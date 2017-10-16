@@ -93,7 +93,7 @@ async function twilioSetup(account) {
     const data = await twilioClient.availablePhoneNumbers('CA').local.list({
       smsEnabled: true,
       voiceEnabled: true,
-      inRegion: account.state,
+      inRegion: account.address.state,
     });
     const number = data.availablePhoneNumbers[0];
     await twilioClient.incomingPhoneNumbers.create({
@@ -112,16 +112,16 @@ async function vendastaSetup(account, setupList) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
-      companyName: account.name,
-      customerIdentifier,
-      addPresenceBuilderFlag: setupList.listings,
-      addReputationFlag: setupList.reputationManagement,
-      addSocialMarketingFlag: setupList.social,
-      address: account.street,
-      city: account.city,
-      country: account.country ,
-      state: account.state,
-      zip: account.zipCode,
+    companyName: account.name,
+    customerIdentifier,
+    addPresenceBuilderFlag: setupList.listings,
+    addReputationFlag: setupList.reputationManagement,
+    addSocialMarketingFlag: setupList.social,
+    address: account.address.street,
+    city: account.address.city,
+    country: account.address.country,
+    state: account.address.state,
+    zip: account.address.zipCode,
   };
   try {
     const newCompany = await axios.post(accountUrl, createCompany);

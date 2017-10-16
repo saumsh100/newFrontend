@@ -23,6 +23,8 @@ const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const clinicPhoneNumber = '+17786558613';
+const addressId = uuid();
+const addressId2 = uuid();
 
 
 const ROLES = {
@@ -45,21 +47,26 @@ const account = {
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
   weeklyScheduleId,
+  addressId,
   name: 'Test Account',
-  city: 'Belgrade',
   twilioPhoneNumber: clinicPhoneNumber,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
   canSendReviews: false,
 };
 
+const address = {
+  id: addressId,
+  city: 'Belgrade',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
 const account2 = {
   id: accountId2,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
-  city: 'Edmonton',
-  state: 'AB',
-  street: '10204 112th St.',
+  addressId: addressId2,
   contactEmail: 'info@libertychiropractic.ca',
   website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
   googlePlaceId: 'ChIJP-dQSDEioFMRBpVTwZ2_h1o',
@@ -70,6 +77,15 @@ const account2 = {
   updatedAt: '2017-07-19T00:14:30.932Z',
   phoneNumber: '+17808508886',
   canSendReviews: true,
+};
+
+const address2 = {
+  id: addressId2,
+  city: 'Edmonton',
+  state: 'AB',
+  street: '10204 112th St.',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
 };
 
 const managerPermission = {
@@ -156,6 +172,8 @@ module.exports = {
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
 
     await queryInterface.bulkInsert('WeeklySchedules', [WeeklySchedule]);
+
+    await queryInterface.bulkInsert('Addresses', [address, address2]);
 
     await queryInterface.bulkInsert('Accounts', [account, account2]);
 

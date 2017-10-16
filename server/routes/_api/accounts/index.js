@@ -39,21 +39,25 @@ accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
     // Fetch all if correct role, just fetch current account if not
     let accounts;
+
     if (role === 'SUPERADMIN') {
       // Return all accounts...
-      accounts = await Account.findAll({ raw: true });
+      const accountsFind = await Account.findAll({ });
+      accounts = accountsFind.map(a => a.get({ plain: true }));
     } else if (enterpriseRole === 'OWNER') {
       // Return all accounts under enterprise
-      accounts = await Account.findAll({
-        raw: true,
+      const accountsFind = await Account.findAll({
         where: { enterpriseId },
       });
+
+      accounts = accountsFind.map(a => a.get({ plain: true }));
     } else {
       // Return single account
-      accounts = [await Account.findOne({
-        raw: true,
+      const accountsFind = await Account.findOne({
         where: { id: accountId },
-      })];
+      });
+
+      accounts = [accountsFind.get({ plain: true })];
     }
 
     res.send(normalize('accounts', accounts));
@@ -333,7 +337,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
  */
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.update(req.body)
-    .then(account => res.send(normalize('account', account.dataValues)))
+    .then(account => res.send(normalize('account', account.get({ plain: true }))))
     .catch(next);
 });
 

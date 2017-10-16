@@ -9,7 +9,12 @@ const accountSchema = () => {
     practitioners: [_practitionerSchema],
     services: [_serviceSchema],
     weeklySchedule: weeklyScheduleSchema(),
+    address: addressSchema(),
   });
+};
+
+const addressSchema = () => {
+  return new schema.Entity('addresses');
 };
 
 const appointmentSchema = () => {
@@ -158,6 +163,7 @@ var _serviceSchema = serviceSchema();
 const SCHEMAS = {
   // Models (singleFetch/findOne)
   account: accountSchema(),
+  address: addressSchema(),
   appointment: appointmentSchema(),
   call: callSchema(),
   chair: chairSchema(),
@@ -185,6 +191,7 @@ const SCHEMAS = {
   sentRecall: sentRecallSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],
+  addresses: [addressSchema()],
   appointments: [appointmentSchema()],
   calls: [callSchema()],
   chairs: [chairSchema()],

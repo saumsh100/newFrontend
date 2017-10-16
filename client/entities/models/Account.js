@@ -16,6 +16,7 @@ import createModel from '../createModel';
 
 const AccountSchema = {
   id: null,
+  addressId: null,
   name: null,
   street: null,
   logo: null,
