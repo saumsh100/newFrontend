@@ -33,6 +33,7 @@ class RequestList extends Component {
     const modifiedRequest = request.set('isConfirmed', true);
     const appointment = {
       requestId: request.get('id'),
+      createdAt: request.get('createdAt'),
       startDate: request.get('startDate'),
       endDate: request.get('endDate'),
       serviceId: request.get('serviceId'),

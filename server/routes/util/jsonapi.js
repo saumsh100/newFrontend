@@ -46,6 +46,7 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'isActive',
   ],
 
   Configuration: [
@@ -117,6 +118,7 @@ const ModelAttributes = {
     'birthDate',
     'insurance',
     'isDeleted',
+    'pmsCreatedAt',
     'isSyncedWithPms',
     'familyId',
     'status',

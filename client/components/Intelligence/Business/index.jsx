@@ -160,9 +160,10 @@ class Business extends Component {
     filledHours = filledHours.toFixed(2);
 
     serviceData = businessStats.productionEarnings.map(pro => {
+
       return {
         title: `${pro.description} - ${pro.type}`,
-        data: pro.totalAmount,
+        data: `${Math.floor(pro.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
       };
     });
 

@@ -1,6 +1,7 @@
 import moment from 'moment-timezone';
 import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
 import format from '../../util/format';
+import handleSequelizeError from '../../util/handleSequelizeError';
 import { sequelizeLoader } from '../../util/loaders';
 
 const practitionersRouter = require('express').Router();
@@ -89,25 +90,25 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), async (r
           },
         });
 
-        practitionerData = Object.assign({},
-          {
-            accountId: req.accountId,
-            weeklyScheduleId: weeklySchedule.id,
-          }, req.body);
+        practitionerData = Object.assign({}, {
+          accountId: req.accountId,
+          weeklyScheduleId: weeklySchedule.id,
+        }, req.body);
+
         return Practitioner.create(practitionerData)
-        .then((practitioner) => {
-          practitioner = practitioner.get({ plain: true });
-          practitioner.weeklySchedule = weeklySchedule;
-          return res.status(201).send(format(req, res, 'practitioner', practitioner));
+          .then((practitioner) => {
+            practitioner = practitioner.get({ plain: true });
+            practitioner.weeklySchedule = weeklySchedule;
+            return res.status(201).send(format(req, res, 'practitioner', practitioner));
         });
       });
     });
   } catch (e) {
-    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
-      const practitioner = e.errors[0].message.model.dataValues;
-      const normalized = format(req, res, 'practitioner', practitioner);
-      return res.status(201).send(normalized);
+    // check sequelize error
+    if (e.errors && e.errors[0]) {
+      return handleSequelizeError(e.errors[0], 'practitioner', res, req, next);
     }
+
     return next(e);
   }
 });

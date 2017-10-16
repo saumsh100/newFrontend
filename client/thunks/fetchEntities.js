@@ -54,8 +54,6 @@ export function fetchEntitiesRequest({ id, key, base, join, params = {}, url }) 
     // Create record for request
     dispatch(createRequest({ id }));
 
-    console.log('url', url);
-
     return axios.get(url, { params })
       .then((response) => {
         const { data } = response;

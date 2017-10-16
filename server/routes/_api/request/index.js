@@ -191,7 +191,10 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
  * Send Confirmed Request Email
  */
 requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('requests:update'), (req, res, next) =>{
-  return req.request.update({ isConfirmed: true })
+  return req.request.update({
+    isConfirmed: true,
+    appointmentId: req.appointmentId,
+  })
     .then(async (request) => {
       const patientUser = await PatientUser.findById(request.dataValues.patientUserId);
       const account = await Account.findById(request.dataValues.accountId);
@@ -202,6 +205,10 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
       // Early return so its not dependant on email sending
       res.status(200).send();
 
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      const normalized = normalize('request', request.dataValues);
+      io.of(ns).in(request.dataValues.accountId).emit('update:Request', normalized);
       // Send Email
       return sendAppointmentRequestConfirmed({
         accountId: req.accountId,

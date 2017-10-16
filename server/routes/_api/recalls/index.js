@@ -1,9 +1,11 @@
+
 import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
+import { getPatientsDueForRecall } from '../../../lib/_recalls/helpers';
 
 const recallsRouter = new Router();
 
@@ -26,6 +28,36 @@ recallsRouter.get('/:accountId/recalls', checkPermissions('accounts:read'), asyn
     });
 
     res.send(normalize('recalls', recalls));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /:accountId/recalls/stats
+ */
+recallsRouter.get('/:accountId/recalls/stats', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    // TODO: date needs to be on the 30 minute marks
+    const date = (new Date()).toISOString();
+    const recalls = await Recall.findAll({
+      raw: true,
+      where: { accountId: req.accountId },
+      order: [['lengthSeconds', 'DESC']],
+    });
+
+    const data = [];
+    for (const recall of recalls) {
+      const patients = await getPatientsDueForRecall({ account: req.account, recall, date });
+      const noEmail = patients.filter(p => !p.email);
+      data.push({
+        ...recall,
+        success: patients.length - noEmail.length,
+        fail: noEmail.length,
+      });
+    }
+
+    res.send(data);
   } catch (error) {
     next(error);
   }

@@ -20,6 +20,9 @@ const accountWithSchedule = {
 
 const rootUrl = '/_api/practitioners';
 
+const createPractitioner = Object.assign({}, practitioner);
+delete createPractitioner.accountId;
+
 
 describe('/api/practitioners', () => {
   // Seed with some standard user data
@@ -119,7 +122,7 @@ describe('/api/practitioners', () => {
       return request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send(practitioner)
+        .send(createPractitioner)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule', 'pmsId', 'avatarUrl']);
@@ -192,7 +195,7 @@ describe('/api/practitioners', () => {
           return request(app)
             .post(rootUrl)
             .set('Authorization', `Bearer ${token}`)
-            .send(practitioner)
+            .send(createPractitioner)
             .expect(201)
             .then(({ body }) => {
               body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule', 'pmsId', 'avatarUrl']);

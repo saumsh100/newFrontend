@@ -97,12 +97,21 @@ export default function (sequelize, DataTypes) {
       // TODO: should this be an ENUM?
       type: DataTypes.STRING,
     },
+
+    appointmentId: {
+      type: DataTypes.UUID,
+    },
   });
 
-  Call.associate = ({ Account, Patient }) => {
+  Call.associate = ({ Appointment, Account, Patient }) => {
     Call.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    Call.belongsTo(Appointment, {
+      foreignKey: 'appointmentId',
+      as: 'appointment',
     });
 
     Call.belongsTo(Patient, {

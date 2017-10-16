@@ -201,7 +201,7 @@ describe('/api/segments', () => {
 
 
   describe('GET /api/enterprise/dashboard/patients/region', () => {
-    test('Preview items', async () => request(app)
+    test.skip('Preview items', async () => request(app)
       .get(`/_api/enterprises/dashboard/patients/region?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)

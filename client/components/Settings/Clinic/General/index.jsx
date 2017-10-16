@@ -68,13 +68,12 @@ class General extends React.Component {
   }
 
   deleteAccounts() {
-    console.log('asdsads')
     const { activeAccount, createEntityRequest } = this.props;
     createEntityRequest({ url: `/api/accounts/${activeAccount.id}/integrations`, params: {} });
   }
 
   async updateApis(values) {
-    const { activeAccount, createEntityRequest, deleteEntityRequest } = this.props;
+    const { activeAccount, createEntityRequest, deleteEntityRequest, address } = this.props;
     const {
       reputationManagement,
       listings,
@@ -94,14 +93,17 @@ class General extends React.Component {
       vendastaAccountId,
       vendastaMsId,
       vendastaSrId,
+      website,
+    } = activeAccount;
+
+    const {
       city,
       state,
       country,
       zipCode,
       street,
       timezone,
-      website,
-    } = activeAccount;
+    } = address;
 
     if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
       return window.alert('Please enter Address and/or Clinic Website Info First');
@@ -362,9 +364,17 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ entities, auth }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const addresses = entities.getIn(['addresses', 'models']);
+  let address;
+  if (activeAccount && activeAccount.addressId) {
+    address = addresses.get(activeAccount.addressId);
+  }
+
   return {
     users: entities.getIn(['users', 'models']),
-    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+    activeAccount,
+    address,
   };
 }
 

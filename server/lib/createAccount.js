@@ -37,14 +37,17 @@ async function getVendastaIds(listings, reputationManagement, accountId, limit) 
       srid = getCompany.data.data.productsJson.RM
         ? getCompany.data.data.productsJson.RM.productId : null;
 
-      completed += 1;
+      if (srid) {
+        completed += 1;
+      }
     }
 
     if (reputationManagement) {
       msid = getCompany.data.data.productsJson.MS
             ? getCompany.data.data.productsJson.MS.productId : null;
-
-      completed += 1;
+      if (msid) {
+        completed += 1;
+      }
     }
 
     // check if ids where returned for the ones we want.
@@ -148,7 +151,7 @@ export async function twilioSetup(account) {
     const data = await twilioClient.availablePhoneNumbers('CA').local.list({
       smsEnabled: true,
       voiceEnabled: true,
-      inRegion: account.state,
+      inRegion: account.address.state,
     });
     const number = data.availablePhoneNumbers[0];
     await twilioClient.incomingPhoneNumbers.create({
@@ -199,7 +202,7 @@ async function vendastaAddProducts(account, setupList) {
 
     const newAccount = await account.update(newData);
 
-    getVendastaIds(setupList.listings === 'true', setupList.reputationManagement === 'true', account.id, 10);
+    getVendastaIds(setupList.listings, setupList.reputationManagement, account.id, 10);
 
     return newAccount;
   } catch (e) {
@@ -219,11 +222,12 @@ async function vendastaSetup(account, setupList) {
     customerIdentifier,
     addPresenceBuilderFlag: setupList.listings,
     addReputationFlag: setupList.reputationManagement,
-    address: account.street,
-    city: account.city,
-    country: account.country,
-    state: account.state,
-    zip: account.zipCode,
+    addSocialMarketingFlag: setupList.social,
+    address: account.address.street,
+    city: account.address.city,
+    country: account.address.country,
+    state: account.address.state,
+    zip: account.address.zipCode,
   };
   try {
     const newCompany = await axios.post(accountUrl, createCompany);
@@ -242,7 +246,7 @@ async function vendastaSetup(account, setupList) {
 
     const newAccount = await account.update(newData);
 
-    getVendastaIds(setupList.listings === 'true', setupList.reputationManagement === 'true', account.id, 10);
+    getVendastaIds(setupList.listings, setupList.reputationManagement, account.id, 10);
 
     return newAccount;
   } catch (e) {

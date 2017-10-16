@@ -18,6 +18,7 @@ import {
   Configuration,
 } from '../../../_models';
 import upload from '../../../lib/upload';
+import { getReviewAppointments } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
@@ -52,21 +53,25 @@ accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
     // Fetch all if correct role, just fetch current account if not
     let accounts;
+
     if (role === 'SUPERADMIN') {
       // Return all accounts...
-      accounts = await Account.findAll({ raw: true });
+      const accountsFind = await Account.findAll({ });
+      accounts = accountsFind.map(a => a.get({ plain: true }));
     } else if (enterpriseRole === 'OWNER') {
       // Return all accounts under enterprise
-      accounts = await Account.findAll({
-        raw: true,
+      const accountsFind = await Account.findAll({
         where: { enterpriseId },
       });
+
+      accounts = accountsFind.map(a => a.get({ plain: true }));
     } else {
       // Return single account
-      accounts = [await Account.findOne({
-        raw: true,
+      const accountsFind = await Account.findOne({
         where: { id: accountId },
-      })];
+      });
+
+      accounts = [accountsFind.get({ plain: true })];
     }
 
     res.send(normalize('accounts', accounts));
@@ -396,7 +401,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
  */
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.update(req.body)
-    .then(account => res.send(normalize('account', account.dataValues)))
+    .then(account => res.send(normalize('account', account.get({ plain: true }))))
     .catch(next);
 });
 
@@ -429,6 +434,29 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
       res.send(obj);
     })
     .catch(next);
+});
+
+/**
+ * PUT /:accountId
+ *
+ * - update clinic account data
+ */
+accountsRouter.get('/:accountId/reviews/stats', checkPermissions('accounts:update'), async (req, res, next) => {
+  try {
+    const date = (new Date()).toISOString();
+
+    // Get the review appointments and filter out
+    const appts = await getReviewAppointments({ date, account: req.account });
+    const noEmail = appts.filter(({ patient }) => !patient.email);
+
+    res.send({
+      success: appts.length - noEmail.length,
+      fail: noEmail.length,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 });
 
 module.exports = accountsRouter;

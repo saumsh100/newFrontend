@@ -3,8 +3,10 @@
 .schedule_filter {
     border-top: $card-border-size $inactive-color;
     min-height: 150px;
-    max-height: calc(100vh - 750px);
-    overflow: auto;
+    //max-height: calc(100vh - 750px);
+    //overflow: auto;
+    flex: 1;
+    height: 100%;
 }
 
 .filter_header {
@@ -46,8 +48,17 @@
         font-size: 12px;
         padding-right: 5px;
         margin-left: auto;
-        &__text{
+        &__selectText{
           padding-right: 10px;
+          &:hover {
+            color: darken(#b4b4b4, 10%)
+          }
+        }
+
+        &__clearText {
+          &:hover {
+            color: darken(#b4b4b4, 10%)
+          }
         }
       @media screen and (max-width: 1250px) {
       }
@@ -59,6 +70,7 @@
 .filter_practitioner {
    // margin: 0 5px;
     padding: 5px 0px 10px 10px;
+    background: $primary-white;
 
     &__name {
       font-size: $small-size;

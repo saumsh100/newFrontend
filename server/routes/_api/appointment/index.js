@@ -1,11 +1,13 @@
 
 import Moment from 'moment-timezone';
+import sequelize from 'sequelize';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import { newPatients } from '../../../lib/intelligence/patients';
+import { appsHygienist, appsNotCancelled, appsNewPatient } from '../../../lib/intelligence/appointments';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -73,6 +75,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       patientId: {
         $not: null,
       },
+      isCancelled: true,
     },
     raw: true,
     nest: true,
@@ -92,33 +95,39 @@ appointmentsRouter.get('/business', (req, res, next) => {
     ],
   })
     .then(async (appointments) => {
+      const hygenApps = await appsHygienist(startDate, endDate, accountId);
+      send.hygieneAppts = hygenApps[0] ? Number(hygenApps[0].appsHygienist) : 0;
+
+      const $or = [];
 
       for (let i = 0; i < appointments.length; i++) {
-        if (testHygien.test(appointments[i].practitioner.type)) {
-          send.hygieneAppts++;
-        }
 
         if (appointments[i].isCancelled) {
           send.brokenAppts++;
-          const filled = await Appointment.findOne({
-            where: {
-              accountId,
-              startDate: {
-                gte: appointments[i].startDate,
-                lte: appointments[i].endDate,
-              },
-              patientId: {
-                $not: null,
-              },
-              practitionerId: appointments[i].practitionerId,
-              isCancelled: false,
+
+          $or.push({
+            accountId,
+            isCancelled: false,
+            startDate: {
+              $between: [appointments[i].startDate,
+                appointments[i].endDate],
             },
+            endDate: {
+              $between: [appointments[i].startDate,
+                appointments[i].endDate],
+            },
+            patientId: {
+              $not: null,
+            },
+            practitionerId: appointments[i].practitionerId,
           });
-          if (filled) {
-            send.brokenAppts--;
-          }
         }
       }
+
+
+      const filled = await appsNotCancelled(startDate, endDate, accountId);
+
+      send.brokenAppts = appointments.length - filled;
 
       send.productionEarnings = await mostBusinessProcedure(startDate, endDate, accountId);
 
@@ -433,22 +442,24 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       }
 
       // practitioner data
-      values[1].map((practitioner) => {
+
+      for (let i = 0; i < values[1].length; i += 1) {
+        const practitioner = values[1][i];
         if (practitioner.isActive) {
           const data = {};
-
+          data.newPatients = await appsNewPatient(startDate, endDate, accountId, practitioner.id);
+          data.newPatients = data.newPatients.length;
           data.firstName = practitioner.firstName;
           data.lastName = practitioner.lastName;
           data.id = practitioner.id;
           data.totalTime = timeOpen;
           data.type = practitioner.type;
           data.appointmentTime = 0;
-          data.newPatients = 0;
-          data.avatarUrl = practitioner.avatarUrl,
-          data.fullAvatarUrl = practitioner.fullAvatarUrl,
+          data.avatarUrl = practitioner.avatarUrl;
+          data.fullAvatarUrl = practitioner.fullAvatarUrl;
           sendStats.practitioner[practitioner.id] = data;
         }
-      });
+      }
 
       let confirmedAppointments = 0;
       let notConfirmedAppointments = 0;
@@ -458,7 +469,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         if (appointment.practitioner.isActive) {
           if (range.contains(moment(appointment.patient.createdAt))) {
             sendStats.newPatients++;
-            sendStats.practitioner[appointment.practitioner.id].newPatients++;
           }
 
           let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
@@ -467,7 +477,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           time += timeApp;
           notConfirmedAppointments++;
 
-          if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+          if (appointment.isCancelled === false) {
             if (!sendStats.patients[appointment.patient.id]) {
               sendStats.patients[appointment.patient.id] = {
                 numAppointments: 0,
@@ -484,7 +494,9 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             }
             sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
-            confirmedAppointments++;
+            if (appointment.isConfirmed) {
+              confirmedAppointments += 1;
+            }
           }
         }
       });
@@ -502,10 +514,20 @@ appointmentsRouter.get('/stats', (req, res, next) => {
 
       sendStats.patients = newObject;
 
-      const newPatientsNumber = await newPatients(startDate, endDate, accountId);
+      const checkPmsCreatedAt = await Patient.findOne({
+        where: {
+          pmsCreatedAt: {
+            $ne: null,
+          },
+        },
+      });
 
-      sendStats.newPatients = newPatientsNumber[0] && newPatientsNumber[0].dataValues.newPatients
-        ? newPatientsNumber[0].dataValues.newPatients : sendStats.newPatients;
+      let newPatientsNumber = await newPatients(startDate, endDate, accountId);
+
+      newPatientsNumber = newPatientsNumber[0] ? newPatientsNumber[0].dataValues.newPatients : 0;
+
+      sendStats.newPatients = checkPmsCreatedAt
+        ? newPatientsNumber : sendStats.newPatients;
 
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;

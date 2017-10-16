@@ -1,3 +1,4 @@
+const { validateAccountIdPmsId } = require('../util/validators');
 
 export default function (sequelize, DataTypes) {
   const Chair = sequelize.define('Chair', {
@@ -16,30 +17,17 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+
     pmsId: {
       type: DataTypes.STRING,
       validate: {
         // validator for if pmsId and accountId are a unique combo
         isUnique(value, next) {
-          return Chair.findOne({
-            where: {
-              accountId: this.accountId,
-              pmsId: value,
-            },
-            paranoid: false,
-          }).then(async (chair) => {
-            if (chair) {
-              chair.setDataValue('deletedAt', null);
-              chair = await chair.save({ paranoid: false });
-
-              return next({
-                messages: 'AccountId PMS ID Violation',
-                model: chair,
-              });
-            }
-
-            return next();
-          });
+          return validateAccountIdPmsId(Chair, value, this, next);
         },
       },
     },
