@@ -4,7 +4,7 @@ import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, Event } from '../../../library';
-import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
+import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 class Timeline extends Component {
@@ -17,13 +17,12 @@ class Timeline extends Component {
 
   componentDidMount() {
     const query = {
-      limit: 2,
-      skip: 1,
+      limit: 10,
     };
 
     Promise.all([
-      this.props.fetchEntitiesRequest({
-        id: 'patientIdEvents',
+      this.props.fetchEntities({
+        key: 'events',
         url: `/api/events/${this.props.patientId}`,
         params: query,
       }),
@@ -36,10 +35,10 @@ class Timeline extends Component {
 
   render() {
     const {
-      patientEvents,
+      events,
     } = this.props;
 
-    if (!patientEvents) {
+    if (!events.length) {
       return (
         <Loader
           loadedClassName={styles.loader}
@@ -50,18 +49,20 @@ class Timeline extends Component {
         />
       );
     }
-    const eventsData = patientEvents.toJS();
 
     const dateObj = {};
 
-    eventsData.events.map((ev) => {
-      const key = moment(ev.createdAt).format('MMMM Do YYYY');
+    events.map((ev) => {
+      const key = moment(ev.get('metaData').createdAt).format('MMMM Do YYYY');
+
       if (dateObj.hasOwnProperty(key)) {
         dateObj[key].push(ev);
       } else {
         dateObj[key] = [ev];
       }
     });
+
+    console.log(dateObj)
 
     return (
       <Card className={styles.card}>
@@ -108,17 +109,19 @@ class Timeline extends Component {
   }
 }
 
-function mapStateToProps({ apiRequests }) {
-  const patientEvents = (apiRequests.get('patientIdEvents') ? apiRequests.get('patientIdEvents').data : null);
+function mapStateToProps({ entities }, { patientId }) {
+  const events = entities.getIn(['events', 'models']).toArray().filter((event) => {
+    return event.get('patientId') === patientId;
+  });
 
   return {
-    patientEvents,
+    events,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchEntitiesRequest,
+    fetchEntities,
   }, dispatch)
 }
 

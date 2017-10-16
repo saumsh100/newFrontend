@@ -25,6 +25,8 @@ import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
 import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
+import events from '../entities/collections/events';
+import Event from '../entities/models/Event';
 import invites from '../entities/collections/invites';
 import Invites from '../entities/models/Invites';
 import patientUsers from '../entities/collections/patientUsers';
@@ -97,6 +99,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => receive
   recalls: new recalls(),
   sentRecalls: new sentRecalls(),
   patientUsers: new patientUsers(),
+  events: new events(),
 
     // reviews: Reviews(), MODEL
     // listings: Listings(),
@@ -107,6 +110,7 @@ const Models = {
   enterprises: Enterprise,
   textMessages: TextMessage,
   appointments: Appointments,
+  events: Event,
   requests: Requests,
   services: Service,
   permissions: Permission,

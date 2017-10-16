@@ -41,7 +41,7 @@ export default function (sequelize, DataTypes) {
     },
 
     metaData: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSONB,
     },
   });
 

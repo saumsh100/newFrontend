@@ -49,6 +49,7 @@ eventsRouter.get('/:patientId', async (req, res, next) => {
       const buildData = {
         patientId: req.patient.id,
         accountId: req.accountId,
+        metaData: event,
       };
 
       if (event.hasOwnProperty('callSource')) {
@@ -59,10 +60,8 @@ eventsRouter.get('/:patientId', async (req, res, next) => {
         buildData.type = 'Appointment';
       }
 
-      //const eventBuilt = await Event.build(buildData)
       return Event.build(buildData).dataValues;
     });
-
 
     res.send(normalize('events', buildEvents));
   } catch (error) {
