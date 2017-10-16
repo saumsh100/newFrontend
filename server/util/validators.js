@@ -17,7 +17,7 @@ function validatePhoneNumber(phoneNumber) {
     return '+'.concat(pn);
   }
 
-  return null;
+  return undefined;
 }
 
 function validateAccountIdPmsId(Model, value, self, next) {
