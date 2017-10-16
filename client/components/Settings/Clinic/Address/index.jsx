@@ -78,7 +78,6 @@ Address.propTypes = {
 };
 
 function mapDispatchToActions(dispatch) {
-  console.log(reset)
   return bindActionCreators({
     updateEntityRequest,
     createEntityRequest,
