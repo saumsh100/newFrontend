@@ -1,54 +1,66 @@
 
-import React, { PropTypes } from 'react';
-import classNames from 'classnames/bind';
-import omit from 'lodash/omit';
-import styles from './styles.scss';
-import Icon from '../Icon';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { getClassMapper } from '../../Utils';
+import styles from './vbutton.scss';
 
-const cx = classNames.bind(styles);
+const scheme = [
+  ['size', ['sm', 'md', 'lg', 'xlg']],
+  ['color', ['white', 'red', 'grey', 'green', 'blue', 'yellow', 'darkgrey', 'darkblue']],
 
-export default function Button(props) {
-  const classes = classNames(
-    props.className,
-    props.theme,
-    cx({
-      default: true,
-      flat: props.flat,
-      notFlat: !props.flat,
-      disabled: props.disabled,
-      icon: props.icon,
-      create: props.create,
-      edit: props.edit
-    })
-  );
+  'primary',
+  'secondary',
+  'tertiary',
 
-  let iconComponent = null;
-  if (props.icon) {
-    iconComponent =
-      <div className={styles.icon}>
-        <Icon icon={props.icon} size={1} />
-      </div>
-  }
+  'rounded',
+  'upperCase',
+  'compact',
+  'raised',
+  'flat',
+  'bordered',
 
-  const newProps = omit(props, ['flat', 'submit']);
-  return (
-    <button data-test-id={props['data-test-id']} {...newProps} className={classes}>
-      <div className={styles.displayFlex}>
-        {iconComponent}
-        {props.children}
-      </div>
-    </button>
-  );
-}
+  'positive',
+  'negative',
+  'fluid',
+];
 
-Button.theme = {
-  secondary: styles.secondary,
+const mapper = getClassMapper(scheme, styles);
+
+const Button = props => (
+  <props.as
+    {...mapper.omit(props, 'as', 'icon', 'submit')}
+    className={mapper.map(props, styles.default, props.className)}
+  >
+    { props.icon ? (
+      <i className={`fa fa-${props.icon} ${styles.icon}`} />
+    ) : null }
+
+    { (props.children || props.title) ? (
+      <span className={styles.text}>{props.children || props.title}</span>
+    ) : null }
+
+    { props.iconRight ? (
+      <i className={`fa fa-${props.iconRight} ${styles.iconRight}`} />
+    ) : null }
+  </props.as>
+);
+
+Button.defaultProps = {
+  as: 'button',
 };
 
 Button.propTypes = {
-  flat: PropTypes.bool,
+  ...mapper.types(),
+  children: PropTypes.node,
+  as: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.func,
+  ]),
+
   className: PropTypes.string,
-  disabled: PropTypes.bool,
   icon: PropTypes.string,
-  theme: PropTypes.string,
+  iconRight: PropTypes.string,
+  title: PropTypes.string,
 };
+
+export default Button;

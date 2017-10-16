@@ -3,8 +3,8 @@ import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
-import normalize from '../normalize';
 import { Chair } from '../../../_models';
+import handleSequelizeError from '../../util/handleSequelizeError';
 
 const chairsRouter = Router();
 
@@ -17,15 +17,25 @@ chairsRouter.param('chairId', sequelizeLoader('chair', 'Chair'));
  *
  * - Create a chair
  */
-chairsRouter.post('/', checkPermissions('chairs:create'), (req, res, next) => {
+chairsRouter.post('/', checkPermissions('chairs:create'), async (req, res, next) => {
   // Attach chair to the clinic of posting user
   const chairData = Object.assign({}, req.body, {
     accountId: req.accountId || req.body.accountId,
   });
 
-  return Chair.create(chairData)
-    .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
-    .catch(next);
+  try {
+    const chairTest = await Chair.build(chairData);
+    await chairTest.validate();
+
+    return Chair.create(chairData)
+        .then(chair => res.status(201).send(format(req, res, 'chair', chair.get({ plain: true }))))
+        .catch(next);
+  } catch (e) {
+    if (e.errors && e.errors[0]) {
+      return handleSequelizeError(e.errors[0], 'chair', res, req, next);
+    }
+    return next(e);
+  }
 });
 
 /**
@@ -40,6 +50,9 @@ chairsRouter.get('/', checkPermissions('chairs:read'), async (req, res, next) =>
       raw: true,
       // TODO: add this back when we have auth back
       where: { accountId },
+      order: [
+        ['name', 'DESC'],
+      ],
     });
 
     res.send(format(req, res, 'chairs', chairs));

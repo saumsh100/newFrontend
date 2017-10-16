@@ -6,6 +6,7 @@ import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
+import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
 import socket from '../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
@@ -17,11 +18,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   }
 
   const getSession = () => {
-    /*const cachedValue = localStorage.getItem('session');
-    return cachedValue ?
-      (Promise.resolve(JSON.parse(cachedValue))) :
-      (axios.get('/api/users/me').then(({ data }) => data));*/
-    // This adds req.header only because it's been added elsewhere
     return axios.get('/api/users/me').then(({ data }) => data);
   };
 
@@ -29,25 +25,20 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     .then((session) => {
       const userSession = { ...session, sessionId };
       localStorage.setItem('session', JSON.stringify(userSession));
-      console.log('userSession', userSession);
       dispatch(loginSuccess(userSession));
       return userSession;
     })
-    .catch((err) => {
+    .catch(() => {
       // Catch 401 from /api/users/me and logout
       localStorage.removeItem('token');
       localStorage.removeItem('session');
       dispatch(authLogout());
-      dispatch(push('/login'));
+      dispatch(push('./login'));
     });
 };
 
-export function login(redirectedFrom = '/') {
+export function login({ values, redirectedFrom = '/', connect = false }) {
   return function (dispatch, getState) {
-    // TODO: this should really be refactored so we aren't accessing state for form values
-    // TODO: change to use values onSubmit
-    const { form: { login: { values } } } = getState();
-
     // reduxForm will not have this set if form is not dirty
     if (!values) return Promise.resolve(null);
 
@@ -63,7 +54,7 @@ export function login(redirectedFrom = '/') {
         const userId = user.id;
         const fullName = `${user.firstName} ${user.lastName}`;
         const email = user.username;
-        if (process.env.NODE_ENV === 'production') {
+        if (connect && process.env.NODE_ENV === 'production') {
           LogRocket.identify(userId, {
             name: fullName,
             email: email,
@@ -78,17 +69,14 @@ export function login(redirectedFrom = '/') {
           });
         }
 
-        connectSocketToStoreLogin({ dispatch, getState }, socket);
+        if (connect) {
+          connectSocketToConnectStore({ dispatch, getState }, socket);
+        } else {
+          connectSocketToStoreLogin({ dispatch, getState }, socket);
+        }
 
         // dispatch(loginSuccess(decodedToken));
         dispatch(push(redirectedFrom));
-      })
-      .catch((err) => {
-        const { data } = err;
-        throw new SubmissionError({
-          email: data,
-          password: data,
-        });
       });
   };
 }
@@ -143,11 +131,12 @@ export function resetUserPassword(location, values) {
     const url = `${location.pathname}`;
     return axios
       .post(url, values)
-      .then(()=> {
-        dispatch(push('/login'));
-      })
       .catch((err) => {
-        console.log(err);
+        const { data } = err;
+        throw new SubmissionError({
+          password: data,
+          confirmPassword: data,
+        });
       });
   };
 }

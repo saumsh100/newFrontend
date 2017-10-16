@@ -54,7 +54,7 @@ Object {
         "firstName": "Ronald",
         "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "isDeleted": false,
-        "isSyncedWithPMS": false,
+        "isSyncedWithPms": false,
         "lastName": "Mcdonald",
         "mobilePhoneNumber": "+17789999999",
         "pmsId": null,

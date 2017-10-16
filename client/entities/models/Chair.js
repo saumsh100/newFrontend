@@ -6,13 +6,18 @@ const ChairsSchema = {
   accountid: null,
   name: null,
   description: null,
+  isActive: null,
 };
 
 export default class Chairs extends createModel(ChairsSchema) {
   /**
    * Add all TextMessage specific member functions here
    */
-  getName(){
+  getName() {
     return this.get('name');
+  }
+
+  getUrlRoot() {
+    return `/api/chairs/${this.get('id')}`;
   }
 }

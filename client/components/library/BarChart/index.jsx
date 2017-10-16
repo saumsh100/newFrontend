@@ -10,6 +10,7 @@ export default function BarChart(props) {
     labels = [],
     displayLegend,
     displayTooltips,
+
   } = props;
 
   const BarChartComponent = type === 'horizontal' ? HorizontalBar : Bar;
@@ -25,6 +26,7 @@ export default function BarChart(props) {
   const options = {
     legend,
     tooltips,
+    ...props.options,
   };
 
   const newData = {

@@ -8,6 +8,7 @@ import sequelizeAuthRouter from './_auth';
 import callsRouterSequelize from './_callrail';
 // import myRouter from './my';
 import sequelizeMyRouter from './_my';
+import connectRouter from './connect';
 // import callrailRouter from './callrail';
 // import twilioRouter from './twilio';
 import twilioRouterSequelize from './_twilio';
@@ -37,6 +38,7 @@ rootRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder
 // Will be removed once microservices are in full effect
 rootRouter.use(subdomain('my', sequelizeMyRouter));
 rootRouter.use(subdomain('my2', sequelizeMyRouter));
+rootRouter.use(subdomain('connect', connectRouter));
 
 // Bind auth route to generate tokens
 rootRouter.use('/_auth', sequelizeAuthRouter);
@@ -57,20 +59,25 @@ rootRouter.use('/callrail', callsRouterSequelize);
 rootRouter.use('/_callrail', callsRouterSequelize);
 
 rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
-  return Invite.findOne({ token: req.params.tokenId })
+  return Invite.findOne({
+    where: {
+      token: req.params.tokenId,
+    },
+    paranoid: false,
+  })
     .then((invite) => {
       if (!invite) {
         // TODO: replace with StatusError
-        res.status(404).send();
-      } else {
-        res.redirect(`/signup/${req.params.tokenId}`);
+        return res.status(404).send('404 NOT FOUND');
+      } else if (invite && invite.deletedAt) {
+        return res.status(404).send('Invite Expired/Cancelled');
       }
+      return res.redirect(`/signup/${req.params.tokenId}`);
     })
     .catch(next);
 });
 
 // below route is sequelize
-
 rootRouter.get('/reset/:tokenId', (req, res, next) => {
   return PasswordReset.findOne({ where: { token: req.params.tokenId } })
     .then((reset) => {

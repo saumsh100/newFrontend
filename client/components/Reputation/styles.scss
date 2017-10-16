@@ -1,7 +1,7 @@
 @import "../../ui.scss";
 
 .mainIntelligenceContainer {
-  padding: $container-padding;
+  padding: 15px 15px 0px 10px;
 }
 
 .header {
@@ -26,7 +26,7 @@
 
 .cards {
   cursor: pointer;
-  margin-bottom: 20px;
+  //margin-bottom: 20px;
   div:not(:last-child) {
     margin-right: 10px;
     flex: 1;
@@ -39,4 +39,24 @@
 
 .cardHeader {
   padding: 20px;
+}
+
+.disabledPage {
+  width: 100%;
+  height: calc(100vh - 160px);
+  position: relative;
+  overflow: hidden;
+  &_text {
+    font-size: 20px;
+    line-height: 1.5em;
+    width: 700px;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
 }

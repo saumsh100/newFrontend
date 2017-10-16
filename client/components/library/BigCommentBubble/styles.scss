@@ -1,3 +1,4 @@
+
 @import "../../../ui";
 
 .bigComment {
@@ -5,17 +6,14 @@
   height: 38px;
   display: flex;
   align-items: flex-end;
-  padding: 0 5px;
   font-size: 35px;
 }
 .bigCommentBubble {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  padding: 40px 40px 20px 20px;
+  padding: 30px 30px 20px 30px;
   margin-right: 10px;
-  border-top: 2px solid $primary-lightgrey;
-  border-right: 2px solid $primary-lightgrey;
 
   @media screen and (max-width: 500px) {
     padding: 10px;
@@ -28,29 +26,32 @@
   }
   &__mainContent {
     position: relative;
-    padding: 10px 40px 10px 20px;
+    padding: 20px 40px 10px 25px;
     background-color: #fff;
     font-size: 14px;
-    border-top: 2px solid $primary-blue;
-    border-left: 2px solid $primary-blue;
-    border-right: 2px solid $primary-blue;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
 
     &__header {
-      color: $primary-dark;
-      font-size: 14px;
-      font-weight: $large-weight;
+      composes: fontMedium from 'sass-loader!../../../fonts.scss';
       &__link {
-        color: $primary-green;
+        color: $primary-blue;
         cursor: pointer;
         margin-right: 5px;
+        text-decoration: none;
+        &:hover {
+          color: darken($primary-blue, 5%);
+        }
       }
       &__site {
-        color: $primary-green;
+        color: $primary-blue;
         cursor: pointer;
         margin-left: 5px;
+        text-decoration: none;
+        &:hover {
+          color: darken($primary-blue, 5%);
+        }
       }
     }
     &::before {
@@ -58,8 +59,9 @@
       width: 0;
       height: 0;
       left: -12px;
+      top: 10px;
       border-top: 12px solid transparent;
-      border-right: 12px solid $primary-blue;
+      border-right: 12px solid #ffffff;
       border-bottom: 12px solid transparent;
       display: block;
       content: "";
@@ -68,32 +70,37 @@
       text-transform: uppercase;
       font-size: 12px;
       font-weight: $large-weight;
-      color: #ff7761;
+      color: lighten($primary-color, 5%);
       margin: 10px 0 10px 0;
     }
     &__title {
       color: $primary-green;
       margin-bottom: 15px;
-      font-size: 14px;
-      font-weight: $large-weight;
+      composes: fontMedium from 'sass-loader!../../../fonts.scss';
+
     }
     &__rating {
-      color: #ede27d;
+      color: $primary-star;
       margin: 10px 0 10px 0;
     }
     &__preview {
+      letter-spacing: 0.5px;
       color: $primary-dark;
+      composes: letterSpacing from 'sass-loader!../../../fonts.scss';
       &__toggleButton {
-        color: $primary-green;
+        color: $primary-blue;
         cursor: pointer;
         margin-left: 5px;
+        text-decoration: none;
+
+        &:hover {
+          color: darken($primary-blue, 5%);
+        }
       }
     }
     &__createdAt {
-      color: $primary-darkgrey;
-      font-weight: $large-weight;
-      font-size: $small-size;
-      margin-bottom: 5px;
+      color: lighten($primary-darkgrey, 20%);
+      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
       margin: 10px 0 10px 0;
     }
   }
@@ -139,6 +146,11 @@
       flex-direction: row;
       font-size: $medium-size;
       font-weight: $large-weight;
+      text-decoration: none;
+      color: $primary-white;
+      &:hover {
+        color: darken($primary-white, 10%);
+      }
     }
     &__actions {
       width: 50%;
@@ -205,4 +217,25 @@
       font-size: $small-size;
     }
   }
+}
+
+.howToWrapper {
+  height: 30px;
+  background-color: $primary-grey;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0px 25px;
+}
+
+.howToLink {
+  color: $primary-blue;
+  cursor: pointer;
+  &:hover {
+    color: darken($primary-blue, 10%);
+  }
+}
+
+.CareCruRespond {
+  background-color: $primary-color;
 }

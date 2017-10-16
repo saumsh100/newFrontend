@@ -50,16 +50,11 @@ function Header(props) {
     }
   }
 
-  const patientUserDisplay = patientUser ? `Hi, ${patientUser.firstName}` : null;
-
   return (
     <div className={styles.appointment__header}>
       {goBackButton}
       <div className={styles.appointment__header_title}>
         {headerText}
-      </div>
-      <div className={styles.appointment__header_name}>
-        {patientUserDisplay}
       </div>
       <IconButton
         icon="times"

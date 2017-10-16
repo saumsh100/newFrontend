@@ -32,21 +32,26 @@ import Input from './Input';
 import Label from './Label';
 import Link from './Link';
 import LineChart from './LineChart';
+import ListBullets from './ListBullets';
+import Loading from './Loading';
 import Modal from './Modal';
 import SelectPill from './SelectPill';
 import InfoSection from './InfoSection';
 import Pill from './Pill';
 import PieChart from './PieChart';
+import ProgressBar from './ProgressBar';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
 import RouterTabs from './RouterTabs';
 import Tabs, { Tab } from './Tabs';
+import TextArea from './TextArea';
 import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import PractitionerAvatar from './PractitionerAvatar';
 import Search from './Search';
 import RangeSlider from './RangeSlider';
 import Star from './Star';
+import Stars from './Stars';
 import Summary from './Summary';
 import Timer from './Timer';
 import Toggle from './Toggle';
@@ -58,7 +63,7 @@ import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 import Filters from './Filters';
 import DoubleIcon from './DoubleIcon';
-import VButton from './VButton';
+import VButton from './Button';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
@@ -106,6 +111,8 @@ export {
   Link,
   Label,
   LineChart,
+  ListBullets,
+  Loading,
   Modal,
   Pill,
   SelectPill,
@@ -117,15 +124,18 @@ export {
   RouterTabs,
   SaveButton,
   PractitionerAvatar,
+  ProgressBar,
   Search,
   RangeSlider,
   Star,
+  Stars,
   Summary,
   Stats,
   FlexGrid,
   Tabs,
   Tab,
   Tag,
+  TextArea,
   Timer,
   Toggle,
   Tooltip,

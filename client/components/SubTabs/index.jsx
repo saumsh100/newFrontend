@@ -61,25 +61,25 @@ const ROUTES = {
       to: '/intelligence/business',
       label: 'Business',
     },
-    {
+    /*{
       to: '/intelligence/social',
       label: 'Social',
       disabled: true,
-    },
+    },*/
   ],
 
-  /*'/reputation': [
-    {
-      to: '/reputation/listings',
-      label: 'Listings',
-    },
+  '/reputation': [
     {
       to: '/reputation/reviews',
       label: 'Reviews',
     },
+    {
+      to: '/reputation/listings',
+      label: 'Listings',
+    },
   ],
 
-  '/social': [
+  /* '/social': [
     {
       to: '/social/patient',
       label: 'Patient Posts',
@@ -93,6 +93,10 @@ const ROUTES = {
     {
       to: '/admin/enterprises',
       label: 'Enterprises',
+    },
+    {
+      to: '/admin/nasa',
+      label: 'NASA',
     },
   ],
 };

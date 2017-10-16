@@ -41,9 +41,8 @@ const updateSessionByToken = (token, dispatch) => {
 };
 
 export function login(credentials) {
-  return function (dispatch, getState) {
-    return axios
-      .post('/auth', credentials)
+  return function (dispatch) {
+    return axios.post('/auth', credentials)
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then((patientUser) => {
         LogRocket.identify(patientUser.id, {
@@ -65,6 +64,18 @@ export function logout() {
   };
 }
 
+export function resetPatientUserPassword(email) {
+  console.log('adssadasd')
+  return (dispatch, getState) => {
+    return axios.post('/auth/reset', { email })
+      .then(() => {
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+}
+
 export function loadPatient() {
   return (dispatch) => {
     const token = Token.get();
@@ -82,9 +93,10 @@ const fetchPatient = () => {
   return axios.get('/auth/me').then(({ data }) => data);
 };
 
-export function createPatient(values) {
+export function createPatient(values, ignoreConfirmationText) {
   return function (dispatch) {
-    return axios.post('/auth/signup', values)
+    const config = ignoreConfirmationText ? { params: { ignoreConfirmationText: true } } : null;
+    return axios.post('/auth/signup', values, config)
     // TODO: dispatch function that successfully created patient, plug in, confirm code
     // TODO: then allow them to create the patient
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch).then(() => token));

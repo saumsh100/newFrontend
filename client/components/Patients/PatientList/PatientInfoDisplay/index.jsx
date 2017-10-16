@@ -49,8 +49,10 @@ class PatientInfoDisplay extends Component {
         {( display ? (
           <div className={styles.flex}>
             <div className={styles.patient_profile}>
-              <IconButton className={styles.deleteInfo} icon="trash-o" onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}} />
-              <Avatar className={styles.patient_profile__photo} user={user} />
+              {/* <IconButton className={styles.deleteInfo} icon="trash-o" onClick={() => {if(confirm(`Delete ${currentPatient.firstName} ${currentPatient.lastName}?`)) {this.props.onDelete(id)}}} /> */}
+              <div className={styles.patient_profile_avatarContainer}>
+                <Avatar className={styles.patient_profile__photo} user={user} />
+              </div>
               <div className={`${styles.patient_profile__name} ${styles.personal__table}`}>
                 <p className={styles2.displayName}>
                   <span>{currentPatient.firstName} {currentPatient.lastName}</span>
@@ -81,12 +83,12 @@ class PatientInfoDisplay extends Component {
                     <span className={styles.info}><strong>{lastApp}</strong></span>
                   </div>
                 </div>
-                <div >
+                <div style={{ textAlign: 'right' }} >
                   <div className={styles2.info_footer}>
                     <span>Next Appointment</span>
                   </div>
                   <div className={styles.end}>
-                    <span className={styles2.contact}>{nextApp}</span>
+                    <span className={styles.info}>{nextApp}</span>
                   </div>
                 </div>
               </div>

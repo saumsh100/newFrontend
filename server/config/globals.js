@@ -52,6 +52,11 @@ const namespaces = {
   sync: '/sync',
 };
 
+const callrails = {
+  apiKey: environmentVariables.CALLRAIL_API_KEY,
+  apiAccount: environmentVariables.CALLRAIL_API_ACCOUNTID,
+};
+
 const vendasta = {
   apiKey: environmentVariables.VENDASTA_API_KEY,
   apiUser: environmentVariables.VENDASTA_API_USER,
@@ -123,7 +128,7 @@ module.exports = {
   db,
   caCert,
   redis,
-  rabbit,
+  rabbit: environmentVariables.RABBITMQ_URL ? `${environmentVariables.RABBITMQ_URL}?heartbeat=380` : rabbit,
   vendasta,
   twilio,
   mandrill,
@@ -134,4 +139,5 @@ module.exports = {
   aws,
   s3,
   postgres,
+  callrails,
 };

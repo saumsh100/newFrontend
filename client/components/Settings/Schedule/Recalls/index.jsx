@@ -192,12 +192,12 @@ class Recalls extends Component {
     });
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.sendEdit, component: RemoteSubmitButton, props: { form: this.state.formName || 'null'} },
     ];
 
     const actionsNew = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.newRecall, component: RemoteSubmitButton, props: { form: 'newRecall' } },
     ];
 
@@ -213,7 +213,7 @@ class Recalls extends Component {
             onClick={this.openModal}
             data-test-id="createNewRecall"
             icon="plus"
-            create
+            secondary
           >
             Add New Recall
           </Button>

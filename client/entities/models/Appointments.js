@@ -15,7 +15,7 @@ const AppointmentsSchema = {
   customBufferTime: null,
   isDeleted: null,
   isCancelled: null,
-  isSyncedWithPMS: null,
+  isSyncedWithPms: null,
   isSplit: null,
   isReminderSent: null,
   mark: null,

@@ -150,7 +150,7 @@ class PractitionerTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button onClick={this.addTimeOff} icon="plus" theme={Button.theme.secondary} data-test-id="addTimeOffButton" create >Add Time Off</Button>
+        <Button onClick={this.addTimeOff} icon="plus" secondary data-test-id="addTimeOffButton" create >Add Time Off</Button>
       </div>
     );
 
@@ -171,7 +171,7 @@ class PractitionerTimeOff extends Component {
     }
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
@@ -186,7 +186,6 @@ class PractitionerTimeOff extends Component {
           active={isAdding || !!selectedTimeOff}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
-          custom
           data-test-id="addTimeOffDialog"
         >
           <TimeOffForm

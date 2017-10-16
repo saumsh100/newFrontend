@@ -80,7 +80,7 @@ class PatientList extends Component {
       showNewUser: true,
     };
 
-    values.isSyncedWithPMS = false;
+    values.isSyncedWithPms = false;
 
     this.setState(newState);
 
@@ -137,7 +137,7 @@ class PatientList extends Component {
       values.key = 'patient';
     }
 
-    values.isSyncedWithPMS = false;
+    values.isSyncedWithPms = false;
 
     const valuesMap = Map(values);
     const modifiedPatient = currentPatient.merge(valuesMap);

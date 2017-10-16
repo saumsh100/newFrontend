@@ -14,6 +14,30 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        // validator for if pmsId and accountId are a unique combo
+        isUnique(value, next) {
+          return Family.findOne({
+            where: {
+              accountId: this.accountId,
+              pmsId: value,
+            },
+            paranoid: false,
+          }).then(async (family) => {
+            if (family) {
+              family.setDataValue('deletedAt', null);
+              family = await family.save({ paranoid: false });
+
+              return next({
+                messages: 'AccountId PMS ID Violation',
+                model: family,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     headId: {

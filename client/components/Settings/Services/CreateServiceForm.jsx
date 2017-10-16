@@ -18,9 +18,6 @@ export default function CreateServiceForm(props) {
   return (
   <Row className={styles.formContainer__createForm}>
     <Col xs={12}>
-    <Row className={styles.servicesFormRow__createRow}>
-      <CardHeader title="Create New Service" />
-    </Row>
       <Form
         form={formName}
         onSubmit={onSubmit}
@@ -53,15 +50,14 @@ export default function CreateServiceForm(props) {
         </Row>
         <Row className={styles.servicesFormRow__createRow}>
           <Col xs={12}>
-              <Field
-                required
-                name="bufferTime"
-                label="Buffer Time"
-                type="number"
-                validate={[notNegative, maxDuration]}
-                normalize={parseNum}
-                data-test-id="bufferTime"
-              />
+            <Field
+              name="bufferTime"
+              label="Buffer Time"
+              type="number"
+              validate={[notNegative, maxDuration]}
+              normalize={parseNum}
+              data-test-id="bufferTime"
+            />
           </Col>
         </Row>
       </Form>

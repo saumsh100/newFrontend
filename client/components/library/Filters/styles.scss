@@ -2,7 +2,7 @@
 @import "../../../fonts";
 
 .filters {
-  border-top: $card-border-size $primary-color;
+  border-top: $card-border-size $primary-darkgrey;
 
   &__checkFilter {
     display: flex;
@@ -10,8 +10,8 @@
     justify-content: center;
     align-items: center;
     padding: 12px 50px;
-    color: $primary-darkgrey;
-    font-size: $medium-size;
+    color: lighten($primary-darkgrey, 20%);
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
     @media screen and (max-width: 1000px) {
       padding: 12px 20px;
     }
@@ -32,25 +32,34 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    margin: 10px 0;
+    //margin: 10px 0;
+    margin: 10px 0px 10px 0px;
     &__left {
-      width: 55%;
+      //width: 55%;
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
       font-size: $medium-size;
       font-weight: $large-weight;
+      font-family: $medium-font;
       span {
-        margin: 0 10px;
+        margin-left: 10px;
       }
     }
     &__right {
+      margin-left: auto;
       margin-right: 10px;
       font-size: $small-size;
       color: $primary-darkgrey;
       font-weight: $large-weight;
+      display: flex;
+      flex-direction: row;
       span {
         margin: 0 5px;
+      }
+
+      > button {
+        padding: 0px;
       }
     }
   }
@@ -80,6 +89,7 @@
     display: flex;
     flex-direction: row;
     align-items: flex-end;
+    text-transform: capitalize;
 
     &__icon {
       display: flex;

@@ -106,7 +106,7 @@ class PractitionerList extends Component {
 
     const formName = 'addPractitionerForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
@@ -120,7 +120,7 @@ class PractitionerList extends Component {
                 onClick={this.setActive}
                 className={styles.addPractitionerButton}
                 data-test-id="addPractitionerButton"
-                create
+                secondary
               >
                 Add New Practitioner
               </Button>

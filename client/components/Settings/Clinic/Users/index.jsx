@@ -51,8 +51,17 @@ class Users extends Component{
   deleteInvite(id) {
     const { accountId } = this.props;
 
+    const alert = {
+      success: {
+        body: 'Invite Deleted.',
+      },
+      error: {
+        body: 'Invite Could Not Be Deleted',
+      },
+    };
+
     const url = `/api/accounts/${accountId}/invites/${id}`;
-    this.props.deleteEntityRequest({ key: 'invites', id, url });
+    this.props.deleteEntityRequest({ key: 'invites', id, url, alert });
   }
 
   sendNewUser(entityData) {
@@ -66,7 +75,16 @@ class Users extends Component{
       newActive: false,
     });
 
-    this.props.createEntityRequest({ key: 'user', entityData, url });
+    const alert = {
+      success: {
+        body: 'User Creaeted.',
+      },
+      error: {
+        body: 'User Could Not Be Created',
+      },
+    };
+
+    this.props.createEntityRequest({ key: 'user', entityData, url, alert });
 
     // resetting inputs to empty
     entityData.firstName = '';
@@ -87,7 +105,16 @@ class Users extends Component{
       active: false,
     });
 
-    this.props.createEntityRequest({ key: 'invites', entityData, url });
+    const alert = {
+      success: {
+        body: 'Invite Sent.',
+      },
+      error: {
+        body: 'Invite Could Not Be Sent',
+      },
+    };
+
+    this.props.createEntityRequest({ key: 'invites', entityData, url, alert });
     entityData.email = '';
   }
 
@@ -122,7 +149,16 @@ class Users extends Component{
     if (numOfOwners === 1 && userOwner === true) {
       alert('There must be one Owner!')
     } else {
-      this.props.updateEntityRequest({ key: 'accounts', values, url });
+      const alert = {
+        success: {
+          body: 'Permission Changed.',
+        },
+        error: {
+          body: 'Permission Could Not Be Changed',
+        },
+      };
+
+      this.props.updateEntityRequest({ key: 'accounts', values, url, alert });
     }
   }
 
@@ -200,6 +236,7 @@ class Users extends Component{
         return (
           <InviteUsersList
             key={invite.id}
+            id={invite.id}
             email={invite.get('email')}
             currentUserRole={this.state.role}
             date={invite.get('createdAt')}
@@ -208,7 +245,7 @@ class Users extends Component{
             nameStyle={styles.name}
             emailStyle={styles.email}
             userListStyle={styles.userListItem}
-            editStyles={styles.edit}
+            editStyles={styles.cancel}
           />
         );
       })
@@ -220,17 +257,17 @@ class Users extends Component{
     ];
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName }},
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
+      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
     const actionsNewUser = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' }},
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
+      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' } },
     ];
 
     const editActions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Edit', onClick: this.sendEdit, component: Button },
     ];
 
@@ -240,7 +277,7 @@ class Users extends Component{
         onClick={this.addNewUser}
         data-test-id="addUserButton"
         icon="plus"
-        create
+        secondary
       >
         Add a User
       </Button>) : null);
@@ -297,14 +334,14 @@ class Users extends Component{
         </DialogBox>
         <Row className={styles.mainHead}>
           <Header className={styles.header} contentHeader title={`Users in ${clinicName}`} />
-          <div>
+          <div className={styles.paddingRight}>
             {addUserButton}
             <Button
               className={styles.inviteUser}
               onClick={this.addUser}
               data-test-id="inviteUserButton"
               icon="plus"
-              create
+              secondary
             >
               Invite a User
             </Button>

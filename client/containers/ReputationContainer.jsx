@@ -1,8 +1,11 @@
 
 import React, { PropTypes, Component } from 'react';
-import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { connect } from 'react-redux';
-import Reputation from '../components/Reputation';
+import { bindActionCreators } from 'redux';
+import Loader from 'react-loader';
+import { fetchEntitiesRequest } from '../thunks/fetchEntities';
+import Reputation from '../components/Reputation/Reviews';
 
 class ReputationContainer extends Component {
   render() {
@@ -15,20 +18,9 @@ class ReputationContainer extends Component {
 }
 
 ReputationContainer.propTypes = {
-  fetchEntities: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
   openForm: PropTypes.func,
 };
 
-function mapStateToProps({ entities }) {
-  return {};
-}
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-
-  }, dispatch);
-}
-
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(ReputationContainer);
+export default ReputationContainer;

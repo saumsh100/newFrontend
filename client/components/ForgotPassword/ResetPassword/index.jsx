@@ -2,7 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card } from '../../library';
+import { push } from 'react-router-redux';
+import { Card, Button } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
 import { resetUserPassword } from '../../../thunks/auth';
 import styles from '../styles.scss';
@@ -11,14 +12,39 @@ import CopyrightFooter from '../../Login/CopyrightFooter/index';
 class ResetPassword extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      submitted: false,
+    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleSubmit(values) {
-    this.props.resetUserPassword(this.props.location, values);
+    // This just posts right back to location URL...
+    return this.props.resetUserPassword(this.props.location, values)
+    .then(() => {
+      this.setState({ submitted: true });
+    });
   }
 
   render() {
+    const {
+      push,
+    } = this.props;
+
+    const display = !this.state.submitted ?  <ResetPasswordForm onSubmit={this.handleSubmit} /> :
+      (<div>
+          <div className={styles.textSuccess2}>Password Successfully Changed!</div>
+          <Button
+            onClick={()=> {
+              push('/login');
+            }}
+            className={styles.displayCenter}
+          >
+            Return to Login
+          </Button>
+       </div>);
+
     return (
       <div className={styles.backDrop}>
         <Card className={styles.loginForm}>
@@ -29,7 +55,7 @@ class ResetPassword extends Component {
               alt="CareCru Logo"
             />
           </div>
-          <ResetPasswordForm onSubmit={this.handleSubmit} />
+          {display}
         </Card>
         <CopyrightFooter />
       </div>
@@ -44,11 +70,10 @@ ResetPassword.propTypes = {
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     resetUserPassword,
+    push,
   }, dispatch);
 }
 
 const enhance = connect(null, mapActionsToProps);
 
 export default enhance(ResetPassword);
-
-

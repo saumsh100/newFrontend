@@ -121,21 +121,30 @@ $padding-size-border: 10px;
   }
 }
 
+.userContainer {
+  display: flex;
+  align-items: center;
+
+}
 .userMenuButton {
   display: flex;
   align-items: center;
-  margin-right: 10px;
   &:hover {
     color: $primary-color !important;
   }
 }
 
 .userMenuGreeting {
+  display: inline-block;
+  align-items: center;
   padding-right: 10px;
   font-weight: 600;
   text-align: right;
   @media screen and (max-width: $medium-screen-width) {
     display: none;
+  }
+  &:hover {
+    color: $primary-color !important;
   }
 }
 

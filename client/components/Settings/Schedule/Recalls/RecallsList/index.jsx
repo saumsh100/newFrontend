@@ -17,8 +17,8 @@ class RecallsList extends Component {
       icon = 'envelope';
     }
 
-    const button = <Button className={styles.edit} onClick={edit} edit>Edit</Button>;
-    const buttonDel = <Button className={styles.edit} onClick={deleteFunc} edit>Delete</Button>;
+    const button = <Button icon="pencil" className={styles.edit} onClick={edit} tertiary >Edit</Button>;
+    const buttonDel = <Button icon="trash" className={styles.edit} onClick={deleteFunc} >Delete</Button>;
 
     return (
       <ListItem
@@ -30,7 +30,7 @@ class RecallsList extends Component {
             <p className={styles.list}>Every {length / 60 / 60 / 24 / 30 } months</p>
           </div>
         </div>
-        <div>
+        <div style={{paddingRight: '15px'}}>
           {buttonDel}
           {button}
         </div>

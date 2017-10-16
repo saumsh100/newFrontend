@@ -19,20 +19,24 @@ export default function FiltersDisplay(props) {
   return (
     <Card className={styles.schedule_filter}>
       <div className={styles.filter_header}>
+        <div className={styles.filter_header__icon}>
+          <Icon size={1.2} icon="sliders" />
+        </div>
         <div className={styles.filter_header__title}>
           Filters
         </div>
-        <div className={styles.filter_header__icon}>
-          <Icon size={2} icon="sliders" />
-        </div>
         <div className={styles.filter_header__link} >
           <div
-            className={styles.filter_header__link__text}
+            className={styles.filter_header__link__selectText}
             onClick={handleSelectAll}
           >
             Select All
           </div>
-          <div onClick={handleClearAll} >Clear All</div>
+          <div
+            onClick={handleClearAll}
+            className={styles.filter_header__link__clearText}
+          >Clear All
+          </div>
         </div>
       </div>
       <div className={styles.filter_practitioner}>
@@ -45,7 +49,7 @@ export default function FiltersDisplay(props) {
           handleEntityCheck={handleEntityCheck}
         />
         <div className={styles.filter_options}>
-          <FilterEntities
+          {/*<FilterEntities
             display="name"
             label="Services"
             filterKey="servicesFilter"
@@ -54,7 +58,7 @@ export default function FiltersDisplay(props) {
             selectedFilterItem={selectedFilters.servicesFilter}
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
-          />
+          />*/}
           <FilterEntities
             display="name"
             label="Chairs"

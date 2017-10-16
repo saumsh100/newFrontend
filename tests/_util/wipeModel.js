@@ -12,6 +12,7 @@ async function wipeModel(Model) {
 const ORDER = [
   'Enterprise',
   'WeeklySchedule',
+  'Address',
   'Account',
   'Chair',
   'Permission',
@@ -31,14 +32,18 @@ const ORDER = [
   'Reminder',
   'SentRecall',
   'SentReminder',
+  'SentReview',
+  'Review',
   'SyncClientError',
   'SyncClientVersion',
   'Token',
   'WaitSpot',
+  'Segment',
   'Chat',
   'TextMessage',
   'Call',
   'PinCode',
+  'PasswordReset',
 ];
 
 async function wipeAllModels() {

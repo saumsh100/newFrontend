@@ -26,6 +26,10 @@ $empty-grey: darken(lightgrey, 5%);
   border-bottom: 1px solid $primary-color;
 }
 
+.primaryWhiteBorder {
+  border-bottom: 1px solid $primary-white;
+}
+
 .active {
   border-bottom: 2px solid $primary-dark ;
 }
@@ -66,6 +70,7 @@ $empty-grey: darken(lightgrey, 5%);
 .selectedListItem {
   padding-left: 15px;
   border-left: $primary-color $selection-border;
+
 }
 
 .toggleValueDiv {
@@ -110,4 +115,21 @@ $empty-grey: darken(lightgrey, 5%);
 .searchInput {
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.error {
+  position: absolute;
+  color: red;
+  font-size: 11px;
+  bottom: -16px;
+  font-weight: normal;
+  pointer-events: none;
+  letter-spacing: 2px;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  opacity: 0;
 }

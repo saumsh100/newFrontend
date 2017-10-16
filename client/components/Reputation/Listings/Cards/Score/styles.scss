@@ -2,7 +2,7 @@
 @import '../../../../../fonts';
 
 .score {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
   height: 210px;
   display: flex;
   justify-content: center;
@@ -14,21 +14,20 @@
     border-bottom: 1px solid $primary-lightgrey;
     padding-bottom: 10px;
     &_count {
-      color: $primary-light-blue;
-      @extend .font-jumbo;
+      color: $primary-blue;
+      composes: fontExtraLarge from 'sass-loader!../../../../../fonts.scss';
     }
     &_title {
       color: $primary-dark;
-      font-size: 20px;
-      font-weight: 600;
+      composes: fontMediumLarge from 'sass-loader!../../../../../fonts.scss';
     }
   }
   &__body {
     width: 80%;
     padding-top: 10px;
     &_listing {
-      @extend .font-small;
-      color: $primary-darkgrey;
+      composes: subHeaderSmall from 'sass-loader!../../../../../fonts.scss';
+      color: lighten($primary-darkgrey, 20%);
       display: flex;
       justify-content: space-between;
       margin-bottom: 10px;

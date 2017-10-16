@@ -20,6 +20,9 @@ const accountWithSchedule = {
 
 const rootUrl = '/_api/practitioners';
 
+const createPractitioner = Object.assign({}, practitioner);
+delete createPractitioner.accountId;
+
 
 describe('/api/practitioners', () => {
   // Seed with some standard user data
@@ -119,7 +122,7 @@ describe('/api/practitioners', () => {
       return request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send(practitioner)
+        .send(createPractitioner)
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule', 'pmsId', 'avatarUrl']);
@@ -179,8 +182,32 @@ describe('/api/practitioners', () => {
   });
 
   describe('DELETE /', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       await seedTestPractitioners();
+    });
+
+    test('/:practitionerId - delete a practitioner then undelete', () => {
+      return request(app)
+        .delete(`${rootUrl}/${practitionerId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(() => {
+          return request(app)
+            .post(rootUrl)
+            .set('Authorization', `Bearer ${token}`)
+            .send(createPractitioner)
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'weeklySchedule', 'pmsId', 'avatarUrl']);
+              const practitioners = body.entities.practitioners;
+              const newBody = omit(practitioners, ['weeklySchedules']);
+              expect({
+                entities: {
+                  practitioners: newBody,
+                },
+              }).toMatchSnapshot();
+            });
+        });
     });
 
     test('/:practitionerId - delete a practitioner', () => {

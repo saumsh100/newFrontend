@@ -1,3 +1,4 @@
+const { validateAccountIdPmsId } = require('../util/validators');
 
 export default function (sequelize, DataTypes) {
   const Appointment = sequelize.define('Appointment', {
@@ -31,6 +32,12 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        // validator for if pmsId and accountId are a unique combo
+        isUnique(value, next) {
+          return validateAccountIdPmsId(Appointment, value, this, next);
+        },
+      },
     },
 
     isDeleted: {
@@ -69,10 +76,20 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    isSyncedWithPMS: {
+    isSyncedWithPms: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,
+    },
+
+    isSyncedWithPMS: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['isSyncedWithPms']),
+      get() {
+        return !!this.get('isSyncedWithPms');
+      },
+      set(value) {
+        this.setDataValue('isSyncedWithPms', value);
+      },
     },
 
     isCancelled: {
@@ -93,7 +110,17 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Appointment.associate = ({ Account, Chair, Patient, Practitioner, SentReminder, Service }) => {
+  Appointment.associate = (models) => {
+    const {
+      Account,
+      Chair,
+      Patient,
+      Practitioner,
+      SentReminder,
+      Service,
+      SentReview,
+    } = models;
+
     Appointment.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -118,6 +145,11 @@ export default function (sequelize, DataTypes) {
     Appointment.hasMany(SentReminder, {
       foreignKey: 'appointmentId',
       as: 'sentReminders',
+    });
+
+    Appointment.hasMany(SentReview, {
+      foreignKey: 'appointmentId',
+      as: 'sentReviews',
     });
 
     Appointment.belongsTo(Service, {
@@ -160,6 +192,7 @@ export default function (sequelize, DataTypes) {
         }
         return error;
       });
+
       throw { docs: response, errors: errorsResponse };
     }
 

@@ -28,6 +28,7 @@ async function seedChairs() {
       id: chairId1,
       accountId,
       name: 'C1',
+      pmsId: '12',
     },
     {
       id: chairId2,
@@ -124,7 +125,6 @@ describe('/api/chairs', () => {
         .set('Authorization', `Bearer ${token}`)
         .send({
           id: newChairId,
-          accountId,
           name: 'New Chair',
         })
         .expect(201)
@@ -145,7 +145,6 @@ describe('/api/chairs', () => {
         .set('Accept', 'application/vnd.api+json')
         .send({
           id: newChairId,
-          accountId,
           name: 'New Chair',
         })
         .expect(201)
@@ -216,6 +215,32 @@ describe('/api/chairs', () => {
         .delete(`${rootUrl}/${chairId1}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204);
+    });
+
+    test('should delete an chair then undelete it', () => {
+      return request(app)
+        .delete(`${rootUrl}/${chairId1}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(() => {
+          return request(app)
+            .post(rootUrl)
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+              id: chairId1,
+              name: 'C5',
+              pmsId: '12',
+            })
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              const chairs = getModelsArray('chairs', body);
+              const [chair] = chairs;
+              expect(chairs.length).toBe(1);
+              expect(chair.name).toBe('C1');
+              expect(body).toMatchSnapshot();
+            });
+        });
     });
   });
 });

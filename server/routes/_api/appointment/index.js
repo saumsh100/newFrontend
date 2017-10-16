@@ -1,9 +1,15 @@
 
 import Moment from 'moment-timezone';
+import sequelize from 'sequelize';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
+import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
+import { newPatients } from '../../../lib/intelligence/patients';
+import { appsHygienist, appsNotCancelled, appsNewPatient } from '../../../lib/intelligence/appointments';
+import format from '../../util/format';
+import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
@@ -69,6 +75,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
       patientId: {
         $not: null,
       },
+      isCancelled: true,
     },
     raw: true,
     nest: true,
@@ -88,43 +95,42 @@ appointmentsRouter.get('/business', (req, res, next) => {
     ],
   })
     .then(async (appointments) => {
-      const queryCancelled = {
-        where: {
-          accountId,
-          $or: [],
-          patientId: {
-            $not: null,
-          },
-        },
-        raw: true,
-      };
+      const hygenApps = await appsHygienist(startDate, endDate, accountId);
+      send.hygieneAppts = hygenApps[0] ? Number(hygenApps[0].appsHygienist) : 0;
+
+      const $or = [];
 
       for (let i = 0; i < appointments.length; i++) {
-        if (testHygien.test(appointments[i].practitioner.type)) {
-          send.hygieneAppts++;
-        }
 
         if (appointments[i].isCancelled) {
           send.brokenAppts++;
-          const filled = await Appointment.findOne({
-            where: {
-              accountId,
-              startDate: {
-                gte: appointments[i].startDate,
-                lte: appointments[i].endDate,
-              },
-              patientId: {
-                $not: null,
-              },
-              practitionerId: appointments[i].practitionerId,
-              isCancelled: false,
+
+          $or.push({
+            accountId,
+            isCancelled: false,
+            startDate: {
+              $between: [appointments[i].startDate,
+                appointments[i].endDate],
             },
+            endDate: {
+              $between: [appointments[i].startDate,
+                appointments[i].endDate],
+            },
+            patientId: {
+              $not: null,
+            },
+            practitionerId: appointments[i].practitionerId,
           });
-          if (filled) {
-            send.brokenAppts--;
-          }
         }
       }
+
+
+      const filled = await appsNotCancelled(startDate, endDate, accountId);
+
+      send.brokenAppts = appointments.length - filled;
+
+      send.productionEarnings = await mostBusinessProcedure(startDate, endDate, accountId);
+
       return res.send(send);
     })
     .catch(next);
@@ -177,12 +183,13 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
       const result = results[0];
       const account = results[1];
 
-      const days = new Array(6).fill(0);
+      const days = new Array(7).fill(0);
       // calculate the frequency of the day of the week
       for (let i = 0; i < result.length; i++) {
         const day = account.timezone ? moment.tz(result[i].startDate, account.timezone).get('day') : moment(result[i].startDate).get('day');
-        days[day - 1]++;
+        days[day]++;
       }
+
       res.send({ days });
     })
     .catch(next);
@@ -373,7 +380,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
     });
 
   return Promise.all([a, b, c, d, e])
-    .then((values) => {
+    .then(async (values) => {
       const sendStats = {};
       sendStats.practitioner = {};
       sendStats.services = {};
@@ -435,22 +442,24 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       }
 
       // practitioner data
-      values[1].map((practitioner) => {
+
+      for (let i = 0; i < values[1].length; i += 1) {
+        const practitioner = values[1][i];
         if (practitioner.isActive) {
           const data = {};
-
+          data.newPatients = await appsNewPatient(startDate, endDate, accountId, practitioner.id);
+          data.newPatients = data.newPatients.length;
           data.firstName = practitioner.firstName;
           data.lastName = practitioner.lastName;
           data.id = practitioner.id;
           data.totalTime = timeOpen;
           data.type = practitioner.type;
           data.appointmentTime = 0;
-          data.newPatients = 0;
-          data.avatarUrl = practitioner.avatarUrl,
-          data.fullAvatarUrl = practitioner.fullAvatarUrl,
+          data.avatarUrl = practitioner.avatarUrl;
+          data.fullAvatarUrl = practitioner.fullAvatarUrl;
           sendStats.practitioner[practitioner.id] = data;
         }
-      });
+      }
 
       let confirmedAppointments = 0;
       let notConfirmedAppointments = 0;
@@ -460,7 +469,6 @@ appointmentsRouter.get('/stats', (req, res, next) => {
         if (appointment.practitioner.isActive) {
           if (range.contains(moment(appointment.patient.createdAt))) {
             sendStats.newPatients++;
-            sendStats.practitioner[appointment.practitioner.id].newPatients++;
           }
 
           let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
@@ -469,7 +477,7 @@ appointmentsRouter.get('/stats', (req, res, next) => {
           time += timeApp;
           notConfirmedAppointments++;
 
-          if (appointment.isPatientConfirmed === true && appointment.isCancelled === false) {
+          if (appointment.isCancelled === false) {
             if (!sendStats.patients[appointment.patient.id]) {
               sendStats.patients[appointment.patient.id] = {
                 numAppointments: 0,
@@ -486,7 +494,9 @@ appointmentsRouter.get('/stats', (req, res, next) => {
             }
             sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
-            confirmedAppointments++;
+            if (appointment.isConfirmed) {
+              confirmedAppointments += 1;
+            }
           }
         }
       });
@@ -503,6 +513,21 @@ appointmentsRouter.get('/stats', (req, res, next) => {
       newObject[sorted[3]] = sendStats.patients[sorted[3]];
 
       sendStats.patients = newObject;
+
+      const checkPmsCreatedAt = await Patient.findOne({
+        where: {
+          pmsCreatedAt: {
+            $ne: null,
+          },
+        },
+      });
+
+      let newPatientsNumber = await newPatients(startDate, endDate, accountId);
+
+      newPatientsNumber = newPatientsNumber[0] ? newPatientsNumber[0].dataValues.newPatients : 0;
+
+      sendStats.newPatients = checkPmsCreatedAt
+        ? newPatientsNumber : sendStats.newPatients;
 
       sendStats.confirmedAppointments = confirmedAppointments;
       sendStats.notConfirmedAppointments = notConfirmedAppointments;
@@ -547,33 +572,109 @@ appointmentsRouter.get('/', (req, res, next) => {
     offset: parseInt(skipped),
   }).then((appointments) => {
     const sendAppointments = appointments.map(a => a.get({ plain: true }));
-    return res.send(normalize('appointments', sendAppointments));
+    return res.send(format(req, res, 'appointments', sendAppointments));
   })
     .catch(next);
 });
 
-appointmentsRouter.post('/', checkPermissions('appointments:create'), (req, res, next) => {
+appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req, res, next) => {
   const accountId = req.accountId;
   const appointmentData = Object.assign({}, req.body, {
     accountId,
   });
 
-  return Appointment.create(appointmentData)
-    .then((appointment) => {
-      const normalized = normalize('appointment', appointment.dataValues);
+  try {
+    const appointmentTest = await Appointment.build(appointmentData);
+    await appointmentTest.validate();
+
+    return Appointment.create(appointmentData)
+        .then((appointment) => {
+          const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
+          res.status(201).send(normalized);
+          return { appointment: appointment.dataValues, normalized };
+        })
+        .then(async ({ appointment }) => {
+          if (appointment.isSyncedWithPms && appointment.patientId) {
+            // Dashboard app needs patient data
+            const patient = await Patient.findById(appointment.patientId);
+            appointment.patient = patient.get({ plain: true });
+          }
+
+          const io = req.app.get('socketio');
+          const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+          io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+          return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
+        })
+        .catch(next);
+  } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+      const appointment = e.errors[0].message.model.dataValues;
+
+      const normalized = format(req, res, 'appointment', appointment);
       res.status(201).send(normalized);
-      return { appointment: appointment.dataValues, normalized };
-    })
-    .then(async ({ appointment }) => {
-      if (appointment.isSyncedWithPMS && appointment.patientId) {
+
+      if (appointment.isSyncedWithPms && appointment.patientId) {
         // Dashboard app needs patient data
         const patient = await Patient.findById(appointment.patientId);
         appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+      io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
+    }
+    return next(e);
+  }
+});
+
+/**
+ * Batch create appointments for connector
+ */
+appointmentsRouter.post('/connector/batch', checkPermissions('appointments:create'), async (req, res, next) => {
+  const appointments = req.body;
+  const cleanedAppointments = appointments.map(appointment => Object.assign(
+    {},
+    appointment,
+    {
+      accountId: req.accountId,
+      isSyncedWithPms: true,
+    }
+  ));
+
+  return batchCreate(cleanedAppointments, Appointment, 'Appointment')
+    .then((apps) => {
+      const appData = apps.map(app => app.get({ plain: true }));
+      res.status(201).send(format(req, res, 'appointments', appData));
+    })
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+
+      const data = format(req, res, 'appointments', docs);
+      return res.status(201).send(Object.assign({}, data));
+    })
+    .catch(next);
+});
+
+/**
+ * Batch update appointments for connector
+ */
+appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update'), (req, res, next) => {
+  const appointments = req.body;
+  const appointmentUpdates = appointments.map((appointment) => {
+    return Appointment.findById(appointment.id)
+      .then(_appointment => _appointment.update(appointment));
+  });
+
+  return Promise.all(appointmentUpdates)
+    .then((_appointments) => {
+      const appData = _appointments.map(app => app.get({ plain: true }));
+      res.send(format(req, res, 'appointments', appData));
     })
     .catch(next);
 });
@@ -602,6 +703,7 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
     })
     .catch(next);
 });
+
 
 /**
  * Batch updating
@@ -660,7 +762,8 @@ if (globals.env !== 'production') {
  * Get an appointment
  */
 appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'), (req, res, next) => Promise.resolve(req.appointment)
-    .then(appointment => res.send(normalize('appointment', appointment.dataValues)))
+    .then(appointment =>
+      res.send(format(req, res, 'appointment', appointment.get({ plain: true }))))
     .catch(next));
 
 /**
@@ -670,20 +773,27 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
   const accountId = req.accountId;
   return req.appointment.update(req.body)
     .then((appointment) => {
-      const normalized = normalize('appointment', appointment.dataValues);
+      const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
       res.status(201).send(normalized);
       return { appointment: appointment.dataValues };
     })
     .then(async ({ appointment }) => {
       // Dispatch to the appropriate socket room
-      if (appointment.isSyncedWithPMS && appointment.patientId) {
+      if (appointment.isSyncedWithPms && appointment.patientId) {
         // Dashboard app needs patient data
         const patient = await Patient.findById(appointment.patientId);
         appointment.patient = patient.get({ plain: true });
       }
 
       const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = appointment.isDeleted ? 'DELETE' : 'UPDATE';
+      io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
+
+      // TODO: why are we double sending? what was wrong with our current lowercase actions? client-side is easy to update!
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
@@ -700,8 +810,9 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
     .then(() => res.send(204))
     .then(() => {
       const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPMS ? namespaces.dash : namespaces.sync;
+      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = normalize('appointment', appointment.get({ plain: true }));
+      io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
       return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
     .catch(next);

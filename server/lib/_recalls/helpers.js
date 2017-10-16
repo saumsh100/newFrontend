@@ -14,30 +14,7 @@ import { Appointment, Patient, SentRecall } from '../../_models';
  * @param date
  */
 export async function getPatientsDueForRecall({ recall, account, date }) {
-  const filterObject = {
-    accountId: account.id,
-    // TODO: save the recall filtering until it computes recall
-    // This is because we want to be able to show the users which patients
-    // are due for recall even tho the communication was not sent
-    // preferences: { recalls: true },
-  };
-
-
-  const joinObject = {
-    sentRecalls: true,
-    appointments: {
-      _apply(sequence) {
-        // TODO: This will order oldest appointment first, needs to be flipped!
-        return sequence
-          .filter({
-            isDeleted: false,
-            isCancelled: false,
-          })
-          .orderBy('startDate');
-      },
-    },
-  };
-
+  const pastDate = moment(date).subtract(2, 'years').toISOString();
   const patients = await Patient.findAll({
     where: {
       isDeleted: false,
@@ -49,7 +26,11 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
         where: {
           isDeleted: false,
           isCancelled: false,
+          startDate: {
+            gt: pastDate,
+          }
         },
+
         model: Appointment,
         as: 'appointments',
         order: [['startDate', 'DESC']],

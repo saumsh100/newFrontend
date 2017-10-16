@@ -1,13 +1,58 @@
 @import "../../../../../ui";
 
+
+
+.showDetails {
+  display: flex;
+  flex-direction: column;
+  padding-top: 5px;
+  padding-left: 12px;
+
+  &_info {
+
+  }
+
+  &_text{
+    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+    color: darken($primary-darkgrey, 5%);
+    line-height: 1.3em;
+  }
+
+  &_website {
+    text-decoration: none;
+    color: $primary-blue;
+    &:hover {
+      text-decoration: underline;
+      color: darken($primary-blue, 5%);
+    }
+  }
+
+  &_links {
+    display: flex;
+  }
+  &_view {
+    padding-top: 5px;
+    text-decoration: none;
+    color: lighten($primary-blue, 5%);
+    &:hover {
+      text-decoration: underline;
+      color: darken($primary-blue, 5%);
+    }
+  }
+}
+
 .mostLoyal {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
   overflow: inherit;
   &__wrapper {
     display: block;
     width: 100%;
-    max-height: 700px;
+    //max-height: 700px;
     overflow: auto;
+    height: calc(100vh - 330px);
+    overflow-x: hidden;
+    box-sizing: border-box;
+    position: relative;
   }
   &__header {
     display: flex;
@@ -47,9 +92,10 @@
     padding-left: 15px;
     height: 60px;
     border-right: 2px solid $primary-lightgrey;
-    font-weight: 600;
     text-transform: uppercase;
     color: $primary-dark;
+    font-family: $medium-font;
+    font-size: 16px;
     @media screen and (max-width: 950px) {
       border-right: none;
     }
@@ -97,6 +143,8 @@
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
+      padding: 15px;
+
     }
     &_left {
       display: flex;
@@ -124,7 +172,7 @@
     &_right {
       display: flex;
       align-items: center;
-      text-align: right;
+      //text-align: right;
       height: 100%;
       width: 100%;
       justify-content: flex-start;
@@ -141,16 +189,19 @@
         &_times {
           color: $primary-color;
         }
+        &_exclamation {
+          color: $primary-yellow;
+        }
       }
     }
 
     &_table {
-      text-align: center;
+      //text-align: center;
       padding: 0 25px;
       min-width: 200px;
       height: 100%;
       display: flex;
-      align-items: center;
+      //align-items: center;
       flex-direction: column;
       justify-content: center;
     }
@@ -162,13 +213,25 @@
         font-size: $small-size;
       }
       &__button {
-        color: $primary-light-blue;;
+        color: $primary-blue;;
         font-size: $small-size;
+        text-decoration: none;
         display: flex;
-        justify-content: center;
-        align-items: center;
+        padding-top: 5px;
+        //justify-content: center;
+        //align-items: center;
         i {
           margin-right: 4px;
+        }
+
+        link {
+          text-decoration: none;
+          &:hover {
+            color: darken($primary-blue, 10%);
+          }
+        }
+        &:hover {
+          color: darken($primary-blue, 10%);
         }
       }
     }
@@ -188,4 +251,19 @@
       }
     }
   }
+}
+
+
+.clearedListings {
+  font-size: 20px;
+  line-height: 1.5em;
+  width: 700px;
+  color: $inactive-color;
+  text-align: center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
 }

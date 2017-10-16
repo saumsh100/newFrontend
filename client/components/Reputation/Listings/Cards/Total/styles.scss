@@ -2,7 +2,7 @@
 @import "../../../../../fonts";
 
 .total {
-  border-top: $card-border-size $primary-light-blue;
+  border-top: $card-border-size $primary-darkgrey;
   height: 210px;
   display: flex;
   justify-content: center;
@@ -33,6 +33,7 @@
     &_text {
       padding-left: 20px;
       color: $primary-dark;
+      font-size: 18px;
     }
   }
   &__body {
@@ -41,7 +42,7 @@
     &_total {
       display: flex;
       justify-content: space-between;
-      color: $primary-light-blue;
+      color: $primary-blue;
     }
   }
 }

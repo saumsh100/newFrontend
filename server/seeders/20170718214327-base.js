@@ -1,7 +1,9 @@
+
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const procedures = require('../fixtures/procedures/procedureDump.json');
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -42,6 +44,7 @@ const enterprise = {
 
 const account = {
   id: accountId,
+  vendastaId: 'Liberty Chiropractic',
   enterpriseId,
   weeklyScheduleId,
   addressId,
@@ -49,6 +52,7 @@ const account = {
   twilioPhoneNumber: clinicPhoneNumber,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  canSendReviews: false,
 };
 
 const address = {
@@ -60,16 +64,26 @@ const address = {
 
 const account2 = {
   id: accountId2,
+  vendastaId: 'Liberty Chiropractic',
   enterpriseId,
   addressId: addressId2,
-  name: 'Test Account 2',
+  contactEmail: 'info@libertychiropractic.ca',
+  website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
+  googlePlaceId: 'ChIJP-dQSDEioFMRBpVTwZ2_h1o',
+  facebookUrl: 'https://www.facebook.com/libertychiroedm/',
+  bookingWidgetPrimaryColor: '#4D3069',
+  name: 'Liberty Chiropractic',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  phoneNumber: '+17808508886',
+  canSendReviews: true,
 };
 
 const address2 = {
   id: addressId2,
-  city: 'Kostolac',
+  city: 'Edmonton',
+  state: 'AB',
+  street: '10204 112th St.',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
@@ -177,13 +191,15 @@ module.exports = {
     ]);
 
     const patients = [];
+    const deliveredProcedures = [];
 
     for (let i = 0; i < 100; i += 1) {
       const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
+      const id = uuid();
       patients.push({
-        id: uuid(),
+        id,
         accountId,
         firstName,
         lastName,
@@ -200,7 +216,35 @@ module.exports = {
           sin: 'dsasdasdasdadsasad',
         }),
         createdAt: faker.date.past(),
+        pmsCreatedAt: faker.date.past(),
         updatedAt: new Date(),
+      });
+
+      const primaryInsuranceAmount = faker.finance.amount(0, 200, 2);
+
+      const secondaryInsuranceAmount = faker.finance.amount(0, 200, 2);
+
+      const patientAmount = faker.finance.amount(0, 200, 2);
+
+      const discountAmount = faker.finance.amount(0, 200, 2);
+
+      const totalAmount = parseFloat(patientAmount) + parseFloat(secondaryInsuranceAmount) +
+      parseFloat(primaryInsuranceAmount) - parseFloat(discountAmount);
+
+      deliveredProcedures.push({
+        id: uuid(),
+        accountId,
+        primaryInsuranceAmount,
+        secondaryInsuranceAmount,
+        patientAmount,
+        discountAmount,
+        totalAmount,
+        units: 1.00,
+        createdAt: faker.date.past(),
+        entryDate: faker.date.past(),
+        updatedAt: new Date(),
+        patientId: id,
+        procedureCode: procedures[Math.floor(Math.random() * procedures.length)].code,
       });
     }
 
@@ -231,6 +275,8 @@ module.exports = {
     }
 
     await queryInterface.bulkInsert('Patients', patients);
+
+    await queryInterface.bulkInsert('DeliveredProcedures', deliveredProcedures);
 
     const practitioners = [];
 
@@ -290,6 +336,7 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
+        pmsCreatedAt: faker.date.past(),
         createdAt: faker.date.past(),
         updatedAt: new Date(),
       });
@@ -336,7 +383,14 @@ module.exports = {
       name: 'Chair 1',
       createdAt: new Date(),
       updatedAt: new Date(),
-    }]);
+    }, {
+      id: uuid(),
+      accountId,
+      name: 'Chair 2',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    ]);
 
     // await queryInterface.bulkInsert('Appointments', appointments2);
   },

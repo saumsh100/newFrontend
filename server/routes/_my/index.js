@@ -1,17 +1,22 @@
 /* eslint-disable consistent-return */
 import { Router } from 'express';
 import fs from 'fs';
+import StatusError from '../../util/StatusError';
+import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
+import reviewsRouter from './reviews';
+import sentReviewsRouter from './sentReviews';
+import widgetsRouter from './widgets';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { PatientUser, Practitioner } from '../../_models';
+import { Patient, PatientUser, Practitioner, PatientUserReset } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
 
-const sequelizeMyRouter = new Router();
+const sequelizeMyRouter = Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
@@ -24,6 +29,10 @@ sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
   { association: 'practitioners', required: false, where: { isActive: true } },
 ]));
+
+sequelizeMyRouter.use('/reviews', reviewsRouter);
+sequelizeMyRouter.use('/sentReviews', sentReviewsRouter);
+sequelizeMyRouter.use('/widgets', widgetsRouter);
 
 sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
   try {
@@ -75,11 +84,11 @@ function replaceIndex(string, regex, index, repl) {
 
 const toString = str => `"${str}"`;
 const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/my/${filename}`;
+const getPath = filename => `${__dirname}/../../routes/_my/${filename}`;
 
 sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
-  const account = req.account.get({ plain: true });
   try {
+    const account = req.account.get({ plain: true });
     fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
       if (err) throw err;
       fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
@@ -92,7 +101,7 @@ sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
         const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(account.id));
 
         // TODO: need to be able to minify and compress code UglifyJS
-        res.send(replacedWidgetJS);
+        res.type('javascript').send(replacedWidgetJS);
       });
     });
   } catch (err) {
@@ -123,7 +132,25 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   phoneNumber = validatePhoneNumber(phoneNumber);
   try {
     const patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
-    return res.send({ exists: !!patientUsers[0] });
+    const alreadyExists = !!patientUsers[0];
+    if (alreadyExists) {
+      return res.send({ error: 'There is already a user with that mobile number.' });
+    }
+
+    lookupsClient.phoneNumbers(phoneNumber).get({
+      type: 'carrier'
+    }, function(error, number) {
+      if (error) {
+        return res.sendStatus(200);
+      }
+
+      const isLandline = number && number.carrier && number.carrier.type === 'landline';
+      if (isLandline) {
+        res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
+      } else {
+        res.sendStatus(200);
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -140,11 +167,80 @@ sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   }
 });
 
+sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
+  try {
+    // TODO: unsubscribe patient preferences
+    const { encoded } = req.params;
+    const { md_email } = req.query;
+    const [email, accountId] = new Buffer(encoded, 'base64').toString('ascii').split(':');
+
+    const patient = await Patient.findOne({ where: { email, accountId } });
+    if (!patient) {
+      return next(StatusError(404, 'Page not found'));
+    }
+
+    if (md_email !== email) {
+      console.log(md_email, email);
+      return next(StatusError(404, 'Page not found'));
+    }
+
+    res.render('unsub', { email, accountId, firstName: patient.firstName });
+  } catch (err) {
+    next(err);
+  }
+});
+
+sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
+  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+    .then((reset) => {
+      if (!reset) {
+        // TODO: replace with StatusError
+        res.status(404).send();
+      } else {
+        res.redirect(`/reset-password/${req.params.tokenId}`);
+      }
+    })
+    .catch(next);
+});
+
+sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
+  const {
+    password,
+  } = req.body;
+
+  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+    .then(async (reset) => {
+      if (!reset) {
+        return next(StatusError(401, 'Invalid Token'));
+      }
+
+      const user = await PatientUser.findOne({
+        where: {
+          id: reset.patientUserId,
+        },
+      });
+
+      await user.setPasswordAsync(password);
+      await user.save();
+      await reset.destroy();
+      return res.sendStatus(201);
+    })
+    .catch(next);
+});
+
+sequelizeMyRouter.get('(/*)?', (req, res, next) => {
+  try {
+    return res.render('my');
+  } catch (err) {
+    next(err);
+  }
+});
+
 // Very important we catch all other endpoints,
 // or else express-subdomain continues to the other middlewares
-sequelizeMyRouter.use('(/*)?', (req, res, next) => {
+/*sequelizeMyRouter.use('(/*)?', (req, res, next) => {
   // TODO: this needs to be wrapped in try catch
   return res.status(404).end();
-});
+});*/
 
 module.exports = sequelizeMyRouter;

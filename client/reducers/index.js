@@ -5,7 +5,7 @@ import { reducer as form } from 'redux-form';
 import alerts from './alerts';
 import toolbar from './toolbar';
 import reputation from './reputation';
-import reviews from './reviews';
+import reviews from './vendastaReviews';
 import auth from './auth';
 import entities from './entities';
 import schedule from './schedule';
@@ -13,12 +13,14 @@ import dialogs from './dialogs';
 import patientList from './patientList';
 import requests from './requests';
 import accountSettings from './accountSettings';
+import caller from './caller';
 import apiRequests from './apiRequests';
 import segments from './segments';
 import availabilities from './availabilities';
 
 const appReducer = combineReducers({
   alerts,
+  caller,
   accountSettings,
   routing,
   form,

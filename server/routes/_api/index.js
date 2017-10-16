@@ -6,6 +6,9 @@ import getResponseConfig from '../../middleware/getResponseConfig';
 import accountsRouter from './accounts';
 import addressRouter from './addresses';
 import chairsRouter from './chairs';
+import connectorRouter from './connector';
+import deliveredProceduresRouter from './deliveredProcedures';
+import reputationRouter from './reputation';
 import enterprisesRouter from './enterprises';
 import familiesRouter from './families';
 import remindersRouter from './reminders';
@@ -40,6 +43,9 @@ apiRouter.use('/accounts', invitesRouter);
 apiRouter.use('/accounts', recallsRouter);
 apiRouter.use('/accounts', permissionsRouter);
 apiRouter.use('/chairs', chairsRouter);
+apiRouter.use('/connector', connectorRouter);
+apiRouter.use('/deliveredProcedures', deliveredProceduresRouter);
+apiRouter.use('/reputation', reputationRouter);
 apiRouter.use('/segments', segmentsRouter);
 apiRouter.use('/enterprises', enterprisesRouter);
 apiRouter.use('/families', familiesRouter);
@@ -59,6 +65,5 @@ apiRouter.use('/appointments', appointmentsRouter);
 apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/calls', callsRouter);
 apiRouter.use('/services', servicesRouter);
-
 
 export default apiRouter;

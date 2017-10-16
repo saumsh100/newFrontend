@@ -40,21 +40,22 @@
   margin: 25px 25px 25px 0;
 }
 
+.paddingRight {
+  padding-right: 10px;
+}
+
 .mainHead {
   font-size: 16px;
-  font-family: "Gotham-Book";
   display: flex;
   justify-content: space-between;
 }
 
 .header{
-  font-family: "Gotham-Book";
   font-size: 16px;
   margin-top: 20px;
 }
 
 .mainHeader{
-  font-family: "Gotham-Book";
   font-style: italic;
   font-size: 16px;
   margin-top: 35px;
@@ -103,8 +104,28 @@
   width: 100%;
 }
 
+.delete {
+  margin-right: 25px;
+  display: flex;
+  i {
+    margin-top: -1.7px;
+  }
+}
+
 .edit {
   margin-right: 25px;
+  display: flex;
+  i {
+    margin-top: -1px;
+  }
+}
+
+.cancel {
+  margin-right: 10px !important;
+  display: flex;
+  i {
+    margin-top: -1px;
+  }
 }
 
 .inviteFormContainer {

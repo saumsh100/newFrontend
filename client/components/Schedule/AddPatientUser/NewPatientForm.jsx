@@ -1,19 +1,38 @@
 
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 import { Form, Field, DayPicker } from '../../library';
 import styles from './styles.scss';
 
 import { maxLength, asyncValidateNewPatient, emailValidate, phoneValidate } from '../../library/Form/validate';
 
-function test() {
+const normalizeBirthdate = (value) => {
+  return value.trim();
+};
 
-}
+const validateBirthdate = (value) => {
+  if (value === undefined) {
+    return;
+  }
+  const format = 'MM/DD/YYYY';
+  const pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+  if (!pattern.test(value)) {
+    return format;
+  } else {
+    const date = moment(value, format);
+    const isValid = date.isValid();
+    if (!isValid) {
+      return format;
+    }
+  }
+};
+
+const options = [
+  { value: 'Male' },
+  { value: 'Female' },
+];
 
 export default function NewPatientForm({ onSubmit, formName, mergingPatientData, }) {
-  const options = [
-    { value: 'Male' },
-    { value: 'Female' },
-  ];
 
   const patientUser = mergingPatientData.patientUser;
 
@@ -74,10 +93,11 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
         label="Email"
       />
       <Field
-        component="DayPicker"
+        normalize={normalizeBirthdate}
+        validate={[validateBirthdate]}
         name="birthDate"
-        label="Birth Date"
-        handleThisInput
+        label="Birth Date (MM/DD/YYYY)"
+        data-test-id="birthDate"
       />
     </Form>
   );

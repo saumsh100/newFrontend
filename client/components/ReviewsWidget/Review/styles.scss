@@ -1,0 +1,15 @@
+
+@import '../../../ui.scss';
+
+.reviewsWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.reviewsFormWrapper {
+  max-width: 350px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+

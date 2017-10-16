@@ -331,7 +331,7 @@ class PractitionerOfficeHours extends Component{
       });
 
       const actionsChair = [
-        { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+        { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
         { label: 'Save', onClick: values => this.chairSubmit(values, this.state.modalChairDay), component: RemoteSubmitButton, props: { form: 'chairs' } },
       ];
 
@@ -383,8 +383,8 @@ class PractitionerOfficeHours extends Component{
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule" />
             <div>
-              <Button className={styles.button} icon="plus" create onClick={this.createPattern}>Add New Pattern</Button>
-              <Button className={styles.button} create onClick={this.openModal}>Change Start Date</Button>
+              <Button className={styles.button} icon="plus" secondary create onClick={this.createPattern}>Add New Pattern</Button>
+              <Button className={styles.button} secondary onClick={this.openModal}>Change Start Date</Button>
             </div>
           </div>
           <OfficeHoursForm
@@ -416,7 +416,7 @@ class PractitionerOfficeHours extends Component{
     }
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.changeStartDate, component: RemoteSubmitButton, props: { form: 'advanceCreatePrac' }},
     ];
 

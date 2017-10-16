@@ -27,28 +27,31 @@ const UserMenu = (props) => {
 
   const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
-  const businessName = enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN') ?
+  const isEnterprise = role === 'SUPERADMIN';//enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
+  const businessName = isEnterprise ?
     enterprise.get('name') :
     activeAccount && activeAccount.name;
 
   return (
     <Button flat {...newProps} className={styles.userMenuButton}>
-      <div className={styles.userMenuGreeting}>
-        <div className={styles.greeting}>
-          Hello, {user.get('firstName')}
+      <div className={styles.userContainer}>
+        <div className={styles.userMenuGreeting}>
+          <div className={styles.greeting}>
+            Hello, {user.get('firstName')}
+          </div>
+          <div className={styles.userRole}>
+            {role}
+          </div>
+          <div className={styles.businessName}>
+            {businessName}
+          </div>
         </div>
-        <div className={styles.userRole}>
-          {role}
-        </div>
-        <div className={styles.businessName}>
-          {businessName}
-        </div>
+        <Avatar
+          className={styles.userAvatar}
+          user={user.toJS()}
+        />
+        <Icon icon="caret-down" />
       </div>
-      <Avatar
-        className={styles.userAvatar}
-        user={user.toJS()}
-      />
-      <Icon icon="caret-down" />
     </Button>
   );
 };

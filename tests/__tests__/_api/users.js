@@ -83,4 +83,32 @@ describe('/api/users', () => {
         });
     });
   });
+
+  describe('DELETE /:userId', () => {
+    test('delete a user', async () => {
+      token = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .delete(`${rootUrl}/${managerUserId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('DELETE /:userId', () => {
+    test('delete a user fail due to being a manager', async () => {
+      token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .delete(`${rootUrl}/${managerUserId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(401)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
 });

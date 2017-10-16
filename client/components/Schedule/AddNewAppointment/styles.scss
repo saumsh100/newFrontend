@@ -6,7 +6,7 @@
   border: .5px solid #ff715a;
   border-radius: .5rem;
   width: 900px;
-  height: 600px;
+  height: 555px;
 }
 
 .title {
@@ -19,27 +19,30 @@
 
 .remoteSubmit {
   display: flex;
-  padding-right: 100px;
+  justify-content: flex-end;
+  padding-right: 40px;
   &_button {
-    margin-left: auto;
   }
   &_buttonDelete {
-    padding-left: 10px;
   }
 }
 
 .trashIcon {
   position: absolute;
-  left: 845px;
-  top: 5px;
+  right: 0px;
+  top: 15px;
   font-size: 1.4em;
   color: $primary-grey;
+
+  &:hover {
+    color: darken($primary-grey, 5%) !important;
+  }
 }
 
 .addNewAppt {
   border-radius: .5rem;
   width: 900px;
-  height: 545px;
+  height: 498px;
 
   &_mainContainer {
     min-width: 200px;
@@ -51,7 +54,7 @@
     &_right {
       padding-top: 49px;
       background-color: #ff755e;
-      height: 551px;
+      height: 506px;
       width: 301px;
       border-bottom-right-radius: .3rem;
       border-top-right-radius: .3rem;
@@ -86,6 +89,7 @@
 
     &_nearFields {
       width: 100%;
+      padding-top: 20px;
     }
 
     &_unit {
@@ -103,6 +107,7 @@
 
     &_textArea {
       padding-top: 20px;
+      position: relative;
     }
 
     &_confirmCancel {
@@ -124,12 +129,15 @@
     background-color: $primary-color;
     border-color: $primary-grey;
     color: $primary-grey;
+
     &_label {
       color: $primary-grey;
       font-weight: normal;
       pointer-events: none;
       font-size: 16px;
       padding-bottom: 5px;
+      position: absolute;
+      top: 10px;
     }
   }
 }
@@ -158,12 +166,17 @@
     height: 90px;
   }
 
+
   &_searchIcon {
     display: flex;
     padding-bottom: 15px;
     color: $primary-white;
     text-align: center;
     justify-content: center;
+
+    img {
+      padding-left: 20px;
+    }
   }
   &_name {
     padding-top: 15px;

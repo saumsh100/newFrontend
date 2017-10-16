@@ -15,7 +15,7 @@ function runSyncClientFeeds(socket) {
       setupFeedShutdown(socket, feed);
       feed.each((error, doc) => {
         if (error) throw new Error('Feed error');
-        if (!doc.isSyncedWithPMS) {
+        if (!doc.isSyncedWithPms) {
           if (isDeleted(doc)) {
             console.log(`SYNC RM: NOT emitting. Removing appointments; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
             // socket.emit('remove:Appointment', normalize('appointment', doc));
@@ -41,7 +41,7 @@ function runSyncClientFeeds(socket) {
 
         console.log('SYNC FEED.PATIENT');
 
-        if (!doc.isSyncedWithPMS) {
+        if (!doc.isSyncedWithPms) {
           if (isDeleted(doc)) {
             console.log(`SYNC RM: NOT emitting. Removing patient; account=${doc.accountId},id=${doc.id}; pmsId=${doc.pmsId}`);
             // socket.emit('remove:Patient', normalize('patient', doc));

@@ -16,6 +16,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     timeInterval: activeAccount.get('timeInterval'),
     canSendReminders: activeAccount.get('canSendReminders'),
     canSendRecalls: activeAccount.get('canSendRecalls'),
+    canSendReviews: activeAccount.get('canSendReviews'),
   };
 
   const lastSyncDate = activeAccount.get('lastSyncDate');
@@ -42,6 +43,19 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
             <Field
               component="Toggle"
               name="canSendReminders"
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.paddingField}>
+        <div className={styles.paddingField_flex}>
+          <div className={styles.paddingText}>
+            Can Send Reviews
+          </div>
+          <div className={styles.paddingField_toggle}>
+            <Field
+              component="Toggle"
+              name="canSendReviews"
             />
           </div>
         </div>

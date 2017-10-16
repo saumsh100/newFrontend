@@ -6,7 +6,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Account, Invite, User, Enterprise } from '../../../_models';
-import { sendInvite } from '../../../lib/inviteMail';
+import { sendInvite } from '../../../lib/mail';
 import StatusError from '../../../util/StatusError';
 
 const uuid = require('uuid').v4;
@@ -102,6 +102,59 @@ invitesRouter.post('/:accountId/invites', async (req, res, next) => {
         });
     })
     .catch(next);
+});
+
+/**
+ * POST /:accountId/invites/resend
+ *
+ * - resends an email invite
+ */
+invitesRouter.post('/:accountId/invites/:inviteId/resend', async (req, res, next) => {
+  // Override accountId, and add token
+
+  return Promise.resolve(req.invite)
+  .then((invite) => {
+    User.findAll({
+      where: {
+        id: invite.sendingUserId,
+      },
+      raw: true,
+    }).then((user) => {
+      let protocol = req.protocol;
+
+      // this is for heroku to create the right http link it uses
+      // x-forward-proto for https but shows http in req.protocol
+
+      if (req.headers['x-forwarded-proto'] === 'https') {
+        protocol = 'https';
+      }
+
+      const fullUrl = `${protocol}://${req.get('host')}/signupinvite/${invite.token}`;
+
+      const mergeVars = [
+        {
+          name: 'URL',
+          content: fullUrl,
+        },
+        {
+          name: 'NAME',
+          content: `${user[0].firstName} ${user[0].lastName}`,
+        },
+        {
+          name: 'CURRENT_YEAR',
+          content: moment().format('YYYY'),
+        },
+      ];
+
+      sendInvite({
+        subject: "You're Invited",
+        toEmail: invite.email,
+        mergeVars,
+      });
+
+      return res.send(normalize('invite', invite.dataValues));
+    });
+  }).catch(next);
 });
 
 /**

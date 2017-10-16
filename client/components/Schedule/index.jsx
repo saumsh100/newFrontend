@@ -9,6 +9,7 @@ import {
   Card,
   DayPicker,
   Modal,
+  DialogBox,
 } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
@@ -20,6 +21,8 @@ import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
 import Filters from './Cards/Filters';
 import styles from './styles.scss';
+import Calendar from '../library/Calendar/index';
+import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -27,11 +30,13 @@ class ScheduleComponent extends Component {
     this.state = {
       addNewAppointment: false,
       patientSearched: null,
+      sendEmail: false,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
+    this.setSendEmail = this.setSendEmail.bind(this);
   }
 
   setCurrentDay(day) {
@@ -48,6 +53,7 @@ class ScheduleComponent extends Component {
     this.setState({
       addNewAppointment: false,
       patientSearched: null,
+      sendEmail: false,
     });
   }
 
@@ -63,6 +69,12 @@ class ScheduleComponent extends Component {
     });
   }
 
+  setSendEmail() {
+    this.setState({
+      sendEmail: !this.state.sendEmail,
+    })
+  }
+
   render() {
     const {
       practitioners,
@@ -75,7 +87,6 @@ class ScheduleComponent extends Component {
       selectedAppointment,
       setMergingPatient,
       weeklySchedules,
-      timeOffs,
     } = this.props;
 
     const {
@@ -92,23 +103,24 @@ class ScheduleComponent extends Component {
     const mergingPatientData = schedule.toJS().mergingPatientData;
 
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
+    const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
 
-    let displayModalComponent = (
-      <AddNewAppointment
-        formName={formName}
-        chairs={chairs.get('models').toArray()}
-        practitioners={filterPractitioners}
-        services={services.get('models')}
+    let displayModalComponent = selectedAppointment && selectedAppointment.nextAppt ? (
+      <ConfirmAppointmentRequest
         patients={patients.get('models')}
         selectedAppointment={selectedAppointment}
+        selectAppointment={selectAppointment}
         reinitializeState={this.reinitializeState}
-        weeklySchedules={weeklySchedules}
-        setPatientSearched={this.setPatientSearched}
-        patientSearched={this.state.patientSearched}
+        setCurrentDay={this.setCurrentDay}
+        setSendEmail={this.setSendEmail}
+        sendEmail={this.state.sendEmail}
       />
-    );
+    ) : null;
+
+    let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : 'Could this be the same appointment?';
 
     if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
+      displayTitle = 'Create or Connect a Patient';
       displayModalComponent = (
         <AddPatientSuggestions
           mergingPatientData={mergingPatientData}
@@ -118,6 +130,7 @@ class ScheduleComponent extends Component {
         />
       );
     } else if (mergingPatientData.patientUser) {
+      displayTitle = 'Add New Patient';
       displayModalComponent = (
         <AddPatientUser
           mergingPatientData={mergingPatientData}
@@ -131,7 +144,7 @@ class ScheduleComponent extends Component {
       <DocumentTitle title="CareCru | Schedule">
         <Grid>
           <Row className={styles.rowMainContainer}>
-            <Col xs={12} sm={8} md={8} className={styles.schedule__container}>
+            <Col xs={12} sm={9} md={9} className={styles.schedule__container}>
               <Card>
                 <div className={`${styles.schedule__title} ${styles.title}`}>
                   <CurrentDate currentDate={currentDate}>
@@ -160,29 +173,47 @@ class ScheduleComponent extends Component {
                   />
                   <Modal
                     active={
-                      addNewAppointment ||
-                      !!selectedAppointment ||
-                      !!mergingPatientData.patientUser
+                      (addNewAppointment ||
+                        (!!selectedAppointment && !selectedAppointment.nextAppt))
                     }
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
                     custom
                   >
-                    {displayModalComponent}
+                    <AddNewAppointment
+                      formName={formName}
+                      chairs={chairs.get('models').toArray()}
+                      practitioners={filterPractitioners}
+                      services={services.get('models')}
+                      patients={patients.get('models')}
+                      selectedAppointment={selectedAppointment}
+                      reinitializeState={this.reinitializeState}
+                      weeklySchedules={weeklySchedules}
+                      setPatientSearched={this.setPatientSearched}
+                      patientSearched={this.state.patientSearched}
+                    />
                   </Modal>
+                  <DialogBox
+                    title={displayTitle}
+                    type="medium"
+                    active={((selectedAppointment && selectedAppointment.nextAppt) ||
+                      !!mergingPatientData.patientUser)}
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={this.reinitializeState}
+                  >
+                    {displayModalComponent}
+                  </DialogBox>
                 </div>
                 {/* Here is the legend */}
                 <Legend />
               </Card>
             </Col>
-            <Col xs={12} sm={4} md={4} className={styles.schedule__sidebar}>
-              <Row>
+            <Col xs={12} sm={3} md={3} className={styles.schedule__sidebar}>
+              <Row className={styles.schedule__sidebar_rowCalendar}>
                 <Col xs={12}>
-                  <Filters
-                    schedule={schedule}
-                    chairs={chairs.get('models').toArray()}
-                    practitioners={filterPractitioners}
-                    services={services.get('models')}
+                  <Calendar
+                    selectedDays={new Date(currentDate)}
+                    onDayClick={this.setCurrentDay}
                   />
                 </Col>
               </Row>
@@ -190,6 +221,17 @@ class ScheduleComponent extends Component {
                 <Col xs={12} className={styles.schedule__sidebar_request} >
                   <RequestsContainer
                     key={'scheduleRequests'}
+                    maxHeight="250px"
+                  />
+                </Col>
+              </Row>
+              <Row className={styles.schedule__sidebar_rowFilter}>
+                <Col xs={12}>
+                  <Filters
+                    schedule={schedule}
+                    chairs={filterChairs}
+                    practitioners={filterPractitioners}
+                    services={services.get('models')}
                   />
                 </Col>
               </Row>

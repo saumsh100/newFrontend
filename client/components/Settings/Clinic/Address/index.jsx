@@ -1,9 +1,10 @@
 
-import React, {PropTypes, Component} from 'react';
-import AddressForm  from './AddressForm';
-import { Map } from 'immutable';
+import React, { PropTypes, Component } from 'react';
+import { reset } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import AddressForm from './AddressForm';
 import { updateEntityRequest, createEntityRequest } from '../../../../thunks/fetchEntities';
 import styles from './styles.scss';
 import { Grid } from '../../../library';
@@ -33,9 +34,11 @@ class Address extends React.Component {
     updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
     if (activeAccount.addressId) {
       values.accountId = activeAccount.id;
-      updateEntityRequest({ key: 'addresses', values, url: `/api/addresses/${activeAccount.addressId}` });
+      updateEntityRequest({ key: 'addresses', values, url: `/api/addresses/${activeAccount.addressId}` })
+      .then(() => this.props.reset('addressSettingsForm'));
     } else {
-      createEntityRequest({ key: 'addresses', values, url: '/api/addresses/' });
+      createEntityRequest({ key: 'addresses', values, url: '/api/addresses/' })
+      .then(() => this.props.reset('addressSettingsForm'));
     }
   }
 
@@ -71,12 +74,15 @@ Address.propTypes = {
   activeAccount: PropTypes.object,
   addresses: PropTypes.object,
   updateEntityRequest: PropTypes.func,
+  reset: PropTypes.func,
 };
 
 function mapDispatchToActions(dispatch) {
+  console.log(reset)
   return bindActionCreators({
     updateEntityRequest,
     createEntityRequest,
+    reset,
   }, dispatch);
 }
 

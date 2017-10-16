@@ -74,12 +74,13 @@ $padding-card-base: 30px;
 
 //header-sizes
 $count-size: 36px;
-$title-size: 16px;
+$title-size: 18px;
 $header-size: 25px;
 
 //Font-sizes
 $extra-large-size: 66px;
 $jumbo-size: 53px;
+$x-mediumLarge-size: 40px;
 $x-large-size: 48px;
 $large-size: 34px;
 
@@ -112,3 +113,5 @@ $browser-context: 14;
 
   @return $pixels / $context * 1em;
 }
+
+

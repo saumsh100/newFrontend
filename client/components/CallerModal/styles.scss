@@ -1,0 +1,236 @@
+@import '../../ui.scss';
+
+.callDisplayContainer {
+  position: relative;
+  width: 450px;
+  height: auto;
+  background: $primary-white;
+  box-sizing: border-box;
+
+
+  button {
+    width: 100%;
+    border-radius: 0px;
+    height: 50px;
+    box-shadow: none;
+  }
+}
+
+.incoming {
+  border-top: 5px solid $primary-green;
+}
+
+.ended {
+  border-top: 5px solid #bcbcbc;
+}
+
+.missed {
+  border-top: 5px solid $primary-color;
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 70px;
+}
+
+.headerContainerUnknown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.callerAvatar {
+  width: 110px;
+  height: 110px;
+  position: absolute;
+
+  span {
+    font-size: 3em;
+  }
+
+  img {
+    width: 145px;
+    height: 145px;
+  }
+}
+
+.callerAvatarUnknown {
+  border-radius: 50%;
+  width: 110px;
+  height: 110px;
+  position: absolute;
+  background: lighten($primary-darkgrey,10%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -58px;
+
+  span {
+    color: #fafafa;
+    font-size: 3em;
+  }
+
+  img {
+    width: 145px;
+    height: 145px;
+  }
+
+}
+
+.patientInfoContainer {
+  display: inline-block;
+  width: 100%;
+  padding-bottom: 30px;
+}
+
+.patientInfoContainerUnknown {
+  display: inline-block;
+  width: 100%;
+}
+
+.patientNameAge {
+  display: flex;
+  justify-content: center;
+  text-transform: capitalize;
+  composes: header from 'sass-loader!../../fonts.scss';
+  padding-bottom: 10px;
+}
+
+.patientBirthday {
+  display: flex;
+  justify-content: center;
+  composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+}
+
+.iconContainer { //disabled for now!
+  display: none;
+  position: absolute;
+  top: 0px;
+  color: $primary-dark;
+  animation: pulse 1s ease infinite;
+}
+
+.callBody {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.appointmentInfoContainer {
+  composes: subHeaderMediumSmall from 'sass-loader!../../fonts.scss';
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+  &_last {
+    text-align: center;
+    width: 160px;
+    padding-bottom: 5px;
+  }
+  &_next {
+    text-align: center;
+    width: 160px;
+    margin-left: auto;
+  }
+
+  &_date {
+    composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+    &_hover {
+      &:hover {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
+  }
+  &_dateLast {
+    composes: subHeaderMedium from 'sass-loader!../../fonts.scss';
+    &_hover {
+      &:hover {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.callInfo {
+  padding-bottom: 10px;
+  display: flex;
+  &_header {
+    composes: header from 'sass-loader!../../fonts.scss';
+    border-top: 1px solid #efefef;
+    margin-bottom: 10px;
+    font-size: 18px;
+    margin-top: 10px;
+    padding-top: 20px;
+    padding-left: 10px;
+  }
+  &_content {
+    height: 100%;
+  }
+
+  &_content2 {
+    padding-left: 60px;
+    height: 100%;
+  }
+
+  &_body {
+    display: flex;
+    padding-left: 10px;
+    padding-top: 10px;
+    align-items: center;
+  }
+
+  &_desc {
+    composes: subHeader from 'sass-loader!../../fonts.scss';
+    width: 90px;
+  }
+
+  &_data {
+    composes: subHeaderSmall from 'sass-loader!../../fonts.scss';
+  }
+}
+
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid $primary-grey;
+  &_text {
+    margin-left: auto;
+    padding-right: 5px;
+    composes: font-medium from 'sass-loader!../../fonts.scss';
+  }
+}
+
+
+.closeIcon {
+  font-size: 1rem;
+  color: grey;
+  font-weight: 900;
+  //margin-left: auto;
+  cursor: pointer;
+  padding-right: 10px;
+  position: absolute;
+  top: 5px;
+  right: 0
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

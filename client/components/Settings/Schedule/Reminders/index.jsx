@@ -192,12 +192,12 @@ class Reminders extends Component {
     });
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.sendEdit, component: RemoteSubmitButton, props: { form: this.state.formName || 'null'} },
     ];
 
     const actionsNew = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { form: 'newReminder' } },
     ];
 
@@ -212,7 +212,7 @@ class Reminders extends Component {
           onClick={this.openModal}
           data-test-id="createNewReminder"
           icon="plus"
-          create
+          secondary
         >
           Add New Reminder
         </Button>

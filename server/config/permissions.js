@@ -45,6 +45,8 @@ const SUPERADMIN = {
   chats: allowAll,
   users: allowAll,
 
+  deliveredProcedures: allowAll,
+
   listings: allow('read'),
 
   patients: allowAll,
@@ -62,6 +64,8 @@ const SUPERADMIN = {
   syncClientError: allow('read', 'create'),
   syncClientVersion: allow('read', 'create'),
   syncClientControl: allow('create'),
+
+  connectorVersion: allow('read', 'create'),
 
   timeOffs: allowAll,
   weeklySchedules: allowAll,

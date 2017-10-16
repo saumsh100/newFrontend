@@ -1,9 +1,10 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import classNames from 'classnames';
 import styles from '../styles.scss';
 import { Icon } from '../../../library';
-import withHoverable from '../../../../hocs/withHoverable'
+import withHoverable from '../../../../hocs/withHoverable';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -77,12 +78,12 @@ function ShowAppointment(props) {
   // const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
 
   const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
-  const top = `${(topCalc / totalHours) * 100}%`;
-  const left = `${(columnWidth * practIndex) + splitRow}%`;
-  const width = `${columnWidth * ((100 / rowSort.length) / 100)}%`;
-  const height = `${(heightCalc / totalHours) * 100}%`;
+  const top = `${((topCalc / totalHours) * 100) + 0.05}%`;
+  const left = `${((columnWidth * practIndex) + splitRow) + 0.07}%`;
+  const width = `${(columnWidth * ((100 / rowSort.length) / 100)) - 0.16}%`;
+  const height = `${((heightCalc / totalHours) * 100) - 0.1}%`;
 
-  const backgroundColor = isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
+  const backgroundColor = bgColor; //isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
   const zIndex = isHovered ? 5 : appPosition;
   // main app style
   const appStyle = {
@@ -97,7 +98,7 @@ function ShowAppointment(props) {
 
   // calculating the buffer position and height styling
   const heightCalcBuffer = ((customBufferTime / 60) / totalHours) * 100;
-  const topBuffer = `${((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)}%`;
+  const topBuffer = `${(((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)) - 0.05}%`;
 
   const bufferStyle = {
     top: topBuffer,
@@ -106,6 +107,10 @@ function ShowAppointment(props) {
     height: `${heightCalcBuffer}%`,
     backgroundColor: '#b4b4b5',
     zIndex,
+  };
+
+  const nameColor = {
+    color: isHovered ? '#fafafa' : '#ededed',
   };
 
   return (
@@ -123,11 +128,11 @@ function ShowAppointment(props) {
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
         <div className={styles.showAppointment_icon}>
-          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon icon="check-circle-o" />)}</div>
-          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon icon="clock-o" />)} </div>
+          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1} icon="check-circle" />)}</div>
+          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1} icon="clock-o" />)} </div>
         </div>
         <div className={styles.showAppointment_nameAge}>
-          <div className={styles.showAppointment_nameAge_name} >
+          <div className={styles.showAppointment_nameAge_name} style={nameColor} >
             <span className={styles.paddingText}>{patient.firstName}</span>
             <span className={styles.paddingText}>{lastName}</span>
             <span>{age || ''}</span>
@@ -139,7 +144,7 @@ function ShowAppointment(props) {
           </span>
         </div>
         <div className={styles.showAppointment_serviceChair}>
-          <span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>
+          {/*<span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>*/}
           <span className={styles.showAppointment_serviceChair_chair}>{chairData}</span>
         </div>
       </div>

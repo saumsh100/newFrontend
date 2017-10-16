@@ -8,6 +8,8 @@ import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Header, Button, DialogBox, RemoteSubmitButton, Form, Field } from '../../../library';
 import styles from './styles.scss';
 
+const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
 class OfficeHours extends Component {
 
   constructor(props) {
@@ -163,8 +165,6 @@ class OfficeHours extends Component {
   render() {
     const { weeklySchedule } = this.props;
     const handleSubmit = (values) => {
-      const newWeeklySchedule = weeklySchedule.merge(values);
-
       const alert = {
         success: {
           body: 'Clinic Office Hours Updated',
@@ -173,7 +173,22 @@ class OfficeHours extends Component {
           body: 'Clinic Office Hours Update Failed',
         },
       };
-      this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+
+      const newWeeklySchedule = Object.assign({}, weeklySchedule.toJS());
+
+      daysOfWeek.forEach((day) => {
+        Object.keys(values[day]).forEach((pram) => {
+          newWeeklySchedule[day][pram] = values[day][pram];
+        });
+      });
+
+      this.props.updateEntityRequest({
+        key: 'weeklySchedule',
+        model: weeklySchedule.merge(newWeeklySchedule),
+        alert,
+      });
+
+
     };
 
     let schedules = null;
@@ -202,7 +217,7 @@ class OfficeHours extends Component {
     }
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.changeStartDate, component: RemoteSubmitButton, props: { form: 'advanceCreate' }},
     ];
 
@@ -242,7 +257,7 @@ class OfficeHours extends Component {
               onClick={this.createPattern}
               data-test-id="createPatternSchedule"
               icon="plus"
-              create
+              secondary
             >
               Add New Pattern
             </Button>
@@ -250,7 +265,7 @@ class OfficeHours extends Component {
               className={styles.button}
               onClick={this.openModal}
               data-test-id="changeStartDate"
-              create
+              secondary
             >
               Change Start Date
             </Button>

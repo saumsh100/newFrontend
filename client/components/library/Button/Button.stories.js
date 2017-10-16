@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { storiesOf, action } from '@kadira/storybook';
-import { withKnobs, text, boolean, number } from '@kadira/storybook-addon-knobs';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import { withKnobs, boolean } from '@storybook/addon-knobs';
 
 import Button from './';
 
@@ -16,15 +17,7 @@ storiesOf('Button', module)
   ))
   .add('with icon ?', () => (
     <Button
-      icon="arrow-left"
-      onClick={action('clicked')}
-    >
-      Test
-    </Button>
-  ))
-  .add('disabled button', () => (
-    <Button
-      disabled={boolean('Disabled', true)}
+      icon="save"
       onClick={action('clicked')}
     >
       Test
@@ -38,12 +31,5 @@ storiesOf('Button', module)
       Test
     </Button>
   ))
-  .add('raised button', () => (
-    <Button
-      onClick={action('clicked')}
-      raised
-    >
-      Test
-    </Button>
-  ));
+
 

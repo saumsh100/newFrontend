@@ -17,6 +17,10 @@ export default function SaveButton(props) {
     saveClasses = classnames(saveClasses, styles[alignSave]);
   }
 
+  if (pristine) {
+    saveClasses = classnames(saveClasses, styles.disabled);
+  }
+
   return (
     <div className={styles.formActionsWrapper}>
       <div className={styles.formActionsPull}>

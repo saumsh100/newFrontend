@@ -58,7 +58,7 @@ class ServiceListContainer extends Component {
 
     const formName = 'createServiceForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.createService, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
@@ -71,7 +71,7 @@ class ServiceListContainer extends Component {
               onClick={this.setActive}
               className={styles.addServiceButton}
               data-test-id="addPractitionerButton"
-              create
+              secondary
             >
               Add New Service
             </Button>
@@ -86,6 +86,7 @@ class ServiceListContainer extends Component {
             actions={actions}
             onEscKeyDown={this.setActive}
             onOverlayClick={this.setActive}
+            title="Create New Service"
           >
             <CreateServiceForm
               formName={formName}

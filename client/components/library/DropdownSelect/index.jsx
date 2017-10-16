@@ -19,13 +19,7 @@ function DefaultOption({ option }) {
 export default class DropdownSelect extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false,
-      options: [],
-      optionsStatic: [],
-      value: '',
-      searching: false,
-    };
+    this.state = this.getInitialState();
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
@@ -34,11 +28,13 @@ export default class DropdownSelect extends Component {
     this.handleSearch = this.handleSearch.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({
-      options: this.props.options,
-      optionsStatic: this.props.options,
-    });
+  getInitialState() {
+    return {
+      options: this.props.options || [],
+      optionsStatic: this.props.options || [],
+      value: '',
+      isOpen: false,
+    };
   }
 
   toggle() {
@@ -86,6 +82,7 @@ export default class DropdownSelect extends Component {
         value,
       });
     }
+
     return this.setState({
       options: optionsStatic,
       value: '',
@@ -100,11 +97,9 @@ export default class DropdownSelect extends Component {
       search,
     } = this.props;
 
-    const {
-      options,
-    } = this.state;
-
     const OptionTemplate = template || DefaultOption;
+
+    let options = search ? this.state.options : this.props.options;
 
     return (
       <List className={styles.dropDownList} >
@@ -114,12 +109,6 @@ export default class DropdownSelect extends Component {
               label="Search"
               onChange={e => {
                 this.handleSearch(e.target.value)
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                this.setState({
-                  searching: true,
-                });
               }}
               value={this.state.value}
               icon="plus"
@@ -136,8 +125,8 @@ export default class DropdownSelect extends Component {
               key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => {
-                onChange(option.value)
-                this.toggle()
+                onChange(option.value);
+                this.close();
               }}
               data-test-id={option.value}
             >
@@ -155,10 +144,11 @@ export default class DropdownSelect extends Component {
     const {
       value,
       disabled,
-      options,
+      options = [],
       label,
       template,
       borderColor,
+      error,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -178,6 +168,7 @@ export default class DropdownSelect extends Component {
     if (borderColor) {
       toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
     }
+
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
@@ -190,6 +181,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
+        <Input onFocus={disabled ? false : this.toggle} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>
@@ -197,6 +189,9 @@ export default class DropdownSelect extends Component {
           {toggleDiv}
         </div>
         <Icon className={caretIconClassName} icon="caret-down" />
+        <div className={styles.error}>
+          {error || ''}
+        </div>
       </div>
     );
   }

@@ -1,0 +1,22 @@
+
+@import '../../../ui.scss';
+
+.headerContainer {
+  width: 100%;
+  background-color: $primary-lightgrey;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 5px solid var(--primaryColor);
+}
+
+.pullRight {
+  margin-left: auto;
+}
+
+.closeButton {
+  width: 35px;
+  font-size: 1em;
+  padding: 10px !important;
+  box-sizing: border-box;
+}

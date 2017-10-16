@@ -153,10 +153,11 @@ export async function computeRemindersAndSend({ date }) {
       canSendReminders: true,
     },
 
+    order: [[{ model: Reminder, as: 'reminders' }, 'lengthSeconds', 'asc']],
+
     include: [{
       model: Reminder,
       as: 'reminders',
-      order: ['lengthSeconds', 'DESC'],
     }],
   });
 

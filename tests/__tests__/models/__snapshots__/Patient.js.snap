@@ -12,7 +12,7 @@ Object {
   "homePhoneNumber": null,
   "insurance": null,
   "isDeleted": false,
-  "isSyncedWithPMS": false,
+  "isSyncedWithPms": false,
   "language": null,
   "lastName": "Sharp",
   "middleName": null,

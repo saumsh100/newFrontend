@@ -1,24 +1,32 @@
 @import './ui';
 
+.letterSpacing {
+  letter-spacing: 0.5px;
+}
+
 //font-headers
 .font-header-title {
   font-family: $medium-font;
   font-size: $title-size;
   color: $primary-dark;
+  @extend .letterSpacing;
 }
 .font-header-title-white{
   font-size: $title-size;
   color: $primary-white;
+  @extend .letterSpacing;
 }
 
 
 .font-large {
   font-size: $large-size;
   font-weight: $large-weight;
+  @extend .letterSpacing;
 }
 .font-small {
   font-size: $small-size;
   font-weight: $small-weight;
+  @extend .letterSpacing;
 }
 
 //Font-sizes-weights
@@ -27,12 +35,14 @@
   font-size: $jumbo-size;
   font-weight: $jumbo-weight;
   letter-spacing: 2px;
+  @extend .letterSpacing;
 }
 
 .font-jumbo-thin {
   font-size: $jumbo-size;
   font-weight: $jumbo-weight;
   letter-spacing: 2px;
+  @extend .letterSpacing;
 }
 
 
@@ -41,11 +51,13 @@
   font-family: $medium-font;
   font-size: $medium-size;
   font-weight: $medium-weight;
+  @extend .letterSpacing;
 }
 
 .font-medium-noFont{
   font-size: $medium-size;
   font-weight: $medium-weight;
+  @extend .letterSpacing;
 }
 
 
@@ -53,73 +65,113 @@
 .font-jumbo-dark {
   @extend .font-jumbo;
   color: $primary-dark;
+  @extend .letterSpacing;
 }
 
 .font-jumbo-white {
   @extend .font-jumbo;
   color: $primary-white;
+  @extend .letterSpacing;
 }
 
 .font-large-dark {
   @extend .font-large;
   color: $primary-dark;
+  @extend .letterSpacing;
 }
 
 .font-medium-dark {
   @extend .font-medium;
   color: $primary-dark;
+  @extend .letterSpacing;
 }
 
 .font-small-dark {
   @extend .font-small;
   color: $primary-dark;
+  @extend .letterSpacing;
 }
 
 .font-medium-grey {
   @extend .font-medium;
   color: $inactive-color;
+  @extend .letterSpacing;
 }
 
 .font-small-grey {
   @extend .font-small;
   color: $inactive-color;
+  @extend .letterSpacing;
 }
 
 
 //New Camel Case Class Structure
 
-.letterSpacing {
-  letter-spacing: 0.5px;
-}
+
 
 .fontMedium {
-  @extend .font-medium;
+  font-family: Gotham-Medium;
+  @extend .letterSpacing;
 }
 
 .fontJumbo {
   @extend .font-jumbo;
+  @extend .letterSpacing;
 }
 
+.fontLarge {
+  font-size: $large-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+
+}
+
+.fontMediumSize {
+  font-size: $medium-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
+.fontMediumLarge {
+  font-size: $extra-medium-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+
+}
+
+.fontExtraLarge {
+  font-size: $x-large-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
+.fontExtraMediumLarge {
+  font-size: $x-mediumLarge-size;
+  font-weight: $large-weight;
+  @extend .letterSpacing;
+}
+
+
 .cardHeaderTitle {
-  font-family: $medium-font;
   font-size: $title-size;
   color: $primary-dark;
   @extend .letterSpacing;
+  @extend .fontMedium;
 }
 
 .cardHeaderCount {
-  font-family: $medium-font;
   font-size: $count-size;
   font-weight: 800;
   @extend .letterSpacing;
+  @extend .fontMedium;
 }
 
 
 .listItemHeader {
-  font-family: $medium-font;
   color: $primary-dark;
   //font-weight: $jumbo-weight;
   @extend .letterSpacing;
+  @extend .fontMedium;
 }
 
 .header {
@@ -127,6 +179,13 @@
   font-weight: $jumbo-weight;
   @extend .letterSpacing;
 }
+
+.headerImportant {
+  font-size: $header-size !important;
+  font-weight: $jumbo-weight !important;
+  @extend .letterSpacing;
+}
+
 
 .subHeader {
   color: $empty-grey;
@@ -144,18 +203,23 @@
 }
 
 .subHeaderMedium {
-  font-family: $medium-font;
   color: darken($primary-grey, 15%);
   @extend .letterSpacing;
+  @extend .fontMedium;
 }
 .subHeaderMediumSmall {
-  font-family: $medium-font;
   font-size: $small-size;
+  color: $primary-darkgrey;
+  @extend .letterSpacing;
+  @extend .fontMedium;
+}
+
+.tab {
+  //font-family: $medium-font;
   color: $primary-darkgrey;
   @extend .letterSpacing;
 }
 
-.tab {
-  font-family: $medium-font;
-  color: $primary-darkgrey;
+.textPreviews {
+
 }

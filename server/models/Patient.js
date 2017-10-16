@@ -51,7 +51,7 @@ const Patient = createModel('Patient', {
   birthDate: type.date(),
   insurance: type.object().allowNull(),
   isDeleted: type.boolean().default(false),
-  isSyncedWithPMS: type.boolean().default(false),
+  isSyncedWithPms: type.boolean().default(false),
   familyId: type.string(),
 
   // TODO: this needs to be modified to support priorities and a standard structure

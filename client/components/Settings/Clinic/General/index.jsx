@@ -1,6 +1,7 @@
 
 import React, {PropTypes, Component} from 'react';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
 import ContactForm from './ContactForm';
@@ -8,7 +9,7 @@ import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
 import { Map } from 'immutable';
 import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
-import { uploadLogo, deleteLogo } from '../../../../thunks/accounts';
+import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
 import { Grid, Row, Col, Dropzone, AccountLogo, Button, Header} from '../../../library';
 import styles from './styles.scss';
 import jwt from 'jwt-decode';
@@ -19,11 +20,14 @@ class General extends React.Component {
     super(props);
     this.state = {
       uploading: false,
+      downloadLink: null,
+      expired: null,
     };
 
     this.updateName = this.updateName.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
+    this.downloadConnector = this.downloadConnector.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +36,19 @@ class General extends React.Component {
     const url = `/api/users/${decodedToken.userId}`;
 
     this.props.fetchEntities({ url });
+  }
+
+  downloadConnector() {
+    this.props.downloadConnector()
+    .then((downloadLink) => {
+      const reg = /Expires=([^&]*)/;
+      const matches = downloadLink.match(reg);
+
+      this.setState({
+        downloadLink,
+        expired: Number(matches[1] * 1000),
+      });
+    });
   }
 
   uploadLogo(files) {
@@ -83,6 +100,33 @@ class General extends React.Component {
         return null;
       });
 
+      let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
+
+      if (this.state.downloadLink) {
+        const now = moment(this.state.expired);
+        const end = moment(new Date());
+        const duration = moment.duration(now.diff(end)).asSeconds();
+
+        button = duration > 0 ? (<a
+          className={styles.linkAsButton}
+          href={this.state.downloadLink}
+          download
+        >Click to Download
+          <br /> {Math.floor(duration)} s
+        </a>) : (<a
+          className={styles.linkAsButton}
+          href={this.state.downloadLink}
+          download
+        >Link Expired
+        </a>);
+
+        setTimeout(() => {
+          if (duration > 0) {
+            this.setState({ expired: this.state.expired });
+          }
+        }, 500);
+      }
+
       showComponent = (
         <div className={styles.outerContainer}>
           <Header
@@ -101,7 +145,7 @@ class General extends React.Component {
                 activeAccount={activeAccount}
               />
             </div>
-            {/*<div className={styles.drop}>
+            <div className={styles.drop}>
               <Header
                 title="Logo"
                 contentHeader
@@ -110,8 +154,8 @@ class General extends React.Component {
                 <AccountLogo account={activeAccount} size="original" />
                   <p>Drop logo here or click to select file.</p>
               </Dropzone>
-              {activeAccount.fullLogoUrl ? <Button className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
-            </div>*/}
+              {activeAccount.fullLogoUrl ? <Button icon="trash" className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
+            </div>
           </div>
           <Header
             title="Contact Information"
@@ -132,6 +176,13 @@ class General extends React.Component {
             <Address
               activeAccount={activeAccount}
             />
+          </div>
+          <Header
+            title="Download Connector"
+            contentHeader
+          />
+          <div className={styles.formContainer}>
+            {button}
           </div>
           {role === 'SUPERADMIN' ? <Header
             title="Administrative Information"
@@ -164,6 +215,7 @@ General.propTypes = {
   fetchEntities: PropTypes.func,
   uploadLogo: PropTypes.func,
   deleteLogo: PropTypes.func,
+  downloadConnector: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch){
@@ -172,6 +224,7 @@ function mapDispatchToProps(dispatch){
     fetchEntities,
     uploadLogo,
     deleteLogo,
+    downloadConnector,
   }, dispatch);
 }
 

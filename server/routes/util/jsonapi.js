@@ -15,6 +15,29 @@ const makeConfig = (config = {}) => Object.assign(
  * sending down
  */
 const ModelAttributes = {
+  Appointment: [
+    'accountId',
+    'practitionerId',
+    'patientId',
+    'serviceId',
+    'chairId',
+    'pmsId',
+    'isDeleted',
+    'isBookable',
+    'startDate',
+    'endDate',
+    'note',
+    'isReminderSent',
+    'isPatientConfirmed',
+    'isSyncedWithPms',
+    'isCancelled',
+    'customBufferTime',
+    'mark',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Chair: [
     'accountId',
     'pmsId',
@@ -23,10 +46,87 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'isActive',
+  ],
+
+  Configuration: [
+    'name',
+    'description',
+    'data-type',
+    'value',
+  ],
+
+  ConnectorVersion: [
+    'tag',
+    'url',
+    'key',
+    'secret',
+    'filename',
+    'path',
+    'bucket',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  DeliveredProcedure: [
+    'accountId',
+    'patientId',
+    'procedureCode',
+    'entryDate',
+    'pmsId',
+    'units',
+    'totalAmount',
+    'primaryInsuranceAmount',
+    'secondaryInsuranceAmount',
+    'patientAmount',
+    'discountAmount',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Family: [
+    'accountId',
+    'pmsId',
+    'headId',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  Patient: [
+    'accountId',
+    'pmsId',
+    'patientUserId',
+    'email',
+    'firstName',
+    'lastName',
+    'middleName',
+    'phoneNumber',
+    'homePhoneNumber',
+    'mobilePhoneNumber',
+    'workPhoneNumber',
+    'otherPhoneNumber',
+    'prefContactPhone',
+    'gender',
+    'prefName',
+    'language',
+    'address',
+    'preferences',
+    'type',
+    'birthDate',
+    'insurance',
+    'isDeleted',
+    'pmsCreatedAt',
+    'isSyncedWithPms',
+    'familyId',
+    'status',
   ],
 
   Practitioner: [
     'firstName',
+    'pmsId',
     'lastName',
     'type',
     'isActive',
@@ -52,14 +152,58 @@ const ModelAttributes = {
     'updatedAt',
     'deletedAt',
   ],
+
+  PractitionerSchedule: [
+    'startDate',
+    'endDate',
+    'startTime',
+    'endTime',
+    'interval',
+    'allDay',
+    'fromPMS',
+    'pmsId',
+    'dayOfWeek',
+    'note',
+    'practitionerId',
+  ],
 };
 
 /**
  * SERIALIZERS contains all allowable resources for jsonapi serialization*
  */
 const SERIALIZERS = {
+  appointment: new Serializer('appointment', makeConfig({
+    attributes: ModelAttributes.Appointment,
+    pluralizeType: false,
+  })),
+
   chair: new Serializer('chair', makeConfig({
     attributes: ModelAttributes.Chair,
+    pluralizeType: false,
+  })),
+
+  connectorVersion: new Serializer('connectorVersion', makeConfig({
+    attributes: ModelAttributes.ConnectorVersion,
+    pluralizeType: false,
+  })),
+
+  configuration: new Serializer('configuration', makeConfig({
+    attributes: ModelAttributes.Configuration,
+    pluralizeType: false,
+  })),
+
+  deliveredProcedure: new Serializer('procedure', makeConfig({
+    attributes: ModelAttributes.DeliveredProcedure,
+    pluralizeType: false,
+  })),
+
+  family: new Serializer('family', makeConfig({
+    attributes: ModelAttributes.Family,
+    pluralizeType: false,
+  })),
+
+  patient: new Serializer('patient', makeConfig({
+    attributes: ModelAttributes.Patient,
     pluralizeType: false,
   })),
 
@@ -70,6 +214,11 @@ const SERIALIZERS = {
 
   service: new Serializer('service', makeConfig({
     attributes: ModelAttributes.Service,
+    pluralizeType: false,
+  })),
+
+  practitionerSchedule: new Serializer('practitionerSchedule', makeConfig({
+    attributes: ModelAttributes.PractitionerSchedule,
     pluralizeType: false,
   })),
 };

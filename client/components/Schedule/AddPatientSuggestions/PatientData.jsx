@@ -1,6 +1,6 @@
 import { set } from 'lodash'
 import React, { Component, PropTypes } from 'react';
-import { ListItem, Button } from '../../library';
+import { ListItem, Button, Avatar } from '../../library';
 import styles from './styles.scss';
 
 export default function PatientData(props) {
@@ -11,24 +11,26 @@ export default function PatientData(props) {
   } = props;
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
-
+  const futureAppointments = patient.appointments;
   const appointment = {
     startDate: requestData.startDate,
     endDate: requestData.endDate,
     serviceId: requestData.serviceId,
     note: requestData.note,
-    isSyncedWithPMS: false,
+    isSyncedWithPms: false,
     customBufferTime: 0,
     request: true,
     patientId: patient.id,
     requestModel: requestData.requestModel,
     practitionerId: requestData.practitionerId,
+    nextAppt: futureAppointments,
   };
+
 
   return (
     <ListItem
       className={styles.suggestionsListItem}>
-      <img className={styles.patientContainer_img} src={patient.avatarUrl || '/images/avatar.png'} alt="" />
+      <Avatar size={'lg'} className={styles.patientContainer_img} user={patient} alt="" />
       <div className={styles.patientContainer} >
         <div className={styles.patientContainer_fullName}>
           {fullName}
@@ -37,7 +39,7 @@ export default function PatientData(props) {
           {patient.email}
         </div>
         <div className={styles.patientContainer_phone}>
-          {patient.phoneNumber}
+          {patient.mobilePhoneNumber}
         </div>
       </div>
       <Button
@@ -46,6 +48,7 @@ export default function PatientData(props) {
         }}
         className={styles.connectButton}
         data-test-id={`${patient.firstName}${patient.lastName}`}
+        tertiary
       >
         Connect
       </Button>

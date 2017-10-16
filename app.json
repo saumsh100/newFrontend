@@ -53,6 +53,9 @@
     },
     "POSTGRESQL_USER": {
       "required": true
+    },
+    "RABBITMQ_URL": {
+      "required": true
     }
   },
   "formation": {

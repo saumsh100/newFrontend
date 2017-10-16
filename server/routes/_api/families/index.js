@@ -3,6 +3,8 @@ import { Router } from 'express';
 import checkIsArray from '../../../middleware/checkIsArray';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
+import batchCreate from '../../util/batch';
+import format from '../../util/format';
 import normalize from '../normalize';
 import { Family } from '../../../_models';
 
@@ -15,7 +17,7 @@ familiesRouter.param('familyId', sequelizeLoader('family', 'Family'));
  */
 familiesRouter.get('/:familyId', checkPermissions('family:read'), (req, res, next) => {
   return Promise.resolve(req.family)
-    .then(family => res.send(normalize('family', family.dataValues)))
+    .then(family => res.send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);
 });
 
@@ -30,10 +32,38 @@ familiesRouter.get('/', checkPermissions('family:read'), async (req, res, next) 
       where: { accountId },
     });
 
-    res.send(normalize('families', families));
+    res.send(format(req, res, 'families', families));
   } catch (error) {
     next(error);
   }
+});
+
+/**
+ * Batch create family for connector
+ */
+familiesRouter.post('/connector/batch', checkPermissions('family:create'), (req, res, next) => {
+  const families = req.body;
+  const cleanedFamilies = families.map(family => Object.assign(
+    {},
+    family,
+    { accountId: req.accountId }
+  ));
+
+  return batchCreate(cleanedFamilies, Family, 'family')
+    .then(a => a.map(f => f.get({ plain: true })))
+    .then(a => res.send(format(req, res, 'families', a)))
+    .catch(({ errors, docs }) => {
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+
+      const data = format(req, res, 'families', docs);
+      return res.status(201).send(Object.assign({}, data));
+    })
+    .catch(next);
 });
 
 /**
@@ -75,10 +105,28 @@ familiesRouter.post('/batch', checkPermissions('family:create'), checkIsArray('f
 /**
  * Create an family entry
  */
-familiesRouter.post('/', checkPermissions('family:create'), (req, res, next) => {
+familiesRouter.post('/', checkPermissions('family:create'), async (req, res, next) => {
   const familyData = Object.assign({}, { accountId: req.accountId }, req.body);
+
+  try {
+    if (familyData.pmsId) {
+      const family = await Family.findOne({
+        where: {
+          pmsId: familyData.pmsId,
+          accountId: req.accountId,
+        },
+      });
+      if (family) {
+        const normalized = format(req, res, 'family', family.get({ plain: true }));
+        return res.status(200).send(normalized);
+      }
+    }
+  } catch (e) {
+    return next(e);
+  }
+
   return Family.create(familyData)
-    .then(family => res.status(201).send(normalize('family', family.dataValues)))
+    .then(family => res.status(201).send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);
 });
 
@@ -87,7 +135,7 @@ familiesRouter.post('/', checkPermissions('family:create'), (req, res, next) => 
  */
 familiesRouter.put('/:familyId', checkPermissions('family:read'), (req, res, next) => {
   return req.family.update(req.body)
-    .then(family => res.send(normalize('family', family.dataValues)))
+    .then(family => res.send(format(req, res, 'family', family.get({ plain: true }))))
     .catch(next);
 });
 

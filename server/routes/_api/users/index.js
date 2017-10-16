@@ -126,4 +126,16 @@ userRouter.put('/:userId', (req, res, next) => {
     .catch(next);
 });
 
+/**
+ * DELETE /:userId
+ */
+userRouter.delete('/:userId', (req, res, next) => {
+  if (req.role !== 'SUPERADMIN' && req.role !== 'OWNER') {
+    return res.sendStatus(401);
+  }
+  return req.profile.destroy()
+    .then(() => res.sendStatus(204))
+    .catch(next);
+});
+
 module.exports = userRouter;

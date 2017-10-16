@@ -1,5 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`/api/chairs DELETE /:chairId should delete an chair then undelete it 1`] = `
+Object {
+  "entities": Object {
+    "chairs": Object {
+      "23d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "description": null,
+        "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
+        "name": "C1",
+        "pmsId": "12",
+      },
+    },
+  },
+  "result": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+}
+`;
+
 exports[`/api/chairs GET /api/chairs should fetch 2 chairs 1`] = `
 Object {
   "entities": Object {
@@ -8,21 +26,23 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "C1",
-        "pmsId": null,
+        "pmsId": "12",
       },
       "46d4e661-1155-4494-8fdb-c4ec0ddf804d": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "C2",
         "pmsId": null,
       },
     },
   },
   "result": Array [
-    "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
     "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+    "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
   ],
 }
 `;
@@ -34,20 +54,22 @@ Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
-        "name": "C1",
+        "isActive": true,
+        "name": "C2",
         "pmsId": null,
       },
-      "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+      "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
       "type": "chair",
     },
     Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
-        "name": "C2",
-        "pmsId": null,
+        "isActive": true,
+        "name": "C1",
+        "pmsId": "12",
       },
-      "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+      "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
       "type": "chair",
     },
   ],
@@ -62,8 +84,9 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "C1",
-        "pmsId": null,
+        "pmsId": "12",
       },
     },
   },
@@ -79,6 +102,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "46d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "C2",
         "pmsId": null,
       },
@@ -94,6 +118,7 @@ Object {
     "attributes": Object {
       "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
       "description": null,
+      "isActive": true,
       "name": "New Chair",
       "pmsId": null,
     },
@@ -111,6 +136,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "11d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "New Chair",
         "pmsId": null,
       },
@@ -128,8 +154,9 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "Modified Chair Name",
-        "pmsId": null,
+        "pmsId": "12",
       },
     },
   },
@@ -145,8 +172,9 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "description": null,
         "id": "23d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "isActive": true,
         "name": "Modified Chair Name",
-        "pmsId": null,
+        "pmsId": "12",
       },
     },
   },

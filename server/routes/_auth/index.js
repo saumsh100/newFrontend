@@ -4,18 +4,18 @@ import omit from 'lodash/omit';
 import { UserAuth } from '../../lib/_auth';
 import { loadPermissionsSequelize } from '../../lib/permissions';
 import { User, PasswordReset } from '../../_models';
-import { resetPasswordEmail } from '../../lib/resetPasswordEmail';
+import { sendResetPassword } from '../../lib/mail';
 
 const uuid = require('uuid').v4;
 
 const authRouter = Router();
 
-authRouter.post('/', ({ body: { username, password } }, res, next) =>
-  UserAuth.login(username, password)
-    .then(({ model: user, session }) =>
-    // TODO: add AuthSession creation after loading Permissions?
+authRouter.post('/', ({ body: { username, password } }, res, next) => {
+  return UserAuth.login(username, password)
+    .then(({model: user, session}) =>
+      // TODO: add AuthSession creation after loading Permissions?
       loadPermissionsSequelize(user)
-        .then(({ dataValues }) => {
+        .then(({dataValues}) => {
           const permission = dataValues;
           const permissionId = permission.id;
           delete permission.id;
@@ -32,9 +32,9 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
           activeAccountId: user.activeAccountId,
         }))
     )
-    .then(token => res.json({ token }))
-    .catch(err => next(err))
-);
+    .then(token => res.json({token}))
+    .catch(err => next(err));
+});
 
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   UserAuth.logout(sessionId)
@@ -79,7 +79,7 @@ authRouter.post('/resetpassword', (req, res, next) => {
         },
       ];
 
-      resetPasswordEmail({
+      sendResetPassword({
         subject: 'Reset Password',
         toEmail: email,
         mergeVars,

@@ -23,6 +23,7 @@ import {
   REFRESH_AVAILABILITIES_STATE,
   SET_HAS_WAITLIST,
   UPDATE_WAITSPOT,
+  SET_FORGOT_PASSWORD,
 } from '../constants';
 
 export const sixDaysShiftAction  = createAction(SIX_DAYS_SHIFT);
@@ -41,6 +42,7 @@ export const setAvailabilities = createAction(SET_AVAILABILITIES);
 export const setNextAvailability = createAction(SET_NEXT_AVAILABILITY);
 export const setIsConfirming = createAction(SET_IS_CONFIRMING);
 export const setIsLogin = createAction(SET_IS_LOGIN);
+export const setForgotPassword = createAction(SET_FORGOT_PASSWORD);
 export const setIsTimerExpired = createAction(SET_IS_TIMER_EXPIRED);
 export const setIsSuccessfulBooking = createAction(SET_IS_SUCCESSFUL_BOOKING);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
