@@ -33,6 +33,11 @@ const chairSchema = () => {
 const enterpriseSchema = () =>
   new schema.Entity('enterprises');
 
+const eventsSchema = () => {
+  return new schema.Entity('events');
+};
+
+
 const chatSchema = () => {
   return new schema.Entity('chats', {
     account: accountSchema(),
@@ -162,6 +167,7 @@ const SCHEMAS = {
   call: callSchema(),
   chair: chairSchema(),
   enterprise: enterpriseSchema(),
+  event: eventsSchema(),
   chat: chatSchema(),
   invite: inviteSchema(),
   patient: patientSchema(),
@@ -191,6 +197,7 @@ const SCHEMAS = {
   chats: [chatSchema()],
   deliveredProcedures: [deliveredProcedureSchema()],
   enterprises: [enterpriseSchema()],
+  events: [eventsSchema()],
   invites: [inviteSchema()],
   patients: [patientSchema()],
   patientUsers: [patientUserSchema()],

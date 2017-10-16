@@ -11,6 +11,7 @@ import normalize from '../normalize';
 import { Appointment, Chat, Patient, Call, SentReminder } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
+import eventsRouter from '../events';
 
 const patientsRouter = new Router();
 
@@ -467,74 +468,7 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
 // TODO: add Event schema and pass through format function (see issue comment)
 // TODO: add client side Event model and collection to run through fetchEntitiesRequest
 
-patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), async (req, res, next) => {
-  try {
-    const date30d = moment().subtract(30, 'days');
-    const appointmentEvents = await Appointment.findAll({
-      raw: true,
-      where: {
-        patientId: req.patient.id,
-        createdAt: {
-          $lte: new Date(),
-        },
-
-        isDeleted: false,
-        isCancelled: false,
-      },
-
-      order: [['createdAt', 'ASC']],
-      limit: 10,
-    });
-
-    const chatEvents = await Chat.findAll({
-      raw: true,
-      where: {
-        patientId: req.patient.id,
-        createdAt: {
-          $gte: date30d,
-        },
-      },
-
-      order: [['createdAt', 'ASC']],
-      limit: 10,
-    });
-
-    const callEvents = await Call.findAll({
-      raw: true,
-      where: {
-        patientId: req.patient.id,
-        createdAt: {
-          $gte: date30d,
-        },
-      },
-
-      order: [['createdAt', 'ASC']],
-      limit: 10,
-    });
-
-
-    const reminderEvents = await SentReminder.findAll({
-      raw: true,
-      where: {
-        patientId: req.patient.id,
-        createdAt: {
-          $gte: date30d,
-        },
-      },
-
-      order: [['createdAt', 'ASC']],
-      limit: 10,
-    });
-
-    const events = appointmentEvents.concat(chatEvents, callEvents, reminderEvents);
-
-    res.send({
-      events,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+//patientsRouter.use('/:patientId/events', );
 
 /**
  * Create a patient

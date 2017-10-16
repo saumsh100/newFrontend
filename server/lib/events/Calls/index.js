@@ -53,6 +53,15 @@ function sendCallerIdSocketEnded(sub, io) {
   });
 }
 
+export function fetchCallEvents(patientId) {
+  return Call.findAll({
+    raw: true,
+    where: {
+      patientId,
+    },
+    order: [['createdAt', 'ASC']],
+  });
+}
 
 export default function registerCallsSubscriber(context, io) {
   // Need to create a new sub for every route to tell

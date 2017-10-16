@@ -13,6 +13,7 @@ const pluralToSingularMap = {
   deliveredProcedures: 'deliveredProcedure',
   practitionerSchedules: 'practitionerSchedule',
   configurations: 'configuration',
+  events: 'event',
 };
 
 const toNormalize = {

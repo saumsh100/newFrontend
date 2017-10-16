@@ -16,10 +16,16 @@ class Timeline extends Component {
   }
 
   componentDidMount() {
+    const query = {
+      limit: 2,
+      skip: 1,
+    };
+
     Promise.all([
       this.props.fetchEntitiesRequest({
         id: 'patientIdEvents',
-        url: `/api/patients/${this.props.patientId}/events`,
+        url: `/api/events/${this.props.patientId}`,
+        params: query,
       }),
     ]).then(() => {
       this.setState({
