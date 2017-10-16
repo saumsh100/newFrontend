@@ -11,7 +11,7 @@ export default function FamilyForm(props) {
   return (
     <div className={styles.disabledPage}>
       <div className={styles.disabledPage_text}>
-        Patient Family has been disabled. Please contact your Carecru account manager for further assistance.
+        This Information is not available at this time.
       </div>
     </div>
   )

@@ -18,7 +18,7 @@ export default function InfoDump(props) {
         {label}
       </div>
       <div className={styles.data}>
-        {data}
+        {data || '-'}
       </div>
     </div>
   );

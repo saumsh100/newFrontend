@@ -60,66 +60,6 @@ export default function AppointmentsForm(props) {
             </Col>
           </Row>
         </FormSection>
-        <FormSection name="Other">
-          <div className={styles.formHeader}> Other </div>
-          <Row className={styles.row}>
-            <Col xs={6} className={styles.colLeft}>
-              <Field
-                name="lastXrayDate"
-                label="Last X-ray Date"
-                component="DayPicker"
-                theme="primaryBlue"
-              />
-            </Col>
-            <Col xs={6} className={styles.colRight}>
-              <Field
-                component="DropdownSelect"
-                name="typeXray"
-                label="Type of X-ray"
-                options={[]}
-                theme="primaryBlue"
-              />
-            </Col>
-            <Col xs={12} className={styles.colRight}>
-              <Field
-                name="lastRestorativeVisit"
-                label="Last Restorative Visit"
-                component="DayPicker"
-                theme="primaryBlue"
-              />
-            </Col>
-            <Col xs={6} className={styles.colLeft}>
-              <Field
-                name="lastRecallVisit"
-                label="Last Recall Visit"
-                component="DayPicker"
-                theme="primaryBlue"
-              />
-            </Col>
-            <Col xs={6} className={styles.colRight}>
-              <Field
-                name="totalRecallVisits"
-                label="Total Recall Visits"
-                theme="primaryBlue"
-              />
-            </Col>
-            <Col xs={6} className={styles.colLeft}>
-              <Field
-                name="lastHygiene"
-                label="Last Hygiene"
-                component="DayPicker"
-                theme="primaryBlue"
-              />
-            </Col>
-            <Col xs={6} className={styles.colRight}>
-              <Field
-                name="totalRecallVisitsHygiene"
-                label="Total Recall Visits"
-                theme="primaryBlue"
-              />
-            </Col>
-          </Row>
-        </FormSection>
       </Grid>
     </Form>
   )

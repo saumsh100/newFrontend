@@ -11,13 +11,13 @@
 }
 
 .infoDisplay {
-  padding-top: 20px;
+  padding-top: 25px;
   padding-right: 20px;
 }
 
 .timeline {
   &_header {
-    padding-top: 20px;
+    padding-top: 25px;
     padding-bottom: 10px;
     composes: fontMedium from 'sass-loader!../../../fonts.scss';
     color: $primary-darkgrey;

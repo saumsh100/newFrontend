@@ -49,19 +49,16 @@ export default function TopDisplay(props) {
               <Col xs={4}>
                 <InfoDump
                   label="PATIENT DUE FOR HYGIENE"
-                  data="OCT 16, 2017"
                 />
               </Col>
               <Col xs={4}>
                 <InfoDump
                   label="INSURANCE"
-                  data="Sun Life (123-123-123)"
                 />
               </Col>
               <Col xs={4}>
                 <InfoDump
                   label="MEDICAL ALERT"
-                  data="None"
                 />
               </Col>
             </Row>
@@ -69,13 +66,11 @@ export default function TopDisplay(props) {
               <Col xs={4}>
                 <InfoDump
                   label="PATIENT DUE FOR RECALL"
-                  data="March 21, 2017"
                 />
               </Col>
               <Col xs={4}>
                 <InfoDump
                   label="UNITS LEFT FOR COVERAGE"
-                  data="7"
                 />
               </Col>
               <Col xs={4}>

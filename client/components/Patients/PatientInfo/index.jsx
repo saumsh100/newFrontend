@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
@@ -7,6 +8,7 @@ import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntiti
 import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
+import SettingsDisplay from './SettingsDisplay/index';
 import DataDisplay from './DataDisplay';
 import styles from './styles.scss';
 
@@ -40,9 +42,13 @@ class PatientInfo extends Component {
 
   render() {
     const patientId = this.props.match.params.patientId;
-    const patient = this.props.patient;
 
-    if (!patient) {
+    const {
+      patient,
+      patientStats,
+    } = this.props;
+
+    if (!patient || !patientStats) {
       return <Loader loaded={this.state.loaded} color="#FF715A" />;
     }
 
@@ -50,6 +56,7 @@ class PatientInfo extends Component {
       <Grid className={styles.mainContainer}>
         <Row>
           <Col sm={12} md={12} className={styles.patientDisplay}>
+            <SettingsDisplay patient={patient}/>
             <TopDisplay patient={patient} />
           </Col>
         </Row>
@@ -85,15 +92,13 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-function mapStateToProps({ entities }, { match }) {
+function mapStateToProps({ entities, apiRequests }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
-
-  if (!patients) {
-    return null;
-  }
+  const patientStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
 
   return {
     patient: patients.get(match.params.patientId),
+    patientStats,
   };
 }
 

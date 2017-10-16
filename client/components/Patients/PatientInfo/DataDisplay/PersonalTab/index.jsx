@@ -51,7 +51,7 @@ export default function PersonalTab(props) {
         <Col xs={6} >
           <InfoDump
             label="ADDRESS"
-            data={patient.country}
+            data={patient.address.street}
           />
         </Col>
       </Row>
@@ -59,7 +59,7 @@ export default function PersonalTab(props) {
         <Col xs={6} >
           <InfoDump
             label="LANGUAGE"
-            data="English"
+            data={patient.language}
           />
         </Col>
       </Row>

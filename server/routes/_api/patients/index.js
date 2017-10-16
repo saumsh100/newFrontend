@@ -8,7 +8,7 @@ import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligen
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
-import { Appointment, Chat, Patient } from '../../../_models';
+import { Appointment, Chat, Patient, Call, SentReminder } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
@@ -389,7 +389,6 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           isDeleted: false,
           isCancelled: false,
         },
-        //limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
         order: [['startDate', 'asc']],
         required: false,
       }],
@@ -422,7 +421,6 @@ patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:rea
         isCancelled: false,
       },
       order: [['startDate', 'ASC']],
-      // limit: 1,
     });
     res.send(normalize('appointments', nextAppt));
   } catch (error) {
@@ -463,6 +461,72 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
   }
 });
 
+patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), async (req, res, next) => {
+
+  const date30d = moment().subtract(30, 'days');
+  const organizedEvents = [];
+
+  try {
+    const appointmentEvents = await Appointment.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        createdAt: {
+          $lte: new Date(),
+        },
+        isDeleted: false,
+        isCancelled: false,
+      },
+      order: [['createdAt', 'ASC']],
+      limit: 10,
+    });
+
+    const chatEvents = await Chat.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        createdAt: {
+          $gte: date30d,
+        },
+      },
+      order: [['createdAt', 'ASC']],
+      limit: 10,
+    });
+
+    const callEvents = await Call.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        createdAt: {
+          $gte: date30d,
+        },
+      },
+      order: [['createdAt', 'ASC']],
+      limit: 10,
+    });
+
+
+    const reminderEvents = await SentReminder.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        createdAt: {
+          $gte: date30d,
+        },
+      },
+      order: [['createdAt', 'ASC']],
+      limit: 10,
+    });
+
+    const events = appointmentEvents.concat(chatEvents, callEvents, reminderEvents);
+
+    res.send({
+      events,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * Create a patient
