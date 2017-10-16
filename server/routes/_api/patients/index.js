@@ -461,12 +461,15 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
   }
 });
 
+// TODO: create an eventsRouter
+// TODO: add lib/events folder to hold call for fetching events (appointments, calls, sentReminders)
+// TODO: add query ability to this endpoint to limit, skip, filter, etc. (apply to array at end)
+// TODO: add Event schema and pass through format function (see issue comment)
+// TODO: add client side Event model and collection to run through fetchEntitiesRequest
+
 patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), async (req, res, next) => {
-
-  const date30d = moment().subtract(30, 'days');
-  const organizedEvents = [];
-
   try {
+    const date30d = moment().subtract(30, 'days');
     const appointmentEvents = await Appointment.findAll({
       raw: true,
       where: {
@@ -474,9 +477,11 @@ patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), asyn
         createdAt: {
           $lte: new Date(),
         },
+
         isDeleted: false,
         isCancelled: false,
       },
+
       order: [['createdAt', 'ASC']],
       limit: 10,
     });
@@ -489,6 +494,7 @@ patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), asyn
           $gte: date30d,
         },
       },
+
       order: [['createdAt', 'ASC']],
       limit: 10,
     });
@@ -501,6 +507,7 @@ patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), asyn
           $gte: date30d,
         },
       },
+
       order: [['createdAt', 'ASC']],
       limit: 10,
     });
@@ -514,6 +521,7 @@ patientsRouter.get('/:patientId/events', checkPermissions('patients:read'), asyn
           $gte: date30d,
         },
       },
+
       order: [['createdAt', 'ASC']],
       limit: 10,
     });

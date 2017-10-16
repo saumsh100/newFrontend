@@ -57,8 +57,6 @@ class Timeline extends Component {
       }
     });
 
-    console.log(Object.keys(dateObj));
-
     return (
       <Card className={styles.card}>
         <div className={styles.eventsContainer}>
