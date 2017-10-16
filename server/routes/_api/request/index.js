@@ -191,7 +191,10 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
  * Send Confirmed Request Email
  */
 requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('requests:update'), (req, res, next) =>{
-  return req.request.update({ isConfirmed: true })
+  return req.request.update({
+    isConfirmed: true,
+    appointmentId: req.appointmentId,
+  })
     .then(async (request) => {
       const patientUser = await PatientUser.findById(request.dataValues.patientUserId);
       const account = await Account.findById(request.dataValues.accountId);

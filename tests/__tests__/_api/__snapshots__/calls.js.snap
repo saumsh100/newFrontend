@@ -7,6 +7,7 @@ Object {
       "asdsads": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "answered": true,
+        "appointmentId": null,
         "callSource": "direct",
         "callerCity": null,
         "callerCountry": null,
@@ -141,6 +142,7 @@ Object {
       "asdsads": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "answered": true,
+        "appointmentId": null,
         "callSource": "direct",
         "callerCity": null,
         "callerCountry": null,
