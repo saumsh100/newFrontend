@@ -91,7 +91,7 @@ class EnterpriseList extends Component {
           />
           <br /><br />
           <br /><br />
-          <span>Switch Enterprise</span>
+          <span className={styles.textPadding}>Switch Enterprise</span>
           {enterprises ? (
             <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
               { enterprises.map(enterprise =>

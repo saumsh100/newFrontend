@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import DayPicker, { DateUtils } from 'react-day-picker';
-import DayPickerStyles from './styles.css';
+import DayPickerStyles from './styles.scss';
 
 class Calendar extends Component {
   constructor(props) {
@@ -22,7 +22,6 @@ class Calendar extends Component {
   render() {
     return (
       <DayPicker
-        styles={DayPickerStyles}
         onDayClick={this.handleDayClick}
         selectedDays={this.state.selectedDay}
         {...this.props}

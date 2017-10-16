@@ -1,8 +1,9 @@
 
 import React, { Component, PropTypes } from 'react';
-import { List, ListItem, Card, CardHeader, Icon } from '../../../../library';
+import { List, ListItem, Card, Icon } from '../../../../library';
 import styles from './styles.scss';
-
+import ShowDetails from './ShowDetails';
+import Collapsible from "../../../../library/Collapsible/index";
 
 class Table extends Component {
   constructor(props) {
@@ -30,16 +31,9 @@ class Table extends Component {
       <Card
         className={styles.mostLoyal}
       >
-        <div className={styles.mostLoyal__header}>
-          <CardHeader
-            className={styles.mostLoyal__header_item}
-            title={cardTitle}
-          >
-            {/*<a className={styles.mostLoyal__header_link}>Print Listings Repost</a>*/}
-          </CardHeader>
-        </div>
+
         <div className={styles.mostLoyal__wrapper}>
-          {data.map((obj, i) => (
+          {data.length ? data.map((obj, i) => (
             <div
               key={i}
               className={styles.mostLoyal__body}
@@ -101,13 +95,12 @@ class Table extends Component {
                             {!obj.listing.length ?
                               null :
                               (<div className={styles.table__button}>
-                                <a
-                                  href={listingInfo}
-                                  className={styles.table__button}
-                                  target="_blank"
-                                >
-                                  show details
-                                </a>
+                                <Collapsible title="show details">
+                                  <ShowDetails
+                                    listingData={obj.listing}
+                                    url={listingInfo}
+                                  />
+                                </Collapsible>
                               </div>)}
                           </div>
                         </div>
@@ -116,7 +109,7 @@ class Table extends Component {
                   )})}
               </List>
             </div>
-          ))}
+          )) : <div className={styles.clearedListings}>Please Select a Filter Option</div>}
         </div>
       </Card>
     );

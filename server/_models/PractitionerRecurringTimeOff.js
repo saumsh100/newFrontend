@@ -41,6 +41,30 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        isUnique(value, next) {
+          // validator for if pmsId and accountId are a unique combo
+          return PractitionerRecurringTimeOff.findOne({
+            where: {
+              practitionerId: this.practitionerId,
+              pmsId: value,
+            },
+            paranoid: false,
+          }).then(async (timeOff) => {
+            if (timeOff) {
+              timeOff.setDataValue('deletedAt', null);
+              timeOff = await timeOff.save({ paranoid: false });
+
+              return next({
+                messages: 'PractitionerId PMS ID Violation',
+                model: timeOff,
+              });
+            }
+
+            return next();
+          });
+        },
+      },
     },
 
     dayOfWeek: {

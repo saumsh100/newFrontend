@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import FileSaver from 'file-saver';
 import { receiveEntities } from '../actions/entities';
 import { showAlertTimeout } from '../thunks/alerts';
 
@@ -45,5 +46,14 @@ export function deleteLogo(accountId) {
         dispatch(receiveEntities({ key: 'accounts', entities: response.data.entities }));
         dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
       });
+  };
+}
+
+export function downloadConnector() {
+  return function (dispatch, getState) {
+
+    return axios
+      .get('/api/connector/download')
+      .then(response => response.data);
   };
 }

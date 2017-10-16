@@ -46,6 +46,7 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'isActive',
   ],
 
   Configuration: [
@@ -63,6 +64,23 @@ const ModelAttributes = {
     'filename',
     'path',
     'bucket',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
+  DeliveredProcedure: [
+    'accountId',
+    'patientId',
+    'procedureCode',
+    'entryDate',
+    'pmsId',
+    'units',
+    'totalAmount',
+    'primaryInsuranceAmount',
+    'secondaryInsuranceAmount',
+    'patientAmount',
+    'discountAmount',
     'createdAt',
     'updatedAt',
     'deletedAt',
@@ -100,6 +118,7 @@ const ModelAttributes = {
     'birthDate',
     'insurance',
     'isDeleted',
+    'pmsCreatedAt',
     'isSyncedWithPms',
     'familyId',
     'status',
@@ -145,6 +164,7 @@ const ModelAttributes = {
     'pmsId',
     'dayOfWeek',
     'note',
+    'practitionerId',
   ],
 };
 

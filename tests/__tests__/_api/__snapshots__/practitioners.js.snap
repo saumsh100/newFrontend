@@ -6,6 +6,25 @@ Object {
 }
 `;
 
+exports[`/api/practitioners DELETE / /:practitionerId - delete a practitioner then undelete 1`] = `
+Object {
+  "entities": Object {
+    "practitioners": Object {
+      "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "firstName": "Colonel",
+        "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "isActive": true,
+        "isCustomSchedule": true,
+        "isHidden": false,
+        "lastName": "Sanders",
+        "type": "Hygienist",
+      },
+    },
+  },
+}
+`;
+
 exports[`/api/practitioners GET / /:practitionerId - get a practitioner 1`] = `
 Object {
   "entities": Object {

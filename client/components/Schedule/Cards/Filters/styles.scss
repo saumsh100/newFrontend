@@ -3,8 +3,10 @@
 .schedule_filter {
     border-top: $card-border-size $inactive-color;
     min-height: 150px;
-    max-height: calc(100vh - 750px);
-    overflow: auto;
+    //max-height: calc(100vh - 750px);
+    //overflow: auto;
+    flex: 1;
+    height: 100%;
 }
 
 .filter_header {
@@ -15,7 +17,7 @@
     padding: 0 5px;
     border-bottom: 1px solid #e6e6e6;
     line-height: 40px;
-    justify-content: flex-end;
+    justify-content: flex-start;
 
     @media screen and (max-width: 1350px){
       justify-content: space-between;
@@ -25,13 +27,17 @@
     &__title {
         justify-content: center;
         padding-right: 15px;
+        padding-left: 15px;
         font-weight: $large-weight;
+        font-size: $title-size;
     }
 
     &__icon {
-        padding-top: 5px;
-        margin-left: 5px;
-        margin-right: 15px;
+      padding-left: 15px;
+      @media screen and (max-width: 1250px) {
+        display: none;
+      }
+
     }
 
     &__link {
@@ -41,9 +47,22 @@
         color: #b4b4b4;
         font-size: 12px;
         padding-right: 5px;
-        &__text{
+        margin-left: auto;
+        &__selectText{
           padding-right: 10px;
+          &:hover {
+            color: darken(#b4b4b4, 10%)
+          }
         }
+
+        &__clearText {
+          &:hover {
+            color: darken(#b4b4b4, 10%)
+          }
+        }
+      @media screen and (max-width: 1250px) {
+      }
+
     }
 }
 
@@ -51,6 +70,7 @@
 .filter_practitioner {
    // margin: 0 5px;
     padding: 5px 0px 10px 10px;
+    background: $primary-white;
 
     &__name {
       font-size: $small-size;

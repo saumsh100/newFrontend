@@ -10,8 +10,10 @@ function sendCallerIdSocket(sub, io) {
         {
           model: Patient,
           as: 'patient',
+          required: false,
         },
       ],
+
       raw: true,
       nest: true,
     })
@@ -33,8 +35,10 @@ function sendCallerIdSocketEnded(sub, io) {
         {
           model: Patient,
           as: 'patient',
+          required: false,
         },
       ],
+
       raw: true,
       nest: true,
     })
@@ -42,6 +46,7 @@ function sendCallerIdSocketEnded(sub, io) {
       if (call.patient.id === null) {
         delete call.patient;
       }
+
       return io.of(namespaces.dash).in(call.accountId).emit('call.ended', normalize('call', call));
     })
     .catch(err => console.log(err));

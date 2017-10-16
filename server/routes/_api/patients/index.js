@@ -4,6 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
+import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -41,12 +42,6 @@ function ageRangePercent(array) {
   newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
   return newArray;
 }
-
-const generateDuringFilter = (m, startDate, endDate) => {
-  return m('startDate').during(startDate, endDate).and(m('startDate').ne(endDate)).or(
-    m('endDate').during(startDate, endDate).and(m('endDate').ne(startDate))
-  );
-};
 
 patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
@@ -115,6 +110,44 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
   } catch (error) {
     next(error);
   }
+});
+
+patientsRouter.get('/revenueStatsTotal', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    accountId,
+    query,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = query;
+
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
+
+  return mostBusinessClinic(startDate, endDate, accountId)
+          .then(result => res.send(result[0]))
+          .catch(next);
+});
+
+patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    accountId,
+    query,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = query;
+
+  startDate = startDate || moment().subtract(1, 'years').toISOString();
+  endDate = endDate || moment().toISOString();
+
+  return mostBusinessPatient(startDate, endDate, accountId)
+          .then(result => res.send(result))
+          .catch(next);
 });
 
 patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res, next) => {
@@ -328,20 +361,70 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
     firstName,
     lastName,
     email,
-    phoneNumber,
+    mobilePhoneNumber,
+    requestCreatedAt,
   } = req.query;
 
   let patients;
   try {
     patients = await Patient.findAll({
-      raw: true,
       where: {
         accountId,
         patientUserId: { $eq: null },
-        $or: [{ firstName, lastName }, { email }, { phoneNumber }],
+        $or: [{ firstName: {
+          ilike: firstName,
+        },
+          lastName: {
+            ilike: lastName,
+          },
+        }, { email }, { mobilePhoneNumber }],
       },
+      include: [{
+        model: Appointment,
+        as: 'appointments',
+        where: {
+          startDate: {
+            $gte: new Date(requestCreatedAt),
+          },
+          isDeleted: false,
+          isCancelled: false,
+        },
+        //limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
+        order: [['startDate', 'asc']],
+        required: false,
+      }],
     });
-    return res.send(normalize('patients', patients));
+
+    const patientsData = patients.map((patient) => {
+      return patient.get({ plain: true });
+    });
+
+    return res.send(normalize('patients', patientsData));
+  } catch (error) {
+    next(error);
+  }
+});
+
+patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:read'), async (req, res, next) => {
+  const {
+    requestCreatedAt,
+  } = req.query;
+
+  try {
+    const nextAppt = await Appointment.findAll({
+      raw: true,
+      where: {
+        patientId: req.patient.id,
+        startDate: {
+          $gte: new Date(requestCreatedAt),
+        },
+        isDeleted: false,
+        isCancelled: false,
+      },
+      order: [['startDate', 'ASC']],
+      // limit: 1,
+    });
+    res.send(normalize('appointments', nextAppt));
   } catch (error) {
     next(error);
   }
@@ -388,18 +471,34 @@ patientsRouter.post('/', async (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
   const patientData = Object.assign({}, req.body, { accountId });
 
-  let patient;
   try {
-    patient = await Patient.create(patientData);
-    const normalizedPatient = format(req, res, 'patient', patient.get({ plain: true }));
+    const patientTest = await Patient.build(patientData);
+    await patientTest.validate();
+
+    const patient = await Patient.create(patientData);
+    const normalizedPatient = format(req, res, 'patient', patient.dataValues);
+
     res.status(201).send(normalizedPatient);
 
     // Dispatch socket event
     const io = req.app.get('socketio');
     const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+    io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
     return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
-  } catch (error) {
-    next(error);
+  } catch (e) {
+    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+      const patient = e.errors[0].message.model.dataValues;
+
+      const normalizedPatient = format(req, res, 'patient', patient);
+      res.status(201).send(normalizedPatient);
+
+      // Dispatch socket event
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+      io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
+      return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
+    }
+    return next(e);
   }
 });
 
@@ -412,7 +511,10 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
   const cleanedPatients = patients.map(patient => Object.assign(
     {},
     patient,
-    { accountId: req.accountId }
+    {
+      accountId: req.accountId,
+      isSyncedWithPms: true,
+    }
   ));
 
   return batchCreate(
@@ -497,7 +599,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
             chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
           });
       }
-      const normalized = format(req, res, 'patient', patient.get({ plain: true }));
+      const normalized = format(req, res, 'patient', patient.dataValues);
       res.status(201).send(normalized);
       return { patient, normalized };
     })
@@ -505,6 +607,54 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = patient.isDeleted ? 'DELETE' : 'UPDATE';
+      // TODO: should the payload be only an id?
+      io.of(ns).in(accountId).emit(`${action}:Patient`, patient.id);
+
+      return io.of(ns).in(accountId).emit('update:Patient', normalized);
+    })
+    .catch(next);
+});
+
+/**
+ * Update a patient (connector)
+ */
+patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (req, res, next) => {
+  const accountId = req.accountId;
+  const phoneNumber = req.patient.mobilePhoneNumber;
+
+  return req.patient.update({
+    isSyncedWithPms: true,
+    ...req.body,
+  })
+    .then((patient) => {
+      if (phoneNumber !== patient.mobilePhoneNumber) {
+        Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } })
+          .then((chat) => {
+            if (!chat[0]) {
+              return;
+            }
+            chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
+          });
+      }
+      const normalized = format(req, res, 'patient', patient.dataValues);
+      res.status(201).send(normalized);
+      return { patient, normalized };
+    })
+    .then(({ patient, normalized }) => {
+      // Dispatch to the appropriate socket room
+      const io = req.app.get('socketio');
+      const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+
+      // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
+      // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
+      const action = patient.isDeleted ? 'DELETE' : 'UPDATE';
+      // TODO: should the payload be only an id?
+      io.of(ns).in(accountId).emit(`${action}:Patient`, patient.id);
+
       return io.of(ns).in(accountId).emit('update:Patient', normalized);
     })
     .catch(next);
@@ -516,12 +666,14 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
 patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, res, next) => {
   const { patient } = req;
   const accountId = req.accountId;
+
   return patient.destroy()
     .then(() => res.sendStatus(204))
     .then(() => {
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = format(req, res, 'patient', patient.get({ plain: true }));
+      io.of(ns).in(accountId).emit('DELETE:Patient', patient.id);
       return io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);

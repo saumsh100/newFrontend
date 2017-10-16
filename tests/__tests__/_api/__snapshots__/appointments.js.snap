@@ -6,6 +6,35 @@ Object {
 }
 `;
 
+exports[`/api/appointments DELETE / /:appointmentId - delete appointment then undelete it 1`] = `
+Object {
+  "entities": Object {
+    "appointments": Object {
+      "6b215a42-5c33-4f94-8313-d89893ae2f36": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "chairId": null,
+        "customBufferTime": null,
+        "endDate": "2017-07-21T00:16:30.932Z",
+        "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+        "isBookable": false,
+        "isCancelled": false,
+        "isDeleted": false,
+        "isPatientConfirmed": false,
+        "isReminderSent": false,
+        "isSyncedWithPms": false,
+        "note": null,
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "pmsId": "12",
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+        "serviceId": null,
+        "startDate": "2017-07-21T00:14:30.932Z",
+      },
+    },
+  },
+  "result": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+}
+`;
+
 exports[`/api/appointments GET / / - retrieve appointments 1`] = `
 Object {
   "entities": Object {
@@ -26,7 +55,7 @@ Object {
         "mark": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-        "pmsId": null,
+        "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "serviceId": null,
         "startDate": "2017-07-21T00:14:30.932Z",
@@ -59,7 +88,7 @@ Object {
         "mark": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-        "pmsId": null,
+        "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "serviceId": null,
         "startDate": "2017-07-21T00:14:30.932Z",
@@ -75,6 +104,7 @@ Object {
   "brokenAppts": 0,
   "entities": Object {},
   "hygieneAppts": 1,
+  "productionEarnings": Array [],
 }
 `;
 
@@ -90,17 +120,17 @@ Object {
       "firstName": "Ronald",
       "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
       "lastName": "Mcdonald",
-      "numAppointments": 0,
+      "numAppointments": 1,
     },
   },
   "practitioner": Object {
     "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
-      "appointmentTime": 0,
+      "appointmentTime": 2,
       "avatarUrl": null,
       "firstName": "Colonel",
       "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       "lastName": "Sanders",
-      "newPatients": 1,
+      "newPatients": 0,
       "totalTime": 394200,
       "type": "Hygienist",
     },
@@ -118,6 +148,7 @@ Object {
 exports[`/api/appointments GET / /statsdate - data for most popular day of the week 1`] = `
 Object {
   "days": Array [
+    0,
     0,
     0,
     0,
@@ -148,14 +179,13 @@ Object {
     0,
     0,
     0,
-    0,
     1,
+    0,
     0,
     0,
   ],
   "entities": Object {},
   "months": Array [
-    "October",
     "November",
     "December",
     "January",
@@ -167,6 +197,7 @@ Object {
     "July",
     "August",
     "September",
+    "October",
   ],
 }
 `;
@@ -191,7 +222,7 @@ Object {
         "mark": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-        "pmsId": null,
+        "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "serviceId": null,
         "startDate": "2017-07-21T00:14:30.932Z",
@@ -222,7 +253,7 @@ Object {
         "mark": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-        "pmsId": null,
+        "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "serviceId": null,
         "startDate": "2017-07-21T00:14:30.932Z",
@@ -253,7 +284,7 @@ Object {
         "mark": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-        "pmsId": null,
+        "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "serviceId": null,
         "startDate": "2017-07-21T00:14:30.932Z",

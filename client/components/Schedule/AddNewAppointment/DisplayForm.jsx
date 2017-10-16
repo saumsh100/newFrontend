@@ -5,7 +5,7 @@ import { Grid, Row, Col, Form, FormSection } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import PatientForm from './PatientForm';
 import { setTime } from '../../library/util/TimeOptions';
-import { SortByName } from '../../library/util/SortEntities';
+import {SortByFirstName, SortByName} from '../../library/util/SortEntities';
 import styles from './styles.scss';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
@@ -24,7 +24,7 @@ const generateEntityOptions = (entities, label) => {
 
 const generatePractitionerOptions = (practitioners) => {
   const options = [];
-  practitioners.map((pr) => {
+  practitioners.sort(SortByFirstName).map((pr) => {
     const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName}`;
     options.push({ label, value: pr.id });
   });

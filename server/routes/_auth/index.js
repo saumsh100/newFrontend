@@ -10,12 +10,12 @@ const uuid = require('uuid').v4;
 
 const authRouter = Router();
 
-authRouter.post('/', ({ body: { username, password } }, res, next) =>
-  UserAuth.login(username, password)
-    .then(({ model: user, session }) =>
-    // TODO: add AuthSession creation after loading Permissions?
+authRouter.post('/', ({ body: { username, password } }, res, next) => {
+  return UserAuth.login(username, password)
+    .then(({model: user, session}) =>
+      // TODO: add AuthSession creation after loading Permissions?
       loadPermissionsSequelize(user)
-        .then(({ dataValues }) => {
+        .then(({dataValues}) => {
           const permission = dataValues;
           const permissionId = permission.id;
           delete permission.id;
@@ -32,9 +32,9 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
           activeAccountId: user.activeAccountId,
         }))
     )
-    .then(token => res.json({ token }))
-    .catch(err => next(err))
-);
+    .then(token => res.json({token}))
+    .catch(err => next(err));
+});
 
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   UserAuth.logout(sessionId)

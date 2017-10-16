@@ -9,7 +9,7 @@ export const createConfirmationText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
-  return `Thanks ${patient.firstName}! You appointment with ${account.name} ` +
+  return `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
     `on ${startDate} at ${startTime} is confirmed. `;
 };
 

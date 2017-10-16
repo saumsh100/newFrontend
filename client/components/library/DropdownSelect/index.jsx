@@ -34,11 +34,10 @@ export default class DropdownSelect extends Component {
       optionsStatic: this.props.options || [],
       value: '',
       isOpen: false,
-      searching: false,
     };
   }
 
-  toggle(value) {
+  toggle() {
     if (this.state.isOpen) {
       this.setState({
         isOpen: false,
@@ -83,6 +82,7 @@ export default class DropdownSelect extends Component {
         value,
       });
     }
+
     return this.setState({
       options: optionsStatic,
       value: '',
@@ -110,12 +110,6 @@ export default class DropdownSelect extends Component {
               onChange={e => {
                 this.handleSearch(e.target.value)
               }}
-              onClick={(e) => {
-                e.stopPropagation();
-                this.setState({
-                  searching: true,
-                });
-              }}
               value={this.state.value}
               icon="plus"
             />
@@ -131,8 +125,8 @@ export default class DropdownSelect extends Component {
               key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => {
-                onChange(option.value)
-                this.toggle(option.value)
+                onChange(option.value);
+                this.close();
               }}
               data-test-id={option.value}
             >
@@ -150,10 +144,11 @@ export default class DropdownSelect extends Component {
     const {
       value,
       disabled,
-      options,
+      options = [],
       label,
       template,
       borderColor,
+      error,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -173,6 +168,7 @@ export default class DropdownSelect extends Component {
     if (borderColor) {
       toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
     }
+
     if (this.state.isOpen) {
       toggleClassName = classNames(styles.active, toggleClassName);
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
@@ -185,6 +181,7 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
+        <Input onFocus={disabled ? false : this.toggle} className={styles.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>
@@ -192,6 +189,9 @@ export default class DropdownSelect extends Component {
           {toggleDiv}
         </div>
         <Icon className={caretIconClassName} icon="caret-down" />
+        <div className={styles.error}>
+          {error || ''}
+        </div>
       </div>
     );
   }

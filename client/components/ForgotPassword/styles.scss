@@ -63,6 +63,13 @@
   padding: 10px;
   background-color: lighten($primary-green,10%);
 }
+
+.textSuccess2 {
+  composes: fontMedium from 'sass-loader!../../fonts.scss';
+  text-align: center;
+  padding: 10px;
+}
+
 .submitText {
   text-align: center;
 }
@@ -74,5 +81,5 @@
 
 .email {
   font-weight: $large-weight;
-  color: $primary-darkgrey  
+  color: $primary-darkgrey
 }

@@ -205,6 +205,10 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
       // Early return so its not dependant on email sending
       res.status(200).send();
 
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      const normalized = normalize('request', request.dataValues);
+      io.of(ns).in(request.dataValues.accountId).emit('update:Request', normalized);
       // Send Email
       return sendAppointmentRequestConfirmed({
         accountId: req.accountId,

@@ -83,7 +83,7 @@ class PatientInfoDisplay extends Component {
                     <span className={styles.info}><strong>{lastApp}</strong></span>
                   </div>
                 </div>
-                <div >
+                <div style={{ textAlign: 'right' }} >
                   <div className={styles2.info_footer}>
                     <span>Next Appointment</span>
                   </div>

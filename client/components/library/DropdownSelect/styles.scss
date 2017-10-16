@@ -116,3 +116,20 @@ $empty-grey: darken(lightgrey, 5%);
   margin-left: 20px;
   margin-right: 20px;
 }
+
+.error {
+  position: absolute;
+  color: red;
+  font-size: 11px;
+  bottom: -16px;
+  font-weight: normal;
+  pointer-events: none;
+  letter-spacing: 2px;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+}

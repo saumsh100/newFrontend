@@ -19,12 +19,11 @@
 
 .remoteSubmit {
   display: flex;
-  padding-right: 100px;
+  justify-content: flex-end;
+  padding-right: 40px;
   &_button {
-    margin-left: auto;
   }
   &_buttonDelete {
-    padding-left: 10px;
   }
 }
 
@@ -43,7 +42,7 @@
 .addNewAppt {
   border-radius: .5rem;
   width: 900px;
-  height: 506px;
+  height: 498px;
 
   &_mainContainer {
     min-width: 200px;
@@ -108,6 +107,7 @@
 
     &_textArea {
       padding-top: 20px;
+      position: relative;
     }
 
     &_confirmCancel {
@@ -129,12 +129,15 @@
     background-color: $primary-color;
     border-color: $primary-grey;
     color: $primary-grey;
+
     &_label {
       color: $primary-grey;
       font-weight: normal;
       pointer-events: none;
       font-size: 16px;
       padding-bottom: 5px;
+      position: absolute;
+      top: 10px;
     }
   }
 }

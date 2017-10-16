@@ -29,6 +29,7 @@ class ScheduleContainer extends React.Component {
     const query = {
       startDate,
       endDate,
+      limit: 150,
     };
 
     Promise.all([
@@ -64,6 +65,7 @@ class ScheduleContainer extends React.Component {
       const query = {
         startDate,
         endDate,
+        limit: 150,
       };
       this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query });
     }

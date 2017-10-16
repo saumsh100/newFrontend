@@ -71,7 +71,7 @@ module.exports = {
     }
 
     await queryInterface.bulkInsert('Patients', patients);
-    await queryInterface.bulkInsert('Calls', calls).then(err => console.log(err));
+    await queryInterface.bulkInsert('Calls', calls);
   },
 
   down: function (queryInterface, Sequelize) {

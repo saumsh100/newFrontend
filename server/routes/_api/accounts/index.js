@@ -16,6 +16,7 @@ import {
   Configuration,
 } from '../../../_models';
 import upload from '../../../lib/upload';
+import { getReviewAppointments } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
@@ -125,13 +126,7 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
     .catch(next);
 });
 
-/**
- * GET /configurations/
- *
- * - get connector configuration settings.
- *
- */
-accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+async function getAccountConnectorConfigurations(req, res, next, accountId) {
   try {
     const sendValues = [];
     const accountConfigs = await Configuration.findAll({
@@ -141,8 +136,9 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
         model: AccountConfiguration,
         as: 'accountConfiguration',
         where: {
-          accountId: req.accountId,
+          accountId,
         },
+
         required: false,
       },
     });
@@ -167,7 +163,28 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
   } catch (err) {
     return next(err);
   }
+}
+
+/**
+ * GET /configurations
+ *
+ * - get connector configuration settings.
+ *
+ */
+accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return getAccountConnectorConfigurations(req, res, next, req.accountId);
 });
+
+/**
+ * GET /:accountId/configurations
+ *
+ * - get connector configuration settings.
+ *
+ */
+accountsRouter.get('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return getAccountConnectorConfigurations(req, res, next, req.account.id);
+});
+
 
 
 /**
@@ -193,19 +210,12 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .catch(next);
 });
 
-/**
- * PUT /configurations/
- *
- * - Update connector configuration settings.
- *
- */
-
-accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  const {
-    name,
-  } = req.body;
-
+async function updateAccountConnectorConfigurations(req, res, next, accountId) {
   try {
+    const {
+      name,
+    } = req.body;
+
     const config = await Configuration.findOne({
       where: { name },
     });
@@ -213,24 +223,24 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     if (!config) {
       return res.sendStatus(400);
     }
-    
+
     const checkConfigExists = await AccountConfiguration.findOne({
       where: {
-        accountId: req.accountId,
-        configurationId: config.id, 
+        accountId,
+        configurationId: config.id,
       },
     });
-      
+
     let newConfig;
-      
+
     if (checkConfigExists) {
       newConfig = await checkConfigExists.update(req.body);
     } else {
       newConfig = await AccountConfiguration.create({
-        accountId: req.accountId,
+        accountId,
         configurationId: config.id,
         ...req.body,
-      });                                         
+      });
     }
 
     const accountConfig = newConfig.get({ plain: true });
@@ -244,12 +254,32 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
     };
 
     const io = req.app.get('socketio');
-    io.of(namespaces.sync).in(req.accountId).emit('CONFIG_CHANGED', name);
+    io.of(namespaces.sync).in(accountId).emit('CONFIG:REFRESH', name);
 
     return res.send(format(req, res, 'configuration', sendValue));
   } catch (err) {
-    return next(err);
+    next(err);
   }
+}
+
+/**
+ * PUT /:accountId/configurations
+ *
+ * - Update connector configuration settings.
+ *
+ */
+accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return updateAccountConnectorConfigurations(req, res, next, req.accountId);
+});
+
+/**
+ * PUT /:accountId/configurations
+ *
+ * - Update connector configuration settings.
+ *
+ */
+accountsRouter.put('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
+  return updateAccountConnectorConfigurations(req, res, next, req.account.id);
 });
 
 
@@ -336,6 +366,29 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
       res.send(obj);
     })
     .catch(next);
+});
+
+/**
+ * PUT /:accountId
+ *
+ * - update clinic account data
+ */
+accountsRouter.get('/:accountId/reviews/stats', checkPermissions('accounts:update'), async (req, res, next) => {
+  try {
+    const date = (new Date()).toISOString();
+
+    // Get the review appointments and filter out
+    const appts = await getReviewAppointments({ date, account: req.account });
+    const noEmail = appts.filter(({ patient }) => !patient.email);
+
+    res.send({
+      success: appts.length - noEmail.length,
+      fail: noEmail.length,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 });
 
 module.exports = accountsRouter;

@@ -84,7 +84,8 @@
     }
 
     &_left {
-      max-width: 200px;
+      line-height: 1.5em;
+      max-width: 240px;
       overflow: hidden;
       @media screen and (max-width: 450px) {
         margin-top: 10px;

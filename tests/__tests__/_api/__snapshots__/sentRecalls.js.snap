@@ -21,7 +21,8 @@ Object {
         "mobilePhoneNumber": "+17789999999",
         "patientUserId": null,
         "phoneNumber": null,
-        "pmsId": null,
+        "pmsCreatedAt": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {

@@ -43,15 +43,26 @@ function sendSocket(io, chatId) {
 }
 
 function sendSocketReminder(io, sentReminder) {
-  return io.of('/dash')
-        .in(sentReminder.accountId)
-        .emit('update:SentReminder', normalize('sentReminder', sentReminder));
+  return SentReminder.findOne({
+    where: {
+      id: sentReminder.id,
+    },
+    include: [
+      {
+        model: Appointment,
+        as: 'appointment',
+      },
+    ],
+  }).then((sentReminderOne) => {
+    const sentReminderData = sentReminderOne.get({ plain: true });
+    io.of('/dash')
+      .in(sentReminder.accountId)
+      .emit('create:SentReminder', normalize('sentReminder', sentReminderData));
+  });
 }
 
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
-    // We close response fast, does this help?
-    res.send(200);
 
     let {
       account,
@@ -82,8 +93,24 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
       where: {
         accountId: account.id,
         patientPhoneNumber: From,
+        patientId: {
+          $ne: null,
+        },
       },
     });
+
+    if (!chat || !patient) {
+      chat = await Chat.findOne({
+        where: {
+          accountId: account.id,
+          patientPhoneNumber: From,
+          patientId: {
+            $eq: null,
+          },
+        },
+      });
+    }
+
     if (!chat) {
       chat = await Chat.create({
         accountId: account.id,
@@ -146,7 +173,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     });
 
     await sendSocket(io, chatClean.id);
-    res.send(200);
+    res.end();
   } catch (err) {
     next(err);
   }

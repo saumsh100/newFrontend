@@ -1,0 +1,14 @@
+
+@import '../../../ui.scss';
+
+.container {
+  height: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.loadingWrapper {
+  display: flex;
+  flex: 1;
+}

@@ -56,7 +56,7 @@ class DayViewBody extends Component {
     // Display the practitioners that have been checked on the filters card.
     const checkedPractitioners = schedule.toJS().practitionersFilter;
     practitionersArray = practitionersArray.filter((pr) => {
-      return checkedPractitioners.indexOf(pr.id) > -1;
+      return checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive;
     });
 
     const practitionersSlot = (
@@ -78,7 +78,7 @@ class DayViewBody extends Component {
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
     const chairsArray = chairs.toArray().sort(SortByName).filter((chair) => {
-      return checkedChairs.indexOf(chair.id) > -1;
+      return checkedChairs.indexOf(chair.id) > -1 && chair.isActive;
     });
 
     const chairsSlot = (

@@ -3,7 +3,6 @@
 
 .reviews {
   &__wrapper {
-    margin-bottom: 15px;
   }
 }
 
@@ -57,7 +56,7 @@
 
 
 .stats {
-  min-height: 168px;
+  min-height: 180px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -65,11 +64,11 @@
 	width: 80%;
 	min-width: 250px;
 	margin: 0 auto;
-	padding: 10px 0 10px 0;
+	padding: 15px 0 15px 0;
   position: relative;
 
 	&__count {
-    composes: fontExtraLarge from 'sass-loader!../../../fonts.scss';
+    composes: fontExtraMediumLarge from 'sass-loader!../../../fonts.scss';
 	}
 
 	&__title {
@@ -114,10 +113,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: $primary-blue;
   &__stars {
-    width: 50%;
+    width: 90%;
     text-align: right;
     display: inline-block;
+    padding-right: 15px;
   }
 
   &__bar {
@@ -128,6 +129,7 @@
 		color: $primary-blue;
 		&__percent {
 			height: 16px;
+      padding-top: 10px;
 			margin-right: 4px;
 			background-color: $primary-blue;
 			display: inline-block;
@@ -156,28 +158,67 @@
 }
 
 .rowReviewsFilter {
-  height: 700px;
+  width: 100%;
+  //height: 700px;
 }
 
 .reviewsComments {
 	width: 100%;
-	margin-top: 10px;
 	min-height: 168px;
   max-height: 745px;
 	overflow: auto;
-  margin-bottom: 15px;
+  //margin-bottom: 15px;
+  height: calc(100vh - 385px);
+  position: relative;
 
   &__cardHeader {
-    padding-top: 15px;
+    //padding-top: 15px;
     padding-left: 15px;
+    margin-right: 10px;
+    justify-content: flex-start;
   }
 
 	&__container {
-		border-right: 2px solid $primary-lightgrey;
-		padding: 10px 10px 0 0;
+		//border-right: 2px solid $primary-lightgrey;
+		//padding: 10px 10px 0 0;
 	}
 
   &__comment {
 
   }
+}
+
+.dateRangeContainer {
+  display: flex;
+  align-items: center;
+  &_date {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+}
+
+.dateRangeDD {
+  padding: 10px;
+}
+
+
+.clearedReviews {
+  font-size: 20px;
+  line-height: 1.5em;
+  width: 700px;
+  color: $inactive-color;
+  text-align: center;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+.ccReviews {
+  margin-left: 20px;
+  font-family: $medium-font;
+  color: $primary-darkgrey;
+  font-size: 12px;
 }

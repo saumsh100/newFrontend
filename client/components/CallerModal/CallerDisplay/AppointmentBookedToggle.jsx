@@ -35,8 +35,6 @@ class AppointmentBookedToggle extends Component {
       },
     };
 
-    console.log(modifiedCall.get('id'))
-
     updateEntityRequest({ key: 'calls', model: modifiedCall, alert });
 
     const newValue = (wasApptBookedValue === 'no') ? 'yes' : 'no';

@@ -1,3 +1,7 @@
+import moment from 'moment-timezone';
+import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
+import format from '../../util/format';
+import handleSequelizeError from '../../util/handleSequelizeError';
 import { sequelizeLoader } from '../../util/loaders';
 
 const practitionersRouter = require('express').Router();
@@ -9,10 +13,6 @@ const normalize = require('../normalize');
 const _ = require('lodash');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
-import moment from 'moment-timezone';
-
-import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
-import format from '../../util/format';
 
 practitionersRouter.param('practitionerId', sequelizeLoader('practitioner', 'Practitioner'));
 
@@ -41,38 +41,76 @@ practitionersRouter.get('/', (req, res, next) => {
 /**
  * Create a practitioner
  */
-practitionersRouter.post('/', checkPermissions('practitioners:create'), (req, res, next) => {
-  return Account.findOne({
-    where: { id: req.accountId },
-    raw: true,
-    nest: true,
-    include: [
-      {
-        model: WeeklySchedule,
-        as: 'weeklySchedule',
-      },
-    ],
-  })
-  .then((account) => {
-    delete account.weeklySchedule.weeklyScheduleId;
-    delete account.weeklySchedule.createdAt;
-    delete account.weeklySchedule.id;
-    return WeeklySchedule.create(account.weeklySchedule)
-    .then((weeklySchedule) => {
-      weeklySchedule = weeklySchedule.get({ plain: true });
-      const practitionerData = Object.assign({},
+practitionersRouter.post('/', checkPermissions('practitioners:create'), async (req, res, next) => {
+  try {
+    const accountId = req.accountId;
+    let practitionerData = Object.assign({}, req.body, {
+      accountId,
+    });
+
+    const practitionerTest = await Practitioner.build(practitionerData);
+    await practitionerTest.validate();
+
+    return Account.findOne({
+      where: { id: req.accountId },
+      raw: true,
+      nest: true,
+      include: [
         {
+          model: WeeklySchedule,
+          as: 'weeklySchedule',
+        },
+      ],
+    })
+    .then((account) => {
+      delete account.weeklySchedule.weeklyScheduleId;
+      delete account.weeklySchedule.createdAt;
+      delete account.weeklySchedule.id;
+      return WeeklySchedule.create(account.weeklySchedule)
+      .then(async (weeklySchedule) => {
+        weeklySchedule = weeklySchedule.get({ plain: true });
+
+        const chairs = await Chair.findAll({
+          raw: true,
+          where: { accountId: req.accountId },
+        });
+
+        const chairIds = chairs.map(chair => chair.id);
+        weeklySchedule.monday.chairIds = chairIds;
+        weeklySchedule.tuesday.chairIds = chairIds;
+        weeklySchedule.wednesday.chairIds = chairIds;
+        weeklySchedule.thursday.chairIds = chairIds;
+        weeklySchedule.friday.chairIds = chairIds;
+        weeklySchedule.saturday.chairIds = chairIds;
+        weeklySchedule.sunday.chairIds = chairIds;
+
+        await WeeklySchedule.update(weeklySchedule, {
+          where: {
+            id: weeklySchedule.id,
+          },
+        });
+
+        practitionerData = Object.assign({}, {
           accountId: req.accountId,
           weeklyScheduleId: weeklySchedule.id,
         }, req.body);
-      return Practitioner.create(practitionerData)
-      .then((practitioner) => {
-        practitioner = practitioner.get({ plain: true });
-        practitioner.weeklySchedule = weeklySchedule;
-        return res.status(201).send(format(req, res, 'practitioner', practitioner));
+
+        return Practitioner.create(practitionerData)
+          .then((practitioner) => {
+            practitioner = practitioner.get({ plain: true });
+            practitioner.weeklySchedule = weeklySchedule;
+            return res.status(201).send(format(req, res, 'practitioner', practitioner));
+        });
       });
     });
-  }).catch(next);
+  } catch (e) {
+    // check sequelize error
+    if (e.errors && e.errors[0]) {
+      return handleSequelizeError(e.errors[0], 'practitioner', res, req, next);
+    }
+
+    return next(e);
+  }
 });
 
 /**
@@ -161,7 +199,7 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
       raw: true,
       where: { accountId: req.accountId },
     })
-    .then((chairs) => {
+    .then(async (chairs) => {
       const chairIds = chairs.map(chair => chair.id);
       account.weeklySchedule.monday.chairIds = chairIds;
       account.weeklySchedule.tuesday.chairIds = chairIds;
@@ -171,31 +209,52 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
       account.weeklySchedule.saturday.chairIds = chairIds;
       account.weeklySchedule.sunday.chairIds = chairIds;
 
-      return WeeklySchedule.create(account.weeklySchedule)
-      .then((weeklySchedule) => {
-        const practitionerData = req.body;
-        practitionerData.weeklyScheduleId = weeklySchedule.dataValues.id;
-        return req.practitioner
-        .update(practitionerData)
-        .then(async (practitioner) => {
-          const prac = await Practitioner.findOne({
-            where: {
-              id: practitioner.dataValues.id,
-            },
-            include: [
-              {
-                model: WeeklySchedule,
-                as: 'weeklySchedule',
-                required: false,
-              },
-            ],
-            raw: true,
-            nest: true,
-          });
-
-          return res.status(201).send(normalize('practitioner', prac));
-        });
+      const prac = await Practitioner.findOne({
+        where: {
+          id: req.practitioner.id,
+        },
+        include: [
+          {
+            model: WeeklySchedule,
+            as: 'weeklySchedule',
+            required: false,
+          },
+        ],
+        raw: true,
+        nest: true,
       });
+
+      if (prac.weeklySchedule.id) {
+        await WeeklySchedule.update(account.weeklySchedule, {
+          where: {
+            id: prac.weeklySchedule.id,
+          },
+        });
+        await req.practitioner.update(req.body);
+      } else {
+        const newSched = await WeeklySchedule.create(account.weeklySchedule);
+        const practitionerData = req.body;
+        practitionerData.weeklyScheduleId = newSched.dataValues.id;
+
+        await req.practitioner.update(practitionerData);
+      }
+
+      const practitioner = await Practitioner.findOne({
+        where: {
+          id: req.practitioner.id,
+        },
+        include: [
+          {
+            model: WeeklySchedule,
+            as: 'weeklySchedule',
+            required: false,
+          },
+        ],
+        raw: true,
+        nest: true,
+      });
+
+      return res.status(201).send(normalize('practitioner', practitioner));
     });
   }).catch(next);
 });

@@ -3,7 +3,6 @@ import moment from 'moment';
 import { Guage, Card } from '../../../../library';
 import styles from './styles.scss';
 
-
 class AppointmentFilled extends Component {
   render() {
     const { borderColor, appointmentFilled, appointmentNotFilled, startDate, endDate } = this.props;

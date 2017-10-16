@@ -1,9 +1,9 @@
 
 import React, { PropTypes, Component } from 'react';
+import moment from 'moment';
 import { Icon } from '../index';
-import styles from './styles.scss';
-
 import DoubleIcon from '../DoubleIcon';
+import styles from './styles.scss';
 
 export class IconBox extends Component {
   render() {
@@ -50,6 +50,7 @@ export class BigCommentBubble extends Component {
   render() {
     const {
       icon,
+      sourceName,
       doubleIcon,
       iconColor,
       background,
@@ -65,8 +66,12 @@ export class BigCommentBubble extends Component {
       actions,
       requiredAction,
       url,
-      reviewerUrl
+      reviewerUrl,
+      onClickHowTo,
     } = this.props;
+
+    const sentiment = siteStars >= 4 ? 'Positive' : 'Negative';
+
     return (
       <div className={styles.bigCommentBubble}>
         {doubleIcon && <DoubleIcon {...doubleIcon} /> }
@@ -83,23 +88,31 @@ export class BigCommentBubble extends Component {
                 <Icon key={i + 1} size={1.8} icon="star" />
               )}
             </div>
-            <div className={styles.bigCommentBubble__mainContent__title}>
-              {siteTitle}
-            </div>
             <div className={styles.bigCommentBubble__mainContent__preview}>
               {sitePreview}
-              <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >more... </a>
+              {/* TODO: put this there ONLY if length is greater */}
+              {sitePreview ? <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >
+                more...
+              </a> : null}
             </div>
             {requiredAction &&
               <div className={styles.bigCommentBubble__mainContent__requirements}>
                 {requiredAction}
               </div>
             }
-            <div className={styles.bigCommentBubble__mainContent__createdAt}>{createdAt} Days Ago</div>
+            <div className={styles.bigCommentBubble__mainContent__createdAt}>{moment(createdAt).fromNow(true)} ago</div>
             <div className={styles.bigCommentBubble__attachments}>
               {attachments.map((at,i) => (<img key={i} src={at.src} />))}
             </div>
             {comments.map((c,i) => (<Comment key={i} {...c} />))}
+          </div>
+          <div className={styles.howToWrapper}>
+            <div
+              className={styles.howToLink}
+              onClick={() => onClickHowTo(sentiment.toLowerCase())}
+            >
+              How to Respond to {sentiment} Reviews
+            </div>
           </div>
           <div className={styles.bigCommentBubble__respondBlock}>
             {actions &&
@@ -116,5 +129,8 @@ export class BigCommentBubble extends Component {
       </div>
     );
   }
-
 }
+
+BigCommentBubble.propTypes = {
+  onClickHowTo: PropTypes.func.isRequired,
+};

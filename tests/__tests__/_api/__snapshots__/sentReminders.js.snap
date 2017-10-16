@@ -18,7 +18,7 @@ Object {
         "isSyncedWithPms": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-        "pmsId": null,
+        "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "serviceId": null,
         "startDate": "2017-07-21T00:14:30.932Z",
@@ -42,7 +42,8 @@ Object {
         "mobilePhoneNumber": "+17789999999",
         "patientUserId": null,
         "phoneNumber": null,
-        "pmsId": null,
+        "pmsCreatedAt": null,
+        "pmsId": "12",
         "prefContactPhone": null,
         "prefName": null,
         "preferences": Object {

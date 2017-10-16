@@ -113,7 +113,7 @@ class Dashboard extends React.Component {
             <Col xs={12}>
               <DashboardStats data={data} />
             </Col>
-            <Col className={styles.padding} xs={12} md={12} lg={8}>
+            <Col className={styles.paddingStats} xs={12} md={12} lg={9}>
               <Card className={styles.dashboard__body_comments} >
                 <CardHeader
                   className={styles.cardHeader}
@@ -133,7 +133,7 @@ class Dashboard extends React.Component {
                 />
               </Card>
             </Col>
-            <Col className={styles.padding} xs={12} md={12} lg={4}>
+            <Col className={styles.paddingStats} xs={12} md={12} lg={3}>
               <div className={styles.dashboard__body_request}>
                 <RequestsContainer
                   key="dashBoardRequests"

@@ -3,8 +3,6 @@ import { change } from 'redux-form';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
 import { Header } from '../../../library';
-
-
 import ServicesPractList from './ServicesPractList';
 import { Form, Toggle } from '../../../library';
 import styles from '../styles.scss';
@@ -41,7 +39,7 @@ class ServicesPractForm extends Component {
   }
 
   setCheck(e) {
-    e.stopPropagation;
+    e.stopPropagation();
     this.props.allPractitioners = checkValues(this.props.values);
   }
 
@@ -108,13 +106,13 @@ function mapStateToProps({ form }, { formName }) {
   if (!form[formName]) {
     return {
       allPractitioners: null,
-      values: {}
+      values: {},
     };
   }
 
   return {
     allPractitioners: checkValues(form[formName].values),
-    values: form[formName].values
+    values: form[formName].values,
   };
 }
 

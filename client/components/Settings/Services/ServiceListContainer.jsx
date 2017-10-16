@@ -58,7 +58,7 @@ class ServiceListContainer extends Component {
 
     const formName = 'createServiceForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.createService, component: RemoteSubmitButton, props: { form: formName } },
     ];
 

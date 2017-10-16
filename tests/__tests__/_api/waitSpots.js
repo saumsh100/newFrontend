@@ -46,7 +46,7 @@ describe('/api/waitSpots', () => {
   describe('GET /', () => {
     test('retrieve a waitSpot', () => {
       return request(app)
-        .get(rootUrl)
+        .get(`${rootUrl}?startTime=2017-09-25T00:14:30.932Z&endTime=2017-09-29T00:14:30.932Z`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

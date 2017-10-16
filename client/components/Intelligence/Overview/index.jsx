@@ -21,7 +21,9 @@ import AgeRange from './Cards/AgeRange';
 import TopReference from './Cards/TopReference';
 import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
-import { SortByFirstName } from "../../library/util/SortEntities";
+import { SortByFirstName } from '../../library/util/SortEntities';
+import nFormatter from '../nFormatter';
+
 
 class Overview extends Component {
   constructor(props) {
@@ -70,6 +72,16 @@ class Overview extends Component {
         url: '/api/appointments/statslastyear',
         params,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientRevenueStats',
+        url: '/api/patients/revenueStats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'totalRevenueStats',
+        url: '/api/patients/revenueStatsTotal',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
@@ -105,6 +117,16 @@ class Overview extends Component {
         url: '/api/appointments/stats',
         params,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'patientRevenueStats',
+        url: '/api/patients/revenueStats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'totalRevenueStats',
+        url: '/api/patients/revenueStatsTotal',
+        params,
+      }),
     ]).then(() => {
       const newState = {
         startDate: moment(values.startDate),
@@ -126,7 +148,12 @@ class Overview extends Component {
   render() {
     const appointmentStats = (this.props.appointmentStats ?
       this.props.appointmentStats.toObject() : null);
+
+    const totalRevenueStats = (this.props.totalRevenueStats ?
+      this.props.totalRevenueStats.toObject().totalAmountClinic : 0);
+
     const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
+    const patientRevenueStats = (this.props.patientRevenueStats ? this.props.patientRevenueStats.toJS() : []);
 
     const prac = (appointmentStats ? appointmentStats.practitioner : {});
     const serve = (appointmentStats ? appointmentStats.services : {});
@@ -148,10 +175,15 @@ class Overview extends Component {
       appointmentNotFiltred: 0,
     };
 
-    let serviceData = (appointmentStats ? serve.map(key => ({
-      title: key.toObject().name,
-      hours: Math.round(key.toObject().time * 10 / 600),
-    })) : []);
+    let serviceData = patientRevenueStats.map((patient) => {
+      const age = patient.birthDate ? moment().diff(patient.birthDate, 'years') : 'N/A';
+      return {
+        name: `${patient.firstName} ${patient.lastName}`,
+        age,
+        number: `$${patient.totalAmount.toLocaleString()}`,
+        firstName: patient.firstName,
+      };
+    });
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
@@ -208,7 +240,6 @@ class Overview extends Component {
       appointmentStats.confirmedAppointments : 0);
 
     let sortedPatients = (appointmentStats ? patients.toArray().map(key => ({
-      img: key.toObject().avatarUrl,
       name: `${key.toObject().firstName} ${key.toObject().lastName}`,
       age: key.toObject().age,
       number: key.toObject().numAppointments,
@@ -230,7 +261,7 @@ class Overview extends Component {
         color: 'primaryColor',
       },
       {
-        count: '?',
+        count: `$${nFormatter(totalRevenueStats, 1)}`,
         title: 'Estimated Revenue',
         icon: 'line-chart',
         size: 6,
@@ -293,13 +324,18 @@ class Overview extends Component {
                   <Form
                     className={styles.formDrop}
                     form="dates"
-                    onSubmit={this.submit}
+                    onSubmit={(values) => {
+                      this.submit(values);
+                      this.myinput.focus();
+                    }}
                     initialValues={initialValues}
                     data-test-id="dates"
+                    enableReinitialize={true}
                   >
                     <Field
                       required
                       component="DayPicker"
+                      disabledDays={date => moment().subtract(5, 'years').isAfter(date)}
                       name="startDate"
                       label="Start Date"
                       data-test-id="startDate"
@@ -317,40 +353,12 @@ class Overview extends Component {
             </Card>
           </Col>
         </Row>
-        <DialogBox
-          actions={actions}
-          title="New Patient"
-          type="small"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
-        >
-          <Form
-            form="dates"
-            onSubmit={this.submit}
-            initialValues={initialValues}
-            ignoreSaveButton
-          >
-            <Field
-              required
-              component="DayPicker"
-              name="startDate"
-              label="Start Date"
-            />
-            <Field
-              required
-              component="DayPicker"
-              name="endDate"
-              label="End Date"
-            />
-          </Form>
-        </DialogBox>
         <Loader loaded={this.state.loader} color="#FF715C">
           <Row className={styles.intelligence__body}>
-            <Col xs={12}>
+            <Col xs={12} >
               <DashboardStats data={data} data-test-id={`${notConfirmedAppointments}_appointmentsConfirmed`}/>
             </Col>
-            <Col  xs={12} sm={6}>
+            <Col xs={12} sm={6} className={styles.padding}>
               <AppointmentFilled
                 appointmentFilled={totalData.appointmentBooked}
                 appointmentNotFilled={totalData.appointmentNotFiltred}
@@ -359,10 +367,13 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <Col   xs={12} sm={6}>
-              <ContainerList
-                cardTitle="Top Procedures by Hours"
+            <Col xs={12} sm={6} className={styles.padding}>
+              <TopReference
+                ref={(ref) => this.myinput = ref}
+                title="Most Business"
                 data={serviceData}
+                className={styles.maxHeight}
+                borderColor={colorMap.grey}
               />
             </Col>
             <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
@@ -381,6 +392,7 @@ class Overview extends Component {
             </Col>
             <Col className={styles.padding} xs={12} md={6}>
               <TopReference
+                title="Most Appointments"
                 data={sortedPatients}
                 borderColor={colorMap.grey}
               />
@@ -433,6 +445,9 @@ Overview.propTypes = {
   appointmentStats: PropTypes.object,
   appointmentStatsLastYear: PropTypes.object,
   dayStats: PropTypes.object,
+  appointmentStats: PropTypes.object,
+  patientRevenueStats: PropTypes.object,
+  totalRevenueStats: PropTypes.object,
   patientStats: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,
@@ -443,12 +458,16 @@ function mapStateToProps({ apiRequests }) {
   const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
   const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
+  const patientRevenueStats = (apiRequests.get('patientRevenueStats') ? apiRequests.get('patientRevenueStats').data : null);
+  const totalRevenueStats = (apiRequests.get('totalRevenueStats') ? apiRequests.get('totalRevenueStats').data : null);
 
   return {
     appointmentStats,
     appointmentStatsLastYear,
     dayStats,
     patientStats,
+    patientRevenueStats,
+    totalRevenueStats,
   };
 }
 

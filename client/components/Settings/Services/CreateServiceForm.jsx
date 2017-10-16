@@ -51,7 +51,6 @@ export default function CreateServiceForm(props) {
         <Row className={styles.servicesFormRow__createRow}>
           <Col xs={12}>
             <Field
-              required
               name="bufferTime"
               label="Buffer Time"
               type="number"

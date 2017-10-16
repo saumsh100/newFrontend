@@ -18,10 +18,10 @@ import {
   shouldSendReminder,
   getValidSmsReminders,
 } from '../../server/lib/_reminders/helpers';
-import { wipeModelSequelize } from '../util/wipeModel';
-import { wipeTestAccounts, seedTestAccountsSequelize, accountId } from '../util/seedTestAccounts';
-import { seedTestPatientsSequelize, patientId } from '../util/seedTestPatients';
-import { seedTestPractitionersSequelize, practitionerId } from '../util/seedTestPractitioners';
+import { wipeAllModels } from '../_util/wipeModel';
+import { seedTestUsers, accountId } from '../_util/seedTestUsers';
+import { seedTestPatients, patientId } from '../_util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../_util/seedTestPractitioners';
 
 // TODO: make seeds more modular so we can see here
 // const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
@@ -52,27 +52,86 @@ const dates = (y, m, d, h) => {
 
 describe('RemindersList Calculation Library', () => {
   beforeEach(async () => {
-    await wipeModelSequelize(Appointment);
-    await wipeModelSequelize(SentReminder);
-    await wipeModelSequelize(Reminder);
-    await wipeModelSequelize(Patient);
-    await wipeModelSequelize(Practitioner);
-    await wipeModelSequelize(Family);
-    await seedTestAccountsSequelize();
-    await seedTestPatientsSequelize();
-    await seedTestPractitionersSequelize();
+    await wipeAllModels();
+    await seedTestUsers();
+    await seedTestPatients();
+    await seedTestPractitioners();
   });
 
   afterAll(async () => {
-    await wipeModelSequelize(Appointment);
-    await wipeModelSequelize(SentReminder);
-    await wipeModelSequelize(Reminder);
-    await wipeModelSequelize(Patient);
-    await wipeModelSequelize(Practitioner);
-    await wipeTestAccounts();
+    await wipeAllModels();
   });
 
   describe('Helpers', () => {
+
+    test('#getAppointmentsFromReminder - creating later on reminder first - should return 1', async () => {
+      // Seed 3 SentReminders for the patient
+
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder2 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
+
+
+      await Appointment.bulkCreate([
+        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+      ]);
+
+      const currentDate = date(2017, 7, 5, 7);
+
+      const appts = await getAppointmentsFromReminder({ reminder: reminder1, date: currentDate });
+
+      await SentReminder.create(makeSentReminderData({
+        reminderId: reminder1.id,
+        appointmentId: appts[0].id,
+        lengthSeconds: 1086410,
+      }));
+
+      const appts2 = await getAppointmentsFromReminder({ reminder: reminder2, date: currentDate });
+
+      expect(appts2.length).toBe(1);
+    });
+
+    test('#getAppointmentsFromReminder - creating earlier reminder first - should return 0', async () => {
+      // Seed 3 SentReminders for the patient
+
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder2 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
+
+
+      await Appointment.bulkCreate([
+        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+      ]);
+
+      const currentDate = date(2017, 7, 5, 7);
+
+      const appts = await getAppointmentsFromReminder({ reminder: reminder2, date: currentDate });
+
+      await SentReminder.create(makeSentReminderData({
+        reminderId: reminder1.id,
+        appointmentId: appts[0].id,
+        lengthSeconds: 1086410,
+      }));
+
+      const appts2 = await getAppointmentsFromReminder({ reminder: reminder1, date: currentDate });
+
+      expect(appts2.length).toBe(0);
+    });
+
+    test('#getAppointmentsFromReminder - with past appointment', async () => {
+      // Seed 3 SentReminders for the patient
+
+      const reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
+
+
+      await Appointment.bulkCreate([
+        makeApptData({ ...dates(2017, 6, 5, 8) }), // A Month ago at 8
+        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+        makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
+      ]);
+      const currentDate = date(2017, 7, 5, 7);
+      const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
+      expect(appts.length).toBe(2);
+    });
+
     describe('#getAppointmentsFromReminder', () => {
       test('should be a function', () => {
         expect(typeof getAppointmentsFromReminder).toBe('function');

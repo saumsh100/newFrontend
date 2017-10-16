@@ -117,9 +117,11 @@ export default function connectSocketToStoreLogin(store, socket) {
           id: callId,
           title: 'Incoming Call',
           caller: true,
-          body: `Call from ${patient} ${data.entities.calls[callId].callerNum}`,
+          body: `${patient}`,
+          subText: `${data.entities.calls[callId].callerNum}`,
           sticky: true,
           browserAlert: true,
+          clickable: true,
         };
 
         dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
@@ -164,7 +166,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           title: 'Sync Error',
           body: `SyncClientError: ${model} ${operation} failed in the PMS`,
         };
-        dispatch(showAlertTimeout({ alert, type: 'error' }));
+        // dispatch(showAlertTimeout({ alert, type: 'error' }));
       });
 
       socket.on('syncFinished', (data) => {
@@ -173,7 +175,7 @@ export default function connectSocketToStoreLogin(store, socket) {
           body: 'Sync finished',
         };
 
-        dispatch(showAlertTimeout({ alert, type: 'success' }));
+        //dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
         dispatch(updateEntity({ key: 'accounts', entity: data }));
       });
@@ -184,8 +186,8 @@ export default function connectSocketToStoreLogin(store, socket) {
           title: 'Sync progress',
           body: `${data.collection} ${percentDone}%`,
         };
-        console.log(alert.body);
-        dispatch(showAlertTimeout({ alert, type: 'success' }));
+        //console.log(alert.body);
+        // dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
     })
     .on('unauthorized', (msg) => {
