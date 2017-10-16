@@ -3,10 +3,29 @@
 
 .signUpWrapper {
   box-sizing: border-box;
-  padding: 0px 10px;
+  padding: 0px 10px 20px 10px;
+}
+
+.header {
+  composes: cardHeaderTitle from 'sass-loader!../../../fonts.scss';
+  padding: 20px 0;
+  text-align: center;
+  color: $primary-blue;
+}
+
+.subHeader {
+  composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+  padding: 10px 0;
 }
 
 .customSubmitButton {
   width: 100%;
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
+.signUpForm {
+  > [class*="group"] {
+    padding: 18px 0;
+  }
+}

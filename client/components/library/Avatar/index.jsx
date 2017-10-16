@@ -5,6 +5,10 @@ import styles from './styles.scss';
 
 export default function Avatar({ user, className, size, onClick = () => {} }) {
   let classes = classNames(className, styles.avatar);
+  if (size === 'sm') {
+    classes = classNames(styles.small, classes);
+  }
+
   if (size === 'lg') {
     classes = classNames(styles.large, classes);
   }

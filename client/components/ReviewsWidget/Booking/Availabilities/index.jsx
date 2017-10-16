@@ -5,6 +5,9 @@ import {
   Button,
   Link,
 } from '../../../library';
+import MobileDayPicker from './MobileDayPicker';
+import AvailabilitiesDisplay from './AvailabilitiesDisplay';
+import styles from './styles.scss';
 
 export default class Availabilities extends Component {
   constructor(props) {
@@ -14,7 +17,10 @@ export default class Availabilities extends Component {
   render() {
     return (
       <div>
-        <h2>Availabilities</h2>
+        <div className={styles.mobileDayPickerContainer}>
+          <MobileDayPicker />
+        </div>
+        <AvailabilitiesDisplay />
         <Link to="./book/wait">
           <Button>Join Waitlist</Button>
         </Link>

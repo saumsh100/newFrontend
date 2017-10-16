@@ -1,23 +1,57 @@
 
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
 import { closeBookingModal } from '../../../thunks/availabilities';
-import { IconButton } from '../../library';
+import { Avatar, IconButton } from '../../library';
+import PatientUserMenu from './PatientUserMenu';
 import styles from './styles.scss';
 
-function Header(props) {
-  return (
-    <div className={styles.headerContainer}>
-      <div className={styles.pullRight}>
+class Header extends Component {
+  constructor(props) {
+    super(props);
+
+    this.goBack = this.goBack.bind(this);
+  }
+
+  goBack() {
+    alert('Going Back');
+  }
+
+  render() {
+    return (
+      <div className={styles.headerContainer}>
         <IconButton
-          icon="close"
-          onClick={props.closeBookingModal}
+          icon="arrow-left"
+          onClick={this.goBack}
           className={styles.closeButton}
         />
+        <div className={styles.title}>
+          Select Availability
+        </div>
+        <div className={styles.pullRight}>
+          <IconButton
+            icon="filter"
+            onClick={this.props.closeBookingModal}
+            className={styles.closeButton}
+          />
+          <IconButton
+            icon="calendar"
+            onClick={this.props.closeBookingModal}
+            className={styles.calendarButton}
+          />
+          <PatientUserMenu user={{ firstName: 'Jack', lastName: 'Sharp' }} />
+          <IconButton
+            icon="close"
+            onClick={this.props.closeBookingModal}
+            className={styles.closeButton}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 Header.propTypes = {};
@@ -28,4 +62,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Header);
+export default withRouter(connect(null, mapDispatchToProps)(Header));

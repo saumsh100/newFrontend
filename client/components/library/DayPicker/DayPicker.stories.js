@@ -17,14 +17,6 @@ storiesOf('DayPicker', module)
       onChange={action('changed')}
       style={object('Style', style)}
     />
-  ))
-  .add('mobile horizontal', () => (
-    <div style={{ maxWidth: '400px', border: '2px solid blue' }}>
-      <DayPicker
-        horizontal
-        onChange={action('changed')}
-      />
-    </div>
   ));
   /*.add('Mutiple Days', () => (
     <DayPicker

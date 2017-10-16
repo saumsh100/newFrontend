@@ -1,5 +1,5 @@
 
-@import '../../../../ui.scss';
+@import '../../../../../ui.scss';
 
 @mixin setBgColorAndHover($baseColor) {
   color: $baseColor;
@@ -21,10 +21,10 @@
     &_btn {
       //font-size: 18px;
       opacity: 0.9;
-      color: var(--bookingWidgetPrimaryColor);
+      color: var(--primaryColor);
       &:hover {
         opacity: 1.0;
-        color: var(--bookingWidgetPrimaryColor) !important;
+        color: var(--primaryColor) !important;
       }
 
       /*cursor: pointer;
@@ -48,7 +48,6 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0 5px;
-    font-size: 18px;
     width: 20%;
     @media screen and (max-width: 800px) {
       margin: 0 2px;
@@ -58,16 +57,16 @@
       margin-top: 5px;
       &_day {
         font-family: $medium-font;
-        font-size: 12px;
-        font-weight: 500;
-        color: #2e3945;
+        text-transform: uppercase;
         text-align: center;
+        margin-bottom: 5px;
+        color: $primary-darkgrey;
       }
 
       &_number {
-        font-size: 10px;
-        color: #dddcdc;
+        font-family: $medium-font;
         text-align: center;
+        color: $primary-darkgrey;
       }
     }
 
@@ -86,13 +85,13 @@
       margin: 5px 0;
       font-size: 12px;
       font-weight: 600;
-      font-family: $medium-font;
       color: white;
       text-align: center;
       list-style: none;
       opacity: 0.9;
-      background-color: var(--bookingWidgetPrimaryColor);
+      background-color: var(--primaryColor);
       flex-grow: 1;
+      border-radius: 5px;
       &:hover {
         opacity: 1.0;
       }
@@ -109,6 +108,10 @@
   }
 }
 
+.availabilitiesContainer {
+  margin-top: 50px;
+}
+
 .nextAvailabilityButton {
   cursor: pointer;
   box-sizing: border-box;
@@ -121,7 +124,7 @@
   text-align: center;
   list-style: none;
   opacity: 0.9;
-  background-color: var(--bookingWidgetPrimaryColor);
+  background-color: var(--primaryColor);
   padding: 20px;
   &:hover {
     opacity: 1.0;
@@ -136,7 +139,6 @@
 .centeredContent {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
 }
 
 .columnsWrapper {
@@ -154,23 +156,78 @@
 .displayContainer {
   overflow-y: scroll;
   // height: 250px;
-  height: 210px;
-  min-height: 210px;
+  height: 230px;
+  min-height: 230px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .displayAvailabilitiesContainer {
   overflow-y: scroll;
-  height: 210px;
-  min-height: 210px;
+  height: 230px;
+  min-height: 230px;
+  margin-top: 20px;
 }
 
 .loadingSpinnerIcon {
-  color: var(--bookingWidgetPrimaryColor);
+  color: var(--primaryColor);
 }
 
 .offsetScroll {
   margin-right: 8px;
+}
+
+.appointmentListMobile {
+  list-style-type: none;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0 5px;
+  > li {
+    display: inline-flex;
+    width: 75px;
+  }
+}
+
+$width: 15px;
+$height: 30px;
+
+.caretButton {
+  width: 0;
+  height: 0;
+  cursor: pointer;
+  border-top: $height/2 solid transparent;
+  border-bottom: $height/2 solid transparent;
+  border-left: $width/2 solid transparent;
+  border-right: $width/2 solid transparent;
+}
+
+.rightCaretButton {
+  @extend .caretButton;
+  border-left: $width/2 solid lighten($primary-darkgrey, 10%);
+  &:hover {
+    border-left: $width/2 solid $primary-color;
+  }
+}
+
+.leftCaretButton {
+  float: right;
+  @extend .caretButton;
+  border-right: $width/2 solid lighten($primary-darkgrey, 10%);
+  &:hover {
+    border-right: $width/2 solid $primary-color;
+  }
+}
+
+.desktopContainer {
+  @media screen and (max-width: $widget-mobile-width) {
+    display: none;
+  }
+}
+
+.mobileContainer {
+  @media screen and (min-width: $widget-mobile-width) {
+    display: none;
+  }
 }

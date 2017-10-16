@@ -2,6 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import Header from './Header';
+import { Avatar } from '../library';
 import styles from './styles.scss';
 
 class ReviewsWidget extends Component {
@@ -23,7 +25,25 @@ class ReviewsWidget extends Component {
     return (
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
-          {children}
+          <Header />
+          {/*<div className={styles.tmpContainer}>
+            <div className={styles.col}>
+              <Avatar
+                user={{ avatarUrl: "//dsw5h1xg5uvx.cloudfront.net/dc7c40b4-ed5e-44e3-9e99-a179df958ca1circle_medium__v1__.png" }}
+              />
+            </div>
+            <div className={styles.col}>
+              <div className={styles.service}>
+                Regular Service & Cleaning
+              </div>
+              <div className={styles.date}>
+                Fri, Oct. 10th - 1:30 PM
+              </div>
+            </div>
+          </div>*/}
+          <div className={styles.container}>
+            {children}
+          </div>
         </div>
       </div>
     );

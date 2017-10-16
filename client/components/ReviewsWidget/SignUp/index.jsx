@@ -16,7 +16,7 @@ const customSubmitButton = (
     icon="email"
     className={styles.customSubmitButton}
   >
-    Sign Up with Email
+    Save and continue
   </Button>
 );
 
@@ -42,15 +42,18 @@ class SignUp extends Component {
   render() {
     return (
       <div className={styles.signUpWrapper}>
-        <h2>Signup</h2>
+        <div className={styles.header}>
+          Sign Up
+        </div>
+        <Link to="./login">
+          Already have an account? Log in.
+        </Link>
         <SignUpForm
           initialValues={{}}
           onSubmit={this.handleSignUp}
           submitButton={customSubmitButton}
+          className={styles.signUpForm}
         />
-        <Link to="./login">
-          <h3>Or Login</h3>
-        </Link>
       </div>
     );
   }

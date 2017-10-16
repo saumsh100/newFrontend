@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Button, Form, Field } from '../../../library';
+import { Button, Form, Field, Grid, Row, Col } from '../../../library';
 import { asyncValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
@@ -13,27 +13,36 @@ const defaultSubmitButton = (
   </Button>
 );
 
-export default function SignUpForm({ onSubmit, initialValues, submitButton = defaultSubmitButton }) {
+export default function SignUpForm({ onSubmit, initialValues, className, submitButton = defaultSubmitButton }) {
   return (
     <Form
       form="userSignUpForm"
       onSubmit={onSubmit}
+      className={className}
       validate={passwordsMatch}
       initialValues={initialValues}
       asyncValidate={asyncValidatePatient}
       asyncBlurFields={['email', 'phoneNumber']}
       ignoreSaveButton
     >
-      <Field
-        required
-        name="firstName"
-        label="First Name"
-      />
-      <Field
-        required
-        name="lastName"
-        label="Last Name"
-      />
+      <Grid>
+        <Row>
+          <Col xs={6} className={styles.colLeft}>
+            <Field
+              required
+              name="firstName"
+              label="First Name"
+            />
+          </Col>
+          <Col xs={6} className={styles.colRight}>
+            <Field
+              required
+              name="lastName"
+              label="Last Name"
+            />
+          </Col>
+        </Row>
+      </Grid>
       <Field
         required
         name="phoneNumber"

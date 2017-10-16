@@ -7,29 +7,31 @@ import { SubmissionError } from 'redux-form';
 import { updateReview } from '../../../thunks/reviews';
 import { login } from '../../../thunks/patientAuth';
 import { Link, Button } from '../../library';
-import LoginForm from '../../Availabilities/SubmitView/LoginForm';
+import ResetPasswordForm from './ResetPasswordForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (
   <Button
     type="submit"
-    color="blue"
+    color="red"
     icon="email"
     className={styles.customSubmitButton}
   >
-    Login and continue
+    Reset Password
   </Button>
 );
 
-class Login extends Component {
+class ResetPassword extends Component {
   constructor(props) {
     super(props);
 
-    this.handleLogin = this.handleLogin.bind(this);
+    this.handleResetPassword = this.handleResetPassword.bind(this);
   }
 
-  handleLogin(values) {
-    return this.props.login(values)
+  handleResetPassword({ email }) {
+    alert(email);
+    this.props.history.push('./reset-success');
+    /*return this.props.login(values)
       .then(() => {
         // Important to return so that it will not navigate if errored
         return this.props.updateReview();
@@ -43,45 +45,22 @@ class Login extends Component {
           email: data,
           password: data,
         });
-      });
+      });*/
   }
 
   render() {
     return (
       <div className={styles.loginWrapper}>
         <div className={styles.header}>
-          Confirm your request
+          Reset Password
         </div>
-        <div className={styles.subHeader}>
-          Don't have an account?
-        </div>
-        <div>
-          Sign up for an account to confirm your request.
-        </div>
-        <Link to="./signup">
-          <Button
-            className={styles.customSubmitButton}
-          >
-            Join now
-          </Button>
-        </Link>
-        <div className={styles.score}>
-          <hr />
-          <span className={styles.scoreText}>
-            or
-          </span>
-        </div>
-        <div className={styles.subHeader}>
-          If you have an account, sign in.
-        </div>
-        <LoginForm
-          className={styles.loginFormWrapper}
-          onLogin={this.handleLogin}
+        <ResetPasswordForm
+          onSubmit={this.handleResetPassword}
           submitButton={customSubmitButton}
         />
         <div className={styles.linkWrapper}>
-          <Link to="./reset">
-            Forgot your password?
+          <Link to="./login">
+            I remember my password
           </Link>
         </div>
       </div>
@@ -89,15 +68,14 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
+ResetPassword.propTypes = {
   updateReview: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    login,
-    updateReview,
+
   }, dispatch);
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default withRouter(connect(null, mapDispatchToProps)(ResetPassword));

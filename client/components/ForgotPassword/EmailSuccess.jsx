@@ -19,7 +19,6 @@ export default function EmailSuccess(props) {
             alt="CareCru Logo"
           />
         </div>
-
         <p>
           We've sent an email to <span className={styles.email}>{email}</span> with password reset instructions.
         </p>

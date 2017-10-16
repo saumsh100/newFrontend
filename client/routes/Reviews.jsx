@@ -2,10 +2,14 @@
 import React, {PropTypes} from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
+import { connect } from 'react-redux';
 import ReviewsWidget from '../components/ReviewsWidget';
 import WidgetContainer from '../components/ReviewsWidget/Container';
+// import BookingContainer from '../components/ReviewsWidget/BookingContainer';
 import Login from '../components/ReviewsWidget/Login';
 import SignUp from '../components/ReviewsWidget/SignUp';
+import ResetPassword from '../components/ReviewsWidget/ResetPassword';
+import ResetSuccess from '../components/ReviewsWidget/ResetPassword/Success';
 import PatientApp from '../containers/PatientApp';
 import Availabilities from '../components/ReviewsWidget/Booking/Availabilities';
 import Waitlist from '../components/ReviewsWidget/Booking/Waitlist';
@@ -44,21 +48,28 @@ const BookingRouter = ({ match }) => {
   );
 };
 
-const EmbedRouter = ({ match }) => {
+const redirectAuth = (NoAuthComponent, isAuth, history) => (props) => {
+  return isAuth ?
+    history.goBack() :
+    <NoAuthComponent {...props} />;
+};
+
+const EmbedRouter = ({ match, isAuth, history }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <Switch>
       <Redirect exact from={b()} to={b('/review')} />
       <Route path={b('/review')} component={ReviewsRouter} />
       <Route path={b('/book')} component={BookingRouter} />
-      <Route exact path={b('/login')} component={Login} />
-      <Route exact path={b('/signup')} component={SignUp} />
+      <Route exact path={b('/login')} render={redirectAuth(Login, isAuth, history)} />
+      <Route exact path={b('/signup')} render={redirectAuth(SignUp, isAuth, history)} />
+      <Route exact path={b('/reset')} render={redirectAuth(ResetPassword, isAuth, history)} />
+      <Route exact path={b('/reset-success')} render={redirectAuth(ResetSuccess, isAuth, history)} />
     </Switch>
   );
 };
 
-const WidgetRouter = ({ history }) => {
-  console.log('widgetRouter', history);
+const WidgetRouter = ({ history, isAuth }) => {
   return (
     <Router history={history}>
       <div>
@@ -67,7 +78,7 @@ const WidgetRouter = ({ history }) => {
         {/* TODO: ReviewsWidget will ultimately become just the widget container */}
         <ReviewsWidget>
           <Switch>
-            <Route path={base()} component={EmbedRouter} />
+            <Route path={base()} render={props => <EmbedRouter {...props} isAuth={isAuth} />} />
           </Switch>
         </ReviewsWidget>
       </div>
@@ -77,6 +88,13 @@ const WidgetRouter = ({ history }) => {
 
 WidgetRouter.propTypes = {
   history: PropTypes.object.isRequired,
+  isAuth: PropTypes.bool.isRequired,
 };
 
-export default WidgetRouter;
+function mapStateToProps({ auth }) {
+  return {
+    isAuth: auth.get('isAuthenticated'),
+  };
+}
+
+export default connect(mapStateToProps)(WidgetRouter);
