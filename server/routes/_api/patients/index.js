@@ -8,14 +8,40 @@ import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligen
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
-import { Appointment, Chat, Patient, Call, SentReminder } from '../../../_models';
+import { Appointment, Chat, Patient, Call, SentReminder, Event } from '../../../_models';
+import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
+import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
+import { fetchCallEvents } from '../../../lib/events/Calls/index'
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
-import eventsRouter from '../events';
 
 const patientsRouter = new Router();
 
+
 patientsRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
+
+const eventsRouter = new Router();
+
+patientsRouter.get('/:patientId/events', eventsRouter);
+
+function filterEventsByQuery(eventsArray, query) {
+  const {
+    limit,
+    skip,
+  } = query;
+
+  let filterArray = eventsArray;
+
+  if (skip && eventsArray.length > skip) {
+    filterArray = filterArray.slice(skip, eventsArray.length);
+  }
+
+  if (limit) {
+    filterArray = filterArray.slice(0, limit);
+  }
+
+  return filterArray;
+}
 
 function ageRange(age, array) {
   if (age < 18) {
@@ -33,6 +59,7 @@ function ageRange(age, array) {
   }
   return array;
 }
+
 function ageRangePercent(array) {
   const newArray = array.slice();
   newArray[0] = Math.round(100 * array[0] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
@@ -468,7 +495,25 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
 // TODO: add Event schema and pass through format function (see issue comment)
 // TODO: add client side Event model and collection to run through fetchEntitiesRequest
 
-//patientsRouter.use('/:patientId/events', );
+eventsRouter.get('/:patientId/events', async (req, res, next) => {
+  try {
+    const accountId = req.accountId;
+    const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId);
+    const callEvents = await fetchCallEvents(req.patient.id, accountId);
+    const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId);
+    console.log(appointmentEvents)
+    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents);
+    const filteredEvents = filterEventsByQuery(totalEvents, req.query).sort((a, b) => {
+      if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
+      if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
+      return 0;
+    });
+
+    res.send(normalize('events', filteredEvents));
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * Create a patient

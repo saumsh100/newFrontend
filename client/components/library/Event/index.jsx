@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import classnames from 'classnames';
 import Icon from '../Icon';
 import styles from './styles.scss';
@@ -35,7 +36,7 @@ class Event extends Component {
       content = (
         <div className={styles.body}>
           <div className={styles.body_header}>
-            Appointment for Teeth Filling booked on September 30 at 11:00am
+            Appointment Booked on September 30 at 11:00am
           </div>
           <div className={styles.body_subHeaderItalic}>
             {data.note || 'Random text goes in here to fill the subheader section' }
@@ -82,7 +83,6 @@ class Event extends Component {
         </div>
       );
     }
-
 
     return (
       <div className={styles.eventContainer}>
