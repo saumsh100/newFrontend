@@ -47,6 +47,7 @@ eventsRouter.get('/:patientId', async (req, res, next) => {
 
     const buildEvents = filteredEvents.map((event) => {
       const buildData = {
+        id: event.id,
         patientId: req.patient.id,
         accountId: req.accountId,
         metaData: event,

@@ -7,7 +7,7 @@ class Event extends Component {
   render() {
     const {
       type,
-      time,
+      data,
     } = this.props;
 
     let content = null;
@@ -38,13 +38,13 @@ class Event extends Component {
             Appointment for Teeth Filling booked on September 30 at 11:00am
           </div>
           <div className={styles.body_subHeaderItalic}>
-            Random text goes in here to fill the subheader section
+            {data.note || 'Random text goes in here to fill the subheader section' }
           </div>
         </div>
       );
     }
 
-    if (type === 'message') {
+    if (type === 'message' || type === 'reminder') {
       icon = 'comment';
       bgIconStyle = classnames(bgIconStyle, styles.redBorder);
       content = (
@@ -66,6 +66,18 @@ class Event extends Component {
           </div>
           <div className={styles.body_subHeader}>
             Random text goes in here to fill the subheader section
+          </div>
+        </div>
+      );
+    }
+
+    if (type === 'call') {
+      icon = 'phone';
+      bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
+      content = (
+        <div className={styles.body}>
+          <div className={styles.body_header}>
+            Phone Call
           </div>
         </div>
       );

@@ -27,7 +27,6 @@
   border-left: 1px solid $primary-grey;
 }
 
-
 .loader {
   position: absolute;
   top: 0;
@@ -36,4 +35,12 @@
   left: 0;
   background: white;
   z-index: 9999;
+}
+
+.dateHeader {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 16px;
+  color: $primary-darkgrey;
+  padding-left: 20px;
+  padding-top: 20px;
 }

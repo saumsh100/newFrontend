@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, Event } from '../../../library';
 import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
+import EventDateSections from './EventDateSections';
 import styles from './styles.scss';
 
 class Timeline extends Component {
@@ -20,13 +21,11 @@ class Timeline extends Component {
       limit: 10,
     };
 
-    Promise.all([
-      this.props.fetchEntities({
+    this.props.fetchEntities({
         key: 'events',
         url: `/api/events/${this.props.patientId}`,
         params: query,
-      }),
-    ]).then(() => {
+    }).then(() => {
       this.setState({
         loaded: true,
       });
@@ -38,7 +37,7 @@ class Timeline extends Component {
       events,
     } = this.props;
 
-    if (!events.length) {
+    if (!events || !events.length) {
       return (
         <Loader
           loadedClassName={styles.loader}
@@ -62,14 +61,21 @@ class Timeline extends Component {
       }
     });
 
-    console.log(dateObj)
-
+    const dateSections = Object.keys(dateObj);
     return (
       <Card className={styles.card}>
         <div className={styles.eventsContainer}>
           <div className={styles.verticalLine}>&nbsp;</div>
           <div className={styles.eventsList}>
-            <Event
+            {dateSections.map((date) => {
+              return (
+                <EventDateSections
+                  dateHeader={date}
+                  events={dateObj[date]}
+                />
+              );
+            })}
+            {/*<Event
               type="email"
             />
             <Event
@@ -101,7 +107,7 @@ class Timeline extends Component {
             />
             <Event
               type="review"
-            />
+            />*/}
           </div>
         </div>
       </Card>
