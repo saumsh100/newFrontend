@@ -67,7 +67,6 @@ class MobileDayPicker extends Component {
 
     const dateTarget = (props) => (
       <div
-        type="button"
         {...props}
       >
         {`${dayString}, ${mDate.format('MMM Do')}`}

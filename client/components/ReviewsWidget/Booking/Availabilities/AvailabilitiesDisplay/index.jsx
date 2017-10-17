@@ -6,11 +6,13 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import 'moment-timezone';
 import classNames from 'classnames';
+// import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Grid,
   Row,
   Col,
   IconButton,
+  Icon,
 } from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
 import * as Thunks from '../../../../../thunks/availabilities';
@@ -37,12 +39,15 @@ class AvailabilitiesDisplay extends Component {
 
     this.state = {
       fetching: false,
+      scrollDown: true,
     };
 
     this.setDateBack = this.setDateBack.bind(this);
     this.setDateForward = this.setDateForward.bind(this);
     this.jumpToNext = this.jumpToNext.bind(this);
     this.debounceFetchAvailabilities = debounce(this.debounceFetchAvailabilities, 500);
+    this.scrollY = this.scrollY.bind(this);
+    this.desktopContainerDidMount = this.desktopContainerDidMount.bind(this);
   }
 
   componentWillMount() {
@@ -80,6 +85,31 @@ class AvailabilitiesDisplay extends Component {
       .then(() => this.setState({ fetching: false }));
   }
 
+  scrollY() {
+    const n = this.desktopContainer;
+    const padding = 20;
+    console.log(n.scrollHeight, n.scrollTop, n.offsetHeight);
+
+    // Determine if certain padding away from bottom and if so, hide scroll
+    const height = n.scrollHeight - n.offsetHeight;
+    if ((height - n.scrollTop) <= padding) {
+      this.setState({
+        scrollDown: false,
+      });
+    } else {
+      this.setState({
+        scrollDown: true,
+      });
+    }
+  }
+
+  desktopContainerDidMount(node) {
+    if (node) {
+      this.desktopContainer = node;
+      node.addEventListener('scroll', this.scrollY);
+    }
+  }
+
   render() {
     const {
       isFetching,
@@ -98,12 +128,13 @@ class AvailabilitiesDisplay extends Component {
 
     let i;
     for (i = 0; i <= numDaysForward; i++) {
-      const momentDate = accountTimezone ? moment.tz(selectedStartDate, accountTimezone).add(i, 'days')
-      : moment(selectedStartDate).add(i, 'days');
+      const momentDate = accountTimezone ?
+        moment.tz(selectedStartDate, accountTimezone).add(i, 'days') :
+        moment(selectedStartDate).add(i, 'days');
+
       const sortedAvailabilities = getSortedAvailabilities(momentDate, availabilities, accountTimezone);
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
-
 
     const headerClasses = classNames(styles.appointment__table_elements);
     const header = (
@@ -134,6 +165,9 @@ class AvailabilitiesDisplay extends Component {
       }
     }
 
+    const needsToScrollMoreDesktop = dayAvailabilities.some(d => d.sortedAvailabilities.length > 5);
+    const needsToScrollMoreMobile = dayAvailabilities[0].length > 3;
+
     // console.log(dayAvailabilities);
     let availabilitiesDisplay = (
       <div className={styles.displayContainer}>
@@ -141,12 +175,19 @@ class AvailabilitiesDisplay extends Component {
       </div>
     );
 
-    let mobileAvailabilitiesDisplay = availabilitiesDisplay;
+    let mobileAvailabilitiesDisplay = (
+      <div className={styles.mobileDisplayContainer}>
+        <i className={`fa fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
+      </div>
+    );
 
     if (!isFetching && !this.state.fetching) {
       if (display) {
         availabilitiesDisplay = (
-          <div className={styles.displayAvailabilitiesContainer}>
+          <div
+            ref={this.desktopContainerDidMount}
+            className={styles.displayAvailabilitiesContainer}
+          >
             <div className={styles.appointment__table_elements}>
               {dayAvailabilities.map((a) => {
                 return (
@@ -164,7 +205,7 @@ class AvailabilitiesDisplay extends Component {
                           className={classes}
                         >
                           {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
-                          : moment(availability.startDate).format('h:mm a')}
+                            : moment(availability.startDate).format('h:mm a')}
                         </li>
                       );
                     })}
@@ -246,6 +287,18 @@ class AvailabilitiesDisplay extends Component {
             <div className={styles.displayWrapperForHorizontalScroll}>
               {header}
               {availabilitiesDisplay}
+              <div className={styles.scrollDownSpace}>
+                {this.state.scrollDown && needsToScrollMoreDesktop ?
+                  <div className={styles.scrollDown}>
+                    <span>Scroll Down</span>
+                    <div>
+                      <Icon
+                        icon="caret-down"
+                      />
+                    </div>
+                  </div>
+                : null}
+              </div>
             </div>
           </Col>
           <Col xs={1}>
@@ -257,11 +310,6 @@ class AvailabilitiesDisplay extends Component {
         </Row>
         <Row className={styles.mobileContainer}>
           <Col xs={1}>
-            {canGoBack ?
-              <CaretButton
-                direction="left"
-                onClick={() => this.setDateBack(1)}
-              /> : null}
           </Col>
           <Col xs={10} className={styles.columnsWrapper}>
             <div className={styles.displayWrapperForHorizontalScroll}>
@@ -269,10 +317,6 @@ class AvailabilitiesDisplay extends Component {
             </div>
           </Col>
           <Col xs={1}>
-            <CaretButton
-              direction="right"
-              onClick={() => this.setDateForward(1)}
-            />
           </Col>
         </Row>
       </Grid>
