@@ -56,7 +56,7 @@ class PatientInfo extends Component {
       <Grid className={styles.mainContainer}>
         <Row>
           <Col sm={12} md={12} className={styles.patientDisplay}>
-            <SettingsDisplay patient={patient}/>
+            {/*<SettingsDisplay patient={patient}/>*/}
             <TopDisplay patient={patient} />
           </Col>
         </Row>

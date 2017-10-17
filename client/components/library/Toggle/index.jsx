@@ -7,9 +7,14 @@ import styles from './styles.scss';
 export default function Toggle(props) {
   const {
     className,
+    theme,
   } = props;
 
-  const classes = classNames(className, 'CareCruToggle');
+  let classes = classNames(className, 'CareCruToggle');
+
+  if (theme) {
+    classes = classNames(styles[`theme_${theme}Background`], className);
+  }
 
   return (
     <RCToggle
@@ -21,4 +26,5 @@ export default function Toggle(props) {
 
 Toggle.propTypes = {
   className: PropTypes.string,
+  theme: PropTypes.string,
 };

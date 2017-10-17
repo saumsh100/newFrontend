@@ -80,7 +80,6 @@ function mapStateToProps({ entities }, { patientId }) {
     return event.get('patientId') === patientId;
   });
 
-  console.log(events);
   return {
     events,
   };

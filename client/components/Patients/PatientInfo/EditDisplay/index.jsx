@@ -5,6 +5,7 @@ import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
 import InsuranceForm from './InsuranceForm';
 import FamilyForm from './FamilyForm';
+import SettingsForm from './SettingsForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import styles from './styles.scss';
 
@@ -101,6 +102,12 @@ class EditDisplay extends Component {
                 </Tab>
                 <Tab label="Family">
                   <FamilyForm
+                    patient={patient}
+                    handleSubmit={this.handleSubmit}
+                  />
+                </Tab>
+                <Tab label="Settings">
+                  <SettingsForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                   />

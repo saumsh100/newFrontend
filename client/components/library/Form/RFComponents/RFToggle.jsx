@@ -10,6 +10,8 @@ export default function RFToggle(props) {
     error,
     meta,
     checked,
+    theme,
+    className,
   } = props;
 
   const newProps = Object.assign({} , props, { defaultChecked: input.value });
