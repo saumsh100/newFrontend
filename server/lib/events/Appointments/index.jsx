@@ -12,7 +12,7 @@ export function fetchAppointmentEvents(patientId, accountId) {
 
     order: [['createdAt', 'ASC']],
   }).then((appointments) => {
-    const appEvents = appointments.map((app) => {
+    return appointments.map((app) => {
       const buildData = {
         id: app.id,
         patientId,
@@ -28,7 +28,5 @@ export function fetchAppointmentEvents(patientId, accountId) {
 
       return Event.build(buildData).get({ plain: true });
     });
-
-    return appEvents;
   });
 }

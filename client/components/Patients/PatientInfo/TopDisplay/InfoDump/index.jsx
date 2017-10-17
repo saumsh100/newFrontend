@@ -12,12 +12,18 @@ export default function InfoDump(props) {
 
   let classes = classNames(className, styles.container);
 
+  let dataClass = styles.data;
+
+  if (!data) {
+    dataClass = classNames(dataClass, styles.noData)
+  }
+
   return (
     <div className={classes}>
       <div className={styles.label}>
         {label}
       </div>
-      <div className={styles.data}>
+      <div className={dataClass}>
         {data || 'n/a'}
       </div>
     </div>

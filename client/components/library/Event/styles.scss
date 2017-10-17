@@ -3,7 +3,7 @@
 .eventContainer {
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
+  margin-top: 10px;
   width: 100%;
   &:first-child {
     margin-top: 0px;
@@ -88,3 +88,37 @@
   }
 }
 
+
+.call {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid $primary-grey;
+  border-radius: 5px;
+  width: 100%;
+  padding: 20px;
+  line-height: 1.5em;
+
+  &_header {
+    composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  }
+
+  &_subHeader {
+    color: $primary-darkgrey;
+  }
+
+  &_subHeaderItalic {
+    padding-left: 10px;
+    color: $primary-darkgrey;
+    font-style: italic;
+    composes: fontSmall from 'sass-loader!../../../fonts.scss';
+  }
+
+  audio {
+    padding-left: 20px;
+  }
+
+  &_duration {
+
+  }
+}

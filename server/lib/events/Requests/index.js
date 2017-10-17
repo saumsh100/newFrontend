@@ -1,6 +1,52 @@
 import { namespaces } from '../../../config/globals';
-import { Request, PatientUser } from '../../../_models';
+import { Request, PatientUser, Patient, Event } from '../../../_models';
 import normalize from '../../../routes/_api/normalize';
+
+
+export function fetchRequestEvents(patientId, accountId) {
+  const patientUserExists = Patient.findOne({
+    where: {
+      id: patientId,
+      accountId,
+      patientUserId: {
+        $ne: null,
+      },
+    },
+  });
+
+  if (patientUserExists) {
+    return Request.findAll({
+      raw: true,
+      where: {
+        accountId,
+        patientUserId: patientUserExists.patientUserId,
+        isCancelled: false,
+      },
+
+      order: [['createdAt', 'ASC']],
+    }).then((requests) => {
+      return requests.map((req) => {
+        const buildData = {
+          id: req.id,
+          patientId,
+          accountId,
+          type: 'Request',
+          metaData: {
+            createdAt: req.createdAt,
+            startDate: req.startDate,
+            endDate: req.endDate,
+            note: req.note,
+            isConfirmed: req.isConfirmed,
+          },
+        };
+
+        return Event.build(buildData).get({ plain: true });
+      });
+    });
+  }
+
+  return [];
+}
 
 function sendRequestIdSocket(sub, io) {
   sub.on('data', (data) => {

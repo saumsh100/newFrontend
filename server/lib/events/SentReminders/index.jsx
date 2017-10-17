@@ -1,5 +1,4 @@
-import { SentReminder, Event } from '../../../_models';
-import normalize from '../../../routes/_api/normalize';
+import { SentReminder, Event, Appointment } from '../../../_models';
 
 export function fetchSentReminderEvents(patientId, accountId) {
   return SentReminder.findAll({
@@ -7,9 +6,18 @@ export function fetchSentReminderEvents(patientId, accountId) {
     where: {
       patientId,
     },
+    include: [{
+      model: Appointment,
+      as: 'appointment',
+      where: {
+        isDeleted: false,
+        isCancelled: false,
+      },
+      required: false,
+    }],
     order: [['createdAt', 'ASC']],
   }).then((sentReminders) => {
-    const sentReminderEvents = sentReminders.map((sentReminder) => {
+    return sentReminders.map((sentReminder) => {
       const buildData = {
         id: sentReminder.id,
         patientId,
@@ -19,12 +27,11 @@ export function fetchSentReminderEvents(patientId, accountId) {
           createdAt: sentReminder.createdAt,
           isConfirmed: sentReminder.isConfirmed,
           primaryType: sentReminder.primaryType,
+          appointmentStartDate: sentReminder['appointment.startDate'],
         },
       };
 
       return Event.build(buildData).get({ plain: true });
     });
-
-    return sentReminderEvents;
   });
 }

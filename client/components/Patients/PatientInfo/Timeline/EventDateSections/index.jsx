@@ -1,4 +1,6 @@
 import React, { PropTypes } from 'react';
+import moment from 'moment';
+import classnames from 'classnames';
 import { Event } from '../../../../library';
 import styles from '../styles.scss';
 
@@ -8,9 +10,17 @@ export default function EventDateSections (props) {
     dateHeader,
   } = props;
 
+  let showHeader = dateHeader;
+  let dateHeaderClass = styles.dateHeader;
+
+  if (moment().format('MMMM Do YYYY') === dateHeader) {
+    showHeader = 'Today';
+    dateHeaderClass = classnames(dateHeaderClass, styles.today)
+  }
+
   return (
-    <div>
-      <div className={styles.dateHeader}> {dateHeader} </div>
+    <div className={styles.eventSection}>
+      <div className={dateHeaderClass}> {showHeader} </div>
       {events.map((event) => {
         return (
           <Event

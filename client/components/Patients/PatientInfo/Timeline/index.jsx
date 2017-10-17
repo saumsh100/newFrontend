@@ -68,39 +68,6 @@ class Timeline extends Component {
                 />
               );
             })}
-            {/*<Event
-              type="email"
-            />
-            <Event
-              type="review"
-            />
-            <Event
-              type="appointment"
-            />
-            <Event
-              type="email"
-            />
-            <Event
-              type="appointment"
-            />
-            <Event
-              type="message"
-            />
-            <Event
-              type="review"
-            />
-            <Event
-              type="appointment"
-            />
-            <Event
-              type="message"
-            />
-            <Event
-              type="message"
-            />
-            <Event
-              type="review"
-            />*/}
           </div>
         </div>
       </Card>

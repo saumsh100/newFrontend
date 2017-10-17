@@ -36,22 +36,22 @@ class Event extends Component {
       content = (
         <div className={styles.body}>
           <div className={styles.body_header}>
-            Appointment Booked on September 30 at 11:00am
+            Appointment Booked on {moment(data.startDate).format('MMMM Do, YYYY h:mma')}
           </div>
           <div className={styles.body_subHeaderItalic}>
-            {data.note || 'Random text goes in here to fill the subheader section' }
+            {data.note || '' }
           </div>
         </div>
       );
     }
 
-    if (type === 'message' || type === 'reminder') {
+    if (type === 'reminder') {
       icon = 'comment';
       bgIconStyle = classnames(bgIconStyle, styles.redBorder);
       content = (
         <div className={styles.body}>
           <div className={styles.body_subHeader}>
-            Random text goes in here to fill the subheader section
+            Reminder Sent: For appointment on {moment(data.appointmentStartDate).format('MMMM Do, YYYY h:mma')}
           </div>
         </div>
       );
@@ -63,10 +63,10 @@ class Event extends Component {
       content = (
         <div className={styles.body}>
           <div className={styles.body_header}>
-            Review Left on Google+
+            Review Left from CareCru
           </div>
           <div className={styles.body_subHeader}>
-            Random text goes in here to fill the subheader section
+            {data.description}
           </div>
         </div>
       );
@@ -76,9 +76,17 @@ class Event extends Component {
       icon = 'phone';
       bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
       content = (
-        <div className={styles.body}>
-          <div className={styles.body_header}>
+        <div className={styles.call}>
+          <div className={styles.call_header}>
             Phone Call
+          </div>
+          <div>
+            <audio controls>
+              <source src={data.recording} type="audio/ogg" />
+            </audio>
+          </div>
+          <div className={styles.call_subHeaderItalic}>
+            {data.duration} seconds, from {data.callerCity}, at {moment(data.startTime).format('h:mm a')}
           </div>
         </div>
       );
@@ -95,7 +103,7 @@ class Event extends Component {
           {content}
         </div>
         <div className={styles.time}>
-          <span className={styles.time_text}>10:30am</span>
+          <span className={styles.time_text}>{moment(data.createdAt).format('h:mm a')}</span>
         </div>
       </div>
     );

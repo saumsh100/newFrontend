@@ -11,7 +11,9 @@ import normalize from '../normalize';
 import { Appointment, Chat, Patient, Call, SentReminder, Event } from '../../../_models';
 import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
 import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
-import { fetchCallEvents } from '../../../lib/events/Calls/index'
+import { fetchCallEvents } from '../../../lib/events/Calls/index';
+import { fetchRequestEvents } from '../../../lib/events/Requests/index';
+import { fetchReviewEvents } from '../../../lib/events/Reviews/index';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
@@ -498,11 +500,15 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
 eventsRouter.get('/:patientId/events', async (req, res, next) => {
   try {
     const accountId = req.accountId;
+
     const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId);
     const callEvents = await fetchCallEvents(req.patient.id, accountId);
     const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId);
-    console.log(appointmentEvents)
-    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents);
+    const requestEvents = await fetchRequestEvents(req.patient.id, accountId);
+    const reviewEvents = await fetchReviewEvents(req.patient.id, accountId);
+
+    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents);
+
     const filteredEvents = filterEventsByQuery(totalEvents, req.query).sort((a, b) => {
       if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
       if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;

@@ -3,6 +3,7 @@ const TYPE = {
   APPOINTMENT: 'Appointment',
   CALL: 'Call',
   REMINDER: 'Reminder',
+  REQUEST: 'Request',
 };
 
 const ACTION = {

@@ -16,6 +16,9 @@
 
 .data {
   color: $primary-dark;
-  font-size: $small-size;
   composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+}
+
+.noData {
+  color: $primary-grey;
 }
