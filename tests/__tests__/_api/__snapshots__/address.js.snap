@@ -51,6 +51,8 @@ Object {
         "unit": 15,
         "vendastaAccountId": null,
         "vendastaId": null,
+        "vendastaMsId": null,
+        "vendastaSrId": null,
         "website": null,
         "weeklyScheduleId": null,
       },

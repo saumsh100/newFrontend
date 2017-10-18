@@ -69,7 +69,7 @@ export function fetchEntitiesRequest({ id, key, base, join, params = {}, url }) 
   };
 }
 
-export function deleteEntityRequest({ key, id, url, alert }) {
+export function deleteEntityRequest({ key, id, url, values, alert }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -78,7 +78,7 @@ export function deleteEntityRequest({ key, id, url, alert }) {
     const keyStr = key.substring(0, key.length - 1);
     const errorText = alert ? alert.error : { body: `Delete ${keyStr} failed` };
 
-    axios.delete(url)
+    axios.delete(url, { params: values })
       .then(() => {
         dispatch(deleteEntity({ key, id }));
         if (alert && alert.success) {

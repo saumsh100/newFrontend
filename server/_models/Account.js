@@ -60,6 +60,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
+    vendastaMsId: {
+      type: DataTypes.STRING,
+    },
+
+    vendastaSrId: {
+      type: DataTypes.STRING,
+    },
+
     vendastaId: {
       type: DataTypes.STRING,
     },
