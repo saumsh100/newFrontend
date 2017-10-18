@@ -104,7 +104,6 @@ class PatientTable extends Component {
             );
           }}
         />
-        />
       </div>
     )
   }
