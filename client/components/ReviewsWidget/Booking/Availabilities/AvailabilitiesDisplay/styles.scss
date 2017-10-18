@@ -60,13 +60,13 @@
         text-transform: uppercase;
         text-align: center;
         margin-bottom: 5px;
-        color: $primary-darkgrey;
+        color: $primary-gray;
       }
 
       &_number {
         font-family: $medium-font;
         text-align: center;
-        color: $primary-darkgrey;
+        color: $primary-gray;
       }
     }
 
@@ -109,7 +109,8 @@
 }
 
 .availabilitiesContainer {
-  margin-top: 50px;
+  // margin-top: 50px;
+  height: auto;
 }
 
 .nextAvailabilityButton {
@@ -125,7 +126,8 @@
   list-style: none;
   opacity: 0.9;
   background-color: var(--primaryColor);
-  padding: 20px;
+  padding: 0px 15px;
+  border-radius: 5px;
   &:hover {
     opacity: 1.0;
   }
@@ -150,7 +152,7 @@
 }
 
 .displayWrapperForHorizontalScroll {
-  min-width: 370px;
+  // min-width: 370px;
 }
 
 .displayContainer {
@@ -171,12 +173,11 @@
   justify-content: center;
 }
 
-
 .displayAvailabilitiesContainer {
   overflow-y: scroll;
   height: 230px;
   min-height: 230px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .loadingSpinnerIcon {
@@ -192,11 +193,18 @@
   white-space: nowrap;
   box-sizing: border-box;
   padding: 0;
-  margin: 0 5px;
+  margin: 0;
   > li {
     display: inline-flex;
-    width: 80px;
+    width: 79px;
     margin: 0 3px;
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 
@@ -215,7 +223,7 @@ $height: 30px;
 
 .rightCaretButton {
   @extend .caretButton;
-  border-left: $width/2 solid lighten($primary-darkgrey, 10%);
+  border-left: $width/2 solid $primary-gray;
   &:hover {
     border-left: $width/2 solid $primary-color;
   }
@@ -224,7 +232,7 @@ $height: 30px;
 .leftCaretButton {
   float: right;
   @extend .caretButton;
-  border-right: $width/2 solid lighten($primary-darkgrey, 10%);
+  border-right: $width/2 solid $primary-gray;
   &:hover {
     border-right: $width/2 solid $primary-color;
   }
@@ -237,6 +245,7 @@ $height: 30px;
 }
 
 .mobileContainer {
+  padding: 0 20px;
   @media screen and (min-width: $widget-mobile-width) {
     display: none;
   }
@@ -253,7 +262,7 @@ $height: 30px;
 .scrollDown {
   display: flex;
   flex-direction: column;
-  color: lighten($primary-darkgrey, 20%);
+  color: $primary-gray;
   // position: relative;
   > span {
     font-family: $medium-font;
@@ -268,5 +277,18 @@ $height: 30px;
     > i {
       width: 10px;
     }
+  }
+}
+
+.availabilityLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.75px;
+  color: #c6c6c6;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  @media screen and (min-width: $widget-mobile-width) {
+    margin-bottom: 20px;
   }
 }

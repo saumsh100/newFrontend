@@ -27,12 +27,16 @@ import {
   SET_FORGOT_PASSWORD,
 } from '../constants';
 
+function getStartTimeForToday(account) {
+  const timezone = account.timezone;
+  const zone = -1 * moment.tz(new Date(), timezone).zone();
+  return moment().add(1, 'hours').zone(zone).toISOString();
+}
+
 export const createInitialWidgetState = state => {
   let selectedStartDate = moment().add(1, 'hours').toISOString()
   if (state) {
-    const timezone = state.account.timezone;
-    const zone = -1 * moment.tz(new Date(), timezone).zone();
-    selectedStartDate = moment().add(1, 'hours').zone(zone).toISOString();
+    selectedStartDate = getStartTimeForToday(state.account);
   }
 
   // selectedStartDate = timezone ?
@@ -154,8 +158,15 @@ export default handleActions({
     return state.set('selectedPractitionerId', action.payload);
   },
 
-  [SET_START_DATE](state, action) {
-    return state.set('selectedStartDate', action.payload);
+  [SET_START_DATE](state, { payload }) {
+    console.log(SET_START_DATE, payload);
+    let startDate = getStartTimeForToday(state.get('account').toJS());
+    if (!moment(payload).isSame(startDate, 'day')) {
+      startDate = moment(payload).hours(0).toISOString();
+    }
+
+    console.log('Setting to', startDate);
+    return state.set('selectedStartDate', startDate);
   },
 
   [CREATE_PATIENT](state, action) {

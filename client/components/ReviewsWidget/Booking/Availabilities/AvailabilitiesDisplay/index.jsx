@@ -216,29 +216,54 @@ class AvailabilitiesDisplay extends Component {
           </div>
         );
 
-        mobileAvailabilitiesDisplay = (
-          <div>
-            <ul className={styles.appointmentListMobile}>
-              {dayAvailabilities[0].sortedAvailabilities.map((availability) => {
-                let classes = styles.appointment__list_item;
-                if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
-                  classes = `${classes} ${styles.appointment__list_selected}`;
-                }
+        // If the selectedDay does not have any availabilities, get next day's availability with
+        // and display Next Availablity
+        const noAvailabilitiesToday = !dayAvailabilities[0].sortedAvailabilities.length;
+        if (noAvailabilitiesToday) {
+          // Find the next day with an availability
+          const dayAvail = dayAvailabilities.find(d => d.sortedAvailabilities.length);
+          const { startDate } = dayAvail.sortedAvailabilities[0];
+          const mDate = accountTimezone ? moment.tz(startDate, accountTimezone) : moment(startDate);
+          const displayDate = mDate.format('ddd, MMM D');
 
-                return (
-                  <li
-                    key={`${availability.startDate}_item`}
-                    onClick={() => setSelectedAvailability(availability)}
-                    className={classes}
-                  >
-                    {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
-                      : moment(availability.startDate).format('h:mm a')}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        );
+          // This is basically like just having nextAvailability, so this could use a refactor
+          // But this is easiest to implement
+          mobileAvailabilitiesDisplay = (
+            <div className={styles.mobileDisplayContainer}>
+              <li
+                onClick={() => this.jumpToNext(startDate)}
+                className={styles.nextAvailabilityButton}
+              >
+                <span>Next Availablility on</span>
+                <div>{' ' + displayDate}</div>
+              </li>
+            </div>
+          );
+        } else {
+          mobileAvailabilitiesDisplay = (
+            <div>
+              <ul className={styles.appointmentListMobile}>
+                {dayAvailabilities[0].sortedAvailabilities.map((availability) => {
+                  let classes = styles.appointment__list_item;
+                  if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
+                    classes = `${classes} ${styles.appointment__list_selected}`;
+                  }
+
+                  return (
+                    <li
+                      key={`${availability.startDate}_item`}
+                      onClick={() => setSelectedAvailability(availability)}
+                      className={classes}
+                    >
+                      {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
+                        : moment(availability.startDate).format('h:mm a')}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        }
       } else if (nextAvailability) {
         const { startDate } = nextAvailability;
         const mDate = accountTimezone ? moment.tz(startDate, accountTimezone) : moment(startDate);
@@ -259,7 +284,11 @@ class AvailabilitiesDisplay extends Component {
           </div>
         );
 
-        mobileAvailabilitiesDisplay = availabilitiesDisplay;
+        mobileAvailabilitiesDisplay = (
+          <div className={styles.mobileDisplayContainer}>
+            {nextLink}
+          </div>
+        );
       } else {
         availabilitiesDisplay = (
           <div className={styles.displayContainer}>
@@ -267,7 +296,11 @@ class AvailabilitiesDisplay extends Component {
           </div>
         );
 
-        mobileAvailabilitiesDisplay = availabilitiesDisplay;
+        mobileAvailabilitiesDisplay = (
+          <div className={styles.mobileDisplayContainer}>
+            There are no available appointments
+          </div>
+        );
       }
     }
 
@@ -275,6 +308,9 @@ class AvailabilitiesDisplay extends Component {
 
     return (
       <Grid className={styles.availabilitiesContainer}>
+        <div className={styles.availabilityLabel}>
+          Availability <Icon icon="calendar" />
+        </div>
         <Row className={styles.desktopContainer}>
           <Col xs={1}>
             {canGoBack ?
@@ -309,14 +345,10 @@ class AvailabilitiesDisplay extends Component {
           </Col>
         </Row>
         <Row className={styles.mobileContainer}>
-          <Col xs={1}>
-          </Col>
-          <Col xs={10} className={styles.columnsWrapper}>
+          <Col xs={12} className={styles.columnsWrapper}>
             <div className={styles.displayWrapperForHorizontalScroll}>
               {mobileAvailabilitiesDisplay}
             </div>
-          </Col>
-          <Col xs={1}>
           </Col>
         </Row>
       </Grid>

@@ -1,10 +1,61 @@
 
 @import '../../../../ui.scss';
 
+.availWrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .mobileDayPickerContainer {
-  border-top: 1px solid darken($primary-grey, 10%);
+  border-top: 1px solid $primary-grey;
   box-shadow: 0 1px 0px rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
   @media screen and (min-width: $widget-mobile-width) {
     display: none;
+  }
+}
+
+.waitlistCta {
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  max-width: 220px;
+  line-height: 20px;
+  font-size: 12px;
+  color: $primary-darkgrey;
+  flex: 1;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  padding: 0 20px;
+  box-shadow: 0 1px 0px rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
+  > a {
+    width: 50%;
+    &:first-child {
+      margin-right: 10px;
+    }
+
+    &:last-child {
+      margin-left: 10px;
+    }
+
+    > button {
+      width: 100%;
+    }
+  }
+}
+
+.invertedButton {
+  background-color: white;
+  color: var(--primaryColor);
+  border: 1px solid;
+  padding: 11px 10px;
+  &:hover {
+    color: var(--primaryColor);
+    background-color: white;
   }
 }
