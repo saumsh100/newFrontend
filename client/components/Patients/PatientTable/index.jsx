@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
 import { fetchEntities } from '../../../thunks/fetchEntities';
+import PatientSubComponent from './PatientSubComponent';
 import styles from './styles.scss';
 
 function getEntities(entities) {
@@ -63,14 +64,6 @@ class PatientTable extends Component {
   }
 
   render() {
-    const {
-      patients,
-    } = this.props;
-
-    if (!patients) {
-      return null;
-    }
-
     const columns = [
       {
         Header: 'First Name',
@@ -102,6 +95,15 @@ class PatientTable extends Component {
           className="-striped -highlight"
           onFetchData={this.fetchData}
           manual
+          SubComponent={row => {
+            console.log(row)
+            return (
+              <PatientSubComponent
+                patient={row.original}
+              />
+            );
+          }}
+        />
         />
       </div>
     )
@@ -112,19 +114,12 @@ PatientTable.propTypes = {
 
 };
 
-function mapStateToProps({ entities }) {
-  const patients = entities.getIn(['patients', 'models']).toArray();
-  return {
-    patients,
-  }
-}
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
   }, dispatch);
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(PatientTable);
