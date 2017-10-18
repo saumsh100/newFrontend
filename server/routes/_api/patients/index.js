@@ -353,7 +353,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
  */
 patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next) => {
   const { accountId } = req;
-  const { email, patientUserId } = req.query;
+  const { email, patientUserId, limit } = req.query;
   let patients;
 
   try {
@@ -373,6 +373,7 @@ patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next
       patients = await Patient.findAll({
         raw: true,
         where: { accountId },
+        limit,
       });
     }
     return res.send(format(req, res, 'patients', patients));
@@ -491,12 +492,11 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
   }
 });
 
-// TODO: create an eventsRouter
-// TODO: add lib/events folder to hold call for fetching events (appointments, calls, sentReminders)
-// TODO: add query ability to this endpoint to limit, skip, filter, etc. (apply to array at end)
-// TODO: add Event schema and pass through format function (see issue comment)
-// TODO: add client side Event model and collection to run through fetchEntitiesRequest
 
+/**
+ * Fetching events for a patient.
+ * params: patientId,
+ */
 eventsRouter.get('/:patientId/events', async (req, res, next) => {
   try {
     const accountId = req.accountId;
@@ -516,6 +516,47 @@ eventsRouter.get('/:patientId/events', async (req, res, next) => {
     });
 
     res.send(normalize('events', filteredEvents));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * Fetching patients for patients table.
+ */
+patientsRouter.get('/table', async (req, res, next) => {
+  try {
+    const {
+      limit,
+      filter,
+      sort,
+    } = req.query;
+
+    let filterBy = {
+      accountId: req.accountId,
+    };
+
+    if (filter && filter.length) {
+      const firstFilter = JSON.parse(filter[0]);
+      const id = firstFilter.id;
+      const value = firstFilter.value;
+
+      filterBy[id] = {
+        $iRegexp: value,
+      };
+    }
+
+    if (sort && sort.length) {
+      const sortObj = JSON.parse(sort[0]);
+    }
+
+    const patients = await Patient.findAll({
+      raw: true,
+      where: filterBy,
+      limit,
+    });
+
+    return res.send(normalize('patients', patients));
   } catch (error) {
     next(error);
   }
