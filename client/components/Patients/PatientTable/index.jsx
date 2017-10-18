@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
@@ -30,10 +31,8 @@ class PatientTable extends Component {
   }
 
   fetchData(state, instance) {
-    console.log(state);
     if (state.page === 0 || state.page === this.state.currentPage ) {
       const limit = state.pageSize * (state.page + 1);
-      console.log(limit);
       const query = {
         limit,
         page: state.page,
@@ -72,15 +71,23 @@ class PatientTable extends Component {
       return null;
     }
 
-    const columns = [{
-      Header: 'First Name',
-      id: 'firstName',
-      accessor: d => d.firstName,
-    }, {
-      Header: 'Last Name',
-      id: 'lastName',
-      accessor: d => d.lastName,
-    },
+    const columns = [
+      {
+        Header: 'First Name',
+        accessor: 'firstName',
+      }, {
+        Header: 'Last Name',
+        accessor: 'lastName',
+      },
+      {
+        Header: 'Active',
+        accessor: 'status',
+      },
+      {
+        Header: 'Age',
+        id: 'birthDate',
+        accessor: d => moment().diff(d.birthDate, 'years'),
+      },
     ];
 
     return (
@@ -95,26 +102,6 @@ class PatientTable extends Component {
           className="-striped -highlight"
           onFetchData={this.fetchData}
           manual
-          geTdProps={(state, rowInfo, column, instance) => {
-            return {
-              onClick: (e, handleOriginal) => {
-                console.log('A Td Element was clicked!')
-                console.log('it produced this event:', e)
-                console.log('It was in this column:', column)
-                console.log('It was in this row:', rowInfo)
-                console.log('It was in this table instance:', instance)
-
-                // IMPORTANT! React-Table uses onClick internally to trigger
-                // events like expanding SubComponents and pivots.
-                // By default a custom 'onClick' handler will override this functionality.
-                // If you want to fire the original onClick handler, call the
-                // 'handleOriginal' function.
-                if (handleOriginal) {
-                  handleOriginal()
-                }
-              }
-            }
-          }}
         />
       </div>
     )
