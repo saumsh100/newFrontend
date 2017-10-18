@@ -24,13 +24,17 @@ class SideBar extends Component {
     } = this.props;
 
     const {
-      name,
       street,
       state,
       city,
+    } = account.toJS().address;
+
+    const {
+      name,
       fullLogoUrl,
       timezone,
     } = account.toJS();
+
 
     let selectedAvailabilityComponent = null;
     if (selectedAvailability) {

@@ -38,12 +38,21 @@ export default function (sequelize, DataTypes) {
     endDate: {
       type: DataTypes.DATE,
     },
+
+    appointmentId: {
+      type: DataTypes.UUID,
+    },
   });
 
-  WaitSpot.associate = ({ Account, Patient, PatientUser }) => {
+  WaitSpot.associate = ({ Appointment, Account, Patient, PatientUser }) => {
     WaitSpot.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    WaitSpot.belongsTo(Appointment, {
+      foreignKey: 'appointmentId',
+      as: 'appointment',
     });
 
     WaitSpot.belongsTo(Patient, {
