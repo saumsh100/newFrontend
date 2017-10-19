@@ -63,7 +63,6 @@ class PatientSubComponent extends Component {
 
 
 function mapStateToProps({ entities }, { patient }) {
-  console.log(patient)
   const events = entities.getIn(['events', 'models']).toArray().filter((event) => {
     return event.get('patientId') === patient.id;
   });

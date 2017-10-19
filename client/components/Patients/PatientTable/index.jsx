@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
+import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
@@ -23,18 +24,20 @@ class PatientTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: [],
       limit: 20,
       loading: true,
       totalPatients: 0,
       currentPage: 0,
-      data: [],
       sorted: [],
+      expanded: {},
     };
-    this.fetchData = this.fetchData.bind(this);
+    this.fetchData = debounce(this.fetchData, 200);
     this.pageChange = this.pageChange.bind(this);
+    this.pageSizeChange = this.pageSizeChange.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.onSort = this.onSort.bind(this);
-    this.pageSizeChange = this.pageSizeChange.bind(this);
+    this.handleRowClick = this.handleRowClick.bind(this);
   }
 
   componentDidMount() {
@@ -51,19 +54,13 @@ class PatientTable extends Component {
         totalPatients,
       });
       this.fetchData({
+        limit: this.state.limit,
         page: 0,
       });
     });
   }
 
-  fetchData(setQuery) {
-    const query = {
-      limit: this.state.limit,
-      sort: this.state.sorted,
-      ...setQuery
-    };
-
-    console.log(query)
+  fetchData(query) {
     this.props.fetchEntities({
       key: 'patients',
       url: '/api/patients/table',
@@ -79,6 +76,8 @@ class PatientTable extends Component {
 
   pageChange(index) {
     this.fetchData({
+      limit: this.state.limit,
+      sort: this.state.sorted,
       page: index,
     });
     this.setState({
@@ -87,11 +86,13 @@ class PatientTable extends Component {
   }
 
   pageSizeChange(pageSize, pageIndex) {
+    this.fetchData({
+      limit: pageSize,
+      sort: this.state.sorted,
+      page: pageIndex,
+    });
     this.setState({
       limit: pageSize,
-    });
-    fetchData({
-      page: pageIndex
     });
   }
 
@@ -99,6 +100,8 @@ class PatientTable extends Component {
     this.fetchData({
       filter: column,
       page: 0,
+      limit: this.state.limit,
+      sort: this.state.sorted,
     });
   }
 
@@ -106,21 +109,41 @@ class PatientTable extends Component {
     this.fetchData({
       sort: newSorted,
       page: 0,
+      limit: this.state.limit,
     });
     this.setState({
       sorted: newSorted,
     });
   }
 
-  render() {
+  handleRowClick(rowInfo, column) {
     const {
-      wasFetched,
       push,
     } = this.props;
 
-    if (!wasFetched) {
-      return null;
+    const {
+      expanded,
+    } = this.state;
+
+    if (column.id === 'firstName' || column.id === 'lastName') {
+      push(`/patients/${rowInfo.original.id}`);
+    } else if (!expanded.hasOwnProperty(rowInfo.index)) {
+      const indexObj = {};
+      indexObj[rowInfo.index] = true;
+      this.setState({
+        expanded: indexObj,
+      });
+    } else {
+      this.setState({
+        expanded: {},
+      });
     }
+  }
+
+  render() {
+    const {
+      wasFetched,
+    } = this.props;
 
     const columns = [
       {
@@ -147,14 +170,15 @@ class PatientTable extends Component {
           data={this.state.data}
           page={this.state.currentPage}
           pages={Math.floor(this.state.totalPatients / this.state.limit)}
-          columns={columns}
           sorted={this.state.sorted}
-          filterable
           defaultPageSize={this.state.limit}
-          loading={this.state.loading}
+          loading={this.state.loading && wasFetched}
+          expanded={this.state.expanded}
+          columns={columns}
           className="-striped -highlight"
           manual
-          SubComponent={row => {
+          filterable
+          SubComponent={(row) => {
             return (
               <PatientSubComponent
                 patient={row.original}
@@ -165,27 +189,27 @@ class PatientTable extends Component {
             this.pageChange(pageIndex);
           }}
           onFilteredChange={(column, value) => {
-            this.onFilter(column, value)
+            this.onFilter(column, value);
           }}
           onSortedChange={(newSorted, column, shiftKey) => {
             this.onSort(newSorted);
           }}
-
           onPageSizeChange={(pageSize, pageIndex) => {
-            this.pageSizeChange(pageSize, pageIndex)
+            this.pageSizeChange(pageSize, pageIndex);
           }}
-
+          onExpandedChange={(newExpanded, index, event) => {
+            this.onExpand(newExpanded, index, event);
+          }}
           getTdProps={(state, rowInfo, column, instance) => {
             return {
               onClick: (e, handleOriginal) => {
-                if(!column.expander) {
-                  push(`/patients/${rowInfo.original.id}`)
-                }
+                this.handleRowClick(rowInfo, column);
+
                 if (handleOriginal) {
-                  handleOriginal()
+                  handleOriginal();
                 }
-              }
-            }
+              },
+            };
           }}
         />
       </div>
