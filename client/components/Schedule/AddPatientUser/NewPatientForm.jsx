@@ -82,7 +82,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
         />
       </div>
       <Field
-        name="phoneNumber"
+        name="mobilePhoneNumber"
         label="Phone Number"
         type="tel"
       />
