@@ -7,6 +7,7 @@ import OfficeHoursForm from '../../../Schedule/OfficeHours/OfficeHoursForm';
 import BreaksForm from '../../../Schedule/OfficeHours/BreaksForm';
 import { Toggle, Header, Row, Col, DialogBox, Form, Field, RemoteSubmitButton, Button } from '../../../../library';
 import styles from '../../styles.scss';
+import { SortByName } from "../../../../library/util/SortEntities";
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -317,7 +318,13 @@ class PractitionerOfficeHours extends Component{
         </div>);
       });
 
-      const chairFields = chairs.toArray().map((chair) => {
+      const filteredChairs = chairs.toArray().filter((chair) => {
+        if (chair.isActive) {
+          return chair;
+        } 
+      }).sort(SortByName);
+
+      const chairFields = filteredChairs.map((chair) => {
         initialValuesChairs[chair.id] = weeklySchedule[this.state.modalChairDay].chairIds.includes(chair.id);
         return (<div className={styles.chairsContainer_fields}>
           <span className={styles.chairsContainer_name}>{chair.name}</span>
