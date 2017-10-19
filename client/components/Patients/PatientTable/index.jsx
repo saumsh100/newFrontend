@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
-import { fetchEntities } from '../../../thunks/fetchEntities';
+import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
 import styles from './styles.scss';
 
@@ -22,48 +22,94 @@ class PatientTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
-      pages: 0,
-      currentPage: 0,
-      dataArray: [],
+      limit: 20,
       loading: true,
+      totalPatients: 0,
+      currentPage: 0,
+      data: [],
+      sorted: [],
     };
     this.fetchData = this.fetchData.bind(this);
+    this.pageChange = this.pageChange.bind(this);
+    this.onFilter = this.onFilter.bind(this);
+    this.onSort = this.onSort.bind(this);
   }
 
-  fetchData(state, instance) {
-    if (state.page === 0 || state.page === this.state.currentPage ) {
-      const limit = state.pageSize * (state.page + 1);
-      const query = {
-        limit,
-        page: state.page,
-        filter: state.filtered,
-        sort: state.sorted,
-      };
+  componentDidMount() {
+    const query = {
+      count: true,
+    };
 
-      return this.props.fetchEntities({
-        key: 'patients',
-        url: '/api/patients/table',
-        params: query,
-      }).then((data) => {
-        const dataArray = getEntities(data);
-
-        this.setState({
-          dataArray,
-          data: dataArray.slice(state.pageSize * state.page, state.pageSize * state.page + state.pageSize),
-          pages: Math.ceil(dataArray.length / state.pageSize) + 1,
-          currentPage: Math.ceil(dataArray.length / state.pageSize),
-          loading: false,
-        });
-      });
-    } else {
+    this.props.fetchEntitiesRequest({
+      id: 'patientTotalCount',
+      url: '/api/patients/table',
+      params: query,
+    }).then((totalPatients) => {
       this.setState({
-        data: this.state.dataArray.slice(state.pageSize * state.page, state.pageSize * state.page + state.pageSize),
+        totalPatients,
       });
-    }
+      this.fetchData({
+        page: 0,
+      });
+    });
+  }
+
+  fetchData(setQuery) {
+    const query = {
+      limit: this.state.limit,
+      sort: this.state.sorted,
+      ...setQuery
+    };
+
+    console.log(query)
+    this.props.fetchEntities({
+      key: 'patients',
+      url: '/api/patients/table',
+      params: query,
+    }).then((data) => {
+      const dataArray = getEntities(data);
+      this.setState({
+        data: dataArray,
+        loading: false,
+      });
+    });
+  }
+
+  pageChange(index) {
+    this.fetchData({
+      page: index,
+    });
+    this.setState({
+      currentPage: index,
+    });
+  }
+
+  onFilter(column, value) {
+    this.fetchData({
+      filter: column,
+      page: 0,
+    });
+  }
+
+  onSort(newSorted) {
+    this.fetchData({
+      sort: newSorted,
+      page: 0,
+    });
+    this.setState({
+      sorted: newSorted,
+    });
   }
 
   render() {
+    const {
+      wasFetched,
+    } = this.props;
+
+    if (!wasFetched) {
+      return null;
+    }
+
     const columns = [
       {
         Header: 'First Name',
@@ -87,21 +133,30 @@ class PatientTable extends Component {
       <div className={styles.mainContainer}>
         <ReactTable
           data={this.state.data}
-          pages={this.state.pages}
+          page={this.state.currentPage}
+          pages={Math.floor(this.state.totalPatients / this.state.limit)}
           columns={columns}
+          sorted={this.state.sorted}
           filterable
-          defaultPageSize={20}
+          defaultPageSize={this.state.limit}
           loading={this.state.loading}
           className="-striped -highlight"
-          onFetchData={this.fetchData}
           manual
           SubComponent={row => {
-            console.log(row)
             return (
               <PatientSubComponent
                 patient={row.original}
               />
             );
+          }}
+          onPageChange={(pageIndex) => {
+            this.pageChange(pageIndex);
+          }}
+          onFilteredChange={(column, value) => {
+            this.onFilter(column, value)
+          }}
+          onSortedChange={(newSorted, column, shiftKey) => {
+            this.onSort(newSorted);
           }}
         />
       </div>
@@ -113,12 +168,20 @@ PatientTable.propTypes = {
 
 };
 
+function mapStateToProps({ entities, apiRequests }, { match }) {
+  const wasFetched = (apiRequests.get('patientTotalCount') ? apiRequests.get('patientTotalCount').wasFetched : null);
+
+  return {
+    wasFetched,
+  };
+}
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    fetchEntitiesRequest,
   }, dispatch);
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(PatientTable);

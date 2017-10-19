@@ -530,6 +530,8 @@ patientsRouter.get('/table', async (req, res, next) => {
       limit,
       filter,
       sort,
+      count,
+      page,
     } = req.query;
 
     const filterBy = {
@@ -549,17 +551,28 @@ patientsRouter.get('/table', async (req, res, next) => {
     const orderBy = [];
 
     if (sort && sort.length) {
+      console.log(sort)
       const sortObj = JSON.parse(sort[0]);
-      const descOrAsc = sortObj.desc ? 'DSC' : 'ASC';
+      const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
       orderBy.push([sortObj.id, descOrAsc]);
     }
 
     //TODO This is the actual data in the table
     //TODO Meaning you need to add pageLimits and pageNumber to this (limit and offset)
 
+    if (count) {
+      const patientCount = await Patient.count().then(c => {
+          return c;
+      });
+      return res.send({
+        entities: patientCount,
+      });
+    }
+
     const patients = await Patient.findAll({
       raw: true,
       where: filterBy,
+      offset: limit * page,
       limit,
       order: orderBy,
     });
