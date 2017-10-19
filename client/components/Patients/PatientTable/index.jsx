@@ -99,7 +99,7 @@ class PatientTable extends Component {
     });
   }
 
-  onFilter(column, value) {
+  onFilter(column) {
     this.fetchData({
       filter: column,
       page: 0,
@@ -119,16 +119,12 @@ class PatientTable extends Component {
     });
   }
 
-  handleRowClick(rowInfo, column) {
-    const {
-      push,
-    } = this.props;
-
+  handleRowClick(rowInfo) {
     const {
       expanded,
     } = this.state;
 
-   if (!expanded.hasOwnProperty(rowInfo.index)) {
+    if (!expanded.hasOwnProperty(rowInfo.index)) {
       const indexObj = {};
       indexObj[rowInfo.index] = true;
       this.setState({
@@ -171,6 +167,35 @@ class PatientTable extends Component {
       {
         Header: 'Active',
         accessor: 'status',
+      },
+      {
+        Header: 'Next Appt',
+        id: 'nextAppt',
+        accessor: d => {
+          if (d.hasOwnProperty('nextAppt')) {
+            const dateValue = moment(d.nextAppt);
+            return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
+          }
+          return '';
+        },
+      },
+      {
+        Header: 'Last Appt',
+        id: 'lastAppt',
+        accessor: d => {
+          if (d.hasOwnProperty('lastAppt')) {
+            const dateValue = moment(d.lastAppt);
+            return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
+          }
+          return '';
+        },
+      },
+      {
+        Header: 'Production Revenue',
+        id: 'productionRevenue',
+        accessor: d => {
+          return d.hasOwnProperty('productionRevenue') ? `$${d.productionRevenue.toFixed(2)}` : '';
+        },
       },
     ];
 
@@ -230,6 +255,13 @@ class PatientTable extends Component {
               },
             };
           }}
+          getTableProps={() => {
+            return {
+              style: {
+                background: 'white',
+              },
+            };
+          }}
           getTheadTrProps={() => {
             return {
               style: {
@@ -238,8 +270,7 @@ class PatientTable extends Component {
               },
             };
           }}
-
-          getTableProps={(state, rowInfo, column) => {
+          getTfootThProps={() => {
             return {
               style: {
                 background: 'white',

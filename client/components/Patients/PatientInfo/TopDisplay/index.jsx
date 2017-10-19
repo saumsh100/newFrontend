@@ -15,7 +15,7 @@ export default function TopDisplay(props) {
   const color = '#' + Math.random().toString(16).slice(2, 8);
 
   const bgStyle = {
-    background: `linear-Gradient(${color}, #959596)`;
+    background: `linear-Gradient(${color}, #959596)`,
   };
 
   return (

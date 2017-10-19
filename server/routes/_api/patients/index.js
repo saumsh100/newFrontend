@@ -4,7 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
-import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
+import { mostBusinessPatient, mostBusinessClinic, mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
@@ -551,18 +551,14 @@ patientsRouter.get('/table', async (req, res, next) => {
     const orderBy = [];
 
     if (sort && sort.length) {
-      console.log(sort)
       const sortObj = JSON.parse(sort[0]);
       const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
       orderBy.push([sortObj.id, descOrAsc]);
     }
 
-    //TODO This is the actual data in the table
-    //TODO Meaning you need to add pageLimits and pageNumber to this (limit and offset)
-
     if (count) {
       const patientCount = await Patient.count().then(c => {
-          return c;
+        return c;
       });
       return res.send({
         entities: patientCount,
@@ -577,7 +573,62 @@ patientsRouter.get('/table', async (req, res, next) => {
       order: orderBy,
     });
 
-    return res.send(normalize('patients', patients));
+    // Getting nextAppt, lastAppt, etc.
+    const calcPatientData = patients.map(async (patient) => {
+      try {
+        const nextAppt = await Appointment.findAll({
+          raw: true,
+          where: {
+            patientId: patient.id,
+            startDate: {
+              $gt: new Date(),
+            },
+            isDeleted: false,
+            isCancelled: false,
+          },
+          order: [['startDate', 'ASC']],
+          limit: 1,
+          required: false,
+        });
+
+        if (nextAppt && nextAppt.length) {
+          patient.nextAppt = nextAppt[0].startDate;
+        }
+
+        const lastAppt = await Appointment.findAll({
+          raw: true,
+          where: {
+            patientId: patient.id,
+            startDate: {
+              $between: [moment('1970-01-01').toISOString(), new Date()],
+            },
+            isDeleted: false,
+            isCancelled: false,
+          },
+          order: [['startDate', 'DESC']],
+          limit: 1,
+          required: false,
+        });
+
+        if (lastAppt && lastAppt.length) {
+          patient.lastAppt = lastAppt[0].startDate;
+        }
+
+        const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), req.accountId, patient.id)
+
+        if (productionRevenue && productionRevenue.length) {
+          patient.productionRevenue = productionRevenue[0].totalAmount;
+        }
+
+        return patient;
+      } catch (error) {
+        next(error);
+      }
+    });
+
+    Promise.all(calcPatientData).then((data) => {
+      return res.send(normalize('patients', data));
+    });
   } catch (error) {
     next(error);
   }
