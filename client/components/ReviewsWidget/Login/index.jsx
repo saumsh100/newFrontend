@@ -31,11 +31,13 @@ class Login extends Component {
   handleLogin(values) {
     return this.props.login(values)
       .then(() => {
+        // TODO: this should be conditional based on where the component came from
         // Important to return so that it will not navigate if errored
-        return this.props.updateReview();
+        // return this.props.updateReview();
       })
       .then(() => {
-        this.props.history.push('./submitted');
+        // TODO: this should be conditional based on where the component came from
+        this.props.history.push('./book/review');
       })
       .catch(({ data, status }) => {
         // TODO: this needs proper error handling for the form

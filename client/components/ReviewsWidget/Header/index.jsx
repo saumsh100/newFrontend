@@ -1,13 +1,22 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { ConnectedRouter as Router } from 'react-router-redux';
+import { /*BrowserRouter as Router, */Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { Avatar, IconButton } from '../../library';
 import PatientUserMenu from './PatientUserMenu';
 import styles from './styles.scss';
+
+const b = (path = '') => `/widgets/:accountId/app${path}`;
+
+const map = {
+  '/book': 'Availabilities Page',
+  '/signup': 'Sign Up Page',
+  '/login': 'Login Page',
+};
 
 class Header extends Component {
   constructor(props) {
@@ -16,33 +25,72 @@ class Header extends Component {
     this.goBack = this.goBack.bind(this);
   }
 
-  goBack() {
-    alert('Going Back');
+  goBack(path) {
+    return () => this.props.history.push(path);
   }
 
   render() {
+    const {
+      isAuth,
+      patientUser,
+      hasWaitList,
+    } = this.props;
+
+    const backButton = path => () => (
+      <IconButton
+        icon="arrow-left"
+        onClick={this.goBack(path)}
+        className={styles.backButton}
+      />
+    );
+
+    const titleDiv = title => () => (
+      <div className={styles.title}>
+        {title}
+      </div>
+    );
+
     return (
       <div className={styles.headerContainer}>
-        <IconButton
-          icon="arrow-left"
-          onClick={this.goBack}
-          className={styles.closeButton}
-        />
-        <div className={styles.title}>
-          Select Availability
-        </div>
+        {/* Back Button */}
+        <Router history={this.props.history}>
+          <div>
+            <Route exact path={b('/signup')} component={backButton('./book')} />
+            <Route exact path={b('/login')} component={backButton('./book')} />
+            <Route exact path={b('/book/review')} component={backButton('../book')} />
+            <Route exact path={b('/book/wait')} component={backButton('../book')} />
+          </div>
+        </Router>
+        {/* Title Div */}
+        <Router history={this.props.history}>
+          <div>
+            <Route exact path={b('/book')} component={titleDiv('Select Availability')} />
+            <Route exact path={b('/book/review')} component={titleDiv('Review & Book')} />
+            <Route exact path={b('/book/wait')} component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)} />
+          </div>
+        </Router>
         <div className={styles.pullRight}>
-          <IconButton
-            icon="filter"
-            onClick={this.props.closeBookingModal}
-            className={styles.closeButton}
-          />
-          <IconButton
-            icon="calendar"
-            onClick={this.props.closeBookingModal}
-            className={styles.calendarButton}
-          />
-          <PatientUserMenu user={{ firstName: 'Jack', lastName: 'Sharp' }} />
+          <Router history={this.props.history}>
+            <div>
+              <Route exact path={b('/book')} component={() => (
+                <div>
+                  <IconButton
+                    icon="filter"
+                    onClick={this.props.closeBookingModal}
+                    className={styles.iconButton}
+                  />
+                  <IconButton
+                    icon="calendar"
+                    onClick={this.props.closeBookingModal}
+                    className={styles.calendarButton}
+                  />
+                </div>
+              )} />
+            </div>
+          </Router>
+          {isAuth ?
+            <PatientUserMenu user={patientUser} />
+          : null}
           <IconButton
             icon="close"
             onClick={this.props.closeBookingModal}
@@ -56,10 +104,18 @@ class Header extends Component {
 
 Header.propTypes = {};
 
+function mapStateToProps({ auth, availabilities }) {
+  return {
+    patientUser: auth.get('patientUser'),
+    isAuth: auth.get('isAuthenticated'),
+    hasWaitList: availabilities.get('hasWaitList'),
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     closeBookingModal,
   }, dispatch);
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(Header));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

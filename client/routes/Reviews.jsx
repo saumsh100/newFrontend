@@ -1,5 +1,5 @@
 
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
 import { connect } from 'react-redux';
@@ -20,6 +20,19 @@ import Complete from '../components/ReviewsWidget/Review/Complete';
 
 const base = (path = '') => `/widgets/:accountId/app${path}`;
 
+const redirectNoAuth = (AuthComponent, isAuth, path) => (props) => {
+  return isAuth ?
+    <AuthComponent {...props} /> :
+    <Redirect to={path} />;
+};
+
+const redirectAuth = (NoAuthComponent, isAuth, history) => (props) => {
+  return isAuth ?
+    null :
+    <NoAuthComponent {...props} />;
+};
+
+
 const ReviewsRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
@@ -33,7 +46,7 @@ const ReviewsRouter = ({ match }) => {
   );
 };
 
-const BookingRouter = ({ match }) => {
+const BookingRouter = ({ match, isAuth }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <div>
@@ -41,17 +54,11 @@ const BookingRouter = ({ match }) => {
         {/*<Redirect exact from={b()} to={b('/submitted')} />*/}
         <Route exact path={b()} component={Availabilities} />
         <Route exact path={b('/wait')} component={Waitlist} />
-        <Route exact path={b('/review')} component={BookingReview} />
-        <Route exact path={b('/complete')} component={BookingComplete} />
+        <Route exact path={b('/review')} render={redirectNoAuth(BookingReview, isAuth, '../login')} />
+        <Route exact path={b('/complete')} render={redirectNoAuth(BookingComplete, isAuth, '../login')} />
       </Switch>
     </div>
   );
-};
-
-const redirectAuth = (NoAuthComponent, isAuth, history) => (props) => {
-  return isAuth ?
-    history.goBack() :
-    <NoAuthComponent {...props} />;
 };
 
 const EmbedRouter = ({ match, isAuth, history }) => {
@@ -60,7 +67,7 @@ const EmbedRouter = ({ match, isAuth, history }) => {
     <Switch>
       <Redirect exact from={b()} to={b('/review')} />
       <Route path={b('/review')} component={ReviewsRouter} />
-      <Route path={b('/book')} component={BookingRouter} />
+      <Route path={b('/book')} render={props => <BookingRouter {...props} isAuth={isAuth} />} />
       <Route exact path={b('/login')} render={redirectAuth(Login, isAuth, history)} />
       <Route exact path={b('/signup')} render={redirectAuth(SignUp, isAuth, history)} />
       <Route exact path={b('/reset')} render={redirectAuth(ResetPassword, isAuth, history)} />

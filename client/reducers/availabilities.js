@@ -64,6 +64,16 @@ export const createInitialWidgetState = state => {
         weekends: true,
       },
 
+      daysOfTheWeek: {
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+      },
+
       unavailableDays: [],
     },
 

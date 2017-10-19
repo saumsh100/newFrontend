@@ -19,20 +19,34 @@
   text-align: center;
   margin: 0 auto;
   margin-top: 40px;
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
   max-width: 220px;
   line-height: 20px;
   font-size: 12px;
   color: $primary-darkgrey;
   flex: 1;
+  @media screen and (min-width: $widget-mobile-width) {
+    margin-top: 20px;
+    // margin-bottom: 20px;
+    max-width: 300px;
+  }
 }
 
 .footer {
   display: flex;
   align-items: center;
+  justify-content: center;
   height: 60px;
   padding: 0 20px;
   box-shadow: 0 1px 0px rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
+}
+
+.buttonsContainer {
+  width: 100%;
+  max-width: 350px;
+  height: 100%;
+  display: flex;
+  align-items: center;
   > a {
     width: 50%;
     &:first-child {
@@ -57,5 +71,15 @@
   &:hover {
     color: var(--primaryColor);
     background-color: white;
+  }
+}
+
+.disabledButton {
+  background-color: $primary-grey;
+  color: $primary-darkgrey;
+  &:hover {
+    cursor: not-allowed;
+    background: lighten($primary-grey, 5%);
+    color: lighten($primary-darkgrey, 10%);
   }
 }

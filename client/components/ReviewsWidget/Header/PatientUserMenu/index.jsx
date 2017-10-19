@@ -1,6 +1,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import {
   Avatar,
   DropdownMenu,
@@ -8,6 +10,7 @@ import {
   Icon,
   Button,
 } from '../../../library';
+import * as AuthThunks from '../../../../thunks/patientAuth';
 import styles from './styles.scss';
 
 function UserAvatarButton(props) {
@@ -34,7 +37,7 @@ function UserAvatarButton(props) {
   );
 }
 
-export default class PatientUserMenu extends Component {
+class PatientUserMenu extends Component {
   constructor(props) {
     super(props);
 
@@ -42,7 +45,7 @@ export default class PatientUserMenu extends Component {
   }
 
   logout() {
-    alert('Logging out!');
+    this.props.logout();
   }
 
   render() {
@@ -66,3 +69,11 @@ export default class PatientUserMenu extends Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    logout: AuthThunks.logout,
+  }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(PatientUserMenu);

@@ -78,7 +78,7 @@
       cursor: pointer;
       width: 100%;
       box-sizing: border-box;
-      height: 40px;
+      height: 38px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -158,8 +158,8 @@
 .displayContainer {
   overflow-y: scroll;
   // height: 250px;
-  height: 230px;
-  min-height: 230px;
+  height: 210px;
+  min-height: 210px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -175,8 +175,8 @@
 
 .displayAvailabilitiesContainer {
   overflow-y: scroll;
-  height: 230px;
-  min-height: 230px;
+  height: 220px;
+  min-height: 220px;
   margin-top: 10px;
 }
 

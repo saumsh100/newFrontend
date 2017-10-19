@@ -77,15 +77,20 @@
 
 .preferencesWrapper {
   padding-top: 20px;
+  padding-bottom: 20px;
   display: flex;
   flex-direction: row;
   @media screen and (max-width: $widget-mobile-width) {
     flex-direction: column;
+    padding-top: 20px;
+    padding-bottom: 0;
   }
 }
 
 .fieldWrapper {
   padding: 20px;
+  display: flex;
+  align-items: center;
   @media screen and (min-width: $widget-mobile-width) {
     width: 50%;
     box-sizing: border-box;
