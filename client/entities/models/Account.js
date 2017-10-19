@@ -16,6 +16,7 @@ import createModel from '../createModel';
 
 const AccountSchema = {
   id: null,
+  addressId: null,
   name: null,
   street: null,
   logo: null,
@@ -42,6 +43,10 @@ const AccountSchema = {
   lastSyncDate: (new Date(2016, 5, 1)).toISOString(),
   googlePlaceId: null,
   facebookUrl: null,
+  vendastaMsId: null,
+  vendastaAccountId: null,
+  vendastaSrId: null,
+  callrailId: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

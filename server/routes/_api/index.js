@@ -4,6 +4,7 @@ import { sequelizeAuthMiddleware } from '../../middleware/auth';
 import createJoinObject from '../../middleware/createJoinObject';
 import getResponseConfig from '../../middleware/getResponseConfig';
 import accountsRouter from './accounts';
+import addressRouter from './addresses';
 import chairsRouter from './chairs';
 import connectorRouter from './connector';
 import deliveredProceduresRouter from './deliveredProcedures';
@@ -36,6 +37,7 @@ const apiRouter = Router();
 
 apiRouter.all('*', sequelizeAuthMiddleware, createJoinObject, getResponseConfig);
 apiRouter.use('/accounts', accountsRouter);
+apiRouter.use('/addresses', addressRouter);
 apiRouter.use('/accounts', remindersRouter);
 apiRouter.use('/accounts', invitesRouter);
 apiRouter.use('/accounts', recallsRouter);
