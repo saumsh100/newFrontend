@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
+import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import "react-table/react-table.css";
@@ -33,6 +34,7 @@ class PatientTable extends Component {
     this.pageChange = this.pageChange.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.onSort = this.onSort.bind(this);
+    this.pageSizeChange = this.pageSizeChange.bind(this);
   }
 
   componentDidMount() {
@@ -84,6 +86,15 @@ class PatientTable extends Component {
     });
   }
 
+  pageSizeChange(pageSize, pageIndex) {
+    this.setState({
+      limit: pageSize,
+    });
+    fetchData({
+      page: pageIndex
+    });
+  }
+
   onFilter(column, value) {
     this.fetchData({
       filter: column,
@@ -104,6 +115,7 @@ class PatientTable extends Component {
   render() {
     const {
       wasFetched,
+      push,
     } = this.props;
 
     if (!wasFetched) {
@@ -158,6 +170,23 @@ class PatientTable extends Component {
           onSortedChange={(newSorted, column, shiftKey) => {
             this.onSort(newSorted);
           }}
+
+          onPageSizeChange={(pageSize, pageIndex) => {
+            this.pageSizeChange(pageSize, pageIndex)
+          }}
+
+          getTdProps={(state, rowInfo, column, instance) => {
+            return {
+              onClick: (e, handleOriginal) => {
+                if(!column.expander) {
+                  push(`/patients/${rowInfo.original.id}`)
+                }
+                if (handleOriginal) {
+                  handleOriginal()
+                }
+              }
+            }
+          }}
         />
       </div>
     )
@@ -179,6 +208,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     fetchEntitiesRequest,
+    push,
   }, dispatch);
 }
 
