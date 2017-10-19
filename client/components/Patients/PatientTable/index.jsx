@@ -85,6 +85,7 @@ class PatientTable extends Component {
     });
     this.setState({
       currentPage: index,
+      loading: true,
     });
   }
 
@@ -96,6 +97,7 @@ class PatientTable extends Component {
     });
     this.setState({
       limit: pageSize,
+      loading: true,
     });
   }
 
@@ -105,6 +107,9 @@ class PatientTable extends Component {
       page: 0,
       limit: this.state.limit,
       sort: this.state.sorted,
+    });
+    this.setState({
+      loading: true,
     });
   }
 
@@ -116,6 +121,7 @@ class PatientTable extends Component {
     });
     this.setState({
       sorted: newSorted,
+      loading: true,
     });
   }
 
@@ -162,7 +168,10 @@ class PatientTable extends Component {
       {
         Header: 'Age',
         id: 'birthDate',
-        accessor: d => moment().diff(d.birthDate, 'years'),
+        accessor: d => {
+          const dateValue = moment().diff(d.birthDate, 'years');
+          return Number.isInteger(dateValue) ? dateValue : '';
+        }
       },
       {
         Header: 'Active',
