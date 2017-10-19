@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import debounce from 'lodash/debounce';
@@ -5,9 +6,10 @@ import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
-import "react-table/react-table.css";
+import 'react-table/react-table.css';
 import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
+import PatientRow from './PatientRow';
 import styles from './styles.scss';
 
 function getEntities(entities) {
@@ -149,6 +151,14 @@ class PatientTable extends Component {
       {
         Header: 'First Name',
         accessor: 'firstName',
+        Cell: row => {
+          return (
+            <PatientRow
+              value={row.value}
+              patient={row.original}
+            />
+          )
+        }
       }, {
         Header: 'Last Name',
         accessor: 'lastName',
@@ -156,11 +166,13 @@ class PatientTable extends Component {
       {
         Header: 'Active',
         accessor: 'status',
+        maxWidth: '200',
       },
       {
         Header: 'Age',
         id: 'birthDate',
         accessor: d => moment().diff(d.birthDate, 'years'),
+        maxWidth: '200',
       },
     ];
 
@@ -211,6 +223,13 @@ class PatientTable extends Component {
               },
             };
           }}
+          getTableProps={(state, rowInfo, column) => {
+            return {
+              style: {
+                background: '#fafafa'
+              }
+            }
+          }}
         />
       </div>
     )
@@ -221,7 +240,7 @@ PatientTable.propTypes = {
 
 };
 
-function mapStateToProps({ entities, apiRequests }, { match }) {
+function mapStateToProps({ apiRequests }) {
   const wasFetched = (apiRequests.get('patientTotalCount') ? apiRequests.get('patientTotalCount').wasFetched : null);
 
   return {
