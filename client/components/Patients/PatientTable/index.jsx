@@ -11,6 +11,7 @@ import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntiti
 import PatientSubComponent from './PatientSubComponent';
 import PatientRow from './PatientRow';
 import styles from './styles.scss';
+import { Button } from '../../library';
 
 function getEntities(entities) {
   const data = [];
@@ -127,9 +128,7 @@ class PatientTable extends Component {
       expanded,
     } = this.state;
 
-    if (column.id === 'firstName' || column.id === 'lastName') {
-      push(`/patients/${rowInfo.original.id}`);
-    } else if (!expanded.hasOwnProperty(rowInfo.index)) {
+   if (!expanded.hasOwnProperty(rowInfo.index)) {
       const indexObj = {};
       indexObj[rowInfo.index] = true;
       this.setState({
@@ -145,39 +144,47 @@ class PatientTable extends Component {
   render() {
     const {
       wasFetched,
+      push,
     } = this.props;
 
     const columns = [
       {
-        Header: 'First Name',
+        Header: 'Name',
         accessor: 'firstName',
         Cell: row => {
           return (
             <PatientRow
               value={row.value}
               patient={row.original}
+              redirect={() => {
+                push(`/patients/${row.original.id}`);
+              }}
             />
-          )
-        }
-      }, {
-        Header: 'Last Name',
-        accessor: 'lastName',
-      },
-      {
-        Header: 'Active',
-        accessor: 'status',
-        maxWidth: '200',
+          );
+        },
       },
       {
         Header: 'Age',
         id: 'birthDate',
         accessor: d => moment().diff(d.birthDate, 'years'),
-        maxWidth: '200',
+      },
+      {
+        Header: 'Active',
+        accessor: 'status',
       },
     ];
 
     return (
       <div className={styles.mainContainer}>
+        <div className={styles.header}>
+          <div className={styles.header_title}> All Patients </div>
+          <div className={styles.header_subHeader}>
+            Showing {this.state.totalPatients} Patients
+          </div>
+          <Button className={styles.addNewButton}>
+            Add New Patient
+          </Button>
+        </div>
         <ReactTable
           data={this.state.data}
           page={this.state.currentPage}
@@ -223,12 +230,24 @@ class PatientTable extends Component {
               },
             };
           }}
+          getTheadTrProps={() => {
+            return {
+              style: {
+                background: 'white',
+                color: '#959596',
+              },
+            };
+          }}
+
           getTableProps={(state, rowInfo, column) => {
             return {
               style: {
-                background: '#fafafa'
-              }
-            }
+                background: 'white',
+              },
+            };
+          }}
+          style={{
+            height: 'calc(100vh - 230px)',
           }}
         />
       </div>

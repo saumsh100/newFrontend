@@ -1,6 +1,17 @@
 @import '../../../../ui';
 
 .patientRow {
-  background: $primary-white;
+  background: inherit;
   display: flex;
+  align-items: center;
+  &:hover {
+    cursor: pointer ;
+  }
+}
+.name {
+  padding-left: 10px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  &:hover {
+    color: $primary-color;
+  }
 }

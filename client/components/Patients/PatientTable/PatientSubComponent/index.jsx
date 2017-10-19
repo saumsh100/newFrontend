@@ -53,6 +53,7 @@ class PatientSubComponent extends Component {
             <div className={styles.verticalLine}>&nbsp;</div>
             <EventsTable
               events={events}
+              patientId={patient.id}
             />
           </Col>
         </Row>

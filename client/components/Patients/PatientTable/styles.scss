@@ -1,6 +1,31 @@
+@import '../../../ui.scss';
+
 .mainContainer {
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  padding: 100px;
+  padding: 50px;
+}
+
+.tableProps {
+  background: red;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 5px solid $inactive-color;
+  &_title {
+    composes: fontLarge from 'sass-loader!../../../fonts.scss';
+    padding-right: 10px;
+  }
+  &_subHeader {
+    composes: subHeader from 'sass-loader!../../../fonts.scss';
+    color: $primary-darkgrey;
+  }
+}
+
+.addNewButton {
+  margin-left: auto;
 }

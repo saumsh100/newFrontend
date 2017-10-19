@@ -5,6 +5,7 @@ import styles from './styles.scss';
 export default function EventsTable(props) {
   const {
     events,
+    patientId,
   } = props;
 
 

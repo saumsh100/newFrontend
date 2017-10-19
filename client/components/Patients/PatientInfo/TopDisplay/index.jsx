@@ -12,10 +12,16 @@ export default function TopDisplay(props) {
 
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
 
+  const color = '#' + Math.random().toString(16).slice(2, 8);
+
+  const bgStyle = {
+    background: `linear-Gradient(${color}, #959596)`;
+  };
+
   return (
     <Card className={styles.card}>
       <div className={styles.content}>
-        <div className={styles.imageContainer}>
+        <div className={styles.imageContainer} style={bgStyle}>
           &nbsp;
         </div>
         <div className={styles.dataContainer}>
