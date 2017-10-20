@@ -5,8 +5,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ConnectedRouter as Router } from 'react-router-redux';
 import { /*BrowserRouter as Router, */Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import moment from 'moment';
 import { closeBookingModal } from '../../../thunks/availabilities';
-import { Avatar, IconButton } from '../../library';
+import { setSelectedStartDate } from '../../../actions/availabilities';
+import { Avatar, IconButton, DayPicker } from '../../library';
 import PatientUserMenu from './PatientUserMenu';
 import styles from './styles.scss';
 
@@ -17,6 +19,10 @@ const map = {
   '/signup': 'Sign Up Page',
   '/login': 'Login Page',
 };
+
+function isDisabledDay(date) {
+  return moment(date).isBefore(moment()) && !moment().isSame(date, 'day');
+}
 
 class Header extends Component {
   constructor(props) {
@@ -34,6 +40,8 @@ class Header extends Component {
       isAuth,
       patientUser,
       hasWaitList,
+      selectedStartDate,
+      account,
     } = this.props;
 
     const backButton = path => () => (
@@ -49,6 +57,8 @@ class Header extends Component {
         {title}
       </div>
     );
+
+    const accountTimezone = account.get('timezone');
 
     return (
       <div className={styles.headerContainer}>
@@ -74,15 +84,19 @@ class Header extends Component {
             <div>
               <Route exact path={b('/book')} component={() => (
                 <div>
-                  <IconButton
+                  {/*<IconButton
                     icon="filter"
                     onClick={this.props.closeBookingModal}
                     className={styles.iconButton}
-                  />
-                  <IconButton
-                    icon="calendar"
-                    onClick={this.props.closeBookingModal}
-                    className={styles.calendarButton}
+                  />*/}
+                  <DayPicker
+                    target="icon"
+                    value={selectedStartDate}
+                    onChange={value => this.props.setSelectedStartDate(value)}
+                    tipSize={0.01}
+                    timezone={accountTimezone}
+                    disabledDays={isDisabledDay}
+                    iconClassName={styles.calendarButton}
                   />
                 </div>
               )} />
@@ -109,12 +123,15 @@ function mapStateToProps({ auth, availabilities }) {
     patientUser: auth.get('patientUser'),
     isAuth: auth.get('isAuthenticated'),
     hasWaitList: availabilities.get('hasWaitList'),
+    selectedStartDate: availabilities.get('selectedStartDate'),
+    account: availabilities.get('account'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     closeBookingModal,
+    setSelectedStartDate,
   }, dispatch);
 }
 

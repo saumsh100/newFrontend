@@ -48,6 +48,7 @@ class AvailabilitiesDisplay extends Component {
     this.debounceFetchAvailabilities = debounce(this.debounceFetchAvailabilities, 500);
     this.scrollY = this.scrollY.bind(this);
     this.desktopContainerDidMount = this.desktopContainerDidMount.bind(this);
+    this.selectAvailability = this.selectAvailability.bind(this);
   }
 
   componentWillMount() {
@@ -109,6 +110,15 @@ class AvailabilitiesDisplay extends Component {
     }
   }
 
+  selectAvailability(availability) {
+    const { selectedAvailability } = this.props;
+    if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
+      this.props.setSelectedAvailability(null);
+    } else {
+      this.props.setSelectedAvailability(availability);
+    }
+  }
+
   render() {
     const {
       isFetching,
@@ -139,8 +149,11 @@ class AvailabilitiesDisplay extends Component {
     const header = (
       <div className={headerClasses}>
         {dayAvailabilities.map((a) => {
+          // TODO: do we need to add timeZone here
+          const isSameDay = !!selectedAvailability && a.momentDate.isSame(selectedAvailability.startDate, 'day');
+          const classes = isSameDay ? classNames(styles.selectedDayHeader, styles.appointment__list) : styles.appointment__list;
           return (
-            <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_header`}>
+            <ul className={classes} key={`${a.momentDate.toISOString()}_header`}>
               <div className={styles.appointment__list_header}>
                 <div className={styles.list__header_day}>
                   {a.momentDate.format('ddd')}
@@ -200,7 +213,7 @@ class AvailabilitiesDisplay extends Component {
                       return (
                         <li
                           key={`${availability.startDate}_item`}
-                          onClick={() => setSelectedAvailability(availability)}
+                          onClick={() => this.selectAvailability(availability)}
                           className={classes}
                         >
                           {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
@@ -251,7 +264,7 @@ class AvailabilitiesDisplay extends Component {
                   return (
                     <li
                       key={`${availability.startDate}_item`}
-                      onClick={() => setSelectedAvailability(availability)}
+                      onClick={() => this.selectAvailability(availability)}
                       className={classes}
                     >
                       {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
