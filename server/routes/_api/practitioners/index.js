@@ -259,6 +259,41 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
   }).catch(next);
 });
 
+
+/**
+ * Update a practitioners custom weekly schedule
+ */
+practitionersRouter.put('/:practitionerId/weeklySchedule', async (req, res, next) => {
+  try {
+    await req.practitioner.update({ isCustomSchedule: true });
+
+    let schedule = await WeeklySchedule.findOne({
+      where: {
+        id: req.practitioner.weeklyScheduleId,
+      },
+    });
+    const updateSchedule = _.merge(schedule.get({ plain: true }), req.body);
+
+    schedule.setDataValue('pmsId', req.body.pmsId);
+
+    await schedule.save();
+
+    schedule = await schedule.update(updateSchedule);
+
+
+    schedule = await WeeklySchedule.findOne({
+      where: {
+        id: req.practitioner.weeklyScheduleId,
+      },
+    });
+
+    return res.send(format(req, res, 'weeklySchedule', schedule));
+  } catch (error) {
+    return next(error);
+  }
+});
+
+
 /**
  * Upload a practitioner's avatar
  */
