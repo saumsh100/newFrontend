@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
-import { updateReview } from '../../../thunks/reviews';
+import { resetPatientUserPassword } from '../../../thunks/patientAuth';
 import { login } from '../../../thunks/patientAuth';
 import { Link, Button } from '../../library';
 import ResetPasswordForm from './ResetPasswordForm';
@@ -29,23 +29,13 @@ class ResetPassword extends Component {
   }
 
   handleResetPassword({ email }) {
-    alert(email);
-    this.props.history.push('./reset-success');
-    /*return this.props.login(values)
+    return this.props.resetPatientUserPassword(email)
       .then(() => {
-        // Important to return so that it will not navigate if errored
-        return this.props.updateReview();
+        this.props.history.push('./reset-success');
       })
-      .then(() => {
-        this.props.history.push('./submitted');
-      })
-      .catch(({ data, status }) => {
-        // TODO: this needs proper error handling for the form
-        throw new SubmissionError({
-          email: data,
-          password: data,
-        });
-      });*/
+      .catch(({ data }) => {
+        throw new SubmissionError({ email: data });
+      });
   }
 
   render() {
@@ -53,6 +43,9 @@ class ResetPassword extends Component {
       <div className={styles.loginWrapper}>
         <div className={styles.header}>
           Reset Password
+        </div>
+        <div className={styles.message}>
+          Enter your email below and if you are a user, we will send you a link to reset your password.
         </div>
         <ResetPasswordForm
           onSubmit={this.handleResetPassword}
@@ -69,12 +62,12 @@ class ResetPassword extends Component {
 }
 
 ResetPassword.propTypes = {
-  updateReview: PropTypes.func.isRequired,
+  resetPatientUserPassword: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-
+    resetPatientUserPassword
   }, dispatch);
 }
 

@@ -77,9 +77,11 @@
 .disabledButton {
   background-color: $primary-grey;
   color: $primary-darkgrey;
+  border: 1px solid lighten($primary-darkgrey, 20%);
+  height: 38px;
   &:hover {
     cursor: not-allowed;
-    background: lighten($primary-grey, 5%);
-    color: lighten($primary-darkgrey, 10%);
+    background: lighten($primary-grey, 0%);
+    color: lighten($primary-darkgrey, 0%);
   }
 }

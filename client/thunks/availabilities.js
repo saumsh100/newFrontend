@@ -50,6 +50,7 @@ export function createRequest() {
       selectedAvailability: { startDate, endDate },
       selectedPractitionerId,
       selectedServiceId,
+      notes,
     } = state.availabilities.toJS();
 
     const {

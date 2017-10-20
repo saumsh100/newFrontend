@@ -7,12 +7,13 @@ class Success extends Component {
   render() {
     return (
       <div className={styles.loginWrapper}>
-        <p>
+        <div className={styles.header}>Password Reset Sent</div>
+        <div className={styles.message}>
           We've sent you an email with password reset instructions.
-        </p>
-        <p>
+        </div>
+        <div className={styles.message}>
           If the email doesn't show up soon, please check your spam folder. We sent the email from <span className={styles.email}>noreply@carecru.com</span>.
-        </p>
+        </div>
         <div className={styles.linkWrapper}>
           <Link to="./login">
             Back to login

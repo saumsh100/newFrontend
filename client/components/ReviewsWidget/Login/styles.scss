@@ -3,7 +3,10 @@
 
 .loginWrapper {
   box-sizing: border-box;
-  padding: 0px 10px 20px 10px;
+  padding: 0px 20px 20px 20px;
+  @media screen and (min-width: $widget-mobile-width) {
+    padding: 0px 40px 40px 40px;
+  }
 }
 
 .header {
@@ -15,7 +18,19 @@
 
 .subHeader {
   composes: listItemHeader from 'sass-loader!../../../fonts.scss';
-  padding: 10px 0;
+  padding: 5px 0;
+}
+
+.message {
+  // margin-bottom: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  color: $primary-darkgrey;
+  /*@media screen and (min-width: $widget-mobile-width) {
+    margin-top: 20px;
+    // margin-bottom: 20px;
+    max-width: 350px;
+  }*/
 }
 
 .customSubmitButton {

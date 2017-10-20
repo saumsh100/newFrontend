@@ -57,7 +57,7 @@ class Login extends Component {
         <div className={styles.subHeader}>
           Don't have an account?
         </div>
-        <div>
+        <div className={styles.message}>
           Sign up for an account to confirm your request.
         </div>
         <Link to="./signup">

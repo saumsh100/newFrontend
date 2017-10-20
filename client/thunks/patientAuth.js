@@ -2,7 +2,7 @@
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import LogRocket from 'logrocket';
-import { loginSuccess, logout as authLogout } from '../actions/auth';
+import { loginSuccess, logout as authLogout, setResetEmail } from '../actions/auth';
 import PatientUser from '../entities/models/PatientUser';
 
 const Token = {
@@ -64,13 +64,10 @@ export function logout() {
 }
 
 export function resetPatientUserPassword(email) {
-  console.log('adssadasd')
-  return (dispatch, getState) => {
+  return (dispatch) => {
     return axios.post('/auth/reset', { email })
       .then(() => {
-      })
-      .catch((err) => {
-        console.log(err);
+        dispatch(setResetEmail(email));
       });
   };
 }
