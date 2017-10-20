@@ -530,7 +530,6 @@ patientsRouter.get('/table', async (req, res, next) => {
       limit,
       filter,
       sort,
-      count,
       page,
     } = req.query;
 
@@ -556,14 +555,10 @@ patientsRouter.get('/table', async (req, res, next) => {
       orderBy.push([sortObj.id, descOrAsc]);
     }
 
-    if (count) {
-      const patientCount = await Patient.count().then(c => {
-        return c;
-      });
-      return res.send({
-        entities: patientCount,
-      });
-    }
+    const patientCount = await Patient.count({
+      where: filterBy,
+      order: orderBy,
+    });
 
     const patients = await Patient.findAll({
       raw: true,
@@ -586,6 +581,7 @@ patientsRouter.get('/table', async (req, res, next) => {
             isDeleted: false,
             isCancelled: false,
           },
+
           order: [['startDate', 'ASC']],
           limit: 1,
           required: false,
@@ -619,7 +615,7 @@ patientsRouter.get('/table', async (req, res, next) => {
         if (productionRevenue && productionRevenue.length) {
           patient.productionRevenue = productionRevenue[0].totalAmount;
         }
-
+        patient.totalPatients = patientCount;
         return patient;
       } catch (error) {
         next(error);

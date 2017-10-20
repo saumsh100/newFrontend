@@ -7,11 +7,11 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
+import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
 import PatientRow from './PatientRow';
+import HeaderComponent from './HeaderComponent';
 import styles from './styles.scss';
-import { Button } from '../../library';
 
 function getEntities(entities) {
   const data = [];
@@ -35,7 +35,7 @@ class PatientTable extends Component {
       sorted: [],
       expanded: {},
     };
-    this.fetchData = debounce(this.fetchData, 200);
+    this.fetchData = debounce(this.fetchData, 500);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
     this.onFilter = this.onFilter.bind(this);
@@ -44,22 +44,9 @@ class PatientTable extends Component {
   }
 
   componentDidMount() {
-    const query = {
-      count: true,
-    };
-
-    this.props.fetchEntitiesRequest({
-      id: 'patientTotalCount',
-      url: '/api/patients/table',
-      params: query,
-    }).then((totalPatients) => {
-      this.setState({
-        totalPatients,
-      });
-      this.fetchData({
-        limit: this.state.limit,
-        page: 0,
-      });
+    this.fetchData({
+      limit: this.state.limit,
+      page: 0,
     });
   }
 
@@ -71,6 +58,7 @@ class PatientTable extends Component {
     }).then((data) => {
       const dataArray = getEntities(data);
       this.setState({
+        totalPatients: dataArray[0].totalPatients,
         data: dataArray,
         loading: false,
       });
@@ -147,6 +135,7 @@ class PatientTable extends Component {
     const {
       wasFetched,
       push,
+      createEntityRequest,
     } = this.props;
 
     const columns = [
@@ -171,11 +160,13 @@ class PatientTable extends Component {
         accessor: d => {
           const dateValue = moment().diff(d.birthDate, 'years');
           return Number.isInteger(dateValue) ? dateValue : '';
-        }
+        },
+
       },
       {
         Header: 'Active',
         accessor: 'status',
+
       },
       {
         Header: 'Next Appt',
@@ -187,6 +178,7 @@ class PatientTable extends Component {
           }
           return '';
         },
+
       },
       {
         Header: 'Last Appt',
@@ -210,15 +202,10 @@ class PatientTable extends Component {
 
     return (
       <div className={styles.mainContainer}>
-        <div className={styles.header}>
-          <div className={styles.header_title}> All Patients </div>
-          <div className={styles.header_subHeader}>
-            Showing {this.state.totalPatients} Patients
-          </div>
-          <Button className={styles.addNewButton}>
-            Add New Patient
-          </Button>
-        </div>
+        <HeaderComponent
+          totalPatients={this.state.totalPatients}
+          createEntityRequest={createEntityRequest}
+        />
         <ReactTable
           data={this.state.data}
           page={this.state.currentPage}
@@ -311,6 +298,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     fetchEntitiesRequest,
     push,
+    createEntityRequest,
   }, dispatch);
 }
 
