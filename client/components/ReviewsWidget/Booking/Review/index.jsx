@@ -12,7 +12,7 @@ import {
   Link,
   TextArea,
 } from '../../../library';
-import { createRequest } from '../../../../thunks/availabilities';
+import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
 import { setNotes } from '../../../../actions/availabilities';
 import styles from './styles.scss';
 
@@ -35,7 +35,18 @@ class Review extends Component {
   }
 
   submitRequest() {
-    this.props.createRequest()
+    const { selectedAvailability, hasWaitList } = this.props;
+
+    const creationPromises = [];
+    if (selectedAvailability) {
+      creationPromises.push(this.props.createRequest());
+    }
+
+    if (hasWaitList) {
+      creationPromises.push(this.props.createWaitSpot());
+    }
+
+    Promise.all(creationPromises)
       .then(() => {
         this.props.history.push('./complete');
       })
@@ -140,6 +151,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setNotes,
     createRequest,
+    createWaitSpot,
   }, dispatch);
 }
 

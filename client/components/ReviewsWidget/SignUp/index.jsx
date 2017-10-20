@@ -29,15 +29,17 @@ class SignUp extends Component {
 
   handleSignUp(values) {
     // true argument is to ignore sending confirmation text on API
-    return this.props.createPatient(values, true)
+    return this.props.createPatient(values)
       .then(() => {
         // TODO: this should be conditional based on where the component came from
         // Important to return so that it will not navigate if errored
         // return this.props.updateReview();
+
+
       })
       .then(() => {
         // TODO: this should be conditional based on where the component came from
-        this.props.history.push('./book/review');
+        this.props.history.push('./signup/confirm');
       });
   }
 

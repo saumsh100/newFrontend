@@ -66,6 +66,7 @@ class Header extends Component {
         <Router history={this.props.history}>
           <div>
             <Route exact path={b('/signup')} component={backButton('./book')} />
+            <Route exact path={b('/signup/confirm')} component={backButton('../book')} />
             <Route exact path={b('/login')} component={backButton('./book')} />
             <Route exact path={b('/book/review')} component={backButton('../book')} />
             <Route exact path={b('/book/wait')} component={backButton('../book')} />
