@@ -321,7 +321,7 @@ class PractitionerOfficeHours extends Component{
       const filteredChairs = chairs.toArray().filter((chair) => {
         if (chair.isActive) {
           return chair;
-        } 
+        }
       }).sort(SortByName);
 
       const chairFields = filteredChairs.map((chair) => {

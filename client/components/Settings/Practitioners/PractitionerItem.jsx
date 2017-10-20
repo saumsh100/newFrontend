@@ -23,7 +23,7 @@ class PractitionerItem extends Component {
 
     const selectedPractitioner = practitionerId === id;
 
-    return(
+    return (
       <ListItem
         onClick={this.showItem}
         className={styles.practListItem}

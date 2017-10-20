@@ -116,6 +116,20 @@ practitionersRouter.post('/', checkPermissions('practitioners:create'), async (r
 /**
  * Get a single practitioner
  */
+practitionersRouter.get('/:noFetchPractitionerId', checkPermissions('practitioners:read'), (req, res, next) => {
+  return Practitioner.findOne({
+    where: {
+      id: req.params.noFetchPractitionerId,
+    },
+
+    include: req.includeArray,
+  }).then(practitioner => res.send(format(req, res, 'practitioner', practitioner.get({ plain: true }))))
+    .catch(next);
+});
+
+/**
+ * Get a single practitioner
+ */
 practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read'), (req, res, next) => {
   return Promise.resolve(req.practitioner.get({ plain: true }))
   .then(practitioner => res.send(format(req, res, 'practitioner', practitioner)))
