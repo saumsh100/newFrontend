@@ -109,7 +109,7 @@ class WaitListPreferences extends Component {
               </Col>
             </Row>
           </Col>
-          <Col xs={12} sm={6}>
+          <Col xs={12} className={styles.preferredTimeWrapper}>
             <Row>
               <Col xs={12}>
                 <div className={styles.label}>

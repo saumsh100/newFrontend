@@ -3,6 +3,10 @@
 
 .reviewAndBookWrapper {
   padding: 20px;
+  @media screen and (min-width: $widget-mobile-width) {
+    flex-direction: column;
+    padding: 40px;
+  }
 }
 
 .label {

@@ -17,6 +17,13 @@
   padding: 20px;
   box-sizing: border-box;
   clear: both;
+  @media screen and (min-width: $widget-mobile-width) {
+    padding: 40px;
+  }
+}
+
+.preferredTimeWrapper {
+  padding-top: 20px;
 }
 
 .prefCheckBox {

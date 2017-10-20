@@ -3,6 +3,9 @@
 
 .completedWrapper {
   padding: 20px;
+  @media screen and (min-width: $widget-mobile-width) {
+    padding: 40px;
+  }
 }
 
 .label {

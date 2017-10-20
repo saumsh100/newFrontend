@@ -88,7 +88,6 @@ class AvailabilitiesDisplay extends Component {
   scrollY() {
     const n = this.desktopContainer;
     const padding = 20;
-    console.log(n.scrollHeight, n.scrollTop, n.offsetHeight);
 
     // Determine if certain padding away from bottom and if so, hide scroll
     const height = n.scrollHeight - n.offsetHeight;
@@ -136,7 +135,7 @@ class AvailabilitiesDisplay extends Component {
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
 
-    const headerClasses = classNames(styles.appointment__table_elements);
+    const headerClasses = classNames(styles.datesRow);
     const header = (
       <div className={headerClasses}>
         {dayAvailabilities.map((a) => {
@@ -326,7 +325,7 @@ class AvailabilitiesDisplay extends Component {
               <div className={styles.scrollDownSpace}>
                 {this.state.scrollDown && needsToScrollMoreDesktop ?
                   <div className={styles.scrollDown}>
-                    <span>Scroll Down</span>
+                    <span>Scroll for More</span>
                     <div>
                       <Icon
                         icon="caret-down"
