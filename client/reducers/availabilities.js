@@ -31,11 +31,11 @@ import {
 function getStartTimeForToday(account) {
   const timezone = account.timezone;
   const zone = -1 * moment.tz(new Date(), timezone).zone();
-  return moment().add(1, 'hours').zone(zone).toISOString();
+  return moment().subtract(8, 'hours').zone(zone).toISOString();
 }
 
 export const createInitialWidgetState = state => {
-  let selectedStartDate = moment().add(1, 'hours').toISOString()
+  let selectedStartDate = moment().subtract(8, 'hours').toISOString()
   if (state) {
     selectedStartDate = getStartTimeForToday(state.account);
   }

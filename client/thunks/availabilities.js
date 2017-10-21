@@ -98,6 +98,7 @@ export function createWaitSpot() {
       patientUserId: patientUser.id,
       preferences: waitSpot.preferences,
       unavailableDays: waitSpot.unavailableDays,
+      daysOfTheWeek: waitSpot.daysOfTheWeek,
 
       // If availability is selected, add this to the waitspot, so we can know when to remove
       endDate: selectedAvailability && selectedAvailability.startDate,

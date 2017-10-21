@@ -61,8 +61,7 @@ class Waitlist extends Component {
       <div className={styles.wrapper}>
         <WaitlistPreferences />
         <div className={styles.waitlistInfo}>
-          You'll be notified when an earlier time becomes available.
-          {hasWaitList ? ' Do you want to be removed from the waitlist? Remove yourself below.' : null}
+          {hasWaitList ? 'Do you want to be removed from the waitlist? Remove yourself below.' : 'You\'ll be notified when an earlier time becomes available.'}
         </div>
         {hasWaitList ?
           <div className={styles.buttonWrapperRemove}>

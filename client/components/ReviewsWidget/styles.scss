@@ -25,9 +25,13 @@
 .container {
   display: flex;
   flex: 1;
+  width: 100%;
   overflow: auto;
   > div {
+    display: flex;
+    flex: 1;
     width: 100%;
+    flex-direction: column;
   }
 }
 
