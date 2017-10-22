@@ -107,5 +107,8 @@
   > button {
     width: 100%;
     max-width: 270px;
+    &:hover {
+      background-color: var(--primaryColor);
+    }
   }
 }

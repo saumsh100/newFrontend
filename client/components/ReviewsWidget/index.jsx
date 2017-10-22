@@ -15,6 +15,7 @@ class ReviewsWidget extends Component {
     // Without this, none of our themed styles would work
     const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
     document.documentElement.style.setProperty('--primaryColor', color);
+    document.documentElement.style.setProperty('--primaryButtonColor', color);
   }
 
   componentDidUpdate(prevProps) {

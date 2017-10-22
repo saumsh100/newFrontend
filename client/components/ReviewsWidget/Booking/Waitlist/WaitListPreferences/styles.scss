@@ -27,7 +27,7 @@
 }
 
 .prefCheckBox {
-  height: 20px;
+  height: 25px;
   input[type=checkbox]:checked + label {
     &:before {
       background-color: var(--primaryColor) !important;
@@ -39,6 +39,7 @@
     font-family: $medium-font;
     &:before {
       margin-right: 10px;
+      border: 1px solid var(--primaryColor);
     }
   }
 }

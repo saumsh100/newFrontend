@@ -39,6 +39,14 @@
   margin-top: 10px;
 }
 
+.joinButton {
+  @extend .customSubmitButton;
+  &:hover {
+    background-color: var(--primaryColor);
+  }
+}
+
+
 .linkWrapper {
   text-align: center;
   padding-bottom: 20px;

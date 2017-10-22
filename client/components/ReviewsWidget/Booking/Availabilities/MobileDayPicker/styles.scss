@@ -15,4 +15,7 @@
 
 .caretButton {
   width: 30px !important;
+  &:hover {
+    color: var(--primaryColor);
+  }
 }

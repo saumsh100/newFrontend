@@ -80,6 +80,12 @@
   }
 }
 
+.nextButton {
+  &:hover {
+    background-color: var(--primaryColor);
+  }
+}
+
 .disabledButton {
   background-color: $primary-grey;
   color: $primary-darkgrey;

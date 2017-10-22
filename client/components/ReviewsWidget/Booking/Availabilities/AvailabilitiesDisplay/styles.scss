@@ -235,7 +235,7 @@ $height: 30px;
   @extend .caretButton;
   border-left: $width/2 solid $gray-color;
   &:hover {
-    border-left: $width/2 solid $primary-color;
+    border-left: $width/2 solid var(--primaryColor);
   }
 }
 
@@ -244,7 +244,7 @@ $height: 30px;
   @extend .caretButton;
   border-right: $width/2 solid $gray-color;
   &:hover {
-    border-right: $width/2 solid $primary-color;
+    border-right: $width/2 solid var(--primaryColor);
   }
 }
 

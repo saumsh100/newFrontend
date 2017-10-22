@@ -113,13 +113,11 @@
       //text-transform: uppercase;
       //color: #fff;
       //border: none;
-      opacity: 0.9;
       color: white;
       background-color: var(--primaryColor);
       &:hover {
         color: white !important;
         background-color: var(--primaryColor) !important;
-        opacity: 1.0;
       }
     }
 

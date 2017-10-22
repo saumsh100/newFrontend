@@ -13,7 +13,6 @@ import styles from './styles.scss';
 const customSubmitButton = (
   <Button
     type="submit"
-    color="red"
     icon="email"
     className={styles.customSubmitButton}
   >

@@ -36,6 +36,9 @@
 .joinButton {
   width: 100%;
   max-width: 250px;
+  &:hover {
+    background-color: var(--primaryColor);
+  }
 }
 
 .buttonWrapperRemove {
@@ -74,4 +77,7 @@
   @extend .splitButton;
   padding-left: 10px;
   padding-right: 10px;
+  &:hover {
+    background-color: var(--primaryColor);
+  }
 }

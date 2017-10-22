@@ -62,7 +62,7 @@ class Login extends Component {
         </div>
         <Link to="./signup">
           <Button
-            className={styles.customSubmitButton}
+            className={styles.joinButton}
           >
             Join now
           </Button>

@@ -36,6 +36,9 @@
 .customSubmitButton {
   width: 100%;
   margin-bottom: 20px;
+  &:hover {
+    background-color: var(--primaryColor);
+  }
 }
 
 .linkWrapper {

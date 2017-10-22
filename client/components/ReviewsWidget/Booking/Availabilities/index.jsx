@@ -25,7 +25,7 @@ class Availabilities extends Component {
     console.log(selectedAvailability);
     console.log(canGoNext);
     const nextButtonClass = canGoNext ?
-      null :
+      styles.nextButton :
       styles.disabledButton;
 
     return (

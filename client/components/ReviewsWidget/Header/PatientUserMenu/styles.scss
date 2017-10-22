@@ -11,9 +11,9 @@
   display: flex;
   align-items: center;
   &:hover {
-    color: $primary-color !important;
+    color: var(--primaryColor) !important;
     .greeting {
-      color: $primary-color !important;
+      color: var(--primaryColor) !important;
     }
 
     .userAvatar {
