@@ -6,6 +6,7 @@ import normalize from '../normalize';
 import StatusError from '../../../util/StatusError';
 import {
   Account,
+  Address,
   Appointment,
   Enterprise,
   Reminder,
@@ -55,13 +56,14 @@ enterprisesRouter.get('/:enterpriseId', checkPermissions('enterprises:read'), (r
 enterprisesRouter.get('/:enterpriseId/accounts', checkPermissions(['enterprises:read', 'accounts:read']), async (req, res, next) => {
   try {
     const accounts = await Account.findAll({
-      raw: true,
       where: {
         enterpriseId: req.enterprise.id,
       },
     });
 
-    res.send(normalize('accounts', accounts));
+    const accountsSend = accounts.map(a => a.get({ plain: true }));
+
+    res.send(normalize('accounts', accountsSend));
   } catch (err) {
     next(err);
   }
@@ -124,18 +126,23 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
     ...pick(req.body, 'name', 'timezone', 'destinationPhoneNumber', 'street', 'city', 'zipCode', 'state', 'country', 'id'),
     enterpriseId: req.enterprise.id,
   };
-  console.log(req.query);
 
   const timezone = req.body.timezone;
-  return Account.create(accountData)
-    .then(async (accountFirst) => {
+  let newAddress = await Address.create(pick(req.body, 'timezone', 'street', 'city', 'zipCode', 'state', 'country'));
 
-      const newData = await createAccount(accountFirst, req.query);
-      accountFirst.callrailId = newData.callrailId;
-      accountFirst.vendastaId = newData.vendastaId;
-      accountFirst.vendastaAccountId = newData.vendastaAccountId;
-      accountFirst.twilioPhoneNumber = newData.twilioPhoneNumber;
-      const account = await accountFirst.save();
+  try {
+    newAddress = await Address.create(req.body);
+  } catch (e) {
+    return next(e);
+  }
+
+  accountData.addressId = newAddress.id;
+
+  return Account.create(accountData)
+    .then(async (accountCreate) => {
+      const accountFirst = await Account.findOne({ where: { id: accountCreate.id } });
+
+      const account = await createAccount(accountFirst, req.query);
 
       const defaultReminders = [
         {
@@ -298,7 +305,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
         Recall.bulkCreate(defaultRecalls),
       ]).then((values) => {
         account.update({ weeklyScheduleId: values[1].id })
-          .then((acct) => res.status(201).send(normalize('account', acct.dataValues)));
+          .then((acct) => res.status(201).send(normalize('account', acct.get({ plain: true }))));
       });
     })
     .catch(next);

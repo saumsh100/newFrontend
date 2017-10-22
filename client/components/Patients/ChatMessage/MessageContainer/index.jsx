@@ -78,7 +78,7 @@ class MessageContainer extends Component {
     let display;
 
     const userAnon = {
-      avatarUrl: '/images/avatar.png',
+      avatarUrl: '',
     };
 
     let userPhone = null;
@@ -103,7 +103,7 @@ class MessageContainer extends Component {
           lastWeek: '[Last] dddd h:mm a',
           sameElse: 'YYYY DD MM, h:mm a',
         })}</div>;
-        
+
         if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
           userPhone = message.to;
         } else {

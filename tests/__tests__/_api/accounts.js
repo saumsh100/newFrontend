@@ -42,7 +42,6 @@ describe('/api/accounts', () => {
 
   describe('GET /', () => {
     test('with manager role so only return one', async () => {
-      console.log(token);
       return request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)

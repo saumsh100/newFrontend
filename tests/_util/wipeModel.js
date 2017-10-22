@@ -12,6 +12,7 @@ async function wipeModel(Model) {
 const ORDER = [
   'Enterprise',
   'WeeklySchedule',
+  'Address',
   'Account',
   'Chair',
   'Permission',

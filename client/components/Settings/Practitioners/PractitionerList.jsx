@@ -77,36 +77,17 @@ class PractitionerList extends Component {
   render() {
     const {
       practitioners,
-      practitionerId,
-      weeklySchedules,
       services,
-      timeOffs,
-      recurringTimeOffs,
+      selectedPractitioner,
     } = this.props;
 
-    const selectedPractitioner = (practitionerId ?
-      practitioners.get(practitionerId) : practitioners.first());
-
-
-    const weeklyScheduleId = selectedPractitioner ? selectedPractitioner.get('weeklyScheduleId') : null;
-    const weeklySchedule = weeklyScheduleId ? weeklySchedules.get(weeklyScheduleId) : null;
-
-    let filteredTimeOffs = null;
-    if (timeOffs) {
-      filteredTimeOffs = timeOffs.filter((timeOff) => {
-        return timeOff.practitionerId === selectedPractitioner.get('id');
-      });
-    }
-    let filteredRecurringTimeOffs = null;
-    if (recurringTimeOffs) {
-      filteredRecurringTimeOffs = recurringTimeOffs.filter((recurringTimeOff) => {
-        return recurringTimeOff.practitionerId === selectedPractitioner.get('id');
-      });
+    if (!selectedPractitioner) {
+      return null;
     }
 
     const formName = 'addPractitionerForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button },
+      { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
       { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { form: formName } },
     ];
 
@@ -159,13 +140,10 @@ class PractitionerList extends Component {
         </div>
         <div className={styles.practDataContainer}>
           <PractitionerTabs
-            key={this.props.practitionerId}
+            key={selectedPractitioner.get('id')}
             practitioner={selectedPractitioner}
-            weeklySchedule={weeklySchedule}
             setPractitionerId={this.props.setPractitionerId}
             services={services}
-            timeOffs={filteredTimeOffs}
-            recurringTimeOffs={filteredRecurringTimeOffs}
           />
         </div>
       </div>
@@ -173,13 +151,13 @@ class PractitionerList extends Component {
   }
 }
 
-function mapStateToProps({ accountSettings }) {
+function mapStateToProps({ accountSettings }, { practitioners }) {
   const practitionerId = accountSettings.get('practitionerId');
-  if(!practitionerId) {
-    return {};
-  }
+  const selectedPractitioner = (practitionerId ?
+    practitioners.get(practitionerId) : practitioners.first());
+
   return {
-    practitionerId,
+    selectedPractitioner,
   };
 }
 function mapActionsToProps(dispatch) {
