@@ -109,4 +109,8 @@
       color: #C1D2D8;
     }
   }
+
+  > div > :global(.dd-menu-items) > ul > ul {
+    max-height: 220px;
+  }
 }

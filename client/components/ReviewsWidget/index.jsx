@@ -17,6 +17,13 @@ class ReviewsWidget extends Component {
     document.documentElement.style.setProperty('--primaryColor', color);
   }
 
+  componentDidUpdate(prevProps) {
+    // Scroll to top of view when route changes
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      this.containerNode.scrollTop = 0;
+    }
+  }
+
   render() {
     const {
       children,
@@ -41,7 +48,7 @@ class ReviewsWidget extends Component {
               </div>
             </div>
           </div>*/}
-          <div className={styles.container}>
+          <div className={styles.container} ref={node => this.containerNode = node}>
             {children}
           </div>
         </div>
