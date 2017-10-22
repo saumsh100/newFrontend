@@ -119,13 +119,9 @@ $gray-color: #D3D2D3;
   color: white;
   text-align: center;
   list-style: none;
-  opacity: 0.9;
   background-color: var(--primaryColor);
   padding: 0px 15px;
   border-radius: 5px;
-  &:hover {
-    opacity: 1.0;
-  }
 
   > div {
     font-family: $medium-font;

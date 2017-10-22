@@ -199,9 +199,10 @@ export default handleActions({
   [SET_START_DATE](state, { payload }) {
     // If same day as today, set it to the 1 hour from now time
     // If not, set it to the beginning of the day
-    let startDate = getStartTimeForToday(state.get('account').toJS());
-    if (!moment(payload).isSame(startDate, 'day')) {
-      startDate = moment(payload).hours(0).toISOString();
+    const account = state.get('account').toJS();
+    let startDate = getStartTimeForToday(account);
+    if (!moment.tz(payload, account.timezone).isSame(startDate, 'day')) {
+      startDate = moment.tz(payload, account.timezone).hours(0).minutes(0).toISOString();
     }
 
     return state.set('selectedStartDate', startDate);
