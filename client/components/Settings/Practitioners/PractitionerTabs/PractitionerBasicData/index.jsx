@@ -90,7 +90,6 @@ class PractitionerBasicData extends Component {
               data-test-id="firstName"
             />
             <Field
-              required
               name="lastName"
               label="Last Name"
               validate={[maxLength25]}
