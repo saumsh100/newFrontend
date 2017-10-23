@@ -170,6 +170,10 @@ $gray-color: #D3D2D3;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  color: black;
+  font-family: $medium-font;
 }
 
 .mobileDisplayContainer {
@@ -177,6 +181,11 @@ $gray-color: #D3D2D3;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  color: black;
+  font-family: $medium-font;
 }
 
 .displayAvailabilitiesContainer {
