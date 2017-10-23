@@ -37,7 +37,6 @@ class WidgetContainer extends Component {
 
     return (
       <div className={styles.container}>
-        <Header/>
         {!sentReviewId || isLoadingSentReview ?
           <LoadingView /> :
           this.props.children

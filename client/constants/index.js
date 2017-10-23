@@ -11,6 +11,7 @@ export const FETCH_REVIEWS_ERROR = 'vendasta/fetchReviewsError';
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGOUT = 'LOGOUT';
+export const SET_RESET_EMAIL = 'SET_RESET_EMAIL';
 
 export const FETCH_ENTITIES = 'FETCH_ENTITIES';
 export const FETCH_MODEL = 'FETCH_MODEL';
@@ -68,6 +69,7 @@ export const SET_REGISTRATION_STEP = 'SET_REGISTRATION_STEP';
 export const SET_CLINIC_INFO = 'SET_CLINIC_INFO';
 export const SET_SELECTED_AVAILABILITY = 'SET_SELECTED_AVAILABILITY';
 export const SET_NEXT_AVAILABILITY = 'SET_NEXT_AVAILABILITY';
+export const SET_NOTES = 'SET_NOTES';
 
 
 export const SET_SERVICE_ID = 'SET_SERVICE_ID';

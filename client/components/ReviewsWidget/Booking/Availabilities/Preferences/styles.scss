@@ -1,0 +1,116 @@
+
+@import '../../../../../ui.scss';
+
+.dsCol {
+  padding: 10px;
+}
+
+.label {
+  text-transform: uppercase;
+  font-size: 10px;
+  text-align: left;
+  font-family: Gotham-Medium;
+  font-weight: bolder;
+}
+
+.widgetBody {
+  overflow-y: auto;
+  height: 90%;
+  height: -webkit-calc(100% - 40px - 60px);
+  height: -moz-calc(100% - 40px - 60px);
+  height: calc(100% - 40px - 60px);
+}
+
+.widgetBodyNoFooter {
+  height: 90%;
+  height: -webkit-calc(100% - 40px);
+  height: -moz-calc(100% - 40px);
+  height: calc(100% - 40px);
+}
+
+.dayPickerIcon {
+  &:hover {
+    color: var(--bookingWidgetPrimaryColor) !important;
+  }
+}
+
+.widgetStickyFooter {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  box-shadow: $widget-box-shadow;
+}
+
+.continueButton {
+  opacity: 0.9;
+  color: white;
+  margin-left: auto;
+  margin-right: 15px !important;
+  background-color: var(--bookingWidgetPrimaryColor);
+  &:hover {
+    color: white;
+    opacity: 1.0;
+    background-color: var(--bookingWidgetPrimaryColor) !important;
+  }
+}
+
+.rightIcon {
+  font-weight: bolder;
+  margin-top: -3px;
+  margin-left: 8px;
+}
+
+.dropdown > div > div {
+  font-size: 14px;
+}
+
+.practitionerItem {
+  display: flex;
+  align-items: center;
+
+}
+
+.labelText {
+  margin-left: 20px;
+}
+
+.preferencesWrapper {
+  padding: 40px 20px 0 20px;
+  // padding-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  @media screen and (max-width: $widget-mobile-width) {
+    flex-direction: column;
+    padding: 20px 0 0 0;
+  }
+}
+
+.fieldWrapper {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  @media screen and (min-width: $widget-mobile-width) {
+    width: 50%;
+    box-sizing: border-box;
+  }
+
+  > div > div {
+    > div {
+      font-family: $medium-font;
+      letter-spacing: 0.5px;
+    }
+
+    > label {
+      font-size: 10px !important;
+      text-transform: uppercase;
+      font-weight: 900;
+      letter-spacing: 0.9px;
+      color: #C1D2D8;
+    }
+  }
+
+  > div > :global(.dd-menu-items) > ul > ul {
+    max-height: 220px;
+  }
+}

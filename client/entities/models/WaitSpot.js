@@ -7,6 +7,7 @@ const WaitSpotSchema = {
   patientUserId: null,
   accountId: null,
   preferences: null,
+  daysOfTheWeek: null,
   unavailableDays: null,
   endDate: null,
 };

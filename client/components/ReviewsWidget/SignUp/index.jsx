@@ -12,11 +12,10 @@ import styles from './styles.scss';
 const customSubmitButton = (
   <Button
     type="submit"
-    color="red"
     icon="email"
     className={styles.customSubmitButton}
   >
-    Sign Up with Email
+    Save and continue
   </Button>
 );
 
@@ -29,28 +28,35 @@ class SignUp extends Component {
 
   handleSignUp(values) {
     // true argument is to ignore sending confirmation text on API
-    return this.props.createPatient(values, true)
+    return this.props.createPatient(values)
       .then(() => {
+        // TODO: this should be conditional based on where the component came from
         // Important to return so that it will not navigate if errored
-        return this.props.updateReview();
+        // return this.props.updateReview();
+
+
       })
       .then(() => {
-        this.props.history.push('./review/submitted');
+        // TODO: this should be conditional based on where the component came from
+        this.props.history.push('./signup/confirm');
       });
   }
 
   render() {
     return (
       <div className={styles.signUpWrapper}>
-        <h2>Signup</h2>
+        <div className={styles.header}>
+          Sign Up
+        </div>
+        <Link to="./login">
+          Already have an account? Log in.
+        </Link>
         <SignUpForm
           initialValues={{}}
           onSubmit={this.handleSignUp}
           submitButton={customSubmitButton}
+          className={styles.signUpForm}
         />
-        <Link to="./login">
-          <h3>Or Login</h3>
-        </Link>
       </div>
     );
   }

@@ -5,25 +5,26 @@ import {
   LOGIN_SUCCESS,
   LOGOUT,
   SET_PATIENT_USER,
+  SET_RESET_EMAIL,
 } from '../constants';
 
 const initialState = fromJS({
   isAuthenticated: false,
   patientUser: null,
   sessionId: null,
+  resetEmail: null,
 });
 
 export default handleActions({
   [LOGIN_SUCCESS](state, { payload }) {
-    console.log('loginSuccess');
-    console.log(payload);
-    const newState = state.merge({
+    return state.merge({
       ...payload,
       isAuthenticated: true,
     });
+  },
 
-    console.log('newState', newState.toJS());
-    return newState;
+  [SET_RESET_EMAIL](state, { payload }) {
+    return state.set('resetEmail', payload);
   },
 
   [SET_PATIENT_USER](state, { payload }) {
