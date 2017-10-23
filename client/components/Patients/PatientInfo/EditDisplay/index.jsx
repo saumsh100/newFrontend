@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import { Card, Modal, Tabs, Tab, Button, Icon } from '../../../library';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
@@ -40,7 +41,33 @@ class EditDisplay extends Component {
   }
 
   handleSubmit(values) {
+    const {
+      updateEntityRequest,
+      patient
+    } = this.props;
+
     console.log(values);
+
+    values.isSyncedWithPms = false;
+
+    const valuesMap = Map(values);
+    const modifiedPatient = patient.merge(valuesMap);
+
+    updateEntityRequest({
+      key: 'patients',
+      model: modifiedPatient,
+      alert: {
+        success: {
+          body: `${patient.get('firstName')}'s Info Updated`,
+        },
+        error: {
+          body: `${patient.get('firstName')}'s Info Not Updated`,
+        },
+      },
+      url: `/api/patients/${patient.get('id')}`,
+    }).then(() => {
+      this.reinitializeState();
+    });
   }
 
   render() {

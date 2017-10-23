@@ -7,21 +7,23 @@ import styles from './styles.scss';
 
 export default function TopDisplay(props) {
   const {
-    patient
+    patient,
+    patientStats,
   } = props;
 
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
+  console.log(patientStats)
 
-  const color = '#' + Math.random().toString(16).slice(2, 8);
+  /* const color = '#' + Math.random().toString(16).slice(2, 8);
 
   const bgStyle = {
     background: `linear-Gradient(${color}, #959596)`,
-  };
+  }; */
 
   return (
     <Card className={styles.card}>
       <div className={styles.content}>
-        <div className={styles.imageContainer} style={bgStyle}>
+        <div className={styles.imageContainer} >
           &nbsp;
         </div>
         <div className={styles.dataContainer}>
@@ -82,7 +84,6 @@ export default function TopDisplay(props) {
               <Col xs={4}>
                 <InfoDump
                   label="PRODUCTION IN CALENDAR YEAR"
-                  data="$850"
                 />
               </Col>
             </Row>

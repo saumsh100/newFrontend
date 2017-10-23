@@ -58,3 +58,22 @@
   color: $primary-blue;
   font-size: $x-medium-size;
 }
+
+.disclaimer {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  &_text {
+    font-size: 16px;
+    line-height: 1.5em;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+}

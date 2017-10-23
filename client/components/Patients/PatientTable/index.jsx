@@ -7,6 +7,7 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Icon } from '../../library';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
 import PatientRow from './PatientRow';
@@ -29,7 +30,6 @@ class PatientTable extends Component {
     this.state = {
       data: [],
       limit: 20,
-      loading: true,
       totalPatients: 0,
       currentPage: 0,
       sorted: [],
@@ -51,8 +51,8 @@ class PatientTable extends Component {
   }
 
   fetchData(query) {
-    this.props.fetchEntities({
-      key: 'patients',
+    this.props.fetchEntitiesRequest({
+      id: 'patientsTable',
       url: '/api/patients/table',
       params: query,
     }).then((data) => {
@@ -60,7 +60,6 @@ class PatientTable extends Component {
       this.setState({
         totalPatients: dataArray[0].totalPatients,
         data: dataArray,
-        loading: false,
       });
     });
   }
@@ -73,7 +72,6 @@ class PatientTable extends Component {
     });
     this.setState({
       currentPage: index,
-      loading: true,
     });
   }
 
@@ -85,7 +83,6 @@ class PatientTable extends Component {
     });
     this.setState({
       limit: pageSize,
-      loading: true,
     });
   }
 
@@ -95,9 +92,6 @@ class PatientTable extends Component {
       page: 0,
       limit: this.state.limit,
       sort: this.state.sorted,
-    });
-    this.setState({
-      loading: true,
     });
   }
 
@@ -109,7 +103,6 @@ class PatientTable extends Component {
     });
     this.setState({
       sorted: newSorted,
-      loading: true,
     });
   }
 
@@ -140,19 +133,30 @@ class PatientTable extends Component {
 
     const columns = [
       {
+        Header: '#',
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.index + 1}</div></div>,
+        filterable: false,
+        sortable: false,
+        maxWidth: 50,
+        className: styles.colBg,
+      },
+      {
         Header: 'Name',
         accessor: 'firstName',
         Cell: row => {
           return (
-            <PatientRow
-              value={row.value}
-              patient={row.original}
-              redirect={() => {
-                push(`/patients/${row.original.id}`);
-              }}
-            />
+            <div className={styles.displayFlex}>
+              <PatientRow
+                value={row.value}
+                patient={row.original}
+                redirect={() => {
+                  push(`/patients/${row.original.id}`);
+                }}
+              />
+            </div>
           );
         },
+        className: styles.colBg,
       },
       {
         Header: 'Age',
@@ -161,12 +165,18 @@ class PatientTable extends Component {
           const dateValue = moment().diff(d.birthDate, 'years');
           return Number.isInteger(dateValue) ? dateValue : '';
         },
-
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.value}</div></div>,
+        filterable: false,
+        maxWidth: 80,
+        className: styles.colBg,
       },
       {
         Header: 'Active',
         accessor: 'status',
-
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_status}>{props.value}</div></div>,
+        filterable: false,
+        maxWidth: 80,
+        className: styles.colBg,
       },
       {
         Header: 'Next Appt',
@@ -178,7 +188,16 @@ class PatientTable extends Component {
           }
           return '';
         },
-
+        Cell: (props) => {
+          return (<div className={styles.displayFlex}>
+            {props.value ? <Icon icon="calendar-o" /> : null}
+            <div className={styles.cellText}>{props.value}</div>
+          </div>);
+        },
+        filterable: false,
+        sortable: false,
+        maxWidth: 280,
+        className: styles.colBg,
       },
       {
         Header: 'Last Appt',
@@ -190,6 +209,16 @@ class PatientTable extends Component {
           }
           return '';
         },
+        Cell: (props) => {
+          return (<div className={styles.displayFlex}>
+            {props.value ? <Icon icon="calendar-o" /> : null}
+            <div className={styles.cellText_lastAppt}>{props.value}</div>
+          </div>);
+        },
+        filterable: false,
+        sortable: false,
+        maxWidth: 280,
+        className: styles.colBg,
       },
       {
         Header: 'Production Revenue',
@@ -197,6 +226,11 @@ class PatientTable extends Component {
         accessor: d => {
           return d.hasOwnProperty('productionRevenue') ? `$${d.productionRevenue.toFixed(2)}` : '';
         },
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_revenue}>{props.value}</div></div>,
+        filterable: false,
+        sortable: false,
+        maxWidth: 280,
+        className: styles.colBg,
       },
     ];
 
@@ -212,8 +246,9 @@ class PatientTable extends Component {
           pages={Math.floor(this.state.totalPatients / this.state.limit)}
           sorted={this.state.sorted}
           defaultPageSize={this.state.limit}
-          loading={this.state.loading && wasFetched}
+          loading={!wasFetched}
           expanded={this.state.expanded}
+          pageSizeOptions={[20, 25, 50, 100]}
           columns={columns}
           className="-striped -highlight"
           manual
@@ -274,7 +309,14 @@ class PatientTable extends Component {
             };
           }}
           style={{
-            height: 'calc(100vh - 230px)',
+            height: 'calc(100vh - 172px)',
+          }}
+          getTbodyProps={() => {
+            return {
+              style: {
+                background: 'white',
+              },
+            };
           }}
         />
       </div>
@@ -287,7 +329,7 @@ PatientTable.propTypes = {
 };
 
 function mapStateToProps({ apiRequests }) {
-  const wasFetched = (apiRequests.get('patientTotalCount') ? apiRequests.get('patientTotalCount').wasFetched : null);
+  const wasFetched = (apiRequests.get('patientsTable') ? apiRequests.get('patientsTable').wasFetched : null);
 
   return {
     wasFetched,

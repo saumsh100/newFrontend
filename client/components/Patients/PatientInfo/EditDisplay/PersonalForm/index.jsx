@@ -1,5 +1,6 @@
 
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates } from '../../../../Settings/Clinic/Address/selectConstants';
 import styles from '../styles.scss';
@@ -29,14 +30,27 @@ const optionsGender = [
 
 export default function PersonalForm(props) {
   const {
+    patient,
     handleSubmit,
   } = props;
+
+  const initialValues = {
+    gender: patient.get('gender'),
+    birthDate: moment(patient.get('birthDate')).format('MM/DD/YYYY'),
+    homePhoneNumber: patient.get('homePhoneNumber'),
+    mobilePhoneNumber: patient.get('mobilePhoneNumber'),
+    workPhoneNumber: patient.get('workPhoneNumber'),
+    city: patient.get('city'),
+    zipCode: patient.get('zipCode'),
+    country: patient.get('country'),
+  };
 
   return (
     <Form
       form="Form2"
       onSubmit={handleSubmit}
       className={styles.formContainer}
+      initialValues={initialValues}
       ignoreSaveButton
     >
       <Grid className={styles.grid}>

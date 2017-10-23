@@ -39,7 +39,9 @@ class Timeline extends Component {
     } = this.props;
 
     if (!events || !events.length) {
-      return null;
+      return <div className={styles.disclaimer}>
+        <div className={styles.disclaimer_text}>Currently, there are no events for this patient.</div>
+      </div>
     }
 
     const dateObj = {};
@@ -60,14 +62,14 @@ class Timeline extends Component {
         <div className={styles.eventsContainer}>
           <div className={styles.verticalLine}>&nbsp;</div>
           <div className={styles.eventsList}>
-            {dateSections.map((date) => {
+            {dateSections.length ? dateSections.map((date) => {
               return (
                 <EventDateSections
                   dateHeader={date}
                   events={dateObj[date]}
                 />
               );
-            })}
+            }) : null}
           </div>
         </div>
       </Card>

@@ -4,13 +4,16 @@
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  padding: 50px;
+  padding: 20px;
 }
 
 .tableProps {
   background: red;
 }
 
+.subHeaderMedium {
+  composes: subHeaderMedium from 'sass-loader!../../../fonts.scss';
+}
 .header {
   display: flex;
   align-items: center;
@@ -32,4 +35,35 @@
 
 .spacing {
   margin: 10px 0;
+}
+
+.displayFlex {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+.cellText {
+  color: $primary-dark;
+  @extend .subHeaderMedium;
+  &_lastAppt {
+    padding-top: 3px;
+    padding-left: 5px;
+    @extend .subHeaderMedium;
+    color: $primary-dark;
+  }
+  &_revenue {
+    color: $primary-blue;
+    @extend .subHeaderMedium;
+  }
+  &_status {
+    @extend .subHeaderMedium;
+  }
+}
+
+.colBg {
+  background: white;
 }

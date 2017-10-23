@@ -6,13 +6,17 @@ import styles from '../styles.scss';
 export default function SettingsForm(props) {
   const {
     handleSubmit,
+    patient,
   } = props;
+
+  const preferences = patient.preferences;
 
   return (
     <Form
       form="Form5"
       onSubmit={handleSubmit}
       className={styles.formContainer}
+      initialValues={preferences}
       ignoreSaveButton
     >
       <Grid className={styles.grid}>
@@ -46,7 +50,7 @@ export default function SettingsForm(props) {
               <div className={styles.toggleContainer_toggle}>
                 <Field
                   component="Toggle"
-                  name="birthdayMessages"
+                  name="birthdayMessage"
                 />
               </div>
             </div>

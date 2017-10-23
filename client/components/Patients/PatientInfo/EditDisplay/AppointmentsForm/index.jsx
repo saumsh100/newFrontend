@@ -11,7 +11,7 @@ export default function AppointmentsForm(props) {
 
   return (
     <Form
-      form="Form2"
+      form="Form1"
       onSubmit={handleSubmit}
       className={styles.formContainer}
       ignoreSaveButton

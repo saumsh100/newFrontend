@@ -4,7 +4,7 @@ import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from '../../library';
-import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
+import { fetchEntities, fetchEntitiesRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
@@ -46,9 +46,12 @@ class PatientInfo extends Component {
     const {
       patient,
       patientStats,
+      updateEntityRequest,
+      wasFetched,
     } = this.props;
 
-    if (!patient || !patientStats) {
+    console.log(wasFetched);
+    if (!wasFetched && !patient) {
       return <Loader loaded={this.state.loaded} color="#FF715A" />;
     }
 
@@ -56,13 +59,18 @@ class PatientInfo extends Component {
       <Grid className={styles.mainContainer}>
         <Row>
           <Col sm={12} md={12} className={styles.patientDisplay}>
-            {/*<SettingsDisplay patient={patient}/>*/}
-            <TopDisplay patient={patient} />
+            <TopDisplay
+              patient={patient}
+              patientStats={patientStats}
+            />
           </Col>
         </Row>
         <Row>
           <Col sm={12} md={4} className={styles.infoDisplay}>
-            <EditDisplay patient={patient} />
+            <EditDisplay
+              patient={patient}
+              updateEntityRequest={updateEntityRequest}
+            />
             <DataDisplay
               patient={patient}
             />
@@ -89,16 +97,19 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     fetchEntitiesRequest,
+    updateEntityRequest,
   }, dispatch);
 }
 
 function mapStateToProps({ entities, apiRequests }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
   const patientStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
+  const wasFetched = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').wasFetched : null);
 
   return {
     patient: patients.get(match.params.patientId),
     patientStats,
+    wasFetched,
   };
 }
 
