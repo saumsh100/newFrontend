@@ -14,9 +14,9 @@
 }
 
 .gridContainer {
+  height: auto;
   padding: 20px;
   box-sizing: border-box;
-  clear: both;
   @media screen and (min-width: $widget-mobile-width) {
     padding: 40px;
   }
@@ -54,6 +54,7 @@
 // TODO: add width difference for desktop widget
 
 .checkboxButton {
+  cursor: pointer;
   height: 40px;
   width: 78px;
   display: inline-flex;

@@ -64,7 +64,7 @@ class Header extends Component {
       <div className={styles.headerContainer}>
         {/* Back Button */}
         <Router history={this.props.history}>
-          <div>
+          <div className={styles.backButtonWrapper}>
             <Route exact path={b('/signup')} component={backButton('./book')} />
             <Route exact path={b('/signup/confirm')} component={backButton('../book')} />
             <Route exact path={b('/login')} component={backButton('./book')} />
