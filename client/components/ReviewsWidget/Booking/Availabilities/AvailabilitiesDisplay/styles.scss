@@ -56,12 +56,14 @@ $gray-color: #D3D2D3;
         text-align: center;
         margin-bottom: 5px;
         color: $gray-color;
+        font-size: 12px;
       }
 
       &_number {
         font-family: $medium-font;
         text-align: center;
         color: $gray-color;
+        font-size: 13px;
       }
     }
 
