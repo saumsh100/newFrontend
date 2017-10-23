@@ -214,7 +214,6 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
       where: { accountId: req.accountId },
     })
     .then(async (chairs) => {
-      console.log(chairs)
       const chairIds = chairs.map(chair => chair.id);
       account.weeklySchedule.monday.chairIds = chairIds;
       account.weeklySchedule.tuesday.chairIds = chairIds;
