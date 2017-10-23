@@ -43,6 +43,9 @@
 
 .linkWrapper {
   text-align: center;
+  > a {
+    text-decoration: underline;
+  }
 }
 
 
