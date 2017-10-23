@@ -12,7 +12,7 @@ import {
 import * as Actions from '../../../../../actions/availabilities';
 import styles from './styles.scss';
 
-class WaitListPreferences extends Component {
+class WaitlistPreferences extends Component {
   constructor(props) {
     super(props);
 
@@ -146,7 +146,7 @@ class WaitListPreferences extends Component {
   }
 }
 
-WaitListPreferences.propTypes = {
+WaitlistPreferences.propTypes = {
   waitSpot: PropTypes.object,
   account: PropTypes.object,
   updateWaitSpot: PropTypes.func.isRequired,
@@ -166,4 +166,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WaitListPreferences);
+export default connect(mapStateToProps, mapDispatchToProps)(WaitlistPreferences);
