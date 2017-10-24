@@ -50,7 +50,6 @@ class PatientInfo extends Component {
       wasFetched,
     } = this.props;
 
-    console.log(wasFetched);
     if (!wasFetched && !patient) {
       return <Loader loaded={this.state.loaded} color="#FF715A" />;
     }

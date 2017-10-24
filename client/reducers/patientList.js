@@ -14,11 +14,9 @@ import {
 const initialState = fromJS({
   currentPatient: null,
   filters: {
-		patientName: null,
-	},
-  editingPatientState: {
-
-  }
+    patientName: null,
+  },
+  editingPatientState: {},
 });
 
 export default handleActions({

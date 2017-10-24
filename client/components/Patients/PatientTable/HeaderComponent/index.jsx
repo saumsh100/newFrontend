@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { Button, DialogBox } from '../../../library';
 import NewPatientForm from '../NewPatientForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
+import SmartFilters from '../SmartFilters';
 import styles from '../styles.scss';
+import FilterTags from "../SmartFilters/FilterTags";
 
 
 class HeaderComponent extends Component {
@@ -10,8 +12,10 @@ class HeaderComponent extends Component {
     super(props);
     this.state = {
       active: false,
+      filterActive: false,
     };
     this.setActive = this.setActive.bind(this);
+    this.openFilter = this.openFilter.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -21,9 +25,16 @@ class HeaderComponent extends Component {
       active: true,
     });
   }
+
+  openFilter() {
+    this.setState({
+      filterActive: !this.state.filterActive,
+    });
+  }
   reinitializeState() {
     this.setState({
       active: false,
+      filterActive: false,
     });
   }
 
@@ -54,7 +65,10 @@ class HeaderComponent extends Component {
 
   render() {
     const {
+      smartFilters,
       totalPatients,
+      setSmartFilter,
+      removeSmartFilter,
     } = this.props;
 
     const formName = 'newUser';
@@ -70,12 +84,34 @@ class HeaderComponent extends Component {
         <div className={styles.header_subHeader}>
           Showing {totalPatients} Patients
         </div>
-        <Button
-          className={styles.addNewButton}
-          onClick={() => this.setActive()}
-        >
-          Add New Patient
-        </Button>
+        <div className={styles.addNewButton}>
+          <FilterTags
+            smartFilters={smartFilters}
+            removeSmartFilter={removeSmartFilter}
+          />
+          <div className={styles.filterContainer}>
+            <SmartFilters
+              filterActive={this.state.filterActive}
+              setSmartFilter={setSmartFilter}
+              smartFilters={smartFilters}
+              reinitializeState={this.reinitializeState}
+            />
+          </div>
+          <Button
+            color="white"
+            compact
+            onClick={() => this.openFilter()}
+          >
+            Smart Filters
+          </Button>
+          <Button
+            onClick={() => this.setActive()}
+            compact
+          >
+            Add New Patient
+          </Button>
+        </div>
+
         <DialogBox
           actions={actions}
           title="Add New Patient"

@@ -1,0 +1,63 @@
+@import '../../../../ui';
+
+.smartFilter {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  height: auto;
+  background: $primary-darkgrey;
+  padding: 10px;
+  z-index: 1;
+  top: 40px
+}
+
+.formContainer {
+  padding-bottom: 10px;
+}
+
+.filterSection {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-bottom: 1px solid $primary-grey;
+}
+
+.filterField {
+  color: white;
+  padding-bottom: 10px;
+}
+
+.sectionHeader {
+  composes: listItemHeader from 'sass-loader!../../../../fonts.scss';
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.filterTags {
+  display: flex;
+  align-items: center;
+}
+
+.tags {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
+  padding: 5px 7px 5px 7px;
+  border-radius: 12px;
+  color: white;
+  margin-right: 5px;
+
+  &_icon {
+    color: $primary-darkgrey;
+    padding-left: 5px;
+    padding-bottom: 1px;
+    &:hover {
+      color: darken($primary-darkgrey, 5%);
+      cursor: pointer;
+    }
+  }
+}

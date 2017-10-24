@@ -9,6 +9,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Icon } from '../../library';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
+import { setSmartFilter, removeSmartFilter, } from '../../../reducers/patientManagement';
 import PatientSubComponent from './PatientSubComponent';
 import PatientRow from './PatientRow';
 import HeaderComponent from './HeaderComponent';
@@ -129,6 +130,9 @@ class PatientTable extends Component {
       wasFetched,
       push,
       createEntityRequest,
+      smartFilters,
+      setSmartFilter,
+      removeSmartFilter,
     } = this.props;
 
     const columns = [
@@ -237,6 +241,9 @@ class PatientTable extends Component {
     return (
       <div className={styles.mainContainer}>
         <HeaderComponent
+          smartFilters={smartFilters}
+          setSmartFilter={setSmartFilter}
+          removeSmartFilter={removeSmartFilter}
           totalPatients={this.state.totalPatients}
           createEntityRequest={createEntityRequest}
         />
@@ -328,19 +335,23 @@ PatientTable.propTypes = {
 
 };
 
-function mapStateToProps({ apiRequests }) {
+function mapStateToProps({ apiRequests, patientManagement }) {
   const wasFetched = (apiRequests.get('patientsTable') ? apiRequests.get('patientsTable').wasFetched : null);
+  const smartFilters = patientManagement.get('smartFilters').toJS();
 
   return {
     wasFetched,
+    smartFilters,
   };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     fetchEntitiesRequest,
-    push,
     createEntityRequest,
+    push,
+    removeSmartFilter,
+    setSmartFilter,
   }, dispatch);
 }
 
