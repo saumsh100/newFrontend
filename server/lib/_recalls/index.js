@@ -1,6 +1,7 @@
 
 import { Account, Patient, SentRecall, Recall } from '../../_models';
-import { getPatientsDueForRecall } from './helpers';
+import { getPatientsDueForRecall, organizePatients } from './helpers';
+import { generateOrganizedPatients } from '../comms/util';
 import normalize from '../../routes/api/normalize';
 import sendRecall from './sendRecall';
 import app from '../../bin/app';
@@ -37,7 +38,11 @@ export async function sendRecallsForAccount(account, date) {
   for (const recall of recalls) {
     const { primaryType } = recall;
     // Get patients whose last appointment is associated with this recall
+
     const patients = await getPatientsDueForRecall({ recall, account, date });
+
+    // const organizedPatients = generateOrganizedPatients(patients);
+
     console.log(`Trying to send ${patients.length} ${primaryType} recalls for ${name}`);
     for (const patient of patients) {
       // Check if latest appointment is within the recall window

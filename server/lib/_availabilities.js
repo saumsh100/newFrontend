@@ -80,6 +80,10 @@ function fetchServiceData(options) {
         { model: Request, as: 'requests', raw: true },
       ],
     }).then((serviceOne) => {
+      if (!serviceOne) {
+        return reject(StatusError(400, `service with id=${serviceId} not found`));
+      }
+
       const service = serviceOne.get({ plain: true });
 
       if (service.accountId !== accountId) {

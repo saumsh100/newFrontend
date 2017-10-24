@@ -2,8 +2,6 @@
 import moment from 'moment';
 import { Appointment, Patient, SentRecall } from '../../_models';
 
-// Made an effort to throw all easily testable functions into here
-
 /**
  * getAppointmentsFromReminder returns all of the appointments that are
  * - in that clinic
@@ -19,6 +17,7 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
     where: {
       isDeleted: false,
       accountId: account.id,
+      status: 'Active',
     },
 
     include: [

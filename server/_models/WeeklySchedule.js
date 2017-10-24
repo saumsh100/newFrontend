@@ -1,5 +1,5 @@
-import moment from 'moment';
 
+import moment from 'moment';
 import { timeWithZone } from '../util/time';
 
 // Converting to UTC as this is a nested JSON where Sequelize won't do it for us

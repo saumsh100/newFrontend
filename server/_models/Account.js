@@ -220,5 +220,6 @@ export default function (sequelize, DataTypes) {
       }],
     }, { override: true });
   };
+
   return Account;
 }
