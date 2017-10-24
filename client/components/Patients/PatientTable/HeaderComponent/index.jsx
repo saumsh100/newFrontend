@@ -13,11 +13,15 @@ class HeaderComponent extends Component {
     this.state = {
       active: false,
       filterActive: false,
+      filter: [],
     };
     this.setActive = this.setActive.bind(this);
     this.openFilter = this.openFilter.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFilterSubmit = this.handleFilterSubmit.bind(this);
+    this.removeFilter = this.removeFilter.bind(this);
+    this.addFilterToTable = this.addFilterToTable.bind(this);
   }
 
   setActive() {
@@ -63,12 +67,47 @@ class HeaderComponent extends Component {
     });
   }
 
+  handleFilterSubmit(values) {
+    const valueKeys = Object.keys(values);
+    const filterArray = [];
+    valueKeys.map((key) => {
+      const innerObj = values[key]
+      const innerKeys = Object.keys(innerObj);
+
+      filterArray.push({
+        id: key,
+        value: innerKeys[0],
+      });
+    });
+
+    this.setState({
+      filter: filterArray,
+    });
+
+    this.reinitializeState();
+  }
+
+  addFilterToTable(filter) {
+    const {
+      addSmartFilter,
+    } = this.props;
+
+    addSmartFilter(filter);
+    console.log(filter);
+  }
+
+  removeFilter() {
+    this.setState({
+      filter: [],
+    });
+    this.reinitializeState();
+    this.props.reinitializeTable();
+  }
+
   render() {
     const {
       smartFilters,
       totalPatients,
-      setSmartFilter,
-      removeSmartFilter,
     } = this.props;
 
     const formName = 'newUser';
@@ -85,17 +124,16 @@ class HeaderComponent extends Component {
           Showing {totalPatients} Patients
         </div>
         <FilterTags
-          smartFilters={smartFilters}
-          removeSmartFilter={removeSmartFilter}
-          reinitializeState={this.reinitializeState}
+          smartFilters={this.state.filter}
+          removeSmartFilter={this.removeFilter}
         />
         <div className={styles.addNewButton}>
           <div className={styles.filterContainer}>
             <SmartFilters
               filterActive={this.state.filterActive}
-              setSmartFilter={setSmartFilter}
               smartFilters={smartFilters}
-              reinitializeState={this.reinitializeState}
+              handleSubmit={this.handleFilterSubmit}
+              addFilterToTable={this.addFilterToTable}
             />
           </div>
           <Button

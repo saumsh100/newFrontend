@@ -531,6 +531,7 @@ patientsRouter.get('/table', async (req, res, next) => {
       filter,
       sort,
       page,
+      smartFilter,
     } = req.query;
 
     const filterBy = {
@@ -571,15 +572,30 @@ patientsRouter.get('/table', async (req, res, next) => {
     // Getting nextAppt, lastAppt, etc.
     const calcPatientData = patients.map(async (patient) => {
       try {
-        const nextAppt = await Appointment.findAll({
-          raw: true,
-          where: {
-            patientId: patient.id,
+        const filters = {
+          nextAppt: {
             startDate: {
               $gt: new Date(),
             },
             isDeleted: false,
             isCancelled: false,
+          },
+          lastAppt: {
+            $between: [moment('1970-01-01').toISOString(), new Date()],
+          },
+        };
+
+        const smartFilterObj = smartFilter && smartFilter.length ? JSON.parse(smartFilter[0]) : null;
+
+        if (smartFilterObj) {
+          filters[smartFilterObj.id] = smartFilterObj.filter;
+        }
+
+        const nextAppt = await Appointment.findAll({
+          raw: true,
+          where: {
+            patientId: patient.id,
+            ...filters.nextAppt,
           },
 
           order: [['startDate', 'ASC']],

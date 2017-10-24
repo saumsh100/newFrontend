@@ -9,7 +9,6 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Icon } from '../../library';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
-import { setSmartFilter, removeSmartFilter, } from '../../../reducers/patientManagement';
 import PatientSubComponent from './PatientSubComponent';
 import PatientRow from './PatientRow';
 import HeaderComponent from './HeaderComponent';
@@ -42,6 +41,8 @@ class PatientTable extends Component {
     this.onFilter = this.onFilter.bind(this);
     this.onSort = this.onSort.bind(this);
     this.handleRowClick = this.handleRowClick.bind(this);
+    this.onSmartFilter = this.onSmartFilter.bind(this);
+    this.reinitializeTable = this.reinitializeTable.bind(this);
   }
 
   componentDidMount() {
@@ -107,6 +108,15 @@ class PatientTable extends Component {
     });
   }
 
+  onSmartFilter(filterData) {
+    this.fetchData({
+      smartFilter: filterData,
+      page: 0,
+      limit: this.state.limit,
+      sort: this.state.sorted,
+    });
+  }
+
   handleRowClick(rowInfo) {
     const {
       expanded,
@@ -125,14 +135,18 @@ class PatientTable extends Component {
     }
   }
 
+  reinitializeTable() {
+    this.fetchData({
+      limit: this.state.limit,
+      page: 0,
+    });
+  }
+
   render() {
     const {
       wasFetched,
       push,
       createEntityRequest,
-      smartFilters,
-      setSmartFilter,
-      removeSmartFilter,
     } = this.props;
 
     const columns = [
@@ -241,11 +255,10 @@ class PatientTable extends Component {
     return (
       <div className={styles.mainContainer}>
         <HeaderComponent
-          smartFilters={smartFilters}
-          setSmartFilter={setSmartFilter}
-          removeSmartFilter={removeSmartFilter}
           totalPatients={this.state.totalPatients}
           createEntityRequest={createEntityRequest}
+          addSmartFilter={this.onSmartFilter}
+          reinitializeTable={this.reinitializeTable}
         />
         <ReactTable
           data={this.state.data}
@@ -315,15 +328,15 @@ class PatientTable extends Component {
               },
             };
           }}
-          style={{
-            height: 'calc(100vh - 172px)',
-          }}
           getTbodyProps={() => {
             return {
               style: {
                 background: 'white',
               },
             };
+          }}
+          style={{
+            height: 'calc(100vh - 172px)',
           }}
         />
       </div>
@@ -337,11 +350,9 @@ PatientTable.propTypes = {
 
 function mapStateToProps({ apiRequests, patientManagement }) {
   const wasFetched = (apiRequests.get('patientsTable') ? apiRequests.get('patientsTable').wasFetched : null);
-  const smartFilters = patientManagement.get('smartFilters').toJS();
 
   return {
     wasFetched,
-    smartFilters,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -350,8 +361,6 @@ function mapDispatchToProps(dispatch) {
     fetchEntitiesRequest,
     createEntityRequest,
     push,
-    removeSmartFilter,
-    setSmartFilter,
   }, dispatch);
 }
 

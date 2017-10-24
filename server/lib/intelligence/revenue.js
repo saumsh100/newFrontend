@@ -38,7 +38,7 @@ export function mostBusinessPatient(startDate, endDate, accountId) {
   });
 }
 
-export function mostBusinessSinglePatient(startDate, endDate, accountId, patientId) {
+export function mostBusinessSinglePatient(startDate, endDate, accountId, patientId, filter) {
   return Patient.findAll({
     where: {
       accountId,
