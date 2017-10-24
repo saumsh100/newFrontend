@@ -17,8 +17,10 @@
   padding: 0;
   composes: headerImportant from 'sass-loader!../../../fonts.scss';
   background-color: transparent;
+  color: $primary-darkgrey;
   &:hover {
-    background-color: transparent;
+    color: darken($primary-darkgrey, 10%);
+    background: transparent;
   }
 }
 

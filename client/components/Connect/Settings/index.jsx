@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { SubmissionError } from 'redux-form';
+import javaParent from '../../../util/javaParent';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import { Link, VButton } from '../../library';
 import ConnectorSettingsForm from './ConnectorSettingsForm';
@@ -19,7 +20,6 @@ class Settings extends Component {
 
   handleSettingsSubmit(values) {
     const { history } = this.props;
-
     const body = {
       name: 'ADAPTER_TYPE',
       value: values.adapterType,
@@ -27,12 +27,17 @@ class Settings extends Component {
 
     const config = {
       headers: {
-        'Accept': 'application/vnd.api+json',
+        Accept: 'application/vnd.api+json',
       },
     };
 
     return axios.put('/api/accounts/configurations', body, config)
-      .then(() => history.push('./panel'))
+      .then(() => {
+        window.JavaParent
+        && window.JavaParent.onAdapterSave
+        && window.JavaParent.onAdapterSave(values.adapterType);
+        history.push('./panel');
+      })
       .catch(err => console.error('Could not save', err));
 
     /*return this.props.updateEntityRequest({ key: 'accounts', model })
