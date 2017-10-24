@@ -12,19 +12,20 @@ export default function FilterTags(props) {
     return null;
   }
 
-  const colors = ['#347283', '#FFC45A', '#2CC4A7'];
+  const colors = ['#367283', '#FFC45A', '#2CC4A7'];
 
   return (
     <div className={styles.filterTags}>
       {smartFilters.map((filterObj, index) => {
         const bgStyle = {
+          //border: `0.8px solid ${colors[index]}`,
           background: colors[index],
         };
 
         return filterObj.data.map((tag) => {
           return (
-            <div className={styles.tags} style={bgStyle}>
-              <div>{`${filterObj.id} : ${tag}`}</div>
+            <div className={styles.tags}>
+              <div>{`${filterObj.id} ${tag}`}</div>
               <div className={styles.tags_icon}>
                 <Icon
                   icon="times"
@@ -35,6 +36,7 @@ export default function FilterTags(props) {
                       id: filterObj.id,
                       tag,
                     });
+                    props.reinitializeState();
                   }}
                 />
               </div>

@@ -75,14 +75,14 @@ class SmartFilters extends Component {
               <div className={styles.sectionHeader}> Last Appointment </div>
               <div className={styles.filterField}>
                 <Field
-                  name="30 Days"
+                  name="< 30 Days"
                   component="Checkbox"
                   label="Within 30 Days"
                 />
                 <Field
-                  name="40 Days"
+                  name="< 1 Year"
                   component="Checkbox"
-                  label="Within 40 Days"
+                  label="Within 1 Year"
                 />
               </div>
             </FormSection>
@@ -90,7 +90,7 @@ class SmartFilters extends Component {
               <div className={styles.sectionHeader}> Next Appointment </div>
               <div className={styles.filterField}>
                 <Field
-                  name="30 Days"
+                  name="< 30 Days"
                   component="Checkbox"
                   label="Within 30 Days"
                 />
@@ -100,7 +100,7 @@ class SmartFilters extends Component {
               <div className={styles.sectionHeader}> Production Revenue </div>
               <div className={styles.filterField}>
                 <Field
-                  name="Greater 500"
+                  name="> $500"
                   component="Checkbox"
                   label="Greater than $500"
                 />

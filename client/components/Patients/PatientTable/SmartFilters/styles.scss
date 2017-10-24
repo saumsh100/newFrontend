@@ -36,6 +36,7 @@
 }
 
 .filterTags {
+  margin-left: 10px;
   display: flex;
   align-items: center;
 }
@@ -45,16 +46,18 @@
   align-items: center;
   align-content: center;
   justify-content: center;
-  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
-  padding: 5px 7px 5px 7px;
-  border-radius: 12px;
-  color: white;
+  composes: fontSmall from 'sass-loader!../../../../fonts.scss';
+  padding: 6px 11px 6px 11px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  background: #367283;
+  color: $primary-white;
   margin-right: 5px;
 
   &_icon {
     color: $primary-darkgrey;
     padding-left: 5px;
-    padding-bottom: 1px;
+    padding-bottom: 2px;
     &:hover {
       color: darken($primary-darkgrey, 5%);
       cursor: pointer;

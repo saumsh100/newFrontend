@@ -84,11 +84,12 @@ class HeaderComponent extends Component {
         <div className={styles.header_subHeader}>
           Showing {totalPatients} Patients
         </div>
+        <FilterTags
+          smartFilters={smartFilters}
+          removeSmartFilter={removeSmartFilter}
+          reinitializeState={this.reinitializeState}
+        />
         <div className={styles.addNewButton}>
-          <FilterTags
-            smartFilters={smartFilters}
-            removeSmartFilter={removeSmartFilter}
-          />
           <div className={styles.filterContainer}>
             <SmartFilters
               filterActive={this.state.filterActive}
