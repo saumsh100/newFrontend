@@ -35,8 +35,7 @@ class Settings extends Component {
       .then(() => {
         window.JavaParent
         && window.JavaParent.onAdapterSave
-        && window.JavaParent.onAdapterSave(
-          values.adapterType);
+        && window.JavaParent.onAdapterSave(values.adapterType);
         history.push('./panel');
       })
       .catch(err => console.error('Could not save', err));

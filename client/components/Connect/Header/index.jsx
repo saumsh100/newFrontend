@@ -13,7 +13,7 @@ function Header(props) {
       className={styles.button}
       icon="angle-left"
       onClick={() => {
-        props.logout().then(() => window.JavaParent && window.JavaParent.onLogoutSuccess);
+        props.logout().then(() => window.JavaParent && window.JavaParent.onLogoutSuccess());
       }}
       title="Sign Out"
     />
