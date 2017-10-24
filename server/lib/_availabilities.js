@@ -432,25 +432,27 @@ function fetchAvailabilities(options) {
                   },
                 ],
               },
+
               raw: true,
             })
-              .then((appointments) => {
-                const practitionerAvailabilities = practitioners.map((p, i) => {
-                  const avails = generatePractitionerAvailabilities({
-                    practitioner: p,
-                    weeklySchedule: weeklySchedules[i],
-                    service,
-                    startDate,
-                    timeInterval,
-                    endDate,
-                  });
-                  return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
+            .then((appointments) => {
+              const practitionerAvailabilities = practitioners.map((p, i) => {
+                const avails = generatePractitionerAvailabilities({
+                  practitioner: p,
+                  weeklySchedule: weeklySchedules[i],
+                  service,
+                  startDate,
+                  timeInterval,
+                  endDate,
                 });
 
-                const squashed = unionBy(...practitionerAvailabilities, 'startDate');
-                const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
-                return resolve(squashedAndSorted);
+                return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
               });
+
+              const squashed = unionBy(...practitionerAvailabilities, 'startDate');
+              const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
+              return resolve(squashedAndSorted);
+            });
           });
       })
       .catch(err => reject(err));
