@@ -39,7 +39,7 @@ class PractitionerList extends Component {
     const { services } = this.props;
 
     values.firstName = values.firstName.trim();
-    values.lastName = values.lastName.trim();
+    values.lastName = values.lastName ? values.lastName.trim() : undefined;
 
     const key = 'practitioners';
 
