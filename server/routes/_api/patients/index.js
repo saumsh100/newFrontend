@@ -625,7 +625,8 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
 patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (req, res, next) => {
   const accountId = req.accountId;
   const phoneNumber = req.patient.mobilePhoneNumber;
-
+  console.log(req.patient.get({ plain: true }));
+  console.log(req.body);
   return req.patient.update({
     isSyncedWithPms: true,
     ...req.body,

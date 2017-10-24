@@ -19,7 +19,7 @@ const PractitionerSchema = {
 
 export default class Practitioner extends createModel(PractitionerSchema) {
   getFullName() {
-    return `${this.get('firstName')} ${this.get('lastName')}`;
+    return `${this.get('firstName')} ${this.get('lastName') || ''}`;
   }
 
   getPrettyName() {
@@ -33,7 +33,7 @@ export default class Practitioner extends createModel(PractitionerSchema) {
 
   getPrettyShortName() {
     if (this.get('type') === 'Dentist') {
-      return `Dr. ${this.get('lastName')}`;
+      return `Dr. ${this.get('lastName') || this.get('firstName')}`;
     } else {
       return this.get('firstName');
     }

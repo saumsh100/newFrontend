@@ -7,6 +7,8 @@ function makeSetter(value, field, self) {
   value.startTime = moment.utc(value.startTime).toISOString();
   value.endTime = moment.utc(value.endTime).toISOString();
 
+  value.breaks = value.breaks || [];
+
   value.breaks = value.breaks.map((b) => {
     b.startTime = moment.utc(b.startTime).toISOString();
     b.endTime = moment.utc(b.endTime).toISOString();
