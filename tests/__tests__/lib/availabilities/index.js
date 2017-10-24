@@ -3,16 +3,16 @@ import {
   Practitioner,
   Appointment,
   PractitionerRecurringTimeOff,
-} from '../../server/_models';
+} from '../../../../server/_models';
 import {
   seedTestAvailabilities,
   wipeTestAvailabilities,
-} from '../_util/seedTestAvailabilities';
+} from '../../../_util/seedTestAvailabilities';
 import {
   fetchServiceData,
   fetchPractitionerData,
   fetchAvailabilities,
-} from '../../server/lib/_availabilities';
+} from '../../../../server/lib/_availabilities';
 
 // TODO: make seeds more modular so we can see here
 const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
