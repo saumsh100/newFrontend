@@ -108,7 +108,7 @@ describe('/api/enterprises', () => {
         .send(account2)
         .expect(201)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['weeklyScheduleId']);
+          body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'addressId']);
           expect(Object.keys(body.entities.accounts).length).toBe(1);
           expect(body).toMatchSnapshot();
         });

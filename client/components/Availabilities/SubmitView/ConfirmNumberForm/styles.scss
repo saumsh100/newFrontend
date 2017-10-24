@@ -28,7 +28,7 @@
 
       &:hover {
         color: #f3715c;
-        color: var(--bookingWidgetPrimaryColor);
+        color: var(--primaryColor);
       }
     }
 
@@ -37,7 +37,7 @@
       text-align: center;
       text-transform: uppercase;
       color: #f3715c;
-      color: var(--bookingWidgetPrimaryColor);
+      color: var(--primaryColor);
     }
 
     &_timer {
@@ -100,7 +100,7 @@
       text-decoration: none;
       text-transform: uppercase;
       color: #f3715c;
-      color: var(--bookingWidgetPrimaryColor);
+      color: var(--primaryColor);
     }
 
     &_btn {
@@ -113,13 +113,11 @@
       //text-transform: uppercase;
       //color: #fff;
       //border: none;
-      opacity: 0.9;
       color: white;
-      background-color: var(--bookingWidgetPrimaryColor);
+      background-color: var(--primaryColor);
       &:hover {
         color: white !important;
-        background-color: var(--bookingWidgetPrimaryColor) !important;
-        opacity: 1.0;
+        background-color: var(--primaryColor) !important;
       }
     }
 

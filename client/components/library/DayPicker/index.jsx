@@ -83,6 +83,8 @@ class DayPicker extends Component {
   render() {
     const {
       target,
+      TargetComponent,
+      tipSize,
       iconClassName,
       value,
       timezone,
@@ -104,18 +106,26 @@ class DayPicker extends Component {
       />
     );
 
-    if (target === 'icon') {
+    if (target) {
       // const iconProps = pick(this.props, ['icon']);
-      dayPickerTargetComponent = (
-        <IconButton
-          // {...iconProps}
-          icon="calendar"
-          type="button"
-          className={iconClassName}
-          onClick={this.togglePopOver}
-          data-test-id={this.props['data-test-id']}
-        />
-      );
+      if (target === 'icon') {
+        dayPickerTargetComponent = (
+          <IconButton
+            // {...iconProps}
+            icon="calendar"
+            type="button"
+            className={iconClassName}
+            onClick={this.togglePopOver}
+            data-test-id={this.props['data-test-id']}
+          />
+        );
+      } else if (target === 'custom') {
+        dayPickerTargetComponent = (
+          <TargetComponent
+            onClick={this.togglePopOver}
+          />
+        );
+      }
     }
 
     // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
@@ -124,6 +134,7 @@ class DayPicker extends Component {
         preferPlace="below"
         onOuterAction={this.togglePopOver}
         isOpen={this.state.isOpen}
+        tipSize={tipSize}
         body={[(
           <div className={styles.wrapper}>
             {/*<IconButton className={styles.closeButton} icon="close" onClick={this.togglePopOver} />*/}

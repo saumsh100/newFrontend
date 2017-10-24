@@ -2,6 +2,8 @@
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
+import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
+import { callRail, twilioSetup, vendastaFullSetup } from '../../../lib/createAccount';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
@@ -27,6 +29,18 @@ accountsRouter.param('joinAccountId', sequelizeLoader('account', 'Account', [{ m
 accountsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
 accountsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
 
+const apiFunctionsCreate = {
+  twilio: twilioSetup,
+  callrail: callRail,
+  vendasta: vendastaFullSetup,
+};
+
+const apiFunctionsDelete = {
+  twilio: twilioDelete,
+  callrail: callRailDelete,
+  vendasta: vendastaDelete,
+};
+
 /**
  * GET /
  *
@@ -39,21 +53,25 @@ accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
     // Fetch all if correct role, just fetch current account if not
     let accounts;
+
     if (role === 'SUPERADMIN') {
       // Return all accounts...
-      accounts = await Account.findAll({ raw: true });
+      const accountsFind = await Account.findAll({ });
+      accounts = accountsFind.map(a => a.get({ plain: true }));
     } else if (enterpriseRole === 'OWNER') {
       // Return all accounts under enterprise
-      accounts = await Account.findAll({
-        raw: true,
+      const accountsFind = await Account.findAll({
         where: { enterpriseId },
       });
+
+      accounts = accountsFind.map(a => a.get({ plain: true }));
     } else {
       // Return single account
-      accounts = [await Account.findOne({
-        raw: true,
+      const accountsFind = await Account.findOne({
         where: { id: accountId },
-      })];
+      });
+
+      accounts = [accountsFind.get({ plain: true })];
     }
 
     res.send(normalize('accounts', accounts));
@@ -124,6 +142,56 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
     }))
     .then(signedToken => res.json({ token: signedToken }))
     .catch(next);
+});
+
+/**
+ * POST /:accountId/switch
+ *
+ * - only superadmins are allowed to switch into accounts right now...
+ *
+ */
+accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
+  let { account } = req;
+  const { integrations } = req.body;
+
+  try {
+    for (let i = 0; i < integrations.length; i += 1) {
+      account = await apiFunctionsCreate[integrations[i].type](account, integrations[i]);
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  // if (role !== 'SUPERADMIN') {
+  //   return next(StatusError(403, 'Operation not permitted'));
+  // }
+  // await vendastaDelete(req.account);
+  return res.send(normalize('account', account.get({ plain: true })));
+});
+
+
+/**
+ * POST /:accountId/switch
+ *
+ * - only superadmins are allowed to switch into accounts right now...
+ *
+ */
+accountsRouter.delete('/:accountId/integrations', async (req, res, next) => {
+  let { account } = req;
+  const integrations = req.query.integrations;
+
+  try {
+    for (let i = 0; i < integrations.length; i += 1) {
+      const data = JSON.parse(integrations[i]);
+      account = await apiFunctionsDelete[data.type](account, data);
+    }
+  } catch (e) {
+    console.log(e)
+  }
+  // if (role !== 'SUPERADMIN') {
+  //   return next(StatusError(403, 'Operation not permitted'));
+  // }
+  // await vendastaDelete(req.account);
+  return res.send(normalize('account', account.get({ plain: true })));
 });
 
 async function getAccountConnectorConfigurations(req, res, next, accountId) {
@@ -333,7 +401,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
  */
 accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
   return req.account.update(req.body)
-    .then(account => res.send(normalize('account', account.dataValues)))
+    .then(account => res.send(normalize('account', account.get({ plain: true }))))
     .catch(next);
 });
 

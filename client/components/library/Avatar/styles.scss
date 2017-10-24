@@ -1,6 +1,7 @@
 
 @import '../../../ui.scss';
 
+$small-size: 1.5rem;
 $medium-size: 2rem;
 $large-size: 3rem;
 $xlarge-size: 4rem;
@@ -24,6 +25,13 @@ $extraLarge-size: 10rem;
 .img {
   max-width: 100%;
   height: auto;
+}
+
+.small {
+  width: $small-size;
+  height: $small-size;
+  min-width: $small-size;
+  min-height: $small-size;
 }
 
 .large {

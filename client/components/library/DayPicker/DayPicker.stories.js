@@ -18,13 +18,7 @@ storiesOf('DayPicker', module)
       style={object('Style', style)}
     />
   ));
-  /*.add('target icon ', () => (
-    <DayPicker
-      target="icon"
-      onChange={action('changed')}
-    />
-  ))
-  .add('Mutiple Days', () => (
+  /*.add('Mutiple Days', () => (
     <DayPicker
       multiple
       target="icon"

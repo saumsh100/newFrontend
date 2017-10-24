@@ -26,8 +26,19 @@ export default function (sequelize, DataTypes) {
         mornings: true,
         afternoons: true,
         evenings: true,
-        weekdays: true,
-        weekends: true,
+      },
+    },
+
+    daysOfTheWeek: {
+      type: DataTypes.JSONB,
+      defaultValue: {
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
       },
     },
 
@@ -38,12 +49,21 @@ export default function (sequelize, DataTypes) {
     endDate: {
       type: DataTypes.DATE,
     },
+
+    appointmentId: {
+      type: DataTypes.UUID,
+    },
   });
 
-  WaitSpot.associate = ({ Account, Patient, PatientUser }) => {
+  WaitSpot.associate = ({ Appointment, Account, Patient, PatientUser }) => {
     WaitSpot.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    WaitSpot.belongsTo(Appointment, {
+      foreignKey: 'appointmentId',
+      as: 'appointment',
     });
 
     WaitSpot.belongsTo(Patient, {

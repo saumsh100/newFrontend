@@ -213,7 +213,7 @@ class Overview extends Component {
         data.appointmentNotFiltred = Math.floor(key.toObject().totalTime / 60) - data.appointmentBooked;
         data.appointmentNotFiltred = (data.appointmentNotFiltred > 0 ? data.appointmentNotFiltred : 0);
         data.percentage = Math.floor(100 * data.appointmentBooked / (data.appointmentNotFiltred + data.appointmentBooked));
-        data.name = (/Dentist/g.test(key.toObject().type) ? `Dr. ${key.toObject().lastName}` : `${key.toObject().firstName} ${key.toObject().lastName}`);
+        data.name = (/Dentist/g.test(key.toObject().type) ? `Dr. ${key.toObject().lastName}` : `${key.toObject().firstName} ${key.toObject().lastName || ''}`);
         data.img = '/images/avatar.png';
         totalData.appointmentBooked += data.appointmentBooked;
         totalData.appointmentNotFiltred += data.appointmentNotFiltred;

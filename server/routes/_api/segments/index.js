@@ -33,6 +33,7 @@ segmentRouter.get('/:segmentId', checkPermissions('segments:read'), async (req, 
 segmentRouter.get('/', checkPermissions('segments:read'), async (req, res, next) => {
   try {
     // Should add for account, now only returns for enterprise
+
     const segments = await Segment.findAll({
       raw: true,
       where: {

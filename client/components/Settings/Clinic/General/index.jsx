@@ -4,11 +4,12 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import GeneralForm from './GeneralForm';
+import AddAccounts from './AddAccounts';
 import ContactForm from './ContactForm';
 import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
 import { Map } from 'immutable';
-import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
 import { Grid, Row, Col, Dropzone, AccountLogo, Button, Header} from '../../../library';
 import styles from './styles.scss';
@@ -27,6 +28,8 @@ class General extends React.Component {
     this.updateName = this.updateName.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
+    this.deleteAccounts = this.deleteAccounts.bind(this);
+    this.updateApis = this.updateApis.bind(this);
     this.downloadConnector = this.downloadConnector.bind(this);
   }
 
@@ -64,6 +67,122 @@ class General extends React.Component {
     });
   }
 
+  deleteAccounts() {
+    const { activeAccount, createEntityRequest } = this.props;
+    createEntityRequest({ url: `/api/accounts/${activeAccount.id}/integrations`, params: {} });
+  }
+
+  async updateApis(values) {
+    const { activeAccount, createEntityRequest, deleteEntityRequest, address } = this.props;
+    const {
+      reputationManagement,
+      listings,
+      callTracking,
+      canSendReminders,
+    } = values;
+
+    const sendingValuesCreate = {};
+    sendingValuesCreate.integrations = [];
+
+    const sendingValuesDelete = {};
+    sendingValuesDelete.integrations = [];
+
+    const {
+      callrailId,
+      twilioPhoneNumber,
+      vendastaAccountId,
+      vendastaMsId,
+      vendastaSrId,
+      website,
+    } = activeAccount;
+
+    const {
+      city,
+      state,
+      country,
+      zipCode,
+      street,
+      timezone,
+    } = address;
+
+    if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
+      return window.alert('Please enter Address and/or Clinic Website Info First');
+    }
+
+    if (vendastaAccountId && !reputationManagement && !listings) {
+      sendingValuesDelete.integrations.push({
+        type: 'vendasta',
+        options: 'deleteAll',
+      });
+    } else if (vendastaAccountId) {
+      const optionsCreate = {
+        type: 'vendasta',
+        options: 'add',
+      };
+
+      const optionsDelete = {
+        type: 'vendasta',
+        options: 'delete',
+      };
+
+      optionsCreate.reputationManagement = !vendastaSrId && reputationManagement;
+      optionsCreate.listings = !vendastaMsId && listings;
+      optionsDelete.reputationManagement = vendastaSrId && !reputationManagement;
+      optionsDelete.listings = vendastaMsId && !listings;
+
+      if (optionsCreate.reputationManagement || optionsCreate.listings) {
+        sendingValuesCreate.integrations.push(optionsCreate);
+      }
+
+      if (optionsDelete.reputationManagement || optionsDelete.listings) {
+        sendingValuesDelete.integrations.push(optionsDelete);
+      }
+    } else if (!vendastaAccountId && (reputationManagement || listings)) {
+      sendingValuesCreate.integrations.push({
+        type: 'vendasta',
+        options: 'createAdd',
+        reputationManagement,
+        listings,
+      });
+    }
+
+    if (canSendReminders && !twilioPhoneNumber) {
+      sendingValuesCreate.integrations.push({
+        type: 'twilio',
+        options: 'create',
+      });
+    }
+
+    if (!canSendReminders && twilioPhoneNumber) {
+      sendingValuesDelete.integrations.push({
+        type: 'twilio',
+        options: 'delete',
+      });
+    }
+
+    if (callTracking && !callrailId) {
+      sendingValuesCreate.integrations.push({
+        type: 'callrail',
+        options: 'create',
+      });
+    }
+
+    if (!callTracking && callrailId) {
+      sendingValuesDelete.integrations.push({
+        type: 'callrail',
+        options: 'delete',
+      });
+    }
+
+    if (sendingValuesCreate.integrations[0]) {
+      await createEntityRequest({ key: 'accounts', url: `/api/accounts/${activeAccount.id}/integrations`, entityData: sendingValuesCreate });
+    }
+
+    if (sendingValuesDelete.integrations[0]) {
+      await deleteEntityRequest({ key: 'accounts', url: `/api/accounts/${activeAccount.id}/integrations`, values: sendingValuesDelete });
+    }
+  }
+
   deleteLogo() {
     this.props.deleteLogo(this.props.activeAccount.id);
   }
@@ -87,9 +206,19 @@ class General extends React.Component {
   render() {
     const { activeAccount, users } = this.props;
 
+    const addAccounts = [(<Header
+      title="API Accounts"
+      contentHeader
+    />), (<div className={styles.formContainer}>
+      <AddAccounts
+        onSubmit={this.updateApis}
+        formName="apis"
+        activeAccount={activeAccount}
+      />
+    </div>)];
+
     let showComponent = null;
     if (activeAccount) {
-
       const token = localStorage.getItem('token');
       const decodedToken = jwt(token);
       let role = null;
@@ -196,6 +325,8 @@ class General extends React.Component {
               activeAccount={activeAccount}
             /> : null }
           </div>
+
+          {role === 'SUPERADMIN' ? addAccounts : null }
         </div>
       );
     }
@@ -212,15 +343,19 @@ General.propTypes = {
   activeAccount: PropTypes.object,
   users: PropTypes.object,
   updateEntityRequest: PropTypes.func,
+  createEntityRequest: PropTypes.func,
+  deleteEntityRequest: PropTypes.func,
   fetchEntities: PropTypes.func,
   uploadLogo: PropTypes.func,
   deleteLogo: PropTypes.func,
   downloadConnector: PropTypes.func,
 };
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     updateEntityRequest,
+    createEntityRequest,
+    deleteEntityRequest,
     fetchEntities,
     uploadLogo,
     deleteLogo,
@@ -229,9 +364,17 @@ function mapDispatchToProps(dispatch){
 }
 
 function mapStateToProps({ entities, auth }) {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const addresses = entities.getIn(['addresses', 'models']);
+  let address;
+  if (activeAccount && activeAccount.addressId) {
+    address = addresses.get(activeAccount.addressId);
+  }
+
   return {
     users: entities.getIn(['users', 'models']),
-    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+    activeAccount,
+    address,
   };
 }
 

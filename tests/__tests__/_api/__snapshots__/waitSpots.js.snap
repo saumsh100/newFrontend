@@ -12,6 +12,16 @@ Object {
     "waitSpots": Object {
       "cc43f0d7-9fb0-4946-b889-f284ea48e4d0": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentId": null,
+        "daysOfTheWeek": Object {
+          "friday": false,
+          "monday": false,
+          "saturday": false,
+          "sunday": false,
+          "thursday": false,
+          "tuesday": false,
+          "wednesday": false,
+        },
         "endDate": "2017-09-27T00:14:30.932Z",
         "id": "cc43f0d7-9fb0-4946-b889-f284ea48e4d0",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
@@ -20,8 +30,6 @@ Object {
           "afternoons": true,
           "evenings": true,
           "mornings": true,
-          "weekdays": true,
-          "weekends": true,
         },
       },
     },
@@ -38,6 +46,16 @@ Object {
     "waitSpots": Object {
       "6303daf4-377e-4b70-843b-08671e6183d7": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentId": null,
+        "daysOfTheWeek": Object {
+          "friday": false,
+          "monday": false,
+          "saturday": false,
+          "sunday": false,
+          "thursday": false,
+          "tuesday": false,
+          "wednesday": false,
+        },
         "id": "6303daf4-377e-4b70-843b-08671e6183d7",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
@@ -45,8 +63,6 @@ Object {
           "afternoons": true,
           "evenings": true,
           "mornings": true,
-          "weekdays": true,
-          "weekends": true,
         },
       },
     },
@@ -61,6 +77,16 @@ Object {
     "waitSpots": Object {
       "cc43f0d7-9fb0-4946-b889-f284ea48e4d0": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentId": null,
+        "daysOfTheWeek": Object {
+          "friday": false,
+          "monday": false,
+          "saturday": false,
+          "sunday": false,
+          "thursday": false,
+          "tuesday": false,
+          "wednesday": false,
+        },
         "endDate": "2017-09-27T00:14:30.932Z",
         "id": "cc43f0d7-9fb0-4946-b889-f284ea48e4d0",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
@@ -69,8 +95,6 @@ Object {
           "afternoons": true,
           "evenings": true,
           "mornings": true,
-          "weekdays": true,
-          "weekends": true,
         },
       },
     },

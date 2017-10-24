@@ -139,3 +139,13 @@
     }
   }
 }
+
+$padding: 5px;
+
+.colLeft {
+  padding-right: $padding;
+}
+
+.colRight {
+  padding-left: $padding;
+}

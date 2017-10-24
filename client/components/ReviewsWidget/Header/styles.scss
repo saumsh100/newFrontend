@@ -3,20 +3,68 @@
 
 .headerContainer {
   width: 100%;
-  background-color: $primary-lightgrey;
+  background-color: $primary-white;
   display: flex;
   flex-direction: row;
   align-items: center;
   border-top: 5px solid var(--primaryColor);
+  //box-shadow: 0 1px 0px rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
+  height: 40px;
 }
 
 .pullRight {
+  display: flex;
   margin-left: auto;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
-.closeButton {
-  width: 35px;
+.iconButton {
+  width: 35px !important;
   font-size: 1em;
   padding: 10px !important;
   box-sizing: border-box;
+  &:hover {
+    color: var(--primaryColor);
+  }
+}
+
+.backButtonWrapper {
+  width: 40px;
+}
+
+.backButton {
+  @extend .iconButton;
+  margin-right: -20px !important;
+}
+
+.closeButton {
+  @extend .iconButton;
+  margin-left: 10px !important;
+}
+
+.calendarButton {
+  margin-right: 10px !important;
+  font-size: 1.3em;
+  @extend .iconButton;
+  @media screen and (max-width: $widget-mobile-width) {
+    display: none;
+  }
+}
+
+/*.filterButton {
+  padding: 10px 0;
+  font-size: 2em;
+}*/
+
+.title {
+  composes: cardHeaderTitle from 'sass-loader!../../../fonts.scss';
+  font-size: 14px;
+}
+
+.col {
+  // padding: 0 10px;
 }

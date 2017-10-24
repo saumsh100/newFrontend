@@ -26,7 +26,6 @@ export default function CreatePractitionerForm(props) {
       </div>
       <div className={styles.practFormRow__createRow}>
         <Field
-          required
           name="lastName"
           label="Last Name"
           data-test-id="lastName"

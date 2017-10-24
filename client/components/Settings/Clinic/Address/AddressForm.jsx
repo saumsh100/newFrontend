@@ -3,7 +3,7 @@ import React, { Component, PropTypes, } from 'react';
 import moment from 'moment-timezone';
 import { Row, Col, Form, Field, Select, } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
-import { change, }  from 'redux-form';
+import { change } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
@@ -51,16 +51,15 @@ class AddressForm extends React.Component {
   }
 
   componentWillMount() {
-    const { accountInfo } = this.props;
-
-    if (accountInfo) {
+    const { accountInfo, address } = this.props;
+    if (address) {
       this.setState({
-        country: accountInfo.get('country'),
-        street: accountInfo.get('street'),
-        city: accountInfo.get('city'),
-        zipCode: accountInfo.get('zipCode'),
-        state: accountInfo.get('state'),
-        timezone: accountInfo.get('timezone'),
+        country: address.get('country'),
+        street: address.get('street'),
+        city: address.get('city'),
+        zipCode: address.get('zipCode'),
+        state: address.get('state'),
+        timezone: address.get('timezone'),
       });
     }
   }
@@ -159,6 +158,7 @@ class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
+  address: PropTypes.object,
   change: PropTypes.func,
   onSubmit: PropTypes.func,
 }

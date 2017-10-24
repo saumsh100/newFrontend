@@ -1,6 +1,7 @@
 
 import customDataTypes from '../util/customDataTypes';
 import globals from '../config/globals';
+import AddressModel from './Address';
 
 export default function (sequelize, DataTypes) {
   const Account = sequelize.define('Account', {
@@ -21,6 +22,10 @@ export default function (sequelize, DataTypes) {
     },
 
     weeklyScheduleId: {
+      type: DataTypes.UUID,
+    },
+
+    addressId: {
       type: DataTypes.UUID,
     },
 
@@ -55,23 +60,11 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    street: {
+    vendastaMsId: {
       type: DataTypes.STRING,
     },
 
-    country: {
-      type: DataTypes.STRING,
-    },
-
-    state: {
-      type: DataTypes.STRING,
-    },
-
-    city: {
-      type: DataTypes.STRING,
-    },
-
-    zipCode: {
+    vendastaSrId: {
       type: DataTypes.STRING,
     },
 
@@ -140,6 +133,7 @@ export default function (sequelize, DataTypes) {
 
   Account.associate = (models) => {
     const {
+      Address,
       Appointment,
       Chat,
       Enterprise,
@@ -161,6 +155,11 @@ export default function (sequelize, DataTypes) {
     Account.belongsTo(WeeklySchedule, {
       foreignKey: 'weeklyScheduleId',
       as: 'weeklySchedule',
+    });
+
+    Account.belongsTo(Address, {
+      foreignKey: 'addressId',
+      as: 'address',
     });
 
     Account.hasMany(Appointment, {
@@ -209,5 +208,17 @@ export default function (sequelize, DataTypes) {
     });
   };
 
+  Account.scopes = (models) => {
+    const {
+      Address,
+    } = models;
+
+    Account.addScope('defaultScope', {
+      include: [{
+        model: Address,
+        as: 'address',
+      }],
+    }, { override: true });
+  };
   return Account;
 }

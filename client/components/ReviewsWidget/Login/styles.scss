@@ -1,7 +1,78 @@
 
 @import '../../../ui.scss';
 
-.customSubmitButton {
-  width: 100%;
+.loginWrapper {
+  box-sizing: border-box;
+  padding: 0px 20px 20px 20px;
+  @media screen and (min-width: $widget-mobile-width) {
+    padding: 0px 40px 40px 40px;
+  }
 }
 
+.header {
+  composes: cardHeaderTitle from 'sass-loader!../../../fonts.scss';
+  padding: 20px 0;
+  text-align: center;
+  color: black;
+}
+
+.subHeader {
+  composes: listItemHeader from 'sass-loader!../../../fonts.scss';
+  padding: 5px 0;
+}
+
+.message {
+  // margin-bottom: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  color: $primary-darkgrey;
+  /*@media screen and (min-width: $widget-mobile-width) {
+    margin-top: 20px;
+    // margin-bottom: 20px;
+    max-width: 350px;
+  }*/
+}
+
+.customSubmitButton {
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  &:hover {
+    background-color: var(--primaryColor);
+  }
+}
+
+.joinButton {
+  @extend .customSubmitButton;
+  &:hover {
+    background-color: var(--primaryColor);
+  }
+}
+
+
+.linkWrapper {
+  text-align: center;
+  padding-bottom: 20px;
+  > a {
+    text-decoration: underline;
+  }
+}
+
+.score {
+  text-align: center;
+  > hr {
+    border: 0.5px solid $inactive-color;
+  }
+}
+
+.scoreText {
+  position: relative;
+  top: -15px;
+  background-color: white;
+  color: $inactive-color;
+  padding: 0 10px;
+}
+
+.loginFormWrapper {
+
+}

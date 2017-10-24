@@ -30,7 +30,13 @@ export const caProv = [
   { value: 'Yukon' },
 ];
 
-export const countrySelector = [{ value: 'Canada'},{ value: 'United States'}];
+export const countrySelector = [{
+  value: 'CA',
+  label: 'Canada',
+}, {
+  value: 'US',
+  label: 'United States',
+}];
 
 export const languages = [
   {

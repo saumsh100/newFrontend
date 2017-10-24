@@ -25,7 +25,7 @@ export default function ConfirmNumberForm({ onSubmit }) {
         type="submit"
         className={styles.signup__footer_btn}
       >
-        Book This Appointment
+        Confirm Signup
       </Button>
     </Form>
   );

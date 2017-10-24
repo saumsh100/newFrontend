@@ -1,12 +1,15 @@
+
+@import '../../../ui.scss';
+
 .checkbox {
   input[type="checkbox"] {
     display: none;
   }
 
   input[type=checkbox]:checked + label::before {
-    content: "\2713";
-    font-size: 13px;
-    background: #f3715c;
+    content: "\2714\fe0e";
+    font-size: 11px;
+    background: $primary-color;
     color: white;
   }
 
@@ -18,15 +21,16 @@
     margin: 5px;
     &:before {
       content: "";
-      display: inline-block;
-      width: 13px;
-      height: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
       margin-right: 3px;
       vertical-align: middle;
       background-color: inherit;
-      color: #f3f3f3;
-      text-align: center;
-      border: 1px solid #f7d1ca;
+      color: white;
+      border: 1px solid $primary-color;
       border-radius: 3px;
     }
   }
