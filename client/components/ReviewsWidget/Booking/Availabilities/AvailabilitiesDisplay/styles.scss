@@ -1,0 +1,319 @@
+
+@import '../../../../../ui.scss';
+
+@mixin setBgColorAndHover($baseColor) {
+  color: $baseColor;
+  &:hover {
+    color: darken($baseColor, 5%);
+  }
+}
+
+$gray-color: #D3D2D3;
+
+.appointment {
+  &__table {
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-self: flex-start;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    &_btn {
+      //font-size: 18px;
+      color: var(--primaryColor);
+      &:hover {
+        font-family: $medium-font;
+        color: var(--primaryColor) !important;
+      }
+
+      /*cursor: pointer;
+      &:focus {
+        outline: none;
+      }*/
+    }
+
+    &_elements {
+      display: flex;
+    }
+  }
+
+  &__list {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0 5px;
+    width: 20%;
+    @media screen and (max-width: 800px) {
+      margin: 0 2px;
+    }
+
+    .list__header {
+      margin-top: 5px;
+      &_day {
+        font-family: $medium-font;
+        text-transform: uppercase;
+        text-align: center;
+        margin-bottom: 5px;
+        color: $gray-color;
+        font-size: 12px;
+      }
+
+      &_number {
+        font-family: $medium-font;
+        text-align: center;
+        color: $gray-color;
+        font-size: 13px;
+      }
+    }
+
+    &_active {
+      background-color: #e6e6e6 !important;
+    }
+
+    &_item {
+      cursor: pointer;
+      width: 100%;
+      box-sizing: border-box;
+      height: 38px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px 0;
+      font-size: 12px;
+      color: white;
+      text-align: center;
+      list-style: none;
+      background-color: var(--primaryColor);
+      flex-grow: 1;
+      border-radius: 5px;
+      box-sizing: border-box;
+      &:hover {
+        font-family: $medium-font;
+      }
+    }
+
+    &_selected {
+      // background-color: var(--bookingWidgetPrimaryColor) !important;
+      background-color: white;
+      color: var(--primaryColor);
+      border: 1px solid var(--primaryColor);
+      font-family: $medium-font;
+    }
+
+  }
+}
+
+.availabilitiesContainer {
+  // margin-top: 50px;
+  height: auto;
+}
+
+.nextAvailabilityButton {
+  cursor: pointer;
+  box-sizing: border-box;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: white;
+  text-align: center;
+  list-style: none;
+  background-color: var(--primaryColor);
+  padding: 0px 15px;
+  border-radius: 5px;
+
+  > div {
+    font-family: $medium-font;
+    margin-left: 8px;
+  }
+}
+
+.centeredContent {
+  display: flex;
+  justify-content: center;
+}
+
+.columnsWrapper {
+  overflow-x: auto;
+}
+
+.headerWrapper {
+  height: 60px;
+}
+
+.displayWrapperForHorizontalScroll {
+  // min-width: 370px;
+}
+
+.datesRow {
+  display: flex;
+  > ul {
+    border-bottom: 1px solid $primary-lightgrey;
+    padding-bottom: 10px;
+  }
+}
+
+.selectedDayHeader {
+  border-bottom: 1px solid $primary-dark !important;
+  > div > div {
+    color: $primary-dark !important;
+  }
+}
+
+.displayContainer {
+  overflow-y: scroll;
+  // height: 250px;
+  height: 210px;
+  min-height: 210px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  line-height: 20px;
+  font-size: 12px;
+  color: black;
+  font-family: $medium-font;
+}
+
+.mobileDisplayContainer {
+  overflow-y: scroll;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  color: black;
+  font-family: $medium-font;
+}
+
+.displayAvailabilitiesContainer {
+  overflow-y: scroll;
+  height: 220px;
+  min-height: 220px;
+  padding-top: 10px;
+}
+
+.loadingSpinnerIcon {
+  color: var(--primaryColor);
+}
+
+.offsetScroll {
+  margin-right: 8px;
+}
+
+.appointmentListMobile {
+  list-style-type: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  > li {
+    display: inline-flex;
+    width: 79px;
+    margin: 0 3px;
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+$width: 15px;
+$height: 30px;
+
+.caretButton {
+  width: 0;
+  height: 0;
+  cursor: pointer;
+  border-top: $height/2 solid transparent;
+  border-bottom: $height/2 solid transparent;
+  border-left: $width/2 solid transparent;
+  border-right: $width/2 solid transparent;
+}
+
+.rightCaretButton {
+  @extend .caretButton;
+  border-left: $width/2 solid $gray-color;
+  &:hover {
+    border-left: $width/2 solid var(--primaryColor);
+  }
+}
+
+.leftCaretButton {
+  float: right;
+  @extend .caretButton;
+  border-right: $width/2 solid $gray-color;
+  &:hover {
+    border-right: $width/2 solid var(--primaryColor);
+  }
+}
+
+.desktopContainer {
+  @media only screen and (max-width: $widget-mobile-width) {
+    display: none;
+  }
+}
+
+.mobileContainer {
+  padding: 0 20px;
+  @media only screen and (min-width: $widget-mobile-width) {
+    display: none;
+  }
+}
+
+.scrollDownSpace {
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 10px;
+}
+
+.scrollDown {
+  display: flex;
+  flex-direction: column;
+  color: $primary-gray;
+  // position: relative;
+  > span {
+    font-size: 10px;
+  }
+
+  > div {
+    margin-top: -3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    > i {
+      width: 10px;
+      color: lighten($primary-gray, 10%);
+    }
+  }
+}
+
+.availabilityLabel {
+  padding: 0 20px;
+  margin-bottom: 10px;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.9px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  color: #C1D2D8;
+  > i {
+    margin-left: 10px;
+    font-size: 1.3em !important;
+    margin-top: -5px;
+  }
+
+  @media only screen and (min-width: $widget-mobile-width) {
+    padding: 0 40px;
+  }
+}

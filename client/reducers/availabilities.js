@@ -25,14 +25,19 @@ import {
   SET_IS_LOGIN,
   SET_NEXT_AVAILABILITY,
   SET_FORGOT_PASSWORD,
+  SET_NOTES,
 } from '../constants';
 
+function getStartTimeForToday(account) {
+  const timezone = account.timezone;
+  const zone = -1 * moment.tz(new Date(), timezone).zone();
+  return moment().add(1, 'hours').zone(zone).toISOString();
+}
+
 export const createInitialWidgetState = state => {
-  let selectedStartDate = moment().add(1, 'hours').toISOString()
+  let selectedStartDate = moment().add(1, 'hours').toISOString();
   if (state) {
-    const timezone = state.account.timezone;
-    const zone = -1 * moment.tz(new Date(), timezone).zone();
-    selectedStartDate = moment().add(1, 'hours').zone(zone).toISOString();
+    selectedStartDate = getStartTimeForToday(state.account);
   }
 
   // selectedStartDate = timezone ?
@@ -56,8 +61,16 @@ export const createInitialWidgetState = state => {
         mornings: true,
         afternoons: true,
         evenings: true,
-        weekdays: true,
-        weekends: true,
+      },
+
+      daysOfTheWeek: {
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
       },
 
       unavailableDays: [],
@@ -69,6 +82,7 @@ export const createInitialWidgetState = state => {
     selectedStartDate,
     registrationStep: 1,
     reservationId: null,
+    notes: null,
   }, state));
 };
 
@@ -85,6 +99,30 @@ export default handleActions({
       registrationStep: 1,
       reservationId: null,
       forgotPassword: false,
+      selectedAvailability: null,
+      //selectedServiceId: null, // Will be set by the initialState from server
+      //selectedPractitionerId: '',
+      notes: null,
+      hasWaitList: false,
+      waitSpot: {
+        preferences: {
+          mornings: true,
+          afternoons: true,
+          evenings: true,
+        },
+
+        daysOfTheWeek: {
+          sunday: false,
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false,
+          friday: false,
+          saturday: false,
+        },
+
+        unavailableDays: [],
+      },
     });
   },
 
@@ -139,6 +177,10 @@ export default handleActions({
     return state.set('isSuccessfulBooking', action.payload);
   },
 
+  [SET_NOTES](state, action) {
+    return state.set('notes', action.payload);
+  },
+
   [SIX_DAYS_SHIFT](state, action) {
     const { selectedStartDay, selectedEndDay, practitionerId, retrievedFirstTime } = action.payload;
     return state.merge({
@@ -154,8 +196,16 @@ export default handleActions({
     return state.set('selectedPractitionerId', action.payload);
   },
 
-  [SET_START_DATE](state, action) {
-    return state.set('selectedStartDate', action.payload);
+  [SET_START_DATE](state, { payload }) {
+    // If same day as today, set it to the 1 hour from now time
+    // If not, set it to the beginning of the day
+    const account = state.get('account').toJS();
+    let startDate = getStartTimeForToday(account);
+    if (!moment.tz(payload, account.timezone).isSame(startDate, 'day')) {
+      startDate = moment.tz(payload, account.timezone).hours(0).minutes(0).toISOString();
+    }
+
+    return state.set('selectedStartDate', startDate);
   },
 
   [CREATE_PATIENT](state, action) {

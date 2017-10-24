@@ -101,6 +101,17 @@ describe('/api/practitioners', () => {
           expect(body).toMatchSnapshot();
         });
     });
+
+    test('/:noFetchPractitionerId - get a practitioner with joins', () => {
+      return request(app)
+        .get(`${rootUrl}/${practitionerId}?join=weeklySchedule`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['pmsId', 'avatarUrl', 'weeklySchedules', 'startDate']);
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('POST /', () => {

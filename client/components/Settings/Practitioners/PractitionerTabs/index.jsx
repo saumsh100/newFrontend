@@ -11,7 +11,7 @@ import PractitionerTimeOff from './PractitionerTimeOff';
 import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import PractitionerActive from './PractitionerActive';
 
-import { updateEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
+import { updateEntityRequest, deleteEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 
 class PractitionerTabs extends Component {
   constructor(props) {
@@ -26,6 +26,16 @@ class PractitionerTabs extends Component {
   }
 
   componentWillMount() {
+    const {
+      practitioner,
+    } = this.props;
+
+    this.props.fetchEntities({
+      key: 'practitioners',
+      url: `/api/practitioners/${practitioner.get('id')}`,
+      join: ['weeklySchedule', 'services', 'recurringTimeOffs'],
+    });
+
     this.setState({ index: 0 });
   }
 
@@ -51,12 +61,25 @@ class PractitionerTabs extends Component {
   render() {
     const { practitioner, weeklySchedule, timeOffs, recurringTimeOffs } = this.props;
 
-    if (!practitioner && !weeklySchedule) {
+    if (!practitioner) {
       return null;
     }
 
-    let serviceIds = null;
-    serviceIds = practitioner.get('services');
+    let filteredTimeOffs = null;
+    if (timeOffs) {
+      filteredTimeOffs = timeOffs.filter((timeOff) => {
+        return timeOff.practitionerId === practitioner.get('id');
+      });
+    }
+    let filteredRecurringTimeOffs = null;
+
+    if (recurringTimeOffs) {
+      filteredRecurringTimeOffs = recurringTimeOffs.filter((recurringTimeOff) => {
+        return recurringTimeOff.practitionerId === practitioner.get('id');
+      });
+    }
+
+    let serviceIds = practitioner.get('services');
 
     return (
       <div className={styles.practTabContainer}>
@@ -100,14 +123,14 @@ class PractitionerTabs extends Component {
             <PractitionerTimeOff
               key={practitioner.get('id')}
               practitioner={practitioner}
-              timeOffs={timeOffs}
+              timeOffs={filteredTimeOffs}
             />
           </Tab>
           <Tab label="Recurring Time Off">
             <PractitionerRecurringTimeOff
               key={practitioner.get('id')}
               practitioner={practitioner}
-              recurringTimeOffs={recurringTimeOffs}
+              recurringTimeOffs={filteredRecurringTimeOffs}
             />
           </Tab>
         </Tabs>
@@ -116,9 +139,27 @@ class PractitionerTabs extends Component {
   }
 }
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities }, { practitioner }) {
+
+  const weeklyScheduleId = practitioner.get('isCustomSchedule') ? practitioner.get('weeklyScheduleId') : null;
+
+  const weeklySchedule = entities.getIn(['weeklySchedules', 'models']).get(weeklyScheduleId);
+
+  const allTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
+
+  const timeOffs = allTimeOffs.filter((timeOff) => {
+    return !timeOff.toJS().interval;
+  });
+
+  const recurringTimeOffs = allTimeOffs.filter((timeOff) => {
+    return timeOff.toJS().interval;
+  });
+
   return {
-    chairs: entities.getIn(['chairs', 'models'])
+    chairs: entities.getIn(['chairs', 'models']),
+    timeOffs,
+    recurringTimeOffs,
+    weeklySchedule,
   };
 }
 
@@ -126,6 +167,7 @@ function mapActionsToProps(dispatch) {
   return bindActionCreators({
     updateEntityRequest,
     deleteEntityRequest,
+    fetchEntities,
   }, dispatch);
 }
 

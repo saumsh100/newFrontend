@@ -1,6 +1,10 @@
 
 @import '../../ui.scss';
 
+:global(.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)) {
+  background-color: var(--primaryColor);
+}
+
 .reviewsWidgetContainer {
   width: 100%;
   height: 100%;
@@ -9,11 +13,53 @@
 }
 
 .reviewsWidgetCenter {
+  height: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   max-width: 800px;
   width: 100%;
-  max-height: 600px;
+  max-height: 650px;
   background-color: white;
   > h1 {
     margin: 0px;
   }
 }
+
+.container {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  overflow: auto;
+  > div {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    flex-direction: column;
+  }
+}
+
+.tmpContainer {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 60px;
+  box-shadow: 0 1px 0px rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
+}
+
+.col {
+  padding: 5px 10px;
+}
+
+.service {
+  font-size: 12px;
+  font-family: $medium-font;
+  padding-bottom: 5px;
+}
+
+.date {
+  font-size: 12px;
+}
+

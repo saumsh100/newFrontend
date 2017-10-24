@@ -166,6 +166,19 @@ const ModelAttributes = {
     'note',
     'practitionerId',
   ],
+
+  WeeklySchedule: [
+    'startDate',
+    'pmsId',
+    'isAdvanced',
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ],
 };
 
 /**
@@ -219,6 +232,11 @@ const SERIALIZERS = {
 
   practitionerSchedule: new Serializer('practitionerSchedule', makeConfig({
     attributes: ModelAttributes.PractitionerSchedule,
+    pluralizeType: false,
+  })),
+
+  weeklySchedule: new Serializer('practitionerWeeklySchedule', makeConfig({
+    attributes: ModelAttributes.WeeklySchedule,
     pluralizeType: false,
   })),
 };

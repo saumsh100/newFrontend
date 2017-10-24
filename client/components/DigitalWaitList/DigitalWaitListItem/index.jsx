@@ -8,6 +8,7 @@ import { Avatar, ListItem, IconButton, Icon } from '../../library';
 import styles from './styles.scss';
 
 const notAllTrue = obj => some(obj, val => !val);
+const notAllFalse = obj => some(obj, val => val);
 
 function DigitalWaitListItem(props) {
   const {
@@ -25,7 +26,7 @@ function DigitalWaitListItem(props) {
     return null;
   }
 
-  const { preferences, unavailableDays } = waitSpot.toJS();
+  const { preferences, unavailableDays, daysOfTheWeek } = waitSpot.toJS();
 
   // Set Availability to All by default and then list selected if not...
   let availComponent = <span className={styles.data}>All</span>;
@@ -36,11 +37,12 @@ function DigitalWaitListItem(props) {
     });
   }
 
-  // Set Except to None by default and then list if not empty
-  let exceptComponent = <span className={styles.data}>None</span>;
-  if (unavailableDays && unavailableDays.length) {
-    exceptComponent = unavailableDays.map((val, unavailableIndex) => {
-      return <div key={unavailableIndex} className={styles.data}>{moment(val).format('MM/DD')}</div>;
+  // Set Availability to All by default and then list selected if not...
+  let daysComponent = <span className={styles.data}>None</span>;
+  if (notAllFalse(daysOfTheWeek)) {
+    daysComponent = map(daysOfTheWeek, (val, key) => {
+      if (!val) return null;
+      return <div key={key} className={styles.data}>{key.slice(0, 3)}</div>;
     });
   }
 
@@ -58,16 +60,16 @@ function DigitalWaitListItem(props) {
   let showHoverComponents = (
     <div className={styles.patients__item_right}>
       <div className={styles.availability}>
-        Availability
+        Preferred Timeframe
       </div>
       <div className={styles.patients__item_days}>
         {availComponent}
       </div>
       <div className={styles.availability}>
-        Except
+        Preferred Days
       </div>
       <div className={styles.patients__item_days}>
-        {exceptComponent}
+        {daysComponent}
       </div>
     </div>
   );

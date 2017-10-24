@@ -6,17 +6,15 @@
   --tertiaryButtonColor: $primary-green;
 }
 
-
 .default {
   font-size: 14px;
 
   font-family: $dashboard-font;
   background-color: var(--primaryButtonColor);
-  color: $primary-white;
+  color: white;
 
   vertical-align: middle;
   cursor: pointer;
-  font-weight: bold;
   outline: none;
   text-decoration: none;
   border: none;
@@ -36,32 +34,32 @@
 
 .default:hover {
   background-color: darken($primary-color, 5%);
-  color: darken($primary-white, 5%);
+  color: darken(white, 5%);
 }
 
-.secondary { color: $primary-white;  background-color: var(--secondaryButtonColor) }
-.secondary:hover { color: $primary-white; background-color: darken($clr-dark-blue, 5%)}
+.secondary { color: white;  background-color: var(--secondaryButtonColor) }
+.secondary:hover { color: white; background-color: darken($clr-dark-blue, 5%)}
 
-.tertiary { color: $primary-white; background-color: var(--tertiaryButtonColor) }
-.tertiary:hover { color: $primary-white; background-color: darken($primary-green, 5%); }
+.tertiary { color: white; background-color: var(--tertiaryButtonColor) }
+.tertiary:hover { color: white; background-color: darken($primary-green, 5%); }
 
-.color-red { color: $primary-white; background-color: $primary-color; }
-.color-red:hover { color: $primary-white; background-color: $primary-color-hover; }
+.color-red { color: white; background-color: $primary-color; }
+.color-red:hover { color: white; background-color: $primary-color-hover; }
 
-.color-green { color: $primary-white; background-color: $primary-green; }
-.color-green:hover { color: $primary-white; background-color: darken($primary-green, 5%); }
+.color-green { color: white; background-color: $primary-green; }
+.color-green:hover { color: white; background-color: darken($primary-green, 5%); }
 
-.color-blue { color: $primary-white; background-color: $primary-light-blue; }
-.color-blue:hover { color: $primary-white; background-color: darken($primary-light-blue, 5%); }
+.color-blue { color: white; background-color: $primary-blue; }
+.color-blue:hover { color: white; background-color: darken($primary-blue, 5%); }
 
-.color-darkblue { color: $primary-white; background-color: $clr-dark-blue; }
-.color-darkblue:hover { color: $primary-white; background-color: darken($clr-dark-blue, 5%); }
+.color-darkblue { color: white; background-color: $clr-dark-blue; }
+.color-darkblue:hover { color: white-white; background-color: darken($clr-dark-blue, 5%); }
 
-.color-yellow { color: $primary-white; background-color: $primary-yellow; }
-.color-yellow:hover { color: $primary-white; background-color: darken($primary-yellow, 5%); }
+.color-yellow { color: white; background-color: $primary-yellow; }
+.color-yellow:hover { color: white; background-color: darken($primary-yellow, 5%); }
 
-.color-dark { color: $primary-white; background-color: $primary-dark; }
-.color-dark:hover { color: $primary-white; background-color: darken($primary-dark, 5%); }
+.color-dark { color: white; background-color: $primary-dark; }
+.color-dark:hover { color: white; background-color: darken($primary-dark, 5%); }
 
 .color-grey { color: $primary-white; background-color: $background-color; }
 .color-grey:hover { color: $primary-white; background-color: darken($background-color, 5%); }

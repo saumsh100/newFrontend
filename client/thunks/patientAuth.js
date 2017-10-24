@@ -2,7 +2,7 @@
 import axios from 'axios';
 import jwt from 'jwt-decode';
 import LogRocket from 'logrocket';
-import { loginSuccess, logout as authLogout } from '../actions/auth';
+import { loginSuccess, logout as authLogout, setResetEmail } from '../actions/auth';
 import PatientUser from '../entities/models/PatientUser';
 
 const Token = {
@@ -21,20 +21,19 @@ const Token = {
 };
 
 const updateSessionByToken = (token, dispatch) => {
-  // Do we need to set?
+  // Set token in local storage
   Token.save(token);
-  // const { sessionId } = jwt(token);
-  console.log(token);
   return fetchPatient()
     .then((session) => {
       const sessionId = session.sessionId;
       const patientUser = new PatientUser(session.patientUser);
+      // set's isAuthenticated and user data
       dispatch(loginSuccess({ sessionId, patientUser }));
       return patientUser;
     })
     .catch((err) => {
-      // Catch 401 from /auth/me and logout
-      console.error(err);
+      // Catch 401 from /auth/me and logout, or errors from React renders
+      console.error('Error Fetching Patient', err);
       Token.remove();
       dispatch(authLogout());
     });
@@ -65,13 +64,10 @@ export function logout() {
 }
 
 export function resetPatientUserPassword(email) {
-  console.log('adssadasd')
-  return (dispatch, getState) => {
+  return (dispatch) => {
     return axios.post('/auth/reset', { email })
       .then(() => {
-      })
-      .catch((err) => {
-        console.log(err);
+        dispatch(setResetEmail(email));
       });
   };
 }
@@ -97,8 +93,8 @@ export function createPatient(values, ignoreConfirmationText) {
   return function (dispatch) {
     const config = ignoreConfirmationText ? { params: { ignoreConfirmationText: true } } : null;
     return axios.post('/auth/signup', values, config)
-    // TODO: dispatch function that successfully created patient, plug in, confirm code
-    // TODO: then allow them to create the patient
+      // TODO: dispatch function that successfully created patient, plug in, confirm code
+      // TODO: then allow them to create the patient
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch).then(() => token));
   };
 }

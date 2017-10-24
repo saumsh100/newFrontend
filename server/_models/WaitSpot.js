@@ -26,8 +26,19 @@ export default function (sequelize, DataTypes) {
         mornings: true,
         afternoons: true,
         evenings: true,
-        weekdays: true,
-        weekends: true,
+      },
+    },
+
+    daysOfTheWeek: {
+      type: DataTypes.JSONB,
+      defaultValue: {
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
       },
     },
 

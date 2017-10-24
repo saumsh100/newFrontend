@@ -23,7 +23,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .primaryColorBorder {
-  border-bottom: 1px solid $primary-color;
+  border-bottom: 1px solid var(--primaryButtonColor);
 }
 
 .primaryWhiteBorder {
@@ -69,7 +69,7 @@ $empty-grey: darken(lightgrey, 5%);
 
 .selectedListItem {
   padding-left: 15px;
-  border-left: $primary-color $selection-border;
+  border-left: var(--primaryButtonColor) $selection-border;
 
 }
 

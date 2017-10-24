@@ -13,11 +13,10 @@ import styles from './styles.scss';
 const customSubmitButton = (
   <Button
     type="submit"
-    color="red"
     icon="email"
     className={styles.customSubmitButton}
   >
-    Login with Email
+    Login and continue
   </Button>
 );
 
@@ -31,11 +30,13 @@ class Login extends Component {
   handleLogin(values) {
     return this.props.login(values)
       .then(() => {
+        // TODO: this should be conditional based on where the component came from
         // Important to return so that it will not navigate if errored
-        return this.props.updateReview();
+        // return this.props.updateReview();
       })
       .then(() => {
-        this.props.history.push('./submitted');
+        // TODO: this should be conditional based on where the component came from
+        this.props.history.push('./book/review');
       })
       .catch(({ data, status }) => {
         // TODO: this needs proper error handling for the form
@@ -48,15 +49,42 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
-        <h2>Login</h2>
+      <div className={styles.loginWrapper}>
+        <div className={styles.header}>
+          Confirm your request
+        </div>
+        <div className={styles.subHeader}>
+          Don't have an account?
+        </div>
+        <div className={styles.message}>
+          Sign up for an account to confirm your request.
+        </div>
+        <Link to="./signup">
+          <Button
+            className={styles.joinButton}
+          >
+            Join now
+          </Button>
+        </Link>
+        <div className={styles.score}>
+          <hr />
+          <span className={styles.scoreText}>
+            or
+          </span>
+        </div>
+        <div className={styles.subHeader}>
+          If you have an account, sign in.
+        </div>
         <LoginForm
+          className={styles.loginFormWrapper}
           onLogin={this.handleLogin}
           submitButton={customSubmitButton}
         />
-        <Link to="./signup">
-          <h3>Or Signup</h3>
-        </Link>
+        <div className={styles.linkWrapper}>
+          <Link to="./reset">
+            Forgot your password?
+          </Link>
+        </div>
       </div>
     );
   }
