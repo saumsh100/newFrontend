@@ -31,7 +31,7 @@ class PatientTable extends Component {
       data: [],
       limit: 20,
       totalPatients: 0,
-      currentPage: 0,
+      page: 0,
       sorted: [],
       expanded: {},
     };
@@ -73,7 +73,7 @@ class PatientTable extends Component {
       page: index,
     });
     this.setState({
-      currentPage: index,
+      page: index,
     });
   }
 
@@ -100,9 +100,10 @@ class PatientTable extends Component {
   onSort(newSorted) {
     this.fetchData({
       sort: newSorted,
-      page: 0,
+      page: this.state.page,
       limit: this.state.limit,
     });
+
     this.setState({
       sorted: newSorted,
     });
@@ -209,11 +210,10 @@ class PatientTable extends Component {
         Cell: (props) => {
           return (<div className={styles.displayFlex}>
             {props.value ? <Icon icon="calendar-o" /> : null}
-            <div className={styles.cellText}>{props.value}</div>
+            <div className={styles.cellText_lastAppt}>{props.value}</div>
           </div>);
         },
         filterable: false,
-        sortable: false,
         maxWidth: 280,
         className: styles.colBg,
       },
@@ -234,15 +234,14 @@ class PatientTable extends Component {
           </div>);
         },
         filterable: false,
-        sortable: false,
         maxWidth: 280,
         className: styles.colBg,
       },
       {
         Header: 'Production Revenue',
-        id: 'productionRevenue',
+        id: 'totalAmount',
         accessor: d => {
-          return d.hasOwnProperty('productionRevenue') ? `$${d.productionRevenue.toFixed(2)}` : '';
+          return d.hasOwnProperty('totalAmount') ? `$${d.totalAmount.toFixed(2)}` : '';
         },
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_revenue}>{props.value}</div></div>,
         filterable: false,
@@ -262,7 +261,7 @@ class PatientTable extends Component {
         />
         <ReactTable
           data={this.state.data}
-          page={this.state.currentPage}
+          page={this.state.page}
           pages={Math.floor(this.state.totalPatients / this.state.limit)}
           sorted={this.state.sorted}
           defaultPageSize={this.state.limit}

@@ -38,35 +38,25 @@ export function mostBusinessPatient(startDate, endDate, accountId) {
   });
 }
 
-export function mostBusinessSinglePatient(startDate, endDate, accountId, patientId, filter) {
+export function mostBusinessSinglePatient(startDate, endDate, accountId, patientId) {
   return Patient.findAll({
     where: {
       accountId,
       id: patientId,
     },
     attributes: [
-      'Patient.firstName',
-      'Patient.lastName',
-      'Patient.birthDate',
       [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
     ],
     include: [
       {
         model: DeliveredProcedure,
         as: 'deliveredProcedures',
-        where: {
-          entryDate: {
-            gt: startDate,
-            lt: endDate,
-          },
-        },
         attributes: [],
         duplicating: false,
         required: true,
       },
     ],
     group: ['Patient.id'],
-    order: [[sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'DESC']],
     raw: true,
     limit: 1,
   });

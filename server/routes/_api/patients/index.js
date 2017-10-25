@@ -8,7 +8,7 @@ import { mostBusinessPatient, mostBusinessClinic, mostBusinessSinglePatient } fr
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
-import { Appointment, Chat, Patient, Call, SentReminder, Event } from '../../../_models';
+import { Appointment, Chat, Patient, Call, SentReminder, Event, DeliveredProcedure } from '../../../_models';
 import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
 import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
 import { fetchCallEvents } from '../../../lib/events/Calls/index';
@@ -72,6 +72,18 @@ function ageRangePercent(array) {
   newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
   return newArray;
 }
+
+function SortByMomentDesc(a, b){
+  if (moment(b).isBefore(moment(a))) return -1;
+  if (moment(b).isAfter(moment(a))) return 1;
+  return 0;
+};
+
+function SortByMomentAsc(a, b) {
+  if (moment(b).isBefore(moment(a))) return 1;
+  if (moment(b).isAfter(moment(a))) return -1;
+  return 0;
+};
 
 patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
@@ -526,6 +538,8 @@ eventsRouter.get('/:patientId/events', async (req, res, next) => {
  */
 patientsRouter.get('/table', async (req, res, next) => {
   try {
+    const start = Date.now();
+    console.log('Table API Started');
     const {
       limit,
       filter,
@@ -534,6 +548,7 @@ patientsRouter.get('/table', async (req, res, next) => {
       smartFilter,
     } = req.query;
 
+    console.log(req.query)
     const filterBy = {
       accountId: req.accountId,
     };
@@ -550,10 +565,16 @@ patientsRouter.get('/table', async (req, res, next) => {
 
     const orderBy = [];
 
+    let smartSortObj = null;
+
     if (sort && sort.length) {
       const sortObj = JSON.parse(sort[0]);
-      const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
-      orderBy.push([sortObj.id, descOrAsc]);
+      if (sortObj.id === 'nextAppt' || sortObj.id === 'lastAppt') {
+        smartSortObj = sortObj;
+      } else {
+        const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
+        orderBy.push([sortObj.id, descOrAsc]);
+      }
     }
 
     const patientCount = await Patient.count({
@@ -568,6 +589,7 @@ patientsRouter.get('/table', async (req, res, next) => {
       limit,
       order: orderBy,
     });
+    console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
 
     // Getting nextAppt, lastAppt, etc.
     const calcPatientData = patients.map(async (patient) => {
@@ -598,10 +620,11 @@ patientsRouter.get('/table', async (req, res, next) => {
             ...filters.nextAppt,
           },
 
-          order: [['startDate', 'ASC']],
           limit: 1,
           required: false,
+          order: [['startDate', 'ASC']],
         });
+
 
         if (nextAppt && nextAppt.length) {
           patient.nextAppt = nextAppt[0].startDate;
@@ -612,25 +635,27 @@ patientsRouter.get('/table', async (req, res, next) => {
           where: {
             patientId: patient.id,
             startDate: {
-              $between: [moment('1970-01-01').toISOString(), new Date()],
+              $lt: new Date(),
             },
             isDeleted: false,
             isCancelled: false,
           },
-          order: [['startDate', 'DESC']],
           limit: 1,
           required: false,
+          order: [['startDate', 'DESC']],
         });
 
         if (lastAppt && lastAppt.length) {
           patient.lastAppt = lastAppt[0].startDate;
         }
 
+
         const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), req.accountId, patient.id)
 
         if (productionRevenue && productionRevenue.length) {
-          patient.productionRevenue = productionRevenue[0].totalAmount;
+          patient.totalAmount = productionRevenue[0].totalAmount;
         }
+
         patient.totalPatients = patientCount;
         return patient;
       } catch (error) {
@@ -639,7 +664,18 @@ patientsRouter.get('/table', async (req, res, next) => {
     });
 
     Promise.all(calcPatientData).then((data) => {
-      return res.send(normalize('patients', data));
+      console.log(`--- ${Date.now() - start}ms elapsed calcData`);
+
+      let sortedData = data;
+      /*if (smartSortObj) {
+        sortedData = data.sort((a, b) => {
+          return (smartSortObj.desc ? SortByMomentDesc(a[smartSortObj.id], b[smartSortObj.id]) :
+            SortByMomentAsc(a[smartSortObj.id], b[smartSortObj.id]));
+        });
+      }*/
+
+      const returnData = normalize('patients', sortedData);
+      return res.send(returnData);
     });
   } catch (error) {
     next(error);
