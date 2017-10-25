@@ -565,12 +565,12 @@ patientsRouter.get('/table', async (req, res, next) => {
 
     const orderBy = [];
 
-    let smartSortObj = null;
+    let apptSortObj = null;
 
     if (sort && sort.length) {
       const sortObj = JSON.parse(sort[0]);
       if (sortObj.id === 'nextAppt' || sortObj.id === 'lastAppt') {
-        smartSortObj = sortObj;
+        apptSortObj = sortObj;
       } else {
         const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
         orderBy.push([sortObj.id, descOrAsc]);
@@ -613,42 +613,49 @@ patientsRouter.get('/table', async (req, res, next) => {
           filters[smartFilterObj.id] = smartFilterObj.filter;
         }
 
-        const nextAppt = await Appointment.findAll({
+        const appointments = await Appointment.findAll({
           raw: true,
           where: {
             patientId: patient.id,
-            ...filters.nextAppt,
           },
-
-          limit: 1,
-          required: false,
-          order: [['startDate', 'ASC']],
-        });
-
-
-        if (nextAppt && nextAppt.length) {
-          patient.nextAppt = nextAppt[0].startDate;
-        }
-
-        const lastAppt = await Appointment.findAll({
-          raw: true,
-          where: {
-            patientId: patient.id,
-            startDate: {
-              $lt: new Date(),
-            },
-            isDeleted: false,
-            isCancelled: false,
-          },
-          limit: 1,
-          required: false,
           order: [['startDate', 'DESC']],
         });
 
-        if (lastAppt && lastAppt.length) {
-          patient.lastAppt = lastAppt[0].startDate;
+        const today = new Date();
+        let nextAppt = null;
+        let lastAppt = null;
+
+
+        for (let i = 0; i < appointments.length; i++) {
+          const app = appointments[i];
+          const startDate = app.startDate;
+          if (!nextAppt && moment(startDate).isAfter(today)) {
+            nextAppt = startDate;
+          } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
+            nextAppt = startDate;
+            break;
+          }
         }
 
+        for (let i = 0; i < appointments.length; i++) {
+          const app = appointments[i];
+          const startDate = app.startDate;
+
+          if (!lastAppt && moment(startDate).isBefore(moment())) {
+            lastAppt = startDate;
+          } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
+            lastAppt = startDate;
+            break;
+          }
+        }
+
+        if (nextAppt) {
+          patient.nextAppt = nextAppt;
+        }
+
+        if (lastAppt) {
+          patient.lastAppt = lastAppt;
+        }
 
         const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), req.accountId, patient.id)
 
@@ -667,12 +674,12 @@ patientsRouter.get('/table', async (req, res, next) => {
       console.log(`--- ${Date.now() - start}ms elapsed calcData`);
 
       let sortedData = data;
-      /*if (smartSortObj) {
+      if (apptSortObj) {
         sortedData = data.sort((a, b) => {
-          return (smartSortObj.desc ? SortByMomentDesc(a[smartSortObj.id], b[smartSortObj.id]) :
-            SortByMomentAsc(a[smartSortObj.id], b[smartSortObj.id]));
+          return (apptSortObj.desc ? SortByMomentDesc(a[apptSortObj.id], b[apptSortObj.id]) :
+            SortByMomentAsc(a[apptSortObj.id], b[apptSortObj.id]));
         });
-      }*/
+      }
 
       const returnData = normalize('patients', sortedData);
       return res.send(returnData);

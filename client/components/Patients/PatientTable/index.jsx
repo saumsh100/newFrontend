@@ -29,13 +29,13 @@ class PatientTable extends Component {
     super(props);
     this.state = {
       data: [],
-      limit: 20,
+      limit: 15,
       totalPatients: 0,
       page: 0,
       sorted: [],
       expanded: {},
     };
-    this.fetchData = debounce(this.fetchData, 500);
+    this.fetchData = debounce(this.fetchData, 300);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
     this.onFilter = this.onFilter.bind(this);
@@ -267,7 +267,7 @@ class PatientTable extends Component {
           defaultPageSize={this.state.limit}
           loading={!wasFetched}
           expanded={this.state.expanded}
-          pageSizeOptions={[20, 25, 50, 100]}
+          pageSizeOptions={[15, 20, 25, 50, 100]}
           columns={columns}
           className="-striped -highlight"
           manual
