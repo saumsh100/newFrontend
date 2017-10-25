@@ -35,6 +35,7 @@ import { namespaces } from '../../config/globals';
  * @returns {Promise.<void>}
  */
 export async function sendRecallsForAccount(account, date) {
+  console.log(`Sending recalls for ${account.name}`);
   const { recalls, name } = account;
   for (const recall of recalls) {
     const { primaryType } = recall;

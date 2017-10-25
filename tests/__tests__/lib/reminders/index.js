@@ -6,10 +6,9 @@ import sendReminder from '../../../../server/lib/reminders/sendReminder';
 import { Account } from '../../../../server/_models';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
+import { patientId } from '../../../_util/seedTestPatients';
 import { seedTestAppointments, appointmentId } from '../../../_util/seedTestAppointments';
 import { seedTestReminders, reminderId1, reminderId2 } from '../../../_util/seedTestReminders';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
 
 // Necessary for mocking
 const sendRemindersForAccountTmp = RemindersLibrary.sendRemindersForAccount;

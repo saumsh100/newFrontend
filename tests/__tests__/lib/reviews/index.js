@@ -1,116 +1,134 @@
 
-/**
- * MAJOR DISCLAIMER: this assumes the DB is seeded with seeds!
- */
-
 import { v4 as uuid } from 'uuid';
-import moment from 'moment';
-import {
-  Account,
-  Appointment,
-  Patient,
-  Practitioner,
-  SentReview,
-  Review,
-} from '../../../../server/_models';
-import {
-  getReviewAppointments,
-} from '../../../../server/lib/reviews/helpers';
+import * as ReviewsLibrary from '../../../../server/lib/reviews';
+import * as ReviewsHelpers from '../../../../server/lib/reviews/helpers';
+import sendReview from '../../../../server/lib/reviews/sendReview';
+import { Account } from '../../../../server/_models';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { patientId } from '../../../_util/seedTestPatients';
+import { seedTestAppointments, appointmentId } from '../../../_util/seedTestAppointments';
 
-// TODO: make seeds more modular so we can see here
-// const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
-// const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
-const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
-const appointmentId = uuid();
+// Necessary for mocking
+const sendReviewsForAccountTmp = ReviewsLibrary.sendReviewsForAccount;
+const sendReviewEmailTmp = sendReview.email;
+const getReviewAppointments = ReviewsHelpers.getReviewAppointments;
 
-const makeApptData = (data = {}) => Object.assign({
-  accountId,
-  patientId,
-  practitionerId,
-}, data);
+const iso = (date = (new Date())) => date.toISOString();
 
-const makeSentReviewData = (data = {}) => Object.assign({
-  patientId,
-  appointmentId,
-  accountId,
-}, data);
+// const start = Date.now();
 
-const makeReviewData = (data = {}) => Object.assign({
-  patientId,
-  accountId,
-  stars: 3,
-}, data);
-
-const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
-const dates = (y, m, d, h) => {
-  return {
-    startDate: date(y, m, d, h),
-    endDate: date(y, m, d, h + 1),
-  };
-};
-
-describe('Reviews Calculation Library', () => {
-  beforeEach(async () => {
+describe('Reviews Job Integration Tests', () => {
+  // TODO: mock the sendRecall function, and test that it has been called for the appropriate patients
+  beforeAll(async () => {
     await wipeAllModels();
     await seedTestUsers();
-    await seedTestPatients();
-    await seedTestPractitioners();
+    await seedTestAppointments();
   });
 
   afterAll(async () => {
     await wipeAllModels();
   });
 
-  describe('Helpers', () => {
-    describe('#getReviewAppointments', () => {
-      test('should be a function', () => {
-        expect(typeof getReviewAppointments).toBe('function');
-      });
+  describe('computeReviewsAndSend', () => {
+    beforeEach(async () => {
+      ReviewsLibrary.sendReviewsForAccount = jest.fn(() => console.log('Calling sendReviewsForAccount Mock'));
 
-      let account;
-      let appointments;
-      beforeEach(async () => {
-        account = await Account.findById(accountId);
-        appointments = await Appointment.bulkCreate([
-          makeApptData({ ...dates(2017, 7, 5, 8) }), // Aug 5th at 8
-          makeApptData({ ...dates(2017, 7, 6, 10) }), // Aug 6th at 10
-          makeApptData({ id: appointmentId, ...dates(2017, 8, 8, 10) }), // Sept. 8th at 10
-          makeApptData({ ...dates(2017, 8, 9, 10) }), // Sept. 9th at 10
-        ]);
-      });
+      await Account.update({ canSendReviews: false }, { where: {} });
+    });
 
-      test('should return 1 appointment that needs a review email', async () => {
-        const currentDate = date(2017, 8, 9, 7); // Sept. 9th 7am
-        const appts = await getReviewAppointments({ account, date: currentDate });
-        expect(appts.length).toBe(1);
-        expect(appts[0].id).toBe(appointments[2].id);
-      });
+    afterAll(async () => {
+      ReviewsLibrary.sendReviewsForAccount = sendReviewsForAccountTmp;
+    });
 
-      test('should return 0 appointments because 1 already has a SentReview', async () => {
-        const currentDate = date(2017, 8, 9, 7); // Sept. 9th 7am
+    /**
+     * There is 1 account that has canSendReviews=false,
+     * therefore, sendReviewsForAccount should not be called
+     */
+    test('should NOT call sendReviewsForAccount if all turned off', async () => {
+      await ReviewsLibrary.computeReviewsAndSend({ date: (new Date()).toISOString() });
+      expect(ReviewsLibrary.sendReviewsForAccount).not.toHaveBeenCalled();
+    });
 
-        // has same appointmentId as one returned
-        await SentReview.create(makeSentReviewData());
-        const appts = await getReviewAppointments({ account, date: currentDate });
-        expect(appts.length).toBe(0);
-      });
+    /**
+     * There is 1 account that has canSendReviews=false,
+     * but we update it to true,
+     * therefore, sendReviewsForAccount should be called
+     */
+    test('should call sendReviewsForAccount if 1 turned on', async () => {
+      const account = await Account.findById(accountId);
+      await account.update({ canSendReviews: true });
 
-      test('should return 0 appointments because patient has reviewed already', async () => {
-        const currentDate = date(2017, 8, 9, 7); // Sept. 9th 7am
+      await ReviewsLibrary.computeReviewsAndSend({ date: (new Date()).toISOString() });
+      expect(ReviewsLibrary.sendReviewsForAccount).toHaveBeenCalledTimes(1);
+    });
+  });
 
-        // make review for patient
-        await Review.create(makeReviewData());
-        const appts = await getReviewAppointments({ account, date: currentDate });
-        expect(appts.length).toBe(0);
-      });
+  describe('sendReviewsForAccount', () => {
+    let account;
+    beforeEach(async () => {
+      // Make it return empty array by default
+      ReviewsHelpers.getReviewAppointments = jest.fn(() => []);
+      sendReview.email = jest.fn(() => console.log('Mock sendReview.email called'));
 
-      // TODO: test that appts are not returned for patients that have had a sentReview in last week
-      // TODO: test that appts are not returned for duplicate patients (say 2 appointments in last week)
+      account = await Account.findById(accountId);
+    });
+
+    afterAll(async () => {
+      ReviewsHelpers.getReviewAppointments = getReviewAppointments;
+      sendReview.email = sendReviewEmailTmp;
+    });
+
+    /**
+     * With 1 recall, it should call getPatientsDueForRecall, but not call sendRecall.email
+     */
+    test('should call getReviewAppointments', async () => {
+      await ReviewsLibrary.sendReviewsForAccount(account, iso());
+      expect(ReviewsHelpers.getReviewAppointments).toHaveBeenCalledTimes(1);
+      expect(sendReview.email).not.toHaveBeenCalled();
+    });
+
+    /**
+     * With 1 recall, and 1 patient, it should call sendRecall.email
+     */
+    test('should call sendReview.email for the 1 patient', async () => {
+      // Make sure it returns a patient
+      ReviewsHelpers.getReviewAppointments = jest.fn(() => [
+        {
+          id: appointmentId,
+          startDate: iso(),
+          endDate: iso(),
+          patient: {
+            id: patientId,
+            email: 'justin+test@carecru.com',
+          },
+        },
+      ]);
+
+      await ReviewsLibrary.sendReviewsForAccount(account, iso());
+      expect(ReviewsHelpers.getReviewAppointments).toHaveBeenCalledTimes(1);
+      expect(sendReview.email).toHaveBeenCalledTimes(1);
+    });
+
+    /**
+     * With 1 recall, and 1 patient without an email, it should NOT call sendRecall.email
+     */
+    test('should NOT call sendRecall.email for the 1 patient cause it has no email', async () => {
+      // Make sure it returns a patient
+      ReviewsHelpers.getReviewAppointments = jest.fn(() => [
+        {
+          id: appointmentId,
+          startDate: iso(),
+          endDate: iso(),
+          patient: {
+            id: patientId,
+          },
+        },
+      ]);
+
+      await ReviewsLibrary.sendReviewsForAccount(account, iso());
+      expect(ReviewsHelpers.getReviewAppointments).toHaveBeenCalledTimes(1);
+      expect(sendReview.email).not.toHaveBeenCalled();
     });
   });
 });
-

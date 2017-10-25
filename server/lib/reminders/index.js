@@ -72,6 +72,7 @@ async function sendSocket(io, chatId) {
  * @returns {Promise.<void>}
  */
 export async function sendRemindersForAccount(account, date) {
+  console.log(`Sending reminders for ${account.name}`);
   const { reminders } = account;
   for (const reminder of reminders) {
     const { primaryType } = reminder;
