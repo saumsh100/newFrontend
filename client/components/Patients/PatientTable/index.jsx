@@ -10,8 +10,8 @@ import 'react-table/react-table.css';
 import { Icon } from '../../library';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
-import PatientRow from './PatientRow';
-import HeaderComponent from './HeaderComponent';
+import PatientNameColumn from './PatientNameColumn';
+import HeaderSection from './HeaderSection';
 import styles from './styles.scss';
 
 function getEntities(entities) {
@@ -34,11 +34,12 @@ class PatientTable extends Component {
       page: 0,
       sorted: [],
       expanded: {},
+      search: '',
     };
-    this.fetchData = debounce(this.fetchData, 400);
+    this.fetchData = debounce(this.fetchData, 500);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
-    this.onFilter = this.onFilter.bind(this);
+    this.onFilterSearch = this.onFilterSearch.bind(this);
     this.onSort = this.onSort.bind(this);
     this.handleRowClick = this.handleRowClick.bind(this);
     this.onSmartFilter = this.onSmartFilter.bind(this);
@@ -88,12 +89,15 @@ class PatientTable extends Component {
     });
   }
 
-  onFilter(column) {
+  onFilterSearch(value) {
     this.fetchData({
-      filter: column,
+      search: value,
       page: 0,
       limit: this.state.limit,
       sort: this.state.sorted,
+    });
+    this.setState({
+      search: value,
     });
   }
 
@@ -102,6 +106,7 @@ class PatientTable extends Component {
       sort: newSorted,
       page: this.state.page,
       limit: this.state.limit,
+      search: this.state.search,
     });
 
     this.setState({
@@ -153,7 +158,7 @@ class PatientTable extends Component {
     const columns = [
       {
         Header: '#',
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.index + 1}</div></div>,
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{((this.state.page * this.state.limit) + props.index) + 1}</div></div>,
         filterable: false,
         sortable: false,
         maxWidth: 50,
@@ -165,7 +170,7 @@ class PatientTable extends Component {
         Cell: row => {
           return (
             <div className={styles.displayFlex}>
-              <PatientRow
+              <PatientNameColumn
                 value={row.value}
                 patient={row.original}
                 redirect={() => {
@@ -175,6 +180,7 @@ class PatientTable extends Component {
             </div>
           );
         },
+        filterable: false,
         className: styles.colBg,
       },
       {
@@ -186,7 +192,6 @@ class PatientTable extends Component {
         },
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.value}</div></div>,
         filterable: false,
-        maxWidth: 80,
         className: styles.colBg,
       },
       {
@@ -194,7 +199,6 @@ class PatientTable extends Component {
         accessor: 'status',
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_status}>{props.value}</div></div>,
         filterable: false,
-        maxWidth: 80,
         className: styles.colBg,
       },
       {
@@ -209,12 +213,10 @@ class PatientTable extends Component {
         },
         Cell: (props) => {
           return (<div className={styles.displayFlex}>
-            {props.value ? <Icon icon="calendar-o" /> : null}
             <div className={styles.cellText_lastAppt}>{props.value}</div>
           </div>);
         },
         filterable: false,
-        maxWidth: 280,
         className: styles.colBg,
       },
       {
@@ -229,12 +231,10 @@ class PatientTable extends Component {
         },
         Cell: (props) => {
           return (<div className={styles.displayFlex}>
-            {props.value ? <Icon icon="calendar-o" /> : null}
             <div className={styles.cellText_lastAppt}>{props.value}</div>
           </div>);
         },
         filterable: false,
-        maxWidth: 280,
         className: styles.colBg,
       },
       {
@@ -246,18 +246,19 @@ class PatientTable extends Component {
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_revenue}>{props.value}</div></div>,
         filterable: false,
         sortable: false,
-        maxWidth: 280,
         className: styles.colBg,
       },
     ];
 
     return (
       <div className={styles.mainContainer}>
-        <HeaderComponent
+        <HeaderSection
           totalPatients={this.state.totalPatients}
           createEntityRequest={createEntityRequest}
           addSmartFilter={this.onSmartFilter}
           reinitializeTable={this.reinitializeTable}
+          onFilterSearch={this.onFilterSearch}
+          searchValue={this.state.search}
         />
         <ReactTable
           data={this.state.data}
@@ -281,9 +282,6 @@ class PatientTable extends Component {
           }}
           onPageChange={(pageIndex) => {
             this.pageChange(pageIndex);
-          }}
-          onFilteredChange={(column, value) => {
-            this.onFilter(column, value);
           }}
           onSortedChange={(newSorted, column, shiftKey) => {
             this.onSort(newSorted);

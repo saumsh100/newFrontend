@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import moment from 'moment';
 import { mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
+import PatientSearch from '../../../lib/patientSearch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { Appointment, Patient } from '../../../_models';
@@ -75,6 +76,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     const {
       limit,
       filter,
+      search,
       sort,
       page,
     } = req.query;
@@ -83,17 +85,9 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       accountId: req.accountId,
     };
 
-    if (filter && filter.length) {
-      const firstFilter = JSON.parse(filter[0]);
-      const id = firstFilter.id;
-      const value = firstFilter.value;
 
-      filterBy[id] = {
-        $iRegexp: value,
-      };
-    }
 
-    const orderBy = [];
+    const patientSortBy = [];
 
     let apptSortObj = null;
 
@@ -103,22 +97,32 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
         apptSortObj = sortObj;
       } else {
         const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
-        orderBy.push([sortObj.id, descOrAsc]);
+        patientSortBy.push([sortObj.id, descOrAsc]);
       }
     }
 
     const patientCount = await Patient.count({
       where: filterBy,
-      order: orderBy,
+      order: patientSortBy,
     });
 
-    const patients = await Patient.findAll({
+    const searchQuery = {
       raw: true,
       where: filterBy,
       offset: limit * page,
       limit,
-      order: orderBy,
-    });
+      order: patientSortBy,
+    };
+
+    let patients = null;
+    if (!search) {
+      patients = await Patient.findAll({
+        ...searchQuery,
+      });
+    } else {
+      patients = await PatientSearch(search, req.accountId, searchQuery);
+    }
+
     console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
 
     // Getting nextAppt, lastAppt, etc.

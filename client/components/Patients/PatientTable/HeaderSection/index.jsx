@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, DialogBox } from '../../../library';
+import { Button, DialogBox, Input } from '../../../library';
 import NewPatientForm from '../NewPatientForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import SmartFilters from '../SmartFilters';
 import styles from '../styles.scss';
-import FilterTags from "../SmartFilters/FilterTags";
+import FilterTags from '../SmartFilters/FilterTags';
 
 
-class HeaderComponent extends Component {
+class HeaderSection extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -108,6 +108,7 @@ class HeaderComponent extends Component {
     const {
       smartFilters,
       totalPatients,
+      onFilterSearch,
     } = this.props;
 
     const formName = 'newUser';
@@ -119,9 +120,19 @@ class HeaderComponent extends Component {
 
     return (
       <div className={styles.header}>
-        <div className={styles.header_title}> All Patients </div>
-        <div className={styles.header_subHeader}>
-          Showing {totalPatients} Patients
+        <div>
+          <div className={styles.header_title}> All Patients </div>
+          <div className={styles.header_subHeader}>
+            Showing {totalPatients} Patients
+          </div>
+        </div>
+        <div className={styles.searchBar}>
+          <Input
+            label="Search"
+            onChange={e => onFilterSearch(e.target.value)}
+            icon="search"
+            value={this.props.searchValue}
+          />
         </div>
         <FilterTags
           smartFilters={this.state.filter}
@@ -136,16 +147,10 @@ class HeaderComponent extends Component {
               addFilterToTable={this.addFilterToTable}
             />
           </div>
-          <Button
-            color="white"
-            compact
-            onClick={() => this.openFilter()}
-          >
-            Smart Filters
-          </Button>
+
           <Button
             onClick={() => this.setActive()}
-            compact
+            border="blue"
           >
             Add New Patient
           </Button>
@@ -169,4 +174,4 @@ class HeaderComponent extends Component {
   }
 }
 
-export default HeaderComponent;
+export default HeaderSection;

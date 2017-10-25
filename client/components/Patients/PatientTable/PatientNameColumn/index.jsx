@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Avatar } from '../../../library';
 import styles from './styles.scss';
 
-export default function PatientRow(props) {
+export default function PatientNameColumn(props) {
   const {
     value,
     patient,
