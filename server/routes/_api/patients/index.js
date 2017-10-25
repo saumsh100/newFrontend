@@ -73,18 +73,6 @@ function ageRangePercent(array) {
   return newArray;
 }
 
-function SortByMomentDesc(a, b){
-  if (moment(b).isBefore(moment(a))) return -1;
-  if (moment(b).isAfter(moment(a))) return 1;
-  return 0;
-};
-
-function SortByMomentAsc(a, b) {
-  if (moment(b).isBefore(moment(a))) return 1;
-  if (moment(b).isAfter(moment(a))) return -1;
-  return 0;
-};
-
 patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async (req, res, next) => {
   const startDate = moment().subtract(1, 'years').toISOString();
   const endDate = moment().toISOString();
@@ -509,7 +497,8 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
  * Fetching events for a patient.
  * params: patientId,
  */
-eventsRouter.get('/:patientId/events', async (req, res, next) => {
+
+eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async (req, res, next) => {
   try {
     const accountId = req.accountId;
 
@@ -521,169 +510,16 @@ eventsRouter.get('/:patientId/events', async (req, res, next) => {
 
     const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents);
 
-    const filteredEvents = filterEventsByQuery(totalEvents, req.query).sort((a, b) => {
-      if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
-      if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
-      return 0;
+    Promise.all(totalEvents).then(() => {
+      const filteredEvents = filterEventsByQuery(totalEvents, req.query).sort((a, b) => {
+        if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
+        if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
+        return 0;
+      });
+
+      res.send(normalize('events', filteredEvents));
     });
 
-    res.send(normalize('events', filteredEvents));
-  } catch (error) {
-    next(error);
-  }
-});
-
-/**
- * Fetching patients for patients table.
- */
-patientsRouter.get('/table', async (req, res, next) => {
-  try {
-    const start = Date.now();
-    console.log('Table API Started');
-    const {
-      limit,
-      filter,
-      sort,
-      page,
-      smartFilter,
-    } = req.query;
-
-    console.log(req.query)
-    const filterBy = {
-      accountId: req.accountId,
-    };
-
-    if (filter && filter.length) {
-      const firstFilter = JSON.parse(filter[0]);
-      const id = firstFilter.id;
-      const value = firstFilter.value;
-
-      filterBy[id] = {
-        $iRegexp: value,
-      };
-    }
-
-    const orderBy = [];
-
-    let apptSortObj = null;
-
-    if (sort && sort.length) {
-      const sortObj = JSON.parse(sort[0]);
-      if (sortObj.id === 'nextAppt' || sortObj.id === 'lastAppt') {
-        apptSortObj = sortObj;
-      } else {
-        const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
-        orderBy.push([sortObj.id, descOrAsc]);
-      }
-    }
-
-    const patientCount = await Patient.count({
-      where: filterBy,
-      order: orderBy,
-    });
-
-    const patients = await Patient.findAll({
-      raw: true,
-      where: filterBy,
-      offset: limit * page,
-      limit,
-      order: orderBy,
-    });
-    console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
-
-    // Getting nextAppt, lastAppt, etc.
-    const calcPatientData = patients.map(async (patient) => {
-      try {
-        const filters = {
-          nextAppt: {
-            startDate: {
-              $gt: new Date(),
-            },
-            isDeleted: false,
-            isCancelled: false,
-          },
-          lastAppt: {
-            $between: [moment('1970-01-01').toISOString(), new Date()],
-          },
-        };
-
-        const smartFilterObj = smartFilter && smartFilter.length ? JSON.parse(smartFilter[0]) : null;
-
-        if (smartFilterObj) {
-          filters[smartFilterObj.id] = smartFilterObj.filter;
-        }
-
-        const appointments = await Appointment.findAll({
-          raw: true,
-          where: {
-            patientId: patient.id,
-          },
-          order: [['startDate', 'DESC']],
-        });
-
-        const today = new Date();
-        let nextAppt = null;
-        let lastAppt = null;
-
-
-        for (let i = 0; i < appointments.length; i++) {
-          const app = appointments[i];
-          const startDate = app.startDate;
-          if (!nextAppt && moment(startDate).isAfter(today)) {
-            nextAppt = startDate;
-          } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
-            nextAppt = startDate;
-            break;
-          }
-        }
-
-        for (let i = 0; i < appointments.length; i++) {
-          const app = appointments[i];
-          const startDate = app.startDate;
-
-          if (!lastAppt && moment(startDate).isBefore(moment())) {
-            lastAppt = startDate;
-          } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
-            lastAppt = startDate;
-            break;
-          }
-        }
-
-        if (nextAppt) {
-          patient.nextAppt = nextAppt;
-        }
-
-        if (lastAppt) {
-          patient.lastAppt = lastAppt;
-        }
-
-        const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), req.accountId, patient.id)
-
-        if (productionRevenue && productionRevenue.length) {
-          patient.totalAmount = productionRevenue[0].totalAmount;
-        }
-
-        patient.totalPatients = patientCount;
-        return patient;
-      } catch (error) {
-        next(error);
-      }
-    });
-
-    Promise.all(calcPatientData).then((data) => {
-      console.log(`--- ${Date.now() - start}ms elapsed calcData`);
-
-      let sortedData = data;
-      if (apptSortObj) {
-        sortedData = data.sort((a, b) => {
-          return (apptSortObj.desc ? SortByMomentDesc(a[apptSortObj.id], b[apptSortObj.id]) :
-            SortByMomentAsc(a[apptSortObj.id], b[apptSortObj.id]));
-        });
-      }
-
-      const returnData = normalize('patients', sortedData);
-      return res.send(returnData);
-    });
   } catch (error) {
     next(error);
   }

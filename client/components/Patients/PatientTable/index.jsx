@@ -35,7 +35,7 @@ class PatientTable extends Component {
       sorted: [],
       expanded: {},
     };
-    this.fetchData = debounce(this.fetchData, 300);
+    this.fetchData = debounce(this.fetchData, 400);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
     this.onFilter = this.onFilter.bind(this);
@@ -55,7 +55,7 @@ class PatientTable extends Component {
   fetchData(query) {
     this.props.fetchEntitiesRequest({
       id: 'patientsTable',
-      url: '/api/patients/table',
+      url: '/api/table',
       params: query,
     }).then((data) => {
       const dataArray = getEntities(data);

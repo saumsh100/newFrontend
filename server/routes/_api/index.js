@@ -32,6 +32,7 @@ import appointmentsRouter from './appointment';
 import callsRouter from './calls';
 import servicesRouter from './services';
 import segmentsRouter from './segments';
+import tableRouter from './table';
 
 const apiRouter = Router();
 
@@ -65,5 +66,6 @@ apiRouter.use('/appointments', appointmentsRouter);
 apiRouter.use('/recurringTimeOffs', recurringTimeOffRouter);
 apiRouter.use('/calls', callsRouter);
 apiRouter.use('/services', servicesRouter);
+apiRouter.use('/table', tableRouter);
 
 export default apiRouter;

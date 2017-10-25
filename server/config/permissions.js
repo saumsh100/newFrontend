@@ -75,6 +75,7 @@ const SUPERADMIN = {
   sentRecalls: allow('read'),
 
   waitSpots: allowAll,
+  table: allow('read'),
 };
 
 const OWNER = {
