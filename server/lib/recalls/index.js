@@ -36,10 +36,10 @@ import { namespaces } from '../../config/globals';
  */
 export async function sendRecallsForAccount(account, date) {
   const { recalls, name } = account;
-
   for (const recall of recalls) {
     const { primaryType } = recall;
 
+    // TODO: we have a function that returns patients per recall { [recall1.id]: [patientsArray] }
     // Get patients whose last appointment is associated with this recall
     const patients = await getPatientsDueForRecall({ recall, account, date });
     const { success, errors } = generateOrganizedPatients(patients, primaryType);
@@ -116,10 +116,11 @@ export async function computeRecallsAndSend({ date }) {
       canSendRecalls: true,
     },
 
+    order: [[{ model: Recall, as: 'recalls' }, 'lengthSeconds', 'asc']],
+
     include: [{
       model: Recall,
       as: 'recalls',
-      order: ['lengthSeconds', 'DESC'],
     }],
   });
 

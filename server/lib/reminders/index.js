@@ -1,7 +1,17 @@
 
-import { Account, Appointment, Chat, Patient, Reminder, SentReminder, TextMessage } from '../../_models';
+import { env } from '../../config/globals';
+import {
+  Account,
+  Appointment,
+  Chat,
+  Patient,
+  Reminder,
+  SentReminder,
+  TextMessage,
+} from '../../_models';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
+import { generateOrganizedPatients } from '../comms/util';
 import { getAppointmentsFromReminder } from './helpers';
 import sendReminder from './sendReminder';
 
@@ -29,7 +39,7 @@ async function sendSocket(io, chatId) {
 }
 
 
-function sendSocketReminder(io, sentReminderId) {
+/*function sendSocketReminder(io, sentReminderId) {
   return SentReminder.findOne({
     where: {
       id: sentReminderId,
@@ -54,7 +64,7 @@ function sendSocketReminder(io, sentReminderId) {
       .in(sentReminder.accountId)
       .emit('create:SentReminder', normalize('sentReminder', sentReminder));
   });
-}
+}*/
 
 /**
  *
@@ -64,11 +74,41 @@ function sendSocketReminder(io, sentReminderId) {
 export async function sendRemindersForAccount(account, date) {
   const { reminders } = account;
   for (const reminder of reminders) {
+    const { primaryType } = reminder;
+
     // Get appointments that this reminder deals with
     const appointments = await getAppointmentsFromReminder({ reminder, account, date });
+    const patients = appointments.map(({ patient, ...appt }) => {
+      patient.appointment = appt;
+      return patient;
+    });
 
-    for (const appointment of appointments) {
-      const { patient } = appointment;
+    const { success, errors } = generateOrganizedPatients(patients, primaryType);
+    try {
+      console.log(`Trying to bulkSave ${errors.length} ${primaryType} failed sentReminders for ${name}`);
+
+      // Save failed sentRecalls from errors
+      const failedSentReminders = errors.map(({ errorCode, patient }) => ({
+        reminderId: reminder.id,
+        accountId: account.id,
+        patientId: patient.id,
+        appointmentId: patient.appointment.id,
+        lengthSeconds: reminder.lengthSeconds,
+        primaryType,
+        errorCode,
+      }));
+
+      await SentReminder.bulkCreate(failedSentReminders);
+    } catch (err) {
+      console.error(`FAILED bulkSave of failed sentReminders`, err);
+      // TODO: do we want to throw the error hear and ignore trying to send?
+    }
+
+    console.log(`Trying to send ${success.length} ${primaryType} ${reminders.lengthSeconds} reminders for ${name}`);
+    // TODO: produce success and failure array and only loop over success at the end
+
+    for (const patient of success) {
+      const { appointment } = patient;
       const { primaryType } = reminder;
 
       // Save sent reminder first so we can
@@ -84,7 +124,6 @@ export async function sendRemindersForAccount(account, date) {
       });
 
       let data = null;
-
       try {
         data = await sendReminder[primaryType]({
           patient,
@@ -101,9 +140,10 @@ export async function sendRemindersForAccount(account, date) {
       console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.update({ isSent: true });
       await appointment.update({ isReminderSent: true });
-      await sendSocketReminder(global.io, sentReminder.id);
+      // await sendSocketReminder(global.io, sentReminder.id);
 
-      if (primaryType === 'sms') {
+      // TODO: need to refactor to go through a Chat module so its unified across API and other services
+      if (primaryType === 'sms' && env !== 'test') {
         const textMessageData = sanitizeTwilioSmsData(data);
         const { to } = textMessageData;
         let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
@@ -133,21 +173,8 @@ export async function sendRemindersForAccount(account, date) {
  * @returns {Promise.<Array|*>}
  */
 export async function computeRemindersAndSend({ date }) {
-  // - Fetch RemindersList in order of shortest secondsAway
-  // - For each reminder, fetch the appointments that fall in this range
-  // that do NOT have a reminder sent (type of reminder?)
-  // - For each appointment, send the reminder
-  /*const joinObject = {
-    reminders: {
-      _apply(sequence) {
-        return sequence.orderBy('lengthSeconds');
-      },
-    },
-  };*/
-
   // Get all clinics that actually want reminders sent and get their Reminder Preferences
   // const accounts = await Account.filter({ canSendReminders: true }).getJoin(joinObject).run();
-
   const accounts = await Account.findAll({
     where: {
       canSendReminders: true,
@@ -162,6 +189,7 @@ export async function computeRemindersAndSend({ date }) {
   });
 
   for (const account of accounts) {
-    await sendRemindersForAccount(account.get({ plain: true }), date);
+    // use `exports.` because we can mock it and stub it in test suite
+    await exports.sendRemindersForAccount(account.get({ plain: true }), date);
   }
 }

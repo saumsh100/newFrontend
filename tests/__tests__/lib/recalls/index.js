@@ -28,7 +28,7 @@ const makeRecallData = (data = {}) => Object.assign({},
   data,
 );
 
-const start = Date.now();
+// const start = Date.now();
 
 describe('Recalls Job Integration Tests', () => {
   // TODO: mock the sendRecall function, and test that it has been called for the appropriate patients
