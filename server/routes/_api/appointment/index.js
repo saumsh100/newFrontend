@@ -666,6 +666,7 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
  */
 appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update'), (req, res, next) => {
   const appointments = req.body;
+  console.log(appointments);
   const appointmentUpdates = appointments.map((appointment) => {
     return Appointment.findById(appointment.id)
       .then(_appointment => _appointment.update(appointment));
