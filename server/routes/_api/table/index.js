@@ -1,13 +1,10 @@
 
-import _ from 'lodash';
 import { Router } from 'express';
 import moment from 'moment';
 import { mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
-import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
 import { Appointment, Patient } from '../../../_models';
-import { sequelizeLoader } from '../../util/loaders';
 
 const tableRouter = new Router();
 
@@ -23,50 +20,49 @@ function SortByMomentAsc(a, b) {
   return 0;
 };
 
-function getNextLastAppointment(patientId, accountId) {
-  const appointments = Appointment.findAll({
+function getNextLastAppointment (patientId, accountId) {
+  return Appointment.findAll({
     raw: true,
     where: {
       accountId,
       patientId,
     },
     order: [['startDate', 'DESC']],
+  }).then((appointments) => {
+    const today = new Date();
+
+    let nextAppt = null;
+    let lastAppt = null;
+
+    for (let i = 0; i < appointments.length; i++) {
+      const app = appointments[i];
+      const startDate = app.startDate;
+
+      if (!nextAppt && moment(startDate).isAfter(today)) {
+        nextAppt = startDate;
+      } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
+        nextAppt = startDate;
+        break;
+      }
+    }
+
+    for (let i = 0; i < appointments.length; i++) {
+      const app = appointments[i];
+      const startDate = app.startDate;
+
+      if (!lastAppt && moment(startDate).isBefore(moment())) {
+        lastAppt = startDate;
+      } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
+        lastAppt = startDate;
+        break;
+      }
+    }
+    return {
+      nextAppt,
+      lastAppt,
+    };
   });
-
-  const today = new Date();
-
-  let nextAppt = null;
-  let lastAppt = null;
-
-  for (let i = 0; i < appointments.length; i++) {
-    const app = appointments[i];
-    const startDate = app.startDate;
-
-    if (!nextAppt && moment(startDate).isAfter(today)) {
-      nextAppt = startDate;
-    } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
-      nextAppt = startDate;
-      break;
-    }
-  }
-
-  for (let i = 0; i < appointments.length; i++) {
-    const app = appointments[i];
-    const startDate = app.startDate;
-
-    if (!lastAppt && moment(startDate).isBefore(moment())) {
-      lastAppt = startDate;
-    } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
-      lastAppt = startDate;
-      break;
-    }
-  }
-
-  return {
-    nextAppt,
-    lastAppt,
-  };
-}
+};
 
 /**
  * Fetching patients for patients table.
@@ -128,8 +124,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     // Getting nextAppt, lastAppt, etc.
     const calcPatientData = patients.map(async (patient) => {
       try {
-
-        const appData = await getNextLastAppointment(patient.id, req.accountId);
+        const appData = await getNextLastAppointment(patient.id, req.accountId, next);
 
         if (appData.nextAppt) {
           patient.nextAppt = appData.nextAppt;
