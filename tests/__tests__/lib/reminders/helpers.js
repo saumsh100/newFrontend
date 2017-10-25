@@ -17,7 +17,7 @@ import {
   getAppointmentsFromReminder,
   shouldSendReminder,
   getValidSmsReminders,
-} from '../../../../server/lib/_reminders/helpers';
+} from '../../../../server/lib/reminders/helpers';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';

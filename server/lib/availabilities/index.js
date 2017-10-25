@@ -1,9 +1,9 @@
 
 import moment from 'moment';
-const isEmpty = require('lodash/isEmpty');
-const isUndefined = require('lodash/isUndefined');
-const unionBy = require('lodash/unionBy');
-const {
+import isEmpty from 'lodash/isEmpty';
+import isUndefined from 'lodash/isUndefined';
+import unionBy from 'lodash/unionBy';
+import {
   Service,
   Practitioner,
   Appointment,
@@ -11,15 +11,15 @@ const {
   WeeklySchedule,
   Account,
   PractitionerRecurringTimeOff,
-} = require('../_models');
-const StatusError = require('../util/StatusError');
-const {
+} from '../../_models';
+import StatusError from '../../util/StatusError';
+import {
   isDuringEachother,
   isDuringEachotherTimeOff,
   createPossibleTimeSlots,
   createIntervalsFromWeeklySchedule,
   getISOSortPredicate,
-} = require('../util/time');
+} from '../../util/time';
 
 const generateDuringFilterSequelize = (startDate, endDate) => {
   return {

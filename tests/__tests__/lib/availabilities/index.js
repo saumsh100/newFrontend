@@ -12,7 +12,7 @@ import {
   fetchServiceData,
   fetchPractitionerData,
   fetchAvailabilities,
-} from '../../../../server/lib/_availabilities';
+} from '../../../../server/lib/availabilities';
 
 // TODO: make seeds more modular so we can see here
 const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';

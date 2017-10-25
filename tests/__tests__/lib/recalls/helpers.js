@@ -10,7 +10,7 @@ import {
 } from '../../../../server/_models';
 import {
   getPatientsDueForRecall,
-} from '../../../../server/lib/_recalls/helpers';
+} from '../../../../server/lib/recalls/helpers';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';

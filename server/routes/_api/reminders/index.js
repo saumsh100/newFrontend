@@ -4,7 +4,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
 import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
-import { getAppointmentsFromReminder } from '../../../lib/_reminders/helpers';
+import { getAppointmentsFromReminder } from '../../../lib/reminders/helpers';
 
 const remindersRouter = Router();
 

@@ -1,7 +1,7 @@
 
 import jobQueue from '../config/jobQueue';
 import createSocketServer from '../sockets/createSocketServer';
-import { computeRecallsAndSend } from '../lib/_recalls';
+import { computeRecallsAndSend } from '../lib/recalls';
 
 global.io = createSocketServer();
 

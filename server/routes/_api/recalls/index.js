@@ -5,7 +5,7 @@ import normalize from '../normalize';
 import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
-import { getPatientsDueForRecall } from '../../../lib/_recalls/helpers';
+import { getPatientsDueForRecall } from '../../../lib/recalls/helpers';
 
 const recallsRouter = new Router();
 

@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Router } from 'express';
-import { fetchAvailabilities } from '../../lib/_availabilities';
+import { fetchAvailabilities } from '../../lib/availabilities';
 import { sequelizeLoader } from '../util/loaders';
 
 const availabilitiesRouter = new Router();

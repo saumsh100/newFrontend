@@ -1,5 +1,5 @@
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol } from '../../config/globals';
 import { sendConfirmationReminder } from '../mail';
@@ -9,7 +9,7 @@ export const createConfirmationText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
-  return `Thanks ${patient.firstName}! You appointment with ${account.name} ` +
+  return `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
     `on ${startDate} at ${startTime} is confirmed. `;
 };
 
@@ -80,11 +80,11 @@ export default {
         },
         {
           name: 'APPOINTMENT_DATE',
-          content: getAppointmentDate(appointment.startDate),
+          content: getAppointmentDate(appointment.startDate, account.timezone),
         },
         {
           name: 'APPOINTMENT_TIME',
-          content: getAppointmentTime(appointment.startDate),
+          content: getAppointmentTime(appointment.startDate, account.timezone),
         },
         {
           name: 'PATIENT_FIRSTNAME',
@@ -110,12 +110,12 @@ export default {
  - Assume all preferences for now
  */
 
-function getAppointmentDate(date) {
-  return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDate()}`;
+function getAppointmentDate(date, timezone) {
+  return moment.tz(date, timezone).format('dddd, MMMM Do YYYY');
 }
 
-function getAppointmentTime(date) {
-  return `${date.getHours()}:${date.getMinutes()}`;
+function getAppointmentTime(date, timezone) {
+  return moment.tz(date, timezone).format('h:mm a');
 }
 
 

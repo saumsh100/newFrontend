@@ -1,41 +1,61 @@
 
-import { Account, Chat, SentReminder, TextMessage } from '../../models';
+import { Account, Appointment, Chat, Patient, Reminder, SentReminder, TextMessage } from '../../_models';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { getAppointmentsFromReminder } from './helpers';
 import sendReminder from './sendReminder';
 
-function sendSocket(io, chatId) {
-  const joinObject = { patient: true };
-  joinObject.textMessages = {
-    _apply: (sequence) => {
-      return sequence
-        .orderBy('createdAt');
-    },
-  };
+async function sendSocket(io, chatId) {
+  let chat = await Chat.findOne({
+    where: { id: chatId },
+    include: [
+      {
+        model: TextMessage,
+        as: 'textMessages',
+        order: ['createdAt', 'DESC'],
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+    ],
+  });
 
-  return Chat.get(chatId).getJoin(joinObject).run()
-    .then((chat) => {
-      io.of('/dash')
-        .in(chat.patient.accountId)
-        .emit('newMessage', normalize('chat', chat));
-    });
+  chat = chat.get({ plain: true });
+
+  await io.of('/dash')
+    .in(chat.patient.accountId)
+    .emit('newMessage', normalize('chat', chat));
 }
+
 
 function sendSocketReminder(io, sentReminderId) {
-  const joinObject = {
-    appointment: true,
-    reminder: true,
-    patient: true,
-  };
-
-  return SentReminder.get(sentReminderId).getJoin(joinObject).run()
-    .then((sentReminder) => {
-      io.of('/dash')
-        .in(sentReminder.accountId)
-        .emit('create:SentReminder', normalize('sentReminder', sentReminder));
-    });
+  return SentReminder.findOne({
+    where: {
+      id: sentReminderId,
+    },
+    include: [
+      {
+        model: Appointment,
+        as: 'appointment',
+      },
+      {
+        model: Reminder,
+        as: 'reminder',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+    ],
+  }).then((sentReminderOne) => {
+    const sentReminder = sentReminderOne.get({ plain: true });
+    io.of('/dash')
+      .in(sentReminder.accountId)
+      .emit('create:SentReminder', normalize('sentReminder', sentReminder));
+  });
 }
+
 /**
  *
  * @param account
@@ -46,6 +66,7 @@ export async function sendRemindersForAccount(account, date) {
   for (const reminder of reminders) {
     // Get appointments that this reminder deals with
     const appointments = await getAppointmentsFromReminder({ reminder, account, date });
+
     for (const appointment of appointments) {
       const { patient } = appointment;
       const { primaryType } = reminder;
@@ -53,7 +74,7 @@ export async function sendRemindersForAccount(account, date) {
       // Save sent reminder first so we can
       // - use sentReminderId as token in email
       // - keep track of failed reminders
-      const sentReminder = await SentReminder.save({
+      const sentReminder = await SentReminder.create({
         reminderId: reminder.id,
         accountId: account.id,
         patientId: patient.id,
@@ -62,25 +83,32 @@ export async function sendRemindersForAccount(account, date) {
         primaryType: reminder.primaryType,
       });
 
-      const data = await sendReminder[primaryType]({
-        patient,
-        account,
-        appointment,
-        sentReminder,
-      });
+      let data = null;
+
+      try {
+        data = await sendReminder[primaryType]({
+          patient,
+          account,
+          appointment,
+          sentReminder,
+        });
+      } catch (error) {
+        console.log(`${primaryType} reminder not sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+        console.log(error);
+        continue;
+      }
 
       console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
-      await sentReminder.merge({ isSent: true }).save();
-      await appointment.merge({ isReminderSent: true }).save();
+      await sentReminder.update({ isSent: true });
+      await appointment.update({ isReminderSent: true });
       await sendSocketReminder(global.io, sentReminder.id);
 
       if (primaryType === 'sms') {
         const textMessageData = sanitizeTwilioSmsData(data);
         const { to } = textMessageData;
-        const chats = await Chat.filter({ accountId: account.id, patientPhoneNumber: to });
-        let chat = chats[0];
+        let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
         if (!chat) {
-          chat = await Chat.save({
+          chat = await Chat.create({
             accountId: account.id,
             patientId: patient.id,
             patientPhoneNumber: to,
@@ -88,11 +116,12 @@ export async function sendRemindersForAccount(account, date) {
         }
 
         // Now save TM
-        const textMessage = await TextMessage.save(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
+        const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
 
         // Update Chat to have new textMessage
-        await chat.merge({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt }).save();
+        await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
 
+        // // Now update the clients in real-time
         await sendSocket(global.io, chat.id);
       }
     }
@@ -108,17 +137,31 @@ export async function computeRemindersAndSend({ date }) {
   // - For each reminder, fetch the appointments that fall in this range
   // that do NOT have a reminder sent (type of reminder?)
   // - For each appointment, send the reminder
-  const joinObject = {
+  /*const joinObject = {
     reminders: {
       _apply(sequence) {
         return sequence.orderBy('lengthSeconds');
       },
     },
-  };
+  };*/
 
   // Get all clinics that actually want reminders sent and get their Reminder Preferences
-  const accounts = await Account.filter({ canSendReminders: true }).getJoin(joinObject).run();
+  // const accounts = await Account.filter({ canSendReminders: true }).getJoin(joinObject).run();
+
+  const accounts = await Account.findAll({
+    where: {
+      canSendReminders: true,
+    },
+
+    order: [[{ model: Reminder, as: 'reminders' }, 'lengthSeconds', 'asc']],
+
+    include: [{
+      model: Reminder,
+      as: 'reminders',
+    }],
+  });
+
   for (const account of accounts) {
-    await sendRemindersForAccount(account, date);
+    await sendRemindersForAccount(account.get({ plain: true }), date);
   }
 }

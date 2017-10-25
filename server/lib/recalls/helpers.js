@@ -1,9 +1,6 @@
 
 import moment from 'moment';
-import { r } from '../../config/thinky';
-import { Appointment, Patient } from '../../models';
-
-// Made an effort to throw all easily testable functions into here
+import { Appointment, Patient, SentRecall } from '../../_models';
 
 /**
  * getAppointmentsFromReminder returns all of the appointments that are
@@ -15,32 +12,37 @@ import { Appointment, Patient } from '../../models';
  * @param date
  */
 export async function getPatientsDueForRecall({ recall, account, date }) {
-  const filterObject = {
-    accountId: account.id,
-    // TODO: save the recall filtering until it computes recall
-    // This is because we want to be able to show the users which patients
-    // are due for recall even tho the communication was not sent
-    // preferences: { recalls: true },
-  };
-
-
-  const joinObject = {
-    sentRecalls: true,
-    appointments: {
-      _apply(sequence) {
-        // TODO: This will order oldest appointment first, needs to be flipped!
-        return sequence
-          .filter({
-            isDeleted: false,
-            isCancelled: false,
-          })
-          .orderBy('startDate');
-      },
+  const pastDate = moment(date).subtract(2, 'years').toISOString();
+  const patients = await Patient.findAll({
+    where: {
+      isDeleted: false,
+      accountId: account.id,
+      status: 'Active',
     },
-  };
 
-  const patients = await Patient.filter(filterObject).getJoin(joinObject).run();
-  return patients.filter(patient => isDueForRecall({ recall, patient, date }));
+    include: [
+      {
+        where: {
+          isDeleted: false,
+          isCancelled: false,
+          startDate: {
+            gt: pastDate,
+          }
+        },
+
+        model: Appointment,
+        as: 'appointments',
+        order: [['startDate', 'DESC']],
+        required: true,
+      },
+      {
+        model: SentRecall,
+        as: 'sentRecalls',
+      },
+    ],
+  });
+
+  return patients.filter(patient => isDueForRecall({ recall, patient: patient.get({ plain: true }), date }));
 }
 
 /**
@@ -56,6 +58,8 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
  */
 export function isDueForRecall({ recall, patient, date }) {
   const { appointments, sentRecalls } = patient;
+
+  // If they've never had any appointments, don't bother
   const numAppointments = appointments.length;
   if (!numAppointments) return false;
 
