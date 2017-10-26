@@ -25,7 +25,7 @@ const generateEntityOptions = (entities, label) => {
 const generatePractitionerOptions = (practitioners) => {
   const options = [];
   practitioners.sort(SortByFirstName).map((pr) => {
-    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName}`;
+    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName || ''}`;
     options.push({ label, value: pr.id });
   });
   return options;
