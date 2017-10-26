@@ -5,7 +5,7 @@ import normalize from '../normalize';
 import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
-import { getPatientsDueForRecall } from '../../../lib/recalls/helpers';
+import { getPatientsDueForRecall, mapPatientsToRecalls } from '../../../lib/recalls/helpers';
 
 const recallsRouter = new Router();
 
@@ -57,6 +57,27 @@ recallsRouter.get('/:accountId/recalls/stats', checkPermissions('accounts:read')
       });
     }
 
+    res.send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /:accountId/recalls/list
+ */
+recallsRouter.get('/:accountId/recalls/list', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    // TODO: date needs to be on the 30 minute marks
+    const { accountId } = req;
+    const date = (new Date()).toISOString();
+    const recalls = await Recall.findAll({
+      raw: true,
+      where: { accountId },
+      order: [['lengthSeconds', 'DESC']],
+    });
+
+    const data = await mapPatientsToRecalls({ recalls, account: { id: accountId }, date });
     res.send(data);
   } catch (error) {
     next(error);
