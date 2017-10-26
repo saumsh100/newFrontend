@@ -45,7 +45,7 @@ remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:rea
       where: { accountId: account.id },
       order: [['lengthSeconds', 'ASC']],
     });
-    
+
     const data = await mapPatientsToReminders({ reminders, account, date });
     const dataWithReminders = data.map((d, i) => {
       return {
