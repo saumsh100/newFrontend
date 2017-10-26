@@ -20,25 +20,40 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 20px;
-  border-bottom: 5px solid $inactive-color;
+  width: 100%;
+
   &_title {
+    display: flex;
+    align-items: center;
     composes: fontLarge from 'sass-loader!../../../fonts.scss';
     padding-right: 10px;
+
+    &:hover {
+      color: $primary-color;
+      cursor: pointer;
+    }
   }
   &_subHeader {
+    padding-top: 10px;
     composes: subHeader from 'sass-loader!../../../fonts.scss';
     color: $primary-darkgrey;
   }
+
+  &_icon {
+    padding-left: 15px;
+    font-size: 18px;
+  }
 }
 
+.tableContainer {
+  border-top: 5px solid $inactive-color;
+}
 .searchBar {
   width: 300px;
 }
 .addNewButton {
   display: flex;
 }
-
-
 .spacing {
   margin: 10px 0;
 }
@@ -74,5 +89,6 @@
   background: white;
 }
 
-.filterContainer {
+.filterMenuButton {
+  height: auto;
 }

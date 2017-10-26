@@ -16,7 +16,6 @@ export default function Input(props) {
     borderColor,
     theme,
     classStyles,
-    disableAnimation,
   } = props;
 
   // TODO: add support for hint attribute
@@ -57,9 +56,9 @@ export default function Input(props) {
     <div className={`${styles.group} ${classStyles}`}>
       <input type={type} className={inputClassName} {...inputProps} />
       <span className={styles.bar} />
-      {!disableAnimation ? <label className={labelClassName}>
+      <label className={labelClassName}>
         {label}
-      </label> : null}
+      </label>
       {errorComponent}
       {icon ? <Icon className={iconClassName} icon={icon} /> : null }
     </div>

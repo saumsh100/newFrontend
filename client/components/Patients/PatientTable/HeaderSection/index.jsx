@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Button, DialogBox, Input } from '../../../library';
-import NewPatientForm from '../NewPatientForm';
+import { Button, DialogBox, Input, DropdownMenu, Icon } from '../../../library';
+import NewPatientForm from './NewPatientForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
-import SmartFilters from '../SmartFilters';
+import SmartFilters from './SmartFilters';
 import styles from '../styles.scss';
-import FilterTags from '../SmartFilters/FilterTags';
-
+import FilterTags from './SmartFilters/FilterTags';
 
 class HeaderSection extends Component {
   constructor(props) {
@@ -13,15 +12,10 @@ class HeaderSection extends Component {
     this.state = {
       active: false,
       filterActive: false,
-      filter: [],
     };
     this.setActive = this.setActive.bind(this);
-    this.openFilter = this.openFilter.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleFilterSubmit = this.handleFilterSubmit.bind(this);
-    this.removeFilter = this.removeFilter.bind(this);
-    this.addFilterToTable = this.addFilterToTable.bind(this);
   }
 
   setActive() {
@@ -30,15 +24,9 @@ class HeaderSection extends Component {
     });
   }
 
-  openFilter() {
-    this.setState({
-      filterActive: !this.state.filterActive,
-    });
-  }
   reinitializeState() {
     this.setState({
       active: false,
-      filterActive: false,
     });
   }
 
@@ -67,48 +55,13 @@ class HeaderSection extends Component {
     });
   }
 
-  handleFilterSubmit(values) {
-    const valueKeys = Object.keys(values);
-    const filterArray = [];
-    valueKeys.map((key) => {
-      const innerObj = values[key]
-      const innerKeys = Object.keys(innerObj);
-
-      filterArray.push({
-        id: key,
-        value: innerKeys[0],
-      });
-    });
-
-    this.setState({
-      filter: filterArray,
-    });
-
-    this.reinitializeState();
-  }
-
-  addFilterToTable(filter) {
-    const {
-      addSmartFilter,
-    } = this.props;
-
-    addSmartFilter(filter);
-    console.log(filter);
-  }
-
-  removeFilter() {
-    this.setState({
-      filter: [],
-    });
-    this.reinitializeState();
-    this.props.reinitializeTable();
-  }
-
   render() {
     const {
-      smartFilters,
       totalPatients,
-      onFilterSearch,
+      onSearch,
+      searchValue,
+      filters,
+      setSmartFilter,
     } = this.props;
 
     const formName = 'newUser';
@@ -118,36 +71,47 @@ class HeaderSection extends Component {
       { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { form: formName }},
     ];
 
+    const filterMenu = props => (
+      <div{...props} className={styles.filterMenuButton}>
+        <div className={styles.header_title}>
+          All Patients
+          <div className={styles.header_icon}>
+            <Icon icon="caret-down" />
+          </div>
+        </div>
+      </div>
+    );
+
     return (
       <div className={styles.header}>
+        <div style={{display: 'flex'}}>
         <div>
-          <div className={styles.header_title}> All Patients </div>
+          <DropdownMenu
+            labelComponent={filterMenu}
+          >
+            <div className={styles.filterContainer}>
+              <SmartFilters
+                setSmartFilter={setSmartFilter}
+              />
+            </div>
+          </DropdownMenu>
           <div className={styles.header_subHeader}>
             Showing {totalPatients} Patients
           </div>
         </div>
+          <FilterTags
+            filters={filters}
+          />
+        </div>
         <div className={styles.searchBar}>
           <Input
             label="Search"
-            onChange={e => onFilterSearch(e.target.value)}
+            onChange={e => onSearch(e.target.value)}
             icon="search"
-            value={this.props.searchValue}
+            value={searchValue}
           />
         </div>
-        <FilterTags
-          smartFilters={this.state.filter}
-          removeSmartFilter={this.removeFilter}
-        />
         <div className={styles.addNewButton}>
-          <div className={styles.filterContainer}>
-            <SmartFilters
-              filterActive={this.state.filterActive}
-              smartFilters={smartFilters}
-              handleSubmit={this.handleFilterSubmit}
-              addFilterToTable={this.addFilterToTable}
-            />
-          </div>
-
           <Button
             onClick={() => this.setActive()}
             border="blue"

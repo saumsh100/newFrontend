@@ -1,0 +1,70 @@
+@import '../../../../ui';
+
+.sideBar {
+  margin-left: 15px;
+  border-top: 5px solid $inactive-color;
+  height: auto;
+  background: $primary-white;
+  padding: 25px 15px 15px 15px;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  &_text {
+    padding-left: 20px;
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  }
+}
+
+.filtersContainer {
+  padding-top: 20px;
+}
+
+.filterHeader {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background: $primary-gray;
+  padding: 10px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  justify-content: space-between;
+
+  &_icon {
+    padding-right: 10px;
+  }
+}
+
+.collapsible {
+  padding: 25px 15px 15px 15px;
+  background: white;
+}
+
+.formContainer {
+  background: white;
+  padding-bottom: 15px;
+  &_row {
+    display: flex;
+    width: 100%;
+    padding-top: 25px;
+    align-items: center;
+    justify-content: space-between;
+
+    &:first-child {
+      padding-top: 0px;
+    }
+  }
+
+  &_middleText {
+    padding: 10px;
+  }
+}
+
+.ddSelect {
+  width: 100%;
+  padding-right: 5px;
+}

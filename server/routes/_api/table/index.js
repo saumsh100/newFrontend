@@ -65,6 +65,97 @@ function getNextLastAppointment (patientId, accountId) {
   });
 };
 
+function getIds(patients) {
+  return patients.map((patient) => {
+    return patient.id;
+  });
+}
+function DemographicsFilter(values, patients, query) {
+  const {
+    ageStart,
+    ageEnd,
+    city,
+    gender,
+  } = values;
+
+  const {
+    limit,
+    order,
+    offset,
+  } = query
+
+  const endDate = moment().subtract(ageStart, 'years').toISOString();
+  const startDate = moment().subtract(ageEnd, 'years').toISOString();
+  const patientIds = getIds(patients)
+  let idData = {};
+  if (patientIds) {
+    idData.id = patientIds;
+  }
+console.log(idData)
+
+  return Patient.findAll({
+    raw: true,
+    where: {
+      id: patientIds,
+      ...query.where,
+      gender: {
+        $ilike: gender,
+      },
+      address: {
+        city: {
+          $ilike: city,
+        },
+      },
+      birthDate: {
+        $between: [startDate, endDate],
+      },
+    },
+    offset,
+    limit,
+    order,
+  });
+}
+
+function LateAppointments(accountId) {
+  const endDate = moment().subtract(6, 'months').toISOString();
+  const startDate = moment().subtract(9, 'months').toISOString();
+
+  return Appointment.findAll({
+    raw: true,
+    nest: true,
+    where: {
+      accountId,
+      startDate: {
+        $between: [startDate, endDate],
+      },
+    },
+    include: {
+      model: Patient,
+      as: 'patient',
+    },
+  }).then((appointments) => {
+    const patients = []
+    const runFilter = appointments.map(async (app) => {
+      const nextLast = await getNextLastAppointment(app.patient.id, accountId);
+      console.log(nextLast)
+      if (!nextLast.nextAppt) {
+        if (nextLast.lastAppt && moment(nextLast.lastAppt).isBefore(endDate)) {
+          patients.push(app.patient);
+        }
+      }
+    });
+
+    return Promise.all(runFilter).then(() => {
+      return patients;
+    });
+  });
+}
+
+const filterFunctions = {
+  Demographics: DemographicsFilter,
+};
+
+const smartFilterFunctions = [LateAppointments];
 /**
  * Fetching patients for patients table.
  *
@@ -75,7 +166,8 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     console.log('Table API Started');
     const {
       limit,
-      filter,
+      filters,
+      smartFilter,
       search,
       sort,
       page,
@@ -85,14 +177,15 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       accountId: req.accountId,
     };
 
-
-
+    /**
+     * Sorting By
+     */
     const patientSortBy = [];
-
     let apptSortObj = null;
 
     if (sort && sort.length) {
       const sortObj = JSON.parse(sort[0]);
+
       if (sortObj.id === 'nextAppt' || sortObj.id === 'lastAppt') {
         apptSortObj = sortObj;
       } else {
@@ -101,12 +194,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       }
     }
 
-    const patientCount = await Patient.count({
-      where: filterBy,
-      order: patientSortBy,
-    });
-
-    const searchQuery = {
+    const defaultQuery = {
       raw: true,
       where: filterBy,
       offset: limit * page,
@@ -114,18 +202,53 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       order: patientSortBy,
     };
 
-    let patients = null;
-    if (!search) {
-      patients = await Patient.findAll({
-        ...searchQuery,
+    let filteredPatients = [];
+
+    if (smartFilter) {
+      filteredPatients = await smartFilterFunctions[smartFilter](req.accountId);
+    }
+
+    if (filters && filters.length) {
+
+      const runFilters = filters.map(async (filter) => {
+        const filterObj = JSON.parse(filter);
+        const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients, defaultQuery);
+        return patients;
       });
+      const data = await Promise.all(runFilters);
+      filteredPatients = data[0]
+    }
+
+    /*
+    /**
+     * Searching patients
+     */
+    let patients = null;
+    let patientCount = 0;
+
+    if (!search) {
+      patientCount = await Patient.count({
+        where: filterBy,
+        order: patientSortBy,
+      });
+      patients = await Patient.findAll({
+        ...defaultQuery,
+      });
+    }
+    if (filteredPatients.length) {
+      console.log('woooooooxs')
+      patients = filteredPatients;
+      patientCount = filteredPatients.length;
     } else {
-      patients = await PatientSearch(search, req.accountId, searchQuery);
+      patients = await PatientSearch(search, req.accountId, defaultQuery);
+      patientCount = patients.length;
     }
 
     console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
 
-    // Getting nextAppt, lastAppt, etc.
+    /**
+     * Calculating Next Appointment, Last Appointment, and Revenue
+     */
     const calcPatientData = patients.map(async (patient) => {
       try {
         const appData = await getNextLastAppointment(patient.id, req.accountId, next);
@@ -151,6 +274,10 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       }
     });
 
+
+    /**
+     * Sorting for next/last appointment
+     */
     Promise.all(calcPatientData).then((data) => {
       console.log(`--- ${Date.now() - start}ms elapsed calcData`);
 

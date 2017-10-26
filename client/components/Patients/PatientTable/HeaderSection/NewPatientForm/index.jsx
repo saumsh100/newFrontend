@@ -1,10 +1,10 @@
 
 import React, { PropTypes } from 'react';
 import moment from 'moment';
-import { Form, Field, } from '../../../library';
-import styles from '../styles.scss';
+import { Form, Field } from '../../../../library';
+import styles from '../../styles.scss';
 
-import { maxLength,  emailValidate, } from '../../../library/Form/validate';
+import { maxLength,  emailValidate, } from '../../../../library/Form/validate';
 
 const normalizeBirthdate = (value) => {
   return value.trim();

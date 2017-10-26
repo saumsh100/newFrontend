@@ -46,9 +46,13 @@ class EditDisplay extends Component {
       patient
     } = this.props;
 
-    console.log(values);
-
     values.isSyncedWithPms = false;
+    values.address = {};
+    values.address.postalCode = values.zipCode;
+    values.address.country = values.country;
+    values.address.city = values.city;
+    values.address.street = values.street;
+    values.address.province = values.province;
 
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
