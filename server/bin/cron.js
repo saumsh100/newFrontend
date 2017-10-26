@@ -6,13 +6,13 @@ import { createJob } from '../config/jobQueue';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Run every 30 min in prod
-const remindersPattern = NODE_ENV === 'production' ? '0 0,10 * * * *' : '0 * * * * *';
+const remindersPattern = NODE_ENV === 'production' ? '0 * * * * *' : '0 * * * * *';
 
 // Run at 5AM every morning
-const recallsPattern = NODE_ENV === 'production' ? '0 0,10 * * * *' : '0 * * * * *';
+const recallsPattern = NODE_ENV === 'production' ? '0 * * * * *' : '0 * * * * *';
 
 // Run every 30 min in prod
-const reviewsPattern = NODE_ENV === 'production' ? '0 0,10 * * * *' : '0 * * * * *';
+const reviewsPattern = NODE_ENV === 'production' ? '0 * * * * *' : '0 * * * * *';
 
 // Appointment Reminders Cron
 cron.schedule(remindersPattern, () => {
