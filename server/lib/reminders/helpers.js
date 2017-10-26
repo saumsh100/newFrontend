@@ -1,8 +1,38 @@
 
 import moment from 'moment';
-import { Appointment, Patient, SentReminder } from '../../_models';
+import {
+  Appointment,
+  Patient,
+  SentReminder,
+} from '../../_models';
+import { generateOrganizedPatients } from '../comms/util';
 
 // Made an effort to throw all easily testable functions into here
+export async function mapPatientsToReminders({ reminders, account, date }) {
+  const seen = {};
+  const remindersPatients = [];
+  for (const reminder of reminders) {
+    // Get appointments that this reminder deals with
+    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, date });
+
+    // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
+    // This is why the order or reminders is so important
+    const unseenAppts = appointments.filter(a => !seen[a.id]);
+
+    // Now add it to the seen map
+    unseenAppts.forEach(a => seen[a.id] = true);
+
+    const patients = appointments.map(({ patient, ...appt }) => {
+      patient.appointment = appt;
+      return patient;
+    });
+
+    remindersPatients.push(generateOrganizedPatients(patients, reminder.primaryType));
+  }
+
+  return remindersPatients;
+}
+
 
 /**
  * getAppointmentsFromReminder returns all of the appointments that are

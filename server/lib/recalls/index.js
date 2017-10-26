@@ -1,11 +1,15 @@
 
 import { Account, Patient, SentRecall, Recall } from '../../_models';
-import { getPatientsDueForRecall, organizePatients } from './helpers';
+import {
+  getPatientsDueForRecall,
+  mapPatientsToRecalls,
+} from './helpers';
 import { generateOrganizedPatients } from '../comms/util';
 import normalize from '../../routes/api/normalize';
 import sendRecall from './sendRecall';
 import app from '../../bin/app';
 import { namespaces } from '../../config/globals';
+
 
 /*async function sendSocketRecall(io, sentRecallId) {
   let sentRecall = await SentRecall.findOne({
@@ -29,6 +33,7 @@ import { namespaces } from '../../config/globals';
           .emit('create:SentRecall', normalize('sentRecall', sentRecall));
 }*/
 /**
+ * sendRecallsForAccount
  *
  * @param account
  * @param date
@@ -37,16 +42,30 @@ import { namespaces } from '../../config/globals';
 export async function sendRecallsForAccount(account, date) {
   console.log(`Sending recalls for ${account.name}`);
   const { recalls, name } = account;
-  for (const recall of recalls) {
-    const { primaryType } = recall;
 
-    // TODO: we have a function that returns patients per recall { [recall1.id]: [patientsArray] }
-    // Get patients whose last appointment is associated with this recall
-    const patients = await getPatientsDueForRecall({ recall, account, date });
-    const { success, errors } = generateOrganizedPatients(patients, primaryType);
+  const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+
+  // Grab all failures and do a bulkCreate to reduce load
+  /*let totalFailures = [];
+  recallsPatients.forEach((rp, i) => {
+    totalFailures = totalFailures.concat(rp.errors.map(({ errorCode, patient }) => ({
+      recallId: recalls[i].id,
+      accountId: account.id,
+      patientId: patient.id,
+      lengthSeconds: recalls[i].lengthSeconds,
+      primaryType: recalls[i].primaryType,
+      errorCode,
+    })));
+  });*/
+
+  let i;
+  for (i = 0; i < recalls.length; i++) {
+    const recall = recalls[i];
+    const { errors, success } = recallsPatients[i];
+    const { primaryType, lengthSeconds } = recall;
 
     try {
-      console.log(`Trying to bulkSave ${errors.length} ${primaryType} failed sentRecalls for ${name}`);
+      console.log(`Trying to bulkSave ${errors.length} ${primaryType}_${lengthSeconds} failed sentRecalls for ${name}...`);
 
       // Save failed sentRecalls from errors
       const failedSentRecalls = errors.map(({ errorCode, patient }) => ({
@@ -59,12 +78,13 @@ export async function sendRecallsForAccount(account, date) {
       }));
 
       await SentRecall.bulkCreate(failedSentRecalls);
+      console.log(`${errors.length} ${primaryType}_${lengthSeconds} failed sentRecalls saved!`);
     } catch (err) {
       console.error(`FAILED bulkSave of failed sentRecalls`, err);
       // TODO: do we want to throw the error hear and ignore trying to send?
     }
 
-    console.log(`Trying to send ${success.length} ${primaryType} recalls for ${name}`);
+    console.log(`Trying to send ${success.length} ${primaryType}_${lengthSeconds} recalls for ${name}`);
     for (const patient of success) {
       // Check if latest appointment is within the recall window
       const { appointments } = patient;
@@ -92,10 +112,8 @@ export async function sendRecallsForAccount(account, date) {
       console.log(`${primaryType} recall SENT to ${patient.firstName} ${patient.lastName} for ${account.name}!`);
       await sentRecall.update({ isSent: true });
 
-      // TODO: this is only needed for sms recalls
-      // TODO: perhaps we update all successfully sent Recalls
-
-
+      // TODO: need Chat update for SMS recalls
+      // TODO: Update all successfully sent Recalls
       // await sendSocketRecall(global.io, sentRecall.id);
     }
   }
@@ -111,7 +129,6 @@ export async function computeRecallsAndSend({ date }) {
   // that do NOT have a reminder sent (type of reminder?)
   // - For each appointment, send the reminder
   // Get all clinics that actually want reminders sent and get their Reminder Preferences
-
   const accounts = await Account.findAll({
     where: {
       canSendRecalls: true,

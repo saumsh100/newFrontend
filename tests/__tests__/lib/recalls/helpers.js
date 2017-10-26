@@ -9,6 +9,7 @@ import {
   SentRecall,
 } from '../../../../server/_models';
 import {
+  mapPatientsToRecalls,
   getPatientsDueForRecall,
 } from '../../../../server/lib/recalls/helpers';
 import { wipeAllModels } from '../../../_util/wipeModel';
@@ -76,9 +77,13 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         appointments = await Appointment.bulkCreate([
-          makeApptData({ patientId: patients[0].id, ...dates(2014, 7, 5, 8) }), // Today at 8
-          makeApptData({ patientId: patients[1].id, ...dates(2016, 7, 5, 9) }), // Today at 9
+          makeApptData({ patientId: patients[0].id, ...dates(2014, 7, 5, 8) }),
+          makeApptData({ patientId: patients[1].id, ...dates(2016, 7, 5, 9) }),
         ]);
+      });
+
+      afterAll(async () => {
+        await wipeAllModels();
       });
 
       test('should return 1 patient that needs a recall', async () => {
@@ -89,12 +94,68 @@ describe('Recalls Calculation Library', () => {
         expect(pts[0].id).toBe(patients[1].id);
       });
 
-      test.skip('should return 0 patients, (1 really old, 1 too recent)', async () => {
+      test('should return 0 patients, (1 really old, 1 too recent)', async () => {
         const currentDate = date(2017, 7, 5, 7);
         const account = { id: accountId };
         const recentAppt = await Appointment.create(makeApptData({ patientId: patients[1].id, ...dates(2017, 7, 5, 9) }));
         const pts = await getPatientsDueForRecall({ recall, account, date: currentDate });
         expect(pts.length).toBe(0);
+      });
+    });
+
+    describe('#mapPatientsToRecalls', () => {
+      test('should be a function', () => {
+        expect(typeof mapPatientsToRecalls).toBe('function');
+      });
+
+      let recalls;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        recalls = await Recall.bulkCreate([
+          {
+            accountId,
+            primaryType: 'email',
+            lengthSeconds: 15552000,
+          },
+          /*{
+            accountId,
+            primaryType: 'email',
+            lengthSeconds: 18144000,
+          },*/
+        ]);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'Old', lastName: 'Patient' }),
+          makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ patientId: patients[0].id, ...dates(2017, 2, 5, 8) }),
+          makeApptData({ patientId: patients[1].id, ...dates(2017, 3, 5, 9) }),
+        ]);
+      });
+
+      afterAll(async () => {
+        await wipeAllModels();
+      });
+
+      test('should return 2 patients for the recall, but both failed because no email', async () => {
+        const date = (new Date(2017, 10, 5, 7)).toISOString();
+        const account = { id: accountId };
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        expect(recallsPatients[0].errors.length).toBe(2);
+        expect(recallsPatients[0].success.length).toBe(0);
+      });
+
+      test('should return 1 patient for each recall, but both success', async () => {
+        const date = (new Date(2017, 10, 5, 7)).toISOString();
+        const account = { id: accountId };
+        await patients[0].update({ email: 'justin+test1@carecru.com' });
+        await patients[1].update({ email: 'justin+test2@carecru.com' });
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        expect(recallsPatients[0].errors.length).toBe(0);
+        expect(recallsPatients[0].success.length).toBe(2);
       });
     });
   });

@@ -1,6 +1,42 @@
 
 import moment from 'moment';
-import { Appointment, Patient, SentRecall } from '../../_models';
+import {
+  Appointment,
+  Patient,
+  SentRecall,
+} from '../../_models';
+import { generateOrganizedPatients } from '../comms/util';
+
+/**
+ * mapPatientsToRecalls is a function that takes the clinic's recalls
+ * and produces an array that matches the order of the success and fail patients for each recall
+ * - success and fail is really just determined off of whether the patient has a property that the
+ * primaryType of comms is dependant on, we do this so that we can batchSave fails
+ * - fails = (sentRecalls where isSent=false with an errorCode)
+ *
+ * @param recalls
+ * @returns {Promise.<Array>}
+ */
+export async function mapPatientsToRecalls({ recalls, account, date }) {
+  const seen = {};
+  const recallsPatients = [];
+  for (const recall of recalls) {
+    // Get patients whose last appointment is associated with this recall
+    const patients = await exports.getPatientsDueForRecall({ recall, account, date });
+
+    // If it has been seen by an earlier recall (farther away from due date), ignore it!
+    // This is why the order or recalls is so important
+    const unseenPatients = patients.filter(p => !seen[p.id]);
+
+    // Now add it to the seen map
+    unseenPatients.forEach(p => seen[p.id] = true);
+
+    // .push({ success, errors })
+    recallsPatients.push(generateOrganizedPatients(unseenPatients, recall.primaryType));
+  }
+
+  return recallsPatients;
+}
 
 /**
  * getAppointmentsFromReminder returns all of the appointments that are
@@ -12,6 +48,7 @@ import { Appointment, Patient, SentRecall } from '../../_models';
  * @param date
  */
 export async function getPatientsDueForRecall({ recall, account, date }) {
+  // TODO: we need to get this to work with new recalls format where there are multiple
   const pastDate = moment(date).subtract(2, 'years').toISOString();
   const patients = await Patient.findAll({
     where: {
@@ -64,6 +101,7 @@ export function isDueForRecall({ recall, patient, date }) {
   if (!numAppointments) return false;
 
   // Check if latest appointment is within the recall window
+  // TODO: should probably add date check to query to reduce size of query
   const { startDate } = appointments[appointments.length - 1];
   const isDue = moment(date).diff(startDate) / 1000 > recall.lengthSeconds;
 

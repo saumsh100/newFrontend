@@ -1,21 +1,20 @@
 
-import { Account, Appointment, Patient, SentReview } from '../../_models';
+import {
+  Account,
+  Appointment,
+  Patient,
+  SentReview,
+} from '../../_models';
 import moment from 'moment';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
-import { generateOrganizedPatients } from '../comms/util';
-import { getReviewAppointments } from './helpers';
+import { getReviewPatients } from './helpers';
 import sendReview from './sendReview';
 
 export async function sendReviewsForAccount(account, date) {
   console.log(`Sending reviews for ${account.name}`);
-  const appointments = await getReviewAppointments({ account, date });
-  const patients = appointments.map(({ patient, ...appt }) => {
-    patient.appointment = appt;
-    return patient;
-  });
 
-  const { success, errors } = generateOrganizedPatients(patients, 'email');
+  const { success, errors } = await getReviewPatients({ account, date });
   try {
     console.log(`Trying to bulkSave ${errors.length} failed sentReviews for ${account.name}`);
 

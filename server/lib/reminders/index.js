@@ -12,7 +12,7 @@ import {
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { generateOrganizedPatients } from '../comms/util';
-import { getAppointmentsFromReminder } from './helpers';
+import { mapPatientsToReminders } from './helpers';
 import sendReminder from './sendReminder';
 
 async function sendSocket(io, chatId) {
@@ -73,20 +73,19 @@ async function sendSocket(io, chatId) {
  */
 export async function sendRemindersForAccount(account, date) {
   console.log(`Sending reminders for ${account.name}`);
-  const { reminders } = account;
-  for (const reminder of reminders) {
-    const { primaryType } = reminder;
+  const { reminders, name } = account;
 
-    // Get appointments that this reminder deals with
-    const appointments = await getAppointmentsFromReminder({ reminder, account, date });
-    const patients = appointments.map(({ patient, ...appt }) => {
-      patient.appointment = appt;
-      return patient;
-    });
+  const remindersPatients = await mapPatientsToReminders({ reminders, account, date });
 
-    const { success, errors } = generateOrganizedPatients(patients, primaryType);
+  let i;
+  for (i = 0; i < reminders.length; i++) {
+    const reminder = reminders[i];
+    const { errors, success } = remindersPatients[i];
+
+    const { primaryType, lengthSeconds } = reminder;
+
     try {
-      console.log(`Trying to bulkSave ${errors.length} ${primaryType} failed sentReminders for ${name}`);
+      console.log(`Trying to bulkSave ${errors.length} ${primaryType}_${lengthSeconds} failed sentReminders for ${name}`);
 
       // Save failed sentRecalls from errors
       const failedSentReminders = errors.map(({ errorCode, patient }) => ({
@@ -100,14 +99,13 @@ export async function sendRemindersForAccount(account, date) {
       }));
 
       await SentReminder.bulkCreate(failedSentReminders);
+      console.log(`${errors.length} ${primaryType}_${lengthSeconds} failed sentReminders saved!`);
     } catch (err) {
       console.error(`FAILED bulkSave of failed sentReminders`, err);
       // TODO: do we want to throw the error hear and ignore trying to send?
     }
 
-    console.log(`Trying to send ${success.length} ${primaryType} ${reminders.lengthSeconds} reminders for ${name}`);
-    // TODO: produce success and failure array and only loop over success at the end
-
+    console.log(`Trying to send ${success.length} ${primaryType}_${lengthSeconds} reminders for ${name}`);
     for (const patient of success) {
       const { appointment } = patient;
       const { primaryType } = reminder;
@@ -133,12 +131,12 @@ export async function sendRemindersForAccount(account, date) {
           sentReminder,
         });
       } catch (error) {
-        console.log(`${primaryType} reminder not sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+        console.log(`${primaryType}_${lengthSeconds} reminder not sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
         console.log(error);
         continue;
       }
 
-      console.log(`${primaryType} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+      console.log(`${primaryType}_${lengthSeconds} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.update({ isSent: true });
       await appointment.update({ isReminderSent: true });
       // await sendSocketReminder(global.io, sentReminder.id);
