@@ -127,14 +127,31 @@ describe('Reminders Job Integration Tests', () => {
           id: appointmentId,
           startDate: iso(),
           endDate: iso(),
+          get() {
+            return {
+              id: appointmentId,
+              startDate: iso(),
+              endDate: iso(),
+              update() {
+                console.log('Appointment is being updated!');
+              },
+            };
+          },
+
           patient: {
             id: patientId,
             mobilePhoneNumber: '+17808508886',
+            get() {
+              return {
+                id: patientId,
+                mobilePhoneNumber: '+17808508886',
+              };
+            }
           },
 
           update() {
             console.log('Appointment is being updated!');
-          }
+          },
         },
       ]);
 
@@ -155,13 +172,26 @@ describe('Reminders Job Integration Tests', () => {
           id: appointmentId,
           startDate: iso(),
           endDate: iso(),
+          get() {
+            return {
+              id: appointmentId,
+              startDate: iso(),
+              endDate: iso(),
+            };
+          },
+
           patient: {
             id: patientId,
+            get() {
+              return {
+                id: patientId,
+              };
+            }
           },
 
           update() {
             console.log('Appointment is being updated!');
-          }
+          },
         },
       ]);
 

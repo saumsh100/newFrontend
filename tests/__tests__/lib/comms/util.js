@@ -10,19 +10,19 @@ describe('Communications Utility Library', () => {
     it('should return the correct error for noMobilePhoneNumber (sms)', () => {
       const patient = {};
       const result = cannotSend(patient, 'sms');
-      expect(result).toBe(1200);
+      expect(result).toBe('1200');
     });
 
     it('should return the correct error for noMobilePhoneNumber (phone)', () => {
       const patient = {};
       const result = cannotSend(patient, 'phone');
-      expect(result).toBe(1300);
+      expect(result).toBe('1300');
     });
 
     it('should return the correct error for noEmail', () => {
       const patient = {};
       const result = cannotSend(patient, 'email');
-      expect(result).toBe(1100);
+      expect(result).toBe('1100');
     });
 
     it('should return the no error for sms', () => {

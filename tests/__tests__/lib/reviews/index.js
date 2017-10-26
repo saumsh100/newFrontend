@@ -98,9 +98,23 @@ describe('Reviews Job Integration Tests', () => {
           id: appointmentId,
           startDate: iso(),
           endDate: iso(),
+          get() {
+            return {
+              id: appointmentId,
+              startDate: iso(),
+              endDate: iso(),
+            };
+          },
+
           patient: {
             id: patientId,
             email: 'justin+test@carecru.com',
+            get() {
+              return {
+                id: patientId,
+                email: 'justin+test@carecru.com',
+              };
+            }
           },
         },
       ]);
@@ -120,8 +134,21 @@ describe('Reviews Job Integration Tests', () => {
           id: appointmentId,
           startDate: iso(),
           endDate: iso(),
+          get() {
+            return {
+              id: appointmentId,
+              startDate: iso(),
+              endDate: iso(),
+            };
+          },
+
           patient: {
             id: patientId,
+            get() {
+              return {
+                id: patientId,
+              };
+            }
           },
         },
       ]);

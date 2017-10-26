@@ -15,9 +15,9 @@ export function cannotSend(patient, primaryType) {
   };
 
   const types = {
-    email: 1100,
-    sms: 1200,
-    phone: 1300,
+    email: '1100',
+    sms: '1200',
+    phone: '1300',
   };
 
   // If it is undefined return the error code
