@@ -15,8 +15,9 @@ import { generateOrganizedPatients } from '../comms/util';
  */
 export async function getReviewPatients({ account, date }) {
   const appointments = await exports.getReviewAppointments({ account, date });
-  const patients = appointments.map(({ patient, ...appt }) => {
-    patient.appointment = appt;
+  const patients = appointments.map((appt) => {
+    const patient = appt.patient.get({ plain: true });
+    patient.appointment = appt.get({ plain: true });
     return patient;
   });
 

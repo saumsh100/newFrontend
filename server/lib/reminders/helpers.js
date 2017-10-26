@@ -22,8 +22,9 @@ export async function mapPatientsToReminders({ reminders, account, date }) {
     // Now add it to the seen map
     unseenAppts.forEach(a => seen[a.id] = true);
 
-    const patients = appointments.map(({ patient, ...appt }) => {
-      patient.appointment = appt;
+    const patients = unseenAppts.map((appt) => {
+      const patient = appt.patient.get({ plain: true });
+      patient.appointment = appt.get({ plain: true });
       return patient;
     });
 
