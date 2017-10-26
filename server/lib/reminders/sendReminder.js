@@ -13,7 +13,7 @@ export const createConfirmationText = ({ patient, account, appointment }) => {
     `on ${startDate} at ${startTime} is confirmed. `;
 };
 
-const BASE_URL = `https://${host}/twilio/voice/sentReminders`;
+const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
 const createReminderText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th

@@ -324,7 +324,7 @@ practitionersRouter.post('/:practitionerId/avatar', checkPermissions('practition
     };
 
     const savedPractitioner = await req.practitioner.update(practitionerData);
-    return res.send(normalize('practitioner', savedPractitioner));
+    return res.send(normalize('practitioner', savedPractitioner.get({ plain: true })));
   } catch (error) {
     return next(error);
   }
