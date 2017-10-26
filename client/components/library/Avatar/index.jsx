@@ -21,8 +21,8 @@ export default function Avatar({ user, className, size, onClick = () => {} }) {
     classes = classNames(styles.extraLarge, classes);
   }
 
-  const centerContent = user.avatarUrl ?
-    <img className={styles.img} src={user.avatarUrl} alt={`Image of ${user.firstName}`} /> :
+  const centerContent = user.fullAvatarUrl ?
+    <img className={styles.img} src={user.fullAvatarUrl} alt={`Image of ${user.firstName}`} /> :
     <span className={styles.text}>{user.firstName && user.firstName[0]}</span>;
 
   return (

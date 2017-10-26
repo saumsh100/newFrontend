@@ -36,7 +36,7 @@ export default {
       mergeVars: [
         {
           name: 'BOOK_URL',
-          content: `${account.website}?ccbw`,
+          content: `${account.website}?cc=book`,
         },
         {
           name: 'ACCOUNT_NAME',
