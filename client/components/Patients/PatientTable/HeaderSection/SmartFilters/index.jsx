@@ -12,9 +12,6 @@ export default function SmartFilters(props) {
   } = props;
   const smartFilters = [
     {
-      label: 'Due within 60 Days',
-    },
-    {
       label: '0-3 Months Late',
     },
     {

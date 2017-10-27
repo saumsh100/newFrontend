@@ -76,6 +76,8 @@ class PatientTable extends Component {
       limit: this.state.limit,
       sort: this.state.sorted,
       page: index,
+      filters: this.state.filters,
+      smartFilter: this.state.smartFilter,
     });
     this.setState({
       page: index,
@@ -157,6 +159,7 @@ class PatientTable extends Component {
 
     this.setState({
       filters: newFilters,
+      page: 0,
     });
   }
 
@@ -171,6 +174,7 @@ class PatientTable extends Component {
 
     this.setState({
       smartFilter: index,
+      page: 0,
     });
   }
 
