@@ -118,7 +118,7 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
       primaryType: 'sms',
     },
 
-    order: ['createdAt'],
+    order: [['createdAt', 'asc']],
     include: [{
       model: Appointment,
       as: 'appointment',

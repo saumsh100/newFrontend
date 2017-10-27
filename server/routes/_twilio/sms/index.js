@@ -64,7 +64,6 @@ function sendSocketReminder(io, sentReminder) {
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
     const start = Date.now();
-    console.log('Started the SMS receive');
     let {
       account,
     } = req;
@@ -133,7 +132,6 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     // If not patient or if not any valid sms sentReminders or if not proper response
     if (!patient || Body.trim() !== 'C') {
       await sendSocket(io, chatClean.id);
-      console.log('res.end about to be called', `${Date.now() - start}ms`);
       return res.end();
     }
 
@@ -145,7 +143,6 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
 
     if (!validSmsReminders.length) {
       await sendSocket(io, chatClean.id);
-      console.log('res.end about to be called', `${Date.now() - start}ms`);
       return res.end();
     }
 
@@ -176,7 +173,6 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     });
 
     await sendSocket(io, chatClean.id);
-    console.log('res.end about to be called', `${Date.now() - start}ms`);
     res.end();
   } catch (err) {
     next(err);

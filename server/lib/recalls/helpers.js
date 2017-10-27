@@ -57,6 +57,8 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
       status: 'Active',
     },
 
+    order: [[{ model: Appointment, as: 'appointments' }, 'startDate', 'asc']],
+
     include: [
       {
         where: {
@@ -69,7 +71,6 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
 
         model: Appointment,
         as: 'appointments',
-        order: [['startDate', 'DESC']],
         required: true,
       },
       {
