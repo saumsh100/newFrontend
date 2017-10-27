@@ -35,6 +35,7 @@ export async function getReviewAppointments({ account, date }) {
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
+      isCancelled: false,
       accountId: account.id,
       startDate: {
         $between: [begin, date],
