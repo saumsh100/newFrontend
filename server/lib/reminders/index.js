@@ -138,20 +138,23 @@ export async function sendRemindersForAccount(account, date) {
 
       console.log(`${primaryType}_${lengthSeconds} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
       await sentReminder.update({ isSent: true });
-      await appointment.update({ isReminderSent: true });
-      // await sendSocketReminder(global.io, sentReminder.id);
+      const appt = await Appointment.findById(appointment.id);
+      appt.update({ isReminderSent: true });
 
       // TODO: need to refactor to go through a Chat module so its unified across API and other services
       if (primaryType === 'sms' && env !== 'test') {
         const textMessageData = sanitizeTwilioSmsData(data);
         const { to } = textMessageData;
         let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
+        if (chat) console.log('Found chat', chat.id);
         if (!chat) {
           chat = await Chat.create({
             accountId: account.id,
             patientId: patient.id,
             patientPhoneNumber: to,
           });
+
+          console.log('Created chat', chat.id);
         }
 
         // Now save TM

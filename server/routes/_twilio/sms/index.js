@@ -141,6 +141,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
       accountId: account.id,
     });
 
+
     if (!validSmsReminders.length) {
       await sendSocket(io, chatClean.id);
       return res.end();
