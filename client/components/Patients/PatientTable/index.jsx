@@ -89,6 +89,8 @@ class PatientTable extends Component {
       limit: pageSize,
       sort: this.state.sorted,
       page: pageIndex,
+      filters: this.state.filters,
+      smartFilter: this.state.smartFilter,
     });
     this.setState({
       limit: pageSize,
@@ -115,6 +117,7 @@ class PatientTable extends Component {
       limit: this.state.limit,
       search: this.state.search,
       filters: this.state.filters,
+      smartFilter: this.state.smartFilter,
     });
 
     this.setState({
@@ -163,17 +166,17 @@ class PatientTable extends Component {
     });
   }
 
-  setSmartFilter(index) {
+  setSmartFilter(filterObj) {
     this.fetchData({
       filters: this.state.filters,
       page: 0,
       limit: this.state.limit,
       sort: this.state.sorted,
-      smartFilter: index,
+      smartFilter: filterObj ,
     });
 
     this.setState({
-      smartFilter: index,
+      smartFilter: filterObj,
       page: 0,
     });
   }
@@ -184,6 +187,7 @@ class PatientTable extends Component {
       page: 0,
       search: '',
       filters: [],
+      smartFilter: null,
     });
   }
 
@@ -194,6 +198,7 @@ class PatientTable extends Component {
       createEntityRequest,
     } = this.props;
 
+    console.log(this.state);
     const columns = [
       {
         Header: '#',

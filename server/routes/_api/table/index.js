@@ -5,7 +5,7 @@ import { mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import PatientSearch from '../../../lib/patientSearch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Appointment, Patient } from '../../../_models';
+import { Appointment, Patient, sequelize } from '../../../_models';
 
 const tableRouter = new Router();
 
@@ -87,9 +87,9 @@ function DemographicsFilter(values, patients, query) {
 
   const endDate = moment().subtract(ageStart, 'years').toISOString();
   const startDate = moment().subtract(ageEnd, 'years').toISOString();
-  const patientIds = getIds(patients)
   const idData = {};
-  if (patientIds.length) {
+  if (patients && patients.length) {
+    const patientIds = getIds(patients)
     idData.id = patientIds;
   }
 
@@ -120,19 +120,22 @@ function DemographicsFilter(values, patients, query) {
   });
 }
 
-async function LateAppointments(accountId, limit, page, filters, next) {
-  const sixMonthsOut = moment().subtract(6, 'months').toISOString();
-  const nineMonthsOut = moment().subtract(9, 'months').toISOString();
-
+async function LateAppointmentsFilter(accountId, limit, offset, order, filters, smFilter, next) {
   try {
+    console.log(smFilter)
+    const startMonthsOut = moment().subtract(smFilter.startMonth, 'months').toISOString();
+    const endMonthsOut = moment().subtract(smFilter.endMonth, 'months').toISOString();
+
     const appData = await Appointment.findAll({
       raw: true,
       attributes: ['patientId'],
       where: {
         accountId,
         startDate: {
-          $between: [sixMonthsOut, moment().add(6, 'months').toISOString()],
+          $between: [endMonthsOut, moment().add(1, 'year').toISOString()],
         },
+        isCancelled: false,
+        isDeleted: false,
         patientId: {
           $ne: null,
         },
@@ -144,62 +147,135 @@ async function LateAppointments(accountId, limit, page, filters, next) {
       return data.patientId;
     });
 
-    const patientCount = await Appointment.count({
-      where: {
-        accountId,
-        startDate: {
-          $between: [nineMonthsOut, sixMonthsOut],
-        },
-        patientId: {
-          $notIn: patientIds,
-        },
-      },
-    });
+    //TODO sorting
 
-    let offSetLimit = {}
+    const offSetLimit = {
+    };
 
     if (!filters) {
-      offSetLimit = {
-        offset: limit * page,
-        limit,
-      };
+      offSetLimit.offset = offset
+      offSetLimit.limit = limit;
     }
 
-    const patientsData = await Appointment.findAll(Object.assign({
+    const patientsData = await Appointment.findAndCountAll(Object.assign({
       raw: true,
       nest: true,
-      attributes: ['patientId'],
       where: {
         accountId,
         startDate: {
-          $between: [nineMonthsOut, sixMonthsOut],
+          $between: [startMonthsOut, endMonthsOut],
         },
+        isCancelled: false,
+        isDeleted: false,
         patientId: {
           $notIn: patientIds,
         },
       },
+      //order: [[{ model: Patient, as: 'patient' }, 'firstName']],
       include: {
         model: Patient,
         as: 'patient',
+        required: true,
       },
     }, offSetLimit));
 
-    const patients = patientsData.map(data => data.patient);
+    const patients = patientsData.rows.map(data => data.patient);
 
     return {
       patients,
-      count: patientCount,
+      count: patientsData.count,
     };
   } catch (err) {
     next(err);
   }
 }
 
+async function CancelledAppointmentsFilter(accountId, limit, offset, order, filters, smFilter, next) {
+  try {
+    const offSetLimit = {
+    };
+
+    if (!filters) {
+      offSetLimit.offset = offset
+      offSetLimit.limit = limit;
+    }
+
+    const patientsData = await Appointment.findAndCountAll(Object.assign({
+      raw: true,
+      nest: true,
+      where: {
+        accountId,
+        isCancelled: true,
+        isDeleted: false,
+        patientId: {
+          $ne: null,
+        },
+      },
+      include: {
+        model: Patient,
+        as: 'patient',
+        required: true,
+      },
+      limit,
+    }, offSetLimit));
+
+    const patients = patientsData.rows.map(data => data.patient);
+    return {
+      patients,
+      count: patientsData.count,
+    };
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function UnConfirmedPatientsFilter(accountId, limit, offset, order, filters, smFilter, next) {
+  try {
+    const offSetLimit = {
+    };
+
+    if (!filters) {
+      offSetLimit.offset = offset
+      offSetLimit.limit = limit;
+    }
+
+    const patientsData = await Appointment.findAndCountAll(Object.assign({
+      raw: true,
+      nest: true,
+      where: {
+        accountId,
+        isPatientConfirmed: false,
+        isCancelled: false,
+        isDeleted: false,
+        startDate: {
+          $between: [moment().toISOString(), moment().add(smFilter.days, 'days').toISOString()]
+        },
+        patientId: {
+          $ne: null,
+        },
+      },
+      include: {
+        model: Patient,
+        as: 'patient',
+        required: true,
+      },
+      limit,
+    }, offSetLimit));
+
+    const patients = patientsData.rows.map(data => data.patient);
+    return {
+      patients,
+      count: patientsData.count,
+    };
+  } catch (err) {
+    next(err);
+  }
+}
 const filterFunctions = {
   Demographics: DemographicsFilter,
 };
 
-const smartFilterFunctions = [LateAppointments];
+const smartFilterFunctions = [LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter];
 /**
  * Fetching patients for patients table.
  *
@@ -224,7 +300,8 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     /**
      * Sorting By
      */
-    const patientSortBy = [];
+    const order = [];
+    const offset = limit * page;
     let apptSortObj = null;
 
     if (sort && sort.length) {
@@ -234,37 +311,39 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
         apptSortObj = sortObj;
       } else {
         const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
-        patientSortBy.push([sortObj.id, descOrAsc]);
+        order.push([sortObj.id, descOrAsc]);
       }
     }
 
     const defaultQuery = {
       raw: true,
       where: filterBy,
-      offset: limit * page,
+      offset,
       limit,
-      order: patientSortBy,
+      order,
     };
 
     let filteredPatients = [];
 
     if (smartFilter) {
-      filteredPatients = await smartFilterFunctions[smartFilter](req.accountId, limit, page, filters, next);
+      const smFilter = JSON.parse(smartFilter)
+      filteredPatients = await smartFilterFunctions[smFilter.index](req.accountId, limit, offset, order, filters, smFilter, next);
     }
+    console.log(filteredPatients)
 
     if (filters && filters.length) {
       const runFilters = filters.map(async (filter) => {
         const filterObj = JSON.parse(filter);
+        console.log(filterObj)
         const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery);
         return patients;
       });
       const data = await Promise.all(runFilters);
-      filteredPatients = data[0]
+      filteredPatients = data[0];
     }
 
-    /*
     /**
-     * Searching patients
+     * Searching patients and applying filters
      */
     let patients = null;
     let patientCount = 0;
@@ -272,15 +351,17 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     if (!search && !smartFilter) {
       patientCount = await Patient.count({
         where: filterBy,
-        order: patientSortBy,
+        order,
       });
       patients = await Patient.findAll({
         ...defaultQuery,
       });
     } else if (smartFilter && !filters) {
+      console.log('smart filtering!!')
       patientCount = filteredPatients.count;
       patients = filteredPatients.patients;
     } else if (filters.length) {
+      console.log('normal filtering!!')
       patients = filteredPatients;
       patientCount = filteredPatients.length;
     } else {
