@@ -50,6 +50,7 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
+      isCancelled: false,
       accountId: reminder.accountId,
       startDate: {
         $between: [date, end],
