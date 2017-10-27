@@ -1,7 +1,7 @@
 
 import { Account } from '../server/_models';
 import { seedTestAccountsSequelize, accountId } from '../tests/util/seedTestAccounts';
-import { computeRemindersAndSend } from '../server/lib/_reminders';
+import { computeRemindersAndSend } from '../server/lib/reminders';
 
 const sampleData = {
   appointment: {

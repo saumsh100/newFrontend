@@ -1,16 +1,43 @@
 
-import { Account, Appointment, Patient, SentReview } from '../../_models';
+import {
+  Account,
+  Appointment,
+  Patient,
+  SentReview,
+} from '../../_models';
 import moment from 'moment';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
-import { getReviewAppointments } from './helpers';
+import { getReviewPatients } from './helpers';
 import sendReview from './sendReview';
 
 export async function sendReviewsForAccount(account, date) {
   console.log(`Sending reviews for ${account.name}`);
-  const appointments = await getReviewAppointments({ account, date });
-  for (const appointment of appointments) {
-    const { patient, practitioner } = appointment;
+
+  const { success, errors } = await getReviewPatients({ account, date });
+  try {
+    console.log(`Trying to bulkSave ${errors.length} failed sentReviews for ${account.name}`);
+
+    // Save failed sentRecalls from errors
+    const failedSentReviews = errors.map(({ errorCode, patient }) => ({
+      accountId: account.id,
+      practitionerId: patient.appointment.practitionerId,
+      patientId: patient.id,
+      appointmentId: patient.appointment.id,
+      errorCode,
+    }));
+
+    await SentReview.bulkCreate(failedSentReviews);
+  } catch (err) {
+    console.error(`FAILED bulkSave of failed sentReviews`, err);
+    // TODO: do we want to throw the error hear and ignore trying to send?
+  }
+
+  console.log(`Trying to send ${success.length} review emails for ${account.name}`);
+
+  for (const patient of success) {
+    const { appointment } = patient;
+    const { practitioner } = appointment;
 
     // Save sent review first so we can
     // - use sentReviewId as token in email to identify patient on review form
@@ -18,7 +45,7 @@ export async function sendReviewsForAccount(account, date) {
     const sentReview = await SentReview.create({
       accountId: account.id,
       practitionerId: appointment.practitionerId,
-      patientId: appointment.patientId,
+      patientId: patient.id,
       appointmentId: appointment.id,
     });
 
@@ -54,6 +81,6 @@ export async function computeReviewsAndSend({ date }) {
   });
 
   for (const account of accounts) {
-    await sendReviewsForAccount(account, date);
+    await exports.sendReviewsForAccount(account, date);
   }
 }

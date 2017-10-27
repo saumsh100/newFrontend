@@ -1,7 +1,28 @@
 
 import moment from 'moment';
 import uniqBy from 'lodash/uniqBy';
-import { Appointment, Patient, SentReview, Review, Practitioner } from '../../_models';
+import {
+  Appointment,
+  Patient,
+  SentReview,
+  Review,
+  Practitioner,
+} from '../../_models';
+import { generateOrganizedPatients } from '../comms/util';
+
+/**
+ * getPatientsNeedingReview
+ */
+export async function getReviewPatients({ account, date }) {
+  const appointments = await exports.getReviewAppointments({ account, date });
+  const patients = appointments.map((appt) => {
+    const patient = appt.patient.get({ plain: true });
+    patient.appointment = appt.get({ plain: true });
+    return patient;
+  });
+
+  return generateOrganizedPatients(patients, 'email');
+}
 
 /**
  * getReviewAppointments

@@ -29,7 +29,7 @@ const createReminderMessage = (config) => {
 voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
   const sentReminder = await SentReminder.findOne({
     where: {
-      id: req.sentReminderId,
+      id: req.params.sentReminderId,
     },
 
     include: [{
@@ -40,6 +40,10 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
     raw: true,
     nest: true,
   });
+
+  if (!sentReminder) {
+    return res.sendStatus(404);
+  }
 
   const { Digits } = req.body;
   const {

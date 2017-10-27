@@ -8,8 +8,8 @@ import {
   SentReminder,
   Appointment
 } from '../../../_models';
-import { getValidSmsReminders } from '../../../lib/_reminders/helpers';
-import { createConfirmationText } from '../../../lib/_reminders/sendReminder';
+import { getValidSmsReminders } from '../../../lib/reminders/helpers';
+import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import { sequelizeLoader } from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
 import twilioClient from '../../../config/twilio';
@@ -63,7 +63,8 @@ function sendSocketReminder(io, sentReminder) {
 
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
-
+    const start = Date.now();
+    console.log('Started the SMS receive');
     let {
       account,
     } = req;
@@ -132,7 +133,8 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     // If not patient or if not any valid sms sentReminders or if not proper response
     if (!patient || Body.trim() !== 'C') {
       await sendSocket(io, chatClean.id);
-      return;
+      console.log('res.end about to be called', `${Date.now() - start}ms`);
+      return res.end();
     }
 
     // Confirming valid SMS Reminder for patient
@@ -143,7 +145,8 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
 
     if (!validSmsReminders.length) {
       await sendSocket(io, chatClean.id);
-      return;
+      console.log('res.end about to be called', `${Date.now() - start}ms`);
+      return res.end();
     }
 
     // Confirm first available reminder
@@ -173,6 +176,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     });
 
     await sendSocket(io, chatClean.id);
+    console.log('res.end about to be called', `${Date.now() - start}ms`);
     res.end();
   } catch (err) {
     next(err);

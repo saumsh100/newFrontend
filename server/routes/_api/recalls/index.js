@@ -5,7 +5,7 @@ import normalize from '../normalize';
 import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
-import { getPatientsDueForRecall } from '../../../lib/_recalls/helpers';
+import { getPatientsDueForRecall, mapPatientsToRecalls } from '../../../lib/recalls/helpers';
 
 const recallsRouter = new Router();
 
@@ -34,30 +34,28 @@ recallsRouter.get('/:accountId/recalls', checkPermissions('accounts:read'), asyn
 });
 
 /**
- * GET /:accountId/recalls/stats
+ * GET /:accountId/recalls/list
  */
-recallsRouter.get('/:accountId/recalls/stats', checkPermissions('accounts:read'), async (req, res, next) => {
+recallsRouter.get('/:accountId/recalls/list', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
     // TODO: date needs to be on the 30 minute marks
+    const { account } = req;
     const date = (new Date()).toISOString();
     const recalls = await Recall.findAll({
       raw: true,
-      where: { accountId: req.accountId },
+      where: { accountId: account.id },
       order: [['lengthSeconds', 'DESC']],
     });
 
-    const data = [];
-    for (const recall of recalls) {
-      const patients = await getPatientsDueForRecall({ account: req.account, recall, date });
-      const noEmail = patients.filter(p => !p.email);
-      data.push({
-        ...recall,
-        success: patients.length - noEmail.length,
-        fail: noEmail.length,
-      });
-    }
+    const data = await mapPatientsToRecalls({ recalls, account, date });
+    const dataWithRecalls = data.map((d, i) => {
+      return {
+        ...d,
+        ...recalls[i],
+      };
+    });
 
-    res.send(data);
+    res.send(dataWithRecalls);
   } catch (error) {
     next(error);
   }
