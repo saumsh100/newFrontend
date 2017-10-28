@@ -66,6 +66,10 @@ async function sendSocket(io, chatId) {
   });
 }*/
 
+function getIsConfirmable(appointment) {
+  return appointment.isPatientConfirmed;
+}
+
 /**
  *
  * @param account
@@ -93,6 +97,7 @@ export async function sendRemindersForAccount(account, date) {
         accountId: account.id,
         patientId: patient.id,
         appointmentId: patient.appointment.id,
+        isConfirmable: getIsConfirmable(patient.appointment),
         lengthSeconds: reminder.lengthSeconds,
         primaryType,
         errorCode,
@@ -119,6 +124,7 @@ export async function sendRemindersForAccount(account, date) {
         patientId: patient.id,
         appointmentId: appointment.id,
         lengthSeconds: reminder.lengthSeconds,
+        isConfirmable: getIsConfirmable(appointment),
         primaryType: reminder.primaryType,
       });
 

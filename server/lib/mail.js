@@ -9,6 +9,12 @@ module.exports = {
     return sendTemplate(config);
   },
 
+  sendAlreadyConfirmedReminder: () => {
+    config.subject = 'Appointment Reminder';
+    config.templateName = 'Appointment Reminder - No Confirmation';
+    return sendTemplate(config);
+  },
+
   sendPatientRecall: (config) => {
     config.subject = 'You are due for your next appointment';
     config.templateName = 'Patient Recall';
