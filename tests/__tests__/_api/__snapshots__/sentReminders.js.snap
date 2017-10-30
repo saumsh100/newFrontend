@@ -15,6 +15,7 @@ Object {
         "isDeleted": false,
         "isPatientConfirmed": false,
         "isReminderSent": true,
+        "isShortCancelled": false,
         "isSyncedWithPms": false,
         "note": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",

@@ -98,6 +98,17 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    isShortCancelled: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+      set(value) {
+        if (value === true) {
+          this.setDataValue('isCancelled', value);
+        }
+      },
+    },
+
     customBufferTime: {
       type: DataTypes.INTEGER,
     },
