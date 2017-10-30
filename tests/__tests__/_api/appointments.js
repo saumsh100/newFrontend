@@ -177,7 +177,7 @@ describe('/api/appointments', () => {
     });
   });
 
-  describe.only('POST /', () => {
+  describe('POST /', () => {
     beforeEach(async () => {
       await wipeModel(Appointment);
     });
