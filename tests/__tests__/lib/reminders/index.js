@@ -140,11 +140,11 @@ describe('Reminders Job Integration Tests', () => {
 
           patient: {
             id: patientId,
-            mobilePhoneNumber: '+17808508886',
+            mobilePhoneNumber: '+16042433796',
             get() {
               return {
                 id: patientId,
-                mobilePhoneNumber: '+17808508886',
+                mobilePhoneNumber: '+16042433796',
               };
             }
           },
