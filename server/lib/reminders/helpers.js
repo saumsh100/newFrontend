@@ -116,6 +116,7 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
       accountId,
       patientId,
       isConfirmed: false,
+      isConfirmable: true,
       primaryType: 'sms',
     },
 
