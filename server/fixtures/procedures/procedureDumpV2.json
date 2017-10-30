@@ -1,0 +1,12 @@
+[
+  {
+    "code": "01900",
+    "description": "Orthodontic Oral Examination",
+    "type": "Orthodontic"
+  },
+  {
+    "code": "99985",
+    "description": "Prophylaxis/Fluoride",
+    "type": ""
+  }
+]
