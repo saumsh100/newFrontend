@@ -39,6 +39,7 @@ class PatientTable extends Component {
       filters: [],
       smartFilter: null,
     };
+
     this.fetchData = debounce(this.fetchData, 500);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
@@ -64,10 +65,18 @@ class PatientTable extends Component {
       params: query,
     }).then((data) => {
       const dataArray = getEntities(data);
-      this.setState({
-        totalPatients: dataArray[0].totalPatients,
-        data: dataArray,
-      });
+
+      if (dataArray.length) {
+        this.setState({
+          totalPatients: dataArray[0].totalPatients,
+          data: dataArray,
+        });
+      } else {
+        this.setState({
+          totalPatients: 0,
+          data: [],
+        });
+      }
     });
   }
 
@@ -79,6 +88,7 @@ class PatientTable extends Component {
       filters: this.state.filters,
       smartFilter: this.state.smartFilter,
     });
+
     this.setState({
       page: index,
     });
@@ -92,6 +102,7 @@ class PatientTable extends Component {
       filters: this.state.filters,
       smartFilter: this.state.smartFilter,
     });
+
     this.setState({
       limit: pageSize,
       search: '',
@@ -168,16 +179,17 @@ class PatientTable extends Component {
 
   setSmartFilter(filterObj) {
     this.fetchData({
-      filters: this.state.filters,
+      filters: [],
       page: 0,
       limit: this.state.limit,
       sort: this.state.sorted,
-      smartFilter: filterObj ,
+      smartFilter: filterObj,
     });
 
     this.setState({
       smartFilter: filterObj,
       page: 0,
+      filters: [],
     });
   }
 
@@ -198,7 +210,6 @@ class PatientTable extends Component {
       createEntityRequest,
     } = this.props;
 
-    console.log(this.state);
     const columns = [
       {
         Header: '#',
@@ -306,7 +317,7 @@ class PatientTable extends Component {
               reinitializeTable={this.reinitializeTable}
               onSearch={this.onSearch}
               searchValue={this.state.search}
-              filters={this.state.filters}
+              smartFilter={this.state.smartFilter}
               setSmartFilter={this.setSmartFilter}
             />
           </Col>

@@ -9,6 +9,7 @@ export default function SmartFilters(props) {
     handleSubmit,
     addFilterToTable,
     setSmartFilter,
+    smartFilter,
   } = props;
   const smartFilters = [
     {
@@ -59,21 +60,34 @@ export default function SmartFilters(props) {
     },
     {
       index: 2,
-      label: 'Unconfirmed Patients one week',
+      label: 'Missed Pre-Appointed',
+    },
+    {
+      index: 3,
+      label: 'Unconfirmed Patients 1 week',
       days: 7,
     },
     {
-      index: 2,
-      label: 'Unconfirmed Patients two week',
+      index: 3,
+      label: 'Unconfirmed Patients 2 weeks',
       days: 14,
     },
   ];
 
+
   return (
     <List className={styles.smartFilter}>
       {smartFilters.map((filter, index) => {
+
+        let borderStyle = { };
+        if (smartFilter && filter.label === smartFilter.label) {
+          borderStyle = {
+            borderLeft: '5px solid #FF715A',
+          };
+        }
+
         return (
-          <ListItem className={styles.filterItem} onClick={() => setSmartFilter(filter)}>
+          <ListItem className={styles.filterItem} onClick={() => setSmartFilter(filter)} style={borderStyle}>
             {filter.label}
           </ListItem>
         );

@@ -60,7 +60,7 @@ class HeaderSection extends Component {
       totalPatients,
       onSearch,
       searchValue,
-      filters,
+      smartFilter,
       setSmartFilter,
     } = this.props;
 
@@ -74,7 +74,7 @@ class HeaderSection extends Component {
     const filterMenu = props => (
       <div{...props} className={styles.filterMenuButton}>
         <div className={styles.header_title}>
-          All Patients
+          {smartFilter ? smartFilter.label : 'All Patients' }
           <div className={styles.header_icon}>
             <Icon icon="caret-down" />
           </div>
@@ -92,24 +92,22 @@ class HeaderSection extends Component {
             <div className={styles.filterContainer}>
               <SmartFilters
                 setSmartFilter={setSmartFilter}
+                smartFilter={smartFilter}
               />
             </div>
           </DropdownMenu>
           <div className={styles.header_subHeader}>
-            Showing {totalPatients} Patients
+            {`Showing ${totalPatients} Patients`}
           </div>
         </div>
-          <FilterTags
-            filters={filters}
-          />
         </div>
         <div className={styles.searchBar}>
-          <Input
+          {/* <Input
             label="Search"
             onChange={e => onSearch(e.target.value)}
             icon="search"
             value={searchValue}
-          />
+          /> */}
         </div>
         <div className={styles.addNewButton}>
           <Button

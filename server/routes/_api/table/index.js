@@ -21,6 +21,25 @@ function SortByMomentAsc(a, b) {
   return 0;
 };
 
+function ManualLimitOffset(eventsArray, query) {
+  const {
+    limit,
+    offset,
+  } = query;
+
+  let filterArray = eventsArray;
+
+  if (offset && eventsArray.length > offset) {
+    filterArray = filterArray.slice(offset, eventsArray.length);
+  }
+
+  if (limit) {
+    filterArray = filterArray.slice(0, limit);
+  }
+
+  return filterArray;
+}
+
 function getNextLastAppointment (patientId, accountId) {
   return Appointment.findAll({
     raw: true,
@@ -89,7 +108,7 @@ function DemographicsFilter(values, patients, query) {
   const startDate = moment().subtract(ageEnd, 'years').toISOString();
   const idData = {};
   if (patients && patients.length) {
-    const patientIds = getIds(patients)
+    const patientIds = getIds(patients);
     idData.id = patientIds;
   }
 
@@ -207,6 +226,9 @@ async function CancelledAppointmentsFilter(accountId, limit, offset, order, filt
         accountId,
         isCancelled: true,
         isDeleted: false,
+        startDate: {
+          $between: [moment().subtract(48, 'hours').toISOString(), new Date()],
+        },
         patientId: {
           $ne: null,
         },
@@ -216,7 +238,6 @@ async function CancelledAppointmentsFilter(accountId, limit, offset, order, filt
         as: 'patient',
         required: true,
       },
-      limit,
     }, offSetLimit));
 
     const patients = patientsData.rows.map(data => data.patient);
@@ -224,6 +245,81 @@ async function CancelledAppointmentsFilter(accountId, limit, offset, order, filt
       patients,
       count: patientsData.count,
     };
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function MissedPreAppointed(accountId, limit, offset, order, filters, smFilter, next) {
+  try {
+    const offSetLimit = {
+    };
+
+    if (!filters) {
+      offSetLimit.offset = offset
+      offSetLimit.limit = limit;
+    }
+
+    const appData = await Appointment.findAll({
+      raw: true,
+      nest: true,
+      where: {
+        accountId,
+        startDate: {
+          $between: [moment().subtract(30, 'days').toISOString(), new Date()],
+        },
+        isCancelled: false,
+        isDeleted: false,
+        patientId: {
+          $ne: null,
+        },
+      },
+      include: {
+        model: Patient,
+        as: 'patient',
+        required: true,
+      },
+    });
+
+    const patientIdsHash = {}
+    const patientIds = appData.map((data) => {
+      patientIdsHash[data.patient.id] = data.patient;
+      return data.patient.id;
+    });
+
+    const patientsData = await Appointment.findAll({
+      raw: true,
+      attributes: ['patientId'],
+      where: {
+        accountId,
+        isCancelled: false,
+        isDeleted: false,
+        startDate: {
+          $between: [new Date(), moment().add(1, 'year').toISOString()],
+        },
+        patientId: {
+          $in: patientIds,
+        },
+      },
+      groupBy: ['patientId'],
+    });
+
+    patientsData.forEach(data => {
+      if (patientIdsHash.hasOwnProperty(data.patientId)) {
+        delete patientIdsHash[data.patientId];
+      }
+    });
+
+    const hashKeys = Object.keys(patientIdsHash);
+    const patients = hashKeys.map(id=> patientIdsHash[id]);
+
+    const filteredPatients = ManualLimitOffset(patients, offSetLimit);
+
+    return {
+      patients: filteredPatients,
+      count: patients.length,
+    };
+
   } catch (err) {
     next(err);
   }
@@ -259,7 +355,6 @@ async function UnConfirmedPatientsFilter(accountId, limit, offset, order, filter
         as: 'patient',
         required: true,
       },
-      limit,
     }, offSetLimit));
 
     const patients = patientsData.rows.map(data => data.patient);
@@ -271,11 +366,19 @@ async function UnConfirmedPatientsFilter(accountId, limit, offset, order, filter
     next(err);
   }
 }
+
 const filterFunctions = {
   Demographics: DemographicsFilter,
 };
 
-const smartFilterFunctions = [LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter];
+const smartFilterFunctions = [
+  LateAppointmentsFilter,
+  CancelledAppointmentsFilter,
+  MissedPreAppointed,
+  UnConfirmedPatientsFilter,
+];
+
+
 /**
  * Fetching patients for patients table.
  *
@@ -323,18 +426,20 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       order,
     };
 
+
+    /**
+     * Applying Filters
+     */
     let filteredPatients = [];
 
     if (smartFilter) {
       const smFilter = JSON.parse(smartFilter)
       filteredPatients = await smartFilterFunctions[smFilter.index](req.accountId, limit, offset, order, filters, smFilter, next);
     }
-    console.log(filteredPatients)
 
     if (filters && filters.length) {
       const runFilters = filters.map(async (filter) => {
         const filterObj = JSON.parse(filter);
-        console.log(filterObj)
         const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery);
         return patients;
       });
@@ -343,7 +448,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     }
 
     /**
-     * Searching patients and applying filters
+     * Searching patients and displaying filters
      */
     let patients = null;
     let patientCount = 0;
@@ -391,7 +496,6 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
         if (productionRevenue && productionRevenue.length) {
           patient.totalAmount = productionRevenue[0].totalAmount;
         }
-
         patient.totalPatients = patientCount;
         return patient;
       } catch (error) {

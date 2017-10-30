@@ -13,6 +13,7 @@ class SideBarFilters extends Component {
   handleDemographics(values) {
     this.props.addFilter({
       type: 'Demographics',
+      subType: '',
       values,
       index: 0,
     });

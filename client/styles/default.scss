@@ -88,7 +88,7 @@
 
   .dd-menu-items {
     width: 100%;
-    //min-width: 200px;
+    min-width: 100px !important;
     z-index: 2500 !important;
     white-space: nowrap;
     background: transparent;
