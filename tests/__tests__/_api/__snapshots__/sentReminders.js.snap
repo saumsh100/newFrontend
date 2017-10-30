@@ -77,6 +77,7 @@ Object {
         "appointment": "6b215a42-5c33-4f94-8313-d89893ae2f36",
         "appointmentId": "6b215a42-5c33-4f94-8313-d89893ae2f36",
         "id": "e757afb0-14ef-4763-b162-c573169131c1",
+        "isConfirmable": true,
         "isConfirmed": false,
         "isSent": true,
         "lengthSeconds": 540,
