@@ -22,7 +22,7 @@ class ResetPassword extends Component {
   handleSubmit(values) {
     // This just posts right back to location URL...
     return this.props.resetUserPassword(this.props.location, values)
-    .then(() => {
+    .then((data) => {
       this.setState({ submitted: true });
     });
   }
@@ -30,19 +30,22 @@ class ResetPassword extends Component {
   render() {
     const {
       push,
+      patientUser,
     } = this.props;
+
+    const button = !patientUser ? (<Button
+      onClick={() => {
+        push('/login');
+      }}
+      className={styles.displayCenter}
+    >
+      Return to Login
+    </Button>) : <div className={styles.textSuccess2}>You can now go back to the clinic's website tab.</div>;
 
     const display = !this.state.submitted ?  <ResetPasswordForm onSubmit={this.handleSubmit} /> :
       (<div>
           <div className={styles.textSuccess2}>Password Successfully Changed!</div>
-          <Button
-            onClick={()=> {
-              push('/login');
-            }}
-            className={styles.displayCenter}
-          >
-            Return to Login
-          </Button>
+          {button}
        </div>);
 
     return (
@@ -64,7 +67,7 @@ class ResetPassword extends Component {
 }
 
 ResetPassword.propTypes = {
-
+  patientUser: PropTypes.bool,
 };
 
 function mapActionsToProps(dispatch) {
