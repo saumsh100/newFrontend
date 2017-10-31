@@ -14,7 +14,13 @@ const MyRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
       <div>
         <Switch>
           {/* TODO: below are both tokenized links, need to handle properly */}
-          <Route exact path="/reset-password/:token" component={ResetPassword} />
+          <Route
+            exact
+            path="/reset-password/:token" render={(props) => (<ResetPassword
+              {...props}
+              patientUser
+            />)}
+          />
           <Route path="/unsubscribe" component={SignUp} />
           <Route component={FourZeroFour} />
         </Switch>
