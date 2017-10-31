@@ -19,10 +19,11 @@ export default function Demographics(props) {
   return (
     <Form
       form="demographics"
-      onSubmit={handleDemographics}
-      enableReinitialize
+      onChange={handleDemographics}
+      ignoreSaveButton
     >
       <div className={styles.formContainer}>
+        <div className={styles.formHeader}> Age </div>
         <div className={styles.formContainer_row} >
           <Field
             component="DropdownSelect"
@@ -47,6 +48,7 @@ export default function Demographics(props) {
             required
           />
         </div>
+        <div className={styles.formHeader}> Gender </div>
         <div className={styles.formContainer_row} >
           <Field
             component="DropdownSelect"
@@ -55,9 +57,9 @@ export default function Demographics(props) {
             options={optionsGender}
             className={styles.ddSelect}
             required
-
           />
         </div>
+        <div className={styles.formHeader}> Location </div>
         <div className={styles.formContainer_row} >
           <Field
             component="DropdownSelect"

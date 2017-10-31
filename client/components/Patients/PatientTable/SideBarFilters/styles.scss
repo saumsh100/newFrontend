@@ -29,11 +29,11 @@
   align-items: center;
   width: 100%;
   height: 50px;
-  background: $primary-gray;
+  background: lighten($inactive-color, 15%);
   padding: 10px;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   justify-content: space-between;
-
+  cursor: pointer;
   &_icon {
     padding-right: 10px;
   }
@@ -42,7 +42,19 @@
 .collapsible {
   padding: 25px 15px 15px 15px;
   background: white;
+  animation: fadein 1s ease;
+  opacity: 1;
 }
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 
 .formContainer {
   background: white;
@@ -50,18 +62,28 @@
   &_row {
     display: flex;
     width: 100%;
-    padding-top: 25px;
     align-items: center;
     justify-content: space-between;
-
-    &:first-child {
-      padding-top: 0px;
+    padding-bottom: 25px;
+    &:last-child {
+      padding-bottom: 0px;
     }
   }
 
   &_middleText {
     padding: 10px;
   }
+}
+
+.formHeader {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-blue;
+  padding-bottom: 15px;
+}
+
+.formHeaderInput {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-blue;
 }
 
 .ddSelect {

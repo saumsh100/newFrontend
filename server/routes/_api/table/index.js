@@ -104,35 +104,56 @@ function DemographicsFilter(values, patients, query) {
     offset,
   } = query
 
-  const endDate = moment().subtract(ageStart, 'years').toISOString();
-  const startDate = moment().subtract(ageEnd, 'years').toISOString();
+
   const idData = {};
   if (patients && patients.length) {
     const patientIds = getIds(patients);
     idData.id = patientIds;
   }
 
+  let birthDate = {};
+  let address = {};
+  let genderObj = {};
+
+  if (ageStart && ageEnd) {
+    const endDate = moment().subtract(ageStart, 'years').toISOString();
+    const startDate = moment().subtract(ageEnd, 'years').toISOString();
+    birthDate = {
+      birthDate: {
+        $between: [startDate, endDate],
+      },
+    };
+  }
+
+  if (city) {
+    address = {
+      address: {
+        city: {
+          $ilike: city,
+        },
+      },
+    };
+  }
+
+  if (gender) {
+    genderObj = {
+      gender: {
+        $ilike: gender,
+      },
+    };
+  }
+
   const searchClause = {
     ...query.where,
-    gender: {
-      $ilike: gender,
-    },
-    address: {
-      city: {
-        $ilike: city,
-      },
-    },
-    birthDate: {
-      $between: [startDate, endDate],
-    },
+    ...genderObj,
+    ...address,
+    ...birthDate,
   };
 
-
-  return Patient.findAll({
+  return Patient.findAndCountAll({
     raw: true,
-    where: Object.assign({
-      ...idData,
-    }, searchClause),
+    where: Object.assign(idData,
+    searchClause),
     offset,
     limit,
     order,
@@ -313,7 +334,7 @@ async function MissedPreAppointed(accountId, limit, offset, order, filters, smFi
     const hashKeys = Object.keys(patientIdsHash);
     const patients = hashKeys.map(id=> patientIdsHash[id]);
 
-    const filteredPatients = ManualLimitOffset(patients, offSetLimit);
+    const filteredPatients = !filters ? ManualLimitOffset(patients, offSetLimit) : patients;
 
     return {
       patients: filteredPatients,
@@ -431,6 +452,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
      * Applying Filters
      */
     let filteredPatients = [];
+    let patientCount = 0;
 
     if (smartFilter) {
       const smFilter = JSON.parse(smartFilter)
@@ -438,22 +460,23 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     }
 
     if (filters && filters.length) {
+      console.log(filters)
       const runFilters = filters.map(async (filter) => {
         const filterObj = JSON.parse(filter);
         const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery);
         return patients;
       });
       const data = await Promise.all(runFilters);
-      filteredPatients = data[0];
+      filteredPatients = data[0].rows;
+      patientCount = data[0].count;
     }
 
     /**
      * Searching patients and displaying filters
      */
     let patients = null;
-    let patientCount = 0;
 
-    if (!search && !smartFilter) {
+    if (!search && !smartFilter && !(filters && filters.length)) {
       patientCount = await Patient.count({
         where: filterBy,
         order,
@@ -466,9 +489,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       patientCount = filteredPatients.count;
       patients = filteredPatients.patients;
     } else if (filters.length) {
-      console.log('normal filtering!!')
-      patients = filteredPatients;
-      patientCount = filteredPatients.length;
+        patients = filteredPatients;
     } else {
       patients = await PatientSearch(search, req.accountId, defaultQuery);
       patientCount = patients.length;

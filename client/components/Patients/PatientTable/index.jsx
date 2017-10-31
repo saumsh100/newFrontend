@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import moment from 'moment';
 import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
@@ -36,7 +37,7 @@ class PatientTable extends Component {
       sorted: [],
       expanded: {},
       search: '',
-      filters: [],
+      filters: Map(),
       smartFilter: null,
     };
 
@@ -85,7 +86,7 @@ class PatientTable extends Component {
       limit: this.state.limit,
       sort: this.state.sorted,
       page: index,
-      filters: this.state.filters,
+      filters: this.state.filters.toArray(),
       smartFilter: this.state.smartFilter,
     });
 
@@ -99,7 +100,7 @@ class PatientTable extends Component {
       limit: pageSize,
       sort: this.state.sorted,
       page: pageIndex,
-      filters: this.state.filters,
+      filters: this.state.filters.toArray(),
       smartFilter: this.state.smartFilter,
     });
 
@@ -127,7 +128,7 @@ class PatientTable extends Component {
       page: this.state.page,
       limit: this.state.limit,
       search: this.state.search,
-      filters: this.state.filters,
+      filters: this.state.filters.toArray(),
       smartFilter: this.state.smartFilter,
     });
 
@@ -160,11 +161,10 @@ class PatientTable extends Component {
       filters,
     } = this.state;
 
-    const newFilters = filters;
-    newFilters.push(filter);
+    const newFilters = filters.set(`${filter.type}`, filter);
 
     this.fetchData({
-      filters: newFilters,
+      filters: newFilters.toArray(),
       page: 0,
       limit: this.state.limit,
       sort: this.state.sorted,
@@ -189,7 +189,7 @@ class PatientTable extends Component {
     this.setState({
       smartFilter: filterObj,
       page: 0,
-      filters: [],
+      filters: Map(),
     });
   }
 
@@ -198,7 +198,7 @@ class PatientTable extends Component {
       limit: 15,
       page: 0,
       search: '',
-      filters: [],
+      filters: Map(),
       smartFilter: null,
     });
   }
@@ -379,6 +379,8 @@ class PatientTable extends Component {
                   style: {
                     background: 'white',
                     color: '#959596',
+                    paddingTop: '3px',
+                    fontSize: '12px',
                   },
                 };
               }}
