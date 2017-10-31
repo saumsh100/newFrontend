@@ -273,6 +273,18 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
   }).catch(next);
 });
 
+/**
+ * [mergeCopyArrays function for custom merge (lodash). So that array's aren't merged]
+ * @param  {[type]} objValue
+ * @param  {[type]} srcValue
+ * @return {[type]} only return source value for arrays so they don't merge
+ * else return undefined and follow merge.
+ */
+function mergeCopyArrays(objValue, srcValue) {
+  if (_.isArray(objValue)) {
+    return srcValue;
+  }
+}
 
 /**
  * Update a practitioners custom weekly schedule
@@ -286,7 +298,13 @@ practitionersRouter.put('/:practitionerId/weeklySchedule', async (req, res, next
         id: req.practitioner.weeklyScheduleId,
       },
     });
-    const updateSchedule = _.merge(schedule.get({ plain: true }), req.body);
+
+    const copy = Object.assign({}, req.body);
+
+    const s3 = schedule.get({ plain: true });
+
+    const updateSchedule = _.mergeWith({}, s3, copy, mergeCopyArrays);
+
 
     schedule.setDataValue('pmsId', req.body.pmsId);
 
