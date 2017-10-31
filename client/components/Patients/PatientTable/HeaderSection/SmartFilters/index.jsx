@@ -13,6 +13,10 @@ export default function SmartFilters(props) {
   } = props;
   const smartFilters = [
     {
+      index: -1,
+      label: 'All Patients',
+    },
+    {
       index: 0,
       label: 'Due within 60 Days',
       startMonth: 6,

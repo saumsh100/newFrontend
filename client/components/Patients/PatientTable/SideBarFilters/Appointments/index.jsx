@@ -3,25 +3,6 @@ import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../../library';
 import styles from '../styles.scss';
 
-
-const normalizeBirthdate = (value) => {
-  return value.trim();
-};
-
-const validateBirthdate = (value) => {
-  const format = 'MM/DD/YYYY';
-  const pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-  if (!pattern.test(value)) {
-    return format;
-  } else {
-    const date = moment(value, format);
-    const isValid = date.isValid();
-    if (!isValid) {
-      return format;
-    }
-  }
-};
-
 export default function Appointments(props) {
   const {
     handleAppointments,
@@ -39,14 +20,14 @@ export default function Appointments(props) {
           <Field
             required
             component="DayPicker"
-            name="firstDate1"
+            name="firstApp1"
             label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="firstDate2"
+            name="firstApp2"
             label="Date"
           />
         </div>
@@ -55,14 +36,14 @@ export default function Appointments(props) {
           <Field
             required
             component="DayPicker"
-            name="lastDate1"
+            name="lastApp1"
             label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastDate2"
+            name="lastApp2"
             label="Date"
           />
         </div>
@@ -71,7 +52,10 @@ export default function Appointments(props) {
           <Field
             component="DropdownSelect"
             name="treatment"
-            options={[]}
+            options={[{
+              label: 'cleaning',
+              value: 'cleaning',
+            }]}
             className={styles.ddSelect}
             label="Treatment"
           />
@@ -92,7 +76,7 @@ export default function Appointments(props) {
               name="app2"
               options={[{
                 label: '10',
-                value: 10,
+                value: '10',
               }]}
               label="#"
               className={styles.ddSelect}
@@ -115,7 +99,7 @@ export default function Appointments(props) {
             name="prod1"
             options={[{
               label: '$0',
-              value: 0,
+              value: '0',
             }]}
           />
           <span className={styles.formContainer_middleText}> to </span>
@@ -124,7 +108,7 @@ export default function Appointments(props) {
             name="prod2"
             options={[{
               label: '$1000',
-              value: 1000,
+              value: '1000',
             }]}
             className={styles.ddSelect}
           />
@@ -146,7 +130,7 @@ export default function Appointments(props) {
               label="#"
               options={[{
                 label: '10',
-                value: 10,
+                value: '10',
               }]}
               className={styles.ddSelect}
             />

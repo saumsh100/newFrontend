@@ -6,7 +6,7 @@ import Appointments from './Appointments';
 import styles from './styles.scss';
 
 class SideBarFilters extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       openFilters: [false, false],
@@ -18,7 +18,7 @@ class SideBarFilters extends Component {
 
   displayFilter(index) {
     const {
-      openFilters
+      openFilters,
     } = this.state;
 
     const filterState = openFilters[index]
@@ -29,6 +29,7 @@ class SideBarFilters extends Component {
       openFilters: newFiltersState,
     });
   }
+
   handleDemographics(values) {
     if ((values.ageStart && values.ageEnd) || (!values.ageStart && !values.ageEnd)) {
       this.props.addFilter({
@@ -41,10 +42,10 @@ class SideBarFilters extends Component {
 
   handleAppointments(values) {
     const {
-      firstDate1,
-      firstDate2,
-      lastDate1,
-      lastDate2,
+      firstApp1,
+      firstApp2,
+      lastApp1,
+      lastApp2,
       app1,
       app2,
       app3,
@@ -55,11 +56,13 @@ class SideBarFilters extends Component {
       online3,
     } = values;
 
-    if (((firstDate1 && firstDate2) || (!firstDate1 && !firstDate2)) &&
-      ((lastDate1 && lastDate2) || (!lastDate1 && !lastDate2)) &&
+
+    if (((firstApp1 && firstApp2) || (!firstApp1 && !firstApp2)) &&
+      ((lastApp1 && lastApp2) || (!lastApp1 && !lastApp2)) &&
       ((app1 && app2 && app3) || (!app1 && !app2 && !app3)) &&
       ((prod1 && prod2) || (!prod1 && !prod2)) &&
       ((online1 && online2 && online3) || (!online1 && !online2 && !online3))) {
+      console.log(values)
       this.props.addFilter({
         type: 'Appointments',
         values,
@@ -79,31 +82,34 @@ class SideBarFilters extends Component {
           <div className={styles.header_text}> Filters </div>
         </div>
         <div className={styles.filtersContainer}>
-          <div
-            className={styles.filterHeader}
-            onClick={() => this.displayFilter(0)}
-          >
-            Demographics
-            <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+          <div className={styles.filterBody}>
+            <div
+              className={styles.filterHeader}
+              onClick={() => this.displayFilter(0)}
+            >
+              Demographics
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+            </div>
+            {openFilters[0] ? <div className={styles.collapsible}>
+              <Demographics
+                handleDemographics={this.handleDemographics}
+              />
+            </div> : null}
           </div>
-          {openFilters[0] ? <div className={styles.collapsible}>
-            <Demographics
-              handleDemographics={this.handleDemographics}
-            />
-          </div> : null}
-          <div
-            className={styles.filterHeader}
-            onClick={() => this.displayFilter(1)}
-          >
-            Appointments
-            <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+          <div className={styles.filterBody}>
+            <div
+              className={styles.filterHeader}
+              onClick={() => this.displayFilter(1)}
+            >
+              Appointments
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+            </div>
+            {openFilters[1] ? <div className={styles.collapsible}>
+              <Appointments
+                handleAppointments={this.handleAppointments}
+              />
+            </div> : null }
           </div>
-          {openFilters[1] ? <div className={styles.collapsible}>
-            <Appointments
-              handleAppointments={this.handleAppointments}
-            />
-          </div> : null }
-
         </div>
       </div>
     );

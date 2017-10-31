@@ -5,7 +5,7 @@ import { mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import PatientSearch from '../../../lib/patientSearch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Appointment, Patient, sequelize } from '../../../_models';
+import { Appointment, Patient, sequelize, Service } from '../../../_models';
 
 const tableRouter = new Router();
 
@@ -84,6 +84,23 @@ function getNextLastAppointment (patientId, accountId) {
   });
 };
 
+function getFirstAppointment(patientId, accountId) {
+  return Appointment.findAll({
+    raw: true,
+    nest: true,
+    where: {
+      accountId,
+      patientId,
+    },
+    order: [['startDate', 'ASC']],
+    include: {
+      model: Patient,
+      as: 'patient',
+    },
+    limit: 1,
+  });
+}
+
 function getIds(patients) {
   return patients.map((patient) => {
     return patient.id;
@@ -102,8 +119,7 @@ function DemographicsFilter(values, patients, query) {
     limit,
     order,
     offset,
-  } = query
-
+  } = query;
 
   const idData = {};
   if (patients && patients.length) {
@@ -159,6 +175,70 @@ function DemographicsFilter(values, patients, query) {
     order,
   });
 }
+
+async function AppointmentsFilter(values, patients, query, next) {
+  try {
+    const {
+      firstApp1,
+      firstApp2,
+      app1,
+    } = values;
+
+    const {
+      limit,
+      order,
+      offset,
+      where,
+    } = query;
+
+    if (firstApp1) {
+      const patientIdData= await Appointment.findAll({
+        raw: true,
+        attributes: ['patientId'],
+        where: {
+          accountId: where.accountId,
+          isCancelled: false,
+          isDeleted: false,
+          startDate: {
+            $between: [firstApp1, firstApp2],
+          },
+          patientId: {
+            $not: null,
+          },
+        },
+        groupBy: ['patientId'],
+      })
+
+      const patientList = patientIdData.map(async (data) => {
+        try {
+          const patient = await Appointment.findAll({
+            raw: true,
+            nest: true,
+            where: {
+              accountId: where.accountId,
+              patientId: data.patientId,
+            },
+            order: [['startDate', 'ASC']],
+            include: {
+              model: Patient,
+              as: 'patient',
+            },
+            limit: 1,
+          });
+          return patient[0].patient;
+        } catch (err) {
+          next(err)
+        }
+      });
+      const pData = await Promise.all(patientList).then(data => data);
+      const truncatedData = ManualLimitOffset(pData, limit, offset)
+      return { rows: truncatedData, count: truncatedData.length } ;
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
 
 async function LateAppointmentsFilter(accountId, limit, offset, order, filters, smFilter, next) {
   try {
@@ -390,6 +470,7 @@ async function UnConfirmedPatientsFilter(accountId, limit, offset, order, filter
 
 const filterFunctions = {
   Demographics: DemographicsFilter,
+  Appointments: AppointmentsFilter,
 };
 
 const smartFilterFunctions = [
@@ -447,7 +528,6 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       order,
     };
 
-
     /**
      * Applying Filters
      */
@@ -460,10 +540,9 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     }
 
     if (filters && filters.length) {
-      console.log(filters)
       const runFilters = filters.map(async (filter) => {
         const filterObj = JSON.parse(filter);
-        const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery);
+        const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery, next);
         return patients;
       });
       const data = await Promise.all(runFilters);

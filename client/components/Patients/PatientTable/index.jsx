@@ -4,6 +4,7 @@ import { Map } from 'immutable';
 import moment from 'moment';
 import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
+import { destroy } from 'redux-form';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
@@ -50,6 +51,7 @@ class PatientTable extends Component {
     this.reinitializeTable = this.reinitializeTable.bind(this);
     this.addFilter = this.addFilter.bind(this);
     this.setSmartFilter = this.setSmartFilter.bind(this);
+    this.clearFilters = this.clearFilters.bind(this);
   }
 
   componentDidMount() {
@@ -178,19 +180,25 @@ class PatientTable extends Component {
   }
 
   setSmartFilter(filterObj) {
-    this.fetchData({
-      filters: [],
-      page: 0,
-      limit: this.state.limit,
-      sort: this.state.sorted,
-      smartFilter: filterObj,
-    });
+    if (filterObj.index > -1) {
+      this.fetchData({
+        filters: [],
+        page: 0,
+        limit: this.state.limit,
+        sort: this.state.sorted,
+        smartFilter: filterObj,
+      });
 
-    this.setState({
-      smartFilter: filterObj,
-      page: 0,
-      filters: Map(),
-    });
+      this.setState({
+        smartFilter: filterObj,
+        page: 0,
+        filters: Map(),
+      });
+      this.clearFilters();
+    } else {
+      this.reinitializeTable();
+      this.clearFilters();
+    }
   }
 
   reinitializeTable() {
@@ -198,9 +206,23 @@ class PatientTable extends Component {
       limit: 15,
       page: 0,
       search: '',
-      filters: Map(),
-      smartFilter: null,
     });
+    this.setState({
+      smartFilter: null,
+      page: 0,
+      filters: Map(),
+      search: '',
+      limit: 15,
+    });
+  }
+
+  clearFilters() {
+    const {
+      destroy,
+    } = this.props;
+
+    const filtersArray = ['demographics', 'appointments'];
+    filtersArray.map(filter => destroy(filter));
   }
 
   render() {
@@ -431,6 +453,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntitiesRequest,
     createEntityRequest,
     push,
+    destroy,
   }, dispatch);
 }
 
