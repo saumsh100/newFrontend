@@ -221,7 +221,6 @@ describe('/api/appointments', () => {
         .expect(400)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          console.log(JSON.stringify(body), Object.keys(body.entities.appointments).length);
           expect(Object.keys(body.entities.appointments).length).toBe(3);
         });
     });
