@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
 import { Appointment, Account, WeeklySchedule } from '../../../server/_models';
-import wipeModel from '../../_util/wipeModel';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { wipeTestPatients } from '../../_util/seedTestPatients';
 import { wipeTestPractitioners } from '../../_util/seedTestPractitioners';
@@ -105,6 +105,7 @@ describe('/api/appointments', () => {
     await wipeTestPatients();
     await wipeTestPractitioners();
     await wipeTestUsers();
+    await wipeAllModels();
   });
 
   // TODO: This can use some more test cases... (Gavin: Not familiar with what's going on in these endpoints)
@@ -251,7 +252,6 @@ describe('/api/appointments', () => {
           body = omitPropertiesFromBody(body);
           expect(Object.keys(body.entities.appointments).length).toBe(3);
         });
-
     });
   });
 

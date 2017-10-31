@@ -110,6 +110,12 @@ export default function (sequelize, DataTypes) {
       },
     },
 
+    isPending: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
     customBufferTime: {
       type: DataTypes.INTEGER,
     },
