@@ -192,7 +192,7 @@ async function AppointmentsFilter(values, patients, query, next) {
     } = query;
 
     if (firstApp1) {
-      const patientIdData= await Appointment.findAll({
+      const patientIdData = await Appointment.findAll({
         raw: true,
         attributes: ['patientId'],
         where: {
@@ -207,7 +207,7 @@ async function AppointmentsFilter(values, patients, query, next) {
           },
         },
         groupBy: ['patientId'],
-      })
+      });
 
       const patientList = patientIdData.map(async (data) => {
         try {
@@ -227,7 +227,7 @@ async function AppointmentsFilter(values, patients, query, next) {
           });
           return patient[0].patient;
         } catch (err) {
-          next(err)
+          next(err);
         }
       });
       const pData = await Promise.all(patientList).then(data => data);
