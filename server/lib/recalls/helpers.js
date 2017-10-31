@@ -65,6 +65,7 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
           isDeleted: false,
           isCancelled: false,
           isShortCancelled: false,
+          isPending: false,
           startDate: {
             gt: pastDate,
           }
