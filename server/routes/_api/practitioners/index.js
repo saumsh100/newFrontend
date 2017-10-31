@@ -299,11 +299,11 @@ practitionersRouter.put('/:practitionerId/weeklySchedule', async (req, res, next
       },
     });
 
-    const copy = Object.assign({}, req.body);
+    const bodyCopy = Object.assign({}, req.body);
 
-    const s3 = schedule.get({ plain: true });
+    const scheduleEntryCopy = schedule.get({ plain: true });
 
-    const updateSchedule = _.mergeWith({}, s3, copy, mergeCopyArrays);
+    const updateSchedule = _.mergeWith({}, scheduleEntryCopy, bodyCopy, mergeCopyArrays);
 
 
     schedule.setDataValue('pmsId', req.body.pmsId);
