@@ -103,6 +103,7 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
       allowNull: false,
       set(value) {
+        this.setDataValue('isShortCancelled', value);
         if (value === true) {
           this.setDataValue('isCancelled', value);
         }
