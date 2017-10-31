@@ -31,6 +31,7 @@ const ModelAttributes = {
     'isPatientConfirmed',
     'isSyncedWithPms',
     'isCancelled',
+    'isShortCancelled',
     'isPending',
     'customBufferTime',
     'mark',

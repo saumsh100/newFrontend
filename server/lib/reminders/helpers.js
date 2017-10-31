@@ -51,6 +51,7 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
     where: {
       isDeleted: false,
       isCancelled: false,
+      isShortCancelled: false,
       accountId: reminder.accountId,
       startDate: {
         $between: [date, end],

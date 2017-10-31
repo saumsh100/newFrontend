@@ -132,6 +132,21 @@ describe('RemindersList Calculation Library', () => {
       expect(appts.length).toBe(2);
     });
 
+    test('#getAppointmentsFromReminder - with Cancelled appointment - return 0', async () => {
+      // Seed 3 SentReminders for the patient
+
+      const reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
+
+
+      await Appointment.bulkCreate([
+        makeApptData({ isCancelled: true, ...dates(2017, 7, 5, 8) }), // Today at 8
+        makeApptData({ isShortCancelled: true, ...dates(2017, 7, 5, 9) }), // Today at 9
+      ]);
+      const currentDate = date(2017, 7, 5, 7);
+      const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
+      expect(appts.length).toBe(0);
+    });
+
     describe('#getAppointmentsFromReminder', () => {
       test('should be a function', () => {
         expect(typeof getAppointmentsFromReminder).toBe('function');
@@ -145,6 +160,8 @@ describe('RemindersList Calculation Library', () => {
           makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
           makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
           makeApptData({ ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
+          makeApptData({ isCancelled: true, ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+          makeApptData({ isShortCancelled: true, ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
         ]);
       });
 
@@ -276,6 +293,8 @@ describe('RemindersList Calculation Library', () => {
           makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
           makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
           makeApptData({ ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
+          makeApptData({ isCancelled: true, ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
+          makeApptData({ isShortCancelled: true, ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
         ]);
       });
 
