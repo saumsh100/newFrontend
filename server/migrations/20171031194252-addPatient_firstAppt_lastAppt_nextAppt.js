@@ -42,11 +42,14 @@ module.exports = {
 
         Patients[0].forEach((patient) => {
           updatePatientsData.push({
-            accountId: patient.accountId,
             id: patient.id,
           });
         });
 
+
+        /**
+         * Iterating over every patient and getting all their appointments
+         */
         for (let i = 0; i < updatePatientsData.length; i += 1) {
           const patientApps = await queryInterface.sequelize.query(`
           SELECT * FROM "Appointments" WHERE "patientId" = :id AND "isCancelled" = false AND "isDeleted" = false ORDER BY "startDate" DESC`,
@@ -58,6 +61,7 @@ module.exports = {
           const apps = patientApps[0];
 
           if (apps.length === 1) {
+            // Setting first and last appointment when there is only one appointment
             if (moment(apps[0].startDate).isBefore(new Date())) {
               await queryInterface.sequelize.query(`
                 UPDATE "Patients"
@@ -75,6 +79,8 @@ module.exports = {
                 replacements: apps[0],
                 transaction: t,
               });
+
+              // Setting next appointment when there is only one appointment
             } else if (moment(apps[0].startDate).isAfter(new Date())) {
               await queryInterface.sequelize.query(`
                 UPDATE "Patients"
@@ -85,6 +91,8 @@ module.exports = {
                 transaction: t,
               });
             }
+
+            // If greater than one appointment calculate next and last appointment
           } else if (apps.length > 1) {
             const today = new Date();
 
@@ -118,6 +126,7 @@ module.exports = {
 
             const endAppointment = apps[apps.length - 1];
 
+            // Set first appointment if the appointment at the end of the array is before today.
             if (moment(endAppointment.startDate).isBefore(today)) {
               await queryInterface.sequelize.query(`
                 UPDATE "Patients"
