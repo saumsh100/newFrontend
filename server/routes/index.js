@@ -1,6 +1,7 @@
 
 import { Router } from 'express';
 import subdomain from 'express-subdomain';
+import url from 'url';
 // import apiRouter from './api';
 import sequelizeApiRouter from './_api';
 // import authRouter from './auth';
@@ -22,6 +23,7 @@ import resetRouter from './reset';
   User,
 } from '../models';*/
 import {
+  Account,
   Appointment,
   Invite,
   Token,
@@ -111,7 +113,21 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
       await appointment.update({ isConfirmed: true });
     }
 
-    res.render('confirmation-success');
+    const account = await Account.findOne({
+      where: {
+        id: appointment.accountId,
+      },
+    });
+
+    // res.render('confirmation-success');
+    res.redirect(url.format({
+      pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
+      query: {
+        startDate: appointment.startDate.toISOString(),
+        endDate: appointment.endDate.toISOString(),
+        clincName: account.name,
+      },
+    }));
   } catch (err) {
     next(err);
   }

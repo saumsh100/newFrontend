@@ -1,0 +1,138 @@
+@import '../../ui.scss';
+
+.backDrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $primary-dark;
+  z-index: 199;
+}
+
+.loginForm {
+  width: 400px;
+  padding: 30px;
+  padding-left: 50px;
+  padding-right: 50px;
+  margin: 0px auto;
+  // margin-top: 15%;
+  height: 100%;
+  z-index: 200;
+  border-top: $card-border-size $primary-color;
+  @media screen and (max-width: $medium-screen-width) {
+    width: 60%;
+  }
+}
+
+.logoContainer {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.loginLogo {
+  width: 100px;
+}
+
+.sidebar {
+  &__header {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-bottom: 1px solid #fff;
+
+    &_logo {
+      margin: 0 auto;
+      display: block;
+      height: 80%;
+    }
+
+    &_title {
+      margin-top: 5px;
+      text-align: center;
+      color: #fff;
+      font-size: 8px;
+      font-weight: 500;
+      span {
+        font-weight: 200;
+      }
+    }
+
+    &_btn {
+      height: 25px;
+      position: absolute;
+      background: none;
+      border: none;
+      display: none;
+      left: 10px;
+      &:hover {
+        color: #f3715c;
+        color: var(--bookingWidgetPrimaryColor);
+      }
+    }
+  }
+
+  &__body {
+    &_address {
+      margin-top: 30px;
+    }
+
+    &_btn {
+      width: 100%;
+      padding: 6px 0;
+      margin-top: 61px;
+      margin-bottom: 20px;
+      font-size: 10px;
+      color: #f3715c;
+      color: var(--bookingWidgetPrimaryColor);
+      text-transform: uppercase;
+      cursor: pointer;
+      background: #fff;
+      border: none;
+      position: relative;
+      &::before {
+        content: "\25c4";
+        position: absolute;
+        left: 5px;
+      }
+    }
+  }
+
+  &__information {
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.25;
+    padding: 25px 0;
+    color: #fff;
+    &_title {
+      font-size: 13px;
+      padding: 2px;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+  }
+
+  &__footer {
+    padding: 10px 0 20px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    &_copy {
+      display: flex;
+      margin-top: 18px;
+      align-items: center;
+      flex-direction: column;
+      div {
+        margin-right: 2px;
+        font-size: 8px;
+        color: #fff;
+      }
+
+      img {
+        height: 40px;
+      }
+    }
+  }
+}
