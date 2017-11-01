@@ -10,7 +10,7 @@ module.exports = {
       Example:
       return queryInterface.createTable('users', { id: Sequelize.INTEGER });
     */
-    return queryInterface.sequelize.transaction( async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.addColumn('Patients', 'firstApptId', {
           type: DataTypes.UUID,
@@ -95,6 +95,7 @@ module.exports = {
 
             for (let j = 0; j < apps.length; j += 1) {
               const startDate = apps[j].startDate;
+
               if (!nextAppt && moment(startDate).isAfter(today)) {
                 nextAppt = apps[j].startDate;
                 nextApptId = apps[j].id;
@@ -107,37 +108,55 @@ module.exports = {
 
             for (let k = 0; k < apps.length; k += 1) {
               const startDate = apps[k].startDate;
+
               if (!lastAppt && moment(startDate).isBefore(today)) {
-                lastAppt = apps[k].startDate;
-                lastApptId = apps[k].id;
-              } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
                 lastAppt = apps[k].startDate;
                 lastApptId = apps[k].id;
                 break;
               }
             }
 
-            await queryInterface.sequelize.query(`
+            const endAppointment = apps[apps.length - 1];
+
+            if (moment(endAppointment.startDate).isBefore(today)) {
+              await queryInterface.sequelize.query(`
                 UPDATE "Patients"
-                SET "lastApptId" = :lastAppt
+                SET "firstApptId" = :firstApptId
                 WHERE id = :patientId
               `, {
-                replacements: { lastApptId, patientId: updatePatientsData[i].id },
+                replacements: {
+                  firstApptId: endAppointment.id,
+                  patientId: updatePatientsData[i].id,
+                },
                 transaction: t,
               });
-            
+            }
+
             await queryInterface.sequelize.query(`
                 UPDATE "Patients"
-                SET "nextApptId" = :nextAppt
+                SET "lastApptId" = :lastApptId
                 WHERE id = :patientId
               `, {
-                replacements: { nextApptId, patientId: updatePatientsData[i].id },
+                replacements: {
+                  lastApptId,
+                  patientId: updatePatientsData[i].id,
+                },
+                transaction: t,
+              });
+
+            await queryInterface.sequelize.query(`
+                UPDATE "Patients"
+                SET "nextApptId" = :nextApptId
+                WHERE id = :patientId
+              `, {
+                replacements: {
+                  nextApptId,
+                  patientId: updatePatientsData[i].id,
+                },
                 transaction: t,
               });
           }
         }
-
-        return t.rollback();
       } catch (e) {
         console.log(e);
         return t.rollback();
