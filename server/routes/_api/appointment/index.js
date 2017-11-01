@@ -603,6 +603,10 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
           const io = req.app.get('socketio');
           const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
           io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+
+          const pub = req.app.get('pub');
+          pub.publish('appointment.created', appointment.id);
+
           return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
         })
         .catch(next);

@@ -164,6 +164,19 @@ export default function (sequelize, DataTypes) {
       values: Object.keys(STATUS).map(key => STATUS[key]),
       defaultValue: STATUS.ACTIVE,
     },
+
+    lastApptId: {
+      type: DataTypes.UUID,
+    },
+
+    firstApptId: {
+      type: DataTypes.UUID,
+    },
+
+    nextApptId: {
+      type: DataTypes.UUID,
+    },
+
   }, {
     // Model Config
     indexes: [
