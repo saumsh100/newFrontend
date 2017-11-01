@@ -46,13 +46,13 @@ module.exports = {
           });
         });
 
-
         /**
          * Iterating over every patient and getting all their appointments
          */
         for (let i = 0; i < updatePatientsData.length; i += 1) {
           const patientApps = await queryInterface.sequelize.query(`
-          SELECT * FROM "Appointments" WHERE "patientId" = :id AND "isCancelled" = false AND "isDeleted" = false ORDER BY "startDate" DESC`,
+          SELECT * FROM "Appointments" WHERE "patientId" = :id 
+          AND "isCancelled" = false AND "isDeleted" = false AND "isPending" = false ORDER BY "startDate" DESC`,
             {
               replacements: updatePatientsData[i],
               transaction: t,

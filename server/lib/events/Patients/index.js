@@ -1,64 +1,92 @@
+
 import moment from 'moment';
 import { Patient, Appointment } from '../../../_models';
 
 
-function getNextLastAppointment (patientId, accountId) {
+function calcFirstNextLastAppointment(patient, accountId) {
   return Appointment.findAll({
     raw: true,
     where: {
       accountId,
-      patientId,
+      patientId: patient.id,
+      isCancelled: false,
+      isDeleted: false,
+      isPending: false,
     },
     order: [['startDate', 'DESC']],
   }).then((appointments) => {
-    const today = new Date();
+    if (appointments.length === 1) {
 
-    let nextAppt = null;
-    let lastAppt = null;
-
-    for (let i = 0; i < appointments.length; i++) {
-      const app = appointments[i];
-      const startDate = app.startDate;
-
-      if (!nextAppt && moment(startDate).isAfter(today)) {
-        nextAppt = startDate;
-      } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
-        nextAppt = startDate;
-        break;
+      if (moment(appointments[0].startDate).isBefore(new Date())) {
+        patient.firstApptId = appointments[0].id;
+        patient.lastApptId = appointments[0].id;
+        patient.nextApptId = null;
+      } else if (moment(appointments[0].startDate).isAfter(new Date())) {
+        patient.nextApptId = appointments[0].id;
+        patient.lastApptId = null;
+        patient.firstApptId = null;
       }
-    }
 
-    for (let j = 0; j < appointments.length; j++) {
-      const app = appointments[j];
-      const startDate = app.startDate;
+    } else if (appointments.length > 1) {
+      const today = new Date();
 
-      if (!lastAppt && moment(startDate).isBefore(moment())) {
-        lastAppt = startDate;
-      } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
-        lastAppt = startDate;
-        break;
+      let nextAppt = null;
+      let nextApptId = null;
+
+      for (let i = 0; i < appointments.length; i += 1) {
+        const app = appointments[i];
+        const startDate = app.startDate;
+
+        if (!nextAppt && moment(startDate).isAfter(today)) {
+          nextAppt = startDate;
+          nextApptId = app.id;
+        } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
+          nextAppt = startDate;
+          nextApptId = app.id;
+          break;
+        }
       }
+
+      let lastAppt = null;
+      let lastApptId = null;
+
+      for (let j = 0; j < appointments.length; j += 1) {
+        const app = appointments[j];
+        const startDate = app.startDate;
+
+        if (!lastAppt && moment(startDate).isBefore(moment())) {
+          lastAppt = startDate;
+          lastApptId = app.id;
+          break;
+        }
+      }
+
+      patient.nextApptId = nextApptId;
+      patient.lastApptId = lastApptId;
+
+      const endAppointment = appointments[appointments.length - 1];
+
+      if (moment(endAppointment.startDate).isBefore(today)) {
+        patient.firstApptId = endAppointment.id;
+      } else {
+        patient.firstApptId = null;
+      }
+
+    } else {
+      patient.nextApptId = null;
+      patient.lastApptId = null;
+      patient.firstApptId = null;
     }
-    return {
-      nextAppt,
-      lastAppt,
-    };
+    console.log(patient)
+    Patient.update(patient, {
+      where: {
+        id: patient.id,
+      },
+    });
   });
 };
 
-function getFirstAppointment (patientId, accountId) {
-  return Appointment.findAll({
-    where: {
-      accountId,
-      patientId,
-    },
-    sort: ['startDate', 'ASC'],
-    limit: 1,
-    raw: true,
-  });
-}
-
-function calculateFNLAppts(sub, io) {
+function registerFirstNextLastCalc(sub, io) {
   sub.on('data', (data) => {
     Appointment.findOne({
       where: { id: data },
@@ -72,24 +100,7 @@ function calculateFNLAppts(sub, io) {
       nest: true,
       raw: true,
     }).then((app) => {
-      Appointment.count({
-        where: {
-          patientId: app.patient.id,
-        },
-      }).then((count) => {
-        if (count === 1) {
-          console.log('first appointment --->', data)
-        } else {
-          //check if firstAppointment field is filled on patient model, if not calculate first appt
-          getFirstAppointment(app.patient.id, app.accountId)
-            .then((firstAppt) => console.log('firstAppointment calculated', firstAppt));
-
-          getNextLastAppointment(app.patient.id, app.accountId)
-            .then((nextLast) => {
-              console.log('nextlastAppoints---->', nextLast);
-            });
-        }
-      });
+      calcFirstNextLastAppointment(app.patient, app.accountId);
     });
   });
 }
@@ -97,10 +108,11 @@ function calculateFNLAppts(sub, io) {
 export default function registerPatientsSubscriber(context, io) {
   // Need to create a new sub for every route to tell
   // the difference eg. request.created and request.ended
-  const subCreated = context.socket('SUB', { routing: 'topic' });
+  const subCalcFNL = context.socket('SUB', { routing: 'topic' });
 
-  subCreated.setEncoding('utf8');
-  subCreated.connect('events', 'appointment.created');
+  subCalcFNL.setEncoding('utf8');
+  subCalcFNL.connect('events', 'calcPatient.FNL');
 
-  calculateFNLAppts(subCreated, io);
+
+  registerFirstNextLastCalc(subCalcFNL, io);
 }
