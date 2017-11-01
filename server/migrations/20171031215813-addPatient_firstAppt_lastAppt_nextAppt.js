@@ -36,11 +36,11 @@ module.exports = {
           },
         }, { transaction: t });
 
-        const Patients = await queryInterface.sequelize.query('SELECT * FROM "Patients"', { transaction: t });
+        const patients = await queryInterface.sequelize.query('SELECT * FROM "Patients"', { transaction: t });
 
         const updatePatientsData = [];
 
-        Patients[0].forEach((patient) => {
+        patients[0].forEach((patient) => {
           updatePatientsData.push({
             id: patient.id,
           });
@@ -49,7 +49,10 @@ module.exports = {
         /**
          * Iterating over every patient and getting all their appointments
          */
+        console.log('calculating for this many patients--->', updatePatientsData.length);
+
         for (let i = 0; i < updatePatientsData.length; i += 1) {
+          console.log('Running Migration-------On Patient--->', updatePatientsData[i].id);
           const patientApps = await queryInterface.sequelize.query(`
           SELECT * FROM "Appointments" WHERE "patientId" = :id 
           AND "isCancelled" = false AND "isDeleted" = false AND "isPending" = false ORDER BY "startDate" DESC`,

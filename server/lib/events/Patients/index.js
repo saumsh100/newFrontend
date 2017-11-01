@@ -54,7 +54,7 @@ function calcFirstNextLastAppointment(patient, accountId) {
         const app = appointments[j];
         const startDate = app.startDate;
 
-        if (!lastAppt && moment(startDate).isBefore(moment())) {
+        if (!lastAppt && moment(startDate).isBefore(today)) {
           lastAppt = startDate;
           lastApptId = app.id;
           break;
@@ -77,8 +77,8 @@ function calcFirstNextLastAppointment(patient, accountId) {
       patient.lastApptId = null;
       patient.firstApptId = null;
     }
-    console.log(patient)
-    Patient.update(patient, {
+
+    return Patient.update(patient, {
       where: {
         id: patient.id,
       },
@@ -112,7 +112,6 @@ export default function registerPatientsSubscriber(context, io) {
 
   subCalcFNL.setEncoding('utf8');
   subCalcFNL.connect('events', 'calcPatient.FNL');
-
 
   registerFirstNextLastCalc(subCalcFNL, io);
 }
