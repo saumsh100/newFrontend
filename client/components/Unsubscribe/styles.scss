@@ -1,0 +1,108 @@
+@import '../../ui.scss';
+
+.backDrop {
+  position: fixed;
+  height: 100%;
+  width:100%;
+  background-color: $primary-grey;
+  z-index: 199;
+
+}
+
+.loginForm {
+  width: 600px;
+  margin: 0px auto;
+  z-index: 200;
+  // display: flex;
+  // flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  @media screen and (max-width: $medium-screen-width) {
+    width: 100%;
+    max-height: 800px;
+  }
+}
+
+.topText {
+  margin: auto;
+  max-width: 60%;
+}
+
+.topContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 500px;
+  height: 60%;
+  width: 100%;
+  flex: 1;
+}
+
+.bottomContainer {
+  text-align: center;
+  background-color: $primary-dark;
+  height: 40%;
+  min-height: 300px;
+  width: 100%;
+  flex: 1;
+}
+
+
+.footer {
+  margin-top: 40px;
+  color: #fafafa;
+  composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
+  text-align: center;
+}
+
+.loginLogo {
+  margin-top: 40px;
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.donnaLogo {
+  margin-top: 40px;
+  width: 150px;
+  margin-bottom: 20px;
+  border-bottom-left-radius: 45%;
+  border-bottom-right-radius: 45%;
+  margin-bottom: 40px;
+}
+
+.text {
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 400;
+  text-align: center;
+}
+
+.bottomText {
+  margin-top: 10px;
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 500;
+  font-size: 16px;
+  color: $primary-darkgrey;
+  text-align: center;
+}
+
+.button {
+  display: inline-block;
+  border-radius: 50%;
+  width: 40px;
+  margin-top: 20px;
+}
+
+.svg {
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+.addressText {
+  margin-top: 5px;
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 400;
+  font-size: 13px;
+  color: $primary-darkgrey;
+  text-align: center;
+}

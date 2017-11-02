@@ -24,6 +24,7 @@ import resetRouter from './reset';
 import {
   Appointment,
   Invite,
+  Patient,
   Token,
   PasswordReset,
   User,
@@ -33,6 +34,8 @@ import { sequelizeLoader } from './util/loaders';
 const rootRouter = Router();
 
 rootRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [{ model: Appointment, as: 'appointment' }]));
+rootRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
+
 
 // Bind subdomain capturing
 // Will be removed once microservices are in full effect
@@ -90,6 +93,21 @@ rootRouter.get('/reset/:tokenId', (req, res, next) => {
     })
     .catch(next);
 });
+
+
+rootRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
+  try {
+    const preferences = Object.assign({}, req.patient.preferences);
+    preferences.reminders = false;
+
+    req.patient.update({ preferences });
+
+    res.redirect('/unsubscribe');
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 rootRouter.post('/userCheck', (req, res, next) => {
   const username = req.body.email.toLowerCase().trim();

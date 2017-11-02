@@ -85,9 +85,12 @@ export async function getReviewAppointments({ account, date }) {
   const sendableAppointments = appointments.filter((a) => {
     const reviewNotSent = !a.sentReviews.length;
     const patientNotReviewed = !a.patient.reviews.length;
+
     // console.log('patient.sentReviews', a.patient.sentReviews);
+    console.log(a.patient.preferences.reminders)
     const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr => moment(sr.createdAt).isBetween(begin, date));
-    return reviewNotSent && patientNotReviewed && patientHasNoRecentSentReview;
+    return reviewNotSent && patientNotReviewed
+    && patientHasNoRecentSentReview && a.patient.preferences.reminders;
   });
 
   // Do not send to the same patient twice

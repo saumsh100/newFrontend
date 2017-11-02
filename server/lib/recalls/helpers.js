@@ -97,7 +97,7 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
  * @returns {boolean}
  */
 export function isDueForRecall({ recall, patient, date }) {
-  const { appointments, sentRecalls } = patient;
+  const { appointments, sentRecalls, preferences } = patient;
 
   // If they've never had any appointments, don't bother
   const numAppointments = appointments.length;
@@ -112,5 +112,5 @@ export function isDueForRecall({ recall, patient, date }) {
     return (s.recallId === recall.id) || (recall.lengthSeconds > s.lengthSeconds);
   });
 
-  return isDue && !recallAlreadySentOrLongerAway;
+  return isDue && !recallAlreadySentOrLongerAway && preferences.reminders;
 }
