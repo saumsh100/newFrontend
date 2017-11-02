@@ -81,7 +81,7 @@ function sendTemplate(config) {
   const string = config.email + accountString;
   const encoded = new Buffer(string).toString('base64');
   const hostUrl = config.accountId ? `my.${host}` : host;
-  const unsubContent = `${protocol}://${hostUrl}/unsubscribe/${encoded}`;
+  const unsubContent = `${protocol}://${hostUrl}/unsubscribe/${config.patientId || encoded}`;
   const defaultMergeVars = [
     {
       name: 'UNSUB',
