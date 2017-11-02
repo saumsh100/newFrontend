@@ -100,7 +100,7 @@ function registerFirstNextLastCalc(sub, io) {
       nest: true,
       raw: true,
     }).then((app) => {
-      calcFirstNextLastAppointment(app.patient, app.accountId);
+      //calcFirstNextLastAppointment(app.patient, app.accountId);
     });
   });
 }

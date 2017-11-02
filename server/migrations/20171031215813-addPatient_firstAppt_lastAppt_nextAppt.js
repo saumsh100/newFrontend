@@ -36,138 +36,75 @@ module.exports = {
           },
         }, { transaction: t });
 
-        const patients = await queryInterface.sequelize.query('SELECT * FROM "Patients"', { transaction: t });
+        console.log('------started migration------')
+        const appointments = await queryInterface.sequelize.query(`SELECT * FROM "Appointments" WHERE "isCancelled" = false 
+        AND "isDeleted" = false AND "isPending" = false ORDER BY "patientId", "startDate" DESC `, { transaction: t });
 
-        const updatePatientsData = [];
+        console.log('------finished fetching appointments------')
 
-        patients[0].forEach((patient) => {
-          updatePatientsData.push({
-            id: patient.id,
-          });
-        });
+        const apps = appointments[0];
+        const today = new Date();
 
-        /**
-         * Iterating over every patient and getting all their appointments
-         */
-        console.log('calculating for this many patients--->', updatePatientsData.length);
+        let j = 0;
+        while (j < apps.length) {
+          const currentPatient = apps[j].patientId;
+          console.log('------setting patient------', apps[j].patientId);
+          let nextAppt = null;
+          let lastAppt = null;
+          let nextApptId = null;
+          let lastApptId = null;
+          let firstApptId = null;
 
-        for (let i = 0; i < updatePatientsData.length; i += 1) {
-          console.log('Running Migration-------On Patient--->', updatePatientsData[i].id);
-          const patientApps = await queryInterface.sequelize.query(`
-          SELECT * FROM "Appointments" WHERE "patientId" = :id 
-          AND "isCancelled" = false AND "isDeleted" = false AND "isPending" = false ORDER BY "startDate" DESC`,
-            {
-              replacements: updatePatientsData[i],
+          let count = 0;
+          let i = j;
+          while (i < apps.length && currentPatient === apps[i].patientId) {
+            count += 1;
+            const startDate = apps[i].startDate;
+            if (moment(startDate).isAfter(today)) {
+              nextAppt = apps[i].startDate;
+              nextApptId = apps[i].id;
+            } else if (moment(startDate).isBefore(today) && count === 1) {
+              lastAppt = apps[i].startDate;
+              lastApptId = apps[i].id;
+              firstApptId = apps[i].id;
+            } else if (moment(startDate).isBefore(today) && !lastAppt) {
+              lastAppt = apps[i].startDate;
+              lastApptId = apps[i].id;
+              firstApptId = null;
+            }
+            i += 1;
+          }
+
+          if (currentPatient && (count > 1 && moment(apps[i - 1].startDate).isBefore(today))) {
+            await queryInterface.sequelize.query(`
+              UPDATE "Patients"
+              SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
+              WHERE id = :patientId
+            `, {
+              replacements: {
+                firstApptId: apps[i - 1].id,
+                lastApptId,
+                nextApptId,
+                patientId: currentPatient,
+              },
               transaction: t,
             });
-
-          const apps = patientApps[0];
-
-          if (apps.length === 1) {
-            // Setting first and last appointment when there is only one appointment
-            if (moment(apps[0].startDate).isBefore(new Date())) {
-              await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "firstApptId" = :id
-                WHERE id = :patientId
-              `, {
-                replacements: apps[0],
-                transaction: t,
-              });
-              await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "lastApptId" = :id
-                WHERE id = :patientId
-              `, {
-                replacements: apps[0],
-                transaction: t,
-              });
-
-              // Setting next appointment when there is only one appointment
-            } else if (moment(apps[0].startDate).isAfter(new Date())) {
-              await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "nextApptId" = :id
-                WHERE id = :patientId
-              `, {
-                replacements: apps[0],
-                transaction: t,
-              });
-            }
-
-            // If greater than one appointment calculate next and last appointment
-          } else if (apps.length > 1) {
-            const today = new Date();
-
-            let nextAppt = null;
-            let lastAppt = null;
-            let nextApptId = null;
-            let lastApptId = null;
-
-            for (let j = 0; j < apps.length; j += 1) {
-              const startDate = apps[j].startDate;
-
-              if (!nextAppt && moment(startDate).isAfter(today)) {
-                nextAppt = apps[j].startDate;
-                nextApptId = apps[j].id;
-              } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
-                nextAppt = apps[j].startDate;
-                nextApptId = apps[j].id;
-                break;
-              }
-            }
-
-            for (let k = 0; k < apps.length; k += 1) {
-              const startDate = apps[k].startDate;
-
-              if (!lastAppt && moment(startDate).isBefore(today)) {
-                lastAppt = apps[k].startDate;
-                lastApptId = apps[k].id;
-                break;
-              }
-            }
-
-            const endAppointment = apps[apps.length - 1];
-
-            // Set first appointment if the appointment at the end of the array is before today.
-            if (moment(endAppointment.startDate).isBefore(today)) {
-              await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "firstApptId" = :firstApptId
-                WHERE id = :patientId
-              `, {
-                replacements: {
-                  firstApptId: endAppointment.id,
-                  patientId: updatePatientsData[i].id,
-                },
-                transaction: t,
-              });
-            }
-
+          } else if (currentPatient) {
             await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "lastApptId" = :lastApptId
-                WHERE id = :patientId
-              `, {
-                replacements: {
-                  lastApptId,
-                  patientId: updatePatientsData[i].id,
-                },
-                transaction: t,
-              });
-
-            await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "nextApptId" = :nextApptId
-                WHERE id = :patientId
-              `, {
-                replacements: {
-                  nextApptId,
-                  patientId: updatePatientsData[i].id,
-                },
-                transaction: t,
-              });
+              UPDATE "Patients"
+              SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
+              WHERE id = :patientId
+            `, {
+              replacements: {
+                firstApptId,
+                lastApptId,
+                nextApptId,
+                patientId: currentPatient,
+              },
+              transaction: t,
+            });
           }
+          j = i;
         }
       } catch (e) {
         console.log(e);
