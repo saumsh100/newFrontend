@@ -136,7 +136,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
           <i className="fa fa-bell" />
         </div>
         <div className={styles.toggle}>
-          <span>Reminders</span>
+          <span>Reminders/Recalls/Reviews</span>
           <Field
             name="reminders"
             component="Toggle"
