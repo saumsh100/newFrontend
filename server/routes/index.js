@@ -168,7 +168,7 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
     // For any confirmed reminder we confirm appointment
     const { appointment } = sentReminder;
     if (appointment) {
-      await appointment.update({ isConfirmed: true });
+      await appointment.update({ isPatientConfirmed: true });
     }
 
     let account = await Account.findOne({
@@ -180,7 +180,7 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
     let fullLogoUrl = account.fullLogoUrl;
 
     if (account.fullLogoUrl) {
-      fullLogoUrl = fullLogoUrl.replace('[size]', 'lg');
+      fullLogoUrl = fullLogoUrl.replace('[size]', 'original');
     }
 
     account = account.get({ plain: true });
