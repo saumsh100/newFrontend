@@ -15,68 +15,40 @@ function calcFirstNextLastAppointment(patient, accountId) {
     },
     order: [['startDate', 'DESC']],
   }).then((appointments) => {
-    if (appointments.length === 1) {
+    const today = new Date();
 
-      if (moment(appointments[0].startDate).isBefore(new Date())) {
-        patient.firstApptId = appointments[0].id;
-        patient.lastApptId = appointments[0].id;
-        patient.nextApptId = null;
-      } else if (moment(appointments[0].startDate).isAfter(new Date())) {
-        patient.nextApptId = appointments[0].id;
-        patient.lastApptId = null;
-        patient.firstApptId = null;
+    let nextAppt = null;
+    let lastAppt = null;
+    let nextApptId = null;
+    let lastApptId = null;
+    let firstApptId = null;
+
+    let count = 0;
+    for (let i = 0; i < appointments.length; i += 1) {
+      count += 1;
+      const startDate = appointments[i].startDate;
+      if (moment(startDate).isAfter(today)) {
+        nextAppt = appointments[i].startDate;
+        nextApptId = appointments[i].id;
+      } else if (moment(startDate).isBefore(today) && count === 1) {
+        lastAppt = appointments[i].startDate;
+        lastApptId = appointments[i].id;
+        firstApptId = appointments[i].id;
+      } else if (moment(startDate).isBefore(today) && !lastAppt) {
+        lastAppt = appointments[i].startDate;
+        lastApptId = appointments[i].id;
+        firstApptId = null;
       }
-
-    } else if (appointments.length > 1) {
-      const today = new Date();
-
-      let nextAppt = null;
-      let nextApptId = null;
-
-      for (let i = 0; i < appointments.length; i += 1) {
-        const app = appointments[i];
-        const startDate = app.startDate;
-
-        if (!nextAppt && moment(startDate).isAfter(today)) {
-          nextAppt = startDate;
-          nextApptId = app.id;
-        } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
-          nextAppt = startDate;
-          nextApptId = app.id;
-          break;
-        }
-      }
-
-      let lastAppt = null;
-      let lastApptId = null;
-
-      for (let j = 0; j < appointments.length; j += 1) {
-        const app = appointments[j];
-        const startDate = app.startDate;
-
-        if (!lastAppt && moment(startDate).isBefore(today)) {
-          lastAppt = startDate;
-          lastApptId = app.id;
-          break;
-        }
-      }
-
-      patient.nextApptId = nextApptId;
-      patient.lastApptId = lastApptId;
-
-      const endAppointment = appointments[appointments.length - 1];
-
-      if (moment(endAppointment.startDate).isBefore(today)) {
-        patient.firstApptId = endAppointment.id;
-      } else {
-        patient.firstApptId = null;
-      }
-
-    } else {
-      patient.nextApptId = null;
-      patient.lastApptId = null;
-      patient.firstApptId = null;
     }
+
+    const length = appointments.length
+    if (count > 1 && moment(appointments[length - 1].startDate).isBefore(today)) {
+      firstApptId = appointments[length - 1].id;
+    }
+
+    patient.nextApptId = nextApptId;
+    patient.lastApptId = lastApptId;
+    patient.firstApptId = firstApptId;
 
     return Patient.update(patient, {
       where: {
@@ -100,7 +72,7 @@ function registerFirstNextLastCalc(sub, io) {
       nest: true,
       raw: true,
     }).then((app) => {
-      //calcFirstNextLastAppointment(app.patient, app.accountId);
+      calcFirstNextLastAppointment(app.patient, app.accountId);
     });
   });
 }

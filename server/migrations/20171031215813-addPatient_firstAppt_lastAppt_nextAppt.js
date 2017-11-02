@@ -49,6 +49,7 @@ module.exports = {
         while (j < apps.length) {
           const currentPatient = apps[j].patientId;
           console.log('------setting patient------', apps[j].patientId);
+
           let nextAppt = null;
           let lastAppt = null;
           let nextApptId = null;
@@ -75,21 +76,11 @@ module.exports = {
             i += 1;
           }
 
-          if (currentPatient && (count > 1 && moment(apps[i - 1].startDate).isBefore(today))) {
-            await queryInterface.sequelize.query(`
-              UPDATE "Patients"
-              SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
-              WHERE id = :patientId
-            `, {
-              replacements: {
-                firstApptId: apps[i - 1].id,
-                lastApptId,
-                nextApptId,
-                patientId: currentPatient,
-              },
-              transaction: t,
-            });
-          } else if (currentPatient) {
+          if (count > 1 && moment(apps[i - 1].startDate).isBefore(today)) {
+            firstApptId = apps[i - 1].id;
+          }
+
+          if (currentPatient) {
             await queryInterface.sequelize.query(`
               UPDATE "Patients"
               SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
@@ -104,6 +95,7 @@ module.exports = {
               transaction: t,
             });
           }
+
           j = i;
         }
       } catch (e) {
