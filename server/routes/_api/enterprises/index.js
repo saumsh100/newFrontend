@@ -160,8 +160,8 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
         {
           // 1 day sms
           accountId: account.id,
-          primaryType: 'phone',
-          lengthSeconds: 24 * 60 * 60,
+          primaryType: 'sms',
+          lengthSeconds: 2 * 24 * 60 * 60,
         },
         {
           // 2 hour sms

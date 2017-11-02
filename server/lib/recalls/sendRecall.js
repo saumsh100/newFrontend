@@ -31,6 +31,7 @@ export default {
     }
 
     return sendPatientRecall({
+      patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [

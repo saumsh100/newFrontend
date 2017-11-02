@@ -74,11 +74,13 @@ describe('Recalls Calculation Library', () => {
         patients = await Patient.bulkCreate([
           makePatientData({ firstName: 'Old', lastName: 'Patient' }),
           makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
+          makePatientData({ firstName: 'Recent', lastName: 'Patient', preferences: { reminders: false } }),
         ]);
 
         appointments = await Appointment.bulkCreate([
           makeApptData({ patientId: patients[0].id, ...dates(2014, 7, 5, 8) }),
           makeApptData({ patientId: patients[1].id, ...dates(2016, 7, 5, 9) }),
+          makeApptData({ patientId: patients[2].id, ...dates(2016, 7, 5, 9) }),
         ]);
       });
 

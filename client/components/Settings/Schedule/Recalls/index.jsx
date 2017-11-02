@@ -202,7 +202,7 @@ class Recalls extends Component {
     ];
 
 
-    const showComponent = this.props.activeAccount.canSendRecalls ? (
+    const showComponent = this.props.activeAccount.canSendRecalls || this.props.role === 'SUPERADMIN' ? (
       <div>
         <div className={styles.header}>
            <Header title={'Recalls'} className={styles.headerTitle} />
@@ -275,13 +275,17 @@ Recalls.propTypes = {
   fetchEntities: PropTypes.func,
   createEntityRequest: PropTypes.func,
   reset: PropTypes.func,
+  role: PropTypes.string,
 };
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const role = auth.get('role');
+
   return {
     activeAccount,
     recalls: entities.getIn(['recalls', 'models']),
+    role,
   };
 }
 

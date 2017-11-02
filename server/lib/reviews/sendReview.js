@@ -53,6 +53,7 @@ export default {
     }
 
     return sendReview({
+      patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [
