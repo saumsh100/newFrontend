@@ -1,4 +1,5 @@
-const moment = require('moment');
+const CalcFirstNextLastAppointment = require('../lib/firstNextLastAppointment');
+
 'use strict';
 
 module.exports = {
@@ -36,68 +37,33 @@ module.exports = {
           },
         }, { transaction: t });
 
-        console.log('------started migration------')
-        const appointments = await queryInterface.sequelize.query(`SELECT * FROM "Appointments" WHERE "isCancelled" = false 
+        console.log('--Started First/Next/Last Appointment migration--');
+        const appointments = await queryInterface.sequelize.query(`SELECT * FROM "Appointments" WHERE "patientId" IS NOT NULL AND "isCancelled" = false 
         AND "isDeleted" = false AND "isPending" = false ORDER BY "patientId", "startDate" DESC `, { transaction: t });
 
-        console.log('------finished fetching appointments------')
-
         const apps = appointments[0];
-        const today = new Date();
 
-        let j = 0;
-        while (j < apps.length) {
-          const currentPatient = apps[j].patientId;
-          console.log('------setting patient------', apps[j].patientId);
-
-          let nextAppt = null;
-          let lastAppt = null;
-          let nextApptId = null;
-          let lastApptId = null;
-          let firstApptId = null;
-
-          let count = 0;
-          let i = j;
-          while (i < apps.length && currentPatient === apps[i].patientId) {
-            count += 1;
-            const startDate = apps[i].startDate;
-            if (moment(startDate).isAfter(today)) {
-              nextAppt = apps[i].startDate;
-              nextApptId = apps[i].id;
-            } else if (moment(startDate).isBefore(today) && count === 1) {
-              lastAppt = apps[i].startDate;
-              lastApptId = apps[i].id;
-              firstApptId = apps[i].id;
-            } else if (moment(startDate).isBefore(today) && !lastAppt) {
-              lastAppt = apps[i].startDate;
-              lastApptId = apps[i].id;
-              firstApptId = null;
+        CalcFirstNextLastAppointment(apps,
+          async (currentPatient, firstApptId, nextApptId, lastApptId) => {
+            try {
+              await queryInterface.sequelize.query(`
+                UPDATE "Patients"
+                SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
+                WHERE id = :patientId
+              `, {
+                replacements: {
+                  firstApptId,
+                  lastApptId,
+                  nextApptId,
+                  patientId: currentPatient,
+                },
+                transaction: t,
+              });
+              console.log(`Set First/Next/Last Appointment for: ${currentPatient}`);
+            } catch (err) {
+              console.log('error');
             }
-            i += 1;
-          }
-
-          if (count > 1 && moment(apps[i - 1].startDate).isBefore(today)) {
-            firstApptId = apps[i - 1].id;
-          }
-
-          if (currentPatient) {
-            await queryInterface.sequelize.query(`
-              UPDATE "Patients"
-              SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
-              WHERE id = :patientId
-            `, {
-              replacements: {
-                firstApptId,
-                lastApptId,
-                nextApptId,
-                patientId: currentPatient,
-              },
-              transaction: t,
-            });
-          }
-
-          j = i;
-        }
+          });
       } catch (e) {
         console.log(e);
         return t.rollback();
