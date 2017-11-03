@@ -67,7 +67,7 @@ async function sendSocket(io, chatId) {
 }*/
 
 function getIsConfirmable(appointment) {
-  return appointment.isPatientConfirmed;
+  return !appointment.isPatientConfirmed;
 }
 
 /**
