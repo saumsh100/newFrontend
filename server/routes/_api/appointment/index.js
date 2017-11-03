@@ -603,6 +603,10 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
           const io = req.app.get('socketio');
           const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
           io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+
+          const pub = req.app.get('pub');
+          pub.publish('calcPatient.FNL', appointment.id);
+
           return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
         })
         .catch(next);
@@ -644,7 +648,12 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
 
   return batchCreate(cleanedAppointments, Appointment, 'Appointment')
     .then((apps) => {
-      const appData = apps.map(app => app.get({ plain: true }));
+      const appData = apps.map(app => {
+        const appPlain = app.get({ plain: true });
+        const pub = req.app.get('pub');
+        pub.publish('calcPatient.FNL', appPlain.id);
+        return appPlain;
+      });
       res.status(201).send(format(req, res, 'appointments', appData));
     })
     .catch(({ errors, docs }) => {
@@ -673,7 +682,12 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
 
   return Promise.all(appointmentUpdates)
     .then((_appointments) => {
-      const appData = _appointments.map(app => app.get({ plain: true }));
+      const appData = _appointments.map((app) => {
+        const appPlain = app.get({ plain: true });
+        const pub = req.app.get('pub');
+        pub.publish('calcPatient.FNL', appPlain.id);
+        return appPlain;
+      });
       res.send(format(req, res, 'appointments', appData));
     })
     .catch(next);
@@ -793,6 +807,8 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       const action = appointment.isDeleted ? 'DELETE' : 'UPDATE';
       io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
 
+      const pub = req.app.get('pub');
+      pub.publish('calcPatient.FNL', appointment.id);
       // TODO: why are we double sending? what was wrong with our current lowercase actions? client-side is easy to update!
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })

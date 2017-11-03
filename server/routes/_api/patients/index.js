@@ -603,17 +603,16 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
       res.status(201).send(normalized);
       return { patient, normalized };
     })
-    .then(({ patient, normalized }) => {
+    .then(async ({ patient, normalized }) => {
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-
       // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
       // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
       const action = patient.isDeleted ? 'DELETE' : 'UPDATE';
+
       // TODO: should the payload be only an id?
       io.of(ns).in(accountId).emit(`${action}:Patient`, patient.id);
-
       return io.of(ns).in(accountId).emit('update:Patient', normalized);
     })
     .catch(next);
@@ -644,7 +643,7 @@ patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (
       res.status(201).send(normalized);
       return { patient, normalized };
     })
-    .then(({ patient, normalized }) => {
+    .then(async ({ patient, normalized }) => {
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
