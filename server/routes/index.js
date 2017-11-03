@@ -126,6 +126,8 @@ rootRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
 
     account = account.get({ plain: true });
 
+    delete account.address.id;
+
     let params = {
       name: account.name,
       address: account.address,
@@ -184,6 +186,8 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
     }
 
     account = account.get({ plain: true });
+
+    delete account.address.id;
 
     let params = {
       startDate: appointment.startDate.toISOString(),
