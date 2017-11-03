@@ -36,6 +36,7 @@ export async function getReviewAppointments({ account, date }) {
     where: {
       isDeleted: false,
       isCancelled: false,
+      isPending: false,
       accountId: account.id,
       startDate: {
         $between: [begin, date],
