@@ -169,6 +169,7 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
 
     // For any confirmed reminder we confirm appointment
     const { appointment } = sentReminder;
+
     if (appointment) {
       await appointment.update({ isPatientConfirmed: true });
     }
