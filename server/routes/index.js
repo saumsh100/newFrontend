@@ -94,6 +94,20 @@ rootRouter.get('/reset/:tokenId', (req, res, next) => {
     .catch(next);
 });
 
+// below route is sequelize
+rootRouter.get('/reset/:tokenId', (req, res, next) => {
+  return PasswordReset.findOne({ where: { token: req.params.tokenId } })
+    .then((reset) => {
+      if (!reset) {
+        // TODO: replace with StatusError
+        res.status(404).send();
+      } else {
+        res.redirect(`/resetpassword/${req.params.tokenId}`);
+      }
+    })
+    .catch(next);
+});
+
 
 rootRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
   try {
