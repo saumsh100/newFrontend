@@ -40,9 +40,83 @@ function registerFirstNextLastCalc(sub, io) {
   sub.on('data', (data) => {
     Appointment.findOne({
       where: { id: data },
+      include: [
+        {
+          model: Patient,
+          as: 'patient',
+          required: true,
+        },
+      ],
+      nest: true,
       raw: true,
     }).then((app) => {
-      getFirstNextLastAppointment(app);
+      const patient = app.patient;
+      const startDate = app.startDate;
+      console.log(patient)
+
+     if (!app.isDeleted && !app.isPending && !app.isCancelled) {
+
+       if (moment(startDate).isAfter(new Date()) && !patient.nextApptId ) {
+
+         patient.nextApptId = app.id;
+         console.log('patient--->', patient)
+
+         return Patient.update(patient, {
+           where: {
+             id: patient.id,
+           },
+         });
+
+       } else if (moment(startDate).isAfter(new Date()) && patient.nextApptId) {
+
+         Appointment.findOne({
+           where: { id: patient.nextApptId },
+           raw: true,
+         }).then((appNext) => {
+            if (moment(appNext.startDate).isAfter(moment(startDate))) {
+              patient.nextApptId = app.id;
+              console.log('patient--->', patient)
+
+              return Patient.update(patient, {
+                where: {
+                  id: patient.id,
+                },
+              });
+            }
+         });
+
+       } else if (moment(startDate).isBefore(new Date()) && !patient.lastApptId && !patient.firstApptId) {
+         patient.lastApptId = app.id;
+         patient.firstApptId = app.id;
+
+         return Patient.update(patient, {
+           where: {
+             id: patient.id,
+           },
+         });
+       } else if (moment(startDate).isBefore(new Date()) && patient.lastApptId && patient.firstApptId) {
+
+         Appointment.findOne({
+           where: { id: patient.lastApptId },
+           raw: true,
+         }).then((appLast) => {
+           if (moment(appLast.startDate).isBefore(moment(startDate))) {
+             patient.lastApptId = app.id;
+
+             return Patient.update(patient, {
+               where: {
+                 id: patient.id,
+               },
+             });
+           }
+         });
+
+       } else {
+         return getFirstNextLastAppointment(app);
+       }
+     } else {
+       return getFirstNextLastAppointment(app);
+     }
     });
   });
 }
