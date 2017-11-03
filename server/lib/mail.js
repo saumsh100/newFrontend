@@ -79,9 +79,9 @@ module.exports = {
 function sendTemplate(config) {
   const accountString = config.accountId ? `:${config.accountId}` : '';
   const string = config.email + accountString;
-  const encoded = new Buffer(string).toString('base64');
+  const encoded = config.patientId ? new Buffer(config.patientId).toString('base64') : new Buffer(string).toString('base64');
   const hostUrl = config.accountId ? `my.${host}` : host;
-  const unsubContent = `${protocol}://${hostUrl}/unsubscribe/${config.patientId || encoded}`;
+  const unsubContent = `${protocol}://${hostUrl}/unsubscribe/${encoded}`;
   const defaultMergeVars = [
     {
       name: 'UNSUB',

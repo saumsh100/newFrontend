@@ -19,6 +19,7 @@ import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
 import loadEnterprise from 'bundle-loader?lazy!./Dashboard/Enterprise';
 import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
+import ConfirmedAppointment from '../components/ConfirmedAppointment';
 import UnSubscribe from '../components/Unsubscribe';
 import ForgotPassword from '../components/ForgotPassword';
 import ResetPassword from '../components/ForgotPassword/ResetPassword';
@@ -64,6 +65,10 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
     <Router history={history}>
       <div>
         <Switch>
+          <Route
+            exact
+            path="/sentReminders/:sentReminderId/confirmed" render={props => (isAuth ? <Redirect to="/" /> : <ConfirmedAppointment {...props} />)}
+          />
           <Route exact path="/unsubscribe" render={props => (isAuth ? <Redirect to="/" /> : <UnSubscribe {...props} />)} />
           <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
           <Route exact path={urlTest} render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)} />
