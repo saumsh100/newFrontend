@@ -19,6 +19,7 @@ module.exports = {
             model: 'Appointments',
             key: 'id',
           },
+          onDelete: 'set null',
         }, { transaction: t });
 
         await queryInterface.addColumn('Patients', 'lastApptId', {
@@ -27,6 +28,7 @@ module.exports = {
             model: 'Appointments',
             key: 'id',
           },
+          onDelete: 'set null',
         }, { transaction: t });
 
         await queryInterface.addColumn('Patients', 'nextApptId', {
@@ -35,6 +37,7 @@ module.exports = {
             model: 'Appointments',
             key: 'id',
           },
+          onDelete: 'set null',
         }, { transaction: t });
 
         console.log('--Started First/Next/Last Appointment migration--');
@@ -45,24 +48,20 @@ module.exports = {
 
         CalcFirstNextLastAppointment(apps,
           async (currentPatient, firstApptId, nextApptId, lastApptId) => {
-            try {
-              await queryInterface.sequelize.query(`
-                UPDATE "Patients"
-                SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
-                WHERE id = :patientId
-              `, {
-                replacements: {
-                  firstApptId,
-                  lastApptId,
-                  nextApptId,
-                  patientId: currentPatient,
-                },
-                transaction: t,
-              });
-              console.log(`Set First/Next/Last Appointment for: ${currentPatient}`);
-            } catch (err) {
-              console.log('error');
-            }
+            await queryInterface.sequelize.query(`
+              UPDATE "Patients"
+              SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
+              WHERE id = :patientId
+            `, {
+              replacements: {
+                firstApptId,
+                lastApptId,
+                nextApptId,
+                patientId: currentPatient,
+              },
+              transaction: t,
+            });
+            console.log(`Set First/Next/Last Appointment for: ${currentPatient}`);
           });
       } catch (e) {
         console.log(e);
