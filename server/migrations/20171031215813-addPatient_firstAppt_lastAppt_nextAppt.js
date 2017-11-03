@@ -19,6 +19,7 @@ module.exports = {
             model: 'Appointments',
             key: 'id',
           },
+          onUpdate: 'cascade',
           onDelete: 'set null',
         }, { transaction: t });
 
@@ -28,6 +29,7 @@ module.exports = {
             model: 'Appointments',
             key: 'id',
           },
+          onUpdate: 'cascade',
           onDelete: 'set null',
         }, { transaction: t });
 
@@ -37,10 +39,10 @@ module.exports = {
             model: 'Appointments',
             key: 'id',
           },
+          onUpdate: 'cascade',
           onDelete: 'set null',
         }, { transaction: t });
 
-        console.log('--Started First/Next/Last Appointment migration--');
         const appointments = await queryInterface.sequelize.query(`SELECT * FROM "Appointments" WHERE "patientId" IS NOT NULL AND "isCancelled" = false 
         AND "isDeleted" = false AND "isPending" = false ORDER BY "patientId", "startDate" DESC `, { transaction: t });
 

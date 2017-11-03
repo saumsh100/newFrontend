@@ -202,6 +202,21 @@ export default function (sequelize, DataTypes) {
       as: 'appointments',
     });
 
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'nextApptId',
+      as: 'nextAppt',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'firstApptId',
+      as: 'firstAppt',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'lastApptId',
+      as: 'lastAppt',
+    });
+
     Patient.hasMany(Chat, {
       foreignKey: 'patientId',
       as: 'chats',
