@@ -119,6 +119,13 @@
   @extend .letterSpacing;
 }
 
+.fontTumboThin {
+  font-size: $jumbo-size;
+  font-weight: $jumbo-weight;
+  letter-spacing: 2px;
+  @extend .letterSpacing;
+}
+
 .fontLarge {
   font-size: $large-size;
   font-weight: $large-weight;

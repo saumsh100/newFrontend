@@ -63,6 +63,7 @@ export default {
     const alreadyConfirmed = appointment.isPatientConfirmed;
     if (alreadyConfirmed) {
       return sendAlreadyConfirmedReminder({
+        patientId: patient.id,
         toEmail: patient.email,
         fromName: account.name,
         mergeVars: [
@@ -106,6 +107,7 @@ export default {
       });
     } else {
       return sendConfirmationReminder({
+        patientId: patient.id,
         toEmail: patient.email,
         fromName: account.name,
         mergeVars: [

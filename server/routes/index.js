@@ -1,6 +1,7 @@
 
 import { Router } from 'express';
 import subdomain from 'express-subdomain';
+import url from 'url';
 // import apiRouter from './api';
 import sequelizeApiRouter from './_api';
 // import authRouter from './auth';
@@ -22,8 +23,10 @@ import resetRouter from './reset';
   User,
 } from '../models';*/
 import {
+  Account,
   Appointment,
   Invite,
+  Patient,
   Token,
   PasswordReset,
   User,
@@ -91,6 +94,65 @@ rootRouter.get('/reset/:tokenId', (req, res, next) => {
     .catch(next);
 });
 
+
+rootRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
+  try {
+    const regUuidTest = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+    let patientId = req.params.patientId;
+
+    if (!regUuidTest.test(patientId)) {
+      patientId = Buffer.from(patientId, 'base64').toString('utf8');
+    }
+
+    const patient = await Patient.findOne({ where: { id: patientId } });
+
+    const preferences = Object.assign({}, patient.preferences);
+    preferences.reminders = false;
+
+    await patient.update({ preferences });
+
+    let account = await Account.findOne({
+      where: {
+        id: patient.accountId,
+      },
+    });
+
+    let fullLogoUrl = account.fullLogoUrl;
+
+    if (account.fullLogoUrl) {
+      fullLogoUrl = fullLogoUrl.replace('[size]', 'original');
+    }
+
+    account = account.get({ plain: true });
+
+    delete account.address.id;
+
+    let params = {
+      name: account.name,
+      address: account.address,
+      facebookUrl: account.facebookUrl,
+      phoneNumber: account.phoneNumber,
+      email: account.contactEmail,
+      fullLogoUrl,
+    };
+
+    params = JSON.stringify(params);
+
+    params = new Buffer(params).toString('base64');
+
+    return res.redirect(url.format({
+      pathname: '/unsubscribe/',
+      query: {
+        params,
+      },
+    }));
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 rootRouter.post('/userCheck', (req, res, next) => {
   const username = req.body.email.toLowerCase().trim();
   User.findOne({ where: { username } })
@@ -108,10 +170,47 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
     // For any confirmed reminder we confirm appointment
     const { appointment } = sentReminder;
     if (appointment) {
-      await appointment.update({ isConfirmed: true });
+      await appointment.update({ isPatientConfirmed: true });
     }
 
-    res.render('confirmation-success');
+    let account = await Account.findOne({
+      where: {
+        id: appointment.accountId,
+      },
+    });
+
+    let fullLogoUrl = account.fullLogoUrl;
+
+    if (account.fullLogoUrl) {
+      fullLogoUrl = fullLogoUrl.replace('[size]', 'original');
+    }
+
+    account = account.get({ plain: true });
+
+    delete account.address.id;
+
+    let params = {
+      startDate: appointment.startDate.toISOString(),
+      endDate: appointment.endDate.toISOString(),
+      name: account.name,
+      address: account.address,
+      facebookUrl: account.facebookUrl,
+      phoneNumber: account.phoneNumber,
+      email: account.contactEmail,
+      fullLogoUrl,
+    };
+
+    params = JSON.stringify(params);
+
+    params = new Buffer(params).toString('base64');
+
+
+    return res.redirect(url.format({
+      pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
+      query: {
+        params,
+      },
+    }));
   } catch (err) {
     next(err);
   }
