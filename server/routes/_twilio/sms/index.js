@@ -8,10 +8,11 @@ import {
   SentReminder,
   Appointment
 } from '../../../_models';
-import { getValidSmsReminders } from '../../../lib/_reminders/helpers';
-import { createConfirmationText } from '../../../lib/_reminders/sendReminder';
+import { getValidSmsReminders } from '../../../lib/reminders/helpers';
+import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import { sequelizeLoader } from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
+import { isSmsConfirmationResponse } from '../../../lib/comms/util/responseChecks';
 import twilioClient from '../../../config/twilio';
 import { namespaces } from '../../../config/globals';
 import normalize from '../../_api/normalize';
@@ -63,7 +64,6 @@ function sendSocketReminder(io, sentReminder) {
 
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
-
     let {
       account,
     } = req;
@@ -79,15 +79,12 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     const textMessageData = sanitizeTwilioSmsData(req.body);
 
     // Grab account from incoming number so that we can get accountId
-    // TODO: change to aux table fetch?
     const patient = await Patient.findOne({
       where: {
         accountId: account.id,
         mobilePhoneNumber: From,
       },
     });
-    if (!patient) {
-    }
 
     let chat = await Chat.findOne({
       where: {
@@ -129,21 +126,22 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     // Update Chat to have new textMessage
     await chat.update({ lastTextMessageId: textMessageClean.id, lastTextMessageDate: textMessageClean.createdAt });
 
-    // If not patient or if not any valid sms sentReminders or if not proper response
-    if (!patient || Body.trim() !== 'C') {
+    // If not patient or if not a valid sms confirmation response just return
+    if (!patient || !isSmsConfirmationResponse(Body)) {
       await sendSocket(io, chatClean.id);
-      return;
+      return res.end();
     }
 
-    // Confirming valid SMS Reminder for patient
+    // Confirm reminder if any exist
     const validSmsReminders = await getValidSmsReminders({
       patientId: patient.id,
       accountId: account.id,
     });
 
+
     if (!validSmsReminders.length) {
       await sendSocket(io, chatClean.id);
-      return;
+      return res.end();
     }
 
     // Confirm first available reminder

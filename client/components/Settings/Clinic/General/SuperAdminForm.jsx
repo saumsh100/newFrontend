@@ -17,6 +17,8 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     canSendReminders: activeAccount.get('canSendReminders'),
     canSendRecalls: activeAccount.get('canSendRecalls'),
     canSendReviews: activeAccount.get('canSendReviews'),
+    googlePlaceId: activeAccount.get('googlePlaceId'),
+    facebookUrl: activeAccount.get('facebookUrl'),
   };
 
   const lastSyncDate = activeAccount.get('lastSyncDate');
@@ -112,7 +114,18 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           validate={[notNegative, maxUnitSize]}
         />
       </div>
-
+      <div className={styles.paddingField}>
+        <Field
+          name="facebookUrl"
+          label="Facebook URL"
+        />
+      </div>
+      <div className={styles.paddingField}>
+        <Field
+          name="googlePlaceId"
+          label="Google Place ID"
+        />
+      </div>
     </Form>
   );
 

@@ -1,0 +1,137 @@
+@import '../../ui.scss';
+
+.backDrop {
+  position: fixed;
+  height: 100%;
+  width:100%;
+  background-color: $primary-grey;
+  z-index: 199;
+
+}
+
+.loginForm {
+  width: 650px;
+  margin: 0px auto;
+  z-index: 200;
+  // display: flex;
+  // flex-direction: column;
+  border-top: $card-border-size $primary-color;
+  height: 100%;
+  overflow-y: auto;
+  @media screen and (max-width: $medium-screen-width) {
+    width: 100%;
+    max-height: 800px;
+  }
+}
+
+.topText {
+  margin: auto;
+  max-width: 50%;
+}
+
+.topContainer {
+  margin: auto;
+  align-items: center;
+  text-align: center;
+  min-height: 550px;
+  height: 60%;
+  width: 100%;
+  flex: 1;
+}
+
+.bottomContainer {
+  text-align: center;
+  background-color: $primary-dark;
+  height: 40%;
+  min-height: 300px;
+  width: 100%;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+}
+
+.loginLogo {
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 40px;
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.footer {
+  margin-top: auto;
+  color: $primary-darkgrey;
+  composes: subHeaderExtraSmall from 'sass-loader!../../fonts.scss';
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.logo {
+  padding: 20px;
+  padding-top: 50px;
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 800;
+  font-size: 20px;
+  color: $primary-white;
+  text-align: center;
+}
+
+.donnaLogo {
+  margin-top: 60px;
+  width: 100px;
+  margin-bottom: 20px;
+  margin-bottom: 40px;
+}
+
+.careLogo {
+  margin-top: 60px;
+  width: 150px;
+}
+
+.text {
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 400;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.bottomText {
+  margin-top: 10px;
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 500;
+  font-size: 16px;
+  color: $primary-darkgrey;
+  text-align: center;
+}
+
+.button {
+  display: inline-block;
+  border-radius: 50%;
+  width: 40px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.svg {
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+.addressText {
+  margin-top: 5px;
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 400;
+  font-size: 13px;
+  color: $primary-darkgrey;
+  text-align: center;
+}
+
+.addressText2 {
+  margin-top: 5px;
+  margin-bottom: 20px;
+  composes: fontLarge from 'sass-loader!../../fonts.scss';
+  font-weight: 400;
+  font-size: 13px;
+  color: $primary-darkgrey;
+  text-align: center;
+}

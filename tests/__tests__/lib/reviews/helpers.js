@@ -12,14 +12,14 @@ import {
   Practitioner,
   SentReview,
   Review,
-} from '../../server/_models';
+} from '../../../../server/_models';
 import {
   getReviewAppointments,
-} from '../../server/lib/reviews/helpers';
-import { wipeAllModels } from '../_util/wipeModel';
-import { seedTestUsers, accountId } from '../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../_util/seedTestPractitioners';
+} from '../../../../server/lib/reviews/helpers';
+import { wipeAllModels } from '../../../_util/wipeModel';
+import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
 
 // TODO: make seeds more modular so we can see here
 // const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';

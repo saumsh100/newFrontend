@@ -1,26 +1,33 @@
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol } from '../../config/globals';
-import { sendConfirmationReminder } from '../mail';
+import { sendConfirmationReminder, sendAlreadyConfirmedReminder } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
 export const createConfirmationText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
-  return `Thanks ${patient.firstName}! You appointment with ${account.name} ` +
+  return `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
     `on ${startDate} at ${startTime} is confirmed. `;
 };
 
-const BASE_URL = `https://${host}/twilio/voice/sentReminders`;
+const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
 const createReminderText = ({ patient, account, appointment }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${patient.firstName}, your next appointment with ${account.name} ` +
-    `is on ${startDate} at ${startTime}. Reply 'C' to ` +
-    'confirm your appointment.';
+
+  const alreadyConfirmed = appointment.isPatientConfirmed;
+  if (alreadyConfirmed) {
+    return `Just a friendly reminder that your next appointment with us at ${account.name} ` +
+      `is confirmed for ${startDate} at ${startTime}. We look forward to seeing you!`;
+  } else {
+    return `${patient.firstName}, your next appointment with ${account.name} ` +
+      `is on ${startDate} at ${startTime}. Reply "C" to ` +
+      'confirm your appointment.';
+  }
 };
 
 const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
@@ -53,53 +60,101 @@ export default {
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
   email({ account, appointment, patient, sentReminder }) {
-    return sendConfirmationReminder({
-      toEmail: patient.email,
-      fromName: account.name,
-      mergeVars: [
-        {
-          name: 'CONFIRMATION_URL',
-          // TODO: we might have to make this a token if UUID is too easy to guess...
-          content: `${protocol}://${host}/sentReminders/${sentReminder.id}/confirm`,
-        },
-        {
-          name: 'ACCOUNT_NAME',
-          content: account.name,
-        },
-        {
-          name: 'ACCOUNT_CONTACTEMAIL',
-          content: account.contactEmail,
-        },
-        {
-          name: 'ACCOUNT_WEBSITE',
-          content: account.website,
-        },
-        {
-          name: 'ACCOUNT_PHONENUMBER',
-          content: account.phoneNumber,
-        },
-        {
-          name: 'APPOINTMENT_DATE',
-          content: getAppointmentDate(appointment.startDate),
-        },
-        {
-          name: 'APPOINTMENT_TIME',
-          content: getAppointmentTime(appointment.startDate),
-        },
-        {
-          name: 'PATIENT_FIRSTNAME',
-          content: patient.firstName,
-        },
-      ],
+    const alreadyConfirmed = appointment.isPatientConfirmed;
+    if (alreadyConfirmed) {
+      return sendAlreadyConfirmedReminder({
+        patientId: patient.id,
+        toEmail: patient.email,
+        fromName: account.name,
+        mergeVars: [
+          {
+            name: 'ACCOUNT_NAME',
+            content: account.name,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_WEBSITE',
+            content: account.website,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: account.phoneNumber,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: getAppointmentDate(appointment.startDate, account.timezone),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: getAppointmentTime(appointment.startDate, account.timezone),
+          },
+          {
+            name: 'PATIENT_FIRSTNAME',
+            content: patient.firstName,
+          },
+        ],
 
-      attachments: [
-        {
-          type: 'application/octet-stream',
-          name: 'appointment.ics',
-          content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
-        },
-      ],
-    });
+        attachments: [
+          {
+            type: 'application/octet-stream',
+            name: 'appointment.ics',
+            content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
+          },
+        ],
+      });
+    } else {
+      return sendConfirmationReminder({
+        patientId: patient.id,
+        toEmail: patient.email,
+        fromName: account.name,
+        mergeVars: [
+          {
+            name: 'CONFIRMATION_URL',
+            // TODO: we might have to make this a token if UUID is too easy to guess...
+            content: `${protocol}://${host}/sentReminders/${sentReminder.id}/confirm`,
+          },
+          {
+            name: 'ACCOUNT_NAME',
+            content: account.name,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_WEBSITE',
+            content: account.website,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: account.phoneNumber,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: getAppointmentDate(appointment.startDate, account.timezone),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: getAppointmentTime(appointment.startDate, account.timezone),
+          },
+          {
+            name: 'PATIENT_FIRSTNAME',
+            content: patient.firstName,
+          },
+        ],
+
+        attachments: [
+          {
+            type: 'application/octet-stream',
+            name: 'appointment.ics',
+            content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
+          },
+        ],
+      });
+    }
   },
 };
 
@@ -110,12 +165,12 @@ export default {
  - Assume all preferences for now
  */
 
-function getAppointmentDate(date) {
-  return `${date.getFullYear()}/${(date.getMonth() + 1)}/${date.getDate()}`;
+function getAppointmentDate(date, timezone) {
+  return moment.tz(date, timezone).format('dddd, MMMM Do YYYY');
 }
 
-function getAppointmentTime(date) {
-  return `${date.getHours()}:${date.getMinutes()}`;
+function getAppointmentTime(date, timezone) {
+  return moment.tz(date, timezone).format('h:mm a');
 }
 
 

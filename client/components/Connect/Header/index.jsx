@@ -9,16 +9,18 @@ import styles from './styles.scss';
 
 function Header(props) {
   const logoutButton = () => (
-    <VButton
+    <Button
       className={styles.button}
       icon="angle-left"
-      onClick={props.logout}
+      onClick={() => {
+        props.logout().then(() => window.JavaParent && window.JavaParent.onLogoutSuccess());
+      }}
       title="Sign Out"
     />
   );
 
   const settingsButton = () => (
-    <VButton
+    <Button
       className={styles.button}
       icon="angle-left"
       onClick={() => props.history.push('./settings')}

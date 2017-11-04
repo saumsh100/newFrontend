@@ -202,7 +202,7 @@ class Reminders extends Component {
     ];
 
 
-    const showComponent = this.props.activeAccount.canSendReminders ? (<div>
+    const showComponent = this.props.activeAccount.canSendReminders || this.props.role === 'SUPERADMIN' ? (<div>
       <div className={styles.header}>
         <Header title={'Reminders'} className={styles.headerTitle} />
       </div>
@@ -264,6 +264,7 @@ class Reminders extends Component {
 Reminders.propTypes = {
   activeAccount: PropTypes.object,
   reminders: PropTypes.object,
+  role: PropTypes.string,
   updateEntityRequest: PropTypes.func,
   deleteEntityRequest: PropTypes.func,
   fetchEntities: PropTypes.func,
@@ -273,9 +274,13 @@ Reminders.propTypes = {
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
+  const role = auth.get('role');
+
   return {
     activeAccount,
     reminders: entities.getIn(['reminders', 'models']),
+    role,
   };
 }
 

@@ -164,6 +164,19 @@ export default function (sequelize, DataTypes) {
       values: Object.keys(STATUS).map(key => STATUS[key]),
       defaultValue: STATUS.ACTIVE,
     },
+
+    lastApptId: {
+      type: DataTypes.UUID,
+    },
+
+    firstApptId: {
+      type: DataTypes.UUID,
+    },
+
+    nextApptId: {
+      type: DataTypes.UUID,
+    },
+
   }, {
     // Model Config
     indexes: [
@@ -187,6 +200,21 @@ export default function (sequelize, DataTypes) {
     Patient.hasMany(Appointment, {
       foreignKey: 'patientId',
       as: 'appointments',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'nextApptId',
+      as: 'nextAppt',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'firstApptId',
+      as: 'firstAppt',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'lastApptId',
+      as: 'lastAppt',
     });
 
     Patient.hasMany(Chat, {

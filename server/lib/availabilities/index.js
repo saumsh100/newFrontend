@@ -1,9 +1,9 @@
 
 import moment from 'moment';
-const isEmpty = require('lodash/isEmpty');
-const isUndefined = require('lodash/isUndefined');
-const unionBy = require('lodash/unionBy');
-const {
+import isEmpty from 'lodash/isEmpty';
+import isUndefined from 'lodash/isUndefined';
+import unionBy from 'lodash/unionBy';
+import {
   Service,
   Practitioner,
   Appointment,
@@ -11,15 +11,15 @@ const {
   WeeklySchedule,
   Account,
   PractitionerRecurringTimeOff,
-} = require('../_models');
-const StatusError = require('../util/StatusError');
-const {
+} from '../../_models';
+import StatusError from '../../util/StatusError';
+import {
   isDuringEachother,
   isDuringEachotherTimeOff,
   createPossibleTimeSlots,
   createIntervalsFromWeeklySchedule,
   getISOSortPredicate,
-} = require('../util/time');
+} from '../../util/time';
 
 const generateDuringFilterSequelize = (startDate, endDate) => {
   return {
@@ -80,6 +80,10 @@ function fetchServiceData(options) {
         { model: Request, as: 'requests', raw: true },
       ],
     }).then((serviceOne) => {
+      if (!serviceOne) {
+        return reject(StatusError(400, `service with id=${serviceId} not found`));
+      }
+
       const service = serviceOne.get({ plain: true });
 
       if (service.accountId !== accountId) {
@@ -428,25 +432,27 @@ function fetchAvailabilities(options) {
                   },
                 ],
               },
+
               raw: true,
             })
-              .then((appointments) => {
-                const practitionerAvailabilities = practitioners.map((p, i) => {
-                  const avails = generatePractitionerAvailabilities({
-                    practitioner: p,
-                    weeklySchedule: weeklySchedules[i],
-                    service,
-                    startDate,
-                    timeInterval,
-                    endDate,
-                  });
-                  return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
+            .then((appointments) => {
+              const practitionerAvailabilities = practitioners.map((p, i) => {
+                const avails = generatePractitionerAvailabilities({
+                  practitioner: p,
+                  weeklySchedule: weeklySchedules[i],
+                  service,
+                  startDate,
+                  timeInterval,
+                  endDate,
                 });
 
-                const squashed = unionBy(...practitionerAvailabilities, 'startDate');
-                const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
-                return resolve(squashedAndSorted);
+                return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
               });
+
+              const squashed = unionBy(...practitionerAvailabilities, 'startDate');
+              const squashedAndSorted = squashed.sort(getISOSortPredicate('startDate'));
+              return resolve(squashedAndSorted);
+            });
           });
       })
       .catch(err => reject(err));

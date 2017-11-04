@@ -9,10 +9,13 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const remindersPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
 
 // Run at 5AM every morning
-const recallsPattern = NODE_ENV === 'production' ? '* 5 * * *' : '0 * * * * *';
+const recallsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
 
 // Run every 30 min in prod
 const reviewsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
+
+// Run 15 min past every 8 hours in prod
+const firstNextLastAppointmentPattern = NODE_ENV === 'production' ? '15 */8 * * *' : '0 * * * * *';
 
 // Appointment Reminders Cron
 cron.schedule(remindersPattern, () => {
@@ -27,6 +30,11 @@ cron.schedule(recallsPattern, () => {
 // Patient Reviews Cron
 cron.schedule(reviewsPattern, () => {
   createJob('reviews');
+});
+
+// Patient First Appointment, Next Appointment, and Last Appointment Cron
+cron.schedule(firstNextLastAppointmentPattern, () => {
+  createJob('firstNextLastApp');
 });
 
 // TODO: Birthday Messages Cron

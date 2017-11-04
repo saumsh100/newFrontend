@@ -26,13 +26,18 @@ const generateCallBackUrl = ({ account, appointment, patient }) => {
 export default {
   // Send Appointment Reminder email via Mandrill (MailChimp)
   email({ account, lastAppointment, patient }) {
+    if (!patient.email) {
+      throw new Error(`patient with id=${patient.id} does not have an email`);
+    }
+
     return sendPatientRecall({
+      patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
       mergeVars: [
         {
           name: 'BOOK_URL',
-          content: `${account.website}?ccbw`,
+          content: `${account.website}?cc=book`,
         },
         {
           name: 'ACCOUNT_NAME',

@@ -4,6 +4,7 @@
 
 .dialogBody {
   display: flex;
+  flex: 1;
   padding: 20px;
   min-width: 250px;
   max-height: 96%;
@@ -13,6 +14,7 @@
     align-items: center;
     padding-bottom: 10px;
   }
+
   &__closeIcon {
     font-size: 1rem;
     color: $primary-darkgrey;
@@ -23,6 +25,7 @@
       color: darken($primary-darkgrey, 10%);
     }
   }
+
   &__footer {
     display: flex;
     padding-top: 10px;
@@ -32,7 +35,6 @@
   &__action {
     margin-left: 5px;
   }
-
 }
 
 .cardHeader {

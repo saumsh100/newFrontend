@@ -292,6 +292,7 @@ describe('/api/patients', () => {
         .send(createPatient)
         .expect(201)
         .then(({ body }) => {
+          console.log(body)
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
@@ -340,6 +341,7 @@ describe('/api/patients', () => {
         })
         .expect(201)
         .then(({ body }) => {
+          console.log('body--->', body);
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });

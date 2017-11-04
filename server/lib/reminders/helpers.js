@@ -1,10 +1,39 @@
 
 import moment from 'moment';
-import { r } from '../../config/thinky';
-import { Appointment, SentReminder } from '../../models';
-import { SentReminder as _SentReminder, Appointment as _Appointment } from '../../_models';
+import {
+  Appointment,
+  Patient,
+  SentReminder,
+} from '../../_models';
+import { generateOrganizedPatients } from '../comms/util';
 
 // Made an effort to throw all easily testable functions into here
+export async function mapPatientsToReminders({ reminders, account, date }) {
+  const seen = {};
+  const remindersPatients = [];
+  for (const reminder of reminders) {
+    // Get appointments that this reminder deals with
+    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, date });
+
+    // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
+    // This is why the order or reminders is so important
+    const unseenAppts = appointments.filter(a => !seen[a.id]);
+
+    // Now add it to the seen map
+    unseenAppts.forEach(a => seen[a.id] = true);
+
+    const patients = unseenAppts.map((appt) => {
+      const patient = appt.patient.get({ plain: true });
+      patient.appointment = appt.get({ plain: true });
+      return patient;
+    });
+
+    remindersPatients.push(generateOrganizedPatients(patients, reminder.primaryType));
+  }
+
+  return remindersPatients;
+}
+
 
 /**
  * getAppointmentsFromReminder returns all of the appointments that are
@@ -16,22 +45,34 @@ import { SentReminder as _SentReminder, Appointment as _Appointment } from '../.
  * @param date
  */
 export async function getAppointmentsFromReminder({ reminder, date }) {
-  const start = r.ISO8601(date);
-  const end = start.add(reminder.lengthSeconds);
+  const end = moment(date).add(reminder.lengthSeconds, 'seconds').toISOString();
 
-  const allAppointments = await Appointment.run();
+  const appointments = await Appointment.findAll({
+    where: {
+      isDeleted: false,
+      isCancelled: false,
+      isShortCancelled: false,
+      isPending: false,
+      accountId: reminder.accountId,
+      startDate: {
+        $between: [date, end],
+      },
+    },
 
-  // console.log(allAppointments);
+    include: [
+      {
+        model: Patient,
+        as: 'patient',
+        required: true,
+      },
+      {
+        model: SentReminder,
+        as: 'sentReminders',
+        required: false,
+      },
+    ],
+  });
 
-  const appointments = await Appointment
-    .filter({ accountId: reminder.accountId })
-    .filter(r.row('startDate').during(start, end).and(r.row('isDeleted').eq(false)))
-    .getJoin({ patient: true, sentReminders: true })
-    .run();
-
-  // console.log(appointments);
-  // console.log(reminder);
-  // .getJoin().filter() does not work in order, therefore we gotta filter after the fetch
   return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
 }
 
@@ -48,8 +89,9 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
 export function shouldSendReminder({ appointment, reminder }) {
   const { sentReminders, patient } = appointment;
   const preferences = patient.preferences;
+
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
-    return (s.reminderId === reminder.id) || (reminder.lengthSeconds > s.lengthSeconds);
+    return (s.reminderId === reminder.id) || (reminder.lengthSeconds >= s.lengthSeconds);
   });
 
   return !reminderAlreadySentOrLongerAway && preferences.reminders;
@@ -60,7 +102,7 @@ export function shouldSendReminder({ appointment, reminder }) {
  */
 export async function getValidSmsReminders({ accountId, patientId, date }) {
   // Confirming valid SMS Reminder for patient
-  const sentReminders = await SentReminder
+  /*const sentReminders = await SentReminder
     .filter({
       accountId,
       patientId,
@@ -69,32 +111,22 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
     })
     .orderBy('createdAt')
     .getJoin({ appointment: true })
-    .run();
+    .run();*/
 
-  return sentReminders.filter(({ appointment }) => {
-    // - if appointment is upcoming or is cancelled
-    const isAfter = moment(appointment.startDate).isAfter(date);
-    return !appointment.isCancelled && isAfter && !appointment.isDeleted;
-  });
-}
-
-export async function getValidSmsRemindersSequelize({ accountId, patientId, date }) {
-  // Confirming valid SMS Reminder for patient
-  const sentReminders = await _SentReminder.findAll({
-    raw: true,
-    nest: true,
+  const sentReminders = await SentReminder.findAll({
     where: {
       accountId,
       patientId,
       isConfirmed: false,
+      isConfirmable: true,
       primaryType: 'sms',
     },
-    include: [
-      {
-        model: _Appointment,
-        as: 'appointment',
-      },
-    ],
+
+    order: [['createdAt', 'asc']],
+    include: [{
+      model: Appointment,
+      as: 'appointment',
+    }],
   });
 
   return sentReminders.filter(({ appointment }) => {

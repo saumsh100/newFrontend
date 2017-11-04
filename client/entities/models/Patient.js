@@ -3,8 +3,9 @@ import moment from 'moment';
 import createModel from '../createModel';
 
 const PatientSchema = {
-  lastAppointmentDate: null,
-  nextAppointmentTitle: null,
+  lastApptId: null,
+  nextApptId: null,
+  firstApptId: null,
   firstName: null,
   avatarUrl: null,
   middleName: null,

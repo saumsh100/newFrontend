@@ -1,0 +1,63 @@
+
+@import '../../../../ui.scss';
+
+.outboxWrapper {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  > div {
+    display: flex;
+    flex: 1;
+    > div {
+      width: 100%;
+      display: flex;
+      flex: 1;
+    }
+  }
+}
+
+.col {
+  padding: 0px 20px;
+}
+
+.listItem {
+  cursor: default !important;
+}
+
+$diameter: 10px;
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /*&:after {
+    width: $diameter;
+    height: $diameter;
+    border-radius: $diameter / 2;
+    background-color: black;
+  }*/
+}
+
+.dot {
+  width: $diameter;
+  height: $diameter;
+  border-radius: $diameter / 2;
+  margin-left: 10px;
+  margin-bottom: 3px;
+}
+
+.on {
+  @extend .dot;
+  background-color: $primary-green;
+}
+
+.off {
+  @extend .dot;
+  background-color: $primary-red;
+}

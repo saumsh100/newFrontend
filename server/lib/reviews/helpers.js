@@ -1,7 +1,28 @@
 
 import moment from 'moment';
 import uniqBy from 'lodash/uniqBy';
-import { Appointment, Patient, SentReview, Review, Practitioner } from '../../_models';
+import {
+  Appointment,
+  Patient,
+  SentReview,
+  Review,
+  Practitioner,
+} from '../../_models';
+import { generateOrganizedPatients } from '../comms/util';
+
+/**
+ * getPatientsNeedingReview
+ */
+export async function getReviewPatients({ account, date }) {
+  const appointments = await exports.getReviewAppointments({ account, date });
+  const patients = appointments.map((appt) => {
+    const patient = appt.patient.get({ plain: true });
+    patient.appointment = appt.get({ plain: true });
+    return patient;
+  });
+
+  return generateOrganizedPatients(patients, 'email');
+}
 
 /**
  * getReviewAppointments
@@ -14,6 +35,8 @@ export async function getReviewAppointments({ account, date }) {
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
+      isCancelled: false,
+      isPending: false,
       accountId: account.id,
       startDate: {
         $between: [begin, date],
@@ -63,9 +86,10 @@ export async function getReviewAppointments({ account, date }) {
   const sendableAppointments = appointments.filter((a) => {
     const reviewNotSent = !a.sentReviews.length;
     const patientNotReviewed = !a.patient.reviews.length;
-    // console.log('patient.sentReviews', a.patient.sentReviews);
+
     const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr => moment(sr.createdAt).isBetween(begin, date));
-    return reviewNotSent && patientNotReviewed && patientHasNoRecentSentReview;
+    return reviewNotSent && patientNotReviewed
+    && patientHasNoRecentSentReview && a.patient.preferences.reminders;
   });
 
   // Do not send to the same patient twice

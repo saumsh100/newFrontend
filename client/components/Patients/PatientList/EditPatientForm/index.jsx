@@ -23,9 +23,8 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
       value: 'Active',
     },
     {
-      value: 'InActive',
-    }
-    ,
+      value: 'Inactive',
+    },
   ];
 
   const gender = [
@@ -34,8 +33,7 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
     },
     {
       value: 'Female',
-    }
-    ,
+    },
   ];
 
   return (
