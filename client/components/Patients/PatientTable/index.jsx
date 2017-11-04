@@ -42,7 +42,7 @@ class PatientTable extends Component {
       smartFilter: null,
     };
 
-    this.fetchData = debounce(this.fetchData, 500);
+    this.fetchData = debounce(this.fetchData, 10);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
@@ -70,6 +70,7 @@ class PatientTable extends Component {
       const dataArray = getEntities(data);
 
       if (dataArray.length) {
+        console.log(dataArray)
         this.setState({
           totalPatients: dataArray[0].totalPatients,
           data: dataArray,
@@ -284,8 +285,8 @@ class PatientTable extends Component {
         Header: 'Next Appt',
         id: 'nextAppt',
         accessor: d => {
-          if (d.hasOwnProperty('nextAppt')) {
-            const dateValue = moment(d.nextAppt);
+          if (d.hasOwnProperty('nextAppt.startDate')) {
+            const dateValue = moment(d['nextAppt.startDate']);
             return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
           }
           return '';
@@ -302,8 +303,8 @@ class PatientTable extends Component {
         Header: 'Last Appt',
         id: 'lastAppt',
         accessor: d => {
-          if (d.hasOwnProperty('lastAppt')) {
-            const dateValue = moment(d.lastAppt);
+          if (d.hasOwnProperty('lastAppt.startDate')) {
+            const dateValue = moment(d['lastAppt.startDate']);
             return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
           }
           return '';

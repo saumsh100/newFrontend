@@ -62,7 +62,6 @@ class SideBarFilters extends Component {
       ((app1 && app2 && app3) || (!app1 && !app2 && !app3)) &&
       ((prod1 && prod2) || (!prod1 && !prod2)) &&
       ((online1 && online2 && online3) || (!online1 && !online2 && !online3))) {
-      console.log(values)
       this.props.addFilter({
         type: 'Appointments',
         values,

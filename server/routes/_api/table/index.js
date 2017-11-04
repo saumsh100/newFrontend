@@ -242,32 +242,9 @@ async function AppointmentsFilter(values, patients, query, next) {
 
 async function LateAppointmentsFilter(accountId, limit, offset, order, filters, smFilter, next) {
   try {
-    console.log(smFilter)
+    console.log(smFilter);
     const startMonthsOut = moment().subtract(smFilter.startMonth, 'months').toISOString();
     const endMonthsOut = moment().subtract(smFilter.endMonth, 'months').toISOString();
-
-    const appData = await Appointment.findAll({
-      raw: true,
-      attributes: ['patientId'],
-      where: {
-        accountId,
-        startDate: {
-          $between: [endMonthsOut, moment().add(1, 'year').toISOString()],
-        },
-        isCancelled: false,
-        isDeleted: false,
-        patientId: {
-          $ne: null,
-        },
-      },
-      groupBy: ['patientId'],
-    });
-
-    const patientIds = appData.map((data) => {
-      return data.patientId;
-    });
-
-    //TODO sorting
 
     const offSetLimit = {
     };
@@ -277,29 +254,28 @@ async function LateAppointmentsFilter(accountId, limit, offset, order, filters, 
       offSetLimit.limit = limit;
     }
 
-    const patientsData = await Appointment.findAndCountAll(Object.assign({
+    const patientsData = await Patient.findAndCountAll(Object.assign({
       raw: true,
-      nest: true,
       where: {
         accountId,
-        startDate: {
-          $between: [startMonthsOut, endMonthsOut],
-        },
-        isCancelled: false,
-        isDeleted: false,
-        patientId: {
-          $notIn: patientIds,
-        },
+        nextApptId: null,
       },
-      //order: [[{ model: Patient, as: 'patient' }, 'firstName']],
       include: {
-        model: Patient,
-        as: 'patient',
-        required: true,
+        model: Appointment,
+        as: 'lastAppt',
+        where: {
+          startDate: {
+            $between: [startMonthsOut, endMonthsOut],
+          },
+        },
+        attributes: ['startDate'],
+        groupBy: ['startDate'],
       },
+      offset,
+      limit,
     }, offSetLimit));
 
-    const patients = patientsData.rows.map(data => data.patient);
+    const patients = patientsData.rows.map(data => data);
 
     return {
       patients,
@@ -361,64 +337,31 @@ async function MissedPreAppointed(accountId, limit, offset, order, filters, smFi
       offSetLimit.limit = limit;
     }
 
-    const appData = await Appointment.findAll({
+    const patientsData = await Patient.findAndCountAll(Object.assign({
       raw: true,
-      nest: true,
       where: {
         accountId,
-        startDate: {
-          $between: [moment().subtract(30, 'days').toISOString(), new Date()],
-        },
-        isCancelled: false,
-        isDeleted: false,
-        patientId: {
-          $ne: null,
-        },
+        nextApptId: null,
       },
       include: {
-        model: Patient,
-        as: 'patient',
-        required: true,
-      },
-    });
-
-    const patientIdsHash = {}
-    const patientIds = appData.map((data) => {
-      patientIdsHash[data.patient.id] = data.patient;
-      return data.patient.id;
-    });
-
-    const patientsData = await Appointment.findAll({
-      raw: true,
-      attributes: ['patientId'],
-      where: {
-        accountId,
-        isCancelled: false,
-        isDeleted: false,
-        startDate: {
-          $between: [new Date(), moment().add(1, 'year').toISOString()],
+        model: Appointment,
+        as: 'lastAppt',
+        where: {
+          startDate: {
+            $between: [moment().subtract(30, 'days').toISOString(), new Date()],
+          },
         },
-        patientId: {
-          $in: patientIds,
-        },
+        attributes: ['startDate'],
+        groupBy: ['startDate'],
       },
-      groupBy: ['patientId'],
-    });
+      offset,
+      limit,
+    }, offSetLimit));
 
-    patientsData.forEach(data => {
-      if (patientIdsHash.hasOwnProperty(data.patientId)) {
-        delete patientIdsHash[data.patientId];
-      }
-    });
-
-    const hashKeys = Object.keys(patientIdsHash);
-    const patients = hashKeys.map(id=> patientIdsHash[id]);
-
-    const filteredPatients = !filters ? ManualLimitOffset(patients, offSetLimit) : patients;
-
+    const patients = patientsData.rows.map(data => data);
     return {
-      patients: filteredPatients,
-      count: patients.length,
+      patients,
+      count: patientsData.count,
     };
 
   } catch (err) {
@@ -432,33 +375,42 @@ async function UnConfirmedPatientsFilter(accountId, limit, offset, order, filter
     };
 
     if (!filters) {
-      offSetLimit.offset = offset
+      offSetLimit.offset = offset;
       offSetLimit.limit = limit;
     }
 
-    const patientsData = await Appointment.findAndCountAll(Object.assign({
+    const patientsData = await Patient.findAndCountAll(Object.assign({
       raw: true,
-      nest: true,
       where: {
         accountId,
-        isPatientConfirmed: false,
-        isCancelled: false,
-        isDeleted: false,
-        startDate: {
-          $between: [moment().toISOString(), moment().add(smFilter.days, 'days').toISOString()]
-        },
-        patientId: {
-          $ne: null,
+        nextApptId: {
+          $not: null,
         },
       },
-      include: {
-        model: Patient,
-        as: 'patient',
+      include: [{
+        model: Appointment,
+        as: 'nextAppt',
+        where: {
+          startDate: {
+            $between: [new Date(), moment().add(smFilter.days, 'days').toISOString()],
+          },
+          isPatientConfirmed: false,
+        },
+        attributes: ['startDate'],
+        groupBy: ['startDate'],
         required: true,
-      },
+      }, {
+        model: Appointment,
+        as: 'lastAppt',
+        attributes: ['startDate'],
+        groupBy: ['startDate'],
+        required: false,
+      }],
+      offset,
+      limit,
     }, offSetLimit));
 
-    const patients = patientsData.rows.map(data => data.patient);
+    const patients = patientsData.rows.map(data => data);
     return {
       patients,
       count: patientsData.count,
@@ -523,6 +475,25 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     const defaultQuery = {
       raw: true,
       where: filterBy,
+      include: [{
+        model: Appointment,
+        as: 'nextAppt',
+        attributes: ['startDate'],
+        groupBy: ['startDate'],
+        required: false,
+      },{
+        model: Appointment,
+        as: 'lastAppt',
+        attributes: ['startDate'],
+        required: false,
+        groupBy: ['startDate'],
+      }, {
+        model: Appointment,
+        as: 'firstAppt',
+        attributes: ['startDate'],
+        required: false,
+        groupBy: ['startDate'],
+      },],
       offset,
       limit,
       order,
@@ -568,7 +539,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       patientCount = filteredPatients.count;
       patients = filteredPatients.patients;
     } else if (filters.length) {
-        patients = filteredPatients;
+      patients = filteredPatients;
     } else {
       patients = await PatientSearch(search, req.accountId, defaultQuery);
       patientCount = patients.length;
@@ -581,16 +552,6 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
      */
     const calcPatientData = patients.map(async (patient) => {
       try {
-        const appData = await getNextLastAppointment(patient.id, req.accountId, next);
-
-        if (appData.nextAppt) {
-          patient.nextAppt = appData.nextAppt;
-        }
-
-        if (appData.lastAppt) {
-          patient.lastAppt = appData.lastAppt;
-        }
-
         const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), req.accountId, patient.id)
 
         if (productionRevenue && productionRevenue.length) {
