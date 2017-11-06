@@ -5,7 +5,7 @@ import { mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import PatientSearch from '../../../lib/patientSearch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Appointment, Patient, sequelize, Service } from '../../../_models';
+import { Appointment, Patient, sequelize, DeliveredProcedure, Request } from '../../../_models';
 
 const tableRouter = new Router();
 
@@ -202,7 +202,44 @@ async function AppointmentsFilter(values, filteredPatients, query, accountId,  n
     }
 
     if (production) {
-
+      const data = await Patient.findAll({
+        where: {
+          accountId,
+        },
+        attributes: [
+          'Patient.id',
+          [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
+        ],
+        include: [
+          {
+            model: DeliveredProcedure,
+            as: 'deliveredProcedures',
+            where: {
+              entryDate: {
+                gt: moment('1970-01-01').toISOString(),
+                lt: new Date(),
+              },
+            },
+            attributes: [],
+            duplicating: false,
+            required: true,
+          },
+        ],
+        group: ['Patient.id'],
+        having: sequelize.literal(`sum("totalAmount") > ${10000}`),
+        raw: true,
+      });
+      const patientIds = getIds(data, 'id');
+      let searchObj = {
+        raw: true,
+        where: {
+          accountId,
+          id: patientIds,
+        },
+        include,
+      };
+      searchObj = keys.length === 1 ? Object.assign(searchObj, { limit }, { offset }) : searchObj;
+      patientsData = await Patient.findAndCountAll(searchObj);
     }
 
     if (keys.length > 1) {
@@ -217,7 +254,6 @@ async function AppointmentsFilter(values, filteredPatients, query, accountId,  n
     next(err);
   }
 }
-
 
 async function LateAppointmentsFilter(accountId, limit, offset, order, filters, smFilter, next) {
   try {
@@ -409,7 +445,6 @@ const smartFilterFunctions = [
   MissedPreAppointed,
   UnConfirmedPatientsFilter,
 ];
-
 
 /**
  * Fetching patients for patients table.

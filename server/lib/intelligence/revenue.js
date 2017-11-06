@@ -5,7 +5,7 @@ import { DeliveredProcedure, Patient, Procedure } from '../../_models';
 // groups by deliveredProcedures.procedurecode and totals up the cost from them.
 // IE the total cost the patient spent between startDate and endDate
 
-export function mostBusinessPatient(startDate, endDate, accountId) {
+export function mostBusinessPatient(startDate, endDate, accountId, searchClause = {}) {
   return Patient.findAll({
     where: {
       accountId,

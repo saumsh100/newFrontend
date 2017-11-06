@@ -61,7 +61,7 @@ class SideBarFilters extends Component {
       if (key === 'appointmentsCount' && values[key].length === 3) {
         setFilter += 1;
       }
-      if (key === 'production' && values[key].length === 3) {
+      if (key === 'production' && values[key].length === 2) {
         setFilter += 1;
       }
       if (key === 'onlineAppointments' && values[key].length === 3) {

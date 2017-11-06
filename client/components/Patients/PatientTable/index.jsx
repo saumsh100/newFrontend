@@ -97,6 +97,7 @@ class PatientTable extends Component {
 
     this.setState({
       page: index,
+      expanded: {},
     });
   }
 
@@ -432,7 +433,6 @@ class PatientTable extends Component {
                 this.pageSizeChange(pageSize, pageIndex);
               }}
               onExpandedChange={(newExpanded, index, event) => {
-                this.onExpand(newExpanded, index, event);
               }}
               getTdProps={(state, rowInfo, column, instance) => {
                 return {

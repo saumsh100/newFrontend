@@ -95,14 +95,16 @@ function registerFirstNextLastCalc(sub, io) {
       nest: true,
       raw: true,
     }).then((app) => {
-      const patient = app.patient;
-      const startDate = app.startDate;
+      if (app) {
+        const patient = app.patient;
+        const startDate = app.startDate;
 
-      if (!app.isDeleted && !app.isPending && !app.isCancelled) {
-        return optimizedFirstNextLastSetter(app, patient, startDate);
+        if (!app.isDeleted && !app.isPending && !app.isCancelled) {
+          return optimizedFirstNextLastSetter(app, patient, startDate);
+        }
+
+        return getFirstNextLastAppointment(app);
       }
-
-      return getFirstNextLastAppointment(app);
     });
   });
 }
