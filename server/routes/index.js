@@ -94,7 +94,6 @@ rootRouter.get('/reset/:tokenId', (req, res, next) => {
     .catch(next);
 });
 
-
 rootRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
   try {
     const regUuidTest = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
