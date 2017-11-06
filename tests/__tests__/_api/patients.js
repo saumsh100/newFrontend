@@ -15,6 +15,7 @@ const batchPatientId2 = '7a1146f9-1d48-4a5f-8479-f6172d5a83b5';
 const batchPatientId3 = '8405acdd-4559-4396-beb8-2e8ce79307c3';
 const batchPatientId4 = '68238eca-3e5c-4fbd-a641-f68ded47510d';
 const batchInvalidPatientId = 'eb6be674-1861-4432-8a2e-48c402ba2aaa';
+const pmsCreatePatientId = 'eb6be674-1861-4432-8a2e-48c402ba2aba';
 const requestCreatedAt = new Date();
 
 const batchPatient = {
@@ -71,6 +72,18 @@ const batchInvalidPatient = {
   mobilePhoneNumber: '7784444444',
 };
 
+const pmsCreatePatient = {
+  id: pmsCreatePatientId,
+  accountId,
+  avatarUrl: '',
+  email: 'batchpatient2@test.com',
+  firstName: 'McInvalid2',
+  lastName: 'McInvalid2',
+  isSyncedWithPms: false,
+  pmsId: null,
+  mobilePhoneNumber: '7784444444',
+};
+
 describe('/api/patients', () => {
   // Seed with some standard user data
   let token = null;
@@ -88,11 +101,23 @@ describe('/api/patients', () => {
   describe('GET /', () => {
     beforeEach(async () => {
       await seedTestAppointments();
+      await Patient.create(pmsCreatePatient);
     });
 
     test('/ - get all patients under a clinic', () => {
       return request(app)
         .get(`${rootUrl}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/ - get all patients under a clinic - connector not notSynced', () => {
+      return request(app)
+        .get(`${rootUrl}/connector/notSynced`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

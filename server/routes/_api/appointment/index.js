@@ -670,6 +670,24 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
     .catch(next);
 });
 
+appointmentsRouter.get('/connector/notSynced', checkPermissions('patients:read'), async (req, res, next) => {
+  const { accountId } = req;
+
+  let appointments;
+  try {
+    appointments = await Appointment.findAll({
+      raw: true,
+      where: {
+        accountId,
+        isSyncedWithPms: false,
+      },
+    });
+    return res.send(format(req, res, 'appointments', appointments));
+  } catch (error) {
+    return next(error);
+  }
+});
+
 /**
  * Batch update appointments for connector
  */

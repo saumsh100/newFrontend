@@ -463,6 +463,23 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
   }
 });
 
+patientsRouter.get('/connector/notSynced', checkPermissions('patients:read'), async (req, res, next) => {
+  const { accountId } = req;
+
+  let patients;
+  try {
+    patients = await Patient.findAll({
+      raw: true,
+      where: {
+        accountId,
+        isSyncedWithPms: false,
+      },
+    });
+    return res.send(format(req, res, 'patients', patients));
+  } catch (error) {
+    next(error);
+  }
+});
 
 /**
  * Create a patient
