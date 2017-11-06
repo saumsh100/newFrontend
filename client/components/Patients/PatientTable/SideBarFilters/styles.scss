@@ -89,6 +89,11 @@
   color: $primary-blue;
 }
 
+.formSubHeader {
+  padding-top: 5px;
+  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+}
 .ddSelect {
   width: 100%;
   padding-right: 5px;

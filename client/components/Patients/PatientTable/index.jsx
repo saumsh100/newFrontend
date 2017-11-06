@@ -205,17 +205,18 @@ class PatientTable extends Component {
   }
 
   reinitializeTable() {
-    this.fetchData({
-      limit: 15,
-      page: 0,
-      search: '',
-    });
     this.setState({
       smartFilter: null,
       page: 0,
       filters: Map(),
       search: '',
       limit: 15,
+    });
+
+    this.fetchData({
+      limit: 15,
+      page: 0,
+      search: '',
     });
   }
 
@@ -224,7 +225,7 @@ class PatientTable extends Component {
       destroy,
     } = this.props;
 
-    const filtersArray = ['demographics', 'appointments', 'practitioners  '];
+    const filtersArray = ['demographics', 'appointments', 'practitioners', 'communications'];
     filtersArray.map(filter => destroy(filter));
   }
 
@@ -235,6 +236,8 @@ class PatientTable extends Component {
       createEntityRequest,
       practitioners,
     } = this.props;
+
+    console.log(this.state);
 
     const columns = [
       {
@@ -412,6 +415,7 @@ class PatientTable extends Component {
               className="-striped -highlight"
               manual
               filterable
+              showPagination={true}
               SubComponent={(row) => {
                 return (
                   <PatientSubComponent
@@ -471,12 +475,14 @@ class PatientTable extends Component {
                 return {
                   style: {
                     background: 'white',
-                    border: '0',
                   },
                 };
               }}
+
               style={{
                 height: 'calc(100vh - 188px)',
+                background: 'white',
+
               }}
             />
           </Col>
