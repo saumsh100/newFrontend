@@ -463,6 +463,9 @@ patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), asyn
   }
 });
 
+/**
+ * return changed patients to connector via isSyncedWithPms
+ */
 patientsRouter.get('/connector/notSynced', checkPermissions('patients:read'), async (req, res, next) => {
   const { accountId } = req;
 

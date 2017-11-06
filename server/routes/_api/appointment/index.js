@@ -670,6 +670,10 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
     .catch(next);
 });
 
+
+/**
+ * return changed appointments to connector via isSyncedWithPms
+ */
 appointmentsRouter.get('/connector/notSynced', checkPermissions('patients:read'), async (req, res, next) => {
   const { accountId } = req;
 
