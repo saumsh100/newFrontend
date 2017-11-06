@@ -39,37 +39,43 @@ class SideBarFilters extends Component {
       this.props.addFilter({
         type: 'Demographics',
         values,
-        index: 0,
       });
     }
   }
 
   handleAppointments(values) {
     const {
-      firstApp1,
-      firstApp2,
-      lastApp1,
-      lastApp2,
-      app1,
-      app2,
-      app3,
-      prod1,
-      prod2,
-      online1,
-      online2,
-      online3,
-    } = values;
+      addFilter,
+    } = this.props;
 
+    const keys = Object.keys(values);
 
-    if (((firstApp1 && firstApp2) || (!firstApp1 && !firstApp2)) &&
-      ((lastApp1 && lastApp2) || (!lastApp1 && !lastApp2)) &&
-      ((app1 && app2 && app3) || (!app1 && !app2 && !app3)) &&
-      ((prod1 && prod2) || (!prod1 && !prod2)) &&
-      ((online1 && online2 && online3) || (!online1 && !online2 && !online3))) {
-      this.props.addFilter({
+    let setFilter = 0;
+    keys.forEach((key) => {
+      if (key === 'firstAppointment' && values[key].length === 2) {
+        setFilter += 1;
+      }
+      if (key === 'lastAppointment' && values[key].length === 2) {
+        setFilter += 1;
+      }
+      if (key === 'appointmentsCount' && values[key].length === 3) {
+        setFilter += 1;
+      }
+      if (key === 'production' && values[key].length === 3) {
+        setFilter += 1;
+      }
+      if (key === 'onlineAppointments' && values[key].length === 3) {
+        setFilter += 1;
+      }
+      if (key === 'treatment') {
+        setFilter += 1;
+      }
+    });
+
+    if (keys.length === setFilter) {
+      addFilter({
         type: 'Appointments',
         values,
-        index: 1,
       });
     }
   }
@@ -84,7 +90,7 @@ class SideBarFilters extends Component {
 
   render() {
     const {
-      practitioners
+      practitioners,
     } = this.props;
 
     const {

@@ -28,30 +28,13 @@ function ManualLimitOffset(eventsArray, query) {
   return filterArray;
 }
 
-function getFirstAppointment(patientId, accountId) {
-  return Appointment.findAll({
-    raw: true,
-    nest: true,
-    where: {
-      accountId,
-      patientId,
-    },
-    order: [['startDate', 'ASC']],
-    include: {
-      model: Patient,
-      as: 'patient',
-    },
-    limit: 1,
-  });
-}
-
-function getIds(patients) {
+function getIds(patients, key) {
   return patients.map((patient) => {
-    return patient.id;
+    return patient[key]
   });
 }
 
-function DemographicsFilter(values, patients, query) {
+function DemographicsFilter(values, patients, query, accountId) {
   const {
     ageStart,
     ageEnd,
@@ -105,7 +88,7 @@ function DemographicsFilter(values, patients, query) {
   }
 
   const searchClause = {
-    ...query.where,
+    accountId,
     ...genderObj,
     ...address,
     ...birthDate,
@@ -122,64 +105,114 @@ function DemographicsFilter(values, patients, query) {
   });
 }
 
-async function AppointmentsFilter(values, patients, query, next) {
+async function AppointmentsFilter(values, filteredPatients, query, accountId,  next) {
   try {
     const {
-      firstApp1,
-      firstApp2,
-      app1,
+      firstAppointment,
+      lastAppointment,
+      treatment,
+      appointmentsCount,
+      production,
+      onlineAppointments,
     } = values;
 
     const {
       limit,
       order,
       offset,
-      where,
+      include,
     } = query;
 
-    if (firstApp1) {
-      const patientIdData = await Appointment.findAll({
+    let patientsData = null;
+    const keys = Object.keys(values);
+
+    if (firstAppointment) {
+      let searchObj = {
         raw: true,
-        attributes: ['patientId'],
         where: {
-          accountId: where.accountId,
+          accountId,
+        },
+        include: [{
+          model: Appointment,
+          as: 'firstAppt',
+          where: {
+            startDate: {
+              $between: [firstAppointment[0], firstAppointment[1]],
+            },
+          },
+          attributes: ['startDate'],
+          groupBy: ['startDate'],
+        }].concat(include),
+      };
+
+      searchObj = keys.length === 1 ? Object.assign(searchObj, { limit }, { offset }) : searchObj;
+      patientsData = await Patient.findAndCountAll(searchObj);
+    }
+
+    if (lastAppointment) {
+      let searchObj = {
+        raw: true,
+        where: {
+          accountId,
+        },
+        include: [{
+          model: Appointment,
+          as: 'lastAppt',
+          where: {
+            startDate: {
+              $between: [lastAppointment[0], lastAppointment[1]],
+            },
+          },
+          attributes: ['startDate'],
+          groupBy: ['startDate'],
+        }].concat(include.slice(0, 1)),
+      };
+
+      searchObj = keys.length === 1 ? Object.assign(searchObj, { limit }, { offset }) : searchObj;
+      patientsData = await Patient.findAndCountAll(searchObj);
+    }
+
+    if (appointmentsCount) {
+      const data = await Appointment.findAll({
+        raw: true,
+        where: {
+          accountId,
           isCancelled: false,
           isDeleted: false,
-          startDate: {
-            $between: [firstApp1, firstApp2],
-          },
+          isPending: false,
           patientId: {
             $not: null,
           },
         },
-        groupBy: ['patientId'],
+        group: ['patientId'],
+        attributes: ['patientId', [sequelize.fn('COUNT', 'patientId'), 'PatientCount']],
+        having: sequelize.literal(`count("patientId") ${appointmentsCount[0]} ${appointmentsCount[1]}`),
       });
-
-      const patientList = patientIdData.map(async (data) => {
-        try {
-          const patient = await Appointment.findAll({
-            raw: true,
-            nest: true,
-            where: {
-              accountId: where.accountId,
-              patientId: data.patientId,
-            },
-            order: [['startDate', 'ASC']],
-            include: {
-              model: Patient,
-              as: 'patient',
-            },
-            limit: 1,
-          });
-          return patient[0].patient;
-        } catch (err) {
-          next(err);
-        }
-      });
-      const pData = await Promise.all(patientList).then(data => data);
-      const truncatedData = ManualLimitOffset(pData, limit, offset)
-      return { rows: truncatedData, count: truncatedData.length } ;
+      const patientIds = getIds(data, 'patientId');
+      let searchObj = {
+        raw: true,
+        where: {
+          accountId,
+          id: patientIds,
+        },
+        include,
+      };
+      searchObj = keys.length === 1 ? Object.assign(searchObj, { limit }, { offset }) : searchObj;
+      patientsData = await Patient.findAndCountAll(searchObj);
     }
+
+    if (production) {
+
+    }
+
+    if (keys.length > 1) {
+      const patients = patientsData.rows.map(d => d);
+      const truncatedData = ManualLimitOffset(patients, limit, offset );
+      return { rows: truncatedData, count: truncatedData.length };
+    }
+
+    return patientsData;
+
   } catch (err) {
     next(err);
   }
@@ -419,13 +452,13 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       attributes: ['startDate'],
       groupBy: ['startDate'],
       required: false,
-    },{
+    }, {
       model: Appointment,
       as: 'lastAppt',
       attributes: ['startDate'],
       required: false,
       groupBy: ['startDate'],
-    },];
+    }];
 
     const defaultQuery = {
       raw: true,
@@ -450,7 +483,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     if (filters && filters.length) {
       const runFilters = filters.map(async (filter) => {
         const filterObj = JSON.parse(filter);
-        const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery, next);
+        const patients = await filterFunctions[filterObj.type](filterObj.values, filteredPatients.patients, defaultQuery, req.accountId, next);
         return patients;
       });
       const data = await Promise.all(runFilters);

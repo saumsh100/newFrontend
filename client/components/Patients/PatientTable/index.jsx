@@ -211,12 +211,12 @@ class PatientTable extends Component {
       filters: Map(),
       search: '',
       limit: 15,
+      data: [],
     });
 
     this.fetchData({
       limit: 15,
       page: 0,
-      search: '',
     });
   }
 
@@ -236,8 +236,6 @@ class PatientTable extends Component {
       createEntityRequest,
       practitioners,
     } = this.props;
-
-    console.log(this.state);
 
     const columns = [
       {
@@ -408,6 +406,7 @@ class PatientTable extends Component {
               pages={Math.floor(this.state.totalPatients / this.state.limit)}
               sorted={this.state.sorted}
               defaultPageSize={this.state.limit}
+              pageSize={this.state.limit}
               loading={!wasFetched}
               expanded={this.state.expanded}
               pageSizeOptions={[15, 20, 25, 50, 100]}
