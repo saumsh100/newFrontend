@@ -21,14 +21,12 @@ export default function Appointments(props) {
             required
             component="DayPicker"
             name="firstApp1"
-            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
             name="firstApp2"
-            label="Date"
           />
         </div>
         <div className={styles.formHeaderInput}>Last Appointment</div>
@@ -37,14 +35,12 @@ export default function Appointments(props) {
             required
             component="DayPicker"
             name="lastApp1"
-            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
             name="lastApp2"
-            label="Date"
           />
         </div>
         <div className={styles.formHeader}>Treatment</div>
@@ -57,7 +53,6 @@ export default function Appointments(props) {
               value: 'cleaning',
             }]}
             className={styles.ddSelect}
-            label="Treatment"
           />
         </div>
         <div className={styles.formHeader}>Number of Appointments </div>

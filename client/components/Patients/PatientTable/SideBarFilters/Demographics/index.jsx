@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../../library';
 import styles from '../styles.scss';
@@ -28,7 +29,6 @@ export default function Demographics(props) {
           <Field
             component="DropdownSelect"
             name="ageStart"
-            label="Years"
             options={[{
               label: '18',
               value: 18,
@@ -39,7 +39,6 @@ export default function Demographics(props) {
           <Field
             component="DropdownSelect"
             name="ageEnd"
-            label="Years"
             options={[{
               label: '35',
               value: 35,
@@ -53,7 +52,6 @@ export default function Demographics(props) {
           <Field
             component="DropdownSelect"
             name="gender"
-            label="Gender"
             options={optionsGender}
             className={styles.ddSelect}
             required
@@ -64,7 +62,6 @@ export default function Demographics(props) {
           <Field
             component="DropdownSelect"
             name="city"
-            label="City"
             options={optionsCity}
             className={styles.ddSelect}
             required

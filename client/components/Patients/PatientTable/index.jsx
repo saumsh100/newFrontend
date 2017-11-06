@@ -42,7 +42,7 @@ class PatientTable extends Component {
       smartFilter: null,
     };
 
-    this.fetchData = debounce(this.fetchData, 10);
+    this.fetchData = debounce(this.fetchData, 300);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
@@ -55,6 +55,9 @@ class PatientTable extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchEntities({
+      key: 'practitioners',
+    });
     this.fetchData({
       limit: this.state.limit,
       page: 0,
@@ -70,7 +73,6 @@ class PatientTable extends Component {
       const dataArray = getEntities(data);
 
       if (dataArray.length) {
-        console.log(dataArray)
         this.setState({
           totalPatients: dataArray[0].totalPatients,
           data: dataArray,
@@ -222,7 +224,7 @@ class PatientTable extends Component {
       destroy,
     } = this.props;
 
-    const filtersArray = ['demographics', 'appointments'];
+    const filtersArray = ['demographics', 'appointments', 'practitioners  '];
     filtersArray.map(filter => destroy(filter));
   }
 
@@ -231,6 +233,7 @@ class PatientTable extends Component {
       wasFetched,
       push,
       createEntityRequest,
+      practitioners,
     } = this.props;
 
     const columns = [
@@ -242,8 +245,9 @@ class PatientTable extends Component {
         maxWidth: 50,
         className: styles.colBg,
       },
+
       {
-        Header: 'Name',
+        Header: '',
         accessor: 'firstName',
         Cell: row => {
           return (
@@ -254,6 +258,50 @@ class PatientTable extends Component {
                 redirect={() => {
                   push(`/patients/${row.original.id}`);
                 }}
+                text=''
+              />
+            </div>
+          );
+        },
+        maxWidth: 45,
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'First Name',
+        accessor: 'firstName',
+        Cell: row => {
+          return (
+            <div className={styles.displayFlex}>
+              <PatientNameColumn
+                value={row.value}
+                patient={row.original}
+                redirect={() => {
+                  push(`/patients/${row.original.id}`);
+                }}
+                text={row.original.firstName}
+                noAvatar
+              />
+            </div>
+          );
+        },
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'Last Name',
+        accessor: 'lastName',
+        Cell: row => {
+          return (
+            <div className={styles.displayFlex}>
+              <PatientNameColumn
+                value={row.value}
+                patient={row.original}
+                redirect={() => {
+                  push(`/patients/${row.original.id}`);
+                }}
+                text={row.original.lastName}
+                noAvatar
               />
             </div>
           );
@@ -276,7 +324,7 @@ class PatientTable extends Component {
       {
         Header: 'Active',
         accessor: 'status',
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_status}>{props.value}</div></div>,
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.value}</div></div>,
         filterable: false,
         className: styles.colBg,
         maxWidth: 80,
@@ -298,6 +346,8 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
+        maxWidth: 180,
+
       },
       {
         Header: 'Last Appt',
@@ -316,6 +366,7 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
+        maxWidth: 180,
       },
       {
         Header: 'Production Revenue',
@@ -327,6 +378,7 @@ class PatientTable extends Component {
         filterable: false,
         sortable: false,
         className: styles.colBg,
+        maxWidth: 120,
       },
     ];
 
@@ -346,7 +398,7 @@ class PatientTable extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={9} className={styles.tableContainer}>
+          <Col xs={10} className={styles.tableContainer}>
             <ReactTable
               data={this.state.data}
               page={this.state.page}
@@ -404,6 +456,7 @@ class PatientTable extends Component {
                     color: '#959596',
                     paddingTop: '3px',
                     fontSize: '12px',
+                    opacity: '0.6',
                   },
                 };
               }}
@@ -418,17 +471,19 @@ class PatientTable extends Component {
                 return {
                   style: {
                     background: 'white',
+                    border: '0',
                   },
                 };
               }}
               style={{
-                height: 'calc(100vh - 172px)',
+                height: 'calc(100vh - 188px)',
               }}
             />
           </Col>
-          <Col xs={3}>
+          <Col xs={2}>
             <SideBarFilters
               addFilter={this.addFilter}
+              practitioners={practitioners}
             />
           </Col>
         </Row>
@@ -441,11 +496,14 @@ PatientTable.propTypes = {
 
 };
 
-function mapStateToProps({ apiRequests, patientManagement }) {
+function mapStateToProps({ apiRequests, entities }) {
   const wasFetched = (apiRequests.get('patientsTable') ? apiRequests.get('patientsTable').wasFetched : null);
+  const practitioners = entities.getIn(['practitioners', 'models']);
+
 
   return {
     wasFetched,
+    practitioners,
   };
 }
 function mapDispatchToProps(dispatch) {

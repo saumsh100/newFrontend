@@ -9,18 +9,6 @@ import { Appointment, Patient, sequelize, Service } from '../../../_models';
 
 const tableRouter = new Router();
 
-function SortByMomentDesc(a, b){
-  if (moment(b).isBefore(moment(a))) return -1;
-  if (moment(b).isAfter(moment(a))) return 1;
-  return 0;
-};
-
-function SortByMomentAsc(a, b) {
-  if (moment(b).isBefore(moment(a))) return 1;
-  if (moment(b).isAfter(moment(a))) return -1;
-  return 0;
-};
-
 function ManualLimitOffset(eventsArray, query) {
   const {
     limit,
@@ -39,50 +27,6 @@ function ManualLimitOffset(eventsArray, query) {
 
   return filterArray;
 }
-
-function getNextLastAppointment (patientId, accountId) {
-  return Appointment.findAll({
-    raw: true,
-    where: {
-      accountId,
-      patientId,
-    },
-    order: [['startDate', 'DESC']],
-  }).then((appointments) => {
-    const today = new Date();
-
-    let nextAppt = null;
-    let lastAppt = null;
-
-    for (let i = 0; i < appointments.length; i++) {
-      const app = appointments[i];
-      const startDate = app.startDate;
-
-      if (!nextAppt && moment(startDate).isAfter(today)) {
-        nextAppt = startDate;
-      } else if (moment(startDate).isAfter(today) && moment(startDate).isBefore(nextAppt)) {
-        nextAppt = startDate;
-        break;
-      }
-    }
-
-    for (let i = 0; i < appointments.length; i++) {
-      const app = appointments[i];
-      const startDate = app.startDate;
-
-      if (!lastAppt && moment(startDate).isBefore(moment())) {
-        lastAppt = startDate;
-      } else if (moment(startDate).isBefore(today) && moment(startDate).isAfter(lastAppt)) {
-        lastAppt = startDate;
-        break;
-      }
-    }
-    return {
-      nextAppt,
-      lastAppt,
-    };
-  });
-};
 
 function getFirstAppointment(patientId, accountId) {
   return Appointment.findAll({
@@ -119,6 +63,7 @@ function DemographicsFilter(values, patients, query) {
     limit,
     order,
     offset,
+    include,
   } = query;
 
   const idData = {};
@@ -170,6 +115,7 @@ function DemographicsFilter(values, patients, query) {
     raw: true,
     where: Object.assign(idData,
     searchClause),
+    include,
     offset,
     limit,
     order,
@@ -242,7 +188,6 @@ async function AppointmentsFilter(values, patients, query, next) {
 
 async function LateAppointmentsFilter(accountId, limit, offset, order, filters, smFilter, next) {
   try {
-    console.log(smFilter);
     const startMonthsOut = moment().subtract(smFilter.startMonth, 'months').toISOString();
     const endMonthsOut = moment().subtract(smFilter.endMonth, 'months').toISOString();
 
@@ -441,6 +386,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
   try {
     const start = Date.now();
     console.log('Table API Started');
+
     const {
       limit,
       filters,
@@ -459,41 +405,32 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
      */
     const order = [];
     const offset = limit * page;
-    let apptSortObj = null;
 
     if (sort && sort.length) {
       const sortObj = JSON.parse(sort[0]);
 
-      if (sortObj.id === 'nextAppt' || sortObj.id === 'lastAppt') {
-        apptSortObj = sortObj;
-      } else {
-        const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
-        order.push([sortObj.id, descOrAsc]);
-      }
+      const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
+      order.push([sortObj.id, descOrAsc]);
     }
+
+    const includeArray = [{
+      model: Appointment,
+      as: 'nextAppt',
+      attributes: ['startDate'],
+      groupBy: ['startDate'],
+      required: false,
+    },{
+      model: Appointment,
+      as: 'lastAppt',
+      attributes: ['startDate'],
+      required: false,
+      groupBy: ['startDate'],
+    },];
 
     const defaultQuery = {
       raw: true,
       where: filterBy,
-      include: [{
-        model: Appointment,
-        as: 'nextAppt',
-        attributes: ['startDate'],
-        groupBy: ['startDate'],
-        required: false,
-      },{
-        model: Appointment,
-        as: 'lastAppt',
-        attributes: ['startDate'],
-        required: false,
-        groupBy: ['startDate'],
-      }, {
-        model: Appointment,
-        as: 'firstAppt',
-        attributes: ['startDate'],
-        required: false,
-        groupBy: ['startDate'],
-      },],
+      include: includeArray,
       offset,
       limit,
       order,
@@ -522,7 +459,7 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
     }
 
     /**
-     * Searching patients and displaying filters
+     * Searching patients and displaying filtered patients
      */
     let patients = null;
 
@@ -531,26 +468,28 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
         where: filterBy,
         order,
       });
+
       patients = await Patient.findAll({
         ...defaultQuery,
       });
     } else if (smartFilter && !filters) {
-      console.log('smart filtering!!')
       patientCount = filteredPatients.count;
+
       patients = filteredPatients.patients;
     } else if (filters.length) {
       patients = filteredPatients;
     } else {
       patients = await PatientSearch(search, req.accountId, defaultQuery);
+
       patientCount = patients.length;
     }
 
     console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
 
     /**
-     * Calculating Next Appointment, Last Appointment, and Revenue
+     * Calculating Revenue
      */
-    const calcPatientData = patients.map(async (patient) => {
+    const calcPatientRevenue = patients.map(async (patient) => {
       try {
         const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), req.accountId, patient.id)
 
@@ -564,22 +503,9 @@ tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
       }
     });
 
-
-    /**
-     * Sorting for next/last appointment
-     */
-    Promise.all(calcPatientData).then((data) => {
+    Promise.all(calcPatientRevenue).then((data) => {
       console.log(`--- ${Date.now() - start}ms elapsed calcData`);
-
-      let sortedData = data;
-      if (apptSortObj) {
-        sortedData = data.sort((a, b) => {
-          return (apptSortObj.desc ? SortByMomentDesc(a[apptSortObj.id], b[apptSortObj.id]) :
-            SortByMomentAsc(a[apptSortObj.id], b[apptSortObj.id]));
-        });
-      }
-
-      const returnData = normalize('patients', sortedData);
+      const returnData = normalize('patients', data);
       return res.send(returnData);
     });
   } catch (error) {

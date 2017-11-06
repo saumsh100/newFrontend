@@ -6,20 +6,24 @@ export default function PatientNameColumn(props) {
   const {
     value,
     patient,
-    redirect
+    redirect,
+    text,
+    noAvatar,
   } = props;
 
   return (
     <div className={styles.patientRow}>
-      <Avatar user={patient} />
+      <div className={styles.avatarContainer}>
+      {!noAvatar ? <Avatar user={patient} /> : null}
+      </div>
       <div
         className={styles.name}
         onClick={(e) => {
           e.stopPropagation()
-          redirect()
+          redirect();
         }}
       >
-        {`${patient.firstName} ${patient.lastName}`}
+        {text}
       </div>
     </div>
   );

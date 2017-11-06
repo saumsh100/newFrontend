@@ -3,17 +3,19 @@ import React, { Component, PropTypes } from 'react';
 import { Icon } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
+import Practitioners from './Practitioners';
 import styles from './styles.scss';
 
 class SideBarFilters extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openFilters: [false, false],
+      openFilters: [false, false, false],
     };
     this.displayFilter = this.displayFilter.bind(this);
     this.handleDemographics = this.handleDemographics.bind(this);
     this.handleAppointments = this.handleAppointments.bind(this);
+    this.handlePractitioners = this.handlePractitioners.bind(this);
   }
 
   displayFilter(index) {
@@ -70,10 +72,23 @@ class SideBarFilters extends Component {
     }
   }
 
+  handlePractitioners(values) {
+    console.log(values);
+  }
+
   render() {
+    const {
+      practitioners
+    } = this.props;
+
     const {
       openFilters,
     } = this.state;
+
+    if (!practitioners) {
+      return null;
+    }
+
     return (
       <div className={styles.sideBar}>
         <div className={styles.header}>
@@ -95,6 +110,7 @@ class SideBarFilters extends Component {
               />
             </div> : null}
           </div>
+
           <div className={styles.filterBody}>
             <div
               className={styles.filterHeader}
@@ -106,6 +122,23 @@ class SideBarFilters extends Component {
             {openFilters[1] ? <div className={styles.collapsible}>
               <Appointments
                 handleAppointments={this.handleAppointments}
+              />
+            </div> : null }
+          </div>
+
+          <div className={styles.filterBody}>
+            <div
+              className={styles.filterHeader}
+              onClick={() => this.displayFilter(2)}
+            >
+              Practitioners
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+            </div>
+
+            {openFilters[2] ? <div className={styles.collapsible}>
+              <Practitioners
+                handlePractitioners={this.handlePractitioners}
+                practitioners={practitioners}
               />
             </div> : null }
           </div>
