@@ -17,12 +17,10 @@ function getFirstNextLastAppointment(app) {
     order: [['startDate', 'DESC']],
   }).then((appointments) => {
     return CalcFirstNextLastAppointment(appointments,
-      async (currentPatient, firstApptId, nextApptId, lastApptId) => {
+      async (currentPatient, appointmentObj) => {
         try {
           await Patient.update({
-            firstApptId,
-            nextApptId,
-            lastApptId,
+            ...appointmentObj,
           },
             {
               where: {
@@ -40,6 +38,7 @@ function optimizedFirstNextLastSetter(app, patient, startDate) {
   if (moment(startDate).isAfter(new Date()) && !patient.nextApptId) {
 
     patient.nextApptId = app.id;
+    patient.nextApptDate = startDate;
 
     return Patient.update(patient, {
       where: {
@@ -55,6 +54,7 @@ function optimizedFirstNextLastSetter(app, patient, startDate) {
     }).then((appNext) => {
       if (moment(appNext.startDate).isAfter(moment(startDate))) {
         patient.nextApptId = app.id;
+        patient.nextApptDate = startDate;
 
         return Patient.update(patient, {
           where: {
@@ -68,7 +68,10 @@ function optimizedFirstNextLastSetter(app, patient, startDate) {
     && !patient.lastApptId && !patient.firstApptId) {
 
     patient.lastApptId = app.id;
+    patient.lastApptDate = startDate;
+
     patient.firstApptId = app.id;
+    patient.firstApptDate = startDate;
 
     return Patient.update(patient, {
       where: {
@@ -95,14 +98,16 @@ function registerFirstNextLastCalc(sub, io) {
       nest: true,
       raw: true,
     }).then((app) => {
-      const patient = app.patient;
-      const startDate = app.startDate;
+      if (app) {
+        const patient = app.patient;
+        const startDate = app.startDate;
 
-      if (!app.isDeleted && !app.isPending && !app.isCancelled) {
-        return optimizedFirstNextLastSetter(app, patient, startDate);
+        if (!app.isDeleted && !app.isPending && !app.isCancelled) {
+          return optimizedFirstNextLastSetter(app, patient, startDate);
+        }
+
+        return getFirstNextLastAppointment(app);
       }
-
-      return getFirstNextLastAppointment(app);
     });
   });
 }

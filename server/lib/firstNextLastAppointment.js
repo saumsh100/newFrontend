@@ -7,12 +7,13 @@ function CalcFirstNextLastAppointment(apps, callback) {
   while (j < apps.length) {
     const currentPatient = apps[j].patientId;
 
-    let nextAppt = null;
+    let nextApptDate = null;
     let nextApptId = null;
 
-    let lastAppt = null;
+    let lastApptDate = null;
     let lastApptId = null;
 
+    let firstApptDate = null;
     let firstApptId = null;
 
     let count = 0;
@@ -20,28 +21,44 @@ function CalcFirstNextLastAppointment(apps, callback) {
 
     while (i < apps.length && currentPatient === apps[i].patientId) {
       count += 1;
+
       const startDate = apps[i].startDate;
+
       if (moment(startDate).isAfter(today)) {
-        nextAppt = apps[i].startDate;
+        nextApptDate = apps[i].startDate;
         nextApptId = apps[i].id;
       } else if (moment(startDate).isBefore(today) && count === 1) {
-        lastAppt = apps[i].startDate;
+        lastApptDate = apps[i].startDate;
         lastApptId = apps[i].id;
+
+        firstApptDate = apps[i].startDate;
         firstApptId = apps[i].id;
-      } else if (moment(startDate).isBefore(today) && !lastAppt) {
-        lastAppt = apps[i].startDate;
+      } else if (moment(startDate).isBefore(today) && !lastApptDate) {
+        lastApptDate = apps[i].startDate;
         lastApptId = apps[i].id;
+
         firstApptId = null;
       }
+
       i += 1;
     }
 
     if (count > 1 && moment(apps[i - 1].startDate).isBefore(today)) {
       firstApptId = apps[i - 1].id;
+      firstApptDate = apps[i - 1].startDate;
     }
 
     if (currentPatient) {
-      callback(currentPatient, firstApptId, nextApptId, lastApptId);
+      const appointmentObj = {
+        firstApptId,
+        firstApptDate,
+        nextApptId,
+        nextApptDate,
+        lastApptId,
+        lastApptDate,
+      };
+
+      callback(currentPatient, appointmentObj);
     }
 
     j = i;
