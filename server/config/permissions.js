@@ -42,6 +42,7 @@ const SUPERADMIN = {
   accounts: allowAll,
   appointments: allowAll,
   chairs: allowAll,
+  correspondences: allowAll,
   chats: allowAll,
   users: allowAll,
 
