@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Appointment, Patient, DeliveredProcedure, sequelize } from '../../_models';
+import { Appointment, Patient, DeliveredProcedure, Request sequelize } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import PatientSearch from './patientSearch';
@@ -119,7 +119,6 @@ async function AppointmentsFilter(values, filteredPatients, query, accountId) {
     } = query;
 
     let patientsData;
-
 
     const searchFirstLastObj = {
       raw: true,
@@ -247,9 +246,23 @@ async function AppointmentsFilter(values, filteredPatients, query, accountId) {
       patientsData = await Patient.findAndCountAll(searchRevenueObj);
     }
 
-
     if (onlineAppointments) {
-
+      /*const data = await Request.findAll({
+        raw: true,
+        where: {
+          accountId,
+          isCancelled: false,
+          isConfirmed: true,
+        },
+        include: [{
+          model: Patient,
+          where: {
+            patientUserId: {
+              $not: null
+            }
+          }
+        }]
+      });*/
     }
 
     return patientsData;
