@@ -375,7 +375,7 @@ export async function PatientQuery(config) {
     } else if (filters.length) {
       patients = filteredPatients;
     } else {
-      patients = await PatientSearch(search, req.accountId, defaultQuery);
+      patients = await PatientSearch(search, accountId, defaultQuery);
 
       patientCount = patients.length;
     }
