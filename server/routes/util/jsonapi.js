@@ -71,6 +71,21 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  Correspondence: [
+    'accountId',
+    'pmsId',
+    'patientId',
+    'appointmentId',
+    'type',
+    'pmsType',
+    'note',
+    'isSyncedWithPms',
+    'contactedAt',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   DeliveredProcedure: [
     'accountId',
     'patientId',
@@ -204,6 +219,11 @@ const SERIALIZERS = {
 
   configuration: new Serializer('configuration', makeConfig({
     attributes: ModelAttributes.Configuration,
+    pluralizeType: false,
+  })),
+
+  correspondence: new Serializer('correspondence', makeConfig({
+    attributes: ModelAttributes.Correspondence,
     pluralizeType: false,
   })),
 
