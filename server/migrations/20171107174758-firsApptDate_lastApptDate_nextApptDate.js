@@ -32,13 +32,13 @@ module.exports = {
         const apps = appointments[0];
 
         CalcFirstNextLastAppointment(apps,
-          async (patientId, appointmentObj) => {
+          async (patientId, appointmentsObj) => {
             await queryInterface.sequelize.query(`
               UPDATE "Patients"
               SET "firstApptId" = :firstApptId, "firstApptDate" = :firstApptDate, "lastApptId" = :lastApptId, "lastApptDate" = :lastApptDate, "nextApptId" = :nextApptId, "nextApptDate" = :nextApptDate   
               WHERE id = :patientId`, {
                 replacements: {
-                  ...appointmentObj,
+                  ...appointmentsObj,
                   patientId,
                 },
                 transaction: t,

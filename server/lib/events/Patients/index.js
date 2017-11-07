@@ -3,7 +3,6 @@ import moment from 'moment';
 import { Patient, Appointment } from '../../../_models';
 import CalcFirstNextLastAppointment from '../../../lib/firstNextLastAppointment';
 
-
 function getFirstNextLastAppointment(app) {
   return Appointment.findAll({
     raw: true,
@@ -17,10 +16,10 @@ function getFirstNextLastAppointment(app) {
     order: [['startDate', 'DESC']],
   }).then((appointments) => {
     return CalcFirstNextLastAppointment(appointments,
-      async (currentPatient, appointmentObj) => {
+      async (currentPatient, appointmentsObj) => {
         try {
           await Patient.update({
-            ...appointmentObj,
+            ...appointmentsObj,
           },
             {
               where: {
@@ -34,7 +33,7 @@ function getFirstNextLastAppointment(app) {
   });
 };
 
-function optimizedFirstNextLastSetter(app, patient, startDate) {
+function firstNextLastSetter(app, patient, startDate) {
   if (moment(startDate).isAfter(new Date()) && !patient.nextApptId) {
 
     patient.nextApptId = app.id;
@@ -103,7 +102,7 @@ function registerFirstNextLastCalc(sub, io) {
         const startDate = app.startDate;
 
         if (!app.isDeleted && !app.isPending && !app.isCancelled) {
-          return optimizedFirstNextLastSetter(app, patient, startDate);
+          return firstNextLastSetter(app, patient, startDate);
         }
 
         return getFirstNextLastAppointment(app);

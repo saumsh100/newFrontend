@@ -25,10 +25,10 @@ jobQueue.process('firstNextLastApp', async (job, done) => {
     });
 
     CalcFirstNextLastAppointment(appointments,
-      async (currentPatient, appointmentObj) => {
+      async (currentPatient, appointmentsObj) => {
         try {
           await Patient.update({
-            ...appointmentObj,
+            ...appointmentsObj,
           },
             {
               where: {

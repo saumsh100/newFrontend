@@ -49,7 +49,7 @@ function CalcFirstNextLastAppointment(apps, callback) {
     }
 
     if (currentPatient) {
-      const appointmentObj = {
+      const appointmentsObj = {
         firstApptId,
         firstApptDate,
         nextApptId,
@@ -58,7 +58,7 @@ function CalcFirstNextLastAppointment(apps, callback) {
         lastApptDate,
       };
 
-      callback(currentPatient, appointmentObj);
+      callback(currentPatient, appointmentsObj);
     }
 
     j = i;
