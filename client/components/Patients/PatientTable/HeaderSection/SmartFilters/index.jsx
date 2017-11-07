@@ -61,6 +61,7 @@ export default function SmartFilters(props) {
     {
       index: 1,
       label: 'Missed/Cancelled',
+      joinFilter: true,
     },
     {
       index: 2,

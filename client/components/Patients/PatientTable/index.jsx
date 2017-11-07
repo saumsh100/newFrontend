@@ -185,6 +185,8 @@ class PatientTable extends Component {
 
   setSmartFilter(filterObj) {
     if (filterObj.index > -1) {
+      this.clearFilters();
+
       this.fetchData({
         filters: [],
         page: 0,
@@ -198,7 +200,6 @@ class PatientTable extends Component {
         page: 0,
         filters: Map(),
       });
-      this.clearFilters();
     } else {
       this.reinitializeTable();
       this.clearFilters();

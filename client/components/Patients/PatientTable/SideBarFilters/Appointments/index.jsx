@@ -56,7 +56,7 @@ export default function Appointments(props) {
           />
         </div>
         <div className={styles.formHeader}>Number of Appointments </div>
-        <FormSection name="appointmentsCount" className={styles.formContainer_row} >
+        <FormSection name="appointments" className={styles.formContainer_row} >
           <Field
             component="DropdownSelect"
             name="0"

@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Patient } from '../_models';
+import { Patient } from '../../_models';
 
 export default function PatientSearch(value, accountId, searchQuery) {
   const searchString = value || '';
