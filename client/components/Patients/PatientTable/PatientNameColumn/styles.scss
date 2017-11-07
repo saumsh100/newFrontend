@@ -10,7 +10,7 @@
 }
 .name {
   padding-left: 10px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: subHeader from 'sass-loader!../../../../fonts.scss';
   color: $primary-darkgrey;
   &:hover {
     color: $primary-color;
