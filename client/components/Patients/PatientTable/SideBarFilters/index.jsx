@@ -53,7 +53,10 @@ class SideBarFilters extends Component {
     let setFilter = 0;
     keys.forEach((key) => {
       if (key === 'firstAppointment' && values[key].length === 2) {
-        setFilter += 1;
+        addFilter({
+          indexFunc: 1,
+          values,
+        });
       }
       if (key === 'lastAppointment' && values[key].length === 2) {
         setFilter += 1;
@@ -71,13 +74,6 @@ class SideBarFilters extends Component {
         setFilter += 1;
       }
     });
-
-    if (keys.length === setFilter) {
-      addFilter({
-        indexFunc: 1,
-        values,
-      });
-    }
   }
 
   handlePractitioners(values) {

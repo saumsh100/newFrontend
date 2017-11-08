@@ -62,6 +62,8 @@ async function AppointmentsFilter(values, filterIds, query, accountId, lastFilte
       patientIds = filterIds;
     }
 
+    console.log(filterIds);
+
     const searchFirstLastObj = {
       raw: true,
       where: {
@@ -143,7 +145,6 @@ async function AppointmentsFilter(values, filterIds, query, accountId, lastFilte
       patientsData = await Patient.findAndCountAll(searchCountObj);
     }
 
-    console.log(patientIds)
     if (production) {
       const data = await Patient.findAll({
         where: {
