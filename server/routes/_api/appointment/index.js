@@ -716,7 +716,6 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
         appointmentIds.push(appParsed.id);
         return appParsed;
       });
-
       const pub = req.app.get('pub');
       pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
 
@@ -745,8 +744,8 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
         return appParsed;
       });
 
-      const pub = req.app.get('pub');
-      pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
+      //const pub = req.app.get('pub');
+      //pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
 
       res.status(201).send(normalize('appointments', appData));
     })
@@ -781,8 +780,8 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
         return appParsed;
       });
 
-      const pub = req.app.get('pub');
-      pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+      //const pub = req.app.get('pub');
+      //pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
 
       res.send(normalize('appointments', appData));
     })
