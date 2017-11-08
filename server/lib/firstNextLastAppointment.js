@@ -2,15 +2,15 @@ const moment = require('moment');
 
 /**
  * CalcFirstNextLastAppointment calculates the first/last/next appointment for a patient
- * - from a list of appointments 
+ * - from a list of appointments
  * - sorted by patientId and startDate descending
  * - updates the patient through the callback function
  *
  * @param apps
- * @param callback
+ * @param updatePatient
  */
 
-function CalcFirstNextLastAppointment(apps, callback) {
+function CalcFirstNextLastAppointment(apps, updatePatient) {
   const today = new Date();
 
   // loops through the entire set of appointments
@@ -81,7 +81,7 @@ function CalcFirstNextLastAppointment(apps, callback) {
       };
 
     // update the current patient of this subset with the calculated data in the appointments object
-      callback(currentPatient, appointmentsObj);
+      updatePatient(currentPatient, appointmentsObj);
     }
 
     // jump to the next subset of appointments if any
