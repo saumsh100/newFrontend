@@ -6,13 +6,17 @@ Object {
     Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentId": null,
+        "contactedAt": "2017-11-04T01:16:30.932Z",
         "isSyncedWithPms": true,
         "note": "CareCru: Recall sent via email",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "pmsId": "2",
+        "pmsType": "MARKETING",
+        "type": "recall:sent",
       },
       "id": "60b59ea4-ab3b-4862-9c69-6488e40b0562",
-      "type": "appointment",
+      "type": "correspondence",
     },
   ],
 }
@@ -61,13 +65,16 @@ Object {
     Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "contactedAt": "2017-11-05T01:16:30.932Z",
         "isSyncedWithPms": true,
         "note": "CareCru: Recall sent!",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "pmsId": "3",
+        "pmsType": "MARKETING",
+        "type": "recall:sent",
       },
       "id": "e9c58071-039c-4b46-b225-899a8b70a0b9",
-      "type": "appointment",
+      "type": "correspondence",
     },
   ],
 }

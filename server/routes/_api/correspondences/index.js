@@ -71,7 +71,7 @@ correspondencesRouter.post('/connector/batch', checkPermissions('correspondences
         console.error(err);
       });
 
-      const data = jsonapi('appointment', docs);
+      const data = jsonapi('correspondence', docs);
       return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
