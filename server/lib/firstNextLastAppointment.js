@@ -2,7 +2,7 @@ const moment = require('moment');
 
 /**
  * CalcFirstNextLastAppointment calculates the first/last/next appointment for a patient
- * - from a list of appointments that are not cancelled, deleted, or pending
+ * - from a list of appointments 
  * - sorted by patientId and startDate descending
  * - updates the patient through the callback function
  *
