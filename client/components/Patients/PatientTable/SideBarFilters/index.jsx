@@ -37,7 +37,7 @@ class SideBarFilters extends Component {
   handleDemographics(values) {
     if ((values.ageStart && values.ageEnd) || (!values.ageStart && !values.ageEnd)) {
       this.props.addFilter({
-        type: 'Demographics',
+        indexFunc: 0,
         values,
       });
     }
@@ -74,7 +74,7 @@ class SideBarFilters extends Component {
 
     if (keys.length === setFilter) {
       addFilter({
-        type: 'Appointments',
+        indexFunc: 1,
         values,
       });
     }

@@ -43,18 +43,6 @@ export default function Appointments(props) {
             name="1"
           />
         </FormSection>
-        <div className={styles.formHeader}>Treatment</div>
-        <div className={styles.formContainer_row} >
-          <Field
-            component="DropdownSelect"
-            name="treatment"
-            options={[{
-              label: 'cleaning',
-              value: 'cleaning',
-            }]}
-            className={styles.ddSelect}
-          />
-        </div>
         <div className={styles.formHeader}>Number of Appointments </div>
         <FormSection name="appointmentsCount" className={styles.formContainer_row} >
           <Field

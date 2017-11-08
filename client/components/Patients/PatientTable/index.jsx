@@ -167,7 +167,7 @@ class PatientTable extends Component {
       filters,
     } = this.state;
 
-    const newFilters = filters.set(`${filter.type}`, filter);
+    const newFilters = filters.set(`${filter.indexFunc}`, filter);
 
     this.fetchData({
       filters: newFilters.toArray(),
