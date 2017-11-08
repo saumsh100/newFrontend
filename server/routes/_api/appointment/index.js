@@ -737,7 +737,17 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
     ));
   return Appointment.batchSave(cleanedAppointments)
     .then((apps) => {
-      const appData = apps.map(app => app.get({ plain: true }));
+      const appointmentIds = [];
+
+      const appData = apps.map((app) => {
+        const appParsed = app.get({ plain: true });
+        appointmentIds.push(appParsed.id);
+        return appParsed;
+      });
+
+      const pub = req.app.get('pub');
+      pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
+
       res.status(201).send(normalize('appointments', appData));
     })
     .catch(({ errors, docs }) => {
@@ -763,7 +773,17 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
 
   return Promise.all(appointmentUpdates)
     .then((_appointments) => {
-      const appData = _appointments.map(app => app.get({ plain: true }));
+      const appointmentIds = [];
+
+      const appData = _appointments.map((app) => {
+        const appParsed = app.get({ plain: true });
+        appointmentIds.push(appParsed.id);
+        return appParsed;
+      });
+
+      const pub = req.app.get('pub');
+      pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+
       res.send(normalize('appointments', appData));
     })
     .catch(next);
