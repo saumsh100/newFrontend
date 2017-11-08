@@ -177,6 +177,9 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    recallDueDateSeconds: {
+      type: DataTypes.INTEGER,
+    },
   }, {
     // Model Config
     indexes: [

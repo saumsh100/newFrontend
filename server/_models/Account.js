@@ -129,6 +129,12 @@ export default function (sequelize, DataTypes) {
     facebookUrl: {
       type: DataTypes.STRING,
     },
+
+    recallDueDateSeconds: {
+      type: DataTypes.INTEGER,
+      defaultValue: 15552000,
+      allowNull: false,
+    },
   });
 
   Account.associate = (models) => {

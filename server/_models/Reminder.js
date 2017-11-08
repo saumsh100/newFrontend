@@ -28,6 +28,12 @@ export default function (sequelize, DataTypes) {
     lengthSeconds: {
       type: DataTypes.INTEGER,
     },
+
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
   });
 
   Reminder.associate = ({ Account }) => {

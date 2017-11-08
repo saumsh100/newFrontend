@@ -45,6 +45,7 @@ export async function mapPatientsToReminders({ reminders, account, date }) {
  * @param date
  */
 export async function getAppointmentsFromReminder({ reminder, date }) {
+  // TODO: add buffer here so that patients aren't receiving reminders to close to one another
   const end = moment(date).add(reminder.lengthSeconds, 'seconds').toISOString();
 
   const appointments = await Appointment.findAll({
