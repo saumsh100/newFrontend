@@ -649,10 +649,7 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
   return batchCreate(cleanedAppointments, Appointment, 'Appointment')
     .then((apps) => {
       const appData = apps.map(app => {
-        const appPlain = app.get({ plain: true });
-        const pub = req.app.get('pub');
-        pub.publish('calcPatient.FNL', appPlain.id);
-        return appPlain;
+        return app.get({ plain: true });
       });
       res.status(201).send(format(req, res, 'appointments', appData));
     })
@@ -705,10 +702,7 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
   return Promise.all(appointmentUpdates)
     .then((_appointments) => {
       const appData = _appointments.map((app) => {
-        const appPlain = app.get({ plain: true });
-        const pub = req.app.get('pub');
-        pub.publish('calcPatient.FNL', appPlain.id);
-        return appPlain;
+        return app.get({ plain: true });
       });
       res.send(format(req, res, 'appointments', appData));
     })
