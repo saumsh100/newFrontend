@@ -127,6 +127,7 @@ function registerFirstNextLastBatchCalc(sub, io) {
       },
       order: [['patientId', 'DESC'], ['startDate', 'DESC']],
     }).then((appointments) => {
+      console.log('Batching First Next Last');
       return CalcFirstNextLastAppointment(appointments,
         async (currentPatient, appointmentsObj) => {
           try {
