@@ -1,9 +1,9 @@
 
 import moment from 'moment';
-import { Patient, Appointment, SentReminder, sequelize } from '../../_models';
+import { Patient, Appointment, SentRecall } from '../../_models';
 import { ManualLimitOffset } from './helpers';
 
-export async function RemindersFilter({ data, key }, filterIds, query, accountId) {
+export async function RecallsFilter({ data, key }, filterIds, query, accountId) {
   try {
     let prevFilterIds = { id: { $not: null } }
 
@@ -13,7 +13,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
       };
     }
 
-    const patientData = await SentReminder.findAll({
+    const patientData = await SentRecall.findAll({
       where: {
         accountId,
         primaryType: key,
@@ -57,7 +57,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
   }
 }
 
-export async function LastReminderFilter({ data, key }, filterIds, query, accountId) {
+export async function LastRecallFilter({ data, key }, filterIds, query, accountId) {
   try {
     let prevFilterIds = { id: { $not: null } }
 
@@ -67,7 +67,7 @@ export async function LastReminderFilter({ data, key }, filterIds, query, accoun
       };
     }
 
-    const patientData = await SentReminder.findAll({
+    const patientData = await SentRecall.findAll({
       where: {
         accountId,
         createdAt: {
@@ -85,7 +85,7 @@ export async function LastReminderFilter({ data, key }, filterIds, query, accoun
         duplicating: false,
         required: true,
       },
-      group: ['patient.id', 'SentReminder.patientId', 'SentReminder.createdAt', 'SentReminder.primaryType'],
+      group: ['patient.id', 'SentRecall.patientId', 'SentRecall.createdAt', 'SentRecall.primaryType'],
       attributes: [
         'patient.id',
         'patient.firstName',
@@ -94,38 +94,36 @@ export async function LastReminderFilter({ data, key }, filterIds, query, accoun
         'patient.lastApptDate',
         'patient.birthDate',
         'patient.status',
-        'SentReminder.createdAt',
-        'SentReminder.primaryType',
+        'SentRecall.createdAt',
+        'SentRecall.primaryType',
       ],
       order: [['patientId', 'desc'], ['createdAt', 'desc']],
       raw: true,
     });
 
-    const reminderData = calcLastReminderSent(patientData);
+    const recallData = calcLastRecallSent(patientData);
 
-    const truncatedData = ManualLimitOffset(reminderData, query);
+    const truncatedData = ManualLimitOffset(recallData, query);
 
     return ({
       rows: truncatedData,
-      count: reminderData.length,
+      count: recallData.length,
     });
-
   } catch (err) {
     console.log(err);
   }
-
 }
 
 
-export function calcLastReminderSent(reminderData) {
+export function calcLastRecallSent(recallData) {
   let j = 0;
   const lastReminderData = [];
-  while (j < reminderData.length) {
-    const currentPatient = reminderData[j].id;
-    lastReminderData.push(reminderData[j])
+  while (j < recallData.length) {
+    const currentPatient = recallData[j].id;
+    lastReminderData.push(recallData[j]);
     let i = j;
 
-    while(i < reminderData.length && currentPatient === reminderData[i].id) {
+    while (i < recallData.length && currentPatient === recallData[i].id) {
       i += 1;
     }
 

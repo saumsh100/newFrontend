@@ -9,6 +9,8 @@ export default function PersonalTab(props) {
     patient
   } = props;
 
+  const address = patient && patient.address ? patient.address.street : '';
+
   return (
     <Grid className={styles.grid}>
       <div className={styles.subHeader}> Basic </div>
@@ -51,7 +53,7 @@ export default function PersonalTab(props) {
         <Col xs={6} >
           <InfoDump
             label="ADDRESS"
-            data={patient.address.street}
+            data={address}
           />
         </Col>
       </Row>

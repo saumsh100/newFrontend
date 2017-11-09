@@ -1,8 +1,9 @@
 
-import { Patient, Appointment, } from '../../_models';
+import moment from 'moment';
+import { Patient, SentReview } from '../../_models';
 import { ManualLimitOffset } from './helpers';
 
-export async function PractitionersFilter({ data }, filterIds, query, accountId) {
+export async function ReviewsFilter({ data }, filterIds, query, accountId) {
   try {
     let prevFilterIds = { id: { $not: null } }
 
@@ -12,19 +13,18 @@ export async function PractitionersFilter({ data }, filterIds, query, accountId)
       };
     }
 
-    const appData = await Appointment.findAll({
-      raw: true,
+    const patientData = await SentReview.findAll({
       where: {
         accountId,
-        isCancelled: false,
-        isDeleted: false,
-        isPending: false,
-        practitionerId: data[0],
+        createdAt: {
+          $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
+        },
       },
       include: {
         model: Patient,
         as: 'patient',
         where: {
+          accountId,
           ...prevFilterIds,
         },
         attributes: [],
@@ -41,13 +41,14 @@ export async function PractitionersFilter({ data }, filterIds, query, accountId)
         'patient.birthDate',
         'patient.status',
       ],
+      raw: true,
     });
 
-    const truncatedData = ManualLimitOffset(appData, query);
+    const truncatedData = ManualLimitOffset(patientData, query);
 
     return ({
       rows: truncatedData,
-      count: appData.length,
+      count: patientData.length,
     });
 
   } catch (err) {

@@ -35,8 +35,12 @@ class SideBarFilters extends Component {
   }
 
   handleDemographics(values) {
+    const {
+      addFilter,
+    } = this.props;
+
     if ((values.ageStart && values.ageEnd) || (!values.ageStart && !values.ageEnd)) {
-      this.props.addFilter({
+      addFilter({
         indexFunc: 0,
         data: values,
         tab: 'Demographics',
@@ -86,7 +90,7 @@ class SideBarFilters extends Component {
         });
       }
       if (key === 'production' && values[key].length === 2) {
-        setFilter += 1
+        setFilter += 1;
         batchFilters.push({
           indexFunc: 3,
           data: values.production,
@@ -95,7 +99,7 @@ class SideBarFilters extends Component {
         });
       }
       if (key === 'onlineAppointments' && values[key].length === 3) {
-        setFilter += 1
+        setFilter += 1;
         batchFilters.push({
           indexFunc: 4,
           data: values.onlineAppointments,
@@ -114,8 +118,12 @@ class SideBarFilters extends Component {
   }
 
   handlePractitioners(values) {
+    const {
+      addFilter,
+    } = this.props;
+
     if (values && values.practitioners.length === 1) {
-      this.props.addFilter({
+      addFilter({
         indexFunc: 5,
         data: values.practitioners,
         tab: 'Practitioners',
@@ -127,19 +135,100 @@ class SideBarFilters extends Component {
   handleCommunications(values) {
     const keys = Object.keys(values);
 
+    const {
+      addFilter,
+    } = this.props;
+
     let setFilter = 0;
     const batchFilters = [];
-    console.log(keys)
+
     keys.forEach((key) => {
-      if (key === 'remindersSMS' && values[key].length === 2) {
-        this.props.addFilter({
+      if (key === 'remindersEmail' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
           indexFunc: 6,
+          data: values.remindersEmail,
+          tab: 'Reminders Email',
+          key: 'phone',
+        });
+      }
+      if (key === 'remindersSMS' && values[key].length === 2) {
+        setFilter += 1;
+
+        batchFilters.push({
+          indexFunc: 7,
           data: values.remindersSMS,
           tab: 'Reminders SMS',
-          key,
+          key: 'sms',
+        });
+      }
+      if (key === 'remindersPhone' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 8,
+          data: values.remindersPhone,
+          tab: 'Reminders Phone',
+          key: 'phone',
+        });
+      }
+      if (key === 'recallsEmail' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 9,
+          data: values.recallsEmail,
+          tab: 'Recalls Email',
+          key: 'phone',
+        });
+      }
+      if (key === 'recallsSMS' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 10,
+          data: values.recallsSMS,
+          tab: 'Recalls SMS',
+          key: 'sms',
+        });
+      }
+      if (key === 'recallsPhone' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 11,
+          data: values.recallsPhone,
+          tab: 'Recalls Phone',
+          key: 'phone',
+        });
+      }
+      if (key === 'lastReminderSent' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 12,
+          data: values.lastReminderSent,
+          tab: 'Last Reminder Sent',
+        });
+      }
+      if (key === 'lastRecareSent' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 13,
+          data: values.lastRecareSent,
+          tab: 'Last Recare Sent',
+        });
+      }
+      if (key === 'reviews' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 14,
+          data: values.reviews,
+          tab: 'Reviews',
         });
       }
     });
+
+    if (keys.length === setFilter){
+      batchFilters.forEach((filter) => {
+        addFilter(filter);
+      });
+    }
   }
 
   render() {

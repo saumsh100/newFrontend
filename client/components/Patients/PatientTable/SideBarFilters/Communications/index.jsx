@@ -60,89 +60,89 @@ export default function Communications(props) {
         </FormSection>
         <div className={styles.formHeaderInput}>Recares</div>
         <div className={styles.formSubHeader}>Sent Via Email</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="recallsEmail" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="firstApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="firstApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formSubHeader}>Sent Via SMS</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="recallsSMS" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formSubHeader}>Sent Via Phone</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="recallsPhone" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formHeader}> Last Reminder Sent</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="lastReminderSent" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formHeader}> Last Recare Sent</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="lastRecareSent" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formHeader}> Reviews</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="reviews" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         {/*<div className={styles.formHeader}> Surveys </div>
         <div className={styles.formContainer_row} >
           <Field

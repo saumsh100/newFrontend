@@ -28,7 +28,6 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-
     isSent: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

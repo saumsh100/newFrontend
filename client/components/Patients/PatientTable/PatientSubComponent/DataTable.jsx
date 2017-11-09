@@ -6,8 +6,10 @@ import styles from './styles.scss';
 
 export default function DataTable(props) {
   const {
-    patient
+    patient,
   } = props;
+
+  const address = patient && patient.address ? patient.address.street : '';
 
   return (
     <Grid className={styles.grid}>
@@ -51,7 +53,7 @@ export default function DataTable(props) {
         <Col xs={6} >
           <InfoDump
             label="ADDRESS"
-            data={patient.address.street}
+            data={address}
           />
         </Col>
       </Row>

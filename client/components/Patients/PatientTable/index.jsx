@@ -417,6 +417,7 @@ class PatientTable extends Component {
               className="-striped -highlight"
               manual
               filterable
+              noDataText="No Patients Found"
               showPagination={true}
               SubComponent={(row) => {
                 return (
@@ -483,7 +484,6 @@ class PatientTable extends Component {
               style={{
                 height: 'calc(100vh - 188px)',
                 background: 'white',
-
               }}
             />
           </Col>

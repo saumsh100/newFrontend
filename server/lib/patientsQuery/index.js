@@ -1,14 +1,13 @@
 
-import moment from 'moment';
 import { Patient, DeliveredProcedure, sequelize } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
 import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter, OnlineAppointmentsFilter } from './appointmentsFilter';
 import { PractitionersFilter } from './practitionersFilter';
-import { RemindersFilter } from './remindersFilter';
-import { mostBusinessSinglePatient } from '../intelligence/revenue';
+import { RemindersFilter, LastReminderFilter } from './remindersFilter';
+import { RecallsFilter, LastRecallFilter } from './recallsFilter';
+import { ReviewsFilter } from './reviewsFilter';
 import PatientSearch from './patientSearch';
-
 
 function getIds(patients, key) {
   return patients.map((patient) => {
@@ -24,6 +23,14 @@ const filterFunctions = [
   OnlineAppointmentsFilter,
   PractitionersFilter,
   RemindersFilter,
+  RemindersFilter,
+  RemindersFilter,
+  RecallsFilter,
+  RecallsFilter,
+  RecallsFilter,
+  LastReminderFilter,
+  LastRecallFilter,
+  ReviewsFilter,
 ];
 
 const smartFilterFunctions = [
@@ -116,7 +123,6 @@ export async function PatientQuery(config) {
         const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
 
         if (i === filters.length - 1) {
-          console.log('setting now!!!!!')
           query.offset = offset;
           query.limit = limit;
         }
