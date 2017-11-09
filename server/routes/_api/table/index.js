@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { PatientQuery } from '../../../lib/patients/patientQuery';
+import { PatientQuery } from '../../../lib/patientsQuery/index';
 
 const tableRouter = new Router();
 

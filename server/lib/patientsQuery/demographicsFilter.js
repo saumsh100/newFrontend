@@ -2,21 +2,13 @@
 import moment from 'moment';
 import { Patient } from '../../_models';
 
-export function DemographicsFilter(values, filterIds, query, accountId, lastFilter) {
-  const indexFunc = 0;
+export function DemographicsFilter(values, filterIds, query, accountId) {
   const {
     ageStart,
     ageEnd,
     city,
     gender,
   } = values;
-
-  const {
-    limit,
-    order,
-    offset,
-    include,
-  } = query;
 
   const idData = {};
   if (filterIds && filterIds.length) {
@@ -62,25 +54,10 @@ export function DemographicsFilter(values, filterIds, query, accountId, lastFilt
     ...birthDate,
   };
 
-  if (!lastFilter) {
-    return Patient.findAndCountAll({
-      raw: true,
-      where: Object.assign(idData,
-        searchClause),
-      attributes: ['id'],
-      groupBy: ['id'],
-      offset,
-      order,
-    });
-  }
-
   return Patient.findAndCountAll({
     raw: true,
     where: Object.assign(idData,
       searchClause),
-    include,
-    offset,
-    limit,
-    order,
+    ...query,
   });
 }

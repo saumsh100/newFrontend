@@ -3,34 +3,16 @@ import moment from 'moment';
 import { Appointment, Patient, DeliveredProcedure, Request, PatientUser, sequelize } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
+import { FirstAppointmentFilter } from './appointmentsFilter';
 import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import PatientSearch from './patientSearch';
 
-function ManualLimitOffset(eventsArray, query) {
-  const {
-    limit,
-    offset,
-  } = query;
-
-  let filterArray = eventsArray;
-
-  if (offset && eventsArray.length > offset) {
-    filterArray = filterArray.slice(offset, eventsArray.length);
-  }
-
-  if (limit) {
-    filterArray = filterArray.slice(0, limit);
-  }
-
-  return filterArray;
-}
 
 function getIds(patients, key) {
   return patients.map((patient) => {
     return patient[key]
   });
 }
-
 
 async function AppointmentsFilter(values, filterIds, query, accountId, lastFilter) {
   try {
@@ -233,14 +215,17 @@ async function AppointmentsFilter(values, filterIds, query, accountId, lastFilte
         offset,
       });
     }
-
+    console.log(patientsData)
     return patientsData;
   } catch (err) {
     console.log(err);
   }
 }
 
-const filterFunctions = [DemographicsFilter, AppointmentsFilter];
+const filterFunctions = [
+  DemographicsFilter,
+  FirstAppointmentFilter,
+];
 
 const smartFilterFunctions = [
   LateAppointmentsFilter,
@@ -325,14 +310,24 @@ export async function PatientQuery(config) {
     }
 
     if (filters && filters.length) {
+
+      const query = {
+        offset,
+        order,
+        include: includeArray,
+      };
+
       for (let i = 0; i < filters.length; i += 1) {
         const filterObj = JSON.parse(filters[i]);
         const index = filterObj.indexFunc;
 
         const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
 
-        const lastFilter = i === filters.length - 1;
-        const patients = await filterFunctions[index](filterObj.values, patientIds, defaultQuery, accountId, lastFilter);
+        if (i === filters.length - 1) {
+          query.limit = limit;
+        }
+
+        const patients = await filterFunctions[index](filterObj.values, patientIds, query, accountId);
         filteredPatients = patients;
       }
     }

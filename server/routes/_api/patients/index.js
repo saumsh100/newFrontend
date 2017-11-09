@@ -9,7 +9,7 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
 import { Appointment, Chat, Patient, Call, SentReminder, Event, DeliveredProcedure } from '../../../_models';
-import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
+import { fetchAppointmentEvents } from '../../../lib/events/_Appointments/';
 import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
 import { fetchCallEvents } from '../../../lib/events/Calls/index';
 import { fetchRequestEvents } from '../../../lib/events/Requests/index';

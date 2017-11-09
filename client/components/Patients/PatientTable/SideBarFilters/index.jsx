@@ -59,7 +59,7 @@ class SideBarFilters extends Component {
         });
       }
       if (key === 'lastAppointment' && values[key].length === 2) {
-        setFilter += 1;
+
       }
       if (key === 'appointmentsCount' && values[key].length === 3) {
         setFilter += 1;
@@ -74,6 +74,10 @@ class SideBarFilters extends Component {
         setFilter += 1;
       }
     });
+
+    if (keys.length === setFilter) {
+
+    }
   }
 
   handlePractitioners(values) {

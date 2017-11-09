@@ -1,5 +1,5 @@
+
 import { Appointment, Event } from '../../../_models';
-import normalize from '../../../routes/_api/normalize';
 
 export function fetchAppointmentEvents(patientId, accountId) {
   return Appointment.findAll({
