@@ -15,6 +15,7 @@ import normalize from '../normalize';
 import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
 import checkIsArray from '../../../middleware/checkIsArray';
 import globals, { namespaces } from '../../../config/globals';
+import CalcFirstNextLastAppointment from '../../../lib/firstNextLastAppointment';
 
 const moment = extendMoment(Moment);
 
@@ -605,7 +606,7 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
           io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
 
           const pub = req.app.get('pub');
-          pub.publish('calcPatient.FNL', appointment.id);
+          pub.publish('APPOINTMENT:CREATED', appointment.id);
 
           return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
         })
@@ -648,12 +649,16 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
 
   return batchCreate(cleanedAppointments, Appointment, 'Appointment')
     .then((apps) => {
-      const appData = apps.map(app => {
-        const appPlain = app.get({ plain: true });
-        const pub = req.app.get('pub');
-        pub.publish('calcPatient.FNL', appPlain.id);
-        return appPlain;
+      const appointmentIds = [];
+      const appData = apps.map((app) => {
+        const appParsed = app.get({ plain: true })
+        appointmentIds.push(appParsed.id);
+        return appParsed;
       });
+
+      const pub = req.app.get('pub');
+      pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
+
       res.status(201).send(format(req, res, 'appointments', appData));
     })
     .catch(({ errors, docs }) => {
@@ -704,12 +709,16 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
 
   return Promise.all(appointmentUpdates)
     .then((_appointments) => {
+      const appointmentIds = [];
+
       const appData = _appointments.map((app) => {
-        const appPlain = app.get({ plain: true });
-        const pub = req.app.get('pub');
-        pub.publish('calcPatient.FNL', appPlain.id);
-        return appPlain;
+        const appParsed = app.get({ plain: true });
+        appointmentIds.push(appParsed.id);
+        return appParsed;
       });
+      const pub = req.app.get('pub');
+      pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+
       res.send(format(req, res, 'appointments', appData));
     })
     .catch(next);
@@ -727,7 +736,17 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
     ));
   return Appointment.batchSave(cleanedAppointments)
     .then((apps) => {
-      const appData = apps.map(app => app.get({ plain: true }));
+      const appointmentIds = [];
+
+      const appData = apps.map((app) => {
+        const appParsed = app.get({ plain: true });
+        appointmentIds.push(appParsed.id);
+        return appParsed;
+      });
+
+      //const pub = req.app.get('pub');
+      //pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
+
       res.status(201).send(normalize('appointments', appData));
     })
     .catch(({ errors, docs }) => {
@@ -753,7 +772,17 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
 
   return Promise.all(appointmentUpdates)
     .then((_appointments) => {
-      const appData = _appointments.map(app => app.get({ plain: true }));
+      const appointmentIds = [];
+
+      const appData = _appointments.map((app) => {
+        const appParsed = app.get({ plain: true });
+        appointmentIds.push(appParsed.id);
+        return appParsed;
+      });
+
+      //const pub = req.app.get('pub');
+      //pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+
       res.send(normalize('appointments', appData));
     })
     .catch(next);
@@ -830,7 +859,7 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
 
       const pub = req.app.get('pub');
-      pub.publish('calcPatient.FNL', appointment.id);
+      pub.publish('APPOINTMENT:UPDATED', appointment.id);
       // TODO: why are we double sending? what was wrong with our current lowercase actions? client-side is easy to update!
       return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
