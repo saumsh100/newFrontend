@@ -1,75 +1,18 @@
 
 import moment from 'moment';
-import { Appointment, Patient, DeliveredProcedure, Request, PatientUser, sequelize } from '../../_models';
+import { Patient, DeliveredProcedure, sequelize } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
-import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter } from './appointmentsFilter';
+import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter, OnlineAppointmentsFilter } from './appointmentsFilter';
+import { PractitionersFilter } from './practitionersFilter';
 import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import PatientSearch from './patientSearch';
 
 
 function getIds(patients, key) {
   return patients.map((patient) => {
-    return patient[key]
+    return patient[key];
   });
-}
-
-
-async function AppointmentsFilter(values, filterIds, query, accountId, lastFilter) {
-  try {
-
-    if (production) {
-
-    }
-
-    if (onlineAppointments) {
-      const data = await Request.findAll({
-        raw: true,
-        where: {
-          accountId,
-          isCancelled: false,
-          isConfirmed: true,
-        },
-        include: {
-          model: PatientUser,
-          as: 'patientUser',
-          required: true,
-          duplicating: false,
-          attributes: [],
-          include: {
-            model: Patient,
-            as: 'patients',
-            where: {
-              id: patientIds,
-            },
-            required: true,
-            duplicating: false,
-            attributes: [],
-          },
-        },
-        attributes: ['patientUser.id', [sequelize.fn('COUNT', 'patientUser.id'), 'PatientCount']],
-        having: sequelize.literal('count("patientUser"."id") >= 1'),
-        group: ['patientUser.id'],
-      });
-
-      const patientUserIds = getIds(data, 'id');
-
-      patientsData = await Patient.findAndCountAll({
-        raw: true,
-        where: {
-          accountId,
-          patientUserId: patientUserIds,
-        },
-        include,
-        limit,
-        offset,
-      });
-    }
-    console.log(patientsData)
-    return patientsData;
-  } catch (err) {
-    console.log(err);
-  }
 }
 
 const filterFunctions = [
@@ -77,6 +20,8 @@ const filterFunctions = [
   FirstLastAppointmentFilter,
   AppointmentsCountFilter,
   ProductionFilter,
+  OnlineAppointmentsFilter,
+  PractitionersFilter,
 ];
 
 const smartFilterFunctions = [
@@ -148,21 +93,39 @@ export async function PatientQuery(config) {
 
     if (filters && filters.length) {
       const query = {
-        offset,
         order,
       };
-      console.log('length--->', filters.length)
-      for (let i = 0; i < filters.length; i += 1) {
-        const filterObj = JSON.parse(filters[i]);
+
+      const sortArray = filters.sort((a, b) => {
+        const filter1 = JSON.parse(a);
+        const filter2 = JSON.parse(b);
+
+        if (filter1.intensive && !filter2.intensive) return 1;
+        if (!filter1.intensive && filter2.intensive) return -1;
+        return 0;
+      });
+
+      for (let i = 0; i < sortArray.length; i += 1) {
+        const filterObj = JSON.parse(sortArray[i]);
         const index = filterObj.indexFunc;
+
+        console.log('Running filter-->', filterObj.tab);
 
         const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
 
         if (i === filters.length - 1) {
+          console.log('setting now!!!!!')
+          query.offset = offset;
           query.limit = limit;
         }
 
         const patients = await filterFunctions[index](filterObj, patientIds, query, accountId);
+
+        if (patients.rows.length === 0) {
+          filteredPatients = patients;
+          break;
+        }
+
         filteredPatients = patients;
       }
     }
@@ -201,21 +164,38 @@ export async function PatientQuery(config) {
     /**
      * Calculating Revenue
      */
-    const calcPatientRevenue = patients.map(async (patient) => {
-      try {
-        const productionRevenue = await mostBusinessSinglePatient(moment('1970-01-01').toISOString(), new Date(), accountId, patient.id)
+    const ids = getIds(patients, 'id');
 
-        if (productionRevenue && productionRevenue.length) {
-          patient.totalAmount = productionRevenue[0].totalAmount;
-        }
-        patient.totalPatients = patientCount;
-        return patient;
-      } catch (error) {
-        throw error;
-      }
+    patients = await Patient.findAll({
+      where: {
+        accountId,
+        id: ids,
+      },
+
+      attributes: [
+        'Patient.id',
+        'Patient.firstName',
+        'Patient.lastName',
+        'Patient.nextApptDate',
+        'Patient.lastApptDate',
+        'Patient.birthDate',
+        'Patient.status',
+        [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
+      ],
+      include: [
+        {
+          model: DeliveredProcedure,
+          as: 'deliveredProcedures',
+          attributes: [],
+        },
+      ],
+      group: ['Patient.id'],
+      raw: true,
     });
 
-    return await Promise.all(calcPatientRevenue);
+    const patientData = [{ totalPatients: patientCount, data: patients }];
+
+    return patientData;
   } catch (error) {
     throw error;
   }

@@ -40,6 +40,7 @@ class SideBarFilters extends Component {
         indexFunc: 0,
         data: values,
         tab: 'Demographics',
+        intensive: false,
       });
     }
   }
@@ -52,49 +53,75 @@ class SideBarFilters extends Component {
     const keys = Object.keys(values);
 
     let setFilter = 0;
+    const batchFilters = [];
+
     keys.forEach((key) => {
       if (key === 'firstAppointment' && values[key].length === 2) {
-        addFilter({
+        setFilter += 1;
+        batchFilters.push({
           indexFunc: 1,
           data: values.firstAppointment,
           key: 'firstApptDate',
           tab: 'First Appointment',
+          intensive: false,
         });
       }
       if (key === 'lastAppointment' && values[key].length === 2) {
-        addFilter({
+        setFilter += 1;
+        batchFilters.push({
           indexFunc: 1,
           data: values.lastAppointment,
           key: 'lastApptDate',
           tab: 'Last Appointment',
+          intensive: false,
         });
       }
       if (key === 'appointmentsCount' && values[key].length === 3) {
-        addFilter({
+        setFilter += 1;
+        batchFilters.push({
           indexFunc: 2,
           data: values.appointmentsCount,
           tab: 'Number of Appointments',
+          intensive: true,
         });
       }
       if (key === 'production' && values[key].length === 2) {
-        addFilter({
+        setFilter += 1
+        batchFilters.push({
           indexFunc: 3,
           data: values.production,
           tab: 'Production',
+          intensive: true,
         });
       }
       if (key === 'onlineAppointments' && values[key].length === 3) {
-        setFilter += 1;
+        setFilter += 1
+        batchFilters.push({
+          indexFunc: 4,
+          data: values.onlineAppointments,
+          tab: 'Online Appointments',
+          intensive: true,
+        });
       }
-      if (key === 'treatment') {
-        setFilter += 1;
-      }
+
     });
 
+    if (keys.length === setFilter){
+      batchFilters.forEach((filter) => {
+        addFilter(filter);
+      });
+    }
   }
 
   handlePractitioners(values) {
-    console.log(values);
+    if (values && values.practitioners.length === 2) {
+      this.props.addFilter({
+        indexFunc: 5,
+        data: values.practitioners,
+        tab: 'Practitioners',
+        intensive: true,
+      });
+    }
   }
 
   handleCommunications(values) {
@@ -113,7 +140,6 @@ class SideBarFilters extends Component {
     if (!practitioners) {
       return null;
     }
-
     return (
       <div className={styles.sideBar}>
         <div className={styles.header}>

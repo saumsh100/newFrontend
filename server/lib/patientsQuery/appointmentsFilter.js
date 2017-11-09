@@ -1,7 +1,6 @@
 
 import moment from 'moment';
-import { Patient, Appointment, DeliveredProcedure, sequelize } from '../../_models';
-import { getIds } from './helpers';
+import { Patient, Appointment, DeliveredProcedure, sequelize, PatientUser, Request } from '../../_models';
 
 function ManualLimitOffset(eventsArray, query) {
   const {
@@ -22,6 +21,11 @@ function ManualLimitOffset(eventsArray, query) {
   return filterArray;
 }
 
+function getIds(patients, key) {
+  return patients.map((patient) => {
+    return patient[key]
+  });
+}
 
 export async function FirstLastAppointmentFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -60,11 +64,11 @@ export async function FirstLastAppointmentFilter({ data, key }, filterIds, query
 
 export async function AppointmentsCountFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { patientId: { $not: null } }
+    let prevFilterIds = { id: { $not: null } }
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
-        patientId: filterIds,
+        id: filterIds,
       };
     }
 
@@ -75,13 +79,16 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
         isCancelled: false,
         isDeleted: false,
         isPending: false,
-        ...prevFilterIds,
       },
       include: {
         model: Patient,
         as: 'patient',
+        where: {
+          ...prevFilterIds,
+        },
         attributes: [],
         duplicating: false,
+        required: true,
       },
       group: ['patient.id'],
       attributes: [
@@ -118,7 +125,6 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
         id: filterIds,
       };
     }
-    console.log('zzzz', prevFilterIds)
     const patientData = await Patient.findAll({
       where: {
         accountId,
@@ -159,6 +165,61 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
     return ({
       rows: truncatedData,
       count: patientData.length,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function OnlineAppointmentsFilter( { data }, filterIds, query, accountId) {
+  try {
+
+    let prevFilterIds = { id: { $not: null } }
+
+    if (filterIds && filterIds.length) {
+      prevFilterIds = {
+        id: filterIds,
+      };
+    }
+
+    const data = await Request.findAll({
+      raw: true,
+      where: {
+        accountId,
+        isCancelled: false,
+        isConfirmed: true,
+      },
+      include: {
+        model: PatientUser,
+        as: 'patientUser',
+        required: true,
+        duplicating: false,
+        attributes: [],
+        include: {
+          model: Patient,
+          as: 'patients',
+          where: {
+            ...prevFilterIds,
+          },
+          required: true,
+          duplicating: false,
+          attributes: [],
+        },
+      },
+      attributes: ['patientUser.id', [sequelize.fn('COUNT', 'patientUser.id'), 'PatientCount']],
+      having: sequelize.literal('count("patientUser"."id") >= 1'),
+      group: ['patientUser.id'],
+    });
+
+    const patientUserIds = getIds(data, 'id');
+
+    return await Patient.findAndCountAll({
+      raw: true,
+      where: {
+        accountId,
+        patientUserId: patientUserIds,
+      },
+      ...query,
     });
   } catch (err) {
     console.log(err);

@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Form, Field } from '../../../../library';
+import { Form, Field, FormSection } from '../../../../library';
 import styles from '../styles.scss';
 
 const optionsGender = [

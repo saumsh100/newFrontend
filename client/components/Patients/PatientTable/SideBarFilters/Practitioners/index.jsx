@@ -1,6 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Form, Field } from '../../../../library';
+import { Form, Field, FormSection } from '../../../../library';
 import { SortByFirstName } from '../../../../library/util/SortEntities';
 
 import styles from '../styles.scss';
@@ -29,31 +29,33 @@ export default function Practitioners(props) {
       ignoreSaveButton
     >
       <div className={styles.formContainer}>
-        <div className={styles.formHeader}> Name </div>
-        <div className={styles.formContainer_row} >
-          <Field
-            component="DropdownSelect"
-            name="name"
-            options={practitionerOptions}
-            required
-          />
-        </div>
-        <div className={styles.formHeader}> Type </div>
-        <div className={styles.formContainer_row} >
-          <Field
-            component="DropdownSelect"
-            name="type"
-            options={[{
-              value: 'All Practitioners',
-            },{
-              value: 'Doctor',
-            },{
-              value: 'Hygienist',
-            }]}
-            className={styles.ddSelect}
-            required
-          />
-        </div>
+        <FormSection name="practitioners">
+          <div className={styles.formHeader}> Name </div>
+          <div className={styles.formContainer_row} >
+            <Field
+              component="DropdownSelect"
+              name="0"
+              options={practitionerOptions}
+              required
+            />
+          </div>
+          {/*<div className={styles.formHeader}> Type </div>
+          <div className={styles.formContainer_row} >
+            <Field
+              component="DropdownSelect"
+              name="1"
+              options={[{
+                value: 'All Practitioners',
+              },{
+                value: 'Doctor',
+              },{
+                value: 'Hygienist',
+              }]}
+              className={styles.ddSelect}
+              required
+            />
+          </div>*/}
+        </FormSection>
       </div>
     </Form>
   )

@@ -73,9 +73,10 @@ class PatientTable extends Component {
       const dataArray = getEntities(data);
 
       if (dataArray.length) {
+        console.log(dataArray)
         this.setState({
           totalPatients: dataArray[0].totalPatients,
-          data: dataArray,
+          data: dataArray[0].data,
         });
       } else {
         this.setState({
@@ -375,7 +376,7 @@ class PatientTable extends Component {
         Header: 'Production Revenue',
         id: 'totalAmount',
         accessor: d => {
-          return d.hasOwnProperty('totalAmount') ? `$${d.totalAmount.toFixed(2)}` : '';
+          return d.hasOwnProperty('totalAmount') && d.totalAmount ? `$${d.totalAmount.toFixed(2)}` : '';
         },
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_revenue}>{props.value}</div></div>,
         filterable: false,
