@@ -38,7 +38,8 @@ class SideBarFilters extends Component {
     if ((values.ageStart && values.ageEnd) || (!values.ageStart && !values.ageEnd)) {
       this.props.addFilter({
         indexFunc: 0,
-        values,
+        data: values,
+        tab: 'Demographics',
       });
     }
   }
@@ -55,17 +56,32 @@ class SideBarFilters extends Component {
       if (key === 'firstAppointment' && values[key].length === 2) {
         addFilter({
           indexFunc: 1,
-          values,
+          data: values.firstAppointment,
+          key: 'firstApptDate',
+          tab: 'First Appointment',
         });
       }
       if (key === 'lastAppointment' && values[key].length === 2) {
-
+        addFilter({
+          indexFunc: 1,
+          data: values.lastAppointment,
+          key: 'lastApptDate',
+          tab: 'Last Appointment',
+        });
       }
       if (key === 'appointmentsCount' && values[key].length === 3) {
-        setFilter += 1;
+        addFilter({
+          indexFunc: 2,
+          data: values.appointmentsCount,
+          tab: 'Number of Appointments',
+        });
       }
       if (key === 'production' && values[key].length === 2) {
-        setFilter += 1;
+        addFilter({
+          indexFunc: 3,
+          data: values.production,
+          tab: 'Production',
+        });
       }
       if (key === 'onlineAppointments' && values[key].length === 3) {
         setFilter += 1;
@@ -75,9 +91,6 @@ class SideBarFilters extends Component {
       }
     });
 
-    if (keys.length === setFilter) {
-
-    }
   }
 
   handlePractitioners(values) {

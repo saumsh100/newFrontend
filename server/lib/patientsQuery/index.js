@@ -3,7 +3,7 @@ import moment from 'moment';
 import { Appointment, Patient, DeliveredProcedure, Request, PatientUser, sequelize } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
-import { FirstAppointmentFilter } from './appointmentsFilter';
+import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter } from './appointmentsFilter';
 import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import PatientSearch from './patientSearch';
 
@@ -14,162 +14,12 @@ function getIds(patients, key) {
   });
 }
 
+
 async function AppointmentsFilter(values, filterIds, query, accountId, lastFilter) {
   try {
-    const {
-      firstAppointment,
-      lastAppointment,
-      appointmentsCount,
-      production,
-      onlineAppointments,
-    } = values;
-
-    const {
-      limit,
-      order,
-      offset,
-      include,
-    } = query;
-
-
-    let patientsData;
-    let prevFilterIds = {};
-    let patientIds = { $not: null }
-
-    if (filterIds && filterIds.length) {
-      prevFilterIds = {
-        id: filterIds,
-      };
-
-      patientIds = filterIds;
-    }
-
-    console.log(filterIds);
-
-    const searchFirstLastObj = {
-      raw: true,
-      where: {
-        accountId,
-        ...prevFilterIds,
-      },
-      include: [],
-      limit,
-      offset,
-    };
-
-    if (firstAppointment) {
-      searchFirstLastObj.include.push({
-        model: Appointment,
-        as: 'firstAppt',
-        where: {
-          startDate: {
-            $between: [firstAppointment[0], firstAppointment[1]],
-          },
-        },
-        attributes: ['startDate'],
-        groupBy: ['startDate'],
-      });
-    }
-
-
-    if (lastAppointment) {
-      searchFirstLastObj.include.push({
-        model: Appointment,
-        as: 'lastAppt',
-        where: {
-          startDate: {
-            $between: [lastAppointment[0], lastAppointment[1]],
-          },
-        },
-        attributes: ['startDate'],
-        groupBy: ['startDate'],
-      });
-    }
-
-    if (lastAppointment && firstAppointment) {
-      searchFirstLastObj.include.push(include[0]);
-    } else if (!lastAppointment && firstAppointment) {
-      searchFirstLastObj.include.concat(include);
-    }
-
-    patientsData = ((lastAppointment || firstAppointment) ?
-      await Patient.findAndCountAll(searchFirstLastObj) : null);
-
-    patientIds = patientsData ? getIds(patientsData.rows, 'id') : patientIds;
-
-    if (appointmentsCount) {
-      const data = await Appointment.findAll({
-        raw: true,
-        where: {
-          accountId,
-          isCancelled: false,
-          isDeleted: false,
-          isPending: false,
-          patientId: patientIds,
-        },
-        group: ['patientId'],
-        attributes: ['patientId', [sequelize.fn('COUNT', 'patientId'), 'PatientCount']],
-        having: sequelize.literal(`count("patientId") ${appointmentsCount[0]} ${appointmentsCount[1]}`),
-      });
-
-      patientIds = getIds(data, 'patientId');
-
-      const searchCountObj = {
-        raw: true,
-        where: {
-          accountId,
-          id: patientIds,
-        },
-        include,
-        limit,
-        offset,
-      };
-      patientsData = await Patient.findAndCountAll(searchCountObj);
-    }
 
     if (production) {
-      const data = await Patient.findAll({
-        where: {
-          accountId,
-          id: patientIds,
-        },
-        attributes: [
-          'Patient.id',
-          [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
-        ],
-        include: [
-          {
-            model: DeliveredProcedure,
-            as: 'deliveredProcedures',
-            where: {
-              entryDate: {
-                gt: moment('1970-01-01').toISOString(),
-                lt: new Date(),
-              },
-            },
-            attributes: [],
-            duplicating: false,
-            required: true,
-          },
-        ],
-        group: ['Patient.id'],
-        having: sequelize.literal(`sum("totalAmount") > ${500}`),
-        raw: true,
-      });
 
-      patientIds = getIds(data, 'id');
-
-      const searchRevenueObj = {
-        raw: true,
-        where: {
-          accountId,
-          id: patientIds,
-        },
-        include,
-        limit,
-        offset,
-      };
-      patientsData = await Patient.findAndCountAll(searchRevenueObj);
     }
 
     if (onlineAppointments) {
@@ -224,7 +74,9 @@ async function AppointmentsFilter(values, filterIds, query, accountId, lastFilte
 
 const filterFunctions = [
   DemographicsFilter,
-  FirstAppointmentFilter,
+  FirstLastAppointmentFilter,
+  AppointmentsCountFilter,
+  ProductionFilter,
 ];
 
 const smartFilterFunctions = [
@@ -266,24 +118,9 @@ export async function PatientQuery(config) {
       order.push([sortObj.id, descOrAsc]);
     }
 
-    const includeArray = [{
-      model: Appointment,
-      as: 'nextAppt',
-      attributes: ['startDate'],
-      groupBy: ['startDate'],
-      required: false,
-    }, {
-      model: Appointment,
-      as: 'lastAppt',
-      attributes: ['startDate'],
-      required: false,
-      groupBy: ['startDate'],
-    }];
-
     const defaultQuery = {
       raw: true,
       where: filterBy,
-      include: includeArray,
       offset,
       limit,
       order,
@@ -310,13 +147,11 @@ export async function PatientQuery(config) {
     }
 
     if (filters && filters.length) {
-
       const query = {
         offset,
         order,
-        include: includeArray,
       };
-
+      console.log('length--->', filters.length)
       for (let i = 0; i < filters.length; i += 1) {
         const filterObj = JSON.parse(filters[i]);
         const index = filterObj.indexFunc;
@@ -327,10 +162,11 @@ export async function PatientQuery(config) {
           query.limit = limit;
         }
 
-        const patients = await filterFunctions[index](filterObj.values, patientIds, query, accountId);
+        const patients = await filterFunctions[index](filterObj, patientIds, query, accountId);
         filteredPatients = patients;
       }
     }
+
 
     /**
      * Searching patients and displaying filtered patients

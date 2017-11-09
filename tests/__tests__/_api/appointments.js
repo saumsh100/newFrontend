@@ -165,9 +165,32 @@ describe('/api/appointments', () => {
         });
     });
 
+    test('/ - retrieve appointments - pms not synced', () => {
+      return request(app)
+        .get(`${rootUrl}/connector/notSynced`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
     test('/:appointmentId - retrieve an appointment', () => {
       return request(app)
         .get(`${rootUrl}/${appointmentId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/ - retrieve appointments - return nothing - pms not synced', async () => {
+      await Appointment.update({ isSyncedWithPms: true }, { where: { id: '6b215a42-5c33-4f94-8313-d89893ae2f36' } });
+      return request(app)
+        .get(`${rootUrl}/connector/notSynced`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

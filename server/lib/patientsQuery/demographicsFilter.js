@@ -2,13 +2,13 @@
 import moment from 'moment';
 import { Patient } from '../../_models';
 
-export function DemographicsFilter(values, filterIds, query, accountId) {
+export function DemographicsFilter({ data }, filterIds, query, accountId) {
   const {
     ageStart,
     ageEnd,
     city,
     gender,
-  } = values;
+  } = data;
 
   const idData = {};
   if (filterIds && filterIds.length) {

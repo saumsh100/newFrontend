@@ -334,10 +334,10 @@ class PatientTable extends Component {
       },
       {
         Header: 'Next Appt',
-        id: 'nextAppt',
+        id: 'nextApptDate',
         accessor: d => {
-          if (d.hasOwnProperty('nextAppt.startDate')) {
-            const dateValue = moment(d['nextAppt.startDate']);
+          if (d.hasOwnProperty('nextApptDate')) {
+            const dateValue = moment(d['nextApptDate']);
             return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
           }
           return '';
@@ -354,10 +354,10 @@ class PatientTable extends Component {
       },
       {
         Header: 'Last Appt',
-        id: 'lastAppt',
+        id: 'lastApptDate',
         accessor: d => {
-          if (d.hasOwnProperty('lastAppt.startDate')) {
-            const dateValue = moment(d['lastAppt.startDate']);
+          if (d.hasOwnProperty('lastApptDate')) {
+            const dateValue = moment(d['lastApptDate']);
             return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
           }
           return '';
