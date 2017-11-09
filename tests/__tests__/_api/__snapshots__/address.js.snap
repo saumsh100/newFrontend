@@ -44,6 +44,7 @@ Object {
         "logo": null,
         "name": "Test Account 2",
         "phoneNumber": null,
+        "recallDueDateSeconds": 15552000,
         "syncClientAdapter": null,
         "timeInterval": null,
         "timezone": null,

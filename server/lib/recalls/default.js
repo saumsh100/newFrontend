@@ -4,7 +4,7 @@ import { w2s } from '../../util/time';
 /**
  * Default Recalls, 17 total touchpoints, all email
  */
-export const defaultRecalls = [
+const defaultRecalls = [
   {
     primaryType: 'email',
     lengthSeconds: w2s(4),
@@ -80,8 +80,11 @@ export const defaultRecalls = [
  * based on account
  *
  * @param account
- * @returns array
+ * @returns Array
  */
 export function generateDefaultRecalls(account) {
-  return exports.defaultRecalls.map(r => r.accountId = account.id);
+  return defaultRecalls.map((r) => {
+    r.accountId = account.id;
+    return r;
+  });
 }

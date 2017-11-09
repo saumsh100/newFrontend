@@ -4,7 +4,7 @@ import { d2s, h2s } from '../../util/time';
 /**
  * Default Reminders
  */
-export const defaultReminders = [
+const defaultReminders = [
   {
     primaryType: 'email',
     lengthSeconds: d2s(21),
@@ -28,8 +28,11 @@ export const defaultReminders = [
  * based on account
  *
  * @param account
- * @returns array
+ * @returns Array
  */
 export function generateDefaultReminders(account) {
-  return exports.defaultReminders.map(r => r.accountId = account.id);
+  return defaultReminders.map((r) => {
+    r.accountId = account.id;
+    return r;
+  });
 }

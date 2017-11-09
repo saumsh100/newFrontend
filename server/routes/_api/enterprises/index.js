@@ -268,7 +268,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
         },
       };
 
-      Promise.all([
+      return Promise.all([
         Reminder.bulkCreate(defaultReminders),
         WeeklySchedule.create(defaultSchdedule),
         Service.bulkCreate(defaultServices),

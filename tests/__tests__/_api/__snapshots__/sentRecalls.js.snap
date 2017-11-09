@@ -41,6 +41,7 @@ Object {
           "weekdays": true,
           "weekends": true,
         },
+        "recallDueDateSeconds": null,
         "status": "Active",
         "type": null,
       },
@@ -49,6 +50,7 @@ Object {
       "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "id": "d5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
+        "isActive": true,
         "lengthSeconds": null,
         "primaryType": "sms",
       },
