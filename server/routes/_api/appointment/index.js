@@ -712,7 +712,7 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
       const appointmentIds = [];
 
       const appData = _appointments.map((app) => {
-        const appParsed = app.get({ plain: true });
+        const appParsed = app.dataValues;
         appointmentIds.push(appParsed.id);
         return appParsed;
       });
