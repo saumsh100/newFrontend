@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { Form, Field } from '../../../../library';
+import { FormSection, Field, Form } from '../../../../library';
 import styles from '../styles.scss';
 
 export default function Communications(props) {
@@ -17,47 +17,47 @@ export default function Communications(props) {
       <div className={styles.formContainer}>
         <div className={styles.formHeaderInput}>Reminders</div>
         <div className={styles.formSubHeader}>Sent Via Email</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="remindersEmail" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="firstApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="firstApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formSubHeader}>Sent Via SMS</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="remindersSMS" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formSubHeader}>Sent Via Phone</div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="remindersPhone" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
-            name="lastApp1"
+            name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             required
             component="DayPicker"
-            name="lastApp2"
+            name="1"
           />
-        </div>
+        </FormSection>
         <div className={styles.formHeaderInput}>Recares</div>
         <div className={styles.formSubHeader}>Sent Via Email</div>
         <div className={styles.formContainer_row} >
@@ -143,7 +143,7 @@ export default function Communications(props) {
             name="lastApp2"
           />
         </div>
-        <div className={styles.formHeader}> Surveys </div>
+        {/*<div className={styles.formHeader}> Surveys </div>
         <div className={styles.formContainer_row} >
           <Field
             required
@@ -170,7 +170,7 @@ export default function Communications(props) {
             component="DayPicker"
             name="lastApp2"
           />
-        </div>
+        </div>*/}
       </div>
     </Form>
   );

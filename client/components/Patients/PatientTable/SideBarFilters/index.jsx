@@ -114,7 +114,7 @@ class SideBarFilters extends Component {
   }
 
   handlePractitioners(values) {
-    if (values && values.practitioners.length === 2) {
+    if (values && values.practitioners.length === 1) {
       this.props.addFilter({
         indexFunc: 5,
         data: values.practitioners,
@@ -125,7 +125,21 @@ class SideBarFilters extends Component {
   }
 
   handleCommunications(values) {
-    console.log(values);
+    const keys = Object.keys(values);
+
+    let setFilter = 0;
+    const batchFilters = [];
+    console.log(keys)
+    keys.forEach((key) => {
+      if (key === 'remindersSMS' && values[key].length === 2) {
+        this.props.addFilter({
+          indexFunc: 6,
+          data: values.remindersSMS,
+          tab: 'Reminders SMS',
+          key,
+        });
+      }
+    });
   }
 
   render() {

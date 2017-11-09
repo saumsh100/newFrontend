@@ -5,6 +5,7 @@ import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatient
 import { DemographicsFilter } from './demographicsFilter';
 import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter, OnlineAppointmentsFilter } from './appointmentsFilter';
 import { PractitionersFilter } from './practitionersFilter';
+import { RemindersFilter } from './remindersFilter';
 import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import PatientSearch from './patientSearch';
 
@@ -22,6 +23,7 @@ const filterFunctions = [
   ProductionFilter,
   OnlineAppointmentsFilter,
   PractitionersFilter,
+  RemindersFilter,
 ];
 
 const smartFilterFunctions = [
