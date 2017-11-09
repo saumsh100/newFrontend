@@ -91,6 +91,7 @@ export function shouldSendReminder({ appointment, reminder }) {
   const { sentReminders, patient } = appointment;
   const preferences = patient.preferences;
 
+  // TODO: dont check reminderId, keep it to lengthSeconds, cause they can delete and add different ones
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
     return (s.reminderId === reminder.id) || (reminder.lengthSeconds >= s.lengthSeconds);
   });

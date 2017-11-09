@@ -41,6 +41,21 @@ const Time = {
     return moment(endDate).diff(startDate, 'hours', true);
   },
 
+  w2s(num) {
+    const oneWeek = 60 * 60 * 24 * 7;
+    return oneWeek * num;
+  },
+
+  d2s(num) {
+    const oneDay = 60 * 60 * 24;
+    return oneDay * num;
+  },
+
+  h2s(num) {
+    const oneHour = 60 * 60;
+    return oneHour * num;
+  },
+
   /**
    *
    * @param date

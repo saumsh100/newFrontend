@@ -52,6 +52,7 @@ module.exports = {
           { transaction: t },
         );
 
+        // TODO: Perhaps we also flag this as isDeleted to we can create now Recalls
         // Now change current Recalls lengthSeconds to be 1week post-dueDate (-604800 seconds)
         await queryInterface.sequelize.query(`UPDATE "Recalls" SET "lengthSeconds" = -604800;`, { transaction: t });
 
