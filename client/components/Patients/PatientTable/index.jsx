@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import moment from 'moment';
 import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
-import { destroy } from 'redux-form';
+import { destroy, arrayRemoveAll } from 'redux-form';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
@@ -52,6 +52,7 @@ class PatientTable extends Component {
     this.addFilter = this.addFilter.bind(this);
     this.setSmartFilter = this.setSmartFilter.bind(this);
     this.clearFilters = this.clearFilters.bind(this);
+    this.removeFilter = this.removeFilter.bind(this);
   }
 
   componentDidMount() {
@@ -73,7 +74,6 @@ class PatientTable extends Component {
       const dataArray = getEntities(data);
 
       if (dataArray.length) {
-        console.log(dataArray)
         this.setState({
           totalPatients: dataArray[0].totalPatients,
           data: dataArray[0].data,
@@ -150,7 +150,7 @@ class PatientTable extends Component {
       expanded,
     } = this.state;
 
-    if (!expanded.hasOwnProperty(rowInfo.index)) {
+    if (rowInfo && !expanded.hasOwnProperty(rowInfo.index)) {
       const indexObj = {};
       indexObj[rowInfo.index] = true;
       this.setState({
@@ -187,7 +187,6 @@ class PatientTable extends Component {
   setSmartFilter(filterObj) {
     if (filterObj.index > -1) {
       this.clearFilters();
-
       this.fetchData({
         filters: [],
         page: 0,
@@ -203,11 +202,12 @@ class PatientTable extends Component {
       });
     } else {
       this.reinitializeTable();
-      this.clearFilters();
     }
   }
 
   reinitializeTable() {
+    this.clearFilters();
+
     this.setState({
       smartFilter: null,
       page: 0,
@@ -232,13 +232,45 @@ class PatientTable extends Component {
     filtersArray.map(filter => destroy(filter));
   }
 
+  removeFilter(index) {
+    const {
+      filters,
+    } = this.state;
+
+    let removed = false;
+    const size = filters.size;
+
+    if (size) {
+      removed = true;
+      const newState = filters.delete(`${index}`);
+
+      this.fetchData({
+        filters: newState.toArray(),
+        page: 0,
+        limit: this.state.limit,
+        sort: this.state.sorted,
+        smartFilter: this.state.smartFilter,
+      });
+
+      this.setState({
+        filters: newState,
+      });
+    }
+    if (removed && size - 1 === 0) {
+      this.reinitializeTable();
+    }
+  }
+
   render() {
     const {
       wasFetched,
       push,
       createEntityRequest,
       practitioners,
+      arrayRemoveAll,
     } = this.props;
+
+    console.log(this.state.filters);
 
     const columns = [
       {
@@ -350,7 +382,6 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
-        maxWidth: 180,
 
       },
       {
@@ -370,7 +401,6 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
-        maxWidth: 180,
       },
       {
         Header: 'Production Revenue',
@@ -491,6 +521,9 @@ class PatientTable extends Component {
             <SideBarFilters
               addFilter={this.addFilter}
               practitioners={practitioners}
+              arrayRemoveAll={arrayRemoveAll}
+              removeFilter={this.removeFilter}
+              filters={this.state.filters}
             />
           </Col>
         </Row>
@@ -520,6 +553,7 @@ function mapDispatchToProps(dispatch) {
     createEntityRequest,
     push,
     destroy,
+    arrayRemoveAll,
   }, dispatch);
 }
 

@@ -24,49 +24,53 @@ export default function Demographics(props) {
       ignoreSaveButton
     >
       <div className={styles.formContainer}>
+
         <div className={styles.formHeader}> Age </div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="age" className={styles.formContainer_row} >
           <Field
             component="DropdownSelect"
-            name="ageStart"
+            name="0"
             options={[{
               label: '18',
               value: 18,
             }]}
-            required
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DropdownSelect"
-            name="ageEnd"
+            name="1"
             options={[{
               label: '35',
               value: 35,
             }]}
             className={styles.ddSelect}
-            required
           />
-        </div>
+        </FormSection>
+
         <div className={styles.formHeader}> Gender </div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="gender" >
+          <div className={styles.formContainer_row}>
           <Field
             component="DropdownSelect"
-            name="gender"
+            name="0"
             options={optionsGender}
             className={styles.ddSelect}
-            required
           />
-        </div>
+          </div>
+        </FormSection>
+
         <div className={styles.formHeader}> Location </div>
-        <div className={styles.formContainer_row} >
+        <FormSection name="city"  >
+          <div className={styles.formContainer_row}>
           <Field
             component="DropdownSelect"
-            name="city"
+            name="1"
             options={optionsCity}
             className={styles.ddSelect}
-            required
           />
-        </div>
+          </div>
+        </FormSection>
+
       </div>
     </Form>
   );

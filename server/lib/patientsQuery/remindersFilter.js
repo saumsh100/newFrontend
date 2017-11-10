@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Patient, Appointment, SentReminder, sequelize } from '../../_models';
+import { Patient, SentReminder } from '../../_models';
 import { ManualLimitOffset } from './helpers';
 
 export async function RemindersFilter({ data, key }, filterIds, query, accountId) {

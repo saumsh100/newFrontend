@@ -1,10 +1,12 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Map } from 'immutable';
 import { Icon } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
 import Practitioners from './Practitioners';
 import Communications from './Communications';
+import FilterTags from './FilterTags';
 import styles from './styles.scss';
 
 class SideBarFilters extends Component {
@@ -12,12 +14,31 @@ class SideBarFilters extends Component {
     super(props);
     this.state = {
       openFilters: [false, false, false, false],
+      filterTags: Map(),
     };
     this.displayFilter = this.displayFilter.bind(this);
     this.handleDemographics = this.handleDemographics.bind(this);
     this.handleAppointments = this.handleAppointments.bind(this);
     this.handlePractitioners = this.handlePractitioners.bind(this);
     this.handleCommunications = this.handleCommunications.bind(this);
+    this.removeTag = this.removeTag.bind(this);
+    this.addTags = this.addTags.bind(this);
+  }
+
+  componentWillUpdate() {
+    const {
+      filters,
+    } = this.props;
+
+    const {
+      filterTags,
+    } = this.state;
+
+    if (!filters.size && !filters.length && filterTags.size) {
+      this.setState({
+        filterTags: Map(),
+        });
+    }
   }
 
   displayFilter(index) {
@@ -25,7 +46,7 @@ class SideBarFilters extends Component {
       openFilters,
     } = this.state;
 
-    const filterState = openFilters[index]
+    const filterState = openFilters[index];
     const newFiltersState = openFilters;
     newFiltersState[index] = !filterState;
 
@@ -34,17 +55,107 @@ class SideBarFilters extends Component {
     });
   }
 
+  addTags(filters) {
+    const {
+      filterTags,
+    } = this.state;
+
+    let newFilters = Map();
+
+    filters.forEach((filter) => {
+      newFilters = filterTags.set(`${filter.indexFunc}`, filter);
+    });
+
+
+    this.setState({
+      filterTags: newFilters,
+    });
+  }
+
+  removeTag(filter) {
+    const {
+      filterTags,
+    } = this.state;
+
+    const {
+      arrayRemoveAll,
+      removeFilter,
+    } = this.props;
+
+    arrayRemoveAll(filter.formName, filter.formSection);
+
+    removeFilter(filter.indexFunc);
+
+    if (filterTags.size >= 1) {
+      this.setState({
+        filterTags: filterTags.delete(`${filter.indexFunc}`),
+      });
+    } else {
+      this.setState({
+        filterTags: Map(),
+      });
+    }
+  }
+
   handleDemographics(values) {
     const {
       addFilter,
     } = this.props;
 
-    if ((values.ageStart && values.ageEnd) || (!values.ageStart && !values.ageEnd)) {
-      addFilter({
-        indexFunc: 0,
-        data: values,
-        tab: 'Demographics',
-        intensive: false,
+    let keys = Object.keys(values);
+
+    let setFilter = 0;
+    const batchFilters = [];
+
+    keys = keys.filter((key) => {
+      if (values[key] && values[key].length !== 0) {
+        return key;
+      }
+    });
+
+    keys.forEach((key) => {
+      if (key === 'age' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 0,
+          formName: 'demographics',
+          formSection: key,
+          key,
+          data: values[key],
+          tag: 'Age',
+          intensive: false,
+        });
+      }
+      if (key === 'gender' && values[key].length === 1) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 1,
+          data: values[key],
+          formName: 'demographics',
+          formSection: key,
+          key,
+          tag: 'Gender',
+          intensive: false,
+        });
+      }
+      if (key === 'location' && values[key].length === 1) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 2,
+          formName: 'demographics',
+          formSection: key,
+          data: values[key],
+          key,
+          tag: 'City',
+          intensive: true,
+        });
+      }
+    });
+
+    if (keys.length === setFilter && keys.length > 0) {
+      this.addTags(batchFilters);
+      batchFilters.forEach((filter) => {
+        addFilter(filter);
       });
     }
   }
@@ -54,63 +165,79 @@ class SideBarFilters extends Component {
       addFilter,
     } = this.props;
 
-    const keys = Object.keys(values);
+    let keys = Object.keys(values);
 
     let setFilter = 0;
     const batchFilters = [];
+    
+    keys = keys.filter((key) => {
+      if (values[key] && values[key].length !== 0) {
+        return key;
+      }
+    });
 
     keys.forEach((key) => {
       if (key === 'firstAppointment' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 1,
+          indexFunc: 3,
+          formName: 'appointments',
+          formSection: key,
           data: values.firstAppointment,
           key: 'firstApptDate',
-          tab: 'First Appointment',
+          tag: 'First Appointment',
           intensive: false,
         });
       }
       if (key === 'lastAppointment' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 1,
+          indexFunc: 4,
           data: values.lastAppointment,
+          formName: 'appointments',
+          formSection: key,
           key: 'lastApptDate',
-          tab: 'Last Appointment',
+          tag: 'Last Appointment',
           intensive: false,
         });
       }
       if (key === 'appointmentsCount' && values[key].length === 3) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 2,
+          indexFunc: 5,
+          formName: 'appointments',
+          formSection: key,
           data: values.appointmentsCount,
-          tab: 'Number of Appointments',
+          tag: 'Number of Appointments',
           intensive: true,
         });
       }
       if (key === 'production' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 3,
+          indexFunc: 6,
+          formName: 'appointments',
+          formSection: key,
           data: values.production,
-          tab: 'Production',
+          tag: 'Production',
           intensive: true,
         });
       }
       if (key === 'onlineAppointments' && values[key].length === 3) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 4,
+          indexFunc: 7,
+          formName: 'appointments',
+          formSection: key,
           data: values.onlineAppointments,
-          tab: 'Online Appointments',
+          tag: 'Online Appointments',
           intensive: true,
         });
       }
-
     });
 
-    if (keys.length === setFilter){
+    if (keys.length === setFilter && keys.length > 0) {
+      this.addTags(batchFilters);
       batchFilters.forEach((filter) => {
         addFilter(filter);
       });
@@ -122,33 +249,52 @@ class SideBarFilters extends Component {
       addFilter,
     } = this.props;
 
-    if (values && values.practitioners.length === 1) {
-      addFilter({
-        indexFunc: 5,
-        data: values.practitioners,
-        tab: 'Practitioners',
-        intensive: true,
-      });
-    }
+    let keys = Object.keys(values);
+    keys = keys.filter((key) => {
+      if (values[key] && values[key].length !== 0) {
+        return key;
+      }
+    });
+    keys.forEach((key) => {
+      if (key && values[key].length === 1) {
+        console.log('wpppp')
+        const pracObj = {
+          indexFunc: 8,
+          data: values.practitioners,
+          formName: 'practitioners',
+          formSection: 'practitioners',
+          tag: 'Practitioners',
+          intensive: true,
+        };
+        this.addTags([pracObj]);
+        addFilter(pracObj);
+      }
+    });
   }
 
   handleCommunications(values) {
-    const keys = Object.keys(values);
-
     const {
       addFilter,
     } = this.props;
 
     let setFilter = 0;
+    let keys = Object.keys(values);
+
     const batchFilters = [];
+
+    keys = keys.filter((key) => {
+      if (values[key] && values[key].length !== 0) {
+        return key;
+      }
+    });
 
     keys.forEach((key) => {
       if (key === 'remindersEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 6,
+          indexFunc: 9,
           data: values.remindersEmail,
-          tab: 'Reminders Email',
+          tag: 'Reminders Email',
           key: 'phone',
         });
       }
@@ -156,75 +302,80 @@ class SideBarFilters extends Component {
         setFilter += 1;
 
         batchFilters.push({
-          indexFunc: 7,
+          indexFunc: 10,
           data: values.remindersSMS,
-          tab: 'Reminders SMS',
+          tag: 'Reminders SMS',
           key: 'sms',
         });
       }
       if (key === 'remindersPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 8,
+          indexFunc: 11,
           data: values.remindersPhone,
-          tab: 'Reminders Phone',
+          tag: 'Reminders Phone',
           key: 'phone',
         });
       }
       if (key === 'recallsEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 9,
+          indexFunc: 12,
           data: values.recallsEmail,
-          tab: 'Recalls Email',
+          tag: 'Recalls Email',
           key: 'phone',
         });
       }
       if (key === 'recallsSMS' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 10,
+          indexFunc: 13,
           data: values.recallsSMS,
-          tab: 'Recalls SMS',
+          tag: 'Recalls SMS',
           key: 'sms',
         });
       }
       if (key === 'recallsPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 11,
+          indexFunc: 14,
           data: values.recallsPhone,
-          tab: 'Recalls Phone',
+          tag: 'Recalls Phone',
           key: 'phone',
         });
       }
       if (key === 'lastReminderSent' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 12,
+          indexFunc: 15,
           data: values.lastReminderSent,
-          tab: 'Last Reminder Sent',
+          tag: 'Last Reminder Sent',
+          intensive: true,
         });
       }
       if (key === 'lastRecareSent' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 13,
+          indexFunc: 16,
           data: values.lastRecareSent,
-          tab: 'Last Recare Sent',
+          tag: 'Last Recare Sent',
+          intensive: true,
         });
       }
       if (key === 'reviews' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 14,
+          indexFunc: 17,
           data: values.reviews,
-          tab: 'Reviews',
+          tag: 'Reviews',
+          intensive: true,
         });
       }
     });
 
-    if (keys.length === setFilter){
+    if (keys.length === setFilter && keys.length > 0){
+      this.addTags(batchFilters);
+
       batchFilters.forEach((filter) => {
         addFilter(filter);
       });
@@ -238,17 +389,25 @@ class SideBarFilters extends Component {
 
     const {
       openFilters,
+      filterTags,
     } = this.state;
 
     if (!practitioners) {
       return null;
     }
+
     return (
       <div className={styles.sideBar}>
         <div className={styles.header}>
           <div className={styles.header_icon}> <Icon icon="sliders" /> </div>
           <div className={styles.header_text}> Filters </div>
         </div>
+
+        <FilterTags
+          filterTags={filterTags}
+          removeTag={this.removeTag}
+        />
+
         <div className={styles.filtersContainer}>
           <div className={styles.filterBody}>
             <div

@@ -2,15 +2,8 @@
 import moment from 'moment';
 import { Patient } from '../../_models';
 
-export function DemographicsFilter({ data }, filterIds, query, accountId) {
-  const {
-    ageStart,
-    ageEnd,
-    city,
-    gender,
-  } = data;
-
-  const idData = {};
+export function DemographicsFilter({ data, key }, filterIds, query, accountId) {
+  const idData = { id: { $not: null }};
   if (filterIds && filterIds.length) {
     idData.id = filterIds;
   }
@@ -19,9 +12,9 @@ export function DemographicsFilter({ data }, filterIds, query, accountId) {
   let address = {};
   let genderObj = {};
 
-  if (ageStart && ageEnd) {
-    const endDate = moment().subtract(ageStart, 'years').toISOString();
-    const startDate = moment().subtract(ageEnd, 'years').toISOString();
+  if (key === 'age') {
+    const endDate = moment().subtract(data[0], 'years').toISOString();
+    const startDate = moment().subtract(data[1], 'years').toISOString();
     birthDate = {
       birthDate: {
         $between: [startDate, endDate],
@@ -29,20 +22,20 @@ export function DemographicsFilter({ data }, filterIds, query, accountId) {
     };
   }
 
-  if (city) {
+  if (key === 'city') {
     address = {
       address: {
         city: {
-          $ilike: city,
+          $ilike: data[0],
         },
       },
     };
   }
 
-  if (gender) {
+  if (key === 'gender') {
     genderObj = {
       gender: {
-        $ilike: gender,
+        $ilike: data[0],
       },
     };
   }
@@ -52,12 +45,12 @@ export function DemographicsFilter({ data }, filterIds, query, accountId) {
     ...genderObj,
     ...address,
     ...birthDate,
+    ...idData,
   };
 
   return Patient.findAndCountAll({
     raw: true,
-    where: Object.assign(idData,
-      searchClause),
+    where: searchClause,
     ...query,
   });
 }

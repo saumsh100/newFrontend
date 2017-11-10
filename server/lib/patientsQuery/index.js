@@ -17,6 +17,9 @@ function getIds(patients, key) {
 
 const filterFunctions = [
   DemographicsFilter,
+  DemographicsFilter,
+  DemographicsFilter,
+  FirstLastAppointmentFilter,
   FirstLastAppointmentFilter,
   AppointmentsCountFilter,
   ProductionFilter,
@@ -118,7 +121,7 @@ export async function PatientQuery(config) {
         const filterObj = JSON.parse(sortArray[i]);
         const index = filterObj.indexFunc;
 
-        console.log('Running filter-->', filterObj.tab);
+        console.log('Running filter-->', filterObj.tag);
 
         const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
 
@@ -137,7 +140,6 @@ export async function PatientQuery(config) {
         filteredPatients = patients;
       }
     }
-
 
     /**
      * Searching patients and displaying filtered patients
