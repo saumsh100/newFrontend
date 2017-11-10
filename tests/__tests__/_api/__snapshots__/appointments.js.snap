@@ -156,38 +156,9 @@ Object {
 
 exports[`/api/appointments GET / /stats - appointment stats for intelligence overview 1`] = `
 Object {
-  "confirmedAppointments": 0,
+  "activePatients": 1,
   "entities": Object {},
-  "newPatients": 1,
-  "notConfirmedAppointments": 1,
-  "patients": Object {
-    "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
-      "age": 37,
-      "firstName": "Ronald",
-      "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-      "lastName": "Mcdonald",
-      "numAppointments": 1,
-    },
-  },
-  "practitioner": Object {
-    "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
-      "appointmentTime": 2,
-      "avatarUrl": null,
-      "firstName": "Colonel",
-      "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
-      "lastName": "Sanders",
-      "newPatients": 0,
-      "totalTime": 394200,
-      "type": "Hygienist",
-    },
-  },
-  "services": Object {
-    "1f439ff8-c55d-4423-9316-a41240c4d329": Object {
-      "id": "1f439ff8-c55d-4423-9316-a41240c4d329",
-      "name": "Cleanup",
-      "time": 0,
-    },
-  },
+  "newPatients": 0,
 }
 `;
 

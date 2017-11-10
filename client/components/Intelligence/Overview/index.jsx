@@ -5,6 +5,7 @@ import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { bindActionCreators } from 'redux';
+import FilterPractitioners from '../../Schedule/Cards/Filters/FilterPractitioners';
 import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import {
   Card, DialogBox, Col, Grid, Row, Button,
@@ -34,10 +35,12 @@ class Overview extends Component {
       startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       active: false,
       loader: false,
+      displayPractitioners: [],
     };
 
     this.reinitializeState = this.reinitializeState.bind(this);
-    this.modelOn = this.modelOn.bind(this);
+    this.filterFunction = this.filterFunction.bind(this);
+    this.handleFilterClick = this.handleFilterClick.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -53,6 +56,17 @@ class Overview extends Component {
 
     Promise.all([
       this.props.fetchEntitiesRequest({
+        id: 'practitionerWorked',
+        url: '/api/appointments/practitionerWorked',
+        params,
+        returnData: true,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'mostAppointments',
+        url: '/api/appointments/mostAppointments',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
         id: 'patientStats',
         url: '/api/patients/stats',
         params,
@@ -60,6 +74,11 @@ class Overview extends Component {
       this.props.fetchEntitiesRequest({
         id: 'appointmentStats',
         url: '/api/appointments/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentsBooked',
+        url: '/api/appointments/appointmentsBooked',
         params,
       }),
       this.props.fetchEntitiesRequest({
@@ -83,11 +102,29 @@ class Overview extends Component {
         params,
       }),
     ])
-      .then(() => {
+      .then((data) => {
+        const displayPractitioners = data[0].map(p => p.id);
         this.setState({
           loader: true,
+          displayPractitioners,
         });
       });
+  }
+
+  handleFilterClick(bool, id) {
+    const displayPractitioners = this.state.displayPractitioners;
+    // console.log(a,b,c)
+    if (bool) {
+      const index = displayPractitioners.indexOf(id);
+
+      if (index > -1) {
+        displayPractitioners.splice(index, 1);
+      }
+    } else {
+      displayPractitioners.push(id);
+    }
+
+    this.setState({ displayPractitioners });
   }
 
   reinitializeState() {
@@ -113,8 +150,24 @@ class Overview extends Component {
 
     Promise.all([
       this.props.fetchEntitiesRequest({
+        id: 'practitionerWorked',
+        url: '/api/appointments/practitionerWorked',
+        params,
+        returnData: true,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'mostAppointments',
+        url: '/api/appointments/mostAppointments',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
         id: 'appointmentStats',
         url: '/api/appointments/stats',
+        params,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'appointmentsBooked',
+        url: '/api/appointments/appointmentsBooked',
         params,
       }),
       this.props.fetchEntitiesRequest({
@@ -127,19 +180,21 @@ class Overview extends Component {
         url: '/api/patients/revenueStatsTotal',
         params,
       }),
-    ]).then(() => {
+    ]).then((data) => {
+      const displayPractitioners = data[0].map(p => p.id);
       const newState = {
         startDate: moment(values.startDate),
         endDate: moment(values.endDate),
         active: false,
         loader: true,
+        displayPractitioners,
       };
 
       this.setState(newState);
     });
   }
 
-  modelOn() {
+  filterFunction() {
     this.setState({
       active: true,
     });
@@ -149,20 +204,26 @@ class Overview extends Component {
     const appointmentStats = (this.props.appointmentStats ?
       this.props.appointmentStats.toObject() : null);
 
+    const practitionerWorked = (this.props.practitionerWorked ?
+      this.props.practitionerWorked.toJS() : null);
+
+    const appointmentsBookedStats = (this.props.appointmentsBooked ?
+      this.props.appointmentsBooked.toObject() : null);
+
+    const mostAppointments = (this.props.mostAppointments ?
+      this.props.mostAppointments.toJS() : null);
+
     const totalRevenueStats = (this.props.totalRevenueStats ?
       this.props.totalRevenueStats.toObject().totalAmountClinic : 0);
 
     const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
     const patientRevenueStats = (this.props.patientRevenueStats ? this.props.patientRevenueStats.toJS() : []);
 
-    const prac = (appointmentStats ? appointmentStats.practitioner : {});
-    const serve = (appointmentStats ? appointmentStats.services : {});
-    const patients = (appointmentStats ? appointmentStats.patients : {});
     let male = (patientStats ? patientStats.male : 0);
     let female = (patientStats ? patientStats.female : 0);
     const ageRange = (patientStats ? patientStats.ageData.toArray() : []);
     const newVisitors = (appointmentStats ? appointmentStats.newPatients : 0);
-    const allApp = (appointmentStats ? appointmentStats.notConfirmedAppointments : 0);
+    const allApp = (appointmentStats ? appointmentStats.activePatients : 0);
     const returning = allApp - newVisitors;
     const newVisitorPercent = Math.floor((newVisitors * 100 / allApp) + 0.5);
     const returningPercent = 100 - newVisitorPercent;
@@ -185,6 +246,12 @@ class Overview extends Component {
       };
     });
 
+    const prac = (practitionerWorked || []).filter(p => {
+      return this.state.displayPractitioners.includes(p.id);
+    });
+
+
+
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
     const colors = ['primaryColor', 'primaryBlueGreen', 'primaryYellow', 'primaryGreen'];
@@ -192,7 +259,7 @@ class Overview extends Component {
     const colorArray = [];
 
 
-    const reset = Math.ceil((prac.size - colorLen) / colorLen);
+    const reset = Math.ceil((prac.length - colorLen) / colorLen);
 
     for (let j = 0; j <= reset; j++) {
       for (let i = 0; i < colorLen; i++) {
@@ -200,61 +267,58 @@ class Overview extends Component {
       }
     }
 
-    const realData = (appointmentStats ? (
-      prac.toArray().sort((pracData, pracData2) => {
-        const a = pracData.toJS();
-        const b = pracData2.toJS();
+    const realData = (practitionerWorked ? (
+      prac.sort((pracData, pracData2) => {
+        const a = pracData;
+        const b = pracData2;
         if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
         if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
         return 0;
       }).map((key, index) => {
         const data = {};
-        data.appointmentBooked = Math.floor(key.toObject().appointmentTime / 60) || 0;
-        data.appointmentNotFiltred = Math.floor(key.toObject().totalTime / 60) - data.appointmentBooked;
+        data.appointmentBooked = key.booked;
+        data.appointmentNotFiltred = key.notFilled;
         data.appointmentNotFiltred = (data.appointmentNotFiltred > 0 ? data.appointmentNotFiltred : 0);
         data.percentage = Math.floor(100 * data.appointmentBooked / (data.appointmentNotFiltred + data.appointmentBooked));
-        data.name = (/Dentist/g.test(key.toObject().type) ? `Dr. ${key.toObject().lastName}` : `${key.toObject().firstName} ${key.toObject().lastName || ''}`);
+        data.name = (/Dentist/g.test(key.type) ? `Dr. ${key.lastName}` : `${key.firstName} ${key.lastName || ''}`);
         data.img = '/images/avatar.png';
         totalData.appointmentBooked += data.appointmentBooked;
         totalData.appointmentNotFiltred += data.appointmentNotFiltred;
-        data.newPatients = key.toObject().newPatients;
+        data.newPatients = key.newPatientsTotal;
 
         return (
           <PractitionersList
             img={data.img}
             name={data.name}
-            profession={key.toObject().type}
+            profession={key.type}
             appointmentBooked={data.appointmentBooked}
             appointmentNotFiltred={data.appointmentNotFiltred}
             newPatients={data.newPatients}
             percentage={data.percentage}
-            practitioner={key.toObject()}
+            practitioner={key}
             color={colorArray[index]}
           />);
       })) : <div />);
 
-    const notConfirmedAppointments = (appointmentStats ?
-      appointmentStats.notConfirmedAppointments : 0);
+    const allAppointments = (appointmentsBookedStats ?
+      appointmentsBookedStats.appointmentsBooked : 0);
 
-    const confirmedAppointments = (appointmentStats ?
-      appointmentStats.confirmedAppointments : 0);
+    const confirmedAppointmentsBooked = (appointmentsBookedStats ?
+      appointmentsBookedStats.confirmedAppointments : 0);
 
-    let sortedPatients = (appointmentStats ? patients.toArray().map(key => ({
-      name: `${key.toObject().firstName} ${key.toObject().lastName}`,
-      age: key.toObject().age,
-      number: key.toObject().numAppointments,
-      firstName: key.toObject().firstName,
-      lastName: key.toObject().lastName,
-      avatarUrl: key.toObject().avatarUrl,
-    })) : []);
-
-    sortedPatients = sortedPatients.sort((a, b) => b.number - a.number);
-
-    sortedPatients = sortedPatients.slice(0, 4);
+    const sortedPatients = (mostAppointments ? mostAppointments.map(key => {
+      return {
+        name: `${key.firstName} ${key.lastName}`,
+        age: moment().diff(moment(key.birthDate), 'years'),
+        number: key.numAppointments,
+        firstName: key.firstName,
+        lastName: key.lastName,
+      };
+    }) : []);
 
     const data = [
       {
-        count: notConfirmedAppointments,
+        count: allAppointments,
         title: 'Appointments Booked',
         icon: 'calendar',
         size: 6,
@@ -275,7 +339,7 @@ class Overview extends Component {
         color: 'primaryGreen',
       },
       {
-        count: confirmedAppointments,
+        count: confirmedAppointmentsBooked,
         title: 'Confirmed Appointments',
         icon: 'check-circle',
         size: 6,
@@ -309,6 +373,21 @@ class Overview extends Component {
 
     return (
       <Grid className={styles.intelligence}>
+      <DialogBox
+        actions={actions}
+        title="Filter Practitioners"
+        type="small"
+        active={this.state.active}
+        onEscKeyDown={this.reinitializeState}
+        onOverlayClick={this.reinitializeState}
+      >
+        <FilterPractitioners
+          filterKey="practitionersFilter"
+          practitioners={practitionerWorked}
+          selectedFilterItem={this.state.displayPractitioners}
+          handleEntityCheck={this.handleFilterClick}
+        />
+      </DialogBox>
         <Row>
           <Col className={styles.intelligence__header} xs={12}>
             <Card className={styles.intelligence__header_title}>
@@ -356,7 +435,7 @@ class Overview extends Component {
         <Loader loaded={this.state.loader} color="#FF715C">
           <Row className={styles.intelligence__body}>
             <Col xs={12} >
-              <DashboardStats data={data} data-test-id={`${notConfirmedAppointments}_appointmentsConfirmed`}/>
+              <DashboardStats data={data} data-test-id={`${allAppointments}_appointmentsConfirmed`}/>
             </Col>
             <Col xs={12} sm={6} className={styles.padding}>
               <AppointmentFilled
@@ -376,9 +455,18 @@ class Overview extends Component {
                 borderColor={colorMap.grey}
               />
             </Col>
-            <FlexGrid borderColor={colorMap.grey} columnCount="4" columnWidth={12}>
-              {realData}
-            </FlexGrid>
+            <div className={styles.background}>
+            <Button
+              onClick={this.filterFunction}
+              className={styles.filterButton}
+            >
+              Filter
+            </Button>
+
+              <FlexGrid className={styles.white} columnCount="4" columnWidth={12}>
+                {realData}
+              </FlexGrid>
+            </div>
             <Col
               className={styles.padding}
               xs={12}
@@ -461,13 +549,21 @@ function mapStateToProps({ apiRequests }) {
   const patientRevenueStats = (apiRequests.get('patientRevenueStats') ? apiRequests.get('patientRevenueStats').data : null);
   const totalRevenueStats = (apiRequests.get('totalRevenueStats') ? apiRequests.get('totalRevenueStats').data : null);
 
+  //new stuff
+  const appointmentsBooked = (apiRequests.get('appointmentsBooked') ? apiRequests.get('appointmentsBooked').data : null);
+  const practitionerWorked = (apiRequests.get('practitionerWorked') ? apiRequests.get('practitionerWorked').data : null);
+  const mostAppointments = (apiRequests.get('mostAppointments') ? apiRequests.get('mostAppointments').data : null);
+
   return {
     appointmentStats,
+    appointmentsBooked,
     appointmentStatsLastYear,
     dayStats,
     patientStats,
     patientRevenueStats,
     totalRevenueStats,
+    practitionerWorked,
+    mostAppointments,
   };
 }
 

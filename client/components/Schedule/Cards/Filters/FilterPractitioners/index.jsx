@@ -21,7 +21,13 @@ export default function FilterPractitioners(props) {
   const colorLen = colors.length;
   const colorArray = [];
 
-  let practitionersSort = practitioners.toArray().sort(SortByFirstName);
+  let practitionersSort;
+
+  if (Array.isArray(practitioners)) {
+    practitionersSort = practitioners.sort(SortByFirstName);
+  } else {
+    practitionersSort = practitioners.toArray().sort(SortByFirstName);
+  }
 
   const reset = Math.ceil((practitionersSort.length - colorLen) / colorLen);
 
@@ -31,7 +37,7 @@ export default function FilterPractitioners(props) {
     }
   }
 
-  practitionersSort = practitionersSort.map((prac, index) => Object.assign({}, prac.toJS(), {
+  practitionersSort = practitionersSort.map((prac, index) => Object.assign({}, prac.toJS ? prac.toJS() : prac, {
     color: colorArray[index],
   }));
 

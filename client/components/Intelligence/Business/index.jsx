@@ -55,6 +55,11 @@ class Business extends Component {
         id: 'businessStats',
         url: '/api/appointments/business',
         params }),
+      this.props.fetchEntitiesRequest({
+        id: 'practitionerWorked',
+        url: '/api/appointments/practitionerWorked',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
@@ -92,6 +97,11 @@ class Business extends Component {
           id: 'callStats',
           url: '/api/calls/',
           params }),
+        this.props.fetchEntitiesRequest({
+          id: 'practitionerWorked',
+          url: '/api/appointments/practitionerWorked',
+          params,
+        }),
       ])
         .then(() => {
           this.setState({
@@ -116,6 +126,11 @@ class Business extends Component {
           id: 'businessStats',
           url: '/api/appointments/business',
           params }),
+        this.props.fetchEntitiesRequest({
+          id: 'practitionerWorked',
+          url: '/api/appointments/practitionerWorked',
+          params,
+        }),
       ])
         .then(() => {
           this.setState({
@@ -132,35 +147,24 @@ class Business extends Component {
     const callStats = (this.props.callStats ? this.props.callStats.toJS() : {});
     const businessStats = (this.props.businessStats ? this.props.businessStats.toJS() : { productionEarnings: [] });
     const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toJS() : {});
-    let activePatients = 0;
+
+    const practitionerWorked = (this.props.practitionerWorked ?
+      this.props.practitionerWorked.toJS() : []);
+
+    const activePatients = appointmentStats.activePatients;
     let unfilledHours = 0;
     let filledHours = 0;
 
-    if (appointmentStats.patients) {
-      Object.keys(appointmentStats.patients).map((key) => {
-        activePatients += appointmentStats.patients[key].numAppointments;
-      });
+    for (let i = 0; i < practitionerWorked.length; i += 1) {
+      filledHours += practitionerWorked[i].booked;
+      unfilledHours += practitionerWorked[i].notFilled;
     }
 
-    if (appointmentStats.practitioner) {
-      Object.keys(appointmentStats.practitioner).map((key) => {
-        unfilledHours += appointmentStats.practitioner[key].appointmentTime / 60;
-        filledHours += appointmentStats.practitioner[key].totalTime / 60;
-      });
-    }
+    unfilledHours = unfilledHours.toFixed(0);
 
-    let serviceData = (appointmentStats.services ? Object.keys(appointmentStats.services).map((key) => {
-      return {
-        title: appointmentStats.services[key].name,
-        hours: Math.round(appointmentStats.services[key].time * 10 / 600),
-      };
-    }) : []);
+    filledHours = filledHours.toFixed(0);
 
-    unfilledHours = unfilledHours.toFixed(2);
-    filledHours = filledHours.toFixed(2);
-
-    serviceData = businessStats.productionEarnings.map(pro => {
-
+    const serviceData = businessStats.productionEarnings.map(pro => {
       return {
         title: `${pro.description} - ${pro.type}`,
         data: `${Math.floor(pro.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
@@ -219,7 +223,7 @@ class Business extends Component {
 
     const patientsData2 = [
       {
-        count: (filledHours - unfilledHours).toFixed(2),
+        count: unfilledHours,
         title: 'Unfilled Hours',
         date: moment({ year: 2017, month: 2, day: 15 }).fromNow(),
         color: 'primaryColor',
@@ -365,8 +369,11 @@ function mapStateToProps({ apiRequests }) {
   const businessStats = (apiRequests.get('businessStats') ? apiRequests.get('businessStats').data : null);
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
   const callStatsCompare = (apiRequests.get('callStatsCompare') ? apiRequests.get('callStatsCompare').data : null);
+  const practitionerWorked = (apiRequests.get('practitionerWorked') ? apiRequests.get('practitionerWorked').data : null);
+
   return {
     callStats,
+    practitionerWorked,
     businessStats,
     appointmentStats,
     callStatsCompare,
