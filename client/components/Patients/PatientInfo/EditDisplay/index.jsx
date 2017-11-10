@@ -79,6 +79,7 @@ class EditDisplay extends Component {
       patient,
     } = this.props;
 
+
     const remoteButtonProps = {
       onClick: this.reinitializeState,
       form: `Form${this.state.tabIndex + 1}`,

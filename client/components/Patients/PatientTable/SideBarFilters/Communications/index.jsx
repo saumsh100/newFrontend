@@ -60,7 +60,7 @@ export default function Communications(props) {
         </FormSection>
         <div className={styles.formHeaderInput}>Recares</div>
         <div className={styles.formSubHeader}>Sent Via Email</div>
-        <FormSection name="recallsEmail" className={styles.formContainer_row} >
+        <FormSection name="recaresEmail" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
@@ -74,7 +74,7 @@ export default function Communications(props) {
           />
         </FormSection>
         <div className={styles.formSubHeader}>Sent Via SMS</div>
-        <FormSection name="recallsSMS" className={styles.formContainer_row} >
+        <FormSection name="recaresSMS" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"
@@ -88,7 +88,7 @@ export default function Communications(props) {
           />
         </FormSection>
         <div className={styles.formSubHeader}>Sent Via Phone</div>
-        <FormSection name="recallsPhone" className={styles.formContainer_row} >
+        <FormSection name="recaresPhone" className={styles.formContainer_row} >
           <Field
             required
             component="DayPicker"

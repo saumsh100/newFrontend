@@ -71,7 +71,7 @@
 .color-white:hover { color: darken($clr-dark-grey, 5%); background-color: darken($primary-white, 5%); }
 
 .border-blue { border: 1px solid $primary-blue; color: $primary-blue; background-color: $background-color; }
-.border-blue:hover { color: white; background: $background-color }
+.border-blue:hover { color: white; background: $primary-blue }
 
 .positive { composes: color-green; }
 .negative { composes: color-red; }

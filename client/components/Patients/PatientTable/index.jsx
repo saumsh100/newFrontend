@@ -9,10 +9,11 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Grid, Row, Col} from '../../library';
+import { Grid, Row, Col } from '../../library';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
 import PatientNameColumn from './PatientNameColumn';
+import SelectPatient from './SelectPatient';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import styles from './styles.scss';
@@ -30,6 +31,7 @@ function getEntities(entities) {
 class PatientTable extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       data: [],
       limit: 15,
@@ -40,6 +42,7 @@ class PatientTable extends Component {
       search: '',
       filters: Map(),
       smartFilter: null,
+      patientIds: [],
     };
 
     this.fetchData = debounce(this.fetchData, 300);
@@ -53,6 +56,7 @@ class PatientTable extends Component {
     this.setSmartFilter = this.setSmartFilter.bind(this);
     this.clearFilters = this.clearFilters.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
+    this.handlePatientSelection = this.handlePatientSelection.bind(this);
   }
 
   componentDidMount() {
@@ -186,9 +190,9 @@ class PatientTable extends Component {
 
   setSmartFilter(filterObj) {
     if (filterObj.index > -1) {
-      this.clearFilters();
+      //this.clearFilters();
       this.fetchData({
-        filters: [],
+        filters: this.state.filters.toArray(),
         page: 0,
         limit: this.state.limit,
         sort: this.state.sorted,
@@ -198,11 +202,30 @@ class PatientTable extends Component {
       this.setState({
         smartFilter: filterObj,
         page: 0,
-        filters: Map(),
+        filters: this.state.filters,
       });
     } else {
       this.reinitializeTable();
     }
+  }
+
+  handlePatientSelection(id) {
+    const {
+      patientIds,
+    } = this.state;
+
+    let newIds = patientIds;
+
+    if (newIds.indexOf(id) > -1) {
+      newIds = newIds.filter(pId => pId !== id);
+    } else {
+      newIds.push(id);
+    }
+
+    console.log(newIds)
+    this.setState({
+      patientIds: newIds,
+    });
   }
 
   reinitializeTable() {
@@ -215,6 +238,7 @@ class PatientTable extends Component {
       search: '',
       limit: 15,
       data: [],
+      patientIds: [],
     });
 
     this.fetchData({
@@ -257,7 +281,9 @@ class PatientTable extends Component {
       });
     }
     if (removed && size - 1 === 0) {
-      this.reinitializeTable();
+      this.setState({
+        filters: Map(),
+      });
     }
   }
 
@@ -270,9 +296,23 @@ class PatientTable extends Component {
       arrayRemoveAll,
     } = this.props;
 
-    console.log(this.state.filters);
-
     const columns = [
+      {
+        Header: '',
+        Cell: row => {
+          return (
+            <SelectPatient
+              patientIds={this.state.patientIds}
+              handlePatientSelection={this.handlePatientSelection}
+              id={row.original.id}
+            />
+          );
+        },
+        filterable: false,
+        sortable: false,
+        maxWidth: 50,
+        className: styles.colBg,
+      },
       {
         Header: '#',
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{((this.state.page * this.state.limit) + props.index) + 1}</div></div>,
@@ -281,7 +321,6 @@ class PatientTable extends Component {
         maxWidth: 50,
         className: styles.colBg,
       },
-
       {
         Header: '',
         accessor: 'firstName',
@@ -403,7 +442,7 @@ class PatientTable extends Component {
         className: styles.colBg,
       },
       {
-        Header: 'Production Revenue',
+        Header: 'Production in Calendar Year',
         id: 'totalAmount',
         accessor: d => {
           return d.hasOwnProperty('totalAmount') && d.totalAmount ? `$${d.totalAmount.toFixed(2)}` : '';
@@ -428,6 +467,7 @@ class PatientTable extends Component {
               searchValue={this.state.search}
               smartFilter={this.state.smartFilter}
               setSmartFilter={this.setSmartFilter}
+              patientIds={this.state.patientIds}
             />
           </Col>
         </Row>

@@ -1,17 +1,18 @@
 @import '../../../../../ui';
 
 .tagsContainer {
+  margin-top: 8px;
   height: auto;
   display: flex;
   flex-direction: row;
   list-style: none;
-  justify-content: center;
   flex-wrap: wrap;
 }
 
 .tagBody {
   display: flex;
   background: lighten($inactive-color, 15%);
+  box-sizing: border-box;
   padding: 8px;
   margin: 5px;
   align-items: center;

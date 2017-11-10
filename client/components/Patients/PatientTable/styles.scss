@@ -55,8 +55,14 @@
 .searchBar {
   width: 300px;
 }
-.addNewButton {
+.buttonContainer {
   display: flex;
+  justify-content: space-between;
+
+  &_actions {
+    box-sizing: border-box;
+    margin-right: 10px;
+  }
 }
 .spacing {
   margin: 10px 0;

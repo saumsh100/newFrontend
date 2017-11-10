@@ -82,7 +82,7 @@ export default function SmartFilters(props) {
 
   return (
     <List className={styles.smartFilter}>
-      {smartFilters.map((filter, index) => {
+      {smartFilters.map((filter) => {
 
         let borderStyle = { };
         if (smartFilter && filter.label === smartFilter.label) {

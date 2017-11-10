@@ -11,8 +11,8 @@ export default function TopDisplay(props) {
     patientStats,
   } = props;
 
+
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
-  console.log(patientStats)
 
   /* const color = '#' + Math.random().toString(16).slice(2, 8);
 

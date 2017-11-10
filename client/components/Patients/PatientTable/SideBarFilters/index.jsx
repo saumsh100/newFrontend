@@ -138,7 +138,7 @@ class SideBarFilters extends Component {
           intensive: false,
         });
       }
-      if (key === 'location' && values[key].length === 1) {
+      if (key === 'city' && values[key].length === 1) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 2,
@@ -147,7 +147,7 @@ class SideBarFilters extends Component {
           data: values[key],
           key,
           tag: 'City',
-          intensive: true,
+          intensive: false,
         });
       }
     });
@@ -169,7 +169,7 @@ class SideBarFilters extends Component {
 
     let setFilter = 0;
     const batchFilters = [];
-    
+
     keys = keys.filter((key) => {
       if (values[key] && values[key].length !== 0) {
         return key;
@@ -183,7 +183,7 @@ class SideBarFilters extends Component {
           indexFunc: 3,
           formName: 'appointments',
           formSection: key,
-          data: values.firstAppointment,
+          data: values[key],
           key: 'firstApptDate',
           tag: 'First Appointment',
           intensive: false,
@@ -193,7 +193,7 @@ class SideBarFilters extends Component {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 4,
-          data: values.lastAppointment,
+          data: values[key],
           formName: 'appointments',
           formSection: key,
           key: 'lastApptDate',
@@ -207,7 +207,7 @@ class SideBarFilters extends Component {
           indexFunc: 5,
           formName: 'appointments',
           formSection: key,
-          data: values.appointmentsCount,
+          data: values[key],
           tag: 'Number of Appointments',
           intensive: true,
         });
@@ -218,7 +218,7 @@ class SideBarFilters extends Component {
           indexFunc: 6,
           formName: 'appointments',
           formSection: key,
-          data: values.production,
+          data: values[key],
           tag: 'Production',
           intensive: true,
         });
@@ -229,7 +229,7 @@ class SideBarFilters extends Component {
           indexFunc: 7,
           formName: 'appointments',
           formSection: key,
-          data: values.onlineAppointments,
+          data: values[key],
           tag: 'Online Appointments',
           intensive: true,
         });
@@ -257,10 +257,9 @@ class SideBarFilters extends Component {
     });
     keys.forEach((key) => {
       if (key && values[key].length === 1) {
-        console.log('wpppp')
         const pracObj = {
           indexFunc: 8,
-          data: values.practitioners,
+          data: values[key],
           formName: 'practitioners',
           formSection: 'practitioners',
           tag: 'Practitioners',
@@ -293,7 +292,7 @@ class SideBarFilters extends Component {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 9,
-          data: values.remindersEmail,
+          data: values[key],
           tag: 'Reminders Email',
           key: 'phone',
         });
@@ -303,7 +302,7 @@ class SideBarFilters extends Component {
 
         batchFilters.push({
           indexFunc: 10,
-          data: values.remindersSMS,
+          data: values[key],
           tag: 'Reminders SMS',
           key: 'sms',
         });
@@ -312,35 +311,35 @@ class SideBarFilters extends Component {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 11,
-          data: values.remindersPhone,
+          data: values[key],
           tag: 'Reminders Phone',
           key: 'phone',
         });
       }
-      if (key === 'recallsEmail' && values[key].length === 2) {
+      if (key === 'recaresEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 12,
-          data: values.recallsEmail,
-          tag: 'Recalls Email',
+          data: values[key],
+          tag: 'Recares Email',
           key: 'phone',
         });
       }
-      if (key === 'recallsSMS' && values[key].length === 2) {
+      if (key === 'recaresSMS' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 13,
-          data: values.recallsSMS,
-          tag: 'Recalls SMS',
+          data: values[key],
+          tag: 'Recares SMS',
           key: 'sms',
         });
       }
-      if (key === 'recallsPhone' && values[key].length === 2) {
+      if (key === 'recaresPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 14,
-          data: values.recallsPhone,
-          tag: 'Recalls Phone',
+          data: values[key],
+          tag: 'Recares Phone',
           key: 'phone',
         });
       }
@@ -348,7 +347,7 @@ class SideBarFilters extends Component {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 15,
-          data: values.lastReminderSent,
+          data: values[key],
           tag: 'Last Reminder Sent',
           intensive: true,
         });
@@ -357,7 +356,7 @@ class SideBarFilters extends Component {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 16,
-          data: values.lastRecareSent,
+          data: values[key],
           tag: 'Last Recare Sent',
           intensive: true,
         });
@@ -366,7 +365,7 @@ class SideBarFilters extends Component {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 17,
-          data: values.reviews,
+          data: values[key],
           tag: 'Reviews',
           intensive: true,
         });

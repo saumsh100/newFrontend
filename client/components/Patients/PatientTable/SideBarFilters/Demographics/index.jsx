@@ -60,11 +60,11 @@ export default function Demographics(props) {
         </FormSection>
 
         <div className={styles.formHeader}> Location </div>
-        <FormSection name="city"  >
+        <FormSection name="city" >
           <div className={styles.formContainer_row}>
           <Field
             component="DropdownSelect"
-            name="1"
+            name="0"
             options={optionsCity}
             className={styles.ddSelect}
           />

@@ -3,8 +3,8 @@ import { Button, DialogBox, Input, DropdownMenu, Icon } from '../../../library';
 import NewPatientForm from './NewPatientForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import SmartFilters from './SmartFilters';
+import Actions from './Actions';
 import styles from '../styles.scss';
-import FilterTags from './SmartFilters/FilterTags';
 
 class HeaderSection extends Component {
   constructor(props) {
@@ -62,6 +62,7 @@ class HeaderSection extends Component {
       searchValue,
       smartFilter,
       setSmartFilter,
+      patientIds,
     } = this.props;
 
     const formName = 'newUser';
@@ -82,9 +83,19 @@ class HeaderSection extends Component {
       </div>
     );
 
+    const actionsMenu = props => (
+      <div {...props} className={styles.buttonContainer_actions}>
+        <Button
+          border="blue"
+        >
+          Actions
+        </Button>
+      </div>
+    );
+
     return (
       <div className={styles.header}>
-        <div style={{display: 'flex'}}>
+        <div style={{ display: 'flex' }}>
         <div>
           <DropdownMenu
             labelComponent={filterMenu}
@@ -109,7 +120,14 @@ class HeaderSection extends Component {
             value={searchValue}
           /> */}
         </div>
-        <div className={styles.addNewButton}>
+        <div className={styles.buttonContainer}>
+          <DropdownMenu
+            labelComponent={actionsMenu}
+          >
+            <Actions
+              patientIds={patientIds}
+            />
+          </DropdownMenu>
           <Button
             onClick={() => this.setActive()}
             border="blue"
