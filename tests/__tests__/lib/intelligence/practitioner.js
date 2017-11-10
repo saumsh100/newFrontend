@@ -199,7 +199,7 @@ describe('Intelligence - Practitioner', () => {
   describe('Practitioner', () => {
     describe('#recurringTimeOffsFilter', () => {
       test('convert all timeoffs (including recurring time offs) to regular time offs', async () => {
-        const body = await recurringTimeOffsFilter(timeOffs, new Date(2017, 10, 1), new Date(2017, 10, 8));
+        const body = await recurringTimeOffsFilter(timeOffs, new Date(2017, 10, 1).toISOString(), new Date(2017, 10, 8).toISOString());
         expect(body).toMatchSnapshot();
       });
 
@@ -207,24 +207,24 @@ describe('Intelligence - Practitioner', () => {
 
     describe('#practitionersTimeOffHours', () => {
       test('Calculate amount of time offs in hours', async () => {
-        const body = await practitionersTimeOffHours(schedule, timeOffsPostProcess, new Date(2017, 10, 1), new Date(2017, 10, 30));
+        const body = await practitionersTimeOffHours(schedule, timeOffsPostProcess, new Date(2017, 10, 1).toISOString(), new Date(2017, 10, 30).toISOString());
         expect(body).toBe(30);
       });
     });
 
     describe('#practitionersTotalHours', () => {
       test('practitionersTotalHours - no repeat schedule', async () => {
-        const body = await practitionersTotalHours(schedule, new Date(2017, 10, 1), new Date(2017, 11, 5));
+        const body = await practitionersTotalHours(schedule, new Date(2017, 10, 1).toISOString(), new Date(2017, 11, 5).toISOString());
         expect(Math.round(body)).toBe(296);
       });
 
       test('practitionersTotalHours - repeat schedule - with extra days', async () => {
-        const body = await practitionersTotalHours(scheduleRepeat, new Date(2017, 10, 1), new Date(2017, 11, 12));
+        const body = await practitionersTotalHours(scheduleRepeat, new Date(2017, 10, 1).toISOString(), new Date(2017, 11, 12).toISOString());
         expect(Math.round(body)).toBe(288);
       });
 
       test('practitionersTotalHours - repeat schedule', async () => {
-        const body = await practitionersTotalHours(scheduleRepeat, new Date(2017, 10, 1), new Date(2017, 11, 13));
+        const body = await practitionersTotalHours(scheduleRepeat, new Date(2017, 10, 1).toISOString(), new Date(2017, 11, 13).toISOString());
         expect(Math.round(body)).toBe(303);
       });
     });
