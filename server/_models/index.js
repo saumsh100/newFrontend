@@ -57,6 +57,7 @@ models.push((require('./Chair').default(sequelize, Sequelize)));
 models.push((require('./Chat').default(sequelize, Sequelize)));
 models.push((require('./Configuration').default(sequelize, Sequelize)));
 models.push((require('./ConnectorVersion').default(sequelize, Sequelize)));
+models.push((require('./Correspondence').default(sequelize, Sequelize)));
 models.push((require('./DeliveredProcedure').default(sequelize, Sequelize)));
 models.push((require('./Enterprise').default(sequelize, Sequelize)));
 models.push((require('./Family').default(sequelize, Sequelize)));
