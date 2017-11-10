@@ -361,6 +361,7 @@ Business.propTypes = {
   callStats: PropTypes.object,
   businessStats: PropTypes.object,
   appointmentStats: PropTypes.object,
+  practitionerWorked: PropTypes.object,
   fetchEntitiesRequest: PropTypes.func,
 }
 

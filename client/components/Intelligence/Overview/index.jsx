@@ -539,6 +539,9 @@ Overview.propTypes = {
   patientStats: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,
+  practitionerWorked: PropTypes.object,
+  mostAppointments: PropTypes.object,
+  appointmentsBooked: PropTypes.object,
 };
 
 function mapStateToProps({ apiRequests }) {
