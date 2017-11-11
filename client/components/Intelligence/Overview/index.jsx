@@ -24,6 +24,7 @@ import WebsiteTrafficSources from './Cards/WebsiteTrafficSources';
 import styles from './styles.scss';
 import { SortByFirstName } from '../../library/util/SortEntities';
 import nFormatter from '../nFormatter';
+import * as Actions from '../../../actions/intelligence';
 
 
 class Overview extends Component {
@@ -31,8 +32,8 @@ class Overview extends Component {
     super(props);
 
     this.state = {
-      endDate: moment(new Date()),
-      startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      endDate: this.props.endDate ? this.props.endDate : moment(new Date()),
+      startDate: this.props.startDate ? this.props.startDate : moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       active: false,
       loader: false,
       displayPractitioners: [],
@@ -48,9 +49,12 @@ class Overview extends Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
+    const startDate = this.props.startDate ? this.props.startDate._d : this.state.startDate._d;
+    const endDate = this.props.endDate ? this.props.endDate._d : this.state.endDate._d;
+
     const params = {
-      startDate: this.state.startDate._d,
-      endDate: this.state.endDate._d,
+      startDate,
+      endDate,
       accountId: decodedToken.activeAccountId,
     };
 
@@ -105,6 +109,8 @@ class Overview extends Component {
       .then((data) => {
         const displayPractitioners = data[0].map(p => p.id);
         this.setState({
+          startDate: moment(startDate),
+          endDate: moment(endDate),
           loader: true,
           displayPractitioners,
         });
@@ -181,6 +187,10 @@ class Overview extends Component {
         params,
       }),
     ]).then((data) => {
+      this.props.setQueryDates({
+        startDate: moment(values.startDate),
+        endDate: moment(values.endDate),
+      });
       const displayPractitioners = data[0].map(p => p.id);
       const newState = {
         startDate: moment(values.startDate),
@@ -354,10 +364,7 @@ class Overview extends Component {
     dayStats = (dayStats.days ? dayStats.days.toArray() : new Array(6).fill(0));
 
 
-    const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button },
-      { label: 'Save', onClick: this.submit, component: RemoteSubmitButton, props: { form: 'dates' } },
-    ];
+    const actions = [];
 
     const initialValues = {
       endDate: this.state.endDate._d,
@@ -537,14 +544,19 @@ Overview.propTypes = {
   patientRevenueStats: PropTypes.object,
   totalRevenueStats: PropTypes.object,
   patientStats: PropTypes.func,
+  setQueryDates: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   location: PropTypes.object,
   practitionerWorked: PropTypes.object,
   mostAppointments: PropTypes.object,
   appointmentsBooked: PropTypes.object,
+  endDate: PropTypes.object,
+  startDate: PropTypes.object,
 };
 
-function mapStateToProps({ apiRequests }) {
+function mapStateToProps({ apiRequests, intelligence }) {
+  const startDate = intelligence.toJS().startDate;
+  const endDate = intelligence.toJS().endDate;
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
   const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
   const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
@@ -564,6 +576,8 @@ function mapStateToProps({ apiRequests }) {
     dayStats,
     patientStats,
     patientRevenueStats,
+    endDate,
+    startDate,
     totalRevenueStats,
     practitionerWorked,
     mostAppointments,
@@ -574,6 +588,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     fetchEntitiesRequest,
+    setQueryDates: Actions.setQueryDates,
   }, dispatch);
 }
 

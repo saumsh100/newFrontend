@@ -109,26 +109,16 @@ export function mostAppointments(startDate, endDate, accountId) {
 }
 
 /**
- * get's the number of hygien apps in an account for a given startDate and endDate and practitioner
+ * get's the number of New Patient apps in an account for a given startDate and endDate and practitioner
  * @param  {[date]} startDate
  * @param  {[date]} endDate
  * @param  {[uuid]} accountId
  * @param  {[uuid]} practitionerId
- * @return {[object]} a sql object with field appsHygienist and result
+ * @return {[object]} with pracId as key and number of new Patients as value
  */
-export function appsNewPatient(startDate, endDate, accountId, practitionerId) {
-  return Appointment.findAll({
+export async function appsNewPatient(startDate, endDate, accountId, practitionerId) {
+  const apps = await Appointment.findAll({
     include: [
-      {
-        model: Practitioner,
-        as: 'practitioner',
-        duplicating: false,
-        required: true,
-        attributes: [],
-        where: {
-          id: practitionerId,
-        },
-      },
       {
         model: Patient,
         as: 'patient',
@@ -145,6 +135,7 @@ export function appsNewPatient(startDate, endDate, accountId, practitionerId) {
     ],
     where: {
       accountId,
+      practitionerId,
       isCancelled: {
         $ne: true,
       },
@@ -164,11 +155,23 @@ export function appsNewPatient(startDate, endDate, accountId, practitionerId) {
       ],
     },
     attributes: [
+      'practitionerId',
       [sequelize.fn('COUNT', sequelize.col('patient.id')), 'appsNewPatient'],
     ],
-    group: ['patient.id'],
+    group: ['practitionerId', 'patient.id'],
     raw: true,
   });
+  const returnValue = {};
+
+  for (let i = 0; i < apps.length; i += 1) {
+    if (!returnValue[apps[i].practitionerId]) {
+      returnValue[apps[i].practitionerId] = 1;
+    } else {
+      returnValue[apps[i].practitionerId] += 1;
+    }
+  }
+
+  return returnValue;
 }
 
 /**
@@ -281,15 +284,21 @@ export async function totalAppointmentHoursPractitioner(startDate, endDate, prac
       ],
     },
     attributes: [
+      'practitionerId',
       [sequelize.fn('SUM', sequelize.literal('EXTRACT(EPOCH FROM ("Appointment"."endDate" - "Appointment"."startDate"))')), 'totalAppointmentSeconds'],
     ],
     group: ['practitionerId'],
     raw: true,
   });
 
-  total = total[0] ? total[0].totalAppointmentSeconds : 0;
+  total = total.map((p) => {
+    return {
+      practitionerId: p.practitionerId,
+      totalAppointmentHours: p.totalAppointmentSeconds / (60 * 60),
+    };
+  });
 
-  return total / (60 * 60);
+  return total;
 }
 
 export async function appsCancelledReplaced(startDate, endDate, practitionerId) {

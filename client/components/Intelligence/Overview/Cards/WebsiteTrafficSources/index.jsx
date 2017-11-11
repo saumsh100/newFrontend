@@ -34,7 +34,11 @@ export default function WebsiteTrafficSources(props) {
     maintainAspectRatio: false,
     scales: {
       yAxes: [{
-        ticks,
+        ticks: {
+          beginAtZero: true,
+          min: 0,
+          ...ticks,
+        },
         gridLines: {
           beginAtZero: true,
           drawTicks: false,

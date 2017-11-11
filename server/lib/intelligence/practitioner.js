@@ -159,7 +159,6 @@ export async function practitionersAll(startDate, endDate, accountId) {
 
   return practitioners.map(p => {
     const prac = p.get({ plain: true });
-
     prac.recurringTimeOffs = recurringTimeOffsFilter(prac.recurringTimeOffs, startDate, endDate);
 
     if (prac.isCustomSchedule) {

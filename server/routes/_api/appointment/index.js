@@ -340,40 +340,81 @@ appointmentsRouter.get('/practitionerWorked', async (req, res, next) => {
   const end = moment(endDate)._d;
 
   try {
-    const practitionerWorked = await practitionersTimeOffs(start, end, accountId);
+    let activePractitioners = await Practitioner.findAll({
+      where: {
+        accountId,
+        isActive: true,
+      },
+    });
 
-    const practitioners = [];
+    activePractitioners = activePractitioners.map(p => p.id);
 
-    for (let i = 0; i < practitionerWorked.length; i += 1) {
-      const prac = practitionerWorked[i];
-      let notFilled = prac.hours - prac.timeOffHours;
-      if (notFilled > 0) {
-        const booked = await totalAppointmentHoursPractitioner(startDate, endDate, prac.id);
+    const promise1 = practitionersTimeOffs(start, end, accountId);
 
-        let newPatientsTotal = await appsNewPatient(startDate, endDate, accountId, prac.id);
+    const totalAppsPromise = totalAppointmentHoursPractitioner(startDate, endDate, activePractitioners);
 
-        newPatientsTotal = newPatientsTotal.length;
+    const newPatientsTotalPromise = appsNewPatient(startDate, endDate, accountId, activePractitioners);
 
-        notFilled -= booked;
+    const promise2 = Promise.all([totalAppsPromise, newPatientsTotalPromise])
+      .then((values) => {
+        const practitioners = {};
 
-        if (notFilled < 0) {
-          notFilled = 0;
+        for (let i = 0; i < activePractitioners.length; i += 1) {
+          const pracId = activePractitioners[i];
+
+          practitioners[pracId] = {
+            booked: 0,
+            newPatientsTotal: 0,
+          };
         }
 
-        practitioners.push({
-          id: prac.id,
-          newPatientsTotal,
-          notFilled: Math.round(notFilled),
-          booked: Math.round(booked),
-          firstName: prac.firstName,
-          lastName: prac.lastName,
-          avatarUrl: prac.avatarUrl,
-          type: prac.type,
-        });
-      }
-    }
+        for (let i = 0; i < values[0].length; i += 1) {
+          const totalAppointment = values[0][i];
 
-    return res.send(practitioners);
+          practitioners[totalAppointment.practitionerId] = {
+            booked: totalAppointment.totalAppointmentHours,
+            newPatientsTotal: values[1][totalAppointment.practitionerId] || 0,
+          };
+        }
+        return practitioners;
+      });
+
+    return Promise.all([promise1, promise2])
+      .then((values) => {
+        const practitionerWorked = values[0];
+        const practitionerStats = values[1];
+        const practitioners = [];
+
+        for (let i = 0; i < practitionerWorked.length; i += 1) {
+          const prac = practitionerWorked[i];
+
+          let notFilled = prac.hours - prac.timeOffHours;
+
+          if (notFilled > 0) {
+            const booked = practitionerStats[prac.id].booked;
+            const newPatientsTotal = practitionerStats[prac.id].newPatientsTotal;
+
+            notFilled -= booked;
+
+            if (notFilled < 0) {
+              notFilled = 0;
+            }
+
+            practitioners.push({
+              id: prac.id,
+              newPatientsTotal,
+              notFilled: Math.round(notFilled),
+              booked: Math.round(booked),
+              firstName: prac.firstName,
+              lastName: prac.lastName,
+              avatarUrl: prac.avatarUrl,
+              type: prac.type,
+            });
+          }
+        }
+        return res.send(practitioners);
+      })
+      .catch(next);
   } catch (e) {
     return next(e);
   }

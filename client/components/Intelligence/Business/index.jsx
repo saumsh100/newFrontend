@@ -14,14 +14,15 @@ import BusinessStats from './Cards/BusinessStats';
 import Patients from './Cards/Patients';
 import styles from './styles.scss';
 import stylesOverview from '../Overview/styles.scss';
+import * as Actions from '../../../actions/intelligence';
 
 class Business extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      endDate: moment(new Date()),
-      startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      endDate: this.props.endDate ? this.props.endDate : moment(new Date()),
+      startDate: this.props.startDate ? this.props.startDate : moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       compareEndDate: moment(new Date()),
       compareStartDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       compare: false,
@@ -35,9 +36,12 @@ class Business extends Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
+    const startDate = this.props.startDate ? this.props.startDate._d : this.state.startDate._d;
+    const endDate = this.props.endDate ? this.props.endDate._d : this.state.endDate._d;
+
     const params = {
-      startDate: this.state.startDate._d,
-      endDate: this.state.endDate._d,
+      startDate,
+      endDate,
       accountId: decodedToken.activeAccountId,
     };
 
@@ -63,6 +67,8 @@ class Business extends Component {
     ])
       .then(() => {
         this.setState({
+          startDate: moment(startDate),
+          endDate: moment(endDate),
           loader: true,
         });
       });
@@ -133,6 +139,10 @@ class Business extends Component {
         }),
       ])
         .then(() => {
+          this.props.setQueryDates({
+            startDate: moment(values.startDate),
+            endDate: moment(values.endDate),
+          });
           this.setState({
             startDate: moment(values.startDate),
             endDate: moment(values.endDate),
@@ -361,11 +371,15 @@ Business.propTypes = {
   callStats: PropTypes.object,
   businessStats: PropTypes.object,
   appointmentStats: PropTypes.object,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
   practitionerWorked: PropTypes.object,
   fetchEntitiesRequest: PropTypes.func,
 }
 
-function mapStateToProps({ apiRequests }) {
+function mapStateToProps({ apiRequests, intelligence }) {
+  const startDate = intelligence.toJS().startDate;
+  const endDate = intelligence.toJS().endDate;
   const callStats = (apiRequests.get('callStats') ? apiRequests.get('callStats').data : null);
   const businessStats = (apiRequests.get('businessStats') ? apiRequests.get('businessStats').data : null);
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
@@ -376,6 +390,8 @@ function mapStateToProps({ apiRequests }) {
     callStats,
     practitionerWorked,
     businessStats,
+    endDate,
+    startDate,
     appointmentStats,
     callStatsCompare,
   };
@@ -384,6 +400,7 @@ function mapStateToProps({ apiRequests }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntitiesRequest,
+    setQueryDates: Actions.setQueryDates,
   }, dispatch);
 }
 

@@ -47,7 +47,6 @@ class AppointmentsBooked extends Component {
         xAxes: [{
           ticks,
           gridLines: {
-            offsetGridLines: true,
             display: true,
             drawTicks: false,
             drawOnChartArea: false,
