@@ -17,6 +17,16 @@
     padding-left: 20px;
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   }
+
+  &_clearText {
+    margin-left: auto;
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    color: darken($primary-grey, 10%);
+    cursor: pointer;
+     &:hover {
+       color: darken($primary-grey, 30%);
+     }
+  }
 }
 
 .filtersContainer {

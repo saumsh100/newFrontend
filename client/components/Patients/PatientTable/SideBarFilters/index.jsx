@@ -23,6 +23,7 @@ class SideBarFilters extends Component {
     this.handleCommunications = this.handleCommunications.bind(this);
     this.removeTag = this.removeTag.bind(this);
     this.addTags = this.addTags.bind(this);
+    this.clearTags = this.clearTags.bind(this);
   }
 
   componentWillUpdate() {
@@ -37,7 +38,7 @@ class SideBarFilters extends Component {
     if (!filters.size && !filters.length && filterTags.size) {
       this.setState({
         filterTags: Map(),
-        });
+      });
     }
   }
 
@@ -46,12 +47,15 @@ class SideBarFilters extends Component {
       openFilters,
     } = this.state;
 
-    const filterState = openFilters[index];
-    const newFiltersState = openFilters;
-    newFiltersState[index] = !filterState;
+    const newState = openFilters.map((filter, filterIndex) => {
+      if (filterIndex !== index) {
+        return false;
+      }
+      return !filter;
+    });
 
     this.setState({
-      openFilters: newFiltersState,
+      openFilters: newState,
     });
   }
 
@@ -95,6 +99,13 @@ class SideBarFilters extends Component {
         filterTags: Map(),
       });
     }
+  }
+
+  clearTags() {
+    this.props.clearFilters()
+    this.setState({
+      filterTags: Map(),
+    });
   }
 
   handleDemographics(values) {
@@ -384,6 +395,7 @@ class SideBarFilters extends Component {
   render() {
     const {
       practitioners,
+      clearFilters,
     } = this.props;
 
     const {
@@ -400,6 +412,15 @@ class SideBarFilters extends Component {
         <div className={styles.header}>
           <div className={styles.header_icon}> <Icon icon="sliders" /> </div>
           <div className={styles.header_text}> Filters </div>
+          <div
+            className={styles.header_clearText}
+            onClick={(e) => {
+              e.stopPropagation();
+              this.clearTags();
+            }}
+          >
+            Clear All
+          </div>
         </div>
 
         <FilterTags

@@ -598,6 +598,7 @@ class PatientTable extends Component {
               arrayRemoveAll={arrayRemoveAll}
               removeFilter={this.removeFilter}
               filters={this.state.filters}
+              clearFilters={this.clearFilters}
             />
           </Col>
         </Row>
