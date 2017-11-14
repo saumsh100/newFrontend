@@ -87,7 +87,7 @@ export default function SmartFilters(props) {
         let borderStyle = { };
         if (smartFilter && filter.label === smartFilter.label) {
           borderStyle = {
-            borderLeft: '5px solid #FF715A',
+            borderLeft: '3px solid #FF715A',
           };
         }
 

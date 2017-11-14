@@ -235,7 +235,6 @@ class PatientTable extends Component {
     this.setState({
       smartFilter: null,
       page: 0,
-      filters: Map(),
       search: '',
       limit: 15,
       data: [],
@@ -255,6 +254,20 @@ class PatientTable extends Component {
 
     const filtersArray = ['demographics', 'appointments', 'practitioners', 'communications'];
     filtersArray.forEach(filter => destroy(filter));
+
+    this.fetchData({
+      smartFilter: this.state.smartFilter,
+      page: this.state.page,
+      search: '',
+      limit: this.state.limit,
+      filters: [],
+      data: [],
+      patientIds: [],
+    });
+
+    this.setState({
+      filters: Map(),
+    });
   }
 
   removeFilter(index) {

@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Patient, Appointment, DeliveredProcedure, sequelize, PatientUser, Request } from '../../_models';
-import { ManualLimitOffset } from './helpers';
+import { ManualLimitOffset, getIds } from './helpers';
 
 export async function FirstLastAppointmentFilter({ data, key }, filterIds, query, accountId) {
   try {
