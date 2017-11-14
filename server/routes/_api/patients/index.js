@@ -609,15 +609,13 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
   const phoneNumber = req.patient.mobilePhoneNumber;
 
   return req.patient.update(req.body)
-    .then((patient) => {
+    .then(async (patient) => {
       if (phoneNumber !== patient.mobilePhoneNumber) {
-        Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } })
-          .then((chat) => {
-            if (!chat[0]) {
-              return;
-            }
-            chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
-          });
+        const chat = Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } });
+
+        if (!chat[0]) {
+          chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
+        }
       }
       const normalized = format(req, res, 'patient', patient.dataValues);
       res.status(201).send(normalized);
