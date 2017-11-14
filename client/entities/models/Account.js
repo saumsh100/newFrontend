@@ -44,6 +44,7 @@ const AccountSchema = {
   googlePlaceId: null,
   facebookUrl: null,
   vendastaMsId: null,
+  sendRequestEmail: null,
   vendastaAccountId: null,
   vendastaSrId: null,
   callrailId: null,

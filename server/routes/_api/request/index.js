@@ -5,13 +5,15 @@ import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { SentReminder, PatientUser, Request, Service, Account } from '../../../_models';
+import { Permission, PatientUser, Request, User, Account } from '../../../_models';
 
 import {
   sendAppointmentRequested,
   sendAppointmentRequestConfirmed,
   sendAppointmentRequestRejected,
+  sendAppointmentRequestedClinic,
 } from '../../../lib/mail';
+
 const { namespaces } = require('../../../config/globals');
 
 
@@ -45,9 +47,63 @@ requestsRouter.post('/', (req, res, next) => {
     .then(async () => {
       const patientUser = await PatientUser.findById(patientUserId);
       const account = await Account.findById(accountId);
-      const { email, firstName } = patientUser;
-      const { name } = account;
+      const users = await User.findAll({
+        raw: true,
+        nest: true,
+        include: [{
+          model: Permission,
+          as: 'permission',
+          where: {
+            role: {
+              $ne: 'SUPERADMIN',
+            },
+          },
+          required: true,
+        }],
+        where: {
+          activeAccountId: accountId,
+        },
+      });
+      const { email, firstName, lastName } = patientUser;
+      const { name, sendRequestEmail } = account;
       // Send Email
+
+      if (sendRequestEmail) {
+        for (let i = 0; i < users.length; i += 1) {
+          const emailDomain = users[i].username.split('@')[1];
+          if (!/carecru/i.test(emailDomain)) {
+            sendAppointmentRequestedClinic({
+              toEmail: users[i].username,
+              mergeVars: [
+                {
+                  name: 'PATIENT_FIRSTNAME',
+                  content: firstName,
+                },
+                {
+                  name: 'PATIENT_LASTNAME',
+                  content: lastName,
+                },
+                {
+                  name: 'USER_NAME',
+                  content: users[i].firstName,
+                },
+                {
+                  name: 'ACCOUNT_WEBSITE',
+                  content: 'https://carecru.io/',
+                },
+                {
+                  name: 'APPOINTMENT_DATE',
+                  content: moment(req.body.startDate).format('MMMM Do YYYY'),
+                },
+                {
+                  name: 'APPOINTMENT_TIME',
+                  content: moment(req.body.startDate).format('h:mm a'),
+                },
+              ],
+            });
+          }
+        }
+      }
       sendAppointmentRequested({
         accountId: req.accountId,
         toEmail: email,
