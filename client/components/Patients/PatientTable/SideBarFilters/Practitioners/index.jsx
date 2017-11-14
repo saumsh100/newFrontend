@@ -27,6 +27,7 @@ export default function Practitioners(props) {
       form="practitioners"
       onChange={handlePractitioners}
       ignoreSaveButton
+      destroyOnUnmount={false}
     >
       <div className={styles.formContainer}>
         <FormSection name="practitioners">

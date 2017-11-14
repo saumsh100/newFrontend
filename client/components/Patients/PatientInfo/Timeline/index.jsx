@@ -46,8 +46,9 @@ class Timeline extends Component {
 
     const dateObj = {};
 
-    events.map((ev) => {
-      const key = moment(ev.get('metaData').createdAt).format('MMMM Do YYYY');
+    events.forEach((ev) => {
+      const meta = ev.get('metaData');
+      const key = moment(meta.createdAt).format('MMMM Do YYYY');
 
       if (dateObj.hasOwnProperty(key)) {
         dateObj[key].push(ev);

@@ -39,7 +39,7 @@ export default function Demographics(props) {
       form="demographics"
       onChange={handleDemographics}
       ignoreSaveButton
-      keepDirtyOnReinitialize
+      destroyOnUnmount={false}
     >
       <div className={styles.formContainer}>
 
@@ -51,7 +51,6 @@ export default function Demographics(props) {
             validate={[notNegative]}
             normalize={parseNum}
             data-test-id="duration"
-            icon="birthday-cake"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
@@ -60,7 +59,6 @@ export default function Demographics(props) {
             validate={[notNegative]}
             normalize={parseNum}
             data-test-id="duration"
-            icon="birthday-cake"
           />
         </FormSection>
 

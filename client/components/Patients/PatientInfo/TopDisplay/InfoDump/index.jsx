@@ -11,7 +11,7 @@ export default function InfoDump(props) {
     component,
   } = props;
 
-  let classes = classNames(className, styles.container);
+  const classes = classNames(className, styles.container);
 
   let dataClass = styles.data;
 

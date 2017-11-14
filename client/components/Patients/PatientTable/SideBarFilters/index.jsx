@@ -185,7 +185,7 @@ class SideBarFilters extends Component {
           formSection: key,
           data: values[key],
           key: 'firstApptDate',
-          tag: 'First Appointment',
+          tag: 'First Appt',
           intensive: false,
         });
       }
@@ -197,7 +197,7 @@ class SideBarFilters extends Component {
           formName: 'appointments',
           formSection: key,
           key: 'lastApptDate',
-          tag: 'Last Appointment',
+          tag: 'Last Appt',
           intensive: false,
         });
       }
@@ -208,7 +208,7 @@ class SideBarFilters extends Component {
           formName: 'appointments',
           formSection: key,
           data: values[key],
-          tag: 'Number of Appointments',
+          tag: 'No of Appts',
           intensive: true,
         });
       }
@@ -230,7 +230,7 @@ class SideBarFilters extends Component {
           formName: 'appointments',
           formSection: key,
           data: values[key],
-          tag: 'Online Appointments',
+          tag: 'Online Appts',
           intensive: true,
         });
       }

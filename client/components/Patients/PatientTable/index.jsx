@@ -561,6 +561,15 @@ class PatientTable extends Component {
                   },
                 };
               }}
+              getTheadThProps={() => {
+                return {
+                  style: {
+                    background: 'white',
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                  },
+                };
+              }}
               getTfootThProps={() => {
                 return {
                   style: {

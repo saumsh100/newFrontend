@@ -15,6 +15,7 @@ export default function Appointments(props) {
       form="appointments"
       onChange={handleAppointments}
       ignoreSaveButton
+      destroyOnUnmount={false}
     >
       <div className={styles.formContainer}>
         <div className={styles.formHeaderInput}>First Appointment</div>

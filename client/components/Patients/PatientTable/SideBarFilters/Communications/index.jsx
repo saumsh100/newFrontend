@@ -13,6 +13,7 @@ export default function Communications(props) {
       form="communications"
       onChange={handleCommunications}
       ignoreSaveButton
+      destroyOnUnmount={false}
     >
       <div className={styles.formContainer}>
         <div className={styles.formHeaderInput}>Reminders</div>
