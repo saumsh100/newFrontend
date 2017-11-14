@@ -1,7 +1,9 @@
 
 import React, { PropTypes } from 'react';
 import { Form, Field, FormSection } from '../../../../library';
+import { parseNum, notNegative } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
+
 
 export default function Appointments(props) {
   const {
@@ -43,57 +45,53 @@ export default function Appointments(props) {
             name="1"
           />
         </FormSection>
+        <div className={styles.formHeader}> Production </div>
+        <FormSection name="production" className={styles.formContainer_row} >
+          <Field
+            name="0"
+            type="number"
+            icon="dollar"
+            validate={[notNegative]}
+            normalize={parseNum}
+            data-test-id="duration"
+          />
+          <span className={styles.formContainer_middleText}> to </span>
+          <Field
+            name="1"
+            type="number"
+            icon="dollar"
+            validate={[notNegative]}
+            normalize={parseNum}
+            data-test-id="duration"
+          />
+        </FormSection>
         <div className={styles.formHeader}>Number of Appointments </div>
         <FormSection name="appointmentsCount" className={styles.formContainer_row} >
           <Field
             component="DropdownSelect"
             name="0"
             options={[{
-              label: 'Greater than',
-              value: '>',
+              label: 'Greater Than',
+              value: '>=',
+            },{
+              label: 'Less Than',
+              value: '<=',
+            }, {
+              label: 'Equal To',
+              value: '=',
             }]}
+            className={styles.ddSelect}
           />
-          <span className={styles.formContainer_middleText}>
-            <Field
-              component="DropdownSelect"
-              name="1"
-              options={[{
-                label: '10',
-                value: '10',
-              }]}
-              className={styles.ddSelect}
-            />
+          <span className={styles.formContainer_middleText}> &nbsp; </span>
+          <span className={styles.formContainer_numberInput}>
+           <Field
+             name="1"
+             type="number"
+             validate={[notNegative]}
+             normalize={parseNum}
+             data-test-id="duration"
+           />
           </span>
-          <Field
-            component="DropdownSelect"
-            name="2"
-            options={[{
-              label: 'All Time',
-              value: 'allTime',
-            }]}
-            className={styles.ddSelect}
-          />
-        </FormSection>
-        <div className={styles.formHeader}> Production </div>
-        <FormSection name="production" className={styles.formContainer_row} >
-          <Field
-            component="DropdownSelect"
-            name="0"
-            options={[{
-              label: '$0',
-              value: '0',
-            }]}
-          />
-          <span className={styles.formContainer_middleText}> to </span>
-          <Field
-            component="DropdownSelect"
-            name="1"
-            options={[{
-              label: '$1000',
-              value: '1000',
-            }]}
-            className={styles.ddSelect}
-          />
         </FormSection>
         <div className={styles.formHeader}> Online Appointments </div>
         <FormSection name="onlineAppointments" className={styles.formContainer_row} >
@@ -101,30 +99,27 @@ export default function Appointments(props) {
             component="DropdownSelect"
             name="0"
             options={[{
-              label: 'Greater than',
-              value: '>',
-            }]}
-          />
-          <span className={styles.formContainer_middleText}>
-            <Field
-              component="DropdownSelect"
-              name="1"
-              options={[{
-                label: '10',
-                value: '10',
-              }]}
-              className={styles.ddSelect}
-            />
-          </span>
-          <Field
-            component="DropdownSelect"
-            name="2"
-            options={[{
-              label: 'All Time',
-              value: 'allTime',
+              label: 'Greater Than',
+              value: '>=',
+            },{
+              label: 'Less Than',
+              value: '<=',
+            }, {
+              label: 'Equal To',
+              value: '=',
             }]}
             className={styles.ddSelect}
           />
+          <span className={styles.formContainer_middleText}> &nbsp; </span>
+          <span className={styles.formContainer_numberInput}>
+            <Field
+              name="1"
+              type="number"
+              validate={[notNegative]}
+              normalize={parseNum}
+              data-test-id="duration"
+            />
+          </span>
         </FormSection>
       </div>
     </Form>

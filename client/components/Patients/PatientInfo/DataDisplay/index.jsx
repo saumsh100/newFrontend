@@ -28,14 +28,14 @@ class DataDisplay extends Component {
     return (
       <div className={styles.mainContainer}>
         <Tabs className={styles.tab} index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
-          <Tab label="Appointments" >
+          <Tab label="APPOINTMENTS" >
             <AppointmentsTab patient={patient} />
           </Tab>
-          <Tab label="Personal">
+          <Tab label="PERSONAL">
             <PersonalTab patient={patient} />
           </Tab>
-          <Tab label="Insurance" />
-          <Tab label="Family" />
+          <Tab label="INSURANCE" />
+          <Tab label="FAMILY" />
         </Tabs>
       </div>
     );

@@ -7,7 +7,6 @@
   background: white;
 }
 
-
 .subHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   color: $primary-darkgrey;
@@ -42,4 +41,9 @@
 
 .tab {
   padding-top: 10px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+
+  > nav {
+    padding-left: 25px;
+  }
 }

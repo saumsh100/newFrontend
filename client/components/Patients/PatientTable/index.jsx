@@ -16,6 +16,7 @@ import PatientNameColumn from './PatientNameColumn';
 import SelectPatient from './SelectPatient';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
+import HygieneColumn from './HygieneColumn';
 import styles from './styles.scss';
 
 function getEntities(entities) {
@@ -190,7 +191,7 @@ class PatientTable extends Component {
 
   setSmartFilter(filterObj) {
     if (filterObj.index > -1) {
-      //this.clearFilters();
+      // this.clearFilters();
       this.fetchData({
         filters: this.state.filters.toArray(),
         page: 0,
@@ -222,7 +223,7 @@ class PatientTable extends Component {
       newIds.push(id);
     }
 
-    console.log(newIds)
+    console.log(newIds);
     this.setState({
       patientIds: newIds,
     });
@@ -253,7 +254,7 @@ class PatientTable extends Component {
     } = this.props;
 
     const filtersArray = ['demographics', 'appointments', 'practitioners', 'communications'];
-    filtersArray.map(filter => destroy(filter));
+    filtersArray.forEach(filter => destroy(filter));
   }
 
   removeFilter(index) {
@@ -296,13 +297,17 @@ class PatientTable extends Component {
       arrayRemoveAll,
     } = this.props;
 
+    const {
+      patientIds,
+    } = this.state;
+
     const columns = [
       {
         Header: '',
         Cell: row => {
           return (
             <SelectPatient
-              patientIds={this.state.patientIds}
+              patientIds={patientIds}
               handlePatientSelection={this.handlePatientSelection}
               id={row.original.id}
             />
@@ -323,7 +328,7 @@ class PatientTable extends Component {
       },
       {
         Header: '',
-        accessor: 'firstName',
+        accessor: '',
         Cell: row => {
           return (
             <div className={styles.displayFlex}>
@@ -362,6 +367,7 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
+        maxWidth: 155,
       },
       {
         Header: 'Last Name',
@@ -383,6 +389,7 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
+        maxWidth: 155,
       },
       {
         Header: 'Age',
@@ -405,12 +412,12 @@ class PatientTable extends Component {
         maxWidth: 80,
       },
       {
-        Header: 'Next Appt',
+        Header: 'Next Appointment',
         id: 'nextApptDate',
         accessor: d => {
           if (d.hasOwnProperty('nextApptDate')) {
             const dateValue = moment(d['nextApptDate']);
-            return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '';
           }
           return '';
         },
@@ -424,12 +431,12 @@ class PatientTable extends Component {
 
       },
       {
-        Header: 'Last Appt',
+        Header: 'Last Appointment',
         id: 'lastApptDate',
         accessor: d => {
           if (d.hasOwnProperty('lastApptDate')) {
             const dateValue = moment(d['lastApptDate']);
-            return dateValue.isValid() ? dateValue.format('MMMM Do YYYY') : '';
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '';
           }
           return '';
         },
@@ -437,6 +444,18 @@ class PatientTable extends Component {
           return (<div className={styles.displayFlex}>
             <div className={styles.cellText_lastAppt}>{props.value}</div>
           </div>);
+        },
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'Due for Hygiene',
+        Cell: (props) => {
+          return (
+            <HygieneColumn
+              patient={props.original}
+            />
+          );
         },
         filterable: false,
         className: styles.colBg,
@@ -484,11 +503,11 @@ class PatientTable extends Component {
               expanded={this.state.expanded}
               pageSizeOptions={[15, 20, 25, 50, 100]}
               columns={columns}
-              className="-striped -highlight"
+              className="-highlight"
               manual
               filterable
+              sortable={false}
               noDataText="No Patients Found"
-              showPagination={true}
               SubComponent={(row) => {
                 return (
                   <PatientSubComponent
@@ -508,14 +527,20 @@ class PatientTable extends Component {
               onExpandedChange={(newExpanded, index, event) => {
               }}
               getTdProps={(state, rowInfo, column, instance) => {
+                let style = {};
+
+                if (rowInfo) {
+                  style.background = patientIds.indexOf(rowInfo.original.id) > -1 ? '#efefef' : 'inherit';
+                }
+
                 return {
                   onClick: (e, handleOriginal) => {
                     this.handleRowClick(rowInfo, column);
-
                     if (handleOriginal) {
                       handleOriginal();
                     }
                   },
+                  style,
                 };
               }}
               getTableProps={() => {

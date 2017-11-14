@@ -8,8 +8,9 @@ export function fetchAppointmentEvents(patientId, accountId) {
       patientId,
       isDeleted: false,
       isCancelled: false,
+      isPending: false,
     },
-
+    
     order: [['createdAt', 'ASC']],
   }).then((appointments) => {
     return appointments.map((app) => {

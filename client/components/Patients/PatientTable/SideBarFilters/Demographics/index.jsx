@@ -9,8 +9,25 @@ const optionsGender = [
 ];
 
 const optionsCity = [
-  { value: 'vancouver' },
+  { value: 'Vancouver' },
+  { value: 'Victoria' },
+  { value: 'Edmonton' },
+  { value: 'Calgary' },
+  { value: 'Regina' },
+  { value: 'Saskatoon' },
+  { value: 'Winnipeg' },
+  { value: 'Quebec' },
+  { value: 'Montreal' },
+  { value: 'Halifax' },
+  { value: 'St.John' },
+  { value: 'Fredericton' },
+  { value: 'Toronto' },
 ];
+
+
+const parseNum = value => value && parseInt(value);
+
+const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
 
 export default function Demographics(props) {
   const {
@@ -22,28 +39,28 @@ export default function Demographics(props) {
       form="demographics"
       onChange={handleDemographics}
       ignoreSaveButton
+      keepDirtyOnReinitialize
     >
       <div className={styles.formContainer}>
 
         <div className={styles.formHeader}> Age </div>
         <FormSection name="age" className={styles.formContainer_row} >
           <Field
-            component="DropdownSelect"
             name="0"
-            options={[{
-              label: '18',
-              value: 18,
-            }]}
+            type="number"
+            validate={[notNegative]}
+            normalize={parseNum}
+            data-test-id="duration"
+            icon="birthday-cake"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            component="DropdownSelect"
             name="1"
-            options={[{
-              label: '35',
-              value: 35,
-            }]}
-            className={styles.ddSelect}
+            type="number"
+            validate={[notNegative]}
+            normalize={parseNum}
+            data-test-id="duration"
+            icon="birthday-cake"
           />
         </FormSection>
 

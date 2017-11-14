@@ -5,6 +5,14 @@ import { Card, Avatar, Icon, Grid, Row, Col, } from '../../../library';
 import InfoDump from './InfoDump';
 import styles from './styles.scss';
 
+const bgImgs = ['banner-01.png', 'banner-02.png', 'banner-03.png', 'banner-04.png', 'banner-05.png']
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function TopDisplay(props) {
   const {
     patient,
@@ -13,21 +21,15 @@ export default function TopDisplay(props) {
 
 
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
-
-  /* const color = '#' + Math.random().toString(16).slice(2, 8);
-
-  const bgStyle = {
-    background: `linear-Gradient(${color}, #959596)`,
-  }; */
+  const randomNum = getRandomIntInclusive(0, 4);
 
   return (
     <Card className={styles.card}>
       <div className={styles.content}>
-        <div className={styles.imageContainer} >
-          &nbsp;
+        <div className={styles.imageContainer}>
+          <img width="100%" height="100%" src={`/images/banners/${bgImgs[randomNum]}`} />
         </div>
         <div className={styles.dataContainer}>
-
           <div className={styles.avatarContainer}>
             <Avatar user={patient} className={styles.avatarContainer_avatar} />
             <div className={styles.avatarContainer_data}>

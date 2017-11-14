@@ -12,9 +12,10 @@
 
 .imageContainer {
   height: 50%;
-  //background: url('http://mycreativepanda.com/wp-content/themes/twentytwelve/images/homepage-slideshow/1.jpg');
-  background: linear-gradient(#0099e0, $primary-darkgrey);
   opacity: 1;
+  img {
+
+  }
 }
 
 .dataContainer {

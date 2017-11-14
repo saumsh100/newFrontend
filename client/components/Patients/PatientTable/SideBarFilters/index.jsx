@@ -123,7 +123,7 @@ class SideBarFilters extends Component {
           key,
           data: values[key],
           tag: 'Age',
-          intensive: false,
+          intensive: true,
         });
       }
       if (key === 'gender' && values[key].length === 1) {
@@ -135,7 +135,7 @@ class SideBarFilters extends Component {
           formSection: key,
           key,
           tag: 'Gender',
-          intensive: false,
+          intensive: true,
         });
       }
       if (key === 'city' && values[key].length === 1) {
@@ -147,7 +147,7 @@ class SideBarFilters extends Component {
           data: values[key],
           key,
           tag: 'City',
-          intensive: false,
+          intensive: true,
         });
       }
     });
@@ -201,7 +201,7 @@ class SideBarFilters extends Component {
           intensive: false,
         });
       }
-      if (key === 'appointmentsCount' && values[key].length === 3) {
+      if (key === 'appointmentsCount' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 5,
@@ -223,7 +223,7 @@ class SideBarFilters extends Component {
           intensive: true,
         });
       }
-      if (key === 'onlineAppointments' && values[key].length === 3) {
+      if (key === 'onlineAppointments' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 7,

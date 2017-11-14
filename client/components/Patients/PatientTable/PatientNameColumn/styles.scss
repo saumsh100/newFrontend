@@ -6,12 +6,11 @@
   align-items: center;
 
   width: 100%;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .name {
-  padding-left: 10px;
   composes: subHeader from 'sass-loader!../../../../fonts.scss';
-  color: $primary-darkgrey;
+  color: #636363;
   &:hover {
     color: $primary-color;
     cursor: pointer;
@@ -19,5 +18,4 @@
 }
 
 .avatarContainer {
-  padding-left: 10px;
 }

@@ -1,31 +1,7 @@
 
 import moment from 'moment';
 import { Patient, Appointment, DeliveredProcedure, sequelize, PatientUser, Request } from '../../_models';
-
-function ManualLimitOffset(eventsArray, query) {
-  const {
-    limit,
-    offset,
-  } = query;
-
-  let filterArray = eventsArray;
-
-  if (offset && eventsArray.length > offset) {
-    filterArray = filterArray.slice(offset, eventsArray.length);
-  }
-
-  if (limit) {
-    filterArray = filterArray.slice(0, limit);
-  }
-
-  return filterArray;
-}
-
-function getIds(patients, key) {
-  return patients.map((patient) => {
-    return patient[key]
-  });
-}
+import { ManualLimitOffset } from './helpers';
 
 export async function FirstLastAppointmentFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -156,7 +132,7 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
         },
       ],
       group: ['Patient.id'],
-      having: sequelize.literal(`sum("totalAmount") > ${500}`),
+      having: sequelize.literal(`sum("totalAmount") >= ${data[0]} AND sum("totalAmount") <= ${data[1]}`),
       raw: true,
     });
 
@@ -171,9 +147,8 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
   }
 }
 
-export async function OnlineAppointmentsFilter( { data }, filterIds, query, accountId) {
+export async function OnlineAppointmentsFilter({ data }, filterIds, query, accountId) {
   try {
-
     let prevFilterIds = { id: { $not: null } }
 
     if (filterIds && filterIds.length) {
@@ -182,7 +157,7 @@ export async function OnlineAppointmentsFilter( { data }, filterIds, query, acco
       };
     }
 
-    const data = await Request.findAll({
+    const patientData = await Request.findAll({
       raw: true,
       where: {
         accountId,
@@ -207,11 +182,11 @@ export async function OnlineAppointmentsFilter( { data }, filterIds, query, acco
         },
       },
       attributes: ['patientUser.id', [sequelize.fn('COUNT', 'patientUser.id'), 'PatientCount']],
-      having: sequelize.literal('count("patientUser"."id") >= 1'),
+      having: sequelize.literal(`count("patientUser"."id") ${data[0]} ${data[1]}`),
       group: ['patientUser.id'],
     });
 
-    const patientUserIds = getIds(data, 'id');
+    const patientUserIds = getIds(patientData, 'id');
 
     return await Patient.findAndCountAll({
       raw: true,

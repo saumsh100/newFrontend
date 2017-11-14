@@ -1,5 +1,5 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { Icon } from '../../../../library';
 import styles from './styles.scss';
 

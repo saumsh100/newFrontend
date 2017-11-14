@@ -27,7 +27,7 @@ class PatientSubComponent extends Component {
       key: 'events',
       url: `/api/patients/${patient.id}/events`,
       params: query,
-    })
+    });
   }
 
   render() {
@@ -38,7 +38,7 @@ class PatientSubComponent extends Component {
 
     let dataTableSize = 4;
     if (!events || !events.length) {
-      dataTableSize = 4;
+      dataTableSize = 0;
     }
 
     return (
