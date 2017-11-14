@@ -611,9 +611,9 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
   return req.patient.update(req.body)
     .then(async (patient) => {
       if (phoneNumber !== patient.mobilePhoneNumber) {
-        const chat = Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } });
+        const chat = await Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } });
 
-        if (!chat[0]) {
+        if (chat[0]) {
           chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
         }
       }
