@@ -1,11 +1,34 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col } from '../../../../library';
 import InfoDump from '../../TopDisplay/InfoDump';
+import RecallDropDowns from './RecallDropDowns';
+import ReminderDropDowns from './ReminderDropDowns';
 import styles from '../styles.scss';
 
 export default function AppointmentsTab(props) {
+  const {
+    patient
+  } = props;
+
+  const recallComp = <RecallDropDowns patient={patient}/>
+  const reminderComp = <ReminderDropDowns patient={patient}/>
+
   return (
     <Grid className={styles.grid}>
+      <Row className={styles.row}>
+        <Col xs={12}>
+          <InfoDump
+            label="RECALLS SENT"
+            component={recallComp}
+          />
+        </Col>
+        <Col xs={12} className={styles.infoPadding}>
+          <InfoDump
+            label="REMINDERS SENT"
+            component={reminderComp}
+          />
+        </Col>
+      </Row>
       <div className={styles.subHeader}> Last Appointment </div>
       <Row className={styles.row}>
         <Col xs={6}>

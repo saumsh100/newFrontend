@@ -8,13 +8,14 @@ export default function InfoDump(props) {
     label,
     data,
     className,
+    component,
   } = props;
 
   let classes = classNames(className, styles.container);
 
   let dataClass = styles.data;
 
-  if (!data) {
+  if (!data && !component) {
     dataClass = classNames(dataClass, styles.noData)
   }
 
@@ -24,7 +25,7 @@ export default function InfoDump(props) {
         {label}
       </div>
       <div className={dataClass}>
-        {data || 'n/a'}
+        {data || component || 'n/a'}
       </div>
     </div>
   );

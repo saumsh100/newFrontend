@@ -170,7 +170,9 @@ class TopBar extends Component {
                   labelComponent={ActiveAccountButton}
                   labelProps={{ account: activeAccount }}
                 >
-                  {accounts.map(renderAccountItem)}
+                  <div style={{ width: '200px' }}>
+                    {accounts.map(renderAccountItem)}
+                  </div>
                 </DropdownMenu>
               </li> :
               null

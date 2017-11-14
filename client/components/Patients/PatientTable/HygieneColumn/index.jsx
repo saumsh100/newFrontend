@@ -10,6 +10,10 @@ export default function HygieneColumn(props) {
   
   const lastApptDate = moment(patient.lastApptDate);
 
+  if (!lastApptDate.isValid()) {
+    return null
+  }
+
   const compareDate = moment().subtract(6, 'months');
   const days = compareDate.diff(lastApptDate, 'days');
 

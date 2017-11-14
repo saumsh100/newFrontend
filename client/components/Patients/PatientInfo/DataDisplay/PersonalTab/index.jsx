@@ -10,6 +10,13 @@ export default function PersonalTab(props) {
   } = props;
 
   const address = patient && patient.address ? patient.address.street : '';
+  const componentAddress = ( <div>
+      <div>{patient.address.street} </div>
+      <div>{patient.address.country} </div>
+      <div>{patient.address.state} </div>
+      <div>{patient.address.zipCode} </div>                        
+    </div>  
+  );
 
   return (
     <Grid className={styles.grid}>
@@ -53,7 +60,7 @@ export default function PersonalTab(props) {
         <Col xs={6} >
           <InfoDump
             label="ADDRESS"
-            data={address}
+            component={componentAddress}            
           />
         </Col>
       </Row>

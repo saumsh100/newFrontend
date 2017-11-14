@@ -47,3 +47,28 @@
     padding-left: 25px;
   }
 }
+
+.recallContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.iconContainer {
+  span {
+    padding-left: 10px;
+  }
+}
+
+.ddList {
+  width: 250px;
+}
+.ddListItem {
+  background: white;
+  padding: 10px;
+}
+
+.infoPadding {
+  padding-top: 25px;
+}

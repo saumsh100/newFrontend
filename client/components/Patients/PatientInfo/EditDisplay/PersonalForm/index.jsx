@@ -33,17 +33,24 @@ export default function PersonalForm(props) {
     patient,
     handleSubmit,
   } = props;
-
+  
   const initialValues = {
     gender: patient.get('gender'),
     birthDate: moment(patient.get('birthDate')).format('MM/DD/YYYY'),
     homePhoneNumber: patient.get('homePhoneNumber'),
     mobilePhoneNumber: patient.get('mobilePhoneNumber'),
     workPhoneNumber: patient.get('workPhoneNumber'),
-    city: patient.get('city'),
-    zipCode: patient.get('zipCode'),
-    country: patient.get('country'),
   };
+
+  if (patient.get('address')) {
+    const currentPatient = patient.get('address');
+
+    initialValues.street = currentPatient.street;
+    initialValues.city = currentPatient.city;
+    initialValues.country = currentPatient.country;
+    initialValues.zipCode = currentPatient.zipCode;
+    initialValues.state = currentPatient.state;
+  }
 
   return (
     <Form
@@ -110,18 +117,10 @@ export default function PersonalForm(props) {
         </Row>
         <div className={styles.formHeader}> Address </div>
         <Row className={styles.row}>
-          <Col xs={6} className={styles.colLeft}>
+          <Col xs={12}>
             <Field
-              name="address1"
+              name="street"
               label="Address Line 1"
-              theme="primaryBlue"
-              icon="map-marker"
-            />
-          </Col>
-          <Col xs={6} className={styles.colRight}>
-            <Field
-              name="address2"
-              label="Address Line 2"
               theme="primaryBlue"
               icon="map-marker"
             />

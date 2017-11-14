@@ -22,14 +22,12 @@ export default function Actions(props) {
   return (
     <List className={styles.actionsContainer}>
       {actionsList.map((action) => {
-
         /*let borderStyle = { };
         if (smartFilter && filter.label === smartFilter.label) {
           borderStyle = {
             borderLeft: '5px solid #FF715A',
           };
         }*/
-
         return (
           <ListItem className={styles.actionItem} onClick={() =>{} }>
             {action}
