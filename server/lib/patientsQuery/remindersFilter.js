@@ -59,7 +59,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
 
 export async function LastReminderFilter({ data, key }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
