@@ -75,9 +75,10 @@ function getIsConfirmable(appointment) {
  * @param account
  * @returns {Promise.<void>}
  */
-export async function sendRemindersForAccount(account, date) {
+export async function sendRemindersForAccount(account, date, pub) {
   console.log(`Sending reminders for ${account.name}`);
   const { reminders, name } = account;
+  const sentReminderIds = [];
 
   const remindersPatients = await mapPatientsToReminders({ reminders, account, date });
 
@@ -128,6 +129,8 @@ export async function sendRemindersForAccount(account, date) {
         primaryType: reminder.primaryType,
       });
 
+      sentReminderIds.push(sentReminder.id);
+
       let data = null;
       try {
         data = await sendReminder[primaryType]({
@@ -173,6 +176,7 @@ export async function sendRemindersForAccount(account, date) {
         await sendSocket(global.io, chat.id);
       }
     }
+    pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   }
 }
 
@@ -180,7 +184,7 @@ export async function sendRemindersForAccount(account, date) {
  *
  * @returns {Promise.<Array|*>}
  */
-export async function computeRemindersAndSend({ date }) {
+export async function computeRemindersAndSend({ date, pub }) {
   // Get all clinics that actually want reminders sent and get their Reminder Preferences
   // const accounts = await Account.filter({ canSendReminders: true }).getJoin(joinObject).run();
   const accounts = await Account.findAll({
@@ -198,6 +202,6 @@ export async function computeRemindersAndSend({ date }) {
 
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
-    await exports.sendRemindersForAccount(account.get({ plain: true }), date);
+    await exports.sendRemindersForAccount(account.get({ plain: true }), date, pub);
   }
 }

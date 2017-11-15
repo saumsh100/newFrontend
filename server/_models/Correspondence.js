@@ -44,6 +44,11 @@ export default function (sequelize, DataTypes) {
       allowNull: true,
     },
 
+    method: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
     pmsType: {
       type: DataTypes.STRING,
       allowNull: true,
