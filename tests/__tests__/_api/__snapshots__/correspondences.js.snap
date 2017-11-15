@@ -8,7 +8,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
         "contactedAt": "2017-11-04T01:16:30.932Z",
-        "isSyncedWithPms": true,
+        "isSyncedWithPms": false,
         "note": "CareCru: Recall sent via email",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "pmsId": "2",
@@ -22,7 +22,29 @@ Object {
 }
 `;
 
-exports[`/api/correspondences GET /api/correspondences should fetch 2 correspondences 1`] = `
+exports[`/api/correspondences GET /api/correspondences should fetch 1 correspondences 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "attributes": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "appointmentId": null,
+        "contactedAt": "2017-11-04T01:16:30.932Z",
+        "isSyncedWithPms": false,
+        "note": "CareCru: Recall sent via email",
+        "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "pmsId": "2",
+        "pmsType": "MARKETING",
+        "type": "recall:sent",
+      },
+      "id": "60b59ea4-ab3b-4862-9c69-6488e40b0562",
+      "type": "correspondence",
+    },
+  ],
+}
+`;
+
+exports[`/api/correspondences GET /api/correspondences should fetch 2 correspondences with isSyncedWithPms false 1`] = `
 Object {
   "data": Array [
     Object {
@@ -45,7 +67,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
         "contactedAt": "2017-11-04T01:16:30.932Z",
-        "isSyncedWithPms": true,
+        "isSyncedWithPms": false,
         "note": "CareCru: Recall sent via email",
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "pmsId": "2",
