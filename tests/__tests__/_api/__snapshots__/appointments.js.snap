@@ -154,6 +154,41 @@ Object {
 }
 `;
 
+exports[`/api/appointments GET / /stats - appointment appointmentsBooked for intelligence overview 1`] = `
+Object {
+  "appointmentsBooked": "1",
+  "confirmedAppointments": 0,
+  "entities": Object {},
+}
+`;
+
+exports[`/api/appointments GET / /stats - appointment mostAppointments for intelligence overview 1`] = `
+Array [
+  Object {
+    "birthDate": "1980-01-01T00:00:00.932Z",
+    "firstName": "Ronald",
+    "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+    "lastName": "Mcdonald",
+    "numAppointments": "1",
+  },
+]
+`;
+
+exports[`/api/appointments GET / /stats - appointment practitionerWorked for intelligence overview 1`] = `
+Array [
+  Object {
+    "avatarUrl": null,
+    "booked": 0,
+    "firstName": "Colonel",
+    "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+    "lastName": "Sanders",
+    "newPatientsTotal": 0,
+    "notFilled": 6570,
+    "type": "Hygienist",
+  },
+]
+`;
+
 exports[`/api/appointments GET / /stats - appointment stats for intelligence overview 1`] = `
 Object {
   "activePatients": 1,
@@ -217,41 +252,6 @@ Object {
     "November",
   ],
 }
-`;
-
-exports[`/api/appointments GET / - stats /stats - appointment appointmentsBooked for intelligence overview 1`] = `
-Object {
-  "appointmentsBooked": "1",
-  "confirmedAppointments": 0,
-  "entities": Object {},
-}
-`;
-
-exports[`/api/appointments GET / - stats /stats - appointment mostAppointments for intelligence overview 1`] = `
-Array [
-  Object {
-    "birthDate": "1980-01-01T00:00:00.932Z",
-    "firstName": "Ronald",
-    "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
-    "lastName": "Mcdonald",
-    "numAppointments": "1",
-  },
-]
-`;
-
-exports[`/api/appointments GET / - stats /stats - appointment practitionerWorked for intelligence overview 1`] = `
-Array [
-  Object {
-    "avatarUrl": null,
-    "booked": 0,
-    "firstName": "Colonel",
-    "id": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
-    "lastName": "Sanders",
-    "newPatientsTotal": 0,
-    "notFilled": 6570,
-    "type": "Hygienist",
-  },
-]
 `;
 
 exports[`/api/appointments POST / / - create a Cancel - only isCancelled field should be true not isShortCancelled 1`] = `
