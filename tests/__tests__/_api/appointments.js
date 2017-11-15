@@ -200,7 +200,7 @@ describe('/api/appointments', () => {
     });
   });
 
-  describe('GET / - stats', () => {
+  describe('GET /', () => {
     test('/stats - appointment mostAppointments for intelligence overview', () => {
       return request(app)
         .get(`${rootUrl}/mostAppointments?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)

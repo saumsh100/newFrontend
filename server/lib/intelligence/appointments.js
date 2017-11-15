@@ -97,9 +97,7 @@ export function mostAppointments(startDate, endDate, accountId) {
         },
       ],
     },
-    attributes: [
-      // [sequelize.fn('COUNT', sequelize.col('patient.id')), 'numAppointments'],
-    ],
+    attributes: [],
     order: [[sequelize.fn('COUNT', sequelize.col('patient.id')), 'DESC']],
     limit: 4,
     group: ['patient.id'],
@@ -179,7 +177,7 @@ export async function appsNewPatient(startDate, endDate, accountId, practitioner
  * @param  {[date]} startDate
  * @param  {[date]} endDate
  * @param  {[uuid]} accountId
- * @param  {[uuid]} where - any custom fitler you want to send im
+ * @param  {[uuid]} where - any custom filter you want to send im
  * @return {[int]} total appointments in a given period
  */
 export async function totalAppointments(startDate, endDate, accountId, where = {}) {

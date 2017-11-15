@@ -222,7 +222,7 @@ export function practitionersTimeOffHours(schedule, timeOffs, startDateQuery, en
       allDay,
     } = timeOffs[i];
 
-    // check if it's an all day time Off which means the schdedule day hours is the full timeOff
+    // check if it's an all day time Off which means the schedule day hours is the full day
     // else it's the timeOff
     if (allDay) {
       const startDateClone = moment(startDate).clone();
