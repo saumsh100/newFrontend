@@ -17,12 +17,14 @@ import caller from './caller';
 import apiRequests from './apiRequests';
 import segments from './segments';
 import availabilities from './availabilities';
+import intelligence from './intelligence';
 
 const appReducer = combineReducers({
   alerts,
   caller,
   accountSettings,
   routing,
+  intelligence,
   form,
   toolbar,
   reputation,
