@@ -24,7 +24,7 @@ const dates = (y, m, d, h) => {
   };
 };
 
-describe('Demograph Filters Tests', () => {
+describe('Practitioners Filter Tests', () => {
   afterAll(async () => {
     await wipeAllModels();
   });
@@ -78,6 +78,6 @@ describe('Demograph Filters Tests', () => {
       const patientsData = await practitionersFiltersLibrary.PractitionersFilter({ data }, [], {}, accountId);
       expect(patientsData.rows.length).toBe(1);
     });
-    
+
   });
 });
