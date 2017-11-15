@@ -19,7 +19,7 @@ export default function PatientNameColumn(props) {
       <div
         className={styles.name}
         onClick={(e) => {
-          e.stopPropagation()
+          e.stopPropagation();
           redirect();
         }}
       >

@@ -2,7 +2,7 @@
 
 .sideBar {
   margin-left: 15px;
-  border-top: 5px solid $inactive-color;
+  border-top: 5px solid darken($primary-darkgrey, 10%);
   height: auto;
   background: $primary-white;
   padding: 25px 15px 15px 15px;
@@ -111,4 +111,13 @@
 .ddSelect {
   width: 100%;
   padding-right: 5px;
+}
+
+.searchContainer {
+  width: 100%;
+  padding-top: 10px;
+}
+
+.searchBar {
+  width: 100%;
 }

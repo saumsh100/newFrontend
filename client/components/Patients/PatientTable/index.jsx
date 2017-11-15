@@ -495,8 +495,6 @@ class PatientTable extends Component {
               totalPatients={this.state.totalPatients}
               createEntityRequest={createEntityRequest}
               reinitializeTable={this.reinitializeTable}
-              onSearch={this.onSearch}
-              searchValue={this.state.search}
               smartFilter={this.state.smartFilter}
               setSmartFilter={this.setSmartFilter}
               patientIds={this.state.patientIds}
@@ -612,6 +610,8 @@ class PatientTable extends Component {
               removeFilter={this.removeFilter}
               filters={this.state.filters}
               clearFilters={this.clearFilters}
+              onSearch={this.onSearch}
+              searchValue={this.state.search}
             />
           </Col>
         </Row>

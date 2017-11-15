@@ -40,7 +40,7 @@ class Timeline extends Component {
 
     if (!events || !events.length) {
       return <div className={styles.disclaimer}>
-        <div className={styles.disclaimer_text}>Currently, there are no events for this patient.</div>
+        <div className={styles.disclaimer_text}>No Events</div>
       </div>
     }
 

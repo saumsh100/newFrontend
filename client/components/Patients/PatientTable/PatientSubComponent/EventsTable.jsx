@@ -13,7 +13,7 @@ export default function EventsTable(props) {
     return (
       <div className={styles.eventsList}>
         <div className={styles.disclaimer}>
-          <span className={styles.disclaimer_text}>Currently, there are no events for this patient.</span>
+          <span className={styles.disclaimer_text}>No Events</span>
         </div>
       </div>
     );

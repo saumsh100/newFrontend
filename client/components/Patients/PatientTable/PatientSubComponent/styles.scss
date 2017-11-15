@@ -17,7 +17,7 @@
 }
 
 .eventsTable{
-  padding: 50px 30px 50px 50px;
+  padding: 20px 30px 50px 50px;
   position: relative;
   display: flex;
   box-sizing: border-box;
@@ -75,7 +75,7 @@
   position: relative;
   overflow: hidden;
   &_text {
-    font-size: 16px;
+    font-size: 12px;
     line-height: 1.5em;
     color: $inactive-color;
     text-align: center;

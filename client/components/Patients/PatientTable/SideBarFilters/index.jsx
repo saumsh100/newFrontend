@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
-import { Icon } from '../../../library';
+import { Icon, Input } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
 import Practitioners from './Practitioners';
@@ -396,6 +396,8 @@ class SideBarFilters extends Component {
     const {
       practitioners,
       clearFilters,
+      onSearch,
+      searchValue,
     } = this.props;
 
     const {

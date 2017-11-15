@@ -6,11 +6,12 @@
 }
 
 .label {
-  color: $primary-blue;
+  color: darken(#d7e1e3, 10%);
   opacity: 1;
   font-size: $extra-small-size;
   padding-bottom: 10px;
   composes: fontExtraSmall from 'sass-loader!../../../../../fonts.scss';
+  font-family: $medium-font;
 
 }
 
@@ -20,6 +21,6 @@
 }
 
 .noData {
-  color: $primary-grey;
+  color: $primary-dark;
   font-style: italic;
 }

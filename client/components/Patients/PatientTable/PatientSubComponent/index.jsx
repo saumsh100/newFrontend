@@ -38,7 +38,7 @@ class PatientSubComponent extends Component {
 
     let dataTableSize = 4;
     if (!events || !events.length) {
-      dataTableSize = 0;
+      dataTableSize = 4;
     }
 
     return (

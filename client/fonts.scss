@@ -149,11 +149,16 @@
   @extend .letterSpacing;
 }
 
+.fontMediumPlusSize {
+  font-size: $medium-plus-size;
+  font-weight: $medium-weight;
+  @extend .letterSpacing;
+}
+
 .fontMediumLarge {
   font-size: $extra-medium-size;
   font-weight: $large-weight;
   @extend .letterSpacing;
-
 }
 
 .fontExtraLarge {

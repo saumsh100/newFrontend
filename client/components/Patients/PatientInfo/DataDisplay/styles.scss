@@ -8,7 +8,7 @@
 }
 
 .subHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMediumPlusSize from 'sass-loader!../../../../fonts.scss';
   color: $primary-darkgrey;
   padding-top: 20px;
 }
@@ -25,8 +25,8 @@
 
 .row {
   border-bottom: 1px solid $primary-grey;
-  padding-top: 20px;
-  padding-bottom: 40px;
+  padding-top: 30px;
+  padding-bottom: 20px;
 }
 .row:first-child {
   padding-top: 0px;
@@ -62,6 +62,10 @@
 .iconContainer {
   span {
     padding-left: 10px;
+  }
+  color: $primary-darkgrey;
+  &_caret {
+    color: $primary-dark;
   }
 }
 

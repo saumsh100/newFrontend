@@ -8,7 +8,9 @@ export default function ReminderDropDowns(props){
     <div {...props}>
       <div className={styles.iconContainer} >
         <Icon icon="envelope" size={1.2} />
-        <span><Icon icon="caret-down" size={1.2} /> </span>      
+        <span className={styles.iconContainer_caret}>
+          <Icon icon="caret-down" size={1.2} />
+        </span>
       </div>
     </div>
   );
@@ -17,7 +19,9 @@ export default function ReminderDropDowns(props){
     <div {...props}>
       <div className={styles.iconContainer} >
         <Icon icon="comment" size={1.2} />
-        <span><Icon icon="caret-down" size={1.2} /> </span>      
+        <span className={styles.iconContainer_caret}>
+          <Icon icon="caret-down" size={1.2} />
+        </span>
       </div>
     </div>
   );
@@ -26,11 +30,13 @@ export default function ReminderDropDowns(props){
     <div {...props}>
       <div className={styles.iconContainer} >
         <Icon icon="phone" size={1.2} />
-        <span><Icon icon="caret-down" size={1.2} /> </span>      
+        <span className={styles.iconContainer_caret}>
+          <Icon icon="caret-down" size={1.2} />
+        </span>
       </div>
     </div>
   );
-  
+
   return (
     <div className={styles.recallContainer}>
       <DropdownMenu

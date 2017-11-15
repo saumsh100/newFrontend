@@ -18,6 +18,7 @@
 .subHeader {
   composes: subHeader from 'sass-loader!../../../fonts.scss';
 }
+
 .header {
   position: relative;
   display: flex;
@@ -50,8 +51,9 @@
 }
 
 .tableContainer {
-  border-top: 5px solid $inactive-color;
+  border-top: 5px solid darken($primary-darkgrey, 10%);
 }
+
 .searchBar {
   width: 300px;
 }

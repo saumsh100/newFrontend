@@ -58,8 +58,6 @@ class HeaderSection extends Component {
   render() {
     const {
       totalPatients,
-      onSearch,
-      searchValue,
       smartFilter,
       setSmartFilter,
       patientIds,
@@ -111,14 +109,6 @@ class HeaderSection extends Component {
             {`Showing ${totalPatients} Patients`}
           </div>
         </div>
-        </div>
-        <div className={styles.searchBar}>
-          {/* <Input
-            label="Search"
-            onChange={e => onSearch(e.target.value)}
-            icon="search"
-            value={searchValue}
-          /> */}
         </div>
         <div className={styles.buttonContainer}>
           <DropdownMenu

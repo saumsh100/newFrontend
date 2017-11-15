@@ -48,7 +48,7 @@
     align-items: center;
     justify-content: center;
     line-height: 1.8em;
-    padding-top: 70px;
+    padding-top: 50px;
 
     &_name {
       color: $primary-blue;
@@ -57,15 +57,19 @@
     }
 
     &_email {
+      font-size: $extra-small-size;
+      font-style: italic;
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
     &_phone {
+      font-size: $extra-small-size;
+      font-style: italic;
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
     &_icon {
-      padding-right: 5px;
+      padding-right: 10px;
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
@@ -85,7 +89,6 @@
   }
 }
 
-
 .rightContainer {
   width: 70%;
   display: flex;
@@ -95,8 +98,6 @@
     padding: 20px 20px 20px 30px;
   }
 }
-
-
 
 .displayFlex {
   display: flex;
