@@ -125,7 +125,7 @@ export function calcLastReminderSent(reminderData) {
     lastReminderData.push(reminderData[j])
     let i = j;
 
-    while(i < reminderData.length && currentPatient === reminderData[i].id) {
+    while (i < reminderData.length && currentPatient === reminderData[i].id) {
       i += 1;
     }
 

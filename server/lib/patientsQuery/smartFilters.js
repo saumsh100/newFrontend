@@ -11,17 +11,10 @@ export function LateAppointmentsFilter(accountId, offSetLimit, order, smFilter) 
     where: {
       accountId,
       nextApptId: null,
-    },
-    include: {
-      model: Appointment,
-      as: 'lastAppt',
-      where: {
-        startDate: {
-          $between: [startMonthsOut, endMonthsOut],
-        },
+      nextApptDate: null,
+      lastApptDate: {
+        $between: [startMonthsOut, endMonthsOut],
       },
-      attributes: ['startDate'],
-      groupBy: ['startDate'],
     },
   }, offSetLimit));
 }
@@ -55,17 +48,10 @@ export function MissedPreAppointed(accountId, offSetLimit, order, smFilter) {
     where: {
       accountId,
       nextApptId: null,
-    },
-    include: {
-      model: Appointment,
-      as: 'lastAppt',
-      where: {
-        startDate: {
-          $between: [moment().subtract(30, 'days').toISOString(), new Date()],
-        },
+      nextApptDate: null,
+      lastApptDate: {
+        $between: [moment().subtract(30, 'days').toISOString(), new Date()],
       },
-      attributes: ['startDate'],
-      groupBy: ['startDate'],
     },
   }, offSetLimit));
 }
