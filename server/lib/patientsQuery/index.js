@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import { Patient, DeliveredProcedure, sequelize } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
@@ -7,7 +8,6 @@ import { PractitionersFilter } from './practitionersFilter';
 import { RemindersFilter, LastReminderFilter } from './remindersFilter';
 import { RecallsFilter, LastRecallFilter } from './recallsFilter';
 import { ReviewsFilter } from './reviewsFilter';
-import PatientSearch from './patientSearch';
 
 function getIds(patients, key) {
   return patients.map((patient) => {
@@ -52,7 +52,6 @@ export async function PatientQuery(config) {
       limit,
       filters,
       smartFilter,
-      search,
       sort,
       page,
       accountId,
@@ -98,15 +97,14 @@ export async function PatientQuery(config) {
       if (!filters) {
         offSetLimit.offset = offset;
         offSetLimit.limit = limit;
+        offSetLimit.order = order;
       }
 
       filteredPatients = await smartFilterFunctions[smFilter.index](accountId, offSetLimit, order, smFilter);
     }
 
     if (filters && filters.length) {
-      const query = {
-        order,
-      };
+      const query = {};
 
       const sortArray = filters.sort((a, b) => {
         const filter1 = JSON.parse(a);
@@ -126,6 +124,7 @@ export async function PatientQuery(config) {
         const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
 
         if (i === filters.length - 1) {
+          query.order = order;
           query.offset = offset;
           query.limit = limit;
         }
@@ -146,7 +145,7 @@ export async function PatientQuery(config) {
      */
     let patients = null;
 
-    if (!search && !smartFilter && !(filters && filters.length)) {
+    if (!smartFilter && !(filters && filters.length)) {
       patientCount = await Patient.count({
         where: filterBy,
         order,
@@ -163,10 +162,6 @@ export async function PatientQuery(config) {
       patientCount = filteredPatients.count;
 
       patients = filteredPatients.rows;
-    } else {
-      patients = await PatientSearch(search, accountId, defaultQuery);
-
-      patientCount = patients.length;
     }
 
     console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
@@ -196,11 +191,20 @@ export async function PatientQuery(config) {
         {
           model: DeliveredProcedure,
           as: 'deliveredProcedures',
+          where: {
+            entryDate: {
+              gt: moment().subtract(1, 'years').toISOString(),
+              lt: new Date(),
+            },
+          },
           attributes: [],
+          required: false,
         },
       ],
+      required: true,
       group: ['Patient.id'],
       raw: true,
+      order,
     });
 
     const patientData = [{ totalPatients: patientCount, data: patients }];

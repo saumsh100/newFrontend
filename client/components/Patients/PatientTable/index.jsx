@@ -472,6 +472,7 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
+        sortable: false,
       },
       {
         Header: 'Production in Calendar Year',
@@ -517,7 +518,7 @@ class PatientTable extends Component {
               className="-highlight"
               manual
               filterable
-              sortable={false}
+              showPageSizeOptions={false}
               noDataText="No Patients Found"
               SubComponent={(row) => {
                 return (
@@ -534,8 +535,6 @@ class PatientTable extends Component {
               }}
               onPageSizeChange={(pageSize, pageIndex) => {
                 this.pageSizeChange(pageSize, pageIndex);
-              }}
-              onExpandedChange={(newExpanded, index, event) => {
               }}
               getTdProps={(state, rowInfo, column, instance) => {
                 let style = {};

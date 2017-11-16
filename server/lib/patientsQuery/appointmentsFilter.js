@@ -55,6 +55,9 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
         isCancelled: false,
         isDeleted: false,
         isPending: false,
+        patientId: {
+          $not: null,
+        },
       },
       include: {
         model: Patient,
@@ -69,22 +72,19 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
       group: ['patient.id'],
       attributes: [
         'patient.id',
-        'patient.firstName',
-        'patient.lastName',
-        'patient.nextApptDate',
-        'patient.lastApptDate',
-        'patient.birthDate',
-        'patient.status',
-        [sequelize.fn('COUNT', 'patient.id'), 'PatientCount'],
       ],
       having: sequelize.literal(`count("patient"."id") ${data[0]} ${data[1]}`),
     });
 
-    const truncatedData = ManualLimitOffset(appData, query);
+    const patientIds = getIds(appData, 'id');
 
-    return ({
-      rows: truncatedData,
-      count: appData.length,
+    return await Patient.findAndCountAll({
+      raw: true,
+      where: {
+        accountId,
+        id: patientIds,
+      },
+      ...query,
     });
   } catch (err) {
     console.log(err);
@@ -101,7 +101,7 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
         id: filterIds,
       };
     }
-    const patientData = await Patient.findAll({
+    const patientData = await Patient.findAndCountAll({
       where: {
         accountId,
         ...prevFilterIds,
@@ -122,7 +122,7 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
           as: 'deliveredProcedures',
           where: {
             entryDate: {
-              gt: moment('1970-01-01').toISOString(),
+              gt: moment().subtract(1, 'years').toISOString(),
               lt: new Date(),
             },
           },
@@ -134,14 +134,13 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
       group: ['Patient.id'],
       having: sequelize.literal(`sum("totalAmount") >= ${data[0]} AND sum("totalAmount") <= ${data[1]}`),
       raw: true,
+      ...query,
     });
 
-    const truncatedData = ManualLimitOffset(patientData, query);
-
-    return ({
-      rows: truncatedData,
-      count: patientData.length,
-    });
+    return {
+      rows: patientData.rows,
+      count: patientData.count.length,
+    };
   } catch (err) {
     console.log(err);
   }
