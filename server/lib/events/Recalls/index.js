@@ -13,16 +13,27 @@ function recallSentHandler(recallSentSocket, io) {
 
   recallSentSocket.on('data', async (data) => {
     try {
-      const recallsSent = await SentRecall.findAll({
+      let recallsSent = await SentRecall.findAll({
         where: {
           id: JSON.parse(data),
         },
         raw: true,
       });
 
-      const correspondencesToCreate = convertRecallsToCorrespondences(recallsSent);
 
-      correspondencesToCreate.push({});
+      const correspondencesCheck = await Correspondence.findAll({
+        where: {
+          sentRecallId: JSON.parse(data),
+        },
+      });
+
+      const sentRecallIdsCheck = correspondencesCheck.map(s => s.sentRecallId);
+
+      recallsSent = recallsSent.filter((s) => {
+        return !sentRecallIdsCheck.includes(s.id);
+      });
+
+      const correspondencesToCreate = convertRecallsToCorrespondences(recallsSent);
 
       correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
     } catch (error) {
@@ -32,7 +43,7 @@ function recallSentHandler(recallSentSocket, io) {
         if (docs && docs.length) {
           correspondences = docs.map(d => d.get({ plain: true }));
         }
-        
+
         errors.forEach((err) => {
           console.error(err);
         });
@@ -44,8 +55,8 @@ function recallSentHandler(recallSentSocket, io) {
     if (correspondences[0]) {
       const accountId = correspondences[0].accountId;
       const correspondenceIds = correspondences.map(correspondence => correspondence.id);
-      
-      console.log(`Sending ${correspondenceIds.length} for account=${accountId}`);
+
+      console.log(`Sending ${correspondenceIds.length} correspondences for account=${accountId}`);
 
       io.of(namespaces.sync)
        .in(accountId)
@@ -58,7 +69,7 @@ function recallSentHandler(recallSentSocket, io) {
  * Generates correspondences to be created in the db.
  * Correspondence type has nothing to do with the Recall type. Correspondence type
  * is what caused the correspondence to create. E.g. "RECALL:SENT".
- * @param {*} recallsSent 
+ * @param {*} recallsSent
  * @return array of Correspondences to be created in the db
  */
 function convertRecallsToCorrespondences(recallsSent) {
@@ -67,9 +78,11 @@ function convertRecallsToCorrespondences(recallsSent) {
     {
       accountId: recall.accountId,
       patientId: recall.patientId,
+      sentRecallId: recall.id,
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
+      note: 'Sent Recall VIA CareCru',
     }));
 }
 
@@ -81,7 +94,7 @@ function convertRecallsToCorrespondences(recallsSent) {
  */
 export default function registerRecallsSubscriber(context, io) {
   const recallSentSubscribeSocket = context.socket('SUB', { routing: 'topic' });
-    
+
   recallSentSubscribeSocket.setEncoding('utf8');
   recallSentSubscribeSocket.connect('events', 'RECALL:SENT:BATCH');
 

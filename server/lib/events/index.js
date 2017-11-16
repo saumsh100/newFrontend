@@ -2,7 +2,6 @@ import registerCallsSubscriber from './Calls';
 import registerRequestsSubscriber from './Requests';
 import registerAppointmentsSubscriber from './Appointments';
 import registerRecallsSubscriber from './Recalls';
-import registerAppointmentsSubscriber from './Appointments/index';
 import registerRemindersSubscriber from './Reminders/index';
 
 export default function registerEventSubscribers(context, io) {

@@ -7,29 +7,44 @@ function sendReminderIdsSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
       const sentreminderIds = JSON.parse(data);
-      const sentreminders = await SentReminder.findAll({
+      let sentreminders = await SentReminder.findAll({
         where: {
           id: sentreminderIds,
         },
+      });
+
+      const correspondencesCheck = await Correspondence.findAll({
+        where: {
+          sentReminderId: sentreminderIds,
+        },
+      });
+
+      const sentreminderIdsCheck = correspondencesCheck.map(s => s.sentReminderId);
+
+      sentreminders = sentreminders.filter((s) => {
+        return !sentreminderIdsCheck.includes(s.id);
       });
 
       const correspondencesToCreate = sentreminders.map((sr) => {
         return {
           accountId: sr.accountId,
           patientId: sr.patientId,
-          sentreminderId: sr.id,
+          sentReminderId: sr.id,
           appointmentId: sr.appointmentId,
           method: sr.primaryType,
-          type: 'REMINDER:SENT',
+          type: Correspondence.REMINDER_SENT_TYPE,
+          contactedAt: sr.createdAt,
+          note: 'Sent Reminder VIA CareCru',
         };
       });
-
 
       let correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
 
       if (correspondences[0]) {
         const accountId = correspondences[0].accountId;
         correspondences = correspondences.map(c => c.id);
+
+        console.log(`Sending ${correspondences.length} correspondences for account=${accountId}`);
 
         return io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
       }
@@ -47,6 +62,8 @@ function sendReminderIdsSocket(sub, io) {
         if (docs[0]) {
           const accountId = docs[0].accountId;
           docs = docs.map(c => c.id);
+
+          console.log(`Sending ${docs.length} correspondences for account=${accountId}`);
 
           io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', docs);
         }
@@ -66,13 +83,33 @@ function sendReminderUpdatedSocket(sub, io) {
     try {
       const correspondence = await Correspondence.findOne({
         where: {
-          id: data,
+          sentReminderId: data,
+          type: Correspondence.REMINDER_SENT_TYPE,
         },
+        raw: true,
       });
 
-      await correspondence.update({ isSyncedWithPms: false });
+      const correspondenceCheck = await Correspondence.findOne({
+        where: {
+          sentReminderId: data,
+          type: Correspondence.REMINDER_CONFIRMED_TYPE,
+        },
+        raw: true,
+      });
 
-      io.of(namespaces.sync).in(correspondence.accountId).emit('UPDATE:Correspondence', correspondence.id);
+      if (!correspondenceCheck) {
+        correspondence.note = 'Patient Confirmed VIA CareCru';
+        correspondence.type = Correspondence.REMINDER_CONFIRMED_TYPE;
+        correspondence.isSyncedWithPms = false;
+        correspondence.contactedAt = new Date();
+        correspondence.id = undefined;
+
+        const newCorrespondence = await Correspondence.create(correspondence);
+
+        console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
+
+        io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondences', [newCorrespondence.id]);
+      }
     } catch (error) {
       console.error(error);
     }
