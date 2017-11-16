@@ -47,7 +47,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
     firstName,
     lastName,
     email,
-    phoneNumber,
+    mobilePhoneNumber: phoneNumber,
   };
 
   return (
