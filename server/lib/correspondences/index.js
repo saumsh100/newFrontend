@@ -33,7 +33,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
       method: sr.primaryType,
       type: Correspondence.REMINDER_SENT_TYPE,
       contactedAt: sr.createdAt,
-      note: 'Sent Reminder VIA CareCru',
+      note: 'Sent Appointment Reminder via CareCru',
     };
   });
 
@@ -80,7 +80,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       method: sr.primaryType,
       type: Correspondence.REMINDER_CONFIRMED_TYPE,
       contactedAt: sr.createdAt,
-      note: 'Patient Confirmed VIA CareCru',
+      note: 'Patient Confirmed their Appointment via CareCru',
     };
   });
 
@@ -125,7 +125,7 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
-      note: 'Sent Recall VIA CareCru',
+      note: 'Sent Recall via CareCru',
     };
   });
 

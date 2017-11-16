@@ -82,7 +82,7 @@ function convertRecallsToCorrespondences(recallsSent) {
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
-      note: 'Sent Recall VIA CareCru',
+      note: 'Sent Recall via CareCru',
     }));
 }
 
