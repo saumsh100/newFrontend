@@ -20,13 +20,11 @@ export default function Communications(props) {
         <div className={styles.formSubHeader}>Sent Via Email</div>
         <FormSection name="remindersEmail" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -34,13 +32,11 @@ export default function Communications(props) {
         <div className={styles.formSubHeader}>Sent Via SMS</div>
         <FormSection name="remindersSMS" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -48,13 +44,11 @@ export default function Communications(props) {
         <div className={styles.formSubHeader}>Sent Via Phone</div>
         <FormSection name="remindersPhone" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -63,13 +57,11 @@ export default function Communications(props) {
         <div className={styles.formSubHeader}>Sent Via Email</div>
         <FormSection name="recaresEmail" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -77,13 +69,11 @@ export default function Communications(props) {
         <div className={styles.formSubHeader}>Sent Via SMS</div>
         <FormSection name="recaresSMS" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -91,13 +81,11 @@ export default function Communications(props) {
         <div className={styles.formSubHeader}>Sent Via Phone</div>
         <FormSection name="recaresPhone" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -105,13 +93,11 @@ export default function Communications(props) {
         <div className={styles.formHeader}> Last Reminder Sent</div>
         <FormSection name="lastReminderSent" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -119,13 +105,11 @@ export default function Communications(props) {
         <div className={styles.formHeader}> Last Recare Sent</div>
         <FormSection name="lastRecareSent" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -133,13 +117,11 @@ export default function Communications(props) {
         <div className={styles.formHeader}> Reviews</div>
         <FormSection name="reviews" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />

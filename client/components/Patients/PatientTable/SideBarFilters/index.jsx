@@ -26,16 +26,11 @@ class SideBarFilters extends Component {
     this.clearTags = this.clearTags.bind(this);
   }
 
-  componentWillUpdate() {
-    const {
-      filters,
-    } = this.props;
+  componentWillReceiveProps(newProps) {
+    const currentFilters = this.props.filters.toArray();
+    const newFilters = newProps.filters.toArray();
 
-    const {
-      filterTags,
-    } = this.state;
-
-    if (!filters.size && !filters.length && filterTags.size) {
+    if (newFilters.length === 0 && currentFilters.length > 0) {
       this.setState({
         filterTags: Map(),
       });
@@ -64,12 +59,10 @@ class SideBarFilters extends Component {
       filterTags,
     } = this.state;
 
-    let newFilters = Map();
-
+    let newFilters = filterTags;
     filters.forEach((filter) => {
-      newFilters = filterTags.set(`${filter.indexFunc}`, filter);
+      newFilters = newFilters.set(`${filter.indexFunc}`, filter);
     });
-
 
     this.setState({
       filterTags: newFilters,
@@ -90,19 +83,21 @@ class SideBarFilters extends Component {
 
     removeFilter(filter.indexFunc);
 
-    if (filterTags.size >= 1) {
+    const newTags = filterTags.delete(`${filter.indexFunc}`);
+    console.log(newTags)
+    if (newTags.isEmpty()) {
       this.setState({
-        filterTags: filterTags.delete(`${filter.indexFunc}`),
+        filterTags: Map(),
       });
     } else {
       this.setState({
-        filterTags: Map(),
+        filterTags: newTags,
       });
     }
   }
 
   clearTags() {
-    this.props.clearFilters()
+    this.props.clearFilters();
     this.setState({
       filterTags: Map(),
     });
@@ -312,7 +307,6 @@ class SideBarFilters extends Component {
       }
       if (key === 'remindersSMS' && values[key].length === 2) {
         setFilter += 1;
-
         batchFilters.push({
           indexFunc: 10,
           data: values[key],
@@ -401,6 +395,7 @@ class SideBarFilters extends Component {
       }
     });
 
+    console.log(batchFilters)
     if (keys.length === setFilter && keys.length > 0){
       this.addTags(batchFilters);
 

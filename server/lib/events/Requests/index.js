@@ -3,7 +3,7 @@ import { Request, PatientUser, Patient, Event } from '../../../_models';
 import normalize from '../../../routes/_api/normalize';
 
 
-export function fetchRequestEvents(patientId, accountId) {
+export function fetchRequestEvents(patientId, accountId, query) {
   const patientUserExists = Patient.findOne({
     where: {
       id: patientId,
@@ -22,8 +22,8 @@ export function fetchRequestEvents(patientId, accountId) {
         patientUserId: patientUserExists.patientUserId,
         isCancelled: false,
       },
-
-      order: [['createdAt', 'ASC']],
+      ...query,
+      order: [['createdAt', 'DESC']],
     }).then((requests) => {
       return requests.map((req) => {
         const buildData = {
@@ -40,7 +40,8 @@ export function fetchRequestEvents(patientId, accountId) {
           },
         };
 
-        return Event.build(buildData).get({ plain: true });
+        const ev = Event.build(buildData);
+        return ev.get({ plain: true });
       });
     });
   }

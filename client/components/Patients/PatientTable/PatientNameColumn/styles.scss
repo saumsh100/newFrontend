@@ -12,7 +12,7 @@
   composes: subHeader from 'sass-loader!../../../../fonts.scss';
   color: #636363;
   &:hover {
-    color: $primary-color;
+    color: $primary-blue;
     cursor: pointer;
   }
 }

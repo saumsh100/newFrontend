@@ -21,13 +21,11 @@ export default function Appointments(props) {
         <div className={styles.formHeaderInput}>First Appointment</div>
         <FormSection name="firstAppointment" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
             component="DayPicker"
             name="1"
           />
@@ -35,14 +33,11 @@ export default function Appointments(props) {
         <div className={styles.formHeaderInput}>Last Appointment</div>
         <FormSection name="lastAppointment" className={styles.formContainer_row} >
           <Field
-            required
             component="DayPicker"
             name="0"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
-            required
-            component="DayPicker"
             name="1"
           />
         </FormSection>

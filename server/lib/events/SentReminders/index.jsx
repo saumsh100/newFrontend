@@ -1,6 +1,6 @@
 import { SentReminder, Event, Appointment } from '../../../_models';
 
-export function fetchSentReminderEvents(patientId, accountId) {
+export function fetchSentReminderEvents(patientId, accountId, query) {
   return SentReminder.findAll({
     raw: true,
     where: {
@@ -15,7 +15,8 @@ export function fetchSentReminderEvents(patientId, accountId) {
       },
       required: false,
     }],
-    order: [['createdAt', 'ASC']],
+    ...query,
+    order: [['createdAt', 'DESC']],
   }).then((sentReminders) => {
     return sentReminders.map((sentReminder) => {
       const buildData = {
@@ -31,7 +32,8 @@ export function fetchSentReminderEvents(patientId, accountId) {
         },
       };
 
-      return Event.build(buildData).get({ plain: true });
+      const ev = Event.build(buildData);
+      return ev.get({ plain: true });
     });
   });
 }

@@ -223,7 +223,6 @@ class PatientTable extends Component {
       newIds.push(id);
     }
 
-    console.log(newIds);
     this.setState({
       patientIds: newIds,
     });
@@ -380,7 +379,6 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
-        maxWidth: 155,
       },
       {
         Header: 'Last Name',
@@ -402,7 +400,6 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
-        maxWidth: 155,
       },
       {
         Header: 'Age',
@@ -484,7 +481,6 @@ class PatientTable extends Component {
         filterable: false,
         sortable: false,
         className: styles.colBg,
-        maxWidth: 120,
       },
     ];
 

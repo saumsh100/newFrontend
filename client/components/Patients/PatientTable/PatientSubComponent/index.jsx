@@ -4,7 +4,7 @@ import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, Event, Grid, Row, Col } from '../../../library';
-import { fetchEntities } from '../../../../thunks/fetchEntities';
+import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import DataTable from './DataTable';
 import EventsTable from './EventsTable';
 import styles from './styles.scss';
@@ -23,8 +23,9 @@ class PatientSubComponent extends Component {
       limit: 5,
     };
 
-    this.props.fetchEntities({
+    this.props.fetchEntitiesRequest({
       key: 'events',
+      id: 'getPatientEvents',
       url: `/api/patients/${patient.id}/events`,
       params: query,
     });
@@ -34,17 +35,13 @@ class PatientSubComponent extends Component {
     const {
       patient,
       events,
+      wasFetched,
     } = this.props;
-
-    let dataTableSize = 4;
-    if (!events || !events.length) {
-      dataTableSize = 4;
-    }
 
     return (
       <Grid className={styles.patientSub}>
         <Row className={styles.content}>
-          <Col xs={12} sm={12} md={dataTableSize} className={styles.dataTable}>
+          <Col xs={12} sm={12} md={4} className={styles.dataTable}>
             <DataTable
               patient={patient}
             />
@@ -52,6 +49,7 @@ class PatientSubComponent extends Component {
           <Col xs={12} sm={12} md={8} className={styles.eventsTable}>
             <div className={styles.verticalLine}>&nbsp;</div>
             <EventsTable
+              wasFetched={wasFetched}
               events={events}
               patientId={patient.id}
             />
@@ -63,19 +61,22 @@ class PatientSubComponent extends Component {
 }
 
 
-function mapStateToProps({ entities }, { patient }) {
+function mapStateToProps({ entities, apiRequests }, { patient }) {
+  const wasFetched = (apiRequests.get('getPatientEvents') ? apiRequests.get('getPatientEvents').wasFetched : null);
+
   const events = entities.getIn(['events', 'models']).toArray().filter((event) => {
     return event.get('patientId') === patient.id;
   });
 
   return {
     events,
+    wasFetched,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchEntities,
+    fetchEntitiesRequest,
   }, dispatch);
 }
 

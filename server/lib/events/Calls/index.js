@@ -53,13 +53,14 @@ function sendCallerIdSocketEnded(sub, io) {
   });
 }
 
-export function fetchCallEvents(patientId, accountId) {
+export function fetchCallEvents(patientId, accountId, query) {
   return Call.findAll({
     raw: true,
     where: {
       patientId,
     },
-    order: [['createdAt', 'ASC']],
+    order: [['createdAt', 'DESC']],
+    ...query,
   }).then((calls) => {
     const callEvents = calls.map((call) => {
       const buildData = {
@@ -77,7 +78,8 @@ export function fetchCallEvents(patientId, accountId) {
           startTime: call.startTime,
         },
       };
-      return Event.build(buildData).get({ plain: true });
+      const ev = Event.build(buildData);
+      return ev.get({ plain: true });
     });
 
     return callEvents;

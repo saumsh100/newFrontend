@@ -34,7 +34,7 @@
     padding-right: 10px;
 
     &:hover {
-      color: $primary-color;
+      color: $primary-blue;
       cursor: pointer;
     }
   }
@@ -51,12 +51,13 @@
 }
 
 .tableContainer {
-  border-top: 5px solid darken($primary-darkgrey, 10%);
+  border-top: 3px solid darken($primary-darkgrey, 10%);
 }
 
 .searchBar {
   width: 300px;
 }
+
 .buttonContainer {
   display: flex;
   justify-content: space-between;
@@ -66,6 +67,7 @@
     margin-right: 10px;
   }
 }
+
 .spacing {
   margin: 10px 0;
 }

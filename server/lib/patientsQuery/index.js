@@ -91,8 +91,7 @@ export async function PatientQuery(config) {
 
     if (smartFilter) {
       smFilter = JSON.parse(smartFilter);
-      const offSetLimit = {
-      };
+      const offSetLimit = {};
 
       if (!filters) {
         offSetLimit.offset = offset;

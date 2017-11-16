@@ -522,23 +522,15 @@ eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async 
   try {
     const accountId = req.accountId;
 
-    const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId);
-    const callEvents = await fetchCallEvents(req.patient.id, accountId);
-    const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId);
-    const requestEvents = await fetchRequestEvents(req.patient.id, accountId);
-    const reviewEvents = await fetchReviewEvents(req.patient.id, accountId);
+    const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId, req.query);
+    const callEvents = await fetchCallEvents(req.patient.id, accountId, req.query);
+    const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId, req.query);
+    const requestEvents = await fetchRequestEvents(req.patient.id, accountId, req.query);
+    const reviewEvents = await fetchReviewEvents(req.patient.id, accountId, req.query);
 
     const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents);
 
-    Promise.all(totalEvents).then(() => {
-      const filteredEvents = filterEventsByQuery(totalEvents, req.query).sort((a, b) => {
-        if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
-        if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
-        return 0;
-      });
-
-      res.send(normalize('events', filteredEvents));
-    });
+    res.send(normalize('events', totalEvents));
 
   } catch (error) {
     next(error);

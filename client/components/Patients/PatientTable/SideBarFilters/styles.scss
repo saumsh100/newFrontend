@@ -2,7 +2,7 @@
 
 .sideBar {
   margin-left: 15px;
-  border-top: 5px solid darken($primary-darkgrey, 10%);
+  border-top: 3px solid darken($primary-darkgrey, 10%);
   height: auto;
   background: $primary-white;
   padding: 25px 15px 15px 15px;
@@ -20,11 +20,11 @@
 
   &_clearText {
     margin-left: auto;
-    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    composes: fontSmall from 'sass-loader!../../../../fonts.scss';
     color: darken($primary-grey, 10%);
     cursor: pointer;
      &:hover {
-       color: darken($primary-grey, 30%);
+       color: $primary-blue;
      }
   }
 }

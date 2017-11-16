@@ -257,7 +257,8 @@ function receiveEntities(state, entities) {
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
-      if (!model || key === 'weeklySchedules' || key === 'patients' || key === 'chats' || key === 'textMessages') {
+      if (!model || key === 'weeklySchedules' || key === 'patients'
+        || key === 'chats' || key === 'textMessages' || key === 'events') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

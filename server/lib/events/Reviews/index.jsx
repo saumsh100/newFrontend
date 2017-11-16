@@ -1,14 +1,14 @@
 import { Review, Event } from '../../../_models';
 import normalize from '../../../routes/_api/normalize';
 
-export function fetchReviewEvents(patientId, accountId) {
+export function fetchReviewEvents(patientId, accountId, query) {
   return Review.findAll({
     raw: true,
     where: {
       patientId,
     },
-
-    order: [['createdAt', 'ASC']],
+    ...query,
+    order: [['createdAt', 'DESC']],
   }).then((reviews) => {
     return reviews.map((review) => {
       const buildData = {
@@ -23,7 +23,8 @@ export function fetchReviewEvents(patientId, accountId) {
         },
       };
 
-      return Event.build(buildData).get({ plain: true });
+      const ev = Event.build(buildData);
+      return ev.get({ plain: true });
     });
   });
 }

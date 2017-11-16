@@ -1,7 +1,7 @@
 
 import { Appointment, Event } from '../../../_models';
 
-export function fetchAppointmentEvents(patientId, accountId) {
+export function fetchAppointmentEvents(patientId, accountId, query) {
   return Appointment.findAll({
     raw: true,
     where: {
@@ -10,8 +10,8 @@ export function fetchAppointmentEvents(patientId, accountId) {
       isCancelled: false,
       isPending: false,
     },
-    
-    order: [['createdAt', 'ASC']],
+    ...query,
+    order: [['startDate', 'DESC']],
   }).then((appointments) => {
     return appointments.map((app) => {
       const buildData = {
@@ -20,14 +20,14 @@ export function fetchAppointmentEvents(patientId, accountId) {
         accountId,
         type: 'Appointment',
         metaData: {
-          createdAt: app.createdAt,
+          createdAt: app.startDate,
           startDate: app.startDate,
           endDate: app.endDate,
           note: app.note,
         },
       };
-
-      return Event.build(buildData).get({ plain: true });
+      const ev = Event.build(buildData);
+      return ev.get({ plain: true });
     });
   });
 }

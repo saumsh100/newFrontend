@@ -37,7 +37,6 @@ export default function Practitioners(props) {
               component="DropdownSelect"
               name="0"
               options={practitionerOptions}
-              required
             />
           </div>
           {/*<div className={styles.formHeader}> Type </div>

@@ -84,7 +84,8 @@ class HeaderSection extends Component {
     const actionsMenu = props => (
       <div {...props} className={styles.buttonContainer_actions}>
         <Button
-          border="blue"
+          color="blue"
+          iconRight="caret-down"
         >
           Actions
         </Button>
