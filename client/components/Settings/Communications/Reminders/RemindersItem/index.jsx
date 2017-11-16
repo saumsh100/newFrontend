@@ -304,12 +304,12 @@ class RemindersItem extends Component {
                 onChange={this.editReminder}
               />
             </Col>
-            <Col xs={3} className={styles.labelCol}>
+            <Col xs={4} className={styles.labelCol}>
               <div className={styles.reminderLabel}>
                 {`${ordinalSuffix(index + 1)} Reminder`}
               </div>
             </Col>
-            <Col xs={8}>
+            <Col xs={7}>
               <div className={selected ? styles.linesBoxSelected : styles.linesBox}>
                 <IconCircle
                   icon={icon}

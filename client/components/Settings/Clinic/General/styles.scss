@@ -5,7 +5,7 @@
 }
 
 .generalMainContainer {
-  display: flex;
+  display: -webkit-box;
   width: 100%;
   box-sizing: border-box;
 }
@@ -95,4 +95,8 @@
   transition: background-color .1s ease, color .1s;
   display: block;
   width: 140px;
+}
+
+.generalBodyClass {
+  padding: 20px;
 }

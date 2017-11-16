@@ -1,8 +1,10 @@
 
-import React, {PropTypes, Component} from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { connect } from 'react-redux';
+import jwt from 'jwt-decode';
 import GeneralForm from './GeneralForm';
 import AddAccounts from './AddAccounts';
 import ContactForm from './ContactForm';
@@ -11,12 +13,11 @@ import Address from '../Address';
 import { Map } from 'immutable';
 import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
-import { Grid, Row, Col, Dropzone, AccountLogo, Button, Header} from '../../../library';
+import { Dropzone, AccountLogo, Button, Header} from '../../../library';
+import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
-import jwt from 'jwt-decode';
 
-class General extends React.Component {
-
+class General extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,15 +44,15 @@ class General extends React.Component {
 
   downloadConnector() {
     this.props.downloadConnector()
-    .then((downloadLink) => {
-      const reg = /Expires=([^&]*)/;
-      const matches = downloadLink.match(reg);
+      .then((downloadLink) => {
+        const reg = /Expires=([^&]*)/;
+        const matches = downloadLink.match(reg);
 
-      this.setState({
-        downloadLink,
-        expired: Number(matches[1] * 1000),
+        this.setState({
+          downloadLink,
+          expired: Number(matches[1] * 1000),
+        });
       });
-    });
   }
 
   uploadLogo(files) {
@@ -60,11 +61,11 @@ class General extends React.Component {
     });
 
     this.props.uploadLogo(this.props.activeAccount.id, files[0])
-    .then(() => {
-      this.setState({
-        uploading: false,
+      .then(() => {
+        this.setState({
+          uploading: false,
+        });
       });
-    });
   }
 
   deleteAccounts() {
@@ -200,11 +201,14 @@ class General extends React.Component {
         body: 'Failed to update.',
       },
     };
+
     updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
   }
 
   render() {
     const { activeAccount, users } = this.props;
+
+    if (!activeAccount) return null;
 
     const addAccounts = [(<Header
       title="API Accounts"
@@ -217,51 +221,48 @@ class General extends React.Component {
       />
     </div>)];
 
-    let showComponent = null;
-    if (activeAccount) {
-      const token = localStorage.getItem('token');
-      const decodedToken = jwt(token);
-      let role = null;
-      users.map((users) => {
-        if (decodedToken.userId === users.id) {
-          role = users.role;
-        }
-        return null;
-      });
-
-      let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
-
-      if (this.state.downloadLink) {
-        const now = moment(this.state.expired);
-        const end = moment(new Date());
-        const duration = moment.duration(now.diff(end)).asSeconds();
-
-        button = duration > 0 ? (<a
-          className={styles.linkAsButton}
-          href={this.state.downloadLink}
-          download
-        >Click to Download
-          <br /> {Math.floor(duration)} s
-        </a>) : (<a
-          className={styles.linkAsButton}
-          href={this.state.downloadLink}
-          download
-        >Link Expired
-        </a>);
-
-        setTimeout(() => {
-          if (duration > 0) {
-            this.setState({ expired: this.state.expired });
-          }
-        }, 500);
+    const token = localStorage.getItem('token');
+    const decodedToken = jwt(token);
+    let role = null;
+    users.map((users) => {
+      if (decodedToken.userId === users.id) {
+        role = users.role;
       }
+      return null;
+    });
 
-      showComponent = (
-        <div className={styles.outerContainer}>
-          <Header
-            title="General"
-            className={styles.generalHeader}
-          />
+    let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
+
+    if (this.state.downloadLink) {
+      const now = moment(this.state.expired);
+      const end = moment(new Date());
+      const duration = moment.duration(now.diff(end)).asSeconds();
+
+      button = duration > 0 ? (<a
+        className={styles.linkAsButton}
+        href={this.state.downloadLink}
+        download
+      >Click to Download
+        <br /> {Math.floor(duration)} s
+      </a>) : (<a
+        className={styles.linkAsButton}
+        href={this.state.downloadLink}
+        download
+      >Link Expired
+      </a>);
+
+      setTimeout(() => {
+        if (duration > 0) {
+          this.setState({ expired: this.state.expired });
+        }
+      }, 500);
+    }
+
+    return (
+      <SettingsCard
+        title="General"
+        bodyClass={styles.generalBodyClass}
+      >
           <div className={styles.generalMainContainer}>
             <div className={styles.formContainer}>
               <Header
@@ -281,7 +282,7 @@ class General extends React.Component {
               />
               <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
                 <AccountLogo account={activeAccount} size="original" />
-                  <p>Drop logo here or click to select file.</p>
+                <p>Drop logo here or click to select file.</p>
               </Dropzone>
               {activeAccount.fullLogoUrl ? <Button icon="trash" className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
             </div>
@@ -327,14 +328,7 @@ class General extends React.Component {
           </div>
 
           {role === 'SUPERADMIN' ? addAccounts : null }
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        {showComponent}
-      </div>
+      </SettingsCard>
     );
   }
 }

@@ -24,7 +24,11 @@ export default function SaveButton(props) {
   return (
     <div className={styles.formActionsWrapper}>
       <div className={styles.formActionsPull}>
-        <Button disabled={pristine} type="submit" className={saveClasses} icon="floppy-o" >
+        <Button
+          disabled={pristine}
+          type="submit"
+          className={saveClasses}
+        >
             Save
         </Button>
       </div>

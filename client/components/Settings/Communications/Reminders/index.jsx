@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import {
-  Toggle,
   Grid,
   Row,
   Col,
@@ -16,6 +15,7 @@ import {
   RemoteSubmitButton,
   DialogBox,
 } from '../../../library';
+import SettingsCard from '../../Shared/SettingsCard';
 import RemindersItem from './RemindersItem';
 import EditRemindersForm from './EditRemindersForm';
 import styles from './styles.scss';
@@ -237,14 +237,11 @@ class Reminders extends Component {
     const { selectedReminderId } = this.state;
     const selectedReminder = this.props.reminders.get(selectedReminderId);
 
-
     return (
-      <div className={styles.main}>
-        <div className={styles.header}>
-          <Header title={'Reminders'} className={styles.headerTitle} />
-        </div>
-        <div className={styles.body}>
-          {/*<div className={styles.createButtonContainer}>
+      <SettingsCard
+        title="Reminders Settings"
+      >
+        {/*<div className={styles.createButtonContainer}>
             <Button
               className={styles.edit}
               onClick={this.openModal}
@@ -255,34 +252,33 @@ class Reminders extends Component {
               Add New Reminder
             </Button>
           </div>*/}
-          {this.props.reminders.toArray().map((reminder, i) => {
-            return (
-              <RemindersItem
-                key={reminder.id}
-                reminder={reminder}
-                account={this.props.activeAccount}
-                index={i}
-                onSelect={() => this.selectReminder(reminder.id)}
-                selected={reminder.id === selectedReminderId}
-              />
-            );
-          })}
-          <Grid className={styles.finalItem}>
-            <Row>
-              <Col xs={1}>
-                {/* Keep Empty */}
-              </Col>
-              <Col xs={3}>
-                <div>
-                  Appointment
-                </div>
-              </Col>
-              <Col xs={8}>
-                <Icon icon="calendar" />
-              </Col>
-            </Row>
-          </Grid>
-        </div>
+        {this.props.reminders.toArray().map((reminder, i) => {
+          return (
+            <RemindersItem
+              key={reminder.id}
+              reminder={reminder}
+              account={this.props.activeAccount}
+              index={i}
+              onSelect={() => this.selectReminder(reminder.id)}
+              selected={reminder.id === selectedReminderId}
+            />
+          );
+        })}
+        <Grid className={styles.finalItem}>
+          <Row>
+            <Col xs={1}>
+              {/* Keep Empty */}
+            </Col>
+            <Col xs={3}>
+              <div>
+                Appointment
+              </div>
+            </Col>
+            <Col xs={8}>
+              <Icon icon="calendar" />
+            </Col>
+          </Row>
+        </Grid>
         <DialogBox
           actions={actionsNew}
           title="Reminders"
@@ -311,7 +307,7 @@ class Reminders extends Component {
             sendEdit={this.sendEdit.bind(null, this.state.formName)}
           />
         </DialogBox>
-      </div>
+      </SettingsCard>
     );
   }
 }

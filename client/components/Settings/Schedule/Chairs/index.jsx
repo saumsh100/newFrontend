@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -7,8 +8,9 @@ import { fetchEntities, updateEntityRequest } from '../../../../thunks/fetchEnti
 import { showAlertTimeout } from '../../../../thunks/alerts';
 import { Header, Toggle } from '../../../library';
 import { SortByName } from '../../../library/util/SortEntities';
-import styles from './styles.scss';
+import SettingsCard from '../../Shared/SettingsCard';
 import ChairsForm from './ChairsForm';
+import styles from './styles.scss';
 
 function checkValues(obj) {
   const allTrue = Object.keys(obj).every((key) => {
@@ -109,13 +111,13 @@ class Chairs extends Component {
     }
 
     return (
-      <div>
-        <div className={styles.headerContainer}>
-          <Header title={'Set Active Chairs'} />
-        </div>
+      <SettingsCard
+        title="Chairs"
+        bodyClass={styles.chairsBody}
+      >
         <div className={styles.container}>
           <div className={styles.allChairs}>
-            <span className={styles.allChairs_text}> All Chairs </span>
+            <span className={styles.allChairs_text}> All Chairs Active </span>
             <Toggle
               name="allChairs"
               onChange={this.setAllChairs}
@@ -129,7 +131,7 @@ class Chairs extends Component {
             formValues={this.state.previousValues}
           /> : null }
         </div>
-      </div>
+      </SettingsCard>
     );
   }
 }

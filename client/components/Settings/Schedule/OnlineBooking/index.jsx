@@ -7,6 +7,7 @@ import { Header, CodeSnippet } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import PreferencesForm from './PreferencesForm';
 import IntervalForm from './IntervalForm';
+import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
 function hexToRgbA(hex, opacity) {
@@ -60,11 +61,10 @@ class OnlineBooking extends Component {
     const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}${port}/widgets/${activeAccount.id}/widget.js"></script>`;
 
     return (
-      <div className={styles.mainContainer}>
-        <Header
-          title="Booking Widget Preferences"
-          className={styles.header}
-        />
+      <SettingsCard
+        title="Online Booking"
+        bodyClass={styles.onlineBookingBody}
+      >
         <div className={styles.formContainer}>
           <Header
             title="Color Options"
@@ -94,7 +94,7 @@ class OnlineBooking extends Component {
             handleSubmit={this.handleSubmit}
           />
         </div>
-      </div>
+      </SettingsCard>
     );
   }
 }

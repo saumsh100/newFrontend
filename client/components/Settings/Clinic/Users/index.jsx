@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +10,7 @@ import InviteUsersList from './InviteUsersList';
 import NewUserForm from './NewUserForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import InviteUserForm from './InviteUserForm';
+import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
 class Users extends Component{
@@ -283,8 +285,10 @@ class Users extends Component{
       </Button>) : null);
 
     return (
-      <Grid>
-        <Header title={'Users'} className={styles.userHeaderTitle} />
+      <SettingsCard
+        title="Users"
+        bodyClass={styles.usersBodyClass}
+      >
         <DialogBox
           actions={actions}
           title="Email Invite"
@@ -376,7 +380,7 @@ class Users extends Component{
         <List className={styles.userList}>
           {usersInvited}
         </List>
-      </Grid>
+      </SettingsCard>
     );
   }
 }
