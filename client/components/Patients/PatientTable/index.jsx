@@ -470,9 +470,9 @@ class PatientTable extends Component {
             />
           );
         },
+        sortable: false,
         filterable: false,
         className: styles.colBg,
-        sortable: false,
       },
       {
         Header: 'Production in Calendar Year',

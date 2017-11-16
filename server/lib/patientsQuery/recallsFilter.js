@@ -13,43 +13,42 @@ export async function RecallsFilter({ data, key }, filterIds, query, accountId) 
       };
     }
 
-    const patientData = await SentRecall.findAll({
+    const patientData = await Patient.findAndCountAll({
+      raw: true,
       where: {
         accountId,
-        primaryType: key,
-        createdAt: {
-          $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
-        },
+        ...prevFilterIds,
       },
       include: {
-        model: Patient,
-        as: 'patient',
+        model: SentRecall,
+        as: 'sentRecalls',
         where: {
           accountId,
-          ...prevFilterIds,
+          primaryType: key,
+          createdAt: {
+            $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
+          },
         },
         attributes: [],
-        duplicating: false,
         required: true,
+        duplicating: false,
       },
-      group: ['patient.id'],
+      group: ['Patient.id'],
       attributes: [
-        'patient.id',
-        'patient.firstName',
-        'patient.lastName',
-        'patient.nextApptDate',
-        'patient.lastApptDate',
-        'patient.birthDate',
-        'patient.status',
+        'Patient.id',
+        'Patient.firstName',
+        'Patient.lastName',
+        'Patient.nextApptDate',
+        'Patient.lastApptDate',
+        'Patient.birthDate',
+        'Patient.status',
       ],
-      raw: true,
+      ...query,
     });
 
-    const truncatedData = ManualLimitOffset(patientData, query);
-
     return ({
-      rows: truncatedData,
-      count: patientData.length,
+      rows: patientData.rows,
+      count: patientData.count.length,
     });
 
   } catch (err) {

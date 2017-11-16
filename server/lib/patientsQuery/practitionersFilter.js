@@ -12,44 +12,43 @@ export async function PractitionersFilter({ data }, filterIds, query, accountId)
       };
     }
 
-    const appData = await Appointment.findAll({
+    const patientData = await Patient.findAndCountAll({
       raw: true,
       where: {
         accountId,
-        isCancelled: false,
-        isDeleted: false,
-        isPending: false,
-        practitionerId: data[0],
+        ...prevFilterIds,
       },
       include: {
-        model: Patient,
-        as: 'patient',
+        model: Appointment,
+        as: 'appointments',
         where: {
-          ...prevFilterIds,
+          accountId,
+          isCancelled: false,
+          isDeleted: false,
+          isPending: false,
+          practitionerId: data[0],
         },
         attributes: [],
-        duplicating: false,
         required: true,
+        duplicating: false,
       },
-      group: ['patient.id'],
+      group: ['Patient.id'],
       attributes: [
-        'patient.id',
-        'patient.firstName',
-        'patient.lastName',
-        'patient.nextApptDate',
-        'patient.lastApptDate',
-        'patient.birthDate',
-        'patient.status',
+        'Patient.id',
+        'Patient.firstName',
+        'Patient.lastName',
+        'Patient.nextApptDate',
+        'Patient.lastApptDate',
+        'Patient.birthDate',
+        'Patient.status',
       ],
+      ...query,
     });
-
-    const truncatedData = ManualLimitOffset(appData, query);
 
     return ({
-      rows: truncatedData,
-      count: appData.length,
+      rows: patientData.rows,
+      count: patientData.count.length,
     });
-
   } catch (err) {
     console.log(err);
   }

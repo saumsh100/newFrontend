@@ -48,44 +48,46 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
       };
     }
 
-    const appData = await Appointment.findAll({
+    const patientData = await Patient.findAndCountAll({
       raw: true,
       where: {
         accountId,
-        isCancelled: false,
-        isDeleted: false,
-        isPending: false,
-        patientId: {
-          $not: null,
-        },
+        ...prevFilterIds,
       },
       include: {
-        model: Patient,
-        as: 'patient',
+        model: Appointment,
+        as: 'appointments',
         where: {
-          ...prevFilterIds,
+          accountId,
+          isCancelled: false,
+          isDeleted: false,
+          isPending: false,
+          patientId: {
+            $not: null,
+          },
         },
         attributes: [],
-        duplicating: false,
         required: true,
+        duplicating: false,
       },
-      group: ['patient.id'],
+      group: ['Patient.id'],
       attributes: [
-        'patient.id',
+        'Patient.id',
+        'Patient.firstName',
+        'Patient.lastName',
+        'Patient.nextApptDate',
+        'Patient.lastApptDate',
+        'Patient.birthDate',
+        'Patient.status',
       ],
-      having: sequelize.literal(`count("patient"."id") ${data[0]} ${data[1]}`),
-    });
-
-    const patientIds = getIds(appData, 'id');
-
-    return await Patient.findAndCountAll({
-      raw: true,
-      where: {
-        accountId,
-        id: patientIds,
-      },
+      having: sequelize.literal(`count("appointments"."patientId") ${data[0]} ${data[1]}`),
       ...query,
     });
+
+    return {
+      rows: patientData.rows,
+      count: patientData.count.length,
+    };
   } catch (err) {
     console.log(err);
   }
@@ -180,7 +182,7 @@ export async function OnlineAppointmentsFilter({ data }, filterIds, query, accou
           attributes: [],
         },
       },
-      attributes: ['patientUser.id', [sequelize.fn('COUNT', 'patientUser.id'), 'PatientCount']],
+      attributes: ['patientUser.id'],
       having: sequelize.literal(`count("patientUser"."id") ${data[0]} ${data[1]}`),
       group: ['patientUser.id'],
     });
