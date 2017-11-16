@@ -24,6 +24,12 @@ const makeSentRecallData = (data = {}) => Object.assign({
   createdAt: date(2000, 10, 10, 9),
 }, data);
 
+const makeSentRecallData2 = (data = {}) => Object.assign({
+  // Doesnt even have to match recall for this test
+  accountId,
+  lengthSeconds: 15552000,
+}, data);
+
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
 const dates = (y, m, d, h) => {
   return {
@@ -37,7 +43,7 @@ describe('Recalls Filters Tests', () => {
     await wipeAllModels();
   });
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await wipeAllModels();
     await seedTestUsers();
     await seedTestPatients();
@@ -85,6 +91,61 @@ describe('Recalls Filters Tests', () => {
 
       const patientsData = await recallsFilterLibrary.RecallsFilter({ data, key: 'phone' }, [], {}, accountId);
       expect(patientsData.rows.length).toBe(1);
+    });
+  });
+
+  describe('Last Recall Filter ', () => {
+    test('Should have 2 patients who have a last recall between these dates', async () => {
+
+      const recall = await Recall.bulkCreate([
+        {accountId, primaryType: 'email', lengthSeconds: 15552000},
+        {accountId, primaryType: 'sms', lengthSeconds: 1231233},
+      ]);
+
+      const recallPlain = recall[0].get({plain: true});
+      const recallPlain1 = recall[1].get({plain: true});
+      const recallPlain2 = recall[1].get({plain: true});
+
+
+      const patients = await Patient.bulkCreate([
+        makePatientData({ firstName: 'Old', lastName: 'Patient' }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
+      ]);
+
+      const appointments = await Appointment.bulkCreate([
+        makeApptData({ patientId: patients[0].id, ...dates(2000, 7, 5, 8) }),
+        makeApptData({ patientId: patients[0].id, ...dates(2000, 8, 5, 9) }),
+        makeApptData({ patientId: patients[1].id, ...dates(2000, 11, 5, 9) }),
+      ]);
+
+      const sentRecall = await SentRecall.bulkCreate([
+        makeSentRecallData2({
+          recallId: recallPlain.id,
+          primaryType: 'email',
+          patientId: patients[0].id,
+          appointmentId: appointments[0].id,
+          createdAt: date(2000, 10, 10, 10),
+        }),
+        makeSentRecallData2({
+          recallId: recallPlain1.id,
+          primaryType: 'sms',
+          patientId: patients[0].id,
+          appointmentId: appointments[1].id,
+          createdAt: date(2000, 10, 10, 9),
+        }),
+        makeSentRecallData2({
+          recallId: recallPlain2.id,
+          primaryType: 'sms',
+          patientId: patients[1].id,
+          appointmentId: appointments[2].id,
+          createdAt: date(2000, 12, 10, 9),
+        }),
+      ]);
+
+      const data = [date(2000, 8, 5, 8), date(2000, 12, 11, 8)];
+
+      const patientsData = await recallsFilterLibrary.LastRecallFilter({ data }, [], {}, accountId);
+      expect(patientsData.rows.length).toBe(2);
     });
   });
 });

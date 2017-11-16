@@ -1,7 +1,7 @@
 
 import moment from 'moment';
-import { Patient, Appointment, SentRecall } from '../../_models';
-import { ManualLimitOffset } from './helpers';
+import { Patient, SentRecall } from '../../_models';
+import { getIds } from './helpers';
 
 export async function RecallsFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -56,7 +56,7 @@ export async function RecallsFilter({ data, key }, filterIds, query, accountId) 
   }
 }
 
-export async function LastRecallFilter({ data, key }, filterIds, query, accountId) {
+export async function LastRecallFilter({ data }, filterIds, query, accountId) {
   try {
     let prevFilterIds = { id: { $not: null } }
 
@@ -71,6 +71,7 @@ export async function LastRecallFilter({ data, key }, filterIds, query, accountI
         accountId,
         createdAt: {
           $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
+          $notBetween: [moment(data[1]).toISOString(), moment().toISOString()],
         },
       },
       include: {
@@ -87,14 +88,6 @@ export async function LastRecallFilter({ data, key }, filterIds, query, accountI
       group: ['patient.id', 'SentRecall.patientId', 'SentRecall.createdAt', 'SentRecall.primaryType'],
       attributes: [
         'patient.id',
-        'patient.firstName',
-        'patient.lastName',
-        'patient.nextApptDate',
-        'patient.lastApptDate',
-        'patient.birthDate',
-        'patient.status',
-        'SentRecall.createdAt',
-        'SentRecall.primaryType',
       ],
       order: [['patientId', 'desc'], ['createdAt', 'desc']],
       raw: true,
@@ -102,17 +95,20 @@ export async function LastRecallFilter({ data, key }, filterIds, query, accountI
 
     const recallData = calcLastRecallSent(patientData);
 
-    const truncatedData = ManualLimitOffset(recallData, query);
+    const patientIds = getIds(recallData, 'id');
 
-    return ({
-      rows: truncatedData,
-      count: recallData.length,
+    return await Patient.findAndCountAll({
+      raw: true,
+      where: {
+        accountId,
+        id: patientIds,
+      },
+      ...query,
     });
   } catch (err) {
     console.log(err);
   }
 }
-
 
 export function calcLastRecallSent(recallData) {
   let j = 0;

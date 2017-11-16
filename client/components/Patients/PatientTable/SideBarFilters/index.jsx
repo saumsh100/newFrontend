@@ -304,6 +304,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 9,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Reminders Email',
           key: 'phone',
         });
@@ -314,6 +316,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 10,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Reminders SMS',
           key: 'sms',
         });
@@ -323,6 +327,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 11,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Reminders Phone',
           key: 'phone',
         });
@@ -332,6 +338,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 12,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Recares Email',
           key: 'phone',
         });
@@ -341,6 +349,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 13,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Recares SMS',
           key: 'sms',
         });
@@ -350,6 +360,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 14,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Recares Phone',
           key: 'phone',
         });
@@ -359,6 +371,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 15,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Last Reminder Sent',
           intensive: true,
         });
@@ -368,6 +382,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 16,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Last Recare Sent',
           intensive: true,
         });
@@ -377,6 +393,8 @@ class SideBarFilters extends Component {
         batchFilters.push({
           indexFunc: 17,
           data: values[key],
+          formName: 'communications',
+          formSection: key,
           tag: 'Reviews',
           intensive: true,
         });

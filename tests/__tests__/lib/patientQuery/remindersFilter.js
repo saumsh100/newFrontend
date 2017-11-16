@@ -24,6 +24,12 @@ const makeSentReminderData = (data = {}) => Object.assign({
   createdAt: date(2000, 10, 10, 9),
 }, data);
 
+const makeSentReminderData2 = (data = {}) => Object.assign({
+  // Doesnt even have to match recall for this test
+  accountId,
+  lengthSeconds: 15552000,
+}, data);
+
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
 const dates = (y, m, d, h) => {
   return {
@@ -37,14 +43,14 @@ describe('Reminder Filters Tests', () => {
     await wipeAllModels();
   });
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     await wipeAllModels();
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
   });
 
-  describe('Recalls Filter ', () => {
+  describe('Reminders Filter ', () => {
     test('Should have 1 patient who has received a reminder email', async () => {
 
       const reminder = await Reminder.create({ accountId, primaryType: 'email', lengthSeconds: 15552000 });
@@ -62,7 +68,7 @@ describe('Reminder Filters Tests', () => {
       ]);
 
       const sentReminder = await SentReminder.create(makeSentReminderData(
-        { reminderId: reminderPlain.id, 
+        { reminderId: reminderPlain.id,
           primaryType: 'email',
           appointmentId: appointments[0].id,
         }));
@@ -89,7 +95,7 @@ describe('Reminder Filters Tests', () => {
       ]);
 
       const sentReminder = await SentReminder.create(makeSentReminderData(
-        { reminderId: reminderPlain.id, 
+        { reminderId: reminderPlain.id,
           primaryType: 'sms',
           appointmentId: appointments[0].id,
         }));
@@ -116,7 +122,7 @@ describe('Reminder Filters Tests', () => {
       ]);
 
       const sentReminder = await SentReminder.create(makeSentReminderData(
-        { reminderId: reminderPlain.id, 
+        { reminderId: reminderPlain.id,
           primaryType: 'phone',
           appointmentId: appointments[0].id,
         }));
@@ -125,6 +131,61 @@ describe('Reminder Filters Tests', () => {
 
       const patientsData = await remindersFilterLibrary.RemindersFilter({ data, key: 'phone' }, [], {}, accountId);
       expect(patientsData.rows.length).toBe(1);
+    });
+  });
+  describe('Last Reminder Filter ', () => {
+    test('Should have 2 patients who have a last reminder between these dates', async () => {
+
+      const reminder = await Reminder.bulkCreate([
+        {accountId, primaryType: 'email', lengthSeconds: 15552000},
+        {accountId, primaryType: 'sms', lengthSeconds: 1231233},
+      ]);
+
+      const reminderPlain = reminder[0].get({plain: true});
+      const reminderPlain1 = reminder[1].get({plain: true});
+      const reminderPlain2 = reminder[1].get({plain: true});
+
+
+      const patients = await Patient.bulkCreate([
+        makePatientData({firstName: 'Old', lastName: 'Patient'}),
+        makePatientData({firstName: 'Recent', lastName: 'Patient'}),
+      ]);
+
+      const appointments = await Appointment.bulkCreate([
+        makeApptData({patientId: patients[0].id, ...dates(2000, 7, 5, 8)}),
+        makeApptData({patientId: patients[0].id, ...dates(2000, 8, 5, 9)}),
+        makeApptData({patientId: patients[1].id, ...dates(2000, 11, 5, 9)}),
+      ]);
+
+      const sentReminder = await SentReminder.bulkCreate([
+        makeSentReminderData2({
+          reminderId: reminderPlain.id,
+          primaryType: 'email',
+          patientId: patients[0].id,
+          appointmentId: appointments[0].id,
+          createdAt: date(2000, 10, 10, 10),
+        }),
+        makeSentReminderData2({
+          reminderId: reminderPlain1.id,
+          primaryType: 'sms',
+          patientId: patients[0].id,
+          appointmentId: appointments[1].id,
+          createdAt: date(2000, 10, 10, 9),
+        }),
+        makeSentReminderData2({
+          reminderId: reminderPlain2.id,
+          primaryType: 'sms',
+          patientId: patients[1].id,
+          appointmentId: appointments[2].id,
+          createdAt: date(2000, 12, 10, 9),
+        }),
+      ]);
+
+      const data = [date(2000, 8, 5, 8), date(2000, 12, 11, 8)];
+
+      const patientsData = await remindersFilterLibrary.LastReminderFilter({ data }, [], {}, accountId);
+      console.log(patientsData);
+      expect(patientsData.rows.length).toBe(2);
     });
   });
 });

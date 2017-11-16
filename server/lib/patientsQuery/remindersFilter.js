@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Patient, SentReminder } from '../../_models';
-import { ManualLimitOffset } from './helpers';
+import { getIds } from './helpers';
 
 export async function RemindersFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -56,7 +56,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
   }
 }
 
-export async function LastReminderFilter({ data, key }, filterIds, query, accountId) {
+export async function LastReminderFilter({ data }, filterIds, query, accountId) {
   try {
     let prevFilterIds = { id: { $not: null } }
 
@@ -71,6 +71,7 @@ export async function LastReminderFilter({ data, key }, filterIds, query, accoun
         accountId,
         createdAt: {
           $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
+          $notBetween: [moment(data[1]).toISOString(), moment().toISOString()],
         },
       },
       include: {
@@ -87,28 +88,22 @@ export async function LastReminderFilter({ data, key }, filterIds, query, accoun
       group: ['patient.id', 'SentReminder.patientId', 'SentReminder.createdAt', 'SentReminder.primaryType'],
       attributes: [
         'patient.id',
-        'patient.firstName',
-        'patient.lastName',
-        'patient.nextApptDate',
-        'patient.lastApptDate',
-        'patient.birthDate',
-        'patient.status',
-        'SentReminder.createdAt',
-        'SentReminder.primaryType',
       ],
       order: [['patientId', 'desc'], ['createdAt', 'desc']],
       raw: true,
     });
 
     const reminderData = calcLastReminderSent(patientData);
+    const patientIds = getIds(reminderData, 'id');
 
-    const truncatedData = ManualLimitOffset(reminderData, query);
-
-    return ({
-      rows: truncatedData,
-      count: reminderData.length,
+    return await Patient.findAndCountAll({
+      raw: true,
+      where: {
+        accountId,
+        id: patientIds,
+      },
+      ...query,
     });
-
   } catch (err) {
     console.log(err);
   }
