@@ -34,7 +34,7 @@ function sendReminderIdsSocket(sub, io) {
           method: sr.primaryType,
           type: Correspondence.REMINDER_SENT_TYPE,
           contactedAt: sr.createdAt,
-          note: 'Sent Appointment Reminder via CareCru',
+          note: Correspondence.REMINDER_SENT_NOTE,
         };
       });
 
@@ -98,7 +98,7 @@ function sendReminderUpdatedSocket(sub, io) {
       });
 
       if (!correspondenceCheck) {
-        correspondence.note = 'Patient Confirmed their Appointment via CareCru';
+        correspondence.note = Correspondence.REMINDER_CONFIRMED_NOTE;
         correspondence.type = Correspondence.REMINDER_CONFIRMED_TYPE;
         correspondence.isSyncedWithPms = false;
         correspondence.contactedAt = new Date();

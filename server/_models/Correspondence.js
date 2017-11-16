@@ -84,7 +84,11 @@ export default function (sequelize, DataTypes) {
   Correspondence.RECALL_SENT_TYPE = 'RECALL:SENT';
   Correspondence.REMINDER_SENT_TYPE = 'REMINDER:SENT';
   Correspondence.REMINDER_CONFIRMED_TYPE = 'REMINDER:CONFIRMED';
-  
+
+  Correspondence.RECALL_SENT_NOTE = 'Sent Recall via CareCru';
+  Correspondence.REMINDER_SENT_NOTE = 'Sent Appointment Reminder via CareCru';
+  Correspondence.REMINDER_CONFIRMED_NOTE = 'Patient Confirmed their Appointment via CareCru';
+
   Correspondence.associate = ({ Account, Appointment, Patient, SentRecall, SentReminder }) => {
     Correspondence.belongsTo(Account, {
       foreignKey: 'accountId',
