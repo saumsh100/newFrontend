@@ -6,26 +6,26 @@ import batchCreate from '../../../routes/util/batch';
 function sendReminderIdsSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
-      const sentreminderIds = JSON.parse(data);
-      let sentreminders = await SentReminder.findAll({
+      const sentReminderIds = JSON.parse(data);
+      let sentReminders = await SentReminder.findAll({
         where: {
-          id: sentreminderIds,
+          id: sentReminderIds,
         },
       });
 
       const correspondencesCheck = await Correspondence.findAll({
         where: {
-          sentReminderId: sentreminderIds,
+          sentReminderId: sentReminderIds,
         },
       });
 
-      const sentreminderIdsCheck = correspondencesCheck.map(s => s.sentReminderId);
+      const sentReminderIdsCheck = correspondencesCheck.map(s => s.sentReminderId);
 
-      sentreminders = sentreminders.filter((s) => {
-        return !sentreminderIdsCheck.includes(s.id);
+      sentReminders = sentReminders.filter((s) => {
+        return !sentReminderIdsCheck.includes(s.id);
       });
 
-      const correspondencesToCreate = sentreminders.map((sr) => {
+      const correspondencesToCreate = sentReminders.map((sr) => {
         return {
           accountId: sr.accountId,
           patientId: sr.patientId,
