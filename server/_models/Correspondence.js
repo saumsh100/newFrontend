@@ -39,6 +39,16 @@ export default function (sequelize, DataTypes) {
       allowNull: true,
     },
 
+    sentReminderId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+
+    sentRecallId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+
     type: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -71,7 +81,7 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Correspondence.associate = ({ Account, Appointment, Patient }) => {
+  Correspondence.associate = ({ Account, Appointment, Patient, SentRecall, SentReminder }) => {
     Correspondence.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -80,6 +90,16 @@ export default function (sequelize, DataTypes) {
     Correspondence.belongsTo(Appointment, {
       foreignKey: 'appointmentId',
       as: 'appointment',
+    });
+
+    Correspondence.belongsTo(SentRecall, {
+      foreignKey: 'sentRecallId',
+      as: 'sentRecall',
+    });
+
+    Correspondence.belongsTo(SentReminder, {
+      foreignKey: 'sentReminderId',
+      as: 'sentReminder',
     });
 
     Correspondence.belongsTo(Patient, {

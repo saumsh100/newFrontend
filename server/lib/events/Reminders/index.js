@@ -17,6 +17,7 @@ function sendReminderIdsSocket(sub, io) {
         return {
           accountId: sr.accountId,
           patientId: sr.patientId,
+          sentreminderId: sr.id,
           appointmentId: sr.appointmentId,
           method: sr.primaryType,
           type: 'REMINDER:SENT',
@@ -30,7 +31,7 @@ function sendReminderIdsSocket(sub, io) {
         const accountId = correspondences[0].accountId;
         correspondences = correspondences.map(c => c.id);
 
-        return io.of(namespaces.dash).in(accountId).emit('CREATE:Correspondence', correspondences);
+        return io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
       }
     } catch (error) {
       let {
@@ -47,7 +48,7 @@ function sendReminderIdsSocket(sub, io) {
           const accountId = docs[0].accountId;
           docs = docs.map(c => c.id);
 
-          io.of(namespaces.dash).in(accountId).emit('CREATE:Correspondence', docs);
+          io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', docs);
         }
         // Log any errors that occurred
         errors.forEach((err) => {
@@ -69,8 +70,9 @@ function sendReminderUpdatedSocket(sub, io) {
         },
       });
 
-      await correspondence.update({ isSyncedWithPms: true });
+      await correspondence.update({ isSyncedWithPms: false });
 
+      io.of(namespaces.sync).in(correspondence.accountId).emit('UPDATE:Correspondence', correspondence.id);
     } catch (error) {
       console.error(error);
     }
