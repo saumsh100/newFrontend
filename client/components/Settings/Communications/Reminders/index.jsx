@@ -5,7 +5,17 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-import { Toggle, Grid, Header, Button, RemoteSubmitButton, DialogBox } from '../../../library';
+import {
+  Toggle,
+  Grid,
+  Row,
+  Col,
+  Icon,
+  Header,
+  Button,
+  RemoteSubmitButton,
+  DialogBox,
+} from '../../../library';
 import RemindersItem from './RemindersItem';
 import EditRemindersForm from './EditRemindersForm';
 import styles from './styles.scss';
@@ -230,11 +240,11 @@ class Reminders extends Component {
 
     return (
       <div className={styles.main}>
-        <div>
-          <div className={styles.header}>
-            <Header title={'Reminders'} className={styles.headerTitle} />
-          </div>
-          <div className={styles.createButtonContainer}>
+        <div className={styles.header}>
+          <Header title={'Reminders'} className={styles.headerTitle} />
+        </div>
+        <div className={styles.body}>
+          {/*<div className={styles.createButtonContainer}>
             <Button
               className={styles.edit}
               onClick={this.openModal}
@@ -244,7 +254,7 @@ class Reminders extends Component {
             >
               Add New Reminder
             </Button>
-          </div>
+          </div>*/}
           {this.props.reminders.toArray().map((reminder, i) => {
             return (
               <RemindersItem
@@ -257,6 +267,21 @@ class Reminders extends Component {
               />
             );
           })}
+          <Grid className={styles.finalItem}>
+            <Row>
+              <Col xs={1}>
+                {/* Keep Empty */}
+              </Col>
+              <Col xs={3}>
+                <div>
+                  Appointment
+                </div>
+              </Col>
+              <Col xs={8}>
+                <Icon icon="calendar" />
+              </Col>
+            </Row>
+          </Grid>
         </div>
         <DialogBox
           actions={actionsNew}

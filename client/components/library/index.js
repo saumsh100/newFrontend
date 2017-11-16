@@ -149,5 +149,6 @@ export {
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';
 export { Grid, Row, Col } from './Grid';
+export { SContainer, SHeader, SBody, SFooter } from './Layout';
 export { List, ListItem } from './List';
 export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';

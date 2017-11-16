@@ -64,10 +64,65 @@
     }
   }
 
-  .CareCruToggle.react-toggle--checked {
+  .CareCruToggle {
     &:hover {
       .react-toggle-track {
-        background-color: $primary-green;
+        background-color: darken($primary-darkgrey, 2%);
+      }
+    }
+
+    .react-toggle-track {
+      background-color: $primary-darkgrey;
+      width: 30px;
+      height: 14px;
+    }
+
+    .react-toggle-thumb {
+      border-color: $primary-darkgrey;
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  .CareCruToggle.react-toggle--checked {
+    .react-toggle-track {
+      width: 30px;
+      height: 14px;
+    }
+
+    .react-toggle-thumb {
+      width: 12px;
+      height: 12px;
+      left: 18px;
+    }
+  }
+
+  .CareCruToggle.react-toggle--focus {
+    .react-toggle-thumb {
+      box-shadow: none;
+    }
+  }
+
+  .CareCruToggle-red.react-toggle--checked {
+    &:hover {
+      .react-toggle-track {
+        background-color: darken($primary-red, 2%);
+      }
+    }
+
+    .react-toggle-track {
+      background-color: $primary-red;
+    }
+
+    .react-toggle-thumb {
+      border-color: $primary-red;
+    }
+  }
+
+  .CareCruToggle-green.react-toggle--checked {
+    &:hover {
+      .react-toggle-track {
+        background-color: darken($primary-green, 2%);
       }
     }
 
@@ -80,15 +135,9 @@
     }
   }
 
-  .CareCruToggle.react-toggle--focus {
-    .react-toggle-thumb {
-      box-shadow: none;
-    }
-  }
-
   .dd-menu-items {
     width: 100%;
-    min-width: 200px;
+    min-width: 100px;
     z-index: 2500 !important;
     white-space: nowrap;
     background: transparent;

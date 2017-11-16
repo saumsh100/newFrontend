@@ -297,14 +297,17 @@ class RemindersItem extends Component {
       >
         <Grid>
           <Row>
-            <Col xs={1}>
+            <Col xs={1} className={styles.toggleCol}>
               <Toggle
+                color="green"
                 checked={isActive}
                 onChange={this.editReminder}
               />
             </Col>
-            <Col xs={3}>
-              {`${ordinalSuffix(index + 1)} Reminder`}
+            <Col xs={3} className={styles.labelCol}>
+              <div className={styles.reminderLabel}>
+                {`${ordinalSuffix(index + 1)} Reminder`}
+              </div>
             </Col>
             <Col xs={8}>
               <div className={selected ? styles.linesBoxSelected : styles.linesBox}>
@@ -361,6 +364,9 @@ class RemindersItem extends Component {
                       </Grid>
                     </div>
                   </div>
+                </div>
+                <div className={styles.downIconWrapper}>
+                  <Icon icon="caret-down" size={2} />
                 </div>
               </div>
             </Col>
