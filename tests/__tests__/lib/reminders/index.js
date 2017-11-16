@@ -17,6 +17,10 @@ const sendReminderSmsTmp = sendReminder.sms;
 const sendReminderPhoneTmp = sendReminder.phone;
 const getAppointmentsFromReminderTmp = RemindersHelpers.getAppointmentsFromReminder;
 
+const mockPub = {
+  publish: () => {},
+};
+
 const iso = (date = (new Date())) => date.toISOString();
 const makeReminderData = (data = {}) => Object.assign({},
   {
@@ -103,7 +107,7 @@ describe('Reminders Job Integration Tests', () => {
      */
     test('should NOT call getAppointmentsFromReminder if no reminders to process', async () => {
       account.reminders = [];
-      await RemindersLibrary.sendRemindersForAccount(account, iso());
+      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
       expect(RemindersHelpers.getAppointmentsFromReminder).not.toHaveBeenCalled();
     });
 
@@ -112,7 +116,7 @@ describe('Reminders Job Integration Tests', () => {
      */
     test('should call getAppointmentsFromReminder if there is a reminder, but because it returns [], will not call sendReminder', async () => {
       account.reminders = [makeReminderData()];
-      await RemindersLibrary.sendRemindersForAccount(account, iso());
+      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
     });
@@ -157,7 +161,7 @@ describe('Reminders Job Integration Tests', () => {
 
       account.reminders = [makeReminderData()];
 
-      await RemindersLibrary.sendRemindersForAccount(account, iso());
+      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).toHaveBeenCalledTimes(1);
     });
@@ -197,7 +201,7 @@ describe('Reminders Job Integration Tests', () => {
 
       account.reminders = [makeReminderData()];
 
-      await RemindersLibrary.sendRemindersForAccount(account, iso());
+      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
     });

@@ -1,6 +1,8 @@
 import registerCallsSubscriber from './Calls';
 import registerRequestsSubscriber from './Requests';
-import registerAppointmentsSubscriber from "./Appointments/index";
+import registerAppointmentsSubscriber from './Appointments';
+import registerRecallsSubscriber from './Recalls';
+import registerRemindersSubscriber from './Reminders/index';
 
 export default function registerEventSubscribers(context, io) {
   context.on('ready', () => {
@@ -8,5 +10,7 @@ export default function registerEventSubscribers(context, io) {
     registerCallsSubscriber(context, io);
     registerRequestsSubscriber(context, io);
     registerAppointmentsSubscriber(context, io);
+    registerRecallsSubscriber(context, io);
+    registerRemindersSubscriber(context, io);
   });
 }
