@@ -39,7 +39,7 @@ import { namespaces } from '../../config/globals';
  * @param date
  * @returns {Promise.<void>}
  */
-export async function sendRecallsForAccount(account, date) {
+export async function sendRecallsForAccount(account, date, pubSocket) {
   console.log(`Sending recalls for ${account.name}`);
   const { recalls, name } = account;
 
@@ -84,6 +84,9 @@ export async function sendRecallsForAccount(account, date) {
       // TODO: do we want to throw the error hear and ignore trying to send?
     }
 
+    // Save ids of recalls sent as we are sending them
+    const sentRecallsIds = [];
+
     console.log(`Trying to send ${success.length} ${primaryType}_${lengthSeconds} recalls for ${name}`);
     for (const patient of success) {
       // Check if latest appointment is within the recall window
@@ -112,9 +115,15 @@ export async function sendRecallsForAccount(account, date) {
       console.log(`${primaryType} recall SENT to ${patient.firstName} ${patient.lastName} for ${account.name}!`);
       await sentRecall.update({ isSent: true });
 
+      sentRecallsIds.push(sentRecall.id);
+
       // TODO: need Chat update for SMS recalls
       // TODO: Update all successfully sent Recalls
       // await sendSocketRecall(global.io, sentRecall.id);
+    }
+
+    if (sentRecallsIds.length) {
+      await pubSocket.publish('RECALL:SENT:BATCH', JSON.stringify(sentRecallsIds));
     }
   }
 }
@@ -123,7 +132,7 @@ export async function sendRecallsForAccount(account, date) {
  *
  * @returns {Promise.<Array|*>}
  */
-export async function computeRecallsAndSend({ date }) {
+export async function computeRecallsAndSend({ date, publishSocket }) {
   // - Fetch Reminders in order of shortest secondsAway
   // - For each reminder, fetch the appointments that fall in this range
   // that do NOT have a reminder sent (type of reminder?)
@@ -144,6 +153,6 @@ export async function computeRecallsAndSend({ date }) {
 
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
-    await exports.sendRecallsForAccount(account.get({ plain: true }), date);
+    await exports.sendRecallsForAccount(account.get({ plain: true }), date, publishSocket);
   }
 }

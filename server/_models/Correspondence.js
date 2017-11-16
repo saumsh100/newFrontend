@@ -66,6 +66,10 @@ export default function (sequelize, DataTypes) {
     },
   });
 
+  Correspondence.RECALL_SENT_TYPE = 'RECALL:SENT';
+  Correspondence.REMINDER_SENT_TYPE = 'REMINDER:SENT';
+  Correspondence.REMINDER_CONFIRMED_TYPE = 'REMINDER:CONFIRMED';
+
   Correspondence.associate = ({ Account, Appointment, Patient }) => {
     Correspondence.belongsTo(Account, {
       foreignKey: 'accountId',
