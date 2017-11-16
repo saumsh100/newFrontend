@@ -18,7 +18,8 @@ function sendReminderIdsSocket(sub, io) {
           accountId: sr.accountId,
           patientId: sr.patientId,
           appointmentId: sr.appointmentId,
-          type: sr.primaryType,
+          method: sr.primaryType,
+          type: 'REMINDER:SENT',
         };
       });
 
@@ -59,14 +60,36 @@ function sendReminderIdsSocket(sub, io) {
   });
 }
 
+function sendReminderUpdatedSocket(sub, io) {
+  sub.on('data', async (data) => {
+    try {
+      const correspondence = await Correspondence.findOne({
+        where: {
+          id: data,
+        },
+      });
+
+      await correspondence.update({ isSyncedWithPms: true });
+
+    } catch (error) {
+      console.error(error);
+    }
+  });
+}
+
 
 export default function registerRemindersSubscriber(context, io) {
   // Need to create a new sub for every route to tell
   // the difference eg. request.created and request.ended
   const subCreated = context.socket('SUB', { routing: 'topic' });
+  const subUpdated = context.socket('SUB', { routing: 'topic' });
 
   subCreated.setEncoding('utf8');
   subCreated.connect('events', 'REMINDER:SENT:BATCH');
 
+  subUpdated.setEncoding('utf8');
+  subUpdated.connect('events', 'REMINDER:UPDATED');
+
   sendReminderIdsSocket(subCreated, io);
+  sendReminderUpdatedSocket(subUpdated, io);
 }
