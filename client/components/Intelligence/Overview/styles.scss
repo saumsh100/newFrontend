@@ -36,6 +36,25 @@
 
 }
 
+.background {
+  width: 100%;
+  border-top: 5px solid $inactive-color;
+  background-color: $primary-white;
+  margin: 0px 5px;
+  position: relative;
+}
+
+.white {
+  border-top: 5px solid $primary-white;
+}
+
+.filterButton {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 10;
+}
+
 .maxHeight {
   max-height: 390px;
   overflow: auto;

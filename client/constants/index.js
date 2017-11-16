@@ -109,3 +109,8 @@ export const SEGMENT_SET_NAME = 'SEGMENT_SET_NAME';
  */
 export const SET_REPUTATION_FILTER = 'SET_REPUTATION_FILTER';
 export const SET_FILTERS_LOADED = 'SET_FILTERS_LOADED';
+
+/*
+  Intelligence Section
+ */
+export const QUERY_DATES = 'QUERY_DATES';

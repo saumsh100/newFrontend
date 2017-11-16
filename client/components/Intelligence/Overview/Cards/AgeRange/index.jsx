@@ -39,7 +39,11 @@ export default function AgeRange(props) {
       }],
 
       xAxes: [{
-        ticks,
+        ticks: {
+          beginAtZero: true,
+          min: 0,
+          ...ticks,
+        },
         gridLines: {
           offsetGridLines: true,
           display: true,

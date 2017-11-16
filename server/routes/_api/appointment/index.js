@@ -6,8 +6,16 @@ import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
-import { newPatients } from '../../../lib/intelligence/patients';
-import { appsHygienist, appsNotCancelled, appsNewPatient } from '../../../lib/intelligence/appointments';
+import { newPatients, activePatients } from '../../../lib/intelligence/patients';
+import {
+  appsHygienist,
+  appsNotCancelled,
+  appsNewPatient,
+  totalAppointments,
+  totalAppointmentHoursPractitioner,
+  mostAppointments,
+} from '../../../lib/intelligence/appointments';
+import { practitionersTimeOffs } from '../../../lib/intelligence/practitioner';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -277,264 +285,198 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     .catch(next);
 });
 
-/* appointment Stats for intelligece overview */
 
-appointmentsRouter.get('/stats', (req, res, next) => {
+/**
+ * get the appointment Booked for a given startDate and endDate in an account
+ * @param  startDate
+ * @param  endDate
+ */
+appointmentsRouter.get('/appointmentsBooked', async (req, res, next) => {
   const {
-    joinObject,
     query,
+    accountId,
   } = req;
 
-  let {
+  const {
     startDate,
     endDate,
-    accountId,
   } = query;
-
-  accountId = accountId || req.accountId;
 
   if (!startDate || !endDate) {
     return res.send(400);
   }
 
-  // By default this will list upcoming appointments
+  const start = moment(startDate)._d;
+  const end = moment(endDate)._d;
+
+  totalAppointments(start, end, accountId);
+
+  try {
+    const appointmentsBooked = await totalAppointments(start, end, accountId);
+    const confirmedAppointments = await totalAppointments(start, end, accountId, { isPatientConfirmed: true });
+
+    return res.send({ appointmentsBooked, confirmedAppointments });
+  } catch (e) {
+    return next(e);
+  }
+});
+
+appointmentsRouter.get('/practitionerWorked', async (req, res, next) => {
+  const {
+    query,
+    accountId,
+  } = req;
+
+  const {
+    startDate,
+    endDate,
+  } = query;
+
+  if (!startDate || !endDate) {
+    return res.send(400);
+  }
 
   const start = moment(startDate)._d;
   const end = moment(endDate)._d;
 
-  startDate = startDate || moment().subtract(1, 'years').toISOString();
-  endDate = endDate || moment().toISOString();
-
-  const a = Appointment.findAll({
-    where: {
-      accountId,
-      $or: [
-        {
-          startDate: {
-            gt: startDate,
-            lt: endDate,
-          },
-        },
-        {
-          endDate: {
-            gt: startDate,
-            lt: endDate,
-          },
-        },
-      ],
-      patientId: {
-        $not: null,
-      },
-    },
-    raw: true,
-    nest: true,
-    include: [
-      {
-        model: Practitioner,
-        as: 'practitioner',
-      },
-      {
-        model: Patient,
-        as: 'patient',
-      },
-      {
-        model: Service,
-        as: 'service',
-      },
-    ],
-  });
-
-  const b = Practitioner
-    .findAll({
+  try {
+    let activePractitioners = await Practitioner.findAll({
       where: {
         accountId,
+        isActive: true,
       },
-      raw: true,
     });
 
-  // TODO: this needs to change for practitioner schedule and recurring schedules
+    activePractitioners = activePractitioners.map(p => p.id);
 
-  const c = Account.findOne({
-    where: {
-      id: accountId,
-    },
-    include: [
-      {
-        model: WeeklySchedule,
-        as: 'weeklySchedule',
-      },
-    ],
-    raw: true,
-    nest: true,
-  });
+    const promise1 = practitionersTimeOffs(start, end, accountId);
 
-  const d = Service
-    .findAll({
-      where: { accountId },
-      raw: true,
-    });
+    const totalAppsPromise = totalAppointmentHoursPractitioner(startDate, endDate, activePractitioners);
 
-  const e = Patient
-    .findAll({
-      where: { accountId },
-      limit: 4,
-    });
+    const newPatientsTotalPromise = appsNewPatient(startDate, endDate, accountId, activePractitioners);
 
-  return Promise.all([a, b, c, d, e])
-    .then(async (values) => {
-      const sendStats = {};
-      sendStats.practitioner = {};
-      sendStats.services = {};
-      sendStats.patients = {};
-      sendStats.newPatients = 0;
-      const range = moment().range(moment(start), moment(end));
+    const promise2 = Promise.all([totalAppsPromise, newPatientsTotalPromise])
+      .then((values) => {
+        const practitioners = {};
 
-      const numberOfDays = moment(end).diff(moment(start), 'days');
-      const dayOfWeek = moment(start).day();
-      const weeks = Math.floor(numberOfDays / 7);
-      const remainingDays = numberOfDays % 7;
+        for (let i = 0; i < activePractitioners.length; i += 1) {
+          const pracId = activePractitioners[i];
 
-      let timeOpen = 0;
-
-      values[3].map((service) => {
-        // create time counter for a service
-        sendStats.services[service.id] = {
-          time: 0,
-          id: service.id,
-          name: service.name,
-        };
-      });
-
-      values[4].map((patient) => {
-        // create patients
-        if (!sendStats.patients[patient.id]) {
-          sendStats.patients[patient.id] = {
-            numAppointments: 0,
-            id: patient.id,
-            firstName: patient.firstName,
-            lastName: patient.lastName,
-            age: moment().diff(moment(patient.birthDate), 'years'),
-            avatarUrl: patient.avatarUrl,
+          practitioners[pracId] = {
+            booked: 0,
+            newPatientsTotal: 0,
           };
         }
+
+        for (let i = 0; i < values[0].length; i += 1) {
+          const totalAppointment = values[0][i];
+
+          practitioners[totalAppointment.practitionerId] = {
+            booked: totalAppointment.totalAppointmentHours,
+            newPatientsTotal: values[1][totalAppointment.practitionerId] || 0,
+          };
+        }
+        return practitioners;
       });
 
-      // Calculate the amount of hours the office is open for a given range
-      const account = values[2];
-      daysOfWeek.map((day) => {
-        if (!account.weeklySchedule[day].isClosed) {
-          timeOpen += getDiffInMin(account.weeklySchedule[day].startTime, account.weeklySchedule[day].endTime);
-          if (account.weeklySchedule[day].breaks && account.weeklySchedule[day].breaks[0]) {
-            timeOpen -= getDiffInMin(account.weeklySchedule[day].breaks[0].startTime, account.weeklySchedule[day].breaks[0].endTime);
-          }
-        }
-      });
+    return Promise.all([promise1, promise2])
+      .then((values) => {
+        const practitionerWorked = values[0];
+        const practitionerStats = values[1];
+        const practitioners = [];
 
-      timeOpen *= weeks;
+        for (let i = 0; i < practitionerWorked.length; i += 1) {
+          const prac = practitionerWorked[i];
 
-      for (let i = 0; i < remainingDays; i++) {
-        const index = (i + dayOfWeek) % 7;
-        if (!account.weeklySchedule[daysOfWeek[index]].isClosed) {
-          timeOpen += getDiffInMin(account.weeklySchedule[daysOfWeek[index]].startTime, account.weeklySchedule[daysOfWeek[index]].endTime);
-          if (account.weeklySchedule[daysOfWeek[index]].breaks && account.weeklySchedule[daysOfWeek[index]].breaks[0]) {
-            timeOpen -= getDiffInMin(account.weeklySchedule[daysOfWeek[index]].breaks[0].startTime, account.weeklySchedule[daysOfWeek[index]].breaks[0].endTime);
-          }
-        }
-      }
+          let notFilled = prac.hours - prac.timeOffHours;
 
-      // practitioner data
+          if (notFilled > 0) {
+            const booked = practitionerStats[prac.id].booked;
+            const newPatientsTotal = practitionerStats[prac.id].newPatientsTotal;
 
-      for (let i = 0; i < values[1].length; i += 1) {
-        const practitioner = values[1][i];
-        if (practitioner.isActive) {
-          const data = {};
-          data.newPatients = await appsNewPatient(startDate, endDate, accountId, practitioner.id);
-          data.newPatients = data.newPatients.length;
-          data.firstName = practitioner.firstName;
-          data.lastName = practitioner.lastName;
-          data.id = practitioner.id;
-          data.totalTime = timeOpen;
-          data.type = practitioner.type;
-          data.appointmentTime = 0;
-          data.avatarUrl = practitioner.avatarUrl;
-          data.fullAvatarUrl = practitioner.fullAvatarUrl;
-          sendStats.practitioner[practitioner.id] = data;
-        }
-      }
+            notFilled -= booked;
 
-      let confirmedAppointments = 0;
-      let notConfirmedAppointments = 0;
-      let time = 0;
-
-      values[0].map((appointment) => {
-        if (appointment.practitioner.isActive) {
-          if (range.contains(moment(appointment.patient.createdAt))) {
-            sendStats.newPatients++;
-          }
-
-          let timeApp = moment(appointment.endDate).diff(moment(appointment.startDate), 'minutes');
-          timeApp = (timeApp > 0 ? timeApp : 0);
-
-          time += timeApp;
-          notConfirmedAppointments++;
-
-          if (appointment.isCancelled === false) {
-            if (!sendStats.patients[appointment.patient.id]) {
-              sendStats.patients[appointment.patient.id] = {
-                numAppointments: 0,
-                id: appointment.patient.id,
-                firstName: appointment.patient.firstName,
-                lastName: appointment.patient.lastName,
-                age: moment().diff(moment(appointment.patient.birthDate), 'years'),
-                avatarUrl: appointment.patient.avatarUrl,
-              };
+            if (notFilled < 0) {
+              notFilled = 0;
             }
-            sendStats.patients[appointment.patient.id].numAppointments++;
-            if (appointment.service && appointment.service.id) {
-              sendStats.services[appointment.service.id].time += timeApp;
-            }
-            sendStats.practitioner[appointment.practitioner.id].appointmentTime += timeApp;
 
-            if (appointment.isConfirmed) {
-              confirmedAppointments += 1;
-            }
+            practitioners.push({
+              id: prac.id,
+              newPatientsTotal,
+              notFilled: Math.round(notFilled),
+              booked: Math.round(booked),
+              firstName: prac.firstName,
+              lastName: prac.lastName,
+              avatarUrl: prac.avatarUrl,
+              type: prac.type,
+            });
           }
         }
-      });
+        return res.send(practitioners);
+      })
+      .catch(next);
+  } catch (e) {
+    return next(e);
+  }
+});
 
-      const newObject = {};
+appointmentsRouter.get('/mostAppointments', async (req, res, next) => {
+  const {
+    query,
+    accountId,
+  } = req;
 
-      const sorted = Object.keys(sendStats.patients).sort((keyA, keyB) => {
-        return sendStats.patients[keyB].numAppointments - sendStats.patients[keyA].numAppointments;
-      });
+  const {
+    startDate,
+    endDate,
+  } = query;
 
-      newObject[sorted[0]] = sendStats.patients[sorted[0]];
-      newObject[sorted[1]] = sendStats.patients[sorted[1]];
-      newObject[sorted[2]] = sendStats.patients[sorted[2]];
-      newObject[sorted[3]] = sendStats.patients[sorted[3]];
+  if (!startDate || !endDate) {
+    return res.send(400);
+  }
 
-      sendStats.patients = newObject;
+  const start = moment(startDate)._d;
+  const end = moment(endDate)._d;
 
-      const checkPmsCreatedAt = await Patient.findOne({
-        where: {
-          pmsCreatedAt: {
-            $ne: null,
-          },
-        },
-      });
+  try {
+    let patientAppoointments = await mostAppointments(start, end, accountId);
 
-      let newPatientsNumber = await newPatients(startDate, endDate, accountId);
+    patientAppoointments = patientAppoointments.map(p => p.patient);
 
-      newPatientsNumber = newPatientsNumber[0] ? newPatientsNumber[0].dataValues.newPatients : 0;
+    return res.send(patientAppoointments);
+  } catch (e) {
+    return next(e);
+  }
+});
 
-      sendStats.newPatients = checkPmsCreatedAt
-        ? newPatientsNumber : sendStats.newPatients;
+appointmentsRouter.get('/stats', async (req, res, next) => {
+  const {
+    query,
+    accountId,
+  } = req;
 
-      sendStats.confirmedAppointments = confirmedAppointments;
-      sendStats.notConfirmedAppointments = notConfirmedAppointments;
-      res.send(sendStats);
-    })
-    .catch(next);
+  const {
+    startDate,
+    endDate,
+  } = query;
+
+  if (!startDate || !endDate) {
+    return res.send(400);
+  }
+
+  const sendStats = {};
+
+  try {
+    const newPatientsNumber = await newPatients(startDate, endDate, accountId);
+
+    sendStats.newPatients = newPatientsNumber[0] ? newPatientsNumber[0].dataValues.newPatients : 0;
+
+    sendStats.activePatients = await activePatients(startDate, endDate, accountId);
+
+    return res.send(sendStats);
+  } catch (e) {
+    return next(e);
+  }
 });
 
 appointmentsRouter.get('/', (req, res, next) => {

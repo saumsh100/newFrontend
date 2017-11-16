@@ -11,7 +11,7 @@ import {
   Patient,
   PractitionerRecurringTimeOff,
 } from '../../server/_models';
-import wipeModel from './wipeModel';
+import wipeModel, { wipeAllModels } from './wipeModel';
 import { time } from '../../server/util/time';
 import moment from 'moment';
 
@@ -511,6 +511,7 @@ const Chairs = [
 ];
 
 async function seedTestAvailabilities() {
+  await wipeAllModels();
   await wipeModel(Appointment);
   await wipeModel(Chair);
   await wipeModel(Account);
@@ -557,6 +558,7 @@ async function wipeTestAvailabilities() {
   await wipeModel(Enterprise);
   await wipeModel(Service);
   await wipeModel(Practitioner_Service);
+  await wipeAllModels();
 }
 
 module.exports = {

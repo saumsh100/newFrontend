@@ -33,6 +33,12 @@ module.exports = {
     return sendTemplate(config);
   },
 
+  sendAppointmentRequestedClinic: (config) => {
+    config.subject = 'An appointment was requested.';
+    config.templateName = 'Appointment Request - Clinic';
+    return sendTemplate(config);
+  },
+
   sendAppointmentRequestRejected: (config) => {
     config.subject = 'Sorry, Your appointment was Rejected.';
     config.templateName = 'Appointment Rejected';

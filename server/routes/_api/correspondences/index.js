@@ -37,7 +37,7 @@ correspondencesRouter.get('/', (req, res, next) => {
   })
   .then((correspondences) => {
     correspondences = correspondences.map(correspondence => correspondence.get({ plain: true }));
-    
+
     return res.send(jsonapi('correspondence', correspondences));
   }).catch(next);
 });
@@ -76,6 +76,28 @@ correspondencesRouter.post('/connector/batch', checkPermissions('correspondences
     })
     .catch(next);
 });
+
+/**
+ * return changed Correspondences to connector via isSyncedWithPms
+ */
+correspondencesRouter.get('/connector/notSynced', checkPermissions('correspondences:read'), async (req, res, next) => {
+  const { accountId } = req;
+
+  let correspondences;
+  try {
+    correspondences = await Correspondence.findAll({
+      raw: true,
+      where: {
+        accountId,
+        isSyncedWithPms: false,
+      },
+    });
+    return res.send(jsonapi('correspondence', correspondences));
+  } catch (error) {
+    return next(error);
+  }
+});
+
 
 /**
  * Update Correspondences - Connector
