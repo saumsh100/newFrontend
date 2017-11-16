@@ -1,0 +1,244 @@
+@import '../../../../ui';
+
+.headerTitle {
+}
+
+.toggle {
+  display: -webkit-box;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  max-width: 200px;
+
+  &_text {
+    font-weight: $large-weight;
+    padding-right: 10px;
+    width: 80px;
+  }
+}
+
+.listItem {
+  min-height: 80px;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 5px;
+}
+
+.edit {
+  margin-right: 30px;
+  //background: $clr-dark-blue;
+}
+
+.createButtonContainer {
+  padding-bottom: 20px;
+}
+
+.main {
+  margin-right: 15px;
+}
+
+.list {
+  font-family: "Gotham-Book";
+  font-size: 1.0em;
+}
+
+.formContainer {
+  padding-bottom: 15px;
+
+  &_select {
+    padding-top: 10px;
+  }
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  margin-right: 15px;
+}
+
+
+.fa-envelope {
+  color: $primary-blue;
+  &:hover {
+    color: darken($primary-blue, 5%);
+  }
+}
+
+.fa-phone {
+  color: $primary-yellow;
+  &:hover {
+    color: darken($primary-yellow, 5%);
+  }
+}
+
+.fa-comment {
+  color: $primary-color;
+  &:hover {
+    color: darken($primary-color, 5%);
+  }
+}
+
+.disabledPage {
+  width: 100%;
+  height: calc(100vh - 130px);
+  position: relative;
+  overflow: hidden;
+  &_text {
+    font-size: 20px;
+    line-height: 1.5em;
+    width: 700px;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+}
+
+.linesBox {
+  margin: 20px 0;
+  height: 150px;
+  border-top: 1px solid $primary-gray;
+  background-image: linear-gradient(to bottom, $primary-gray 50%, transparent 0%);
+  background-position: left;
+  background-size: 2px 14px;
+  background-repeat: repeat-y;
+}
+
+.linesBoxSelected {
+  @extend .linesBox;
+  border-top: 1px solid $primary-green;
+}
+
+.secondaryLinesBox {
+  margin-left: auto;
+  width: 75%;
+  height: 70px;
+  border-left: 1px solid $primary-gray;
+  border-bottom: 1px solid $primary-gray;
+  position: relative;
+  top: -56px;
+}
+
+.secondaryLinesBoxSelected {
+  @extend .secondaryLinesBox;
+  border-left: 1px solid $primary-green;
+  border-bottom: 1px solid $primary-green;
+}
+
+.dropdownsWrapper {
+  margin-left: auto;
+  width: 90%;
+  position: relative;
+  top: -20px;
+}
+
+.dropdownSelect {
+  background-color: white;
+  border: 1px solid $primary-gray;
+  padding: 0;
+  > input {
+    padding: 10px;
+    box-sizing: border-box;
+  }
+}
+
+.dropdownSelectSelected {
+  @extend .dropdownSelect;
+  border: 1px solid $primary-green;
+}
+
+.topRow {
+  position: relative;
+  top: -24px;
+}
+
+.bottomRow {
+  position: relative;
+  bottom: -5px;
+}
+
+.rightDropdown {
+  padding-left: 20px;
+}
+
+$width: 40px;
+$wrapper-thickness: 8px;
+
+.reminderIconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $width;
+  height: $width;
+  border-radius: $width / 2;
+  background-color: $primary-green;
+  color: white;
+  > i {
+    font-size: 1.4em !important;
+  }
+}
+
+$outer-width: $width + $wrapper-thickness;
+
+.reminderWrapperCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $outer-width;
+  height: $outer-width;
+  border-radius: $outer-width / 2;
+  background-color: $primary-white;
+}
+
+$outest-width: $outer-width + $wrapper-thickness;
+
+.reminderSelectWrapperCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $outest-width;
+  height: $outest-width;
+  border-radius: $outest-width / 2;
+  position: relative;
+  top: -($width + 2 * $wrapper-thickness) / 2;
+  left: -($width + 2* $wrapper-thickness) / 2;
+}
+
+.reminderSelectWrapperCircleSelected {
+  @extend .reminderSelectWrapperCircle;
+  background-color: $primary-green;
+}
+
+.smallIconContainer {
+  position: relative;
+  top: 55px;
+  left: -15px;
+}
+
+$small-icon-width: 30px;
+
+.smallReminderSelectWrapperCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $small-icon-width;
+  height: $small-icon-width;
+  border-radius: $small-icon-width / 2;
+  color: white;
+  background-color: $primary-gray;
+}
+
+.smallReminderSelectWrapperCircleSelected {
+  @extend .smallReminderSelectWrapperCircle;
+  background-color: $primary-green;
+}
+
+

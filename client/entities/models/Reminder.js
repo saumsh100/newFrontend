@@ -5,6 +5,7 @@ const ReminderSchema = {
   accountId: null,
   primaryType: null,
   lengthSeconds: null,
+  isActive: null,
 };
 
 export default class Reminder extends createModel(ReminderSchema) {

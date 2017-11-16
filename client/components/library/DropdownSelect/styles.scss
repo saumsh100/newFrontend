@@ -6,13 +6,14 @@ $empty-grey: darken(lightgrey, 5%);
 .wrapper {
   position: relative;
   width: 100%;
+  padding: 20px 0;
 }
 
 .toggleDiv {
   position: relative;
   font-size: 16px;
   font-family: $dashboard-font;
-  height: 28.89px;
+  height: 40px;
   width: 100%;
   padding: 5px 5px 5px 0px;
   cursor: pointer;
@@ -20,6 +21,7 @@ $empty-grey: darken(lightgrey, 5%);
   display: flex;
   align-items: center;
   transition : border 500ms ease-out;
+  box-sizing: border-box;
 }
 
 .primaryColorBorder {
@@ -39,7 +41,7 @@ $empty-grey: darken(lightgrey, 5%);
   color: $disabled-color;
   cursor: not-allowed;
   border-bottom: 1px solid $disabled-color;
-  .caretIcon {
+  .caretIconWrapper {
     color: $disabled-color;
   }
 }
@@ -78,10 +80,14 @@ $empty-grey: darken(lightgrey, 5%);
   user-select: none;
 }
 
-.caretIcon {
+.caretIconWrapper {
   margin-left: auto;
   color: $primary-darkgrey;
   transition : color 500ms ease-out;
+}
+
+.caretIcon {
+  margin-left: 20px;
 }
 .activeIcon {
   color: $primary-dark;

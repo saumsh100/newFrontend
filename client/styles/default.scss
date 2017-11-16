@@ -67,16 +67,16 @@
   .CareCruToggle.react-toggle--checked {
     &:hover {
       .react-toggle-track {
-        background-color: $primary-color;
+        background-color: $primary-green;
       }
     }
 
     .react-toggle-track {
-      background-color: $primary-color;
+      background-color: $primary-green;
     }
 
     .react-toggle-thumb {
-      border-color: $primary-color;
+      border-color: $primary-green;
     }
   }
 

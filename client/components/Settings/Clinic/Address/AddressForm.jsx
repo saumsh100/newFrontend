@@ -92,64 +92,52 @@ class AddressForm extends React.Component {
           alignSave="left"
         >
           <div className={styles.addressForm}>
-            <div className={styles.addressColPlain_padding}>
-              <Field
-                required
-                name="street"
-                label="Street Address"
-                validate={[maxLength25]}
-                data-test-id="street"
-              />
-            </div>
-            <div className={styles.addressColSelect}>
-              <Field
-                name="country"
-                label="Country"
-                component="DropdownSelect"
-                options={countrySelector}
-                onChange={this.changeCountry}
-                data-test-id="country"
-              />
-            </div>
-            <div className={styles.addressColSelect}>
-              <Field
-                required
-                name="state"
-                label="State"
-                component="DropdownSelect"
-                options={stateProv}
-                data-test-id="state"
-              />
-            </div>
-            <div className={styles.addressColPlain}>
-              <Field
-                required
-                name="city"
-                label="City"
-                validate={[maxLength25]}
-                data-test-id="city"
-              />
-            </div>
-            <div className={styles.addressColPlain_padding}>
-              <Field
-                required
-                name="zipCode"
-                label={zipPostal}
-                validate={[maxPostalLength, this.zipPostalVal]}
-                data-test-id="zipCode"
-                maxLength="6"
-              />
-            </div>
-            <div className={styles.addressColSelect}>
-              <Field
-                name="timezone"
-                label="Timezone"
-                component="DropdownSelect"
-                options={options}
-                data-test-id="timezone"
-                search
-              />
-            </div>
+            <Field
+              required
+              name="street"
+              label="Street Address"
+              validate={[maxLength25]}
+              data-test-id="street"
+            />
+            <Field
+              name="country"
+              label="Country"
+              component="DropdownSelect"
+              options={countrySelector}
+              onChange={this.changeCountry}
+              data-test-id="country"
+            />
+            <Field
+              required
+              name="state"
+              label="State"
+              component="DropdownSelect"
+              options={stateProv}
+              data-test-id="state"
+            />
+            <Field
+              required
+              name="city"
+              label="City"
+              validate={[maxLength25]}
+              data-test-id="city"
+            />
+            <Field
+              required
+              name="zipCode"
+              label={zipPostal}
+              validate={[maxPostalLength, this.zipPostalVal]}
+              data-test-id="zipCode"
+              maxLength="6"
+            />
+            <Field
+              name="timezone"
+              label="Timezone"
+              component="DropdownSelect"
+              options={options}
+              data-test-id="timezone"
+              search
+            />
           </div>
         </Form>
       </div>

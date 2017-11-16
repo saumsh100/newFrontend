@@ -43,13 +43,16 @@ const PATHS = {
       to: '/settings/schedule/chairs',
       label: 'Chairs',
     },
+  ],
+
+  '/settings/communications': [
     {
-      to: '/settings/schedule/reminderslist',
+      to: '/settings/communications/reminders',
       label: 'Reminders',
       icon: 'clock-o',
     },
     {
-      to: '/settings/schedule/recalls',
+      to: '/settings/communications/recalls',
       label: 'Recalls',
     },
     {

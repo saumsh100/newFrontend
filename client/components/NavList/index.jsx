@@ -140,6 +140,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
           <SubNavItem path="/settings/schedule" label="Schedule" />
           <SubNavItem path="/settings/services" label="Services" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
+          <SubNavItem path="/settings/communications" label="Communications" />
         </MultiNavItem>
 
         {renderIf(isSuperAdmin, () =>

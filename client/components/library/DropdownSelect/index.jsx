@@ -188,7 +188,9 @@ export default class DropdownSelect extends Component {
         <div className={styles.toggleValueDiv}>
           {toggleDiv}
         </div>
-        <Icon className={caretIconClassName} icon="caret-down" />
+        <div className={styles.caretIconWrapper}>
+          <Icon className={caretIconClassName} icon="caret-down" />
+        </div>
         <div className={styles.error}>
           {error || ''}
         </div>

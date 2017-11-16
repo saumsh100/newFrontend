@@ -117,21 +117,15 @@ export function isDueForRecall({ account, recall, patient, date }) {
   // Get the preferred due date
   const dueDateSeconds = patient.recallDueDateSeconds || account.recallDueDateSeconds;
 
-  console.log(dueDateSeconds, recall.lengthSeconds);
-
   // Recalls work around dueDate, whereas Reminders work around appointment.startDate
   const recallSeconds = dueDateSeconds - recall.lengthSeconds;
 
   // Get how long ago last appointment was
   const appointmentTimeAwaySeconds = moment(date).diff(startDate) / 1000;
 
-  console.log(recallSeconds, appointmentTimeAwaySeconds, (recallSeconds + DEFAULT_RECALL_BUFFER));
-
   // Determine if the dueDate from  last appointment fits into this recall (with a buffer)
   const isDue = (recallSeconds <= appointmentTimeAwaySeconds) &&
     (appointmentTimeAwaySeconds <= (recallSeconds + DEFAULT_RECALL_BUFFER));
-
-  console.log('isDue', isDue);
 
   // If I sent a 2week PAST dueDate, don't send a 1week PAST dueDate, stick to recalls
   // further down the line
