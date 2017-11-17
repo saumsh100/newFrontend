@@ -96,6 +96,7 @@ describe('/api/patients', () => {
   afterAll(async () => {
     await wipeTestAppointments();
     await wipeTestUsers();
+    await wipeAllModels();
   });
 
   describe('GET /', () => {
@@ -354,12 +355,12 @@ describe('/api/patients', () => {
 
   describe('PUT /', () => {
     beforeEach(async () => {
-      await seedTestAppointments();
+      return await seedTestAppointments();
     });
 
     afterEach(async () => {
       await wipeModel(Chat);
-      await wipeTestAppointments();
+      return await wipeTestAppointments();
     });
 
     test('/:patientId - update patient', () => {
@@ -377,7 +378,7 @@ describe('/api/patients', () => {
         });
     });
 
-    test('/:patientId - update patient (connector)', () => {
+    test('/connector/:patientId - update patient (connector)', () => {
       return request(app)
         .put(`${rootUrl}/connector/${patientId}`)
         .set('Authorization', `Bearer ${token}`)

@@ -671,7 +671,7 @@ Object {
 }
 `;
 
-exports[`/api/patients PUT / /:patientId - update patient (connector) 1`] = `
+exports[`/api/patients PUT / /:patientId - update patient 1`] = `
 Object {
   "entities": Object {
     "patients": Object {
@@ -683,13 +683,13 @@ Object {
         "familyId": null,
         "firstApptDate": null,
         "firstApptId": null,
-        "firstName": "Testing",
+        "firstName": "Wendy",
         "gender": null,
         "homePhoneNumber": null,
         "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "insurance": null,
         "isDeleted": false,
-        "isSyncedWithPms": true,
+        "isSyncedWithPms": false,
         "language": null,
         "lastApptDate": null,
         "lastApptId": null,
@@ -728,7 +728,7 @@ Object {
 }
 `;
 
-exports[`/api/patients PUT / /:patientId - update patient 1`] = `
+exports[`/api/patients PUT / /connector/:patientId - update patient (connector) 1`] = `
 Object {
   "entities": Object {
     "patients": Object {
@@ -740,13 +740,13 @@ Object {
         "familyId": null,
         "firstApptDate": null,
         "firstApptId": null,
-        "firstName": "Wendy",
+        "firstName": "Testing",
         "gender": null,
         "homePhoneNumber": null,
         "id": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "insurance": null,
         "isDeleted": false,
-        "isSyncedWithPms": false,
+        "isSyncedWithPms": true,
         "language": null,
         "lastApptDate": null,
         "lastApptId": null,
