@@ -567,7 +567,7 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
  * Batch update patients for connector
  */
 patientsRouter.put('/connector/batch', checkPermissions('patients:update'),
-  async (req, res, next) => {
+  (req, res, next) => {
     const patients = req.body;
 
     const cleanedPatients = patients.map(patient => Object.assign(
