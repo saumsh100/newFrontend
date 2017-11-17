@@ -49,7 +49,7 @@ export default function AppointmentsForm(props) {
                 theme="primaryBlue"
               />
             </Col>
-            <Col xs={6} className={styles.colRight}>
+            <Col xs={6} className={styles.colToggle}>
               <Field
                 component="DropdownSelect"
                 name="hygiene"

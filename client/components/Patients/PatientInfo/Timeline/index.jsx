@@ -21,12 +21,11 @@ class Timeline extends Component {
       limit: 10,
     };
 
-    // TODO: remove setState here, and instead the loading bool comes from redux apiRequest
     this.props.fetchEntitiesRequest({
-        key: 'events',
-        id: 'getPatientEvents',
-        url: `/api/patients/${this.props.patientId}/events`,
-        params: query,
+      key: 'events',
+      id: 'getPatientEvents',
+      url: `/api/patients/${this.props.patientId}/events`,
+      params: query,
     }).then(() => {
       this.setState({
         loaded: true,
@@ -41,7 +40,7 @@ class Timeline extends Component {
     } = this.props;
 
     if (!wasFetched) {
-      return null;
+      return <Loading />;
     }
 
     if (events && events.length === 0) {

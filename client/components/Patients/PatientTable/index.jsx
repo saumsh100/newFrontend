@@ -13,7 +13,7 @@ import { Grid, Row, Col } from '../../library';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import PatientSubComponent from './PatientSubComponent';
 import PatientNameColumn from './PatientNameColumn';
-import SelectPatient from './SelectPatient';
+import SelectPatientColumn from './SelectPatientColumn';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import HygieneColumn from './HygieneColumn';
@@ -119,6 +119,7 @@ class PatientTable extends Component {
     this.setState({
       limit: pageSize,
       search: '',
+      expanded: {},
     });
   }
 
@@ -146,6 +147,7 @@ class PatientTable extends Component {
 
     this.setState({
       sorted: newSorted,
+      expanded: {},
     });
   }
 
@@ -186,6 +188,7 @@ class PatientTable extends Component {
     this.setState({
       filters: newFilters,
       page: 0,
+      expanded: {},
     });
   }
 
@@ -238,6 +241,7 @@ class PatientTable extends Component {
       limit: 15,
       data: [],
       patientIds: [],
+      expanded: {},
     });
 
     this.fetchData({
@@ -318,7 +322,7 @@ class PatientTable extends Component {
         Header: '',
         Cell: row => {
           return (
-            <SelectPatient
+            <SelectPatientColumn
               patientIds={patientIds}
               handlePatientSelection={this.handlePatientSelection}
               id={row.original.id}

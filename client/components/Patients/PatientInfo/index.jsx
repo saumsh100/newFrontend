@@ -8,16 +8,12 @@ import { fetchEntities, fetchEntitiesRequest, updateEntityRequest } from '../../
 import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
-import SettingsDisplay from './SettingsDisplay/index';
-import DataDisplay from './DataDisplay';
+import LeftInfoDisplay from './LeftInfoDisplay';
 import styles from './styles.scss';
 
 class PatientInfo extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loaded: false,
-    };
   }
 
   componentDidMount() {
@@ -33,11 +29,7 @@ class PatientInfo extends Component {
         id: 'patientIdStats',
         url: `/api/patients/${patientId}/stats`,
       }),
-    ]).then(() => {
-      this.setState({
-        loaded: true,
-      });
-    });
+    ]);
   }
 
   render() {
@@ -51,7 +43,7 @@ class PatientInfo extends Component {
     } = this.props;
 
     if (!wasFetched || !patient) {
-      return <Loader loaded={this.state.loaded} color="#FF715A" />;
+      return <Loader color="#FF715A" />;
     }
 
     return (
@@ -70,7 +62,7 @@ class PatientInfo extends Component {
               patient={patient}
               updateEntityRequest={updateEntityRequest}
             />
-            <DataDisplay
+            <LeftInfoDisplay
               patient={patient}
             />
           </Col>

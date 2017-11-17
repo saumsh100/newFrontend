@@ -17,51 +17,40 @@ export default function DataTable(props) {
       <Row className={styles.row}>
         <Col xs={6}>
           <InfoDump
-            label="Gender"
-            data={patient.gender}
+            label="PRIMARY EMAIL"
+            data={patient.email}
           />
         </Col>
         <Col xs={6}>
           <InfoDump
-            label="BIRTHDAY"
-            data={moment(patient.birthDate).format('MMMM Do, YYYY')}
-          />
-        </Col>
-      </Row>
-      <div className={styles.subHeader}> Contact </div>
-      <Row className={styles.row}>
-        <Col xs={6} className={styles.paddingCol}>
-          <InfoDump
-            label="HOME NUMBER"
-            data={patient.homePhoneNumber}
-          />
-        </Col>
-        <Col xs={6} className={styles.paddingCol}>
-          <InfoDump
-            label="MOBILE NUMBER"
+            label="PRIMARY-NUMBER"
             data={patient.mobilePhoneNumber}
           />
         </Col>
-        <Col xs={6}>
+      </Row>
+      <Row className={styles.row}>
+        <Col xs={12} >
           <InfoDump
-            label="WORK NUMBER"
-            data={patient.workPhoneNumber}
+            label="INSURANCE"
           />
         </Col>
       </Row>
       <Row className={styles.row}>
         <Col xs={6} >
           <InfoDump
-            label="ADDRESS"
-            data={address}
+            label="LAST RECALL VISIT"
+          />
+        </Col>
+        <Col xs={6} >
+          <InfoDump
+            label="LAST HYGIENE VIST"
           />
         </Col>
       </Row>
       <Row className={styles.row}>
         <Col xs={6} >
           <InfoDump
-            label="LANGUAGE"
-            data={patient.language}
+            label="LAST X-RAY"
           />
         </Col>
       </Row>

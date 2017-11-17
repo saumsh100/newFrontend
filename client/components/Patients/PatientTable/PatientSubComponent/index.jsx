@@ -42,17 +42,21 @@ class PatientSubComponent extends Component {
       <Grid className={styles.patientSub}>
         <Row className={styles.content}>
           <Col xs={12} sm={12} md={4} className={styles.dataTable}>
+            <div className={styles.patientInfoHeader}> PATIENT INFO </div>
             <DataTable
               patient={patient}
             />
           </Col>
-          <Col xs={12} sm={12} md={8} className={styles.eventsTable}>
-            <div className={styles.verticalLine}>&nbsp;</div>
-            <EventsTable
-              wasFetched={wasFetched}
-              events={events}
-              patientId={patient.id}
-            />
+          <Col xs={12} sm={12} md={8} >
+            <div className={styles.timeLineHeader}> TIMELINE & ACTIVITIES </div>
+            <div className={styles.eventsTable}>
+              <div className={styles.verticalLine}>&nbsp;</div>
+              <EventsTable
+                wasFetched={wasFetched}
+                events={events}
+                patientId={patient.id}
+              />
+            </div>
           </Col>
         </Row>
       </Grid>

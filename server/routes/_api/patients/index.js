@@ -530,8 +530,15 @@ eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async 
 
     const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents);
 
-    res.send(normalize('events', totalEvents));
+    const sortedEvents = totalEvents.sort((a, b) => {
+      if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
+      if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
+      return 0;
+    });
 
+    const filteredEvents = filterEventsByQuery(sortedEvents, req.query)
+
+    res.send(normalize('events', filteredEvents));
   } catch (error) {
     next(error);
   }

@@ -3,7 +3,7 @@
 .patientSub {
   width: 100%;
   height: 100%;
-  padding-left: 100px;
+  padding-left: 35px;
   background: $primary-white;
 }
 
@@ -16,12 +16,36 @@
 .dataTable {
 }
 
+.header {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+}
+
+.timeLineHeader {
+  @extend .header;
+  padding-top: 20px;
+  padding-left: 100px;
+}
+
+.patientInfoHeader {
+  @extend .header;
+  padding-top: 20px;
+  padding-left: 35px;
+}
+
+.eventsContainer {
+  width: 100%;
+  height: 100%;
+}
+
 .eventsTable{
   padding: 20px 30px 50px 50px;
   position: relative;
   display: flex;
   box-sizing: border-box;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 .verticalLine {
@@ -39,6 +63,7 @@
   height: 100%;
 }
 
+
 .subHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   color: $primary-darkgrey;
@@ -55,9 +80,8 @@
 }
 
 .row {
-  border-bottom: 1px solid $primary-grey;
   padding-top: 20px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 }
 .row:first-child {
   padding-top: 0px;
@@ -67,7 +91,7 @@
 }
 
 .paddingCol {
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 }
 
 .disclaimer {

@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col } from '../../../../library';
 import InfoDump from '../../TopDisplay/InfoDump';
-import RecallDropDowns from './RecallDropDowns';
-import ReminderDropDowns from './ReminderDropDowns';
+import RecallDropDowns from '../../../Shared/RecallDropDowns';
+import ReminderDropDowns from '../../../Shared/ReminderDropDowns';
 import styles from '../styles.scss';
 
 export default function AppointmentsTab(props) {
@@ -10,8 +10,8 @@ export default function AppointmentsTab(props) {
     patient
   } = props;
 
-  const recallComp = <RecallDropDowns patient={patient}/>
-  const reminderComp = <ReminderDropDowns patient={patient}/>
+  const recallComp = <RecallDropDowns patient={patient} />
+  const reminderComp = <ReminderDropDowns patient={patient} />
 
   return (
     <Grid className={styles.grid}>

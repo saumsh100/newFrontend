@@ -23,6 +23,7 @@ export default function EventsTable(props) {
       </div>
     );
   }
+
   const sortedEvents = events.sort((a, b) => {
     if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
     if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;

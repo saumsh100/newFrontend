@@ -19,7 +19,6 @@ export default function TopDisplay(props) {
     patientStats,
   } = props;
 
-
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
   const randomNum = getRandomIntInclusive(0, 4);
 

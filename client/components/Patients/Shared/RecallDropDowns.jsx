@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
-import styles from '../styles.scss';
-import { Icon, DropdownMenu, List, ListItem } from '../../../../library';
+import styles from '../PatientInfo/LeftInfoDisplay/styles.scss';
+import { Icon, DropdownMenu, List, ListItem } from '../../library/index';
 
-export default function ReminderDropDowns(props){
+export default function RecallDropDowns(props){
 
-  const reminderSmsMenu = props => (
+  const recallSmsMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
         <Icon icon="envelope" size={1.2} />
@@ -15,7 +15,7 @@ export default function ReminderDropDowns(props){
     </div>
   );
 
-  const reminderEmailMenu = props => (
+  const recallEmailMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
         <Icon icon="comment" size={1.2} />
@@ -26,7 +26,7 @@ export default function ReminderDropDowns(props){
     </div>
   );
 
-  const reminderPhoneMenu = props => (
+  const recallPhoneMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
         <Icon icon="phone" size={1.2} />
@@ -40,14 +40,14 @@ export default function ReminderDropDowns(props){
   return (
     <div className={styles.recallContainer}>
       <DropdownMenu
-        labelComponent={reminderSmsMenu}
+        labelComponent={recallSmsMenu}
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem}>
-            Send a Custom SMS Reminder
+            Send a Custom SMS Recall
           </ListItem>
           <ListItem className={styles.ddListItem}>
-            Send a Automated SMS Reminder
+            Send a Automated SMS Recall
           </ListItem>
           <ListItem className={styles.ddListItem}>
             Log SMS
@@ -55,14 +55,14 @@ export default function ReminderDropDowns(props){
         </List>
       </DropdownMenu>
       <DropdownMenu
-        labelComponent={reminderEmailMenu}
+        labelComponent={recallEmailMenu}
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem}>
-            Send a Custom Email Reminder
+            Send a Custom Email Recall
           </ListItem>
           <ListItem className={styles.ddListItem}>
-            Send a Automated Email Reminder
+            Send a Automated Email Recall
           </ListItem>
           <ListItem className={styles.ddListItem}>
             Log Email
@@ -70,17 +70,17 @@ export default function ReminderDropDowns(props){
         </List>
       </DropdownMenu>
       <DropdownMenu
-        labelComponent={reminderPhoneMenu}
+        labelComponent={recallPhoneMenu}
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem}>
-            Send a Custom Phone Reminder
+            Send a Custom Phone Recall
           </ListItem>
           <ListItem className={styles.ddListItem}>
-            Send a Automated Phone Reminder
+            Send a Automated Phone Recall
           </ListItem>
           <ListItem className={styles.ddListItem}>
-            Log Phone Reminder
+            Log SMS
           </ListItem>
         </List>
       </DropdownMenu>
