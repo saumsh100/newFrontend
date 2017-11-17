@@ -25,7 +25,7 @@ export default function Toggle(props) {
 Toggle.propTypes = {
   className: PropTypes.string,
   color: PropTypes.string,
-  icons: PropTypes.boolean,
+  icons: PropTypes.bool,
 };
 
 Toggle.defaultProps = {

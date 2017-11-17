@@ -149,14 +149,14 @@ class PractitionerList extends Component {
             </SBody>
           </SContainer>
         </Card>
-        <div className={styles.practDataContainer}>
+        <Card className={styles.practDataContainer}>
           <PractitionerTabs
             key={selectedPractitioner.get('id')}
             practitioner={selectedPractitioner}
             setPractitionerId={this.props.setPractitionerId}
             services={services}
           />
-        </div>
+        </Card>
       </div>
     );
   }

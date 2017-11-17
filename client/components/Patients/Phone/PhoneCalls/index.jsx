@@ -86,7 +86,7 @@ function PhoneCalls(props) {
 PhoneCalls.propTypes = {
   calls: PropTypes.object,
   patients: PropTypes.object,
-  moreData: PropTypes.boolean,
+  moreData: PropTypes.bool,
   loadMore: PropTypes.function,
   startDate: PropTypes.object,
   endDate: PropTypes.object,

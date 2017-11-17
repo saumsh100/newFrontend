@@ -156,7 +156,7 @@ DayPicker.propTypes = {
   onChange: PropTypes.func.isRequired,
   iconClassName: PropTypes.string,
   timezone: PropTypes.string,
-  multiple: PropTypes.bool.isRequired,
+  multiple: PropTypes.bool,
 };
 
 export default DayPicker;

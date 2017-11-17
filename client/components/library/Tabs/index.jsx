@@ -55,6 +55,7 @@ class Tabs extends Component {
           if (item.props.disabled) return;
           this.handleTabClick(index);
         },
+
         noUnderLine: this.props.noUnderLine,
       });
     });
@@ -79,7 +80,7 @@ class Tabs extends Component {
       className,
       contentClass,
       navClass,
-      noUnderLine,
+      noHeaders,
     } = this.props;
 
     const newProps = omit(this.props, ['index', 'navClass', 'contentClass']);
@@ -91,9 +92,11 @@ class Tabs extends Component {
     return (
       // Order is important, classNames={classes} needs to override props.className
       <div {...newProps} className={classes}>
-        <nav className={navClass}>
-          {this.renderHeaders(headers)}
-        </nav>
+        {noHeaders ? null :
+          <nav className={navClass}>
+            {this.renderHeaders(headers)}
+          </nav>
+        }
         <div className={contentClasses}>
           {this.renderContents(contents)}
         </div>
@@ -110,6 +113,8 @@ Tabs.propTypes = {
   index: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  noHeaders: PropTypes.bool,
+  noUnderLine: PropTypes.bool,
 };
 
 export default Tabs;
