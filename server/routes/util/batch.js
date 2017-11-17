@@ -1,5 +1,5 @@
 /**
- * Module to provide Baßtch Creation functionality for a Sequelize Model
+ * Module to provide Batch Creation functionality for a Sequelize Model
  * Created by gavin on 2017-09-09.
  */
 
@@ -84,7 +84,7 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
   return { errors, docs: validatedDocs };
 }
 
-export async function batchUpdate(dataArray, Model, modelType, postGetFunction) {
+export async function batchUpdate(dataArray, Model, modelType, preUpdateFunction) {
   const savedModels = [];
   const errors = [];
 
@@ -97,8 +97,8 @@ export async function batchUpdate(dataArray, Model, modelType, postGetFunction) 
       });
 
 
-      if (postGetFunction) {
-        postGetFunction(model, dataArray[i]);
+      if (preUpdateFunction) {
+        preUpdateFunction(model, dataArray[i]);
       }
       const savedModel = await model.update(dataArray[i]);
 

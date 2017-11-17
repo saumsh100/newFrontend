@@ -4,7 +4,7 @@ import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
 import batchCreate, { batchUpdate } from '../../util/batch';
-import { updateChatAfterPatient } from '../../util/postUpdateFunctions';
+import { updateChatAfterPatient } from '../../util/preUpdateFunctions';
 import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
