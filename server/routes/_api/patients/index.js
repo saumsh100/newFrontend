@@ -693,7 +693,7 @@ patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (
     isSyncedWithPms: true,
     ...req.body,
   })
-    .then((patient) => {
+    .then(async (patient) => {
       if (phoneNumber !== patient.mobilePhoneNumber) {
         Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } })
           .then((chat) => {
