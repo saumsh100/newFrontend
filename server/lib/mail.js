@@ -3,6 +3,12 @@ import mandrill from '../config/mandrill';
 import { host, protocol, env } from '../config/globals';
 
 module.exports = {
+  sendConnectorDown: (config) => {
+    config.subject = `The Connector for ${config.name} is Down!`;
+    config.templateName = 'Connector Down';
+    return sendTemplate(config);
+  },
+
   sendConfirmationReminder: (config) => {
     config.subject = 'Appointment Reminder';
     config.templateName = 'Appointment Reminder';

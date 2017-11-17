@@ -50,6 +50,7 @@ const account = {
   addressId,
   name: 'Test Account',
   twilioPhoneNumber: clinicPhoneNumber,
+  lastSyncDate: '2017-11-17T20:20:30.932Z',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
   canSendReviews: false,
