@@ -78,6 +78,7 @@ const ModelAttributes = {
     'appointmentId',
     'type',
     'pmsType',
+    'method',
     'note',
     'isSyncedWithPms',
     'contactedAt',
