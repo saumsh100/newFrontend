@@ -6,11 +6,7 @@ import { Account } from '../../../../server/_models';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 
-
-// const start = Date.now();
-
 describe('connectorWatch', () => {
-  // TODO: mock the sendRecall function, and test that it has been called for the appropriate patients
   beforeAll(async () => {
     await wipeAllModels();
     await seedTestUsers();
