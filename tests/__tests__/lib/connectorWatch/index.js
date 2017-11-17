@@ -1,0 +1,83 @@
+import { v4 as uuid } from 'uuid';
+import moment from 'moment';
+import { getAccountsConnectorDown } from '../../../../server/lib/connectorWatch';
+import sendRecall from '../../../../server/lib/recalls/sendRecall';
+import { Account } from '../../../../server/_models';
+import { wipeAllModels } from '../../../_util/wipeModel';
+import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
+
+describe('connectorWatch', () => {
+  beforeAll(async () => {
+    await wipeAllModels();
+    await seedTestUsers();
+  });
+
+  afterAll(async () => {
+    await wipeAllModels();
+  });
+
+  describe('checkWhichAccountsAreReturned - only return between 10min - 3 hour exclusive', () => {
+    beforeEach(async () => {
+      const lastSyncDate = moment({
+        years: 2010,
+        months: 3,
+        date: 5,
+        hours: 15,
+        minutes: 10,
+      });
+      await Account.update({ lastSyncDate }, { where: {} });
+    });
+
+    test('should return 1 as last sync was 11 mins ago', async () => {
+      const date = moment({
+        years: 2010,
+        months: 3,
+        date: 5,
+        hours: 15,
+        minutes: 21,
+      });
+      const account = await getAccountsConnectorDown(date);
+
+      expect(account.length).toBe(1);
+    });
+
+    test('should return 0 as last sync was 10 mins ago', async () => {
+      const date = moment({
+        years: 2010,
+        months: 3,
+        date: 5,
+        hours: 15,
+        minutes: 20,
+      });
+      const account = await getAccountsConnectorDown(date);
+
+      expect(account.length).toBe(0);
+    });
+
+    test('should return 0 as last sync 3 hours ago', async () => {
+      const date = moment({
+        years: 2010,
+        months: 3,
+        date: 5,
+        hours: 18,
+        minutes: 10,
+      });
+      const account = await getAccountsConnectorDown(date);
+
+      expect(account.length).toBe(0);
+    });
+
+    test('should return 1 as last sync 2 hours and 59 mins ago', async () => {
+      const date = moment({
+        years: 2010,
+        months: 3,
+        date: 5,
+        hours: 18,
+        minutes: 9,
+      });
+      const account = await getAccountsConnectorDown(date);
+
+      expect(account.length).toBe(1);
+    });
+  });
+});
