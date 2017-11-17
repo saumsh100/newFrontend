@@ -11,7 +11,7 @@ export default async function connectorWatch() {
       const account = accounts[i];
       const timeInMins = moment().diff(account.lastSyncDate, 'minutes');
       sendConnectorDown({
-        toEmail: 'kirat@carecru.com',
+        toEmail: 'monitoring@carecru.com',
         name: account.name,
         mergeVars: [
           {
