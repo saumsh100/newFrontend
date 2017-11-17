@@ -95,7 +95,7 @@ describe('Recalls Filters Tests', () => {
   });
 
   describe('Last Recall Filter ', () => {
-    test('Should have 2 patients who have a last recall between these dates', async () => {
+    test('Should have 2 patients who have a last recall between these dates ordered by firstName', async () => {
 
       const recall = await Recall.bulkCreate([
         {accountId, primaryType: 'email', lengthSeconds: 15552000},
@@ -143,9 +143,14 @@ describe('Recalls Filters Tests', () => {
       ]);
 
       const data = [date(2000, 8, 5, 8), date(2000, 12, 11, 8)];
+      const query = {
+        order: [['firstName', 'ASC']],
+      };
 
-      const patientsData = await recallsFilterLibrary.LastRecallFilter({ data }, [], {}, accountId);
+      const patientsData = await recallsFilterLibrary.LastRecallFilter({ data }, [], query, accountId);
+
       expect(patientsData.rows.length).toBe(2);
+      expect(patientsData.rows[0].firstName).toBe('Old');
     });
   });
 });

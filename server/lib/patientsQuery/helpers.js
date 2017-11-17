@@ -3,7 +3,6 @@ export function ManualLimitOffset(eventsArray, query) {
   const {
     limit,
     offset,
-    order,
   } = query;
 
 

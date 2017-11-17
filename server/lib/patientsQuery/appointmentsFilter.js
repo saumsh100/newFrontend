@@ -100,7 +100,7 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
         accountId,
         ...prevFilterIds,
       },
-      attributes: patientAttributes,
+      attributes: patientAttributes.concat([[sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount']]),
       include: [
         {
           model: DeliveredProcedure,

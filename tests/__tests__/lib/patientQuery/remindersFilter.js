@@ -134,7 +134,7 @@ describe('Reminder Filters Tests', () => {
     });
   });
   describe('Last Reminder Filter ', () => {
-    test('Should have 2 patients who have a last reminder between these dates', async () => {
+    test('Should have 2 patients who have a last reminder between these dates, ordered by lastName', async () => {
 
       const reminder = await Reminder.bulkCreate([
         {accountId, primaryType: 'email', lengthSeconds: 15552000},
@@ -148,7 +148,7 @@ describe('Reminder Filters Tests', () => {
 
       const patients = await Patient.bulkCreate([
         makePatientData({firstName: 'Old', lastName: 'Patient'}),
-        makePatientData({firstName: 'Recent', lastName: 'Patient'}),
+        makePatientData({firstName: 'Recent', lastName: 'Zatient'}),
       ]);
 
       const appointments = await Appointment.bulkCreate([
@@ -157,7 +157,7 @@ describe('Reminder Filters Tests', () => {
         makeApptData({patientId: patients[1].id, ...dates(2000, 11, 5, 9)}),
       ]);
 
-      const sentReminder = await SentReminder.bulkCreate([
+      await SentReminder.bulkCreate([
         makeSentReminderData2({
           reminderId: reminderPlain.id,
           primaryType: 'email',
@@ -182,10 +182,13 @@ describe('Reminder Filters Tests', () => {
       ]);
 
       const data = [date(2000, 8, 5, 8), date(2000, 12, 11, 8)];
+      const query = {
+        order: [['lastName', 'DESC']],
+      };
 
-      const patientsData = await remindersFilterLibrary.LastReminderFilter({ data }, [], {}, accountId);
-      console.log(patientsData);
+      const patientsData = await remindersFilterLibrary.LastReminderFilter({ data }, [], query, accountId);
       expect(patientsData.rows.length).toBe(2);
+      expect(patientsData.rows[0].lastName).toBe('Zatient');
     });
   });
 });

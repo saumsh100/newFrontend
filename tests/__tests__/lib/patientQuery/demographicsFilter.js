@@ -85,5 +85,23 @@ describe('Demograph Filters Tests', () => {
       const patientsData = await demographicsFiltersLibrary.DemographicsFilter({ data, key: 'Male' }, [], {}, accountId);
       expect(patientsData.rows.length).toBe(4);
     });
+
+    test('Find (4) male patients order by firstName', async () => {
+
+      const patients = await Patient.bulkCreate([
+        makePatientData({ firstName: 'Old', lastName: 'Patient', gender: 'Male' }),
+        makePatientData({ firstName: 'Kind Of Old', lastName: 'Patient', gender: 'male' }),
+        makePatientData({ firstName: 'Very Old', lastName: 'Patient', gender: 'male' }),
+        makePatientData({ firstName: 'Super Old', lastName: 'Patient', gender: 'Male' }),
+      ]);
+
+      const data = ['Male'];
+      const query = {
+        order: [['firstName', 'Desc']],
+      };
+      const patientsData = await demographicsFiltersLibrary.DemographicsFilter({ data, key: 'Male' }, [], query, accountId);
+      expect(patientsData.rows.length).toBe(4);
+      expect(patientsData.rows[0].firstName).toBe('Very Old');
+    });
   });
 });

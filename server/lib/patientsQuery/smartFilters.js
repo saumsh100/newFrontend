@@ -6,8 +6,6 @@ export function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
   const startMonthsOut = moment().subtract(smFilter.startMonth, 'months').toISOString();
   const endMonthsOut = moment().subtract(smFilter.endMonth, 'months').toISOString();
 
-  console.log(offSetLimit);
-
   return Patient.findAndCountAll(Object.assign({
     raw: true,
     where: {

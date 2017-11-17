@@ -79,5 +79,30 @@ describe('Practitioners Filter Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
+    test('Should have 3 patients who have had appointments with this practitioner order by firstName', async () => {
+
+      const patients = await Patient.bulkCreate([
+        makePatientData({ firstName: 'Old', lastName: 'Patient', birthDate: date(1998, 2, 6, 9)}),
+        makePatientData({ firstName: 'Kind Of Old', lastName: 'Patient', birthDate: date(1990, 7, 6, 9)}),
+        makePatientData({ firstName: 'Very Old', lastName: 'Patient', birthDate: date(1890, 7, 6, 9)}),
+      ]);
+
+      const appointments = await Appointment.bulkCreate([
+        makeApptData({ patientId: patients[1].id, ...dates(2014, 7, 5, 8) }),
+        makeApptData({ patientId: patients[0].id, ...dates(2016, 8, 5, 9) }),
+        makeApptData({ patientId: patients[2].id, ...dates(2016, 9, 5, 9) }),
+        makeApptData({ patientId: patients[0].id, ...dates(2016, 10, 5, 9) }),
+      ]);
+
+      const data = [practitionerId];
+      const query = {
+        order: [['firstName', 'Desc']],
+      };
+
+      const patientsData = await practitionersFiltersLibrary.PractitionersFilter({ data }, [], query, accountId);
+      expect(patientsData.rows.length).toBe(3);
+      expect(patientsData.rows[0].firstName).toBe('Very Old');
+    });
+
   });
 });
