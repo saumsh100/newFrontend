@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Grid, Row, Col } from '../../../../library';
-import InfoDump from '../../TopDisplay/InfoDump';
+import InfoDump from '../../../Shared/InfoDump';
 import styles from '../styles.scss';
 
 export default function PersonalTab(props) {
@@ -14,8 +14,8 @@ export default function PersonalTab(props) {
       <div>{patient.address.street} </div>
       <div>{patient.address.country} </div>
       <div>{patient.address.state} </div>
-      <div>{patient.address.zipCode} </div>                        
-    </div>  
+      <div>{patient.address.zipCode} </div>
+    </div>
   );
 
   return (
@@ -60,7 +60,7 @@ export default function PersonalTab(props) {
         <Col xs={6} >
           <InfoDump
             label="ADDRESS"
-            component={componentAddress}            
+            component={componentAddress}
           />
         </Col>
       </Row>

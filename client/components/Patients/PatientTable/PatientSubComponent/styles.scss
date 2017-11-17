@@ -63,12 +63,19 @@
   height: 100%;
 }
 
-
 .subHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   color: $primary-darkgrey;
   padding-top: 20px;
 }
+
+.subHeaderSmall {
+  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+  font-style: italic;
+  padding-top: 10px;
+}
+
 .subHeader:first-child {
   padding-top: 0px;
 }
@@ -80,7 +87,7 @@
 }
 
 .row {
-  padding-top: 20px;
+  padding-top: 25px;
   padding-bottom: 20px;
 }
 .row:first-child {

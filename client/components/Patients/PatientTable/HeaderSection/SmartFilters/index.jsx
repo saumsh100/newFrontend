@@ -61,7 +61,6 @@ export default function SmartFilters(props) {
     {
       index: 1,
       label: 'Missed/Cancelled',
-      joinFilter: true,
     },
     {
       index: 2,
@@ -83,9 +82,9 @@ export default function SmartFilters(props) {
   return (
     <List className={styles.smartFilter}>
       {smartFilters.map((filter) => {
-        let borderStyle = { };
+        let borderStyle = {};
 
-        if (smartFilter && filter.label === smartFilter.label) {
+        if ((smartFilter && filter.label === smartFilter.label) || (filter.label === 'All Patients' && !smartFilter)) {
           borderStyle = {
             borderLeft: '3px solid #FF715A',
           };

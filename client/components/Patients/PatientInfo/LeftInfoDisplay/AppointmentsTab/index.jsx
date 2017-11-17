@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Grid, Row, Col } from '../../../../library';
-import InfoDump from '../../TopDisplay/InfoDump';
+import InfoDump from '../../../Shared/InfoDump';
 import RecallDropDowns from '../../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../../Shared/ReminderDropDowns';
 import styles from '../styles.scss';

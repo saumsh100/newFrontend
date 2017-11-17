@@ -1,5 +1,6 @@
 import sequelize from 'sequelize';
 import { DeliveredProcedure, Patient, Procedure } from '../../_models';
+import { patientAttributes } from "../patientsQuery/helpers";
 
 // SQL query that gets Patients and joins with delivered procedures and
 // groups by deliveredProcedures.procedurecode and totals up the cost from them.
@@ -38,27 +39,32 @@ export function mostBusinessPatient(startDate, endDate, accountId, searchClause 
   });
 }
 
-export function mostBusinessSinglePatient(startDate, endDate, accountId, patientId) {
+export function mostBusinessSinglePatient(startDate, endDate, accountId, patientIds, order = []) {
   return Patient.findAll({
     where: {
       accountId,
-      id: patientId,
+      id: patientIds,
     },
-    attributes: [
-      [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
-    ],
+
+    attributes: patientAttributes.concat([[sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount']]),
     include: [
       {
         model: DeliveredProcedure,
         as: 'deliveredProcedures',
+        where: {
+          entryDate: {
+            gt: startDate,
+            lt: endDate,
+          },
+        },
         attributes: [],
-        duplicating: false,
-        required: true,
+        required: false,
       },
     ],
+    required: true,
     group: ['Patient.id'],
     raw: true,
-    limit: 1,
+    order,
   });
 }
 

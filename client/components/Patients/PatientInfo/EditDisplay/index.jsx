@@ -114,32 +114,32 @@ class EditDisplay extends Component {
               </div>
             </div>
             <div className={styles.content}>
-              <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} >
-                <Tab label="Appointments" >
+              <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
+                <Tab label="APPOINTMENTS" >
                   <AppointmentsForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                   />
                 </Tab>
-                <Tab label="Personal">
+                <Tab label="PERSONAL">
                   <PersonalForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                   />
                 </Tab>
-                <Tab label="Insurance">
+                <Tab label="INSURANCE">
                   <InsuranceForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                   />
                 </Tab>
-                <Tab label="Family">
+                <Tab label="FAMILY">
                   <FamilyForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                   />
                 </Tab>
-                <Tab label="Settings">
+                <Tab label="SETTINGS">
                   <SettingsForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}

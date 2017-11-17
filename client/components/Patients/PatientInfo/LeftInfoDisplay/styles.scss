@@ -2,8 +2,8 @@
 
 .mainContainer {
   width: 100%;
-  margin-top: 10px;
-  border-top: 5px solid $inactive-color;
+  margin-top: 9px;
+  border-top: 3px solid $inactive-color;
   background: $primary-white;
 }
 
@@ -41,7 +41,6 @@
 
 .tab {
   padding-top: 10px;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
 
   > nav {
     display: flex;
@@ -49,6 +48,7 @@
     align-items: center;
     padding-left: 25px;
     padding-right: 25px;
+    font-weight: $large-weight;
   }
 }
 

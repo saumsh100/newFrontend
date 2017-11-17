@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Patient, DeliveredProcedure, sequelize } from '../../_models';
+import { Patient } from '../../_models';
 import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
 import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter, OnlineAppointmentsFilter } from './appointmentsFilter';
@@ -8,12 +8,8 @@ import { PractitionersFilter } from './practitionersFilter';
 import { RemindersFilter, LastReminderFilter } from './remindersFilter';
 import { RecallsFilter, LastRecallFilter } from './recallsFilter';
 import { ReviewsFilter } from './reviewsFilter';
-
-function getIds(patients, key) {
-  return patients.map((patient) => {
-    return patient[key];
-  });
-}
+import { mostBusinessSinglePatient } from '../intelligence/revenue';
+import { getIds } from './helpers';
 
 const filterFunctions = [
   DemographicsFilter,
@@ -99,7 +95,7 @@ export async function PatientQuery(config) {
         offSetLimit.order = order;
       }
 
-      filteredPatients = await smartFilterFunctions[smFilter.index](accountId, offSetLimit, order, smFilter);
+      filteredPatients = await smartFilterFunctions[smFilter.index](accountId, offSetLimit, smFilter);
     }
 
     if (filters && filters.length) {
@@ -153,13 +149,8 @@ export async function PatientQuery(config) {
       patients = await Patient.findAll({
         ...defaultQuery,
       });
-    } else if (smartFilter && !filters) {
+    } else {
       patientCount = filteredPatients.count;
-
-      patients = filteredPatients.rows.map(data => smFilter.joinFilter ? data.patient : data);
-    } else if (filters.length) {
-      patientCount = filteredPatients.count;
-
       patients = filteredPatients.rows;
     }
 
@@ -170,41 +161,7 @@ export async function PatientQuery(config) {
      */
     const ids = getIds(patients, 'id');
 
-    patients = await Patient.findAll({
-      where: {
-        accountId,
-        id: ids,
-      },
-
-      attributes: [
-        'Patient.id',
-        'Patient.firstName',
-        'Patient.lastName',
-        'Patient.nextApptDate',
-        'Patient.lastApptDate',
-        'Patient.birthDate',
-        'Patient.status',
-        [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
-      ],
-      include: [
-        {
-          model: DeliveredProcedure,
-          as: 'deliveredProcedures',
-          where: {
-            entryDate: {
-              gt: moment().subtract(1, 'years').toISOString(),
-              lt: new Date(),
-            },
-          },
-          attributes: [],
-          required: false,
-        },
-      ],
-      required: true,
-      group: ['Patient.id'],
-      raw: true,
-      order,
-    });
+    patients = await mostBusinessSinglePatient(moment().subtract(1, 'years').toISOString(), new Date(), accountId, ids, order);
 
     const patientData = [{ totalPatients: patientCount, data: patients }];
 

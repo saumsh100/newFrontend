@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { Card, Avatar, Icon, Grid, Row, Col, } from '../../../library';
-import InfoDump from './InfoDump';
+import InfoDump from '../../Shared/InfoDump';
 import styles from './styles.scss';
 
 const bgImgs = ['banner-01.png', 'banner-02.png', 'banner-03.png', 'banner-04.png', 'banner-05.png']

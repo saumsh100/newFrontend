@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { Checkbox } from '../../../library';
+import styles from '../styles.scss';
 
 export default function SelectPatient(props) {
   const {
@@ -12,7 +13,7 @@ export default function SelectPatient(props) {
   const checked = patientIds.indexOf(id) > -1;
 
   return (
-    <div>
+    <div className={styles.selectPatient}>
       <Checkbox
         checked={checked}
         onChange={(e) => {

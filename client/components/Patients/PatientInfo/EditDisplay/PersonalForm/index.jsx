@@ -33,7 +33,7 @@ export default function PersonalForm(props) {
     patient,
     handleSubmit,
   } = props;
-  
+
   const initialValues = {
     gender: patient.get('gender'),
     birthDate: moment(patient.get('birthDate')).format('MM/DD/YYYY'),
@@ -73,7 +73,7 @@ export default function PersonalForm(props) {
               theme="primaryBlue"
             />
           </Col>
-          <Col xs={6} className={styles.colRight}>
+          <Col xs={6} className={styles.colRightDropDown}>
             <Field
               required
               normalize={normalizeBirthdate}
@@ -132,7 +132,7 @@ export default function PersonalForm(props) {
               theme="primaryBlue"
             />
           </Col>
-          <Col xs={6} className={styles.colRight}>
+          <Col xs={6} className={styles.colToggle}>
             <Field
               required
               name="state"
@@ -151,7 +151,7 @@ export default function PersonalForm(props) {
               theme="primaryBlue"
             />
           </Col>
-          <Col xs={6} className={styles.colRight}>
+          <Col xs={6} className={styles.colToggle}>
             <Field
               name="country"
               label="Country"

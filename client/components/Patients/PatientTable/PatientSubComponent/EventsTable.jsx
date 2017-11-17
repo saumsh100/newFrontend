@@ -11,7 +11,7 @@ export default function EventsTable(props) {
   } = props;
 
   if (!wasFetched) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (!events || !events.length) {

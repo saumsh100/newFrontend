@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Patient, SentReminder } from '../../_models';
-import { getIds } from './helpers';
+import { getIds, patientAttributes } from './helpers';
 
 export async function RemindersFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -34,15 +34,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
         duplicating: false,
       },
       group: ['Patient.id'],
-      attributes: [
-        'Patient.id',
-        'Patient.firstName',
-        'Patient.lastName',
-        'Patient.nextApptDate',
-        'Patient.lastApptDate',
-        'Patient.birthDate',
-        'Patient.status',
-      ],
+      attributes: patientAttributes,
       ...query,
     });
 

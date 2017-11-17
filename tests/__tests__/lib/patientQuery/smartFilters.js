@@ -27,6 +27,13 @@ const dates = (y, m, d, h) => {
   };
 };
 
+const currentDateMinusDays = (days) => {
+  const d = new Date();
+  d.setDate(d.getDate() - days);
+
+  return d;
+}
+
 describe('Smart Filters Tests', () => {
   beforeAll(async () => {
     await wipeAllModels();
@@ -49,7 +56,7 @@ describe('Smart Filters Tests', () => {
 
     test('Find Patients due within 60 days', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2017, 3, 10, 9) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: currentDateMinusDays(220) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2013, 7, 6, 9) }),
       ]);
 
@@ -58,7 +65,7 @@ describe('Smart Filters Tests', () => {
         endMonth: 7,
       };
 
-      const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, null, smFilter);
+      const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, smFilter);
       expect(patientsData.rows.length).toBe(1);
     });
 
@@ -73,15 +80,14 @@ describe('Smart Filters Tests', () => {
         endMonth: 7,
       };
 
-      const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, null, smFilter);
+      const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, smFilter);
       expect(patientsData.rows.length).toBe(0);
     });
 
     test('Find Patients late 13-18 months', async () => {
-
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2015, 11, 10, 9) }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2016, 1, 13, 9) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: currentDateMinusDays(730) }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: currentDateMinusDays(760) }),
       ]);
 
       const smFilter = {
@@ -89,7 +95,7 @@ describe('Smart Filters Tests', () => {
         endMonth: 21,
       };
 
-      const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, null, smFilter);
+      const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, smFilter);
       expect(patientsData.rows.length).toBe(2);
     });
   });
@@ -108,12 +114,20 @@ describe('Smart Filters Tests', () => {
         makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
-      const appointments = await Appointment.bulkCreate([
-        makeApptData({ patientId: patients[0].id, ...dates(2017, 10, 14, 5), isCancelled: true }),
-        makeApptData({ patientId: patients[1].id, ...dates(2017, 10, 14, 5) }),
+      await Appointment.bulkCreate([
+        makeApptData({
+          patientId: patients[0].id,
+          startDate: currentDateMinusDays(1),
+          endDate: currentDateMinusDays(1),
+          isCancelled: true,
+        }),
+        makeApptData({
+          patientId: patients[1].id,
+          ...dates(2017, 10, 14, 5),
+        }),
       ]);
 
-      const patientsData = await smartFiltersLibrary.CancelledAppointmentsFilter(accountId, {}, null, {});
+      const patientsData = await smartFiltersLibrary.CancelledAppointmentsFilter(accountId, {}, {});
       expect(patientsData.rows.length).toBe(1);
     });
     test('Find all cancelled patients within the last 48 hours, should be 0', async () => {
@@ -122,12 +136,20 @@ describe('Smart Filters Tests', () => {
         makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
-      const appointments = await Appointment.bulkCreate([
-        makeApptData({ patientId: patients[0].id, ...dates(2017, 10, 14, 5), isCancelled: false }),
-        makeApptData({ patientId: patients[1].id, ...dates(2017, 10, 14, 5) }),
+      await Appointment.bulkCreate([
+        makeApptData({
+          patientId: patients[0].id,
+          startDate: currentDateMinusDays(1),
+          endDate: currentDateMinusDays(1),
+          isCancelled: false,
+        }),
+        makeApptData({
+          patientId: patients[1].id,
+          ...dates(2017, 10, 14, 5),
+        }),
       ]);
 
-      const patientsData = await smartFiltersLibrary.CancelledAppointmentsFilter(accountId, {}, null, {});
+      const patientsData = await smartFiltersLibrary.CancelledAppointmentsFilter(accountId, {}, {});
       expect(patientsData.rows.length).toBe(0);
     });
   });
@@ -142,21 +164,21 @@ describe('Smart Filters Tests', () => {
 
     test('Find all patients with last appointment in the last 30 days and no next appointment', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2017, 10, 10, 9)}),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: currentDateMinusDays(20) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
-      const patientsData = await smartFiltersLibrary.MissedPreAppointed(accountId, {}, null, {});
+      const patientsData = await smartFiltersLibrary.MissedPreAppointed(accountId, {}, {});
       expect(patientsData.rows.length).toBe(1);
     });
 
     test('should fail because there is a next appt and not in 30 days ', async () => {
-      const patients = await Patient.bulkCreate([
+      await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2017, 10, 10, 9), nextApptDate: date(2017, 12, 10, 9) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2017, 7, 10, 9), nextApptDate: date(2017, 12, 10, 9) }),
       ]);
 
-      const patientsData = await smartFiltersLibrary.MissedPreAppointed(accountId, {}, null, {});
+      const patientsData = await smartFiltersLibrary.MissedPreAppointed(accountId, {}, {});
       expect(patientsData.rows.length).toBe(0);
     });
   });
@@ -175,9 +197,22 @@ describe('Smart Filters Tests', () => {
         makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
+      const d = new Date();
+      d.setDate(d.getDate() + 5);
+
       const appointments = await Appointment.bulkCreate([
-        makeApptData({ patientId: patients[0].id, ...dates(2017, 10, 20, 5), isPatientConfirmed: false }),
-        makeApptData({ patientId: patients[1].id, ...dates(2017, 10, 20, 5), isPatientConfirmed: true }),
+        makeApptData({
+          patientId: patients[0].id,
+          startDate: d,
+          endDate: d,
+          isPatientConfirmed: false,
+        }),
+        makeApptData({
+          patientId: patients[1].id,
+          startDate: d,
+          endDate: d,
+          isPatientConfirmed: true,
+        }),
       ]);
 
       const patientPlain = patients[0].get({ plain: true });
@@ -189,19 +224,19 @@ describe('Smart Filters Tests', () => {
       patientPlain.nextApptId = appPlain.id;
       patientPlain1.nextApptId = appPlain1.id;
 
-      const update = await Patient.update(patientPlain, {
+      await Patient.update(patientPlain, {
         where: {
           id: patientPlain.id,
         },
       });
 
-      const update1 = await Patient.update(patientPlain1, {
+      await Patient.update(patientPlain1, {
         where: {
           id: patientPlain1.id,
         },
       });
 
-      const patientsData = await smartFiltersLibrary.UnConfirmedPatientsFilter(accountId, {}, null, { days: 7 });
+      const patientsData = await smartFiltersLibrary.UnConfirmedPatientsFilter(accountId, {}, { days: 7 });
       expect(patientsData.rows.length).toBe(1);
     });
   });

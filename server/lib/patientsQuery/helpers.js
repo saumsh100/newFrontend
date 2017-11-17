@@ -25,3 +25,28 @@ export function getIds(patients, key) {
     return patient[key];
   });
 }
+
+export const patientAttributes = [
+  'Patient.id',
+  'Patient.firstName',
+  'Patient.lastName',
+  'Patient.nextApptDate',
+  'Patient.nextApptId',
+  'Patient.lastApptId',
+  'Patient.lastApptDate',
+  'Patient.firstApptId',
+  'Patient.firstApptDate',
+  'Patient.birthDate',
+  'Patient.status',
+  'Patient.email',
+  'Patient.patientUserId',
+  'Patient.pmsId',
+  'Patient.accountId',
+  'Patient.phoneNumber',
+  'Patient.homePhoneNumber',
+  'Patient.workPhoneNumber',
+  'Patient.otherPhoneNumber',
+  'Patient.gender',
+  'Patient.language',
+  'Patient.type',
+];

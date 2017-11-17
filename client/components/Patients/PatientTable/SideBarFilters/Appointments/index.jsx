@@ -63,22 +63,23 @@ export default function Appointments(props) {
         </FormSection>
         <div className={styles.formHeader}>Number of Appointments </div>
         <FormSection name="appointmentsCount" className={styles.formContainer_row} >
-          <Field
-            component="DropdownSelect"
-            name="0"
-            options={[{
-              label: 'Greater Than',
-              value: '>=',
-            },{
-              label: 'Less Than',
-              value: '<=',
-            }, {
-              label: 'Equal To',
-              value: '=',
-            }]}
-            className={styles.ddSelect}
-          />
-          <span className={styles.formContainer_middleText}> &nbsp; </span>
+          <span className={styles.formContainer_dropDownInput}>
+            <Field
+              component="DropdownSelect"
+              name="0"
+              options={[{
+                label: 'Greater Than',
+                value: '>=',
+              },{
+                label: 'Less Than',
+                value: '<=',
+              }, {
+                label: 'Equal To',
+                value: '=',
+              }]}
+              className={styles.ddSelect}
+            />
+          </span>
           <span className={styles.formContainer_numberInput}>
            <Field
              name="1"
@@ -91,22 +92,23 @@ export default function Appointments(props) {
         </FormSection>
         <div className={styles.formHeader}> Online Appointments </div>
         <FormSection name="onlineAppointments" className={styles.formContainer_row} >
-          <Field
-            component="DropdownSelect"
-            name="0"
-            options={[{
-              label: 'Greater Than',
-              value: '>=',
-            },{
-              label: 'Less Than',
-              value: '<=',
-            }, {
-              label: 'Equal To',
-              value: '=',
-            }]}
-            className={styles.ddSelect}
-          />
-          <span className={styles.formContainer_middleText}> &nbsp; </span>
+          <span className={styles.formContainer_dropDownInput}>
+            <Field
+              component="DropdownSelect"
+              name="0"
+              options={[{
+                label: 'Greater Than',
+                value: '>=',
+              },{
+                label: 'Less Than',
+                value: '<=',
+              }, {
+                label: 'Equal To',
+                value: '=',
+              }]}
+              className={styles.ddSelect}
+            />
+          </span>
           <span className={styles.formContainer_numberInput}>
             <Field
               name="1"

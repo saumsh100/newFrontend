@@ -1,6 +1,6 @@
 
 import { Patient, Appointment, } from '../../_models';
-import { ManualLimitOffset } from './helpers';
+import { patientAttributes } from './helpers';
 
 export async function PractitionersFilter({ data }, filterIds, query, accountId) {
   try {
@@ -33,15 +33,7 @@ export async function PractitionersFilter({ data }, filterIds, query, accountId)
         duplicating: false,
       },
       group: ['Patient.id'],
-      attributes: [
-        'Patient.id',
-        'Patient.firstName',
-        'Patient.lastName',
-        'Patient.nextApptDate',
-        'Patient.lastApptDate',
-        'Patient.birthDate',
-        'Patient.status',
-      ],
+      attributes: patientAttributes,
       ...query,
     });
 

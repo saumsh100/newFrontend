@@ -1,8 +1,8 @@
 
 import moment from 'moment';
-import { Appointment, Patient, sequelize, DeliveredProcedure, Request } from '../../_models';
+import { Appointment, Patient } from '../../_models';
 
-export function LateAppointmentsFilter(accountId, offSetLimit, order, smFilter) {
+export function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
   const startMonthsOut = moment().subtract(smFilter.startMonth, 'months').toISOString();
   const endMonthsOut = moment().subtract(smFilter.endMonth, 'months').toISOString();
 
@@ -21,30 +21,35 @@ export function LateAppointmentsFilter(accountId, offSetLimit, order, smFilter) 
   }, offSetLimit));
 }
 
-export function CancelledAppointmentsFilter(accountId, offSetLimit, order, smFilter) {
-  return Appointment.findAndCountAll(Object.assign({
+export function CancelledAppointmentsFilter(accountId, offSetLimit) {
+  return Patient.findAndCountAll(Object.assign({
     raw: true,
-    nest: true,
     where: {
       accountId,
-      isCancelled: true,
-      isDeleted: false,
-      startDate: {
-        $between: [moment().subtract(48, 'hours').toISOString(), new Date()],
-      },
-      patientId: {
-        $ne: null,
-      },
     },
     include: {
-      model: Patient,
-      as: 'patient',
+      model: Appointment,
+      as: 'appointments',
+      where: {
+        accountId,
+        isCancelled: true,
+        isDeleted: false,
+        isPending: false,
+        startDate: {
+          $between: [moment().subtract(48, 'hours').toISOString(), new Date()],
+        },
+        patientId: {
+          $not: null,
+        },
+      },
+      attributes: [],
       required: true,
+      duplicating: false,
     },
   }, offSetLimit));
 }
 
-export function MissedPreAppointed(accountId, offSetLimit, order, smFilter) {
+export function MissedPreAppointed(accountId, offSetLimit) {
   return Patient.findAndCountAll(Object.assign({
     raw: true,
     where: {
@@ -58,7 +63,7 @@ export function MissedPreAppointed(accountId, offSetLimit, order, smFilter) {
   }, offSetLimit));
 }
 
-export function UnConfirmedPatientsFilter(accountId, offSetLimit, order, smFilter) {
+export function UnConfirmedPatientsFilter(accountId, offSetLimit, smFilter) {
   return Patient.findAndCountAll(Object.assign({
     raw: true,
     where: {

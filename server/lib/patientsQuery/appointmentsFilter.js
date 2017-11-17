@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Patient, Appointment, DeliveredProcedure, sequelize, PatientUser, Request } from '../../_models';
-import { ManualLimitOffset, getIds } from './helpers';
+import { ManualLimitOffset, getIds, patientAttributes } from './helpers';
 
 export async function FirstLastAppointmentFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -71,15 +71,7 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
         duplicating: false,
       },
       group: ['Patient.id'],
-      attributes: [
-        'Patient.id',
-        'Patient.firstName',
-        'Patient.lastName',
-        'Patient.nextApptDate',
-        'Patient.lastApptDate',
-        'Patient.birthDate',
-        'Patient.status',
-      ],
+      attributes: patientAttributes,
       having: sequelize.literal(`count("appointments"."patientId") ${data[0]} ${data[1]}`),
       ...query,
     });
@@ -108,16 +100,7 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
         accountId,
         ...prevFilterIds,
       },
-      attributes: [
-        'Patient.id',
-        'Patient.firstName',
-        'Patient.lastName',
-        'Patient.nextApptDate',
-        'Patient.lastApptDate',
-        'Patient.birthDate',
-        'Patient.status',
-        [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
-      ],
+      attributes: patientAttributes,
       include: [
         {
           model: DeliveredProcedure,
