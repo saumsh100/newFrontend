@@ -22,6 +22,7 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
+    queryInterface.bulkDelete('AccountConfigurations', {});
     return queryInterface.bulkDelete('Configurations', {
       name: [
         'BIDIRECTIONAL_SYNC_ENABLED',
