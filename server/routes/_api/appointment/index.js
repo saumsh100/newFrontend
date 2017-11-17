@@ -644,7 +644,16 @@ appointmentsRouter.get('/connector/notSynced', checkPermissions('patients:read')
  */
 appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update'), (req, res, next) => {
   const appointments = req.body;
-  const appointmentUpdates = appointments.map((appointment) => {
+  const cleanedAppointments = appointments.map(appointment => Object.assign(
+    {},
+    appointment,
+    {
+      accountId: req.accountId,
+      isSyncedWithPms: true,
+    }
+  ));
+
+  const appointmentUpdates = cleanedAppointments.map((appointment) => {
     return Appointment.findById(appointment.id)
       .then(_appointment => _appointment.update(appointment));
   });

@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
-import { Appointment, Patient } from '../../../server/_models';
+import { Appointment, Patient, Chat } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { serviceId, service, seedTestService } from '../../_util/seedTestServices';
@@ -383,6 +383,112 @@ describe('/api/patients', () => {
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('PUT /', () => {
+    beforeEach(async () => {
+      await seedTestAppointments();
+    });
+
+    afterEach(async () => {
+      await wipeModel(Chat);
+      await wipeTestAppointments();
+    });
+
+    test('/:patientId - batch update patients', () => {
+      return request(app)
+        .post(`${rootUrl}/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          patients: [batchPatient, batchPatient2, batchPatient3, batchPatient4],
+        })
+        .expect(201)
+        .then(({}) => {
+          const patient1 = Object.assign({}, batchPatient, { lastName: 'HELLO' });
+          const patient2 = Object.assign({}, batchPatient2, { lastName: 'HELLO2' });
+          const patient3 = Object.assign({}, batchPatient3, { lastName: 'HELLO3' });
+          const patient4 = Object.assign({}, batchPatient4, { lastName: 'HELLO4' });
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([patient1, patient2, patient3, patient4])
+            .expect(201)
+            .then(({ body }) => {
+              expect(Object.keys(body.entities.patients).length).toBe(4);
+
+              expect(body.entities.patients[batchPatientId].lastName).toBe('HELLO');
+              expect(body.entities.patients[batchPatientId2].lastName).toBe('HELLO2');
+              expect(body.entities.patients[batchPatientId3].lastName).toBe('HELLO3');
+              expect(body.entities.patients[batchPatientId4].lastName).toBe('HELLO4');
+            });
+        });
+    });
+
+    test('/:patientId - batch update patients', () => {
+      const batchPatient1New = Object.assign({}, batchPatient, { pmsId: '112' });
+      const batchPatient2New = Object.assign({}, batchPatient2, { pmsId: '113' });
+      const batchPatient3New = Object.assign({}, batchPatient3, { pmsId: '114' });
+      const batchPatient4New = Object.assign({}, batchPatient4, { pmsId: '115' });
+      return request(app)
+        .post(`${rootUrl}/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          patients: [batchPatient1New, batchPatient2New, batchPatient3New, batchPatient4New],
+        })
+        .expect(201)
+        .then(({}) => {
+          const patient1 = Object.assign({}, batchPatient, { pmsId: '112', lastName: 'HELLO' });
+          const patient2 = Object.assign({}, batchPatient2, { pmsId: '113', lastName: 'HELLO2' });
+          const patient3 = Object.assign({}, batchPatient3, { pmsId: '115', lastName: 'HELLO3' });
+          const patient4 = Object.assign({}, batchPatient4, { pmsId: '115', lastName: 'HELLO4' });
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([patient1, patient2, patient3, patient4])
+            .expect(201)
+            .then(({ body }) => {
+              expect(Object.keys(body.entities.patients).length).toBe(3);
+
+              expect(body.entities.patients[batchPatientId].lastName).toBe('HELLO');
+              expect(body.entities.patients[batchPatientId2].lastName).toBe('HELLO2');
+              expect(body.entities.patients[batchPatientId4].lastName).toBe('HELLO4');
+            });
+        });
+    });
+
+    test('/:patientId - batch update patients with chat', () => {
+      return request(app)
+        .post(`${rootUrl}/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          patients: [batchPatient, batchPatient2, batchPatient3, batchPatient4],
+        })
+        .expect(201)
+        .then(async () => {
+          await Chat.create({
+            accountId,
+            patientId: batchPatientId,
+            patientPhoneNumber: '+17789999991',
+          });
+          const patient1 = Object.assign({}, batchPatient, { lastName: 'HELLO' });
+          const patient2 = Object.assign({}, batchPatient2, { lastName: 'HELLO2' });
+          const patient3 = Object.assign({}, batchPatient3, { lastName: 'HELLO3' });
+          const patient4 = Object.assign({}, batchPatient4, { lastName: 'HELLO4' });
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([patient1, patient2, patient3, patient4])
+            .expect(201)
+            .then(({ body }) => {
+              expect(Object.keys(body.entities.patients).length).toBe(4);
+
+              expect(body.entities.patients[batchPatientId].lastName).toBe('HELLO');
+              expect(body.entities.patients[batchPatientId2].lastName).toBe('HELLO2');
+              expect(body.entities.patients[batchPatientId3].lastName).toBe('HELLO3');
+              expect(body.entities.patients[batchPatientId4].lastName).toBe('HELLO4');
+            });
         });
     });
   });
