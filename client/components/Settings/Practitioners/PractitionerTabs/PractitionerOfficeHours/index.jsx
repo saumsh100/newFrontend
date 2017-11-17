@@ -388,7 +388,7 @@ class PractitionerOfficeHours extends Component{
       showComponent = (
         <div className={styles.toggleContainer_hours}>
           <div className={styles.flexHeader}>
-            <Header title="Weekly Schedule" />
+            <Header title="Weekly Schedule" contentHeader />
             <div>
               <Button className={styles.button} icon="plus" secondary create onClick={this.createPattern}>Add New Pattern</Button>
               <Button className={styles.button} secondary onClick={this.openModal}>Change Start Date</Button>
@@ -402,7 +402,7 @@ class PractitionerOfficeHours extends Component{
             modal
             openModal={day => this.openModalChair(day)}
           />
-          <Header title="Breaks" className={styles.subHeader} />
+          <Header title="Breaks" className={styles.subHeader} contentHeader />
           <BreaksForm
             key={`${practitioner.get('id')}_Breaks`}
             weeklySchedule={weeklySchedule}

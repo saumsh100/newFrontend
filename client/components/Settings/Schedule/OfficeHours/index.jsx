@@ -254,7 +254,7 @@ class OfficeHours extends Component {
           </Form>
         </DialogBox>
         <div className={styles.flexHeader}>
-          <Header title="Weekly Schedule" className={styles.header} />
+          <Header title="Weekly Schedule" contentHeader className={styles.header} />
           <div>
             <Button
               className={styles.button}
@@ -280,7 +280,7 @@ class OfficeHours extends Component {
           onSubmit={handleSubmit}
           formName="officeHours"
         />
-        <Header title="Breaks" className={styles.subHeader} />
+        <Header title="Breaks" contentHeader className={styles.subHeader} />
         <BreaksForm
           weeklySchedule={weeklySchedule}
           onSubmit={handleSubmit}

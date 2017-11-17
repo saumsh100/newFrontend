@@ -32,29 +32,20 @@ class ServicePractitioners extends Component {
   }
 
   render() {
-    const { service, practitioners, practitionerIds } = this.props;
+    const { service, practitioners } = this.props;
+    if (!service) return null;
 
-    let showComponent = null;
-
-    if (service) {
-      const practitionerIds = service.get('practitioners');
-
-      showComponent = (
-        <ServicesPractForm
-          key={`${service.get('id')}PractForm`}
-          service={service}
-          practitioners={practitioners}
-          handleSubmit={this.handleSubmit}
-          practitionerIds={practitionerIds}
-          formName={`${service.get('id')}practitioners`}
-        />
-      );
-    }
+    const practitionerIds = service.get('practitioners');
 
     return (
-      <div>
-        {showComponent}
-      </div>
+      <ServicesPractForm
+        key={`${service.get('id')}PractForm`}
+        service={service}
+        practitioners={practitioners}
+        handleSubmit={this.handleSubmit}
+        practitionerIds={practitionerIds}
+        formName={`${service.get('id')}practitioners`}
+      />
     );
   }
 }

@@ -2,15 +2,20 @@
 import React, {Component, PropTypes, } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { IconButton, CardHeader, Grid, Row, Col  } from '../../library';
 import ServiceDataItem from './ServiceDataItem';
 import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import ServicePractitioners from './ServicePractitioners';
+import SettingsCard from '../Shared/SettingsCard';
+import {
+  Card,
+  IconButton,
+} from '../../library';
 import styles from './styles.scss';
 
 class ServiceDataContainer extends Component {
   constructor(props) {
     super(props);
+
     this.updateService = this.updateService.bind(this);
     this.deleteService = this.deleteService.bind(this);
   }
@@ -19,50 +24,59 @@ class ServiceDataContainer extends Component {
     this.props.updateEntityRequest({ key: 'services', model: modifiedService, alert });
   }
 
-  deleteService(id) {
-    this.props.deleteEntityRequest({ key: 'services', id });
-    this.props.setServiceId({ id: null });
+  deleteService() {
+    const { serviceId } = this.props;
+    const deleteService = confirm('Are you sure you want to delete this service?');
+    if (deleteService) {
+      this.props.deleteEntityRequest({ key: 'services', id: serviceId });
+      this.props.setServiceId({ id: null });
+    }
   }
 
   render() {
     const { services, serviceId, practitioners } = this.props;
 
-    const selectedService = serviceId ? services.get(serviceId) : services.first();
-
-    if (!practitioners) {
+    if (!services || !practitioners) {
       return null;
     }
 
-    let showComponent1 = null;
-    let showComponent2 = null;
-
-    const practitionerIds = (
-      selectedService ? selectedService.get('practitioners') : null);
-
+    const selectedService = serviceId ? services.get(serviceId) : services.first();
+    let component = null;
     if (selectedService) {
-      showComponent1 = (
-        <ServiceDataItem
-          key={`${selectedService.get('id')}basicdata`}
-          service={selectedService}
-          onSubmit={this.updateService}
-          deleteService={this.deleteService}
-        />
-      );
-      showComponent2 = (
-        <ServicePractitioners
-          key={`${selectedService.get('id')}selectedPractitioners`}
-          service={selectedService}
-          practitionerIds={practitionerIds}
-          updateService={this.updateService}
-          practitioners={practitioners}
-        />
+      const practitionerIds = selectedService.get('practitioners');
+      component = (
+        <SettingsCard
+          title={selectedService.get('name')}
+          bodyClass={styles.serviceDataBody}
+          rightActions={(
+            <div>
+              <IconButton
+                icon="trash"
+                onClick={this.deleteService}
+              />
+            </div>
+          )}
+        >
+          <ServiceDataItem
+            key={`${selectedService.get('id')}basicdata`}
+            service={selectedService}
+            onSubmit={this.updateService}
+          />
+          <ServicePractitioners
+            key={`${selectedService.get('id')}selectedPractitioners`}
+            service={selectedService}
+            practitionerIds={practitionerIds}
+            updateService={this.updateService}
+            practitioners={practitioners}
+          />
+        </SettingsCard>
       );
     }
+
     return (
-      <div className={styles.servicesDataContainer}>
-        {showComponent1}
-        {showComponent2}
-      </div>
+      <Card className={styles.servicesDataContainer}>
+        {component}
+      </Card>
     );
   }
 }

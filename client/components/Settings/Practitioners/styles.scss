@@ -1,3 +1,4 @@
+
 @import '../../../ui.scss';
 
 .practOuterContainer {
@@ -9,14 +10,20 @@
   height: 100%;
   width: 100%;
 }
-.practListContainer {
-  display: inline-block;
+
+.listCardStyles {
   width: 270px;
   max-width: 270px;
   min-width: 270px;
-  overflow-y: auto;
-  padding-top: 15px;
-  background: $primary-white;
+}
+
+.practListContainer {
+
+  // background: $primary-white;
+}
+
+.listHeader {
+  padding-top: 20px;
 }
 
 .chairFlex {
@@ -58,10 +65,11 @@
   padding-top: 30px;
   text-transform: capitalize;
   background: $primary-white;
+  display: -webkit-box;
 
   &_textContainer {
     height: 100%;
-    width: 100%;
+    //width: 100%;
   }
   &_name {
     composes: listItemHeader from 'sass-loader!../../../fonts.scss';

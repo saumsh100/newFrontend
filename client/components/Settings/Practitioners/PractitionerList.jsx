@@ -5,15 +5,22 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
 import { setPractitionerId } from '../../../actions/accountSettings';
-import { IconButton, BadgeHeader, Col, Button } from '../../library';
+import {
+  IconButton,
+  BadgeHeader,
+  Col,
+  Card,
+  Button,
+  SContainer,
+  SHeader,
+  SBody,
+} from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
-
-import Modal  from '../../library/Modal';
+import DialogBox from '../../library/DialogBox';
 import styles from './styles.scss';
-import DialogBox from "../../library/DialogBox/index";
 
 class PractitionerList extends Component {
   constructor(props) {
@@ -92,52 +99,56 @@ class PractitionerList extends Component {
     ];
 
     return (
-      <div className={styles.practMainContainer} >
-        <div className={styles.practListContainer}>
-          <div className={styles.modalContainer}>
-            <div className={styles.displayFlexCenter}>
-              <Button
-                icon="plus"
-                onClick={this.setActive}
-                className={styles.addPractitionerButton}
-                data-test-id="addPractitionerButton"
-                secondary
-              >
-                Add New Practitioner
-              </Button>
-            </div>
-            <BadgeHeader
-              count={practitioners.size}
-              title="Practitioners"
-              className={styles.badgeHeader}
-            />
-            <DialogBox
-              active={this.state.active}
-              onEscKeyDown={this.setActive}
-              onOverlayClick={this.setActive}
-              title="Add New Practitioner"
-              actions={actions}
-            >
-              <CreatePractitionerForm
-                formName={formName}
-                onSubmit={this.createPractitioner}
+      <div className={styles.practMainContainer}>
+        <Card className={styles.listCardStyles}>
+          <SContainer>
+            <SHeader className={styles.listHeader}>
+              <div className={styles.displayFlexCenter}>
+                <Button
+                  icon="plus"
+                  onClick={this.setActive}
+                  className={styles.addPractitionerButton}
+                  data-test-id="addPractitionerButton"
+                  secondary
+                >
+                  Add New Practitioner
+                </Button>
+              </div>
+              <BadgeHeader
+                count={practitioners.size}
+                title="Practitioners"
+                className={styles.badgeHeader}
               />
-            </DialogBox>
-          </div>
-            {practitioners.toArray().map((practitioner) => {
-              return (
-                <PractitionerItem
-                  key={practitioner.get('id')}
-                  id={practitioner.get('id')}
-                  practitionerId={selectedPractitioner.get('id')}
-                  practitioner={practitioner}
-                  fullName={practitioner.getFullName()}
-                  setPractitionerId={this.props.setPractitionerId}
-                  data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
+              <DialogBox
+                active={this.state.active}
+                onEscKeyDown={this.setActive}
+                onOverlayClick={this.setActive}
+                title="Add New Practitioner"
+                actions={actions}
+              >
+                <CreatePractitionerForm
+                  formName={formName}
+                  onSubmit={this.createPractitioner}
                 />
-              );
-            })}
-        </div>
+              </DialogBox>
+            </SHeader>
+            <SBody>
+              {practitioners.toArray().map((practitioner) => {
+                return (
+                  <PractitionerItem
+                    key={practitioner.get('id')}
+                    id={practitioner.get('id')}
+                    practitionerId={selectedPractitioner.get('id')}
+                    practitioner={practitioner}
+                    fullName={practitioner.getFullName()}
+                    setPractitionerId={this.props.setPractitionerId}
+                    data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
+                  />
+                );
+              })}
+            </SBody>
+          </SContainer>
+        </Card>
         <div className={styles.practDataContainer}>
           <PractitionerTabs
             key={selectedPractitioner.get('id')}
