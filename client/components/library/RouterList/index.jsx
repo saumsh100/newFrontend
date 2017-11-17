@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import Icon from '../Icon';
 import Link from '../Link';
 import { List, ListItem } from '../List';
+import styles from './styles.scss';
 
 export default function RouterList({ location, routes, className }) {
   const listItems = routes.map(({ to, label, disabled, icon }) => {
@@ -17,6 +18,7 @@ export default function RouterList({ location, routes, className }) {
           disabled={disabled}
           selectItem={selectedItem}
           className={className}
+          selectedClass={styles.selectedRouterListItem}
         >
           {label}
         </ListItem>

@@ -293,4 +293,18 @@ $small-icon-width: 30px;
   height: 100px;
 }
 
+.remindersGrid {
+  min-width: 1300px;
+}
+
+.remindersRow {
+  height: 100%;
+}
+
+.remindersListCol {
+  padding: 40px;
+  border-right: 1px solid #e6e6e6;
+  overflow-y: scroll;
+}
+
 

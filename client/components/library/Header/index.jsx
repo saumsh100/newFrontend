@@ -29,7 +29,6 @@ export default function Header(props) {
     );
   }
 
-
   return (
     <div {...props} className={classes}>
       <div className={styles.displayFlex}>
@@ -43,7 +42,5 @@ export default function Header(props) {
 }
 
 Header.propTypes = {
-
   contentHeader: PropTypes.bool,
-
 };

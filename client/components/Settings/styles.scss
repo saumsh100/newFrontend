@@ -30,12 +30,14 @@
 .subSettingsListItem {
   height: 65px;
   padding-left: 15px;
-  composes: listItemHeader from 'sass-loader!../../fonts.scss';
+  // composes: listItemHeader from 'sass-loader!../../fonts.scss';
+  color: $primary-darkgrey;
 }
 
 .settingsFormsCol {
   width: 100%;
   background: #fafafa;
+  overflow: auto;
 }
 
 .settingsFormsCard {

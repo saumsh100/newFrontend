@@ -18,6 +18,7 @@ import {
 import SettingsCard from '../../Shared/SettingsCard';
 import RemindersItem from './RemindersItem';
 import EditRemindersForm from './EditRemindersForm';
+import ReminderPreview from './ReminderPreview';
 import styles from './styles.scss';
 
 class Reminders extends Component {
@@ -237,6 +238,15 @@ class Reminders extends Component {
     const { selectedReminderId } = this.state;
     const selectedReminder = this.props.reminders.get(selectedReminderId);
 
+    let previewComponent = null;
+    if (selectedReminder) {
+      previewComponent = (
+        <ReminderPreview
+          reminder={selectedReminder}
+        />
+      );
+    }
+
     return (
       <SettingsCard
         title="Reminders Settings"
@@ -252,30 +262,42 @@ class Reminders extends Component {
               Add New Reminder
             </Button>
           </div>*/}
-        {this.props.reminders.toArray().map((reminder, i) => {
-          return (
-            <RemindersItem
-              key={reminder.id}
-              reminder={reminder}
-              account={this.props.activeAccount}
-              index={i}
-              onSelect={() => this.selectReminder(reminder.id)}
-              selected={reminder.id === selectedReminderId}
-            />
-          );
-        })}
-        <Grid className={styles.finalItem}>
-          <Row>
-            <Col xs={1}>
-              {/* Keep Empty */}
+        <Grid className={styles.remindersGrid}>
+          <Row className={styles.remindersRow}>
+            <Col
+              xs={6}
+              className={styles.remindersListCol}
+            >
+              {this.props.reminders.toArray().map((reminder, i) => {
+                return (
+                  <RemindersItem
+                    key={reminder.id}
+                    reminder={reminder}
+                    account={this.props.activeAccount}
+                    index={i}
+                    onSelect={() => this.selectReminder(reminder.id)}
+                    selected={reminder.id === selectedReminderId}
+                  />
+                );
+              })}
+              <Grid className={styles.finalItem}>
+                <Row>
+                  <Col xs={1}>
+                    {/* Keep Empty */}
+                  </Col>
+                  <Col xs={3}>
+                    <div>
+                      Appointment
+                    </div>
+                  </Col>
+                  <Col xs={8}>
+                    <Icon icon="calendar" />
+                  </Col>
+                </Row>
+              </Grid>
             </Col>
-            <Col xs={3}>
-              <div>
-                Appointment
-              </div>
-            </Col>
-            <Col xs={8}>
-              <Icon icon="calendar" />
+            <Col xs={6}>
+              {previewComponent}
             </Col>
           </Row>
         </Grid>
