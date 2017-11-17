@@ -357,6 +357,11 @@ describe('/api/patients', () => {
       await seedTestAppointments();
     });
 
+    afterEach(async () => {
+      await wipeModel(Chat);
+      await wipeTestAppointments();
+    });
+
     test('/:patientId - update patient', () => {
       return request(app)
         .put(`${rootUrl}/${patientId}`)
