@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Patient, Appointment } from '../../../_models';
+import { Patient, Appointment, Event } from '../../../_models';
 import CalcFirstNextLastAppointment from '../../../lib/firstNextLastAppointment';
 
 export function fetchAppointmentEvents(patientId, accountId, query) {
