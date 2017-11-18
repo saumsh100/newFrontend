@@ -19,6 +19,9 @@ export default function InfoDump(props) {
     dataClass = classNames(dataClass, styles.noData)
   }
 
+  if (component) {
+    dataClass = null;
+  }
   return (
     <div className={classes}>
       <div className={styles.label}>

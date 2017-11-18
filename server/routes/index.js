@@ -204,6 +204,8 @@ rootRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) 
 
     params = new Buffer(params).toString('base64');
 
+    const pub = req.app.get('pub');
+    pub.publish('REMINDER:UPDATED', req.sentReminder.id);
 
     return res.redirect(url.format({
       pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,

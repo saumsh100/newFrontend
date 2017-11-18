@@ -3,5 +3,6 @@ cron: nodemon server/bin/build/cron.bundle.js
 reminders: nodemon server/bin/build/reminders.bundle.js
 recalls: nodemon server/bin/build/recalls.bundle.js
 events: nodemon server/bin/build/events.bundle.js
+correspondences: nodemon server/bin/build/correspondences.bundle.js
 firstNextLastApp: nodemon server/bin/build/firstNextLastApp.bundle.js
 

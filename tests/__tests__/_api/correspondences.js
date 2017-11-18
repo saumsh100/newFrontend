@@ -36,7 +36,7 @@ async function seedTestCorrespondences() {
       type: 'recall:sent',
       pmsType: 'MARKETING',
       note: 'CareCru: Recall sent via email',
-      isSyncedWithPms: true,
+      isSyncedWithPms: false,
       contactedAt: '2017-11-04T01:16:30.932Z',
     },
   ]);
@@ -61,7 +61,7 @@ describe('/api/correspondences', () => {
   });
 
   describe('GET /api/correspondences', () => {
-    test('should fetch 2 correspondences', async () =>
+    test('should fetch 2 correspondences with isSyncedWithPms false', async () =>
       request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
@@ -70,6 +70,18 @@ describe('/api/correspondences', () => {
           body = omitPropertiesFromBody(body, [], true);
           const correspondences = body.data;
           expect(correspondences.length).toBe(2);
+          expect(body).toMatchSnapshot();
+        }));
+
+    test('should fetch 1 correspondences', async () =>
+      request(app)
+        .get(`${rootUrl}/connector/notSynced`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, [], true);
+          const correspondences = body.data;
+          expect(correspondences.length).toBe(1);
           expect(body).toMatchSnapshot();
         }));
   });

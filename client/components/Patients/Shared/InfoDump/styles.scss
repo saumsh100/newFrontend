@@ -18,6 +18,10 @@
 .data {
   color: $primary-dark;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  width: 170px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .noData {

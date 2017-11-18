@@ -39,7 +39,7 @@ export function fetchEntities({ key, join, params = {}, url }) {
   };
 }
 
-export function fetchEntitiesRequest({ id, key, base, join, params = {}, url }) {
+export function fetchEntitiesRequest({ id, key, base, join, params = {}, url, returnData }) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -58,7 +58,7 @@ export function fetchEntitiesRequest({ id, key, base, join, params = {}, url }) 
         const { data } = response;
         dispatch(receiveRequest({ id, data }));
         dispatch(receiveEntities({ key, entities: data.entities }));
-        return data.entities;
+        return returnData ? data : data.entities;
       })
       .catch((error) => {
         // TODO: set didInvalidate=true of entity and dispatch alert action

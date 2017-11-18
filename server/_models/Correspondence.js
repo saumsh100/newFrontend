@@ -39,7 +39,22 @@ export default function (sequelize, DataTypes) {
       allowNull: true,
     },
 
+    sentReminderId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+
+    sentRecallId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+
     type: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    method: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -66,7 +81,15 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  Correspondence.associate = ({ Account, Appointment, Patient }) => {
+  Correspondence.RECALL_SENT_TYPE = 'RECALL:SENT';
+  Correspondence.REMINDER_SENT_TYPE = 'REMINDER:SENT';
+  Correspondence.REMINDER_CONFIRMED_TYPE = 'REMINDER:CONFIRMED';
+
+  Correspondence.RECALL_SENT_NOTE = 'Sent Recall via CareCru';
+  Correspondence.REMINDER_SENT_NOTE = 'Sent Appointment Reminder via CareCru';
+  Correspondence.REMINDER_CONFIRMED_NOTE = 'Patient Confirmed their Appointment via CareCru';
+
+  Correspondence.associate = ({ Account, Appointment, Patient, SentRecall, SentReminder }) => {
     Correspondence.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -75,6 +98,16 @@ export default function (sequelize, DataTypes) {
     Correspondence.belongsTo(Appointment, {
       foreignKey: 'appointmentId',
       as: 'appointment',
+    });
+
+    Correspondence.belongsTo(SentRecall, {
+      foreignKey: 'sentRecallId',
+      as: 'sentRecall',
+    });
+
+    Correspondence.belongsTo(SentReminder, {
+      foreignKey: 'sentReminderId',
+      as: 'sentReminder',
     });
 
     Correspondence.belongsTo(Patient, {

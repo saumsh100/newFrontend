@@ -15,6 +15,10 @@ const sendRecallsForAccountTmp = RecallsLibrary.sendRecallsForAccount;
 const sendRecallEmailTmp = sendRecall.email;
 const getPatientsDueForRecallTmp = RecallsHelpers.getPatientsDueForRecall;
 
+const mockPub = {
+  publish: () => {},
+};
+
 const iso = (date = (new Date())) => date.toISOString();
 const makeRecallData = (data = {}) => Object.assign({},
   {
@@ -132,7 +136,7 @@ describe('Recalls Job Integration Tests', () => {
 
       account.recalls = [makeRecallData()];
 
-      await RecallsLibrary.sendRecallsForAccount(account, iso());
+      await RecallsLibrary.sendRecallsForAccount(account, iso(), mockPub);
       expect(RecallsHelpers.getPatientsDueForRecall).toHaveBeenCalledTimes(1);
       expect(sendRecall.email).toHaveBeenCalledTimes(1);
     });
