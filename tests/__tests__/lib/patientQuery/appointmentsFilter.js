@@ -6,6 +6,7 @@ import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 import { patientId, patient, seedTestPatients } from '../../../_util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { seedTestProcedures, wipeTestProcedures } from '../../../_util/seedTestProcedures';
 import { serviceId, seedTestService } from '../../../_util/seedTestServices';
 
 
@@ -30,13 +31,16 @@ const dates = (y, m, d, h) => {
 describe('Appointment Filters Tests', () => {
   beforeEach(async () => {
     await wipeAllModels();
+    await wipeTestProcedures();
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
     await seedTestService();
+    await seedTestProcedures();
   });
 
   afterAll(async () => {
+    await wipeTestProcedures();
     await wipeAllModels();
   });
 
@@ -158,7 +162,7 @@ describe('Appointment Filters Tests', () => {
         patientId: patients[0].id,
         accountId,
         entryDate: new Date(),
-        procedureCode: '01900',
+        procedureCode: '11111',
         totalAmount: 700,
       });
 
@@ -176,7 +180,7 @@ describe('Appointment Filters Tests', () => {
         patientId: patients[0].id,
         accountId,
         entryDate: new Date(),
-        procedureCode: '01900',
+        procedureCode: '11111',
         totalAmount: 700,
       });
 
