@@ -16,11 +16,13 @@ class EditDisplay extends Component {
     this.state = {
       isOpen: false,
       tabIndex: 0,
+      country: '',
     };
 
     this.setModal = this.setModal.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
+    this.setCountry = this.setCountry.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -34,6 +36,12 @@ class EditDisplay extends Component {
     this.setState({
       isOpen: false,
     });
+  }
+
+  setCountry(value) {
+    this.setState({
+      country: value,
+    })
   }
 
   handleTabChange(index) {
@@ -54,7 +62,6 @@ class EditDisplay extends Component {
     values.address.street = values.street;
     values.address.state = values.state;
 
-    console.log(values)
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
 
@@ -125,6 +132,8 @@ class EditDisplay extends Component {
                   <PersonalForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
+                    setCountry={this.setCountry}
+                    country={this.state.country}
                   />
                 </Tab>
                 <Tab label="INSURANCE">

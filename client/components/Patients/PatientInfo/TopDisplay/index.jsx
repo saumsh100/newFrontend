@@ -35,20 +35,22 @@ export default function TopDisplay(props) {
               <div className={styles.avatarContainer_data_name}>
                 {patient.getFullName()}, {age}
               </div>
-              <div className={styles.displayFlex}>
+              {patient.email ? <div className={styles.displayFlex}>
                 <span className={styles.avatarContainer_data_icon}> <Icon icon="envelope" /> </span>
                 <div className={styles.avatarContainer_data_email}>
                   {patient.email}
                 </div>
-              </div>
-              <div className={styles.displayFlex}>
+              </div> : null }
+              {patient.mobilePhoneNumber ? <div className={styles.displayFlex}>
                 <span className={styles.avatarContainer_data_icon}> <Icon icon="phone" /> </span>
                 <div className={styles.avatarContainer_data_phone}>
                   {patient.mobilePhoneNumber}
                 </div>
-              </div>
-              <div className={styles.avatarContainer_data_active}>
-                {patient.status}
+              </div> : null}
+              <div className={styles.paddingStatus}>
+                <div className={styles.avatarContainer_data_active}>
+                  {patient.status}
+                </div>
               </div>
             </div>
           </div>

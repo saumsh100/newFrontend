@@ -9,19 +9,19 @@ const optionsGender = [
 ];
 
 const optionsCity = [
-  { value: 'Vancouver' },
-  { value: 'Victoria' },
-  { value: 'Edmonton' },
   { value: 'Calgary' },
+  { value: 'Edmonton' },
+  { value: 'Fredericton' },
+  { value: 'Halifax' },
+  { value: 'Montreal' },
+  { value: 'Quebec' },
   { value: 'Regina' },
   { value: 'Saskatoon' },
-  { value: 'Winnipeg' },
-  { value: 'Quebec' },
-  { value: 'Montreal' },
-  { value: 'Halifax' },
   { value: 'St.John' },
-  { value: 'Fredericton' },
   { value: 'Toronto' },
+  { value: 'Vancouver' },
+  { value: 'Victoria' },
+  { value: 'Winnipeg' },
 ];
 
 

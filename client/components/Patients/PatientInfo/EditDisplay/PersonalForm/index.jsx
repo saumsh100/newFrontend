@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
-import { usStates } from '../../../../Settings/Clinic/Address/selectConstants';
+import { usStates, caProv } from '../../../../Settings/Clinic/Address/selectConstants';
 import styles from '../styles.scss';
 
 const normalizeBirthdate = (value) => {
@@ -32,6 +32,8 @@ export default function PersonalForm(props) {
   const {
     patient,
     handleSubmit,
+    country,
+    setCountry,
   } = props;
 
   const initialValues = {
@@ -50,6 +52,12 @@ export default function PersonalForm(props) {
     initialValues.country = currentPatient.country;
     initialValues.zipCode = currentPatient.zipCode;
     initialValues.state = currentPatient.state;
+  }
+
+  let states = usStates;
+
+  if (country === 'CA') {
+    states = caProv;
   }
 
   return (
@@ -138,7 +146,7 @@ export default function PersonalForm(props) {
               name="state"
               label="State"
               component="DropdownSelect"
-              options={usStates}
+              options={states}
               theme="primaryBlue"
             />
           </Col>
@@ -165,6 +173,9 @@ export default function PersonalForm(props) {
               }]}
               required
               theme="primaryBlue"
+              onChange={(e, value) => {
+                setCountry(value);
+              }}
             />
           </Col>
         </Row>
