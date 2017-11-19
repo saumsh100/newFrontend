@@ -38,6 +38,7 @@ export default function Appointments(props) {
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
+            component="DayPicker"
             name="1"
           />
         </FormSection>

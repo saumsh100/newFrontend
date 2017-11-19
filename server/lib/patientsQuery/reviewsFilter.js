@@ -1,6 +1,6 @@
 
 import moment from 'moment';
-import { Patient, SentReview } from '../../_models';
+import { Patient, Review } from '../../_models';
 import { patientAttributes } from './helpers';
 
 export async function ReviewsFilter({ data }, filterIds, query, accountId) {
@@ -20,8 +20,8 @@ export async function ReviewsFilter({ data }, filterIds, query, accountId) {
         ...prevFilterIds,
       },
       include: {
-        model: SentReview,
-        as: 'sentReviews',
+        model: Review,
+        as: 'reviews',
         where: {
           accountId,
           createdAt: {
