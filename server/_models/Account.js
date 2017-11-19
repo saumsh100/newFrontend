@@ -41,6 +41,12 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    sendRequestEmail: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+
     canSendReviews: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

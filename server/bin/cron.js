@@ -14,8 +14,11 @@ const recallsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * *
 // Run every 30 min in prod
 const reviewsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
 
-// Run 15 min past every 8 hours in prod
-const firstNextLastAppointmentPattern = NODE_ENV === 'production' ? '15 */8 * * *' : '0 * * * * *';
+// Run every 30 min in prod
+const correspondencesPattern = NODE_ENV === 'production' ? '0 15,45 * * * *' : '0 * * * * *';
+
+// Run 15 min past every 2 hours in prod
+const firstNextLastAppointmentPattern = NODE_ENV === 'production' ? '15 */2 * * *' : '0 * * * * *';
 
 // Appointment Reminders Cron
 cron.schedule(remindersPattern, () => {
@@ -25,6 +28,10 @@ cron.schedule(remindersPattern, () => {
 // Patient Recalls Cron
 cron.schedule(recallsPattern, () => {
   createJob('recalls');
+});
+
+cron.schedule(correspondencesPattern, () => {
+  createJob('correspondences');
 });
 
 // Patient Reviews Cron

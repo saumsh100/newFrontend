@@ -463,4 +463,5 @@ module.exports = {
   fetchServiceData,
   fetchPractitionerData,
   fetchAvailabilities,
+  recurringTimeOffsFilter,
 };

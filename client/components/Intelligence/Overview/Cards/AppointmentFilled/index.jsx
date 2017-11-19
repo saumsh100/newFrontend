@@ -6,7 +6,7 @@ import styles from './styles.scss';
 class AppointmentFilled extends Component {
   render() {
     const { borderColor, appointmentFilled, appointmentNotFilled, startDate, endDate } = this.props;
-    const percentage = Math.floor(100 * appointmentFilled / appointmentNotFilled);
+    const percentage = Math.floor(100 * appointmentFilled / (appointmentNotFilled + appointmentFilled));
 
     return (
       <Card className={styles.appointmentFilled} >

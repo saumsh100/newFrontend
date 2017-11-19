@@ -169,12 +169,24 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    lastApptDate: {
+      type: DataTypes.DATE,
+    },
+
     firstApptId: {
       type: DataTypes.UUID,
     },
 
+    firstApptDate: {
+      type: DataTypes.DATE,
+    },
+
     nextApptId: {
       type: DataTypes.UUID,
+    },
+
+    nextApptDate: {
+      type: DataTypes.DATE,
     },
 
     recallDueDateSeconds: {

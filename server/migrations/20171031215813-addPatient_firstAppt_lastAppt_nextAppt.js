@@ -1,4 +1,3 @@
-const CalcFirstNextLastAppointment = require('../lib/firstNextLastAppointment');
 
 'use strict';
 
@@ -42,29 +41,6 @@ module.exports = {
           onUpdate: 'cascade',
           onDelete: 'set null',
         }, { transaction: t });
-
-        const appointments = await queryInterface.sequelize.query(`SELECT * FROM "Appointments" WHERE "patientId" IS NOT NULL AND "isCancelled" = false 
-        AND "isDeleted" = false AND "isPending" = false ORDER BY "patientId", "startDate" DESC `, { transaction: t });
-
-        const apps = appointments[0];
-
-        CalcFirstNextLastAppointment(apps,
-          async (currentPatient, firstApptId, nextApptId, lastApptId) => {
-            await queryInterface.sequelize.query(`
-              UPDATE "Patients"
-              SET "firstApptId" = :firstApptId, "lastApptId" = :lastApptId, "nextApptId" = :nextApptId
-              WHERE id = :patientId
-            `, {
-              replacements: {
-                firstApptId,
-                lastApptId,
-                nextApptId,
-                patientId: currentPatient,
-              },
-              transaction: t,
-            });
-            console.log(`Set First/Next/Last Appointment for: ${currentPatient}`);
-          });
       } catch (e) {
         console.log(e);
         return t.rollback();

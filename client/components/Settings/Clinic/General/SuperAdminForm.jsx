@@ -19,6 +19,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     canSendReviews: activeAccount.get('canSendReviews'),
     googlePlaceId: activeAccount.get('googlePlaceId'),
     facebookUrl: activeAccount.get('facebookUrl'),
+    sendRequestEmail: activeAccount.get('sendRequestEmail'),
   };
 
   const lastSyncDate = activeAccount.get('lastSyncDate');
@@ -71,6 +72,19 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
             <Field
               component="Toggle"
               name="canSendRecalls"
+            />
+          </div>
+        </div>
+      </div>
+      <div className={styles.paddingField}>
+        <div className={styles.paddingField_flex}>
+          <div className={styles.paddingText} >
+            Send Request Emails
+          </div>
+          <div className={styles.paddingField_toggle}>
+            <Field
+              component="Toggle"
+              name="sendRequestEmail"
             />
           </div>
         </div>

@@ -79,7 +79,7 @@ class Users extends Component{
 
     const alert = {
       success: {
-        body: 'User Creaeted.',
+        body: 'User Created.',
       },
       error: {
         body: 'User Could Not Be Created',

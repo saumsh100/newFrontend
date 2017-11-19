@@ -14,14 +14,15 @@ import BusinessStats from './Cards/BusinessStats';
 import Patients from './Cards/Patients';
 import styles from './styles.scss';
 import stylesOverview from '../Overview/styles.scss';
+import * as Actions from '../../../actions/intelligence';
 
 class Business extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      endDate: moment(new Date()),
-      startDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      endDate: this.props.endDate ? this.props.endDate : moment(new Date()),
+      startDate: this.props.startDate ? this.props.startDate : moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       compareEndDate: moment(new Date()),
       compareStartDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
       compare: false,
@@ -35,9 +36,12 @@ class Business extends Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
+    const startDate = this.props.startDate ? this.props.startDate._d : this.state.startDate._d;
+    const endDate = this.props.endDate ? this.props.endDate._d : this.state.endDate._d;
+
     const params = {
-      startDate: this.state.startDate._d,
-      endDate: this.state.endDate._d,
+      startDate,
+      endDate,
       accountId: decodedToken.activeAccountId,
     };
 
@@ -55,9 +59,16 @@ class Business extends Component {
         id: 'businessStats',
         url: '/api/appointments/business',
         params }),
+      this.props.fetchEntitiesRequest({
+        id: 'practitionerWorked',
+        url: '/api/appointments/practitionerWorked',
+        params,
+      }),
     ])
       .then(() => {
         this.setState({
+          startDate: moment(startDate),
+          endDate: moment(endDate),
           loader: true,
         });
       });
@@ -92,6 +103,11 @@ class Business extends Component {
           id: 'callStats',
           url: '/api/calls/',
           params }),
+        this.props.fetchEntitiesRequest({
+          id: 'practitionerWorked',
+          url: '/api/appointments/practitionerWorked',
+          params,
+        }),
       ])
         .then(() => {
           this.setState({
@@ -116,8 +132,17 @@ class Business extends Component {
           id: 'businessStats',
           url: '/api/appointments/business',
           params }),
+        this.props.fetchEntitiesRequest({
+          id: 'practitionerWorked',
+          url: '/api/appointments/practitionerWorked',
+          params,
+        }),
       ])
         .then(() => {
+          this.props.setQueryDates({
+            startDate: moment(values.startDate),
+            endDate: moment(values.endDate),
+          });
           this.setState({
             startDate: moment(values.startDate),
             endDate: moment(values.endDate),
@@ -132,35 +157,24 @@ class Business extends Component {
     const callStats = (this.props.callStats ? this.props.callStats.toJS() : {});
     const businessStats = (this.props.businessStats ? this.props.businessStats.toJS() : { productionEarnings: [] });
     const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toJS() : {});
-    let activePatients = 0;
+
+    const practitionerWorked = (this.props.practitionerWorked ?
+      this.props.practitionerWorked.toJS() : []);
+
+    const activePatients = appointmentStats.activePatients;
     let unfilledHours = 0;
     let filledHours = 0;
 
-    if (appointmentStats.patients) {
-      Object.keys(appointmentStats.patients).map((key) => {
-        activePatients += appointmentStats.patients[key].numAppointments;
-      });
+    for (let i = 0; i < practitionerWorked.length; i += 1) {
+      filledHours += practitionerWorked[i].booked;
+      unfilledHours += practitionerWorked[i].notFilled;
     }
 
-    if (appointmentStats.practitioner) {
-      Object.keys(appointmentStats.practitioner).map((key) => {
-        unfilledHours += appointmentStats.practitioner[key].appointmentTime / 60;
-        filledHours += appointmentStats.practitioner[key].totalTime / 60;
-      });
-    }
+    unfilledHours = unfilledHours.toFixed(0);
 
-    let serviceData = (appointmentStats.services ? Object.keys(appointmentStats.services).map((key) => {
-      return {
-        title: appointmentStats.services[key].name,
-        hours: Math.round(appointmentStats.services[key].time * 10 / 600),
-      };
-    }) : []);
+    filledHours = filledHours.toFixed(0);
 
-    unfilledHours = unfilledHours.toFixed(2);
-    filledHours = filledHours.toFixed(2);
-
-    serviceData = businessStats.productionEarnings.map(pro => {
-
+    const serviceData = businessStats.productionEarnings.map(pro => {
       return {
         title: `${pro.description} - ${pro.type}`,
         data: `${Math.floor(pro.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
@@ -219,7 +233,7 @@ class Business extends Component {
 
     const patientsData2 = [
       {
-        count: (filledHours - unfilledHours).toFixed(2),
+        count: unfilledHours,
         title: 'Unfilled Hours',
         date: moment({ year: 2017, month: 2, day: 15 }).fromNow(),
         color: 'primaryColor',
@@ -357,17 +371,27 @@ Business.propTypes = {
   callStats: PropTypes.object,
   businessStats: PropTypes.object,
   appointmentStats: PropTypes.object,
+  startDate: PropTypes.object,
+  endDate: PropTypes.object,
+  practitionerWorked: PropTypes.object,
   fetchEntitiesRequest: PropTypes.func,
 }
 
-function mapStateToProps({ apiRequests }) {
+function mapStateToProps({ apiRequests, intelligence }) {
+  const startDate = intelligence.toJS().startDate;
+  const endDate = intelligence.toJS().endDate;
   const callStats = (apiRequests.get('callStats') ? apiRequests.get('callStats').data : null);
   const businessStats = (apiRequests.get('businessStats') ? apiRequests.get('businessStats').data : null);
   const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
   const callStatsCompare = (apiRequests.get('callStatsCompare') ? apiRequests.get('callStatsCompare').data : null);
+  const practitionerWorked = (apiRequests.get('practitionerWorked') ? apiRequests.get('practitionerWorked').data : null);
+
   return {
     callStats,
+    practitionerWorked,
     businessStats,
+    endDate,
+    startDate,
     appointmentStats,
     callStatsCompare,
   };
@@ -376,6 +400,7 @@ function mapStateToProps({ apiRequests }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntitiesRequest,
+    setQueryDates: Actions.setQueryDates,
   }, dispatch);
 }
 

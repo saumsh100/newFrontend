@@ -84,6 +84,37 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
   return { errors, docs: validatedDocs };
 }
 
+export async function batchUpdate(dataArray, Model, modelType, preUpdateFunction) {
+  const savedModels = [];
+  const errors = [];
+
+  for (let i = 0; i < dataArray.length; i += 1) {
+    try {
+      const model = await Model.findOne({
+        where: {
+          id: dataArray[i].id,
+        },
+      });
+
+
+      if (preUpdateFunction) {
+        preUpdateFunction(model, dataArray[i]);
+      }
+      const savedModel = await model.update(dataArray[i]);
+
+      savedModels.push(savedModel);
+    } catch (e) {
+      errors.push(e);
+    }
+  }
+
+  if (errors.length) {
+    throw { docs: savedModels, errors };
+  }
+
+  return savedModels;
+}
+
 /**
  * Batch Saves models, validating them beforehand
  * @param dataArray - List of model data to build models from

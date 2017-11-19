@@ -3,7 +3,8 @@ import _ from 'lodash';
 import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
-import batchCreate from '../../util/batch';
+import batchCreate, { batchUpdate } from '../../util/batch';
+import { updateChatAfterPatient } from '../../util/preUpdateFunctions';
 import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
@@ -563,6 +564,46 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
 });
 
 /**
+ * Batch update patients for connector
+ */
+patientsRouter.put('/connector/batch', checkPermissions('patients:update'),
+  (req, res, next) => {
+    const patients = req.body;
+
+    const cleanedPatients = patients.map(patient => Object.assign(
+      {},
+      patient,
+      {
+        accountId: req.accountId,
+        isSyncedWithPms: true,
+      }
+    ));
+
+    return batchUpdate(
+      cleanedPatients,
+      Patient,
+      'Patient',
+      updateChatAfterPatient,
+    )
+      .then((savedPatients) => {
+        const patientData = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));
+        res.status(201).send(format(req, res, 'patients', patientData));
+      })
+      .catch(({ errors, docs }) => {
+        docs = docs.map(d => d.get({ plain: true }));
+
+        // Log any errors that occurred
+        errors.forEach((err) => {
+          console.error(err);
+        });
+
+        const data = format(req, res, 'patients', docs);
+        return res.status(201).send(Object.assign({}, data));
+      })
+      .catch(next);
+  });
+
+/**
  * Batch creation
  */
 patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray('patients'), async (req, res, next) => {
@@ -609,15 +650,18 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), (req, res, 
   const phoneNumber = req.patient.mobilePhoneNumber;
 
   return req.patient.update(req.body)
-    .then((patient) => {
+    .then(async (patient) => {
       if (phoneNumber !== patient.mobilePhoneNumber) {
-        Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } })
-          .then((chat) => {
-            if (!chat[0]) {
-              return;
-            }
-            chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
-          });
+        const chat = await Chat.findAll({
+          where: {
+            accountId: req.accountId,
+            patientId: patient.id,
+          },
+        });
+
+        if (chat[0]) {
+          chat[0].update({ patientPhoneNumber: patient.mobilePhoneNumber });
+        }
       }
       const normalized = format(req, res, 'patient', patient.dataValues);
       res.status(201).send(normalized);
@@ -649,7 +693,7 @@ patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (
     isSyncedWithPms: true,
     ...req.body,
   })
-    .then((patient) => {
+    .then(async (patient) => {
       if (phoneNumber !== patient.mobilePhoneNumber) {
         Chat.findAll({ where: { accountId: req.accountId, patientPhoneNumber: phoneNumber } })
           .then((chat) => {

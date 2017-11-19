@@ -3,9 +3,6 @@ import moment from 'moment';
 import createModel from '../createModel';
 
 const PatientSchema = {
-  lastApptId: null,
-  nextApptId: null,
-  firstApptId: null,
   firstName: null,
   avatarUrl: null,
   middleName: null,
@@ -34,6 +31,12 @@ const PatientSchema = {
   isSyncedWithPms: null,
   appointments: null,
   patientUserId: null,
+  lastApptId: null,
+  lastApptDate: null,
+  nextApptId: null,
+  nextApptDate: null,
+  firstApptId: null,
+  firstApptDate: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {

@@ -200,6 +200,41 @@ describe('/api/appointments', () => {
     });
   });
 
+  describe('GET /', () => {
+    test('/stats - appointment mostAppointments for intelligence overview', () => {
+      return request(app)
+        .get(`${rootUrl}/mostAppointments?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/stats - appointment practitionerWorked for intelligence overview', () => {
+      return request(app)
+        .get(`${rootUrl}/practitionerWorked?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/stats - appointment appointmentsBooked for intelligence overview', () => {
+      return request(app)
+        .get(`${rootUrl}/appointmentsBooked?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
   describe('POST /', () => {
     beforeEach(async () => {
       await wipeModel(Appointment);
