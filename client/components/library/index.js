@@ -53,6 +53,7 @@ import RangeSlider from './RangeSlider';
 import Star from './Star';
 import Stars from './Stars';
 import Summary from './Summary';
+import SMSPreview from './SMSPreview';
 import Timer from './Timer';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
@@ -127,6 +128,7 @@ export {
   ProgressBar,
   Search,
   RangeSlider,
+  SMSPreview,
   Star,
   Stars,
   Summary,

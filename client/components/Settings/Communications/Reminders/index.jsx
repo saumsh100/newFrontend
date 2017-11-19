@@ -17,7 +17,7 @@ import {
 } from '../../../library';
 import SettingsCard from '../../Shared/SettingsCard';
 import RemindersItem from './RemindersItem';
-import EditRemindersForm from './EditRemindersForm';
+import CreateRemindersForm from './CreateRemindersForm';
 import ReminderPreview from './ReminderPreview';
 import styles from './styles.scss';
 
@@ -26,74 +26,24 @@ class Reminders extends Component {
     super(props);
 
     this.state = {
-      active: false,
-      activeNew: false,
+      isAdding: false,
       selectedReminderId: null,
     };
 
-    this.canSendReminders = this.canSendReminders.bind(this);
-    this.reinitializeState = this.reinitializeState.bind(this);
-    this.edit = this.edit.bind(this);
-    this.sendEdit = this.sendEdit.bind(this);
-    this.deleteReminders = this.deleteReminders.bind(this);
     this.newReminder = this.newReminder.bind(this);
     this.openModal = this.openModal.bind(this);
     this.selectReminder = this.selectReminder.bind(this);
+    this.toggleAdding = this.toggleAdding.bind(this);
   }
 
   componentWillMount() {
-    if (this.props.activeAccount && this.props.activeAccount.id) {
-      this.props.fetchEntities({
-        url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
-      });
-    }
-
-    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
-
-    this.setState({
-      canSendReminders,
+    this.props.fetchEntities({
+      url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
     });
   }
 
-  componentWillReceiveProps() {
-    const canSendReminders = this.props.activeAccount ? this.props.activeAccount.toJS().canSendReminders : null;
-
-    if (this.state.canSendReminders === null && this.props.activeAccount && this.props.activeAccount.id) {
-      this.setState({
-        canSendReminders,
-      });
-      this.props.fetchEntities({
-        url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
-      });
-    }
-  }
-
-  reinitializeState() {
-    const newState = {
-      active: false,
-      activeNew: false,
-    };
-
-    this.setState(newState);
-  }
-
-  deleteReminders(id) {
-    const alert = {
-      success: {
-        body: 'Reminder Delete',
-      },
-      error: {
-        title: 'Clinic Reminders Error',
-        body: 'Failed to Delete.',
-      },
-    };
-
-    this.props.deleteEntityRequest({
-      url: `/api/accounts/${this.props.activeAccount.id}/reminders/${id}/`,
-      key: 'reminders',
-      id,
-      alert,
-    });
+  toggleAdding() {
+    this.setState({ isAdding: !this.state.isAdding });
   }
 
   openModal() {
@@ -115,6 +65,7 @@ class Reminders extends Component {
       success: {
         body: 'Reminder Created',
       },
+
       error: {
         title: 'Clinic Reminders Error',
         body: 'Failed to create.',
@@ -122,70 +73,13 @@ class Reminders extends Component {
     };
 
     this.props.createEntityRequest({ url: `/api/accounts/${this.props.activeAccount.id}/reminders`, entityData, alert })
-    .then(() => {
-      this.setState({
-        activeNew: false,
+      .then(() => {
+        this.setState({
+          isAdding: false,
+        });
+
+        this.props.reset('newReminder');
       });
-      this.props.reset('newReminder');
-    });
-  }
-
-  edit(id) {
-    const newState = {
-      active: true,
-      newActive: false,
-      formName: id,
-    };
-
-    this.setState(newState);
-  }
-
-  sendEdit(id, values) {
-    const valuesMap = {
-      lengthSeconds: values.lengthHours * 60 * 60,
-      primaryType: values.primaryType,
-    };
-
-    const alert = {
-      success: {
-        body: 'Updated Reminders',
-      },
-      error: {
-        title: 'Clinic Reminders Error',
-        body: 'Failed to update.',
-      },
-    };
-
-    this.props.updateEntityRequest({
-      url: `/api/accounts/${this.props.activeAccount.id}/reminders/${id}`,
-      values: valuesMap,
-      alert,
-    }).then(() => {
-      this.setState({
-        active: false,
-      });
-    });
-  }
-
-  canSendReminders() {
-    const { activeAccount } = this.props;
-    const valuesMap = Map({ canSendReminders: !this.state.canSendReminders });
-    const modifiedAccount = activeAccount.merge(valuesMap);
-
-    const alert = {
-      success: {
-        body: 'Updated Reminders',
-      },
-      error: {
-        title: 'Clinic Reminders Error',
-        body: 'Failed to update.',
-      },
-    };
-
-    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
-    this.setState({
-      canSendReminders: !this.state.canSendReminders,
-    });
   }
 
   selectReminder(reminderId) {
@@ -200,11 +94,6 @@ class Reminders extends Component {
     if (!this.props.activeAccount || !this.props.activeAccount.id) {
       return null;
     }
-
-    const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.sendEdit, component: RemoteSubmitButton, props: { form: this.state.formName || 'null'} },
-    ];
 
     const actionsNew = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
@@ -235,6 +124,7 @@ class Reminders extends Component {
       </div>
     </div>);*/
 
+    const { activeAccount } = this.props;
     const { selectedReminderId } = this.state;
     const selectedReminder = this.props.reminders.get(selectedReminderId);
 
@@ -243,6 +133,7 @@ class Reminders extends Component {
       previewComponent = (
         <ReminderPreview
           reminder={selectedReminder}
+          account={activeAccount}
         />
       );
     }
@@ -250,18 +141,17 @@ class Reminders extends Component {
     return (
       <SettingsCard
         title="Reminders Settings"
+        rightActions={(
+          <Button
+            className={styles.edit}
+            onClick={this.toggleAdding}
+            data-test-id="createNewReminder"
+            color="blue"
+          >
+            Add
+          </Button>
+        )}
       >
-        {/*<div className={styles.createButtonContainer}>
-            <Button
-              className={styles.edit}
-              onClick={this.openModal}
-              data-test-id="createNewReminder"
-              icon="plus"
-              secondary
-            >
-              Add New Reminder
-            </Button>
-          </div>*/}
         <Grid className={styles.remindersGrid}>
           <Row className={styles.remindersRow}>
             <Col
@@ -275,7 +165,7 @@ class Reminders extends Component {
                     reminder={reminder}
                     account={this.props.activeAccount}
                     index={i}
-                    onSelect={() => this.selectReminder(reminder.id)}
+                    selectReminder={this.selectReminder}
                     selected={reminder.id === selectedReminderId}
                   />
                 );
@@ -303,30 +193,15 @@ class Reminders extends Component {
         </Grid>
         <DialogBox
           actions={actionsNew}
-          title="Reminders"
+          title="Add Reminder"
           type="small"
-          active={this.state.activeNew}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
+          active={this.state.isAdding}
+          onEscKeyDown={this.toggleAdding}
+          onOverlayClick={this.toggleAdding}
         >
-          <EditRemindersForm
+          <CreateRemindersForm
             formName="newReminder"
             sendEdit={this.newReminder}
-          />
-        </DialogBox>
-        <DialogBox
-          key={this.state.formName || 'null'}
-          actions={actions}
-          title="Reminders"
-          type="small"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
-        >
-          <EditRemindersForm
-            formName={this.state.formName || 'null'}
-            initialValues={this.props.reminders.get(this.state.formName)}
-            sendEdit={this.sendEdit.bind(null, this.state.formName)}
           />
         </DialogBox>
       </SettingsCard>
@@ -347,7 +222,7 @@ Reminders.propTypes = {
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const reminders = entities.getIn(['reminders', 'models']).sortBy(r => -r.lengthSeconds);
+  const reminders = entities.getIn(['reminders', 'models']).filter(r => !r.isDeleted).sortBy(r => -r.lengthSeconds);
   const role = auth.get('role');
 
   return {

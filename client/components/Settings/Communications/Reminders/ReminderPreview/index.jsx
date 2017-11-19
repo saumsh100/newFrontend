@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Lorem from 'react-lorem-component';
+import moment from 'moment';
 import {
   updateEntityRequest,
   deleteEntityRequest,
@@ -24,8 +25,13 @@ import {
   SContainer,
   SHeader,
   SBody,
+  SMSPreview,
 } from '../../../../library';
+import createReminderText from '../../../../../../server/lib/reminders/createReminderText';
 import styles from './styles.scss';
+
+const reminderMessage = 'Jane, this is a friendly reminder that you have an upcoming appointment with Dental Practice' +
+  'on October 1st at 4 PM. Please take a moment to confirm your appointment by responding with \'C\'.';
 
 class ReminderPreview extends Component {
   constructor(props) {
@@ -48,14 +54,49 @@ class ReminderPreview extends Component {
   render() {
     const {
       reminder,
+      account,
     } = this.props;
-
+    const { primaryType } = reminder;
     const { index } = this.state;
+    const isConfirmable = index === 1;
 
-    const isConfirmable = index === 0;
+    // Fake Jane Doe Data
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
 
-    // TODO: render preview of reminder based on type
-    
+    // Fake Appt Data
+    const appointment = {
+      // 1 day from now with no minutes
+      startDate: moment().add(1, 'days').minutes(0).toISOString(),
+    };
+
+    let typePreview = null;
+    if (primaryType === 'sms') {
+      appointment.isPatientConfirmed = isConfirmable;
+      const reminderMessage = createReminderText({ patient, account, appointment });
+      typePreview = (
+        <div className={styles.smsPreviewWrapper}>
+          <SMSPreview
+            from="+1 (780) 850-8886"
+            message={reminderMessage}
+          />
+        </div>
+      );
+    } else if (primaryType === 'email') {
+      typePreview = (
+        <div className={styles.smsPreviewWrapper}>
+          {`Email Preview ${isConfirmable ? '(Confirmed)' : ''}`}
+        </div>
+      );
+    } else if (primaryType === 'phone') {
+      typePreview = (
+        <div className={styles.smsPreviewWrapper}>
+          {`Phone Preview ${isConfirmable ? '(Confirmed)' : ''}`}
+        </div>
+      );
+    }
 
     return (
       <SContainer>
@@ -82,23 +123,9 @@ class ReminderPreview extends Component {
             </Tabs>
           </div>
         </SHeader>
-        <SBody>
-          <Tabs
-            index={index}
-            onChange={i => this.setState({ index: i })}
-            noHeaders
-          >
-            <Tab label=" ">
-              <div className={styles.previewBodyUnconfirmed}>
-                <Lorem count={20} />
-              </div>
-            </Tab>
-            <Tab label=" ">
-              <div className={styles.previewBodyConfirmed}>
-                <Lorem count={20} />
-              </div>
-            </Tab>
-          </Tabs>
+        <SBody className={styles.previewSBody}>
+          {/* TODO: No need for Tabs here, just need to be able to determine type and isConfirmable */}
+          {typePreview}
         </SBody>
       </SContainer>
     );
@@ -107,6 +134,7 @@ class ReminderPreview extends Component {
 
 ReminderPreview.propTypes = {
   reminder: PropTypes.object.isRequired,
+  account: PropTypes.object.isRequired,
 };
 
 /*function mapDispatchToProps(dispatch) {

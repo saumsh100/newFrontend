@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ClassyDiv from '../util/ClassyDiv';
 import styles from './styles.scss';
 

@@ -28,6 +28,30 @@ module.exports = {
           { transaction: t },
         );
 
+        // Add isActive column to Recalls
+        await queryInterface.addColumn(
+          'Recalls',
+          'isDeleted',
+          {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+          },
+          { transaction: t },
+        );
+
+        // Add isActive column to Reminders
+        await queryInterface.addColumn(
+          'Reminders',
+          'isDeleted',
+          {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+          },
+          { transaction: t },
+        );
+
         // Add dueDateSeconds column to Patients, overrides Account's value
         await queryInterface.addColumn(
           'Patients',
@@ -82,6 +106,20 @@ module.exports = {
           { transaction: t }
         );
 
+        // Remove isActive column to Recalls
+        await queryInterface.removeColumn(
+          'Recalls',
+          'isDeleted',
+          { transaction: t }
+        );
+
+        // Remove isActive column to Reminders
+        await queryInterface.removeColumn(
+          'Reminders',
+          'isDeleted',
+          { transaction: t }
+        );
+
         // Remove dueDateSeconds column to Patients
         await queryInterface.removeColumn(
           'Patients',
@@ -102,7 +140,7 @@ module.exports = {
         // Change back to what it was before
         await queryInterface.sequelize.query(`UPDATE "SentRecalls" SET "lengthSeconds" = 15552000;`, { transaction: t });
       } catch (err) {
-        console.error(e);
+        console.error(err);
         t.rollback();
       }
     });

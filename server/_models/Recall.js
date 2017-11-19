@@ -34,6 +34,12 @@ export default function (sequelize, DataTypes) {
       defaultValue: true,
       allowNull: false,
     },
+
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   });
 
   Recall.associate = ({ Account }) => {

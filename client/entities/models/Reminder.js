@@ -1,3 +1,4 @@
+
 import createModel from '../createModel';
 
 const ReminderSchema = {
@@ -6,6 +7,7 @@ const ReminderSchema = {
   primaryType: null,
   lengthSeconds: null,
   isActive: null,
+  isDeleted: null,
 };
 
 export default class Reminder extends createModel(ReminderSchema) {

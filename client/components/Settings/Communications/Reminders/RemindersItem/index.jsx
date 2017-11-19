@@ -119,6 +119,7 @@ class RemindersItem extends Component {
     };
 
     this.editReminder = this.editReminder.bind(this);
+    this.deleteReminder = this.deleteReminder.bind(this);
     this.changePrimaryType = this.changePrimaryType.bind(this);
     this.onChangeNumberInput = this.onChangeNumberInput.bind(this);
     this.changeDaysHours = this.changeDaysHours.bind(this);
@@ -169,6 +170,40 @@ class RemindersItem extends Component {
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
       values: { isActive },
+      alert,
+    });
+  }
+
+  deleteReminder(e) {
+    // So that it doesn't bubble up and try to select this reminder
+    e.stopPropagation();
+    e.preventDefault();
+    const { reminder, account, selected, selectReminder } = this.props;
+    const { num, type } = secondsToNumType(reminder.lengthSeconds);
+    const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
+    if (!sure) {
+      return;
+    }
+
+    if (selected) {
+      selectReminder(null);
+    }
+
+    const alert = {
+      success: {
+        title: 'Deleted Reminder',
+        body: `You have deleted the ${num} ${type} reminder`,
+      },
+
+      error: {
+        title: 'Error Deleting Reminder',
+        body: `Failed to delete the ${num} ${type} reminder`,
+      },
+    };
+
+    this.props.updateEntityRequest({
+      url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
+      values: { isDeleted: true },
       alert,
     });
   }
@@ -273,7 +308,7 @@ class RemindersItem extends Component {
       reminder,
       index,
       selected,
-      onSelect,
+      selectReminder,
     } = this.props;
 
     // TODO: reminder.lengthSeconds needs to be converted to days/hours
@@ -293,7 +328,7 @@ class RemindersItem extends Component {
     return (
       <div
         className={styles.listItem}
-        onClick={onSelect}
+        onClick={() => selectReminder(reminder.id)}
       >
         <Grid>
           <Row>
@@ -304,7 +339,7 @@ class RemindersItem extends Component {
                 onChange={this.editReminder}
               />
             </Col>
-            <Col xs={4} className={styles.labelCol}>
+            <Col xs={3} className={styles.labelCol}>
               <div className={styles.reminderLabel}>
                 {`${ordinalSuffix(index + 1)} Reminder`}
               </div>
@@ -370,6 +405,13 @@ class RemindersItem extends Component {
                 </div>
               </div>
             </Col>
+            <Col xs={1}>
+              <div className={selected ? styles.connectionLineSelected : styles.connectionLine}>
+                <div className={styles.deleteButtonWrapper} onClick={this.deleteReminder}>
+                  <div className={styles.tinyDeleteButton}>-</div>
+                </div>
+              </div>
+            </Col>
           </Row>
         </Grid>
       </div>
@@ -382,6 +424,7 @@ RemindersItem.propTypes = {
   length: PropTypes.number,
   edit: PropTypes.func,
   deleteFunc: PropTypes.func,
+  selectReminder: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {

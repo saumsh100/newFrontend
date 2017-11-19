@@ -24,6 +24,17 @@
   // justify-content: space-between;
   padding-left: 5px;
   cursor: pointer;
+  &:hover {
+    .deleteButtonWrapper {
+      display: block;
+    }
+  }
+}
+
+.deleteButtonWrapper {
+  display: none;
+  position: relative;
+  top: 30px;
 }
 
 .edit {
@@ -302,9 +313,38 @@ $small-icon-width: 30px;
 }
 
 .remindersListCol {
+  box-sizing: border-box;
   padding: 40px;
+  padding-right: 0;
   border-right: 1px solid #e6e6e6;
   overflow-y: scroll;
+}
+
+.connectionLine {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.connectionLineSelected {
+  @extend .connectionLine;
+  border-top: 1px solid $primary-green;
+}
+
+$tiny: 14px;
+
+.tinyDeleteButton {
+  padding-top: 2px;
+  box-sizing: border-box;
+  width: $tiny;
+  height: $tiny;
+  border-radius: $tiny / 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-red;
+  color: white;
 }
 
 

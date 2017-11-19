@@ -13,9 +13,13 @@
   border-bottom: 1px solid #e6e6e6;
 }
 
+.previewSBody {
+  background-color: #D6D6D6;
+}
+
 .previewBody {
-  padding: 20px;
-  background-color: $primary-darkgrey;
+  padding: 40px;
+  background-color: #F1F2F2;
 }
 
 .previewBodyUnconfirmed {
@@ -24,8 +28,12 @@
 
 .previewBodyConfirmed {
   @extend .previewBody;
-  background-color: $primary-dark;
-  color: white;
+}
+
+.smsPreviewWrapper {
+  @extend .previewBody;
+  display: flex;
+  justify-content: center;
 }
 
 .tab {
