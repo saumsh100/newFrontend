@@ -15,7 +15,6 @@ class SideBarFilters extends Component {
     super(props);
     this.state = {
       openFilters: [false, false, false, false],
-      filterTags: Map(),
     };
     this.displayFilter = this.displayFilter.bind(this);
     this.handleDemographics = this.handleDemographics.bind(this);
@@ -23,7 +22,6 @@ class SideBarFilters extends Component {
     this.handlePractitioners = this.handlePractitioners.bind(this);
     this.handleCommunications = this.handleCommunications.bind(this);
     this.removeTag = this.removeTag.bind(this);
-    this.addTags = this.addTags.bind(this);
     this.clearTags = this.clearTags.bind(this);
   }
 
@@ -44,26 +42,7 @@ class SideBarFilters extends Component {
     });
   }
 
-  addTags(filters) {
-    const {
-      filterTags,
-    } = this.state;
-
-    let newFilters = filterTags;
-    filters.forEach((filter) => {
-      newFilters = newFilters.set(`${filter.indexFunc}`, filter);
-    });
-
-    this.setState({
-      filterTags: newFilters,
-    });
-  }
-
   removeTag(filter) {
-    const {
-      filterTags,
-    } = this.state;
-
     const {
       arrayRemoveAll,
       removeFilter,
@@ -72,18 +51,6 @@ class SideBarFilters extends Component {
     arrayRemoveAll(filter.formName, filter.formSection);
 
     removeFilter(filter.indexFunc);
-
-    const newTags = filterTags.delete(`${filter.indexFunc}`);
-
-    if (newTags.isEmpty()) {
-      this.setState({
-        filterTags: Map(),
-      });
-    } else {
-      this.setState({
-        filterTags: newTags,
-      });
-    }
   }
 
   clearTags() {
@@ -149,7 +116,6 @@ class SideBarFilters extends Component {
     });
 
     if (keys.length === setFilter && keys.length > 0) {
-      this.addTags(batchFilters);
       batchFilters.forEach((filter) => {
         addFilter(filter);
       });
@@ -233,7 +199,6 @@ class SideBarFilters extends Component {
     });
 
     if (keys.length === setFilter && keys.length > 0) {
-      this.addTags(batchFilters);
       batchFilters.forEach((filter) => {
         addFilter(filter);
       });
@@ -261,7 +226,6 @@ class SideBarFilters extends Component {
           tag: 'Practitioners',
           intensive: true,
         };
-        this.addTags([pracObj]);
         addFilter(pracObj);
       }
     });
@@ -385,10 +349,7 @@ class SideBarFilters extends Component {
       }
     });
 
-    console.log(batchFilters)
     if (keys.length === setFilter && keys.length > 0){
-      this.addTags(batchFilters);
-
       batchFilters.forEach((filter) => {
         addFilter(filter);
       });
@@ -398,11 +359,11 @@ class SideBarFilters extends Component {
   render() {
     const {
       practitioners,
+      filters,
     } = this.props;
 
     const {
       openFilters,
-      filterTags,
     } = this.state;
 
     if (!practitioners) {
@@ -426,7 +387,7 @@ class SideBarFilters extends Component {
         </div>
 
         <FilterTags
-          filterTags={filterTags}
+          filterTags={filters}
           removeTag={this.removeTag}
         />
 

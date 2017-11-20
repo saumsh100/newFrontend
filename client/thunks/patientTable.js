@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import { setTableData, setIsLoading } from '../reducers/patientTable';
 
@@ -11,10 +12,12 @@ export function fetchPatientTableData() {
 
       const filters = patientTable.get('filters').toArray();
       const query = patientTable.toJS();
+
       query.filters = filters;
       delete query.data;
       delete query.totalPatients;
       delete query.isLoadingTable;
+      delete query.filterTags;
 
       const patientData = await axios.get('/api/table', { params: query });
       const dataArray = getEntities(patientData.data.entities);

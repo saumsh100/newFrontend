@@ -34,6 +34,7 @@ export const createInitialPatientState = state => {
     page: 0,
     sort: [],
     filters: Map(),
+    filterTags: Map(),
     smartFilter: null,
   }, state));
 };

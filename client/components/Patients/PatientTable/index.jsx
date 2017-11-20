@@ -20,6 +20,7 @@ import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import HygieneColumn from './HygieneColumn';
 import styles from './styles.scss';
+import Loading from "../../library/Loading/index";
 
 
 class PatientTable extends Component {
@@ -354,6 +355,7 @@ class PatientTable extends Component {
               filterable
               showPageSizeOptions={false}
               noDataText="No Patients Found"
+              loadingText={<Loading />}
               SubComponent={(row) => {
                 return (
                   <PatientSubComponent
