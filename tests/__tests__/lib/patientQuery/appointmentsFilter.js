@@ -45,7 +45,7 @@ describe('Appointment Filters Tests', () => {
   });
 
   describe('First Last Appointment Filter', () => {
-    test('Find Patient with first appointment between these dates', async () => {
+    test('Find Patient with first appointment within these dates', async () => {
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', firstApptDate: date(2014, 7, 6, 9) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', firstApptDate: date(2013, 7, 6, 9) }),
@@ -57,7 +57,7 @@ describe('Appointment Filters Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
-    test('Find Patient with last appointment between these dates', async () => {
+    test('Find Patient with last appointment within these dates', async () => {
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2014, 7, 6, 9) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2014, 7, 7, 9) }),
@@ -69,7 +69,7 @@ describe('Appointment Filters Tests', () => {
       expect(patientsData.rows.length).toBe(2);
     });
 
-    test('Find Patient with last appointment between these dates ordered by lastApptDate', async () => {
+    test('Find Patient with last appointment, ordered by lastApptDate', async () => {
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2014, 7, 6, 9) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2014, 7, 7, 9) }),
@@ -152,7 +152,7 @@ describe('Appointment Filters Tests', () => {
   })
 
   describe('Production Filter', () => {
-    test('Find Patients with production revenue between these $500 to $1500', async () => {
+    test('Find Patients with production revenue between $500 to $1500', async () => {
 
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient' }),

@@ -134,7 +134,7 @@ describe('Reminder Filters Tests', () => {
     });
   });
   describe('Last Reminder Filter ', () => {
-    test('Should have 2 patients who have a last reminder between these dates, ordered by lastName', async () => {
+    test('Should have 2 patients who have a last reminder, ordered by lastName', async () => {
 
       const reminder = await Reminder.bulkCreate([
         {accountId, primaryType: 'email', lengthSeconds: 15552000},

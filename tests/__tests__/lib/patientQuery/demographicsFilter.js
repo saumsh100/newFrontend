@@ -42,7 +42,7 @@ describe('Demograph Filters Tests', () => {
       await seedTestUsers();
     });
 
-    test('Find (2) Patients between these 18 and 36 years of age', async () => {
+    test('Find (2) Patients between 18 and 36 years of age', async () => {
 
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', birthDate: date(1998, 2, 6, 9)}),

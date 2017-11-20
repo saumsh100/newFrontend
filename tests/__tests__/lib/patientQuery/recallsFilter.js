@@ -95,7 +95,7 @@ describe('Recalls Filters Tests', () => {
   });
 
   describe('Last Recall Filter ', () => {
-    test('Should have 2 patients who have a last recall between these dates ordered by firstName', async () => {
+    test('Should have 2 patients who have a last recall, ordered by firstName', async () => {
 
       const recall = await Recall.bulkCreate([
         {accountId, primaryType: 'email', lengthSeconds: 15552000},

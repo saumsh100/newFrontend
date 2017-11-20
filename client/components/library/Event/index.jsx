@@ -1,8 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
 import Icon from '../Icon';
 import styles from './styles.scss';
+import ReviewEvent from './ReviewEvent';
+import ReminderEvent from './ReminderEvent';
+import CallEvent from './CallEvent';
+import AppointmentEvent from './AppointmentEvent';
 
 class Event extends Component {
   render() {
@@ -15,81 +21,28 @@ class Event extends Component {
     let icon = '';
     let bgIconStyle = styles.bgIcon;
 
-    if (type === 'email') {
-      icon = 'envelope';
-      bgIconStyle = classnames(bgIconStyle, styles.greenBorder);
-      content = (
-        <div className={styles.body}>
-          <div className={styles.body_header}>
-            Subject: Need to confirm information | Status: Email Sent
-          </div>
-          <div className={styles.body_subHeader}>
-            Random text goes in here to fill the subheader section
-          </div>
-        </div>
-      );
-    }
-
     if (type === 'appointment') {
       icon = 'calendar-o';
       bgIconStyle = classnames(bgIconStyle, styles.blueBorder);
-      content = (
-        <div className={styles.body}>
-          <div className={styles.body_header}>
-            Appointment Booked on {moment(data.startDate).format('MMMM Do, YYYY h:mma')}
-          </div>
-          <div className={styles.body_subHeaderItalic}>
-            {data.note || '' }
-          </div>
-        </div>
-      );
+      content = <AppointmentEvent data={data} />;
     }
 
     if (type === 'reminder') {
       icon = 'comment';
       bgIconStyle = classnames(bgIconStyle, styles.redBorder);
-      content = (
-        <div className={styles.body}>
-          <div className={styles.body_subHeader}>
-            Reminder Sent: For appointment on {moment(data.appointmentStartDate).format('MMMM Do, YYYY h:mma')}
-          </div>
-        </div>
-      );
+      content = <ReminderEvent data={data} />;
     }
 
     if (type === 'review') {
       icon = 'star';
       bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
-      content = (
-        <div className={styles.body}>
-          <div className={styles.body_header}>
-            Review Left from CareCru
-          </div>
-          <div className={styles.body_subHeader}>
-            {data.description}
-          </div>
-        </div>
-      );
+      content = <ReviewEvent data={data} />;
     }
 
     if (type === 'call') {
       icon = 'phone';
       bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
-      content = (
-        <div className={styles.call}>
-          <div className={styles.call_header}>
-            Phone Call
-          </div>
-          <div>
-            <audio controls>
-              <source src={data.recording} type="audio/ogg" />
-            </audio>
-          </div>
-          <div className={styles.call_subHeaderItalic}>
-            {data.duration} seconds, from {data.callerCity}, at {moment(data.startTime).format('h:mm a')}
-          </div>
-        </div>
-      );
+      content = <CallEvent data={data} />;
     }
 
     return (
@@ -111,7 +64,8 @@ class Event extends Component {
 }
 
 Event.propTypes = {
-
+  type: PropTypes.string.isRequired,
+  data: PropTypes.object.isRequired,
 };
 
 export default Event;
