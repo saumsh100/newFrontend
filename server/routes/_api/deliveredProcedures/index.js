@@ -55,7 +55,7 @@ deliveredProceduresRouter.post('/connector/batch', checkPermissions('deliveredPr
 });
 
 /**
- * Batch update deliveredProcedure for connector
+ * Batch update deliveredProcedures for connector
  */
 deliveredProceduresRouter.put('/connector/batch', checkPermissions('deliveredProcedures:update'),
 (req, res, next) => {
