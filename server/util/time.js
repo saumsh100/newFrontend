@@ -56,6 +56,46 @@ const Time = {
     return oneHour * num;
   },
 
+  ordinalSuffix(i) {
+    const j = i % 10;
+    const k = i % 100;
+    if (j === 1 && k !== 11) {
+      return i + 'st';
+    }
+
+    if (j === 2 && k !== 12) {
+      return i + 'nd';
+    }
+
+    if (j === 3 && k !== 13) {
+      return i + 'rd';
+    }
+
+    return i + 'th';
+  },
+
+  secondsToNumType(seconds) {
+    const daySeconds = Time.d2s(1);
+    const hourSeconds = Time.h2s(1);
+    const numDays = seconds / daySeconds;
+    const numHours = seconds / hourSeconds;
+    const isDay = seconds % daySeconds === 0 && numDays > 2;
+    const type = isDay ? 'days' : 'hours';
+    const num = isDay ? parseInt(numDays) : parseInt(numHours);
+    return { type, num };
+  },
+
+  numTypeToSeconds(num, type) {
+    if (type !== 'hours' && type !== 'days') {
+      throw new Error('not a valid type to convert to seconds');
+    }
+
+    const daySeconds = Time.d2s(1);
+    const hourSeconds = Time.h2s(1);
+    const secondsMultiplier = type === 'hours' ? hourSeconds : daySeconds;
+    return num * secondsMultiplier;
+  },
+
   /**
    *
    * @param date

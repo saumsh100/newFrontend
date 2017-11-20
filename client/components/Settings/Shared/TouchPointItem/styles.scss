@@ -1,3 +1,4 @@
+
 @import '../../../../ui';
 
 .headerTitle {
@@ -18,12 +19,11 @@
   }
 }
 
-.reminderListItem {
-  &:hover {
-    .deleteButtonWrapper {
-      display: block;
-    }
-  }
+.listItem {
+  // min-height: 80px;
+  // display: flex;
+  // justify-content: space-between;
+  cursor: pointer;
 }
 
 .deleteButtonWrapper {

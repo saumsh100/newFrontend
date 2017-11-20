@@ -15,10 +15,12 @@ import {
   RemoteSubmitButton,
   DialogBox,
 } from '../../../library';
+import { numTypeToSeconds } from '../../../../../server/util/time';
 import SettingsCard from '../../Shared/SettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
 import ReminderPreview from './ReminderPreview';
+import TouchPointItem from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 class Reminders extends Component {
@@ -56,9 +58,16 @@ class Reminders extends Component {
   }
 
   newReminder(values) {
+    const {
+      primaryType,
+      number,
+      type,
+    } = values;
+
+    const lengthSeconds = numTypeToSeconds(number, type);
     const entityData = {
-      lengthSeconds: values.lengthHours * 60 * 60,
-      primaryType: values.primaryType,
+      lengthSeconds,
+      primaryType,
     };
 
     const alert = {
@@ -170,21 +179,18 @@ class Reminders extends Component {
                   />
                 );
               })}
-              <Grid className={styles.finalItem}>
-                <Row>
-                  <Col xs={1}>
-                    {/* Keep Empty */}
-                  </Col>
-                  <Col xs={3}>
-                    <div>
-                      Appointment
-                    </div>
-                  </Col>
-                  <Col xs={8}>
-                    <Icon icon="calendar" />
-                  </Col>
-                </Row>
-              </Grid>
+              <TouchPointItem
+                noLines
+                labelComponent={(
+                  <div>
+                    Appointment
+                  </div>
+                )}
+
+                mainComponent={(
+                  <Icon icon="calendar" />
+                )}
+              />
             </Col>
             <Col xs={6}>
               {previewComponent}

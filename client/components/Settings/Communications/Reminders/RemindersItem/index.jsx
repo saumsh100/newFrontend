@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { d2s, h2s } from '../../../../../../server/util/time';
+import { d2s, h2s, ordinalSuffix, secondsToNumType, numTypeToSeconds } from '../../../../../../server/util/time';
 import {
   updateEntityRequest,
   deleteEntityRequest,
@@ -18,6 +18,9 @@ import {
   Input,
   DropdownSelect,
 } from '../../../../library';
+import IconCircle from '../../../Shared/IconCircle';
+import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
+import TouchPointItem from '../../../Shared/TouchPointItem';
 import styles from '../styles.scss';
 
 const iconsMap = {
@@ -31,67 +34,6 @@ const wordMap = {
   phone: 'Voice',
   email: 'Email',
 };
-
-function ordinalSuffix(i) {
-  const j = i % 10;
-  const k = i % 100;
-
-  if (j == 1 && k != 11) {
-    return i + "st";
-  }
-
-  if (j == 2 && k != 12) {
-    return i + "nd";
-  }
-
-  if (j == 3 && k != 13) {
-    return i + "rd";
-  }
-
-  return i + "th";
-}
-
-function secondsToNumType(seconds) {
-  const daySeconds = d2s(1);
-  const hourSeconds = h2s(1);
-  const numDays = seconds / daySeconds;
-  const numHours = seconds / hourSeconds;
-  const isDay = seconds % daySeconds === 0 && numDays > 2;
-  const type = isDay ? 'days' : 'hours';
-  const num = isDay ? parseInt(numDays) : parseInt(numHours);
-  return { type, num };
-}
-
-function numTypeToSeconds(num, type) {
-  if (type !== 'hours' && type !== 'days') {
-    throw new Error('not a valid type to convert to seconds');
-  }
-
-  const daySeconds = d2s(1);
-  const hourSeconds = h2s(1);
-  const secondsMultiplier = type === 'hours' ? hourSeconds : daySeconds;
-  return num * secondsMultiplier;
-}
-
-function IconCircle(props) {
-  const { selected, icon } = props;
-  // delete props.selected;
-  // delete props.icon;
-
-  const wrapperClass = selected ?
-    styles.reminderSelectWrapperCircleSelected :
-    styles.reminderSelectWrapperCircle;
-
-  return (
-    <div className={wrapperClass}>
-      <div className={styles.reminderWrapperCircle}>
-        <div className={styles.reminderIconCircle}>
-          {icon ? <Icon icon={icon} /> : null}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function SmallIconCircle(props) {
   const { selected, icon } = props;
@@ -326,95 +268,91 @@ class RemindersItem extends Component {
     const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
 
     return (
-      <div
-        className={styles.listItem}
+      <TouchPointItem
+        selected={selected}
+        className={styles.reminderListItem}
         onClick={() => selectReminder(reminder.id)}
-      >
-        <Grid>
-          <Row>
-            <Col xs={1} className={styles.toggleCol}>
-              <Toggle
-                color="green"
-                checked={isActive}
-                onChange={this.editReminder}
+        toggleComponent={(
+          <Toggle
+            color="green"
+            checked={isActive}
+            onChange={this.editReminder}
+          />
+        )}
+
+        labelComponent={(
+          <div className={styles.reminderLabel}>
+            {`${ordinalSuffix(index + 1)} Reminder`}
+          </div>
+        )}
+
+        mainComponent={(
+          <div>
+            <div className={styles.reminderIconContainer}>
+              <IconCircle
+                icon={icon}
+                selected={selected}
               />
-            </Col>
-            <Col xs={3} className={styles.labelCol}>
-              <div className={styles.reminderLabel}>
-                {`${ordinalSuffix(index + 1)} Reminder`}
-              </div>
-            </Col>
-            <Col xs={7}>
-              <div className={selected ? styles.linesBoxSelected : styles.linesBox}>
-                <IconCircle
-                  icon={icon}
+            </div>
+            <div className={selected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
+              <div className={styles.smallIconContainer}>
+                <SmallIconCircle
+                  icon="bell"
                   selected={selected}
                 />
-                <div className={selected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
-                  <div className={styles.smallIconContainer}>
-                    <SmallIconCircle
-                      icon="bell"
-                      selected={selected}
-                    />
-                  </div>
-                  <div className={styles.dropdownsWrapper}>
-                    <div className={styles.topRow}>
-                      <DropdownSelect
-                        onChange={this.changePrimaryType}
-                        className={dropdownSelectClass}
-                        value={primaryType}
-                        options={[
-                          { label: 'Email', value: 'email' },
-                          { label: 'SMS', value: 'sms' },
-                          { label: 'Voice', value: 'phone' },
-                        ]}
-                      />
-                    </div>
-                    <div className={styles.bottomRow}>
-                      <Grid>
-                        <Row>
-                          <Col xs={3}>
-                            <Input
-                              classStyles={dropdownSelectClass}
-                              value={number}
-                              //type="number"
-                              //min="1"
-                              //step="any"
-                              onChange={this.onChangeNumberInput}
-                              onBlur={(e) => this.changeNumber(e.target.value)}
-                            />
-                          </Col>
-                          <Col xs={9} className={styles.rightDropdown}>
-                            <DropdownSelect
-                              onChange={this.changeDaysHours}
-                              className={dropdownSelectClass}
-                              value={type}
-                              options={[
-                                { label: 'Hours Before Appt', value: 'hours' },
-                                { label: 'Days Before Appt', value: 'days' },
-                              ]}
-                            />
-                          </Col>
-                        </Row>
-                      </Grid>
-                    </div>
-                  </div>
+              </div>
+              <div className={styles.dropdownsWrapper}>
+                <div className={styles.topRow}>
+                  <DropdownSelect
+                    onChange={this.changePrimaryType}
+                    className={dropdownSelectClass}
+                    value={primaryType}
+                    options={[
+                      { label: 'Email', value: 'email' },
+                      { label: 'SMS', value: 'sms' },
+                      { label: 'Voice', value: 'phone' },
+                    ]}
+                  />
                 </div>
-                <div className={styles.downIconWrapper}>
-                  <Icon icon="caret-down" size={2} />
+                <div className={styles.bottomRow}>
+                  <Grid>
+                    <Row>
+                      <Col xs={3}>
+                        <Input
+                          classStyles={dropdownSelectClass}
+                          value={number}
+                          //type="number"
+                          //min="1"
+                          //step="any"
+                          onChange={this.onChangeNumberInput}
+                          onBlur={(e) => this.changeNumber(e.target.value)}
+                        />
+                      </Col>
+                      <Col xs={9} className={styles.rightDropdown}>
+                        <DropdownSelect
+                          onChange={this.changeDaysHours}
+                          className={dropdownSelectClass}
+                          value={type}
+                          options={[
+                            { label: 'Hours Before Appt', value: 'hours' },
+                            { label: 'Days Before Appt', value: 'days' },
+                          ]}
+                        />
+                      </Col>
+                    </Row>
+                  </Grid>
                 </div>
               </div>
-            </Col>
-            <Col xs={1}>
-              <div className={selected ? styles.connectionLineSelected : styles.connectionLine}>
-                <div className={styles.deleteButtonWrapper} onClick={this.deleteReminder}>
-                  <div className={styles.tinyDeleteButton}>-</div>
-                </div>
-              </div>
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+            </div>
+          </div>
+        )}
+
+        rightComponent={(
+          <div className={styles.deleteButtonWrapper} onClick={this.deleteReminder}>
+            <TinyDeleteButton />
+          </div>
+        )}
+      />
     );
   }
 }

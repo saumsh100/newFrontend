@@ -197,6 +197,9 @@ export async function computeRemindersAndSend({ date, pub }) {
     include: [{
       model: Reminder,
       as: 'reminders',
+      where: {
+        isDeleted: false,
+      },
     }],
   });
 

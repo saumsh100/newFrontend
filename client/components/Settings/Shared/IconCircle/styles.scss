@@ -1,0 +1,86 @@
+
+@import '../../../../ui';
+
+$width: 36px;
+$wrapper-thickness: 8px;
+
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $width;
+  height: $width;
+  border-radius: $width / 2;
+  background-color: $primary-green;
+  color: white;
+  > i {
+    font-size: 1.4em !important;
+  }
+}
+
+.iconCircle_green {
+  @extend .iconCircle;
+  background-color: $primary-green;
+}
+
+.iconCircle_yellow {
+  @extend .iconCircle;
+  background-color: $primary-yellow;
+}
+
+.iconCircle_red {
+  @extend .iconCircle;
+  background-color: $primary-red;
+}
+
+.iconCircle_blue {
+  @extend .iconCircle;
+  background-color: $primary-blue;
+}
+
+$outer-width: $width + $wrapper-thickness;
+
+.wrapperCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $outer-width;
+  height: $outer-width;
+  border-radius: $outer-width / 2;
+  background-color: $primary-white;
+}
+
+$outest-width: $outer-width + $wrapper-thickness;
+
+.selectWrapperCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $outest-width;
+  height: $outest-width;
+  border-radius: $outest-width / 2;
+}
+
+.selectWrapperCircleSelected {
+  @extend .selectWrapperCircle;
+}
+
+.selectWrapperCircleSelected_green {
+  @extend .selectWrapperCircleSelected;
+  background-color: $primary-green;
+}
+
+.selectWrapperCircleSelected_yellow {
+  @extend .selectWrapperCircleSelected;
+  background-color: $primary-yellow;
+}
+
+.selectWrapperCircleSelected_red {
+  @extend .selectWrapperCircleSelected;
+  background-color: $primary-red;
+}
+
+.selectWrapperCircleSelected_blue {
+  @extend .selectWrapperCircleSelected;
+  background-color: $primary-blue;
+}
