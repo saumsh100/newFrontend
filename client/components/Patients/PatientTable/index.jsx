@@ -52,9 +52,7 @@ class PatientTable extends Component {
     this.fetchData();
   }
 
-  fetchData() {
-    this.props.fetchPatientTableData();
-  }
+
 
   pageChange(index) {
     this.props.setTableData({ page: index });
@@ -83,6 +81,10 @@ class PatientTable extends Component {
   setSmartFilter(filterObj) {
     this.props.setSmartFilter({ smFilter: filterObj });
     this.fetchData();
+  }
+  
+  fetchData() {
+    this.props.fetchPatientTableData();
   }
 
   clearFilters() {

@@ -34,4 +34,4 @@ export default function FilterTags(props) {
 FilterTags.propTypes = {
   filterTags: PropTypes.object.isRequired,
   removeTag: PropTypes.func.isRequired,
-}
+};

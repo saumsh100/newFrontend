@@ -13,9 +13,11 @@ import styles from './styles.scss';
 class SideBarFilters extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       openFilters: [false, false, false, false],
     };
+
     this.displayFilter = this.displayFilter.bind(this);
     this.handleDemographics = this.handleDemographics.bind(this);
     this.handleAppointments = this.handleAppointments.bind(this);
