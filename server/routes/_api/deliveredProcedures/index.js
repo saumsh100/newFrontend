@@ -4,7 +4,7 @@ import isArray from 'lodash/isArray';
 import { DeliveredProcedure } from '../../../_models';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
-import batchCreate from '../../util/batch';
+import batchCreate, { batchUpdate } from '../../util/batch';
 import format from '../../util/format';
 
 const deliveredProceduresRouter = new Router();
@@ -41,6 +41,35 @@ deliveredProceduresRouter.post('/connector/batch', checkPermissions('deliveredPr
         throw err;
       }
 
+      docs = docs.map(d => d.get({ plain: true }));
+
+      // Log any errors that occurred
+      errors.forEach((err) => {
+        console.error(err);
+      });
+
+      const data = format(req, res, 'deliveredProcedures', docs);
+      return res.status(201).send(Object.assign({}, data));
+    })
+    .catch(next);
+});
+
+/**
+ * Batch update deliveredProcedure for connector
+ */
+deliveredProceduresRouter.put('/connector/batch', checkPermissions('deliveredProcedures:update'),
+(req, res, next) => {
+  const deliveredProcedures = req.body;
+  return batchUpdate(
+    deliveredProcedures,
+    DeliveredProcedure,
+    'DeliveredProcedure',
+  )
+    .then((saveddeliveredProcedures) => {
+      const savedDeliveredProcedures = saveddeliveredProcedures.map(savedDeliveredProcedure => savedDeliveredProcedure.get({ plain: true }));
+      res.status(201).send(format(req, res, 'deliveredProcedures', savedDeliveredProcedures));
+    })
+    .catch(({ errors, docs }) => {
       docs = docs.map(d => d.get({ plain: true }));
 
       // Log any errors that occurred

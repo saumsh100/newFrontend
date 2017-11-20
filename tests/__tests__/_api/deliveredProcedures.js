@@ -57,7 +57,6 @@ describe('/api/deliveredProcedures', () => {
     });
 
     test('/batch - 4 deliverProcedures created successfully', () => {
-      console.log(makeDeliveredProcedure());
       return request(app)
         .post(`${rootUrl}/connector/batch`)
         .set('Authorization', `Bearer ${token}`)
@@ -70,6 +69,7 @@ describe('/api/deliveredProcedures', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
+          console.log(JSON.stringify(body));
           expect(Object.keys(body.entities.deliveredProcedures).length).toBe(4);
         });
     });
@@ -91,7 +91,81 @@ describe('/api/deliveredProcedures', () => {
     });
 
   });
+
+  describe('PUT /', () => {
+    test('/batch - 1 invalid deliverProcedure, 3 valid deliverProcedure', () => {
+      return request(app)
+        .post(`${rootUrl}/connector/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send([
+          makeDeliveredProcedure(),
+          makeDeliveredProcedure(),
+          makeDeliveredProcedure(),
+          makeDeliveredProcedure(),
+        ])
+        .expect(200)
+        .then(({ body }) => {
+          const ids = Object.keys(body.entities.deliveredProcedures);
+          const dps = body.entities.deliveredProcedures;
+
+          dps[ids[1]].entryDate = '';
+
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([
+              dps[ids[0]],
+              dps[ids[1]],
+              dps[ids[2]],
+              dps[ids[3]],
+            ])
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              expect(Object.keys(body.entities.deliveredProcedures).length).toBe(3);
+            });
+        });
+    });
+
+    test('/batch - batch update 4', () => {
+      return request(app)
+        .post(`${rootUrl}/connector/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send([
+          makeDeliveredProcedure(),
+          makeDeliveredProcedure(),
+          makeDeliveredProcedure(),
+          makeDeliveredProcedure(),
+        ])
+        .expect(200)
+        .then(({ body }) => {
+          const ids = Object.keys(body.entities.deliveredProcedures);
+          const dps = body.entities.deliveredProcedures;
+
+          dps[ids[0]].entryDate = '2017-09-19T00:14:30.932Z';
+          dps[ids[1]].entryDate = '2017-09-19T00:14:30.932Z';
+          dps[ids[2]].entryDate = '2017-09-19T00:14:30.932Z';
+          dps[ids[3]].entryDate = '2017-09-19T00:14:30.932Z';
+
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([
+              dps[ids[0]],
+              dps[ids[1]],
+              dps[ids[2]],
+              dps[ids[3]],
+            ])
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              expect(Object.keys(body.entities.deliveredProcedures).length).toBe(4);
+            });
+        });
+    });
+  });
 });
+
 
 describe('Revenue Functions', () => {
   beforeAll(async () => {
