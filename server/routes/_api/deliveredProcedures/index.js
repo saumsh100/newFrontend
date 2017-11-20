@@ -65,8 +65,8 @@ deliveredProceduresRouter.put('/connector/batch', checkPermissions('deliveredPro
     DeliveredProcedure,
     'DeliveredProcedure',
   )
-    .then((saveddeliveredProcedures) => {
-      const savedDeliveredProcedures = saveddeliveredProcedures.map(savedDeliveredProcedure => savedDeliveredProcedure.get({ plain: true }));
+    .then((savedDeliveredProcedures) => {
+      savedDeliveredProcedures = savedDeliveredProcedures.map(savedDeliveredProcedure => savedDeliveredProcedure.get({ plain: true }));
       res.status(201).send(format(req, res, 'deliveredProcedures', savedDeliveredProcedures));
     })
     .catch(({ errors, docs }) => {
