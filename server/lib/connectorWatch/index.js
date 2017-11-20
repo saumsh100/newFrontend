@@ -30,7 +30,7 @@ export default async function connectorWatch() {
 
 export async function getAccountsConnectorDown(date) {
   const currentTime = moment(date);
-  const tenMinAgo = currentTime.clone().subtract(10, 'minutes');
+  const thirtyMinAgo = currentTime.clone().subtract(30, 'minutes');
   const threeHoursAgo = currentTime.clone().subtract(3, 'hours');
 
   const accounts = await Account.findAll({
@@ -38,7 +38,7 @@ export async function getAccountsConnectorDown(date) {
       lastSyncDate: {
         $ne: null,
         $gt: threeHoursAgo.toISOString(),
-        $lt: tenMinAgo.toISOString(),
+        $lt: thirtyMinAgo.toISOString(),
       },
     },
   });
