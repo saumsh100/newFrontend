@@ -1,7 +1,9 @@
 import moment from 'moment';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from '../styles.scss';
+
 
 export default function HygieneColumn(props) {
   const {
@@ -32,4 +34,8 @@ export default function HygieneColumn(props) {
     <div className={dotStyle}>&nbsp;</div>
   </div>
   );
+}
+
+HygieneColumn.propTypes = {
+  patient: PropTypes.object,
 }

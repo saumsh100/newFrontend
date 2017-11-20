@@ -1,4 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, DialogBox, Input, DropdownMenu, Icon } from '../../../library';
 import NewPatientForm from './NewPatientForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
@@ -11,7 +13,6 @@ class HeaderSection extends Component {
     super(props);
     this.state = {
       active: false,
-      filterActive: false,
     };
     this.setActive = this.setActive.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
@@ -144,5 +145,13 @@ class HeaderSection extends Component {
     );
   }
 }
+
+HeaderSection.propTypes = {
+  totalPatients: PropTypes.number,
+  smartFilter: PropTypes.object,
+  setSmartFilter: PropTypes.func.isRequired,
+  patientIds: PropTypes.arrayOf(String),
+  createEntityRequest: PropTypes.func.isRequired,
+};
 
 export default HeaderSection;

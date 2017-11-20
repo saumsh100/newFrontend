@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Avatar } from '../../../library';
 import styles from './styles.scss';
 
 export default function PatientNameColumn(props) {
   const {
-    value,
     patient,
     redirect,
     text,
@@ -27,4 +27,11 @@ export default function PatientNameColumn(props) {
       </div>
     </div>
   );
+}
+
+PatientNameColumn.propTypes = {
+  patient: PropTypes.object,
+  redirect: PropTypes.func,
+  text: PropTypes.string,
+  noAvatar: PropTypes.bool,
 }

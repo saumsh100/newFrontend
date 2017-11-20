@@ -1,8 +1,8 @@
 
-import React, { Component, PropTypes } from 'react';
-import { Map } from 'immutable';
-import moment from 'moment';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import debounce from 'lodash/debounce';
+import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { destroy, arrayRemoveAll } from 'redux-form';
 import { push } from 'react-router-redux';
@@ -10,7 +10,9 @@ import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Grid, Row, Col } from '../../library';
-import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
+import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities'
+import { fetchPatientTableData } from '../../../thunks/patientTable';
+import { setTableData, setSmartFilter, setFilters, removeFilter, clearFilters } from '../../../reducers/patientTable';
 import PatientSubComponent from './PatientSubComponent';
 import PatientNameColumn from './PatientNameColumn';
 import SelectPatientColumn from './SelectPatientColumn';
@@ -19,40 +21,21 @@ import HeaderSection from './HeaderSection';
 import HygieneColumn from './HygieneColumn';
 import styles from './styles.scss';
 
-function getEntities(entities) {
-  const data = [];
-  _.each(entities, (collectionMap) => {
-    _.each(collectionMap, (modelData) => {
-      data.push(modelData);
-    });
-  });
-  return data;
-}
 
 class PatientTable extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      data: [],
-      limit: 15,
-      totalPatients: 0,
-      page: 0,
-      sorted: [],
       expanded: {},
-      search: '',
-      filters: Map(),
-      smartFilter: null,
       patientIds: [],
     };
 
     this.fetchData = debounce(this.fetchData, 300);
     this.pageChange = this.pageChange.bind(this);
     this.pageSizeChange = this.pageSizeChange.bind(this);
-    this.onSearch = this.onSearch.bind(this);
     this.onSort = this.onSort.bind(this);
     this.handleRowClick = this.handleRowClick.bind(this);
-    this.reinitializeTable = this.reinitializeTable.bind(this);
     this.addFilter = this.addFilter.bind(this);
     this.setSmartFilter = this.setSmartFilter.bind(this);
     this.clearFilters = this.clearFilters.bind(this);
@@ -64,93 +47,59 @@ class PatientTable extends Component {
     this.props.fetchEntities({
       key: 'practitioners',
     });
-    this.fetchData({
-      limit: this.state.limit,
-      page: 0,
-    });
+
+    this.fetchData();
   }
 
-  fetchData(query) {
-    this.props.fetchEntitiesRequest({
-      id: 'patientsTable',
-      url: '/api/table',
-      params: query,
-    }).then((data) => {
-      const dataArray = getEntities(data);
-
-      if (dataArray.length) {
-        this.setState({
-          totalPatients: dataArray[0].totalPatients,
-          data: dataArray[0].data,
-        });
-      } else {
-        this.setState({
-          totalPatients: 0,
-          data: [],
-        });
-      }
-    });
+  fetchData() {
+    this.props.fetchPatientTableData();
   }
 
   pageChange(index) {
-    this.fetchData({
-      limit: this.state.limit,
-      sort: this.state.sorted,
-      page: index,
-      filters: this.state.filters.toArray(),
-      smartFilter: this.state.smartFilter,
-    });
-
-    this.setState({
-      page: index,
-      expanded: {},
-    });
+    this.props.setTableData({ page: index });
+    this.fetchData();
   }
 
-  pageSizeChange(pageSize, pageIndex) {
-    this.fetchData({
-      limit: pageSize,
-      sort: this.state.sorted,
-      page: pageIndex,
-      filters: this.state.filters.toArray(),
-      smartFilter: this.state.smartFilter,
-    });
-
-    this.setState({
-      limit: pageSize,
-      search: '',
-      expanded: {},
-    });
-  }
-
-  onSearch(value) {
-    this.fetchData({
-      search: value,
-      page: 0,
-      limit: this.state.limit,
-      sort: this.state.sorted,
-    });
-    this.setState({
-      search: value,
-    });
+  pageSizeChange(pageSize) {
+    this.props.setTableData({ limit: pageSize });
+    this.fetchData();
   }
 
   onSort(newSorted) {
-    this.fetchData({
-      sort: newSorted,
-      page: this.state.page,
-      limit: this.state.limit,
-      search: this.state.search,
-      filters: this.state.filters.toArray(),
-      smartFilter: this.state.smartFilter,
-    });
+    this.props.setTableData({ sort: newSorted });
+    this.fetchData();
 
     this.setState({
-      sorted: newSorted,
       expanded: {},
     });
   }
 
+  addFilter(filter) {
+    this.props.setFilters({ filter });
+    this.fetchData();
+  }
+
+  setSmartFilter(filterObj) {
+    this.props.setSmartFilter({ smFilter: filterObj });
+    this.fetchData();
+  }
+
+  clearFilters() {
+    const {
+      destroy,
+    } = this.props;
+
+    const filtersArray = ['demographics', 'appointments', 'practitioners', 'communications'];
+    filtersArray.forEach(filter => destroy(filter));
+
+    this.props.clearFilters();
+    this.fetchData();
+  }
+
+  removeFilter(index) {
+    this.props.removeFilter({ index });
+    this.fetchData();
+  }
 
   handleRowClick(rowInfo) {
     const {
@@ -167,49 +116,6 @@ class PatientTable extends Component {
       this.setState({
         expanded: {},
       });
-    }
-  }
-
-  addFilter(filter) {
-    const {
-      filters,
-    } = this.state;
-
-    const newFilters = filters.set(`${filter.indexFunc}`, filter);
-
-    this.fetchData({
-      filters: newFilters.toArray(),
-      page: 0,
-      limit: this.state.limit,
-      sort: this.state.sorted,
-      smartFilter: this.state.smartFilter,
-    });
-
-    this.setState({
-      filters: newFilters,
-      page: 0,
-      expanded: {},
-    });
-  }
-
-  setSmartFilter(filterObj) {
-    if (filterObj.index > -1) {
-      // this.clearFilters();
-      this.fetchData({
-        filters: this.state.filters.toArray(),
-        page: 0,
-        limit: this.state.limit,
-        sort: this.state.sorted,
-        smartFilter: filterObj,
-      });
-
-      this.setState({
-        smartFilter: filterObj,
-        page: 0,
-        filters: this.state.filters,
-      });
-    } else {
-      this.reinitializeTable();
     }
   }
 
@@ -231,86 +137,14 @@ class PatientTable extends Component {
     });
   }
 
-  reinitializeTable() {
-    this.clearFilters();
-
-    this.setState({
-      smartFilter: null,
-      page: 0,
-      search: '',
-      limit: 15,
-      data: [],
-      patientIds: [],
-      expanded: {},
-    });
-
-    this.fetchData({
-      limit: 15,
-      page: 0,
-    });
-  }
-
-  clearFilters() {
-    const {
-      destroy,
-    } = this.props;
-
-    const filtersArray = ['demographics', 'appointments', 'practitioners', 'communications'];
-    filtersArray.forEach(filter => destroy(filter));
-
-    this.fetchData({
-      smartFilter: this.state.smartFilter,
-      page: this.state.page,
-      search: '',
-      limit: this.state.limit,
-      filters: [],
-      data: [],
-      patientIds: [],
-    });
-
-    this.setState({
-      filters: Map(),
-    });
-  }
-
-  removeFilter(index) {
-    const {
-      filters,
-    } = this.state;
-
-    let removed = false;
-    const size = filters.size;
-
-    if (size) {
-      removed = true;
-      const newState = filters.delete(`${index}`);
-
-      this.fetchData({
-        filters: newState.toArray(),
-        page: 0,
-        limit: this.state.limit,
-        sort: this.state.sorted,
-        smartFilter: this.state.smartFilter,
-      });
-
-      this.setState({
-        filters: newState,
-      });
-    }
-    if (removed && size - 1 === 0) {
-      this.setState({
-        filters: Map(),
-      });
-    }
-  }
-
   render() {
     const {
-      wasFetched,
       push,
       createEntityRequest,
       practitioners,
       arrayRemoveAll,
+      patientTable,
+      filters,
     } = this.props;
 
     const {
@@ -336,7 +170,7 @@ class PatientTable extends Component {
       },
       {
         Header: '#',
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{((this.state.page * this.state.limit) + props.index) + 1}</div></div>,
+        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{((patientTable.page * patientTable.limit) + props.index) + 1}</div></div>,
         filterable: false,
         sortable: false,
         maxWidth: 50,
@@ -493,10 +327,10 @@ class PatientTable extends Component {
         <Row>
           <Col xs={12} >
             <HeaderSection
-              totalPatients={this.state.totalPatients}
+              totalPatients={patientTable.totalPatients}
               createEntityRequest={createEntityRequest}
               reinitializeTable={this.reinitializeTable}
-              smartFilter={this.state.smartFilter}
+              smartFilter={patientTable.smartFilter}
               setSmartFilter={this.setSmartFilter}
               patientIds={this.state.patientIds}
             />
@@ -505,13 +339,13 @@ class PatientTable extends Component {
         <Row>
           <Col xs={10} className={styles.tableContainer}>
             <ReactTable
-              data={this.state.data}
-              page={this.state.page}
-              pages={Math.floor(this.state.totalPatients / this.state.limit)}
-              sorted={this.state.sorted}
-              defaultPageSize={this.state.limit}
-              pageSize={this.state.limit}
-              loading={!wasFetched}
+              data={patientTable.data}
+              page={patientTable.page}
+              pages={Math.floor(patientTable.totalPatients / patientTable.limit)}
+              sorted={patientTable.sort}
+              defaultPageSize={patientTable.limit}
+              pageSize={patientTable.limit}
+              loading={patientTable.isLoadingTable}
               expanded={this.state.expanded}
               pageSizeOptions={[15, 20, 25, 50, 100]}
               columns={columns}
@@ -537,7 +371,7 @@ class PatientTable extends Component {
                 this.pageSizeChange(pageSize, pageIndex);
               }}
               getTdProps={(state, rowInfo, column, instance) => {
-                let style = {};
+                const style = {};
 
                 if (rowInfo) {
                   style.background = patientIds.indexOf(rowInfo.original.id) > -1 ? '#efefef' : 'inherit';
@@ -607,10 +441,8 @@ class PatientTable extends Component {
               practitioners={practitioners}
               arrayRemoveAll={arrayRemoveAll}
               removeFilter={this.removeFilter}
-              filters={this.state.filters}
+              filters={filters}
               clearFilters={this.clearFilters}
-              onSearch={this.onSearch}
-              searchValue={this.state.search}
             />
           </Col>
         </Row>
@@ -620,27 +452,47 @@ class PatientTable extends Component {
 }
 
 PatientTable.propTypes = {
-
+  fetchEntities: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  fetchPatientTableData: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  destroy: PropTypes.func.isRequired,
+  arrayRemoveAll: PropTypes.func.isRequired,
+  setTableData: PropTypes.func.isRequired,
+  setSmartFilter: PropTypes.func.isRequired,
+  setFilters: PropTypes.func.isRequired,
+  removeFilter: PropTypes.func.isRequired,
+  clearFilters: PropTypes.func.isRequired,
+  practitioners: PropTypes.object,
+  patientTable: PropTypes.object,
+  filters: PropTypes.object,
 };
 
-function mapStateToProps({ apiRequests, entities }) {
+function mapStateToProps({ apiRequests, entities, patientTable }) {
   const wasFetched = (apiRequests.get('patientsTable') ? apiRequests.get('patientsTable').wasFetched : null);
   const practitioners = entities.getIn(['practitioners', 'models']);
 
-
+  const filters = patientTable.get('filters');
   return {
     wasFetched,
     practitioners,
+    filters,
+    patientTable: patientTable.toJS(),
   };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
-    fetchEntitiesRequest,
     createEntityRequest,
+    fetchPatientTableData,
     push,
     destroy,
     arrayRemoveAll,
+    setTableData,
+    setSmartFilter,
+    setFilters,
+    removeFilter,
+    clearFilters,
   }, dispatch);
 }
 

@@ -1,16 +1,15 @@
 
-import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { List, ListItem } from '../../../../library';
 import styles from './styles.scss';
 
 export default function SmartFilters(props) {
   const {
-    handleSubmit,
-    addFilterToTable,
     setSmartFilter,
     smartFilter,
   } = props;
+
   const smartFilters = [
     {
       index: -1,
@@ -98,4 +97,9 @@ export default function SmartFilters(props) {
       })}
     </List>
   );
+}
+
+SmartFilters.propTypes = {
+  setSmartFilter: PropTypes.func.isRequired,
+  smartFilter: PropTypes.object,
 }

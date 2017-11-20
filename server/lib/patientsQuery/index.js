@@ -163,7 +163,12 @@ export async function PatientQuery(config) {
 
     patients = await mostBusinessSinglePatient(moment().subtract(1, 'years').toISOString(), new Date(), accountId, ids, order);
 
-    const patientData = [{ totalPatients: patientCount, data: patients }];
+    const patientTotal = { id: 'totalPatients',
+      count: patientCount,
+    };
+
+    patients.push(patientTotal);
+    const patientData = patients;
 
     return patientData;
   } catch (error) {

@@ -21,9 +21,9 @@ export default function Actions(props) {
 
   return (
     <List className={styles.actionsContainer}>
-      {actionsList.map((action) => {
+      {actionsList.map((action, index) => {
         return (
-          <ListItem className={styles.actionItem} onClick={() =>{} }>
+          <ListItem key={`patientIds_${index}`} className={styles.actionItem} onClick={() =>{} }>
             {action}
           </ListItem>
         );
@@ -31,3 +31,7 @@ export default function Actions(props) {
     </List>
   );
 }
+
+Actions.propTypes = {
+  patientIds: PropTypes.arrayOf(String),
+};

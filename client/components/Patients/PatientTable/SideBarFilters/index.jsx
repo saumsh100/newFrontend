@@ -27,14 +27,14 @@ class SideBarFilters extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const currentFilters = this.props.filters.toArray();
+    /*const currentFilters = this.props.filters.toArray();
     const newFilters = newProps.filters.toArray();
 
     if (newFilters.length === 0 && currentFilters.length > 0) {
       this.setState({
         filterTags: Map(),
       });
-    }
+    }*/
   }
 
   displayFilter(index) {
