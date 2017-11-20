@@ -82,7 +82,7 @@ class PatientTable extends Component {
     this.props.setSmartFilter({ smFilter: filterObj });
     this.fetchData();
   }
-  
+
   fetchData() {
     this.props.fetchPatientTableData();
   }
