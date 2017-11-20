@@ -16,7 +16,7 @@ describe('connectorWatch', () => {
     await wipeAllModels();
   });
 
-  describe('checkWhichAccountsAreReturned - only return between 10min - 3 hour exclusive', () => {
+  describe('checkWhichAccountsAreReturned - only return between 30 min - 3 hour exclusive', () => {
     beforeEach(async () => {
       const lastSyncDate = moment({
         years: 2010,
@@ -28,26 +28,26 @@ describe('connectorWatch', () => {
       await Account.update({ lastSyncDate }, { where: {} });
     });
 
-    test('should return 1 as last sync was 11 mins ago', async () => {
+    test('should return 1 as last sync was 31 mins ago', async () => {
       const date = moment({
         years: 2010,
         months: 3,
         date: 5,
         hours: 15,
-        minutes: 21,
+        minutes: 41,
       });
       const account = await getAccountsConnectorDown(date);
 
       expect(account.length).toBe(1);
     });
 
-    test('should return 0 as last sync was 10 mins ago', async () => {
+    test('should return 0 as last sync was 30 mins ago', async () => {
       const date = moment({
         years: 2010,
         months: 3,
         date: 5,
         hours: 15,
-        minutes: 20,
+        minutes: 40,
       });
       const account = await getAccountsConnectorDown(date);
 
