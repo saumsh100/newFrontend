@@ -1,5 +1,7 @@
-import React, { PropTypes } from 'react';
-import moment from 'moment'
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Grid, Row, Col } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import RecallDropDowns from '../../Shared/RecallDropDowns';
@@ -81,3 +83,7 @@ export default function DataTable(props) {
     </Grid>
   )
 }
+
+DataTable.propTypes = {
+  patient: PropTypes.object,
+};

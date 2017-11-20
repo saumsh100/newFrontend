@@ -1,7 +1,8 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Icon, Input } from '../../../library';
+import { Icon } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
 import Practitioners from './Practitioners';
@@ -24,17 +25,6 @@ class SideBarFilters extends Component {
     this.removeTag = this.removeTag.bind(this);
     this.addTags = this.addTags.bind(this);
     this.clearTags = this.clearTags.bind(this);
-  }
-
-  componentWillReceiveProps(newProps) {
-    /*const currentFilters = this.props.filters.toArray();
-    const newFilters = newProps.filters.toArray();
-
-    if (newFilters.length === 0 && currentFilters.length > 0) {
-      this.setState({
-        filterTags: Map(),
-      });
-    }*/
   }
 
   displayFilter(index) {
@@ -84,7 +74,7 @@ class SideBarFilters extends Component {
     removeFilter(filter.indexFunc);
 
     const newTags = filterTags.delete(`${filter.indexFunc}`);
-    console.log(newTags)
+
     if (newTags.isEmpty()) {
       this.setState({
         filterTags: Map(),
@@ -408,9 +398,6 @@ class SideBarFilters extends Component {
   render() {
     const {
       practitioners,
-      clearFilters,
-      onSearch,
-      searchValue,
     } = this.props;
 
     const {
@@ -512,5 +499,12 @@ class SideBarFilters extends Component {
     );
   }
 }
+
+SideBarFilters.propTypes = {
+  practitioners: PropTypes.object.isRequired,
+  clearFilters: PropTypes.func.isRequired,
+  arrayRemoveAll: PropTypes.func.isRequired,
+  removeFilter: PropTypes.func.isRequired,
+};
 
 export default SideBarFilters;

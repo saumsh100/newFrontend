@@ -1,9 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
-import Loader from 'react-loader';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card, Event, Grid, Row, Col } from '../../../library';
+import { Grid, Row, Col } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import DataTable from './DataTable';
 import EventsTable from './EventsTable';
@@ -64,6 +63,12 @@ class PatientSubComponent extends Component {
   }
 }
 
+PatientSubComponent.propTypes = {
+  patient: PropTypes.object.isRequired,
+  events: PropTypes.object.isRequired,
+  wasFetched: PropTypes.bool.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+}
 
 function mapStateToProps({ entities, apiRequests }, { patient }) {
   const wasFetched = (apiRequests.get('getPatientEvents') ? apiRequests.get('getPatientEvents').wasFetched : null);

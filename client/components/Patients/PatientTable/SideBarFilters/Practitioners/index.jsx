@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Field, FormSection } from '../../../../library';
 import { SortByFirstName } from '../../../../library/util/SortEntities';
 
@@ -59,4 +60,9 @@ export default function Practitioners(props) {
       </div>
     </Form>
   )
+}
+
+Practitioners.propTypes = {
+  handlePractitioners: PropTypes.func.isRequired,
+  practitioners: PropTypes.object.isRequired,
 }

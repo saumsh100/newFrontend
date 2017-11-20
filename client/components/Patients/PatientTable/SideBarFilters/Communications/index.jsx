@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { FormSection, Field, Form } from '../../../../library';
 import styles from '../styles.scss';
 
@@ -157,4 +158,8 @@ export default function Communications(props) {
       </div>
     </Form>
   );
+}
+
+Communications.propTypes = {
+  handleCommunications: PropTypes.func.isRequired,
 }

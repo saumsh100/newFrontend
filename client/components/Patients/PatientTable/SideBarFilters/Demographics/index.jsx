@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Field, FormSection } from '../../../../library';
 import styles from '../styles.scss';
 
@@ -89,4 +90,8 @@ export default function Demographics(props) {
       </div>
     </Form>
   );
+}
+
+Demographics.propTypes = {
+  handleDemographics: PropTypes.func.isRequired,
 }

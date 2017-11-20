@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+
+import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Event, Loading } from '../../../library';
 import styles from './styles.scss';
@@ -6,7 +8,6 @@ import styles from './styles.scss';
 export default function EventsTable(props) {
   const {
     events,
-    patientId,
     wasFetched,
   } = props;
 
@@ -43,3 +44,8 @@ export default function EventsTable(props) {
     </div>
   );
 }
+
+EventsTable.propTypes = {
+  events: PropTypes.object.isRequired,
+  wasFetched: PropTypes.bool.isRequired,
+};

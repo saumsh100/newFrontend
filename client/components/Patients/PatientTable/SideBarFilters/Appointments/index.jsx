@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Field, FormSection } from '../../../../library';
 import { parseNum, notNegative } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
@@ -124,3 +125,7 @@ export default function Appointments(props) {
     </Form>
   );
 }
+
+Appointments.propTypes = {
+  handleAppointments: PropTypes.func.isRequired,
+};

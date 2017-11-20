@@ -30,3 +30,8 @@ export default function FilterTags(props) {
     </div>
   );
 }
+
+FilterTags.propTypes = {
+  filterTags: PropTypes.object.isRequired,
+  removeTag: PropTypes.func.isRequired,
+}
