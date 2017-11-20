@@ -98,6 +98,7 @@ const ModelAttributes = {
     'primaryInsuranceAmount',
     'secondaryInsuranceAmount',
     'patientAmount',
+    'isCompleted',
     'discountAmount',
     'createdAt',
     'updatedAt',
