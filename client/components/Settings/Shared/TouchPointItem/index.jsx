@@ -10,6 +10,14 @@ import {
 } from '../../../library';
 import styles from './styles.scss';
 
+export function TouchPointLabel(props) {
+  return (
+    <div className={styles.reminderLabel}>
+      {props.title}
+    </div>
+  );
+}
+
 export default function TouchPointItem(props) {
   const {
     toggleComponent,

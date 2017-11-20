@@ -20,7 +20,7 @@ import {
 } from '../../../../library';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
-import TouchPointItem from '../../../Shared/TouchPointItem';
+import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
 import styles from '../styles.scss';
 
 const iconsMap = {
@@ -281,9 +281,7 @@ class RemindersItem extends Component {
         )}
 
         labelComponent={(
-          <div className={styles.reminderLabel}>
-            {`${ordinalSuffix(index + 1)} Reminder`}
-          </div>
+          <TouchPointLabel title={`${ordinalSuffix(index + 1)} Reminder`} />
         )}
 
         mainComponent={(

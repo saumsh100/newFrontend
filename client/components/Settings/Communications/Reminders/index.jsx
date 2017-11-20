@@ -20,7 +20,8 @@ import SettingsCard from '../../Shared/SettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
 import ReminderPreview from './ReminderPreview';
-import TouchPointItem from '../../Shared/TouchPointItem';
+import IconCircle from '../../Shared/IconCircle';
+import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 class Reminders extends Component {
@@ -181,14 +182,19 @@ class Reminders extends Component {
               })}
               <TouchPointItem
                 noLines
-                labelComponent={(
-                  <div>
-                    Appointment
-                  </div>
-                )}
-
+                className={styles.bottomItem}
                 mainComponent={(
-                  <Icon icon="calendar" />
+                  <div className={styles.bottomBox}>
+                    <div className={styles.reminderIconContainer}>
+                      <IconCircle
+                        icon="calendar"
+                        color="blue"
+                      />
+                    </div>
+                    <div className={styles.bottomLabel}>
+                      <TouchPointLabel title="Appointment Date" />
+                    </div>
+                  </div>
                 )}
               />
             </Col>

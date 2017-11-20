@@ -152,7 +152,7 @@
 }
 
 .inputFont {
-  color: $primary-darkgrey;
+  // color: $primary-darkgrey;
   font-size: 14px;
 }
 
@@ -235,6 +235,32 @@ $small-icon-width: 24px;
   background-color: $primary-green;
 }
 
+.bottomItem {
+  cursor: default;
+}
+
+.bottomBox {
+  border-top: 1px solid $primary-blue;
+}
+
+.bottomLabel {
+  height: 50px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $primary-white;
+  border: 1px solid $primary-blue;
+  margin-left: 0;
+  width: 80%;
+  position: relative;
+  top: -75px;
+  float: right;
+  > div {
+    color: $primary-blue !important;
+  }
+}
+
 .toggleCol {
   padding-top: 15px;
 }
@@ -245,7 +271,6 @@ $small-icon-width: 24px;
 
 .reminderLabel {
   text-align: center;
-  padding-right: 40px;
   composes: cardHeaderTitle from 'sass-loader!../../../../fonts.scss';
 }
 

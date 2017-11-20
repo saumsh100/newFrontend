@@ -119,7 +119,7 @@
   border-top: 1px solid $primary-gray;
   background-image: linear-gradient(to bottom, $primary-gray 50%, transparent 0%);
   background-position: left;
-  background-size: 2px 14px;
+  background-size: 1px 14px;
   background-repeat: repeat-y;
 }
 
@@ -236,17 +236,18 @@ $small-icon-width: 24px;
 }
 
 .toggleCol {
-  padding-top: 15px;
+  padding-top: 14px;
 }
 
 .labelCol {
-  padding-top: 10px;
+  padding-top: 13px;
+  padding-right: 33px;
 }
 
 .reminderLabel {
   text-align: center;
-  padding-right: 40px;
   composes: cardHeaderTitle from 'sass-loader!../../../../fonts.scss';
+  font-size: 16px;
 }
 
 .downIconWrapper {
