@@ -12,10 +12,14 @@
   color: $primary-darkgrey;
   padding-top: 20px;
 }
+
 .subHeader:first-child {
   padding-top: 0px;
 }
 
+.text {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+}
 .grid {
   box-sizing: border-box;
   padding: 20px 35px 10px 35px;

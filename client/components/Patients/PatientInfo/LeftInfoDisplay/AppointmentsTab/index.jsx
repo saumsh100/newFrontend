@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Row, Col } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import RecallDropDowns from '../../../Shared/RecallDropDowns';
@@ -91,3 +92,7 @@ export default function AppointmentsTab(props) {
     </Grid>
   )
 }
+
+AppointmentsTab.propTypes = {
+  patient: PropTypes.object.isRequired,
+};

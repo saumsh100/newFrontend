@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { Card, Modal, Tabs, Tab, Button, Icon } from '../../../library';
 import PersonalForm from './PersonalForm';
@@ -51,7 +52,7 @@ class EditDisplay extends Component {
   handleSubmit(values) {
     const {
       updateEntityRequest,
-      patient
+      patient,
     } = this.props;
 
     values.isSyncedWithPms = false;
@@ -178,5 +179,10 @@ class EditDisplay extends Component {
     );
   }
 }
+
+EditDisplay.propTypes = {
+  patient: PropTypes.object.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+};
 
 export default EditDisplay;

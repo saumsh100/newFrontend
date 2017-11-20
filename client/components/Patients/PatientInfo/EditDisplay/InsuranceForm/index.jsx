@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import styles from '../styles.scss';
 
@@ -55,3 +56,7 @@ export default function InsuranceForm(props) {
     </Form>
   )
 }
+
+InsuranceForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+};

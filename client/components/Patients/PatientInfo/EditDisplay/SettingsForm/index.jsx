@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import styles from '../styles.scss';
 
@@ -95,3 +96,8 @@ export default function SettingsForm(props) {
     </Form>
   )
 }
+
+SettingsForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  patient: PropTypes.object,
+};

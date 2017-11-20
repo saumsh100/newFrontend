@@ -10,12 +10,12 @@ export default function PersonalTab(props) {
   } = props;
 
   const address = patient && patient.address ? patient.address.street : '';
-  const componentAddress = ( <div>
-      <div>{patient.address.street} </div>
-      <div>{patient.address.country} </div>
-      <div>{patient.address.state} </div>
-      <div>{patient.address.zipCode} </div>
-    </div>
+  const componentAddress = ( <div className={styles.text}>
+    <div>{patient.address.street} </div>
+    <div>{patient.address.country} </div>
+    <div>{patient.address.state} </div>
+    <div>{patient.address.zipCode} </div>
+  </div>
   );
 
   return (
@@ -75,3 +75,7 @@ export default function PersonalTab(props) {
     </Grid>
   )
 }
+
+PersonalTab.propTypes = {
+  patient: PropTypes.object.isRequired,
+};

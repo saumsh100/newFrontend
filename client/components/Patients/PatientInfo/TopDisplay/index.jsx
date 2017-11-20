@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Card, Avatar, Icon, Grid, Row, Col, } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
@@ -91,9 +92,12 @@ export default function TopDisplay(props) {
               </Col>
             </Row>
           </Grid>
-
         </div>
       </div>
     </Card>
   );
 }
+
+TopDisplay.propTypes = {
+  patient: PropTypes.instanceOf(Object),
+};

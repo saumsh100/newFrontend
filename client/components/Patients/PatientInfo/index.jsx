@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -81,6 +82,7 @@ class PatientInfo extends Component {
 PatientInfo.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
+  match: PropTypes.instanceOf(Object),
 };
 
 

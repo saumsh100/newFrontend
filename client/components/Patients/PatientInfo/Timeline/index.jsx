@@ -1,9 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
-import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card, Event, Loading } from '../../../library';
+import { Card, Loading } from '../../../library';
 import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import EventDateSections from './EventDateSections';
 import styles from './styles.scss';
@@ -11,9 +11,6 @@ import styles from './styles.scss';
 class Timeline extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loaded: false,
-    };
   }
 
   componentDidMount() {
@@ -26,17 +23,13 @@ class Timeline extends Component {
       id: 'getPatientEvents',
       url: `/api/patients/${this.props.patientId}/events`,
       params: query,
-    }).then(() => {
-      this.setState({
-        loaded: true,
-      });
     });
   }
 
   render() {
     const {
       events,
-      wasFetched
+      wasFetched,
     } = this.props;
 
     if (!wasFetched) {
@@ -74,9 +67,10 @@ class Timeline extends Component {
         <div className={styles.eventsContainer}>
           <div className={styles.verticalLine}>&nbsp;</div>
           <div className={styles.eventsList}>
-            {dateSections.length ? dateSections.map((date) => {
+            {dateSections.length ? dateSections.map((date, index) => {
               return (
                 <EventDateSections
+                  key={`eventSection_${index}`}
                   dateHeader={date}
                   events={dateObj[date]}
                 />
@@ -89,8 +83,14 @@ class Timeline extends Component {
   }
 }
 
-function mapStateToProps({ entities, apiRequests }, { patientId }) {
+Timeline.propTypes = {
+  fetchEntitiesRequest: PropTypes.func,
+  events: PropTypes.arrayOf(Object),
+  wasFetched: PropTypes.bool,
+  patientId: PropTypes.string,
+};
 
+function mapStateToProps({ entities, apiRequests }, { patientId }) {
   const wasFetched = (apiRequests.get('getPatientEvents') ? apiRequests.get('getPatientEvents').wasFetched : null);
 
   const events = entities.getIn(['events', 'models']).toArray().filter((event) => {
@@ -107,7 +107,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     fetchEntitiesRequest,
-  }, dispatch)
+  }, dispatch);
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

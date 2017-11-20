@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
 import { Event } from '../../../../library';
@@ -24,6 +25,7 @@ export default function EventDateSections (props) {
       {events.map((event) => {
         return (
           <Event
+            key={`eventSection_${event.id}`}
             data={event.get('metaData')}
             type={event.get('type').toLowerCase()}
           />
@@ -32,3 +34,8 @@ export default function EventDateSections (props) {
     </div>
   );
 }
+
+EventDateSections.propTypes = {
+  events: PropTypes.arrayOf(Object),
+  dateHeader: PropTypes.string,
+};

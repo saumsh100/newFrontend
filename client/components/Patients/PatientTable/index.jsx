@@ -300,7 +300,7 @@ class PatientTable extends Component {
         className: styles.colBg,
       },
       {
-        Header: 'Due for Hygiene',
+        Header: 'Due for Hygiene (9mo)',
         Cell: (props) => {
           return (
             <HygieneColumn

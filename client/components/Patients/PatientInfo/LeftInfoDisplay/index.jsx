@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from '../../../library';
 import styles from './styles.scss';
 import AppointmentsTab from './AppointmentsTab/index';
@@ -7,7 +8,7 @@ import PersonalTab from './PersonalTab';
 
 class DataDisplay extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       tabIndex: 0,
     };
@@ -23,7 +24,7 @@ class DataDisplay extends Component {
 
   render() {
     const {
-      patient
+      patient,
     } = this.props;
 
     return (
@@ -42,5 +43,9 @@ class DataDisplay extends Component {
     );
   }
 }
+
+DataDisplay.propTypes = {
+  patient: PropTypes.object.isRequired,
+};
 
 export default DataDisplay;

@@ -1,6 +1,6 @@
 
-import React, { PropTypes } from 'react';
-import { Grid, Row, Col, Form, Field } from '../../../../library';
+import React from 'react';
+import PropTypes from 'prop-types';
 import styles from '../styles.scss';
 
 export default function FamilyForm(props) {
@@ -16,3 +16,6 @@ export default function FamilyForm(props) {
     </div>
   )
 }
+FamilyForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+};

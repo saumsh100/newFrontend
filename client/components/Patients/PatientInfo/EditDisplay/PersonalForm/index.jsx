@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Clinic/Address/selectConstants';
@@ -183,3 +184,10 @@ export default function PersonalForm(props) {
     </Form>
   )
 }
+
+PersonalForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  patient: PropTypes.object,
+  country: PropTypes.string,
+  setCountry: PropTypes.func.isRequired,
+};
