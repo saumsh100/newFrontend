@@ -1,116 +1,11 @@
 
 @import '../../../../ui';
 
-.headerTitle {
-}
-
-.toggle {
-  display: -webkit-box;
-  display: flex;
-  align-items: center;
-  align-content: center;
-  justify-content: space-between;
-  max-width: 200px;
-
-  &_text {
-    font-weight: $large-weight;
-    padding-right: 10px;
-    width: 80px;
-  }
-}
-
 .listItem {
   // min-height: 80px;
   // display: flex;
   // justify-content: space-between;
   cursor: pointer;
-}
-
-.deleteButtonWrapper {
-  display: none;
-  position: relative;
-  top: 30px;
-}
-
-.edit {
-  margin-right: 30px;
-  //background: $clr-dark-blue;
-}
-
-.createButtonContainer {
-  padding-bottom: 20px;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-}
-
-.list {
-  font-family: "Gotham-Book";
-  font-size: 1.0em;
-}
-
-.formContainer {
-  padding-bottom: 15px;
-
-  &_select {
-    padding-top: 10px;
-  }
-}
-
-.header {
-  width: 100%;
-  display: flex;
-  height: 65px;
-  justify-content: space-between;
-  border-bottom: 1px solid #efefef;
-}
-
-.body {
-  flex: 1;
-  overflow: auto;
-}
-
-.fa-envelope {
-  color: $primary-blue;
-  &:hover {
-    color: darken($primary-blue, 5%);
-  }
-}
-
-.fa-phone {
-  color: $primary-yellow;
-  &:hover {
-    color: darken($primary-yellow, 5%);
-  }
-}
-
-.fa-comment {
-  color: $primary-color;
-  &:hover {
-    color: darken($primary-color, 5%);
-  }
-}
-
-.disabledPage {
-  width: 100%;
-  height: calc(100vh - 130px);
-  position: relative;
-  overflow: hidden;
-  &_text {
-    font-size: 20px;
-    line-height: 1.5em;
-    width: 700px;
-    color: $inactive-color;
-    text-align: center;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%)
-  }
 }
 
 .linesBox {
@@ -128,113 +23,6 @@
   border-top: 1px solid $primary-green;
 }
 
-.secondaryLinesBox {
-  margin-left: auto;
-  width: 75%;
-  height: 54px;
-  border-left: 1px solid $primary-gray;
-  border-bottom: 1px solid $primary-gray;
-  position: relative;
-  top: -53px;
-}
-
-.secondaryLinesBoxSelected {
-  @extend .secondaryLinesBox;
-  border-left: 1px solid $primary-green;
-  border-bottom: 1px solid $primary-green;
-}
-
-.dropdownsWrapper {
-  margin-left: auto;
-  width: 91%;
-  position: relative;
-  top: -20px;
-}
-
-.inputFont {
-  color: $primary-darkgrey;
-  font-size: 14px;
-}
-
-.dropdownSelect {
-  background-color: white;
-  border: 1px solid $primary-gray;
-  padding: 0;
-  // For inputs
-  > input {
-    @extend .inputFont;
-    padding: 10px;
-    box-sizing: border-box;
-    border-bottom: none;
-    height: 40px;
-  }
-
-  // For dropdowns
-  > div:not(:last-child) {
-    @extend .inputFont;
-    border-bottom: none;
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  > :global(.dd-menu-items) {
-    margin: 2px 0 0 0;
-  }
-}
-
-.dropdownSelectSelected {
-  @extend .dropdownSelect;
-  border: 1px solid $primary-green;
-}
-
-.topRow {
-  position: relative;
-  top: -24px;
-}
-
-.bottomRow {
-  position: relative;
-  bottom: 12px;
-}
-
-.rightDropdown {
-  padding-left: 10px;
-}
-
-// Needs to be same as IconCircle component
-$width: 36px;
-$wrapper-thickness: 8px;
-
-.reminderIconContainer {
-  position: relative;
-  top: -($width + 2 * $wrapper-thickness) / 2;
-  left: -($width + 2* $wrapper-thickness) / 2;
-}
-
-.smallIconContainer {
-  position: relative;
-  top: 44px;
-  left: -12px;
-}
-
-$small-icon-width: 24px;
-
-.smallReminderSelectWrapperCircle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: $small-icon-width + 1;
-  height: $small-icon-width;
-  border-radius: $small-icon-width / 2;
-  color: white;
-  background-color: $primary-gray;
-}
-
-.smallReminderSelectWrapperCircleSelected {
-  @extend .smallReminderSelectWrapperCircle;
-  background-color: $primary-green;
-}
-
 .toggleCol {
   padding-top: 14px;
 }
@@ -247,7 +35,8 @@ $small-icon-width: 24px;
 .reminderLabel {
   text-align: center;
   composes: cardHeaderTitle from 'sass-loader!../../../../fonts.scss';
-  font-size: 16px;
+  font-size: 15px;
+  color: black;
 }
 
 .downIconWrapper {
@@ -257,26 +46,6 @@ $small-icon-width: 24px;
   > i {
     color: $primary-gray;
   }
-}
-
-.finalItem {
-  height: 100px;
-}
-
-.remindersGrid {
-  min-width: 1300px;
-}
-
-.remindersRow {
-  height: 100%;
-}
-
-.remindersListCol {
-  box-sizing: border-box;
-  padding: 40px;
-  padding-right: 0;
-  border-right: 1px solid #e6e6e6;
-  overflow-y: scroll;
 }
 
 .connectionLine {

@@ -21,7 +21,7 @@ import {
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
-import styles from '../styles.scss';
+import styles from './styles.scss';
 
 const iconsMap = {
   sms: 'comment',

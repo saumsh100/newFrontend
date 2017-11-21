@@ -1,22 +1,16 @@
 
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
-import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import {
-  Grid,
-  Row,
-  Col,
-  Icon,
-  Header,
   Button,
   RemoteSubmitButton,
   DialogBox,
 } from '../../../library';
 import { numTypeToSeconds } from '../../../../../server/util/time';
-import SettingsCard from '../../Shared/SettingsCard';
+import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
 import ReminderPreview from './ReminderPreview';
@@ -110,30 +104,6 @@ class Reminders extends Component {
       { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { form: 'newReminder' } },
     ];
 
-
-    /*const showComponent = this.props.activeAccount.canSendReminders || this.props.role === 'SUPERADMIN' ? (<div>
-      <div className={styles.header}>
-        <Header title={'Reminders'} className={styles.headerTitle} />
-      </div>
-      <div className={styles.createButtonContainer}>
-        <Button
-          className={styles.edit}
-          onClick={this.openModal}
-          data-test-id="createNewReminder"
-          icon="plus"
-          secondary
-        >
-          Add New Reminder
-        </Button>
-      </div>
-      {this.props.reminders.size > 0 ? <Header title={'Reminders List'} contentHeader /> : null }
-      {reminders}
-    </div>) : (<div className={styles.disabledPage}>
-      <div className={styles.disabledPage_text}>
-        Reminders have been disabled. Please contact your CareCru account manager for further assistance.
-      </div>
-    </div>);*/
-
     const { activeAccount } = this.props;
     const { selectedReminderId } = this.state;
     const selectedReminder = this.props.reminders.get(selectedReminderId);
@@ -149,11 +119,10 @@ class Reminders extends Component {
     }
 
     return (
-      <SettingsCard
+      <CommunicationSettingsCard
         title="Reminders Settings"
         rightActions={(
           <Button
-            className={styles.edit}
             onClick={this.toggleAdding}
             data-test-id="createNewReminder"
             color="blue"
@@ -161,48 +130,43 @@ class Reminders extends Component {
             Add
           </Button>
         )}
-      >
-        <Grid className={styles.remindersGrid}>
-          <Row className={styles.remindersRow}>
-            <Col
-              xs={6}
-              className={styles.remindersListCol}
-            >
-              {this.props.reminders.toArray().map((reminder, i) => {
-                return (
-                  <RemindersItem
-                    key={reminder.id}
-                    reminder={reminder}
-                    account={this.props.activeAccount}
-                    index={i}
-                    selectReminder={this.selectReminder}
-                    selected={reminder.id === selectedReminderId}
-                  />
-                );
-              })}
-              <TouchPointItem
-                noLines
-                className={styles.bottomItem}
-                mainComponent={(
-                  <div className={styles.bottomBox}>
-                    <div className={styles.reminderIconContainer}>
-                      <IconCircle
-                        icon="calendar"
-                        color="blue"
-                      />
-                    </div>
-                    <div className={styles.bottomLabel}>
-                      <TouchPointLabel title="Appointment Date" />
-                    </div>
+
+        leftColumn={(
+          <div>
+            {this.props.reminders.toArray().map((reminder, i) => {
+              return (
+                <RemindersItem
+                  key={reminder.id}
+                  reminder={reminder}
+                  account={this.props.activeAccount}
+                  index={i}
+                  selectReminder={this.selectReminder}
+                  selected={reminder.id === selectedReminderId}
+                />
+              );
+            })}
+            <TouchPointItem
+              noLines
+              className={styles.bottomItem}
+              mainComponent={(
+                <div className={styles.bottomBox}>
+                  <div className={styles.bottomIconContainer}>
+                    <IconCircle
+                      icon="calendar"
+                      color="blue"
+                    />
                   </div>
-                )}
-              />
-            </Col>
-            <Col xs={6}>
-              {previewComponent}
-            </Col>
-          </Row>
-        </Grid>
+                  <div className={styles.bottomLabel}>
+                    <TouchPointLabel title="Appointment" />
+                  </div>
+                </div>
+              )}
+            />
+          </div>
+        )}
+
+        rightColumn={previewComponent}
+      >
         <DialogBox
           actions={actionsNew}
           title="Add Reminder"
@@ -216,7 +180,7 @@ class Reminders extends Component {
             sendEdit={this.newReminder}
           />
         </DialogBox>
-      </SettingsCard>
+      </CommunicationSettingsCard>
     );
   }
 }
