@@ -558,7 +558,7 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
       });
 
       const data = format(req, res, 'patients', docs);
-      return res.status(201).send(Object.assign({}, data));
+      return res.status(201).send(data);
     })
     .catch(next);
 });
@@ -598,7 +598,7 @@ patientsRouter.put('/connector/batch', checkPermissions('patients:update'),
         });
 
         const data = format(req, res, 'patients', docs);
-        return res.status(201).send(Object.assign({}, data));
+        return res.status(201).send(data);
       })
       .catch(next);
   });

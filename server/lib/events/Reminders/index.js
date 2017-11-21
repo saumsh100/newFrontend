@@ -104,12 +104,13 @@ function sendReminderUpdatedSocket(sub, io) {
         correspondence.isSyncedWithPms = false;
         correspondence.contactedAt = new Date();
         correspondence.id = undefined;
+        correspondence.pmsId = undefined;
 
         const newCorrespondence = await Correspondence.create(correspondence);
 
         console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
 
-        io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondences', [newCorrespondence.id]);
+        io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondence', [newCorrespondence.id]);
       }
     } catch (error) {
       console.error(error);
