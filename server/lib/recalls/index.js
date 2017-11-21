@@ -150,6 +150,7 @@ export async function computeRecallsAndSend({ date, publishSocket }) {
       as: 'recalls',
       where: {
         isDeleted: false,
+        isActive: true,
       },
     }],
   });

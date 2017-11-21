@@ -6,6 +6,9 @@ import {
   SentReminder,
 } from '../../_models';
 import { generateOrganizedPatients } from '../comms/util';
+import { h2s } from '../../util/time';
+
+const BUFFER_SECONDS =  h2s(1);
 
 // Made an effort to throw all easily testable functions into here
 export async function mapPatientsToReminders({ reminders, account, date }) {
@@ -91,7 +94,11 @@ export function shouldSendReminder({ appointment, reminder }) {
   const { sentReminders, patient } = appointment;
   const preferences = patient.preferences;
 
-  // TODO: dont check reminderId, keep it to lengthSeconds, cause they can delete and add different ones
+  // TODO: get lastSuccessfulSentReminder and is within lastReminder to this reminder
+  // TODO: Check if this is within the BUFFER_SECONDS
+
+
+  // We check lengthSeconds because they can change and add different reminders
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
     return (s.reminderId === reminder.id) || (reminder.lengthSeconds >= s.lengthSeconds);
   });

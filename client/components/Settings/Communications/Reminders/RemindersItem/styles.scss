@@ -128,6 +128,9 @@ $small-icon-width: 24px;
   border-radius: $small-icon-width / 2;
   color: white;
   background-color: $primary-gray;
+  > i {
+    font-size: 0.8em;
+  }
 }
 
 .smallReminderSelectWrapperCircleSelected {
