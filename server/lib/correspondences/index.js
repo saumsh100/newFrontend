@@ -19,6 +19,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
   const sentreminders = await SentReminder.findAll({
     where: {
       accountId,
+      isSent: true,
       id: {
         $notIn: sentReminderIds,
       },
@@ -66,6 +67,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
   const sentreminders = await SentReminder.findAll({
     where: {
       accountId,
+      isSent: true,
       id: {
         $notIn: sentReminderIds,
       },
@@ -114,6 +116,7 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
   const sentRecalls = await SentRecall.findAll({
     where: {
       accountId,
+      isSent: true,
       id: {
         $notIn: sentRecallsIds,
       },
