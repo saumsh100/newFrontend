@@ -103,6 +103,7 @@ function sendReminderUpdatedSocket(sub, io) {
         correspondence.isSyncedWithPms = false;
         correspondence.contactedAt = new Date();
         correspondence.id = undefined;
+        correspondence.pmsId = undefined;
 
         const newCorrespondence = await Correspondence.create(correspondence);
 
