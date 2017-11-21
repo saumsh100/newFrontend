@@ -85,14 +85,27 @@ const Time = {
     return { type, num };
   },
 
+  secondsToNumWeeks(seconds) {
+    const weekSeconds = Time.w2s(1);
+    return parseInt(seconds / weekSeconds);
+  },
+
   numTypeToSeconds(num, type) {
-    if (type !== 'hours' && type !== 'days') {
+    if (type !== 'hours' && type !== 'days' && type !== 'weeks') {
       throw new Error('not a valid type to convert to seconds');
     }
 
+    const weekSeconds = Time.w2s(1);
     const daySeconds = Time.d2s(1);
     const hourSeconds = Time.h2s(1);
-    const secondsMultiplier = type === 'hours' ? hourSeconds : daySeconds;
+
+    let secondsMultiplier = weekSeconds;
+    if (type === 'days') {
+      secondsMultiplier = daySeconds;
+    } else if (type === 'hours') {
+      secondsMultiplier = hourSeconds;
+    }
+
     return num * secondsMultiplier;
   },
 

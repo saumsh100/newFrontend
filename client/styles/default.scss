@@ -135,6 +135,22 @@
     }
   }
 
+  .CareCruToggle-yellow.react-toggle--checked {
+    &:hover {
+      .react-toggle-track {
+        background-color: darken($primary-yellow, 2%);
+      }
+    }
+
+    .react-toggle-track {
+      background-color: $primary-yellow;
+    }
+
+    .react-toggle-thumb {
+      border-color: $primary-yellow;
+    }
+  }
+
   .dd-menu-items {
     width: 100%;
     min-width: 100px;

@@ -27,6 +27,10 @@ export default function TouchPointItem(props) {
     selected,
     color,
     noLines,
+    toggleClass,
+    labelClass,
+    linesBoxClass,
+    connectLinesClass,
     ...otherProps,
   } = props;
 
@@ -40,14 +44,14 @@ export default function TouchPointItem(props) {
     >
       <Grid>
         <Row>
-          <Col xs={1} className={styles.toggleCol}>
+          <Col xs={1} className={classNames(toggleClass, styles.toggleCol)}>
             {toggleComponent}
           </Col>
-          <Col xs={3} className={styles.labelCol}>
+          <Col xs={3} className={classNames(labelClass, styles.labelCol)}>
             {labelComponent}
           </Col>
           <Col xs={7}>
-            <div className={noLines ? null : (selected ? styles.linesBoxSelected : styles.linesBox)}>
+            <div className={classNames(linesBoxClass, noLines ? styles.linesBox : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
               {mainComponent}
               {/*<div className={styles.downIconWrapper}>
                   <Icon icon="caret-down" size={2} />
@@ -55,7 +59,7 @@ export default function TouchPointItem(props) {
             </div>
           </Col>
           <Col xs={1}>
-            <div className={selected ? styles.connectionLineSelected : styles.connectionLine}>
+            <div className={classNames(connectLinesClass, selected ? styles[`connectionLineSelected_${color}`] : styles.connectionLine)}>
               {rightComponent}
             </div>
           </Col>
@@ -73,4 +77,8 @@ TouchPointItem.propTypes = {
   selected: PropTypes.bool,
   noLines: PropTypes.bool,
   color: PropTypes.string,
+};
+
+TouchPointItem.defaultProps = {
+  color: 'green',
 };
