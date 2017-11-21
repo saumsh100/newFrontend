@@ -3,9 +3,9 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import { Correspondence } from '../../../server/_models';
 import { wipeTestUsers, seedTestUsers, accountId } from '../../_util/seedTestUsers';
-import { patientId, seedTestPatients, wipeTestPatients, wipeAllModels } from '../../_util/seedTestPatients';
+import { patientId, seedTestPatients, wipeTestPatients } from '../../_util/seedTestPatients';
 import generateToken from '../../_util/generateToken';
-import wipeModel from '../../_util/wipeModel';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/correspondences';
