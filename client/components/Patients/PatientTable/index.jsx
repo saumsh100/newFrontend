@@ -186,7 +186,13 @@ class PatientTable extends Component {
       },
       {
         Header: '#',
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{((patientTable.page * patientTable.limit) + props.index) + 1}</div></div>,
+        Cell: (props) => {
+          return (<div className={styles.displayFlex}>
+            <div className={styles.cellText}>{((patientTable.page * patientTable.limit) + props.index) + 1}
+            </div>
+          </div>
+          );
+        },
         filterable: false,
         sortable: false,
         maxWidth: 50,
@@ -204,7 +210,7 @@ class PatientTable extends Component {
                 redirect={() => {
                   push(`/patients/${row.original.id}`);
                 }}
-                text=''
+                text={''}
               />
             </div>
           );
@@ -423,7 +429,7 @@ class PatientTable extends Component {
               }}
               getTheadThProps={(state, rowInfo, column) => {
                 const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null
-                let color = '#206477';
+                let color = '#2CC4A7';
                 if (column.id === compare && patientTable.sort[0].desc) {
                   color = '#2CC4A7';
                 }
