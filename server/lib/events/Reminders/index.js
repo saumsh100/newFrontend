@@ -9,6 +9,7 @@ function sendReminderIdsSocket(sub, io) {
       const sentReminderIds = JSON.parse(data);
       let sentReminders = await SentReminder.findAll({
         where: {
+          isSent: true,
           id: sentReminderIds,
         },
       });
