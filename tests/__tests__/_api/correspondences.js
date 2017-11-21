@@ -210,8 +210,49 @@ describe('/api/correspondences', () => {
             .expect(201)
             .then(({ body }) => {
               body = omitPropertiesFromBody(body, [], true);
-              expect(body.data[0].attributes.pmsId).toBe("2");
+              expect(body.data[0].attributes.pmsId).toBe('2');
               expect(body).toMatchSnapshot();
+            });
+        });
+    });
+  });
+
+  describe('DELETE /connector/batch', () => {
+    test('should batch delete 2 correspondences', () => {
+      return request(app)
+        .delete(`${rootUrl}/connector/batch?ids=${correspondenceId1}&ids=${correspondenceId2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(async () => {
+          const correspondences = await Correspondence.findAll({});
+          expect(correspondences.length).toBe(0);
+        });
+    });
+
+    test('should fail batch delete 2 correspondences - an invalid id was sent', () => {
+      return request(app)
+        .delete(`${rootUrl}/connector/batch?ids=${correspondenceId1}&ids=${correspondenceId2}&ids=${newCorrespondenceId2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(500)
+        .then(async () => {
+          const correspondences = await Correspondence.findAll({});
+          expect(correspondences.length).toBe(2);
+        });
+    });
+
+    test('should try to batch delete 2 correspondences with one already deleted', () => {
+      return request(app)
+        .delete(`${rootUrl}/${correspondenceId2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(() => {
+          return request(app)
+            .delete(`${rootUrl}/connector/batch?ids=${correspondenceId1}&ids=${correspondenceId2}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(204)
+            .then(async () => {
+              const correspondences = await Correspondence.findAll({});
+              expect(correspondences.length).toBe(0);
             });
         });
     });

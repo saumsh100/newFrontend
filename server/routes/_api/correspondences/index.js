@@ -4,7 +4,7 @@
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
-import batchCreate from '../../util/batch';
+import batchCreate, { batchDelete } from '../../util/batch';
 import jsonapi from '../../util/jsonapi';
 import { Correspondence } from '../../../_models';
 import handleSequelizeError from '../../util/handleSequelizeError';
@@ -75,6 +75,20 @@ correspondencesRouter.post('/connector/batch', checkPermissions('correspondences
       return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
+});
+
+/**
+ * DELETE Correspondences - Connector
+ */
+correspondencesRouter.delete('/connector/batch', checkPermissions('correspondences:delete'), async (req, res, next) => {
+  const correspondences = req.query.ids;
+
+  try {
+    await batchDelete(correspondences, Correspondence);
+    return res.sendStatus(204);
+  } catch (error) {
+    return next(error);
+  }
 });
 
 /**
