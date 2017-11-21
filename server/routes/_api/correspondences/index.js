@@ -81,7 +81,10 @@ correspondencesRouter.post('/connector/batch', checkPermissions('correspondences
  * DELETE Correspondences - Connector
  */
 correspondencesRouter.delete('/connector/batch', checkPermissions('correspondences:delete'), async (req, res, next) => {
-  const correspondences = req.query.ids;
+  let correspondences = req.query.ids;
+  if (!Array.isArray(correspondences)) {
+    correspondences = [correspondences];
+  }
 
   try {
     await batchDelete(correspondences, Correspondence);
