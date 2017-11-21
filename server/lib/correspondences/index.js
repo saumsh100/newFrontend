@@ -11,6 +11,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
         $ne: null,
       },
     },
+    paranoid: false,
   });
 
   const sentReminderIds = correspondences.map(c => c.sentReminderId);
@@ -57,6 +58,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
         $ne: null,
       },
     },
+    paranoid: false,
   });
 
   const sentReminderIds = correspondences.map(c => c.sentReminderId);
@@ -104,6 +106,7 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
         $ne: null,
       },
     },
+    paranoid: false,
   });
 
   const sentRecallsIds = correspondences.map(c => c.sentReminderId);
