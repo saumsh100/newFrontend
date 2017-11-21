@@ -2,9 +2,8 @@
 
 .mainContainer {
   width: 100%;
-  margin-top: 9px;
   border-top: 3px solid $inactive-color;
-  background: $primary-white;
+  background: white;
 }
 
 .subHeader {
@@ -22,9 +21,8 @@
 }
 .grid {
   box-sizing: border-box;
-  padding: 20px 35px 10px 35px;
-  margin-top: 10px;
-  border-top: 1px solid $primary-grey;
+  padding: 10px 35px 10px 35px;
+  border-top: 0.5px dotted $primary-grey;
 }
 
 .row {
@@ -45,7 +43,6 @@
 
 .tab {
   padding-top: 10px;
-
   > nav {
     display: flex;
     justify-content: space-between;
@@ -83,4 +80,31 @@
 
 .infoPadding {
   padding-top: 25px;
+}
+
+.textContainer {
+  display: flex;
+}
+.hiddenText {
+  margin-left: auto;
+}
+
+.textEdit {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+
+  &:hover {
+    cursor: pointer;
+    color: $primary-blue;
+  }
+
+  &_text {
+  }
+
+  &_icon {
+    padding-right: 5px;
+  }
 }

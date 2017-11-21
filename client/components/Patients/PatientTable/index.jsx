@@ -157,6 +157,20 @@ class PatientTable extends Component {
     const columns = [
       {
         Header: '',
+        expander: true,
+        style: {
+          cursor: 'pointer',
+          fontSize: 18,
+          padding: '0',
+          textAlign: 'center',
+          userSelect: 'none',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+      },
+      {
+        Header: '',
         Cell: row => {
           return (
             <SelectPatientColumn
@@ -279,7 +293,6 @@ class PatientTable extends Component {
         },
         filterable: false,
         className: styles.colBg,
-
       },
       {
         Header: 'Last Appointment',
@@ -409,12 +422,19 @@ class PatientTable extends Component {
                   },
                 };
               }}
-              getTheadThProps={() => {
+              getTheadThProps={(state, rowInfo, column) => {
+                const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null
+                let color = '#206477';
+                if (column.id === compare && patientTable.sort[0].desc) {
+                  color = '#2CC4A7';
+                }
                 return {
                   style: {
                     background: 'white',
                     display: 'flex',
                     justifyContent: 'flex-start',
+                    boxShadow: 'none',
+                    color: column.id === compare ? color : 'inherit',
                   },
                 };
               }}

@@ -4,7 +4,14 @@
   position: relative;
   border-top: 3px solid $inactive-color;
   overflow: auto;
-  padding: 50px 50px 50px 50px;
+  padding: 20px 35px 50px 35px;
+  background: white;
+}
+
+.header {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+  padding-bottom: 10px;
 }
 
 .eventsContainer {

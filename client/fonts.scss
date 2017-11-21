@@ -152,6 +152,7 @@
 .fontMediumPlusSize {
   font-size: $medium-plus-size;
   font-weight: $medium-weight;
+  @extend .fontMedium;
   @extend .letterSpacing;
 }
 

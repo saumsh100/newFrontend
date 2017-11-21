@@ -48,7 +48,6 @@ export default function Appointments(props) {
           <Field
             name="0"
             type="number"
-            icon="dollar"
             validate={[notNegative]}
             normalize={parseNum}
             data-test-id="duration"
@@ -57,7 +56,6 @@ export default function Appointments(props) {
           <Field
             name="1"
             type="number"
-            icon="dollar"
             validate={[notNegative]}
             normalize={parseNum}
             data-test-id="duration"

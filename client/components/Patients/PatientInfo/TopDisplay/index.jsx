@@ -14,6 +14,8 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const randomNum = getRandomIntInclusive(0, 4);
+
 export default function TopDisplay(props) {
   const {
     patient,
@@ -21,7 +23,6 @@ export default function TopDisplay(props) {
   } = props;
 
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
-  const randomNum = getRandomIntInclusive(0, 4);
 
   return (
     <Card className={styles.card}>

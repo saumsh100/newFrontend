@@ -1,51 +1,58 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, Tab } from '../../../library';
+import { Tabs, Tab, Icon } from '../../../library';
 import styles from './styles.scss';
 import AppointmentsTab from './AppointmentsTab/index';
 import PersonalTab from './PersonalTab';
 
-class DataDisplay extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tabIndex: 0,
-    };
+export default function DataDisplay(props) {
+  const {
+    patient,
+    handleTabChange,
+    tabIndex,
+    openModal,
+  } = props;
 
-    this.handleTabChange = this.handleTabChange.bind(this);
-  }
-
-  handleTabChange(index) {
-    this.setState({
-      tabIndex: index,
-    });
-  }
-
-  render() {
-    const {
-      patient,
-    } = this.props;
-
-    return (
-      <div className={styles.mainContainer}>
-        <Tabs className={styles.tab} index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
-          <Tab label="APPOINTMENTS" >
-            <AppointmentsTab patient={patient} />
-          </Tab>
-          <Tab label="PERSONAL">
-            <PersonalTab patient={patient} />
-          </Tab>
-          <Tab label="INSURANCE" />
-          <Tab label="FAMILY" />
-        </Tabs>
+  const editComponent = (
+    <div className={styles.textContainer}>
+      <div className={styles.hiddenText}>
+        &nbsp;
       </div>
-    );
-  }
+      <div className={styles.textEdit} onClick={() => openModal()}>
+        <div className={styles.textEdit_icon}>
+          <Icon icon="pencil" />
+        </div>
+        <div className={styles.textEdit_text}>Edit</div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className={styles.mainContainer}>
+      <Tabs className={styles.tab} index={tabIndex} onChange={handleTabChange} noUnderLine >
+        <Tab label="APPOINTMENTS" >
+          <AppointmentsTab
+            patient={patient}
+            openModal={openModal}
+            editComponent={editComponent}
+          />
+        </Tab>
+        <Tab label="PERSONAL">
+          <PersonalTab
+            patient={patient}
+            openModal={openModal}
+            editComponent={editComponent}
+          />
+        </Tab>
+        <Tab label="INSURANCE" index={tabIndex} />
+        <Tab label="FAMILY" index={tabIndex} />
+      </Tabs>
+    </div>
+  );
 }
 
 DataDisplay.propTypes = {
   patient: PropTypes.object.isRequired,
 };
 
-export default DataDisplay;

@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
-import { Grid, Row, Col } from '../../../../library';
+import { Grid, Row, Col, Icon } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import styles from '../styles.scss';
 
 export default function PersonalTab(props) {
   const {
-    patient
+    patient,
+    openModal,
+    editComponent,
   } = props;
 
   const address = patient && patient.address ? patient.address.street : '';
@@ -20,6 +22,7 @@ export default function PersonalTab(props) {
 
   return (
     <Grid className={styles.grid}>
+      {editComponent}
       <div className={styles.subHeader}> Basic </div>
       <Row className={styles.row}>
         <Col xs={6}>

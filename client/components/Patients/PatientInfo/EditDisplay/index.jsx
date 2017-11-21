@@ -20,29 +20,23 @@ class EditDisplay extends Component {
       country: '',
     };
 
-    this.setModal = this.setModal.bind(this);
-    this.reinitializeState = this.reinitializeState.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
     this.setCountry = this.setCountry.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  setModal() {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
-  }
-
-  reinitializeState() {
-    this.setState({
-      isOpen: false,
-    });
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.outerTabIndex !== this.state.tabIndex) {
+      this.setState({
+        tabIndex: nextProps.outerTabIndex,
+      });
+    }
   }
 
   setCountry(value) {
     this.setState({
       country: value,
-    })
+    });
   }
 
   handleTabChange(index) {
@@ -53,6 +47,7 @@ class EditDisplay extends Component {
     const {
       updateEntityRequest,
       patient,
+      reinitializeState,
     } = this.props;
 
     values.isSyncedWithPms = false;
@@ -79,36 +74,29 @@ class EditDisplay extends Component {
       },
       url: `/api/patients/${patient.get('id')}`,
     }).then(() => {
-      this.reinitializeState();
+      reinitializeState();
     });
   }
 
   render() {
     const {
       patient,
+      reinitializeState,
+      isOpen
     } = this.props;
 
 
     const remoteButtonProps = {
-      onClick: this.reinitializeState,
+      onClick: reinitializeState,
       form: `Form${this.state.tabIndex + 1}`,
     };
 
     return (
       <div className={styles.mainContainer}>
-        <div className={styles.text}>
-          <div className={styles.text_title}>
-            Patient Info
-          </div>
-          <div className={styles.text_edit} onClick={() => this.setModal()}>
-            <Icon icon="pencil" className={styles.text_icon} />
-            Edit
-          </div>
-        </div>
         <Modal
-          active={this.state.isOpen}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
+          active={isOpen}
+          onEscKeyDown={reinitializeState}
+          onOverlayClick={reinitializeState}
           custom
         >
           <div className={styles.editModal}>
@@ -116,7 +104,7 @@ class EditDisplay extends Component {
               {`Editing ${patient.get('firstName')}'s Patient Info`}
               <div
                 className={styles.header_closeIcon}
-                onClick={this.reinitializeState}
+                onClick={reinitializeState}
               >
                 <Icon icon="times" />
               </div>
@@ -161,7 +149,7 @@ class EditDisplay extends Component {
               <div className={styles.remoteSubmit_buttonDelete}>
                 <Button
                   color="darkgrey"
-                  onClick={() => this.reinitializeState()}
+                  onClick={() => reinitializeState()}
                 >
                   Cancel
                 </Button>
@@ -183,6 +171,6 @@ class EditDisplay extends Component {
 EditDisplay.propTypes = {
   patient: PropTypes.object.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
-};
+}
 
 export default EditDisplay;

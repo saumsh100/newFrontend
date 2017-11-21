@@ -1,6 +1,7 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Row, Col } from '../../../../library';
+import { Grid, Row, Col, Icon } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import RecallDropDowns from '../../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../../Shared/ReminderDropDowns';
@@ -8,7 +9,9 @@ import styles from '../styles.scss';
 
 export default function AppointmentsTab(props) {
   const {
-    patient
+    patient,
+    openModal,
+    editComponent,
   } = props;
 
   const recallComp = <RecallDropDowns patient={patient} />
@@ -16,6 +19,7 @@ export default function AppointmentsTab(props) {
 
   return (
     <Grid className={styles.grid}>
+      {editComponent}
       <Row className={styles.row}>
         <Col xs={12}>
           <InfoDump

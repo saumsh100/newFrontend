@@ -163,7 +163,6 @@ class TopBar extends Component {
         />
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
-
             {withEnterprise && activeAccount ?
               <li>
                 <DropdownMenu
@@ -177,7 +176,6 @@ class TopBar extends Component {
               </li> :
               null
             }
-
             <li>
               <DropdownMenu labelComponent={props => <UserMenu {...props} {...userMenuProps} />}>
                 <Link to="/profile">

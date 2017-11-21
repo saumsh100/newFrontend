@@ -15,6 +15,14 @@ import styles from './styles.scss';
 class PatientInfo extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      isOpen: false,
+      tabIndex: 0,
+    };
+
+    this.openModal = this.openModal.bind(this);
+    this.reinitializeState = this.reinitializeState.bind(this)
+    this.handleTabChange = this.handleTabChange.bind(this);
   }
 
   componentDidMount() {
@@ -31,6 +39,24 @@ class PatientInfo extends Component {
         url: `/api/patients/${patientId}/stats`,
       }),
     ]);
+  }
+
+  openModal() {
+    this.setState({
+      isOpen: true,
+    });
+  }
+
+  reinitializeState() {
+    this.setState({
+      isOpen: false,
+    });
+  }
+
+  handleTabChange(index) {
+    this.setState({
+      tabIndex: index,
+    });
   }
 
   render() {
@@ -62,15 +88,19 @@ class PatientInfo extends Component {
             <EditDisplay
               patient={patient}
               updateEntityRequest={updateEntityRequest}
+              reinitializeState={this.reinitializeState}
+              isOpen={this.state.isOpen}
+              outerTabIndex={this.state.tabIndex}
             />
             <LeftInfoDisplay
               patient={patient}
+              openModal={this.openModal}
+              reinitializeState={this.reinitializeState}
+              tabIndex={this.state.tabIndex}
+              handleTabChange={this.handleTabChange}
             />
           </Col>
           <Col sm={12} md={8} className={styles.timeline}>
-            <div className={styles.timeline_header}>
-              Timeline and Activities
-            </div>
             <Timeline patientId={patientId} />
           </Col>
         </Row>
