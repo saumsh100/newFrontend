@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import { Correspondence } from '../../../server/_models';
 import { wipeTestUsers, seedTestUsers, accountId } from '../../_util/seedTestUsers';
-import { patientId, seedTestPatients, wipeTestPatients } from '../../_util/seedTestPatients';
+import { patientId, seedTestPatients, wipeTestPatients, wipeAllModels } from '../../_util/seedTestPatients';
 import generateToken from '../../_util/generateToken';
 import wipeModel from '../../_util/wipeModel';
 import { omitPropertiesFromBody } from '../../util/selectors';
@@ -46,6 +46,7 @@ describe('/api/correspondences', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    await wipeAllModels();
     await wipeModel(Correspondence);
     await wipeTestPatients();
     await seedTestUsers();
