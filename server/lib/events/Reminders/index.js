@@ -108,7 +108,7 @@ function sendReminderUpdatedSocket(sub, io) {
 
         console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
 
-        io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondences', [newCorrespondence.id]);
+        io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondence', [newCorrespondence.id]);
       }
     } catch (error) {
       console.error(error);

@@ -79,7 +79,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       appointmentId: sr.appointmentId,
       method: sr.primaryType,
       type: Correspondence.REMINDER_CONFIRMED_TYPE,
-      contactedAt: sr.createdAt,
+      contactedAt: sr.updatedAt,
       note: Correspondence.REMINDER_CONFIRMED_NOTE,
     };
   });
