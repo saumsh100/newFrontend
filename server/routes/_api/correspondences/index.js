@@ -121,6 +121,7 @@ correspondencesRouter.get('/connector/notSynced', checkPermissions('corresponden
  */
 correspondencesRouter.put('/connector/batch', checkPermissions('correspondences:update'), (req, res, next) => {
   const correspondences = req.body;
+  console.log(req.body)
   const correspondencesUpdates = correspondences.map(correspondence =>
     Correspondence.findById(correspondence.id)
       .then(existingCorrespondence => existingCorrespondence.update(correspondence)));
