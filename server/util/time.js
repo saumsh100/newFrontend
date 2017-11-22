@@ -41,6 +41,10 @@ const Time = {
     return moment(endDate).diff(startDate, 'hours', true);
   },
 
+  m2s(num) {
+    return num * Time.w2s(4);
+  },
+
   w2s(num) {
     const oneWeek = 60 * 60 * 24 * 7;
     return oneWeek * num;
@@ -54,6 +58,16 @@ const Time = {
   h2s(num) {
     const oneHour = 60 * 60;
     return oneHour * num;
+  },
+
+  s2w(seconds) {
+    const weekSeconds = Time.w2s(1);
+    return parseInt(seconds / weekSeconds);
+  },
+
+  s2m(seconds) {
+    const monthSeconds = Time.m2s(1);
+    return parseInt(seconds / monthSeconds);
   },
 
   ordinalSuffix(i) {
@@ -83,11 +97,6 @@ const Time = {
     const type = isDay ? 'days' : 'hours';
     const num = isDay ? parseInt(numDays) : parseInt(numHours);
     return { type, num };
-  },
-
-  secondsToNumWeeks(seconds) {
-    const weekSeconds = Time.w2s(1);
-    return parseInt(seconds / weekSeconds);
   },
 
   numTypeToSeconds(num, type) {

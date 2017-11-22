@@ -11,8 +11,9 @@ import {
 import styles from './styles.scss';
 
 export function TouchPointLabel(props) {
+  const classes = classNames(props.className, styles.reminderLabel);
   return (
-    <div className={styles.reminderLabel}>
+    <div className={classes}>
       {props.title}
     </div>
   );

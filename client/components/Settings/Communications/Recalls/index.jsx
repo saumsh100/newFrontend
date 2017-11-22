@@ -5,11 +5,15 @@ import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
 import {
+  Grid,
+  Row,
+  Col,
   Button,
   RemoteSubmitButton,
   DialogBox,
+  DropdownSelect,
 } from '../../../library';
-import { numTypeToSeconds, w2s } from '../../../../../server/util/time';
+import { numTypeToSeconds, w2s, s2m, m2s } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import CreateRecallsForm from './CreateRecallsForm';
@@ -17,6 +21,18 @@ import RecallPreview from './RecallPreview';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
+
+const dueDateOptions = [
+  { label: '4 Months', value: 4 },
+  { label: '5 Months', value: 5 },
+  { label: '6 Months', value: 6 },
+  { label: '7 Months', value: 7 },
+  { label: '8 Months', value: 8 },
+  { label: '9 Months', value: 9 },
+  { label: '10 Months', value: 10 },
+  { label: '11 Months', value: 11 },
+  { label: '12 Months', value: 12 },
+];
 
 class Recalls extends Component {
   constructor(props) {
@@ -31,6 +47,8 @@ class Recalls extends Component {
     this.openModal = this.openModal.bind(this);
     this.selectRecall = this.selectRecall.bind(this);
     this.toggleAdding = this.toggleAdding.bind(this);
+    this.changeRecareDate = this.changeRecareDate.bind(this);
+    this.changeHygieneDate = this.changeHygieneDate.bind(this);
   }
 
   componentWillMount() {
@@ -99,6 +117,40 @@ class Recalls extends Component {
     this.setState({ selectedRecallId: recallId });
   }
 
+  changeHygieneDate(val) {
+    const values = { hygieneDueDateSeconds: m2s(val) };
+    const alert = {
+      success: {
+        title: 'Account Updated',
+        body: `Successfully updated the default hygiene due date to ${val} months`,
+      },
+
+      error: {
+        title: 'Failed to Update Account',
+        body: `Error trying to update the default hygiene due date to ${val} months`,
+      },
+    };
+
+    this.props.updateEntityRequest({ url: `/api/accounts/${this.props.activeAccount.id}`, values, alert });
+  }
+
+  changeRecareDate(val) {
+    const values = { recareDueDateSeconds: m2s(val) };
+    const alert = {
+      success: {
+        title: 'Account Updated',
+        body: `Successfully updated the default recare due date to ${val} months`,
+      },
+
+      error: {
+        title: 'Failed to Update Account',
+        body: `Error trying to update the default recare due date to ${val} months`,
+      },
+    };
+
+    this.props.updateEntityRequest({ url: `/api/accounts/${this.props.activeAccount.id}`, values, alert });
+  }
+
   render() {
     if (!this.props.activeAccount || !this.props.activeAccount.id) {
       return null;
@@ -126,6 +178,9 @@ class Recalls extends Component {
         />
       );
     }
+
+    const numHygieneMonths = s2m(activeAccount.hygieneDueDateSeconds || m2s(6));
+    const numRecareMonths = s2m(activeAccount.recareDueDateSeconds || m2s(6));
 
     return (
       <CommunicationSettingsCard
@@ -156,6 +211,12 @@ class Recalls extends Component {
             })}
             <TouchPointItem
               className={styles.dueDateItem}
+              labelComponent={(
+                <div className={styles.dueDateWrapper}>
+                  <TouchPointLabel title="Due Date" className={styles.dueDateLabel} />
+                </div>
+              )}
+
               mainComponent={(
                 <div className={styles.bottomBox}>
                   <div className={styles.bottomIconContainer}>
@@ -165,7 +226,32 @@ class Recalls extends Component {
                     />
                   </div>
                   <div className={styles.bottomLabel}>
-                    <TouchPointLabel title="Due Date" />
+                    <Grid>
+                      <Row className={styles.bottomRow}>
+                        <Col xs={6} className={styles.leftCol}>
+                          <div className={styles.dropdownWrapper}>
+                            <DropdownSelect
+                              label="Hygiene"
+                              className={styles.dueDateDropdown}
+                              value={numHygieneMonths}
+                              options={dueDateOptions}
+                              onChange={this.changeHygieneDate}
+                            />
+                          </div>
+                        </Col>
+                        <Col xs={6} className={styles.rightCol}>
+                          <div className={styles.dropdownWrapper}>
+                            <DropdownSelect
+                              label="Recare"
+                              className={styles.dueDateDropdown}
+                              value={numRecareMonths}
+                              options={dueDateOptions}
+                              onChange={this.changeRecareDate}
+                            />
+                          </div>
+                        </Col>
+                      </Row>
+                    </Grid>
                   </div>
                 </div>
               )}

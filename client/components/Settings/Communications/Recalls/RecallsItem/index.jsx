@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { secondsToNumWeeks } from '../../../../../../server/util/time';
+import { s2w } from '../../../../../../server/util/time';
 import {
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
@@ -32,7 +32,7 @@ class RecallsItem extends Component {
   constructor(props) {
     super(props);
 
-    const num = secondsToNumWeeks(props.recall.lengthSeconds);
+    const num = s2w(props.recall.lengthSeconds);
 
     // This is more for the input if we had one...
     this.state = {
@@ -46,7 +46,7 @@ class RecallsItem extends Component {
 
   componentDidMount() {
     // Need function to abstract
-    const num = secondsToNumWeeks(this.props.recall.lengthSeconds);
+    const num = s2w(this.props.recall.lengthSeconds);
     if (this.state.number === num) {
       return;
     }
@@ -58,8 +58,8 @@ class RecallsItem extends Component {
 
   componentWillUpdate(nextProps) {
     // Need function to abstract
-    const oldNum = secondsToNumWeeks(this.props.recall.lengthSeconds);
-    const newNum = secondsToNumWeeks(nextProps.recall.lengthSeconds);
+    const oldNum = s2w(this.props.recall.lengthSeconds);
+    const newNum = s2w(nextProps.recall.lengthSeconds);
     if (oldNum === newNum) {
       return;
     }
@@ -98,7 +98,7 @@ class RecallsItem extends Component {
     e.stopPropagation();
     e.preventDefault();
     const { recall, account, selected, selectRecall } = this.props;
-    const num = secondsToNumWeeks(recall.lengthSeconds);
+    const num = s2w(recall.lengthSeconds);
     const type = num >= 0 ? 'before' : 'after';
     const sure = confirm(`Are you sure you want to delete the ${num} weeks ${type} due date recall?`);
     if (!sure) {
@@ -168,7 +168,7 @@ class RecallsItem extends Component {
     } = recall;
 
     const icon = iconsMap[primaryType];
-    const numWeeks = secondsToNumWeeks(lengthSeconds);
+    const numWeeks = s2w(lengthSeconds);
     const type = numWeeks >= 0 ? 'before' : 'after';
 
     let color = 'green';

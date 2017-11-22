@@ -7,6 +7,10 @@ import { w2s } from '../../util/time';
 const defaultRecalls = [
   {
     primaryType: 'email',
+    lengthSeconds: w2s(4),
+  },
+  {
+    primaryType: 'sms',
     lengthSeconds: w2s(1),
   },
   {
@@ -18,7 +22,7 @@ const defaultRecalls = [
     lengthSeconds: w2s(-4),
   },
   {
-    primaryType: 'sms',
+    primaryType: 'email',
     lengthSeconds: w2s(-8),
   },
   {
@@ -26,7 +30,7 @@ const defaultRecalls = [
     lengthSeconds: w2s(-12),
   },
   {
-    primaryType: 'sms',
+    primaryType: 'email',
     lengthSeconds: w2s(-20),
   },
   {
@@ -34,7 +38,7 @@ const defaultRecalls = [
     lengthSeconds: w2s(-28),
   },
   {
-    primaryType: 'sms',
+    primaryType: 'email',
     lengthSeconds: w2s(-36),
   },
   {
@@ -42,7 +46,7 @@ const defaultRecalls = [
     lengthSeconds: w2s(-44),
   },
   {
-    primaryType: 'sms',
+    primaryType: 'email',
     lengthSeconds: w2s(-52),
   },
   {
@@ -50,7 +54,7 @@ const defaultRecalls = [
     lengthSeconds: w2s(-60),
   },
   {
-    primaryType: 'sms',
+    primaryType: 'email',
     lengthSeconds: w2s(-68),
   },
   {

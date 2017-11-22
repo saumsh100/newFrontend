@@ -189,7 +189,11 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     },
 
-    recallDueDateSeconds: {
+    recareDueDateSeconds: {
+      type: DataTypes.INTEGER,
+    },
+
+    hygieneDueDateSeconds: {
       type: DataTypes.INTEGER,
     },
   }, {

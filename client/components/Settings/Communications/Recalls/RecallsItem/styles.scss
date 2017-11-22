@@ -68,6 +68,7 @@
     border-bottom: none;
     padding-left: 10px;
     padding-right: 10px;
+    padding-top: 8px;
   }
 
   > :global(.dd-menu-items) {
@@ -178,6 +179,7 @@ $small-icon-width: 24px;
   text-transform: uppercase;
   color: $primary-darkgrey;
   font-size: 11px;
+  margin-top: 5px;
 }
 
 .linesBoxClass {

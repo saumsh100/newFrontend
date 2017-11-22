@@ -1,3 +1,4 @@
+
 'use strict';
 
 module.exports = {
@@ -55,9 +56,34 @@ module.exports = {
         // Add dueDateSeconds column to Patients, overrides Account's value
         await queryInterface.addColumn(
           'Patients',
-          'recallDueDateSeconds',
+          'recareDueDateSeconds',
           {
             type: Sequelize.INTEGER,
+          },
+          { transaction: t },
+        );
+
+        // Add dueDateSeconds column to Patients, overrides Account's value
+        await queryInterface.addColumn(
+          'Patients',
+          'hygieneDueDateSeconds',
+          {
+            type: Sequelize.INTEGER,
+          },
+          { transaction: t },
+        );
+
+
+        // Add dueDateSeconds column to Accounts
+        await queryInterface.addColumn(
+          'Accounts',
+          'recareDueDateSeconds',
+          {
+            type: Sequelize.INTEGER,
+
+            // 6 months
+            defaultValue: 23328000,
+            allowNull: false,
           },
           { transaction: t },
         );
@@ -65,7 +91,7 @@ module.exports = {
         // Add dueDateSeconds column to Accounts
         await queryInterface.addColumn(
           'Accounts',
-          'recallDueDateSeconds',
+          'hygieneDueDateSeconds',
           {
             type: Sequelize.INTEGER,
 
@@ -123,14 +149,28 @@ module.exports = {
         // Remove dueDateSeconds column to Patients
         await queryInterface.removeColumn(
           'Patients',
-          'recallDueDateSeconds',
+          'recareDueDateSeconds',
+          { transaction: t }
+        );
+
+        // Remove dueDateSeconds column to Patients
+        await queryInterface.removeColumn(
+          'Patients',
+          'hygieneDueDateSeconds',
           { transaction: t }
         );
 
         // Remove dueDateSeconds column to Accounts
         await queryInterface.removeColumn(
           'Accounts',
-          'recallDueDateSeconds',
+          'recareDueDateSeconds',
+          { transaction: t }
+        );
+
+        // Remove dueDateSeconds column to Accounts
+        await queryInterface.removeColumn(
+          'Accounts',
+          'hygieneDueDateSeconds',
           { transaction: t }
         );
 
