@@ -1,0 +1,86 @@
+@import '../../../../ui';
+
+.card {
+  position: relative;
+  border-top: 3px solid $inactive-color;
+  overflow: auto;
+  padding: 20px 35px 50px 35px;
+  background: white;
+}
+
+.header {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+  padding-bottom: 10px;
+}
+
+.eventsContainer {
+  position: relative;
+  height: 100%;
+  display:flex;
+}
+
+.eventsList {
+  width: 100%;
+  z-index: 2;
+}
+
+.verticalLine {
+  position: absolute;
+  margin-top: 50px;
+  left: 16px;
+  height: 100%;
+  z-index: 1;
+  border-left: 1px solid $primary-grey;
+}
+
+.loader {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: white;
+  z-index: 9999;
+}
+
+.eventSection {
+  padding-top: 30px;
+
+  &:first-child {
+    padding-top: 0px;
+  }
+}
+
+.dateHeader {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 16px;
+  color: $primary-darkgrey;
+  padding-left: 55px;
+  padding-top: 20px;
+  padding-bottom: 5px;
+}
+
+.today {
+  color: $primary-blue;
+  font-size: $x-medium-size;
+}
+
+.disclaimer {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  &_text {
+    font-size: 14px;
+    line-height: 1.5em;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+}

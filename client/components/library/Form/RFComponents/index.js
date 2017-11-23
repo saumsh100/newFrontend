@@ -10,6 +10,7 @@ import RFTextArea from './RFTextArea';
 import RFAutoComplete from './RFAutoComplete';
 import RFColorPicker from './RFColorPicker';
 import RFStars from './RFStars';
+import RFButton from './RFButton';
 
 export default {
   Input: RFInput,
@@ -24,4 +25,5 @@ export default {
   AutoComplete: RFAutoComplete,
   ColorPicker: RFColorPicker,
   Stars: RFStars,
+  Button: RFButton,
 };

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
+
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { updateChatAfterPatient } from '../../util/preUpdateFunctions';
 import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
@@ -10,12 +11,41 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
 import { Appointment, Chat, Patient } from '../../../_models';
+import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
+import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
+import { fetchCallEvents } from '../../../lib/events/Calls/index';
+import { fetchRequestEvents } from '../../../lib/events/Requests/index';
+import { fetchReviewEvents } from '../../../lib/events/Reviews/index';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
 const patientsRouter = new Router();
 
+
 patientsRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
+
+const eventsRouter = new Router();
+
+patientsRouter.get('/:patientId/events', eventsRouter);
+
+function filterEventsByQuery(eventsArray, query) {
+  const {
+    limit,
+    skip,
+  } = query;
+
+  let filterArray = eventsArray;
+
+  if (skip && eventsArray.length > skip) {
+    filterArray = filterArray.slice(skip, eventsArray.length);
+  }
+
+  if (limit) {
+    filterArray = filterArray.slice(0, limit);
+  }
+
+  return filterArray;
+}
 
 function ageRange(age, array) {
   if (age < 18) {
@@ -33,6 +63,7 @@ function ageRange(age, array) {
   }
   return array;
 }
+
 function ageRangePercent(array) {
   const newArray = array.slice();
   newArray[0] = Math.round(100 * array[0] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
@@ -324,7 +355,7 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
  */
 patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next) => {
   const { accountId } = req;
-  const { email, patientUserId } = req.query;
+  const { email, patientUserId, limit } = req.query;
   let patients;
 
   try {
@@ -344,6 +375,7 @@ patientsRouter.get('/', checkPermissions('patients:read'), async (req, res, next
       patients = await Patient.findAll({
         raw: true,
         where: { accountId },
+        limit,
       });
     }
     return res.send(format(req, res, 'patients', patients));
@@ -390,7 +422,6 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           isDeleted: false,
           isCancelled: false,
         },
-        //limit: 1,  // TODO: Check to see what we should do when a patient has multiple appointments
         order: [['startDate', 'asc']],
         required: false,
       }],
@@ -423,7 +454,6 @@ patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:rea
         isCancelled: false,
       },
       order: [['startDate', 'ASC']],
-      // limit: 1,
     });
     res.send(normalize('appointments', nextAppt));
   } catch (error) {
@@ -480,6 +510,37 @@ patientsRouter.get('/connector/notSynced', checkPermissions('patients:read'), as
       },
     });
     return res.send(format(req, res, 'patients', patients));
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * Fetching events for a patient.
+ * params: patientId,
+ */
+
+eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async (req, res, next) => {
+  try {
+    const accountId = req.accountId;
+
+    const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId, req.query);
+    const callEvents = await fetchCallEvents(req.patient.id, accountId, req.query);
+    const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId, req.query);
+    const requestEvents = await fetchRequestEvents(req.patient.id, accountId, req.query);
+    const reviewEvents = await fetchReviewEvents(req.patient.id, accountId, req.query);
+
+    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents);
+
+    const sortedEvents = totalEvents.sort((a, b) => {
+      if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
+      if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
+      return 0;
+    });
+
+    const filteredEvents = filterEventsByQuery(sortedEvents, req.query)
+
+    res.send(normalize('events', filteredEvents));
   } catch (error) {
     next(error);
   }

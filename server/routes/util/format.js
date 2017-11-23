@@ -15,6 +15,7 @@ const pluralToSingularMap = {
   practitionerSchedules: 'practitionerSchedule',
   weeklySchedule: 'weeklySchedule',
   configurations: 'configuration',
+  events: 'event',
 };
 
 const toNormalize = {

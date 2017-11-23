@@ -111,7 +111,7 @@ export default class DropdownSelect extends Component {
                 this.handleSearch(e.target.value)
               }}
               value={this.state.value}
-              icon="plus"
+              icon="search"
             />
           </div> : null}
         {options.map((option, i) => {
@@ -149,6 +149,7 @@ export default class DropdownSelect extends Component {
       template,
       borderColor,
       error,
+      theme,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -158,6 +159,8 @@ export default class DropdownSelect extends Component {
     const option = options.find(opt => opt.value === value);
 
     let labelClassName = styles.label;
+
+
     if (option) {
       toggleDiv = <ToggleTemplate option={option} />;
       labelClassName = classNames(styles.filled, labelClassName);
@@ -165,6 +168,13 @@ export default class DropdownSelect extends Component {
 
     let toggleClassName = styles.toggleDiv;
     let caretIconClassName = styles.caretIcon;
+
+    if (theme) {
+      toggleClassName = classNames(styles[`theme_${theme}Border`], toggleClassName);
+      labelClassName = classNames(styles[`theme_${theme}Label`], labelClassName);
+      caretIconClassName = classNames(styles[`theme_${theme}Caret`], caretIconClassName);
+    }
+
     if (borderColor) {
       toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
     }
@@ -174,6 +184,8 @@ export default class DropdownSelect extends Component {
       caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
       labelClassName = classNames(styles.activeLabel, labelClassName);
     }
+
+
 
     return (
       <div

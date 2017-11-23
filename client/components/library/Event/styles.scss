@@ -1,0 +1,124 @@
+@import '../../../ui';
+
+.eventContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  width: 100%;
+  &:first-child {
+    margin-top: 0px;
+  }
+}
+.event {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+  padding-right: 20px;
+  height: 100%;
+}
+
+.icon {
+  color: $primary-dark;
+}
+
+.bgIcon {
+  background: white;
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+  border: 2px solid $primary-green;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.greenBorder {
+  border: 2px solid $primary-green;
+}
+.blueBorder {
+  border: 2px solid $primary-blue;
+}
+.redBorder {
+  border: 2px solid $primary-color;
+}
+.yellowBorder {
+  border: 2px solid $primary-yellow;
+}
+
+.body {
+  background: white;
+  border: 1px solid $primary-grey;
+  border-radius: 5px;
+  width: 100%;
+  padding: 20px;
+  line-height: 1.5em;
+
+  &_header {
+    composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  }
+
+  &_subHeader {
+    color: $primary-darkgrey;
+  }
+
+  &_subHeaderItalic {
+    color: $primary-darkgrey;
+    font-style: italic;
+    composes: fontSmall from 'sass-loader!../../../fonts.scss';
+  }
+}
+
+.time {
+  padding-top: 5px;
+  width: 100%;
+  display: flex;
+  &_text {
+    composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
+    margin-left: auto;
+    color: $primary-darkgrey;
+    opacity: 0.6;
+  }
+}
+
+
+.call {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid $primary-grey;
+  border-radius: 5px;
+  width: 100%;
+  padding: 20px;
+  line-height: 1.5em;
+
+  &_header {
+    composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  }
+
+  &_subHeader {
+    color: $primary-darkgrey;
+  }
+
+  &_subHeaderItalic {
+    padding-left: 10px;
+    color: $primary-darkgrey;
+    font-style: italic;
+    composes: fontSmall from 'sass-loader!../../../fonts.scss';
+  }
+
+  audio {
+    padding-left: 20px;
+  }
+
+  &_duration {
+
+  }
+}

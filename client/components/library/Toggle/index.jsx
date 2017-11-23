@@ -9,9 +9,13 @@ export default function Toggle(props) {
     className,
     icons,
     color,
+    theme,
   } = props;
 
-  const classes = classNames(className, 'CareCruToggle', `CareCruToggle-${color}`);
+  let classes = classNames(className, 'CareCruToggle', `CareCruToggle-${color}`);
+  if (theme) {
+    classes = classNames(styles[`theme_${theme}Background`], className);
+  }
 
   return (
     <RCToggle
@@ -26,6 +30,7 @@ Toggle.propTypes = {
   className: PropTypes.string,
   color: PropTypes.string,
   icons: PropTypes.bool,
+  theme: PropTypes.string,
 };
 
 Toggle.defaultProps = {

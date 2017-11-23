@@ -1,0 +1,128 @@
+@import '../../../../ui';
+
+.mainContainer {
+  display: flex;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+
+  &_edit {
+    opacity: 0.6;
+    cursor: pointer;
+    &:hover {
+      color: darken($primary-darkgrey, 10%);
+    }
+  }
+
+  &_icon {
+    padding-right: 5px;
+  }
+}
+
+.editModal {
+  width: 600px;
+  padding-top: 15px;
+  background: $primary-white;
+  border-top: 5px solid $primary-color;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  padding-bottom: 15px;
+  padding-right: 15px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+
+  &_closeIcon {
+    font-size: 1rem;
+    color: $primary-darkgrey;
+    font-weight: 900;
+    margin-left: auto;
+    cursor: pointer;
+    &:hover {
+      color: darken($primary-darkgrey, 10%);
+    }
+  }
+}
+
+.content {
+  padding: 0px 5px 0px 5px;
+}
+
+.grid {
+  box-sizing: border-box;
+  padding-bottom: 5px;
+}
+
+.row {
+  align-items: center;
+  border-bottom: 1px solid $primary-grey;
+  margin-bottom: 20px;
+}
+.row:last-child {
+  border-bottom: 0px;
+  margin-bottom: 0px;
+}
+
+.colLeft {
+  padding-right: 20px;
+  padding-bottom: 10px;
+}
+
+.colRight {
+  padding-right: 5px;
+  padding-bottom: 10px;
+}
+
+.formHeader {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+}
+
+.formHeader:first-child {
+  padding-top: 20px;
+}
+
+.formContainer {
+  padding: 15px 25px 5px 25px;
+  background: #FFFFFF;
+}
+
+.remoteSubmit {
+  display: flex;
+  justify-content: flex-end;
+  background: #FFFFFF;
+  padding-bottom: 23px;
+  padding-right: 33px;
+
+  &_buttonDelete {
+    padding-right: 10px;
+  }
+}
+
+.disabledPage {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  background: #FFFFFF;
+  &_text {
+    font-size: 16px;
+    line-height: 1.5em;
+    color: $inactive-color;
+    text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+  }
+}
+

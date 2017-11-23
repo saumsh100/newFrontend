@@ -22,6 +22,7 @@ import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
 import Dropzone from './Dropzone';
 import DashboardStats from './DashboardStats';
+import Event from './Event';
 import Form, { FormSection, Field, FieldArray, SaveButton, RemoteSubmitButton } from './Form';
 import Guage from './Guage';
 import Header from './Header';
@@ -97,6 +98,7 @@ export {
   Dropzone,
   DashboardStats,
   DoubleIcon,
+  Event,
   Filters,
   Field,
   FieldArray,

@@ -1,0 +1,24 @@
+@import '../../../../ui';
+
+.patientRow {
+  background: inherit;
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  justify-content: flex-start;
+}
+.name {
+  composes: subHeader from 'sass-loader!../../../../fonts.scss';
+  color: #636363;
+  &:hover {
+    color: $primary-blue;
+    cursor: pointer;
+  }
+}
+
+.avatarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start ;
+}

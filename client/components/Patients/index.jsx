@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PatientList from './PatientList';
+import PatientTable from './PatientTable';
 
 
 class Patients extends Component {
@@ -10,7 +11,7 @@ class Patients extends Component {
   render() {
 
     return (
-      <PatientList
+      <PatientTable
       />
     );
   }

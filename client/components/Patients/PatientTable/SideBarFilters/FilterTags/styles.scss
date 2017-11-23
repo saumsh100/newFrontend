@@ -1,0 +1,36 @@
+@import '../../../../../ui';
+
+.tagsContainer {
+  margin-top: 8px;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.tagBody {
+  display: flex;
+  background: lighten($inactive-color, 15%);
+  box-sizing: border-box;
+  padding: 8px;
+  margin: 5px 5px 5px 0px;
+  align-items: center;
+  flex: 0 0 1;
+  justify-content: space-between;
+  width: auto;
+}
+
+.tagText {
+  composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+  color: $primary-blue;
+  padding-right: 10px;
+}
+
+.closeIcon {
+  color: $primary-darkgrey;
+  &:hover {
+    color: darken($primary-darkgrey, 10%);
+    cursor: pointer;
+  }
+}

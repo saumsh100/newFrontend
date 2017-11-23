@@ -143,7 +143,7 @@ describe('First Next Last Appointment Calculation', () => {
       await wipeAllModels();
     });
 
-    test('should set nextApptId/date and firstApptId/date and lastApptId/date should be null', async () => {
+    test('nextApptId/date and firstApptId/date and lastApptId/date should be null', async () => {
       CalcFirstNextLastAppointment(appointments,
         async (currentPatient, appointmentsObj) => {
           try {

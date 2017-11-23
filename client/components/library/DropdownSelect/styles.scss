@@ -11,7 +11,7 @@ $empty-grey: darken(lightgrey, 5%);
 
 .toggleDiv {
   position: relative;
-  font-size: 16px;
+  font-size: $small-size;
   font-family: $dashboard-font;
   height: 40px;
   width: 100%;
@@ -31,6 +31,20 @@ $empty-grey: darken(lightgrey, 5%);
 .primaryWhiteBorder {
   border-bottom: 1px solid $primary-white;
 }
+
+.theme {
+  &_primaryBlueLabel {
+    font-size: $small-size !important;
+    letter-spacing: 2px;
+  }
+  &_primaryBlueBorder{
+    border-bottom: 1px solid $primary-blue;
+  }
+  &_primaryBlueCaret{
+    color: $primary-blue !important;
+  }
+}
+
 
 .active {
   border-bottom: 2px solid $primary-dark ;
@@ -52,7 +66,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .optionListItem {
-  font-size: 14px;
+  font-size: $small-size;
   cursor: pointer;
   padding-left: 20px;
   padding-right: 20px;
@@ -106,13 +120,13 @@ $empty-grey: darken(lightgrey, 5%);
   left: 0px;
   transition: 0.2s ease all;
   top: 15px;
-  font-size: 16px;
+  font-size: $small-size;
 }
 
 .filled {
-  top: -10px !important;
+  top: -5px !important;
   left: 0px !important;
-  font-size: 12px !important;
+  font-size: $extra-small-size !important;
 }
 
 .activeLabel {

@@ -40,6 +40,8 @@ $primary-darkgrey: #959596;
 $primary-grey: #efefef;
 $primary-gray: darken($primary-grey, 20%);
 $primary-lightgrey: #f0f0f0;
+$primary-light-grey: #c9c9c9;
+
 $primary-white: white;
 $background-color: #E6E6E6;
 $primary-red: #FF715C;
@@ -79,7 +81,7 @@ $padding-card-base: 30px;
 
 //header-sizes
 $count-size: 36px;
-$title-size: 18px;
+$title-size: 15px;
 $header-size: 25px;
 
 //Font-sizes
@@ -90,6 +92,8 @@ $x-large-size: 48px;
 $large-size: 34px;
 
 $extra-medium-size: 24px;
+$x-medium-size: 20px;
+$medium-plus-size: 16px;
 $medium-size: 14px;
 $small-size: 12px;
 $extra-small-size: 10px;

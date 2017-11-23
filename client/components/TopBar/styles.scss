@@ -190,7 +190,6 @@ $padding-size-border: 10px;
   background-color: $primary-green;
   cursor: default;
   color: white;
-
   &:hover {
     background-color: $primary-green!important;
     cursor: default;
@@ -199,6 +198,7 @@ $padding-size-border: 10px;
 }
 
 .userMenuLi {
+  width: 200px;
   background-color: $primary-white;
 }
 
