@@ -211,6 +211,7 @@ class Recalls extends Component {
             })}
             <TouchPointItem
               className={styles.dueDateItem}
+              linesBoxClass={styles.dueDateLinesBox}
               labelComponent={(
                 <div className={styles.dueDateWrapper}>
                   <TouchPointLabel title="Due Date" className={styles.dueDateLabel} />

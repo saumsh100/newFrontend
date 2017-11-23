@@ -2,7 +2,7 @@
 @import '../../../../../ui';
 
 .recallListItem {
-  height: 120px;
+  height: 100px;
   &:hover {
     .deleteButtonWrapper {
       display: block;
@@ -36,12 +36,12 @@
   margin-left: auto;
   width: 80%;
   position: relative;
-  top: -74px;
+  top: -56px;
 }
 
 .inputFont {
   color: $primary-darkgrey;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .inputFontSelected {
@@ -49,17 +49,20 @@
   color: black;
 }
 
+$dheight: 30px;
+
 .dropdownSelect {
   background-color: white;
   border: 1px solid $primary-gray;
   padding: 0;
+  height: $dheight;
   // For inputs
   > input {
     @extend .inputFont;
     padding: 10px;
     box-sizing: border-box;
     border-bottom: none;
-    height: 40px;
+    height: $dheight;
   }
 
   // For dropdowns
@@ -69,6 +72,8 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 8px;
+    box-sizing: border-box;
+    height: 100%;
   }
 
   > :global(.dd-menu-items) {
@@ -118,8 +123,8 @@
 }
 
 // Needs to be same as <IconCircle /> component
-$width: 36px;
-$wrapper-thickness: 8px;
+$width: 26px;
+$wrapper-thickness: 6px;
 
 .reminderIconContainer {
   position: relative;
@@ -178,7 +183,7 @@ $small-icon-width: 24px;
 .beforeAfterLabel {
   text-transform: uppercase;
   color: $primary-darkgrey;
-  font-size: 11px;
+  font-size: 9px;
   margin-top: 5px;
 }
 

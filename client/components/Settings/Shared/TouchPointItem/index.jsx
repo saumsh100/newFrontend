@@ -48,10 +48,10 @@ export default function TouchPointItem(props) {
           <Col xs={1} className={classNames(toggleClass, styles.toggleCol)}>
             {toggleComponent}
           </Col>
-          <Col xs={3} className={classNames(labelClass, styles.labelCol)}>
+          <Col xs={4} className={classNames(labelClass, styles.labelCol)}>
             {labelComponent}
           </Col>
-          <Col xs={7}>
+          <Col xs={6}>
             <div className={classNames(linesBoxClass, noLines ? styles.linesBox : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
               {mainComponent}
               {/*<div className={styles.downIconWrapper}>

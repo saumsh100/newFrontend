@@ -17,12 +17,12 @@
 
 .secondaryLinesBox {
   margin-left: auto;
-  width: 80%;
-  height: 54px;
+  width: 85%;
+  height: 44px;
   border-left: 1px solid $primary-gray;
   border-bottom: 1px solid $primary-gray;
   position: relative;
-  top: -53px;
+  top: -39px;
 }
 
 .secondaryLinesBoxSelected {
@@ -35,7 +35,7 @@
   margin-left: auto;
   width: 91%;
   position: relative;
-  top: -20px;
+  top: -10px;
 }
 
 .inputFont {
@@ -48,26 +48,33 @@
   color: black;
 }
 
+$dheight: 30px;
+
 .dropdownSelect {
   background-color: white;
   border: 1px solid $primary-gray;
   padding: 0;
+  height: $dheight;
   // For inputs
   > input {
     @extend .inputFont;
     padding: 10px;
     box-sizing: border-box;
     border-bottom: none;
-    height: 40px;
+    height: $dheight;
+    font-size: 12px;
   }
 
   // For dropdowns
   > div:not(:last-child) {
     @extend .inputFont;
     border-bottom: none;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
     padding-top: 8px;
+    font-size: 12px;
+    height: 100%;
+    box-sizing: border-box;
   }
 
   > :global(.dd-menu-items) {
@@ -95,7 +102,7 @@
 
 .bottomRow {
   position: relative;
-  bottom: 12px;
+  bottom: 14px;
 }
 
 .rightDropdown {
@@ -103,8 +110,8 @@
 }
 
 // Needs to be same as <IconCircle /> component
-$width: 36px;
-$wrapper-thickness: 8px;
+$width: 26px;
+$wrapper-thickness: 6px;
 
 .reminderIconContainer {
   position: relative;
@@ -114,11 +121,11 @@ $wrapper-thickness: 8px;
 
 .smallIconContainer {
   position: relative;
-  top: 44px;
+  top: 35px;
   left: -12px;
 }
 
-$small-icon-width: 24px;
+$small-icon-width: 20px;
 
 .smallReminderSelectWrapperCircle {
   display: flex;
@@ -130,7 +137,7 @@ $small-icon-width: 24px;
   color: white;
   background-color: $primary-gray;
   > i {
-    font-size: 0.8em;
+    font-size: 0.6em;
   }
 }
 

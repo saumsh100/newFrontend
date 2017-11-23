@@ -10,7 +10,7 @@
 
 .linesBox {
   margin: 10px 0;
-  height: 150px;
+  height: 120px;
   border-top: 1px solid $primary-gray;
 }
 
@@ -18,7 +18,7 @@
   @extend .linesBox;
   background-image: linear-gradient(to bottom, $primary-gray 50%, transparent 0%);
   background-position: left;
-  background-size: 1.5px 14px;
+  background-size: 1px 14px;
   background-repeat: repeat-y;
 }
 
@@ -43,13 +43,13 @@
 
 .labelCol {
   padding-top: 4px;
-  padding-right: 33px;
+  padding-right: 20px;
 }
 
 .reminderLabel {
   text-align: center;
   composes: cardHeaderTitle from 'sass-loader!../../../../fonts.scss';
-  font-size: 15px;
+  font-size: 14px;
   color: black;
 }
 

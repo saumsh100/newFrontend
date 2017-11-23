@@ -332,8 +332,8 @@ class RemindersItem extends Component {
                           className={dropdownSelectClass}
                           value={type}
                           options={[
-                            { label: 'Hours Before Appt', value: 'hours' },
-                            { label: 'Days Before Appt', value: 'days' },
+                            { label: 'Hours Before', value: 'hours' },
+                            { label: 'Days Before', value: 'days' },
                           ]}
                         />
                       </Col>

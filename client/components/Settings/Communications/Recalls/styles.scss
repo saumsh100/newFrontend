@@ -3,7 +3,11 @@
 
 .dueDateItem {
   cursor: default;
-  height: 120px;
+  height: 100px;
+}
+
+.dueDateLinesBox {
+  border-top: none;
 }
 
 .bottomBox {
@@ -26,15 +30,15 @@
 }
 
 .bottomLabel {
-  height: 40px;
+  height: 30px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 0;
-  width: 80%;
+  width: 85%;
   position: relative;
-  top: -75px;
+  top: -54px;
   float: right;
   > div {
     color: $primary-blue !important;
@@ -70,17 +74,19 @@
   height: 100%;
   > div:not(:last-child) {
     color: black;
-    font-size: 14px;
+    font-size: 11px;
     border-bottom: none;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 6px;
+    padding-right: 6px;
     padding-top: 8px;
+    height: 100%;
+    box-sizing: border-box;
     > label {
       // font-family: $medium-font;
       top: -15px !important;
       color: $primary-darkgrey;
       text-transform: uppercase;
-      font-size: 10px !important;
+      font-size: 9px !important;
     }
   }
 
@@ -90,8 +96,8 @@
 }
 
 // Needs to be same as IconCircle component
-$width: 36px;
-$wrapper-thickness: 8px;
+$width: 26px;
+$wrapper-thickness: 6px;
 
 .bottomIconContainer {
   position: relative;
