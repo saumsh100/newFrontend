@@ -11,7 +11,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .input {
-  font-size: 16px;
+  font-size: $small-size;
   font-family: $dashboard-font;
   padding: 10px 0px 10px 0px;
   display: block;
@@ -33,7 +33,12 @@ $empty-grey: darken(lightgrey, 5%);
   }
 }
 
-
+.icon {
+  position: absolute;
+  right: 0px;
+  bottom: 30px;
+  opacity: 0.5;
+}
 
 .erroredInput {
   border-bottom: 1px solid $error-color;
@@ -54,7 +59,7 @@ $empty-grey: darken(lightgrey, 5%);
   left: 0px;
   transition: 0.2s ease all;
   top: 35px;
-  font-size: 16px;
+  font-size: $small-size;
 }
 
 .primaryColorBorder {
@@ -65,8 +70,14 @@ $empty-grey: darken(lightgrey, 5%);
   &_primaryWhiteLabel {
     color: $primary-white;
   }
+  &_primaryWhiteBorder{
+    border-color: $primary-white;
+  }
   &_primaryWhiteInput{
     border-bottom: 1px solid $primary-white;
+  }
+  &_primaryWhiteIcon{
+    color: $primary-white;
   }
 
   &_primaryGreyLabel {
@@ -80,9 +91,27 @@ $empty-grey: darken(lightgrey, 5%);
       color: $primary-white;
     }
   }
+  &_primaryGreyIcon {
+    color: $primary-grey;
+  }
 
-  &_primaryWhiteBorder{
-    border-color: $primary-white;
+  &_primaryBlueLabel {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  &_primaryBlueBorder{
+    border-color: $primary-blue;
+  }
+  &_primaryBlueInput{
+    border-bottom: 1px solid $primary-blue;
+
+    &:focus ~ .label {
+      color: $primary-blue;
+      opacity: 0.5;
+    }
+  }
+  &_primaryBlueIcon {
+    color: $primary-blue;
   }
 }
 

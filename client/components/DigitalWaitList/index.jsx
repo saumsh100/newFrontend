@@ -62,7 +62,7 @@ class DigitalWaitList extends Component {
               </span>
             </div>
           );
-        })
+        });
         return patientList;
       });
   }
@@ -75,7 +75,7 @@ class DigitalWaitList extends Component {
       reset,
     } = this.props;
 
-    let newValues = {}
+    let newValues = {};
 
     if (!selectedWaitSpot) {
       newValues = Object.assign(

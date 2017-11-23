@@ -30,11 +30,11 @@ class FiltersAll extends Component {
   handleEntityCheck(checked, id, filterKey) {
     const temp = {}
     if (checked) {
-      this.props.removeScheduleFilter({ key: filterKey , id })
+      this.props.removeScheduleFilter({ key: filterKey, id })
       temp[filterKey] = false;
       this.setState(temp);
     } else  {
-      this.props.addScheduleFilter({ key: filterKey , id });
+      this.props.addScheduleFilter({ key: filterKey, id });
       this.isAllChecked(filterKey);
     }
   }
@@ -55,7 +55,7 @@ class FiltersAll extends Component {
         this.setState(temp);
       }
     } else if (lenFilter === lenEntities - 1) {
-        this.setState(temp);
+      this.setState(temp);
     }
   }
 

@@ -31,7 +31,7 @@ class AppointmentsList extends Component {
     } = this.props;
 
     setSelectedPatientId(id);
-    push('/patients/list');
+    push(`/patients/${id}`);
   }
 
   render() {
@@ -44,27 +44,6 @@ class AppointmentsList extends Component {
     } = this.props;
 
     const sortedAppointments = appointments.toArray().sort(SortByStartDate);
-
-    // This sets the colors for each appointment based on practitioner
-
-    /*
-    const sortedPractitioners = practitioners.toArray().sort(SortByFirstName);
-
-    const colors = ['#FF715A', '#FFC45A', '#2CC4A7', '#8CBCD6',];
-    const colorLen = colors.length;
-    const reset = Math.ceil((sortedPractitioners.length - colorLen) / colorLen);
-
-    for (let j = 1; j <= reset; j++) {
-      for (let i = 0; i < colorLen; i++) {
-        colors.push(colors[i]);
-      }
-    }
-
-    const practitionersArray = sortedPractitioners.map((prac, index) => {
-      return Object.assign({}, prac.toJS(), {
-        color: colors[index],
-      });
-    });*/
 
     return (
       <List className={styles.appointmentList}>

@@ -1,0 +1,112 @@
+@import '../../../../ui';
+
+.card {
+  height: 100%;
+  width: 100%;
+  background: white;
+}
+
+.content {
+  height: 100%;
+  width: 100%;
+}
+
+.imageContainer {
+  height: 50%;
+  opacity: 1;
+  img {
+
+  }
+}
+
+.dataContainer {
+  position: relative;
+  display: flex;
+  height: 50%;
+  width: 100%;
+  background: white;
+}
+
+.avatarContainer {
+  width: 30%;
+  border-right: 1px solid $primary-grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &_avatar {
+    top: -75px;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(#dadada, #a1a1a1);
+    span {
+      font-size: 45px !important;
+    }
+  }
+
+  &_data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.8em;
+    padding-top: 70px;
+
+    &_name {
+      color: $primary-blue;
+      font-size: $extra-medium-size;
+      composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_email {
+      font-size: $extra-small-size;
+      font-style: italic;
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_phone {
+      font-size: $extra-small-size;
+      font-style: italic;
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_icon {
+      padding-right: 10px;
+      composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
+    }
+
+    &_active {
+      composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
+      color: #ffffff;
+      opacity: 0.6;
+      background: lighten($primary-darkgrey,10%);
+      padding: 3px;
+      height: 10px;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      font-size: 14px;
+      width: 80px;
+      justify-content: center;
+    }
+  }
+}
+
+.paddingStatus {
+  padding-top: 10px;
+}
+
+.rightContainer {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  &_content {
+    padding: 20px 20px 20px 30px;
+  }
+}
+
+.displayFlex {
+  display: flex;
+  align-items: center;
+}

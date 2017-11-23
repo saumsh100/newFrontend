@@ -88,6 +88,7 @@ class DayPicker extends Component {
       iconClassName,
       value,
       timezone,
+      icon
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
@@ -101,6 +102,7 @@ class DayPicker extends Component {
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}
+        icon="calendar-o"
       />
     );
 

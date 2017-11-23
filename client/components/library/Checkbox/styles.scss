@@ -9,8 +9,8 @@
   input[type=checkbox]:checked + label::before {
     content: "\2714\fe0e";
     font-size: 11px;
-    background: $primary-color;
     color: white;
+    background-color: $primary-blue;
   }
 
   label {
@@ -24,14 +24,15 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 18px;
-      height: 18px;
+      width: 14px;
+      height: 14px;
       margin-right: 3px;
       vertical-align: middle;
       background-color: inherit;
       color: white;
-      border: 1px solid $primary-color;
-      border-radius: 3px;
+      border: 1px solid $primary-blue;
+      border-radius: 30%;
+      padding-top: 1px;
     }
   }
 }

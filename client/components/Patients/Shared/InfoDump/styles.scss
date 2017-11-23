@@ -1,0 +1,30 @@
+@import '../../../../ui';
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  color: darken(#d7e1e3, 10%);
+  opacity: 1;
+  font-size: $extra-small-size;
+  padding-bottom: 10px;
+  composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
+  font-family: $medium-font;
+
+}
+
+.data {
+  color: $primary-dark;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  width: 170px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.noData {
+  color: $primary-dark;
+  font-style: italic;
+}

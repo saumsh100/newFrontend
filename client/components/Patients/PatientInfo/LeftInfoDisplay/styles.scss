@@ -1,0 +1,114 @@
+@import '../../../../ui';
+
+.mainContainer {
+  width: 100%;
+  border-top: 3px solid $inactive-color;
+  background: white;
+}
+
+.subHeader {
+  composes: fontMediumPlusSize from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+  padding-top: 20px;
+}
+
+.subHeader:first-child {
+  padding-top: 0px;
+}
+
+.text {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+}
+.grid {
+  box-sizing: border-box;
+  padding: 10px 35px 10px 35px;
+  border-top: 0.5px dotted $primary-grey;
+}
+
+.row {
+  border-bottom: 1px solid $primary-grey;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+.row:first-child {
+  padding-top: 0px;
+}
+.row:last-child {
+  border-bottom: 0px;
+}
+
+.paddingCol {
+  padding-bottom: 40px;
+}
+
+.tab {
+  padding-top: 10px;
+  > nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: $large-weight;
+  }
+}
+
+.recallContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.iconContainer {
+  span {
+    padding-left: 10px;
+  }
+  color: $primary-darkgrey;
+  &_caret {
+    color: $primary-dark;
+  }
+}
+
+.ddList {
+  width: 250px;
+}
+
+.ddListItem {
+  background: white;
+  padding: 10px;
+  &:hover {
+    background-color: white !important;
+  }
+}
+
+.infoPadding {
+  padding-top: 25px;
+}
+
+.textContainer {
+  display: flex;
+}
+.hiddenText {
+  margin-left: auto;
+}
+
+.textEdit {
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-darkgrey;
+
+  &:hover {
+    cursor: pointer;
+    color: $primary-blue;
+  }
+
+  &_text {
+  }
+
+  &_icon {
+    padding-right: 5px;
+  }
+}
