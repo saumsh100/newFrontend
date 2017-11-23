@@ -9,7 +9,8 @@
   input[type=checkbox]:checked + label::before {
     content: "\2714\fe0e";
     font-size: 11px;
-    color: $primary-color;
+    color: white;
+    background-color: $primary-blue;
   }
 
   label {
@@ -29,8 +30,9 @@
       vertical-align: middle;
       background-color: inherit;
       color: white;
-      border: 1px solid $primary-darkgrey;
+      border: 1px solid $primary-blue;
       border-radius: 30%;
+      padding-top: 1px;
     }
   }
 }

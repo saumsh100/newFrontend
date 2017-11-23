@@ -23,7 +23,7 @@ export default function Actions(props) {
     <List className={styles.actionsContainer}>
       {actionsList.map((action, index) => {
         return (
-          <ListItem key={`patientIds_${index}`} className={styles.actionItem} onClick={() =>{} }>
+          <ListItem key={`patientIds_${index}`} className={styles.actionItem} onClick={() =>{} } disabled>
             {action}
           </ListItem>
         );

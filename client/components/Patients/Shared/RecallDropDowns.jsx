@@ -43,13 +43,13 @@ export default function RecallDropDowns(props){
         labelComponent={recallSmsMenu}
       >
         <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Custom SMS Recall
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Automated SMS Recall
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Log SMS
           </ListItem>
         </List>
@@ -58,13 +58,13 @@ export default function RecallDropDowns(props){
         labelComponent={recallEmailMenu}
       >
         <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Custom Email Recall
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Automated Email Recall
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Log Email
           </ListItem>
         </List>
@@ -73,13 +73,13 @@ export default function RecallDropDowns(props){
         labelComponent={recallPhoneMenu}
       >
         <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Custom Phone Recall
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Automated Phone Recall
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Log SMS
           </ListItem>
         </List>

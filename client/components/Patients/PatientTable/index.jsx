@@ -19,8 +19,8 @@ import SelectPatientColumn from './SelectPatientColumn';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import HygieneColumn from './HygieneColumn';
+import Loading from '../../library/Loading';
 import styles from './styles.scss';
-import Loading from '../../library/Loading/index';
 
 class PatientTable extends Component {
   constructor(props) {
@@ -50,8 +50,6 @@ class PatientTable extends Component {
 
     this.fetchData();
   }
-
-
 
   pageChange(index) {
     this.props.setTableData({ page: index });
@@ -187,12 +185,15 @@ class PatientTable extends Component {
       {
         Header: '#',
         Cell: (props) => {
-          return (<div className={styles.displayFlex}>
-            <div className={styles.cellText}>{((patientTable.page * patientTable.limit) + props.index) + 1}
+          return (
+            <div className={styles.displayFlex}>
+              <div className={styles.cellText}>
+                {((patientTable.page * patientTable.limit) + props.index) + 1}
+              </div>
             </div>
-          </div>
           );
         },
+
         filterable: false,
         sortable: false,
         maxWidth: 50,
@@ -276,7 +277,14 @@ class PatientTable extends Component {
       {
         Header: 'Active',
         accessor: 'status',
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.value}</div></div>,
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText}>
+              {props.value}
+            </div>
+          </div>
+        ),
+
         filterable: false,
         className: styles.colBg,
         maxWidth: 80,
@@ -291,11 +299,17 @@ class PatientTable extends Component {
           }
           return '';
         },
+
         Cell: (props) => {
-          return (<div className={styles.displayFlex}>
-            <div className={styles.cellText_lastAppt}>{props.value}</div>
-          </div>);
+          return (
+            <div className={styles.displayFlex}>
+              <div className={styles.cellText_lastAppt}>
+                {props.value}
+              </div>
+            </div>
+          );
         },
+
         filterable: false,
         className: styles.colBg,
       },
@@ -307,13 +321,18 @@ class PatientTable extends Component {
             const dateValue = moment(d['lastApptDate']);
             return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '';
           }
+
           return '';
         },
+
         Cell: (props) => {
-          return (<div className={styles.displayFlex}>
-            <div className={styles.cellText_lastAppt}>{props.value}</div>
-          </div>);
+          return (
+            <div className={styles.displayFlex}>
+              <div className={styles.cellText_lastAppt}>{props.value}</div>
+            </div>
+          );
         },
+
         filterable: false,
         className: styles.colBg,
       },
@@ -326,6 +345,7 @@ class PatientTable extends Component {
             />
           );
         },
+
         sortable: false,
         filterable: false,
         className: styles.colBg,
@@ -336,7 +356,15 @@ class PatientTable extends Component {
         accessor: d => {
           return d.hasOwnProperty('totalAmount') && d.totalAmount ? `$${d.totalAmount.toFixed(2)}` : '';
         },
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText_revenue}>{props.value}</div></div>,
+
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText_revenue}>
+              {props.value}
+            </div>
+          </div>
+        ),
+
         filterable: false,
         sortable: false,
         className: styles.colBg,
@@ -346,7 +374,7 @@ class PatientTable extends Component {
     return (
       <Grid className={styles.mainContainer}>
         <Row>
-          <Col xs={12} >
+          <Col xs={12}>
             <HeaderSection
               totalPatients={patientTable.totalPatients}
               createEntityRequest={createEntityRequest}
@@ -358,121 +386,128 @@ class PatientTable extends Component {
           </Col>
         </Row>
         <Row>
-          <Col xs={10} className={styles.tableContainer}>
-            <ReactTable
-              data={patientTable.data}
-              page={patientTable.page}
-              pages={Math.floor(patientTable.totalPatients / patientTable.limit)}
-              sorted={patientTable.sort}
-              defaultPageSize={patientTable.limit}
-              pageSize={patientTable.limit}
-              loading={patientTable.isLoadingTable}
-              expanded={this.state.expanded}
-              pageSizeOptions={[15, 20, 25, 50, 100]}
-              columns={columns}
-              className="-highlight"
-              manual
-              filterable
-              showPageSizeOptions={false}
-              noDataText="No Patients Found"
-              loadingText={<Loading />}
-              SubComponent={(row) => {
-                return (
-                  <PatientSubComponent
-                    patient={row.original}
-                  />
-                );
-              }}
-              onPageChange={(pageIndex) => {
-                this.pageChange(pageIndex);
-              }}
-              onSortedChange={(newSorted, column, shiftKey) => {
-                this.onSort(newSorted);
-              }}
-              onPageSizeChange={(pageSize, pageIndex) => {
-                this.pageSizeChange(pageSize, pageIndex);
-              }}
-              getTdProps={(state, rowInfo, column, instance) => {
-                const style = {};
+          <Col xs={12} className={styles.tableColWrapper}>
+            <div className={styles.tableContainer}>
+              <ReactTable
+                data={patientTable.data}
+                page={patientTable.page}
+                pages={Math.floor(patientTable.totalPatients / patientTable.limit)}
+                sorted={patientTable.sort}
+                defaultPageSize={patientTable.limit}
+                pageSize={patientTable.limit}
+                loading={patientTable.isLoadingTable}
+                expanded={this.state.expanded}
+                pageSizeOptions={[15, 20, 25, 50, 100]}
+                columns={columns}
+                className="-highlight"
+                manual
+                // filterable
+                showPageSizeOptions={false}
+                noDataText="No Patients Found"
+                loadingText={<Loading />}
+                SubComponent={(row) => {
+                  return (
+                    <PatientSubComponent
+                      patient={row.original}
+                    />
+                  );
+                }}
+                onPageChange={(pageIndex) => {
+                  this.pageChange(pageIndex);
+                }}
+                onSortedChange={(newSorted, column, shiftKey) => {
+                  this.onSort(newSorted);
+                }}
+                onPageSizeChange={(pageSize, pageIndex) => {
+                  this.pageSizeChange(pageSize, pageIndex);
+                }}
+                getTdProps={(state, rowInfo, column, instance) => {
+                  const style = {};
 
-                if (rowInfo) {
-                  style.background = patientIds.indexOf(rowInfo.original.id) > -1 ? '#efefef' : 'inherit';
-                }
+                  if (rowInfo) {
+                    style.background = patientIds.indexOf(rowInfo.original.id) > -1 ? '#efefef' : 'inherit';
+                  }
 
-                return {
-                  onClick: (e, handleOriginal) => {
-                    this.handleRowClick(rowInfo, column);
-                    if (handleOriginal) {
-                      handleOriginal();
-                    }
-                  },
-                  style,
-                };
-              }}
-              getTableProps={() => {
-                return {
-                  style: {
-                    background: 'white',
-                  },
-                };
-              }}
-              getTheadTrProps={() => {
-                return {
-                  style: {
-                    background: 'white',
-                    color: '#959596',
-                    paddingTop: '3px',
-                    fontSize: '12px',
-                    opacity: '0.6',
-                  },
-                };
-              }}
-              getTheadThProps={(state, rowInfo, column) => {
-                const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null
-                let color = '#2CC4A7';
-                if (column.id === compare && patientTable.sort[0].desc) {
-                  color = '#2CC4A7';
-                }
-                return {
-                  style: {
-                    background: 'white',
-                    display: 'flex',
-                    justifyContent: 'flex-start',
-                    boxShadow: 'none',
-                    color: column.id === compare ? color : 'inherit',
-                  },
-                };
-              }}
-              getTfootThProps={() => {
-                return {
-                  style: {
-                    background: 'white',
-                  },
-                };
-              }}
-              getTbodyProps={() => {
-                return {
-                  style: {
-                    background: 'white',
-                  },
-                };
-              }}
+                  return {
+                    onClick: (e, handleOriginal) => {
+                      this.handleRowClick(rowInfo, column);
+                      if (handleOriginal) {
+                        handleOriginal();
+                      }
+                    },
+                    style,
+                  };
+                }}
+                getTableProps={() => {
+                  return {
+                    style: {
+                      background: 'white',
+                    },
+                  };
+                }}
+                getTheadTrProps={() => {
+                  return {
+                    style: {
+                      background: 'white',
+                      color: '#959596',
+                      paddingTop: '15px',
+                      paddingBottom: '5px',
+                      borderBottom: '1px solid grey',
+                      fontSize: '12px',
+                      opacity: '0.6',
+                    },
+                  };
+                }}
+                getTheadThProps={(state, rowInfo, column) => {
+                  const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null
+                  let color = '#2CC4A7';
+                  if (column.id === compare && patientTable.sort[0].desc) {
+                    color = '#2CC4A7';
+                  }
 
-              style={{
-                height: 'calc(100vh - 188px)',
-                background: 'white',
-              }}
-            />
-          </Col>
-          <Col xs={2}>
-            <SideBarFilters
-              addFilter={this.addFilter}
-              practitioners={practitioners}
-              arrayRemoveAll={arrayRemoveAll}
-              removeFilter={this.removeFilter}
-              filters={filters}
-              clearFilters={this.clearFilters}
-            />
+                  return {
+                    style: {
+                      background: 'white',
+                      display: 'flex',
+                      justifyContent: 'flex-start',
+                      boxShadow: 'none',
+                      fontFamily: 'Gotham-Medium',
+                      color: column.id === compare ? color : 'inherit',
+                      borderRight: 'none',
+                    },
+                  };
+                }}
+                getTfootThProps={() => {
+                  return {
+                    style: {
+                      background: 'white',
+                    },
+                  };
+                }}
+                getTbodyProps={() => {
+                  return {
+                    style: {
+                      background: 'white',
+                    },
+                  };
+                }}
+
+                style={{
+                  height: 'calc(100vh - 188px)',
+                  background: 'white',
+                }}
+              />
+            </div>
+            <div className={styles.filterContainer}>
+              <SideBarFilters
+                addFilter={this.addFilter}
+                practitioners={practitioners}
+                arrayRemoveAll={arrayRemoveAll}
+                removeFilter={this.removeFilter}
+                filters={filters}
+                clearFilters={this.clearFilters}
+              />
+            </div>
           </Col>
         </Row>
       </Grid>

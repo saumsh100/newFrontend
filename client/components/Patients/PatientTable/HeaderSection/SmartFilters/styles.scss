@@ -8,6 +8,9 @@
   padding: 0px 10px 0px 10px;
   color: $primary-darkgrey;
   background: white;
+  &:hover {
+    background-color: $primary-lightgrey !important;
+  }
 }
 
 .formContainer {

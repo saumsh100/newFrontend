@@ -50,8 +50,19 @@
   }
 }
 
+.tableColWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
 .tableContainer {
   border-top: 3px solid darken($primary-darkgrey, 10%);
+  flex: 1;
+}
+
+.filterContainer {
+  flex: 0 0 300px;
 }
 
 .searchBar {
@@ -104,6 +115,11 @@
 
 .colBg {
   background: white;
+  border-right: none !important;
+  font-family: $medium-font;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .colOrdered {
@@ -137,4 +153,8 @@
 }
 .dotGreen {
   background: $primary-green;
+}
+
+:global(.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover) {
+  background: rgba(0,0,0,0.02);
 }

@@ -43,13 +43,13 @@ export default function ReminderDropDowns(props){
         labelComponent={reminderSmsMenu}
       >
         <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Custom SMS Reminder
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Automated SMS Reminder
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Log SMS
           </ListItem>
         </List>
@@ -58,13 +58,13 @@ export default function ReminderDropDowns(props){
         labelComponent={reminderEmailMenu}
       >
         <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Custom Email Reminder
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Automated Email Reminder
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Log Email
           </ListItem>
         </List>
@@ -73,13 +73,13 @@ export default function ReminderDropDowns(props){
         labelComponent={reminderPhoneMenu}
       >
         <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Custom Phone Reminder
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Send a Automated Phone Reminder
           </ListItem>
-          <ListItem className={styles.ddListItem}>
+          <ListItem className={styles.ddListItem} disabled>
             Log Phone Reminder
           </ListItem>
         </List>

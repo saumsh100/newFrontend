@@ -73,9 +73,13 @@
 .ddList {
   width: 250px;
 }
+
 .ddListItem {
   background: white;
   padding: 10px;
+  &:hover {
+    background-color: white !important;
+  }
 }
 
 .infoPadding {
