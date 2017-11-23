@@ -8,10 +8,10 @@ export default function createReminderText({ patient, account, appointment }) {
 
   const alreadyConfirmed = appointment.isPatientConfirmed;
   if (alreadyConfirmed) {
-    return `Just a friendly reminder that your next appointment with us at ${account.name} ` +
-      `is confirmed for ${startDate} at ${startTime}. We look forward to seeing you!`;
+    return `Hi ${patient.firstName}, this is just a friendly reminder that your next appointment with ${account.name} ` +
+      `is on ${startDate} at ${startTime}.`;
   } else {
-    return `${patient.firstName}, your next appointment with ${account.name} ` +
+    return `Hi ${patient.firstName}, this is just a friendly reminder that your next appointment with ${account.name} ` +
       `is on ${startDate} at ${startTime}. Reply "C" to ` +
       'confirm your appointment.';
   }

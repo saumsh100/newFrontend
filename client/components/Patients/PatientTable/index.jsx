@@ -459,10 +459,10 @@ class PatientTable extends Component {
                   };
                 }}
                 getTheadThProps={(state, rowInfo, column) => {
-                  const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null
-                  let color = '#2CC4A7';
+                  const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null;
+                  let sortedClasses = styles.theadAsc;
                   if (column.id === compare && patientTable.sort[0].desc) {
-                    color = '#2CC4A7';
+                    sortedClasses = styles.theadDesc;
                   }
 
                   return {
@@ -472,9 +472,10 @@ class PatientTable extends Component {
                       justifyContent: 'flex-start',
                       boxShadow: 'none',
                       fontFamily: 'Gotham-Medium',
-                      color: column.id === compare ? color : 'inherit',
                       borderRight: 'none',
                     },
+
+                    className: column.id === compare ? sortedClasses : null,
                   };
                 }}
                 getTfootThProps={() => {

@@ -27,7 +27,7 @@ import {
   SBody,
   SMSPreview,
 } from '../../../../library';
-import createReminderText from '../../../../../../server/lib/reminders/createReminderText';
+import createRecallText from '../../../../../../server/lib/recalls/createRecallText';
 import styles from './styles.scss';
 
 const reminderMessage = 'Jane, this is a friendly reminder that you have an upcoming appointment with Dental Practice' +
@@ -67,21 +67,13 @@ class RecallPreview extends Component {
       lastName: 'Doe',
     };
 
-    // Fake Appt Data
-    const appointment = {
-      // 1 day from now with no minutes
-      startDate: moment().add(1, 'days').minutes(0).toISOString(),
-    };
-
     let typePreview = null;
     if (primaryType === 'sms') {
-      appointment.isPatientConfirmed = isConfirmable;
-      const recallMessage = createReminderText({ patient, account, appointment });
-
+      const recallMessage = createRecallText({ patient, account, recall });
       typePreview = (
         <div className={styles.smsPreviewWrapper}>
           <SMSPreview
-            from="+1 (780) 850-8886"
+            from="+1 (604) 404-1122"
             message={recallMessage}
           />
         </div>
