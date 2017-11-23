@@ -25,6 +25,7 @@ export function mostBusinessPatient(startDate, endDate, accountId) {
             gt: startDate,
             lt: endDate,
           },
+          isCompleted: true,
         },
         attributes: [],
         duplicating: false,
@@ -59,6 +60,7 @@ export function mostBusinessProcedure(startDate, endDate, accountId) {
             gt: startDate,
             lt: endDate,
           },
+          isCompleted: true,
         },
         attributes: [],
         duplicating: false,
@@ -81,6 +83,7 @@ export function mostBusinessClinic(startDate, endDate, accountId) {
         gt: startDate,
         lt: endDate,
       },
+      isCompleted: true,
     },
     attributes: [
       [sequelize.fn('sum', sequelize.col('totalAmount')), 'totalAmountClinic'],

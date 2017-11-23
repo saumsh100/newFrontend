@@ -16,6 +16,7 @@ function recallSentHandler(recallSentSocket, io) {
       let recallsSent = await SentRecall.findAll({
         where: {
           id: JSON.parse(data),
+          isSent: true,
         },
         raw: true,
       });

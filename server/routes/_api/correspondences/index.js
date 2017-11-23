@@ -4,7 +4,7 @@
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
-import batchCreate from '../../util/batch';
+import batchCreate, { batchDelete } from '../../util/batch';
 import jsonapi from '../../util/jsonapi';
 import { Correspondence } from '../../../_models';
 import handleSequelizeError from '../../util/handleSequelizeError';
@@ -78,6 +78,23 @@ correspondencesRouter.post('/connector/batch', checkPermissions('correspondences
 });
 
 /**
+ * DELETE Correspondences - Connector
+ */
+correspondencesRouter.delete('/connector/batch', checkPermissions('correspondences:delete'), async (req, res, next) => {
+  let correspondences = req.query.ids;
+  if (!Array.isArray(correspondences)) {
+    correspondences = [correspondences];
+  }
+
+  try {
+    await batchDelete(correspondences, Correspondence);
+    return res.sendStatus(204);
+  } catch (error) {
+    return next(error);
+  }
+});
+
+/**
  * return changed Correspondences to connector via isSyncedWithPms
  */
 correspondencesRouter.get('/connector/notSynced', checkPermissions('correspondences:read'), async (req, res, next) => {
@@ -104,7 +121,16 @@ correspondencesRouter.get('/connector/notSynced', checkPermissions('corresponden
  */
 correspondencesRouter.put('/connector/batch', checkPermissions('correspondences:update'), (req, res, next) => {
   const correspondences = req.body;
-  const correspondencesUpdates = correspondences.map(correspondence =>
+  const cleanedCorrespondences = correspondences.map(correspondence => Object.assign(
+    {},
+    correspondence,
+    {
+      accountId: req.accountId,
+      isSyncedWithPms: true,
+    }
+  ));
+
+  const correspondencesUpdates = cleanedCorrespondences.map(correspondence =>
     Correspondence.findById(correspondence.id)
       .then(existingCorrespondence => existingCorrespondence.update(correspondence)));
 

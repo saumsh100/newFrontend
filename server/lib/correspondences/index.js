@@ -11,6 +11,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
         $ne: null,
       },
     },
+    paranoid: false,
   });
 
   const sentReminderIds = correspondences.map(c => c.sentReminderId);
@@ -18,6 +19,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
   const sentreminders = await SentReminder.findAll({
     where: {
       accountId,
+      isSent: true,
       id: {
         $notIn: sentReminderIds,
       },
@@ -57,6 +59,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
         $ne: null,
       },
     },
+    paranoid: false,
   });
 
   const sentReminderIds = correspondences.map(c => c.sentReminderId);
@@ -64,6 +67,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
   const sentreminders = await SentReminder.findAll({
     where: {
       accountId,
+      isSent: true,
       id: {
         $notIn: sentReminderIds,
       },
@@ -79,7 +83,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       appointmentId: sr.appointmentId,
       method: sr.primaryType,
       type: Correspondence.REMINDER_CONFIRMED_TYPE,
-      contactedAt: sr.createdAt,
+      contactedAt: sr.updatedAt,
       note: Correspondence.REMINDER_CONFIRMED_NOTE,
     };
   });
@@ -104,6 +108,7 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
         $ne: null,
       },
     },
+    paranoid: false,
   });
 
   const sentRecallsIds = correspondences.map(c => c.sentReminderId);
@@ -111,6 +116,7 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
   const sentRecalls = await SentRecall.findAll({
     where: {
       accountId,
+      isSent: true,
       id: {
         $notIn: sentRecallsIds,
       },

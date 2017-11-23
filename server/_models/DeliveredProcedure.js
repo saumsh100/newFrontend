@@ -27,6 +27,12 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    isCompleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+
     pmsId: {
       type: DataTypes.STRING,
     },
