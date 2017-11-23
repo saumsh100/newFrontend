@@ -1,3 +1,5 @@
+import { sequelize } from '../../_models';
+
 /**
  * Module to provide Batch Creation functionality for a Sequelize Model
  * Created by gavin on 2017-09-09.
@@ -84,6 +86,46 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
   return { errors, docs: validatedDocs };
 }
 
+export function batchDelete(ids, Model) {
+  const length = ids.length;
+
+  return sequelize.transaction(async (t) => {
+    try {
+      await Model.destroy({
+        where: {
+          id: ids,
+        },
+        transaction: t,
+      });
+
+      let affectedRows = await Model.findAndCountAll({
+        where: {
+          id: ids,
+        },
+        paranoid: false,
+      });
+
+      affectedRows = affectedRows.count;
+
+      if (affectedRows !== length) {
+        throw "Didn't delete the right number of rows so deleted none";
+      }
+
+      return affectedRows;
+    } catch (e) {
+      throw e;
+    }
+  });
+}
+
+/**
+ * [batchUpdate description]
+ * @param  {[object]} dataArray           values to change
+ * @param  {[object]} Model               [Model of the values]
+ * @param  {[string]} modelType           [model name]
+ * @param  {[function]} preUpdateFunction [a function to be called before the update]
+ * @return {[object]}                     [object of saved models and any errors (if any)]
+ */
 export async function batchUpdate(dataArray, Model, modelType, preUpdateFunction) {
   const savedModels = [];
   const errors = [];
