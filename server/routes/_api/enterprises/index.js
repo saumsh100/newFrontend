@@ -1,3 +1,4 @@
+
 import moment from 'moment';
 import { Router } from 'express';
 import { pick } from 'lodash';
@@ -21,6 +22,8 @@ import {
 } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { UserAuth } from '../../../lib/_auth';
+import { generateDefaultRecalls } from '../../../lib/recalls/default';
+import { generateDefaultReminders } from '../../../lib/reminders/default';
 import createAccount from '../../../lib/createAccount';
 
 const { timeWithZone } = require('../../../util/time');
@@ -144,41 +147,8 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
 
       const account = await createAccount(accountFirst, req.query);
 
-      const defaultReminders = [
-        {
-          // 21 day email
-          accountId: account.id,
-          primaryType: 'email',
-          lengthSeconds: 21 * 24 * 60 * 60,
-        },
-        {
-          // 7 day sms
-          accountId: account.id,
-          primaryType: 'sms',
-          lengthSeconds: 7 * 24 * 60 * 60,
-        },
-        {
-          // 1 day sms
-          accountId: account.id,
-          primaryType: 'sms',
-          lengthSeconds: 2 * 24 * 60 * 60,
-        },
-        {
-          // 2 hour sms
-          accountId: account.id,
-          primaryType: 'sms',
-          lengthSeconds: 2 * 60 * 60,
-        },
-      ];
-
-      const defaultRecalls =  [
-        {
-          // 6 month recall
-          accountId: account.id,
-          primaryType: 'email',
-          lengthSeconds: 6 * 30 * 24 * 60 * 60,
-        },
-      ];
+      const defaultReminders = generateDefaultReminders(account);
+      const defaultRecalls = generateDefaultRecalls(account);
 
       const defaultServices = [
         {
@@ -298,7 +268,7 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
         },
       };
 
-      Promise.all([
+      return Promise.all([
         Reminder.bulkCreate(defaultReminders),
         WeeklySchedule.create(defaultSchdedule),
         Service.bulkCreate(defaultServices),

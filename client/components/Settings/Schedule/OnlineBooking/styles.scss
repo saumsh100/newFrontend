@@ -1,5 +1,9 @@
 @import '../../../../ui';
 
+.onlineBookingBody {
+  padding: 40px;
+}
+
 .mainContainer {
   display: inline-block;
   width: 100%;
@@ -17,9 +21,7 @@
   }
 
   &_intervalField {
-    width: 235px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    width: 250px;
   }
 }
 
@@ -27,6 +29,7 @@
 }
 .snippetContainer {
   display: inline-block;
+  padding: 20px 0;
 }
 
 .label {

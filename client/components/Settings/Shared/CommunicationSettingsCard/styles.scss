@@ -1,0 +1,17 @@
+@import '../../../../ui';
+
+.commsGrid {
+  min-width: 1250px;
+}
+
+.commsRow {
+  height: 100%;
+}
+
+.commsListCol {
+  box-sizing: border-box;
+  padding: 40px;
+  padding-right: 0;
+  border-right: 1px solid #e6e6e6;
+  overflow-y: scroll;
+}

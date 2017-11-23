@@ -41,6 +41,83 @@ const Time = {
     return moment(endDate).diff(startDate, 'hours', true);
   },
 
+  m2s(num) {
+    return num * Time.w2s(4);
+  },
+
+  w2s(num) {
+    const oneWeek = 60 * 60 * 24 * 7;
+    return oneWeek * num;
+  },
+
+  d2s(num) {
+    const oneDay = 60 * 60 * 24;
+    return oneDay * num;
+  },
+
+  h2s(num) {
+    const oneHour = 60 * 60;
+    return oneHour * num;
+  },
+
+  s2w(seconds) {
+    const weekSeconds = Time.w2s(1);
+    return parseInt(seconds / weekSeconds);
+  },
+
+  s2m(seconds) {
+    const monthSeconds = Time.m2s(1);
+    return parseInt(seconds / monthSeconds);
+  },
+
+  ordinalSuffix(i) {
+    const j = i % 10;
+    const k = i % 100;
+    if (j === 1 && k !== 11) {
+      return i + 'st';
+    }
+
+    if (j === 2 && k !== 12) {
+      return i + 'nd';
+    }
+
+    if (j === 3 && k !== 13) {
+      return i + 'rd';
+    }
+
+    return i + 'th';
+  },
+
+  secondsToNumType(seconds) {
+    const daySeconds = Time.d2s(1);
+    const hourSeconds = Time.h2s(1);
+    const numDays = seconds / daySeconds;
+    const numHours = seconds / hourSeconds;
+    const isDay = seconds % daySeconds === 0 && numDays > 2;
+    const type = isDay ? 'days' : 'hours';
+    const num = isDay ? parseInt(numDays) : parseInt(numHours);
+    return { type, num };
+  },
+
+  numTypeToSeconds(num, type) {
+    if (type !== 'hours' && type !== 'days' && type !== 'weeks') {
+      throw new Error('not a valid type to convert to seconds');
+    }
+
+    const weekSeconds = Time.w2s(1);
+    const daySeconds = Time.d2s(1);
+    const hourSeconds = Time.h2s(1);
+
+    let secondsMultiplier = weekSeconds;
+    if (type === 'days') {
+      secondsMultiplier = daySeconds;
+    } else if (type === 'hours') {
+      secondsMultiplier = hourSeconds;
+    }
+
+    return num * secondsMultiplier;
+  },
+
   /**
    *
    * @param date

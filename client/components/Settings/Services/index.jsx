@@ -72,7 +72,8 @@ function mapStateToProps({ entities, accountSettings }) {
   const filteredServices = services.sort(sortServicesAlphabetical);
 
   if (!serviceId) {
-    serviceId = null;
+    const selectedService = services.first();
+    serviceId = selectedService && selectedService.id;
   }
 
   return {

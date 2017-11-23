@@ -7,6 +7,9 @@ import {
 } from '../../_models';
 import { generateOrganizedPatients } from '../comms/util';
 
+// 1 day
+const DEFAULT_RECALL_BUFFER = 86400;
+
 /**
  * mapPatientsToRecalls is a function that takes the clinic's recalls
  * and produces an array that matches the order of the success and fail patients for each recall
@@ -15,6 +18,8 @@ import { generateOrganizedPatients } from '../comms/util';
  * - fails = (sentRecalls where isSent=false with an errorCode)
  *
  * @param recalls
+ * @param account
+ * @param date
  * @returns {Promise.<Array>}
  */
 export async function mapPatientsToRecalls({ recalls, account, date }) {
@@ -45,6 +50,7 @@ export async function mapPatientsToRecalls({ recalls, account, date }) {
  * - and if we should send reminder
  *
  * @param reminder
+ * @param account
  * @param date
  */
 export async function getPatientsDueForRecall({ recall, account, date }) {
@@ -82,7 +88,7 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
     ],
   });
 
-  return patients.filter(patient => isDueForRecall({ recall, patient: patient.get({ plain: true }), date }));
+  return patients.filter(patient => isDueForRecall({ account, recall, patient: patient.get({ plain: true }), date }));
 }
 
 /**
@@ -91,12 +97,13 @@ export async function getPatientsDueForRecall({ recall, account, date }) {
  * - checks if reminder was already sent
  * - and if it is sendable according to patient preferences
  *
+ * @param account
  * @param recall
  * @param patient
  * @param date
  * @returns {boolean}
  */
-export function isDueForRecall({ recall, patient, date }) {
+export function isDueForRecall({ account, recall, patient, date }) {
   const { appointments, sentRecalls, preferences } = patient;
 
   // If they've never had any appointments, don't bother
@@ -106,11 +113,27 @@ export function isDueForRecall({ recall, patient, date }) {
   // Check if latest appointment is within the recall window
   // TODO: should probably add date check to query to reduce size of query
   const { startDate } = appointments[appointments.length - 1];
-  const isDue = moment(date).diff(startDate) / 1000 > recall.lengthSeconds;
 
-  const recallAlreadySentOrLongerAway = sentRecalls.some((s) => {
-    return (s.recallId === recall.id) || (recall.lengthSeconds > s.lengthSeconds);
+  // Get the preferred due date
+  const dueDateSeconds = patient.recallDueDateSeconds || account.recallDueDateSeconds;
+
+  // Recalls work around dueDate, whereas Reminders work around appointment.startDate
+  const recallSeconds = dueDateSeconds - recall.lengthSeconds;
+
+  // Get how long ago last appointment was
+  const appointmentTimeAwaySeconds = moment(date).diff(startDate) / 1000;
+
+  // Determine if the dueDate from  last appointment fits into this recall (with a buffer)
+  const isDue = (recallSeconds <= appointmentTimeAwaySeconds) &&
+    (appointmentTimeAwaySeconds <= (recallSeconds + DEFAULT_RECALL_BUFFER));
+
+  // If I sent a 2week PAST dueDate, don't send a 1week PAST dueDate, stick to recalls
+  // further down the line
+  const recallAlreadySentOrLongerAway = sentRecalls.some((sentRecall) => {
+    return recall.lengthSeconds >= sentRecall.lengthSeconds;
   });
 
   return isDue && !recallAlreadySentOrLongerAway && preferences.reminders;
 }
+
+

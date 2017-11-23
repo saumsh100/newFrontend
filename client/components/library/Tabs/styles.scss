@@ -14,7 +14,8 @@
 
 .activeTab {
   border-bottom: $selection-border $primary-color;
-  color: $primary-color;
+  color: black;
+  font-family: $medium-font;
 }
 
 .disabledTab {

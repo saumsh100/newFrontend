@@ -51,7 +51,6 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         label="Last Name"
         data-test-id="lastName"
       />
-      <div className={styles.spacing}>
       <Field
         required
         name="gender"
@@ -60,7 +59,6 @@ export default function NewPatientForm({ onSubmit, saveBirthday, birthday, formN
         options={options}
         data-test-id="gender"
       />
-      </div>
       <Field
         required
         name="mobilePhoneNumber"

@@ -28,6 +28,18 @@ export default function (sequelize, DataTypes) {
     lengthSeconds: {
       type: DataTypes.INTEGER,
     },
+
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+
+    isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   });
 
   Recall.associate = ({ Account }) => {

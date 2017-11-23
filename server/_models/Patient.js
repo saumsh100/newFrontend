@@ -189,6 +189,13 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     },
 
+    recareDueDateSeconds: {
+      type: DataTypes.INTEGER,
+    },
+
+    hygieneDueDateSeconds: {
+      type: DataTypes.INTEGER,
+    },
   }, {
     // Model Config
     indexes: [

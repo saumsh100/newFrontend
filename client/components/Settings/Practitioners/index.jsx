@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes,} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -6,7 +7,6 @@ import PractitionerList from './PractitionerList';
 import { Col } from '../../library';
 import styles from './styles.scss';
 
-
 const sortPractitionersAlphabetical = (a, b) => {
   if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
   if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
@@ -14,7 +14,6 @@ const sortPractitionersAlphabetical = (a, b) => {
 };
 
 class Practitioners extends Component {
-
   componentWillMount() {
     this.props.fetchEntities({ key: 'practitioners' });
     this.props.fetchEntities({ key: 'services' });

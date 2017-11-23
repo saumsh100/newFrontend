@@ -16,6 +16,7 @@ import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { w2s } from '../../../../server/util/time';
 
 // TODO: make seeds more modular so we can see here
 // const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
@@ -36,7 +37,7 @@ const makeSentRecallData = (data = {}) => Object.assign({
   // Doesnt even have to match recall for this test
   patientId,
   accountId,
-  lengthSeconds: 15552000,
+  lengthSeconds: w2s(-1),
   primaryType: 'email',
 }, data);
 
@@ -70,7 +71,7 @@ describe('Recalls Calculation Library', () => {
       let appointments;
       let patients;
       beforeEach(async () => {
-        recall = await Recall.create({ accountId, primaryType: 'email', lengthSeconds: 15552000 });
+        recall = await Recall.create({ accountId, primaryType: 'email', lengthSeconds: w2s(-1) });
         patients = await Patient.bulkCreate([
           makePatientData({ firstName: 'Old', lastName: 'Patient' }),
           makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
@@ -88,19 +89,19 @@ describe('Recalls Calculation Library', () => {
         await wipeAllModels();
       });
 
-      test('should return 1 patient that needs a recall', async () => {
-        const currentDate = date(2017, 7, 5, 7);
-        const account = { id: accountId };
+      test('should return 1 patient that needs a 1wk past-due recall', async () => {
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
         const pts = await getPatientsDueForRecall({ recall, account, date: currentDate });
         expect(pts.length).toBe(1);
         expect(pts[0].id).toBe(patients[1].id);
       });
 
-      test.skip('should return 0 patients, (1 really old, 1 too recent)', async () => {
+      test('should return 0 patients, (1 really old, 1 too recent)', async () => {
         // TODO: need to fix this by forcing timezone!
-        const currentDate = date(2017, 7, 5, 7);
-        const account = { id: accountId };
-        const recentAppt = await Appointment.create(makeApptData({ patientId: patients[1].id, ...dates(2017, 7, 5, 9) }));
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
+        await Appointment.create(makeApptData({ patientId: patients[1].id, ...dates(2017, 7, 5, 9) }));
         const pts = await getPatientsDueForRecall({ recall, account, date: currentDate });
         expect(pts.length).toBe(0);
       });
@@ -119,7 +120,7 @@ describe('Recalls Calculation Library', () => {
           {
             accountId,
             primaryType: 'email',
-            lengthSeconds: 15552000,
+            lengthSeconds: w2s(-1),
           },
           /*{
             accountId,
@@ -134,8 +135,8 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         appointments = await Appointment.bulkCreate([
-          makeApptData({ patientId: patients[0].id, ...dates(2017, 2, 5, 8) }),
-          makeApptData({ patientId: patients[1].id, ...dates(2017, 3, 5, 9) }),
+          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+          makeApptData({ patientId: patients[1].id, ...dates(2016, 7, 5, 9) }),
           makeApptData({ patientId: patients[1].id, isCancelled: true, ...dates(2017, 8, 5, 9) }),
           makeApptData({ patientId: patients[1].id, isShortCancelled: true, ...dates(2017, 8, 5, 9) }),
           makeApptData({ patientId: patients[1].id, isPending: true, ...dates(2017, 8, 5, 9) }),
@@ -147,26 +148,25 @@ describe('Recalls Calculation Library', () => {
       });
 
       test('should return 2 patients for the recall, but both failed because no email', async () => {
-        const date = (new Date(2017, 10, 5, 7)).toISOString();
-        const account = { id: accountId };
-        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date: currentDate });
         expect(recallsPatients[0].errors.length).toBe(2);
         expect(recallsPatients[0].success.length).toBe(0);
       });
 
       test('should return 1 patient for each recall, but both success', async () => {
-        const date = (new Date(2017, 10, 5, 7)).toISOString();
-        const account = { id: accountId };
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
         await patients[0].update({ email: 'justin+test1@carecru.com' });
         await patients[1].update({ email: 'justin+test2@carecru.com' });
-        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date: currentDate });
         expect(recallsPatients[0].errors.length).toBe(0);
         expect(recallsPatients[0].success.length).toBe(2);
       });
     });
 
     describe('#mapPatientsToRecalls - cancelled appointments', () => {
-
       let recalls;
       let appointments;
       let patients;
@@ -175,7 +175,7 @@ describe('Recalls Calculation Library', () => {
           {
             accountId,
             primaryType: 'email',
-            lengthSeconds: 15552000,
+            lengthSeconds: w2s(-1),
           },
         ]);
 
@@ -185,8 +185,8 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         appointments = await Appointment.bulkCreate([
-          makeApptData({ patientId: patients[0].id, ...dates(2017, 2, 5, 8) }),
-          makeApptData({ patientId: patients[1].id, ...dates(2017, 3, 5, 9) }),
+          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+          makeApptData({ patientId: patients[1].id, ...dates(2016, 7, 5, 9) }),
         ]);
       });
 
@@ -195,28 +195,27 @@ describe('Recalls Calculation Library', () => {
       });
 
       test('should return 1 patient for each recall, but both success', async () => {
-        const date = (new Date(2017, 10, 5, 7)).toISOString();
-        const account = { id: accountId };
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
 
-        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date: currentDate });
         expect(recallsPatients[0].errors.length).toBe(0);
         expect(recallsPatients[0].success.length).toBe(2);
       });
 
       test('should return 1 patient  and one recall as one appointment is cancelled', async () => {
-        const date = (new Date(2017, 10, 5, 7)).toISOString();
-        const account = { id: accountId };
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
 
         await appointments[0].update({ isShortCancelled: true });
 
-        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date: currentDate });
         expect(recallsPatients[0].errors.length).toBe(0);
         expect(recallsPatients[0].success.length).toBe(1);
       });
     });
 
-    describe('#mapPatientsToRecalls - pendding appointments', () => {
-
+    describe('#mapPatientsToRecalls - pending appointments', () => {
       let recalls;
       let appointments;
       let patients;
@@ -225,7 +224,7 @@ describe('Recalls Calculation Library', () => {
           {
             accountId,
             primaryType: 'email',
-            lengthSeconds: 15552000,
+            lengthSeconds: w2s(-1),
           },
         ]);
 
@@ -234,8 +233,8 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         appointments = await Appointment.bulkCreate([
-          makeApptData({ patientId: patients[0].id, ...dates(2017, 2, 5, 8) }),
-          makeApptData({ patientId: patients[0].id, ...dates(2017, 10, 5, 9) }),
+          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+          makeApptData({ patientId: patients[0].id, ...dates(2017, 2, 5, 9) }),
         ]);
       });
 
@@ -244,21 +243,21 @@ describe('Recalls Calculation Library', () => {
       });
 
       test('should have no recall sent as patient as appointment in two days', async () => {
-        const date = (new Date(2017, 10, 5, 7)).toISOString();
-        const account = { id: accountId };
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
 
-        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date: currentDate });
         expect(recallsPatients[0].errors.length).toBe(0);
         expect(recallsPatients[0].success.length).toBe(0);
       });
 
       test('should return 1 patient  and one recall as the appointments is pendding', async () => {
-        const date = (new Date(2017, 10, 5, 7)).toISOString();
-        const account = { id: accountId };
+        const currentDate = date(2017, 1, 8, 8);
+        const account = { id: accountId, recallDueDateSeconds: 15552000 };
 
         await appointments[1].update({ isPending: true });
 
-        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+        const recallsPatients = await mapPatientsToRecalls({ recalls, account, date: currentDate });
         expect(recallsPatients[0].errors.length).toBe(0);
         expect(recallsPatients[0].success.length).toBe(1);
       });

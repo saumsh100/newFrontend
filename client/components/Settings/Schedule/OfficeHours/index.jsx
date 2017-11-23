@@ -6,6 +6,7 @@ import OfficeHoursForm from './OfficeHoursForm';
 import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Header, Button, DialogBox, RemoteSubmitButton, Form, Field } from '../../../library';
+import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
@@ -222,7 +223,10 @@ class OfficeHours extends Component {
     ];
 
     return (
-      <div>
+      <SettingsCard
+        title="Office Hours"
+        bodyClass={styles.officeHoursBody}
+      >
         <DialogBox
           actions={actions}
           title="Update StartDate"
@@ -250,7 +254,7 @@ class OfficeHours extends Component {
           </Form>
         </DialogBox>
         <div className={styles.flexHeader}>
-          <Header title="Weekly Schedule" className={styles.header} />
+          <Header title="Weekly Schedule" contentHeader className={styles.header} />
           <div>
             <Button
               className={styles.button}
@@ -276,7 +280,7 @@ class OfficeHours extends Component {
           onSubmit={handleSubmit}
           formName="officeHours"
         />
-        <Header title="Breaks" className={styles.subHeader} />
+        <Header title="Breaks" contentHeader className={styles.subHeader} />
         <BreaksForm
           weeklySchedule={weeklySchedule}
           onSubmit={handleSubmit}
@@ -284,7 +288,7 @@ class OfficeHours extends Component {
           breaksName="clinicBreaks"
         />
         {schedules}
-      </div>
+      </SettingsCard>
     );
   }
 }

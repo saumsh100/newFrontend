@@ -1,0 +1,191 @@
+
+@import '../../../../../ui';
+
+.recallListItem {
+  height: 120px;
+  &:hover {
+    .deleteButtonWrapper {
+      display: block;
+    }
+  }
+}
+
+.deleteButtonWrapper {
+  display: none;
+  position: relative;
+  top: 12px;
+}
+
+.secondaryLinesBox {
+  margin-left: auto;
+  width: 80%;
+  height: 54px;
+  border-left: 1px solid $primary-gray;
+  border-bottom: 1px solid $primary-gray;
+  position: relative;
+  top: -53px;
+}
+
+.secondaryLinesBoxSelected {
+  @extend .secondaryLinesBox;
+  border-left: 1px solid $primary-green;
+  border-bottom: 1px solid $primary-green;
+}
+
+.dropdownWrapper {
+  margin-left: auto;
+  width: 80%;
+  position: relative;
+  top: -74px;
+}
+
+.inputFont {
+  color: $primary-darkgrey;
+  font-size: 14px;
+}
+
+.inputFontSelected {
+  @extend .inputFont;
+  color: black;
+}
+
+.dropdownSelect {
+  background-color: white;
+  border: 1px solid $primary-gray;
+  padding: 0;
+  // For inputs
+  > input {
+    @extend .inputFont;
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom: none;
+    height: 40px;
+  }
+
+  // For dropdowns
+  > div:not(:last-child) {
+    @extend .inputFont;
+    border-bottom: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+  }
+
+  > :global(.dd-menu-items) {
+    margin: 2px 0 0 0;
+  }
+}
+
+.dropdownSelectSelected {
+  @extend .dropdownSelect;
+  > input {
+    @extend .inputFontSelected;
+
+  }
+  // For dropdowns
+  > div:not(:last-child) {
+    @extend .inputFontSelected;
+  }
+}
+
+.dropdownSelectSelected_green {
+  @extend .dropdownSelectSelected;
+  border: 1px solid $primary-green;
+}
+
+.dropdownSelectSelected_yellow {
+  @extend .dropdownSelectSelected;
+  border: 1px solid $primary-yellow;
+}
+
+.dropdownSelectSelected_red {
+  @extend .dropdownSelectSelected;
+  border: 1px solid $primary-red;
+}
+
+.topRow {
+  position: relative;
+  top: -24px;
+}
+
+.bottomRow {
+  position: relative;
+  bottom: 12px;
+}
+
+.rightDropdown {
+  padding-left: 10px;
+}
+
+// Needs to be same as <IconCircle /> component
+$width: 36px;
+$wrapper-thickness: 8px;
+
+.reminderIconContainer {
+  position: relative;
+  top: -($width + 2 * $wrapper-thickness) / 2;
+  left: -($width + 2* $wrapper-thickness) / 2;
+}
+
+.smallIconContainer {
+  position: relative;
+  top: 44px;
+  left: -12px;
+}
+
+$small-icon-width: 24px;
+
+.smallReminderSelectWrapperCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $small-icon-width + 1;
+  height: $small-icon-width;
+  border-radius: $small-icon-width / 2;
+  color: white;
+  background-color: $primary-gray;
+}
+
+.smallReminderSelectWrapperCircleSelected {
+  @extend .smallReminderSelectWrapperCircle;
+  background-color: $primary-green;
+}
+
+.toggleClass {
+  padding-top: 6px;
+}
+
+.labelClass {
+  padding-top: 0;
+}
+
+.downIconWrapper {
+  position: relative;
+  bottom: -14px;
+  left: -7px;
+  > i {
+    color: $primary-gray;
+  }
+}
+
+.recallLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.beforeAfterLabel {
+  text-transform: uppercase;
+  color: $primary-darkgrey;
+  font-size: 11px;
+  margin-top: 5px;
+}
+
+.linesBoxClass {
+  height: 110px;
+}
+
+.connectLinesClass {
+  margin-top: 10px;
+}

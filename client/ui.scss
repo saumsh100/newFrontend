@@ -12,6 +12,7 @@ $widget-primary-color: var(--bookingWidgetPrimaryColor);
 $secondary-color1: #CAEBF2;
 $secondary-color2: #CAEBF2;
 $primary-yellow: #ffc45a;
+$primary-orange: #F5C673;
 $primary-blue: #206477;
 $primary-green: #2CC4A7;
 $primary-dark-blue: #3a5199;
@@ -31,6 +32,8 @@ $clr-table-header-icons: #eff2f3;
 $primary-blue-green: #206477;
 
 $primary-dark: #2e3845;
+$primary-darker: #3D4551;
+$primary-darkdark: #242A34;
 
 $inactive-color: #b4b4b5;
 $primary-darkgrey: #959596;
@@ -39,7 +42,7 @@ $primary-gray: darken($primary-grey, 20%);
 $primary-lightgrey: #f0f0f0;
 $primary-light-grey: #c9c9c9;
 
-$primary-white: #fafafa;
+$primary-white: white;
 $background-color: #E6E6E6;
 $primary-red: #FF715C;
 $primary-star: #FBF174;

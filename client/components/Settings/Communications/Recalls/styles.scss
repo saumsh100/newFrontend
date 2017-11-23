@@ -1,0 +1,103 @@
+
+@import '../../../../ui';
+
+.dueDateItem {
+  cursor: default;
+  height: 120px;
+}
+
+.bottomBox {
+  border-top: 1px solid $primary-blue;
+}
+
+.dueDateWrapper {
+  /*position: relative;
+  top: -25px;
+  height: 50px;
+  background: white;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;*/
+}
+
+.dueDateLabel {
+  // color: $primary-blue;
+}
+
+.bottomLabel {
+  height: 40px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0;
+  width: 80%;
+  position: relative;
+  top: -75px;
+  float: right;
+  > div {
+    color: $primary-blue !important;
+  }
+}
+
+.bottomRow {
+  height: 100%;
+}
+
+.dropdownCol {
+  height: 100%;
+}
+
+.leftCol {
+  @extend .dropdownCol;
+  padding-right: 5px;
+}
+
+.rightCol {
+  @extend .dropdownCol;
+  padding-left: 5px;
+}
+
+.dropdownWrapper {
+  background-color: $primary-white;
+  border: 1px solid $primary-blue;
+  height: 100%;
+}
+
+.dueDateDropdown {
+  padding: 0;
+  height: 100%;
+  > div:not(:last-child) {
+    color: black;
+    font-size: 14px;
+    border-bottom: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+    > label {
+      // font-family: $medium-font;
+      top: -15px !important;
+      color: $primary-darkgrey;
+      text-transform: uppercase;
+      font-size: 10px !important;
+    }
+  }
+
+  > :global(.dd-menu-items) {
+    margin: 2px 0 0 0;
+  }
+}
+
+// Needs to be same as IconCircle component
+$width: 36px;
+$wrapper-thickness: 8px;
+
+.bottomIconContainer {
+  position: relative;
+  top: -($width + 2 * $wrapper-thickness) / 2;
+  left: -($width + 2* $wrapper-thickness) / 2;
+}
+
+
+

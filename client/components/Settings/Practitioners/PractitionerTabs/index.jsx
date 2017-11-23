@@ -3,13 +3,14 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Tabs, Tab, IconButton, Header } from '../../../library';
-import styles from '../styles.scss';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
 import PractitionerTimeOff from './PractitionerTimeOff';
 import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import PractitionerActive from './PractitionerActive';
+import SettingsCard from '../../Shared/SettingsCard';
+import styles from '../styles.scss';
 
 import { updateEntityRequest, deleteEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 
@@ -82,27 +83,48 @@ class PractitionerTabs extends Component {
     let serviceIds = practitioner.get('services');
 
     return (
-      <div className={styles.practTabContainer}>
-        <div className={styles.pracHeaderContainer}>
-          <Header title={practitioner.getFullName()} />
-          <PractitionerActive
-            key={practitioner.get('id')}
-            practitioner={practitioner}
-            updatePractitioner={this.updatePractitioner}
-          />
-          <div className={styles.trashButton}>
-            <IconButton icon="trash" onClick={this.deletePractitioner} data-test-id="deletePractitioner" />
+      <SettingsCard
+        title={practitioner.getFullName()}
+        headerClass={styles.pracHeaderClass}
+        bodyClass={styles.pracBodyClass}
+        rightActions={(
+          <div className={styles.rightActions}>
+            <PractitionerActive
+              key={practitioner.get('id')}
+              practitioner={practitioner}
+              updatePractitioner={this.updatePractitioner}
+            />
+            <div className={styles.trashButton}>
+              <IconButton icon="trash" onClick={this.deletePractitioner} data-test-id="deletePractitioner" />
+            </div>
           </div>
-        </div>
-        <Tabs className={styles.practitionerTabs} index={this.state.index} onChange={this.handleTabChange} noUnderLine >
-          <Tab label="Basic" data-test-id="practitionerBasicDataTab">
+        )}
+
+        subHeader={(
+          <Tabs
+            index={this.state.index}
+            onChange={this.handleTabChange}
+          >
+            <Tab label="Basic" data-test-id="practitionerBasicDataTab" />
+            <Tab label="Practitioner Schedule" data-test-id="practitionerOfficeHoursTab" />
+            <Tab label="Services" data-test-id="practitionerServicesTab" />
+            <Tab label="Time Off" data-test-id="practitionerTimeOffTab" />
+            <Tab label="Recurring Time Off" />
+          </Tabs>
+        )}
+      >
+        <Tabs
+          index={this.state.index}
+          noHeaders
+        >
+          <Tab label=" ">
             <PractitionerBasicData
               key={practitioner.get('id')}
               practitioner={practitioner}
               updatePractitioner={this.updatePractitioner}
             />
           </Tab>
-          <Tab label="Practitioner Schedule" data-test-id="practitionerOfficeHoursTab">
+          <Tab label=" ">
             <PractitionerOfficeHours
               key={practitioner.get('id')}
               weeklySchedule={weeklySchedule}
@@ -111,7 +133,7 @@ class PractitionerTabs extends Component {
               chairs={this.props.chairs}
             />
           </Tab>
-          <Tab label="Services" data-test-id="practitionerServicesTab">
+          <Tab label=" ">
             <PractitionerServices
               key={practitioner.get('id')}
               serviceIds={serviceIds}
@@ -119,14 +141,14 @@ class PractitionerTabs extends Component {
               updatePractitioner={this.updatePractitioner}
             />
           </Tab>
-          <Tab label="Time Off" data-test-id="practitionerTimeOffTab">
+          <Tab label=" ">
             <PractitionerTimeOff
               key={practitioner.get('id')}
               practitioner={practitioner}
               timeOffs={filteredTimeOffs}
             />
           </Tab>
-          <Tab label="Recurring Time Off">
+          <Tab label=" ">
             <PractitionerRecurringTimeOff
               key={practitioner.get('id')}
               practitioner={practitioner}
@@ -134,19 +156,15 @@ class PractitionerTabs extends Component {
             />
           </Tab>
         </Tabs>
-      </div>
+      </SettingsCard>
     );
   }
 }
 
 function mapStateToProps({ entities }, { practitioner }) {
-
   const weeklyScheduleId = practitioner.get('isCustomSchedule') ? practitioner.get('weeklyScheduleId') : null;
-
   const weeklySchedule = entities.getIn(['weeklySchedules', 'models']).get(weeklyScheduleId);
-
   const allTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
-
   const timeOffs = allTimeOffs.filter((timeOff) => {
     return !timeOff.toJS().interval;
   });

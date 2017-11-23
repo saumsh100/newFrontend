@@ -148,6 +148,10 @@ export async function computeRecallsAndSend({ date, publishSocket }) {
     include: [{
       model: Recall,
       as: 'recalls',
+      where: {
+        isDeleted: false,
+        isActive: true,
+      },
     }],
   });
 

@@ -2,7 +2,6 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import { Form, Field, } from '../../../library';
-import styles from './styles.scss';
 import { emailValidate } from '../../../library/Form/validate';
 
 const maxLength = max => value =>
@@ -23,21 +22,17 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
       data-test-id="generalSettingsForm"
       alignSave="left"
     >
-      <div className={styles.paddingField}>
-        <Field
-          name="name"
-          label="Name"
-          validate={[maxLength25]}
-          data-test-id="name"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="website"
-          label="Website"
-          data-test-id="website"
-        />
-      </div>
+      <Field
+        name="name"
+        label="Name"
+        validate={[maxLength25]}
+        data-test-id="name"
+      />
+      <Field
+        name="website"
+        label="Website"
+        data-test-id="website"
+      />
     </Form>
   );
 }

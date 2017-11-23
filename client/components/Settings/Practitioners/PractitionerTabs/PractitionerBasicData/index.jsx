@@ -95,17 +95,15 @@ class PractitionerBasicData extends Component {
               validate={[maxLength25]}
               data-test-id="lastName"
             />
-            <div className={styles.practFormContainer_type}>
-              <Field
-                name="type"
-                label="Practitioner Type"
-                component="DropdownSelect"
-                options={[
-                  { value: 'Dentist' },
-                  { value: 'Hygienist' },
-                ]}
-              />
-            </div>
+            <Field
+              name="type"
+              label="Practitioner Type"
+              component="DropdownSelect"
+              options={[
+                { value: 'Dentist' },
+                { value: 'Hygienist' },
+              ]}
+            />
             <div className={styles.practFormContainer_practHidden}>
               <span className={styles.practFormContainer_practHidden_text}>
                 {`Would you like to set this practitioner to be hidden on the booking

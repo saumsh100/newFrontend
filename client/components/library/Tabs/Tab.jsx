@@ -7,26 +7,32 @@ class Tab extends Component {
   render() {
     const {
       className,
-      activeClassName,
       index,
       label,
       active,
       onClick,
       disabled,
       noUnderLine,
+      activeClass,
+      inactiveClass,
     } = this.props;
 
     let classes = classNames(className, styles.tab);
-    if (active ) {
-      classes = classNames(classes, activeClassName, styles.activeTab);
-      if (noUnderLine) {
-        classes = classNames(classes, styles.noUnderLine);
-      }
+    if (active) {
+      classes = classNames(classes, activeClass, styles.activeTab);
+    } else {
+      classes = classNames(classes, inactiveClass);
+    }
+
+    if (noUnderLine) {
+      classes = classNames(classes, styles.noUnderLine);
     }
 
     if (disabled) {
       classes = classNames(classes, styles.disabledTab);
     }
+
+    if (active) console.log('Active:', label, 'Class:', classes);
 
     return (
       // Order is important, classNames={classes} needs to override props.className

@@ -54,6 +54,7 @@ import RangeSlider from './RangeSlider';
 import Star from './Star';
 import Stars from './Stars';
 import Summary from './Summary';
+import SMSPreview from './SMSPreview';
 import Timer from './Timer';
 import Toggle from './Toggle';
 import Tooltip from './Tooltip';
@@ -129,6 +130,7 @@ export {
   ProgressBar,
   Search,
   RangeSlider,
+  SMSPreview,
   Star,
   Stars,
   Summary,
@@ -151,5 +153,6 @@ export {
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';
 export { Grid, Row, Col } from './Grid';
+export { SContainer, SHeader, SBody, SFooter } from './Layout';
 export { List, ListItem } from './List';
 export { Nav, NavItem, NavLink, Navbar, NavbarBrand } from './Nav';

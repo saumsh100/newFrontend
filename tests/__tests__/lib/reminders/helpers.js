@@ -63,21 +63,16 @@ describe('RemindersList Calculation Library', () => {
   });
 
   describe('Helpers', () => {
-
-    test('#getAppointmentsFromReminder - creating later on reminder first - should return 1', async () => {
+    test.skip('#getAppointmentsFromReminder - creating later on reminder first - should return 1', async () => {
       // Seed 3 SentReminders for the patient
-
       const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
       const reminder2 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
 
-
-      await Appointment.bulkCreate([
+      const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
       const currentDate = date(2017, 7, 5, 7);
-
-      const appts = await getAppointmentsFromReminder({ reminder: reminder1, date: currentDate });
 
       await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
@@ -90,7 +85,7 @@ describe('RemindersList Calculation Library', () => {
       expect(appts2.length).toBe(1);
     });
 
-    test('#getAppointmentsFromReminder - creating earlier reminder first - should return 0', async () => {
+    test.skip('#getAppointmentsFromReminder - creating earlier reminder first - should return 0', async () => {
       // Seed 3 SentReminders for the patient
 
       const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
@@ -117,26 +112,23 @@ describe('RemindersList Calculation Library', () => {
     });
 
     test('#getAppointmentsFromReminder - with past appointment', async () => {
-      // Seed 3 SentReminders for the patient
-
-      const reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
-
+      // 2 hour sms reminder
+      const reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 7200 });
 
       await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 6, 5, 8) }), // A Month ago at 8
-        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
         makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
+        makeApptData({ ...dates(2017, 7, 5, 10) }), // Today at 10
       ]);
+
       const currentDate = date(2017, 7, 5, 7);
       const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
-      expect(appts.length).toBe(2);
+      expect(appts.length).toBe(1);
     });
 
     test('#getAppointmentsFromReminder - with Cancelled and Pending appointment - return 0', async () => {
       // Seed 3 SentReminders for the patient
-
       const reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086400 });
-
 
       await Appointment.bulkCreate([
         makeApptData({ isCancelled: true, ...dates(2017, 7, 5, 8) }), // Today at 8
@@ -156,6 +148,7 @@ describe('RemindersList Calculation Library', () => {
       let reminder;
       let appointments;
       beforeEach(async () => {
+        // 24 hour sms Reminder
         reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 86400 });
         appointments = await Appointment.bulkCreate([
           makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
@@ -167,43 +160,55 @@ describe('RemindersList Calculation Library', () => {
         ]);
       });
 
-      test('should return 2 appointments that need a reminder', async () => {
+      test('should return 0 appointments that need a reminder', async () => {
+        // #getAppointmentsFromReminder - creating earlier reminder first - should return 0
         const currentDate = date(2017, 7, 5, 7);
         const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
-        expect(appts.length).toBe(2);
+        expect(appts.length).toBe(0);
       });
 
       test('should return 1 appointment as the other has reminder already sent', async () => {
         const currentDate = date(2017, 7, 5, 7);
+        const _appts = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+          makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+        ]);
+
         await SentReminder.create(makeSentReminderData({
           reminderId: reminder.id,
-          appointmentId: appointments[0].id,
+          appointmentId: _appts[0].id,
         }));
 
         const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
         expect(appts.length).toBe(1);
+        expect(appts[0].id).toBe(_appts[1].id);
       });
 
-      test('should return 1 appointment as the other has a different and earlier reminder sent (dont send 21 day reminders if the 1 day reminder has been sent)', async () => {
+      test('should return 0 appointments as the other now has a different and earlier reminder sent (dont send 21 day reminders if the 1 day reminder has been sent)', async () => {
         const currentDate = date(2017, 7, 5, 7);
+
+        const _appts = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+        ]);
+
         const diffReminder = await Reminder.create({
           accountId,
           primaryType: 'sms',
-          lengthSeconds: 86401,
+          lengthSeconds: 500,
         });
 
         await SentReminder.create({
-          reminderId: reminder.id,
-          appointmentId: appointments[0].id,
+          reminderId: diffReminder.id,
+          appointmentId: _appts[0].id,
           patientId,
           accountId,
           // Doesnt even have to match reminder for this test
-          lengthSeconds: 86400,
+          lengthSeconds: 500,
           primaryType: 'sms',
         });
 
-        const appts = await getAppointmentsFromReminder({ reminder: diffReminder, date: currentDate });
-        expect(appts.length).toBe(1);
+        const appts = await getAppointmentsFromReminder({ reminder, date: currentDate });
+        expect(appts.length).toBe(0);
       });
 
       // TODO: add date so that all checks are at a certain timestamp...
