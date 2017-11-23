@@ -5,7 +5,7 @@ import { Correspondence } from '../../../server/_models';
 import { wipeTestUsers, seedTestUsers, accountId } from '../../_util/seedTestUsers';
 import { patientId, seedTestPatients, wipeTestPatients } from '../../_util/seedTestPatients';
 import generateToken from '../../_util/generateToken';
-import wipeModel from '../../_util/wipeModel';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/correspondences';
@@ -46,6 +46,7 @@ describe('/api/correspondences', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    await wipeAllModels();
     await wipeModel(Correspondence);
     await wipeTestPatients();
     await seedTestUsers();
@@ -210,8 +211,49 @@ describe('/api/correspondences', () => {
             .expect(201)
             .then(({ body }) => {
               body = omitPropertiesFromBody(body, [], true);
-              expect(body.data[0].attributes.pmsId).toBe("2");
+              expect(body.data[0].attributes.pmsId).toBe('2');
               expect(body).toMatchSnapshot();
+            });
+        });
+    });
+  });
+
+  describe('DELETE /connector/batch', () => {
+    test('should batch delete 2 correspondences', () => {
+      return request(app)
+        .delete(`${rootUrl}/connector/batch?ids=${correspondenceId1}&ids=${correspondenceId2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(async () => {
+          const correspondences = await Correspondence.findAll({});
+          expect(correspondences.length).toBe(0);
+        });
+    });
+
+    test('should fail batch delete 2 correspondences - an invalid id was sent', () => {
+      return request(app)
+        .delete(`${rootUrl}/connector/batch?ids=${correspondenceId1}&ids=${correspondenceId2}&ids=${newCorrespondenceId2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(500)
+        .then(async () => {
+          const correspondences = await Correspondence.findAll({});
+          expect(correspondences.length).toBe(2);
+        });
+    });
+
+    test('should try to batch delete 2 correspondences with one already deleted', () => {
+      return request(app)
+        .delete(`${rootUrl}/${correspondenceId2}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(() => {
+          return request(app)
+            .delete(`${rootUrl}/connector/batch?ids=${correspondenceId1}&ids=${correspondenceId2}`)
+            .set('Authorization', `Bearer ${token}`)
+            .expect(204)
+            .then(async () => {
+              const correspondences = await Correspondence.findAll({});
+              expect(correspondences.length).toBe(0);
             });
         });
     });
