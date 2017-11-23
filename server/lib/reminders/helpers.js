@@ -8,15 +8,21 @@ import {
 import { generateOrganizedPatients } from '../comms/util';
 import { h2s } from '../../util/time';
 
-const BUFFER_SECONDS =  h2s(1);
+// Should always be greater than or equal to reminder cron job interval
+const BUFFER_SECONDS =  h2s(1) / 2;
 
 // Made an effort to throw all easily testable functions into here
 export async function mapPatientsToReminders({ reminders, account, date }) {
   const seen = {};
   const remindersPatients = [];
-  for (const reminder of reminders) {
+
+  let i;
+  for (i = 0; i < reminders.length; i++) {
+    const reminder = reminders[i];
+    const lastReminder = reminders[i - 1];
+
     // Get appointments that this reminder deals with
-    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, date });
+    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, date, lastReminder });
 
     // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
     // This is why the order or reminders is so important
@@ -46,10 +52,12 @@ export async function mapPatientsToReminders({ reminders, account, date }) {
  *
  * @param reminder
  * @param date
+ * @param lastReminder
  */
-export async function getAppointmentsFromReminder({ reminder, date }) {
+export async function getAppointmentsFromReminder({ reminder, date, lastReminder }) {
   // TODO: add buffer here so that patients aren't receiving reminders to close to one another
-  const end = moment(date).add(reminder.lengthSeconds, 'seconds').toISOString();
+  const start = moment(date).add(reminder.lengthSeconds, 'seconds').toISOString();
+  const end = moment(start).add(BUFFER_SECONDS, 'seconds').toISOString();
 
   const appointments = await Appointment.findAll({
     where: {
@@ -59,9 +67,13 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
       isPending: false,
       accountId: reminder.accountId,
       startDate: {
-        $between: [date, end],
+        $between: [start, end],
       },
     },
+
+    // Important for grabbing latest sentReminder and checking if it was within window or lastReminder
+    // and this one. If it is, we ignore this touchpoint
+    order: [[{ model: SentReminder, as: 'sentReminders' }, 'createdAt', 'desc']],
 
     include: [
       {
@@ -77,7 +89,7 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
     ],
   });
 
-  return appointments.filter(appointment => shouldSendReminder({ appointment, reminder }));
+  return appointments.filter(appointment => shouldSendReminder({ appointment, reminder, lastReminder }));
 }
 
 /**
@@ -88,17 +100,21 @@ export async function getAppointmentsFromReminder({ reminder, date }) {
  *
  * @param appointment
  * @param reminder
+ * @param lastReminder
  * @returns {boolean}
  */
-export function shouldSendReminder({ appointment, reminder }) {
+export function shouldSendReminder({ appointment, reminder, lastReminder }) {
   const { sentReminders, patient } = appointment;
   const preferences = patient.preferences;
+  const lastSentReminder = sentReminders[0];
 
-  // TODO: get lastSuccessfulSentReminder and is within lastReminder to this reminder
-  // TODO: Check if this is within the BUFFER_SECONDS
-
+  if (lastReminder) {
+    // TODO: Check if the lastSentReminder was in the window
+    // TODO: this needs to be done when singular sending is possible
+  }
 
   // We check lengthSeconds because they can change and add different reminders
+  // We don't send auto-reminders that are farther away than a previously sent one
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
     return (s.reminderId === reminder.id) || (reminder.lengthSeconds >= s.lengthSeconds);
   });
