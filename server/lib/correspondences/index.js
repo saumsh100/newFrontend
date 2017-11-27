@@ -1,4 +1,5 @@
-import { Account, SentReminder, SentRecall, Correspondence } from '../../_models';
+import moment from 'moment';
+import { Account, SentReminder, SentRecall, Correspondence, Appointment } from '../../_models';
 import { namespaces } from '../../config/globals';
 import batchCreate from '../../routes/util/batch';
 
@@ -40,6 +41,20 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
   });
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+
+  for (let i = 0; i < correspondences.length; i += 1) {
+    const appointment = await Appointment.findOne({
+      where: {
+        id: correspondences[i].appointmentId,
+      },
+    });
+
+    if (appointment) {
+      const text = `- CareCru: A Reminder was sent via ${correspondences[i].method.toLowerCase()} on ${moment(correspondences[i].contactedAt).format('LLL')} for this appointment`;
+      appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+      await appointment.save();
+    }
+  }
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
@@ -89,6 +104,20 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
   });
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+
+  for (let i = 0; i < correspondences.length; i += 1) {
+    const appointment = await Appointment.findOne({
+      where: {
+        id: correspondences[i].appointmentId,
+      },
+    });
+
+    if (appointment) {
+      const text = `- Carecru: Patient has confirmed via ${correspondences[i].method.toLowerCase()} on ${moment(correspondences[i].contactedAt).format('LLL')} for this appointment`;
+      appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+      await appointment.save();
+    }
+  }
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);

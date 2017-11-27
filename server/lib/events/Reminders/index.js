@@ -1,5 +1,6 @@
+import moment from 'moment';
 import { namespaces } from '../../../config/globals';
-import { SentReminder, Correspondence } from '../../../_models';
+import { SentReminder, Correspondence, Appointment } from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
 
 
@@ -41,6 +42,20 @@ function sendReminderIdsSocket(sub, io) {
 
       let correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
 
+      for (let i = 0; i < correspondences.length; i += 1) {
+        const appointment = await Appointment.findOne({
+          where: {
+            id: correspondences[i].appointmentId,
+          },
+        });
+
+        if (appointment) {
+          const text = `- CareCru: A Reminder was sent via ${correspondences[i].method.toLowerCase()} on ${moment().format('LLL')} for this appointment`;
+          appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+          await appointment.save();
+        }
+      }
+
       if (correspondences[0]) {
         const accountId = correspondences[0].accountId;
         correspondences = correspondences.map(c => c.id);
@@ -58,11 +73,22 @@ function sendReminderIdsSocket(sub, io) {
       if (errors && docs && docs.length) {
         docs = docs.map(d => d.get({ plain: true }));
 
-        docs = docs.map(c => c.id);
-
         if (docs[0]) {
           const accountId = docs[0].accountId;
-          docs = docs.map(c => c.id);
+
+          for (let i = 0; i < docs.length; i += 1) {
+            const appointment = await Appointment.findOne({
+              where: {
+                id: docs[i].appointmentId,
+              },
+            });
+
+            if (appointment) {
+              const text = `- CareCru: A Reminder was sent via ${docs[i].method.toLowerCase()} on ${moment().format('LLL')} for this appointment`;
+              appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+              await appointment.save();
+            }
+          }
 
           console.log(`Sending ${docs.length} correspondences for account=${accountId}`);
 
@@ -109,6 +135,18 @@ function sendReminderUpdatedSocket(sub, io) {
         const newCorrespondence = await Correspondence.create(correspondence);
 
         console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
+
+        const appointment = await Appointment.findOne({
+          where: {
+            id: correspondence.appointmentId,
+          },
+        });
+
+        if (appointment) {
+          const text = `- Carecru: Patient has confirmed via ${correspondence.method.toLowerCase()} on ${moment().format('LLL')} for this appointment`;
+          appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+          await appointment.save();
+        }
 
         io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondence', [newCorrespondence.id]);
       }
