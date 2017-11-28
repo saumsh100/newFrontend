@@ -2,7 +2,7 @@
 import mandrill from '../config/mandrill';
 import { host, protocol, env } from '../config/globals';
 
-module.exports = {
+export default {
   sendConnectorDown: (config) => {
     config.subject = `The Connector for ${config.name} is Down!`;
     config.templateName = 'Connector Down';
@@ -159,6 +159,34 @@ function sendTemplate(config) {
           console.log(`Mandrill Error: ${err}`);
           reject(err);
         }
+      });
+  });
+}
+
+/**
+ *
+ * @param config
+ * @returns {Promise}
+ */
+export function renderTemplate(config) {
+  const { mergeVars = [], templateName } = config;
+  return new Promise((resolve, reject) => {
+    mandrill.templates.render({
+        template_name: templateName,
+        template_content: [{
+          name: 'example name',
+          content: 'example content',
+        }],
+
+        merge_vars: mergeVars,
+      },
+
+      ({ html }) => {
+        resolve(html);
+      },
+
+      (err) => {
+        reject(err);
       });
   });
 }

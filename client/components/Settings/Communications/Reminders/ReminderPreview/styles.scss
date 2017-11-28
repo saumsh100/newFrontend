@@ -36,6 +36,13 @@
   justify-content: center;
 }
 
+.smsPreviewWrapperFull {
+  @extend .smsPreviewWrapper;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
 .tab {
   display: inline-flex;
   box-sizing: border-box;

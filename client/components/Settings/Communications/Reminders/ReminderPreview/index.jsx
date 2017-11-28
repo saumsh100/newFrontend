@@ -1,24 +1,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import Lorem from 'react-lorem-component';
 import moment from 'moment';
 import {
-  updateEntityRequest,
-  deleteEntityRequest,
-  fetchEntities,
-} from '../../../../../thunks/fetchEntities';
-import {
-  Button,
-  Icon,
-  Grid,
-  Row,
-  Col,
-  Toggle,
-  Input,
-  DropdownSelect,
   Tabs,
   Tab,
   Header,
@@ -28,10 +12,10 @@ import {
   SMSPreview,
 } from '../../../../library';
 import createReminderText from '../../../../../../server/lib/reminders/createReminderText';
+import EmailPreview from '../../../Shared/EmailPreview';
 import styles from './styles.scss';
 
-const reminderMessage = 'Jane, this is a friendly reminder that you have an upcoming appointment with Dental Practice' +
-  'on October 1st at 4 PM. Please take a moment to confirm your appointment by responding with \'C\'.';
+const formatPhoneNumber = phone => `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
 
 class ReminderPreview extends Component {
   constructor(props) {
@@ -58,7 +42,7 @@ class ReminderPreview extends Component {
     } = this.props;
     const { primaryType } = reminder;
     const { index } = this.state;
-    const isConfirmable = index === 1;
+    const isConfirmable = index === 0;
 
     // Fake Jane Doe Data
     const patient = {
@@ -69,25 +53,31 @@ class ReminderPreview extends Component {
     // Fake Appt Data
     const appointment = {
       // 1 day from now with no minutes
-      startDate: moment().add(1, 'days').minutes(0).toISOString(),
+      startDate: moment().add(reminder.lengthSeconds, 'seconds').minutes(0).toISOString(),
     };
 
     let typePreview = null;
     if (primaryType === 'sms') {
-      appointment.isPatientConfirmed = isConfirmable;
+      appointment.isPatientConfirmed = !isConfirmable;
       const reminderMessage = createReminderText({ patient, account, appointment });
+      const smsPhoneNumber = account.twilioPhoneNumber ||
+        account.destinationPhoneNumber ||
+        account.phoneNumber ||
+        '+1112223333';
+
       typePreview = (
         <div className={styles.smsPreviewWrapper}>
           <SMSPreview
-            from="+1 (780) 850-8886"
+            from={formatPhoneNumber(smsPhoneNumber)}
             message={reminderMessage}
           />
         </div>
       );
     } else if (primaryType === 'email') {
+      const url = `/api/accounts/${account.id}/reminders/${reminder.id}/preview?isConfirmable=${isConfirmable}`
       typePreview = (
-        <div className={styles.smsPreviewWrapper}>
-          {`Email Preview ${isConfirmable ? '(Confirmed)' : ''}`}
+        <div className={styles.smsPreviewWrapperFull}>
+          <EmailPreview url={url} />
         </div>
       );
     } else if (primaryType === 'phone') {

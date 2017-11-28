@@ -1,5 +1,7 @@
 
 import { Router } from 'express';
+import { renderTemplate } from '../../../lib/mail';
+import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
@@ -101,5 +103,47 @@ remindersRouter.delete('/:accountId/reminders/:reminderId', checkPermissions('ac
     .catch(next);
 });
 
+/**
+ * DELETE /:accountId/reminders/:reminderId/preview
+ *
+ * - purpose of this route is mainly for email templates as we have to go to mandrill
+ */
+remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    if (req.accountId !== req.account.id) {
+      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+    }
+
+    const { reminder } = req;
+    const { isConfirmable } = req.query;
+    const templateName = getReminderTemplateName({ isConfirmable, reminder });
+    const html = await renderTemplate({
+      templateName,
+      mergeVars: [
+        {
+          name: 'PATIENT_FIRSTNAME',
+          content: 'Jane',
+        },
+        {
+          name: 'ACCOUNT_NAME',
+          content: 'Chuck',
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: 'account.phoneNumber',
+        },
+        {
+          name: 'ACCOUNT_EMAIL',
+          content: 'account.phoneNumber'
+        },
+      ],
+    });
+
+    return res.send(html);
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+});
 
 module.exports = remindersRouter;

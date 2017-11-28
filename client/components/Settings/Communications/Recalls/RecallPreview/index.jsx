@@ -1,37 +1,16 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import Lorem from 'react-lorem-component';
-import moment from 'moment';
 import {
-  updateEntityRequest,
-  deleteEntityRequest,
-  fetchEntities,
-} from '../../../../../thunks/fetchEntities';
-import {
-  Button,
-  Icon,
-  Grid,
-  Row,
-  Col,
-  Toggle,
-  Input,
-  DropdownSelect,
-  Tabs,
-  Tab,
   Header,
   SContainer,
   SHeader,
   SBody,
   SMSPreview,
 } from '../../../../library';
+import EmailPreview from '../../../Shared/EmailPreview';
 import createRecallText from '../../../../../../server/lib/recalls/createRecallText';
 import styles from './styles.scss';
-
-const reminderMessage = 'Jane, this is a friendly reminder that you have an upcoming appointment with Dental Practice' +
-  'on October 1st at 4 PM. Please take a moment to confirm your appointment by responding with \'C\'.';
 
 class RecallPreview extends Component {
   constructor(props) {
@@ -79,9 +58,10 @@ class RecallPreview extends Component {
         </div>
       );
     } else if (primaryType === 'email') {
+      const url = `/api/accounts/${account.id}/recalls/${recall.id}/preview`;
       typePreview = (
-        <div className={styles.smsPreviewWrapper}>
-          {`Email Preview`}
+        <div className={styles.smsPreviewWrapperFull}>
+          <EmailPreview url={url} />
         </div>
       );
     } else if (primaryType === 'phone') {

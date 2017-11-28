@@ -1,5 +1,7 @@
 
 import { Router } from 'express';
+import { renderTemplate } from '../../../lib/mail';
+import { getRecallTemplateName } from '../../../lib/recalls/createRecallText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { sequelizeLoader } from '../../util/loaders';
@@ -99,6 +101,48 @@ recallsRouter.delete('/:accountId/recalls/:recallId', checkPermissions('accounts
   return req.recall.destroy()
     .then(() => res.status(204).send())
     .catch(next);
+});
+
+/**
+ * DELETE /:accountId/reminders/:reminderId/preview
+ *
+ * - purpose of this route is mainly for email templates as we have to go to mandrill
+ */
+recallsRouter.get('/:accountId/recalls/:recallId/preview', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    if (req.accountId !== req.account.id) {
+      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+    }
+
+    const { recall } = req;
+    const templateName = getRecallTemplateName({ recall });
+    const html = await renderTemplate({
+      templateName,
+      mergeVars: [
+        {
+          name: 'PATIENT_FIRSTNAME',
+          content: 'Jane',
+        },
+        {
+          name: 'ACCOUNT_NAME',
+          content: 'Chuck',
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: 'account.phoneNumber',
+        },
+        {
+          name: 'ACCOUNT_EMAIL',
+          content: 'account.phoneNumber'
+        },
+      ],
+    });
+
+    return res.send(html);
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
 });
 
 module.exports = recallsRouter;
