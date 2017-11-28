@@ -76,6 +76,7 @@ export default function DisplayForm(props) {
   let patient = null;
 
   if (selectedAppointment) {
+
     const {
       startDate,
       endDate,

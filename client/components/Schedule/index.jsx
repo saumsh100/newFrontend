@@ -87,6 +87,7 @@ class ScheduleComponent extends Component {
       selectedAppointment,
       setMergingPatient,
       weeklySchedules,
+      unit,
     } = this.props;
 
     const {
@@ -191,6 +192,7 @@ class ScheduleComponent extends Component {
                       weeklySchedules={weeklySchedules}
                       setPatientSearched={this.setPatientSearched}
                       patientSearched={this.state.patientSearched}
+                      unit={unit}
                     />
                   </Modal>
                   <DialogBox
