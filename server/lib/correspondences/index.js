@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { Account, SentReminder, SentRecall, Correspondence, Appointment } from '../../_models';
 import { namespaces } from '../../config/globals';
+import { reminderConfirmedNote, reminderSentNote } from './appointmentNotesGenerators';
 import batchCreate from '../../routes/util/batch';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
@@ -50,9 +51,11 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
     });
 
     if (appointment) {
-      const text = `- CareCru: A Reminder was sent via ${correspondences[i].method.toLowerCase()} on ${moment(correspondences[i].contactedAt).format('LLL')} for this appointment`;
+      const text = reminderSentNote(correspondences[i].method.toLowerCase(), correspondences[i].contactedAt);
       appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+      appointment.isSyncedWithPms = false;
       await appointment.save();
+      global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
     }
   }
 
@@ -113,9 +116,11 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
     });
 
     if (appointment) {
-      const text = `- Carecru: Patient has confirmed via ${correspondences[i].method.toLowerCase()} on ${moment(correspondences[i].contactedAt).format('LLL')} for this appointment`;
+      const text = reminderConfirmedNote(correspondences[i].method, correspondences[i].contactedAt);
       appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+      appointment.isSyncedWithPms = false;
       await appointment.save();
+      global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
     }
   }
 
