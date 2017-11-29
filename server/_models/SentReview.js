@@ -55,7 +55,6 @@ export default function (sequelize, DataTypes) {
     primaryType: {
       type: DataTypes.ENUM,
       values: Object.keys(PRIMARY_TYPES).map(key => PRIMARY_TYPES[key]),
-      // TODO: maybe a default value?
       defaultValue: PRIMARY_TYPES.EMAIL,
       allowNull: false,
     },

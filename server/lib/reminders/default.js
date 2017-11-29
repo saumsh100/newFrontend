@@ -6,19 +6,19 @@ import { d2s, h2s } from '../../util/time';
  */
 const defaultReminders = [
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: d2s(21),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: d2s(7),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: d2s(2),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: h2s(2),
   },
 ];

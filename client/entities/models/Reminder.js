@@ -5,6 +5,7 @@ const ReminderSchema = {
   id: null,
   accountId: null,
   primaryType: null,
+  primaryTypes: null,
   lengthSeconds: null,
   isActive: null,
   isDeleted: null,

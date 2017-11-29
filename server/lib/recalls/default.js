@@ -6,63 +6,63 @@ import { w2s } from '../../util/time';
  */
 const defaultRecalls = [
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(4),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(1),
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-1),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-4),
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-8),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-12),
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-20),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-28),
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-36),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-44),
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-52),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-60),
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-68),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-76),
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-84),
   },
 ];

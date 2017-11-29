@@ -18,6 +18,7 @@ import {
   Input,
   DropdownSelect,
 } from '../../../../library';
+import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
@@ -27,12 +28,14 @@ const iconsMap = {
   sms: 'comment',
   phone: 'phone',
   email: 'envelope',
+  email_sms: 'user',
 };
 
 const wordMap = {
   sms: 'SMS',
   phone: 'Voice',
   email: 'Email',
+  email_sms: 'Email & SMS',
 };
 
 function SmallIconCircle(props) {
@@ -62,7 +65,7 @@ class RemindersItem extends Component {
 
     this.editReminder = this.editReminder.bind(this);
     this.deleteReminder = this.deleteReminder.bind(this);
-    this.changePrimaryType = this.changePrimaryType.bind(this);
+    this.changePrimaryTypes = this.changePrimaryTypes.bind(this);
     this.onChangeNumberInput = this.onChangeNumberInput.bind(this);
     this.changeDaysHours = this.changeDaysHours.bind(this);
   }
@@ -150,9 +153,10 @@ class RemindersItem extends Component {
     });
   }
 
-  changePrimaryType(value) {
+  changePrimaryTypes(value) {
     const { reminder, account } = this.props;
     const word = wordMap[value];
+    const primaryTypes = value.split('_');
 
     const alert = {
       success: {
@@ -168,7 +172,7 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { primaryType: value },
+      values: { primaryTypes },
       alert,
     });
   }
@@ -257,11 +261,13 @@ class RemindersItem extends Component {
 
     const {
       lengthSeconds,
-      primaryType,
+      primaryTypes,
       isActive,
     } = reminder;
 
-    const icon = iconsMap[primaryType];
+    const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
+
+    const icon = iconsMap[primaryTypesKey];
     const { type } = secondsToNumType(lengthSeconds);
     const { number } = this.state;
 
@@ -302,13 +308,14 @@ class RemindersItem extends Component {
               <div className={styles.dropdownsWrapper}>
                 <div className={styles.topRow}>
                   <DropdownSelect
-                    onChange={this.changePrimaryType}
+                    onChange={this.changePrimaryTypes}
                     className={dropdownSelectClass}
-                    value={primaryType}
+                    value={primaryTypesKey}
                     options={[
                       { label: 'Email', value: 'email' },
                       { label: 'SMS', value: 'sms' },
-                      { label: 'Voice', value: 'phone' },
+                      // { label: 'Voice', value: 'phone' },
+                      { label: 'Email & SMS', value: 'email_sms' }
                     ]}
                   />
                 </div>

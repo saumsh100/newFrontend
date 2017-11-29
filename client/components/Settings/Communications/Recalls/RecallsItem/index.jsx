@@ -11,6 +11,7 @@ import {
   Toggle,
   DropdownSelect,
 } from '../../../../library';
+import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
@@ -20,12 +21,14 @@ const iconsMap = {
   sms: 'comment',
   phone: 'phone',
   email: 'envelope',
+  email_sms: 'user',
 };
 
 const wordMap = {
   sms: 'SMS',
   phone: 'Voice',
   email: 'Email',
+  email_sms: 'Email & SMS',
 };
 
 class RecallsItem extends Component {
@@ -131,6 +134,7 @@ class RecallsItem extends Component {
   changePrimaryType(value) {
     const { recall, account } = this.props;
     const word = wordMap[value];
+    const primaryTypes = value.split('_');
 
     const alert = {
       success: {
@@ -146,7 +150,7 @@ class RecallsItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/recalls/${recall.id}`,
-      values: { primaryType: value },
+      values: { primaryTypes },
       alert,
     });
   }
@@ -167,7 +171,9 @@ class RecallsItem extends Component {
       isActive,
     } = recall;
 
-    const icon = iconsMap[primaryType];
+    const primaryTypesKey = convertPrimaryTypesToKey(primaryType);
+
+    const icon = iconsMap[primaryTypesKey];
     const numWeeks = s2w(lengthSeconds);
     const type = numWeeks >= 0 ? 'before' : 'after';
 
@@ -219,11 +225,12 @@ class RecallsItem extends Component {
               <DropdownSelect
                 onChange={this.changePrimaryType}
                 className={dropdownSelectClass}
-                value={primaryType}
+                value={primaryTypesKey}
                 options={[
                   { label: 'Email', value: 'email' },
                   { label: 'SMS', value: 'sms' },
-                  { label: 'Voice', value: 'phone' },
+                  // { label: 'Voice', value: 'phone' },
+                  { label: 'Email & SMS', value: 'email & sms' }
                 ]}
               />
             </div>

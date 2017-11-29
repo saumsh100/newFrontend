@@ -1,4 +1,6 @@
 
+import { commsTypes } from './shared/comms';
+
 const PRIMARY_TYPES = {
   PHONE: 'phone',
   EMAIL: 'email',
@@ -20,8 +22,14 @@ export default function (sequelize, DataTypes) {
 
     primaryType: {
       type: DataTypes.ENUM,
+      defaultValue: PRIMARY_TYPES.EMAIL,
       values: Object.keys(PRIMARY_TYPES).map(key => PRIMARY_TYPES[key]),
-      // TODO: maybe a default value?
+      allowNull: false,
+    },
+
+    primaryTypes: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
       allowNull: false,
     },
 
