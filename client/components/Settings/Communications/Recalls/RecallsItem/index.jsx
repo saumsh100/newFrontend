@@ -167,11 +167,11 @@ class RecallsItem extends Component {
 
     const {
       lengthSeconds,
-      primaryType,
+      primaryTypes,
       isActive,
     } = recall;
 
-    const primaryTypesKey = convertPrimaryTypesToKey(primaryType);
+    const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
 
     const icon = iconsMap[primaryTypesKey];
     const numWeeks = s2w(lengthSeconds);
@@ -230,7 +230,7 @@ class RecallsItem extends Component {
                   { label: 'Email', value: 'email' },
                   { label: 'SMS', value: 'sms' },
                   // { label: 'Voice', value: 'phone' },
-                  { label: 'Email & SMS', value: 'email & sms' }
+                  { label: 'Email & SMS', value: 'email_sms' }
                 ]}
               />
             </div>
