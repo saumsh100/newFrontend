@@ -5,6 +5,8 @@
 
 }
 
+// $background: #eeeeee;
+
 .topHeader {
   height: 20px;
   padding: 20px;
@@ -14,12 +16,11 @@
 }
 
 .previewSBody {
-  background-color: #D6D6D6;
+  // background-color: $background;
 }
 
 .previewBody {
-  padding: 40px;
-  background-color: #F1F2F2;
+  padding: 0 40px;
 }
 
 .previewBodyUnconfirmed {
@@ -34,11 +35,13 @@
   @extend .previewBody;
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .smsPreviewWrapperFull {
   @extend .smsPreviewWrapper;
-  height: 100%;
+  // height: 100%;
   padding: 0;
   overflow: hidden;
 }

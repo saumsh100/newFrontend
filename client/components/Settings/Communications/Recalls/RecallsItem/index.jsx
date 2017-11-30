@@ -21,7 +21,7 @@ const iconsMap = {
   sms: 'comment',
   phone: 'phone',
   email: 'envelope',
-  email_sms: 'user',
+  email_sms: 'envelope_comment',
 };
 
 const wordMap = {

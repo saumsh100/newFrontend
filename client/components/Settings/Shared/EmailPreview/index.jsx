@@ -5,8 +5,8 @@ import axios from 'axios';
 import Cache from '../../../../../server/util/Cache';
 import styles from './styles.scss';
 
-// Default expiry is 30 minutes
-const emailPreviewCache = new Cache({ defaultExpiryMs: 1000 * 60 * 30 });
+// Default expiry is 30 seconds
+const emailPreviewCache = new Cache({ defaultExpiryMs: 1000 * 30 });
 
 // TODO: refactor out a get html api function
 
@@ -31,6 +31,7 @@ export default class EmailPreview extends Component {
 
     this.state = {
       loading: false,
+      height: 500,
     };
 
     this.fetchPreview = this.fetchPreview.bind(this);
@@ -64,15 +65,18 @@ export default class EmailPreview extends Component {
         const iHtml = this.iframe.contentWindow.document.getElementsByTagName('html')[0];
         iHtml.style.transform = `scale(${EMAIL_SCALE})`;
         iHtml.style.transformOrigin = 'top center';
-        this.setState({ loading: false });
+
+        // Set container with proper html so that the iframe is not scrollable
+        // We want the overall container to be scrollable
+        const height = iHtml.offsetHeight * EMAIL_SCALE;
+        this.setState({ loading: false, height });
       });
   }
 
   render() {
-    // const { loading } = this.state;
-    // const iframeNode = ;
+    const { height } = this.state;
     return (
-      <div className={styles.iframeWrapper}>
+      <div style={{ height: `${height}px` }}className={styles.iframeWrapper}>
         <iframe ref={node => this.iframe = node} className={styles.iframe} />
       </div>
     );

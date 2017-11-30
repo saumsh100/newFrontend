@@ -190,3 +190,36 @@ export function renderTemplate(config) {
       });
   });
 }
+
+export function generateClinicMergeVars({ patient, account }) {
+  return [
+    {
+      name: 'PATIENT_FIRSTNAME',
+      content: patient.firstName,
+    },
+    {
+      name: 'ACCOUNT_CLINICNAME',
+      content: account.name,
+    },
+    {
+      name: 'ACCOUNT_PHONENUMBER',
+      content: account.phoneNumber,
+    },
+    {
+      name: 'ACCOUNT_CONTACTEMAIL',
+      content: account.contactEmail,
+    },
+    {
+      name: 'ACCOUNT_STREET',
+      content: account.address.street,
+    },
+    {
+      name: 'ACCOUNT_CITY',
+      content: `${account.address.city}, ${account.address.state}`,
+    },
+    {
+      name: 'PRIMARY_COLOR',
+      content: account.bookingWidgetPrimaryColor,
+    },
+  ];
+}

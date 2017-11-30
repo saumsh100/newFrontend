@@ -1,6 +1,6 @@
 
 import { Router } from 'express';
-import { renderTemplate } from '../../../lib/mail';
+import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getRecallTemplateName } from '../../../lib/recalls/createRecallText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
@@ -114,27 +114,17 @@ recallsRouter.get('/:accountId/recalls/:recallId/preview', checkPermissions('acc
       return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
     }
 
-    const { recall } = req;
+    const patient = {
+      firstName: 'Jane',
+    };
+
+    const { account, recall } = req;
     const templateName = getRecallTemplateName({ recall });
     const html = await renderTemplate({
       templateName,
       mergeVars: [
-        {
-          name: 'PATIENT_FIRSTNAME',
-          content: 'Jane',
-        },
-        {
-          name: 'ACCOUNT_NAME',
-          content: 'Chuck',
-        },
-        {
-          name: 'ACCOUNT_PHONENUMBER',
-          content: 'account.phoneNumber',
-        },
-        {
-          name: 'ACCOUNT_EMAIL',
-          content: 'account.phoneNumber'
-        },
+        // defaultMergeVars
+        ...generateClinicMergeVars({ account, patient }),
       ],
     });
 
