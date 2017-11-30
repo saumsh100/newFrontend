@@ -5,7 +5,7 @@ import styles from './styles.scss';
 
 function CommsPreviewTitle({ title }) {
   return (
-    <div className={styles.commsPreviewTitle}>{title}</div>
+    <div className={styles.commsPreviewTitle} />
   );
 }
 

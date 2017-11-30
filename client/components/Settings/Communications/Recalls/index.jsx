@@ -23,15 +23,15 @@ import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 const dueDateOptions = [
-  { label: '4 Months', value: 4 },
-  { label: '5 Months', value: 5 },
-  { label: '6 Months', value: 6 },
-  { label: '7 Months', value: 7 },
-  { label: '8 Months', value: 8 },
-  { label: '9 Months', value: 9 },
-  { label: '10 Months', value: 10 },
-  { label: '11 Months', value: 11 },
-  { label: '12 Months', value: 12 },
+  { label: '4 Mos', value: 4 },
+  { label: '5 Mos', value: 5 },
+  { label: '6 Mos', value: 6 },
+  { label: '7 Mos', value: 7 },
+  { label: '8 Mos', value: 8 },
+  { label: '9 Mos', value: 9 },
+  { label: '10 Mos', value: 10 },
+  { label: '11 Mos', value: 11 },
+  { label: '12 Mos', value: 12 },
 ];
 
 class Recalls extends Component {

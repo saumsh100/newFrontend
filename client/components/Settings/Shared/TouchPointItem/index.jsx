@@ -43,29 +43,29 @@ export default function TouchPointItem(props) {
       className={classNames(className, styles.listItem)}
       {...finalProps}
     >
-      <Grid>
-        <Row>
-          <Col xs={1} className={classNames(toggleClass, styles.toggleCol)}>
+      <div className={styles.gridSection}>
+        <div className={styles.leftSection}>
+          <div className={classNames(toggleClass, styles.toggleCol)}>
             {toggleComponent}
-          </Col>
-          <Col xs={4} className={classNames(labelClass, styles.labelCol)}>
+          </div>
+          <div className={classNames(labelClass, styles.labelCol)}>
             {labelComponent}
-          </Col>
-          <Col xs={6}>
-            <div className={classNames(linesBoxClass, noLines ? styles.linesBox : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
-              {mainComponent}
-              {/*<div className={styles.downIconWrapper}>
+          </div>
+        </div>
+        <div className={styles.flexSection}>
+          <div className={classNames(linesBoxClass, noLines ? styles.linesBox : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
+            {mainComponent}
+            {/*<div className={styles.downIconWrapper}>
                   <Icon icon="caret-down" size={2} />
                 </div>*/}
-            </div>
-          </Col>
-          <Col xs={1}>
-            <div className={classNames(connectLinesClass, selected ? styles[`connectionLineSelected_${color}`] : styles.connectionLine)}>
-              {rightComponent}
-            </div>
-          </Col>
-        </Row>
-      </Grid>
+          </div>
+        </div>
+        <div className={styles.rightSection}>
+          <div className={classNames(connectLinesClass, selected ? styles[`connectionLineSelected_${color}`] : styles.connectionLine)}>
+            {rightComponent}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
