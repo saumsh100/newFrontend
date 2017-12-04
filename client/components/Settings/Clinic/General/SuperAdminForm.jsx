@@ -89,57 +89,43 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           </div>
         </div>
       </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="twilioPhoneNumber"
-          label="Twilio Phone Number"
-          type="tel"
-          data-test-id="twilioPhoneNumber"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="destinationPhoneNumber"
-          label="Destination Phone Number"
-          type="tel"
-          data-test-id="destinationPhoneNumber"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="vendastaId"
-          label="Vendasta Id"
-          data-test-id="vendastaId"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="unit"
-          label="Schedule Unit"
-          type="number"
-          validate={[notNegative, maxUnitSize]}
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="timeInterval"
-          label="Time Interval for Booking Widget"
-          type="number"
-          validate={[notNegative, maxUnitSize]}
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="facebookUrl"
-          label="Facebook URL"
-        />
-      </div>
-      <div className={styles.paddingField}>
-        <Field
-          name="googlePlaceId"
-          label="Google Place ID"
-        />
-      </div>
+      <Field
+        name="twilioPhoneNumber"
+        label="Twilio Phone Number"
+        type="tel"
+        data-test-id="twilioPhoneNumber"
+      />
+      <Field
+        name="destinationPhoneNumber"
+        label="Destination Phone Number"
+        type="tel"
+        data-test-id="destinationPhoneNumber"
+      />
+      <Field
+        name="vendastaId"
+        label="Vendasta Id"
+        data-test-id="vendastaId"
+      />
+      <Field
+        name="unit"
+        label="Schedule Unit"
+        type="number"
+        validate={[notNegative, maxUnitSize]}
+      />
+      <Field
+        name="timeInterval"
+        label="Time Interval for Booking Widget"
+        type="number"
+        validate={[notNegative, maxUnitSize]}
+      />
+      <Field
+        name="facebookUrl"
+        label="Facebook URL"
+      />
+      <Field
+        name="googlePlaceId"
+        label="Google Place ID"
+      />
     </Form>
   );
 

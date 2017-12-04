@@ -27,6 +27,8 @@ import textMessages from '../entities/collections/textMessages';
 import TextMessage from '../entities/models/TextMessage';
 import Appointments from '../entities/models/Appointments';
 import appointments from '../entities/collections/appointments';
+import events from '../entities/collections/events';
+import Event from '../entities/models/Event';
 import invites from '../entities/collections/invites';
 import Invites from '../entities/models/Invites';
 import patientUsers from '../entities/collections/patientUsers';
@@ -100,6 +102,7 @@ export const createInitialEntitiesState = (initialEntitiesState = {}) => receive
   recalls: new recalls(),
   sentRecalls: new sentRecalls(),
   patientUsers: new patientUsers(),
+  events: new events(),
 
     // reviews: Reviews(), MODEL
     // listings: Listings(),
@@ -111,6 +114,7 @@ const Models = {
   enterprises: Enterprise,
   textMessages: TextMessage,
   appointments: Appointments,
+  events: Event,
   requests: Requests,
   services: Service,
   permissions: Permission,
@@ -253,7 +257,8 @@ function receiveEntities(state, entities) {
     each(collectionMap, (modelData, id) => {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
-      if (!model || key === 'weeklySchedules' || key === 'patients' || key === 'chats' || key === 'textMessages') {
+      if (!model || key === 'weeklySchedules' || key === 'patients'
+        || key === 'chats' || key === 'textMessages' || key === 'events') {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);
         newState = newState.setIn([key, 'models', id], newModel);

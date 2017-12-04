@@ -1,3 +1,4 @@
+
 @import '../../../ui.scss';
 
 .practOuterContainer {
@@ -9,14 +10,20 @@
   height: 100%;
   width: 100%;
 }
-.practListContainer {
-  display: inline-block;
+
+.listCardStyles {
   width: 270px;
   max-width: 270px;
   min-width: 270px;
-  overflow-y: auto;
-  padding-top: 15px;
-  background: $primary-white;
+}
+
+.practListContainer {
+
+  // background: $primary-white;
+}
+
+.listHeader {
+  padding-top: 20px;
 }
 
 .chairFlex {
@@ -58,10 +65,11 @@
   padding-top: 30px;
   text-transform: capitalize;
   background: $primary-white;
+  display: -webkit-box;
 
   &_textContainer {
     height: 100%;
-    width: 100%;
+    //width: 100%;
   }
   &_name {
     composes: listItemHeader from 'sass-loader!../../../fonts.scss';
@@ -115,19 +123,10 @@
 .practDataContainer {
   box-sizing: border-box;
   margin-left: 15px;
-  height:100%;
+  height: 100%;
   width: 100%;
   display: inline-block;
-  overflow-y: auto;
-  padding-top: 15px;
-  padding-right: 15px;
-  background: $primary-white;
 }
-
-.practTabContainer {
-  padding-left: 25px;
-}
-
 
 .pracHeaderContainer {
   display: flex;
@@ -148,10 +147,12 @@
   align-items: center;
   padding-top: 15px;
   padding-left: 10px;
+  padding-bottom: 40px;
   &_hours {
     padding-left: 10px;
     padding-bottom: 15px;
   }
+
   &__toggle{
     padding-left: 5px;
   }
@@ -211,7 +212,7 @@
     padding-bottom: 25px;
 
     &_text {
-      width: 50%;
+      // width: 50%;
     }
     &_hiddenToggle {
       margin-left: auto;
@@ -267,4 +268,19 @@
   &_toggle {
     margin-left: auto;
   }
+}
+
+.rightActions {
+  display: flex;
+  align-items: center;
+}
+
+.pracHeaderClass {
+  padding-bottom: 0;
+  height: auto;
+}
+
+
+.pracBodyClass {
+  padding: 40px;
 }

@@ -24,7 +24,7 @@ export default function Checkbox(props) {
   );
 
   return (
-    <div className={classes}>
+    <div className={classes} >
       <input
         className={styles.checkbox__input}
         type="checkbox"

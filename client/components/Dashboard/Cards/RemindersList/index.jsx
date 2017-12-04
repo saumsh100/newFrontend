@@ -20,7 +20,7 @@ class RemindersList extends Component {
     } = this.props;
 
     setSelectedPatientId(id);
-    push('/patients/list');
+    push(`/patients/${id}`);
   }
 
   handleAppointmentClick(startDate) {

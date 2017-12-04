@@ -28,12 +28,8 @@ export default function EditPatientForm({ onSubmit, formName, styles, currentPat
   ];
 
   const gender = [
-    {
-      value: 'Male',
-    },
-    {
-      value: 'Female',
-    },
+    { value: 'Male' },
+    { value: 'Female' },
   ];
 
   return (

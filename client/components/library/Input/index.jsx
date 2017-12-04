@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import styles from './styles.scss';
+import Icon from '../Icon';
 
 export default function Input(props) {
   const {
@@ -41,9 +42,12 @@ export default function Input(props) {
     inputClassName = classNames(styles[`${borderColor}Border`], inputClassName);
   }
 
+  let iconClassName = styles.icon;
+
   if (theme) {
     labelClassName = classNames(styles[`theme_${theme}Label`], labelClassName);
     inputClassName = classNames(styles[`theme_${theme}Input`], inputClassName);
+    iconClassName = classNames(styles[`theme_${theme}Icon`], iconClassName);
   }
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
@@ -56,6 +60,7 @@ export default function Input(props) {
         {label}
       </label>
       {errorComponent}
+      {icon ? <Icon className={iconClassName} icon={icon} /> : null }
     </div>
   );
 }

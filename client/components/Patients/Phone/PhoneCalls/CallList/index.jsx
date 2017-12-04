@@ -112,8 +112,8 @@ CallList.propTypes = {
   callerName: PropTypes.string,
   recording: PropTypes.string,
   duration: PropTypes.string,
-  answered: PropTypes.boolean,
-  wasApptBooked: PropTypes.boolean,
+  answered: PropTypes.bool,
+  wasApptBooked: PropTypes.bool,
 };
 
 function mapDispatchToProps(dispatch) {

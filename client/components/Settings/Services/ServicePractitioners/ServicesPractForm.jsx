@@ -1,3 +1,4 @@
+
 import React, {Component, PropTypes} from 'react';
 import { change } from 'redux-form';
 import { connect } from 'react-redux';
@@ -95,7 +96,7 @@ class ServicesPractForm extends Component {
               />
             </div>
           </div>
-            {showComponent}
+          {showComponent}
         </div>
       </div>
     );

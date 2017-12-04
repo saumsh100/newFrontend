@@ -4,3 +4,9 @@
 .toggle {
   background-color: $primary-color;
 }
+
+.theme {
+  &_primaryBlueBackground {
+    background-color: $primary-blue;
+  }
+}

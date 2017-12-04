@@ -6,13 +6,14 @@ $empty-grey: darken(lightgrey, 5%);
 .wrapper {
   position: relative;
   width: 100%;
+  padding: 20px 0;
 }
 
 .toggleDiv {
   position: relative;
-  font-size: 16px;
+  font-size: $small-size;
   font-family: $dashboard-font;
-  height: 28.89px;
+  height: 40px;
   width: 100%;
   padding: 5px 5px 5px 0px;
   cursor: pointer;
@@ -20,6 +21,7 @@ $empty-grey: darken(lightgrey, 5%);
   display: flex;
   align-items: center;
   transition : border 500ms ease-out;
+  box-sizing: border-box;
 }
 
 .primaryColorBorder {
@@ -30,6 +32,20 @@ $empty-grey: darken(lightgrey, 5%);
   border-bottom: 1px solid $primary-white;
 }
 
+.theme {
+  &_primaryBlueLabel {
+    font-size: $small-size !important;
+    letter-spacing: 2px;
+  }
+  &_primaryBlueBorder{
+    border-bottom: 1px solid $primary-blue;
+  }
+  &_primaryBlueCaret{
+    color: $primary-blue !important;
+  }
+}
+
+
 .active {
   border-bottom: 2px solid $primary-dark ;
 }
@@ -39,7 +55,7 @@ $empty-grey: darken(lightgrey, 5%);
   color: $disabled-color;
   cursor: not-allowed;
   border-bottom: 1px solid $disabled-color;
-  .caretIcon {
+  .caretIconWrapper {
     color: $disabled-color;
   }
 }
@@ -50,7 +66,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .optionListItem {
-  font-size: 14px;
+  font-size: $small-size;
   cursor: pointer;
   padding-left: 20px;
   padding-right: 20px;
@@ -78,11 +94,16 @@ $empty-grey: darken(lightgrey, 5%);
   user-select: none;
 }
 
-.caretIcon {
+.caretIconWrapper {
   margin-left: auto;
   color: $primary-darkgrey;
   transition : color 500ms ease-out;
 }
+
+.caretIcon {
+  //margin-left: 20px;
+}
+
 .activeIcon {
   color: $primary-dark;
 }
@@ -99,13 +120,13 @@ $empty-grey: darken(lightgrey, 5%);
   left: 0px;
   transition: 0.2s ease all;
   top: 15px;
-  font-size: 16px;
+  font-size: $small-size;
 }
 
 .filled {
-  top: -10px !important;
+  top: -5px !important;
   left: 0px !important;
-  font-size: 12px !important;
+  font-size: $extra-small-size !important;
 }
 
 .activeLabel {

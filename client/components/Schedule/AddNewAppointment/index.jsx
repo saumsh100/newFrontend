@@ -386,19 +386,15 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-function mapStateToProps({ entities, form, auth }, { formName }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-
-  if (!form[formName] || !activeAccount.get('unit')) {
+function mapStateToProps({ form }, { formName }) {
+  if (!form[formName]) {
     return {
       values: {},
-      unit: 15,
     };
   }
 
   return {
     appFormValues: form[formName].values,
-    unit: activeAccount.get('unit'),
   };
 }
 

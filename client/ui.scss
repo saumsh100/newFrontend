@@ -12,6 +12,7 @@ $widget-primary-color: var(--bookingWidgetPrimaryColor);
 $secondary-color1: #CAEBF2;
 $secondary-color2: #CAEBF2;
 $primary-yellow: #ffc45a;
+$primary-orange: #F5C673;
 $primary-blue: #206477;
 $primary-green: #2CC4A7;
 $primary-dark-blue: #3a5199;
@@ -31,13 +32,17 @@ $clr-table-header-icons: #eff2f3;
 $primary-blue-green: #206477;
 
 $primary-dark: #2e3845;
+$primary-darker: #3D4551;
+$primary-darkdark: #242A34;
 
 $inactive-color: #b4b4b5;
 $primary-darkgrey: #959596;
 $primary-grey: #efefef;
 $primary-gray: darken($primary-grey, 20%);
 $primary-lightgrey: #f0f0f0;
-$primary-white: #fafafa;
+$primary-light-grey: #c9c9c9;
+
+$primary-white: white;
 $background-color: #E6E6E6;
 $primary-red: #FF715C;
 $primary-star: #FBF174;
@@ -76,7 +81,7 @@ $padding-card-base: 30px;
 
 //header-sizes
 $count-size: 36px;
-$title-size: 18px;
+$title-size: 15px;
 $header-size: 25px;
 
 //Font-sizes
@@ -87,6 +92,8 @@ $x-large-size: 48px;
 $large-size: 34px;
 
 $extra-medium-size: 24px;
+$x-medium-size: 20px;
+$medium-plus-size: 16px;
 $medium-size: 14px;
 $small-size: 12px;
 $extra-small-size: 10px;

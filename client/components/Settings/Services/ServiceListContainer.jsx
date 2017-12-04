@@ -2,7 +2,15 @@
 import React, {Component, PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button, BadgeHeader, Col } from '../../library';
+import {
+  Button,
+  BadgeHeader,
+  Card,
+  SContainer,
+  SHeader,
+  SBody,
+  SFooter,
+} from '../../library';
 import Modal from '../../library/Modal';
 import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
@@ -53,9 +61,6 @@ class ServiceListContainer extends Component {
       return null;
     }
 
-    const selectedService = (serviceId ?
-      services.get(serviceId) : services.first());
-
     const formName = 'createServiceForm';
     const actions = [
       { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
@@ -63,52 +68,59 @@ class ServiceListContainer extends Component {
     ];
 
     return (
-      <Col xs={2} className={styles.servicesListContainer}>
-        <div className={styles.modalContainer}>
-          <div className={styles.displayFlexCenter}>
-            <Button
-              icon="plus"
-              onClick={this.setActive}
-              className={styles.addServiceButton}
-              data-test-id="addPractitionerButton"
-              secondary
-            >
-              Add New Service
-            </Button>
-          </div>
-          <BadgeHeader
-            count={services.size}
-            title="Services"
-            className={styles.badgeHeader}
-          />
-          <DialogBox
-            active={this.state.active}
-            actions={actions}
-            onEscKeyDown={this.setActive}
-            onOverlayClick={this.setActive}
-            title="Create New Service"
-          >
-            <CreateServiceForm
-              formName={formName}
-              onSubmit={this.createService}
-            />
-          </DialogBox>
-        </div>
-        {services.toArray().map((service) => {
-          return (
-            <ServiceListItem
-              key={service.get('id')}
-              id={service.get('id')}
-              service={service.get('name')}
-              setServiceId={this.props.setServiceId}
-              serviceId={selectedService.get('id')}
-            />
-          );
-        })}
-      </Col>
+      <Card className={styles.servicesListContainer}>
+        <SContainer>
+          <SHeader>
+            <div className={styles.modalContainer}>
+              <div className={styles.displayFlexCenter}>
+                <Button
+                  icon="plus"
+                  onClick={this.setActive}
+                  className={styles.addServiceButton}
+                  data-test-id="addPractitionerButton"
+                  secondary
+                >
+                  Add New Service
+                </Button>
+              </div>
+              <BadgeHeader
+                count={services.size}
+                title="Services"
+                className={styles.badgeHeader}
+              />
+              <DialogBox
+                active={this.state.active}
+                actions={actions}
+                onEscKeyDown={this.setActive}
+                onOverlayClick={this.setActive}
+                title="Create New Service"
+              >
+                <CreateServiceForm
+                  formName={formName}
+                  onSubmit={this.createService}
+                />
+              </DialogBox>
+            </div>
+          </SHeader>
+          <SBody>
+            {services.toArray().map((service) => {
+              return (
+                <ServiceListItem
+                  key={service.get('id')}
+                  id={service.get('id')}
+                  service={service.get('name')}
+                  setServiceId={this.props.setServiceId}
+                  serviceId={serviceId}
+                />
+              );
+            })}
+          </SBody>
+        </SContainer>
+      </Card>
     );
   }
 }
+
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
     createEntityRequest,

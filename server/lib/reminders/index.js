@@ -86,9 +86,7 @@ export async function sendRemindersForAccount(account, date, pub) {
   for (i = 0; i < reminders.length; i++) {
     const reminder = reminders[i];
     const { errors, success } = remindersPatients[i];
-
     const { primaryType, lengthSeconds } = reminder;
-
     try {
       console.log(`Trying to bulkSave ${errors.length} ${primaryType}_${lengthSeconds} failed sentReminders for ${name}`);
 
@@ -176,6 +174,7 @@ export async function sendRemindersForAccount(account, date, pub) {
         await sendSocket(global.io, chat.id);
       }
     }
+
     pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   }
 }
@@ -197,6 +196,10 @@ export async function computeRemindersAndSend({ date, pub }) {
     include: [{
       model: Reminder,
       as: 'reminders',
+      where: {
+        isDeleted: false,
+        isActive: true,
+      },
     }],
   });
 

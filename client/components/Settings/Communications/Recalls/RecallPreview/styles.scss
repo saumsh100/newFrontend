@@ -1,0 +1,50 @@
+
+@import '../../../../../ui';
+
+.previewHeader {
+
+}
+
+.topHeader {
+  height: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.previewSBody {
+  background-color: #D6D6D6;
+}
+
+.previewBody {
+  padding: 40px;
+  background-color: #F1F2F2;
+}
+
+.previewBodyUnconfirmed {
+  @extend .previewBody;
+}
+
+.previewBodyConfirmed {
+  @extend .previewBody;
+}
+
+.smsPreviewWrapper {
+  @extend .previewBody;
+  display: flex;
+  justify-content: center;
+}
+
+.tab {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 50%;
+  justify-content: center;
+  padding-top: 12px;
+  background-color: $primary-grey;
+}
+
+.activeTab {
+  background-color: $primary-white;
+}

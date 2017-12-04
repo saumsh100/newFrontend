@@ -50,6 +50,10 @@ const ROUTES = {
       to: '/settings/practitioners',
       label: 'Practitioners',
     },
+    {
+      to: '/settings/communications',
+      label: 'Communications',
+    },
   ],
 
   '/intelligence': [

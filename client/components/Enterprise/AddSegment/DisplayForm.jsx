@@ -64,7 +64,7 @@ class DisplayForm extends Component {
                 contentClass={styles.tabContent}
                 onChange={this.onTabChange}
               >
-                <Tab label="Demographics" className={styles.tab} activeClassName={styles.activeTab}>
+                <Tab label="Demographics" className={styles.tab} activeClass={styles.activeTab}>
                   <Grid className={styles.grid}>
                     <Row>
                       <Col xs={2} sm={2} md={2} className={styles.fieldLabel}>
@@ -124,10 +124,10 @@ class DisplayForm extends Component {
                   </Grid>
 
                 </Tab>
-                <Tab label="Behavior" className={styles.tab} activeClassName={styles.activeTab}>
+                <Tab label="Behavior" className={styles.tab} activeClass={styles.activeTab}>
                   <span>Coming soon</span>
                 </Tab>
-                <Tab label="Custom" className={styles.tab} activeClassName={styles.activeTab}>
+                <Tab label="Custom" className={styles.tab} activeClass={styles.activeTab}>
                   <span>Coming soon</span>
                 </Tab>
               </Tabs>

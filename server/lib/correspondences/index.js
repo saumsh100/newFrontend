@@ -1,5 +1,7 @@
-import { Account, SentReminder, SentRecall, Correspondence } from '../../_models';
+import moment from 'moment';
+import { Account, SentReminder, SentRecall, Correspondence, Appointment } from '../../_models';
 import { namespaces } from '../../config/globals';
+import { reminderConfirmedNote, reminderSentNote } from './appointmentNotesGenerators';
 import batchCreate from '../../routes/util/batch';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
@@ -40,6 +42,22 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
   });
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+
+  for (let i = 0; i < correspondences.length; i += 1) {
+    const appointment = await Appointment.findOne({
+      where: {
+        id: correspondences[i].appointmentId,
+      },
+    });
+
+    if (appointment) {
+      const text = reminderSentNote(correspondences[i].method.toLowerCase(), correspondences[i].contactedAt);
+      appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+      appointment.isSyncedWithPms = false;
+      await appointment.save();
+      global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
+    }
+  }
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
@@ -89,6 +107,22 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
   });
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+
+  for (let i = 0; i < correspondences.length; i += 1) {
+    const appointment = await Appointment.findOne({
+      where: {
+        id: correspondences[i].appointmentId,
+      },
+    });
+
+    if (appointment) {
+      const text = reminderConfirmedNote(correspondences[i].method, correspondences[i].contactedAt);
+      appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+      appointment.isSyncedWithPms = false;
+      await appointment.save();
+      global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
+    }
+  }
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);

@@ -163,19 +163,19 @@ class TopBar extends Component {
         />
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
-
             {withEnterprise && activeAccount ?
               <li>
                 <DropdownMenu
                   labelComponent={ActiveAccountButton}
                   labelProps={{ account: activeAccount }}
                 >
-                  {accounts.map(renderAccountItem)}
+                  <div style={{ width: '200px' }}>
+                    {accounts.map(renderAccountItem)}
+                  </div>
                 </DropdownMenu>
               </li> :
               null
             }
-
             <li>
               <DropdownMenu labelComponent={props => <UserMenu {...props} {...userMenuProps} />}>
                 <Link to="/profile">

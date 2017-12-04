@@ -111,11 +111,11 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
           </MultiNavItem>
         )}
         <SingleNavItem path="/" icon="tachometer" label={renderIf(withEnterprise, () => 'Clinic Dashboard', () => 'Dashboard')} />
-        <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
+        {/*<MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
-          {/*<SubNavItem path="/intelligence/social" label="Social" disabled/>*/}
-        </MultiNavItem>
+          <SubNavItem path="/intelligence/social" label="Social" disabled/>
+        </MultiNavItem>*/}
         <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
@@ -140,6 +140,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
           <SubNavItem path="/settings/schedule" label="Schedule" />
           <SubNavItem path="/settings/services" label="Services" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
+          <SubNavItem path="/settings/communications" label="Communications" />
         </MultiNavItem>
 
         {renderIf(isSuperAdmin, () =>

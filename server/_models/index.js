@@ -90,6 +90,8 @@ models.push((require('./Token').default(sequelize, Sequelize)));
 models.push((require('./User').default(sequelize, Sequelize)));
 models.push((require('./WaitSpot').default(sequelize, Sequelize)));
 models.push((require('./WeeklySchedule').default(sequelize, Sequelize)));
+models.push((require('./Event').default(sequelize, Sequelize)));
+
 
 const db = {};
 models.forEach((model) => {

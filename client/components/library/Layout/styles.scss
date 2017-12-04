@@ -1,0 +1,23 @@
+
+.container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: auto;
+}
+
+.footer {
+
+}
+

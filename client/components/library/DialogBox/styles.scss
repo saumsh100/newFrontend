@@ -17,7 +17,6 @@
 
   &__closeIcon {
     font-size: 1rem;
-    padding-top: 0.5em;
     color: $primary-darkgrey;
     font-weight: 900;
     margin-left: auto;
@@ -38,3 +37,6 @@
   }
 }
 
+.cardHeader {
+  padding-top: 0px !important;
+}

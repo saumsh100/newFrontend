@@ -54,7 +54,7 @@ class DialogBox extends Component {
           data-test-id={this.props['data-test-id']}
         >
           <div className={styles.dialogBody__header}>
-            <CardHeader title={title} />
+            <CardHeader title={title} className={styles.cardHeader}/>
             <div
               className={styles.dialogBody__closeIcon}
               onClick={this.deactivate}

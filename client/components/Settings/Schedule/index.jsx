@@ -4,7 +4,7 @@ import React from 'react';
 export default function Schedule(props) {
   const children = React.cloneElement(props.children, { activeAccount: props.activeAccount });
   return (
-    <div>
+    <div style={{ height: '100%' }}>
       {children}
     </div>
   );

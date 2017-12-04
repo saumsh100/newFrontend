@@ -1,0 +1,67 @@
+@import '../../../../../ui';
+
+.smartFilter {
+  width:100%;
+}
+
+.filterItem {
+  padding: 0px 10px 0px 10px;
+  color: $primary-darkgrey;
+  background: white;
+  &:hover {
+    background-color: $primary-lightgrey !important;
+  }
+}
+
+.formContainer {
+  padding-bottom: 10px;
+}
+
+.filterSection {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-bottom: 1px solid $primary-grey;
+}
+
+.filterField {
+  color: white;
+  padding-bottom: 10px;
+}
+
+.sectionHeader {
+  composes: listItemHeader from 'sass-loader!../../../../../fonts.scss';
+  color: white;
+  padding-top: 10px;
+  padding-bottom: 5px;
+}
+
+.filterTags {
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.tags {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  composes: fontSmall from 'sass-loader!../../../../../fonts.scss';
+  padding: 6px 11px 6px 11px;
+  border-radius: 16px;
+  box-sizing: border-box;
+  background: $primary-light-grey;
+  color: $primary-white;
+  margin-right: 5px;
+
+  &_icon {
+    color: $primary-darkgrey;
+    padding-left: 5px;
+    padding-bottom: 2px;
+    &:hover {
+      color: darken($primary-darkgrey, 5%);
+      cursor: pointer;
+    }
+  }
+}

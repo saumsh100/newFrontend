@@ -18,6 +18,7 @@ import apiRequests from './apiRequests';
 import segments from './segments';
 import availabilities from './availabilities';
 import intelligence from './intelligence';
+import patientTable from './patientTable';
 
 const appReducer = combineReducers({
   alerts,
@@ -38,6 +39,7 @@ const appReducer = combineReducers({
   availabilities,
   apiRequests,
   segments,
+  patientTable,
 });
 
 const rootReducer = (state, action) => {
