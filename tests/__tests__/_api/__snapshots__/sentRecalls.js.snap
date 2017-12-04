@@ -21,6 +21,8 @@ Object {
         "language": null,
         "lastApptDate": null,
         "lastApptId": null,
+        "lastHygieneApptId": null,
+        "lastHygieneDate": null,
         "lastName": "Mcdonald",
         "middleName": null,
         "mobilePhoneNumber": "+17789999999",
