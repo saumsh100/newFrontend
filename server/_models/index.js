@@ -49,6 +49,7 @@ sequelize
 const models = [];
 models.push((require('./Account').default(sequelize, Sequelize)));
 models.push((require('./Address').default(sequelize, Sequelize)));
+models.push((require('./AccountCronConfiguration').default(sequelize, Sequelize)));
 models.push((require('./AccountConfiguration').default(sequelize, Sequelize)));
 models.push((require('./Appointment').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
@@ -58,6 +59,7 @@ models.push((require('./Chat').default(sequelize, Sequelize)));
 models.push((require('./Configuration').default(sequelize, Sequelize)));
 models.push((require('./ConnectorVersion').default(sequelize, Sequelize)));
 models.push((require('./Correspondence').default(sequelize, Sequelize)));
+models.push((require('./CronConfiguration').default(sequelize, Sequelize)));
 models.push((require('./DeliveredProcedure').default(sequelize, Sequelize)));
 models.push((require('./Enterprise').default(sequelize, Sequelize)));
 models.push((require('./Family').default(sequelize, Sequelize)));

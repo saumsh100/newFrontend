@@ -17,6 +17,9 @@ const reviewsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * *
 // Run every 30 min in prod
 const correspondencesPattern = NODE_ENV === 'production' ? '0 15,45 * * * *' : '0 * * * * *';
 
+// Run every 30 min in prod
+const lastHygienePattern = NODE_ENV === 'production' ? '0 20,50 * * * *' : '0 * * * * *';
+
 // Run 15 min past every 2 hours in prod
 const firstNextLastAppointmentPattern = NODE_ENV === 'production' ? '15 */2 * * *' : '0 * * * * *';
 
@@ -30,6 +33,7 @@ cron.schedule(recallsPattern, () => {
   createJob('recalls');
 });
 
+// Creating correspondences for reminders sent and confirmed
 cron.schedule(correspondencesPattern, () => {
   createJob('correspondences');
 });
@@ -42,6 +46,11 @@ cron.schedule(reviewsPattern, () => {
 // Patient First Appointment, Next Appointment, and Last Appointment Cron
 cron.schedule(firstNextLastAppointmentPattern, () => {
   createJob('firstNextLastApp');
+});
+
+// Patient First Appointment, Next Appointment, and Last Appointment Cron
+cron.schedule(lastHygienePattern, () => {
+  createJob('lastHygiene');
 });
 
 // TODO: Birthday Messages Cron
