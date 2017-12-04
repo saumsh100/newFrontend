@@ -52,6 +52,3 @@ cron.schedule(firstNextLastAppointmentPattern, () => {
 cron.schedule(lastHygienePattern, () => {
   createJob('lastHygiene');
 });
-
-// TODO: Birthday Messages Cron
-// TODO: DigitalWaitList Cron

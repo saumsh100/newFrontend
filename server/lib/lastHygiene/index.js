@@ -65,6 +65,8 @@ export async function updateMostRecentHygiene(accountId, patientIds) {
   });
 
   // try to link to an appointment and update the patient
+  // if fails, just update the lastHygiene date
+  // if pass, add lastHygieneApptId
   for (let i = 0; i < invoices.length; i += 1) {
     const invoice = invoices[i];
     const appointment = await Appointment.findAll({
