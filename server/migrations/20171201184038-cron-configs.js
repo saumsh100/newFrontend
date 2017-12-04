@@ -110,7 +110,7 @@ module.exports = {
           id: uuid(),
           name: 'CRON_LAST_HYGIENE',
           defaultValue: null,
-          description: 'The last time the Cron for a patients Last Hygeine was run',
+          description: 'The last time the Cron for a patients Last Hygiene was run',
           type: 'isoString',
           createdAt: new Date(),
           updatedAt: new Date(),

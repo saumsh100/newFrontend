@@ -37,7 +37,7 @@ export async function getPatientsChangedDeliveredProcedure(date, accountId) {
 }
 
 /**
- * [updateMostRecentHygiene gets most recent hygeine procedures for patients with them
+ * [updateMostRecentHygiene gets most recent hygiene procedures for patients with them
  * and then trys to link to an appointment and update the patient model with
  * those values]
  * @param  {[uuid]} accountId  [description]
@@ -92,8 +92,8 @@ export async function updateMostRecentHygiene(accountId, patientIds) {
 }
 
 /**
- * checks if the most recent Hygeine has been run before for an account
- * if it has only do it for patients who have hygeine procedures
+ * checks if the most recent hygiene has been run before for an account
+ * if it has only do it for patients who have hygiene procedures
  * created, updated, or deleted recently
  * @param  {[uuid]} accountId
  */
