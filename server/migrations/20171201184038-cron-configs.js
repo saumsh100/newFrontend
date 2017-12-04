@@ -3,13 +3,6 @@ const uuid = require('uuid').v4;
 
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    /*
-      Add altering commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.createTable('users', { id: Sequelize.INTEGER });
-    */
     return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.createTable('CronConfigurations', {
@@ -123,13 +116,6 @@ module.exports = {
   },
 
   down: function (queryInterface, Sequelize) {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.dropTable('users');
-    */
     return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.dropTable('AccountCronConfigurations', { transaction: t });
