@@ -7,6 +7,7 @@ const ReminderSchema = {
   primaryType: null,
   primaryTypes: null,
   lengthSeconds: null,
+  interval: null,
   isActive: null,
   isDeleted: null,
 };

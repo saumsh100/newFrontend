@@ -1,6 +1,7 @@
 
 import moment from 'moment';
 import 'moment-timezone';
+import 'moment-interval';
 import isEmpty from 'lodash/isEmpty';
 
 // OS of the computer will add timezone to this function
@@ -403,6 +404,40 @@ const Time = {
       // console.log(Time.getHoursFromInterval(interval));
       return availableHours + Time.getHoursFromInterval(interval);
     }, 0);
+  },
+
+  // Purpose is to properly order intervals in DESC
+  sortIntervalDescPredicate(a, b) {
+    const aSeconds = moment.duration(Time.convertIntervalStringToObject(a)).asMilliseconds();
+    const bSeconds = moment.duration(Time.convertIntervalStringToObject(b)).asMilliseconds();
+    return aSeconds < bSeconds;
+  },
+
+  // converts "-10 weeks 0 days 2 seconds" to { weeks: -10, days: 0, seconds: 2 }
+  convertIntervalStringToObject(interval) {
+    const array = interval.split(' ');
+
+    // Defaults to be overridden
+    const intervalData = {
+      years: 0,
+      months: 0,
+      weeks: 0,
+      days: 0,
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0,
+    };
+
+    // IMPORTANT! We increment by 2...
+    let i;
+    for (i = 0; i < array.length; i += 2) {
+      const quantity = parseFloat(array[i]);
+      const type = array[i + 1];
+      intervalData[type] = quantity;
+    }
+
+    return intervalData;
   },
 };
 

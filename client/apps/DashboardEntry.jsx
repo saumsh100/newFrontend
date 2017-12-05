@@ -5,6 +5,8 @@ import { AppContainer } from 'react-hot-loader';
 import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
+import 'moment-timezone';
+import 'moment-interval';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';

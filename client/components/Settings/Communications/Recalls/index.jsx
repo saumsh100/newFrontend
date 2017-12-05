@@ -309,6 +309,9 @@ function mapStateToProps({ entities, auth }) {
   const recalls = entities.getIn(['recalls', 'models']).filter(r => !r.isDeleted).sortBy(r => -r.lengthSeconds);
   const role = auth.get('role');
 
+  console.log(`Recalls (${recalls.size})`);
+  recalls.forEach(r => console.log(r.toJS()));
+
   return {
     activeAccount,
     recalls,

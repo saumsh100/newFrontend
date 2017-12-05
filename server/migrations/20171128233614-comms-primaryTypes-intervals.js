@@ -11,13 +11,14 @@ module.exports = {
   up: function (queryInterface, Sequelize) {
     return queryInterface.sequelize.transaction(async (t) => {
       try {
+        // TODO: needs to add allowNull AFTER the row gets the value
         await queryInterface.addColumn(
           'Recalls',
           'primaryTypes',
           {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],
-            allowNull: false,
+            // allowNull: false,
           },
           { transaction: t },
         );
@@ -28,7 +29,27 @@ module.exports = {
           {
             type: Sequelize.ARRAY(Sequelize.STRING),
             defaultValue: [],
-            allowNull: false,
+            // allowNull: false,
+          },
+          { transaction: t },
+        );
+
+        await queryInterface.addColumn(
+          'Recalls',
+          'interval',
+          {
+            type: Sequelize.STRING,
+            // allowNull: false,
+          },
+          { transaction: t },
+        );
+
+        await queryInterface.addColumn(
+          'Reminders',
+          'interval',
+          {
+            type: Sequelize.STRING,
+            // allowNull: false,
           },
           { transaction: t },
         );
@@ -71,6 +92,18 @@ module.exports = {
           'Reminders',
           'primaryTypes',
           { transaction: t }
+        );
+
+        await queryInterface.removeColumn(
+          'Recalls',
+          'interval',
+          { transaction: t },
+        );
+
+        await queryInterface.removeColumn(
+          'Reminders',
+          'interval',
+          { transaction: t },
         );
 
         /*await queryInterface.addColumn(
