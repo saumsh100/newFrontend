@@ -19,6 +19,7 @@ export async function getPatientsChangedDeliveredProcedure(date, accountId) {
     ],
     where: {
       accountId,
+      isCompleted: true,
       $or: {
         createdAt: {
           $gte: date,
