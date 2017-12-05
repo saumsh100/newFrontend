@@ -199,12 +199,13 @@ export function fetchAvailabilities() {
         }
       })
       .catch((err) => {
+        console.error(err);
         dispatch(setAvailabilities([]));
+        dispatch(setNextAvailability(null));
         requestCount -= 1;
         if (!requestCount) {
           dispatch(setIsFetching(false));
         }
-        throw err;
       });
   };
 }

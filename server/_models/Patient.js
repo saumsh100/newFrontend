@@ -204,6 +204,10 @@ export default function (sequelize, DataTypes) {
     hygieneDueDateSeconds: {
       type: DataTypes.INTEGER,
     },
+
+    insuranceInterval: {
+      type: DataTypes.STRING,
+    },
   }, {
     // Model Config
     indexes: [

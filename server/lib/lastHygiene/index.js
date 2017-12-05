@@ -51,6 +51,7 @@ export async function updateMostRecentHygiene(accountId, patientIds) {
   const invoices = await DeliveredProcedure.findAll({
     where: {
       accountId,
+      isCompleted: true,
       procedureCode: {
         $like: '111%',
       },
