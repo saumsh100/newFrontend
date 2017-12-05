@@ -768,7 +768,7 @@ patientsRouter.put('/connector/:patientId', checkPermissions('patients:read'), (
       res.status(201).send(normalized);
       return { patient, normalized };
     })
-    .then(async ({ patient, normalized }) => {
+    .then(({ patient, normalized }) => {
       // Dispatch to the appropriate socket room
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;

@@ -8,7 +8,7 @@ module.exports = {
           'Patients',
           'insuranceInterval',
           {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
           },
           { transaction: t },
         );

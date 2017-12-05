@@ -206,7 +206,7 @@ export default function (sequelize, DataTypes) {
     },
 
     insuranceInterval: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
   }, {
     // Model Config
