@@ -15,6 +15,12 @@ module.exports = {
     return sendTemplate(config);
   },
 
+  sendDueForRecare: (config) => {
+    config.subject = 'Reset Password';
+    config.templateName = 'User Password Reset';
+    return sendTemplate(config);
+  },
+
   sendAlreadyConfirmedReminder: () => {
     config.subject = 'Appointment Reminder';
     config.templateName = 'Appointment Reminder - No Confirmation';
