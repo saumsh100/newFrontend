@@ -15,7 +15,7 @@ mail.sendDueForRecare({
       content: 'Beckett Dental',
     },
     {
-      name: 'ACCOUNT_CLINICLOGO',
+      name: 'ACCOUNT_LOGO_URL',
       content: 'https://carecru-production.s3.amazonaws.com/logos/eed25a35-56e4-494f-8822-bcef14cf418f/49d1f5bc-04fb-44e3-810f-367a40712a7e_original_BeckettLogo_square.png',
     },
     {
@@ -31,7 +31,7 @@ mail.sendDueForRecare({
       content: 'info@beckettdental.com',
     },
     {
-      name: 'ACCOUNT_STREET',
+      name: 'ACCOUNT_ADDRESS',
       content: '#101 - 1312 Marine Drive',
     },
     {
@@ -43,7 +43,7 @@ mail.sendDueForRecare({
       content: 'November 30th, 2017',
     },
     {
-      name: 'ACCOUNT_CLINICWEBSITE',
+      name: 'ACCOUNT_WEBSITE',
       content: 'http://www.beckettdental.com',
     },
   ]

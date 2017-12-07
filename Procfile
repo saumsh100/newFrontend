@@ -6,4 +6,5 @@ reviews: node server/bin/build/reviews.bundle.js
 events: node server/bin/build/events.bundle.js
 firstNextLastApp: node server/bin/build/firstNextLastApp.bundle.js
 correspondences: node server/bin/build/correspondences.bundle.js
+lastHygiene: node server/bin/build/lastHygiene.bundle.js
 release: node_modules/.bin/sequelize db:migrate

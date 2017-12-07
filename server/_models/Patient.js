@@ -173,6 +173,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     },
 
+    lastHygieneDate: {
+      type: DataTypes.DATE,
+    },
+
+    lastHygieneApptId: {
+      type: DataTypes.UUID,
+    },
+
     firstApptId: {
       type: DataTypes.UUID,
     },
@@ -195,6 +203,10 @@ export default function (sequelize, DataTypes) {
 
     hygieneDueDateSeconds: {
       type: DataTypes.INTEGER,
+    },
+
+    insuranceInterval: {
+      type: DataTypes.STRING,
     },
   }, {
     // Model Config
@@ -224,6 +236,11 @@ export default function (sequelize, DataTypes) {
     Patient.belongsTo(Appointment, {
       foreignKey: 'nextApptId',
       as: 'nextAppt',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'lastHygieneApptId',
+      as: 'lastHygieneAppId',
     });
 
     Patient.belongsTo(Appointment, {

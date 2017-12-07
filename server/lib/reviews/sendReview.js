@@ -58,7 +58,7 @@ export default {
       fromName: account.name,
       mergeVars: [
         {
-          name: 'ACCOUNT_PRIMARY_COLOR',
+          name: 'PRIMARY_COLOR',
           content: account.bookingWidgetPrimaryColor,
         },
         {
@@ -66,15 +66,15 @@ export default {
           content: account.fullLogoUrl,
         },
         {
-          name: 'ACCOUNT_NAME',
+          name: 'ACCOUNT_CLINICNAME',
           content: account.name,
         },
         {
-          name: 'ACCOUNT_CONTACT_EMAIL',
+          name: 'ACCOUNT_CONTACTEMAIL',
           content: account.contactEmail,
         },
         {
-          name: 'ACCOUNT_CONTACT_NUMBER',
+          name: 'ACCOUNT_PHONENUMBER',
           content: account.phoneNumber,
         },
         {

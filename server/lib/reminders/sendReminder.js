@@ -68,7 +68,7 @@ export default {
         fromName: account.name,
         mergeVars: [
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: account.name,
           },
           {
@@ -117,7 +117,7 @@ export default {
             content: `${protocol}://${host}/sentReminders/${sentReminder.id}/confirm`,
           },
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: account.name,
           },
           {
