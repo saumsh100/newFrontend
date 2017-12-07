@@ -17,7 +17,7 @@ module.exports = {
 
   sendDueForRecare: (config) => {   // This function is used only for testing
     config.subject = 'Reset Password';
-    config.templateName = 'Patient Recall - 64 Week After';
+    config.templateName = 'Patient Appointment - Requested';
     return sendTemplate(config);
   },
 
@@ -77,7 +77,7 @@ module.exports = {
 
   sendPatientResetPassword: (config) => {
     config.subject = 'Reset Password';
-    config.templateName = 'Patient Password Reset';
+    config.templateName = 'Patient Reset Password';
     return sendTemplate(config);
   },
 

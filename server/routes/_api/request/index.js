@@ -110,12 +110,24 @@ requestsRouter.post('/', (req, res, next) => {
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: name,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: moment(req.body.startDate).format('MMMM Do YYYY'),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: moment(req.body.startDate).format('h:mm a'),
           },
         ],
       });
@@ -210,6 +222,8 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const account = await Account.findById(accountId);
       const { email, firstName } = patientUser;
       const { name, phoneNumber, contactEmail, website } = account;
+      const { startDate } = req.request;
+
       // Send Email
       sendAppointmentRequestRejected({
         accountId: req.accountId,
@@ -217,11 +231,15 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: name || '',
           },
           {
@@ -235,6 +253,14 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
           {
             name: 'ACCOUNT_WEBSITE',
             content: website || '',
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: moment(startDate).format('MMMM Do YYYY'),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: moment(startDate).format('h:mm:ss a'),
           },
         ],
       });
@@ -272,11 +298,15 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: name || '',
           },
           {

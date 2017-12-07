@@ -59,7 +59,7 @@ export default {
       mergeVars: [
         {
           name: 'PRIMARY_COLOR',
-          content: account.bookingWidgetPrimaryColor,
+          content: account.bookingWidgetPrimaryColor || '#206477',
         },
         {
           name: 'ACCOUNT_LOGO_URL',
