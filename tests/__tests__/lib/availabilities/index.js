@@ -20,7 +20,9 @@ const serviceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const fillServiceId = 'e18bd613-c76b-4a9a-a1df-850c867b2cab';
 const funServiceId = 'ac286d7e-cb62-4ea1-8425-fc7e22195692';
 const practitionerId = '4f439ff8-c55d-4423-9316-a41240c4d329';
+const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
 const weeklyScheduleId = '39b9ed42-b82b-4fb5-be5e-9dfded032bdf';
+const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
 const timeOffId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
@@ -208,6 +210,8 @@ describe('Availabilities Library', () => {
               expect(availabilities[0]).toEqual({
                 startDate: (new Date(2017, 3, 3, 11, 0)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 12, 0)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
 
               //const endTime = Date.now();
@@ -236,22 +240,32 @@ describe('Availabilities Library', () => {
               expect(availabilities[0]).toEqual({
                 startDate: (new Date(2017, 3, 3, 13, 30)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 13, 51)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
               expect(availabilities[1]).toEqual({
                 startDate: (new Date(2017, 3, 3, 14, 0)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 14, 21)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
               expect(availabilities[2]).toEqual({
                 startDate: (new Date(2017, 3, 3, 15, 30)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 15, 51)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
               expect(availabilities[3]).toEqual({
                 startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 16, 21)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
               expect(availabilities[4]).toEqual({
                 startDate: (new Date(2017, 3, 3, 16, 30)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 16, 51)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
 
               const endTime = Date.now();
@@ -279,6 +293,33 @@ describe('Availabilities Library', () => {
               expect(availabilities[0]).toEqual({
                 startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
                 endDate: (new Date(2017, 3, 3, 16, 21)).toISOString(),
+                practitionerId,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
+              });
+            });
+        });
+
+        test('should return 4 availabilities with 60 timeInterval. - setting practitionerId and chairId', () => {
+          const startDate = (new Date(2017, 3, 3, 13, 0)).toISOString();
+          const endDate = (new Date(2017, 3, 3, 17, 0)).toISOString();
+
+          const options = {
+            accountId,
+            serviceId: cleanupServiceId,
+            timeInterval: 60,
+            startDate,
+            endDate,
+          };
+          return fetchAvailabilities(options)
+            .then((availabilities) => {
+              expect(Array.isArray(availabilities)).toBe(true);
+              expect(availabilities.length).toBe(4);
+              expect(availabilities[1].practitionerId).not.toEqual(practitionerId4);
+              expect(availabilities[3]).toEqual({
+                startDate: (new Date(2017, 3, 3, 16, 0)).toISOString(),
+                endDate: (new Date(2017, 3, 3, 17, 0)).toISOString(),
+                practitionerId: practitionerId4,
+                chairId: '2f439ff8-c55d-4423-9316-a41240c4d329',
               });
             });
         });

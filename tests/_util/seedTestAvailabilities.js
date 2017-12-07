@@ -256,15 +256,6 @@ const Practitioners = [
     // services: [],
   },
   {
-    id: practitionerId4,
-    accountId: accountId2,
-    firstName: 'Chelsea',
-    lastName: 'Handler',
-    weeklyScheduleId: weeklyScheduleId4,
-    isCustomSchedule: true,
-    // services: [],
-  },
-  {
     id: practitionerId5,
     accountId: accountId2,
     firstName: 'Will',
@@ -278,6 +269,18 @@ const Practitioners = [
     firstName: 'Joe',
     lastName: 'Montana',
     isCustomSchedule: false,
+    // services: [],
+  },
+];
+
+const Practitioners2 = [
+  {
+    id: practitionerId4,
+    accountId: accountId2,
+    firstName: 'Chelsea',
+    lastName: 'Handler',
+    weeklyScheduleId: weeklyScheduleId4,
+    isCustomSchedule: true,
     // services: [],
   },
 ];
@@ -539,6 +542,7 @@ async function seedTestAvailabilities() {
   await Enterprise.bulkCreate(Enterprises);
   await WeeklySchedule.bulkCreate(newWeeklySchedules);
   await Account.bulkCreate(Accounts);
+  await Practitioner.bulkCreate(Practitioners2);
   await Practitioner.bulkCreate(Practitioners);
   await Service.bulkCreate(Services);
   await Practitioner_Service.bulkCreate(PractitionerServices);

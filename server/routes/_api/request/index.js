@@ -28,7 +28,6 @@ requestsRouter.param('appointmentId', sequelizeLoader('appointment', 'Appointmen
 requestsRouter.post('/', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { patientUserId, accountId } = req.body;
-
   return Request.create(req.body)
     .then((request) => {
       const normalized = normalize('request', request.dataValues);
