@@ -11,19 +11,25 @@ module.exports = {
 
   sendConfirmationReminder: (config) => {
     config.subject = 'Appointment Reminder';
-    config.templateName = 'Appointment Reminder';
+    config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed';
+    return sendTemplate(config);
+  },
+
+  sendDueForRecare: (config) => {   // This function is used only for testing
+    config.subject = 'Reset Password';
+    config.templateName = 'Patient Recall - 64 Week After';
     return sendTemplate(config);
   },
 
   sendAlreadyConfirmedReminder: () => {
     config.subject = 'Appointment Reminder';
-    config.templateName = 'Appointment Reminder - No Confirmation';
+    config.templateName = 'Patient Reminder - 2 Hours Before Confirmed';
     return sendTemplate(config);
   },
 
   sendPatientRecall: (config) => {
     config.subject = 'You are due for your next appointment';
-    config.templateName = 'Patient Recall';
+    config.templateName = 'Patient Recall - 64 Week After';
     return sendTemplate(config);
   },
 
@@ -35,7 +41,7 @@ module.exports = {
 
   sendAppointmentRequested: (config) => {
     config.subject = 'Congratulations! Your appointment was requested.';
-    config.templateName = 'Appointment Requested';
+    config.templateName = 'Patient Appointment - Requested';
     return sendTemplate(config);
   },
 
@@ -47,13 +53,13 @@ module.exports = {
 
   sendAppointmentRequestRejected: (config) => {
     config.subject = 'Sorry, Your appointment was Rejected.';
-    config.templateName = 'Appointment Rejected';
+    config.templateName = 'Patient Appointment - Cancelled';
     return sendTemplate(config);
   },
 
   sendAppointmentRequestConfirmed: (config) => {
     config.subject = 'Congratulations! Your appointment request was confirmed.';
-    config.templateName = 'Appointment Request Confirmed';
+    config.templateName = 'Patient Appointment - Confirmed';
     return sendTemplate(config);
   },
 
@@ -65,19 +71,19 @@ module.exports = {
 
   sendResetPassword: (config) => {
     config.subject = 'Reset Password';
-    config.templateName = 'Reset Password';
+    config.templateName = 'User Password Reset';
     return sendTemplate(config);
   },
 
   sendPatientResetPassword: (config) => {
     config.subject = 'Reset Password';
-    config.templateName = 'Patient Reset Password';
+    config.templateName = 'Patient Password Reset';
     return sendTemplate(config);
   },
 
   sendReview: (config) => {
     config.subject = 'Tell us about your experience.';
-    config.templateName = 'Patient Review Stars';
+    config.templateName = 'Patient Review';
     return sendTemplate(config);
   },
 };
