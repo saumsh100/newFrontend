@@ -36,6 +36,10 @@ export default {
       fromName: account.name,
       mergeVars: [
         {
+          name: 'PRIMARY_COLOR',
+          content: account.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
           name: 'BOOK_URL',
           content: `${account.website}?cc=book`,
         },

@@ -68,6 +68,10 @@ export default {
         fromName: account.name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'ACCOUNT_CLINICNAME',
             content: account.name,
           },
@@ -111,6 +115,10 @@ export default {
         toEmail: patient.email,
         fromName: account.name,
         mergeVars: [
+          {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
           {
             name: 'CONFIRMATION_URL',
             // TODO: we might have to make this a token if UUID is too easy to guess...
