@@ -144,6 +144,16 @@ const ModelAttributes = {
     'status',
   ],
 
+  PatientUser: [
+    'email',
+    'phoneNumber',
+    'firstName',
+    'lastName',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Practitioner: [
     'firstName',
     'pmsId',
@@ -158,16 +168,19 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
-  Service: [
+  Request: [
     'name',
     'accountId',
     'duration',
-    'bufferTime',
-    'unitCost',
-    'customCosts',
+    'startDate',
+    'endDate',
+    'suggestedPractitionerId',
+    'suggestedChairId',
+    'note',
     'pmsId',
+    'patientUser',
     'isHidden',
-    'isDefault',
+    'isDeleted',
     'createdAt',
     'updatedAt',
     'deletedAt',
@@ -185,6 +198,21 @@ const ModelAttributes = {
     'dayOfWeek',
     'note',
     'practitionerId',
+  ],
+
+  Service: [
+    'name',
+    'accountId',
+    'duration',
+    'bufferTime',
+    'unitCost',
+    'customCosts',
+    'pmsId',
+    'isHidden',
+    'isDefault',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
   ],
 
   WeeklySchedule: [
@@ -258,6 +286,14 @@ const SERIALIZERS = {
   practitionerSchedule: new Serializer('practitionerSchedule', makeConfig({
     attributes: ModelAttributes.PractitionerSchedule,
     pluralizeType: false,
+  })),
+
+  request: new Serializer('appointmentRequest', makeConfig({
+    attributes: ModelAttributes.Request,
+    pluralizeType: false,
+    patientUser: {
+      attributes: ModelAttributes.PatientUser,
+    },
   })),
 
   weeklySchedule: new Serializer('practitionerWeeklySchedule', makeConfig({
