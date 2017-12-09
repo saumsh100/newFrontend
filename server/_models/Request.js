@@ -67,6 +67,23 @@ export default function (sequelize, DataTypes) {
     appointmentId: {
       type: DataTypes.UUID,
     },
+
+    isSyncedWithPms: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
+    pmsId: {
+      type: DataTypes.STRING,
+    },
+
+    isDeleted: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['isConfirmed', 'isCancelled']),
+      get() {
+        return this.get('isConfirmed') || this.get('isCancelled');
+      },
+    },
   });
 
   Request.associate = ({ Account, Appointment, Chair, Service, PatientUser, Practitioner }) => {

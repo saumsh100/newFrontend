@@ -5,6 +5,7 @@ import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
+import jsonapi from '../../util/jsonapi';
 import { Permission, PatientUser, Request, User, Account } from '../../../_models';
 
 import {
@@ -162,14 +163,70 @@ requestsRouter.get('/', (req, res, next) => {
 });
 
 /**
+ * Get all requests that need to be synced
+ */
+requestsRouter.get('/notSynced', (req, res, next) => {
+  const {
+    accountId,
+  } = req;
+
+
+  return Request.findAll({
+    where: {
+      accountId,
+      isSyncedWithPms: false,
+      suggestedPractitionerId: {
+        $ne: null,
+      },
+      suggestedChairId: {
+        $ne: null,
+      },
+    },
+    include: [{
+      model: PatientUser,
+      as: 'patientUser',
+    }],
+  }).then((requests) => {
+    const sendRequests = requests.map(r => r.get({ plain: true }));
+    const normalized = jsonapi('request', sendRequests);
+    return res.send(normalized);
+  })
+    .catch(next);
+});
+
+/**
  * Update a request
  */
 requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
   const { accountId } = req;
 
+  req.body.isSyncedWithPms = false;
+
   return req.request.update(req.body)
     .then((request) => {
       const normalized = normalize('request', request.dataValues);
+      res.status(200).send(normalized);
+      return { normalized };
+    })
+    .then(({ normalized }) => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('update:Request', normalized);
+    })
+    .catch(next);
+});
+
+/**
+ * Update a request
+ */
+requestsRouter.put('/:requestId/connector', checkPermissions('requests:update'), (req, res, next) =>{
+  const { accountId } = req;
+
+  req.body.isSyncedWithPms = true;
+
+  return req.request.update(req.body)
+    .then((request) => {
+      const normalized = jsonapi('request', request);
       res.status(200).send(normalized);
       return { normalized };
     })
@@ -205,7 +262,7 @@ requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, 
 requestsRouter.put('/:requestId/reject', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { accountId, request } = req;
-  return request.update({ isCancelled: true })
+  return request.update({ isCancelled: true, isSyncedWithPms: false })
     .then((requestData) => {
       const normalized = normalize('request', requestData.dataValues);
       res.status(201).send(normalized);
@@ -275,6 +332,7 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
   return req.request.update({
     isConfirmed: true,
     appointmentId: req.appointmentId,
+    isSyncedWithPms: false,
   })
     .then(async (request) => {
       const patientUser = await PatientUser.findById(request.dataValues.patientUserId);
