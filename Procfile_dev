@@ -6,4 +6,4 @@ events: nodemon server/bin/build/events.bundle.js
 correspondences: nodemon server/bin/build/correspondences.bundle.js
 lastHygiene: nodemon server/bin/build/lastHygiene.bundle.js
 firstNextLastApp: nodemon server/bin/build/firstNextLastApp.bundle.js
-
+lastRecall: nodemon server/bin/build/lastRecall.bundle.js
