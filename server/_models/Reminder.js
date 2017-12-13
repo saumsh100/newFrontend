@@ -39,6 +39,7 @@ export default function (sequelize, DataTypes) {
 
     interval: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
 
     isActive: {

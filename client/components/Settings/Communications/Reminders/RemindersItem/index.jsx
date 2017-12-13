@@ -2,14 +2,11 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { d2s, h2s, ordinalSuffix, secondsToNumType, numTypeToSeconds } from '../../../../../../server/util/time';
+import { ordinalSuffix, intervalToNumType, numTypeToInterval } from '../../../../../../server/util/time';
 import {
   updateEntityRequest,
-  deleteEntityRequest,
-  fetchEntities,
 } from '../../../../../thunks/fetchEntities';
 import {
-  Button,
   Icon,
   Grid,
   Row,
@@ -38,6 +35,18 @@ const wordMap = {
   email_sms: 'Email & SMS',
 };
 
+const typeOptions = [
+  { label: 'Hours Before', value: 'hours' },
+  { label: 'Days Before', value: 'days' },
+];
+
+const primaryTypesOptions = [
+  { label: 'Email', value: 'email' },
+  { label: 'SMS', value: 'sms' },
+  // { label: 'Voice', value: 'phone' },
+  { label: 'Email & SMS', value: 'email_sms' }
+];
+
 function SmallIconCircle(props) {
   const { selected, icon } = props;
   // delete props.selected;
@@ -58,7 +67,7 @@ class RemindersItem extends Component {
   constructor(props) {
     super(props);
 
-    const { num } = secondsToNumType(props.reminder.lengthSeconds);
+    const { num } = intervalToNumType(props.reminder.interval);
     this.state = {
       number: num,
     };
@@ -72,7 +81,7 @@ class RemindersItem extends Component {
 
   componentDidMount() {
     // Need function to abstract
-    const { num } = secondsToNumType(this.props.reminder.lengthSeconds);
+    const { num } = intervalToNumType(this.props.reminder.interval);
     if (this.state.number === num) {
       return;
     }
@@ -84,8 +93,8 @@ class RemindersItem extends Component {
 
   componentWillUpdate(nextProps) {
     // Need function to abstract
-    const oldNumType = secondsToNumType(this.props.reminder.lengthSeconds);
-    const newNumType = secondsToNumType(nextProps.reminder.lengthSeconds);
+    const oldNumType = intervalToNumType(this.props.reminder.interval);
+    const newNumType = intervalToNumType(nextProps.reminder.interval);
     if (oldNumType.num === newNumType.num) {
       return;
     }
@@ -124,7 +133,7 @@ class RemindersItem extends Component {
     e.stopPropagation();
     e.preventDefault();
     const { reminder, account, selected, selectReminder } = this.props;
-    const { num, type } = secondsToNumType(reminder.lengthSeconds);
+    const { num, type } = intervalToNumType(reminder.interval);
     const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
     if (!sure) {
       return;
@@ -178,12 +187,9 @@ class RemindersItem extends Component {
   }
 
   changeNumber(number) {
-    // Setting lengthSeconds to
     const { account, reminder } = this.props;
-    const { num, type } = secondsToNumType(reminder.lengthSeconds);
-    const lengthSeconds = numTypeToSeconds(number, type);
-
-    if (lengthSeconds === reminder.lengthSeconds) {
+    const { num, type } = intervalToNumType(reminder.interval);
+    if (num === number) {
       return;
     }
 
@@ -201,18 +207,15 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { lengthSeconds },
+      values: { interval: numTypeToInterval(number, type) },
       alert,
     });
   }
 
   changeDaysHours(newType) {
-    // Setting lengthSeconds to
     const { account, reminder } = this.props;
-    const { num, type } = secondsToNumType(reminder.lengthSeconds);
-    const lengthSeconds = numTypeToSeconds(num, newType);
-
-    if (lengthSeconds === reminder.lengthSeconds) {
+    const { num, type } = intervalToNumType(reminder.interval);
+    if (newType === type) {
       return;
     }
 
@@ -230,7 +233,7 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { lengthSeconds },
+      values: { interval: numTypeToInterval(num, newType) },
       alert,
     });
   }
@@ -257,10 +260,8 @@ class RemindersItem extends Component {
       selectReminder,
     } = this.props;
 
-    // TODO: reminder.lengthSeconds needs to be converted to days/hours
-
     const {
-      lengthSeconds,
+      interval,
       primaryTypes,
       isActive,
     } = reminder;
@@ -268,7 +269,7 @@ class RemindersItem extends Component {
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
 
     const icon = iconsMap[primaryTypesKey];
-    const { type } = secondsToNumType(lengthSeconds);
+    const { type } = intervalToNumType(interval);
     const { number } = this.state;
 
     const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
@@ -311,24 +312,17 @@ class RemindersItem extends Component {
                     onChange={this.changePrimaryTypes}
                     className={dropdownSelectClass}
                     value={primaryTypesKey}
-                    options={[
-                      { label: 'Email', value: 'email' },
-                      { label: 'SMS', value: 'sms' },
-                      // { label: 'Voice', value: 'phone' },
-                      { label: 'Email & SMS', value: 'email_sms' }
-                    ]}
+                    options={primaryTypesOptions}
                   />
                 </div>
                 <div className={styles.bottomRow}>
                   <Grid>
                     <Row>
                       <Col xs={3}>
+                        {/* Using min, step and type=number did not work here properly so have to code around it */}
                         <Input
                           classStyles={dropdownSelectClass}
                           value={number}
-                          //type="number"
-                          //min="1"
-                          //step="any"
                           onChange={this.onChangeNumberInput}
                           onBlur={(e) => this.changeNumber(e.target.value)}
                         />
@@ -338,10 +332,7 @@ class RemindersItem extends Component {
                           onChange={this.changeDaysHours}
                           className={dropdownSelectClass}
                           value={type}
-                          options={[
-                            { label: 'Hours Before', value: 'hours' },
-                            { label: 'Days Before', value: 'days' },
-                          ]}
+                          options={typeOptions}
                         />
                       </Col>
                     </Row>

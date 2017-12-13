@@ -6,13 +6,22 @@ import {
   SentReminder,
 } from '../../_models';
 import { generateOrganizedPatients } from '../comms/util';
-import { h2s } from '../../util/time';
+import { m2s, convertIntervalStringToObject, convertIntervalToMs } from '../../util/time';
 
-// Should always be greater than or equal to reminder cron job interval
-const BUFFER_SECONDS =  h2s(1) / 2;
+// TODO: add to globals file for these values
+// Should always be equal to the cron interval
+const BUFFER_SECONDS = 60 * 5;
 
-// Made an effort to throw all easily testable functions into here
-export async function mapPatientsToReminders({ reminders, account, date }) {
+/**
+ * mapPatientsToReminders will return the patients that need a reminder
+ * and organized behind what would succeed and what would fail based on patientData
+ *
+ * @param reminders
+ * @param account
+ * @param date
+ * @returns {Promise.<Array>}
+ */
+export async function mapPatientsToReminders({ reminders, account, startDate, endDate }) {
   const seen = {};
   const remindersPatients = [];
 
@@ -22,7 +31,12 @@ export async function mapPatientsToReminders({ reminders, account, date }) {
     const lastReminder = reminders[i - 1];
 
     // Get appointments that this reminder deals with
-    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, date, lastReminder });
+    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, startDate, endDate, lastReminder });
+
+    /*console.log(startDate);
+    console.log(endDate);
+    console.log(reminder.interval);
+    console.log(appointments.map(a => a.startDate));*/
 
     // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
     // This is why the order or reminders is so important
@@ -37,7 +51,7 @@ export async function mapPatientsToReminders({ reminders, account, date }) {
       return patient;
     });
 
-    remindersPatients.push(generateOrganizedPatients(patients, reminder.primaryType));
+    remindersPatients.push(generateOrganizedPatients(patients, reminder.primaryTypes));
   }
 
   return remindersPatients;
@@ -51,13 +65,19 @@ export async function mapPatientsToReminders({ reminders, account, date }) {
  * - and if we should send reminder
  *
  * @param reminder
- * @param date
+ * @param startDate
+ * @param endDate
  * @param lastReminder
+ * @param buffer
  */
-export async function getAppointmentsFromReminder({ reminder, date, lastReminder }) {
+export async function getAppointmentsFromReminder({ reminder, startDate, endDate, lastReminder, buffer = BUFFER_SECONDS }) {
   // TODO: add buffer here so that patients aren't receiving reminders to close to one another
-  const start = moment(date).add(reminder.lengthSeconds, 'seconds').toISOString();
-  const end = moment(start).add(BUFFER_SECONDS, 'seconds').toISOString();
+  // convert string to { weeks: 1, days: 1, ... }
+  const intervalObject = convertIntervalStringToObject(reminder.interval);
+  const start = moment(startDate).add(intervalObject).toISOString();
+
+  // If endDate is not supplied, default to using startDate + recall interval + buffer
+  const end = moment(endDate || startDate).add(intervalObject).add(buffer, 'seconds').toISOString();
 
   const appointments = await Appointment.findAll({
     where: {
@@ -113,10 +133,12 @@ export function shouldSendReminder({ appointment, reminder, lastReminder }) {
     // TODO: this needs to be done when singular sending is possible
   }
 
-  // We check lengthSeconds because they can change and add different reminders
+  // We check interval because they can change and add different reminders
   // We don't send auto-reminders that are farther away than a previously sent one
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
-    return (s.reminderId === reminder.id) || (reminder.lengthSeconds >= s.lengthSeconds);
+    const sentReminderMs = convertIntervalToMs(s.interval);
+    const reminderMs = convertIntervalToMs(reminder.interval);
+    return (s.reminderId === reminder.id) || (reminderMs >= sentReminderMs);
   });
 
   return !reminderAlreadySentOrLongerAway && preferences.reminders;

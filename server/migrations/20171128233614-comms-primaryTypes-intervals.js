@@ -54,6 +54,26 @@ module.exports = {
           { transaction: t },
         );
 
+        await queryInterface.addColumn(
+          'SentRecalls',
+          'interval',
+          {
+            type: Sequelize.STRING,
+            // allowNull: false,
+          },
+          { transaction: t },
+        );
+
+        await queryInterface.addColumn(
+          'SentReminders',
+          'interval',
+          {
+            type: Sequelize.STRING,
+            // allowNull: false,
+          },
+          { transaction: t },
+        );
+
         /*await queryInterface.removeColumn(
           'Recalls',
           'primaryType',
@@ -102,6 +122,18 @@ module.exports = {
 
         await queryInterface.removeColumn(
           'Reminders',
+          'interval',
+          { transaction: t },
+        );
+
+        await queryInterface.removeColumn(
+          'SentRecalls',
+          'interval',
+          { transaction: t },
+        );
+
+        await queryInterface.removeColumn(
+          'SentReminders',
           'interval',
           { transaction: t },
         );

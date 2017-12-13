@@ -1,5 +1,6 @@
 
 import moment from 'moment-timezone';
+import { convertIntervalStringToObject } from '../../util/time';
 
 const nowISO = () => (new Date()).toISOString();
 
@@ -90,7 +91,7 @@ export function getReminderType({ appointment, reminder, currentDate = nowISO() 
   }
 
   // If appointment is not defined, assume reminder is there and get apptDate from there to determine type
-  let apptDate = moment().add(reminder.lengthSeconds, 'seconds');
+  let apptDate = moment().add(convertIntervalStringToObject(reminder.interval));
   if (appointment && appointment.startDate) {
     apptDate = moment(appointment.startDate);
   }

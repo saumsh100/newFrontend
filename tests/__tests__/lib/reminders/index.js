@@ -26,10 +26,8 @@ const makeReminderData = (data = {}) => Object.assign({},
   {
     id: reminderId1,
     accountId,
-    primaryType: 'sms',
-
-    // 2 hours by default
-    lengthSeconds: 7200,
+    primaryTypes: ['sms'],
+    interval: '2 hours',
   },
   data,
 );

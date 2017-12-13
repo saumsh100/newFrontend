@@ -63,6 +63,10 @@ export default function (sequelize, DataTypes) {
     lengthSeconds: {
       type: DataTypes.INTEGER,
     },
+
+    interval: {
+      type: DataTypes.STRING,
+    },
   });
 
   SentReminder.associate = ({ Account, Appointment, Reminder, Patient }) => {

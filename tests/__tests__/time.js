@@ -720,19 +720,33 @@ describe('util/time', () => {
 
     test('should sort the intervals properly', () => {
       expect([
-        '1 week',
-        '1 year',
+        '1 weeks',
+        '1 years',
         '-5 years 11 months',
         '-4 years',
         '12 seconds',
-        '1 day',
+        '1 days',
       ].sort(sortIntervalDescPredicate)).toEqual([
-        '1 year',
-        '1 week',
-        '1 day',
+        '1 years',
+        '1 weeks',
+        '1 days',
         '12 seconds',
         '-4 years',
         '-5 years 11 months',
+      ]);
+    });
+
+    test('should sort the intervals properly', () => {
+      expect([
+        '-1 months',
+        '-1 weeks',
+        '1 months',
+        '1 weeks',
+      ].sort(sortIntervalDescPredicate)).toEqual([
+        '1 months',
+        '1 weeks',
+        '-1 weeks',
+        '-1 months',
       ]);
     });
   });

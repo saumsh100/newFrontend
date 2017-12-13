@@ -13,7 +13,7 @@ import {
   DialogBox,
   DropdownSelect,
 } from '../../../library';
-import { numTypeToSeconds, w2s, s2m, m2s } from '../../../../../server/util/time';
+import { convertIntervalToMs, w2s, s2m, m2s } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import CreateRecallsForm from './CreateRecallsForm';
@@ -185,19 +185,20 @@ class Recalls extends Component {
     return (
       <CommunicationSettingsCard
         title="Recalls Settings"
-        rightActions={(
-          <Button
+        // TODO: we have removed add button for now
+        //rightActions={
+          /*(<Button
             onClick={this.toggleAdding}
             data-test-id="createNewReminder"
             color="blue"
           >
             Add
-          </Button>
-        )}
+          </Button>)*/
+        //}
 
         leftColumn={(
           <div>
-            {this.props.recalls.toArray().filter(r => r.lengthSeconds >= 0).map((recall, i) => {
+            {this.props.recalls.toArray().filter(r => convertIntervalToMs(r.interval) >= 0).map((recall, i) => {
               return (
                 <RecallsItem
                   key={recall.id}
@@ -257,7 +258,7 @@ class Recalls extends Component {
                 </div>
               )}
             />
-            {this.props.recalls.toArray().filter(r => r.lengthSeconds < 0).map((recall, i) => {
+            {this.props.recalls.toArray().filter(r => convertIntervalToMs(r.interval) < 0).map((recall, i) => {
               return (
                 <RecallsItem
                   lastRecall={recall.id === lastRecallId}
@@ -305,12 +306,11 @@ Recalls.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const recalls = entities.getIn(['recalls', 'models']).filter(r => !r.isDeleted).sortBy(r => -r.lengthSeconds);
   const role = auth.get('role');
-
-  console.log(`Recalls (${recalls.size})`);
-  recalls.forEach(r => console.log(r.toJS()));
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const recalls = entities.getIn(['recalls', 'models'])
+    .filter(r => !r.isDeleted)
+    .sortBy(r => -convertIntervalToMs(r.interval));
 
   return {
     activeAccount,

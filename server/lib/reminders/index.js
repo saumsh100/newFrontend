@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import { env } from '../../config/globals';
 import {
   Account,
@@ -12,6 +13,7 @@ import {
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { generateOrganizedPatients } from '../comms/util';
+import { sortIntervalDescPredicate } from '../../util/time';
 import { mapPatientsToReminders } from './helpers';
 import sendReminder from './sendReminder';
 
@@ -76,43 +78,53 @@ function getIsConfirmable(appointment) {
  * @returns {Promise.<void>}
  */
 export async function sendRemindersForAccount(account, date, pub) {
-  console.log(`Sending reminders for ${account.name}`);
+  console.log(`Sending reminders for ${account.name} (${account.id}) at ${moment(date).format('YYYY-MM-DD h:mma')}...`);
   const { reminders, name } = account;
-  const sentReminderIds = [];
 
-  const remindersPatients = await mapPatientsToReminders({ reminders, account, date });
+  // Sort reminders by interval so that we send to earliest first
+  const sortedReminders = reminders.sort((a, b) => sortIntervalDescPredicate(a.interval, b.interval));
+
+  const sentReminderIds = [];
+  const remindersPatients = await mapPatientsToReminders({ reminders: sortedReminders, account, startDate: date });
 
   let i;
-  for (i = 0; i < reminders.length; i++) {
-    const reminder = reminders[i];
+  for (i = 0; i < sortedReminders.length; i++) {
+    const reminder = sortedReminders[i];
     const { errors, success } = remindersPatients[i];
-    const { primaryType, lengthSeconds } = reminder;
+    const { primaryTypes, interval } = reminder;
+
+    // For logging purposes
+    const ptName = primaryTypes.join(' & ');
+
+    console.log(`-- Sending '${interval} ${ptName}'`);
+
     try {
-      console.log(`Trying to bulkSave ${errors.length} ${primaryType}_${lengthSeconds} failed sentReminders for ${name}`);
+      console.log(`---- Bulk saving ${errors.length} '${interval} ${ptName}' sentReminders that would fail...`);
 
       // Save failed sentRecalls from errors
-      const failedSentReminders = errors.map(({ errorCode, patient }) => ({
+      const failedSentReminders = errors.map(({ errorCode, patient, primaryType }) => ({
         reminderId: reminder.id,
         accountId: account.id,
         patientId: patient.id,
         appointmentId: patient.appointment.id,
         isConfirmable: getIsConfirmable(patient.appointment),
-        lengthSeconds: reminder.lengthSeconds,
+        interval: reminder.interval,
         primaryType,
         errorCode,
       }));
 
       await SentReminder.bulkCreate(failedSentReminders);
-      console.log(`${errors.length} ${primaryType}_${lengthSeconds} failed sentReminders saved!`);
+      console.log(`---- Saved ${errors.length} '${interval} ${ptName}'  failed sentReminders saved.`);
     } catch (err) {
-      console.error(`FAILED bulkSave of failed sentReminders`, err);
+      console.error(`---- Failed bulk saving of sentReminders that would fail`);
+      console.error(err);
       // TODO: do we want to throw the error hear and ignore trying to send?
     }
 
-    console.log(`Trying to send ${success.length} ${primaryType}_${lengthSeconds} reminders for ${name}`);
-    for (const patient of success) {
+    console.log(`---- Sending ${success.length} '${interval} ${ptName}' reminders that should succeed...`);
+    for (const { patient, primaryType } of success) {
       const { appointment } = patient;
-      const { primaryType } = reminder;
+      // const { primaryType } = reminder;
 
       // Save sent reminder first so we can
       // - use sentReminderId as token in email
@@ -122,9 +134,9 @@ export async function sendRemindersForAccount(account, date, pub) {
         accountId: account.id,
         patientId: patient.id,
         appointmentId: appointment.id,
-        lengthSeconds: reminder.lengthSeconds,
+        interval: reminder.interval,
         isConfirmable: getIsConfirmable(appointment),
-        primaryType: reminder.primaryType,
+        primaryType,
       });
 
       sentReminderIds.push(sentReminder.id);
@@ -138,12 +150,12 @@ export async function sendRemindersForAccount(account, date, pub) {
           sentReminder,
         });
       } catch (error) {
-        console.log(`${primaryType}_${lengthSeconds} reminder not sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
-        console.log(error);
+        console.error(`------ Failed sending ${interval} ${primaryType} reminder to ${patient.firstName} ${patient.lastName}`);
+        console.error(error);
         continue;
       }
 
-      console.log(`${primaryType}_${lengthSeconds} reminder sent to ${patient.firstName} ${patient.lastName} for ${account.name}`);
+      console.log(`------ Sent ${interval} ${primaryType} reminder to ${patient.firstName} ${patient.lastName}`);
       await sentReminder.update({ isSent: true });
       const appt = await Appointment.findById(appointment.id);
       appt.update({ isReminderSent: true });
@@ -153,15 +165,12 @@ export async function sendRemindersForAccount(account, date, pub) {
         const textMessageData = sanitizeTwilioSmsData(data);
         const { to } = textMessageData;
         let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
-        if (chat) console.log('Found chat', chat.id);
         if (!chat) {
           chat = await Chat.create({
             accountId: account.id,
             patientId: patient.id,
             patientPhoneNumber: to,
           });
-
-          console.log('Created chat', chat.id);
         }
 
         // Now save TM
@@ -177,6 +186,8 @@ export async function sendRemindersForAccount(account, date, pub) {
 
     pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   }
+
+  console.log(`Reminders completed for ${account.name} (${account.id})!`);
 }
 
 /**
@@ -191,7 +202,8 @@ export async function computeRemindersAndSend({ date, pub }) {
       canSendReminders: true,
     },
 
-    order: [[{ model: Reminder, as: 'reminders' }, 'lengthSeconds', 'asc']],
+    // We have to sort in JS until Sequelize gets interval types for Postgres
+    // order: [[{ model: Reminder, as: 'reminders' }, 'lengthSeconds', 'asc']],
 
     include: [{
       model: Reminder,

@@ -110,6 +110,11 @@ const postgres = {
   logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };
 
+
+const reminders = {
+  numMinutes: 5,
+};
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -119,7 +124,7 @@ module.exports = {
   tokenExpiry,
   passwordHashSaltRounds,
 
-  // Enivornment Variable Related
+  // Environment Variable Related
   env,
   port,
   host,
@@ -140,4 +145,5 @@ module.exports = {
   s3,
   postgres,
   callrails,
+  reminders,
 };

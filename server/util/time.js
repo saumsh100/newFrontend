@@ -408,9 +408,14 @@ const Time = {
 
   // Purpose is to properly order intervals in DESC
   sortIntervalDescPredicate(a, b) {
-    const aSeconds = moment.duration(Time.convertIntervalStringToObject(a)).asMilliseconds();
-    const bSeconds = moment.duration(Time.convertIntervalStringToObject(b)).asMilliseconds();
+    const aSeconds = Time.convertIntervalToMs(a);
+    const bSeconds = Time.convertIntervalToMs(b);
     return aSeconds < bSeconds;
+  },
+
+  // Purpose is to properly order intervals in DESC
+  convertIntervalToMs(interval) {
+    return moment.duration(Time.convertIntervalStringToObject(interval)).asMilliseconds();
   },
 
   // converts "-10 weeks 0 days 2 seconds" to { weeks: -10, days: 0, seconds: 2 }
@@ -439,6 +444,17 @@ const Time = {
 
     return intervalData;
   },
+
+  // Convert interval to num and type for frontend use on dropdowns and inputs
+  intervalToNumType(interval) {
+    const [num, type] = interval.split(' ');
+    return { num, type };
+  },
+
+  // Convert interval to num and type for frontend use on dropdowns and inputs
+  numTypeToInterval(num, type) {
+    return `${num} ${type}`;
+  }
 };
 
 module.exports = Time;

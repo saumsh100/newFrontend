@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { s2w } from '../../../../../../server/util/time';
+import { intervalToNumType } from '../../../../../../server/util/time';
 import {
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
@@ -31,11 +31,29 @@ const wordMap = {
   email_sms: 'Email & SMS',
 };
 
+const singularType = {
+  weeks: 'Week',
+  months: 'Month',
+};
+
+const pluralType = {
+  weeks: 'Weeks',
+  months: 'Months',
+};
+
+const getTypeWord = (num, type) => {
+  if (Math.abs(num) === 1) {
+    return singularType[type];
+  } else {
+    return pluralType[type];
+  }
+};
+
 class RecallsItem extends Component {
   constructor(props) {
     super(props);
 
-    const num = s2w(props.recall.lengthSeconds);
+    const { num } = intervalToNumType(props.recall.interval);
 
     // This is more for the input if we had one...
     this.state = {
@@ -49,7 +67,7 @@ class RecallsItem extends Component {
 
   componentDidMount() {
     // Need function to abstract
-    const num = s2w(this.props.recall.lengthSeconds);
+    const { num } = intervalToNumType(this.props.recall.interval);
     if (this.state.number === num) {
       return;
     }
@@ -61,14 +79,14 @@ class RecallsItem extends Component {
 
   componentWillUpdate(nextProps) {
     // Need function to abstract
-    const oldNum = s2w(this.props.recall.lengthSeconds);
-    const newNum = s2w(nextProps.recall.lengthSeconds);
-    if (oldNum === newNum) {
+    const oldNumType = intervalToNumType(this.props.recall.interval);
+    const newNumType = intervalToNumType(nextProps.recall.interval);
+    if (oldNumType.num === newNumType.num) {
       return;
     }
 
     this.setState({
-      number: newNum,
+      number: newNumType.num,
     });
   }
 
@@ -101,9 +119,9 @@ class RecallsItem extends Component {
     e.stopPropagation();
     e.preventDefault();
     const { recall, account, selected, selectRecall } = this.props;
-    const num = s2w(recall.lengthSeconds);
-    const type = num >= 0 ? 'before' : 'after';
-    const sure = confirm(`Are you sure you want to delete the ${num} weeks ${type} due date recall?`);
+    const { num, type } = intervalToNumType(recall.interval);
+    const subType = num >= 0 ? 'before' : 'after';
+    const sure = confirm(`Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`);
     if (!sure) {
       return;
     }
@@ -115,12 +133,12 @@ class RecallsItem extends Component {
     const alert = {
       success: {
         title: 'Deleted Recall',
-        body: `You have deleted the ${num} weeks ${type} due date recall`,
+        body: `You have deleted the ${num} ${type} ${subType} due date recall`,
       },
 
       error: {
         title: 'Error Deleting Recall',
-        body: `Failed to delete the ${num} weeks ${type} due date recall`,
+        body: `Failed to delete the ${num} ${type} ${subType} due date recall`,
       },
     };
 
@@ -163,10 +181,8 @@ class RecallsItem extends Component {
       lastRecall,
     } = this.props;
 
-    // TODO: reminder.lengthSeconds needs to be converted to days/hours
-
     const {
-      lengthSeconds,
+      interval,
       primaryTypes,
       isActive,
     } = recall;
@@ -174,13 +190,14 @@ class RecallsItem extends Component {
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
 
     const icon = iconsMap[primaryTypesKey];
-    const numWeeks = s2w(lengthSeconds);
-    const type = numWeeks >= 0 ? 'before' : 'after';
+    const { num, type } = intervalToNumType(interval);
+    const subType = num >= 0 ? 'before' : 'after';
 
+    // Pretty hacky way to decide length, should convert interval to days and use that
     let color = 'green';
-    if ((0 > numWeeks) && (numWeeks > -36)) {
+    if ((0 > num) && (num >= -6)) {
       color = 'yellow';
-    } else if (-36 >= numWeeks) {
+    } else if (-6 > num) {
       color = 'red';
     }
 
@@ -207,8 +224,8 @@ class RecallsItem extends Component {
 
         labelComponent={(
           <div className={styles.recallLabel}>
-            <TouchPointLabel title={`${Math.abs(numWeeks)} Weeks`} />
-            <div className={styles.beforeAfterLabel}>{type} due date</div>
+            <TouchPointLabel title={`${Math.abs(num)} ${getTypeWord(num, type)}`} />
+            <div className={styles.beforeAfterLabel}>{subType} due date</div>
           </div>
         )}
 

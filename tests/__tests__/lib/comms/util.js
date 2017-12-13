@@ -51,23 +51,43 @@ describe('Communications Utility Library', () => {
 
     it('should return no success and all error', () => {
       const patients = [{}, {}, {}];
-      const result = generateOrganizedPatients(patients, 'email');
+      const result = generateOrganizedPatients(patients, ['email']);
       expect(result.success.length).toBe(0);
       expect(result.errors.length).toBe(3);
     });
 
     it('should return no error and all success', () => {
       const patients = [{ email: 'a@b.ca' }, { email: 'a@b.ca' }, { email: 'a@b.ca' }];
-      const result = generateOrganizedPatients(patients, 'email');
+      const result = generateOrganizedPatients(patients, ['email']);
       expect(result.success.length).toBe(3);
       expect(result.errors.length).toBe(0);
     });
 
     it('should return 1 success and 2 error', () => {
       const patients = [{ email: 'a@b.ca' }, {}, {}];
-      const result = generateOrganizedPatients(patients, 'email');
+      const result = generateOrganizedPatients(patients, ['email']);
       expect(result.success.length).toBe(1);
       expect(result.errors.length).toBe(2);
+    });
+
+    it('should return 1 success and 2 error', () => {
+      const patients = [
+        { id: 0, email: 'a@b.ca' },
+        { id: 1, email: 'b@a.ca' },
+        { id: 2, mobilePhoneNumber: '+17808508886' },
+      ];
+
+      const result = generateOrganizedPatients(patients, ['email', 'sms']);
+      expect(result.success.length).toBe(3);
+      expect(result.errors.length).toBe(3);
+
+      expect(result.success[0].primaryType).toBe('email');
+      expect(result.success[1].primaryType).toBe('email');
+      expect(result.success[2].primaryType).toBe('sms');
+
+      expect(result.errors[0].primaryType).toBe('sms');
+      expect(result.errors[1].primaryType).toBe('sms');
+      expect(result.errors[2].primaryType).toBe('email');
     });
   });
 });
