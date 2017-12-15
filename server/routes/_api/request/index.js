@@ -5,6 +5,7 @@ import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
+import jsonapi from '../../util/jsonapi';
 import { Permission, PatientUser, Request, User, Account } from '../../../_models';
 
 import {
@@ -28,7 +29,6 @@ requestsRouter.param('appointmentId', sequelizeLoader('appointment', 'Appointmen
 requestsRouter.post('/', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { patientUserId, accountId } = req.body;
-
   return Request.create(req.body)
     .then((request) => {
       const normalized = normalize('request', request.dataValues);
@@ -110,12 +110,44 @@ requestsRouter.post('/', (req, res, next) => {
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: name,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: account.phoneNumber,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: moment(req.body.startDate).format('MMMM Do YYYY'),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: moment(req.body.startDate).format('h:mm a'),
           },
         ],
       });
@@ -151,14 +183,70 @@ requestsRouter.get('/', (req, res, next) => {
 });
 
 /**
+ * Get all requests that need to be synced
+ */
+requestsRouter.get('/notSynced', (req, res, next) => {
+  const {
+    accountId,
+  } = req;
+
+
+  return Request.findAll({
+    where: {
+      accountId,
+      isSyncedWithPms: false,
+      suggestedPractitionerId: {
+        $ne: null,
+      },
+      suggestedChairId: {
+        $ne: null,
+      },
+    },
+    include: [{
+      model: PatientUser,
+      as: 'patientUser',
+    }],
+  }).then((requests) => {
+    const sendRequests = requests.map(r => r.get({ plain: true }));
+    const normalized = jsonapi('request', sendRequests);
+    return res.send(normalized);
+  })
+    .catch(next);
+});
+
+/**
  * Update a request
  */
 requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
   const { accountId } = req;
 
+  req.body.isSyncedWithPms = false;
+
   return req.request.update(req.body)
     .then((request) => {
       const normalized = normalize('request', request.dataValues);
+      res.status(200).send(normalized);
+      return { normalized };
+    })
+    .then(({ normalized }) => {
+      const io = req.app.get('socketio');
+      const ns = namespaces.dash;
+      return io.of(ns).in(accountId).emit('update:Request', normalized);
+    })
+    .catch(next);
+});
+
+/**
+ * Update a request
+ */
+requestsRouter.put('/:requestId/connector', checkPermissions('requests:update'), (req, res, next) =>{
+  const { accountId } = req;
+
+  req.body.isSyncedWithPms = true;
+
+  return req.request.update(req.body)
+    .then((request) => {
+      const normalized = jsonapi('request', request);
       res.status(200).send(normalized);
       return { normalized };
     })
@@ -194,7 +282,7 @@ requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, 
 requestsRouter.put('/:requestId/reject', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { accountId, request } = req;
-  return request.update({ isCancelled: true })
+  return request.update({ isCancelled: true, isSyncedWithPms: false })
     .then((requestData) => {
       const normalized = normalize('request', requestData.dataValues);
       res.status(201).send(normalized);
@@ -210,6 +298,8 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const account = await Account.findById(accountId);
       const { email, firstName } = patientUser;
       const { name, phoneNumber, contactEmail, website } = account;
+      const { startDate } = req.request;
+
       // Send Email
       sendAppointmentRequestRejected({
         accountId: req.accountId,
@@ -217,24 +307,48 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
-            content: name || '',
+            name: 'ACCOUNT_CLINICNAME',
+            content: name,
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: phoneNumber || '',
+            content: phoneNumber,
           },
           {
             name: 'ACCOUNT_CONTACTEMAIL',
-            content: contactEmail || '',
+            content: contactEmail,
           },
           {
             name: 'ACCOUNT_WEBSITE',
-            content: website || '',
+            content: website,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: moment(startDate).format('MMMM Do YYYY'),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: moment(startDate).format('h:mm:ss a'),
           },
         ],
       });
@@ -250,6 +364,7 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
   return req.request.update({
     isConfirmed: true,
     appointmentId: req.appointmentId,
+    isSyncedWithPms: false,
   })
     .then(async (request) => {
       const patientUser = await PatientUser.findById(request.dataValues.patientUserId);
@@ -272,24 +387,40 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
-            content: name || '',
+            name: 'ACCOUNT_CLINICNAME',
+            content: name,
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: phoneNumber || '',
+            content: phoneNumber,
           },
           {
             name: 'ACCOUNT_CONTACTEMAIL',
-            content: contactEmail || '',
+            content: contactEmail,
           },
           {
             name: 'ACCOUNT_WEBSITE',
-            content: website || '',
+            content: website,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
           },
           {
             name: 'APPOINTMENT_DATE',

@@ -1,8 +1,13 @@
+import moment from 'moment';
 import { namespaces } from '../../../config/globals';
-import { SentReminder, Correspondence } from '../../../_models';
+import { SentReminder, Correspondence, Appointment } from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
+import { reminderConfirmedNote, reminderSentNote } from '../../correspondences/appointmentNotesGenerators';
 
-
+/**
+ * When a Reminder is sent out this runs to create correspondences and
+ * update the appointment notes
+ */
 function sendReminderIdsSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
@@ -26,6 +31,7 @@ function sendReminderIdsSocket(sub, io) {
         return !sentReminderIdsCheck.includes(s.id);
       });
 
+      // create an object of correspondences from sent reminders
       const correspondencesToCreate = sentReminders.map((sr) => {
         return {
           accountId: sr.accountId,
@@ -40,6 +46,21 @@ function sendReminderIdsSocket(sub, io) {
       });
 
       let correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+
+      // updating the notes field on appointments to say a reminder was sent.
+      for (let i = 0; i < correspondences.length; i += 1) {
+        const appointment = await Appointment.findOne({
+          where: {
+            id: correspondences[i].appointmentId,
+          },
+        });
+
+        if (appointment) {
+          const text = reminderSentNote(correspondences[i].method.toLowerCase(), correspondences[i].contactedAt);
+          appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+          await appointment.save();
+        }
+      }
 
       if (correspondences[0]) {
         const accountId = correspondences[0].accountId;
@@ -58,11 +79,25 @@ function sendReminderIdsSocket(sub, io) {
       if (errors && docs && docs.length) {
         docs = docs.map(d => d.get({ plain: true }));
 
-        docs = docs.map(c => c.id);
-
         if (docs[0]) {
           const accountId = docs[0].accountId;
-          docs = docs.map(c => c.id);
+
+          // updating the notes field on appointments to say a reminder was sent.
+          for (let i = 0; i < docs.length; i += 1) {
+            const appointment = await Appointment.findOne({
+              where: {
+                id: docs[i].appointmentId,
+              },
+            });
+
+            if (appointment) {
+              const text = reminderConfirmedNote(docs[i].method, docs[i].contactedAt);
+              appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+              appointment.isSyncedWithPms = false;
+              await appointment.save();
+              global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
+            }
+          }
 
           console.log(`Sending ${docs.length} correspondences for account=${accountId}`);
 
@@ -79,6 +114,10 @@ function sendReminderIdsSocket(sub, io) {
   });
 }
 
+/**
+ * When a Reminder is confirmed this runs to create correspondences and
+ * update the appointment notes
+ */
 function sendReminderUpdatedSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
@@ -109,6 +148,20 @@ function sendReminderUpdatedSocket(sub, io) {
         const newCorrespondence = await Correspondence.create(correspondence);
 
         console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
+
+        const appointment = await Appointment.findOne({
+          where: {
+            id: correspondence.appointmentId,
+          },
+        });
+
+        if (appointment) {
+          const text = `- Carecru: Patient has confirmed via ${correspondence.method.toLowerCase()} on ${moment().format('LLL')} for this appointment`;
+          appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
+          appointment.isSyncedWithPms = false;
+          await appointment.save();
+          global.io.of(namespaces.sync).in(correspondence.accountId).emit('UPDATE:Appointment', appointment.id);
+        }
 
         io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondence', [newCorrespondence.id]);
       }

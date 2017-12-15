@@ -47,7 +47,7 @@ export function createRequest() {
     const state = getState();
     const {
       account,
-      selectedAvailability: { startDate, endDate },
+      selectedAvailability: { startDate, endDate, practitionerId, chairId },
       selectedPractitionerId,
       selectedServiceId,
       notes,
@@ -63,10 +63,15 @@ export function createRequest() {
       serviceId: selectedServiceId,
       startDate,
       endDate,
+      suggestedPractitionerId: practitionerId,
+      suggestedChairId: chairId,
     };
 
     if (selectedPractitionerId) {
-      params = Object.assign({}, params, { practitionerId: selectedPractitionerId });
+      params = Object.assign({}, params, {
+        practitionerId: selectedPractitionerId,
+        suggestedPractitionerId: selectedPractitionerId,
+      });
     }
 
     return axios.post('/requests', params)
@@ -199,12 +204,13 @@ export function fetchAvailabilities() {
         }
       })
       .catch((err) => {
+        console.error(err);
         dispatch(setAvailabilities([]));
+        dispatch(setNextAvailability(null));
         requestCount -= 1;
         if (!requestCount) {
           dispatch(setIsFetching(false));
         }
-        throw err;
       });
   };
 }

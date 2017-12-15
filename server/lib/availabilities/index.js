@@ -10,6 +10,7 @@ import {
   Request,
   WeeklySchedule,
   Account,
+  Chair,
   PractitionerRecurringTimeOff,
 } from '../../_models';
 import StatusError from '../../util/StatusError';
@@ -173,7 +174,9 @@ function fetchPractitionerTOAndAppts(practitioner, startDate, endDate) {
       where: {
         id: practitioner.id,
       },
-
+      order: [
+        ['createdAt', 'DESC'],
+      ],
       include: [
         {
           model: Appointment,
@@ -377,27 +380,40 @@ function generatePractitionerAvailabilities(options) {
 
 // fetches appointment in the time frame for a given chair(s) and filters if they aren't any availiable
 
-function filterByChairs(weeklySchedule, avails, pracWeeklySchedule, appointments) {
+function filterByChairs(weeklySchedule, avails, prac, appointments, allChairs) {
   const newAvails = [];
 
-  // prac has no custom so has all chairs
-  if (pracWeeklySchedule !== weeklySchedule.id) {
-    return avails;
-  }
+  const pracWeeklySchedule = prac.weeklyScheduleId;
 
   for (let j = 0; j < avails.length; j++) {
     const dayOfWeek = moment(avails[j].startDate).format('dddd').toLowerCase();
-    const chairIds = weeklySchedule[dayOfWeek].chairIds || [];
+    let chairIds = weeklySchedule[dayOfWeek].chairIds || [];
+
+    // prac has no custom so has all chairs
+    if (pracWeeklySchedule !== weeklySchedule.id) {
+      chairIds = allChairs;
+    }
+
+    let chairIdDefault;
+
     const isAvailiable = chairIds.some((chairId) => {
       const test = appointments.some(a => {
         return a.chairId === chairId && isDuringEachother(avails[j], a);
       });
 
+      if (!test) {
+        chairIdDefault = chairId;
+      }
+
       return !test;
     });
 
     if (isAvailiable) {
-      newAvails.push(avails[j]);
+      newAvails.push({
+        ...avails[j],
+        practitionerId: prac.id,
+        chairId: chairIdDefault,
+      });
     }
   }
 
@@ -418,11 +434,13 @@ function fetchAvailabilities(options) {
   return new Promise((resolve, reject) => {
     fetchServiceData(options)
       .then((service) => {
-        fetchPractitionerData({ practitioners: service.practitioners, startDate, endDate })
+        const practitionersSorted = service.practitioners.sort(getISOSortPredicate('createdAt'));
+        fetchPractitionerData({ practitioners: practitionersSorted, startDate, endDate })
           .then(({ weeklySchedules, practitioners }) => {
             // TODO: handle for noPreference on practitioners!
             return Appointment.findAll({
               where: {
+                accountId: service.accountId,
                 $and: [
                   {
                     isBookable: false,
@@ -435,7 +453,14 @@ function fetchAvailabilities(options) {
 
               raw: true,
             })
-            .then((appointments) => {
+            .then(async (appointments) => {
+              let allChairs = await Chair.findAll({
+                where: {
+                  accountId: service.accountId,
+                },
+              });
+
+              allChairs = allChairs.map(c => c.id);
               const practitionerAvailabilities = practitioners.map((p, i) => {
                 const avails = generatePractitionerAvailabilities({
                   practitioner: p,
@@ -446,7 +471,7 @@ function fetchAvailabilities(options) {
                   endDate,
                 });
 
-                return filterByChairs(weeklySchedules[i], avails, p.weeklyScheduleId, appointments);
+                return filterByChairs(weeklySchedules[i], avails, p, appointments, allChairs);
               });
 
               const squashed = unionBy(...practitionerAvailabilities, 'startDate');

@@ -64,8 +64,10 @@ export function logout() {
 }
 
 export function resetPatientUserPassword(email) {
-  return (dispatch) => {
-    return axios.post('/auth/reset', { email })
+  return (dispatch, getState) => {
+    const { availabilities } = getState();
+    const accountId = availabilities.getIn(['account', 'id']);
+    return axios.post(`/auth/reset/${accountId}`, { email })
       .then(() => {
         dispatch(setResetEmail(email));
       });
@@ -90,9 +92,13 @@ const fetchPatient = () => {
 };
 
 export function createPatient(values, ignoreConfirmationText) {
-  return function (dispatch) {
+  return function (dispatch, getState) {
+    const { availabilities } = getState();
+
     const config = ignoreConfirmationText ? { params: { ignoreConfirmationText: true } } : null;
-    return axios.post('/auth/signup', values, config)
+    const accountId = availabilities.getIn(['account', 'id']);
+
+    return axios.post(`/auth/signup/${accountId}`, values, config)
       // TODO: dispatch function that successfully created patient, plug in, confirm code
       // TODO: then allow them to create the patient
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch).then(() => token));

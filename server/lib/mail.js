@@ -11,31 +11,37 @@ export default {
 
   sendConfirmationReminder: (config) => {
     config.subject = 'Appointment Reminder';
-    config.templateName = 'Appointment Reminder';
+    config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed'; // Test Template, needs to be updated
+    return sendTemplate(config);
+  },
+
+  sendDueForRecare: (config) => {   // This function is used only for testing
+    config.subject = 'Appointment Reminder';
+    config.templateName = 'Patient Password Reset';
     return sendTemplate(config);
   },
 
   sendAlreadyConfirmedReminder: (config) => {
     config.subject = 'Appointment Reminder';
-    config.templateName = 'Appointment Reminder - No Confirmation';
+    config.templateName = 'Patient Reminder - 2 Hours Before Confirmed'; // Test Template, needs to be updated
     return sendTemplate(config);
   },
 
   sendPatientRecall: (config) => {
     config.subject = 'You are due for your next appointment';
-    config.templateName = 'Patient Recall';
+    config.templateName = 'Patient Recall - 64 Week After'; // Test Template, needs to be updated
     return sendTemplate(config);
   },
 
   sendPatientSignup: (config) => {
     config.subject = 'Confirm your email';
-    config.templateName = 'Patient Signup Confirmation';
+    config.templateName = 'Patient Email Confirmation';
     return sendTemplate(config);
   },
 
   sendAppointmentRequested: (config) => {
     config.subject = 'Congratulations! Your appointment was requested.';
-    config.templateName = 'Appointment Requested';
+    config.templateName = 'Patient Appointment - Requested';
     return sendTemplate(config);
   },
 
@@ -47,13 +53,13 @@ export default {
 
   sendAppointmentRequestRejected: (config) => {
     config.subject = 'Sorry, Your appointment was Rejected.';
-    config.templateName = 'Appointment Rejected';
+    config.templateName = 'Patient Appointment - Cancelled';
     return sendTemplate(config);
   },
 
   sendAppointmentRequestConfirmed: (config) => {
     config.subject = 'Congratulations! Your appointment request was confirmed.';
-    config.templateName = 'Appointment Request Confirmed';
+    config.templateName = 'Patient Appointment - Confirmed';
     return sendTemplate(config);
   },
 
@@ -65,19 +71,19 @@ export default {
 
   sendResetPassword: (config) => {
     config.subject = 'Reset Password';
-    config.templateName = 'Reset Password';
+    config.templateName = 'User Password Reset';
     return sendTemplate(config);
   },
 
   sendPatientResetPassword: (config) => {
     config.subject = 'Reset Password';
-    config.templateName = 'Patient Reset Password';
+    config.templateName = 'Patient Password Reset';
     return sendTemplate(config);
   },
 
   sendReview: (config) => {
     config.subject = 'Tell us about your experience.';
-    config.templateName = 'Patient Review Stars';
+    config.templateName = 'Patient Review';
     return sendTemplate(config);
   },
 };

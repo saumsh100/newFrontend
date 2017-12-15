@@ -85,6 +85,7 @@ class ScheduleContainer extends React.Component {
       chairs,
       weeklySchedules,
       timeOffs,
+      unit
     } = this.props;
 
     return (
@@ -102,6 +103,7 @@ class ScheduleContainer extends React.Component {
           weeklySchedules={weeklySchedules}
           timeOffs={timeOffs}
           setMergingPatient={setMergingPatient}
+          unit={unit}
         />
       </Loader>
     );
@@ -121,10 +123,11 @@ ScheduleContainer.propTypes = {
   chairs: PropTypes.object,
 };
 
-function mapStateToProps({ entities, schedule }) {
+function mapStateToProps({ entities, schedule, auth }) {
 
   const weeklySchedules = entities.getIn(['weeklySchedules', 'models'])
   const timeOffs = entities.getIn(['timeOffs', 'models']);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   return {
     schedule,
@@ -137,6 +140,7 @@ function mapStateToProps({ entities, schedule }) {
     chairs: entities.get('chairs'),
     weeklySchedules,
     timeOffs,
+    unit: activeAccount.get('unit'),
   };
 }
 

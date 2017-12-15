@@ -30,6 +30,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    suggestedPractitionerId: {
+      type: DataTypes.UUID,
+    },
+
+    suggestedChairId: {
+      type: DataTypes.UUID,
+    },
+
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -59,6 +67,23 @@ export default function (sequelize, DataTypes) {
     appointmentId: {
       type: DataTypes.UUID,
     },
+
+    isSyncedWithPms: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
+    pmsId: {
+      type: DataTypes.STRING,
+    },
+
+    isDeleted: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['isConfirmed', 'isCancelled']),
+      get() {
+        return this.get('isConfirmed') || this.get('isCancelled');
+      },
+    },
   });
 
   Request.associate = ({ Account, Appointment, Chair, Service, PatientUser, Practitioner }) => {
@@ -77,6 +102,11 @@ export default function (sequelize, DataTypes) {
       as: 'chair',
     });
 
+    Request.belongsTo(Chair, {
+      foreignKey: 'suggestedChairId',
+      as: 'suggestedChair',
+    });
+
     Request.belongsTo(Service, {
       foreignKey: 'serviceId',
       as: 'service',
@@ -85,6 +115,11 @@ export default function (sequelize, DataTypes) {
     Request.belongsTo(Practitioner, {
       foreignKey: 'practitionerId',
       as: 'practitioner',
+    });
+
+    Request.belongsTo(Practitioner, {
+      foreignKey: 'suggestedPractitionerId',
+      as: 'suggestedPractitioner',
     });
 
     Request.belongsTo(PatientUser, {

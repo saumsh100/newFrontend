@@ -40,6 +40,7 @@ export async function getAccountsConnectorDown(date) {
         $gt: threeHoursAgo.toISOString(),
         $lt: thirtyMinAgo.toISOString(),
       },
+      syncClientAdapter: null,
     },
   });
   return accounts;

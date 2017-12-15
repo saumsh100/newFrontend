@@ -14,6 +14,8 @@ const authRouter = Router();
 
 authRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 authRouter.param('tokenId', sequelizeLoader('token', 'Token'));
+authRouter.param('accountId', sequelizeLoader('account', 'Account'));
+
 
 const signTokenAndSend = res => ({ session, model }) => {
   const tokenData = {
@@ -45,8 +47,10 @@ async function sendConfirmationMessage(patientUser) {
   });
 }
 
-authRouter.post('/signup', (req, res, next) => {
+authRouter.post('/signup/:accountId', (req, res, next) => {
   const { body: patient } = req;
+
+
   const { ignoreConfirmationText } = req.query;
   if (patient.password !== patient.confirmPassword) {
     next({ status: 400, message: 'Passwords doesn\'t match.' });
@@ -66,6 +70,8 @@ authRouter.post('/signup', (req, res, next) => {
     .then(async (patientUser) => {
       const { email, firstName, id } = patientUser;
 
+      const account = req.account.get({ plain: true });
+
       // Create token
       const tokenId = crypto.randomBytes(12).toString('hex');
       const token = await Token.create({ id: tokenId, patientUserId: id });
@@ -77,6 +83,34 @@ authRouter.post('/signup', (req, res, next) => {
       sendPatientSignup({
         toEmail: email,
         mergeVars: [
+          {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
+            name: 'ACCOUNT_CLINICNAME',
+            content: account.name,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: account.phoneNumber,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
           {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
@@ -139,10 +173,11 @@ authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
   }
 });
 
-authRouter.post('/reset', (req, res, next) => {
+authRouter.post('/reset/:accountId', (req, res, next) => {
   const {
     body,
   } = req;
+
 
   const email = body.email;
   const token = crypto.randomBytes(12).toString('hex');
@@ -168,7 +203,37 @@ authRouter.post('/reset', (req, res, next) => {
         token,
       });
 
+      const account = req.account.get({ plain: true });
+
       const mergeVars = [
+        {
+          name: 'PRIMARY_COLOR',
+          content: account.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
+          name: 'ACCOUNT_CLINICNAME',
+          content: account.name,
+        },
+        {
+          name: 'ACCOUNT_LOGO_URL',
+          content: account.logo,
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: account.phoneNumber,
+        },
+        {
+          name: 'ACCOUNT_CITY',
+          content: account.address.city,
+        },
+        {
+          name: 'ACCOUNT_CONTACTEMAIL',
+          content: account.contactEmail,
+        },
+        {
+          name: 'ACCOUNT_ADDRESS',
+          content: account.address.street,
+        },
         {
           name: 'RESET_URL',
           content: fullUrl,
