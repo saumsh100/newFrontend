@@ -11,31 +11,31 @@ module.exports = {
 
   sendConfirmationReminder: (config) => {
     config.subject = 'Appointment Reminder';
-    config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed';
+    config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed'; // Test Template, needs to be updated
     return sendTemplate(config);
   },
 
   sendDueForRecare: (config) => {   // This function is used only for testing
-    config.subject = 'Reset Password';
-    config.templateName = 'Patient Appointment - Requested';
+    config.subject = 'Appointment Reminder';
+    config.templateName = 'Patient Password Reset';
     return sendTemplate(config);
   },
 
   sendAlreadyConfirmedReminder: () => {
     config.subject = 'Appointment Reminder';
-    config.templateName = 'Patient Reminder - 2 Hours Before Confirmed';
+    config.templateName = 'Patient Reminder - 2 Hours Before Confirmed'; // Test Template, needs to be updated
     return sendTemplate(config);
   },
 
   sendPatientRecall: (config) => {
     config.subject = 'You are due for your next appointment';
-    config.templateName = 'Patient Recall - 64 Week After';
+    config.templateName = 'Patient Recall - 64 Week After'; // Test Template, needs to be updated
     return sendTemplate(config);
   },
 
   sendPatientSignup: (config) => {
     config.subject = 'Confirm your email';
-    config.templateName = 'Patient Signup Confirmation';
+    config.templateName = 'Patient Email Confirmation';
     return sendTemplate(config);
   },
 
@@ -77,7 +77,7 @@ module.exports = {
 
   sendPatientResetPassword: (config) => {
     config.subject = 'Reset Password';
-    config.templateName = 'Patient Reset Password';
+    config.templateName = 'Patient Password Reset';
     return sendTemplate(config);
   },
 
