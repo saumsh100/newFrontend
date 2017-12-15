@@ -78,6 +78,7 @@ const account2 = {
   updatedAt: '2017-07-19T00:14:30.932Z',
   phoneNumber: '+17808508886',
   canSendReviews: true,
+  twilioPhoneNumber: '+15874003884',
 };
 
 const address2 = {

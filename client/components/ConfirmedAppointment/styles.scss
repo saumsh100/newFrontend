@@ -9,14 +9,14 @@
 
 }
 
-.loginForm {
+.centerWrapper {
   width: 650px;
   margin: 0px auto;
   z-index: 200;
   // display: flex;
   // flex-direction: column;
   border-top: $card-border-size $primary-color;
-  height: 100%;
+  // height: 100%;
   overflow-y: auto;
   @media screen and (max-width: $medium-screen-width) {
     width: 100%;

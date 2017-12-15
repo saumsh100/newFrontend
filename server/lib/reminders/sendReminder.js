@@ -2,7 +2,7 @@
 import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol } from '../../config/globals';
-import { sendConfirmationReminder, sendAlreadyConfirmedReminder } from '../mail';
+import Mail from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
 export const createConfirmationText = ({ patient, account, appointment }) => {
@@ -62,7 +62,7 @@ export default {
   email({ account, appointment, patient, sentReminder }) {
     const alreadyConfirmed = appointment.isPatientConfirmed;
     if (alreadyConfirmed) {
-      return sendAlreadyConfirmedReminder({
+      return Mail.sendAlreadyConfirmedReminder({
         patientId: patient.id,
         toEmail: patient.email,
         fromName: account.name,
@@ -106,7 +106,7 @@ export default {
         ],
       });
     } else {
-      return sendConfirmationReminder({
+      return Mail.sendConfirmationReminder({
         patientId: patient.id,
         toEmail: patient.email,
         fromName: account.name,
@@ -149,7 +149,7 @@ export default {
         attachments: [
           {
             type: 'application/octet-stream',
-            name: 'appointment.ics',
+            name: `Dental Appointment at ${account.name}`,
             content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
           },
         ],

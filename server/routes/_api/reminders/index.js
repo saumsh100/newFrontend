@@ -7,6 +7,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
 import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
+import { getDayStart, getDayEnd } from '../../../util/time';
 import { mapPatientsToReminders } from '../../../lib/reminders/helpers';
 
 const remindersRouter = Router();
@@ -39,16 +40,22 @@ remindersRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), 
  */
 remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
-    // TODO: date needs to be on the 30 minute marks
     const { account } = req;
+    const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
+
+    // TODO: add defaults for startDate & endDate
+
     const date = (new Date()).toISOString();
     const reminders = await Reminder.findAll({
       raw: true,
-      where: { accountId: account.id },
-      order: [['lengthSeconds', 'ASC']],
+      where: {
+        accountId: account.id,
+        isDeleted: false,
+        isActive: true,
+      },
     });
 
-    const data = await mapPatientsToReminders({ reminders, account, date });
+    const data = await mapPatientsToReminders({ reminders, account, startDate, endDate });
     const dataWithReminders = data.map((d, i) => {
       return {
         ...d,

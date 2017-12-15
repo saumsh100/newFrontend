@@ -15,7 +15,7 @@ export default {
     return sendTemplate(config);
   },
 
-  sendAlreadyConfirmedReminder: () => {
+  sendAlreadyConfirmedReminder: (config) => {
     config.subject = 'Appointment Reminder';
     config.templateName = 'Appointment Reminder - No Confirmation';
     return sendTemplate(config);
@@ -149,14 +149,13 @@ function sendTemplate(config) {
 
       // Success Callback
       (result) => {
-        console.log(`Successfully sent the ${templateName} email to ${toEmail}`);
         resolve(result);
       },
 
       // Error Callback
       (err) => {
         if (err) {
-          console.log(`Mandrill Error: ${err}`);
+          console.error(`Mandrill Error: ${err}`) ;
           reject(err);
         }
       });

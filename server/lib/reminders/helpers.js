@@ -34,9 +34,9 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
     const appointments = await exports.getAppointmentsFromReminder({ reminder, account, startDate, endDate, lastReminder });
 
     /*console.log(startDate);
-    console.log(endDate);
-    console.log(reminder.interval);
-    console.log(appointments.map(a => a.startDate));*/
+    console.log(endDate);*/
+    //console.log(reminder.interval);
+    //console.log(appointments.map(a => a.startDate));
 
     // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
     // This is why the order or reminders is so important
@@ -78,6 +78,8 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
 
   // If endDate is not supplied, default to using startDate + recall interval + buffer
   const end = moment(endDate || startDate).add(intervalObject).add(buffer, 'seconds').toISOString();
+
+  // console.log(`start --> end ${start} --> ${end}`);
 
   const appointments = await Appointment.findAll({
     where: {

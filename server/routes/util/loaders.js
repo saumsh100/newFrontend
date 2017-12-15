@@ -21,6 +21,7 @@ const StatusError = require('../../util/StatusError');
 
 module.exports.sequelizeLoader = (reqProp, modelName, include = []) => {
   return (req, res, next, param) => {
+    console.log('reqProp', reqProp);
     _models[modelName].findOne({ where: { id: param }, include })
       .then((model) => {
         if (!model) next(StatusError(404, `${modelName} with id=${param} not found`));

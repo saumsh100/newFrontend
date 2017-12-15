@@ -37,6 +37,7 @@ function sendSocket(io, chatId) {
       },
     ],
   }).then((chat) => {
+    console.log('Found chat', chat.id);
     io.of(namespaces.dash)
       .in(chat.accountId)
       .emit('newMessage', normalize('chat', chat.get({ plain: true })));
@@ -64,6 +65,7 @@ function sendSocketReminder(io, sentReminder) {
 
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
+    console.log(`Receive /accounts/${req.account.id}`);
     let {
       account,
     } = req;
@@ -117,9 +119,13 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     }
 
     const chatClean = chat.get({ plain: true });
-    // Now save TM
 
-    const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chatClean.id }));
+    // Now save TM
+    const textMessage = await TextMessage.create(Object.assign(
+      {},
+      textMessageData,
+      { chatId: chatClean.id }
+    ));
 
     const textMessageClean = textMessage.get({ plain: true });
 
@@ -162,7 +168,12 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     });
 
     const responseTextMessageData = sanitizeTwilioSmsData(responseMessage);
-    let responseTextMessage = await TextMessage.create(Object.assign({}, responseTextMessageData, { chatId: chatClean.id, read: true }));
+    let responseTextMessage = await TextMessage.create(Object.assign(
+      {},
+      responseTextMessageData,
+      { chatId: chatClean.id, read: true }
+    ));
+
     responseTextMessage = responseTextMessage.get({ plain: true });
 
     await chat.update({

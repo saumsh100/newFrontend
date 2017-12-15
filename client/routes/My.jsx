@@ -6,6 +6,7 @@ import { ConnectedRouter as Router } from 'react-router-redux';
 import FourZeroFour from '../components/FourZeroFour';
 import SignUp from '../components/SignUpInvite';
 import ResetPassword from '../components/ForgotPassword/ResetPassword';
+import ConfirmedAppointment from '../components/ConfirmedAppointment';
 import withAuthProps from '../hocs/withAuthProps';
 
 const MyRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
@@ -20,6 +21,10 @@ const MyRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
               {...props}
               patientUser
             />)}
+          />
+          <Route
+            exact
+            path="/sentReminders/:sentReminderId/confirmed" render={props => <ConfirmedAppointment {...props} />}
           />
           <Route path="/unsubscribe" component={SignUp} />
           <Route component={FourZeroFour} />

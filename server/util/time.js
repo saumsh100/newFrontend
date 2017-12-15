@@ -414,6 +414,13 @@ const Time = {
   },
 
   // Purpose is to properly order intervals in DESC
+  sortIntervalAscPredicate(a, b) {
+    const aSeconds = Time.convertIntervalToMs(a);
+    const bSeconds = Time.convertIntervalToMs(b);
+    return aSeconds > bSeconds;
+  },
+
+  // Purpose is to properly order intervals in DESC
   convertIntervalToMs(interval) {
     return moment.duration(Time.convertIntervalStringToObject(interval)).asMilliseconds();
   },
@@ -454,7 +461,15 @@ const Time = {
   // Convert interval to num and type for frontend use on dropdowns and inputs
   numTypeToInterval(num, type) {
     return `${num} ${type}`;
-  }
+  },
+
+  getDayStart(date = (new Date())) {
+    return moment(date).startOf('day').toISOString();
+  },
+
+  getDayEnd(date = (new Date())) {
+    return moment(date).endOf('day').toISOString();
+  },
 };
 
 module.exports = Time;

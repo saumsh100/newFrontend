@@ -1,6 +1,8 @@
 /* eslint-disable consistent-return */
 import { Router } from 'express';
 import fs from 'fs';
+import url from 'url';
+import pick from 'lodash/pick';
 import StatusError from '../../util/StatusError';
 import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
@@ -11,7 +13,14 @@ import reviewsRouter from './reviews';
 import sentReviewsRouter from './sentReviews';
 import widgetsRouter from './widgets';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { Patient, PatientUser, Practitioner, PatientUserReset } from '../../_models';
+import {
+  Account,
+  Appointment,
+  Patient,
+  PatientUser,
+  Practitioner,
+  PatientUserReset,
+} from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import normalize from '../_api/normalize';
@@ -22,6 +31,11 @@ sequelizeMyRouter.use('/', newAvailabilitiesRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
 sequelizeMyRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
 sequelizeMyRouter.use('/auth', authRouter);
+
+sequelizeMyRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [
+  { model: Appointment, as: 'appointment' },
+  { model: Patient, as: 'patient' },
+]));
 
 sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
 sequelizeMyRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
@@ -226,6 +240,65 @@ sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
       return res.sendStatus(201);
     })
     .catch(next);
+});
+
+sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
+  try {
+    const sentReminder = req.sentReminder;
+    await sentReminder.update({ isConfirmed: true });
+
+    // For any confirmed reminder we confirm appointment
+    const { appointment, patient } = sentReminder;
+
+    if (appointment) {
+      await appointment.update({ isPatientConfirmed: true });
+    }
+
+    const account = await Account.findOne({
+      where: {
+        id: appointment.accountId,
+      },
+    });
+
+    if (account.fullLogoUrl) {
+      account.fullLogoUrl = account.fullLogoUrl.replace('[size]', 'original');
+    }
+
+    const accountJSON = account.get({ plain: true });
+    const appointmentJSON = appointment.get({ plain: true });
+    const patientJSON = patient.get({ plain: true });
+
+    let params = {
+      patient: patientJSON,
+      appointment: appointmentJSON,
+      account: pick(accountJSON, [
+        'name',
+        'address',
+        'website',
+        'contactEmail',
+        'phoneNumber',
+        'fullLogoUrl',
+        'facebookUrl',
+        'googlePlaceId',
+        'bookingWidgetPrimaryColor',
+      ]),
+    };
+
+    params = JSON.stringify(params);
+    params = new Buffer(params).toString('base64');
+
+    const pub = req.app.get('pub');
+    pub.publish('REMINDER:UPDATED', req.sentReminder.id);
+
+    return res.redirect(url.format({
+      pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
+      query: {
+        params,
+      },
+    }));
+  } catch (err) {
+    next(err);
+  }
 });
 
 sequelizeMyRouter.get('(/*)?', (req, res, next) => {
