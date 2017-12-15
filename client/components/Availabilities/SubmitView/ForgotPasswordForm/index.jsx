@@ -25,7 +25,7 @@ export default function ForgotPasswordForm({ onSubmit, className, setIsLogin, se
       <a
         href="#backtoLogin"
         onClick={()=> {
-          setForgotPassword(false)
+          setForgotPassword(false);
           setIsLogin(true);
         }}
         className={styles.backToLogin}
