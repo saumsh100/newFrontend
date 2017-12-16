@@ -43,11 +43,10 @@
       height: 604px;
     }
     &_request {
-      border-top: $card-border-size $primary-blue-green;
       padding: 0;
-      height: 606px;
+      height: 608px;
       margin-bottom: 20px;
-      background-color: lighten($primary-lightgrey, 2%);
+      background-color: white;
     }
     @media screen and (max-width: 450px) {
       padding: 0 5px 45px 5px;

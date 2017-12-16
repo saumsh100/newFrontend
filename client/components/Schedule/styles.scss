@@ -13,7 +13,7 @@
     &__container {
 
     &_content {
-        max-height: calc(98vh - 156px);
+        max-height: calc(98vh - 142px);
         //height: calc(100vh - 145px);
         overflow-y: auto;
       }
@@ -28,13 +28,11 @@
         &_rowCalendar {
           min-height: 260px;
           margin-bottom: 15px;
-          border-top: $card-border-size $inactive-color;
         }
         &_rowRequest {
           //height: auto;
           //overflow: auto;
           margin-bottom: 15px;
-          border-top: $card-border-size $primary-blue;
           background-color: lighten($primary-lightgrey, 2%);
         }
 
@@ -47,15 +45,12 @@
         }
 
         &_calendar {
-          border-top: $card-border-size $inactive-color;
           background-color: #fafafa;
         }
     }
     &__title {
-        min-height: 45px;
+        min-height: 40px;
         padding: 10px 20px 5px 20px;
-        border-top: $card-border-size $inactive-color;
-        border-bottom: $selection-border $background-color;
     }
 
     &__date {

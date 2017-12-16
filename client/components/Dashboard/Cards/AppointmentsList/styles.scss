@@ -16,7 +16,6 @@
 .appointmentList {
   height: 556px;
   overflow: auto;
-  background-color: lighten($primary-lightgrey, 2%);
   @media screen and (max-width: 450px){
     max-width: 270px;
   }

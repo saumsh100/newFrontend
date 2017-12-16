@@ -25,7 +25,7 @@ export default function TopDisplay(props) {
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
 
   return (
-    <Card className={styles.card}>
+    <Card className={styles.card} noBorder>
       <div className={styles.content}>
         <div className={styles.imageContainer}>
           <img width="100%" height="100%" src={`/images/banners/${bgImgs[randomNum]}`} />

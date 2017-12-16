@@ -1,5 +1,7 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import { omit } from 'lodash';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
@@ -7,19 +9,27 @@ export default function Card(props) {
   const {
     children,
     className,
-    borderColor,
-    fontColor,
+    noBorder,
   } = props;
-  const classes = classNames(className, styles.card);
+
+  let classes = classNames(className, styles.card);
+
+  if (noBorder) {
+    classes = classNames(classes, styles.noBorder);
+  }
+
+  const newProps = omit(props, ['noBorder', 'className']);
 
   return (
     // Order is important, classNames={classes} needs to override props.className
-    <div {...props} style={{borderTop: '5px solid ' + borderColor, color: fontColor}} className={classes}>
+    <div {...newProps} className={classes}>
       {children}
     </div>
   );
 }
 
 Card.propTypes = {
-  //children: PropTypes.object.isRequired,
+  noBorder: PropTypes.bool,
+  className: PropTypes.string,
+  children: PropTypes.node,
 };
