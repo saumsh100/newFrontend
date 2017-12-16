@@ -496,6 +496,7 @@ class PatientTable extends Component {
                 style={{
                   height: 'calc(100vh - 188px)',
                   background: 'white',
+                  border: '0px',
                 }}
               />
             </Card>
