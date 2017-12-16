@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
         <Grid className={styles.dashboard}>
           <Row className={styles.dashboard__header}>
             <Col xs={12} >
-              <Card className={styles.dashboard__header_title} noBorderTop>
+              <Card className={styles.dashboard__header_title} noBorder>
                 Welcome Back, <b>{userShow}</b>
               </Card>
             </Col>
