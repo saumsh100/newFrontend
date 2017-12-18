@@ -9,7 +9,7 @@ import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Grid, Row, Col } from '../../library';
+import { Grid, Row, Col, Card } from '../../library';
 import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities'
 import { fetchPatientTableData } from '../../../thunks/patientTable';
 import { setTableData, setSmartFilter, setFilters, removeFilter, clearFilters } from '../../../reducers/patientTable';
@@ -387,7 +387,7 @@ class PatientTable extends Component {
         </Row>
         <Row>
           <Col xs={12} className={styles.tableColWrapper}>
-            <div className={styles.tableContainer}>
+            <Card className={styles.tableContainer}>
               <ReactTable
                 data={patientTable.data}
                 page={patientTable.page}
@@ -496,9 +496,10 @@ class PatientTable extends Component {
                 style={{
                   height: 'calc(100vh - 188px)',
                   background: 'white',
+                  border: '0px',
                 }}
               />
-            </div>
+            </Card>
             <div className={styles.filterContainer}>
               <SideBarFilters
                 addFilter={this.addFilter}

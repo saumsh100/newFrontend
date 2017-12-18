@@ -100,7 +100,7 @@ class PractitionerList extends Component {
 
     return (
       <div className={styles.practMainContainer}>
-        <Card className={styles.listCardStyles}>
+        <Card className={styles.listCardStyles} noBorder>
           <SContainer>
             <SHeader className={styles.listHeader}>
               <div className={styles.displayFlexCenter}>
@@ -149,7 +149,7 @@ class PractitionerList extends Component {
             </SBody>
           </SContainer>
         </Card>
-        <Card className={styles.practDataContainer}>
+        <Card className={styles.practDataContainer} noBorder>
           <PractitionerTabs
             key={selectedPractitioner.get('id')}
             practitioner={selectedPractitioner}

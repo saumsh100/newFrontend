@@ -68,7 +68,7 @@ class ServiceListContainer extends Component {
     ];
 
     return (
-      <Card className={styles.servicesListContainer}>
+      <Card className={styles.servicesListContainer} noBorder>
         <SContainer>
           <SHeader>
             <div className={styles.modalContainer}>
