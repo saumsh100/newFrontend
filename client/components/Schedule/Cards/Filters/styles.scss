@@ -3,13 +3,14 @@
 .schedule_filter {
   min-height: 150px;
   box-shadow: 0px 0px 25px 1px rgba(209,209,209,0.5);
+  background-color: white;
 }
 
 .filter_header {
   position: relative;
   display: flex;
   flex-direction: row;
-  height: 40px;
+  height: 37px;
   padding: 0 5px;
   line-height: 40px;
   justify-content: flex-start;
@@ -59,13 +60,12 @@
 }
 
 .filter_practitioner {
-  margin: 0 5px;
-  padding: 5px 0px 10px 10px;
+  padding: 10px 10px 10px 10px;
   background: $primary-white;
   height: 100%;
   max-height: 280px;
   overflow-y: scroll;
-  max-width: 320px;
+  max-width: 310px;
 
   &__name {
     font-size: 10px;
@@ -90,11 +90,10 @@
   &__wrapper {
     display: flex;
     flex-direction: row;
-    margin: 0 0 15px;
     padding: 0;
     list-style: none;
-    justify-content: flex-start;
     flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   &__list {
@@ -104,7 +103,7 @@
     font-size: 12px;
     align-items: center;
     //flex: 1 0 20%;
-    flex: 0 0 0;
+    flex: 0 0 23%;
     margin-bottom: 8px;
     min-width: 55px;
     margin: 3px;

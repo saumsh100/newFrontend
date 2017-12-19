@@ -83,7 +83,8 @@ $extraLarge-size2: 9rem;
 .gradientBackground {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 3px;
+  background-color: transparent;
 }
 
 .gradientPadding {
