@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterEntities from './FilterEntities';
-import { Card, Icon } from '../../../library';
+import { Card, Icon, SContainer, SHeader, SBody, Header } from '../../../library';
 import styles from './styles.scss';
 
 export default function FiltersDisplay(props) {
@@ -17,11 +17,8 @@ export default function FiltersDisplay(props) {
   } = props;
 
   return (
-    <Card className={styles.schedule_filter}>
+    <Card className={styles.schedule_filter} noBorder>
       <div className={styles.filter_header}>
-        <div className={styles.filter_header__icon}>
-          <Icon size={1.2} icon="sliders" />
-        </div>
         <div className={styles.filter_header__title}>
           Filters
         </div>

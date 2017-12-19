@@ -1,18 +1,26 @@
 
 import { bindActionCreators } from 'redux';
+import Popover from 'react-popover';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 import { Icon } from '../../../library';
 import styles from '../../styles.scss';
 import { runOnDemandSync } from '../../../../thunks/runOnDemandSync';
+import Filters from '../Filters';
 
 import { setSyncingWithPMS, setScheduleView } from '../../../../actions/schedule';
+import FilterField from "../../../library/Filters/FilterField";
 
 class HeaderButtons extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      openFilters: false,
+    };
+
     this.setView = this.setView.bind(this);
+    this.toggleFilters = this.toggleFilters.bind(this);
   }
 
   componentDidMount() {
@@ -22,7 +30,6 @@ class HeaderButtons extends Component {
       this.props.setScheduleView({ view });
     }
   }
-
   setView() {
     if (this.props.scheduleView === 'chair') {
       const viewObj = { view: 'practitioner' };
@@ -35,6 +42,12 @@ class HeaderButtons extends Component {
     }
   }
 
+  toggleFilters() {
+    this.setState({
+      openFilters: !this.state.openFilters,
+    });
+  }
+
   render() {
     const {
       addNewAppointment,
@@ -43,6 +56,10 @@ class HeaderButtons extends Component {
       syncingWithPMS,
       scheduleView,
       setScheduleView,
+      schedule,
+      chairs,
+      practitioners,
+      services,
     } = this.props;
 
     function onDemandSync() {
@@ -64,6 +81,31 @@ class HeaderButtons extends Component {
 
     return (
       <div className={styles.headerButtons}>
+        <Popover
+          isOpen={this.state.openFilters}
+          body={[(
+            <Filters
+              schedule={schedule}
+              chairs={chairs}
+              practitioners={practitioners}
+              services={services}
+            />
+          )]}
+          preferPlace="below"
+          tipSize={.01}
+          onOuterAction={this.toggleFilters}
+        >
+          <div
+            className={styles.headerButtons__quickAdd}
+            onClick={this.toggleFilters}
+          >
+            <Icon
+              icon="sliders"
+              size={1.5}
+              className={styles.headerButtons__quickAdd_icon}
+            />
+          </div>
+        </Popover>
         <div
           className={styles.headerButtons__quickAdd}
           onClick={this.setView}

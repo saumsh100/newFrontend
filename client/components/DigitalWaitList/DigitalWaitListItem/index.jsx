@@ -108,7 +108,7 @@ function DigitalWaitListItem(props) {
       className={styles.patients__item}
       data-test-id={`${index}_waitList`}
     >
-      <Avatar size="lg" user={patientUser.toJS()} />
+      <Avatar size="md" user={patientUser.toJS()} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_endDate}>

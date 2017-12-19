@@ -121,7 +121,7 @@ class PractitionerBasicData extends Component {
         <div className={styles.practFormContainer_avatarContainer}>
           <Header title="Avatar" contentHeader />
           <Dropzone onDrop={this.uploadAvatar} loaded={!this.state.uploading}>
-            <PractitionerAvatar practitioner={initialValues} size="extralg" />
+            <PractitionerAvatar practitioner={initialValues} size="xl" />
             <p>Drop avatar here or click to select file.</p>
           </Dropzone>
           {initialValues.fullAvatarUrl ? <Button className={styles.deleteAvatar} icon="trash" onClick={this.deleteAvatar}>Remove Avatar</Button> : null}

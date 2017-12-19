@@ -32,7 +32,7 @@ export default function TopDisplay(props) {
         </div>
         <div className={styles.dataContainer}>
           <div className={styles.avatarContainer}>
-            <Avatar user={patient} className={styles.avatarContainer_avatar} />
+            <Avatar user={patient} className={styles.avatarContainer_avatar} size="xl" />
             <div className={styles.avatarContainer_data}>
               <div className={styles.avatarContainer_data_name}>
                 {patient.getFullName()}, {age}

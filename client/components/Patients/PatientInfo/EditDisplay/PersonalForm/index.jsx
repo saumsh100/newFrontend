@@ -74,7 +74,6 @@ export default function PersonalForm(props) {
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
             <Field
-              required
               name="gender"
               label="Gender"
               component="DropdownSelect"
@@ -84,7 +83,6 @@ export default function PersonalForm(props) {
           </Col>
           <Col xs={6} className={styles.colRightDropDown}>
             <Field
-              required
               normalize={normalizeBirthdate}
               validate={[validateBirthdate]}
               name="birthDate"
@@ -143,7 +141,6 @@ export default function PersonalForm(props) {
           </Col>
           <Col xs={6} className={styles.colToggle}>
             <Field
-              required
               name="state"
               label="State"
               component="DropdownSelect"
@@ -156,7 +153,6 @@ export default function PersonalForm(props) {
               name="zipCode"
               label="Postal Code"
               maxLength="6"
-              required
               theme="primaryBlue"
             />
           </Col>
@@ -172,7 +168,6 @@ export default function PersonalForm(props) {
                 value: 'US',
                 label: 'United States',
               }]}
-              required
               theme="primaryBlue"
               onChange={(e, value) => {
                 setCountry(value);

@@ -1,11 +1,18 @@
 
 @import '../../../ui.scss';
 
-$small-size: 1.5rem;
-$medium-size: 2rem;
-$large-size: 3rem;
-$xlarge-size: 4rem;
-$extraLarge-size: 10rem;
+$extraSmall-size: 1.5rem;
+$small-size: 2rem;
+$medium-size: 3rem;
+$large-size: 6rem;
+$extraLarge-size: 9rem;
+
+$small-size2: 1.5rem;
+$medium-size2: 2rem;
+$large-size2: 3rem;
+$xlarge-size2: 4rem;
+$xxlarge-size2: 6rem;
+$extraLarge-size2: 9rem;
 
 .avatar {
   display: inline-flex;
@@ -13,6 +20,7 @@ $extraLarge-size: 10rem;
   height: $medium-size;
   min-width: $medium-size;
   min-height: $medium-size;
+  font-size: 20px;
   border-radius: 50%;
   overflow: hidden;
   align-items: center;
@@ -27,36 +35,81 @@ $extraLarge-size: 10rem;
   height: auto;
 }
 
-.small {
+.xs {
+  width: $extraSmall-size;
+  height: $extraSmall-size;
+  min-width: $extraSmall-size;
+  min-height: $extraSmall-size;
+  font-size: 12px;
+}
+
+.sm {
   width: $small-size;
   height: $small-size;
   min-width: $small-size;
   min-height: $small-size;
+  font-size: 15px;
 }
 
-.large {
+.md {
+  width: $medium-size;
+  height: $medium-size;
+  min-width: $medium-size;
+  min-height: $medium-size;
+  font-size: 20px;
+}
+
+.lg {
   width: $large-size;
   height: $large-size;
   min-width: $large-size;
   min-height: $large-size;
+  font-size: 32px;
 }
 
-.xlarge {
-  width: $xlarge-size;
-  height: $xlarge-size;
-  min-width: $xlarge-size;
-  min-height: $xlarge-size;
-}
-
-.extraLarge {
+.xl {
   width: $extraLarge-size;
   height: $extraLarge-size;
   min-width: $extraLarge-size;
   min-height: $extraLarge-size;
+  font-size: 45px;
 }
 
 .text {
-  font-size: 20px;
   color: white;
-  margin-top: 5px;
+  margin-top: 3px;
 }
+
+.gradientBackground {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.gradientPadding {
+  padding: 3px;
+}
+
+.red {
+  background: linear-gradient(rgba(255, 113, 90, 1), white 70%);
+  border-radius: 50%;
+  @extend .gradientPadding;
+}
+
+.yellow {
+  background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
+  border-radius: 50%;
+  @extend .gradientPadding;
+}
+.green {
+  background: linear-gradient(rgba(44, 196, 167, 1), white 70%);
+  border-radius: 50%;
+  @extend .gradientPadding;
+}
+.blue-green {
+  background: linear-gradient(rgba(32,100,119,1), white 70%);
+  border-radius: 50%;
+  @extend .gradientPadding;
+
+}
+

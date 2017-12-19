@@ -39,27 +39,29 @@ export default function FilterEntities(props) {
   const sortedEntities = entities.sort(sortAlphabetical);
 
   return (
-    <div className={styles.filter_options__item}>
+    <div className={styles.fillContainer} >
       <div className={styles.filter_options__title}>{label}</div>
-      {showAllCheck}
-      {sortedEntities.map((entity, index) => {
-        if (!entity) {
-          return null;
-        }
+      <div className={styles.filter_options__item}>
+        {showAllCheck}
+        {sortedEntities.map((entity, index) => {
+          if (!entity) {
+            return null;
+          }
 
-        const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
-        return (
-          <div key={index} className={styles.filter_options__checkLabel}>
-            <Checkbox
-              key={entity.get(display)}
-              checked={checked}
-              onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
-            />
-            {entity.get(display)}
-          </div>
+          const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
+          return (
+            <div key={index} className={styles.filter_options__checkLabel}>
+              <Checkbox
+                key={entity.get(display)}
+                checked={checked}
+                onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+              />
+              {entity.get(display)}
+            </div>
 
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   )
 }
