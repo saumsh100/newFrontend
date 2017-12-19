@@ -65,6 +65,7 @@ export function createRequest() {
       endDate,
       suggestedPractitionerId: practitionerId,
       suggestedChairId: chairId,
+      note: notes,
     };
 
     if (selectedPractitionerId) {
