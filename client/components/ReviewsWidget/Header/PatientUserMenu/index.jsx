@@ -31,7 +31,7 @@ function UserAvatarButton(props) {
             {user.firstName + ' ' + user.lastName}
           </div>
         </div>
-        <Icon icon="caret-down" className={styles.caretIcon} />
+        <Icon icon="caret-down" type="solid" className={styles.caretIcon} />
       </div>
     </div>
   );

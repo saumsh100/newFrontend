@@ -95,7 +95,7 @@ class PractitionerTabs extends Component {
               updatePractitioner={this.updatePractitioner}
             />
             <div className={styles.trashButton}>
-              <IconButton icon="trash" onClick={this.deletePractitioner} data-test-id="deletePractitioner" />
+              <IconButton iconType="solid" icon="trash" onClick={this.deletePractitioner} data-test-id="deletePractitioner" />
             </div>
           </div>
         )}

@@ -27,7 +27,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
 
-  const SingleNavItem = ({ path, icon, label, active, disabled }) => {
+  const SingleNavItem = ({ path, icon, label, active, disabled, iconType = 'solid' }) => {
     active = active || location.pathname === path;
     let classes = active ? activeClass : inactiveClass;
     if (disabled) {
@@ -46,14 +46,14 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
     return (
       <Link to={path} disabled={disabled}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} size={1.5} />
+          <Icon icon={icon} className={styles.icon} size={1.5} type={iconType} />
           {labelComponent}
         </NavItem>
       </Link>
     );
   };
 
-  const MultiNavItem = ({ path, icon, label, children }) => {
+  const MultiNavItem = ({ path, icon, label, children, iconType }) => {
     const active = location.pathname.indexOf(path) === 0;
 
     let content = null;
@@ -67,7 +67,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
 
     return (
       <div>
-        <SingleNavItem path={path} icon={icon} label={label} active={active} />
+        <SingleNavItem path={path} icon={icon} label={label} active={active} iconType={iconType} />
         {content}
       </div>
     );
@@ -106,7 +106,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
     <div className={styles.navListWrapper}>
       <Nav>
         {renderIf(withEnterprise, () =>
-          <MultiNavItem path="/enterprise" icon="building-o" label="Enterprise Dashboard">
+          <MultiNavItem path="/enterprise" icon="building" label="Enterprise Dashboard">
             <SubNavItem path="/enterprise/patients" label="Patients" />
           </MultiNavItem>
         )}
@@ -116,7 +116,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
           <SubNavItem path="/intelligence/business" label="Business" />
           <SubNavItem path="/intelligence/social" label="Social" disabled/>
         </MultiNavItem>*/}
-        <SingleNavItem path="/schedule" icon="calendar" label="Schedule" />
+        <SingleNavItem path="/schedule" icon="calendar-alt" label="Schedule" />
         <MultiNavItem path="/patients" icon="heart" label="Patient Management">
           <SubNavItem path="/patients/list" label="Patients" />
           <SubNavItem path="/patients/messages" label="Messages" />
@@ -144,7 +144,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
         </MultiNavItem>
 
         {renderIf(isSuperAdmin, () =>
-          <MultiNavItem path="/admin" icon="superpowers" label="Super Admin">
+          <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
             <SubNavItem path="/admin/enterprises" label="Enterprises" />
           </MultiNavItem>
         )}

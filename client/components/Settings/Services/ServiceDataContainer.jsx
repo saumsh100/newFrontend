@@ -52,6 +52,7 @@ class ServiceDataContainer extends Component {
             <div>
               <IconButton
                 icon="trash"
+                iconType="solid"
                 onClick={this.deleteService}
               />
             </div>

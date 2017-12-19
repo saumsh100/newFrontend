@@ -46,7 +46,7 @@ export default function ContactPatientForm({ onSubmit, formName, styles, current
     >
       <div className={styles.names3}>
         <div className={styles.mailIcon}>
-          <i className="fa fa-clock-o" />
+          <i className="fa fa-clock" />
         </div>
         <div className={styles.compref}>
           <span className={styles.comprestitle}>Communication Prefereneces</span>

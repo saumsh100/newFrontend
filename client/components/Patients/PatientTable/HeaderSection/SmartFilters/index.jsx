@@ -102,4 +102,4 @@ export default function SmartFilters(props) {
 SmartFilters.propTypes = {
   setSmartFilter: PropTypes.func.isRequired,
   smartFilter: PropTypes.object,
-}
+};

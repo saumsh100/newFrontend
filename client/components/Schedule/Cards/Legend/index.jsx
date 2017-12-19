@@ -7,7 +7,7 @@ export default function Legend() {
   return (
     <div className={styles.legend}>
       <div className={styles.legend_container}>
-        <div className={styles.legend_icon_clock}><Icon size={1.3} icon="clock-o" /></div>
+        <div className={styles.legend_icon_clock}><Icon size={1.3} icon="clock" /></div>
         <div className={styles.legend_text}>Reminders Sent</div>
         <div className={styles.legend_icon_check}><Icon  size={1.3}icon="check-circle" /></div>
         <div className={styles.legend_text}>Reminders Confirmed</div>

@@ -17,10 +17,10 @@ Date.prototype.dst = function () {
 
 const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
 
-const generateTimeOptions = (timeInput, unitIncrement) => {
+const generateTimeOptions = (timeInput, unitIncrement, minIncrement = 5) => {
   const timeOptions = [];
   const totalHours = 24;
-  const increment = unitIncrement;
+  const increment = minIncrement;
   const increments = 60 / increment;
 
   if (timeInput) {

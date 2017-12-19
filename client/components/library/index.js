@@ -69,6 +69,7 @@ import VButton from './Button';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
+import Well from './Well';
 
 export {
   AccountLogo,
@@ -149,6 +150,7 @@ export {
   BreadcrumbItem,
   FBLoginButton,
   VCard,
+  Well,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

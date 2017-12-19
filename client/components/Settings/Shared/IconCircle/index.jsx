@@ -14,13 +14,13 @@ export default function IconCircle(props) {
     const [primaryIcon, secondaryIcon] = icon.split('_');
     iconComponent = (
       <div className={styles.stackedIconsWrapper}>
-        <Icon icon={secondaryIcon} className={styles.secondaryIcon} />
-        <Icon icon={primaryIcon} className={styles.primaryIcon} />
+        <Icon icon={secondaryIcon} className={styles.secondaryIcon} type="solid" />
+        <Icon icon={primaryIcon} className={styles.primaryIcon} type="solid" />
       </div>
     );
   } else if (icon) {
     iconComponent = (
-      <Icon icon={icon} />
+      <Icon icon={icon} type="solid" />
     );
   }
 

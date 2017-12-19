@@ -3,6 +3,13 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
+const typeMap = {
+  light: 'fal',
+  solid: 'fas',
+  regular: 'far',
+  brand: 'fab',
+};
+
 export default function Icon(props) {
   const {
     icon,
@@ -10,9 +17,11 @@ export default function Icon(props) {
     className,
     onClick,
     style,
+    type,
   } = props;
 
-  const fontAwesomeClass = `fa fa-${icon} ${styles.icon}`;
+  const baseClass = typeMap[type];
+  const fontAwesomeClass = `${baseClass} fa-${icon} ${styles.icon}`;
   const classes = classNames(className, fontAwesomeClass);
 
   const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
@@ -22,10 +31,12 @@ export default function Icon(props) {
 
 Icon.defaultProps = {
   size: 1,
+  type: 'light',
 };
 
 Icon.propTypes = {
   icon: PropTypes.string,
+  type: PropTypes.string,
   size: PropTypes.number,
   className: PropTypes.string,
   onClick: PropTypes.func,

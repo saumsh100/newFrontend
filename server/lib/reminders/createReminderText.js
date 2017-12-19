@@ -91,9 +91,11 @@ export function getReminderType({ appointment, reminder, currentDate = nowISO() 
   }
 
   // If appointment is not defined, assume reminder is there and get apptDate from there to determine type
-  let apptDate = moment().add(convertIntervalStringToObject(reminder.interval));
+  let apptDate;
   if (appointment && appointment.startDate) {
     apptDate = moment(appointment.startDate);
+  } else {
+    apptDate = moment().add(convertIntervalStringToObject(reminder.interval));
   }
 
   // Now see how many days away it is, and categorize it
@@ -120,5 +122,5 @@ export function getReminderTemplateName({ isConfirmable, reminder }) {
 
   const type = getReminderType({ reminder });
   const confirmType = isConfirmable === 'true' ? 'Unconfirmed' : 'Confirmed';
-  return `Appointment Reminder - ${typeMap[type]} - ${confirmType}`;
+  return `Patient Reminder - ${typeMap[type]} - ${confirmType}`;
 }

@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Card } from '../library';
+import { Card, Well } from '../library';
+import ClassyDiv from '../library/util/ClassyDiv';
 import styles from './styles.scss';
 
 export function getParameterByName(name, url) {
@@ -20,6 +21,21 @@ export function getParameterByName(name, url) {
 
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
+
+const Section = ClassyDiv(styles.section);
+
+const PoweredByFooter = () => (
+  <div className={styles.footer}>
+    <div>Powered By</div>
+    <div>
+      <img
+        className={styles.logoCareCru}
+        src="/images/carecru_logo.png"
+        alt="CareCru Logo"
+      />
+    </div>
+  </div>
+);
 
 // Props:
 // - patient, firstName
@@ -53,7 +69,6 @@ export default function ConfirmedAppointment() {
   const urlCheck = /(http(s?))\:\/\//gi;
 
   const facebook = facebookUrl && facebookUrl !== '' ? `https://${facebookUrl.replace(urlCheck, '')}` : null;
-
   const displayFacebook = facebook ? (
     <a className={styles.button} href={facebook}>
       <svg className={styles.svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
@@ -69,22 +84,32 @@ export default function ConfirmedAppointment() {
     />
   );
 
+
   return (
     <div className={styles.backDrop}>
       <Card borderColor={bookingWidgetPrimaryColor} className={styles.centerWrapper}>
-        <div className={styles.topContainer}>
-          <div className={styles.topText}>
-            <br />
-            <img
-              className={styles.donnaLogo}
-              src={fullLogoUrl}
-              alt="Logo"
-            />
-            <div className={styles.text}>Your Appointment Has Been Confirmed!</div>
-            <div className={styles.bottomText}>{moment(startDate).format('dddd, MMMM Do YYYY')}</div>
-            <div className={styles.bottomText}>{moment(startDate).format('h:mm a')}</div>
-          </div>
-        </div>
+        <Section>
+          <img
+            className={styles.logoClinic}
+            src={'https://carecru-staging.s3.amazonaws.com/dev/dental_clinic_logo_red.png'}
+            alt="Logo"
+          />
+        </Section>
+        <Section>
+          <div className={styles.text}>Thank you!</div>
+          <div className={styles.bottomText}>Your appointment has been successfully confirmed.</div>
+        </Section>
+        <Section>
+          <Well>
+            Appointment Information
+          </Well>
+        </Section>
+        <Section>
+          <Well>
+            Practice Information
+          </Well>
+        </Section>
+        <PoweredByFooter />
       </Card>
     </div>
   );

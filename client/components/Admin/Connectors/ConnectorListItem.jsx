@@ -90,6 +90,7 @@ export default class ConnectorsListItem extends Component {
                   <IconButton
                     icon={this.state.isCollapsed ? 'caret-up' : 'caret-down'}
                     onClick={this.toggleCollapsed}
+                    type="solid"
                   />
                 </div>
               </Col>

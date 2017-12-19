@@ -90,7 +90,7 @@ class Dashboard extends React.Component {
     const data = [
       { count: appointmentFilter.size, title: 'Appointments Today', icon: 'calendar', size: 6, color: 'primaryColor' },
       { count: filterConfirmedRequests.length, title: 'Appointment Requests', icon: 'user', size: 6, color: 'primaryBlue' },
-      { count: sentReminders.size, title: 'Reminders Sent', icon: 'clock-o', size: 6, color: 'primaryGreen' },
+      { count: sentReminders.size, title: 'Reminders Sent', icon: 'clock', size: 6, color: 'primaryGreen' },
       { count: sentRecalls.size, title: 'Recalls Sent', icon: 'bullhorn', size: 6, color: 'primaryYellow' },
     ];
 

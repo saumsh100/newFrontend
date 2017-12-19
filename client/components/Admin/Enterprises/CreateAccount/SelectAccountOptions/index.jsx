@@ -74,7 +74,7 @@ export default function SelectAccountOptions(props) {
           <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
             <div className={styles.displayFlex}>
               <span>
-                <Icon icon="clock-o" />
+                <Icon icon="clock" />
               </span>
               <span className={styles.accountOptions_text}>
                 Reminders

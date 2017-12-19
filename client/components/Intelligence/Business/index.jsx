@@ -206,7 +206,7 @@ class Business extends Component {
         question: true,
         count: callStats.booked,
         title: 'Bookings',
-        icon: 'calendar-o',
+        icon: 'calendar',
         color: 'primaryDarkBlue',
       },
     ];

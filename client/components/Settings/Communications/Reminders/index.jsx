@@ -201,7 +201,7 @@ function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const reminders = entities.getIn(['reminders', 'models'])
     .filter(r => !r.isDeleted)
-    .sortBy(r => -convertIntervalToMs(r.interval));
+    .sortBy(r => { console.log(r.interval); return -convertIntervalToMs(r.interval) });
 
   return {
     activeAccount,

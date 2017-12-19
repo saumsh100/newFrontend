@@ -76,7 +76,7 @@ class HeaderSection extends Component {
         <div className={styles.header_title}>
           {smartFilter ? smartFilter.label : 'All Patients' }
           <div className={styles.header_icon}>
-            <Icon icon="caret-down" />
+            <Icon icon="caret-down" type="solid" />
           </div>
         </div>
       </div>

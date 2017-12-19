@@ -13,6 +13,16 @@
     font-size: 12px;
   }
 
+  html.MyPatientApp {
+    height: 100%;
+  }
+
+  body.MyPatientApp {
+    height: 100%;
+    background-color: $primary-grey;
+    font-size: 12px;
+  }
+
   body.Widget {
     background-color: $primary-grey;
   }

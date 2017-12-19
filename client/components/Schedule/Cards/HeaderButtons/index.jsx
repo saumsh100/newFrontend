@@ -81,7 +81,7 @@ class HeaderButtons extends Component {
         >
           <span className={styles.headerButtons__quickAdd_text}> Sync PMS </span>
           <Icon
-            icon="refresh"
+            icon="sync"
             size={1.5}
             className={styles.headerButtons__quickAdd_icon}
           />

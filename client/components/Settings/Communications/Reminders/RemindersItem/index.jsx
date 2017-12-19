@@ -58,7 +58,7 @@ function SmallIconCircle(props) {
 
   return (
     <div className={wrapperClass}>
-      {icon ? <Icon icon={icon} /> : null}
+      {icon ? <Icon icon={icon} type="solid" /> : null}
     </div>
   );
 }
