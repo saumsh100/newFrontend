@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Card, Well } from '../library';
+import { Card, Well, Icon } from '../library';
 import ClassyDiv from '../library/util/ClassyDiv';
 import styles from './styles.scss';
 
@@ -23,7 +23,6 @@ export function getParameterByName(name, url) {
 }
 
 const Section = ClassyDiv(styles.section);
-
 const PoweredByFooter = () => (
   <div className={styles.footer}>
     <div>Powered By</div>
@@ -37,12 +36,8 @@ const PoweredByFooter = () => (
   </div>
 );
 
-// Props:
-// - patient, firstName
-// - account, clinicName, logo, colors, phoneNumber, email, address, etc.
-// - appointment, startDate, endDate, practitioner
-// -
-// - appointment attachment? TODO
+const WellHeader = ClassyDiv(styles.wellHeader);
+const WellItem = ClassyDiv(styles.wellItem);
 
 export default function ConfirmedAppointment() {
   let params = getParameterByName('params');
@@ -52,63 +47,65 @@ export default function ConfirmedAppointment() {
   const {
     account,
     appointment,
-    patient,
   } = params;
 
   const {
     address,
-    facebookUrl,
     fullLogoUrl,
     phoneNumber,
     contactEmail,
     bookingWidgetPrimaryColor,
+    website,
   } = account;
 
+  const { street, city, state } = address;
   const { startDate, endDate } = appointment;
 
-  const urlCheck = /(http(s?))\:\/\//gi;
-
-  const facebook = facebookUrl && facebookUrl !== '' ? `https://${facebookUrl.replace(urlCheck, '')}` : null;
-  const displayFacebook = facebook ? (
-    <a className={styles.button} href={facebook}>
-      <svg className={styles.svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
-        <circle fill="#ff715a" cx="20" cy="20" r="20"></circle>
-        <path fill="#ffffff" d="M16.38,17.46h1.55V16a4,4,0,0,1,.5-2.32,2.76,2.76,0,0,1,2.41-1.13,9.74,9.74,0,0,1,2.78.28l-.39,2.3A5.23,5.23,0,0,0,22,14.89c-.6,0-1.14.22-1.14.82v1.75h2.47l-.17,2.24h-2.3v7.8H17.93V19.7H16.38Z"></path>
-      </svg>
-    </a>
-  ) : (
-    <img
-      className={styles.loginLogo}
-      src="/images/carecru_logo.png"
-      alt="CareCru Logo"
+  const TinyIcon = (props) => (
+    <Icon
+      style={{ color: bookingWidgetPrimaryColor }}
+      className={styles.tinyIcon}
+      type="solid"
+      {...props}
     />
   );
-
 
   return (
     <div className={styles.backDrop}>
       <Card borderColor={bookingWidgetPrimaryColor} className={styles.centerWrapper}>
         <Section>
-          <img
-            className={styles.logoClinic}
-            src={'https://carecru-staging.s3.amazonaws.com/dev/dental_clinic_logo_red.png'}
-            alt="Logo"
-          />
+          {fullLogoUrl ?
+            <img
+              className={styles.logoClinic}
+              src={fullLogoUrl}
+              alt="Logo"
+            /> : null}
         </Section>
         <Section>
-          <div className={styles.text}>Thank you!</div>
-          <div className={styles.bottomText}>Your appointment has been successfully confirmed.</div>
+          <div className={styles.header}>Thank you!</div>
+          <div className={styles.text}>Your appointment has been confirmed.</div>
         </Section>
         <Section>
-          <Well>
+          <WellHeader>
             Appointment Information
+          </WellHeader>
+          <Well>
+            <WellItem>{moment(startDate).format('dddd, MMMM Do YYYY')}</WellItem>
+            <WellItem>{moment(startDate).format('h:mma')} - {moment(endDate).format('h:mma')}</WellItem>
           </Well>
         </Section>
         <Section>
-          <Well>
+          <WellHeader>
             Practice Information
+          </WellHeader>
+          <Well>
+            {contactEmail ? (<WellItem><TinyIcon icon="envelope" /> {contactEmail}</WellItem>) : null}
+            {phoneNumber ? (<WellItem><TinyIcon icon="phone" /> {phoneNumber}</WellItem>) : null}
+            {address ? (<WellItem><TinyIcon icon="map" /> {street}, {city}, {state}</WellItem>) : null}
+            {website ? (<WellItem><TinyIcon icon="globe" /> {website}</WellItem>) : null}
           </Well>
         </Section>
+        <div className={styles.spaceFiller} />
         <PoweredByFooter />
       </Card>
     </div>
