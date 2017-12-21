@@ -85,8 +85,12 @@ class ScheduleContainer extends React.Component {
       chairs,
       weeklySchedules,
       timeOffs,
-      unit
+      activeAccount,
     } = this.props;
+
+    if (!activeAccount) {
+      return <Loader color="#FF715A" />
+    }
 
     return (
       <Loader loaded={this.state.loaded} color="#FF715A">
@@ -103,7 +107,7 @@ class ScheduleContainer extends React.Component {
           weeklySchedules={weeklySchedules}
           timeOffs={timeOffs}
           setMergingPatient={setMergingPatient}
-          unit={unit}
+          unit={activeAccount.get('unit')}
         />
       </Loader>
     );
@@ -140,7 +144,7 @@ function mapStateToProps({ entities, schedule, auth }) {
     chairs: entities.get('chairs'),
     weeklySchedules,
     timeOffs,
-    unit: activeAccount.get('unit'),
+    activeAccount,
   };
 }
 

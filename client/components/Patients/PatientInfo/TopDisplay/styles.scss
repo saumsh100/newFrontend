@@ -36,9 +36,6 @@
   &_avatar {
     top: -75px;
     position: absolute;
-    width: 150px;
-    height: 150px;
-    background: linear-gradient(#dadada, #a1a1a1);
     span {
       font-size: 45px !important;
     }
@@ -50,7 +47,7 @@
     align-items: center;
     justify-content: center;
     line-height: 1.8em;
-    padding-top: 70px;
+    padding-top: 60px;
 
     &_name {
       color: $primary-blue;

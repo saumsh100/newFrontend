@@ -33,7 +33,7 @@ export default function RecallData(props) {
       className={styles.patients__item}
       data-test-id={`${index}_sentRecall`}
     >
-      <Avatar className={styles.patients__item_img} size="lg" user={patient} />
+      <Avatar className={styles.patients__item_img} size="md" user={patient} />
       <div className={styles.patients__item_wrapper}>
         <div className={styles.patients__item_left}>
           <div className={styles.patients__item_name} >

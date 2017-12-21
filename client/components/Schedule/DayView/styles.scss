@@ -21,6 +21,7 @@
       justify-content: center;
       align-items: center;
       border: 1px solid $primary-grey;
+      border-left: 0px;
       width: 100px;
       color: $inactive-color;
       font-weight: $large-weight;
@@ -150,6 +151,7 @@
   }
 
   &_text {
+    padding-top: 2px;
     padding-left: 2px;
     padding-right: 2px;
     overflow: hidden;

@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterEntities from './FilterEntities';
-import { Card, Icon } from '../../../library';
+import { Card, Icon, SContainer, SHeader, SBody, } from '../../../library';
 import styles from './styles.scss';
 
 export default function FiltersDisplay(props) {
@@ -38,8 +38,8 @@ export default function FiltersDisplay(props) {
           >Clear All
           </div>
         </div>
-      </div>
-      <div className={styles.filter_practitioner}>
+      </SHeader>
+      <SBody className={styles.filter_practitioner}>
         <FilterPractitioners
           filterKey="practitionersFilter"
           allChecked={allChecked.practitionersFilter}
@@ -70,8 +70,8 @@ export default function FiltersDisplay(props) {
             handleEntityCheck={handleEntityCheck}
           />
         </div>
-      </div>
-    </Card>
+      </SBody>
+    </SContainer>
   );
 }
 

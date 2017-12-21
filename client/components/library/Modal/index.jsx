@@ -72,7 +72,7 @@ class Modal extends Component {
           onClick={() => { this.handleOverlayClick; }}
           className={backDropClassName}
         /> : null}
-        <Card className={modalBodyClassName}>
+        <Card className={modalBodyClassName} noBorder>
           {children}
         </Card>
       </div>

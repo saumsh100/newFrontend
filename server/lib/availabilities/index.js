@@ -457,6 +457,7 @@ function fetchAvailabilities(options) {
               let allChairs = await Chair.findAll({
                 where: {
                   accountId: service.accountId,
+                  isActive: true,
                 },
               });
 

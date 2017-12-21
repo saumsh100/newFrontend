@@ -14,7 +14,7 @@ export default function DisplaySearchedPatient(props) {
     const lastName = bday ? `${patientSearched.lastName},` : patientSearched.lastName
     displayPatientComponent = (
       <div className={styles.patientSearch}>
-        <Avatar className={styles.patientSearch_avatar} user={patientSearched || {}} />
+        <Avatar className={styles.patientSearch_avatar} user={patientSearched || {}} size="lg" />
         <div className={styles.patientSearch_name}>
           {`${patientSearched.firstName} ${lastName} ${bday || ''}`}
         </div>

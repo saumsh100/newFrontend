@@ -5,9 +5,7 @@ import styles from '../styles.scss';
 
 export default function ShowColumnHeader(props) {
   const {
-    scheduleView,
     columnWidth,
-    index,
     columnHeaderName,
   } = props;
 

@@ -17,7 +17,8 @@ export default function FilterPractitioners(props) {
   if (!practitioners) {
     return null;
   }
-  const colors = ['primaryColor', 'primaryBlueGreen', 'primaryYellow', 'primaryGreen'];
+
+  const colors = ['red', 'blue-green', 'yellow', 'green'];
   const colorLen = colors.length;
   const colorArray = [];
 
@@ -43,6 +44,7 @@ export default function FilterPractitioners(props) {
 
   return (
     <div>
+      <div className={styles.filter_options__title}>Practitioners</div>
       <ul className={styles.filter_practitioner__wrapper}>
         <Checkbox
           hidden
@@ -58,7 +60,14 @@ export default function FilterPractitioners(props) {
           const displayName = pr.type === 'Dentist' ? `Dr. ${pr.lastName || pr.firstName}` : `${pr.firstName} ${pr.lastName || ''}`;
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
 
-          const label = (<div className={styles.filter_practitioner__name}>{displayName}</div>);
+          const label = (
+            <div className={styles.filter_practitioner__name}>
+              {displayName}
+              <div className={styles.filter_practitioner__type}>
+                {pr.type}
+              </div>
+            </div>
+          );
           const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null);
 
           return (

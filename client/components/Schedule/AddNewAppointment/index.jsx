@@ -270,7 +270,7 @@ class AddNewAppointment extends Component {
         patientList.map((patient) => {
           patient.display = (
             <div className={styles.suggestionContainer}>
-              <Avatar user={patient} size="lg" />
+              <Avatar user={patient} size="md" />
               <span className={styles.suggestionContainer_fullName}>
                 {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
               </span>

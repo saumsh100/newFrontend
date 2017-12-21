@@ -75,7 +75,7 @@ class ServiceDataContainer extends Component {
     }
 
     return (
-      <Card className={styles.servicesDataContainer}>
+      <Card className={styles.servicesDataContainer} noBorder>
         {component}
       </Card>
     );

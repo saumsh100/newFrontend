@@ -132,6 +132,7 @@ class Review extends Component {
         </div>
         <TextArea
           value={notes}
+          maxLength="255"
           onChange={this.setNotes}
           classStyles={styles.textArea}
         />

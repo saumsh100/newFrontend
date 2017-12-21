@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Icon } from '../../../library';
+import { Icon, Card } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
 import Practitioners from './Practitioners';
@@ -373,7 +373,7 @@ class SideBarFilters extends Component {
     }
 
     return (
-      <div className={styles.sideBar}>
+      <Card className={styles.sideBar}>
         <div className={styles.header}>
           <div className={styles.header_icon}> <Icon icon="filter" type="solid" /> </div>
           <div className={styles.header_text}> Filters </div>
@@ -458,7 +458,7 @@ class SideBarFilters extends Component {
             </div> : null }
           </div>
         </div>
-      </div>
+      </Card>
     );
   }
 }

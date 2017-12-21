@@ -19,7 +19,6 @@ import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Cards/CurrentDate';
 import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
-import Filters from './Cards/Filters';
 import styles from './styles.scss';
 import Calendar from '../library/Calendar/index';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
@@ -158,6 +157,10 @@ class ScheduleComponent extends Component {
                     />
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}
+                      schedule={schedule}
+                      chairs={filterChairs}
+                      practitioners={filterPractitioners}
+                      services={services.get('models')}
                     />
                   </CurrentDate>
                 </div>
@@ -206,17 +209,18 @@ class ScheduleComponent extends Component {
                     {displayModalComponent}
                   </DialogBox>
                 </div>
-                {/* Here is the legend */}
-                <Legend />
+                {/* <Legend />*/}
               </Card>
             </Col>
             <Col xs={12} sm={3} md={3} className={styles.schedule__sidebar}>
               <Row className={styles.schedule__sidebar_rowCalendar}>
                 <Col xs={12}>
-                  <Calendar
-                    selectedDays={new Date(currentDate)}
-                    onDayClick={this.setCurrentDay}
-                  />
+                  <Card>
+                    <Calendar
+                      selectedDays={new Date(currentDate)}
+                      onDayClick={this.setCurrentDay}
+                    />
+                  </Card>
                 </Col>
               </Row>
               <Row className={styles.schedule__sidebar_rowRequest}>
@@ -224,16 +228,6 @@ class ScheduleComponent extends Component {
                   <RequestsContainer
                     key={'scheduleRequests'}
                     maxHeight="250px"
-                  />
-                </Col>
-              </Row>
-              <Row className={styles.schedule__sidebar_rowFilter}>
-                <Col xs={12}>
-                  <Filters
-                    schedule={schedule}
-                    chairs={filterChairs}
-                    practitioners={filterPractitioners}
-                    services={services.get('models')}
                   />
                 </Col>
               </Row>

@@ -18,8 +18,7 @@
 }
 
 .practListContainer {
-
-  // background: $primary-white;
+  //background: $primary-white;
 }
 
 .listHeader {
@@ -69,6 +68,8 @@
 
   &_textContainer {
     height: 100%;
+    padding-left: 5px;
+    padding-top: 5px;
     //width: 100%;
   }
   &_name {
