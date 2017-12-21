@@ -100,7 +100,7 @@ class HeaderButtons extends Component {
             onClick={this.toggleFilters}
           >
             <Icon
-              icon="sliders"
+              icon="filter"
               size={1.5}
               className={styles.headerButtons__quickAdd_icon}
             />

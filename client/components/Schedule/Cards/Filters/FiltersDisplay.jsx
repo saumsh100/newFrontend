@@ -17,25 +17,27 @@ export default function FiltersDisplay(props) {
   } = props;
 
   return (
-    <Card className={styles.schedule_filter}>
-      <div className={styles.filter_header}>
-        <div className={styles.filter_header__icon}>
-          <Icon size={1.2} icon="filter" />
-        </div>
-        <div className={styles.filter_header__title}>
-          Filters
-        </div>
-        <div className={styles.filter_header__link} >
-          <div
-            className={styles.filter_header__link__selectText}
-            onClick={handleSelectAll}
-          >
-            Select All
+    <SContainer className={styles.schedule_filter} noBorder>
+      <SHeader className={styles.filter_header}>
+        <div className={styles.filter_header}>
+          <div className={styles.filter_header__icon}>
+            <Icon size={1.2} icon="filter" />
           </div>
-          <div
-            onClick={handleClearAll}
-            className={styles.filter_header__link__clearText}
-          >Clear All
+          <div className={styles.filter_header__title}>
+            Filters
+          </div>
+          <div className={styles.filter_header__link} >
+            <div
+              className={styles.filter_header__link__selectText}
+              onClick={handleSelectAll}
+            >
+              Select All
+            </div>
+            <div
+              onClick={handleClearAll}
+              className={styles.filter_header__link__clearText}
+            >Clear All
+            </div>
           </div>
         </div>
       </SHeader>
