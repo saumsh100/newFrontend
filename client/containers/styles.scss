@@ -42,4 +42,8 @@
   padding: 0px;
   box-sizing: border-box;
   height: 100%;
+
+  > div {
+    height: 100%;
+  }
 }

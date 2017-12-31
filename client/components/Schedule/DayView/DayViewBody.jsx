@@ -165,15 +165,17 @@ class DayViewBody extends Component {
     );
 
     return (
-      <Card noBorder className={styles.card} >
-        <ColumnHeader
-          scheduleView={scheduleView}
-          entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
-          headerComponentDidMount={this.headerComponentDidMount}
-          leftColumnWidth={leftColumnWidth}
-          minWidth={schedule.toJS().columnWidth}
-        />
-        <div className={styles.dayView} >
+      <SContainer noBorder className={styles.card} >
+        <SHeader>
+          <ColumnHeader
+            scheduleView={scheduleView}
+            entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
+            headerComponentDidMount={this.headerComponentDidMount}
+            leftColumnWidth={leftColumnWidth}
+            minWidth={schedule.toJS().columnWidth}
+          />
+        </SHeader>
+        <SBody className={styles.dayView} >
           <TimeColumn
             timeSlots={timeSlots}
             timeSlotHeight={timeSlotHeight}
@@ -181,8 +183,8 @@ class DayViewBody extends Component {
             timeComponentDidMount={this.timeComponentDidMount}
           />
           {scheduleView === 'chair' ? chairsSlot : practitionersSlot}
-        </div>
-      </Card>
+        </SBody>
+      </SContainer>
     );
   }
 }

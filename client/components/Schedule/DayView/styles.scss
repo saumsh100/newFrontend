@@ -33,6 +33,7 @@
   color: $primary-dark;
   font-size: 10px;
   position: relative;
+  overflow: hidden;
 
   &_gmt {
     border-top: 1px solid $primary-grey;
@@ -70,6 +71,7 @@
   justify-content: center;
   align-items: center;
   border: 1px solid $primary-grey;
+  overflow: hidden;
 }
 
 

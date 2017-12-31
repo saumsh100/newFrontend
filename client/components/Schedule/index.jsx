@@ -160,13 +160,12 @@ class ScheduleComponent extends Component {
     const leftColumnWidth = 70;
 
     return (
-      <DocumentTitle title="CareCru | Schedule">
-        <Grid>
-          <Row className={styles.rowMainContainer}>
-            <Col xs={12} sm={9} md={9} >
-              <Card className={styles.card}>
-                <SContainer>
-                <SHeader className={`${styles.schedule__title} ${styles.title}`}>
+      <Grid>
+        <Row className={styles.rowMainContainer}>
+          <Col xs={12} sm={9} md={9} className={styles.dayViewContainer}>
+            <Card className={styles.card}>
+              <SContainer>
+                <SHeader>
                   <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
                     <div className={styles.changeDay}>
                       <IconButton
@@ -190,7 +189,6 @@ class ScheduleComponent extends Component {
                     >
                       Today
                     </Button>
-
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}
                       schedule={schedule}
@@ -200,7 +198,7 @@ class ScheduleComponent extends Component {
                     />
                   </CurrentDate>
                 </SHeader>
-                <SBody className={styles.schedule__container_content} >
+                <SBody>
                   <DayView
                     currentDate={currentDate}
                     practitioners={filterPractitioners}
@@ -246,33 +244,31 @@ class ScheduleComponent extends Component {
                     {displayModalComponent}
                   </DialogBox>
                 </SBody>
-                </SContainer>
-              </Card>
-        </Col>
-            <Col xs={12} sm={3} md={3} className={styles.schedule__sidebar}>
-              <Row className={styles.schedule__sidebar_rowCalendar}>
-                <Col xs={12}>
-                  <Card>
-                    <Calendar
-                      month={new Date(moment(currentDate).year(), moment(currentDate).month())}
-                      selectedDays={new Date(currentDate)}
-                      onDayClick={this.setCurrentDay}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-              <Row className={styles.schedule__sidebar_rowRequest}>
-                <Col xs={12} className={styles.schedule__sidebar_request} >
-                  <RequestsContainer
-                    key={'scheduleRequests'}
-                    maxHeight="250px"
+              </SContainer>
+            </Card>
+          </Col>
+          <Col xs={12} sm={3} md={3} className={styles.sidebar}>
+            <Row className={styles.sidebar_rowCalendar}>
+              <Col xs={12}>
+                <Card>
+                  <Calendar
+                    month={new Date(moment(currentDate).year(), moment(currentDate).month())}
+                    selectedDays={new Date(currentDate)}
+                    onDayClick={this.setCurrentDay}
                   />
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Grid>
-      </DocumentTitle>
+                </Card>
+              </Col>
+            </Row>
+            <Row className={styles.sidebar_rowRequest}>
+              <Col xs={12} className={styles.sidebar_request} >
+                <RequestsContainer
+                  key={'scheduleRequests'}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }

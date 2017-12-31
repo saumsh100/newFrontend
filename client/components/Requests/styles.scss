@@ -9,7 +9,9 @@
 .requestCard {
   display: flex;
   flex-direction: column;
+  height: 100%;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .requestHeader{
@@ -20,9 +22,9 @@
 .requestList {
   postion: relative;
   width: 100%;
-  height: 100%;
+  height: 100px;
  // max-height: 555px;
-  //flex: 1;
+  flex: 1;
   min-height: 314px;
   overflow: auto;
   //background: lighten($primary-lightgrey, 2%);
@@ -39,7 +41,9 @@
 }
 .requestBody {
   width: 100%;
-  flex-grow: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   //background-color: $primary-lightgrey;
 }
 
