@@ -4,7 +4,7 @@ import Popover from 'react-popover';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import { Icon } from '../../../library';
+import { Icon, Button } from '../../../library';
 import styles from '../../styles.scss';
 import { runOnDemandSync } from '../../../../thunks/runOnDemandSync';
 import Filters from '../Filters';
@@ -106,38 +106,23 @@ class HeaderButtons extends Component {
             />
           </div>
         </Popover>
-        <div
-          className={styles.headerButtons__quickAdd}
+
+        <Button
           onClick={this.setView}
+          border="blue"
+          iconRight="exchange"
+          className={styles.headerButtons_buttonText}
         >
-          <span className={styles.headerButtons__quickAdd_text}>{scheduleView} View</span>
-          <Icon
-            icon="exchange"
-            size={1.5}
-            className={styles.headerButtons__quickAdd_icon}
-          />
-        </div>
-        <div
-          className={syncStyle}
-          onClick={onDemandSync}
+          {scheduleView} View
+        </Button>
+
+        <Button
+          color="blue"
+          onClick={addNewAppointment}
+          className={styles.headerButtons_buttonText}
         >
-          <span className={styles.headerButtons__quickAdd_text}> Sync PMS </span>
-          <Icon
-            icon="refresh"
-            size={1.5}
-            className={styles.headerButtons__quickAdd_icon}
-          />
-        </div>
-        <div>
-          <div className={styles.headerButtons__quickAdd} onClick={addNewAppointment}>
-            <span className={styles.headerButtons__quickAdd_text} data-test-id="quickAddAppointment"> Quick Add </span>
-            <Icon
-              icon="plus-circle"
-              size={1.5}
-              className={styles.headerButtons__quickAdd_icon}
-            />
-          </div>
-        </div>
+          Quick Add
+        </Button>
       </div>
     );
   }
@@ -146,6 +131,14 @@ class HeaderButtons extends Component {
 HeaderButtons.PropTypes = {
   addNewAppointment: PropTypes.func,
   runOnDemandSync: PropTypes.func,
+  setSyncingWithPMS: PropTypes.func,
+  syncingWithPMS: PropTypes.bool,
+  scheduleView: PropTypes.string,
+  setScheduleView: PropTypes.func,
+  schedule: PropTypes.object,
+  chairs: PropTypes.object,
+  practitioners: PropTypes.object,
+  services: PropTypes.object,
 };
 
 function mapDispatchToProps(dispatch) {

@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Checkbox } from '../../../../library';
 
 import styles from '../styles.scss';
@@ -50,13 +51,18 @@ export default function FilterEntities(props) {
 
           const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
           return (
-            <div key={index} className={styles.filter_options__checkLabel}>
+            <div key={index} className={styles.filter_options__checkLabelContainer}>
               <Checkbox
                 key={entity.get(display)}
                 checked={checked}
                 onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
               />
-              {entity.get(display)}
+              <div
+                className={styles.filter_options__label}
+                onClick={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+              >
+                {entity.get(display)}
+              </div>
             </div>
 
           );
@@ -65,3 +71,14 @@ export default function FilterEntities(props) {
     </div>
   )
 }
+
+FilterEntities.propTypes = {
+  display: PropTypes.string,
+  label: PropTypes.string,
+  filterKey: PropTypes.string,
+  allChecked: PropTypes.bool,
+  entities: PropTypes.array,
+  selectedFilterItem: PropTypes.array,
+  handleAllCheck: PropTypes.func,
+  handleEntityCheck: PropTypes.func,
+};

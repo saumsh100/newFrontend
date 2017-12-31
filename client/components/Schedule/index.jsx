@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import DocumentTitle from 'react-document-title';
 import {
@@ -7,7 +8,12 @@ import {
   Row,
   Col,
   Card,
+  SHeader,
+  SBody,
+  SContainer,
+  Button,
   DayPicker,
+  IconButton,
   Modal,
   DialogBox,
 } from '../library';
@@ -19,9 +25,10 @@ import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Cards/CurrentDate';
 import Legend from './Cards/Legend';
 import HeaderButtons from './Cards/HeaderButtons';
-import styles from './styles.scss';
 import Calendar from '../library/Calendar/index';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
+import styles from './styles.scss';
+
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -36,10 +43,20 @@ class ScheduleComponent extends Component {
     this.addNewAppointment = this.addNewAppointment.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
     this.setSendEmail = this.setSendEmail.bind(this);
+    this.nextDay = this.nextDay.bind(this);
+    this.previousDay = this.previousDay.bind(this);
   }
 
   setCurrentDay(day) {
     this.props.setScheduleDate({ scheduleDate: moment(day) });
+  }
+
+  nextDay(currentDay) {
+    this.props.setScheduleDate({ scheduleDate: moment(currentDay).add(1, 'days') });
+  }
+
+  previousDay(currentDay) {
+    this.props.setScheduleDate({ scheduleDate: moment(currentDay).subtract(1, 'days') });
   }
 
   reinitializeState() {
@@ -140,21 +157,40 @@ class ScheduleComponent extends Component {
       );
     }
 
+    const leftColumnWidth = 70;
+
     return (
       <DocumentTitle title="CareCru | Schedule">
         <Grid>
           <Row className={styles.rowMainContainer}>
-            <Col xs={12} sm={9} md={9} className={styles.schedule__container}>
-              <Card>
-                <div className={`${styles.schedule__title} ${styles.title}`}>
-                  <CurrentDate currentDate={currentDate}>
-                    <DayPicker
-                      target="icon"
-                      selectedDays={new Date(currentDate)}
-                      onDayClick={this.setCurrentDay}
-                      multiple={false}
-                      data-test-id="dayPicker"
-                    />
+            <Col xs={12} sm={9} md={9} >
+              <Card className={styles.card}>
+                <SContainer>
+                <SHeader className={`${styles.schedule__title} ${styles.title}`}>
+                  <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
+                    <div className={styles.changeDay}>
+                      <IconButton
+                        icon="angle-left"
+                        size={1.3}
+                        onClick={() => this.previousDay(currentDate)}
+                        className={styles.changeDay_left}
+                      />
+                      <IconButton
+                        icon="angle-right"
+                        size={1.3}
+                        onClick={() => this.nextDay(currentDate)}
+                        className={styles.changeDay_right}
+                      />
+                    </div>
+
+                    <Button
+                      border="blue"
+                      onClick={() => this.setCurrentDay(new Date())}
+                      className={styles.headerButtons_buttonText}
+                    >
+                      Today
+                    </Button>
+
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}
                       schedule={schedule}
@@ -163,8 +199,8 @@ class ScheduleComponent extends Component {
                       services={services.get('models')}
                     />
                   </CurrentDate>
-                </div>
-                <div className={styles.schedule__container_content}>
+                </SHeader>
+                <SBody className={styles.schedule__container_content} >
                   <DayView
                     currentDate={currentDate}
                     practitioners={filterPractitioners}
@@ -174,6 +210,7 @@ class ScheduleComponent extends Component {
                     appointments={appointments}
                     schedule={schedule}
                     selectAppointment={selectAppointment}
+                    leftColumnWidth={leftColumnWidth}
                   />
                   <Modal
                     active={
@@ -208,15 +245,16 @@ class ScheduleComponent extends Component {
                   >
                     {displayModalComponent}
                   </DialogBox>
-                </div>
-                {/* <Legend />*/}
+                </SBody>
+                </SContainer>
               </Card>
-            </Col>
+        </Col>
             <Col xs={12} sm={3} md={3} className={styles.schedule__sidebar}>
               <Row className={styles.schedule__sidebar_rowCalendar}>
                 <Col xs={12}>
                   <Card>
                     <Calendar
+                      month={new Date(moment(currentDate).year(), moment(currentDate).month())}
                       selectedDays={new Date(currentDate)}
                       onDayClick={this.setCurrentDay}
                     />
@@ -250,6 +288,9 @@ ScheduleComponent.propTypes = {
   setScheduleDate: PropTypes.func,
   selectAppointment: PropTypes.func,
   selectedAppointment: PropTypes.object,
+  setMergingPatient: PropTypes.func,
+  weeklySchedules: PropTypes.object,
+  unit: PropTypes.number,
 };
 
 export default ScheduleComponent;

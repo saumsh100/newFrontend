@@ -1,15 +1,75 @@
 
-import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import TimeColumn from './TimeColumn/TimeColumn';
-import TimeSlot from './TimeSlot/index';
 import PractitionersSlot from './PractitionersSlot';
+import ColumnHeader from './ColumnHeader/index';
 import ChairsSlot from './ChairsSlot';
 import styles from './styles.scss';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
+import { Card, SContainer, SBody, SHeader } from '../../library';
 
 class DayViewBody extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      removed: false,
+    };
+    this.scrollComponentDidMount = this.scrollComponentDidMount.bind(this);
+    this.scrollComponentDidMountChair = this.scrollComponentDidMountChair.bind(this);
+    this.headerComponentDidMount = this.headerComponentDidMount.bind(this);
+    this.timeComponentDidMount = this.timeComponentDidMount.bind(this);
+    this.onScroll = this.onScroll.bind(this);
+    this.onScrollChair = this.onScrollChair.bind(this);
+
+  }
+
+  componentWillUnmount() {
+    if (this.scrollComponentChair) {
+      this.scrollComponentChair.removeEventListener('scroll', this.onScrollChair.bind(this));
+    } else if (this.scrollComponent) {
+      this.scrollComponent.removeEventListener('scroll', this.onScroll.bind(this));
+    }
+  }
+
+  onScroll() {
+    const scrollTop = this.scrollComponent.scrollTop;
+    const scrollLeft = this.scrollComponent.scrollLeft;
+    this.headerComponent.scrollLeft = scrollLeft;
+    this.timeComponent.scrollTop = scrollTop;
+  }
+
+  onScrollChair() {
+    const scrollTop = this.scrollComponentChair.scrollTop;
+    const scrollLeft = this.scrollComponentChair.scrollLeft;
+    this.headerComponent.scrollLeft = scrollLeft;
+    this.timeComponent.scrollTop = scrollTop;
+  }
+
+  scrollComponentDidMount(node) {
+    if (this.props.scheduleView === 'practitioner' && node) {
+      this.scrollComponent = node;
+      this.scrollComponent.addEventListener('scroll', this.onScroll);
+    }
+  }
+
+  scrollComponentDidMountChair(node) {
+    if (this.props.scheduleView === 'chair' && node) {
+      this.scrollComponentChair = node;
+      this.scrollComponentChair.addEventListener('scroll', this.onScrollChair);
+    }
+  }
+
+  headerComponentDidMount(node) {
+    this.headerComponent = node;
+  }
+
+  timeComponentDidMount(node) {
+    this.timeComponent = node;
+  }
+
+
   render() {
     const {
       startHour,
@@ -22,6 +82,7 @@ class DayViewBody extends Component {
       chairs,
       selectAppointment,
       scheduleView,
+      leftColumnWidth,
     } = this.props;
 
     const timeSlots = [];
@@ -30,7 +91,7 @@ class DayViewBody extends Component {
     }
 
     const timeSlotHeight = {
-      height: '100px',
+      height: schedule.get('timeSlotHeight'),
     };
 
     // Setting the colors for each practitioner
@@ -72,6 +133,8 @@ class DayViewBody extends Component {
         services={services}
         chairs={chairs}
         selectAppointment={selectAppointment}
+        scheduleView={scheduleView}
+        scrollComponentDidMount={this.scrollComponentDidMount}
       />
     );
 
@@ -96,17 +159,30 @@ class DayViewBody extends Component {
         chairs={chairs}
         practitioners={practitioners}
         selectAppointment={selectAppointment}
+        scheduleView={scheduleView}
+        scrollComponentDidMountChair={this.scrollComponentDidMountChair}
       />
     );
 
     return (
-      <div className={styles.dayView_body}>
-        <TimeColumn
-          timeSlots={timeSlots}
-          timeSlotHeight={timeSlotHeight}
+      <Card noBorder className={styles.card} >
+        <ColumnHeader
+          scheduleView={scheduleView}
+          entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
+          headerComponentDidMount={this.headerComponentDidMount}
+          leftColumnWidth={leftColumnWidth}
+          minWidth={schedule.toJS().columnWidth}
         />
-        {scheduleView === 'chair' ? chairsSlot : practitionersSlot}
-      </div>
+        <div className={styles.dayView} >
+          <TimeColumn
+            timeSlots={timeSlots}
+            timeSlotHeight={timeSlotHeight}
+            width={leftColumnWidth}
+            timeComponentDidMount={this.timeComponentDidMount}
+          />
+          {scheduleView === 'chair' ? chairsSlot : practitionersSlot}
+        </div>
+      </Card>
     );
   }
 }
@@ -121,6 +197,8 @@ DayViewBody.propTypes = {
   practitioners: PropTypes.object.isRequired,
   schedule: PropTypes.object,
   selectAppointment: PropTypes.func.isRequired,
+  scheduleView: PropTypes.string.isRequired,
+  leftColumnWidth: PropTypes.number,
 };
 
 

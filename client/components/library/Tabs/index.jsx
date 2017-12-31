@@ -83,7 +83,7 @@ class Tabs extends Component {
       noHeaders,
     } = this.props;
 
-    const newProps = omit(this.props, ['index', 'navClass', 'contentClass']);
+    const newProps = omit(this.props, ['index', 'navClass', 'contentClass', 'noUnderLine']);
 
     const classes = classNames(className, styles.tabs);
     const contentClasses = classNames(contentClass, styles.content);

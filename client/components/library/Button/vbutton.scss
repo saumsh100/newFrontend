@@ -7,7 +7,7 @@
 }
 
 .default {
-  font-size: 14px;
+  font-size: 12px;
 
   font-family: $dashboard-font;
   background-color: var(--primaryButtonColor);
@@ -70,7 +70,7 @@
 .color-white { color: $clr-dark-grey; background-color: $primary-white; }
 .color-white:hover { color: darken($clr-dark-grey, 5%); background-color: darken($primary-white, 5%); }
 
-.border-blue { border: 1px solid $primary-blue; color: $primary-blue; background-color: $background-color; }
+.border-blue { border: 1px solid $primary-blue; color: $primary-blue; background-color: transparent; }
 .border-blue:hover { color: white; background: $primary-blue }
 
 .positive { composes: color-green; }

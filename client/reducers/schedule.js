@@ -18,6 +18,8 @@ import {
 const initialState = fromJS({
   scheduleDate: new Date(),
   scheduleView: 'chair',
+  timeSlotHeight: 50,
+  columnWidth: 150,
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],

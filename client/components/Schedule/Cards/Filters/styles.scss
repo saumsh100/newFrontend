@@ -7,11 +7,11 @@
 }
 
 .filter_header {
+  padding: 0px 10px 10px 10px;
   position: relative;
   display: flex;
   flex-direction: row;
-  height: 37px;
-  padding: 0 5px;
+  height: 27px;
   line-height: 40px;
   justify-content: flex-start;
 
@@ -22,7 +22,7 @@
   &__title {
     justify-content: center;
     padding-right: 15px;
-    padding-left: 15px;
+    //padding-left: 15px;
     font-weight: $large-weight;
     font-size: $title-size;
   }
@@ -39,7 +39,7 @@
     cursor: pointer;
     color: #b4b4b4;
     font-size: 10px;
-    padding-right: 5px;
+    //padding-right: 5px;
     margin-left: auto;
     &__selectText{
       padding-right: 10px;
@@ -117,15 +117,13 @@
   justify-content: space-between;
 
   &__title {
-    margin-left: 5px;
-    margin-bottom: 6px;
     text-transform: uppercase;
     color: $primary-darkgrey;
     font-size: 9px;
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   }
 
-  &__checkLabel {
+  &__checkLabelContainer {
     display: flex;
     align-items: center;
     text-transform: uppercase;
@@ -137,6 +135,10 @@
     &__all {
       font-weight: $large-weight;
     }
+  }
+
+  &__label {
+    cursor: pointer;
   }
 
   &__item {
