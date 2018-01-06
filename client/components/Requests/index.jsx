@@ -44,7 +44,6 @@ class Requests extends Component {
             patientUsers={patientUsers}
             location={location}
             practitioners={practitioners}
-            maxHeight={this.props.maxHeight}
           />
         </div>
       </Card>

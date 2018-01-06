@@ -24,11 +24,9 @@ function hexToRgbA(hex, opacity) {
 export default function ShowMark(props) {
   const {
     appointment,
-    practIndex,
     startHour,
-    endHour,
-    columnWidth,
     rowSort,
+    timeSlotHeight,
   } = props;
 
   const {
@@ -50,26 +48,24 @@ export default function ShowMark(props) {
   const durationTime = getDuration(startDate, endDate, customBufferTime);
   const startDateHours = moment(startDate).hours();
   const startDateMinutes = moment(startDate).minutes();
-  const topCalc = ((startDateHours - startHour) + (startDateMinutes / 60));
+  const topCalc = (((startDateHours - startHour) + (startDateMinutes / 60)) * timeSlotHeight.height) //+ timeSlotHeight.height;
 
-  const heightCalc = (durationTime) / 60;
-  const totalHours = (endHour - startHour) + 1;
+  const heightCalc = ((durationTime) / 60) * timeSlotHeight.height;
 
-  // const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
 
-  const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
-  const top = `${((topCalc / totalHours) * 100) + 0.05}%`;
-  const left = `${((columnWidth * practIndex) + splitRow) + 0.07}%`;
-  const width = `${(columnWidth * ((100 / rowSort.length) / 100)) - 0.16}%`;
-  const height = `${((heightCalc / totalHours) * 100) - 0.1}%`;
+  const splitRow = rowSort.length > 1 ? (100 * (appPosition / (rowSort.length))) : 0;
+  const top = `${(topCalc + 0.05)}px`;
+  const left = `${(0 + splitRow) + 0.07}%`;
+  const width = `${(100 * ((100 / rowSort.length) / 100)) - 0.16}%`;
+  const height = `${heightCalc - 0.1}px`;
 
   // main app style
   const appStyle = {
     top,
     left,
     height,
-    width,
-    backgroundColor: hexToRgbA('#b4b4b5', 0.8),
+    backgroundColor: hexToRgbA('#b4b4b5', 1),
+    border: `0.5px solid ${appPosition === 0 ? hexToRgbA('#b4b4b5', 1) : '#FFFFFF'}`,
     zIndex: appPosition,
   };
 
@@ -77,6 +73,7 @@ export default function ShowMark(props) {
     <div
       key={appointment.id}
       className={styles.appointmentContainer}
+      style={{ position: 'absolute', height: `${(heightCalc - 0.1)}px`, top, width, left }}
     >
       <div
         key={appointment.id}
@@ -90,3 +87,10 @@ export default function ShowMark(props) {
     </div>
   );
 }
+
+ShowMark.propTypes = {
+  appointment: PropTypes.object.isRequired,
+  startHour: PropTypes.number,
+  rowSort: PropTypes.array(Array),
+  timeSlotHeight: PropTypes.object,
+};

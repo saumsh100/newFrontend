@@ -1,0 +1,79 @@
+@import '../../../../ui';
+
+
+.columnHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  overflow-x: hidden;
+  min-height: 50px;
+
+  &_empty {
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $primary-grey;
+    border-bottom: 0px;
+    padding-bottom: 2px;
+    font-size: 13px;
+  }
+
+  &_body {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  &_item {
+    flex: 1;
+    box-sizing: border-box;
+    border: 1px solid $primary-grey;
+    border-bottom: 0px;
+    height: 50px;
+  }
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: 10px;
+  height: 100%;
+}
+
+.containerText {
+  margin-left: 5px;
+  overflow: hidden;
+}
+
+.practitionerName {
+  font-size: 14px;
+  composes: fontBold from 'sass-loader!../../../../fonts.scss';
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.practitionerType {
+  font-size: $extra-small-size;
+  color: $primary-darkgrey;
+}
+
+.chairContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 18px;
+  color: $primary-blue;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  text-align: center;
+  padding: 5px;
+}
+
+

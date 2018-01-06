@@ -70,15 +70,11 @@ class RequestList extends Component {
       patientUsers,
       practitioners,
       setHoverRequestId,
-      maxHeight,
     } = this.props;
 
-    const style = {
-      maxHeight: maxHeight || '555px',
-    };
 
     return (
-      <List className={styles.requestList} style={style}>
+      <List className={styles.requestList} >
         {sortedRequests.map((request) => {
           //const active = request.get('id') === this.props.setHoverRequestId;
           const practitionerId = request.get('practitionerId');

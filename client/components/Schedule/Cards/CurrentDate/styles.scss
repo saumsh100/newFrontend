@@ -1,0 +1,51 @@
+@import '../../../../ui.scss';
+
+.container {
+    display: flex;
+    align-items: center;
+    composes: fontBold from 'sass-loader!../../../../fonts.scss';
+}
+
+.dayOfWeek {
+  font-size: 22px;
+  margin-right: 5px;
+  text-transform: uppercase;
+  width: 160px;
+}
+
+.monthDay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  border-right: 1.2px solid $primary-grey;
+  box-sizing: border-box;
+}
+
+.month {
+  font-size: 12px;
+  font-weight: $large-weight;
+  text-transform: uppercase;
+  text-align: center;
+  width:100%;
+}
+
+.day {
+  font-size: 18px;
+}
+
+.number {
+  font-size: 22px;
+  text-align: center;
+  width: 100%;
+}
+
+.icon {
+  padding-left: 5px;
+}

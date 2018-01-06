@@ -47,7 +47,7 @@ class Tab extends Component {
 
 Tab.propTypes = {
   index: PropTypes.number,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   active: PropTypes.bool,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,

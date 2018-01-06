@@ -29,7 +29,7 @@ const mapper = getClassMapper(scheme, styles);
 
 const Button = props => (
   <props.as
-    {...mapper.omit(props, 'as', 'icon', 'submit')}
+    {...mapper.omit(props, 'as', 'icon', 'submit', 'iconRight')}
     className={mapper.map(props, styles.default, props.className)}
   >
     { props.icon ? (

@@ -88,28 +88,26 @@ class ScheduleContainer extends React.Component {
       activeAccount,
     } = this.props;
 
-    if (!activeAccount) {
-      return <Loader color="#FF715A" />
+    if (!activeAccount || !this.state.loaded) {
+      return <Loader color="#FF715A" />;
     }
 
     return (
-      <Loader loaded={this.state.loaded} color="#FF715A">
-        <ScheduleComponent
-          practitioners={practitioners}
-          schedule={schedule}
-          appointments={appointments}
-          setScheduleDate={setScheduleDate}
-          selectedAppointment={selectedAppointment}
-          selectAppointment={selectAppointment}
-          services={services}
-          patients={patients}
-          chairs={chairs}
-          weeklySchedules={weeklySchedules}
-          timeOffs={timeOffs}
-          setMergingPatient={setMergingPatient}
-          unit={activeAccount.get('unit')}
-        />
-      </Loader>
+      <ScheduleComponent
+        practitioners={practitioners}
+        schedule={schedule}
+        appointments={appointments}
+        setScheduleDate={setScheduleDate}
+        selectedAppointment={selectedAppointment}
+        selectAppointment={selectAppointment}
+        services={services}
+        patients={patients}
+        chairs={chairs}
+        weeklySchedules={weeklySchedules}
+        timeOffs={timeOffs}
+        setMergingPatient={setMergingPatient}
+        unit={activeAccount.get('unit')}
+      />
     );
   }
 }

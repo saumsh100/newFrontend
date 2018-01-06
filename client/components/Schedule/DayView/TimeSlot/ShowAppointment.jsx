@@ -1,9 +1,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import classNames from 'classnames';
 import styles from '../styles.scss';
 import { Icon } from '../../../library';
+import Popover from 'react-popover';
 import withHoverable from '../../../../hocs/withHoverable';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
@@ -12,38 +12,20 @@ const getDuration = (startDate, endDate, customBufferTime) => {
   return duration.asMinutes() - customBufferTime;
 };
 
-function hexToRgbA(hex, opacity) {
-  let c;
-  if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-    c = hex.substring(1).split('');
-    if (c.length === 3) {
-      c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-    }
-    c = `0x${c.join('')}`;
-    return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c &255].join(',')}, ${opacity})`;
-  }
-  throw new Error('Bad Hex');
-}
-
 function ShowAppointment(props) {
   const {
     appointment,
-    practIndex,
     selectAppointment,
     startHour,
-    endHour,
-    columnWidth,
-    widthIntersect,
     rowSort,
     isHovered,
+    timeSlotHeight,
   } = props;
 
   const {
     startDate,
     endDate,
     customBufferTime,
-    serviceData,
-    chairData,
     patientData,
     practitionerData,
     isPatientConfirmed,
@@ -70,41 +52,33 @@ function ShowAppointment(props) {
   const durationTime = getDuration(startDate, endDate, customBufferTime);
   const startDateHours = moment(startDate).hours();
   const startDateMinutes = moment(startDate).minutes();
-  const topCalc = ((startDateHours - startHour) + (startDateMinutes / 60));
-
-  const heightCalc = (durationTime) / 60;
-  const totalHours = (endHour - startHour) + 1;
+  const topCalc = (((startDateHours - startHour) + (startDateMinutes / 60)) * timeSlotHeight.height) // + timeSlotHeight.height;
+  const heightCalc = ((durationTime) / 60) * timeSlotHeight.height;
 
   // const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
 
-  const splitRow = rowSort.length > 1 ? (columnWidth * (appPosition / (rowSort.length))) : 0;
-  const top = `${((topCalc / totalHours) * 100) + 0.05}%`;
-  const left = `${((columnWidth * practIndex) + splitRow) + 0.07}%`;
-  const width = `${(columnWidth * ((100 / rowSort.length) / 100)) - 0.16}%`;
-  const height = `${((heightCalc / totalHours) * 100) - 0.1}%`;
+  const splitRow = rowSort.length > 1 ? (100 * (appPosition / (rowSort.length))) : 0;
+  const top = `${(topCalc + 0.05)}px`;
+  const left = `${(0 + splitRow) + 0.07}%`;
+  const width = `${(100 * ((100 / rowSort.length) / 100)) - 0.16}%`;
+  const height = `${heightCalc - 0.1}px`;
 
-  const backgroundColor = bgColor; //isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
+  const backgroundColor = bgColor; // isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
   const zIndex = isHovered ? 5 : appPosition;
   // main app style
   const appStyle = {
-    top,
-    left,
     height,
-    width,
     backgroundColor,
-    border: `1.5px solid ${bgColor}`,
+    border: `0.5px solid ${appPosition === 0 ? bgColor : '#FFFFFF'}`,
     zIndex,
   };
 
   // calculating the buffer position and height styling
-  const heightCalcBuffer = ((customBufferTime / 60) / totalHours) * 100;
-  const topBuffer = `${(((topCalc / totalHours) * 100) + ((heightCalc / totalHours) * 100)) - 0.05}%`;
+  const heightCalcBuffer = (customBufferTime / 60) * timeSlotHeight.height;
 
   const bufferStyle = {
-    top: topBuffer,
-    left,
-    width,
-    height: `${heightCalcBuffer}%`,
+    width: '100%',
+    height: `${heightCalcBuffer}px`,
     backgroundColor: '#b4b4b5',
     zIndex,
   };
@@ -120,6 +94,7 @@ function ShowAppointment(props) {
         selectAppointment(appointment);
       }}
       className={styles.appointmentContainer}
+      style={{ height: `${(heightCalc - 0.1) + heightCalcBuffer}px`, top, width, left }}
     >
       <div
         key={appointment.id}
@@ -127,10 +102,10 @@ function ShowAppointment(props) {
         style={appStyle}
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
-        <div className={styles.showAppointment_icon}>
+        {isPatientConfirmed || isReminderSent ? (<div className={styles.showAppointment_icon}>
           <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1} icon="check-circle" />)}</div>
           <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1} icon="clock" />)} </div>
-        </div>
+        </div>) : null}
         <div className={styles.showAppointment_nameAge}>
           <div className={styles.showAppointment_nameAge_name} style={nameColor} >
             <span className={styles.paddingText}>{patient.firstName}</span>
@@ -143,13 +118,13 @@ function ShowAppointment(props) {
             {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
           </span>
         </div>
-        <div className={styles.showAppointment_serviceChair}>
-          {/*<span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>*/}
+        {/*<div className={styles.showAppointment_serviceChair}>
+          {/*<span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>
           <span className={styles.showAppointment_serviceChair_chair}>{chairData}</span>
-        </div>
+        </div>*/}
       </div>
-      <div className={styles.showAppointment} style={bufferStyle}>
-        {''}
+      <div className={styles.showAppointment_buffer} style={bufferStyle}>
+          {''}
       </div>
     </div>
   );
@@ -162,8 +137,9 @@ ShowAppointment.propTypes = {
   patient: PropTypes.object.isRequired,
   selectAppointment: PropTypes.func.isRequired,
   startHour: PropTypes.number,
-  endHour: PropTypes.number,
-  columnWidth: PropTypes.number,
+  rowSort: PropTypes.array(Array),
+  isHovered: PropTypes.bool,
+  timeSlotHeight: PropTypes.object,
 };
 
 export default withHoverable(ShowAppointment);

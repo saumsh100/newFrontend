@@ -35,13 +35,10 @@ class TimeOffListItem extends Component {
       pmsId,
     } = timeOff;
 
-    const startTime = setTime(startDate);
-    const endTime = setTime(endDate);
-
     const startDateFM = moment(startDate).format('MMM Do YYYY');
     const endDateFM = moment(endDate).format('MMM Do YYYY');
-    const startTimeFM = moment(startTime).format('LT');
-    const endTimeFM = moment(endTime).format('LT');
+    const startTimeFM = moment(startDate).format('LT');
+    const endTimeFM = moment(endDate).format('LT');
 
     const showData = allDay ? `${startDateFM} To: ${endDateFM}` :
       `${startDateFM} ${startTimeFM} To: ${endDateFM} ${endTimeFM}`;

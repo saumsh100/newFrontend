@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import TimeSlot from '../TimeSlot';
+import ColumnHeader from '../ColumnHeader/index';
 import styles from '../styles.scss';
 
 export default function ChairsSlot(props) {
@@ -16,12 +17,14 @@ export default function ChairsSlot(props) {
     appointments,
     services,
     selectAppointment,
+    scrollComponentDidMountChair,
   } = props;
 
   return (
-    <div className={styles.dayView_body_timeSlot} >
+    <div className={styles.timeSlot} ref={scrollComponentDidMountChair}>
       {chairsArray.length ? chairsArray.map((chair, i, arr) => {
-        const columnWidth = 100 / arr.length;
+        const columnWidth = arr.length < 5 ? 100 / arr.length : 30;
+
 
         const checkFilters = schedule.toJS();
 
@@ -30,9 +33,7 @@ export default function ChairsSlot(props) {
             return app;
           }
 
-          //const service = services.get(app.get('serviceId'));
           const practitioner = practitioners.get(app.get('practitionerId'));
-          //const servicesFilter = service && checkFilters.servicesFilter.indexOf(service.get('id')) > -1;
           const practitionersFilter = practitioner && checkFilters.practitionersFilter.indexOf(practitioner.get('id')) > -1;
 
           return ((app.chairId === chair.id) && practitionersFilter);
@@ -45,7 +46,6 @@ export default function ChairsSlot(props) {
 
           return Object.assign({}, app.toJS(), {
             appModel: app,
-            //serviceData: services.get(app.get('serviceId')).get('name'),
             chairData: chair.name,
             practitionerData,
             patientData: patients.get(app.get('patientId')),
@@ -59,15 +59,36 @@ export default function ChairsSlot(props) {
             timeSlotHeight={timeSlotHeight}
             practIndex={i}
             columnWidth={columnWidth}
+            minWidth={schedule.toJS().columnWidth}
             startHour={startHour}
             endHour={endHour}
             filteredApps={filteredApps}
             selectAppointment={selectAppointment}
             scheduleView={schedule.toJS().scheduleView}
-            columnHeaderName={chair.name}
+            entity={chair}
           />
         );
       }) : null}
     </div>
   );
 }
+
+
+ChairsSlot.propTypes = {
+  startHour: PropTypes.number,
+  endHour: PropTypes.number,
+  appointments: PropTypes.arrayOf(PropTypes.object),
+  patients: PropTypes.object.isRequired,
+  services: PropTypes.object.isRequired,
+  chairs: PropTypes.object.isRequired,
+  practitioners: PropTypes.object.isRequired,
+  schedule: PropTypes.object,
+  selectAppointment: PropTypes.func.isRequired,
+  scheduleView: PropTypes.string.isRequired,
+  leftColumnWidth: PropTypes.number,
+  practitionersArray: PropTypes.array,
+  chairsArray: PropTypes.array,
+  timeSlots: PropTypes.array,
+  timeSlotHeight: PropTypes.object,
+  scrollComponentDidMountChair: PropTypes.func,
+};

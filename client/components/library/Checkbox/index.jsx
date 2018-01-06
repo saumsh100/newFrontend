@@ -49,5 +49,5 @@ Checkbox.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,
-  checked: PropTypes.bool,
+  // checked: PropTypes.bool,
 };

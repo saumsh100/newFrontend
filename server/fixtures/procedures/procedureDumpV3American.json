@@ -1,0 +1,4784 @@
+[
+  {
+    "code": "D0601",
+    "type": "CarRskLow",
+    "description": "Caries risk assessment - Low",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0395",
+    "type": "3dImgFuse",
+    "description": "3D image fusion",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0394",
+    "type": "DigitlSub",
+    "description": "Digital Subtraction of 2+ Imgs",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0393",
+    "type": "3dTrtSim",
+    "description": "Treatment sim. using 3D Imgs",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0391",
+    "type": "DiagImg",
+    "description": "Inter. Diagnostic Img",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0120",
+    "type": "PeriodicX",
+    "description": "Periodic oral evaluation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0140",
+    "type": "LimitedEx",
+    "description": "Limited oral evaluation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0145",
+    "type": "Eval<3yrs",
+    "description": "Oral evaluation < 3 yrs of age",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0150",
+    "type": "CompEx",
+    "description": "Comprehensive oral evaluation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0160",
+    "type": "ExtEval",
+    "description": "Detail/extensive oral eval",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0170",
+    "type": "ReEval",
+    "description": "Limited re-evaluation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0180",
+    "type": "CmpPerEvl",
+    "description": "Comprehensive perio evaluation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0210",
+    "type": "FMX",
+    "description": "Intraoral-complete series (bw)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0220",
+    "type": "PA1st",
+    "description": "Intraoral-periapical 1st film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0230",
+    "type": "PAadd",
+    "description": "Intraoral-periapical each add'l",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0240",
+    "type": "OcclusalX",
+    "description": "Intraoral-occlusal film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0250",
+    "type": "Extraor1s",
+    "description": "Extraoral-first film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0260",
+    "type": "ExtraorX+",
+    "description": "Extraoral-each additional film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0270",
+    "type": "BW1Xray",
+    "description": "Bitewing-single film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0272",
+    "type": "2BWX",
+    "description": "Bitewings-two films",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0273",
+    "type": "3BWX",
+    "description": "Bitewings-three films",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0274",
+    "type": "4BWX",
+    "description": "Bitewings-four films",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0277",
+    "type": "VertBWX",
+    "description": "Vertical bitewings-7 to 8 films",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0290",
+    "type": "SurvXray",
+    "description": "Skull & facial bone survey film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0310",
+    "type": "Sialo",
+    "description": "Sialography",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0320",
+    "type": "TMJarthro",
+    "description": "TMJ arthrogram",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0321",
+    "type": "OtherTMJX",
+    "description": "Other TMJ films",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0322",
+    "type": "Tomograph",
+    "description": "Tomographic survey",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0330",
+    "type": "Pano",
+    "description": "Panoramic film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0340",
+    "type": "Cephalo",
+    "description": "Cephalometric film",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0350",
+    "type": "OralImags",
+    "description": "Oral/Facial Photographic Images",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0360",
+    "type": "CnBeamCT",
+    "description": "Cone beam ct-craniofacial data",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0362",
+    "type": "Cn2dImgRc",
+    "description": "Cone beam-2D multi img reconst",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0363",
+    "type": "Cn3dImgRc",
+    "description": "Cone beam-3D multi img reconst",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0415",
+    "type": "BactStud",
+    "description": "Collection of microorganisms",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0416",
+    "type": "VrlCultr",
+    "description": "Viral culture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0421",
+    "type": "GenetTest",
+    "description": "Genetic test-suscept oral dis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0425",
+    "type": "CarisTest",
+    "description": "Caries susceptibility tests",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0431",
+    "type": "TestMucAb",
+    "description": "Adjunc pre-diag test-detect muc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0460",
+    "type": "PulpVitTe",
+    "description": "Pulp vitality tests",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0470",
+    "type": "DiagCasts",
+    "description": "Diagnostic casts",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0472",
+    "type": "AcTisExam",
+    "description": "Accession of tissue",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0473",
+    "type": "AcTisGrEx",
+    "description": "Access of tiss",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0474",
+    "type": "AcTisDsEx",
+    "description": "Acc of tiss",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0475",
+    "type": "DecalcPrc",
+    "description": "Decalcification procedure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0476",
+    "type": "StnsMicro",
+    "description": "Special stains for microorg",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0477",
+    "type": "StnsNotMi",
+    "description": "Special stains-not for microorg",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0478",
+    "type": "ImmunStns",
+    "description": "Immunohistochemical stains",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0479",
+    "type": "TissHybrd",
+    "description": "Tissue in-situ hybrid-inclu int",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0480",
+    "type": "CytoSmrs",
+    "description": "Cytologic smears",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0481",
+    "type": "ElecMicro",
+    "description": "Electron microscopy-diagnostic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0482",
+    "type": "DrImFluor",
+    "description": "Direct immunofluorescence",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0483",
+    "type": "InImFluor",
+    "description": "Indirect immunofluorescence",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0484",
+    "type": "CnsSlPrEl",
+    "description": "Consult on slides prp elsewhere",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0485",
+    "type": "CnsPrpSlB",
+    "description": "Consult",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0486",
+    "type": "BrshBiop",
+    "description": "Brush biopsy sample",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0502",
+    "type": "OthPath",
+    "description": "Other oral path procedure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0999",
+    "type": "UnspDiag",
+    "description": "Unspecified diag procedure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1110",
+    "type": "ProphyAd",
+    "description": "Prophylaxis-adult",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1120",
+    "type": "ProphyCh",
+    "description": "Prophylaxis-child",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1203",
+    "type": "FluoridCh",
+    "description": "Fluoride w/o prophylaxis-child",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1204",
+    "type": "FluoridAd",
+    "description": "Fluoride w/o prophylaxis-adult",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1206",
+    "type": "TopFlride",
+    "description": "Topical fluoride varnish",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1310",
+    "type": "NutriCnsl",
+    "description": "Nutritional counseling",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1320",
+    "type": "TobacCnsl",
+    "description": "Tobacco counseling",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1330",
+    "type": "OralHygIn",
+    "description": "Oral hygiene instruction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1351",
+    "type": "Sealant",
+    "description": "Sealant-per tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1510",
+    "type": "SpMFixUni",
+    "description": "Space maint-fixed-unilateral",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1515",
+    "type": "SpMFixBil",
+    "description": "Space maint-fixed-bilateral",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1520",
+    "type": "SpMRemUni",
+    "description": "Space maint-remov-unilateral",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1525",
+    "type": "SpMRemBil",
+    "description": "Space maint-remov-bilateral",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1550",
+    "type": "Recement",
+    "description": "Recementation of space maint",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1555",
+    "type": "RmvSpcMnt",
+    "description": "Removal of fixed space maint",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2140",
+    "type": "Amalg1Per",
+    "description": "Amalgam-1 surf. prim/perm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2150",
+    "type": "Amalg2Per",
+    "description": "Amalgam-2 surf. prim/perm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2160",
+    "type": "Amalg3Per",
+    "description": "Amalgam-3 surf. prim/perm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2161",
+    "type": "Amalg4Per",
+    "description": "Amalgam-4+ surf. prim/perm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2330",
+    "type": "Resin1",
+    "description": "Resin-one surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2331",
+    "type": "Resin2",
+    "description": "Resin-two surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2332",
+    "type": "Resin3",
+    "description": "Resin-three surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2335",
+    "type": "Res4/inAn",
+    "description": "Resin-4+ w/incis angle-anterior",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2390",
+    "type": "CrnResAnt",
+    "description": "Resin composite crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2391",
+    "type": "ResCmP1s",
+    "description": "Resin composite-1s",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2392",
+    "type": "ResCmP2s",
+    "description": "Resin composite-2s",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2393",
+    "type": "ResCmP3s",
+    "description": "Resin composite-3s",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2394",
+    "type": "ResCmP4+s",
+    "description": "Resin composite-4+s",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2410",
+    "type": "GoldFoil1",
+    "description": "Gold foil-one surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2420",
+    "type": "GoldFoil2",
+    "description": "Gold foil-two surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2430",
+    "type": "GoldFoil3",
+    "description": "Gold foil-three surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2510",
+    "type": "InlayMet1",
+    "description": "Inlay-metallic-one surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2520",
+    "type": "InlayMet2",
+    "description": "Inlay-metallic-two surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2530",
+    "type": "InlayMet3",
+    "description": "Inlay-metallic-three + surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2542",
+    "type": "OnlayMet2",
+    "description": "Onlay-metallic-two surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2543",
+    "type": "OnlayMet3",
+    "description": "Onlay-metallic-three surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2544",
+    "type": "OnlayMet4",
+    "description": "Onlay-metallic-four + surfaces",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2610",
+    "type": "InPorc/C1",
+    "description": "Inlay-porcel/ceramic-1 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2620",
+    "type": "InPorc/C2",
+    "description": "Inlay-porcel/ceramic-2 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2630",
+    "type": "InPorc/C3",
+    "description": "Inlay-porcel/ceramic-3+ surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2642",
+    "type": "OnPorc/2s",
+    "description": "Onlay-porcel/ceram-2 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2643",
+    "type": "OnPorc/3s",
+    "description": "Onlay-porcel/ceram-3 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2644",
+    "type": "OnPorc/4+",
+    "description": "Onlay-porcel/ceram-4 + surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2650",
+    "type": "InComR1Lb",
+    "description": "Inlay-resin composite-1 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2651",
+    "type": "IncomR2Lb",
+    "description": "Inlay-resin composite-2 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2652",
+    "type": "InComR3Lb",
+    "description": "Inlay-resin composite-3+surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2662",
+    "type": "OnComR2s",
+    "description": "Onlay-resin composite-1 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2663",
+    "type": "OnComR3s",
+    "description": "Onlay-resin composite-2 surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2664",
+    "type": "OnComR4+",
+    "description": "Onlay-resin composite-3+surface",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2710",
+    "type": "CrwnResLb",
+    "description": "Crown-resin composite(indirect)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2712",
+    "type": "Crwn34RsC",
+    "description": "Crown-3/4 resin comp(indirect)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2720",
+    "type": "CrwnResHN",
+    "description": "Crown-resin w/high noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2721",
+    "type": "CrwnResBm",
+    "description": "Crown-resin w/ most base metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2722",
+    "type": "CrwnResNm",
+    "description": "Crown-resin with noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2740",
+    "type": "CrwnPrCrS",
+    "description": "Crown-porcelain/ceramic substr",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2750",
+    "type": "CrnPrFHnM",
+    "description": "Crown-porc fuse high noble mtl",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2751",
+    "type": "CrwnPrFBm",
+    "description": "Crown-porc fused to base metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2752",
+    "type": "CrnPrFNm",
+    "description": "Crown-porc fused noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2780",
+    "type": "Crn3/4HnM",
+    "description": "Crown-3/4 cast high noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2781",
+    "type": "Crn3/4Bm",
+    "description": "Crown-3/4 cast most base metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2782",
+    "type": "Crn3/4Nm",
+    "description": "Crown-3/4 cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2783",
+    "type": "Crn3/4Prc",
+    "description": "Crown-3/4 porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2790",
+    "type": "CrnFlcHNm",
+    "description": "Crown-full cast high noble mtl",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2791",
+    "type": "CrnFlcBm",
+    "description": "Crown-full cast base metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2792",
+    "type": "CrnFlcNm",
+    "description": "Crown-full cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2794",
+    "type": "CrnTitanm",
+    "description": "Crown-titanium",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2799",
+    "type": "ProvCrwn",
+    "description": "Provisional crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2910",
+    "type": "RecmtInly",
+    "description": "Recement inlay/onlay/partial",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2915",
+    "type": "RecmtCstP",
+    "description": "Recemnt cast or prefab pst/cor",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2920",
+    "type": "RecmtCrwn",
+    "description": "Recement crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2930",
+    "type": "PrFbSSCPr",
+    "description": "Prefab stain steel crn-primary",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2931",
+    "type": "PrFbSSCPe",
+    "description": "Prefab stain steel crown-perm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2932",
+    "type": "PrFbRsCrn",
+    "description": "Prefabricated resin crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2933",
+    "type": "PrFbSCRsW",
+    "description": "Prefab stl crown w/resin window",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2934",
+    "type": "PrFbECSPr",
+    "description": "Prefb esth ctd stnl stl crn-prm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2940",
+    "type": "SedFill",
+    "description": "Sedative filling",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2950",
+    "type": "CrnBldPin",
+    "description": "Core buildup",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2951",
+    "type": "PnRetTth+",
+    "description": "Pin retention-/tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2952",
+    "type": "FabPst&Cr",
+    "description": "Post&core in add to crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2953",
+    "type": "FabPstAdd",
+    "description": "Each add'l fabr post-same tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2954",
+    "type": "PrFbPt&Cr",
+    "description": "Prefab post&core in add to crn",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2955",
+    "type": "PostRemov",
+    "description": "Post removal (not with endo)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2957",
+    "type": "PrFbPtAdd",
+    "description": "Each + prefab post-same tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2960",
+    "type": "LabVnLmCs",
+    "description": "Labial veneer(laminate)-chairsd",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2961",
+    "type": "LabVnRsLm",
+    "description": "Labial veneer (resin lamin)-lab",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2962",
+    "type": "LbVnPorLm",
+    "description": "Labial veneer (porceln lam)-lab",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2970",
+    "type": "TempCrn",
+    "description": "Temporary crown (fractured th)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2971",
+    "type": "CrwnUnExD",
+    "description": "Add'l prc-new crn undr exs dent",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2975",
+    "type": "Coping",
+    "description": "Coping",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2980",
+    "type": "CrwnRepr",
+    "description": "Crown repair",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2999",
+    "type": "UnspResPr",
+    "description": "Unspecif restorative proced B/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3110",
+    "type": "PlpCpDir",
+    "description": "Pulp cap-direct",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3120",
+    "type": "PlpCpIndr",
+    "description": "Pulp cap-indirect",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3220",
+    "type": "TherPlpty",
+    "description": "Therapeutic pulpotomy-pulp remv",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3221",
+    "type": "GrPulDbrd",
+    "description": "Pulpal debridemnt-prim/perm th",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3230",
+    "type": "PulThA/Pr",
+    "description": "Pulpal therapy-anterior",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3240",
+    "type": "PulThP/Pr",
+    "description": "Pulpal therapy-posterior",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3310",
+    "type": "RtCnThrAn",
+    "description": "Root canal therapy - anterior",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3320",
+    "type": "RtCnThrBi",
+    "description": "Root canal therapy - bicuspid",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3330",
+    "type": "RtCnThrMo",
+    "description": "Root canal therapy - molar",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3331",
+    "type": "TxRtCnOb",
+    "description": "Treatmnt of root canal obstruct",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3332",
+    "type": "IncmpThrp",
+    "description": "Incomplete endo therapy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3333",
+    "type": "IntRtRpr",
+    "description": "Int root repair of perf defects",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3346",
+    "type": "Retrt-Ant",
+    "description": "Retreat",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3347",
+    "type": "Retrt-Bi",
+    "description": "Retreat",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3348",
+    "type": "Retrt-Mol",
+    "description": "Retreat",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3351",
+    "type": "ApxRclIni",
+    "description": "Apexification/recalcif",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3352",
+    "type": "ApxRclInt",
+    "description": "Apexification/recalcif",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3353",
+    "type": "ApxRclFin",
+    "description": "Apexification/recalcif",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3410",
+    "type": "ApctPrSrA",
+    "description": "Apicoectomy/Periradic surg-ant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3421",
+    "type": "ApctPrBi1",
+    "description": "Apicoect/Perirad-bicus/1st root",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3425",
+    "type": "ApctPrMo1",
+    "description": "Apicoect/Perirad-molar/1st root",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3426",
+    "type": "ApctPr+th",
+    "description": "Apicoect/Perirad (each + root)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3430",
+    "type": "RetroFill",
+    "description": "Retrograde filling-per root",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3450",
+    "type": "RtAmpPrRt",
+    "description": "Root amputation-per root",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3460",
+    "type": "EndoEdsIm",
+    "description": "Endodontic endosseous implant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3470",
+    "type": "IntRplISp",
+    "description": "Intentional replant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3910",
+    "type": "SrIslw/RD",
+    "description": "Surg isolation of th w/rub dam",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3920",
+    "type": "HemiNRtCn",
+    "description": "Hemisection",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3950",
+    "type": "CnPrpDwPs",
+    "description": "Canal prep/fit of dowel/post",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3999",
+    "type": "UnspEdoPr",
+    "description": "Unspecified endo procedure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4210",
+    "type": "GingctQdr",
+    "description": "Gingivectomy-4+ per quadrant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4211",
+    "type": "GingctTh",
+    "description": "Gingivectomy-1-3 per quadrant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4230",
+    "type": "CrnEx4+",
+    "description": "Anatomical crwn exp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4231",
+    "type": "CrnEx1-3",
+    "description": "Anatomical crwn exp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4240",
+    "type": "GnFlInRtP",
+    "description": "Ging flap",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4241",
+    "type": "GnFlPl1-3",
+    "description": "Ging flap rt pln 1-3 per quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4245",
+    "type": "ApicPosFl",
+    "description": "Apically positioned flap",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4249",
+    "type": "CrnLngH&S",
+    "description": "Clinic crown lengthen-hard tiss",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4260",
+    "type": "OssSurQ",
+    "description": "Osseous surgery- 4+ per quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4261",
+    "type": "OssSur1-3",
+    "description": "Osseous surgery- 1-3 per quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4263",
+    "type": "BnRpGr1st",
+    "description": "Bone replace graft-1st site/qu",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4264",
+    "type": "BnRpGrEa+",
+    "description": "Bone replace graft-each add/qu",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4265",
+    "type": "SfTssRgPr",
+    "description": "Bio mat",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4266",
+    "type": "TissRgPer",
+    "description": "Guided tiss regen-resorb-per",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4267",
+    "type": "TissRgNr",
+    "description": "Guided tiss regen-nonresorb-per",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4268",
+    "type": "SurgRevTh",
+    "description": "Surg revision proc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4270",
+    "type": "PedsfTsGr",
+    "description": "Pedicle soft tissue graft proc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4271",
+    "type": "FrSfTsGr",
+    "description": "Free soft tissue graft proced",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4273",
+    "type": "SubTisGr",
+    "description": "Subepithelial con tis graft/th",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4274",
+    "type": "DistPxWg",
+    "description": "Distal/proximal wedge procedure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4275",
+    "type": "SftTsGrft",
+    "description": "Soft tissue allograft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4276",
+    "type": "CmPdsfTGr",
+    "description": "Combined graft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4320",
+    "type": "ProvSplIn",
+    "description": "Provisional splinting-intracor",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4321",
+    "type": "ProvSplEx",
+    "description": "Provisional splinting-extracor",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4341",
+    "type": "PrSclRtPl",
+    "description": "Perio scale&root pln-4+per quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4342",
+    "type": "PerScl1-3",
+    "description": "Perio scale&root pln-1-3th",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4355",
+    "type": "FullDebrd",
+    "description": "Full mouth debridemnt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4381",
+    "type": "Chemo",
+    "description": "Local deliv antimicrb ag-th B/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4910",
+    "type": "PerMaint",
+    "description": "Periodontal maintenance",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4920",
+    "type": "UnscDrChg",
+    "description": "Unscheduled dressing change",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4999",
+    "type": "UnspcPerP",
+    "description": "Unspecified perio proced",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5110",
+    "type": "ComUpDen",
+    "description": "Complete denture - maxillary",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5120",
+    "type": "ComLowDen",
+    "description": "Complete denture - mandibular",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5130",
+    "type": "ImmUpDen",
+    "description": "Immediate denture - maxillary",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5140",
+    "type": "ImmLowDen",
+    "description": "Immediate denture - mandibular",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5211",
+    "type": "UpParRsBs",
+    "description": "Maxillary partial - resin base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5212",
+    "type": "LwParRsBs",
+    "description": "Mandibular partial - resin base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5213",
+    "type": "UpParMtBs",
+    "description": "Maxil partl-cast metal w/resin",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5214",
+    "type": "LwParMtBs",
+    "description": "Mand partl-cast metal w/resin",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5225",
+    "type": "MxPrtFlxB",
+    "description": "Maxillary partial-flexible base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5226",
+    "type": "MnPrtFlxB",
+    "description": "Mandibul partial-flexible base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5281",
+    "type": "RmvUniPDn",
+    "description": "Removable unilat part denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5410",
+    "type": "AdjCmDnUp",
+    "description": "Adjust complete denture-maxil",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5411",
+    "type": "AdjCmDnLw",
+    "description": "Adjust complete denture-mand",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5421",
+    "type": "AdjPrDnUp",
+    "description": "Adjust partial denture-maxil",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5422",
+    "type": "AdjPrDnLw",
+    "description": "Adjust partial denture-mand",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5510",
+    "type": "RprCmDnBs",
+    "description": "Repair complete denture base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5520",
+    "type": "RplThCmDn",
+    "description": "Replace teeth-comp dent (ea th)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5610",
+    "type": "RprRsSdBs",
+    "description": "Repair resin denture base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5620",
+    "type": "RprCstFrm",
+    "description": "Repair cast framework",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5630",
+    "type": "RepClsp",
+    "description": "Repair or replace broken clasp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5640",
+    "type": "RepBrkTh",
+    "description": "Replace broken teeth-per tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5650",
+    "type": "AddThExDn",
+    "description": "Add tooth to exist part denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5660",
+    "type": "AddClsp",
+    "description": "Add clasp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5670",
+    "type": "RpAllTxMx",
+    "description": "Replace all th&acrylic-maxil",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5671",
+    "type": "RpAllTxMn",
+    "description": "Replace all th&acrylic-mand",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5710",
+    "type": "RebsCUpDn",
+    "description": "Rebase complete maxil denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5711",
+    "type": "RebsCLwDn",
+    "description": "Rebase complete mand denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5720",
+    "type": "RebsUPPDn",
+    "description": "Rebase maxil partial denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5721",
+    "type": "RebsLwPDn",
+    "description": "Rebase mand partial denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5730",
+    "type": "RlnCmUpCh",
+    "description": "Reline complete maxil-chairside",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5731",
+    "type": "RlnCmLwCh",
+    "description": "Reline complete mand-chairside",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5740",
+    "type": "RlnUpPrCh",
+    "description": "Reline maxil partial-chairside",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5741",
+    "type": "RlnLwPrCh",
+    "description": "Reline mand partial-chairside",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5750",
+    "type": "RlnCmUpLb",
+    "description": "Reline complete maxillary (lab)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5751",
+    "type": "RlnCmLwLb",
+    "description": "Reline complete mand (lab)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5760",
+    "type": "RlnUpPrLb",
+    "description": "Reline maxillary partial (lab)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5761",
+    "type": "RlnLwPrLb",
+    "description": "Reline mandibular partial (lab)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5810",
+    "type": "IntCmDnUp",
+    "description": "Interim comp denture (maxil)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5811",
+    "type": "IntCmDnLw",
+    "description": "Interim comp denture (mand)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5820",
+    "type": "IntPrDnUp",
+    "description": "Interim partial denture (maxil)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5821",
+    "type": "IntPrDnLw",
+    "description": "Interim partial denture (mand)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5850",
+    "type": "TisConUp",
+    "description": "Tissue condition",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5851",
+    "type": "TisConLw",
+    "description": "Tissue condition",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5860",
+    "type": "OvrDenCom",
+    "description": "Overdenture-complete",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5861",
+    "type": "OvrDenPar",
+    "description": "Overdenture-partial",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5862",
+    "type": "PrecnAtt",
+    "description": "Precision attachment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5867",
+    "type": "RplPrecAt",
+    "description": "Replcmt prec attachmt-part/full",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5875",
+    "type": "ModRmPros",
+    "description": "Mod of remvble prosth-post surg",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5899",
+    "type": "UnspcRmPr",
+    "description": "Unspecified remove prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5911",
+    "type": "FacMoulSc",
+    "description": "Facial moulage (sectional)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5912",
+    "type": "FacMoulCm",
+    "description": "Facial moulage (complete)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5913",
+    "type": "NasProsth",
+    "description": "Nasal prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5914",
+    "type": "AurProsth",
+    "description": "Auricular prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5915",
+    "type": "OrbProsth",
+    "description": "Orbital prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5916",
+    "type": "OcuProsth",
+    "description": "Ocular prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5919",
+    "type": "FacProsth",
+    "description": "Facial prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5922",
+    "type": "NasSepPro",
+    "description": "Nasal septal prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5923",
+    "type": "OcuProsIn",
+    "description": "Ocular prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5924",
+    "type": "CranPros",
+    "description": "Cranial prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5925",
+    "type": "FacAugImp",
+    "description": "Facial augmentat implant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5926",
+    "type": "NasProsRp",
+    "description": "Nasal prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5927",
+    "type": "AurProRep",
+    "description": "Auricular prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5928",
+    "type": "OrbProRep",
+    "description": "Orbital prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5929",
+    "type": "FacProRep",
+    "description": "Facial prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5931",
+    "type": "ObtProSur",
+    "description": "Obturator prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5932",
+    "type": "ObtProDef",
+    "description": "Obturator prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5933",
+    "type": "ObtProMod",
+    "description": "Obturator prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5934",
+    "type": "ManResFla",
+    "description": "Mandibular resection w/ flange",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5935",
+    "type": "ManRes",
+    "description": "Mandibular resection w/o flange",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5936",
+    "type": "ObtProInt",
+    "description": "Obturator prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5937",
+    "type": "TrisAppli",
+    "description": "Trismus appliance (not TMD)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5951",
+    "type": "FeedAid",
+    "description": "Feeding aid",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5952",
+    "type": "SpchAidPd",
+    "description": "Speech aid prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5953",
+    "type": "SpchAidAd",
+    "description": "Speech aid prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5954",
+    "type": "PalAugPro",
+    "description": "Palatal augmentation prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5955",
+    "type": "PlLftPrDf",
+    "description": "Palatal lift prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5958",
+    "type": "PlLftPrIn",
+    "description": "Palatal lift prosthesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5959",
+    "type": "PlLftPrMd",
+    "description": "Palatal lift prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5960",
+    "type": "SpchAdPrM",
+    "description": "Speech aid prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5982",
+    "type": "SurgStent",
+    "description": "Surgical stent",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5983",
+    "type": "RadtnCarr",
+    "description": "Radiation carrier",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5984",
+    "type": "RadtnShld",
+    "description": "Radiation shield",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5985",
+    "type": "RadtnCnLc",
+    "description": "Radiation cone locator",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5986",
+    "type": "FlrGelCar",
+    "description": "Fluoride gel carrier",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5987",
+    "type": "CommSplnt",
+    "description": "Commissure splint",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5988",
+    "type": "SurgSplnt",
+    "description": "Surgical splint",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5999",
+    "type": "UnspcMxPr",
+    "description": "Unspec maxillofacial prosth B/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6010",
+    "type": "SrgImpEnd",
+    "description": "Surg place implant: endosteal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6012",
+    "type": "PlcIntImp",
+    "description": "Plcmnt of intrm impl: endosteal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6040",
+    "type": "SurEpoImp",
+    "description": "Surgic place: eposteal implant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6050",
+    "type": "TrnsImpln",
+    "description": "Surg place: transosteal implant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6053",
+    "type": "ImAbtRmCm",
+    "description": "Imp/abut remov",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6054",
+    "type": "ImAbtRmPt",
+    "description": "Imp/abut remov",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6055",
+    "type": "ImpltCnBr",
+    "description": "Dent implant sup connecting bar",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6056",
+    "type": "PrefabAbt",
+    "description": "Prefab abutment-incl placement",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6057",
+    "type": "CustomAbt",
+    "description": "Custom abutment-incl placement",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6058",
+    "type": "AbtPrcCrn",
+    "description": "Abutment supported porc/cer crn",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6059",
+    "type": "AbtPrFCnH",
+    "description": "Abtmt supp porc fused to hi-nob",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6060",
+    "type": "AbtPrFCnB",
+    "description": "Abtmt supp porc fused-base metl",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6061",
+    "type": "AbtPrFCnN",
+    "description": "Abtmt supp porc fused-mtl crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6062",
+    "type": "AbtCsCnHN",
+    "description": "Abtmt supp cast mtl crown-hinob",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6063",
+    "type": "AbtCsCnBs",
+    "description": "Abtmt supp cast mtl crown-base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6064",
+    "type": "AbtCsCnNb",
+    "description": "Abtmt supp cast mtl crown-noble",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6065",
+    "type": "ImplPrCrn",
+    "description": "Implant supp porc/cer crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6066",
+    "type": "ImpPrFMCn",
+    "description": "Implant supp porc fused mtl crn",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6067",
+    "type": "ImplMCrn",
+    "description": "Implant supported metal crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6068",
+    "type": "AbtPrcFPD",
+    "description": "Abtmt supp ret for porc/cer FPD",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6069",
+    "type": "AbtPFPDHi",
+    "description": "Abut sup ret-porc fsd mtl FPDhn",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6070",
+    "type": "AbtPFPDBs",
+    "description": "Abut supp ret-porc fsd mtl FPDb",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6071",
+    "type": "AbtPFPDNb",
+    "description": "Abut sup ret-porc fsd mtl FPDno",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6072",
+    "type": "AbCsFPDHi",
+    "description": "Abut sup ret-cast mtl FPD-hinob",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6073",
+    "type": "AbCsFPDBs",
+    "description": "Abut sup ret-cast mtl FPD-base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6074",
+    "type": "AbCsFPDNb",
+    "description": "Abut sup ret-cast mtl FPD-noble",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6075",
+    "type": "ImpCerFPD",
+    "description": "Implant supp ret-ceramic FPD",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6076",
+    "type": "ImpPrcFPD",
+    "description": "Implnt supp ret-prc fuse mtlFPD",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6077",
+    "type": "ImpCsMFPD",
+    "description": "Implant supp ret-cast metal FPD",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6078",
+    "type": "ImpAbtCEd",
+    "description": "Implnt/abut supp fxd comp edent",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6079",
+    "type": "ImpAbtPEd",
+    "description": "Implnt/abut supp fxd part edent",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6080",
+    "type": "ImpltMtPr",
+    "description": "Implant maintenance procedures",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6090",
+    "type": "ReprImplt",
+    "description": "Repair implant sup prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6091",
+    "type": "RplAmtPro",
+    "description": "Rpl attchmt imp/abt sup prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6092",
+    "type": "RecSptCrn",
+    "description": "Recement impl/abut sup crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6093",
+    "type": "RecSptDnt",
+    "description": "Recement impl/abut sup FPD",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6094",
+    "type": "AbtSCrnTi",
+    "description": "Abutment supp crown - titanium",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6095",
+    "type": "RepImAbt",
+    "description": "Repair implant abutment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6100",
+    "type": "ImpltRemv",
+    "description": "Implant removal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6190",
+    "type": "RadSrgImI",
+    "description": "Radiograph/surg impl index B/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6194",
+    "type": "AbCsFPDTi",
+    "description": "Abut sup ret-cast mtl FPD-titan",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6199",
+    "type": "UnspcImpl",
+    "description": "Unspecified implant proced",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6205",
+    "type": "PntcIndRC",
+    "description": "Pontic-indirect res based comp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6210",
+    "type": "PntcCtHNM",
+    "description": "Pontic-cast high noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6211",
+    "type": "PntcCtPdB",
+    "description": "Pontic-cast predominantly base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6212",
+    "type": "PntcCtNM",
+    "description": "Pontic-cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6214",
+    "type": "PntcTitan",
+    "description": "Pontic-titanium",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6240",
+    "type": "PntcPrFHN",
+    "description": "Pontic-porcelain fused to hnob",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6241",
+    "type": "PntcPrFBs",
+    "description": "Pontic-porcelain fused to base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6242",
+    "type": "PntcPrFNb",
+    "description": "Pontic-porcelain fused to nobl",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6245",
+    "type": "PntcPrCer",
+    "description": "Pontic-porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6250",
+    "type": "PntcRsHNM",
+    "description": "Pontic-resin w/ high noble met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6251",
+    "type": "PntcRsPdB",
+    "description": "Pontic-resin w/ predomnt base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6252",
+    "type": "PntcRsNM",
+    "description": "Pontic-resin with noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6253",
+    "type": "ProvPntc",
+    "description": "Provisional pontic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6545",
+    "type": "RetCast",
+    "description": "Retainer-cast for resin bonded",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6548",
+    "type": "RetPorc",
+    "description": "Ret-porc/cer-resin bnd fxd pros",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6600",
+    "type": "InlPrCr2s",
+    "description": "Inlay-porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6601",
+    "type": "InPrCr3+s",
+    "description": "Inlay-porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6602",
+    "type": "InlHiNb2s",
+    "description": "Inlay-cast high noble met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6603",
+    "type": "InHiNb3+s",
+    "description": "Inlay-cast high nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6604",
+    "type": "InlBase2s",
+    "description": "Inlay-cast predomnt base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6605",
+    "type": "InBase3+s",
+    "description": "Inlay-cast predomnt base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6606",
+    "type": "InlNobl2s",
+    "description": "Inlay-cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6607",
+    "type": "InNobl3+s",
+    "description": "Inlay-cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6608",
+    "type": "OnlPrCr2s",
+    "description": "Onlay-porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6609",
+    "type": "OnPrCr3+s",
+    "description": "Onlay-porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6610",
+    "type": "OnlHiNb2s",
+    "description": "Onlay-cast high noble met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6611",
+    "type": "OnHiNb3+s",
+    "description": "Onlay-cast high nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6612",
+    "type": "OnlBase2s",
+    "description": "Onlay-cast predomnt base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6613",
+    "type": "OnBase3+s",
+    "description": "Onlay-cast predomnt base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6614",
+    "type": "OnlNobl2s",
+    "description": "Onlay-cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6615",
+    "type": "OnNobl3+s",
+    "description": "Onlay-cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6624",
+    "type": "InlTitanm",
+    "description": "Inlay-titanium",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6634",
+    "type": "OnlTitanm",
+    "description": "Onlay-titanium",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6710",
+    "type": "RtCrnRsCm",
+    "description": "Retainer crn-indir res-bas comp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6720",
+    "type": "RtCrnRsHN",
+    "description": "Retainer crn-res w/ hi nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6721",
+    "type": "RtCrnRsBM",
+    "description": "Retainer crn-resin w/ base met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6722",
+    "type": "RtCrnRsNM",
+    "description": "Retainer crn-resin w/ nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6740",
+    "type": "RtCrnPorc",
+    "description": "Crown-porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6750",
+    "type": "RtCrnPFHn",
+    "description": "Retainer crn-porc fused-hi nob",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6751",
+    "type": "RtCrnPrFB",
+    "description": "Retainer crn-porc fuse-base met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6752",
+    "type": "RtCrnPrFN",
+    "description": "Retainer crn-porc fused-nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6780",
+    "type": "RtCrn3/4",
+    "description": "Retainer crn-3/4 cast h nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6781",
+    "type": "RtCn3/4Bs",
+    "description": "Crown-3/4 cast most base metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6782",
+    "type": "RtCn3/4Nb",
+    "description": "Crown-3/4 cast noble metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6783",
+    "type": "RtCn3/4Pr",
+    "description": "Crown-3/4 porcelain/ceramic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6790",
+    "type": "RtCrnFCHn",
+    "description": "Retainer crn-full cast hi nob",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6791",
+    "type": "RtCrnFCBs",
+    "description": "Retainer crn-full cast base",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6792",
+    "type": "RtCrnFCNm",
+    "description": "Retainer crn-full cast nob met",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6793",
+    "type": "PrvRetCrn",
+    "description": "Provisional retainer crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6794",
+    "type": "RtCrnTitn",
+    "description": "Retainer crown-titanium",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6920",
+    "type": "ConectBar",
+    "description": "Connector bar",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6930",
+    "type": "RcmntPrtl",
+    "description": "Recement fixed partial denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6940",
+    "type": "StressBrk",
+    "description": "Stress breaker",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6950",
+    "type": "PrecAttac",
+    "description": "Precision attachment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6970",
+    "type": "FabPtCr+B",
+    "description": "Post&core w/bridge retainer",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6972",
+    "type": "PrfbPtC+B",
+    "description": "Prefab post/core+ brdg retainer",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6973",
+    "type": "CrBldRtIP",
+    "description": "Core buildup for retain",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6975",
+    "type": "CopngMetl",
+    "description": "Coping-metal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6976",
+    "type": "FabPtAdd",
+    "description": "Each add'l fabr post-same tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6977",
+    "type": "PrfbPstAd",
+    "description": "Each + prefab post-same tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6980",
+    "type": "BrdgRepr",
+    "description": "Fixed partial dent. repair",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6985",
+    "type": "PedPrtDen",
+    "description": "Pediatric part'l denture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6999",
+    "type": "UnspcFxPr",
+    "description": "Unspec fixed prosth proced",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7111",
+    "type": "CorRemDcd",
+    "description": "Extraction crnl remnts-decid th",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7140",
+    "type": "ExtErpTh",
+    "description": "Extract",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7210",
+    "type": "ExtSrErTh",
+    "description": "Extraction-surgical/erupt tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7220",
+    "type": "ExtImpSfT",
+    "description": "Extraction-impacted/soft tis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7230",
+    "type": "ExtImpPtB",
+    "description": "Extraction-impacted/part bony",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7240",
+    "type": "ExtImpCmB",
+    "description": "Extraction-impacted/compl bony",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7241",
+    "type": "RmvImpCmB",
+    "description": "Remov impact-comp bony w/ comp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7250",
+    "type": "SrgRmRThR",
+    "description": "Surgic removl resid tooth root",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7260",
+    "type": "OrlAntFsC",
+    "description": "Oroantral fistula closure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7261",
+    "type": "ClsSinPrf",
+    "description": "Prim closure sinus perforation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7270",
+    "type": "ReimpStab",
+    "description": "Reimplantation/stabilization",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7272",
+    "type": "ThTrnspln",
+    "description": "Tooth transplantation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7280",
+    "type": "ExpImpUer",
+    "description": "Surgical access unerupted tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7282",
+    "type": "MobErMpTh",
+    "description": "Mobiliz erupt/malpos th-erupt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7283",
+    "type": "DvcErupTh",
+    "description": "Device for impacted tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7285",
+    "type": "BpsyOrTsH",
+    "description": "Biopsy of oral tissue-hard",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7286",
+    "type": "BpsyOrTsS",
+    "description": "Biopsy of oral tissue-soft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7287",
+    "type": "CytSmpCol",
+    "description": "Exfoliative cytological samples",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7288",
+    "type": "BrshBiopT",
+    "description": "Brush biopsy-transepith sample",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7290",
+    "type": "SrgRepsTh",
+    "description": "Surgical reposition of teeth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7291",
+    "type": "TnsptlFbr",
+    "description": "T/SC Fiberotomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7292",
+    "type": "PlcAncSrw",
+    "description": "Plcmnt: temp anch scrw rtnd plt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7293",
+    "type": "PlcAcWFlp",
+    "description": "Plcmnt: temp anch w/ surg flap",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7294",
+    "type": "PlcAcNoFp",
+    "description": "Plcmnt: temp anch w/o surg flap",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7310",
+    "type": "AlvplsyEx",
+    "description": "Alveoloplasty w/ext 4+",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7311",
+    "type": "AlvExt13q",
+    "description": "Alveoloplasty w/ext 1-3 th/quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7320",
+    "type": "Alvplsty",
+    "description": "Alveoloplasty w/o ext 4+",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7321",
+    "type": "AlvNEx13q",
+    "description": "Alveoloplsty w/o ex 1-3 th/quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7340",
+    "type": "Vstbplsy2",
+    "description": "Vestibuloplasty-ridge ext -2nd",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7350",
+    "type": "VstplstyI",
+    "description": "Vestiplasty-ridge ext (inc)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7410",
+    "type": "RadExDm<=",
+    "description": "Excision benign lesion<=1.25cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7411",
+    "type": "ExBnLs>",
+    "description": "Excision benign lesion>1.25 cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7412",
+    "type": "ExBnLsCmp",
+    "description": "Excision benign lesion",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7413",
+    "type": "ExMtLs<=",
+    "description": "Excision malig lesion<=1.25cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7414",
+    "type": "ExMtLs>",
+    "description": "Excision malig lesion>1.25cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7415",
+    "type": "ExMtLsCmp",
+    "description": "Excision malig lesion",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7440",
+    "type": "ExMlTmD<=",
+    "description": "Ex malig tumor-diam <= 1.25 cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7441",
+    "type": "ExMlTmD>",
+    "description": "Ex malig tumor-diam > 1.25 cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7450",
+    "type": "RmOdCyD<=",
+    "description": "Rem benign odont-diam<=1.25cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7451",
+    "type": "RmOdCyD>",
+    "description": "Rem benign odont-diam>1.25 cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7460",
+    "type": "RmNodCD<=",
+    "description": "Rem benign nonodont-di<=1.25cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7461",
+    "type": "RmNodCD>",
+    "description": "Rem benign nonodont-diam>1.25cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7465",
+    "type": "DstrLsPhC",
+    "description": "Destruct lesion-phys/chem B/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7471",
+    "type": "RmExsSite",
+    "description": "Rem lat exostosis-maxil/mand",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7472",
+    "type": "RmTorPal",
+    "description": "Removal of torus palatinus",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7473",
+    "type": "RmTorMan",
+    "description": "Removal of torus mandibularis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7485",
+    "type": "SrgRedOss",
+    "description": "Surg reduc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7490",
+    "type": "RdRsMnBng",
+    "description": "Rad resectn-maxilla or mandible",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7510",
+    "type": "Inc&DrAIn",
+    "description": "Incis&drain abscess-intra soft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7511",
+    "type": "Inc&DAISC",
+    "description": "Incis&drain abscs-int soft comp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7520",
+    "type": "Inc&DrAEx",
+    "description": "Incis&drain abscess-extra soft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7521",
+    "type": "Inc&DAESC",
+    "description": "Incis&drain abscs-ext soft comp",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7530",
+    "type": "RmFrBSbQT",
+    "description": "Remove foreign body from tissue",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7540",
+    "type": "RmFrBdBon",
+    "description": "Remove foreign body from bone",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7550",
+    "type": "SqstrOstm",
+    "description": "Partial ostect/sequestrectomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7560",
+    "type": "MxlSnstRm",
+    "description": "Maxill sinusotomy-rem foreign",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7610",
+    "type": "MxlOpRdIm",
+    "description": "Maxilla-open red (teeth immob)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7620",
+    "type": "MxlClRdIm",
+    "description": "Maxilla-closed red(teeth immob)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7630",
+    "type": "ManOpRdIm",
+    "description": "Mandible-open red (teeth immob)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7640",
+    "type": "ManClRdIm",
+    "description": "Mandible-closed red (th immob)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7650",
+    "type": "MlZyArOpR",
+    "description": "Malar/zygomat arch-open reduc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7660",
+    "type": "MlZyArClR",
+    "description": "Malar/zygo arch-closed reduc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7670",
+    "type": "AlvStabOp",
+    "description": "Alveolus-closed reduction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7671",
+    "type": "AlvOpnRed",
+    "description": "Alveolus-open reduction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7680",
+    "type": "FacBnCmRd",
+    "description": "Facial bone-complicated reduct",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7710",
+    "type": "MxlOpRd",
+    "description": "Maxilla-open reduction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7720",
+    "type": "MxlClRd",
+    "description": "Maxilla-closed reduction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7730",
+    "type": "ManOpRd",
+    "description": "Mandible-open reduction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7740",
+    "type": "ManClRd",
+    "description": "Mandible-closed reduction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7750",
+    "type": "MalZYArOR",
+    "description": "Malar/zygomatic arch-open red",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7760",
+    "type": "MalZyArCR",
+    "description": "Malar/zygomatic arch-close red",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7770",
+    "type": "AlvStbThO",
+    "description": "Alveolus-stabilize teeth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7771",
+    "type": "AlvStabTh",
+    "description": "Alveolus-stabilize teeth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7780",
+    "type": "FacBnCmpR",
+    "description": "Facial bones-complicated reduc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7810",
+    "type": "OpRdDsloc",
+    "description": "Open reduction of dislocation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7820",
+    "type": "ClRdDsloc",
+    "description": "Closed reduction of dislocate",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7830",
+    "type": "ManipAnes",
+    "description": "Manipulation under anesthesia",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7840",
+    "type": "Cndylctmy",
+    "description": "Condylectomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7850",
+    "type": "SurgDisc",
+    "description": "Surgical discect:w/ w/o implant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7852",
+    "type": "DiscRepr",
+    "description": "Disc repair",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7854",
+    "type": "Synvctomy",
+    "description": "Synovectomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7856",
+    "type": "Myotomy",
+    "description": "Myotomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7858",
+    "type": "JointRecn",
+    "description": "Joint reconstruction",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7860",
+    "type": "Arthrtomy",
+    "description": "Arthrotomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7865",
+    "type": "Arthrplst",
+    "description": "Arthroplasty",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7870",
+    "type": "Arthrcnts",
+    "description": "Arthrocentesis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7871",
+    "type": "NonArthro",
+    "description": "Non-arthroscopic lysis & lavage",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7872",
+    "type": "ArthrscpD",
+    "description": "Arthroscopy-diag",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7873",
+    "type": "ArthrSrAd",
+    "description": "Arthroscopy-surgical: adhesions",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7874",
+    "type": "ArthrSDsR",
+    "description": "Arthroscopy-surgical: disc rep",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7875",
+    "type": "ArthrSSyn",
+    "description": "Arthroscopy-surgic: synovectomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7876",
+    "type": "ArthrSDsc",
+    "description": "Arthroscopy-surgical:discectomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7877",
+    "type": "ArthrSDbr",
+    "description": "Arthroscopy-surgic: debridement",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7880",
+    "type": "OclOrthDv",
+    "description": "Occlusal orthotic device",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7899",
+    "type": "UnspcTMDT",
+    "description": "Unspecified TMD therapy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7910",
+    "type": "SutSmWds",
+    "description": "Suture of small wounds to 5cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7911",
+    "type": "CompSut",
+    "description": "Complicated suture-up to 5 cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7912",
+    "type": "CompSut>5",
+    "description": "Complicated suture-over 5 cm",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7920",
+    "type": "SkinGraft",
+    "description": "Skin grafts",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7940",
+    "type": "OstpOrtDf",
+    "description": "Osteoplasty-orthognathic defor",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7941",
+    "type": "OsteRamCl",
+    "description": "Osteotomy-mand rami",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7943",
+    "type": "OstRmOpGr",
+    "description": "Osteotomy-mand rami w/bone graf",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7944",
+    "type": "OstSgSbps",
+    "description": "Osteotomy-segmented/subapical",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7945",
+    "type": "OstBdMand",
+    "description": "Osteotomy-body of mandible",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7946",
+    "type": "LeFrtIMxT",
+    "description": "LeFort I (maxilla-total)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7947",
+    "type": "LeFrtIMxS",
+    "description": "LeFort I (maxilla-segmented)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7948",
+    "type": "LeFrt2&3",
+    "description": "LeFort II/III-no bone graft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7949",
+    "type": "LeFrt2&3B",
+    "description": "LeFort II/III-with bone graft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7950",
+    "type": "OsCrtGrMn",
+    "description": "Graft of mandible/maxilla B/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7951",
+    "type": "SinAugBne",
+    "description": "Sinus augmentation w/bone",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7953",
+    "type": "BnRpGftRP",
+    "description": "Bone repl grft ridge prsv/site",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7955",
+    "type": "RpMxfcSHT",
+    "description": "Rep maxillofacial sft/hrd tis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7960",
+    "type": "FrnlctmSP",
+    "description": "Frenulectomy-separate procedur",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7963",
+    "type": "Frenulopl",
+    "description": "Frenuloplasty",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7970",
+    "type": "ExcHypTsA",
+    "description": "Excision",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7971",
+    "type": "ExcPrcGnA",
+    "description": "Excision-pericoronal ging /arch",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7972",
+    "type": "SrgRedFib",
+    "description": "Surg reduc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7980",
+    "type": "Sialoltho",
+    "description": "Sialolithotomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7981",
+    "type": "ExcSalGld",
+    "description": "Excision of salivary gland",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7982",
+    "type": "Sialodoch",
+    "description": "Sialodochoplasty",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7983",
+    "type": "ClsrSalvF",
+    "description": "Closure of salivary fistula",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7990",
+    "type": "EmerTrach",
+    "description": "Emergency tracheotomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7991",
+    "type": "Cornoidct",
+    "description": "Coronoidectomy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7995",
+    "type": "SnGrMndFc",
+    "description": "Synthetic graft-mand/facial",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7996",
+    "type": "ImplntOth",
+    "description": "Implant-mandib/augmentation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7997",
+    "type": "ApplRem",
+    "description": "Appliance removal-incl archbar",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7998",
+    "type": "PlcDvNoFr",
+    "description": "Plcmnt of devc w/o fracture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7999",
+    "type": "UnspcOrSr",
+    "description": "Unspecified oral surg proc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8010",
+    "type": "LimitPrim",
+    "description": "Limited ortho trt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8020",
+    "type": "LimitTran",
+    "description": "Limited ortho trt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8030",
+    "type": "LimitAdol",
+    "description": "Limited ortho treat",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8040",
+    "type": "LimitAdlt",
+    "description": "Limited ortho treat",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8050",
+    "type": "IntcPrim",
+    "description": "Intercep orth trt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8060",
+    "type": "IntcTrans",
+    "description": "Intercep orth trt",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8070",
+    "type": "CompTrans",
+    "description": "Comprehensive orth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8080",
+    "type": "CompAdol",
+    "description": "Comprehensive ortho",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8090",
+    "type": "CompAdult",
+    "description": "Comprehensive ortho",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8210",
+    "type": "RmAppTh",
+    "description": "Removable appliance therapy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8220",
+    "type": "FxAppTh",
+    "description": "Fixed appliance therapy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8660",
+    "type": "PrOrthVst",
+    "description": "Pre-orthodontic treatment visit",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8670",
+    "type": "PstTrtStb",
+    "description": "Periodic ortho visit (contract)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8680",
+    "type": "OrthRetn",
+    "description": "Orthodontic retention",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8690",
+    "type": "OrthTrtBl",
+    "description": "Ortho treatment (bill/contract)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8691",
+    "type": "RepairApp",
+    "description": "Repair of orthodontic appliance",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8692",
+    "type": "ReplcRetn",
+    "description": "Retainer replacemnt-lost/broken",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8693",
+    "type": "RepFixRet",
+    "description": "Rebond/repair of fixed retainer",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8999",
+    "type": "UnspcOrth",
+    "description": "Unspec ortho procedure",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9110",
+    "type": "EmergEx",
+    "description": "Emerg treatment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9120",
+    "type": "FixDntSct",
+    "description": "Fixed partl denture sectioning",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9210",
+    "type": "LoclAnsNO",
+    "description": "Local anesthesia not op/surg",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9211",
+    "type": "RegBlkAns",
+    "description": "Regional block anesthesia",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9212",
+    "type": "TriDvBlAn",
+    "description": "Trigeminal division blk anesth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9215",
+    "type": "LoclAnes",
+    "description": "Local anesthesia",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9220",
+    "type": "GnAns30mn",
+    "description": "Deep sedat/gen anesth-1st 30m",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9221",
+    "type": "GnAns+15m",
+    "description": "Deep sedat/gen anesth-ea+15m",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9230",
+    "type": "AnlgNitOx",
+    "description": "Analgesia-inhal of nitrous oxid",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9241",
+    "type": "IntraF30m",
+    "description": "IV conscious sed/analg-1st 30m",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9242",
+    "type": "IntrAdd15",
+    "description": "IV conscious sed/analg-ea15m+",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9248",
+    "type": "NonIntrSn",
+    "description": "Non IV conscious sedation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9310",
+    "type": "Consult",
+    "description": "Consultation (2nd opinion)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9410",
+    "type": "ProfHsCal",
+    "description": "Professional house call",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9420",
+    "type": "ProfHosCl",
+    "description": "Hospital call",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9430",
+    "type": "OffVisRgH",
+    "description": "Office visit for observation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9440",
+    "type": "OffVisAfH",
+    "description": "Office visit-after regular hrs",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9450",
+    "type": "CasPsntTx",
+    "description": "Case present",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9610",
+    "type": "ThrDrgPnt",
+    "description": "Therap parenteral drug",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9612",
+    "type": "ThpdPtl2+",
+    "description": "Therap parenteral drugs",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9630",
+    "type": "OthDrgMed",
+    "description": "Other drugs/medicaments",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9910",
+    "type": "ApDesnMed",
+    "description": "Application of desensitize med",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9911",
+    "type": "DesResTh",
+    "description": "Apply desensitiz' resin",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9920",
+    "type": "BehavMang",
+    "description": "Behavior management",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9930",
+    "type": "TrtPstOpC",
+    "description": "Treat complications-postsurgic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9940",
+    "type": "OcclGuard",
+    "description": "Occlusal guard",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9941",
+    "type": "FabAthMgd",
+    "description": "Fabricate athletic mouthguards",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9942",
+    "type": "RepRelOG",
+    "description": "Repair/Reline of occlusal guard",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9950",
+    "type": "OcclanlMC",
+    "description": "Occlusal analysis-mounted case",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9951",
+    "type": "OcclAdjLm",
+    "description": "Occlusal adjustment-limited",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9952",
+    "type": "OcclAdjCm",
+    "description": "Occlusal adjustment-complete",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9970",
+    "type": "EnamMcrAb",
+    "description": "Enamel microabrasion",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9971",
+    "type": "Odontopl",
+    "description": "Odontoplasty 1-2 teeth-rmv enam",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9972",
+    "type": "ExtBlchAr",
+    "description": "External bleaching-per arch",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9973",
+    "type": "ExtBlchTh",
+    "description": "External bleaching-per tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9974",
+    "type": "IntBlchTh",
+    "description": "Internal bleaching-per tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9999",
+    "type": "UnspcAdjP",
+    "description": "Unspecified adjunct. proced",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15005",
+    "type": "Abrasion",
+    "description": "Abrasion",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15000",
+    "type": "DriftingM",
+    "description": "Drifting - Mesial",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15001",
+    "type": "DriftingD",
+    "description": "Drifting - Distal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15002",
+    "type": "ImpactedD",
+    "description": "Impacted - Distal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15003",
+    "type": "ImpactedM",
+    "description": "Impacted - Mesial",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15004",
+    "type": "Bleeding",
+    "description": "Bleeding",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15115",
+    "type": "PrpclAbs",
+    "description": "Periapical abscess",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15007",
+    "type": "Calculus",
+    "description": "Calculus",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15008",
+    "type": "Plaque",
+    "description": "Plaque",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15009",
+    "type": "WatchTh",
+    "description": "Watch Tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15010",
+    "type": "PrimPerCh",
+    "description": "Primary - Permanent Change",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15114",
+    "type": "Unerupted",
+    "description": "Unerupted tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "90620",
+    "type": "ExConsult",
+    "description": "Exam and consultation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "20999",
+    "type": "OrthSplnt",
+    "description": "Orthopedic splint (orthotic)",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "64550",
+    "type": "TENS",
+    "description": "Transcutan. electric. stimulat.",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "97700",
+    "type": "AdjSplint",
+    "description": "Adjust orthotic/splint",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "95831",
+    "type": "MusclTest",
+    "description": "Muscle testing",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "209999",
+    "type": "MndKinRec",
+    "description": "Mandibular kinesiograph record",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "95868",
+    "type": "ElecMyogr",
+    "description": "Electromyography",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15100",
+    "type": "MissTh>yr",
+    "description": "Missing tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15101",
+    "type": "MissTh",
+    "description": "Missing tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15104",
+    "type": "DeepCarie",
+    "description": "Deep dentinal/cemental caries",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15006",
+    "type": "PerioAbs",
+    "description": "Periodontal abscess",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15107",
+    "type": "RecCaries",
+    "description": "Recurring caries/surface restor",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15111",
+    "type": "NonfuncTh",
+    "description": "Non-functional tooth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15110",
+    "type": "FracThNRs",
+    "description": "Fractured th",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15109",
+    "type": "FracRest",
+    "description": "Fractured restoration",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15108",
+    "type": "ResPmargI",
+    "description": "Restoration",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15112",
+    "type": "OpenCntM",
+    "description": "Open contact - Mesial",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15102",
+    "type": "PLosPr>yr",
+    "description": "Prem. loss",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15103",
+    "type": "PLosPr",
+    "description": "Prem. loss",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15106",
+    "type": "IncCaries",
+    "description": "Incipient Caries",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15105",
+    "type": "Caries",
+    "description": "Caries/decay",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15113",
+    "type": "OpenCntD",
+    "description": "Open contact - Distal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15011",
+    "type": "Hypersens",
+    "description": "Hypersensitivity",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "15012",
+    "type": "Recession",
+    "description": "Recession",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxBRG",
+    "type": "Bridge",
+    "description": "Bridge",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xx3sA",
+    "type": "MOD Amalg",
+    "description": "MOD Amalgam",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xx3sC",
+    "type": "MOD Comp.",
+    "description": "MOD Composite",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxRCC",
+    "type": "TxRC/Crwn",
+    "description": "Tx Root Canal and Crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxCCA",
+    "type": "CCAdult",
+    "description": "Cont. Care - Prophy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxCCP",
+    "type": "CCChild",
+    "description": "Cont. Care - Prophy",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xx2sA",
+    "type": "DO Amalg.",
+    "description": "DO Amalgam",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xx2sC",
+    "type": "DO Comp.",
+    "description": "DO Composite",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxPex",
+    "type": "PerioExam",
+    "description": "Initial Perio Exam",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxCCC",
+    "type": "CCcomp",
+    "description": "Cont. Care - Comprehensive",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3-02000",
+    "type": "",
+    "description": "Hypertension",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4-51051",
+    "type": "",
+    "description": "Dental Fluorosis",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4-51075",
+    "type": "",
+    "description": "Abnormal Tooth eruption",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4-51120",
+    "type": "",
+    "description": "Vertical Overbite",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4-51131",
+    "type": "",
+    "description": "Malocclusion angle",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4-51261",
+    "type": "",
+    "description": "Failure of Exfoliation",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4-51520",
+    "type": "",
+    "description": "Dentigerous cast",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5-10130",
+    "type": "",
+    "description": "Cementum Caries",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5-10250",
+    "type": "",
+    "description": "Secondary dental caries",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxPeU",
+    "type": "Perio-Up",
+    "description": "Perio scale&root UL & UR",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "xxPeL",
+    "type": "Perio-Low",
+    "description": "Perio scale&root LL & LR",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0417",
+    "type": "CltSaliva",
+    "description": "Collection of saliva sample",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0418",
+    "type": "AnlSaliva",
+    "description": "Analysis of saliva sample",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3222",
+    "type": "PartPulp",
+    "description": "Partial pulpototomy apexogen",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5991",
+    "type": "TopMedCar",
+    "description": "Topical medicament carrier",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1352",
+    "type": "PrevRest",
+    "description": "Preventive Restoration",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3354",
+    "type": "PulpRegen",
+    "description": "Pulpal Regeneration",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5992",
+    "type": "AdjProsth",
+    "description": "Adj Max'facial Prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5993",
+    "type": "MntProsth",
+    "description": "Maint Max'facial Prosth",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6254",
+    "type": "IntPontic",
+    "description": "Interim Pontic",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6795",
+    "type": "IntRetCrn",
+    "description": "Interim Retainer Crown",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7251",
+    "type": "Coronect",
+    "description": "Coronectomy-part tooth removal",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7295",
+    "type": "BoneHarv",
+    "description": "Bone Harvest for Grafting",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0001",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0002",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0003",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0004",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0005",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0006",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0007",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0011",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0014",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0080",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0110",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D012",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0130",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D111",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1350",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2110",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2120",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2130",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2190",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2333",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2334",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2380",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2381",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2382",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2385",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2386",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2387",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2388",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2840",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3325",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3960",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4340",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5231",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5251",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5260",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5261",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5645",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5655",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5680",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5755",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5765",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7110",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7120",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7130",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8110",
+    "type": "",
+    "description": "",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0125",
+    "type": "",
+    "description": "CONSULTATION",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1124",
+    "type": "",
+    "description": "DIFFICULT PROPHYLAXIS",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1999",
+    "type": "",
+    "description": "2ND APPT. TO COMPLETE SCALING",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2711",
+    "type": "",
+    "description": "ACRYLIC PREFABRICATED CROWN",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2759",
+    "type": "",
+    "description": "CEMENT CROWN",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2830",
+    "type": "",
+    "description": "STAINLESS STEEL CROWN",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3335",
+    "type": "",
+    "description": "APEXIFICATION",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3340",
+    "type": "",
+    "description": "ROOT CANAL-FOUR CANAL TOOTH",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3420",
+    "type": "",
+    "description": "APICO-IN CONJUNCTION WITH RCT/R",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3440",
+    "type": "",
+    "description": "APICAL CURETTAGE",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3940",
+    "type": "",
+    "description": "RECALCIFICATION OF PERFORATIONS",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4250",
+    "type": "",
+    "description": "MUCOGINGIVAL SURGERY",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4280",
+    "type": "",
+    "description": "PERIODONTAL-PULPAL PROCEDURES",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4330",
+    "type": "",
+    "description": "LIMITED OCCLUSAL ADJUSTMENT",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4331",
+    "type": "",
+    "description": "OCCLUSAL ADJUSTMENT",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4345",
+    "type": "",
+    "description": "PERIO SCALING FOR GINGIVAL INFL",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4360",
+    "type": "",
+    "description": "OCCLUSAL GUARD",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5109",
+    "type": "",
+    "description": "IMPRESSIONS",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5216",
+    "type": "",
+    "description": "PARTIAL UPPER-ACRYLIC-CLASPS &",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5218",
+    "type": "",
+    "description": "PARTIAL LOWER-ACRYLIC-CLASPS &",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5310",
+    "type": "",
+    "description": "ADDITIONAL CLASP",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5752",
+    "type": "",
+    "description": "OFFICE SOFTLINE",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6928",
+    "type": "",
+    "description": "TRY-IN FRAMEWORK",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6929",
+    "type": "",
+    "description": "CEMENT BRIDGE",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8120",
+    "type": "",
+    "description": "FIXED SPACE MAINTAINER-UNILATER",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8211",
+    "type": "",
+    "description": "RETAINER ADJUSTMENT",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8320",
+    "type": "",
+    "description": "FIXED APPLIANCE",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9989",
+    "type": "",
+    "description": "BLEACHING KIT",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9990",
+    "type": "",
+    "description": "BLEACHING (INCL TRAYS AND MATER",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9991",
+    "type": "",
+    "description": "BLEACHING TRAY/MATER. UPPER ONL",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9992",
+    "type": "",
+    "description": "BLEACHING MAT. 1/15 or 4/40",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9993",
+    "type": "",
+    "description": "BLEACHING TRAYS ONLY 35.00/TRAY",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9994",
+    "type": "",
+    "description": "FAILED APPT.",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9995",
+    "type": "",
+    "description": "BRAUN-ULTRA",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9996",
+    "type": "",
+    "description": "BRAUN-BRUSH 3-PAK",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9997",
+    "type": "",
+    "description": "PERIO-MED",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9998",
+    "type": "",
+    "description": "INTER-SPACE BRUSH",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "99990",
+    "type": "",
+    "description": "PRE-MED GIVEN IN OFFICE",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "99991",
+    "type": "",
+    "description": "PATIENT BAL. ON CURRENT PROCEDU",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0190",
+    "type": "Screen",
+    "description": "Screening of Patient",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0386",
+    "type": "Img-Ultra",
+    "description": "Maxillofacial Ultrasnd Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0385",
+    "type": "Img-MRI",
+    "description": "Maxillofacial MRI Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0384",
+    "type": "Img-TMJ",
+    "description": "CT Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0383",
+    "type": "Img-Both",
+    "description": "CT Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0382",
+    "type": "Img-Maxil",
+    "description": "CT Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0381",
+    "type": "Img-Mand",
+    "description": "CT Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0380",
+    "type": "Img<1Jaw",
+    "description": "CT Image",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0371",
+    "type": "Cap-Sialo",
+    "description": "Sialoendoscopy Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0370",
+    "type": "Cap-Ultra",
+    "description": "Maxillofacial Ultrasnd Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0369",
+    "type": "Cap-MRI",
+    "description": "Maxillofacial MRI Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0368",
+    "type": "Cap-TMJ",
+    "description": "CT Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0367",
+    "type": "Cap-Both",
+    "description": "CT Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0366",
+    "type": "Cap-Maxil",
+    "description": "CT Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0365",
+    "type": "Cap-Mand",
+    "description": "CT Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0364",
+    "type": "Cap<1Jaw",
+    "description": "CT Capture",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0191",
+    "type": "Assess",
+    "description": "Assessment of Patient",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0602",
+    "type": "CarRskMod",
+    "description": "Caries risk assessment - Mod",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D0603",
+    "type": "CarRskHgh",
+    "description": "Caries risk assessment - High",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D1208",
+    "type": "TopFlApp",
+    "description": "Topical Application of Fluoride",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2921",
+    "type": "ReaThFrgI",
+    "description": "Reattach Th Fragment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2929",
+    "type": "PCrnPCPri",
+    "description": "Prefab Porcelain/C Crown-Prim",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2941",
+    "type": "IntRstPri",
+    "description": "Interim Therapeutic Rest - Prim",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2949",
+    "type": "RstFndInd",
+    "description": "Foundation for Indirect Rest",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2981",
+    "type": "InlayRep",
+    "description": "Inlay Repair",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2982",
+    "type": "OnlayRep",
+    "description": "Onlay Repair",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2983",
+    "type": "VeneerRep",
+    "description": "Veneer Repair",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D2990",
+    "type": "ResInfilt",
+    "description": "Resin Infiltration-Surf Lesions",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3355",
+    "type": "PulpRg1st",
+    "description": "Pulpal Regeneration - 1st visit",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3356",
+    "type": "PulpRgInt",
+    "description": "Pulpal Rgn - interim med Replc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3357",
+    "type": "PulpRgCmp",
+    "description": "Pulpal Regen - completion",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3427",
+    "type": "PerSurg",
+    "description": "Periradicular surg-no apicoect",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3428",
+    "type": "PrdSrg1St",
+    "description": "Bone Graft w/Perirdc Srg 1 Site",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3429",
+    "type": "BnGfPrd+1",
+    "description": "Bn Graft w/Berirdc Srg each add",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3431",
+    "type": "BioMtrPrd",
+    "description": "Bio Mtrl to aid Reg w/Prdc Srg",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D3432",
+    "type": "GuiTisPrd",
+    "description": "Guided TissRgn PerSite w/PrdSrg",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4212",
+    "type": "GingvRest",
+    "description": "Gingivectomy-Access/Restoration",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4277",
+    "type": "SfTisGr1",
+    "description": "Soft Tissue Graft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4278",
+    "type": "SfTisGr+",
+    "description": "Soft Tissue Graft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D4921",
+    "type": "GingIrrQd",
+    "description": "Gingival Irrigation–Per Quad",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5863",
+    "type": "ODComMax",
+    "description": "Overdenture - Complete Max",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5864",
+    "type": "ODParMax",
+    "description": "Overdenture - Partial Max",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5865",
+    "type": "ODComMan",
+    "description": "Overdenture - Complete Mand",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5866",
+    "type": "ODParMan",
+    "description": "Overdenture - Partial Mand",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D5994",
+    "type": "PerMedCar",
+    "description": "Periodontal medicament carrier",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6011",
+    "type": "2StImpSrg",
+    "description": "Second stage implant surgery",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6013",
+    "type": "PlcMinImp",
+    "description": "Placement of mini implant",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6051",
+    "type": "IntrmAbut",
+    "description": "Interim Abutment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6052",
+    "type": "SmPricAbt",
+    "description": "Semi-precision attchmt abutment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6101",
+    "type": "DbrdPerIm",
+    "description": "Debride Peri-Implant Defect",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6102",
+    "type": "D/OPerImp",
+    "description": "Debride/Oss Peri-Implant Defect",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6103",
+    "type": "BnGrftRep",
+    "description": "Bone Graft Rep Peri-Imp Defect",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D6104",
+    "type": "BnGrftImp",
+    "description": "Bone Graft",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7921",
+    "type": "AutoBlood",
+    "description": "Coll/App Autologous Blood Conc",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D7952",
+    "type": "SinAugVer",
+    "description": "Sinus Augment",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D8694",
+    "type": "ReaFixRet",
+    "description": "Repair/reattach fixed retainer",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9975",
+    "type": "ExtBlHmAr",
+    "description": "External Bleaching-Home-Arch",
+    "codeType": "American Dental Code"
+  },
+  {
+    "code": "D9985",
+    "type": "SalesTax",
+    "description": "Sales Tax",
+    "codeType": "American Dental Code"
+  }
+]

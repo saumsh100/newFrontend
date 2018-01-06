@@ -2,150 +2,43 @@
 
 .rowMainContainer {
   box-sizing: border-box;
-  padding: 10px 0px 0px 10px;
+  padding: 10px;
+  height: 100%;
+}
+
+.dayViewContainer {
+  height: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .calendarContainer {
   width: 200px;
   height: 200px;
 }
-.schedule {
-    &__container {
 
-    &_content {
-        max-height: calc(98vh - 142px);
-        //height: calc(100vh - 145px);
-        overflow-y: auto;
-      }
-    }
-
-    &__sidebar {
-        padding: 0px 10px 0px 15px;
-        height: calc(98vh - 66px);
-        overflow: auto;
-        display: flex;
-        flex-direction: column;
-        &_rowCalendar {
-          min-height: 260px;
-          margin-bottom: 15px;
-        }
-        &_rowRequest {
-          //height: auto;
-          //overflow: auto;
-          margin-bottom: 15px;
-          background-color: lighten($primary-lightgrey, 2%);
-        }
-
-        &_rowFilter {
-          flex: 1;
-        }
-
-        &_request {
-          flex: 1;
-        }
-
-        &_calendar {
-          background-color: #fafafa;
-        }
-    }
-    &__title {
-        min-height: 40px;
-        padding: 10px 20px 5px 20px;
-    }
-
-    &__date {
-        font-weight: 600;
-    }
-
-    &__element {
-        display: flex;
-        width: 100%;
-        color: #dedede;
-        border-right: 3px solid $background-color;
-        border-bottom: 3px solid $background-color;
-        justify-content: center;
-        align-items: center;
-    }
-    &__daypicker {
-        &_wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9998;
-            width: 100%;
-            height: 100%;
-            padding: 2rem;
-        }
-        &_select {
-            position: fixed !important;
-            top: 50%;
-            left: 50%;
-            z-index: 9999;
-            background-color: #fff;
-            border-radius: 5px;
-            border: 3px solid $background-color;
-            transform: translateX(-50%) translateY(-50%);
-            > div:last-child {
-                width: 430px;
-                height: 300px;
-            }
-            &:focus {
-                outline: none;
-            }
-        }
-    }
+.card {
+  height: 100%;
 }
 
-.title {
-  &__dayOfWeek {
-    font-size: 22px;
-    font-weight: $large-weight;
-    font-family: $medium-font;
-    margin-right: 10px;
-  },
-
-    &__month {
-      font-size: 18px;
-      font-weight: $large-weight;
-      text-transform: uppercase;
-    }
-
-    &__day {
-      font-size: 18px;
-      font-weight: $large-weight;
-    }
-
-    &__number {
-        font-size: 18px;
-        font-weight: $large-weight;
-    }
-    &__icon {
-      padding-left: 5px;
-    }
-}
-
-.calendarTitle {
+.sidebar {
+  padding-left: 10px;
   display: flex;
-  align-items: center;
-  padding-left: 20px;
-  border-bottom: 2px solid;
-  border-bottom-color: $background-color;
-
-  &__month {
-    display: inline-block;
-    font-size: 18px;
-    text-transform: uppercase;
+  flex-direction: column;
+  box-sizing: border-box;
+  &_rowCalendar {
+    min-height: 260px;
+    margin-bottom: 10px;
   }
-  &__dayWeek {
-    font-size: 18px;
-    font-weight: $large-weight;
-    text-transform: uppercase;
+  &_rowRequest {
+    flex: 2;
+  }
+  &_request {
+    height: 100%;
   }
 
-  &__dayMonth {
-    font-size: $jumbo-size;
-    font-weight: $large-weight;
-    color: $primary-light-blue;
+  &_calendar {
+    background-color: #fafafa;
   }
 }
 
@@ -157,6 +50,8 @@
   text-align: center;
   font-size: $small-size;
   color: $primary-darkgrey;
+  justify-content: space-between;
+  margin-right: 10px;
 
   &__text {
     padding-right: 35px;
@@ -168,19 +63,45 @@
     align-content: center;
     font-weight: 600;
     color: $primary-dark;
+    margin-right: 20px;
+    box-sizing: border-box;
 
     &:hover {
       cursor: pointer;
       color: $primary-color-hover;
     }
 
-    &_text {
-      padding-left: 20px;
-      text-transform: capitalize;
-    }
     &_icon{
       padding-left: 10px;
     }
+  }
+
+  &_buttonText {
+    text-transform: capitalize;
+    padding: 0.65em;
+    height: 28px;
+    box-sizing: border-box !important;
+    composes: fontMedium from 'sass-loader!../../fonts.scss';
+    font-size: 11px;
+    margin-right: 15px;
+  }
+}
+
+
+.changeDay {
+  display: flex;
+  align-items: center;
+  width: 35px;
+  justify-content: space-between;
+  padding-right: 10px;
+  color: $primary-dark;
+
+  &_left {
+    color: inherit;
+  }
+
+  &_right {
+    color: inherit;
   }
 }
 
@@ -190,96 +111,23 @@
 }
 
 .appointment {
-    position: absolute;
-    width: 99%;
-    padding: 5px;
-    background: $primary-color;
+  position: absolute;
+  width: 99%;
+  padding: 5px;
+  background: $primary-color;
 
-    &__username {
-        color: white;
-    }
-
-    &__date {
-        color: #2e3845;
-    }
-
-    &__title {
-        color: #434f61;
-    }
-}
-
-
-.legend {
-  display: flex;
-  padding-top: 2px;
-  padding-right: 5px;
-  background-color: $primary-lightgrey;
-
-  &_container {
-    display: flex;
-    margin-left: auto;
-    align-items: center;
+  &__username {
+      color: white;
   }
 
-  &_text {
-    padding-left: 5px;
-    color: $primary-dark;
-    text-align: center;
-    font-size: $extra-small-size;
-    font-weight: $medium-weight;
-    font-family: $medium-font;
-
-    &_newAppt {
-      padding-left: 5px;
-      padding-right: 5px;
-      font-size: $extra-small-size;
-      font-weight: $medium-weight;
-      font-family: $medium-font;
-    }
+  &__date {
+      color: #2e3845;
   }
 
-  &_icon {
-    padding-left: 5px;
-
-    &_clock {
-      color: $inactive-color;
-      opacity: 0.5;
-    }
-
-    &_square {
-      color: $primary-color;
-      opacity: 0.6;
-    }
-
-    &_check {
-      padding-left: 5px;
-      color: $inactive-color;
-      opacity: 0.5;
-    }
-
-    &_squareO {
-      position: relative;
-      display: flex;
-      align-items: center;
-      padding-left: 5px;
-      width: 11px;
-      height: 11px;
-    }
-
-    &_gradient {
-      position: absolute;
-      //width: 100%;
-     // height: 70%;
-      width: 11px;
-      height: 11px;
-      border: 0.1px solid $primary-color;
-      background: linear-gradient(135deg, rgba(255,138,117,1) 0%, rgba(255,138,117,1) 8%,
-        rgba(255,113,90,1) 16%, rgba(255,113,90,1) 17%, rgba(255,113,90,1) 22%,
-        rgba(255,113,90,1) 27%, rgba(255,113,90,1) 28%, rgba(255,113,90,1) 34%,
-        rgba(255,149,133,1) 44%, rgba(255,171,158,1) 50%, rgba(255,93,71,1) 51%,
-        rgba(255,97,77,1) 52%, rgba(255,97,77,1) 62%, rgba(255,97,77,1) 65%,
-        rgba(255,189,179,1) 82%, rgba(255,189,179,1) 100%);
-    }
+  &__title {
+      color: #434f61;
   }
 }
+
+
 
