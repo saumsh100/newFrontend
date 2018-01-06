@@ -43,8 +43,6 @@ const defaultEndTime = moment(new Date(1970, 1, 0, 13, 0)).toISOString();
 
 const timeOptions = generateTimeOptions();
 
-console.log('found?', timeOptions.find(to => to.value === defaultStartTime));
-
 function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;

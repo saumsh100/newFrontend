@@ -1,5 +1,6 @@
 
 import { Router } from 'express';
+import moment from 'moment';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getRecallTemplateName } from '../../../lib/recalls/createRecallText';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -8,6 +9,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
 import { getPatientsDueForRecall, mapPatientsToRecalls } from '../../../lib/recalls/helpers';
+import { convertIntervalStringToObject } from '../../../util/time';
 
 const recallsRouter = new Router();
 
@@ -114,11 +116,17 @@ recallsRouter.get('/:accountId/recalls/:recallId/preview', checkPermissions('acc
       return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
     }
 
+    const { account, recall } = req;
+    const intervalObject = convertIntervalStringToObject(recall.interval);
+    const dueDate = moment().add(intervalObject);
+    const lastApptDate = dueDate.subtract(6, 'months');
     const patient = {
       firstName: 'Jane',
+      lastName: 'Doe',
+      lastApptDate,
+      dueDate,
     };
 
-    const { account, recall } = req;
     const templateName = getRecallTemplateName({ recall });
     const html = await renderTemplate({
       templateName,

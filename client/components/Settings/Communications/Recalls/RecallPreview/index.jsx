@@ -53,6 +53,7 @@ class RecallPreview extends Component {
       recall,
       account,
     } = this.props;
+
     const { primaryTypes } = recall;
 
     // Fake Jane Doe Data
@@ -61,7 +62,8 @@ class RecallPreview extends Component {
       lastName: 'Doe',
     };
 
-    const commsPreviewSections = primaryTypes.reverse().map((type) => {
+    // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
+    const commsPreviewSections = primaryTypes.slice().reverse().map((type) => {
       let typePreview = null;
       if (type === 'sms') {
         typePreview = (
@@ -90,7 +92,6 @@ class RecallPreview extends Component {
 
       return (
         <CommsPreviewSection
-          title={wordMap[type]}
           key={`${recall.id}_${type}`}
         >
           {typePreview}

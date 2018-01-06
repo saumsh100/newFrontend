@@ -14,7 +14,7 @@ class CommsPreviewSection extends Component {
     const { title, children } = this.props;
     return (
       <div className={styles.commsPreviewSection}>
-        {title && <CommsPreviewTitle title={title} />}
+        {title ? <CommsPreviewTitle title={title} /> : null}
         <div>
           {children}
         </div>

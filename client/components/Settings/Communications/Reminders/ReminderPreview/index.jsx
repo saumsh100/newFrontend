@@ -65,6 +65,7 @@ class ReminderPreview extends Component {
       reminder,
       account,
     } = this.props;
+
     const { primaryTypes } = reminder;
     const { index } = this.state;
     const isConfirmable = index === 0;
@@ -82,7 +83,8 @@ class ReminderPreview extends Component {
       isPatientConfirmed: !isConfirmable,
     };
 
-    const commsPreviewSections = primaryTypes.reverse().map((type) => {
+    // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
+    const commsPreviewSections = primaryTypes.slice().reverse().map((type) => {
       let typePreview = null;
       if (type === 'sms') {
         typePreview = (
@@ -111,7 +113,6 @@ class ReminderPreview extends Component {
 
       return (
         <CommsPreviewSection
-          title={wordMap[type]}
           key={`${reminder.id}_${type}_${isConfirmable}`}
         >
           {typePreview}

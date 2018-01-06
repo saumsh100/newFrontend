@@ -25,6 +25,9 @@ const getPreview = (url) => new Promise((resolve) => {
 
 const EMAIL_SCALE = 0.75;
 
+// This accounts for images not loading in time to set height exactly
+const AVERAGE_IMAGE_HEIGHT = 200;
+
 export default class EmailPreview extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +65,7 @@ export default class EmailPreview extends Component {
 
         // Now insert the custom scaling css into the html style
         // Without this, the emails look huge
-        const iHtml = this.iframe.contentWindow.document.getElementsByTagName('html')[0];
+        const iHtml = this.iframe.contentWindow.document.getElementsByTagName('center')[0];
         iHtml.style.transform = `scale(${EMAIL_SCALE})`;
         iHtml.style.transformOrigin = 'top center';
 
@@ -71,7 +74,7 @@ export default class EmailPreview extends Component {
 
         // Set container with proper html so that the iframe is not scrollable
         // We want the overall container to be scrollable
-        const height = iHtml.offsetHeight * EMAIL_SCALE;
+        const height = iHtml.offsetHeight * EMAIL_SCALE + AVERAGE_IMAGE_HEIGHT;
         this.setState({ loading: false, height });
       });
   }
@@ -79,7 +82,7 @@ export default class EmailPreview extends Component {
   render() {
     const { height } = this.state;
     return (
-      <div style={{ height: `${height}px` }}className={styles.iframeWrapper}>
+      <div style={{ height: `${height}px` }} className={styles.iframeWrapper}>
         <iframe ref={node => this.iframe = node} className={styles.iframe} />
       </div>
     );

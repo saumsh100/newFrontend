@@ -15,17 +15,21 @@
     <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="shortcut icon" href="/favicons/favicon.ico">
     <style>
-        @font-face {
-            font-family: Gotham-Book;
-            src: url(/fonts/Gotham-Book.ttf);
-        }
-        @font-face {
-            font-family: Gotham-Medium;
-            src: url(/fonts/Gotham-Medium.ttf);
-        }
-        /*.CareCruToggle.react-toggle--checked .react-toggle-track {
-            background-color: red !important;
-        }*/
+      @font-face{
+        font-family: 'Gotham-Book';
+        font-weight: normal;
+        font-style: normal;
+        src: url(/fonts/Gotham-Book.otf) format("opentype"),
+        url(/fonts/Gotham-Book.woff) format("woff");
+      }
+
+      @font-face {
+        font-family: 'Gotham-Medium';
+        font-weight: normal;
+        font-style: normal;
+        src: url(/fonts/Gotham-Medium.otf) format("opentype"),
+        url(/fonts/Gotham-Medium.woff) format("woff");
+      }
     </style>
     {{#productionCSS}}my-commons.js{{/productionCSS}}
     {{#productionCSS}}my{{/productionCSS}}

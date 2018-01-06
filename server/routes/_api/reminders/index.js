@@ -1,6 +1,6 @@
 
 import { Router } from 'express';
-import { renderTemplate } from '../../../lib/mail';
+import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
@@ -121,27 +121,26 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
       return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
     }
 
-    const { reminder } = req;
+    const { reminder, account } = req;
     const { isConfirmable } = req.query;
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
+
     const templateName = getReminderTemplateName({ isConfirmable, reminder });
     const html = await renderTemplate({
       templateName,
       mergeVars: [
+        // defaultMergeVars
+        ...generateClinicMergeVars({ account, patient }),
         {
-          name: 'PATIENT_FIRSTNAME',
-          content: 'Jane',
+          name: 'APPOINTMENT_DATE',
+          content: 'Thursday, September 7th',
         },
         {
-          name: 'ACCOUNT_NAME',
-          content: 'Chuck',
-        },
-        {
-          name: 'ACCOUNT_PHONENUMBER',
-          content: 'account.phoneNumber',
-        },
-        {
-          name: 'ACCOUNT_EMAIL',
-          content: 'account.phoneNumber'
+          name: 'APPOINTMENT_TIME',
+          content: '8:54am',
         },
       ],
     });

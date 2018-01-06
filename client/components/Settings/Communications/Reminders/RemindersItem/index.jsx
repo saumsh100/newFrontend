@@ -36,8 +36,8 @@ const wordMap = {
 };
 
 const typeOptions = [
-  { label: 'Hours Before', value: 'hours' },
-  { label: 'Days Before', value: 'days' },
+  { label: 'Hours', value: 'hours' },
+  { label: 'Days', value: 'days' },
 ];
 
 const primaryTypesOptions = [

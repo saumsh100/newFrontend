@@ -30,7 +30,6 @@ class OnlineBooking extends Component {
   }
 
   handleSubmit(values) {
-    console.log(values);
     const { activeAccount, updateEntityRequest } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);

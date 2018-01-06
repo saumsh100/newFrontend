@@ -63,6 +63,7 @@ $dheight: 30px;
     border-bottom: none;
     height: $dheight;
     font-size: 12px;
+    margin-top: 2px;
   }
 
   // For dropdowns
@@ -131,7 +132,7 @@ $small-icon-width: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: $small-icon-width;
+  width: $small-icon-width + 1;
   height: $small-icon-width;
   border-radius: $small-icon-width / 2;
   color: white;

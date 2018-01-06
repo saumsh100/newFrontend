@@ -1,4 +1,5 @@
 
+import moment from 'moment';
 import mandrill from '../config/mandrill';
 import { host, protocol, env } from '../config/globals';
 
@@ -198,10 +199,21 @@ export function renderTemplate(config) {
 
 export function generateClinicMergeVars({ patient, account }) {
   return [
+    // Patient Variables
     {
       name: 'PATIENT_FIRSTNAME',
       content: patient.firstName,
     },
+    {
+      name: 'PATIENT_LASTAPPOINTMENTDATE',
+      content: moment(patient.lastApptDate).format('dddd, MMMM Do'),
+    },
+    {
+      name: 'RECALL_DUEDATE',
+      content: moment(patient.dueDate).format('dddd, MMMM Do'),
+    },
+
+    // Clinic Variables
     {
       name: 'ACCOUNT_CLINICNAME',
       content: account.name,
@@ -225,6 +237,22 @@ export function generateClinicMergeVars({ patient, account }) {
     {
       name: 'PRIMARY_COLOR',
       content: account.bookingWidgetPrimaryColor,
+    },
+    {
+      name: 'ACCOUNT_LOGO_URL',
+      content: 'https://carecru-staging.s3.amazonaws.com/dev/dental_clinic_logo_red.png',
+    },
+    {
+      name: 'ACCOUNT_ADDRESS',
+      content: account.address.street,
+    },
+    {
+      name: 'FACEBOOK_URL',
+      content: account.facebookUrl,
+    },
+    {
+      name: 'GOOGLE_URL',
+      content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
     },
   ];
 }
