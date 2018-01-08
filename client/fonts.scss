@@ -130,7 +130,7 @@
 }
 
 .fontMedium {
-  font-family: Gotham-Medium;
+  font-family: Gotham-Medium !important;
   @extend .letterSpacing;
 }
 

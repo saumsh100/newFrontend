@@ -21,10 +21,9 @@ export default function PractitionersSlot(props) {
   } = props;
 
   return (
-      <div className={styles.timeSlot} ref={scrollComponentDidMount}>
+    <div className={styles.scrollDiv} ref={scrollComponentDidMount}>
+      <div className={styles.timeSlot}>
         {practitionersArray.length ? practitionersArray.map((pract, i, arr) => {
-          const columnWidth = arr.length < 5 ? 100 / arr.length : 30;
-
           const checkFilters = schedule.toJS();
 
           const filteredApps = appointments.filter((app) => {
@@ -54,16 +53,19 @@ export default function PractitionersSlot(props) {
               key={i}
               timeSlots={timeSlots}
               timeSlotHeight={timeSlotHeight}
-              columnWidth={columnWidth}
               startHour={startHour}
               endHour={endHour}
               filteredApps={filteredApps}
               selectAppointment={selectAppointment}
               scheduleView={schedule.toJS().scheduleView}
               minWidth={schedule.toJS().columnWidth}
+              selectedAppointment={schedule.toJS().selectedAppointment}
+              numOfColumns={practitionersArray.length}
+              columnIndex={i}
             />
           );
         }) : null}
+      </div>
     </div>
   );
 }
@@ -75,7 +77,7 @@ PractitionersSlot.propTypes = {
   patients: PropTypes.object.isRequired,
   services: PropTypes.object.isRequired,
   chairs: PropTypes.object.isRequired,
-  practitioners: PropTypes.object.isRequired,
+  practitioners: PropTypes.object,
   schedule: PropTypes.object,
   selectAppointment: PropTypes.func.isRequired,
   scheduleView: PropTypes.string.isRequired,

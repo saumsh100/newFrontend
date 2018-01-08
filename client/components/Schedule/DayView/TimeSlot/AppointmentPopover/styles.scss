@@ -1,0 +1,88 @@
+@import '../../../../../ui';
+
+.card {
+  width: auto;
+  box-shadow: 0px 5px 25px 2px rgba(209,209,209,0.6);
+  min-width: 300px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background-color: #313843;
+  color: $primary-white;
+  padding-left: 15px;
+  padding-right: 15px;
+
+  &_text {
+    padding-left: 5px;
+    font-size: 15px;
+    margin-right: 10px;
+    composes: fontDefault from 'sass-loader!../../../../../fonts.scss';
+  }
+}
+
+.closeIcon {
+  margin-left: auto;
+  composes: fontMediumSize from 'sass-loader!../../../../../fonts.scss';
+  color: $primary-grey;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.body {
+  background-color: $primary-white;
+  padding: 15px 15px 0px 15px;
+  height: auto;
+  min-height: 200px;
+  max-height: 290px;
+  max-width: 285px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.subHeader {
+  composes: subHeaderExtraSmall from 'sass-loader!../../../../../fonts.scss';
+  padding-bottom: 2px;
+}
+
+.data {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+  padding-bottom: 2px;
+
+  &_note {
+    max-height: 80px;
+  }
+
+  &_text {
+    padding-left: 5px;
+    padding-top: 1px;
+  }
+}
+
+.footer {
+  box-sizing: border-box;
+  display: flex;
+  padding: 15px;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.editButton {
+  margin-left: 5px;
+}

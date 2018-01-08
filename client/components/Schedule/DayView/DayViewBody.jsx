@@ -133,7 +133,6 @@ class DayViewBody extends Component {
         services={services}
         chairs={chairs}
         selectAppointment={selectAppointment}
-        scheduleView={scheduleView}
         scrollComponentDidMount={this.scrollComponentDidMount}
       />
     );
@@ -159,14 +158,13 @@ class DayViewBody extends Component {
         chairs={chairs}
         practitioners={practitioners}
         selectAppointment={selectAppointment}
-        scheduleView={scheduleView}
         scrollComponentDidMountChair={this.scrollComponentDidMountChair}
       />
     );
 
     return (
-      <SContainer noBorder className={styles.card} >
-        <SHeader>
+      <SContainer noBorder className={styles.card} id="scheduleContainer">
+        <SHeader className={styles.header}>
           <ColumnHeader
             scheduleView={scheduleView}
             entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
@@ -179,7 +177,7 @@ class DayViewBody extends Component {
           <TimeColumn
             timeSlots={timeSlots}
             timeSlotHeight={timeSlotHeight}
-            width={leftColumnWidth}
+            leftColumnWidth={leftColumnWidth}
             timeComponentDidMount={this.timeComponentDidMount}
           />
           {scheduleView === 'chair' ? chairsSlot : practitionersSlot}

@@ -8,9 +8,9 @@ import {
   Row,
   Col,
   Card,
-  SHeader,
   SBody,
   SContainer,
+  SHeader,
   Button,
   DayPicker,
   IconButton,
@@ -22,9 +22,8 @@ import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
 import AddPatientUser from './AddPatientUser';
 import AddPatientSuggestions from './AddPatientSuggestions';
-import CurrentDate from './Cards/CurrentDate';
-import Legend from './Cards/Legend';
-import HeaderButtons from './Cards/HeaderButtons';
+import CurrentDate from './Header/CurrentDate';
+import HeaderButtons from './Header/HeaderButtons';
 import Calendar from '../library/Calendar/index';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import styles from './styles.scss';
@@ -165,8 +164,11 @@ class ScheduleComponent extends Component {
           <Col xs={12} sm={9} md={9} className={styles.dayViewContainer}>
             <Card className={styles.card}>
               <SContainer>
-                <SHeader>
-                  <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
+                <SHeader className={styles.headerContainer}>
+                  <CurrentDate
+                    currentDate={currentDate}
+                    leftColumnWidth={leftColumnWidth}
+                  >
                     <div className={styles.changeDay}>
                       <IconButton
                         icon="angle-left"
@@ -185,7 +187,8 @@ class ScheduleComponent extends Component {
                     <Button
                       border="blue"
                       onClick={() => this.setCurrentDay(new Date())}
-                      className={styles.headerButtons_buttonText}
+                      dense
+                      compact
                     >
                       Today
                     </Button>
@@ -255,6 +258,7 @@ class ScheduleComponent extends Component {
                     month={new Date(moment(currentDate).year(), moment(currentDate).month())}
                     selectedDays={new Date(currentDate)}
                     onDayClick={this.setCurrentDay}
+                    className={styles.sidebar_calendar}
                   />
                 </Card>
               </Col>

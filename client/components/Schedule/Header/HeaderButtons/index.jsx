@@ -1,16 +1,12 @@
 
 import { bindActionCreators } from 'redux';
 import Popover from 'react-popover';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
 import { Icon, Button } from '../../../library';
 import styles from '../../styles.scss';
-import { runOnDemandSync } from '../../../../thunks/runOnDemandSync';
 import Filters from '../Filters';
-
-import { setSyncingWithPMS, setScheduleView } from '../../../../actions/schedule';
-import FilterField from "../../../library/Filters/FilterField";
+import { setScheduleView } from '../../../../actions/schedule';
 
 class HeaderButtons extends Component {
   constructor(props) {
@@ -51,36 +47,15 @@ class HeaderButtons extends Component {
   render() {
     const {
       addNewAppointment,
-      runOnDemandSync,
-      setSyncingWithPMS,
-      syncingWithPMS,
       scheduleView,
-      setScheduleView,
       schedule,
       chairs,
       practitioners,
       services,
     } = this.props;
 
-    function onDemandSync() {
-      if (!syncingWithPMS) {
-        console.log('onDemandSync: running on demand sync');
-        setSyncingWithPMS({ isSyncing: true })
-        runOnDemandSync()
-          .then(() => {
-            console.log('Just sent on demand sync; result');
-          });
-      }
-    }
-
-    let syncStyle = styles.headerButtons__quickAdd;
-
-    if (syncingWithPMS) {
-      syncStyle = classNames(styles.disabledStyle, syncStyle);
-    }
-
     return (
-      <div className={styles.headerButtons}>
+      <div className={styles.header}>
         <Popover
           isOpen={this.state.openFilters}
           body={[(
@@ -96,13 +71,13 @@ class HeaderButtons extends Component {
           onOuterAction={this.toggleFilters}
         >
           <div
-            className={styles.headerButtons__quickAdd}
+            className={styles.headerLinks}
             onClick={this.toggleFilters}
           >
             <Icon
               icon="sliders"
               size={1.5}
-              className={styles.headerButtons__quickAdd_icon}
+              className={styles.headerLinks_icon}
             />
           </div>
         </Popover>
@@ -111,15 +86,18 @@ class HeaderButtons extends Component {
           onClick={this.setView}
           border="blue"
           iconRight="exchange"
-          className={styles.headerButtons_buttonText}
+          dense
+          compact
         >
-          {scheduleView} View
+          {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
         </Button>
 
         <Button
           color="blue"
           onClick={addNewAppointment}
-          className={styles.headerButtons_buttonText}
+          dense
+          compact
+          className={styles.headerLinks_add}
         >
           Quick Add
         </Button>
@@ -143,17 +121,13 @@ HeaderButtons.PropTypes = {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    runOnDemandSync,
     setScheduleView,
-    setSyncingWithPMS,
   }, dispatch);
 }
 
 function mapStateToProps({ schedule }) {
-  const syncingWithPMS = schedule.toJS().syncingWithPMS;
   const scheduleView = schedule.toJS().scheduleView;
   return {
-    syncingWithPMS,
     scheduleView,
   };
 }

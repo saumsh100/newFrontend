@@ -6,7 +6,7 @@
   flex-direction: row;
   align-items: stretch;
   overflow-x: hidden;
-  min-height: 50px;
+  min-height: 60px;
 
   &_empty {
     box-sizing: border-box;
@@ -15,8 +15,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border: 1px solid $primary-grey;
-    border-bottom: 0px;
+    border-bottom: 0.13em solid $primary-grey;
+    border-right: 0.13em solid $primary-grey;
     padding-bottom: 2px;
     font-size: 13px;
   }
@@ -24,17 +24,26 @@
   &_body {
     display: flex;
     box-sizing: border-box;
-    width: 100%;
+    min-width: 100%;
     overflow-x: hidden;
   }
 
   &_item {
     flex: 1;
     box-sizing: border-box;
-    border: 1px solid $primary-grey;
-    border-bottom: 0px;
-    height: 50px;
+    border: 0.13em solid $primary-grey;
+    border-top: 0px;
+    border-left: 0px;
   }
+}
+
+.scrollDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-right: 8px;
 }
 
 .container {
@@ -53,7 +62,7 @@
 
 .practitionerName {
   font-size: 14px;
-  composes: fontBold from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   text-overflow: ellipsis;
   overflow: hidden;
 }

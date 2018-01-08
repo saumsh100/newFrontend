@@ -13,6 +13,8 @@ const scheme = [
   'secondary',
   'tertiary',
 
+  'dense',
+
   'rounded',
   'upperCase',
   'compact',
@@ -30,7 +32,7 @@ const mapper = getClassMapper(scheme, styles);
 const Button = props => (
   <props.as
     {...mapper.omit(props, 'as', 'icon', 'submit', 'iconRight')}
-    className={mapper.map(props, styles.default, props.className)}
+    className={mapper.map(props, styles.baseline, props.className)}
   >
     { props.icon ? (
       <i className={`fa fa-${props.icon} ${styles.icon}`} />
