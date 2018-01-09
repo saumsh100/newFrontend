@@ -90,9 +90,7 @@ function ShowAppointment(props) {
   return (
     <div
       key={appointment.id}
-      onClick={() => {
-        selectAppointment(appointment);
-      }}
+      onClick={() => selectAppointment(appointment)}
       className={styles.appointmentContainer}
       style={{ height: `${(heightCalc - 0.1) + heightCalcBuffer}px`, top, width, left }}
     >
@@ -102,12 +100,14 @@ function ShowAppointment(props) {
         style={appStyle}
         data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
       >
-        {isPatientConfirmed || isReminderSent ? (<div className={styles.showAppointment_icon}>
-          <div className={styles.showAppointment_icon_item}>{(isPatientConfirmed && <Icon size={1} icon="check-circle" />)}</div>
-          <div className={styles.showAppointment_icon_item}> {(isReminderSent && <Icon size={1} icon="clock" />)} </div>
-        </div>) : null}
+        {isPatientConfirmed || isReminderSent ? (
+          <div className={styles.showAppointment_icon}>
+            <div className={styles.showAppointment_icon_item}>{isPatientConfirmed && <Icon size={1} icon="check-circle" />}</div>
+            <div className={styles.showAppointment_icon_item}> {isReminderSent && <Icon size={1} icon="clock" />} </div>
+          </div>
+        ) : null}
         <div className={styles.showAppointment_nameAge}>
-          <div className={styles.showAppointment_nameAge_name} style={nameColor} >
+          <div className={styles.showAppointment_nameAge_name} style={nameColor}>
             <span className={styles.paddingText}>{patient.firstName}</span>
             <span className={styles.paddingText}>{lastName}</span>
             <span>{age || ''}</span>

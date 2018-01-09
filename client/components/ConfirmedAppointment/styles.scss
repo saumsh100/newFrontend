@@ -20,7 +20,7 @@
   flex-direction: column;
   width: 650px;
   z-index: 200;
-  border-top: $card-border-size $primary-color;
+  // border-top: $card-border-size $primary-color;
   box-sizing: border-box;
   @media screen and (max-width: $medium-screen-width) {
     width: 100%;

@@ -6,7 +6,7 @@ import Header from './Header';
 import { Avatar } from '../library';
 import styles from './styles.scss';
 
-class ReviewsWidget extends Component {
+class Widget extends Component {
   constructor(props) {
     super(props);
   }
@@ -58,7 +58,7 @@ class ReviewsWidget extends Component {
   }
 }
 
-ReviewsWidget.propTypes = {};
+Widget.propTypes = {};
 
 function mapStateToProps({ reviews }) {
   const account = reviews.get('account');
@@ -67,10 +67,4 @@ function mapStateToProps({ reviews }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, null)(ReviewsWidget));
-
-// ChIJmdp9t7VwhlQRailxK3m6p1g
-// https://search.google.com/local/writereview?placeid=ChIJmdp9t7VwhlQRailxK3m6p1g
-
-// https://www.google.com/search?q=Capitol+Hill+Dental+Clinic+-+Dr.+Wong,+4633+Hastings+St,+Burnaby,+BC+V5C+2K6,+Canada&ludocid=6388279626030983530#lrd=0x548670b5b77dda99:0x58a7ba792b71296a,3,5
-
+export default withRouter(connect(mapStateToProps, null)(Widget));

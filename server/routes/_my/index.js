@@ -48,81 +48,6 @@ sequelizeMyRouter.use('/reviews', reviewsRouter);
 sequelizeMyRouter.use('/sentReviews', sentReviewsRouter);
 sequelizeMyRouter.use('/widgets', widgetsRouter);
 
-sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
-  try {
-    const { entities } = normalize('account', req.account.get({ plain: true }));
-    let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
-    for (let i = 0; i < req.account.services.length; i++) {
-      if (req.account.services[i].isDefault) {
-        selectedServiceId = req.account.services[i].id;
-      }
-    }
-
-    const responseAccount = req.account.get({ plain: true });
-    const responseServices = req.account.services.map((service) => {
-      return service.get({ plain: true });
-    });
-
-    const responsePractitioners = req.account.practitioners.map((practitioner) => {
-      return practitioner.get({ plain: true });
-    });
-
-    const initialState = {
-      availabilities: {
-        account: responseAccount,
-        services: responseServices,
-        practitioners: responsePractitioners,
-        selectedServiceId,
-      },
-
-      entities,
-    };
-
-    return res.render('patient', {
-      account: responseAccount,
-      initialState: JSON.stringify(initialState),
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-function replaceIndex(string, regex, index, repl) {
-  let nth = -1;
-  return string.replace(regex, (match) => {
-    nth += 1;
-    if (index === nth) return repl;
-    return match;
-  });
-}
-
-const toString = str => `"${str}"`;
-const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/_my/${filename}`;
-
-sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
-  try {
-    const account = req.account.get({ plain: true });
-    fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
-      if (err) throw err;
-      fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
-        if (_err) throw _err;
-        const color = account.bookingWidgetPrimaryColor || '#FF715A';
-        const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${account.id}/embed`;
-        const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
-        const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
-        const withStyleText = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
-        const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(account.id));
-
-        // TODO: need to be able to minify and compress code UglifyJS
-        res.type('javascript').send(replacedWidgetJS);
-      });
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
 sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
   let {
     email,
@@ -181,24 +106,58 @@ sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   }
 });
 
-sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
+sequelizeMyRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
   try {
-    // TODO: unsubscribe patient preferences
-    const { encoded } = req.params;
-    const { md_email } = req.query;
-    const [email, accountId] = new Buffer(encoded, 'base64').toString('ascii').split(':');
+    const regUuidTest = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-    const patient = await Patient.findOne({ where: { email, accountId } });
-    if (!patient) {
-      return next(StatusError(404, 'Page not found'));
+    let patientId = req.params.patientId;
+
+    if (!regUuidTest.test(patientId)) {
+      patientId = Buffer.from(patientId, 'base64').toString('utf8');
     }
 
-    if (md_email !== email) {
-      console.log(md_email, email);
-      return next(StatusError(404, 'Page not found'));
+    const patient = await Patient.findOne({ where: { id: patientId } });
+
+    const preferences = Object.assign({}, patient.preferences);
+    preferences.reminders = false;
+
+    await patient.update({ preferences });
+
+    let account = await Account.findOne({
+      where: {
+        id: patient.accountId,
+      },
+    });
+
+    let fullLogoUrl = account.fullLogoUrl;
+
+    if (account.fullLogoUrl) {
+      fullLogoUrl = fullLogoUrl.replace('[size]', 'original');
     }
 
-    res.render('unsub', { email, accountId, firstName: patient.firstName });
+    account = account.get({ plain: true });
+
+    delete account.address.id;
+
+    let params = {
+      name: account.name,
+      address: account.address,
+      facebookUrl: account.facebookUrl,
+      phoneNumber: account.phoneNumber,
+      email: account.contactEmail,
+      fullLogoUrl,
+    };
+
+    params = JSON.stringify(params);
+
+    params = new Buffer(params).toString('base64');
+
+    return res.redirect(url.format({
+      pathname: '/unsubscribe/',
+      query: {
+        params,
+      },
+    }));
   } catch (err) {
     next(err);
   }

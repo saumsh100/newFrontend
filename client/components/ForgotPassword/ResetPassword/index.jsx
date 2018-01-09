@@ -16,6 +16,7 @@ class ResetPassword extends Component {
     this.state = {
       submitted: false,
     };
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 

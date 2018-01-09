@@ -157,7 +157,7 @@ export default {
         attachments: [
           {
             type: 'application/octet-stream',
-            name: `Dental Appointment at ${account.name}`,
+            name: `appointment.ics`,
             content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
           },
         ],

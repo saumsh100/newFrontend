@@ -7,7 +7,7 @@ import { SubmissionError } from 'redux-form';
 import { updateReview } from '../../../thunks/reviews';
 import { confirmCode, resendPinCode } from '../../../thunks/availabilities';
 import { Link, Button } from '../../library';
-import ConfirmNumberForm from '../../Availabilities/SubmitView/ConfirmNumberForm';
+import ConfirmNumberForm from './ConfirmNumberForm';
 import styles from './styles.scss';
 
 class ConfirmSignUp extends Component {

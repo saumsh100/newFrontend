@@ -72,7 +72,7 @@ export default function ConfirmedAppointment() {
 
   return (
     <div className={styles.backDrop}>
-      <Card borderColor={bookingWidgetPrimaryColor} className={styles.centerWrapper}>
+      <Card style={{ borderTop: `5px solid ${bookingWidgetPrimaryColor}` }} className={styles.centerWrapper}>
         <Section>
           {fullLogoUrl ?
             <img

@@ -7,7 +7,7 @@ import { SubmissionError } from 'redux-form';
 import { updateReview } from '../../../thunks/reviews';
 import { login } from '../../../thunks/patientAuth';
 import { Link, Button } from '../../library';
-import LoginForm from '../../Availabilities/SubmitView/LoginForm';
+import LoginForm from './LoginForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (

@@ -64,17 +64,17 @@ class Header extends Component {
       <div className={styles.headerContainer}>
         {/* Back Button */}
         <Router history={this.props.history}>
-          <div className={styles.backButtonWrapper}>
+          <Switch>
             <Route exact path={b('/signup')} component={backButton('./book')} />
             <Route exact path={b('/signup/confirm')} component={backButton('../book')} />
             <Route exact path={b('/login')} component={backButton('./book')} />
             <Route exact path={b('/book/review')} component={backButton('../book')} />
             <Route exact path={b('/book/wait')} component={backButton('../book')} />
-          </div>
+          </Switch>
         </Router>
         {/* Title Div */}
         <Router history={this.props.history}>
-          <div>
+          <div className={styles.titleWrapper}>
             <Route exact path={b('/book')} component={titleDiv('Select Availability')} />
             <Route exact path={b('/book/review')} component={titleDiv('Review & Book')} />
             <Route exact path={b('/book/wait')} component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)} />
@@ -107,7 +107,7 @@ class Header extends Component {
             <PatientUserMenu user={patientUser} />
           : null}
           <IconButton
-            icon="close"
+            icon="times"
             onClick={this.props.closeBookingModal}
             className={styles.closeButton}
           />

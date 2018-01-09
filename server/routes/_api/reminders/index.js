@@ -1,5 +1,6 @@
 
 import { Router } from 'express';
+import moment from 'moment';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -128,6 +129,12 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
       lastName: 'Doe',
     };
 
+    const mDate = moment();
+    const roundedMinute = Math.round(mDate.minute() / 15) * 15;
+    const formattedDate = mDate.minutes(roundedMinute).seconds(0);
+    const appointmentDate = formattedDate.format('dddd, MMMM Do');
+    const appointmentTime = formattedDate.format('h:mma');
+
     const templateName = getReminderTemplateName({ isConfirmable, reminder });
     const html = await renderTemplate({
       templateName,
@@ -136,11 +143,11 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
         ...generateClinicMergeVars({ account, patient }),
         {
           name: 'APPOINTMENT_DATE',
-          content: 'Thursday, September 7th',
+          content: appointmentDate,
         },
         {
           name: 'APPOINTMENT_TIME',
-          content: '8:54am',
+          content: appointmentTime,
         },
       ],
     });

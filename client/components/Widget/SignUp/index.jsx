@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { updateReview } from '../../../thunks/reviews';
 import { createPatient } from '../../../thunks/patientAuth';
 import { Link, Button } from '../../library';
-import SignUpForm from '../../Availabilities/SubmitView/SignUpForm';
+import SignUpForm from './SignUpForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (
