@@ -21,7 +21,7 @@ jobQueue.process('recalls', async (job, done) => {
     await computeRecallsAndSend({ date, publishSocket });
     // putting connector down email cron here as it's not intensive enough
     // to warrant a seperate cron
-    connectorWatch();
+    await connectorWatch(global.io);
     done();
   } catch (err) {
     done(err);

@@ -188,6 +188,166 @@ Object {
 }
 `;
 
+exports[`/api/accounts GET /:accountId/configurations Getting Connector Configs 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of appointment sync",
+        "name": "APPOINTMENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of patient sync",
+        "name": "PATIENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of procedure sync",
+        "name": "PROCEDURE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The adapter type",
+        "name": "ADAPTER_TYPE",
+        "value": null,
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is connector enabled",
+        "name": "CONNECTOR_ENABLED",
+        "value": "0",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of family sync",
+        "name": "FAMILY_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of chair sync",
+        "name": "CHAIR_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of practitioner sync",
+        "name": "PRACTITIONER_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of practitioner schedule sync",
+        "name": "PRACTITIONER_SCHEDULE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The full sync interval",
+        "name": "FULL_SYNC_INTERVAL",
+        "value": "300",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The quick sync interval",
+        "name": "QUICK_SYNC_INTERVAL",
+        "value": "20",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The cache engine",
+        "name": "CACHE_ENGINE",
+        "value": "REDIS",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is full sync enabled",
+        "name": "FULL_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is quick sync enabled",
+        "name": "QUICK_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Turns Connector auto update functionality on or off.",
+        "name": "AUTO_UPDATE_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of correspondence sync",
+        "name": "CORRESPONDENCE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Turns bidirectional sync functionality on or off.",
+        "name": "BIDIRECTIONAL_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+  ],
+}
+`;
+
 exports[`/api/accounts GET /:accountId/users should fetch users for the account 1`] = `
 Object {
   "entities": Object {
@@ -276,6 +436,166 @@ Object {
 }
 `;
 
+exports[`/api/accounts GET /configurations Getting Connector Configs 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of appointment sync",
+        "name": "APPOINTMENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of patient sync",
+        "name": "PATIENT_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of procedure sync",
+        "name": "PROCEDURE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The adapter type",
+        "name": "ADAPTER_TYPE",
+        "value": null,
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is connector enabled",
+        "name": "CONNECTOR_ENABLED",
+        "value": "0",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of family sync",
+        "name": "FAMILY_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of chair sync",
+        "name": "CHAIR_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of practitioner sync",
+        "name": "PRACTITIONER_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of practitioner schedule sync",
+        "name": "PRACTITIONER_SCHEDULE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The full sync interval",
+        "name": "FULL_SYNC_INTERVAL",
+        "value": "300",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The quick sync interval",
+        "name": "QUICK_SYNC_INTERVAL",
+        "value": "20",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The cache engine",
+        "name": "CACHE_ENGINE",
+        "value": "REDIS",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is full sync enabled",
+        "name": "FULL_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Is quick sync enabled",
+        "name": "QUICK_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Turns Connector auto update functionality on or off.",
+        "name": "AUTO_UPDATE_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of correspondence sync",
+        "name": "CORRESPONDENCE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Turns bidirectional sync functionality on or off.",
+        "name": "BIDIRECTIONAL_SYNC_ENABLED",
+        "value": "1",
+      },
+      "type": "configuration",
+    },
+  ],
+}
+`;
+
 exports[`/api/accounts POST /:accountId/newUser should create and return the user 1`] = `
 Object {
   "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
@@ -285,6 +605,20 @@ Object {
   "id": "72954241-3652-4792-bae5-5bfed53d37b7",
   "lastName": "Guy",
   "username": "newguy@test.com",
+}
+`;
+
+exports[`/api/accounts PUT /:accountId/configurations Changing Connector Configs 1`] = `
+Object {
+  "data": Object {
+    "attributes": Object {
+      "dataType": "integer",
+      "description": "The quick sync interval",
+      "name": "QUICK_SYNC_INTERVAL",
+      "value": "30",
+    },
+    "type": "configuration",
+  },
 }
 `;
 
@@ -331,5 +665,19 @@ Object {
     },
   },
   "result": "62954241-3652-4792-bae5-5bfed53d37b7",
+}
+`;
+
+exports[`/api/accounts PUT /configurations Changing Connector Configs 1`] = `
+Object {
+  "data": Object {
+    "attributes": Object {
+      "dataType": "integer",
+      "description": "The quick sync interval",
+      "name": "QUICK_SYNC_INTERVAL",
+      "value": "30",
+    },
+    "type": "configuration",
+  },
 }
 `;

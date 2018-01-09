@@ -1,6 +1,8 @@
 
+import moment from 'moment';
 import customDataTypes from '../util/customDataTypes';
-import globals from '../config/globals';
+import globals, { env } from '../config/globals';
+import { sendConnectorBackUp } from '../lib/mail';
 import AddressModel from './Address';
 
 export default function (sequelize, DataTypes) {
@@ -146,6 +148,33 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       defaultValue: 15552000,
       allowNull: false,
+    },
+  }, {
+    hooks: {
+      // send an email to say a connector has restarted by itself
+      beforeUpdate: (account) => {
+        if (env === 'production') {
+          const newDate = account.lastSyncDate;
+          const oldDate = account._previousDataValues.lastSyncDate;
+
+          if (oldDate !== newDate) {
+            const minsDiff = moment(newDate).diff(moment(oldDate), 'minutes');
+
+            if (minsDiff > 10) {
+              sendConnectorBackUp({
+                toEmail: 'monitoring@carecru.com',
+                name: account.name,
+                mergeVars: [
+                  {
+                    name: 'CONNECTOR_NAME',
+                    content: account.name,
+                  },
+                ],
+              });
+            }
+          }
+        }
+      },
     },
   });
 

@@ -5,9 +5,9 @@ import {
   Account,
   WeeklySchedule,
 } from '../../../server/_models';
-import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers, Correspondence } from '../../_util/seedTestUsers';
 import generateToken from '../../_util/generateToken';
-import { getModelsArray, omitPropertiesFromBody, omitProperties } from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody, omitProperties, omitPropertiesFromBodyJsonApi } from '../../util/selectors';
 import wipeModel from '../../_util/wipeModel';
 
 const rootUrl = '/_api/accounts';
@@ -54,7 +54,7 @@ describe('/api/accounts', () => {
 
     test('with owner role so return all', async () => {
       // TODO: need to insert another account into enterprise to test that it returns multiple
-      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' })
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
       return request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${ownerToken}`)
@@ -62,6 +62,109 @@ describe('/api/accounts', () => {
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('GET /configurations', () => {
+    test('Getting Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .get(`${rootUrl}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('GET /:accountId/configurations', () => {
+    test('Getting Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .get(`${rootUrl}/${accountId}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('Getting Connector Configs - wrong id', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .get(`${rootUrl}/dsfhds;kjdfs}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(404)
+        .then(({ body }) => {
+        });
+    });
+  });
+
+  describe('PUT /configurations', () => {
+    afterAll(async () => {
+      await wipeModel(Correspondence);
+    });
+
+    test('Changing Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .put(`${rootUrl}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          name: 'QUICK_SYNC_INTERVAL',
+          value: 30,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('PUT /:accountId/configurations', () => {
+    afterAll(async () => {
+      await wipeModel(Correspondence);
+    });
+
+    test('Changing Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .put(`${rootUrl}/${accountId}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          name: 'QUICK_SYNC_INTERVAL',
+          value: 30,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('Changing Connector Configs - Wrong Id', async () => {
+      // TODO: need to insert another account into enterprise to test that it returns multiple
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .put(`${rootUrl}/dsfhds;kjdfs}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          name: 'QUICK_SYNC_INTERVAL',
+          value: 30,
+        })
+        .expect(404)
+        .then(({ body }) => {
         });
     });
   });
