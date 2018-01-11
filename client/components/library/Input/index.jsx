@@ -52,6 +52,7 @@ export default function Input(props) {
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
+  // TODO: use classNames to avoid "undefined" being a className
   return (
     <div className={`${styles.group} ${classStyles}`}>
       <input type={type} className={inputClassName} {...inputProps} />

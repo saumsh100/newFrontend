@@ -10,7 +10,7 @@ import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import time from '../../server/util/time';
 import App from './My';
-import configure from '../store/availabilitiesStore';
+import configure from '../store/myStore';
 import { loadPatient } from '../thunks/patientAuth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 

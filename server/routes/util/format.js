@@ -25,7 +25,7 @@ const toNormalize = {
 };
 
 export default function format(req, res, resourceName, dataArray) {
-  if (req.responseConfig.type === JSONAPI) {
+  if (req.responseConfig && (req.responseConfig.type === JSONAPI)) {
     resourceName = (pluralToSingularMap[resourceName]) ? pluralToSingularMap[resourceName]
       : resourceName;
     return jsonapi(resourceName, dataArray);

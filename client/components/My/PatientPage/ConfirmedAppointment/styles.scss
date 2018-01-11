@@ -1,0 +1,38 @@
+
+@import '../../../../ui.scss';
+
+.header {
+  composes: header from 'sass-loader!../../../../fonts.scss';
+  text-align: center;
+  color: $primary-dark;
+}
+
+.text {
+  font-size: 14px;
+  color: $primary-darkgrey;
+  padding: 10px;
+  text-align: center;
+}
+
+.wellHeader {
+  text-transform: uppercase;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.9px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  color: #313131;
+  width: 100%;
+}
+
+.wellItem {
+  padding: 5px 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.tinyIcon {
+  padding-right: 7px;
+}

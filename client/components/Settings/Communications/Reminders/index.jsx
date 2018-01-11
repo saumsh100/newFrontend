@@ -123,9 +123,9 @@ class Reminders extends Component {
         title="Reminders Settings"
         rightActions={(
           <Button
+            color="blue"
             onClick={this.toggleAdding}
             data-test-id="createNewReminder"
-            color="blue"
           >
             Add
           </Button>

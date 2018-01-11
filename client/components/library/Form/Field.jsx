@@ -17,6 +17,7 @@ class ReduxField extends Component {
     this.state = {
       isOpen: false,
     };
+
     this.togglePopOver = this.togglePopOver.bind(this);
   }
 
@@ -43,28 +44,41 @@ class ReduxField extends Component {
 
     // need to remove required attribute from ReduxField as the Input component uses it
     // extend component attribute for reduxForm's Field props
-    const newProps = Object.assign({}, omit(this.props, ['required']), { component, normalize, validate, onClick: this.togglePopOver });
-
-    const isOpen = popover ? this.state.isOpen : false;
-
-    return (<Popover
-      place="below"
-      onOuterAction={this.togglePopOver}
-      isOpen={isOpen}
-      tipSize={4}
-      body={(
-        <div className={styles.toggle}>
-          {popover}
-        </div>
-      )}
-    >
-      <Field {...newProps} />
-    </Popover>
+    const newProps = Object.assign(
+      {},
+      omit(this.props, ['required']),
+      {
+        component,
+        normalize,
+        validate,
+        onClick: this.togglePopOver,
+      }
     );
+
+    if (popover) {
+      return (
+        <Popover
+          place="below"
+          onOuterAction={this.togglePopOver}
+          isOpen={this.state.isOpen}
+          tipSize={4}
+          body={(
+            <div className={styles.toggle}>
+              {popover}
+            </div>
+          )}
+        >
+          <Field {...newProps} />
+        </Popover>
+      );
+    } else {
+      return <Field {...newProps} />;
+    }
   }
 }
 
 ReduxField.propTypes = {
+  popover: PropTypes.string,
   required: PropTypes.bool,
   validate: PropTypes.arrayOf(PropTypes.func),
   component: PropTypes.oneOfType([

@@ -11,37 +11,23 @@ export default function SaveButton(props) {
     alignSave,
   } = props;
 
+  // TODO: is this alignSave necessary?
   let saveClasses = styles.submitButton;
-
   if (alignSave) {
     saveClasses = classnames(saveClasses, styles[alignSave]);
   }
 
-  if (pristine) {
-    saveClasses = classnames(saveClasses, styles.disabled);
-  }
-
   return (
-    <div className={styles.formActionsWrapper}>
-      <div className={styles.formActionsPull}>
-        <Button
-          disabled={pristine}
-          type="submit"
-          className={saveClasses}
-        >
-            Save
-        </Button>
-      </div>
-    </div>
+    <Button
+      disabled={pristine}
+      type="submit"
+      className={saveClasses}
+    >
+      Save
+    </Button>
   );
 }
+
 SaveButton.propTypes = {
   pristine: PropTypes.bool,
 };
-
-
-
-
-
-
-

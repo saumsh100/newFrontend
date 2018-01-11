@@ -23,28 +23,39 @@ const scheme = [
   'positive',
   'negative',
   'fluid',
+
+  'disabled',
 ];
 
 const mapper = getClassMapper(scheme, styles);
 
-const Button = props => (
-  <props.as
-    {...mapper.omit(props, 'as', 'icon', 'submit', 'iconRight')}
-    className={mapper.map(props, styles.default, props.className)}
-  >
-    { props.icon ? (
-      <i className={`fa fa-${props.icon} ${styles.icon}`} />
-    ) : null }
+function Button(props) {
+  const baseClassName = mapper.map(props, styles.default, props.className);
+  let finalProps = mapper.omit(props, 'as', 'icon', 'submit', 'iconRight');
+  if (props.disabled) {
+    finalProps = mapper.omit(finalProps, 'onClick');
+    finalProps.type = 'button';
+  }
 
-    { (props.children || props.title) ? (
-      <span className={styles.text}>{props.children || props.title}</span>
-    ) : null }
+  return (
+    <props.as
+      {...finalProps}
+      className={baseClassName}
+    >
+      {props.icon ? (
+        <i className={`fa fa-${props.icon} ${styles.icon}`}/>
+      ) : null}
 
-    { props.iconRight ? (
-      <i className={`fa fa-${props.iconRight} ${styles.iconRight}`} />
-    ) : null }
-  </props.as>
-);
+      {(props.children || props.title) ? (
+        <span className={styles.text}>{props.children || props.title}</span>
+      ) : null}
+
+      {props.iconRight ? (
+        <i className={`fa fa-${props.iconRight} ${styles.iconRight}`}/>
+      ) : null}
+    </props.as>
+  );
+}
 
 Button.defaultProps = {
   as: 'button',

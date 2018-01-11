@@ -1,3 +1,4 @@
+
 /* eslint-disable consistent-return */
 import { Router } from 'express';
 import fs from 'fs';
@@ -12,6 +13,7 @@ import authRouter from './auth';
 import reviewsRouter from './reviews';
 import sentReviewsRouter from './sentReviews';
 import widgetsRouter from './widgets';
+import unsubRouter from './unsubscribe';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import {
   Account,
@@ -28,6 +30,7 @@ import normalize from '../_api/normalize';
 const sequelizeMyRouter = Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
+sequelizeMyRouter.use('/', unsubRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
 sequelizeMyRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
 sequelizeMyRouter.use('/auth', authRouter);
@@ -38,6 +41,7 @@ sequelizeMyRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentR
 ]));
 
 sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
+sequelizeMyRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
 sequelizeMyRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
@@ -48,6 +52,7 @@ sequelizeMyRouter.use('/reviews', reviewsRouter);
 sequelizeMyRouter.use('/sentReviews', sentReviewsRouter);
 sequelizeMyRouter.use('/widgets', widgetsRouter);
 
+// Used on patient signup form to determine if a patientUser's email is taken
 sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
   let {
     email,
@@ -63,6 +68,7 @@ sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
   }
 });
 
+// Used on patient signup form to determine if a patientUser's phoneNumber is taken
 sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   let {
     phoneNumber,
@@ -95,69 +101,11 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   }
 });
 
-
 sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   const patientUser = req.patientUser.get({ plain: true });
   delete patientUser.password;
   try {
     res.json(patientUser);
-  } catch (err) {
-    next(err);
-  }
-});
-
-sequelizeMyRouter.get('/unsubscribe/:patientId', async (req, res, next) => {
-  try {
-    const regUuidTest = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-    let patientId = req.params.patientId;
-
-    if (!regUuidTest.test(patientId)) {
-      patientId = Buffer.from(patientId, 'base64').toString('utf8');
-    }
-
-    const patient = await Patient.findOne({ where: { id: patientId } });
-
-    const preferences = Object.assign({}, patient.preferences);
-    preferences.reminders = false;
-
-    await patient.update({ preferences });
-
-    let account = await Account.findOne({
-      where: {
-        id: patient.accountId,
-      },
-    });
-
-    let fullLogoUrl = account.fullLogoUrl;
-
-    if (account.fullLogoUrl) {
-      fullLogoUrl = fullLogoUrl.replace('[size]', 'original');
-    }
-
-    account = account.get({ plain: true });
-
-    delete account.address.id;
-
-    let params = {
-      name: account.name,
-      address: account.address,
-      facebookUrl: account.facebookUrl,
-      phoneNumber: account.phoneNumber,
-      email: account.contactEmail,
-      fullLogoUrl,
-    };
-
-    params = JSON.stringify(params);
-
-    params = new Buffer(params).toString('base64');
-
-    return res.redirect(url.format({
-      pathname: '/unsubscribe/',
-      query: {
-        params,
-      },
-    }));
   } catch (err) {
     next(err);
   }
@@ -203,6 +151,7 @@ sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
 
 sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
   try {
+    // TODO: it's stuff like this that we need to put into a "Manager" SentReminderManager.confirm();
     const sentReminder = req.sentReminder;
     await sentReminder.update({ isConfirmed: true });
 
