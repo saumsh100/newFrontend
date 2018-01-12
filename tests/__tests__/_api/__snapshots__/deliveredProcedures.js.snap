@@ -11,6 +11,7 @@ Object {
   "pmsId": null,
   "primaryInsuranceAmount": null,
   "procedureCode": "11111",
+  "procedureCodeId": "CDA-11111",
   "secondaryInsuranceAmount": null,
   "totalAmount": null,
   "units": null,

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import { Account, Recall } from '../../../server/_models';
+import { Account, Recall, Address } from '../../../server/_models';
 import wipeModel from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { recallId1, seedTestRecalls } from '../../_util/seedTestRecalls';
@@ -9,8 +9,15 @@ import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 
 const newRecallId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 describe('/api/accounts/:account/recalls', () => {
   // Seed with some standard user data
@@ -19,8 +26,11 @@ describe('/api/accounts/:account/recalls', () => {
     await seedTestUsers();
 
     // Seed an extra account for fetching multiple and testing switching
+    await Address.create(address);
+
     await Account.create({
       id: accountId2,
+      addressId,
       enterpriseId,
       name: 'Test Account 2',
       createdAt: '2017-07-20T00:14:30.932Z',

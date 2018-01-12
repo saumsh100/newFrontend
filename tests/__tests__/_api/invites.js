@@ -4,6 +4,7 @@ import app from '../../../server/bin/app';
 import {
   Account,
   Invite,
+  Address,
 } from '../../../server/_models';
 import { accountId, enterpriseId, ownerUserId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import generateToken from '../../_util/generateToken';
@@ -17,11 +18,22 @@ const inviteId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const newInviteId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const token1 = '6778f250-e8c9-46e3-bfff-0249f1eec6b8';
 const token2 = '8998f250-e8c9-46e3-bfff-0249f1eec6b8';
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 async function seedData() {
   // Seed an extra account for fetching multiple and testing switching
+
+  Address.create(address);
   await Account.create({
     id: accountId2,
+    addressId,
     enterpriseId,
     name: 'Test Account 2',
     createdAt: '2017-07-20T00:14:30.932Z',

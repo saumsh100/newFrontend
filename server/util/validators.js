@@ -47,7 +47,27 @@ function validateAccountIdPmsId(Model, value, self, next) {
   });
 }
 
+async function procedureExistsValidation(Procedure, procedureCodeId, codeType) {
+  const procedure = await Procedure.findOne({
+    where: {
+      code: procedureCodeId,
+    },
+  });
+
+  if (!procedure) {
+    return await Procedure.create({
+      code: procedureCodeId,
+      codeType,
+      type: 'unknown',
+      isValidated: false,
+    });
+  }
+
+  return procedure;
+}
+
 module.exports = {
   validatePhoneNumber,
   validateAccountIdPmsId,
+  procedureExistsValidation,
 };

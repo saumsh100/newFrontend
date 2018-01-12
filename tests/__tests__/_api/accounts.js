@@ -3,6 +3,7 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import {
   Account,
+  Address,
   WeeklySchedule,
 } from '../../../server/_models';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers, Correspondence } from '../../_util/seedTestUsers';
@@ -14,13 +15,23 @@ const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const userId = '72954241-3652-4792-bae5-5bfed53d37b7';
+const addressId = '62954241-3652-4792-bae5-5bfed53d37b7';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 async function seedData() {
   await seedTestUsers();
 
   // Seed an extra account for fetching multiple and testing switching
+  await Address.create(address);
   await Account.create({
     id: accountId2,
+    addressId: '62954241-3652-4792-bae5-5bfed53d37b7',
     enterpriseId,
     name: 'Test Account 2',
     createdAt: '2017-07-20T00:14:30.932Z',
@@ -293,6 +304,10 @@ describe('/api/accounts', () => {
           const users = getModelsArray('users', body).map((u) => {
             delete u.password;
             return u;
+          });
+
+          getModelsArray('accounts', body).forEach((a) => {
+            delete a.address.updatedAt;
           });
 
           expect(users.length).toBe(2);

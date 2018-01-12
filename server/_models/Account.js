@@ -29,6 +29,7 @@ export default function (sequelize, DataTypes) {
 
     addressId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
 
     // TODO: booleans should have allowNull=true

@@ -1,6 +1,8 @@
 
+import moment from 'moment';
 import {
   Account,
+  Address,
   Appointment,
   Practitioner,
   WeeklySchedule,
@@ -13,12 +15,13 @@ import {
 } from '../../server/_models';
 import wipeModel, { wipeAllModels } from './wipeModel';
 import { time } from '../../server/util/time';
-import moment from 'moment';
 
 const uuid = require('uuid').v4;
 
 const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
 const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
 const timeOffId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
 const enterpriseId = uuid();
@@ -46,6 +49,13 @@ const weeklyScheduleId4 = '39b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const justinPhoneNumber = '+17808508886';
 
 const clinicPhoneNumber = '+17786558613';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 const generateDefaultServices = (_accountId) => {
   const createService = serviceData => Object.assign({}, {
@@ -124,6 +134,7 @@ const sunshineServices = generateDefaultServices(accountId2);
 const Accounts = [
   {
     id: accountId2,
+    addressId,
     weeklyScheduleId: weeklyScheduleId3,
     name: 'Sunshine Smiles Dental',
     street: '10405 King St.',
@@ -518,6 +529,7 @@ async function seedTestAvailabilities() {
   await wipeModel(Appointment);
   await wipeModel(Chair);
   await wipeModel(Account);
+  await wipeModel(Address);
   await wipeModel(PractitionerRecurringTimeOff);
   await wipeModel(Practitioner);
   await wipeModel(WeeklySchedule);
@@ -541,6 +553,7 @@ async function seedTestAvailabilities() {
 
   await Enterprise.bulkCreate(Enterprises);
   await WeeklySchedule.bulkCreate(newWeeklySchedules);
+  await Address.bulkCreate([address]);
   await Account.bulkCreate(Accounts);
   await Practitioner.bulkCreate(Practitioners2);
   await Practitioner.bulkCreate(Practitioners);
@@ -556,6 +569,7 @@ async function wipeTestAvailabilities() {
   await wipeModel(Appointment);
   await wipeModel(Chair);
   await wipeModel(Account);
+  await wipeModel(Address);
   await wipeModel(PractitionerRecurringTimeOff);
   await wipeModel(Practitioner);
   await wipeModel(WeeklySchedule);

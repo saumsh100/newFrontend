@@ -3,12 +3,21 @@ import request from 'supertest';
 import jwt from 'jwt-decode';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
-import { Account, Enterprise } from '../../../server/_models';
+import { Account, Enterprise, Address } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, enterprise, enterpriseId, seedTestUsers } from '../../_util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/enterprises';
+
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 const accountId2 = '1fa3a399-5a41-42d9-b2c8-59df666ec7ea';
 const account2 = {
@@ -83,8 +92,10 @@ describe('/api/enterprises', () => {
     test('/switch - switch enterprise', async () => {
       // Seed another enterprise and account
       const enterprise = await Enterprise.create({ name: 'Testerprise' });
+      await Address.create(address);
       const account = await Account.create({
         enterpriseId: enterprise.id,
+        addressId,
         name: 'Testcount',
       });
 

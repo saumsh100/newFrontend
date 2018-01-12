@@ -292,7 +292,7 @@ enterprisesRouter.put(
   checkPermissions(['enterprises:read', 'accounts:update']),
   (req, res, next) => {
     req.account.update(pick(req.body, ['name']))
-      .then(account => res.send(normalize('account', account.dataValues)))
+      .then(account => res.send(normalize('account', account.get({ plain: true }))))
       .catch(next);
   }
 );

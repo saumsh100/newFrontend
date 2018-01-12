@@ -1,7 +1,7 @@
 import request from 'supertest';
 
 import app from '../../../server/bin/app';
-import { Account, Reminder } from '../../../server/_models';
+import { Account, Reminder, Address } from '../../../server/_models';
 import wipeModel from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { reminderId1, seedTestReminders } from '../../_util/seedTestReminders';
@@ -10,8 +10,16 @@ import { getModelsArray, omitProperties, omitPropertiesFromBody } from '../../ut
 
 const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 const newReminderId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 describe('/api/accounts/:account/reminders', () => {
   // Seed with some standard user data
@@ -20,8 +28,10 @@ describe('/api/accounts/:account/reminders', () => {
     await wipeModel(Reminder);
     await wipeTestUsers();
     await seedTestUsers();
+    await Address.create(address);
     await Account.create({
       id: accountId2,
+      addressId,
       enterpriseId,
       name: 'Test Account 2',
       createdAt: '2017-07-20T00:14:30.932Z',

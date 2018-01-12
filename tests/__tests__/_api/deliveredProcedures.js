@@ -69,27 +69,9 @@ describe('/api/deliveredProcedures', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          console.log(JSON.stringify(body));
           expect(Object.keys(body.entities.deliveredProcedures).length).toBe(4);
         });
     });
-
-    test('/batch - 1 invalid deliverProcedure, 3 valid deliverProcedure', () => {
-
-      return request(app)
-        .post(`${rootUrl}/connector/batch`)
-        .set('Authorization', `Bearer ${token}`)
-        .send([
-          makeDeliveredProcedure({ procedureCode: '123112' }),
-          makeDeliveredProcedure(),
-          makeDeliveredProcedure(),
-          makeDeliveredProcedure(),
-        ])
-        .expect(500)
-        .then(({ body }) => {
-        });
-    });
-
   });
 
   describe('PUT /', () => {

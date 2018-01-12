@@ -163,6 +163,7 @@ describe('Appointment Filters Tests', () => {
         accountId,
         entryDate: new Date(),
         procedureCode: '11111',
+        procedureCodeId: 'CDA-11111',
         totalAmount: 700,
       });
 
@@ -181,6 +182,7 @@ describe('Appointment Filters Tests', () => {
         accountId,
         entryDate: new Date(),
         procedureCode: '11111',
+        procedureCodeId: 'CDA-11111',
         totalAmount: 700,
       });
 

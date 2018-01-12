@@ -1,3 +1,37 @@
+const { procedureExistsValidation } = require('../util/validators');
+
+const CountryToDentalCode = {
+  CA: 'CDA',
+  US: 'ADA',
+};
+
+function getDentalCodeFromAddress(address) {
+  return CountryToDentalCode[address.country];
+}
+
+/**
+ * [convertProcedureCode prepends the country code depending on the address]
+ * @param  {[string]} procedureCode [the code]
+ * @param  {[object]} address       [the clinic address]
+ * @return {[string]}               [the code with a code type prepend]
+ */
+function convertProcedureCode(procedureCode, address, dentalCode) {
+  return `${dentalCode || getDentalCodeFromAddress(address)}-${procedureCode}`;
+}
+
+async function findAddress(Account, Address, accountId) {
+  const account = await Account.findOne({
+    where: {
+      id: accountId,
+    },
+  });
+
+  return Address.findOne({
+    where: {
+      id: account.addressId,
+    },
+  });
+}
 
 export default function (sequelize, DataTypes) {
   const DeliveredProcedure = sequelize.define('DeliveredProcedure', {
@@ -23,6 +57,11 @@ export default function (sequelize, DataTypes) {
     },
 
     procedureCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+    procedureCodeId: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -74,8 +113,53 @@ export default function (sequelize, DataTypes) {
     });
 
     DeliveredProcedure.belongsTo(Procedure, {
-      foreignKey: 'procedureCode',
+      foreignKey: 'procedureCodeId',
       as: 'procedure',
+    });
+  });
+
+  DeliveredProcedure.modelHooks = (({ Account, Address, Procedure }) => {
+
+    // All Hooks for prepending the procedure code and creating a procedure code
+    // if it doesn't exist
+    DeliveredProcedure.hook('beforeValidate', async (deliveredProcedure) => {
+      const address = await findAddress(Account, Address, deliveredProcedure.accountId);
+
+      deliveredProcedure.procedureCodeId
+        = convertProcedureCode(deliveredProcedure.procedureCode, address);
+
+      await procedureExistsValidation(
+        Procedure,
+        deliveredProcedure.procedureCodeId,
+        getDentalCodeFromAddress(address));
+    });
+
+    DeliveredProcedure.hook('beforeBulkUpdate', async (deliveredProcedures) => {
+      const address = await findAddress(Account, Address, deliveredProcedures[0].accountId);
+
+      for (let i = 0; i < deliveredProcedures.length; i += 1) {
+        deliveredProcedures[i].procedureCodeId
+          = convertProcedureCode(deliveredProcedures[i].procedureCode, address);
+
+        await procedureExistsValidation(
+          Procedure,
+          deliveredProcedures[i].procedureCodeId,
+          getDentalCodeFromAddress(address));
+      }
+    });
+
+    DeliveredProcedure.hook('beforeBulkCreate', async (deliveredProcedures) => {
+      const address = await findAddress(Account, Address, deliveredProcedures[0].accountId);
+
+      for (let i = 0; i < deliveredProcedures.length; i += 1) {
+        deliveredProcedures[i].procedureCodeId
+          = convertProcedureCode(deliveredProcedures[i].procedureCode, address);
+
+        await procedureExistsValidation(
+          Procedure,
+          deliveredProcedures[i].procedureCodeId,
+          getDentalCodeFromAddress(address));
+      }
     });
   });
 
