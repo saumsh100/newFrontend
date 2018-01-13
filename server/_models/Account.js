@@ -150,33 +150,6 @@ export default function (sequelize, DataTypes) {
       defaultValue: 15552000,
       allowNull: false,
     },
-  }, {
-    hooks: {
-      // send an email to say a connector has restarted by itself
-      beforeUpdate: (account) => {
-        if (env === 'production') {
-          const newDate = account.lastSyncDate;
-          const oldDate = account._previousDataValues.lastSyncDate;
-
-          if (oldDate !== newDate) {
-            const minsDiff = moment(newDate).diff(moment(oldDate), 'minutes');
-
-            if (minsDiff > 10) {
-              sendConnectorBackUp({
-                toEmail: 'monitoring@carecru.com',
-                name: account.name,
-                mergeVars: [
-                  {
-                    name: 'CONNECTOR_NAME',
-                    content: account.name,
-                  },
-                ],
-              });
-            }
-          }
-        }
-      },
-    },
   });
 
   Account.associate = (models) => {
@@ -268,6 +241,48 @@ export default function (sequelize, DataTypes) {
       }],
     }, { override: true });
   };
+
+  Account.modelHooks = (({ AccountConfiguration, Configuration }) => {
+    // Hook for sending email if a Connector is back up
+    Account.hook('beforeUpdate', async (account) => {
+      const config = await Configuration.findOne({
+        where: {
+          name: 'CONNECTOR_ENABLED',
+        },
+      });
+
+      const accountConfig = await AccountConfiguration.findOne({
+        where: {
+          accountId: account.id,
+          configurationId: config.id,
+        },
+      });
+
+      const isEnabled = accountConfig ? accountConfig.value === '1' : config.defaultValue === '1';
+
+      if (env !== 'production' && isEnabled) {
+        const newDate = account.lastSyncDate;
+        const oldDate = account._previousDataValues.lastSyncDate;
+
+        if (oldDate !== newDate) {
+          const minsDiff = moment(newDate).diff(moment(oldDate), 'minutes');
+
+          if (minsDiff > 10) {
+            sendConnectorBackUp({
+              toEmail: 'monitoring@carecru.com',
+              name: account.name,
+              mergeVars: [
+                {
+                  name: 'CONNECTOR_NAME',
+                  content: account.name,
+                },
+              ],
+            });
+          }
+        }
+      }
+    });
+  });
 
   return Account;
 }
