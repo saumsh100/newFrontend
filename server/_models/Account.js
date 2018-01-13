@@ -260,7 +260,7 @@ export default function (sequelize, DataTypes) {
 
       const isEnabled = accountConfig ? accountConfig.value === '1' : config.defaultValue === '1';
 
-      if (env !== 'production' && isEnabled) {
+      if (env === 'production' && isEnabled) {
         const newDate = account.lastSyncDate;
         const oldDate = account._previousDataValues.lastSyncDate;
 
