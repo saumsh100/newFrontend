@@ -6,19 +6,28 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
     },
 
+    token: {
+      type: DataTypes.STRING,
+    },
+
     patientUserId: {
       type: DataTypes.UUID,
     },
 
-    token: {
-      type: DataTypes.STRING,
+    accountId: {
+      type: DataTypes.UUID,
     },
   });
 
-  PatientUserReset.associate = ({ PatientUser }) => {
+  PatientUserReset.associate = ({ Account, PatientUser }) => {
     PatientUserReset.belongsTo(PatientUser, {
       foreignKey: 'patientUserId',
       as: 'patientUser',
+    });
+
+    PatientUserReset.belongsTo(Account, {
+      foreignKey: 'accountId',
+      as: 'account',
     });
   };
 

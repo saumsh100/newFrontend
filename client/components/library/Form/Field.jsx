@@ -7,7 +7,7 @@ import { Field } from 'redux-form';
 import RFComponents from './RFComponents';
 import { normalizePhone } from './normalize';
 import { phoneValidateNullOkay } from './validate';
-import styles from './styles.scss';
+import styles from './field.scss';
 
 const requiredValidation = val => val ? undefined : 'Required';
 

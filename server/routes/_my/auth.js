@@ -176,8 +176,8 @@ authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
 authRouter.post('/reset/:accountId', (req, res, next) => {
   const {
     body,
+    account,
   } = req;
-
 
   const email = body.email;
   const token = crypto.randomBytes(12).toString('hex');
@@ -200,39 +200,41 @@ authRouter.post('/reset/:accountId', (req, res, next) => {
 
       await PatientUserReset.create({
         patientUserId: patientUser.id,
+        accountId: account.id,
         token,
       });
 
-      const account = req.account.get({ plain: true });
+      const accountJson = account.get({ plain: true });
 
+      // TODO: use merge_var generator
       const mergeVars = [
         {
           name: 'PRIMARY_COLOR',
-          content: account.bookingWidgetPrimaryColor || '#206477',
+          content: accountJson.bookingWidgetPrimaryColor || '#206477',
         },
         {
           name: 'ACCOUNT_CLINICNAME',
-          content: account.name,
+          content: accountJson.name,
         },
         {
           name: 'ACCOUNT_LOGO_URL',
-          content: account.logo,
+          content: accountJson.logo,
         },
         {
           name: 'ACCOUNT_PHONENUMBER',
-          content: account.phoneNumber,
+          content: accountJson.phoneNumber,
         },
         {
           name: 'ACCOUNT_CITY',
-          content: account.address.city,
+          content: accountJson.address.city,
         },
         {
           name: 'ACCOUNT_CONTACTEMAIL',
-          content: account.contactEmail,
+          content: accountJson.contactEmail,
         },
         {
           name: 'ACCOUNT_ADDRESS',
-          content: account.address.street,
+          content: accountJson.address.street,
         },
         {
           name: 'RESET_URL',

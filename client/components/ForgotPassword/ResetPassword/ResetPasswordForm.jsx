@@ -3,13 +3,11 @@ import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../../library';
 import { passwordsValidate, passwordStrength } from '../../library/Form/validate';
 
-
-export default function ResetPasswordForm({ onSubmit }) {
+export default function ResetPasswordForm(props) {
   return (
     <Form
       form="login"
-      onSubmit={onSubmit}
-      ignoreSaveButton
+      {...props}
     >
       <Field
         required
@@ -25,13 +23,6 @@ export default function ResetPasswordForm({ onSubmit }) {
         validate={[passwordsValidate, passwordStrength]}
         label="Confirm Password"
       />
-      <Button
-        type="submit"
-        style={{ width: '100%' }}
-        color="red"
-      >
-        Reset Password
-      </Button>
     </Form>
   );
 }

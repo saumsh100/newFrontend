@@ -29,25 +29,25 @@ class ResetPassword extends Component {
   }
 
   render() {
-    const {
-      push,
-      patientUser,
-    } = this.props;
-
-    const button = !patientUser ? (<Button
-      onClick={() => {
-        push('/login');
-      }}
-      className={styles.displayCenter}
-    >
-      Return to Login
-    </Button>) : <div className={styles.textSuccess2}>You can now go back to the clinic's website tab.</div>;
-
-    const display = !this.state.submitted ?  <ResetPasswordForm onSubmit={this.handleSubmit} /> :
-      (<div>
+    const { submitted } = this.state;
+    const display = submitted ?
+      (
+        <div>
           <div className={styles.textSuccess2}>Password Successfully Changed!</div>
-          {button}
-       </div>);
+          <Button
+            onClick={() => this.props.push('/login')}
+            className={styles.displayCenter}
+          >
+            Return to Login
+          </Button>
+        </div>
+      ) :
+      (
+        <ResetPasswordForm
+          onSubmit={this.handleSubmit}
+          saveButtonProps={{ fluid: true, title: 'Reset Password' }}
+        />
+      );
 
     return (
       <div className={styles.backDrop}>
@@ -68,7 +68,7 @@ class ResetPassword extends Component {
 }
 
 ResetPassword.propTypes = {
-  patientUser: PropTypes.bool,
+
 };
 
 function mapActionsToProps(dispatch) {

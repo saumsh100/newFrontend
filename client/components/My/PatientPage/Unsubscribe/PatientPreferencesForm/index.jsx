@@ -8,9 +8,9 @@ import styles from './styles.scss';
 const DefaultSubmitButton = ({ pristine }) => (
   <Button
     // primary
+    fluid
     disabled={pristine}
     type="submit"
-    className={styles.submitButton}
   >
     Update Preferences
   </Button>
@@ -22,7 +22,7 @@ export default function PatientPreferencesForm({ initialValues, onSubmit }) {
       form="patientPreferencesForm"
       onSubmit={onSubmit}
       initialValues={initialValues}
-      SubmitButton={DefaultSubmitButton}
+      SaveButton={DefaultSubmitButton}
     >
       <Field
         name="reminders"

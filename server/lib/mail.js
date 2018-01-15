@@ -3,90 +3,88 @@ import moment from 'moment';
 import mandrill from '../config/mandrill';
 import { host, protocol, env } from '../config/globals';
 
-export default {
-  sendConnectorDown: (config) => {
-    config.subject = `The Connector for ${config.name} is Down!`;
-    config.templateName = 'Connector Down';
-    return sendTemplate(config);
-  },
+export const sendConnectorDown = (config) => {
+  config.subject = `The Connector for ${config.name} is Down!`;
+  config.templateName = 'Connector Down';
+  return exports.sendTemplate(config);
+};
 
-  sendConfirmationReminder: (config) => {
-    config.subject = 'Appointment Reminder';
-    config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed'; // Test Template, needs to be updated
-    return sendTemplate(config);
-  },
+export const sendConfirmationReminder = (config) => {
+  config.subject = 'Appointment Reminder';
+  config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed'; // Test Template, needs to be updated
+  return exports.sendTemplate(config);
+};
 
-  sendDueForRecare: (config) => {   // This function is used only for testing
-    config.subject = 'Appointment Reminder';
-    config.templateName = 'Patient Password Reset';
-    return sendTemplate(config);
-  },
+export const sendDueForRecare = (config) => {   // This function is used only for testing
+  config.subject = 'Appointment Reminder';
+  config.templateName = 'Patient Password Reset';
+  return exports.sendTemplate(config);
+};
 
-  sendAlreadyConfirmedReminder: (config) => {
-    config.subject = 'Appointment Reminder';
-    config.templateName = 'Patient Reminder - 2 Hours Before Confirmed'; // Test Template, needs to be updated
-    return sendTemplate(config);
-  },
+export const sendAlreadyConfirmedReminder = (config) => {
+  config.subject = 'Appointment Reminder';
+  config.templateName = 'Patient Reminder - 2 Hours Before Confirmed'; // Test Template, needs to be updated
+  return sendTemplate(config);
+};
 
-  sendPatientRecall: (config) => {
-    config.subject = 'You are due for your next appointment';
-    config.templateName = 'Patient Recall - 64 Week After'; // Test Template, needs to be updated
-    return sendTemplate(config);
-  },
+export const sendPatientRecall = (config) => {
+  config.subject = 'You are due for your next appointment';
+  config.templateName = 'Patient Recall - 64 Week After'; // Test Template, needs to be updated
+  return exports.sendTemplate(config);
+};
 
-  sendPatientSignup: (config) => {
-    config.subject = 'Confirm your email';
-    config.templateName = 'Patient Email Confirmation';
-    return sendTemplate(config);
-  },
+export const sendPatientSignup = (config) => {
+  config.subject = 'Confirm your email';
+  config.templateName = 'Patient Email Confirmation';
+  return exports.sendTemplate(config);
+};
 
-  sendAppointmentRequested: (config) => {
-    config.subject = 'Congratulations! Your appointment was requested.';
-    config.templateName = 'Patient Appointment - Requested';
-    return sendTemplate(config);
-  },
+export const sendAppointmentRequested = (config) => {
+  config.subject = 'Congratulations! Your appointment was requested.';
+  config.templateName = 'Patient Appointment - Requested';
+  return exports.sendTemplate(config);
+};
 
-  sendAppointmentRequestedClinic: (config) => {
-    config.subject = 'An appointment was requested.';
-    config.templateName = 'Appointment Request - Clinic';
-    return sendTemplate(config);
-  },
+export const sendAppointmentRequestedClinic = (config) => {
+  config.subject = 'An appointment was requested.';
+  config.templateName = 'Appointment Request - Clinic';
+  return exports.sendTemplate(config);
+};
 
-  sendAppointmentRequestRejected: (config) => {
-    config.subject = 'Sorry, Your appointment was Rejected.';
-    config.templateName = 'Patient Appointment - Cancelled';
-    return sendTemplate(config);
-  },
+export const sendAppointmentRequestRejected = (config) => {
+  config.subject = 'Sorry, Your appointment was Rejected.';
+  config.templateName = 'Patient Appointment - Cancelled';
+  return exports.sendTemplate(config);
+};
 
-  sendAppointmentRequestConfirmed: (config) => {
-    config.subject = 'Congratulations! Your appointment request was confirmed.';
-    config.templateName = 'Patient Appointment - Confirmed';
-    return sendTemplate(config);
-  },
+export const sendAppointmentRequestConfirmed = (config) => {
+  config.subject = 'Congratulations! Your appointment request was confirmed.';
+  config.templateName = 'Patient Appointment - Confirmed';
+  return exports.sendTemplate(config);
+};
 
-  sendInvite: (config) => {
-    config.subject = 'Join CareCru';
-    config.templateName = 'Join CareCru';
-    return sendTemplate(config);
-  },
+export const sendInvite = (config) => {
+  config.subject = 'Join CareCru';
+  config.templateName = 'Join CareCru';
+  return exports.sendTemplate(config);
+};
 
-  sendResetPassword: (config) => {
-    config.subject = 'Reset Password';
-    config.templateName = 'User Password Reset';
-    return sendTemplate(config);
-  },
+export const sendResetPassword = (config) => {
+  config.subject = 'Reset Password';
+  config.templateName = 'User Password Reset';
+  return exports.sendTemplate(config);
+};
 
-  sendPatientResetPassword: (config) => {
-    config.subject = 'Reset Password';
-    config.templateName = 'Patient Password Reset';
-    return sendTemplate(config);
-  },
+export const sendPatientResetPassword = (config) => {
+  config.subject = 'Reset Password';
+  config.templateName = 'Patient Password Reset';
+  return exports.sendTemplate(config);
+};
 
-  sendReview: (config) => {
-    config.subject = 'Tell us about your experience.';
-    config.templateName = 'Patient Review';
-    return sendTemplate(config);
-  },
+export const sendReview = (config) => {
+  config.subject = 'Tell us about your experience.';
+  config.templateName = 'Patient Review';
+  return exports.sendTemplate(config);
 };
 
 /**
@@ -95,7 +93,7 @@ export default {
  * @param config
  * @returns {Promise}
  */
-function sendTemplate(config) {
+export function sendTemplate(config) {
   const accountString = config.accountId ? `:${config.accountId}` : '';
   const string = config.email + accountString;
   const encoded = config.patientId ? new Buffer(config.patientId).toString('base64') : new Buffer(string).toString('base64');

@@ -6,7 +6,7 @@ import { ConnectedRouter as Router } from 'react-router-redux';
 import PatientPage from '../components/My/PatientPage';
 import FourZeroFour from '../components/FourZeroFour';
 import SignUp from '../components/SignUpInvite';
-import ResetPassword from '../components/ForgotPassword/ResetPassword';
+import ResetPassword from '../components/My/PatientPage/ResetPassword';
 import ConfirmedAppointment from '../components/My/PatientPage/ConfirmedAppointment';
 import getParameterByName from '../components/My/PatientPage/Shared/getParameterByName';
 import Unsubscribe from '../components/My/PatientPage/Unsubscribe';
@@ -21,11 +21,11 @@ const MyRouter = ({ history }) => {
         <Switch>
           <Route
             exact
-            path="/reset-password/:token"
+            path="/reset-password/:tokenId"
             render={props => (
               <ResetPassword
                 {...props}
-                patientUser
+                params={params}
               />
             )}
           />
@@ -48,7 +48,7 @@ const MyRouter = ({ history }) => {
               />
             )}
           />
-          <Route component={FourZeroFour}/>
+          <Route component={FourZeroFour} />
         </Switch>
       </PatientPage>
     );

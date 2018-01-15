@@ -25,6 +25,7 @@ import {
 } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
+import { generateAccountParams, encodeParams } from './util/params';
 import normalize from '../_api/normalize';
 
 const sequelizeMyRouter = Router();
@@ -112,13 +113,28 @@ sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
 });
 
 sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
-  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+  const tokenId = req.params.tokenId;
+  return PatientUserReset.findOne({ where: { token: tokenId } })
     .then((reset) => {
       if (!reset) {
-        // TODO: replace with StatusError
+        // TODO: replace with StatusError and pass to next...
         res.status(404).send();
       } else {
-        res.redirect(`/reset-password/${req.params.tokenId}`);
+        // TODO: add encoded params
+        const { accountId } = reset;
+        return Account.findOne({ where: { id: accountId } })
+          .then((account) => {
+            const params = {
+              account: generateAccountParams(account),
+            };
+
+            res.redirect(url.format({
+              pathname: `/reset-password/${tokenId}`,
+              query: {
+                params: encodeParams(params),
+              },
+            }));
+          });
       }
     })
     .catch(next);
@@ -168,32 +184,16 @@ sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res,
       },
     });
 
-    if (account.fullLogoUrl) {
-      account.fullLogoUrl = account.fullLogoUrl.replace('[size]', 'original');
-    }
-
-    const accountJSON = account.get({ plain: true });
     const appointmentJSON = appointment.get({ plain: true });
     const patientJSON = patient.get({ plain: true });
 
-    let params = {
+    const params = {
       patient: patientJSON,
       appointment: appointmentJSON,
-      account: pick(accountJSON, [
-        'name',
-        'address',
-        'website',
-        'contactEmail',
-        'phoneNumber',
-        'fullLogoUrl',
-        'facebookUrl',
-        'googlePlaceId',
-        'bookingWidgetPrimaryColor',
-      ]),
+      account: generateAccountParams(account),
     };
 
-    params = JSON.stringify(params);
-    params = new Buffer(params).toString('base64');
+    const encodedParams = encodeParams(params);
 
     const pub = req.app.get('pub');
     pub.publish('REMINDER:UPDATED', req.sentReminder.id);
@@ -201,7 +201,7 @@ sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res,
     return res.redirect(url.format({
       pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
       query: {
-        params,
+        params: encodedParams,
       },
     }));
   } catch (err) {
