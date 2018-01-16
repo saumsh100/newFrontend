@@ -9,36 +9,45 @@ module.exports = {
         await queryInterface.addColumn('Procedures', 'codeType', {
           type: Sequelize.STRING,
           allowNull: true,
-          defaultValue: 'Canadian Dental Code',
+          defaultValue: 'CDA',
         }, { transaction: t });
 
+        await queryInterface.addColumn('Procedures', 'isValidated', {
+          type: Sequelize.BOOLEAN,
+          allowNull: false,
+          defaultValue: true,
+        }, { transaction: t });
+
+        await queryInterface.renameColumn('DeliveredProcedures', 'procedureCode', 'procedureCodeId',
+          { transaction: t });
+
+        await queryInterface.addColumn('DeliveredProcedures', 'procedureCode', {
+          type: Sequelize.STRING,
+          allowNull: true,
+        }, { transaction: t });
+
+        await queryInterface
+          .sequelize.query('UPDATE "DeliveredProcedures" SET "procedureCode" = "procedureCodeId"'
+            , { transaction: t });
+
         const syncProcedures = procedures.map((procedure) => {
+          procedure.code = `ADA-${procedure.code}`;
           return Object.assign({}, procedure, {
+            codeType: 'ADA',
             createdAt: new Date(),
             updatedAt: new Date(),
           });
         });
 
-        const code = procedures.map((procedure) => {
-          return procedure.code;
-        });
-
-        await queryInterface.changeColumn('Procedures', 'codeType', {
-          type: Sequelize.STRING,
-          allowNull: true,
-        }, { transaction: t });
-
         await queryInterface.bulkDelete('Procedures', {
-          code,
-        }, { transaction: t });
-
-        await queryInterface.bulkUpdate('Procedures', {
-          codeType: 'American Dental Code',
-        }, {
           code: {
             $like: 'D%',
           },
         }, { transaction: t });
+
+        await queryInterface
+          .sequelize.query(`UPDATE "Procedures" SET "code" = concat_ws('CDA-', "code"::text)`
+            , { transaction: t });
 
         return queryInterface.bulkInsert(
           'Procedures',
@@ -53,7 +62,20 @@ module.exports = {
   },
 
   down: function (queryInterface) {
-    queryInterface.bulkDelete('DeliveredProcedures', null, {});
-    return queryInterface.bulkDelete('Procedures', null, {});
+    return queryInterface.sequelize.transaction(async (t) => {
+      try {
+        await queryInterface.removeColumn('Procedures', 'codeType', { transaction: t });
+
+        await queryInterface.removeColumn('Procedures', 'isValidated', { transaction: t });
+
+        await queryInterface.removeColumn('DeliveredProcedures', 'procedureCode', { transaction: t });
+
+        await queryInterface.renameColumn('DeliveredProcedures', 'procedureCodeId', 'procedureCode',
+          { transaction: t });
+      } catch (e) {
+        console.log(e);
+        t.rollback();
+      }
+    });
   },
 };

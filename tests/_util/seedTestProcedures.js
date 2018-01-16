@@ -5,7 +5,7 @@ import wipeModel from './wipeModel';
 const code = '11111';
 
 const procedure = {
-  code,
+  code: `CDA-${code}`,
   type: 'Test Procedure',
 };
 

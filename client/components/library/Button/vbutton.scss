@@ -6,7 +6,7 @@
   --tertiaryButtonColor: $primary-green;
 }
 
-.default {
+.baseline {
   font-size: 12px;
 
   font-family: $dashboard-font;
@@ -19,13 +19,13 @@
   text-decoration: none;
   border: none;
 
-  border-radius: 2px;
   padding: em(12px) 1.5em;
   margin: 0 em(5px) 0 0;
   line-height: 1em;
   text-align: center;
 
   transition: background-color .1s ease, color .1s ease;
+  composes: letterSpacing from 'sass-loader!../../../fonts.scss';
 
   &:last-child {
     margin-right: 0;
@@ -50,7 +50,7 @@
 .color-green { color: white; background-color: $primary-green; }
 .color-green:hover { color: white; background-color: darken($primary-green, 5%); }
 
-.color-blue { color: white; background-color: $primary-blue; }
+.color-blue { color: white; background-color: $primary-blue;}
 .color-blue:hover { color: white; background-color: darken($primary-blue, 5%); }
 
 .color-darkblue { color: white; background-color: $clr-dark-blue; }
@@ -94,6 +94,15 @@
 
 .compact {
   padding: em(8px) em(14px);
+}
+
+.dense {
+  text-transform: capitalize;
+  padding-top: 0.65em;
+  padding-bottom: 0.6em;
+  height: 28px;
+  font-size: 11px;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 
 .size-sm { font-size: 11px; }

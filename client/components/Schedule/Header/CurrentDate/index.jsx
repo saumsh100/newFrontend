@@ -8,20 +8,26 @@ const CurrentDate = (props) => {
   const {
     currentDate,
     leftColumnWidth,
+    children,
   } = props;
 
-  const dayOfTheWeek = moment(currentDate).format('dddd')
+  const dayOfTheWeek = moment(currentDate).format('dddd');
   const dayOftheMonth = currentDate.date();
   const currentMonth = currentDate.format('MMM');
 
+  const monthDayStyle = {
+    width: leftColumnWidth,
+    minWidth: leftColumnWidth,
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.monthDay} style={{ width: leftColumnWidth, minWidth: leftColumnWidth }}>
+      <div className={styles.monthDay} style={monthDayStyle}>
         <div className={styles.number}>{dayOftheMonth > 9 ? dayOftheMonth : `0${dayOftheMonth}`}</div>
         <div className={styles.month}>{currentMonth}</div>
       </div>
       <div className={styles.dayOfWeek}>{dayOfTheWeek}</div>
-      {props.children}
+      {children}
     </div>
   );
 };

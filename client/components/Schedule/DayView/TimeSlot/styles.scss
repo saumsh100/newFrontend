@@ -1,0 +1,98 @@
+@import '../../../../ui.scss';
+
+.appointmentContainer {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+
+  &:hover {
+    cursor: pointer;
+    z-index: 5 !important;
+  }
+}
+
+.showAppointment {
+  box-sizing: border-box;
+  overflow: hidden;
+  width: 100%;
+  padding: 3px;
+  margin-bottom: 2px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+
+  &_mark {
+    overflow-y: auto;
+  }
+}
+
+.mark {
+  font-size: $small-size;
+  letter-spacing: 0.5px;
+  padding: 5px;
+  cursor: default;
+  width: 100%;
+
+  &_note {
+    padding: 2px;
+    white-space: normal;
+  }
+}
+
+.note {
+  display: flex;
+  padding-top: 2px;
+  padding-left: 5px;
+  composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
+  box-sizing: border-box;
+  width: 100%;
+  &_text {
+    color: $primary-dark;
+    width: inherit;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+}
+
+.nameAge {
+  display: flex;
+  width: auto;
+  padding-top: 4px;
+  padding-bottom: 3px;
+  &_name {
+    composes: subHeaderMediumSmall from 'sass-loader!../../../../fonts.scss';
+    font-size: 13px;
+    color: $primary-white;
+    padding-right: 5px;
+    padding-left: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.duration {
+  padding-left: 5px;
+  display: flex;
+  &_text {
+    color: #FFFFFF;
+    composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.icon {
+  display: flex;
+  color: darken($primary-grey,10%);
+  opacity: 0.7;
+  float: right;
+  &_item {
+    padding-top: 2px;
+    padding-right: 2px;
+  }
+}
+
+.paddingText {
+  padding-right: 5px;
+}

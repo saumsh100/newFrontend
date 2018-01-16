@@ -68,7 +68,6 @@ class DayPicker extends Component {
   }
 
   handleInputChange(e) {
-
     const { value } = e.target;
 
     const momentDay = moment(value, 'L', true);
@@ -98,11 +97,10 @@ class DayPicker extends Component {
       <Input
         {...this.props}
         value={displayValue}
-        classStyles={styles.dateInput}
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}
-        icon="calendar"
+        // icon="calendar"
       />
     );
 
@@ -142,6 +140,7 @@ class DayPicker extends Component {
               onDayClick={this.handleDayClick}
               selectedDays={convertValueToDate(value, timezone)}
               handleInputChange={this.handleInputChange}
+              month={ value ? new Date(moment(value).year(), moment(value).month()) : new Date()}
               {...this.props}
             />
           </div>

@@ -1,16 +1,16 @@
 @import '../../../../ui.scss';
 
 .container {
-    display: flex;
-    align-items: center;
-    composes: fontBold from 'sass-loader!../../../../fonts.scss';
+  display: flex;
+  align-items: center;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
 }
 
 .dayOfWeek {
-  font-size: 22px;
-  margin-right: 5px;
+  font-size: 19px;
+  margin-right: 10px;
   text-transform: uppercase;
-  width: 160px;
+  width: 133px;
 }
 
 .monthDay {
@@ -24,24 +24,23 @@
   margin-top: 10px;
   margin-bottom: 10px;
 
-  border-right: 1.2px solid $primary-grey;
+  border-right: 0.13em solid $primary-grey;
   box-sizing: border-box;
 }
 
 .month {
-  font-size: 12px;
-  font-weight: $large-weight;
+  font-size: 10px;
   text-transform: uppercase;
   text-align: center;
   width:100%;
 }
 
 .day {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .number {
-  font-size: 22px;
+  font-size: 19px;
   text-align: center;
   width: 100%;
 }

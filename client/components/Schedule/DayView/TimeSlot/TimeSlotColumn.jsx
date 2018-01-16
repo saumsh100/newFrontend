@@ -8,20 +8,18 @@ export default function TimeSlotColumn(props) {
   const {
     timeSlots,
     timeSlotHeight,
-    index,
   } = props;
 
+
   return (
-    <div
-      key={index}
-    >
+    <div>
       {timeSlots.map((slot, i) => {
         return (
-          <div key={i} className={styles.dayView_body_timeSlotColumn} style={{
-            height: timeSlotHeight.height,
-            width: `100%`,
-            minWidth: `100%`,
-          }}>
+          <div
+            key={i + Math.random()}
+            className={styles.timeSlotColumnItem}
+            style={timeSlotHeight}
+          >
             {''}
           </div>
         );

@@ -5,7 +5,7 @@ import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { bindActionCreators } from 'redux';
-import FilterPractitioners from '../../Schedule/Cards/Filters/FilterPractitioners';
+import FilterPractitioners from '../../Schedule/Header/Filters/FilterPractitioners';
 import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import {
   Card, DialogBox, Col, Grid, Row, Button,

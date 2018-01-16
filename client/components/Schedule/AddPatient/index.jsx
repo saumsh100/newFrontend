@@ -32,23 +32,26 @@ const options = [
   { value: 'Female' },
 ];
 
-export default function NewPatientForm({ onSubmit, formName, mergingPatientData, }) {
+export default function AddPatient({ onSubmit, formName, mergingPatientData, }) {
+  let initialValues = {};
 
-  const patientUser = mergingPatientData.patientUser;
+  if (mergingPatientData) {
+    const patientUser = mergingPatientData.patientUser;
 
-  const {
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-  } = patientUser;
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+    } = patientUser;
 
-  const initialValues = {
-    firstName,
-    lastName,
-    email,
-    mobilePhoneNumber: phoneNumber,
-  };
+    initialValues = {
+      firstName,
+      lastName,
+      email,
+      mobilePhoneNumber: phoneNumber,
+    };
+  }
 
   return (
     <Form
@@ -58,6 +61,8 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
       asyncValidate={asyncValidateNewPatient}
       allowSave
       data-test-id="newPatientForm"
+      ignoreSaveButton
+      key={`Patient Creation Form Name_${formName}`}
     >
       <Field
         required
@@ -65,22 +70,18 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
         validate={[maxLength(15)]}
         label="First Name"
       />
-      <div className={styles.formContainer_spacing}>
-        <Field
-          required
-          name="lastName"
-          validate={[maxLength(15)]}
-          label="Last Name"
-        />
-      </div>
-      <div className={styles.formContainer_dropDown}>
-        <Field
-          name="gender"
-          label="Gender"
-          component="DropdownSelect"
-          options={options}
-        />
-      </div>
+      <Field
+        required
+        name="lastName"
+        validate={[maxLength(15)]}
+        label="Last Name"
+      />
+      <Field
+        name="gender"
+        label="Gender"
+        component="DropdownSelect"
+        options={options}
+      />
       <Field
         name="mobilePhoneNumber"
         label="Phone Number"
@@ -103,7 +104,7 @@ export default function NewPatientForm({ onSubmit, formName, mergingPatientData,
   );
 }
 
-NewPatientForm.propTypes = {
+AddPatient.propTypes = {
   formName: PropTypes.string,
   birthday: PropTypes.instanceOf(Date),
   saveBirthday: PropTypes.func,

@@ -1,10 +1,11 @@
 
 import React, { Component, PropTypes } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { change, reset } from 'redux-form';
-import moment from 'moment';
+import { setTime } from '../../library/util/TimeOptions';
 import DisplayForm from './DisplayForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import {
@@ -12,40 +13,185 @@ import {
   createEntityRequest,
   updateEntityRequest,
   deleteEntityRequest,
+  fetchEntitiesRequest,
 } from '../../../thunks/fetchEntities';
-import { Button, IconButton, Avatar } from '../../library';
+import {
+  Button,
+  Avatar,
+  Card,
+  SContainer,
+  SFooter,
+  SHeader,
+  SBody,
+  Icon,
+} from '../../library';
 import styles from './styles.scss';
-import { SortByFirstName } from '../../library/util/SortEntities';
-
 
 const mergeTime = (date, time) => {
   date.setHours(time.getHours());
   date.setMinutes(time.getMinutes());
   return new Date(date);
 };
-
-// Disabled for handleDateChange
-function dayOfWeekAsString(dayIndex) {
-  return ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ][dayIndex];
-}
+const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
+  return duration.asMinutes() - customBufferTime;
+};
 
 class AddNewAppointment extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      servicesAllowed: this.props.services,
-      patientSearched: null,
-    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.deleteAppointment = this.deleteAppointment.bind(this);
-    this.handlePractitionerChange = this.handlePractitionerChange.bind(this);
-    this.handleSliderChange = this.handleSliderChange.bind(this);
     this.handleDurationChange = this.handleDurationChange.bind(this);
     this.handleUnitChange = this.handleUnitChange.bind(this);
-    this.handleBufferChange = this.handleBufferChange.bind(this);
+    this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
+    this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
+    this.getSuggestions = this.getSuggestions.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentDate = moment(this.props.currentDate);
+
+    const nextPropsDate = moment(nextProps.currentDate);
+
+    if (!nextPropsDate.isSame(currentDate)) {
+      this.props.change(this.props.formName, 'date', nextPropsDate);
+    }
+  }
+
+  getSuggestions(value) {
+    return this.props.fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .then((searchData) => searchData.patients).then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
+          key => searchedPatients[key]) : [];
+
+        patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="xs" />
+              <div className={styles.suggestionContainer_details}>
+                <div className={styles.suggestionContainer_fullName}>
+                  {`${patient.firstName} ${patient.lastName}${patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''}`}
+                </div>
+                <div className={styles.suggestionContainer_date}>
+                  Last Appointment {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                </div>
+              </div>
+            </div>
+          );
+        });
+        return patientList;
+      });
+  }
+
+  handleStartTimeChange(value) {
+    const {
+      appFormValues,
+      formName,
+      unit,
+      change,
+    } = this.props;
+
+    if (appFormValues && appFormValues.endTime) {
+      const duration = getDuration(value, appFormValues.endTime, 0);
+      const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
+      change(formName, 'duration', duration);
+      change(formName, 'unit', unitValue);
+    }
+  }
+
+  handleEndTimeChange(value) {
+    const {
+      appFormValues,
+      unit,
+      formName,
+      change,
+    } = this.props;
+
+    if (appFormValues && appFormValues.startTime) {
+      const duration = getDuration(appFormValues.startTime, value, 0);
+      const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
+      change(formName, 'duration', duration);
+      change(formName, 'unit', unitValue);
+    }
+  }
+
+  handleDurationChange(value) {
+    const {
+      change,
+      formName,
+      unit,
+      appFormValues,
+    } = this.props;
+
+    if (appFormValues && appFormValues.startTime) {
+      const time = moment(appFormValues.startTime).add(value, 'minutes');
+      change(formName, 'endTime', setTime(time));
+    } else {
+      let startTime = moment();
+      startTime.seconds(0);
+
+      if (startTime.minutes() % unit) {
+        startTime = startTime.minutes(Math.floor(startTime.minutes() / unit) * unit);
+      }
+
+      const endTime = moment(startTime).add(value, 'minutes');
+
+      if (!value % unit) {
+        change(formName, 'endTime', setTime(endTime));
+      }
+
+      if (!value) {
+        change(formName, 'endTime', '');
+      }
+      change(formName, 'startTime', setTime(startTime));
+    }
+
+    change(formName, 'unit', (value / unit).toFixed(2));
+  }
+
+  handleUnitChange(value) {
+    const {
+      change,
+      formName,
+      unit,
+      appFormValues,
+    } = this.props;
+
+    const duration = value * unit;
+
+    if (duration >= unit) {
+      if (appFormValues && appFormValues.startTime) {
+        const time = moment(appFormValues.startTime).add(duration, 'minutes');
+        change(formName, 'endTime', setTime(time));
+      } else {
+        let startTime = moment();
+        startTime.seconds(0);
+
+        if (startTime.minutes() % unit) {
+          startTime = startTime.minutes(Math.floor(startTime.minutes() / unit) * unit);
+        }
+
+        const endTime = moment(startTime).add(duration, 'minutes');
+
+        change(formName, 'startTime', setTime(startTime));
+        change(formName, 'endTime', setTime(endTime));
+      }
+
+      change(formName, 'duration', duration);
+    }
+  }
+
+  handleAutoSuggest(newValue) {
+    if (typeof newValue === 'object') {
+      this.props.setPatientSearched(newValue);
+      this.props.setShowInput(false);
+    } else if (newValue === '') {
+      this.props.setPatientSearched('');
+    }
   }
 
   handleSubmit(values) {
@@ -58,32 +204,24 @@ class AddNewAppointment extends Component {
       formName,
     } = this.props;
 
-    const appointmentValues = values.appointment;
-    const patientValues = values.patient;
     const {
       date,
-      time,
+      startTime,
       practitionerId,
       chairId,
       isPatientConfirmed,
       isCancelled,
-      buffer,
       duration,
-    } = appointmentValues;
-
-    const {
-      patientSelected,
       note,
-    } = patientValues;
+      patientSelected,
+    } = values;
 
-    const totalDurationMin = duration + buffer;
-
-    const startDate = mergeTime(new Date(date), new Date(time));
-    const endDate = moment(startDate).add(totalDurationMin, 'minutes');
+    const startDate = mergeTime(new Date(date), new Date(startTime));
+    const endDate = moment(startDate).add(duration, 'minutes');
 
     const newAppointment = {
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startDate,
+      endDate,
       patientId: patientSelected.id,
       practitionerId,
       chairId,
@@ -91,8 +229,8 @@ class AddNewAppointment extends Component {
       isPatientConfirmed,
       isCancelled,
       isSyncedWithPms: false,
-      customBufferTime: buffer,
     };
+
 
     const alertCreate = {
       success: {
@@ -140,10 +278,10 @@ class AddNewAppointment extends Component {
               url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
               values: {},
             })
-            .then(() => {
-              reinitializeState();
-              reset(formName);
-            });
+              .then(() => {
+                reinitializeState();
+                reset(formName);
+              });
           });
         } else {
           reinitializeState();
@@ -165,120 +303,6 @@ class AddNewAppointment extends Component {
     }).then(() => {
       reinitializeState();
     });
-  }
-
-  handleSliderChange(value) {
-    const {
-      change,
-      formName,
-      unit,
-    } = this.props;
-
-    const duration = value[0];
-    const buffer = value[1];
-
-    change(formName, 'appointment.duration', duration);
-    change(formName, 'appointment.buffer', buffer - duration);
-    change(formName, 'appointment.unit', (duration / unit).toFixed(2));
-  }
-
-  handleDurationChange(value) {
-    const {
-      change,
-      formName,
-      appFormValues,
-      unit,
-    } = this.props;
-
-    change(formName, 'appointment.unit', (value / unit).toFixed(2));
-
-    if (value >= unit && value <= 180 && appFormValues) {
-      change(formName, 'appointment.slider', [value, value]);
-      change(formName, 'appointment.buffer', 0);
-    }
-  }
-
-  handleUnitChange(value) {
-    const {
-      change,
-      formName,
-      unit,
-    } = this.props;
-
-    const duration = value * unit;
-
-    if (duration <= 180 && duration >= unit) {
-      change(formName, 'appointment.duration', duration);
-      change(formName, 'appointment.slider', [duration, duration]);
-      change(formName, 'appointment.buffer', 0);
-    }
-  }
-
-  handleBufferChange(value) {
-    const {
-      change,
-      formName,
-      appFormValues,
-    } = this.props;
-
-    const duration = (appFormValues && appFormValues.appointment.slider) ? appFormValues.appointment.slider[0] : 60;
-
-    const bufferValue = duration + value;
-    if (bufferValue >= duration && bufferValue <= 180) {
-      change(formName, 'appointment.slider', [duration, bufferValue]);
-    }
-  }
-
-  handlePractitionerChange(id) {
-    const {
-      services,
-      practitioners,
-      change,
-      formName,
-    } = this.props;
-
-    const selectedPractitioner = practitioners.get(id);
-    const practitionerServiceIds = selectedPractitioner ? selectedPractitioner.get('services') : null;
-
-    const servicesAllowed = [];
-    practitionerServiceIds.map((serviceId) => {
-      if (!servicesAllowed.includes(services.get(serviceId))) {
-        servicesAllowed.push(services.get(serviceId));
-      }
-    });
-
-    // change(formName, 'appointment.serviceId', '');
-    this.setState({
-      servicesAllowed,
-    });
-  }
-
-  handleAutoSuggest(newValue) {
-    if (typeof newValue === 'object') {
-      this.props.setPatientSearched(newValue);
-    } else if (newValue === '') {
-      this.props.setPatientSearched('');
-    }
-  }
-
-  getSuggestions(value) {
-    return this.props.fetchEntities({ url: '/api/patients/search', params: { patients: value } })
-      .then((searchData) => searchData.patients).then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          key => searchedPatients[key]) : [];
-
-        patientList.map((patient) => {
-          patient.display = (
-            <div className={styles.suggestionContainer}>
-              <Avatar user={patient} size="md" />
-              <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
-              </span>
-            </div>
-          );
-        });
-        return patientList;
-      });
   }
 
   deleteAppointment() {
@@ -312,64 +336,85 @@ class AddNewAppointment extends Component {
       selectedAppointment,
       reinitializeState,
       unit,
+      currentDate,
     } = this.props;
 
     const remoteButtonProps = {
       onClick: reinitializeState,
       form: formName,
     };
+    let title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
+    let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Edit' : 'Add';
+
+    if (selectedAppointment && selectedAppointment.request) {
+      title = 'Accept Appointment';
+      buttonTitle = 'Add';
+    }
 
     return (
-      <div className={styles.formContainer}>
-        <IconButton
-          icon="times"
-          onClick={() => {
-            this.props.reset(formName);
-            return reinitializeState();
-          }}
-          className={styles.trashIcon}
-        />
-        <DisplayForm
-          key={formName}
-          formName={formName}
-          services={this.state.servicesAllowed}
-          practitioners={practitioners}
-          patients={patients}
-          chairs={chairs}
-          selectedAppointment={selectedAppointment}
-          patientSearched={this.props.patientSearched}
-          unit={unit}
-          getSuggestions={this.getSuggestions}
-          handleSubmit={this.handleSubmit}
-          handleAutoSuggest={this.handleAutoSuggest}
-          handlePractitionerChange={this.handlePractitionerChange}
-          handleSliderChange={this.handleSliderChange}
-          handleDurationChange={this.handleDurationChange}
-          handleUnitChange={this.handleUnitChange}
-          handleBufferChange={this.handleBufferChange}
-        />
-        <div className={styles.remoteSubmit}>
-          <RemoteSubmitButton
-            {...remoteButtonProps}
-            className={styles.remoteSubmit_button}
-            icon="floppy-o"
-            bordered
-          >
-            Save
-          </RemoteSubmitButton>
-          {selectedAppointment && !selectedAppointment.request && (
-            <div className={styles.remoteSubmit_buttonDelete}>
+      <Card className={styles.formContainer} noBorder>
+        <SContainer>
+          <SHeader className={styles.header}>
+            <div>{title}</div>
+            <div
+              className={styles.close}
+              onClick={() => {
+                this.props.reset(formName);
+                this.props.reinitializeState();
+              }}
+            >
+              <Icon icon="times" />
+            </div>
+          </SHeader>
+          <SBody className={styles.body}>
+            <DisplayForm
+              key={formName}
+              formName={formName}
+              practitioners={practitioners}
+              patients={patients}
+              chairs={chairs}
+              selectedAppointment={selectedAppointment}
+              unit={unit}
+              getSuggestions={this.getSuggestions}
+              handleSubmit={this.handleSubmit}
+              handleAutoSuggest={this.handleAutoSuggest}
+              handleDurationChange={this.handleDurationChange}
+              handleUnitChange={this.handleUnitChange}
+              handleStartTimeChange={this.handleStartTimeChange}
+              handleEndTimeChange={this.handleEndTimeChange}
+              title={title}
+              reinitializeState={reinitializeState}
+              currentDate={currentDate}
+              showInput={this.props.showInput}
+              setShowInput={this.props.setShowInput}
+              setCreatingPatient={this.props.setCreatingPatient}
+              patientSearched={this.props.patientSearched}
+              setPatientSearched={this.props.setPatientSearched}
+              change={this.props.change}
+              reset={this.props.reset}
+            />
+          </SBody>
+          <SFooter className={styles.footer}>
+            <div className={styles.button_cancel}>
               <Button
-                onClick={this.deleteAppointment}
-                icon="trash"
-                bordered
+                onClick={() => {
+                  this.props.reset(formName);
+                  this.props.reinitializeState();
+                }}
+                border="blue"
               >
-                Delete
+                Cancel
               </Button>
             </div>
-          )}
-        </div>
-      </div>
+            <RemoteSubmitButton
+              {...remoteButtonProps}
+              color="blue"
+            >
+              {buttonTitle}
+            </RemoteSubmitButton>
+          </SFooter>
+        </SContainer>
+      </Card>
     );
   }
 }
@@ -377,6 +422,7 @@ class AddNewAppointment extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
+    fetchEntitiesRequest,
     createEntityRequest,
     updateEntityRequest,
     deleteEntityRequest,

@@ -1,10 +1,13 @@
 
-import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
-import styles from '../styles.scss';
-import { Icon } from '../../../library';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Popover from 'react-popover';
+import moment from 'moment';
+import styles from './styles.scss';
+import { Icon } from '../../../library';
+import AppointmentPopover from './AppointmentPopover';
 import withHoverable from '../../../../hocs/withHoverable';
+import { hexToRgbA } from '../../../library/util/colorMap';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -12,134 +15,193 @@ const getDuration = (startDate, endDate, customBufferTime) => {
   return duration.asMinutes() - customBufferTime;
 };
 
-function ShowAppointment(props) {
-  const {
-    appointment,
-    selectAppointment,
-    startHour,
-    rowSort,
-    isHovered,
-    timeSlotHeight,
-  } = props;
+const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
+  const containerElement = document.getElementById('scheduleContainer');
 
-  const {
-    startDate,
-    endDate,
-    customBufferTime,
-    patientData,
-    practitionerData,
-    isPatientConfirmed,
-    isReminderSent,
-  } = appointment;
+  if (containerElement) {
+    const containerWidth = containerElement.clientWidth;
+    const maxColumns = Math.floor(containerWidth / minWidth);
 
-  if (!patientData) {
-    return null;
+    if (maxColumns > numOfColumns && columnIndex === (numOfColumns - 1)) {
+      return 'left';
+    } else if (maxColumns < numOfColumns && columnIndex === (maxColumns - 1)) {
+      return 'left';
+    } else if (columnIndex === numOfColumns - 1) {
+      return 'left';
+    }
+
+    return 'right';
+  }
+};
+
+class ShowAppointment extends Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpened: false,
+    };
+
+    this.togglePopover = this.togglePopover.bind(this);
+    this.closePopover = this.closePopover.bind(this);
+    this.editAppointment = this.editAppointment.bind(this);
   }
 
-  let appPosition = 0;
-  rowSort.map((app, index) => {
-    if (appointment.id === app.id) {
-      appPosition = index;
-    }
-  });
+  togglePopover() {
+    this.setState({
+      isOpened: !this.state.isOpened,
+    });
+  }
 
-  const bgColor = practitionerData.color;
-  const patient = patientData.toJS();
-  const age = moment().diff(patient.birthDate, 'years') || '';
-  const lastName = age ? `${patient.lastName},` : patient.lastName;
+  closePopover() {
+    this.setState({
+      isOpened: false,
+    });
+  }
 
-  // Calculating the top position and height of the appointment.
-  const durationTime = getDuration(startDate, endDate, customBufferTime);
-  const startDateHours = moment(startDate).hours();
-  const startDateMinutes = moment(startDate).minutes();
-  const topCalc = (((startDateHours - startHour) + (startDateMinutes / 60)) * timeSlotHeight.height) // + timeSlotHeight.height;
-  const heightCalc = ((durationTime) / 60) * timeSlotHeight.height;
+  editAppointment() {
+    this.closePopover();
+    this.props.selectAppointment(this.props.appointment);
+  }
 
-  // const adjacentWidth = rowSort.length === 1 ? widthIntersect : rowSort.length
+  render() {
+    const {
+      appointment,
+      selectedAppointment,
+      startHour,
+      rowSort,
+      isHovered,
+      timeSlotHeight,
+      numOfColumns,
+      columnIndex,
+      minWidth,
+      scheduleView,
+    } = this.props;
 
-  const splitRow = rowSort.length > 1 ? (100 * (appPosition / (rowSort.length))) : 0;
-  const top = `${(topCalc + 0.05)}px`;
-  const left = `${(0 + splitRow) + 0.07}%`;
-  const width = `${(100 * ((100 / rowSort.length) / 100)) - 0.16}%`;
-  const height = `${heightCalc - 0.1}px`;
+    const {
+      startDate,
+      endDate,
+      customBufferTime,
+      patientData,
+      isPatientConfirmed,
+      isReminderSent,
+      note,
+      practitionerData,
+    } = appointment;
 
-  const backgroundColor = bgColor; // isHovered ? bgColor : hexToRgbA(bgColor, 0.6);
-  const zIndex = isHovered ? 5 : appPosition;
-  // main app style
-  const appStyle = {
-    height,
-    backgroundColor,
-    border: `0.5px solid ${appPosition === 0 ? bgColor : '#FFFFFF'}`,
-    zIndex,
-  };
+    let appPosition = 0;
+    rowSort.forEach((app, index) => {
+      if (appointment.id === app.id) {
+        appPosition = index;
+      }
+    });
 
-  // calculating the buffer position and height styling
-  const heightCalcBuffer = (customBufferTime / 60) * timeSlotHeight.height;
+    const bgColor = practitionerData.color;
+    const patient = patientData.toJS();
+    const age = moment().diff(patient.birthDate, 'years') || '';
+    const lastName = patient.lastName;
 
-  const bufferStyle = {
-    width: '100%',
-    height: `${heightCalcBuffer}px`,
-    backgroundColor: '#b4b4b5',
-    zIndex,
-  };
+    // Calculating the top position and height of the appointment.
+    const durationTime = getDuration(startDate, endDate, customBufferTime);
+    const startDateHours = moment(startDate).hours();
+    const startDateMinutes = moment(startDate).minutes();
 
-  const nameColor = {
-    color: isHovered ? '#fafafa' : '#ededed',
-  };
+    const topCalc = (((startDateHours - startHour) + (startDateMinutes / 60)) * timeSlotHeight.height);
+    const heightCalc = ((durationTime) / 60) * timeSlotHeight.height;
 
-  return (
-    <div
-      key={appointment.id}
-      onClick={() => selectAppointment(appointment)}
-      className={styles.appointmentContainer}
-      style={{ height: `${(heightCalc - 0.1) + heightCalcBuffer}px`, top, width, left }}
-    >
-      <div
-        key={appointment.id}
-        className={styles.showAppointment}
-        style={appStyle}
-        data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
+    const splitRow = rowSort.length > 1 ? (100 * (appPosition / (rowSort.length))) : 0;
+    const top = `${(topCalc + 0.05)}px`;
+    const left = `${splitRow + 0.07}%`;
+
+    const widthPadding = 0.6;
+    const width = `${(100 * ((100 / rowSort.length) / 100)) - widthPadding}%`;
+    const height = `${heightCalc - 0.1}px`;
+
+    const backgroundColor = bgColor;
+    const zIndex = isHovered ? 5 : appPosition;
+
+    const containerStyle = {
+      height,
+      top,
+      width,
+      left,
+    };
+
+    // main app style
+    const appStyle = {
+      height,
+      backgroundColor,
+      border: `0.5px solid ${appPosition === 0 ? bgColor : '#FFFFFF'}`,
+      zIndex,
+      boxShadow: this.state.isOpened ? `0px 3px 5px 0px ${hexToRgbA(bgColor, 0.5)}` : 'none',
+    };
+
+    const placement = numOfColumns === 1 ? 'below' : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
+
+    return (
+      <Popover
+        isOpen={this.state.isOpened && !selectedAppointment}
+        body={[(
+          <AppointmentPopover
+            appointment={appointment}
+            patient={patientData}
+            age={age}
+            closePopover={this.closePopover}
+            editAppointment={this.editAppointment}
+            scheduleView={scheduleView}
+          />
+        )]}
+        preferPlace={placement}
+        tipSize={0.01}
+        onOuterAction={this.closePopover}
       >
-        {isPatientConfirmed || isReminderSent ? (
-          <div className={styles.showAppointment_icon}>
-            <div className={styles.showAppointment_icon_item}>{isPatientConfirmed && <Icon size={1} icon="check-circle" />}</div>
-            <div className={styles.showAppointment_icon_item}> {isReminderSent && <Icon size={1} icon="clock" />} </div>
-          </div>
-        ) : null}
-        <div className={styles.showAppointment_nameAge}>
-          <div className={styles.showAppointment_nameAge_name} style={nameColor}>
-            <span className={styles.paddingText}>{patient.firstName}</span>
-            <span className={styles.paddingText}>{lastName}</span>
-            <span>{age || ''}</span>
+        <div
+          onClick={this.togglePopover}
+          onDoubleClick={this.editAppointment}
+          className={styles.appointmentContainer}
+          style={containerStyle}
+        >
+          <div
+            className={styles.showAppointment}
+            style={appStyle}
+            data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
+          >
+            {isPatientConfirmed || isReminderSent ? (<div className={styles.icon}>
+              <div className={styles.icon_item}>{(isPatientConfirmed && <Icon size={1} icon="check-circle" />)}</div>
+              <div className={styles.icon_item}> {(isReminderSent && <Icon size={1} icon="clock-o" />)} </div>
+            </div>) : null}
+
+            <div className={styles.nameAge}>
+              <div className={styles.nameAge_name} >
+                <span className={styles.paddingText}>{patient.firstName}</span>
+                <span className={styles.paddingText}>{lastName}</span>
+              </div>
+            </div>
+
+            <div className={styles.duration}>
+              <span className={styles.duration_text}>
+                {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
+              </span>
+            </div>
           </div>
         </div>
-        <div className={styles.showAppointment_duration}>
-          <span className={styles.showAppointment_duration_text}>
-            {moment(startDate).format('h:mm')}-{moment(endDate).format('h:mm a')}
-          </span>
-        </div>
-        {/*<div className={styles.showAppointment_serviceChair}>
-          {/*<span className={styles.showAppointment_serviceChair_service}>{serviceData},</span>
-          <span className={styles.showAppointment_serviceChair_chair}>{chairData}</span>
-        </div>*/}
-      </div>
-      <div className={styles.showAppointment_buffer} style={bufferStyle}>
-          {''}
-      </div>
-    </div>
-  );
+      </Popover>
+    );
+  }
 }
 
 ShowAppointment.propTypes = {
   appointment: PropTypes.object.isRequired,
   bgColor: PropTypes.string,
-  practIndex: PropTypes.number,
-  patient: PropTypes.object.isRequired,
+  patient: PropTypes.object,
   selectAppointment: PropTypes.func.isRequired,
+  selectedAppointment: PropTypes.object,
   startHour: PropTypes.number,
-  rowSort: PropTypes.array(Array),
+  rowSort: PropTypes.arrayOf(Array),
   isHovered: PropTypes.bool,
   timeSlotHeight: PropTypes.object,
+  numOfColumns: PropTypes.number,
+  columnIndex: PropTypes.number,
+  minWidth: PropTypes.number,
 };
 
 export default withHoverable(ShowAppointment);

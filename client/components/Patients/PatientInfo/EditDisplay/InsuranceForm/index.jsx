@@ -9,6 +9,10 @@ export default function InsuranceForm(props) {
     handleSubmit,
   } = props;
 
+  const theme = {
+    input: styles.inputBarStyle,
+  };
+
   return (
     <Form
       form="Form3"
@@ -23,7 +27,7 @@ export default function InsuranceForm(props) {
               required
               name="insuranceCarrier"
               label="Insurance Carrier"
-              theme="primaryBlue"
+              theme={theme}
             />
           </Col>
         </Row>
@@ -32,14 +36,14 @@ export default function InsuranceForm(props) {
             <Field
               name="memberId"
               label="Member ID"
-              theme="primaryBlue"
+              theme={theme}
             />
           </Col>
           <Col xs={6} className={styles.colRight}>
             <Field
               name="contractId"
               label="Contract ID"
-              theme="primaryBlue"
+              theme={theme}
             />
           </Col>
         </Row>
@@ -48,7 +52,7 @@ export default function InsuranceForm(props) {
             <Field
               name="sin"
               label="SIN"
-              theme="primaryBlue"
+              theme={theme}
             />
           </Col>
         </Row>

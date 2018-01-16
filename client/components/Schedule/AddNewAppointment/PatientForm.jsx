@@ -33,7 +33,6 @@ export default function PatientForm(props) {
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}
             validate={[validatePatient]}
-            theme="primaryGrey"
             required
           />
         </Col>

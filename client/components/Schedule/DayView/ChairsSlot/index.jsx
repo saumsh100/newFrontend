@@ -15,60 +15,61 @@ export default function ChairsSlot(props) {
     chairsArray,
     patients,
     appointments,
-    services,
     selectAppointment,
     scrollComponentDidMountChair,
   } = props;
 
   return (
-    <div className={styles.timeSlot} ref={scrollComponentDidMountChair}>
-      {chairsArray.length ? chairsArray.map((chair, i, arr) => {
-        const columnWidth = arr.length < 5 ? 100 / arr.length : 30;
+    <div className={styles.scrollDiv} ref={scrollComponentDidMountChair}>
+      <div className={styles.timeSlot} >
+        {chairsArray.length ? chairsArray.map((chair, i, arr) => {
+          const checkFilters = schedule.toJS();
 
+          const filteredApps = appointments.filter((app) => {
+            if (app.get('mark') && (app.chairId === chair.id)) {
+              return app;
+            }
 
-        const checkFilters = schedule.toJS();
+            const practitioner = practitioners.get(app.get('practitionerId'));
+            const practitionersFilter = practitioner && checkFilters.practitionersFilter.indexOf(practitioner.get('id')) > -1;
 
-        const filteredApps = appointments.filter((app) => {
-          if (app.get('mark') && (app.chairId === chair.id)) {
-            return app;
-          }
+            return ((app.chairId === chair.id) && practitionersFilter);
+          }).map((app) => {
+            if (app.get('mark')) {
+              return app;
+            }
 
-          const practitioner = practitioners.get(app.get('practitionerId'));
-          const practitionersFilter = practitioner && checkFilters.practitionersFilter.indexOf(practitioner.get('id')) > -1;
+            const practitionerData = practitionersArray.find(prac=> prac.id === app.get('practitionerId'));
 
-          return ((app.chairId === chair.id) && practitionersFilter);
-        }).map((app) => {
-          if (app.get('mark')) {
-            return app;
-          }
-
-          const practitionerData = practitionersArray.find(prac=> prac.id === app.get('practitionerId'));
-
-          return Object.assign({}, app.toJS(), {
-            appModel: app,
-            chairData: chair.name,
-            practitionerData,
-            patientData: patients.get(app.get('patientId')),
+            return Object.assign({}, app.toJS(), {
+              appModel: app,
+              chairData: chair.name,
+              practitionerData,
+              patientData: patients.get(app.get('patientId')),
+            });
           });
-        });
 
-        return (
-          <TimeSlot
-            key={i}
-            timeSlots={timeSlots}
-            timeSlotHeight={timeSlotHeight}
-            practIndex={i}
-            columnWidth={columnWidth}
-            minWidth={schedule.toJS().columnWidth}
-            startHour={startHour}
-            endHour={endHour}
-            filteredApps={filteredApps}
-            selectAppointment={selectAppointment}
-            scheduleView={schedule.toJS().scheduleView}
-            entity={chair}
-          />
-        );
-      }) : null}
+          return (
+            <TimeSlot
+              key={i}
+              timeSlots={timeSlots}
+              timeSlotHeight={timeSlotHeight}
+              practIndex={i}
+              minWidth={schedule.toJS().columnWidth}
+              startHour={startHour}
+              endHour={endHour}
+              filteredApps={filteredApps}
+              selectAppointment={selectAppointment}
+              scheduleView={schedule.toJS().scheduleView}
+              entity={chair}
+              selectedAppointment={schedule.toJS().selectedAppointment}
+              numOfColumns={chairsArray.length}
+              columnIndex={i}
+            />
+          );
+        }) : null}
+      </div>
+
     </div>
   );
 }

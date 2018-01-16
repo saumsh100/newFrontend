@@ -18,6 +18,7 @@ const deliveredProcedure1 = {
   updatedAt: new Date(),
   patientId,
   procedureCode: code,
+  procedureCodeId: `CDA-${code}`,
 };
 
 const deliveredProcedure2 = {
@@ -30,6 +31,7 @@ const deliveredProcedure2 = {
   updatedAt: new Date(),
   patientId,
   procedureCode: code,
+  procedureCodeId: `CDA-${code}`,
 };
 
 async function seedTestDeliveredProcedures() {

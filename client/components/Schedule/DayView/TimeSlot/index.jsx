@@ -4,6 +4,7 @@ import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import ShowMark from './ShowMark';
 import styles from '../styles.scss';
+import TimeSlotColumn from "./TimeSlotColumn";
 
 function intersectingAppointments(appointments, startDate, endDate) {
   const sDate = moment(startDate);
@@ -35,30 +36,23 @@ export default function TimeSlot(props) {
     endHour,
     filteredApps,
     selectAppointment,
-    columnWidth,
+    selectedAppointment,
     minWidth,
+    numOfColumns,
+    columnIndex,
+    scheduleView,
   } = props;
 
   const timeSlotContentStyle = {
-    width: `${columnWidth}%`,
     minWidth: `${minWidth}px`,
-    boxSizing: 'border-box',
   };
 
   return (
-    <div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
-      {timeSlots.map((slot, i) => {
-        return (
-          <div
-            key={i + Math.random()}
-            className={styles.timeSlotColumnItem} style={{
-              height: timeSlotHeight.height,
-            }}
-          >
-            {''}
-          </div>
-        );
-      })}
+    <div style={timeSlotContentStyle} className={styles.timeSlotColumn} >
+      <TimeSlotColumn
+        timeSlots={timeSlots}
+        timeSlotHeight={timeSlotHeight}
+      />
 
       {filteredApps && filteredApps.map((app, index, array) => {
         const intersectingApps = intersectingAppointments(array, app.startDate, app.endDate);
@@ -91,6 +85,11 @@ export default function TimeSlot(props) {
             widthIntersect={rowFilter.length}
             rowSort={rowSort}
             timeSlotHeight={timeSlotHeight}
+            selectedAppointment={selectedAppointment}
+            numOfColumns={numOfColumns}
+            columnIndex={columnIndex}
+            minWidth={minWidth}
+            scheduleView={scheduleView}
           />
         );
 
@@ -103,7 +102,7 @@ export default function TimeSlot(props) {
 TimeSlot.propTypes = {
   startHour: PropTypes.number,
   endHour: PropTypes.number,
-  columnWidth: PropTypes.number,
+  minWidth: PropTypes.number,
   appointments: PropTypes.arrayOf(PropTypes.object),
   schedule: PropTypes.object,
   patients: PropTypes.object,
@@ -113,6 +112,9 @@ TimeSlot.propTypes = {
   timeSlotHeight: PropTypes.object,
   practitioner: PropTypes.object,
   selectAppointment: PropTypes.func.isRequired,
+  selectedAppointment: PropTypes.object,
   filteredApps: PropTypes.arrayOf(PropTypes.object),
+  numOfColumns: PropTypes.number,
+  columnIndex: PropTypes.number,
 };
 

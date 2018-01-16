@@ -67,8 +67,8 @@ class HeaderSection extends Component {
     const formName = 'newUser';
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { form: formName }},
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { color: 'blue', form: formName }},
     ];
 
     const filterMenu = props => (

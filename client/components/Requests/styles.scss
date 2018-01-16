@@ -2,6 +2,14 @@
 @import '../../fonts.scss';
 @import '../../ui.scss';
 
+.mediumFont {
+  composes: fontMedium from 'sass-loader!../../fonts.scss';
+}
+
+.defaultFont {
+  composes: fontDefault from 'sass-loader!../../fonts.scss';
+}
+
 .requestPopover > :global(svg.Popover-tip) {
   fill: white;
 }
@@ -15,23 +23,19 @@
 }
 
 .requestHeader{
-  padding-left: 15px;
+  //padding-left: 15px;
   position: static;
 }
 
 .requestList {
-  postion: relative;
   width: 100%;
   height: 100px;
- // max-height: 555px;
   flex: 1;
   min-height: 314px;
   overflow: auto;
-  //background: lighten($primary-lightgrey, 2%);
 }
 
 .emptyList{
-  //padding-top: 35%;
   background-color: lighten($primary-lightgrey, 2%);
   text-align: center;
   color: lighten($primary-darkgrey, 5%);
@@ -44,43 +48,55 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  //background-color: $primary-lightgrey;
 }
 
 .requestListItem {
-  height: auto;
-  padding-left: 1em;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  height: 92px;
+  //padding-bottom: 15px;
   color: $primary-dark;
   position: relative;
+  cursor: pointer;
 }
 
 .requestData {
   padding-left: 1em;
-  border-left: 2px solid;
-  border-left-color: #bfbfbf;
+  border-left: 1px solid #E4E4E4;
   line-height: 1.5em;
   text-align: left;
-  @extend .font-small-grey;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
   @media screen and (max-width: 350px){
     max-width: 170px;
   }
+
+  @extend .defaultFont;
+  font-size: $extra-small-size;
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__time {
-    @extend .font-medium-dark;
+    @extend .mediumFont;
+    font-size: $small-size;
     line-height: 1.5em;
   }
 
   &__nameAge{
-    font-family: $medium-font;
+    @extend .mediumFont;
     display: flex;
     text-decoration: none;
-    color: red;
-
   }
 
   &__name {
-    @extend .font-medium-grey;
+    color: $primary-darkgrey;
     width: auto;
     white-space: nowrap;
     overflow: hidden;
@@ -88,7 +104,6 @@
   }
 
   &__age{
-    @extend .font-medium-grey;
     margin-right: 0px;
     padding-right: 0px;
     &:hover {
@@ -97,30 +112,45 @@
   }
 
   &__phoneNumber{
+    color: #929293;
   }
 
   &__service  {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: #929293;
+  }
+
+  &__createdAt {
+    color: #929293;
+  }
+
+  &__icon {
+    padding-right: 3px;
   }
 
 }
 
 .monthDay {
   text-align: center;
-  padding-top: 1em;
-  padding-right: 1em;
-  font-family: $medium-font;
-  width: 45px;
+  width: 71px;
+  @extend .mediumFont;
 
-  &__month {
-    font-size: $medium-size
+  &_new {
+    color: $primary-green;
+    font-size: $extra-small-size;
+    padding-bottom: 3px;
   }
 
-  &__day {
+  &_day {
     font-weight: $medium-weight;
-    font-size: $large-size;
+    font-size: 19px;
+    padding-bottom: 3px;
+  }
+
+  &_month {
+    font-size: $extra-small-size;
   }
 }
 

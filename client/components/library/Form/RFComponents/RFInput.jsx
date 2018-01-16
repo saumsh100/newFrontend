@@ -17,7 +17,6 @@ export default function RFInput(props) {
 
   const newProps = omit(props, ['input', 'meta',]);
   const { touched, asyncValidating, dirty } = meta;
-
   const finalError = error || ((touched || dirty) ? meta.error : null);
   const IconComponent = asyncValidating ?
     (props) => <Icon {...props} icon="spinner" pulse /> :

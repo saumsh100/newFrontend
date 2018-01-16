@@ -105,6 +105,10 @@ Object.keys(db).forEach((modelName) => {
   if (db[modelName].scopes) {
     db[modelName].scopes(db);
   }
+
+  if (db[modelName].modelHooks) {
+    db[modelName].modelHooks(db);
+  }
 });
 
 db.sequelize = sequelize;

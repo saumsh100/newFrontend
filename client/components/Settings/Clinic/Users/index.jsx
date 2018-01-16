@@ -259,18 +259,18 @@ class Users extends Component{
     ];
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { form: formName } },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { color: 'blue', form: formName } },
     ];
 
     const actionsNewUser = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { form: 'newUser' } },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { color: 'blue', form: 'newUser' } },
     ];
 
     const editActions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Edit', onClick: this.sendEdit, component: Button },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      { label: 'Edit', onClick: this.sendEdit, component: Button, props: { color: 'blue' } },
     ];
 
     const addUserButton = (this.props.role === 'SUPERADMIN' ? (

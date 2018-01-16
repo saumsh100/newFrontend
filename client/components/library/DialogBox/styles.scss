@@ -1,7 +1,6 @@
 
 @import '../../../ui.scss';
 
-
 .dialogBody {
   display: flex;
   flex: 1;
@@ -9,34 +8,46 @@
   min-width: 250px;
   max-height: 96%;
   flex-direction: column;
-  &__header{
-    display: flex;
-    align-items: center;
-    padding-bottom: 10px;
-  }
-
-  &__closeIcon {
-    font-size: 1rem;
-    color: $primary-darkgrey;
-    font-weight: 900;
-    margin-left: auto;
-    cursor: pointer;
-    &:hover {
-      color: darken($primary-darkgrey, 10%);
-    }
-  }
-
-  &__footer {
-    display: flex;
-    padding-top: 10px;
-    margin-left: auto;
-  }
-
-  &__action {
-    margin-left: 5px;
-  }
+  overflow: unset;
 }
 
+.header{
+  display: flex;
+  align-items: center;
+  border-bottom: 0;
+  background-color: #313843;
+  height: 45px;
+  color: $primary-white;
+  padding: 0px 20px 0px 20px;
+  font-size: 18px;
+}
+
+.title {
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+
+}
 .cardHeader {
   padding-top: 0px !important;
+  color: $primary-white !important;
+}
+
+.closeIcon {
+  font-size: 1rem;
+  color: $primary-white;
+  font-weight: 900;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  padding: 20px 20px 20px 20px;
+  border-top: 1px solid $primary-grey;
+  box-sizing: border-box;
+  justify-content: flex-end;
+}
+
+.action {
+  margin-left: 5px;
 }

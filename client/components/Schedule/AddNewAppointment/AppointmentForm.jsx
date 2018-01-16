@@ -1,7 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment-timezone';
-import { Grid, Row, Col, Field, } from '../../library';
+import { Grid, Row, Col, Field, Avatar, Icon } from '../../library';
 import { parseNum, notNegative} from '../../library/Form/validate'
 import styles from './styles.scss';
 
@@ -15,12 +15,10 @@ Date.prototype.dst = function () {
   return this.getTimezoneOffset() < this.stdTimezoneOffset();
 };
 
-const maxDuration = value => value && value > 180 ? 'Must be less than or equal to 180' : undefined;
-
-const generateTimeOptions = (timeInput, unitIncrement, minIncrement = 5) => {
+const generateTimeOptions = (timeInput, unitIncrement) => {
   const timeOptions = [];
   const totalHours = 24;
-  const increment = minIncrement;
+  const increment = unitIncrement;
   const increments = 60 / increment;
 
   if (timeInput) {
@@ -58,188 +56,155 @@ const generateTimeOptions = (timeInput, unitIncrement, minIncrement = 5) => {
   return timeOptions;
 };
 
-const marks2 = (unit) => {
-  const mark = {};
-  for(let i = unit; i <= 180; i+=unit) {
-    mark[i] = `${i}`;
-  }
-  return mark;
-};
-
 export default function AppointmentForm(props) {
   const {
-    serviceOptions,
     practitionerOptions,
     chairOptions,
-    handlePractitionerChange,
     selectedAppointment,
     time,
     unit,
-    handleSliderChange,
     handleDurationChange,
     handleUnitChange,
-    handleBufferChange,
   } = props;
 
+  const inputTheme = {
+    input: styles.inputStyle,
+  };
+
+  const dropDownTheme = {
+    input: styles.inputStyle,
+  };
+
   return (
-    <Grid className={styles.addNewAppt_mainContainer_left}>
-      <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+    <Grid className={styles.grid}>
+      <Row className={styles.row}>
+        <Col xs={6} >
           <Field
             component="DayPicker"
             name="date"
             label="Date"
-            borderColor="primaryColor"
             multiple={false}
             required
             data-test-id="date"
+            tipSize={0.01}
+            theme={inputTheme}
           />
         </Col>
-        <Col md={2} />
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
-          <Field
-            options={generateTimeOptions(time, unit)}
-            component="DropdownSelect"
-            name="time"
-            label="Time"
-            borderColor="primaryColor"
-            required
-            data-test-id="time"
-            search="label"
-          />
+        <Col xs={6} className={styles.col}>
+          <Col xs={1} />
+          <Col xs={5} className={styles.colDropDown}>
+            <Field
+              options={generateTimeOptions(time, unit)}
+              component="DropdownSelect"
+              name="startTime"
+              label="Start Time"
+              required
+              data-test-id="time"
+              search="label"
+              onChange={(e, value) => props.handleStartTimeChange(value)}
+              theme={dropDownTheme}
+            />
+          </Col>
+          <Col xs={1} />
+          <Col xs={5} className={styles.colDropDown}>
+            <Field
+              options={generateTimeOptions(time, unit)}
+              component="DropdownSelect"
+              name="endTime"
+              label="End Time"
+              required
+              data-test-id="time"
+              search="label"
+              onChange={(e, value) => props.handleEndTimeChange(value)}
+              theme={dropDownTheme}
+            />
+          </Col>
         </Col>
       </Row>
-      <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={12} className={styles.addNewAppt_col}>
-          <Row className={styles.addNewAppt_col_nearFields}>
-            <Col xs={12} >
-              <Field
-                options={practitionerOptions}
-                component="DropdownSelect"
-                name="practitionerId"
-                label="Practitioner"
-                borderColor="primaryColor"
-                // onChange={(e, newValue) => handlePractitionerChange(newValue)}
-                required
-                data-test-id="practitionerId"
-              />
-            </Col>
-          </Row>
-        </Col>
-        {/*<Col md={2} />
-         <Col xs={12} md={5} className={styles.addNewAppt_col}>
-         <Row className={styles.addNewAppt_col_nearFields}>
-         <Col xs={12} >
-         <Field
-         options={[]}
-         component="DropdownSelect"
-         name="split"
-         label="Split"
-         borderColor="primaryColor"
-         disabled
-         />
-         </Col>
-         </Row>
-         </Col>*/}
-      </Row>
-      {/* TODO: Removing this because service is annoying to deal with for patients */}
-      {/*<Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={12} className={styles.addNewAppt_col}>
-          <Field
-            options={serviceOptions}
-            component="DropdownSelect"
-            name="serviceId"
-            label="Service"
-            borderColor="primaryColor"
-            required
-            data-test-id="serviceId"
-          />
-        </Col>
-      </Row>*/}
-      <Row className={styles.addNewAppt_row}>
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
+      <Row className={styles.row}>
+        <Col xs={6} className={styles.colDropDown}>
           <Field
             options={chairOptions}
             component="DropdownSelect"
             name="chairId"
             label="Chair"
-            borderColor="primaryColor"
             required
             data-test-id="chairId"
+            theme={dropDownTheme}
           />
         </Col>
-        <Col md={2} />
-        <Col xs={12} md={5} className={styles.addNewAppt_col}>
-          <div className={styles.addNewAppt_col_confirmCancel}>
+        <Col xs={6} className={styles.col}>
+          <Col xs={1} />
+          <Col xs={5}>
+            <Field
+              name="unit"
+              label={`Unit (${unit})`}
+              normalize={parseNum}
+              validate={[notNegative]}
+              type="number"
+              onChange={(e, value)=> handleUnitChange(value)}
+              data-test-id="unit"
+              theme={inputTheme}
+            />
+          </Col>
+          <Col xs={1} />
+          <Col xs={5}>
+            <Field
+              name="duration"
+              label="Duration"
+              normalize={parseNum}
+              validate={[notNegative]}
+              type="number"
+              onChange={(e, value) => handleDurationChange(value)}
+              data-test-id="duration"
+              theme={inputTheme}
+            />
+          </Col>
+        </Col>
+      </Row>
+      <Row className={styles.row}>
+        <Col xs={9} >
+          <Field
+            options={practitionerOptions}
+            component="DropdownSelect"
+            name="practitionerId"
+            label="Practitioner"
+            required
+            data-test-id="practitionerId"
+            className={styles.dropDownWrapper}
+            theme={dropDownTheme}
+          />
+        </Col>
+        <Col xs={3} className={styles.colConfirmCancel}>
+          <div className={styles.confirmCancel}>
             <Field
               component="Checkbox"
               name="isPatientConfirmed"
-              label="Patient Confirmed"
-              className={styles.addNewAppt_col_confirmCancel_label}
+              label="Confirmed"
+              className={styles.confirmCancel_label}
               data-test-id="isPatientConfirmed"
+              labelClassNames={styles.checkBox}
             />
             <Field
               component="Checkbox"
               name="isCancelled"
-              label="Patient Cancelled"
-              className={styles.addNewAppt_col_confirmCancel_label}
-              hidden={selectedAppointment && !selectedAppointment.request ? false : true}
+              label="Cancelled"
+              className={styles.confirmCancel_label}
               data-test-id="isCancelled"
+              labelClassNames={styles.checkBox}
             />
           </div>
         </Col>
       </Row>
-      <Row className={styles.addNewAppt_row_durBuff}>
-        <Col xs={12} md={4} className={styles.addNewAppt_col}>
+      <Row className={styles.rowTextArea}>
+        <Col xs={12} className={styles.textAreaContainer}>
           <Field
-            name="duration"
-            label="Duration (min)"
-            borderColor="primaryColor"
-            normalize={parseNum}
-            validate={[notNegative, maxDuration]}
-            type="number"
-            onChange={(e, value) => handleDurationChange(value)}
-            required
-            data-test-id="duration"
-          />
-        </Col>
-        <Col xs={12} md={5} className={styles.addNewAppt_col_unit}>
-          <Field
-            name="unit"
-            label={`Duration (unit of ${unit})`}
-            borderColor="primaryColor"
-            normalize={parseNum}
-            validate={[notNegative, maxDuration]}
-            type="number"
-            onChange={(e, value)=> handleUnitChange(value)}
-            data-test-id="unit"
-          />
-        </Col>
-        <Col xs={12} md={3} className={styles.addNewAppt_col}>
-          <Field
-            name="buffer"
-            label="Buffer (min)"
-            borderColor="primaryColor"
-            normalize={parseNum}
-            validate={[notNegative, maxDuration]}
-            type="number"
-            onChange={(e, value) => handleBufferChange(value)}
-            data-test-id="buffer"
-          />
-        </Col>
-      </Row>
-      <Row className={styles.addNewAppt_row_slider}>
-        <Col xs={12} className={styles.addNewAppt_col_nearFields}>
-          <Field
-            component="RangeSlider"
-            name="slider"
-            unit="m"
-            defaultValues={[60,61]}
-            min={unit}
-            max={180}
-            marks={marks2(unit)}
-            onChange={(e, value)=> handleSliderChange(value)}
-            data-test-id="slider"
+            component="TextArea"
+            name="note"
+            label="Notes:"
+            rows={9}
+            data-test-id="note"
+            classStyles={styles.textArea}
           />
         </Col>
       </Row>

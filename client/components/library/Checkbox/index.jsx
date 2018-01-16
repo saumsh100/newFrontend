@@ -13,6 +13,7 @@ export default function Checkbox(props) {
     checked,
     onChange,
     hidden,
+    labelClassNames,
   } = props;
 
   const classes = classNames(
@@ -22,6 +23,12 @@ export default function Checkbox(props) {
       hidden,
     })
   );
+
+  let labelClasses = styles.checkbox;
+
+  if (labelClassNames) {
+    labelClasses = classNames(labelClasses, labelClassNames);
+  }
 
   return (
     <div className={classes} >
@@ -35,7 +42,7 @@ export default function Checkbox(props) {
       />
       <label
         htmlFor={id}
-        className={styles.checkbox__label}
+        className={labelClasses}
         onClick={onChange}
         onChange={onChange}
       >

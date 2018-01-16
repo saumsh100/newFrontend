@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
@@ -42,10 +43,9 @@ class ConfirmAppointmentRequest extends Component {
         url: `/api/requests/${requestId.get('id')}/confirm/${this.state.selectedApp['id']}`,
         values: {},
         alert: alertRequestUpdate,
-      })
-        .then(() => {
-          reinitializeState();
-        });
+      }).then(() => {
+        reinitializeState();
+      });
     } else {
       const alertRequestUpdate = {
         success: {
@@ -97,6 +97,7 @@ class ConfirmAppointmentRequest extends Component {
     const appointments = selectedAppointment.nextAppt;
 
     let displayText = '';
+
     if (appointments.length === 1) {
       const startDate = moment(appointments[0].startDate);
       const endDate = moment(appointments[0].endDate);
@@ -114,17 +115,21 @@ class ConfirmAppointmentRequest extends Component {
       displayText = (
         <div className={styles.text}>It seems like a few appointments were already created for
           <span className={styles.listItemHeader}> {patient.get('firstName')}.</span>
-          <br />
-          Would you like to connect the appointment request with one of these appointments?
+          <br /><br />
+          If you would like to connect one of these appointments with this request please select one now and click <span className={styles.bold}>Yes</span>.
+          Otherwise, you can create a new appointment by clicking <span className={styles.bold}>No</span>.
         </div>
-      )
+      );
     }
+
+    const cursorStyle={ cursor: selectedApp ? 'pointer' : 'not-allowed' }
 
     return (
       <div>
         {!sendEmail ? (
           <div className={styles.container}>
             {displayText}
+
             {appointments.map((app) => {
               return (<SameAppointment
                 key={app.id}
@@ -138,18 +143,19 @@ class ConfirmAppointmentRequest extends Component {
                 length={appointments.length}
               />);
             })}
+
             {appointments.length === 1 ? (
               <div className={styles.buttonContainer}>
                 <Button
                   icon="times"
-                  color="darkgrey"
-                  onClick={() => this.createAppointment()}
+                  border="blue"
+                  onClick={this.createAppointment}
                 >
                   No
                 </Button>
                 <Button
                   icon="check"
-                  tertiary
+                  color="blue"
                   onClick={() => {
                     if (confirm('Are you sure this is the correct Appointment?')) {
                       this.setSelected(appointments[0]);
@@ -163,15 +169,15 @@ class ConfirmAppointmentRequest extends Component {
                 <div className={styles.buttonContainer}>
                   <Button
                     icon="times"
-                    color="darkgrey"
+                    border="blue"
                     onClick={() => this.createAppointment()}
                   >
                     No
                   </Button>
                   <Button
                     icon="check"
-                    style={{ cursor: selectedApp ? 'pointer' : 'not-allowed' }}
-                    color={selectedApp ? 'green' : 'grey'}
+                    style={cursorStyle}
+                    color={selectedApp ? 'blue' : 'grey'}
                     onClick={() => {
                       if (selectedApp) {
                         return confirm('Are you sure this is the correct Appointment?') ? setSendEmail() : null;
@@ -196,6 +202,7 @@ class ConfirmAppointmentRequest extends Component {
 ConfirmAppointmentRequest.propTypes = {
   updateEntityRequest: PropTypes.func.required,
   reinitializeState: PropTypes.func.required,
+  selectAppointment: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {

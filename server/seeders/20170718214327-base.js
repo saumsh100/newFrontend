@@ -233,6 +233,12 @@ module.exports = {
       const totalAmount = parseFloat(patientAmount) + parseFloat(secondaryInsuranceAmount) +
       parseFloat(primaryInsuranceAmount) - parseFloat(discountAmount);
 
+      let code = Math.floor(Math.random() * procedures.length);
+
+      while (procedures[code].code.match(/^d/i)) {
+        code = Math.floor(Math.random() * procedures.length);
+      }
+
       deliveredProcedures.push({
         id: uuid(),
         accountId,
@@ -246,7 +252,8 @@ module.exports = {
         entryDate: faker.date.past(),
         updatedAt: new Date(),
         patientId: id,
-        procedureCode: procedures[Math.floor(Math.random() * procedures.length)].code,
+        procedureCode: procedures[code].code,
+        procedureCodeId: `CDA-${procedures[code].code}`,
       });
     }
 

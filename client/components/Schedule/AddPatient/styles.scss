@@ -1,0 +1,10 @@
+@import '../../../ui';
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+.row {
+  flex: 1;
+  align-items: center;
+}

@@ -30,8 +30,7 @@ export default function SameAppointment(props) {
     <ListItem
       className={dataContainer}
       onClick={()=> {
-        setCurrentDay(startDate);
-        setSelected(appointment)
+        setSelected(appointment);
       }}
     >
       <div className={styles.avatarContainer}>

@@ -42,6 +42,7 @@ class AddPatientSuggestions extends Component {
 
     const confirmSuggestion = confirm('Are you sure you want to connect these patients?');
 
+
     if (confirmSuggestion) {
       updateEntityRequest({
         key: 'patients',
@@ -83,7 +84,7 @@ class AddPatientSuggestions extends Component {
           })}
         </List>
         <div className={styles.createPatientButtonContainer}>
-          <Button color="darkgrey" onClick={this.handleCreatePatient}>
+          <Button border="blue" onClick={this.handleCreatePatient}>
             Create New Patient
           </Button>
         </div>
@@ -91,6 +92,7 @@ class AddPatientSuggestions extends Component {
     );
   }
 }
+
 AddPatientSuggestions.propTypes = {
   mergingData: PropTypes.object.required,
 };

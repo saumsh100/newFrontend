@@ -13,7 +13,10 @@
 
 .text {
   text-align: left;
-  padding-top: 10px;
+}
+
+.bold {
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 
 .dataContainer {

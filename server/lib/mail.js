@@ -9,6 +9,12 @@ export const sendConnectorDown = (config) => {
   return exports.sendTemplate(config);
 };
 
+export const sendConnectorBackUp = (config) => {
+    config.subject = `The Connector for ${config.name} is Back Up!`;
+    config.templateName = 'Connector Back Up';
+    return sendTemplate(config);
+  };
+
 export const sendConfirmationReminder = (config) => {
   config.subject = 'Appointment Reminder';
   config.templateName = 'Patient Reminder - 2 Hours Before UnConfirmed'; // Test Template, needs to be updated

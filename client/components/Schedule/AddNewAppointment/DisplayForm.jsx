@@ -1,11 +1,14 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import { Grid, Row, Col, Form, FormSection } from '../../library';
+import {
+  Form,
+  Field,
+} from '../../library';
 import AppointmentForm from './AppointmentForm';
-import PatientForm from './PatientForm';
+import DisplaySearchedPatient from './DisplaySearchedPatient'
 import { setTime } from '../../library/util/TimeOptions';
-import {SortByFirstName, SortByName} from '../../library/util/SortEntities';
+import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
 import styles from './styles.scss';
 
 const getDuration = (startDate, endDate, customBufferTime) => {
@@ -31,149 +34,178 @@ const generatePractitionerOptions = (practitioners) => {
   return options;
 };
 
-const validateAppForm = (values) => {
-  const errors = {
-    appointment: {},
-    patient: {},
-  };
-
-  const patientSelected = (values.patient && values.patient.patientSelected) ? values.patient.patientSelected : null;
-
-  if (patientSelected && (typeof values.patient.patientSelected !== 'object')) {
-    errors.patient.patientSelected = 'Searching...';
+class DisplayForm extends Component {
+  constructor(props) {
+    super(props);
+    this.focusAutoSuggest = this.focusAutoSuggest.bind(this);
   }
 
-  return errors;
-};
+  focusAutoSuggest() {
+    this.autoSuggestInput.focus();
+  }
 
-export default function DisplayForm(props) {
-  const {
-    formName,
-    patients,
-    services,
-    chairs,
-    practitioners,
-    patientSearched,
-    getSuggestions,
-    selectedAppointment,
-    unit,
-    handleSubmit,
-    handleAutoSuggest,
-    handlePractitionerChange,
-    handleSliderChange,
-    handleDurationChange,
-    handleUnitChange,
-    handleBufferChange,
-  } = props;
+  componentDidUpdate() {
+    if (this.props.showInput) {
+      this.focusAutoSuggest();
+    }
+  }
 
-  let initialValues = {
-    appointment: {
-      duration: 60,
-      buffer: 0,
-    },
-  };
-  let time = null;
-  let patient = null;
-
-  if (selectedAppointment) {
-
+  render() {
     const {
-      startDate,
-      endDate,
-      customBufferTime,
-      patientId,
-      serviceId,
-      chairId,
-      practitionerId,
-      note,
-      isPatientConfirmed,
-      isCancelled,
-    } = selectedAppointment;
+      formName,
+      patients,
+      chairs,
+      practitioners,
+      selectedAppointment,
+      unit,
+      handleSubmit,
+      handleDurationChange,
+      handleUnitChange,
+      handleAutoSuggest,
+      getSuggestions,
+      currentDate,
+      patientSearched,
+    } = this.props;
 
-    patient = patients.get(patientId);
-    const durationTime = getDuration(startDate, endDate, customBufferTime);
-    const bufferTime = customBufferTime ? durationTime + customBufferTime : durationTime;
-    const slider = durationTime > 180 ? [180, 180] : [durationTime, bufferTime];
+    let initialValues = {
+      date: moment(currentDate),
+    };
 
-    time = setTime(startDate);
-    const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
+    let time = null;
+    let startTime = null;
+    let endTime = null;
+    let patient = null;
 
-    initialValues = {
-      appointment: {
-        time,
+    if (selectedAppointment) {
+      const {
+        startDate,
+        endDate,
+        customBufferTime,
+        patientId,
+        serviceId,
+        chairId,
+        practitionerId,
+        note,
+        isPatientConfirmed,
+        isCancelled,
+      } = selectedAppointment;
+
+      patient = patients.get(patientId);
+      const durationTime = getDuration(startDate, endDate, customBufferTime);
+
+      startTime = setTime(startDate);
+      time = setTime(startDate);
+      endTime = setTime(endDate);
+      const unitValue = unit ? Number((durationTime / unit).toFixed(2)) : 0;
+
+      initialValues = {
+        startTime,
+        endTime,
         date: moment(startDate).format('L'),
         serviceId,
         practitionerId: practitionerId || '',
         chairId: chairId || '',
-        slider,
         isPatientConfirmed,
         isCancelled,
         duration: durationTime,
-        buffer: customBufferTime,
         unit: unitValue,
-      },
-      patient: {
-        patientSelected: patient.toJS(),
-        mobilePhoneNumber: patient.get('mobilePhoneNumber') || patient.get('homePhoneNumber'),
-        email: patient.get('email'),
         note,
-      },
+        patientSelected: patient.toJS(),
+      };
+    }
+
+    const practitionerOptions = generatePractitionerOptions(practitioners);
+    const chairOptions = generateEntityOptions(chairs, 'name');
+
+    let patientDisplay = patientSearched;
+
+    if (!this.props.showInput && patient) {
+      patientDisplay = patient;
+    }
+
+    if (this.props.showInput && patient) {
+      patientDisplay = null;
+    }
+
+    if (patientSearched === '') {
+      patientDisplay = patientSearched;
+    }
+
+    const autoCompleteStyle = {
+      error: styles.errorStyle,
+      icon: styles.iconAuto,
+      label: styles.labelAuto,
+      input: styles.inputStyleAuto,
+      toggleValueDiv: styles.dropDownValueStyle,
+      bar: styles.searchDropDownBar,
+      group: styles.groupAuto,
     };
+
+    const addNewPatientComponent = () => {
+      return (
+        <div
+          className={styles.addNewPatient}
+          onClick={(e) => {
+            e.stopPropagation();
+            this.props.setCreatingPatient({ createPatientBool: true });
+            this.props.setShowInput(true);
+            this.props.setPatientSearched(null)
+          }}
+        >
+          Add New Patient
+        </div>
+      );
+    };
+
+    const searchStyles = !patientDisplay ? styles.searchContainer : styles.hidden;
+
+    return (
+      <Form
+        form={formName}
+        onSubmit={handleSubmit}
+        ignoreSaveButton
+        initialValues={initialValues}
+        data-test-id="createAppointmentForm"
+      >
+        <DisplaySearchedPatient
+          patient={patientDisplay}
+          setPatientSearched={this.props.setPatientSearched}
+          setShowInput={this.props.setShowInput}
+          focusAutoSuggest={this.focusAutoSuggest}
+        />
+
+        <div className={searchStyles}>
+          <Field
+            component="AutoComplete"
+            name="patientSelected"
+            placeholder="Add Patient"
+            getSuggestions={getSuggestions}
+            onChange={(e, newValue) => handleAutoSuggest(newValue)}
+
+            classStyles={styles.searchInput}
+            theme={autoCompleteStyle}
+            suggestionsContainerComponent={addNewPatientComponent}
+            icon="search"
+            refCallBack={(el) => this.autoSuggestInput = el}
+            required
+            onBlurFunction={()=> this.props.setShowInput(false)}
+          />
+        </div>
+        <AppointmentForm
+          practitionerOptions={practitionerOptions}
+          chairOptions={chairOptions}
+          selectedAppointment={selectedAppointment}
+          time={time}
+          unit={unit}
+          handleDurationChange={handleDurationChange}
+          handleUnitChange={handleUnitChange}
+          handleStartTimeChange={this.props.handleStartTimeChange}
+          handleEndTimeChange={this.props.handleEndTimeChange}
+        />
+      </Form>
+    );
   }
 
-  let patientDisplay = patientSearched || patient;
-
-  if (patientSearched === '') {
-    patientDisplay = patientSearched;
-  }
-
-  const serviceOptions = generateEntityOptions(services, 'name');
-  const practitionerOptions = generatePractitionerOptions(practitioners);
-  const chairOptions = generateEntityOptions(chairs, 'name');
-  const title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Create New Appointment';
-
-  return (
-    <Form
-      form={formName}
-      onSubmit={handleSubmit}
-      ignoreSaveButton
-      initialValues={initialValues}
-      data-test-id="createAppointmentForm"
-    >
-      <Grid className={styles.addNewAppt}>
-        <Row className={styles.addNewAppt_mainContainer}>
-          <Col xs={8} sm={8} md={8}>
-            <div className={styles.title}>{title}</div>
-            <FormSection name="appointment">
-              <AppointmentForm
-                serviceOptions={serviceOptions}
-                practitionerOptions={practitionerOptions}
-                chairOptions={chairOptions}
-                handlePractitionerChange={handlePractitionerChange}
-                selectedAppointment={selectedAppointment}
-                time={time}
-                unit={unit}
-                handleSliderChange={handleSliderChange}
-                handleDurationChange={handleDurationChange}
-                handleUnitChange={handleUnitChange}
-                handleBufferChange={handleBufferChange}
-              />
-            </FormSection>
-          </Col>
-          <Col xs={4} sm={4} md={4}>
-            <FormSection name="patient">
-              <PatientForm
-                getSuggestions={getSuggestions}
-                patientSearched={patientDisplay}
-                handleSubmit={handleSubmit}
-                handleAutoSuggest={handleAutoSuggest}
-              />
-            </FormSection>
-          </Col>
-        </Row>
-      </Grid>
-    </Form>
-  );
 }
 
 DisplayForm.PropTypes = {
@@ -188,3 +220,5 @@ DisplayForm.PropTypes = {
   handleAutoSuggest: PropTypes.func.isRequired,
   handlePractitionerChange: PropTypes.func.isRequired,
 };
+
+export default DisplayForm;

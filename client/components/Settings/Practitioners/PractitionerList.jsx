@@ -94,8 +94,8 @@ class PractitionerList extends Component {
 
     const formName = 'addPractitionerForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { form: formName } },
+      { label: 'Cancel', onClick: this.setActive, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { color: 'blue', form: formName } },
     ];
 
     return (

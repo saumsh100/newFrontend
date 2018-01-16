@@ -13,6 +13,8 @@ const scheme = [
   'secondary',
   'tertiary',
 
+  'dense',
+
   'rounded',
   'upperCase',
   'compact',
@@ -30,7 +32,7 @@ const scheme = [
 const mapper = getClassMapper(scheme, styles);
 
 function Button(props) {
-  const baseClassName = mapper.map(props, styles.default, props.className);
+  const baseClassName = mapper.map(props, styles.baseline, props.className);
   let finalProps = mapper.omit(props, 'as', 'icon', 'submit', 'iconRight');
   if (props.disabled) {
     finalProps = mapper.omit(finalProps, 'onClick');

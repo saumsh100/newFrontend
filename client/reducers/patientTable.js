@@ -67,7 +67,6 @@ export default handleActions({
     const size = filters.size;
 
     if (size) {
-      console.log(filters)
       const modifiedFilters = filters.delete(`${payload.index}`);
       return state.set('filters', modifiedFilters);
     }
