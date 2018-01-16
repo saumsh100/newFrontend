@@ -10,6 +10,7 @@ import ResetPassword from '../components/My/PatientPage/ResetPassword';
 import ConfirmedAppointment from '../components/My/PatientPage/ConfirmedAppointment';
 import getParameterByName from '../components/My/PatientPage/Shared/getParameterByName';
 import Unsubscribe from '../components/My/PatientPage/Unsubscribe';
+import ConfirmedEmail from '../components/My/PatientPage/ConfirmedEmail';
 import withAuthProps from '../hocs/withAuthProps';
 
 const MyRouter = ({ history }) => {
@@ -43,6 +44,15 @@ const MyRouter = ({ history }) => {
             path="/unsubscribe"
             render={props => (
               <Unsubscribe
+                {...props}
+                params={params}
+              />
+            )}
+          />
+          <Route
+            path="/signup/confirmed"
+            render={props => (
+              <ConfirmedEmail
                 {...props}
                 params={params}
               />

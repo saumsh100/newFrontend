@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import styles from './styles.scss';
@@ -11,6 +12,7 @@ export default function Input(props) {
     value,
     error,
     icon,
+    IconComponent,
     type = 'text',
     min,
     borderColor,
@@ -21,7 +23,7 @@ export default function Input(props) {
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
-  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles']);
+  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles', 'IconComponent']);
 
   const valuePresent = value !== null && value !== undefined && value !== '' &&
     !(typeof value === 'number' && isNaN(value));
@@ -52,6 +54,14 @@ export default function Input(props) {
 
   const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
 
+  let iconComponent = null;
+  // TODO: fix this so that it does not throw an error!
+  /*if (IconComponent) {
+    iconComponent = <IconComponent className={iconClassName} />;
+  } else if (icon) {
+    iconComponent = <Icon className={iconClassName} icon={icon} />;
+  }*/
+
   // TODO: use classNames to avoid "undefined" being a className
   return (
     <div className={`${styles.group} ${classStyles}`}>
@@ -61,7 +71,7 @@ export default function Input(props) {
         {label}
       </label>
       {errorComponent}
-      {icon ? <Icon className={iconClassName} icon={icon} /> : null }
+      {iconComponent}
     </div>
   );
 }
@@ -76,4 +86,5 @@ Input.propTypes = {
 
   type: PropTypes.string,
   icon: PropTypes.string,
+  IconComponent: PropTypes.func,
 };

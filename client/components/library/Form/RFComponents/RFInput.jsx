@@ -2,6 +2,7 @@
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
 import Input from '../../Input';
+import Icon from '../../Icon';
 
 export default function RFInput(props) {
   const {
@@ -16,9 +17,11 @@ export default function RFInput(props) {
 
   const newProps = omit(props, ['input', 'meta',]);
   const { touched, asyncValidating, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
-  const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
 
+  const finalError = error || ((touched || dirty) ? meta.error : null);
+  const IconComponent = asyncValidating ?
+    (props) => <Icon {...props} icon="spinner" pulse /> :
+    null;
 
   return (
     <Input
@@ -27,7 +30,8 @@ export default function RFInput(props) {
       type={type}
       label={label}
       error={finalError}
-      icon={finalIcon}
+      IconComponent={IconComponent}
+      icon={icon}
     />
   );
 }

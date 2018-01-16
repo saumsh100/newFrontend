@@ -12,7 +12,6 @@ import styles from './styles.scss';
 const customSubmitButton = (
   <Button
     type="submit"
-    icon="email"
     className={styles.customSubmitButton}
   >
     Save and continue
@@ -63,7 +62,7 @@ class SignUp extends Component {
 }
 
 SignUp.propTypes = {
-  updateReview: PropTypes.func.isRequired,
+  updateReview: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {

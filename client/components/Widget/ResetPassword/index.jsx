@@ -13,7 +13,6 @@ import styles from './styles.scss';
 const customSubmitButton = (
   <Button
     type="submit"
-    icon="email"
     className={styles.customSubmitButton}
   >
     Reset Password

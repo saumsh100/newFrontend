@@ -56,7 +56,10 @@ class PatientUserMenu extends Component {
 
     return (
       <div className={styles.userWrapper}>
-        <DropdownMenu labelComponent={props => <UserAvatarButton {...props} {...userMenuProps} />}>
+        <DropdownMenu
+          className={styles.dropdownUserMenu}
+          labelComponent={props => <UserAvatarButton {...props} {...userMenuProps} />}
+        >
           <MenuItem
             icon="power-off"
             className={styles.userMenuLi}

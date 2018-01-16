@@ -9,7 +9,15 @@ module.exports = {
           'accountId',
           {
             type: Sequelize.UUID,
-            allowNull: true,
+          },
+          { transaction: t },
+        );
+
+        queryInterface.addColumn(
+          'Tokens',
+          'accountId',
+          {
+            type: Sequelize.UUID,
           },
           { transaction: t },
         );
@@ -25,6 +33,12 @@ module.exports = {
       try {
         await queryInterface.removeColumn(
           'PatientUserResets',
+          'accountId',
+          { transaction: t },
+        );
+
+        await queryInterface.removeColumn(
+          'Tokens',
           'accountId',
           { transaction: t },
         );

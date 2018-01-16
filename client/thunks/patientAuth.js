@@ -27,15 +27,16 @@ const updateSessionByToken = (token, dispatch) => {
     .then((session) => {
       const sessionId = session.sessionId;
       const patientUser = new PatientUser(session.patientUser);
+
       // set's isAuthenticated and user data
       dispatch(loginSuccess({ sessionId, patientUser }));
       return patientUser;
     })
     .catch((err) => {
       // Catch 401 from /auth/me and logout, or errors from React renders
-      console.error('Error Fetching Patient', err);
       Token.remove();
       dispatch(authLogout());
+      throw err;
     });
 };
 

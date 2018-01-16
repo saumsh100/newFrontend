@@ -16,10 +16,7 @@ const asyncPhoneNumberValidatePatient = (values) => {
   if (!values.phoneNumber) return;
   return axios.post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
     .then((response) => {
-      console.log(response);
-      console.log(response.data);
       const { error } = response.data;
-      console.log(error);
       if (error) {
         throw { phoneNumber: error };
       }
@@ -27,6 +24,7 @@ const asyncPhoneNumberValidatePatient = (values) => {
 };
 
 const asyncEmailValidateNewPatient = (values) => {
+  if (!values.email) return;
   return axios.post('/api/patients/emailCheck', { email: values.email })
     .then((response) => {
       if (response.data.exists) {
@@ -40,7 +38,6 @@ const asyncPhoneNumberValidateNewPatient = (values) => {
   return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.phoneNumber })
     .then((response) => {
       if (response.data.exists) {
-        console.log('throwing error');
         throw { phoneNumber: 'There is already a user with that phone number' };
       }
     });
@@ -48,20 +45,25 @@ const asyncPhoneNumberValidateNewPatient = (values) => {
 
 
 const asyncValidatePatient = composeAsyncValidators([asyncEmailValidatePatient, asyncPhoneNumberValidatePatient]);
-const asyncValidateNewPatient = composeAsyncValidators(([asyncEmailValidateNewPatient, asyncPhoneNumberValidateNewPatient]))
+const asyncValidateNewPatient = composeAsyncValidators(([asyncEmailValidateNewPatient, asyncPhoneNumberValidateNewPatient]));
 
 function composeAsyncValidators(validatorFns) {
   return async (values, dispatch, props, field) => {
     let errors;
     for (const validatorFn of validatorFns) {
       try {
+        console.log('running validatorFn');
         await validatorFn(values, dispatch, props, field);
       } catch (err) {
+        console.log('err', err);
         errors = Object.assign({}, errors, err);
       }
     }
 
-    if (errors) throw errors;
+    if (errors) {
+      console.log('errors', errors);
+      throw errors;
+    }
   };
 }
 

@@ -1,13 +1,15 @@
 
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import url from 'url';
 import crypto from 'crypto';
 import { PatientAuth } from '../../lib/_auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
 import { sequelizeLoader } from '../util/loaders';
+import { generateAccountParams, encodeParams } from './util/params';
 import StatusError from '../../util/StatusError';
-import { PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
+import { Account, PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
 import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
 
 const authRouter = Router();
@@ -15,7 +17,6 @@ const authRouter = Router();
 authRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 authRouter.param('tokenId', sequelizeLoader('token', 'Token'));
 authRouter.param('accountId', sequelizeLoader('account', 'Account'));
-
 
 const signTokenAndSend = res => ({ session, model }) => {
   const tokenData = {
@@ -74,7 +75,7 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
 
       // Create token
       const tokenId = crypto.randomBytes(12).toString('hex');
-      const token = await Token.create({ id: tokenId, patientUserId: id });
+      const token = await Token.create({ id: tokenId, patientUserId: id, accountId: account.id });
 
       // Generate the URL to confirm email
       const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
@@ -163,11 +164,21 @@ authRouter.post('/:patientUserId/resend', (req, res, next) => {
 authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
   try {
     const { token } = req;
-    const { patientUserId } = token;
+    const { patientUserId, accountId } = token;
     const patientUser = await PatientUser.findById(patientUserId);
     await patientUser.update({ isEmailConfirmed: true });
     await token.destroy();
-    return res.render('patient-email-confirmed');
+
+    // This will be replaced with proper URL mounting for clinics
+    const account = await Account.findById(accountId);
+    const params = {
+      account: generateAccountParams(account),
+    };
+
+    return res.redirect(url.format({
+      pathname: '/signup/confirmed',
+      query: { params: encodeParams(params) },
+    }));
   } catch (err) {
     next(err);
   }

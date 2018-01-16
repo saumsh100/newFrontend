@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
@@ -18,11 +19,15 @@ export default function Icon(props) {
     onClick,
     style,
     type,
+    pulse,
   } = props;
 
   const baseClass = typeMap[type];
   const fontAwesomeClass = `${baseClass} fa-${icon} ${styles.icon}`;
-  const classes = classNames(className, fontAwesomeClass);
+  let classes = classNames(className, fontAwesomeClass);
+  if (pulse) {
+    classes = classNames(classes, 'fa-pulse');
+  }
 
   const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
 

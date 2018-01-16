@@ -62,3 +62,10 @@
   margin-right: 5px;
 }
 
+.dropdownUserMenu {
+  /* used to target div.dd-menu-items */
+  > div:last-child {
+    width: 150px;
+  }
+}
+
