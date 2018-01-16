@@ -56,11 +56,10 @@ $empty-grey: darken(lightgrey, 5%);
   position: absolute;
   pointer-events: none;
   font-family: $medium-font;
-  // left: 0px;
-  // transition: 0.2s ease all;
-  // top: 35px;
-  // font-size: 16px;
-  @extend .filled;
+  left: 0;
+  transition: 0.2s ease all;
+  top: 5px;
+  font-size: $medium-size;
 }
 
 .primaryColorBorder {

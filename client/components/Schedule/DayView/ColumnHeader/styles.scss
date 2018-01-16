@@ -58,10 +58,11 @@
 .containerText {
   margin-left: 5px;
   overflow: hidden;
+  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
 }
 
 .practitionerName {
-  font-size: 14px;
+  font-size: 15px;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   text-overflow: ellipsis;
   overflow: hidden;
@@ -78,8 +79,8 @@
   justify-content: center;
   box-sizing: border-box;
   height: 100%;
-  font-size: 18px;
-  color: $primary-blue;
+  font-size: 15px;
+  color: $primary-dark;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   text-align: center;
   padding: 5px;

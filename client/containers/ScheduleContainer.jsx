@@ -1,12 +1,17 @@
 
 import React, { PropTypes } from 'react';
+import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Loader from 'react-loader';
 import moment from 'moment';
 import ScheduleComponent from '../components/Schedule';
-import { fetchEntities } from '../thunks/fetchEntities';
-import { setScheduleDate, selectAppointment, setMergingPatient } from '../actions/schedule';
+import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
+import {
+  setScheduleDate,
+  selectAppointment,
+  setMergingPatient,
+  setCreatingPatient,
+} from '../actions/schedule';
 
 import {
   setAllFilters,
@@ -14,7 +19,7 @@ import {
 
 class ScheduleContainer extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       loaded: false,
     };
@@ -33,24 +38,29 @@ class ScheduleContainer extends React.Component {
     };
 
     Promise.all([
-      this.props.fetchEntities({
+      this.props.fetchEntitiesRequest({
+        id: 'appSchedule',
         key: 'appointments',
         join: ['patient', 'service'],
         params: query,
       }),
-      this.props.fetchEntities({
-        key: 'practitioners', join: ['weeklySchedule', 'services'],
+
+      this.props.fetchEntitiesRequest({
+        id: 'pracSchedule',
+        key: 'practitioners',
+        join: ['weeklySchedule', 'services'],
       }),
-      this.props.fetchEntities({
+      this.props.fetchEntitiesRequest({
+        id: 'chairsSchedule',
         key: 'chairs',
       }),
-      this.props.fetchEntities({
+      this.props.fetchEntitiesRequest({
+        id: 'accountsSchedule',
         key: 'accounts',
-        join: ['weeklySchedule'],
       }),
     ]).then(() => {
+      this.setState({ loaded: true })
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
-      this.setState({ loaded: true });
     }).catch(e => console.log(e));
   }
 
@@ -59,7 +69,7 @@ class ScheduleContainer extends React.Component {
 
     const nextPropsDate = moment(nextProps.schedule.toJS().scheduleDate);
 
-    if (!nextPropsDate.isSame(currentDate)) {
+    if (!nextPropsDate.isSame(currentDate, 'month') || !nextPropsDate.isSame(currentDate, 'day') || !nextPropsDate.isSame(currentDate, 'year')) {
       const startDate = nextPropsDate.startOf('day').toISOString();
       const endDate = nextPropsDate.endOf('day').toISOString();
       const query = {
@@ -67,7 +77,12 @@ class ScheduleContainer extends React.Component {
         endDate,
         limit: 150,
       };
-      this.props.fetchEntities({ key: 'appointments', join: ['patient'], params: query });
+      this.props.fetchEntitiesRequest({
+        id: 'appSchedule',
+        key: 'appointments',
+        join: ['patient'],
+        params: query
+      });
     }
   }
 
@@ -88,10 +103,9 @@ class ScheduleContainer extends React.Component {
       activeAccount,
     } = this.props;
 
-    if (!activeAccount || !this.state.loaded) {
+    if (!this.state.loaded || !activeAccount) {
       return <Loader color="#FF715A" />;
     }
-
     return (
       <ScheduleComponent
         practitioners={practitioners}
@@ -106,7 +120,9 @@ class ScheduleContainer extends React.Component {
         weeklySchedules={weeklySchedules}
         timeOffs={timeOffs}
         setMergingPatient={setMergingPatient}
-        unit={activeAccount.get('unit')}
+        unit={activeAccount}
+        setCreatingPatient={this.props.setCreatingPatient}
+        createEntityRequest={this.props.createEntityRequest}
       />
     );
   }
@@ -115,6 +131,7 @@ class ScheduleContainer extends React.Component {
 ScheduleContainer.propTypes = {
   setAllFilters: PropTypes.func,
   fetchEntities: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
   setScheduleDate: PropTypes.func,
   practitioners: PropTypes.object,
   currentDate: PropTypes.object,
@@ -123,13 +140,26 @@ ScheduleContainer.propTypes = {
   services: PropTypes.object,
   patients: PropTypes.object,
   chairs: PropTypes.object,
+  setCreatingPatient: PropTypes.func,
 };
 
-function mapStateToProps({ entities, schedule, auth }) {
+function mapStateToProps({ apiRequests, entities, schedule, auth }) {
 
   const weeklySchedules = entities.getIn(['weeklySchedules', 'models'])
   const timeOffs = entities.getIn(['timeOffs', 'models']);
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const waitForAuth = auth.get('accountId');
+  const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
+
+  /*
+  const appsFetched = (apiRequests.get('appSchedule') ? apiRequests.get('appSchedule').wasFetched : null);
+  const pracFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
+  const chairFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);
+  const accountFetched = (apiRequests.get('accountsSchedule') ? apiRequests.get('accountsSchedule').wasFetched : null);
+
+  let loaded = false;
+  if (appsFetched && pracFetched && chairFetched && accountFetched && waitForAuth) {
+    loaded = true;
+  }*/
 
   return {
     schedule,
@@ -148,11 +178,14 @@ function mapStateToProps({ entities, schedule, auth }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    createEntityRequest,
     fetchEntities,
+    fetchEntitiesRequest,
     setAllFilters,
     setScheduleDate,
     selectAppointment,
     setMergingPatient,
+    setCreatingPatient,
   }, dispatch);
 }
 

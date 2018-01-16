@@ -7,6 +7,7 @@ import Icon from '../Icon';
 import Input from '../Input';
 import { List, ListItem } from '../List';
 import styles from './styles.scss';
+import withTheme from '../../../hocs/withTheme';
 
 function DefaultOption({ option }) {
   return (
@@ -16,7 +17,7 @@ function DefaultOption({ option }) {
   );
 }
 
-export default class DropdownSelect extends Component {
+class DropdownSelect extends Component {
   constructor(props) {
     super(props);
     this.state = this.getInitialState();
@@ -106,9 +107,8 @@ export default class DropdownSelect extends Component {
         {search ?
           <div className={styles.searchInput}>
             <Input
-              label="Search"
               onChange={e => {
-                this.handleSearch(e.target.value)
+                this.handleSearch(e.target.value);
               }}
               value={this.state.value}
               icon="search"
@@ -143,13 +143,12 @@ export default class DropdownSelect extends Component {
   renderToggle() {
     const {
       value,
-      disabled,
       options = [],
-      label,
       template,
-      borderColor,
-      error,
       theme,
+      error,
+      disabled,
+      label,
     } = this.props;
 
     const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
@@ -158,34 +157,28 @@ export default class DropdownSelect extends Component {
     let toggleDiv = null;
     const option = options.find(opt => opt.value === value);
 
-    let labelClassName = styles.label;
-
+    let labelClassName = theme.label;
 
     if (option) {
       toggleDiv = <ToggleTemplate option={option} />;
-      labelClassName = classNames(styles.filled, labelClassName);
+      labelClassName = classNames(theme.filled, labelClassName);
     }
 
     let toggleClassName = styles.toggleDiv;
+    const toggleValueClassName = theme.toggleValueDiv;
     let caretIconClassName = styles.caretIcon;
 
-    if (theme) {
-      toggleClassName = classNames(styles[`theme_${theme}Border`], toggleClassName);
-      labelClassName = classNames(styles[`theme_${theme}Label`], labelClassName);
-      caretIconClassName = classNames(styles[`theme_${theme}Caret`], caretIconClassName);
-    }
-
-    if (borderColor) {
-      toggleClassName = classNames(styles[`${borderColor}Border`], toggleClassName);
-    }
-
     if (this.state.isOpen) {
-      toggleClassName = classNames(styles.active, toggleClassName);
-      caretIconClassName = classNames(styles.activeIcon, caretIconClassName);
-      labelClassName = classNames(styles.activeLabel, labelClassName);
+      toggleClassName = classNames(theme.active, toggleClassName);
+      caretIconClassName = classNames(theme.activeIcon, caretIconClassName);
+      labelClassName = classNames(theme.activeLabel, labelClassName);
     }
 
-
+    if (error) {
+      labelClassName = classNames(theme.errorLabel, labelClassName);
+      caretIconClassName = classNames(theme.errorIcon, caretIconClassName);
+      toggleClassName = classNames(theme.errorToggleDiv, toggleClassName);
+    }
 
     return (
       <div
@@ -193,17 +186,17 @@ export default class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
-        <Input onFocus={disabled ? false : this.toggle} className={styles.hiddenInput} />
+        <Input onFocus={disabled ? false : this.toggle} className={theme.hiddenInput} />
         <label className={labelClassName}>
           {label}
         </label>
-        <div className={styles.toggleValueDiv}>
+        <div className={toggleValueClassName}>
           {toggleDiv}
         </div>
-        <div className={styles.caretIconWrapper}>
+        <div className={theme.caretIconWrapper}>
           <Icon className={caretIconClassName} icon="caret-down" />
         </div>
-        <div className={styles.error}>
+        <div className={theme.error}>
           {error || ''}
         </div>
       </div>
@@ -243,3 +236,5 @@ DropdownSelect.propTypes = {
   disabled: PropTypes.bool,
   align: PropTypes.string,
 };
+
+export default withTheme(DropdownSelect, styles);

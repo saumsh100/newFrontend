@@ -10,6 +10,10 @@ export default function AppointmentsForm(props) {
     handleSubmit,
   } = props;
 
+  const theme = {
+    input: styles.inputBarStyle,
+  };
+
   return (
     <Form
       form="Form1"
@@ -26,7 +30,7 @@ export default function AppointmentsForm(props) {
                 name="recall"
                 label="Recall"
                 component="DayPicker"
-                theme="primaryBlue"
+                theme={theme}
               />
             </Col>
             <Col xs={6} className={styles.colRight}>
@@ -34,7 +38,7 @@ export default function AppointmentsForm(props) {
                 component="DayPicker"
                 name="hygiene"
                 label="Hygiene"
-                theme="primaryBlue"
+                theme={theme}
               />
             </Col>
           </Row>
@@ -47,7 +51,8 @@ export default function AppointmentsForm(props) {
                 name="recall"
                 label="Recall"
                 component="DayPicker"
-                theme="primaryBlue"
+                theme={theme}
+
               />
             </Col>
             <Col xs={6} className={styles.colToggle}>

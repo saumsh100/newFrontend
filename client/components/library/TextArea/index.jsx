@@ -2,9 +2,10 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import styles from './styles.scss';
+import textAreaStyles from './styles.scss';
+import withTheme from '../../../hocs/withTheme';
 
-export default function Input(props) {
+function TextArea(props) {
   const {
     label,
     value,
@@ -19,6 +20,8 @@ export default function Input(props) {
 
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
+
+  const styles = theme;
 
   const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles']);
 
@@ -60,7 +63,7 @@ export default function Input(props) {
   );
 }
 
-Input.propTypes = {
+TextArea.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.oneOfType([
@@ -70,4 +73,7 @@ Input.propTypes = {
 
   type: PropTypes.string,
   icon: PropTypes.string,
+  theme: PropTypes.object,
 };
+
+export default withTheme(TextArea, textAreaStyles);

@@ -60,8 +60,10 @@
   padding-bottom: 3px;
   &_name {
     composes: subHeaderMediumSmall from 'sass-loader!../../../../fonts.scss';
+    font-size: 13px;
     color: $primary-white;
     padding-right: 5px;
+    padding-left: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

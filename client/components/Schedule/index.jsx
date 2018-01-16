@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import DocumentTitle from 'react-document-title';
 import {
   Grid,
@@ -12,7 +14,6 @@ import {
   SContainer,
   SHeader,
   Button,
-  DayPicker,
   IconButton,
   Modal,
   DialogBox,
@@ -20,14 +21,14 @@ import {
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
-import AddPatientUser from './AddPatientUser';
+import AddPatient from './AddPatient';
 import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Header/CurrentDate';
 import HeaderButtons from './Header/HeaderButtons';
+import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import Calendar from '../library/Calendar/index';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import styles from './styles.scss';
-
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -36,6 +37,7 @@ class ScheduleComponent extends Component {
       addNewAppointment: false,
       patientSearched: null,
       sendEmail: false,
+      showInput: false,
     };
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
@@ -44,6 +46,82 @@ class ScheduleComponent extends Component {
     this.setSendEmail = this.setSendEmail.bind(this);
     this.nextDay = this.nextDay.bind(this);
     this.previousDay = this.previousDay.bind(this);
+    this.setShowInput = this.setShowInput.bind(this);
+    this.handlePatientUserSubmit = this.handlePatientUserSubmit.bind(this);
+    this.handlePatientSubmit = this.handlePatientSubmit.bind(this);
+    this.setCreatingPatient = this.setCreatingPatient.bind(this);
+  }
+
+  handlePatientUserSubmit(values) {
+    const {
+      schedule,
+      selectAppointment,
+      createEntityRequest,
+    } = this.props;
+
+    const mergingPatientData = schedule.toJS().mergingPatientData;
+
+    const {
+      requestData,
+      patientUser,
+    } = mergingPatientData;
+
+    values.isSyncedWithPms = false;
+    values.patientUserId = patientUser.id;
+
+    const appointment = {
+      startDate: requestData.startDate,
+      endDate: requestData.endDate,
+      serviceId: requestData.serviceId,
+      note: requestData.note,
+      isSyncedWithPms: false,
+      customBufferTime: 0,
+      requestModel: requestData.requestModel,
+      request: true,
+      practitionerId: requestData.practitionerId,
+    };
+
+    const alert = {
+      success: {
+        body: 'New Patient Added.',
+      },
+      error: {
+        body: 'Failed to add patient.',
+      },
+    };
+
+    createEntityRequest({
+      key: 'patients',
+      entityData: values,
+      alert,
+    }).then((result) => {
+      appointment.patientId = Object.keys(result.patients)[0];
+      this.reinitializeState();
+      selectAppointment(appointment);
+    });
+  }
+
+  handlePatientSubmit(values) {
+    const alert = {
+      success: {
+        body: 'New Patient Added.',
+      },
+      error: {
+        body: 'Failed to add patient.',
+      },
+    };
+
+    this.props.createEntityRequest({
+      key: 'patients',
+      entityData: values,
+      alert,
+    }).then(() => {
+      this.props.setCreatingPatient({ createPatientBool: false });
+    });
+  }
+
+  setCreatingPatient(value = false) {
+    this.props.setCreatingPatient({ creatingPatientBool: value});
   }
 
   setCurrentDay(day) {
@@ -64,11 +142,13 @@ class ScheduleComponent extends Component {
       requestData: null,
       suggestions: [],
     });
+    this.props.setCreatingPatient(false);
     this.props.selectAppointment(null);
     this.setState({
       addNewAppointment: false,
       patientSearched: null,
       sendEmail: false,
+      showInput: false,
     });
   }
 
@@ -87,7 +167,13 @@ class ScheduleComponent extends Component {
   setSendEmail() {
     this.setState({
       sendEmail: !this.state.sendEmail,
-    })
+    });
+  }
+
+  setShowInput(showBool) {
+    this.setState({
+      showInput: showBool,
+    });
   }
 
   render() {
@@ -109,7 +195,6 @@ class ScheduleComponent extends Component {
       addNewAppointment,
     } = this.state;
 
-    const currentDate = moment(schedule.toJS().scheduleDate);
 
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
@@ -117,23 +202,32 @@ class ScheduleComponent extends Component {
     }
 
     const mergingPatientData = schedule.toJS().mergingPatientData;
+    const createNewPatient = schedule.toJS().createNewPatient;
+    const leftColumnWidth = schedule.toJS().leftColumnWidth;
+    const currentDate = moment(schedule.toJS().scheduleDate);
 
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
     const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
 
-    let displayModalComponent = selectedAppointment && selectedAppointment.nextAppt ? (
-      <ConfirmAppointmentRequest
-        patients={patients.get('models')}
-        selectedAppointment={selectedAppointment}
-        selectAppointment={selectAppointment}
-        reinitializeState={this.reinitializeState}
-        setCurrentDay={this.setCurrentDay}
-        setSendEmail={this.setSendEmail}
-        sendEmail={this.state.sendEmail}
-      />
-    ) : null;
-
     let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : 'Could this be the same appointment?';
+
+    let displayModalComponent = null;
+
+    let actions = [];
+
+    if (selectedAppointment && selectedAppointment.nextAppt) {
+      displayModalComponent = (
+        <ConfirmAppointmentRequest
+          patients={patients.get('models')}
+          selectedAppointment={selectedAppointment}
+          selectAppointment={selectAppointment}
+          reinitializeState={this.reinitializeState}
+          setCurrentDay={this.setCurrentDay}
+          setSendEmail={this.setSendEmail}
+          sendEmail={this.state.sendEmail}
+        />
+      );
+    }
 
     if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
       displayTitle = 'Create or Connect a Patient';
@@ -147,22 +241,55 @@ class ScheduleComponent extends Component {
       );
     } else if (mergingPatientData.patientUser) {
       displayTitle = 'Add New Patient';
+
+      const patientFormName = 'Create New Patient User';
+
+      actions = [
+        { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+        { label: 'Save', onClick: this.handlePatientUserSubmit, component: RemoteSubmitButton, props: { color: 'blue', form: patientFormName } },
+      ];
+
       displayModalComponent = (
-        <AddPatientUser
+        <AddPatient
           mergingPatientData={mergingPatientData}
-          reinitializeState={this.reinitializeState}
-          selectAppointment={selectAppointment}
+          formName={patientFormName}
+          onSubmit={this.handlePatientUserSubmit}
         />
       );
     }
 
-    const leftColumnWidth = 70;
+    if (createNewPatient) {
+      displayTitle = 'Create New Patient';
+      const patientFormName = 'Create New Patient';
+
+      actions = [
+        { label: 'Cancel',
+          onClick: () => {
+            this.setCreatingPatient(false);
+          },
+          component: Button,
+          props: { border: 'blue' } ,
+        },
+        { label: 'Save',
+          onClick: this.handlePatientSubmit,
+          component: RemoteSubmitButton,
+          props: { color: 'blue', form: patientFormName },
+        },
+      ];
+
+      displayModalComponent = (
+        <AddPatient
+          formName={patientFormName}
+          onSubmit={this.handlePatientSubmit}
+        />
+      );
+    }
 
     return (
       <Grid>
         <Row className={styles.rowMainContainer}>
           <Col xs={12} sm={9} md={9} className={styles.dayViewContainer}>
-            <Card className={styles.card}>
+            <Card className={styles.card} >
               <SContainer>
                 <SHeader className={styles.headerContainer}>
                   <CurrentDate
@@ -192,6 +319,7 @@ class ScheduleComponent extends Component {
                     >
                       Today
                     </Button>
+
                     <HeaderButtons
                       addNewAppointment={this.addNewAppointment}
                       schedule={schedule}
@@ -226,23 +354,27 @@ class ScheduleComponent extends Component {
                       formName={formName}
                       chairs={chairs.get('models').toArray()}
                       practitioners={filterPractitioners}
-                      services={services.get('models')}
                       patients={patients.get('models')}
-                      selectedAppointment={selectedAppointment}
                       reinitializeState={this.reinitializeState}
                       weeklySchedules={weeklySchedules}
                       setPatientSearched={this.setPatientSearched}
                       patientSearched={this.state.patientSearched}
-                      unit={unit}
+                      unit={unit.get('unit')}
+                      currentDate={currentDate}
+                      showInput={this.state.showInput}
+                      setShowInput={this.setShowInput}
+                      selectedAppointment={this.props.selectedAppointment}
+                      setCreatingPatient={this.props.setCreatingPatient}
                     />
                   </Modal>
                   <DialogBox
                     title={displayTitle}
-                    type="medium"
+                    type={createNewPatient ? "small" : "medium"}
+                    actions={actions}
                     active={((selectedAppointment && selectedAppointment.nextAppt) ||
-                      !!mergingPatientData.patientUser)}
+                      !!mergingPatientData.patientUser) || createNewPatient}
                     onEscKeyDown={this.reinitializeState}
-                    onOverlayClick={this.reinitializeState}
+                    onOverlayClick={createNewPatient ? this.setCreatingPatient : this.reinitializeState}
                   >
                     {displayModalComponent}
                   </DialogBox>
@@ -290,7 +422,8 @@ ScheduleComponent.propTypes = {
   selectedAppointment: PropTypes.object,
   setMergingPatient: PropTypes.func,
   weeklySchedules: PropTypes.object,
+  setCreatingPatient: PropTypes.func,
   unit: PropTypes.number,
 };
 
-export default ScheduleComponent;
+export default ScheduleComponent

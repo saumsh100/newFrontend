@@ -61,6 +61,10 @@ export default function PersonalForm(props) {
     states = caProv;
   }
 
+  const theme = {
+    input: styles.inputBarStyle,
+  };
+
   return (
     <Form
       form="Form2"
@@ -87,7 +91,7 @@ export default function PersonalForm(props) {
               validate={[validateBirthdate]}
               name="birthDate"
               label="Birth Date (MM/DD/YYYY)"
-              theme="primaryBlue"
+              theme={theme}
               icon="birthday-cake"
             />
           </Col>
@@ -99,7 +103,7 @@ export default function PersonalForm(props) {
               name="homePhoneNumber"
               type="tel"
               label="Home Number"
-              theme="primaryBlue"
+              theme={theme}
               icon="phone"
             />
           </Col>
@@ -108,7 +112,7 @@ export default function PersonalForm(props) {
               name="mobilePhoneNumber"
               type="tel"
               label="Mobile Number"
-              theme="primaryBlue"
+              theme={theme}
               icon="mobile"
             />
           </Col>
@@ -117,7 +121,7 @@ export default function PersonalForm(props) {
               name="workPhoneNumber"
               type="tel"
               label="Work Number"
-              theme="primaryBlue"
+              theme={theme}
               icon="phone-square"
             />
           </Col>
@@ -128,7 +132,7 @@ export default function PersonalForm(props) {
             <Field
               name="street"
               label="Address Line 1"
-              theme="primaryBlue"
+              theme={theme}
               icon="map-marker"
             />
           </Col>
@@ -136,7 +140,7 @@ export default function PersonalForm(props) {
             <Field
               name="city"
               label="City"
-              theme="primaryBlue"
+              theme={theme}
             />
           </Col>
           <Col xs={6} className={styles.colToggle}>
@@ -153,7 +157,7 @@ export default function PersonalForm(props) {
               name="zipCode"
               label="Postal Code"
               maxLength="6"
-              theme="primaryBlue"
+              theme={theme}
             />
           </Col>
           <Col xs={6} className={styles.colToggle}>

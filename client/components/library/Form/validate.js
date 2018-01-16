@@ -160,7 +160,7 @@ const passwordStrength = (value) => {
 
 const parseNum = value => value && parseInt(value);
 
-const notNegative = value => value && value <= 0 ? 'Must be greater than 0' : undefined;
+const notNegative = value => value && value <= 0 ? 'Negative value' : undefined;
 
 export {
   composeAsyncValidators,

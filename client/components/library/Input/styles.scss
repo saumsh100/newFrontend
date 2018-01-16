@@ -11,9 +11,10 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .input {
-  font-size: $small-size;
+  font-size: $medium-size;
   font-family: $dashboard-font;
-  padding: 10px 0px 10px 0px;
+  height: 25px;
+  box-sizing: border-box;
   display: block;
   width: 100%;
   border: none;
@@ -31,6 +32,7 @@ $empty-grey: darken(lightgrey, 5%);
   &:focus ~ .label {
     @extend .filled;
   }
+
 }
 
 .icon {
@@ -42,13 +44,20 @@ $empty-grey: darken(lightgrey, 5%);
 
 .erroredInput {
   border-bottom: 1px solid $error-color;
+  &::placeholder {
+    color: red !important;
+  }
 }
 
 // TODO: figure out how to stack the CSS to make sure we dont have to use !important
 .filled {
-  top: 10px !important;
+  top:11px !important;
   left: 0px !important;
-  font-size: 12px !important;
+  font-size: 10px !important;
+}
+
+.hideLabel {
+  display: none;
 }
 
 .label {
@@ -58,65 +67,20 @@ $empty-grey: darken(lightgrey, 5%);
   pointer-events: none;
   left: 0px;
   transition: 0.2s ease all;
-  top: 35px;
-  font-size: $small-size;
+  top: 25px;
+  font-size: $medium-size;
 }
 
 .primaryColorBorder {
   border-bottom: 1px solid $primary-color;
 }
 
-.theme {
-  &_primaryWhiteLabel {
-    color: $primary-white;
-  }
-  &_primaryWhiteBorder{
-    border-color: $primary-white;
-  }
-  &_primaryWhiteInput{
-    border-bottom: 1px solid $primary-white;
-  }
-  &_primaryWhiteIcon{
-    color: $primary-white;
-  }
-
-  &_primaryGreyLabel {
-    color: $primary-grey;
-  }
-  &_primaryGreyInput{
-    border-bottom: 1px solid $primary-grey;
-    color: $primary-grey;
-
-    &:focus ~ .label {
-      color: $primary-white;
-    }
-  }
-  &_primaryGreyIcon {
-    color: $primary-grey;
-  }
-
-  &_primaryBlueLabel {
-    font-size: 12px;
-    letter-spacing: 0.5px;
-  }
-  &_primaryBlueBorder{
-    border-color: $primary-blue;
-  }
-  &_primaryBlueInput{
-    border-bottom: 1px solid $primary-blue;
-
-    &:focus ~ .label {
-      color: $primary-blue;
-      opacity: 0.5;
-    }
-  }
-  &_primaryBlueIcon {
-    color: $primary-blue;
-  }
+.erroredLabel {
+  color: $error-color !important;
 }
 
-.erroredLabel {
-  color: $error-color;
+.erroredIcon {
+  color: $error-color !important;
 }
 
 .bar {
@@ -155,31 +119,12 @@ $empty-grey: darken(lightgrey, 5%);
   position: absolute;
   pointer-events: none;
   left: 0px;
-  top: 62px;
+  top: 48px;
   font-size: 11px;
 }
 
-/*.highlight {
-  position: absolute;
-  height: 60%;
-  width: 100px;
-  top: 25%;
-  left: 0;
-  pointer-events: none;
-  opacity: 0.5;
+
+.hidden {
+  display: none;
 }
 
-.input:focus ~ .highlight {
-  animation: inputHighlighter 0.3s ease;
-}
-
-@keyframes inputHighlighter {
-  from {
-    background: $primary-dark;
-  }
-
-  to {
-    width: 0;
-    background: transparent;
-  }
-}*/

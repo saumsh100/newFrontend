@@ -10,20 +10,26 @@ export default function Card(props) {
     children,
     className,
     noBorder,
+    runAnimation,
+    loaded
   } = props;
 
   let classes = classNames(className, styles.card);
 
-  if (noBorder) {
+  if (noBorder || (runAnimation && !loaded)) {
     classes = classNames(classes, styles.noBorder);
   }
 
-  const newProps = omit(props, ['noBorder', 'className']);
-
+  const newProps = omit(props, ['noBorder', 'className', 'runAnimation', 'loaded']);
   return (
     // Order is important, classNames={classes} needs to override props.className
     <div {...newProps} className={classes}>
-      {children}
+      {runAnimation && !loaded ? <div className={styles.loadBar}>
+        <div className={styles.bar} />
+        <div className={styles.bar} />
+        <div className={styles.bar} />
+      </div>
+        : children }
     </div>
   );
 }

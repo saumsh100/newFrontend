@@ -11,6 +11,7 @@ import {
   SBody,
   SFooter,
   Button,
+  TextArea,
 } from '../../../../library';
 import { FormatPhoneNumber } from '../../../../library/util/Formatters';
 import styles from './styles.scss';
@@ -33,6 +34,10 @@ export default function AppointmentPopover(props) {
 
   const appointmentDate = moment(startDate).format('dddd LL');
   const lastName = age ? `${patient.lastName},` : patient.lastName;
+
+  const textAreaTheme = {
+    group: styles.textAreaGroup,
+  }
 
   return (
     <Card className={styles.card} noBorder>
@@ -112,7 +117,9 @@ export default function AppointmentPopover(props) {
               Note
             </div>
             <div className={styles.data}>
-              <div className={styles.data_note}>{note}</div>
+              <div className={styles.data_note}>
+                <TextArea disabled="disabled" theme={textAreaTheme}>{note}</TextArea>
+              </div>
             </div>
           </div>) : null}
         </SBody>

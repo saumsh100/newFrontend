@@ -4,14 +4,13 @@ import Autosuggest from 'react-autosuggest';
 import { Provider } from 'react-redux';
 import omit from 'lodash/omit';
 import debounce from 'lodash/debounce';
-import { Input } from '../';
+import { Input, Icon } from '../';
+import theme from './theme.scss';
 
 
-// input value for every given suggestion.
-//const getSuggestionValue = suggestion => suggestion.name;
 const renderSuggestion = suggestion => {
   const display = suggestion.display || `${suggestion.firstName} ${suggestion.lastName}` || suggestion.name;
-  return (<div data-test-id={`${suggestion.name}Suggestion`} >
+  return (<div data-test-id={`${suggestion.name}Suggestion`}>
     {display}
   </div>);
 };
@@ -28,6 +27,7 @@ class AutoCompleteForm extends Component {
     };
 
     this.getSuggestions = debounce(this.onSuggestionsFetchRequested, 300);
+    this.renderSuggestionsContainer = this.renderSuggestionsContainer.bind(this);
   }
 
   // Autosuggest will call this function every time you need to update suggestions.
@@ -55,31 +55,60 @@ class AutoCompleteForm extends Component {
       props.className = this.props.className;
     }
 
+    props.label = this.props.label;
     props.classStyles = this.props.classStyles;
+    props.theme = this.props.theme;
 
     props.value = this.props.value;
+    props.ref = this.props.refCallBack;
 
-    return <Input {...props} data-test-id={this.props['data-test-id']} />;
+
+    return (
+      <Input {...props} ref={null} refCallBack={this.props.refCallBack} />
+    );
   }
 
+  renderSuggestionsContainer({ containerProps, children }) {
+    const RenderComponent = this.props.suggestionsContainerComponent;
+
+    return RenderComponent ? (
+      <div {... containerProps}>
+        {children}
+        <RenderComponent />
+      </div>) : <div {...containerProps}>{children}</div>
+  }
 
   render() {
     const { suggestions } = this.state;
 
-    const newProps = omit(this.props, ['value', 'theme']);
+    const newProps = omit(this.props, ['value', 'theme', 'suggestionsContainerComponent']);
     // Autosuggest will pass through all these props to the input element.
     // Finally, render it!
+
     return (
+      <div className={theme.outerContainer}>
         <Autosuggest
+          theme={theme}
           suggestions={suggestions}
           renderInputComponent={this.displayField}
           onSuggestionsFetchRequested={this.getSuggestions}
           onSuggestionsClearRequested={this.onSuggestionsClearRequested}
           renderSuggestion={renderSuggestion}
+          renderSuggestionsContainer={this.renderSuggestionsContainer}
           {...newProps}
         />
+      </div>
     );
   }
 }
+
+
+AutoCompleteForm.propTypes = {
+  label: PropTypes.string,
+  classStyles: PropTypes.object,
+  className: PropTypes.object,
+  theme: PropTypes.object,
+  suggestionsContainerComponent: PropTypes.component,
+};
 
 export default AutoCompleteForm;

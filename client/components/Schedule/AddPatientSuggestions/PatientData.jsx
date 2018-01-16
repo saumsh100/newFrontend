@@ -11,7 +11,8 @@ export default function PatientData(props) {
   } = props;
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
-  const futureAppointments = patient.appointments;
+  const futureAppointments = patient.appointments && patient.appointments.length ? patient.appointments : false;
+
   const appointment = {
     startDate: requestData.startDate,
     endDate: requestData.endDate,
@@ -30,7 +31,7 @@ export default function PatientData(props) {
   return (
     <ListItem
       className={styles.suggestionsListItem}>
-      <Avatar size={'lg'} className={styles.patientContainer_img} user={patient} alt="" />
+      <Avatar size={'md'} className={styles.patientContainer_img} user={patient} alt="" />
       <div className={styles.patientContainer} >
         <div className={styles.patientContainer_fullName}>
           {fullName}
@@ -48,7 +49,7 @@ export default function PatientData(props) {
         }}
         className={styles.connectButton}
         data-test-id={`${patient.firstName}${patient.lastName}`}
-        tertiary
+        color="blue"
       >
         Connect
       </Button>

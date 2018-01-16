@@ -546,6 +546,7 @@ function mapStateToProps({ apiRequests, entities, patientTable }) {
     patientTable: patientTable.toJS(),
   };
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,

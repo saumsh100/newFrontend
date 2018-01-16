@@ -27,6 +27,7 @@ export default function SaveButton(props) {
         <Button
           disabled={pristine}
           type="submit"
+          color="blue"
           className={saveClasses}
         >
             Save
