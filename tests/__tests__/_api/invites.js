@@ -30,7 +30,7 @@ const address = {
 async function seedData() {
   // Seed an extra account for fetching multiple and testing switching
 
-  Address.create(address);
+  await Address.create(address);
   await Account.create({
     id: accountId2,
     addressId,
@@ -67,6 +67,7 @@ describe('/api/accounts/:accountId/invites', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    await wipeAllModels();
     await wipeModel(Invite);
     await seedTestUsers();
     await seedData();
@@ -78,6 +79,7 @@ describe('/api/accounts/:accountId/invites', () => {
     await wipeModel(Invite);
     await wipeTestUsers();
     await wipeModel(Account);
+    await wipeAllModels();
   });
 
   describe('GET /api/accounts/:accountId/invites', () => {
