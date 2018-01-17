@@ -10,8 +10,29 @@ import styles from './styles.scss';
 class AddPatientSuggestions extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedPatient: null,
+    };
+
     this.handleCreatePatient = this.handleCreatePatient.bind(this);
-    this.handleUpdatePatient = this.handleUpdatePatient.bind(this);
+    this.handleConnectPatient = this.handleConnectPatient.bind(this);
+    this.selectPatient = this.selectPatient.bind(this);
+  }
+
+  componentDidMount() {
+    const {
+      mergingPatientData,
+    } = this.props;
+
+    const suggestions = mergingPatientData.suggestions;
+    this.setState({
+      selectedPatient: suggestions[0],
+    });
+  }
+  selectPatient(selectedPatient) {
+    this.setState({
+      selectedPatient,
+    });
   }
 
   handleCreatePatient() {
@@ -27,7 +48,7 @@ class AddPatientSuggestions extends Component {
     });
   }
 
-  handleUpdatePatient(appointment) {
+  handleConnectPatient() {
     const {
       patients,
       reinitializeState,
@@ -35,6 +56,25 @@ class AddPatientSuggestions extends Component {
       mergingPatientData,
       updateEntityRequest,
     } = this.props;
+
+    const requestData = mergingPatientData.requestData;
+    const patient = this.state.selectedPatient;
+
+    const futureAppointments = patient.appointments && patient.appointments.length ? patient.appointments : false;
+
+    const appointment = {
+      startDate: requestData.startDate,
+      endDate: requestData.endDate,
+      serviceId: requestData.serviceId,
+      note: requestData.note,
+      isSyncedWithPms: false,
+      customBufferTime: 0,
+      request: true,
+      patientId: patient.id,
+      requestModel: requestData.requestModel,
+      practitionerId: requestData.practitionerId,
+      nextAppt: futureAppointments,
+    };
 
     const patientModel = patients.get(appointment.patientId);
     const patientUserId = mergingPatientData.patientUser.id;
@@ -66,12 +106,12 @@ class AddPatientSuggestions extends Component {
     const fullName = `${patientUser.firstName} ${patientUser.lastName}`;
 
     return (
-      <div>
+      <div >
         <div className={styles.patientSpeel}>
-          We noticed the CareCru patient, {fullName}, did not have a patient record in your PMS. We have provided
+          We noticed the CareCru patient, <span className={styles.bold}>{fullName}</span>, did not have a patient record in your PMS. We have provided
           some possible matches to this patient. Please select one or create a new patient.
         </div>
-        <List className={styles.suggestionsList}>
+        <div className={styles.suggestionsList}>
           {suggestions.map((patient, index) => {
             return (
               <PatientData
@@ -79,13 +119,18 @@ class AddPatientSuggestions extends Component {
                 patient={patient}
                 requestData={mergingPatientData.requestData}
                 handleUpdatePatient={this.handleUpdatePatient}
+                selectPatient={this.selectPatient}
+                selectedPatient={this.state.selectedPatient}
               />
             );
           })}
-        </List>
+        </div>
         <div className={styles.createPatientButtonContainer}>
-          <Button border="blue" onClick={this.handleCreatePatient}>
+          <Button border="blue" onClick={this.handleCreatePatient} >
             Create New Patient
+          </Button>
+          <Button color="blue" onClick={this.handleConnectPatient} className={styles.connectButton}>
+            Connect Patient
           </Button>
         </div>
       </div>

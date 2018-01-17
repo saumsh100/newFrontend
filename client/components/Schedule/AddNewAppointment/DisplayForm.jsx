@@ -131,6 +131,10 @@ class DisplayForm extends Component {
       patientDisplay = patientSearched;
     }
 
+    if (patientSearched && patient) {
+      patientDisplay = patientSearched;
+    }
+    
     const autoCompleteStyle = {
       error: styles.errorStyle,
       icon: styles.iconAuto,

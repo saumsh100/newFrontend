@@ -19,7 +19,7 @@ function PractitionerListItem({ option }) {
   if (ignore) return <div className={styles.practitionerItem}>{label || value}</div>;
   return (
     <div className={styles.practitionerItem}>
-      <PractitionerAvatar practitioner={practitioner} size="sm" />
+      <PractitionerAvatar practitioner={practitioner} size="xs" />
       <div className={styles.labelText}>
         {label}
       </div>

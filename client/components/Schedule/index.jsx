@@ -17,6 +17,7 @@ import {
   IconButton,
   Modal,
   DialogBox,
+  DayPicker,
 } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
@@ -26,7 +27,6 @@ import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Header/CurrentDate';
 import HeaderButtons from './Header/HeaderButtons';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
-import Calendar from '../library/Calendar/index';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import styles from './styles.scss';
 
@@ -386,11 +386,12 @@ class ScheduleComponent extends Component {
             <Row className={styles.sidebar_rowCalendar}>
               <Col xs={12}>
                 <Card>
-                  <Calendar
+                  <DayPicker
                     month={new Date(moment(currentDate).year(), moment(currentDate).month())}
                     selectedDays={new Date(currentDate)}
                     onDayClick={this.setCurrentDay}
                     className={styles.sidebar_calendar}
+                    noTarget
                   />
                 </Card>
               </Col>

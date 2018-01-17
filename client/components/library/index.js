@@ -8,7 +8,6 @@ import BadgeHeader from './BadgeHeader';
 import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
-import Calendar from './Calendar';
 import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
@@ -82,7 +81,6 @@ export {
   Button,
   BigCommentBubble,
   Card,
-  Calendar,
   ContainerList,
   CardHeader,
   Checkbox,

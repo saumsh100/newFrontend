@@ -5,7 +5,6 @@ import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
-import AppointmentShowData from '../Appointment/AppointmentShowData';
 import RequestPopover from './RequestPopover';
 import withHoverable from '../../hocs/withHoverable';
 

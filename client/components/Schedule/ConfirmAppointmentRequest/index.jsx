@@ -22,6 +22,20 @@ class ConfirmAppointmentRequest extends Component {
     this.setSelected = this.setSelected.bind(this);
   }
 
+  componentDidMount() {
+    const {
+      selectedAppointment
+    } = this.props;
+
+    const appointments = selectedAppointment.nextAppt;
+
+    if (appointments && appointments.length === 1) {
+      this.setState({
+        selectedApp: appointments[0]
+      });
+    }
+  }
+
   confirmRequest(patient, sendEmail) {
     const {
       selectedAppointment,
@@ -130,31 +144,34 @@ class ConfirmAppointmentRequest extends Component {
           <div className={styles.container}>
             {displayText}
 
-            {appointments.map((app) => {
-              return (<SameAppointment
-                key={app.id}
-                patient={patient}
-                appointment={app}
-                confirmRequest={this.confirmRequest}
-                createAppointment={this.createAppointment}
-                setCurrentDay={setCurrentDay}
-                setSelected={this.setSelected}
-                selectedApp={this.state.selectedApp}
-                length={appointments.length}
-              />);
-            })}
+            <div className={styles.containerApp}>
+              <div className={styles.sameAppList}>
+              {appointments.map((app) => {
+                console.log(app)
+                return (<SameAppointment
+                  key={app.id}
+                  patient={patient}
+                  appointment={app}
+                  confirmRequest={this.confirmRequest}
+                  createAppointment={this.createAppointment}
+                  setCurrentDay={setCurrentDay}
+                  setSelected={this.setSelected}
+                  selectedApp={this.state.selectedApp}
+                  length={appointments.length}
+                />);
+              })}
+              </div>
+            </div>
 
             {appointments.length === 1 ? (
               <div className={styles.buttonContainer}>
                 <Button
-                  icon="times"
                   border="blue"
                   onClick={this.createAppointment}
                 >
                   No
                 </Button>
                 <Button
-                  icon="check"
                   color="blue"
                   onClick={() => {
                     if (confirm('Are you sure this is the correct Appointment?')) {
@@ -168,16 +185,15 @@ class ConfirmAppointmentRequest extends Component {
               </div>) : (
                 <div className={styles.buttonContainer}>
                   <Button
-                    icon="times"
                     border="blue"
                     onClick={() => this.createAppointment()}
                   >
                     No
                   </Button>
                   <Button
-                    icon="check"
                     style={cursorStyle}
                     color={selectedApp ? 'blue' : 'grey'}
+                    className={styles.buttonContainer_yes}
                     onClick={() => {
                       if (selectedApp) {
                         return confirm('Are you sure this is the correct Appointment?') ? setSendEmail() : null;
