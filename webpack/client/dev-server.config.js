@@ -58,9 +58,7 @@ module.exports = {
       const filePath = path.join(contentBase, req.path);
 
       // Return file from contentBase directory if its exists (reverse proxy)
-      if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
-        return req.path;
-      }
+      if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) return req.path;
 
       // If not just ask server
       return undefined;

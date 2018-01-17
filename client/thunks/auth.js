@@ -57,7 +57,7 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
         if (connect && process.env.NODE_ENV === 'production') {
           LogRocket.identify(userId, {
             name: fullName,
-            email: email,
+            email,
           });
 
           window.Intercom('update', {
