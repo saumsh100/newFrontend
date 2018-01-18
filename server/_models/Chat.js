@@ -29,6 +29,10 @@ export default function (sequelize, DataTypes) {
     lastTextMessageId: {
       type: DataTypes.STRING,
     },
+
+    isFlagged: {
+      type: DataTypes.BOOLEAN,
+    },
   });
 
   Chat.associate = ({ Account, Patient, TextMessage }) => {
