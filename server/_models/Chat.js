@@ -32,6 +32,7 @@ export default function (sequelize, DataTypes) {
 
     isFlagged: {
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   });
 
