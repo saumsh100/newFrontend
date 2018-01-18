@@ -1,11 +1,12 @@
 @import '../../../ui.scss';
 
 .container {
-
+  max-height: 96%;
+  overflow: auto;
 }
 
 .subHeader {
-  composes: subHeader from from 'sass-loader!../../../fonts.scss';
+  composes: subHeaderExtraSmall from from 'sass-loader!../../../fonts.scss';
 }
 .listItemHeader {
   composes: listItemHeader from 'sass-loader!../../../fonts.scss';
@@ -22,26 +23,33 @@
 .dataContainer {
   display: flex;
   align-items: center;
-  margin-top: 20px;
-  padding: 0px 10px 0px 10px;
   height: auto;
-  border: 1px solid #e6e6e6;
 
   @media screen and (max-width: 1300px) {
     flex-direction: column;
     padding-top: 10px;
+    text-align: center;
   }
 
   &_body {
     display: flex;
     flex-direction: row;
+    align-items: center;
     line-height: 1.5em;
     padding: 10px;
     width: 100%;
     @media screen and (max-width: 1300px) {
       flex-direction: column;
       align-items: center;
+      text-align: center;
     }
+  }
+
+  &_bodyEmail {
+    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   &_contactInfo {
@@ -49,6 +57,7 @@
     align-items: flex-end;
     flex-direction: column;
     margin-left: auto;
+    padding-left: 20px;
     @extend .subHeader;
     @media screen and (max-width: 1300px) {
       align-items: center;
@@ -64,6 +73,15 @@
     }
   }
 
+
+  &_contactInfoEmail {
+    margin-left: 0px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    @extend .subHeader;
+  }
+
   &_patientInfo {
     &_fullName {
       @extend .listItemHeader;
@@ -72,7 +90,41 @@
     &_date {
       @extend .listItemHeader;
     }
+
+    &_createdAt {
+      @extend .subHeader;
+      font-size: 10px;
+    }
   }
+}
+
+.containerApp {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sameAppList{
+  width: 470px;
+}
+
+.singleItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.singleItemEmail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  padding-top: 10px;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .selected {
@@ -86,5 +138,12 @@
   display: flex;
   width: 100%;
   justify-content: flex-end;
+
+  &_yes {
+    margin-left: 5px;
+  }
 }
 
+.radio {
+  margin-right: 20px;
+}

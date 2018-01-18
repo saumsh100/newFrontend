@@ -17,12 +17,12 @@ export default function SendConfirmationEmail(props) {
 
   return (
     <div className={styles.container}>
-      Would you like to send an email confirmation to {patient.getFullName()}?
-      {length > 1 ? <div className={styles.dataContainer} >
+      Would you like to send an email confirmation to <span className={styles.bold}>{patient.getFullName()}</span>?
+      {/* length > 1 ? <div className={styles.dataContainer_bodyEmail} >
         <div className={styles.avatarContainer}>
           <Icon size={2} icon="calendar" />
         </div>
-        <div className={styles.dataContainer_body}>
+        <div className={styles.singleItemEmail}>
           <div className={styles.dataContainer_patientInfo}>
             <div className={styles.dataContainer_patientInfo_date}>
               {startDate.format('MMMM Do, YYYY')}
@@ -31,17 +31,17 @@ export default function SendConfirmationEmail(props) {
               {startDate.format('h:mma')} - {endDate.format('h:mma')}
             </div>
           </div>
-          <div className={styles.dataContainer_contactInfo}>
+          <div className={styles.dataContainer_contactInfoEmail}>
             <div className={styles.dataContainer_contactInfo_email}>{patient.get('email')}</div>
             <div className={styles.dataContainer_contactInfo_phone}>{patient.get('mobilePhoneNumber')}</div>
           </div>
         </div>
-      </div> : null }
+      </div> : null */}
       <div className={styles.buttonContainer}>
-        <Button icon="times" color="darkgrey" onClick={() => confirmRequest(patient, false)}>
+        <Button border="blue" onClick={() => confirmRequest(patient, false)}>
           No
         </Button>
-        <Button icon="check" tertiary onClick={() => confirmRequest(patient, true)}>
+        <Button className={styles.buttonContainer_yes} color="blue" onClick={() => confirmRequest(patient, true)}>
           Yes
         </Button>
       </div>

@@ -42,7 +42,6 @@ function Input(props) {
     iconClassName = classNames(inputStyle.erroredIcon, iconClassName);
   }
 
-
   const errorClassName = inputStyle.error;
 
   const errorComponent = error ? <span className={errorClassName}>{error}</span> : null;

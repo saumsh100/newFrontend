@@ -57,6 +57,10 @@ loadPatient()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./My', () => render(App));
+    module.hot.accept('./My', () => {
+      const NextApp = require('./My').default; // eslint-disable-line
+      
+      render(App);
+    });
   }
 });

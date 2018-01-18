@@ -6,28 +6,33 @@ import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
+import LogRocket from 'logrocket';
 import Immutable from 'immutable';
 import time from '../../server/util/time';
-import socket from '../socket';
-import App from './Connect';
-import configure from '../store/connectStore';
-import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
-import { load as loadUser } from '../thunks/auth';
+import App from './Patient';
+import configure from '../store/availabilitiesStore';
+import { loadPatient } from '../thunks/patientAuth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 
-// Bind the token setting in header
-bindAxiosInterceptors();
+// getToken function is custom
+bindAxiosInterceptors(() => localStorage.getItem('auth_token'));
+
+LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const browserHistory = createBrowserHistory();
 const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
 
-// Bind event handlers from parent
-loadUser()(store.dispatch).then(() => {
+loadPatient()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
-    // hook up sockets to the connecter status update events
-    connectSocketToConnectStore(store, socket);
+    const patientUser = auth.get('patientUser').toJS();
+    LogRocket.identify(patientUser.id, {
+      name: `${patientUser.firstName} ${patientUser.lastName}`,
+      email: patientUser.email,
+    });
   }
+
+  console.log('loadPatient completed successfully');
 
   // TODO: define globals with webpack ProvidePlugin
   window.store = store;
@@ -52,14 +57,10 @@ loadUser()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./Connect', () => {
-      const NextApp = require('./Connect').default; // eslint-disable-line
-
-      return render(NextApp);
+    module.hot.accept('./Patient', () => {
+      const NextApp = require('./Patient').default; // eslint-disable-line
+      
+      render(App);
     });
   }
 });
-
-
-
-

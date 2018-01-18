@@ -4,20 +4,19 @@
   position: relative;
   width: 700px;
   height: auto;
-  max-height: 450px;
-  overflow: auto;
+  //max-height: 450px;
+  //overflow: auto;
   background: $primary-white;
   border-radius: 5px;
 }
 
 .suggestionsList {
   margin: 0 auto;
-  max-height: 200px;
+  //max-height: 200px;
   height: auto;
-  border: 1px solid #efefef;
-  border-bottom: 0px;
-  overflow: auto;
-  background-color: lighten($primary-lightgrey, 2%);
+  //border: 1px solid #efefef;
+  //overflow: auto;
+  width: 400px;
   @media screen and (max-width: 450px){
     max-width: 270px;
   }
@@ -34,9 +33,16 @@
   }
 }
 
+.singleSuggestion {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  //border-bottom: 1px solid $primary-grey;
+  cursor: pointer;
+}
 .suggestionsListItem {
   display: flex;
-  padding: 20px 20px 20px 20px;
+  padding: 10px 20px 20px 10px;
   line-height: 1.5em;
 }
 
@@ -49,8 +55,22 @@
 }
 
 .patientSpeel {
-  padding: 15px 0px 20px 0px;
+  padding: 0px 0px 20px 0px;
   font-size: $medium-size;
+}
+
+.radioButton {
+  margin-right: 10px;
+
+  input[type=radio] {
+    width: 20px;
+    height: 20px;
+  }
+
+  input[type=radio]:checked {
+    border: 1px solid $primary-color;
+    background-color: $primary-blue;
+  }
 }
 
 .patientContainer {
@@ -71,20 +91,25 @@
   }
 
   &_phone {
-    composes: subHeader from 'sass-loader!../../../fonts.scss';
+    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
   }
 
   &_email {
-    composes: subHeader from 'sass-loader!../../../fonts.scss';
+    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
   }
 }
 
 .createPatientButtonContainer {
   padding-top: 20px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .connectButton {
-  margin-left: auto;
+  margin-left: 10px;
+}
+
+.bold {
+  text-transform: capitalize;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }

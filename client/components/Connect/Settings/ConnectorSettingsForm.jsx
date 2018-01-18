@@ -24,6 +24,10 @@ const options = [
     value: 'DENTRIX_V61',
     label: 'Dentrix G6.1',
   },
+  {
+    value: 'OPENDENTAL_V17',
+    label: 'OpenDental 17',
+  },
 ];
 
 export default function ConnectorSettingsForm({ initialValues, onSubmit }) {

@@ -63,7 +63,11 @@ loadPatient()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./Reviews', () => render(App));
+    module.hot.accept('./Reviews', () => {
+      const NextApp = require('./Reviews').default; // eslint-disable-line
+      
+      render(App);
+    });
   }
 });
 

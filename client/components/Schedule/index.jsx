@@ -17,6 +17,7 @@ import {
   IconButton,
   Modal,
   DialogBox,
+  DayPicker,
 } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
@@ -26,7 +27,6 @@ import AddPatientSuggestions from './AddPatientSuggestions';
 import CurrentDate from './Header/CurrentDate';
 import HeaderButtons from './Header/HeaderButtons';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
-import Calendar from '../library/Calendar/index';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import styles from './styles.scss';
 
@@ -286,9 +286,8 @@ class ScheduleComponent extends Component {
     }
 
     return (
-      <Grid>
-        <Row className={styles.rowMainContainer}>
-          <Col xs={12} sm={9} md={9} className={styles.dayViewContainer}>
+        <div className={styles.rowMainContainer}>
+          <div className={styles.dayViewContainer}>
             <Card className={styles.card} >
               <SContainer>
                 <SHeader className={styles.headerContainer}>
@@ -381,30 +380,28 @@ class ScheduleComponent extends Component {
                 </SBody>
               </SContainer>
             </Card>
-          </Col>
-          <Col xs={12} sm={3} md={3} className={styles.sidebar}>
-            <Row className={styles.sidebar_rowCalendar}>
-              <Col xs={12}>
+          </div>
+          <div className={styles.sidebar}>
+            <div className={styles.sidebar_rowCalendar}>
                 <Card>
-                  <Calendar
+                  <DayPicker
                     month={new Date(moment(currentDate).year(), moment(currentDate).month())}
                     selectedDays={new Date(currentDate)}
                     onDayClick={this.setCurrentDay}
                     className={styles.sidebar_calendar}
+                    noTarget
                   />
                 </Card>
-              </Col>
-            </Row>
-            <Row className={styles.sidebar_rowRequest}>
-              <Col xs={12} className={styles.sidebar_request} >
+            </div>
+            <div className={styles.sidebar_rowRequest}>
+              <div xs={12} className={styles.sidebar_request} >
                 <RequestsContainer
                   key={'scheduleRequests'}
                 />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Grid>
+              </div>
+            </div>
+          </div>
+        </div>
     );
   }
 }

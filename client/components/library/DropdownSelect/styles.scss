@@ -13,7 +13,7 @@ $empty-grey: darken(lightgrey, 5%);
   position: relative;
   font-size: $medium-size;
   font-family: $dashboard-font;
-  height: 25px;
+  height: 28px;
   width: 100%;
   //padding: 5px 5px 5px 0px;
   cursor: pointer;
@@ -89,21 +89,19 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .toggleValueDiv {
-  margin-right: 10px;
   user-select: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 .caretIconWrapper {
-  position: absolute;
-  right: 0;
-  //margin-left: auto;
+  margin-left: auto;
   color: $primary-darkgrey;
   transition : color 500ms ease-out;
-  //padding-bottom: 3px;
 }
 
 .caretIcon {
-  //margin-left: 20px;
 }
 
 .activeIcon {
@@ -126,10 +124,10 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .filled {
-  top: -9px !important;
+  position: absolute;
+  top: -11px !important;
   left: 0px !important;
   font-size: $extra-small-size !important;
-
 }
 
 .hideLabel {

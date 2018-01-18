@@ -3,16 +3,21 @@
 .modal {
   border-radius: 0;
 }
+
 .rowMainContainer {
   box-sizing: border-box;
   padding: 10px;
   height: 100%;
+  width: 100%;
+  display: flex;
+  min-width: 1200px;
 }
 
 .dayViewContainer {
   height: 100%;
   box-sizing: border-box;
   overflow: hidden;
+  flex: 1;
 }
 
 .calendarContainer {
@@ -29,8 +34,9 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  width: 320px;
+  
   &_rowCalendar {
-    min-height: 260px;
     margin-bottom: 10px;
   }
   &_rowRequest {

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
@@ -42,7 +41,7 @@ load()(store.dispatch).then(() => {
       const email = user.username;
       LogRocket.identify(userId, {
         name: fullName,
-        email: email,
+        email,
       });
 
       window.Intercom('update', {
@@ -82,6 +81,10 @@ load()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./Dashboard', () => render(App));
+    module.hot.accept('./Dashboard', () => {
+      const NextApp = require('./Dashboard').default; // eslint-disable-line
+
+      return render(NextApp);
+    });
   }
 });

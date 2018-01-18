@@ -19,6 +19,7 @@ const AppointmentsSchema = {
   isSplit: null,
   isReminderSent: null,
   mark: null,
+  createdAt: null,
 };
 
 export default class Appointments extends createModel(AppointmentsSchema) {

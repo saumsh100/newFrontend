@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment-timezone';
+import 'react-day-picker/lib/style.css';
 import pick from 'lodash/pick';
 import isArray from 'lodash/isArray';
 import RDayPicker, { DateUtils } from 'react-day-picker';
@@ -87,7 +88,8 @@ class DayPicker extends Component {
       iconClassName,
       value,
       timezone,
-      icon
+      icon,
+      noTarget,
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
@@ -126,28 +128,32 @@ class DayPicker extends Component {
       }
     }
 
+    const body = (
+      <div className={styles.wrapper}>
+        <RDayPicker
+          onDayClick={this.handleDayClick}
+          selectedDays={convertValueToDate(value, timezone)}
+          handleInputChange={this.handleInputChange}
+          month={ value ? new Date(moment(value).year(), moment(value).month()) : new Date()}
+          {...this.props}
+        />
+      </div>
+    );
+
     // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
     return (
-      <Popover
-        preferPlace="below"
-        onOuterAction={this.togglePopOver}
-        isOpen={this.state.isOpen}
-        tipSize={tipSize}
-        body={[(
-          <div className={styles.wrapper}>
-            {/*<IconButton className={styles.closeButton} icon="close" onClick={this.togglePopOver} />*/}
-            <RDayPicker
-              onDayClick={this.handleDayClick}
-              selectedDays={convertValueToDate(value, timezone)}
-              handleInputChange={this.handleInputChange}
-              month={ value ? new Date(moment(value).year(), moment(value).month()) : new Date()}
-              {...this.props}
-            />
-          </div>
-        )]}
-      >
-        {dayPickerTargetComponent}
-      </Popover>
+      <div>
+        {!noTarget ?
+          <Popover
+            preferPlace="below"
+            onOuterAction={this.togglePopOver}
+            isOpen={this.state.isOpen}
+            tipSize={tipSize}
+            body={[body]}
+          >
+            {dayPickerTargetComponent}
+          </Popover> : body }
+      </div>
     );
   }
 }
