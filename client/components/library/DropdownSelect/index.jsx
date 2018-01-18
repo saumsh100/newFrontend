@@ -187,14 +187,14 @@ class DropdownSelect extends Component {
         data-test-id={this.props['data-test-id']}
       >
         <Input onFocus={disabled ? false : this.toggle} className={theme.hiddenInput} />
-        <label className={labelClassName}>
-          {label}
-        </label>
         <div className={toggleValueClassName}>
           {toggleDiv}
-        </div>
-        <div className={theme.caretIconWrapper}>
-          <Icon className={caretIconClassName} icon="caret-down" />
+          <label className={labelClassName}>
+            {label}
+          </label>
+          <div className={theme.caretIconWrapper}>
+            <Icon className={caretIconClassName} icon="caret-down" />
+          </div>
         </div>
         <div className={theme.error}>
           {error || ''}

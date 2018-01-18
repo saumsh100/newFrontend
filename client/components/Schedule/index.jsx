@@ -286,9 +286,8 @@ class ScheduleComponent extends Component {
     }
 
     return (
-      <Grid>
-        <Row className={styles.rowMainContainer}>
-          <Col xs={12} sm={9} md={9} className={styles.dayViewContainer}>
+        <div className={styles.rowMainContainer}>
+          <div className={styles.dayViewContainer}>
             <Card className={styles.card} >
               <SContainer>
                 <SHeader className={styles.headerContainer}>
@@ -381,10 +380,9 @@ class ScheduleComponent extends Component {
                 </SBody>
               </SContainer>
             </Card>
-          </Col>
-          <Col xs={12} sm={3} md={3} className={styles.sidebar}>
-            <Row className={styles.sidebar_rowCalendar}>
-              <Col xs={12}>
+          </div>
+          <div className={styles.sidebar}>
+            <div className={styles.sidebar_rowCalendar}>
                 <Card>
                   <DayPicker
                     month={new Date(moment(currentDate).year(), moment(currentDate).month())}
@@ -394,18 +392,16 @@ class ScheduleComponent extends Component {
                     noTarget
                   />
                 </Card>
-              </Col>
-            </Row>
-            <Row className={styles.sidebar_rowRequest}>
-              <Col xs={12} className={styles.sidebar_request} >
+            </div>
+            <div className={styles.sidebar_rowRequest}>
+              <div xs={12} className={styles.sidebar_request} >
                 <RequestsContainer
                   key={'scheduleRequests'}
                 />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </Grid>
+              </div>
+            </div>
+          </div>
+        </div>
     );
   }
 }
