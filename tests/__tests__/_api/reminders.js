@@ -1,5 +1,5 @@
-import request from 'supertest';
 
+import request from 'supertest';
 import app from '../../../server/bin/app';
 import { Account, Reminder, Address } from '../../../server/_models';
 import wipeModel from '../../_util/wipeModel';
@@ -12,7 +12,6 @@ const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 const newReminderId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
-
 
 const address = {
   id: addressId,
@@ -80,7 +79,8 @@ describe('/api/accounts/:account/reminders', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             id: newReminderId,
-            primaryType: 'sms',
+            primaryTypes: ['sms'],
+            interval: '2 hours',
             createdAt: '2017-07-19T00:14:30.932Z',
           })
           .expect(201)
@@ -107,7 +107,7 @@ describe('/api/accounts/:account/reminders', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             id: reminderId1,
-            primaryType: 'phone',
+            primaryTypes: ['phone'],
             createdAt: '2017-07-19T00:14:30.932Z',
           })
           .expect(200)
@@ -116,7 +116,7 @@ describe('/api/accounts/:account/reminders', () => {
             const reminders = getModelsArray('reminders', body);
             const [reminder] = reminders;
             expect(reminders.length).toBe(1);
-            expect(reminder.primaryType).toBe('phone');
+            expect(reminder.primaryTypes).toEqual(['phone']);
             expect(body).toMatchSnapshot();
           });
       });

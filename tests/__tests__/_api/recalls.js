@@ -79,7 +79,8 @@ describe('/api/accounts/:account/recalls', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             id: newRecallId,
-            primaryType: 'sms',
+            primaryTypes: ['sms'],
+            interval: '-2 months',
             createdAt: '2017-07-19T00:14:30.932Z',
           })
           .expect(201)
@@ -105,7 +106,7 @@ describe('/api/accounts/:account/recalls', () => {
           .put(`${rootUrl}/${accountId}/recalls/${recallId1}`)
           .set('Authorization', `Bearer ${token}`)
           .send({
-            primaryType: 'phone',
+            primaryTypes: ['phone'],
             createdAt: '2017-07-19T00:14:30.932Z',
           })
           .expect(200)
@@ -114,7 +115,7 @@ describe('/api/accounts/:account/recalls', () => {
             const recalls = getModelsArray('recalls', body);
             const [recall] = recalls;
             expect(recalls.length).toBe(1);
-            expect(recall.primaryType).toBe('phone');
+            expect(recall.primaryTypes).toEqual(['phone']);
             expect(body).toMatchSnapshot();
           });
       });

@@ -51,7 +51,7 @@ describe('Recalls Filters Tests', () => {
   });
 
   describe('Recalls Filter ', () => {
-    test('Should have 1 patient who has received a recall email', async () => {
+    test.skip('Should have 1 patient who has received a recall email', async () => {
 
       const recall = await Recall.create({ accountId, primaryType: 'email', lengthSeconds: 15552000 });
 
@@ -65,7 +65,7 @@ describe('Recalls Filters Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
-    test('Should have 1 patient who has received a recall sms', async () => {
+    test.skip('Should have 1 patient who has received a recall sms', async () => {
 
       const recall = await Recall.create({ accountId, primaryType: 'sms', lengthSeconds: 15552000 });
 
@@ -79,7 +79,7 @@ describe('Recalls Filters Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
-    test('Should have 1 patient who has received a recall phone', async () => {
+    test.skip('Should have 1 patient who has received a recall phone', async () => {
 
       const recall = await Recall.create({ accountId, primaryType: 'phone', lengthSeconds: 15552000 });
 

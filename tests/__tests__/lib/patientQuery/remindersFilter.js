@@ -51,7 +51,7 @@ describe('Reminder Filters Tests', () => {
   });
 
   describe('Reminders Filter ', () => {
-    test('Should have 1 patient who has received a reminder email', async () => {
+    test.skip('Should have 1 patient who has received a reminder email', async () => {
 
       const reminder = await Reminder.create({ accountId, primaryType: 'email', lengthSeconds: 15552000 });
 
@@ -79,7 +79,7 @@ describe('Reminder Filters Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
-    test('Should have 1 patient who has received a reminder sms', async () => {
+    test.skip('Should have 1 patient who has received a reminder sms', async () => {
       const reminder = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 15552000 });
 
       const reminderPlain = reminder.get({ plain: true });
@@ -106,7 +106,7 @@ describe('Reminder Filters Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
-    test('Should have 1 patient who has received a reminder phone', async () => {
+    test.skip('Should have 1 patient who has received a reminder phone', async () => {
       const reminder = await Reminder.create({ accountId, primaryType: 'phone', lengthSeconds: 15552000 });
 
       const reminderPlain = reminder.get({ plain: true });
