@@ -5,12 +5,13 @@ import {
   Patient,
   SentReminder,
 } from '../../_models';
+import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
 import { m2s, convertIntervalStringToObject, convertIntervalToMs } from '../../util/time';
 
 // TODO: add to globals file for these values
 // Should always be equal to the cron interval
-const BUFFER_SECONDS = 60 * 5;
+const BUFFER_SECONDS = 60 * GLOBALS.reminders.cronIntervalMinutes;
 
 /**
  * mapPatientsToReminders will return the patients that need a reminder
@@ -18,8 +19,9 @@ const BUFFER_SECONDS = 60 * 5;
  *
  * @param reminders
  * @param account
- * @param date
- * @returns {Promise.<Array>}
+ * @param startDate
+ * @param endDate
+ * @returns [remindersPatients] = [ { success, error }, { success, error }, ... ]
  */
 export async function mapPatientsToReminders({ reminders, account, startDate, endDate }) {
   const seen = {};
@@ -32,11 +34,6 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
 
     // Get appointments that this reminder deals with
     const appointments = await exports.getAppointmentsFromReminder({ reminder, account, startDate, endDate, lastReminder });
-
-    /*console.log(startDate);
-    console.log(endDate);*/
-    //console.log(reminder.interval);
-    //console.log(appointments.map(a => a.startDate));
 
     // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
     // This is why the order or reminders is so important

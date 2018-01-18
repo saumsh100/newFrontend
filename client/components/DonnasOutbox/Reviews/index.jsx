@@ -11,7 +11,7 @@ import {
   Grid,
   Row,
   Col,
-} from '../../../../library';
+} from '../../library';
 import styles from './styles.scss';
 
 const getAttrFromPatient = (patient, primaryType) => {
@@ -24,12 +24,12 @@ const getAttrFromPatient = (patient, primaryType) => {
   return patient[attrs[primaryType]];
 };
 
-function SuccessfulList({ success }) {
+function SuccessfulList({ success, primaryType }) {
   return (
     <div className={styles.successList}>
-      {success.map(({ patient, primaryType, reminder }) => {
-        const reminderAppt = patient.appointment;
-        const reminderApptDate = moment(reminderAppt.startDate).format('h:mma MMM Do, YYYY');
+      {success.map((patient) => {
+        const reviewAppt = patient.appointment;
+        const reviewApptDate = moment(reviewAppt.startDate).format('h:mma MMM Do, YYYY');
         return (
           <Grid className={styles.successItemWrapper}>
             <Row>
@@ -40,7 +40,7 @@ function SuccessfulList({ success }) {
                 {getAttrFromPatient(patient, primaryType)}
               </Col>
               <Col xs={4}>
-                {reminderApptDate}
+                {reviewApptDate}
               </Col>
             </Row>
           </Grid>
@@ -68,63 +68,61 @@ class ReminderListItem extends Component {
   }
 
   render() {
-    const { reminder } = this.props;
+    const { review } = this.props;
     return (
       <div className={styles.listItemWrapper}>
         <ListItem
           className={styles.listItem}
           onClick={this.toggleExpanded}
         >
-          <div className={styles.col}>Type: {reminder.primaryType}</div>
-          <div className={styles.col}>Length: {reminder.lengthSeconds}</div>
-          <div className={styles.col}>Success: {reminder.success.length}</div>
-          <div className={styles.col}>Fail: {reminder.errors.length}</div>
+          <div className={styles.col}>Type: {'email'}</div>
+          <div className={styles.col}>Length: {'1 week'}</div>
+          <div className={styles.col}>Success: {review.success.length}</div>
+          <div className={styles.col}>Fail: {review.errors.length}</div>
         </ListItem>
         {this.state.expanded ?
-          <SuccessfulList success={reminder.success} primaryType={reminder.primaryType}/>
+          <SuccessfulList success={review.success} primaryType={'email'}/>
         : null}
       </div>
     );
   }
 }
 
-export default class OutboxReminders extends Component {
+export default class OutboxReviews extends Component {
   constructor(props) {
     super(props);
 
     // Using state because configurations are not supported
     this.state = {
       isLoading: true,
-      reminders: [],
-      selectedReminder: null,
+      reviews: null,
     };
+
+    this.handleTabChange = this.handleTabChange.bind(this);
   }
 
   componentWillMount() {
     const { account } = this.props;
     return Promise.all([
-        axios.get(`/api/accounts/${account.id}/reminders/list`),
+        axios.get(`/api/accounts/${account.id}/reviews/list`),
       ])
-      .then(([remindersData]) => {
-        console.log('remindersData', remindersData);
+      .then(([reviewsData]) => {
+        console.log('reviewsData', reviewsData);
         this.setState({
           isLoading: false,
-          reminders: remindersData.data,
+          reviews: reviewsData.data,
         });
       })
       .catch(err => console.error('Failed to load configs', err));
   }
 
+  handleTabChange(tabIndex) {
+    this.setState({ tabIndex });
+  }
+
   render() {
     const { account } = this.props;
-    const { reminders, isLoading } = this.state;
-
-    let totalSuccess = 0;
-    let totalErrors = 0;
-    reminders.forEach((r) => {
-      totalSuccess += r.success.length;
-      totalErrors += r.errors.length;
-    });
+    const { reviews, isLoading } = this.state;
 
     if (isLoading) {
       return (
@@ -134,10 +132,13 @@ export default class OutboxReminders extends Component {
       );
     }
 
+    let totalSuccess = reviews && reviews.success ? reviews.success.length : 'error';
+    let totalErrors = reviews && reviews.errors ? reviews.errors.length : 'error';
+
     return (
-      <div className={styles.remindersWrapper}>
-        {!reminders.length ?
-          <div>No Reminders</div> :
+      <div className={styles.reviewsWrapper}>
+        {!reviews ?
+          <div>No Reviews</div> :
           <div>
             <h4>
               Total Success: {totalSuccess}
@@ -146,14 +147,9 @@ export default class OutboxReminders extends Component {
               Total Errors: {totalErrors}
             </h4>
             <List>
-              {reminders.map((reminder) => {
-                return (
-                  <ReminderListItem
-                    key={reminder.id}
-                    reminder={reminder}
-                  />
-                );
-              })}
+              <ReminderListItem
+                review={reviews}
+              />
             </List>
           </div>
         }
@@ -162,6 +158,6 @@ export default class OutboxReminders extends Component {
   }
 }
 
-OutboxReminders.propTypes = {
+OutboxReviews.propTypes = {
   account: PropTypes.object.isRequired,
 };

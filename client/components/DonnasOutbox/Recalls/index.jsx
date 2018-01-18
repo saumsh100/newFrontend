@@ -11,7 +11,7 @@ import {
   Grid,
   Row,
   Col,
-} from '../../../../library';
+} from '../../library';
 import styles from './styles.scss';
 
 const getAttrFromPatient = (patient, primaryType) => {
@@ -24,12 +24,12 @@ const getAttrFromPatient = (patient, primaryType) => {
   return patient[attrs[primaryType]];
 };
 
-function SuccessfulList({ success }) {
+function SuccessfulList({ success, primaryType }) {
   return (
     <div className={styles.successList}>
-      {success.map(({ patient, primaryType, reminder }) => {
-        const reminderAppt = patient.appointment;
-        const reminderApptDate = moment(reminderAppt.startDate).format('h:mma MMM Do, YYYY');
+      {success.map((patient) => {
+        const lastAppt = patient.appointments[patient.appointments.length - 1];
+        const lastApptDate = moment(lastAppt.startDate).format('DD/MM/YYYY');
         return (
           <Grid className={styles.successItemWrapper}>
             <Row>
@@ -40,7 +40,7 @@ function SuccessfulList({ success }) {
                 {getAttrFromPatient(patient, primaryType)}
               </Col>
               <Col xs={4}>
-                {reminderApptDate}
+                {lastApptDate}
               </Col>
             </Row>
           </Grid>
@@ -50,7 +50,7 @@ function SuccessfulList({ success }) {
   );
 }
 
-class ReminderListItem extends Component {
+class RecallListItem extends Component {
   constructor(props) {
     super(props);
 
@@ -68,60 +68,68 @@ class ReminderListItem extends Component {
   }
 
   render() {
-    const { reminder } = this.props;
+    const { recall } = this.props;
     return (
       <div className={styles.listItemWrapper}>
         <ListItem
           className={styles.listItem}
           onClick={this.toggleExpanded}
         >
-          <div className={styles.col}>Type: {reminder.primaryType}</div>
-          <div className={styles.col}>Length: {reminder.lengthSeconds}</div>
-          <div className={styles.col}>Success: {reminder.success.length}</div>
-          <div className={styles.col}>Fail: {reminder.errors.length}</div>
+          <div className={styles.col}>Type: {recall.primaryType}</div>
+          <div className={styles.col}>Length: {recall.lengthSeconds}</div>
+          <div className={styles.col}>Success: {recall.success.length}</div>
+          <div className={styles.col}>Fail: {recall.errors.length}</div>
         </ListItem>
         {this.state.expanded ?
-          <SuccessfulList success={reminder.success} primaryType={reminder.primaryType}/>
+          <SuccessfulList success={recall.success} primaryType={recall.primaryType}/>
         : null}
       </div>
     );
   }
 }
 
-export default class OutboxReminders extends Component {
+export default class OutboxRecalls extends Component {
   constructor(props) {
     super(props);
 
     // Using state because configurations are not supported
     this.state = {
       isLoading: true,
-      reminders: [],
-      selectedReminder: null,
+      recalls: [],
+      selectedRecall: null,
     };
+
+    this.handleTabChange = this.handleTabChange.bind(this);
   }
 
   componentWillMount() {
+    // this.setState({ isLoading: true });
+
     const { account } = this.props;
     return Promise.all([
-        axios.get(`/api/accounts/${account.id}/reminders/list`),
+        axios.get(`/api/accounts/${account.id}/recalls/list`),
       ])
-      .then(([remindersData]) => {
-        console.log('remindersData', remindersData);
+      .then(([recallsData]) => {
+        console.log('recallsData', recallsData);
         this.setState({
           isLoading: false,
-          reminders: remindersData.data,
+          recalls: recallsData.data,
         });
       })
       .catch(err => console.error('Failed to load configs', err));
   }
 
+  handleTabChange(tabIndex) {
+    this.setState({ tabIndex });
+  }
+
   render() {
     const { account } = this.props;
-    const { reminders, isLoading } = this.state;
+    const { recalls, isLoading } = this.state;
 
     let totalSuccess = 0;
     let totalErrors = 0;
-    reminders.forEach((r) => {
+    recalls.forEach((r) => {
       totalSuccess += r.success.length;
       totalErrors += r.errors.length;
     });
@@ -135,9 +143,9 @@ export default class OutboxReminders extends Component {
     }
 
     return (
-      <div className={styles.remindersWrapper}>
-        {!reminders.length ?
-          <div>No Reminders</div> :
+      <div className={styles.recallsWrapper}>
+        {!recalls.length ?
+          <div>No Recalls</div> :
           <div>
             <h4>
               Total Success: {totalSuccess}
@@ -146,11 +154,11 @@ export default class OutboxReminders extends Component {
               Total Errors: {totalErrors}
             </h4>
             <List>
-              {reminders.map((reminder) => {
+              {recalls.map((recall) => {
                 return (
-                  <ReminderListItem
-                    key={reminder.id}
-                    reminder={reminder}
+                  <RecallListItem
+                    key={recall.id}
+                    recall={recall}
                   />
                 );
               })}
@@ -162,6 +170,6 @@ export default class OutboxReminders extends Component {
   }
 }
 
-OutboxReminders.propTypes = {
+OutboxRecalls.propTypes = {
   account: PropTypes.object.isRequired,
 };

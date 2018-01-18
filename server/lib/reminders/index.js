@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import omit from 'lodash/omit';
 import { env } from '../../config/globals';
 import {
   Account,
@@ -10,10 +11,17 @@ import {
   SentReminder,
   TextMessage,
 } from '../../_models';
+import GLOBALS from '../../config/globals';
+import { organizeForOutbox } from '../comms/util';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { generateOrganizedPatients } from '../comms/util';
-import { sortIntervalAscPredicate } from '../../util/time';
+import {
+  convertIntervalStringToObject,
+  sortIntervalAscPredicate,
+  ceilDateMinutes,
+  floorDateMinutes,
+} from '../../util/time';
 import { mapPatientsToReminders } from './helpers';
 import sendReminder from './sendReminder';
 
@@ -73,9 +81,24 @@ function getIsConfirmable(appointment) {
 }
 
 /**
+ * sendRemindersForAccount is an async function that will send reminders for the account passed in
+ * by calling other composable functions to assemble patients that need reminders and then looping through
+ * them and sending the appropirate comms to them
+ *
+ * - sort reminders from shortest reminder interval (ie. 2 hours) to longest (ie. 1 month) to ensure order
+ *   - this used to be very important, but now that we only send within a 5 minute buffer it is really only to ensure
+ *   logs are predictable and readable
+ * - call mapPatientsToReminders to grab the patients that need a respective reminder
+ * - loop through this sortedReminders
+ *    - grab errored patients from the map and do a batchSave of failed sentReminders
+ *    - loop through successful patients and try sending reminders to them
+ *      - if error, do nothing as sentReminder is not successful by default in DB
+ *      - if no error, update sentReminder to be a successful one
  *
  * @param account
- * @returns {Promise.<void>}
+ * @param date
+ * @param pub
+ * @returns {undefined}
  */
 export async function sendRemindersForAccount(account, date, pub) {
   const { reminders, name } = account;
@@ -193,8 +216,17 @@ export async function sendRemindersForAccount(account, date, pub) {
 }
 
 /**
+ * computeRemindersAndSend is an async function that will act like the top-level do-er of
+ * sending reminder comms to accounts. It's called by the cron job but can also
+ * be used to manually trigger the sending of reminders for accounts (ie. in testing)
  *
- * @returns {Promise.<Array|*>}
+ * - fetch accounts that can send auto-reminders, include that account's active reminders
+ * - loop through these fetched accounts
+ *   - send auto-reminders for account
+ *
+ * @param  {date} date in which the job is run (created by cron job but can be overriden for testing)
+ * @param  {pub} RabbitMQ client module, for publishing events on reminders being sent
+ * @returns {undefined}
  */
 export async function computeRemindersAndSend({ date, pub }) {
   // Get all clinics that actually want reminders sent and get their Reminder Preferences
@@ -221,4 +253,106 @@ export async function computeRemindersAndSend({ date, pub }) {
     // use `exports.` because we can mock it and stub it in test suite
     await exports.sendRemindersForAccount(account.get({ plain: true }), date, pub);
   }
+}
+
+/**
+ * getRemindersOutboxList is an async function that will return the list of patients that will receive
+ * reminders communications within a certain period of time (between { startDate, endDate })
+ *
+ * - startDate is ciel to nearest 5 minute
+ * - endDate is floor to nearest 5 minute
+ * - grab reminders for account and sort them
+ * - call mapPatientsToReminders to get [{ success, error }, { success, error }, ...]
+ * - loop over that array
+ *    - take "success" sentReminders and orderBy appointmentDate
+ *    - loop through the success now and add sendDate
+ *    - order array by sendDate
+ *    - spread into returned array
+ *  - order returned array by sendDate
+ *
+ * @param account
+ * @param startDate
+ * @param endDate
+ * @returns [outboxList] = [{ ...patientData, ...reminderDate, sendDate }, ...]
+ */
+export async function getRemindersOutboxList({ account, startDate, endDate }) {
+  // Fetch active reminders for the account that need to be sent
+  const reminders = await Reminder.findAll({
+    raw: true,
+    where: {
+      accountId: account.id,
+      isDeleted: false,
+      isActive: true,
+    },
+  });
+
+  // Sort reminders by interval so that we send to earliest first
+  const sortedReminders = reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+
+  // Adjust dates so we are not including items that would not happen in the interval.
+  // This is because we need to show according to how we run the cron
+  startDate = ceilDateMinutes(startDate, GLOBALS.reminders.cronIntervalMinutes);
+  endDate = floorDateMinutes(endDate, GLOBALS.reminders.cronIntervalMinutes);
+
+  const remindersPatients = await mapPatientsToReminders({
+    account,
+    startDate,
+    endDate,
+    reminders: sortedReminders,
+  });
+
+  // Now we begin to produce the final array
+  let outboxList = [];
+  remindersPatients.forEach(({ success }, i) => {
+    const reminder = sortedReminders[i];
+
+    // mapPatientsToReminders will return a flatter array with primaryTypes separated into primaryType
+    // this will group it back together
+    const organizedList = organizeRemindersOutboxList(success);
+
+    // Clone array so its not mutable and order by appointment.startDate ASC
+    // TODO: do we really need to slice() and make immutable here? whats the performance loss?
+    const sortedPatientsAppointments = organizedList.slice()
+      .sort((a, b) => a.patient.appointment.startDate > b.patient.appointment.startDate);
+
+    // map over the sorted array and construct the final object:
+    // { patient: { ...patientData, appointment }, reminder, sendDate }
+    const outboxReminders = sortedPatientsAppointments.map((pa) => {
+      const intervalObject = convertIntervalStringToObject(reminder.interval);
+      const subtractedDate = moment(pa.patient.appointment.startDate).subtract(intervalObject).toISOString();
+      const sendDate = floorDateMinutes(subtractedDate, GLOBALS.reminders.cronIntervalMinutes);
+      return {
+        ...pa,
+        reminder,
+        sendDate,
+      };
+    });
+
+    outboxList = [...outboxList, ...outboxReminders];
+  });
+
+  return outboxList.sort((a, b) => a.sendDate > b.sendDate);
+}
+
+/**
+ * organizeRemindersOutboxList is a function used to organize the outbox for reminders ontop of
+ * mapPatientsToReminders
+ *
+ * @params outboxList
+ */
+export function organizeRemindersOutboxList(outboxList) {
+  // Assume appointment.id is the unique indicator
+  // (shouldn't be multiple different reminders going out to same appointment)
+  const selectorPredicate = ({ patient: { appointment } }) => appointment.id;
+  const mergePredicate = (groupedArray) => {
+    const primaryTypes = groupedArray.map(item => item.primaryType);
+    const newObj = {
+      ...groupedArray[0],
+      primaryTypes,
+    };
+
+    return omit(newObj, 'primaryType');
+  };
+
+  return organizeForOutbox(outboxList, selectorPredicate, mergePredicate);
 }

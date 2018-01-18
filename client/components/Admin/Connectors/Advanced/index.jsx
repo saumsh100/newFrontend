@@ -11,6 +11,7 @@ import {
 } from '../../../library';
 import ConfigurationItem from './ConfigurationItem';
 import Outbox from '../Outbox';
+import DonnasOutbox from '../../../DonnasOutbox';
 import styles from './styles.scss';
 
 const headersConfig = {
@@ -32,10 +33,12 @@ export default class Advanced extends Component {
       reviews: null,
 
       isDonnaOutboxOpen: false,
+      isDonnaTODOListOpen: false,
     };
 
     this.onUpdateConfiguration = this.onUpdateConfiguration.bind(this);
     this.toggleDonnaOutbox = this.toggleDonnaOutbox.bind(this);
+    this.toggleDonnaTODOList = this.toggleDonnaTODOList.bind(this);
   }
 
   componentWillMount() {
@@ -74,6 +77,12 @@ export default class Advanced extends Component {
     });
   }
 
+  toggleDonnaTODOList() {
+    this.setState({
+      isDonnaTODOListOpen: !this.state.isDonnaTODOListOpen,
+    });
+  }
+
   render() {
     const { account } = this.props;
     const { configurations, recalls, reminders, reviews } = this.state;
@@ -103,6 +112,31 @@ export default class Advanced extends Component {
             <Outbox account={account} />
           </DialogBox>
         : null}
+
+        <Button
+          onClick={this.toggleDonnaTODOList}
+        >
+          View Donna's TODO List
+        </Button>
+        {this.state.isDonnaTODOListOpen ?
+          <DialogBox
+            className={styles.outboxDialog}
+            title={`Donna's TODO List for ${account.name}`}
+            active={this.state.isDonnaTODOListOpen}
+            onEscKeyDown={this.toggleDonnaTODOList}
+            onOverlayClick={this.toggleDonnaTODOList}
+            actions={[
+              {
+                onClick: this.toggleDonnaTODOList,
+                label: 'Close',
+                component: Button,
+                props: { color: 'darkgrey' },
+              },
+            ]}
+          >
+            <DonnasOutbox account={account} />
+          </DialogBox>
+          : null}
 
         <h3>Configurations</h3>
         {configurations.map((config) => {

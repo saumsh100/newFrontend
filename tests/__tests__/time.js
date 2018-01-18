@@ -16,6 +16,8 @@ const {
   getAvailableHours,
   sortIntervalDescPredicate,
   convertIntervalStringToObject,
+  floorDateMinutes,
+  ceilDateMinutes,
 } = require('../../server/util/time');
 
 // Monday -> Friday 9 to 5 by default
@@ -748,6 +750,38 @@ describe('util/time', () => {
         '-1 weeks',
         '-1 months',
       ]);
+    });
+  });
+
+  describe('#floorDateMinutes', () => {
+    test('should return 12:05 if it is 12:06', () => {
+      const date = (new Date(2018, 8, 8, 12, 6)).toISOString();
+      const floored = new Date(floorDateMinutes(date, 5));
+      expect(floored.getHours()).toBe(12);
+      expect(floored.getMinutes()).toBe(5);
+    });
+
+    test('should return 12:05 if it is 12:05', () => {
+      const date = (new Date(2018, 8, 8, 12, 5)).toISOString();
+      const floored = new Date(floorDateMinutes(date, 5));
+      expect(floored.getHours()).toBe(12);
+      expect(floored.getMinutes()).toBe(5);
+    });
+  });
+
+  describe('#ceilDateMinutes', () => {
+    test('should return 12:10 if it is 12:06', () => {
+      const date = (new Date(2018, 8, 8, 12, 6)).toISOString();
+      const ceiled = new Date(ceilDateMinutes(date, 5));
+      expect(ceiled.getHours()).toBe(12);
+      expect(ceiled.getMinutes()).toBe(10);
+    });
+
+    test('should return 12:10 if it is 12:10', () => {
+      const date = (new Date(2018, 8, 8, 12, 10)).toISOString();
+      const ceiled = new Date(ceilDateMinutes(date, 5));
+      expect(ceiled.getHours()).toBe(12);
+      expect(ceiled.getMinutes()).toBe(10);
     });
   });
 });

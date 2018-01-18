@@ -1,4 +1,8 @@
 
+import groupBy from 'lodash/groupBy';
+import map from 'lodash/map';
+import toArray from 'lodash/toArray';
+
 const ATTRS = {
   email: 'email',
   sms: 'mobilePhoneNumber',
@@ -57,4 +61,20 @@ export function generateOrganizedPatients(patients, primaryTypes) {
   return { errors, success };
 }
 
-
+/**
+ * organizeForOutbox is a function that accepts an array and a selectorPredicate
+ * and will group the array based on the selectorPredicate, and then map over that array
+ * to return outbox items that have primaryTypes grouped together.
+ *
+ * NOTE: this is primarily a layer ontop of the mapPatientsTo____ calls that will take the flat
+ * array with primaryType and bring it back into primaryTypes
+ *
+ * @param array (ie.// [{ patient, appointment, primaryType: 'sms' }, { patient, appointment, primaryType: 'email' }])
+ * @param selectorPredicate (ie.// ({ patient, appointment }) => `${patient.id}_${appointment.id}`)
+ * @param mergePredicate
+ * @returns [organizedArray] (ie.// [{ patient, appointment, primaryTypes: ['sms', 'email'] }])
+ */
+export function organizeForOutbox(array, selectorPredicate, mergePredicate) {
+  const groupedMap = groupBy(array, selectorPredicate);
+  return toArray(map(groupedMap, mergePredicate));
+}

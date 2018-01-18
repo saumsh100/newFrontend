@@ -116,7 +116,7 @@ const postgres = {
 
 
 const reminders = {
-  numMinutes: 5,
+  cronIntervalMinutes: 5,
 };
 
 const staticPath = path.normalize(path.join(root, '../statics'));

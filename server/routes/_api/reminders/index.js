@@ -9,6 +9,7 @@ import normalize from '../normalize';
 import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
 import { getDayStart, getDayEnd } from '../../../util/time';
+import { getRemindersOutboxList } from '../../../lib/reminders';
 import { mapPatientsToReminders } from '../../../lib/reminders/helpers';
 
 const remindersRouter = Router();
@@ -37,7 +38,7 @@ remindersRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), 
 });
 
 /**
- * GET /:accountId/reminders/stats
+ * GET /:accountId/reminders/list
  */
 remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
@@ -47,6 +48,9 @@ remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:rea
     // TODO: add defaults for startDate & endDate
 
     const date = (new Date()).toISOString();
+
+    // TODO: use a getRemindersOutboxList(account, startDate, endDate1)
+
     const reminders = await Reminder.findAll({
       raw: true,
       where: {
@@ -65,6 +69,20 @@ remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:rea
     });
 
     res.send(dataWithReminders);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /:accountId/reminders/outbox
+ */
+remindersRouter.get('/:accountId/reminders/outbox', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    const { account } = req;
+    const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
+    const outboxList = await getRemindersOutboxList({ account, startDate, endDate });
+    res.send(outboxList);
   } catch (error) {
     next(error);
   }

@@ -470,6 +470,18 @@ const Time = {
   getDayEnd(date = (new Date())) {
     return moment(date).endOf('day').toISOString();
   },
+
+  floorDateMinutes(date = (new Date()), intervalMinutes) {
+    const mDate =  moment(date);
+    const flooredMinutes = Math.floor(mDate.minute() / intervalMinutes) * intervalMinutes;
+    return mDate.minutes(flooredMinutes).toISOString();
+  },
+
+  ceilDateMinutes(date = (new Date()), intervalMinutes) {
+    const mDate =  moment(date);
+    const ceiledMinutes = Math.ceil(mDate.minute() / intervalMinutes) * intervalMinutes;
+    return mDate.minutes(ceiledMinutes).toISOString();
+  },
 };
 
 module.exports = Time;

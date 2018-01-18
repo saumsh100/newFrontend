@@ -1,5 +1,10 @@
 
-import { cannotSend, generateOrganizedPatients } from '../../../../server/lib/comms/util';
+import omit from 'lodash/omit';
+import {
+  cannotSend,
+  generateOrganizedPatients,
+  organizeForOutbox,
+} from '../../../../server/lib/comms/util';
 
 describe('Communications Utility Library', () => {
   describe('cannotSend', () => {
@@ -88,6 +93,49 @@ describe('Communications Utility Library', () => {
       expect(result.errors[0].primaryType).toBe('sms');
       expect(result.errors[1].primaryType).toBe('sms');
       expect(result.errors[2].primaryType).toBe('email');
+    });
+  });
+
+  describe('organizeForOutbox', () => {
+    test('should be a function', () => {
+      expect(typeof organizeForOutbox).toBe('function');
+    });
+
+    test('should return proper array', () => {
+      const array = [
+        {
+          appointment: { id: 1 },
+          patient: { id: 2 },
+          primaryType: 'email'
+        },
+        {
+          appointment: { id: 1 },
+          patient: { id: 2 },
+          primaryType: 'sms'
+        },
+        {
+          appointment: { id: 2 },
+          patient: { id: 1 },
+          primaryType: 'sms'
+        },
+      ];
+
+      const selectorPredicate = ({ appointment }) => appointment.id;
+      const mergePredicate = (groupedArray) => {
+        const primaryTypes = groupedArray.map(item => item.primaryType);
+        const newObj = {
+          ...groupedArray[0],
+          primaryTypes,
+        };
+
+        return omit(newObj, 'primaryType');
+      };
+
+      const organizedArray = organizeForOutbox(array, selectorPredicate, mergePredicate);
+
+      expect(organizedArray.length).toBe(2);
+      expect(organizedArray[0].primaryTypes).toEqual(['email', 'sms']);
+      expect(organizedArray[1].primaryTypes).toEqual(['sms']);
     });
   });
 });
