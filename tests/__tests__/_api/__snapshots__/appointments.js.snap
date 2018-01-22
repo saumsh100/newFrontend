@@ -254,6 +254,21 @@ Object {
 }
 `;
 
+exports[`/api/appointments GET /insights /insights - appointment insights 1`] = `
+Object {
+  "insights": Array [
+    Object {
+      "type": "missingMobilePhone",
+      "value": null,
+    },
+    Object {
+      "type": "missingEmail",
+      "value": null,
+    },
+  ],
+}
+`;
+
 exports[`/api/appointments POST / / - create a Cancel - only isCancelled field should be true not isShortCancelled 1`] = `
 Object {
   "entities": Object {
