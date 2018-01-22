@@ -288,7 +288,7 @@ describe('/api/appointments', () => {
         familyId: family.id,
       }));
 
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
 
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 5, 19, 8), patientId: pat.id }),

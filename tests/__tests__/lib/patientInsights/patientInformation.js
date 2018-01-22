@@ -87,7 +87,7 @@ describe('Patient Insights', () => {
     });
 
     test('should have one sms reminder - with one sms sent reminder no confirmation', async () => {
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
@@ -107,7 +107,7 @@ describe('Patient Insights', () => {
     });
 
     test('should have one phone reminder - with one phone sent reminder no confirmation', async () => {
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
 
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
@@ -129,7 +129,7 @@ describe('Patient Insights', () => {
     });
 
     test('should have one email reminder - with one email sent reminder no confirmation', async () => {
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
@@ -150,7 +150,7 @@ describe('Patient Insights', () => {
     });
 
     test('should have no reminder - its confirmed', async () => {
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
@@ -171,7 +171,7 @@ describe('Patient Insights', () => {
     });
 
     test('should have no reminder - its not isConfirmable', async () => {
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
@@ -299,7 +299,7 @@ describe('Patient Insights', () => {
         familyId: family.id,
       }));
 
-      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410 });
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
 
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
