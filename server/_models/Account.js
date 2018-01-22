@@ -83,6 +83,7 @@ export default function (sequelize, DataTypes) {
 
     timeInterval: {
       type: DataTypes.INTEGER,
+      defaultValue: 30,
     },
 
     timezone: {

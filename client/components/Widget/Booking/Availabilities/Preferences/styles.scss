@@ -93,7 +93,7 @@
     box-sizing: border-box;
   }
 
-  > div > div {
+  > div > div > div {
     > div {
       font-family: $medium-font;
       letter-spacing: 0.5px;

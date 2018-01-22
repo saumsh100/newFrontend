@@ -48,7 +48,7 @@ Object {
         "recareDueDateSeconds": 23328000,
         "sendRequestEmail": true,
         "syncClientAdapter": null,
-        "timeInterval": null,
+        "timeInterval": 30,
         "timezone": null,
         "twilioPhoneNumber": null,
         "unit": 15,

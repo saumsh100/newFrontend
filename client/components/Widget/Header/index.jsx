@@ -7,7 +7,7 @@ import { ConnectedRouter as Router } from 'react-router-redux';
 import { /*BrowserRouter as Router, */Redirect, Route, Switch, withRouter } from 'react-router-dom';
 import moment from 'moment';
 import { closeBookingModal } from '../../../thunks/availabilities';
-import { setSelectedStartDate } from '../../../actions/availabilities';
+import { setSelectedStartDate, setIsFetching } from '../../../actions/availabilities';
 import { Avatar, IconButton, DayPicker } from '../../library';
 import PatientUserMenu from './PatientUserMenu';
 import styles from './styles.scss';
@@ -93,7 +93,10 @@ class Header extends Component {
                   <DayPicker
                     target="icon"
                     value={selectedStartDate}
-                    onChange={value => this.props.setSelectedStartDate(value)}
+                    onChange={(value) => {
+                      this.props.setIsFetching(true);
+                      this.props.setSelectedStartDate(value);
+                    }}
                     tipSize={0.01}
                     timezone={accountTimezone}
                     disabledDays={isDisabledDay}
@@ -133,6 +136,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     closeBookingModal,
     setSelectedStartDate,
+    setIsFetching,
   }, dispatch);
 }
 

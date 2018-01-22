@@ -1,6 +1,7 @@
 
 import moment from 'moment';
 import axios from 'axios';
+import { batchActions } from 'redux-batched-actions';
 import {
   setIsFetching,
   setAvailabilities,
@@ -195,23 +196,32 @@ export function fetchAvailabilities() {
 
     return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
-        // data.availabilities = [];
-        dispatch(setAvailabilities(data.availabilities));
-        dispatch(setNextAvailability(data.nextAvailability));
+        const actions = [
+          setAvailabilities(data.availabilities),
+          setNextAvailability(data.nextAvailability),
+        ];
+
         requestCount -= 1;
         // Remove loading symbol
         if (!requestCount) {
-          dispatch(setIsFetching(false));
+          actions.push(setIsFetching(false));
         }
+
+        dispatch(batchActions(actions));
       })
       .catch((err) => {
-        console.error(err);
-        dispatch(setAvailabilities([]));
-        dispatch(setNextAvailability(null));
+        console.error('axios request error', err);
+        const actions = [
+          setAvailabilities([]),
+          setNextAvailability(null),
+        ];
+
         requestCount -= 1;
         if (!requestCount) {
-          dispatch(setIsFetching(false));
+          actions.push(setIsFetching(false));
         }
+
+        dispatch(batchActions(actions));
       });
   };
 }

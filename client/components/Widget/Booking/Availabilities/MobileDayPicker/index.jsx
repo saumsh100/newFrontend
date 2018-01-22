@@ -32,15 +32,18 @@ class MobileDayPicker extends Component {
 
   oneDayBackward() {
     const newStartDate = moment(this.props.selectedStartDate).subtract(1, 'days').toISOString();
+    this.props.setIsFetching(true);
     this.props.setSelectedStartDate(newStartDate);
   }
 
   oneDayForward() {
     const newStartDate = moment(this.props.selectedStartDate).add(1, 'days').toISOString();
+    this.props.setIsFetching(true);
     this.props.setSelectedStartDate(newStartDate);
   }
 
   setSelectedDate(date) {
+    this.props.setIsFetching(true);
     this.props.setSelectedStartDate(date);
   }
 
@@ -81,6 +84,7 @@ class MobileDayPicker extends Component {
               <IconButton
                 className={styles.caretButton}
                 icon="caret-left"
+                iconType="solid"
                 onClick={() => this.oneDayBackward()}
               /> : null}
           </Col>
@@ -99,6 +103,7 @@ class MobileDayPicker extends Component {
             <IconButton
               className={styles.caretButton}
               icon="caret-right"
+              iconType="solid"
               onClick={() => this.oneDayForward()}
             />
           </Col>
@@ -129,6 +134,7 @@ function mapStateToProps({ availabilities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     setSelectedStartDate: Actions.setSelectedStartDate,
+    setIsFetching: Actions.setIsFetching,
   }, dispatch);
 }
 

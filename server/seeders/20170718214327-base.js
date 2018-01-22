@@ -9,7 +9,6 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-
 const passwordHashSaltRounds = 10;
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
@@ -22,6 +21,7 @@ const managerUserId = '6668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const ownerUserId = '5668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const superAdminUserId = '4668f250-e8c9-46e3-bfff-0249f1eec6b8';
 const weeklyScheduleId = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
+const weeklyScheduleId2 = '89b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const clinicPhoneNumber = '+17786558613';
 const addressId = uuid();
 const addressId2 = uuid();
@@ -67,6 +67,7 @@ const account2 = {
   id: accountId2,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
+  weeklyScheduleId: weeklyScheduleId2,
   addressId: addressId2,
   contactEmail: 'info@libertychiropractic.ca',
   website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
@@ -163,8 +164,14 @@ const superAdminUser2 = {
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
 
-const WeeklySchedule = {
+const weeklySchedule1 = {
   id: weeklyScheduleId,
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
+const weeklySchedule2 = {
+  id: weeklyScheduleId2,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
@@ -173,7 +180,10 @@ module.exports = {
   up: async function (queryInterface, Sequelize) { // eslint-disable-line
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
 
-    await queryInterface.bulkInsert('WeeklySchedules', [WeeklySchedule]);
+    await queryInterface.bulkInsert('WeeklySchedules', [
+      weeklySchedule1,
+      weeklySchedule2,
+    ]);
 
     await queryInterface.bulkInsert('Addresses', [address, address2]);
 
@@ -287,19 +297,28 @@ module.exports = {
 
     await queryInterface.bulkInsert('DeliveredProcedures', deliveredProcedures);
 
-    const practitioners = [];
+    const practitionerIds = [
+      '19b851d4-5730-41ad-8b85-b3c5f2ee91ff',
+      '96eadc09-4c70-4259-9534-c7e112e3b2d6',
+      '4c8f5a0b-4a50-4ea1-af22-46362c14833b',
+      '714b1556-a077-4cd6-8f7b-aadf0bd163d1',
+      '6ecc3d1d-2d8c-4763-baac-f7e3c0c203d5',
+      '12594869-c80b-43bb-8e2b-eeae7aead5e0',
+      '0200e115-edbd-45f0-a907-8c40fff357e2',
+      'f334b97f-21ec-42ad-828e-599bf4c99b1d',
+      '69281845-f523-4848-8368-159fb575bd7d',
+      'f059e1cd-5593-46ec-90b6-af14dd9c974e',
+    ];
 
-    for (let i = 0; i < 10; i += 1) {
-      practitioners.push({
-        id: uuid(),
-        accountId,
-        type: 'Hygienist',
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
-    }
+    const practitioners = practitionerIds.map((id) => ({
+      id,
+      accountId,
+      type: 'Hygienist',
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
 
     await queryInterface.bulkInsert('Practitioners', practitioners);
 

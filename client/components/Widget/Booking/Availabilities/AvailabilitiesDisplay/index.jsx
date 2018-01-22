@@ -38,7 +38,7 @@ class AvailabilitiesDisplay extends Component {
     super(props);
 
     this.state = {
-      fetching: false,
+      // fetching: false,
       scrollDown: true,
     };
 
@@ -61,18 +61,20 @@ class AvailabilitiesDisplay extends Component {
                                       (nextProps.selectedStartDate !== this.props.selectedStartDate);
 
     if (shouldFetchAvailabilities) {
-      this.setState({ fetching: true });
+      // this.setState({ fetching: true });
       this.debounceFetchAvailabilities();
     }
   }
 
   setDateBack(numDays = 4) {
     const newStartDate = moment(this.props.selectedStartDate).subtract(numDays, 'days').toISOString();
+    this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
     this.props.setSelectedStartDate(newStartDate);
   }
 
   setDateForward(numDays = 4) {
     const newStartDate = moment(this.props.selectedStartDate).add(numDays, 'days').toISOString();
+    this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
     this.props.setSelectedStartDate(newStartDate);
   }
 
@@ -82,8 +84,8 @@ class AvailabilitiesDisplay extends Component {
   }
 
   debounceFetchAvailabilities() {
-    this.props.fetchAvailabilities()
-      .then(() => this.setState({ fetching: false }));
+    this.props.fetchAvailabilities();
+      // .then(() => this.setState({ fetching: false }));
   }
 
   scrollY() {
@@ -96,7 +98,7 @@ class AvailabilitiesDisplay extends Component {
       this.setState({
         scrollDown: false,
       });
-    } else {
+    } else if (!this.state.scrollDown) {
       this.setState({
         scrollDown: true,
       });
@@ -120,7 +122,7 @@ class AvailabilitiesDisplay extends Component {
   }
 
   render() {
-    const {
+    let {
       isFetching,
       availabilities,
       nextAvailability,
@@ -148,12 +150,12 @@ class AvailabilitiesDisplay extends Component {
     const headerClasses = classNames(styles.datesRow);
     const header = (
       <div className={headerClasses}>
-        {dayAvailabilities.map((a) => {
+        {dayAvailabilities.map((a, i) => {
           // TODO: do we need to add timeZone here
           const isSameDay = !!selectedAvailability && a.momentDate.isSame(selectedAvailability.startDate, 'day');
           const classes = isSameDay ? classNames(styles.selectedDayHeader, styles.appointment__list) : styles.appointment__list;
           return (
-            <ul className={classes} key={`${a.momentDate.toISOString()}_header`}>
+            <ul className={classes} key={`${a.momentDate.toISOString()}_header_${i}`}>
               <div className={styles.appointment__list_header}>
                 <div className={styles.list__header_day}>
                   {a.momentDate.format('ddd')}
@@ -183,17 +185,17 @@ class AvailabilitiesDisplay extends Component {
     // console.log(dayAvailabilities);
     let availabilitiesDisplay = (
       <div className={styles.displayContainer}>
-        <i className={`fa fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
+        <i className={`fas fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
       </div>
     );
 
     let mobileAvailabilitiesDisplay = (
       <div className={styles.mobileDisplayContainer}>
-        <i className={`fa fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
+        <i className={`fas fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
       </div>
     );
 
-    if (!isFetching && !this.state.fetching) {
+    if (!isFetching) {  /*&& !this.state.fetching) {*/
       if (display) {
         availabilitiesDisplay = (
           <div
@@ -201,10 +203,10 @@ class AvailabilitiesDisplay extends Component {
             className={styles.displayAvailabilitiesContainer}
           >
             <div className={styles.appointment__table_elements}>
-              {dayAvailabilities.map((a) => {
+              {dayAvailabilities.map((a, i) => {
                 return (
-                  <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
-                    {a.sortedAvailabilities.map((availability) => {
+                  <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list_${i}`}>
+                    {a.sortedAvailabilities.map((availability, j) => {
                       let classes = styles.appointment__list_item;
                       if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
                         classes = `${classes} ${styles.appointment__list_selected}`;
@@ -212,7 +214,7 @@ class AvailabilitiesDisplay extends Component {
 
                       return (
                         <li
-                          key={`${availability.startDate}_item`}
+                          key={`${availability.startDate}_item_${j}`}
                           onClick={() => this.selectAvailability(availability)}
                           className={classes}
                         >
@@ -336,12 +338,13 @@ class AvailabilitiesDisplay extends Component {
               {header}
               {availabilitiesDisplay}
               <div className={styles.scrollDownSpace}>
-                {this.state.scrollDown && needsToScrollMoreDesktop ?
+                {!isFetching && this.state.scrollDown && needsToScrollMoreDesktop ?
                   <div className={styles.scrollDown}>
                     <span>Scroll for More</span>
                     <div>
                       <Icon
                         icon="caret-down"
+                        type="solid"
                       />
                     </div>
                   </div>
@@ -407,6 +410,7 @@ function mapDispatchToProps(dispatch) {
     fetchAvailabilities: Thunks.fetchAvailabilities,
     setSelectedStartDate: Actions.setSelectedStartDate,
     setSelectedAvailability: Actions.setSelectedAvailability,
+    setIsFetching: Actions.setIsFetching,
   }, dispatch);
 }
 
