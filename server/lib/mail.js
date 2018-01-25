@@ -10,10 +10,10 @@ export const sendConnectorDown = (config) => {
 };
 
 export const sendConnectorBackUp = (config) => {
-    config.subject = `The Connector for ${config.name} is Back Up!`;
-    config.templateName = 'Connector Back Up';
-    return sendTemplate(config);
-  };
+  config.subject = `The Connector is up for ${config.name}!`;
+  config.templateName = 'Connector Back Up';
+  return sendTemplate(config);
+};
 
 export const sendConfirmationReminder = (config) => {
   config.subject = 'Appointment Reminder';

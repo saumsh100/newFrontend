@@ -268,7 +268,7 @@ export default function (sequelize, DataTypes) {
         if (oldDate !== newDate) {
           const minsDiff = moment(newDate).diff(moment(oldDate), 'minutes');
 
-          if (minsDiff > 10) {
+          if (minsDiff > 30) {
             sendConnectorBackUp({
               toEmail: 'monitoring@carecru.com',
               name: account.name,
