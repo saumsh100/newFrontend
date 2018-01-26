@@ -4,6 +4,7 @@ import styles from './styles.scss';
 import CardHeader from '../CardHeader';
 import Icon from '../Icon';
 import Modal from '../Modal';
+import { SContainer, SHeader, SBody, SFooter } from '../Layout/index';
 
 class DialogBox extends Component {
   constructor(props) {
@@ -23,9 +24,9 @@ class DialogBox extends Component {
     } = this.props;
 
     let showFooterComponent = null;
-    if (actions) {
+    if (actions && actions.length) {
       showFooterComponent = (
-        <div className={styles.dialogBody__footer}>
+        <SFooter className={styles.footer}>
           {actions.map((action, index) => {
             if (this.props['data-test-id']) {
               action.props = action.props || [];
@@ -36,35 +37,38 @@ class DialogBox extends Component {
               <action.component
                 key={`action_${index}`}
                 onClick={action.onClick}
-                className={styles.dialogBody__action}
+                className={styles.action}
                 {...action.props}
               >
                 {action.label}
               </action.component>
             );
           })}
-        </div>
+        </SFooter>
       );
     }
 
     return (
       <Modal {...this.props}>
-        <div
-          className={styles.dialogBody}
+        <SContainer
           data-test-id={this.props['data-test-id']}
         >
-          <div className={styles.dialogBody__header}>
-            <CardHeader title={title} className={styles.cardHeader}/>
+          <SHeader className={styles.header}>
+            <div className={styles.title}>
+              {title}
+            </div>
             <div
-              className={styles.dialogBody__closeIcon}
+              className={styles.closeIcon}
               onClick={this.deactivate}
             >
               <Icon icon="times" />
             </div>
-          </div>
-          {children}
+          </SHeader>
+          <SBody className={styles.dialogBody}>
+            {children}
+          </SBody>
           {showFooterComponent}
-        </div>
+        </SContainer>
       </Modal>
     );
   }

@@ -1,5 +1,5 @@
 
-import React, { PropTypes } from 'react';
+import  React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import RCToggle from 'react-toggle';
 import styles from './styles.scss';
@@ -10,19 +10,27 @@ export default function Toggle(props) {
     icons,
     color,
     theme,
+    label,
   } = props;
 
-  let classes = classNames(className, 'CareCruToggle', `CareCruToggle-${color}`);
+  let classes = classNames(styles.toggle, 'CareCruToggle', `CareCruToggle-${color}`);
   if (theme) {
-    classes = classNames(styles[`theme_${theme}Background`], className);
+    classes = classNames(styles[`theme_${theme}Background`]);
   }
 
   return (
-    <RCToggle
-      {...props}
-      icons={icons}
-      className={classes}
-    />
+    <div className={classNames(className, styles.toggleWrapper)}>
+      {label ?
+        <label className={styles.toggleLabel}>
+          {label}
+        </label>
+      : null}
+      <RCToggle
+        {...props}
+        icons={icons}
+        className={classes}
+      />
+    </div>
   );
 }
 
@@ -31,6 +39,7 @@ Toggle.propTypes = {
   color: PropTypes.string,
   icons: PropTypes.bool,
   theme: PropTypes.string,
+  label: PropTypes.string,
 };
 
 Toggle.defaultProps = {

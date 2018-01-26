@@ -13,15 +13,24 @@ export default function (sequelize, DataTypes) {
     patientUserId: {
       type: DataTypes.UUID,
     },
+
+    accountId: {
+      type: DataTypes.UUID,
+    },
   });
 
-  Token.associate = ({ Appointment, PatientUser }) => {
+  Token.associate = ({ Account, Appointment, PatientUser }) => {
+    Token.belongsTo(Account, {
+      foreignKey: 'accountId',
+      as: 'account',
+    });
+
     Token.belongsTo(Appointment, {
       foreignKey: 'appointmentId',
       as: 'appointment',
     });
 
-    PatientUser.belongsTo(PatientUser, {
+    Token.belongsTo(PatientUser, {
       foreignKey: 'patientUserId',
       as: 'patientUser',
     });

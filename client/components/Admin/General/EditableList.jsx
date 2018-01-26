@@ -17,7 +17,7 @@ const EditableListItem = ({ children, item, onDelete, onEdit }) =>
             onClickCapture={(e) => { e.preventDefault(); onEdit(item); }}
           />
           <VButton
-            icon="trash-o"
+            icon="trash"
             negative
             rounded
             compact

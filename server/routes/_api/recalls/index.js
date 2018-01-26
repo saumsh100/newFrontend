@@ -1,11 +1,15 @@
 
 import { Router } from 'express';
+import moment from 'moment';
+import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
+import { getRecallTemplateName } from '../../../lib/recalls/createRecallText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
 import { getPatientsDueForRecall, mapPatientsToRecalls } from '../../../lib/recalls/helpers';
+import { convertIntervalStringToObject } from '../../../util/time';
 
 const recallsRouter = new Router();
 
@@ -99,6 +103,44 @@ recallsRouter.delete('/:accountId/recalls/:recallId', checkPermissions('accounts
   return req.recall.destroy()
     .then(() => res.status(204).send())
     .catch(next);
+});
+
+/**
+ * DELETE /:accountId/reminders/:reminderId/preview
+ *
+ * - purpose of this route is mainly for email templates as we have to go to mandrill
+ */
+recallsRouter.get('/:accountId/recalls/:recallId/preview', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    if (req.accountId !== req.account.id) {
+      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+    }
+
+    const { account, recall } = req;
+    const intervalObject = convertIntervalStringToObject(recall.interval);
+    const dueDate = moment().add(intervalObject);
+    const lastApptDate = dueDate.subtract(6, 'months');
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      lastApptDate,
+      dueDate,
+    };
+
+    const templateName = getRecallTemplateName({ recall });
+    const html = await renderTemplate({
+      templateName,
+      mergeVars: [
+        // defaultMergeVars
+        ...generateClinicMergeVars({ account, patient }),
+      ],
+    });
+
+    return res.send(html);
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
 });
 
 module.exports = recallsRouter;

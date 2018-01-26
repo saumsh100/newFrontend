@@ -32,8 +32,6 @@ class Tab extends Component {
       classes = classNames(classes, styles.disabledTab);
     }
 
-    if (active) console.log('Active:', label, 'Class:', classes);
-
     return (
       // Order is important, classNames={classes} needs to override props.className
       <label
@@ -49,7 +47,7 @@ class Tab extends Component {
 
 Tab.propTypes = {
   index: PropTypes.number,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   active: PropTypes.bool,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,

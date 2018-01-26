@@ -52,6 +52,7 @@ class ServiceDataContainer extends Component {
             <div>
               <IconButton
                 icon="trash"
+                iconType="solid"
                 onClick={this.deleteService}
               />
             </div>
@@ -74,7 +75,7 @@ class ServiceDataContainer extends Component {
     }
 
     return (
-      <Card className={styles.servicesDataContainer}>
+      <Card className={styles.servicesDataContainer} noBorder>
         {component}
       </Card>
     );

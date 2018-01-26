@@ -228,8 +228,8 @@ Object {
     0,
     0,
     0,
-    0,
     1,
+    0,
     0,
     0,
     0,
@@ -238,7 +238,6 @@ Object {
   ],
   "entities": Object {},
   "months": Array [
-    "January",
     "February",
     "March",
     "April",
@@ -250,6 +249,22 @@ Object {
     "October",
     "November",
     "December",
+    "January",
+  ],
+}
+`;
+
+exports[`/api/appointments GET /insights /insights - appointment insights 1`] = `
+Object {
+  "insights": Array [
+    Object {
+      "type": "missingMobilePhone",
+      "value": null,
+    },
+    Object {
+      "type": "missingEmail",
+      "value": null,
+    },
   ],
 }
 `;

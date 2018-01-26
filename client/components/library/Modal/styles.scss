@@ -20,12 +20,13 @@
 }
 
 .small {
-  width: 20%;
+  width: 25%;
 }
 
 .mediumSmall {
   width: 30%;
 }
+
 .medium {
   width: 40%;
 }
@@ -64,7 +65,7 @@
   max-height: 96%;
   flex-direction: column;
   z-index: 301;
-  border-radius: .5rem;
+  //border-radius: .5rem;
   box-shadow: 0 19px 60px rgba(0,0,0,.3), 0 15px 20px rgba(0,0,0,.22);
   animation: slidein 0.5s;
   &__modalHeader{

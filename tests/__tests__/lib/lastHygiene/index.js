@@ -24,6 +24,7 @@ const makeDeliveredProcedure = (config = {}) => Object.assign({}, {
   accountId,
   patientId,
   procedureCode: code,
+  procedureCodeId: `CDA-${code}`,
   entryDate: '2017-07-19T00:14:30.932Z',
 }, config);
 

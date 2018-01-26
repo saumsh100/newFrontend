@@ -57,6 +57,10 @@ const callrails = {
   apiAccount: environmentVariables.CALLRAIL_API_ACCOUNTID,
 };
 
+const launchDarkly = {
+  sdkKey: environmentVariables.LAUNCH_DARKLY_SDK_KEY,
+};
+
 const vendasta = {
   apiKey: environmentVariables.VENDASTA_API_KEY,
   apiUser: environmentVariables.VENDASTA_API_USER,
@@ -110,6 +114,11 @@ const postgres = {
   logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };
 
+
+const reminders = {
+  cronIntervalMinutes: 5,
+};
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -119,7 +128,7 @@ module.exports = {
   tokenExpiry,
   passwordHashSaltRounds,
 
-  // Enivornment Variable Related
+  // Environment Variable Related
   env,
   port,
   host,
@@ -129,6 +138,7 @@ module.exports = {
   caCert,
   redis,
   rabbit: environmentVariables.RABBITMQ_URL ? `${environmentVariables.RABBITMQ_URL}?heartbeat=380` : rabbit,
+  launchDarkly,
   vendasta,
   twilio,
   mandrill,
@@ -140,4 +150,5 @@ module.exports = {
   s3,
   postgres,
   callrails,
+  reminders,
 };

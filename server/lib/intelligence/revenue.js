@@ -101,7 +101,7 @@ export function mostBusinessProcedure(startDate, endDate, accountId) {
     order: [[sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'DESC']],
     raw: true,
     limit: 5,
-  });
+  }).catch();
 }
 
 

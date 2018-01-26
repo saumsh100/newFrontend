@@ -19,7 +19,7 @@ function PhoneGraph(props) {
   const UserMenu = buttonProps => (
     <Button flat {...buttonProps} className={styles.userMenuButton}>
       <span className={styles.userRole}><i className="fa fa-calendar" /> {props.startDate.format('MMMM Do YYYY')} - {props.endDate.format('MMMM Do YYYY')}&nbsp;</span>
-      <Icon icon="caret-down" />
+      <Icon icon="caret-down" type="solid" />
     </Button>
   );
 

@@ -1,19 +1,22 @@
 
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import url from 'url';
 import crypto from 'crypto';
 import { PatientAuth } from '../../lib/_auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import twilio, { phoneNumber } from '../../config/twilio';
 import { sequelizeLoader } from '../util/loaders';
+import { generateAccountParams, encodeParams } from './util/params';
 import StatusError from '../../util/StatusError';
-import { PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
+import { Account, PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
 import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
 
 const authRouter = Router();
 
 authRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 authRouter.param('tokenId', sequelizeLoader('token', 'Token'));
+authRouter.param('accountId', sequelizeLoader('account', 'Account'));
 
 const signTokenAndSend = res => ({ session, model }) => {
   const tokenData = {
@@ -45,8 +48,10 @@ async function sendConfirmationMessage(patientUser) {
   });
 }
 
-authRouter.post('/signup', (req, res, next) => {
+authRouter.post('/signup/:accountId', (req, res, next) => {
   const { body: patient } = req;
+
+
   const { ignoreConfirmationText } = req.query;
   if (patient.password !== patient.confirmPassword) {
     next({ status: 400, message: 'Passwords doesn\'t match.' });
@@ -66,9 +71,11 @@ authRouter.post('/signup', (req, res, next) => {
     .then(async (patientUser) => {
       const { email, firstName, id } = patientUser;
 
+      const account = req.account.get({ plain: true });
+
       // Create token
       const tokenId = crypto.randomBytes(12).toString('hex');
-      const token = await Token.create({ id: tokenId, patientUserId: id });
+      const token = await Token.create({ id: tokenId, patientUserId: id, accountId: account.id });
 
       // Generate the URL to confirm email
       const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
@@ -77,6 +84,34 @@ authRouter.post('/signup', (req, res, next) => {
       sendPatientSignup({
         toEmail: email,
         mergeVars: [
+          {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
+            name: 'ACCOUNT_CLINICNAME',
+            content: account.name,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: account.phoneNumber,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
           {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
@@ -129,19 +164,30 @@ authRouter.post('/:patientUserId/resend', (req, res, next) => {
 authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
   try {
     const { token } = req;
-    const { patientUserId } = token;
+    const { patientUserId, accountId } = token;
     const patientUser = await PatientUser.findById(patientUserId);
     await patientUser.update({ isEmailConfirmed: true });
     await token.destroy();
-    return res.render('patient-email-confirmed');
+
+    // This will be replaced with proper URL mounting for clinics
+    const account = await Account.findById(accountId);
+    const params = {
+      account: generateAccountParams(account),
+    };
+
+    return res.redirect(url.format({
+      pathname: '/signup/confirmed',
+      query: { params: encodeParams(params) },
+    }));
   } catch (err) {
     next(err);
   }
 });
 
-authRouter.post('/reset', (req, res, next) => {
+authRouter.post('/reset/:accountId', (req, res, next) => {
   const {
     body,
+    account,
   } = req;
 
   const email = body.email;
@@ -165,10 +211,42 @@ authRouter.post('/reset', (req, res, next) => {
 
       await PatientUserReset.create({
         patientUserId: patientUser.id,
+        accountId: account.id,
         token,
       });
 
+      const accountJson = account.get({ plain: true });
+
+      // TODO: use merge_var generator
       const mergeVars = [
+        {
+          name: 'PRIMARY_COLOR',
+          content: accountJson.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
+          name: 'ACCOUNT_CLINICNAME',
+          content: accountJson.name,
+        },
+        {
+          name: 'ACCOUNT_LOGO_URL',
+          content: accountJson.logo,
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: accountJson.phoneNumber,
+        },
+        {
+          name: 'ACCOUNT_CITY',
+          content: accountJson.address.city,
+        },
+        {
+          name: 'ACCOUNT_CONTACTEMAIL',
+          content: accountJson.contactEmail,
+        },
+        {
+          name: 'ACCOUNT_ADDRESS',
+          content: accountJson.address.street,
+        },
         {
           name: 'RESET_URL',
           content: fullUrl,

@@ -15,7 +15,7 @@ export default function SMSPreview(props) {
       <div className={styles.headerSection}>
         <div className={styles.leftSection}>
           <div className={styles.smsIcon}>
-            <Icon icon="comment" />
+            <Icon icon="comment" type="solid" />
           </div>
           <div className={styles.title}>
             MESSAGES

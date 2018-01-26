@@ -13,7 +13,7 @@ import {
   DialogBox,
   DropdownSelect,
 } from '../../../library';
-import { numTypeToSeconds, w2s, s2m, m2s } from '../../../../../server/util/time';
+import { convertIntervalToMs, w2s, s2m, m2s } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import CreateRecallsForm from './CreateRecallsForm';
@@ -23,15 +23,15 @@ import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 const dueDateOptions = [
-  { label: '4 Months', value: 4 },
-  { label: '5 Months', value: 5 },
-  { label: '6 Months', value: 6 },
-  { label: '7 Months', value: 7 },
-  { label: '8 Months', value: 8 },
-  { label: '9 Months', value: 9 },
-  { label: '10 Months', value: 10 },
-  { label: '11 Months', value: 11 },
-  { label: '12 Months', value: 12 },
+  { label: '4 Mos', value: 4 },
+  { label: '5 Mos', value: 5 },
+  { label: '6 Mos', value: 6 },
+  { label: '7 Mos', value: 7 },
+  { label: '8 Mos', value: 8 },
+  { label: '9 Mos', value: 9 },
+  { label: '10 Mos', value: 10 },
+  { label: '11 Mos', value: 11 },
+  { label: '12 Mos', value: 12 },
 ];
 
 class Recalls extends Component {
@@ -185,19 +185,20 @@ class Recalls extends Component {
     return (
       <CommunicationSettingsCard
         title="Recalls Settings"
-        rightActions={(
-          <Button
+        // TODO: we have removed add button for now
+        //rightActions={
+          /*(<Button
             onClick={this.toggleAdding}
             data-test-id="createNewReminder"
             color="blue"
           >
             Add
-          </Button>
-        )}
+          </Button>)*/
+        //}
 
         leftColumn={(
           <div>
-            {this.props.recalls.toArray().filter(r => r.lengthSeconds >= 0).map((recall, i) => {
+            {this.props.recalls.toArray().filter(r => convertIntervalToMs(r.interval) >= 0).map((recall, i) => {
               return (
                 <RecallsItem
                   key={recall.id}
@@ -257,7 +258,7 @@ class Recalls extends Component {
                 </div>
               )}
             />
-            {this.props.recalls.toArray().filter(r => r.lengthSeconds < 0).map((recall, i) => {
+            {this.props.recalls.toArray().filter(r => convertIntervalToMs(r.interval) < 0).map((recall, i) => {
               return (
                 <RecallsItem
                   lastRecall={recall.id === lastRecallId}
@@ -305,9 +306,11 @@ Recalls.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const recalls = entities.getIn(['recalls', 'models']).filter(r => !r.isDeleted).sortBy(r => -r.lengthSeconds);
   const role = auth.get('role');
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const recalls = entities.getIn(['recalls', 'models'])
+    .filter(r => !r.isDeleted)
+    .sortBy(r => -convertIntervalToMs(r.interval));
 
   return {
     activeAccount,

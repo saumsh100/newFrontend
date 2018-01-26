@@ -3,8 +3,6 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
-import IconButton from '../IconButton';
-import CardHeader from '../CardHeader';
 
 class Modal extends Component {
   constructor(props) {
@@ -21,8 +19,8 @@ class Modal extends Component {
     }
   }
 
-  componentDidUpdate({ active }) {
-    if (active) {
+  componentDidUpdate() {
+    if (this.props.active) {
       document.body.addEventListener('keydown', this.handleEscKeyDown);
     } else {
       document.body.removeEventListener('keydown', this.handleEscKeyDown);
@@ -45,12 +43,11 @@ class Modal extends Component {
     const {
       children,
       active,
-      actions,
-      title,
       type,
       custom,
       className,
       showOverlay,
+      backDropStyles,
     } = this.props;
 
     let modalContainerClassName = styles.modalContainer;
@@ -64,15 +61,15 @@ class Modal extends Component {
       modalBodyClassName = type ? classNames(styles[type], modalBodyClassName) : classNames(styles.medium, modalBodyClassName);
     }
 
-    const backDropClassName = classNames(styles.backDropDefault);
+    const backDropClassName = classNames(styles.backDropDefault, backDropStyles);
 
     return (
       <div className={modalContainerClassName}>
         {showOverlay ? <div
-          onClick={() => { this.handleOverlayClick; }}
+          onClick={() => { this.handleOverlayClick(); }}
           className={backDropClassName}
         /> : null}
-        <Card className={modalBodyClassName}>
+        <Card className={modalBodyClassName} noBorder>
           {children}
         </Card>
       </div>

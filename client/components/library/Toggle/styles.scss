@@ -1,8 +1,18 @@
 
 @import '../../../ui';
 
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  height: auto;
+}
+
+.toggleLabel {
+
+}
+
 .toggle {
-  background-color: $primary-color;
+  margin-left: auto;
 }
 
 .theme {

@@ -8,6 +8,25 @@
   cursor: pointer;
 }
 
+.gridSection {
+  display: flex;
+  flex-direction: row;
+}
+
+.leftSection {
+  width: 175px;
+  display: flex;
+}
+
+.flexSection {
+  flex: 1;
+}
+
+.rightSection {
+  width: 10%;
+  min-width: 25px;
+}
+
 .linesBox {
   margin: 10px 0;
   height: 120px;
@@ -39,11 +58,13 @@
 
 .toggleCol {
   padding-top: 4px;
+  width: 25px;
 }
 
 .labelCol {
-  padding-top: 4px;
-  padding-right: 20px;
+  padding-top: 3px;
+  padding-right: 10px;
+  flex: 1;
 }
 
 .reminderLabel {
@@ -51,6 +72,7 @@
   composes: cardHeaderTitle from 'sass-loader!../../../../fonts.scss';
   font-size: 14px;
   color: black;
+  text-transform: capitalize;
 }
 
 .downIconWrapper {
@@ -63,7 +85,7 @@
 }
 
 .connectionLine {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   box-sizing: border-box;

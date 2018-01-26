@@ -3,21 +3,21 @@ import React, { PropTypes } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
 import { connect } from 'react-redux';
-import ReviewsWidget from '../components/ReviewsWidget';
-import WidgetContainer from '../components/ReviewsWidget/Container';
-// import BookingContainer from '../components/ReviewsWidget/BookingContainer';
-import Login from '../components/ReviewsWidget/Login';
-import SignUp from '../components/ReviewsWidget/SignUp';
-import ConfirmSignUp from '../components/ReviewsWidget/ConfirmSignUp';
-import ResetPassword from '../components/ReviewsWidget/ResetPassword';
-import ResetSuccess from '../components/ReviewsWidget/ResetPassword/Success';
-import PatientApp from '../containers/PatientApp';
-import Availabilities from '../components/ReviewsWidget/Booking/Availabilities';
-import Waitlist from '../components/ReviewsWidget/Booking/Waitlist';
-import BookingReview from '../components/ReviewsWidget/Booking/Review';
-import BookingComplete from '../components/ReviewsWidget/Booking/Complete';
-import Submitted from '../components/ReviewsWidget/Review/Submitted';
-import Complete from '../components/ReviewsWidget/Review/Complete';
+import Widget from '../components/Widget';
+import WidgetContainer from '../components/Widget/Container';
+// import BookingContainer from '../components/Widget/BookingContainer';
+import Login from '../components/Widget/Login';
+import SignUp from '../components/Widget/SignUp';
+import ConfirmSignUp from '../components/Widget/ConfirmSignUp';
+import ResetPassword from '../components/Widget/ResetPassword';
+import ResetSuccess from '../components/Widget/ResetPassword/Success';
+// import PatientApp from '../containers/PatientApp';
+import Availabilities from '../components/Widget/Booking/Availabilities';
+import Waitlist from '../components/Widget/Booking/Waitlist';
+import BookingReview from '../components/Widget/Booking/Review';
+import BookingComplete from '../components/Widget/Booking/Complete';
+import Submitted from '../components/Widget/Review/Submitted';
+import Complete from '../components/Widget/Review/Complete';
 
 const base = (path = '') => `/widgets/:accountId/app${path}`;
 
@@ -90,12 +90,11 @@ const WidgetRouter = ({ history, isAuth, patientUser }) => {
       <div>
         {/* TODO: Booking widget will soon become part of app */}
         {/*<Route exact path={base('/book')} component={PatientApp} />*/}
-        {/* TODO: ReviewsWidget will ultimately become just the widget container */}
-        <ReviewsWidget>
+        <Widget>
           <Switch>
             <Route path={base()} render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />} />
           </Switch>
-        </ReviewsWidget>
+        </Widget>
       </div>
     </Router>
   );

@@ -110,12 +110,44 @@ requestsRouter.post('/', (req, res, next) => {
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
+            name: 'ACCOUNT_CLINICNAME',
             content: name,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: account.phoneNumber,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: moment(req.body.startDate).format('MMMM Do YYYY'),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: moment(req.body.startDate).format('h:mm a'),
           },
         ],
       });
@@ -266,6 +298,8 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const account = await Account.findById(accountId);
       const { email, firstName } = patientUser;
       const { name, phoneNumber, contactEmail, website } = account;
+      const { startDate } = req.request;
+
       // Send Email
       sendAppointmentRequestRejected({
         accountId: req.accountId,
@@ -273,24 +307,48 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
-            content: name || '',
+            name: 'ACCOUNT_CLINICNAME',
+            content: name,
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: phoneNumber || '',
+            content: phoneNumber,
           },
           {
             name: 'ACCOUNT_CONTACTEMAIL',
-            content: contactEmail || '',
+            content: contactEmail,
           },
           {
             name: 'ACCOUNT_WEBSITE',
-            content: website || '',
+            content: website,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'APPOINTMENT_DATE',
+            content: moment(startDate).format('MMMM Do YYYY'),
+          },
+          {
+            name: 'APPOINTMENT_TIME',
+            content: moment(startDate).format('h:mm:ss a'),
           },
         ],
       });
@@ -329,24 +387,40 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
         fromName: name,
         mergeVars: [
           {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
             name: 'PATIENT_FIRSTNAME',
             content: firstName,
           },
           {
-            name: 'ACCOUNT_NAME',
-            content: name || '',
+            name: 'ACCOUNT_CLINICNAME',
+            content: name,
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: phoneNumber || '',
+            content: phoneNumber,
           },
           {
             name: 'ACCOUNT_CONTACTEMAIL',
-            content: contactEmail || '',
+            content: contactEmail,
           },
           {
             name: 'ACCOUNT_WEBSITE',
-            content: website || '',
+            content: website,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: account.logo,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: account.address.city,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
           },
           {
             name: 'APPOINTMENT_DATE',

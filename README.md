@@ -1,19 +1,19 @@
-# CareCru Platform v3
+# CareCru Platform
 
-This repository is for all code necessary to the CareCru Dashboard.
+This repository is for all code necessary to the CareCru Platform but not including the CareCru Connector.
 
 ##### Backend
-NodeJS, ExpressJS, PassportJS, RethinkDB (thinky.io ORM)
+NodeJS, ExpressJS, PassportJS, PostgreSQL (Sequelize ORM)
 
 ##### Frontend
-React, Redux, Sass
+React, Redux, CSS Modules w/ SASS
 
 ## Install
 
-1. Install RethinkDB (https://www.rethinkdb.com/docs/install/).
+1. Install Postgres if not already installed (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04).
 2. Use node and npm versions in package.json file, install them if not already installed. To do so, use
 Node Version Manager (https://github.com/creationix/nvm).
-3. Install Redis (https://redis.io/)
+3. Install Redis if not already installed (https://redis.io/)
 4. Clone the Repository: `git clone git@github.com:carecru/carecru.git`
 5. Navigate into root directory: `cd carecru`
 6. Install node modules: `npm install`
@@ -39,10 +39,14 @@ If there are problems with build and you are changing order of installation, bui
 
 ## Database Setup
 
-1. Start up RethinkDB in a separate tab: `rethinkdb`
-2. Seed the database with development data: `npm run seeds`
+1. Start up PostgreSQL in background (use brew if using mac, see the guide above)
+2. Seed the database with development data: `npm run rebuild:seeds`
 > **Note:**
-> `npm run seeds` can be re-run whenever a fresh DB is needed
+> `npm run rebuild:seeds` can be re-run whenever a fresh DB is needed
+
+## Redis Setup
+
+Simply run `redis-server` in any terminal window.
 
 ## RabbitMQ Setup
 
@@ -87,9 +91,9 @@ Contact the repo admin to acquire the `.env` file.
 3. Navigate to `localhost:5000` to see application running
 4. Add the following subdomains to your `/etc/hosts` file:
 ```
-127.0.0.1           carecru.dev
-127.0.0.1        my.carecru.dev
-127.0.0.1       api.carecru.dev
+127.0.0.1           care.cru
+127.0.0.1        my.care.cru
+127.0.0.1       api.care.cru
 ```
 > **Note:**
 > For purposes of testing and effective development, please continue this README to run the build-tools, and use localhost:5100 instead of localhost:5000.
@@ -157,18 +161,6 @@ https://carecru-staging-pr-[PR_NUMBER].herokuapp.com
 
 ## Useful notes
 
-### Rethink
-It is also possible to run rethinkdb as a daemon from any directory hidden in the background:
-```
-rethinkdb --daemon -d <CARECRU_CODE_DIR>
-```
-CARECRU_CODE_DIR is the directory where you want the `rethinkdb_data` to reside. Change accordingly.
-
-On Linux (and alike) system you can alias this command for quicker access to it:
-```
-echo alias rundb='rethinkdb --daemon -d <CARECRU_CODE_DIR>' >> ~/.profile
-```
-
 This will run it in the background as daemon process so you won't need to keep a terminal window for it. To kill it use your systems task manager or run `pkill rethinkdb` and then check that it's killed `ps -ef | grep rethinkdb`. However, you should not need to do this often.
 
 ### Sequelize/Postgres
@@ -177,6 +169,7 @@ Run `npm install` to install sequelize and other libraries for postgres
 
 First we need to install postgres. Follow up this link and setup database (MacOS: https://www.codementor.io/devops/tutorial/getting-started-postgresql-server-mac-osx)
 Add to your .env file
+
 ```
 POSTGRESQL_HOST="localhost"
 POSTGRESQL_PORT=5432
@@ -202,16 +195,17 @@ To see example model go to `server/_models/Segment/segment.js`. Same structure c
 
 Inside folde `server/seeders/` are seeder files. You can use this to seed database.
 
-To see example usage in route, go to `server/api/routes/segment/index.js`
+To see example usage in route, go to `server/api/routes/segment/index.jsx`
 
 NOTE: I haven't added migrations
 
 ##### Rebuild/Seed database
-To rebuild and seed database just type
+To rebuild database schemas just type
+
 ```
 npm run rebuild
 ```
 
 ##### Adding new model
-You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
+You will find inside of `server/_models/index.jsx` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
 This line represent importing of a single model into the code. Just repeat that for all models.

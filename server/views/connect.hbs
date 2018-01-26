@@ -7,20 +7,25 @@
   <!-- <meta name="csrf-token" content={{csrfToken}}> -->
 
   <title>CareCru Connector</title>
+  <link href="/fontawesome/fontawesome-all.css" rel="stylesheet">
 
   <!-- favicon file <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"> -->
   <style>
     @font-face {
-      font-family: Gotham-Book;
-      src: url(/fonts/Gotham-Book.ttf);
+      font-family: 'Gotham-Book';
+      font-weight: normal;
+      font-style: normal;
+      src: url(/fonts/GothamSSm-Book.otf) format("opentype"),
+      url(/fonts/Gotham-Book.woff) format("woff");
     }
+
     @font-face {
-      font-family: Gotham-Medium;
-      src: url(/fonts/Gotham-Medium.ttf);
+      font-family: 'Gotham-Medium';
+      font-weight: normal;
+      font-style: normal;
+      src: url(/fonts/GothamSSm-Medium.otf) format("opentype"),
+      url(/fonts/Gotham-Medium.woff) format("woff");
     }
-    /*.CareCruToggle.react-toggle--checked .react-toggle-track {
-        background-color: red !important;
-    }*/
   </style>
 
   {{#productionCSS}}connect-commons.js{{/productionCSS}}

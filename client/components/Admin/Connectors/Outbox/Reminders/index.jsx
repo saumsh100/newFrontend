@@ -24,10 +24,10 @@ const getAttrFromPatient = (patient, primaryType) => {
   return patient[attrs[primaryType]];
 };
 
-function SuccessfulList({ success, primaryType }) {
+function SuccessfulList({ success }) {
   return (
     <div className={styles.successList}>
-      {success.map((patient) => {
+      {success.map(({ patient, primaryType, reminder }) => {
         const reminderAppt = patient.appointment;
         const reminderApptDate = moment(reminderAppt.startDate).format('h:mma MMM Do, YYYY');
         return (
@@ -98,13 +98,9 @@ export default class OutboxReminders extends Component {
       reminders: [],
       selectedReminder: null,
     };
-
-    this.handleTabChange = this.handleTabChange.bind(this);
   }
 
   componentWillMount() {
-    // this.setState({ isLoading: true });
-
     const { account } = this.props;
     return Promise.all([
         axios.get(`/api/accounts/${account.id}/reminders/list`),
@@ -117,10 +113,6 @@ export default class OutboxReminders extends Component {
         });
       })
       .catch(err => console.error('Failed to load configs', err));
-  }
-
-  handleTabChange(tabIndex) {
-    this.setState({ tabIndex });
   }
 
   render() {

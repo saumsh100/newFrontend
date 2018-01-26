@@ -2,14 +2,11 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { d2s, h2s, ordinalSuffix, secondsToNumType, numTypeToSeconds } from '../../../../../../server/util/time';
+import { ordinalSuffix, intervalToNumType, numTypeToInterval } from '../../../../../../server/util/time';
 import {
   updateEntityRequest,
-  deleteEntityRequest,
-  fetchEntities,
 } from '../../../../../thunks/fetchEntities';
 import {
-  Button,
   Icon,
   Grid,
   Row,
@@ -18,6 +15,7 @@ import {
   Input,
   DropdownSelect,
 } from '../../../../library';
+import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
@@ -27,13 +25,27 @@ const iconsMap = {
   sms: 'comment',
   phone: 'phone',
   email: 'envelope',
+  email_sms: 'envelope_comment',
 };
 
 const wordMap = {
   sms: 'SMS',
   phone: 'Voice',
   email: 'Email',
+  email_sms: 'Email & SMS',
 };
+
+const typeOptions = [
+  { label: 'Hours', value: 'hours' },
+  { label: 'Days', value: 'days' },
+];
+
+const primaryTypesOptions = [
+  { label: 'Email', value: 'email' },
+  { label: 'SMS', value: 'sms' },
+  // { label: 'Voice', value: 'phone' },
+  { label: 'Email & SMS', value: 'email_sms' }
+];
 
 function SmallIconCircle(props) {
   const { selected, icon } = props;
@@ -46,7 +58,7 @@ function SmallIconCircle(props) {
 
   return (
     <div className={wrapperClass}>
-      {icon ? <Icon icon={icon} /> : null}
+      {icon ? <Icon icon={icon} type="solid" /> : null}
     </div>
   );
 }
@@ -55,21 +67,21 @@ class RemindersItem extends Component {
   constructor(props) {
     super(props);
 
-    const { num } = secondsToNumType(props.reminder.lengthSeconds);
+    const { num } = intervalToNumType(props.reminder.interval);
     this.state = {
       number: num,
     };
 
     this.editReminder = this.editReminder.bind(this);
     this.deleteReminder = this.deleteReminder.bind(this);
-    this.changePrimaryType = this.changePrimaryType.bind(this);
+    this.changePrimaryTypes = this.changePrimaryTypes.bind(this);
     this.onChangeNumberInput = this.onChangeNumberInput.bind(this);
     this.changeDaysHours = this.changeDaysHours.bind(this);
   }
 
   componentDidMount() {
     // Need function to abstract
-    const { num } = secondsToNumType(this.props.reminder.lengthSeconds);
+    const { num } = intervalToNumType(this.props.reminder.interval);
     if (this.state.number === num) {
       return;
     }
@@ -81,8 +93,8 @@ class RemindersItem extends Component {
 
   componentWillUpdate(nextProps) {
     // Need function to abstract
-    const oldNumType = secondsToNumType(this.props.reminder.lengthSeconds);
-    const newNumType = secondsToNumType(nextProps.reminder.lengthSeconds);
+    const oldNumType = intervalToNumType(this.props.reminder.interval);
+    const newNumType = intervalToNumType(nextProps.reminder.interval);
     if (oldNumType.num === newNumType.num) {
       return;
     }
@@ -121,7 +133,7 @@ class RemindersItem extends Component {
     e.stopPropagation();
     e.preventDefault();
     const { reminder, account, selected, selectReminder } = this.props;
-    const { num, type } = secondsToNumType(reminder.lengthSeconds);
+    const { num, type } = intervalToNumType(reminder.interval);
     const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
     if (!sure) {
       return;
@@ -150,9 +162,10 @@ class RemindersItem extends Component {
     });
   }
 
-  changePrimaryType(value) {
+  changePrimaryTypes(value) {
     const { reminder, account } = this.props;
     const word = wordMap[value];
+    const primaryTypes = value.split('_');
 
     const alert = {
       success: {
@@ -168,18 +181,15 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { primaryType: value },
+      values: { primaryTypes },
       alert,
     });
   }
 
   changeNumber(number) {
-    // Setting lengthSeconds to
     const { account, reminder } = this.props;
-    const { num, type } = secondsToNumType(reminder.lengthSeconds);
-    const lengthSeconds = numTypeToSeconds(number, type);
-
-    if (lengthSeconds === reminder.lengthSeconds) {
+    const { num, type } = intervalToNumType(reminder.interval);
+    if (num === number) {
       return;
     }
 
@@ -197,18 +207,15 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { lengthSeconds },
+      values: { interval: numTypeToInterval(number, type) },
       alert,
     });
   }
 
   changeDaysHours(newType) {
-    // Setting lengthSeconds to
     const { account, reminder } = this.props;
-    const { num, type } = secondsToNumType(reminder.lengthSeconds);
-    const lengthSeconds = numTypeToSeconds(num, newType);
-
-    if (lengthSeconds === reminder.lengthSeconds) {
+    const { num, type } = intervalToNumType(reminder.interval);
+    if (newType === type) {
       return;
     }
 
@@ -226,7 +233,7 @@ class RemindersItem extends Component {
 
     this.props.updateEntityRequest({
       url: `/api/accounts/${account.id}/reminders/${reminder.id}`,
-      values: { lengthSeconds },
+      values: { interval: numTypeToInterval(num, newType) },
       alert,
     });
   }
@@ -253,16 +260,16 @@ class RemindersItem extends Component {
       selectReminder,
     } = this.props;
 
-    // TODO: reminder.lengthSeconds needs to be converted to days/hours
-
     const {
-      lengthSeconds,
-      primaryType,
+      interval,
+      primaryTypes,
       isActive,
     } = reminder;
 
-    const icon = iconsMap[primaryType];
-    const { type } = secondsToNumType(lengthSeconds);
+    const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
+
+    const icon = iconsMap[primaryTypesKey];
+    const { type } = intervalToNumType(interval);
     const { number } = this.state;
 
     const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
@@ -302,26 +309,20 @@ class RemindersItem extends Component {
               <div className={styles.dropdownsWrapper}>
                 <div className={styles.topRow}>
                   <DropdownSelect
-                    onChange={this.changePrimaryType}
+                    onChange={this.changePrimaryTypes}
                     className={dropdownSelectClass}
-                    value={primaryType}
-                    options={[
-                      { label: 'Email', value: 'email' },
-                      { label: 'SMS', value: 'sms' },
-                      { label: 'Voice', value: 'phone' },
-                    ]}
+                    value={primaryTypesKey}
+                    options={primaryTypesOptions}
                   />
                 </div>
                 <div className={styles.bottomRow}>
                   <Grid>
                     <Row>
                       <Col xs={3}>
+                        {/* Using min, step and type=number did not work here properly so have to code around it */}
                         <Input
                           classStyles={dropdownSelectClass}
                           value={number}
-                          //type="number"
-                          //min="1"
-                          //step="any"
                           onChange={this.onChangeNumberInput}
                           onBlur={(e) => this.changeNumber(e.target.value)}
                         />
@@ -331,10 +332,7 @@ class RemindersItem extends Component {
                           onChange={this.changeDaysHours}
                           className={dropdownSelectClass}
                           value={type}
-                          options={[
-                            { label: 'Hours Before', value: 'hours' },
-                            { label: 'Days Before', value: 'days' },
-                          ]}
+                          options={typeOptions}
                         />
                       </Col>
                     </Row>

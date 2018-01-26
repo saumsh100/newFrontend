@@ -4,6 +4,7 @@ import { getAccountCronConfigurations, updateAccountCronConfigurations } from '.
 
 const recallCodes = [
   '00121',
+  '01202',
 ];
 
 /**

@@ -15,7 +15,13 @@ import { checkPatientUser } from '../../thunks/schedule';
 class RequestList extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      requestId: null,
+    };
+
     this.confirmAppointment = this.confirmAppointment.bind(this);
+    this.openRequest = this.openRequest.bind(this);
     this.removeRequest = this.removeRequest.bind(this);
   }
 
@@ -23,7 +29,6 @@ class RequestList extends Component {
     const {
       location,
       push,
-      checkPatientUser,
     } = this.props;
 
     if (location === '/') {
@@ -31,7 +36,7 @@ class RequestList extends Component {
     }
 
     const modifiedRequest = request.set('isConfirmed', true);
-    const appointment = {
+    const requestData = {
       requestId: request.get('id'),
       createdAt: request.get('createdAt'),
       startDate: request.get('startDate'),
@@ -45,22 +50,26 @@ class RequestList extends Component {
       practitionerId: request.get('practitionerId'),
     };
 
-    checkPatientUser(patientUser, appointment);
-
-    // TODO possibly do something here to trigger creating of a "submitted" popup or dialog
-    console.log('[ TEMP ] SYNCLOG: Creating appointment in the PMS.');
+    this.props.checkPatientUser(patientUser, requestData);
+    this.openRequest(null);
   }
 
 
   removeRequest(request) {
     const confirmRemove = confirm('Are you sure you want to reject this request?');
     if (confirmRemove) {
+      this.openRequest(null);
       this.props.updateEntityRequest({
         url: `/api/requests/${request.id}/reject`,
         values: {},
       });
-      // this.props.setUndoRequest({ undoRequest: request });
     }
+  }
+
+  openRequest(id) {
+    this.setState({
+      requestId: id,
+    });
   }
 
   render() {
@@ -70,17 +79,12 @@ class RequestList extends Component {
       patientUsers,
       practitioners,
       setHoverRequestId,
-      maxHeight,
     } = this.props;
 
-    const style = {
-      maxHeight: maxHeight || '555px',
-    };
 
     return (
-      <List className={styles.requestList} style={style}>
+      <List className={styles.requestList} >
         {sortedRequests.map((request) => {
-          //const active = request.get('id') === this.props.setHoverRequestId;
           const practitionerId = request.get('practitionerId');
           const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
 
@@ -94,6 +98,8 @@ class RequestList extends Component {
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
               setClickedId={setHoverRequestId}
+              requestId={this.state.requestId}
+              openRequest={this.openRequest}
             />
           );
         })}

@@ -94,13 +94,13 @@ class PractitionerList extends Component {
 
     const formName = 'addPractitionerForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { form: formName } },
+      { label: 'Cancel', onClick: this.setActive, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.createPractitioner, component: RemoteSubmitButton, props: { color: 'blue', form: formName } },
     ];
 
     return (
       <div className={styles.practMainContainer}>
-        <Card className={styles.listCardStyles}>
+        <Card className={styles.listCardStyles} noBorder>
           <SContainer>
             <SHeader className={styles.listHeader}>
               <div className={styles.displayFlexCenter}>
@@ -149,7 +149,7 @@ class PractitionerList extends Component {
             </SBody>
           </SContainer>
         </Card>
-        <Card className={styles.practDataContainer}>
+        <Card className={styles.practDataContainer} noBorder>
           <PractitionerTabs
             key={selectedPractitioner.get('id')}
             practitioner={selectedPractitioner}

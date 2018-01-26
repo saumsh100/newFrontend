@@ -52,7 +52,11 @@ loadUser()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./Connect', () => render(App));
+    module.hot.accept('./Connect', () => {
+      const NextApp = require('./Connect').default; // eslint-disable-line
+
+      return render(NextApp);
+    });
   }
 });
 

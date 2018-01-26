@@ -17,7 +17,7 @@ export default function IconCard(props) {
   // TODO: Make Icon a light grey to match title text, just like in mockups
   return (
     <div data-test-id={props['data-test-id']}>
-      <Card className={classes}>
+      <Card className={classes} noBorder>
         <div className={styles.iconCard__wrapper}>
           <div className={styles.iconCard__count}>{count}</div>
           <div className={styles.iconCard__title}>{title}</div>

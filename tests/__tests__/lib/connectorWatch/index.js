@@ -5,6 +5,9 @@ import sendRecall from '../../../../server/lib/recalls/sendRecall';
 import { Account } from '../../../../server/_models';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
+import {
+  updateAccountConnectorConfigurations,
+} from '../../../../server/lib/accountConnectorConfigurations';
 
 describe('connectorWatch', () => {
   beforeAll(async () => {
@@ -25,6 +28,10 @@ describe('connectorWatch', () => {
         hours: 15,
         minutes: 10,
       });
+      await updateAccountConnectorConfigurations({
+        name: 'CONNECTOR_ENABLED',
+        value: '1',
+      }, '62954241-3652-4792-bae5-5bfed53d37b7');
       await Account.update({ lastSyncDate }, { where: {} });
     });
 
@@ -41,7 +48,7 @@ describe('connectorWatch', () => {
       expect(account.length).toBe(1);
     });
 
-    test('should return 0 as last sync was 30 mins ago', async () => {
+    test('should return 0 as last sync was 31 mins ago', async () => {
       const date = moment({
         years: 2010,
         months: 3,

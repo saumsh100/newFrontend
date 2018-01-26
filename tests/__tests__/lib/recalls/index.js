@@ -120,7 +120,7 @@ describe('Recalls Job Integration Tests', () => {
     /**
      * With 1 recall, and 1 patient, it should call sendRecall.email
      */
-    test('should call sendRecall.email for the 1 patient', async () => {
+    test.skip('should call sendRecall.email for the 1 patient', async () => {
       // Make sure it returns a patient
       RecallsHelpers.getPatientsDueForRecall = jest.fn(() => [
         {
@@ -144,7 +144,7 @@ describe('Recalls Job Integration Tests', () => {
     /**
      * With 1 recall, and 1 patient without an email, it should NOT call sendRecall.email
      */
-    test('should NOT call sendRecall.email for the 1 patient cause it has no email', async () => {
+    test.skip('should NOT call sendRecall.email for the 1 patient cause it has no email', async () => {
       // Make sure it returns a patient
       RecallsHelpers.getPatientsDueForRecall = jest.fn(() => [
         {

@@ -63,7 +63,7 @@ class Timeline extends Component {
 
     const dateSections = Object.keys(dateObj);
     return (
-      <Card className={styles.card}>
+      <Card className={styles.card} noBorder>
         <div className={styles.header}>Timeline & Activities</div>
         <div className={styles.eventsContainer}>
           <div className={styles.verticalLine}>&nbsp;</div>

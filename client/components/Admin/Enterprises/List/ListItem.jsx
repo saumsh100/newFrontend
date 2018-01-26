@@ -22,7 +22,7 @@ const EnterprisesListItem = ({ isHovered, name, id, onDelete, onEdit }) =>
           onClick={() => onEdit(id)}
         />
         <VButton
-          icon="trash-o"
+          icon="trash"
           negative
           rounded
           compact

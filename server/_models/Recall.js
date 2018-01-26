@@ -20,13 +20,24 @@ export default function (sequelize, DataTypes) {
 
     primaryType: {
       type: DataTypes.ENUM,
+      defaultValue: PRIMARY_TYPES.EMAIL,
       values: Object.keys(PRIMARY_TYPES).map(key => PRIMARY_TYPES[key]),
-      // TODO: maybe a default value?
+      allowNull: false,
+    },
+
+    primaryTypes: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
       allowNull: false,
     },
 
     lengthSeconds: {
       type: DataTypes.INTEGER,
+    },
+
+    interval: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
 
     isActive: {

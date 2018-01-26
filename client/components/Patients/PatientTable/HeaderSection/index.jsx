@@ -67,8 +67,8 @@ class HeaderSection extends Component {
     const formName = 'newUser';
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { form: formName }},
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { color: 'blue', form: formName }},
     ];
 
     const filterMenu = props => (
@@ -76,7 +76,7 @@ class HeaderSection extends Component {
         <div className={styles.header_title}>
           {smartFilter ? smartFilter.label : 'All Patients' }
           <div className={styles.header_icon}>
-            <Icon icon="caret-down" />
+            <Icon icon="caret-down" type="solid" />
           </div>
         </div>
       </div>

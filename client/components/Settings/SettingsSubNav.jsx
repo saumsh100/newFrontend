@@ -49,7 +49,7 @@ const PATHS = {
     {
       to: '/settings/communications/reminders',
       label: 'Reminders',
-      icon: 'clock-o',
+      icon: 'clock',
     },
     {
       to: '/settings/communications/recalls',

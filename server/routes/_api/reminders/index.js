@@ -1,10 +1,15 @@
 
 import { Router } from 'express';
+import moment from 'moment';
+import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
+import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
 import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
+import { getDayStart, getDayEnd } from '../../../util/time';
+import { getRemindersOutboxList } from '../../../lib/reminders';
 import { mapPatientsToReminders } from '../../../lib/reminders/helpers';
 
 const remindersRouter = Router();
@@ -33,20 +38,29 @@ remindersRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), 
 });
 
 /**
- * GET /:accountId/reminders/stats
+ * GET /:accountId/reminders/list
  */
 remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
-    // TODO: date needs to be on the 30 minute marks
     const { account } = req;
+    const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
+
+    // TODO: add defaults for startDate & endDate
+
     const date = (new Date()).toISOString();
+
+    // TODO: use a getRemindersOutboxList(account, startDate, endDate1)
+
     const reminders = await Reminder.findAll({
       raw: true,
-      where: { accountId: account.id },
-      order: [['lengthSeconds', 'ASC']],
+      where: {
+        accountId: account.id,
+        isDeleted: false,
+        isActive: true,
+      },
     });
 
-    const data = await mapPatientsToReminders({ reminders, account, date });
+    const data = await mapPatientsToReminders({ reminders, account, startDate, endDate });
     const dataWithReminders = data.map((d, i) => {
       return {
         ...d,
@@ -55,6 +69,20 @@ remindersRouter.get('/:accountId/reminders/list', checkPermissions('accounts:rea
     });
 
     res.send(dataWithReminders);
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
+ * GET /:accountId/reminders/outbox
+ */
+remindersRouter.get('/:accountId/reminders/outbox', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    const { account } = req;
+    const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
+    const outboxList = await getRemindersOutboxList({ account, startDate, endDate });
+    res.send(outboxList);
   } catch (error) {
     next(error);
   }
@@ -101,5 +129,52 @@ remindersRouter.delete('/:accountId/reminders/:reminderId', checkPermissions('ac
     .catch(next);
 });
 
+/**
+ * DELETE /:accountId/reminders/:reminderId/preview
+ *
+ * - purpose of this route is mainly for email templates as we have to go to mandrill
+ */
+remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    if (req.accountId !== req.account.id) {
+      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+    }
+
+    const { reminder, account } = req;
+    const { isConfirmable } = req.query;
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
+
+    const mDate = moment();
+    const roundedMinute = Math.round(mDate.minute() / 15) * 15;
+    const formattedDate = mDate.minutes(roundedMinute).seconds(0);
+    const appointmentDate = formattedDate.format('dddd, MMMM Do');
+    const appointmentTime = formattedDate.format('h:mma');
+
+    const templateName = getReminderTemplateName({ isConfirmable, reminder });
+    const html = await renderTemplate({
+      templateName,
+      mergeVars: [
+        // defaultMergeVars
+        ...generateClinicMergeVars({ account, patient }),
+        {
+          name: 'APPOINTMENT_DATE',
+          content: appointmentDate,
+        },
+        {
+          name: 'APPOINTMENT_TIME',
+          content: appointmentTime,
+        },
+      ],
+    });
+
+    return res.send(html);
+  } catch (err) {
+    console.error(err);
+    return next(err);
+  }
+});
 
 module.exports = remindersRouter;

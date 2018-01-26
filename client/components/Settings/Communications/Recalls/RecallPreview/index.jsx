@@ -1,26 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import Lorem from 'react-lorem-component';
-import moment from 'moment';
 import {
-  updateEntityRequest,
-  deleteEntityRequest,
-  fetchEntities,
-} from '../../../../../thunks/fetchEntities';
-import {
-  Button,
-  Icon,
-  Grid,
-  Row,
-  Col,
-  Toggle,
-  Input,
-  DropdownSelect,
-  Tabs,
-  Tab,
   Header,
   SContainer,
   SHeader,
@@ -28,28 +9,44 @@ import {
   SMSPreview,
 } from '../../../../library';
 import createRecallText from '../../../../../../server/lib/recalls/createRecallText';
+import EmailPreview from '../../../Shared/EmailPreview';
+import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
+// import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import styles from './styles.scss';
 
-const reminderMessage = 'Jane, this is a friendly reminder that you have an upcoming appointment with Dental Practice' +
-  'on October 1st at 4 PM. Please take a moment to confirm your appointment by responding with \'C\'.';
+const formatPhoneNumber = phone => `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
+
+const wordMap = {
+  sms: 'SMS',
+  phone: 'Voice',
+  email: 'Email',
+};
+
+function RecallSMSPreview({ patient, account, recall }) {
+  const recallMessage = createRecallText({ patient, account, recall });
+  const smsPhoneNumber = account.twilioPhoneNumber ||
+    account.destinationPhoneNumber ||
+    account.phoneNumber ||
+    '+1112223333';
+
+  return (
+    <div className={styles.smsPreviewWrapper}>
+      <SMSPreview
+        from={formatPhoneNumber(smsPhoneNumber)}
+        message={recallMessage}
+      />
+    </div>
+  );
+}
 
 class RecallPreview extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      index: 0,
-    };
   }
 
-  componentWillReceiveProps(nextProps) {
-    // If new reminder is selected, go to Unconfirmed Tab
-    if ((nextProps.recall.id !== this.props.recall.id) && (this.state.index !== 0)) {
-      this.setState({
-        index: 0,
-      });
-    }
-  }
+  /*componentWillReceiveProps(nextProps) {
+
+  }*/
 
   render() {
     const {
@@ -57,9 +54,7 @@ class RecallPreview extends Component {
       account,
     } = this.props;
 
-    const { primaryType } = recall;
-    const { index } = this.state;
-    const isConfirmable = index === 1;
+    const { primaryTypes } = recall;
 
     // Fake Jane Doe Data
     const patient = {
@@ -67,30 +62,42 @@ class RecallPreview extends Component {
       lastName: 'Doe',
     };
 
-    let typePreview = null;
-    if (primaryType === 'sms') {
-      const recallMessage = createRecallText({ patient, account, recall });
-      typePreview = (
-        <div className={styles.smsPreviewWrapper}>
-          <SMSPreview
-            from="+1 (604) 404-1122"
-            message={recallMessage}
-          />
-        </div>
+    // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
+    const commsPreviewSections = primaryTypes.slice().reverse().map((type) => {
+      let typePreview = null;
+      if (type === 'sms') {
+        typePreview = (
+          <div>
+            <RecallSMSPreview
+              recall={recall}
+              patient={patient}
+              account={account}
+            />
+          </div>
+        );
+      } else if (type === 'email') {
+        const url = `/api/accounts/${account.id}/recalls/${recall.id}/preview`;
+        typePreview = (
+          <div>
+            <EmailPreview url={url} />
+          </div>
+        );
+      } else if (type === 'phone') {
+        typePreview = (
+          <div className={styles.smsPreviewWrapper}>
+            {`Phone Preview`}
+          </div>
+        );
+      }
+
+      return (
+        <CommsPreviewSection
+          key={`${recall.id}_${type}`}
+        >
+          {typePreview}
+        </CommsPreviewSection>
       );
-    } else if (primaryType === 'email') {
-      typePreview = (
-        <div className={styles.smsPreviewWrapper}>
-          {`Email Preview`}
-        </div>
-      );
-    } else if (primaryType === 'phone') {
-      typePreview = (
-        <div className={styles.smsPreviewWrapper}>
-          {`Phone Preview`}
-        </div>
-      );
-    }
+    });
 
     return (
       <SContainer>
@@ -101,7 +108,9 @@ class RecallPreview extends Component {
         </SHeader>
         <SBody className={styles.previewSBody}>
           {/* TODO: No need for Tabs here, just need to be able to determine type and isConfirmable */}
-          {typePreview}
+          <CommsPreview>
+            {commsPreviewSections}
+          </CommsPreview>
         </SBody>
       </SContainer>
     );
@@ -112,13 +121,5 @@ RecallPreview.propTypes = {
   recall: PropTypes.object.isRequired,
   account: PropTypes.object.isRequired,
 };
-
-/*function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-  }, dispatch);
-}*/
-
-// const enhance = connect(null, mapDispatchToProps);
 
 export default RecallPreview;

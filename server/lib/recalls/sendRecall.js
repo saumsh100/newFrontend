@@ -36,11 +36,15 @@ export default {
       fromName: account.name,
       mergeVars: [
         {
+          name: 'PRIMARY_COLOR',
+          content: account.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
           name: 'BOOK_URL',
           content: `${account.website}?cc=book`,
         },
         {
-          name: 'ACCOUNT_NAME',
+          name: 'ACCOUNT_CLINICNAME',
           content: account.name,
         },
         {
@@ -56,7 +60,7 @@ export default {
           content: account.phoneNumber,
         },
         {
-          name: 'LAST_APPOINTMENT_TIMEAGO',
+          name: 'PATIENT_LASTAPPOINTMENTDATE',
           content: getTimeAgo(lastAppointment.startDate),
         },
         {

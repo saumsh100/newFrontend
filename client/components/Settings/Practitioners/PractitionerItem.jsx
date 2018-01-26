@@ -31,7 +31,7 @@ class PractitionerItem extends Component {
         data-test-id={this.props['data-test-id']}
       >
         <span className={styles.practListItem_avatarContainer}>
-          <Avatar user={practitioner.toJS()} className={styles.sizingThisAvatar} />
+          <Avatar user={practitioner.toJS()} className={styles.sizingThisAvatar} size="md" />
         </span>
         <div className={styles.practListItem_textContainer}>
           <div className={styles.practListItem_name}>{fullName}</div>

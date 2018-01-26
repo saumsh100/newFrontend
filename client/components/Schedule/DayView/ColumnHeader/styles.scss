@@ -1,0 +1,89 @@
+@import '../../../../ui';
+
+
+.columnHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  overflow-x: hidden;
+  min-height: 60px;
+
+  &_empty {
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 0.13em solid $primary-grey;
+    border-right: 0.13em solid $primary-grey;
+    padding-bottom: 2px;
+    font-size: 13px;
+  }
+
+  &_body {
+    display: flex;
+    box-sizing: border-box;
+    min-width: 100%;
+    overflow-x: hidden;
+  }
+
+  &_item {
+    flex: 1;
+    box-sizing: border-box;
+    border: 0.13em solid $primary-grey;
+    border-top: 0px;
+    border-left: 0px;
+  }
+}
+
+.scrollDiv {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-right: 8px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: 10px;
+  height: 100%;
+}
+
+.containerText {
+  margin-left: 5px;
+  overflow: hidden;
+  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+}
+
+.practitionerName {
+  font-size: 15px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.practitionerType {
+  font-size: $extra-small-size;
+  color: $primary-darkgrey;
+}
+
+.chairContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 100%;
+  font-size: 15px;
+  color: $primary-dark;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  text-align: center;
+  padding: 5px;
+}
+
+

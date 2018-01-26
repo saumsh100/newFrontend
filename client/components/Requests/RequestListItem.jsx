@@ -5,12 +5,15 @@ import { ListItem, IconButton, Icon } from '../library';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
-import AppointmentShowData from '../Appointment/AppointmentShowData';
+import RequestPopover from './RequestPopover';
 import withHoverable from '../../hocs/withHoverable';
 
 class RequestListItem extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      viewRequest: false,
+    };
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
   }
@@ -23,21 +26,13 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request);
   }
 
-  /*
-  //set clicked handler on listitem
-  setId(){
-    const { setClickedId, request } = this.props;
-    setClickedId({id: request.get('id')});
-  }*/
-
   render() {
     const {
       request,
       service,
-      isHovered,
-      active,
       patientUser,
       practitioner,
+      requestId,
     } = this.props;
 
     if (!request || !patientUser) {
@@ -55,56 +50,37 @@ class RequestListItem extends Component {
       nameAge: '',
       email: patientUser.email,
       service: serviceName,
-      mobilePhoneNumber: patientUser.phoneNumber,
+      phoneNumber: patientUser.phoneNumber,
       note: request.note,
       month: request.getMonth(),
       day: request.getDay(),
     };
 
-    let showHoverComponents = (<div className={styles.clickHandlers__newreqText}>New</div>);
-
-    //if (isHovered) {
-   showHoverComponents = (
-      <div>
-        <div className={styles.clickHandlers}>
-          <Icon
-            icon={'times-circle-o'}
-            className={styles.clickHandlers__remove}
-            onClick={this.onClickRemove}
-            data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Reject`}
-          />
-          <Icon
-            icon={'check-circle'}
-            className={styles.clickHandlers__confirm}
-            onClick={this.onClickConfirm}
-            data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}Accept`}
-          />
-        </div>
-      </div>
-    );
-  //}
-
     return (
       <ListItem
         className={styles.requestListItem}
         data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}AppointmentRequest`}
+        onClick={() => this.props.openRequest(request.id)}
       >
         <Popover
           className={styles.requestPopover}
-          isOpen={isHovered}
+          isOpen={requestId === request.id}
           body={[(
-            <AppointmentShowData
-              nameAge={data.name}
+            <RequestPopover
               time={data.time}
               service={data.service}
-              phoneNumber={data.mobilePhoneNumber}
-              email={data.email}
               note={data.note}
               practitioner={practitioner}
+              patient={patientUser}
+              request={request}
+              closePopover={() => this.props.openRequest(null)}
+              acceptRequest={this.onClickConfirm}
+              rejectRequest={this.onClickRemove}
             />
           )]}
           preferPlace="left"
           tipSize={12}
+          onOuterAction={() => this.props.openRequest(null)}
         >
           <MonthDay
             month={data.month}
@@ -115,10 +91,10 @@ class RequestListItem extends Component {
           time={data.time}
           name={data.name}
           age={data.age}
-          phoneNumber={data.mobilePhoneNumber}
+          phoneNumber={data.phoneNumber}
           service={data.service}
+          requestCreatedAt={request.createdAt}
         />
-        {showHoverComponents}
       </ListItem>
     );
   }

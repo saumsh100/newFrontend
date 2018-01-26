@@ -14,6 +14,7 @@ class DayView extends Component  {
       chairs,
       schedule,
       selectAppointment,
+      leftColumnWidth,
     } = this.props;
 
     const filteredAppointments = appointments.get('models').toArray().filter((app) => {
@@ -33,6 +34,7 @@ class DayView extends Component  {
         practitioners={practitioners}
         startHour={6}
         endHour={24}
+        leftColumnWidth={leftColumnWidth}
       />
     );
   }
@@ -48,6 +50,7 @@ DayView.propTypes = {
   currentDate: PropTypes.object.isRequired,
   schedule: PropTypes.object.isRequired,
   selectAppointment: PropTypes.func.isRequired,
+  leftColumnWidth: PropTypes.number,
 };
 
 export default DayView;

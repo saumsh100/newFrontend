@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Icon } from '../../../library';
+import { Icon, Card } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
 import Practitioners from './Practitioners';
@@ -373,9 +373,9 @@ class SideBarFilters extends Component {
     }
 
     return (
-      <div className={styles.sideBar}>
+      <Card className={styles.sideBar}>
         <div className={styles.header}>
-          <div className={styles.header_icon}> <Icon icon="sliders" /> </div>
+          <div className={styles.header_icon}> <Icon icon="filter" type="solid" /> </div>
           <div className={styles.header_text}> Filters </div>
           <div
             className={styles.header_clearText}
@@ -400,7 +400,7 @@ class SideBarFilters extends Component {
               onClick={() => this.displayFilter(0)}
             >
               Demographics
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
             </div>
             {openFilters[0] ? <div className={styles.collapsible}>
               <Demographics
@@ -415,7 +415,7 @@ class SideBarFilters extends Component {
               onClick={() => this.displayFilter(1)}
             >
               Appointments
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
             </div>
             {openFilters[1] ? <div className={styles.collapsible}>
               <Appointments
@@ -430,7 +430,7 @@ class SideBarFilters extends Component {
               onClick={() => this.displayFilter(2)}
             >
               Practitioners
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
             </div>
 
             {openFilters[2] ? <div className={styles.collapsible}>
@@ -447,7 +447,7 @@ class SideBarFilters extends Component {
               onClick={() => this.displayFilter(3)}
             >
               Communications
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" /> </span>
+              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
             </div>
 
             {openFilters[3] ? <div className={styles.collapsible}>
@@ -458,7 +458,7 @@ class SideBarFilters extends Component {
             </div> : null }
           </div>
         </div>
-      </div>
+      </Card>
     );
   }
 }

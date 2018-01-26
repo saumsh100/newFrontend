@@ -107,6 +107,16 @@
 
 //New Camel Case Class Structure
 
+.fontDefault {
+  font-family: Gotham-Book;
+  @extend .letterSpacing;
+}
+
+.fontBold {
+  @extend .fontDefault;
+  font-weight: 700;
+}
+
 .fontExtraSmall {
   font-size: $extra-small-size;
   font-weight: $small-weight;
@@ -120,7 +130,7 @@
 }
 
 .fontMedium {
-  font-family: Gotham-Medium;
+  font-family: Gotham-Medium !important;
   @extend .letterSpacing;
 }
 
@@ -129,7 +139,7 @@
   @extend .letterSpacing;
 }
 
-.fontTumboThin {
+.fontJumboThin {
   font-size: $jumbo-size;
   font-weight: $jumbo-weight;
   letter-spacing: 2px;

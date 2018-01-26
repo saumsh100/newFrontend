@@ -9,7 +9,7 @@ export default function RecallDropDowns(props){
       <div className={styles.iconContainer} >
         <Icon icon="envelope" size={1.2} />
         <span className={styles.iconContainer_caret}>
-          <Icon icon="caret-down" size={1.2} />
+          <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
       </div>
     </div>
@@ -20,7 +20,7 @@ export default function RecallDropDowns(props){
       <div className={styles.iconContainer} >
         <Icon icon="comment" size={1.2} />
         <span className={styles.iconContainer_caret}>
-          <Icon icon="caret-down" size={1.2} />
+          <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
       </div>
     </div>
@@ -31,7 +31,7 @@ export default function RecallDropDowns(props){
       <div className={styles.iconContainer} >
         <Icon icon="phone" size={1.2} />
         <span className={styles.iconContainer_caret}>
-          <Icon icon="caret-down" size={1.2} />
+          <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
       </div>
     </div>

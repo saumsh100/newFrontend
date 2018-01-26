@@ -17,7 +17,6 @@ import {
   Card,
   CardHeader,
   DashboardStats,
-  BigCommentBubble,
 } from '../library';
 import RemindersList from './Cards/RemindersList';
 import RecallsList from './Cards/RecallsList';
@@ -90,7 +89,7 @@ class Dashboard extends React.Component {
     const data = [
       { count: appointmentFilter.size, title: 'Appointments Today', icon: 'calendar', size: 6, color: 'primaryColor' },
       { count: filterConfirmedRequests.length, title: 'Appointment Requests', icon: 'user', size: 6, color: 'primaryBlue' },
-      { count: sentReminders.size, title: 'Reminders Sent', icon: 'clock-o', size: 6, color: 'primaryGreen' },
+      { count: sentReminders.size, title: 'Reminders Sent', icon: 'clock', size: 6, color: 'primaryGreen' },
       { count: sentRecalls.size, title: 'Recalls Sent', icon: 'bullhorn', size: 6, color: 'primaryYellow' },
     ];
 
@@ -104,7 +103,7 @@ class Dashboard extends React.Component {
         <Grid className={styles.dashboard}>
           <Row className={styles.dashboard__header}>
             <Col xs={12} >
-              <Card className={styles.dashboard__header_title}>
+              <Card className={styles.dashboard__header_title} noBorder>
                 Welcome Back, <b>{userShow}</b>
               </Card>
             </Col>
@@ -114,7 +113,7 @@ class Dashboard extends React.Component {
               <DashboardStats data={data} />
             </Col>
             <Col className={styles.paddingStats} xs={12} md={12} lg={9}>
-              <Card className={styles.dashboard__body_comments} >
+              <Card >
                 <CardHeader
                   className={styles.cardHeader}
                   title="Appointments"

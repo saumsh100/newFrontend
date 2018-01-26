@@ -1,6 +1,9 @@
+
 /* eslint-disable consistent-return */
 import { Router } from 'express';
 import fs from 'fs';
+import url from 'url';
+import pick from 'lodash/pick';
 import StatusError from '../../util/StatusError';
 import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
@@ -10,20 +13,36 @@ import authRouter from './auth';
 import reviewsRouter from './reviews';
 import sentReviewsRouter from './sentReviews';
 import widgetsRouter from './widgets';
+import unsubRouter from './unsubscribe';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import { Patient, PatientUser, Practitioner, PatientUserReset } from '../../_models';
+import {
+  Account,
+  Appointment,
+  Patient,
+  PatientUser,
+  Practitioner,
+  PatientUserReset,
+} from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
+import { generateAccountParams, encodeParams } from './util/params';
 import normalize from '../_api/normalize';
 
 const sequelizeMyRouter = Router();
 
 sequelizeMyRouter.use('/', newAvailabilitiesRouter);
+sequelizeMyRouter.use('/', unsubRouter);
 sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
 sequelizeMyRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
 sequelizeMyRouter.use('/auth', authRouter);
 
+sequelizeMyRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [
+  { model: Appointment, as: 'appointment' },
+  { model: Patient, as: 'patient' },
+]));
+
 sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
+sequelizeMyRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
 sequelizeMyRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
@@ -34,81 +53,7 @@ sequelizeMyRouter.use('/reviews', reviewsRouter);
 sequelizeMyRouter.use('/sentReviews', sentReviewsRouter);
 sequelizeMyRouter.use('/widgets', widgetsRouter);
 
-sequelizeMyRouter.get('/widgets/:accountIdJoin/embed', async (req, res, next) => {
-  try {
-    const { entities } = normalize('account', req.account.get({ plain: true }));
-    let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
-    for (let i = 0; i < req.account.services.length; i++) {
-      if (req.account.services[i].isDefault) {
-        selectedServiceId = req.account.services[i].id;
-      }
-    }
-
-    const responseAccount = req.account.get({ plain: true });
-    const responseServices = req.account.services.map((service) => {
-      return service.get({ plain: true });
-    });
-
-    const responsePractitioners = req.account.practitioners.map((practitioner) => {
-      return practitioner.get({ plain: true });
-    });
-
-    const initialState = {
-      availabilities: {
-        account: responseAccount,
-        services: responseServices,
-        practitioners: responsePractitioners,
-        selectedServiceId,
-      },
-
-      entities,
-    };
-
-    return res.render('patient', {
-      account: responseAccount,
-      initialState: JSON.stringify(initialState),
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
-function replaceIndex(string, regex, index, repl) {
-  let nth = -1;
-  return string.replace(regex, (match) => {
-    nth += 1;
-    if (index === nth) return repl;
-    return match;
-  });
-}
-
-const toString = str => `"${str}"`;
-const toTemplateString = str => `\`${str}\``;
-const getPath = filename => `${__dirname}/../../routes/_my/${filename}`;
-
-sequelizeMyRouter.get('/widgets/:accountId/widget.js', (req, res, next) => {
-  try {
-    const account = req.account.get({ plain: true });
-    fs.readFile(getPath('widget.js'), 'utf8', (err, widgetJS) => {
-      if (err) throw err;
-      fs.readFile(getPath('widget.css'), 'utf8', (_err, widgetCSS) => {
-        if (_err) throw _err;
-        const color = account.bookingWidgetPrimaryColor || '#FF715A';
-        const iframeSrc = `${req.protocol}://${req.headers.host}/widgets/${account.id}/embed`;
-        const withColor = replaceIndex(widgetJS, /__REPLACE_THIS_COLOR__/g, 1, toString(color));
-        const withSrc = replaceIndex(withColor, /__REPLACE_THIS_IFRAME_SRC__/g, 1, toString(iframeSrc));
-        const withStyleText = replaceIndex(withSrc, /__REPLACE_THIS_STYLE_TEXT__/g, 1, toTemplateString(widgetCSS));
-        const replacedWidgetJS = replaceIndex(withStyleText, /__ACCOUNT_ID__/g, 1, toTemplateString(account.id));
-
-        // TODO: need to be able to minify and compress code UglifyJS
-        res.type('javascript').send(replacedWidgetJS);
-      });
-    });
-  } catch (err) {
-    next(err);
-  }
-});
-
+// Used on patient signup form to determine if a patientUser's email is taken
 sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
   let {
     email,
@@ -124,6 +69,7 @@ sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
   }
 });
 
+// Used on patient signup form to determine if a patientUser's phoneNumber is taken
 sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   let {
     phoneNumber,
@@ -156,7 +102,6 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   }
 });
 
-
 sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   const patientUser = req.patientUser.get({ plain: true });
   delete patientUser.password;
@@ -167,37 +112,29 @@ sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   }
 });
 
-sequelizeMyRouter.get('/unsubscribe/:encoded', async (req, res, next) => {
-  try {
-    // TODO: unsubscribe patient preferences
-    const { encoded } = req.params;
-    const { md_email } = req.query;
-    const [email, accountId] = new Buffer(encoded, 'base64').toString('ascii').split(':');
-
-    const patient = await Patient.findOne({ where: { email, accountId } });
-    if (!patient) {
-      return next(StatusError(404, 'Page not found'));
-    }
-
-    if (md_email !== email) {
-      console.log(md_email, email);
-      return next(StatusError(404, 'Page not found'));
-    }
-
-    res.render('unsub', { email, accountId, firstName: patient.firstName });
-  } catch (err) {
-    next(err);
-  }
-});
-
 sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
-  return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
+  const tokenId = req.params.tokenId;
+  return PatientUserReset.findOne({ where: { token: tokenId } })
     .then((reset) => {
       if (!reset) {
-        // TODO: replace with StatusError
+        // TODO: replace with StatusError and pass to next...
         res.status(404).send();
       } else {
-        res.redirect(`/reset-password/${req.params.tokenId}`);
+        // TODO: add encoded params
+        const { accountId } = reset;
+        return Account.findOne({ where: { id: accountId } })
+          .then((account) => {
+            const params = {
+              account: generateAccountParams(account),
+            };
+
+            res.redirect(url.format({
+              pathname: `/reset-password/${tokenId}`,
+              query: {
+                params: encodeParams(params),
+              },
+            }));
+          });
       }
     })
     .catch(next);
@@ -226,6 +163,50 @@ sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
       return res.sendStatus(201);
     })
     .catch(next);
+});
+
+sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
+  try {
+    // TODO: it's stuff like this that we need to put into a "Manager" SentReminderManager.confirm();
+    const sentReminder = req.sentReminder;
+    await sentReminder.update({ isConfirmed: true });
+
+    // For any confirmed reminder we confirm appointment
+    const { appointment, patient } = sentReminder;
+
+    if (appointment) {
+      await appointment.update({ isPatientConfirmed: true });
+    }
+
+    const account = await Account.findOne({
+      where: {
+        id: appointment.accountId,
+      },
+    });
+
+    const appointmentJSON = appointment.get({ plain: true });
+    const patientJSON = patient.get({ plain: true });
+
+    const params = {
+      patient: patientJSON,
+      appointment: appointmentJSON,
+      account: generateAccountParams(account),
+    };
+
+    const encodedParams = encodeParams(params);
+
+    const pub = req.app.get('pub');
+    pub.publish('REMINDER:UPDATED', req.sentReminder.id);
+
+    return res.redirect(url.format({
+      pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
+      query: {
+        params: encodedParams,
+      },
+    }));
+  } catch (err) {
+    next(err);
+  }
 });
 
 sequelizeMyRouter.get('(/*)?', (req, res, next) => {

@@ -2,35 +2,13 @@
 import React, { PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { compose, withProps } from 'recompose';
-import Button from '../Button';
 import Field from './Field';
 import FieldArray from './FieldArray';
 import FormSection from './FormSection';
-import SaveButton from './SaveButton';
+import FormButton from './FormButton';
 import RemoteSubmitButton from './RemoteSubmitButton';
-import styles from './styles.scss';
-
-
 import { asyncEmailValidate } from './validate';
-/**
- * Given the requiredFields it will generate a validate function to return errors if
- * a field is empty. Note that this is note fired if the form is pristine.
- *
- * @param requiredFields
- * @returns {function(*)}
- */
-/*const requiredValidationGenerator = (requiredFields) => {
-  return (fields) => {
-    const errors = {};
-    requiredFields.forEach((name) => {
-      if (!fields[name]) {
-        errors[name] = 'Required';
-      }
-    });
-
-    return errors;
-  };
-};*/
+import styles from './styles.scss';
 
 function Form(props) {
   const {
@@ -39,12 +17,16 @@ function Form(props) {
     handleSubmit,
     pristine,
     ignoreSaveButton,
-    allowSave,
-    alignSave,
+    SaveButton = FormButton,
+    saveButtonProps = {},
   } = props;
 
-  let showSubmitButton = ignoreSaveButton ? null : (<SaveButton pristine={!allowSave && pristine} alignSave={alignSave} />);
-
+  const showSubmitButton = ignoreSaveButton ? null : (
+    <SaveButton
+      pristine={pristine}
+      {...saveButtonProps}
+    />
+  );
 
   return (
     <div>
@@ -55,7 +37,11 @@ function Form(props) {
         data-test-id={props['data-test-id']}
       >
         {children}
-        {showSubmitButton}
+        {showSubmitButton && (
+          <div className={styles.submitButton}>
+            {showSubmitButton}
+          </div>
+        )}
       </form>
     </div>
   );
@@ -73,30 +59,6 @@ const withReduxForm = (BaseComponent) => {
   })(BaseComponent);
 };
 
-/*const withValidate = withProps(({ requiredFields = [], children }) => {
-  // Parse children to check invidual settings
-  children.forEach((child) => {
-    // Coniditions to add into requiredFields
-    // - ChildElement type does not equal ReduxField
-    // - name attribute is falsey (wouldnt even work with ReduxForm)
-    // - required attribute is falsey
-    // - already exists in requiredFields
-    const { name, required } = child.props;
-    if (
-      child.type.name !== 'ReduxField' ||
-      !name ||
-      !required ||
-      requiredFields.indexOf(name) > -1
-    ) return;
-
-    requiredFields.push(name);
-  });
-
-  return {
-    validate: requiredValidationGenerator(requiredFields),
-  };
-});*/
-
 const enhance = compose(
   // withValidate,
   withReduxForm,
@@ -108,6 +70,6 @@ export {
   Field,
   FieldArray,
   FormSection,
-  SaveButton,
+  FormButton,
   RemoteSubmitButton,
 };

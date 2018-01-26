@@ -50,7 +50,7 @@ const UserMenu = (props) => {
           className={styles.userAvatar}
           user={user.toJS()}
         />
-        <Icon icon="caret-down" />
+        <Icon icon="caret-down" type="solid" />
       </div>
     </Button>
   );
@@ -59,7 +59,7 @@ const UserMenu = (props) => {
 const ActiveAccountButton = ({ account, onClick }) =>
   <div onClick={onClick} className={styles.activeAccountButton}>
     <span className={styles.activeAccountTitle}>{ account.name }</span>
-    <Icon icon="caret-down" />
+    <Icon icon="caret-down" type="solid" />
   </div>;
 
 class TopBar extends Component {

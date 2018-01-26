@@ -7,22 +7,22 @@ export default function RFToggle(props) {
     input,
     flipped,
     label,
+    className,
     error,
     meta,
     checked,
     theme,
-    className,
   } = props;
 
-  const newProps = Object.assign({} , props, { defaultChecked: input.value });
+  console.log(props);
 
   return (
-    <div>
-      <Toggle
-        checked={flipped ? !input.value : input.value}
-        onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
-      />
-    </div>
+    <Toggle
+      label={label}
+      className={className}
+      checked={flipped ? !input.value : input.value}
+      onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
+    />
   );
 }
 

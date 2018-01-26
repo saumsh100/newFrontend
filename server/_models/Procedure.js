@@ -14,11 +14,23 @@ export default function (sequelize, DataTypes) {
     description: {
       type: DataTypes.STRING,
     },
+
+    codeType: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'CDA',
+    },
+
+    isValidated: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   });
 
   Procedure.associate = (({ DeliveredProcedure }) => {
     Procedure.hasMany(DeliveredProcedure, {
-      foreignKey: 'procedureCode',
+      foreignKey: 'procedureCodeId',
       sourceKey: 'code',
       as: 'deliveredProcedures',
     });

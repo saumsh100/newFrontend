@@ -1,8 +1,8 @@
 @import '../../../ui.scss';
 
 .checkBoxImage {
-  margin: 0 5px;
-  padding: 10px;
+  //margin: 0 5px;
+  padding: 2px;
 
   input[type=checkbox] {
     display: none;
@@ -39,46 +39,39 @@
     max-width: 55px;
     margin-bottom: 5px;
     display: inline-block;
-    position:relative;
   }
+
   &__avatar {
-    position: absolute;
-    left: 4px;
-    top: 3.4px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
   }
 
   &__spec {
     color: #b4b4b4;
   }
-
 }
 
 .primaryColor {
   background: linear-gradient(rgba(255, 113, 90, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-color;
-  //transition-timing-function: ease-in;
-  width: 55px;
-  height: 55px;
+  width: 40px;
 }
 .primaryYellow {
   background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
   border-radius: 50%;
   border-color: $primary-yellow;
-  width: 55px;
-  height: 55px;
+  width: 40px;
 }
 .primaryGreen {
   background: linear-gradient(rgba(44, 196, 167, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-green;
-  width: 55px;
-  height: 55px;
+  width: 40px;
 }
 .primaryBlueGreen {
   background: linear-gradient(rgba(32,100,119,1), white 70%);
   border-radius: 50%;
   border-color: $primary-blue;
-  width: 55px;
-  height: 55px;
+  width: 40px;
 }

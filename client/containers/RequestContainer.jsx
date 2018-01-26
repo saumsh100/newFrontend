@@ -42,11 +42,6 @@ function mapStateToProps({ entities }) {
   const requests = entities.getIn(['requests', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);
 
-  //const patientIds = requests.toArray().map(request => request.get('patientId'));
-   //const patients = entities.getIn(['patients', 'models']).filter((patient) => {
-  //  return patientIds.indexOf(patient.get('id')) > -1;
-    //});
-
   return {
     requests,
     services,

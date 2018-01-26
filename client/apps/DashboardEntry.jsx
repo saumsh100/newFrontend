@@ -1,10 +1,11 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { createBrowserHistory } from 'history';
 import moment from 'moment';
 import { extendMoment } from 'moment-range';
+import 'moment-timezone';
+import 'moment-interval';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
@@ -40,7 +41,7 @@ load()(store.dispatch).then(() => {
       const email = user.username;
       LogRocket.identify(userId, {
         name: fullName,
-        email: email,
+        email,
       });
 
       window.Intercom('update', {
@@ -80,6 +81,10 @@ load()(store.dispatch).then(() => {
   render(App);
 
   if (module.hot) {
-    module.hot.accept('./Dashboard', () => render(App));
+    module.hot.accept('./Dashboard', () => {
+      const NextApp = require('./Dashboard').default; // eslint-disable-line
+
+      return render(NextApp);
+    });
   }
 });

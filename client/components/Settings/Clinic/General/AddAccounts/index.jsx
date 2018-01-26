@@ -70,7 +70,7 @@ export default function SelectAccountOptions(props) {
             </div>
             <div className={styles.displayFlex}>
               <span>
-                <Icon icon="clock-o" />
+                <Icon icon="clock" />
               </span>
               <span className={styles.accountOptions_text}>
                 Twilio

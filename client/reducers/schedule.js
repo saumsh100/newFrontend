@@ -13,11 +13,17 @@ import {
   SET_SYNCING,
   SET_MERGING,
   SET_SCHEDULE_VIEW,
+  CREATE_NEW_PATIENT,
 } from '../constants';
 
 const initialState = fromJS({
   scheduleDate: new Date(),
   scheduleView: 'chair',
+
+  timeSlotHeight: 50,
+  columnWidth: 150,
+  leftColumnWidth: 70,
+
   chairsFilter: [],
   practitionersFilter: [],
   servicesFilter: [],
@@ -30,6 +36,7 @@ const initialState = fromJS({
     requestData: null,
     suggestions: [],
   },
+  createNewPatient: false,
 });
 
 export default handleActions({
@@ -55,6 +62,11 @@ export default handleActions({
   [SELECT_WAITSPOT](state, action) {
     const waitSpot = action.payload;
     return state.set('selectedWaitSpot', waitSpot);
+  },
+
+  [CREATE_NEW_PATIENT](state, action) {
+    const createPatientBool = action.payload.createPatientBool
+    return state.set('createNewPatient', createPatientBool)
   },
 
   [ADD_SCHEDULE_FILTER](state, action) {

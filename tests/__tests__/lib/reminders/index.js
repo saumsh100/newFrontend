@@ -1,11 +1,12 @@
 
 import { v4 as uuid } from 'uuid';
+import moment from 'moment';
 import * as RemindersLibrary from '../../../../server/lib/reminders';
 import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
 import sendReminder from '../../../../server/lib/reminders/sendReminder';
-import { Account } from '../../../../server/_models';
+import { Account, Address, Appointment, Reminder, Patient, Practitioner } from '../../../../server/_models';
 import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
+import { seedTestUsers, accountId, enterpriseId } from '../../../_util/seedTestUsers';
 import { patientId } from '../../../_util/seedTestPatients';
 import { seedTestAppointments, appointmentId } from '../../../_util/seedTestAppointments';
 import { seedTestReminders, reminderId1, reminderId2 } from '../../../_util/seedTestReminders';
@@ -26,10 +27,8 @@ const makeReminderData = (data = {}) => Object.assign({},
   {
     id: reminderId1,
     accountId,
-    primaryType: 'sms',
-
-    // 2 hours by default
-    lengthSeconds: 7200,
+    primaryTypes: ['sms'],
+    interval: '2 hours',
   },
   data,
 );
@@ -204,6 +203,146 @@ describe('Reminders Job Integration Tests', () => {
       await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getRemindersOutboxList', () => {
+    const newAddressId = 'cd39f7d8-fc06-11e7-8450-fea9aa178066';
+    const newAccountId = '2fc72afc-fc06-11e7-8450-fea9aa178066';
+
+    let account;
+    let practitioner;
+    let reminders;
+    let patients;
+    let appointments;
+    beforeAll(async () => {
+      await Address.create({ id: newAddressId });
+      account = await Account.create({
+        id: newAccountId,
+        name: 'New Account',
+        enterpriseId,
+        addressId: newAddressId,
+      });
+
+      practitioner = await Practitioner.create({
+        accountId: newAccountId,
+        firstName: 'Timothy',
+      });
+
+      reminders = await Reminder.bulkCreate([
+        {
+          accountId: newAccountId,
+          primaryTypes: ['sms'],
+          interval: '2 hours'
+        },
+        {
+          accountId: newAccountId,
+          primaryTypes: ['email', 'sms'],
+          interval: '2 days',
+        },
+        {
+          accountId: newAccountId,
+          primaryTypes: ['email', 'sms'],
+          interval: '2 weeks',
+        },
+      ]);
+
+      patients = await Patient.bulkCreate([
+        {
+          accountId: newAccountId,
+          email: 'sarah@williams.ca',
+          mobilePhoneNumber: '+12223334444',
+          firstName: 'Sarah',
+          lastName: 'Williams',
+        },
+        {
+          accountId: newAccountId,
+          email: 'john@doe.ca',
+          mobilePhoneNumber: '+13334445555',
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        {
+          accountId: newAccountId,
+          email: 'jane@donut.ca',
+          mobilePhoneNumber: '+14445556666',
+          firstName: 'Jane',
+          lastName: 'Donut',
+        },
+        {
+          accountId: newAccountId,
+          mobilePhoneNumber: '+15556667777',
+          firstName: 'Jack',
+          lastName: 'Sharp',
+        },
+      ]);
+
+      appointments = await Appointment.bulkCreate([
+        {
+          accountId: newAccountId,
+          patientId: patients[0].id,
+          practitionerId: practitioner.id,
+          startDate: iso(new Date(2018, 0, 17, 11, 0)), // Jan 17th @ 11:00 am
+          endDate: iso(new Date(2018, 0, 17, 12, 0)),
+        },
+        {
+          accountId: newAccountId,
+          patientId: patients[1].id,
+          practitionerId: practitioner.id,
+          startDate: iso(new Date(2018, 0, 17, 11, 16)), // Jan 17th @ 11:16 am
+          endDate: iso(new Date(2018, 0, 17, 12, 16)),
+        },
+        {
+          accountId: newAccountId,
+          patientId: patients[2].id,
+          practitionerId: practitioner.id,
+          startDate: iso(new Date(2018, 0, 19, 9, 0)), // Jan 19th @ 9:00 am
+          endDate: iso(new Date(2018, 0, 19, 10, 0)),
+        },
+        {
+          accountId: newAccountId,
+          patientId: patients[3].id,
+          practitionerId: practitioner.id,
+          startDate: iso(new Date(2018, 0, 31, 10, 15)), // Jan 31st @ 10:15 am
+          endDate: iso(new Date(2018, 0, 31, 11, 15)),
+        },
+      ]);
+    });
+
+    afterAll(async () => {
+      await wipeAllModels();
+    });
+
+
+    test('it should be a function', () => {
+      expect(typeof RemindersLibrary.getRemindersOutboxList).toBe('function');
+    });
+
+    test('it should return 2 list items for a daterange of 9:00 to 9:05', async () => {
+      const startDate = iso(new Date(2018, 0, 17, 9, 0));
+      const endDate = iso(new Date(2018, 0, 17, 9, 5));
+      const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
+
+      expect(outboxList.length).toBe(2);
+      expect(outboxList[0].primaryTypes).toEqual(['sms']);
+      expect(outboxList[1].primaryTypes).toEqual(['email', 'sms']);
+    });
+
+    test('it should return 2 list items for a daterange of 9:00 to 9:05', async () => {
+      const startDate = iso(new Date(2018, 0, 17, 9, 0));
+      const endDate = iso(new Date(2018, 0, 17, 10, 15));
+      const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
+
+      expect(outboxList.length).toBe(4);
+      expect(outboxList[0].primaryTypes).toEqual(['sms']);
+      expect(outboxList[1].primaryTypes).toEqual(['email', 'sms']);
+      expect(outboxList[2].primaryTypes).toEqual(['sms']);
+      expect(outboxList[3].primaryTypes).toEqual(['sms']);
+
+      expect(moment(outboxList[0].sendDate).format('h:mma')).toBe('9:00am');
+      expect(moment(outboxList[1].sendDate).format('h:mma')).toBe('9:00am');
+      expect(moment(outboxList[2].sendDate).format('h:mma')).toBe('9:15am');
+      expect(moment(outboxList[3].sendDate).format('h:mma')).toBe('10:15am');
     });
   });
 });

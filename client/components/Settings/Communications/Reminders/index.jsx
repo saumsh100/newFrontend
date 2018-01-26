@@ -9,7 +9,7 @@ import {
   RemoteSubmitButton,
   DialogBox,
 } from '../../../library';
-import { numTypeToSeconds } from '../../../../../server/util/time';
+import { convertIntervalToMs } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
@@ -123,9 +123,9 @@ class Reminders extends Component {
         title="Reminders Settings"
         rightActions={(
           <Button
+            color="blue"
             onClick={this.toggleAdding}
             data-test-id="createNewReminder"
-            color="blue"
           >
             Add
           </Button>
@@ -197,9 +197,11 @@ Reminders.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const reminders = entities.getIn(['reminders', 'models']).filter(r => !r.isDeleted).sortBy(r => -r.lengthSeconds);
   const role = auth.get('role');
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const reminders = entities.getIn(['reminders', 'models'])
+    .filter(r => !r.isDeleted)
+    .sortBy(r => -convertIntervalToMs(r.interval));
 
   return {
     activeAccount,

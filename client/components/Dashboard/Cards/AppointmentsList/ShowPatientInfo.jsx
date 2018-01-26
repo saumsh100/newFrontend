@@ -25,7 +25,7 @@ export default function ShowPatientInfo(props) {
   const fullName = `${patient.firstName} ${patient.lastName}`;
   return (
     <div className={styles.patientContainer} data-test-id={`${index}_appointment`}>
-      <Avatar className={styles.patientContainer_img} user={patient} />
+      <Avatar className={styles.patientContainer_img} user={patient} size="md" />
       <div className={styles.patientContainer_text}>
         <div className={styles.patientContainer_name} >
           <a

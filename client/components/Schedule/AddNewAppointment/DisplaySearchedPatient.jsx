@@ -1,46 +1,36 @@
-import React, { Component, PropTypes } from 'react';
-import moment from 'moment';
+
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Avatar, Icon } from '../../library';
 import styles from './styles.scss';
+import { FormatPhoneNumber } from '../../library/util/Formatters';
 
 export default function DisplaySearchedPatient(props) {
   const {
-    patientSearched,
+    patient,
   } = props;
 
-  let displayPatientComponent = null;
-  if (patientSearched) {
-    const bday = moment().diff(patientSearched.birthDate, 'years') || '';
-    const lastName = bday ? `${patientSearched.lastName},` : patientSearched.lastName
-    displayPatientComponent = (
-      <div className={styles.patientSearch}>
-        <Avatar className={styles.patientSearch_avatar} user={patientSearched || {}} />
-        <div className={styles.patientSearch_name}>
-          {`${patientSearched.firstName} ${lastName} ${bday || ''}`}
-        </div>
-        <div className={styles.patientSearch_email}>
-          {`${patientSearched.email || ''}`}
-        </div>
-        <div className={styles.patientSearch_phone}>
-          {`${patientSearched.mobilePhoneNumber || ''}`}
-        </div>
-      </div>
-    );
-  } else {
-    displayPatientComponent = (
-      <div className={styles.patientSearch}>
-        <div className={styles.patientSearch_searchIcon}>
-          <img src="/images/carecru_logo_collapsed.png" width="90px" height="90px" className={styles.patientSearch_img}/>
-        </div>
-        <div className={styles.patientSearch_speel}>
-          Search for a patient by typing into the input below.
-        </div>
-      </div>
-    )
-  }
   return (
     <div>
-      {displayPatientComponent}
+      {patient ? <div
+        className={styles.patientContainer}
+        onClick={() => {
+          props.setShowInput(true);
+          props.setPatientSearched(null);
+        }}
+      >
+        <Avatar user={patient} size="sm" />
+        <div className={styles.patientContainer_name}>
+          {patient.firstName} {patient.lastName}
+        </div>
+        <div className={styles.patientContainer_icon}>
+          <Icon icon="search" />
+        </div>
+      </div> : null }
     </div>
   );
+}
+
+DisplaySearchedPatient.propTypes = {
+  patient: PropTypes.object,
 }

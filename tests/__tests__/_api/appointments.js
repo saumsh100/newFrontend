@@ -1,8 +1,8 @@
-
+import moment from 'moment';
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../_util/generateToken';
-import { Appointment, Account, WeeklySchedule } from '../../../server/_models';
+import { Appointment, Account, Address, WeeklySchedule, Family, Reminder, SentReminder, Patient } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { wipeTestPatients } from '../../_util/seedTestPatients';
@@ -11,7 +11,7 @@ import { patientId } from '../../_util/seedTestPatients';
 import { appointment, appointmentId, seedTestAppointments } from '../../_util/seedTestAppointments';
 import { weeklyScheduleId, seedTestWeeklySchedules } from '../../_util/seedTestWeeklySchedules';
 import { practitionerId } from '../../_util/seedTestPractitioners';
-import { omitPropertiesFromBody } from '../../util/selectors';
+import { omitPropertiesFromBody, omitProperties } from '../../util/selectors';
 
 const batchAppointmentId = '04148c65-292d-4d06-8801-d8061cec7b12';
 const batchAppointmentId2 = '6ee224d6-8e66-4cb8-9d41-8964a3d9b909';
@@ -86,6 +86,36 @@ const invalidBatchAppointment = {
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
+};
+
+const makeApptData = (data = {}) => Object.assign({
+  accountId,
+  patientId,
+  practitionerId,
+}, data);
+
+const makePatientData = (data = {}) => Object.assign({
+  accountId,
+}, data);
+
+const makeFamilyData = (data = {}) => Object.assign({
+  accountId,
+}, data);
+
+const makeSentReminderData = (data = {}) => Object.assign({
+  // Doesnt even have to match reminder for this test
+  patientId,
+  accountId,
+  lengthSeconds: 86400,
+  primaryType: 'sms',
+}, data);
+
+const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
+const dates = (y, m, d, h) => {
+  return {
+    startDate: date(y, m, d, h),
+    endDate: date(y, m, d, h + 1),
+  };
 };
 
 describe('/api/appointments', () => {
@@ -234,6 +264,53 @@ describe('/api/appointments', () => {
         });
     });
   });
+
+  describe('GET /insights', () => {
+    afterEach(async () => {
+      await wipeModel(SentReminder);
+      await wipeModel(Reminder);
+      await wipeModel(Appointment);
+      await wipeModel(Patient);
+      await wipeModel(Family);
+      await wipeTestUsers();
+      await wipeAllModels();
+    });
+
+    test('/insights - appointment insights', async () => {
+      const time = moment(date(2017, 5, 19, 7));
+
+      const family = await Family.create(makeFamilyData());
+
+      const pat = await Patient.create(makePatientData({
+        firstName: 'WHAT',
+        lastName: 'NO',
+        lastHygieneDate: time.clone().subtract(7, 'months')._d,
+        familyId: family.id,
+      }));
+
+      const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
+
+      const appts = await Appointment.bulkCreate([
+        makeApptData({ ...dates(2017, 5, 19, 8), patientId: pat.id }),
+      ]);
+
+      await SentReminder.create(makeSentReminderData({
+        reminderId: reminder1.id,
+        appointmentId: appts[0].id,
+        lengthSeconds: 1086410,
+        isSent: true,
+      }));
+
+      return request(app)
+        .get(`${rootUrl}/insights?startDate=2017-06-18T00:14:30.932Z&endDate=2017-06-20T00:14:30.932Z`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitProperties(body[0], ['appointmentId', 'patientId']);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  })
 
   describe('POST /', () => {
     beforeEach(async () => {

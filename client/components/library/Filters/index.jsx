@@ -111,7 +111,7 @@ class Filters extends Component {
         <div className={styles.filters}>
           <div className={styles.filters__header}>
             <div className={styles.filters__header__left}>
-              <span className="fa fa-sliders" />
+              <span className="fal fa-filter" />
               <span>Filters</span>
             </div>
             <div className={styles.filters__header__right}>

@@ -6,65 +6,85 @@ import { w2s } from '../../util/time';
  */
 const defaultRecalls = [
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(4),
+    interval: '1 months',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(1),
+    interval: '1 weeks',
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-1),
+    interval: '-1 weeks',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-4),
+    interval: '-1 months',
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-8),
+    interval: '-2 months',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-12),
+    interval: '-4 months',
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-20),
+    interval: '-6 months',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-28),
+    interval: '-8 months',
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-36),
+    interval: '-10 months',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-44),
+    interval: '-12 months',
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-52),
+    interval: '-14 months',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-60),
+    interval: '-16 months',
   },
   {
-    primaryType: 'email',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-68),
+    interval: '-18 months',
   },
-  {
-    primaryType: 'sms',
+  /*{
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-76),
+    interval: '-20 months',
   },
   {
-    primaryType: 'sms',
+    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-84),
+    interval: '-22 months',
   },
+  {
+    primaryTypes: ['email', 'sms'],
+    lengthSeconds: w2s(-84),
+    interval: '-24 months',
+  },*/
 ];
 
 /**

@@ -8,7 +8,6 @@ import BadgeHeader from './BadgeHeader';
 import BarChart from './BarChart';
 import Button from './Button';
 import Card from './Card';
-import Calendar from './Calendar';
 import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
@@ -69,6 +68,7 @@ import VButton from './Button';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
+import Well from './Well';
 
 export {
   AccountLogo,
@@ -82,7 +82,6 @@ export {
   Button,
   BigCommentBubble,
   Card,
-  Calendar,
   ContainerList,
   CardHeader,
   Checkbox,
@@ -149,6 +148,7 @@ export {
   BreadcrumbItem,
   FBLoginButton,
   VCard,
+  Well,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

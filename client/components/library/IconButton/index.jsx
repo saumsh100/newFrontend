@@ -11,13 +11,14 @@ export default function IconButton(props) {
     className,
     size,
     icon,
+    iconType,
   } = props;
 
   const classes = classNames(className, styles.iconButton);
   const buttonProps = omit(props, ['icon', 'size']);
   return (
     <VButton {...buttonProps} className={classes}>
-      <Icon icon={icon} size={size} />
+      <Icon icon={icon} size={size} type={iconType} />
     </VButton>
   );
 }

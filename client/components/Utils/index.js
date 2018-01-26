@@ -1,3 +1,4 @@
+
 import PropTypes from 'prop-types';
 import { isArray, pick, omit as lOmit, isFunction } from 'lodash';
 
@@ -66,6 +67,7 @@ export const getClassMapper = (scheme, styles) => {
       ((index[key] === true) ? toDashName(key) : mapKeysWithValues(key, value));
 
     const classes = keys
+      .filter(key => props[key]) // can't be falsey
       .map(key => mapKeys(key, props[key]))
       .filter(i => i)
       .map(key => styles[key])

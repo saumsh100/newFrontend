@@ -6,8 +6,8 @@
   --tertiaryButtonColor: $primary-green;
 }
 
-.default {
-  font-size: 14px;
+.baseline {
+  font-size: 12px;
 
   font-family: $dashboard-font;
   background-color: var(--primaryButtonColor);
@@ -19,13 +19,13 @@
   text-decoration: none;
   border: none;
 
-  border-radius: 2px;
   padding: em(12px) 1.5em;
   margin: 0 em(5px) 0 0;
   line-height: 1em;
   text-align: center;
 
   transition: background-color .1s ease, color .1s ease;
+  composes: letterSpacing from 'sass-loader!../../../fonts.scss';
 
   &:last-child {
     margin-right: 0;
@@ -34,6 +34,7 @@
 
 .default:hover {
   background-color: darken($primary-color, 5%);
+  background-color: var(--primaryButtonColor);
   color: darken(white, 5%);
 }
 
@@ -49,7 +50,7 @@
 .color-green { color: white; background-color: $primary-green; }
 .color-green:hover { color: white; background-color: darken($primary-green, 5%); }
 
-.color-blue { color: white; background-color: $primary-blue; }
+.color-blue { color: white; background-color: $primary-blue;}
 .color-blue:hover { color: white; background-color: darken($primary-blue, 5%); }
 
 .color-darkblue { color: white; background-color: $clr-dark-blue; }
@@ -70,7 +71,7 @@
 .color-white { color: $clr-dark-grey; background-color: $primary-white; }
 .color-white:hover { color: darken($clr-dark-grey, 5%); background-color: darken($primary-white, 5%); }
 
-.border-blue { border: 1px solid $primary-blue; color: $primary-blue; background-color: $background-color; }
+.border-blue { border: 1px solid $primary-blue; color: $primary-blue; background-color: transparent; }
 .border-blue:hover { color: white; background: $primary-blue }
 
 .positive { composes: color-green; }
@@ -93,6 +94,15 @@
 
 .compact {
   padding: em(8px) em(14px);
+}
+
+.dense {
+  text-transform: capitalize;
+  padding-top: 0.65em;
+  padding-bottom: 0.6em;
+  height: 28px;
+  font-size: 11px;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 
 .size-sm { font-size: 11px; }

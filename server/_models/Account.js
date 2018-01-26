@@ -1,6 +1,8 @@
 
+import moment from 'moment';
 import customDataTypes from '../util/customDataTypes';
-import globals from '../config/globals';
+import globals, { env } from '../config/globals';
+import { sendConnectorBackUp } from '../lib/mail';
 import AddressModel from './Address';
 
 export default function (sequelize, DataTypes) {
@@ -27,6 +29,7 @@ export default function (sequelize, DataTypes) {
 
     addressId: {
       type: DataTypes.UUID,
+      allowNull: false,
     },
 
     // TODO: booleans should have allowNull=true
@@ -80,6 +83,7 @@ export default function (sequelize, DataTypes) {
 
     timeInterval: {
       type: DataTypes.INTEGER,
+      defaultValue: 30,
     },
 
     timezone: {
@@ -238,6 +242,48 @@ export default function (sequelize, DataTypes) {
       }],
     }, { override: true });
   };
+
+  Account.modelHooks = (({ AccountConfiguration, Configuration }) => {
+    // Hook for sending email if a Connector is back up
+    Account.hook('beforeUpdate', async (account) => {
+      const config = await Configuration.findOne({
+        where: {
+          name: 'CONNECTOR_ENABLED',
+        },
+      });
+
+      const accountConfig = await AccountConfiguration.findOne({
+        where: {
+          accountId: account.id,
+          configurationId: config.id,
+        },
+      });
+
+      const isEnabled = accountConfig ? accountConfig.value === '1' : config.defaultValue === '1';
+
+      if (env === 'production' && isEnabled) {
+        const newDate = account.lastSyncDate;
+        const oldDate = account._previousDataValues.lastSyncDate;
+
+        if (oldDate !== newDate) {
+          const minsDiff = moment(newDate).diff(moment(oldDate), 'minutes');
+
+          if (minsDiff > 30) {
+            sendConnectorBackUp({
+              toEmail: 'monitoring@carecru.com',
+              name: account.name,
+              mergeVars: [
+                {
+                  name: 'CONNECTOR_NAME',
+                  content: account.name,
+                },
+              ],
+            });
+          }
+        }
+      }
+    });
+  });
 
   return Account;
 }

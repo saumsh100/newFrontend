@@ -32,9 +32,8 @@ class Requests extends Component {
           <CardHeader
             data-test-id="requestCount"
             count={sortedRequests.length}
-            title={'Appointment Requests'}
+            title={'Online Requests'}
           >
-            {/*<IconButton icon="undo" />*/}
           </CardHeader>
         </div>
         <div className={styles.requestBody}>
@@ -44,7 +43,6 @@ class Requests extends Component {
             patientUsers={patientUsers}
             location={location}
             practitioners={practitioners}
-            maxHeight={this.props.maxHeight}
           />
         </div>
       </Card>

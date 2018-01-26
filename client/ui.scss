@@ -43,6 +43,7 @@ $primary-lightgrey: #f0f0f0;
 $primary-light-grey: #c9c9c9;
 
 $primary-white: white;
+$primary-lightgray: #FAFAFA;
 $background-color: #E6E6E6;
 $primary-red: #FF715C;
 $primary-star: #FBF174;
@@ -51,6 +52,7 @@ $box-shadow: 1px 1px 16px 0.1px rgba(0,0,0,0.3);
 $widget-box-shadow: 0 1px rgba(0,0,0,0.05);
 $disabled-color: lighten($primary-darkgrey, 25%);
 $empty-grey: darken(lightgrey, 5%);
+$card-border-color: #cdcdcd;
 
 
 // Feedback Colors
@@ -80,7 +82,7 @@ $medium-font: Gotham-Medium;
 $padding-card-base: 30px;
 
 //header-sizes
-$count-size: 36px;
+$count-size: 15px;
 $title-size: 15px;
 $header-size: 25px;
 

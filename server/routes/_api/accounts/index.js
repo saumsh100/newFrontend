@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
 import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
 import { callRail, twilioSetup, vendastaFullSetup } from '../../../lib/createAccount';
+import { getAccountConnectorConfigurations, updateAccountConnectorConfigurations } from '../../../lib/accountConnectorConfigurations';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
@@ -194,45 +195,6 @@ accountsRouter.delete('/:accountId/integrations', async (req, res, next) => {
   return res.send(normalize('account', account.get({ plain: true })));
 });
 
-async function getAccountConnectorConfigurations(req, res, next, accountId) {
-  try {
-    const sendValues = [];
-    const accountConfigs = await Configuration.findAll({
-      raw: true,
-      nest: true,
-      include: {
-        model: AccountConfiguration,
-        as: 'accountConfiguration',
-        where: {
-          accountId,
-        },
-
-        required: false,
-      },
-    });
-
-    for (let i = 0; i < accountConfigs.length; i += 1) {
-      const sendValue = {
-        name: accountConfigs[i].name,
-        description: accountConfigs[i].description,
-        'data-type': accountConfigs[i].type,
-        value: accountConfigs[i].defaultValue,
-        id: accountConfigs[i].id,
-      };
-
-      if (accountConfigs[i].accountConfiguration.id) {
-        sendValue.value = accountConfigs[i].accountConfiguration.value;
-      }
-
-      sendValues.push(sendValue);
-    }
-
-    return res.send(format(req, res, 'configurations', sendValues));
-  } catch (err) {
-    return next(err);
-  }
-}
-
 /**
  * GET /configurations
  *
@@ -240,7 +202,13 @@ async function getAccountConnectorConfigurations(req, res, next, accountId) {
  *
  */
 accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  return getAccountConnectorConfigurations(req, res, next, req.accountId);
+  try {
+    const configs = await getAccountConnectorConfigurations(req.accountId);
+
+    return res.send(format(req, res, 'configurations', configs));
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
@@ -250,7 +218,16 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
  *
  */
 accountsRouter.get('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  return getAccountConnectorConfigurations(req, res, next, req.account.id);
+  try {
+    if (!req.account) {
+      return req.sendStatus(404);
+    }
+    const configs = await getAccountConnectorConfigurations(req.account.id);
+
+    return res.send(format(req, res, 'configurations', configs));
+  } catch (err) {
+    return next(err);
+  }
 });
 
 
@@ -278,58 +255,6 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     .catch(next);
 });
 
-async function updateAccountConnectorConfigurations(req, res, next, accountId) {
-  try {
-    const {
-      name,
-    } = req.body;
-
-    const config = await Configuration.findOne({
-      where: { name },
-    });
-
-    if (!config) {
-      return res.sendStatus(400);
-    }
-
-    const checkConfigExists = await AccountConfiguration.findOne({
-      where: {
-        accountId,
-        configurationId: config.id,
-      },
-    });
-
-    let newConfig;
-
-    if (checkConfigExists) {
-      newConfig = await checkConfigExists.update(req.body);
-    } else {
-      newConfig = await AccountConfiguration.create({
-        accountId,
-        configurationId: config.id,
-        ...req.body,
-      });
-    }
-
-    const accountConfig = newConfig.get({ plain: true });
-
-    const sendValue = {
-      name,
-      description: config.description,
-      'data-type': config.type,
-      value: accountConfig.value,
-      id: newConfig.id,
-    };
-
-    const io = req.app.get('socketio');
-    io.of(namespaces.sync).in(accountId).emit('CONFIG:REFRESH', name);
-
-    return res.send(format(req, res, 'configuration', sendValue));
-  } catch (err) {
-    next(err);
-  }
-}
-
 /**
  * PUT /:accountId/configurations
  *
@@ -337,7 +262,15 @@ async function updateAccountConnectorConfigurations(req, res, next, accountId) {
  *
  */
 accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  return updateAccountConnectorConfigurations(req, res, next, req.accountId);
+  try {
+    const io = req.app.get('socketio');
+
+    const config = await updateAccountConnectorConfigurations(req.body, req.accountId, io);
+
+    return res.send(format(req, res, 'configuration', config));
+  } catch (err) {
+    return next(err);
+  }
 });
 
 /**
@@ -347,7 +280,15 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
  *
  */
 accountsRouter.put('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  return updateAccountConnectorConfigurations(req, res, next, req.account.id);
+  try {
+    const io = req.app.get('socketio');
+
+    const config = await updateAccountConnectorConfigurations(req.body, req.account.id, io);
+
+    return res.send(format(req, res, 'configuration', config));
+  } catch (err) {
+    return next(err);
+  }
 });
 
 

@@ -5,7 +5,9 @@ const RecallSchema = {
   id: null,
   accountId: null,
   primaryType: null,
+  primaryTypes: null,
   lengthSeconds: null,
+  interval: null,
   isActive: null,
   isDeleted: null,
 };

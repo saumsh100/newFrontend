@@ -10,7 +10,7 @@
 }
 
 .bottomLabel {
-  height: 40px;
+  height: 30px;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -18,9 +18,9 @@
   background-color: $primary-white;
   border: 1px solid $primary-blue;
   margin-left: 0;
-  width: 80%;
+  width: 77%;
   position: relative;
-  top: -59px;
+  top: -53px;
   float: right;
   > div {
     color: $primary-blue !important;

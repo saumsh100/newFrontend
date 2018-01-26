@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import AutoComplete from '../../AutoCompleteForm';
+import Icon from '../../Icon';
 
 class RFAutoComplete extends Component {
   constructor(props) {
@@ -35,6 +36,7 @@ class RFAutoComplete extends Component {
       meta,
       input,
       theme,
+      placeholder,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
@@ -51,10 +53,11 @@ class RFAutoComplete extends Component {
       onChange: (e, { newValue }) => {
         return this.setValue(newValue);
       },
-      label,
       error: finalError,
       icon: finalIcon,
       theme,
+      placeholder,
+      onBlur: this.props.onBlurFunction,
     };
 
     const getSuggestionValue = suggestion => suggestion;

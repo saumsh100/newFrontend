@@ -15,6 +15,10 @@ import {
   totalAppointmentHoursPractitioner,
   mostAppointments,
 } from '../../../lib/intelligence/appointments';
+import {
+  allInsights,
+  formatingInsights,
+} from '../../../lib/patientInsights/patientInformation';
 import { practitionersTimeOffs } from '../../../lib/intelligence/practitioner';
 import format from '../../util/format';
 import batchCreate from '../../util/batch';
@@ -474,6 +478,28 @@ appointmentsRouter.get('/stats', async (req, res, next) => {
     sendStats.activePatients = await activePatients(startDate, endDate, accountId);
 
     return res.send(sendStats);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+appointmentsRouter.get('/insights', async (req, res, next) => {
+  const {
+    accountId,
+    query,
+  } = req;
+
+  let {
+    startDate,
+    endDate,
+  } = query;
+
+  startDate = startDate ? startDate : moment().startOf('day').toISOString();
+  endDate = endDate ? endDate : moment().startOf('day').add(1, 'days').toISOString();
+
+  try {
+    const insightData = await formatingInsights(await allInsights(accountId, startDate, endDate));
+    return res.send(insightData);
   } catch (e) {
     return next(e);
   }

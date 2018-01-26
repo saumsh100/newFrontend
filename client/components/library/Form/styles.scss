@@ -1,19 +1,8 @@
+
 @import '../../../ui.scss';
 
-.formActionsWrapper {
-
-}
-
-.formActionsPull {
-  display: flex;
-}
-
 .submitButton {
-  margin: 0 auto;
-}
-
-.left {
-  margin: 0;
+  margin-top: 20px;
 }
 
 .toggle {
@@ -24,14 +13,4 @@
   background: hsl(0, 0%, 27%);
   color: white;
   border-radius: 0.3rem;
-}
-
-.disabled {
-  cursor: not-allowed;
-  color: $inactive-color;
-  background-color: $background-color !important;
-  &:hover {
-    color: $inactive-color !important;
-    background-color: $background-color !important;
-  }
 }
