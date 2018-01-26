@@ -50,6 +50,8 @@ Object {
         "lastName": "Mcdonald",
         "lastRecallApptId": null,
         "lastRecallDate": null,
+        "lastRestorativeApptId": null,
+        "lastRestorativeDate": null,
         "middleName": null,
         "mobilePhoneNumber": "+17789999999",
         "nextApptDate": null,
