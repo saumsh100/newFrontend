@@ -89,6 +89,11 @@ class EditDisplay extends Component {
     const remoteButtonProps = {
       onClick: reinitializeState,
       form: `Form${this.state.tabIndex + 1}`,
+      color: 'blue'
+    };
+
+    const dropDownStyle = {
+      toggleDiv: styles.toggleDivStyle
     };
 
     return (
@@ -115,6 +120,7 @@ class EditDisplay extends Component {
                   <AppointmentsForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
+                    dropDownStyle={dropDownStyle}
                   />
                 </Tab>
                 <Tab label="PERSONAL">
@@ -123,18 +129,21 @@ class EditDisplay extends Component {
                     handleSubmit={this.handleSubmit}
                     setCountry={this.setCountry}
                     country={this.state.country}
+                    dropDownStyle={dropDownStyle}
                   />
                 </Tab>
                 <Tab label="INSURANCE">
                   <InsuranceForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
+                    dropDownStyle={dropDownStyle}
                   />
                 </Tab>
                 <Tab label="FAMILY">
                   <FamilyForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
+                    dropDownStyle={dropDownStyle}
                   />
                 </Tab>
                 <Tab label="SETTINGS">
@@ -148,7 +157,7 @@ class EditDisplay extends Component {
             <div className={styles.remoteSubmit}>
               <div className={styles.remoteSubmit_buttonDelete}>
                 <Button
-                  color="darkgrey"
+                  border="blue"
                   onClick={() => reinitializeState()}
                 >
                   Cancel

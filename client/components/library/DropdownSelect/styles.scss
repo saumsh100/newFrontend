@@ -13,7 +13,7 @@ $empty-grey: darken(lightgrey, 5%);
   position: relative;
   font-size: $medium-size;
   font-family: $dashboard-font;
-  height: 28px;
+  height: 30px;
   width: 100%;
   //padding: 5px 5px 5px 0px;
   cursor: pointer;
@@ -125,7 +125,7 @@ $empty-grey: darken(lightgrey, 5%);
 
 .filled {
   position: absolute;
-  top: -11px !important;
+  top: -10px !important;
   left: 0px !important;
   font-size: $extra-small-size !important;
 }

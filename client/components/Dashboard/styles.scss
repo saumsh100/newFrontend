@@ -1,129 +1,74 @@
 
-@import "../../ui.scss";
-
-.dashboardContainer {
-  padding: $container-padding;
-}
+@import '../../ui.scss';
 
 .dashboard {
   width: 100%;
-  &__header {
-    padding: 0 5px;
-    @media screen and (max-width: 450px) {
-      padding: 5px 10px 0;
-    }
-    &_title {
-      display: flex;
-      align-items: center;
-      height: 35px;
-      background: $primary-white;
-      margin-bottom: 15px;
-      padding-left: 10px;
-      font-size: $medium-size;
-      b {
-        padding-left: 5px;
-      }
-    }
-    &_cards {
-      cursor: pointer;
-      margin-bottom: 20px;
-      div:not(:last-child) {
-        margin-right: 10px;
-        flex: 1;
-      }
-    }
-  }
-  &__body {
-    &_table {
-      border-top: $card-border-size $inactive-color;
-      height: 635px;
-    }
-    &_comments {
-      border-top: $card-border-size $primary-color;
-      height: 604px;
-    }
-    &_request {
-      padding: 0;
-      height: 584px;
-      margin-bottom: 20px;
-      background-color: white;
-    }
-    @media screen and (max-width: 450px) {
-      padding: 0 5px 45px 5px;
-    }
-  }
-  &__patientList {
-    &_item {
-      padding: 0 5px;
-      @media screen and (max-width: 650px) {
-        min-width: 300px;
-      }
-      @media screen and (max-width: 300px) {
-        min-width: auto;
-      }
-    }
-  }
-  &__requestContainer {
-    padding: 5px;
-  }
-}
-.primaryColor {
-  background: $primary-color;
-}
-.primaryBlue {
-  background: $primary-blue;
-}
-.primaryGreen {
-  background: $primary-green;
-}
-.primaryYellow {
-  background: $primary-yellow;
-}
-
-.loadingOuter {
-  position: absolute;
   height: 100%;
-  width: 100% ;
-  background-color: white;
-  opacity: .4;
-  display: flex;
+  padding: 15px;
+  box-sizing: border-box;
+  overflow: auto;
 }
 
-.loadingInner {
-  align-items: center;
-  justify-content: center;
+.header {
   display: flex;
   width: 100%;
+  align-items: center;
+  padding-bottom: 5px;
 }
-.padding {
-  padding: 0 5px;
-  @media screen and (max-width: 900px) {
-    margin-bottom: 15px;
+
+.userName {
+  composes: fontMedium from 'sass-loader!../../fonts.scss';
+  font-size: 19px;
+  @media screen and (max-width: 700px) {
+    display: none;
   }
 }
 
-.paddingStats {
-  padding: 20px 5px 5px 5px;
-  @media screen and (max-width: 900px) {
-    margin-bottom: 15px;
-  }
-}
 
-.underspondedReviews {
-  flexDirection: column;
+.dateInput {
   display: flex;
-  justifyContent: center;
-  overflow: hidden;
-  &__mainContainer {
-    flexDirection: row;
-    justifyContent: space-around;
-  }
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
 
-  &__comment {
-    max-height: 590px;
-    overflow: auto;
+.inputGroup {
+  padding: 0;
+  input {
+    border: 0px;
+    background-color: $primary-white;
+    color: $primary-dark-grey;
+    padding-left: 10px;
   }
 }
 
-.cardHeader {
+.inputFilled {
+  display: none;
 }
+
+.dateIconContainer {
+  background-color: darken($clr-bg-dark-grey, 5%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  font-size: 14px;
+  color: white;
+}
+
+.colPadding {
+  padding-right: 10px;
+}
+
+.colFlex {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+
+  @media screen and (max-width: 1000px) {
+    flex-direction: column;
+  }
+}
+

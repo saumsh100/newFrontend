@@ -84,7 +84,6 @@ class ShowAppointment extends Component{
       patientData,
       isPatientConfirmed,
       isReminderSent,
-      note,
       practitionerData,
     } = appointment;
 

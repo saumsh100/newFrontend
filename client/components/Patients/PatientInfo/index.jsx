@@ -84,24 +84,26 @@ class PatientInfo extends Component {
           </Col>
         </Row>
         <Row>
-          <Col sm={12} md={4} className={styles.infoDisplay}>
-            <EditDisplay
-              patient={patient}
-              updateEntityRequest={updateEntityRequest}
-              reinitializeState={this.reinitializeState}
-              isOpen={this.state.isOpen}
-              outerTabIndex={this.state.tabIndex}
-            />
-            <LeftInfoDisplay
-              patient={patient}
-              openModal={this.openModal}
-              reinitializeState={this.reinitializeState}
-              tabIndex={this.state.tabIndex}
-              handleTabChange={this.handleTabChange}
-            />
-          </Col>
-          <Col sm={12} md={8} className={styles.timeline}>
-            <Timeline patientId={patientId} />
+          <Col xs={12} className={styles.body}>
+            <div className={styles.infoDisplay}>
+              <EditDisplay
+                patient={patient}
+                updateEntityRequest={updateEntityRequest}
+                reinitializeState={this.reinitializeState}
+                isOpen={this.state.isOpen}
+                outerTabIndex={this.state.tabIndex}
+              />
+              <LeftInfoDisplay
+                patient={patient}
+                openModal={this.openModal}
+                reinitializeState={this.reinitializeState}
+                tabIndex={this.state.tabIndex}
+                handleTabChange={this.handleTabChange}
+              />
+            </div>
+            <div className={styles.timeline}>
+              <Timeline patientId={patientId} />
+            </div>
           </Col>
         </Row>
       </Grid>

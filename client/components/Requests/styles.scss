@@ -10,6 +10,9 @@
   composes: fontDefault from 'sass-loader!../../fonts.scss';
 }
 
+.boldFont {
+  composes: fontBold from 'sass-loader!../../fonts.scss';
+}
 .requestPopover > :global(svg.Popover-tip) {
   fill: white;
 }
@@ -43,6 +46,17 @@
   font-weight: $large-weight;
   font-family: $medium-font;
 }
+
+.noRequests {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: $primary-dark-grey;
+  opacity: 0.6;
+}
+
 .requestBody {
   width: 100%;
   flex: 1;
@@ -51,19 +65,17 @@
 }
 
 .requestListItem {
-  height: 92px;
-  //padding-bottom: 15px;
-  color: $primary-dark;
-  position: relative;
+  height: auto;
+  color: #2e3845;
   cursor: pointer;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .requestData {
   padding-left: 1em;
   border-left: 1px solid #E4E4E4;
-  line-height: 1.5em;
   text-align: left;
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -81,12 +93,15 @@
   &__details {
     display: flex;
     flex-direction: column;
+    line-height: 1.4;
   }
 
   &__time {
-    @extend .mediumFont;
+    //@extend .mediumFont;
+    font-family: Gotham-Bold;
     font-size: $small-size;
-    line-height: 1.5em;
+    padding-bottom: 10px;
+    //line-height: 1.5em;
   }
 
   &__nameAge{
@@ -96,8 +111,8 @@
   }
 
   &__name {
-    color: $primary-darkgrey;
-    width: auto;
+    color: $primary-dark-grey;
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -112,18 +127,19 @@
   }
 
   &__phoneNumber{
-    color: #929293;
+    color: $primary-dark-grey;
   }
 
   &__service  {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    color: #929293;
+    color: $primary-dark-grey;
   }
 
   &__createdAt {
-    color: #929293;
+    padding-top: 10px;
+    color: #A7A9AC;
   }
 
   &__icon {
@@ -147,6 +163,7 @@
     font-weight: $medium-weight;
     font-size: 19px;
     padding-bottom: 3px;
+    padding-top: 3px
   }
 
   &_month {
@@ -199,4 +216,8 @@
       color: darken($primary-green, 10%);
     }
   }
+}
+
+.hidden {
+  display: none;
 }

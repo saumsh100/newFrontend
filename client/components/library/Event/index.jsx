@@ -22,7 +22,7 @@ class Event extends Component {
     let bgIconStyle = styles.bgIcon;
 
     if (type === 'appointment') {
-      icon = 'calendar-o';
+      icon = 'calendar';
       bgIconStyle = classnames(bgIconStyle, styles.blueBorder);
       content = <AppointmentEvent data={data} />;
     }

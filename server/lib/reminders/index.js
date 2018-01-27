@@ -286,8 +286,10 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     },
   });
 
+  const filteredReminders = reminders.filter(reminder => reminder.interval !== null);
+
   // Sort reminders by interval so that we send to earliest first
-  const sortedReminders = reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+  const sortedReminders = filteredReminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
 
   // Adjust dates so we are not including items that would not happen in the interval.
   // This is because we need to show according to how we run the cron
@@ -300,7 +302,6 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     endDate,
     reminders: sortedReminders,
   });
-
   // Now we begin to produce the final array
   let outboxList = [];
   remindersPatients.forEach(({ success }, i) => {

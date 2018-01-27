@@ -79,6 +79,7 @@ class RequestList extends Component {
       patientUsers,
       practitioners,
       setHoverRequestId,
+      popoverRight
     } = this.props;
 
 
@@ -100,6 +101,7 @@ class RequestList extends Component {
               setClickedId={setHoverRequestId}
               requestId={this.state.requestId}
               openRequest={this.openRequest}
+              popoverRight={popoverRight}
             />
           );
         })}

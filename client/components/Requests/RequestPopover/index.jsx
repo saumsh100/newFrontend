@@ -22,7 +22,6 @@ export default function RequestPopover(props) {
     time,
     service,
     note,
-    closePopover,
   } = props;
 
   const appointmentDate = moment(request.startDate).format('dddd LL');

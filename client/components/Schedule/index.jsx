@@ -351,7 +351,7 @@ class ScheduleComponent extends Component {
                   >
                     <AddNewAppointment
                       formName={formName}
-                      chairs={chairs.get('models').toArray()}
+                      chairs={filterChairs}
                       practitioners={filterPractitioners}
                       patients={patients.get('models')}
                       reinitializeState={this.reinitializeState}

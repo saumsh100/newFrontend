@@ -7,13 +7,14 @@
 }
 
 .filter_header {
-  padding: 0px 10px 10px 10px;
+  padding: 0px 10px 10px 0px;
   position: relative;
   display: flex;
   flex-direction: row;
   height: 27px;
   line-height: 40px;
   justify-content: flex-start;
+  width: 100%;
 
   @media screen and (max-width: 1350px){
     justify-content: space-between;
@@ -28,7 +29,8 @@
   }
 
   &__icon {
-    padding-left: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
     @media screen and (max-width: 1250px) {
       display: none;
     }

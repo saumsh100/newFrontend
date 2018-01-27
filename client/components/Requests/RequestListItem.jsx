@@ -33,6 +33,7 @@ class RequestListItem extends Component {
       patientUser,
       practitioner,
       requestId,
+      popoverRight
     } = this.props;
 
     if (!request || !patientUser) {
@@ -57,45 +58,45 @@ class RequestListItem extends Component {
     };
 
     return (
-      <ListItem
-        className={styles.requestListItem}
-        data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}AppointmentRequest`}
-        onClick={() => this.props.openRequest(request.id)}
+      <Popover
+        className={styles.requestPopover}
+        isOpen={requestId === request.id}
+        body={[(
+          <RequestPopover
+            time={data.time}
+            service={data.service}
+            note={data.note}
+            practitioner={practitioner}
+            patient={patientUser}
+            request={request}
+            closePopover={() => this.props.openRequest(null)}
+            acceptRequest={this.onClickConfirm}
+            rejectRequest={this.onClickRemove}
+          />
+        )]}
+        preferPlace={popoverRight || 'left'}
+        tipSize={12}
+        onOuterAction={() => this.props.openRequest(null)}
       >
-        <Popover
-          className={styles.requestPopover}
-          isOpen={requestId === request.id}
-          body={[(
-            <RequestPopover
-              time={data.time}
-              service={data.service}
-              note={data.note}
-              practitioner={practitioner}
-              patient={patientUser}
-              request={request}
-              closePopover={() => this.props.openRequest(null)}
-              acceptRequest={this.onClickConfirm}
-              rejectRequest={this.onClickRemove}
-            />
-          )]}
-          preferPlace="left"
-          tipSize={12}
-          onOuterAction={() => this.props.openRequest(null)}
+        <ListItem
+          className={styles.requestListItem}
+          data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}AppointmentRequest`}
+          onClick={() => this.props.openRequest(request.id)}
         >
           <MonthDay
             month={data.month}
             day={data.day}
           />
-        </Popover>
-        <RequestData
-          time={data.time}
-          name={data.name}
-          age={data.age}
-          phoneNumber={data.phoneNumber}
-          service={data.service}
-          requestCreatedAt={request.createdAt}
-        />
-      </ListItem>
+          <RequestData
+            time={data.time}
+            name={data.name}
+            age={data.age}
+            phoneNumber={data.phoneNumber}
+            service={data.service}
+            requestCreatedAt={request.createdAt}
+          />
+        </ListItem>
+      </Popover>
     );
   }
 }

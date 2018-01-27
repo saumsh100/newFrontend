@@ -168,9 +168,8 @@ export async function PatientQuery(config) {
     };
 
     patients.push(patientTotal);
-    const patientData = patients;
 
-    return patientData;
+    return patients;
   } catch (error) {
     throw error;
   }

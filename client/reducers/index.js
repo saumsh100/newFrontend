@@ -5,6 +5,7 @@ import { reducer as form } from 'redux-form';
 import alerts from './alerts';
 import toolbar from './toolbar';
 import reputation from './reputation';
+import dashboard from './dashboard';
 import reviews from './vendastaReviews';
 import auth from './auth';
 import entities from './entities';
@@ -24,6 +25,7 @@ const appReducer = combineReducers({
   alerts,
   caller,
   accountSettings,
+  dashboard,
   routing,
   intelligence,
   form,

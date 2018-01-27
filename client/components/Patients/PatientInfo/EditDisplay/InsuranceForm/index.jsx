@@ -39,7 +39,7 @@ export default function InsuranceForm(props) {
               theme={theme}
             />
           </Col>
-          <Col xs={6} className={styles.colRight}>
+          <Col xs={6} >
             <Field
               name="contractId"
               label="Contract ID"

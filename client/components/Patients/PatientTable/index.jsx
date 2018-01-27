@@ -373,7 +373,7 @@ class PatientTable extends Component {
 
     return (
       <Grid className={styles.mainContainer}>
-        <Row>
+        <Row className={styles.rowHeader}>
           <Col xs={12}>
             <HeaderSection
               totalPatients={patientTable.totalPatients}
@@ -385,9 +385,9 @@ class PatientTable extends Component {
             />
           </Col>
         </Row>
-        <Row>
+        <Row className={styles.rowTable}>
           <Col xs={12} className={styles.tableColWrapper}>
-            <Card className={styles.tableContainer}>
+            <Card className={styles.tableContainer} runAnimation loaded={!patientTable.isLoadingTable}>
               <ReactTable
                 data={patientTable.data}
                 page={patientTable.page}
@@ -404,7 +404,7 @@ class PatientTable extends Component {
                 // filterable
                 showPageSizeOptions={false}
                 noDataText="No Patients Found"
-                loadingText={<Loading />}
+                loadingText=""
                 SubComponent={(row) => {
                   return (
                     <PatientSubComponent
@@ -488,15 +488,17 @@ class PatientTable extends Component {
                 getTbodyProps={() => {
                   return {
                     style: {
+                      height: '100%',
                       background: 'white',
                     },
                   };
                 }}
 
                 style={{
-                  height: 'calc(100vh - 188px)',
+                  //height: 'calc(100vh - 188px)',
                   background: 'white',
                   border: '0px',
+                  height: '100%',
                 }}
               />
             </Card>
@@ -513,7 +515,7 @@ class PatientTable extends Component {
           </Col>
         </Row>
       </Grid>
-    )
+    );
   }
 }
 
@@ -535,12 +537,10 @@ PatientTable.propTypes = {
 };
 
 function mapStateToProps({ apiRequests, entities, patientTable }) {
-  const wasFetched = (apiRequests.get('patientsTable') ? apiRequests.get('patientsTable').wasFetched : null);
   const practitioners = entities.getIn(['practitioners', 'models']);
 
   const filters = patientTable.get('filters');
   return {
-    wasFetched,
     practitioners,
     filters,
     patientTable: patientTable.toJS(),

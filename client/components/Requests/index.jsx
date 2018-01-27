@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import classNames from 'classnames';
 import RequestList from './RequestList';
 import { Card, CardHeader, IconButton } from '../library';
 import styles from './styles.scss';
@@ -16,6 +17,9 @@ class Requests extends Component {
       patientUsers,
       practitioners,
       location,
+      popoverRight,
+      noBorder,
+      disableHeader,
     } = this.props;
 
     const filteredRequests = requests.toArray().filter((req) => {
@@ -26,9 +30,32 @@ class Requests extends Component {
       return Date.parse(b.startDate) - Date.parse(a.startDate);
     });
 
+    let requestHeaderClassNames = styles.requestHeader;
+    if (disableHeader) {
+      requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
+    }
+
+    let display = (
+      <RequestList
+        sortedRequests={sortedRequests}
+        services={services}
+        patientUsers={patientUsers}
+        location={location}
+        practitioners={practitioners}
+        popoverRight={popoverRight}
+      />
+    );
+
+    if (filteredRequests.length === 0) {
+      display = (
+        <div className={styles.noRequests}>
+          No Requests
+        </div>
+      );
+    }
     return (
-      <Card className={styles.requestCard}>
-        <div className={styles.requestHeader}>
+      <Card className={styles.requestCard} noBorder={noBorder}>
+        <div className={requestHeaderClassNames}>
           <CardHeader
             data-test-id="requestCount"
             count={sortedRequests.length}
@@ -37,13 +64,7 @@ class Requests extends Component {
           </CardHeader>
         </div>
         <div className={styles.requestBody}>
-          <RequestList
-            sortedRequests={sortedRequests}
-            services={services}
-            patientUsers={patientUsers}
-            location={location}
-            practitioners={practitioners}
-          />
+          {display}
         </div>
       </Card>
     );

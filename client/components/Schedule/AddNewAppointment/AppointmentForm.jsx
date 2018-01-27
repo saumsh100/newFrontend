@@ -60,7 +60,6 @@ export default function AppointmentForm(props) {
   const {
     practitionerOptions,
     chairOptions,
-    selectedAppointment,
     time,
     unit,
     handleDurationChange,

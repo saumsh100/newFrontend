@@ -29,7 +29,7 @@
   width: 600px;
   padding-top: 15px;
   background: $primary-white;
-  border-top: 3px solid $primary-color;
+  border-top: 3px solid $primary-blue;
 }
 
 .header {
@@ -54,8 +54,8 @@
 
 .content {
   padding: 0px 5px 0px 5px;
-  height: 700px;
-  max-height: 645px;
+  height: 600px;
+  max-height: 600px;
   background: #FFFFFF;
   nav {
     background: $primary-white;
@@ -86,7 +86,6 @@
 
 .colLeft {
   padding-right: 20px;
-  padding-bottom: 10px;
 }
 
 .colRightDropDown {
@@ -164,4 +163,8 @@
 
 .inputBarStyle {
   border-bottom-color: $primary-blue;
+}
+
+.toggleDivStyle {
+  border-bottom: 1px solid $primary-blue !important;
 }

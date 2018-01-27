@@ -77,7 +77,7 @@ class AddNewAppointment extends Component {
                   {`${patient.firstName} ${patient.lastName}${patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''}`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
-                  Last Appointment {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                  Last Appointment: {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
                 </div>
               </div>
             </div>
@@ -343,6 +343,7 @@ class AddNewAppointment extends Component {
       onClick: reinitializeState,
       form: formName,
     };
+
     let title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
     let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Edit' : 'Add';
 

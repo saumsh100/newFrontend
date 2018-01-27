@@ -10,25 +10,32 @@ export default function IconCard(props) {
     count,
     title,
     icon,
+    color,
   } = props;
 
-  const classes = classNames(className, styles.iconCard);
+  const backgroundColor = {
+    backgroundColor: color
+  };
+
+  let classes = classNames(className, styles.iconCard);
+
+  if (color) {
+    classes = classNames(classes, styles[`${color}Background`]);
+  }
   // TODO: Remove Col wrapper, this component does not care if it is in a Grid!
   // TODO: Make Icon a light grey to match title text, just like in mockups
   return (
-    <div data-test-id={props['data-test-id']}>
-      <Card className={classes} noBorder>
-        <div className={styles.iconCard__wrapper}>
-          <div className={styles.iconCard__count}>{count}</div>
-          <div className={styles.iconCard__title}>{title}</div>
-        </div>
-        <Icon
-          className={styles.iconCard__icon}
-          icon={icon}
-          size={6}
-        />
-      </Card>
-    </div>
+    <Card className={classes} noBorder>
+      <div className={styles.iconCard__wrapper}>
+        <div className={styles.iconCard__count}>{count}</div>
+        <div className={styles.iconCard__title}>{title}</div>
+      </div>
+      <Icon
+        className={styles.iconCard__icon}
+        icon={icon}
+        size={6}
+      />
+    </Card>
   );
 }
 

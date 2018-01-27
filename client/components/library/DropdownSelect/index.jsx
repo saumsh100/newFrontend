@@ -164,9 +164,9 @@ class DropdownSelect extends Component {
       labelClassName = classNames(theme.filled, labelClassName);
     }
 
-    let toggleClassName = styles.toggleDiv;
+    let toggleClassName = theme.toggleDiv;
     const toggleValueClassName = theme.toggleValueDiv;
-    let caretIconClassName = styles.caretIcon;
+    let caretIconClassName = theme.caretIcon;
 
     if (this.state.isOpen) {
       toggleClassName = classNames(theme.active, toggleClassName);
@@ -182,7 +182,7 @@ class DropdownSelect extends Component {
 
     return (
       <div
-        className={disabled ? styles.toggleDivDisabled : toggleClassName}
+        className={disabled ? theme.toggleDivDisabled : toggleClassName}
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >

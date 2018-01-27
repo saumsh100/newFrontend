@@ -82,10 +82,10 @@ export default function PersonalForm(props) {
               label="Gender"
               component="DropdownSelect"
               options={optionsGender}
-              theme="primaryBlue"
+              theme={props.dropDownStyle}
             />
           </Col>
-          <Col xs={6} className={styles.colRightDropDown}>
+          <Col xs={6}>
             <Field
               normalize={normalizeBirthdate}
               validate={[validateBirthdate]}
@@ -107,7 +107,7 @@ export default function PersonalForm(props) {
               icon="phone"
             />
           </Col>
-          <Col xs={6} className={styles.colRight}>
+          <Col xs={6}>
             <Field
               name="mobilePhoneNumber"
               type="tel"
@@ -143,13 +143,13 @@ export default function PersonalForm(props) {
               theme={theme}
             />
           </Col>
-          <Col xs={6} className={styles.colToggle}>
+          <Col xs={6} >
             <Field
               name="state"
               label="State"
               component="DropdownSelect"
               options={states}
-              theme="primaryBlue"
+              theme={props.dropDownStyle}
             />
           </Col>
           <Col xs={6} className={styles.colLeft}>
@@ -160,7 +160,7 @@ export default function PersonalForm(props) {
               theme={theme}
             />
           </Col>
-          <Col xs={6} className={styles.colToggle}>
+          <Col xs={6} >
             <Field
               name="country"
               label="Country"
@@ -172,7 +172,7 @@ export default function PersonalForm(props) {
                 value: 'US',
                 label: 'United States',
               }]}
-              theme="primaryBlue"
+              theme={props.dropDownStyle}
               onChange={(e, value) => {
                 setCountry(value);
               }}

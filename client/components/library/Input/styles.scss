@@ -13,12 +13,11 @@ $empty-grey: darken(lightgrey, 5%);
 .input {
   font-size: $medium-size;
   font-family: $dashboard-font;
-  height: 28px;
+  height: 30px;
   box-sizing: border-box;
   display: block;
   width: 100%;
   border: none;
-  letter-spacing: 0.05em;
   border-bottom: 1px solid $empty-grey;
   background-color: transparent;
   &:focus {
@@ -52,7 +51,7 @@ $empty-grey: darken(lightgrey, 5%);
 
 // TODO: figure out how to stack the CSS to make sure we dont have to use !important
 .filled {
-  top: 9px !important;
+  top: 10px !important;
   left: 0px !important;
   font-size: 10px !important;
 }

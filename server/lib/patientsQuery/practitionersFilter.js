@@ -4,7 +4,7 @@ import { patientAttributes } from './helpers';
 
 export async function PractitionersFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {

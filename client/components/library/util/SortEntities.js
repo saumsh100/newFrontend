@@ -18,7 +18,6 @@ export const SortByName = (a, b) => {
   return 0;
 };
 
-
 export const SortByCreatedAtDesc = (a, b) => {
   if (moment(b.createdAt).isBefore(moment(a.createdAt))) return -1;
   if (moment(b.createdAt).isAfter(moment(a.createdAt))) return 1;

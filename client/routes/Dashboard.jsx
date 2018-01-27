@@ -5,7 +5,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
-import DashboardComponent from '../components/Dashboard';
+import DashboardComponent from '../components/Dashboard/index';
 import FourZeroFour from '../components/FourZeroFour';
 import LazyRoute from './LazyRoute';
 import loadSchedule from 'bundle-loader?lazy!./Dashboard/Schedule';

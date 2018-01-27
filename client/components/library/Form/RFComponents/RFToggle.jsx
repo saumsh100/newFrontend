@@ -14,8 +14,6 @@ export default function RFToggle(props) {
     theme,
   } = props;
 
-  console.log(props);
-
   return (
     <Toggle
       label={label}

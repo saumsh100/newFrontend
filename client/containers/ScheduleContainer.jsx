@@ -81,7 +81,7 @@ class ScheduleContainer extends React.Component {
         id: 'appSchedule',
         key: 'appointments',
         join: ['patient'],
-        params: query
+        params: query,
       });
     }
   }

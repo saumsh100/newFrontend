@@ -9,32 +9,48 @@
   height: 130px;
   color: $color-white;
   overflow: hidden;
-    &__wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-    &__count {
-      composes: font-jumbo from 'sass-loader!../../../fonts.scss';
-    }
+  &__wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  &__count {
+    composes: font-jumbo from 'sass-loader!../../../fonts.scss';
+  }
 
-    &__title {
-      composes: font-header-title-white from 'sass-loader!../../../fonts.scss';
-      @media screen and (max-width: 1660px) {
-          max-width: 120px;
-          text-align: center;
-      }
-      @media screen and (max-width: 1010px){
-        max-width: 160px;
+  &__title {
+    composes: font-header-title-white from 'sass-loader!../../../fonts.scss';
+    @media screen and (max-width: 1660px) {
+        max-width: 120px;
         text-align: center;
-      }
     }
-    &__icon {
-        position: absolute;
-        bottom: -25%;
-        transform: translateY(-25%);
-        right: -1%;
-        color: rgba($primary-lightgrey, .5);
+    @media screen and (max-width: 1010px){
+      max-width: 160px;
+      text-align: center;
     }
+  }
+  &__icon {
+      position: absolute;
+      bottom: -25%;
+      transform: translateY(-25%);
+      right: -1%;
+      color: rgba($primary-lightgrey, .5);
+  }
+}
+
+.blueBackground {
+  background-color: $primary-blue;
+}
+
+.redBackground {
+  background-color: $primary-color;
+}
+
+.yellowBackground {
+  background-color: $primary-yellow;
+}
+
+.greyBackground {
+  background-color: $primary-dark-grey;
 }

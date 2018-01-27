@@ -1,6 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
-import Patients from '../components/Patients';
+import Patients from '../components/Patients/PatientTable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 

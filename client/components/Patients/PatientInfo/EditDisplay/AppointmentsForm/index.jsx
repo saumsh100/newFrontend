@@ -14,6 +14,8 @@ export default function AppointmentsForm(props) {
     input: styles.inputBarStyle,
   };
 
+  console.log(props.dropDownStyle)
+
   return (
     <Form
       form="Form1"
@@ -33,7 +35,7 @@ export default function AppointmentsForm(props) {
                 theme={theme}
               />
             </Col>
-            <Col xs={6} className={styles.colRight}>
+            <Col xs={6} >
               <Field
                 component="DayPicker"
                 name="hygiene"
@@ -55,13 +57,13 @@ export default function AppointmentsForm(props) {
 
               />
             </Col>
-            <Col xs={6} className={styles.colToggle}>
+            <Col xs={6} >
               <Field
                 component="DropdownSelect"
                 name="hygiene"
                 label="Hygiene"
                 options={[]}
-                theme="primaryBlue"
+                theme={props.dropDownStyle}
               />
             </Col>
           </Row>

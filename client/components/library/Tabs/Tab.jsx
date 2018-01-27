@@ -15,6 +15,7 @@ class Tab extends Component {
       noUnderLine,
       activeClass,
       inactiveClass,
+      id,
     } = this.props;
 
     let classes = classNames(className, styles.tab);
@@ -38,6 +39,7 @@ class Tab extends Component {
         className={classes}
         onClick={e => onClick(e, index)}
         data-test-id={this.props['data-test-id']}
+        id={id}
       >
         {label}
       </label>

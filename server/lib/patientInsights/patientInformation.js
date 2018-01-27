@@ -1,5 +1,8 @@
+
 import moment from 'moment';
+import uniqBy from 'lodash/uniqBy';
 import { Patient, Appointment, SentReminder } from '../../_models';
+
 
 /**
  * [checkMobileNumber checks if mobile number exists]
@@ -47,7 +50,7 @@ and puts all insights together in the following format
 ]
 */
 export async function allInsights(accountId, startDate, endDate) {
-  const appointments = await Appointment.findAll({
+   let appointments = await Appointment.findAll({
     where: {
       accountId,
       startDate: {
@@ -64,9 +67,13 @@ export async function allInsights(accountId, startDate, endDate) {
     }],
     raw: true,
     nest: true,
+    order: [['startDate', 'DESC']],
   });
 
+
   const resultAppointments = [];
+
+  appointments = uniqBy(appointments, 'patientId');
 
   // loop through all appointments in the period and calculate each insight
   for (let i = 0; i < appointments.length; i += 1) {

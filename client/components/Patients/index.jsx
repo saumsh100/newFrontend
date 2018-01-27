@@ -7,12 +7,11 @@ import PatientTable from './PatientTable';
 
 
 class Patients extends Component {
-
   render() {
-
     return (
-      <PatientTable
-      />
+      <div>
+        <PatientTable />
+      </div>
     );
   }
 }

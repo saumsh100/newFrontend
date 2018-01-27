@@ -18,6 +18,7 @@
   height: 3px;
   background-color: $card-border-color;
 }
+
 .bar {
   content: "";
   display: inline;
@@ -27,21 +28,24 @@
   left: 50%;
   text-align: center;
 }
+
 .bar:nth-child(1) {
   background-color: $primary-blue;
-  animation: loading 5s linear infinite;
+  animation: loading 1.5s linear infinite;
 }
+
 .bar:nth-child(2) {
   background-color: $primary-blue;
-  animation: loading 5s linear 1s infinite;
+  animation: loading 1.5s linear infinite;
 }
+
 .bar:nth-child(3) {
   background-color: $primary-blue;
-  animation: loading 5s linear 2s infinite;
+  animation: loading 1.5s linear infinite;
 }
 
 @keyframes loading {
-  from {left: 50%; width: 0; z-index:100;}
-  33.3333% {left: 0; width: 100%;z-index: 10;}
-  to {left: 0; width: 100%;}
+  from {left: 0%; width: 0%;}
+  33.3333% {left: 33.3333%; width: 33.3333%;}
+  to {left: 100%; width: 0%;}
 }

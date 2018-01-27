@@ -28,8 +28,8 @@ export default function Card(props) {
         <div className={styles.bar} />
         <div className={styles.bar} />
         <div className={styles.bar} />
-      </div>
-        : children }
+      </div> : null}
+      {children}
     </div>
   );
 }

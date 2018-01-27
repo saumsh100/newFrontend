@@ -113,8 +113,8 @@
 }
 
 .fontBold {
-  @extend .fontDefault;
-  font-weight: 700;
+  font-family: Gotham-Bold;
+  @extend .letterSpacing;
 }
 
 .fontExtraSmall {

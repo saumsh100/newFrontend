@@ -100,8 +100,8 @@ class Reminders extends Component {
     }
 
     const actionsNew = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { form: 'newReminder' } },
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { color: 'blue', form: 'newReminder' } },
     ];
 
     const { activeAccount } = this.props;
