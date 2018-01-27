@@ -41,11 +41,20 @@ module.exports = {
       try {
         await queryInterface.removeColumn('Patients', 'lastRestorativeDate', { transaction: t });
         await queryInterface.removeColumn('Patients', 'lastRestorativeApptId', { transaction: t });
+
+        const cronConfig = await queryInterface
+          .sequelize.query(`SELECT * FROM "CronConfigurations" WHERE name = 'CRON_LAST_RESTORATIVE'`
+            , { transaction: t });
+
+        await queryInterface.bulkDelete('AccountCronConfigurations', {
+          cronConfigurationId: cronConfig[0][0].id,
+        }, { transaction: t });
+
         return queryInterface.bulkDelete('CronConfigurations', {
           name: [
             'CRON_LAST_RESTORATIVE',
           ],
-        });
+        }, { transaction: t });
       } catch (e) {
         console.log(e);
         return t.rollback();
