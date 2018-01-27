@@ -26,6 +26,9 @@ const lastHygienePattern = NODE_ENV === 'production' ? '0 20,50 * * * *' : '0 * 
 // Run every 30 min in prod
 const lastRecallPattern = NODE_ENV === 'production' ? '0 10,40 * * * *' : '0 * * * * *';
 
+// Run every 30 min in prod
+const lastRestorativePattern = NODE_ENV === 'production' ? '0 15,45 * * * *' : '0 * * * * *';
+
 // Run 15 min past every 2 hours in prod
 const firstNextLastAppointmentPattern = NODE_ENV === 'production' ? '15 */2 * * *' : '0 * * * * *';
 
@@ -61,4 +64,8 @@ cron.schedule(lastHygienePattern, () => {
 
 cron.schedule(lastRecallPattern, () => {
   createJob('lastRecall');
+});
+
+cron.schedule(lastRestorativePattern, () => {
+  createJob('lastRestorative');
 });

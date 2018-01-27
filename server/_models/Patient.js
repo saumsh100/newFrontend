@@ -189,6 +189,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    lastRestorativeDate: {
+      type: DataTypes.DATE,
+    },
+
+    lastRestorativeApptId: {
+      type: DataTypes.UUID,
+    },
+
     firstApptId: {
       type: DataTypes.UUID,
     },
@@ -254,6 +262,11 @@ export default function (sequelize, DataTypes) {
     Patient.belongsTo(Appointment, {
       foreignKey: 'lastRecallApptId',
       as: 'lastRecallApp',
+    });
+
+    Patient.belongsTo(Appointment, {
+      foreignKey: 'lastRestorativeApptId',
+      as: 'lastRestorativeAppt',
     });
 
     Patient.belongsTo(Appointment, {
