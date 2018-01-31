@@ -163,8 +163,6 @@ export async function sendRemindersForAccount(account, date, pub) {
         primaryType,
       });
 
-      sentReminderIds.push(sentReminder.id);
-
       let data = null;
       try {
         data = await sendReminder[primaryType]({
@@ -173,6 +171,8 @@ export async function sendRemindersForAccount(account, date, pub) {
           appointment,
           sentReminder,
         });
+
+        sentReminderIds.push(sentReminder.id);
 
         console.log(`------ Sent '${interval} ${primaryType}' reminder to ${patient.firstName} ${patient.lastName}`);
       } catch (error) {
