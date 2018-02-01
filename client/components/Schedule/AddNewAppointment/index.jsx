@@ -83,6 +83,7 @@ class AddNewAppointment extends Component {
             </div>
           );
         });
+
         return patientList;
       });
   }

@@ -11,7 +11,9 @@ import { reminderConfirmedNote, reminderSentNote } from '../../correspondences/a
 function sendReminderIdsSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
+
       const sentReminderIds = JSON.parse(data);
+      console.log(sentReminderIds);
       let sentReminders = await SentReminder.findAll({
         where: {
           isSent: true,

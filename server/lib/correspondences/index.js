@@ -43,7 +43,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
 
-  for (let i = 0; i < correspondences.length; i += 1) {
+  /*for (let i = 0; i < correspondences.length; i += 1) {
     const appointment = await Appointment.findOne({
       where: {
         id: correspondences[i].appointmentId,
@@ -57,7 +57,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
       await appointment.save();
       global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
     }
-  }
+  }*/
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
@@ -108,7 +108,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
 
-  for (let i = 0; i < correspondences.length; i += 1) {
+  /*for (let i = 0; i < correspondences.length; i += 1) {
     const appointment = await Appointment.findOne({
       where: {
         id: correspondences[i].appointmentId,
@@ -122,7 +122,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       await appointment.save();
       global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
     }
-  }
+  }*/
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);

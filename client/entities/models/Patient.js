@@ -35,6 +35,13 @@ const PatientSchema = {
   lastApptDate: null,
   nextApptId: null,
   nextApptDate: null,
+  lastHygieneDate: null,
+  lastHygieneApptId: null,
+  lastRestorativeDate: null,
+  lastRestorativeApptId: null,
+  lastRecallDate: null,
+  lastRecallApptId: null,
+
   firstApptId: null,
   firstApptDate: null,
   recareDueDateSeconds: null,

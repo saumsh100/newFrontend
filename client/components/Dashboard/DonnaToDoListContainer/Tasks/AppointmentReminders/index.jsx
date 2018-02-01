@@ -30,7 +30,7 @@ export default function AppointmentReminders({ reminders }) {
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles2.smallCol}>
-              {primaryTypes[0].toUpperCase()}
+              {primaryTypes.join(' & ')}
             </div>
             <div className={styles2.smallCol}>
               {moment(sendDate).format('h:mm A')}

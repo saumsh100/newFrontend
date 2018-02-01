@@ -46,6 +46,7 @@ export default function connectSocketToStoreLogin(store, socket) {
 
         dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
+
       socket.on('update:Request', (data) => {
         dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
       });
@@ -194,6 +195,5 @@ export default function connectSocketToStoreLogin(store, socket) {
       console.log('unauthorized: ', JSON.stringify(msg.data));
       throw new Error(msg.data.type);
     });
-
 }
 

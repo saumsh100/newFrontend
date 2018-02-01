@@ -1,0 +1,65 @@
+
+@import '../../../ui';
+
+.time {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 12px;
+  color: $inactive-color;
+}
+
+.patientAvatar {
+  margin-top: -10px;
+}
+
+.messageWrapper {
+  // display: flex;
+  // flex-direction: row;
+  width: 100%;
+  padding: 10px 20px;
+  box-sizing: border-box;
+}
+
+.sharedMessage {
+  // width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.clinicMessage {
+  @extend .sharedMessage;
+  float: right;
+}
+
+.patientMessage {
+  @extend .sharedMessage;
+  float: left;
+}
+
+.allMessages {
+  align-items: center;
+  overflow-y: auto;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  background-color: $chat-lightgrey;
+}
+
+.raise {
+  padding: 10px;
+}
+
+.sendMessage {
+  // border-top: 1px solid #e6e6e6;
+  padding: 20px;
+  padding-top: 0;
+  boz-sizing: border-box;
+  background-color: $chat-lightgrey;
+  height: 160px;
+  > div {
+    height: 100%;
+    > form {
+      height: 100%;
+    }
+  }
+}

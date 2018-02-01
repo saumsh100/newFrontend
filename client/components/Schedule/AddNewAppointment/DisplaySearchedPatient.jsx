@@ -33,4 +33,4 @@ export default function DisplaySearchedPatient(props) {
 
 DisplaySearchedPatient.propTypes = {
   patient: PropTypes.object,
-}
+};

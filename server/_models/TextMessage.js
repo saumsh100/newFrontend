@@ -28,7 +28,7 @@ export default function (sequelize, DataTypes) {
     }),
 
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
 
     smsStatus: {

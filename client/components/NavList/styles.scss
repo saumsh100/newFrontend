@@ -11,6 +11,7 @@
   text-decoration: none;
   color: $inactive-color !important;
   align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: #41464c;
@@ -49,8 +50,6 @@
 }
 
 .icon {
-  margin-right: 20px;
-  margin-left: 30px;
   font-size: 1.5em;
 }
 
@@ -58,6 +57,7 @@
   width: 95px;
   text-align: left;
   margin-top: 5px;
+  margin-left: 20px;
 }
 
 .activeLabel {
@@ -94,6 +94,7 @@
   position: relative;
   list-style: none;
   margin-bottom: 10px;
+  padding-left: 55px;
 
   &__item {
     position: relative;

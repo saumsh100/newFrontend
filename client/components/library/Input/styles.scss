@@ -89,7 +89,7 @@ $empty-grey: darken(lightgrey, 5%);
   width: 100%;
   &:before,  &:after {
     content: '';
-    height: 2px;
+    height: 1px;
     width: 0;
     bottom: 0px;
     position: absolute;

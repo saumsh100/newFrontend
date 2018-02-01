@@ -59,9 +59,9 @@ class Reminders extends Component {
       type,
     } = values;
 
-    const lengthSeconds = numTypeToSeconds(number, type);
     const entityData = {
-      lengthSeconds,
+      interval: `${number} ${type}`,
+      primaryTypes: [primaryType],
       primaryType,
     };
 
@@ -200,7 +200,7 @@ function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const reminders = entities.getIn(['reminders', 'models'])
-    .filter(r => !r.isDeleted)
+    .filter(r => !r.isDeleted && !!r.interval)
     .sortBy(r => -convertIntervalToMs(r.interval));
 
   return {

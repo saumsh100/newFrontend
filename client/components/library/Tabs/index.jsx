@@ -44,9 +44,10 @@ class Tabs extends Component {
     };
   }
 
-  renderHeaders(headers) {
+  renderHeaders(headers, fluid) {
     return headers.map((item, idx) => {
       return React.cloneElement(item, {
+        fluid: fluid,
         key: idx,
         index: idx,
         active: this.props.index === idx,
@@ -81,6 +82,7 @@ class Tabs extends Component {
       contentClass,
       navClass,
       noHeaders,
+      fluid,
     } = this.props;
 
     const newProps = omit(this.props, ['index', 'navClass', 'contentClass', 'noUnderLine']);
@@ -93,8 +95,8 @@ class Tabs extends Component {
       // Order is important, classNames={classes} needs to override props.className
       <div {...newProps} className={classes}>
         {noHeaders ? null :
-          <nav className={navClass}>
-            {this.renderHeaders(headers)}
+          <nav className={classNames(navClass, styles.nav)}>
+            {this.renderHeaders(headers, fluid)}
           </nav>
         }
         <div className={contentClasses}>
@@ -115,6 +117,7 @@ Tabs.propTypes = {
   disabled: PropTypes.bool,
   noHeaders: PropTypes.bool,
   noUnderLine: PropTypes.bool,
+  fluid: PropTypes.bool,
 };
 
 export default Tabs;

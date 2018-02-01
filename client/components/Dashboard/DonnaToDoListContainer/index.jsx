@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Card } from '../../library';
 import DonnaToDoTabs from './DonnaToDoTabs';
 import Tasks from './Tasks';
@@ -17,6 +18,14 @@ class DonnaToDoListContainer extends Component {
 
   componentDidMount() {
     this.props.fetchDonnasToDos(this.state.toDoIndex);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentDate = moment(this.props.dashboard.get('dashboardDate'));
+    const nextPropsDate = moment(nextProps.dashboard.get('dashboardDate'));
+    if (!nextPropsDate.isSame(currentDate, 'month') || !nextPropsDate.isSame(currentDate, 'day') || !nextPropsDate.isSame(currentDate, 'year')) {
+      this.props.fetchDonnasToDos(this.state.toDoIndex);
+    }
   }
 
   changeTab(index) {

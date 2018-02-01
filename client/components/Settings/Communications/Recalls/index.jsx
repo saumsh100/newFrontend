@@ -73,18 +73,17 @@ class Recalls extends Component {
   newRecall(values) {
     const {
       primaryType,
-      number,
       type,
     } = values;
+    let { number } = values;
 
-    let lengthSeconds = w2s(number);
     if (type === 'after') {
-      lengthSeconds = -lengthSeconds;
+      number = -number;
     }
 
     const entityData = {
-      lengthSeconds,
-      primaryType,
+      interval: `${number} ${type}`,
+      primaryTypes: [primaryType],
     };
 
     const alert = {
@@ -309,7 +308,7 @@ function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const recalls = entities.getIn(['recalls', 'models'])
-    .filter(r => !r.isDeleted)
+    .filter(r => !r.isDeleted && !!r.interval)
     .sortBy(r => -convertIntervalToMs(r.interval));
 
   return {

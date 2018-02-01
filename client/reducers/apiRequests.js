@@ -10,7 +10,7 @@ export const createRequest = createAction(CREATE_REQUEST);
 export const receiveRequest = createAction(RECEIVE_REQUEST);
 export const errorRequest = createAction(ERROR_REQUEST);
 
-
+// TODO: should probably add id here as well
 export const APIRequest = Record({
   isFetching: false,
   wasFetched: false,

@@ -40,13 +40,18 @@ export function fetchDonnasToDos(index) {
   return async function (dispatch, getState) {
     const {
       auth,
+      dashboard,
     } = getState();
+
+    const currentDate = moment(dashboard.toJS().dashboardDate);
+    const startDate = currentDate.startOf('day').toISOString();
+    const endDate = currentDate.endOf('day').toISOString();
 
     if (index < toDoFunctions.length) {
       const accountId = auth.get('accountId');
       dispatch(setLoading({ key: 'loadingToDos', value: true }));
 
-      await toDoFunctions[index](accountId, dispatch);
+      await toDoFunctions[index](accountId, startDate, endDate, dispatch);
       return dispatch(setLoading({ key: 'loadingToDos', value: false }));
     }
 
@@ -54,10 +59,10 @@ export function fetchDonnasToDos(index) {
   };
 }
 
-async function fetchToDoReminders(accountId, dispatch) {
+async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
   try {
-    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`);
-
+    const params = { startDate, endDate };
+    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, { params });
     dispatch(setToDoReminders(remindersData.data));
   } catch (err) {
     console.log(err);

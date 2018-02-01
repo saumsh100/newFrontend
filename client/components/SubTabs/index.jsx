@@ -6,21 +6,6 @@ import styles from './styles.scss';
 const getRootPath = pathname => pathname;
 
 const ROUTES = {
-  '/patients': [
-    {
-      to: '/patients/list',
-      label: 'Patients',
-    },
-    {
-      to: '/patients/messages',
-      label: 'Messages',
-    },
-    {
-      to: '/patients/phone',
-      label: 'Phone',
-    },
-  ],
-
   '/schedule': [
    /* {
       to: '/schedule/calendar',

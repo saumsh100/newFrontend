@@ -30,6 +30,6 @@ storiesOf('Button', module)
     >
       Test
     </Button>
-  ))
+  ));
 
 

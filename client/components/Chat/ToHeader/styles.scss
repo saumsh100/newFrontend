@@ -1,0 +1,31 @@
+
+@import '../../../ui';
+
+.wrapper {
+  height: 100%;
+}
+
+.patientInfoWrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-left: 20px;
+}
+
+.patientInfoName {
+  margin-left: 10px;
+  font-size: 16px;
+  font-family: $medium-font;
+}
+
+.autocompleteContainer {
+  height: 100%;
+}
+
+.suggestionsContainer {
+  top: 50px;
+}
+
+//.autocompleteInput {
+//  height: 100%;
+//}

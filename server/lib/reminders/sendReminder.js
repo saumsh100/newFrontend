@@ -1,8 +1,8 @@
 
 import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
-import { host, protocol } from '../../config/globals';
-import Mail from '../mail';
+import { host, protocol, myHost } from '../../config/globals';
+import { sendAlreadyConfirmedReminder, sendConfirmationReminder } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
 export const createConfirmationText = ({ patient, account, appointment }) => {
@@ -62,7 +62,7 @@ export default {
   email({ account, appointment, patient, sentReminder }) {
     const alreadyConfirmed = appointment.isPatientConfirmed;
     if (alreadyConfirmed) {
-      return Mail.sendAlreadyConfirmedReminder({
+      return sendAlreadyConfirmedReminder({
         patientId: patient.id,
         toEmail: patient.email,
         fromName: account.name,
@@ -98,6 +98,26 @@ export default {
           {
             name: 'PATIENT_FIRSTNAME',
             content: patient.firstName,
+          },
+          {
+            name: 'ACCOUNT_STREET',
+            content: account.address.street,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: `${account.address.city}, ${account.address.state}`,
+          },
+          {
+            name: 'FACEBOOK_URL',
+            content: account.facebookUrl,
+          },
+          {
+            name: 'GOOGLE_URL',
+            content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
           },
         ],
 
@@ -110,7 +130,7 @@ export default {
         ],
       });
     } else {
-      return Mail.sendConfirmationReminder({
+      return sendConfirmationReminder({
         patientId: patient.id,
         toEmail: patient.email,
         fromName: account.name,
@@ -122,7 +142,7 @@ export default {
           {
             name: 'CONFIRMATION_URL',
             // TODO: we might have to make this a token if UUID is too easy to guess...
-            content: `${protocol}://${host}/sentReminders/${sentReminder.id}/confirm`,
+            content: `${protocol}://${myHost}/sentReminders/${sentReminder.id}/confirm`,
           },
           {
             name: 'ACCOUNT_CLINICNAME',
@@ -151,6 +171,26 @@ export default {
           {
             name: 'PATIENT_FIRSTNAME',
             content: patient.firstName,
+          },
+          {
+            name: 'ACCOUNT_STREET',
+            content: account.address.street,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: `${account.address.city}, ${account.address.state}`,
+          },
+          {
+            name: 'FACEBOOK_URL',
+            content: account.facebookUrl,
+          },
+          {
+            name: 'GOOGLE_URL',
+            content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
           },
         ],
 

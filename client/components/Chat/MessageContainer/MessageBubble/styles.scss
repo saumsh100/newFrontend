@@ -1,0 +1,43 @@
+
+@import '../../../../ui';
+
+.bubbleWrapper {
+  max-width: 350px;
+  min-width: 70px;
+}
+
+.bubbleBody {
+  // font-size: 13px;
+  padding: 12px 26px;
+  border-radius: 40px;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: 16px;
+}
+
+.fromPatientBody {
+  background-color: white;
+  font-family: $medium-font;
+  border-bottom-left-radius: 0px;
+}
+
+.fromClinicBody {
+  background-color: $primary-blue;
+  color: white;
+  border-bottom-right-radius: 0px;
+}
+
+.bubbleTime {
+  font-size: 9px;
+  color: $primary-gray;
+  padding-top: 5px;
+}
+
+.fromPatientTime {
+  float: left;
+}
+
+.fromClinicTime {
+  float: right;
+}

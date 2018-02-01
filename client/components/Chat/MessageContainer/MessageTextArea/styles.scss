@@ -1,0 +1,83 @@
+
+@import '../../../../ui';
+
+.textAreaContainer {
+  background-color: $primary-white;
+  border: 1px solid $chat-border-color;
+}
+
+.textAreaBody {
+  > div {
+    height: 100%;
+    > form {
+      height: 100%;
+    }
+  }
+}
+
+.textAreaWrapper {
+  height: 100%;
+  > div {
+    height: 100%;
+    padding: 0;
+    > textarea {
+      color: $primary-dark;
+      height: 100%;
+      border-bottom: 1px solid $chat-border-color;
+      padding: 15px;
+      &::placeholder {
+        color: $primary-gray;
+      }
+    }
+  }
+}
+
+.sendIconWrapper {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.sendIcon {
+  margin-left: auto;
+  color: darken($primary-blue, 10%);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  > i {
+    cursor: pointer;
+    font-size: 1.2rem !important;
+  }
+
+  > label {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 12px;
+    font-family: $medium-font;
+  }
+
+  &:hover {
+    color: $primary-blue;
+  }
+}
+
+.sendIconDisabled {
+  @extend .sendIcon;
+  color: $primary-gray;
+  cursor: not-allowed;
+  > i {
+    cursor: not-allowed;
+  }
+
+  > label {
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    color: $primary-gray;
+  }
+}

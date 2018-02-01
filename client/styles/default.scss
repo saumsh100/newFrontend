@@ -10,6 +10,7 @@
   body.Dashboard {
     height: 100%;
     background-color: $primary-dark;
+    color: $primary-dark;
     font-size: 12px;
     overflow: hidden;
   }
@@ -93,16 +94,16 @@
   .CareCruToggle-red.react-toggle--checked {
     &:hover {
       .react-toggle-track {
-        background-color: darken($primary-red, 2%);
+        background-color: var(--primaryButtonColor);
       }
     }
 
     .react-toggle-track {
-      background-color: $primary-red;
+      background-color: var(--primaryButtonColor);
     }
 
     .react-toggle-thumb {
-      border-color: $primary-red;
+      border-color: var(--primaryButtonColor);
     }
   }
 

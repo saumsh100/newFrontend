@@ -140,7 +140,7 @@ export function createEntityRequest({ key, entityData, url, params = {}, alert }
   };
 }
 
-export function updateEntityRequest({ key, model, values, url, alert }) {
+export function updateEntityRequest({ key, model, values, url, alert, merge }) {
   url = url || model.getUrlRoot();
   values = values || model.toJSON();
 
@@ -149,11 +149,12 @@ export function updateEntityRequest({ key, model, values, url, alert }) {
   return dispatch => axios.put(url, values)
       .then((response) => {
         const { data } = response;
-        dispatch(receiveEntities({ key, entities: data.entities }));
+        dispatch(receiveEntities({ key, entities: data.entities, merge }));
 
         if (alert && alert.success) {
           dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
         }
+
         return data.entities;
       })
       .catch((err) => {

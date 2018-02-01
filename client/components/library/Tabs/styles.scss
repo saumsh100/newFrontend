@@ -2,10 +2,12 @@
 @import '../../../ui.scss';
 
 .tab {
-  display: inline-block;
   padding: 10px;
   cursor: pointer;
   composes: tab from 'sass-loader!../../../fonts.scss';
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .noUnderLine {
@@ -23,8 +25,13 @@
   cursor: not-allowed;
 }
 
-.nav {
+.fluidTab {
+  flex: 1;
+  text-align: center;
+}
 
+.nav {
+  display: flex;
 }
 
 .content {

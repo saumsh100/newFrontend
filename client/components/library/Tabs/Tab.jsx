@@ -10,6 +10,7 @@ class Tab extends Component {
       index,
       label,
       active,
+      fluid,
       onClick,
       disabled,
       noUnderLine,
@@ -33,6 +34,10 @@ class Tab extends Component {
       classes = classNames(classes, styles.disabledTab);
     }
 
+    if (fluid) {
+      classes = classNames(classes, styles.fluidTab);
+    }
+
     return (
       // Order is important, classNames={classes} needs to override props.className
       <label
@@ -53,6 +58,7 @@ Tab.propTypes = {
   active: PropTypes.bool,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  fluid: PropTypes.bool,
 };
 
 export default Tab;

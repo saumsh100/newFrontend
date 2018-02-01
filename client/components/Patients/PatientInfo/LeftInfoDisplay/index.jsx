@@ -30,7 +30,12 @@ export default function DataDisplay(props) {
 
   return (
     <Card className={styles.mainContainer}>
-      <Tabs className={styles.tab} index={tabIndex} onChange={handleTabChange} noUnderLine >
+      <Tabs
+        className={styles.tab}
+        index={tabIndex}
+        onChange={handleTabChange}
+        noUnderLine
+      >
         <Tab label="APPOINTMENTS" >
           <AppointmentsTab
             patient={patient}
@@ -55,4 +60,3 @@ export default function DataDisplay(props) {
 DataDisplay.propTypes = {
   patient: PropTypes.object.isRequired,
 };
-

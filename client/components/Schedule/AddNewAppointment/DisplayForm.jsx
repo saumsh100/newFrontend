@@ -41,7 +41,9 @@ class DisplayForm extends Component {
   }
 
   focusAutoSuggest() {
-    this.autoSuggestInput.focus();
+    if (this.autoSuggest && this.autoSuggest.inputComponent) {
+      this.autoSuggest.inputComponent.focus();
+    }
   }
 
   componentDidUpdate() {
@@ -134,7 +136,7 @@ class DisplayForm extends Component {
     if (patientSearched && patient) {
       patientDisplay = patientSearched;
     }
-    
+
     const autoCompleteStyle = {
       error: styles.errorStyle,
       icon: styles.iconAuto,
@@ -145,18 +147,21 @@ class DisplayForm extends Component {
       group: styles.groupAuto,
     };
 
-    const addNewPatientComponent = () => {
+    const addNewPatientComponent = ({ containerProps, children }) => {
       return (
-        <div
-          className={styles.addNewPatient}
-          onClick={(e) => {
-            e.stopPropagation();
-            this.props.setCreatingPatient({ createPatientBool: true });
-            this.props.setShowInput(true);
-            this.props.setPatientSearched(null)
-          }}
-        >
-          Add New Patient
+        <div {...containerProps}>
+          {children}
+          <div
+            className={styles.addNewPatient}
+            onClick={(e) => {
+              e.stopPropagation();
+              this.props.setCreatingPatient({ createPatientBool: true });
+              this.props.setShowInput(true);
+              this.props.setPatientSearched(null)
+            }}
+          >
+            Add New Patient
+          </div>
         </div>
       );
     };
@@ -188,9 +193,9 @@ class DisplayForm extends Component {
 
             classStyles={styles.searchInput}
             theme={autoCompleteStyle}
-            suggestionsContainerComponent={addNewPatientComponent}
+            renderSuggestionsContainer={addNewPatientComponent}
             icon="search"
-            refCallBack={(el) => this.autoSuggestInput = el}
+            ref={(el) => this.autoSuggest = el}
             required
             onBlurFunction={()=> this.props.setShowInput(false)}
           />

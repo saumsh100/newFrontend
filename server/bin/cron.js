@@ -9,7 +9,7 @@ const REMINDERS_INTERVAL_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Run every X min in prod
-const remindersPattern = NODE_ENV === 'production' ? `0 0,${REMINDERS_INTERVAL_MINUTES} * * * *` : '0 * * * * *';
+const remindersPattern = NODE_ENV === 'production' ? `0 */${REMINDERS_INTERVAL_MINUTES} * * * *` : `0 */${REMINDERS_INTERVAL_MINUTES} * * * *`;
 
 // Run at 5AM every morning
 const recallsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
@@ -31,6 +31,8 @@ const lastRestorativePattern = NODE_ENV === 'production' ? '0 15,45 * * * *' : '
 
 // Run 15 min past every 2 hours in prod
 const firstNextLastAppointmentPattern = NODE_ENV === 'production' ? '15 */2 * * *' : '0 * * * * *';
+
+console.log('remindersPattern', remindersPattern);
 
 // Appointment Reminders Cron
 cron.schedule(remindersPattern, () => {

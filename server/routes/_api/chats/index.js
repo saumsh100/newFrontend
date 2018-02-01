@@ -125,6 +125,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     lastTextMessageDate: new Date(),
   };
 
+  console.log(`Sending textmessage to ${patient.mobilePhoneNumber}`);
 
   const include = [
     {
@@ -140,8 +141,10 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
         attributes: {
           exclude: 'password',
         },
+
         required: false,
       }],
+
       required: true,
     },
   ];
@@ -154,7 +157,6 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     patientId: patient.id,
   };
 
-  Chat.findOne({ where: { id: chatMerge.accountId }, raw: true })
   return Account.findOne({ where: { id: chatMerge.accountId }, raw: true })
     .then((account) => {
       const textMessages = {
@@ -163,6 +165,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
         userId,
         to: patient.mobilePhoneNumber,
         from: account.twilioPhoneNumber,
+        read: true,
       };
 
       return twilioClient.sendMessage(textMessages)
@@ -318,8 +321,8 @@ chatsRouter.put('/:_chatId/textMessages/read', checkPermissions('textMessages:up
  * Update a chat
  */
 chatsRouter.put('/:chatId', checkPermissions('chats:update'), (req, res, next) => {
-  return req.chat.merge(req.body).save()
-    .then(chat => res.send(normalize('chat', chat)))
+  return req.chat.update(req.body)
+    .then(chat => res.send(normalize('chat', chat.get({ plain: true }))))
     .catch(next);
 });
 

@@ -1,5 +1,5 @@
-const { validateAccountIdPmsId } = require('../util/validators');
 
+const { validateAccountIdPmsId } = require('../util/validators');
 
 /**
  * Keeps track of Correspondence history with a Patient

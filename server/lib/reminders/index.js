@@ -208,10 +208,9 @@ export async function sendRemindersForAccount(account, date, pub) {
         global.io && await sendSocket(global.io, chat.id);
       }
     }
-
-    pub && pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   }
 
+  pub && pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   console.log(`Reminders completed for ${account.name} (${account.id})!`);
 }
 
@@ -248,6 +247,8 @@ export async function computeRemindersAndSend({ date, pub }) {
       },
     }],
   });
+
+  date = moment(date).seconds(0).milliseconds(0).toISOString();
 
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
@@ -302,6 +303,7 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     endDate,
     reminders: sortedReminders,
   });
+
   // Now we begin to produce the final array
   let outboxList = [];
   remindersPatients.forEach(({ success }, i) => {

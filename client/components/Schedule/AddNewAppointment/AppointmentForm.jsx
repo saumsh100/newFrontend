@@ -93,7 +93,7 @@ export default function AppointmentForm(props) {
           <Col xs={1} />
           <Col xs={5} className={styles.colDropDown}>
             <Field
-              options={generateTimeOptions(time, unit)}
+              options={generateTimeOptions(time, 5)}
               component="DropdownSelect"
               name="startTime"
               label="Start Time"
@@ -107,7 +107,7 @@ export default function AppointmentForm(props) {
           <Col xs={1} />
           <Col xs={5} className={styles.colDropDown}>
             <Field
-              options={generateTimeOptions(time, unit)}
+              options={generateTimeOptions(time, 5)}
               component="DropdownSelect"
               name="endTime"
               label="End Time"
