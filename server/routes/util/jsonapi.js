@@ -137,6 +137,7 @@ const ModelAttributes = {
     'birthDate',
     'insurance',
     'insuranceInterval',
+    'contCareInterval',
     'isDeleted',
     'pmsCreatedAt',
     'isSyncedWithPms',
