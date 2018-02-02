@@ -39,7 +39,7 @@ class DonnaToDoListContainer extends Component {
 
   render() {
     const {
-      dashboard
+      dashboard,
     } = this.props;
 
     const loadingToDos = dashboard.get('loadingToDos');

@@ -65,7 +65,7 @@ class Tasks extends Component {
         <SHeader className={styles.countHeader}>
           <span className={styles.countHeader_count}>{this.props.reminders.size || 0}&nbsp;</span> {toDoListNames[toDoIndex]}
         </SHeader>
-          {header}
+        {header}
         <SBody className={styles.body}>
           {body}
         </SBody>

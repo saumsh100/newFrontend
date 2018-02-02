@@ -16,6 +16,7 @@ const AppointmentsSchema = {
   isDeleted: null,
   isCancelled: null,
   isSyncedWithPms: null,
+  isPending: null,
   isSplit: null,
   isReminderSent: null,
   mark: null,
