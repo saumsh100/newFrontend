@@ -141,7 +141,6 @@ practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read
  */
 practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:update'), (req, res, next) => {
   const newServices = req.body.services || [];
-  console.log(req.body);
   // TODO: how to Query Practitioners based on service
   return Practitioner.findOne({
     where: { id: req.practitioner.id },
@@ -152,31 +151,35 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
     const services = [];
     const addServices = [];
 
-    practitioner.services.forEach((service) => {
-      if (!newServices.includes(service)) {
-        services.push(service.Practitioner_Service.id);
-      }
-    });
     const promises = [];
 
-    newServices.forEach((newService) => {
-      if (!practitioner.services.includes(newService)) {
-        addServices.push(newService);
-        promises.push(Practitioner_Service.create({
-          practitionerId: practitioner.id,
-          serviceId: newService,
-        }));
-      }
-    });
+    if (req.body.services && Array.isArray(req.body.services)) {
+      practitioner.services.forEach((service) => {
+        if (!newServices.includes(service)) {
+          services.push(service.Practitioner_Service.id);
+        }
+      });
 
-    promises.push(Practitioner.update(req.body, { where: { id: req.practitioner.id } }));
-    promises.push(Practitioner_Service.destroy({
-      where: {
-        id: services,
-      },
-      paranoid: false,
-      force: true,
-    }));
+      newServices.forEach((newService) => {
+        if (!practitioner.services.includes(newService)) {
+          addServices.push(newService);
+          promises.push(Practitioner_Service.create({
+            practitionerId: practitioner.id,
+            serviceId: newService,
+          }));
+        }
+      });
+
+      promises.push(Practitioner.update(req.body, { where: { id: req.practitioner.id } }));
+      promises.push(Practitioner_Service.destroy({
+        where: {
+          id: services,
+        },
+        paranoid: false,
+        force: true,
+      }));
+    }
+
     return Promise.all(promises)
     .then(() => {
       return Practitioner.findOne({
