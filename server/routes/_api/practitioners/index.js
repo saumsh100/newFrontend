@@ -170,7 +170,6 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
         }
       });
 
-      promises.push(Practitioner.update(req.body, { where: { id: req.practitioner.id } }));
       promises.push(Practitioner_Service.destroy({
         where: {
           id: services,
@@ -179,6 +178,14 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
         force: true,
       }));
     }
+
+    promises.push(Practitioner.update(req.body,
+      {
+        where: {
+          id: req.practitioner.id
+        },
+      },
+    ));
 
     return Promise.all(promises)
     .then(() => {
