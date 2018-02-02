@@ -141,6 +141,7 @@ practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read
  */
 practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:update'), (req, res, next) => {
   const newServices = req.body.services || [];
+  console.log(req.body);
   // TODO: how to Query Practitioners based on service
   return Practitioner.findOne({
     where: { id: req.practitioner.id },
