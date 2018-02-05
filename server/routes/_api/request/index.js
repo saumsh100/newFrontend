@@ -104,6 +104,8 @@ requestsRouter.post('/', (req, res, next) => {
           }
         }
       }
+
+      const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
       sendAppointmentRequested({
         accountId: req.accountId,
         toEmail: email,
@@ -123,7 +125,7 @@ requestsRouter.post('/', (req, res, next) => {
           },
           {
             name: 'ACCOUNT_LOGO_URL',
-            content: account.logo,
+            content: accountLogoUrl,
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
@@ -299,6 +301,7 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const { email, firstName } = patientUser;
       const { name, phoneNumber, contactEmail, website } = account;
       const { startDate } = req.request;
+      const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
       // Send Email
       sendAppointmentRequestRejected({
@@ -332,7 +335,7 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
           },
           {
             name: 'ACCOUNT_LOGO_URL',
-            content: account.logo,
+            content: accountLogoUrl,
           },
           {
             name: 'ACCOUNT_CITY',
@@ -380,6 +383,8 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
       const ns = namespaces.dash;
       const normalized = normalize('request', request.dataValues);
       io.of(ns).in(request.dataValues.accountId).emit('update:Request', normalized);
+      const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+
       // Send Email
       return sendAppointmentRequestConfirmed({
         accountId: req.accountId,
@@ -412,7 +417,7 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
           },
           {
             name: 'ACCOUNT_LOGO_URL',
-            content: account.logo,
+            content: accountLogoUrl,
           },
           {
             name: 'ACCOUNT_CITY',

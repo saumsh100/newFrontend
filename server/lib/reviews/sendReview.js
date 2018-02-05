@@ -52,6 +52,8 @@ export default {
       });
     }
 
+    const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+
     return sendReview({
       patientId: patient.id,
       toEmail: patient.email,
@@ -63,7 +65,7 @@ export default {
         },
         {
           name: 'ACCOUNT_LOGO_URL',
-          content: account.fullLogoUrl,
+          content: accountLogoUrl,
         },
         {
           name: 'ACCOUNT_CLINICNAME',

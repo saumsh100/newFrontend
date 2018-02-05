@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import uniqWith from 'lodash/uniqWith';
 import {
   Appointment,
   Patient,
@@ -12,6 +13,7 @@ import { m2s, convertIntervalStringToObject, convertIntervalToMs } from '../../u
 // TODO: add to globals file for these values
 // Should always be equal to the cron interval
 const BUFFER_SECONDS = 60 * GLOBALS.reminders.cronIntervalMinutes;
+const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
 
 /**
  * mapPatientsToReminders will return the patients that need a reminder
@@ -73,11 +75,14 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
   const intervalObject = convertIntervalStringToObject(reminder.interval);
   const start = moment(startDate).add(intervalObject).toISOString();
 
+  // This is where we look to see if the patient has had any appointments
+  // within a certain window
+  const sameDayStart = moment(start).subtract(SAME_DAY_HOURS, 'hours').toISOString();
+
   // If endDate is not supplied, default to using startDate + recall interval + buffer
   const end = moment(endDate || startDate).add(intervalObject).add(buffer, 'seconds').toISOString();
 
-  // console.log(`start --> end ${start} --> ${end}`);
-
+  // Now we query for the appointments, those appointments patients and sentReminders, and those patients appointmemnts
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
@@ -92,13 +97,33 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
 
     // Important for grabbing latest sentReminder and checking if it was within window or lastReminder
     // and this one. If it is, we ignore this touchpoint
-    order: [[{ model: SentReminder, as: 'sentReminders' }, 'createdAt', 'desc']],
+    order: [
+      ['startDate', 'ASC'],
+      [{ model: SentReminder, as: 'sentReminders' }, 'createdAt', 'desc']
+    ],
 
     include: [
       {
         model: Patient,
         as: 'patient',
         required: true,
+        include: [{
+          model: Appointment,
+          as: 'appointments',
+          required: false,
+          where: {
+            isDeleted: false,
+            isCancelled: false,
+            isShortCancelled: false,
+            isPending: false,
+            accountId: reminder.accountId,
+            // Do not include the upper-bound, or else you'll always get the same appointment as above
+            startDate: {
+              $gte: sameDayStart,
+              $lt: start,
+            },
+          },
+        }],
       },
       {
         model: SentReminder,
@@ -108,7 +133,12 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
     ],
   });
 
-  return appointments.filter(appointment => shouldSendReminder({ appointment, reminder, lastReminder }));
+  // Assuming this array is ordered by startDate ASC, make sure there is only 1 appt per patient
+  const sameDayAppointments = uniqWith(appointments, (appA, appB) => {
+    return appA.patient.id === appB.patient.id;
+  });
+
+  return sameDayAppointments.filter(appointment => shouldSendReminder({ appointment, reminder, lastReminder }));
 }
 
 /**
@@ -124,12 +154,18 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
  */
 export function shouldSendReminder({ appointment, reminder, lastReminder }) {
   const { sentReminders, patient } = appointment;
-  const preferences = patient.preferences;
-  const lastSentReminder = sentReminders[0];
+  const { preferences, appointments = [] } = patient;
 
+  // These are appointments that are within the "same day" window, don't send a reminder
+  // This is because a reminder for that appointment was probably already sent
+  if (appointments.length) {
+    return false;
+  }
+
+  const lastSentReminder = sentReminders[0];
   if (lastReminder) {
-    // TODO: Check if the lastSentReminder was in the window
-    // TODO: this needs to be done when singular sending is possible
+    // TODO: Check if the lastSentReminder was in the window to account for manual reminders
+    // TODO: this needs to be done when manual sending is finished
   }
 
   // We check interval because they can change and add different reminders

@@ -118,6 +118,7 @@ const postgres = {
 
 const reminders = {
   cronIntervalMinutes: 5,
+  sameDayWindowHours: 6,
 };
 
 const staticPath = path.normalize(path.join(root, '../statics'));

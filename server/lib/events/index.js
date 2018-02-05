@@ -2,7 +2,7 @@ import registerCallsSubscriber from './Calls';
 import registerRequestsSubscriber from './Requests';
 import registerAppointmentsSubscriber from './Appointments';
 import registerRecallsSubscriber from './Recalls';
-import registerRemindersSubscriber from './Reminders/index';
+import registerRemindersSubscriber from './Reminders';
 
 export default function registerEventSubscribers(context, io) {
   context.on('ready', () => {

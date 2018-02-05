@@ -201,6 +201,7 @@ export function renderTemplate(config) {
 }
 
 export function generateClinicMergeVars({ patient, account }) {
+  const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
   return [
     // Patient Variables
     {
@@ -243,7 +244,7 @@ export function generateClinicMergeVars({ patient, account }) {
     },
     {
       name: 'ACCOUNT_LOGO_URL',
-      content: 'https://carecru-staging.s3.amazonaws.com/dev/dental_clinic_logo_red.png',
+      content: accountLogoUrl,
     },
     {
       name: 'ACCOUNT_ADDRESS',

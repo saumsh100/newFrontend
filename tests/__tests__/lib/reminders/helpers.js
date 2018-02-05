@@ -19,7 +19,7 @@ import {
   getValidSmsReminders,
   mapPatientsToReminders,
 } from '../../../../server/lib/reminders/helpers';
-import { wipeAllModels } from '../../../_util/wipeModel';
+import wipeModel, { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
@@ -51,7 +51,7 @@ const dates = (y, m, d, h) => {
   };
 };
 
-describe.skip('RemindersList Calculation Library', () => {
+describe('RemindersList Calculation Library', () => {
   beforeEach(async () => {
     await wipeAllModels();
     await seedTestUsers();
@@ -210,6 +210,41 @@ describe.skip('RemindersList Calculation Library', () => {
 
         const appts = await getAppointmentsFromReminder({ reminder, startDate: currentDate });
         expect(appts.length).toBe(0);
+      });
+
+      describe('#getAppointmentsFromReminder -- sameDay Appointments', () => {
+        let reminder;
+        let appointments;
+        beforeEach(async () => {
+          await wipeModel(Appointment);
+
+          // 24 hour sms Reminder
+          reminder = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '2 hours' });
+          appointments = await Appointment.bulkCreate([
+            makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+            makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
+          ]);
+        });
+
+        test('should return 8:00 appointment if patient has a later appointment at 9:00', async () => {
+          const startDate = date(2017, 7, 5, 6);
+          const appointments = await getAppointmentsFromReminder({ reminder, startDate });
+          expect(appointments.length).toBe(1);
+        });
+
+        test('should not return 9:00 appointment if patient had another appointment at 8:00', async () => {
+          const startDate = date(2017, 7, 5, 7);
+          const appointments = await getAppointmentsFromReminder({ reminder, startDate });
+          expect(appointments.length).toBe(0);
+        });
+
+        test('should not return 1 8:00 appointment even though patient has multiple at that time', async () => {
+          await Appointment.create(makeApptData({ ...dates(2017, 7, 5, 8) }));
+
+          const startDate = date(2017, 7, 5, 6);
+          const appointments = await getAppointmentsFromReminder({ reminder, startDate });
+          expect(appointments.length).toBe(1);
+        });
       });
 
       // TODO: add date so that all checks are at a certain timestamp...
@@ -419,9 +454,9 @@ describe.skip('RemindersList Calculation Library', () => {
 
         const [hoursRemindersPatients, daysRemindersPatients] = remindersPatients;
         expect(hoursRemindersPatients.errors.length).toBe(0); // Patient has all info
-        expect(hoursRemindersPatients.success.length).toBe(2); // Monday at 8am & Monday at 11am
+        expect(hoursRemindersPatients.success.length).toBe(1); // Monday at 8am
         expect(daysRemindersPatients.errors.length).toBe(0); // Patient has all info
-        expect(daysRemindersPatients.success.length).toBe(4); // Tuesday at 8am & Tuesday at 11am both email & sms
+        expect(daysRemindersPatients.success.length).toBe(2); // Tuesday at 8am both email & sms
       });
 
       test('should range does not capture the appts outside of it for 2 day', async () => {
@@ -439,8 +474,7 @@ describe.skip('RemindersList Calculation Library', () => {
 
         const [hoursRemindersPatients, daysRemindersPatients] = remindersPatients;
         expect(hoursRemindersPatients.errors.length).toBe(0); // Patient has all info
-        expect(hoursRemindersPatients.success.length).toBe(1); // Monday at 8am & Monday at 11am
-        expect(hoursRemindersPatients.success[0].patient.appointment.id === appointments[1].id);
+        expect(hoursRemindersPatients.success.length).toBe(0); // Monday at 11am gets ignore cause there was an earlier appts
         expect(daysRemindersPatients.errors.length).toBe(0); // Patient has all info
         expect(daysRemindersPatients.success.length).toBe(0); // Outside of the range
       });

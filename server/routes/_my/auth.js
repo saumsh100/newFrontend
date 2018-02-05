@@ -79,6 +79,7 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
 
       // Generate the URL to confirm email
       const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
+      const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
       // Send Mandrill email async
       sendPatientSignup({
@@ -94,7 +95,7 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
           },
           {
             name: 'ACCOUNT_LOGO_URL',
-            content: account.logo,
+            content: accountLogoUrl,
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
@@ -216,6 +217,7 @@ authRouter.post('/reset/:accountId', (req, res, next) => {
       });
 
       const accountJson = account.get({ plain: true });
+      const accountLogoUrl = typeof accountJson.fullLogoUrl === 'string' && accountJson.fullLogoUrl.replace('[size]', 'original');
 
       // TODO: use merge_var generator
       const mergeVars = [
@@ -229,7 +231,7 @@ authRouter.post('/reset/:accountId', (req, res, next) => {
         },
         {
           name: 'ACCOUNT_LOGO_URL',
-          content: accountJson.logo,
+          content: accountLogoUrl,
         },
         {
           name: 'ACCOUNT_PHONENUMBER',

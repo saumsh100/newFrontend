@@ -37,8 +37,6 @@ function Button(props) {
   if (props.disabled) {
     finalProps = mapper.omit(finalProps, 'onClick');
     finalProps.type = 'button';
-
-    console.log('finalProps', finalProps);
   }
 
   return (

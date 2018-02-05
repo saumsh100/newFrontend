@@ -299,7 +299,7 @@ describe('Availabilities Library', () => {
             });
         });
 
-        test('should return 4 availabilities with 60 timeInterval. - setting practitionerId and chairId', () => {
+        test.skip('should return 4 availabilities with 60 timeInterval. - setting practitionerId and chairId', () => {
           const startDate = (new Date(2017, 3, 3, 13, 0)).toISOString();
           const endDate = (new Date(2017, 3, 3, 17, 0)).toISOString();
 
@@ -310,6 +310,7 @@ describe('Availabilities Library', () => {
             startDate,
             endDate,
           };
+
           return fetchAvailabilities(options)
             .then((availabilities) => {
               expect(Array.isArray(availabilities)).toBe(true);
