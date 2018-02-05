@@ -20,11 +20,12 @@ class Insights extends Component {
 
     const sortedInsights = insights.filter((insightData) => {
       return patients.get(insightData.patientId) !== undefined && insightData.insights.length > 0;
-    }).sort((a,b) => {
+    });
+      /*.sort((a,b) => {
       const app1 = appointments.get(a.appointmentId);
       const app2 = appointments.get(b.appointmentId);
       return SortByStartDate(app1, app2);
-    });
+    });*/
 
     return (
       <div className={styles.body}>
