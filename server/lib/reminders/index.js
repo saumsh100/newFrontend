@@ -170,6 +170,8 @@ export async function sendRemindersForAccount(account, date, pub) {
           account,
           appointment,
           sentReminder,
+          reminder,
+          currentDate: date,
         });
 
         sentReminderIds.push(sentReminder.id);
@@ -204,7 +206,7 @@ export async function sendRemindersForAccount(account, date, pub) {
         // Update Chat to have new textMessage
         await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
 
-        // // Now update the clients in real-time
+        // Now update the clients in real-time
         global.io && await sendSocket(global.io, chat.id);
       }
     }

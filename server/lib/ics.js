@@ -1,6 +1,6 @@
 
 import ICS from 'ics';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 const ics = new ICS();
 
@@ -14,12 +14,13 @@ export function buildAppointmentEvent({ appointment, patient, account }) {
 
   const {
     name,
+    timezone,
   } = account;
 
   return ics.buildEvent({
     // Date Format is very important here ex.// '2017-05-20 10:30'
-    start: moment(startDate).format('gggg-MM-DD kk:mm'),
-    end: moment(endDate).format('gggg-MM-DD kk:mm'),
+    start: moment.tz(startDate, timezone).format('gggg-MM-DD kk:mm'),
+    end: moment.tz(endDate, timezone).format('gggg-MM-DD kk:mm'),
     title: `${name} Appointment`,
     description: `Appointment at ${name}`,
     // location: account.buildAddress(),

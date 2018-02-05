@@ -2,6 +2,7 @@
 import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol, myHost } from '../../config/globals';
+import createReminderText from './createReminderText';
 import { sendAlreadyConfirmedReminder, sendConfirmationReminder } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
@@ -11,22 +12,6 @@ export const createConfirmationText = ({ patient, account, appointment }) => {
   const startTime = mDate.format('h:mma'); // 2:15pm
   return `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
     `on ${startDate} at ${startTime} is confirmed. `;
-};
-
-export const createReminderText = ({ patient, account, appointment }) => {
-  const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
-
-  const alreadyConfirmed = appointment.isPatientConfirmed;
-  if (alreadyConfirmed) {
-    return `Just a friendly reminder that your next appointment with us at ${account.name} ` +
-      `is confirmed for ${startDate} at ${startTime}. We look forward to seeing you!`;
-  } else {
-    return `${patient.firstName}, your next appointment with ${account.name} ` +
-      `is on ${startDate} at ${startTime}. Reply "C" to ` +
-      'confirm your appointment.';
-  }
 };
 
 const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
@@ -39,12 +24,12 @@ const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) =>
 
 export default {
   // Send Appointment Reminder text via Twilio
-  sms({ account, appointment, patient }) {
+  sms({ account, appointment, patient, reminder, currentDate }) {
     // TODO: add phoneNumber logic for patient
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
-      body: createReminderText({ patient, account, appointment }),
+      body: createReminderText({ patient, account, appointment, reminder, currentDate }),
     });
   },
 
