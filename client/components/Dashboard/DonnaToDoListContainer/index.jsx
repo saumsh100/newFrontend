@@ -22,8 +22,8 @@ class DonnaToDoListContainer extends Component {
 
   componentWillReceiveProps(nextProps) {
     const currentDate = moment(this.props.dashboard.get('dashboardDate'));
-    const nextPropsDate = moment(nextProps.dashboard.get('dashboardDate'));
-    if (!nextPropsDate.isSame(currentDate, 'month') || !nextPropsDate.isSame(currentDate, 'day') || !nextPropsDate.isSame(currentDate, 'year')) {
+    const nextDate = moment(nextProps.dashboard.get('dashboardDate'));
+    if (currentDate.toISOString() !== nextDate.toISOString()) {
       this.props.fetchDonnasToDos(this.state.toDoIndex);
     }
   }
