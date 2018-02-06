@@ -171,6 +171,11 @@ export function shouldSendReminder({ appointment, reminder, lastReminder }) {
   // We check interval because they can change and add different reminders
   // We don't send auto-reminders that are farther away than a previously sent one
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
+    if (!s.interval) {
+      // For older sentReminders that have lengthSeconds, we can ignore
+      return false;
+    }
+
     const sentReminderMs = convertIntervalToMs(s.interval);
     const reminderMs = convertIntervalToMs(reminder.interval);
     return (s.reminderId === reminder.id) || (reminderMs >= sentReminderMs);
