@@ -11,7 +11,8 @@
 }
 
 .subHeader {
-  composes: fontMediumPlusSize from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 13px !important;
   color: $primary-darkgrey;
   padding-top: 20px;
 }

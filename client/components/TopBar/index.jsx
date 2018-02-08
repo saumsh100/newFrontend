@@ -15,6 +15,7 @@ import {
   MenuSeparator,
 } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
+import PatientSearch from '../PatientSearch';
 import styles from './styles.scss';
 
 const UserMenu = (props) => {
@@ -49,6 +50,7 @@ const UserMenu = (props) => {
         <Avatar
           className={styles.userAvatar}
           user={user.toJS()}
+          size="sm"
         />
         <Icon icon="caret-down" type="solid" />
       </div>
@@ -71,11 +73,27 @@ class TopBar extends Component {
     };
 
     this.sync = this.sync.bind(this);
+    this.onSearchSelect = this.onSearchSelect.bind(this);
+    this.openSearch = this.openSearch.bind(this);
+    this.closeSearch = this.closeSearch.bind(this);
   }
 
   sync(e) {
     e.preventDefault();
     this.props.runOnDemandSync();
+  }
+
+  onSearchSelect(patient) {
+    document.getElementById('topBarPatientSearch').value = '';
+    this.props.push(`/patients/${patient.id}`);
+  }
+
+  openSearch() {
+    this.props.setIsSearchCollapsed({ isCollapsed: false });
+  }
+
+  closeSearch() {
+    this.props.setIsSearchCollapsed({ isCollapsed: true });
   }
 
   render() {
@@ -90,6 +108,7 @@ class TopBar extends Component {
       user,
       role,
       isAuth,
+      isSearchCollapsed,
     } = this.props;
 
     // TODO: for some reason the DashbaordApp Container renders even if not logged in...
@@ -153,6 +172,28 @@ class TopBar extends Component {
       role,
     };
 
+    const patientSearchInputProps = {
+      placeholder: 'Search',
+      id: 'topBarPatientSearch',
+      onBlur: this.closeSearch,
+    };
+
+    let groupStyles = styles.searchTheme;
+    let iconStyles = styles.searchIcon;
+
+    if (!isSearchCollapsed) {
+      groupStyles = classNames(styles.searchTheme, styles.animateSearch);
+      iconStyles = classNames(iconStyles, styles.iconSearchOpen);
+    }
+
+
+    const searchTheme = {
+      group: groupStyles,
+      bar: styles.barStyle,
+      container: styles.patientSearchClass,
+      suggestionsContainerOpen: styles.containerOpen,
+    };
+
     return (
       <AppBar className={topBarClassName}>
         {logoComponent}
@@ -161,36 +202,55 @@ class TopBar extends Component {
           className={styles.hamburger}
           onClick={() => setIsCollapsed(!isCollapsed)}
         />
-        <div className={styles.rightOfBar}>
-          <ul className={styles.pillsList}>
-            {withEnterprise && activeAccount ?
+
+        <div className={styles.rightContainer}>
+          <div className={styles.searchContainer}>
+            <div className={styles.wrapper}>
+              <Icon
+                icon="search"
+                className={iconStyles}
+                onClick={this.openSearch}
+              />
+              {!this.props.isSearchCollapsed ?
+                <PatientSearch
+                  onSelect={this.onSearchSelect}
+                  inputProps={patientSearchInputProps}
+                  theme={searchTheme}
+                  focusInputOnMount
+                /> : null }
+            </div>
+          </div>
+          <div className={styles.rightOfBar}>
+            <ul className={styles.pillsList}>
+              {withEnterprise && activeAccount ?
+                <li>
+                  <DropdownMenu
+                    labelComponent={ActiveAccountButton}
+                    labelProps={{ account: activeAccount }}
+                  >
+                    <div style={{ width: '200px' }}>
+                      {accounts.map(renderAccountItem)}
+                    </div>
+                  </DropdownMenu>
+                </li> :
+                null
+              }
               <li>
-                <DropdownMenu
-                  labelComponent={ActiveAccountButton}
-                  labelProps={{ account: activeAccount }}
-                >
-                  <div style={{ width: '200px' }}>
-                    {accounts.map(renderAccountItem)}
-                  </div>
+                <DropdownMenu labelComponent={props => <UserMenu {...props} {...userMenuProps} />}>
+                  <Link to="/profile">
+                    <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
+                  </Link>
+                  <Link to="/settings">
+                    <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
+                  </Link>
+                  <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
                 </DropdownMenu>
-              </li> :
-              null
-            }
-            <li>
-              <DropdownMenu labelComponent={props => <UserMenu {...props} {...userMenuProps} />}>
-                <Link to="/profile">
-                  <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
-                </Link>
-                <Link to="/settings">
-                  <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
-                </Link>
-                <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
-              </DropdownMenu>
-            </li>
-            <li className={styles.logoutPill}>
-              <IconButton onClick={this.props.logout} icon="power-off" />
-            </li>
-          </ul>
+              </li>
+              <li className={styles.logoutPill}>
+                <IconButton onClick={this.props.logout} icon="power-off" />
+              </li>
+            </ul>
+          </div>
         </div>
       </AppBar>
     );
@@ -205,6 +265,9 @@ TopBar.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }),
+  push: PropTypes.func.isRequired,
+  setIsSearchCollapsed: PropTypes.func.isRequired,
+  isSearchCollapsed: PropTypes.bool.isRequired,
 };
 
 export default withAuthProps(withRouter(TopBar));

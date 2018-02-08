@@ -31,7 +31,7 @@
 .patientInfoHeader {
   @extend .header;
   padding-top: 20px;
-  padding-left: 30px;
+  padding-left: 35px;
 }
 
 .eventsContainer {
@@ -40,7 +40,7 @@
 }
 
 .eventsTable{
-  padding: 20px 30px 50px 50px;
+  padding: 20px 35px 50px 50px;
   display: flex;
   box-sizing: border-box;
   overflow: hidden;
@@ -92,7 +92,7 @@
 
 .grid {
   box-sizing: border-box;
-  padding: 20px 0px 10px 30px;
+  padding: 20px 0px 10px 35px;
   margin-top: 10px;
 }
 

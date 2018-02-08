@@ -33,7 +33,6 @@ class AutoCompleteForm extends Component {
   }
 
   componentDidMount() {
-    console.log('Mounting');
     if (this.props.focusInputOnMount) {
       this.inputComponent.focus();
     }
@@ -66,9 +65,10 @@ class AutoCompleteForm extends Component {
     if (props.className) {
       props.className = this.props.className;
     }
-
+    props.theme = this.props.theme;
     props.value = this.props.value;
     props.ref = this.props.refCallBack;
+
     return (
       <Input
         {...props}

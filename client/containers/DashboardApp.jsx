@@ -21,6 +21,7 @@ function DashboardApp(props) {
     children,
     isCollapsed,
     setIsCollapsed,
+    isSearchCollapsed,
     activeAccount = {},
   } = props;
 
@@ -38,9 +39,10 @@ function DashboardApp(props) {
         <NavList location={location} isCollapsed={isCollapsed} />
       </NavRegionContainer>
       <MainRegionContainer>
-        <div className={styles.subTabs}>
-          <SubTabs location={location} />
-        </div>
+        {isSearchCollapsed ?
+          <div className={styles.subTabs}>
+            <SubTabs location={location} />
+          </div> : null}
         <div className={styles.mainRegionChildren}>
           {children}
           <AlertContainer />
@@ -68,11 +70,13 @@ DashboardApp.propTypes = {
   location: PropTypes.object,
   isCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
+  isSearchCollapsed: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps({ toolbar, entities, auth, caller }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
+    isSearchCollapsed: toolbar.get('isSearchCollapsed'),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
 }

@@ -4,6 +4,7 @@
 $padding-size-border: 10px;
 
 .topBarContainer {
+  display: flex;
   background-color: $primary-grey;
 }
 
@@ -95,12 +96,14 @@ $padding-size-border: 10px;
 
 .hamburger {
   color: $primary-dark;
+  //width: 35px !important;
+  //margin-left: 15px;
 }
 
 .rightOfBar {
   display: flex !important;
   text-align: right;
-  margin-left: auto;
+  //margin-left: auto;
 }
 
 .pillsList {
@@ -112,7 +115,7 @@ $padding-size-border: 10px;
 }
 
 .logoutPill {
-  border-left: 1.5px solid darkgrey;
+  border-left: 1px solid $primary-dark-grey;
   padding: 6px;
   @media screen and (max-width: $medium-screen-width) {
     font-size: 1.2rem;
@@ -130,7 +133,7 @@ $padding-size-border: 10px;
   display: flex;
   align-items: center;
   &:hover {
-    color: $primary-color !important;
+    color: $primary-blue !important;
   }
 }
 
@@ -144,7 +147,7 @@ $padding-size-border: 10px;
     display: none;
   }
   &:hover {
-    color: $primary-color !important;
+    color: $primary-blue !important;
   }
 }
 
@@ -164,7 +167,6 @@ $padding-size-border: 10px;
   font-weight: 100;
   font-size: 10px;
   color: $primary-darkgrey;
-
 }
 
 .userAvatar {
@@ -172,13 +174,14 @@ $padding-size-border: 10px;
 }
 
 .activeAccountButton {
-  border-right: 1.5px solid darkgray;
+  padding-left: 1em;
+  border-right: 1px solid $primary-dark-grey;
   padding-right: 1em;
   cursor: pointer;
   line-height: 47px;
-
+  white-space: nowrap;
   &:hover {
-    color: $primary-red;
+    color: $primary-blue;
   }
 }
 
@@ -200,5 +203,116 @@ $padding-size-border: 10px;
 .userMenuLi {
   width: 200px;
   background-color: $primary-white;
+}
+
+.searchContainer {
+  display: flex;
+  margin-right: 50px;
+  z-index: 25;
+}
+
+.wrapper {
+  position: relative;
+  height: 35px;
+}
+
+.searchIcon {
+  position: absolute;
+  padding: 7px;
+  box-sizing: border-box;
+  width: 30px;
+  display: flex;
+  justify-content: flex-start;
+  left: 8px;
+  top: 4px;
+  z-index: 2;
+  color: $primary-dark;
+  border: 1px solid darken(#f4f4f4, 10%);
+  border-radius: 50%;
+  background-color: darken(#f4f4f4, 5%);
+
+  &:hover {
+    cursor: pointer;
+    border-color: $primary-blue;
+  }
+}
+.iconSearchOpen {
+  pointer-events: none;
+  border: 0px;
+  background-color: transparent;
+  color: $primary-dark;
+}
+
+.searchTheme {
+  background-color: darken(#f4f4f4, 5%);
+  height: 100%;
+  border: 1px solid darken(#f4f4f4, 10%);
+  border-radius: 45px;
+  input {
+    height: 100%;
+    padding-left: 33px;
+  }
+
+  input::placeholder {
+    font-size: 12px;
+    color: #929293;
+    padding-left: 2px;
+  }
+
+  @media screen and (max-width: 1250px) {
+    input {
+      width: 300px;
+    }
+  }
+
+  @media screen and (max-width: 1100px) {
+    width: 250px;
+  }
+
+  @media screen and (max-width: 1050px) {
+    width: 200px;
+  }
+
+}
+
+.barStyle {
+  display: none;
+  //width: 75%;
+}
+
+.patientSearchClass {
+  height: 100%;
+}
+
+.containerOpen {
+
+  top: 35px;
+  box-shadow: 0px 8px 4px -1px rgba(0,0,0,0.1);
+}
+
+
+.animateSearch {
+  input {
+    width: 0px;
+    animation: animateThis 0.3s ease-in-out;
+    animation-fill-mode: forwards;
+  }
+}
+
+
+@keyframes animateThis {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 500px;
+  }
+}
+
+.rightContainer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
