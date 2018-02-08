@@ -14,8 +14,6 @@ export default function AppointmentsForm(props) {
     input: styles.inputBarStyle,
   };
 
-  console.log(props.dropDownStyle)
-
   return (
     <Form
       form="Form1"

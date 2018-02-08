@@ -1,0 +1,38 @@
+@import '../../../../../ui';
+
+.form {
+  padding-bottom: 15px;
+}
+
+.input {
+  border: 1px solid $primary-grey;
+  background-color: white;
+  width: 100%;
+  padding-left: 4px;
+}
+
+.group {
+  //padding: 0 0 10px 0;
+  box-sizing: border-box;
+  input::placeholder {
+    padding-left: 16px;
+    font-size: 12px;
+    font-family: $medium-font;
+  }
+}
+
+.icon {
+  left: 5px;
+  //bottom: 18px;
+  width: 5px;
+}
+
+.hidden {
+  display: block;
+  right: 10px;
+  left: unset;
+}
+
+.bar {
+
+}

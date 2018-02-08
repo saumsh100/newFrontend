@@ -19,13 +19,12 @@ class Insights extends Component {
     } = this.props;
 
     const sortedInsights = insights.filter((insightData) => {
-      return patients.get(insightData.patientId) !== undefined && insightData.insights.length > 0;
-    });
-      /*.sort((a,b) => {
+      return patients.get(insightData.patientId) && insightData.insights && insightData.insights.length > 0;
+    }).sort((a,b) => {
       const app1 = appointments.get(a.appointmentId);
       const app2 = appointments.get(b.appointmentId);
       return SortByStartDate(app1, app2);
-    });*/
+    });
 
     return (
       <div className={styles.body}>

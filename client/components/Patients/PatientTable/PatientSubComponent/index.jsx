@@ -49,7 +49,6 @@ class PatientSubComponent extends Component {
           <Col xs={12} sm={12} md={8} >
             <div className={styles.timeLineHeader}> TIMELINE & ACTIVITIES </div>
             <div className={styles.eventsTable}>
-              <div className={styles.verticalLine}>&nbsp;</div>
               <EventsTable
                 wasFetched={wasFetched}
                 events={events}

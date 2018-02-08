@@ -12,16 +12,17 @@
   padding-bottom: 10px;
   composes: fontExtraSmall from 'sass-loader!../../../../fonts.scss';
   font-family: $medium-font;
-
 }
 
 .data {
   color: $primary-dark;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  width: 170px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  //width: 170px;
+  //text-overflow: ellipsis;
+  //white-space: nowrap;
+  //overflow: hidden;
+  word-wrap: break-word;
+  margin-right: 5px;
 }
 
 .noData {

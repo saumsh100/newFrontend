@@ -16,19 +16,20 @@ export default function InfoDump(props) {
   let dataClass = styles.data;
 
   if (!data && !component) {
-    dataClass = classNames(dataClass, styles.noData)
+    dataClass = classNames(dataClass, styles.noData);
   }
 
   if (component) {
     dataClass = null;
   }
+
   return (
     <div className={classes}>
       <div className={styles.label}>
         {label}
       </div>
       <div className={dataClass}>
-        {data || component || 'n/a'}
+        {data || component || '-'}
       </div>
     </div>
   );

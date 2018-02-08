@@ -29,12 +29,14 @@ function Input(props) {
     !(typeof value === 'number' && isNaN(value));
 
   let labelClassName = inputStyle.label;
+  let iconClassName = inputStyle.icon;
+
   if (valuePresent) {
     labelClassName = classNames(inputStyle.filled, labelClassName);
+    iconClassName = classNames(inputStyle.hidden, iconClassName);
   }
 
   let inputClassName = inputStyle.input;
-  let iconClassName = inputStyle.icon;
 
   if (error) {
     labelClassName = classNames(inputStyle.erroredLabel, labelClassName);
@@ -50,9 +52,11 @@ function Input(props) {
   // TODO: fix this so that it does not throw an error!
   /*if (IconComponent) {
     iconComponent = <IconComponent className={iconClassName} />;
-  } else if (icon) {
+  } else */
+
+  if (icon) {
     iconComponent = <Icon className={iconClassName} icon={icon} />;
-  }*/
+  }
 
   // TODO: use classNames to avoid "undefined" being a className
   return (

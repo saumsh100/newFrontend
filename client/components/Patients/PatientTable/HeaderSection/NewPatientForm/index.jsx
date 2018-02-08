@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Form, Field } from '../../../../library';
 import styles from '../../styles.scss';
 
-import { maxLength,  emailValidate, } from '../../../../library/Form/validate';
+import { maxLength, emailValidate, asyncEmailValidateNewPatient } from '../../../../library/Form/validate';
 
 const normalizeBirthdate = (value) => {
   return value.trim();
@@ -14,12 +14,12 @@ const normalizeBirthdate = (value) => {
 const validateBirthdate = (value) => {
   const format = 'MM/DD/YYYY';
   const pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
-  if (!pattern.test(value)) {
+  if (!pattern.test(value) && value !== undefined) {
     return format;
   } else {
     const date = moment(value, format);
     const isValid = date.isValid();
-    if (!isValid) {
+    if (!isValid && value !== undefined) {
       return format;
     }
   }
@@ -51,7 +51,6 @@ export default function NewPatientForm({ onSubmit, formName }) {
       />
       <div className={styles.spacing}>
       <Field
-        required
         name="gender"
         label="Gender"
         component="DropdownSelect"
@@ -59,20 +58,17 @@ export default function NewPatientForm({ onSubmit, formName }) {
       />
       </div>
       <Field
-        required
         name="mobilePhoneNumber"
         type="tel"
         label="Phone Number"
       />
       <Field
-        required
         type="email"
         name="email"
         validate={[emailValidate]}
         label="Email"
       />
       <Field
-        required
         normalize={normalizeBirthdate}
         validate={[validateBirthdate]}
         name="birthDate"

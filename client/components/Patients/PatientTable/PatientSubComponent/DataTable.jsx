@@ -7,6 +7,7 @@ import InfoDump from '../../Shared/InfoDump';
 import RecallDropDowns from '../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../Shared/ReminderDropDowns';
 import styles from './styles.scss';
+import { validDateValue } from '../../Shared/helpers';
 
 export default function DataTable(props) {
   const {
@@ -65,11 +66,13 @@ export default function DataTable(props) {
         <Col xs={6} >
           <InfoDump
             label="LAST RECALL VISIT"
+            data={validDateValue(patient.lastRecallDate)}
           />
         </Col>
         <Col xs={6} >
           <InfoDump
-            label="LAST HYGIENE VIST"
+            label="LAST HYGIENE VISIT"
+            data={validDateValue(patient.lastRecallDate)}
           />
         </Col>
       </Row>

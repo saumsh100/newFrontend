@@ -21,6 +21,7 @@ export default function EventDateSections (props) {
 
   return (
     <div className={styles.eventSection}>
+      <div className={styles.verticalLine}>&nbsp;</div>
       <div className={dateHeaderClass}> {showHeader} </div>
       {events.map((event) => {
         return (

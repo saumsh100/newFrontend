@@ -18,6 +18,7 @@ export function fetchPatientTableData() {
       delete query.totalPatients;
       delete query.isLoadingTable;
       delete query.filterTags;
+      delete query.timelineFilters;
 
       const patientData = await axios.get('/api/table', { params: query });
       const dataArray = getEntities(patientData.data.entities);

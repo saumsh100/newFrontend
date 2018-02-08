@@ -39,15 +39,15 @@ class PatientInsightsContainer extends Component {
     } = this.props;
 
     return (
-      <Card className={styles.card} runAnimation loaded={!this.props.loadingInsights && this.props.dashAppointments && appointments && patients}>
+      <Card className={styles.card} runAnimation loaded={!this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients}>
         <div className={styles.container}>
-          {!this.props.loadingInsights && this.props.dashAppointments && appointments && patients ? (
+          {!this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients ? (
             <div className={styles.header}>
               <span className={styles.header_count}>{this.props.insightCount}&nbsp;</span>
               {this.props.insightCount === 1 ? 'Patient Insight' : 'Patient Insights'}
             </div>) : null}
 
-          {!this.props.loadingInsights && this.props.dashAppointments && appointments && patients ?
+          {!this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients ?
             <Insights
               insights={insights}
               appointments={appointments}
@@ -63,7 +63,7 @@ class PatientInsightsContainer extends Component {
 PatientInsightsContainer.propTypes = {
   insights: PropTypes.instanceOf(Array),
   loadingInsights: PropTypes.bool,
-  dashAppointments: PropTypes.bool,
+  dashAppointmentsFetched: PropTypes.bool,
   appointments: PropTypes.object,
   patients: PropTypes.object,
   insightCount: PropTypes.number,
@@ -77,7 +77,7 @@ function mapStateToProps({ apiRequests, dashboard, entities }) {
   const insights = dash.insights;
   const insightCount = dash.insightCount;
 
-  const dashAppointments = (apiRequests.get('dashAppointments') ? apiRequests.get('dashAppointments').wasFetched : null);
+  const dashAppointmentsFetched = (apiRequests.get('dashAppointments') ? apiRequests.get('dashAppointments').wasFetched : null);
 
   const appointments = entities.getIn(['appointments', 'models']);
   const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
@@ -90,8 +90,8 @@ function mapStateToProps({ apiRequests, dashboard, entities }) {
     insights,
     loadingInsights,
     patients,
-    appointments,
-    dashAppointments,
+    appointments: filteredAppointments,
+    dashAppointmentsFetched,
     insightCount,
   };
 }

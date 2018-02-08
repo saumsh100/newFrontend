@@ -28,7 +28,7 @@
 .header {
   border-bottom: 0;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
-  padding-bottom: 30px;
+  padding-bottom: 15px;
   font-size: 23px;
 
   &_count {

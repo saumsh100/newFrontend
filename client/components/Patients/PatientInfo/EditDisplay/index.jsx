@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Card, Modal, Tabs, Tab, Button, Icon } from '../../../library';
+import { Card, Modal, Tabs, Tab, Button, Icon, DialogBox } from '../../../library';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
 import InsuranceForm from './InsuranceForm';
@@ -58,6 +58,11 @@ class EditDisplay extends Component {
     values.address.street = values.street;
     values.address.state = values.state;
 
+    values.preferences = {};
+    values.preferences.newsletter = values.newsletter;
+    values.preferences.birthdayMessage = values.birthdayMessage;
+    values.preferences.reminders = values.reminders;
+
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
 
@@ -85,35 +90,40 @@ class EditDisplay extends Component {
       isOpen
     } = this.props;
 
-
-    const remoteButtonProps = {
-      onClick: reinitializeState,
-      form: `Form${this.state.tabIndex + 1}`,
-      color: 'blue'
-    };
+    if (!patient) {
+      return null;
+    }
 
     const dropDownStyle = {
-      toggleDiv: styles.toggleDivStyle
+      toggleDiv: styles.toggleDivStyle,
     };
+
+    const actions = [
+      { label: 'Cancel',
+        onClick: () => {
+          reinitializeState();
+        },
+        component: Button,
+        props: { border: 'blue' } ,
+      },
+      { label: 'Save',
+        onClick: this.handleSubmit,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: `Form${this.state.tabIndex + 1}`},
+      },
+    ];
 
     return (
       <div className={styles.mainContainer}>
-        <Modal
+        <DialogBox
           active={isOpen}
           onEscKeyDown={reinitializeState}
           onOverlayClick={reinitializeState}
+          title={`Editing ${patient.get('firstName')}'s Patient Info`}
+          actions={actions}
           custom
         >
           <div className={styles.editModal}>
-            <div className={styles.header}>
-              {`Editing ${patient.get('firstName')}'s Patient Info`}
-              <div
-                className={styles.header_closeIcon}
-                onClick={reinitializeState}
-              >
-                <Icon icon="times" />
-              </div>
-            </div>
             <div className={styles.content}>
               <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
                 <Tab label="APPOINTMENTS" >
@@ -154,24 +164,8 @@ class EditDisplay extends Component {
                 </Tab>
               </Tabs>
             </div>
-            <div className={styles.remoteSubmit}>
-              <div className={styles.remoteSubmit_buttonDelete}>
-                <Button
-                  border="blue"
-                  onClick={() => reinitializeState()}
-                >
-                  Cancel
-                </Button>
-              </div>
-              <RemoteSubmitButton
-                {...remoteButtonProps}
-                className={styles.remoteSubmit_button}
-              >
-                Save
-              </RemoteSubmitButton>
-            </div>
           </div>
-        </Modal>
+        </DialogBox>
       </div>
     );
   }

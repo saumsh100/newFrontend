@@ -19,6 +19,8 @@ export default function Actions(props) {
     patientIds,
   } = props;
 
+  console.log(patientIds);
+
   return (
     <List className={styles.actionsContainer}>
       {actionsList.map((action, index) => {

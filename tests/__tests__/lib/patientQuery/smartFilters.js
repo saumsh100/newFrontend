@@ -56,8 +56,8 @@ describe('Smart Filters Tests', () => {
 
     test('Find Patients due within 60 days', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: currentDateMinusDays(220) }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2013, 7, 6, 9) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(220) }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: date(2013, 7, 6, 9) }),
       ]);
 
       const smFilter = {
@@ -71,8 +71,8 @@ describe('Smart Filters Tests', () => {
 
     test('Should Fail because there is a nextApptDate', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: date(2017, 3, 10, 9), nextApptDate: date(2017, 12, 10, 9) }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: date(2013, 7, 6, 9) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: date(2017, 3, 10, 9), nextApptDate: date(2017, 12, 10, 9) }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: date(2013, 7, 6, 9) }),
       ]);
 
       const smFilter = {
@@ -86,8 +86,8 @@ describe('Smart Filters Tests', () => {
 
     test('Find Patients late 13-18 months', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastApptDate: currentDateMinusDays(730) }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastApptDate: currentDateMinusDays(760) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(730) }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(760) }),
       ]);
 
       const smFilter = {

@@ -1,3 +1,4 @@
+
 @import '../../../ui.scss';
 
 .mainContainer {
@@ -7,6 +8,7 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
+  min-width: 1280px;
 }
 
 .tableProps {
@@ -124,6 +126,18 @@
   padding-top: 2px;
 }
 
+.selectAll {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  bottom: 1px;
+}
+
 .colBg {
   background: white;
   border-right: none !important;
@@ -153,7 +167,6 @@
   min-height: 6px;
   border-radius: 50%;
   margin-left: 5px;
-  margin-bottom: 5px;
 }
 
 .dotRed {
@@ -168,7 +181,41 @@
 
 :global(.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover) {
   background: rgba(0,0,0,0.02);
+
 }
+
+:global(.ReactTable .-pagination) {
+  border-top: 1px solid $primary-grey;
+  font-family: $medium-font;
+  color: $primary-darkgrey;
+}
+
+:global(.ReactTable .-pagination .-btn) {
+  background-color: unset;
+  font-family: $medium-font;
+  border: 1px solid $primary-dark-grey;
+  color: $primary-dark-grey;
+  border-radius: unset;
+
+  &:hover {
+    background-color: darken($primary-dark-grey, 5%) !important;
+  }
+}
+
+:global(.ReactTable .rt-tbody .rt-tr-group) {
+  border-bottom: 0;
+}
+
+:global(.ReactTable .-pagination .-btn[disabled]) {
+  opacity: 1;
+  color: $primary-grey;
+  cursor: not-allowed;
+
+  &:hover {
+    background-color: unset !important;
+  }
+}
+
 
 $width: 6px;
 $height: 6px;
@@ -218,4 +265,14 @@ $height: 6px;
     margin-left: 3px;
     margin-top: 1px;
   }
+}
+
+
+.columnHeaderStyle {
+  background: white;
+  display: flex;
+  justify-content: flex-start;
+  box-shadow: none;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  align-items: center;
 }

@@ -20,7 +20,7 @@ const initialState = fromJS({
   scheduleDate: new Date(),
   scheduleView: 'chair',
 
-  timeSlotHeight: 50,
+  timeSlotHeight: 120,
   columnWidth: 150,
   leftColumnWidth: 70,
 

@@ -76,7 +76,7 @@ const phoneValidate = (value) => {
 };
 
 const emailValidate = (value) => {
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) && value !== undefined) {
     return 'Invalid email address';
   }
 };
@@ -88,7 +88,7 @@ const phoneNumberValidate = (value) => {
 };
 
 const phoneValidateNullOkay = (value) => {
-  if (!/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) && value !== null && value !== '') {
+  if (!/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) && value !== null && value !== '' && value !== undefined) {
     return 'Invalid phone number';
   }
 };

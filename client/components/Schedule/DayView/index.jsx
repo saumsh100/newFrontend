@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import DayViewBody from './DayViewBody';
 
-class DayView extends Component  {
+class DayView extends Component {
   render() {
     const {
       currentDate,

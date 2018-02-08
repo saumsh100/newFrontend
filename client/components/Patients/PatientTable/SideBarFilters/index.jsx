@@ -8,6 +8,7 @@ import Appointments from './Appointments';
 import Practitioners from './Practitioners';
 import Communications from './Communications';
 import FilterTags from './FilterTags';
+import SearchPatientTable from './SearchPatientTable/index';
 import styles from './styles.scss';
 
 class SideBarFilters extends Component {
@@ -65,6 +66,7 @@ class SideBarFilters extends Component {
   handleDemographics(values) {
     const {
       addFilter,
+      removeFilter
     } = this.props;
 
     let keys = Object.keys(values);
@@ -73,16 +75,46 @@ class SideBarFilters extends Component {
     const batchFilters = [];
 
     keys = keys.filter((key) => {
+      if (key === 'firstName' && values[key].length === 0) {
+        removeFilter(0);
+      } else if (key === 'lastName' && values[key].length === 0) {
+        removeFilter(1);
+      }
+
       if (values[key] && values[key].length !== 0) {
         return key;
       }
     });
 
     keys.forEach((key) => {
-      if (key === 'age' && values[key].length === 2) {
+      if (key === 'firstName' && values[key].length === 1 && values[key] !== '') {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 0,
+          formName: 'demographics',
+          formSection: key,
+          key,
+          data: values[key],
+          tag: 'Search First Name',
+        });
+      }
+
+      if (key === 'lastName' && values[key].length === 1 && values[key] !== '') {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 1,
+          formName: 'demographics',
+          formSection: key,
+          key,
+          data: values[key],
+          tag: 'Search Last Name',
+        });
+      }
+
+      if (key === 'age' && values[key].length === 2) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 2,
           formName: 'demographics',
           formSection: key,
           key,
@@ -94,7 +126,7 @@ class SideBarFilters extends Component {
       if (key === 'gender' && values[key].length === 1) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 1,
+          indexFunc: 3,
           data: values[key],
           formName: 'demographics',
           formSection: key,
@@ -106,7 +138,7 @@ class SideBarFilters extends Component {
       if (key === 'city' && values[key].length === 1) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 2,
+          indexFunc: 4,
           formName: 'demographics',
           formSection: key,
           data: values[key],
@@ -144,7 +176,7 @@ class SideBarFilters extends Component {
       if (key === 'firstAppointment' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 3,
+          indexFunc: 5,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -156,7 +188,7 @@ class SideBarFilters extends Component {
       if (key === 'lastAppointment' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 4,
+          indexFunc: 6,
           data: values[key],
           formName: 'appointments',
           formSection: key,
@@ -168,7 +200,7 @@ class SideBarFilters extends Component {
       if (key === 'appointmentsCount' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 5,
+          indexFunc: 7,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -179,7 +211,7 @@ class SideBarFilters extends Component {
       if (key === 'production' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 6,
+          indexFunc: 8,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -190,7 +222,7 @@ class SideBarFilters extends Component {
       if (key === 'onlineAppointments' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 7,
+          indexFunc: 9,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -221,7 +253,7 @@ class SideBarFilters extends Component {
     keys.forEach((key) => {
       if (key && values[key].length === 1) {
         const pracObj = {
-          indexFunc: 8,
+          indexFunc: 10,
           data: values[key],
           formName: 'practitioners',
           formSection: 'practitioners',
@@ -253,7 +285,7 @@ class SideBarFilters extends Component {
       if (key === 'remindersEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 9,
+          indexFunc: 11,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -264,7 +296,7 @@ class SideBarFilters extends Component {
       if (key === 'remindersSMS' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 10,
+          indexFunc: 12,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -275,7 +307,7 @@ class SideBarFilters extends Component {
       if (key === 'remindersPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 11,
+          indexFunc: 13,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -286,7 +318,7 @@ class SideBarFilters extends Component {
       if (key === 'recaresEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 12,
+          indexFunc: 14,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -297,7 +329,7 @@ class SideBarFilters extends Component {
       if (key === 'recaresSMS' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 13,
+          indexFunc: 15,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -308,7 +340,7 @@ class SideBarFilters extends Component {
       if (key === 'recaresPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 14,
+          indexFunc: 16,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -319,7 +351,7 @@ class SideBarFilters extends Component {
       if (key === 'lastReminderSent' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 15,
+          indexFunc: 17,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -330,7 +362,7 @@ class SideBarFilters extends Component {
       if (key === 'lastRecareSent' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 16,
+          indexFunc: 18,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -341,7 +373,7 @@ class SideBarFilters extends Component {
       if (key === 'reviews' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 17,
+          indexFunc: 19,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -372,6 +404,27 @@ class SideBarFilters extends Component {
       return null;
     }
 
+    const inputStyles = {
+      group: styles.groupInputStyle,
+    };
+
+    const filterBodyDisplay = ({ index, component, headerTitle }) => {
+      return (
+        <div className={styles.filterBody}>
+          <div
+            className={styles.filterHeader}
+            onClick={() => this.displayFilter(index)}
+          >
+            {headerTitle}
+            <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
+          </div>
+          {openFilters[index] ? <div className={styles.collapsible}>
+            {component}
+          </div> : null}
+        </div>
+      );
+    };
+
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
@@ -379,14 +432,15 @@ class SideBarFilters extends Component {
           <div className={styles.header_text}> Filters </div>
           <div
             className={styles.header_clearText}
-            onClick={(e) => {
-              e.stopPropagation();
-              this.clearTags();
-            }}
+            onClick={this.clearTags}
           >
             Clear All
           </div>
         </div>
+
+        {/*<SearchPatientTable
+          handleSearchPatient={this.props.searchPatients}
+        />*/}
 
         <FilterTags
           filterTags={filters}
@@ -394,69 +448,39 @@ class SideBarFilters extends Component {
         />
 
         <div className={styles.filtersContainer}>
-          <div className={styles.filterBody}>
-            <div
-              className={styles.filterHeader}
-              onClick={() => this.displayFilter(0)}
-            >
-              Demographics
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
-            </div>
-            {openFilters[0] ? <div className={styles.collapsible}>
-              <Demographics
-                handleDemographics={this.handleDemographics}
-              />
-            </div> : null}
-          </div>
-
-          <div className={styles.filterBody}>
-            <div
-              className={styles.filterHeader}
-              onClick={() => this.displayFilter(1)}
-            >
-              Appointments
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
-            </div>
-            {openFilters[1] ? <div className={styles.collapsible}>
-              <Appointments
-                handleAppointments={this.handleAppointments}
-              />
-            </div> : null }
-          </div>
-
-          <div className={styles.filterBody}>
-            <div
-              className={styles.filterHeader}
-              onClick={() => this.displayFilter(2)}
-            >
-              Practitioners
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
-            </div>
-
-            {openFilters[2] ? <div className={styles.collapsible}>
-              <Practitioners
-                handlePractitioners={this.handlePractitioners}
-                practitioners={practitioners}
-              />
-            </div> : null }
-          </div>
-
-          <div className={styles.filterBody}>
-            <div
-              className={styles.filterHeader}
-              onClick={() => this.displayFilter(3)}
-            >
-              Communications
-              <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
-            </div>
-
-            {openFilters[3] ? <div className={styles.collapsible}>
-              <Communications
-                handleCommunications={this.handleCommunications}
-                practitioners={practitioners}
-              />
-            </div> : null }
-          </div>
+          {filterBodyDisplay({
+            index: 0,
+            component: Demographics({
+              handleDemographics: this.handleDemographics,
+              searchPatients: this.props.searchPatients,
+            }),
+            headerTitle: 'Demographics',
+          })}
+          {filterBodyDisplay({
+            index: 1,
+            component: <Appointments
+              handleAppointments={this.handleAppointments}
+              theme={inputStyles}
+            />,
+            headerTitle: 'Appointments',
+          })}
+          {filterBodyDisplay({
+            index: 2,
+            component: <Practitioners
+              handlePractitioners={this.handlePractitioners}
+              practitioners={practitioners}
+            />,
+            headerTitle: 'Appointments',
+          })}
+          {filterBodyDisplay({
+            index: 3,
+            component: <Communications
+              handleCommunications={this.handleCommunications}
+              practitioners={practitioners}
+              theme={inputStyles}
+            />,
+            headerTitle: 'Communications',
+          })}
         </div>
       </Card>
     );
@@ -468,6 +492,7 @@ SideBarFilters.propTypes = {
   clearFilters: PropTypes.func.isRequired,
   arrayRemoveAll: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
+  searchPatients: PropTypes.func.isRequired,
 };
 
 export default SideBarFilters;

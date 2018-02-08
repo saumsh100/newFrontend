@@ -397,6 +397,7 @@ Object {
   "lastAppointment": "2017-07-21T00:14:30.932Z",
   "monthsApp": 1,
   "nextAppointment": null,
+  "productionCalendarYear": null,
 }
 `;
 

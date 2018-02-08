@@ -6,11 +6,11 @@ import format from '../../util/format';
 
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { updateChatAfterPatient } from '../../util/preUpdateFunctions';
-import { mostBusinessPatient, mostBusinessClinic } from '../../../lib/intelligence/revenue';
+import { mostBusinessPatient, mostBusinessClinic, mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
-import { Appointment, Chat, Patient } from '../../../_models';
+import { Appointment, Chat, Patient, Event } from '../../../_models';
 import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
 import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
 import { fetchCallEvents } from '../../../lib/events/Calls/index';
@@ -31,13 +31,13 @@ patientsRouter.get('/:patientId/events', eventsRouter);
 function filterEventsByQuery(eventsArray, query) {
   const {
     limit,
-    skip,
+    offset,
   } = query;
 
   let filterArray = eventsArray;
 
-  if (skip && eventsArray.length > skip) {
-    filterArray = filterArray.slice(skip, eventsArray.length);
+  if (offset && eventsArray.length > offset) {
+    filterArray = filterArray.slice(offset, eventsArray.length);
   }
 
   if (limit) {
@@ -132,11 +132,13 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
       },
     });
 
+    const productionCalendarYear = await mostBusinessSinglePatient(moment().subtract(1, 'years').toISOString(), new Date(), req.accountId, [req.patient.id], []);
+
     stats.allApps = totalAppointmentCount;
     stats.monthsApp = appointmentsInDateRangeCount;
     stats.lastAppointment = mostRecentAppointmentDate;
     stats.nextAppointment = appointmentsAllTimeNext[0] ? appointmentsAllTimeNext[0].startDate : null;
-
+    stats.productionCalendarYear = productionCalendarYear[0] ? productionCalendarYear[0].totalAmount : null;
 
     return res.send(stats);
   } catch (error) {
@@ -524,13 +526,29 @@ eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async 
   try {
     const accountId = req.accountId;
 
+    const patient = await Patient.findById(req.patient.id);
+
+    const buildData = {
+      id: patient.id,
+      patientId: patient.id,
+      accountId,
+      type: 'New Patient',
+      metaData: {
+        createdAt: patient.pmsCreatedAt || patient.createdAt,
+        firstName: patient.firstName,
+        lastName: patient.lastName,
+      },
+    };
+
+    const patientEvent = Event.build(buildData).get({ plain: true });
+
     const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId, req.query);
     const callEvents = await fetchCallEvents(req.patient.id, accountId, req.query);
     const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId, req.query);
     const requestEvents = await fetchRequestEvents(req.patient.id, accountId, req.query);
     const reviewEvents = await fetchReviewEvents(req.patient.id, accountId, req.query);
 
-    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents);
+    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents, patientEvent);
 
     const sortedEvents = totalEvents.sort((a, b) => {
       if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
@@ -538,7 +556,7 @@ eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async 
       return 0;
     });
 
-    const filteredEvents = filterEventsByQuery(sortedEvents, req.query)
+    const filteredEvents = filterEventsByQuery(sortedEvents, req.query);
 
     res.send(normalize('events', filteredEvents));
   } catch (error) {

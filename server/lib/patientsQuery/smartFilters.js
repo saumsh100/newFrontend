@@ -9,10 +9,11 @@ export function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
   return Patient.findAndCountAll(Object.assign({
     raw: true,
     where: {
+      status: 'Active',
       accountId,
       nextApptId: null,
       nextApptDate: null,
-      lastApptDate: {
+      lastHygieneDate: {
         $between: [startMonthsOut, endMonthsOut],
       },
     },

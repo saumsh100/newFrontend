@@ -1,31 +1,59 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Loader from 'react-loader';
+import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from '../../library';
-import { fetchEntities, fetchEntitiesRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
+import { Grid, Row, Col, Icon} from '../../library';
+import {
+  fetchEntities,
+  fetchEntitiesRequest,
+  updateEntityRequest
+} from '../../../thunks/fetchEntities';
+import {
+  addRemoveTimelineFilters,
+  selectAllTimelineFilters,
+  clearAllTimelineFilters,
+} from '../../../reducers/patientTable';
+import FilterTimeline from './FilterTimeline';
 import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
 import LeftInfoDisplay from './LeftInfoDisplay';
 import styles from './styles.scss';
 
+const HeaderModalComponent = ({ icon, text, onClick, title }) => (
+  <div className={styles.textContainer}>
+    <div className={styles.cardTitle}> {title} </div>
+    <div className={styles.textHeader} onClick={onClick}>
+      <div className={styles.textHeader_icon}>
+        <Icon icon={icon} />
+      </div>
+      <div className={styles.textHeader_text}>{text}</div>
+    </div>
+  </div>
+);
+
+// The default list of events shown on the time-line. Add to this when a new event typed is added.
+const defaultEvents = ['appointment', 'reminder', 'review', 'call', 'new patient'];
+
 class PatientInfo extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isOpen: false,
+      filterOpen: false,
       tabIndex: 0,
     };
 
     this.openModal = this.openModal.bind(this);
+    this.openFilter = this.openFilter.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this);
+    this.addRemoveFilter = this.addRemoveFilter.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const patientId = this.props.match.params.patientId;
     const url = `/api/patients/${patientId}`;
 
@@ -41,15 +69,26 @@ class PatientInfo extends Component {
     ]);
   }
 
+  componentWillUnmount() {
+    this.props.selectAllTimelineFilters();
+  }
+
   openModal() {
     this.setState({
       isOpen: true,
     });
   }
 
+  openFilter() {
+    this.setState({
+      filterOpen: true,
+    })
+  }
+
   reinitializeState() {
     this.setState({
       isOpen: false,
+      filterOpen: false,
     });
   }
 
@@ -57,6 +96,10 @@ class PatientInfo extends Component {
     this.setState({
       tabIndex: index,
     });
+  }
+
+  addRemoveFilter(filter) {
+    this.props.addRemoveTimelineFilters({ type: filter });
   }
 
   render() {
@@ -69,21 +112,19 @@ class PatientInfo extends Component {
       wasFetched,
     } = this.props;
 
-    if (!wasFetched || !patient) {
-      return <Loader color="#FF715A" />;
-    }
 
     return (
       <Grid className={styles.mainContainer}>
         <Row>
-          <Col sm={12} md={12} className={styles.patientDisplay}>
+          <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
               patient={patient}
               patientStats={patientStats}
+              wasFetched={wasFetched}
             />
           </Col>
         </Row>
-        <Row>
+        <Row className={styles.row}>
           <Col xs={12} className={styles.body}>
             <div className={styles.infoDisplay}>
               <EditDisplay
@@ -92,6 +133,12 @@ class PatientInfo extends Component {
                 reinitializeState={this.reinitializeState}
                 isOpen={this.state.isOpen}
                 outerTabIndex={this.state.tabIndex}
+              />
+              <HeaderModalComponent
+                icon="pencil"
+                text="Edit"
+                onClick={() => this.openModal()}
+                title="Patient Info"
               />
               <LeftInfoDisplay
                 patient={patient}
@@ -102,7 +149,35 @@ class PatientInfo extends Component {
               />
             </div>
             <div className={styles.timeline}>
-              <Timeline patientId={patientId} />
+              <div className={styles.textContainer}>
+                <div className={styles.cardTitle}>Timeline & Activities</div>
+                <Popover
+                  isOpen={this.state.filterOpen}
+                  body={[(
+                    <FilterTimeline
+                      addRemoveFilter={this.addRemoveFilter}
+                      defaultEvents={defaultEvents}
+                      filters={this.props.filters}
+                      clearFilters={this.props.clearAllTimelineFilters}
+                      selectAllFilters={this.props.selectAllTimelineFilters}
+                    />
+                  )]}
+                  preferPlace="below"
+                  tipSize={0.01}
+                  onOuterAction={this.reinitializeState}
+                >
+                  <div className={styles.textHeader} onClick={this.openFilter}>
+                    <div className={styles.textHeader_icon}>
+                      <Icon icon="filter" />
+                    </div>
+                    <div className={styles.textHeader_text}>Filter</div>
+                  </div>
+                </Popover>
+              </div>
+              <Timeline
+                patientId={patientId}
+                filters={this.props.filters}
+              />
             </div>
           </Col>
         </Row>
@@ -115,18 +190,30 @@ PatientInfo.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   match: PropTypes.instanceOf(Object),
+  addRemoveTimelineFilters: PropTypes.func.isRequired,
+  selectAllTimelineFilters: PropTypes.func.isRequired,
+  clearAllTimelineFilters: PropTypes.func.isRequired,
 };
 
+HeaderModalComponent.propTypes = {
+  icon: PropTypes.string,
+  text: PropTypes.string,
+  onClick: PropTypes.func.isRequired,
+  title: PropTypes.string,
+};
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchEntities,
     fetchEntitiesRequest,
     updateEntityRequest,
+    addRemoveTimelineFilters,
+    selectAllTimelineFilters,
+    clearAllTimelineFilters,
   }, dispatch);
 }
 
-function mapStateToProps({ entities, apiRequests }, { match }) {
+function mapStateToProps({ entities, apiRequests, patientTable }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
   const patientStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
   const wasFetched = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').wasFetched : null);
@@ -135,6 +222,7 @@ function mapStateToProps({ entities, apiRequests }, { match }) {
     patient: patients.get(match.params.patientId),
     patientStats,
     wasFetched,
+    filters: patientTable.get('timelineFilters'),
   };
 }
 

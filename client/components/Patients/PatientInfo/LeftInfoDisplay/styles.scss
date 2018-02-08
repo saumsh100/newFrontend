@@ -1,8 +1,13 @@
+
 @import '../../../../ui';
 
 .mainContainer {
   width: 100%;
   background: white;
+  box-sizing: border-box;
+  min-height: 698px;
+  height: 698px;
+  flex: 1;
 }
 
 .subHeader {
@@ -20,8 +25,8 @@
 }
 .grid {
   box-sizing: border-box;
-  padding: 10px 35px 10px 35px;
-  border-top: 0.5px dotted $primary-grey;
+  padding: 20px 35px 20px 35px;
+  //border-top: 1px solid $primary-grey;
 }
 
 .row {
@@ -42,6 +47,7 @@
 
 .tab {
   padding-top: 10px;
+  height: 100%;
   > nav {
     display: flex;
     justify-content: space-between;
@@ -50,16 +56,21 @@
     padding-right: 25px;
     font-weight: $large-weight;
   }
+
+
+
 }
 
 .recallContainer {
   display: flex;
-  width: 100%;
   justify-content: space-between;
   align-items: center;
+  //width: 350px;
+  margin-left: 40px;
 }
 
 .iconContainer {
+
   span {
     padding-left: 10px;
   }
@@ -110,4 +121,16 @@
   &_icon {
     padding-right: 5px;
   }
+}
+
+.noData {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  color: $primary-dark-grey;
+  font-size: $extra-small-size;
+  height: 400px;
+
 }

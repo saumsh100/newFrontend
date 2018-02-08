@@ -1,0 +1,115 @@
+
+@import '../../../../ui';
+
+.filterContainer {
+  width: 330px;
+  height: auto;
+  background: white;
+  border: 1px solid $primary-grey;
+  box-shadow: 0px 0px 25px 1px rgba(209,209,209,0.5) !important;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 15px;
+  box-sizing: border-box;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 13px;
+}
+
+.headerOptions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.selectClear {
+  font-size: $extra-small-size;
+  color: $primary-dark-grey;
+
+  &:hover {
+    cursor: pointer;
+    color: darken($primary-dark-grey, 10%);
+  }
+}
+
+.selectText {
+  @extend .selectClear;
+  margin-right: 10px;
+}
+
+.clearText {
+  @extend .selectClear;
+}
+
+.body{
+  padding: 20px;
+  padding-bottom: 0px;
+  padding-right: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.subHeader {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 10px;
+  color: $primary-dark-grey;
+  margin-bottom: 15px;
+}
+
+.eventWrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.singleEvent {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.iconEvent {
+  border: 2px solid white;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterIcon {
+  margin-right: 5px;
+}
+
+.textEvent {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+.selectedBlue {
+  border: 2px solid $primary-blue;
+}
+
+.selectedRed {
+  border: 2px solid $primary-color;
+}
+
+.selectedGreen {
+  border: 2px solid $primary-green;
+}
+
+.selectedYellow {
+  border: 2px solid $primary-yellow;
+}

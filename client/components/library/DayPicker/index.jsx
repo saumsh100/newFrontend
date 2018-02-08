@@ -102,7 +102,6 @@ class DayPicker extends Component {
         onChange={this.handleInputChange}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}
-        icon="calendar"
       />
     );
 

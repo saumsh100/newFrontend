@@ -22,12 +22,11 @@ export default function PersonalTab(props) {
 
   return (
     <Grid className={styles.grid}>
-      {editComponent}
       <div className={styles.subHeader}> Basic </div>
       <Row className={styles.row}>
         <Col xs={6}>
           <InfoDump
-            label="Gender"
+            label="GENDER"
             data={patient.gender}
           />
         </Col>
@@ -56,6 +55,12 @@ export default function PersonalTab(props) {
           <InfoDump
             label="WORK NUMBER"
             data={patient.workPhoneNumber}
+          />
+        </Col>
+        <Col xs={6}>
+          <InfoDump
+            label="EMAIL"
+            data={patient.email}
           />
         </Col>
       </Row>

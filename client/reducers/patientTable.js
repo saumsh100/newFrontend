@@ -11,6 +11,10 @@ export const SET_SMART_FILTER = 'SET_SMART_FIlTER';
 export const SET_TABLE_FILTERS = 'SET_TABLE_FILTERS';
 export const REMOVE_TABLE_FILTER = 'REMOVE_TABLE_FILTER';
 export const CLEAR_TABLE_FILTERS = 'CLEAR_TABLE_FILTERS';
+export const CLEAR_TABLE_SEARCH = 'CLEAR_TABLE_SEARCH';
+export const ADD_REMOVE_TIMELINE_FILTERS = 'ADD_REMOVE_TIMELINE_FILTERS';
+export const SELECT_ALL_TIMELINE_FILTERS = 'SELECT_ALL_TIMELINE_FILTERS';
+export const CLEAR_ALL_TIMELINE_FILTERS = 'CLEAR_ALL_TIMELINE_FILTERS';
 
 /**
  * Actions
@@ -21,11 +25,16 @@ export const setSmartFilter = createAction(SET_SMART_FILTER);
 export const setFilters = createAction(SET_TABLE_FILTERS);
 export const removeFilter = createAction(REMOVE_TABLE_FILTER);
 export const clearFilters = createAction(CLEAR_TABLE_FILTERS);
+export const clearSearch = createAction(CLEAR_TABLE_SEARCH);
+
+export const addRemoveTimelineFilters = createAction(ADD_REMOVE_TIMELINE_FILTERS);
+export const selectAllTimelineFilters = createAction(SELECT_ALL_TIMELINE_FILTERS);
+export const clearAllTimelineFilters = createAction(CLEAR_ALL_TIMELINE_FILTERS);
 
 /**
  * Initial State
  */
-export const createInitialPatientState = state => {
+export const createInitialPatientState = (state) => {
   return fromJS(Object.assign({
     data: [],
     totalPatients: 0,
@@ -36,6 +45,10 @@ export const createInitialPatientState = state => {
     filters: Map(),
     filterTags: Map(),
     smartFilter: null,
+    searchFirstName: '',
+    searchLastName: '',
+
+    timelineFilters: ['appointment', 'reminder', 'review', 'call', 'new patient'],
   }, state));
 };
 
@@ -90,4 +103,42 @@ export default handleActions({
     return state.set('filters', filters);
   },
 
+  [CLEAR_TABLE_SEARCH](state) {
+    state.set('searchFirstName', '');
+    state.set('searchLastName', '');
+    return state;
+  },
+
+  [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
+    let filters = state.get('timelineFilters');
+
+    if (filters.size > 0) {
+      filters = filters.toJS();
+    }
+    const type = payload.type;
+
+    if (filters.indexOf(type) > -1) {
+      const index = filters.indexOf(type);
+      const newFilters = filters;
+      newFilters.splice(index, 1);
+      return state.merge({
+        timelineFilters: newFilters,
+      });
+    }
+
+    const newFilters = filters;
+    newFilters.push(type);
+    return state.merge({
+      timelineFilters: newFilters,
+    });
+  },
+
+  [CLEAR_ALL_TIMELINE_FILTERS](state) {
+    return state.set('timelineFilters', []);
+  },
+
+  [SELECT_ALL_TIMELINE_FILTERS](state) {
+    const defaultEvents = initialState.get('timelineFilters');
+    return state.set('timelineFilters', defaultEvents);
+  },
 }, initialState);

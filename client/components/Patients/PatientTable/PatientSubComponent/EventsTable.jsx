@@ -29,16 +29,19 @@ export default function EventsTable(props) {
     if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
     if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
     return 0;
-  });
+  }).slice(0, 5);
 
   return (
     <div className={styles.eventsList}>
-      {sortedEvents.map((event) => {
+      {sortedEvents.map((event, index) => {
         return (
-          <Event
-            data={event.get('metaData')}
-            type={event.get('type').toLowerCase()}
-          />
+          <div className={styles.lineEventContainer}>
+           <div className={styles.verticalLine}>&nbsp;</div>
+            <Event
+              data={event.get('metaData')}
+              type={event.get('type').toLowerCase()}
+            />
+          </div>
         );
       })}
     </div>

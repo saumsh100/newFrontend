@@ -6,6 +6,7 @@ import InfoDump from '../../../Shared/InfoDump';
 import RecallDropDowns from '../../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../../Shared/ReminderDropDowns';
 import styles from '../styles.scss';
+import { validDateValue } from '../../../Shared/helpers';
 
 export default function AppointmentsTab(props) {
   const {
@@ -19,7 +20,6 @@ export default function AppointmentsTab(props) {
 
   return (
     <Grid className={styles.grid}>
-      {editComponent}
       <Row className={styles.row}>
         <Col xs={12}>
           <InfoDump
@@ -39,11 +39,13 @@ export default function AppointmentsTab(props) {
         <Col xs={6}>
           <InfoDump
             label="RECALL"
+            data={validDateValue(patient.lastRecallDate)}
           />
         </Col>
         <Col xs={6}>
           <InfoDump
             label="HYGIENE"
+            data={validDateValue(patient.lastHygieneDate)}
           />
         </Col>
       </Row>
@@ -70,6 +72,7 @@ export default function AppointmentsTab(props) {
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump
             label="LAST RESTORATIVE VISIT"
+            data={validDateValue(patient.lastRestorativeDate)}
           />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
@@ -84,12 +87,12 @@ export default function AppointmentsTab(props) {
         </Col>
         <Col xs={6}>
           <InfoDump
-            label="LAST HYGIENE VIST"
+            label="LAST HYGIENE VISIT"
           />
         </Col>
         <Col xs={6}>
           <InfoDump
-            label="TOTAL HYGIENCE VISTS"
+            label="TOTAL HYGIENCE VISITS"
           />
         </Col>
       </Row>

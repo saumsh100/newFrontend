@@ -9,6 +9,7 @@ import ReviewEvent from './ReviewEvent';
 import ReminderEvent from './ReminderEvent';
 import CallEvent from './CallEvent';
 import AppointmentEvent from './AppointmentEvent';
+import NewPatientEvent from './NewPatientEvent';
 
 class Event extends Component {
   render() {
@@ -43,6 +44,12 @@ class Event extends Component {
       icon = 'phone';
       bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
       content = <CallEvent data={data} />;
+    }
+
+    if (type === 'new patient') {
+      icon = 'user';
+      bgIconStyle = classnames(bgIconStyle, styles.greenBorder);
+      content = <NewPatientEvent data={data} />
     }
 
     return (

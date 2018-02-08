@@ -52,6 +52,7 @@ class HeaderSection extends Component {
       entityData: values,
       alert,
     }).then(() => {
+      this.props.destroy('newUser')
       this.reinitializeState();
     });
   }
@@ -123,6 +124,7 @@ class HeaderSection extends Component {
           <Button
             onClick={() => this.setActive()}
             border="blue"
+            compact
           >
             Add New Patient
           </Button>

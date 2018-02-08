@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Card, Avatar, Icon, Grid, Row, Col, } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
+import HygieneData from '../../Shared/HygieneColumn';
+import RecallData from '../../Shared/RecallColumn';
+import { validDateValue } from '../../Shared/helpers';
 import styles from './styles.scss';
 
 const bgImgs = ['banner-01.png', 'banner-02.png', 'banner-03.png', 'banner-04.png', 'banner-05.png']
@@ -20,17 +23,26 @@ export default function TopDisplay(props) {
   const {
     patient,
     patientStats,
+    wasFetched,
   } = props;
 
+
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
+
+  const production = wasFetched && patientStats.get('productionCalendarYear') ? `$${patientStats.get('productionCalendarYear')}` : '-';
+
+  const bgStyle = {
+    background: `url('/images/banners/${bgImgs[randomNum]}')`,
+    backgroundSize: '100%'
+  };
 
   return (
     <Card className={styles.card} noBorder>
       <div className={styles.content}>
-        <div className={styles.imageContainer}>
-          <img width="100%" height="100%" src={`/images/banners/${bgImgs[randomNum]}`} />
+        <div className={styles.imageContainer} style={bgStyle}>
+          {''}
         </div>
-        <div className={styles.dataContainer}>
+        {wasFetched && patient ? (<div className={styles.dataContainer}>
           <div className={styles.avatarContainer}>
             <Avatar user={patient} className={styles.avatarContainer_avatar} size="xl" />
             <div className={styles.avatarContainer_data}>
@@ -56,12 +68,12 @@ export default function TopDisplay(props) {
               </div>
             </div>
           </div>
-
           <Grid className={styles.rightContainer}>
             <Row className={styles.rightContainer_content}>
               <Col xs={4}>
                 <InfoDump
                   label="PATIENT DUE FOR HYGIENE"
+                  component={HygieneData({ patient, className: styles.fontStyle })}
                 />
               </Col>
               <Col xs={4}>
@@ -79,6 +91,7 @@ export default function TopDisplay(props) {
               <Col xs={4}>
                 <InfoDump
                   label="PATIENT DUE FOR RECALL"
+                  component={RecallData({ patient, className: styles.fontStyle })}
                 />
               </Col>
               <Col xs={4}>
@@ -89,16 +102,18 @@ export default function TopDisplay(props) {
               <Col xs={4}>
                 <InfoDump
                   label="PRODUCTION IN CALENDAR YEAR"
+                  data={production}
                 />
               </Col>
             </Row>
           </Grid>
-        </div>
+        </div>) : null}
       </div>
     </Card>
   );
 }
 
 TopDisplay.propTypes = {
+  wasFetched: PropTypes.bool,
   patient: PropTypes.instanceOf(Object),
 };

@@ -62,6 +62,7 @@ $empty-grey: darken(lightgrey, 5%);
 .optionDiv {
   padding: 0px !important;
   font-family: $dashboard-font !important;
+  white-space: normal !important;
 }
 
 .optionListItem {

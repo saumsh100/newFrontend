@@ -9,6 +9,7 @@ import styles from '../styles.scss';
 export default function Appointments(props) {
   const {
     handleAppointments,
+    theme,
   } = props;
 
   return (
@@ -24,11 +25,13 @@ export default function Appointments(props) {
           <Field
             component="DayPicker"
             name="0"
+            theme={theme}
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
+            theme={theme}
           />
         </FormSection>
         <div className={styles.formHeaderInput}>Last Appointment</div>
@@ -36,11 +39,13 @@ export default function Appointments(props) {
           <Field
             component="DayPicker"
             name="0"
+            theme={theme}
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
+            theme={theme}
           />
         </FormSection>
         <div className={styles.formHeader}> Production </div>

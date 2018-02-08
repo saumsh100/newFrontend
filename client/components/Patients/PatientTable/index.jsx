@@ -10,16 +10,24 @@ import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Grid, Row, Col, Card } from '../../library';
-import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities'
+import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities';
 import { fetchPatientTableData } from '../../../thunks/patientTable';
-import { setTableData, setSmartFilter, setFilters, removeFilter, clearFilters } from '../../../reducers/patientTable';
+import {
+  setTableData,
+  setSmartFilter,
+  setFilters,
+  removeFilter,
+  clearFilters,
+  clearSearch,
+} from '../../../reducers/patientTable';
 import PatientSubComponent from './PatientSubComponent';
 import PatientNameColumn from './PatientNameColumn';
 import SelectPatientColumn from './SelectPatientColumn';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
-import HygieneColumn from './HygieneColumn';
-import Loading from '../../library/Loading';
+import HygieneColumn from '../Shared/HygieneColumn';
+import RecallColumn from '../Shared/RecallColumn';
+import SelectAllPatients from './SelectPatientColumn/SelectAllPatients';
 import styles from './styles.scss';
 
 class PatientTable extends Component {
@@ -41,6 +49,8 @@ class PatientTable extends Component {
     this.clearFilters = this.clearFilters.bind(this);
     this.removeFilter = this.removeFilter.bind(this);
     this.handlePatientSelection = this.handlePatientSelection.bind(this);
+    this.selectAllPatients = this.selectAllPatients.bind(this);
+    this.searchPatients = debounce(this.searchPatients.bind(this), 300);
   }
 
   componentDidMount() {
@@ -53,6 +63,10 @@ class PatientTable extends Component {
 
   pageChange(index) {
     this.props.setTableData({ page: index });
+    this.setState({
+      expanded: {},
+      patientIds: [],
+    });
     this.fetchData();
   }
 
@@ -85,14 +99,18 @@ class PatientTable extends Component {
   }
 
   clearFilters() {
-    const {
-      destroy,
-    } = this.props;
+    const filtersArray = [
+      'demographics',
+      'appointments',
+      'practitioners',
+      'communications',
+      'SearchPatientTable',
+    ];
 
-    const filtersArray = ['demographics', 'appointments', 'practitioners', 'communications'];
-    filtersArray.forEach(filter => destroy(filter));
+    filtersArray.forEach(filter => this.props.destroy(filter));
 
     this.props.clearFilters();
+    this.props.clearSearch();
     this.fetchData();
   }
 
@@ -137,6 +155,46 @@ class PatientTable extends Component {
     });
   }
 
+  selectAllPatients() {
+    const {
+      patientTable,
+    } = this.props;
+
+    const length = this.state.patientIds.length
+
+    if (length !== patientTable.data.length) {
+      const patients = patientTable.data;
+      const patientIds = [];
+
+      patients.forEach((patient) => {
+        patientIds.push(patient.id)
+      });
+
+      this.setState({
+        patientIds,
+      });
+    } else if (length === patientTable.data.length) {
+      this.setState({
+        patientIds: [],
+      });
+    }
+
+    return null;
+  }
+
+  searchPatients(values) {
+    this.props.setTableData({
+      searchFirstName: values && values.searchFirstName ? values.searchFirstName : '',
+      searchLastName: values && values.searchLastName ? values.searchLastName : '',
+      page: 0,
+    });
+
+    this.setState({
+      expanded: {},
+    });
+    this.fetchData();
+  }
+
   render() {
     const {
       push,
@@ -167,7 +225,15 @@ class PatientTable extends Component {
         },
       },
       {
-        Header: '',
+        Header: (row) => {
+          return (
+            <SelectAllPatients
+              selectAllPatients={this.selectAllPatients}
+              patientIds={patientIds}
+              maxPatients={row.data.length}
+            />
+          );
+        },
         Cell: row => {
           return (
             <SelectPatientColumn
@@ -196,13 +262,13 @@ class PatientTable extends Component {
 
         filterable: false,
         sortable: false,
-        maxWidth: 50,
+        maxWidth: 40,
         className: styles.colBg,
       },
       {
         Header: '',
         accessor: '',
-        Cell: row => {
+        Cell: (row) => {
           return (
             <div className={styles.displayFlex}>
               <PatientNameColumn
@@ -216,14 +282,14 @@ class PatientTable extends Component {
             </div>
           );
         },
-        maxWidth: 45,
+        maxWidth: 60,
         filterable: false,
         className: styles.colBg,
       },
       {
         Header: 'First Name',
         accessor: 'firstName',
-        Cell: row => {
+        Cell: (row) => {
           return (
             <div className={styles.displayFlex}>
               <PatientNameColumn
@@ -244,7 +310,7 @@ class PatientTable extends Component {
       {
         Header: 'Last Name',
         accessor: 'lastName',
-        Cell: row => {
+        Cell: (row) => {
           return (
             <div className={styles.displayFlex}>
               <PatientNameColumn
@@ -265,7 +331,7 @@ class PatientTable extends Component {
       {
         Header: 'Age',
         id: 'birthDate',
-        accessor: d => {
+        accessor: (d) => {
           const dateValue = moment().diff(d.birthDate, 'years');
           return Number.isInteger(dateValue) ? dateValue : '';
         },
@@ -287,17 +353,17 @@ class PatientTable extends Component {
 
         filterable: false,
         className: styles.colBg,
-        maxWidth: 80,
+        maxWidth: 60,
       },
       {
         Header: 'Next Appointment',
         id: 'nextApptDate',
-        accessor: d => {
+        accessor: (d) => {
           if (d.hasOwnProperty('nextApptDate')) {
             const dateValue = moment(d['nextApptDate']);
-            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '';
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
-          return '';
+          return '-';
         },
 
         Cell: (props) => {
@@ -316,13 +382,13 @@ class PatientTable extends Component {
       {
         Header: 'Last Appointment',
         id: 'lastApptDate',
-        accessor: d => {
+        accessor: (d) => {
           if (d.hasOwnProperty('lastApptDate')) {
             const dateValue = moment(d['lastApptDate']);
-            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '';
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
 
-          return '';
+          return '-';
         },
 
         Cell: (props) => {
@@ -337,7 +403,8 @@ class PatientTable extends Component {
         className: styles.colBg,
       },
       {
-        Header: 'Due for Hygiene (9mo)',
+        Header: 'Due for Hygiene',
+        id: 'lastHygieneDate',
         Cell: (props) => {
           return (
             <HygieneColumn
@@ -346,14 +413,36 @@ class PatientTable extends Component {
           );
         },
 
-        sortable: false,
+        sortable: true,
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'Due for Recall',
+        id: 'lastRecallDate',
+        accessor: (d) => {
+          if (d.hasOwnProperty('lastRecallDate')) {
+            const dateValue = moment(d['lastRecallDate']);
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
+          }
+
+          return '-';
+        },
+        Cell: (props) => {
+          return (
+            <RecallColumn
+              patient={props.original}
+            />
+          );
+        },
+        sortable: true,
         filterable: false,
         className: styles.colBg,
       },
       {
         Header: 'Production in Calendar Year',
         id: 'totalAmount',
-        accessor: d => {
+        accessor: (d) => {
           return d.hasOwnProperty('totalAmount') && d.totalAmount ? `$${d.totalAmount.toFixed(2)}` : '';
         },
 
@@ -364,12 +453,52 @@ class PatientTable extends Component {
             </div>
           </div>
         ),
-
+        show: false,
         filterable: false,
         sortable: false,
         className: styles.colBg,
       },
     ];
+
+    const backgroundWhite = {
+      style: {
+        background: 'white',
+      },
+    };
+
+    const tableStyle = {
+      background: 'white',
+      border: '0px',
+      height: '100%',
+    };
+
+    const headerStyle = {
+      style: {
+        background: 'white',
+        color: '#959596',
+        paddingTop: '10px',
+        paddingBottom: '5px',
+        borderBottom: '1px solid #efefef',
+        fontSize: '12px',
+      },
+    };
+
+    const bodyStyle = {
+      style: {
+        height: '100%',
+        background: 'white',
+      },
+    };
+
+    const columnHeaderStyle = {
+      background: 'white',
+      display: 'flex',
+      justifyContent: 'flex-start',
+      boxShadow: 'none',
+      fontFamily: 'Gotham-Medium',
+      alignItems: 'center',
+      borderRight: 'none',
+    };
 
     return (
       <Grid className={styles.mainContainer}>
@@ -382,6 +511,7 @@ class PatientTable extends Component {
               smartFilter={patientTable.smartFilter}
               setSmartFilter={this.setSmartFilter}
               patientIds={this.state.patientIds}
+              destroy={this.props.destroy}
             />
           </Col>
         </Row>
@@ -391,7 +521,7 @@ class PatientTable extends Component {
               <ReactTable
                 data={patientTable.data}
                 page={patientTable.page}
-                pages={Math.floor(patientTable.totalPatients / patientTable.limit)}
+                pages={Math.ceil(patientTable.totalPatients / patientTable.limit)}
                 sorted={patientTable.sort}
                 defaultPageSize={patientTable.limit}
                 pageSize={patientTable.limit}
@@ -415,13 +545,13 @@ class PatientTable extends Component {
                 onPageChange={(pageIndex) => {
                   this.pageChange(pageIndex);
                 }}
-                onSortedChange={(newSorted, column, shiftKey) => {
+                onSortedChange={(newSorted) => {
                   this.onSort(newSorted);
                 }}
                 onPageSizeChange={(pageSize, pageIndex) => {
                   this.pageSizeChange(pageSize, pageIndex);
                 }}
-                getTdProps={(state, rowInfo, column, instance) => {
+                getTdProps={(state, rowInfo, column) => {
                   const style = {};
 
                   if (rowInfo) {
@@ -439,25 +569,12 @@ class PatientTable extends Component {
                   };
                 }}
                 getTableProps={() => {
-                  return {
-                    style: {
-                      background: 'white',
-                    },
-                  };
+                  return backgroundWhite;
                 }}
                 getTheadTrProps={() => {
-                  return {
-                    style: {
-                      background: 'white',
-                      color: '#959596',
-                      paddingTop: '15px',
-                      paddingBottom: '5px',
-                      borderBottom: '1px solid grey',
-                      fontSize: '12px',
-                      opacity: '0.6',
-                    },
-                  };
+                  return headerStyle;
                 }}
+
                 getTheadThProps={(state, rowInfo, column) => {
                   const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null;
                   let sortedClasses = styles.theadAsc;
@@ -466,40 +583,18 @@ class PatientTable extends Component {
                   }
 
                   return {
-                    style: {
-                      background: 'white',
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                      boxShadow: 'none',
-                      fontFamily: 'Gotham-Medium',
-                      borderRight: 'none',
-                    },
-
+                    style: columnHeaderStyle,
                     className: column.id === compare ? sortedClasses : null,
                   };
                 }}
                 getTfootThProps={() => {
-                  return {
-                    style: {
-                      background: 'white',
-                    },
-                  };
+                  return backgroundWhite;
                 }}
                 getTbodyProps={() => {
-                  return {
-                    style: {
-                      height: '100%',
-                      background: 'white',
-                    },
-                  };
+                  return bodyStyle;
                 }}
 
-                style={{
-                  //height: 'calc(100vh - 188px)',
-                  background: 'white',
-                  border: '0px',
-                  height: '100%',
-                }}
+                style={tableStyle}
               />
             </Card>
             <div className={styles.filterContainer}>
@@ -510,6 +605,7 @@ class PatientTable extends Component {
                 removeFilter={this.removeFilter}
                 filters={filters}
                 clearFilters={this.clearFilters}
+                searchPatients={this.searchPatients}
               />
             </div>
           </Col>
@@ -534,9 +630,10 @@ PatientTable.propTypes = {
   practitioners: PropTypes.object,
   patientTable: PropTypes.object,
   filters: PropTypes.object,
+  clearSearch: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ apiRequests, entities, patientTable }) {
+function mapStateToProps({ entities, patientTable }) {
   const practitioners = entities.getIn(['practitioners', 'models']);
 
   const filters = patientTable.get('filters');
@@ -560,6 +657,7 @@ function mapDispatchToProps(dispatch) {
     setFilters,
     removeFilter,
     clearFilters,
+    clearSearch,
   }, dispatch);
 }
 

@@ -2,37 +2,47 @@
 
 .card {
   position: relative;
-  border-top: 3px solid $inactive-color;
-  overflow: auto;
-  padding: 20px 35px 50px 35px;
   background: white;
+  min-height: 698px;
+  height: 710px;
+  flex: 1;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .header {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  color: $primary-darkgrey;
-  padding-bottom: 10px;
+  color: $primary-dark;
+  font-size: 23px;
+  padding: 20px 0px 10px 20px;
 }
 
 .eventsContainer {
-  position: relative;
-  height: 100%;
+  padding: 10px 30px 10px 30px;
   display:flex;
+  max-height: 100%;
+  overflow: scroll;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+.fill {
+  width: 100%;
 }
 
 .eventsList {
   width: 100%;
-  z-index: 2;
 }
 
 .verticalLine {
   position: absolute;
-  margin-top: 50px;
+  margin-top: 70px;
   left: 16px;
   height: 100%;
   z-index: 1;
-  border-left: 1px solid $primary-grey;
+  border-left: 1.5px dashed darken($primary-grey, 10%);
 }
+
 
 .loader {
   position: absolute;
@@ -45,10 +55,15 @@
 }
 
 .eventSection {
-  padding-top: 30px;
+  position: relative;
+  padding-bottom: 30px;
+}
 
-  &:first-child {
-    padding-top: 0px;
+.eventSection:last-child {
+  padding-bottom: 50px;
+
+  div.verticalLine {
+    display: none;
   }
 }
 

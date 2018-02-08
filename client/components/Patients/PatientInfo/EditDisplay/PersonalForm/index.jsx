@@ -29,6 +29,14 @@ const optionsGender = [
   { value: 'Female' },
 ];
 
+const countries = [{
+  value: 'CA',
+  label: 'Canada',
+}, {
+  value: 'US',
+  label: 'United States',
+}];
+
 export default function PersonalForm(props) {
   const {
     patient,
@@ -43,6 +51,7 @@ export default function PersonalForm(props) {
     homePhoneNumber: patient.get('homePhoneNumber'),
     mobilePhoneNumber: patient.get('mobilePhoneNumber'),
     workPhoneNumber: patient.get('workPhoneNumber'),
+    email: patient.get('email'),
   };
 
   if (patient.get('address')) {
@@ -125,6 +134,14 @@ export default function PersonalForm(props) {
               icon="phone-square"
             />
           </Col>
+          <Col xs={6}>
+            <Field
+              name="email"
+              label="Email"
+              theme={theme}
+              icon="envelope"
+            />
+          </Col>
         </Row>
         <div className={styles.formHeader}> Address </div>
         <Row className={styles.row}>
@@ -145,11 +162,14 @@ export default function PersonalForm(props) {
           </Col>
           <Col xs={6} >
             <Field
-              name="state"
-              label="State"
+              name="country"
+              label="Country"
               component="DropdownSelect"
-              options={states}
+              options={countries}
               theme={props.dropDownStyle}
+              onChange={(e, value) => {
+                setCountry(value);
+              }}
             />
           </Col>
           <Col xs={6} className={styles.colLeft}>
@@ -162,20 +182,11 @@ export default function PersonalForm(props) {
           </Col>
           <Col xs={6} >
             <Field
-              name="country"
-              label="Country"
+              name="state"
+              label="State"
               component="DropdownSelect"
-              options={[{
-                value: 'CA',
-                label: 'Canada',
-              }, {
-                value: 'US',
-                label: 'United States',
-              }]}
+              options={states}
               theme={props.dropDownStyle}
-              onChange={(e, value) => {
-                setCountry(value);
-              }}
             />
           </Col>
         </Row>

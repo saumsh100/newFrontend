@@ -10,8 +10,11 @@ import { RecallsFilter, LastRecallFilter } from './recallsFilter';
 import { ReviewsFilter } from './reviewsFilter';
 import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import { getIds } from './helpers';
+import { PatientSearch, PatientSearchFirstLastName } from './patientSearch';
 
 const filterFunctions = [
+  PatientSearchFirstLastName,
+  PatientSearchFirstLastName,
   DemographicsFilter,
   DemographicsFilter,
   DemographicsFilter,
@@ -112,6 +115,7 @@ export async function PatientQuery(config) {
 
       for (let i = 0; i < sortArray.length; i += 1) {
         const filterObj = JSON.parse(sortArray[i]);
+        console.log(filterObj)
         const index = filterObj.indexFunc;
 
         console.log('Running filter-->', filterObj.tag);
@@ -157,11 +161,12 @@ export async function PatientQuery(config) {
     console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
 
     /**
-     * Calculating Revenue
-     */
+     * Calculating Revenue (Temporarily disabled)
+
     const ids = getIds(patients, 'id');
 
     patients = await mostBusinessSinglePatient(moment().subtract(1, 'years').toISOString(), new Date(), accountId, ids, order);
+    **/
 
     const patientTotal = { id: 'totalPatients',
       count: patientCount,
