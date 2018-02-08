@@ -470,7 +470,7 @@ class SideBarFilters extends Component {
               handlePractitioners={this.handlePractitioners}
               practitioners={practitioners}
             />,
-            headerTitle: 'Appointments',
+            headerTitle: 'Practitioners',
           })}
           {filterBodyDisplay({
             index: 3,
