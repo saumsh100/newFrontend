@@ -57,8 +57,7 @@ class PatientSearch extends Component {
       .then(({ patients }) => {
         // need to merge in chat information
         const suggestions = toArray(patients).map((patient) => {
-          const chat = patient.chats[0];
-          patient.chatId = patient.chatId || (chat && chat.id);
+          patient.chatId = patient.chats[0];
           return patient;
         });
 

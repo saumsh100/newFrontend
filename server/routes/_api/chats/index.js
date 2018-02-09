@@ -187,8 +187,10 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
             });
           } else {
             TextMessage.create(textMessages)
-              .then(() => {
-                Chat.update({ mergeData }, { where: { id: chatId } })
+              .then((tm) => {
+                const lastTextMessageId = tm.id;
+                const lastTextMessageDate = tm.createdAt;
+                Chat.update({ lastTextMessageId, lastTextMessageDate }, { where: { id: chatId } })
                   .then(() => {
                     Chat.findOne({
                       where: { id: chatId },

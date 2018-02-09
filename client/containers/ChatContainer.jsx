@@ -64,7 +64,6 @@ class PatientsMessagesContainer extends Component {
   }
 
   loadMore() {
-    const newState = {};
     this.props.fetchEntities({
       key: 'chats',
       join: ['textMessages', 'patient'],
@@ -73,11 +72,11 @@ class PatientsMessagesContainer extends Component {
         limit: HOW_MANY_TO_SKIP,
       },
     }).then((result) => {
-      if (Object.keys(result).length === 0 || Object.keys(result.chats).length < 15) {
+      if (Object.keys(result).length === 0 || Object.keys(result.chats || {}).length < 15) {
         this.setState({ moreData: false });
       }
 
-      this.setState({ people: this.state.people + Object.keys(result.chats).length })
+      this.setState({ people: this.state.people + Object.keys(result.chats || {}).length })
     });
   }
 
@@ -91,49 +90,16 @@ class PatientsMessagesContainer extends Component {
       newChat,
     } = this.props;
 
-
-    const chatOrder = chats.sort((a, b) => {
-      if (!a.textMessages || !b.textMessages) {
-        return 0;
-      }
-      if (a.textMessages.length === 0 && b.textMessages.length === 0) {
-        return 0;
-      }
-      if (b.textMessages.length === 0) {
-        return 1;
-      }
-      if (a.textMessages.length === 0) {
-        return -1;
-      }
-      return moment(textMessages.get(b.textMessages[b.textMessages.length - 1]).createdAt)
-        .diff(textMessages.get(a.textMessages[a.textMessages.length - 1]).createdAt);
-    });
-
-    const firstId = (chatOrder.toArray()[0] ? chatOrder.toArray()[0].patientId : null);
-
-    const currentPatient = selectedPatient;
-
-    let currentChat;
-
-    //allow for patients with not chat messages be searched and messages can be sent
-
-    const sortedChat = this.props.chats.toArray().sort((a, b) => {
-      return new Date(b.lastTextMessageDate) - new Date(a.lastTextMessageDate);
-    });
-
-    //currentChat = selectedChat || (!newChat && sortedChat[0]);
-    currentChat = selectedChat;
-
     return (
       <ChatMessage
         textMessages={textMessages}
-        chats={chatOrder}
+        chats={chats}
         patients={patients}
         moreData={this.state.moreData}
         loadMore={this.loadMore}
-        currentPatient={currentPatient}
+        currentPatient={selectedPatient}
         setCurrentPatient={this.setCurrentPatient}
-        selectedChat={currentChat}
+        selectedChat={selectedChat}
         searchPatient={this.props.searchPatient}
         searchedPatients={this.props.searchedPatients}
       />
@@ -161,8 +127,7 @@ function mapStateToProps({ entities, currentDialog, chat, form, patientList }) {
   const selectedChatId = chat.get('selectedChatId');
   const selectedChat = chats.get(selectedChatId);
 
-  // TODO: turn this into selectedPatient not selectedChat
-  const finalChat = chats.get(selectedChatId) || chat.get('newChat');
+  const finalChat = selectedChat || chat.get('newChat');
   const selectedPatientId = finalChat && finalChat.patientId;
 
   return {

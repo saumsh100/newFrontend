@@ -120,58 +120,6 @@ class ChatMessage extends Component {
     });
   };
 
-  /*getSuggestions(value) {
-    return this.submitSearch({
-      patients: value,
-    }).then(() => {
-      const patientSearch = this.props.searchedPatients || [] ;
-
-      const searched = patientSearch.map((userId) => {
-        const avatar = (this.props.patients.get(userId) ? this.props.patients.get(userId).toJS(): {} );
-        const name = `${this.props.patients.get(userId).get('firstName')} ${this.props.patients.get(userId).get('lastName')}`;
-        const age = moment().diff(this.props.patients.get(userId).get('birthDate'), 'years');
-        const display = (<div className={main.searchList} onClick={this.userClick.bind(null, userId)}>
-          <Avatar className={styles.users__photo} user={avatar} size="lg"/>
-          <div className={main.grow}>
-            <div className={main.users__header}>
-              <div className={main.users__name}>
-                {name},&nbsp;{age}
-              </div>
-            </div>
-          </div>
-        </div>);
-
-        return {
-          id: this.props.patients.get(userId).get('id'),
-          display,
-          name,
-          email: this.props.patients.get(userId).get('email'),
-        };
-      });
-
-
-      const results = searched;
-
-      this.setState({
-        results,
-        searched,
-      });
-
-      return results;
-    });
-  }*/
-
-  /*submitSearch(value) {
-    if (value.patients.length >= 2) {
-      return this.props.fetchEntities({ url: '/api/patients/search', params: value })
-        .then(result => {
-          this.props.searchPatient(Object.keys(result.patients));
-        });
-    }
-
-    return new Promise((resolve) => { resolve(); });
-  }*/
-
   render() {
     const {
       newChat,

@@ -42,7 +42,6 @@ const eventsSchema = () => {
   return new schema.Entity('events');
 };
 
-
 const chatSchema = () => {
   return new schema.Entity('chats', {
     account: accountSchema(),
@@ -58,6 +57,7 @@ const patientSingleSchema = () => {
 const patientSchema = () => {
   return new schema.Entity('patients', {
     patientUser: patientUserSchema(),
+    chats: [_chatSchema],
   });
 };
 
@@ -164,6 +164,7 @@ const sentRecallSchema = () => {
 
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
+var _chatSchema = chatSchema();
 
 const SCHEMAS = {
   // Models (singleFetch/findOne)

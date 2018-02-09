@@ -16,7 +16,15 @@ export function defaultSelectedChatId() {
 
     // Because it is not defined, we need to sort the chats and pick the appropriate one
     const chats = entities.getIn(['chats', 'models']);
-    const sortedChats = chats.sort((a, b) => a.lastTextMessageDate < b.lastTextMessageDate);
+    const textMessages = entities.getIn(['textMessages', 'models']);
+    const sortedChats = chats.sort((a, b) => {
+      const aLastId = a.textMessages[a.textMessages.length - 1];
+      const aLastTm = textMessages.get(aLastId);
+      const bLastId = b.textMessages[b.textMessages.length - 1];
+      const bLastTm = textMessages.get(bLastId);
+      return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
+    });
+
     const firstChat = sortedChats.first();
     dispatch(setSelectedChatId(firstChat.get('id')));
   };

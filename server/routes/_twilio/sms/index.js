@@ -13,6 +13,7 @@ import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import { sequelizeLoader } from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
 import { isSmsConfirmationResponse } from '../../../lib/comms/util/responseChecks';
+import twilio from 'twilio';
 import twilioClient from '../../../config/twilio';
 import { namespaces } from '../../../config/globals';
 import normalize from '../../_api/normalize';
@@ -63,9 +64,13 @@ function sendSocketReminder(io, sentReminder) {
   });
 }
 
-smsRouter.post('/accounts/:accountId', async (req, res, next) => {
+smsRouter.post('/accounts/:accountId', twilio.webhook(), async (req, res, next) => {
   try {
-    console.log(`Receive /accounts/${req.account.id}`);
+    console.log(`Received twilio message on /accounts/${req.account.id}`);
+
+    // Twilio needs to have a certain type associated with the response
+    res.type('xml');
+
     let {
       account,
     } = req;

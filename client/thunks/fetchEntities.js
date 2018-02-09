@@ -114,7 +114,6 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 
 
 export function createEntityRequest({ key, entityData, url, params = {}, alert }) {
-  console.log('inside createEntityRequest; url=', url);
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -125,12 +124,11 @@ export function createEntityRequest({ key, entityData, url, params = {}, alert }
     return axios.post(url, entityData, { params })
       .then((response) => {
         const { data } = response;
-        console.log('in then response=', response);
         dispatch(receiveEntities({ key, entities: data.entities }));
-
         if (alert && alert.success) {
           dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
         }
+
         return data.entities;
       })
       .catch((err) => {

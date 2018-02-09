@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, submit } from 'redux-form';
+import debounce from 'lodash/debounce';
 import {
   Avatar,
   Form,
@@ -13,6 +14,7 @@ import {
   SContainer,
   SBody,
   SFooter,
+  Tooltip,
 } from '../../../library';
 import styles from './styles.scss';
 
@@ -25,14 +27,27 @@ class MessageTextArea extends Component {
     const {
       chat,
       canSend,
+      error,
     } = this.props;
 
     if (!chat) return null;
 
     const sendButtonProps = {
       className: canSend ? styles.sendIcon : styles.sendIconDisabled,
-      onClick: canSend ? () => this.props.submit(`chatMessageForm_${chat.id}`) : null,
+      onClick: canSend ? debounce(() => this.props.submit(`chatMessageForm_${chat.id}`), 300) : null,
     };
+
+    const sendButton = (
+      <div {...sendButtonProps}>
+        <Icon
+          icon="paper-plane"
+          type="solid"
+        />
+        <label>
+          SEND
+        </label>
+      </div>
+    );
 
     return (
       <SContainer className={styles.textAreaContainer}>
@@ -59,15 +74,15 @@ class MessageTextArea extends Component {
           </Form>
         </SBody>
         <SFooter className={styles.sendIconWrapper}>
-          <div {...sendButtonProps}>
-            <Icon
-              icon="paper-plane"
-              type="solid"
-            />
-            <label>
-              SEND
-            </label>
-          </div>
+          {canSend ?
+            sendButton :
+            <Tooltip
+              placement="top"
+              overlay={error}
+            >
+              {sendButton}
+            </Tooltip>
+          }
         </SFooter>
       </SContainer>
     );
@@ -84,8 +99,17 @@ function mapStateToProps(state, { chat = {} }) {
   const values = getFormValues(`chatMessageForm_${chat.id}`)(state);
   const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
   const canSend = !!values && !!values.message && patient && patient.mobilePhoneNumber;
+
+  let error = 'Type a message';
+  if (!patient) {
+    error = 'Select a patient above';
+  } else if (!patient.mobilePhoneNumber) {
+    error = 'This patient does not have a mobile phone number';
+  }
+
   return {
     canSend,
+    error,
   };
 }
 

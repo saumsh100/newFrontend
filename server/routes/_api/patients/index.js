@@ -337,12 +337,13 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
     normPatients.entities.textMessages = {};
 
     for (let i = 0; i < patientsSort.length; i++) {
-      if (patientsSort[i].chat && patientsSort[i].chat.length) {
-        const chatNorm = normalize('chat', patientsSort[i].chat);
-        normPatients.entities.chats = Object.assign(normPatients.entities.chats, chatNorm.entities.chats);
-        normPatients.entities.textMessages = Object.assign(normPatients.entities.textMessages, chatNorm.entities.textMessages);
+      if (patientsSort[i].chats && patientsSort[i].chats.length) {
+        const chatNorm = normalize('chats', patientsSort[i].chats);
+        normPatients.entities.chats = Object.assign({}, normPatients.entities.chats, chatNorm.entities.chats);
+        normPatients.entities.textMessages = Object.assign({}, normPatients.entities.textMessages, chatNorm.entities.textMessages);
       }
     }
+
     normPatients.entities.patients = normPatients.entities.patients || {};
 
     return res.send(normPatients);

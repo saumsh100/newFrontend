@@ -65,9 +65,14 @@ class ChatListContainer extends Component {
       title += ` to ${newChatPatient.firstName} ${newChatPatient.lastName}`;
     }
 
-    // TODO: move into a selector for re-render efficiency
+    // LastTextMessageDate on Chat is not that reliable, using this for now
+    // until we have reparation jobs
     let sortedChats = chats.toArray().sort((a, b) => {
-      return new Date(b.lastTextMessageDate) - new Date(a.lastTextMessageDate);
+      const aLastId = a.textMessages[a.textMessages.length - 1];
+      const aLastTm = textMessages.get(aLastId);
+      const bLastId = b.textMessages[b.textMessages.length - 1];
+      const bLastTm = textMessages.get(bLastId);
+      return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
     });
 
     if (filterIndex) {

@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import jwt from 'jwt-decode';
 import moment from 'moment';
+import debounce from 'lodash/debounce';
 import {
   Avatar,
   Form,
@@ -26,12 +27,7 @@ class MessageContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      buttonClass: styles.sendButtonOff,
-    };
-
-    this.sendMessage = this.sendMessage.bind(this);
-    this.button = this.button.bind(this);
+    this.sendMessage = debounce(this.sendMessage.bind(this), 300);
   }
 
   componentDidMount() {
@@ -44,22 +40,13 @@ class MessageContainer extends Component {
     this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
-  button(e) {
-    if (e.target.value && e.target.value.length !== 0) {
-      this.setState({
-        buttonClass: styles.sendButton,
-      });
-    } else {
-      this.setState({
-        buttonClass: styles.sendButtonOff,
-      });
-    }
-  }
-
-  sendMessage(mobilePhoneNumber, values) {
+  sendMessage(values) {
     const accountId = this.props.activeAccount.id;
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
+    const { selectedPatient } = this.props;
+    const { mobilePhoneNumber } = selectedPatient;
+    if (!values.message) return;
 
     const entityData = {
       message: values.message,
@@ -224,7 +211,7 @@ class MessageContainer extends Component {
         <SFooter className={styles.sendMessage}>
           <MessageTextArea
             chat={chat}
-            onSendMessage={(values) => this.sendMessage(selectedPatient.mobilePhoneNumber, values)}
+            onSendMessage={this.sendMessage}
           />
         </SFooter>
       </SContainer>
