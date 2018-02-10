@@ -64,7 +64,11 @@ function sendSocketReminder(io, sentReminder) {
   });
 }
 
-smsRouter.post('/accounts/:accountId', twilio.webhook(), async (req, res, next) => {
+/**
+ * Twilio SMS Webhook
+ * - need to add twilio.webhook() when we separate environments on prod, staging and local
+ */
+smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
     console.log(`Received twilio message on /accounts/${req.account.id}`);
 
