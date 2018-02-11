@@ -6,7 +6,7 @@ import {
 } from '../constants';
 
 
-export const SET_IS_SEARCH_COLLAPSED = 'SET_DASHBOARD_DATE';
+export const SET_IS_SEARCH_COLLAPSED = 'SET_IS_SEARCH_COLLAPSED';
 
 /**
  * Actions

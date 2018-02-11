@@ -76,19 +76,6 @@ class Timeline extends Component {
       overflow: 'scroll',
     };
 
-    /*
-    if (wasFetched) {
-      const filteredEvents = events.filter((event) => {
-        return filters.indexOf(event.get('type').toLowerCase()) > -1;
-      });
-
-      if (filteredEvents.length < 10) {
-        style = {
-          overflow: 'hidden',
-        };
-      }
-    }*/
-
     return (
       <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasFetched}>
         { wasFetched ?

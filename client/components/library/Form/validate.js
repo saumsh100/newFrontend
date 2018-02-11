@@ -34,11 +34,12 @@ const asyncEmailValidateNewPatient = (values) => {
 };
 
 const asyncPhoneNumberValidateNewPatient = (values) => {
-  if (!values.phoneNumber) return;
-  return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.phoneNumber })
+  if (!values.mobilePhoneNumber) return;
+  // TODO: Check for valid mobile phone number
+  return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.mobilePhoneNumber })
     .then((response) => {
       if (response.data.exists) {
-        throw { phoneNumber: 'There is already a user with that phone number' };
+        throw { mobilePhoneNumber: 'There is already a user with that phone number' };
       }
     });
 };

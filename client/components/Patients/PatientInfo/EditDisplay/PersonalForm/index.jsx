@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Clinic/Address/selectConstants';
 import styles from '../styles.scss';
+import { asyncValidateNewPatient } from '../../../../library/Form/validate';
 
 const normalizeBirthdate = (value) => {
   return value.trim();
@@ -80,6 +81,8 @@ export default function PersonalForm(props) {
       onSubmit={handleSubmit}
       className={styles.formContainer}
       initialValues={initialValues}
+      asyncValidate={asyncValidateNewPatient}
+      asyncBlurFields={['email', 'mobilePhoneNumber']}
       ignoreSaveButton
     >
       <Grid className={styles.grid}>

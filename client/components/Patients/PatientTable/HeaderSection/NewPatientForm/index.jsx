@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Form, Field } from '../../../../library';
 import styles from '../../styles.scss';
 
-import { maxLength, emailValidate, asyncEmailValidateNewPatient } from '../../../../library/Form/validate';
+import { maxLength, emailValidate, asyncValidateNewPatient } from '../../../../library/Form/validate';
 
 const normalizeBirthdate = (value) => {
   return value.trim();
@@ -36,6 +36,8 @@ export default function NewPatientForm({ onSubmit, formName }) {
       form={formName}
       onSubmit={onSubmit}
       ignoreSaveButton
+      asyncValidate={asyncValidateNewPatient}
+      asyncBlurFields={['email', 'mobilePhoneNumber']}
     >
       <Field
         required
@@ -60,7 +62,7 @@ export default function NewPatientForm({ onSubmit, formName }) {
       <Field
         name="mobilePhoneNumber"
         type="tel"
-        label="Phone Number"
+        label="Mobile Phone Number"
       />
       <Field
         type="email"

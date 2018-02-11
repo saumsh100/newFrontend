@@ -10,7 +10,6 @@ import {
 import styles from '../styles.scss';
 
 export default function HeaderUserDate({ user, dashboardDate, setDashboardDate }) {
-
   const dateTheme = {
     group: styles.inputGroup,
     filled: styles.inputFilled,
@@ -26,7 +25,9 @@ export default function HeaderUserDate({ user, dashboardDate, setDashboardDate }
       <div className={styles.dateInput}>
         <Form
           form="Dashboard Date"
-          onChange={(values) => setDashboardDate(values.date)}
+          onChange={(values) => {
+            setDashboardDate(values.date);
+          }}
           ignoreSaveButton
           initialValues={{
             date: dashboardDate,

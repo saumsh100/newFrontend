@@ -69,7 +69,6 @@ DashboardApp.propTypes = {
   activeAccount: PropTypes.object,
   location: PropTypes.object,
   isCollapsed: PropTypes.bool.isRequired,
-  setIsCollapsed: PropTypes.func.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
 };
 
@@ -83,7 +82,6 @@ function mapStateToProps({ toolbar, entities, auth, caller }) {
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators({
-    setIsCollapsed,
     dispatch,
   }, dispatch);
 }

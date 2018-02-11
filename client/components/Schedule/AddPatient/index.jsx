@@ -59,6 +59,7 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData, }) 
       onSubmit={onSubmit}
       initialValues={initialValues}
       asyncValidate={asyncValidateNewPatient}
+      asyncBlurFields={['email', 'mobilePhoneNumber']}
       allowSave
       data-test-id="newPatientForm"
       ignoreSaveButton
@@ -84,7 +85,7 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData, }) 
       />
       <Field
         name="mobilePhoneNumber"
-        label="Phone Number"
+        label="Mobile Phone Number"
         type="tel"
       />
       <Field

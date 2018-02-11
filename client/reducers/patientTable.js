@@ -111,8 +111,7 @@ export default handleActions({
 
   [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
     let filters = state.get('timelineFilters');
-
-    if (filters.size > 0) {
+    if (filters.size >= 0) {
       filters = filters.toJS();
     }
     const type = payload.type;
@@ -121,6 +120,7 @@ export default handleActions({
       const index = filters.indexOf(type);
       const newFilters = filters;
       newFilters.splice(index, 1);
+
       return state.merge({
         timelineFilters: newFilters,
       });
