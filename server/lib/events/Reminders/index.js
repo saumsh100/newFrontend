@@ -1,8 +1,10 @@
+
 import moment from 'moment';
 import { namespaces } from '../../../config/globals';
 import { SentReminder, Correspondence, Appointment } from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
 import { reminderConfirmedNote, reminderSentNote } from '../../correspondences/appointmentNotesGenerators';
+import { reminderSent, reminderConfirmed } from '../../correspondences/correspondenceNote';
 
 /**
  * When a Reminder is sent out this runs to create correspondences and
@@ -41,7 +43,7 @@ function sendReminderIdsSocket(sub, io) {
           method: sr.primaryType,
           type: Correspondence.REMINDER_SENT_TYPE,
           contactedAt: sr.createdAt,
-          note: Correspondence.REMINDER_SENT_NOTE,
+          note: reminderSent(sr),
         };
       });
 
@@ -121,6 +123,7 @@ function sendReminderIdsSocket(sub, io) {
 function sendReminderUpdatedSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
+      const sentReminder = await SentReminder.findById(data);
       const correspondence = await Correspondence.findOne({
         where: {
           sentReminderId: data,
@@ -138,7 +141,7 @@ function sendReminderUpdatedSocket(sub, io) {
       });
 
       if (!correspondenceCheck) {
-        correspondence.note = Correspondence.REMINDER_CONFIRMED_NOTE;
+        correspondence.note = reminderConfirmed(sentReminder);
         correspondence.type = Correspondence.REMINDER_CONFIRMED_TYPE;
         correspondence.isSyncedWithPms = false;
         correspondence.contactedAt = new Date();
@@ -149,13 +152,13 @@ function sendReminderUpdatedSocket(sub, io) {
 
         console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
 
-        const appointment = await Appointment.findOne({
+        /*const appointment = await Appointment.findOne({
           where: {
             id: correspondence.appointmentId,
           },
         });
 
-        /*if (appointment) {
+        if (appointment) {
           const text = `- Carecru: Patient has confirmed via ${correspondence.method.toLowerCase()} on ${moment().format('LLL')} for this appointment`;
           appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
           appointment.isSyncedWithPms = false;

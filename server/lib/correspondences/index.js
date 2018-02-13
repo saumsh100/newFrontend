@@ -2,6 +2,7 @@ import moment from 'moment';
 import { Account, SentReminder, SentRecall, Correspondence, Appointment } from '../../_models';
 import { namespaces } from '../../config/globals';
 import { reminderConfirmedNote, reminderSentNote } from './appointmentNotesGenerators';
+import { reminderSent, reminderConfirmed } from './correspondenceNote';
 import batchCreate from '../../routes/util/batch';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
@@ -37,7 +38,7 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
       method: sr.primaryType,
       type: Correspondence.REMINDER_SENT_TYPE,
       contactedAt: sr.createdAt,
-      note: Correspondence.REMINDER_SENT_NOTE,
+      note: reminderSent(sr),
     };
   });
 
