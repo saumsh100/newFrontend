@@ -2,6 +2,8 @@
 @import '../../../../../ui';
 
 .reviewListItem {
+  height: 100px;
+
   &:hover {
     .deleteButtonWrapper {
       display: block;
@@ -19,16 +21,22 @@
   margin-left: auto;
   width: 85%;
   height: 44px;
+  border-top: 1px solid $primary-gray;
   border-left: 1px solid $primary-gray;
   border-bottom: 1px solid $primary-gray;
   position: relative;
   top: -39px;
 }
 
+.linesBoxSelected {
+  boreder-top: 1px solid $primary-yellow;
+}
+
 .secondaryLinesBoxSelected {
   @extend .secondaryLinesBox;
-  border-left: 1px solid $primary-green;
-  border-bottom: 1px solid $primary-green;
+  border-top: 1px solid $primary-yellow;
+  border-left: 1px solid $primary-yellow;
+  border-bottom: 1px solid $primary-yellow;
 }
 
 .dropdownsWrapper {
@@ -83,7 +91,7 @@ $dheight: 30px;
 
 .dropdownSelectSelected {
   @extend .dropdownSelect;
-  border: 1px solid $primary-green;
+  border: 1px solid $primary-yellow;
   > input {
     @extend .inputFontSelected;
 
@@ -142,7 +150,7 @@ $small-icon-width: 20px;
 
 .smallReviewSelectWrapperCircleSelected {
   @extend .smallReviewSelectWrapperCircle;
-  background-color: $primary-green;
+  background-color: $primary-yellow;
 }
 
 .toggleCol {

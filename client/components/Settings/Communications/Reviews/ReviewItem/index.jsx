@@ -17,7 +17,7 @@ import {
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
-import styles from '../../Reminders/RemindersItem/styles.scss';
+import styles from './styles.scss';
 
 const iconsMap = {
   sms: 'comment',
@@ -42,8 +42,8 @@ function SmallIconCircle(props) {
   const { selected, icon } = props;
 
   const wrapperClass = selected ?
-    styles.smallReminderSelectWrapperCircleSelected :
-    styles.smallReminderSelectWrapperCircle;
+    styles.smallReviewSelectWrapperCircleSelected :
+    styles.smallReviewSelectWrapperCircle;
 
   return (
     <div className={wrapperClass}>
@@ -156,10 +156,11 @@ class ReviewItem extends Component {
 
     return (
       <div>
-        <div className={styles.reminderIconContainer}>
+        <div className={styles.reviewIconContainer}>
           <IconCircle
             icon={icon}
             selected={selected}
+            color={'yellow'}
           />
         </div>
         <div className={selected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
@@ -216,7 +217,9 @@ class ReviewItem extends Component {
       <TouchPointItem
         selected={selected}
         noLines
-        className={styles.reminderListItem}
+        color={'yellow'}
+        className={styles.reviewListItem}
+        linesBoxSelectedClass={styles.linesBoxSelected}
         onClick={() => this.props.onSelect()}
         toggleComponent={null}
         labelComponent={this.renderLabel()}

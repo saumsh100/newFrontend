@@ -53,7 +53,7 @@ export default function TouchPointItem(props) {
           </div>
         </div>
         <div className={styles.flexSection}>
-          <div className={classNames(linesBoxClass, noLines ? styles.linesBox : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
+          <div className={classNames(linesBoxClass, noLines ? classNames(styles.linesBox, selected ? styles[`boxSelected_${color}`] : {}) : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
             {mainComponent}
             {/*<div className={styles.downIconWrapper}>
                   <Icon icon="caret-down" size={2} />
