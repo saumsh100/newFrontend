@@ -1,6 +1,8 @@
+
 import { namespaces } from '../../../config/globals';
 import { SentRecall, Correspondence } from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
+import { recallSent } from '../../correspondences/correspondenceNote';
 
 /**
  * Create correspondences from 'data', which contains ids of recalls sent.
@@ -83,7 +85,7 @@ function convertRecallsToCorrespondences(recallsSent) {
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
-      note: Correspondence.RECALL_SENT_NOTE,
+      note: recallSent(recall),
     }));
 }
 

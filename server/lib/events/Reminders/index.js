@@ -49,21 +49,6 @@ function sendReminderIdsSocket(sub, io) {
 
       let correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
 
-      // updating the notes field on appointments to say a reminder was sent.
-      /*for (let i = 0; i < correspondences.length; i += 1) {
-        const appointment = await Appointment.findOne({
-          where: {
-            id: correspondences[i].appointmentId,
-          },
-        });
-
-        if (appointment) {
-          const text = reminderSentNote(correspondences[i].method.toLowerCase(), correspondences[i].contactedAt);
-          appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
-          await appointment.save();
-        }
-      }*/
-
       if (correspondences[0]) {
         const accountId = correspondences[0].accountId;
         correspondences = correspondences.map(c => c.id);
@@ -83,23 +68,6 @@ function sendReminderIdsSocket(sub, io) {
 
         if (docs[0]) {
           const accountId = docs[0].accountId;
-
-          // updating the notes field on appointments to say a reminder was sent.
-          /*for (let i = 0; i < docs.length; i += 1) {
-            const appointment = await Appointment.findOne({
-              where: {
-                id: docs[i].appointmentId,
-              },
-            });
-
-            if (appointment) {
-              const text = reminderConfirmedNote(docs[i].method, docs[i].contactedAt);
-              appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
-              appointment.isSyncedWithPms = false;
-              await appointment.save();
-              global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
-            }
-          }*/
 
           console.log(`Sending ${docs.length} correspondences for account=${accountId}`);
 
@@ -151,20 +119,6 @@ function sendReminderUpdatedSocket(sub, io) {
         const newCorrespondence = await Correspondence.create(correspondence);
 
         console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
-
-        /*const appointment = await Appointment.findOne({
-          where: {
-            id: correspondence.appointmentId,
-          },
-        });
-
-        if (appointment) {
-          const text = `- Carecru: Patient has confirmed via ${correspondence.method.toLowerCase()} on ${moment().format('LLL')} for this appointment`;
-          appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
-          appointment.isSyncedWithPms = false;
-          await appointment.save();
-          global.io.of(namespaces.sync).in(correspondence.accountId).emit('UPDATE:Appointment', appointment.id);
-        }*/
 
         io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondence', [newCorrespondence.id]);
       }

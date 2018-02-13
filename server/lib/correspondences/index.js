@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Account, SentReminder, SentRecall, Correspondence, Appointment } from '../../_models';
 import { namespaces } from '../../config/globals';
 import { reminderConfirmedNote, reminderSentNote } from './appointmentNotesGenerators';
-import { reminderSent, reminderConfirmed } from './correspondenceNote';
+import { reminderSent, reminderConfirmed, recallSent } from './correspondenceNote';
 import batchCreate from '../../routes/util/batch';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
@@ -43,22 +43,6 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
   });
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
-
-  /*for (let i = 0; i < correspondences.length; i += 1) {
-    const appointment = await Appointment.findOne({
-      where: {
-        id: correspondences[i].appointmentId,
-      },
-    });
-
-    if (appointment) {
-      const text = reminderSentNote(correspondences[i].method.toLowerCase(), correspondences[i].contactedAt);
-      appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
-      appointment.isSyncedWithPms = false;
-      await appointment.save();
-      global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
-    }
-  }*/
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
@@ -103,27 +87,11 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       method: sr.primaryType,
       type: Correspondence.REMINDER_CONFIRMED_TYPE,
       contactedAt: sr.updatedAt,
-      note: Correspondence.REMINDER_CONFIRMED_NOTE,
+      note: reminderConfirmed(sr),
     };
   });
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
-
-  /*for (let i = 0; i < correspondences.length; i += 1) {
-    const appointment = await Appointment.findOne({
-      where: {
-        id: correspondences[i].appointmentId,
-      },
-    });
-
-    if (appointment) {
-      const text = reminderConfirmedNote(correspondences[i].method, correspondences[i].contactedAt);
-      appointment.note = appointment.note ? appointment.note.concat('\n\n').concat(text) : text;
-      appointment.isSyncedWithPms = false;
-      await appointment.save();
-      global.io.of(namespaces.sync).in(accountId).emit('UPDATE:Appointment', appointment.id);
-    }
-  }*/
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
@@ -166,7 +134,7 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
-      note: Correspondence.RECALL_SENT_NOTE,
+      note: recallSent(recall),
     };
   });
 
