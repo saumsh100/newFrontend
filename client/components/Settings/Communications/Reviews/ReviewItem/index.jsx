@@ -219,7 +219,6 @@ class ReviewItem extends Component {
         noLines
         color={'yellow'}
         className={styles.reviewListItem}
-        linesBoxSelectedClass={styles.linesBoxSelected}
         onClick={() => this.props.onSelect()}
         toggleComponent={null}
         labelComponent={this.renderLabel()}
