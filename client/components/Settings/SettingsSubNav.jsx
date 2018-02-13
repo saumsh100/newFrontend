@@ -60,6 +60,10 @@ const PATHS = {
       label: 'Waitlist',
       disabled: true,
     },
+    {
+      to: '/settings/communications/reviews',
+      label: 'Reviews',
+    },
   ],
 
   '/settings/services': [
