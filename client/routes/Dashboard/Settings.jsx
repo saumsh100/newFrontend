@@ -6,6 +6,7 @@ import Container from '../../containers/SettingsContainer';
 import Clinic from '../../components/Settings/Clinic';
 import Schedule from '../../components/Settings/Schedule';
 import Communications from '../../components/Settings/Communications';
+import Reviews from '../../components/Settings/Communications/Reviews';
 import ClinicGeneral from '../../components/Settings/Clinic/General';
 import ClinicUsers from '../../components/Settings/Clinic/Users';
 import ScheduleOfficeHours from '../../components/Settings/Schedule/OfficeHours';
@@ -46,6 +47,7 @@ const CommunicationsContainer = props =>
       <Redirect exact from={commsBase()} to={commsBase('/reminders')} />
       <Route path={commsBase('/reminders')} component={Reminders} />
       <Route path={commsBase('/recalls')} component={Recalls} />
+      <Route path={commsBase('/reviews')} component={Reviews} />
     </Switch>
   </Communications>;
 

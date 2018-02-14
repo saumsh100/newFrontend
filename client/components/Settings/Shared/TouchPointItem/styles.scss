@@ -33,6 +33,21 @@
   border-top: 1px solid $primary-gray;
 }
 
+.boxSelected_green {
+  @extend .linesBox;
+  border-top: 1px solid $primary-green;
+}
+
+.boxSelected_yellow {
+  @extend .linesBox;
+  border-top: 1px solid $primary-yellow;
+}
+
+.boxSelected_red {
+  @extend .linesBox;
+  border-top: 1px solid $primary-red;
+}
+
 .linesBoxWithLines {
   @extend .linesBox;
   background-image: linear-gradient(to bottom, $primary-gray 50%, transparent 0%);

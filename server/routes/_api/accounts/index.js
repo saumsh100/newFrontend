@@ -1,4 +1,11 @@
-
+/**
+ * GET /
+ *
+ * - list of accounts in an enterprise
+ * - must be a SUPERADMIN or OWNER to list all
+ * - if not, it just lists the one
+ */
+import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
@@ -22,6 +29,7 @@ import upload from '../../../lib/upload';
 import { getReviewPatients } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
+import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 
 const accountsRouter = Router();
 
@@ -42,13 +50,6 @@ const apiFunctionsDelete = {
   vendasta: vendastaDelete,
 };
 
-/**
- * GET /
- *
- * - list of accounts in an enterprise
- * - must be a SUPERADMIN or OWNER to list all
- * - if not, it just lists the one
- */
 accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
@@ -393,6 +394,37 @@ accountsRouter.get('/:accountId/reviews/list', checkPermissions('accounts:update
   } catch (err) {
     console.log(err);
     next(err);
+  }
+});
+
+/**
+ * GET /:accountId/reviews/preview
+ *
+ * - purpose of this route is mainly for email templates as we have to go to mandrill
+ */
+accountsRouter.get('/:accountId/reviews/preview', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    if (req.accountId !== req.account.id) {
+      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+    }
+
+    const { account } = req;
+    const patient = {
+      firstName: 'Jane',
+      lastName: 'Doe',
+    };
+
+    const templateName = 'Patient Review';
+
+    const html = await renderTemplate({
+      templateName,
+      mergeVars: generateClinicMergeVars({ account, patient }),
+    });
+
+    return res.send(html);
+  } catch (err) {
+    console.error(err);
+    return next(err);
   }
 });
 
