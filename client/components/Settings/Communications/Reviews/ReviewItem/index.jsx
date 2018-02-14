@@ -142,7 +142,7 @@ class ReviewItem extends Component {
   }
 
   renderLabel() {
-    return <TouchPointLabel title={'Review notification'} />;
+    return <TouchPointLabel title={'Review Request'} />;
   }
 
   renderMainComponent() {

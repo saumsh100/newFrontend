@@ -44,7 +44,7 @@ class Reviews extends React.Component {
                 />
               </div>
               <div className={styles.bottomLabel}>
-                <TouchPointLabel title="Appointment" />
+                <TouchPointLabel title="Appointment End Date" />
               </div>
             </div>
           )}

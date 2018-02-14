@@ -56,13 +56,13 @@ const PATHS = {
       label: 'Recalls',
     },
     {
+      to: '/settings/communications/reviews',
+      label: 'Reviews',
+    },
+    {
       to: '',
       label: 'Waitlist',
       disabled: true,
-    },
-    {
-      to: '/settings/communications/reviews',
-      label: 'Reviews',
     },
   ],
 
