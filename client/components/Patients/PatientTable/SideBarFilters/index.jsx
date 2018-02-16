@@ -147,6 +147,18 @@ class SideBarFilters extends Component {
           intensive: true,
         });
       }
+      if (key === 'status' && values[key].length === 1) {
+        setFilter += 1;
+        batchFilters.push({
+          indexFunc: 5,
+          formName: 'demographics',
+          formSection: key,
+          data: values[key],
+          key,
+          tag: 'Status',
+          intensive: true,
+        });
+      }
     });
 
     if (keys.length === setFilter && keys.length > 0) {
@@ -176,7 +188,7 @@ class SideBarFilters extends Component {
       if (key === 'firstAppointment' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 5,
+          indexFunc: 6,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -188,7 +200,7 @@ class SideBarFilters extends Component {
       if (key === 'lastAppointment' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 6,
+          indexFunc: 7,
           data: values[key],
           formName: 'appointments',
           formSection: key,
@@ -200,7 +212,7 @@ class SideBarFilters extends Component {
       if (key === 'appointmentsCount' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 7,
+          indexFunc: 8,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -211,7 +223,7 @@ class SideBarFilters extends Component {
       if (key === 'production' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 8,
+          indexFunc: 9,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -222,7 +234,7 @@ class SideBarFilters extends Component {
       if (key === 'onlineAppointments' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 9,
+          indexFunc: 10,
           formName: 'appointments',
           formSection: key,
           data: values[key],
@@ -253,7 +265,7 @@ class SideBarFilters extends Component {
     keys.forEach((key) => {
       if (key && values[key].length === 1) {
         const pracObj = {
-          indexFunc: 10,
+          indexFunc: 11,
           data: values[key],
           formName: 'practitioners',
           formSection: 'practitioners',
@@ -285,7 +297,7 @@ class SideBarFilters extends Component {
       if (key === 'remindersEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 11,
+          indexFunc: 12,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -296,7 +308,7 @@ class SideBarFilters extends Component {
       if (key === 'remindersSMS' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 12,
+          indexFunc: 13,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -307,7 +319,7 @@ class SideBarFilters extends Component {
       if (key === 'remindersPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 13,
+          indexFunc: 14,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -318,7 +330,7 @@ class SideBarFilters extends Component {
       if (key === 'recaresEmail' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 14,
+          indexFunc: 15,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -329,7 +341,7 @@ class SideBarFilters extends Component {
       if (key === 'recaresSMS' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 15,
+          indexFunc: 16,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -340,7 +352,7 @@ class SideBarFilters extends Component {
       if (key === 'recaresPhone' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 16,
+          indexFunc: 17,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -351,7 +363,7 @@ class SideBarFilters extends Component {
       if (key === 'lastReminderSent' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 17,
+          indexFunc: 18,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -362,7 +374,7 @@ class SideBarFilters extends Component {
       if (key === 'lastRecareSent' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 18,
+          indexFunc: 19,
           data: values[key],
           formName: 'communications',
           formSection: key,
@@ -373,7 +385,7 @@ class SideBarFilters extends Component {
       if (key === 'reviews' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
-          indexFunc: 19,
+          indexFunc: 20,
           data: values[key],
           formName: 'communications',
           formSection: key,

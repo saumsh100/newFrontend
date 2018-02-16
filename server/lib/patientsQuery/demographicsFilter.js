@@ -11,6 +11,7 @@ export function DemographicsFilter({ data, key }, filterIds, query, accountId) {
   let birthDate = {};
   let address = {};
   let genderObj = {};
+  let statusObj = {};
 
   if (key === 'age') {
     const endDate = moment().subtract(data[0], 'years').toISOString();
@@ -40,11 +41,18 @@ export function DemographicsFilter({ data, key }, filterIds, query, accountId) {
     };
   }
 
+  if (key === 'status') {
+    statusObj = {
+      status: data,
+    };
+  }
+
   const searchClause = {
     accountId,
     ...genderObj,
     ...address,
     ...birthDate,
+    ...statusObj,
     ...idData,
   };
 

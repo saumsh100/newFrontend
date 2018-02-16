@@ -26,6 +26,10 @@ const optionsCity = [
   { value: 'Winnipeg' },
 ];
 
+const optionsStatus = [
+  { value: 'Active' },
+  { label: 'Inactive', value: 'Inactive' },
+];
 
 const parseNum = value => value && parseInt(value);
 
@@ -75,27 +79,38 @@ export default function Demographics(props) {
           <div className={styles.formHeader}> Gender </div>
           <FormSection name="gender" >
             <div className={styles.formContainer_row}>
-            <Field
-              component="DropdownSelect"
-              name="0"
-              options={optionsGender}
-              className={styles.ddSelect}
-            />
+              <Field
+                component="DropdownSelect"
+                name="0"
+                options={optionsGender}
+                className={styles.ddSelect}
+              />
             </div>
           </FormSection>
 
           <div className={styles.formHeader}> Location </div>
           <FormSection name="city" >
             <div className={styles.formContainer_row}>
-            <Field
-              component="DropdownSelect"
-              name="0"
-              options={optionsCity}
-              className={styles.ddSelect}
-            />
+              <Field
+                component="DropdownSelect"
+                name="0"
+                options={optionsCity}
+                className={styles.ddSelect}
+              />
             </div>
           </FormSection>
 
+          <div className={styles.formHeader}> Status </div>
+          <FormSection name="status" >
+            <div className={styles.formContainer_row}>
+              <Field
+                component="DropdownSelect"
+                name="0"
+                options={optionsStatus}
+                className={styles.ddSelect}
+              />
+            </div>
+          </FormSection>
         </div>
       </Form>
   );

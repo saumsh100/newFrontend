@@ -18,6 +18,7 @@ const filterFunctions = [
   DemographicsFilter,
   DemographicsFilter,
   DemographicsFilter,
+  DemographicsFilter,
   FirstLastAppointmentFilter,
   FirstLastAppointmentFilter,
   AppointmentsCountFilter,
@@ -115,7 +116,6 @@ export async function PatientQuery(config) {
 
       for (let i = 0; i < sortArray.length; i += 1) {
         const filterObj = JSON.parse(sortArray[i]);
-        console.log(filterObj)
         const index = filterObj.indexFunc;
 
         console.log('Running filter-->', filterObj.tag);
