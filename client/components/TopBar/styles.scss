@@ -114,26 +114,38 @@ $padding-size-border: 10px;
   list-style: none;
 }
 
-.logoutPill {
-  border-left: 1px solid $primary-dark-grey;
-  padding: 6px;
-  @media screen and (max-width: $medium-screen-width) {
-    font-size: 1.2rem;
-    margin-left: 5px;
-    display: none;
-  }
-}
-
 .userContainer {
   display: flex;
   align-items: center;
 
 }
+
+.userDropdownMenu > div {
+  width: auto;
+  margin: -5px 0 0 0 !important;
+}
+
+.accountsDropdownMenu > div {
+  width: auto;
+  // margin: -5px 0 0 0 !important;
+}
+
 .userMenuButton {
   display: flex;
   align-items: center;
   &:hover {
     color: $primary-blue !important;
+    .greeting {
+      color: $primary-blue;
+    }
+
+    .userRole {
+      color: lighten($primary-blue, 10%);
+    }
+
+    .businessName {
+      color: lighten($primary-blue, 10%);
+    }
   }
 }
 
@@ -146,14 +158,10 @@ $padding-size-border: 10px;
   @media screen and (max-width: $medium-screen-width) {
     display: none;
   }
-  &:hover {
-    color: $primary-blue !important;
-  }
 }
 
 .greeting {
   font-family: $medium-font;
-  color: black;
 }
 
 .userRole {
@@ -190,13 +198,17 @@ $padding-size-border: 10px;
 }
 
 .menuItemSelected {
-  background-color: $primary-green;
+  background-color: $primary-blue;
   cursor: default;
   color: white;
   &:hover {
-    background-color: $primary-green!important;
+    background-color: $primary-blue !important;
     cursor: default;
-    color: white!important;
+    color: white !important;
+  }
+
+  &:last-child {
+    border-bottom: none;
   }
 }
 
@@ -314,7 +326,7 @@ $padding-size-border: 10px;
 }
 
 .rightContainer {
-  width: 100%;
+  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: flex-end;

@@ -27,7 +27,6 @@ export default function RecallColumn(props) {
   const weeks = moment().diff(lastRecallDate, 'weeks');
 
   let dotStyle = styles.dot;
-
   if (months >= 9) {
     dotStyle = classnames(dotStyle, styles.dotRed);
   } else if (months >= 6 && months < 9) {
@@ -38,7 +37,7 @@ export default function RecallColumn(props) {
 
   return (
     <div className={styles.displayFlex}>
-      <div className={`${styles.date} ${className}`}>{lastRecallDate.format('MMM DD YYYY')}</div>
+      <div className={`${styles.date} ${className}`}>{lastRecallDate.add(6, 'months').format('MMM DD YYYY')}</div>
       <div className={dotStyle}>&nbsp;</div>
     </div>
   );

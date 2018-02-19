@@ -220,6 +220,10 @@ export default function (sequelize, DataTypes) {
     contCareInterval: {
       type: DataTypes.STRING,
     },
+
+    avatarUrl: {
+      type: DataTypes.STRING,
+    },
   }, {
     // Model Config
     indexes: [

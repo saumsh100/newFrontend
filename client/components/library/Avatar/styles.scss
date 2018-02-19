@@ -7,8 +7,6 @@ $medium-size: 3rem;
 $large-size: 5rem;
 $extraLarge-size: 9rem;
 
-
-
 .avatar {
   display: inline-flex;
   width: $medium-size;
@@ -25,8 +23,22 @@ $extraLarge-size: 9rem;
   background: linear-gradient(#bebebe, #a2a2a2);
 }
 
+.male {
+  // background: linear-gradient(lighten($primary-blue, 10%), lighten($primary-blue, 5%));
+  background: lighten($primary-blue, 10%);
+}
+
+.female {
+  // background: linear-gradient(lighten($primary-red, 20%), lighten($primary-red, 10%));
+  background: lighten($primary-red, 10%);
+}
+
+.user {
+  background: linear-gradient(lighten($primary-blue, 10%), lighten($primary-blue, 5%));
+}
+
 .img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
@@ -35,7 +47,7 @@ $extraLarge-size: 9rem;
   height: $extraSmall-size;
   min-width: $extraSmall-size;
   min-height: $extraSmall-size;
-  font-size: 12px;
+  font-size: 10px;
 }
 
 .sm {
@@ -43,7 +55,7 @@ $extraLarge-size: 9rem;
   height: $small-size;
   min-width: $small-size;
   min-height: $small-size;
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .md {
@@ -51,7 +63,7 @@ $extraLarge-size: 9rem;
   height: $medium-size;
   min-width: $medium-size;
   min-height: $medium-size;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .lg {

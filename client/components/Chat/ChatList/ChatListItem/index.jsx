@@ -39,9 +39,25 @@ class ChatListItem extends Component {
 
     const fullName = patient.firstName || patient.lastName ?
       (patient.birthDate ?
-        `${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}` :
-        `${patient.firstName} ${patient.lastName}`) :
-      patient.mobilePhoneNumber;
+        (
+          <div className={styles.nameAgeWrapper}>
+            <div className={styles.nameWithAge}>
+              {patient.firstName} {patient.lastName}
+            </div>
+            <div className={styles.age}>
+              {` ${moment().diff(patient.birthDate, 'years')}`}
+            </div>
+          </div>
+        ) : (
+          <div className={styles.name}>
+            {patient.firstName} {patient.lastName}
+          </div>
+        )
+      ) : (
+        <div className={styles.name}>
+          {patient.mobilePhoneNumber}
+        </div>
+      );
 
     const mDate = moment(lastTextMessage.createdAt);
     const daysDifference = moment().diff(mDate, 'days');

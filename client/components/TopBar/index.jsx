@@ -40,9 +40,6 @@ const UserMenu = (props) => {
           <div className={styles.greeting}>
             Hello, {user.get('firstName')}
           </div>
-          <div className={styles.userRole}>
-            {role}
-          </div>
           <div className={styles.businessName}>
             {businessName}
           </div>
@@ -50,6 +47,7 @@ const UserMenu = (props) => {
         <Avatar
           className={styles.userAvatar}
           user={user.toJS()}
+          isPatient={false}
           size="sm"
         />
         <Icon icon="caret-down" type="solid" />
@@ -157,7 +155,7 @@ class TopBar extends Component {
       return (
         <MenuItem
           key={account.id}
-          className={(isActive ? styles.menuItemSelected : false)}
+          className={(isActive ? styles.menuItemSelected : null)}
           onClick={isActive ? false : setActive}
         >
           {account.name}
@@ -202,7 +200,6 @@ class TopBar extends Component {
           className={styles.hamburger}
           onClick={() => setIsCollapsed(!isCollapsed)}
         />
-
         <div className={styles.rightContainer}>
           <div className={styles.searchContainer}>
             <div className={styles.wrapper}>
@@ -220,37 +217,40 @@ class TopBar extends Component {
                 /> : null }
             </div>
           </div>
-          <div className={styles.rightOfBar}>
-            <ul className={styles.pillsList}>
-              {withEnterprise && activeAccount ?
-                <li>
-                  <DropdownMenu
-                    labelComponent={ActiveAccountButton}
-                    labelProps={{ account: activeAccount }}
-                  >
-                    <div style={{ width: '200px' }}>
-                      {accounts.map(renderAccountItem)}
-                    </div>
-                  </DropdownMenu>
-                </li> :
-                null
-              }
+        </div>
+        <div className={styles.rightOfBar}>
+          <ul className={styles.pillsList}>
+            {withEnterprise && activeAccount ?
               <li>
-                <DropdownMenu labelComponent={props => <UserMenu {...props} {...userMenuProps} />}>
-                  <Link to="/profile">
-                    <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
-                  </Link>
-                  <Link to="/settings">
-                    <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
-                  </Link>
-                  <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
+                <DropdownMenu
+                  className={styles.accountsDropdownMenu}
+                  labelComponent={ActiveAccountButton}
+                  labelProps={{ account: activeAccount }}
+                >
+                  <div style={{ width: '200px' }}>
+                    {accounts.map(renderAccountItem)}
+                  </div>
                 </DropdownMenu>
-              </li>
-              <li className={styles.logoutPill}>
-                <IconButton onClick={this.props.logout} icon="power-off" />
-              </li>
-            </ul>
-          </div>
+              </li> :
+              null
+            }
+            <li>
+              <DropdownMenu
+                className={styles.userDropdownMenu}
+                labelComponent={(props) =>
+                  <UserMenu {...props} {...userMenuProps} />
+                }
+              >
+                <Link to="/profile">
+                  <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
+                </Link>
+                <Link to="/settings">
+                  <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
+                </Link>
+                <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
+              </DropdownMenu>
+            </li>
+          </ul>
         </div>
       </AppBar>
     );
@@ -265,6 +265,7 @@ TopBar.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }),
+
   push: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,

@@ -10,6 +10,7 @@ export default function PatientAvatarTitle({ patient }) {
       <Avatar
         user={patient}
         className={styles.avatar}
+        size="lg"
       />
       <div className={styles.title}>
         {patient.firstName} {patient.lastName}

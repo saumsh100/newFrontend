@@ -3,19 +3,32 @@ import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
-export default function Avatar({ user, className, size, onClick = () => {}, bgColor }) {
-  let classes = styles.avatar;
-
+export default function Avatar({ user, className, size, onClick = () => {}, bgColor, isPatient }) {
+  let classes = classNames(className, styles.avatar);
   if (size) {
     classes = classNames(styles[size], classes);
   }
 
-  const centerContent = user.fullAvatarUrl ?
-    <img className={styles.img} src={user.fullAvatarUrl} alt={`Image of ${user.firstName}`} /> :
-    <span className={styles.text}>{user.firstName && user.firstName[0]}</span>;
+  const url = user.fullAvatarUrl || user.avatarUrl;
+  const centerContent = url ?
+    (
+      <img
+        className={styles.img}
+        src={url}
+        alt={`Image of ${user.firstName}`}
+      />
+    ) :
+    (
+      <span className={styles.text}>
+        {user.firstName && user.firstName[0]}{user.lastName && user.lastName[0]}
+      </span>
+    );
 
-  let gradientStyle = classNames(className, styles.gradientBackground);
+  if (!isPatient) {
+    classes = classNames(styles.user, classes);
+  }
 
+  let gradientStyle = classNames(styles.gradientBackground);
   if (bgColor) {
     gradientStyle = classNames(styles[bgColor], gradientStyle);
   }
@@ -29,6 +42,10 @@ export default function Avatar({ user, className, size, onClick = () => {}, bgCo
   );
 }
 
+Avatar.defaultProps = {
+  isPatient: true,
+};
+
 Avatar.propTypes = {
   title: PropTypes.string,
   className: PropTypes.string,
@@ -37,4 +54,6 @@ Avatar.propTypes = {
     avatarUrl: PropTypes.string,
     firstName: PropTypes.string.isRequired,
   }),
+
+  isPatient: PropTypes.bool.isRequired,
 };

@@ -23,8 +23,9 @@ export default function HygieneColumn(props) {
     );
   }
 
-  const hygieneDate = lastApptDate;
-  const months = moment().diff(hygieneDate, 'months');
+  // This needs to be the account.interval...
+  const hygieneDate = moment(lastApptDate).add(6, 'months');
+  const months = moment().diff(lastApptDate, 'months');
 
   let dotStyle = styles.dot;
 

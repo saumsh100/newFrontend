@@ -13,6 +13,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -78,6 +79,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -133,6 +135,7 @@ Object {
       "eb6be674-1861-4432-8a2e-48c402ba2aba": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": Object {},
+        "avatarUrl": "",
         "birthDate": null,
         "contCareInterval": null,
         "email": "batchpatient2@test.com",
@@ -201,6 +204,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -256,6 +260,7 @@ Object {
       "eb6be674-1861-4432-8a2e-48c402ba2aba": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": Object {},
+        "avatarUrl": "",
         "birthDate": null,
         "contCareInterval": null,
         "email": "batchpatient2@test.com",
@@ -324,6 +329,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -421,6 +427,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
         "appointments": Array [],
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "chats": Array [],
         "contCareInterval": null,
@@ -504,6 +511,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
         "appointments": Array [],
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "chats": Array [],
         "contCareInterval": null,
@@ -598,6 +606,7 @@ Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
         "appointments": Array [],
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -666,6 +675,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -759,6 +769,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
@@ -824,6 +835,7 @@ Object {
       "10518e11-b9d2-4d74-9887-29eaae7b5938": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "address": null,
+        "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "email": "testpatient@test.com",
