@@ -81,6 +81,7 @@ export default function (sequelize, DataTypes) {
       Service,
       Request,
       Appointment,
+      DailySchedule,
       WeeklySchedule,
       PractitionerRecurringTimeOff,
       Review,
@@ -120,6 +121,11 @@ export default function (sequelize, DataTypes) {
     Practitioner.hasMany(PractitionerRecurringTimeOff, {
       foreignKey: 'practitionerId',
       as: 'recurringTimeOffs',
+    });
+
+    Practitioner.hasMany(DailySchedule, {
+      foreignKey: 'practitionerId',
+      as: 'dailySchedules',
     });
 
     Practitioner.belongsToMany(Service, {

@@ -12,6 +12,7 @@ const pluralToSingularMap = {
   practitioners: 'practitioner',
   services: 'service',
   requests: 'request',
+  dailySchedules: 'dailySchedule',
   deliveredProcedures: 'deliveredProcedure',
   practitionerSchedules: 'practitionerSchedule',
   weeklySchedule: 'weeklySchedule',

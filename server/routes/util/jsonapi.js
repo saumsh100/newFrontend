@@ -105,6 +105,18 @@ const ModelAttributes = {
     'deletedAt',
   ],
 
+  DailySchedule: [
+    'pmsId',
+    'practitionerId',
+    'date',
+    'startTime',
+    'endTime',
+    'breaks',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   Family: [
     'accountId',
     'pmsId',
@@ -256,6 +268,11 @@ const SERIALIZERS = {
 
   correspondence: new Serializer('correspondence', makeConfig({
     attributes: ModelAttributes.Correspondence,
+    pluralizeType: false,
+  })),
+
+  dailySchedule: new Serializer('dailySchedule', makeConfig({
+    attributes: ModelAttributes.DailySchedule,
     pluralizeType: false,
   })),
 

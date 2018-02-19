@@ -9,6 +9,8 @@ async function wipeModel(Model) {
   });
 }
 
+// The model gets wiped in the reverse order
+// IE the last in the array gets wiped first.
 const ORDER = [
   'Enterprise',
   'WeeklySchedule',
@@ -26,6 +28,7 @@ const ORDER = [
   'Practitioner',
   'Practitioner_Service',
   'PractitionerRecurringTimeOff',
+  'DailySchedule',
   'Appointment',
   'Request',
   'Recall',

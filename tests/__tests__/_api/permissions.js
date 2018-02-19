@@ -28,7 +28,7 @@ async function seedData() {
 
   // Seed an extra account for fetching multiple and testing switching
 
-  Address.create(address);
+  await Address.create(address);
   await Account.create({
     id: accountId2,
     addressId,

@@ -2,7 +2,7 @@
 
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
-import { Practitioner, Service, Practitioner_Service } from '../../server/_models';
+import { Practitioner, Service, Practitioner_Service, DailySchedule } from '../../server/_models';
 import wipeModel, { wipeModelSequelize } from './wipeModel';
 import { accountId } from './seedTestUsers';
 import { weeklyScheduleId, seedTestWeeklySchedules, wipeTestWeeklySchedules } from './seedTestWeeklySchedules';
@@ -41,6 +41,7 @@ const service = {
 
 async function seedTestPractitioners() {
   await seedTestWeeklySchedules();
+  await wipeModel(DailySchedule);
   await wipeModel(Practitioner);
   await wipeModel(Practitioner_Service);
   await wipeModel(Service);
@@ -51,6 +52,7 @@ async function seedTestPractitioners() {
 
 async function wipeTestPractitioners() {
   await wipeModel(Practitioner_Service);
+  await wipeModel(DailySchedule);
   await wipeModel(Service);
   await wipeModel(Practitioner);
   await wipeTestWeeklySchedules();

@@ -73,6 +73,7 @@ models.push((require('./PinCode').default(sequelize, Sequelize)));
 models.push((require('./Practitioner').default(sequelize, Sequelize)));
 models.push((require('./Practitioner_Service').default(sequelize, Sequelize)));
 models.push((require('./PractitionerRecurringTimeOff').default(sequelize, Sequelize)));
+models.push((require('./DailySchedule').default(sequelize, Sequelize)));
 models.push((require('./Procedure').default(sequelize, Sequelize)));
 models.push((require('./Recall').default(sequelize, Sequelize)));
 models.push((require('./Reminder').default(sequelize, Sequelize)));

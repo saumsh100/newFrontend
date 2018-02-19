@@ -1,3 +1,4 @@
+import { validatePractitionerIdPmsId } from '../util/validators';
 
 export default function (sequelize, DataTypes) {
   const PractitionerRecurringTimeOff = sequelize.define('PractitionerRecurringTimeOff', {
@@ -42,27 +43,9 @@ export default function (sequelize, DataTypes) {
     pmsId: {
       type: DataTypes.STRING,
       validate: {
+        // validator for if pmsId and practitionerId are a unique combo
         isUnique(value, next) {
-          // validator for if pmsId and accountId are a unique combo
-          return PractitionerRecurringTimeOff.findOne({
-            where: {
-              practitionerId: this.practitionerId,
-              pmsId: value,
-            },
-            paranoid: false,
-          }).then(async (timeOff) => {
-            if (timeOff) {
-              timeOff.setDataValue('deletedAt', null);
-              timeOff = await timeOff.save({ paranoid: false });
-
-              return next({
-                messages: 'PractitionerId PMS ID Violation',
-                model: timeOff,
-              });
-            }
-
-            return next();
-          });
+          return validatePractitionerIdPmsId(PractitionerRecurringTimeOff, value, this, next);
         },
       },
     },

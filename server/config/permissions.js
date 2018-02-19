@@ -70,6 +70,7 @@ const SUPERADMIN = {
 
   timeOffs: allowAll,
   weeklySchedules: allowAll,
+  dailySchedules: allowAll,
 
   enterprises: allowAll,
   sentReminders: allow('read'),
