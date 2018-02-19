@@ -7,7 +7,7 @@ import Bundle from './Bundle';
 const Loading = () =>
   <Loader loaded={false} color="#FF715A" />;
 
-const LazyRoute = ({ path, load, component = null, name = '' }) => {
+const LazyRoute = ({ path, load, component = null, name = '', disableLoader }) => {
   const bundleComponent = props =>
     <Bundle load={load} name={name}>
       {((Module) => {
@@ -18,7 +18,7 @@ const LazyRoute = ({ path, load, component = null, name = '' }) => {
 
         return Module
           ? renderModule()
-          : <Loading />;
+          : !disableLoader ? <Loading /> : null;
       })}
     </Bundle>;
 
@@ -30,6 +30,7 @@ LazyRoute.propTypes = {
   name: PropTypes.string,
   load: PropTypes.func.isRequired,
   component: PropTypes.element,
+  disableLoader: PropTypes.bool,
 };
 
 export default LazyRoute;

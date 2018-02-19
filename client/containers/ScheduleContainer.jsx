@@ -1,6 +1,5 @@
 
-import React, { PropTypes } from 'react';
-import Loader from 'react-loader';
+import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -17,12 +16,9 @@ import {
   setAllFilters,
 } from '../thunks/schedule';
 
-class ScheduleContainer extends React.Component {
+class ScheduleContainer extends Component {
   constructor(props) {
-    super(props)
-    this.state = {
-      loaded: false,
-    };
+    super(props);
   }
 
   componentDidMount() {
@@ -44,7 +40,6 @@ class ScheduleContainer extends React.Component {
         join: ['patient', 'service'],
         params: query,
       }),
-
       this.props.fetchEntitiesRequest({
         id: 'pracSchedule',
         key: 'practitioners',
@@ -59,7 +54,6 @@ class ScheduleContainer extends React.Component {
         key: 'accounts',
       }),
     ]).then(() => {
-      this.setState({ loaded: true })
       this.props.setAllFilters(['chairs', 'practitioners', 'services']);
     }).catch(e => console.log(e));
   }
@@ -103,9 +97,6 @@ class ScheduleContainer extends React.Component {
       activeAccount,
     } = this.props;
 
-    if (!this.state.loaded || !activeAccount) {
-      return <Loader color="#FF715A" />;
-    }
     return (
       <ScheduleComponent
         practitioners={practitioners}
@@ -123,6 +114,10 @@ class ScheduleContainer extends React.Component {
         unit={activeAccount}
         setCreatingPatient={this.props.setCreatingPatient}
         createEntityRequest={this.props.createEntityRequest}
+        appsFetched={this.props.appsFetched}
+        pracsFetched={this.props.pracsFetched}
+        chairsFetched={this.props.chairsFetched}
+        accountsFetched={this.props.accountsFetched}
       />
     );
   }
@@ -141,6 +136,10 @@ ScheduleContainer.propTypes = {
   patients: PropTypes.object,
   chairs: PropTypes.object,
   setCreatingPatient: PropTypes.func,
+  appsFetched: PropTypes.bool,
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
+  accountsFetched: PropTypes.bool,
 };
 
 function mapStateToProps({ apiRequests, entities, schedule, auth }) {
@@ -150,16 +149,10 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
   const waitForAuth = auth.get('accountId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
-  /*
   const appsFetched = (apiRequests.get('appSchedule') ? apiRequests.get('appSchedule').wasFetched : null);
-  const pracFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
-  const chairFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);
-  const accountFetched = (apiRequests.get('accountsSchedule') ? apiRequests.get('accountsSchedule').wasFetched : null);
-
-  let loaded = false;
-  if (appsFetched && pracFetched && chairFetched && accountFetched && waitForAuth) {
-    loaded = true;
-  }*/
+  const pracsFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
+  const chairsFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);
+  const accountsFetched = (apiRequests.get('accountsSchedule') ? apiRequests.get('accountsSchedule').wasFetched : null);
 
   return {
     schedule,
@@ -173,6 +166,10 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
     weeklySchedules,
     timeOffs,
     activeAccount,
+    appsFetched,
+    pracsFetched,
+    chairsFetched,
+    accountsFetched,
   };
 }
 

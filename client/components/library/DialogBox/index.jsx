@@ -1,5 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
+import classNames from 'classnames';
 import styles from './styles.scss';
 import CardHeader from '../CardHeader';
 import Icon from '../Icon';
@@ -21,6 +22,7 @@ class DialogBox extends Component {
       children,
       actions,
       title,
+      bodyStyles,
     } = this.props;
 
     let showFooterComponent = null;
@@ -64,7 +66,7 @@ class DialogBox extends Component {
               <Icon icon="times" />
             </div>
           </SHeader>
-          <SBody className={styles.dialogBody}>
+          <SBody className={classNames(styles.dialogBody, bodyStyles)}>
             {children}
           </SBody>
           {showFooterComponent}

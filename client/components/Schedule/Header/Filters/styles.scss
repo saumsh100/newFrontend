@@ -62,7 +62,8 @@
 }
 
 .filter_practitioner {
-  padding: 10px 10px 10px 10px;
+  padding: 15px 10px 10px 10px;
+  margin-bottom: 15px;
   background: $primary-white;
   height: 100%;
   max-height: 280px;
@@ -133,7 +134,7 @@
     //composes: fontMedium from 'sass-loader!../../../../fonts.scss';
     text-overflow: ellipsis;
     flex: 1 0 35%;
-    padding: 2px;
+    //padding: 2px;
     &__all {
       font-weight: $large-weight;
     }
@@ -144,10 +145,10 @@
   }
 
   &__item {
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-bottom: px;
     select {
       border: none;
       border-bottom: 1px #ff715a solid;

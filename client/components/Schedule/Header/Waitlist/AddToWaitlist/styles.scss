@@ -1,0 +1,100 @@
+
+@import '../../../../../ui';
+
+.addToContainer {
+  height: auto;
+  width: 500px;
+}
+
+.searchContainer {
+  margin-bottom: 20px;
+  height: 59px;
+}
+
+.dayContainer {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  flex-wrap: wrap;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.subContainer {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.subHeader {
+  font-size: 13px;
+  composes: fontDefault from 'sass-loader!../../../../../fonts.scss';
+  color: $primary-dark;
+  text-align: left;
+}
+
+.subHeaderExtended {
+  @extend .subHeader;
+  margin-bottom: 5px;
+}
+
+.subHeaderMargin {
+  @extend  .subHeader;
+  margin-bottom: 12px;
+  margin-left: 20px;
+}
+
+.groupStyle {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 0px;
+}
+
+.suggestionOpen {
+
+}
+
+.errorStyle {
+  left: 20px;
+}
+
+.iconStyle {
+  font-size: 1em !important;
+  margin-right: 20px;
+  padding-bottom: 3px;
+  color: #2F3844;
+  opacity: 1;
+  bottom: 5px;
+}
+
+.colSpacing {
+  display: flex;
+  padding-bottom: 10px;
+  flex: 1 0 30%;
+
+  &:last-child {
+    padding-bottom: 20px;
+  }
+}
+
+.patientContainer {
+  padding: 10px 20px 10px 20px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid $primary-grey;
+  cursor: pointer;
+
+  &_name {
+    padding-left: 10px;
+    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+    font-size: 15px;
+    color: $primary-dark;
+  }
+
+  &_icon {
+    margin-left: auto;
+    font-size: 1em !important;
+    color: #2F3844;
+  }
+}

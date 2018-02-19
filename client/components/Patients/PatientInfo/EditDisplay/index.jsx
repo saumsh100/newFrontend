@@ -50,6 +50,10 @@ class EditDisplay extends Component {
       reinitializeState,
     } = this.props;
 
+    if (values.mobilePhoneNumber === '') {
+      values.mobilePhoneNumber = null;
+    }
+
     values.isSyncedWithPms = false;
     values.address = {};
     values.address.zipCode = values.zipCode;
@@ -65,6 +69,7 @@ class EditDisplay extends Component {
 
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
+
 
     updateEntityRequest({
       key: 'patients',

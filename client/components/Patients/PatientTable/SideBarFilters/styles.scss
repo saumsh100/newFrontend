@@ -27,6 +27,14 @@
        color: $primary-blue;
      }
   }
+
+  &_clearTextDark {
+    color: $primary-dark-grey;
+    cursor: pointer;
+    &:hover {
+      color: $primary-blue;
+    }
+  }
 }
 
 .filtersContainer {

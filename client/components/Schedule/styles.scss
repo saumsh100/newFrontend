@@ -35,7 +35,7 @@
   flex-direction: column;
   box-sizing: border-box;
   width: 320px;
-  
+
   &_rowCalendar {
     margin-bottom: 10px;
   }
@@ -91,6 +91,10 @@
 
   &_add {
     margin-left: 10px;
+  }
+
+  &_waitlist {
+    margin-right: 15px;
   }
 }
 
@@ -152,4 +156,6 @@
     margin-right: 10px;
   }
 }
+
+
 

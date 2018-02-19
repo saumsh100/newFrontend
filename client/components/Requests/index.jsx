@@ -20,6 +20,8 @@ class Requests extends Component {
       popoverRight,
       noBorder,
       disableHeader,
+      runAnimation,
+      isLoaded,
     } = this.props;
 
     const filteredRequests = requests.toArray().filter((req) => {
@@ -54,7 +56,12 @@ class Requests extends Component {
       );
     }
     return (
-      <Card className={styles.requestCard} noBorder={noBorder}>
+      <Card
+        className={styles.requestCard}
+        noBorder={noBorder}
+        runAnimation={runAnimation}
+        loaded={isLoaded}
+      >
         <div className={requestHeaderClassNames}>
           <CardHeader
             data-test-id="requestCount"
@@ -64,7 +71,7 @@ class Requests extends Component {
           </CardHeader>
         </div>
         <div className={styles.requestBody}>
-          {display}
+          {isLoaded ? display : null}
         </div>
       </Card>
     );

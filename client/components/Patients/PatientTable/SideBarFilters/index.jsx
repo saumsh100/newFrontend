@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Map } from 'immutable';
 import { Icon, Card } from '../../../library';
 import Demographics from './Demographics';
@@ -8,7 +9,6 @@ import Appointments from './Appointments';
 import Practitioners from './Practitioners';
 import Communications from './Communications';
 import FilterTags from './FilterTags';
-import SearchPatientTable from './SearchPatientTable/index';
 import styles from './styles.scss';
 
 class SideBarFilters extends Component {
@@ -437,22 +437,23 @@ class SideBarFilters extends Component {
       );
     };
 
+    let clearTextStyle = styles.header_clearText;
+    if (filters && filters.size > 0) {
+      clearTextStyle = classnames(clearTextStyle, styles.header_clearTextDark)
+    }
+
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
           <div className={styles.header_icon}> <Icon icon="filter" type="solid" /> </div>
           <div className={styles.header_text}> Filters </div>
           <div
-            className={styles.header_clearText}
+            className={clearTextStyle}
             onClick={this.clearTags}
           >
             Clear All
           </div>
         </div>
-
-        {/*<SearchPatientTable
-          handleSearchPatient={this.props.searchPatients}
-        />*/}
 
         <FilterTags
           filterTags={filters}

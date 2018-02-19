@@ -1,18 +1,22 @@
 
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Requests from '../components/Requests';
 import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { fetchEntities } from '../thunks/fetchEntities';
+import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
-class RequestContainer extends React.Component {
+class RequestContainer extends Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.fetchEntities({ key: 'requests', join: ['service', 'patientUser', 'practitioner'] });
+    this.props.fetchEntitiesRequest({
+      id: 'scheduleRequests',
+      key: 'requests',
+      join: ['service', 'patientUser', 'practitioner'],
+    });
   }
 
   render() {
@@ -26,17 +30,25 @@ class RequestContainer extends React.Component {
         patientUsers={this.props.patientUsers}
         practitioners={this.props.practitioners}
         location={location}
-        maxHeight={this.props.maxHeight}
+        isLoaded={this.props.scheduleRequestsFetched}
+        runAnimation
       />
     );
   }
 }
 
 RequestContainer.propTypes = {
-  fetchEntities: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
+  scheduleRequestsFetched: PropTypes.bool,
+  requests: PropTypes.object,
+  services: PropTypes.object,
+  patientUsers: PropTypes.object,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities, apiRequests }) {
+
+  const scheduleRequestsFetched = (apiRequests.get('scheduleRequests') ? apiRequests.get('scheduleRequests').wasFetched : null);
+
   const patientUsers = entities.getIn(['patientUsers', 'models']);
   const services = entities.getIn(['services', 'models']);
   const requests = entities.getIn(['requests', 'models']);
@@ -47,12 +59,13 @@ function mapStateToProps({ entities }) {
     services,
     patientUsers,
     practitioners,
+    scheduleRequestsFetched,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchEntities,
+    fetchEntitiesRequest,
   }, dispatch);
 }
 

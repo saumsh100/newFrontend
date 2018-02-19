@@ -12,6 +12,7 @@ import ContainerList from './ContainerList';
 import CardHeader from './CardHeader';
 import Checkbox from './Checkbox';
 import CheckboxImage from './CheckboxImage';
+import CheckboxButton from './CheckboxButton';
 import CircleGauge from './CircleGauge';
 import CodeSnippet from './CodeSnippet';
 import Collapsible from './Collapsible';
@@ -68,7 +69,8 @@ import VButton from './Button';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
-import Well from './Well';
+import Well from './Well'
+import PatientPopover from './PatientPopover';
 
 export {
   AccountLogo,
@@ -86,6 +88,7 @@ export {
   CardHeader,
   Checkbox,
   CheckboxImage,
+  CheckboxButton,
   ChartStats,
   CircleGauge,
   CodeSnippet,
@@ -119,6 +122,7 @@ export {
   Pill,
   SelectPill,
   InfoSection,
+  PatientPopover,
   PieChart,
   RemoteSubmitButton,
   RouterButton,

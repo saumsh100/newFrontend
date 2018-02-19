@@ -1,0 +1,143 @@
+
+@import '../../../../ui.scss';
+
+.waitList {
+  min-height: 267px;
+  width: 600px;
+  composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  font-size: 18px;
+  font-family: inherit;
+  color: $primary-dark;
+  border-bottom: 1px solid $primary-grey;
+  box-sizing: border-box;
+  padding: 20px;
+};
+
+.iconAdd {
+  margin-left: 5px;
+}
+
+.list {
+  max-height: 325px;
+  overflow: auto;
+  height: 100%;
+}
+
+.waitListItem {
+  display: flex;
+  width: 100%;
+  //min-height: 105px;
+  padding: 0px 30px 0px 30px;
+  box-sizing: border-box;
+  border: 0;
+  cursor: default !important;
+
+  &:hover {
+    background-color: lighten($primary-grey, 5%);
+  }
+
+  /*&:last-child .wrapper {
+    border-bottom: 0px;
+  }*/
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  height: auto;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid $primary-grey;
+  box-sizing: border-box;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.avatar {
+  margin-right: 15px;
+}
+
+.name {
+  font-family: inherit;
+  color: $primary-dark;
+}
+
+.patientPrefInfo {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  font-size: 13px;
+  word-wrap: break-word;
+  height: auto;
+}
+
+.info {
+  font-size: 10px;
+  width: 178px;
+  color: $primary-dark-grey;
+  padding: 3px 0px 3px 0px;
+}
+
+.subHeader {
+}
+
+.dataText {
+  font-style: italic;
+  margin-right: 3px;
+  opacity: 0.6;
+}
+
+.patientGeneralInfo {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  line-height: 1.5;
+}
+
+.infoContainer {
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+}
+
+.icon {
+  margin-right: 5px;
+}
+
+.infoData {
+  color: $primary-darkgrey;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.remove {
+  margin-left: 30px;
+  margin-right: 20px;
+
+  &:hover {
+    color: $primary-blue;
+    cursor: pointer;
+  }
+}
+
+.addTo {
+  display: flex;
+  font-size: 12px;
+  margin-left: auto;
+  &:hover {
+    color: $primary-blue;
+    cursor: pointer;
+  }
+}
+
+.removeBorder {
+  border-bottom: 0;
+}

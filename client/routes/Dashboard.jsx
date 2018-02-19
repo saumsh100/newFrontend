@@ -31,8 +31,8 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         <Route exact path="/" component={DashboardComponent} />
         <Route path="/profile" component={Profile} />
         <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
-        <LazyRoute path="/schedule" load={loadSchedule} name="schedule" />
-        <LazyRoute path="/patients" load={loadPatients} name="patients" />
+        <LazyRoute path="/schedule" load={loadSchedule} name="schedule" disableLoader />
+        <LazyRoute path="/patients" load={loadPatients} name="patients" disableLoader />
         <Route path="/chat" component={ChatContainer} />
         <LazyRoute path="/typography" load={loadTypography} name="typography" />
 

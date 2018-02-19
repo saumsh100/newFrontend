@@ -39,7 +39,7 @@ export default function AppointmentPopover(props) {
   };
 
   return (
-    <Card className={styles.card} noBorder id="appPopOver">
+    <Card className={styles.card} noBorder id="appPopOver" >
       <SContainer>
         <SHeader className={styles.header}>
           <Avatar user={patient} size="xs" />
@@ -163,4 +163,6 @@ AppointmentPopover.propTypes = {
   closePopover: PropTypes.func,
   editAppointment: PropTypes.func,
   scheduleView: PropTypes.string,
+  practitioner: PropTypes.object,
+  chair: PropTypes.object,
 };

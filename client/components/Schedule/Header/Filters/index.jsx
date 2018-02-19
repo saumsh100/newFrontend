@@ -8,39 +8,19 @@ export default function Filters(props) {
   const {
     practitioners,
     schedule,
-    services,
     chairs,
   } = props;
 
-  const practitionersFilter = schedule.toJS().practitionersFilter;
 
   const selectedFilters = {
     chairsFilter: schedule.toJS().chairsFilter,
     practitionersFilter: schedule.toJS().practitionersFilter,
-    servicesFilter: schedule.toJS().servicesFilter,
     remindersFilter: schedule.toJS().remindersFilter,
   };
-
-  const filteredServices = [];
-
-  if (practitionersFilter.length) {
-    practitionersFilter.map((pracId) => {
-      if (pracId) {
-        const selectedPrac = practitioners.get(pracId);
-        const serviceIds = selectedPrac ? selectedPrac.get('services') : [];
-        serviceIds.map((sid) => {
-          if(filteredServices.indexOf(services.get(sid)) === -1) {
-            filteredServices.push(services.get(sid));
-          }
-        });
-      }
-    });
-  }
 
   const entities = {
     chairsFilter: chairs,
     practitionersFilter: practitioners,
-    servicesFilter: filteredServices,
     remindersFilter: [
       Map({ id: 'Reminder Sent' }),
       Map({ id: 'PMS Not Synced' }),

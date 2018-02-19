@@ -32,6 +32,7 @@ class RFCheckbox extends Component {
     const finalError = error || ((touched || dirty) ? meta.error : null);
     const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
     const checked = flipped ? !input.value : input.value;
+
     return (
       <Checkbox
         {...this.props}

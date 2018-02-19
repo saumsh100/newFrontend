@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import TimeColumn from './TimeColumn/TimeColumn';
 import PractitionersSlot from './PractitionersSlot';
@@ -23,6 +24,16 @@ class DayViewBody extends Component {
     this.onScroll = this.onScroll.bind(this);
     this.onScrollChair = this.onScrollChair.bind(this);
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const currentDate = moment(this.props.schedule.get('scheduleDate'));
+    const nextDate = moment(nextProps.schedule.get('scheduleDate'));
+
+    if ((nextProps.scheduleView !== this.props.scheduleView)
+      || (currentDate.toISOString() !== nextDate.toISOString())) {
+      this.headerComponent.scrollLeft = 0;
+    }
   }
 
   componentWillUnmount() {
@@ -83,6 +94,9 @@ class DayViewBody extends Component {
       selectAppointment,
       scheduleView,
       leftColumnWidth,
+      appsFetched,
+      chairsFetched,
+      pracsFetched,
     } = this.props;
 
     const timeSlots = [];
@@ -120,7 +134,7 @@ class DayViewBody extends Component {
       return checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive;
     });
 
-    const practitionersSlot = (
+    const practitionersSlot = appsFetched && chairsFetched && pracsFetched ? (
       <PractitionersSlot
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
@@ -135,7 +149,7 @@ class DayViewBody extends Component {
         selectAppointment={selectAppointment}
         scrollComponentDidMount={this.scrollComponentDidMount}
       />
-    );
+    ) : null;
 
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
@@ -143,7 +157,7 @@ class DayViewBody extends Component {
       return checkedChairs.indexOf(chair.id) > -1 && chair.isActive;
     });
 
-    const chairsSlot = (
+    const chairsSlot = appsFetched && chairsFetched && pracsFetched ? (
       <ChairsSlot
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
@@ -160,7 +174,7 @@ class DayViewBody extends Component {
         selectAppointment={selectAppointment}
         scrollComponentDidMountChair={this.scrollComponentDidMountChair}
       />
-    );
+    ) : null;
 
     return (
       <SContainer noBorder className={styles.card} id="scheduleContainer">
@@ -171,6 +185,8 @@ class DayViewBody extends Component {
             headerComponentDidMount={this.headerComponentDidMount}
             leftColumnWidth={leftColumnWidth}
             minWidth={schedule.toJS().columnWidth}
+            headerComponent={this.headerComponent}
+            schedule={schedule}
           />
         </SHeader>
         <SBody className={styles.dayView} >
@@ -199,14 +215,24 @@ DayViewBody.propTypes = {
   selectAppointment: PropTypes.func.isRequired,
   scheduleView: PropTypes.string.isRequired,
   leftColumnWidth: PropTypes.number,
+  appsFetched: PropTypes.bool,
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
 };
 
 
-function mapStateToProps({ schedule }) {
+function mapStateToProps({ schedule, apiRequests }) {
   const scheduleView = schedule.toJS().scheduleView;
+
+  const appsFetched = (apiRequests.get('appSchedule') ? apiRequests.get('appSchedule').wasFetched : null);
+  const pracsFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
+  const chairsFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);
 
   return {
     scheduleView,
+    appsFetched,
+    pracsFetched,
+    chairsFetched,
   };
 }
 

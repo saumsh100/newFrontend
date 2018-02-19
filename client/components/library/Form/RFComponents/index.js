@@ -11,6 +11,7 @@ import RFAutoComplete from './RFAutoComplete';
 import RFColorPicker from './RFColorPicker';
 import RFStars from './RFStars';
 import RFButton from './RFButton';
+import RFCheckboxButton from './RFCheckboxButton';
 
 export default {
   Input: RFInput,
@@ -26,4 +27,5 @@ export default {
   ColorPicker: RFColorPicker,
   Stars: RFStars,
   Button: RFButton,
+  CheckboxButton: RFCheckboxButton,
 };

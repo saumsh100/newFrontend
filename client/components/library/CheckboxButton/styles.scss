@@ -1,0 +1,33 @@
+
+@import '../../../ui';
+
+.buttonLabel {
+  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  display: inline-block;
+  cursor: pointer;
+  color: $primary-dark-grey;
+  border: 1px solid $primary-dark-grey;
+  border-radius: 0.25em;
+  background: transparent;
+
+  outline: none;
+  text-decoration: none;
+
+  padding: em(12px) 1.5em;
+  margin: 0 em(5px) 0 0;
+  line-height: 1em;
+  text-align: center;
+
+  transition: background-color .1s ease, color .1s ease;
+  min-width: 60px;
+}
+
+.checkboxButton input {
+  display: none!important;
+}
+
+.checkboxButton input[type=checkbox]:checked + label {
+  background-color: $primary-blue;
+  border-color:  $primary-blue;
+  color: #ffffff;
+}

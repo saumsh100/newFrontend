@@ -209,6 +209,10 @@ $padding-size-border: 10px;
   display: flex;
   margin-right: 50px;
   z-index: 25;
+
+  @media screen and (max-width: 400px) {
+    display: none;
+  }
 }
 
 .wrapper {
@@ -270,7 +274,7 @@ $padding-size-border: 10px;
   }
 
   @media screen and (max-width: 1050px) {
-    width: 200px;
+    width: 150px;
   }
 
 }
@@ -293,7 +297,7 @@ $padding-size-border: 10px;
 
 .animateSearch {
   input {
-    width: 0px;
+    width: 0;
     animation: animateThis 0.3s ease-in-out;
     animation-fill-mode: forwards;
   }
@@ -305,7 +309,7 @@ $padding-size-border: 10px;
     width: 0px;
   }
   100% {
-    width: 700px;
+    width: 600px;
   }
 }
 

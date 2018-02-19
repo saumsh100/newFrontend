@@ -23,8 +23,14 @@ const asyncPhoneNumberValidatePatient = (values) => {
     });
 };
 
-const asyncEmailValidateNewPatient = (values) => {
+const asyncEmailValidateNewPatient = (values, dispatch, props) => {
   if (!values.email) return;
+
+  const initialValues = props.initialValues;
+  if (props.initialized && (initialValues.email === values.email.replace(/\s/g, ''))) {
+    return;
+  }
+
   return axios.post('/api/patients/emailCheck', { email: values.email })
     .then((response) => {
       if (response.data.exists) {
@@ -33,8 +39,16 @@ const asyncEmailValidateNewPatient = (values) => {
     });
 };
 
-const asyncPhoneNumberValidateNewPatient = (values) => {
+const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
   if (!values.mobilePhoneNumber) return;
+
+  const initialValues = props.initialValues;
+
+  if (props.initialized && (initialValues.mobilePhoneNumber === values.mobilePhoneNumber.replace(/\s/g, ''))) {
+    console.log('initial values are equal', initialValues.mobilePhoneNumber, values.mobilePhoneNumber)
+    return;
+  }
+
   // TODO: Check for valid mobile phone number
   return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.mobilePhoneNumber })
     .then((response) => {

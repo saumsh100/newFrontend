@@ -143,6 +143,8 @@ class AppsRequestsContainer extends Component {
         popoverRight="right"
         noBorder
         disableHeader
+        runAnimation={false}
+        isLoaded
       />
     ) : null;
 

@@ -2,19 +2,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import DocumentTitle from 'react-document-title';
 import {
-  Grid,
-  Row,
-  Col,
   Card,
   SBody,
   SContainer,
-  SHeader,
   Button,
-  IconButton,
   Modal,
   DialogBox,
   DayPicker,
@@ -24,8 +16,7 @@ import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
 import AddPatient from './AddPatient';
 import AddPatientSuggestions from './AddPatientSuggestions';
-import CurrentDate from './Header/CurrentDate';
-import HeaderButtons from './Header/HeaderButtons';
+import Header from './Header';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
 import styles from './styles.scss';
@@ -189,6 +180,10 @@ class ScheduleComponent extends Component {
       setMergingPatient,
       weeklySchedules,
       unit,
+      appsFetched,
+      pracsFetched,
+      chairsFetched,
+      accountsFetched,
     } = this.props;
 
     const {
@@ -288,46 +283,22 @@ class ScheduleComponent extends Component {
     return (
         <div className={styles.rowMainContainer}>
           <div className={styles.dayViewContainer}>
-            <Card className={styles.card} >
+            <Card
+              className={styles.card}
+              runAnimation
+              loaded={appsFetched && accountsFetched && chairsFetched && pracsFetched}
+            >
               <SContainer>
-                <SHeader className={styles.headerContainer}>
-                  <CurrentDate
-                    currentDate={currentDate}
-                    leftColumnWidth={leftColumnWidth}
-                  >
-                    <div className={styles.changeDay}>
-                      <IconButton
-                        icon="angle-left"
-                        size={1.3}
-                        onClick={() => this.previousDay(currentDate)}
-                        className={styles.changeDay_left}
-                      />
-                      <IconButton
-                        icon="angle-right"
-                        size={1.3}
-                        onClick={() => this.nextDay(currentDate)}
-                        className={styles.changeDay_right}
-                      />
-                    </div>
-
-                    <Button
-                      border="blue"
-                      onClick={() => this.setCurrentDay(new Date())}
-                      dense
-                      compact
-                    >
-                      Today
-                    </Button>
-
-                    <HeaderButtons
-                      addNewAppointment={this.addNewAppointment}
-                      schedule={schedule}
-                      chairs={filterChairs}
-                      practitioners={filterPractitioners}
-                      services={services.get('models')}
-                    />
-                  </CurrentDate>
-                </SHeader>
+                <Header
+                  addNewAppointment={this.addNewAppointment}
+                  schedule={schedule}
+                  chairs={filterChairs}
+                  practitioners={filterPractitioners}
+                  previousDay={this.previousDay}
+                  setCurrentDay={this.setCurrentDay}
+                  nextDay={this.nextDay}
+                  reinitializeState={this.reinitializeState}
+                />
                 <SBody>
                   <DayView
                     currentDate={currentDate}
@@ -349,33 +320,40 @@ class ScheduleComponent extends Component {
                     onOverlayClick={this.reinitializeState}
                     custom
                   >
-                    <AddNewAppointment
-                      formName={formName}
-                      chairs={filterChairs}
-                      practitioners={filterPractitioners}
-                      patients={patients.get('models')}
-                      reinitializeState={this.reinitializeState}
-                      weeklySchedules={weeklySchedules}
-                      setPatientSearched={this.setPatientSearched}
-                      patientSearched={this.state.patientSearched}
-                      unit={unit.get('unit')}
-                      currentDate={currentDate}
-                      showInput={this.state.showInput}
-                      setShowInput={this.setShowInput}
-                      selectedAppointment={this.props.selectedAppointment}
-                      setCreatingPatient={this.props.setCreatingPatient}
-                    />
+                    {appsFetched && accountsFetched && chairsFetched && pracsFetched ? (
+                      <AddNewAppointment
+                        formName={formName}
+                        chairs={filterChairs}
+                        practitioners={filterPractitioners}
+                        patients={patients.get('models')}
+                        reinitializeState={this.reinitializeState}
+                        weeklySchedules={weeklySchedules}
+                        setPatientSearched={this.setPatientSearched}
+                        patientSearched={this.state.patientSearched}
+                        unit={unit.get('unit')}
+                        currentDate={currentDate}
+                        showInput={this.state.showInput}
+                        setShowInput={this.setShowInput}
+                        selectedAppointment={this.props.selectedAppointment}
+                        setCreatingPatient={this.props.setCreatingPatient}
+                      />) : null }
                   </Modal>
                   <DialogBox
                     title={displayTitle}
-                    type={createNewPatient ? "small" : "medium"}
+                    type={createNewPatient ? 'small' : 'medium'}
                     actions={actions}
                     active={((selectedAppointment && selectedAppointment.nextAppt) ||
                       !!mergingPatientData.patientUser) || createNewPatient}
                     onEscKeyDown={this.reinitializeState}
-                    onOverlayClick={createNewPatient ? this.setCreatingPatient : this.reinitializeState}
+                    onOverlayClick={
+                      createNewPatient ? this.setCreatingPatient : this.reinitializeState
+                    }
                   >
-                    {displayModalComponent}
+                    {appsFetched && accountsFetched && chairsFetched && pracsFetched ?
+
+                      displayModalComponent
+                      : null
+                    }
                   </DialogBox>
                 </SBody>
               </SContainer>
@@ -383,15 +361,15 @@ class ScheduleComponent extends Component {
           </div>
           <div className={styles.sidebar}>
             <div className={styles.sidebar_rowCalendar}>
-                <Card>
-                  <DayPicker
-                    month={new Date(moment(currentDate).year(), moment(currentDate).month())}
-                    selectedDays={new Date(currentDate)}
-                    onDayClick={this.setCurrentDay}
-                    className={styles.sidebar_calendar}
-                    noTarget
-                  />
-                </Card>
+              <Card>
+                <DayPicker
+                  month={new Date(moment(currentDate).year(), moment(currentDate).month())}
+                  selectedDays={new Date(currentDate)}
+                  onDayClick={this.setCurrentDay}
+                  className={styles.sidebar_calendar}
+                  noTarget
+                />
+              </Card>
             </div>
             <div className={styles.sidebar_rowRequest}>
               <div xs={12} className={styles.sidebar_request} >
@@ -421,6 +399,10 @@ ScheduleComponent.propTypes = {
   weeklySchedules: PropTypes.object,
   setCreatingPatient: PropTypes.func,
   unit: PropTypes.number,
+  appsFetched: PropTypes.bool,
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
+  accountsFetched: PropTypes.bool,
 };
 
-export default ScheduleComponent
+export default ScheduleComponent;

@@ -23,3 +23,12 @@ export const SortByCreatedAtDesc = (a, b) => {
   if (moment(b.createdAt).isAfter(moment(a.createdAt))) return 1;
   return 0;
 };
+
+
+export const sortByField = (collection, fieldDate) => {
+  return collection.sort((a, b) => {
+    if (moment(a[fieldDate]).isBefore(moment(b[fieldDate]))) return -1;
+    if (moment(a[fieldDate]).isAfter(moment(b[fieldDate]))) return 1;
+    return 0;
+  });
+};
