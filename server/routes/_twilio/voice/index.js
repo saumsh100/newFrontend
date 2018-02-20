@@ -78,7 +78,7 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
 
     // Confirm the appointment if any one sentReminder is confirmed
     await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
-    await Appointment.update({ isPatientConfirmed: true }, { where: { id: sentReminder.appointment.id } });
+    await Appointment.update({ isPatientConfirmed: true, isSyncedWithPms: false }, { where: { id: sentReminder.appointment.id } });
   } else {
     twiml.gather({
       timeout: 30,
