@@ -175,7 +175,7 @@ sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res,
     const { appointment, patient } = sentReminder;
 
     if (appointment) {
-      await appointment.update({ isPatientConfirmed: true });
+      await appointment.update({ isPatientConfirmed: true, isSyncedWithPms: false });
     }
 
     const account = await Account.findOne({

@@ -165,7 +165,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
 
 
     await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
-    await Appointment.update({ isPatientConfirmed: true }, { where: { id: appointment.id } });
+    await Appointment.update({ isPatientConfirmed: true, isSyncedWithPms: false }, { where: { id: appointment.id } });
     await sendSocketReminder(io, sentReminder);
     // Mark this as read cause we are auto-responding to it
     await textMessage.update({ read: true });
