@@ -126,6 +126,18 @@ export default function (sequelize, DataTypes) {
         return !this.get('patientId');
       },
     },
+
+    reason: {
+        type: DataTypes.STRING,
+    },
+
+    isPreConfirmed: {
+        type: DataTypes.BOOLEAN,
+    },
+
+    estimatedRevenue: {
+      type: DataTypes.FLOAT,
+    }
   });
 
   Appointment.associate = (models) => {
