@@ -38,6 +38,9 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'reason',
+    'isPreConfirmed',
+    'estimatedRevenue'
   ],
 
   Chair: [
