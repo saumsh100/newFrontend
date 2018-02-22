@@ -1,7 +1,12 @@
 
 import axios from 'axios';
 import moment from 'moment';
-import { setLoading, setInsights, setToDoReminders} from '../reducers/dashboard';
+import {
+  setLoading,
+  setInsights,
+  setToDoReminders,
+  setToDoRecalls,
+} from '../reducers/dashboard';
 
 export function fetchInsights() {
   return async function (dispatch, getState) {
@@ -32,9 +37,10 @@ export function fetchInsights() {
   };
 }
 
-const toDoFunctions = [
-  fetchToDoReminders,
-];
+const toDoFunctions = {
+  0: fetchToDoReminders,
+  1: fetchToDoRecalls,
+};
 
 export function fetchDonnasToDos(index) {
   return async function (dispatch, getState) {
@@ -47,7 +53,7 @@ export function fetchDonnasToDos(index) {
     const startDate = currentDate.startOf('day').toISOString();
     const endDate = currentDate.endOf('day').toISOString();
 
-    if (index < toDoFunctions.length) {
+    if (toDoFunctions[index]) {
       const accountId = auth.get('accountId');
       dispatch(setLoading({ key: 'loadingToDos', value: true }));
 
@@ -65,6 +71,19 @@ async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
     const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, { params });
     dispatch(setToDoReminders(remindersData.data));
   } catch (err) {
-    console.log(err);
+    console.error('fetchToDoReminders', err);
+    throw err;
   }
 }
+
+async function fetchToDoRecalls(accountId, startDate, endDate, dispatch) {
+  try {
+    const params = { startDate, endDate };
+    const recallsData = await axios.get(`/api/accounts/${accountId}/recalls/outbox`, { params });
+    dispatch(setToDoRecalls(recallsData.data));
+  } catch (err) {
+    console.error('fetchToDoRecalls', err);
+    throw err;
+  }
+}
+

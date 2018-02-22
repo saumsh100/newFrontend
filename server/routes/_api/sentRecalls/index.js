@@ -5,6 +5,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { SentRecall } from '../../../_models';
+import StatusError from '../../../util/StatusError';
 
 const sentRecallsRouter = Router();
 

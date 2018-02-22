@@ -12,6 +12,7 @@ import {
   SMSPreview,
 } from '../../../../library';
 import createReminderText from '../../../../../../server/lib/reminders/createReminderText';
+import { convertIntervalStringToObject } from '../../../../../../server/util/time';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 // import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
@@ -76,10 +77,11 @@ class ReminderPreview extends Component {
       lastName: 'Doe',
     };
 
+    const intervalObject = convertIntervalStringToObject(reminder.interval);
     // Fake Appt Data
     const appointment = {
       // 1 day from now with no minutes
-      startDate: moment().add(reminder.lengthSeconds, 'seconds').minutes(0).toISOString(),
+      startDate: moment().add(intervalObject).minutes(0).toISOString(),
       isPatientConfirmed: !isConfirmable,
     };
 

@@ -48,8 +48,6 @@ const PatientSchema = {
 
   firstApptId: null,
   firstApptDate: null,
-  recareDueDateSeconds: null,
-  hygieneDueDateSeconds: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {

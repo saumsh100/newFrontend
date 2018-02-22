@@ -7,6 +7,7 @@ import {
   SBody,
 } from '../../../library';
 import AppointmentReminders from './AppointmentReminders';
+import PatientRecalls from './PatientRecalls';
 import styles from './styles.scss';
 
 const toDoListNames = [
@@ -40,8 +41,11 @@ class Tasks extends Component {
     const {
       toDoIndex,
       loadingToDos,
+      reminders,
+      recalls,
     } = this.props;
 
+    let count = 0;
     let header = <SHeader className={styles.header} />;
 
     let body = loadingToDos ? null : (
@@ -50,20 +54,29 @@ class Tasks extends Component {
       </div>
     );
 
-    if (this.props.reminders && this.props.reminders.size && !loadingToDos) {
-      const reminders = this.props.reminders.toJS();
-
-      if (toDoIndex === 0) {
-        header = defaultHeaderTemplate();
-
-        body = <AppointmentReminders reminders={reminders} />;
-      }
+    if (toDoIndex === 0 && reminders && reminders.size && !loadingToDos) {
+      count = reminders.size;
+      body = <AppointmentReminders reminders={reminders.toJS()} />;
+      header = defaultHeaderTemplate();
+    } else if (toDoIndex === 1 && recalls && recalls.size && !loadingToDos) {
+      count = recalls.size;
+      body = <PatientRecalls recalls={recalls.toJS()} />;
+      header = (
+        <SHeader className={styles.header}>
+          <div className={styles.avatar}>{''}</div>
+          <div className={styles.mediumCol}>Type</div>
+          <div className={styles.smallCol}>Task</div>
+          <div className={styles.smallCol}>Scheduled</div>
+          <div className={styles.col}>Name</div>
+          <div className={styles.col}>Due for Hygiene</div>
+        </SHeader>
+      );
     }
 
     return (
       <SContainer className={styles.container}>
         <SHeader className={styles.countHeader}>
-          <span className={styles.countHeader_count}>{this.props.reminders.size || 0}&nbsp;</span> {toDoListNames[toDoIndex]}
+          <span className={styles.countHeader_count}>{count}&nbsp;</span> {toDoListNames[toDoIndex]}
         </SHeader>
         {header}
         <SBody className={styles.body}>
@@ -76,6 +89,7 @@ class Tasks extends Component {
 
 Tasks.propTypes = {
   reminders: PropTypes.object,
+  recalls: PropTypes.object,
   toDoIndex: PropTypes.number,
 };
 

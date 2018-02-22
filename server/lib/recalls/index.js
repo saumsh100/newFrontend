@@ -43,7 +43,7 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
   console.log(`Sending recalls for ${account.name}`);
   const { recalls, name } = account;
 
-  const recallsPatients = await mapPatientsToRecalls({ recalls, account, date });
+  const recallsPatients = await mapPatientsToRecalls({ recalls, account, startDate: date });
 
   // Grab all failures and do a bulkCreate to reduce load
   /*let totalFailures = [];

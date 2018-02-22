@@ -112,8 +112,11 @@ export default function (sequelize, DataTypes) {
         emailNotifications: true,
         phone: true,
         reminders: true,
+        recalls: true,
         newsletter: true,
         birthdayMessage: true,
+        reviews: true,
+        referrals: true,
       },
     },
 

@@ -5,10 +5,11 @@ import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getRecallTemplateName } from '../../../lib/recalls/createRecallText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
+import { getDayStart, getDayEnd } from '../../../util/time';
 import { sequelizeLoader } from '../../util/loaders';
 import { Recall } from '../../../_models';
 import StatusError from '../../../util/StatusError';
-import { getPatientsDueForRecall, mapPatientsToRecalls } from '../../../lib/recalls/helpers';
+import { getRecallsOutboxList } from '../../../lib/recalls/helpers';
 import { convertIntervalStringToObject } from '../../../util/time';
 
 const recallsRouter = new Router();
@@ -143,5 +144,22 @@ recallsRouter.get('/:accountId/recalls/:recallId/preview', checkPermissions('acc
   }
 });
 
-module.exports = recallsRouter;
+/**
+ * GET /:accountId/outbox
+ */
+recallsRouter.get('/:accountId/recalls/outbox', checkPermissions('sentRecalls:read'), async (req, res, next) => {
+  try {
+    if (req.account.id !== req.accountId) {
+      throw StatusError(403, 'req.accountId does not match URL account id');
+    }
 
+    const { account } = req;
+    const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
+    const outboxList = await getRecallsOutboxList({ account, startDate, endDate });
+    return res.send(outboxList);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports = recallsRouter;

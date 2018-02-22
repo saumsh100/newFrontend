@@ -1,11 +1,36 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import { Account, Recall, Address } from '../../../server/_models';
-import wipeModel from '../../_util/wipeModel';
+import { Account, Recall, Address, Patient, Appointment } from '../../../server/_models';
+import wipeModel, { wipeAllModels } from '../../_util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
 import { recallId1, seedTestRecalls } from '../../_util/seedTestRecalls';
 import generateToken from '../../_util/generateToken';
-import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
+import { getModelsArray, omitPropertiesFromBody, omitProperties } from '../../util/selectors';
+import { seedTestPatients, patientId } from '../../_util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../_util/seedTestPractitioners';
+
+// TODO: make seeds more modular so we can see here
+// const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+// const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
+const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
+
+const makeApptData = (data = {}) => Object.assign({
+  accountId,
+  patientId,
+  practitionerId,
+}, data);
+
+const makePatientData = (data = {}) => Object.assign({
+  accountId,
+}, data);
+
+const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
+const dates = (y, m, d, h) => {
+  return {
+    startDate: date(y, m, d, h),
+    endDate: date(y, m, d, h + 1),
+  };
+};
 
 const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
@@ -148,6 +173,65 @@ describe('/api/accounts/:account/recalls', () => {
           .expect(403);
       });
     });
-  });
 
+    describe('GET /:accountId/recalls/outbox', () => {
+      beforeEach(async () => {
+        await wipeAllModels();
+        await seedTestUsers();
+        await seedTestPatients();
+        await seedTestPractitioners();
+        token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+
+        await Recall.bulkCreate([
+          {
+            accountId,
+            primaryTypes: ['email'],
+            interval: '1 months',
+          },
+        ]);
+
+        const patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'Old', email: 'hello@hello.com', lastName: 'Patient', status: 'Active', lastHygieneDate: date(2016, 7, 5, 9), contCareInterval: '6 months' }),
+        ]);
+
+        await Appointment.bulkCreate([
+          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+        ]);
+      });
+
+      afterAll(async () => {
+        await wipeModel(Recall);
+        await wipeAllModels();
+
+        await seedTestUsers();
+        token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+      });
+
+      test('Outbox for Recalls - Should return Patient Old', () => {
+        const startDate = date(2016, 0, 1, 9);
+        const endDate = date(2017, 8, 8, 9);
+        return request(app)
+          .get(`${rootUrl}/${accountId}/recalls/outbox?startDate=${startDate}&endDate=${endDate}`)
+          .set('Authorization', `Bearer ${token}`)
+          .expect(200)
+          .then(async ({ body }) => {
+            body[0].patient = omitProperties(body[0].patient, ['id']);
+            body[0].recall = omitProperties(body[0].recall, ['id']);
+            expect(body).toMatchSnapshot();
+          });
+      });
+
+      test('Outbox for Recalls - Should not return Patient Old as their recall not in range', () => {
+        const startDate = date(2016, 0, 1, 9);
+        const endDate = date(2016, 8, 8, 9);
+        return request(app)
+          .get(`${rootUrl}/${accountId}/recalls/outbox?startDate=${startDate}&endDate=${endDate}`)
+          .set('Authorization', `Bearer ${token}`)
+          .expect(200)
+          .then(async ({ body }) => {
+            expect(body.length).toBe(0);
+          });
+      });
+    });
+  });
 });

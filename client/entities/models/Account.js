@@ -48,8 +48,8 @@ const AccountSchema = {
   vendastaAccountId: null,
   vendastaSrId: null,
   callrailId: null,
-  recareDueDateSeconds: null,
-  hygieneDueDateSeconds: null,
+  recallInterval: null,
+  hygieneInterval: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

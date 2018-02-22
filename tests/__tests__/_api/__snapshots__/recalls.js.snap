@@ -37,6 +37,88 @@ Object {
 }
 `;
 
+exports[`/api/accounts/:account/recalls Recalls GET /:accountId/recalls/outbox Outbox for Recalls - Should return Patient Old 1`] = `
+Array [
+  Object {
+    "patient": Object {
+      "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+      "address": Object {},
+      "avatarUrl": null,
+      "birthDate": null,
+      "contCareInterval": "6 months",
+      "email": "hello@hello.com",
+      "familyId": null,
+      "firstApptDate": null,
+      "firstApptId": null,
+      "firstName": "Old",
+      "gender": null,
+      "homePhoneNumber": null,
+      "insurance": null,
+      "insuranceInterval": null,
+      "isDeleted": false,
+      "isSyncedWithPMS": false,
+      "isSyncedWithPms": false,
+      "language": null,
+      "lastApptDate": null,
+      "lastApptId": null,
+      "lastHygieneApptId": null,
+      "lastHygieneDate": "2016-08-05T16:00:00.000Z",
+      "lastName": "Patient",
+      "lastRecallApptId": null,
+      "lastRecallDate": null,
+      "lastRestorativeApptId": null,
+      "lastRestorativeDate": null,
+      "middleName": null,
+      "mobilePhoneNumber": null,
+      "nextApptDate": null,
+      "nextApptId": null,
+      "otherPhoneNumber": null,
+      "patientUserId": null,
+      "phoneNumber": null,
+      "pmsCreatedAt": null,
+      "pmsId": null,
+      "prefContactPhone": null,
+      "prefName": null,
+      "preferences": Object {
+        "afternoon": true,
+        "birthdayMessage": true,
+        "emailNotifications": true,
+        "evening": true,
+        "morning": true,
+        "newsletter": true,
+        "phone": true,
+        "recalls": true,
+        "referrals": true,
+        "reminders": true,
+        "reviews": true,
+        "sms": true,
+        "weekdays": true,
+        "weekends": true,
+      },
+      "sentRecalls": Array [],
+      "status": "Active",
+      "type": null,
+      "workPhoneNumber": null,
+    },
+    "primaryTypes": Array [
+      "email",
+    ],
+    "recall": Object {
+      "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+      "interval": "1 months",
+      "isActive": true,
+      "isDeleted": false,
+      "lengthSeconds": null,
+      "primaryType": "email",
+      "primaryTypes": Array [
+        "email",
+      ],
+    },
+    "sendDate": "2017-01-06T01:00:00.000Z",
+  },
+]
+`;
+
 exports[`/api/accounts/:account/recalls Recalls POST /:accountId/recalls should create a recall for the account 1`] = `
 Object {
   "entities": Object {

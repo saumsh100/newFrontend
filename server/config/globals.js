@@ -121,6 +121,11 @@ const reminders = {
   sameDayWindowHours: 6,
 };
 
+const recalls = {
+  cronHour: 17,
+  cronMinute: 0,
+};
+
 const staticPath = path.normalize(path.join(root, '../statics'));
 
 module.exports = {
@@ -154,4 +159,5 @@ module.exports = {
   postgres,
   callrails,
   reminders,
+  recalls,
 };

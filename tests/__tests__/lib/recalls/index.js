@@ -99,25 +99,6 @@ describe('Recalls Job Integration Tests', () => {
     });
 
     /**
-     * Without any recalls, there is no need to getPatientDueForRecall
-     */
-    test('should NOT call getPatientsDueForRecall if no recalls to process', async () => {
-      account.recalls = [];
-      await RecallsLibrary.sendRecallsForAccount(account, iso());
-      expect(RecallsHelpers.getPatientsDueForRecall).not.toHaveBeenCalled();
-    });
-
-    /**
-     * With 1 recall, it should call getPatientsDueForRecall, but not call sendRecall.email
-     */
-    test('should call getPatientsDueForRecall if there is a recall, but because it returns [], will not call sendRecall.email', async () => {
-      account.recalls = [makeRecallData()];
-      await RecallsLibrary.sendRecallsForAccount(account, iso());
-      expect(RecallsHelpers.getPatientsDueForRecall).toHaveBeenCalledTimes(1);
-      expect(sendRecall.email).not.toHaveBeenCalled();
-    });
-
-    /**
      * With 1 recall, and 1 patient, it should call sendRecall.email
      */
     test.skip('should call sendRecall.email for the 1 patient', async () => {

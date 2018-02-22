@@ -23,15 +23,15 @@ import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 const dueDateOptions = [
-  { label: '4 Mos', value: 4 },
-  { label: '5 Mos', value: 5 },
-  { label: '6 Mos', value: 6 },
-  { label: '7 Mos', value: 7 },
-  { label: '8 Mos', value: 8 },
-  { label: '9 Mos', value: 9 },
-  { label: '10 Mos', value: 10 },
-  { label: '11 Mos', value: 11 },
-  { label: '12 Mos', value: 12 },
+  { label: '4 Mos', value: '4 months' },
+  { label: '5 Mos', value: '5 months' },
+  { label: '6 Mos', value: '6 months' },
+  { label: '7 Mos', value: '7 months' },
+  { label: '8 Mos', value: '8 months' },
+  { label: '9 Mos', value: '9 months' },
+  { label: '10 Mos', value: '10 months' },
+  { label: '11 Mos', value: '11 months' },
+  { label: '12 Mos', value: '12 months' },
 ];
 
 class Recalls extends Component {
@@ -73,17 +73,18 @@ class Recalls extends Component {
   newRecall(values) {
     const {
       primaryType,
+      interval,
       type,
     } = values;
-    let { number } = values;
 
+    let { number } = values;
     if (type === 'after') {
       number = -number;
     }
 
     const entityData = {
-      interval: `${number} ${type}`,
-      primaryTypes: [primaryType],
+      interval: `${number} ${interval}`,
+      primaryTypes: primaryType.split('_'),
     };
 
     const alert = {
@@ -117,16 +118,16 @@ class Recalls extends Component {
   }
 
   changeHygieneDate(val) {
-    const values = { hygieneDueDateSeconds: m2s(val) };
+    const values = { hygieneInterval: val };
     const alert = {
       success: {
         title: 'Account Updated',
-        body: `Successfully updated the default hygiene due date to ${val} months`,
+        body: `Successfully updated the default hygiene due date to ${val[0]} months`,
       },
 
       error: {
         title: 'Failed to Update Account',
-        body: `Error trying to update the default hygiene due date to ${val} months`,
+        body: `Error trying to update the default hygiene due date to ${val[0]} months`,
       },
     };
 
@@ -134,16 +135,16 @@ class Recalls extends Component {
   }
 
   changeRecareDate(val) {
-    const values = { recareDueDateSeconds: m2s(val) };
+    const values = { recallInterval: val };
     const alert = {
       success: {
         title: 'Account Updated',
-        body: `Successfully updated the default recare due date to ${val} months`,
+        body: `Successfully updated the default recare due date to ${val[0]} months`,
       },
 
       error: {
         title: 'Failed to Update Account',
-        body: `Error trying to update the default recare due date to ${val} months`,
+        body: `Error trying to update the default recare due date to ${val[0]} months`,
       },
     };
 
@@ -156,11 +157,11 @@ class Recalls extends Component {
     }
 
     const actionsNew = [
-      { label: 'Cancel', onClick: this.toggleAdding, component: Button, props: { color: 'darkgrey' } },
-      { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { form: 'newRecall' } },
+      { label: 'Cancel', onClick: this.toggleAdding, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { color: 'blue', form: 'newRecall' } },
     ];
 
-    const { activeAccount, recalls } = this.props;
+    const { activeAccount, recalls, role } = this.props;
     const { selectedRecallId } = this.state;
     const selectedRecall = this.props.recalls.get(selectedRecallId);
 
@@ -178,22 +179,24 @@ class Recalls extends Component {
       );
     }
 
-    const numHygieneMonths = s2m(activeAccount.hygieneDueDateSeconds || m2s(6));
-    const numRecareMonths = s2m(activeAccount.recareDueDateSeconds || m2s(6));
+    const numHygieneMonths = activeAccount.hygieneInterval || '6 months';
+    const numRecareMonths = activeAccount.recallInterval || '6 months';
 
     return (
       <CommunicationSettingsCard
         title="Recalls Settings"
         // TODO: we have removed add button for now
-        //rightActions={
-          /*(<Button
-            onClick={this.toggleAdding}
-            data-test-id="createNewReminder"
-            color="blue"
-          >
-            Add
-          </Button>)*/
-        //}
+        rightActions={
+          role === 'SUPERADMIN' ?
+            <Button
+              onClick={this.toggleAdding}
+              data-test-id="createNewReminder"
+              color="blue"
+            >
+              Add
+            </Button>
+          : null
+        }
 
         leftColumn={(
           <div>
@@ -243,7 +246,7 @@ class Recalls extends Component {
                         <Col xs={6} className={styles.rightCol}>
                           <div className={styles.dropdownWrapper}>
                             <DropdownSelect
-                              label="Recare"
+                              label="Recall"
                               className={styles.dueDateDropdown}
                               value={numRecareMonths}
                               options={dueDateOptions}

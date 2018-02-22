@@ -8,40 +8,31 @@ import {
   Col,
 } from '../../../../library';
 import styles from './styles.scss'
-import { emailValidate } from '../../../../library/Form/validate';
 
-const options = [
-  {
-    value: 'sms',
-    label: 'SMS',
-  },
-  {
-    value: 'phone',
-    label: 'Phone',
-  },
-  {
-    value: 'email',
-    label: 'Email',
-  },
+const primaryTypesOptions = [
+  { label: 'Email', value: 'email' },
+  { label: 'SMS', value: 'sms' },
+  // { label: 'Voice', value: 'phone' },
+  { label: 'Email & SMS', value: 'email_sms' }
+];
+
+const intervalOptions = [
+  { label: 'Months', value: 'months' },
+  { label: 'Weeks', value: 'weeks' },
 ];
 
 const typeOptions = [
-  {
-    value: 'before',
-    label: 'Weeks Before Due Date',
-  },
-  {
-    value: 'after',
-    label: 'Weeks After Due Date',
-  },
+  { label: 'Before Due Date', value: 'before' },
+  { label: 'After Due Date', value: 'after' }
 ];
 
 class CreateRecallsForm extends Component {
   render() {
     const { sendEdit, formName } = this.props;
     const intValues = {
-      primaryType: 'email',
+      primaryType: 'email_sms',
       number: 2,
+      interval: 'weeks',
       type: 'before',
     };
 
@@ -56,7 +47,7 @@ class CreateRecallsForm extends Component {
         <Field
           required
           component="DropdownSelect"
-          options={options}
+          options={primaryTypesOptions}
           name="primaryType"
           // label="Communication Type"
           data-test-id="primaryType"
@@ -72,7 +63,16 @@ class CreateRecallsForm extends Component {
                 data-test-id="number"
               />
             </Col>
-            <Col xs={9} className={styles.rightCol}>
+            <Col xs={3} className={styles.rightCol}>
+              <Field
+                required
+                component="DropdownSelect"
+                options={intervalOptions}
+                name="interval"
+                data-test-id="interval"
+              />
+            </Col>
+            <Col xs={6} className={styles.rightCol}>
               <Field
                 required
                 name="type"

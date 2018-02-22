@@ -44,6 +44,9 @@ class DonnaToDoListContainer extends Component {
 
     const loadingToDos = dashboard.get('loadingToDos');
     const reminders = dashboard.get('reminders');
+    const recalls = dashboard.get('recalls');
+
+    console.log(recalls);
 
     return (
       <Card className={styles.card} runAnimation loaded={!loadingToDos}>
@@ -55,6 +58,7 @@ class DonnaToDoListContainer extends Component {
           <Tasks
             toDoIndex={this.state.toDoIndex}
             reminders={reminders}
+            recalls={recalls}
             loadingToDos={loadingToDos}
           />
         </div>

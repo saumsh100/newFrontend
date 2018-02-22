@@ -61,8 +61,7 @@ class Reminders extends Component {
 
     const entityData = {
       interval: `${number} ${type}`,
-      primaryTypes: [primaryType],
-      primaryType,
+      primaryTypes: primaryType.split('_'),
     };
 
     const alert = {

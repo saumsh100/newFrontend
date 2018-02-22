@@ -10,30 +10,16 @@ import {
 import styles from './styles.scss'
 import { emailValidate } from '../../../../library/Form/validate';
 
-const options = [
-  {
-    value: 'sms',
-    label: 'SMS',
-  },
-  {
-    value: 'phone',
-    label: 'Phone',
-  },
-  {
-    value: 'email',
-    label: 'Email',
-  },
+const primaryTypesOptions = [
+  { label: 'Email', value: 'email' },
+  { label: 'SMS', value: 'sms' },
+  // { label: 'Voice', value: 'phone' },
+  { label: 'Email & SMS', value: 'email_sms' }
 ];
 
 const typeOptions = [
-  {
-    value: 'hours',
-    label: 'Hours',
-  },
-  {
-    value: 'days',
-    label: 'Days',
-  },
+  { value: 'hours', label: 'Hours' },
+  { value: 'days', label: 'Days' },
 ];
 
 class CreateRemindersForm extends Component {
@@ -56,7 +42,7 @@ class CreateRemindersForm extends Component {
         <Field
           required
           component="DropdownSelect"
-          options={options}
+          options={primaryTypesOptions}
           name="primaryType"
           // label="Communication Type"
           data-test-id="primaryType"

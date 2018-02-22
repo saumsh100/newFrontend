@@ -140,16 +140,16 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    recareDueDateSeconds: {
-      type: DataTypes.INTEGER,
-      defaultValue: 23328000,
+    recallInterval: {
+      type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '6 months',
     },
 
-    hygieneDueDateSeconds: {
-      type: DataTypes.INTEGER,
-      defaultValue: 15552000,
+    hygieneInterval: {
+      type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '6 months',
     },
   });
 
