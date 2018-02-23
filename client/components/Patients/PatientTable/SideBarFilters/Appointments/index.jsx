@@ -5,11 +5,22 @@ import { Form, Field, FormSection } from '../../../../library';
 import { parseNum, notNegative } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
+const mathSymbols = [{
+  label: 'Greater than',
+  value: '>=',
+},{
+  label: 'Less than',
+  value: '<=',
+}, {
+  label: 'Equal to',
+  value: '=',
+}];
 
 export default function Appointments(props) {
   const {
     handleAppointments,
     theme,
+    dateTheme,
   } = props;
 
   return (
@@ -25,13 +36,15 @@ export default function Appointments(props) {
           <Field
             component="DayPicker"
             name="0"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
         </FormSection>
         <div className={styles.formHeaderInput}>Last Appointment</div>
@@ -39,13 +52,15 @@ export default function Appointments(props) {
           <Field
             component="DayPicker"
             name="0"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
         </FormSection>
         <div className={styles.formHeader}> Production </div>
@@ -56,6 +71,8 @@ export default function Appointments(props) {
             validate={[notNegative]}
             normalize={parseNum}
             data-test-id="duration"
+            label="Amount"
+            theme={theme}
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
@@ -64,6 +81,9 @@ export default function Appointments(props) {
             validate={[notNegative]}
             normalize={parseNum}
             data-test-id="duration"
+            label="Amount"
+            theme={theme}
+
           />
         </FormSection>
         <div className={styles.formHeader}>Number of Appointments </div>
@@ -72,17 +92,10 @@ export default function Appointments(props) {
             <Field
               component="DropdownSelect"
               name="0"
-              options={[{
-                label: 'Greater Than',
-                value: '>=',
-              },{
-                label: 'Less Than',
-                value: '<=',
-              }, {
-                label: 'Equal To',
-                value: '=',
-              }]}
+              options={mathSymbols}
               className={styles.ddSelect}
+              label="> < ="
+              theme={theme}
             />
           </span>
           <span className={styles.formContainer_numberInput}>
@@ -92,6 +105,8 @@ export default function Appointments(props) {
              validate={[notNegative]}
              normalize={parseNum}
              data-test-id="duration"
+             label="Amount"
+             theme={theme}
            />
           </span>
         </FormSection>
@@ -101,17 +116,10 @@ export default function Appointments(props) {
             <Field
               component="DropdownSelect"
               name="0"
-              options={[{
-                label: 'Greater Than',
-                value: '>=',
-              },{
-                label: 'Less Than',
-                value: '<=',
-              }, {
-                label: 'Equal To',
-                value: '=',
-              }]}
+              options={mathSymbols}
               className={styles.ddSelect}
+              theme={theme}
+              label="> < ="
             />
           </span>
           <span className={styles.formContainer_numberInput}>
@@ -121,6 +129,8 @@ export default function Appointments(props) {
               validate={[notNegative]}
               normalize={parseNum}
               data-test-id="duration"
+              theme={theme}
+              label="Amount"
             />
           </span>
         </FormSection>
@@ -131,4 +141,6 @@ export default function Appointments(props) {
 
 Appointments.propTypes = {
   handleAppointments: PropTypes.func.isRequired,
+  theme: PropTypes.object,
+  dateTheme: PropTypes.object,
 };

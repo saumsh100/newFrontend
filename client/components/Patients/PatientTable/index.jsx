@@ -282,9 +282,9 @@ class PatientTable extends Component {
             </div>
           );
         },
-        maxWidth: 60,
         filterable: false,
         className: styles.colBg,
+        maxWidth: 60,
       },
       {
         Header: 'First Name',
@@ -338,7 +338,7 @@ class PatientTable extends Component {
         Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.value}</div></div>,
         filterable: false,
         className: styles.colBg,
-        maxWidth: 50,
+        show: false,
       },
       {
         Header: 'Active',
@@ -353,7 +353,7 @@ class PatientTable extends Component {
 
         filterable: false,
         className: styles.colBg,
-        maxWidth: 60,
+        maxWidth: 100,
       },
       {
         Header: 'Next Appointment',
@@ -475,9 +475,8 @@ class PatientTable extends Component {
     const headerStyle = {
       style: {
         background: 'white',
-        color: '#959596',
-        paddingTop: '10px',
-        paddingBottom: '5px',
+        paddingTop: '20px',
+        paddingBottom: '10px',
         borderBottom: '1px solid #efefef',
         fontSize: '12px',
       },
@@ -495,9 +494,9 @@ class PatientTable extends Component {
       display: 'flex',
       justifyContent: 'flex-start',
       boxShadow: 'none',
-      fontFamily: 'Gotham-Medium',
       alignItems: 'center',
       borderRight: 'none',
+      color: '#a7a9ac',
     };
 
     return (
@@ -552,7 +551,9 @@ class PatientTable extends Component {
                   this.pageSizeChange(pageSize, pageIndex);
                 }}
                 getTdProps={(state, rowInfo, column) => {
-                  const style = {};
+                  const style = {
+                    cursor: 'pointer',
+                  };
 
                   if (rowInfo) {
                     style.background = patientIds.indexOf(rowInfo.original.id) > -1 ? '#efefef' : 'inherit';

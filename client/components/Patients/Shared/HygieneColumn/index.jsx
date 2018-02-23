@@ -14,16 +14,9 @@ export default function HygieneColumn(props) {
   const lastApptDate = moment(patient.lastHygieneDate);
 
   if (!lastApptDate.isValid()) {
-    return (
-      <div className={styles.displayFlex}>
-        <div className={styles.cellText_lastAppt}>
-          -
-        </div>
-      </div>
-    );
+    return null;
   }
 
-  // This needs to be the account.interval...
   const hygieneDate = moment(lastApptDate).add(6, 'months');
   const months = moment().diff(lastApptDate, 'months');
 

@@ -8,11 +8,19 @@ import FormSection from '../../../../library/Form/FormSection';
 export default function AppointmentsForm(props) {
   const {
     handleSubmit,
+    dropDownStyle,
+    inputStyle,
   } = props;
 
-  const theme = {
-    input: styles.inputBarStyle,
-  };
+  return (
+    <div className={styles.formContainer}>
+      <div className={styles.disabledPage}>
+        <div className={styles.disabledPage_text}>
+          No Appointment Information
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Form
@@ -30,7 +38,7 @@ export default function AppointmentsForm(props) {
                 name="recall"
                 label="Recall"
                 component="DayPicker"
-                theme={theme}
+                theme={inputStyle}
               />
             </Col>
             <Col xs={6} >
@@ -38,7 +46,7 @@ export default function AppointmentsForm(props) {
                 component="DayPicker"
                 name="hygiene"
                 label="Hygiene"
-                theme={theme}
+                theme={inputStyle}
               />
             </Col>
           </Row>
@@ -51,7 +59,7 @@ export default function AppointmentsForm(props) {
                 name="recall"
                 label="Recall"
                 component="DayPicker"
-                theme={theme}
+                theme={inputStyle}
 
               />
             </Col>
@@ -61,7 +69,7 @@ export default function AppointmentsForm(props) {
                 name="hygiene"
                 label="Hygiene"
                 options={[]}
-                theme={props.dropDownStyle}
+                theme={dropDownStyle}
               />
             </Col>
           </Row>
@@ -73,4 +81,6 @@ export default function AppointmentsForm(props) {
 
 AppointmentsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
+  dropDownStyle: PropTypes.string,
+  inputStyle: PropTypes.string,
 };

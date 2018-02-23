@@ -72,6 +72,18 @@ $empty-grey: darken(lightgrey, 5%);
   padding-right: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  background-color: $primary-white;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($primary-grey, 5%);
+  }
   &:hover {
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;

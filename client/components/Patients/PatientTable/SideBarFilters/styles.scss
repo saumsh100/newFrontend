@@ -14,7 +14,8 @@
   align-items: center;
 
   &_text {
-    padding-left: 20px;
+    font-size: 19px;
+    padding-left: 10px;
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   }
 
@@ -41,7 +42,7 @@
   padding-top: 15px;
 }
 .filterBody {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .filterHeader {
@@ -50,7 +51,7 @@
   align-items: center;
   width: 100%;
   height: 40px;
-  background: #E5E5E5;
+  background: #EFEFEF;
   padding: 10px;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   justify-content: space-between;
@@ -62,9 +63,9 @@
 
 .collapsible {
   padding: 25px 15px 15px 15px;
-  background: white;
-  animation: fadein 1s ease;
+  animation: fadein 0.5s ease;
   opacity: 1;
+  background-color: #fafafa;
 }
 
 @keyframes fadein {
@@ -78,8 +79,8 @@
 
 
 .formContainer {
-  background: white;
   padding-bottom: 15px;
+  background-color: #fafafa;
   &_row {
     display: flex;
     width: 100%;
@@ -137,4 +138,21 @@
 
 .groupInputStyle {
   padding: 0;
+  input:focus ~label {
+    display: none;
+  }
+}
+
+.groupInputStyle2 {
+  input:focus ~label {
+    display: none;
+  }
+}
+
+.dateLabelStyle {
+  top: 10px;
+}
+
+.filledLabelStyle {
+  display: none;
 }

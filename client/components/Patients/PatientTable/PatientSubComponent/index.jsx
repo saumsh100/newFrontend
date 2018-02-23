@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, Row, Col } from '../../../library';
+import { Grid, Row, Col, Card } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import DataTable from './DataTable';
 import EventsTable from './EventsTable';
@@ -38,27 +38,31 @@ class PatientSubComponent extends Component {
     } = this.props;
 
     return (
-      <Grid className={styles.patientSub}>
-        <Row className={styles.content}>
-          <Col xs={12} sm={12} md={4} className={styles.dataTable}>
-            <div className={styles.patientInfoHeader}> PATIENT INFO </div>
-            <DataTable
-              patient={patient}
-            />
-          </Col>
-          <Col xs={12} sm={12} md={8} >
-            <div className={styles.timeLineHeader}> TIMELINE & ACTIVITIES </div>
-            <div className={styles.eventsTable}>
-              <EventsTable
-                wasFetched={wasFetched}
-                events={events}
-                patientId={patient.id}
-              />
-            </div>
-          </Col>
-        </Row>
-      </Grid>
-    )
+      <div className={styles.patientSub}>
+        <div className={styles.content}>
+          <div className={styles.dataTable}>
+            <div className={styles.patientInfoHeader}> Patient Info </div>
+            <Card className={styles.card} runAnimation loaded={patient}>
+              {patient ?
+                <DataTable
+                  patient={patient}
+                /> : null}
+            </Card>
+          </div>
+          <div className={styles.timeLineTable}>
+            <div className={styles.timeLineHeader}> Timeline & Activities </div>
+            <Card className={styles.eventsCard} runAnimation loaded={wasFetched}>
+              {wasFetched ?
+                <EventsTable
+                  wasFetched={wasFetched}
+                  events={events}
+                  patientId={patient.id}
+                /> : null}
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 

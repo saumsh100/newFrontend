@@ -11,7 +11,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .input {
-  font-size: 14px;
+  font-size: 12px;
   height: 60px;
   font-family: $dashboard-font;
   padding: 10px 0px 10px 0px;
@@ -30,14 +30,7 @@ $empty-grey: darken(lightgrey, 5%);
   &:focus ~ .label {
     color: $active-color;
   }
-
-  // Bring the label above the input when focused / filled in
-  //&:focus ~ .label {
-  //  @extend .filled;
-  //}
 }
-
-
 
 .erroredInput {
   border-bottom: 1px solid $error-color;
@@ -47,7 +40,7 @@ $empty-grey: darken(lightgrey, 5%);
 .filled {
   top: 6px !important;
   left: 0px !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
 }
 
 .label {
@@ -59,7 +52,7 @@ $empty-grey: darken(lightgrey, 5%);
   left: 0;
   transition: 0.2s ease all;
   top: 5px;
-  font-size: $medium-size;
+  font-size: $small-size;
 }
 
 .primaryColorBorder {

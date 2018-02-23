@@ -65,6 +65,13 @@ class WaitlistPreferences extends Component {
       );
     };
 
+    const checkboxTheme = {
+      cbxContainer: styles.prefCheckBoxContainer,
+      cbx: styles.prefCheckBox,
+      cbxChecked: styles.prefCheckBoxChecked,
+      label: styles.prefCheckBoxLabel,
+    };
+
     return (
       <Grid className={styles.gridContainer}>
         <Row>
@@ -120,19 +127,19 @@ class WaitlistPreferences extends Component {
             <Row>
               <Col xs={6}>
                 <Checkbox
-                  className={styles.prefCheckBox}
+                  theme={checkboxTheme}
                   checked={preferences.get('mornings')}
                   label="Mornings"
                   onChange={this.updatePreferencesField('mornings')}
                 />
                 <Checkbox
-                  className={styles.prefCheckBox}
+                  theme={checkboxTheme}
                   checked={preferences.get('afternoons')}
                   label="Afternoons"
                   onChange={this.updatePreferencesField('afternoons')}
                 />
                 <Checkbox
-                  className={styles.prefCheckBox}
+                  theme={checkboxTheme}
                   checked={preferences.get('evenings')}
                   label="Evenings"
                   onChange={this.updatePreferencesField('evenings')}

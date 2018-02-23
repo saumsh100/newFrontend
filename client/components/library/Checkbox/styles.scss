@@ -1,40 +1,59 @@
 
 @import '../../../ui.scss';
 
-.checkbox {
-  input[type="checkbox"] {
+.cbxContainer {
+  display: flex;
+  align-items: center;
+  line-height: 13px;
+  margin: 5px;
+}
+
+.cbx {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border: 1px solid $primary-dark;
+  border-radius: 3px;
+  vertical-align: middle;
+  transition: background 0.1s ease;
+  cursor: pointer;
+
+  input[type=checkbox] {
     display: none;
   }
 
-  input[type=checkbox]:checked + label::before {
-    content: "\2714\fe0e";
-    font-size: 11px;
-    color: white;
-    background-color: $primary-blue;
+  input[type=checkbox]:checked + label::after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+    cursor: pointer;
   }
 
   label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    line-height: 13px;
-    margin: 5px;
-    &:before {
-      content: "";
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 14px;
-      height: 14px;
-      margin-right: 3px;
-      vertical-align: middle;
-      background-color: inherit;
-      color: white;
-      border: 1px solid $primary-blue;
-      border-radius: 30%;
-      padding-top: 1px;
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0px;
+      left: 4px;
+      width: 3px;
+      height: 8px;
+      opacity: 0;
+      transform: rotate(45deg) scale(0);
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transition: all 0.2s ease;
+      transition-delay: 0.1s;
     }
   }
+}
+
+.cbxChecked {
+  border-color: transparent;
+  background-color: $primary-dark;
+}
+
+.label {
+  margin-left: 5px;
+  cursor: pointer;
 }
 
 .hidden {

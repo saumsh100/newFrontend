@@ -15,13 +15,7 @@ export default function RecallColumn(props) {
   const lastRecallDate = moment(patient.lastRecallDate);
 
   if (!lastRecallDate.isValid()) {
-    return (
-      <div className={styles.displayFlex}>
-        <div className={styles.cellText_lastAppt}>
-          -
-        </div>
-      </div>
-    );
+    return null;
   }
   const months = moment().diff(lastRecallDate, 'months');
   const weeks = moment().diff(lastRecallDate, 'weeks');

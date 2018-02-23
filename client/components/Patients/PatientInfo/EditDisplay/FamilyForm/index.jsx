@@ -9,9 +9,11 @@ export default function FamilyForm(props) {
   } = props;
 
   return (
-    <div className={styles.disabledPage}>
-      <div className={styles.disabledPage_text}>
-        This Information is not available at this time.
+    <div className={styles.formContainer}>
+      <div className={styles.disabledPage}>
+        <div className={styles.disabledPage_text}>
+          No Family Information
+        </div>
       </div>
     </div>
   )

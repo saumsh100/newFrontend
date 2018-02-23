@@ -16,7 +16,7 @@ class EditDisplay extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      tabIndex: 0,
+      tabIndex: 1,
       country: '',
     };
 
@@ -26,11 +26,11 @@ class EditDisplay extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.outerTabIndex !== this.state.tabIndex) {
+   /* if (nextProps.outerTabIndex !== this.state.tabIndex) {
       this.setState({
         tabIndex: nextProps.outerTabIndex,
       });
-    }
+    }*/
   }
 
   setCountry(value) {
@@ -61,11 +61,6 @@ class EditDisplay extends Component {
     values.address.city = values.city;
     values.address.street = values.street;
     values.address.state = values.state;
-
-    values.preferences = {};
-    values.preferences.newsletter = values.newsletter;
-    values.preferences.birthdayMessage = values.birthdayMessage;
-    values.preferences.reminders = values.reminders;
 
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
@@ -100,7 +95,13 @@ class EditDisplay extends Component {
     }
 
     const dropDownStyle = {
+      wrapper: styles.inputGroup,
       toggleDiv: styles.toggleDivStyle,
+    };
+
+    const inputStyle = {
+      input: styles.inputBarStyle,
+      group: styles.inputGroup,
     };
 
     const actions = [
@@ -118,6 +119,7 @@ class EditDisplay extends Component {
       },
     ];
 
+    console.log(this.state.tabIndex)
     return (
       <div className={styles.mainContainer}>
         <DialogBox
@@ -126,42 +128,62 @@ class EditDisplay extends Component {
           onOverlayClick={reinitializeState}
           title={`Editing ${patient.get('firstName')}'s Patient Info`}
           actions={actions}
+          bodyStyles={styles.editModalBody}
           custom
         >
           <div className={styles.editModal}>
             <div className={styles.content}>
               <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine >
-                <Tab label="APPOINTMENTS" >
+                <Tab
+                  label="Appointments"
+                  tabCard
+                >
                   <AppointmentsForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                     dropDownStyle={dropDownStyle}
+                    inputStyle={inputStyle}
                   />
                 </Tab>
-                <Tab label="PERSONAL">
+                <Tab
+                  label="Personal"
+                  tabCard
+                >
                   <PersonalForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                     setCountry={this.setCountry}
                     country={this.state.country}
                     dropDownStyle={dropDownStyle}
+                    inputStyle={inputStyle}
                   />
                 </Tab>
-                <Tab label="INSURANCE">
+                <Tab
+                  label="Insurance"
+                  tabCard
+                >
                   <InsuranceForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                     dropDownStyle={dropDownStyle}
+                    inputStyle={inputStyle}
                   />
                 </Tab>
-                <Tab label="FAMILY">
+                <Tab
+                  label="Family"
+                  tabCard
+                >
                   <FamilyForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}
                     dropDownStyle={dropDownStyle}
+                    inputStyle={inputStyle}
                   />
                 </Tab>
-                <Tab label="SETTINGS">
+                <Tab
+                  label="Settings"
+                  tabCard
+                >
                   <SettingsForm
                     patient={patient}
                     handleSubmit={this.handleSubmit}

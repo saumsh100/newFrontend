@@ -39,9 +39,12 @@ class AddressForm extends React.Component {
   }
 
   zipPostalVal(value) {
+    if (!value) {
+      return;
+    }
     const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
 
-    if(this.state.country === 'United States') {
+    if(this.state.country === 'US') {
       return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
@@ -93,7 +96,6 @@ class AddressForm extends React.Component {
         >
           <div className={styles.addressForm}>
             <Field
-              required
               name="street"
               label="Street Address"
               validate={[maxLength25]}
@@ -108,7 +110,6 @@ class AddressForm extends React.Component {
               data-test-id="country"
             />
             <Field
-              required
               name="state"
               label="State"
               component="DropdownSelect"
@@ -116,14 +117,12 @@ class AddressForm extends React.Component {
               data-test-id="state"
             />
             <Field
-              required
               name="city"
               label="City"
               validate={[maxLength25]}
               data-test-id="city"
             />
             <Field
-              required
               name="zipCode"
               label={zipPostal}
               validate={[maxPostalLength, this.zipPostalVal]}

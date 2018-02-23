@@ -6,7 +6,7 @@ import { Card, Avatar, Icon, Grid, Row, Col, } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
-import { validDateValue } from '../../Shared/helpers';
+import { formatPhoneNumber } from '../../../library/util/Formatters';
 import styles from './styles.scss';
 
 const bgImgs = ['banner-01.png', 'banner-02.png', 'banner-03.png', 'banner-04.png', 'banner-05.png']
@@ -29,7 +29,7 @@ export default function TopDisplay(props) {
 
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
 
-  const production = wasFetched && patientStats.get('productionCalendarYear') ? `$${patientStats.get('productionCalendarYear')}` : '-';
+  const production = wasFetched && patientStats.get('productionCalendarYear') ? `$${patientStats.get('productionCalendarYear')}` : null;
 
   const bgStyle = {
     background: `url('/images/banners/${bgImgs[randomNum]}')`,
@@ -60,7 +60,7 @@ export default function TopDisplay(props) {
               {patient.mobilePhoneNumber ? <div className={styles.displayFlex}>
                 <span className={styles.avatarContainer_data_icon}> <Icon icon="phone" /> </span>
                 <div className={styles.avatarContainer_data_phone}>
-                  {patient.mobilePhoneNumber}
+                  {formatPhoneNumber(patient.mobilePhoneNumber)}
                 </div>
               </div> : null}
               <div className={styles.paddingStatus}>

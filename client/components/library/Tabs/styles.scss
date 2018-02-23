@@ -37,3 +37,28 @@
 .content {
 
 }
+
+.tabCard {
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 50%;
+  justify-content: center;
+  background-color: $primary-grey;
+  height: 50px;
+  border-right: 1px solid #e3e3e3;
+  color: $primary-dark;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  align-items: center;
+  cursor: pointer;
+
+  &:last-child {
+    border-right: 0;
+  }
+}
+
+.activeTabCard {
+  border-bottom: $selection-border $primary-color;
+  color: black;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  background-color: white;
+}

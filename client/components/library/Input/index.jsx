@@ -32,7 +32,7 @@ function Input(props) {
   let iconClassName = inputStyle.icon;
 
   if (valuePresent) {
-    labelClassName = classNames(inputStyle.filled, labelClassName);
+    labelClassName = classNames(labelClassName, inputStyle.filled,);
     iconClassName = classNames(inputStyle.hidden, iconClassName);
   }
 

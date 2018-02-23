@@ -7,10 +7,11 @@ import styles from './styles.scss';
 export default function ReminderEvent(props) {
   const {
     data,
+    bodyStyle,
   } = props;
 
   return (
-    <div className={styles.body}>
+    <div className={bodyStyle}>
       <div className={styles.body_subHeader}>
         Reminder Sent: For appointment on {moment(data.appointmentStartDate).format('MMMM Do, YYYY h:mma')}
       </div>
@@ -20,4 +21,5 @@ export default function ReminderEvent(props) {
 
 ReminderEvent.propTypes = {
   data: PropTypes.object,
+  bodyStyle: PropTypes.object,
 };

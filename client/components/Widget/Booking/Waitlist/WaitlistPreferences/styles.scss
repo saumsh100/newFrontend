@@ -25,23 +25,25 @@
   padding-top: 20px;
 }
 
-.prefCheckBox {
-  height: 25px;
-  input[type=checkbox]:checked + label {
-    &:before {
-      background-color: var(--primaryColor) !important;
-    }
-  }
-
-  label {
-    font-size: 14px;
-    font-family: $medium-font;
-    &:before {
-      margin-right: 10px;
-      border: 1px solid var(--primaryColor);
-    }
-  }
+.prefCheckBoxContainer {
+  margin-bottom: 15px;
 }
+
+.prefCheckBox {
+  border-color: var(--primaryColor) !important;
+}
+
+.prefCheckBoxLabel {
+  font-size: 14px;
+  font-family: $medium-font;
+  margin-left: 15px !important;
+}
+
+.prefCheckBoxChecked {
+  background-color: var(--primaryColor) !important;
+}
+
+
 
 .unavailButton {
   font-size: 1.2rem;

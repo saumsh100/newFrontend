@@ -186,24 +186,22 @@
 
 :global(.ReactTable .-pagination) {
   border-top: 1px solid $primary-grey;
-  font-family: $medium-font;
   color: $primary-darkgrey;
 }
 
 :global(.ReactTable .-pagination .-btn) {
   background-color: unset;
-  font-family: $medium-font;
-  border: 1px solid $primary-dark-grey;
-  color: $primary-dark-grey;
+  border: 1px solid $primary-blue;
+  color: $primary-blue;
   border-radius: unset;
 
   &:hover {
-    background-color: darken($primary-dark-grey, 5%) !important;
+    background-color: $primary-blue !important;
   }
 }
 
 :global(.ReactTable .rt-tbody .rt-tr-group) {
-  border-bottom: 0;
+  //border-bottom: 0;
 }
 
 :global(.ReactTable .-pagination .-btn[disabled]) {
@@ -216,6 +214,9 @@
   }
 }
 
+:global(.ReactTable .rt-expander:after) {
+  border-top-color: #cdcdcd
+}
 
 $width: 6px;
 $height: 6px;
@@ -275,4 +276,5 @@ $height: 6px;
   box-shadow: none;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
   align-items: center;
+  color: #A7A9AC;
 }

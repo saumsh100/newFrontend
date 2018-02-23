@@ -7,7 +7,7 @@ export default function ReminderDropDowns(props){
   const reminderSmsMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="envelope" size={1.2} />
+        <Icon icon="envelope" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -18,7 +18,7 @@ export default function ReminderDropDowns(props){
   const reminderEmailMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="comment" size={1.2} />
+        <Icon icon="comment" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -29,7 +29,7 @@ export default function ReminderDropDowns(props){
   const reminderPhoneMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="phone" size={1.2} />
+        <Icon icon="phone" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>

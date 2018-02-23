@@ -7,11 +7,19 @@ import styles from '../styles.scss';
 export default function InsuranceForm(props) {
   const {
     handleSubmit,
+    inputStyle,
+    dropDownStyle,
   } = props;
 
-  const theme = {
-    input: styles.inputBarStyle,
-  };
+  return (
+    <div className={styles.formContainer}>
+      <div className={styles.disabledPage}>
+        <div className={styles.disabledPage_text}>
+          No Insurance Information
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Form
@@ -27,7 +35,7 @@ export default function InsuranceForm(props) {
               required
               name="insuranceCarrier"
               label="Insurance Carrier"
-              theme={theme}
+              theme={inputStyle}
             />
           </Col>
         </Row>
@@ -36,14 +44,14 @@ export default function InsuranceForm(props) {
             <Field
               name="memberId"
               label="Member ID"
-              theme={theme}
+              theme={inputStyle}
             />
           </Col>
           <Col xs={6} >
             <Field
               name="contractId"
               label="Contract ID"
-              theme={theme}
+              theme={inputStyle}
             />
           </Col>
         </Row>
@@ -52,7 +60,7 @@ export default function InsuranceForm(props) {
             <Field
               name="sin"
               label="SIN"
-              theme={theme}
+              theme={inputStyle}
             />
           </Col>
         </Row>

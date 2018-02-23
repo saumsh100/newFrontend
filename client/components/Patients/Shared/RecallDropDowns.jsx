@@ -7,7 +7,7 @@ export default function RecallDropDowns(props){
   const recallSmsMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="envelope" size={1.2} />
+        <Icon icon="envelope" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -18,7 +18,7 @@ export default function RecallDropDowns(props){
   const recallEmailMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="comment" size={1.2} />
+        <Icon icon="comment" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -29,7 +29,7 @@ export default function RecallDropDowns(props){
   const recallPhoneMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="phone" size={1.2} />
+        <Icon icon="phone" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -80,7 +80,7 @@ export default function RecallDropDowns(props){
             Send a Automated Phone Recall
           </ListItem>
           <ListItem className={styles.ddListItem} disabled>
-            Log SMS
+            Log Phone Recall
           </ListItem>
         </List>
       </DropdownMenu>

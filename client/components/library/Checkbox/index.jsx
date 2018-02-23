@@ -1,11 +1,12 @@
 
 import React, { PropTypes, Component, defaultProps } from 'react';
 import classNames from 'classnames/bind';
+import withTheme from '../../../hocs/withTheme';
 import styles from './styles.scss';
 
 const cx = classNames.bind(styles);
 
-export default function Checkbox(props) {
+function Checkbox(props) {
   const {
     id,
     value,
@@ -14,40 +15,51 @@ export default function Checkbox(props) {
     onChange,
     hidden,
     labelClassNames,
+    theme,
   } = props;
 
-  const classes = classNames(
-    props.className,
-    cx({
-      checkbox: true,
-      hidden,
-    })
-  );
+  let classes = theme.cbx;
+  let containerClasses = theme.cbxContainer;
 
-  let labelClasses = styles.checkbox;
+  let labelClasses = theme.label;
 
   if (labelClassNames) {
     labelClasses = classNames(labelClasses, labelClassNames);
   }
 
+  if (checked) {
+    classes = classNames(classes, theme.cbxChecked);
+  }
+
+  if (hidden) {
+    containerClasses = classNames(containerClasses, styles.hidden);
+  }
+
   return (
-    <div className={classes} >
-      <input
-        className={styles.checkbox__input}
-        type="checkbox"
-        id={id}
-        checked={checked}
-        value={value}
-        onChange={() => {}}
-      />
-      <label
-        htmlFor={id}
-        className={labelClasses}
+    <div className={containerClasses}>
+      <div
+        className={classes}
         onClick={onChange}
         onChange={onChange}
       >
-        {label}
-      </label>
+        <input
+          id={id}
+          type="checkbox"
+          checked={checked}
+          value={value}
+          onChange={() => {}}
+          className={classes}
+        />
+        <label
+          htmlFor={id}
+
+        />
+      </div>
+      <span
+        onClick={onChange}
+        onChange={onChange}
+        className={labelClasses}
+      >{label}</span>
     </div>
   );
 }
@@ -58,3 +70,5 @@ Checkbox.propTypes = {
   onChange: PropTypes.func,
   // checked: PropTypes.bool,
 };
+
+export default withTheme(Checkbox, styles);

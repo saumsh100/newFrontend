@@ -16,25 +16,38 @@ export default function DataDisplay(props) {
 
   return (
     <Card className={styles.mainContainer} runAnimation loaded={patient}>
-      <Tabs className={styles.tab} index={tabIndex} onChange={handleTabChange} noUnderLine >
-        <Tab label="APPOINTMENTS" >
+      <Tabs index={tabIndex} onChange={handleTabChange} noUnderLine >
+        <Tab
+          label="Appointments"
+          tabCard
+        >
           {patient ? <AppointmentsTab
             patient={patient}
             openModal={openModal}
           /> : null }
         </Tab>
-        <Tab label="PERSONAL">
+        <Tab
+          label="Personal"
+          tabCard
+        >
           {patient ? <PersonalTab
             patient={patient}
             openModal={openModal}
           /> : null}
         </Tab>
-        <Tab label="INSURANCE" index={tabIndex} >
+        <Tab
+          label="Insurance" index={tabIndex}
+          tabCard
+        >
           <div className={styles.noData}>
             No Insurance Information
           </div>
         </Tab>
-        <Tab label="FAMILY" index={tabIndex} >
+        <Tab
+          label="Family"
+          index={tabIndex}
+          tabCard
+        >
           <div className={styles.noData}>
             No Family Information
           </div>

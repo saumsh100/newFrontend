@@ -29,6 +29,7 @@ export default function EventDateSections (props) {
             key={`eventSection_${event.id}`}
             data={event.get('metaData')}
             type={event.get('type').toLowerCase()}
+            bgColor="secondary"
           />
         );
       })}

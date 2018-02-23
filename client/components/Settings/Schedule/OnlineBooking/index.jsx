@@ -57,7 +57,7 @@ class OnlineBooking extends Component {
     const location = window.location;
 
     const port = location.port ? `:${location.port}` : '';
-    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}${port}/widgets/${activeAccount.id}/widget.js"></script>`;
+    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${location.hostname}${port}/widgets/${activeAccount.id}/cc.js"></script>`;
 
     return (
       <SettingsCard

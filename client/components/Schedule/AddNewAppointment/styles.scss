@@ -39,7 +39,7 @@
 
   > input {
     width: 100%;
-    box-sizing: border-box;
+    box-sizing: border-box;;
   }
 
   input::placeholder {
@@ -122,7 +122,6 @@
 }
 
 
-
 .body {
   overflow: unset;
 }
@@ -177,6 +176,9 @@
 .confirmCancel {
   display: inline-block;
   align-items: center;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  font-size: 10px;
+
   &_label {
     composes: fontMedium from 'sass-loader!../../../fonts.scss';
     color: #3D4956;

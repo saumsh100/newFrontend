@@ -19,6 +19,7 @@ export default function Practitioners(props) {
   const {
     handlePractitioners,
     practitioners,
+    theme,
   } = props;
 
   const practitionerOptions = generatePractitionerOptions(practitioners);
@@ -38,6 +39,8 @@ export default function Practitioners(props) {
               component="DropdownSelect"
               name="0"
               options={practitionerOptions}
+              theme={theme}
+              label="Doctor / Hygienist"
             />
           </div>
           {/*<div className={styles.formHeader}> Type </div>
@@ -65,4 +68,5 @@ export default function Practitioners(props) {
 Practitioners.propTypes = {
   handlePractitioners: PropTypes.func.isRequired,
   practitioners: PropTypes.object.isRequired,
+  theme: PropTypes.object,
 }

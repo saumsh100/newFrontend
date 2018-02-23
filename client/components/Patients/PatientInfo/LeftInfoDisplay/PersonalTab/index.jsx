@@ -2,23 +2,21 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Grid, Row, Col, Icon } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
+import { formatPhoneNumber } from '../../../../library/util/Formatters';
 import styles from '../styles.scss';
 
 export default function PersonalTab(props) {
   const {
     patient,
-    openModal,
-    editComponent,
   } = props;
 
-  const address = patient && patient.address ? patient.address.street : '';
-  const componentAddress = ( <div className={styles.text}>
+  const componentAddress = patient && patient.address && Object.keys(patient.address).length ? (<div className={styles.text}>
     <div>{patient.address.street} </div>
     <div>{patient.address.country} </div>
     <div>{patient.address.state} </div>
     <div>{patient.address.zipCode} </div>
   </div>
-  );
+  ) : null;
 
   return (
     <Grid className={styles.grid}>
@@ -42,19 +40,19 @@ export default function PersonalTab(props) {
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump
             label="HOME NUMBER"
-            data={patient.homePhoneNumber}
+            data={formatPhoneNumber(patient.homePhoneNumber)}
           />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump
             label="MOBILE NUMBER"
-            data={patient.mobilePhoneNumber}
+            data={formatPhoneNumber(patient.mobilePhoneNumber)}
           />
         </Col>
         <Col xs={6}>
           <InfoDump
             label="WORK NUMBER"
-            data={patient.workPhoneNumber}
+            data={formatPhoneNumber(patient.workPhoneNumber)}
           />
         </Col>
         <Col xs={6}>

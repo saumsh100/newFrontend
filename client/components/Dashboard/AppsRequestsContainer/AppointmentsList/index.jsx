@@ -20,7 +20,9 @@ class AppointmentsList extends Component {
   }
 
   componentDidMount() {
-    document.getElementById('appListDiv').addEventListener('scroll', this.onScroll);
+    if (this.props.appointments.size) {
+      document.getElementById('appListDiv').addEventListener('scroll', this.onScroll);
+    }
   }
 
   onScroll() {
@@ -35,6 +37,13 @@ class AppointmentsList extends Component {
       practitioners,
     } = this.props;
 
+    if (!appointments.size) {
+      return (
+        <div className={styles.noApps}>
+          No Appointments
+        </div>
+      );
+    }
 
     const sortedApps = appointments.sort(SortByStartDate);
 

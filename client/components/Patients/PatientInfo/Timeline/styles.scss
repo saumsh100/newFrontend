@@ -3,8 +3,8 @@
 .card {
   position: relative;
   background: white;
-  min-height: 698px;
-  height: 710px;
+  min-height: 700px;
+  height: 700px;
   flex: 1;
   overflow: hidden;
   box-sizing: border-box;
@@ -18,7 +18,7 @@
 }
 
 .eventsContainer {
-  padding: 10px 30px 10px 30px;
+  padding: 30px 30px 10px 30px;
   display:flex;
   max-height: 100%;
   overflow: scroll;

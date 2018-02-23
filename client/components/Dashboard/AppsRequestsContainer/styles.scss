@@ -27,6 +27,14 @@
   justify-content: center;
   padding-top: 12px;
   background-color: $primary-grey;
+  height: 50px;
+  border-right: 1px solid #e3e3e3;
+  color: $primary-dark;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+
+  &:last-child {
+    border-right: 0;
+  }
 }
 
 .activeTab {

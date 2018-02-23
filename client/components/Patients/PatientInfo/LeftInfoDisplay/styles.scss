@@ -5,14 +5,14 @@
   width: 100%;
   background: white;
   box-sizing: border-box;
-  min-height: 698px;
-  height: 698px;
+  min-height: 700px;
+  height: 700px;
   flex: 1;
 }
 
 .subHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  font-size: 13px !important;
+  font-size: 15px !important;
   color: $primary-darkgrey;
   padding-top: 20px;
 }
@@ -26,13 +26,13 @@
 }
 .grid {
   box-sizing: border-box;
-  padding: 20px 35px 20px 35px;
+  padding: 45px 35px 20px 35px;
   //border-top: 1px solid $primary-grey;
 }
 
 .row {
   border-bottom: 1px solid $primary-grey;
-  padding-top: 30px;
+  padding-top: 15px;
   padding-bottom: 20px;
 }
 .row:first-child {
@@ -47,38 +47,45 @@
 }
 
 .tab {
-  padding-top: 10px;
-  height: 100%;
-  > nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 25px;
-    padding-right: 25px;
-    font-weight: $large-weight;
+  display: inline-flex;
+  box-sizing: border-box;
+  width: 50%;
+  justify-content: center;
+  padding-top: 12px;
+  background-color: $primary-grey;
+  height: 50px;
+  border-right: 1px solid #e3e3e3;
+  color: $primary-dark;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+
+  &:last-child {
+    border-right: 0;
   }
-
-
-
 }
+
+.activeTab {
+  background-color: $primary-white;
+}
+
 
 .recallContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  //width: 350px;
-  margin-left: 40px;
+  width: 50%;
 }
 
 .iconContainer {
-
   span {
     padding-left: 10px;
   }
+
   color: $primary-darkgrey;
+
   &_caret {
     color: $primary-dark;
   }
+  cursor: pointer;
 }
 
 .ddList {
@@ -132,6 +139,7 @@
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   color: $primary-dark-grey;
   font-size: $extra-small-size;
-  height: 400px;
-
+  height: 652px;
+  opacity: 0.6;
 }
+

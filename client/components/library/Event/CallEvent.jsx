@@ -7,10 +7,11 @@ import styles from './styles.scss';
 export default function CallEvent(props) {
   const {
     data,
+    callStyle,
   } = props;
 
   return (
-    <div className={styles.call}>
+    <div className={callStyle}>
       <div className={styles.call_header}>
         Phone Call
       </div>
@@ -28,4 +29,5 @@ export default function CallEvent(props) {
 
 CallEvent.propTypes = {
   data: PropTypes.object,
+  callStyle: PropTypes.object,
 };

@@ -130,6 +130,7 @@ export default function AppointmentForm(props) {
             required
             data-test-id="chairId"
             theme={dropDownTheme}
+            search="label"
           />
         </Col>
         <Col xs={6} className={styles.col}>
@@ -172,6 +173,7 @@ export default function AppointmentForm(props) {
             data-test-id="practitionerId"
             className={styles.dropDownWrapper}
             theme={dropDownTheme}
+            search="label"
           />
         </Col>
         <Col xs={3} className={styles.colConfirmCancel}>

@@ -11,10 +11,6 @@ export default function EventsTable(props) {
     wasFetched,
   } = props;
 
-  if (!wasFetched) {
-    return <Loading />;
-  }
-
   if (!events || !events.length) {
     return (
       <div className={styles.eventsList}>
@@ -33,7 +29,7 @@ export default function EventsTable(props) {
 
   return (
     <div className={styles.eventsList}>
-      {sortedEvents.map((event, index) => {
+      {sortedEvents.map((event) => {
         return (
           <div className={styles.lineEventContainer}>
            <div className={styles.verticalLine}>&nbsp;</div>

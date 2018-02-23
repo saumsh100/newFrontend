@@ -29,7 +29,7 @@ export default function InfoDump(props) {
         {label}
       </div>
       <div className={dataClass}>
-        {data || component || '-'}
+        {data || component || 'n/a'}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@
 
 .tagBody {
   display: flex;
-  background: lighten($inactive-color, 15%);
+  background: $primary-blue;
   box-sizing: border-box;
   padding: 8px;
   margin: 5px 5px 5px 0px;
@@ -23,14 +23,14 @@
 
 .tagText {
   composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
-  color: $primary-blue;
+  color: $primary-white;
   padding-right: 10px;
 }
 
 .closeIcon {
-  color: $primary-darkgrey;
+  color: $primary-white;
   &:hover {
-    color: darken($primary-darkgrey, 10%);
+    color: darken($primary-white, 10%);
     cursor: pointer;
   }
 }

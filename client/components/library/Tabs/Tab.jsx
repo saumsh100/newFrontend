@@ -17,11 +17,12 @@ class Tab extends Component {
       activeClass,
       inactiveClass,
       id,
+      tabCard,
     } = this.props;
 
-    let classes = classNames(className, styles.tab);
+    let classes = !tabCard ? classNames(className, styles.tab) : classNames(className, styles.tabCard);
     if (active) {
-      classes = classNames(classes, activeClass, styles.activeTab);
+      classes = !tabCard ? classNames(classes, activeClass, styles.activeTab) : classNames(classes, activeClass, styles.activeTabCard);
     } else {
       classes = classNames(classes, inactiveClass);
     }

@@ -5,10 +5,11 @@ import styles from './styles.scss';
 export default function ReviewEvent(props) {
   const {
     data,
+    bodyStyle,
   } = props;
 
   return (
-    <div className={styles.body}>
+    <div className={bodyStyle}>
       <div className={styles.body_header}>
         Review Left from CareCru
       </div>
@@ -21,4 +22,5 @@ export default function ReviewEvent(props) {
 
 ReviewEvent.propTypes = {
   data: PropTypes.object,
+  bodyStyle: PropTypes.object,
 };

@@ -6,10 +6,11 @@ import styles from './styles.scss';
 export default function NewPatientEvent(props) {
   const {
     data,
+    bodyStyle,
   } = props;
 
   return (
-    <div className={styles.body}>
+    <div className={bodyStyle}>
       <div className={styles.body_header}>
         {data.firstName} {data.lastName} was created on {moment(data.createdAt).format('MMMM Do, YYYY')}.
       </div>
@@ -19,4 +20,5 @@ export default function NewPatientEvent(props) {
 
 NewPatientEvent.propTypes = {
   data: PropTypes.object,
+  bodyStyle: PropTypes.object,
 };

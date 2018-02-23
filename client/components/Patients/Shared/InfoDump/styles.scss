@@ -3,10 +3,11 @@
 .container {
   display: flex;
   flex-direction: column;
+  min-width: 120px;
 }
 
 .label {
-  color: darken(#d7e1e3, 10%);
+  color: #A7A9AC;
   opacity: 1;
   font-size: $extra-small-size;
   padding-bottom: 10px;
@@ -17,15 +18,13 @@
 .data {
   color: $primary-dark;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  //width: 170px;
   //text-overflow: ellipsis;
   //white-space: nowrap;
   //overflow: hidden;
   word-wrap: break-word;
-  margin-right: 5px;
+  margin-right: 15px;
 }
 
 .noData {
   color: $primary-dark;
-  font-style: italic;
 }

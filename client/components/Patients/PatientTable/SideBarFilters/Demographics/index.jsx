@@ -41,6 +41,11 @@ export default function Demographics(props) {
     searchPatients,
   } = props;
 
+  const theme = {
+    filled: styles.filledLabelStyle,
+    group: styles.groupInputStyle2,
+  };
+
   return (
       <Form
         form="demographics"
@@ -65,6 +70,8 @@ export default function Demographics(props) {
               validate={[notNegative]}
               normalize={parseNum}
               data-test-id="duration"
+              label="Years"
+              theme={theme}
             />
             <span className={styles.formContainer_middleText}> to </span>
             <Field
@@ -73,6 +80,8 @@ export default function Demographics(props) {
               validate={[notNegative]}
               normalize={parseNum}
               data-test-id="duration"
+              label="Years"
+              theme={theme}
             />
           </FormSection>
 
@@ -84,6 +93,8 @@ export default function Demographics(props) {
                 name="0"
                 options={optionsGender}
                 className={styles.ddSelect}
+                label="All"
+                theme={theme}
               />
             </div>
           </FormSection>
@@ -96,6 +107,8 @@ export default function Demographics(props) {
                 name="0"
                 options={optionsCity}
                 className={styles.ddSelect}
+                label="City"
+                theme={theme}
               />
             </div>
           </FormSection>
@@ -108,6 +121,8 @@ export default function Demographics(props) {
                 name="0"
                 options={optionsStatus}
                 className={styles.ddSelect}
+                label="All"
+                theme={theme}
               />
             </div>
           </FormSection>

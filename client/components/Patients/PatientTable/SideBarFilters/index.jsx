@@ -417,7 +417,14 @@ class SideBarFilters extends Component {
     }
 
     const inputStyles = {
+      group: styles.groupInputStyle2,
+      filled: styles.filledLabelStyle,
+    };
+
+    const dateTheme = {
       group: styles.groupInputStyle,
+      filled: styles.filledLabelStyle,
+      label: styles.dateLabelStyle,
     };
 
     const filterBodyDisplay = ({ index, component, headerTitle }) => {
@@ -428,7 +435,9 @@ class SideBarFilters extends Component {
             onClick={() => this.displayFilter(index)}
           >
             {headerTitle}
-            <span className={styles.filterHeader_icon}> <Icon icon="caret-down" type="solid" /> </span>
+            <span className={styles.filterHeader_icon}>
+              <Icon size={1.5} icon="caret-down" type="solid" />
+            </span>
           </div>
           {openFilters[index] ? <div className={styles.collapsible}>
             {component}
@@ -445,8 +454,8 @@ class SideBarFilters extends Component {
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
-          <div className={styles.header_icon}> <Icon icon="filter" type="solid" /> </div>
-          <div className={styles.header_text}> Filters </div>
+          <div className={styles.header_icon}> <Icon icon="filter" size={1.5} /> </div>
+          <div className={styles.header_text}> Filter </div>
           <div
             className={clearTextStyle}
             onClick={this.clearTags}
@@ -474,6 +483,7 @@ class SideBarFilters extends Component {
             component: <Appointments
               handleAppointments={this.handleAppointments}
               theme={inputStyles}
+              dateTheme={dateTheme}
             />,
             headerTitle: 'Appointments',
           })}
@@ -482,6 +492,7 @@ class SideBarFilters extends Component {
             component: <Practitioners
               handlePractitioners={this.handlePractitioners}
               practitioners={practitioners}
+              theme={inputStyles}
             />,
             headerTitle: 'Practitioners',
           })}
@@ -491,6 +502,7 @@ class SideBarFilters extends Component {
               handleCommunications={this.handleCommunications}
               practitioners={practitioners}
               theme={inputStyles}
+              dateTheme={dateTheme}
             />,
             headerTitle: 'Communications',
           })}

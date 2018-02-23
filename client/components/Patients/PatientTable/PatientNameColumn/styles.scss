@@ -10,7 +10,7 @@
 }
 .name {
   composes: subHeader from 'sass-loader!../../../../fonts.scss';
-  color: #636363;
+  color: lighten($primary-blue, 10%);
   &:hover {
     color: $primary-blue;
     cursor: pointer;

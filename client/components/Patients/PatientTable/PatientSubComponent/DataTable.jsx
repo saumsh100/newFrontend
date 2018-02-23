@@ -8,6 +8,7 @@ import RecallDropDowns from '../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../Shared/ReminderDropDowns';
 import styles from './styles.scss';
 import { validDateValue } from '../../Shared/helpers';
+import { FormatPhoneNumber } from '../../../library/util/Formatters';
 
 export default function DataTable(props) {
   const {
@@ -18,72 +19,62 @@ export default function DataTable(props) {
   const reminderComp = <ReminderDropDowns patient={patient} />
 
   return (
-    <Grid className={styles.grid}>
-      <Row className={styles.row}>
-        <Col xs={6}>
-          <InfoDump
-            label="PRIMARY EMAIL"
-            data={patient.email}
-          />
-        </Col>
-        <Col xs={6}>
-          <InfoDump
-            label="PRIMARY-NUMBER"
-            data={patient.mobilePhoneNumber}
-          />
-        </Col>
-      </Row>
-      <Row className={styles.row}>
-        <Col xs={12} >
-          <InfoDump
-            label="INSURANCE"
-          />
-        </Col>
-      </Row>
-      <Row className={styles.row}>
-        <Col xs={12} >
-          <InfoDump
-            label="RECALLS SENT"
-            component={recallComp}
-          />
-          {patient.nextApptDate ? (<div className={styles.subHeaderSmall}>
-            Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
-          </div>) : ''}
-        </Col>
-      </Row>
-      <Row className={styles.row}>
-        <Col xs={12} >
-          <InfoDump
-            label="REMINDERS SENT"
-            component={reminderComp}
-          />
-          {patient.nextApptDate ? (<div className={styles.subHeaderSmall}>
-            Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
-          </div>) : ''}
-        </Col>
-      </Row>
-      <Row className={styles.row}>
-        <Col xs={6} >
-          <InfoDump
-            label="LAST RECALL VISIT"
-            data={validDateValue(patient.lastRecallDate)}
-          />
-        </Col>
-        <Col xs={6} >
-          <InfoDump
-            label="LAST HYGIENE VISIT"
-            data={validDateValue(patient.lastRecallDate)}
-          />
-        </Col>
-      </Row>
-      <Row className={styles.row}>
-        <Col xs={6} >
-          <InfoDump
-            label="LAST X-RAY"
-          />
-        </Col>
-      </Row>
-    </Grid>
+    <div className={styles.grid}>
+      <div className={styles.row}>
+        <InfoDump
+          label="PRIMARY EMAIL"
+          data={patient.email}
+          className={styles.infoDump}
+        />
+
+        <InfoDump
+          label="PRIMARY-NUMBER"
+          data={FormatPhoneNumber(patient.mobilePhoneNumber)}
+          className={styles.infoDump}
+        />
+        <InfoDump
+          label="SECONDARY-NUMBER"
+          data={FormatPhoneNumber(patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber)}
+          className={styles.infoDump}
+        />
+      </div>
+      <div className={styles.row}>
+        <InfoDump
+          label="INSURANCE"
+        />
+      </div>
+      <div className={styles.col}>
+        <InfoDump
+          label="RECALLS SENT"
+          component={recallComp}
+        />
+        {patient.nextApptDate ? (<div className={styles.subHeaderSmall}>
+          Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
+        </div>) : <div className={styles.subHeaderSmall}>Next Appointment: n/a </div>}
+      </div>
+      <div className={styles.col}>
+        <InfoDump
+          label="REMINDERS SENT"
+          component={reminderComp}
+        />
+      </div>
+      <div className={styles.row}>
+        <InfoDump
+          label="LAST RECALL VISIT"
+          data={validDateValue(patient.lastRecallDate)}
+          className={styles.infoDump}
+        />
+        <InfoDump
+          label="LAST HYGIENE VISIT"
+          data={validDateValue(patient.lastHygieneDate)}
+          className={styles.infoDump}
+        />
+        <InfoDump
+          label="LAST X-RAY"
+          className={styles.infoDump}
+        />
+      </div>
+    </div>
   )
 }
 

@@ -163,7 +163,7 @@ class AppsRequestsContainer extends Component {
 
     return (
       <Card runAnimation loaded={isLoaded} className={styles.card}>
-        <div className={styles.tabsContainer}>
+        <div>
           {isLoaded ? (<Tabs
             index={index}
             onChange={i => this.setState({ index: i })}

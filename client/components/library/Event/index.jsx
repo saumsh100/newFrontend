@@ -16,40 +16,49 @@ class Event extends Component {
     const {
       type,
       data,
+      bgColor,
     } = this.props;
 
     let content = null;
     let icon = '';
     let bgIconStyle = styles.bgIcon;
 
+    let bodyStyle = styles.body;
+    let callStyle = styles.call;
+
+    if (bgColor) {
+      bodyStyle = classnames(bodyStyle, styles[`${bgColor}BgColor`]);
+      callStyle = classnames(callStyle, styles[`${bgColor}BgColor`]);
+    }
+
     if (type === 'appointment') {
       icon = 'calendar';
       bgIconStyle = classnames(bgIconStyle, styles.blueBorder);
-      content = <AppointmentEvent data={data} />;
+      content = <AppointmentEvent data={data} bodyStyle={bodyStyle} />;
     }
 
     if (type === 'reminder') {
       icon = 'comment';
       bgIconStyle = classnames(bgIconStyle, styles.redBorder);
-      content = <ReminderEvent data={data} />;
+      content = <ReminderEvent data={data} bodyStyle={bodyStyle} />;
     }
 
     if (type === 'review') {
       icon = 'star';
       bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
-      content = <ReviewEvent data={data} />;
+      content = <ReviewEvent data={data} bodyStyle={bodyStyle} />;
     }
 
     if (type === 'call') {
       icon = 'phone';
       bgIconStyle = classnames(bgIconStyle, styles.yellowBorder);
-      content = <CallEvent data={data} />;
+      content = <CallEvent data={data} callStyle={callStyle} />;
     }
 
     if (type === 'new patient') {
       icon = 'user';
       bgIconStyle = classnames(bgIconStyle, styles.greenBorder);
-      content = <NewPatientEvent data={data} />
+      content = <NewPatientEvent data={data} bodyStyle={bodyStyle} />;
     }
 
     return (
@@ -57,7 +66,7 @@ class Event extends Component {
         <div className={styles.event}>
           <div className={styles.iconContainer}>
             <div className={bgIconStyle}>
-              <Icon size={1} icon={icon} className={styles.icon}/>
+              <Icon size={1} icon={icon} className={styles.icon} type="solid" />
             </div>
           </div>
           {content}

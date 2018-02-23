@@ -1,11 +1,9 @@
 
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
 import Input from '../Input';
-import { List, ListItem } from '../List';
 import styles from './styles.scss';
 import withTheme from '../../../hocs/withTheme';
 
@@ -27,22 +25,71 @@ class DropdownSelect extends Component {
     this.renderList = this.renderList.bind(this);
     this.renderToggle = this.renderToggle.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.scrollComponentDidMount = this.scrollComponentDidMount.bind(this);
+    this.valueScrollComponentDidMount = this.valueScrollComponentDidMount.bind(this);
+    this.searchListener = this.searchListener.bind(this);
+    this.clearSearchValue = this.clearSearchValue.bind(this);
   }
 
   getInitialState() {
     return {
-      options: this.props.options || [],
-      optionsStatic: this.props.options || [],
       value: '',
       isOpen: false,
     };
   }
 
+  componentWillMount() {
+    this.clearSearchValue();
+  }
+
+  componentDidUpdate() {
+    const options = this.props.options;
+    if (this.props.value && this.state.isOpen) {
+      let valueHeight = 0;
+
+      options.forEach((option, index) => {
+        if (option.value === this.props.value) {
+          valueHeight = index;
+        }
+      });
+
+      this.scrollComponent.scrollTop = valueHeight * this.valueScrollComponent.scrollHeight;
+    }
+
+    if (this.state.isOpen) {
+      document.addEventListener('keydown', this.searchListener);
+    }
+  }
+
+  componentWillUnmount() {
+    this.clearSearchValue();
+  }
+
+  clearSearchValue() {
+    this.searchValue = '';
+  }
+
+  searchListener(event) {
+    if ((event.keyCode >= 65 && event.keyCode <= 90) ||
+      (event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 186) {
+      this.searchValue = this.searchValue + event.key;
+      this.handleSearch(this.searchValue);
+    }
+  }
+
+  scrollComponentDidMount(node) {
+    this.scrollComponent = node;
+  }
+
+  valueScrollComponentDidMount(node) {
+    this.valueScrollComponent = node;
+  }
+
   toggle() {
+    this.clearSearchValue();
     if (this.state.isOpen) {
       this.setState({
         isOpen: false,
-        options: this.state.optionsStatic,
         value: '',
       });
     } else {
@@ -53,41 +100,32 @@ class DropdownSelect extends Component {
   }
 
   close() {
+    this.clearSearchValue();
+    document.removeEventListener('keydown', this.searchListener);
+
     this.setState({
       isOpen: false,
-      options: this.state.optionsStatic,
       value: '',
     });
   }
 
   handleSearch(value) {
     const {
-      optionsStatic,
-    } = this.state;
-
-    const {
-      search
+      options,
     } = this.props;
 
-    const test = (typeof search === 'string') ? search : 'value';
+    const height = 40;
 
     if (value !== '') {
-      const filteredOptions = optionsStatic.filter((option) => {
-        if (new RegExp(value, 'i').test(option[test])) {
-          return option;
+      for (let i = 0; i < options.length; i++) {
+        const option = options[i];
+        const whichToSearch = option.label ? 'label' : 'value';
+        if (new RegExp(value, 'i').test(option[whichToSearch])) {
+          this.scrollComponent.scrollTop = i * height;
+          break;
         }
-      });
-
-      return this.setState({
-        options: filteredOptions,
-        value,
-      });
+      }
     }
-
-    return this.setState({
-      options: optionsStatic,
-      value: '',
-    });
   }
 
   renderList() {
@@ -95,33 +133,23 @@ class DropdownSelect extends Component {
       template,
       onChange,
       value,
-      search,
+      options
     } = this.props;
 
     const OptionTemplate = template || DefaultOption;
 
-    let options = search ? this.state.options : this.props.options;
-
     return (
-      <List className={styles.dropDownList} >
-        {search ?
-          <div className={styles.searchInput}>
-            <Input
-              onChange={e => {
-                this.handleSearch(e.target.value);
-              }}
-              value={this.state.value}
-              icon="search"
-            />
-          </div> : null}
+      <div className={styles.dropDownList} ref={this.scrollComponentDidMount}>
         {options.map((option, i) => {
           const isSelected = value === option.value;
           let className = styles.optionListItem;
+
           if (isSelected) {
             className = classNames(className, styles.selectedListItem);
           }
+
           return (
-            <ListItem
+            <div
               key={`dropDownSelect_${i}`}
               className={className}
               onClick={() => {
@@ -129,14 +157,17 @@ class DropdownSelect extends Component {
                 this.close();
               }}
               data-test-id={option.value}
+              ref={isSelected ? this.valueScrollComponentDidMount : null}
             >
-              <div className={styles.optionDiv} >
+              <div
+                className={styles.optionDiv}
+              >
                 <OptionTemplate option={option} />
               </div>
-            </ListItem>
+            </div>
           );
         })}
-      </List>
+      </div>
     );
   }
 
@@ -186,7 +217,11 @@ class DropdownSelect extends Component {
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
       >
-        <Input onFocus={disabled ? false : this.toggle} className={theme.hiddenInput} />
+        <Input
+          onFocus={disabled ? false : this.toggle}
+          onBlur={this.close}
+          className={theme.hiddenInput}
+        />
         <div className={toggleValueClassName}>
           {toggleDiv}
           <label className={labelClassName}>
@@ -204,6 +239,10 @@ class DropdownSelect extends Component {
   }
 
   render() {
+    const {
+      theme,
+    } = this.props;
+
     const children = this.renderList();
     const toggle = this.renderToggle();
     const menuOptions = {
@@ -213,9 +252,11 @@ class DropdownSelect extends Component {
       isOpen: this.state.isOpen,
       close: this.close,
       animAlign: 'right',
-      className: classNames(this.props.className, styles.wrapper),
+      className: classNames(this.props.className, theme.wrapper),
       closeOnInsideClick: false,
       closeOnOutsideClick: true,
+      enterTimeout: 70,
+      leaveTimeout: 70,
     };
 
     return <RDropdownMenu {...menuOptions} />;
@@ -235,6 +276,8 @@ DropdownSelect.propTypes = {
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   align: PropTypes.string,
+  search: PropTypes.string,
+  theme: PropTypes.string,
 };
 
 export default withTheme(DropdownSelect, styles);

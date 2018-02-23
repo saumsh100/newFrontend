@@ -346,7 +346,7 @@ class AddNewAppointment extends Component {
     };
 
     let title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
-    let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Edit' : 'Add';
+    let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
 
     if (selectedAppointment && selectedAppointment.request) {
       title = 'Accept Appointment';

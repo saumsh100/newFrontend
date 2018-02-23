@@ -8,6 +8,7 @@ export default function Communications(props) {
   const {
     handleCommunications,
     theme,
+    dateTheme,
   } = props;
 
   return (
@@ -97,13 +98,15 @@ export default function Communications(props) {
           <Field
             component="DayPicker"
             name="0"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
         </FormSection>
         <div className={styles.formHeader}> Last Recall Sent</div>
@@ -111,13 +114,15 @@ export default function Communications(props) {
           <Field
             component="DayPicker"
             name="0"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
         </FormSection>
         <div className={styles.formHeader}> Reviews</div>
@@ -125,13 +130,15 @@ export default function Communications(props) {
           <Field
             component="DayPicker"
             name="0"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
           <span className={styles.formContainer_middleText}> to </span>
           <Field
             component="DayPicker"
             name="1"
-            theme={theme}
+            theme={dateTheme}
+            label="Date"
           />
         </FormSection>
         {/*<div className={styles.formHeader}> Surveys </div>
@@ -169,4 +176,6 @@ export default function Communications(props) {
 
 Communications.propTypes = {
   handleCommunications: PropTypes.func.isRequired,
+  theme: PropTypes.object,
+  dateTheme: PropTypes.object,
 }

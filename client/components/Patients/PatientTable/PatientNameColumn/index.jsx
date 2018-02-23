@@ -14,7 +14,7 @@ export default function PatientNameColumn(props) {
   return (
     <div className={styles.patientRow}>
       <div className={styles.avatarContainer}>
-      {!noAvatar ? <Avatar user={patient} size="sm" /> : null}
+      {!noAvatar ? <Avatar user={patient} size="xs" /> : null}
       </div>
       <div
         className={styles.name}

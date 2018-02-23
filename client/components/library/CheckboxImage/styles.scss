@@ -49,6 +49,10 @@
   &__spec {
     color: #b4b4b4;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .primaryColor {
@@ -57,21 +61,25 @@
   border-color: $primary-color;
   width: 40px;
 }
+
 .primaryYellow {
   background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
   border-radius: 50%;
   border-color: $primary-yellow;
   width: 40px;
 }
+
 .primaryGreen {
   background: linear-gradient(rgba(44, 196, 167, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-green;
   width: 40px;
 }
+
 .primaryBlueGreen {
   background: linear-gradient(rgba(32,100,119,1), white 70%);
   border-radius: 50%;
   border-color: $primary-blue;
   width: 40px;
+
 }
