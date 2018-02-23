@@ -161,7 +161,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
     const patientHasNoLaterAppt = !a.patient.appointments.length;
     const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr =>
       sr.isSent &&
-      moment().diff(sr.createdAt, 'days') > 30
+      moment().diff(sr.createdAt, 'days') < 30
     );
 
     return reviewNotSentForAppointment &&

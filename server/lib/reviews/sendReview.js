@@ -12,7 +12,8 @@ export default {
   // Send Review SMS via Twilio
   async sms({ account, appointment, patient, sentReview }) {
     const longLink = generateReviewsUrl({ account, sentReview });
-    const link = await compressUrl(longLink);
+    const shortLink = await compressUrl(longLink);
+    const link = `https://${shortLink}`;
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
