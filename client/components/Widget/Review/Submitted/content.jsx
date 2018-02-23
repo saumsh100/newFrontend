@@ -35,4 +35,20 @@ export default {
       </div>
     ),
   },
+
+  // If stars = 0
+  empty: {
+    header: (
+      <div>
+        We hope you had<br/>
+        a lovely visit!
+      </div>
+    ),
+
+    response: (
+      <div>
+        Let us know how it went.
+      </div>
+    ),
+  }
 };

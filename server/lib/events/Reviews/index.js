@@ -1,5 +1,5 @@
+
 import { Review, Event } from '../../../_models';
-import normalize from '../../../routes/_api/normalize';
 
 export function fetchReviewEvents(patientId, accountId, query) {
   return Review.findAll({

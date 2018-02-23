@@ -7,6 +7,7 @@ import {
   SBody,
 } from '../../../library';
 import AppointmentReminders from './AppointmentReminders';
+import ReviewsRequests from './ReviewsRequests';
 import PatientRecalls from './PatientRecalls';
 import styles from './styles.scss';
 
@@ -42,12 +43,12 @@ class Tasks extends Component {
       toDoIndex,
       loadingToDos,
       reminders,
+      reviews,
       recalls,
     } = this.props;
 
     let count = 0;
     let header = <SHeader className={styles.header} />;
-
     let body = loadingToDos ? null : (
       <div className={styles.noReminders}>
         No {toDoListNames[toDoIndex]}
@@ -71,6 +72,19 @@ class Tasks extends Component {
           <div className={styles.col}>Due for Hygiene</div>
         </SHeader>
       );
+    } else if (toDoIndex === 2 && reviews && reviews.size && !loadingToDos) {
+      count = reviews.size;
+      header = (
+        <SHeader className={styles.header}>
+          <div className={styles.avatar}>{''}</div>
+          <div className={styles.smallCol}>Task</div>
+          <div className={styles.smallCol}>Scheduled</div>
+          <div className={styles.col}>Name</div>
+          <div className={styles.col}>Appointment</div>
+        </SHeader>
+      );
+
+      body = <ReviewsRequests reviews={reviews.toJS()} />;
     }
 
     return (
@@ -89,6 +103,7 @@ class Tasks extends Component {
 
 Tasks.propTypes = {
   reminders: PropTypes.object,
+  reviews: PropTypes.object,
   recalls: PropTypes.object,
   toDoIndex: PropTypes.number,
 };

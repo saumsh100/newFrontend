@@ -74,7 +74,7 @@ function main() {
   // Parse URL to see if we are being linked here
   const sentReviewId = getQueryVariable('srid');
   const accountId = getQueryVariable('accountId');
-  const stars = getQueryVariable('stars');
+  const stars = getQueryVariable('stars') || 0;
 
   if (cc) {
     // open the appropriate modal with that route open
@@ -85,7 +85,7 @@ function main() {
     }
   }
 
-  if (stars && sentReviewId) {
+  if (sentReviewId) {
     const reviewData = { stars };
     const sentReviewData = { id: sentReviewId };
     if (window.CareCruz[accountId]) {

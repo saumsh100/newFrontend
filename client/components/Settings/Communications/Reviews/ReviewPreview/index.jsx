@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -9,13 +10,14 @@ import {
 } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
+import { createReviewText } from '../../../../../../server/lib/reviews/createReviewText';
 import styles from './styles.scss';
 
 const formatPhoneNumber = phone => `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
 
-function ReviewSMSPreview({ patient, account, review }) {
-  //TODO change text (GENERATE?)
-  const recallMessage = 'Please review our services.';
+function ReviewSMSPreview({ patient, account }) {
+  const link = 'carecru.co/a35fg';
+  const recallMessage = createReviewText({ patient, account, link });
   const smsPhoneNumber = account.twilioPhoneNumber ||
     account.destinationPhoneNumber ||
     account.phoneNumber ||

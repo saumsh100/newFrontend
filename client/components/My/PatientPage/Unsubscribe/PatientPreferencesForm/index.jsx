@@ -31,6 +31,12 @@ export default function PatientPreferencesForm({ initialValues, onSubmit }) {
         className={styles.preferenceToggle}
       />
       <Field
+        name="reviews"
+        label="Practice Reviews"
+        component="Toggle"
+        className={styles.preferenceToggle}
+      />
+      <Field
         name="newsletter"
         label="Newsletters & Special Promotions"
         component="Toggle"

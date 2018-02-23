@@ -2,6 +2,8 @@
 @import '../../../ui.scss';
 
 .paragraph {
+  font-size: 12px;
+  line-height: 18px;
   padding: 10px 0;
   > strong {
     color: black;

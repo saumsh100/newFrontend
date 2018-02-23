@@ -571,16 +571,16 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
 
           const io = req.app.get('socketio');
           const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-          io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+          io && io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
 
           const pub = req.app.get('pub');
           pub.publish('APPOINTMENT:CREATED', appointment.id);
 
-          return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
+          return io && io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
         })
         .catch(next);
   } catch (e) {
-    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+    if (e.errors && e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
       const appointment = e.errors[0].message.model.dataValues;
 
       const normalized = format(req, res, 'appointment', appointment);
@@ -594,8 +594,8 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
 
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-      io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
-      return io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
+      io && io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+      return io && io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
     }
     return next(e);
   }
@@ -833,12 +833,12 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
       // This is assuming we won't get another PUT if isDeleted was already set, or else it's gonna double send a DELETE event
       // We could probably catch this up top and throw a warning/error, DO NOT UPDATE AN APPOINTMENT W/ ISDELETED
       const action = appointment.isDeleted ? 'DELETE' : 'UPDATE';
-      io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
+      io && io.of(ns).in(accountId).emit(`${action}:Appointment`, appointment.id);
 
       const pub = req.app.get('pub');
       pub.publish('APPOINTMENT:UPDATED', appointment.id);
       // TODO: why are we double sending? what was wrong with our current lowercase actions? client-side is easy to update!
-      return io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
+      return io && io.of(ns).in(accountId).emit('update:Appointment', normalize('appointment', appointment));
     })
     .catch(next);
 });
@@ -856,8 +856,8 @@ appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:dele
       const io = req.app.get('socketio');
       const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = normalize('appointment', appointment.get({ plain: true }));
-      io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
-      return io.of(ns).in(accountId).emit('remove:Appointment', normalized);
+      io && io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
+      return io && io.of(ns).in(accountId).emit('remove:Appointment', normalized);
     })
     .catch(next);
 });

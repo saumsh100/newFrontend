@@ -1,15 +1,28 @@
 
 import { Router } from 'express';
-import { Review, SentReview, sequelize } from '../../../_models';
+import { Appointment, Review, SentReview } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
-import { readFile, replaceJavascriptFile } from '../../../util/file';
-import StatusError from '../../../util/StatusError';
-import normalize from '../../_api/normalize';
 
 const sentReviewsRouter = Router();
 
 sentReviewsRouter.param('sentReviewJoinId', sequelizeLoader('sentReview', 'SentReview', [
   { association: 'review', required: false },
+  {
+    model: Appointment,
+    as: 'appointment',
+    required: false,
+    include: [{
+      model: SentReview,
+      as: 'sentReviews',
+      where: { isCompleted: true },
+      required: false,
+      include: [{
+        model: Review,
+        as: 'review',
+        required: true,
+      }],
+    }],
+  },
 ]));
 
 /**
@@ -21,8 +34,17 @@ sentReviewsRouter.param('sentReviewJoinId', sequelizeLoader('sentReview', 'SentR
 sentReviewsRouter.get('/:sentReviewJoinId', async (req, res, next) => {
   try {
     const { sentReview } = req;
-    const { review } = sentReview;
-    res.send({ sentReview, review });
+    const { review, appointment } = sentReview;
+
+    // If sentReview is not completed, check if it's appointment has another sentReview
+    // that is completed, if so, respond with that sentReview and review combo instead
+    // This can happen as we create multiple sentReviews per appointment (email & sms)
+    if (!sentReview.isCompleted && appointment.sentReviews && appointment.sentReviews.length) {
+      const completedSentReview = appointment.sentReviews[0];
+      return res.send({ sentReview: completedSentReview, review: completedSentReview.review });
+    }
+
+    return res.send({ sentReview, review });
   } catch (err) {
     next(err);
   }

@@ -34,7 +34,7 @@ export default class Stars extends Component {
       const { i } = props;
       const isFilled = value >= i;
       const isSelected = value === i;
-      const icon = isFilled ? 'star' : 'star-o';
+      const type = isFilled ? 'solid' : 'regular';
       let starClass = isFilled ? styles.filled : styles.empty;
       if (isSelected && !isStatic) {
         starClass = classNames(styles.selected, starClass);
@@ -49,7 +49,8 @@ export default class Stars extends Component {
       const iconProps = {
         className: starClass,
         size: size,
-        icon: icon,
+        icon: 'star',
+        type,
       };
 
       if (!isStatic) {
@@ -96,7 +97,7 @@ export default class Stars extends Component {
 }
 
 Stars.defaultProps = {
-  size: 4,
+  size: 3.6,
   isStatic: false,
   isMinimal: false,
 };

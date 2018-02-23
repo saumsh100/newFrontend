@@ -121,6 +121,7 @@ export function sendTemplate(config) {
     toEmail,
     templateName,
     mergeVars,
+    replyTo,
     fromName = 'CareCru',
     attachments,
   } = config;
@@ -151,6 +152,10 @@ export function sendTemplate(config) {
             email: toEmail,
             type: 'to',
           }],
+
+          headers: {
+            'Reply-To': config.replyTo
+          },
 
           global_merge_vars: mergeVars.concat(defaultMergeVars),
           attachments,

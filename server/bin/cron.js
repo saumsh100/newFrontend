@@ -4,6 +4,7 @@ import { createJob } from '../config/jobQueue';
 import GLOBALS from '../config/globals';
 
 const REMINDERS_INTERVAL_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
+const REVIEWS_INTERVAL_MINUTES = GLOBALS.reviews.cronIntervalMinutes;
 
 // TODO: put these in globals.js
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -14,8 +15,8 @@ const remindersPattern = NODE_ENV === 'production' ? `0 */${REMINDERS_INTERVAL_M
 // Run at 5AM every morning
 const recallsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
 
-// Run every 30 min in prod
-const reviewsPattern = NODE_ENV === 'production' ? '0 0,30 * * * *' : '0 * * * * *';
+// Run every X min in prod
+const reviewsPattern = NODE_ENV === 'production' ? `0 */${REVIEWS_INTERVAL_MINUTES} * * * *` : `0 */${REVIEWS_INTERVAL_MINUTES} * * * *`;
 
 // Run every 30 min in prod
 const correspondencesPattern = NODE_ENV === 'production' ? '0 15,45 * * * *' : '0 * * * * *';

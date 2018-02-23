@@ -91,7 +91,8 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
       isPending: false,
       accountId: reminder.accountId,
       startDate: {
-        $between: [start, end],
+        $gte: start,
+        $lt: end,
       },
     },
 

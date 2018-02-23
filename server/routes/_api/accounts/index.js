@@ -1,10 +1,4 @@
-/**
- * GET /
- *
- * - list of accounts in an enterprise
- * - must be a SUPERADMIN or OWNER to list all
- * - if not, it just lists the one
- */
+
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
@@ -15,6 +9,7 @@ import { getAccountConnectorConfigurations, updateAccountConnectorConfigurations
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
+import { getDayStart, getDayEnd } from '../../../util/time';
 import StatusError from'../../../util/StatusError';
 import {
   Account,
@@ -26,7 +21,7 @@ import {
   Configuration,
 } from '../../../_models';
 import upload from '../../../lib/upload';
-import { getReviewPatients } from '../../../lib/reviews/helpers';
+import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
@@ -50,6 +45,13 @@ const apiFunctionsDelete = {
   vendasta: vendastaDelete,
 };
 
+/**
+ * GET /
+ *
+ * - list of accounts in an enterprise
+ * - must be a SUPERADMIN or OWNER to list all
+ * - if not, it just lists the one
+ */
 accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
     const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
@@ -379,11 +381,11 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
 });
 
 /**
- * PUT /:accountId
+ * GET /:accountId/reviews/list DEPRECATED
  *
- * - update clinic account data
+ * - gets the reviews list
  */
-accountsRouter.get('/:accountId/reviews/list', checkPermissions('accounts:update'), async (req, res, next) => {
+accountsRouter.get('/:accountId/reviews/list', async (req, res, next) => {
   try {
     const date = (new Date()).toISOString();
 
@@ -396,6 +398,24 @@ accountsRouter.get('/:accountId/reviews/list', checkPermissions('accounts:update
     next(err);
   }
 });
+
+/**
+ * GET /:accountId/reviews/outbox
+ *
+ * - gets the reviews outbox for a certain time range
+ * - will default to beginning and end of current day if not supplied
+ */
+accountsRouter.get('/:accountId/reviews/outbox', async (req, res, next) => {
+  try {
+    const { account } = req;
+    const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
+    const outboxList = await generateReviewsOutbox({ account, startDate, endDate });
+    res.send(outboxList);
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 /**
  * GET /:accountId/reviews/preview

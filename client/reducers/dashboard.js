@@ -8,6 +8,7 @@ import { createAction, handleActions } from 'redux-actions';
 export const SET_DASHBOARD_DATE = 'SET_DASHBOARD_DATE';
 export const SET_INSIGHTS = 'SET_INSIGHTS';
 export const SET_TODO_REMINDERS = 'SET_REMINDERS';
+export const SET_TODO_REVIEWS = 'SET_REVIEWS';
 export const SET_TODO_RECALLS = 'SET_TODO_RECALLS';
 export const SET_LOADING = 'SET_LOADING';
 
@@ -18,6 +19,7 @@ export const setDashboardDate = createAction(SET_DASHBOARD_DATE);
 export const setInsights = createAction(SET_INSIGHTS);
 export const setToDoReminders = createAction(SET_TODO_REMINDERS);
 export const setToDoRecalls = createAction(SET_TODO_RECALLS);
+export const setToDoReviews = createAction(SET_TODO_REVIEWS);
 export const setLoading = createAction(SET_LOADING);
 
 /**
@@ -31,6 +33,7 @@ export const createInitialDashboardState = (state) => {
     insightCount: 0,
     insights: [],
     reminders: [],
+    reviews: [],
     recalls: [],
   }, state));
 };
@@ -69,5 +72,9 @@ export default handleActions({
 
   [SET_TODO_RECALLS](state, { payload }) {
     return state.merge({ recalls: payload });
+  },
+
+  [SET_TODO_REVIEWS](state, { payload }) {
+    return state.merge({ reviews: payload });
   },
 }, initialState);

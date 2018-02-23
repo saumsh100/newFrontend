@@ -39,6 +39,8 @@ function Button(props) {
     finalProps.type = 'button';
   }
 
+  let IconRightComponent = props.iconRightComponent || null;
+
   return (
     <props.as
       {...finalProps}
@@ -51,6 +53,10 @@ function Button(props) {
       {(props.children || props.title) ? (
         <span className={styles.text}>{props.children || props.title}</span>
       ) : null}
+
+      {props.iconRightComponent &&
+        <props.iconRightComponent className={styles.iconRight} />
+      }
 
       {props.iconRight ? (
         <i className={`fa fa-${props.iconRight} ${styles.iconRight}`}/>
@@ -74,6 +80,7 @@ Button.propTypes = {
   className: PropTypes.string,
   icon: PropTypes.string,
   iconRight: PropTypes.string,
+  iconRightComponent: PropTypes.function,
   title: PropTypes.string,
 };
 

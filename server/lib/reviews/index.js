@@ -1,22 +1,49 @@
 
+import moment from 'moment';
 import {
   Account,
   Appointment,
+  Chat,
   Patient,
   SentReview,
+  TextMessage,
 } from '../../_models';
-import moment from 'moment';
+import { env } from '../../config/globals';
 import normalize from '../../routes/api/normalize';
 import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
 import { getReviewPatients } from './helpers';
 import sendReview from './sendReview';
 
-export async function sendReviewsForAccount(account, date) {
-  console.log(`Sending reviews for ${account.name}`);
+async function sendSocket(io, chatId) {
+  let chat = await Chat.findOne({
+    where: { id: chatId },
+    include: [
+      {
+        model: TextMessage,
+        as: 'textMessages',
+        order: ['createdAt', 'DESC'],
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+    ],
+  });
 
-  const { success, errors } = await getReviewPatients({ account, date });
+  chat = chat.get({ plain: true });
+
+  await io.of('/dash')
+    .in(chat.patient.accountId)
+    .emit('newMessage', normalize('chat', chat));
+}
+
+export async function sendReviewsForAccount(account, date, pub) {
+  const { name } = account;
+  console.log(`Sending reviews for ${name} (${account.id}) at ${moment(date).format('YYYY-MM-DD h:mma')}...`);
+
+  const { success, errors } = await getReviewPatients({ account, startDate: date });
   try {
-    console.log(`Trying to bulkSave ${errors.length} failed sentReviews for ${account.name}`);
+    console.log(`---- ${errors.length} => sentReviews that would fail`);
 
     // Save failed sentRecalls from errors
     const failedSentReviews = errors.map(({ errorCode, patient }) => ({
@@ -28,14 +55,16 @@ export async function sendReviewsForAccount(account, date) {
     }));
 
     await SentReview.bulkCreate(failedSentReviews);
+    console.log(`------ ${errors.length} => saved sentReviews that would fail`);
   } catch (err) {
-    console.error(`FAILED bulkSave of failed sentReviews`, err);
-    // TODO: do we want to throw the error hear and ignore trying to send?
+    console.error(`------ Failed bulk saving of sentReviews that would fail`);
+    console.error(err);
   }
 
-  console.log(`Trying to send ${success.length} review emails for ${account.name}`);
+  console.log(`---- ${success.length} review requests that should succeed`);
 
-  for (const patient of success) {
+  const sentReviewIds = [];
+  for (const { patient, primaryType } of success) {
     const { appointment } = patient;
     const { practitioner } = appointment;
 
@@ -47,32 +76,64 @@ export async function sendReviewsForAccount(account, date) {
       practitionerId: appointment.practitionerId,
       patientId: patient.id,
       appointmentId: appointment.id,
+      primaryType,
     });
 
+    let data = null;
     try {
-      await sendReview['email']({
+      data = await sendReview[primaryType]({
         patient,
         account,
         appointment,
         sentReview,
         practitioner,
       });
+
+      sentReviewIds.push(sentReview.id);
+
+      console.log(`------ Sent '${primaryType}' review request to ${patient.firstName} ${patient.lastName}`);
     } catch (error) {
-      console.log(`${'email'} review failed to send to ${patient.firstName} ${patient.lastName} for ${account.name}`);
-      console.log(error);
+      console.error(`------ Failed sending '${primaryType}' review request to ${patient.firstName} ${patient.lastName}`);
+      console.error(error);
       continue;
     }
 
     // If sendReview was successful, then update isSent
     await sentReview.update({ isSent: true });
+
+    // This needs to be refactored into a Chat lib module
+    if (primaryType === 'sms' && env !== 'test') {
+      const textMessageData = sanitizeTwilioSmsData(data);
+      const { to } = textMessageData;
+      let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
+      if (!chat) {
+        chat = await Chat.create({
+          accountId: account.id,
+          patientId: patient.id,
+          patientPhoneNumber: to,
+        });
+      }
+
+      // Now save TM
+      const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
+
+      // Update Chat to have new textMessage
+      await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
+
+      // Now update the clients in real-time
+      global.io && await sendSocket(global.io, chat.id);
+    }
   }
+
+  pub && pub.publish('REVIEW:SENT:BATCH', JSON.stringify(sentReviewIds));
+  console.log(`Reviews completed for ${name} (${account.id})!`);
 }
 
 /**
  *
  * @returns {Promise.<Array|*>}
  */
-export async function computeReviewsAndSend({ date }) {
+export async function computeReviewsAndSend({ date, pub }) {
   // Fetch accounts that have reviews turned on
   const accounts = await Account.findAll({
     where: {
@@ -80,7 +141,10 @@ export async function computeReviewsAndSend({ date }) {
     },
   });
 
+  // Be sure it runs on the minute
+  date = moment(date).seconds(0).milliseconds(0).toISOString();
+
   for (const account of accounts) {
-    await exports.sendReviewsForAccount(account, date);
+    await exports.sendReviewsForAccount(account, date, pub);
   }
 }

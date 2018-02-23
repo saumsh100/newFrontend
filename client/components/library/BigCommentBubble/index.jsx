@@ -91,7 +91,7 @@ export class BigCommentBubble extends Component {
             <div className={styles.bigCommentBubble__mainContent__preview}>
               {sitePreview}
               {/* TODO: put this there ONLY if length is greater */}
-              {sitePreview ? <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >
+              {sitePreview && !(sitePreview.length < 333) && url ? <a href={url} target="_blank" className={styles.bigCommentBubble__mainContent__preview__toggleButton} >
                 more...
               </a> : null}
             </div>
@@ -122,7 +122,7 @@ export class BigCommentBubble extends Component {
               </div>
             }
             <a href={url} target="_blank" className={styles.bigCommentBubble__respondBlock__respondButton}>
-              Respond
+              {url ? "Respond" : " "}
             </a>
           </div>
         </div>

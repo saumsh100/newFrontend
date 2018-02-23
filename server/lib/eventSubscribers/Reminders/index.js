@@ -1,5 +1,4 @@
 
-import moment from 'moment';
 import { namespaces } from '../../../config/globals';
 import { SentReminder, Correspondence, Appointment } from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
@@ -53,7 +52,7 @@ function sendReminderIdsSocket(sub, io) {
         const accountId = correspondences[0].accountId;
         correspondences = correspondences.map(c => c.id);
 
-        console.log(`Sending ${correspondences.length} correspondences for account=${accountId}`);
+        console.log(`Sending ${correspondences.length} ${Correspondence.REMINDER_SENT_TYPE} correspondences for account=${accountId}`);
 
         return io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
       }

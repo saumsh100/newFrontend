@@ -1,49 +1,28 @@
 
 import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
-import { host, protocol } from '../../config/globals';
+import compressUrl from '../../util/compressUrl';
 import { sendReview } from '../mail';
-import { buildAppointmentEvent } from '../ics';
+import { createReviewText } from './createReviewText';
 
-export const createConfirmationText = ({ patient, account, appointment }) => {
-  const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
-  return `Thanks ${patient.firstName}! You appointment with ${account.name} ` +
-    `on ${startDate} at ${startTime} is confirmed. `;
-};
-
-const BASE_URL = `https://${host}/twilio/voice/sentReminders`;
-const createReminderText = ({ patient, account, appointment }) => {
-  const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${patient.firstName}, your next appointment with ${account.name} ` +
-    `is on ${startDate} at ${startTime}. Reply 'C' to ` +
-    'confirm your appointment.';
-};
-
-const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
-  const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${BASE_URL}/${sentReminder.id}/?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
-};
+const generateReviewsUrl = ({ account, sentReview }) =>
+  `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
 
 export default {
-  // Send Appointment Reminder text via Twilio
-  /*sms({ account, appointment, patient }) {
-    // TODO: add phoneNumber logic for patient
+  // Send Review SMS via Twilio
+  async sms({ account, appointment, patient, sentReview }) {
+    const longLink = generateReviewsUrl({ account, sentReview });
+    const link = await compressUrl(longLink);
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
-      body: createReminderText({ patient, account, appointment }),
+      body: createReviewText({ patient, account, link }),
     });
-  },*/
+  },
 
-  // Send Appointment Reminder email via Mandrill (MailChimp)
+  // Send Review email via Mandrill (MailChimp)
   email({ account, patient, practitioner, sentReview }) {
-    const reviewsUrl = `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
+    const reviewsUrl = generateReviewsUrl({ account, sentReview });
     const stars = [];
     for (let i = 1; i < 6; i++) {
       stars.push({
@@ -58,6 +37,7 @@ export default {
       patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
+      replyTo: account.contactEmail,
       mergeVars: [
         {
           name: 'PRIMARY_COLOR',
@@ -84,12 +64,16 @@ export default {
           content: account.website,
         },
         {
-          name: 'ACCOUNT_CITY',
-          content: `${account.city}, ${account.state}`,
+          name: 'ACCOUNT_STREET',
+          content: account.address.street,
         },
         {
           name: 'ACCOUNT_ADDRESS',
-          content: account.street,
+          content: account.address.street,
+        },
+        {
+          name: 'ACCOUNT_CITY',
+          content: `${account.address.city}, ${account.address.state}`,
         },
         {
           name: 'PATIENT_FIRSTNAME',

@@ -6,10 +6,15 @@
   border-radius: 50%;
   // border-color: $primary-color;
   //transition-timing-function: ease-in;
-  width: 4.4rem;
-  height: 4.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.space {
+  height: 20px;
+  @media screen and (min-width: $widget-mobile-width) {
+    height: 40px;
+  }
 }
 

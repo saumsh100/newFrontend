@@ -1,35 +1,43 @@
-import moment from 'moment';
-import { Account, SentReminder, SentRecall, Correspondence, Appointment } from '../../_models';
+
+import {
+  Account,
+  Appointment,
+  Correspondence,
+  SentReminder,
+  SentRecall,
+  SentReview,
+  Review,
+} from '../../_models';
 import { namespaces } from '../../config/globals';
-import { reminderConfirmedNote, reminderSentNote } from './appointmentNotesGenerators';
-import { reminderSent, reminderConfirmed, recallSent } from './correspondenceNote';
+import {
+  reminderSent,
+  reminderConfirmed,
+  recallSent,
+  reviewSent,
+  reviewCompleted,
+} from './correspondenceNote';
 import batchCreate from '../../routes/util/batch';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
   let correspondences = await Correspondence.findAll({
+    paranoid: false,
     where: {
       accountId,
       type: Correspondence.REMINDER_SENT_TYPE,
-      sentReminderId: {
-        $ne: null,
-      },
+      sentReminderId: { $ne: null },
     },
-    paranoid: false,
   });
 
   const sentReminderIds = correspondences.map(c => c.sentReminderId);
-
-  const sentreminders = await SentReminder.findAll({
+  const sentReminders = await SentReminder.findAll({
     where: {
       accountId,
       isSent: true,
-      id: {
-        $notIn: sentReminderIds,
-      },
+      id: { $notIn: sentReminderIds },
     },
   });
 
-  const correspondencesToCreate = sentreminders.map((sr) => {
+  const correspondencesToCreate = sentReminders.map((sr) => {
     return {
       accountId: sr.accountId,
       patientId: sr.patientId,
@@ -46,39 +54,32 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
-
     console.log(`Sending ${Correspondence.REMINDER_SENT_TYPE} ${correspondences.length} correspondences for account=${accountId}`);
-
     global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
   }
 }
 
 async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
   let correspondences = await Correspondence.findAll({
+    paranoid: false,
     where: {
       accountId,
       type: Correspondence.REMINDER_CONFIRMED_TYPE,
-      sentReminderId: {
-        $ne: null,
-      },
+      sentReminderId: { $ne: null },
     },
-    paranoid: false,
   });
 
   const sentReminderIds = correspondences.map(c => c.sentReminderId);
-
-  const sentreminders = await SentReminder.findAll({
+  const sentReminders = await SentReminder.findAll({
     where: {
       accountId,
       isSent: true,
-      id: {
-        $notIn: sentReminderIds,
-      },
+      id: { $notIn: sentReminderIds },
       isConfirmed: true,
     },
   });
 
-  const correspondencesToCreate = sentreminders.map((sr) => {
+  const correspondencesToCreate = sentReminders.map((sr) => {
     return {
       accountId: sr.accountId,
       patientId: sr.patientId,
@@ -95,9 +96,7 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
 
   if (correspondences[0]) {
     correspondences = correspondences.map(c => c.id);
-
     console.log(`Sending ${Correspondence.REMINDER_CONFIRMED_TYPE} ${correspondences.length} correspondences for account=${accountId}`);
-
     global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
   }
 }
@@ -149,12 +148,106 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
   }
 }
 
+async function computeReviewsCorrespondencesAndCreate(accountId) {
+  let correspondences = await Correspondence.findAll({
+    paranoid: false,
+    where: {
+      accountId,
+      type: Correspondence.REVIEW_SENT_TYPE,
+      sentReviewId: { $ne: null },
+    },
+  });
+
+  const sentReviewsIds = correspondences.map(c => c.sentReviewId);
+  const sentReviews = await SentReview.findAll({
+    where: {
+      accountId,
+      isSent: true,
+      id: { $notIn: sentReviewsIds },
+    },
+  });
+
+  const correspondencesToCreate = sentReviews.map((sentReview) => {
+    return {
+      type: Correspondence.REVIEW_SENT_TYPE,
+      accountId: sentReview.accountId,
+      patientId: sentReview.patientId,
+      sentReviewId: sentReview.id,
+      appointmentId: sentReview.appointmentId,
+      method: sentReview.primaryType,
+      contactedAt: sentReview.createdAt,
+      note: reviewSent(sentReview),
+    };
+  });
+
+  correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+  if (correspondences[0]) {
+    correspondences = correspondences.map(c => c.id);
+    console.log(`Sending ${correspondences.length} ${Correspondence.REVIEW_SENT_TYPE} correspondences for account=${accountId}`);
+    global.io && global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
+  }
+}
+
+async function computeReviewsCompletedCorrespondencesAndCreate(accountId) {
+  let correspondences = await Correspondence.findAll({
+    paranoid: false,
+    where: {
+      accountId,
+      type: Correspondence.REVIEW_COMPLETED_TYPE,
+      sentReviewId: { $ne: null },
+    },
+  });
+
+  const sentReviewIds = correspondences.map(c => c.sentReviewId);
+  const sentReviews = await SentReview.findAll({
+    where: {
+      accountId,
+      isSent: true,
+      id: { $notIn: sentReviewIds },
+      isCompleted: true,
+    },
+
+    include: [{
+      model: Review,
+      as: 'review',
+      required: true,
+    }],
+  });
+
+  const correspondencesToCreate = sentReviews.map((sr) => {
+    return {
+      accountId: sr.accountId,
+      patientId: sr.patientId,
+      sentReviewId: sr.id,
+      appointmentId: sr.appointmentId,
+      method: sr.primaryType,
+      type: Correspondence.REVIEW_COMPLETED_TYPE,
+      contactedAt: sr.review.createdAt,
+      note: reviewCompleted(sr),
+    };
+  });
+
+  correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+
+  if (correspondences[0]) {
+    correspondences = correspondences.map(c => c.id);
+    console.log(`Sending ${correspondences.length} ${Correspondence.REVIEW_COMPLETED_TYPE} correspondences for account=${accountId}`);
+    global.io && global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
+  }
+}
+
 export default async function computeCorrespondencesAndCreate() {
   const accounts = await Account.findAll({});
-
   for (const account of accounts) {
+    // Reminders Sent and Confirmed
     computeRemindersCorrespondencesAndCreate(account.id);
-    computeRecallsCorrespondencesAndCreate(account.id);
     computeRemindersConfirmedCorrespondencesAndCreate(account.id);
+
+    // Recalls Sent
+    computeRecallsCorrespondencesAndCreate(account.id);
+
+    // Reviews Sent and Completed
+    computeReviewsCorrespondencesAndCreate(account.id);
+    computeReviewsCompletedCorrespondencesAndCreate(account.id);
   }
 }

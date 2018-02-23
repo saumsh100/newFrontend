@@ -25,22 +25,24 @@ class Complete extends Component {
           <Picture reviewedPractitioner={reviewedPractitioner} />
         </div>
         <div className={styles.completeHeader}>
-          Feedback sent to {reviewedPractitioner.getPrettyShortName()}.
+          Feedback sent.
         </div>
-        <div>
+        <div className={styles.starsWrapper}>
           <Stars
             value={stars}
             isStatic
             isMinimal
           />
         </div>
-        <Button
-          className={styles.button}
-          color='red'
-          onClick={this.props.closeBookingModal}
-        >
-          Done
-        </Button>
+        <div className={styles.footer}>
+          <Button
+            className={styles.button}
+            color='red'
+            onClick={this.props.closeBookingModal}
+          >
+            Done
+          </Button>
+        </div>
       </div>
     );
   }

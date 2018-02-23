@@ -137,11 +137,10 @@ export async function sendRemindersForAccount(account, date, pub) {
         }));
 
         await SentReminder.bulkCreate(failedSentReminders);
-        console.log(`---- ${errors.length} => saved sentReminders that would fail`);
+        console.log(`------ ${errors.length} => saved sentReminders that would fail`);
       } catch (err) {
-        console.error(`---- Failed bulk saving of sentReminders that would fail`);
+        console.error(`------ Failed bulk saving of sentReminders that would fail`);
         console.error(err);
-        // TODO: do we want to throw the error hear and ignore trying to send?
       }
     }
 
@@ -187,7 +186,7 @@ export async function sendRemindersForAccount(account, date, pub) {
       const appt = await Appointment.findById(appointment.id);
       appt.update({ isReminderSent: true });
 
-      // TODO: need to refactor to go through a Chat module so its unified across API and other services
+      // This needs to be refactored into a Chat lib module
       if (primaryType === 'sms' && env !== 'test') {
         const textMessageData = sanitizeTwilioSmsData(data);
         const { to } = textMessageData;
@@ -250,6 +249,7 @@ export async function computeRemindersAndSend({ date, pub }) {
     }],
   });
 
+  // Be sure it runs on the minute
   date = moment(date).seconds(0).milliseconds(0).toISOString();
 
   for (const account of accounts) {

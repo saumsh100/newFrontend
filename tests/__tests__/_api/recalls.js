@@ -215,8 +215,11 @@ describe('/api/accounts/:account/recalls', () => {
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(async ({ body }) => {
-            body[0].patient = omitProperties(body[0].patient, ['id']);
+            expect(body[0].patient.lastHygieneDate).toBe(date(2016, 7, 5, 9));
+
+            body[0].patient = omitProperties(body[0].patient, ['id', 'lastHygieneDate']);
             body[0].recall = omitProperties(body[0].recall, ['id']);
+
             expect(body).toMatchSnapshot();
           });
       });

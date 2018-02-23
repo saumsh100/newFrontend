@@ -66,6 +66,11 @@ reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
       }, { transaction: t });
 
       await t.commit();
+
+      // Create completed correspondence in real-time
+      const pub = req.app.get('pub');
+      pub && pub.publish('REVIEW:COMPLETED', sentReview.id);
+
       return res.status(201).send(review.get({ plain: true }));
     } catch (err) {
       await t.rollback();

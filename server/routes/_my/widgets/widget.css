@@ -84,7 +84,7 @@
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
   cursor: pointer;
-  font-size: 1.4rem;
+  font-size: 22px;
   display: flex;
   align-items: center;
   background-color: var(--bookingWidgetPrimaryColor);
@@ -111,7 +111,7 @@
     left: 0;
     width: 100%;
     height: 65px;
-    font-size: 1em;
+    font-size: 14px;
     border-radius: 0;
     justify-content: center;
     box-sizing: border-box;

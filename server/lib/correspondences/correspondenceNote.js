@@ -56,3 +56,25 @@ export function recallSent(sentRecall) {
 
   return `Sent "${cap(prettyInterval)} ${time} Due Date" ${typeMap[primaryType]} Recall via CareCru`;
 }
+
+/**
+ * reviewSent will generate the correspondance note for a REVIEW:SENT
+ *
+ * @param sentReview
+ * @return {string}
+ */
+export function reviewSent(sentReview) {
+  const { primaryType } = sentReview;
+  return `Sent "${typeMap[primaryType]}" Review Request via CareCru`;
+}
+
+/**
+ * reviewCompleted will generate the correspondance note for a REVIEW:COMPLETED
+ *
+ * @param sentReview
+ * @return {string}
+ */
+export function reviewCompleted(sentReview) {
+  const { review: { stars } } = sentReview;
+  return `Patient Left ${stars}-Star Review via CareCru`;
+}

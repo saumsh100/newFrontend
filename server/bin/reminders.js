@@ -1,5 +1,5 @@
-import rabbitjs from 'rabbit.js';
 
+import rabbitjs from 'rabbit.js';
 import globals from '../config/globals';
 import jobQueue from '../config/jobQueue';
 import createSocketServer from '../sockets/createSocketServer';

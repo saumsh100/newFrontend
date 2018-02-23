@@ -77,6 +77,16 @@ const mandrill = {
   apiKey: environmentVariables.MANDRILL_API_KEY,
 };
 
+const bitly = {
+  accessToken: environmentVariables.BITLY_ACCESS_TOKEN,
+  shortDomain: environmentVariables.BITLY_SHORT_DOMAIN,
+};
+
+const rebrandly = {
+  apiKey: environmentVariables.REBRANDLY_API_KEY,
+  shortDomain: environmentVariables.REBRANDLY_SHORT_DOMAIN,
+};
+
 const loader = {
   token: environmentVariables.LOADERIO,
 };
@@ -115,10 +125,16 @@ const postgres = {
   logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };
 
-
 const reminders = {
   cronIntervalMinutes: 5,
   sameDayWindowHours: 6,
+};
+
+const reviews = {
+  cronIntervalMinutes: 5,
+  sameDayWindowHours: 6,
+  defaultInterval: '-2 hours', // same convention as recalls
+  lastSentReviewInterval: '4 weeks',
 };
 
 const recalls = {
@@ -159,5 +175,8 @@ module.exports = {
   postgres,
   callrails,
   reminders,
+  reviews,
   recalls,
+  bitly,
+  rebrandly,
 };

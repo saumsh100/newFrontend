@@ -84,7 +84,8 @@
       margin: 10px 0 10px 0;
     }
     &__preview {
-      letter-spacing: 0.5px;
+      letter-spacing: 0px;
+      line-height: 20px;
       color: $primary-dark;
       composes: letterSpacing from 'sass-loader!../../../fonts.scss';
       &__toggleButton {
@@ -128,6 +129,8 @@
 
 
   &__respondBlock {
+    height: 35px;
+    box-sizing: border-box;
     padding: 10px 20px 10px 20px;
     background-color: $primary-blue;
     border-bottom: 2px solid $primary-blue;

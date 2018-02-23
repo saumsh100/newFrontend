@@ -5,6 +5,7 @@ import {
   setLoading,
   setInsights,
   setToDoReminders,
+  setToDoReviews,
   setToDoRecalls,
 } from '../reducers/dashboard';
 
@@ -40,6 +41,7 @@ export function fetchInsights() {
 const toDoFunctions = {
   0: fetchToDoReminders,
   1: fetchToDoRecalls,
+  2: fetchToDoReviews,
 };
 
 export function fetchDonnasToDos(index) {
@@ -72,6 +74,17 @@ async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
     dispatch(setToDoReminders(remindersData.data));
   } catch (err) {
     console.error('fetchToDoReminders', err);
+    throw err;
+  }
+}
+
+async function fetchToDoReviews(accountId, startDate, endDate, dispatch) {
+  try {
+    const params = { startDate, endDate };
+    const reviewsData = await axios.get(`/api/accounts/${accountId}/reviews/outbox`, { params });
+    dispatch(setToDoReviews(reviewsData.data));
+  } catch (err) {
+    console.error('fetchToDoReviews', err);
     throw err;
   }
 }

@@ -70,26 +70,13 @@ unsubRouter.get('/unsubscribe/:encodedPatientId', async (req, res, next) => {
   // TODO: this needs to be tokenized
   try {
     const regUuidTest = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
     let patientId = req.params.encodedPatientId;
-
     if (!regUuidTest.test(patientId)) {
       patientId = Buffer.from(patientId, 'base64').toString('utf8');
     }
 
     const patient = await Patient.findOne({ where: { id: patientId } });
-
-    const preferences = Object.assign({}, patient.preferences);
-    preferences.reminders = false;
-
-    await patient.update({ preferences });
-
-    const account = await Account.findOne({
-      where: {
-        id: patient.accountId,
-      },
-    });
-
+    const account = await Account.findOne({ where: { id: patient.accountId } });
     if (account.fullLogoUrl) {
       account.fullLogoUrl = account.fullLogoUrl.replace('[size]', 'original');
     }

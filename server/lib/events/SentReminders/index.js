@@ -1,3 +1,4 @@
+
 import { SentReminder, Event, Appointment } from '../../../_models';
 
 export function fetchSentReminderEvents(patientId, accountId, query) {

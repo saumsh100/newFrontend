@@ -1,6 +1,11 @@
 
 import moment from 'moment';
+import _ from 'lodash';
 import uniqBy from 'lodash/uniqBy';
+import omit from 'lodash/omit';
+import orderBy from 'lodash/orderBy';
+import groupBy from 'lodash/groupBy';
+import forEach from 'lodash/forEach';
 import {
   Appointment,
   Patient,
@@ -8,43 +13,92 @@ import {
   Review,
   Practitioner,
 } from '../../_models';
-import { generateOrganizedPatients } from '../comms/util';
+import GLOBALS from '../../config/globals';
+import { organizeForOutbox, generateOrganizedPatients } from '../comms/util';
+import { convertIntervalStringToObject } from '../../util/time';
+
+const BUFFER_MINUTES = GLOBALS.reviews.cronIntervalMinutes;
+const DEFAULT_INTERVAL = GLOBALS.reviews.defaultInterval;
+const SAME_DAY_HOURS = GLOBALS.reviews.sameDayWindowHours;
 
 /**
- * getPatientsNeedingReview
+ * generateReviewsOutbox
+ *
+ * @param account
+ * @param startDate
+ * @param endDate
+ * @return [outboxReviews]
  */
-export async function getReviewPatients({ account, date }) {
-  const appointments = await exports.getReviewAppointments({ account, date });
+export async function generateReviewsOutbox({ account, startDate, endDate }) {
+  endDate = endDate || moment(startDate).endOf('day').toISOString();
+  const appointments = await exports.getReviewAppointments({ account, startDate, endDate });
+
+  // Create array that the success-fail-organizer function can accept
   const patients = appointments.map((appt) => {
     const patient = appt.patient.get({ plain: true });
     patient.appointment = appt.get({ plain: true });
     return patient;
   });
 
-  return generateOrganizedPatients(patients, 'email');
+  // Find which ones should actually pass
+  const { success } = generateOrganizedPatients(patients, ['email', 'sms']);
+  const organizedList = organizeReviewsOutboxList(success);
+  const intervalObject = convertIntervalStringToObject(DEFAULT_INTERVAL);
+  const outboxReviews = organizedList.map((pa) => {
+    const sendDate = moment(pa.patient.appointment.endDate).subtract(intervalObject).toISOString();
+    return {
+      ...pa,
+      sendDate,
+    };
+  });
+
+  return orderBy(outboxReviews, 'sendDate');
+}
+
+/**
+ * getPatientsNeedingReview
+ */
+export async function getReviewPatients({ account, startDate, endDate }) {
+  const appointments = await exports.getReviewAppointments({ account, startDate, endDate });
+  const patients = appointments.map((appt) => {
+    const patient = appt.patient.get({ plain: true });
+    patient.appointment = appt.get({ plain: true });
+    return patient;
+  });
+
+  return generateOrganizedPatients(patients, ['email', 'sms']);
 }
 
 /**
  * getReviewAppointments
  *
  * @param reminder
- * @param date
+ * @param startDate
+ * @param endDate
  */
-export async function getReviewAppointments({ account, date }) {
-  const begin = moment(date).subtract(1, 'week').toISOString();
+export async function getReviewAppointments({ account, startDate, endDate, buffer = BUFFER_MINUTES }) {
+  // Cron job will default to startDate + 5 minutes
+  endDate = endDate || moment(startDate).add(buffer, 'minutes').toISOString();
+
+  // We want to make sure we send to patients 2 hours after their endDate
+  const intervalObject = convertIntervalStringToObject(DEFAULT_INTERVAL);
+  const begin = moment(startDate).add(intervalObject).toISOString();
+  const end = moment(endDate).add(intervalObject).toISOString();
+  const sameDayEnd = moment(end).add(SAME_DAY_HOURS, 'hours').toISOString();
+
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
       isCancelled: false,
       isPending: false,
       accountId: account.id,
-      startDate: {
-        $between: [begin, date],
+      endDate: {
+        $gte: begin,
+        $lt: end,
       },
     },
 
-    // Do this so that uniqWith will remove last patient
-    order: [['startDate', 'DESC']],
+    order: [['endDate', 'DESC']],
 
     include: [
       {
@@ -61,6 +115,21 @@ export async function getReviewAppointments({ account, date }) {
             model: SentReview,
             as: 'sentReviews',
             required: false,
+          },
+          {
+            model: Appointment,
+            as: 'appointments',
+            required: false,
+            where: {
+              isDeleted: false,
+              isCancelled: false,
+              isPending: false,
+              accountId: account.id,
+              endDate: {
+                $gte: end,
+                $lt: sameDayEnd,
+              },
+            },
           },
         ],
       },
@@ -79,21 +148,81 @@ export async function getReviewAppointments({ account, date }) {
     ],
   });
 
-  // console.log(appointments);
+  // Do not send to the same patient twice
+  // NOTE: If the Outbox range is greater than a month, it will be innacurate because after 4 months
+  // the patients will be able to get a SentReview again
+  const filteredAppointments = exports.getEarliestLatestAppointment({ appointments, account });
 
   // Filter down to appointments who have no sentReviews and
   // whose patients have not yet reviewed the clinic
-  const sendableAppointments = appointments.filter((a) => {
-    const reviewNotSent = !a.sentReviews.length;
-    const patientNotReviewed = !a.patient.reviews.length;
+  const sendableAppointments = filteredAppointments.filter((a) => {
+    const reviewNotSentForAppointment = !a.sentReviews.length;
+    const patientNotReviewed = !a.patient.reviews.length; // we may want to make another range check (within a year?)
+    const patientHasNoLaterAppt = !a.patient.appointments.length;
+    const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr =>
+      sr.isSent &&
+      moment().diff(sr.createdAt, 'days') > 30
+    );
 
-    const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr => moment(sr.createdAt).isBetween(begin, date));
-    return reviewNotSent && patientNotReviewed
-    && patientHasNoRecentSentReview && a.patient.preferences.reminders;
+    return reviewNotSentForAppointment &&
+      patientNotReviewed &&
+      patientHasNoRecentSentReview &&
+      a.patient.preferences.reminders &&
+      patientHasNoLaterAppt;
   });
 
-  // Do not send to the same patient twice
-  const filteredAppointments = uniqBy(sendableAppointments, 'patientId');
+  return sendableAppointments;
+}
+
+/**
+ * getEarliestLatestAppointment filters appts by getting
+ * the earliest appointment that is latest in the day
+ *
+ * @param appointments
+ * @param account
+ * @returns filteredAppointments
+ */
+export function getEarliestLatestAppointment({ appointments, account }) {
+  // Get all appointments for that patient together so we can make the decision on which appt to pick
+  const patientAppts = groupBy(appointments, 'patientId');
+  const filteredAppointments = [];
+  forEach(patientAppts, (appts) => {
+    // Group appointments by day
+    // Take the earliest day but latest appt in that day
+    const groupedAppts = groupBy(appts, a =>
+      moment.tz(a.startDate, account.timezone).format('YYYY-MM-DD')
+    );
+
+    // Take earliest day and latest one in that day
+    const dayKeys = Object.keys(groupedAppts);
+    const lastKey = dayKeys[dayKeys.length - 1];
+    const earliestDay = groupedAppts[lastKey];
+    const latestApptInDay = earliestDay[0];
+    filteredAppointments.push(latestApptInDay);
+  });
 
   return filteredAppointments;
+}
+
+/**
+ * organizeReviewsOutboxList is a function used to organize the outbox for reminders ontop of
+ * mapPatientsToReminders
+ *
+ * @params outboxList
+ */
+export function organizeReviewsOutboxList(outboxList) {
+  // Assume appointment.id is the unique indicator
+  // (shouldn't be multiple different reminders going out to same appointment)
+  const selectorPredicate = ({ patient: { appointment } }) => appointment.id;
+  const mergePredicate = (groupedArray) => {
+    const primaryTypes = groupedArray.map(item => item.primaryType);
+    const newObj = {
+      ...groupedArray[0],
+      primaryTypes,
+    };
+
+    return omit(newObj, 'primaryType');
+  };
+
+  return organizeForOutbox(outboxList, selectorPredicate, mergePredicate);
 }

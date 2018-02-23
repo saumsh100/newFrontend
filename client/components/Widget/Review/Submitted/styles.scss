@@ -9,7 +9,7 @@
   height: 100%;
   box-sizing: border-box;
   width: 100%;
-  min-height: 500px;
+  min-height: 420px;
   max-width: 500px;
   margin: 0 auto;
 }
@@ -22,12 +22,17 @@
 
 .footer {
   @extend .row;
-  flex-grow: 1;
   flex-direction: column;
 }
 
 .textAreaWrapper {
   width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0 20px 0;
 }
 
 .avatar {
@@ -43,7 +48,8 @@
 }
 
 .starsWrapper {
-  margin: 10px 0;
+  padding: 40px 0 10px 0;
+  box-sizing: border-box;
 }
 
 .text-centered {
@@ -53,19 +59,20 @@
 .header {
   @extend .text-centered;
   @extend .row;
-  padding: 20px 20px 0 20px;
+  box-sizing: border-box;
+  padding: 20px 10px 10px 10px;
   margin: 0 auto; // when you add max-width you need this
-  margin-bottom: 10px;
   // max-width: 210px;
   font-size: 1.8em;
-  color: $primary-blue;
+  color: $primary-dark;
   // font-family: $medium-font;
 }
 
 .message {
   @extend .text-centered;
   padding: 5px 10px;
-  font-size: 14px;
+  font-size: 12px;
+  line-height: 20px;
   color: $primary-darkgrey;
   max-width: 300px;
   margin: 0 auto;
@@ -73,7 +80,8 @@
 
 .button {
   width: 100%;
-  margin-top: auto;
+  max-width: 300px;
+  font-size: 14px;
   background-color: var(--primaryColor);
   &:hover {
     background-color: var(--primaryColor);
@@ -110,3 +118,22 @@
   justify-content: center;
 }
 
+.textArea {
+  width: 100%;
+  > label {
+    font-size: 12px !important;
+    color: $primary-darkgrey;
+    top: -18px !important;
+  }
+
+  padding-top: 0;
+  > textarea {
+    line-height: normal;
+    box-sizing: border-box;
+    border-radius: 0; // for ios
+    height: 80px;
+    padding: 10px;
+    border: 1px solid $primary-gray;
+    color: black;
+  }
+}

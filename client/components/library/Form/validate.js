@@ -58,7 +58,6 @@ const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
     });
 };
 
-
 const asyncValidatePatient = composeAsyncValidators([asyncEmailValidatePatient, asyncPhoneNumberValidatePatient]);
 const asyncValidateNewPatient = composeAsyncValidators(([asyncEmailValidateNewPatient, asyncPhoneNumberValidateNewPatient]));
 

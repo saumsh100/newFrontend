@@ -142,7 +142,7 @@ class ReviewItem extends Component {
   }
 
   renderLabel() {
-    return <TouchPointLabel title={'Review Request'} />;
+    return <TouchPointLabel title={'Review Request'} className={styles.reviewLabel} />;
   }
 
   renderMainComponent() {

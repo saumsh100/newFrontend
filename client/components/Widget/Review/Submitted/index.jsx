@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import sentimentContent from './content';
 import { mergeReviewValues } from '../../../../reducers/reviewsWidget';
 import { saveReview } from '../../../../thunks/reviews';
-import { Avatar, Link, Input, Stars, TextArea, Button } from '../../../library';
+import { Stars, TextArea, Button, Icon } from '../../../library';
 import Picture from '../Picture';
 import styles from './styles.scss';
 
@@ -58,7 +58,13 @@ class Submitted extends Component {
   render() {
     const { review, reviewedPractitioner } = this.props;
     const poorReview = review.get('stars') < 4;
-    const sentiment = poorReview ? 'sorry' : 'grateful';
+    const noStars = review.get('stars') === 0;
+    const sentiment = noStars ?
+      'empty' :
+      poorReview ?
+        'sorry' :
+        'grateful';
+
     const content = sentimentContent[sentiment];
     const stars = review.get('stars');
     const description = review.get('description');
@@ -74,9 +80,6 @@ class Submitted extends Component {
         <div className={styles.message}>
           {content.response}
         </div>
-        <div className={styles.from}>
-          - {reviewedPractitioner.getPrettyName()}
-        </div>
         <div className={styles.starsWrapper}>
           <Stars
             value={stars}
@@ -87,24 +90,25 @@ class Submitted extends Component {
         </div>
         <div className={styles.footer}>
           <div className={styles.textAreaWrapper}>
-            {poorReview ?
+            {!noStars && poorReview ?
               <TextArea
                 label="FEEDBACK"
                 value={description}
                 onChange={this.handleChange('description')}
+                classStyles={styles.textArea}
               /> : null}
           </div>
           {poorReview ?
             <Button
               className={styles.button}
               onClick={this.submitBad}
-              disabled={!description}
+              disabled={noStars && !description}
             >
-              Submit Feedback
+              Share Feedback
             </Button> :
             <Button
               className={styles.googleButton}
-              iconRight="google-plus"
+              iconRightComponent={(props) => <Icon {...props} icon="google-plus-g" type="brand" />}
               onClick={this.submitGood}
             >
               Share Review on Google

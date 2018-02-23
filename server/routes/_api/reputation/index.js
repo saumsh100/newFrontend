@@ -4,6 +4,7 @@ import { Router } from 'express';
 import axios from 'axios';
 import toArray from 'lodash/toArray';
 import orderBy from 'lodash/orderBy';
+import sortBy from 'lodash/sortBy';
 import checkPermission from '../../../middleware/checkPermissions';
 import globals from '../../../config/globals';
 import StatusError from '../../../util/StatusError';
@@ -146,7 +147,7 @@ reputationRouter.get('/reviews', checkPermission('reviews:read'), async (req, re
         sourceName: 'CareCru',
         domain: 'carecru.com',
         contentSnippet: ccReview.description,
-        publishedDateTime: moment(ccReview.createdAt).format('YYYY-MM-DD[T]HH:mm:ss[Z]'),
+        publishedDateTime: ccReview.createdAt,
         reviewId: ccReview.id,
         rating: ccReview.stars.toString(),
         reviewerName: `${patient.firstName} ${patient.lastName}`,
@@ -155,7 +156,7 @@ reputationRouter.get('/reviews', checkPermission('reviews:read'), async (req, re
     });
 
     const mergedReviews = vendastaReviews.data.data.concat(parsedCareCruReviews);
-    const orderedReviews = orderBy(mergedReviews, 'publishedDateTime', 'desc');
+    const orderedReviews = mergedReviews.sort((a, b) => moment(b.publishedDateTime).diff(a.publishedDateTime));
 
     // Now fetch stats as well. Could probably be separated out...
     const reviewsData = await fetchReviewsData(account);

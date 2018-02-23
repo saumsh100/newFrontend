@@ -28,6 +28,8 @@ const capitalize = (str) => {
   return `${firstLetter.toUpperCase()}${rest}`;
 };
 
+const isCareCruReview = r => r.icon === 'CareCru';
+
 export default class ReviewsCard extends Component {
   constructor(props) {
     super(props);
@@ -55,7 +57,7 @@ export default class ReviewsCard extends Component {
       submitDate,
     } = this.props;
 
-    const careCruReviews = data.filter(r => r.icon === 'CareCru');
+    const careCruReviews = data.filter(isCareCruReview);
     const ccLength = careCruReviews.length;
 
     const UserMenu = props => (
@@ -83,28 +85,28 @@ export default class ReviewsCard extends Component {
           <div className={styles.reviewsComments__container}>
             <Col xs={12} md={12} className={styles.reviewsComments__comment}>
               {data.length ? data.map((obj, i) => {
-                  return (
-                    <BigCommentBubble
-                      key={i}
-                      sourceName={obj.icon}
-                      icon={companyIcons[obj.icon]}
-                      iconColor={obj.iconColor}
-                      background={obj.background}
-                      iconAlign={obj.iconAlign}
-                      headerLinkName={obj.headerLinkName}
-                      headerLinkSite={obj.headerLinkSite}
-                      siteStars={obj.siteStars}
-                      siteTitle={obj.siteTitle}
-                      sitePreview={obj.sitePreview}
-                      createdAt={obj.publishedDate}
-                      requiredAction={obj.requiredAction}
-                      url={obj.url}
-                      reviewerUrl={obj.reviewerUrl}
-                      onClickHowTo={this.toggleHowTo}
-                    />
-                  );
-                }) :
-                <div className={styles.clearedReviews}>Please Remove a Filter Option or Increase the Date Range.</div>}
+                const isCC = isCareCruReview(obj);
+                return (
+                  <BigCommentBubble
+                    key={`${i}_reviewBubble`}
+                    sourceName={obj.icon}
+                    icon={companyIcons[obj.icon]}
+                    iconColor={obj.iconColor}
+                    background={obj.background}
+                    iconAlign={obj.iconAlign}
+                    headerLinkName={obj.headerLinkName}
+                    headerLinkSite={obj.headerLinkSite}
+                    siteStars={obj.siteStars}
+                    siteTitle={obj.siteTitle}
+                    sitePreview={obj.sitePreview}
+                    createdAt={obj.publishedDate}
+                    requiredAction={!isCC && obj.requiredAction}
+                    url={obj.url}
+                    reviewerUrl={obj.reviewerUrl}
+                    onClickHowTo={this.toggleHowTo}
+                  />
+                );
+              }) : <div className={styles.clearedReviews}>Please Remove a Filter Option or Increase the Date Range.</div>}
             </Col>
           </div>
         </div>
@@ -113,6 +115,7 @@ export default class ReviewsCard extends Component {
           active={this.state.isHowToActive}
           title={`How to Respond to ${capitalize(this.state.sentiment)} Reviews`}
           actions={[{
+            props: { border: 'blue' },
             component: Button,
             onClick: () => this.toggleHowTo(),
             label: 'Close',

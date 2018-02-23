@@ -11,11 +11,11 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
 import { Appointment, Chat, Patient, Event } from '../../../_models';
-import { fetchAppointmentEvents } from '../../../lib/events/Appointments/';
-import { fetchSentReminderEvents } from '../../../lib/events/SentReminders/';
-import { fetchCallEvents } from '../../../lib/events/Calls/index';
-import { fetchRequestEvents } from '../../../lib/events/Requests/index';
-import { fetchReviewEvents } from '../../../lib/events/Reviews/index';
+import { fetchAppointmentEvents } from '../../../lib/events/Appointments';
+import { fetchSentReminderEvents } from '../../../lib/events/SentReminders';
+import { fetchCallEvents } from '../../../lib/events/Calls';
+import { fetchRequestEvents } from '../../../lib/events/Requests';
+import { fetchReviewEvents } from '../../../lib/events/Reviews';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 
@@ -584,10 +584,10 @@ patientsRouter.post('/', async (req, res, next) => {
     // Dispatch socket event
     const io = req.app.get('socketio');
     const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-    io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
-    return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
+    io && io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
+    return io && io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
   } catch (e) {
-    if (e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
+    if (e.errors && e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
       const patient = e.errors[0].message.model.dataValues;
 
       const normalizedPatient = format(req, res, 'patient', patient);
@@ -596,8 +596,8 @@ patientsRouter.post('/', async (req, res, next) => {
       // Dispatch socket event
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-      io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
-      return io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
+      io && io.of(ns).in(accountId).emit('CREATE:Patient', patient.id);
+      return io && io.of(ns).in(accountId).emit('create:Patient', normalizedPatient);
     }
     return next(e);
   }
@@ -822,8 +822,8 @@ patientsRouter.delete('/:patientId', checkPermissions('patients:delete'), (req, 
       const io = req.app.get('socketio');
       const ns = patient.isSyncedWithPms ? namespaces.dash : namespaces.sync;
       const normalized = format(req, res, 'patient', patient.get({ plain: true }));
-      io.of(ns).in(accountId).emit('DELETE:Patient', patient.id);
-      return io.of(ns).in(accountId).emit('remove:Patient', normalized);
+      io && io.of(ns).in(accountId).emit('DELETE:Patient', patient.id);
+      return io && io.of(ns).in(accountId).emit('remove:Patient', normalized);
     })
     .catch(next);
 });
