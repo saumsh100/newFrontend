@@ -409,6 +409,7 @@ class PatientTable extends Component {
           return (
             <HygieneColumn
               patient={props.original}
+              showTable
             />
           );
         },
@@ -432,6 +433,7 @@ class PatientTable extends Component {
           return (
             <RecallColumn
               patient={props.original}
+              showTable
             />
           );
         },

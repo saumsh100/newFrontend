@@ -9,12 +9,15 @@ export default function HygieneColumn(props) {
   const {
     patient,
     className,
+    showTable,
   } = props;
 
   const lastApptDate = moment(patient.lastHygieneDate);
 
-  if (!lastApptDate.isValid()) {
+  if (!lastApptDate.isValid() && !showTable) {
     return null;
+  } else if (!lastApptDate.isValid() && showTable) {
+    return <div className={styles.displayFlex}> - </div>;
   }
 
   const hygieneDate = moment(lastApptDate).add(6, 'months');

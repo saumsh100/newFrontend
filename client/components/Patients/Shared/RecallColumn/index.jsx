@@ -10,12 +10,15 @@ export default function RecallColumn(props) {
   const {
     patient,
     className,
+    showTable,
   } = props;
 
   const lastRecallDate = moment(patient.lastRecallDate);
 
-  if (!lastRecallDate.isValid()) {
+  if (!lastRecallDate.isValid() && !showTable) {
     return null;
+  } else if (!lastRecallDate.isValid() && showTable) {
+    return <div className={styles.displayFlex}> - </div>;
   }
   const months = moment().diff(lastRecallDate, 'months');
   const weeks = moment().diff(lastRecallDate, 'weeks');
