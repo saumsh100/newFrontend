@@ -65,7 +65,6 @@ class EditDisplay extends Component {
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
 
-
     updateEntityRequest({
       key: 'patients',
       model: modifiedPatient,
@@ -119,7 +118,6 @@ class EditDisplay extends Component {
       },
     ];
 
-    console.log(this.state.tabIndex)
     return (
       <div className={styles.mainContainer}>
         <DialogBox
