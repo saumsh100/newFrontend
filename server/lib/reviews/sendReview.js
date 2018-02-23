@@ -79,10 +79,6 @@ export default {
           name: 'PATIENT_FIRSTNAME',
           content: patient.firstName,
         },
-        {
-          name: 'PRACTITIONER_URL',
-          content: practitioner.fullAvatarUrl || account.fullLogoUrl,
-        },
       ].concat(stars),
     });
   },
