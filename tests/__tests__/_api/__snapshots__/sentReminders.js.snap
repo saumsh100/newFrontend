@@ -17,6 +17,7 @@ Object {
         "isPatientConfirmed": false,
         "isPending": false,
         "isPreConfirmed": null,
+        "isRecall": null,
         "isReminderSent": true,
         "isShortCancelled": false,
         "isSyncedWithPms": false,

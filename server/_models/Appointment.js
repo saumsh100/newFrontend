@@ -137,7 +137,11 @@ export default function (sequelize, DataTypes) {
 
     estimatedRevenue: {
       type: DataTypes.FLOAT,
-    }
+    },
+
+    isRecall: {
+      type: DataTypes.BOOLEAN,
+    },
   });
 
   Appointment.associate = (models) => {

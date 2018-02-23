@@ -40,7 +40,8 @@ const ModelAttributes = {
     'deletedAt',
     'reason',
     'isPreConfirmed',
-    'estimatedRevenue'
+    'estimatedRevenue',
+    'isRecall'
   ],
 
   Chair: [
