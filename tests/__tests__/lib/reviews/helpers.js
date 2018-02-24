@@ -95,20 +95,20 @@ describe('Reviews Calculation Library', () => {
 
       describe('Basic Tests, default endDate', () => {
         test('should return the 1 appt for Dustin', async () => {
-          const startDate = date(2017, 7, 5, 11);
+          const startDate = date(2017, 7, 5, 9, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
           expect(appts[0].patientId).toBe(patients[0].id);
         });
 
         test('should return the 0 appts cause no endDate in the range', async () => {
-          const startDate = date(2017, 7, 5, 10);
+          const startDate = date(2017, 7, 5, 8, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(0);
         });
 
         test('should return the 2 10am appts for Ethan and Donald', async () => {
-          const startDate = date(2017, 7, 5, 13);
+          const startDate = date(2017, 7, 5, 11, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(2);
 
@@ -118,7 +118,7 @@ describe('Reviews Calculation Library', () => {
         });
 
         test('should return 1 9am appt for Frank', async () => {
-          const startDate = date(2017, 7, 5, 12);
+          const startDate = date(2017, 7, 5, 10, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
           expect(appts[0].patientId).toBe(patients[1].id);
@@ -138,13 +138,13 @@ describe('Reviews Calculation Library', () => {
         });
 
         test('should not return the 8am appt because Dustin has another one at 9', async () => {
-          const startDate = date(2017, 7, 5, 11);
+          const startDate = date(2017, 7, 5, 9, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(0);
         });
 
         test('should return the 9am appt because its the latest one Dustin has', async () => {
-          const startDate = date(2017, 7, 5, 11, 30);
+          const startDate = date(2017, 7, 5, 9, 45);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
           expect(appts[0].patientId).toBe(patients[0].id);
@@ -163,7 +163,7 @@ describe('Reviews Calculation Library', () => {
         });
 
         test('should return ONE appt at 8am appt', async () => {
-          const startDate = date(2017, 7, 5, 11);
+          const startDate = date(2017, 7, 5, 9, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
         });
@@ -232,13 +232,13 @@ describe('Reviews Calculation Library', () => {
         });
 
         test('should not return appt for Dustin cause he has already sentReview', async () => {
-          const startDate = date(2017, 7, 5, 11);
+          const startDate = date(2017, 7, 5, 9, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(0);
         });
 
         test('should return the 1 10am appt for Frank because Ethan already left a review', async () => {
-          const startDate = date(2017, 7, 5, 13);
+          const startDate = date(2017, 7, 5, 11, 15);
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
           expect(appts[0].patientId).toBe(patients[3].id);
