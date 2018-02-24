@@ -79,7 +79,7 @@ function recallSentHandler(recallSentSocket, io) {
 async function convertRecallsToCorrespondences(recallsSent) {
   const recallsCreate = [];
   for (let i = 0; i < recallsSent.length; i += 1) {
-    const recall = recallSent[i];
+    const recall = recallsSent[i];
     const appointmentId = await bumpPendingAppointment(recall.id);
     recallsCreate.push({
       accountId: recall.accountId,
