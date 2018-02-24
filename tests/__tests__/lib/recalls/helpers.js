@@ -14,6 +14,7 @@ import {
   getRecallsOutboxList,
   getPatientsDueForRecall,
   shouldSendRecall,
+  removeRecallDuplicates,
   getPatientsForRecallTouchPoint,
 } from '../../../../server/lib/recalls/helpers';
 import { wipeAllModels } from '../../../_util/wipeModel';
@@ -109,6 +110,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2016, 10, 5, 8),
@@ -168,6 +170,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 8),
@@ -189,6 +192,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 7),
@@ -209,6 +213,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 6, 7),
@@ -231,6 +236,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 6, 8),
@@ -247,6 +253,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2017, 0, 1, 9),
         });
@@ -255,9 +262,9 @@ describe('Recalls Calculation Library', () => {
       });
     });
 
-    // tests recalls with the right range using contCareInterval
-    // they should be sent based on lasthygieneAppDate + contCareInterval - recallinterval
-    describe('#getPatientsForRecallTouchPoint - contCareInterval', () => {
+    // tests recalls with the right range using insuranceInterval
+    // they should be sent based on lasthygieneAppDate + insuranceInterval - recallinterval
+    describe('#getPatientsForRecallTouchPoint - insuranceInterval', () => {
       let recalls;
       let patients;
       let appointments;
@@ -271,7 +278,7 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         patients = await Patient.bulkCreate([
-          makePatientData({ firstName: 'Old', lastName: 'Patient', status: 'Active', lastHygieneDate: date(2016, 7, 5, 9), contCareInterval: '6 months' }),
+          makePatientData({ firstName: 'Old', lastName: 'Patient', status: 'Active', lastHygieneDate: date(2016, 7, 5, 9), insuranceInterval: '6 months' }),
         ]);
 
         appointments = await Appointment.bulkCreate([
@@ -285,7 +292,7 @@ describe('Recalls Calculation Library', () => {
 
       // note that the recall start range is 8 am, but last hygiene is at 9 am. This is because we are crossing over
       // Daylight savings.
-      test('contCareInterval - should return 1 patient for the recall when on the start of the recall range', async () => {
+      test('insuranceInterval - should return 1 patient for the recall when on the start of the recall range', async () => {
         const result = await getPatientsForRecallTouchPoint({
           recall: {
             interval: '1 months',
@@ -294,6 +301,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 8),
@@ -305,7 +313,7 @@ describe('Recalls Calculation Library', () => {
       });
 
 
-      test('contCareInterval - should return 1 patient for the recall when on the start of the recall range with negative interval', async () => {
+      test('insuranceInterval - should return 1 patient for the recall when on the start of the recall range with negative interval', async () => {
         const result = await getPatientsForRecallTouchPoint({
           recall: {
             interval: '-1 months',
@@ -314,6 +322,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 2, 5, 8),
@@ -326,7 +335,7 @@ describe('Recalls Calculation Library', () => {
 
       // note that the recall start range is 8 am, but last hygiene is at 9 am. This is because we are crossing over
       // Daylight savings.
-      test('contCareInterval - should return 0 patient for the recall when 1 hour before of the recall range', async () => {
+      test('insuranceInterval - should return 0 patient for the recall when 1 hour before of the recall range', async () => {
         const result = await getPatientsForRecallTouchPoint({
           recall: {
             interval: '1 months',
@@ -335,6 +344,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 7),
@@ -346,7 +356,7 @@ describe('Recalls Calculation Library', () => {
       // note that the recall end range is 8 am, but last hygiene is at 9 am. This is because we are crossing over
       // Daylight savings.
       // The end shouldn't be inclusive so that we don't send twice if it falls in it
-      test('contCareInterval - should return 1 patient for the recall when is 1 hour shy of end of the recall range', async () => {
+      test('insuranceInterval - should return 1 patient for the recall when is 1 hour shy of end of the recall range', async () => {
         const result = await getPatientsForRecallTouchPoint({
           recall: {
             interval: '1 months',
@@ -355,6 +365,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 6, 7),
@@ -368,7 +379,7 @@ describe('Recalls Calculation Library', () => {
       // note that the recall end range is 8 am, but last hygiene is at 9 am. This is because we are crossing over
       // Daylight savings.
       // The end shouldn't be inclusive so that we don't send twice if it falls in it
-      test('contCareInterval - should return 0 patient for the recall when on the end of the recall range', async () => {
+      test('insuranceInterval - should return 0 patient for the recall when on the end of the recall range', async () => {
         const result = await getPatientsForRecallTouchPoint({
           recall: {
             interval: '1 months',
@@ -377,6 +388,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 6, 8),
@@ -385,7 +397,7 @@ describe('Recalls Calculation Library', () => {
         expect(result.length).toBe(0);
       });
 
-      test('contCareInterval - should return 0 patients for the recall when 1 day before the 5 months needs for recall', async () => {
+      test('insuranceInterval - should return 0 patients for the recall when 1 day before the 5 months needs for recall', async () => {
         const result = await getPatientsForRecallTouchPoint({
           recall: {
             interval: '1 months',
@@ -393,6 +405,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2017, 0, 1, 9),
         });
@@ -451,6 +464,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 9),
@@ -510,6 +524,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 9),
@@ -569,6 +584,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 9),
@@ -634,6 +650,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallBuffer: '1 days',
           },
 
           startDate: date(2017, 0, 5, 9),
@@ -677,6 +694,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
           endDate: date(2018, 2, 8, 8),
@@ -719,7 +737,7 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         patients = await Patient.bulkCreate([
-          makePatientData({ firstName: 'Old', email: 'hello@hello.com', lastName: 'Patient', status: 'Active', lastHygieneDate: date(2016, 7, 5, 9), contCareInterval: '6 months' }),
+          makePatientData({ firstName: 'Old', email: 'hello@hello.com', lastName: 'Patient', status: 'Active', lastHygieneDate: date(2016, 7, 5, 9), insuranceInterval: '6 months' }),
         ]);
 
         appointments = await Appointment.bulkCreate([
@@ -738,6 +756,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2016, 0, 1, 9),
           endDate: date(2017, 8, 8, 9),
@@ -756,6 +775,7 @@ describe('Recalls Calculation Library', () => {
             id: accountId,
             hygieneInterval: '10 months',
             timezone: 'America/New_York',
+            recallBuffer: '1 days',
           },
           startDate: date(2016, 0, 1, 9),
           endDate: date(2017, 8, 8, 9),
@@ -763,7 +783,7 @@ describe('Recalls Calculation Library', () => {
 
         expect(result[0].patient.firstName).toBe('Old');
         expect(result[0].patient.lastName).toBe('Patient');
-        expect(result[0].sendDate).toBe(date(2017, 0, 5, 14));
+        expect(result[0].sendDate).toBe('2017-01-05T22:00:00.000Z');
         expect(result.length).toBe(1);
       });
     });
@@ -806,6 +826,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 8),
           endDate: date(2018, 2, 3, 8),
@@ -824,6 +845,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
           endDate: date(2018, 2, 3, 8),
@@ -845,6 +867,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
           endDate: date(2018, 2, 8, 8),
@@ -871,6 +894,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 9),
           endDate: date(2018, 2, 2, 10),
@@ -897,6 +921,162 @@ describe('Recalls Calculation Library', () => {
         expect(result.length).toBe(1);
       });
     });
+
+
+    describe('#getPatientsForRecallTouchPoint - ranged tests with multiple patients - lastRecallDate', () => {
+      let recalls;
+      let patients;
+      let appointments;
+      beforeEach(async () => {
+        recalls = await Recall.bulkCreate([
+          {
+            accountId,
+            primaryTypes: ['email'],
+            interval: '1 months',
+            lengthSeconds: w2s(-1),
+          },
+        ]);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', email: 'hello1@hello.com', lastName: 'Denver', status: 'Active', lastRecallDate: date(2018, 0, 1, 8) }),
+          makePatientData({ firstName: 'Carol', email: 'hello2@hello.com', lastName: 'Heine', status: 'Active', lastRecallDate: date(2018, 0, 2, 8) }),
+          makePatientData({ firstName: 'Beth', email: 'hello3@hello.com', lastName: 'Berth', status: 'Active', lastRecallDate: date(2018, 0, 2, 17) }),
+          makePatientData({ firstName: 'Herbie', email: 'hello4@hello.com', lastName: 'Hancock', status: 'Active', lastRecallDate: date(2018, 0, 3, 18) }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+        ]);
+      });
+
+      afterAll(async () => {
+        await wipeAllModels();
+      });
+
+      test('should return Carol Heine and Not John as the StartDate is exclusive and End Date is Inclusive', async () => {
+        const result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+            recallBuffer: '1 days',
+          },
+          startDate: date(2018, 2, 2, 8),
+          endDate: date(2018, 2, 3, 8),
+        });
+
+        expect(result[0].firstName).toBe('Carol');
+        expect(result[0].lastName).toBe('Heine');
+        expect(result.length).toBe(1);
+      });
+
+      test('should return Carol Heine and John when startDate is before John\'s lastHygieneDate', async () => {
+        let result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+          },
+          startDate: date(2018, 2, 2, 7),
+          endDate: date(2018, 2, 3, 8),
+        });
+        result = result.sort((a, b) => moment(a.lastRecallDate).isAfter(b.lastRecallDate));
+
+        expect(result[0].firstName).toBe('John');
+        expect(result[0].lastName).toBe('Denver');
+        expect(result[1].firstName).toBe('Carol');
+        expect(result[1].lastName).toBe('Heine');
+        expect(result.length).toBe(2);
+      });
+
+      test('should return John, Carol, Beth and Herbie when the range includes all their Due Dates', async () => {
+        let result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+            recallBuffer: '1 days',
+          },
+          startDate: date(2018, 2, 2, 7),
+          endDate: date(2018, 2, 8, 8),
+        });
+
+        result = result.sort((a, b) => moment(a.lastRecallDate).isAfter(b.lastRecallDate));
+
+        expect(result[0].firstName).toBe('John');
+        expect(result[0].lastName).toBe('Denver');
+        expect(result[1].firstName).toBe('Carol');
+        expect(result[1].lastName).toBe('Heine');
+        expect(result[2].firstName).toBe('Beth');
+        expect(result[2].lastName).toBe('Berth');
+        expect(result[3].firstName).toBe('Herbie');
+        expect(result[3].lastName).toBe('Hancock');
+        expect(result.length).toBe(4);
+      });
+
+      test('should return none when range doesn\'t include anyone\'s due for hygiene date', async () => {
+        const result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+            recallBuffer: '1 days',
+          },
+          startDate: date(2018, 2, 2, 9),
+          endDate: date(2018, 2, 2, 10),
+        });
+
+        expect(result.length).toBe(0);
+      });
+    });
+
+    describe('#removeRecallDuplicates', () => {
+      test('should be a function', () => {
+        expect(typeof removeRecallDuplicates).toBe('function');
+      });
+
+      test('should return one with duplicates with it being hygiene', async () => {
+        const patient1 = {
+          get: () => {
+            return { id: '5' };
+          },
+        };
+
+        const result = removeRecallDuplicates([patient1], [patient1]);
+
+        expect(result.length).toBe(1);
+        expect(result[0].hygiene).toBe(true);
+      });
+
+      test('should return two with duplicates with one hygiene and one recall that are unique patients', async () => {
+        const patient1 = {
+          get: () => {
+            return { id: '5' };
+          },
+        };
+
+        const patient2 = {
+          get: () => {
+            return { id: '7' };
+          },
+        };
+
+        const result = removeRecallDuplicates([patient1], [patient2]);
+
+        expect(result.length).toBe(2);
+        expect(result[0].hygiene).toBe(true);
+        expect(result[1].hygiene).toBe(false);
+      });
+    });
+
   });
 });
 

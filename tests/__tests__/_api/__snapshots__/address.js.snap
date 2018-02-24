@@ -46,6 +46,7 @@ Object {
         "logo": null,
         "name": "Test Account 2",
         "phoneNumber": null,
+        "recallBuffer": "1 days",
         "recallInterval": "6 months",
         "sendRequestEmail": true,
         "syncClientAdapter": null,

@@ -53,6 +53,7 @@ Array [
       "firstName": "Old",
       "gender": null,
       "homePhoneNumber": null,
+      "hygiene": true,
       "insurance": null,
       "insuranceInterval": null,
       "isDeleted": false,

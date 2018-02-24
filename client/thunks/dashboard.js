@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {
   setLoading,
   setInsights,
@@ -49,11 +49,18 @@ export function fetchDonnasToDos(index) {
     const {
       auth,
       dashboard,
+      entities,
     } = getState();
 
     const currentDate = moment(dashboard.toJS().dashboardDate);
-    const startDate = currentDate.startOf('day').toISOString();
-    const endDate = currentDate.endOf('day').toISOString();
+    let startDate = currentDate.startOf('day').toISOString();
+    let endDate = currentDate.endOf('day').toISOString();
+    const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+
+    if (account.timezone) {
+      startDate = moment.tz(currentDate, account.timezone).startOf('day').toISOString();
+      endDate = moment.tz(currentDate, account.timezone).endOf('day').toISOString();
+    }
 
     if (toDoFunctions[index]) {
       const accountId = auth.get('accountId');

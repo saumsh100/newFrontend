@@ -2,6 +2,7 @@
 import moment from 'moment';
 import 'moment-timezone';
 import omit from 'lodash/omit';
+import uniqBy from 'lodash/uniqBy';
 import GLOBALS from '../../config/globals';
 import {
   Appointment,
@@ -78,12 +79,19 @@ export function organizeRecallsOutboxList(outboxList, recall, account) {
   return result.map((p) => {
     p.recall = recall;
 
-    const dateWithZone = account.timezone ? moment.tz(p.patient.lastHygieneDate, account.timezone)
-    : moment(p.patient.lastHygieneDate);
+    let dateWithZone;
+
+    if (p.patient.hygiene) {
+      dateWithZone = account.timezone ? moment.tz(p.patient.lastHygieneDate, account.timezone)
+        : moment(p.patient.lastHygieneDate);
+    } else {
+      dateWithZone = account.timezone ? moment.tz(p.patient.lastRecallDate, account.timezone)
+        : moment(p.patient.lastHygieneDate);
+    }
 
     p.sendDate = dateWithZone
       .add(1, 'days')
-      .add(convertIntervalStringToObject(p.patient.contCareInterval || account.hygieneInterval))
+      .add(convertIntervalStringToObject(p.patient.insuranceInterval || account.hygieneInterval))
       .subtract(convertIntervalStringToObject(recall.interval))
       // we subtract the global hours and minutes, so that we get the correct date
       // the recall will run at.
@@ -162,15 +170,15 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
 
   if (!endDate) {
     startDate = moment(startDate).toISOString();
-    endDate = moment(startDate).add(1, 'days').toISOString();
+    endDate = moment(startDate).add(convertIntervalStringToObject(account.recallBuffer)).toISOString();
   }
 
-  const patientsWithInterval = await Patient.findAll({
+  const patientsHygieneWithInterval = await Patient.findAll({
     where: sequelize.and({
       accountId: account.id,
       status: 'Active',
       nextApptDate: null,
-      contCareInterval: {
+      insuranceInterval: {
         $ne: null,
       },
       lastHygieneDate: {
@@ -179,8 +187,8 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
       preferences: {
         recalls: true,
       },
-    }, sequelize.literal(`'${endDate}' >= ("lastHygieneDate" + INTERVAL '1 days' + "contCareInterval"::Interval - INTERVAL '${recall.interval}')`),
-    sequelize.literal(`'${startDate}' < ("lastHygieneDate" + INTERVAL '1 days' + "contCareInterval"::Interval - INTERVAL '${recall.interval}')`)),
+    }, sequelize.literal(`'${endDate}' >= ("lastHygieneDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`),
+    sequelize.literal(`'${startDate}' < ("lastHygieneDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`)),
     include: [{
       model: SentRecall,
       as: 'sentRecalls',
@@ -194,12 +202,12 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
     }],
   });
 
-  const patientsWithOutInterval = await Patient.findAll({
+  const patientsHygieneWithOutInterval = await Patient.findAll({
     where: sequelize.and({
       accountId: account.id,
       status: 'Active',
       nextApptDate: null,
-      contCareInterval: null,
+      insuranceInterval: null,
       lastHygieneDate: {
         $ne: null,
       },
@@ -221,8 +229,94 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
     }],
   });
 
-  const patients = patientsWithInterval.concat(patientsWithOutInterval);
+  const patientsRecallWithInterval = await Patient.findAll({
+    where: sequelize.and({
+      accountId: account.id,
+      status: 'Active',
+      nextApptDate: null,
+      insuranceInterval: {
+        $ne: null,
+      },
+      lastRecallDate: {
+        $ne: null,
+      },
+      preferences: {
+        recalls: true,
+      },
+    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`),
+    sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`)),
+    include: [{
+      model: SentRecall,
+      as: 'sentRecalls',
+      where: {
+        isSent: true,
+        createdAt: {
+          $gt: twoWeeksAgo._d,
+        },
+      },
+      required: false,
+    }],
+  });
+
+  const patientsRecallWithOutInterval = await Patient.findAll({
+    where: sequelize.and({
+      accountId: account.id,
+      status: 'Active',
+      nextApptDate: null,
+      insuranceInterval: null,
+      lastRecallDate: {
+        $ne: null,
+      },
+      preferences: {
+        recalls: true,
+      },
+    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.hygieneInterval}' - INTERVAL '${recall.interval}')`),
+    sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.hygieneInterval}' - INTERVAL '${recall.interval}')`)),
+    include: [{
+      model: SentRecall,
+      as: 'sentRecalls',
+      where: {
+        isSent: true,
+        createdAt: {
+          $gt: twoWeeksAgo._d,
+        },
+      },
+      required: false,
+    }],
+  });
+
+  const patientsHygiene = patientsHygieneWithInterval.concat(patientsHygieneWithOutInterval);
+  const patientsRecall = patientsRecallWithInterval.concat(patientsRecallWithOutInterval);
+  const patients = removeRecallDuplicates(patientsHygiene, patientsRecall);
+
   return shouldSendRecall(patients);
+}
+
+/**
+ * [removeRecallDuplicates removes duplicate patients and adds a flag to whether
+ * the patient's recall is due to hygiene or recall]
+ * @param  {[array]} patientsHygiene [recalls due from lastHygieneDate]
+ * @param  {[array]} patientsRecall  [recalls due from lastRecallDate]
+ * @return {[array]}                 [resulting array]
+ */
+export function removeRecallDuplicates(patientsHygiene, patientsRecall) {
+  patientsHygiene = patientsHygiene.map((ph) => {
+    return {
+      ...ph.get({ plain: true }),
+      hygiene: true,
+    };
+  });
+
+  patientsRecall = patientsRecall.map((ph) => {
+    return {
+      ...ph.get({ plain: true }),
+      hygiene: false,
+    };
+  });
+
+  const patients = patientsHygiene.concat(patientsRecall);
+
+  return uniqBy(patients, 'id');
 }
 
 export function shouldSendRecall(patients) {

@@ -152,6 +152,12 @@ export default function (sequelize, DataTypes) {
       defaultValue: '6 months',
     },
 
+    recallBuffer: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '1 days',
+    },
+
     bumpInterval: {
       type: DataTypes.STRING,
       allowNull: false,
