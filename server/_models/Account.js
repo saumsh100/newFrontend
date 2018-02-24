@@ -151,6 +151,12 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '6 months',
     },
+
+    bumpInterval: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '2 weeks',
+    },
   });
 
   Account.associate = (models) => {

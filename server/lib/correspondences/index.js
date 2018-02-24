@@ -17,6 +17,7 @@ import {
   reviewCompleted,
 } from './correspondenceNote';
 import batchCreate from '../../routes/util/batch';
+import bumpPendingAppointment from './bumpPendingAppointment';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
   let correspondences = await Correspondence.findAll({
@@ -125,17 +126,22 @@ async function computeRecallsCorrespondencesAndCreate(accountId) {
     },
   });
 
-  const correspondencesToCreate = sentRecalls.map((recall) => {
-    return {
+  const correspondencesToCreate = [];
+  for (let i = 0; i < sentRecalls.length; i += 1) {
+    const recall = sentRecalls[i];
+    const appointmentId = await bumpPendingAppointment(recall.id);
+
+    correspondencesToCreate.push({
       accountId: recall.accountId,
       patientId: recall.patientId,
       sentRecallId: recall.id,
+      appointmentId,
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
       note: recallSent(recall),
-    };
-  });
+    });
+  }
 
   correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
 

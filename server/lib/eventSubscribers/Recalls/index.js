@@ -3,6 +3,7 @@ import { namespaces } from '../../../config/globals';
 import { SentRecall, Correspondence } from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
 import { recallSent } from '../../correspondences/correspondenceNote';
+import bumpPendingAppointment from '../../correspondences/bumpPendingAppointment';
 
 /**
  * Create correspondences from 'data', which contains ids of recalls sent.
@@ -36,7 +37,7 @@ function recallSentHandler(recallSentSocket, io) {
         return !sentRecallIdsCheck.includes(s.id);
       });
 
-      const correspondencesToCreate = convertRecallsToCorrespondences(recallsSent);
+      const correspondencesToCreate = await convertRecallsToCorrespondences(recallsSent);
 
       correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
     } catch (error) {
@@ -75,18 +76,23 @@ function recallSentHandler(recallSentSocket, io) {
  * @param {*} recallsSent
  * @return array of Correspondences to be created in the db
  */
-function convertRecallsToCorrespondences(recallsSent) {
-  return recallsSent.map(recall => Object.assign(
-    {},
-    {
+async function convertRecallsToCorrespondences(recallsSent) {
+  const recallsCreate = [];
+  for (let i = 0; i < recallsSent.length; i += 1) {
+    const recall = recallSent[i];
+    const appointmentId = await bumpPendingAppointment(recall.id);
+    recallsCreate.push({
       accountId: recall.accountId,
       patientId: recall.patientId,
       sentRecallId: recall.id,
+      appointmentId,
       type: Correspondence.RECALL_SENT_TYPE,
       method: recall.primaryType,
       contactedAt: recall.createdAt,
       note: recallSent(recall),
-    }));
+    });
+  }
+  return recallsCreate;
 }
 
 /**

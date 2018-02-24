@@ -62,13 +62,16 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
   for (i = 0; i < recalls.length; i++) {
     const recall = recalls[i];
     const { errors, success } = recallsPatients[i];
-    const { primaryType, lengthSeconds } = recall;
+    const { primaryTypes, interval } = recall;
 
     try {
-      console.log(`Trying to bulkSave ${errors.length} ${primaryType}_${lengthSeconds} failed sentRecalls for ${name}...`);
+      const recallName = `'${interval} ${primaryTypes.join(' & ')}'`;
+
+      console.log(`-- Sending ${recallName} reminder...`);
+      console.log(`---- ${errors.length} => sentRecalls that would fail`);
 
       // Save failed sentRecalls from errors
-      const failedSentRecalls = errors.map(({ errorCode, patient }) => ({
+      const failedSentRecalls = errors.map(({ errorCode, patient, primaryType }) => ({
         recallId: recall.id,
         accountId: account.id,
         patientId: patient.id,
@@ -78,7 +81,6 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
       }));
 
       await SentRecall.bulkCreate(failedSentRecalls);
-      console.log(`${errors.length} ${primaryType}_${lengthSeconds} failed sentRecalls saved!`);
     } catch (err) {
       console.error(`FAILED bulkSave of failed sentRecalls`, err);
       // TODO: do we want to throw the error hear and ignore trying to send?
@@ -87,16 +89,16 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
     // Save ids of recalls sent as we are sending them
     const sentRecallsIds = [];
 
-    console.log(`Trying to send ${success.length} ${primaryType}_${lengthSeconds} recalls for ${name}`);
-    for (const patient of success) {
+    console.log(`---- ${success.length} => recall that should succeed`);
+    for (const { patient, primaryType } of success) {
       // Check if latest appointment is within the recall window
-      const { appointments } = patient;
-      const lastAppointment = appointments[appointments.length - 1];
+      //
       const sentRecall = await SentRecall.create({
         recallId: recall.id,
         accountId: account.id,
         patientId: patient.id,
         lengthSeconds: recall.lengthSeconds,
+        interval: recall.interval,
         primaryType,
       });
 
@@ -104,11 +106,11 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
         await sendRecall[primaryType]({
           patient,
           account,
-          lastAppointment,
+          lastAppointment: {},
         });
       } catch (error) {
         console.log(`${primaryType} recall NOT SENT to ${patient.firstName} ${patient.lastName} for ${name} because:`);
-        console.error(err);
+        console.error(error);
         continue;
       }
 
