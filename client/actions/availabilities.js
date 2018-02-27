@@ -25,6 +25,8 @@ import {
   UPDATE_WAITSPOT,
   SET_FORGOT_PASSWORD,
   SET_NOTES,
+  SET_SENTRECALLID,
+  SET_DUE_DATE,
 } from '../constants';
 
 export const sixDaysShiftAction  = createAction(SIX_DAYS_SHIFT);
@@ -50,6 +52,8 @@ export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_ST
 export const setHasWaitList = createAction(SET_HAS_WAITLIST);
 export const updateWaitSpot = createAction(UPDATE_WAITSPOT);
 export const setNotes = createAction(SET_NOTES);
+export const setSentRecallId = createAction(SET_SENTRECALLID);
+export const setDueDate = createAction(SET_DUE_DATE);
 
 // This is on the auth reducer!
 export const setPatientUser = createAction(SET_PATIENT_USER);

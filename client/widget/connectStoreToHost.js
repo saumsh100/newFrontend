@@ -1,7 +1,14 @@
 
 import Client from  'ifrau/client';
 import { push } from 'react-router-redux';
-import { mergeReviewValues, mergeSentReviewValues } from '../reducers/reviewsWidget';
+import {
+  mergeReviewValues,
+  mergeSentReviewValues,
+} from '../reducers/reviewsWidget';
+import {
+  setSentRecallId,
+  setDueDate,
+} from '../actions/availabilities';
 
 const allowedRoutes = {
   book: true,
@@ -50,6 +57,16 @@ export default function connectStoreToHost(store) {
   client.onEvent('mergeSentReviewValues', (values) => {
     // used to route
     store.dispatch(mergeSentReviewValues(values));
+  });
+
+  client.onEvent('setSentRecallId', (sentRecallId) => {
+    // used to route
+    store.dispatch(setSentRecallId(sentRecallId));
+  });
+
+  client.onEvent('setDueDate', (dueDate) => {
+    // used to route
+    store.dispatch(setDueDate(dueDate));
   });
 
   window.iframeClient = client;

@@ -2,8 +2,10 @@
 import twilio from '../../config/twilio';
 import moment from 'moment';
 import { host } from '../../config/globals';
-import { sendPatientRecall } from '../mail';
+import { sendTemplate } from '../mail';
+import createRecallText from './createRecallText';
 import { buildAppointmentEvent } from '../ics';
+import compressUrl from '../../util/compressUrl';
 
 const BASE_URL = `https://${host}/twilio/voice/reminders`;
 const createReminderText = ({ patient, account, appointment }) => (`
@@ -23,17 +25,54 @@ const generateCallBackUrl = ({ account, appointment, patient }) => {
        startTime=${startTime}`;
 };
 
+const recallIntervalToTemplate = {
+  '1 weeks': 'Patient Recall - 1 Week Before',
+  '1 months': 'Patient Recall - 1 Months Before',
+  '-1 weeks': 'Patient Recall - 1 Week After',
+  '-1 months': 'Patient Recall - 1 Months After',
+  '-2 months': 'Patient Recall - 2 Months After',
+  '-4 months': 'Patient Recall - 4 Months After',
+  '-6 months': 'Patient Recall - 6 Months After',
+  '-8 months': 'Patient Recall - 8 Months After',
+  '-10 months': 'Patient Recall - 10 Months After',
+  '-12 months': 'Patient Recall - 12 Months After',
+  '-14 months': 'Patient Recall - 14 Months After',
+  '-16 months': 'Patient Recall - 16 Months After',
+  '-18 months': 'Patient Recall - 18 Months After',
+};
+
+const generateBookingUrl = ({ account, sentRecall, dueDate }) => {
+  return `${account.website}?cc=book&sentRecallId=${encodeURIComponent(sentRecall.id)}&dueDate=${encodeURIComponent(dueDate)}`;
+};
+
 export default {
+  // Send Appointment Reminder text via Twilio
+  async sms({ account, patient, sentRecall, recall, dueDate }) {
+    // TODO: add phoneNumber logic for patient
+    const longLink = generateBookingUrl({ account, sentRecall, dueDate });
+    const shortLink = await compressUrl(longLink);
+    const link = `https://${shortLink}`;
+
+    return twilio.sendMessage({
+      to: patient.mobilePhoneNumber,
+      from: account.twilioPhoneNumber,
+      body: createRecallText({ patient, account, sentRecall, recall, link }),
+    });
+  },
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, lastAppointment, patient }) {
+  email({ account, lastAppointment, dueDate, recall, patient, sentRecall }) {
     if (!patient.email) {
       throw new Error(`patient with id=${patient.id} does not have an email`);
     }
 
-    return sendPatientRecall({
+    const lastDate = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
+
+    return sendTemplate({
       patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
+      subject: 'You are due for your next appointment',
+      templateName: recallIntervalToTemplate[recall.interval],
       mergeVars: [
         {
           name: 'PRIMARY_COLOR',
@@ -41,7 +80,7 @@ export default {
         },
         {
           name: 'BOOK_URL',
-          content: `${account.website}?cc=book`,
+          content: generateBookingUrl({ account, sentRecall, dueDate }),
         },
         {
           name: 'ACCOUNT_CLINICNAME',
@@ -60,8 +99,20 @@ export default {
           content: account.phoneNumber,
         },
         {
-          name: 'PATIENT_LASTAPPOINTMENTDATE',
-          content: getTimeAgo(lastAppointment.startDate),
+          name: 'WEEKSBEFORE_DUEDATE',
+          content: moment(dueDate).diff(moment(), 'weeks'),
+        },
+        {
+          name: 'MONTHS_PASTDUE',
+          content: moment().diff(moment(lastDate), 'months'),
+        },
+        {
+          name: 'WEEKSAFTER_DUEDATE',
+          content: moment().diff(moment(lastDate), 'weeks'),
+        },
+        {
+          name: 'RECALL_DUEDATE',
+          content: moment(dueDate).format('LL'),
         },
         {
           name: 'PATIENT_FIRSTNAME',

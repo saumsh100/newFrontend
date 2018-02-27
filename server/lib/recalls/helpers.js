@@ -89,14 +89,17 @@ export function organizeRecallsOutboxList(outboxList, recall, account) {
         : moment(p.patient.lastHygieneDate);
     }
 
+    const startHour = Number(account.recallStartTime.split(':')[0]);
+    const startMin = Number(account.recallStartTime.split(':')[1]);
+
     p.sendDate = dateWithZone
       .add(1, 'days')
       .add(convertIntervalStringToObject(p.patient.insuranceInterval || account.hygieneInterval))
       .subtract(convertIntervalStringToObject(recall.interval))
       // we subtract the global hours and minutes, so that we get the correct date
       // the recall will run at.
-      .subtract(GLOBALS.recalls.cronHour, 'hours')
-      .subtract(GLOBALS.recalls.cronMinute, 'minutes')
+      .subtract(startHour, 'hours')
+      .subtract(startMin, 'minutes')
       // set the hour and minute to the correct time. Moment timezone will
       // set the right time in UTC for the timezone.
       .set('hour', GLOBALS.recalls.cronHour)

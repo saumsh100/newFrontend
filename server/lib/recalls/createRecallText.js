@@ -6,108 +6,103 @@ import { convertIntervalStringToObject, convertIntervalToMs } from '../../util/t
 // TODO: generateBookingUrl
 // TODO; format phone number
 
-const generateBookingUrl = ({ account }) => {
-  return `${account.website}?cc=book`;
-};
-
 const RecallsText = {
-  ['1 months']: ({ account, patient, dueDate }) => {
+  ['1 months']: ({ account, patient, dueDate, link }) => {
     return `Hi ${patient.firstName}, this is ${account.name}. We're reaching out because you're ` +
       `almost due for your next dental appointment. You can schedule your appointment for anytime after ` +
-      `${dueDate}, by clicking this link: ${generateBookingUrl({ account })}`;
+      `${dueDate}, by clicking this link: ${link}`;
   },
 
-  ['1 weeks']: ({ account, patient, dueDate }) => {
+  ['1 weeks']: ({ account, patient, dueDate, link }) => {
     return `${patient.firstName}, this is ${account.name}. Just a reminder that you're due ` +
       `for your next dental visit in 1 week. You can schedule your appointment for anytime after ` +
-      `${dueDate} by clicking this link: ${generateBookingUrl({ account })}`;
+      `${dueDate} by clicking this link: ${link}`;
   },
 
-  ['-1 weeks']: ({ account, patient }) => {
+  ['-1 weeks']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-1 months']: ({ account, patient }) => {
+  ['-1 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, regular cleaning visits are essential to a lifetime of healthy teeth. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-2 months']: ({ account, patient, lastApptDate }) => {
+  ['-2 months']: ({ account, patient, lastApptDate, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${lastApptDate} ` +
       `and you are 8 weeks past due. ` +
       `Please schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-4 months']: ({ account, patient }) => {
+  ['-4 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-6 months']: ({ account, patient }) => {
+  ['-6 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-8 months']: ({ account, patient }) => {
+  ['-8 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-10 months']: ({ account, patient }) => {
+  ['-10 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-12 months']: ({ account, patient }) => {
+  ['-12 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-14 months']: ({ account, patient }) => {
+  ['-14 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-16 months']: ({ account, patient }) => {
+  ['-16 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-18 months']: ({ account, patient }) => {
+  ['-18 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-20 months']: ({ account, patient }) => {
+  ['-20 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 
-  ['-24 months']: ({ account, patient }) => {
+  ['-24 months']: ({ account, patient, link }) => {
     return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
       `You can schedule your appointment by clicking this link: ` +
-      `${generateBookingUrl({ account })}`;
+      `${link}`;
   },
 };
 
-export default function createRecallText({ patient, account, recall }) {
-  console.log(recall.interval);
+export default function createRecallText({ patient, account, recall, link }) {
   const dueDate = moment().add(convertIntervalStringToObject(recall.interval)).format('dddd, MMMM Do');
   const lastApptDate = moment(patient.lastApptDate).format('dddd, MMMM Do');
-  return RecallsText[recall.interval]({ patient, account, dueDate, lastApptDate });
+  return RecallsText[recall.interval]({ patient, account, dueDate, lastApptDate, link });
 }
 
 export function getRecallTemplateName({ recall }) {

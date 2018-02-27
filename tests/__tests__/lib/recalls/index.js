@@ -64,21 +64,83 @@ describe('Recalls Job Integration Tests', () => {
      * therefore, sendRecallsForAccount should not be called
      */
     test('should NOT call sendRecallsForAccount if all turned off', async () => {
-      await RecallsLibrary.computeRecallsAndSend({ date: (new Date()).toISOString() });
+      await RecallsLibrary.computeRecallsAndSend({ date: '2015-08-27T00:00:00.000Z' });
       expect(RecallsLibrary.sendRecallsForAccount).not.toHaveBeenCalled();
     });
 
     /**
      * There is 1 account that has canSendRecalls=false,
      * but we update it to true,
+     * the account's timezone is Vancouver and the time is 5pm given
+     * the job will run between 5pm - 8pm vancouver time
      * therefore, sendRecallsForAccount should be called
      */
-    test('should call sendRecallsForAccount if 1 turned on', async () => {
+    test('should call sendRecallsForAccount if 5pm', async () => {
       const account = await Account.findById(accountId);
       await account.update({ canSendRecalls: true });
 
-      await RecallsLibrary.computeRecallsAndSend({ date: (new Date()).toISOString() });
+      await RecallsLibrary.computeRecallsAndSend({ date: '2015-08-27T00:00:00.000Z' });
       expect(RecallsLibrary.sendRecallsForAccount).toHaveBeenCalledTimes(1);
+    });
+
+    /**
+     * There is 1 account that has canSendRecalls=false,
+     * but we update it to true,
+     * the account's timezone is Vancouver and the time is 6pm given
+     * the job will run between 5pm - 8pm vancouver time
+     * therefore, sendRecallsForAccount should be called
+     */
+    test('should call sendRecallsForAccount if 6pm', async () => {
+      const account = await Account.findById(accountId);
+      await account.update({ canSendRecalls: true });
+
+      await RecallsLibrary.computeRecallsAndSend({ date: '2015-08-27T01:00:00.000Z' });
+      expect(RecallsLibrary.sendRecallsForAccount).toHaveBeenCalledTimes(1);
+    });
+
+    /**
+     * There is 1 account that has canSendRecalls=false,
+     * but we update it to true,
+     * the account's timezone is Vancouver and the time is 8pm given
+     * the job will run between 5pm - 8pm vancouver time
+     * therefore, sendRecallsForAccount should be called
+     */
+    test('should call sendRecallsForAccount if 8pm', async () => {
+      const account = await Account.findById(accountId);
+      await account.update({ canSendRecalls: true });
+
+      await RecallsLibrary.computeRecallsAndSend({ date: '2015-08-27T03:00:00.000Z' });
+      expect(RecallsLibrary.sendRecallsForAccount).toHaveBeenCalledTimes(1);
+    });
+
+    /**
+     * There is 1 account that has canSendRecalls=false,
+     * but we update it to true,
+     * the account's timezone is Vancouver and the time is 8:01pm given
+     * the job will run between 5pm - 8pm vancouver time
+     * therefore, sendRecallsForAccount should not be called
+     */
+    test('should not call sendRecallsForAccount if after 8pm', async () => {
+      const account = await Account.findById(accountId);
+      await account.update({ canSendRecalls: true });
+
+      await RecallsLibrary.computeRecallsAndSend({ date: '2015-08-27T03:01:00.000Z' });
+      expect(RecallsLibrary.sendRecallsForAccount).not.toHaveBeenCalled();
+    });
+
+    /**
+     * There is 1 account that has canSendRecalls=false,
+     * but we update it to true,
+     * the account's timezone is Vancouver and the time is 4:59pm given
+     * the job will run between 5pm - 8pm vancouver time
+     * therefore, sendRecallsForAccount should not be called
+     */
+    test('should not call sendRecallsForAccount if before 5pm', async () => {
+      const account = await Account.findById(accountId);
+      await account.update({ canSendRecalls: true });
+
+      await RecallsLibrary.computeRecallsAndSend({ date: '2015-08-26T23:59:00.000Z' });
+      expect(RecallsLibrary.sendRecallsForAccount).not.toHaveBeenCalled();
     });
   });
 

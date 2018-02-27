@@ -1,23 +1,26 @@
 
-import { Account, Patient, SentRecall, Recall } from '../../_models';
+import moment from 'moment-timezone';
+import { Account, Patient, SentRecall, Recall, Chat, TextMessage } from '../../_models';
 import {
   getPatientsDueForRecall,
   mapPatientsToRecalls,
 } from './helpers';
 import { generateOrganizedPatients } from '../comms/util';
+import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
+import { convertIntervalStringToObject } from '../../util/time';
 import normalize from '../../routes/api/normalize';
 import sendRecall from './sendRecall';
 import app from '../../bin/app';
-import { namespaces } from '../../config/globals';
+import { namespaces, env } from '../../config/globals';
 
-
-/*async function sendSocketRecall(io, sentRecallId) {
-  let sentRecall = await SentRecall.findOne({
-    where: { id: sentRecallId },
+async function sendSocket(io, chatId) {
+  let chat = await Chat.findOne({
+    where: { id: chatId },
     include: [
       {
-        model: Recall,
-        as: 'recall',
+        model: TextMessage,
+        as: 'textMessages',
+        order: ['createdAt', 'DESC'],
       },
       {
         model: Patient,
@@ -26,12 +29,13 @@ import { namespaces } from '../../config/globals';
     ],
   });
 
-  sentRecall = sentRecall.get({ plain: true });
+  chat = chat.get({ plain: true });
 
-  return io.of('/dash')
-          .in(sentRecall.patient.accountId)
-          .emit('create:SentRecall', normalize('sentRecall', sentRecall));
-}*/
+  await io.of('/dash')
+    .in(chat.patient.accountId)
+    .emit('newMessage', normalize('chat', chat));
+}
+
 /**
  * sendRecallsForAccount
  *
@@ -102,16 +106,57 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
         primaryType,
       });
 
+      const lastAppointment = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
+      let data = null;
       try {
-        await sendRecall[primaryType]({
+        let dueDate;
+        if (patient.hygiene) {
+          dueDate = account.timezone ? moment.tz(patient.lastHygieneDate, account.timezone)
+            : moment(patient.lastHygieneDate);
+        } else {
+          dueDate = account.timezone ? moment.tz(patient.lastRecallDate, account.timezone)
+            : moment(patient.lastHygieneDate);
+        }
+
+        dueDate = dueDate
+            .add(1, 'days')
+            .add(convertIntervalStringToObject(patient.insuranceInterval || account.hygieneInterval))
+            .toISOString();
+
+        data = await sendRecall[primaryType]({
           patient,
           account,
-          lastAppointment: {},
+          lastAppointment,
+          sentRecall,
+          recall,
+          dueDate,
         });
       } catch (error) {
         console.log(`${primaryType} recall NOT SENT to ${patient.firstName} ${patient.lastName} for ${name} because:`);
         console.error(error);
         continue;
+      }
+
+      if (primaryType === 'sms' && env !== 'test') {
+        const textMessageData = sanitizeTwilioSmsData(data);
+        const { to } = textMessageData;
+        let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
+        if (!chat) {
+          chat = await Chat.create({
+            accountId: account.id,
+            patientId: patient.id,
+            patientPhoneNumber: to,
+          });
+        }
+
+        // Now save TM
+        const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
+
+        // Update Chat to have new textMessage
+        await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
+
+        // Now update the clients in real-time
+        global.io && await sendSocket(global.io, chat.id);
       }
 
       console.log(`${primaryType} recall SENT to ${patient.firstName} ${patient.lastName} for ${account.name}!`);
@@ -159,6 +204,27 @@ export async function computeRecallsAndSend({ date, publishSocket }) {
 
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
-    await exports.sendRecallsForAccount(account.get({ plain: true }), date, publishSocket);
+
+    const startHour = Number(account.recallStartTime.split(':')[0]);
+    const startMin = Number(account.recallStartTime.split(':')[1]);
+
+    const endHour = Number(account.recallEndTime.split(':')[0]);
+    const endMin = Number(account.recallEndTime.split(':')[1]);
+
+    const startDate = account.timezone ?
+      moment.tz(date, account.timezone).hours(startHour).minutes(startMin).toISOString() :
+      moment(date).hours(startHour).minutes(startMin).toISOString();
+
+    const endDate = account.timezone ?
+      moment.tz(date, account.timezone).hours(endHour).minutes(endMin).toISOString() :
+      moment(date).hours(endHour).minutes(endMin).toISOString();
+
+    const dateNow = moment(date);
+
+    if ((dateNow.isBefore(endDate) && dateNow.isAfter(startDate))
+     || ((dateNow.isSame(startDate) || dateNow.isSame(endDate)))
+    ) {
+      await exports.sendRecallsForAccount(account.get({ plain: true }), date, publishSocket);
+    }
   }
 }

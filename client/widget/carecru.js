@@ -48,6 +48,15 @@ CareCru.prototype.mergeSentReviewValues = function (values) {
   this.host.sendEvent('mergeSentReviewValues', values);
 };
 
+CareCru.prototype.setSentRecallId = function (id) {
+  this.host.sendEvent('setSentRecallId', id);
+};
+
+CareCru.prototype.setDueDate = function (id) {
+  this.host.sendEvent('setDueDate', id);
+};
+
+
 /**
  * #close
  */

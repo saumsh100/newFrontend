@@ -695,6 +695,7 @@ describe('Recalls Calculation Library', () => {
             id: accountId,
             hygieneInterval: '3 months',
             recallBuffer: '1 days',
+            recallStartTime: '17:00:00',
           },
           startDate: date(2018, 2, 2, 7),
           endDate: date(2018, 2, 8, 8),
@@ -757,6 +758,7 @@ describe('Recalls Calculation Library', () => {
             id: accountId,
             hygieneInterval: '10 months',
             recallBuffer: '1 days',
+            recallStartTime: '17:00:00',
           },
           startDate: date(2016, 0, 1, 9),
           endDate: date(2017, 8, 8, 9),
@@ -776,6 +778,7 @@ describe('Recalls Calculation Library', () => {
             hygieneInterval: '10 months',
             timezone: 'America/New_York',
             recallBuffer: '1 days',
+            recallStartTime: '17:00:00',
           },
           startDate: date(2016, 0, 1, 9),
           endDate: date(2017, 8, 8, 9),
@@ -1018,6 +1021,153 @@ describe('Recalls Calculation Library', () => {
         expect(result[3].firstName).toBe('Herbie');
         expect(result[3].lastName).toBe('Hancock');
         expect(result.length).toBe(4);
+      });
+
+      test('should return none when range doesn\'t include anyone\'s due for hygiene date', async () => {
+        const result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+            recallBuffer: '1 days',
+          },
+          startDate: date(2018, 2, 2, 9),
+          endDate: date(2018, 2, 2, 10),
+        });
+
+        expect(result.length).toBe(0);
+      });
+    });
+
+    describe('#removeRecallDuplicates', () => {
+      test('should be a function', () => {
+        expect(typeof removeRecallDuplicates).toBe('function');
+      });
+
+      test('should return one with duplicates with it being hygiene', async () => {
+        const patient1 = {
+          get: () => {
+            return { id: '5' };
+          },
+        };
+
+        const result = removeRecallDuplicates([patient1], [patient1]);
+
+        expect(result.length).toBe(1);
+        expect(result[0].hygiene).toBe(true);
+      });
+
+      test('should return two with duplicates with one hygiene and one recall that are unique patients', async () => {
+        const patient1 = {
+          get: () => {
+            return { id: '5' };
+          },
+        };
+
+        const patient2 = {
+          get: () => {
+            return { id: '7' };
+          },
+        };
+
+        const result = removeRecallDuplicates([patient1], [patient2]);
+
+        expect(result.length).toBe(2);
+        expect(result[0].hygiene).toBe(true);
+        expect(result[1].hygiene).toBe(false);
+      });
+    });
+
+    describe('#getPatientsForRecallTouchPoint - ranged tests with multiple patients - lastRecallDate - Carol Inactive', () => {
+      let recalls;
+      let patients;
+      let appointments;
+      beforeEach(async () => {
+        recalls = await Recall.bulkCreate([
+          {
+            accountId,
+            primaryTypes: ['email'],
+            interval: '1 months',
+            lengthSeconds: w2s(-1),
+          },
+        ]);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', email: 'hello1@hello.com', lastName: 'Denver', status: 'Active', lastRecallDate: date(2018, 0, 1, 8) }),
+          makePatientData({ firstName: 'Carol', email: 'hello2@hello.com', lastName: 'Heine', status: 'Inactive', lastRecallDate: date(2018, 0, 2, 8) }),
+          makePatientData({ firstName: 'Beth', email: 'hello3@hello.com', lastName: 'Berth', status: 'Active', lastRecallDate: date(2018, 0, 2, 17) }),
+          makePatientData({ firstName: 'Herbie', email: 'hello4@hello.com', lastName: 'Hancock', status: 'Active', lastRecallDate: date(2018, 0, 3, 18) }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+        ]);
+      });
+
+      afterAll(async () => {
+        await wipeAllModels();
+      });
+
+      test('should not return Carol Heine (inactive) and Not John as the StartDate is exclusive and End Date is Inclusive', async () => {
+        const result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+            recallBuffer: '1 days',
+          },
+          startDate: date(2018, 2, 2, 8),
+          endDate: date(2018, 2, 3, 8),
+        });
+        expect(result.length).toBe(0);
+      });
+
+      test('should not return Carol Heine (inactive) and John when startDate is before John\'s lastHygieneDate', async () => {
+        let result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+          },
+          startDate: date(2018, 2, 2, 7),
+          endDate: date(2018, 2, 3, 8),
+        });
+        result = result.sort((a, b) => moment(a.lastRecallDate).isAfter(b.lastRecallDate));
+
+        expect(result[0].firstName).toBe('John');
+        expect(result[0].lastName).toBe('Denver');
+        expect(result.length).toBe(1);
+      });
+
+      test('should return John, Beth and Herbie when the range includes all their Due Dates', async () => {
+        let result = await getPatientsForRecallTouchPoint({
+          recall: {
+            interval: '1 months',
+          },
+          account: {
+            id: accountId,
+            hygieneInterval: '3 months',
+            recallBuffer: '1 days',
+          },
+          startDate: date(2018, 2, 2, 7),
+          endDate: date(2018, 2, 8, 8),
+        });
+
+        result = result.sort((a, b) => moment(a.lastRecallDate).isAfter(b.lastRecallDate));
+
+        expect(result[0].firstName).toBe('John');
+        expect(result[0].lastName).toBe('Denver');
+        expect(result[1].firstName).toBe('Beth');
+        expect(result[1].lastName).toBe('Berth');
+        expect(result[2].firstName).toBe('Herbie');
+        expect(result[2].lastName).toBe('Hancock');
+        expect(result.length).toBe(3);
       });
 
       test('should return none when range doesn\'t include anyone\'s due for hygiene date', async () => {

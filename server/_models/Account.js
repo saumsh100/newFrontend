@@ -163,6 +163,16 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: '2 weeks',
     },
+
+    recallStartTime: {
+      type: DataTypes.TIME,
+      defaultValue: '17:00:00',
+    },
+
+    recallEndTime: {
+      type: DataTypes.TIME,
+      defaultValue: '20:00:00',
+    },
   });
 
   Account.associate = (models) => {

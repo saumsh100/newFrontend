@@ -20,8 +20,9 @@ const map = {
   '/login': 'Login Page',
 };
 
-function isDisabledDay(date) {
-  return moment(date).isBefore(moment()) && !moment().isSame(date, 'day');
+function generateIsDisabledDay(currentDate) {
+  return date =>
+    moment(date).isBefore(currentDate);
 }
 
 class Header extends Component {
@@ -42,6 +43,7 @@ class Header extends Component {
       hasWaitList,
       selectedStartDate,
       account,
+      floorDate,
     } = this.props;
 
     const backButton = path => () => (
@@ -99,7 +101,7 @@ class Header extends Component {
                     }}
                     tipSize={0.01}
                     timezone={accountTimezone}
-                    disabledDays={isDisabledDay}
+                    disabledDays={generateIsDisabledDay(floorDate)}
                     iconClassName={styles.calendarButton}
                   />
                 </div>
@@ -128,6 +130,7 @@ function mapStateToProps({ auth, availabilities }) {
     isAuth: auth.get('isAuthenticated'),
     hasWaitList: availabilities.get('hasWaitList'),
     selectedStartDate: availabilities.get('selectedStartDate'),
+    floorDate: availabilities.get('floorDate'),
     account: availabilities.get('account'),
   };
 }

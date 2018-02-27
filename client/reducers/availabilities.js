@@ -26,6 +26,8 @@ import {
   SET_NEXT_AVAILABILITY,
   SET_FORGOT_PASSWORD,
   SET_NOTES,
+  SET_SENTRECALLID,
+  SET_DUE_DATE,
 } from '../constants';
 
 function getStartTimeForToday(account) {
@@ -34,11 +36,17 @@ function getStartTimeForToday(account) {
   return moment().add(1, 'hours').zone(zone).toISOString();
 }
 
+function getFloorDate(date) {
+  return moment(date).startOf('day').toISOString();
+}
+
 export const createInitialWidgetState = state => {
   let selectedStartDate = moment().add(1, 'hours').toISOString();
   if (state) {
     selectedStartDate = getStartTimeForToday(state.account);
   }
+
+  const floorDate = getFloorDate(selectedStartDate);
 
   // selectedStartDate = timezone ?
   return fromJS(Object.assign({
@@ -83,6 +91,9 @@ export const createInitialWidgetState = state => {
     registrationStep: 1,
     reservationId: null,
     notes: null,
+    sentRecallId: null,
+    dueDate: null,
+    floorDate,
   }, state));
 };
 
@@ -123,6 +134,8 @@ export default handleActions({
 
         unavailableDays: [],
       },
+
+      sentRecallId: null,
     });
   },
 
@@ -244,5 +257,21 @@ export default handleActions({
       reservationId: null,
       messages: [`Reserved time for this practitioner has been expired...`]
     })
+  },
+
+  [SET_SENTRECALLID](state, action) {
+    return state.set('sentRecallId', action.payload);
+  },
+
+  [SET_DUE_DATE](state, { payload }) {
+    let newState = state.set('dueDate', payload);
+    if (moment().isBefore(payload)) {
+      newState = newState.merge({
+        selectedStartDate: payload,
+        floorDate: getFloorDate(payload),
+      });
+    }
+
+    return newState;
   },
 }, createInitialWidgetState());

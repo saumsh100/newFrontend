@@ -17,8 +17,9 @@ import {
 import * as Actions from '../../../../../actions/availabilities';
 import styles from './styles.scss';
 
-function isDisabledDay(date) {
-  return moment(date).isBefore(moment()) && !moment().isSame(date, 'day');
+function generateIsDisabledDay(currentDate) {
+  return date =>
+    moment(date).isBefore(currentDate);
 }
 
 class MobileDayPicker extends Component {
@@ -50,6 +51,7 @@ class MobileDayPicker extends Component {
   render() {
     const {
       selectedStartDate,
+      floorDate,
       account,
     } = this.props;
 
@@ -57,7 +59,7 @@ class MobileDayPicker extends Component {
     const accountTimezone = account.timezone;
 
     const mDate = moment(selectedStartDate);
-    const canGoBack = !isDisabledDay(moment(selectedStartDate).subtract(1, 'day'));
+    const canGoBack = !generateIsDisabledDay(floorDate)(moment(selectedStartDate).subtract(1, 'day'));
     const isToday = mDate.isSame(moment(), 'day');
     const isTomorrow = mDate.isSame(moment().add(1, 'day'), 'day');
 
@@ -96,7 +98,7 @@ class MobileDayPicker extends Component {
               tipSize={0.01}
               onChange={this.setSelectedDate}
               timezone={accountTimezone}
-              disabledDays={isDisabledDay}
+              disabledDays={generateIsDisabledDay(floorDate)}
             />
           </Col>
           <Col xs={1}>
@@ -118,6 +120,7 @@ class MobileDayPicker extends Component {
 
 MobileDayPicker.propTypes = {
   selectedStartDate: PropTypes.string.isRequired,
+  floorDate: PropTypes.string.isRequired,
   account: PropTypes.object,
   setSelectedStartDate: PropTypes.func.isRequired,
 };
@@ -126,6 +129,7 @@ function mapStateToProps({ availabilities }) {
   const account = availabilities.get('account').toJS();
   return {
     selectedStartDate: availabilities.get('selectedStartDate'),
+    floorDate: availabilities.get('floorDate'),
     account,
   };
 }

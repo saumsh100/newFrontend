@@ -51,6 +51,7 @@ export function createRequest() {
       selectedAvailability: { startDate, endDate, practitionerId, chairId },
       selectedPractitionerId,
       selectedServiceId,
+      sentRecallId,
       notes,
     } = state.availabilities.toJS();
 
@@ -67,6 +68,7 @@ export function createRequest() {
       suggestedPractitionerId: practitionerId,
       suggestedChairId: chairId,
       note: notes,
+      sentRecallId,
     };
 
     if (selectedPractitionerId) {

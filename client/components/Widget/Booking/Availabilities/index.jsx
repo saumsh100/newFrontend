@@ -19,11 +19,7 @@ class Availabilities extends Component {
 
   render() {
     const { hasWaitList, selectedAvailability } = this.props;
-
     const canGoNext = hasWaitList || selectedAvailability;
-    console.log(hasWaitList);
-    console.log(selectedAvailability);
-    console.log(canGoNext);
     const nextButtonClass = canGoNext ?
       styles.nextButton :
       styles.disabledButton;

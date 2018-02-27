@@ -73,6 +73,8 @@ function main() {
 
   // Parse URL to see if we are being linked here
   const sentReviewId = getQueryVariable('srid');
+  const sentRecallId = getQueryVariable('sentRecallId');
+  const dueDate = getQueryVariable('dueDate');
   const accountId = getQueryVariable('accountId');
   const stars = getQueryVariable('stars') || 0;
 
@@ -94,6 +96,16 @@ function main() {
     } else {
       window.CareCru.mergeReviewValues(reviewData);
       window.CareCru.mergeSentReviewValues(sentReviewData);
+    }
+  }
+
+  if (sentRecallId) {
+    if (window.CareCruz[accountId]) {
+      window.CareCruz[accountId].setSentRecallId(sentRecallId);
+      window.CareCruz[accountId].setDueDate(sentRecallId);
+    } else {;
+      window.CareCru.setSentRecallId(dueDate);
+      window.CareCru.setDueDate(dueDate);
     }
   }
 }
