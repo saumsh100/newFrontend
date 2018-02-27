@@ -128,11 +128,11 @@ export default function (sequelize, DataTypes) {
     },
 
     reason: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
 
     isPreConfirmed: {
-        type: DataTypes.BOOLEAN,
+      type: DataTypes.BOOLEAN,
     },
 
     estimatedRevenue: {
@@ -143,6 +143,8 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
     },
   });
+
+  Appointment.REQUEST_REASON = 'Appointment Request - CareCru';
 
   Appointment.associate = (models) => {
     const {

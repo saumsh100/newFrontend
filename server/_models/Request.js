@@ -68,6 +68,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    patientId: {
+      type: DataTypes.UUID,
+    },
+
     isSyncedWithPms: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

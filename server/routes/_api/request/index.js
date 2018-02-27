@@ -7,6 +7,7 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import jsonapi from '../../util/jsonapi';
 import { Permission, PatientUser, Request, User, Account } from '../../../_models';
+import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
 
 import {
   sendAppointmentRequested,
@@ -26,10 +27,18 @@ requestsRouter.param('appointmentId', sequelizeLoader('appointment', 'Appointmen
 /**
  * Create a request
  */
-requestsRouter.post('/', (req, res, next) => {
+requestsRouter.post('/', async (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
-  const { patientUserId, accountId } = req.body;
-  return Request.create(req.body)
+  const {
+    patientUserId,
+    accountId,
+    sentRecallId,
+  } = req.body;
+
+  const newRequest = Object.assign({}, req.body,
+    await linkRequestWithPendingAppointment(sentRecallId));
+
+  return Request.create(newRequest)
     .then((request) => {
       const normalized = normalize('request', request.dataValues);
       res.status(201).send(normalized);

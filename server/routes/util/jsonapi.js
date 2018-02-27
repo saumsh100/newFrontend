@@ -195,6 +195,7 @@ const ModelAttributes = {
     'suggestedChairId',
     'note',
     'pmsId',
+    'patientId',
     'patientUser',
     'isHidden',
     'isDeleted',
