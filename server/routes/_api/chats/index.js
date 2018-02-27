@@ -121,10 +121,6 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     return res.sendStatus(400);
   }
 
-  const mergeData = {
-    lastTextMessageDate: new Date(),
-  };
-
   console.log(`Sending textmessage to ${patient.mobilePhoneNumber}`);
 
   const include = [
@@ -155,11 +151,12 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     lastTextMessageDate: new Date(),
     accountId: patient.accountId,
     patientId: patient.id,
+    patientPhoneNumber: patient.mobilePhoneNumber,
   };
 
   return Account.findOne({ where: { id: chatMerge.accountId }, raw: true })
     .then((account) => {
-      const textMessages = {
+      const twilioMessageData = {
         body: message,
         chatId,
         userId,
@@ -168,25 +165,30 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
         read: true,
       };
 
-      return twilioClient.sendMessage(textMessages)
+      return twilioClient.sendMessage(twilioMessageData)
         .then((sms) => {
           // Add twilio sid as our uniqueId
-          textMessages.id = sms.sid;
+          twilioMessageData.id = sms.sid;
           if (!chatId) {
             Chat.create(chatMerge).then((chat) => {
-              TextMessage.create(textMessages)
-                .then((chats) => {
-                  chats = chats.get({ plain: true });
-                  const send = normalize('chat', chats);
-                  io.of(namespaces.dash)
-                    .in(account.id)
-                    .emit('newMessage', send);
+              twilioMessageData.chatId = chat.id;
+              TextMessage.create(twilioMessageData)
+                .then((textMessage) => {
+                  Chat.findOne({
+                    where: { id: chat.id },
+                    include,
+                  }).then((chat) => {
+                    const send = normalize('chat', chat.get({ plain: true }));
+                    io.of(namespaces.dash)
+                      .in(account.id)
+                      .emit('newMessage', send);
 
-                  res.send(send);
+                    res.send(send);
+                  });
                 });
             });
           } else {
-            TextMessage.create(textMessages)
+            TextMessage.create(twilioMessageData)
               .then((tm) => {
                 const lastTextMessageId = tm.id;
                 const lastTextMessageDate = tm.createdAt;
@@ -195,8 +197,8 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
                     Chat.findOne({
                       where: { id: chatId },
                       include,
-                    }).then((chats) => {
-                      const send = normalize('chat', chats.get({ plain: true }));
+                    }).then((chat) => {
+                      const send = normalize('chat', chat.get({ plain: true }));
                       io.of(namespaces.dash)
                         .in(account.id)
                         .emit('newMessage', send);
@@ -211,6 +213,102 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
     })
     .catch(next);
 });
+
+/**
+ * Get the list of unread chats
+ **/
+chatsRouter.get('/unread', checkPermissions('chats:read'), (req, res, next) => {
+  const {
+    accountId,
+    includeArray,
+  } = req;
+
+  const {
+    limit,
+    skip,
+  } = req.query;
+
+  const skipped = skip || 0;
+  const limitted = limit || 25;
+
+  const order = [['lastTextMessageDate', 'DESC']];
+
+  let textMessageInclude = {
+    model: TextMessage,
+    as: 'textMessages',
+    where: {
+      read: false
+    },
+    required: true,
+  };
+
+  return Chat.findAll({
+    where: { accountId },
+    order,
+    offset: skipped,
+    limit: limitted,
+    include: [
+      ...includeArray,
+      textMessageInclude,
+    ],
+  }).then((chats) => {
+    const allChats = chats.map(chat => chat.get({ plain: true }));
+    return res.send(normalize('chats', allChats));
+  })
+  .catch(next);
+});
+
+/**
+ * Get the list of flagged chats
+ **/
+chatsRouter.get('/flagged', checkPermissions('chats:read'), (req, res, next) => {
+  const {
+    accountId,
+    includeArray,
+  } = req;
+
+  const {
+    limit,
+    skip,
+  } = req.query;
+
+  const skipped = skip || 0;
+  const limitted = limit || 25;
+  const order = [['lastTextMessageDate', 'DESC']];
+  // Some default code to ensure we don't pull the entire conversation for each chat
+  const newIncludeArray = includeArray.map((include) => {
+    if (include.as === 'textMessages') {
+      include.include = [
+        {
+          model: User,
+          as: 'user',
+          attributes: {
+            exclude: 'password',
+          },
+          required: false,
+        },
+      ];
+      order.push([{ model: TextMessage, as: 'textMessages' }, 'createdAt', 'ASC']);
+      include.required = true;
+    }
+    return include;
+  });
+
+  return Chat.findAll({
+    where: {
+      accountId,
+      isFlagged: true,
+    },
+    order,
+    limit: limitted,
+    offset: skipped,
+    include: newIncludeArray,
+  }).then((chats) => {
+    const allChats = chats.map(chat => chat.get({ plain: true }));
+    return res.send(normalize('chats', allChats));
+  })
+  .catch(next);
+})
 
 /**
  * Get a chat

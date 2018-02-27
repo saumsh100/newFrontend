@@ -42,6 +42,7 @@ async function main({ accountId }) {
       accountId,
       patientId: patient.id,
       patientPhoneNumber: patient.mobilePhoneNumber,
+      isFlagged: true,
     };
   });
 
@@ -59,7 +60,8 @@ async function main({ accountId }) {
         body: i.toString(),
         to: patients[j].mobilePhoneNumber,
         from: account.twilioPhoneNumber,
-        read: true,
+        read: false,
+        createdAt: faker.date.past(40, '2010-01-01'),
       });
     }
 

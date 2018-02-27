@@ -54,6 +54,13 @@ const chatSchema = () => {
   });
 };
 
+const unreadChatSchema = () => {
+  return new schema.Entity('chats', {
+    account: accountSchema(),
+    patient: patientSchema(),
+  });
+}
+
 const patientSingleSchema = () => {
   return new schema.Entity('patient');
 };
@@ -208,6 +215,7 @@ const SCHEMAS = {
   calls: [callSchema()],
   chairs: [chairSchema()],
   chats: [chatSchema()],
+  unreadChats: [unreadChatSchema()],
   deliveredProcedures: [deliveredProcedureSchema()],
   dailySchedules: [dailyScheduleSchema()],
   enterprises: [enterpriseSchema()],

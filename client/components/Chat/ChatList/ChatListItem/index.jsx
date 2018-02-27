@@ -1,30 +1,64 @@
 
 import React, { PropTypes, Component } from 'react';
-import classNames from 'classnames';
 import moment from 'moment';
-import omit from 'lodash/omit';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Icon, ListItem, Avatar, Star } from '../../../library';
-import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import { Icon, ListItem, Avatar } from '../../../library';
+import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import styles from './styles.scss';
-
-function FlaggedStar(props) {
-  const { isFlagged } = props;
-  const newIconProps = omit(props, 'isFlagged');
-  return (
-    <Icon
-      {...newIconProps}
-      icon="star"
-      className={isFlagged ? styles.filled : styles.hallow}
-      type={isFlagged ? 'solid' : 'light'}
-    />
-  );
-}
 
 class ChatListItem extends Component {
   constructor(props) {
     super(props);
+
+    this.toggleFlag = this.toggleFlag.bind(this);
+    this.selectChat = this.selectChat.bind(this);
+  }
+
+  toggleFlag(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const { id, isFlagged } = this.props.chat;
+    this.props.toggleFlagged(id, isFlagged);
+  }
+
+  selectChat() {
+    const { id } = this.props.chat;
+    this.props.selectChat(id);
+  }
+
+  renderStar(isFlagged, onClickListener) {
+    return (
+      <Icon
+        onClick={onClickListener}
+        icon="star"
+        className={isFlagged ? styles.filled : styles.hallow}
+        type={isFlagged ? 'solid' : 'light'}
+      />
+    );
+  }
+
+  renderPatient() {
+    const { patient } = this.props;
+
+    if (patient.firstName || patient.lastName) {
+      return (
+        <div className={styles.nameAgeWrapper}>
+          <div className={styles.nameWithAge}>
+            {patient.firstName} {patient.lastName}
+          </div>
+          {patient.birthDate && <div className={styles.age}>
+            {` ${moment().diff(patient.birthDate, 'years')}`}
+          </div>}
+        </div>
+      );
+    }
+
+    return (
+      <div className={styles.name}>
+        {patient.mobilePhoneNumber}
+      </div>
+    );
   }
 
   render() {
@@ -32,54 +66,32 @@ class ChatListItem extends Component {
       chat,
       patient,
       lastTextMessage,
-      isActive,
-      onSelect,
-      onToggleFlag,
+      selectedChatId,
     } = this.props;
 
-    const fullName = patient.firstName || patient.lastName ?
-      (patient.birthDate ?
-        (
-          <div className={styles.nameAgeWrapper}>
-            <div className={styles.nameWithAge}>
-              {patient.firstName} {patient.lastName}
-            </div>
-            <div className={styles.age}>
-              {` ${moment().diff(patient.birthDate, 'years')}`}
-            </div>
-          </div>
-        ) : (
-          <div className={styles.name}>
-            {patient.firstName} {patient.lastName}
-          </div>
-        )
-      ) : (
-        <div className={styles.name}>
-          {patient.mobilePhoneNumber}
-        </div>
-      );
+    if (!patient || !lastTextMessage) {
+      return null;
+    }
 
     const mDate = moment(lastTextMessage.createdAt);
     const daysDifference = moment().diff(mDate, 'days');
+    const isActive = selectedChatId === chat.id;
 
     const messageDate = daysDifference ?
       mDate.format('YY/MM/DD') :
       mDate.format('h:mma');
 
-    const hasUnread = !lastTextMessage.read;
+    const hasUnread = !isActive && !lastTextMessage.read;
 
     return (
       <ListItem
         selectedClass={styles.selectedChatItem}
         className={styles.chatListItem}
         selectItem={isActive}
-        onClick={onSelect}
+        onClick={this.selectChat}
       >
         <div>
-          <FlaggedStar
-            isFlagged={chat.isFlagged}
-            onClick={onToggleFlag}
-          />
+          {this.renderStar(chat.isFlagged, this.toggleFlag)}
         </div>
         <div className={styles.avatar}>
           <Avatar
@@ -90,7 +102,7 @@ class ChatListItem extends Component {
         <div className={styles.flexSection}>
           <div className={styles.topSection}>
             <div className={hasUnread ? styles.fullNameUnread : styles.fullName}>
-              {fullName}
+              {this.renderPatient()}
             </div>
             <div className={styles.time}>
               {messageDate}
@@ -106,23 +118,43 @@ class ChatListItem extends Component {
 }
 
 ChatListItem.propTypes = {
-  lastTextMessage: PropTypes.object.isRequired,
-  chat: PropTypes.object.isRequired,
-  activeAccount: PropTypes.object,
-  patient: PropTypes.object.isRequired,
-  onSelect: PropTypes.func,
-  onToggleFlag: PropTypes.func,
+  lastTextMessage: PropTypes.shape({
+    read: PropTypes.bool,
+    body: PropTypes.string,
+    createdAt: PropTypes.string,
+  }).isRequired,
+  chat: PropTypes.shape({
+    id: PropTypes.string,
+    patientId: PropTypes.string,
+    lastTextMessageId: PropTypes.string,
+    isFlagged: PropTypes.bool,
+  }).isRequired,
+  patient: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    birthDate: PropTypes.string,
+  }).isRequired,
+  toggleFlagged: PropTypes.func,
+  selectChat: PropTypes.func,
+  selectedChatId: PropTypes.string,
 };
 
-function mapStateToProps({ entities }) {
+function mapStateToProps(state, { chat = {} }) {
+  const patients = state.entities.getIn(['patients', 'models']);
+  const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
+  const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
+
   return {
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
+    selectedChatId: state.chat.get('selectedChatId'),
+    patient: patients.get(chat.patientId) || {},
+    lastTextMessage,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateEntityRequest,
+    toggleFlagged,
+    selectChat,
   }, dispatch);
 }
 

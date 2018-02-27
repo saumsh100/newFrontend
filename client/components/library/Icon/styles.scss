@@ -4,3 +4,32 @@
 .icon {
   display: inline;
 }
+
+.iconWrapper {
+  position: relative;
+}
+
+.badgeWrapper {
+  position: absolute;
+  right: -13px;
+  top: -13px;
+  border-radius: 1em;
+  color: #fff;
+  background-color: $badge-notification-background;
+  height: 1.5em;
+  line-height: 1;
+  max-width: 5em;
+  min-width: 1.5em;
+  overflow: hidden;
+  padding: .25em;
+  text-overflow: ellipsis;
+  transform: scale(.80);
+  transform-origin: top right;
+  text-align: center;
+
+  .badge {
+    color: white;
+    line-height: 18px;
+    font-size: 11px;
+  }
+}

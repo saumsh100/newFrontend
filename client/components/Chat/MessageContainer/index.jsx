@@ -3,198 +3,215 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
-import jwt from 'jwt-decode';
 import moment from 'moment';
-import debounce from 'lodash/debounce';
 import {
   Avatar,
-  Form,
-  Field,
-  Button,
-  Icon,
   SContainer,
   SBody,
   SFooter,
 } from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
-import * as Actions from '../../../actions/entities';
-import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
-import { setSelectedChatId, setNewChat } from '../../../reducers/chat';
+import { setNewChat } from '../../../reducers/chat';
+import { sendChatMessage, createNewChat, selectChat } from '../../../thunks/chat';
 import styles from './styles.scss';
 
 class MessageContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.sendMessage = debounce(this.sendMessage.bind(this), 300);
+    this.state = {
+      sendingMessage: false,
+    };
+
+    this.sendMessageHandler = this.sendMessageHandler.bind(this);
   }
 
   componentDidMount() {
-    // TODO: post to /read endpoint
-    // TODO: IF there are messages that are unread
     this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
+  }
+
+  componentWillReceiveProps() {
+    // Scroll down on component
+    const node = document.getElementById('careCruChatScrollIntoView');
+    if (node) {
+      node.scrollTop = node.scrollHeight;
+    }
   }
 
   componentDidUpdate() {
     this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
-  sendMessage(values) {
+  createNewChat(request) {
+    return this.props.createNewChat(request);
+  }
+
+  sendMessage(request) {
+    return this.props.sendChatMessage(request);
+  }
+
+  sendMessageHandler(values) {
+    if (this.state.sendingMessage) return;
+
+    this.setState({ sendingMessage: true });
+
     const accountId = this.props.activeAccount.id;
-    const token = localStorage.getItem('token');
-    const decodedToken = jwt(token);
-    const { selectedPatient } = this.props;
+    const { selectedPatient, selectedChat, userId } = this.props;
     const { mobilePhoneNumber } = selectedPatient;
+
     if (!values.message) return;
 
-    const entityData = {
-      message: values.message,
-      patient: {
-        id: this.props.selectedPatient.id,
-        mobilePhoneNumber,
-        accountId,
-      },
-
-      userId: decodedToken.userId,
+    const patient = {
+      id: this.props.selectedPatient.id,
+      mobilePhoneNumber,
+      accountId,
     };
 
-    entityData.chatId = (this.props.selectedChat ? this.props.selectedChat.id : null);
+    let requestObject = {
+      message: values.message,
+      patient,
+      userId,
+    };
 
-    if (!entityData.chatId) {
-      // Create chat, then send textMessage
-      this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats' })
-        .then((chat) => {
-          entityData.chatId = Object.keys(chat.chats)[0];
-          this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
-            .then(() => {
-              // Remove new chat as this is now a regular chat!
-              this.props.setSelectedChatId(entityData.chatId);
-              this.props.setNewChat(null);
-
-              this.props.reset('chatMessageForm_newChat');
-
-              // Scroll down on component
-              const node = document.getElementById('careCruChatScrollIntoView');
-              if (node) {
-                node.scrollTop = node.scrollHeight;
-              }
-            });
-        });
-    } else {
-      this.props.createEntityRequest({ key: 'chats', entityData, url: '/api/chats/textMessages' })
-        .then(() => {
-          this.props.reset(`chatMessageForm_${entityData.chatId}`);
-
-          // Scroll down on component
-          const node = document.getElementById('careCruChatScrollIntoView');
-          if (node) {
-            node.scrollTop = node.scrollHeight;
-          }
-        });
+    if (selectedChat && selectedChat.id) {
+      requestObject.chatId = selectedChat.id;
     }
+
+    if (!requestObject.chatId) {
+      return this.createNewChat(requestObject)
+          .then((chat) => {
+            const newChatId = Object.keys(chat.chats)[0];
+            requestObject.chatId = newChatId;
+            return this.sendMessage(requestObject);
+          })
+          .then(() => {
+            this.props.selectChat(requestObject.chatId);
+            this.props.setNewChat(null);
+            this.props.reset('chatMessageForm_newChat');
+            this.setState({ sendingMessage: false });
+          })
+          .catch(() => {
+            this.setState({ sendingMessage: false });
+          });
+    }
+
+    this.sendMessage(requestObject)
+      .then(() => this.props.reset(`chatMessageForm_${selectedChat.id}`))
+      .then(() => this.setState({ sendingMessage: false }))
+      .then(() => {
+        this.props.selectChat(selectedChat.id);
+        this.props.setNewChat(null);
+      })
+      .catch(() => this.setState({ sendingMessage: false }));
+  }
+
+  getMessageTime(message) {
+    return moment(message).calendar(null, {
+      sameDay: '[Today], h:mm a',
+      nextDay: '[Tomorrow]',
+      nextWeek: 'dddd',
+      lastDay: '[Yesterday], h:mm a',
+      lastWeek: '[Last] dddd h:mm a',
+      sameElse: 'YYYY/MM/DD, h:mm a',
+    })
+  }
+
+  isWithinTimePeriod(startDate, testingDate, maxIntervalValue = 1, maxIntervalUnit = 'hours') {
+    const firstDate = moment(startDate);
+    const secondDate = moment(testingDate);
+    return firstDate.diff(secondDate, maxIntervalUnit) > -Math.abs(maxIntervalValue);
+  }
+
+  groupChatMessages(textMessages) {
+    let group = [];
+    let currentGroup = {
+      messages: [],
+    };
+
+    textMessages.map((message) => {
+      if (!currentGroup.time) {
+        currentGroup.time = message.createdAt;
+      }
+
+      if (currentGroup.messages.length === 0) {
+        return currentGroup.messages.push(message);
+      }
+
+      if (!this.isWithinTimePeriod(currentGroup.time, message.createdAt)) {
+        group.push(currentGroup);
+
+        currentGroup = {
+          time: message.createdAt,
+          messages: [],
+        };
+      }
+
+      currentGroup.messages.push(message);
+    });
+
+    group.push(currentGroup);
+    return group;
+  }
+
+  renderMessageGroup(messages) {
+    const { selectedPatient } = this.props;
+
+    return messages.map((message, index) => {
+      const isFromPatient = message.get('from') !== this.props.activeAccount.toJS().twilioPhoneNumber;
+
+      const avatar = isFromPatient ? (
+        <Avatar
+          size="xs"
+          className={styles.patientAvatar}
+          user={selectedPatient}
+        />
+      ) : null;
+
+      return (
+        <div
+          key={index}
+          data-test-id="chatMessage"
+          className={styles.messageWrapper}
+        >
+          <div
+            key={message.get('id')}
+            className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
+          >
+            {avatar}
+            <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
+          </div>
+        </div>
+      );
+    });
+  }
+
+  renderMessagesTree() {
+    const { textMessages } = this.props;
+
+    return this.groupChatMessages(textMessages).map((group, index) => {
+      const time = (
+        <div className={styles.time}>
+          {this.getMessageTime(group.time)}
+        </div>
+      );
+
+      return (
+        <div className={styles.groupWrapper}>
+          {time}
+          <div>
+            {this.renderMessageGroup(group.messages)}
+          </div>
+        </div>
+      );
+    });
   }
 
   render() {
     const {
       selectedChat,
-      selectedPatient,
       newChat,
     } = this.props;
-
-    let display;
-
-    let userPhone = null;
-
-    if (selectedChat) {
-      // TODO: change this to componentDidMount
-      display = selectedChat.textMessages.map((text, i) => {
-        const message = this.props.textMessages.get(selectedChat.textMessages[i]);
-        if (!message.get('read')) {
-          // TODO: Absolutely get rid of this...
-          this.props.updateEntityRequest({
-            key: 'textMessages',
-            values: {},
-            url: `/api/chats/${selectedChat.id}/textMessages/read`,
-          });
-        }
-
-        let avatar;
-        let bubble;
-        let time = (
-          <div className={styles.time}>
-            {moment(message.createdAt).calendar(null, {
-              sameDay: '[Today], h:mm a',
-              nextDay: '[Tomorrow]',
-              nextWeek: 'dddd',
-              lastDay: '[Yesterday], h:mm a',
-              lastWeek: '[Last] dddd h:mm a',
-              sameElse: 'YYYY DD MM, h:mm a',
-            })}
-          </div>
-        );
-
-        if (message.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
-          userPhone = message.to;
-        } else {
-          userPhone = message.from;
-        }
-
-        let nextMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i + 1]);
-        nextMessage = (nextMessage ? nextMessage.from : null);
-
-        const isFromPatient = message.from !== this.props.activeAccount.toJS().twilioPhoneNumber;
-
-        if (isFromPatient) {
-          bubble = <MessageBubble textMessage={message} isFromPatient />;
-          avatar = (
-            <Avatar
-              size="xs"
-              className={styles.patientAvatar}
-              user={selectedPatient}
-            />
-          );
-
-          if (i !== 0) {
-            const lastMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i - 1]);
-            if (moment(message.createdAt).diff(moment(lastMessage.createdAt), 'days') < 1) {
-              time = null;
-            }
-          }
-        } else {
-          // From clinic
-          bubble = <MessageBubble textMessage={message} />;
-
-          // TODO: not putting Avatars for now
-          //if (nextMessage !== message.from) {
-            // first = <Avatar className={styles.margin} user={user} />;
-          //}
-
-          if (i !== 0) {
-            const lastMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[i - 1]);
-            if (message.from === lastMessage.from && moment(message.createdAt).diff(moment(lastMessage.createdAt), 'days') < 1) {
-              time = null;
-            }
-          }
-        }
-
-        return (
-          <div
-            key={text}
-            className={styles.messageWrapper}
-            data-test-id="chatMessage"
-          >
-            {time}
-            <div
-              className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
-            >
-              {avatar}
-              {bubble}
-            </div>
-          </div>
-        );
-      });
-    }
 
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
 
@@ -205,13 +222,14 @@ class MessageContainer extends Component {
           className={styles.allMessages}
           refCallback={node => this.scrollContainer = node}
         >
-          {display}
+          {selectedChat && this.renderMessagesTree()}
           <div className={styles.raise} />
         </SBody>
         <SFooter className={styles.sendMessage}>
           <MessageTextArea
             chat={chat}
-            onSendMessage={this.sendMessage}
+            sendingMessage={this.state.sendingMessage}
+            onSendMessage={this.sendMessageHandler}
           />
         </SFooter>
       </SContainer>
@@ -220,29 +238,34 @@ class MessageContainer extends Component {
 }
 
 MessageContainer.propTypes = {
-  currentPatient: PropTypes.object,
-  textMessages: PropTypes.object,
-  chats: PropTypes.object,
-  patients: PropTypes.object,
+  textMessages: PropTypes.array,
   activeAccount: PropTypes.object,
   selectedChat: PropTypes.object,
   newChat: PropTypes.object,
-  createEntityRequest: PropTypes.func.isRequired,
-  updateEntityRequest: PropTypes.func.isRequired,
-  receiveMessage: PropTypes.func.isRequired,
+  selectedPatient: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  userId: PropTypes.string,
+  selectChat: PropTypes.func,
+  setNewChat: PropTypes.func,
+  reset: PropTypes.func,
+  sendChatMessage: PropTypes.func,
+  createNewChat: PropTypes.func,
 };
 
 function mapStateToProps({ entities, auth, chat }) {
-  const selectedChatId = chat.get('selectedChatId');
   const chats = entities.getIn(['chats', 'models']);
   const patients = entities.getIn(['patients', 'models']);
-
-  // TODO: turn this into selectedPatient not selectedChat
+  const selectedChatId = chat.get('selectedChatId');
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   const selectedPatientId = selectedChat && selectedChat.patientId;
+  const textMessages = chat.get('chatMessages');
 
   return {
+    textMessages,
+    selectedChat,
     newChat: chat.get('newChat'),
+    userId: auth.getIn(['user', 'id']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
     selectedPatient: patients.get(selectedPatientId),
   };
@@ -250,12 +273,11 @@ function mapStateToProps({ entities, auth, chat }) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    receiveMessage: Actions.receiveEntities,
-    createEntityRequest,
-    updateEntityRequest,
-    setSelectedChatId,
+    selectChat,
     setNewChat,
     reset,
+    sendChatMessage,
+    createNewChat,
   }, dispatch);
 }
 

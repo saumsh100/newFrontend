@@ -26,6 +26,15 @@
   align-items: center;
 }
 
+.groupWrapper {
+  width: 100%;
+  display: block;
+  & > div {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .clinicMessage {
   @extend .sharedMessage;
   float: right;

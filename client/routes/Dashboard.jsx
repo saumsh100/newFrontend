@@ -11,7 +11,7 @@ import LazyRoute from './LazyRoute';
 import loadSchedule from 'bundle-loader?lazy!./Dashboard/Schedule';
 import loadIntelligence from 'bundle-loader?lazy!./Dashboard/Intelligence';
 import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
-import ChatContainer from '../containers/ChatContainer';
+import ChatContainer from '../components/Chat';
 import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
 import loadTypography from 'bundle-loader?lazy!./Dashboard/Typography';
 import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';

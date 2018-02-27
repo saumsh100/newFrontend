@@ -20,6 +20,7 @@ export default function Icon(props) {
     style,
     type,
     pulse,
+    badgeText,
   } = props;
 
   const baseClass = typeMap[type];
@@ -31,7 +32,18 @@ export default function Icon(props) {
 
   const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
 
-  return <i className={classes} data-test-id={props['data-test-id']} style={finalStyles} onClick={onClick} />;
+  if (!badgeText) {
+    return <i className={classes} data-test-id={props['data-test-id']} style={finalStyles} onClick={onClick} />;
+  }
+
+  return (
+    <div className={styles.iconWrapper}>
+      <i className={classes} data-test-id={props['data-test-id']} style={finalStyles} onClick={onClick} />
+      <div className={styles.badgeWrapper}>
+        <span className={styles.badge}>{badgeText}</span>
+      </div>
+    </div>
+  );
 }
 
 Icon.defaultProps = {
@@ -47,4 +59,5 @@ Icon.propTypes = {
   onClick: PropTypes.func,
   style: PropTypes.shape({}),
   'data-test-id': PropTypes.string,
+  badgeText: PropTypes.string,
 };

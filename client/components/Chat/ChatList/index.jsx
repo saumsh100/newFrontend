@@ -7,137 +7,109 @@ import {
   ListItem,
 } from '../../library';
 import ChatListItem from './ChatListItem';
-import { updateEntityRequest } from '../../../thunks/fetchEntities';
-import { defaultSelectedChatId } from '../../../thunks/chat';
-import { setNewChat, setSelectedChatId } from '../../../reducers/chat';
+import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
+import { setNewChat } from '../../../reducers/chat';
 import listItemStyles from './ChatListItem/styles.scss';
-import styles from './styles.scss';
 
 class ChatListContainer extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      chatList: [],
+    };
+
     this.removeNewChat = this.removeNewChat.bind(this);
     this.selectNewChat = this.selectNewChat.bind(this);
-    this.setPatient = this.setPatient.bind(this);
-    this.toggleIsFlagged = this.toggleIsFlagged.bind(this);
+  }
+
+  componentWillReceiveProps({ chats, tabIndex }) {
+    let chatList = chats.toArray();
+
+    if (tabIndex === 2) {
+      chatList = chatList.filter(chat => chat.isFlagged);
+    }
+
+    this.setState({
+      chatList,
+    });
+  }
+
+  sortChatList() {
+    const { textMessages } = this.props;
+    return this.state.chatList.sort((a, b) => {
+      const aLastId = a.textMessages[a.textMessages.length - 1];
+      const aLastTm = textMessages.get(aLastId);
+      const bLastId = b.textMessages[b.textMessages.length - 1];
+      const bLastTm = textMessages.get(bLastId);
+      if (bLastTm && aLastTm) {
+        return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
+      }
+    });
+  }
+
+  selectNewChat() {
+    this.props.selectChat(null);
   }
 
   removeNewChat(e) {
     e.stopPropagation();
     e.preventDefault();
     this.props.setNewChat(null);
-    this.props.setSelectedChatId(null);
+    this.props.selectChat(null);
     this.props.defaultSelectedChatId();
   }
 
-  selectNewChat() {
-    this.props.setSelectedChatId(null);
+  renderChatList() {
+    return this.sortChatList().map(chat =>
+      <ChatListItem
+        key={`${chat.id}_listItem`}
+        chat={chat}
+      />
+    );
   }
 
-  setPatient(id, chatId) {
-    this.props.onClick(id, chatId);
-    this.props.updateEntityRequest({ key: 'textMessages', values: {}, url: `/api/chats/${chatId}/textMessages/read` });
-  }
+  renderNewChat() {
+    const { newChat, newChatPatient, selectedChatId } = this.props;
 
-  toggleIsFlagged(chat) {
-    this.props.updateEntityRequest({
-      key: 'chats',
-      values: { isFlagged: !chat.isFlagged },
-      url: `/api/chats/${chat.id}`,
-      merge: true,
-    });
-  }
-
-  render() {
-    const {
-      chats,
-      patients,
-      textMessages,
-      selectedChat,
-      newChat,
-      newChatPatient,
-      filterIndex,
-    } = this.props;
+    if (!newChat) {
+      return null;
+    }
 
     let title = 'New message';
-    if (newChat && newChat.patientId && newChatPatient) {
+
+    if (newChat.patientId && newChatPatient) {
       title += ` to ${newChatPatient.firstName} ${newChatPatient.lastName}`;
     }
 
-    // LastTextMessageDate on Chat is not that reliable, using this for now
-    // until we have reparation jobs
-    let sortedChats = chats.toArray().sort((a, b) => {
-      const aLastId = a.textMessages[a.textMessages.length - 1];
-      const aLastTm = textMessages.get(aLastId);
-      const bLastId = b.textMessages[b.textMessages.length - 1];
-      const bLastTm = textMessages.get(bLastId);
-      return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
-    });
+    return (
+      <ListItem
+        key="new"
+        selectItem={!selectedChatId}
+        className={listItemStyles.chatListItem}
+        selectedClass={listItemStyles.selectedChatItem}
+        onClick={this.selectNewChat}
+      >
+        <div className={listItemStyles.fullName}>
+          {title}
+        </div>
+        <div
+          onClick={this.removeNewChat}
+          className={listItemStyles.hoverSection}
+        >
+          <Icon
+            icon="times"
+          />
+        </div>
+      </ListItem>
+    );
+  }
 
-    if (filterIndex) {
-      if (filterIndex === 1) {
-        sortedChats = sortedChats.filter((chat) => {
-          const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
-          return !textMessages.get(lastTextMessageId).read;
-        });
-      } else if (filterIndex === 2) {
-        sortedChats = sortedChats.filter((chat) => {
-          return chat.isFlagged;
-        });
-
-        console.log(sortedChats.length);
-      }
-    }
-
-    // based on tabs index from parent component, now filter the chats
+  render() {
     return (
       <div>
-        {newChat ?
-          <ListItem
-            selectItem={!(selectedChat && selectedChat)}
-            className={listItemStyles.chatListItem}
-            selectedClass={listItemStyles.selectedChatItem}
-            onClick={this.selectNewChat}
-          >
-            <div className={listItemStyles.fullName}>
-              {title}
-            </div>
-            <div
-              onClick={this.removeNewChat}
-              className={listItemStyles.hoverSection}
-            >
-              <Icon
-                icon="times"
-              />
-            </div>
-          </ListItem> : null}
-        {sortedChats.map((chat) => {
-          const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
-          const lastTextMessage = textMessages.get(lastTextMessageId);
-          const patient = patients.get(chat.patientId);
-
-          // A fix for when we create chat, but still haven't sent the textMessage yet
-          if (!patient || !lastTextMessage) {
-            return null;
-          }
-
-          return (
-            <ChatListItem
-              key={`${chat.id}_listItem`}
-              chat={chat}
-              patient={patient}
-              lastTextMessage={lastTextMessage}
-              isActive={selectedChat && (selectedChat.id === chat.id)}
-              onSelect={() => this.setPatient(patient.id, chat.id)}
-              onToggleFlag={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                this.toggleIsFlagged(chat);
-              }}
-            />
-          );
-        })}
+        {this.renderNewChat()}
+        {this.renderChatList()}
       </div>
     );
   }
@@ -146,29 +118,37 @@ class ChatListContainer extends Component {
 ChatListContainer.propTypes = {
   textMessages: PropTypes.object,
   chats: PropTypes.object,
-  selectedChat: PropTypes.object,
-  activeAccount: PropTypes.object,
-  currentPatient: PropTypes.object,
-  patients: PropTypes.object,
-  updateEntityRequest: PropTypes.func.isRequired,
-  newChat: PropTypes.object,
-  filterIndex: PropTypes.number.isRequired,
+  tabIndex: PropTypes.number,
+  newChat: PropTypes.shape({
+    patientId: PropTypes.string,
+  }),
+  newChatPatient: PropTypes.object,
+  selectedChatId: PropTypes.string,
+  setNewChat: PropTypes.func,
+  defaultSelectedChatId: PropTypes.func,
+  selectChat: PropTypes.func,
 };
 
-function mapStateToProps({ entities }, { newChat }) {
+function mapStateToProps({ entities, chat }) {
+  const newChat = chat.get('newChat');
   const patientId = newChat && newChat.patientId;
+  const chats = entities.getIn(['chats', 'models']);
+  const textMessages = entities.getIn(['textMessages', 'models']);
+
   return {
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
+    newChat,
+    chats,
+    textMessages,
+    selectedChatId: chat.get('selectedChatId'),
     newChatPatient: entities.getIn(['patients', 'models', patientId]),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateEntityRequest,
     setNewChat,
-    setSelectedChatId,
     defaultSelectedChatId,
+    selectChat,
   }, dispatch);
 }
 

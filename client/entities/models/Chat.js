@@ -7,6 +7,7 @@ const ChatSchema = {
   patientId: null,
   textMessages: null,
   lastTextMessageDate: null,
+  lastTextMessageId: null,
   isFlagged: null,
 };
 

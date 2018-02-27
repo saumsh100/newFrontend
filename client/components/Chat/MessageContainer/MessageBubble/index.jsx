@@ -11,12 +11,12 @@ function MessageBubble(props) {
     isFromPatient,
   } = props;
 
-  let bodyClasses = classNames(
+  const bodyClasses = classNames(
     isFromPatient ? styles.fromPatientBody : styles.fromClinicBody,
     styles.bubbleBody,
   );
 
-  let timeClasses = classNames(
+  const timeClasses = classNames(
     isFromPatient ? styles.fromPatientTime : styles.fromClinicTime,
     styles.bubbleTime,
   );
@@ -26,17 +26,21 @@ function MessageBubble(props) {
       className={styles.bubbleWrapper}
     >
       <div className={bodyClasses}>
-        {textMessage.body}
+        {textMessage.get('body')}
       </div>
       <div className={timeClasses}>
-        {moment(textMessage.createdAt).format('h:mm a')}
+        {moment(textMessage.get('createdAt')).format('h:mm a')}
       </div>
     </div>
   );
 }
 
 MessageBubble.propTypes = {
-
+  textMessage: PropTypes.shape({
+    body: PropTypes.string,
+    createdAt: PropTypes.string,
+  }),
+  isFromPatient: PropTypes.bool,
 };
 
 export default MessageBubble;

@@ -16,6 +16,7 @@ import socket from '../socket';
 import App from './Dashboard';
 import configure from '../store';
 import { load } from '../thunks/auth';
+import { loadUnreadMessages } from '../thunks/chat';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 
 // Binds the token setting in header
@@ -53,7 +54,7 @@ load()(store.dispatch).then(() => {
         logrocketURL: `https://app.logrocket.com/${process.env.LOGROCKET_APP_ID}/sessions?u=${userId}`,
       });
     }
-
+    loadUnreadMessages()(store.dispatch, store.getState());
     connectSocketToStoreLogin(store, socket);
   }
 

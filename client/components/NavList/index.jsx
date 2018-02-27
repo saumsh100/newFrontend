@@ -8,12 +8,12 @@ import styles from './styles.scss';
 
 const PATHS = {
   '/patients': [
-    {  }
+    { },
   ],
 
 };
 
-function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
+function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadChats }) {
   const {
     navItem,
     activeItem,
@@ -27,7 +27,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
 
-  const SingleNavItem = ({ path, icon, label, active, disabled, iconType = 'solid' }) => {
+  const SingleNavItem = ({ path, icon, label, active, disabled, iconType = 'solid', badge = false }) => {
     active = active || location.pathname === path;
     let classes = active ? activeClass : inactiveClass;
     if (disabled) {
@@ -46,7 +46,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
     return (
       <Link to={path} disabled={disabled}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} size={1.5} type={iconType} />
+          <Icon icon={icon} className={styles.icon} size={1.5} type={iconType} badgeText={badge} />
           {labelComponent}
         </NavItem>
       </Link>
@@ -118,7 +118,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
         </MultiNavItem>*/}
         <SingleNavItem path="/schedule" icon="calendar-alt" label="Schedule" />
         <SingleNavItem path="/patients/list" icon="heart" label="Patient Management" />
-        <SingleNavItem path="/chat" icon="comment-alt" label="Chat" />
+        <SingleNavItem path="/chat" icon="comment-alt" label="Chat" badge={unreadChats} />
 
         {/*<SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />*/}
 
@@ -150,4 +150,15 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise }) {
   );
 }
 
-export default withAuthProps(NavList);
+function mapStateToProps({ chat }) {
+  const unreadChats = chat.get('unreadChats');
+  const length = unreadChats.length > 100 ? '99+' : unreadChats.length;
+
+  return {
+    unreadChats: length,
+  };
+}
+
+const enhance = connect(mapStateToProps);
+
+export default enhance(withAuthProps(NavList));

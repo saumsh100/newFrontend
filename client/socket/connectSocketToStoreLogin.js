@@ -21,6 +21,10 @@ import {
 } from '../actions/schedule';
 
 import {
+  addMessage
+} from '../thunks/chat';
+
+import {
   getModel,
 } from '../components/Utils';
 
@@ -152,6 +156,7 @@ export default function connectSocketToStoreLogin(store, socket) {
 
       socket.on('newMessage', (data) => {
         dispatch(receiveEntities({ key: 'chats', entities: data.entities }));
+        dispatch(addMessage(data))
         const node = document.getElementById('careCruChatScrollIntoView');
         if (node) {
           node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
@@ -196,4 +201,3 @@ export default function connectSocketToStoreLogin(store, socket) {
       throw new Error(msg.data.type);
     });
 }
-

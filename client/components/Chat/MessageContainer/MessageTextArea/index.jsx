@@ -3,14 +3,10 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getFormValues, submit } from 'redux-form';
-import debounce from 'lodash/debounce';
 import {
-  Avatar,
   Form,
   Field,
-  Button,
   Icon,
-  IconButton,
   SContainer,
   SBody,
   SFooter,
@@ -19,25 +15,15 @@ import {
 import styles from './styles.scss';
 
 class MessageTextArea extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const {
-      chat,
-      canSend,
-      error,
-    } = this.props;
-
-    if (!chat) return null;
+  renderSendButton() {
+    const { canSend, chat, sendingMessage } = this.props;
 
     const sendButtonProps = {
-      className: canSend ? styles.sendIcon : styles.sendIconDisabled,
-      onClick: canSend ? debounce(() => this.props.submit(`chatMessageForm_${chat.id}`), 300) : null,
+      className: canSend && !sendingMessage ? styles.sendIcon : styles.sendIconDisabled,
+      onClick: canSend && !sendingMessage ? () => this.props.submit(`chatMessageForm_${chat.id}`) : null,
     };
 
-    const sendButton = (
+    return (
       <div {...sendButtonProps}>
         <Icon
           icon="paper-plane"
@@ -48,7 +34,16 @@ class MessageTextArea extends Component {
         </label>
       </div>
     );
+  }
 
+  render() {
+    const {
+      chat,
+      canSend,
+      error,
+    } = this.props;
+
+    if (!chat) return null;
     return (
       <SContainer className={styles.textAreaContainer}>
         <SBody className={styles.textAreaBody}>
@@ -75,12 +70,12 @@ class MessageTextArea extends Component {
         </SBody>
         <SFooter className={styles.sendIconWrapper}>
           {canSend ?
-            sendButton :
+            this.renderSendButton() :
             <Tooltip
               placement="top"
               overlay={error}
             >
-              {sendButton}
+              {this.renderSendButton()}
             </Tooltip>
           }
         </SFooter>
@@ -90,15 +85,20 @@ class MessageTextArea extends Component {
 }
 
 MessageTextArea.propTypes = {
-  chat: PropTypes.object,
+  chat: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  error: PropTypes.string,
+  canSend: PropTypes.bool,
+  sendingMessage: PropTypes.bool,
   onSendMessage: PropTypes.func.isRequired,
-  canSend: PropTypes.bool.isRequired,
+  submit: PropTypes.func,
 };
 
 function mapStateToProps(state, { chat = {} }) {
   const values = getFormValues(`chatMessageForm_${chat.id}`)(state);
   const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
-  const canSend = !!values && !!values.message && patient && patient.mobilePhoneNumber;
+  const canSend = !!(!!values && !!values.message && patient && patient.mobilePhoneNumber);
 
   let error = 'Type a message';
   if (!patient) {

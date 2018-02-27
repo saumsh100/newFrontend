@@ -120,6 +120,8 @@ $fb-fg-color: #fff;
 
 $browser-context: 14;
 
+$badge-notification-background: darken($primary-red, 10%);
+
 @function em($pixels, $context: $browser-context) {
   @if (unitless($pixels)) {
     $pixels: $pixels * 1px;
@@ -131,5 +133,3 @@ $browser-context: 14;
 
   @return $pixels / $context * 1em;
 }
-
-

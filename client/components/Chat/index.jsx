@@ -3,32 +3,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
-import immutable from 'immutable';
-import main from '../Patients/PatientList/main.scss';
 import ChatList from './ChatList';
 import MessageContainer from './MessageContainer';
 import PatientInfo from './PatientInfo';
 import ToHeader from './ToHeader';
 import {
   Button,
-  Row,
-  Avatar,
-  Col,
   SContainer,
   SHeader,
   SBody,
-  CardHeader,
   Card,
   List,
-  Grid,
   InfiniteScroll,
   Tabs,
   Tab,
-  Input,
 } from '../library';
-import { fetchEntities } from '../../thunks/fetchEntities';
-import { setNewChat, mergeNewChat, setSelectedChatId } from '../../reducers/chat';
+import { defaultSelectedChatId, loadChatList, selectChat, loadUnreadChatList, loadFlaggedChatList, cleanChatList } from '../../thunks/chat';
+import { setNewChat } from '../../reducers/chat';
 import PatientSearch from '../PatientSearch';
 import styles from './styles.scss';
 
@@ -41,186 +32,176 @@ const patientSearchInputProps = {
   placeholder: 'Search...',
 };
 
+const CHAT_LIST_OFFSET = 15;
+
 class ChatMessage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showSearch: false,
-      value: '',
-      searched: [],
-      results: [],
       tabIndex: 0,
+      chats: 0,
+      moreData: true,
     };
 
     this.addNewChat = this.addNewChat.bind(this);
     this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
-    this.submit = this.submit.bind(this);
-    this.resetState = this.resetState.bind(this);
-    // this.submitSearch = this.submitSearch.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.userClick = this.userClick.bind(this);
-    // this.getSuggestions = this.getSuggestions.bind(this);
+    this.loadChatList = this.loadChatList.bind(this);
+    this.changeTab = this.changeTab.bind(this);
+  }
+
+  componentDidMount() {
+    this.loadChatList(true);
   }
 
   addNewChat() {
     // No data yet, this just sets it to not be null
     this.props.setNewChat({});
-    this.props.setSelectedChatId(null);
+    this.props.selectChat(null);
   }
 
   selectChatOrCreate(patient) {
     // If this patient has a chat, select the chat
     if (patient.chatId) {
-      this.props.setSelectedChatId(patient.chatId);
+      this.props.selectChat(patient.chatId);
       this.props.setNewChat(null);
     } else {
-      this.props.setSelectedChatId(null);
+      this.props.selectChat(null);
       this.props.setNewChat({ patientId: patient.id });
     }
   }
 
-  submit(event) {
-    if (event.key === 'Enter') {
-      let id = null;
-      this.state.results.forEach((result) => {
-        if (result.name === this.state.value) {
-          id = result.id;
-        }
-      });
+  receivedChatsPostUpdate(result) {
+    this.setState({
+      chats: this.state.chats + Object.keys(result.chats || {}).length,
+      moreData: !(Object.keys(result).length === 0 ||
+                Object.keys(result.chats).length < CHAT_LIST_OFFSET),
+    });
+  }
 
-      const map = immutable.fromJS(this.props.chats);
-      const selectedChat = map.filter(chat => chat.get('patientId') === id).first() || {};
+  chatListLoader() {
+    const { tabIndex } = this.state;
 
-      if (id) {
-        return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
-          this.props.setCurrentPatient(id, selectedChat.id);
-        });
-      }
+    if (tabIndex === 1) {
+      return this.props.loadUnreadChatList;
     }
+
+    if (tabIndex === 2) {
+      return this.props.loadFlaggedChatList;
+    }
+
+    return this.props.loadChatList;
   }
 
-  userClick(id) {
-    const map = immutable.fromJS(this.props.chats);
-    const selectedChat = map.filter(chat => chat.get('patientId') === id).first() || {};
-
-    return this.props.fetchEntities({ url: `/api/chats/patient/${id}` }).then(() => {
-      this.props.setCurrentPatient(id, selectedChat.id);
-    });
+  loadChatList(initial = false) {
+    return this.chatListLoader()(CHAT_LIST_OFFSET, this.state.chats)
+        .then(result => this.receivedChatsPostUpdate(result))
+        .then(() => {
+          if (initial) {
+            this.props.defaultSelectedChatId();
+          }
+        });
   }
 
-  resetState() {
+  changeTab(newIndex) {
+    if (this.state.tabIndex === newIndex) {
+      return;
+    }
+
+    this.props.selectChat(null);
+
     this.setState({
-      showSearch: false,
+      tabIndex: newIndex,
+      chats: 0,
+    }, () => {
+      this.props.cleanChatList();
+      this.loadChatList()
+          .then(() => {
+            this.props.defaultSelectedChatId();
+          });
     });
   }
 
-  onChange(e, { newValue }) {
-    this.setState({
-      value: newValue,
-    });
-  };
+  renderHeading() {
+    return (
+      <SHeader className={styles.leftCardHeader}>
+        <div className={styles.searchSection}>
+          <div className={styles.searchInputWrapper}>
+            <PatientSearch
+              onSelect={this.selectChatOrCreate}
+              theme={patientSearchTheme}
+              inputProps={patientSearchInputProps}
+            />
+          </div>
+          <Button
+            icon="edit"
+            onClick={this.addNewChat}
+            className={styles.addNewChatButton}
+            color="darkblue"
+          />
+        </div>
+        <div className={styles.tabsSection}>
+          <Tabs
+            fluid
+            index={this.state.tabIndex}
+            onChange={this.changeTab}
+            noUnderLine
+          >
+            <Tab label="All" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
+            <Tab label="Unread" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
+            <Tab label="Flagged" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
+          </Tabs>
+        </div>
+      </SHeader>
+    );
+  }
+
+  renderChatList() {
+    return (
+      <SBody>
+        <List className={styles.chatsList}>
+          <InfiniteScroll
+            loadMore={this.loadChatList}
+            loader={<div style={{ clear: 'both' }}>Loading...</div>}
+            hasMore={this.state.moreData}
+            initialLoad={false}
+            useWindow={false}
+            threshold={1}
+          >
+            <ChatList
+              tabIndex={this.state.tabIndex}
+            />
+          </InfiniteScroll>
+        </List>
+      </SBody>
+    );
+  }
+
+  renderMessageContainer() {
+    return (
+      <SBody>
+        <div className={styles.splitWrapper}>
+          <div className={styles.leftSplit}>
+            <MessageContainer />
+          </div>
+          <div className={styles.rightSplit}>
+            <div className={styles.rightInfo}>
+              <PatientInfo />
+              <div className={styles.bottomInfo} />
+            </div>
+          </div>
+        </div>
+      </SBody>
+    );
+  }
 
   render() {
-    const {
-      newChat,
-    } = this.props;
-
-    const info = (this.props.currentPatient ? `${this.props.currentPatient.firstName} ${this.props.currentPatient.lastName} ${this.props.currentPatient.mobilePhoneNumber}` : null);
-    const displayinfo = (this.props.currentPatient ? <PatientInfo
-      patient={this.props.currentPatient}
-    /> : null);
-
-    let userPhone = null;
-    let displayAnonInfo = null;
-
-    if (this.props.selectedChat && !this.props.selectedChat.patientId && this.props.selectedChat.textMessages[0]) {
-      const firstMessage = this.props.textMessages.get(this.props.selectedChat.textMessages[0]).toJS();
-
-      if (firstMessage.to !== this.props.activeAccount.toJS().twilioPhoneNumber) {
-        userPhone = firstMessage.to;
-      } else {
-        userPhone = firstMessage.from;
-      }
-
-      /*displayAnonInfo = (
-        <PatientInfo
-          patient={{
-            avatarUrl: '',
-            anonPhone: userPhone,
-          }}
-        />
-      );*/
-      displayAnonInfo = null;
-    }
-
-    const inputProps = {
-      placeholder: 'Search...',
-      value: this.state.value,
-      onChange: this.onChange,
-      onKeyDown: this.submit,
-      name: 'patients',
-    };
-
     return (
       <div className={styles.chatWrapper}>
         <div className={styles.patientsList}>
           <Card className={styles.leftCard} noBorder>
             <SContainer>
-              <SHeader className={styles.leftCardHeader}>
-                <div className={styles.searchSection}>
-                  <div className={styles.searchInputWrapper}>
-                    <PatientSearch
-                      onSelect={this.selectChatOrCreate}
-                      theme={patientSearchTheme}
-                      inputProps={patientSearchInputProps}
-                    />
-                  </div>
-                  <Button
-                    icon="edit"
-                    onClick={this.addNewChat}
-                    className={styles.addNewChatButton}
-                    color="darkblue"
-                  />
-                </div>
-                {/*<div className={styles.actionsSection}>
-
-                    </div>*/}
-                <div className={styles.tabsSection}>
-                  <Tabs
-                    fluid
-                    index={this.state.tabIndex}
-                    onChange={(index) => this.setState({ tabIndex: index })}
-                    noUnderLine
-                  >
-                    <Tab label="All" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
-                    <Tab label="Unread" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
-                    <Tab label="Flagged" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
-                  </Tabs>
-                </div>
-              </SHeader>
-              <SBody>
-                <List className={styles.chatsList}>
-                  <InfiniteScroll
-                    loadMore={this.props.loadMore}
-                    loader={<div style={{ clear: 'both' }}>Loading...</div>}
-                    hasMore={this.state.tabIndex === 0 && this.props.moreData}
-                    initialLoad={false}
-                    useWindow={false}
-                    threshold={1}
-                  >
-                    <ChatList
-                      textMessages={this.props.textMessages}
-                      chats={this.props.chats}
-                      patients={this.props.patients}
-                      selectedChat={this.props.selectedChat}
-                      onClick={this.props.setCurrentPatient}
-                      currentPatient={this.props.currentPatient}
-                      newChat={newChat}
-                      filterIndex={this.state.tabIndex}
-                    />
-                  </InfiniteScroll>
-                </List>
-              </SBody>
+              {this.renderHeading()}
+              {this.renderChatList()}
             </SContainer>
           </Card>
         </div>
@@ -232,26 +213,7 @@ class ChatMessage extends Component {
             <SHeader className={styles.messageHeader}>
               <ToHeader />
             </SHeader>
-            <SBody>
-              <div className={styles.splitWrapper}>
-                <div className={styles.leftSplit}>
-                  <MessageContainer
-                    newChat={newChat}
-                    selectedChat={this.props.selectedChat}
-                    currentPatient={this.props.currentPatient}
-                    textMessages={this.props.textMessages}
-                  />
-                </div>
-                <div className={styles.rightSplit}>
-                  <div className={styles.rightInfo}>
-                    {displayinfo || displayAnonInfo}
-                    <div className={styles.bottomInfo}>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </SBody>
+            {this.renderMessageContainer()}
           </SContainer>
         </Card>
       </div>
@@ -260,37 +222,27 @@ class ChatMessage extends Component {
 }
 
 ChatMessage.propTypes = {
-  currentPatient: PropTypes.object,
-  searchedPatients: PropTypes.object,
-  chats: PropTypes.object,
-  patients: PropTypes.object,
-  selectedChat: PropTypes.object,
-  activeAccount: PropTypes.object,
-  moreData: PropTypes.bool,
-  textMessages: PropTypes.object,
-  loadMore: PropTypes.func.isRequired,
-  searchPatient: PropTypes.func.isRequired,
-  setCurrentPatient: PropTypes.func.isRequired,
-  fetchEntities: PropTypes.func.isRequired,
+  setNewChat: PropTypes.func,
+  defaultSelectedChatId: PropTypes.func,
+  selectChat: PropTypes.func,
+  loadChatList: PropTypes.func,
+  loadUnreadChatList: PropTypes.func,
+  loadFlaggedChatList: PropTypes.func,
+  cleanChatList: PropTypes.func,
 };
-
-function mapStateToProps({ entities, chat }) {
-  return {
-    // TODO: this is not right... can't get activeAccount this way!
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
-    newChat: chat.get('newChat'),
-  };
-}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    fetchEntities,
     setNewChat,
-    setSelectedChatId,
-    mergeNewChat,
+    defaultSelectedChatId,
+    selectChat,
+    loadChatList,
+    loadUnreadChatList,
+    loadFlaggedChatList,
+    cleanChatList,
   }, dispatch);
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(null, mapDispatchToProps);
 
 export default enhance(ChatMessage);

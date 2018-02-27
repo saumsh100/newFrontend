@@ -1,9 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
-import moment from 'moment';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Avatar, Tabs, Tab } from '../../library';
+import { Tabs, Tab } from '../../library';
 import About from './About';
 import Appointments from './Appointments';
 import Insurance from './Insurance';
@@ -20,6 +18,7 @@ class PatientInfo extends Component {
 
   render() {
     const { patient } = this.props;
+
     if (!patient) return null;
 
     return (
@@ -59,12 +58,20 @@ PatientInfo.propTypes = {
   patient: PropTypes.object,
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
+function mapStateToProps({ entities, chat }) {
+  const selectedChat = chat.get('selectedChatId');
+  const finalChat = selectedChat || chat.get('newChat');
 
-  }, dispatch);
+  const selectedPatientId = finalChat && finalChat.patientId ?
+                            finalChat.patientId
+                            : entities.getIn(['chats', 'models', finalChat, 'patientId']);
+
+  return {
+    patient: entities.getIn(['patients', 'models', selectedPatientId]),
+  };
 }
 
-const enhance = connect(null, mapDispatchToProps);
+
+const enhance = connect(mapStateToProps);
 
 export default enhance(PatientInfo);
