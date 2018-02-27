@@ -23,7 +23,8 @@ const wordMap = {
 };
 
 function RecallSMSPreview({ patient, account, recall }) {
-  const recallMessage = createRecallText({ patient, account, recall });
+  const link = 'carecru.co/gg58h';
+  const recallMessage = createRecallText({ patient, account, recall, link });
   const smsPhoneNumber = account.twilioPhoneNumber ||
     account.destinationPhoneNumber ||
     account.phoneNumber ||

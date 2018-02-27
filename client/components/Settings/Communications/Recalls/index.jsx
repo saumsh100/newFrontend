@@ -16,6 +16,7 @@ import {
 import { convertIntervalToMs, w2s, s2m, m2s } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
+import AdvancedSettingsForm from './AdvancedSettingsForm';
 import CreateRecallsForm from './CreateRecallsForm';
 import RecallPreview from './RecallPreview';
 import IconCircle from '../../Shared/IconCircle';
@@ -40,13 +41,16 @@ class Recalls extends Component {
 
     this.state = {
       isAdding: false,
+      isAdvancedSettingsOpen: false,
       selectedRecallId: null,
     };
 
+    this.saveAdvancedSettings = this.saveAdvancedSettings.bind(this);
     this.newRecall = this.newRecall.bind(this);
     this.openModal = this.openModal.bind(this);
     this.selectRecall = this.selectRecall.bind(this);
     this.toggleAdding = this.toggleAdding.bind(this);
+    this.toggleAdvancedSettings = this.toggleAdvancedSettings.bind(this);
     this.changeRecareDate = this.changeRecareDate.bind(this);
     this.changeHygieneDate = this.changeHygieneDate.bind(this);
   }
@@ -61,6 +65,10 @@ class Recalls extends Component {
     this.setState({ isAdding: !this.state.isAdding });
   }
 
+  toggleAdvancedSettings() {
+    this.setState({ isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen });
+  }
+
   openModal() {
     const newState = {
       active: false,
@@ -68,6 +76,37 @@ class Recalls extends Component {
     };
 
     this.setState(newState);
+  }
+
+  saveAdvancedSettings(values) {
+    const { activeAccount } = this.props;
+    const {
+      recallBufferNumber,
+      recallBufferInterval,
+      recallStartTime,
+      recallEndTime,
+    } = values;
+
+    const newValues = {
+      recallBuffer: `${recallBufferNumber} ${recallBufferInterval}`,
+      recallStartTime,
+      recallEndTime,
+    };
+
+    const alert = {
+      success: {
+        title: 'Recall Settings Updated',
+          body: `Successfully updated the advanced settings for recalls`,
+      },
+
+      error: {
+        title: 'Failed to Update Recall Settings',
+          body: `Error trying to update the advanced settings for recalls`,
+      },
+    };
+
+    this.props.updateEntityRequest({ url: `/api/accounts/${activeAccount.id}`, values: newValues, alert })
+      .then(this.toggleAdvancedSettings);
   }
 
   newRecall(values) {
@@ -152,17 +191,31 @@ class Recalls extends Component {
   }
 
   render() {
-    if (!this.props.activeAccount || !this.props.activeAccount.id) {
+    const { activeAccount, recalls, role } = this.props;
+    const { selectedRecallId } = this.state;
+
+    if (!activeAccount || !activeAccount.id) {
       return null;
     }
 
-    const actionsNew = [
+    const advancedSettingsActions = [
+      { label: 'Cancel', onClick: this.toggleAdvancedSettings, component: Button, props: { border: 'blue' } },
+      { label: 'Save', onClick: this.saveAdvancedSettings, component: RemoteSubmitButton, props: { color: 'blue', form: 'recallAdvancedSettings' } },
+    ];
+
+    const arr = activeAccount.recallBuffer.split(' ');
+    const advancedValues = {
+      recallBufferNumber: arr[0],
+      recallBufferInterval: arr[1],
+      recallStartTime: activeAccount.recallStartTime,
+      recallEndTime: activeAccount.recallEndTime,
+    };
+
+    const addRecallActions = [
       { label: 'Cancel', onClick: this.toggleAdding, component: Button, props: { border: 'blue' } },
       { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { color: 'blue', form: 'newRecall' } },
     ];
 
-    const { activeAccount, recalls, role } = this.props;
-    const { selectedRecallId } = this.state;
     const selectedRecall = this.props.recalls.get(selectedRecallId);
 
     const recallsArray = recalls.toArray();
@@ -188,13 +241,23 @@ class Recalls extends Component {
         // TODO: we have removed add button for now
         rightActions={
           role === 'SUPERADMIN' ?
-            <Button
-              onClick={this.toggleAdding}
-              data-test-id="createNewReminder"
-              color="blue"
-            >
-              Add
-            </Button>
+            (
+              <div>
+                <Button
+                  border="blue"
+                  onClick={this.toggleAdvancedSettings}
+                >
+                  Advanced Settings
+                </Button>
+                <Button
+                  onClick={this.toggleAdding}
+                  data-test-id="createNewReminder"
+                  color="blue"
+                >
+                  Add
+                </Button>
+              </div>
+            )
           : null
         }
 
@@ -279,7 +342,20 @@ class Recalls extends Component {
         rightColumn={previewComponent}
       >
         <DialogBox
-          actions={actionsNew}
+          actions={advancedSettingsActions}
+          title="Recalls Advanced Settings"
+          type="medium"
+          active={this.state.isAdvancedSettingsOpen}
+          onEscKeyDown={this.toggleAdvancedSettings}
+          onOverlayClick={this.toggleAdvancedSettings}
+        >
+          <AdvancedSettingsForm
+            initialValues={advancedValues}
+            onSubmit={this.saveAdvancedSettings}
+          />
+        </DialogBox>
+        <DialogBox
+          actions={addRecallActions}
           title="Add Recall"
           type="medium"
           active={this.state.isAdding}

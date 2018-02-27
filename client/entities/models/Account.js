@@ -50,6 +50,9 @@ const AccountSchema = {
   callrailId: null,
   recallInterval: null,
   hygieneInterval: null,
+  recallBuffer: null,
+  recallStartTime: null,
+  recallEndTime: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

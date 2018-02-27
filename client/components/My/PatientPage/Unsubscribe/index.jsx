@@ -27,7 +27,6 @@ class Unsubscribe extends Component {
   }
 
   updatePreferences(values) {
-    console.log('values', values);
     const patientId = this.props.params.patient.id;
     this.props.updateEntityRequest({
       id: 'updatePatientPreferences',

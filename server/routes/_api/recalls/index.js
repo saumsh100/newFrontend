@@ -2,7 +2,7 @@
 import { Router } from 'express';
 import moment from 'moment';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
-import { getRecallTemplateName } from '../../../lib/recalls/createRecallText';
+import { getRecallTemplateName, getPreviewMergeVars } from '../../../lib/recalls/createRecallText';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { getDayStart, getDayEnd } from '../../../util/time';
@@ -129,11 +129,13 @@ recallsRouter.get('/:accountId/recalls/:recallId/preview', checkPermissions('acc
     };
 
     const templateName = getRecallTemplateName({ recall });
+    const previewMergeVars = getPreviewMergeVars({ recall });
     const html = await renderTemplate({
       templateName,
       mergeVars: [
         // defaultMergeVars
         ...generateClinicMergeVars({ account, patient }),
+        ...previewMergeVars,
       ],
     });
 

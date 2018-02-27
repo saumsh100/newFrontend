@@ -122,3 +122,23 @@ export function getRecallTemplateName({ recall }) {
   const subtype = numSeconds >= 0 ? 'Before' : 'After';
   return `Patient Recall - ${interval} ${subtype}`;
 }
+
+const RecallsPreviewMergeVars = {
+  '1 months': [{ name: 'WEEKSBEFORE_DUEDATE', content: '4' }],
+  '1 weeks': [{ name: 'WEEKSBEFORE_DUEDATE' , content: '1' }],
+  '-1 weeks': [{ name: 'WEEKS_PASTDUE' , content: '1' }],
+  '-1 months': [{ name: 'MONTHS_PASTDUE', content: '1' }],
+  '-2 months': [{ name: 'MONTHS_PASTDUE', content: '2' }],
+  '-4 months': [{ name: 'MONTHS_PASTDUE', content: '4' }],
+  '-6 months': [{ name: 'MONTHS_PASTDUE', content: '6' }],
+  '-8 months': [{ name: 'MONTHS_PASTDUE', content: '8' }],
+  '-10 months': [{ name: 'MONTHS_PASTDUE', content: '10' }],
+  '-12 months': [{ name: 'MONTHS_PASTDUE', content: '12' }],
+  '-14 months': [{ name: 'MONTHS_PASTDUE', content: '14' }],
+  '-16 months': [{ name: 'MONTHS_PASTDUE', content: '16' }],
+  '-18 months': [{ name: 'MONTHS_PASTDUE', content: '18' }],
+};
+
+export function getPreviewMergeVars({ recall }) {
+  return RecallsPreviewMergeVars[recall.interval];
+}
