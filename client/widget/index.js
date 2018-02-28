@@ -102,9 +102,9 @@ function main() {
   if (sentRecallId) {
     if (window.CareCruz[accountId]) {
       window.CareCruz[accountId].setSentRecallId(sentRecallId);
-      window.CareCruz[accountId].setDueDate(sentRecallId);
-    } else {;
-      window.CareCru.setSentRecallId(dueDate);
+      window.CareCruz[accountId].setDueDate(dueDate);
+    } else {
+      window.CareCru.setSentRecallId(sentRecallId);
       window.CareCru.setDueDate(dueDate);
     }
   }
