@@ -273,8 +273,8 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
       preferences: {
         recalls: true,
       },
-    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.hygieneInterval}' - INTERVAL '${recall.interval}')`),
-    sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.hygieneInterval}' - INTERVAL '${recall.interval}')`)),
+    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.recallInterval}' - INTERVAL '${recall.interval}')`),
+    sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.recallInterval}' - INTERVAL '${recall.interval}')`)),
     include: [{
       model: SentRecall,
       as: 'sentRecalls',

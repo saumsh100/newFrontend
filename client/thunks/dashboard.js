@@ -8,6 +8,7 @@ import {
   setToDoReviews,
   setToDoRecalls,
 } from '../reducers/dashboard';
+import { convertIntervalStringToObject } from '../../server/util/time';
 
 export function fetchInsights() {
   return async function (dispatch, getState) {
@@ -56,17 +57,20 @@ export function fetchDonnasToDos(index) {
     let startDate = currentDate.startOf('day').toISOString();
     let endDate = currentDate.endOf('day').toISOString();
     const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-
-    if (account.timezone) {
-      startDate = moment.tz(currentDate, account.timezone).startOf('day').toISOString();
-      endDate = moment.tz(currentDate, account.timezone).endOf('day').toISOString();
+    let recallBuffer;
+    if (account && account.toJS()) {
+      recallBuffer = account.toJS().recallBuffer;
+      if (account.timezone) {
+        startDate = moment.tz(currentDate, account.timezone).startOf('day').toISOString();
+        endDate = moment.tz(currentDate, account.timezone).endOf('day').toISOString();
+      }
     }
 
     if (toDoFunctions[index]) {
       const accountId = auth.get('accountId');
       dispatch(setLoading({ key: 'loadingToDos', value: true }));
 
-      await toDoFunctions[index](accountId, startDate, endDate, dispatch);
+      await toDoFunctions[index](accountId, startDate, endDate, dispatch, recallBuffer);
       return dispatch(setLoading({ key: 'loadingToDos', value: false }));
     }
 
@@ -96,9 +100,15 @@ async function fetchToDoReviews(accountId, startDate, endDate, dispatch) {
   }
 }
 
-async function fetchToDoRecalls(accountId, startDate, endDate, dispatch) {
+async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallBuffer) {
   try {
-    const params = { startDate, endDate };
+    let endDateQuery = endDate;
+    if (recallBuffer) {
+      endDateQuery = moment(startDate)
+      .add(convertIntervalStringToObject(recallBuffer)).toISOString();
+    }
+
+    const params = { startDate, endDate: endDateQuery };
     const recallsData = await axios.get(`/api/accounts/${accountId}/recalls/outbox`, { params });
     dispatch(setToDoRecalls(recallsData.data));
   } catch (err) {

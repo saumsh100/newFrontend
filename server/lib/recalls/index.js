@@ -119,7 +119,6 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
         }
 
         dueDate = dueDate
-            .add(1, 'days')
             .add(convertIntervalStringToObject(patient.insuranceInterval || account.hygieneInterval))
             .toISOString();
 

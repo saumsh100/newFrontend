@@ -65,6 +65,8 @@ export default {
       throw new Error(`patient with id=${patient.id} does not have an email`);
     }
 
+    const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+
     const lastDate = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
 
     return sendTemplate({
@@ -87,6 +89,14 @@ export default {
           content: account.name,
         },
         {
+          name: 'ACCOUNT_ADDRESS',
+          content: account.address.street,
+        },
+        {
+          name: 'ACCOUNT_CITY',
+          content: account.address.city,
+        },
+        {
           name: 'ACCOUNT_CONTACTEMAIL',
           content: account.contactEmail,
         },
@@ -103,7 +113,7 @@ export default {
           content: moment(dueDate).diff(moment(), 'weeks'),
         },
         {
-          name: 'MONTHS_PASTDUE',
+          name: 'MONTHS_LASTAPPT',
           content: moment().diff(moment(lastDate), 'months'),
         },
         {
@@ -111,8 +121,20 @@ export default {
           content: moment().diff(moment(lastDate), 'weeks'),
         },
         {
+          name: 'ACCOUNT_LOGO_URL',
+          content: accountLogoUrl,
+        },
+        {
           name: 'RECALL_DUEDATE',
           content: moment(dueDate).format('LL'),
+        },
+        {
+          name: 'FACEBOOK_URL',
+          content: account.facebookUrl,
+        },
+        {
+          name: 'GOOGLE_URL',
+          content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
         },
         {
           name: 'PATIENT_FIRSTNAME',

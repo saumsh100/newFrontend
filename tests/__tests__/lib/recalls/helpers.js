@@ -110,6 +110,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -170,6 +171,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -192,6 +194,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -213,6 +216,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -236,6 +240,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -253,6 +258,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
           startDate: date(2017, 0, 1, 9),
@@ -301,6 +307,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             recallBuffer: '1 days',
           },
 
@@ -322,6 +329,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             recallBuffer: '1 days',
           },
 
@@ -344,6 +352,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             recallBuffer: '1 days',
           },
 
@@ -365,6 +374,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             recallBuffer: '1 days',
           },
 
@@ -388,6 +398,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             recallBuffer: '1 days',
           },
 
@@ -405,6 +416,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
           startDate: date(2017, 0, 1, 9),
@@ -464,6 +476,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -524,6 +537,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -584,6 +598,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -650,6 +665,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '6 months',
+            recallInterval: '6 months',
             recallBuffer: '1 days',
           },
 
@@ -695,6 +711,7 @@ describe('Recalls Calculation Library', () => {
             id: accountId,
             hygieneInterval: '3 months',
             recallBuffer: '1 days',
+            recallInterval: '6 months',
             recallStartTime: '17:00:00',
           },
           startDate: date(2018, 2, 2, 7),
@@ -757,6 +774,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             recallBuffer: '1 days',
             recallStartTime: '17:00:00',
           },
@@ -776,6 +794,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '10 months',
+            recallInterval: '10 months',
             timezone: 'America/New_York',
             recallBuffer: '1 days',
             recallStartTime: '17:00:00',
@@ -829,6 +848,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 8),
@@ -848,6 +868,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
@@ -870,6 +891,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
@@ -897,6 +919,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 9),
@@ -964,6 +987,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 8),
@@ -983,6 +1007,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
           },
           startDate: date(2018, 2, 2, 7),
           endDate: date(2018, 2, 3, 8),
@@ -1004,6 +1029,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
@@ -1031,6 +1057,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 9),
@@ -1118,6 +1145,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 8),
@@ -1134,6 +1162,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
           },
           startDate: date(2018, 2, 2, 7),
           endDate: date(2018, 2, 3, 8),
@@ -1153,6 +1182,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 7),
@@ -1178,6 +1208,7 @@ describe('Recalls Calculation Library', () => {
           account: {
             id: accountId,
             hygieneInterval: '3 months',
+            recallInterval: '3 months',
             recallBuffer: '1 days',
           },
           startDate: date(2018, 2, 2, 9),
