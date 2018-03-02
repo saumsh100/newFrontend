@@ -30,7 +30,7 @@ class ScheduleContainer extends Component {
     const query = {
       startDate,
       endDate,
-      limit: 150,
+      limit: 350,
     };
 
     Promise.all([

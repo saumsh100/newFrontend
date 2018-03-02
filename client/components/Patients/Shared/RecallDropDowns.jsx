@@ -80,7 +80,7 @@ export default function RecallDropDowns(props){
             Send a Automated Phone Recall
           </ListItem>
           <ListItem className={styles.ddListItem} disabled>
-            Log Phone Recall
+            Log Phone
           </ListItem>
         </List>
       </DropdownMenu>

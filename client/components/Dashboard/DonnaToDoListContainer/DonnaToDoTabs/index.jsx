@@ -128,12 +128,12 @@ class DonnaToDoTabs extends Component {
                 activeClass={styles.activeTab}
               />
               <Tab
-                label={'Online Directories'}
+                label={'Referral Follow Ups'}
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />
               <Tab
-                label={'Surveys'}
+                label={'Waitlist Queue'}
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />

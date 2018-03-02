@@ -52,7 +52,6 @@ function Checkbox(props) {
         />
         <label
           htmlFor={id}
-
         />
       </div>
       <span

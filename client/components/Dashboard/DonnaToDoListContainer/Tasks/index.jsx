@@ -16,8 +16,8 @@ const toDoListNames = [
   'Patient Recalls',
   'Review Requests',
   'Referral Requests',
-  'Online Directories',
-  'Surveys',
+  'Referral Follow Ups',
+  'Waitlist Queue',
 ];
 
 const defaultHeaderTemplate = () => {

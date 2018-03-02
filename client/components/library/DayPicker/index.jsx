@@ -133,8 +133,7 @@ class DayPicker extends Component {
           onDayClick={this.handleDayClick}
           selectedDays={convertValueToDate(value, timezone)}
           handleInputChange={this.handleInputChange}
-          //month={ convertValueToDate(value, timezone) ? new Date(moment(value).year(), moment(value).month()) : new Date()}
-          initialMonth={new Date(value)}
+          initialMonth={value ? new Date(convertValueToDate(value, timezone)) : new Date()}
           {...this.props}
         />
       </div>

@@ -3,6 +3,7 @@ export function ManualLimitOffset(eventsArray, query) {
   const {
     limit,
     offset,
+    order,
   } = query;
 
 
@@ -54,4 +55,5 @@ export const patientAttributes = [
   'Patient.gender',
   'Patient.language',
   'Patient.type',
+  'Patient.insuranceInterval',
 ];

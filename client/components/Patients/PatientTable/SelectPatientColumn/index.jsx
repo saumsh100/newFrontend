@@ -12,6 +12,9 @@ export default function SelectPatient(props) {
   } = props;
 
   const checked = patientIds.indexOf(id) > -1;
+  const theme = {
+    cbx: styles.cbxStyle,
+  };
 
   return (
     <div className={styles.selectPatient}>
@@ -21,6 +24,7 @@ export default function SelectPatient(props) {
           e.stopPropagation();
           handlePatientSelection(id);
         }}
+        theme={theme}
       />
     </div>
   );

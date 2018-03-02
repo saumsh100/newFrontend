@@ -11,6 +11,8 @@
 .name {
   composes: subHeader from 'sass-loader!../../../../fonts.scss';
   color: lighten($primary-blue, 10%);
+  overflow: hidden;
+  text-overflow: ellipsis;
   &:hover {
     color: $primary-blue;
     cursor: pointer;

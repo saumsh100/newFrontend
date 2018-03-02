@@ -11,11 +11,16 @@ export default function SelectAllPatients(props) {
     maxPatients,
   } = props;
 
+  const theme = {
+    cbx: styles.cbxStyle,
+  };
+
   return (
     <div className={styles.selectAll}>
       <Checkbox
         checked={patientIds.length === maxPatients && patientIds.length !== 0}
         onChange={selectAllPatients}
+        theme={theme}
       />
     </div>
   );

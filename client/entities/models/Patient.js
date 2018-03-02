@@ -45,7 +45,7 @@ const PatientSchema = {
   lastRestorativeApptId: null,
   lastRecallDate: null,
   lastRecallApptId: null,
-
+  insuranceInterval: null,
   firstApptId: null,
   firstApptDate: null,
 };

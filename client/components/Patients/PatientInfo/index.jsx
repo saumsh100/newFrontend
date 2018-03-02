@@ -66,6 +66,10 @@ class PatientInfo extends Component {
         id: 'patientIdStats',
         url: `/api/patients/${patientId}/stats`,
       }),
+      this.props.fetchEntitiesRequest({
+        id: 'accountsPatientInfo',
+        key: 'accounts',
+      }),
     ]);
   }
 
@@ -110,6 +114,8 @@ class PatientInfo extends Component {
       patientStats,
       updateEntityRequest,
       wasFetched,
+      accountsFetched,
+      activeAccount,
     } = this.props;
 
 
@@ -121,6 +127,8 @@ class PatientInfo extends Component {
               patient={patient}
               patientStats={patientStats}
               wasFetched={wasFetched}
+              accountsFetched={accountsFetched}
+              activeAccount={activeAccount}
             />
           </Col>
         </Row>
@@ -213,16 +221,23 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-function mapStateToProps({ entities, apiRequests, patientTable }, { match }) {
+function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
   const patientStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
   const wasFetched = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').wasFetched : null);
+
+  const waitForAuth = auth.get('accountId');
+  const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
+
+  const accountsFetched = (apiRequests.get('accountsPatientInfo') ? apiRequests.get('accountsPatientInfo').wasFetched : null);
 
   return {
     patient: patients.get(match.params.patientId),
     patientStats,
     wasFetched,
     filters: patientTable.get('timelineFilters'),
+    activeAccount,
+    accountsFetched,
   };
 }
 

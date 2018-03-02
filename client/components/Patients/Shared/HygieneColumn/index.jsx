@@ -4,43 +4,60 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from '../../PatientTable/styles.scss';
 
-
 export default function HygieneColumn(props) {
   const {
     patient,
     className,
     showTable,
+    activeAccount,
   } = props;
 
-  const lastApptDate = moment(patient.lastHygieneDate);
+  const lastHygieneDate = moment(patient.lastHygieneDate);
+  let intervalNum = null;
 
-  if (!lastApptDate.isValid() && !showTable) {
+  if (!lastHygieneDate.isValid() && !showTable) {
     return null;
-  } else if (!lastApptDate.isValid() && showTable) {
+  } else if (!lastHygieneDate.isValid() && showTable) {
     return <div className={styles.displayFlex}> - </div>;
   }
 
-  const hygieneDate = moment(lastApptDate).add(6, 'months');
-  const months = moment().diff(lastApptDate, 'months');
+  if (patient && patient.insuranceInterval) {
+    const insuranceInterval = patient.insuranceInterval.split(' ');
+    intervalNum = Number(insuranceInterval[0]);
+  } else {
+    const hygieneInterval = activeAccount.hygieneInterval.split(' ');
+    intervalNum = Number(hygieneInterval[0]);
+  }
 
+  const hygieneDueDate = moment(lastHygieneDate).add(intervalNum, 'months');
+  const monthsDiff = moment().diff(hygieneDueDate, 'months');
+  const weeksDiff = moment().diff(hygieneDueDate, 'weeks');
   let dotStyle = styles.dot;
 
-  if (months >= 9) {
+  // weeksDiff === 0 || (weeksDiff <= -1 && weeksDiff >= -4)
+  // weeksDiff === -1 || weeksDiff === -4
+
+  if (monthsDiff >= 8) {
     dotStyle = classnames(dotStyle, styles.dotRed);
-  } else if (months >= 6 && months < 9) {
+  } else if (monthsDiff >= 0 && monthsDiff < 8 && weeksDiff > 0) {
     dotStyle = classnames(dotStyle, styles.dotYellow);
-  } else if (months < 6 && months > 3) {
+  } else if (weeksDiff === 0 || (weeksDiff <= -1 && weeksDiff >= -4)) {
     dotStyle = classnames(dotStyle, styles.dotGreen);
   }
 
-
-  return (<div className={styles.displayFlex}>
-    <div className={`${styles.date} ${className}`}>{hygieneDate.format('MMM DD YYYY')}</div>
-    <div className={dotStyle}>&nbsp;</div>
-  </div>
+  return (
+    <div className={styles.displayFlex}>
+      <div className={`${styles.date} ${className}`}>
+        {hygieneDueDate.format('MMM DD YYYY')}
+      </div>
+      <div className={dotStyle}>&nbsp;</div>
+    </div>
   );
 }
 
 HygieneColumn.propTypes = {
   patient: PropTypes.object,
+  className: PropTypes.string,
+  showTable: PropTypes.bool,
+  activeAccount: PropTypes.object,
 }

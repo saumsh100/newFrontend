@@ -55,14 +55,16 @@ describe('Smart Filters Tests', () => {
     });
 
     test('Find Patients due within 60 days', async () => {
+      const account = await Account.findById(accountId);
+
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(220) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(6 * 30) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: date(2013, 7, 6, 9) }),
       ]);
 
       const smFilter = {
-        startMonth: 8,
-        endMonth: 7,
+        startMonth: -2,
+        endMonth: 0,
       };
 
       const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, smFilter);
@@ -76,8 +78,8 @@ describe('Smart Filters Tests', () => {
       ]);
 
       const smFilter = {
-        startMonth: 8,
-        endMonth: 7,
+        startMonth: -2,
+        endMonth: 0,
       };
 
       const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, smFilter);
@@ -86,13 +88,13 @@ describe('Smart Filters Tests', () => {
 
     test('Find Patients late 13-18 months', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(730) }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(760) }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(24 * 30) }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(24 * 30) }),
       ]);
 
       const smFilter = {
-        startMonth: 26,
-        endMonth: 21,
+        startMonth: 18,
+        endMonth: 13,
       };
 
       const patientsData = await smartFiltersLibrary.LateAppointmentsFilter(accountId, {}, smFilter);

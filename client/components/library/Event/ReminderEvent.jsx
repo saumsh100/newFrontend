@@ -9,7 +9,7 @@ export default function ReminderEvent(props) {
     data,
     bodyStyle,
   } = props;
-
+  console.log(data)
   return (
     <div className={bodyStyle}>
       <div className={styles.body_subHeader}>

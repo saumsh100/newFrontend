@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Grid, Row, Col, Card } from '../../library';
-import { fetchEntities, createEntityRequest } from '../../../thunks/fetchEntities';
+import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
 import { fetchPatientTableData } from '../../../thunks/patientTable';
 import {
   setTableData,
@@ -26,6 +26,7 @@ import SelectPatientColumn from './SelectPatientColumn';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import HygieneColumn from '../Shared/HygieneColumn';
+import HygieneRecallColumn from '../Shared/HygieneRecallColumn';
 import RecallColumn from '../Shared/RecallColumn';
 import SelectAllPatients from './SelectPatientColumn/SelectAllPatients';
 import styles from './styles.scss';
@@ -54,11 +55,16 @@ class PatientTable extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchEntities({
-      key: 'practitioners',
-    });
-
-    this.fetchData();
+    Promise.all([
+      this.props.fetchEntities({
+        key: 'practitioners',
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'accountsTable',
+        key: 'accounts',
+      }),
+      this.fetchData(),
+    ]);
   }
 
   pageChange(index) {
@@ -87,6 +93,10 @@ class PatientTable extends Component {
   addFilter(filter) {
     this.props.setFilters({ filter });
     this.fetchData();
+
+    this.setState({
+      expanded: {},
+    });
   }
 
   setSmartFilter(filterObj) {
@@ -203,6 +213,8 @@ class PatientTable extends Component {
       arrayRemoveAll,
       patientTable,
       filters,
+      accountsFetched,
+      activeAccount,
     } = this.props;
 
     const {
@@ -282,6 +294,7 @@ class PatientTable extends Component {
             </div>
           );
         },
+        sortable: false,
         filterable: false,
         className: styles.colBg,
         maxWidth: 60,
@@ -350,13 +363,81 @@ class PatientTable extends Component {
             </div>
           </div>
         ),
-
+        show: false,
         filterable: false,
         className: styles.colBg,
         maxWidth: 100,
       },
       {
-        Header: 'Next Appointment',
+        Header: 'Last Appt',
+        id: 'lastApptDate',
+        accessor: (d) => {
+          if (d.hasOwnProperty('lastApptDate')) {
+            const dateValue = moment(d['lastApptDate']);
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
+          }
+
+          return '-';
+        },
+
+        Cell: (props) => {
+          return (
+            <div className={styles.displayFlex}>
+              <div className={styles.cellText_lastAppt}>{props.value}</div>
+            </div>
+          );
+        },
+
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'Last Hygiene Appt',
+        id: 'lastHygieneDate',
+        accessor: (d) => {
+          if (d.hasOwnProperty('lastHygieneDate')) {
+            const dateValue = moment(d['lastHygieneDate']);
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
+          }
+
+          return '-';
+        },
+
+        Cell: (props) => {
+          return (
+            <div className={styles.displayFlex}>
+              <div className={styles.cellText_lastAppt}>{props.value}</div>
+            </div>
+          );
+        },
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'Last Recall Exam',
+        id: 'lastRecallDate',
+        accessor: (d) => {
+          if (d.hasOwnProperty('lastRecallDate')) {
+            const dateValue = moment(d['lastRecallDate']);
+            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
+          }
+
+          return '-';
+        },
+
+        Cell: (props) => {
+          return (
+            <div className={styles.displayFlex}>
+              <div className={styles.cellText_lastAppt}>{props.value}</div>
+            </div>
+          );
+        },
+
+        filterable: false,
+        className: styles.colBg,
+      },
+      {
+        Header: 'Next Appt',
         id: 'nextApptDate',
         accessor: (d) => {
           if (d.hasOwnProperty('nextApptDate')) {
@@ -380,40 +461,32 @@ class PatientTable extends Component {
         className: styles.colBg,
       },
       {
-        Header: 'Last Appointment',
-        id: 'lastApptDate',
-        accessor: (d) => {
-          if (d.hasOwnProperty('lastApptDate')) {
-            const dateValue = moment(d['lastApptDate']);
-            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
-          }
-
-          return '-';
-        },
-
+        Header: 'Due for Hygiene/Recall',
         Cell: (props) => {
           return (
-            <div className={styles.displayFlex}>
-              <div className={styles.cellText_lastAppt}>{props.value}</div>
-            </div>
+            <HygieneRecallColumn
+              patient={props.original}
+              activeAccount={activeAccount}
+            />
           );
         },
-
+        show: false,
+        sortable: false,
         filterable: false,
         className: styles.colBg,
       },
       {
         Header: 'Due for Hygiene',
-        id: 'lastHygieneDate',
+
         Cell: (props) => {
           return (
             <HygieneColumn
               patient={props.original}
               showTable
+              activeAccount={activeAccount}
             />
           );
         },
-
         sortable: true,
         filterable: false,
         className: styles.colBg,
@@ -434,6 +507,7 @@ class PatientTable extends Component {
             <RecallColumn
               patient={props.original}
               showTable
+              activeAccount={activeAccount}
             />
           );
         },
@@ -499,6 +573,7 @@ class PatientTable extends Component {
       alignItems: 'center',
       borderRight: 'none',
       color: '#a7a9ac',
+      outline: 'none',
     };
 
     return (
@@ -526,7 +601,7 @@ class PatientTable extends Component {
                 sorted={patientTable.sort}
                 defaultPageSize={patientTable.limit}
                 pageSize={patientTable.limit}
-                loading={patientTable.isLoadingTable}
+                loading={patientTable.isLoadingTable && accountsFetched}
                 expanded={this.state.expanded}
                 pageSizeOptions={[15, 20, 25, 50, 100]}
                 columns={columns}
@@ -634,15 +709,24 @@ PatientTable.propTypes = {
   patientTable: PropTypes.object,
   filters: PropTypes.object,
   clearSearch: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities, patientTable }) {
+function mapStateToProps({ entities, patientTable, apiRequests, auth }) {
   const practitioners = entities.getIn(['practitioners', 'models']);
 
   const filters = patientTable.get('filters');
+
+  const waitForAuth = auth.get('accountId');
+  const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
+
+  const accountsFetched = (apiRequests.get('accountsTable') ? apiRequests.get('accountsTable').wasFetched : null);
+
   return {
     practitioners,
     filters,
+    activeAccount,
+    accountsFetched,
     patientTable: patientTable.toJS(),
   };
 }
@@ -652,6 +736,7 @@ function mapDispatchToProps(dispatch) {
     fetchEntities,
     createEntityRequest,
     fetchPatientTableData,
+    fetchEntitiesRequest,
     push,
     destroy,
     arrayRemoveAll,

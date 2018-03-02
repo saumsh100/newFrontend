@@ -42,13 +42,13 @@ export default function NewPatientForm({ onSubmit, formName }) {
       <Field
         required
         name="firstName"
-        validate={[maxLength(15)]}
+        validate={[maxLength(25)]}
         label="First Name"
       />
       <Field
         required
         name="lastName"
-        validate={[maxLength(15)]}
+        validate={[maxLength(25)]}
         label="Last Name"
       />
       <div className={styles.spacing}>

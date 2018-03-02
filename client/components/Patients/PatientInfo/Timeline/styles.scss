@@ -70,15 +70,15 @@
 .dateHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   font-size: 16px;
-  color: $primary-darkgrey;
+  color: $primary-dark-grey;
   padding-left: 55px;
   padding-top: 20px;
   padding-bottom: 5px;
 }
 
 .today {
-  color: $primary-blue;
-  font-size: $x-medium-size;
+  color: $primary-dark;
+  font-size: 23px;
 }
 
 .disclaimer {

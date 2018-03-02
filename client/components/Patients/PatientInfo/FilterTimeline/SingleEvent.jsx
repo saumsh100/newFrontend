@@ -8,14 +8,16 @@ import styles from './styles.scss'
 export default function SingleEvent({ type, onClick, checked }) {
   let icon = '';
   let color = '';
+  let iconType = 'solid';
 
   switch (type) {
     case 'appointment':
       icon = 'calendar';
       color = 'Blue';
+      iconType = 'regular';
       break;
     case 'reminder':
-      icon = 'comment';
+      icon = 'bell';
       color = 'Red';
       break;
     case 'review':
@@ -44,7 +46,7 @@ export default function SingleEvent({ type, onClick, checked }) {
       onClick={onClick}
     >
       <div className={iconStyle}>
-        <Icon icon={icon} size={2} />
+        <Icon icon={icon} size={2} type={iconType}/>
       </div>
       <div className={styles.textEvent}>{type}s</div>
     </div>

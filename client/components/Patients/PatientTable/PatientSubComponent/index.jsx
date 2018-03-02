@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Card } from '../../../library';
+import { Grid, Row, Col, Card, Loading } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import DataTable from './DataTable';
 import EventsTable from './EventsTable';
@@ -42,7 +42,7 @@ class PatientSubComponent extends Component {
         <div className={styles.content}>
           <div className={styles.dataTable}>
             <div className={styles.patientInfoHeader}> Patient Info </div>
-            <Card className={styles.card} runAnimation loaded={patient}>
+            <Card className={styles.card} >
               {patient ?
                 <DataTable
                   patient={patient}
@@ -51,13 +51,16 @@ class PatientSubComponent extends Component {
           </div>
           <div className={styles.timeLineTable}>
             <div className={styles.timeLineHeader}> Timeline & Activities </div>
-            <Card className={styles.eventsCard} runAnimation loaded={wasFetched}>
+            <Card className={styles.eventsCard} >
               {wasFetched ?
                 <EventsTable
                   wasFetched={wasFetched}
                   events={events}
                   patientId={patient.id}
-                /> : null}
+                /> : (<div className={styles.loadingBox}>
+                  <div className={styles.signal}></div>
+                </div>
+                ) }
             </Card>
           </div>
         </div>

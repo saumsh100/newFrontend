@@ -5,7 +5,9 @@ export function fetchSentReminderEvents(patientId, accountId, query) {
   return SentReminder.findAll({
     raw: true,
     where: {
+      accountId,
       patientId,
+      isSent: true,
     },
     include: [{
       model: Appointment,
@@ -13,8 +15,9 @@ export function fetchSentReminderEvents(patientId, accountId, query) {
       where: {
         isDeleted: false,
         isCancelled: false,
+        isPending: false,
       },
-      required: false,
+      required: true,
     }],
     ...query,
     order: [['createdAt', 'DESC']],

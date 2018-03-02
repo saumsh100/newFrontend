@@ -1,23 +1,102 @@
 
 import moment from 'moment';
-import { Appointment, Patient } from '../../_models';
+import { Appointment, Patient, sequelize, Account } from '../../_models';
+import { removeRecallDuplicates } from '../recalls/helpers';
+import { ManualLimitOffset } from './helpers';
 
-export function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
-  const startMonthsOut = moment().subtract(smFilter.startMonth, 'months').toISOString();
-  const endMonthsOut = moment().subtract(smFilter.endMonth, 'months').toISOString();
+export async function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
+  let startDate = moment().subtract(smFilter.startMonth, 'months').toISOString();
+  let endDate = moment().subtract(smFilter.endMonth, 'months').toISOString();
 
-  return Patient.findAndCountAll(Object.assign({
-    raw: true,
-    where: {
+  if (smFilter.startMonth < 0) {
+    endDate = moment().add(smFilter.startMonth * -1, 'months').toISOString();
+    startDate = moment().add(smFilter.endMonth * -1, 'months').toISOString();
+  }
+
+  const accountData = await Account.findById(accountId);
+  const account = accountData.get({ plain: true });
+
+  const patientsHygieneWithInterval = await Patient.findAll({
+    where: sequelize.and({
+      accountId: account.id,
       status: 'Active',
-      accountId,
-      nextApptId: null,
       nextApptDate: null,
-      lastHygieneDate: {
-        $between: [startMonthsOut, endMonthsOut],
+      insuranceInterval: {
+        $ne: null,
       },
-    },
-  }, offSetLimit));
+      lastHygieneDate: {
+        $ne: null,
+      },
+      preferences: {
+        recalls: true,
+      },
+    }, sequelize.literal(`'${endDate}' >= ("lastHygieneDate" + "insuranceInterval"::Interval )`),
+      sequelize.literal(`'${startDate}' < ("lastHygieneDate" + "insuranceInterval"::Interval )`)),
+    ...offSetLimit,
+  });
+
+  const patientsHygieneWithOutInterval = await Patient.findAll({
+    where: sequelize.and({
+      accountId: account.id,
+      status: 'Active',
+      nextApptDate: null,
+      insuranceInterval: null,
+      lastHygieneDate: {
+        $ne: null,
+      },
+      preferences: {
+        recalls: true,
+      },
+    }, sequelize.literal(`'${endDate}' >= ("lastHygieneDate" + INTERVAL '${account.hygieneInterval}')`),
+      sequelize.literal(`'${startDate}' < ("lastHygieneDate" + INTERVAL '${account.hygieneInterval}')`)),
+    ...offSetLimit,
+  });
+
+
+  const patientsRecallWithInterval = await Patient.findAll({
+    where: sequelize.and({
+      accountId: account.id,
+      status: 'Active',
+      nextApptDate: null,
+      insuranceInterval: {
+        $ne: null,
+      },
+      lastRecallDate: {
+        $ne: null,
+      },
+      preferences: {
+        recalls: true,
+      },
+    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + "insuranceInterval"::Interval)`),
+      sequelize.literal(`'${startDate}' < ("lastRecallDate" + "insuranceInterval"::Interval )`)),
+    ...offSetLimit,
+  });
+
+  const patientsRecallWithOutInterval = await Patient.findAll({
+    where: sequelize.and({
+      accountId: account.id,
+      status: 'Active',
+      nextApptDate: null,
+      insuranceInterval: null,
+      lastRecallDate: {
+        $ne: null,
+      },
+      preferences: {
+        recalls: true,
+      },
+    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '${account.hygieneInterval}')`),
+      sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '${account.hygieneInterval}')`)),
+    ...offSetLimit,
+  });
+
+  const patientsHygiene = patientsHygieneWithInterval.concat(patientsHygieneWithOutInterval);
+  const patientsRecall = patientsRecallWithInterval.concat(patientsRecallWithOutInterval);
+  const patients = removeRecallDuplicates(patientsHygiene, patientsRecall);
+
+  return {
+    count: patients.length,
+    rows: patients,
+  };
 }
 
 export function CancelledAppointmentsFilter(accountId, offSetLimit) {

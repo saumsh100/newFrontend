@@ -24,6 +24,8 @@ export default function TopDisplay(props) {
     patient,
     patientStats,
     wasFetched,
+    accountsFetched,
+    activeAccount,
   } = props;
 
 
@@ -33,7 +35,7 @@ export default function TopDisplay(props) {
 
   const bgStyle = {
     background: `url('/images/banners/${bgImgs[randomNum]}')`,
-    backgroundSize: '100%'
+    backgroundSize: '100%',
   };
 
   return (
@@ -42,7 +44,7 @@ export default function TopDisplay(props) {
         <div className={styles.imageContainer} style={bgStyle}>
           {''}
         </div>
-        {wasFetched && patient ? (<div className={styles.dataContainer}>
+        {wasFetched && patient && accountsFetched ? (<div className={styles.dataContainer}>
           <div className={styles.avatarContainer}>
             <div className={styles.avatarContainer_avatar}>
               <Avatar user={patient} size="xl" />
@@ -75,7 +77,13 @@ export default function TopDisplay(props) {
               <Col xs={4}>
                 <InfoDump
                   label="PATIENT DUE FOR HYGIENE"
-                  component={HygieneData({ patient, className: styles.fontStyle })}
+                  component={HygieneData({ patient, className: styles.fontStyle, activeAccount })}
+                />
+              </Col>
+              <Col xs={4}>
+                <InfoDump
+                  label="INSURANCE INTERVAL"
+                  data={patient.insuranceInterval}
                 />
               </Col>
               <Col xs={4}>
@@ -83,17 +91,12 @@ export default function TopDisplay(props) {
                   label="INSURANCE"
                 />
               </Col>
-              <Col xs={4}>
-                <InfoDump
-                  label="MEDICAL ALERT"
-                />
-              </Col>
             </Row>
             <Row className={styles.rightContainer_content}>
               <Col xs={4}>
                 <InfoDump
                   label="PATIENT DUE FOR RECALL"
-                  component={RecallData({ patient, className: styles.fontStyle })}
+                  component={RecallData({ patient, className: styles.fontStyle, activeAccount })}
                 />
               </Col>
               <Col xs={4}>

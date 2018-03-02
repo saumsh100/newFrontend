@@ -11,8 +11,8 @@
 .cbx {
   position: relative;
   width: 14px;
-  height: 14px;
-  border: 1px solid $primary-dark;
+  height: 13px;
+  border: 2px solid $primary-dark;
   border-radius: 3px;
   vertical-align: middle;
   transition: background 0.1s ease;
@@ -34,7 +34,7 @@
       position: absolute;
       top: 0px;
       left: 4px;
-      width: 3px;
+      width: 4px;
       height: 8px;
       opacity: 0;
       transform: rotate(45deg) scale(0);

@@ -104,7 +104,7 @@
 
 .formHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  color: $primary-dark-grey;
+  color: $primary-dark;
   font-size: 15px;
   @media screen and (max-width: 800px) {
     display: none;

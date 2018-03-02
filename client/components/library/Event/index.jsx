@@ -21,6 +21,7 @@ class Event extends Component {
 
     let content = null;
     let icon = '';
+    let iconType = 'solid';
     let bgIconStyle = styles.bgIcon;
 
     let bodyStyle = styles.body;
@@ -34,11 +35,12 @@ class Event extends Component {
     if (type === 'appointment') {
       icon = 'calendar';
       bgIconStyle = classnames(bgIconStyle, styles.blueBorder);
+      iconType = 'regular';
       content = <AppointmentEvent data={data} bodyStyle={bodyStyle} />;
     }
 
     if (type === 'reminder') {
-      icon = 'comment';
+      icon = 'bell';
       bgIconStyle = classnames(bgIconStyle, styles.redBorder);
       content = <ReminderEvent data={data} bodyStyle={bodyStyle} />;
     }
@@ -66,7 +68,7 @@ class Event extends Component {
         <div className={styles.event}>
           <div className={styles.iconContainer}>
             <div className={bgIconStyle}>
-              <Icon size={1} icon={icon} className={styles.icon} type="solid" />
+              <Icon size={1} icon={icon} className={styles.icon} type={iconType} />
             </div>
           </div>
           {content}

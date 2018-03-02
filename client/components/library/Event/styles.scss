@@ -28,7 +28,7 @@
 }
 
 .icon {
-  color: $primary-dark;
+  color: $primary-dark-grey;
 }
 
 .bgIcon {
@@ -86,8 +86,8 @@
   &_text {
     composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
     margin-left: auto;
-    color: $primary-darkgrey;
-    opacity: 0.6;
+    color: $primary-dark-grey;
+    font-style: italic;
   }
 }
 

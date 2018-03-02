@@ -13,7 +13,7 @@
 .subHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   font-size: 15px !important;
-  color: $primary-darkgrey;
+  color: $primary-dark;
   padding-top: 20px;
 }
 
@@ -72,7 +72,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 50%;
+  width: 80%;
 }
 
 .iconContainer {

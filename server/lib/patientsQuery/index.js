@@ -99,6 +99,7 @@ export async function PatientQuery(config) {
         offSetLimit.order = order;
       }
 
+      console.log(offSetLimit)
       filteredPatients = await smartFilterFunctions[smFilter.index](accountId, offSetLimit, smFilter);
     }
 
