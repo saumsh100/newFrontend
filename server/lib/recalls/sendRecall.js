@@ -49,14 +49,15 @@ export default {
   // Send Appointment Reminder text via Twilio
   async sms({ account, patient, sentRecall, recall, dueDate }) {
     // TODO: add phoneNumber logic for patient
-    const longLink = generateBookingUrl({ account, sentRecall, dueDate });
+    const longLink = generateBookingUrl({ account, sentRecall, dueDate: dueDate.slice(0) });
     const shortLink = await compressUrl(longLink);
     const link = `https://${shortLink}`;
+    const lastDate = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
 
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
-      body: createRecallText({ patient, account, sentRecall, recall, link }),
+      body: createRecallText({ patient, account, sentRecall, recall, link, dueDate, lastApptDate: moment(lastDate).format('MMM YYYY') }),
     });
   },
   // Send Appointment Reminder email via Mandrill (MailChimp)
@@ -110,15 +111,15 @@ export default {
         },
         {
           name: 'WEEKSBEFORE_DUEDATE',
-          content: moment(dueDate).diff(moment(), 'weeks'),
+          content: moment(dueDate).add(1, 'days').diff(moment(), 'weeks'),
         },
         {
           name: 'MONTHS_LASTAPPT',
-          content: moment().diff(moment(lastDate), 'months'),
+          content: moment().add(1, 'days').diff(moment(lastDate), 'months'),
         },
         {
           name: 'WEEKSAFTER_DUEDATE',
-          content: moment().diff(moment(lastDate), 'weeks'),
+          content: moment().add(1, 'days').diff(moment(lastDate), 'weeks'),
         },
         {
           name: 'ACCOUNT_LOGO_URL',

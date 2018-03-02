@@ -1,7 +1,6 @@
 
 import moment from 'moment-timezone';
-import { s2w } from '../../util/time';
-import { convertIntervalStringToObject, convertIntervalToMs } from '../../util/time';
+import { convertIntervalStringToObject, s2w, convertIntervalToMs } from '../../util/time';
 
 // TODO: generateBookingUrl
 // TODO; format phone number
@@ -10,13 +9,13 @@ const RecallsText = {
   ['1 months']: ({ account, patient, dueDate, link }) => {
     return `Hi ${patient.firstName}, this is ${account.name}. We're reaching out because you're ` +
       `almost due for your next dental appointment. You can schedule your appointment for anytime after ` +
-      `${dueDate}, by clicking this link: ${link}`;
+      `${moment(dueDate).format('dddd, MMMM Do')}, by clicking this link: ${link}`;
   },
 
   ['1 weeks']: ({ account, patient, dueDate, link }) => {
     return `${patient.firstName}, this is ${account.name}. Just a reminder that you're due ` +
-      `for your next dental visit in 1 week. You can schedule your appointment for anytime after ` +
-      `${dueDate} by clicking this link: ${link}`;
+      `for your next dental visit in ${moment(dueDate).add(1, 'days').diff(moment(), 'weeks')} week. You can schedule your appointment for anytime after ` +
+      `${moment(dueDate).format('dddd, MMMM Do')} by clicking this link: ${link}`;
   },
 
   ['-1 weeks']: ({ account, patient, link }) => {
@@ -25,83 +24,92 @@ const RecallsText = {
       `${link}`;
   },
 
-  ['-1 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, regular cleaning visits are essential to a lifetime of healthy teeth. ` +
-      `You can schedule your appointment by clicking this link: ` +
-      `${link}`;
-  },
-
-  ['-2 months']: ({ account, patient, lastApptDate, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${lastApptDate} ` +
-      `and you are 8 weeks past due. ` +
+  ['-1 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} month past due. ` +
       `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-4 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-2 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because your last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-6 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-4 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-8 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-6 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-10 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-8 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-12 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-10 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-14 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-12 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because your last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-16 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-14 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-18 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-16 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-20 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-18 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 
-  ['-24 months']: ({ account, patient, link }) => {
-    return `Hi ${patient.firstName}, this is a reminder that you're past due for your dental appointment. ` +
-      `You can schedule your appointment by clicking this link: ` +
+  ['-20 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
+      `${link}`;
+  },
+
+  ['-24 months']: ({ account, patient, dueDate, lastApptDate, link }) => {
+    return `Hi ${patient.firstName}, this is a reminder that you're last dental appointment was on ${moment(lastApptDate).format('dddd, MMMM Do')} ` +
+      `and you are ${moment().add(1, 'days').diff(moment(dueDate), 'months')} months past due. ` +
+      `Please schedule your appointment by clicking this link: ` +
       `${link}`;
   },
 };
 
-export default function createRecallText({ patient, account, recall, link }) {
-  const dueDate = moment().add(convertIntervalStringToObject(recall.interval)).format('dddd, MMMM Do');
-  const lastApptDate = moment(patient.lastApptDate).format('dddd, MMMM Do');
+export default function createRecallText({ patient, account, dueDate, lastApptDate, recall, link }) {
   return RecallsText[recall.interval]({ patient, account, dueDate, lastApptDate, link });
 }
 
