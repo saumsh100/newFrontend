@@ -15,6 +15,7 @@ const RequestsSchema = {
   note: null,
   isConfirmed: null,
   isCancelled: null,
+  sentRecallId: null,
 };
 
 export default class Requests extends createModel(RequestsSchema) {

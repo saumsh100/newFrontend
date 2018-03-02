@@ -57,6 +57,8 @@ class RequestListItem extends Component {
       day: request.getDay(),
     };
 
+    const requestType = request.sentRecallId ? 'RECALL' : 'NEW';
+
     return (
       <Popover
         className={styles.requestPopover}
@@ -86,6 +88,7 @@ class RequestListItem extends Component {
           <MonthDay
             month={data.month}
             day={data.day}
+            type={requestType}
           />
           <RequestData
             time={data.time}
