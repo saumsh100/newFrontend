@@ -7,7 +7,7 @@ export default function RecallDropDowns(props){
   const recallSmsMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="envelope" size={1.2} type="solid" />
+        <Icon icon="comment" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -18,7 +18,7 @@ export default function RecallDropDowns(props){
   const recallEmailMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="comment" size={1.2} type="solid" />
+        <Icon icon="envelope" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -40,22 +40,8 @@ export default function RecallDropDowns(props){
   return (
     <div className={styles.recallContainer}>
       <DropdownMenu
-        labelComponent={recallSmsMenu}
-      >
-        <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem} disabled>
-            Send a Custom SMS Recall
-          </ListItem>
-          <ListItem className={styles.ddListItem} disabled>
-            Send a Automated SMS Recall
-          </ListItem>
-          <ListItem className={styles.ddListItem} disabled>
-            Log SMS
-          </ListItem>
-        </List>
-      </DropdownMenu>
-      <DropdownMenu
         labelComponent={recallEmailMenu}
+        align="left"
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>
@@ -70,7 +56,24 @@ export default function RecallDropDowns(props){
         </List>
       </DropdownMenu>
       <DropdownMenu
+        labelComponent={recallSmsMenu}
+        align="left"
+      >
+        <List className={styles.ddList}>
+          <ListItem className={styles.ddListItem} disabled>
+            Send a Custom SMS Recall
+          </ListItem>
+          <ListItem className={styles.ddListItem} disabled>
+            Send a Automated SMS Recall
+          </ListItem>
+          <ListItem className={styles.ddListItem} disabled>
+            Log SMS
+          </ListItem>
+        </List>
+      </DropdownMenu>
+      <DropdownMenu
         labelComponent={recallPhoneMenu}
+        align="left"
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>

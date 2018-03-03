@@ -77,7 +77,7 @@ class HeaderSection extends Component {
         <div className={styles.header_title}>
           {smartFilter ? smartFilter.label : 'All Patients' }
           <div className={styles.header_icon}>
-            <Icon icon="caret-down" type="solid" />
+            <Icon icon="caret-down" type="solid" size={1.7} />
           </div>
         </div>
       </div>
@@ -86,8 +86,8 @@ class HeaderSection extends Component {
     const actionsMenu = props => (
       <div {...props} className={styles.buttonContainer_actions}>
         <Button
-          color="blue"
           iconRight="caret-down"
+          border="blue"
         >
           Actions
         </Button>
@@ -116,6 +116,7 @@ class HeaderSection extends Component {
         <div className={styles.buttonContainer}>
           <DropdownMenu
             labelComponent={actionsMenu}
+            className={styles.alignDD}
           >
             <Actions
               patientIds={patientIds}
@@ -123,8 +124,8 @@ class HeaderSection extends Component {
           </DropdownMenu>
           <Button
             onClick={() => this.setActive()}
-            border="blue"
             compact
+            color="blue"
           >
             Add New Patient
           </Button>

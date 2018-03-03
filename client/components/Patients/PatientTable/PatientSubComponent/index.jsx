@@ -51,16 +51,13 @@ class PatientSubComponent extends Component {
           </div>
           <div className={styles.timeLineTable}>
             <div className={styles.timeLineHeader}> Timeline & Activities </div>
-            <Card className={styles.eventsCard} >
+            <Card className={styles.eventsCard} runAnimation loaded={wasFetched} loaderStyle={styles.loaderStyle}>
               {wasFetched ?
                 <EventsTable
                   wasFetched={wasFetched}
                   events={events}
                   patientId={patient.id}
-                /> : (<div className={styles.loadingBox}>
-                  <div className={styles.signal}></div>
-                </div>
-                ) }
+                /> : null}
             </Card>
           </div>
         </div>

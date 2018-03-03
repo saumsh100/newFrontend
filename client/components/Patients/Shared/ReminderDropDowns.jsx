@@ -7,7 +7,7 @@ export default function ReminderDropDowns(props){
   const reminderSmsMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="envelope" size={1.2} type="solid" />
+        <Icon icon="comment" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -18,7 +18,7 @@ export default function ReminderDropDowns(props){
   const reminderEmailMenu = props => (
     <div {...props}>
       <div className={styles.iconContainer} >
-        <Icon icon="comment" size={1.2} type="solid" />
+        <Icon icon="envelope" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
         </span>
@@ -40,22 +40,8 @@ export default function ReminderDropDowns(props){
   return (
     <div className={styles.recallContainer}>
       <DropdownMenu
-        labelComponent={reminderSmsMenu}
-      >
-        <List className={styles.ddList}>
-          <ListItem className={styles.ddListItem} disabled>
-            Send a Custom SMS Reminder
-          </ListItem>
-          <ListItem className={styles.ddListItem} disabled>
-            Send a Automated SMS Reminder
-          </ListItem>
-          <ListItem className={styles.ddListItem} disabled>
-            Log SMS
-          </ListItem>
-        </List>
-      </DropdownMenu>
-      <DropdownMenu
         labelComponent={reminderEmailMenu}
+        align="left"
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>
@@ -70,7 +56,24 @@ export default function ReminderDropDowns(props){
         </List>
       </DropdownMenu>
       <DropdownMenu
+        labelComponent={reminderSmsMenu}
+        align="left"
+      >
+        <List className={styles.ddList}>
+          <ListItem className={styles.ddListItem} disabled>
+            Send a Custom SMS Reminder
+          </ListItem>
+          <ListItem className={styles.ddListItem} disabled>
+            Send a Automated SMS Reminder
+          </ListItem>
+          <ListItem className={styles.ddListItem} disabled>
+            Log SMS
+          </ListItem>
+        </List>
+      </DropdownMenu>
+      <DropdownMenu
         labelComponent={reminderPhoneMenu}
+        align="left"
       >
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>
