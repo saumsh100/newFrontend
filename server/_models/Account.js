@@ -173,6 +173,12 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.TIME,
       defaultValue: '20:00:00',
     },
+
+    reviewsInterval: {
+      type: DataTypes.STRING,
+      defaultValue: '15 minutes',
+    },
+
   });
 
   Account.associate = (models) => {

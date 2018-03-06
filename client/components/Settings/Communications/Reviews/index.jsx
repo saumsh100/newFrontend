@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ReviewItem from './ReviewItem';
 import ReviewPreview from './ReviewPreview';
@@ -10,24 +10,37 @@ import styles from './styles.scss';
 class Reviews extends React.Component {
   constructor(props) {
     super(props);
+    const { activeAccount } = props;
 
     this.state = {
       selectedReview: false,
+      reviewSettings: {
+        interval: activeAccount.get('reviewsInterval'),
+        primaryType: 'email',
+        primaryTypes: ['email', 'sms'],
+      },
     };
   }
 
-  componentDidMount() {
+  componentWillReceiveProps(newProps) {
+    const { activeAccount } = newProps;
+    const interval = activeAccount.get('reviewsInterval');
+
+    if (interval === this.state.reviewSettings.interval) {
+      return;
+    }
+
     this.setState({
       reviewSettings: {
-        interval: '2 hours',
-        primaryType: 'email',
-        primaryTypes: ['email', 'sms'],
+        ...this.state.reviewSettings,
+        interval,
       },
     });
   }
 
-  toggleSelect() {
-    this.setState({ selectedReview: !this.state.selectedReview });
+  selectReview() {
+    if (this.state.selectedReview) return;
+    this.setState({ selectedReview: true });
   }
 
   renderLeftColumn() {
@@ -77,7 +90,7 @@ class Reviews extends React.Component {
         key="select"
         noLines
         selected={this.state.selectedReview}
-        onSelect={this.toggleSelect.bind(this)}
+        onSelect={this.selectReview.bind(this)}
         account={this.props.activeAccount}
         reviewSettings={this.state.reviewSettings}
       />
@@ -95,9 +108,15 @@ class Reviews extends React.Component {
   }
 }
 
+Reviews.propTypes = {
+  activeAccount: PropTypes.shape({
+    id: PropTypes.string,
+    reviewSettings: PropTypes.string,
+  }),
+};
+
 const mapStateToProps = ({ entities, auth }) => ({
   activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
 });
 
 export default connect(mapStateToProps, null)(Reviews);
-

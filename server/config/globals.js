@@ -133,7 +133,6 @@ const reminders = {
 const reviews = {
   cronIntervalMinutes: 5,
   sameDayWindowHours: 6,
-  defaultInterval: '-15 minutes', // same convention as recalls
   lastSentReviewInterval: '4 weeks',
 };
 

@@ -53,6 +53,7 @@ const AccountSchema = {
   recallBuffer: null,
   recallStartTime: null,
   recallEndTime: null,
+  reviewsInterval: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

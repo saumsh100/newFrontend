@@ -2,6 +2,7 @@
 import axios from 'axios';
 import FileSaver from 'file-saver';
 import { receiveEntities } from '../actions/entities';
+import { updateEntityRequest } from './fetchEntities';
 import { showAlertTimeout } from '../thunks/alerts';
 
 
@@ -56,4 +57,14 @@ export function downloadConnector() {
       .get('/api/connector/download')
       .then(response => response.data);
   };
+}
+
+export function updateReviewInterval(accountId, newInterval, alert) {
+  return dispatch =>
+    dispatch(updateEntityRequest({
+      key: 'accounts',
+      url: `/api/accounts/${accountId}`,
+      values: { reviewsInterval: newInterval },
+      alert,
+    }));
 }

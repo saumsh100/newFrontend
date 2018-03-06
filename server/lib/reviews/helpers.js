@@ -1,7 +1,5 @@
 
 import moment from 'moment';
-import _ from 'lodash';
-import uniqBy from 'lodash/uniqBy';
 import omit from 'lodash/omit';
 import orderBy from 'lodash/orderBy';
 import groupBy from 'lodash/groupBy';
@@ -18,7 +16,6 @@ import { organizeForOutbox, generateOrganizedPatients } from '../comms/util';
 import { convertIntervalStringToObject } from '../../util/time';
 
 const BUFFER_MINUTES = GLOBALS.reviews.cronIntervalMinutes;
-const DEFAULT_INTERVAL = GLOBALS.reviews.defaultInterval;
 const SAME_DAY_HOURS = GLOBALS.reviews.sameDayWindowHours;
 
 /**
@@ -43,9 +40,12 @@ export async function generateReviewsOutbox({ account, startDate, endDate }) {
   // Find which ones should actually pass
   const { success } = generateOrganizedPatients(patients, ['email', 'sms']);
   const organizedList = organizeReviewsOutboxList(success);
-  const intervalObject = convertIntervalStringToObject(DEFAULT_INTERVAL);
+  const intervalObject = convertIntervalStringToObject(account.reviewsInterval);
+
+  console.log('reviewsInterval');
+
   const outboxReviews = organizedList.map((pa) => {
-    const sendDate = moment(pa.patient.appointment.endDate).subtract(intervalObject).toISOString();
+    const sendDate = moment(pa.patient.appointment.endDate).add(intervalObject).toISOString();
     return {
       ...pa,
       sendDate,
@@ -80,10 +80,10 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
   // Cron job will default to startDate + 5 minutes
   endDate = endDate || moment(startDate).add(buffer, 'minutes').toISOString();
 
-  // We want to make sure we send to patients 2 hours after their endDate
-  const intervalObject = convertIntervalStringToObject(DEFAULT_INTERVAL);
-  const begin = moment(startDate).add(intervalObject).toISOString();
-  const end = moment(endDate).add(intervalObject).toISOString();
+  // We want to make sure we send to patients {account.reviewsInterval} after their endDate
+  const intervalObject = convertIntervalStringToObject(account.reviewsInterval);
+  const begin = moment(startDate).subtract(intervalObject).toISOString();
+  const end = moment(endDate).subtract(intervalObject).toISOString();
   const sameDayEnd = moment(end).add(SAME_DAY_HOURS, 'hours').toISOString();
 
   const appointments = await Appointment.findAll({

@@ -3,9 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ordinalSuffix, intervalToNumType, numTypeToInterval } from '../../../../../../server/util/time';
-import {
-  updateEntityRequest,
-} from '../../../../../thunks/fetchEntities';
+import { updateReviewInterval } from '../../../../../thunks/accounts';
 import {
   Icon,
   Grid,
@@ -27,6 +25,7 @@ const iconsMap = {
 };
 
 const typeOptions = [
+  { label: 'Minutes', value: 'minutes' },
   { label: 'Hours', value: 'hours' },
   { label: 'Days', value: 'days' },
 ];
@@ -118,7 +117,6 @@ class ReviewItem extends Component {
   }
 
   updateInterval() {
-    // TODO add API CALL
     const { account } = this.props;
     const { number, intervalType } = this.state;
 
@@ -134,11 +132,7 @@ class ReviewItem extends Component {
       },
     };
 
-    this.props.updateEntityRequest({
-      url: `/api/accounts/${account.id}/review`,
-      values: { interval: numTypeToInterval(number, intervalType) },
-      alert,
-    });
+    this.props.updateReviewInterval(account.id, numTypeToInterval(number, intervalType), alert);
   }
 
   renderLabel() {
@@ -173,11 +167,11 @@ class ReviewItem extends Component {
           <div className={styles.dropdownsWrapper}>
             <div className={styles.topRow}>
               <DropdownSelect
+                disabled
                 onChange={() => {}}
                 className={dropdownSelectClass}
                 value={primaryTypesKey}
                 options={primaryTypesOptions}
-                disabled={true}
               />
             </div>
             <div className={styles.bottomRow}>
@@ -189,7 +183,6 @@ class ReviewItem extends Component {
                       value={number}
                       onChange={this.updateNumberInput.bind(this)}
                       onBlur={this.onIntervalNumberBlur.bind(this)}
-                      disabled={true}
                     />
                   </Col>
                   <Col xs={9} className={styles.rightDropdown}>
@@ -198,7 +191,6 @@ class ReviewItem extends Component {
                       className={dropdownSelectClass}
                       value={type}
                       options={typeOptions}
-                      disabled={true}
                     />
                   </Col>
                 </Row>
@@ -238,11 +230,12 @@ ReviewItem.propTypes = {
   }).isRequired,
   selected: PropTypes.bool,
   account: PropTypes.shape({}).isRequired,
+  updateReviewInterval: PropTypes.fun,
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateEntityRequest,
+    updateReviewInterval,
   }, dispatch);
 }
 
