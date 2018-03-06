@@ -96,7 +96,7 @@ export function loadSentReview() {
       .then(({ data }) => {
         if (data.sentReview.isCompleted) {
           dispatch(mergeReviewValues(data.review));
-          dispatch(mergeSentReviewValues(data.senReview));
+          dispatch(mergeSentReviewValues(data.sentReview));
           dispatch(push('./review/complete'));
         }
 

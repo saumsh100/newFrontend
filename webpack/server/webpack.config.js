@@ -21,6 +21,7 @@ const entries = appEntries(name => [
 module.exports = {
   name: 'server',
   target: 'node',
+  devtool: 'cheap-module-source-map',
 
   context: projectRoot,
 

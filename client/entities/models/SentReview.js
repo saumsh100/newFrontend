@@ -3,7 +3,7 @@ import createModel from '../createModel';
 
 const SentReviewSchema = {
   id: null,
-  accountId,
+  accountId: null,
   stars: null,
   description: null,
   patientId: null,

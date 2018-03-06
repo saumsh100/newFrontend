@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const globals = require('../config/globals');
 const handleErrors = require('../middleware/handleErrors');
 const app = require('../config/express');
+const expressReactNews = require('express-react-views');
 // require('../models');
 require('../_models');
 
@@ -16,10 +17,15 @@ app.set('showStackError', true);
 // Load in webpack configurations
 // applyWebpack(app);
 
-// Set the Handlebars templating engine
+// Set the JSX view engine
 app.set('views', `${globals.root}/views`);
-app.engine('hbs', require('../config/handlebars').engine);
-app.set('view engine', 'hbs');
+app.set('view engine', 'jsx');
+app.engine('jsx', expressReactNews.createEngine({
+  babel: {
+    presets: ['react', ['env', { targets: { node: 'current' } }]],
+    plugins: [],
+  },
+}));
 
 // Extra logging for communication with server
 app.use((req, res, next) => {
