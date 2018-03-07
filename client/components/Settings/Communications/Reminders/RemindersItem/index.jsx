@@ -63,6 +63,10 @@ function SmallIconCircle(props) {
   );
 }
 
+function AdvancedSettingsButton(props) {
+  return <Icon icon="cogs" type="solid" {...props} />;
+}
+
 class RemindersItem extends Component {
   constructor(props) {
     super(props);
@@ -132,14 +136,14 @@ class RemindersItem extends Component {
     // So that it doesn't bubble up and try to select this reminder
     e.stopPropagation();
     e.preventDefault();
-    const { reminder, account, selected, selectReminder } = this.props;
+    const { reminder, account, isSelected, selectReminder } = this.props;
     const { num, type } = intervalToNumType(reminder.interval);
     const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
     if (!sure) {
       return;
     }
 
-    if (selected) {
+    if (isSelected) {
       selectReminder(null);
     }
 
@@ -256,8 +260,10 @@ class RemindersItem extends Component {
     const {
       reminder,
       index,
-      selected,
-      selectReminder,
+      isSelected,
+      onSelectReminder,
+      onSelectAdvancedSettings,
+      isSuperAdmin,
     } = this.props;
 
     const {
@@ -272,13 +278,13 @@ class RemindersItem extends Component {
     const { type } = intervalToNumType(interval);
     const { number } = this.state;
 
-    const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
+    const dropdownSelectClass = isSelected ? styles.dropdownSelectSelected : styles.dropdownSelect;
 
     return (
       <TouchPointItem
-        selected={selected}
+        selected={isSelected}
         className={styles.reminderListItem}
-        onClick={() => selectReminder(reminder.id)}
+        onClick={() => onSelectReminder(reminder.id)}
         toggleComponent={(
           <Toggle
             color="green"
@@ -296,14 +302,14 @@ class RemindersItem extends Component {
             <div className={styles.reminderIconContainer}>
               <IconCircle
                 icon={icon}
-                selected={selected}
+                selected={isSelected}
               />
             </div>
-            <div className={selected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
+            <div className={isSelected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
               <div className={styles.smallIconContainer}>
                 <SmallIconCircle
                   icon="bell"
-                  selected={selected}
+                  selected={isSelected}
                 />
               </div>
               <div className={styles.dropdownsWrapper}>
@@ -344,8 +350,17 @@ class RemindersItem extends Component {
         )}
 
         rightComponent={(
-          <div className={styles.deleteButtonWrapper} onClick={this.deleteReminder}>
-            <TinyDeleteButton />
+          <div className={styles.hoverWrapper}>
+            {isSuperAdmin ?
+              <AdvancedSettingsButton
+                className={styles.advancedSettingsButton}
+                onClick={() => onSelectAdvancedSettings(reminder.id)}
+              />
+            : null}
+            <TinyDeleteButton
+              className={styles.deleteButton}
+              onClick={this.deleteReminder}
+            />
           </div>
         )}
       />
@@ -354,11 +369,8 @@ class RemindersItem extends Component {
 }
 
 RemindersItem.propTypes = {
-  primaryType: PropTypes.string,
-  length: PropTypes.number,
-  edit: PropTypes.func,
-  deleteFunc: PropTypes.func,
-  selectReminder: PropTypes.func.isRequired,
+  onSelectReminder: PropTypes.func.isRequired,
+  isSuperAdmin: PropTypes.bool.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {

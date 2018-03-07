@@ -3,11 +3,12 @@ import { Router } from 'express';
 import twilio from 'twilio';
 import {
   Account,
+  Appointment,
   Chat,
   Patient,
-  TextMessage,
+  Reminder,
   SentReminder,
-  Appointment
+  TextMessage,
 } from '../../../_models';
 
 const voiceRouter = Router();
@@ -32,10 +33,10 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
       id: req.params.sentReminderId,
     },
 
-    include: [{
-      model: Appointment,
-      as: 'appointment',
-    }],
+    include: [
+      { model: Appointment, as: 'appointment' },
+      { model: Reminder, as: 'reminder' }
+    ],
 
     raw: true,
     nest: true,
@@ -52,6 +53,7 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
     startDate,
     startTime,
   } = req.query;
+  const { appointment, reminder } = sentReminder;
 
   // Use the Twilio Node.js SDK to build an XML response
   const twiml = new twilio.TwimlResponse();
@@ -77,8 +79,8 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
     twiml.hangup();
 
     // Confirm the appointment if any one sentReminder is confirmed
-    await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
-    await Appointment.update({ isPatientConfirmed: true, isSyncedWithPms: false }, { where: { id: sentReminder.appointment.id } });
+    await sentReminder.update({ isConfirmed: true });
+    await appointment.confirm(reminder);
   } else {
     twiml.gather({
       timeout: 30,

@@ -13,11 +13,11 @@ const getDateAndTime = (date) => {
 };
 
 const weeksAway = {
-  unconfirmed: ({ patient, account, appointment }) => {
+  unconfirmed: ({ patient, account, appointment, action }) => {
     const { date, time } = getDateAndTime(appointment.startDate);
     return `Hi ${patient.firstName}, your next appointment ` +
       `with ${account.name} is on ${date} at ${time}. ` +
-      `Reply "C" to confirm your appointment.`;
+      `Reply "C" to ${action} your appointment.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
@@ -29,10 +29,10 @@ const weeksAway = {
 };
 
 const weekAway = {
-  unconfirmed: ({ patient, account, appointment }) => {
+  unconfirmed: ({ patient, account, appointment, action }) => {
     const { date, time } = getDateAndTime(appointment.startDate);
     return `Hi ${patient.firstName}, your upcoming appointment is at ` +
-      `${time} on ${date}. Respond with the letter "C" to confirm.`;
+      `${time} on ${date}. Respond with the letter "C" to ${action}.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
@@ -43,11 +43,11 @@ const weekAway = {
 };
 
 const sameWeek = {
-  unconfirmed: ({ patient, account, appointment }) => {
+  unconfirmed: ({ patient, account, appointment, action }) => {
     const { date, time } = getDateAndTime(appointment.startDate);
     return `Hi ${patient.firstName}, this week's appointment at ` +
       `${account.name} is on ${date} at ${time}. ` +
-      `To confirm, please reply with the letter "C".`;
+      `To ${action}, please reply with the letter "C".`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
@@ -58,11 +58,11 @@ const sameWeek = {
 };
 
 const sameDay = {
-  unconfirmed: ({ patient, account, appointment }) => {
+  unconfirmed: ({ patient, account, appointment, action }) => {
     const { date, time } = getDateAndTime(appointment.startDate);
-    return `Hi ${patient.firstName}, please confirm today's ${time} ` +
+    return `Hi ${patient.firstName}, please ${action} today's ${time} ` +
       `appointment at ${account.name}. ` +
-      `Reply with "C" to confirm or call us at ${account.destinationPhoneNumber} to reschedule.`;
+      `Reply with "C" to ${action} or call us at ${account.destinationPhoneNumber} to reschedule.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
@@ -82,7 +82,8 @@ const createText = {
 export default function createReminderText({ patient, account, appointment, reminder = {}, currentDate = nowISO() }) {
   const type = getReminderType({ appointment, reminder, currentDate });
   const subtype = appointment.isPatientConfirmed ? 'confirmed' : 'unconfirmed';
-  return createText[type][subtype]({ patient, account, appointment });
+  const action = reminder.isCustomConfirm ? 'pre-confirm' : 'confirm';
+  return createText[type][subtype]({ patient, account, appointment, action });
 }
 
 export function getReminderType({ appointment, reminder, currentDate = nowISO() }) {
@@ -121,6 +122,9 @@ export function getReminderTemplateName({ isConfirmable, reminder }) {
   };
 
   const type = getReminderType({ reminder });
-  const confirmType = isConfirmable === 'true' ? 'Unconfirmed' : 'Confirmed';
+  const confirmType = isConfirmable === 'true' ?
+    (reminder.isCustomConfirm ? 'Preconfirmed' : 'Unconfirmed') :
+    'Confirmed';
+
   return `Patient Reminder - ${typeMap[type]} - ${confirmType}`;
 }

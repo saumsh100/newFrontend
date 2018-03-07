@@ -2,16 +2,25 @@
 import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol, myHost } from '../../config/globals';
-import createReminderText from './createReminderText';
-import { sendAlreadyConfirmedReminder, sendConfirmationReminder } from '../mail';
+import createReminderText, { getReminderTemplateName } from './createReminderText';
+import { sendTemplate } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 
-export const createConfirmationText = ({ patient, account, appointment }) => {
+export function getIsConfirmable(appointment, reminder) {
+  if (reminder.isCustomConfirm) {
+    return !appointment.isPreConfirmed || !appointment.isPatientConfirmed;
+  } else {
+    return !appointment.isPatientConfirmed;
+  }
+}
+
+export const createConfirmationText = ({ patient, account, appointment, reminder }) => {
   const mDate = moment(appointment.startDate);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
+  const action = reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed';
   return `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
-    `on ${startDate} at ${startTime} is confirmed. `;
+    `on ${startDate} at ${startTime} is ${action}. `;
 };
 
 const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
@@ -44,150 +53,82 @@ export default {
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, appointment, patient, sentReminder }) {
-    const alreadyConfirmed = appointment.isPatientConfirmed;
-    if (alreadyConfirmed) {
-      return sendAlreadyConfirmedReminder({
-        patientId: patient.id,
-        toEmail: patient.email,
-        fromName: account.name,
-        mergeVars: [
-          {
-            name: 'PRIMARY_COLOR',
-            content: account.bookingWidgetPrimaryColor || '#206477',
-          },
-          {
-            name: 'ACCOUNT_CLINICNAME',
-            content: account.name,
-          },
-          {
-            name: 'ACCOUNT_CONTACTEMAIL',
-            content: account.contactEmail,
-          },
-          {
-            name: 'ACCOUNT_WEBSITE',
-            content: account.website,
-          },
-          {
-            name: 'ACCOUNT_PHONENUMBER',
-            content: account.phoneNumber,
-          },
-          {
-            name: 'APPOINTMENT_DATE',
-            content: getAppointmentDate(appointment.startDate, account.timezone),
-          },
-          {
-            name: 'APPOINTMENT_TIME',
-            content: getAppointmentTime(appointment.startDate, account.timezone),
-          },
-          {
-            name: 'PATIENT_FIRSTNAME',
-            content: patient.firstName,
-          },
-          {
-            name: 'ACCOUNT_STREET',
-            content: account.address.street,
-          },
-          {
-            name: 'ACCOUNT_ADDRESS',
-            content: account.address.street,
-          },
-          {
-            name: 'ACCOUNT_CITY',
-            content: `${account.address.city}, ${account.address.state}`,
-          },
-          {
-            name: 'FACEBOOK_URL',
-            content: account.facebookUrl,
-          },
-          {
-            name: 'GOOGLE_URL',
-            content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
-          },
-        ],
+  email({ account, appointment, patient, sentReminder, reminder }) {
+    const isConfirmable = getIsConfirmable(appointment, reminder) ? 'true' : null;
+    return sendTemplate({
+      patientId: patient.id,
+      toEmail: patient.email,
+      fromName: account.name,
+      subject: 'Appointment Reminder',
+      templateName: getReminderTemplateName({ isConfirmable, reminder }),
+      mergeVars: [
+        {
+          name: 'PRIMARY_COLOR',
+          content: account.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
+          name: 'CONFIRMATION_URL',
+          // TODO: we might have to make this a token if UUID is too easy to guess...
+          content: `${protocol}://${myHost}/sentReminders/${sentReminder.id}/confirm`,
+        },
+        {
+          name: 'ACCOUNT_CLINICNAME',
+          content: account.name,
+        },
+        {
+          name: 'ACCOUNT_CONTACTEMAIL',
+          content: account.contactEmail,
+        },
+        {
+          name: 'ACCOUNT_WEBSITE',
+          content: account.website,
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: account.phoneNumber,
+        },
+        {
+          name: 'APPOINTMENT_DATE',
+          content: getAppointmentDate(appointment.startDate, account.timezone),
+        },
+        {
+          name: 'APPOINTMENT_TIME',
+          content: getAppointmentTime(appointment.startDate, account.timezone),
+        },
+        {
+          name: 'PATIENT_FIRSTNAME',
+          content: patient.firstName,
+        },
+        {
+          name: 'ACCOUNT_STREET',
+          content: account.address.street,
+        },
+        {
+          name: 'ACCOUNT_ADDRESS',
+          content: account.address.street,
+        },
+        {
+          name: 'ACCOUNT_CITY',
+          content: `${account.address.city}, ${account.address.state}`,
+        },
+        {
+          name: 'FACEBOOK_URL',
+          content: account.facebookUrl,
+        },
+        {
+          name: 'GOOGLE_URL',
+          content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
+        },
+      ],
 
-        attachments: [
-          {
-            type: 'application/octet-stream',
-            name: 'appointment.ics',
-            content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
-          },
-        ],
-      });
-    } else {
-      return sendConfirmationReminder({
-        patientId: patient.id,
-        toEmail: patient.email,
-        fromName: account.name,
-        mergeVars: [
-          {
-            name: 'PRIMARY_COLOR',
-            content: account.bookingWidgetPrimaryColor || '#206477',
-          },
-          {
-            name: 'CONFIRMATION_URL',
-            // TODO: we might have to make this a token if UUID is too easy to guess...
-            content: `${protocol}://${myHost}/sentReminders/${sentReminder.id}/confirm`,
-          },
-          {
-            name: 'ACCOUNT_CLINICNAME',
-            content: account.name,
-          },
-          {
-            name: 'ACCOUNT_CONTACTEMAIL',
-            content: account.contactEmail,
-          },
-          {
-            name: 'ACCOUNT_WEBSITE',
-            content: account.website,
-          },
-          {
-            name: 'ACCOUNT_PHONENUMBER',
-            content: account.phoneNumber,
-          },
-          {
-            name: 'APPOINTMENT_DATE',
-            content: getAppointmentDate(appointment.startDate, account.timezone),
-          },
-          {
-            name: 'APPOINTMENT_TIME',
-            content: getAppointmentTime(appointment.startDate, account.timezone),
-          },
-          {
-            name: 'PATIENT_FIRSTNAME',
-            content: patient.firstName,
-          },
-          {
-            name: 'ACCOUNT_STREET',
-            content: account.address.street,
-          },
-          {
-            name: 'ACCOUNT_ADDRESS',
-            content: account.address.street,
-          },
-          {
-            name: 'ACCOUNT_CITY',
-            content: `${account.address.city}, ${account.address.state}`,
-          },
-          {
-            name: 'FACEBOOK_URL',
-            content: account.facebookUrl,
-          },
-          {
-            name: 'GOOGLE_URL',
-            content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
-          },
-        ],
-
-        attachments: [
-          {
-            type: 'application/octet-stream',
-            name: `appointment.ics`,
-            content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
-          },
-        ],
-      });
-    }
+      attachments: [
+        {
+          type: 'application/octet-stream',
+          name: `appointment.ics`,
+          content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
+        },
+      ],
+    });
   },
 };
 

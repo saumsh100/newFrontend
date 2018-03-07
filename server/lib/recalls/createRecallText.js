@@ -2,9 +2,6 @@
 import moment from 'moment-timezone';
 import { convertIntervalStringToObject, s2w, convertIntervalToMs } from '../../util/time';
 
-// TODO: generateBookingUrl
-// TODO; format phone number
-
 const RecallsText = {
   ['1 months']: ({ account, patient, dueDate, link }) => {
     return `Hi ${patient.firstName}, this is ${account.name}. We're reaching out because you're ` +

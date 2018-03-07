@@ -35,6 +35,10 @@ const makeApptData = (data = {}) => Object.assign({
   practitionerId,
 }, data);
 
+const makePatientData = (data = {}) => Object.assign({
+  accountId,
+}, data);
+
 const makeSentReminderData = (data = {}) => Object.assign({
   // Doesn't even have to match reminder for this test
   patientId,
@@ -252,6 +256,154 @@ describe('RemindersList Calculation Library', () => {
       // TODO: test fetching of appointments that have SentReminders
     });
 
+    describe('#getAppointmentsFromReminder - omitPractitionerIds', () => {
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          interval: '4 weeks',
+          primaryTypes: ['email', 'sms'],
+          omitPractitionerIds: [practitionerId],
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 8), patientId: patients[0].id }), // in 4 weeks at 8am
+          makeApptData({ ...dates(2017, 8, 5, 9), patientId: patients[1].id }), // in 4 weeks at 9am
+        ]);
+      });
+
+      test('should not return any appointments because of omitPractitionerIds', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        const appointments = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appointments.length).toBe(0);
+      });
+
+      test('should return 2 appointments because we updated omitPractitionerIds on reminder to be []', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        const newReminder = await reminder.update({ omitPractitionerIds: [] });
+        const appts = await getAppointmentsFromReminder({ reminder: newReminder, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[1].patientId).toBe(patients[1].id);
+      });
+    });
+
+    describe('#getAppointmentsFromReminder - ingoreSendIfConfirmed', () => {
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          interval: '2 weeks',
+          primaryTypes: ['email', 'sms'],
+          ignoreSendIfConfirmed: true,
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 8), patientId: patients[0].id, isPatientConfirmed: true }), // in 4 weeks at 8am
+          makeApptData({ ...dates(2017, 8, 5, 9), patientId: patients[1].id }), // in 4 weeks at 9am
+        ]);
+      });
+
+      test('should return 1 appointment because the first one is already confirmed', async () => {
+        const startDate = date(2017, 7, 22, 8);
+        const endDate = date(2017, 7, 22, 10); // make it 2 hours because we don't include endDate in boundary
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(1);
+        expect(appts[0].patientId).toBe(patients[1].id);
+      });
+
+      test('should return 2 appointments because neither is already confirmed', async () => {
+        const startDate = date(2017, 7, 22, 8);
+        const endDate = date(2017, 7, 22, 10); // make it 2 hours because we don't include endDate in boundary
+
+        // go back to it being unconfirmed
+        await appointments[0].update({ isPatientConfirmed: false });
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[1].patientId).toBe(patients[1].id);
+      });
+
+      test('should not return appointment even if there\'s a later one that is not confirmed', async () => {
+        const startDate = date(2017, 7, 22, 8);
+        const endDate = date(2017, 7, 22, 17); // make it 2 hours because we don't include endDate in boundary
+
+        // add another one for the first patient for later
+        await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 9), patientId: patients[0].id }),
+          makeApptData({ ...dates(2017, 8, 5, 10), patientId: patients[1].id }),
+          makeApptData({ ...dates(2017, 8, 5, 17), patientId: patients[0].id }),
+        ]);
+
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[1].id);
+        expect(appts[1].patientId).toBe(patients[0].id);
+        expect(appts[0].startDate.toISOString()).toBe(date(2017, 8, 5, 9));
+        expect(appts[1].startDate.toISOString()).toBe(date(2017, 8, 5, 17));
+      });
+    });
+
+    describe('#getAppointmentsFromReminder - ingoreSendIfConfirmed + isCustomConfirm', () => {
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          interval: '2 weeks',
+          primaryTypes: ['email', 'sms'],
+          ignoreSendIfConfirmed: true,
+          isCustomConfirm: true,
+          customConfirmData: { isPreConfirmed: true },
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 8), patientId: patients[0].id, isPreConfirmed: true }), // in 4 weeks at 8am
+          makeApptData({ ...dates(2017, 8, 5, 9), patientId: patients[1].id }), // in 4 weeks at 9am
+        ]);
+      });
+
+      test('should return 1 appointment because the first one is already custom confirmed', async () => {
+        const startDate = date(2017, 7, 22, 8);
+        const endDate = date(2017, 7, 22, 10); // make it 2 hours because we don't include endDate in boundary
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(1);
+        expect(appts[0].patientId).toBe(patients[1].id);
+      });
+
+      test('should return 1 appointment because the first one is already custom confirmed', async () => {
+        const startDate = date(2017, 7, 22, 8);
+        const endDate = date(2017, 7, 22, 10); // make it 2 hours because we don't include endDate in boundary
+        const newReminder = await reminder.update({ customConfirmData: { reason: 'Cat' } });
+        await appointments[0].update({ reason: 'Cat' });
+        const appts = await getAppointmentsFromReminder({ reminder: newReminder, startDate, endDate });
+        expect(appts.length).toBe(1);
+        expect(appts[0].patientId).toBe(patients[1].id);
+      });
+    });
+
     describe('#shouldSendReminder', () => {
       test('should be a function', () => {
         expect(typeof shouldSendReminder).toBe('function');
@@ -456,7 +608,7 @@ describe('RemindersList Calculation Library', () => {
         expect(hoursRemindersPatients.errors.length).toBe(0); // Patient has all info
         expect(hoursRemindersPatients.success.length).toBe(1); // Monday at 8am
         expect(daysRemindersPatients.errors.length).toBe(0); // Patient has all info
-        expect(daysRemindersPatients.success.length).toBe(2); // Tuesday at 8am both email & sms
+        expect(daysRemindersPatients.success.length).toBe(4); // Tuesday at 8am both email & sms
       });
 
       test('should range does not capture the appts outside of it for 2 day', async () => {

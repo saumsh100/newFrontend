@@ -9,10 +9,11 @@ import {
   RemoteSubmitButton,
   DialogBox,
 } from '../../../library';
-import { convertIntervalToMs } from '../../../../../server/util/time';
+import { ordinalSuffix, convertIntervalToMs } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
+import AdvancedSettingsForm from './AdvancedSettingsForm';
 import ReminderPreview from './ReminderPreview';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
@@ -25,12 +26,16 @@ class Reminders extends Component {
     this.state = {
       isAdding: false,
       selectedReminderId: null,
+      selectedAdvancedReminderId: null,
     };
 
     this.newReminder = this.newReminder.bind(this);
     this.openModal = this.openModal.bind(this);
     this.selectReminder = this.selectReminder.bind(this);
+    this.selectAdvancedSettings = this.selectAdvancedSettings.bind(this);
     this.toggleAdding = this.toggleAdding.bind(this);
+    this.closeAdvancedSettings = this.closeAdvancedSettings.bind(this);
+    this.saveAdvancedSettingsReminder = this.saveAdvancedSettingsReminder.bind(this);
   }
 
   componentWillMount() {
@@ -85,6 +90,47 @@ class Reminders extends Component {
       });
   }
 
+  saveAdvancedSettingsReminder(values) {
+    const { reminders, activeAccount } = this.props;
+    const { selectedAdvancedReminderId } = this.state;
+
+    const reminder = reminders.get(selectedAdvancedReminderId);
+    if (!reminder) {
+      console.error('Reminder does not exist in Redux state');
+      return;
+    }
+
+    const newValues = Object.assign({}, values);
+    const { isCustomConfirm, customConfirmString, omitPractitionerIdsString } = newValues;
+    if (isCustomConfirm && customConfirmString) {
+      newValues.customConfirmData = JSON.parse(customConfirmString);
+    } else {
+      newValues.customConfirmData = null;
+    }
+
+    if (omitPractitionerIdsString) {
+      newValues.omitPractitionerIds = omitPractitionerIdsString.split(',');
+    }
+
+    const alert = {
+      success: {
+        title: 'Updated Reminder Settings',
+        body: `Successfully updated the reminder's advanced settings`,
+      },
+
+      error: {
+        title: 'Error Updating Reminder Settings',
+        body: `Failed to update the advanced settings for reminder`,
+      },
+    };
+
+    this.props.updateEntityRequest({
+      url: `/api/accounts/${activeAccount.id}/reminders/${reminder.id}`,
+      values: newValues,
+      alert,
+    }).then(this.closeAdvancedSettings);
+  }
+
   selectReminder(reminderId) {
     if (reminderId === this.state.selectedReminderId) {
       return;
@@ -93,18 +139,41 @@ class Reminders extends Component {
     this.setState({ selectedReminderId: reminderId });
   }
 
+  selectAdvancedSettings(reminderId) {
+    this.setState({ selectedAdvancedReminderId: reminderId });
+  }
+
+  closeAdvancedSettings() {
+    this.setState({ selectedAdvancedReminderId: null });
+  }
+
   render() {
-    if (!this.props.activeAccount || !this.props.activeAccount.id) {
+    const { activeAccount, role, reminders } = this.props;
+    const { selectedReminderId, selectedAdvancedReminderId } = this.state;
+    if (!activeAccount || !activeAccount.id) {
       return null;
     }
 
-    const actionsNew = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { color: 'blue', form: 'newReminder' } },
+    const advancedSettingsActions = [
+      { label: 'Cancel', onClick: this.closeAdvancedSettings, component: Button, props: { border: 'blue' } },
+      {
+        label: 'Save',
+        onClick: this.saveAdvancedSettingsReminder,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: `advancedSettingsReminders_${selectedAdvancedReminderId}` },
+      },
     ];
 
-    const { activeAccount } = this.props;
-    const { selectedReminderId } = this.state;
+    const actionsNew = [
+      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      {
+        label: 'Save',
+        onClick: this.newReminder,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: 'newReminder' },
+      },
+    ];
+
     const selectedReminder = this.props.reminders.get(selectedReminderId);
 
     let previewComponent = null;
@@ -116,6 +185,11 @@ class Reminders extends Component {
         />
       );
     }
+
+    // Used to display the cogs button to open Advanced Settings
+    const isSuperAdmin = role === 'SUPERADMIN';
+    const advancedReminder = reminders.get(selectedAdvancedReminderId);
+    const advancedIndex = reminders.toArray().findIndex(r => r.id === selectedAdvancedReminderId);
 
     return (
       <CommunicationSettingsCard
@@ -132,15 +206,17 @@ class Reminders extends Component {
 
         leftColumn={(
           <div>
-            {this.props.reminders.toArray().map((reminder, i) => {
+            {reminders.toArray().map((reminder, i) => {
               return (
                 <RemindersItem
                   key={reminder.id}
                   reminder={reminder}
-                  account={this.props.activeAccount}
+                  account={activeAccount}
                   index={i}
-                  selectReminder={this.selectReminder}
-                  selected={reminder.id === selectedReminderId}
+                  onSelectReminder={this.selectReminder}
+                  onSelectAdvancedSettings={this.selectAdvancedSettings}
+                  isSelected={reminder.id === selectedReminderId}
+                  isSuperAdmin={isSuperAdmin}
                 />
               );
             })}
@@ -166,6 +242,21 @@ class Reminders extends Component {
 
         rightColumn={previewComponent}
       >
+        <DialogBox
+          type="small"
+          actions={advancedSettingsActions}
+          title={`${ordinalSuffix(advancedIndex + 1)} Reminder Settings`}
+          active={advancedReminder && !!this.state.selectedAdvancedReminderId}
+          onEscKeyDown={this.closeAdvancedSettings}
+          onOverlayClick={this.closeAdvancedSettings}
+        >
+          {advancedReminder ?
+            <AdvancedSettingsForm
+              reminder={advancedReminder}
+              onSubmit={this.saveAdvancedSettingsReminder}
+            />
+          : null}
+        </DialogBox>
         <DialogBox
           actions={actionsNew}
           title="Add Reminder"

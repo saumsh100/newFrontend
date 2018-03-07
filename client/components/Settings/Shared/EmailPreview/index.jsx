@@ -26,7 +26,7 @@ const getPreview = (url) => new Promise((resolve) => {
 const EMAIL_SCALE = 0.75;
 
 // This accounts for images not loading in time to set height exactly
-const AVERAGE_IMAGE_HEIGHT = 200;
+const AVERAGE_IMAGE_HEIGHT = 500;
 
 export default class EmailPreview extends Component {
   constructor(props) {

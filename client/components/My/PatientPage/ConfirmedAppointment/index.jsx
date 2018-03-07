@@ -14,6 +14,7 @@ export default function ConfirmedAppointment({ params }) {
   const {
     account,
     appointment,
+    reminder,
   } = params;
 
   const {
@@ -39,8 +40,12 @@ export default function ConfirmedAppointment({ params }) {
   return (
     <div>
       <Section>
-        <div className={styles.header}>Thank you!</div>
-        <div className={styles.text}>Your appointment has been confirmed.</div>
+        <div className={styles.header}>
+          Thank you!
+        </div>
+        <div className={styles.text}>
+          Your appointment has been {reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed'}.
+        </div>
       </Section>
       <Section>
         <WellHeader>

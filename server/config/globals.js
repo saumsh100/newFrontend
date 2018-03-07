@@ -128,6 +128,7 @@ const postgres = {
 const reminders = {
   cronIntervalMinutes: 5,
   sameDayWindowHours: 6,
+  allowedCustomConfirmKeys: ['isPreConfirmed', 'reason'],
 };
 
 const reviews = {

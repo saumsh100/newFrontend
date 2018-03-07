@@ -26,8 +26,8 @@ const wordMap = {
   email: 'Email',
 };
 
-function ReminderSMSPreview({ patient, account, appointment }) {
-  const reminderMessage = createReminderText({ patient, account, appointment });
+function ReminderSMSPreview({ patient, account, appointment, reminder }) {
+  const reminderMessage = createReminderText({ patient, account, appointment, reminder });
   const smsPhoneNumber = account.twilioPhoneNumber ||
     account.destinationPhoneNumber ||
     account.phoneNumber ||
@@ -95,6 +95,7 @@ class ReminderPreview extends Component {
               appointment={appointment}
               patient={patient}
               account={account}
+              reminder={reminder}
             />
           </div>
         );

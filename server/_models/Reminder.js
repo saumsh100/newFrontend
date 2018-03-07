@@ -1,6 +1,4 @@
 
-import { commsTypes } from './shared/comms';
-
 const PRIMARY_TYPES = {
   PHONE: 'phone',
   EMAIL: 'email',
@@ -49,6 +47,34 @@ export default function (sequelize, DataTypes) {
     },
 
     isDeleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
+    isCustomConfirm: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
+    customConfirmData: {
+      type: DataTypes.JSON,
+    },
+
+    isConfirmable: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+
+    omitPractitionerIds: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: [],
+      allowNull: false,
+    },
+
+    ignoreSendIfConfirmed: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,

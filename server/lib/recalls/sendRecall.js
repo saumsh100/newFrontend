@@ -48,18 +48,17 @@ const generateBookingUrl = ({ account, sentRecall, dueDate }) => {
 export default {
   // Send Appointment Reminder text via Twilio
   async sms({ account, patient, sentRecall, recall, dueDate }) {
-    // TODO: add phoneNumber logic for patient
     const longLink = generateBookingUrl({ account, sentRecall, dueDate: dueDate.slice(0) });
     const shortLink = await compressUrl(longLink);
     const link = `https://${shortLink}`;
     const lastDate = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
-
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
       body: createRecallText({ patient, account, sentRecall, recall, link, dueDate, lastApptDate: moment(lastDate).format('MMM YYYY') }),
     });
   },
+
   // Send Appointment Reminder email via Mandrill (MailChimp)
   email({ account, lastAppointment, dueDate, recall, patient, sentRecall }) {
     if (!patient.email) {

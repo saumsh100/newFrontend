@@ -23,7 +23,7 @@ import {
   floorDateMinutes,
 } from '../../util/time';
 import { mapPatientsToReminders } from './helpers';
-import sendReminder from './sendReminder';
+import sendReminder, { getIsConfirmable } from './sendReminder';
 
 async function sendSocket(io, chatId) {
   let chat = await Chat.findOne({
@@ -76,10 +76,6 @@ async function sendSocket(io, chatId) {
   });
 }*/
 
-function getIsConfirmable(appointment) {
-  return !appointment.isPatientConfirmed;
-}
-
 /**
  * sendRemindersForAccount is an async function that will send reminders for the account passed in
  * by calling other composable functions to assemble patients that need reminders and then looping through
@@ -107,6 +103,7 @@ export async function sendRemindersForAccount(account, date, pub) {
   // Sort reminders by interval so that we send to earliest first
   const sortedReminders = reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
 
+  // Collect successfully sent sentReminderIds to be sent to create correspondences
   const sentReminderIds = [];
   const remindersPatients = await mapPatientsToReminders({ reminders: sortedReminders, account, startDate: date });
 
@@ -125,12 +122,12 @@ export async function sendRemindersForAccount(account, date, pub) {
     if (errors.length) {
       try {
         // Save failed sentRecalls from errors
-        const failedSentReminders = errors.map(({errorCode, patient, primaryType}) => ({
+        const failedSentReminders = errors.map(({ errorCode, patient, primaryType }) => ({
           reminderId: reminder.id,
           accountId: account.id,
           patientId: patient.id,
           appointmentId: patient.appointment.id,
-          isConfirmable: getIsConfirmable(patient.appointment),
+          isConfirmable: getIsConfirmable(patient.appointment, reminder),
           interval: reminder.interval,
           primaryType,
           errorCode,
@@ -158,7 +155,7 @@ export async function sendRemindersForAccount(account, date, pub) {
         patientId: patient.id,
         appointmentId: appointment.id,
         interval: reminder.interval,
-        isConfirmable: getIsConfirmable(appointment),
+        isConfirmable: getIsConfirmable(appointment, reminder),
         primaryType,
       });
 

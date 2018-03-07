@@ -1,10 +1,13 @@
 
 import moment from 'moment';
 import uniqWith from 'lodash/uniqWith';
+import groupBy from 'lodash/groupBy';
+import forEach from 'lodash/forEach';
 import {
   Appointment,
   Patient,
   SentReminder,
+  Reminder,
 } from '../../_models';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
@@ -69,8 +72,7 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
  * @param lastReminder
  * @param buffer
  */
-export async function getAppointmentsFromReminder({ reminder, startDate, endDate, lastReminder, buffer = BUFFER_SECONDS }) {
-  // TODO: add buffer here so that patients aren't receiving reminders to close to one another
+export async function getAppointmentsFromReminder({ reminder, startDate, endDate, buffer = BUFFER_SECONDS }) {
   // convert string to { weeks: 1, days: 1, ... }
   const intervalObject = convertIntervalStringToObject(reminder.interval);
   const start = moment(startDate).add(intervalObject).toISOString();
@@ -93,6 +95,10 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
       startDate: {
         $gte: start,
         $lt: end,
+      },
+
+      practitionerId: {
+        $notIn: reminder.omitPractitionerIds,
       },
     },
 
@@ -134,12 +140,43 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
     ],
   });
 
-  // Assuming this array is ordered by startDate ASC, make sure there is only 1 appt per patient
-  const sameDayAppointments = uniqWith(appointments, (appA, appB) => {
-    return appA.patient.id === appB.patient.id;
+  return exports.filterReminderAppointments({ appointments, reminder });
+}
+
+/**
+ * filterReminderAppointments will group the appointments by the buffer interval and then
+ * for each group it will filter out duplicate patients as well as appointments
+ * that are confirmed if ignoreSendIfConfirmed=true
+ *
+ * @param appointments
+ * @param reminder
+ * @return [filteredAppointments]
+ */
+export function filterReminderAppointments({ appointments, reminder }) {
+  if (!appointments.length) return [];
+
+  // First group appointments by the buffer time (could be every 24 hours, every 6 hours, etc.)
+  const floorTime = appointments[0].startDate;
+  const groupedAppointmentsByBuffer = groupBy(appointments, (a) => {
+    return Math.floor(moment(a.startDate).diff(floorTime, 'hours') / SAME_DAY_HOURS);
   });
 
-  return sameDayAppointments.filter(appointment => shouldSendReminder({ appointment, reminder, lastReminder }));
+  // Now, for each group, ensure the appointments have unique patientIds
+  // Then if ignoreSendIfConfirmed if true, filter out the confirmed ones
+  let filteredAppointments = [];
+  forEach(groupedAppointmentsByBuffer, (appointmentsGroup) => {
+    let filteredAppointmentsGroup = uniqWith(appointmentsGroup, (a, b) =>
+      a.patient.id === b.patient.id
+    );
+
+    filteredAppointmentsGroup = filteredAppointmentsGroup.filter(a =>
+      exports.shouldSendReminder({ appointment: a, reminder })
+    );
+
+    filteredAppointments = [...filteredAppointments, ...filteredAppointmentsGroup];
+  });
+
+  return filteredAppointments;
 }
 
 /**
@@ -153,7 +190,7 @@ export async function getAppointmentsFromReminder({ reminder, startDate, endDate
  * @param lastReminder
  * @returns {boolean}
  */
-export function shouldSendReminder({ appointment, reminder, lastReminder }) {
+export function shouldSendReminder({ appointment, reminder }) {
   const { sentReminders, patient } = appointment;
   const { preferences, appointments = [] } = patient;
 
@@ -163,10 +200,8 @@ export function shouldSendReminder({ appointment, reminder, lastReminder }) {
     return false;
   }
 
-  const lastSentReminder = sentReminders[0];
-  if (lastReminder) {
-    // TODO: Check if the lastSentReminder was in the window to account for manual reminders
-    // TODO: this needs to be done when manual sending is finished
+  if (reminder.ignoreSendIfConfirmed && exports.isAppointmentConfirmed(appointment, reminder)) {
+    return false;
   }
 
   // We check interval because they can change and add different reminders
@@ -186,21 +221,32 @@ export function shouldSendReminder({ appointment, reminder, lastReminder }) {
 }
 
 /**
+ * isAppointmentConfirmed is a function that determines if the appointment is
+ * "confirmed". it takes the reminders settings into account
  *
+ * @param appointment
+ * @param reminder
+ * @return {isPreConfirmed|{type}|boolean}
+ */
+export function isAppointmentConfirmed(appointment, reminder) {
+  if (reminder.isCustomConfirm) {
+    return appointment.isPreConfirmed || appointment.isPatientConfirmed;
+  } else {
+    return appointment.isPatientConfirmed;
+  }
+}
+
+/**
+ * getValidSmsReminders will return the sms reminders that are valid for confirmations
+ * so that the text message will confirm it
+ *
+ * @param patientId
+ * @param accountId
+ * @param date
+ * @return [sentReminders]
  */
 export async function getValidSmsReminders({ accountId, patientId, date }) {
   // Confirming valid SMS Reminder for patient
-  /*const sentReminders = await SentReminder
-    .filter({
-      accountId,
-      patientId,
-      isConfirmed: false,
-      primaryType: 'sms',
-    })
-    .orderBy('createdAt')
-    .getJoin({ appointment: true })
-    .run();*/
-
   const sentReminders = await SentReminder.findAll({
     where: {
       accountId,
@@ -211,10 +257,10 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
     },
 
     order: [['createdAt', 'asc']],
-    include: [{
-      model: Appointment,
-      as: 'appointment',
-    }],
+    include: [
+      { model: Appointment, as: 'appointment' },
+      { model: Reminder, as: 'reminder' },
+    ],
   });
 
   return sentReminders.filter(({ appointment }) => {

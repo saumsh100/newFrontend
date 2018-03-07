@@ -370,5 +370,3 @@ export function isDueForRecall({ account, recall, patient, date }) {
 
   return isDue && !recallAlreadySentOrLongerAway && preferences.reminders;
 }
-
-

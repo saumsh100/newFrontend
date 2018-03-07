@@ -160,20 +160,21 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     }
 
     // Confirm first available reminder
-    const sentReminder = validSmsReminders[0].get({ plain: true });
-    const { appointment } = sentReminder;
-
+    const validSentReminder = validSmsReminders[0];
+    const { appointment, reminder } = validSentReminder;
+    const sentReminder = validSentReminder.get({ plain: true });
 
     await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
-    await Appointment.update({ isPatientConfirmed: true, isSyncedWithPms: false }, { where: { id: appointment.id } });
+    await appointment.confirm(reminder);
     await sendSocketReminder(io, sentReminder);
+
     // Mark this as read cause we are auto-responding to it
     await textMessage.update({ read: true });
 
     const responseMessage = await twilioClient.sendMessage({
       from: account.twilioPhoneNumber,
       to: patient.mobilePhoneNumber,
-      body: createConfirmationText({ patient, appointment, account }),
+      body: createConfirmationText({ patient, appointment, account, reminder }),
     });
 
     const responseTextMessageData = sanitizeTwilioSmsData(responseMessage);

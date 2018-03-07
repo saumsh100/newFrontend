@@ -3,16 +3,24 @@
 
 .reminderListItem {
   &:hover {
-    .deleteButtonWrapper {
+    .hoverWrapper {
       display: block;
     }
   }
 }
 
-.deleteButtonWrapper {
+.hoverWrapper {
   display: none;
   position: relative;
-  top: 30px;
+  top: 10px;
+}
+
+.advancedSettingsButton {
+  color: grey;
+}
+
+.deleteButton {
+  margin-top: 10px;
 }
 
 .secondaryLinesBox {

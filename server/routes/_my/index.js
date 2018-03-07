@@ -22,6 +22,7 @@ import {
   PatientUser,
   Practitioner,
   PatientUserReset,
+  Reminder,
 } from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
@@ -39,6 +40,7 @@ sequelizeMyRouter.use('/auth', authRouter);
 sequelizeMyRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [
   { model: Appointment, as: 'appointment' },
   { model: Patient, as: 'patient' },
+  { model: Reminder, as: 'reminder' },
 ]));
 
 sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
@@ -172,10 +174,10 @@ sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res,
     await sentReminder.update({ isConfirmed: true });
 
     // For any confirmed reminder we confirm appointment
-    const { appointment, patient } = sentReminder;
+    const { appointment, patient, reminder } = sentReminder;
 
     if (appointment) {
-      await appointment.update({ isPatientConfirmed: true, isSyncedWithPms: false });
+      await appointment.confirm(reminder);
     }
 
     const account = await Account.findOne({
@@ -186,11 +188,13 @@ sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res,
 
     const appointmentJSON = appointment.get({ plain: true });
     const patientJSON = patient.get({ plain: true });
+    const reminderJSON = reminder.get({ plain: true });
 
     const params = {
       patient: patientJSON,
       appointment: appointmentJSON,
       account: generateAccountParams(account),
+      reminder: reminderJSON,
     };
 
     const encodedParams = encodeParams(params);

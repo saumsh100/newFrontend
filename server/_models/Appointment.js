@@ -235,5 +235,16 @@ export default function (sequelize, DataTypes) {
     return response;
   };
 
+  Appointment.prototype.confirm = async function (reminder) {
+    let mergeData = { isSyncedWithPms: false };
+    if (reminder.isCustomConfirm) {
+      mergeData = Object.assign({}, reminder.customConfirmData, mergeData);
+    } else {
+      mergeData = Object.assign({}, { isPatientConfirmed: true }, mergeData);
+    }
+
+    return await this.update(mergeData);
+  };
+
   return Appointment;
 }
