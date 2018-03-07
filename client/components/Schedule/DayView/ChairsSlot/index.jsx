@@ -39,7 +39,7 @@ export default function ChairsSlot(props) {
               return app;
             }
 
-            const practitionerData = practitionersArray.find(prac=> prac.id === app.get('practitionerId'));
+            const practitionerData = practitionersArray.find(prac => prac.id === app.get('practitionerId'));
 
             return Object.assign({}, app.toJS(), {
               appModel: app,
@@ -65,6 +65,7 @@ export default function ChairsSlot(props) {
               selectedAppointment={schedule.toJS().selectedAppointment}
               numOfColumns={chairsArray.length}
               columnIndex={i}
+              unit={schedule.toJS().appointmentMinUnit}
             />
           );
         }) : null}

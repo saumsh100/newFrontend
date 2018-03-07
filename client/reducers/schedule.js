@@ -20,7 +20,8 @@ const initialState = fromJS({
   scheduleDate: new Date(),
   scheduleView: 'chair',
 
-  timeSlotHeight: 50,
+  appointmentMinUnit: 15,
+  timeSlotHeight: 75,
   columnWidth: 150,
   leftColumnWidth: 70,
 
@@ -65,8 +66,8 @@ export default handleActions({
   },
 
   [CREATE_NEW_PATIENT](state, action) {
-    const createPatientBool = action.payload.createPatientBool
-    return state.set('createNewPatient', createPatientBool)
+    const createPatientBool = action.payload.createPatientBool;
+    return state.set('createNewPatient', createPatientBool);
   },
 
   [ADD_SCHEDULE_FILTER](state, action) {

@@ -29,21 +29,129 @@ const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
     } else if (columnIndex === numOfColumns - 1) {
       return 'left';
     }
-
-    return 'right';
   }
+
+  return 'right';
 };
 
-class ShowAppointment extends Component{
+/**
+ * Function to calculate the height and the minHeight to display the hours inline
+ *
+ * @param {number} duration
+ * @param {number} timeSlotHeight
+ *
+ * @returns {number} HeightCalculated
+ */
+const calculateHeight = (duration, timeSlotHeight) => (duration / 60) * timeSlotHeight;
+
+/**
+ * Function to shorten the time string based on the minutes
+ * Can also set the AM/PM indicator
+ * @param {string | moment} date
+ * @param {bool} addAtoFormat
+ */
+const shortenTime = (date, addAtoFormat = true) => {
+  date = moment(date);
+  const aFormat = addAtoFormat ? 'a' : '';
+
+  return date.get('minutes') === 0 ?
+        date.format(`h${aFormat}`) :
+        date.format(`h:mm${aFormat}`);
+};
+
+/**
+ * Function that builds the correct format to display the times.
+ * Supress the AM/PM of the end and start times are the same.
+ * @param {string | moment} startDate
+ * @param {string | moment} endDate
+ */
+const buildHoursFormat = (startDate, endDate = null) => {
+  startDate = moment(startDate);
+  
+  if (endDate) {
+    endDate = moment(endDate);
+
+    const afternoon = 12;
+    const addAtoFormat =
+    (startDate.get('hour') >= afternoon && endDate.get('hour') >= afternoon) ||
+    (startDate.get('hour') < afternoon && endDate.get('hour') < afternoon);
+    
+    return `${shortenTime(startDate, !addAtoFormat)} - ${shortenTime(endDate)}`;
+  }
+  return shortenTime(startDate);
+};
+
+/**
+ * Builds the final string to display.
+ * @param {string | moment} startDate
+ * @param {string | moment} endDate
+ * @param {bool} inline
+ */
+const buildHoursString = (startDate, endDate, inline = false) => {
+  const timeString = inline ?
+      buildHoursFormat(startDate) :
+      buildHoursFormat(startDate, endDate);
+
+  return timeString;
+};
+
+/**
+ * Hours presenter component
+ *
+ * @param {stylesheet} styles
+ * @param {date} startDate
+ * @param {date} endDate
+ * @param {bool} inline - add a comma if true
+ */
+const AppointmentHours = ({
+  style,
+  startDate,
+  endDate,
+  inline = false,
+}) => (
+  <span className={style.nameContainer_hours}>
+    {inline && ','} {buildHoursString(startDate, endDate, inline)}
+  </span>
+  );
+
+
+AppointmentHours.propTypes = {
+  style: PropTypes.shape({ nameContainer_hours: PropTypes.string }),
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
+  inline: PropTypes.bool,
+};
+/**
+ * ShowAppointment represents each block of appointment on the calendar view
+ * it is used on both PractitionersSlot and ChairSlot components
+ * and is rendered by the TimeSlot component.
+ * Also responsible for the toggling the PopOver component.
+ *
+ */
+class ShowAppointment extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isOpened: false,
+      /**
+       * this two properties hold the nameContainer actual width
+       * and the minimun offSetWidth to display the AppointmentHours component inline
+       */
+      nameContainerOffsetWidth: 100,
+      nameContainerOffset: 100,
     };
-
+    
     this.togglePopover = this.togglePopover.bind(this);
     this.closePopover = this.closePopover.bind(this);
     this.editAppointment = this.editAppointment.bind(this);
+  }
+
+  componentDidMount() {
+    // This prevents setState to be called indefinitely
+    if (this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth) {
+      /* eslint-disable react/no-did-mount-set-state */
+      this.setState({ nameContainerOffsetWidth: this.nameContainer.offsetWidth });
+    }
   }
 
   togglePopover() {
@@ -75,7 +183,14 @@ class ShowAppointment extends Component{
       columnIndex,
       minWidth,
       scheduleView,
+      unit,
     } = this.props;
+
+    const {
+      isOpened,
+      nameContainerOffsetWidth,
+      nameContainerOffset,
+    } = this.state;
 
     const {
       startDate,
@@ -105,21 +220,25 @@ class ShowAppointment extends Component{
     const startDateMinutes = moment(startDate).minutes();
 
     const topCalc = (((startDateHours - startHour) + (startDateMinutes / 60)) * timeSlotHeight.height);
-    const heightCalc = ((durationTime) / 60) * timeSlotHeight.height;
-
+  
+    const heightCalc = calculateHeight((durationTime > unit ? durationTime : unit), timeSlotHeight.height);
+        
     const splitRow = rowSort.length > 1 ? (100 * (appPosition / (rowSort.length))) : 0;
     const top = `${(topCalc + 0.05)}px`;
     const left = `${splitRow + 0.07}%`;
 
     const widthPadding = 0.6;
     const width = `${(100 * ((100 / rowSort.length) / 100)) - widthPadding}%`;
+    
     const height = `${heightCalc - 0.1}px`;
-
+    
     const backgroundColor = bgColor;
     const zIndex = isHovered ? 5 : appPosition;
 
+    // set the minimum height to display the hours below the name. Set to 30 min
+    const displayDurationHeight = calculateHeight(30, timeSlotHeight.height);
+
     const containerStyle = {
-      height,
       top,
       width,
       left,
@@ -129,16 +248,22 @@ class ShowAppointment extends Component{
     const appStyle = {
       height,
       backgroundColor,
-      border: `0.5px solid ${appPosition === 0 ? bgColor : '#FFFFFF'}`,
+      border: 0,
       zIndex,
-      boxShadow: this.state.isOpened ? `0px 3px 5px 0px ${hexToRgbA(bgColor, 0.5)}` : 'none',
+      boxShadow: this.state.isOpened ? `0px 2px 6px 0px ${hexToRgbA(bgColor, 0.5)}` : 'none',
     };
 
     const placement = numOfColumns === 1 ? 'below' : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
 
+    // function to check if there is enought room to display the AppointmentHours inline
+    const canInlineAppointment = () => (
+      displayDurationHeight > heightCalc &&
+      nameContainerOffsetWidth >= nameContainerOffset
+    );
+
     return (
       <Popover
-        isOpen={this.state.isOpened && !selectedAppointment}
+        isOpen={isOpened && !selectedAppointment}
         body={[(
           <AppointmentPopover
             appointment={appointment}
@@ -155,6 +280,7 @@ class ShowAppointment extends Component{
       >
         <div
           onClick={this.togglePopover}
+          role="button"
           onDoubleClick={this.editAppointment}
           className={styles.appointmentContainer}
           style={containerStyle}
@@ -164,23 +290,31 @@ class ShowAppointment extends Component{
             style={appStyle}
             data-test-id={`timeSlot${patient.firstName}${patient.lastName}`}
           >
-            {isPatientConfirmed || isReminderSent ? (<div className={styles.icon}>
-              <div className={styles.icon_item}>{(isPatientConfirmed && <Icon size={1} icon="check-circle" />)}</div>
-              <div className={styles.icon_item}> {(isReminderSent && <Icon size={1} icon="clock-o" />)} </div>
-            </div>) : null}
+            {isPatientConfirmed || isReminderSent ? (
+              <div className={styles.icon}>
+                {(isPatientConfirmed ? <Icon size={1} icon="check-circle" type="solid" /> : <Icon size={1} icon="clock-o" />)}
+              </div>) : null}
 
-            <div className={styles.nameAge}>
-              <div className={styles.nameAge_name} >
-                <span className={styles.paddingText}>{patient.firstName}</span>
-                <span className={styles.paddingText}>{lastName}</span>
+            <div className={styles.nameContainer} ref={(div) => { this.nameContainer = div; }}>
+              <div className={styles.nameContainer_name}>
+                {`${patient.firstName} ${lastName}`}
               </div>
+              
+              {canInlineAppointment() &&
+                <AppointmentHours
+                  style={styles}
+                  startDate={startDate}
+                  endDate={endDate}
+                  inline
+                /> }
             </div>
 
-            <div className={styles.duration}>
-              <span className={styles.duration_text}>
-                {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
-              </span>
-            </div>
+            {!canInlineAppointment() &&
+              <AppointmentHours
+                style={styles}
+                startDate={startDate}
+                endDate={endDate}
+              /> }
           </div>
         </div>
       </Popover>
@@ -201,6 +335,8 @@ ShowAppointment.propTypes = {
   numOfColumns: PropTypes.number,
   columnIndex: PropTypes.number,
   minWidth: PropTypes.number,
+  scheduleView: PropTypes.string,
+  unit: PropTypes.number,
 };
 
 export default withHoverable(ShowAppointment);

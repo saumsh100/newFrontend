@@ -62,6 +62,7 @@ export default function PractitionersSlot(props) {
               selectedAppointment={schedule.toJS().selectedAppointment}
               numOfColumns={practitionersArray.length}
               columnIndex={i}
+              unit={schedule.toJS().appointmentMinUnit}
             />
           );
         }) : null}

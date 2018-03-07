@@ -112,7 +112,7 @@ class ScheduleComponent extends Component {
   }
 
   setCreatingPatient(value = false) {
-    this.props.setCreatingPatient({ creatingPatientBool: value});
+    this.props.setCreatingPatient({ creatingPatientBool: value });
   }
 
   setCurrentDay(day) {
@@ -263,7 +263,7 @@ class ScheduleComponent extends Component {
             this.setCreatingPatient(false);
           },
           component: Button,
-          props: { border: 'blue' } ,
+          props: { border: 'blue' },
         },
         { label: 'Save',
           onClick: this.handlePatientSubmit,
@@ -281,7 +281,7 @@ class ScheduleComponent extends Component {
     }
 
     return (
-        <div className={styles.rowMainContainer}>
+      <div className={styles.rowMainContainer}>
           <div className={styles.dayViewContainer}>
             <Card
               className={styles.card}

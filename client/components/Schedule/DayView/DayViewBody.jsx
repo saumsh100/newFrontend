@@ -23,7 +23,6 @@ class DayViewBody extends Component {
     this.timeComponentDidMount = this.timeComponentDidMount.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.onScrollChair = this.onScrollChair.bind(this);
-
   }
 
   componentWillReceiveProps(nextProps) {
@@ -113,26 +112,22 @@ class DayViewBody extends Component {
 
     const colors = ['#FF715A', '#347283', '#FFC45A', '#2CC4A7'];
     const colorLen = colors.length;
-    const reset = Math.ceil(( sortedPractitioners.length - colorLen) / colorLen);
+    const reset = Math.ceil((sortedPractitioners.length - colorLen) / colorLen);
 
-    for (let j = 1 ; j <= reset; j++) {
-      for (let i = 0; i < (sortedPractitioners.length - colorLen);  i++) {
+    for (let j = 1; j <= reset; j++) {
+      for (let i = 0; i < (sortedPractitioners.length - colorLen); i++) {
         colors.push(colors[i]);
       }
     }
 
-    let practitionersArray = sortedPractitioners.map((prac, index) => {
-      return Object.assign({}, prac.toJS(), {
-        color: colors[index],
-        prettyName: prac.getPrettyName(),
-      });
-    });
+    let practitionersArray = sortedPractitioners.map((prac, index) => Object.assign({}, prac.toJS(), {
+      color: colors[index],
+      prettyName: prac.getPrettyName(),
+    }));
 
     // Display the practitioners that have been checked on the filters card.
     const checkedPractitioners = schedule.toJS().practitionersFilter;
-    practitionersArray = practitionersArray.filter((pr) => {
-      return checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive;
-    });
+    practitionersArray = practitionersArray.filter(pr => checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive);
 
     const practitionersSlot = appsFetched && chairsFetched && pracsFetched ? (
       <PractitionersSlot
@@ -153,9 +148,7 @@ class DayViewBody extends Component {
 
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
-    const chairsArray = chairs.toArray().sort(SortByName).filter((chair) => {
-      return checkedChairs.indexOf(chair.id) > -1 && chair.isActive;
-    });
+    const chairsArray = chairs.toArray().sort(SortByName).filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
 
     const chairsSlot = appsFetched && chairsFetched && pracsFetched ? (
       <ChairsSlot
@@ -236,6 +229,6 @@ function mapStateToProps({ schedule, apiRequests }) {
   };
 }
 
-const enhance = connect(mapStateToProps, null)
+const enhance = connect(mapStateToProps, null);
 
 export default enhance(DayViewBody);

@@ -1,10 +1,10 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import moment from 'moment';
 import ShowAppointment from './ShowAppointment';
 import ShowMark from './ShowMark';
 import styles from '../styles.scss';
-import TimeSlotColumn from "./TimeSlotColumn";
+import TimeSlotColumn from './TimeSlotColumn';
 
 function intersectingAppointments(appointments, startDate, endDate) {
   const sDate = moment(startDate);
@@ -16,7 +16,7 @@ function intersectingAppointments(appointments, startDate, endDate) {
     if (sDate.isSame(appStartDate) || sDate.isBetween(appStartDate, appEndDate) ||
       eDate.isSame(appEndDate) || eDate.isBetween(appStartDate, appEndDate)) {
       return app;
-    };
+    }
   });
 }
 
@@ -41,6 +41,7 @@ export default function TimeSlot(props) {
     numOfColumns,
     columnIndex,
     scheduleView,
+    unit,
   } = props;
 
   const timeSlotContentStyle = {
@@ -90,6 +91,7 @@ export default function TimeSlot(props) {
             columnIndex={columnIndex}
             minWidth={minWidth}
             scheduleView={scheduleView}
+            unit={unit}
           />
         );
 
@@ -116,5 +118,6 @@ TimeSlot.propTypes = {
   filteredApps: PropTypes.arrayOf(PropTypes.object),
   numOfColumns: PropTypes.number,
   columnIndex: PropTypes.number,
+  unit: PropTypes.number,
 };
 
