@@ -78,6 +78,7 @@ const SUPERADMIN = {
 
   waitSpots: allowAll,
   table: allow('read'),
+  revenue: allow('read'),
 };
 
 const OWNER = {
