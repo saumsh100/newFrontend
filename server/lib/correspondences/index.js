@@ -7,6 +7,7 @@ import {
   SentRecall,
   SentReview,
   Review,
+  Reminder,
 } from '../../_models';
 import { namespaces } from '../../config/globals';
 import {
@@ -36,6 +37,8 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
       isSent: true,
       id: { $notIn: sentReminderIds },
     },
+
+    include: [{ model: Reminder, as: 'reminder' }],
   });
 
   const correspondencesToCreate = sentReminders.map((sr) => {
@@ -78,6 +81,8 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       id: { $notIn: sentReminderIds },
       isConfirmed: true,
     },
+
+    include: [{ model: Reminder, as: 'reminder' }],
   });
 
   const correspondencesToCreate = sentReminders.map((sr) => {

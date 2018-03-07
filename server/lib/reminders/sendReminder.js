@@ -59,6 +59,7 @@ export default {
       patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
+      replyTo: account.contactEmail,
       subject: 'Appointment Reminder',
       templateName: getReminderTemplateName({ isConfirmable, reminder }),
       mergeVars: [

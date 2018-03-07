@@ -1,8 +1,12 @@
 
 import { namespaces } from '../../../config/globals';
-import { SentReminder, Correspondence, Appointment } from '../../../_models';
+import {
+  Appointment,
+  Correspondence,
+  Reminder,
+  SentReminder,
+} from '../../../_models';
 import batchCreate from '../../../routes/util/batch';
-import { reminderConfirmedNote, reminderSentNote } from '../../correspondences/appointmentNotesGenerators';
 import { reminderSent, reminderConfirmed } from '../../correspondences/correspondenceNote';
 
 /**
@@ -18,6 +22,8 @@ function sendReminderIdsSocket(sub, io) {
           isSent: true,
           id: sentReminderIds,
         },
+
+        include: [{ model: Reminder, as: 'reminder' }],
       });
 
       const correspondencesCheck = await Correspondence.findAll({
@@ -90,7 +96,11 @@ function sendReminderIdsSocket(sub, io) {
 function sendReminderUpdatedSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
-      const sentReminder = await SentReminder.findById(data);
+      const sentReminder = await SentReminder.findOne({
+        where: { id: data},
+        include: [{ model: Reminder, as: 'reminder' }],
+      });
+
       const correspondence = await Correspondence.findOne({
         where: {
           sentReminderId: data,

@@ -1,4 +1,6 @@
 
+import { getIsConfirmable } from '../reminders/sendReminder';
+
 const cap = str => str.replace(/\b\w/g, l => l.toUpperCase());
 const typeMap = {
   email: 'Email',
@@ -17,8 +19,13 @@ export function reminderSent(sentReminder) {
     interval,
     primaryType,
     isConfirmable,
+    reminder = {},
   } = sentReminder;
-  const type = isConfirmable ? 'Unconfirmed' : 'Confirmed';
+  const { isCustomConfirm } = reminder;
+  const type = isConfirmable ?
+    (isCustomConfirm ? 'Unpreconfirmed' : 'Unconfirmed') :
+    (isCustomConfirm ? 'Pre-Confirmed' : 'Confirmed');
+
   return `Sent "${cap(interval)} ${typeMap[primaryType]} ${type}" Reminder for Appointment via CareCru`;
 }
 
@@ -32,8 +39,10 @@ export function reminderConfirmed(sentReminder) {
   const {
     interval,
     primaryType,
+    reminder = {},
   } = sentReminder;
-  return `Patient Confirmed "${cap(interval)} ${typeMap[primaryType]}" Reminder for Appointment via CareCru`;
+  const action = reminder.isCustomConfirm ? 'Pre-Confirmed' : 'Confirmed';
+  return `Patient ${action} "${cap(interval)} ${typeMap[primaryType]}" Reminder for Appointment via CareCru`;
 }
 
 /**

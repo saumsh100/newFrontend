@@ -154,7 +154,7 @@ export function sendTemplate(config) {
           }],
 
           headers: {
-            'Reply-To': config.replyTo
+            'Reply-To': replyTo,
           },
 
           global_merge_vars: mergeVars.concat(defaultMergeVars),

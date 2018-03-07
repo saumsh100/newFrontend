@@ -42,8 +42,8 @@ class PatientPage extends Component {
             {fullLogoUrl ?
               <img
                 className={styles.logoClinic}
-                src={fullLogoUrl}
-                alt="Logo"
+                src={fullLogoUrl.replace('[size]', 'original')}
+                alt={`Logo for ${account.name}`}
               /> : null}
           </Section>
           {children}
