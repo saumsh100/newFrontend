@@ -1,5 +1,5 @@
 
-import { Appointment } from '../../server/_models';
+import { Appointment, AppointmentCode } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 import { practitionerId, seedTestPractitioners, wipeTestPractitioners } from './seedTestPractitioners';
@@ -23,11 +23,13 @@ const appointment = {
 async function seedTestAppointments() {
   await seedTestPractitioners();
   await seedTestPatients();
+  await wipeModel(AppointmentCode);
   await wipeModel(Appointment);
   await Appointment.create(appointment);
 }
 
 async function wipeTestAppointments() {
+  await wipeModel(AppointmentCode);
   await wipeModel(Appointment);
   await wipeTestPatients();
   await wipeTestPractitioners;

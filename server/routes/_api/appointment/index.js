@@ -1,12 +1,12 @@
 
 import Moment from 'moment-timezone';
-import sequelize from 'sequelize';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
 import { newPatients, activePatients } from '../../../lib/intelligence/patients';
+import { fetchApptsWithCodes } from '../../../lib/queries/appointments';
 import {
   appsHygienist,
   appsNotCancelled,
@@ -24,7 +24,7 @@ import format from '../../util/format';
 import batchCreate from '../../util/batch';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import { Appointment, Account, Service, Patient, Practitioner, WeeklySchedule } from '../../../_models';
+import { Appointment, AppointmentCode, Account, Service, Patient, Practitioner, WeeklySchedule, sequelize } from '../../../_models';
 import checkIsArray from '../../../middleware/checkIsArray';
 import globals, { namespaces } from '../../../config/globals';
 import CalcFirstNextLastAppointment from '../../../lib/firstNextLastAppointment';
@@ -602,6 +602,29 @@ appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req
 });
 
 /**
+ * [createAppointmentCodes function to run after batch create of appointments
+ * to create the appointment codes]
+ * @param  {[array]} appointments [appointment models]
+ * @return {[void]}
+ */
+async function createAppointmentCodes(appointments) {
+  for (let i = 0; i < appointments.length; i += 1) {
+    const values = appointments[i].request;
+
+    if (!values.appointmentCodes) continue;
+
+    const createBulk = values.appointmentCodes.map((appCode) => {
+      return {
+        appointmentId: appointments[i].id,
+        code: appCode.code,
+      };
+    });
+
+    await AppointmentCode.bulkCreate(createBulk);
+  }
+}
+
+/**
  * Batch create appointments for connector
  */
 appointmentsRouter.post('/connector/batch', checkPermissions('appointments:create'), async (req, res, next) => {
@@ -615,29 +638,33 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
     }
   ));
 
-  return batchCreate(cleanedAppointments, Appointment, 'Appointment')
-    .then((apps) => {
-      const appointmentIds = [];
-      const appData = apps.map((app) => {
-        const appParsed = app.get({ plain: true })
-        appointmentIds.push(appParsed.id);
-        return appParsed;
-      });
+  return batchCreate(cleanedAppointments, Appointment, 'Appointment', [], [], createAppointmentCodes)
+    .then(async (apps) => {
+      const appointmentIds = apps.map(app => app.id);
+
+      const appsWithCodes = await fetchApptsWithCodes({ id: appointmentIds });
+
+      const appData = appsWithCodes.map(a => a.get({ plain: true }));
 
       const pub = req.app.get('pub');
-      pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
 
-      res.status(201).send(format(req, res, 'appointments', appData));
+      pub && pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
+
+      return res.status(201).send(format(req, res, 'appointments', appData));
     })
-    .catch(({ errors, docs }) => {
-      docs = docs.map(d => d.get({ plain: true }));
+    .catch(async ({ errors, docs }) => {
+      const appointmentIds = docs.map(app => app.id);
+
+      const appsWithCodes = await fetchApptsWithCodes({ id: appointmentIds });
+
+      const appData = appsWithCodes.map(a => a.get({ plain: true }));
 
       // Log any errors that occurred
       errors.forEach((err) => {
         console.error(err);
       });
 
-      const data = format(req, res, 'appointments', docs);
+      const data = format(req, res, 'appointments', appData);
       return res.status(201).send(Object.assign({}, data));
     })
     .catch(next);
@@ -652,14 +679,11 @@ appointmentsRouter.get('/connector/notSynced', checkPermissions('patients:read')
 
   let appointments;
   try {
-    appointments = await Appointment.findAll({
-      raw: true,
-      where: {
-        accountId,
-        isSyncedWithPms: false,
-      },
-    });
-    return res.send(format(req, res, 'appointments', appointments));
+    appointments = await fetchApptsWithCodes({ accountId, isSyncedWithPms: false });
+
+    const cleanedAppointments = appointments.map(a => a.get({ plain: true }));
+
+    return res.send(format(req, res, 'appointments', cleanedAppointments));
   } catch (error) {
     return next(error);
   }
@@ -679,22 +703,58 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
     }
   ));
 
+  const appointmentCodes = [];
+
+  cleanedAppointments.forEach((appointment) => {
+    if (appointment.appointmentCodes) {
+      appointment.appointmentCodes.forEach((ac) => {
+        appointmentCodes.push({
+          appointmentId: appointment.id,
+          code: ac.code,
+        });
+      });
+    }
+  });
+
   const appointmentUpdates = cleanedAppointments.map((appointment) => {
     return Appointment.findById(appointment.id)
-      .then(_appointment => _appointment.update(appointment));
+      .then(singleAppointment => singleAppointment.update(appointment));
   });
 
   return Promise.all(appointmentUpdates)
-    .then((_appointments) => {
-      const appointmentIds = [];
-
-      const appData = _appointments.map((app) => {
-        const appParsed = app.dataValues;
-        appointmentIds.push(appParsed.id);
-        return appParsed;
+    .then(async (singleAppointment) => {
+      const t = await sequelize.transaction();
+      const appointmentIds = singleAppointment.map((app) => {
+        return app.id;
       });
+
+      try {
+        // destroy all codes and recreate them (and any more or less)
+        // This is done under a single transaction as if one fails the transaction
+        // is undone.
+        await AppointmentCode.destroy({
+          where: {
+            appointmentId: appointmentIds,
+          },
+          force: true,
+          paranoid: false,
+          transaction: t,
+        });
+
+        await AppointmentCode.bulkCreate(appointmentCodes, { transaction: t });
+
+        t.commit();
+      } catch (e) {
+        t.rollback();
+        throw e;
+      }
       const pub = req.app.get('pub');
-      pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+
+      pub && pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+
+      const appsWithCodes = await fetchApptsWithCodes({ id: appointmentIds });
+
+      const appData = appsWithCodes.map(a => a.get({ plain: true }));
 
       res.send(format(req, res, 'appointments', appData));
     })

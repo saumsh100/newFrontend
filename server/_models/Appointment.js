@@ -148,6 +148,7 @@ export default function (sequelize, DataTypes) {
 
   Appointment.associate = (models) => {
     const {
+      AppointmentCode,
       Account,
       Chair,
       Patient,
@@ -186,6 +187,11 @@ export default function (sequelize, DataTypes) {
     Appointment.hasMany(SentReview, {
       foreignKey: 'appointmentId',
       as: 'sentReviews',
+    });
+
+    Appointment.hasMany(AppointmentCode, {
+      foreignKey: 'appointmentId',
+      as: 'appointmentCodes',
     });
 
     Appointment.belongsTo(Service, {

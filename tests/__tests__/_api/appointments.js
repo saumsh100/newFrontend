@@ -36,6 +36,9 @@ const batchAppointment = {
   endDate: '2017-07-21T00:16:30.932Z',
   patientId,
   practitionerId,
+  appointmentCodes: [{
+    code: '111111',
+  }],
   isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
@@ -199,9 +202,10 @@ describe('/api/appointments', () => {
       return request(app)
         .get(`${rootUrl}/connector/notSynced`)
         .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/vnd.api+json')
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['id'], true);
           expect(body).toMatchSnapshot();
         });
     });
@@ -359,6 +363,35 @@ describe('/api/appointments', () => {
         });
     });
 
+    test('/connector/batch - 4 appointments created successfully', () => {
+      return request(app)
+        .post(`${rootUrl}/connector/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send([batchAppointment, batchAppointment2, batchAppointment3, batchAppointment4])
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.entities.appointments['04148c65-292d-4d06-8801-d8061cec7b12'].appointmentCodes.length).toBe(1);
+          body = omitProperties(body, ['result']);
+          body = omitPropertiesFromBody(body, ['appointmentCodes']);
+          expect(body).toMatchSnapshot();
+          expect(Object.keys(body.entities.appointments).length).toBe(4);
+        });
+    });
+
+    test('/connector/batch - 1 invalid appointment, 3 valid appointments', () => {
+      return request(app)
+        .post(`${rootUrl}/connector/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send([invalidBatchAppointment, batchAppointment, batchAppointment3, batchAppointment4])
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.entities.appointments['04148c65-292d-4d06-8801-d8061cec7b12'].appointmentCodes.length).toBe(1);
+          body = omitProperties(body, ['result']);
+          body = omitPropertiesFromBody(body, ['appointmentCodes']);
+          expect(body).toMatchSnapshot();
+          expect(Object.keys(body.entities.appointments).length).toBe(3);
+        });
+    });
 
     test('/batch - 4 appointments created successfully', () => {
       return request(app)
@@ -406,6 +439,26 @@ describe('/api/appointments', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
+          expect(Object.keys(body.entities.appointments).length).toBe(1);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/connector/batch - update 1 appointment', () => {
+      const updateAppointment = appointment;
+      appointment.isReminderSent = false;
+      appointment.appointmentCodes = [{
+        code: '111111',
+      }];
+      return request(app)
+        .put(`${rootUrl}/connector/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send([updateAppointment])
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.entities.appointments['6b215a42-5c33-4f94-8313-d89893ae2f36'].appointmentCodes.length).toBe(1);
+
+          body = omitPropertiesFromBody(body, ['appointmentCodes']);
           expect(Object.keys(body.entities.appointments).length).toBe(1);
           expect(body).toMatchSnapshot();
         });

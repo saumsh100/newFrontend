@@ -41,7 +41,8 @@ const ModelAttributes = {
     'reason',
     'isPreConfirmed',
     'estimatedRevenue',
-    'isRecall'
+    'isRecall',
+    'appointmentCodes',
   ],
 
   Chair: [

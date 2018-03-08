@@ -52,6 +52,7 @@ models.push((require('./Address').default(sequelize, Sequelize)));
 models.push((require('./AccountCronConfiguration').default(sequelize, Sequelize)));
 models.push((require('./AccountConfiguration').default(sequelize, Sequelize)));
 models.push((require('./Appointment').default(sequelize, Sequelize)));
+models.push((require('./AppointmentCode').default(sequelize, Sequelize)));
 models.push((require('./AuthSession').default(sequelize, Sequelize)));
 models.push((require('./Call').default(sequelize, Sequelize)));
 models.push((require('./Chair').default(sequelize, Sequelize)));

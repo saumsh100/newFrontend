@@ -46,7 +46,12 @@ function buildErrors(err, model) {
  */
 async function preValidate(dataArray, Model, extraSetValidators = [], extraModelValidators = []) {
   const errors = [];
-  const docs = dataArray.map(p => Model.build(p));
+  const docs = dataArray.map(p => {
+    const model = Model.build(p);
+
+    model.request = p;
+    return model;
+  });
 
   // Now Do ORM Validation
   let validatedDocs = [];
@@ -55,6 +60,7 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
       await d.validate(); // validate against schema
       validatedDocs.push(d);
     } catch (err) {
+      console.log(err)
       errors.push(buildErrors(err, d));
     }
   }
@@ -168,7 +174,7 @@ export async function batchUpdate(dataArray, Model, modelType, preUpdateFunction
  * @returns {Promise.<*>}
  */
 async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
-                           extraModelValidators = []) {
+                           extraModelValidators = [], postCreate) {
   const { docs, errors } = await preValidate(
     dataArray,
     Model,
@@ -178,13 +184,16 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
 
   const savableCopies = docs.map(d => d.get({ plain: true }));
 
-
   const response = await Model.bulkCreate(savableCopies).catch((e) => {
     if (modelType === 'deliveredProcedure') {
       return console.log('Batch Failed for deliveredProcedure');
     }
     return console.log(e);
   });
+
+  if (postCreate) {
+    await postCreate(docs);
+  }
 
   if (errors.length) {
     const errorsResponse = errors.map((error) => {
