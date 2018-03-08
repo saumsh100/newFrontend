@@ -26,6 +26,7 @@ const ModelAttributes = {
     'isBookable',
     'startDate',
     'endDate',
+    'originalDate',
     'note',
     'isReminderSent',
     'isPatientConfirmed',

@@ -60,6 +60,10 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    originalDate: {
+      type: DataTypes.DATE,
+    },
+
     note: {
       type: DataTypes.TEXT,
     },

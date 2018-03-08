@@ -22,6 +22,7 @@ Object {
         "isShortCancelled": false,
         "isSyncedWithPms": false,
         "note": null,
+        "originalDate": null,
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "pmsId": "12",
         "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
