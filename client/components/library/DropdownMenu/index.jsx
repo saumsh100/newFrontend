@@ -35,7 +35,7 @@ export class DropdownMenu extends Component {
   }
 
   render() {
-    const { children, className, labelProps, closeOnInsideClick, align } = this.props;
+    const { children, className, labelProps, closeOnInsideClick, align, upwards } = this.props;
     const classes = classNames(className, styles.dropdownContainer);
 
     const menuOptions = {
@@ -49,6 +49,7 @@ export class DropdownMenu extends Component {
       closeOnInsideClick,
       className: classes,
       align: align || 'right',
+      upwards,
     };
 
     return <RDropdownMenu {...menuOptions} data-test-id={this.props['data-test-id']}/>;
@@ -61,6 +62,9 @@ DropdownMenu.defaultProps = {
 
 DropdownMenu.propTypes = {
   labelProps: PropTypes.object,
+  closeOnInsideClick: PropTypes.bool,
+  align: PropTypes.string,
+  upwards: PropTypes.bool,
 };
 
 export function MenuItem(props) {
