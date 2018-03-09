@@ -18,6 +18,7 @@ import configure from '../store';
 import { load } from '../thunks/auth';
 import { loadUnreadMessages } from '../thunks/chat';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
+import DesktopNotification from '../util/desktopNotification';
 
 // Binds the token setting in header
 bindAxiosInterceptors();
@@ -55,6 +56,7 @@ load()(store.dispatch).then(() => {
       });
     }
     loadUnreadMessages()(store.dispatch, store.getState());
+    DesktopNotification.requestPermission();
     connectSocketToStoreLogin(store, socket);
   }
 

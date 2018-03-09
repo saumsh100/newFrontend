@@ -1,9 +1,15 @@
 
 import axios from 'axios';
+import { push } from 'react-router-redux';
 import { pullAll, uniq, union } from 'lodash';
 import { setSelectedChatId, setUnreadChats, setChatMessages } from '../reducers/chat';
 import { fetchEntities, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import { deleteAllEntity } from '../actions/entities';
+import DesktopNotification from '../util/desktopNotification';
+
+function isOnChatPage() {
+  return location.pathname.indexOf('/chat') !== -1;
+}
 
 /**
  * defaultSelectedChatId is a function that will determine how to select a chat if there is not already
@@ -56,9 +62,27 @@ export function addMessage(message) {
     if (selectedChatId === message.result) {
       dispatch(setChatMessagesListForChat(selectedChatId));
 
-      if (location.pathname.indexOf('/chat') !== -1) {
+      if (isOnChatPage()) {
         dispatch(markAsRead(selectedChatId));
       }
+    }
+
+    if (!isOnChatPage()) {
+      const { chats, textMessages, patients } = message.entities;
+      const chatId = message.result;
+      const conversation = chats[chatId];
+      const patientId = conversation.patientId;
+      const lastTextMessageId = conversation.textMessages[conversation.textMessages.length - 1];
+      const { body } = textMessages[lastTextMessageId];
+      const { firstName, lastName } = patients[patientId];
+      const messageHeading = `New message from ${firstName} ${lastName}`;
+
+      DesktopNotification.showNotification(messageHeading, {
+        body,
+        onClick: () => {
+          dispatch(push('/chat'));
+        },
+      });
     }
   };
 }
@@ -85,7 +109,7 @@ export function createListOfUnreadedChats(result) {
 }
 
 function shouldUpdateUnreadChats(unreadChatsList, unreadChatId, selectedChatId) {
-  return !unreadChatsList.includes(unreadChatId) && (location.pathname.indexOf('/chat') === -1 || selectedChatId !== unreadChatId);
+  return !unreadChatsList.includes(unreadChatId) && (!isOnChatPage() || selectedChatId !== unreadChatId);
 }
 
 export function loadChatList(limit, skip = 0, url = '/api/chats', join = ['textMessages', 'patient']) {

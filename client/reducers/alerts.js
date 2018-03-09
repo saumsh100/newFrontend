@@ -2,6 +2,7 @@
 import { Map } from 'immutable';
 import { handleActions } from 'redux-actions';
 import Alert from '../entities/models/Alert';
+import DesktopNotification from '../util/desktopNotification';
 
 const uuid = require('uuid').v4;
 
@@ -39,6 +40,12 @@ export default handleActions({
       browserAlert: alert.browserAlert || false,
       clickable: alert.clickable || false,
     });
+
+    if (alert.browserAlert) {
+      DesktopNotification.showNotification(title, {
+        body: alert.body,
+      });
+    }
 
     return state.set(id, alertData);
   },

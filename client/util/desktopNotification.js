@@ -1,0 +1,21 @@
+
+import Push from 'push.js';
+
+const NotificationConfiguration = {
+  body: 'default',
+  timeout: 4000,
+  icon: '/images/logo_notext.png',
+};
+
+export default class DesktopNotification {
+  static requestPermission() {
+    Push.Permission.request();
+  }
+
+  static showNotification(message, config = {}) {
+    Push.create(message, {
+      ...NotificationConfiguration,
+      ...config,
+    });
+  }
+}
