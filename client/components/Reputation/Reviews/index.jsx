@@ -3,9 +3,9 @@ import React, { PropTypes, Component } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
-import Loader from 'react-loader';
 import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
+import Loader from '../../Loader';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { setReputationFilter } from '../../../actions/reputation';
 import { setReputationFilterState } from '../../../thunks/reputation';
@@ -98,7 +98,7 @@ class Reviews extends Component {
     });
   }
 
-  render() {
+  renderInnerContent() {
     const {
       reviews,
       reviewsFilter,
@@ -107,12 +107,8 @@ class Reviews extends Component {
       change,
     } = this.props;
 
-    if (!this.state.hasAccount) {
-      return <ReputationDisabled activationText={this.state.activationText} />;
-    }
-
     if (!reviews) {
-      return <Loader loaded={this.state.loaded} color="#FF715A" />;
+      return <Loader inContainer={true}/>;
     }
 
     const reviewsData = reviews.get('data').toJS();
@@ -251,6 +247,13 @@ class Reviews extends Component {
         </Row>
       </Grid>
     );
+  }
+
+  render() {
+    if (!this.state.hasAccount) {
+      return <ReputationDisabled activationText={this.state.activationText} />;
+    }
+    return this.renderInnerContent();
   }
 }
 

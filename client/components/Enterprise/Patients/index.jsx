@@ -1,10 +1,10 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Loading from 'react-loader';
 import React, { Component } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import Loader from '../../Loader';
 import Page from '../Page';
 import Table from '../Table';
 import Graph from '../Graph';
@@ -40,9 +40,13 @@ class PatientsPage extends Component {
   }
 
   render() {
+    const isLoaded = this.props.enterpriseDashboardPatients;
+    if (!isLoaded) {
+      return <Loader inContainer={true}/>;
+    }
+
     return (
-      !this.props.enterpriseDashboardPatients ?
-        <Loading /> : <Page>
+        <Page>
           <Grid className={styles.container}>
             <Row>
               <Col md={9}>

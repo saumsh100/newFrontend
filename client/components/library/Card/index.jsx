@@ -4,6 +4,7 @@ import { omit } from 'lodash';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './styles.scss';
+import baseStyles from '../../../styles/default.scss';
 
 export default function Card(props) {
   const {

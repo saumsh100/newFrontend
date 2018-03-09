@@ -280,13 +280,15 @@ class ScheduleComponent extends Component {
       );
     }
 
+    const allFetched = appsFetched && accountsFetched && chairsFetched && pracsFetched;
+
     return (
       <div className={styles.rowMainContainer}>
           <div className={styles.dayViewContainer}>
             <Card
               className={styles.card}
               runAnimation
-              loaded={appsFetched && accountsFetched && chairsFetched && pracsFetched}
+              loaded={allFetched}
             >
               <SContainer>
                 <Header
@@ -311,16 +313,17 @@ class ScheduleComponent extends Component {
                     selectAppointment={selectAppointment}
                     leftColumnWidth={leftColumnWidth}
                   />
-                  <Modal
-                    active={
-                      (addNewAppointment ||
-                        (!!selectedAppointment && !selectedAppointment.nextAppt))
-                    }
-                    onEscKeyDown={this.reinitializeState}
-                    onOverlayClick={this.reinitializeState}
-                    custom
-                  >
-                    {appsFetched && accountsFetched && chairsFetched && pracsFetched ? (
+                  {allFetched ? (
+                    <Modal
+                      active={
+                        (addNewAppointment ||
+                          (!!selectedAppointment && !selectedAppointment.nextAppt))
+                      }
+                      onEscKeyDown={this.reinitializeState}
+                      onOverlayClick={this.reinitializeState}
+                      custom
+                    >
+
                       <AddNewAppointment
                         formName={formName}
                         chairs={filterChairs}
@@ -336,25 +339,23 @@ class ScheduleComponent extends Component {
                         setShowInput={this.setShowInput}
                         selectedAppointment={this.props.selectedAppointment}
                         setCreatingPatient={this.props.setCreatingPatient}
-                      />) : null }
-                  </Modal>
-                  <DialogBox
-                    title={displayTitle}
-                    type={createNewPatient ? 'small' : 'medium'}
-                    actions={actions}
-                    active={((selectedAppointment && selectedAppointment.nextAppt) ||
-                      !!mergingPatientData.patientUser) || createNewPatient}
-                    onEscKeyDown={this.reinitializeState}
-                    onOverlayClick={
-                      createNewPatient ? this.setCreatingPatient : this.reinitializeState
-                    }
-                  >
-                    {appsFetched && accountsFetched && chairsFetched && pracsFetched ?
+                      />)
+                    </Modal>) : null }
+                  {allFetched ?
+                    (<DialogBox
+                      title={displayTitle}
+                      type={createNewPatient ? 'small' : 'medium'}
+                      actions={actions}
+                      active={((selectedAppointment && selectedAppointment.nextAppt) ||
+                        !!mergingPatientData.patientUser) || createNewPatient}
+                      onEscKeyDown={this.reinitializeState}
+                      onOverlayClick={
+                        createNewPatient ? this.setCreatingPatient : this.reinitializeState
+                      }
+                    >
 
-                      displayModalComponent
-                      : null
-                    }
-                  </DialogBox>
+                      {displayModalComponent}
+                    </DialogBox>) : null}
                 </SBody>
               </SContainer>
             </Card>

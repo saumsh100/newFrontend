@@ -41,6 +41,7 @@ module.exports = {
             options: {
               modules: true,
               sourceMap: true,
+              minimize: true,
               localIdentName,
             },
           },
@@ -63,7 +64,7 @@ module.exports = {
               sourceMap: true,
             },
           },
-        ],
+        ]
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -87,9 +88,10 @@ module.exports = {
             options: {
               modules: true,
               sourceMap: true,
+              minimize: true,
               localIdentName,
             },
-          },
+          }
         ],
         include: /flexboxgrid/,
       },

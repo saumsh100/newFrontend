@@ -5,42 +5,42 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
 import Login from '../components/Login';
 import DashboardApp from '../containers/DashboardApp';
-import DashboardComponent from '../components/Dashboard/index';
 import FourZeroFour from '../components/FourZeroFour';
 import LazyRoute from './LazyRoute';
-import loadSchedule from 'bundle-loader?lazy!./Dashboard/Schedule';
-import loadIntelligence from 'bundle-loader?lazy!./Dashboard/Intelligence';
-import loadPatients from 'bundle-loader?lazy!./Dashboard/Patients';
-import ChatContainer from '../components/Chat';
-import loadSettings from 'bundle-loader?lazy!./Dashboard/Settings';
-import loadTypography from 'bundle-loader?lazy!./Dashboard/Typography';
-import loadSocial from 'bundle-loader?lazy!./Dashboard/Social';
-import loadReputation from 'bundle-loader?lazy!./Dashboard/Reputation';
-import loadAdmin from 'bundle-loader?lazy!./Admin/Enterprises';
-import loadEnterprise from 'bundle-loader?lazy!./Dashboard/Enterprise';
-import Profile from '../components/Profile';
 import SignUp from '../components/SignUpInvite';
 import ForgotPassword from '../components/ForgotPassword';
 import ResetPassword from '../components/ForgotPassword/ResetPassword';
 import withAuthProps from '../hocs/withAuthProps';
 
+const Routes = {
+  dashboard: LazyRoute(() => import('../components/Dashboard/index'), true),
+  profile: LazyRoute(() => import('../components/Profile'), true),
+  intelligence: LazyRoute(() => import('./Dashboard/Intelligence'), true),
+  schedule: LazyRoute(() => import('./Dashboard/Schedule'), true),
+  patients: LazyRoute(() => import('./Dashboard/Patients'), true),
+  chat: LazyRoute(() => import('../components/Chat'), true),
+  typography: LazyRoute(() => import('./Dashboard/Typography'), true),
+  reputation: LazyRoute(() => import('./Dashboard/Reputation'), true),
+  settings: LazyRoute(() => import('./Dashboard/Settings'), true),
+  admin: LazyRoute(() => import('./Admin/Enterprises'), true),
+  enterprise: LazyRoute(() => import('./Dashboard/Enterprise'), true),
+};
+
 const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const getAuthorizedRoutes = () =>
     <div>
       <Switch>
-        <Route exact path="/" component={DashboardComponent} />
-        <Route path="/profile" component={Profile} />
-        <LazyRoute path="/intelligence" load={loadIntelligence} name="intelligence" />
-        <LazyRoute path="/schedule" load={loadSchedule} name="schedule" disableLoader />
-        <LazyRoute path="/patients" load={loadPatients} name="patients" disableLoader />
-        <Route path="/chat" component={ChatContainer} />
-        <LazyRoute path="/typography" load={loadTypography} name="typography" />
-
-        {/*<LazyRoute path="/social" load={loadSocial} name="social" />*/}
-        <LazyRoute path="/reputation" load={loadReputation} name="reputation" />
-        <LazyRoute path="/settings" load={loadSettings} name="settings" />
-        { isSuperAdmin ? (<LazyRoute path="/admin" load={loadAdmin} name="admin" />) : null }
-        { withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null }
+        <Route path="/" exact component={Routes.dashboard} />
+        <Route path="/profile" component={Routes.profile} />
+        <Route path="/intelligence" component={Routes.intelligence} />
+        <Route path="/schedule" component={Routes.schedule} />
+        <Route path="/patients" component={Routes.patients} />
+        <Route path="/chat" component={Routes.chat} />
+        <Route path="/typography" component={Routes.typography} />
+        <Route path="/reputation" component={Routes.reputation} />
+        <Route path="/settings" component={Routes.settings} />
+        { isSuperAdmin ? (<Route path="/admin" component={Routes.admin} />) : null }
+        { withEnterprise ? (<Route path="/enterprise" component={Routes.enterprise} />) : null }
         <Route component={FourZeroFour} />
       </Switch>
     </div>;

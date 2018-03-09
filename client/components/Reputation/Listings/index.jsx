@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
-import Loader from 'react-loader';
+import Loader from '../../Loader';
 import { Col, Grid, Row, Filters } from '../../library';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { setReputationFilter} from '../../../actions/reputation';
@@ -105,7 +105,7 @@ class Listings extends Component {
     }
 
     if (!listings) {
-      return <Loader loaded={this.state.loaded} color="#FF715A" />
+      return <Loader inContainer={true} />
     }
 
     const listingsData = listings.get('data').toJS();

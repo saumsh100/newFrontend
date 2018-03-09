@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
 import {
@@ -98,27 +99,29 @@ class ScheduleContainer extends Component {
     } = this.props;
 
     return (
-      <ScheduleComponent
-        practitioners={practitioners}
-        schedule={schedule}
-        appointments={appointments}
-        setScheduleDate={setScheduleDate}
-        selectedAppointment={selectedAppointment}
-        selectAppointment={selectAppointment}
-        services={services}
-        patients={patients}
-        chairs={chairs}
-        weeklySchedules={weeklySchedules}
-        timeOffs={timeOffs}
-        setMergingPatient={setMergingPatient}
-        unit={activeAccount}
-        setCreatingPatient={this.props.setCreatingPatient}
-        createEntityRequest={this.props.createEntityRequest}
-        appsFetched={this.props.appsFetched}
-        pracsFetched={this.props.pracsFetched}
-        chairsFetched={this.props.chairsFetched}
-        accountsFetched={this.props.accountsFetched}
-      />
+      <Loader isLoaded={!!activeAccount}>
+        <ScheduleComponent
+          practitioners={practitioners}
+          schedule={schedule}
+          appointments={appointments}
+          setScheduleDate={setScheduleDate}
+          selectedAppointment={selectedAppointment}
+          selectAppointment={selectAppointment}
+          services={services}
+          patients={patients}
+          chairs={chairs}
+          weeklySchedules={weeklySchedules}
+          timeOffs={timeOffs}
+          setMergingPatient={setMergingPatient}
+          unit={activeAccount}
+          setCreatingPatient={this.props.setCreatingPatient}
+          createEntityRequest={this.props.createEntityRequest}
+          appsFetched={this.props.appsFetched}
+          pracsFetched={this.props.pracsFetched}
+          chairsFetched={this.props.chairsFetched}
+          accountsFetched={this.props.accountsFetched}
+        />
+      </Loader>
     );
   }
 }
@@ -140,6 +143,7 @@ ScheduleContainer.propTypes = {
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   accountsFetched: PropTypes.bool,
+  createEntityRequest: PropTypes.object,
 };
 
 function mapStateToProps({ apiRequests, entities, schedule, auth }) {
