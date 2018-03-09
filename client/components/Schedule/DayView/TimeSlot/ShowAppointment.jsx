@@ -255,11 +255,13 @@ class ShowAppointment extends Component {
 
     const placement = numOfColumns === 1 ? 'below' : setPopoverPlacement(columnIndex, numOfColumns, minWidth);
 
-    // function to check if there is enought room to display the AppointmentHours inline
+    // functions to check if there is enough room to display the AppointmentHours inline
+    const canShowAppointmentBelow = () => (heightCalc >= displayDurationHeight);
+    
     const canInlineAppointment = () => (
-      displayDurationHeight > heightCalc &&
-      nameContainerOffsetWidth >= nameContainerOffset
+      !canShowAppointmentBelow() && nameContainerOffsetWidth >= nameContainerOffset
     );
+
 
     return (
       <Popover
@@ -309,7 +311,7 @@ class ShowAppointment extends Component {
                 /> }
             </div>
 
-            {!canInlineAppointment() &&
+            {canShowAppointmentBelow() &&
               <AppointmentHours
                 style={styles}
                 startDate={startDate}

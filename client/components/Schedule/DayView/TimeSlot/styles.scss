@@ -20,19 +20,16 @@
   transition: 300ms all cubic-bezier(0.4, 0.0, 0.2, 1);
 
   &_mark {
-    overflow-y: auto;
+    overflow: hidden;
   }
 }
 
 .mark {
-  font-size: $small-size;
+  font-size: $extra-small-size;
   letter-spacing: 0.5px;
   padding: 5px;
   cursor: default;
-  width: 100%;
-
   &_note {
-    padding: 2px;
     white-space: normal;
   }
 }
@@ -68,8 +65,7 @@
   &_name {
     @extend .box;  
     composes: subHeaderMediumSmall from 'sass-loader!../../../../fonts.scss';
-    min-width: 60px;
-    font-size: 10px;
+    font-size: $extra-small-size;
   }
   
   &_hours {
@@ -86,7 +82,7 @@
   opacity: 0.7;
   float: right;
   padding-left: 2px;
-  font-size: 10px;
+  font-size: $extra-small-size;
 }
 
 .paddingText {
