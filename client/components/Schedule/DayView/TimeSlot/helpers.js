@@ -33,8 +33,7 @@ export const intersectingAppointments = (appointments, startDate, endDate) => {
  * @param {*} a
  * @param {*} b
  */
-// eslint-disable-next-line no-confusing-arrow
-export const sortAppsByStartDate = (a, b) => b.startDate > a.startDate ? 1 : -1;
+export const sortAppsByStartDate = (a, b) => (a.startDate > b.startDate ? 1 : -1);
 
 /**
  * Function to calculate the height and the minHeight to display the hours inline
