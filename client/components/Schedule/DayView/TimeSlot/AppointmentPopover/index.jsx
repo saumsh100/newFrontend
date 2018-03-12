@@ -20,7 +20,6 @@ export default function AppointmentPopover(props) {
   const {
     patient,
     appointment,
-    age,
     scheduleView,
   } = props;
 
@@ -32,13 +31,15 @@ export default function AppointmentPopover(props) {
     note,
   } = appointment;
 
+  const age = moment().diff(patient.get('birthDate'), 'years') || '';
+
   const appointmentDate = moment(startDate).format('dddd LL');
   const lastName = age ? `${patient.lastName},` : patient.lastName;
 
   const textAreaTheme = {
     group: styles.textAreaGroup,
-  }
-
+  };
+  
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
