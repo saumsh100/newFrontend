@@ -112,7 +112,7 @@ describe('/api/revenue', () => {
   });
 
   describe('GET /', () => {
-    test('retrieve total revenue for a date in the past', () => {
+    test.skip('retrieve total revenue for a date in the past', () => {
       return request(app)
         .get(`${rootUrl}/totalRevenueDays?date=${dates(2016, 7, 5, 9).startDate}`)
         .set('Authorization', `Bearer ${token}`)
@@ -124,7 +124,7 @@ describe('/api/revenue', () => {
         });
     });
 
-    test('retrieve total revenue for a date in the future', () => {
+    test.skip('retrieve total revenue for a date in the future', () => {
       return request(app)
         .get(`${rootUrl}/totalRevenueDays?date=${dates(2020, 7, 5, 9).startDate}`)
         .set('Authorization', `Bearer ${token}`)

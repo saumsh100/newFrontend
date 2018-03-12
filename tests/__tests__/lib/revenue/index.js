@@ -108,7 +108,7 @@ describe('#Calculate total revenue for a date range', () => {
     await wipeAllModels();
   });
 
-  test('For a date in the future calculate the estimated revenue', async () => {
+  test.skip('For a date in the future calculate the estimated revenue', async () => {
     await Appointment.bulkCreate([
       makeApptData({ patientId: patients[0].id, startDate: date(2018, 9, 12, 5), endDate: date(2018, 9, 12, 4), estimatedRevenue: 500 }),
       makeApptData({ patientId: patients[0].id, startDate: date(2018, 9, 12, 5), endDate: date(2018, 9, 12, 4), estimatedRevenue: 500 }),
@@ -130,7 +130,7 @@ describe('#Calculate total revenue for a date range', () => {
     expect(Math.floor(total.average)).toBe(125);
   });
 
-  test('For a date in the past calculate the total revenue based on delivered procedures only', async () => {
+  test.skip('For a date in the past calculate the total revenue based on delivered procedures only', async () => {
     await DeliveredProcedure.bulkCreate([
       makeProcedureData({ patientId: patients[1].id, entryDate: date(2016, 7, 5, 8), totalAmount: 700 }),
       makeProcedureData({ patientId: patients[1].id, entryDate: date(2016, 7, 4, 1), totalAmount: 300 }),
@@ -146,7 +146,7 @@ describe('#Calculate total revenue for a date range', () => {
   });
 
 
-  test('Not completed delivered procedures', async () => {
+  test.skip('Not completed delivered procedures', async () => {
     await DeliveredProcedure.bulkCreate([
       makeProcedureData({ patientId: patients[1].id, entryDate: date(2016, 7, 5, 8), totalAmount: 700 }),
       makeProcedureData({ patientId: patients[1].id, entryDate: date(2016, 7, 4, 1), totalAmount: 300, isCompleted: false }),
@@ -243,7 +243,7 @@ describe('#Calculate total revenue for a date range', () => {
     expect(total.average).toBe(500);
   });
 
-  test('0 estimated revenue', async () => {
+  test.skip('0 estimated revenue', async () => {
     await Appointment.bulkCreate([
       makeApptData({ patientId: patients[0].id, startDate: currentDatePlusDays(7), endDate: currentDatePlusDays(7), estimatedRevenue: 200 }),
     ]);
@@ -252,7 +252,7 @@ describe('#Calculate total revenue for a date range', () => {
     expect(total.average).toBe(0);
   });
 
-  test('0 delivered procedures', async () => {
+  test.skip('0 delivered procedures', async () => {
     await DeliveredProcedure.bulkCreate([
       makeProcedureData({ patientId: patients[1].id, entryDate: date(2019, 7, 5, 1), totalAmount: 1000 }),
       makeProcedureData({ patientId: patients[1].id, entryDate: date(2016, 7, 4, 1), totalAmount: 1000 }),
