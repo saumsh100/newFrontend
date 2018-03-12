@@ -1,11 +1,21 @@
 
-import { Account } from '../server/_models';
-// import { seedTestAccountsSequelize, accountId } from '../tests/util/seedTestAccounts';
+import moment from 'moment';
+import {
+  Account,
+  SentReminder,
+} from '../server/_models';
 import { computeRemindersAndSend } from '../server/lib/reminders';
 
 async function main() {
   try {
-    await computeRemindersAndSend({ date: process.env.REMINDERS_DATE });
+    await SentReminder.destroy({
+      where: {},
+      force: true,
+    });
+
+    const startDate = process.env.REMINDERS_DATE;
+    const endDate = moment(startDate).add(5, 'minutes').toISOString();
+    await computeRemindersAndSend({ startDate, endDate });
     process.exit();
   } catch (err) {
     console.error(err);

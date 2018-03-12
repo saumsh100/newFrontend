@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import 'moment-timezone';
 import omit from 'lodash/omit';
 import { env } from '../../config/globals';
 import {
@@ -22,7 +23,11 @@ import {
   ceilDateMinutes,
   floorDateMinutes,
 } from '../../util/time';
-import { mapPatientsToReminders } from './helpers';
+import {
+  mapPatientsToReminders,
+  fetchActiveReminders,
+  fetchAccountsAndActiveReminders,
+} from './helpers';
 import sendReminder, { getIsConfirmable } from './sendReminder';
 
 async function sendSocket(io, chatId) {
@@ -48,34 +53,6 @@ async function sendSocket(io, chatId) {
     .emit('newMessage', normalize('chat', chat));
 }
 
-
-/*function sendSocketReminder(io, sentReminderId) {
-  return SentReminder.findOne({
-    where: {
-      id: sentReminderId,
-    },
-    include: [
-      {
-        model: Appointment,
-        as: 'appointment',
-      },
-      {
-        model: Reminder,
-        as: 'reminder',
-      },
-      {
-        model: Patient,
-        as: 'patient',
-      },
-    ],
-  }).then((sentReminderOne) => {
-    const sentReminder = sentReminderOne.get({ plain: true });
-    io.of('/dash')
-      .in(sentReminder.accountId)
-      .emit('create:SentReminder', normalize('sentReminder', sentReminder));
-  });
-}*/
-
 /**
  * sendRemindersForAccount is an async function that will send reminders for the account passed in
  * by calling other composable functions to assemble patients that need reminders and then looping through
@@ -96,16 +73,16 @@ async function sendSocket(io, chatId) {
  * @param pub
  * @returns {undefined}
  */
-export async function sendRemindersForAccount(account, date, pub) {
+export async function sendRemindersForAccount({ account, startDate, endDate, pub }) {
   const { reminders, name } = account;
-  console.log(`Sending reminders for ${name} (${account.id}) at ${moment(date).format('YYYY-MM-DD h:mma')}...`);
+  console.log(`Sending reminders for ${name} (${account.id}) at ${moment(startDate).format('YYYY-MM-DD h:mma')}...`);
 
   // Sort reminders by interval so that we send to earliest first
   const sortedReminders = reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
 
   // Collect successfully sent sentReminderIds to be sent to create correspondences
   const sentReminderIds = [];
-  const remindersPatients = await mapPatientsToReminders({ reminders: sortedReminders, account, startDate: date });
+  const remindersPatients = await mapPatientsToReminders({ reminders: sortedReminders, account, startDate, endDate });
 
   let i;
   for (i = 0; i < sortedReminders.length; i++) {
@@ -167,7 +144,7 @@ export async function sendRemindersForAccount(account, date, pub) {
           appointment,
           sentReminder,
           reminder,
-          currentDate: date,
+          currentDate: startDate,
         });
 
         sentReminderIds.push(sentReminder.id);
@@ -221,37 +198,17 @@ export async function sendRemindersForAccount(account, date, pub) {
  * - loop through these fetched accounts
  *   - send auto-reminders for account
  *
- * @param  {date} date in which the job is run (created by cron job but can be overriden for testing)
+ * @param  {startDate} date in which the job is run (created by cron job but can be overriden for testing)
+ * @param  {endDate} date that closes the range you are searching for
  * @param  {pub} RabbitMQ client module, for publishing events on reminders being sent
  * @returns {undefined}
  */
-export async function computeRemindersAndSend({ date, pub }) {
-  // Get all clinics that actually want reminders sent and get their Reminder Preferences
-  // const accounts = await Account.filter({ canSendReminders: true }).getJoin(joinObject).run();
-  const accounts = await Account.findAll({
-    where: {
-      canSendReminders: true,
-    },
-
-    // We have to sort in JS until Sequelize gets interval types for Postgres
-    // order: [[{ model: Reminder, as: 'reminders' }, 'lengthSeconds', 'asc']],
-
-    include: [{
-      model: Reminder,
-      as: 'reminders',
-      where: {
-        isDeleted: false,
-        isActive: true,
-      },
-    }],
-  });
-
-  // Be sure it runs on the minute
-  date = moment(date).seconds(0).milliseconds(0).toISOString();
-
+export async function computeRemindersAndSend({ startDate, endDate, pub }) {
+  // Get all clinics that actually want reminders sent and get their Reminder Touchpoints
+  const accounts = await fetchAccountsAndActiveReminders({ startDate, endDate });
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
-    await exports.sendRemindersForAccount(account.get({ plain: true }), date, pub);
+    await exports.sendRemindersForAccount({ account, startDate, endDate, pub });
   }
 }
 
@@ -277,19 +234,7 @@ export async function computeRemindersAndSend({ date, pub }) {
  */
 export async function getRemindersOutboxList({ account, startDate, endDate }) {
   // Fetch active reminders for the account that need to be sent
-  const reminders = await Reminder.findAll({
-    raw: true,
-    where: {
-      accountId: account.id,
-      isDeleted: false,
-      isActive: true,
-    },
-  });
-
-  const filteredReminders = reminders.filter(reminder => reminder.interval !== null);
-
-  // Sort reminders by interval so that we send to earliest first
-  const sortedReminders = filteredReminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+  const reminders = await fetchActiveReminders({ account, startDate, endDate });
 
   // Adjust dates so we are not including items that would not happen in the interval.
   // This is because we need to show according to how we run the cron
@@ -300,13 +245,13 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     account,
     startDate,
     endDate,
-    reminders: sortedReminders,
+    reminders,
   });
 
   // Now we begin to produce the final array
   let outboxList = [];
   remindersPatients.forEach(({ success }, i) => {
-    const reminder = sortedReminders[i];
+    const reminder = reminders[i];
 
     // mapPatientsToReminders will return a flatter array with primaryTypes separated into primaryType
     // this will group it back together
@@ -322,7 +267,14 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     const outboxReminders = sortedPatientsAppointments.map((pa) => {
       const intervalObject = convertIntervalStringToObject(reminder.interval);
       const subtractedDate = moment(pa.patient.appointment.startDate).subtract(intervalObject).toISOString();
-      const sendDate = floorDateMinutes(subtractedDate, GLOBALS.reminders.cronIntervalMinutes);
+      let sendDate = floorDateMinutes(subtractedDate, GLOBALS.reminders.cronIntervalMinutes);
+      if (reminder.isDaily) {
+        sendDate = moment.tz(
+          `${moment(subtractedDate).format('YYYY-MM-DD')} ${reminder.dailyRunTime}`,
+          account.timezone
+        ).toISOString();
+      }
+
       return {
         ...pa,
         reminder,

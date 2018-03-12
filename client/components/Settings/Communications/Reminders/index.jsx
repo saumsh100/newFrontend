@@ -101,11 +101,21 @@ class Reminders extends Component {
     }
 
     const newValues = Object.assign({}, values);
-    const { isCustomConfirm, customConfirmString, omitPractitionerIdsString } = newValues;
+    const {
+      isCustomConfirm,
+      customConfirmString,
+      omitPractitionerIdsString,
+      isDaily,
+    } = newValues;
+
     if (isCustomConfirm && customConfirmString) {
       newValues.customConfirmData = JSON.parse(customConfirmString);
     } else {
       newValues.customConfirmData = null;
+    }
+
+    if (!isDaily) {
+      newValues.dailyRunTime = null;
     }
 
     if (omitPractitionerIdsString) {

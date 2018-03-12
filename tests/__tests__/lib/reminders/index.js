@@ -4,7 +4,16 @@ import moment from 'moment';
 import * as RemindersLibrary from '../../../../server/lib/reminders';
 import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
 import sendReminder from '../../../../server/lib/reminders/sendReminder';
-import { Account, Address, Appointment, Reminder, Patient, Practitioner } from '../../../../server/_models';
+import {
+  Account,
+  Address,
+  Appointment,
+  Enterprise,
+  Reminder,
+  Patient,
+  Practitioner,
+} from '../../../../server/_models';
+import { tzIso } from '../../../../server/util/time';
 import { wipeAllModels } from '../../../_util/wipeModel';
 import { seedTestUsers, accountId, enterpriseId } from '../../../_util/seedTestUsers';
 import { patientId } from '../../../_util/seedTestPatients';
@@ -22,8 +31,11 @@ const mockPub = {
   publish: () => {},
 };
 
+const TIME_ZONE = 'America/Vancouver';
+const td = d => tzIso(d, TIME_ZONE);
 const iso = (date = (new Date())) => date.toISOString();
-const makeReminderData = (data = {}) => Object.assign({},
+const makeReminderData = (data = {}) => Object.assign(
+  {},
   {
     id: reminderId1,
     accountId,
@@ -33,11 +45,11 @@ const makeReminderData = (data = {}) => Object.assign({},
   data,
 );
 
-// const start = Date.now();
+const dates = () => ({ startDate: td('2017-01-05 11:00'), endDate: td('2017-01-05 11:05') });
 
 describe('Reminders Job Integration Tests', () => {
   // TODO: mock the sendRecall function, and test that it has been called for the appropriate patients
-  beforeAll(async () => {
+  beforeEach(async () => {
     await wipeAllModels();
     await seedTestUsers();
     await seedTestReminders();
@@ -63,7 +75,7 @@ describe('Reminders Job Integration Tests', () => {
      * therefore, sendRecallsForAccount should not be called
      */
     test('should NOT call sendRemindersForAccount if all turned off', async () => {
-      await RemindersLibrary.computeRemindersAndSend({ date: (new Date()).toISOString() });
+      await RemindersLibrary.computeRemindersAndSend({ ...dates() });
       expect(RemindersLibrary.sendRemindersForAccount).not.toHaveBeenCalled();
     });
 
@@ -75,8 +87,7 @@ describe('Reminders Job Integration Tests', () => {
     test('should call sendRemindersForAccount if 1 turned on', async () => {
       const account = await Account.findById(accountId);
       await account.update({ canSendReminders: true });
-
-      await RemindersLibrary.computeRemindersAndSend({ date: (new Date()).toISOString() });
+      await RemindersLibrary.computeRemindersAndSend({ ...dates() });
       expect(RemindersLibrary.sendRemindersForAccount).toHaveBeenCalledTimes(1);
     });
   });
@@ -106,7 +117,7 @@ describe('Reminders Job Integration Tests', () => {
      */
     test('should NOT call getAppointmentsFromReminder if no reminders to process', async () => {
       account.reminders = [];
-      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
+      await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
       expect(RemindersHelpers.getAppointmentsFromReminder).not.toHaveBeenCalled();
     });
 
@@ -115,7 +126,7 @@ describe('Reminders Job Integration Tests', () => {
      */
     test('should call getAppointmentsFromReminder if there is a reminder, but because it returns [], will not call sendReminder', async () => {
       account.reminders = [makeReminderData()];
-      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
+      await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
     });
@@ -128,13 +139,13 @@ describe('Reminders Job Integration Tests', () => {
       RemindersHelpers.getAppointmentsFromReminder = jest.fn(() => [
         {
           id: appointmentId,
-          startDate: iso(),
-          endDate: iso(),
+          startDate: td(),
+          endDate: td(),
           get() {
             return {
               id: appointmentId,
-              startDate: iso(),
-              endDate: iso(),
+              startDate: td(),
+              endDate: td(),
               update() {
                 console.log('Appointment is being updated!');
               },
@@ -160,7 +171,7 @@ describe('Reminders Job Integration Tests', () => {
 
       account.reminders = [makeReminderData()];
 
-      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
+      await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).toHaveBeenCalledTimes(1);
     });
@@ -173,13 +184,13 @@ describe('Reminders Job Integration Tests', () => {
       RemindersLibrary.getAppointmentsFromReminder = jest.fn(() => [
         {
           id: appointmentId,
-          startDate: iso(),
-          endDate: iso(),
+          startDate: td(),
+          endDate: td(),
           get() {
             return {
               id: appointmentId,
-              startDate: iso(),
-              endDate: iso(),
+              startDate: td(),
+              endDate: td(),
             };
           },
 
@@ -200,7 +211,7 @@ describe('Reminders Job Integration Tests', () => {
 
       account.reminders = [makeReminderData()];
 
-      await RemindersLibrary.sendRemindersForAccount(account, iso(), mockPub);
+      await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
     });
@@ -215,13 +226,14 @@ describe('Reminders Job Integration Tests', () => {
     let reminders;
     let patients;
     let appointments;
-    beforeAll(async () => {
+    beforeEach(async () => {
       await Address.create({ id: newAddressId });
       account = await Account.create({
         id: newAccountId,
         name: 'New Account',
         enterpriseId,
         addressId: newAddressId,
+        timezone: TIME_ZONE,
       });
 
       practitioner = await Practitioner.create({
@@ -282,29 +294,29 @@ describe('Reminders Job Integration Tests', () => {
           accountId: newAccountId,
           patientId: patients[0].id,
           practitionerId: practitioner.id,
-          startDate: iso(new Date(2018, 0, 17, 11, 0)), // Jan 17th @ 11:00 am
-          endDate: iso(new Date(2018, 0, 17, 12, 0)),
+          startDate: td('2018-01-17 11:00'), // Jan 17th @ 11:00 am
+          endDate: td('2018-01-17 12:00'),
         },
         {
           accountId: newAccountId,
           patientId: patients[1].id,
           practitionerId: practitioner.id,
-          startDate: iso(new Date(2018, 0, 17, 11, 16)), // Jan 17th @ 11:16 am
-          endDate: iso(new Date(2018, 0, 17, 12, 16)),
+          startDate: td('2018-01-17 11:16'), // Jan 17th @ 11:16 am
+          endDate: td('2018-01-17 12:16'),
         },
         {
           accountId: newAccountId,
           patientId: patients[2].id,
           practitionerId: practitioner.id,
-          startDate: iso(new Date(2018, 0, 19, 9, 0)), // Jan 19th @ 9:00 am
-          endDate: iso(new Date(2018, 0, 19, 10, 0)),
+          startDate: td('2018-01-19 09:00'), // Jan 19th @ 9:00 am
+          endDate: td('2018-01-19 10:00'),
         },
         {
           accountId: newAccountId,
           patientId: patients[3].id,
           practitionerId: practitioner.id,
-          startDate: iso(new Date(2018, 0, 31, 10, 15)), // Jan 31st @ 10:15 am
-          endDate: iso(new Date(2018, 0, 31, 11, 15)),
+          startDate: td('2018-01-31 10:15'), // Jan 31st @ 10:15 am
+          endDate: td('2018-01-31 11:15'),
         },
       ]);
     });
@@ -319,8 +331,8 @@ describe('Reminders Job Integration Tests', () => {
     });
 
     test('it should return 2 list items for a daterange of 9:00 to 9:05', async () => {
-      const startDate = iso(new Date(2018, 0, 17, 9, 0));
-      const endDate = iso(new Date(2018, 0, 17, 9, 5));
+      const startDate = td('2018-01-17 09:00');
+      const endDate = td('2018-01-17 09:05');
       const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
 
       expect(outboxList.length).toBe(2);
@@ -328,21 +340,158 @@ describe('Reminders Job Integration Tests', () => {
       expect(outboxList[1].primaryTypes).toEqual(['email', 'sms']);
     });
 
-    test('it should return 2 list items for a daterange of 9:00 to 9:05', async () => {
-      const startDate = iso(new Date(2018, 0, 17, 9, 0));
-      const endDate = iso(new Date(2018, 0, 17, 10, 15));
+    test('it should return 2 list items for a daterange of 9:00 to 10:15', async () => {
+      const startDate = td('2018-01-17 09:00');
+      const endDate = td('2018-01-17 10:15');
       const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
 
-      expect(outboxList.length).toBe(4);
+      expect(outboxList.length).toBe(3);
       expect(outboxList[0].primaryTypes).toEqual(['sms']);
       expect(outboxList[1].primaryTypes).toEqual(['email', 'sms']);
       expect(outboxList[2].primaryTypes).toEqual(['sms']);
-      expect(outboxList[3].primaryTypes).toEqual(['sms']);
 
-      expect(moment(outboxList[0].sendDate).format('h:mma')).toBe('9:00am');
-      expect(moment(outboxList[1].sendDate).format('h:mma')).toBe('9:00am');
-      expect(moment(outboxList[2].sendDate).format('h:mma')).toBe('9:15am');
-      expect(moment(outboxList[3].sendDate).format('h:mma')).toBe('10:15am');
+      expect(moment.tz(outboxList[0].sendDate, TIME_ZONE).format('h:mma')).toBe('9:00am');
+      expect(moment.tz(outboxList[1].sendDate, TIME_ZONE).format('h:mma')).toBe('9:00am');
+      expect(moment.tz(outboxList[2].sendDate, TIME_ZONE).format('h:mma')).toBe('9:15am');
+    });
+  });
+
+  describe('getRemindersOutboxList - isDaily', () => {
+    const newAddressId = 'cd39f7d8-fc06-11e7-8450-fea9aa178066';
+    const newAccountId = '2fc72afc-fc06-11e7-8450-fea9aa178066';
+
+    let account;
+    let practitioner;
+    let reminders;
+    let patients;
+    let appointments;
+    beforeEach(async () => {
+      await Address.create({ id: newAddressId });
+
+      account = await Account.create({
+        id: newAccountId,
+        name: 'New Account',
+        enterpriseId,
+        addressId: newAddressId,
+        timezone: 'America/Vancouver',
+      });
+
+      practitioner = await Practitioner.create({
+        accountId: newAccountId,
+        firstName: 'Timothy',
+      });
+
+      reminders = await Reminder.bulkCreate([
+        {
+          accountId: newAccountId,
+          primaryTypes: ['sms'],
+          interval: '2 hours'
+        },
+        {
+          accountId: newAccountId,
+          primaryTypes: ['email', 'sms'],
+          interval: '2 days',
+          isDaily: true,
+          dailyRunTime: '11:00:00'
+        },
+      ]);
+
+      patients = await Patient.bulkCreate([
+        {
+          accountId: newAccountId,
+          email: 'sarah@williams.ca',
+          mobilePhoneNumber: '+12223334444',
+          firstName: 'Sarah',
+          lastName: 'Williams',
+        },
+        {
+          accountId: newAccountId,
+          email: 'john@doe.ca',
+          mobilePhoneNumber: '+13334445555',
+          firstName: 'John',
+          lastName: 'Doe',
+        },
+        {
+          accountId: newAccountId,
+          email: 'jane@donut.ca',
+          mobilePhoneNumber: '+14445556666',
+          firstName: 'Jane',
+          lastName: 'Donut',
+        },
+        {
+          accountId: newAccountId,
+          mobilePhoneNumber: '+15556667777',
+          firstName: 'Jack',
+          lastName: 'Sharp',
+        },
+      ]);
+
+      appointments = await Appointment.bulkCreate([
+        {
+          accountId: newAccountId,
+          patientId: patients[0].id,
+          practitionerId: practitioner.id,
+
+          startDate: td('2018-01-17 11:00'), // Jan 17th @ 11:00 am
+          endDate: td('2018-01-17 12:00'),
+        },
+        {
+          accountId: newAccountId,
+          patientId: patients[1].id,
+          practitionerId: practitioner.id,
+          startDate: td('2018-01-17 11:16'), // Jan 17th @ 11:16 am
+          endDate: td('2018-01-17 12:16'),
+        },
+        {
+          accountId: newAccountId,
+          patientId: patients[2].id,
+          practitionerId: practitioner.id,
+          startDate: td('2018-01-19 09:00'), // Jan 19th @ 9:00 am
+          endDate: td('2018-01-19 10:00'),
+        },
+      ]);
+    });
+
+    test('it should be a function', () => {
+      expect(typeof RemindersLibrary.getRemindersOutboxList).toBe('function');
+    });
+
+    test('it should return 2 list items for a daterange of 9:00 to 9:05', async () => {
+      const startDate = td('2018-01-17 09:00'); // Jan 17th 9am
+      const endDate = td('2018-01-17 09:05');
+      const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
+
+      expect(outboxList.length).toBe(1);
+      expect(outboxList[0].primaryTypes).toEqual(['sms']);
+      expect(moment.tz(outboxList[0].sendDate, TIME_ZONE).format('h:mma')).toBe('9:00am');
+    });
+
+    test('it should return 2 list items for a daterange of 9:00 to 11:00', async () => {
+      const startDate = td('2018-01-17 09:00');
+      const endDate = td('2018-01-17 11:00');
+      const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
+
+      expect(outboxList.length).toBe(2);
+      expect(outboxList[0].primaryTypes).toEqual(['sms']);
+      expect(outboxList[1].primaryTypes).toEqual(['sms']);
+
+      expect(moment.tz(outboxList[0].sendDate, TIME_ZONE).format('h:mma')).toBe('9:00am');
+      expect(moment.tz(outboxList[1].sendDate, TIME_ZONE).format('h:mma')).toBe('9:15am');
+    });
+
+    test('it should return 3 list items for a daterange of 9:00 to 11:01', async () => {
+      const startDate = td('2018-01-17 09:00');
+      const endDate = td('2018-01-17 11:01');
+      const outboxList = await RemindersLibrary.getRemindersOutboxList({ account, startDate, endDate });
+
+      expect(outboxList.length).toBe(3);
+      expect(outboxList[0].primaryTypes).toEqual(['sms']);
+      expect(outboxList[1].primaryTypes).toEqual(['sms']);
+      expect(outboxList[2].primaryTypes).toEqual(['email', 'sms']);
+
+      expect(moment.tz(outboxList[0].sendDate, TIME_ZONE).format('h:mma')).toBe('9:00am');
+      expect(moment.tz(outboxList[1].sendDate, TIME_ZONE).format('h:mma')).toBe('9:15am');
+      expect(moment.tz(outboxList[2].sendDate, TIME_ZONE).format('h:mma')).toBe('11:00am');
     });
   });
 });

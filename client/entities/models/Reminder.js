@@ -13,6 +13,8 @@ const ReminderSchema = {
   isConfirmable: null,
   omitPractitionerIds: null,
   ignoreSendIfConfirmed: null,
+  isDaily: null,
+  dailyRunTime: null,
 };
 
 export default class Reminder extends createModel(ReminderSchema) {

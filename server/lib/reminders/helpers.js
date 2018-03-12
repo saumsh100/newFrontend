@@ -1,9 +1,11 @@
 
 import moment from 'moment';
+import 'moment-timezone';
 import uniqWith from 'lodash/uniqWith';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
 import {
+  Account,
   Appointment,
   Patient,
   SentReminder,
@@ -11,11 +13,15 @@ import {
 } from '../../_models';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
-import { m2s, convertIntervalStringToObject, convertIntervalToMs } from '../../util/time';
+import {
+  convertIntervalStringToObject,
+  convertIntervalToMs,
+  sortIntervalAscPredicate,
+} from '../../util/time';
 
 // TODO: add to globals file for these values
 // Should always be equal to the cron interval
-const BUFFER_SECONDS = 60 * GLOBALS.reminders.cronIntervalMinutes;
+const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
 
 /**
@@ -68,21 +74,38 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
  *
  * @param reminder
  * @param startDate
- * @param endDate
+ * @param endDate (defaults to startDate + 5 minutes)
  * @param lastReminder
  * @param buffer
  */
-export async function getAppointmentsFromReminder({ reminder, startDate, endDate, buffer = BUFFER_SECONDS }) {
+export async function getAppointmentsFromReminder({ reminder, account, startDate, endDate }) {
+  endDate = endDate || moment(startDate).add(CRON_MINUTES, 'minutes').toISOString();
+
   // convert string to { weeks: 1, days: 1, ... }
   const intervalObject = convertIntervalStringToObject(reminder.interval);
-  const start = moment(startDate).add(intervalObject).toISOString();
+
+  // Add the touchpoint's interval to the date we are wanting to check for
+  let start = moment(startDate).add(intervalObject).toISOString();
+
+  // If endDate is not supplied, default to using startDate + recall interval
+  let end = moment(endDate).add(intervalObject).toISOString();
 
   // This is where we look to see if the patient has had any appointments
   // within a certain window
-  const sameDayStart = moment(start).subtract(SAME_DAY_HOURS, 'hours').toISOString();
+  let sameDayStart = moment(start).subtract(SAME_DAY_HOURS, 'hours').toISOString();
 
-  // If endDate is not supplied, default to using startDate + recall interval + buffer
-  const end = moment(endDate || startDate).add(intervalObject).add(buffer, 'seconds').toISOString();
+  if (reminder.isDaily) {
+    const { timezone } = account;
+
+    // Assume that this function is only run when its time to pull these
+    // Or else we should check to make sure dailyRunTime is in range
+    start = moment.tz(start, timezone).startOf('day').toISOString();
+    end = moment.tz(end, timezone).endOf('day').toISOString();
+
+    // Easier than conditionally querying same-day appts
+    // This makes the window 0 seconds
+    sameDayStart = start;
+  }
 
   // Now we query for the appointments, those appointments patients and sentReminders, and those patients appointmemnts
   const appointments = await Appointment.findAll({
@@ -268,4 +291,99 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
     const isAfter = moment(appointment.startDate).isAfter(date);
     return !appointment.isCancelled && isAfter && !appointment.isDeleted;
   });
+}
+
+/**
+ * fetchActiveReminders is used by the outbox functions to
+ * pull active, relevant (based on startDate, endDate) reminders that are ordered
+ * by the interval
+ *
+ * @param account
+ * @param startDate
+ * @param endDate
+ * @return {Promise.<Array.<Model>>}
+ */
+export async function fetchActiveReminders({ account, startDate, endDate }) {
+  const t = d => moment.tz(d, account.timezone).format('HH:mm:ss');
+  const start = t(startDate);
+  const end = t(endDate);
+
+  // Fetch active reminders for the account that need to be sent
+  const reminders = await Reminder.findAll({
+    raw: true,
+    where: {
+      accountId: account.id,
+      isDeleted: false,
+      isActive: true,
+      interval: { $not: null },
+      $or: [
+        { isDaily: false },
+        {
+          isDaily: true,
+          dailyRunTime: {
+            $gte: start,
+            $lt: end,
+          },
+        },
+      ],
+    },
+  });
+
+  // Sort reminders by interval so that we send to earliest first
+  return reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+}
+
+/**
+ * fetchAccountsAndActiveReminders is used by the reminders job to
+ * pull active, relevant (based on startDate, endDate) reminders that are ordered
+ * by the interval
+ *
+ * @param account
+ * @param startDate
+ * @param endDate
+ * @return {Promise.<Array.<Model>>}
+ */
+export async function fetchAccountsAndActiveReminders({ startDate, endDate }) {
+  const accounts = await Account.findAll({
+    where: { canSendReminders: true },
+    include: [{
+      model: Reminder,
+      as: 'reminders',
+      where: {
+        isDeleted: false,
+        isActive: true,
+        interval: { $not: null },
+      },
+    }],
+  });
+
+  // Filter out reminders and sort by interval
+  accounts.forEach((account) => {
+    account.reminders = account.reminders
+      .filter(generateIsActiveReminder({ account, startDate, endDate }))
+      .sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+  });
+
+  return accounts;
+}
+
+/**
+ * generateIsActiveReminder is a thunk that will return a predicate to filter
+ * out isDaily reminders in an array whose dailyRunTime is not in the range
+ *
+ * @param account
+ * @param startDate
+ * @param endDate
+ */
+export function generateIsActiveReminder({ account, startDate, endDate }) {
+  return (reminder) => {
+    if (!reminder.isDaily) return true;
+    // If it's a daily reminder, ensure the dailyRunTime is within the range
+    // or else it wouldn't get sent in the range and no need to return
+    const { dailyRunTime } = reminder;
+    const t = d => moment.tz(d, account.timezone).format('HH:mm:ss');
+    const start = t(startDate);
+    const end = t(endDate);
+    return (start <= dailyRunTime) && (dailyRunTime < end);
+  };
 }

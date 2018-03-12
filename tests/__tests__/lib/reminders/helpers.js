@@ -24,10 +24,7 @@ import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
 
-// TODO: make seeds more modular so we can see here
-// const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
-// const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
-const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
+const TIME_ZONE = 'America/Vancouver';
 
 const makeApptData = (data = {}) => Object.assign({
   accountId,
@@ -341,8 +338,8 @@ describe('RemindersList Calculation Library', () => {
       });
 
       test('should not return appointment even if there\'s a later one that is not confirmed', async () => {
-        const startDate = date(2017, 7, 22, 8);
-        const endDate = date(2017, 7, 22, 17); // make it 2 hours because we don't include endDate in boundary
+        const startDate = date(2017, 7, 22, 6);
+        const endDate = date(2017, 7, 22, 24); // make it 2 hours because we don't include endDate in boundary
 
         // add another one for the first patient for later
         await Appointment.bulkCreate([
@@ -351,7 +348,7 @@ describe('RemindersList Calculation Library', () => {
           makeApptData({ ...dates(2017, 8, 5, 17), patientId: patients[0].id }),
         ]);
 
-        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        const appts = await getAppointmentsFromReminder({ reminder, account: { timezone: TIME_ZONE }, startDate, endDate });
         expect(appts.length).toBe(2);
         expect(appts[0].patientId).toBe(patients[1].id);
         expect(appts[1].patientId).toBe(patients[0].id);
@@ -401,6 +398,38 @@ describe('RemindersList Calculation Library', () => {
         const appts = await getAppointmentsFromReminder({ reminder: newReminder, startDate, endDate });
         expect(appts.length).toBe(1);
         expect(appts[0].patientId).toBe(patients[1].id);
+      });
+    });
+
+    describe('#getAppointmentsFromReminder - isDaily', () => {
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          interval: '2 days',
+          primaryTypes: ['email', 'sms'],
+          isDaily: true,
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 8), patientId: patients[0].id }),
+          makeApptData({ ...dates(2017, 8, 5, 17), patientId: patients[1].id }),
+        ]);
+      });
+
+      test('should return 1 appointment because the first one is already custom confirmed', async () => {
+        const startDate = date(2017, 8, 3, 11);
+        const appts = await getAppointmentsFromReminder({ reminder, account: { timezone: 'America/Vancouver' },  startDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[1].patientId).toBe(patients[1].id);
       });
     });
 
@@ -608,7 +637,7 @@ describe('RemindersList Calculation Library', () => {
         expect(hoursRemindersPatients.errors.length).toBe(0); // Patient has all info
         expect(hoursRemindersPatients.success.length).toBe(1); // Monday at 8am
         expect(daysRemindersPatients.errors.length).toBe(0); // Patient has all info
-        expect(daysRemindersPatients.success.length).toBe(4); // Tuesday at 8am both email & sms
+        expect(daysRemindersPatients.success.length).toBe(2); // Tuesday at 8am both email & sms
       });
 
       test('should range does not capture the appts outside of it for 2 day', async () => {
@@ -648,6 +677,59 @@ describe('RemindersList Calculation Library', () => {
         expect(hoursRemindersPatients.success[0].patient.appointment.id === appointments[0].id);
         expect(daysRemindersPatients.errors.length).toBe(0); // Patient has all info
         expect(daysRemindersPatients.success.length).toBe(2); // Wednesday at 6am email & sms
+      });
+    });
+
+    describe('#mapPatientsToReminders - isDaily', () => {
+      let reminders;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        reminders = await Reminder.bulkCreate([
+          {
+            accountId,
+            primaryTypes: ['sms'],
+            interval: '2 hours',
+          },
+          {
+            accountId,
+            primaryTypes: ['email', 'sms'],
+            interval: '2 days',
+            isDaily: true,
+          },
+        ]);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe', mobilePhoneNumber: '+12223334444', email: 'a@b.c' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson', mobilePhoneNumber: '+13334445555', email: 'd@e.f' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 11, 11, 8), patientId: patients[0].id }), // Monday at 8am
+          makeApptData({ ...dates(2017, 11, 11, 11), patientId: patients[1].id }), // Monday at 11am
+          makeApptData({ ...dates(2017, 11, 12, 15), patientId: patients[0].id }), // Tuesday at 3pm
+          makeApptData({ ...dates(2017, 11, 13, 6), patientId: patients[0].id }), // Wednesday at 6am
+          makeApptData({ ...dates(2017, 11, 13, 20), patientId: patients[1].id }), // Wednesday at 8pm
+        ]);
+      });
+
+      test('should return the proper patients and appointments for a longer startDate endDate range', async () => {
+        // For an 8-5 Monday, and a 6-8 Wednesday, These reminders should return
+        const startDate = date(2017, 11, 11, 6);
+        const remindersPatients = await mapPatientsToReminders({
+          reminders,
+          account: { id: accountId, timezone: 'America/Vancouver'},
+          startDate,
+        });
+
+        expect(remindersPatients.length).toBe(2);
+
+        const [hoursRemindersPatients, daysRemindersPatients] = remindersPatients;
+
+        expect(hoursRemindersPatients.errors.length).toBe(0); // Patient has all info
+        expect(hoursRemindersPatients.success.length).toBe(1); // Monday at 8am
+        expect(daysRemindersPatients.errors.length).toBe(0); // Patients have all info
+        expect(daysRemindersPatients.success.length).toBe(4); // Wednesday all day
       });
     });
   });

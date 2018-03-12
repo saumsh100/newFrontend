@@ -1,5 +1,6 @@
 
 import rabbitjs from 'rabbit.js';
+import moment from 'moment';
 import globals from '../config/globals';
 import jobQueue from '../config/jobQueue';
 import createSocketServer from '../sockets/createSocketServer';
@@ -16,9 +17,11 @@ pub.connect('events');
 // We could use Heroku Scheduler for this but I have never tested it - JS
 jobQueue.process('reminders', async (job, done) => {
   const { data: { date } } = job;
-
   try {
-    await computeRemindersAndSend({ date, pub });
+    const mDate = moment(date).seconds(0).milliseconds(0);
+    const startDate = mDate.toISOString();
+    const endDate = mDate.add(globals.reminders.cronIntervalMinutes, 'minutes').toISOString();
+    await computeRemindersAndSend({ startDate, endDate, pub });
     done();
   } catch (err) {
     done(err);

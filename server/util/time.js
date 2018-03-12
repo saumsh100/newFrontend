@@ -16,6 +16,8 @@ const Time = {
     return now._d;
   },
 
+  tzIso: (date = new Date(), timezone) => moment.tz(date, timezone).toISOString(),
+
   getISOSortPredicate: property => (a, b) => {
     const ap = a[property];
     const bp = b[property];

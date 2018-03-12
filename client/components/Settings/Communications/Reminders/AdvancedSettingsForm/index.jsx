@@ -30,14 +30,51 @@ const validateOmitPractitionerArray = (val) => {
   }
 };
 
+const isValidTime = (val) => {
+  const array = val.split(':');
+  if (array.length !== 3 || val.length !== 8) {
+    return 'HH:MM:SS';
+  }
+
+  const hh = parseInt(array[0]);
+  if (hh < 0 || 24 < hh) {
+    return 'HH:MM:SS';
+  }
+
+  const mm = parseInt(array[1]);
+  if (mm < 0 || 60 <= mm) {
+    return 'Minutes must be less than 60';
+  }
+
+  const r = mm % 5;
+  if (r !== 0) {
+    return 'Minutes must be increments of 5';
+  }
+
+  const ss = parseInt(array[2]);
+  if (ss !== 0) {
+    return 'Seconds must be zero';
+  }
+};
+
 function AdvancedSettingsForm(props) {
-  const { reminder, onSubmit, isCustomConfirmValue } = props;
-  const { ignoreSendIfConfirmed, isCustomConfirm, customConfirmData, omitPractitionerIds } = reminder;
+  const { reminder, onSubmit, isCustomConfirmValue, isDailyValue } = props;
+  const {
+    ignoreSendIfConfirmed,
+    isCustomConfirm,
+    customConfirmData,
+    omitPractitionerIds,
+    isDaily,
+    dailyRunTime,
+  } = reminder;
+
   const initialValues = {
-    ignoreSendIfConfirmed: ignoreSendIfConfirmed,
-    isCustomConfirm: isCustomConfirm,
+    ignoreSendIfConfirmed,
+    isCustomConfirm,
     customConfirmString: customConfirmData ? JSON.stringify(customConfirmData) : '',
     omitPractitionerIdsString: omitPractitionerIds.join(','),
+    isDaily,
+    dailyRunTime,
   };
 
   return (
@@ -72,6 +109,20 @@ function AdvancedSettingsForm(props) {
         label="Omit Practitioner IDs"
         validate={[validateOmitPractitionerArray]}
       />
+      <Field
+        className={styles.toggle}
+        component="Toggle"
+        name="isDaily"
+        label="Only Run Daily?"
+      />
+      {isDailyValue ?
+        <Field
+          required
+          name="dailyRunTime"
+          label="Daily Run Time"
+          validate={[isValidTime]}
+        />
+        : null}
     </Form>
   );
 }
@@ -83,7 +134,10 @@ AdvancedSettingsForm.propTypes = {
 
 function mapStateToProps(state, { reminder }) {
   const values = getFormValues(formName(reminder))(state);
-  return { isCustomConfirmValue: values && values.isCustomConfirm };
+  return {
+    isCustomConfirmValue: values && values.isCustomConfirm,
+    isDailyValue: values && values.isDaily,
+  };
 }
 
 export default connect(mapStateToProps, null)(AdvancedSettingsForm);

@@ -79,6 +79,16 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
       allowNull: false,
     },
+
+    isDaily: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
+    dailyRunTime: {
+      type: DataTypes.TIME,
+    },
   });
 
   Reminder.associate = ({ Account }) => {
