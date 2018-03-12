@@ -493,6 +493,7 @@ Object {
         "lastName": "Dentest",
         "permission": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "permissionId": "74d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "sendBookingRequestEmail": false,
         "username": "owner@test.com",
       },
       "6668f250-e8c9-46e3-bfff-0249f1eec6b8": Object {
@@ -504,6 +505,7 @@ Object {
         "lastName": "Dentest",
         "permission": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
         "permissionId": "84d4e661-1155-4494-8fdb-c4ec0ddf804d",
+        "sendBookingRequestEmail": false,
         "username": "manager@test.com",
       },
     },
@@ -683,6 +685,7 @@ Object {
   "firstName": "New",
   "id": "72954241-3652-4792-bae5-5bfed53d37b7",
   "lastName": "Guy",
+  "sendBookingRequestEmail": false,
   "username": "newguy@test.com",
 }
 `;

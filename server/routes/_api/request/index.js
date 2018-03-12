@@ -71,6 +71,7 @@ requestsRouter.post('/', async (req, res, next) => {
         }],
         where: {
           activeAccountId: accountId,
+          sendBookingRequestEmail: true,
         },
       });
       const { email, firstName, lastName } = patientUser;

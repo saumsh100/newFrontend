@@ -52,6 +52,12 @@ export default function (sequelize, DataTypes) {
     avatarUrl: {
       type: DataTypes.STRING,
     },
+
+    sendBookingRequestEmail: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
   });
 
   User.associate = ({ Account, Enterprise, Permission }) => {
