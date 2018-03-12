@@ -53,7 +53,7 @@ export const sendAppointmentRequested = (config) => {
 
 export const sendAppointmentRequestedClinic = (config) => {
   config.subject = 'An appointment was requested.';
-  config.templateName = 'Appointment Request - Clinic';
+  config.templateName = 'User Appointment Requested';
   return exports.sendTemplate(config);
 };
 

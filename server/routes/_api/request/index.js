@@ -101,6 +101,10 @@ requestsRouter.post('/', async (req, res, next) => {
                   content: 'https://carecru.io/',
                 },
                 {
+                  name: 'ACCOUNT_CLINICNAME',
+                  content: name,
+                },
+                {
                   name: 'APPOINTMENT_DATE',
                   content: moment(req.body.startDate).format('MMMM Do YYYY'),
                 },
