@@ -90,7 +90,7 @@ export default function TimeSlot(props) {
   return (<div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
     <TimeSlotColumn timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
 
-    {filteredApps && filteredApps
+    {filteredApps && filteredApps.sort(sortAppsByStartDate)
           .map(calculateAppoitmentTop({ startHour, timeSlotHeight, unit }))
           .map(renderDisplayComponent(props))}
   </div>);

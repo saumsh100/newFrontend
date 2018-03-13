@@ -17,12 +17,12 @@ export const intersectingAppointments = (appointments, startDate, endDate) => {
     const appEndDate = moment(app.endDate);
     
     const dateIntersectsApp =
-      sDate.isBetween(appStartDate, appEndDate, null, '[]') ||
-      eDate.isBetween(appStartDate, appEndDate, null, '[]');
+      sDate.isBetween(appStartDate, appEndDate, null, '[)') ||
+      eDate.isBetween(appStartDate, appEndDate, null, '(]');
 
     const appIntersectsDates =
-      appStartDate.isBetween(sDate, eDate, null, '[]') ||
-      appEndDate.isBetween(sDate, eDate, null, '[]');
+      appStartDate.isBetween(sDate, eDate, null, '()') ||
+      appEndDate.isBetween(sDate, eDate, null, '()');
 
     return dateIntersectsApp || appIntersectsDates;
   });
@@ -159,7 +159,9 @@ export const buildAppoitmentProps = (params) => {
 
   const left = `${splitRow}%`;
 
-  const width = `calc(${(100 / rowSort.length)}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
+  const width = rowSort.length > 1 ?
+          `calc(${(100 / rowSort.length)}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)` :
+          `calc(${(100)}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
 
   const containerStyle = {
     top,
