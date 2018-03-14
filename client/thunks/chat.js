@@ -1,18 +1,19 @@
 
 import axios from 'axios';
-import { push } from 'react-router-redux';
-import { pullAll, uniq, union } from 'lodash';
-import { setSelectedChatId, setUnreadChats, setChatMessages } from '../reducers/chat';
+import { pull, pullAll, uniq, union } from 'lodash';
+import { setSelectedChatId, setUnreadChats, setChatMessages, setLockedChats } from '../reducers/chat';
 import { fetchEntities, updateEntityRequest, createEntityRequest } from './fetchEntities';
-import { deleteAllEntity } from '../actions/entities';
 import DesktopNotification from '../util/desktopNotification';
+import { deleteAllEntity, receiveEntities } from '../actions/entities';
 
 function isOnChatPage() {
   return location.pathname.indexOf('/chat') !== -1;
 }
 
 /**
- * defaultSelectedChatId is a function that will determine how to select a chat if there is not already
+ * defaultSelectedChatId is a function that will determine how to
+ * select a chat if there is not already
+ *
  * one selected
  *
  * @returns undefined
@@ -87,21 +88,27 @@ export function addMessage(message) {
   };
 }
 
+function filterUnreadMessages(textMessagesList) {
+  return Object.values(textMessagesList)
+    .filter(message => !message.read);
+}
+
 export function createListOfUnreadedChats(result) {
   return (dispatch, getState) => {
-    const { chat } = getState();
+    const { chat, auth } = getState();
     const unreadChats = chat.get('unreadChats');
     const selectedChatId = chat.get('selectedChatId');
+    const currentUser = auth.getIn(['user', 'id']);
 
     if (result === {}) {
       return;
     }
 
-    result = Object.values(result)
-      .filter(message =>
-        !message.read && shouldUpdateUnreadChats(unreadChats, message.chatId, selectedChatId)
-      )
-      .map(message => message.id);
+    result = filterUnreadMessages(result)
+        .filter(message => shouldUpdateUnreadChats(unreadChats, message.chatId, selectedChatId))
+        .filter(message => currentUser !== message.userId)
+        .map(message => message.id);
+
     result = uniq(result);
     const newUnreadChatsList = union(unreadChats, result);
     return dispatch(setUnreadChats(newUnreadChatsList));
@@ -109,7 +116,8 @@ export function createListOfUnreadedChats(result) {
 }
 
 function shouldUpdateUnreadChats(unreadChatsList, unreadChatId, selectedChatId) {
-  return !unreadChatsList.includes(unreadChatId) && (!isOnChatPage() || selectedChatId !== unreadChatId);
+  return !unreadChatsList.includes(unreadChatId) &&
+    (!isOnChatPage() || selectedChatId !== unreadChatId);
 }
 
 export function loadChatList(limit, skip = 0, url = '/api/chats', join = ['textMessages', 'patient']) {
@@ -150,9 +158,44 @@ export function toggleFlagged(chatId, isFlagged) {
     }));
 }
 
+export function markAsUnread(chatId, messageDate) {
+  return (dispatch, getState) => {
+    const { auth, entities } = getState();
+    const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+    const accountTwilioNumber = activeAccount.get('twilioPhoneNumber');
+
+    dispatch(updateEntityRequest({
+      key: 'textMessages',
+      values: {
+        textMessageCreatedAt: messageDate,
+        accountTwilioNumber,
+      },
+      url: `/api/chats/${chatId}/textMessages/unread`,
+    })).then((response) => {
+      const { chat } = getState();
+      const unreadChats = chat.get('unreadChats');
+
+      const unreadMessagesList = filterUnreadMessages(response.textMessages)
+        .filter(message => accountTwilioNumber !== message.from)
+        .map(message => message.id);
+
+      const newUnreadChatsList = union(unreadChats, unreadMessagesList);
+      dispatch(setUnreadChats(newUnreadChatsList));
+      dispatch(lockChat(chatId));
+    });
+  };
+}
+
+
 export function markAsRead(chatId) {
   return (dispatch, getState) => {
     const { chat } = getState();
+    const lockedChats = chat.get('lockedChats') || [];
+
+    if (lockedChats.includes(chatId)) {
+      return;
+    }
+
     dispatch(updateEntityRequest({
       key: 'textMessages',
       values: {},
@@ -186,6 +229,7 @@ export function selectChat(id) {
     if (id) {
       dispatch(markAsRead(id));
     }
+    dispatch(unlockChat(id));
     dispatch(setChatMessagesListForChat(id));
   };
 }
@@ -206,4 +250,63 @@ export function sendChatMessage(entityData) {
       entityData,
       url: '/api/chats/textMessages',
     }));
+}
+
+export function socketLock(textMessages) {
+  return (dispatch, getState) => {
+    const { chat } = getState();
+    const unreadChats = chat.get('unreadChats');
+    const messages = Object.values(textMessages);
+
+    const chatListToLock = messages.map(message => message.chatId);
+
+    const unreadMessagesList = filterUnreadMessages(textMessages)
+      .map(message => message.id);
+    const newUnreadChatsList = union(unreadChats, unreadMessagesList);
+
+    dispatch(setUnreadChats(newUnreadChatsList));
+    dispatch(lockChatList(chatListToLock));
+    dispatch(receiveEntities({ key: 'textMessages', entities: { textMessages } }));
+  };
+}
+
+export function lockChatList(chatListToLock) {
+  return (dispatch, getState) => {
+    const { chat } = getState();
+
+    const lockedChats = chat.get('lockedChats');
+    const chatsToLock = uniq([
+      ...chatListToLock,
+      ...lockedChats,
+    ]);
+
+    return dispatch(setLockedChats(chatsToLock));
+  };
+}
+
+export function lockChat(chatId) {
+  return (dispatch, getState) => {
+    const { chat } = getState();
+    const lockedChats = chat.get('lockedChats');
+
+    if (!lockedChats.includes(chatId)) {
+      lockedChats.push(chatId);
+    }
+
+    dispatch(setLockedChats(lockedChats));
+  };
+}
+
+export function unlockChat(chatId) {
+  return (dispatch, getState) => {
+    if (!chatId) {
+      return;
+    }
+    const { chat } = getState();
+    const lockedChats = chat.get('lockedChats');
+
+    pull(lockedChats, chatId);
+    dispatch(setLockedChats(lockedChats));
+    dispatch(markAsRead(chatId));
+  };
 }

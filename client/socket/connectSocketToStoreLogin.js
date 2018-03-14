@@ -21,7 +21,8 @@ import {
 } from '../actions/schedule';
 
 import {
-  addMessage
+  addMessage,
+  socketLock,
 } from '../thunks/chat';
 
 import {
@@ -156,11 +157,16 @@ export default function connectSocketToStoreLogin(store, socket) {
 
       socket.on('newMessage', (data) => {
         dispatch(receiveEntities({ key: 'chats', entities: data.entities }));
-        dispatch(addMessage(data))
+        dispatch(addMessage(data));
+
         const node = document.getElementById('careCruChatScrollIntoView');
         if (node) {
           node.scrollTop = node.scrollHeight - node.getBoundingClientRect().height;
         }
+      });
+
+      socket.on('markUnread', (data) => {
+        dispatch(socketLock(data.entities.textMessages));
       });
 
       socket.on('syncClientError', (data) => {

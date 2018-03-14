@@ -9,11 +9,13 @@ import {
   SContainer,
   SBody,
   SFooter,
+  Icon,
+  Tooltip,
 } from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
 import { setNewChat } from '../../../reducers/chat';
-import { sendChatMessage, createNewChat, selectChat } from '../../../thunks/chat';
+import { sendChatMessage, createNewChat, selectChat, markAsUnread } from '../../../thunks/chat';
 import styles from './styles.scss';
 
 class MessageContainer extends Component {
@@ -159,6 +161,23 @@ class MessageContainer extends Component {
 
     return messages.map((message, index) => {
       const isFromPatient = message.get('from') !== this.props.activeAccount.toJS().twilioPhoneNumber;
+      const dotsIcon = (
+        <Icon
+          icon="ellipsis-h"
+          size={2}
+          className={styles.dotsIcon}
+          id={`dots_${message.id}`}
+        />
+      );
+
+      const markUnreadText = (
+        <div
+          className={styles.markUnreadButton}
+          onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt')) }
+        >
+          Mark unread
+        </div>
+      );
 
       const avatar = isFromPatient ? (
         <Avatar
@@ -166,6 +185,21 @@ class MessageContainer extends Component {
           className={styles.patientAvatar}
           user={selectedPatient}
         />
+      ) : null;
+
+      let optionsWrapper = null;
+
+      const messageOptions = isFromPatient ? (
+        <div ref={(reference) => { optionsWrapper = reference; }}>
+          <Tooltip
+            trigger={['click', 'hover']}
+            overlay={markUnreadText}
+            placement={'right'}
+            getTooltipContainer={() => optionsWrapper}
+          >
+            {dotsIcon}
+          </Tooltip>
+        </div>
       ) : null;
 
       return (
@@ -180,6 +214,7 @@ class MessageContainer extends Component {
           >
             {avatar}
             <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
+            {messageOptions}
           </div>
         </div>
       );
@@ -278,6 +313,7 @@ function mapDispatchToProps(dispatch) {
     reset,
     sendChatMessage,
     createNewChat,
+    markAsUnread,
   }, dispatch);
 }
 

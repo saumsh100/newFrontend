@@ -9,6 +9,7 @@ const UserSchema = {
   username: null,
   activeAccountid: null,
   permissionId: null,
+  twilioPhoneNumber: null,
   role: null,
 };
 

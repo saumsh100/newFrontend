@@ -1,0 +1,19 @@
+@import '../../../../ui';
+
+.barStyle {
+  position: absolute;
+  top: 15px;
+  background: $primary-navy-blue;
+  padding: 3px 7px;
+  border-radius: 5px;
+  left: 10px;
+  right: 10px;
+  color: $color-white;
+
+  .markRead {
+    float: right;
+    border-left: 1px solid $color-white;
+    padding-left: 10px;
+    cursor: pointer;
+  }
+}

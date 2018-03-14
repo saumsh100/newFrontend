@@ -6,15 +6,15 @@ export const SET_SELECTED_CHAT_ID = '@chat/SET_SELECTED_CHAT_ID';
 export const SET_NEW_CHAT = '@chat/SET_NEW_CHAT';
 export const MERGE_NEW_CHAT = '@chat/MERGE_NEW_CHAT';
 export const SET_UNREAD_CHATS = '@chat/SET_UNREAD_CHATS';
-export const SET_FLAGGED_CHATS = '@chat/SET_FLAGGED_CHATS';
 export const SET_CHAT_MESSAGES = '@chat/SET_CHAT_MESSAGES';
+export const SET_LOCKED_CHATS = '@chat/SET_LOCKED_CHATS';
 
 export const setSelectedChatId = createAction(SET_SELECTED_CHAT_ID);
 export const setNewChat = createAction(SET_NEW_CHAT);
 export const mergeNewChat = createAction(MERGE_NEW_CHAT);
 export const setUnreadChats = createAction(SET_UNREAD_CHATS);
-export const setFlaggedChats = createAction(SET_FLAGGED_CHATS);
 export const setChatMessages = createAction(SET_CHAT_MESSAGES);
+export const setLockedChats = createAction(SET_LOCKED_CHATS);
 
 export const initialState = Map({
   selectedChatId: null,
@@ -22,6 +22,7 @@ export const initialState = Map({
   unreadChats: [],
   chatList: {},
   chatMessages: [],
+  lockedChats: [],
 });
 
 export default handleActions({
@@ -44,6 +45,10 @@ export default handleActions({
 
   [SET_CHAT_MESSAGES](state, { payload }) {
     return state.set('chatMessages', payload);
+  },
+
+  [SET_LOCKED_CHATS](state, { payload }) {
+    return state.set('lockedChats', payload);
   },
 
 }, initialState);

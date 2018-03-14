@@ -1,13 +1,16 @@
 
 import { Chat, Account, TextMessage, User, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
-
 const chatsRouter = require('express').Router();
+const Sequelize = require('sequelize');
+const moment = require('moment');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const { namespaces } = require('../../../config/globals');
 const twilio = require('../../../config/globals').twilio;
 const twilioClient = require('../../../config/twilio');
+
+const Op = Sequelize.Op
 
 chatsRouter.param('chatId', sequelizeLoader('chat', 'Chat'));
 
@@ -389,6 +392,57 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
     }],
   }).then(chat => res.send(normalize('chat', chat.get({ plain: true }))))
   .catch(next);
+});
+
+/**
+ * Set all of a chat's textMessages recived after the given date to unread.
+ */
+chatsRouter.put('/:_chatId/textMessages/unread', checkPermissions('textMessages:update'), async (req, res, next) => {
+  try {
+    const { textMessageCreatedAt, accountTwilioNumber } = req.body;
+    const io = req.app.get('socketio');
+    const chatId = req.params._chatId;
+
+    await TextMessage.update({ read: false }, {
+      where: {
+        chatId,
+        to: accountTwilioNumber,
+        createdAt: {
+          [Op.gte]: moment(textMessageCreatedAt).toDate(),
+        },
+      },
+    });
+
+    const chat = await Chat.findOne({
+      where: {
+        id: chatId,
+      },
+    });
+
+    const messagesList = await TextMessage.findAll({
+      raw: true,
+      nest: true,
+      where: { chatId },
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: {
+          exclude: 'password',
+        },
+        required: false,
+      }],
+    });
+
+    const normalizedMessages = normalize('textMessages', messagesList);
+
+    io.of(namespaces.dash)
+      .in(chat.accountId)
+      .emit('markUnread', normalizedMessages);
+
+    return res.send(normalizedMessages);
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**

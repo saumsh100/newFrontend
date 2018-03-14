@@ -66,7 +66,9 @@ class ChatListItem extends Component {
       chat,
       patient,
       lastTextMessage,
+      hasUnread,
       selectedChatId,
+      isLocked,
     } = this.props;
 
     if (!patient || !lastTextMessage) {
@@ -81,7 +83,7 @@ class ChatListItem extends Component {
       mDate.format('YY/MM/DD') :
       mDate.format('h:mma');
 
-    const hasUnread = !isActive && !lastTextMessage.read;
+    const isUnread = (!isActive && hasUnread) || isLocked;
 
     return (
       <ListItem
@@ -101,14 +103,14 @@ class ChatListItem extends Component {
         </div>
         <div className={styles.flexSection}>
           <div className={styles.topSection}>
-            <div className={hasUnread ? styles.fullNameUnread : styles.fullName}>
+            <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
               {this.renderPatient()}
             </div>
             <div className={styles.time}>
               {messageDate}
             </div>
           </div>
-          <div className={hasUnread ? styles.bottomSectionUnread : styles.bottomSection}>
+          <div className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}>
             {lastTextMessage && lastTextMessage.body}
           </div>
         </div>
@@ -134,6 +136,8 @@ ChatListItem.propTypes = {
     lastName: PropTypes.string,
     birthDate: PropTypes.string,
   }).isRequired,
+  hasUnread: PropTypes.bool,
+  isLocked: PropTypes.bool,
   toggleFlagged: PropTypes.func,
   selectChat: PropTypes.func,
   selectedChatId: PropTypes.string,
@@ -143,10 +147,18 @@ function mapStateToProps(state, { chat = {} }) {
   const patients = state.entities.getIn(['patients', 'models']);
   const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
   const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
+  const lockedChats = state.chat.get('lockedChats');
+  const hasUnread = chat.textMessages
+      .filter(message => {
+        const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
+        return !messageEntity.read;
+      });
 
   return {
     selectedChatId: state.chat.get('selectedChatId'),
     patient: patients.get(chat.patientId) || {},
+    isLocked: lockedChats.includes(chat.id),
+    hasUnread: hasUnread.length > 0,
     lastTextMessage,
   };
 }
