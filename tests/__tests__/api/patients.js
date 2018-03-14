@@ -1,27 +1,28 @@
-
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Appointment, Patient } from '../../../server/models';
+import { Appointment, Patient, Chat } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { serviceId, service, seedTestService } from '../../util/seedTestServices';
 import { patient, patientId } from '../../util/seedTestPatients';
-import { seedTestAppointments } from '../../util/seedTestAppointments';
+import { seedTestAppointments, wipeTestAppointments } from '../../util/seedTestAppointments';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
+const rootUrl = '/_api/patients';
 const batchPatientId = '8ec1c573-a092-4649-a219-81be86cd1552';
 const batchPatientId2 = '7a1146f9-1d48-4a5f-8479-f6172d5a83b5';
 const batchPatientId3 = '8405acdd-4559-4396-beb8-2e8ce79307c3';
 const batchPatientId4 = '68238eca-3e5c-4fbd-a641-f68ded47510d';
 const batchInvalidPatientId = 'eb6be674-1861-4432-8a2e-48c402ba2aaa';
+const pmsCreatePatientId = 'eb6be674-1861-4432-8a2e-48c402ba2aba';
+const requestCreatedAt = new Date();
 
 const batchPatient = {
   id: batchPatientId,
   accountId,
   avatarUrl: '',
   email: 'batchpatient@test.com',
-  pmsId: 0,
   firstName: 'Bonald',
   lastName: 'Mcdonald',
   pmsId: null,
@@ -33,7 +34,6 @@ const batchPatient2 = {
   accountId,
   avatarUrl: '',
   email: 'batchpatient2@test.com',
-  pmsId: 0,
   firstName: 'Conald',
   lastName: 'Mcdonald',
   pmsId: null,
@@ -45,7 +45,6 @@ const batchPatient3 = {
   accountId,
   avatarUrl: '',
   email: 'batchpatient3@test.com',
-  pmsId: 0,
   firstName: 'Donald',
   lastName: 'Mcdonald',
   pmsId: null,
@@ -57,7 +56,6 @@ const batchPatient4 = {
   accountId,
   avatarUrl: '',
   email: 'batchpatient4@test.com',
-  pmsId: 0,
   firstName: 'Fonald',
   lastName: 'Mcdonald',
   pmsId: null,
@@ -69,8 +67,19 @@ const batchInvalidPatient = {
   accountId,
   avatarUrl: '',
   email: 'batchpatient@test.com',
-  pmsId: 0,
   lastName: 'McInvalid',
+  pmsId: null,
+  mobilePhoneNumber: '7784444444',
+};
+
+const pmsCreatePatient = {
+  id: pmsCreatePatientId,
+  accountId,
+  avatarUrl: '',
+  email: 'batchpatient2@test.com',
+  firstName: 'McInvalid2',
+  lastName: 'McInvalid2',
+  isSyncedWithPms: false,
   pmsId: null,
   mobilePhoneNumber: '7784444444',
 };
@@ -78,23 +87,38 @@ const batchInvalidPatient = {
 describe('/api/patients', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeTestAppointments();
     await seedTestUsers();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-   await wipeAllModels();
+    await wipeTestAppointments();
+    await wipeTestUsers();
+    await wipeAllModels();
   });
 
   describe('GET /', () => {
     beforeEach(async () => {
       await seedTestAppointments();
+      await Patient.create(pmsCreatePatient);
     });
 
     test('/ - get all patients under a clinic', () => {
       return request(app)
-        .get('/api/patients/')
+        .get(`${rootUrl}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/ - get all patients under a clinic - connector not notSynced', () => {
+      return request(app)
+        .get(`${rootUrl}/connector/notSynced`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -105,7 +129,7 @@ describe('/api/patients', () => {
 
     test('/:patientId - retrieve a patient', () => {
       return request(app)
-        .get(`/api/patients/${patientId}`)
+        .get(`${rootUrl}/${patientId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -119,7 +143,7 @@ describe('/api/patients', () => {
 
     test('/:patientId/stats - retrieve patient appointments', () => {
       return request(app)
-        .get(`/api/patients/${patientId}/stats`)
+        .get(`${rootUrl}/${patientId}/stats`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -132,7 +156,7 @@ describe('/api/patients', () => {
     // TODO: Don't quite understand the response from this
     test('/stats - retrieve patients appointments', () => {
       return request(app)
-        .get('/api/patients/stats')
+        .get(`${rootUrl}/stats`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -143,7 +167,7 @@ describe('/api/patients', () => {
 
     test('/search - search patients - no results', () => {
       return request(app)
-        .get('/api/patients/search?patients=Dylan')
+        .get(`${rootUrl}/search?patients=Dylan`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -154,7 +178,40 @@ describe('/api/patients', () => {
 
     test('/search - search patients - result found', () => {
       return request(app)
-        .get('/api/patients/search?patients=Ronald')
+        .get(`${rootUrl}/search?patients=Ronald`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/search - search patients - phone number not found', () => {
+      return request(app)
+        .get(`${rootUrl}/search?patients=604-111-1111`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/search - search patients - phone number found', () => {
+      return request(app)
+        .get(`${rootUrl}/search?patients=778-999-9999`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/:patientId/nextAppointment - retrieve patients next appointments', () => {
+      return request(app)
+        .get(`${rootUrl}/${patientId}/nextAppointment?requestCreatedAt=${requestCreatedAt}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -165,7 +222,7 @@ describe('/api/patients', () => {
 
     test('/suggestions - no result found', () => {
       return request(app)
-        .get('/api/patients/suggestions?firstName=Mr&lastName=Nothing&email=lala&phoneNumber=1')
+        .get(`${rootUrl}/suggestions?firstName=Mr&lastName=Nothing&email=lala&phoneNumber=1&requestCreatedAt=${requestCreatedAt}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -176,7 +233,7 @@ describe('/api/patients', () => {
 
     test('/suggestions - result found', () => {
       return request(app)
-        .get('/api/patients/suggestions?firstName=Ronald')
+        .get(`${rootUrl}/suggestions?firstName=Ronald&lastName=Mcdonald&requestCreatedAt=${requestCreatedAt}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -188,14 +245,13 @@ describe('/api/patients', () => {
 
   describe('POST /', () => {
     beforeEach(async () => {
-      await wipeModel(Appointment);
-      await wipeModel(Patient);
+      await wipeTestAppointments();
     });
 
     test('/emailCheck - result not found', async () => {
       await seedTestAppointments();
       return request(app)
-        .post('/api/patients/emailCheck')
+        .post(`${rootUrl}/emailCheck`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           email: 'mrnotfound@test.com',
@@ -211,11 +267,10 @@ describe('/api/patients', () => {
     test('/emailCheck - result found', async () => {
       await seedTestAppointments();
       return request(app)
-        .post('/api/patients/emailCheck')
+        .post(`${rootUrl}/emailCheck`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           email: 'testpatient@test.com',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -227,11 +282,10 @@ describe('/api/patients', () => {
     test('/phoneNumberCheck - result not found', async () => {
       await seedTestAppointments();
       return request(app)
-        .post('/api/patients/phoneNumberCheck')
+        .post(`${rootUrl}/phoneNumberCheck`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           phoneNumber: '7788888888',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -243,11 +297,10 @@ describe('/api/patients', () => {
     test('/phoneNumberCheck - result found', async () => {
       await seedTestAppointments();
       return request(app)
-        .post('/api/patients/phoneNumberCheck')
+        .post(`${rootUrl}/phoneNumberCheck`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           phoneNumber: '+17789999999',
-          accountId,
         })
         .expect(200)
         .then(({ body }) => {
@@ -257,12 +310,15 @@ describe('/api/patients', () => {
     });
 
     test('/ - create a patient', () => {
+      const createPatient = Object.assign({}, patient);
+      delete createPatient.accountId;
       return request(app)
-        .post('/api/patients')
+        .post(`${rootUrl}`)
         .set('Authorization', `Bearer ${token}`)
-        .send(patient)
+        .send(createPatient)
         .expect(201)
         .then(({ body }) => {
+          console.log(body)
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
@@ -270,12 +326,12 @@ describe('/api/patients', () => {
 
     test('/batch - 4 patients created successfully', () => {
       return request(app)
-        .post('/api/patients/batch')
+        .post(`${rootUrl}/batch`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           patients: [batchPatient, batchPatient2, batchPatient3, batchPatient4],
         })
-        .expect(200)
+        .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(Object.keys(body.entities.patients).length).toBe(4);
@@ -284,7 +340,7 @@ describe('/api/patients', () => {
 
     test('/batch - 1 invalid patient, 3 valid patients', () => {
       return request(app)
-        .post('/api/patients/batch')
+        .post(`${rootUrl}/batch`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           patients: [batchInvalidPatient, batchPatient2, batchPatient3, batchPatient4],
@@ -295,7 +351,46 @@ describe('/api/patients', () => {
           expect(Object.keys(body.entities.patients).length).toBe(3);
         });
     });
+  });
 
+  describe('PUT /', () => {
+    beforeEach(async () => {
+      return await seedTestAppointments();
+    });
+
+    afterEach(async () => {
+      await wipeModel(Chat);
+      return await wipeTestAppointments();
+    });
+
+    test('/:patientId - update patient', () => {
+      return request(app)
+        .put(`${rootUrl}/${patientId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          firstName: 'Wendy',
+        })
+        .expect(201)
+        .then(({ body }) => {
+          console.log('body--->', body);
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/connector/:patientId - update patient (connector)', () => {
+      return request(app)
+        .put(`${rootUrl}/connector/${patientId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          firstName: 'Testing',
+        })
+        .expect(201)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
   });
 
   describe('PUT /', () => {
@@ -303,17 +398,103 @@ describe('/api/patients', () => {
       await seedTestAppointments();
     });
 
-    test('/:patientId - update patient', () => {
+    afterEach(async () => {
+      await wipeModel(Chat);
+      await wipeTestAppointments();
+    });
+
+    test('/:patientId - batch update patients', () => {
       return request(app)
-        .put(`/api/patients/${patientId}`)
+        .post(`${rootUrl}/batch`)
         .set('Authorization', `Bearer ${token}`)
         .send({
-          firstName: 'Wendy',
+          patients: [batchPatient, batchPatient2, batchPatient3, batchPatient4],
         })
         .expect(201)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+        .then(({}) => {
+          const patient1 = Object.assign({}, batchPatient, { lastName: 'HELLO' });
+          const patient2 = Object.assign({}, batchPatient2, { lastName: 'HELLO2' });
+          const patient3 = Object.assign({}, batchPatient3, { lastName: 'HELLO3' });
+          const patient4 = Object.assign({}, batchPatient4, { lastName: 'HELLO4' });
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([patient1, patient2, patient3, patient4])
+            .expect(201)
+            .then(({ body }) => {
+              expect(Object.keys(body.entities.patients).length).toBe(4);
+
+              expect(body.entities.patients[batchPatientId].lastName).toBe('HELLO');
+              expect(body.entities.patients[batchPatientId2].lastName).toBe('HELLO2');
+              expect(body.entities.patients[batchPatientId3].lastName).toBe('HELLO3');
+              expect(body.entities.patients[batchPatientId4].lastName).toBe('HELLO4');
+            });
+        });
+    });
+
+    test('/:patientId - batch update patients', () => {
+      const batchPatient1New = Object.assign({}, batchPatient, { pmsId: '112' });
+      const batchPatient2New = Object.assign({}, batchPatient2, { pmsId: '113' });
+      const batchPatient3New = Object.assign({}, batchPatient3, { pmsId: '114' });
+      const batchPatient4New = Object.assign({}, batchPatient4, { pmsId: '115' });
+      return request(app)
+        .post(`${rootUrl}/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          patients: [batchPatient1New, batchPatient2New, batchPatient3New, batchPatient4New],
+        })
+        .expect(201)
+        .then(({}) => {
+          const patient1 = Object.assign({}, batchPatient, { pmsId: '112', lastName: 'HELLO' });
+          const patient2 = Object.assign({}, batchPatient2, { pmsId: '113', lastName: 'HELLO2' });
+          const patient3 = Object.assign({}, batchPatient3, { pmsId: '115', lastName: 'HELLO3' });
+          const patient4 = Object.assign({}, batchPatient4, { pmsId: '115', lastName: 'HELLO4' });
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([patient1, patient2, patient3, patient4])
+            .expect(201)
+            .then(({ body }) => {
+              expect(Object.keys(body.entities.patients).length).toBe(3);
+
+              expect(body.entities.patients[batchPatientId].lastName).toBe('HELLO');
+              expect(body.entities.patients[batchPatientId2].lastName).toBe('HELLO2');
+              expect(body.entities.patients[batchPatientId4].lastName).toBe('HELLO4');
+            });
+        });
+    });
+
+    test('/:patientId - batch update patients with chat', () => {
+      return request(app)
+        .post(`${rootUrl}/batch`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          patients: [batchPatient, batchPatient2, batchPatient3, batchPatient4],
+        })
+        .expect(201)
+        .then(async () => {
+          await Chat.create({
+            accountId,
+            patientId: batchPatientId,
+            patientPhoneNumber: '+17789999991',
+          });
+          const patient1 = Object.assign({}, batchPatient, { lastName: 'HELLO' });
+          const patient2 = Object.assign({}, batchPatient2, { lastName: 'HELLO2' });
+          const patient3 = Object.assign({}, batchPatient3, { lastName: 'HELLO3' });
+          const patient4 = Object.assign({}, batchPatient4, { lastName: 'HELLO4' });
+          return request(app)
+            .put(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([patient1, patient2, patient3, patient4])
+            .expect(201)
+            .then(({ body }) => {
+              expect(Object.keys(body.entities.patients).length).toBe(4);
+
+              expect(body.entities.patients[batchPatientId].lastName).toBe('HELLO');
+              expect(body.entities.patients[batchPatientId2].lastName).toBe('HELLO2');
+              expect(body.entities.patients[batchPatientId3].lastName).toBe('HELLO3');
+              expect(body.entities.patients[batchPatientId4].lastName).toBe('HELLO4');
+            });
         });
     });
   });
@@ -325,12 +506,52 @@ describe('/api/patients', () => {
 
     test('/:patientId - delete patient', () => {
       return request(app)
-        .delete(`/api/patients/${patientId}`)
+        .delete(`${rootUrl}/${patientId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/:patientId - delete patient then undelete it', () => {
+      return request(app)
+        .delete(`${rootUrl}/${patientId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(({ body }) => {
+          const patientCreate = {
+            email: 'testpatient@test.com',
+            firstName: 'Ronald',
+            lastName: 'Mcdonald',
+            mobilePhoneNumber: '7789999999',
+            createdAt: '2017-07-19T00:14:30.932Z',
+            address: null,
+            birthDate: null,
+            familyId: null,
+            gender: null,
+            homePhoneNumber: null,
+            pmsId: '12',
+            language: null,
+            middleName: null,
+            otherPhoneNumber: null,
+            patientUserId: null,
+            phoneNumber: null,
+            prefName: null,
+            prefPhoneNumber: null,
+            type: null,
+            workPhoneNumber: null,
+          };
+          return request(app)
+            .post(`${rootUrl}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(patientCreate)
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              expect(body).toMatchSnapshot();
+            });
         });
     });
   });

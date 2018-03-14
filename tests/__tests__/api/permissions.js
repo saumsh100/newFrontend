@@ -3,22 +3,35 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import {
   Account,
-} from '../../../server/models';
-import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
+  Address,
+} from '../../../server/_models';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
-import { wipeAllModels } from '../../util/wipeModel';
+import { wipeModel } from '../../util/wipeModel';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/api/accounts';
+const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 async function seedData() {
+  await wipeTestUsers();
   await seedTestUsers();
 
   // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
+
+  await Address.create(address);
+  await Account.create({
     id: accountId2,
+    addressId,
     enterpriseId,
     name: 'Test Account 2',
     createdAt: '2017-07-20T00:14:30.932Z',
@@ -28,13 +41,13 @@ async function seedData() {
 describe('/api/accounts/:accountId/permissions', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
     await seedData();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeTestUsers();
   });
 
   describe('PUT /api/accounts/:accountId/permissions/:permissionId', () => {
@@ -51,7 +64,7 @@ describe('/api/accounts/:accountId/permissions', () => {
         });
     });
 
-    test('should return 403', async () => {
+    test('should return 403', () => {
       return request(app)
         .put(`${rootUrl}/${accountId}/permissions/${permissionId}`)
         .send({ role: 'ADMIN' })

@@ -3,8 +3,8 @@ import moment from 'moment';
 import { getAccountsConnectorDown } from '../../../../server/lib/connectorWatch';
 import sendRecall from '../../../../server/lib/recalls/sendRecall';
 import { Account } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import {
   updateAccountConnectorConfigurations,
 } from '../../../../server/lib/accountConnectorConfigurations';

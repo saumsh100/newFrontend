@@ -3,23 +3,35 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import {
   Account,
-} from '../../../server/models';
-import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
+  Address,
+  WeeklySchedule,
+} from '../../../server/_models';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers, Correspondence } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
-import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
-import { wipeAllModels } from '../../util/wipeModel';
+import { getModelsArray, omitPropertiesFromBody, omitProperties, omitPropertiesFromBodyJsonApi } from '../../util/selectors';
+import wipeModel from '../../util/wipeModel';
 
-const rootUrl = '/api/accounts';
+const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const userId = '72954241-3652-4792-bae5-5bfed53d37b7';
+const addressId = '62954241-3652-4792-bae5-5bfed53d37b7';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 async function seedData() {
   await seedTestUsers();
 
   // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
+  await Address.create(address);
+  await Account.create({
     id: accountId2,
+    addressId: '62954241-3652-4792-bae5-5bfed53d37b7',
     enterpriseId,
     name: 'Test Account 2',
     createdAt: '2017-07-20T00:14:30.932Z',
@@ -35,7 +47,8 @@ describe('/api/accounts', () => {
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(WeeklySchedule);
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
@@ -52,7 +65,7 @@ describe('/api/accounts', () => {
 
     test('with owner role so return all', async () => {
       // TODO: need to insert another account into enterprise to test that it returns multiple
-      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' })
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
       return request(app)
         .get(rootUrl)
         .set('Authorization', `Bearer ${ownerToken}`)
@@ -60,6 +73,109 @@ describe('/api/accounts', () => {
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('GET /configurations', () => {
+    test('Getting Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .get(`${rootUrl}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('GET /:accountId/configurations', () => {
+    test('Getting Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .get(`${rootUrl}/${accountId}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('Getting Connector Configs - wrong id', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .get(`${rootUrl}/dsfhds;kjdfs}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .expect(404)
+        .then(({ body }) => {
+        });
+    });
+  });
+
+  describe('PUT /configurations', () => {
+    afterAll(async () => {
+      await wipeModel(Correspondence);
+    });
+
+    test('Changing Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .put(`${rootUrl}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          name: 'QUICK_SYNC_INTERVAL',
+          value: 30,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('PUT /:accountId/configurations', () => {
+    afterAll(async () => {
+      await wipeModel(Correspondence);
+    });
+
+    test('Changing Connector Configs', async () => {
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .put(`${rootUrl}/${accountId}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          name: 'QUICK_SYNC_INTERVAL',
+          value: 30,
+        })
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id'], true);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('Changing Connector Configs - Wrong Id', async () => {
+      // TODO: need to insert another account into enterprise to test that it returns multiple
+      const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .put(`${rootUrl}/dsfhds;kjdfs}/configurations`)
+        .set('Authorization', `Bearer ${ownerToken}`)
+        .set('Accept', 'application/vnd.api+json')
+        .send({
+          name: 'QUICK_SYNC_INTERVAL',
+          value: 30,
+        })
+        .expect(404)
+        .then(({ body }) => {
         });
     });
   });
@@ -135,7 +251,7 @@ describe('/api/accounts', () => {
           firstName: 'New',
           lastName: 'Guy',
         })
-        .expect(200)
+        .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
           const [user] = getModelsArray('users', body);
@@ -188,6 +304,10 @@ describe('/api/accounts', () => {
           const users = getModelsArray('users', body).map((u) => {
             delete u.password;
             return u;
+          });
+
+          getModelsArray('accounts', body).forEach((a) => {
+            delete a.address.updatedAt;
           });
 
           expect(users.length).toBe(2);

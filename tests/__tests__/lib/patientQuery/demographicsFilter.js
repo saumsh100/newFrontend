@@ -1,9 +1,8 @@
 import * as demographicsFiltersLibrary from '../../../../server/lib/patientsQuery/demographicsFilter';
-
 import { Account, Patient, Appointment } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { patientId, patient, seedTestPatients } from '../../../_util/seedTestPatients';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { patientId, patient, seedTestPatients } from '../../../util/seedTestPatients';
 
 
 const makeApptData = (data = {}) => Object.assign({

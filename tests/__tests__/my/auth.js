@@ -1,16 +1,17 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import { AuthSession, PatientUser, Patient, PinCode } from '../../../server/models';
+import { AuthSession, PatientUser, Patient, PinCode } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { patientUser, patientUserId, seedTestPatients } from '../../util/seedTestPatients';
 import { omitPropertiesFromBody, omitProperties } from '../../util/selectors';
 
+const host = 'my2.test.com';
+const rootUrl = '/auth';
 
 const pinCodeId = '76d50acd-44f1-414e-bc9b-c0d197ce7149';
 const authSessionId = 'c5574713-835d-4371-8cfe-8ad242a33499';
-
 const pinCode = {
   id: pinCodeId,
   pinCode: '1234',
@@ -26,7 +27,7 @@ const authSession = {
 async function generatePatientUserToken() {
   const response = await request(app)
     .post('/auth')
-    .set('Host', 'my.test.com')
+    .set('Host', host)
     .send({
       email: patientUser.email,
       password: '!@CityOfBudaTest#$',
@@ -37,17 +38,18 @@ async function generatePatientUserToken() {
 
 async function seedTestAuthSessions() {
   await wipeModel(AuthSession);
-  await AuthSession.save(authSession);
+  await AuthSession.create(authSession);
 }
 
 async function seedTestPinCodes() {
   await wipeModel(PinCode);
-  await PinCode.save(pinCode);
+  await PinCode.create(pinCode);
 }
 
 describe('/auth', () => {
-  beforeAll(async() => {
+  beforeEach(async() =>  {
     await seedTestUsers();
+    await seedTestPatients();
   });
 
   afterAll(async () => {
@@ -63,10 +65,9 @@ describe('/auth', () => {
     test('/me - get current patientUser', async () => {
       const token = await generatePatientUserToken();
       return request(app)
-        .get(`/auth/me?patientUserId=${patientUserId}&sessionId=${authSessionId}`)
-        .set('Host', 'my.test.com')
+        .get(`${rootUrl}/me`)
+        .set('Host', host)
         .set('Authorization', `Bearer ${token}`)
-        .send(Object.assign(patientUser, { confirmPassword: patientUser.password }))
         .expect(200)
         .then(({ body }) => {
           body.patientUser = omitProperties(body.patientUser, ['password']);
@@ -85,8 +86,8 @@ describe('/auth', () => {
 
     test('/signup - sign up a patientUser', () => {
       return request(app)
-        .post('/auth/signup')
-        .set('Host', 'my.test.com')
+        .post(`${rootUrl}/signup`)
+        .set('Host', host)
         .send(Object.assign(patientUser, { confirmPassword: patientUser.password }))
         .expect(200)
         .then(({ body }) => {
@@ -99,8 +100,8 @@ describe('/auth', () => {
       await seedTestPatients();
       await seedTestPinCodes();
       return request(app)
-        .post(`/auth/signup/${patientUserId}/confirm`)
-        .set('Host', 'my.test.com')
+        .post(`${rootUrl}/signup/${patientUserId}/confirm`)
+        .set('Host', host)
         .send({ confirmCode: pinCode.pinCode })
         .expect(200)
         .then(({ body }) => {
@@ -113,8 +114,8 @@ describe('/auth', () => {
       await seedTestPatients();
       await seedTestPinCodes();
       return request(app)
-        .post(`/auth/signup/${patientUserId}/confirm`)
-        .set('Host', 'my.test.com')
+        .post(`${rootUrl}/signup/${patientUserId}/confirm`)
+        .set('Host', host)
         .send({ confirmCode: '4321' })
         .expect(400)
         .then(({ body }) => {
@@ -142,8 +143,8 @@ describe('/auth', () => {
     test('/ - login - successful', async () => {
       await seedTestPatients();
       return request(app)
-        .post('/auth')
-        .set('Host', 'my.test.com')
+        .post(rootUrl)
+        .set('Host', host)
         .send({
           email: patientUser.email,
           password: '!@CityOfBudaTest#$',
@@ -158,8 +159,8 @@ describe('/auth', () => {
     test('/ - login - unsuccessful', async () => {
       await seedTestPatients();
       return request(app)
-        .post('/auth')
-        .set('Host', 'my.test.com')
+        .post(rootUrl)
+        .set('Host', host)
         .send({
           email: patientUser.email,
           password: 'wrongpassword',
@@ -180,8 +181,8 @@ describe('/auth', () => {
 
     test('/session/:sessionId - log out patientUser', async () => {
       return request(app)
-        .delete(`/auth/session/${authSessionId}`)
-        .set('Host', 'my.test.com')
+        .delete(`${rootUrl}/session/${authSessionId}`)
+        .set('Host', host)
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);

@@ -3,13 +3,23 @@ import request from 'supertest';
 import jwt from 'jwt-decode';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Account, Enterprise } from '../../../server/models';
+import { Account, Enterprise, Address } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterprise, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const accountId2 = '1fa3a399-5a41-42d9-b2c8-59df666ec7ea';
+const rootUrl = '/_api/enterprises';
 
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
+const accountId2 = '1fa3a399-5a41-42d9-b2c8-59df666ec7ea';
 const account2 = {
   id: accountId2,
   enterpriseId,
@@ -33,7 +43,7 @@ describe('/api/enterprises', () => {
   describe('GET /', () => {
     test('/ - get enterprises', () => {
       return request(app)
-        .get('/api/enterprises/')
+        .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -44,7 +54,7 @@ describe('/api/enterprises', () => {
 
     test('/:enterpriseId - retrieve enterprise', () => {
       return request(app)
-        .get(`/api/enterprises/${enterpriseId}`)
+        .get(`${rootUrl}/${enterpriseId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -55,7 +65,7 @@ describe('/api/enterprises', () => {
 
     test('/:enterpriseId/accounts - retrieve enterprise accounts', () => {
       return request(app)
-        .get(`/api/enterprises/${enterpriseId}/accounts`)
+        .get(`${rootUrl}/${enterpriseId}/accounts`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -69,7 +79,7 @@ describe('/api/enterprises', () => {
   describe('POST /', () => {
     test('/ - create an enterprise', () => {
       return request(app)
-        .post('/api/enterprises')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send(enterprise)
         .expect(201)
@@ -81,14 +91,16 @@ describe('/api/enterprises', () => {
 
     test('/switch - switch enterprise', async () => {
       // Seed another enterprise and account
-      const enterprise = await Enterprise.save({ name: 'Testerprise' });
-      const account = await Account.save({
+      const enterprise = await Enterprise.create({ name: 'Testerprise' });
+      await Address.create(address);
+      const account = await Account.create({
         enterpriseId: enterprise.id,
+        addressId,
         name: 'Testcount',
       });
 
       return request(app)
-        .post('/api/enterprises/switch')
+        .post(`${rootUrl}/switch`)
         .set('Authorization', `Bearer ${token}`)
         .send({ enterpriseId: enterprise.id })
         .expect(200)
@@ -102,12 +114,12 @@ describe('/api/enterprises', () => {
 
     test('/:enterpriseId/accounts - create account under enterprise', async () => {
       return request(app)
-        .post(`/api/enterprises/${enterpriseId}/accounts`)
+        .post(`${rootUrl}/${enterpriseId}/accounts`)
         .set('Authorization', `Bearer ${token}`)
         .send(account2)
         .expect(201)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['weeklyScheduleId']);
+          body = omitPropertiesFromBody(body, ['weeklyScheduleId', 'addressId']);
           expect(Object.keys(body.entities.accounts).length).toBe(1);
           expect(body).toMatchSnapshot();
         });
@@ -118,11 +130,9 @@ describe('/api/enterprises', () => {
   describe('PUT /', () => {
     test('/:enterpriseId/accounts/:accountId - update account', () => {
       return request(app)
-        .put(`/api/enterprises/${enterpriseId}/accounts/${accountId}`)
+        .put(`${rootUrl}/${enterpriseId}/accounts/${accountId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          name: 'Updated',
-        })
+        .send({ name: 'Updated' })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -134,7 +144,7 @@ describe('/api/enterprises', () => {
   describe('DELETE /', () => {
     test('/:enterpriseId/accounts/:accountId - delete enterprise account', () => {
       return request(app)
-        .delete(`/api/enterprises/${enterpriseId}/accounts/${accountId}`)
+        .delete(`${rootUrl}/${enterpriseId}/accounts/${accountId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {

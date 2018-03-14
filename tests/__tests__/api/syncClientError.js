@@ -2,7 +2,7 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { SyncClientError } from '../../../server/models';
+import { SyncClientError } from '../../../server/_models';
 import wipeModel from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody, omitProperties }  from '../../util/selectors';
@@ -25,17 +25,18 @@ const syncClientError = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
-const rootUrl = '/api/syncClientError';
+const rootUrl = '/_api/syncClientError';
 
 async function seedTestSyncClientError() {
   await wipeModel(SyncClientError);
-  await SyncClientError.save(syncClientError);
-};
+  await SyncClientError.create(syncClientError);
+}
 
 describe('/api/syncClientError', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    await wipeModel(SyncClientError);
     await seedTestUsers();
     await seedTestSyncClientError();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
@@ -48,7 +49,7 @@ describe('/api/syncClientError', () => {
   describe('GET /', () => {
     test('/ - get all errors for account', () => {
       return request(app)
-        .get(`${rootUrl}`)
+        .get(`${rootUrl}?accountId=${accountId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -63,22 +64,20 @@ describe('/api/syncClientError', () => {
       await wipeModel(SyncClientError);
     });
 
-    // TODO: This throws an error because of socket io
-    /*
+
     test('/ - create an error', () => {
-      return request(app)
-        .post(`${rootUrl}`)
-        .set('Authorization', `Bearer ${token}`)
-        .send(syncClientError)
-        .expect(201)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          body = omitProperties(body);
-          console.log(JSON.stringify(body));
-          expect(body).toMatchSnapshot();
-        });
+     return request(app)
+     .post(`${rootUrl}`)
+     .set('Authorization', `Bearer ${token}`)
+     .send(syncClientError)
+     .expect(201)
+     .then(({ body }) => {
+       body = omitPropertiesFromBody(body);
+       body = omitProperties(body);
+       expect(body).toMatchSnapshot();
+     });
     });
-    */
+
   });
 
 });

@@ -1,10 +1,9 @@
 import * as practitionersFiltersLibrary from '../../../../server/lib/patientsQuery/practitionersFilter';
-
 import { Account, Patient, Appointment } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { patientId, patient, seedTestPatients } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { patientId, patient, seedTestPatients } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 
 const makeApptData = (data = {}) => Object.assign({
   accountId,

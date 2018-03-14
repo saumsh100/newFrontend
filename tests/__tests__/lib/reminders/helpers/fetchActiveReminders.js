@@ -7,8 +7,8 @@ import {
   fetchActiveReminders,
 } from '../../../../../server/lib/reminders/helpers';
 import { tzIso } from '../../../../../server/util/time';
-import { wipeAllModels } from '../../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../../_util/seedTestUsers';
+import { wipeAllModels } from '../../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../../util/seedTestUsers';
 
 const TIME_ZONE = 'America/Vancouver';
 const td = d => tzIso(d, TIME_ZONE);

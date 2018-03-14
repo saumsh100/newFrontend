@@ -6,7 +6,7 @@ import {
   snakeCaseToCamelCase,
   convertKeysToCamelCase,
   sanitizeTwilioSmsData,
-} from '../../../server/routes/twilio/util';
+} from '../../../server/routes/_twilio/util';
 
 describe('Twilio Util', () => {
   describe('#snakeCaseToCamelCase', () => {

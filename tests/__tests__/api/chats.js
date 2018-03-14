@@ -2,7 +2,7 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Chat, TextMessage } from '../../../server/models';
+import { Chat, TextMessage, Patient } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 import { patient, patientId, seedTestPatients } from '../../util/seedTestPatients';
@@ -12,6 +12,8 @@ const chatId = '3180a744-f6b0-4a09-8046-4e713bf5b565';
 const textMessageId = '059987cb-3051-4656-98d0-72cda34d32a6';
 const patientPhoneNumber = '+16045555555';
 const clinicPhone = '+16043333333';
+
+const rootUrl = '/_api/chats';
 
 const chat = {
   id: chatId,
@@ -29,14 +31,28 @@ const textMessage = {
   from: clinicPhone,
   body: 'This is a test text message',
   createdAt: '2017-07-19T00:14:30.932Z',
+  userId: '6668f250-e8c9-46e3-bfff-0249f1eec6b8',
 };
 
 async function seedTestChats() {
-  await seedTestPatients();
   await wipeModel(TextMessage);
   await wipeModel(Chat);
-  await Chat.save(chat);
-  await TextMessage.save(textMessage);
+  await wipeModel(Patient);
+  await seedTestPatients();
+  await Chat.create(chat);
+  await TextMessage.create(textMessage);
+}
+
+function filterObject(obj, key) {
+  for (let i in obj) {
+    if (!obj.hasOwnProperty(i)) continue;
+    if (typeof obj[i] === 'object') {
+      filterObject(obj[i], key);
+    } else if (i == key) {
+      delete obj[key];
+    }
+  }
+  return obj;
 }
 
 describe('/api/chats', () => {
@@ -48,53 +64,56 @@ describe('/api/chats', () => {
   });
 
   afterAll(async () => {
+    await wipeModel(Chat)
     await wipeAllModels();
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       await seedTestChats();
     });
 
     test('/ - get chats', () => {
       return request(app)
-        .get('/api/chats/')
+        .get(`${rootUrl}?limit=15`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['lastTextMessageId']);
           expect(body).toMatchSnapshot();
         });
     });
 
     test('/:chatId - retrieve chat', () => {
       return request(app)
-        .get(`/api/chats/${chatId}`)
+        .get(`${rootUrl}/${chatId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['lastTextMessageId']);
           expect(body).toMatchSnapshot();
         });
     });
 
     test('/patient/:patientId - return chat with patient', () => {
       return request(app)
-        .get(`/api/chats/patient/${patientId}`)
+        .get(`${rootUrl}/patient/${patientId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          filterObject(body, 'updatedAt')
+          body = omitPropertiesFromBody(body, ['lastTextMessageId', 'updatedAt']);
           expect(body).toMatchSnapshot();
         });
     });
 
     test('/:chatId/textMessages - retrieve text messages for a chat', () => {
       return request(app)
-        .get(`/api/chats/${chatId}/textMessages`)
+        .get(`${rootUrl}/${chatId}/textMessages`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
+          filterObject(body, 'updatedAt')
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
@@ -102,64 +121,67 @@ describe('/api/chats', () => {
   });
 
   describe('POST /', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
       await wipeModel(TextMessage);
       await wipeModel(Chat);
     });
 
     test('/ - create a chat', () => {
       return request(app)
-        .post('/api/chats')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send({
           patient,
         })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['lastTextMessageId', 'updatedAt']);
           expect(Object.keys(body.entities.chats).length).toBe(1);
         });
     });
 
     // TODO: Figure out how to run this without twilio
-    /*
-    test.only('/textMessages - create a text message', async () => {
-      await seedTestChats();
-      const textPatient = patient;
-      textPatient.mobilePhoneNumber = '+16045555555';
 
-      return request(app)
-        .post('/api/chats/textMessages')
-        .set('Authorization', `Bearer ${token}`)
-        .send({
-          chatId,
-          message: 'Test POST text message',
-          patient: textPatient,
-        })
-        .expect(201)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          console.log(JSON.stringify(body));
-          expect(Object.keys(body.entities.textMessages).length).toBe(1);
-        });
-    });
-    */
+    // test.only('/textMessages - create a text message', async () => {
+    //   await seedTestChats();
+    //   const textPatient = patient;
+    //   textPatient.mobilePhoneNumber = '+16045555555';
+
+    //   return request(app)
+    //     .post(`${rootUrl}/textMessages`)
+    //     .set('Authorization', `Bearer ${token}`)
+    //     .send({
+    //       chatId,
+    //       message: 'Test POST text message',
+    //       patient: textPatient,
+    //     })
+    //     .expect(200)
+    //     .then(({ body }) => {
+    //       body = omitPropertiesFromBody(body);
+    //       console.log(JSON.stringify(body));
+    //       expect(Object.keys(body.entities.textMessages).length).toBe(1);
+    //     });
+    // });
+
   });
 
   describe('PUT /', () => {
     beforeEach(async () => {
+      console.log('notdone')
       await seedTestChats();
+      console.log('done')
     });
 
     test('/:_chatId/textMessages/read - set all of chats unread text messages to read', () => {
       return request(app)
-        .put(`/api/chats/${chatId}/textMessages/read`)
+        .put(`${rootUrl}/${chatId}/textMessages/read`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           name: 'Updated',
         })
         .expect(200)
         .then(({ body }) => {
+          filterObject(body, 'updatedAt')
           body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
@@ -173,7 +195,7 @@ describe('/api/chats', () => {
 
     test('/:chatId - delete chat', () => {
       return request(app)
-        .delete(`/api/chats/${chatId}`)
+        .delete(`${rootUrl}/${chatId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {

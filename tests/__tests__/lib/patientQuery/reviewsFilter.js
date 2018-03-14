@@ -7,10 +7,10 @@ import {
   Patient,
   Review,
 } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 
 const makePatientData = (data = {}) => Object.assign({
   accountId,

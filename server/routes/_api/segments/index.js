@@ -3,7 +3,7 @@ import { Router } from 'express';
 import db from '../../../_models/index';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
-import normalize from '../../api/normalize';
+import normalize from '../../_api/normalize';
 
 const segmentRouter = Router();
 

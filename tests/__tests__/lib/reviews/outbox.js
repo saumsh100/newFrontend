@@ -13,10 +13,10 @@ import {
 import {
   generateReviewsOutbox,
 } from '../../../../server/lib/reviews/helpers';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 
 const appointmentId = uuid();
 

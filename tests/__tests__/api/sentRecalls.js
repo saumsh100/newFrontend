@@ -2,12 +2,14 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { SentRecall } from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
+import { SentRecall, Recall, Patient } from '../../../server/_models';
+import wipeModel from '../../util/wipeModel';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { patientId, seedTestPatients } from '../../util/seedTestPatients';
 import { recallId1, seedTestRecalls } from '../../util/seedTestRecalls';
 import { omitPropertiesFromBody } from '../../util/selectors';
+
+const rootUrl = '/_api/sentRecalls';
 
 const sentRecallId = '689b7e40-0bff-40ea-bdeb-ff08d055075f';
 const sentRecall = {
@@ -16,44 +18,42 @@ const sentRecall = {
   accountId,
   patientId,
   lengthSeconds: 540,
+  isSent: true,
   primaryType: 'sms',
-  createdAt: '2017-07-19T00:14:30.932Z',
+  createdAt: new Date().toISOString(),
 };
 
 async function seedTestSentRecall() {
-  await seedTestRecalls();
   await seedTestPatients();
-  await wipeModel(SentRecall);
-  SentRecall.save(sentRecall);
+  await seedTestRecalls();
+  await SentRecall.create(sentRecall);
 }
 
 describe('/api/sentRecalls', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeModel(SentRecall);
     await seedTestUsers();
+    await seedTestSentRecall();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeModel(SentRecall);
+    await wipeModel(Recall);
+    await wipeModel(Patient);
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestSentRecall();
-    });
-
     test('retrieve sent recall', () => {
       return request(app)
-        .get('/api/sentRecalls?join=recall,patient')
+        .get(`${rootUrl}?join=recall,patient`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitPropertiesFromBody(body, ['homePhoneNumber', 'insurance', 'otherPhoneNumber', 'prefPhoneNumber', 'workPhoneNumber', 'createdAt']);
           expect(body).toMatchSnapshot();
         });
     });

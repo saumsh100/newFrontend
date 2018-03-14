@@ -1,19 +1,22 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import { PatientUser, Patient } from '../../../server/models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
-import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { patientUserId, seedTestPatients } from '../../util/seedTestPatients';
-import { omitPropertiesFromBody } from '../../util/selectors';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
+import { patientUserId, seedTestPatients, wipeTestPatients } from '../../util/seedTestPatients';
+import { omitPropertiesFromBody, omitProperties } from '../../util/selectors';
+
+const host = 'my2.test.com';
 
 describe('/widgets', () => {
-  beforeAll(async() => {
+  beforeEach(async() => {
+    await wipeTestPatients();
+    await wipeTestUsers();
     await seedTestUsers();
   });
 
   afterAll(async() => {
-    await wipeAllModels();
+    await wipeTestPatients();
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
@@ -25,7 +28,7 @@ describe('/widgets', () => {
     test('/:accountId/embed - [no description]', () => {
       return request(app)
         .get(`/widgets/${accountId}/embed`)
-        .set('Host', 'my.test.com')
+        .set('Host', host)
         .expect(200)
         .then(({body}) => {
           body = omitPropertiesFromBody(body);
@@ -36,12 +39,15 @@ describe('/widgets', () => {
 });
 
 describe('/patientUsers', () => {
-  beforeAll(async() => {
+  beforeEach(async() => {
+    await wipeTestPatients();
+    await wipeTestUsers();
     await seedTestUsers();
   });
 
   afterAll(async () => {
-    await wipeAllModels();
+    await wipeTestPatients();
+    await wipeTestUsers();
   });
 
 
@@ -53,10 +59,10 @@ describe('/patientUsers', () => {
     test('/patientUsers/:patientUserId - retrieve patientUser', () => {
       return request(app)
         .get(`/patientUsers/${patientUserId}`)
-        .set('Host', 'my.test.com')
+        .set('Host', host)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
+          body = omitProperties(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -64,15 +70,14 @@ describe('/patientUsers', () => {
 
   describe('POST /', () => {
     beforeEach(async () => {
-      await wipeModel(PatientUser);
-      await wipeModel(Patient);
+      await wipeTestPatients();
     });
 
     test('/patientUsers/email - check if patientuser with given email exists - exists', async () => {
       await seedTestPatients();
       return request(app)
         .post('/patientUsers/email')
-        .set('Host', 'my.test.com')
+        .set('Host', host)
         .send({
           email: 'testpatientuser@test.com',
         })
@@ -87,7 +92,7 @@ describe('/patientUsers', () => {
       await seedTestPatients();
       return request(app)
         .post('/patientUsers/email')
-        .set('Host', 'my.test.com')
+        .set('Host', host)
         .send({
           email: 'ronaldmcdonald@test.com',
         })
@@ -102,7 +107,7 @@ describe('/patientUsers', () => {
       await seedTestPatients();
       return request(app)
         .post('/patientUsers/phoneNumber')
-        .set('Host', 'my.test.com')
+        .set('Host', host)
         .send({
           phoneNumber: '+16049999999',
         })
@@ -117,7 +122,7 @@ describe('/patientUsers', () => {
       await seedTestPatients();
       return request(app)
         .post('/patientUsers/phoneNumber')
-        .set('Host', 'my.test.com')
+        .set('Host', host)
         .send({
           phoneNumber: '+16049919999',
         })

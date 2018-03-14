@@ -2,12 +2,12 @@
 import * as appFiltersLibrary from '../../../../server/lib/patientsQuery/appointmentsFilter';
 
 import { Account, Patient, Appointment, DeliveredProcedure, Request, PatientUser } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { patientId, patient, seedTestPatients } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
-import { seedTestProcedures, wipeTestProcedures } from '../../../_util/seedTestProcedures';
-import { serviceId, seedTestService } from '../../../_util/seedTestServices';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { patientId, patient, seedTestPatients } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestProcedures, wipeTestProcedures } from '../../../util/seedTestProcedures';
+import { serviceId, seedTestService } from '../../../util/seedTestServices';
 
 
 const makeApptData = (data = {}) => Object.assign({

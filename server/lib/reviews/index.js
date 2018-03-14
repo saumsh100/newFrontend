@@ -9,8 +9,8 @@ import {
   TextMessage,
 } from '../../_models';
 import { env } from '../../config/globals';
-import normalize from '../../routes/api/normalize';
-import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
+import normalize from '../../routes/_api/normalize';
+import { sanitizeTwilioSmsData } from '../../routes/_twilio/util';
 import { getReviewPatients } from './helpers';
 import sendReview from './sendReview';
 

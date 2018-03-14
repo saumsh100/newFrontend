@@ -3,7 +3,7 @@ import uniqWith from 'lodash/uniqWith';
 import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
-import { UniqueFieldError } from '../models/createModel/errors';
+import { UniqueFieldError } from './errors';
 
 const { validateAccountIdPmsId } = require('../util/validators');
 

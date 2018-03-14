@@ -6,9 +6,9 @@ import {
   mapPatientsToRecalls,
 } from './helpers';
 import { generateOrganizedPatients } from '../comms/util';
-import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
+import { sanitizeTwilioSmsData } from '../../routes/_twilio/util';
 import { convertIntervalStringToObject } from '../../util/time';
-import normalize from '../../routes/api/normalize';
+import normalize from '../../routes/_api/normalize';
 import sendRecall from './sendRecall';
 import app from '../../bin/app';
 import { namespaces, env } from '../../config/globals';

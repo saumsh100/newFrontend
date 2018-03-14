@@ -2,14 +2,14 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Service } from '../../../server/models';
+import { Service, WeeklySchedule, Practitioner, Account } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
 
+const rootUrl = '/_api/services';
+
 import { serviceId, service, seedTestService } from '../../util/seedTestServices';
-
 import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
-
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 
@@ -22,18 +22,21 @@ describe('/api/services', () => {
   });
 
   afterAll(async () => {
+    await wipeModel(WeeklySchedule);
+    await wipeModel(Practitioner);
+    await wipeModel(Account);
     await wipeAllModels();
   });
 
   describe('GET /', () => {
-    beforeEach(async () => {
-      await seedTestService();
+    beforeAll(async () => {
+      // await seedTestService();
       await seedTestPractitioners();
     });
 
     test('retrieve services', () => {
       return request(app)
-        .get('/api/services')
+        .get(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -47,7 +50,7 @@ describe('/api/services', () => {
 
     test('/:serviceId - retrieve a service', () => {
       return request(app)
-        .get(`/api/services/${serviceId}`)
+        .get(`${rootUrl}/1f439ff8-c55d-4423-9316-a41240c4d329`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
@@ -64,7 +67,7 @@ describe('/api/services', () => {
 
     test('create service', () => {
       return request(app)
-        .post('/api/services')
+        .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
         .send(service)
         .expect(201)
@@ -82,14 +85,16 @@ describe('/api/services', () => {
 
     test('/:serviceId - update service', () => {
       return request(app)
-        .put(`/api/services/${serviceId}`)
+        .put(`${rootUrl}/${serviceId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
+          isDefault: true,
           name: 'Updated Test Service',
           practitioners: [practitionerId],
         })
         .expect(200)
         .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['id', 'Practitioner_Service']);
           expect(body).toMatchSnapshot();
         });
     });
@@ -102,7 +107,7 @@ describe('/api/services', () => {
 
     test('join practitioners', () => {
       return request(app)
-        .get('/api/services?join=practitioners')
+        .get(`${rootUrl}?join=practitioners`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -122,7 +127,7 @@ describe('/api/services', () => {
 
     test('/:serviceId - delete service', () => {
       return request(app)
-        .delete(`/api/services/${serviceId}`)
+        .delete(`${rootUrl}/${serviceId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {

@@ -1,9 +1,8 @@
 
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
-import { Patient, PatientUser } from '../../server/models';
-import { Patient as _Patient, PatientUser as _PatientUser } from '../../server/_models';
-import wipeModel, { wipeModelSequelize } from './wipeModel';
+import { Patient, PatientUser } from '../../server/_models';
+import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 
 const patientId = '10518e11-b9d2-4d74-9887-29eaae7b5938';
@@ -15,11 +14,11 @@ const patient = {
   email: 'testpatient@test.com',
   firstName: 'Ronald',
   lastName: 'Mcdonald',
-  pmsId: null,
+  pmsId: '12',
   mobilePhoneNumber: '7789999999',
   createdAt: '2017-07-19T00:14:30.932Z',
   address: null,
-  birthDate: null,
+  birthDate: '1980-01-01T00:00:00.932Z',
   familyId: null,
   gender: null,
   homePhoneNumber: null,
@@ -32,20 +31,24 @@ const patient = {
   prefPhoneNumber: null,
   type: null,
   workPhoneNumber: null,
+  firstApptId: null,
+  lastApptId: null,
+  nextApptId: null,
+  appointmentPreference: 'both',
   // avatarUrl: '',
- // pmsId: 0,
+  // pmsId: 0,
   //pmsId: null,
   /*
-  middleName: '',
+   middleName: '',
 
-  phoneNumber: '60494949494',
-  homePhoneNumber: '6049899090',
-  mobilePhoneNumber: '7789393090',
-  workPhoneNumber: '6043854341',
-  otherPhoneNumber: '6048989213',
-  prefContactPhone: '',
-  patientUserId: '',
-  */
+   phoneNumber: '60494949494',
+   homePhoneNumber: '6049899090',
+   mobilePhoneNumber: '7789393090',
+   workPhoneNumber: '6043854341',
+   otherPhoneNumber: '6048989213',
+   prefContactPhone: '',
+   patientUserId: '',
+   */
 
 };
 
@@ -63,16 +66,13 @@ async function seedTestPatients() {
   await wipeModel(PatientUser);
   await wipeModel(Patient);
 
-  await PatientUser.save(patientUser);
-  await Patient.save(patient);
+  await PatientUser.create(patientUser);
+  await Patient.create(patient);
 }
 
-async function seedTestPatientsSequelize() {
-  await wipeModelSequelize(_PatientUser);
-  await wipeModelSequelize(_Patient);
-
-  await _PatientUser.create(patientUser);
-  await _Patient.create(patient);
+async function wipeTestPatients() {
+  await wipeModel(PatientUser);
+  await wipeModel(Patient);
 }
 
 module.exports = {
@@ -81,5 +81,5 @@ module.exports = {
   patientId,
   patientUserId,
   seedTestPatients,
-  seedTestPatientsSequelize,
+  wipeTestPatients,
 };

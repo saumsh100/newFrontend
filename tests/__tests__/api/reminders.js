@@ -1,28 +1,36 @@
 
 import request from 'supertest';
 import app from '../../../server/bin/app';
-import { Account } from '../../../server/models';
-import { wipeAllModels } from '../../util/wipeModel';
-import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
+import { Account, Reminder, Address } from '../../../server/_models';
+import wipeModel from '../../util/wipeModel';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import generateToken from '../../util/generateToken';
 import { getModelsArray, omitProperties, omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/api/accounts';
+const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
-
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 const newReminderId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 describe('/api/accounts/:account/reminders', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeModel(Reminder);
+    await wipeTestUsers();
     await seedTestUsers();
-
-    // Seed an extra account for fetching multiple and testing switching
-    await Account.save({
+    await Address.create(address);
+    await Account.create({
       id: accountId2,
+      addressId,
       enterpriseId,
       name: 'Test Account 2',
       createdAt: '2017-07-20T00:14:30.932Z',
@@ -31,13 +39,14 @@ describe('/api/accounts/:account/reminders', () => {
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
-  afterAll(async () => {
-    await wipeAllModels();
-  });
-
   describe('Reminders', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
       await seedTestReminders();
+    });
+
+    afterAll(async () => {
+      await wipeModel(Reminder);
+      await wipeTestUsers();
     });
 
     describe('GET /:accountId/reminders', () => {
@@ -50,7 +59,6 @@ describe('/api/accounts/:account/reminders', () => {
             body = omitPropertiesFromBody(body);
             body = omitProperties(body, ['result']);
             const reminders = getModelsArray('reminders', body);
-            console.log(JSON.stringify(body));
             expect(reminders.length).toBe(2);
             expect(body).toMatchSnapshot();
           });
@@ -71,11 +79,11 @@ describe('/api/accounts/:account/reminders', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             id: newReminderId,
-            lengthSeconds: null,
-            primaryType: 'sms',
+            primaryTypes: ['sms'],
+            interval: '2 hours',
             createdAt: '2017-07-19T00:14:30.932Z',
           })
-          .expect(200)
+          .expect(201)
           .then(({ body }) => {
             body = omitPropertiesFromBody(body);
             const reminders = getModelsArray('reminders', body);
@@ -99,8 +107,7 @@ describe('/api/accounts/:account/reminders', () => {
           .set('Authorization', `Bearer ${token}`)
           .send({
             id: reminderId1,
-            lengthSeconds:null,
-            primaryType: 'phone',
+            primaryTypes: ['phone'],
             createdAt: '2017-07-19T00:14:30.932Z',
           })
           .expect(200)
@@ -109,7 +116,7 @@ describe('/api/accounts/:account/reminders', () => {
             const reminders = getModelsArray('reminders', body);
             const [reminder] = reminders;
             expect(reminders.length).toBe(1);
-            expect(reminder.primaryType).toBe('phone');
+            expect(reminder.primaryTypes).toEqual(['phone']);
             expect(body).toMatchSnapshot();
           });
       });
@@ -124,7 +131,6 @@ describe('/api/accounts/:account/reminders', () => {
 
     describe('DELETE /:accountId/reminders/:reminderId', () => {
       afterEach(async () => {
-        // have to restore recalls cause these routes could delete
         await seedTestReminders();
       });
 

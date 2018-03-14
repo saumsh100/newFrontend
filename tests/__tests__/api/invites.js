@@ -4,26 +4,36 @@ import app from '../../../server/bin/app';
 import {
   Account,
   Invite,
-} from '../../../server/models';
-import { accountId, enterpriseId, ownerUserId, seedTestUsers } from '../../util/seedTestUsers';
+  Address,
+} from '../../../server/_models';
+import { accountId, enterpriseId, ownerUserId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/api/accounts';
+const rootUrl = '/_api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const inviteId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const inviteId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const newInviteId = '11d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const token1 = '6778f250-e8c9-46e3-bfff-0249f1eec6b8';
 const token2 = '8998f250-e8c9-46e3-bfff-0249f1eec6b8';
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 async function seedData() {
-  await seedTestUsers();
-
   // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
+
+  await Address.create(address);
+  await Account.create({
     id: accountId2,
+    addressId,
     enterpriseId,
     name: 'Test Account 2',
     createdAt: '2017-07-20T00:14:30.932Z',
@@ -31,8 +41,7 @@ async function seedData() {
 }
 
 async function seedInvites() {
-  await wipeModel(Invite);
-  await Invite.save([
+  await Invite.bulkCreate([
     {
       id: inviteId1,
       createdAt: '2017-07-20T00:14:30.932Z',
@@ -57,13 +66,19 @@ async function seedInvites() {
 describe('/api/accounts/:accountId/invites', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
+    await wipeAllModels();
+    await wipeModel(Invite);
+    await seedTestUsers();
     await seedData();
     await seedInvites();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
+    await wipeModel(Invite);
+    await wipeTestUsers();
+    await wipeModel(Account);
     await wipeAllModels();
   });
 
@@ -80,9 +95,10 @@ describe('/api/accounts/:accountId/invites', () => {
     });
   });
 
+
   describe('POST /api/accounts/:accountId/invites', () => {
-    afterAll(async () => {
-      await seedInvites();
+    beforeEach(async() => {
+      await wipeModel(Invite);
     });
 
     test('should create an invite', async () => {
@@ -108,6 +124,7 @@ describe('/api/accounts/:accountId/invites', () => {
         });
     });
 
+
     test('should fail if required info is not there', async () => {
       const ownerToken = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
       return request(app)
@@ -128,10 +145,6 @@ describe('/api/accounts/:accountId/invites', () => {
   });
 
   describe('DELETE /:accountId/invites/:inviteId', () => {
-    afterEach(async () => {
-      await seedInvites();
-    });
-
     test('should delete an invite', () => {
       return request(app)
         .delete(`${rootUrl}/${accountId}/invites/${inviteId1}`)
@@ -146,4 +159,24 @@ describe('/api/accounts/:accountId/invites', () => {
         .expect(403);
     });
   });
+
+  describe('POST /signup/:token', () => {
+
+    test('should create a User', async () => {
+      return request(app)
+        .post(`/_signup/${token2}/`)
+        .send({
+          firstName: 'Why',
+          lastName: '?',
+          username: 'invite@test.com',
+          password: 'thisisatest',
+          confirmPassword: 'thisisatest',
+        })
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.token).not.toBeNull();
+        });
+    });
+  });
+
 });

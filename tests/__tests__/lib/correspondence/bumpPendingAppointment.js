@@ -15,11 +15,11 @@ import {
   shouldSendRecall,
   getPatientsForRecallTouchPoint,
 } from '../../../../server/lib/recalls/helpers';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
-import { seedTestRecalls, recallId1, recallId2 } from '../../../_util/seedTestRecalls';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestRecalls, recallId1, recallId2 } from '../../../util/seedTestRecalls';
 import { w2s } from '../../../../server/util/time';
 import bumpPendingAppointment from '../../../../server/lib/correspondences/bumpPendingAppointment';
 

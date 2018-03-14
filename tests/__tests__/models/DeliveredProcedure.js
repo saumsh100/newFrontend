@@ -1,10 +1,10 @@
 
 import { Account, DeliveredProcedure, Procedure } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
-import { accountId, seedTestUsers, wipeTestUsers } from '../../_util/seedTestUsers';
-import wipeModel from '../../_util/wipeModel';
-import { patientId, seedTestPatients, wipeTestPatients } from '../../_util/seedTestPatients';
-import { code, seedTestProcedures, wipeTestProcedures } from '../../_util/seedTestProcedures';
+import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
+import wipeModel from '../../util/wipeModel';
+import { patientId, seedTestPatients, wipeTestPatients } from '../../util/seedTestPatients';
+import { code, seedTestProcedures, wipeTestProcedures } from '../../util/seedTestProcedures';
 
 const makeDeliveredProcedure = procedureCode => Object.assign({}, {
   accountId,

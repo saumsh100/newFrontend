@@ -14,11 +14,11 @@ import {
   Practitioner,
 } from '../../../../server/_models';
 import { tzIso } from '../../../../server/util/time';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId, enterpriseId } from '../../../_util/seedTestUsers';
-import { patientId } from '../../../_util/seedTestPatients';
-import { seedTestAppointments, appointmentId } from '../../../_util/seedTestAppointments';
-import { seedTestReminders, reminderId1, reminderId2 } from '../../../_util/seedTestReminders';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId, enterpriseId } from '../../../util/seedTestUsers';
+import { patientId } from '../../../util/seedTestPatients';
+import { seedTestAppointments, appointmentId } from '../../../util/seedTestAppointments';
+import { seedTestReminders, reminderId1, reminderId2 } from '../../../util/seedTestReminders';
 
 // Necessary for mocking
 const sendRemindersForAccountTmp = RemindersLibrary.sendRemindersForAccount;

@@ -1,7 +1,7 @@
 
 import { Account, Enterprise } from '../../../server/_models';
 import { omitProperties }  from '../../util/selectors';
-import { wipeTestAccounts, seedTestAccountsSequelize, enterpriseId } from '../../util/seedTestAccounts';
+import { wipeTestUsers, seedTestUsers, enterpriseId } from '../../util/seedTestUsers';
 
 const makeData = (data = {}) => (Object.assign({
   name: 'Test Account',
@@ -12,11 +12,11 @@ const fail = 'Your code should be failing but it is passing';
 
 describe('models/Account', () => {
   beforeEach(async () => {
-    await seedTestAccountsSequelize();
+    await seedTestUsers();
   });
 
   afterAll(async () => {
-    await wipeTestAccounts();
+    await wipeTestUsers();
   });
 
   describe('Data Validation', () => {

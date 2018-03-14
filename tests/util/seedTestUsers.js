@@ -1,12 +1,12 @@
 
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
-import { Account, Enterprise, Permission, User } from '../../server/models';
-import { Account as _Account, Enterprise as _Enterprise, Permission as _Permission, User as _User } from '../../server/_models';
-import wipeModel, { wipeModelSequelize } from './wipeModel';
+import { Account, Address, Enterprise, Permission, User } from '../../server/_models';
+import wipeModel from './wipeModel';
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
+const addressId = '62954242-3652-4792-bae5-5bfed53d37b7';
 const managerPermissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const ownerPermissionId = '74d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const superAdminPermissionId = '64d4e661-1155-4494-8fdb-c4ec0ddf804d';
@@ -22,28 +22,29 @@ const enterprise = {
 
 const account = {
   id: accountId,
+  addressId,
   enterpriseId,
   name: 'Test Account',
+  destinationPhoneNumber: '+16041234567',
+  timezone: 'America/Vancouver',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 const managerPermission = {
   id: managerPermissionId,
-  allowedAccounts: null,
-  permissions: null,
-  role: _Permission.ROLES.MANAGER,
+  role: 'MANAGER',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 const ownerPermission = {
   id: ownerPermissionId,
-  role: _Permission.ROLES.OWNER,
+  role: 'OWNER',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 const superAdminPermission = {
   id: superAdminPermissionId,
-  role: _Permission.ROLES.SUPERADMIN,
+  role: 'SUPERADMIN',
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
@@ -83,43 +84,31 @@ const superAdminUser = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
+
+
 async function seedTestUsers() {
-  // TODO: will be a simple DB wipe with Postgres
-  await wipeModel(Account);
-  await wipeModel(Enterprise);
-  await wipeModel(Permission);
   await wipeModel(User);
+  await wipeModel(Permission);
+  await wipeModel(Account);
+  await wipeModel(Address);
+  await wipeModel(Enterprise);
 
-  await Account.save(account);
-  await Enterprise.save(enterprise);
-  await Permission.save([
+  await Enterprise.create(enterprise);
+  await Address.create(address);
+  await Account.create(account);
+  await Permission.bulkCreate([
     managerPermission,
     ownerPermission,
     superAdminPermission,
   ]);
 
-  await User.save([
-    managerUser,
-    ownerUser,
-    superAdminUser,
-  ]);
-}
-
-async function seedTestUsersSequelize() {
-  await wipeModelSequelize(_User);
-  await wipeModelSequelize(_Permission);
-  await wipeModelSequelize(_Account);
-  await wipeModelSequelize(_Enterprise);
-
-  await _Enterprise.create(enterprise);
-  await _Account.create(account);
-  await _Permission.bulkCreate([
-    managerPermission,
-    ownerPermission,
-    superAdminPermission,
-  ]);
-
-  await _User.bulkCreate([
+  await User.bulkCreate([
     managerUser,
     ownerUser,
     superAdminUser,
@@ -127,10 +116,11 @@ async function seedTestUsersSequelize() {
 }
 
 async function wipeTestUsers() {
-  await wipeModelSequelize(_User);
-  await wipeModelSequelize(_Permission);
-  await wipeModelSequelize(_Account);
-  await wipeModelSequelize(_Enterprise);
+  await wipeModel(User);
+  await wipeModel(Permission);
+  await wipeModel(Account);
+  await wipeModel(Address);
+  await wipeModel(Enterprise);
 }
 
 module.exports = {
@@ -144,6 +134,5 @@ module.exports = {
   ownerUserId,
   superAdminUserId,
   seedTestUsers,
-  seedTestUsersSequelize,
   wipeTestUsers,
 };

@@ -25,7 +25,7 @@ module.exports = {
 
   context: projectRoot,
 
-  entry: entries('server', 'cron', 'reminders', 'seeds', 'recalls', 'reviews',
+  entry: entries('server', 'cron', 'reminders', 'recalls', 'reviews',
     'events', 'firstNextLastApp', 'correspondences', 'lastHygiene', 'lastRecall', 'lastRestorative'),
 
   resolve: {

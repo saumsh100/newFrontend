@@ -4,10 +4,10 @@ import * as ReviewsLibrary from '../../../../server/lib/reviews';
 import * as ReviewsHelpers from '../../../../server/lib/reviews/helpers';
 import sendReview from '../../../../server/lib/reviews/sendReview';
 import { Account } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { patientId } from '../../../_util/seedTestPatients';
-import { seedTestAppointments, appointmentId } from '../../../_util/seedTestAppointments';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { patientId } from '../../../util/seedTestPatients';
+import { seedTestAppointments, appointmentId } from '../../../util/seedTestAppointments';
 
 // Necessary for mocking
 const sendReviewsForAccountTmp = ReviewsLibrary.sendReviewsForAccount;

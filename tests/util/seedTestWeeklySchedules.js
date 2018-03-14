@@ -1,5 +1,5 @@
 
-import { WeeklySchedule } from '../../server/models';
+import { WeeklySchedule } from '../../server/_models';
 import wipeModel from './wipeModel';
 
 const weeklyScheduleId = '8ce3ba61-60cd-40c6-bc85-c018cabd4a40';
@@ -12,11 +12,16 @@ const weeklySchedule = {
 
 async function seedTestWeeklySchedules() {
   await wipeModel(WeeklySchedule);
-  await WeeklySchedule.save(weeklySchedule);
+  await WeeklySchedule.create(weeklySchedule);
+}
+
+async function wipeTestWeeklySchedules() {
+  await wipeModel(WeeklySchedule);
 }
 
 module.exports = {
   weeklyScheduleId,
   weeklySchedule,
   seedTestWeeklySchedules,
+  wipeTestWeeklySchedules,
 };

@@ -88,10 +88,6 @@ rootRouter.post('/userCheck', (req, res, next) => {
     .catch(next);
 });
 
-rootRouter.get('/break', async (req, res, next) => {
-  throw new Error('Break this process');
-});
-
 // All other traffic, just render app
 // TODO: Need to update client-side router to handle this
 rootRouter.get('(/*)?', (req, res, next) => {

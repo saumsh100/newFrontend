@@ -7,7 +7,7 @@ import {
 import {
   seedTestAvailabilities,
   wipeTestAvailabilities,
-} from '../../../_util/seedTestAvailabilities';
+} from '../../../util/seedTestAvailabilities';
 import {
   fetchServiceData,
   fetchPractitionerData,

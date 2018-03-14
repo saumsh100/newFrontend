@@ -1,98 +1,61 @@
 
-import { Account, Appointment, Practitioner, Patient, Enterprise, WeeklySchedule, Service, PractitionerRecurringTimeOff, Practitioner_Service, Chair } from '../../server/models';
-import { Account as _Account,
-  Practitioner as _Practitioner,
-  WeeklySchedule as _WeeklySchedule,
-  Enterprise as _Enterprise,
-  Service as _Service,
-  Practitioner_Service as PractitionerService,
-  Chair as _Chair,
-  Patient as _Patient,
-  Appointment as _Appointment,
-  PractitionerRecurringTimeOff as _PractitionerRecurringTimeOff,
-} from '../../server/_models';
-import wipeModel, { wipeModelSequelize } from './wipeModel';
-import { time } from '../../server/util/time';
 import moment from 'moment';
+import {
+  Account,
+  Address,
+  Appointment,
+  Practitioner,
+  WeeklySchedule,
+  Enterprise,
+  Service,
+  Practitioner_Service,
+  Chair,
+  Patient,
+  PractitionerRecurringTimeOff,
+} from '../../server/_models';
+import wipeModel, { wipeAllModels } from './wipeModel';
+import { time } from '../../server/util/time';
 
 const uuid = require('uuid').v4;
 
-const oneHour = 1 * 60 * 60;
-
 const accountId = '2aeab035-b72c-4f7a-ad73-09465cbf5654';
 const accountId2 = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
+const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
+
 const timeOffId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
-const justinUserId = uuid();
-const grantUserId = uuid();
-const markUserId = uuid();
-const alexUserId = uuid();
-const sergeyUserId = uuid();
-const jdUserId = uuid();
-const syncUserId = uuid();
-const vstUserId = uuid();
-
 const enterpriseId = uuid();
-const markPermissionId = uuid();
-const grantPermissionId = uuid();
 
-const alexPatientId = uuid();
-const alexPatientId2 = uuid();
-const markPatientId = uuid();
+
 const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
-const recallPatientId = '4fcab035-b72c-4f7a-ad73-09465cbf5654';
-const sergeyPatientId = '0b59a171-889e-4631-b392-cc422f711db1';
-const jdPatientId = uuid();
 
-const justinFamilyId = '50271221-c5ee-46b3-baf5-95df3acaa6e7';
-
-const practitionerId = uuid();
-const practitionerId2 = uuid();
 const practitionerId3 = uuid();
 const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
-const practitionerId5 = '5f439ff8-c55d-4423-9316-a41240c4d329';
+const practitionerId5 = '7f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
 
-const chairId = '7f439ff8-c55d-4423-9316-a41240c4d329';
-const chairId2 = uuid();
 const chairId3 = '2f439ff8-c55d-4423-9316-a41240c4d329';
 
 const serviceId = uuid();
 const serviceId2 = uuid();
-const serviceId3 = uuid();
 const fillServiceId = 'e18bd613-c76b-4a9a-a1df-850c867b2cab';
 const funServiceId = 'ac286d7e-cb62-4ea1-8425-fc7e22195692';
 const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
 const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 
-const appointmentId1 = uuid();
-const appointmentId2 = uuid();
-const jdAppointmentId = uuid();
-
-const alexChatId = uuid();
-const markChatId = uuid();
-const justinChatId = uuid();
-const sergeyChatId = uuid();
-
-const weeklyScheduleId = uuid();
-const weeklyScheduleId2 = uuid();
 const weeklyScheduleId3 = '79b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const weeklyScheduleId4 = '39b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 
-const hour8 = new Date(1970, 1, 1, 8, 0);
-const hour5 = new Date(1970, 1, 1, 17, 0);
-
 const justinPhoneNumber = '+17808508886';
-const sergeyPhoneNumber = '+16042657486';
-const alexPhoneNumber = '+19782521845';
-const markPhoneNumber = '+17788654451';
-const jdPhoneNumber = '+16048076210';
 
 const clinicPhoneNumber = '+17786558613';
-const reminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
-const recallId = uuid();
 
-const appointmentId = '6b215a42-5c33-4f94-8313-d89893ae2f36';
+const address = {
+  id: addressId,
+  country: 'CA',
+  createdAt: '2017-07-19T00:14:30.932Z',
+  updatedAt: '2017-07-19T00:14:30.932Z',
+};
 
 const generateDefaultServices = (_accountId) => {
   const createService = serviceData => Object.assign({}, {
@@ -166,12 +129,12 @@ const generatePracServJoin = (services, _practitionerId) => {
   });
 };
 
-const donnaServices = generateDefaultServices(accountId);
 const sunshineServices = generateDefaultServices(accountId2);
 
 const Accounts = [
   {
     id: accountId2,
+    addressId,
     weeklyScheduleId: weeklyScheduleId3,
     name: 'Sunshine Smiles Dental',
     street: '10405 King St.',
@@ -184,7 +147,7 @@ const Accounts = [
     canSendReminders: true,
     canSendRecalls: true,
   },
-]
+];
 
 const Appointments = [
   {
@@ -304,15 +267,6 @@ const Practitioners = [
     // services: [],
   },
   {
-    id: practitionerId4,
-    accountId: accountId2,
-    firstName: 'Chelsea',
-    lastName: 'Handler',
-    weeklyScheduleId: weeklyScheduleId4,
-    isCustomSchedule: true,
-    // services: [],
-  },
-  {
     id: practitionerId5,
     accountId: accountId2,
     firstName: 'Will',
@@ -326,6 +280,18 @@ const Practitioners = [
     firstName: 'Joe',
     lastName: 'Montana',
     isCustomSchedule: false,
+    // services: [],
+  },
+];
+
+const Practitioners2 = [
+  {
+    id: practitionerId4,
+    accountId: accountId2,
+    firstName: 'Chelsea',
+    lastName: 'Handler',
+    weeklyScheduleId: weeklyScheduleId4,
+    isCustomSchedule: true,
     // services: [],
   },
 ];
@@ -384,6 +350,7 @@ const WeeklySchedules = [
       isClosed: true,
       chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
     },
+
     startDate: new Date(2017, 4, 5, 9, 0),
     weeklySchedules: [{
       sunday: {
@@ -421,6 +388,7 @@ const WeeklySchedules = [
         isClosed: true,
       },
     }],
+
     isAdvanced: true,
   },
 ];
@@ -556,31 +524,19 @@ const Chairs = [
   },
 ];
 
-
 async function seedTestAvailabilities() {
-  await Appointment.save(Appointments);
-  await Account.save(Accounts);
-  await Enterprise.save(Enterprises);
-  await WeeklySchedule.save(WeeklySchedules);
-  await Practitioner.save(Practitioners);
-  await Patient.save(Patients);
-  await Service.save(Services);
-  await PractitionerRecurringTimeOff.save(PractitionerTimeOffs);
-  await Practitioner_Service.save(Practitioner_Services);
-  await Chair.save(Chairs);
-}
-
-async function seedTestAvailabilitiesSequelize() {
-  await wipeModelSequelize(_Appointment);
-  await wipeModelSequelize(_Chair);
-  await wipeModelSequelize(_Account);
-  await wipeModelSequelize(_PractitionerRecurringTimeOff);
-  await wipeModelSequelize(_Practitioner);
-  await wipeModelSequelize(_WeeklySchedule);
-  await wipeModelSequelize(_Enterprise);
-  await wipeModelSequelize(_Service);
-  await wipeModelSequelize(PractitionerService);
-  await wipeModelSequelize(_Patient);
+  await wipeAllModels();
+  await wipeModel(Appointment);
+  await wipeModel(Chair);
+  await wipeModel(Account);
+  await wipeModel(Address);
+  await wipeModel(PractitionerRecurringTimeOff);
+  await wipeModel(Practitioner);
+  await wipeModel(WeeklySchedule);
+  await wipeModel(Enterprise);
+  await wipeModel(Service);
+  await wipeModel(Practitioner_Service);
+  await wipeModel(Patient);
 
 
   const newWeeklySchedules = WeeklySchedules.map((weeklySchedule) => {
@@ -595,32 +551,35 @@ async function seedTestAvailabilitiesSequelize() {
     };
   });
 
-  await _Enterprise.bulkCreate(Enterprises);
-  await _WeeklySchedule.bulkCreate(newWeeklySchedules);
-  await _Account.bulkCreate(Accounts);
-  await _Practitioner.bulkCreate(Practitioners);
-  await _Service.bulkCreate(Services);
-  await PractitionerService.bulkCreate(PractitionerServices);
-  await _PractitionerRecurringTimeOff.bulkCreate(PractitionerTimeOffs);
-  await _Chair.bulkCreate(Chairs);
-  await _Patient.bulkCreate(Patients);
-  await _Appointment.bulkCreate(Appointments);
+  await Enterprise.bulkCreate(Enterprises);
+  await WeeklySchedule.bulkCreate(newWeeklySchedules);
+  await Address.bulkCreate([address]);
+  await Account.bulkCreate(Accounts);
+  await Practitioner.bulkCreate(Practitioners2);
+  await Practitioner.bulkCreate(Practitioners);
+  await Service.bulkCreate(Services);
+  await Practitioner_Service.bulkCreate(PractitionerServices);
+  await PractitionerRecurringTimeOff.bulkCreate(PractitionerTimeOffs);
+  await Chair.bulkCreate(Chairs);
+  await Patient.bulkCreate(Patients);
+  await Appointment.bulkCreate(Appointments);
 }
 
 async function wipeTestAvailabilities() {
-  await wipeModelSequelize(_Appointment);
-  await wipeModelSequelize(_Chair);
-  await wipeModelSequelize(_Account);
-  await wipeModelSequelize(_PractitionerRecurringTimeOff);
-  await wipeModelSequelize(_Practitioner);
-  await wipeModelSequelize(_WeeklySchedule);
-  await wipeModelSequelize(_Enterprise);
-  await wipeModelSequelize(_Service);
-  await wipeModelSequelize(PractitionerService);
+  await wipeModel(Appointment);
+  await wipeModel(Chair);
+  await wipeModel(Account);
+  await wipeModel(Address);
+  await wipeModel(PractitionerRecurringTimeOff);
+  await wipeModel(Practitioner);
+  await wipeModel(WeeklySchedule);
+  await wipeModel(Enterprise);
+  await wipeModel(Service);
+  await wipeModel(Practitioner_Service);
+  await wipeAllModels();
 }
 
 module.exports = {
   seedTestAvailabilities,
-  seedTestAvailabilitiesSequelize,
   wipeTestAvailabilities,
 };

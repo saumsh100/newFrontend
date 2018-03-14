@@ -14,8 +14,8 @@ import {
 } from '../../_models';
 import GLOBALS from '../../config/globals';
 import { organizeForOutbox } from '../comms/util';
-import normalize from '../../routes/api/normalize';
-import { sanitizeTwilioSmsData } from '../../routes/twilio/util';
+import normalize from '../../routes/_api/normalize';
+import { sanitizeTwilioSmsData } from '../../routes/_twilio/util';
 import { generateOrganizedPatients } from '../comms/util';
 import {
   convertIntervalStringToObject,

@@ -1,22 +1,58 @@
 
-import * as Models from '../../server/models';
+import clone from 'lodash/clone';
+import * as Models from '../../server/_models';
 
 async function wipeModel(Model) {
-  const models = await Model.run();
-  for (const model of models) {
-    await model.delete();
-  }
-}
-
-async function wipeModelSequelize(Model) {
   await Model.destroy({
     where: {},
     force: true,
   });
 }
 
+// The model gets wiped in the reverse order
+// IE the last in the array gets wiped first.
+const ORDER = [
+  'Enterprise',
+  'WeeklySchedule',
+  'Address',
+  'Account',
+  'Chair',
+  'Permission',
+  'User',
+  'AuthSession',
+  'Invite',
+  'PatientUser',
+  'Family',
+  'Patient',
+  'Service',
+  'Practitioner',
+  'Practitioner_Service',
+  'PractitionerRecurringTimeOff',
+  'DailySchedule',
+  'Appointment',
+  'Request',
+  'Recall',
+  'Reminder',
+  'SentRecall',
+  'SentReminder',
+  'SentReview',
+  'Review',
+  'SyncClientError',
+  'SyncClientVersion',
+  'Token',
+  'WaitSpot',
+  'Segment',
+  'Chat',
+  'TextMessage',
+  'Call',
+  'PinCode',
+  'PasswordReset',
+  'DeliveredProcedure',
+];
+
 async function wipeAllModels() {
-  for (const modelName in Models) {
+  const reversedOrder = clone(ORDER).reverse();
+  for (const modelName of reversedOrder) {
     await wipeModel(Models[modelName]);
   }
 }
@@ -24,5 +60,4 @@ async function wipeAllModels() {
 export default wipeModel;
 export {
   wipeAllModels,
-  wipeModelSequelize,
 };

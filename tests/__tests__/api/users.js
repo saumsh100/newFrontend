@@ -7,36 +7,44 @@ import {
   ownerUserId,
   managerUserId,
   seedTestUsers,
+  wipeTestUsers,
 } from '../../util/seedTestUsers';
-import { omitPropertiesFromBody }  from '../../util/selectors';
+import { omitProperties, omitPropertiesFromBody }  from '../../util/selectors';
+
+const rootUrl = '/_api/users';
 
 describe('/api/users', () => {
   // Seed with some standard user data
   let token = null;
-  beforeAll(async () => {
+  beforeEach(async () => {
     await seedTestUsers();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+  });
+
+  afterAll(async () => {
+    await wipeTestUsers();
   });
 
   describe('GET /', () => {
     test('/me - retrieve user from token', () => {
       return request(app)
-        .get('/api/users/me')
+        .get(`${rootUrl}/me`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['password']);
+          body.enterprise = omitProperties(body.enterprise);
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
 
     test('/:userId - retrieve user from id', () => {
       return request(app)
-        .get(`/api/users/${ownerUserId}`)
+        .get(`${rootUrl}/${ownerUserId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
-          body = omitPropertiesFromBody(body, ['password']);
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });
@@ -44,7 +52,7 @@ describe('/api/users', () => {
     // TODO: Password diff each time, fix this
     test('/ - retrieve users', () => {
       return request(app)
-        .get(`/api/users/${ownerUserId}`)
+        .get(`${rootUrl}/${ownerUserId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           accountId,
@@ -61,7 +69,7 @@ describe('/api/users', () => {
   describe('PUT /:userId', () => {
     test('update a user', async () => {
       return request(app)
-        .put(`/api/users/${managerUserId}`)
+        .put(`${rootUrl}/${managerUserId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           oldPassword: '!@CityOfBudaTest#$',
@@ -71,6 +79,34 @@ describe('/api/users', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['password']);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('DELETE /:userId', () => {
+    test('delete a user', async () => {
+      token = await generateToken({ username: 'owner@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .delete(`${rootUrl}/${managerUserId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+  });
+
+  describe('DELETE /:userId', () => {
+    test('delete a user fail due to being a manager', async () => {
+      token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+      return request(app)
+        .delete(`${rootUrl}/${managerUserId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(401)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
           expect(body).toMatchSnapshot();
         });
     });

@@ -7,13 +7,13 @@ import {
   Account,
 } from '../../../../server/_models';
 import { calcRevenueDays } from '../../../../server/lib/revenue/index';
-import { seedTestUsers, accountId, wipeTestUsers} from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId, wipeTestPatients } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId, wipeTestPractitioners } from '../../../_util/seedTestPractitioners';
-import { seedTestProcedures, wipeTestProcedures } from '../../../_util/seedTestProcedures';
-import { wipeTestDeliveredProcedures } from '../../../_util/seedTestDeliveredProcedures';
-import { wipeTestWeeklySchedules  } from '../../../_util/seedTestWeeklySchedules';
-import { wipeAllModels } from '../../../_util/wipeModel';
+import { seedTestUsers, accountId, wipeTestUsers} from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId, wipeTestPatients } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId, wipeTestPractitioners } from '../../../util/seedTestPractitioners';
+import { seedTestProcedures, wipeTestProcedures } from '../../../util/seedTestProcedures';
+import { wipeTestDeliveredProcedures } from '../../../util/seedTestDeliveredProcedures';
+import { wipeTestWeeklySchedules  } from '../../../util/seedTestWeeklySchedules';
+import { wipeAllModels } from '../../../util/wipeModel';
 
 const makeProcedureData = (data = {}) => Object.assign({
   accountId,

@@ -1,18 +1,15 @@
 import moment from 'moment';
-
 import {
   Appointment,
   Patient,
   DeliveredProcedure,
 } from '../../../../server/_models';
-
 import { getPatientsChangedDeliveredProcedure, updateMostRecentRecall } from '../../../../server/lib/lastRecall';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestProcedures, wipeTestProcedures } from '../../../_util/seedTestProcedures';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
-
-import wipeModel, { wipeAllModels } from '../../../_util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
+import { seedTestProcedures, wipeTestProcedures } from '../../../util/seedTestProcedures';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
 
 const code = '00121';
 

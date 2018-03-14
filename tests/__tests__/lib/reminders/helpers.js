@@ -19,10 +19,10 @@ import {
   getValidSmsReminders,
   mapPatientsToReminders,
 } from '../../../../server/lib/reminders/helpers';
-import wipeModel, { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 
 const TIME_ZONE = 'America/Vancouver';
 

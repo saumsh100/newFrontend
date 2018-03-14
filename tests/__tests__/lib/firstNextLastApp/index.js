@@ -3,13 +3,11 @@ import {
   Appointment,
   Patient,
 } from '../../../../server/_models';
-
 import CalcFirstNextLastAppointment from '../../../../server/lib/firstNextLastAppointment';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
-
-import { wipeAllModels } from '../../../_util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { wipeAllModels } from '../../../util/wipeModel';
 
 const makeApptData = (data = {}) => Object.assign({
   accountId,

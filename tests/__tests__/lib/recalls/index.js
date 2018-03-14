@@ -4,11 +4,11 @@ import * as RecallsLibrary from '../../../../server/lib/recalls';
 import * as RecallsHelpers from '../../../../server/lib/recalls/helpers';
 import sendRecall from '../../../../server/lib/recalls/sendRecall';
 import { Account } from '../../../../server/_models';
-import { wipeAllModels } from '../../../_util/wipeModel';
-import { seedTestUsers, accountId } from '../../../_util/seedTestUsers';
-import { seedTestPatients, patientId } from '../../../_util/seedTestPatients';
-import { seedTestRecalls, recallId1, recallId2 } from '../../../_util/seedTestRecalls';
-import { seedTestPractitioners, practitionerId } from '../../../_util/seedTestPractitioners';
+import { wipeAllModels } from '../../../util/wipeModel';
+import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
+import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
+import { seedTestRecalls, recallId1, recallId2 } from '../../../util/seedTestRecalls';
+import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 
 // Necessary for mocking
 const sendRecallsForAccountTmp = RecallsLibrary.sendRecallsForAccount;
@@ -75,7 +75,7 @@ describe('Recalls Job Integration Tests', () => {
      * the job will run between 5pm - 8pm vancouver time
      * therefore, sendRecallsForAccount should be called
      */
-    test('should call sendRecallsForAccount if 5pm', async () => {
+    test('  should call sendRecallsForAccount if 5pm', async () => {
       const account = await Account.findById(accountId);
       await account.update({ canSendRecalls: true });
 

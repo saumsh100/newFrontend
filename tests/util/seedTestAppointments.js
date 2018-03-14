@@ -1,9 +1,9 @@
 
-import { Appointment } from '../../server/models';
+import { Appointment, AppointmentCode } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
-import { practitionerId, seedTestPractitioners } from './seedTestPractitioners';
-import { patientId, seedTestPatients } from './seedTestPatients';
+import { practitionerId, seedTestPractitioners, wipeTestPractitioners } from './seedTestPractitioners';
+import { patientId, seedTestPatients, wipeTestPatients } from './seedTestPatients';
 
 const appointmentId = '6b215a42-5c33-4f94-8313-d89893ae2f36';
 const appointment = {
@@ -13,26 +13,31 @@ const appointment = {
   accountId,
   patientId,
   practitionerId,
+  pmsId: '12',
   isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
   createdAt: '2017-07-19T00:14:30.932Z',
-  chairId: null,
-  customBufferTime: null,
-  isBookable: false,
-  pmsId: null,
-  serviceId: null,
 };
 
 async function seedTestAppointments() {
   await seedTestPractitioners();
   await seedTestPatients();
+  await wipeModel(AppointmentCode);
   await wipeModel(Appointment);
-  await Appointment.save(appointment);
+  await Appointment.create(appointment);
+}
+
+async function wipeTestAppointments() {
+  await wipeModel(AppointmentCode);
+  await wipeModel(Appointment);
+  await wipeTestPatients();
+  await wipeTestPractitioners;
 }
 
 module.exports = {
   appointment,
   appointmentId,
   seedTestAppointments,
+  wipeTestAppointments,
 };

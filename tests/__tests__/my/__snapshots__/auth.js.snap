@@ -9,12 +9,14 @@ Object {
 exports[`/auth GET / /me - get current patientUser 1`] = `
 Object {
   "patientUser": Object {
+    "avatarUrl": null,
     "email": "testpatientuser@test.com",
     "firstName": "Jack",
     "id": "b8665c97-1e98-41ac-bf13-090b742de400",
     "isEmailConfirmed": false,
     "isPhoneNumberConfirmed": false,
     "lastName": "Daniels",
+    "patientUserId": null,
     "phoneNumber": "+16049999999",
   },
 }
@@ -28,12 +30,14 @@ Object {
 
 exports[`/auth POST / /signup/:patientUserId/confirm - confirm patientUser phoneNumber - successful 1`] = `
 Object {
+  "avatarUrl": null,
   "email": "testpatientuser@test.com",
   "firstName": "Jack",
   "id": "b8665c97-1e98-41ac-bf13-090b742de400",
   "isEmailConfirmed": false,
   "isPhoneNumberConfirmed": true,
   "lastName": "Daniels",
+  "patientUserId": null,
   "phoneNumber": "+16049999999",
 }
 `;
