@@ -111,6 +111,11 @@
   }
 }
 
+.settingsHeader {
+  @extend .formHeader;
+  padding-bottom: 15px;
+}
+
 .formContainer {
   height: 520px;
   max-height: 520px;
@@ -147,7 +152,7 @@
   justify-content: space-between;
   &_label {
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-    color: $primary-dark;
+    color: $primary-dark-grey;
   }
 }
 
