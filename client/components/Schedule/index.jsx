@@ -339,7 +339,7 @@ class ScheduleComponent extends Component {
                         setShowInput={this.setShowInput}
                         selectedAppointment={this.props.selectedAppointment}
                         setCreatingPatient={this.props.setCreatingPatient}
-                      />)
+                      />
                     </Modal>) : null }
                   {allFetched ?
                     (<DialogBox

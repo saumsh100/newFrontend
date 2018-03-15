@@ -6,6 +6,7 @@
   flex-direction: column;
   height: 100%;
   justify-content: center;
+  margin-left: 15px;
   @media screen and (max-width: 1000px) {
     margin-top: 10px;
     margin-left: 10px;
@@ -13,7 +14,7 @@
 }
 
 .insight {
-  padding-bottom: 30px;
+  padding-bottom: 40px;
   box-sizing: border-box;
 
   &:last-child {
@@ -33,7 +34,8 @@
 }
 
 .iconContainer {
-  width: 35px;
+  width: 20px;
+  color: $primary-dark-grey;
 }
 
 .displayFlex {
@@ -44,17 +46,17 @@
 
 .insightHeader {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  font-size: 15px;
+  font-size: $small-size;
 }
 
 .insightSubHeader {
   composes: fontDefault from 'sass-loader!../../../../fonts.scss';
-  color: $primary-dark-grey;
-  font-size: 13px;
+  color: $light-grey;
+  font-size: $extra-small-size;
   width: 100%;
   box-sizing: border-box;
   padding-top: 3px;
-  padding-left: 35px;
+  padding-left: 20px;
 
   @media screen and (max-width: 1000px) {
     padding-left: 0;
@@ -64,7 +66,7 @@
 
 .insightSubHeaderList {
   margin-left: 10px;
-  list-style: square;
+  list-style: dash;
   composes: fontDefault from 'sass-loader!../../../../fonts.scss';
   color: $light-grey;
   font-size: 10px;
@@ -78,12 +80,19 @@
   text-transform: capitalize;
 }
 
+.patientNameAvatar {
+  display: flex;
+  align-items: center;
+
+  &_text {
+    margin-left: 20px;
+    max-width: 95px;
+    min-width: 95px;
+  }
+}
+
 .patientInfo {
-  width: 185px;
-  min-width: 180px;
-  border-right: 1px solid $primary-grey;
-
-
+  margin-right: 10px;
   @media screen and (max-width: 1000px) {
     align-items: center;
     justify-content: center;
@@ -95,22 +104,28 @@
 
   &_body {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    text-align: center;
+    justify-content: space-between;
 
     @media screen and (max-width: 1000px) {
       margin: 0;
     }
+    color: $primary-dark;
   }
 
   &_name {
-    padding-top: 5px;
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
     font-size: 15px;
-    color: $primary-dark;
-    max-width: 140px;
+    line-height: 1.2em;
+    margin-left: 15px;
+    white-space: nowrap;
+    //color: $primary-dark;
+  }
+
+  &_firstLast {
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &_otherInfo {
@@ -121,4 +136,53 @@
     font-size: 10px;
     color: $primary-dark-grey;
   }
+
+  &_avatarContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+}
+
+.insightCount {
+  font-size: 12px;
+  height: 12px;
+  width: 12px;
+  color: $primary-white;
+  border-radius: 12px;
+  display: flex;
+  background-color: $primary-yellow;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+}
+
+.apptData {
+  display: flex;
+  flex-direction: column;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  justify-content: flex-start;
+  line-height: 1.5em;
+  text-align: left;
+
+  align-items: left;
+  width: 100px;
+  margin-left: 30px;
+
+  &_time {
+    font-size: 15px;
+  }
+
+  &_date {
+    font-size: $extra-small-size;
+    color: #929293;
+    text-transform: uppercase;
+  }
+}
+
+.removePadding {
+  padding: 0 !important
 }

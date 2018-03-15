@@ -11,7 +11,7 @@ function DisplayInsightDiv(header, subHeader) {
       <div className={styles.insightBody}>
         <div className={styles.displayFlex}>
           <div className={styles.iconContainer}>
-            &#x25A0;
+            &#x25CB;
           </div>
           <div className={styles.insightHeader}>
             {header}

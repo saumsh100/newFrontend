@@ -6,27 +6,16 @@ import {
   List,
   ListItem,
   Card,
+  AppointmentPopover,
 } from '../../../library';
 import PatientData from './PatientData';
 import AppointmentData from './AppointmentData';
-import AppointmentPopover from './AppointmentPopover';
 import styles from '../styles.scss';
 import { SortByStartDate } from '../../../library/util/SortEntities';
 
 class AppointmentsList extends Component {
   constructor(props){
     super(props);
-    this.onScroll = this.onScroll.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.props.appointments.size) {
-      document.getElementById('appListDiv').addEventListener('scroll', this.onScroll);
-    }
-  }
-
-  onScroll() {
-    this.props.handleAppointmentClick(null);
   }
 
   render() {
@@ -56,22 +45,12 @@ class AppointmentsList extends Component {
             const practitioner = practitioners.get(app.practitionerId);
 
             return (
-              <Popover
-                className={styles.appPopover}
-                isOpen={app.id === this.props.selectedApp}
-                body={[(
-                  <AppointmentPopover
-                    appointment={app}
-                    patient={patient}
-                    chair={chair}
-                    practitioner={practitioner}
-                    closePopover={()=> this.props.handleAppointmentClick(null)}
-                    handleEditAppointment={this.props.handleEditAppointment}
-                  />
-                )]}
-                preferPlace="right"
-                tipSize={12}
-                onOuterAction={() => this.props.handleAppointmentClick(null)}
+              <AppointmentPopover
+                appointment={app}
+                patient={patient}
+                practitioner={practitioner}
+                chair={chair}
+                scrollId="appListDiv"
               >
                 <ListItem
                   className={styles.appItem}
@@ -86,9 +65,10 @@ class AppointmentsList extends Component {
                   <PatientData
                     appointment={app}
                     patient={patient}
+                    practitioner={practitioner}
                   />
                 </ListItem>
-              </Popover>
+              </AppointmentPopover>
             );
           })}
         </List>

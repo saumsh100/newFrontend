@@ -16,7 +16,16 @@ class PatientPopover extends Component {
     };
 
     this.setOpen = this.setOpen.bind(this);
-    this.editPatient = this.editPatient.bind(this)
+    this.editPatient = this.editPatient.bind(this);
+    this.closeOnScroll = this.closeOnScroll.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.scrollId) {
+      document.getElementById(this.props.scrollId).addEventListener('scroll', this.closeOnScroll);
+    }
+
+    window.addEventListener('scroll', this.closeOnScroll);
   }
 
   setOpen(value) {
@@ -27,6 +36,12 @@ class PatientPopover extends Component {
 
   editPatient(id) {
     this.props.push(`/patients/${id}`);
+  }
+
+  closeOnScroll() {
+    this.setState({
+      isOpen: false,
+    });
   }
 
   render() {
@@ -77,6 +92,7 @@ PatientPopover.propTypes = {
   isPatientUser: PropTypes.bool,
   closePopover: PropTypes.bool,
   push: PropTypes.func,
+  scrollId: PropTypes.string,
 };
 
 function mapDispatchToProps(dispatch) {

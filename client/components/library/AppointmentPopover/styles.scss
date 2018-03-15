@@ -1,7 +1,6 @@
-
 @import '../../../ui';
 
-.patientLink {
+.appLink {
   transition: all 0.1s ease-in-out;
   cursor: pointer;
   color: $primary-blue;
@@ -11,7 +10,7 @@
   }
 }
 
-.patientPopover > :global(svg.Popover-tip) {
+.appPopover > :global(svg.Popover-tip) {
   fill: white;
 }
 
@@ -31,7 +30,8 @@
   padding-right: 15px;
 
   &_text {
-    padding-left: 5px;
+    padding-top: 4px;
+    padding-left: 10px;
     font-size: 15px;
     margin-right: 10px;
     composes: fontDefault from 'sass-loader!../../../fonts.scss';
@@ -101,23 +101,19 @@
 }
 
 .textAreaGroup {
-  padding: 0px;
+  padding: 0px !important;
 }
 
 .footer {
-  border-top: 1px solid $primary-grey;
   box-sizing: border-box;
   display: flex;
   padding: 15px;
   width: 100%;
   justify-content: flex-end;
   align-items: center;
+  border-top: 1px solid $primary-grey;
 }
 
 .editButton {
   margin-left: 5px;
-}
-
-.basicText {
-  text-transform: capitalize;
 }

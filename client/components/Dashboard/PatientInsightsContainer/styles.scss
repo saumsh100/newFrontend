@@ -14,10 +14,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  height: 530px;
+  height: 535px;
 
   @media screen and (max-width: 1000px) {
     padding-left: 10px;
@@ -29,6 +26,9 @@
   border-bottom: 0;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
   padding-bottom: 15px;
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 20px;
   font-size: 23px;
 
   &_count {
@@ -39,17 +39,21 @@
 .body {
   height: 100%;
   width: 100%;
+  padding-top: 20px;
+  padding-left: 40px;
+  padding-right: 40px;
   overflow: auto;
+  box-sizing: border-box;
 }
 
 .wrapper {
   display: flex;
   flex-direction: row;
   width: 100%;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
   border-bottom: 1px solid $primary-grey;
-  padding-top: 40px;
-  align-items: center;
+  padding-top: 30px;
+  align-items: flex-start;
 
   @media screen and (max-width: 1000px) {
     flex-direction: column;
@@ -63,7 +67,8 @@
 }
 
 .insightsList {
-  padding-left: 20px;
+  padding-left: 30px;
+  border-left: 1px solid $primary-grey;
 
   @media screen and (max-width: 1000px) {
     padding-left: 0px;

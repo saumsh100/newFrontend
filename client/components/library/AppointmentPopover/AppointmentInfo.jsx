@@ -1,6 +1,5 @@
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
 import {
   Card,
@@ -11,38 +10,48 @@ import {
   SBody,
   SFooter,
   Button,
-} from '../../library';
-import { FormatPhoneNumber } from '../../library/util/Formatters';
+  TextArea,
+} from '../index.js';
 import styles from './styles.scss';
+import { formatPhoneNumber } from '../../library/util/Formatters';
 
-export default function RequestPopover(props) {
+export default function AppointmentInfo(props) {
   const {
     patient,
-    request,
-    time,
-    service,
-    note,
+    appointment,
+    age,
+    practitioner,
+    chair,
   } = props;
 
-  const appointmentDate = moment(request.startDate).format('dddd LL');
-  const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A')
+  const {
+    startDate,
+    endDate,
+    note,
+  } = appointment;
+
+  const appointmentDate = moment(startDate).format('dddd LL');
+  const lastName = age ? `${patient.lastName},` : patient.lastName;
+
+  const textAreaTheme = {
+    group: styles.textAreaGroup,
+  };
 
   return (
-    <Card className={styles.card} noBorder>
+    <Card className={styles.card} noBorder >
       <SContainer>
         <SHeader className={styles.header}>
-          <Avatar user={patient} size="xs" />
+          <Icon icon="calendar" size={1.5} />
           <div className={styles.header_text}>
-            {patient.firstName} {patient.lastName}
+            {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
           </div>
           <div
             className={styles.closeIcon}
-            onClick={props.closePopover}
+            onClick={()=>props.closePopover()}
           >
             <Icon icon="times" />
           </div>
         </SHeader>
-
         <SBody className={styles.body} >
           <div className={styles.container}>
             <div className={styles.subHeader}>
@@ -55,45 +64,36 @@ export default function RequestPopover(props) {
 
           <div className={styles.container}>
             <div className={styles.subHeader}>
-              Time
+              Name
             </div>
             <div className={styles.data}>
-              {time}
+              {patient.firstName} {lastName} {age}
             </div>
           </div>
 
-          <div className={styles.container}>
-            <div className={styles.subHeader}>
-              Appointment Type
-            </div>
-            <div className={styles.data}>
-              {service}
-            </div>
-          </div>
-
-          {patient.phoneNumber || patient.email ? (
+          {patient.mobilePhoneNumber || patient.email ? (
             <div className={styles.container}>
               <div className={styles.subHeader}>
-                Patient Info
+                Contact Info
               </div>
 
               <div className={styles.data}>
-                {patient.phoneNumber ?
+                {patient.mobilePhoneNumber ?
                   <Icon icon="phone" size={0.9} type="solid"/> : null}
                 <div className={styles.data_text}>
-                  {patient.phoneNumber && patient.phoneNumber[0] === '+' ?
-                    FormatPhoneNumber(patient.phoneNumber) : patient.phoneNumber}
+                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+' ?
+                    formatPhoneNumber(patient.mobilePhoneNumber) : patient.mobilePhoneNumber}
                 </div>
               </div>
 
               <div className={styles.data}>
-                {patient.email ? <Icon icon="envelope" size={0.9} type="solid" /> : null}
+                {patient.email ? <Icon icon="envelope" size={0.9} type="solid"/> : null}
                 <div className={styles.data_text}>{patient.email}</div>
               </div>
             </div>) : (
             <div className={styles.container}>
               <div className={styles.subHeader}>
-                Patient Info
+                Contact Info
               </div>
               <div className={styles.data}>
                 n/a
@@ -101,18 +101,34 @@ export default function RequestPopover(props) {
             </div>
           )}
 
+          <div className={styles.container}>
+            <div className={styles.subHeader}>
+              Practitioner
+            </div>
+            <div className={styles.data}>
+              {practitioner.firstName} {practitioner.lastName}
+            </div>
+          </div>
+
+          <div className={styles.container}>
+            <div className={styles.subHeader}>
+              Chair
+            </div>
+            <div className={styles.data}>
+              {chair.name}
+            </div>
+          </div>
+
           {note ? (<div className={styles.container}>
             <div className={styles.subHeader}>
               Note
             </div>
             <div className={styles.data}>
-              <div className={styles.data_note}>{note}</div>
+              <div className={styles.data_note}>
+                <TextArea disabled="disabled" theme={textAreaTheme}>{note}</TextArea>
+              </div>
             </div>
           </div>) : null}
-
-          <div className={styles.requestedAt}>
-            Requested: {requestedAt}
-          </div>
         </SBody>
 
         <SFooter className={styles.footer}>
@@ -120,32 +136,21 @@ export default function RequestPopover(props) {
             border="blue"
             dense
             compact
-            onClick={props.rejectRequest}
+            onClick={()=>props.closePopover()}
           >
-            Reject
+            Close
           </Button>
           <Button
             color="blue"
             dense
             compact
             className={styles.editButton}
-            onClick={props.acceptRequest}
+            onClick={() => props.editAppointment()}
           >
-            Accept
+            Edit
           </Button>
         </SFooter>
       </SContainer>
     </Card>
-  );
+  )
 }
-
-RequestPopover.propTypes = {
-  patient: PropTypes.object,
-  appointment: PropTypes.object,
-  age: PropTypes.number,
-  closePopover: PropTypes.func,
-  editAppointment: PropTypes.func,
-  scheduleView: PropTypes.string,
-  acceptRequest: PropTypes.func,
-  rejectRequest: PropTypes.func,
-};

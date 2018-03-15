@@ -26,7 +26,9 @@ class PatientInsightsContainer extends Component {
     const currentDate = moment(this.props.dashboardDate);
     const nextPropsDate = moment(nextProps.dashboardDate);
 
-    if (!nextPropsDate.isSame(currentDate, 'month') || !nextPropsDate.isSame(currentDate, 'day') || !nextPropsDate.isSame(currentDate, 'year')) {
+    if (!nextPropsDate.isSame(currentDate, 'month')
+      || !nextPropsDate.isSame(currentDate, 'day')
+      || !nextPropsDate.isSame(currentDate, 'year')) {
       this.props.fetchInsights();
     }
   }
@@ -38,16 +40,18 @@ class PatientInsightsContainer extends Component {
       patients,
     } = this.props;
 
+    const loaded = !this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients;
+
     return (
-      <Card className={styles.card} runAnimation loaded={!this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients}>
+      <Card className={styles.card} runAnimation loaded={loaded}>
         <div className={styles.container}>
-          {!this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients ? (
+          {loaded ? (
             <div className={styles.header}>
               <span className={styles.header_count}>{this.props.insightCount}&nbsp;</span>
               {this.props.insightCount === 1 ? 'Patient Insight' : 'Patient Insights'}
             </div>) : null}
 
-          {!this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients ?
+          {loaded ?
             <Insights
               insights={insights}
               appointments={appointments}
@@ -67,6 +71,8 @@ PatientInsightsContainer.propTypes = {
   appointments: PropTypes.object,
   patients: PropTypes.object,
   insightCount: PropTypes.number,
+  fetchInsights: PropTypes.func,
+  dasboardDate: PropTypes.instanceOf(Date),
 };
 
 function mapStateToProps({ apiRequests, dashboard, entities }) {

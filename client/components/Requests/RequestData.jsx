@@ -27,10 +27,10 @@ export default function RequestData(props){
           <div className={styles.requestData__name}>{name}</div>
         </div>
         <div className={styles.requestData__service}>{service}</div>
-        <div className={styles.requestData__phoneNumber}>
-          <Icon icon="phone" className={styles.requestData__icon}/>
+        {/* <div className={styles.requestData__phoneNumber}>
+          <Icon icon="phone" className={styles.requestData__icon} type="solid" />
           {joinNumber(phoneNumber)}
-        </div>
+        </div> */}
       </div>
       <div className={styles.requestData__createdAt}>
         Requested: {moment(requestCreatedAt).format('MMM D, hh:mm A')}

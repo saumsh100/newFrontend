@@ -20,19 +20,24 @@ class Insights extends Component {
 
     const sortedInsights = insights.filter((insightData) => {
       return patients.get(insightData.patientId) && insightData.insights && insightData.insights.length > 0;
-    }).sort((a,b) => {
+    }).sort((a, b) => {
       const app1 = appointments.get(a.appointmentId);
       const app2 = appointments.get(b.appointmentId);
       return SortByStartDate(app1, app2);
     });
 
+    const scrollId = 'insightScrollDiv';
+
     return (
-      <div className={styles.body}>
+      <div className={styles.body} id={scrollId}>
         {sortedInsights.map((insightData) => {
           return (
             <div className={styles.wrapper}>
               <PatientInfo
+                insightData={insightData.insights}
                 patient={patients.get(insightData.patientId)}
+                appointment={appointments.get(insightData.appointmentId)}
+                scrollId={scrollId}
               />
               <div className={styles.insightsList}>
                 <InsightList

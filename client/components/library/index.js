@@ -2,6 +2,7 @@
 import AccountLogo from './AccountLogo';
 import Alert from './Alert';
 import AppBar from './AppBar';
+import AppointmentPopover from './AppointmentPopover';
 import Avatar from './Avatar';
 import AutoCompleteForm from './AutoCompleteForm';
 import BadgeHeader from './BadgeHeader';
@@ -76,6 +77,7 @@ export {
   AccountLogo,
   Alert,
   AppBar,
+  AppointmentPopover,
   Avatar,
   AutoCompleteForm,
   BadgeHeader,

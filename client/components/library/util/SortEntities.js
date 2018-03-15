@@ -9,6 +9,7 @@ export const SortByFirstName = (a, b) => {
 export const SortByStartDate = (a, b) => {
   if (moment(a.startDate).isBefore(moment(b.startDate))) return -1;
   if (moment(a.startDate).isAfter(moment(b.startDate))) return 1;
+  if (moment(a.createdAt).isBefore(moment(b.createdAt))) return 1;
   return 0;
 }
 
@@ -32,3 +33,4 @@ export const sortByField = (collection, fieldDate) => {
     return 0;
   });
 };
+

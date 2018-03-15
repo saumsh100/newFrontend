@@ -70,6 +70,11 @@
   cursor: pointer;
   padding: 20px;
   box-sizing: border-box;
+
+  transition: all 0.1s ease-in-out;
+  &:hover {
+    transform: scale(1.03);
+  }
 }
 
 .requestData {
@@ -135,11 +140,16 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: $primary-dark-grey;
+    @extend .fontDefault;
+    opacity: 0.6;
   }
 
   &__createdAt {
     padding-top: 10px;
+    font-size: $extra-small-size;
+    @extend .fontDefault;
     color: #A7A9AC;
+    opacity: 0.6;
   }
 
   &__icon {

@@ -33,7 +33,7 @@ export default function StatCards(props) {
     title: appointments.size === 1 ? 'Appointment Today' : 'Appointments Today',
     icon: 'user',
     size: 6,
-    color: 'yellow',
+    color: 'red',
   };
 
   const patientInsights = {
@@ -41,7 +41,7 @@ export default function StatCards(props) {
     title: insightCount === 1 ? 'Patient Insight' : 'Patient Insights',
     icon: 'lightbulb',
     size: 6,
-    color: 'red',
+    color: 'yellow',
   };
 
   const patientsUnConfirmed = {

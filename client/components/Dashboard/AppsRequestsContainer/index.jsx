@@ -27,7 +27,6 @@ class AppsRequestsContainer extends Component {
     };
     this.handleAppointmentClick = this.handleAppointmentClick.bind(this);
     this.handleEditAppointment = this.handleEditAppointment.bind(this);
-
   }
 
   componentDidMount() {

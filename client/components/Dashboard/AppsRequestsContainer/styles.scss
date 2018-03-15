@@ -5,6 +5,10 @@
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 
+.fontDefault {
+  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+}
+
 .appPopover > :global(svg.Popover-tip) {
   fill: white;
 }
@@ -123,14 +127,26 @@
 .patientDetails {
   font-size: $extra-small-size;
   display: flex;
-  align-items: center;
   width: 100%;
   color: $primary-dark-grey;
   line-height: 1.1em;
+  align-items: flex-end;
+
+  &_lastAppt {
+    @extend .fontMedium;
+    color: #A7A9AC
+  }
 
   &_data {
-    padding-top: 2px;
-    padding-left: 5px;
+    @extend .fontMedium;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+  }
+
+  &_date {
+    @extend .fontDefault;
+    opacity: 0.6;
   }
 
   &_created {

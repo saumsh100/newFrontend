@@ -14,7 +14,7 @@ export default function AppointmentEvent(props) {
   return (
     <div className={bodyStyle}>
       <div className={styles.body_header}>
-        Appointment booked on {moment(data.startDate).format('MMMM Do, YYYY h:mma')}
+        Appointment on {moment(data.startDate).format('MMMM Do, YYYY h:mma')}
       </div>
       <div className={styles.body_subHeaderItalic}>
         {data.note || '' }

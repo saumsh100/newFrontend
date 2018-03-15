@@ -214,7 +214,6 @@ class DisplayForm extends Component {
       </Form>
     );
   }
-
 }
 
 DisplayForm.PropTypes = {
