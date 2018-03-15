@@ -25,6 +25,7 @@ export default function SettingsForm(props) {
       <FormSection name="preferences">
         <Grid className={styles.grid}>
           <div className={styles.topPadding}>&nbsp;</div>
+          <div className={styles.settingsHeader}> Subscriptions </div>
           <Row className={styles.row}>
             <Col xs={12} className={styles.colToggle}>
               <div className={styles.toggleContainer}>
@@ -49,6 +50,7 @@ export default function SettingsForm(props) {
               </div>
             </Col>
           </Row>
+          <div className={styles.settingsHeader}> Services </div>
           <Row className={styles.row}>
             <Col xs={12} className={styles.colToggle}>
               <div className={styles.toggleContainer}>
@@ -90,6 +92,42 @@ export default function SettingsForm(props) {
                   <Field
                     component="Toggle"
                     name="referrals"
+                  />
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <div className={styles.settingsHeader}> Contact Methods </div>
+          <Row className={styles.row}>
+            <Col xs={12} className={styles.colToggle}>
+              <div className={styles.toggleContainer}>
+                <div className={styles.toggleContainer_label}>Email</div>
+                <div className={styles.toggleContainer_toggle}>
+                  <Field
+                    component="Toggle"
+                    name="emailNotifications"
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col xs={12} className={styles.colToggle}>
+              <div className={styles.toggleContainer}>
+                <div className={styles.toggleContainer_label}>SMS</div>
+                <div className={styles.toggleContainer_toggle}>
+                  <Field
+                    component="Toggle"
+                    name="sms"
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col xs={12} className={styles.colToggle}>
+              <div className={styles.toggleContainer}>
+                <div className={styles.toggleContainer_label}>Phone</div>
+                <div className={styles.toggleContainer_toggle}>
+                  <Field
+                    component="Toggle"
+                    name="phone"
                   />
                 </div>
               </div>

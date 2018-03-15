@@ -81,7 +81,7 @@ export default function InsightList(props) {
       const subHeader = total > 0 ? (
         <div>
           <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
-          has not yet confirmed {gender} appointment despite CareCru's {total} attempts.({emailCount} Emails and {phoneCount} Phone and {smsCount} SMS)
+          has not yet confirmed {gender} appointment despite CareCru's {total} attempts. ({emailCount} Emails and {phoneCount} Phone and {smsCount} SMS)
         </div>
       ) : null;
 
