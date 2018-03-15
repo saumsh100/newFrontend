@@ -64,11 +64,14 @@ describe('RemindersList Calculation Library', () => {
       const endDate = td('2017-07-05 09:00');
       const accountsReminders = await fetchAccountsAndActiveReminders({ startDate, endDate });
       expect(accountsReminders.length).toBe(2);
-      expect(accountsReminders[0].reminders.length).toBe(2);
-      expect(accountsReminders[0].reminders[0].id).toBe(reminders[0].id);
-      expect(accountsReminders[0].reminders[1].id).toBe(reminders[1].id);
-      expect(accountsReminders[1].reminders.length).toBe(1);
-      expect(accountsReminders[1].reminders[0].id).toBe(reminders[2].id);
+
+      const account1 = accountsReminders.find(a => a.name === 'Account 1');
+      const account2 = accountsReminders.find(a => a.name === 'Account 2');
+      expect(account1.reminders.length).toBe(2);
+      expect(account1.reminders[0].id).toBe(reminders[0].id);
+      expect(account1.reminders[1].id).toBe(reminders[1].id);
+      expect(account2.reminders.length).toBe(1);
+      expect(account2.reminders[0].id).toBe(reminders[2].id);
     });
 
     test('should return 2 accounts, with second account having 2 reminders', async () => {
@@ -77,12 +80,15 @@ describe('RemindersList Calculation Library', () => {
       const endDate = td('2017-07-05 11:01');
       const accountsReminders = await fetchAccountsAndActiveReminders({ startDate, endDate });
       expect(accountsReminders.length).toBe(2);
-      expect(accountsReminders[0].reminders.length).toBe(2);
-      expect(accountsReminders[0].reminders[0].id).toBe(reminders[0].id);
-      expect(accountsReminders[0].reminders[1].id).toBe(reminders[1].id);
-      expect(accountsReminders[1].reminders.length).toBe(2);
-      expect(accountsReminders[1].reminders[0].id).toBe(reminders[2].id);
-      expect(accountsReminders[1].reminders[1].id).toBe(reminders[3].id);
+
+      const account1 = accountsReminders.find(a => a.name === 'Account 1');
+      const account2 = accountsReminders.find(a => a.name === 'Account 2');
+      expect(account1.reminders.length).toBe(2);
+      expect(account1.reminders[0].id).toBe(reminders[0].id);
+      expect(account1.reminders[1].id).toBe(reminders[1].id);
+      expect(account2.reminders.length).toBe(2);
+      expect(account2.reminders[0].id).toBe(reminders[2].id);
+      expect(account2.reminders[1].id).toBe(reminders[3].id);
     });
 
     test('should return 2 accounts, with second account having 1 reminders because of timezone', async () => {
@@ -90,12 +96,15 @@ describe('RemindersList Calculation Library', () => {
       const startDate = td('2017-07-05 07:00');
       const endDate = td('2017-07-05 11:01');
       const accountsReminders = await fetchAccountsAndActiveReminders({ startDate, endDate });
+
+      const account1 = accountsReminders.find(a => a.name === 'Account 1');
+      const account2 = accountsReminders.find(a => a.name === 'Account 2');
       expect(accountsReminders.length).toBe(2);
-      expect(accountsReminders[0].reminders.length).toBe(2);
-      expect(accountsReminders[0].reminders[0].id).toBe(reminders[0].id);
-      expect(accountsReminders[0].reminders[1].id).toBe(reminders[1].id);
-      expect(accountsReminders[1].reminders.length).toBe(1);
-      expect(accountsReminders[1].reminders[0].id).toBe(reminders[2].id);
+      expect(account1.reminders.length).toBe(2);
+      expect(account1.reminders[0].id).toBe(reminders[0].id);
+      expect(account1.reminders[1].id).toBe(reminders[1].id);
+      expect(account2.reminders.length).toBe(1);
+      expect(account2.reminders[0].id).toBe(reminders[2].id);
     });
   });
 });
