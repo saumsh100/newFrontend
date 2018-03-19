@@ -40,9 +40,9 @@ If there are problems with build and you are changing order of installation, bui
 ## Database Setup
 
 1. Start up PostgreSQL in background (use brew if using mac, see the guide above)
-2. Seed the database with development data: `npm run rebuild:seeds`
+2. Seed the database with development data: `npm run rebuild:seed`
 > **Note:**
-> `npm run rebuild:seeds` can be re-run whenever a fresh DB is needed
+> `npm run rebuild:seed` can be re-run whenever a fresh DB is needed
 
 ## Redis Setup
 
