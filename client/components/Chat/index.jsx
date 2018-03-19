@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import ChatList from './ChatList';
 import MessageContainer from './MessageContainer';
 import PatientInfo from './PatientInfo';
+import classnames from 'classnames';
 import ToHeader from './ToHeader';
 import {
   Button,
@@ -41,12 +42,19 @@ class ChatMessage extends Component {
       tabIndex: 0,
       chats: 0,
       moreData: true,
+      showPatientsList: true,
+      showMessageContainer: false,
+      showPatientInfo: false,
     };
 
     this.addNewChat = this.addNewChat.bind(this);
     this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
     this.loadChatList = this.loadChatList.bind(this);
     this.changeTab = this.changeTab.bind(this);
+    this.togglePatientsList = this.togglePatientsList.bind(this);
+    this.togglePatientsInfo = this.togglePatientsInfo.bind(this);
+    this.toggleShowMessageContainer = this.toggleShowMessageContainer.bind(this);
+    this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
   }
 
   componentDidMount() {
@@ -57,6 +65,31 @@ class ChatMessage extends Component {
     // No data yet, this just sets it to not be null
     this.props.setNewChat({});
     this.props.selectChat(null);
+    this.toggleShowMessageContainer();
+  }
+
+  togglePatientsList() {
+    this.setState({
+      showPatientsList: !this.state.showPatientsList,
+      showPatientInfo: false,
+      showMessageContainer: false,
+    });
+  }
+
+  togglePatientsInfo() {
+    this.setState({
+      showPatientInfo: !this.state.showPatientInfo,
+      showPatientsList: false,
+      showMessageContainer: !this.state.showMessageContainer,
+    });
+  }
+
+  toggleShowMessageContainer() {
+    this.setState({
+      showMessageContainer: !this.state.showMessageContainer,
+      showPatientsList: false,
+      showPatientInfo: false,
+    });
   }
 
   selectChatOrCreate(patient) {
@@ -169,6 +202,7 @@ class ChatMessage extends Component {
           >
             <ChatList
               tabIndex={this.state.tabIndex}
+              onChatClick={this.toggleShowMessageContainer}
             />
           </InfiniteScroll>
         </List>
@@ -177,14 +211,23 @@ class ChatMessage extends Component {
   }
 
   renderMessageContainer() {
+    const { showPatientInfo } = this.state;
+    const slideStyle = showPatientInfo ? styles.slideIn : {};
+    const patientInfoStyle = classnames(styles.rightSplit, slideStyle);
+
     return (
       <SBody>
         <div className={styles.splitWrapper}>
           <div className={styles.leftSplit}>
             <MessageContainer />
           </div>
-          <div className={styles.rightSplit}>
+          <div className={patientInfoStyle}>
             <div className={styles.rightInfo}>
+              <Button
+                icon="arrow-left"
+                onClick={this.togglePatientsInfo}
+                className={styles.closePatientInfo}
+              />
               <PatientInfo />
               <div className={styles.bottomInfo} />
             </div>
@@ -195,9 +238,17 @@ class ChatMessage extends Component {
   }
 
   render() {
+    const { showPatientsList, showMessageContainer, showPatientInfo } = this.state;
+    const slideStyle = showPatientsList ? styles.slideIn : {};
+    const patientsListStyle = classnames(styles.patientsList, slideStyle);
+
+    const messageContainerSlideStyle = showMessageContainer || showPatientInfo ?
+      styles.slideIn : {};
+    const messageContainerClass = classnames(styles.rightCard, messageContainerSlideStyle);
+
     return (
       <div className={styles.chatWrapper}>
-        <div className={styles.patientsList}>
+        <div className={patientsListStyle}>
           <Card className={styles.leftCard} noBorder>
             <SContainer>
               {this.renderHeading()}
@@ -207,11 +258,15 @@ class ChatMessage extends Component {
         </div>
         <Card
           noBorder
-          className={styles.rightCard}
+          className={messageContainerClass}
         >
           <SContainer>
             <SHeader className={styles.messageHeader}>
-              <ToHeader />
+              <ToHeader
+                onPatientInfoClick={this.togglePatientsInfo}
+                onPatientListClick={this.togglePatientsList}
+                onSearch={this.selectChatOrCreate}
+              />
             </SHeader>
             {this.renderMessageContainer()}
           </SContainer>

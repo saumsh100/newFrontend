@@ -44,6 +44,10 @@
      & > ul {
        box-shadow: none !important;
      }
+
+    @media (max-width: 576px) {
+      left: -22px !important;
+    }
   }
 }
 

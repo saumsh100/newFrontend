@@ -74,7 +74,12 @@ export function addMessage(message) {
       const conversation = chats[chatId];
       const patientId = conversation.patientId;
       const lastTextMessageId = conversation.textMessages[conversation.textMessages.length - 1];
-      const { body } = textMessages[lastTextMessageId];
+      const { body, read } = textMessages[lastTextMessageId];
+
+      if (read) {
+        return;
+      }
+
       const { firstName, lastName } = patients[patientId];
       const messageHeading = `New message from ${firstName} ${lastName}`;
 

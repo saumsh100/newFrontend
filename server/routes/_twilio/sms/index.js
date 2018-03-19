@@ -30,6 +30,7 @@ function sendSocket(io, chatId) {
         model: TextMessage,
         as: 'textMessages',
         required: false,
+        order: ['createdAt', 'ASC'],
       },
       {
         model: Patient,

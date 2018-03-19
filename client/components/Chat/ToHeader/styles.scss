@@ -1,24 +1,80 @@
 
 @import '../../../ui';
 
+@mixin headingButtons {
+  flex: 1;
+  background: transparent !important;
+  color: $primary-dark !important;
+  padding: 0 0 0 10px;
+  margin-right: -10px;
+  font-size: 28px;
+  font-weight: 100 !important;
+}
+
 .wrapper {
   height: 100%;
+  display: flex;
+}
+
+.menuButton {
+  @include headingButtons;
+  display: none;
+
+  @media (max-width: 576px) {
+    display: block;
+  }
+}
+
+.patientListButton {
+  @extend .menuButton;
+  & > i {
+    font-weight: 100;
+  }
+}
+
+.patientInfoButton {
+  @extend .menuButton;
+  padding-left: 0;
+  text-align: center;
+
+  & > span > div {
+    display: inline-block;
+  }
+}
+
+.infoArrow {
+  display: none;
+  font-size: 20px !important;
+  margin-left: 10px;
+  color: $primary-gray;
+
+  @media (max-width: 576px) {
+    display: inline;
+  }
 }
 
 .patientInfoWrapper {
   display: flex;
+  flex: 10;
   align-items: center;
   height: 100%;
   padding-left: 20px;
+
+  @media (max-width: 576px) {
+    margin-left: -35px;
+    padding-left: 0;
+  }
 }
 
 .patientInfoName {
   margin-left: 10px;
   font-size: 16px;
   font-family: $medium-font;
+  vertical-align: middle;
 }
 
 .autocompleteContainer {
+  flex: 10;
   height: 100%;
 }
 

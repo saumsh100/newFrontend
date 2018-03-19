@@ -1,13 +1,11 @@
 
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import {
+  Button,
   Avatar,
-  Input,
+  Icon,
 } from '../../library';
-import { fetchEntities } from '../../../thunks/fetchEntities';
-import { setNewChat, mergeNewChat, setSelectedChatId } from '../../../reducers/chat';
 import PatientSearch from '../../PatientSearch';
 import styles from './styles.scss';
 
@@ -21,23 +19,54 @@ const toInputProps = {
 };
 
 class ToHeader extends Component {
-  constructor(props) {
-    super(props);
+  renderMobile() {
+    const { selectedPatient, onPatientInfoClick, onPatientListClick } = this.props;
 
-    this.selectPatientForNewMessage = this.selectPatientForNewMessage.bind(this);
+    return (
+      <div className={styles.wrapper}>
+        <Button
+          icon="arrow-left"
+          className={styles.patientListButton}
+          onClick={onPatientListClick}
+        />
+        {selectedPatient ?
+          (
+            <div className={styles.patientInfoWrapper}>
+              <Button
+                flat
+                fluid
+                onClick={onPatientInfoClick}
+                className={styles.patientInfoButton}
+              >
+                <Avatar
+                  size="sm"
+                  user={selectedPatient}
+                />
+                <div className={styles.patientInfoName}>
+                  {selectedPatient.firstName} {selectedPatient.lastName}
+                </div>
+                <Icon
+                  className={styles.infoArrow}
+                  icon="angle-right"
+                  type="light"
+                />
+              </Button>
+            </div>
+          ) : (
+            <PatientSearch
+              placeholder="To: Type the name of the person"
+              onSelect={this.props.onSearch}
+              inputProps={toInputProps}
+              theme={toInputTheme}
+              focusInputOnMount
+            />
+          )
+        }
+      </div>
+    );
   }
 
-  selectPatientForNewMessage(patient) {
-    // If this patient has a chat, select the chat
-    // if not, add that patientId to the newChat
-    if (patient.chatId) {
-      this.props.setSelectedChatId(patient.chatId);
-    } else {
-      this.props.mergeNewChat({ patientId: patient.id });
-    }
-  }
-
-  render() {
+  renderDesktop() {
     const { selectedPatient } = this.props;
     return (
       <div className={styles.wrapper}>
@@ -55,15 +84,18 @@ class ToHeader extends Component {
           ) : (
             <PatientSearch
               placeholder="To: Type the name of the person"
-              onSelect={this.selectPatientForNewMessage}
+              onSelect={this.props.onSearch}
               inputProps={toInputProps}
               theme={toInputTheme}
-              focusInputOnMount
             />
           )
         }
       </div>
     );
+  }
+
+  render() {
+    return window.innerWidth > 576 ? this.renderDesktop() : this.renderMobile();
   }
 }
 
@@ -74,6 +106,9 @@ ToHeader.propTypes = {
   setNewChat: PropTypes.func.isRequired,
   mergeNewChat: PropTypes.func.isRequired,
   setSelectedChatId: PropTypes.func.isRequired,
+  onPatientInfoClick: PropTypes.func,
+  onPatientListClick: PropTypes.func,
+  onSearch: PropTypes.func,
 };
 
 function mapStateToProps({ entities, chat }) {
@@ -91,14 +126,6 @@ function mapStateToProps({ entities, chat }) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setNewChat,
-    mergeNewChat,
-    setSelectedChatId,
-  }, dispatch);
-}
-
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(mapStateToProps);
 
 export default enhance(ToHeader);

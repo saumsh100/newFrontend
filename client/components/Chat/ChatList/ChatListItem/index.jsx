@@ -25,6 +25,7 @@ class ChatListItem extends Component {
   selectChat() {
     const { id } = this.props.chat;
     this.props.selectChat(id);
+    this.props.onChatClick();
   }
 
   renderStar(isFlagged, onClickListener) {
@@ -141,6 +142,7 @@ ChatListItem.propTypes = {
   toggleFlagged: PropTypes.func,
   selectChat: PropTypes.func,
   selectedChatId: PropTypes.string,
+  onChatClick: PropTypes.func,
 };
 
 function mapStateToProps(state, { chat = {} }) {

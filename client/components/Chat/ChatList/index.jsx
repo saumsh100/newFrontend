@@ -50,6 +50,7 @@ class ChatListContainer extends Component {
 
   selectNewChat() {
     this.props.selectChat(null);
+    this.props.onChatClick();
   }
 
   removeNewChat(e) {
@@ -64,6 +65,7 @@ class ChatListContainer extends Component {
     return this.sortChatList().map(chat =>
       <ChatListItem
         key={`${chat.id}_listItem`}
+        onChatClick={this.props.onChatClick}
         chat={chat}
       />
     );
@@ -127,6 +129,7 @@ ChatListContainer.propTypes = {
   setNewChat: PropTypes.func,
   defaultSelectedChatId: PropTypes.func,
   selectChat: PropTypes.func,
+  onChatClick: PropTypes.func,
 };
 
 function mapStateToProps({ entities, chat }) {
