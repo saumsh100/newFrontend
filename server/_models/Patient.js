@@ -125,6 +125,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
+    contactMethodNote: {
+      type: DataTypes.STRING,
+    },
+
     birthDate: {
       type: DataTypes.DATE,
     },

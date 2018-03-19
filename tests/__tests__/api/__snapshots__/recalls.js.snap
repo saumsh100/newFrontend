@@ -46,6 +46,7 @@ Array [
       "avatarUrl": null,
       "birthDate": null,
       "contCareInterval": "6 months",
+      "contactMethodNote": null,
       "email": "hello@hello.com",
       "familyId": null,
       "firstApptDate": null,
