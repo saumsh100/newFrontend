@@ -47,6 +47,8 @@ Array [
       "birthDate": null,
       "contCareInterval": "6 months",
       "contactMethodNote": null,
+      "dueForHygieneDate": null,
+      "dueForRecallExamDate": null,
       "email": "hello@hello.com",
       "familyId": null,
       "firstApptDate": null,

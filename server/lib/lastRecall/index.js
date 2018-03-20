@@ -2,7 +2,7 @@ import moment from 'moment';
 import { Account, Appointment, Patient, DeliveredProcedure, sequelize } from '../../_models';
 import { getAccountCronConfigurations, updateAccountCronConfigurations } from '../AccountCronConfigurations';
 
-const recallCodes = [
+export const recallCodes = [
   '00121',
   '01202',
 ];

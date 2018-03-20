@@ -26,7 +26,7 @@ module.exports = {
   context: projectRoot,
 
   entry: entries('server', 'cron', 'reminders', 'recalls', 'reviews',
-    'events', 'firstNextLastApp', 'correspondences', 'lastHygiene', 'lastRecall', 'lastRestorative'),
+    'events', 'firstNextLastApp', 'correspondences', 'patientCache'),
 
   resolve: {
     extensions: ['.js', '.jsx'],

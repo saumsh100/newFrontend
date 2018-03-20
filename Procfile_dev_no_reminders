@@ -1,6 +1,4 @@
 web: nodemon --inspect server/bin/build/server.bundle.js
 cron: nodemon server/bin/build/cron.bundle.js
 events: nodemon server/bin/build/events.bundle.js
-lastRestorative: nodemon server/bin/build/lastRestorative.bundle.js
-lastHygiene: nodemon server/bin/build/lastHygiene.bundle.js
-lastRecall: nodemon server/bin/build/lastRecall.bundle.js
+patientCache: nodemon server/bin/build/patientCache.bundle.js

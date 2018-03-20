@@ -11,6 +11,10 @@ const sequelizeConfig = {
     underscored: false,
     paranoid: true,
   },
+  pool: {
+    max: 20,
+    min: 0,
+  },
 };
 
 // Don't use NODE_ENV===production

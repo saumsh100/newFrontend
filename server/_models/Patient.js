@@ -196,6 +196,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
     },
 
+    dueForRecallExamDate: {
+      type: DataTypes.DATE,
+    },
+
+    dueForHygieneDate: {
+      type: DataTypes.DATE,
+    },
+
     lastRestorativeDate: {
       type: DataTypes.DATE,
     },

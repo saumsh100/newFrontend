@@ -2,6 +2,9 @@
 import moment from 'moment';
 import { Patient, Appointment } from '../../../_models';
 import CalcFirstNextLastAppointment from '../../../lib/firstNextLastAppointment';
+import { updatePatientDueDate } from '../../../lib/dueDate';
+import { updateMostRecentHygiene } from '../../../lib/lastHygiene';
+import { updateMostRecentRecall } from '../../../lib/lastRecall';
 
 function getFirstNextLastAppointment(app) {
   return Appointment.findAll({
@@ -83,67 +86,102 @@ function firstNextLastSetter(app, patient, startDate) {
   }
 }
 
-function registerFirstNextLastCalc(sub, io) {
-  sub.on('data', (data) => {
-    Appointment.findOne({
-      where: { id: data },
-      include: [
-        {
-          model: Patient,
-          as: 'patient',
-          required: true,
-        },
-      ],
-      nest: true,
-      raw: true,
-    }).then((app) => {
-      if (app) {
-        const patient = app.patient;
-        const startDate = app.startDate;
+function firstNextLastAppointmentCalc(data) {
+  return Appointment.findOne({
+    where: { id: data },
+    include: [
+      {
+        model: Patient,
+        as: 'patient',
+        required: true,
+      },
+    ],
+    nest: true,
+    raw: true,
+  }).then((app) => {
+    if (app) {
+      const patient = app.patient;
+      const startDate = app.startDate;
 
-        if (!app.isDeleted && !app.isPending && !app.isCancelled) {
-          return firstNextLastSetter(app, patient, startDate);
-        }
-
-        return getFirstNextLastAppointment(app);
+      if (!app.isDeleted && !app.isPending && !app.isCancelled) {
+        return firstNextLastSetter(app, patient, startDate);
       }
-    });
+
+      return getFirstNextLastAppointment(app);
+    }
   });
 }
 
-function registerFirstNextLastBatchCalc(sub, io) {
-  sub.on('data', (data) => {
-    const appointmentIds = JSON.parse(data);
-    return Appointment.findAll({
-      raw: true,
-      where: {
-        id: appointmentIds,
-        isCancelled: false,
-        isDeleted: false,
-        isPending: false,
-        patientId: {
-          $not: null,
-        },
+function firstNextLastAppointmentBatchCalc(appointmentIds) {
+  return Appointment.findAll({
+    raw: true,
+    where: {
+      id: appointmentIds,
+      isCancelled: false,
+      isDeleted: false,
+      isPending: false,
+      patientId: {
+        $not: null,
       },
-      order: [['patientId', 'DESC'], ['startDate', 'DESC']],
-    }).then((appointments) => {
-      console.log('Batching First Next Last');
-      return CalcFirstNextLastAppointment(appointments,
-        async (currentPatient, appointmentsObj) => {
-          try {
-            await Patient.update({
-              ...appointmentsObj,
-            },
-              {
-                where: {
-                  id: currentPatient,
-                },
-              });
-          } catch (err) {
-            console.log(err);
-          }
-        });
-    });
+    },
+    order: [['patientId', 'DESC'], ['startDate', 'DESC']],
+  }).then((appointments) => {
+    console.log('Batching First Next Last');
+    return CalcFirstNextLastAppointment(appointments,
+      async (currentPatient, appointmentsObj) => {
+        try {
+          await Patient.update({
+            ...appointmentsObj,
+          },
+            {
+              where: {
+                id: currentPatient,
+              },
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+  });
+}
+
+ /**
+ * does the due date calculation when a appointment(s)
+ * is changed and the other jobs it needs (last recall and last hygiene)
+ *
+ * @param  {[array]} - array of appointment ids that got updated
+ */
+async function dueDateCalculation(ids) {
+  const patients = await Appointment.findAll({
+    raw: true,
+    group: ['patientId', 'accountId'],
+    paranoid: false,
+    attributes: ['patientId', 'accountId'],
+    where: {
+      id: ids,
+      patientId: {
+        $not: null,
+      },
+    },
+  });
+  if (patients.length) {
+    const patientIds = patients.map(p => p.patientId);
+    await updateMostRecentHygiene(patients[0].accountId, patientIds);
+    await updateMostRecentRecall(patients[0].accountId, patientIds);
+    await updatePatientDueDate(patients[0].accountId, patientIds);
+  }
+}
+
+function registerAppointmentCalc(sub, push) {
+  sub.on('data', async (data) => {
+    return push.write(data, 'utf8');
+  });
+}
+
+
+function registerAppointmentBatchCalc(sub, push) {
+  sub.on('data', async (data) => {
+    return push.write(data, 'utf8');
   });
 }
 
@@ -152,6 +190,30 @@ export default function registerAppointmentsSubscriber(context, io) {
   // the difference eg. request.created and request.ended
   const subCalcFirstNextLast = context.socket('SUB', { routing: 'topic' });
   const subCalcFirstNextLastBatch = context.socket('SUB', { routing: 'topic' });
+  const pushBatch = context.socket('PUSH');
+  const push = context.socket('PUSH');
+
+  pushBatch.connect('APPOINTMENT:BATCH');
+  push.connect('APPOINTMENT');
+
+  const batchWorker = context.socket('WORKER', { prefetch: 5 });
+  batchWorker.connect('APPOINTMENT:BATCH');
+  batchWorker.setEncoding('utf8');
+  batchWorker.on('data', async (data) => {
+    const appointmentIds = JSON.parse(data);
+    await dueDateCalculation(appointmentIds);
+    await firstNextLastAppointmentBatchCalc(appointmentIds);
+    return batchWorker.ack();
+  });
+
+  const singleWorker = context.socket('WORKER', { prefetch: 5 });
+  singleWorker.connect('APPOINTMENT');
+  singleWorker.setEncoding('utf8');
+  singleWorker.on('data', async (data) => {
+    await dueDateCalculation([data]);
+    firstNextLastAppointmentCalc(data);
+    return singleWorker.ack();
+  });
 
   subCalcFirstNextLast.setEncoding('utf8');
   subCalcFirstNextLast.connect('events', 'APPOINTMENT:CREATED');
@@ -163,6 +225,6 @@ export default function registerAppointmentsSubscriber(context, io) {
   subCalcFirstNextLastBatch.connect('events', 'APPOINTMENT:UPDATED:BATCH');
   subCalcFirstNextLastBatch.connect('events', 'APPOINTMENT:DELETED:BATCH');
 
-  registerFirstNextLastCalc(subCalcFirstNextLast, io);
-  registerFirstNextLastBatchCalc(subCalcFirstNextLastBatch, io);
+  registerAppointmentCalc(subCalcFirstNextLast, push);
+  registerAppointmentBatchCalc(subCalcFirstNextLastBatch, pushBatch);
 }

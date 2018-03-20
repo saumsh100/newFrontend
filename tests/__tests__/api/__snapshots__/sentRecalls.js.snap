@@ -11,6 +11,8 @@ Object {
         "birthDate": "1980-01-01T00:00:00.932Z",
         "contCareInterval": null,
         "contactMethodNote": null,
+        "dueForHygieneDate": null,
+        "dueForRecallExamDate": null,
         "email": "testpatient@test.com",
         "familyId": null,
         "firstApptDate": null,
