@@ -196,7 +196,7 @@ export default function registerAppointmentsSubscriber(context, io) {
   pushBatch.connect('APPOINTMENT:BATCH');
   push.connect('APPOINTMENT');
 
-  const batchWorker = context.socket('WORKER', { prefetch: 5 });
+  const batchWorker = context.socket('WORKER', { prefetch: 3 });
   batchWorker.connect('APPOINTMENT:BATCH');
   batchWorker.setEncoding('utf8');
   batchWorker.on('data', async (data) => {
@@ -206,7 +206,7 @@ export default function registerAppointmentsSubscriber(context, io) {
     return batchWorker.ack();
   });
 
-  const singleWorker = context.socket('WORKER', { prefetch: 5 });
+  const singleWorker = context.socket('WORKER', { prefetch: 3 });
   singleWorker.connect('APPOINTMENT');
   singleWorker.setEncoding('utf8');
   singleWorker.on('data', async (data) => {
