@@ -125,6 +125,7 @@ export async function updatePatientDueDate(accountId, patientIds) {
     // check if lastHygieneDate is null
     const patients = await Patient.findAll({
       where: {
+        accountId,
         id: idQuery,
       },
     });
