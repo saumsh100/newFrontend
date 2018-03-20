@@ -649,7 +649,7 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
 patientsRouter.put('/connector/batch', checkPermissions('patients:update'),
   (req, res, next) => {
     const patients = req.body;
-
+    console.log(patients[0]);
     const cleanedPatients = patients.map(patient => Object.assign(
       {},
       patient,
