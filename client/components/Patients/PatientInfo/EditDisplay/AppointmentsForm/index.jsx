@@ -8,25 +8,19 @@ import FormSection from '../../../../library/Form/FormSection';
 export default function AppointmentsForm(props) {
   const {
     handleSubmit,
-    dropDownStyle,
     inputStyle,
+    patient,
   } = props;
 
-  return (
-    <div className={styles.formContainer}>
-      <div className={styles.disabledPage}>
-        <div className={styles.disabledPage_text}>
-          No Appointment Information
-        </div>
-      </div>
-    </div>
-  );
+  const { dueForHygieneDate, dueForRecallExamDate } = patient.toJS();
+  const initialValues = { dueForHygieneDate, dueForRecallExamDate };
 
   return (
     <Form
       form="Form1"
       onSubmit={handleSubmit}
       className={styles.formContainer}
+      initialValues={initialValues}
       ignoreSaveButton
     >
       <Grid className={styles.grid}>
@@ -51,29 +45,27 @@ export default function AppointmentsForm(props) {
             </Col>
           </Row>
         </FormSection>
-        <FormSection name="Continuing Care">
-          <div className={styles.formHeader}> Continuing Care </div>
-          <Row className={styles.row}>
-            <Col xs={6} className={styles.colLeft}>
-              <Field
-                name="recall"
-                label="Recall"
-                component="DayPicker"
-                theme={inputStyle}
-
-              />
-            </Col>
-            <Col xs={6} >
-              <Field
-                component="DropdownSelect"
-                name="hygiene"
-                label="Hygiene"
-                options={[]}
-                theme={dropDownStyle}
-              />
-            </Col>
-          </Row>
-        </FormSection>
+        <div className={styles.formHeader}>
+          Continuing Care
+        </div>
+        <Row className={styles.row}>
+          <Col xs={6} className={styles.colLeft}>
+            <Field
+              name="dueForHygieneDate"
+              label="Due for Hygiene"
+              component="DayPicker"
+              theme={inputStyle}
+            />
+          </Col>
+          <Col xs={6} >
+            <Field
+              component="DayPicker"
+              name="dueForRecallExamDate"
+              label="Due for Recall Exam"
+              theme={inputStyle}
+            />
+          </Col>
+        </Row>
       </Grid>
     </Form>
   );

@@ -1,19 +1,13 @@
-import { v4 as uuid } from 'uuid';
-import moment from 'moment';
+
 import {
   Appointment,
   Patient,
   Practitioner,
   Recall,
   SentRecall,
-  sequelize,
 } from '../../../../server/_models';
 import {
-  mapPatientsToRecalls,
-  getRecallsOutboxList,
   getPatientsDueForRecall,
-  shouldSendRecall,
-  getPatientsForRecallTouchPoint,
 } from '../../../../server/lib/recalls/helpers';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
@@ -50,7 +44,7 @@ const dates = (y, m, d, h) => {
   };
 };
 
-describe('Correspondence Note Generators', () => {
+describe('#bumpPendingAppointment', () => {
   beforeEach(async () => {
     await wipeAllModels();
     await seedTestUsers();
@@ -63,26 +57,30 @@ describe('Correspondence Note Generators', () => {
     await wipeAllModels();
   });
 
-  test('should return null as no pending appointment in future', async () => {
-    const recalls = await Recall.bulkCreate([
+  let recalls;
+  let patients;
+  let appointments;
+  let sentRecalls;
+  beforeEach(async () => {
+    recalls = await Recall.bulkCreate([
       {
         accountId,
         primaryType: 'email',
-        lengthSeconds: w2s(-1),
+        interval: '1 months',
       },
     ]);
 
-    const patients = await Patient.bulkCreate([
+    patients = await Patient.bulkCreate([
       makePatientData({
         firstName: 'Old',
         email: 'test@test.com',
         lastName: 'Patient',
         status: 'Active',
-        lastHygieneDate: date(2016, 7, 5, 9),
+        dueForHygieneDate: date(2016, 7, 5, 9),
       }),
     ]);
 
-    const appointments = await Appointment.bulkCreate([
+    appointments = await Appointment.bulkCreate([
       makeApptData({
         patientId: patients[0].id,
         ...dates(2016, 7, 5, 9),
@@ -94,125 +92,21 @@ describe('Correspondence Note Generators', () => {
       }),
     ]);
 
-    const sentRecalls = await SentRecall.bulkCreate([
+    sentRecalls = await SentRecall.bulkCreate([
       makeSentRecallData({
-        appointmentId: appointments[1].id,
         recallId: recalls[0].id,
         patientId: patients[0].id,
         isSent: true,
+        isHygiene: true,
       }),
     ]);
-
-    expect(await bumpPendingAppointment(sentRecalls[0].id)).toBe(null);
   });
 
-  test('should return first pending appointment as it\'s in future', async () => {
-    const recalls = await Recall.bulkCreate([
-      {
-        accountId,
-        primaryType: 'email',
-        lengthSeconds: w2s(-1),
-      },
-    ]);
-
-    const patients = await Patient.bulkCreate([
-      makePatientData({
-        firstName: 'Old',
-        email: 'test@test.com',
-        lastName: 'Patient',
-        status: 'Active',
-        lastHygieneDate: date(2016, 7, 5, 9),
-      }),
-    ]);
-
-    const appointments = await Appointment.bulkCreate([
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2019, 7, 5, 9),
-        isPending: true,
-      }),
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2016, 7, 5, 9),
-      }),
-    ]);
-
-    const sentRecalls = await SentRecall.bulkCreate([
-      makeSentRecallData({
-        appointmentId: appointments[1].id,
-        recallId: recalls[0].id,
-        patientId: patients[0].id,
-        isSent: true,
-      }),
-    ]);
-
-    expect(await bumpPendingAppointment(sentRecalls[0].id)).toBe(appointments[0].id);
-
-    const resultAppointment = await Appointment.findOne({
-      where: {
-        id: appointments[0].id,
-      },
-    });
-
-    expect(resultAppointment.startDate.toISOString()).toBe(date(2019, 7, 19, 9));
-    expect(resultAppointment.endDate.toISOString()).toBe(date(2019, 7, 19, 10));
+  test('should return null if sentRecallId is null', async () => {
+    expect(await bumpPendingAppointment(null)).toBe(null);
   });
 
-  test('should return first pending appointment and not the future away as it\'s in future', async () => {
-    const recalls = await Recall.bulkCreate([
-      {
-        accountId,
-        primaryType: 'email',
-        lengthSeconds: w2s(-1),
-      },
-    ]);
-
-    const patients = await Patient.bulkCreate([
-      makePatientData({
-        firstName: 'Old',
-        email: 'test@test.com',
-        lastName: 'Patient',
-        status: 'Active',
-        lastHygieneDate: date(2016, 7, 5, 9),
-      }),
-    ]);
-
-    const appointments = await Appointment.bulkCreate([
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2019, 7, 5, 9),
-        isPending: true,
-        isSyncedWithPms: true,
-      }),
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2016, 7, 5, 9),
-      }),
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2029, 7, 5, 9),
-        isPending: true,
-      }),
-    ]);
-
-    const sentRecalls = await SentRecall.bulkCreate([
-      makeSentRecallData({
-        appointmentId: appointments[1].id,
-        recallId: recalls[0].id,
-        patientId: patients[0].id,
-        isSent: true,
-      }),
-    ]);
-
+  test('should return then pending appointment\'s id', async () => {
     expect(await bumpPendingAppointment(sentRecalls[0].id)).toBe(appointments[0].id);
-
-    const resultAppointment = await Appointment.findOne({
-      where: {
-        id: appointments[0].id,
-      },
-    });
-    expect(resultAppointment.isSyncedWithPms).toBe(false);
-    expect(resultAppointment.startDate.toISOString()).toBe(date(2019, 7, 19, 9));
-    expect(resultAppointment.endDate.toISOString()).toBe(date(2019, 7, 19, 10));
   });
 });

@@ -460,28 +460,13 @@ class PatientTable extends Component {
         className: styles.colBg,
       },
       {
-        Header: 'Due for Hygiene/Recall',
-        Cell: (props) => {
-          return (
-            <HygieneRecallColumn
-              patient={props.original}
-              activeAccount={activeAccount}
-            />
-          );
-        },
-        show: false,
-        sortable: false,
-        filterable: false,
-        className: styles.colBg,
-      },
-      {
         Header: 'Due for Hygiene',
-
+        id: 'dueForHygieneDate',
         Cell: (props) => {
           return (
             <HygieneColumn
-              patient={props.original}
               showTable
+              patient={props.original}
               activeAccount={activeAccount}
             />
           );
@@ -492,20 +477,12 @@ class PatientTable extends Component {
       },
       {
         Header: 'Due for Recall',
-        id: 'lastRecallDate',
-        accessor: (d) => {
-          if (d.hasOwnProperty('lastRecallDate')) {
-            const dateValue = moment(d['lastRecallDate']);
-            return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
-          }
-
-          return '-';
-        },
+        id: 'dueForRecallExamDate',
         Cell: (props) => {
           return (
             <RecallColumn
-              patient={props.original}
               showTable
+              patient={props.original}
               activeAccount={activeAccount}
             />
           );

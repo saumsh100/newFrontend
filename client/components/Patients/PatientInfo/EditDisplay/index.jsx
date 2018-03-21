@@ -86,7 +86,8 @@ class EditDisplay extends Component {
     const {
       patient,
       reinitializeState,
-      isOpen
+      isOpen,
+      role,
     } = this.props;
 
     if (!patient) {
@@ -136,12 +137,21 @@ class EditDisplay extends Component {
                   label="Appointments"
                   tabCard
                 >
-                  <AppointmentsForm
-                    patient={patient}
-                    handleSubmit={this.handleSubmit}
-                    dropDownStyle={dropDownStyle}
-                    inputStyle={inputStyle}
-                  />
+                  {role === 'SUPERADMIN' ?
+                    <AppointmentsForm
+                      patient={patient}
+                      handleSubmit={this.handleSubmit}
+                      dropDownStyle={dropDownStyle}
+                      inputStyle={inputStyle}
+                    /> :
+                    <div className={styles.formContainer}>
+                      <div className={styles.disabledPage}>
+                        <div className={styles.disabledPage_text}>
+                          No Appointment Information
+                        </div>
+                      </div>
+                    </div>
+                  }
                 </Tab>
                 <Tab
                   label="Personal"
@@ -199,6 +209,7 @@ class EditDisplay extends Component {
 EditDisplay.propTypes = {
   patient: PropTypes.object.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
-}
+  role: PropTypes.string.isRequired,
+};
 
 export default EditDisplay;

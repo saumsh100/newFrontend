@@ -35,8 +35,6 @@ export function PatientSearchFirstLastName({ data, key }, filterIds, query, acco
       const patients = patientData.rows;
 
       const beginningCheck1 = new RegExp(`^${search[0]}`, 'i');
-      console.log('beginnginchec', beginningCheck1)
-
       const anyCheck1 = new RegExp(search[0], 'i');
 
       const word1Length = search[0].length;

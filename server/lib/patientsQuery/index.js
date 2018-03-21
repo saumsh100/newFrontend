@@ -46,8 +46,6 @@ const smartFilterFunctions = [
 export async function PatientQuery(config) {
   try {
     const start = Date.now();
-    console.log('Table API Started');
-
     const {
       limit,
       filters,
@@ -99,7 +97,6 @@ export async function PatientQuery(config) {
         offSetLimit.order = order;
       }
 
-      console.log(offSetLimit)
       filteredPatients = await smartFilterFunctions[smFilter.index](accountId, offSetLimit, smFilter);
     }
 
@@ -118,9 +115,6 @@ export async function PatientQuery(config) {
       for (let i = 0; i < sortArray.length; i += 1) {
         const filterObj = JSON.parse(sortArray[i]);
         const index = filterObj.indexFunc;
-
-        console.log('Running filter-->', filterObj.tag);
-
         const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
 
         if (i === filters.length - 1) {

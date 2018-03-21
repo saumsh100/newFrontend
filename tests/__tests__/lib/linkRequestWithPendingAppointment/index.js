@@ -1,19 +1,13 @@
-import { v4 as uuid } from 'uuid';
-import moment from 'moment';
+
 import {
   Appointment,
   Patient,
   Practitioner,
   Recall,
   SentRecall,
-  sequelize,
 } from '../../../../server/_models';
 import {
-  mapPatientsToRecalls,
-  getRecallsOutboxList,
   getPatientsDueForRecall,
-  shouldSendRecall,
-  getPatientsForRecallTouchPoint,
 } from '../../../../server/lib/recalls/helpers';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
@@ -63,26 +57,30 @@ describe('#linkRequestWithPendingAppointment', () => {
     await wipeAllModels();
   });
 
-  test('should return empty object as no pending appointment in future', async () => {
-    const recalls = await Recall.bulkCreate([
+  let recalls;
+  let patients;
+  let appointments;
+  let sentRecalls;
+  beforeEach(async () => {
+    recalls = await Recall.bulkCreate([
       {
         accountId,
         primaryType: 'email',
-        lengthSeconds: w2s(-1),
+        interval: '1 months',
       },
     ]);
 
-    const patients = await Patient.bulkCreate([
+    patients = await Patient.bulkCreate([
       makePatientData({
         firstName: 'Old',
         email: 'test@test.com',
         lastName: 'Patient',
         status: 'Active',
-        lastHygieneDate: date(2016, 7, 5, 9),
+        dueForHygieneDate: date(2016, 7, 5, 9),
       }),
     ]);
 
-    const appointments = await Appointment.bulkCreate([
+    appointments = await Appointment.bulkCreate([
       makeApptData({
         patientId: patients[0].id,
         ...dates(2016, 7, 5, 9),
@@ -91,138 +89,42 @@ describe('#linkRequestWithPendingAppointment', () => {
       }),
       makeApptData({
         patientId: patients[0].id,
-        ...dates(2016, 7, 5, 9),
+        ...dates(2015, 6, 5, 9),
       }),
     ]);
 
-    const sentRecalls = await SentRecall.bulkCreate([
+    sentRecalls = await SentRecall.bulkCreate([
       makeSentRecallData({
-        appointmentId: appointments[1].id,
         recallId: recalls[0].id,
         patientId: patients[0].id,
-        isSent: true,
+        isHygiene: true,
       }),
     ]);
-
-    const result = await linkRequestWithPendingAppointment(sentRecalls[0].id);
-
-    expect(result.note).toBe(undefined);
-    expect(result.patientId).toBe(undefined);
-    expect(result.suggestedChairId).toBe(undefined);
-    expect(result.suggestedPractitionerId).toBe(undefined);
   });
 
-  test('should return object with correct values of the first pending appointment as it\'s in future', async () => {
-    const recalls = await Recall.bulkCreate([
-      {
-        accountId,
-        primaryType: 'email',
-        lengthSeconds: w2s(-1),
-      },
-    ]);
+  test('should return true and update appointment properly', async () => {
+    const requestData = {
+      sentRecallId: sentRecalls[0].id,
+      startDate: date(2016, 7, 9, 9),
+    };
 
-    const patients = await Patient.bulkCreate([
-      makePatientData({
-        firstName: 'Old',
-        email: 'test@test.com',
-        lastName: 'Patient',
-        status: 'Active',
-        lastHygieneDate: date(2016, 7, 5, 9),
-      }),
-    ]);
+    const result = await linkRequestWithPendingAppointment(requestData);
+    expect(result).toBe(true);
 
-    const appointments = await Appointment.bulkCreate([
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2019, 7, 5, 9),
-        pmsId: '23',
-        isPending: true,
-      }),
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2016, 7, 5, 9),
-      }),
-    ]);
-
-    const sentRecalls = await SentRecall.bulkCreate([
-      makeSentRecallData({
-        appointmentId: appointments[1].id,
-        recallId: recalls[0].id,
-        patientId: patients[0].id,
-        isSent: true,
-      }),
-    ]);
-
-    const result = await linkRequestWithPendingAppointment(sentRecalls[0].id);
-
-    const appointmentCheck = await Appointment.findOne({
-      where: {
-        id: appointments[0].id,
-      },
-    });
-
-    expect(appointmentCheck.isSyncedWithPms).toBe(false);
-    expect(appointmentCheck.isDeleted).toBe(true);
-    expect(result.note).toBe(null);
-    expect(result.patientId).toBe(patients[0].id);
-    expect(result.suggestedChairId).toBe(null);
-    expect(result.suggestedPractitionerId).toBe('497ff59a-4bae-4013-bdce-b6b5be91a1f5');
+    const appointment = await Appointment.findOne({ where: { id: appointments[0].id } });
+    expect(appointment.isPending).toBe(false);
+    expect(appointment.isSyncedWithPms).toBe(false);
+    expect(appointment.reason).toBe(Appointment.REQUEST_REASON);
+    expect(appointment.note).toBe(null);
   });
 
-  test('should return first appointment values of pending appointment and not the future away as it\'s in future', async () => {
-    const recalls = await Recall.bulkCreate([
-      {
-        accountId,
-        primaryType: 'email',
-        lengthSeconds: w2s(-1),
-      },
-    ]);
+  test('should return false cause sentRecallId is null', async () => {
+    const requestData = {
+      sentRecallId: null,
+      startDate: date(2016, 7, 9, 9),
+    };
 
-    const patients = await Patient.bulkCreate([
-      makePatientData({
-        firstName: 'Old',
-        email: 'test@test.com',
-        lastName: 'Patient',
-        status: 'Active',
-        lastHygieneDate: date(2016, 7, 5, 9),
-      }),
-    ]);
-
-    const appointments = await Appointment.bulkCreate([
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2019, 7, 5, 9),
-        isPending: true,
-        pmsId: '23',
-        isSyncedWithPms: true,
-      }),
-      makeApptData({
-        patientId: patients[0].id,
-        ...dates(2016, 7, 5, 9),
-      }),
-      makeApptData({
-        patientId: patients[0].id,
-        pmsId: '24',
-        ...dates(2029, 7, 5, 9),
-        isPending: true,
-      }),
-    ]);
-
-    const sentRecalls = await SentRecall.bulkCreate([
-      makeSentRecallData({
-        appointmentId: appointments[1].id,
-        recallId: recalls[0].id,
-        patientId: patients[0].id,
-        isSent: true,
-      }),
-    ]);
-
-    const result = await linkRequestWithPendingAppointment(sentRecalls[0].id);
-
-    expect(result.note).toBe(null);
-    expect(result.patientId).toBe(patients[0].id);
-    expect(result.suggestedChairId).toBe(null);
-    expect(result.suggestedPractitionerId).toBe('497ff59a-4bae-4013-bdce-b6b5be91a1f5');
-
+    const result = await linkRequestWithPendingAppointment(requestData);
+    expect(result).toBe(false);
   });
 });

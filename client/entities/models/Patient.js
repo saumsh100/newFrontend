@@ -39,15 +39,13 @@ const PatientSchema = {
   lastRecallDate: null,
   nextApptId: null,
   nextApptDate: null,
-  lastHygieneDate: null,
-  lastHygieneApptId: null,
   lastRestorativeDate: null,
   lastRestorativeApptId: null,
-  lastRecallDate: null,
-  lastRecallApptId: null,
   insuranceInterval: null,
   firstApptId: null,
   firstApptDate: null,
+  dueForHygieneDate: null,
+  dueForRecallExamDate: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {

@@ -5,13 +5,11 @@ import {
   getPatientsDueForRecall,
   mapPatientsToRecalls,
 } from './helpers';
-import { generateOrganizedPatients } from '../comms/util';
 import { sanitizeTwilioSmsData } from '../../routes/_twilio/util';
 import { convertIntervalStringToObject } from '../../util/time';
 import normalize from '../../routes/_api/normalize';
 import sendRecall from './sendRecall';
-import app from '../../bin/app';
-import { namespaces, env } from '../../config/globals';
+import { env } from '../../config/globals';
 
 async function sendSocket(io, chatId) {
   let chat = await Chat.findOne({
@@ -37,30 +35,28 @@ async function sendSocket(io, chatId) {
 }
 
 /**
- * sendRecallsForAccount
+ * sendRecallsForAccount is an async function that will send recalls for the data passed in
+ * by calling the composable functions to assemble patients that needs recall comms and then looping
+ * through them and sending the appropriate comms
+ *
+ * - call mapPatientsToRecalls to grab that patients that each recall email needs to send to
+ *     - this list is organized for success or error
+ * - batchSave failed recalls
+ * - loop through successful recalls
+ *     - sendRecall. if error: do nothing, SentRecall isSent=false by default and contiue
+ *                   else update isSent=true and add to sentRecallsId
+ * - publish event that recalls were sent (things like Correspondence need this)
  *
  * @param account
  * @param date
  * @returns {Promise.<void>}
  */
 export async function sendRecallsForAccount(account, date, pubSocket) {
+  // TODO: make console.logs explicit like reminders
   console.log(`Sending recalls for ${account.name}`);
   const { recalls, name } = account;
 
   const recallsPatients = await mapPatientsToRecalls({ recalls, account, startDate: date });
-
-  // Grab all failures and do a bulkCreate to reduce load
-  /*let totalFailures = [];
-  recallsPatients.forEach((rp, i) => {
-    totalFailures = totalFailures.concat(rp.errors.map(({ errorCode, patient }) => ({
-      recallId: recalls[i].id,
-      accountId: account.id,
-      patientId: patient.id,
-      lengthSeconds: recalls[i].lengthSeconds,
-      primaryType: recalls[i].primaryType,
-      errorCode,
-    })));
-  });*/
 
   let i;
   for (i = 0; i < recalls.length; i++) {
@@ -87,7 +83,6 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
       await SentRecall.bulkCreate(failedSentRecalls);
     } catch (err) {
       console.error(`FAILED bulkSave of failed sentRecalls`, err);
-      // TODO: do we want to throw the error hear and ignore trying to send?
     }
 
     // Save ids of recalls sent as we are sending them
@@ -95,8 +90,9 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
 
     console.log(`---- ${success.length} => recall that should succeed`);
     for (const { patient, primaryType } of success) {
+      const isHygiene = patient.hygiene;
+
       // Check if latest appointment is within the recall window
-      //
       const sentRecall = await SentRecall.create({
         recallId: recall.id,
         accountId: account.id,
@@ -104,37 +100,38 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
         lengthSeconds: recall.lengthSeconds,
         interval: recall.interval,
         primaryType,
+        isHygiene,
       });
 
-      const lastAppointment = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
+      let dueDate = account.timezone ?
+        moment.tz(patient.dueForRecallExamDate, account.timezone) :
+        moment(patient.dueForRecallExamDate);
+
+      if (isHygiene) {
+        dueDate = account.timezone ?
+          moment.tz(patient.dueForHygieneDate, account.timezone) :
+          moment(patient.dueForHygieneDate);
+      }
+
       let data = null;
       try {
-        let dueDate;
-        if (patient.hygiene) {
-          dueDate = account.timezone ? moment.tz(patient.lastHygieneDate, account.timezone)
-            : moment(patient.lastHygieneDate);
-        } else {
-          dueDate = account.timezone ? moment.tz(patient.lastRecallDate, account.timezone)
-            : moment(patient.lastHygieneDate);
-        }
-
-        dueDate = dueDate
-            .add(convertIntervalStringToObject(patient.insuranceInterval || account.hygieneInterval))
-            .toISOString();
-
+        dueDate = dueDate.toISOString();
         data = await sendRecall[primaryType]({
           patient,
           account,
-          lastAppointment,
           sentRecall,
           recall,
           dueDate,
         });
+
+        console.log(`${primaryType} recall SENT to ${patient.firstName} ${patient.lastName} for ${account.name}!`);
       } catch (error) {
         console.log(`${primaryType} recall NOT SENT to ${patient.firstName} ${patient.lastName} for ${name} because:`);
         console.error(error);
         continue;
       }
+
+      await sentRecall.update({ isSent: true });
 
       if (primaryType === 'sms' && env !== 'test') {
         const textMessageData = sanitizeTwilioSmsData(data);
@@ -158,38 +155,31 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
         global.io && await sendSocket(global.io, chat.id);
       }
 
-      console.log(`${primaryType} recall SENT to ${patient.firstName} ${patient.lastName} for ${account.name}!`);
-      await sentRecall.update({ isSent: true });
-
       sentRecallsIds.push(sentRecall.id);
-
-      // TODO: need Chat update for SMS recalls
-      // TODO: Update all successfully sent Recalls
-      // await sendSocketRecall(global.io, sentRecall.id);
     }
 
+    // TODO: shouldn't we will send? keep things loggable?
     if (sentRecallsIds.length) {
-      await pubSocket.publish('RECALL:SENT:BATCH', JSON.stringify(sentRecallsIds));
+      pubSocket && await pubSocket.publish('RECALL:SENT:BATCH', JSON.stringify(sentRecallsIds));
     }
   }
 }
 
 /**
+ * computeRecallsAndSend is an async function that will fetch all accounts that canSendRecalls and
+ * its active Recall touchpoints and then loop through each account to send those recall touchpoints
  *
- * @returns {Promise.<Array|*>}
+ * @param {startDate}
+ * @param {endDate}
+ * @param {publishSocket} TODO: rename this to be consistent
+ * @returns undefined;
  */
 export async function computeRecallsAndSend({ date, publishSocket }) {
-  // - Fetch Reminders in order of shortest secondsAway
-  // - For each reminder, fetch the appointments that fall in this range
-  // that do NOT have a reminder sent (type of reminder?)
-  // - For each appointment, send the reminder
-  // Get all clinics that actually want reminders sent and get their Reminder Preferences
+  // TODO: Create a fetcher function just like reminders has
   const accounts = await Account.findAll({
     where: {
       canSendRecalls: true,
     },
-
-    order: [[{ model: Recall, as: 'recalls' }, 'lengthSeconds', 'asc']],
 
     include: [{
       model: Recall,
@@ -204,6 +194,7 @@ export async function computeRecallsAndSend({ date, publishSocket }) {
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
 
+    // TODO: use string comparison '11:00:00' > '11:00:01'
     const startHour = Number(account.recallStartTime.split(':')[0]);
     const startMin = Number(account.recallStartTime.split(':')[1]);
 

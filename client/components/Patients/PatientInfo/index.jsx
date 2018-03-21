@@ -108,7 +108,6 @@ class PatientInfo extends Component {
 
   render() {
     const patientId = this.props.match.params.patientId;
-
     const {
       patient,
       patientStats,
@@ -116,8 +115,8 @@ class PatientInfo extends Component {
       wasFetched,
       accountsFetched,
       activeAccount,
+      role,
     } = this.props;
-
 
     return (
       <Grid className={styles.mainContainer}>
@@ -141,6 +140,7 @@ class PatientInfo extends Component {
                 reinitializeState={this.reinitializeState}
                 isOpen={this.state.isOpen}
                 outerTabIndex={this.state.tabIndex}
+                role={role}
               />
               <HeaderModalComponent
                 icon="pencil"
@@ -227,6 +227,7 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match 
   const wasFetched = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').wasFetched : null);
 
   const waitForAuth = auth.get('accountId');
+  const role = auth.get('role');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
   const accountsFetched = (apiRequests.get('accountsPatientInfo') ? apiRequests.get('accountsPatientInfo').wasFetched : null);
@@ -238,6 +239,7 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match 
     filters: patientTable.get('timelineFilters'),
     activeAccount,
     accountsFetched,
+    role,
   };
 }
 

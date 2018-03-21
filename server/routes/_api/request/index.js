@@ -29,16 +29,20 @@ requestsRouter.param('appointmentId', sequelizeLoader('appointment', 'Appointmen
  */
 requestsRouter.post('/', async (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
+  const requestData = req.body;
   const {
     patientUserId,
     accountId,
-    sentRecallId,
-  } = req.body;
+  } = requestData;
 
-  const newRequest = Object.assign({}, req.body,
-    await linkRequestWithPendingAppointment(sentRecallId));
+  const hasPendingAppt = await linkRequestWithPendingAppointment(requestData);
+  const newRequestData = Object.assign(
+    {},
+    requestData,
+    { isSyncedWithPms: hasPendingAppt },
+  );
 
-  return Request.create(newRequest)
+  return Request.create(newRequestData)
     .then((request) => {
       const normalized = normalize('request', request.dataValues);
       res.status(201).send(normalized);

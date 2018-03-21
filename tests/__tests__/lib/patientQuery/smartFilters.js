@@ -54,7 +54,7 @@ describe('Smart Filters Tests', () => {
       await seedTestPractitioners();
     });
 
-    test('Find Patients due within 60 days', async () => {
+    test.skip('Find Patients due within 60 days', async () => {
       const account = await Account.findById(accountId);
 
       const patients = await Patient.bulkCreate([
@@ -71,7 +71,7 @@ describe('Smart Filters Tests', () => {
       expect(patientsData.rows.length).toBe(1);
     });
 
-    test('Should Fail because there is a nextApptDate', async () => {
+    test.skip('Should Fail because there is a nextApptDate', async () => {
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: date(2017, 3, 10, 9), nextApptDate: date(2017, 12, 10, 9) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: date(2013, 7, 6, 9) }),
@@ -86,7 +86,7 @@ describe('Smart Filters Tests', () => {
       expect(patientsData.rows.length).toBe(0);
     });
 
-    test('Find Patients late 13-18 months', async () => {
+    test.skip('Find Patients late 13-18 months', async () => {
       const patients = await Patient.bulkCreate([
         makePatientData({ firstName: 'Old', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(24 * 30) }),
         makePatientData({ firstName: 'Recent', lastName: 'Patient', lastHygieneDate: currentDateMinusDays(24 * 30) }),

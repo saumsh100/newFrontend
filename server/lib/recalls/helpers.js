@@ -79,32 +79,25 @@ export function organizeRecallsOutboxList(outboxList, recall, account) {
   return result.map((p) => {
     p.recall = recall;
 
-    let dateWithZone;
+    let dateWithZone = account.timezone ?
+      moment.tz(p.patient.dueForRecallExamDate, account.timezone) :
+      moment(p.patient.dueForRecallExamDate);
 
     if (p.patient.hygiene) {
-      dateWithZone = account.timezone ? moment.tz(p.patient.lastHygieneDate, account.timezone)
-        : moment(p.patient.lastHygieneDate);
-    } else {
-      dateWithZone = account.timezone ? moment.tz(p.patient.lastRecallDate, account.timezone)
-        : moment(p.patient.lastHygieneDate);
+      dateWithZone = account.timezone ?
+        moment.tz(p.patient.dueForHygieneDate, account.timezone) :
+        moment(p.patient.dueForHygieneDate);
     }
 
     const startHour = Number(account.recallStartTime.split(':')[0]);
     const startMin = Number(account.recallStartTime.split(':')[1]);
 
     p.sendDate = dateWithZone
-      .add(1, 'days')
-      .add(convertIntervalStringToObject(p.patient.insuranceInterval || account.hygieneInterval))
       .subtract(convertIntervalStringToObject(recall.interval))
-      // we subtract the global hours and minutes, so that we get the correct date
-      // the recall will run at.
-      .subtract(startHour, 'hours')
-      .subtract(startMin, 'minutes')
-      // set the hour and minute to the correct time. Moment timezone will
-      // set the right time in UTC for the timezone.
-      .set('hour', GLOBALS.recalls.cronHour)
-      .set('minute', GLOBALS.recalls.cronMinute)
+      .set(startHour, 'hours')
+      .set(startMin, 'minutes')
       .toISOString();
+
     return p;
   });
 }
@@ -157,141 +150,87 @@ export async function getRecallsOutboxList({ startDate, endDate, account }) {
 }
 
 /**
- * [getPatientsForRecallTouchPoint Calculate's the patients for a given account
- * that need to be sent recalls
- * EX: if the contCareInterval is set to 6 months and the Recall interval is
- * 1 month. Then the recalls will be sent out 5 months after the last hygiene date. This
- * only happens if there is not nextAppt, the patient is Active and there's no other Sent Recall
- * in the last 2 Weeks]
- * @param  {[object]} options.recall  [recall model]
- * @param  {[object]} options.account [account model]
- * @param  {[object]} options.date    [the date to use for the calculation - normally today]
- * @return {[array]}                 [an array of patient models that need to be sent recalls]
+ * getPatientsForRecallTouchPoint is an async functino that calculates the patients for a given account
+ * that need to be sent the supplied recall touchpoint based on the patient's dueDate
+ *
+ * ie.// If a patient's dueDate is in 1 month and a recall touchpoint with an interval of
+ * 1 month was supplied. That patient would be return. However a patient that is not due or not
+ * due in the exact time (+/- the buffer time) then they are not returned.
+ *
+ * @param  {recall} recall model
+ * @param  {account} account model
+ * @param  {date} the date to use for the calculation - normally today
+ * @return [patientsWithData] an array of patient models that need to be sent recalls
  */
 export async function getPatientsForRecallTouchPoint({ recall, account, startDate, endDate }) {
+  /*
+
+  So if we are running this with the following criteria, the start & end range with which we search
+  for dueDates becomes:
+
+  Criteria:
+
+  recall.interval = '1 months'
+  account.recallBuffer = '1 weeks'
+  startDate = March 8th 2018 11:00am
+  endDate = March 8th 2018 11:30am
+
+  Outcome:
+
+  start = April 1st 2018 11:00am
+  end =  April 8th 2018 11:30am
+
+  */
+  const recallIntervalObject = convertIntervalStringToObject(recall.interval);
+  const recallBufferObject = convertIntervalStringToObject(account.recallBuffer);
+  const start = moment(startDate).add(recallIntervalObject).subtract(recallBufferObject).toISOString();
+  const end = moment(endDate || startDate).add(recallIntervalObject).toISOString();
+
+  const baseWhereQuery = {
+    accountId: account.id,
+    status: 'Active',
+    preferences: { recalls: true },
+  };
+
   const twoWeeksAgo = moment(startDate).subtract(14, 'days');
+  const includeArray = [{
+    model: SentRecall,
+    as: 'sentRecalls',
+    where: {
+      isSent: true,
+      createdAt: {
+        $gt: twoWeeksAgo._d,
+      },
+    },
 
-  if (!endDate) {
-    startDate = moment(startDate).toISOString();
-    endDate = moment(startDate).add(convertIntervalStringToObject(account.recallBuffer)).toISOString();
-  }
+    required: false,
+  }];
 
-  const patientsHygieneWithInterval = await Patient.findAll({
-    where: sequelize.and({
-      accountId: account.id,
-      status: 'Active',
-      nextApptDate: null,
-      insuranceInterval: {
-        $ne: null,
+  const patientsDueForHygiene = await Patient.findAll({
+    include: includeArray,
+    where: {
+      ...baseWhereQuery,
+      dueForHygieneDate: {
+        $not: null,
+        $gte: start,
+        $lt: end,
       },
-      lastHygieneDate: {
-        $ne: null,
-      },
-      preferences: {
-        recalls: true,
-      },
-    }, sequelize.literal(`'${endDate}' >= ("lastHygieneDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`),
-    sequelize.literal(`'${startDate}' < ("lastHygieneDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`)),
-    include: [{
-      model: SentRecall,
-      as: 'sentRecalls',
-      where: {
-        isSent: true,
-        createdAt: {
-          $gt: twoWeeksAgo._d,
-        },
-      },
-      required: false,
-    }],
+    },
   });
 
-  const patientsHygieneWithOutInterval = await Patient.findAll({
-    where: sequelize.and({
-      accountId: account.id,
-      status: 'Active',
-      nextApptDate: null,
-      insuranceInterval: null,
-      lastHygieneDate: {
-        $ne: null,
+  const patientsDueForRecall = await Patient.findAll({
+    include: includeArray,
+    where: {
+      ...baseWhereQuery,
+      dueForRecallExamDate: {
+        $not: null,
+        $gte: start,
+        $lt: end,
       },
-      preferences: {
-        recalls: true,
-      },
-    }, sequelize.literal(`'${endDate}' >= ("lastHygieneDate" + INTERVAL '1 days' + INTERVAL '${account.hygieneInterval}' - INTERVAL '${recall.interval}')`),
-    sequelize.literal(`'${startDate}' < ("lastHygieneDate" + INTERVAL '1 days' + INTERVAL '${account.hygieneInterval}' - INTERVAL '${recall.interval}')`)),
-    include: [{
-      model: SentRecall,
-      as: 'sentRecalls',
-      where: {
-        isSent: true,
-        createdAt: {
-          $gt: twoWeeksAgo._d,
-        },
-      },
-      required: false,
-    }],
+    },
   });
 
-  const patientsRecallWithInterval = await Patient.findAll({
-    where: sequelize.and({
-      accountId: account.id,
-      status: 'Active',
-      nextApptDate: null,
-      insuranceInterval: {
-        $ne: null,
-      },
-      lastRecallDate: {
-        $ne: null,
-      },
-      preferences: {
-        recalls: true,
-      },
-    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`),
-    sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '1 days' + "insuranceInterval"::Interval - INTERVAL '${recall.interval}')`)),
-    include: [{
-      model: SentRecall,
-      as: 'sentRecalls',
-      where: {
-        isSent: true,
-        createdAt: {
-          $gt: twoWeeksAgo._d,
-        },
-      },
-      required: false,
-    }],
-  });
-
-  const patientsRecallWithOutInterval = await Patient.findAll({
-    where: sequelize.and({
-      accountId: account.id,
-      status: 'Active',
-      nextApptDate: null,
-      insuranceInterval: null,
-      lastRecallDate: {
-        $ne: null,
-      },
-      preferences: {
-        recalls: true,
-      },
-    }, sequelize.literal(`'${endDate}' >= ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.recallInterval}' - INTERVAL '${recall.interval}')`),
-    sequelize.literal(`'${startDate}' < ("lastRecallDate" + INTERVAL '1 days' + INTERVAL '${account.recallInterval}' - INTERVAL '${recall.interval}')`)),
-    include: [{
-      model: SentRecall,
-      as: 'sentRecalls',
-      where: {
-        isSent: true,
-        createdAt: {
-          $gt: twoWeeksAgo._d,
-        },
-      },
-      required: false,
-    }],
-  });
-
-  const patientsHygiene = patientsHygieneWithInterval.concat(patientsHygieneWithOutInterval);
-  const patientsRecall = patientsRecallWithInterval.concat(patientsRecallWithOutInterval);
-  const patients = removeRecallDuplicates(patientsHygiene, patientsRecall);
-
+  const patients = removeRecallDuplicates(patientsDueForHygiene, patientsDueForRecall);
   return shouldSendRecall(patients);
 }
 
@@ -318,55 +257,9 @@ export function removeRecallDuplicates(patientsHygiene, patientsRecall) {
   });
 
   const patients = patientsHygiene.concat(patientsRecall);
-
   return uniqBy(patients, 'id');
 }
 
 export function shouldSendRecall(patients) {
   return patients.filter(p => !p.sentRecalls[0]);
-}
-
-/**
- * shouldSendReminder returns a boolean if the appointment is in need
- * of a reminder being sent
- * - checks if reminder was already sent
- * - and if it is sendable according to patient preferences
- *
- * @param account
- * @param recall
- * @param patient
- * @param date
- * @returns {boolean}
- */
-export function isDueForRecall({ account, recall, patient, date }) {
-  const { appointments, sentRecalls, preferences } = patient;
-
-  // If they've never had any appointments, don't bother
-  const numAppointments = appointments.length;
-  if (!numAppointments) return false;
-
-  // Check if latest appointment is within the recall window
-  // TODO: should probably add date check to query to reduce size of query
-  const { startDate } = appointments[appointments.length - 1];
-
-  // Get the preferred due date
-  const dueDateSeconds = patient.recallDueDateSeconds || account.recallDueDateSeconds;
-
-  // Recalls work around dueDate, whereas Reminders work around appointment.startDate
-  const recallSeconds = dueDateSeconds - recall.lengthSeconds;
-
-  // Get how long ago last appointment was
-  const appointmentTimeAwaySeconds = moment(date).diff(startDate) / 1000;
-
-  // Determine if the dueDate from  last appointment fits into this recall (with a buffer)
-  const isDue = (recallSeconds <= appointmentTimeAwaySeconds) &&
-    (appointmentTimeAwaySeconds <= (recallSeconds + DEFAULT_RECALL_BUFFER));
-
-  // If I sent a 2week PAST dueDate, don't send a 1week PAST dueDate, stick to recalls
-  // further down the line
-  const recallAlreadySentOrLongerAway = sentRecalls.some((sentRecall) => {
-    return recall.lengthSeconds >= sentRecall.lengthSeconds;
-  });
-
-  return isDue && !recallAlreadySentOrLongerAway && preferences.reminders;
 }

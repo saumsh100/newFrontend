@@ -70,6 +70,7 @@ class Tasks extends Component {
           <div className={styles.smallCol}>Scheduled</div>
           <div className={styles.col}>Name</div>
           <div className={styles.col}>Due for Hygiene</div>
+          <div className={styles.col}>Due for Recall</div>
         </SHeader>
       );
     } else if (toDoIndex === 2 && reviews && reviews.size && !loadingToDos) {

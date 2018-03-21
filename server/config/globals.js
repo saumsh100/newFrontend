@@ -138,6 +138,7 @@ const reviews = {
 };
 
 const recalls = {
+  cronIntervalMinutes: 5,
   cronHour: 17,
   cronMinute: 0,
 };

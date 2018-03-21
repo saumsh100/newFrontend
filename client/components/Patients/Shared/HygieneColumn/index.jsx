@@ -1,3 +1,4 @@
+
 import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -9,34 +10,17 @@ export default function HygieneColumn(props) {
     patient,
     className,
     showTable,
-    activeAccount,
   } = props;
 
-  const lastHygieneDate = moment(patient.lastHygieneDate);
-  let intervalNum = null;
+  const hygieneDueDate = moment(patient.dueForHygieneDate);
 
-  if (!lastHygieneDate.isValid() && !showTable) {
-    return null;
-  } else if (!lastHygieneDate.isValid() && showTable) {
-    return <div className={styles.displayFlex}> - </div>;
+  if (!hygieneDueDate.isValid()) {
+    return <div className={styles.displayFlex}>{showTable ? '-' : 'n/a'}</div>;
   }
 
-  if (patient && patient.insuranceInterval) {
-    const insuranceInterval = patient.insuranceInterval.split(' ');
-    intervalNum = Number(insuranceInterval[0]);
-  } else {
-    const hygieneInterval = activeAccount.hygieneInterval.split(' ');
-    intervalNum = Number(hygieneInterval[0]);
-  }
-
-  const hygieneDueDate = moment(lastHygieneDate).add(intervalNum, 'months');
   const monthsDiff = moment().diff(hygieneDueDate, 'months');
   const weeksDiff = moment().diff(hygieneDueDate, 'weeks');
   let dotStyle = styles.dot;
-
-  // weeksDiff === 0 || (weeksDiff <= -1 && weeksDiff >= -4)
-  // weeksDiff === -1 || weeksDiff === -4
-
   if (monthsDiff >= 8) {
     dotStyle = classnames(dotStyle, styles.dotRed);
   } else if (monthsDiff >= 0 && monthsDiff < 8 && weeksDiff > 0) {
@@ -50,7 +34,9 @@ export default function HygieneColumn(props) {
       <div className={`${styles.date} ${className}`}>
         {hygieneDueDate.format('MMM DD YYYY')}
       </div>
-      <div className={dotStyle}>&nbsp;</div>
+      <div className={dotStyle}>
+        &nbsp;
+      </div>
     </div>
   );
 }
@@ -60,4 +46,4 @@ HygieneColumn.propTypes = {
   className: PropTypes.string,
   showTable: PropTypes.bool,
   activeAccount: PropTypes.object,
-}
+};

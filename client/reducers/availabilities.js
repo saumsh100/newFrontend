@@ -260,6 +260,7 @@ export default handleActions({
   },
 
   [SET_SENTRECALLID](state, action) {
+    console.log('action.payload', action.payload);
     return state.set('sentRecallId', action.payload);
   },
 

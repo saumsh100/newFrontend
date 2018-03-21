@@ -56,11 +56,8 @@ async function sendSocket(io, chatId) {
 /**
  * sendRemindersForAccount is an async function that will send reminders for the account passed in
  * by calling other composable functions to assemble patients that need reminders and then looping through
- * them and sending the appropirate comms to them
+ * them and sending the appropriate comms to them
  *
- * - sort reminders from shortest reminder interval (ie. 2 hours) to longest (ie. 1 month) to ensure order
- *   - this used to be very important, but now that we only send within a 5 minute buffer it is really only to ensure
- *   logs are predictable and readable
  * - call mapPatientsToReminders to grab the patients that need a respective reminder
  * - loop through this sortedReminders
  *    - grab errored patients from the map and do a batchSave of failed sentReminders

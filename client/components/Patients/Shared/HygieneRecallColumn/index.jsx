@@ -84,4 +84,4 @@ HygieneRecallColumn.propTypes = {
   patient: PropTypes.object,
   className: PropTypes.string,
   activeAccount: PropTypes.object,
-}
+};

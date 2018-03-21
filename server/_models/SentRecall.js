@@ -50,6 +50,12 @@ export default function (sequelize, DataTypes) {
     interval: {
       type: DataTypes.STRING,
     },
+
+    isHygiene: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    }
   });
 
   SentRecall.associate = ({ Account, Recall, Patient }) => {

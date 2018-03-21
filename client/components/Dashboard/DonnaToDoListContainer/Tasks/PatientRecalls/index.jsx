@@ -22,12 +22,7 @@ export default function PatientRecalls({ recalls }) {
           sendDate,
         } = r;
 
-        const { lastHygieneDate, lastRecallDate } = patient;
-
-        // TODO: remove this, endpoint should calculate due date
-        const dueForHygiene = moment(lastHygieneDate).add(6, 'months');
-        const dueForRecall = moment(lastRecallDate).add(6, 'months');
-
+        const { dueForHygieneDate, dueForRecallExamDate } = patient;
         let type = recall.interval;
         if (type[0] === '-') {
           type = type.slice(1, type.length) + ' After';
@@ -53,7 +48,16 @@ export default function PatientRecalls({ recalls }) {
               {patient.firstName} {patient.lastName}
             </div>
             <div className={styles2.col}>
-              {dueForHygiene.format('MMM Do, YYYY, h:mm A')}
+              {dueForHygieneDate ?
+                moment(dueForHygieneDate).format('MMM Do, YYYY') :
+                'n/a'
+              }
+            </div>
+            <div className={styles2.col}>
+              {dueForRecallExamDate ?
+                moment(dueForRecallExamDate).format('MMM Do, YYYY') :
+                'n/a'
+              }
             </div>
           </ListItem>
         );

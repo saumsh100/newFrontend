@@ -1,5 +1,6 @@
+
 import moment from 'moment';
-import { Account, SentRecall, Appointment } from '../../_models';
+import { Account, Appointment, Patient, SentRecall } from '../../_models';
 import { convertIntervalStringToObject } from '../../util/time';
 
 /**
@@ -13,39 +14,66 @@ export default async function bumpPendingAppointment(sentRecallId) {
     where: {
       id: sentRecallId,
     },
-    raw: true,
+
+    include: [
+      {
+        model: Patient,
+        as: 'patient',
+        required: true,
+      },
+      {
+        model: Account,
+        as: 'account',
+        required: true,
+      },
+    ],
   });
 
-  const appointment = await Appointment.findAll({
+  if (!sentRecall) return null;
+  const { patient, account } = sentRecall;
+  const dueDate = sentRecall.isHygiene ? patient.dueForHygieneDate : patient.dueForRecallExamDate;
+
+  let startOfDay;
+  let endOfDay;
+  if (account.timezone) {
+    const mDay = moment.tz(dueDate, account.timezone);
+    startOfDay = mDay.startOf('day').toISOString();
+    endOfDay = mDay.endOf('day').toISOString();
+  } else {
+    const mDay = moment(dueDate);
+    startOfDay = mDay.startOf('day').toISOString();
+    endOfDay = mDay.endOf('day').toISOString();
+  }
+
+  const [appointment] = await Appointment.findAll({
     where: {
-      startDate: {
-        $gt: sentRecall.createdAt,
-      },
       patientId: sentRecall.patientId,
       isPending: true,
-      isRecall: true,
+      startDate: {
+        $between: [startOfDay, endOfDay],
+      },
     },
     limit: 1,
     order: [['startDate', 'ASC']],
   });
 
-  const account = await Account.findOne({
-    where: {
-      id: sentRecall.accountId,
-    },
+  if (!appointment) return null;
+
+  const intervalObject = convertIntervalStringToObject(account.bumpInterval);
+  const currentStartDate = moment(appointment.startDate);
+  const durationMinutes = moment(appointment.endDate).diff(currentStartDate, 'minutes');
+
+  const newStartDate = moment(sentRecall.createdAt)
+    .add(intervalObject)
+    .hours(currentStartDate.hours())
+    .minutes(currentStartDate.minutes())
+    .toISOString();
+
+  await appointment.update({
+    startDate: newStartDate,
+    endDate: moment(newStartDate).add(durationMinutes, 'minutes').toISOString(),
+    isSyncedWithPms: false,
   });
 
-  if (appointment[0]) {
-    const intervalObject = convertIntervalStringToObject(account.bumpInterval);
-
-    await appointment[0].update({
-      startDate: moment(appointment[0].startDate).add(intervalObject).toISOString(),
-      endDate: moment(appointment[0].endDate).add(intervalObject).toISOString(),
-      isSyncedWithPms: false,
-    });
-
-    return appointment[0].id;
-  }
-
-  return null;
+  return appointment.id;
 }

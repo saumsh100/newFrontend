@@ -191,7 +191,13 @@ describe('/api/accounts/:account/recalls', () => {
         ]);
 
         const patients = await Patient.bulkCreate([
-          makePatientData({ firstName: 'Old', email: 'hello@hello.com', lastName: 'Patient', status: 'Active', lastHygieneDate: date(2016, 7, 5, 9), contCareInterval: '6 months' }),
+          makePatientData({
+            firstName: 'Old',
+            lastName: 'Patient',
+            email: 'hello@hello.com',
+            status: 'Active',
+            dueForHygieneDate: date(2017, 7, 5, 9),
+          }),
         ]);
 
         await Appointment.bulkCreate([
@@ -215,11 +221,9 @@ describe('/api/accounts/:account/recalls', () => {
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(async ({ body }) => {
-            expect(body[0].patient.lastHygieneDate).toBe(date(2016, 7, 5, 9));
-
-            body[0].patient = omitProperties(body[0].patient, ['id', 'lastHygieneDate']);
+            body[0].patient = omitProperties(body[0].patient, ['id', 'dueForHygieneDate']);
             body[0].recall = omitProperties(body[0].recall, ['id']);
-
+            delete body[0].sendDate;
             expect(body).toMatchSnapshot();
           });
       });

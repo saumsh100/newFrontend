@@ -264,24 +264,24 @@ $height: 6px;
 }
 
 .thead-order {
-  color: black;
-}
-
-.theadAsc {
-  @extend .thead-order;
-  &:after {
-    @extend .topCaretButton;
-    margin-left: 3px;
-    margin-top: -1px;
-  }
+  color: black !important;
 }
 
 .theadDesc {
   @extend .thead-order;
   &:after {
+    @extend .topCaretButton;
+    margin-left: 3px;
+    margin-top: -4px;
+  }
+}
+
+.theadAsc {
+  @extend .thead-order;
+  &:after {
     @extend .bottomCaretButton;
     margin-left: 3px;
-    margin-top: 1px;
+    margin-top: 2px;
   }
 }
 

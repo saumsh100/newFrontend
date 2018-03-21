@@ -88,9 +88,13 @@ export default function (sequelize, DataTypes) {
         return this.get('isConfirmed') || this.get('isCancelled');
       },
     },
+
+    sentRecallId: {
+      type: DataTypes.UUID,
+    },
   });
 
-  Request.associate = ({ Account, Appointment, Chair, Service, PatientUser, Practitioner }) => {
+  Request.associate = ({ Account, Appointment, Chair, Service, PatientUser, Practitioner, SentRecall}) => {
     Request.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -129,6 +133,11 @@ export default function (sequelize, DataTypes) {
     Request.belongsTo(PatientUser, {
       foreignKey: 'patientUserId',
       as: 'patientUser',
+    });
+
+    Request.belongsTo(SentRecall, {
+      foreignKey: 'sentRecallId',
+      as: 'sentRecall',
     });
   };
 

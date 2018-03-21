@@ -60,13 +60,12 @@ export default {
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, lastAppointment, dueDate, recall, patient, sentRecall }) {
+  email({ account, dueDate, recall, patient, sentRecall }) {
     if (!patient.email) {
       throw new Error(`patient with id=${patient.id} does not have an email`);
     }
 
     const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
-
     const lastDate = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
 
     return sendTemplate({
