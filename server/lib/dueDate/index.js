@@ -13,35 +13,35 @@ import { recallCodes } from '../lastRecall';
 
  /**
  * finds the next most recent  Appointment of
- * code from the now date
+ * code from the now date with the patient model
  *
- * @param  {[uuid]} patientId - a uuid of patient
+ * @param  {[query]} object - query of patient
  * @param  {[object]} code - sequelize filter on code
- * @param  {[isoString]} now
- * @return {[array]} - an array of appointments
+ * @return {[array]} - an array of patients with appointments
  */
-function getAppointmentWithPatientBasedOnCode(patientId, code, now) {
-  return Appointment.findAll({
-    where: {
-      patientId,
-      startDate: {
-        $gt: now,
-      },
-      isCancelled: false,
-      isPending: true,
-    },
+function getPatientsWithAppointmentBasedOnCode(query, code) {
+  return Patient.findAll({
+    where: query,
+    order: [
+      [{ model: Appointment, as: 'appointments' }, 'startDate', 'ASC'],
+    ],
     include: [{
-      model: AppointmentCode,
-      as: 'appointmentCodes',
+      model: Appointment,
+      as: 'appointments',
       where: {
-        code,
+        isCancelled: false,
+        isPending: true,
       },
+      include: [{
+        model: AppointmentCode,
+        as: 'appointmentCodes',
+        where: {
+          code,
+        },
+        required: true,
+      }],
       required: true,
     }],
-    order: [
-      ['startDate', 'ASC'],
-    ],
-    limit: 1,
   });
 }
 
@@ -116,53 +116,55 @@ export async function getPatientsChangedAppointment(date, accountId) {
  * @param  {[array]} patientIds - array of patientIds if not sent then assume all patients
  */
 export async function updatePatientDueDate(accountId, patientIds) {
-  const idQuery = patientIds || { $ne: null };
+  const idQuery = patientIds || { $not: null };
   const t = await sequelize.transaction();
 
-  const now = moment().toISOString();
+  try {
+    await Patient.update({
+      dueForHygieneDate: null,
+      dueForRecallExamDate: null,
+      recallPendingAppointmentId: null,
+      hygienePendingAppointmentId: null,
+    }, {
+      where: { id: idQuery, accountId },
+    });
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
 
   try {
-    // check if lastHygieneDate is null
-    const patients = await Patient.findAll({
-      where: {
-        accountId,
-        id: idQuery,
+    const patientsHygiene = await getPatientsWithAppointmentBasedOnCode({
+      id: idQuery,
+      accountId,
+      lastHygieneDate: {
+        $not: null,
       },
-    });
+    }, { $like: '111%' });
+
+    const patientsRecall = await getPatientsWithAppointmentBasedOnCode({
+      id: idQuery,
+      accountId,
+      lastRecallDate: {
+        $not: null,
+      },
+    }, recallCodes);
 
     // for the patients with lastHygieneDate null find their due date for hygiene
-    for (let i = 0; i < patients.length; i += 1) {
-      const appointment
-        = await getAppointmentWithPatientBasedOnCode(patients[i].id, { $like: '111%' }, now);
-
-      // resetting the Patient's dueDates to null if no lastHygiene or no pending.
-      if (!patients[i].lastHygieneDate || !appointment.length) {
-        await patients[i].update({
-          dueForHygieneDate: null,
-        }, { transaction: t });
-      } else if (appointment.length) {
-        await patients[i].update({
-          dueForHygieneDate: appointment[0].startDate,
-        }, { transaction: t });
-      }
+    for (let i = 0; i < patientsHygiene.length; i += 1) {
+      await patientsHygiene[i].update({
+        dueForHygieneDate: patientsHygiene[i].appointments[0].originalDate,
+        hygienePendingAppointmentId: patientsHygiene[i].appointments[0].id,
+      }, { transaction: t });
     }
 
-    // for the patients with lastRecallDate is null find their due date for hygiene
-    for (let i = 0; i < patients.length; i += 1) {
-      const appointment
-        = await getAppointmentWithPatientBasedOnCode(patients[i].id, recallCodes, now);
-
-      // resetting the Patient's dueDates to null if no lastHygiene or no pending.
-      if (!patients[i].lastRecallDate || !appointment.length) {
-        await patients[i].update({
-          dueForRecallExamDate: null,
-        }, { transaction: t });
-      } else if (appointment.length) {
-        await patients[i].update({
-          dueForRecallExamDate: appointment[0].startDate,
-        }, { transaction: t });
-      }
+    for (let i = 0; i < patientsRecall.length; i += 1) {
+      await patientsRecall[i].update({
+        dueForRecallExamDate: patientsRecall[i].appointments[0].originalDate,
+        recallPendingAppointmentId: patientsRecall[i].appointments[0].id,
+      }, { transaction: t });
     }
+
     await t.commit();
   } catch (e) {
     await t.rollback();

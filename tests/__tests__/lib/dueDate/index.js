@@ -221,6 +221,7 @@ describe('Last Hygiene Calculations', () => {
 
       const appointment = await Appointment.create(makeApptData({
         startDate: '2019-07-20T00:14:30.932Z',
+        originalDate: '2019-07-20T00:14:30.932Z',
         endDate: '2019-07-20T00:15:30.932Z',
         isPending: true,
       }));
@@ -260,6 +261,7 @@ describe('Last Hygiene Calculations', () => {
 
       const appointment = await Appointment.create(makeApptData({
         startDate: '2019-07-20T00:14:30.932Z',
+        originalDate: '2019-07-20T00:14:30.932Z',
         endDate: '2019-07-20T00:15:30.932Z',
         isPending: true,
       }));
@@ -299,6 +301,7 @@ describe('Last Hygiene Calculations', () => {
 
       const appointment2 = await Appointment.create(makeApptData({
         startDate: '2021-07-20T00:14:30.932Z',
+        originalDate: '2021-07-20T00:14:30.932Z',
         endDate: '2021-07-20T00:15:30.932Z',
         isPending: true,
       }));
@@ -310,6 +313,7 @@ describe('Last Hygiene Calculations', () => {
 
       const appointment = await Appointment.create(makeApptData({
         startDate: '2019-07-20T00:14:30.932Z',
+        originalDate: '2019-07-20T00:14:30.932Z',
         endDate: '2019-07-20T00:15:30.932Z',
         isPending: true,
       }));
@@ -354,6 +358,7 @@ describe('Last Hygiene Calculations', () => {
 
       const appointment2 = await Appointment.create(makeApptData({
         startDate: '2021-07-20T00:14:30.932Z',
+        originalDate: '2021-07-20T00:14:30.932Z',
         endDate: '2021-07-20T00:15:30.932Z',
         isPending: true,
       }));
@@ -365,6 +370,7 @@ describe('Last Hygiene Calculations', () => {
 
       const appointment = await Appointment.create(makeApptData({
         startDate: '2019-07-20T00:14:30.932Z',
+        originalDate: '2019-07-20T00:14:30.932Z',
         endDate: '2019-07-20T00:15:30.932Z',
         isPending: true,
       }));
@@ -384,8 +390,11 @@ describe('Last Hygiene Calculations', () => {
 
       expect(patientBefore.dueForHygieneDate.toISOString()).toBe(date.toISOString());
       expect(patientAfter.dueForHygieneDate.toISOString()).toBe('2019-07-20T00:14:30.932Z');
+      expect(patientAfter.hygienePendingAppointmentId).toBe(appointment.id);
       expect(patientBefore.dueForRecallExamDate.toISOString()).toBe(date.toISOString());
       expect(patientAfter.dueForRecallExamDate.toISOString()).toBe('2021-07-20T00:14:30.932Z');
+      expect(patientAfter.recallPendingAppointmentId).toBe(appointment2.id);
+
     });
   });
 });
