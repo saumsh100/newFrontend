@@ -15,6 +15,7 @@ const ReminderSchema = {
   ignoreSendIfConfirmed: null,
   isDaily: null,
   dailyRunTime: null,
+  dontSendWhenClosed: null,
 };
 
 export default class Reminder extends createModel(ReminderSchema) {

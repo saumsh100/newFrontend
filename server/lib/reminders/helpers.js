@@ -10,6 +10,7 @@ import {
   Patient,
   SentReminder,
   Reminder,
+  WeeklySchedule,
 } from '../../_models';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
@@ -18,6 +19,7 @@ import {
   convertIntervalToMs,
   sortIntervalAscPredicate,
 } from '../../util/time';
+import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNextClosedDays';
 
 // TODO: add to globals file for these values
 // Should always be equal to the cron interval
@@ -96,6 +98,23 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
 
   if (reminder.isDaily) {
     const { timezone } = account;
+
+    // Now adjust end if there are consecutive closed days
+    if (reminder.dontSendWhenClosed) {
+      const weeklySchedule = await WeeklySchedule.findById(account.weeklyScheduleId);
+      if (weeklySchedule) {
+        // Early return if the clinic is closed this day
+        if (!isOpen(weeklySchedule, getDayOfWeek(startDate))) {
+          return [];
+        }
+
+        const consecutiveClosedDays = countNextClosedDays({ weeklySchedule, startDate });
+        if (consecutiveClosedDays) {
+          console.log(`There are consecutive closed days, therefore bumping end date by ${consecutiveClosedDays} days`);
+          end = moment(end).add(consecutiveClosedDays, 'days').toISOString();
+        }
+      }
+    }
 
     // Assume that this function is only run when its time to pull these
     // Or else we should check to make sure dailyRunTime is in range

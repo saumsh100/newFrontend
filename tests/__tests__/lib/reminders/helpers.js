@@ -6,12 +6,14 @@
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import {
+  Account,
   Appointment,
   Patient,
   Practitioner,
   Reminder,
   SentReminder,
   Family,
+  WeeklySchedule,
 } from '../../../../server/_models';
 import {
   getAppointmentsFromReminder,
@@ -433,6 +435,59 @@ describe('RemindersList Calculation Library', () => {
       });
     });
 
+    describe('#getAppointmentsFromReminder - dontSendOnClosedDays', () => {
+      let reminder;
+      let appointments;
+      let patients;
+      let weeklySchedules;
+      let account;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          interval: '2 days',
+          primaryTypes: ['email', 'sms'],
+          isDaily: true,
+          dontSendWhenClosed: true,
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 4, 8), patientId: patients[0].id }),
+          makeApptData({ ...dates(2017, 8, 5, 17), patientId: patients[1].id }),
+          makeApptData({ ...dates(2017, 8, 6, 8), patientId: patients[1].id }),
+        ]);
+
+        weeklySchedules = await WeeklySchedule.bulkCreate([
+          {
+            friday: { isClosed: true },
+            saturday: { isClosed: true },
+            sunday: { isClosed: true },
+          },
+        ]);
+
+        account = await Account.findById(accountId);
+        account = await account.update({ weeklyScheduleId: weeklySchedules[0].id });
+      });
+
+      test('should return 0 appointments because the clinic is closed', async () => {
+        const startDate = date(2017, 8, 3, 11); // Sunday
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate });
+        expect(appts.length).toBe(0);
+      });
+
+      test('should return 2 appointments because the clinic is closed the next 3 days', async () => {
+        const startDate = date(2017, 7, 31, 11); // Thursday
+
+        // Has to send for Monday and Tuesday's appts but not Wednesday's
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate });
+        expect(appts.length).toBe(2);
+      });
+    });
+
     describe('#shouldSendReminder', () => {
       test('should be a function', () => {
         expect(typeof shouldSendReminder).toBe('function');
@@ -734,4 +789,3 @@ describe('RemindersList Calculation Library', () => {
     });
   });
 });
-

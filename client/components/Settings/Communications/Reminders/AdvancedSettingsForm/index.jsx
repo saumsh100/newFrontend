@@ -64,6 +64,7 @@ function AdvancedSettingsForm(props) {
     isCustomConfirm,
     customConfirmData,
     omitPractitionerIds,
+    dontSendWhenClosed,
     isDaily,
     dailyRunTime,
   } = reminder;
@@ -73,6 +74,7 @@ function AdvancedSettingsForm(props) {
     isCustomConfirm,
     customConfirmString: customConfirmData ? JSON.stringify(customConfirmData) : '',
     omitPractitionerIdsString: omitPractitionerIds.join(','),
+    dontSendWhenClosed,
     isDaily,
     dailyRunTime,
   };
@@ -108,6 +110,12 @@ function AdvancedSettingsForm(props) {
         name="omitPractitionerIdsString"
         label="Omit Practitioner IDs"
         validate={[validateOmitPractitionerArray]}
+      />
+      <Field
+        className={styles.toggle}
+        component="Toggle"
+        name="dontSendWhenClosed"
+        label="Don't Sent When Closed?"
       />
       <Field
         className={styles.toggle}

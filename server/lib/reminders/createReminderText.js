@@ -45,14 +45,14 @@ const weekAway = {
 const sameWeek = {
   unconfirmed: ({ patient, account, appointment, action }) => {
     const { date, time } = getDateAndTime(appointment.startDate);
-    return `Hi ${patient.firstName}, this week's appointment at ` +
+    return `Hi ${patient.firstName}, your upcoming appointment at ` +
       `${account.name} is on ${date} at ${time}. ` +
       `To ${action}, please reply with the letter "C".`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
     const { date, time } = getDateAndTime(appointment.startDate);
-    return `Hi ${patient.firstName}, this week's appointment at ` +
+    return `Hi ${patient.firstName}, your upcoming appointment at ` +
       `${account.name} is on ${date} at ${time}.`;
   },
 };
