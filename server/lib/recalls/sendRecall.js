@@ -96,6 +96,10 @@ export default {
           content: moment().diff(moment(lastDate), 'months'),
         },
         {
+          name: 'MONTHS_PASTDUE',
+          content: moment().diff(moment(dueDate), 'months'),
+        },
+        {
           name: 'WEEKSAFTER_DUEDATE',
           content: moment().diff(moment(lastDate), 'weeks'),
         },

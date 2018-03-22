@@ -130,18 +130,18 @@ export function getRecallTemplateName({ recall }) {
 
 const RecallsPreviewMergeVars = {
   '1 months': [{ name: 'WEEKSBEFORE_DUEDATE', content: '4' }],
-  '1 weeks': [{ name: 'WEEKSBEFORE_DUEDATE' , content: '1' }],
-  '-1 weeks': [{ name: 'WEEKS_PASTDUE' , content: '1' }],
-  '-1 months': [{ name: 'MONTHS_PASTDUE', content: '1' }],
-  '-2 months': [{ name: 'MONTHS_PASTDUE', content: '2' }],
-  '-4 months': [{ name: 'MONTHS_PASTDUE', content: '4' }],
-  '-6 months': [{ name: 'MONTHS_PASTDUE', content: '6' }],
-  '-8 months': [{ name: 'MONTHS_PASTDUE', content: '8' }],
-  '-10 months': [{ name: 'MONTHS_PASTDUE', content: '10' }],
-  '-12 months': [{ name: 'MONTHS_PASTDUE', content: '12' }],
-  '-14 months': [{ name: 'MONTHS_PASTDUE', content: '14' }],
-  '-16 months': [{ name: 'MONTHS_PASTDUE', content: '16' }],
-  '-18 months': [{ name: 'MONTHS_PASTDUE', content: '18' }],
+  '1 weeks': [{ name: 'WEEKSBEFORE_DUEDATE', content: '1' }],
+  '-1 weeks': [{ name: 'MONTHS_LASTAPPT', content: '6' }, { name: 'MONTHS_PASTDUE', content: '0' }],
+  '-1 months': [{ name: 'MONTHS_LASTAPPT', content: '7' }, { name: 'MONTHS_PASTDUE', content: '1' }],
+  '-2 months': [{ name: 'MONTHS_LASTAPPT', content: '8' }, { name: 'MONTHS_PASTDUE', content: '2' }],
+  '-4 months': [{ name: 'MONTHS_LASTAPPT', content: '10' }, { name: 'MONTHS_PASTDUE', content: '4' }],
+  '-6 months': [{ name: 'MONTHS_LASTAPPT', content: '12' }, { name: 'MONTHS_PASTDUE', content: '6' }],
+  '-8 months': [{ name: 'MONTHS_LASTAPPT', content: '14' }, { name: 'MONTHS_PASTDUE', content: '8' }],
+  '-10 months': [{ name: 'MONTHS_LASTAPPT', content: '16' }, { name: 'MONTHS_PASTDUE', content: '10' }],
+  '-12 months': [{ name: 'MONTHS_LASTAPPT', content: '18' }, { name: 'MONTHS_PASTDUE', content: '12' }],
+  '-14 months': [{ name: 'MONTHS_LASTAPPT', content: '20' }, { name: 'MONTHS_PASTDUE', content: '14' }],
+  '-16 months': [{ name: 'MONTHS_LASTAPPT', content: '22' }, { name: 'MONTHS_PASTDUE', content: '16' }],
+  '-18 months': [{ name: 'MONTHS_LASTAPPT', content: '24' }, { name: 'MONTHS_PASTDUE', content: '18' }],
 };
 
 export function getPreviewMergeVars({ recall }) {
