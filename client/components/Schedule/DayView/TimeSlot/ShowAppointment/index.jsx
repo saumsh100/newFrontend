@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
-import styles from './styles.scss';
-import { Icon } from '../../../library';
-import AppointmentPopover from './AppointmentPopover';
-import AppointmentHours from './AppointmentHours';
-import withHoverable from '../../../../hocs/withHoverable';
+import styles from '../styles.scss';
+import { Icon } from '../../../../library';
+import AppointmentPopover from '../AppointmentPopover';
+import AppointmentHours from '../AppointmentHours';
+import withHoverable from '../../../../../hocs/withHoverable';
 
 /**
  * ShowAppointment represents each block of appointment on the calendar view
