@@ -108,6 +108,7 @@ describe('#linkRequestWithPendingAppointment', () => {
     const requestData = {
       sentRecallId: sentRecalls[0].id,
       startDate: date(2016, 7, 9, 9),
+      endDate: date(2016, 7, 9, 10),
     };
 
     const result = await linkRequestWithPendingAppointment(requestData);
@@ -124,6 +125,7 @@ describe('#linkRequestWithPendingAppointment', () => {
     const requestData = {
       sentRecallId: null,
       startDate: date(2016, 7, 9, 9),
+      endDate: date(2016, 7, 9, 10),
     };
 
     const result = await linkRequestWithPendingAppointment(requestData);

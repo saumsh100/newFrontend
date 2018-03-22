@@ -1,34 +1,14 @@
 
 import twilio from '../../config/twilio';
 import moment from 'moment';
-import { host } from '../../config/globals';
 import { sendTemplate } from '../mail';
 import createRecallText from './createRecallText';
-import { buildAppointmentEvent } from '../ics';
 import compressUrl from '../../util/compressUrl';
 
-const BASE_URL = `https://${host}/twilio/voice/reminders`;
-const createReminderText = ({ patient, account, appointment }) => (`
-  ${patient.firstName}, your next appointment with ${account.name}
-  is ${appointment.startDate} at ${appointment.startTime}. Reply 'C' to
-  confirm your appointment.
-`);
-
-const generateCallBackUrl = ({ account, appointment, patient }) => {
-  const mDate = moment(appointment.startDate);
-  const startDate = mDate.format('dddd, MMMM do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
-  return `${BASE_URL}
-      ?firstName=${patient.firstName},
-       clinicName=${account.name},
-       startDate=${startDate},
-       startTime=${startTime}`;
-};
-
 const recallIntervalToTemplate = {
-  '1 weeks': 'Patient Recall - 1 Week Before',
+  '1 weeks': 'Patient Recall - 1 Weeks Before',
   '1 months': 'Patient Recall - 1 Months Before',
-  '-1 weeks': 'Patient Recall - 1 Week After',
+  '-1 weeks': 'Patient Recall - 1 Weeks After',
   '-1 months': 'Patient Recall - 1 Months After',
   '-2 months': 'Patient Recall - 2 Months After',
   '-4 months': 'Patient Recall - 4 Months After',
@@ -55,7 +35,7 @@ export default {
     return twilio.sendMessage({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
-      body: createRecallText({ patient, account, sentRecall, recall, link, dueDate, lastApptDate: moment(lastDate).format('MMM YYYY') }),
+      body: createRecallText({ patient, account, sentRecall, recall, link, dueDate, lastApptDate: lastDate }),
     });
   },
 
@@ -109,15 +89,15 @@ export default {
         },
         {
           name: 'WEEKSBEFORE_DUEDATE',
-          content: moment(dueDate).add(1, 'days').diff(moment(), 'weeks'),
+          content: moment(dueDate).diff(moment(), 'weeks'),
         },
         {
           name: 'MONTHS_LASTAPPT',
-          content: moment().add(1, 'days').diff(moment(lastDate), 'months'),
+          content: moment().diff(moment(lastDate), 'months'),
         },
         {
           name: 'WEEKSAFTER_DUEDATE',
-          content: moment().add(1, 'days').diff(moment(lastDate), 'weeks'),
+          content: moment().diff(moment(lastDate), 'weeks'),
         },
         {
           name: 'ACCOUNT_LOGO_URL',

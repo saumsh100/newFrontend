@@ -94,8 +94,8 @@ export function organizeRecallsOutboxList(outboxList, recall, account) {
 
     p.sendDate = dateWithZone
       .subtract(convertIntervalStringToObject(recall.interval))
-      .set(startHour, 'hours')
-      .set(startMin, 'minutes')
+      .hours(startHour)
+      .minutes(startMin)
       .toISOString();
 
     return p;
@@ -145,8 +145,8 @@ export async function getRecallsOutboxList({ startDate, endDate, account }) {
     patientResults = patientResults.concat(organizeRecallsOutboxList(success, recall, account));
   });
 
-  return patientResults
-      .sort((a, b) => moment(a.sendDate).isAfter(b.sendDate));
+  // No need to sort by sendDate here...
+  return patientResults;
 }
 
 /**

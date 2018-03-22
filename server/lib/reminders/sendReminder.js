@@ -55,6 +55,7 @@ export default {
   // Send Appointment Reminder email via Mandrill (MailChimp)
   email({ account, appointment, patient, sentReminder, reminder }) {
     const isConfirmable = getIsConfirmable(appointment, reminder) ? 'true' : null;
+    const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
     return sendTemplate({
       patientId: patient.id,
       toEmail: patient.email,
@@ -66,6 +67,10 @@ export default {
         {
           name: 'PRIMARY_COLOR',
           content: account.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
+          name: 'ACCOUNT_LOGO_URL',
+          content: accountLogoUrl,
         },
         {
           name: 'CONFIRMATION_URL',

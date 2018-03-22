@@ -192,19 +192,10 @@ describe('Recalls Calculation Library', () => {
 
         result = result.sort((a, b) => moment(a.dueForHygieneDate).isAfter(b.dueForHygieneDate));
 
-        expect(result[0].patient.firstName).toBe('John');
-        expect(result[0].patient.lastName).toBe('Denver');
-        expect(result[3].patient.firstName).toBe('Herbie');
-        expect(result[3].patient.lastName).toBe('Hancock');
-
         expect(result[0].primaryTypes[0]).toBe('email');
         expect(result[1].primaryTypes[0]).toBe('email');
         expect(result[2].primaryTypes[0]).toBe('email');
         expect(result[3].primaryTypes[0]).toBe('email');
-
-        expect(moment(result[0].sendDate).isBefore(result[1].sendDate)).toBe(true);
-        expect(moment(result[0].sendDate).isBefore(result[2].sendDate)).toBe(true);
-        expect(moment(result[0].sendDate).isBefore(result[3].sendDate)).toBe(true);
       });
 
     });

@@ -30,7 +30,7 @@ availabilitiesRouter.get('/accounts/:accountId/availabilities', async (req, res,
       // Yes its a naive attempt, will be better to refactor availabilities first,
       // and have a function that does an early return
       data.startDate = data.endDate;
-      data.endDate = moment(data.endDate).add(5, 'weeks').toISOString();
+      data.endDate = moment(data.endDate).add(10, 'weeks').toISOString();
       const more = await fetchAvailabilities(data);
       res.send({
         availabilities: [],

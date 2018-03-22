@@ -38,6 +38,7 @@ export default async function linkRequestWithPendingAppointment(requestData) {
     note,
     isPending: false,
     startDate: requestData.startDate,
+    endDate: requestData.endDate,
     isSyncedWithPms: false,
     reason: Appointment.REQUEST_REASON,
   });
