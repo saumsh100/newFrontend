@@ -117,7 +117,6 @@ export async function getPatientsChangedAppointment(date, accountId) {
  */
 export async function updatePatientDueDate(accountId, patientIds) {
   const idQuery = patientIds || { $not: null };
-  const t = await sequelize.transaction();
 
   try {
     await Patient.update({
@@ -155,19 +154,16 @@ export async function updatePatientDueDate(accountId, patientIds) {
       await patientsHygiene[i].update({
         dueForHygieneDate: patientsHygiene[i].appointments[0].originalDate,
         hygienePendingAppointmentId: patientsHygiene[i].appointments[0].id,
-      }, { transaction: t });
+      });
     }
 
     for (let i = 0; i < patientsRecall.length; i += 1) {
       await patientsRecall[i].update({
         dueForRecallExamDate: patientsRecall[i].appointments[0].originalDate,
         recallPendingAppointmentId: patientsRecall[i].appointments[0].id,
-      }, { transaction: t });
+      });
     }
-
-    await t.commit();
   } catch (e) {
-    await t.rollback();
     console.log('DueDate job failed for Patients');
     return null;
   }
