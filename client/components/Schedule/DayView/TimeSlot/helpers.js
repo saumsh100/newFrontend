@@ -73,6 +73,7 @@ export const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
   } else if (columnIndex === numOfColumns - 1) {
     return 'left';
   }
+  return 'right';
 };
 
 /**

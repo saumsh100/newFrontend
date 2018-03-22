@@ -89,3 +89,8 @@
 .paddingText {
   padding-right: 5px;
 }
+
+.appPopover > :global(svg.Popover-tip) {
+  fill: white;
+  filter: drop-shadow(0px 2px 38px rgba(0,0,0,0.14));
+}

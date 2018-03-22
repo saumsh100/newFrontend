@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
@@ -104,8 +105,9 @@ class ShowAppointment extends Component {
           />
         )]}
         preferPlace={placement}
-        tipSize={0.01}
+        tipSize={12}
         onOuterAction={this.closePopover}
+        className={styles.appPopover}
       >
         <div
           onClick={this.togglePopover}
