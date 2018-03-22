@@ -1,7 +1,5 @@
 
-import moment from 'moment';
-import 'moment-timezone';
-import { Appointment, Account, SentRecall, Patient } from '../../_models';
+import { Appointment, SentRecall, Patient } from '../../_models';
 
 export default async function linkRequestWithPendingAppointment(requestData) {
   const { sentRecallId } = requestData;
@@ -12,50 +10,20 @@ export default async function linkRequestWithPendingAppointment(requestData) {
       id: sentRecallId,
     },
 
-    include: [
-      {
-        model: Patient,
-        as: 'patient',
-        required: true,
-      },
-      {
-        model: Account,
-        as: 'account',
-        required: true,
-      },
-    ],
+    include: [{
+      model: Patient,
+      as: 'patient',
+      required: true,
+    }],
   });
 
   if (!sentRecall) return false;
-  const { patient, account } = sentRecall;
-  const dueDate = sentRecall.isHygiene ? patient.dueForHygieneDate : patient.dueForRecallExamDate;
+  const { patient } = sentRecall;
+  const pendingApptId = sentRecall.isHygiene ?
+    patient.hygienePendingAppointmentId :
+    patient.recallPendingAppointmentId;
 
-  let startOfDay;
-  let endOfDay;
-  if (account.timezone) {
-    const mDay = moment.tz(dueDate, account.timezone);
-    startOfDay = mDay.startOf('day').toISOString();
-    endOfDay = mDay.endOf('day').toISOString();
-  } else {
-    const mDay = moment(dueDate);
-    startOfDay = mDay.startOf('day').toISOString();
-    endOfDay = mDay.endOf('day').toISOString();
-  }
-
-  // This is the pending appointment
-  // In the future we will probably just stash that pendingAppointmentId on the Patient model
-  const [appointment] = await Appointment.findAll({
-    where: {
-      patientId: sentRecall.patientId,
-      isPending: true,
-      startDate: {
-        $between: [startOfDay, endOfDay],
-      },
-    },
-    limit: 1,
-    order: [['startDate', 'ASC']],
-  });
-
+  const appointment = await Appointment.findById(pendingApptId);
   if (!appointment) return false;
 
   // Append the note from the booking request if there is one

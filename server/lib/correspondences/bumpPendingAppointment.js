@@ -17,46 +17,25 @@ export default async function bumpPendingAppointment(sentRecallId) {
 
     include: [
       {
-        model: Patient,
-        as: 'patient',
+        model: Account,
+        as: 'account',
         required: true,
       },
       {
-        model: Account,
-        as: 'account',
+        model: Patient,
+        as: 'patient',
         required: true,
       },
     ],
   });
 
   if (!sentRecall) return null;
-  const { patient, account } = sentRecall;
-  const dueDate = sentRecall.isHygiene ? patient.dueForHygieneDate : patient.dueForRecallExamDate;
+  const { account, patient } = sentRecall;
+  const pendingApptId = sentRecall.isHygiene ?
+    patient.hygienePendingAppointmentId :
+    patient.recallPendingAppointmentId;
 
-  let startOfDay;
-  let endOfDay;
-  if (account.timezone) {
-    const mDay = moment.tz(dueDate, account.timezone);
-    startOfDay = mDay.startOf('day').toISOString();
-    endOfDay = mDay.endOf('day').toISOString();
-  } else {
-    const mDay = moment(dueDate);
-    startOfDay = mDay.startOf('day').toISOString();
-    endOfDay = mDay.endOf('day').toISOString();
-  }
-
-  const [appointment] = await Appointment.findAll({
-    where: {
-      patientId: sentRecall.patientId,
-      isPending: true,
-      startDate: {
-        $between: [startOfDay, endOfDay],
-      },
-    },
-    limit: 1,
-    order: [['startDate', 'ASC']],
-  });
-
+  const appointment = await Appointment.findById(pendingApptId);
   if (!appointment) return null;
 
   const intervalObject = convertIntervalStringToObject(account.bumpInterval);

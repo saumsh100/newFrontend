@@ -93,6 +93,8 @@ describe('#linkRequestWithPendingAppointment', () => {
       }),
     ]);
 
+    await patients[0].update({ hygienePendingAppointmentId: appointments[0].id });
+
     sentRecalls = await SentRecall.bulkCreate([
       makeSentRecallData({
         recallId: recalls[0].id,
