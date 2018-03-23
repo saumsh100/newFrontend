@@ -12,7 +12,6 @@ const moment = require('moment');
 
 function CalcFirstNextLastAppointment(apps, updatePatient) {
   const today = new Date();
-
   // loops through the entire set of appointments
   let j = 0;
   while (j < apps.length) {

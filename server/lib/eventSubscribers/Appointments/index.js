@@ -6,7 +6,10 @@ import { updatePatientDueDate } from '../../../lib/dueDate';
 import { updateMostRecentHygiene } from '../../../lib/lastHygiene';
 import { updateMostRecentRecall } from '../../../lib/lastRecall';
 
-function getFirstNextLastAppointment(app) {
+/**
+ * does the firstNextLast calculation by grabbing all the patients appointments
+ */
+function calcPatientFNLAllApps(app) {
   return Appointment.findAll({
     raw: true,
     where: {
@@ -36,9 +39,14 @@ function getFirstNextLastAppointment(app) {
   });
 };
 
-function firstNextLastSetter(app, patient, startDate) {
-  if (moment(startDate).isAfter(new Date()) && !patient.nextApptId) {
+/**
+ * does the firstNextLast calculation without grabbing all the patients appointments
+ * unless necessary.
+ *
+ */
 
+function calcPatientFNLSingleApp(app, patient, startDate) {
+  if (moment(startDate).isAfter(new Date()) && !patient.nextApptId) {
     patient.nextApptId = app.id;
     patient.nextApptDate = startDate;
 
@@ -47,9 +55,7 @@ function firstNextLastSetter(app, patient, startDate) {
         id: patient.id,
       },
     });
-
-  } else if (moment(startDate).isAfter(new Date()) && patient.nextApptId) {
-
+  } else if (moment(startDate).isAfter(new Date()) && patient.nextApptId){
     return Appointment.findOne({
       where: { id: patient.nextApptId },
       raw: true,
@@ -65,10 +71,7 @@ function firstNextLastSetter(app, patient, startDate) {
         });
       }
     });
-
-  } else if (moment(startDate).isBefore(new Date())
-    && !patient.lastApptId && !patient.firstApptId) {
-
+  } else if (moment(startDate).isBefore(new Date()) && !patient.lastApptId && !patient.firstApptId) {
     patient.lastApptId = app.id;
     patient.lastApptDate = startDate;
 
@@ -80,15 +83,20 @@ function firstNextLastSetter(app, patient, startDate) {
         id: patient.id,
       },
     });
-
-  } else {
-    return getFirstNextLastAppointment(app);
   }
+
+  return calcPatientFNLAllApps(app);
 }
 
-function firstNextLastAppointmentCalc(data) {
+/**
+ * does the firstNextLast calculation for a single appointment
+ *
+ * @param  {id} - id of an appointment
+ */
+
+function firstNextLastAppointmentCalc(id) {
   return Appointment.findOne({
-    where: { id: data },
+    where: { id },
     include: [
       {
         model: Patient,
@@ -104,14 +112,20 @@ function firstNextLastAppointmentCalc(data) {
       const startDate = app.startDate;
 
       if (!app.isDeleted && !app.isPending && !app.isCancelled) {
-        return firstNextLastSetter(app, patient, startDate);
+        return calcPatientFNLSingleApp(app, patient, startDate);
       }
 
-      return getFirstNextLastAppointment(app);
+      // If an appointment was cancelled deleted or changed to pending reset FNL for this patient.
+      return calcPatientFNLAllApps(app);
     }
   });
 }
 
+/**
+ * does the firstNextLast calculation of a batch of appointments from the connector
+ *
+ * @param  {[appointmentIds]} - array of appointment ids that were created/updated
+ */
 function firstNextLastAppointmentBatchCalc(appointmentIds) {
   return Appointment.findAll({
     raw: true,

@@ -372,8 +372,8 @@ class PatientTable extends Component {
         Header: 'Last Appt',
         id: 'lastApptDate',
         accessor: (d) => {
-          if (d.hasOwnProperty('nextApptDate')) {
-            const dateValue = moment(d['nextApptDate']);
+          if (d.hasOwnProperty('lastApptDate')) {
+            const dateValue = moment(d['lastApptDate']);
             return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
           return '-';
