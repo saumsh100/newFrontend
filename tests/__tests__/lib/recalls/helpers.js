@@ -77,6 +77,7 @@ describe('Recalls Calculation Library', () => {
             status: 'Active',
             email: 'test@test.com',
             dueForHygieneDate: date(2017, 1, 5, 9),
+            lastHygieneDate: date(2016, 1, 5, 9),
           }),
         ]);
       });
@@ -139,6 +140,7 @@ describe('Recalls Calculation Library', () => {
             email: 'hello1@hello.com',
             status: 'Active',
             dueForHygieneDate: date(2018, 3, 1, 8),
+            lastHygieneDate: date(2017, 3, 1, 8),
           }),
 
           makePatientData({
@@ -147,6 +149,7 @@ describe('Recalls Calculation Library', () => {
             lastName: 'Heine',
             status: 'Active',
             dueForHygieneDate: date(2018, 3, 2, 8),
+            lastHygieneDate: date(2017, 3, 1, 8),
           }),
 
           makePatientData({
@@ -155,6 +158,7 @@ describe('Recalls Calculation Library', () => {
             lastName: 'Berth',
             status: 'Active',
             dueForHygieneDate: date(2018, 3, 2, 17),
+            lastHygieneDate: date(2017, 3, 1, 8),
           }),
 
           makePatientData({
@@ -163,6 +167,7 @@ describe('Recalls Calculation Library', () => {
             lastName: 'Hancock',
             status: 'Active',
             dueForHygieneDate: date(2018, 3, 3, 18),
+            lastHygieneDate: date(2017, 3, 1, 8),
           }),
         ]);
 

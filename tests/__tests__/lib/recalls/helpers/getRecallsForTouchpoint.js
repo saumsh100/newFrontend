@@ -99,7 +99,7 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return 1 patient that is dueForHygiene in 1 month', async () => {
-      await patients[0].update({ dueForHygieneDate: date(2017, 1, 5, 7) });
+      await patients[0].update({ dueForHygieneDate: date(2017, 1, 5, 7), lastHygieneDate: date(2016, 1, 5, 7) });
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '1 months',
@@ -120,7 +120,7 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return 0 patients that are dueForHygiene in 1 month cause its endDate is on the end bound', async () => {
-      await patients[0].update({ dueForHygieneDate: date(2017, 1, 5, 7) });
+      await patients[0].update({ dueForHygieneDate: date(2017, 1, 5, 7), lastHygieneDate: date(2016, 1, 5, 7) });
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '1 months',
@@ -140,7 +140,7 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return a patient for a negative interval', async () => {
-      await patients[0].update({ dueForHygieneDate: date(2017, 1, 5, 7) });
+      await patients[0].update({ dueForHygieneDate: date(2017, 1, 5, 7), lastHygieneDate: date(2016, 1, 5, 7) });
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '-1 months',
@@ -174,7 +174,7 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return 1 patient that is dueForRecallExamDate in 1 month', async () => {
-      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7) });
+      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7), lastRecallDate: date(2016, 1, 5, 7) });
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '1 months',
@@ -195,7 +195,7 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return 0 patients that are dueForRecallExamDate in 1 month cause its endDate is on the end bound', async () => {
-      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7) });
+      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7), lastRecallDate: date(2016, 1, 5, 7) });
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '1 months',
@@ -215,7 +215,7 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return a patient for a negative interval', async () => {
-      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7) });
+      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7), lastRecallDate: date(2016, 1, 5, 7) });
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '-1 months',
@@ -249,7 +249,12 @@ describe('#getPatientsForRecallTouchpoint', () => {
     });
 
     test('Should return 0 patienta cause the patient that is due has recalls turned off', async () => {
-      await patients[0].update({ dueForRecallExamDate: date(2017, 1, 5, 7), preferences: { recalls: false } });
+      await patients[0].update({
+        dueForRecallExamDate: date(2017, 1, 5, 7),
+        lastHygieneDate: date(2016, 1, 5, 7),
+        preferences: { recalls: false },
+      });
+
       const result = await getPatientsForRecallTouchPoint({
         recall: {
           interval: '1 months',
@@ -273,10 +278,10 @@ describe('#getPatientsForRecallTouchpoint', () => {
     let patients;
     beforeEach(async () => {
       patients = await Patient.bulkCreate([
-        makePatData({ firstName: 'John', lastName: 'Denver', dueForHygieneDate: date(2018, 3, 2, 8) }),
-        makePatData({ firstName: 'Carol', lastName: 'Heine', dueForHygieneDate: date(2018, 3, 3, 8) }),
-        makePatData({ firstName: 'Beth', lastName: 'Berth', dueForHygieneDate: date(2018, 3, 3, 17) }),
-        makePatData({ firstName: 'Herbie', lastName: 'Hancock', dueForHygieneDate: date(2018, 3, 4, 18) }),
+        makePatData({ firstName: 'John', lastName: 'Denver', dueForHygieneDate: date(2018, 3, 2, 8), lastHygieneDate: date(2017, 1, 5, 7) }),
+        makePatData({ firstName: 'Carol', lastName: 'Heine', dueForHygieneDate: date(2018, 3, 3, 8), lastHygieneDate: date(2017, 1, 5, 7) }),
+        makePatData({ firstName: 'Beth', lastName: 'Berth', dueForHygieneDate: date(2018, 3, 3, 17), lastHygieneDate: date(2017, 1, 5, 7) }),
+        makePatData({ firstName: 'Herbie', lastName: 'Hancock', dueForHygieneDate: date(2018, 3, 4, 18), lastHygieneDate: date(2017, 1, 5, 7) }),
       ]);
     });
 

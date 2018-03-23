@@ -215,6 +215,11 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
         $gte: start,
         $lt: end,
       },
+
+      lastHygieneDate: {
+        $not: null,
+        $gte: moment(startDate).subtract(2, 'years').toISOString(),
+      },
     },
   });
 
@@ -226,6 +231,11 @@ export async function getPatientsForRecallTouchPoint({ recall, account, startDat
         $not: null,
         $gte: start,
         $lt: end,
+      },
+
+      lastRecallDate: {
+        $not: null,
+        $gte: moment(startDate).subtract(2, 'years').toISOString(),
       },
     },
   });

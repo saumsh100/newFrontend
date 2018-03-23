@@ -197,6 +197,7 @@ describe('/api/accounts/:account/recalls', () => {
             email: 'hello@hello.com',
             status: 'Active',
             dueForHygieneDate: date(2017, 7, 5, 9),
+            lastHygieneDate: date(2016, 7, 5, 9),
           }),
         ]);
 
