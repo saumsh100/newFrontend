@@ -197,6 +197,8 @@ const ModelAttributes = {
     'suggestedPractitionerId',
     'suggestedChairId',
     'note',
+    'insuranceMemberId',
+    'insuranceCarrier',
     'pmsId',
     'patientId',
     'patientUser',
@@ -343,4 +345,4 @@ export default function jsonapi(resourceName, data) {
   }
 
   return serializer.serialize(data);
-};
+}

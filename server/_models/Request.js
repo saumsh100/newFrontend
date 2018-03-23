@@ -78,6 +78,14 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    insuranceCarrier: {
+      type: DataTypes.STRING,
+    },
+
+    insuranceMemberId: {
+      type: DataTypes.STRING,
+    },
+
     pmsId: {
       type: DataTypes.STRING,
     },
