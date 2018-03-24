@@ -36,6 +36,7 @@
   flex: 1;
   min-height: 314px;
   overflow: auto;
+  overflow-x: hidden;
 }
 
 .emptyList{
@@ -73,7 +74,7 @@
 
   transition: all 0.1s ease-in-out;
   &:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 }
 

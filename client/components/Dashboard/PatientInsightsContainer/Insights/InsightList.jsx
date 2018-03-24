@@ -27,6 +27,69 @@ function DisplayInsightDiv(header, subHeader) {
   );
 }
 
+function buildFamilyData(insightObj, patient, gender) {
+  const numOfFam = insightObj.value.length;
+  let textPlural = 'family members';
+
+  if (numOfFam === 1) {
+    textPlural = 'family member';
+  }
+
+  let genderOption2 = 'they';
+
+  if (gender === 'his') {
+    genderOption2 = 'he';
+  } else if (gender === 'her') {
+    genderOption2 = 'she';
+  }
+
+  const header = (
+    <div>
+      Ask <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
+      if {genderOption2} would like to schedule {gender} family as well.
+    </div>
+  );
+  const subHeader = (
+    <div>
+      <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
+      has {numOfFam} {textPlural} due for Recare:
+
+      {insightObj.value.map((famMember) => {
+        if (moment(famMember.dateDue).isValid()) {
+          return (
+            <li className={styles.insightSubHeaderList}>
+              {famMember.firstName} {famMember.lastName} was due for {moment(famMember.dateDue).format('MMM Do YYYY')}
+            </li>
+          );
+        }
+      })}
+    </div>
+  );
+  return DisplayInsightDiv(header, subHeader);
+}
+
+
+function buildConfirmData(insightObj, patient, gender) {
+  const header = (
+    <div>
+      Call <span className={styles.patientName}>{patient.firstName}</span> at {FormatPhoneNumber(patient.mobilePhoneNumber)} to confirm {gender} appointment.
+    </div>
+  );
+
+  const emailCount = insightObj.value.email;
+  const phoneCount = insightObj.value.phone;
+  const smsCount = insightObj.value.sms;
+  const total = emailCount + smsCount + phoneCount;
+  const subHeader = total > 0 ? (
+    <div>
+      <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
+      has not yet confirmed {gender} appointment despite CareCru's {total} attempts. ({emailCount} Emails and {phoneCount} Phone and {smsCount} SMS)
+    </div>
+  ) : null;
+
+  return DisplayInsightDiv(header, subHeader);
+}
+
 export default function InsightList(props) {
   const {
     patient,
@@ -41,7 +104,7 @@ export default function InsightList(props) {
   insightData.insights.forEach((insightObj) => {
     let gender = 'their';
 
-    if(patient.gender) {
+    if (patient.gender) {
       if (patient.gender.toLowerCase() === 'male') {
         gender = 'his';
       } else {
@@ -68,63 +131,11 @@ export default function InsightList(props) {
     }
 
     if (insightObj.type === 'confirmAttempts' && patient.mobilePhoneNumber) {
-      const header = (
-        <div>
-          Call <span className={styles.patientName}>{patient.firstName}</span> at {FormatPhoneNumber(patient.mobilePhoneNumber)} to confirm {gender} appointment.
-        </div>
-      );
-
-      const emailCount = insightObj.value.email;
-      const phoneCount = insightObj.value.phone;
-      const smsCount = insightObj.value.sms;
-      const total = emailCount + smsCount + phoneCount;
-      const subHeader = total > 0 ? (
-        <div>
-          <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
-          has not yet confirmed {gender} appointment despite CareCru's {total} attempts. ({emailCount} Emails and {phoneCount} Phone and {smsCount} SMS)
-        </div>
-      ) : null;
-
-      displayPatientConfirmed = DisplayInsightDiv(header, subHeader);
+      displayPatientConfirmed = buildConfirmData(insightObj, patient, gender);
     }
 
     if (insightObj.type === 'familiesDueRecare') {
-      const numOfFam = insightObj.value.length;
-      let textPlural = 'family members';
-
-      if (numOfFam === 1) {
-        textPlural = 'family member';
-      }
-
-      let genderOption2 = 'they';
-
-      if (gender === 'his') {
-        genderOption2 = 'he';
-      } else if (gender === 'her') {
-        genderOption2 = 'she';
-      }
-
-      const header = (
-        <div>
-          Ask <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
-          if {genderOption2} would like to schedule {gender} family as well.
-        </div>
-      );
-      const subHeader = (
-        <div>
-          <span className={styles.patientName}>{patient.firstName}&nbsp;</span>
-          has {numOfFam} {textPlural} due for Recare:
-
-          {insightObj.value.map((famMember, index, arr) => {
-            return (
-              <li className={styles.insightSubHeaderList}>
-                {famMember.firstName} {famMember.lastName} was due for {moment(famMember.dateDue).format('MMM Do YYYY')}
-              </li>
-            );
-          })}
-        </div>
-      );
-      displayFamilyRecare = DisplayInsightDiv(header, subHeader);
+      displayFamilyRecare = buildFamilyData(insightObj, patient, gender);
     }
   });
 
@@ -141,4 +152,4 @@ export default function InsightList(props) {
 InsightList.propTypes = {
   patient: PropTypes.object,
   insightData: PropTypes.object,
-}
+};

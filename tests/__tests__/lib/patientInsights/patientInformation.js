@@ -223,7 +223,7 @@ describe('Patient Insights', () => {
       const patient = await Patient.create(makePatientData({
         firstName: 'WHAT',
         lastName: 'NO',
-        lastHygieneDate: time.clone().subtract(7, 'months')._d,
+        dueForHygieneDate: time.clone().subtract(7, 'months')._d,
         familyId: family.id,
       }));
 
@@ -238,7 +238,7 @@ describe('Patient Insights', () => {
       const patient = await Patient.create(makePatientData({
         firstName: 'WHAT',
         lastName: 'NO',
-        lastHygieneDate: time.clone().subtract(5, 'months')._d,
+        dueForHygieneDate: time.clone().subtract(5, 'months')._d,
         familyId: family.id,
       }));
 
@@ -253,7 +253,8 @@ describe('Patient Insights', () => {
       const patient = await Patient.create(makePatientData({
         firstName: 'WHAT',
         lastName: 'NO',
-        lastHygieneDate: time.clone().subtract(7, 'months')._d,
+        dueForHygieneDate: time.clone().subtract(7, 'months')._d,
+        dueForRecallExamDate: time.clone().subtract(7, 'months')._d,
         nextApptDate: time.clone().add(7, 'months')._d,
         familyId: family.id,
       }));
@@ -292,7 +293,7 @@ describe('Patient Insights', () => {
       await Patient.create(makePatientData({
         firstName: 'WHAT',
         lastName: 'NO',
-        lastHygieneDate: time.clone().subtract(7, 'months')._d,
+        dueForHygieneDate: time.clone().subtract(7, 'months')._d,
         familyId: family.id,
       }));
 

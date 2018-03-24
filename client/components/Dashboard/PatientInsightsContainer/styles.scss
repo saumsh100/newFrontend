@@ -50,7 +50,7 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  padding-bottom: 30px;
+  padding-bottom: 25px;
   border-bottom: 1px solid $primary-grey;
   padding-top: 30px;
   align-items: flex-start;
@@ -64,6 +64,10 @@
   &:first-child {
     padding-top: 0;
   }
+
+  &:last-child {
+    border-bottom: 0px;
+  }
 }
 
 .insightsList {
@@ -73,6 +77,6 @@
   @media screen and (max-width: 1000px) {
     padding-left: 0px;
   }
-
+  min-height: 35px;
   height: 100%;
 }

@@ -5,7 +5,7 @@
   cursor: pointer;
   color: $primary-blue;
   &:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
     color: lighten($primary-blue, 10%),
   }
 }

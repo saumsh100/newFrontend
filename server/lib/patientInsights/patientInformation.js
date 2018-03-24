@@ -173,8 +173,6 @@ export async function formatingInsights(insights) {
  * @return {[object]}           [patient Model with recareDate]
  */
 export async function familyRecare(familyId, patientId, startDate) {
-  const sixMonthsAgo = moment(startDate).subtract(6, 'months');
-
   if (familyId == null) {
     return [];
   }
@@ -186,9 +184,15 @@ export async function familyRecare(familyId, patientId, startDate) {
         $ne: patientId,
       },
       familyId,
-      lastHygieneDate: {
-        $lte: sixMonthsAgo.toISOString(),
-        $ne: null,
+      $or: {
+        dueForHygieneDate: {
+          $lt: moment(startDate).toISOString(),
+          $ne: null,
+        },
+        dueForRecallExamDate: {
+          $lt: moment(startDate).toISOString(),
+          $ne: null,
+        },
       },
       nextApptDate: null,
       status: 'Active',
@@ -197,7 +201,12 @@ export async function familyRecare(familyId, patientId, startDate) {
 
   for (let i = 0; i < patients.length; i += 1) {
     const patient = patients[i];
-    patient.dateDue = moment(patient.lastHygieneDate).add(6, 'months').toISOString();
+
+    if (moment(patient.dueForHygieneDate).isBefore(moment(patient.dueForRecallExamDate)) || !patient.dueForRecallExamDate) {
+      patient.dateDue = moment(patient.dueForHygieneDate).toISOString();
+    } else {
+      patient.dateDue = moment(patient.dueForRecallExamDate).toISOString();
+    }
   }
 
   return patients;
