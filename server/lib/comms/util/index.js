@@ -15,6 +15,18 @@ const ERROR_CODES = {
   phone: '1300',
 };
 
+const PREFERENCE_TYPES = {
+  email: 'emailNotifications',
+  sms: 'sms',
+  phone: 'phone',
+};
+
+const NO_PREFERENCE_ERROR_CODES = {
+  email: '2100',
+  sms: '2200',
+  phone: '2300',
+};
+
 /**
  * cannotSend
  *
@@ -26,6 +38,20 @@ export function cannotSend(patient, primaryType) {
   // If it is undefined return the error code
   if (!patient[ATTRS[primaryType]]) {
     return ERROR_CODES[primaryType];
+  }
+}
+
+/**
+ * noPreference
+ *
+ * @param patient
+ * @param primaryType
+ * @returns {{errors: Array, success: Array}}
+ */
+export function noPreference(patient, primaryType) {
+  // If it is false return errorCode
+  if (!patient.preferences[PREFERENCE_TYPES[primaryType]]) {
+    return NO_PREFERENCE_ERROR_CODES[primaryType];
   }
 }
 
@@ -45,7 +71,7 @@ export function generateOrganizedPatients(patients, primaryTypes) {
 
   for (const patient of patients) {
     primaryTypes.forEach((primaryType) => {
-      const errorCode = cannotSend(patient, primaryType);
+      const errorCode = cannotSend(patient, primaryType) || noPreference(patient, primaryType);
       if (errorCode) {
         errors.push({
           patient,

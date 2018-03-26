@@ -143,6 +143,8 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
         {renderIf(isSuperAdmin, () =>
           <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
             <SubNavItem path="/admin/enterprises" label="Enterprises" />
+            <SubNavItem path="/admin/nasa" label="NASA" />
+            <SubNavItem path="/admin/play" label="Playground" />
           </MultiNavItem>
         )}
       </Nav>

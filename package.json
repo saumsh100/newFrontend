@@ -73,6 +73,7 @@
     "classnames": "^2.2.3",
     "cleave.js": "^0.7.15",
     "compression": "^1.6.0",
+    "compromise": "^11.5.3",
     "consolidate": "~0.12.1",
     "cookie-parser": "^1.4.1",
     "cors": "^2.8.1",

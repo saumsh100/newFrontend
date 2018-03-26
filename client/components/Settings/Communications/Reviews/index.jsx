@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ReviewItem from './ReviewItem';
@@ -5,6 +6,7 @@ import ReviewPreview from './ReviewPreview';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
+import ContactNotes from '../../../demo/ContactNotes';
 import styles from './styles.scss';
 
 class Reviews extends React.Component {
@@ -63,6 +65,7 @@ class Reviews extends React.Component {
           )}
         />
         {this.renderReviewItem()}
+        <ContactNotes />
       </div>
     );
   }

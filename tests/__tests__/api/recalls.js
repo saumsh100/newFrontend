@@ -222,7 +222,7 @@ describe('/api/accounts/:account/recalls', () => {
           .set('Authorization', `Bearer ${token}`)
           .expect(200)
           .then(async ({ body }) => {
-            body[0].patient = omitProperties(body[0].patient, ['id', 'dueForHygieneDate']);
+            body[0].patient = omitProperties(body[0].patient, ['id', 'dueForHygieneDate', 'lastHygieneDate']);
             body[0].recall = omitProperties(body[0].recall, ['id']);
             delete body[0].sendDate;
             expect(body).toMatchSnapshot();

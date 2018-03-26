@@ -5,6 +5,7 @@ import DocumentTitle from 'react-document-title';
 import Container from '../../containers/EnterprisesContainer';
 import List from '../../components/Admin/Enterprises/List';
 import Create from '../../components/Admin/Enterprises/Form';
+import Playground from '../../components/Admin/Playground';
 import Accounts from './Accounts';
 import Connectors from './Connectors';
 
@@ -26,6 +27,7 @@ const Admin = () =>
       <Switch>
         <Redirect exact from="/admin" to={base()} />
         <Route path="/admin/nasa" component={Connectors} />
+        <Route path="/admin/play" component={Playground} />
         <Route path={base('/:enterpriseId/accounts')} component={Accounts} />
         <Route path={base()} component={Enterprises} />
       </Switch>

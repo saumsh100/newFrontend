@@ -3,10 +3,10 @@ import uniqWith from 'lodash/uniqWith';
 import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
+import convertToCommsPreferences from '../util/convertToCommsPreferences';
 import { UniqueFieldError } from './errors';
 
 const { validateAccountIdPmsId } = require('../util/validators');
-
 
 const STATUS = {
   ACTIVE: 'Active',
@@ -127,6 +127,15 @@ export default function (sequelize, DataTypes) {
 
     contactMethodNote: {
       type: DataTypes.STRING,
+      set(val) {
+        this.setDataValue('contactMethodNote', val);
+
+        // Parse notes to smart-determine comms prefs
+        const oldPrefs = this.getDataValue('preferences');
+        const smartPrefs = convertToCommsPreferences(val);
+        const newPrefs = Object.assign({}, oldPrefs, smartPrefs);
+        this.setDataValue('preferences', newPrefs);
+      }
     },
 
     birthDate: {

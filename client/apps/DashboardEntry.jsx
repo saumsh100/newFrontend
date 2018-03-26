@@ -10,6 +10,7 @@ import 'moment-interval';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
+import nlp from 'compromise';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import time from '../../server/util/time';
 import socket from '../socket';
@@ -68,6 +69,7 @@ load()(store.dispatch).then(() => {
   window.time = time;
   window._ = _;
   window.Immutable = Immutable;
+  window.nlp = nlp;
 
   // We have to create global objects only once
   // And pass them to App on render

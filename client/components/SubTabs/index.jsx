@@ -87,6 +87,10 @@ const ROUTES = {
       to: '/admin/nasa',
       label: 'NASA',
     },
+    {
+      to: '/admin/play',
+      label: 'Playground',
+    },
   ],
 };
 
