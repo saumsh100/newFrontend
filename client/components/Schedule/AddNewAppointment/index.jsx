@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { change, reset } from 'redux-form';
-import { setTime } from '../../library/util/TimeOptions';
+import { setTime, getDuration } from '../../library/util/TimeOptions';
 import DisplayForm from './DisplayForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import {
@@ -32,11 +32,6 @@ const mergeTime = (date, time) => {
   date.setMinutes(time.getMinutes());
   return new Date(date);
 };
-const getDuration = (startDate, endDate, customBufferTime) => {
-  const end = moment(endDate);
-  const duration = moment.duration(end.diff(startDate));
-  return duration.asMinutes() - customBufferTime;
-};
 
 class AddNewAppointment extends Component {
   constructor(props) {
@@ -62,9 +57,10 @@ class AddNewAppointment extends Component {
     }
   }
 
+
   getSuggestions(value) {
     return this.props.fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
-      .then((searchData) => searchData.patients).then((searchedPatients) => {
+      .then(searchData => searchData.patients).then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
           key => searchedPatients[key]) : [];
 
@@ -95,13 +91,13 @@ class AddNewAppointment extends Component {
       unit,
       change,
     } = this.props;
-
-    if (appFormValues && appFormValues.endTime) {
-      const duration = getDuration(value, appFormValues.endTime, 0);
-      const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
-      change(formName, 'duration', duration);
-      change(formName, 'unit', unitValue);
-    }
+    const defaultDuration = appFormValues ? appFormValues.duration : 60;
+    const endTime = moment(value).add(defaultDuration, 'minutes');
+    change(formName, 'endTime', setTime(endTime));
+    const duration = getDuration(value, endTime, 0);
+    const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
+    change(formName, 'duration', duration);
+    change(formName, 'unit', unitValue);
   }
 
   handleEndTimeChange(value) {
@@ -284,12 +280,10 @@ class AddNewAppointment extends Component {
                 reset(formName);
               });
           });
-        } else {
-          reinitializeState();
-          reset(formName);
         }
+        reinitializeState();
+        reset(formName);
       });
-
     }
 
     const appModel = selectedAppointment.appModel;

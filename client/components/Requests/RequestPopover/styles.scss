@@ -39,7 +39,7 @@
   padding: 15px 15px 15px 15px;
   height: auto;
   min-height: 200px;
-  max-height: 290px;
+  max-height: 350px;
   max-width: 285px;
 }
 
@@ -64,7 +64,7 @@
   align-items: center;
   font-size: 13px;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
-  padding-bottom: 2px;
+  padding-bottom: 4px;
 
   &_note {
     max-height: 80px;
@@ -75,6 +75,17 @@
     padding-top: 1px;
   }
 }
+.multilineData{
+  @extend .data;
+  align-items: flex-start;
+  .data_text{
+    padding-top: 0;
+  }
+}
+    .subData{
+      composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
+      color: $primary-dark-grey;
+    }
 
 .footer {
   border-top: 1px solid $primary-grey;

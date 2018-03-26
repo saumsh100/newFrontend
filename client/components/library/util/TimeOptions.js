@@ -30,3 +30,9 @@ export const setTime = (time) => {
   mergeTime.setMinutes(tempTime.getMinutes());
   return mergeTime.toISOString();
 };
+
+export const getDuration = (startDate, endDate, customBufferTime) => {
+  const end = moment(endDate);
+  const duration = moment.duration(end.diff(startDate));
+  return duration.asMinutes() - customBufferTime;
+};

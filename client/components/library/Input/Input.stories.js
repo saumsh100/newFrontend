@@ -27,6 +27,14 @@ storiesOf('Input', module)
       onChange={action('disabled')}
     />
   ))
+  .add('error input', () => (
+    <Input
+      value="text"
+      label="Test value"
+      disabled={boolean('Disabled', true)}
+      error="Error"
+    />
+  ))
   .add('empty value', () => (
     <Input
       value=""

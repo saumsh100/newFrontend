@@ -71,9 +71,8 @@ class ReduxField extends Component {
           <Field {...newProps} />
         </Popover>
       );
-    } else {
-      return <Field {...newProps} />;
     }
+    return <Field {...newProps} />;
   }
 }
 

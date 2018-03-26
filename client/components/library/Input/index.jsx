@@ -17,14 +17,14 @@ function Input(props) {
     type = 'text',
     theme,
     classStyles,
+    iconType,
   } = props;
 
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
-  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles',  'IconComponent']);
+  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles', 'IconComponent', 'iconType', 'refCallBack']);
   const inputStyle = theme;
-
   const valuePresent = value !== null && value !== undefined && value !== '' &&
     !(typeof value === 'number' && isNaN(value));
 
@@ -32,7 +32,7 @@ function Input(props) {
   let iconClassName = inputStyle.icon;
 
   if (valuePresent) {
-    labelClassName = classNames(labelClassName, inputStyle.filled,);
+    labelClassName = classNames(labelClassName, inputStyle.filled);
     iconClassName = classNames(inputStyle.hidden, iconClassName);
   }
 
@@ -50,22 +50,19 @@ function Input(props) {
 
   let iconComponent = null;
   // TODO: fix this so that it does not throw an error!
-  /*if (IconComponent) {
+  /* if (IconComponent) {
     iconComponent = <IconComponent className={iconClassName} />;
   } else */
 
   if (icon) {
-    iconComponent = <Icon className={iconClassName} icon={icon} />;
+    iconComponent = <Icon className={iconClassName} type={iconType} icon={icon} />;
   }
-
   // TODO: use classNames to avoid "undefined" being a className
   return (
     <div className={`${inputStyle.group} ${classStyles}`}>
-      <input type={type} className={inputClassName} {...inputProps} ref={inputProps.refCallBack} />
+      <input type={type} className={inputClassName} {...inputProps} ref={props.refCallBack} />
       <span className={inputStyle.bar} />
-      <label className={labelClassName}>
-        {label}
-      </label>
+      <label className={labelClassName}>{label}</label>
       {errorComponent}
       {iconComponent}
     </div>

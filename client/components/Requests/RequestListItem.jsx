@@ -53,6 +53,8 @@ class RequestListItem extends Component {
       service: serviceName,
       phoneNumber: patientUser.phoneNumber,
       note: request.note,
+      insuranceCarrier: request.insuranceCarrier,
+      insuranceMemberId: request.insuranceMemberId,
       month: request.getMonth(),
       day: request.getDay(),
     };
@@ -68,6 +70,8 @@ class RequestListItem extends Component {
             time={data.time}
             service={data.service}
             note={data.note}
+            insuranceCarrier={data.insuranceCarrier}
+            insuranceMemberId={data.insuranceMemberId}
             practitioner={practitioner}
             patient={patientUser}
             request={request}

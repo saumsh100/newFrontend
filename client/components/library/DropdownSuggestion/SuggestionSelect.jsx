@@ -1,24 +1,19 @@
 
-import React, { PropTypes } from 'react';
-import DropdownSelect from '../../DropdownSelect';
+import React from 'react';
+import PropTypes from 'prop-types';
+import DropdownSuggestion from './index';
 
-export default function RFDropdownSelect(props) {
-  const {
-    input,
-    icon,
-    label,
-    error,
-    meta,
-  } = props;
+export default function SuggestionSelect(props) {
+  const { icon, error, meta, input } = props;
 
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
   const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+
   return (
-    <DropdownSelect
-      {...props}
+    <DropdownSuggestion
       {...input}
-      label={label}
+      {...props}
       error={finalError}
       icon={finalIcon}
     />
@@ -26,10 +21,9 @@ export default function RFDropdownSelect(props) {
 }
 
 /* eslint react/forbid-prop-types: 0 */
-RFDropdownSelect.propTypes = {
+SuggestionSelect.propTypes = {
   input: PropTypes.object,
   meta: PropTypes.object,
   icon: PropTypes.node,
-  label: PropTypes.node,
   error: PropTypes.string,
 };

@@ -6,16 +6,10 @@ import {
   Field,
 } from '../../library';
 import AppointmentForm from './AppointmentForm';
-import DisplaySearchedPatient from './DisplaySearchedPatient'
-import { setTime } from '../../library/util/TimeOptions';
+import DisplaySearchedPatient from './DisplaySearchedPatient';
+import { setTime, getDuration } from '../../library/util/TimeOptions';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
 import styles from './styles.scss';
-
-const getDuration = (startDate, endDate, customBufferTime) => {
-  const end = moment(endDate);
-  const duration = moment.duration(end.diff(startDate));
-  return duration.asMinutes() - customBufferTime;
-};
 
 const generateEntityOptions = (entities, label) => {
   const options = [];
@@ -34,21 +28,83 @@ const generatePractitionerOptions = (practitioners) => {
   return options;
 };
 
+/**
+ * Generate an array containing valid time-slots,
+ * incrementing the provided amount.
+ *
+ * @param {string} timeInput
+ * @param {string} unitIncrement
+ */
+const generateTimeOptions = (timeInput, unitIncrement = 30) => {
+  const timeOptions = [];
+  const totalHours = 24;
+  const increment = unitIncrement;
+  const increments = 60 / increment;
+
+  if (timeInput) {
+    const minutes = moment(timeInput).minute();
+    const remainder = minutes % increment;
+    const today = new Date();
+    const label = (today.dst() && !moment(new Date()).isDST() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
+    if (remainder) {
+      timeOptions.push({ value: timeInput, label });
+    }
+  }
+  let i;
+  for (i = 6; i < totalHours; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const today = new Date();
+      const value = time.toISOString();
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      timeOptions.push({ value, label });
+    }
+  }
+
+  for (i = 0; i < 6; i++) {
+    let j;
+    for (j = 0; j < increments; j++) {
+      const time = moment(new Date(1970, 1, 0, i, j * increment));
+      const today = new Date();
+      const value = time.toISOString();
+      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      timeOptions.push({ value, label });
+    }
+  }
+
+  return timeOptions;
+};
+
+/**
+ * Check if the current patientSelected value
+ * is a valid object containing an ID.
+ *
+ * @param {*} value
+ */
+const validatePatient = value => (value && typeof value === 'object' && value.id ? undefined : 'You must select a valid patient');
+
+const defaultStartTime = () => {
+  const now = moment().add(60, 'minutes');
+  const nextAvailable = generateTimeOptions().find(opt => moment(opt.value).format('HH:mm') > now.format('HH:mm'));
+  return nextAvailable.value;
+};
+
 class DisplayForm extends Component {
   constructor(props) {
     super(props);
     this.focusAutoSuggest = this.focusAutoSuggest.bind(this);
   }
 
-  focusAutoSuggest() {
-    if (this.autoSuggest && this.autoSuggest.inputComponent) {
-      this.autoSuggest.inputComponent.focus();
-    }
-  }
-
   componentDidUpdate() {
     if (this.props.showInput) {
       this.focusAutoSuggest();
+    }
+  }
+
+  focusAutoSuggest() {
+    if (this.autoSuggest && this.autoSuggest.inputComponent) {
+      this.autoSuggest.inputComponent.focus();
     }
   }
 
@@ -71,6 +127,10 @@ class DisplayForm extends Component {
 
     let initialValues = {
       date: moment(currentDate),
+      startTime: defaultStartTime(),
+      duration: 60,
+      endTime: moment(defaultStartTime()).add(60, 'minutes').toISOString(),
+      unit: 15,
     };
 
     let time = null;
@@ -147,24 +207,22 @@ class DisplayForm extends Component {
       group: styles.groupAuto,
     };
 
-    const addNewPatientComponent = ({ containerProps, children }) => {
-      return (
-        <div {...containerProps}>
-          {children}
-          <div
-            className={styles.addNewPatient}
-            onClick={(e) => {
-              e.stopPropagation();
-              this.props.setCreatingPatient({ createPatientBool: true });
-              this.props.setShowInput(true);
-              this.props.setPatientSearched(null)
-            }}
-          >
-            Add New Patient
+    const addNewPatientComponent = ({ containerProps, children }) => (
+      <div {...containerProps}>
+        {children}
+        <div
+          className={styles.addNewPatient}
+          onClick={(e) => {
+            e.stopPropagation();
+            this.props.setCreatingPatient({ createPatientBool: true });
+            this.props.setShowInput(true);
+            this.props.setPatientSearched(null);
+          }}
+        >
+          Add New Patient
           </div>
-        </div>
-      );
-    };
+      </div>
+    );
 
     const searchStyles = !patientDisplay ? styles.searchContainer : styles.hidden;
 
@@ -190,14 +248,13 @@ class DisplayForm extends Component {
             placeholder="Add Patient"
             getSuggestions={getSuggestions}
             onChange={(e, newValue) => handleAutoSuggest(newValue)}
-
             classStyles={styles.searchInput}
             theme={autoCompleteStyle}
             renderSuggestionsContainer={addNewPatientComponent}
             icon="search"
-            ref={(el) => this.autoSuggest = el}
-            required
-            onBlurFunction={()=> this.props.setShowInput(false)}
+            ref={el => (this.autoSuggest = el)}
+            validate={[validatePatient]}
+            onBlurFunction={() => this.props.setShowInput(false)}
           />
         </div>
         <AppointmentForm
@@ -206,6 +263,7 @@ class DisplayForm extends Component {
           selectedAppointment={selectedAppointment}
           time={time}
           unit={unit}
+          timeOptions={generateTimeOptions()}
           handleDurationChange={handleDurationChange}
           handleUnitChange={handleUnitChange}
           handleStartTimeChange={this.props.handleStartTimeChange}

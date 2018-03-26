@@ -1,0 +1,225 @@
+
+@import '../../../ui.scss';
+
+$empty-grey: darken(lightgrey, 5%);
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  padding: 20px 0;
+}
+
+.toggleDiv {
+  position: relative;
+  font-size: $medium-size;
+  font-family: $dashboard-font;
+  height: 30px;
+  width: 100%;
+  //padding: 5px 5px 5px 0px;
+  cursor: pointer;
+  border-bottom: 1px solid $disabled-color;
+  display: flex;
+  align-items: center;
+  transition : border 500ms ease-out;
+  box-sizing: border-box;
+}
+
+.primaryColorBorder {
+  border-bottom: 1px solid var(--primaryButtonColor);
+}
+
+.primaryWhiteBorder {
+  border-bottom: 1px solid $primary-white;
+}
+
+.theme {
+  &_primaryBlueLabel {
+    font-size: $small-size !important;
+    letter-spacing: 2px;
+  }
+  &_primaryBlueBorder{
+    border-bottom: 1px solid $primary-blue;
+  }
+  &_primaryBlueCaret{
+    color: $primary-blue !important;
+  }
+}
+
+.active {
+  border-bottom: 1px solid $primary-dark;
+}
+
+.toggleDivDisabled {
+  @extend .toggleDiv;
+  color: $disabled-color;
+  cursor: not-allowed;
+  border-bottom: 1px solid $disabled-color;
+  .caretIconWrapper {
+    color: $disabled-color;
+  }
+}
+
+.optionDiv {
+  padding: 0px !important;
+  font-family: $dashboard-font !important;
+  white-space: normal !important;
+}
+
+.optionListItem {
+  font-size: $small-size;
+  cursor: pointer;
+  padding-left: 20px;
+  padding-right: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  background-color: $primary-white;
+  border:0;
+  width: 100%;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+  text-align: center;
+  color: $primary-dark;
+  justify-content: center;
+  letter-spacing: 0;
+  &:hover {
+    cursor: pointer;
+    background-color: lighten($primary-grey, 5%);
+    background-color: $primary-lightgrey !important;
+    color: $primary-dark !important;
+  }
+}
+
+.dropDownList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.selectedListItem {
+  padding-left: 15px;
+  border-left: $selection-border $primary-color;
+
+}
+
+.toggleValueDiv {
+  user-select: none;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.caretIconWrapper {
+  margin-left: auto;
+  z-index: 1;
+  color: $primary-darkgrey;
+  transition : color 500ms ease-out;
+}
+
+.timesIconWrapper{
+  padding: 0;
+  border: 0;
+  z-index: 1;
+  color: $primary-darkgrey;
+  transition : color 500ms ease-out;
+  margin-left: auto;
+  background: transparent;
+  cursor: pointer;
+  &:hover{
+    color: $primary-dark;
+  }
+}
+
+.caretIcon {
+}
+
+.activeIcon {
+  color: $primary-dark;
+}
+
+.noBorder {
+  border: none;
+}
+
+.label {
+  color: $empty-grey;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 0px;
+  transition: 0.2s ease all;
+  top: 6px;
+  font-size: $medium-size;
+}
+
+.filled {
+  position: absolute;
+  top: -10px !important;
+  left: 0px !important;
+  font-size: $extra-small-size !important;
+}
+
+.hideLabel {
+  display: none;
+}
+
+.activeLabel {
+  color: $primary-dark;
+}
+
+.searchInput {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.error {
+  position: absolute;
+  color: red;
+  font-size: 11px;
+  bottom: -16px;
+  font-weight: normal;
+  pointer-events: none;
+  letter-spacing: 0.5px;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+}
+
+.errorIcon {
+  color: red;
+}
+
+.errorLabel {
+  color: red;
+}
+
+.errorToggleDiv {
+  border-bottom-color: red;
+}
+.asInput {
+  margin-bottom: 20px;
+}
+
+.inputToggler{
+  width: 100%;
+  border: 0;
+  font-family: $dashboard-font;
+  &:focus{
+    outline:none;
+  }
+  &::placeholder{
+    font-style: italic;
+    color: $inactive-color;
+    font-weight: 200
+  }
+}
+.groupFull{
+  width: 100%;
+  padding: 0;
+}

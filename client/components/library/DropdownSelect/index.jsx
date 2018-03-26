@@ -133,7 +133,7 @@ class DropdownSelect extends Component {
       template,
       onChange,
       value,
-      options
+      options,
     } = this.props;
 
     const OptionTemplate = template || DefaultOption;

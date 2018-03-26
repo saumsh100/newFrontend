@@ -2,12 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import styles from './styles.scss';
 import { hexToRgbA } from '../../../library/util/colorMap';
-
-const getDuration = (startDate, endDate, customBufferTime) => {
-  const end = moment(endDate);
-  const duration = moment.duration(end.diff(startDate));
-  return duration.asMinutes() - customBufferTime;
-};
+import { getDuration } from '../../../library/util/TimeOptions';
 
 export default function ShowMark(props) {
   const {

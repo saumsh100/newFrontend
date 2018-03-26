@@ -53,6 +53,8 @@ export function createRequest() {
       selectedServiceId,
       sentRecallId,
       notes,
+      insuranceCarrier,
+      insuranceMemberId,
     } = state.availabilities.toJS();
 
     const {
@@ -68,6 +70,8 @@ export function createRequest() {
       suggestedPractitionerId: practitionerId,
       suggestedChairId: chairId,
       note: notes,
+      insuranceCarrier,
+      insuranceMemberId,
       sentRecallId,
     };
 

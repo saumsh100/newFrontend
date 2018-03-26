@@ -21,12 +21,13 @@ export default function RequestPopover(props) {
     request,
     time,
     service,
+    insuranceCarrier,
+    insuranceMemberId,
     note,
   } = props;
 
   const appointmentDate = moment(request.startDate).format('dddd LL');
-  const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A')
-
+  const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A');
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
@@ -71,7 +72,7 @@ export default function RequestPopover(props) {
             </div>
           </div>
 
-          {patient.phoneNumber || patient.email ? (
+          {patient.phoneNumber || patient.email || insuranceCarrier ? (
             <div className={styles.container}>
               <div className={styles.subHeader}>
                 Patient Info
@@ -79,7 +80,7 @@ export default function RequestPopover(props) {
 
               <div className={styles.data}>
                 {patient.phoneNumber ?
-                  <Icon icon="phone" size={0.9} type="solid"/> : null}
+                  <Icon icon="phone" size={0.9} type="solid" /> : null}
                 <div className={styles.data_text}>
                   {patient.phoneNumber && patient.phoneNumber[0] === '+' ?
                     FormatPhoneNumber(patient.phoneNumber) : patient.phoneNumber}
@@ -90,17 +91,28 @@ export default function RequestPopover(props) {
                 {patient.email ? <Icon icon="envelope" size={0.9} type="solid" /> : null}
                 <div className={styles.data_text}>{patient.email}</div>
               </div>
+              <div className={styles.multilineData}>
+                {insuranceCarrier ? <Icon icon="medkit" size={0.9} type="solid" /> : null}
+                <div className={styles.data_text}>
+                  {insuranceCarrier || 'n/a'}
+                  {insuranceMemberId &&
+                    <span className={styles.subData}>
+                      <br />
+                      {insuranceMemberId}
+                    </span>
+                  }
+                </div>
+              </div>
             </div>) : (
-            <div className={styles.container}>
-              <div className={styles.subHeader}>
-                Patient Info
+              <div className={styles.container}>
+                <div className={styles.subHeader}>
+                  Patient Info
               </div>
-              <div className={styles.data}>
-                n/a
+                <div className={styles.data}>
+                  n/a
               </div>
-            </div>
-          )}
-
+              </div>
+            )}
           {note ? (<div className={styles.container}>
             <div className={styles.subHeader}>
               Note

@@ -51,7 +51,7 @@ class DayPicker extends Component {
       this.props.onChange(day);
       this.setState({ isOpen: false });
     } else {
-      const selectedIndex = value.findIndex(v => {
+      const selectedIndex = value.findIndex((v) => {
         const date = moment(new Date(v))._d;
         return DateUtils.isSameDay(new Date(date), new Date(day));
       });
@@ -80,6 +80,13 @@ class DayPicker extends Component {
     }
   }
 
+  handleClose(e) {
+    const key = e.key;
+    if (key === 'Tab' || key === 'Enter' || key === 'Escape') {
+      this.setState({ isOpen: false });
+    }
+  }
+
   render() {
     const {
       target,
@@ -100,6 +107,7 @@ class DayPicker extends Component {
         {...this.props}
         value={displayValue}
         onChange={this.handleInputChange}
+        onKeyDown={e => this.handleClose(e)}
         onFocus={this.togglePopOver}
         data-test-id={this.props['data-test-id']}
       />
@@ -151,7 +159,7 @@ class DayPicker extends Component {
             body={[body]}
           >
             {dayPickerTargetComponent}
-          </Popover> : body }
+          </Popover> : body}
       </div>
     );
   }

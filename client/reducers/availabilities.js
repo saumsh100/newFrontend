@@ -26,6 +26,8 @@ import {
   SET_NEXT_AVAILABILITY,
   SET_FORGOT_PASSWORD,
   SET_NOTES,
+  SET_INSURANCE_MEMBER_ID,
+  SET_INSURANCE_CARRIER,
   SET_SENTRECALLID,
   SET_DUE_DATE,
 } from '../constants';
@@ -40,7 +42,7 @@ function getFloorDate(date) {
   return moment(date).startOf('day').toISOString();
 }
 
-export const createInitialWidgetState = state => {
+export const createInitialWidgetState = (state) => {
   let selectedStartDate = moment().add(1, 'hours').toISOString();
   if (state) {
     selectedStartDate = getStartTimeForToday(state.account);
@@ -111,8 +113,8 @@ export default handleActions({
       reservationId: null,
       forgotPassword: false,
       selectedAvailability: null,
-      //selectedServiceId: null, // Will be set by the initialState from server
-      //selectedPractitionerId: '',
+      // selectedServiceId: null, // Will be set by the initialState from server
+      // selectedPractitionerId: '',
       notes: null,
       hasWaitList: false,
       waitSpot: {
@@ -163,7 +165,7 @@ export default handleActions({
     return state.set('isLogin', action.payload);
   },
 
-  [SET_FORGOT_PASSWORD](state, action){
+  [SET_FORGOT_PASSWORD](state, action) {
     return state.set('forgotPassword', action.payload);
   },
 
@@ -192,6 +194,14 @@ export default handleActions({
 
   [SET_NOTES](state, action) {
     return state.set('notes', action.payload);
+  },
+
+  [SET_INSURANCE_MEMBER_ID](state, action) {
+    return state.set('insuranceMemberId', action.payload);
+  },
+
+  [SET_INSURANCE_CARRIER](state, action) {
+    return state.set('insuranceCarrier', action.payload);
   },
 
   [SIX_DAYS_SHIFT](state, action) {
@@ -224,7 +234,7 @@ export default handleActions({
   [CREATE_PATIENT](state, action) {
     const { firstName, lastName } = action.payload;
     return state.merge({
-      messages: [`Patient ${firstName} ${lastName} has been registered`]
+      messages: [`Patient ${firstName} ${lastName} has been registered`],
     });
   },
 
@@ -249,14 +259,14 @@ export default handleActions({
     const reservationId = action.payload;
     return state.merge({
       reservationId,
-    })
+    });
   },
 
   [REMOVE_RESERVATION](state, action) {
     return state.merge({
       reservationId: null,
-      messages: [`Reserved time for this practitioner has been expired...`]
-    })
+      messages: ['Reserved time for this practitioner has been expired...'],
+    });
   },
 
   [SET_SENTRECALLID](state, action) {

@@ -20,6 +20,11 @@ $empty-grey: darken(lightgrey, 5%);
   border: none;
   border-bottom: 1px solid $empty-grey;
   background-color: transparent;
+  &::placeholder{
+    font-style: italic;
+    color: $inactive-color;
+    font-weight: 200
+  }
   &:focus {
     outline: none;
   }
@@ -34,7 +39,9 @@ $empty-grey: darken(lightgrey, 5%);
   }
 
 }
-
+.inputWrapper{
+  position: relative;
+}
 .icon {
   position: absolute;
   right: 0px;

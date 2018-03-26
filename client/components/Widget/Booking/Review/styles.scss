@@ -18,6 +18,7 @@
   display: flex;
   align-items: center;
   color: #C1D2D8;
+  flex:1;
 }
 
 .gridContainer {
@@ -45,7 +46,7 @@
 .well {
   color: $primary-dark;
   padding: 15px 10px;
-  background-color: $primary-white;
+  background-color: $primary-lightgray;
   border: 1px solid darken($primary-white, 10%);
   > div {
     padding: 5px 0;
@@ -56,6 +57,9 @@
 .bold {
   font-family: $medium-font;
   text-transform: none !important;
+}
+.text-left{
+  text-align: left !important;
 }
 
 .service {
@@ -89,4 +93,56 @@
     border: 1px solid $primary-gray;
     color: black;
   }
+}
+
+.preferencesWrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0 -20px;
+  @media screen and (max-width: $widget-mobile-width) {
+    flex-direction: column;
+    padding: 0;
+  }
+}
+
+.fieldWrapper {
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  @media screen and (min-width: $widget-mobile-width) {
+    flex: 1;
+    box-sizing: border-box;
+  }
+  &.fullFieldWrapper{
+    width: 100%;
+  }
+  > div{
+    width: 100%;
+  }
+}
+
+.reviewAndBookSlot{
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+.reviewAndBookInputWrapper{
+  padding: 0 0 20px !important;
+}
+
+.reviewAndBookPlaceholder{
+  &::placeholder{
+    font-style: italic;
+    color: $inactive-color;
+    font-weight: 200
+  }
+}
+
+.flexWrapper{
+  display: flex;
+}
+
+.boxWrapper{
+ margin-bottom: 20px;
 }
