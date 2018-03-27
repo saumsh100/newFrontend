@@ -125,12 +125,16 @@ class DisplayForm extends Component {
       patientSearched,
     } = this.props;
 
+    const initDuration = 60;
+    const initStartTime = defaultStartTime();
+    const initEndTime = moment(initStartTime).add(initDuration, 'minutes').toISOString();
+    const initUnit = getDuration(initStartTime, initEndTime, 0) / unit;
     let initialValues = {
       date: moment(currentDate),
-      startTime: defaultStartTime(),
-      duration: 60,
-      endTime: moment(defaultStartTime()).add(60, 'minutes').toISOString(),
-      unit: 15,
+      startTime: initStartTime,
+      duration: initDuration,
+      endTime: initEndTime,
+      unit: initUnit,
     };
 
     let time = null;
