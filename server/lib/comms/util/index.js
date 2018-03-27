@@ -49,8 +49,10 @@ export function cannotSend(patient, primaryType) {
  * @returns {{errors: Array, success: Array}}
  */
 export function noPreference(patient, primaryType) {
+  const preferences = patient.preferences || {};
+
   // If it is false return errorCode
-  if (!patient.preferences[PREFERENCE_TYPES[primaryType]]) {
+  if (!preferences[PREFERENCE_TYPES[primaryType]]) {
     return NO_PREFERENCE_ERROR_CODES[primaryType];
   }
 }

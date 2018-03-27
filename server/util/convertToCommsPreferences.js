@@ -33,7 +33,8 @@ const has = (c, phrase) => !!c.match(phrase).out();
  * @param str
  * @return preferences {{sms: boolean, email: boolean, phone: boolean}}
  */
-module.exports = function convertToCommsPreferences(str = '') {
+module.exports = function convertToCommsPreferences(str) {
+  str = str || '';
   str = str.toLowerCase();
   str = str.replace(new RegExp('/', 'g'), ' or ');
   const c = compromise(str, lexicon);

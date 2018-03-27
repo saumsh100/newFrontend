@@ -155,10 +155,12 @@ describe('Reminders Job Integration Tests', () => {
           patient: {
             id: patientId,
             mobilePhoneNumber: '+16042433796',
+            preferences: { sms: true },
             get() {
               return {
                 id: patientId,
                 mobilePhoneNumber: '+16042433796',
+                preferences: { sms: true },
               };
             }
           },
