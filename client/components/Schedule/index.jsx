@@ -323,7 +323,6 @@ class ScheduleComponent extends Component {
                       onOverlayClick={this.reinitializeState}
                       custom
                     >
-
                       <AddNewAppointment
                         formName={formName}
                         chairs={filterChairs}
@@ -360,27 +359,27 @@ class ScheduleComponent extends Component {
               </SContainer>
             </Card>
           </div>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebar_rowCalendar}>
-              <Card>
-                <DayPicker
-                  month={new Date(moment(currentDate).year(), moment(currentDate).month())}
-                  selectedDays={new Date(currentDate)}
-                  onDayClick={this.setCurrentDay}
-                  className={styles.sidebar_calendar}
-                  noTarget
-                />
-              </Card>
-            </div>
-            <div className={styles.sidebar_rowRequest}>
-              <div xs={12} className={styles.sidebar_request} >
-                <RequestsContainer
-                  key={'scheduleRequests'}
-                />
-              </div>
+        <div className={styles.sidebar}>
+          <div className={styles.sidebar_rowCalendar}>
+            <Card>
+              <DayPicker
+                month={new Date(moment(currentDate).year(), moment(currentDate).month())}
+                selectedDays={new Date(currentDate)}
+                onDayClick={this.setCurrentDay}
+                className={styles.sidebar_calendar}
+                noTarget
+              />
+            </Card>
+          </div>
+          <div className={styles.sidebar_rowRequest}>
+            <div xs={12} className={styles.sidebar_request} >
+              <RequestsContainer
+                key={'scheduleRequests'}
+              />
             </div>
           </div>
         </div>
+      </div>
     );
   }
 }

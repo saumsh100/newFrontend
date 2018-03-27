@@ -20,6 +20,7 @@ const developmentConfig = merge(baseConfig, {
         NODE_ENV: JSON.stringify('production'),
         LOGROCKET_APP_ID: JSON.stringify(process.env.LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
         INTERCOM_APP_ID: JSON.stringify(process.env.INTERCOM_APP_ID || 'enpxykhl'),
+        FEATURE_FLAG_KEY: JSON.stringify(process.env.FEATURE_FLAG_KEY),
       },
     }),
 

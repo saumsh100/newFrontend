@@ -13,6 +13,7 @@ import AppsRequestsContainer from './AppsRequestsContainer/index';
 import PatientInsightsContainer from './PatientInsightsContainer/index';
 import DonnaToDoListContainer from './DonnaToDoListContainer/index';
 import { setDashboardDate } from '../../reducers/dashboard';
+import RevenueContainer from './RevenueContainer';
 import { fetchDonnasToDos } from '../../thunks/dashboard';
 
 class Dashboard extends React.Component {
@@ -47,9 +48,14 @@ class Dashboard extends React.Component {
             setDashboardDate={this.props.setDashboardDate}
           />
 
-          <StatsContainer
-            dashboardDate={this.props.dashboardDate}
-          />
+          <div className={styles.revenueColFlex}>
+            <RevenueContainer
+              dashboardDate={this.props.dashboardDate}
+            />
+            <StatsContainer
+              dashboardDate={this.props.dashboardDate}
+            />
+          </div>
 
           <div className={styles.colFlex}>
             <AppsRequestsContainer
@@ -78,7 +84,7 @@ Dashboard.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
 };
 
-function mapStateToProps({ entities, dashboard, }) {
+function mapStateToProps({ entities, dashboard }) {
   return {
     users: entities.getIn(['users', 'models']),
     dashboardDate: dashboard.toJS().dashboardDate,

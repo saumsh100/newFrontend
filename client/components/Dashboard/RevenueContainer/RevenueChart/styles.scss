@@ -1,0 +1,39 @@
+
+@import '../../../../ui';
+
+.chart {
+  flex: 1;
+  background-color: #3B4552;
+  position: relative;
+  height: 100%;
+  width: 300px;
+
+  @media screen and (max-width: 1266px) {
+    height: unset;
+  }
+
+  @media screen and (max-width: 529px) {
+    width: unset;
+  }
+
+  canvas {
+    padding: 20px 20px 0px 20px;
+    box-sizing: border-box;
+
+    @media screen and (max-width: 2500px){
+      padding: 20px;
+    }
+  }
+}
+
+.noRevenue {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  color: $primary-white;
+  opacity: 0.6;
+  font-size: $extra-small-size;
+}

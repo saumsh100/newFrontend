@@ -1,0 +1,148 @@
+
+@import '../../../../ui';
+
+.fontMedium {
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+}
+
+.revenueDisplay {
+  background-color: darken($primary-dark, 5%);
+  height: 100%;
+  color: $primary-white;
+  display: flex;
+  flex-direction: column;
+  padding-top: 25px;
+  box-sizing: border-box;
+  width: 210px;
+
+
+  @media screen and (max-width: 1266px) {
+    height: unset;
+  }
+
+  @media screen and (max-width: 414px) {
+    width: 100%;
+  }
+}
+
+.revenueDisplayTop {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.todaysProductionText {
+  width: 100%;
+  text-align: center;
+  font-size: 19px;
+  @extend .fontMedium;
+  @media screen and (max-width: 768px) {
+    margin-bottom: 10px;
+  }
+}
+
+.todaysProductionValue {
+  @extend .fontMedium;
+  display: flex;
+  justify-content: center;
+  font-size: 50px;
+  text-align: center;
+  width: 100%;
+
+  &_dollar {
+    color: #4F5966;
+    font-size: 28px;
+    margin-right: 3px;
+  }
+}
+
+.yesterdayContainer {
+  color: #4F5966;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  font-size: 13px;
+}
+
+.yesterdayLeft {
+  @extend .fontMedium;
+  padding-left: 10px;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 70%;
+  border-right: 1px solid #4F5966;
+
+  &_text {
+    margin-right: 3px;
+  }
+}
+
+.yesterdayRight {
+  margin-left: 8px;
+  margin-right: 8px;
+  @extend .fontMedium;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+}
+
+.percentageBox {
+  @extend .fontMedium;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primary-green;
+  border: 1px solid $primary-green;
+  min-width: 35px;
+  min-height: 18px;
+  padding: 3px;
+
+  &_icon {
+    margin-left: 3px;
+  }
+}
+
+.negative {
+  color: $primary-color;
+  border: 1px solid $primary-color;
+}
+
+.average {
+  height: 80px;
+  background-color: #4F5966;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @extend .fontMedium;
+
+  &_value {
+    width: 100%;
+    text-align:center;
+    font-size: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &_text {
+    width: 100%;
+    text-align: center;
+    font-size: $extra-small-size;
+    font-family: $dashboard-font;
+  }
+
+  &_dollar {
+    font-size: $extra-small-size;
+    color: black;
+  }
+}

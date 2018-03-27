@@ -59,6 +59,9 @@
     },
     "MANDRILL_API_KEY": {
       "required": true
+    },
+    "FEATURE_FLAG_KEY": {
+      "required": true
     }
   },
   "formation": {

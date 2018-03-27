@@ -112,33 +112,33 @@ describe('/api/revenue', () => {
   });
 
   describe('GET /', () => {
-    test.skip('retrieve total revenue for a date in the past', () => {
+    test('retrieve total revenue for a date in the past', () => {
       return request(app)
-        .get(`${rootUrl}/totalRevenueDays?date=${dates(2016, 7, 5, 9).startDate}`)
+        .get(`${rootUrl}/totalRevenueDays?date=${dates(2016, 7, 5, 9).startDate}&maxDates=${12}&pastDaysLimit=${30}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           const avg = Math.floor(body.data.average);
-          expect(avg).toBe(166);
+          expect(avg).toBe(0);
           expect(body).toMatchSnapshot();
         });
     });
 
     test.skip('retrieve total revenue for a date in the future', () => {
       return request(app)
-        .get(`${rootUrl}/totalRevenueDays?date=${dates(2020, 7, 5, 9).startDate}`)
+        .get(`${rootUrl}/totalRevenueDays?date=${dates(2020, 7, 5, 9).startDate}&maxDates=${12}&pastDaysLimit=${30}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
           const avg = Math.floor(body.data.average);
-          expect(avg).toBe(8);
+          expect(avg).toBe(50);
           expect(body).toMatchSnapshot();
         });
     });
 
     test.skip('retrieve total revenue for the current day', () => {
       return request(app)
-        .get(`${rootUrl}/totalRevenueDays?date=${dates(currentYear, currentMonth, currentDay, 6).startDate}`)
+        .get(`${rootUrl}/totalRevenueDays?date=${dates(currentYear, currentMonth, currentDay, 6).startDate}&maxDates=${12}&pastDaysLimit=${30}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {

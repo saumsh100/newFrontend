@@ -22,7 +22,7 @@ export default function StatCards(props) {
 
   const onlineAppointmentRequest = {
     count: requests.size,
-    title: requests.size === 1 ? 'Online Request' : 'Online Requests',
+    title: requests.size === 1 ? 'Appointment Request' : 'Appointment Requests',
     icon: 'calendar',
     size: 6,
     color: 'blue',
@@ -58,10 +58,10 @@ export default function StatCards(props) {
         <IconCard {...onlineAppointmentRequest} />
       </div>
       <div className={styles.stat}>
-        <IconCard {...patientInsights} />
+        <IconCard {...appointmentsToday} />
       </div>
       <div className={styles.stat}>
-        <IconCard {...appointmentsToday} />
+        <IconCard {...patientInsights} />
       </div>
       <div className={styles.stat}>
         <IconCard {...patientsUnConfirmed} />

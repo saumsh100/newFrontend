@@ -17,7 +17,7 @@ export default function Card(props) {
   } = props;
 
   let classes = classNames(className, styles.card);
-  const loadBarClass = classNames(loaderStyle, styles.loadBar)
+  const loadBarClass = classNames(loaderStyle, styles.loadBar);
 
   if (noBorder || (runAnimation && !loaded)) {
     classes = classNames(classes, styles.noBorder);

@@ -42,7 +42,9 @@ export default function HeaderUserDate({ user, dashboardDate, setDashboardDate }
             theme={dateTheme}
           />
         </Form>
-        <div className={styles.dateIconContainer}>
+        <div
+          className={styles.dateIconContainer}
+        >
           <Icon icon="calendar" />
         </div>
       </div>

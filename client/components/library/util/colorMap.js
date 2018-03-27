@@ -12,6 +12,7 @@ export default {
   lightBlue: '#8CBCD6',
   facebookBlue: '#395998',
   lightBlue: '#8CBCD6',
+  white: '#FFFFFF'
 };
 
 export const hexToRgbA = (hex, opacity) => {

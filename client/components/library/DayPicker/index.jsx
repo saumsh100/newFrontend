@@ -39,7 +39,6 @@ class DayPicker extends Component {
       timezone,
     } = this.props;
 
-
     const dates = moment(day).format('YYYY-MM-DD');
 
     day = timezone ? moment.tz(dates, timezone).add(12, 'hours').toISOString() : moment(day).subtract(12, 'hours').toISOString();

@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import jwt from 'jwt-decode';
+import LDClient from 'ldclient-js';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
@@ -8,6 +9,37 @@ import { loginSuccess, logout as authLogout } from '../actions/auth';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
 import socket from '../socket';
+
+const getUserFeatureFlags = (userSession, dispatch) => {
+  const user = userSession.user;
+
+  const userData = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.username,
+    key: userSession.userId,
+    custom: {
+      plan: userSession.enterprise.plan,
+      role: userSession.role,
+      accountId: userSession.accountId,
+      enterpriseName: userSession.enterprise.name,
+      enterpriseId: userSession.enterprise.id,
+    },
+  };
+
+  let envKey = process.env.FEATURE_FLAG_KEY;
+
+  if (process.env.NODE_ENV !== 'production') {
+    envKey = JSON.parse(process.env.FEATURE_FLAG_KEY);
+  }
+
+  const client = LDClient.initialize(`${envKey}`, userData);
+
+  client.on('ready', () => {
+    const flags = client.allFlags();
+    dispatch(loginSuccess({ flags }));
+  });
+};
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   localStorage.setItem('token', token);
@@ -25,6 +57,9 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     .then((session) => {
       const userSession = { ...session, sessionId };
       localStorage.setItem('session', JSON.stringify(userSession));
+
+      getUserFeatureFlags(userSession, dispatch);
+
       dispatch(loginSuccess(userSession));
       return userSession;
     })

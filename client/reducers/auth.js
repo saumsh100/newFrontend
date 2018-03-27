@@ -14,6 +14,7 @@ const initialState = fromJS({
   enterprise: null,
   user: null,
   sessionId: null,
+  flags: {},
 });
 
 export default handleActions({

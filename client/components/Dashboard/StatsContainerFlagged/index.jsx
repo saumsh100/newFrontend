@@ -6,8 +6,6 @@ import moment from 'moment';
 import StatCards from './StatCards';
 import styles from './styles.scss';
 import { FilterAppointments } from '../Shared/filters';
-import withFeatureFlag from '../../../hocs/withFeatureFlag';
-import StatsContainerFlagged from '../StatsContainerFlagged';
 
 class StatsContainer extends React.Component {
   constructor(props) {
@@ -55,4 +53,4 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
 
 const enhance = connect(mapStateToProps, null);
 
-export default withFeatureFlag(StatsContainerFlagged, 'feature-revenue-card')(enhance(StatsContainer));
+export default enhance(StatsContainer);

@@ -25,6 +25,7 @@ const {
   INTERCOM_APP_ID,
   LOGROCKET_APP_ID,
   FACEBOOK_APP_ID,
+  FEATURE_FLAG_KEY,
 } = env;
 
 const developmentConfig = merge(baseConfig, {
@@ -37,6 +38,7 @@ const developmentConfig = merge(baseConfig, {
         INTERCOM_APP_ID: `"${INTERCOM_APP_ID || 'enpxykhl'}"`,
         FACEBOOK_APP_ID: `"${FACEBOOK_APP_ID}"`,
         API_SERVER_PORT: `"${serverPort}"`,
+        FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
       },
     }),
 
