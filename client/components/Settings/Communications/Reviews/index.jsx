@@ -65,7 +65,6 @@ class Reviews extends React.Component {
           )}
         />
         {this.renderReviewItem()}
-        <ContactNotes />
       </div>
     );
   }
