@@ -25,6 +25,18 @@ const options = [
     label: 'Dentrix G6.1',
   },
   {
+    value: 'DENTRIX_V62',
+    label: 'Dentrix G6.2',
+  },
+  {
+    value: 'DENTRIX_V63',
+    label: 'Dentrix G6.3',
+  },
+  {
+    value: 'DENTRIX_V64',
+    label: 'Dentrix G6.4',
+  },
+  {
     value: 'OPENDENTAL_V17',
     label: 'OpenDental 17',
   },
