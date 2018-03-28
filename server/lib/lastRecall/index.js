@@ -55,7 +55,7 @@ export async function updateMostRecentRecall(accountId, patientIds) {
     lastRecallDate: null,
     lastRecallApptId: null,
   }, {
-    where: { id: patientId },
+    where: { id: patientId, accountId },
   });
 
   // get all patients with procedure code of recall exams

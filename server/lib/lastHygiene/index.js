@@ -53,7 +53,7 @@ export async function updateMostRecentHygiene(accountId, patientIds) {
     lastHygieneDate: null,
     lastHygieneApptId: null,
   }, {
-    where: { id: patientId },
+    where: { id: patientId, accountId },
   });
 
   const invoices = await DeliveredProcedure.findAll({

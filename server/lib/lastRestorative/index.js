@@ -96,7 +96,7 @@ export async function updateMostRecentRestorative(accountId, patientIds) {
     lastRestorativeDate: null,
     lastRestorativeApptId: null,
   }, {
-    where: { id: patientId },
+    where: { id: patientId, accountId },
   });
 
   // get all patients with procedure code of reminder exams
