@@ -38,7 +38,7 @@ const developmentConfig = merge(baseConfig, {
         INTERCOM_APP_ID: `"${INTERCOM_APP_ID || 'enpxykhl'}"`,
         FACEBOOK_APP_ID: `"${FACEBOOK_APP_ID}"`,
         API_SERVER_PORT: `"${serverPort}"`,
-        FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
+        FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY || '5a32b1415224d92074eb0f55'),
       },
     }),
 
