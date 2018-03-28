@@ -46,12 +46,15 @@ Object {
   "entities": Object {
     "patientUsers": Object {
       "b8665c97-1e98-41ac-bf13-090b742de400": Object {
+        "birthDate": null,
         "email": "testpatientuser@test.com",
         "firstName": "Jack",
+        "gender": null,
         "id": "b8665c97-1e98-41ac-bf13-090b742de400",
         "isEmailConfirmed": false,
         "isPhoneNumberConfirmed": false,
         "lastName": "Daniels",
+        "patientUserFamilyId": null,
         "phoneNumber": "+16049999999",
       },
     },

@@ -11,9 +11,12 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
     },
 
+    patientUserFamilyId: {
+      type: DataTypes.UUID,
+    },
+
     email: {
       type: DataTypes.STRING,
-      allowNull: false,
       unique: true,
       validate: {
         isEmail: true,
@@ -22,11 +25,9 @@ export default function (sequelize, DataTypes) {
 
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
 
     phoneNumber: customDataTypes.phoneNumber('phoneNumber', DataTypes, {
-      allowNull: false,
       unique: true,
     }),
 
@@ -38,6 +39,14 @@ export default function (sequelize, DataTypes) {
     lastName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+
+    gender: {
+      type: DataTypes.STRING,
+    },
+
+    birthDate: {
+      type: DataTypes.DATE,
     },
 
     isEmailConfirmed: {
@@ -58,12 +67,25 @@ export default function (sequelize, DataTypes) {
   });
 
 
-  PatientUser.associate = (({ Patient }) => {
-    // TODO: add waitspots and requests once those models are done
-
+  PatientUser.associate = (({ Patient, PatientUserFamily, Request, WaitSpot }) => {
     PatientUser.hasMany(Patient, {
       foreignKey: 'patientUserId',
       as: 'patients',
+    });
+
+    PatientUser.belongsTo(PatientUserFamily, {
+      foreignKey: 'patientUserFamilyId',
+      as: 'patientUserFamily',
+    });
+
+    PatientUser.hasMany(Request, {
+      foreignKey: 'patientUserId',
+      as: 'requests',
+    });
+
+    PatientUser.hasMany(WaitSpot, {
+      foreignKey: 'patientUserId',
+      as: 'waitSpots',
     });
   });
 

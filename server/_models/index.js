@@ -73,6 +73,7 @@ models.push((require('./PasswordReset').default(sequelize, Sequelize)));
 models.push((require('./PatientUserReset').default(sequelize, Sequelize)));
 models.push((require('./Patient').default(sequelize, Sequelize)));
 models.push((require('./PatientUser').default(sequelize, Sequelize)));
+models.push((require('./PatientUserFamily').default(sequelize, Sequelize)));
 models.push((require('./Permission').default(sequelize, Sequelize)));
 models.push((require('./PinCode').default(sequelize, Sequelize)));
 models.push((require('./Practitioner').default(sequelize, Sequelize)));

@@ -11,6 +11,7 @@ import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
 import reviewsRouter from './reviews';
+import familiesRouter from './families';
 import sentReviewsRouter from './sentReviews';
 import widgetsRouter from './widgets';
 import unsubRouter from './unsubscribe';
@@ -29,34 +30,35 @@ import { sequelizeLoader } from '../util/loaders';
 import { generateAccountParams, encodeParams } from './util/params';
 import normalize from '../_api/normalize';
 
-const sequelizeMyRouter = Router();
+const myRouter = Router();
 
-sequelizeMyRouter.use('/', newAvailabilitiesRouter);
-sequelizeMyRouter.use('/', unsubRouter);
-sequelizeMyRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
-sequelizeMyRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
-sequelizeMyRouter.use('/auth', authRouter);
+myRouter.use('/', newAvailabilitiesRouter);
+myRouter.use('/', unsubRouter);
+myRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
+myRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
+myRouter.use('/families', sequelizeAuthMiddleware, familiesRouter);
+myRouter.use('/auth', authRouter);
 
-sequelizeMyRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [
+myRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [
   { model: Appointment, as: 'appointment' },
   { model: Patient, as: 'patient' },
   { model: Reminder, as: 'reminder' },
 ]));
 
-sequelizeMyRouter.param('accountId', sequelizeLoader('account', 'Account'));
-sequelizeMyRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
-sequelizeMyRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
-sequelizeMyRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
+myRouter.param('accountId', sequelizeLoader('account', 'Account'));
+myRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
+myRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
+myRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
   { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
   { association: 'practitioners', required: false, where: { isActive: true } },
 ]));
 
-sequelizeMyRouter.use('/reviews', reviewsRouter);
-sequelizeMyRouter.use('/sentReviews', sentReviewsRouter);
-sequelizeMyRouter.use('/widgets', widgetsRouter);
+myRouter.use('/reviews', reviewsRouter);
+myRouter.use('/sentReviews', sentReviewsRouter);
+myRouter.use('/widgets', widgetsRouter);
 
 // Used on patient signup form to determine if a patientUser's email is taken
-sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
+myRouter.post('/patientUsers/email', async (req, res, next) => {
   let {
     email,
   } = req.body;
@@ -72,7 +74,7 @@ sequelizeMyRouter.post('/patientUsers/email', async (req, res, next) => {
 });
 
 // Used on patient signup form to determine if a patientUser's phoneNumber is taken
-sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
+myRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   let {
     phoneNumber,
   } = req.body;
@@ -104,17 +106,26 @@ sequelizeMyRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
   }
 });
 
-sequelizeMyRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
-  const patientUser = req.patientUser.get({ plain: true });
-  delete patientUser.password;
+myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
   try {
+    const patientUser = req.patientUser.get({ plain: true });
+    delete patientUser.password;
     res.json(patientUser);
   } catch (err) {
     next(err);
   }
 });
 
-sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
+myRouter.post('/patientUsers/:patientUserId/patientUsers', async (req, res, next) => {
+  try {
+    const patientUser = await PatientUser.create(req.body);
+
+  } catch (err) {
+    next(err);
+  }
+});
+
+myRouter.get('/reset/:tokenId', (req, res, next) => {
   const tokenId = req.params.tokenId;
   return PatientUserReset.findOne({ where: { token: tokenId } })
     .then((reset) => {
@@ -142,7 +153,7 @@ sequelizeMyRouter.get('/reset/:tokenId', (req, res, next) => {
     .catch(next);
 });
 
-sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
+myRouter.post('/reset-password/:tokenId', (req, res, next) => {
   const {
     password,
   } = req.body;
@@ -167,7 +178,7 @@ sequelizeMyRouter.post('/reset-password/:tokenId', (req, res, next) => {
     .catch(next);
 });
 
-sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
+myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
   try {
     // TODO: it's stuff like this that we need to put into a "Manager" SentReminderManager.confirm();
     const sentReminder = req.sentReminder;
@@ -213,7 +224,7 @@ sequelizeMyRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res,
   }
 });
 
-sequelizeMyRouter.get('(/*)?', (req, res, next) => {
+myRouter.get('(/*)?', (req, res, next) => {
   try {
     return res.render('my');
   } catch (err) {
@@ -221,11 +232,4 @@ sequelizeMyRouter.get('(/*)?', (req, res, next) => {
   }
 });
 
-// Very important we catch all other endpoints,
-// or else express-subdomain continues to the other middlewares
-/*sequelizeMyRouter.use('(/*)?', (req, res, next) => {
-  // TODO: this needs to be wrapped in try catch
-  return res.status(404).end();
-});*/
-
-module.exports = sequelizeMyRouter;
+module.exports = myRouter;

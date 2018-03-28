@@ -15,4 +15,4 @@ module.exports = {
       this.setDataValue(fieldName, validatePhoneNumber(val));
     },
   }),
-}
+};

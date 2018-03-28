@@ -9,7 +9,14 @@ import twilio, { phoneNumber } from '../../config/twilio';
 import { sequelizeLoader } from '../util/loaders';
 import { generateAccountParams, encodeParams } from './util/params';
 import StatusError from '../../util/StatusError';
-import { Account, PatientUser, PatientUserReset, PinCode, Token } from '../../_models';
+import {
+  Account,
+  PatientUser,
+  PatientUserFamily,
+  PatientUserReset,
+  PinCode,
+  Token,
+} from '../../_models';
 import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
 
 const authRouter = Router();
@@ -50,16 +57,18 @@ async function sendConfirmationMessage(patientUser) {
 
 authRouter.post('/signup/:accountId', (req, res, next) => {
   const { body: patient } = req;
-
-
   const { ignoreConfirmationText } = req.query;
   if (patient.password !== patient.confirmPassword) {
     next({ status: 400, message: 'Passwords doesn\'t match.' });
   }
 
-  // TODO: additional validation required
-  // TODO: we have to use some form library for validations.
   return PatientAuth.signup(patient)
+    .then(async ({ session, model }) => {
+      // For ever patientUser, create a family and make it
+      const family = await PatientUserFamily.create({ headId: model.id });
+      model = await model.update({ patientUserFamilyId: family.id });
+      return { session, model };
+    })
     .then(async ({ session, model }) => {
       if (phoneNumber && ignoreConfirmationText !== 'true') {
         await sendConfirmationMessage(model);
