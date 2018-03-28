@@ -179,5 +179,29 @@ describe('Last Hygiene Calculations', () => {
 
       expect(moment(patientUpdated.lastRecallDate).toISOString()).toBe(moment('2017-07-20T00:14:30.932Z').toISOString());
     });
+
+    test('should update one patient with recall data and be able to link an appointment and then null out when procedure is deleted', async() => {
+      await DeliveredProcedure.create(makeDeliveredProcedure({ entryDate: '2017-07-20T00:14:30.932Z' }));
+      const appointmentCreated = await Appointment.create(makeApptData({
+        startDate: '2017-07-20T00:14:30.932Z',
+        endDate: '2017-07-20T00:15:30.932Z',
+      }));
+
+      await updateMostRecentRecall(accountId, [patientId]);
+
+      const patientUpdated = await Patient.findOne({ where: { id: patientId } });
+
+      await wipeModel(DeliveredProcedure);
+
+      await updateMostRecentRecall(accountId, [patientId]);
+
+      const patientUpdatedAgain = await Patient.findOne({ where: { id: patientId } });
+
+      expect(patientUpdated.lastRecallApptId).toBe(appointmentCreated.id);
+      expect(moment(patientUpdated.lastRecallDate).toISOString()).toBe(moment('2017-07-20T00:14:30.932Z').toISOString());
+
+      expect(patientUpdatedAgain.lastRecallApptId).toBeNull();
+      expect(patientUpdatedAgain.lastRecallDate).toBeNull();
+    });
   });
 });

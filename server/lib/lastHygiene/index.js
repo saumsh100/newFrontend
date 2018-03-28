@@ -48,6 +48,14 @@ export async function updateMostRecentHygiene(accountId, patientIds) {
 
   // get all patients with procedure code starting with 111 and their most
   // recent one
+
+  await Patient.update({
+    lastHygieneDate: null,
+    lastHygieneApptId: null,
+  }, {
+    where: { id: patientId },
+  });
+
   const invoices = await DeliveredProcedure.findAll({
     where: {
       accountId,

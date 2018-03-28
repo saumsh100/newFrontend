@@ -92,6 +92,13 @@ export async function getPatientsChangedDeliveredProcedure(date, accountId) {
 export async function updateMostRecentRestorative(accountId, patientIds) {
   const patientId = patientIds || { $ne: null };
 
+  await Patient.update({
+    lastRestorativeDate: null,
+    lastRestorativeApptId: null,
+  }, {
+    where: { id: patientId },
+  });
+
   // get all patients with procedure code of reminder exams
   // recent one
   const invoices = await DeliveredProcedure.findAll({
