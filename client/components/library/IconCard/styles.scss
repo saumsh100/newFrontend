@@ -46,6 +46,15 @@
       bottom: -15%;
     }
   }
+
+  img {
+    position: absolute;
+    bottom: -15px;
+    right: -15px;
+    width: 100px;
+    height: 100px;
+    opacity: 0.1;
+  }
 }
 
 .blueBackground {

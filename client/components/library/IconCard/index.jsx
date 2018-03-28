@@ -11,6 +11,7 @@ export default function IconCard(props) {
     title,
     icon,
     color,
+    src,
   } = props;
 
   const backgroundColor = {
@@ -30,10 +31,8 @@ export default function IconCard(props) {
         <div className={styles.iconCard__count}>{count}</div>
         <div className={styles.iconCard__title}>{title}</div>
       </div>
-      <Icon
-        className={styles.iconCard__icon}
-        icon={icon}
-        size={6}
+      <img
+        src={src}
       />
     </Card>
   );

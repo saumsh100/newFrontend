@@ -23,7 +23,7 @@ export default function StatCards(props) {
   const onlineAppointmentRequest = {
     count: requests.size,
     title: requests.size === 1 ? 'Online Request' : 'Online Requests',
-    icon: 'calendar',
+    src: '/images/icons/Appt-Requests.png',
     size: 6,
     color: 'blue',
   };
@@ -31,7 +31,7 @@ export default function StatCards(props) {
   const appointmentsToday = {
     count: appointments.size,
     title: appointments.size === 1 ? 'Appointment Today' : 'Appointments Today',
-    icon: 'user',
+    src: '/images/icons/Appts-Today.png',
     size: 6,
     color: 'red',
   };
@@ -39,7 +39,7 @@ export default function StatCards(props) {
   const patientInsights = {
     count: insightCount,
     title: insightCount === 1 ? 'Patient Insight' : 'Patient Insights',
-    icon: 'lightbulb',
+    src: '/images/icons/Patient-Insights.png',
     size: 6,
     color: 'yellow',
   };
@@ -47,7 +47,7 @@ export default function StatCards(props) {
   const patientsUnConfirmed = {
     count: unConfirmedPatients.size,
     title: unConfirmedPatients.size === 1 ? 'Patient Unconfirmed' : 'Patients Unconfirmed',
-    icon: 'list-alt',
+    src: '/images/icons/Unconfirmed-Patients.png',
     size: 6,
     color: 'grey',
   };
