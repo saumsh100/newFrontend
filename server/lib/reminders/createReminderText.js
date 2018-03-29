@@ -1,6 +1,7 @@
 
 import moment from 'moment-timezone';
 import { convertIntervalStringToObject } from '../../util/time';
+import { formatPhoneNumber } from '../../util/formatters';
 
 const nowISO = () => (new Date()).toISOString();
 
@@ -62,7 +63,7 @@ const sameDay = {
     const { date, time } = getDateAndTime(appointment.startDate);
     return `Hi ${patient.firstName}, please ${action} today's ${time} ` +
       `appointment at ${account.name}. ` +
-      `Reply with "C" to ${action} or call us at ${account.destinationPhoneNumber} to reschedule.`;
+      `Reply with "C" to ${action} or call us at ${formatPhoneNumber(account.destinationPhoneNumber)} to reschedule.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {

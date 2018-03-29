@@ -5,6 +5,7 @@ import { host, protocol, myHost } from '../../config/globals';
 import createReminderText, { getReminderTemplateName } from './createReminderText';
 import { sendTemplate } from '../mail';
 import { buildAppointmentEvent } from '../ics';
+import { formatPhoneNumber } from '../../util/formatters';
 
 export function getIsConfirmable(appointment, reminder) {
   if (reminder.isCustomConfirm) {
@@ -91,7 +92,7 @@ export default {
         },
         {
           name: 'ACCOUNT_PHONENUMBER',
-          content: account.phoneNumber,
+          content: formatPhoneNumber(account.phoneNumber),
         },
         {
           name: 'APPOINTMENT_DATE',

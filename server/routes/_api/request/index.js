@@ -8,6 +8,7 @@ import normalize from '../normalize';
 import jsonapi from '../../util/jsonapi';
 import { Permission, PatientUser, Request, User, Account } from '../../../_models';
 import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
+import { formatPhoneNumber } from '../../../util/formatters';
 
 import {
   sendAppointmentRequested,
@@ -147,7 +148,7 @@ requestsRouter.post('/', async (req, res, next) => {
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: account.phoneNumber,
+            content: formatPhoneNumber(account.phoneNumber),
           },
           {
             name: 'ACCOUNT_CITY',
@@ -341,7 +342,7 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: phoneNumber,
+            content: formatPhoneNumber(phoneNumber),
           },
           {
             name: 'ACCOUNT_CONTACTEMAIL',
@@ -423,7 +424,7 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
           },
           {
             name: 'ACCOUNT_PHONENUMBER',
-            content: phoneNumber,
+            content: formatPhoneNumber(phoneNumber),
           },
           {
             name: 'ACCOUNT_CONTACTEMAIL',

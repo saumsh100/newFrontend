@@ -4,6 +4,7 @@ import moment from 'moment';
 import { sendTemplate } from '../mail';
 import createRecallText from './createRecallText';
 import compressUrl from '../../util/compressUrl';
+import { formatPhoneNumber } from '../../util/formatters';
 
 const recallIntervalToTemplate = {
   '1 weeks': 'Patient Recall - 1 Weeks Before',
@@ -85,7 +86,7 @@ export default {
         },
         {
           name: 'ACCOUNT_PHONENUMBER',
-          content: account.phoneNumber,
+          content: formatPhoneNumber(account.phoneNumber),
         },
         {
           name: 'WEEKSBEFORE_DUEDATE',

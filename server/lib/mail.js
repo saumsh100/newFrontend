@@ -2,6 +2,7 @@
 import moment from 'moment';
 import mandrill from '../config/mandrill';
 import { host, myHost, protocol, env } from '../config/globals';
+import { formatPhoneNumber } from '../util/formatters';
 
 export const sendConnectorDown = (config) => {
   config.subject = `The Connector for ${config.name} is Down!`;
@@ -229,7 +230,7 @@ export function generateClinicMergeVars({ patient, account }) {
     },
     {
       name: 'ACCOUNT_PHONENUMBER',
-      content: account.phoneNumber,
+      content: formatPhoneNumber(account.phoneNumber),
     },
     {
       name: 'ACCOUNT_CONTACTEMAIL',

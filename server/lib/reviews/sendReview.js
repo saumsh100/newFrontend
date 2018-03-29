@@ -4,6 +4,7 @@ import twilio from '../../config/twilio';
 import compressUrl from '../../util/compressUrl';
 import { sendReview } from '../mail';
 import { createReviewText } from './createReviewText';
+import { formatPhoneNumber } from '../../util/formatters';
 
 const generateReviewsUrl = ({ account, sentReview }) =>
   `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
@@ -58,7 +59,7 @@ export default {
         },
         {
           name: 'ACCOUNT_PHONENUMBER',
-          content: account.phoneNumber,
+          content: formatPhoneNumber(account.phoneNumber),
         },
         {
           name: 'ACCOUNT_WEBSITE',
