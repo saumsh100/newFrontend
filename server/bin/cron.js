@@ -56,5 +56,5 @@ cron.schedule(firstNextLastAppointmentPattern, () => {
 
 // Patient last and due hygiene and Recall date job.
 cron.schedule(patientCachePattern, () => {
-  createJob('patientCache');
+  createJob('patientCache', {}, { ttl: 1000 * 60 * 120 });
 });
