@@ -3,7 +3,7 @@ import {
   Appointment,
   Patient,
 } from '../../../../server/_models';
-import CalcFirstNextLastAppointment from '../../../../server/lib/firstNextLastAppointment';
+import { calcFirstNextLastAppointment } from '../../../../server/lib/firstNextLastAppointment';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
@@ -41,7 +41,7 @@ describe('First Next Last Appointment Calculation', () => {
 
   describe('#calcPatients First and Last Appointment', () => {
     test('should be a function', () => {
-      expect(typeof CalcFirstNextLastAppointment).toBe('function');
+      expect(typeof calcFirstNextLastAppointment).toBe('function');
     });
 
     let appointments;
@@ -63,8 +63,8 @@ describe('First Next Last Appointment Calculation', () => {
       await wipeAllModels();
     });
 
-    test('should set patients firstApptId/date and lastApptId/date', () => {
-      CalcFirstNextLastAppointment(appointments,
+    test('should set patients firstApptId/date and lastApptId/date', async() => {
+      await calcFirstNextLastAppointment(appointments,
         async (currentPatient, appointmentsObj) => {
           try {
             await Patient.update({
@@ -95,7 +95,7 @@ describe('First Next Last Appointment Calculation', () => {
     });
 
     test('nextApptId/date should be null', async () => {
-      CalcFirstNextLastAppointment(appointments,
+      await calcFirstNextLastAppointment(appointments,
         async (currentPatient, appointmentsObj) => {
           try {
             await Patient.update({
@@ -142,7 +142,7 @@ describe('First Next Last Appointment Calculation', () => {
     });
 
     test('nextApptId/date and firstApptId/date and lastApptId/date should be null', async () => {
-      CalcFirstNextLastAppointment(appointments,
+      await calcFirstNextLastAppointment(appointments,
         async (currentPatient, appointmentsObj) => {
           try {
             await Patient.update({
@@ -197,7 +197,7 @@ describe('First Next Last Appointment Calculation', () => {
     });
 
     test('should set nextApptId, firstApptId and lastApptId', async () => {
-      CalcFirstNextLastAppointment(appointments,
+      await calcFirstNextLastAppointment(appointments,
         async (currentPatient, appointmentsObj) => {
           try {
             await Patient.update({

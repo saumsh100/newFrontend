@@ -10,7 +10,7 @@ const moment = require('moment');
  * @param updatePatient
  */
 
-function CalcFirstNextLastAppointment(apps, updatePatient) {
+async function calcFirstNextLastAppointment(apps, updatePatient) {
   const today = new Date();
   // loops through the entire set of appointments
   let j = 0;
@@ -80,7 +80,7 @@ function CalcFirstNextLastAppointment(apps, updatePatient) {
       };
 
     // update the current patient of this subset with the calculated data in the appointments object
-      updatePatient(currentPatient, appointmentsObj);
+      await updatePatient(currentPatient, appointmentsObj);
     }
 
     // jump to the next subset of appointments if any
@@ -88,4 +88,6 @@ function CalcFirstNextLastAppointment(apps, updatePatient) {
   }
 }
 
-module.exports = CalcFirstNextLastAppointment;
+module.exports = {
+  calcFirstNextLastAppointment,
+};

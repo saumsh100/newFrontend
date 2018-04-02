@@ -244,8 +244,8 @@ Object {
   "data": Array [
     0,
     0,
-    0,
     1,
+    0,
     0,
     0,
     0,
@@ -257,7 +257,6 @@ Object {
   ],
   "entities": Object {},
   "months": Array [
-    "April",
     "May",
     "June",
     "July",
@@ -269,6 +268,7 @@ Object {
     "January",
     "February",
     "March",
+    "April",
   ],
 }
 `;

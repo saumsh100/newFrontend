@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Patient, Appointment } from '../../../_models';
-import CalcFirstNextLastAppointment from '../../../lib/firstNextLastAppointment';
+import { calcFirstNextLastAppointment } from '../../../lib/firstNextLastAppointment';
 import { updatePatientDueDate } from '../../../lib/dueDate';
 import { updateMostRecentHygiene } from '../../../lib/lastHygiene';
 import { updateMostRecentRecall } from '../../../lib/lastRecall';
@@ -20,8 +20,8 @@ function calcPatientFNLAllApps(app) {
       isPending: false,
     },
     order: [['startDate', 'DESC']],
-  }).then((appointments) => {
-    return CalcFirstNextLastAppointment(appointments,
+  }).then(async (appointments) => {
+    return await calcFirstNextLastAppointment(appointments,
       async (currentPatient, appointmentsObj) => {
         try {
           await Patient.update({
@@ -139,9 +139,9 @@ function firstNextLastAppointmentBatchCalc(appointmentIds) {
       },
     },
     order: [['patientId', 'DESC'], ['startDate', 'DESC']],
-  }).then((appointments) => {
+  }).then(async (appointments) => {
     console.log('Batching First Next Last');
-    return CalcFirstNextLastAppointment(appointments,
+    return await calcFirstNextLastAppointment(appointments,
       async (currentPatient, appointmentsObj) => {
         try {
           await Patient.update({

@@ -1,4 +1,4 @@
-const CalcFirstNextLastAppointment = require('../lib/firstNextLastAppointment');
+const { calcFirstNextLastAppointment } = require('../lib/firstNextLastAppointment');
 
 'use strict';
 
@@ -31,7 +31,7 @@ module.exports = {
 
         const apps = appointments[0];
 
-        CalcFirstNextLastAppointment(apps,
+        await calcFirstNextLastAppointment(apps,
           async (patientId, appointmentsObj) => {
             await queryInterface.sequelize.query(`
               UPDATE "Patients"
