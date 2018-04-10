@@ -26,7 +26,7 @@ describe('Patient Management Table Tests', () => {
 
   it('use smart filter - due in 60 days', () => {
     cy
-      .wait(500)
+      .wait(1500)
       .get('[data-test-id="dropDown_smartFilters"]')
       .click()
       .getAndClick('option_1')
@@ -35,7 +35,7 @@ describe('Patient Management Table Tests', () => {
 
   it('use smart filter - missed/cancelled appointment', () => {
     cy
-      .wait(500)
+      .wait(1500)
       .get('[data-test-id="dropDown_smartFilters"]')
       .click()
       .getAndClick('option_8')

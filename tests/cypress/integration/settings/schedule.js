@@ -74,7 +74,7 @@ context('Account Settings - Schedule', () => {
         .submitForm('advanceCreate')
         .get('[data-test-id="button_createPatternSchedule"]')
         .click({ force: true })
-        .wait(1000)
+        .wait(1500)
         .get('[data-test-id="pattern_0"]')
         .should('exist');
     });

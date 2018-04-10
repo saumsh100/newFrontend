@@ -101,10 +101,11 @@ class HeaderSection extends Component {
 
     return (
       <div className={styles.header} >
-        <div>
+        <div
+        >
           <DropdownMenu
-            labelComponent={filterMenu}
             data-test-id="dropDown_smartFilters"
+            labelComponent={filterMenu}
           >
             <div className={styles.filterContainer}>
               <SmartFilters
