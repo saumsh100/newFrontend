@@ -74,7 +74,7 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    /*notes: {
+    /* notes: {
       type: DataTypes.STRING,
     },*/
 

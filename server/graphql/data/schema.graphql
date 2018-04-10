@@ -1,0 +1,325 @@
+"""The account Viewer"""
+type AccountViewer implements Node {
+  """The ID of an object"""
+  id: ID!
+  userId: String
+  role: String
+  permissionId: String
+  enterpriseId: String
+  accountId: String
+  patients: [Patient]
+  patient(
+    id: String
+
+    """
+    A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
+    """
+    where: SequelizeJSON
+  ): Patient
+  families: [Family]
+  family(id: String!): Family
+}
+
+input addFamilyInput {
+  accountId: String!
+  pmsId: String
+  headId: String
+  clientMutationId: String
+}
+
+type addFamilyPayload {
+  family: Family
+  clientMutationId: String
+}
+
+input addPatientInput {
+  accountId: String!
+  pmsId: String
+  patientUserId: String
+  email: String
+  firstName: String!
+  lastName: String!
+  middleName: String
+  phoneNumber: String
+  homePhoneNumber: String
+  mobilePhoneNumber: String
+  workPhoneNumber: String
+  otherPhoneNumber: String
+  prefContactPhone: String
+  gender: String
+  prefName: String
+  language: String
+  address: SequelizeJSON
+  preferences: SequelizeJSON
+  type: String
+  contactMethodNote: String
+  birthDate: String
+  pmsCreatedAt: String
+  insurance: SequelizeJSON
+  isDeleted: Boolean
+  isSyncedWithPms: Boolean
+  isSyncedWithPMS: Boolean
+  familyId: String
+  lastApptId: String
+  lastApptDate: String
+  lastHygieneDate: String
+  lastHygieneApptId: String
+  lastRecallDate: String
+  lastRecallApptId: String
+  dueForRecallExamDate: String
+  recallPendingAppointmentId: String
+  dueForHygieneDate: String
+  hygienePendingAppointmentId: String
+  lastRestorativeDate: String
+  lastRestorativeApptId: String
+  firstApptId: String
+  firstApptDate: String
+  nextApptId: String
+  nextApptDate: String
+  insuranceInterval: String
+  contCareInterval: String
+  avatarUrl: String
+  clientMutationId: String
+}
+
+type addPatientPayload {
+  patient: Patient
+  clientMutationId: String
+}
+
+input createFamilyWithMembersInput {
+  members: [String]!
+  clientMutationId: String
+}
+
+type createFamilyWithMembersPayload {
+  family: Family
+  clientMutationId: String
+}
+
+input deleteFamilyInput {
+  id: String!
+  clientMutationId: String
+}
+
+type deleteFamilyPayload {
+  clientMutationId: String
+}
+
+input deletePatientInput {
+  id: String!
+  clientMutationId: String
+}
+
+type deletePatientPayload {
+  clientMutationId: String
+}
+
+"""Details of a family"""
+type Family implements Node {
+  """The ID of an object"""
+  id: ID!
+  accountId: String!
+  pmsId: String
+  headId: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  ccId: String
+  head: Patient
+  members(after: String, first: Int, before: String, last: Int): PatientConnection
+}
+
+type Mutation {
+  addPatientMutation(input: addPatientInput!): addPatientPayload
+  updatePatientMutation(input: updatePatientInput!): updatePatientPayload
+  deletePatientMutation(input: deletePatientInput!): deletePatientPayload
+  addFamilyMutation(input: addFamilyInput!): addFamilyPayload
+  updateFamilyMutation(input: updateFamilyInput!): updateFamilyPayload
+  deleteFamilyMutation(input: deleteFamilyInput!): deleteFamilyPayload
+  createFamilyWithMembersMutation(input: createFamilyWithMembersInput!): createFamilyWithMembersPayload
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""Details of a patient"""
+type Patient implements Node {
+  """The ID of an object"""
+  id: ID!
+  accountId: String!
+  pmsId: String
+  patientUserId: String
+  email: String
+  firstName: String!
+  lastName: String!
+  middleName: String
+  phoneNumber: String
+  homePhoneNumber: String
+  mobilePhoneNumber: String
+  workPhoneNumber: String
+  otherPhoneNumber: String
+  prefContactPhone: String
+  gender: String
+  prefName: String
+  language: String
+  address: SequelizeJSON
+  preferences: SequelizeJSON
+  type: String
+  contactMethodNote: String
+  birthDate: String
+  pmsCreatedAt: String
+  insurance: SequelizeJSON
+  isDeleted: Boolean
+  isSyncedWithPms: Boolean
+  isSyncedWithPMS: Boolean
+  familyId: String
+  status: PatientstatusEnumType
+  lastApptId: String
+  lastApptDate: String
+  lastHygieneDate: String
+  lastHygieneApptId: String
+  lastRecallDate: String
+  lastRecallApptId: String
+  dueForRecallExamDate: String
+  recallPendingAppointmentId: String
+  dueForHygieneDate: String
+  hygienePendingAppointmentId: String
+  lastRestorativeDate: String
+  lastRestorativeApptId: String
+  firstApptId: String
+  firstApptDate: String
+  nextApptId: String
+  nextApptDate: String
+  insuranceInterval: String
+  contCareInterval: String
+  avatarUrl: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  ccId: String
+  family: Family
+}
+
+"""A connection to a list of items."""
+type PatientConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [PatientEdge]
+}
+
+"""An edge in a connection."""
+type PatientEdge {
+  """The item at the end of the edge"""
+  node: Patient
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+enum PatientstatusEnumType {
+  Active
+  Inactive
+}
+
+type Query {
+  accountViewer: AccountViewer
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+"""The `JSON` scalar type represents raw JSON as values."""
+scalar SequelizeJSON
+
+input updateFamilyInput {
+  id: String!
+  accountId: String!
+  pmsId: String
+  headId: String
+  clientMutationId: String
+}
+
+type updateFamilyPayload {
+  family: Family
+  clientMutationId: String
+}
+
+input updatePatientInput {
+  id: String!
+  accountId: String!
+  pmsId: String
+  patientUserId: String
+  email: String
+  firstName: String!
+  lastName: String!
+  middleName: String
+  phoneNumber: String
+  homePhoneNumber: String
+  mobilePhoneNumber: String
+  workPhoneNumber: String
+  otherPhoneNumber: String
+  prefContactPhone: String
+  gender: String
+  prefName: String
+  language: String
+  address: SequelizeJSON
+  preferences: SequelizeJSON
+  type: String
+  contactMethodNote: String
+  birthDate: String
+  pmsCreatedAt: String
+  insurance: SequelizeJSON
+  isDeleted: Boolean
+  isSyncedWithPms: Boolean
+  isSyncedWithPMS: Boolean
+  familyId: String
+  lastApptId: String
+  lastApptDate: String
+  lastHygieneDate: String
+  lastHygieneApptId: String
+  lastRecallDate: String
+  lastRecallApptId: String
+  dueForRecallExamDate: String
+  recallPendingAppointmentId: String
+  dueForHygieneDate: String
+  hygienePendingAppointmentId: String
+  lastRestorativeDate: String
+  lastRestorativeApptId: String
+  firstApptId: String
+  firstApptDate: String
+  nextApptId: String
+  nextApptDate: String
+  insuranceInterval: String
+  contCareInterval: String
+  avatarUrl: String
+  clientMutationId: String
+}
+
+type updatePatientPayload {
+  patient: Patient
+  clientMutationId: String
+}

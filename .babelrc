@@ -6,6 +6,7 @@
     "react"
   ],
   "plugins": [
+    "relay",
     "syntax-dynamic-import",
     "react-hot-loader/babel"
   ]

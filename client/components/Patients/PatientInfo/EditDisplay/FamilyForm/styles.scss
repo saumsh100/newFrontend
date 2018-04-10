@@ -1,0 +1,55 @@
+
+@import "../../../../../ui";
+
+.familyFormContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.borderBottom {
+  border-bottom: 1px solid $light-grey;
+}
+
+.withPadding {
+  padding: 25px 25px 0px;
+}
+
+.patientSearchClass {
+  height: 50px;
+  box-sizing: border-box;
+  border-bottom: 1px solid $primary-darkgrey;
+  width: 100%;
+}
+
+.patientSearchInput {
+  height: 100%;
+  background-color: $color-white;
+  
+  > span::before, span::after {
+    bottom: -1px;
+  }
+
+  > input {
+    padding-left: 0px;
+    &::placeholder {
+      color: $primary-darkgrey;
+    }
+  }
+}
+
+.patientInfoWrapper {
+  cursor: pointer;
+  display: flex;
+  flex: 10;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+  font-size: $medium-plus-size;
+  background: $color-white;
+  border: none;
+
+  @media (max-width: 576px) {
+    margin-left: -35px;
+    padding-left: 0;
+  }
+}

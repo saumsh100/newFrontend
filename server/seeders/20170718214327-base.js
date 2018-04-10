@@ -202,17 +202,38 @@ module.exports = {
       superAdminUser2,
     ]);
 
+    const families = [];
     const patients = [];
     const deliveredProcedures = [];
+    
+    // Create some families
+    for (let i = 0; i < 25; i += 1) {
+      families.push({
+        id: uuid(),
+        pmsId: uuid(),
+        accountId,
+        createdAt: faker.date.past(),
+        updatedAt: new Date(),
+      });
+    }
 
     for (let i = 0; i < 100; i += 1) {
       const firstName = faker.name.firstName('male');
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
       const id = uuid();
+      const pmsId = uuid();
+      const familyPosition = i % families.length;
+
+      if (!families[familyPosition].headId) {
+        families[familyPosition].headId = pmsId;
+      }
+
       patients.push({
         id,
+        pmsId,
         accountId,
+        familyId: (i > 5) ? families[familyPosition].id : null,
         firstName,
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
@@ -273,9 +294,12 @@ module.exports = {
       const firstName = faker.name.firstName('female');
       const lastName = faker.name.lastName();
       const phoneNumber = faker.phone.phoneNumberFormat(0);
+      const familyPosition = i % families.length;
       patients.push({
         id: uuid(),
+        pmsId: uuid(),
         accountId,
+        familyId: (i > 5) ? families[familyPosition].id : null,
         firstName,
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
@@ -320,6 +344,8 @@ module.exports = {
       updatedAt: new Date(),
     });
 
+    await queryInterface.bulkInsert('Families', families);
+
     await queryInterface.bulkInsert('Patients', patients);
 
     await queryInterface.bulkInsert('DeliveredProcedures', deliveredProcedures);
@@ -337,7 +363,7 @@ module.exports = {
       'f059e1cd-5593-46ec-90b6-af14dd9c974e',
     ];
 
-    const practitioners = practitionerIds.map((id) => ({
+    const practitioners = practitionerIds.map(id => ({
       id,
       accountId,
       type: 'Hygienist',
@@ -377,6 +403,7 @@ module.exports = {
       patients2.push({
         id: uuid(),
         accountId: accountId2,
+        pmsId: uuid(),
         firstName,
         lastName,
         email: `${firstName}.${lastName}@google.ca`,

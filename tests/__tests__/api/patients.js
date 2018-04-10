@@ -312,6 +312,7 @@ describe('/api/patients', () => {
     test('/ - create a patient', () => {
       const createPatient = Object.assign({}, patient);
       delete createPatient.accountId;
+      delete createPatient.familyId;
       return request(app)
         .post(`${rootUrl}`)
         .set('Authorization', `Bearer ${token}`)

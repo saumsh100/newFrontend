@@ -26,9 +26,13 @@ module.exports = {
   context: projectRoot,
 
   entry: entries('server', 'cron', 'reminders', 'recalls', 'reviews',
-    'events', 'firstNextLastApp', 'correspondences', 'patientCache'),
+    'events', 'firstNextLastApp', 'correspondences', 'patientCache', 'updateSchema'),
 
   resolve: {
+    alias: {
+      CareCruModels$: path.resolve(projectRoot, './server/_models/index.js'),
+      CareCruGraphQL: path.resolve(projectRoot, './server/graphql/'),
+    },
     extensions: ['.js', '.jsx'],
   },
 
@@ -87,6 +91,7 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.BROWSER': false,
       'process.env.BUNDLED': true,
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
   ],

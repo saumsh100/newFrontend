@@ -61,7 +61,7 @@ export default function (sequelize, DataTypes) {
     const errors = [];
 
     // Build instances of the models
-    let docs = dataArray.map(p => Family.build(p));
+    const docs = dataArray.map(p => Family.build(p));
 
     // Now Do ORM Validation
     const validatedDocs = [];

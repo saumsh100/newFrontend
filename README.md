@@ -112,6 +112,18 @@ Now, the application is hosted at `http://localhost:5100`. All non-static reques
 > If you get a message like `Error occurred while trying to proxy` you need to check that the application is running. It may not yet be initialized, so just reload the page in a moment.
 > If there are no changes even after page reload - be sure that you are accessing the application from `http://localhost:5100`, and not `http://localhost:5000`.
 
+#### Relay
+
+Relay needs the graphQL queries to be compiled before sent to the server. After making edits to your queries, just run the relay script to generate new compiled artifacts:
+
+`npm run relay`
+
+Alternatively, you can pass the `--watch` option to watch for file changes in your source code and automatically re-generate the compiled artifacts: 
+>Note: Requires [watchman](https://facebook.github.io/watchman/) to be installed
+
+`npm run relay -- --watch`
+
+
 ### Back-end
 
 Be sure that you start application with `npm start` command. In a new terminal do next command to start watching on changes:
@@ -119,6 +131,12 @@ Be sure that you start application with `npm start` command. In a new terminal d
 `npm run server:watch`
 
 The Server will be restarted automatically.
+
+#### GraphQL
+
+Everytime a change is made to the GraphQL Schema a new static json representation of it needs to be updated. Just run:
+
+`npm run update-schema`
 
 ### Running on custom `host:port`
 By default `npm start` will run the Node server on `localhost:5000`. Webpack then starts a proxy server that will run on `localhost:5100`, which is the address that we ultimately connect to.  However, it is possible to run both Webpack server and Node server on a different localhost:port. Changing Node's server host and port is not really needed, but if you run a VM or want to expose the Carecru application on your local network, you can use environment variables to set the host and port for Webpack. `npm` spins up Webpack in a new shell, so it does not care for `.env` file that the Node server sources. Hence, you can't put these vars in there. It has a global environment and environment vars that were part of the start command. Long story short, to set the host and port for Webpack, put the following into your `$HOME/.profile` file (or another bash file that is sourced when a login shell is created).

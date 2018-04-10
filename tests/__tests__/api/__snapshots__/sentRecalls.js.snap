@@ -14,7 +14,7 @@ Object {
         "dueForHygieneDate": null,
         "dueForRecallExamDate": null,
         "email": "testpatient@test.com",
-        "familyId": null,
+        "familyId": "b35bee92-e86d-4084-87d8-add21a1ba0f6",
         "firstApptDate": null,
         "firstApptId": null,
         "firstName": "Ronald",

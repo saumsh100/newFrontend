@@ -19,6 +19,7 @@ import {
   PasswordReset,
   User,
 } from '../_models';
+import graphQLRouter from 'CareCruGraphQL/server';
 
 const rootRouter = Router();
 
@@ -40,19 +41,21 @@ rootRouter.use('/_signup', signupRouterSequelize);
 rootRouter.use('/_api', sequelizeApiRouter);
 rootRouter.use('/api', sequelizeApiRouter);
 
+// Bind GraphQL endpoint
+rootRouter.use('/graphql', graphQLRouter);
+
 // Webhooks!
 rootRouter.use('/twilio', twilioRouterSequelize);
 rootRouter.use('/_twilio', twilioRouterSequelize);
 rootRouter.use('/callrail', callsRouterSequelize);
 rootRouter.use('/_callrail', callsRouterSequelize);
 
-rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
-  return Invite.findOne({
-    where: {
-      token: req.params.tokenId,
-    },
-    paranoid: false,
-  })
+rootRouter.get('/signupinvite/:tokenId', (req, res, next) => Invite.findOne({
+  where: {
+    token: req.params.tokenId,
+  },
+  paranoid: false,
+})
     .then((invite) => {
       if (!invite) {
         // TODO: replace with StatusError
@@ -62,12 +65,10 @@ rootRouter.get('/signupinvite/:tokenId', (req, res, next) => {
       }
       return res.redirect(`/signup/${req.params.tokenId}`);
     })
-    .catch(next);
-});
+    .catch(next));
 
 // below route is sequelize
-rootRouter.get('/reset/:tokenId', (req, res, next) => {
-  return PasswordReset.findOne({ where: { token: req.params.tokenId } })
+rootRouter.get('/reset/:tokenId', (req, res, next) => PasswordReset.findOne({ where: { token: req.params.tokenId } })
     .then((reset) => {
       if (!reset) {
         // TODO: replace with StatusError
@@ -76,8 +77,7 @@ rootRouter.get('/reset/:tokenId', (req, res, next) => {
         res.redirect(`/resetpassword/${req.params.tokenId}`);
       }
     })
-    .catch(next);
-});
+    .catch(next));
 
 rootRouter.post('/userCheck', (req, res, next) => {
   const username = req.body.email.toLowerCase().trim();
@@ -90,9 +90,8 @@ rootRouter.post('/userCheck', (req, res, next) => {
 
 // All other traffic, just render app
 // TODO: Need to update client-side router to handle this
-rootRouter.get('(/*)?', (req, res, next) => {
+rootRouter.get('(/*)?', (req, res, next) =>
   // TODO: this should be wrapped in a try catch
-  return res.render('app');
-});
+   res.render('app'));
 
 module.exports = rootRouter;

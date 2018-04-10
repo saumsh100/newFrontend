@@ -5,6 +5,7 @@ import AppBar from './AppBar';
 import AppointmentPopover from './AppointmentPopover';
 import Avatar from './Avatar';
 import AutoCompleteForm from './AutoCompleteForm';
+import Badge from './Badge';
 import BadgeHeader from './BadgeHeader';
 import BarChart from './BarChart';
 import Button from './Button';
@@ -70,7 +71,7 @@ import VButton from './Button';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
-import Well from './Well'
+import Well from './Well';
 import PatientPopover from './PatientPopover';
 
 export {
@@ -80,6 +81,7 @@ export {
   AppointmentPopover,
   Avatar,
   AutoCompleteForm,
+  Badge,
   BadgeHeader,
   BarChart,
   BackgroundIcon,

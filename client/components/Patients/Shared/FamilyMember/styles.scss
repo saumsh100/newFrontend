@@ -1,0 +1,93 @@
+
+@import '../../../../ui';
+
+@mixin withBorder {
+  content: '';
+  display: block;
+  margin: 0 auto;
+  padding-top: 15px;
+  border-bottom: 1px solid $primary-light-grey;
+}
+
+.familyMember {
+  margin-bottom: 30px;
+
+  &_withBorder:after {
+    @include withBorder;
+    width: 80%;
+  }
+
+  &_row {
+    padding-bottom: 15px;
+  }
+
+  &_name {
+    color: $primary-dark;
+    font-size: $medium-plus-size;
+    padding-right: 10px;
+    vertical-align: baseline;
+  }
+
+  &_fontStyle {
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    color: $primary-dark !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &_head {
+    display: block;
+  }
+
+  &_headColumn {
+    text-align: center;
+  }
+}
+
+.familyMember_config {
+  margin-bottom: 15px;
+
+  &_withBorder:after {
+    @include withBorder;
+  }
+
+  &_col {
+    padding-left: 25px;
+  }
+
+  &_row {
+    &_head {
+      padding: 0;
+    }
+  }
+
+  &_head {
+    display: inline-block;
+    width: auto;
+  }
+
+  &_bullet {
+    color: $inactive-color;
+    font-size: $extra-small-size;
+    padding: 0px 10px;
+  }
+
+  &_button {
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    color: $primary-blue-green; 
+    font-size: $extra-small-size;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-block;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  button.familyMember_config_button_remove {
+    color: $primary-red;
+  }
+}

@@ -39,7 +39,7 @@ app.use(require('../routes'));
 app.use(handleErrors);
 
 // assume 404 since no middleware responded
-/*app.use((req, res) => {
+/* app.use((req, res) => {
   res.status(404).render('404', {
     url: req.originalUrl,
     error: 'Not found',

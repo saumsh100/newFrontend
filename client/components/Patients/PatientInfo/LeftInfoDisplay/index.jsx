@@ -2,17 +2,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, Tab, Icon, Card } from '../../../library';
-import styles from './styles.scss';
+import { familyDataSelector } from '../../Shared/helpers';
 import AppointmentsTab from './AppointmentsTab/index';
 import PersonalTab from './PersonalTab';
+import FamilyTab from './FamilyTab';
+import styles from './styles.scss';
 
 export default function DataDisplay(props) {
   const {
     patient,
+    activeAccount,
     handleTabChange,
     tabIndex,
     openModal,
+    accountViewer,
   } = props;
+
+  const { family, familyLength } = familyDataSelector(accountViewer);
 
   return (
     <Card className={styles.mainContainer} runAnimation loaded={patient}>
@@ -48,9 +54,13 @@ export default function DataDisplay(props) {
           index={tabIndex}
           tabCard
         >
-          <div className={styles.noData}>
-            No Family Information
-          </div>
+          { familyLength > 0 ?
+            <FamilyTab
+              family={family}
+              patient={patient}
+              activeAccount={activeAccount}
+              openModal={openModal}
+            /> : <div className={styles.noData}>No Family Information</div>}
         </Tab>
       </Tabs>
     </Card>

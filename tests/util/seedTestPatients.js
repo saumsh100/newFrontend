@@ -1,12 +1,13 @@
 
 import bcrypt from 'bcrypt';
 import { passwordHashSaltRounds } from '../../server/config/globals';
-import { Patient, PatientUser } from '../../server/_models';
+import { Patient, PatientUser, Family } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
 
 const patientId = '10518e11-b9d2-4d74-9887-29eaae7b5938';
 const patientUserId = 'b8665c97-1e98-41ac-bf13-090b742de400';
+const familyId = 'b35bee92-e86d-4084-87d8-add21a1ba0f6';
 
 const patient = {
   id: patientId,
@@ -19,7 +20,7 @@ const patient = {
   createdAt: '2017-07-19T00:14:30.932Z',
   address: null,
   birthDate: '1980-01-01T00:00:00.932Z',
-  familyId: null,
+  familyId,
   gender: null,
   homePhoneNumber: null,
   language: null,
@@ -62,10 +63,19 @@ const patientUser = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
+const family = {
+  id: familyId,
+  accountId,
+  pmsId: '12',
+  headId: '12',
+};
+
 async function seedTestPatients() {
   await wipeModel(PatientUser);
   await wipeModel(Patient);
+  await wipeModel(Family);
 
+  await Family.create(family);
   await PatientUser.create(patientUser);
   await Patient.create(patient);
 }
@@ -73,13 +83,16 @@ async function seedTestPatients() {
 async function wipeTestPatients() {
   await wipeModel(PatientUser);
   await wipeModel(Patient);
+  await wipeModel(Family);
 }
 
 module.exports = {
   patient,
   patientUser,
+  family,
   patientId,
   patientUserId,
+  familyId,
   seedTestPatients,
   wipeTestPatients,
 };

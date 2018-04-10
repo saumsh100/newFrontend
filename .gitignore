@@ -48,3 +48,5 @@ package-lock.json
 .ackrc
 .history/
 yarn.lock
+**/__generated__
+.python-version

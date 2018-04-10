@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Icon} from '../../library';
+import { graphql, QueryRenderer } from 'react-relay';
+import graphQLEnvironment from '../../../util/graphqlEnvironment';
+import { Grid, Row, Col, Icon } from '../../library';
 import {
   fetchEntities,
   fetchEntitiesRequest,
-  updateEntityRequest
+  updateEntityRequest,
 } from '../../../thunks/fetchEntities';
 import {
   addRemoveTimelineFilters,
@@ -48,7 +50,7 @@ class PatientInfo extends Component {
 
     this.openModal = this.openModal.bind(this);
     this.openFilter = this.openFilter.bind(this);
-    this.reinitializeState = this.reinitializeState.bind(this)
+    this.reinitializeState = this.reinitializeState.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
     this.addRemoveFilter = this.addRemoveFilter.bind(this);
   }
@@ -86,7 +88,7 @@ class PatientInfo extends Component {
   openFilter() {
     this.setState({
       filterOpen: true,
-    })
+    });
   }
 
   reinitializeState() {
@@ -116,6 +118,7 @@ class PatientInfo extends Component {
       accountsFetched,
       activeAccount,
       role,
+      accountViewer,
     } = this.props;
 
     return (
@@ -135,6 +138,7 @@ class PatientInfo extends Component {
           <Col xs={12} className={styles.body}>
             <div className={styles.infoDisplay}>
               <EditDisplay
+                accountViewer={accountViewer}
                 patient={patient}
                 updateEntityRequest={updateEntityRequest}
                 reinitializeState={this.reinitializeState}
@@ -149,11 +153,13 @@ class PatientInfo extends Component {
                 title="Patient Info"
               />
               <LeftInfoDisplay
+                accountViewer={accountViewer}
                 patient={patient}
                 openModal={this.openModal}
                 reinitializeState={this.reinitializeState}
                 tabIndex={this.state.tabIndex}
                 handleTabChange={this.handleTabChange}
+                activeAccount={activeAccount}
               />
             </div>
             <div className={styles.timeline}>
@@ -245,4 +251,84 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match 
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-export default enhance(PatientInfo);
+const query = graphql`
+  query PatientInfo_Query($patientId: String!) {
+    accountViewer {
+      id
+      patient(id: $patientId) {
+        id
+        ccId
+        family {
+          id
+          ccId
+          head {
+            id
+            ccId
+            pmsId
+            accountId
+            avatarUrl
+            firstName
+            lastName
+            birthDate
+            lastApptDate
+            nextApptDate
+            dueForHygieneDate
+            dueForRecallExamDate
+            status
+          }
+          members(
+            first: 2147483647 # MaxGraphQL Int
+          ) @connection(key:"PatientFamily_members", filters: ["first"]){
+            edges {
+              node {
+                id
+                ccId
+                pmsId
+                accountId
+                avatarUrl
+                firstName
+                lastName
+                birthDate
+                lastApptDate
+                nextApptDate
+                dueForHygieneDate
+                dueForRecallExamDate
+                status
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const PatientInfoRenderer = parentProps => ({ error, props }) => {
+  if (error) {
+    return <div>Error!</div>;
+  }
+  if (!props) {
+    return <div>Loading...</div>;
+  }
+  return <PatientInfo {...parentProps} {...props} />;
+};
+
+const PatientInfoWithData = (parentProps) => {
+  if (!parentProps.patient || parentProps.patient === null) {
+    return <PatientInfo {...parentProps} />;
+  }
+  
+  const { id } = parentProps.patient;
+  return (
+    <QueryRenderer
+      environment={graphQLEnvironment}
+      query={query}
+      variables={{
+        patientId: id,
+      }}
+      render={PatientInfoRenderer(parentProps)}
+    />
+  );
+};
+
+export default enhance(PatientInfoWithData);
