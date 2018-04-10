@@ -433,6 +433,7 @@ class SideBarFilters extends Component {
           <div
             className={styles.filterHeader}
             onClick={() => this.displayFilter(index)}
+            data-test-id={`collapsible_${index}`}
           >
             {headerTitle}
             <span className={styles.filterHeader_icon}>

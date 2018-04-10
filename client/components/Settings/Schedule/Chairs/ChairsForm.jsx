@@ -46,15 +46,19 @@ export default function ChairsForm(props) {
       alignSave="left"
       initialValues={initialValues}
       ignoreSaveButton
+      data-test-id="chairsForm"
     >
       <div className={styles.formContainer}>
-        {chairs.map((chair) => {
+        {chairs.map((chair, index) => {
           return (
             <div className={styles.chairContainer}>
               <span className={styles.chairContainer_name}>
                 {chair.get('name')}
               </span>
-              <div className={styles.chairContainer_toggle}>
+              <div
+                className={styles.chairContainer_toggle}
+                data-test-id={`chair_${index}`}
+              >
                 <Field
                   component="Toggle"
                   name={chair.get('id')}

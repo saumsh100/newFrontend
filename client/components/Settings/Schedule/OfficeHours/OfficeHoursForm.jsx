@@ -80,7 +80,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
             <Col
               xs={2}
               className={styles.flexCentered}
-              data-test-id={`${day}Toggle`}
+              data-test-id={`toggle_${day}`}
             >
               <Field component="Toggle" name="isClosed" flipped />
             </Col>
@@ -90,7 +90,7 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
             >
               <Grid>
                 <Row>
-                  <Col xs={4} className={styles.flexCentered} data-test-id={`${day}StartTime`} >
+                  <Col xs={4} className={styles.flexCentered} data-test-id={`dropDown_${day}_startTime`} >
                     <Field
                       component="DropdownSelect"
                       options={timeOptions}

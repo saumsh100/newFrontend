@@ -17,6 +17,7 @@ export default function SearchPatientTable(props) {
       name="0"
       theme={searchTheme}
       icon="search"
+      data-test-id={props['data-test-id']}
     />
   );
 }

@@ -43,7 +43,7 @@ export class DropdownMenu extends Component {
       children,
       isOpen: this.state.isOpen,
       close: this.close,
-      toggle: <this.props.labelComponent {...labelProps} onClick={this.toggle} />,
+      toggle: <this.props.labelComponent {...labelProps} onClick={this.toggle} data-test-id={this.props['data-test-id']}/>,
 
       // Default
       closeOnInsideClick,
@@ -52,7 +52,7 @@ export class DropdownMenu extends Component {
       upwards,
     };
 
-    return <RDropdownMenu {...menuOptions} data-test-id={this.props['data-test-id']}/>;
+    return <RDropdownMenu {...menuOptions} />;
   }
 }
 
@@ -75,7 +75,7 @@ export function MenuItem(props) {
 
   const classes = classNames(props.className, styles.menuItemLi);
   return (
-    <ListItem className={classes} onClick={props.onClick}>
+    <ListItem className={classes} onClick={props.onClick} data-test-id={props['data-test-id']}>
       <div className={`dd-item-ignore ${styles.menuItemContent}`}>
         {icon}
         {props.children}

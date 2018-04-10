@@ -259,6 +259,7 @@ class DisplayForm extends Component {
             ref={el => (this.autoSuggest = el)}
             validate={[validatePatient]}
             onBlurFunction={() => this.props.setShowInput(false)}
+            data-test-id="patientSelected"
           />
         </div>
         <AppointmentForm

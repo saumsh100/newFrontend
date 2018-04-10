@@ -158,7 +158,7 @@ class ChatMessage extends Component {
     return (
       <SHeader className={styles.leftCardHeader}>
         <div className={styles.searchSection}>
-          <div className={styles.searchInputWrapper}>
+          <div className={styles.searchInputWrapper} data-test-id="input_chatSearch">
             <PatientSearch
               onSelect={this.selectChatOrCreate}
               theme={patientSearchTheme}
@@ -170,6 +170,7 @@ class ChatMessage extends Component {
             onClick={this.addNewChat}
             className={styles.addNewChatButton}
             color="darkblue"
+            data-test-id="button_addNewChat"
           />
         </div>
         <div className={styles.tabsSection}>

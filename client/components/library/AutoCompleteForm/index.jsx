@@ -74,6 +74,7 @@ class AutoCompleteForm extends Component {
         {...props}
         ref={null}
         refCallBack={node => this.inputComponent = node}
+        data-test-id={this.props['data-test-id']}
       />
     );
   }

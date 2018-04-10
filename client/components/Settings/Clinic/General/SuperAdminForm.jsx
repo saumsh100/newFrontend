@@ -33,7 +33,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       form="superAdminSettingsForm"
       onSubmit={onSubmit}
       initialValues={initialValues}
-      data-test-id="generalSettingsForm"
+      data-test-id="superAdminSettingsForm"
       alignSave="left"
     >
       {lastSyncComponent}
@@ -42,7 +42,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           <div className={styles.paddingText} >
             Can Send Reminders
           </div>
-          <div className={styles.paddingField_toggle}>
+          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReminders">
             <Field
               component="Toggle"
               name="canSendReminders"
@@ -55,7 +55,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           <div className={styles.paddingText}>
             Can Send Reviews
           </div>
-          <div className={styles.paddingField_toggle}>
+          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReviews">
             <Field
               component="Toggle"
               name="canSendReviews"
@@ -68,7 +68,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           <div className={styles.paddingText} >
             Can Send Recalls
           </div>
-          <div className={styles.paddingField_toggle}>
+          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendRecalls">
             <Field
               component="Toggle"
               name="canSendRecalls"
@@ -81,7 +81,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           <div className={styles.paddingText} >
             Send Request Emails
           </div>
-          <div className={styles.paddingField_toggle}>
+          <div className={styles.paddingField_toggle} data-test-id="toggle_sendRequestEmail">
             <Field
               component="Toggle"
               name="sendRequestEmail"
@@ -111,20 +111,24 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         label="Schedule Unit"
         type="number"
         validate={[notNegative, maxUnitSize]}
+        data-test-id="unit"
       />
       <Field
         name="timeInterval"
         label="Time Interval for Booking Widget"
         type="number"
         validate={[notNegative, maxUnitSize]}
+        data-test-id="timeInterval"
       />
       <Field
         name="facebookUrl"
         label="Facebook URL"
+        data-test-id="facebookUrl"
       />
       <Field
         name="googlePlaceId"
         label="Google Place ID"
+        data-test-id="googlePlaceId"
       />
     </Form>
   );

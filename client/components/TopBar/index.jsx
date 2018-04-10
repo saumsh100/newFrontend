@@ -157,6 +157,7 @@ class TopBar extends Component {
           key={account.id}
           className={(isActive ? styles.menuItemSelected : null)}
           onClick={isActive ? false : setActive}
+          data-test-id={`option_${account.name}`}
         >
           {account.name}
         </MenuItem>
@@ -221,7 +222,9 @@ class TopBar extends Component {
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
             {withEnterprise && activeAccount ?
-              <li>
+              <li
+                data-test-id="dropDown_accounts"
+              >
                 <DropdownMenu
                   className={styles.accountsDropdownMenu}
                   labelComponent={ActiveAccountButton}

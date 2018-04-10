@@ -121,6 +121,7 @@ class DonnaToDoTabs extends Component {
                 label={'Review Requests'}
                 className={styles.tab}
                 activeClass={styles.activeTab}
+                data-test-id="reviewRequestsTab"
               />
               <Tab
                 label={'Referral Requests'}

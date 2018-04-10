@@ -214,6 +214,7 @@ class Header extends Component {
               size={1.3}
               onClick={() => this.props.previousDay(currentDate)}
               className={styles.changeDay_left}
+              data-test-id="button_previousDay"
             />
             <IconButton
               icon="angle-right"
@@ -264,6 +265,7 @@ class Header extends Component {
               compact
               className={styles.headerLinks_waitlist}
               onClick={this.openWaitlist}
+              data-test-id="button_headerWaitlist"
             >
               Waitlist
             </Button>
@@ -284,6 +286,7 @@ class Header extends Component {
               dense
               compact
               className={styles.headerLinks_add}
+              data-test-id="button_appointmentQuickAdd"
             >
               Quick Add
             </Button>
@@ -328,7 +331,7 @@ class Header extends Component {
                   label: 'Cancel',
                 },
                 {
-                  props: { color: 'blue', form: addToFormName },
+                  props: { color: 'blue', form: addToFormName, 'data-test-id': 'button_submitForm' },
                   component: RemoteSubmitButton,
                   onClick: this.openAddToWaitlist,
                   label: 'Save',

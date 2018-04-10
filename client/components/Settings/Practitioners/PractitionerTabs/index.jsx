@@ -105,10 +105,10 @@ class PractitionerTabs extends Component {
             index={this.state.index}
             onChange={this.handleTabChange}
           >
-            <Tab label="Basic" data-test-id="practitionerBasicDataTab" />
-            <Tab label="Practitioner Schedule" data-test-id="practitionerOfficeHoursTab" />
-            <Tab label="Services" data-test-id="practitionerServicesTab" />
-            <Tab label="Time Off" data-test-id="practitionerTimeOffTab" />
+            <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
+            <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
+            <Tab label="Services" data-test-id="tab_practitionerServices" />
+            <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
             <Tab label="Recurring Time Off" />
           </Tabs>
         )}

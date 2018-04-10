@@ -79,8 +79,8 @@ export default function SmartFilters(props) {
 
 
   return (
-    <List className={styles.smartFilter}>
-      {smartFilters.map((filter) => {
+    <List className={styles.smartFilter} data-test-id={'smartFiltersList'}>
+      {smartFilters.map((filter, index) => {
         let borderStyle = {};
 
         if ((smartFilter && filter.label === smartFilter.label) || (filter.label === 'All Patients' && !smartFilter)) {
@@ -90,7 +90,12 @@ export default function SmartFilters(props) {
         }
 
         return (
-          <ListItem className={styles.filterItem} onClick={() => setSmartFilter(filter)} style={borderStyle}>
+          <ListItem
+            className={styles.filterItem}
+            onClick={() => setSmartFilter(filter)}
+            style={borderStyle}
+            data-test-id={`option_${index}`}
+          >
             {filter.label}
           </ListItem>
         );

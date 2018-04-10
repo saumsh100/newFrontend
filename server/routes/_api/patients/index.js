@@ -455,6 +455,7 @@ patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:rea
         },
         isDeleted: false,
         isCancelled: false,
+        isPending: false,
       },
       order: [['startDate', 'ASC']],
     });

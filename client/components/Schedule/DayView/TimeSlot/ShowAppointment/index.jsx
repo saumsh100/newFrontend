@@ -115,11 +115,11 @@ class ShowAppointment extends Component {
           onDoubleClick={this.editAppointment}
           className={styles.appointmentContainer}
           style={containerStyle}
+          data-test-id={`appointment_${patient.get('firstName')}${patient.get('lastName')}`}
         >
           <div
             className={styles.showAppointment}
             style={appStyle}
-            data-test-id={`timeSlot${patient.get('firstName')}${patient.get('lastName')}`}
           >
             {isPatientConfirmed || isReminderSent ? (
               <div className={styles.icon}>

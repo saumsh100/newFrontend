@@ -29,6 +29,7 @@ export default function ReviewRequests({ reviews }) {
           <ListItem
             key={`reviewRequest_${sendDate}_${patient.id}`}
             className={styles.listItem}
+            data-test-id="list_donnaReviews"
           >
             <div className={styles2.avatar}>
               <Avatar size="sm" user={patient} />

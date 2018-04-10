@@ -251,7 +251,7 @@ class Recalls extends Component {
                 </Button>
                 <Button
                   onClick={this.toggleAdding}
-                  data-test-id="createNewReminder"
+                  data-test-id="button_createNewRecall"
                   color="blue"
                 >
                   Add

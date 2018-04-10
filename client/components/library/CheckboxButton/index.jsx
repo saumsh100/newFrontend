@@ -23,7 +23,7 @@ export default function CheckboxButton(props) {
   }
 
   return (
-    <div className={styles.checkboxButton}>
+    <div className={styles.checkboxButton} data-test-id={props['data-test-id']}>
       <input
         type="checkbox"
         id={id}

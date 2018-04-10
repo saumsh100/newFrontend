@@ -65,7 +65,7 @@ class HeaderSection extends Component {
       patientIds,
     } = this.props;
 
-    const formName = 'newUser';
+    const formName = 'newPatientForm';
 
     const actions = [
       { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
@@ -73,8 +73,13 @@ class HeaderSection extends Component {
     ];
 
     const filterMenu = props => (
-      <div{...props} className={styles.filterMenuButton}>
-        <div className={styles.header_title}>
+      <div
+        {...props}
+        className={styles.filterMenuButton}
+      >
+        <div
+          className={styles.header_title}
+        >
           {smartFilter ? smartFilter.label : 'All Patients' }
           <div className={styles.header_icon}>
             <Icon icon="caret-down" type="solid" size={1.7} />
@@ -95,11 +100,11 @@ class HeaderSection extends Component {
     );
 
     return (
-      <div className={styles.header}>
-        <div style={{ display: 'flex' }}>
+      <div className={styles.header} >
         <div>
           <DropdownMenu
             labelComponent={filterMenu}
+            data-test-id="dropDown_smartFilters"
           >
             <div className={styles.filterContainer}>
               <SmartFilters
@@ -108,10 +113,9 @@ class HeaderSection extends Component {
               />
             </div>
           </DropdownMenu>
-          <div className={styles.header_subHeader}>
+          <div className={styles.header_subHeader} data-test-id={'text_totalPatientsCount'}>
             {`Showing ${totalPatients} Patients`}
           </div>
-        </div>
         </div>
         <div className={styles.buttonContainer}>
           <DropdownMenu
@@ -126,6 +130,7 @@ class HeaderSection extends Component {
             onClick={() => this.setActive()}
             compact
             color="blue"
+            data-test-id="button_addNewPatient"
           >
             Add New Patient
           </Button>

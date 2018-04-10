@@ -74,6 +74,7 @@ class ServicesPractForm extends Component {
                 <ServicesPractList
                   key={`${practitioner.get('id')}${index}`}
                   practitioner={practitioner}
+                  index={index}
                 />
               );
             })}

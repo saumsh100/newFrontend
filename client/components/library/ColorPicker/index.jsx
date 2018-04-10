@@ -33,7 +33,6 @@ class ColorPicker extends Component {
     return (
       <div className={styles.colorPickerContainer}>
         <div className={styles.colorSwatch} style={swatchColor} />
-
         <Popover
           className={styles.colorPickerPopover}
           onOuterAction={this.handleClose}
@@ -51,7 +50,7 @@ class ColorPicker extends Component {
             value={this.props.color}
             onChange={this.props.onChange}
             onClick={this.handleClick}
-            data-test-id={this.props['data-test-id']}
+            data-test-id={this.props['data-test-id-child']}
           />
         </Popover>
       </div>

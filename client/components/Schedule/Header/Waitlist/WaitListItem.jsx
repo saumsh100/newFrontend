@@ -44,7 +44,7 @@ export default function WaitListItem(props) {
   }
 
   return (
-    <div className={styles.waitListItem}>
+    <div className={styles.waitListItem} data-test-id="list_waitListItem">
       <div className={wrapperStyle}>
         <div className={styles.avatar}>
           <Avatar user={patient} size="sm" />

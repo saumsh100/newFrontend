@@ -16,10 +16,10 @@ export default function GeneralForm({ onSubmit, activeAccount }) {
 
   return (
     <Form
-      form="generalSettingsForm"
+      form="clinicDetailsForm"
       onSubmit={onSubmit}
       initialValues={initialValues}
-      data-test-id="generalSettingsForm"
+      data-test-id="clinicDetailsForm"
       alignSave="left"
     >
       <Field

@@ -21,7 +21,8 @@ export default function PreferencesForm({ handleSubmit, activeAccount, }) {
           component="ColorPicker"
           label="Primary Widget Color"
           name="bookingWidgetPrimaryColor"
-          data-test-id="colorInput"
+          data-test-id-child="colorInput"
+          data-test-id="colorPicker"
         />
       </div>
     </Form>

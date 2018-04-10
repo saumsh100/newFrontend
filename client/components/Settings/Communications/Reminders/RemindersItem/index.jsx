@@ -294,7 +294,10 @@ class RemindersItem extends Component {
         )}
 
         labelComponent={(
-          <TouchPointLabel title={`${ordinalSuffix(index + 1)} Reminder`} />
+          <TouchPointLabel
+            title={`${ordinalSuffix(index + 1)} Reminder`}
+            data-test-id={`touchPoint_reminder_${index}`}
+          />
         )}
 
         mainComponent={(

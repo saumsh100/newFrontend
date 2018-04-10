@@ -152,7 +152,7 @@ const superAdminUser = {
 };
 
 const superAdminUser2 = {
-  id: uuid(),
+  id: '83fd6b53-83b1-425a-9c6b-ec120c0e91ae',
   enterpriseId,
   activeAccountId: accountId,
   permissionId: superAdminPermissionId,
@@ -290,12 +290,35 @@ module.exports = {
           carrier: 'sadasadsadsads',
           sin: 'dsasdasdasdadsasad',
         }),
-        lastHygieneDate: faker.date.past(),
-        lastRecallDate: faker.date.past(),
+        dueForHygieneDate: faker.date.past(),
+        dueForRecallExamDate: faker.date.past(),
         createdAt: faker.date.past(),
         updatedAt: new Date(),
       });
     }
+
+    patients.push({
+      id: uuid(),
+      accountId,
+      firstName: 'Testy',
+      lastName: 'Testerson',
+      email: 'testy.testerson@google.ca',
+      mobilePhoneNumber: faker.phone.phoneNumberFormat(0),
+      birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+      gender: 'female',
+      language: 'English',
+      insurance: JSON.stringify({
+        insurance: 'Lay Health Insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      }),
+      dueForHygieneDate: moment().add(1, 'months').toISOString(),
+      dueForRecallExamDate: moment().add(1, 'months').toISOString(),
+      createdAt: faker.date.past(),
+      updatedAt: new Date(),
+    });
 
     await queryInterface.bulkInsert('Patients', patients);
 
@@ -376,6 +399,30 @@ module.exports = {
       });
     }
 
+    // Test Patient for Account 2
+    patients2.push({
+      id: 'a021cf88-1b5c-4d54-a0f4-b6629523b738',
+      accountId: accountId2,
+      firstName: 'Testy',
+      lastName: 'Testerson',
+      email: 'testy.testerson@google.ca',
+      mobilePhoneNumber: '906-594-6264',
+      birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+      gender: 'female',
+      language: 'English',
+      insurance: JSON.stringify({
+        insurance: 'Lay Health Insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      }),
+      dueForHygieneDate: moment().add(1, 'months').toISOString(),
+      dueForRecallExamDate: moment().add(1, 'months').toISOString(),
+      createdAt: faker.date.past(),
+      updatedAt: new Date(),
+    });
+
     await queryInterface.bulkInsert('Patients', patients2);
 
     const practitioners2 = [];
@@ -411,14 +458,16 @@ module.exports = {
       appointments2.push(appointment);
     }
 
+    const chair1Id = uuid();
+    const chair2Id = uuid();
     await queryInterface.bulkInsert('Chairs', [{
-      id: uuid(),
+      id: chair1Id,
       accountId,
       name: 'Chair 1',
       createdAt: new Date(),
       updatedAt: new Date(),
     }, {
-      id: uuid(),
+      id: chair2Id,
       accountId,
       name: 'Chair 2',
       createdAt: new Date(),
@@ -426,7 +475,56 @@ module.exports = {
     },
     ]);
 
-    // await queryInterface.bulkInsert('Appointments', appointments2);
+    const todaysApps = [];
+    for (let i = 0; i < 5; i += 2) {
+      const patient = patients[i];
+      const appointment = {
+        id: uuid(),
+        accountId,
+        practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+        patientId: patient.id,
+        startDate: moment().add(`${i * 15}`, 'minutes').toISOString(),
+        endDate: moment().add(`${(i * 15) + 15}`, 'minutes').toISOString(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        chairId: chair2Id,
+        isCancelled: false,
+      };
+
+      todaysApps.push(appointment);
+    }
+
+    const prevDay = moment().subtract(1, 'day');
+    const prevDayApp = {
+      id: uuid(),
+      accountId,
+      practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+      patientId: patients[patients.length - 1].id,
+      startDate: prevDay.toISOString(),
+      endDate: moment(prevDay).add(15, 'minutes').toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      chairId: chair1Id,
+      isCancelled: false,
+    };
+
+    const prevDayCancelledApp = {
+      id: uuid(),
+      accountId,
+      practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
+      patientId: patients[patients.length - 2].id,
+      startDate: prevDay.toISOString(),
+      endDate: moment(prevDay).add(15, 'minutes').toISOString(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      chairId: chair1Id,
+      isCancelled: true,
+    };
+
+    todaysApps.push(prevDayApp);
+    todaysApps.push(prevDayCancelledApp);
+
+    await queryInterface.bulkInsert('Appointments', todaysApps);
   },
 
   down(queryInterface, Sequelize) { // eslint-disable-line

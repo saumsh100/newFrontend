@@ -49,11 +49,13 @@ class ServiceDataContainer extends Component {
           title={selectedService.get('name')}
           bodyClass={styles.serviceDataBody}
           rightActions={(
-            <div>
+            <div
+              data-test-id="removeService"
+              onClick={this.deleteService}
+            >
               <IconButton
                 icon="trash"
                 iconType="solid"
-                onClick={this.deleteService}
               />
             </div>
           )}

@@ -81,7 +81,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
                 type="button"
                 icon="plus"
                 onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
-                data-test-id={`${day}AddBreakButton`}
+                data-test-id={`button_${day}_addBreak`}
                 secondary
               >
                 Add Break
@@ -102,7 +102,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
                           name={`${field}.startTime`}
                           className={styles.inlineBlock}
                           label="Start Time"
-                          data-test-id={`${day}BreakStartTime`}
+                          data-test-id={`input_${day}BreakStartTime`}
                           search="label"
                         />
                       </Col>
@@ -127,7 +127,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
                           icon="trash"
                           className={styles.trashButton}
                           onClick={() => fields.remove(index)}
-                          data-test-id={`${day}BreakTrash`}
+                          data-test-id={`button_${day}BreakTrash`}
                         />
                       </Col>
                     </Row>

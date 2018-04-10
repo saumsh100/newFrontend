@@ -77,7 +77,7 @@ class ServiceListContainer extends Component {
                   icon="plus"
                   onClick={this.setActive}
                   className={styles.addServiceButton}
-                  data-test-id="addPractitionerButton"
+                  data-test-id="button_addService"
                   secondary
                 >
                   Add New Service

@@ -52,15 +52,16 @@ export default function Demographics(props) {
         onChange={handleDemographics}
         ignoreSaveButton
         destroyOnUnmount={false}
+        data-test-id="demographics"
       >
         <div className={styles.formContainer}>
           <div className={styles.formHeader}> Search By First Name </div>
           <FormSection name="firstName" className={styles.formContainer_row} >
-            <SearchPatientTable />
+            <SearchPatientTable data-test-id="search_firstName" />
           </FormSection>
           <div className={styles.formHeader}> Search By Last Name </div>
-          <FormSection name="lastName" className={styles.formContainer_row} >
-            <SearchPatientTable />
+          <FormSection name="lastName" className={styles.formContainer_row}>
+            <SearchPatientTable data-test-id="search_lastName" />
           </FormSection>
           <div className={styles.formHeader}> Age </div>
           <FormSection name="age" className={styles.formContainer_row} >
@@ -69,7 +70,7 @@ export default function Demographics(props) {
               type="number"
               validate={[notNegative]}
               normalize={parseNum}
-              data-test-id="duration"
+              data-test-id="ageInput_0"
               label="Years"
               theme={theme}
             />
@@ -79,7 +80,7 @@ export default function Demographics(props) {
               type="number"
               validate={[notNegative]}
               normalize={parseNum}
-              data-test-id="duration"
+              data-test-id="ageInput_1"
               label="Years"
               theme={theme}
             />
@@ -95,6 +96,7 @@ export default function Demographics(props) {
                 className={styles.ddSelect}
                 label="All"
                 theme={theme}
+                data-test-id="genderInput"
               />
             </div>
           </FormSection>

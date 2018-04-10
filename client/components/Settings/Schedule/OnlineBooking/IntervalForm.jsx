@@ -29,7 +29,7 @@ export default function IntervalForm({ handleSubmit, activeAccount, }) {
       form="intervalPreferenceForm"
       onSubmit={handleSubmit}
       initialValues={initialValues}
-      data-test-id="generalSettingsForm"
+      data-test-id="intervalPreferenceForm"
       alignSave="left"
     >
       <div className={styles.formContainer_intervalField}>
@@ -38,6 +38,7 @@ export default function IntervalForm({ handleSubmit, activeAccount, }) {
           label="Interval for Booking Widget"
           component="DropdownSelect"
           options={optionsInterval}
+          data-test-id="timeInterval"
         />
       </div>
     </Form>

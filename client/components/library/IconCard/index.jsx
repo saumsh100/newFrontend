@@ -23,12 +23,18 @@ export default function IconCard(props) {
   if (color) {
     classes = classNames(classes, styles[`${color}Background`]);
   }
+
   // TODO: Remove Col wrapper, this component does not care if it is in a Grid!
   // TODO: Make Icon a light grey to match title text, just like in mockups
   return (
     <Card className={classes} noBorder>
       <div className={styles.iconCard__wrapper}>
-        <div className={styles.iconCard__count}>{count}</div>
+        <div
+          className={styles.iconCard__count}
+          data-test-id={`statCard_${title}`}
+        >
+          {count}
+        </div>
         <div className={styles.iconCard__title}>{title}</div>
       </div>
       <img

@@ -23,6 +23,7 @@ export default function Waitlist(props) {
           <Button
             color="blue"
             onClick={openAddTo}
+            data-test-id="button_addToWaitlist"
           >
             Add to Waitlist
           </Button>

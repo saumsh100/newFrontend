@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
 import classNames from 'classnames';
-import VButton from '../Button';
+import Button from '../Button';
 import Icon from '../Icon';
 import styles from './styles.scss';
 
@@ -17,9 +17,9 @@ export default function IconButton(props) {
   const classes = classNames(className, styles.iconButton);
   const buttonProps = omit(props, ['icon', 'size']);
   return (
-    <VButton {...buttonProps} className={classes}>
+    <Button {...buttonProps} className={classes}>
       <Icon icon={icon} size={size} type={iconType} />
-    </VButton>
+    </Button>
   );
 }
 

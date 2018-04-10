@@ -1,22 +1,23 @@
-Cypress.addParentCommand('submitDialogForm', (dataTestId) => {
+Cypress.Commands.add('submitDialogForm', (dataTestId) => {
   cy
     .get(`[data-test-id=${dataTestId}Save]`)
     .click();
 });
 
-Cypress.addParentCommand('submitForm', (dataTestId) => {
+Cypress.Commands.add('submitForm', (dataTestId) => {
   cy
     .get(`[data-test-id=${dataTestId}]`)
     .submit();
 });
 
-Cypress.addParentCommand('getAndClick', (dataTestId) => {
+Cypress.Commands.add('getAndClick', (dataTestId) => {
   cy
     .get(`[data-test-id=${dataTestId}]`)
     .click();
 });
 
-Cypress.addParentCommand('selectOption', (formDataTestId, dataTestId, optionValue) => {
+Cypress.Commands.add('selectOption', (formDataTestId, dataTestId, optionValue) => {
+  console.log(optionValue)
   cy
     .get(`[data-test-id=${formDataTestId}]`)
     .find(`[data-test-id=${dataTestId}]`)
@@ -26,7 +27,7 @@ Cypress.addParentCommand('selectOption', (formDataTestId, dataTestId, optionValu
     .click({ force: true });
 });
 
-Cypress.addParentCommand('fillTextInput', (formDataTestId ,dataTestId, text) => {
+Cypress.Commands.add('fillTextInput', (formDataTestId ,dataTestId, text) => {
   cy
     .get(`[data-test-id=${formDataTestId}]`)
     .find(`[data-test-id=${dataTestId}]`)
@@ -34,18 +35,17 @@ Cypress.addParentCommand('fillTextInput', (formDataTestId ,dataTestId, text) => 
     .type(text);
 });
 
-Cypress.addParentCommand('fillInput', (formDataTestId ,dataTestId, email) => {
+Cypress.Commands.add('fillInput', (formDataTestId ,dataTestId, email) => {
   cy
     .get(`[data-test-id=${formDataTestId}]`)
     .find(`[data-test-id=${dataTestId}]`)
     .type(email);
 });
 
-Cypress.addParentCommand('login', (username, secret) => {
-  const email = username || 'justin@carecru.com'
-  const password = secret || 'justin'
-
-  const log = Cypress.Log.command({
+Cypress.Commands.add('login', (username, secret) => {
+  const email = username || 'justin@carecru.com';
+  const password = secret || 'justin';
+  const log = Cypress.log({
     name: 'login',
     message: [email, password],
     consoleProps() {
@@ -74,4 +74,25 @@ Cypress.addParentCommand('login', (username, secret) => {
     .then(() => {
       log.snapshot().end();
     });*/
+});
+
+Cypress.Commands.add('sendTextMessage', (patientId, chatId, mobilePhoneNumber, accountId) => {
+  return cy.request({
+    method: 'POST',
+    url: '/api/chats/textMessages', // baseUrl is prepended to url
+    header: {
+      Authorization: `Bearer ${window.localStorage.getItem('token')}`,
+      'Content-Type': 'application/json',
+    },
+    body: {
+      message: 'test',
+      patient: {
+        id: patientId,
+        mobilePhoneNumber,
+        accountId,
+      },
+      userId: '83fd6b53-83b1-425a-9c6b-ec120c0e91ae',
+      chatId: 'd088f259-a3b1-4057-9453-9de92423cba6',
+    },
+  });
 });

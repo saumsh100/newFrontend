@@ -51,6 +51,7 @@ export default function AddToWaitlist(props) {
       theme={autoStyles}
       onChange={(e, newValue) => handleAutoSuggest(newValue)}
       icon="search"
+      data-test-id="patientData"
       required
     />
   ) : (
@@ -74,6 +75,7 @@ export default function AddToWaitlist(props) {
       onSubmit={onSubmit}
       initialValues={initialValues}
       ignoreSaveButton
+      data-test-id={formName}
     >
       <Grid className={styles.addToContainer}>
         <Row className={styles.searchContainer}>
@@ -100,6 +102,7 @@ export default function AddToWaitlist(props) {
                 component="CheckboxButton"
                 name="monday"
                 label="Mon"
+                data-test-id="monday"
               />
             </div>
             <div className={styles.colSpacing}>

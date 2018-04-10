@@ -8,7 +8,7 @@ class ServicesPractList extends Component {
   }
 
   render() {
-    const { practitioner } = this.props;
+    const { practitioner, index } = this.props;
 
     return (
       <div
@@ -18,7 +18,10 @@ class ServicesPractList extends Component {
         <span className={styles.servicesPractForm_service_text}>
           {practitioner.getFullName()}
         </span>
-        <div className={styles.servicesPractForm_service_toggle}>
+        <div
+          className={styles.servicesPractForm_service_toggle}
+          data-test-id={`toggle_prac_${index}`}
+        >
           <Field
             component="Toggle"
             name={practitioner.get('id')}

@@ -108,7 +108,7 @@ class PractitionerList extends Component {
                   icon="plus"
                   onClick={this.setActive}
                   className={styles.addPractitionerButton}
-                  data-test-id="addPractitionerButton"
+                  data-test-id="button_addPractitioner"
                   secondary
                 >
                   Add New Practitioner

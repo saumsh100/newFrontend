@@ -13,7 +13,7 @@ import styles from './styles.scss';
 export function TouchPointLabel(props) {
   const classes = classNames(props.className, styles.reminderLabel);
   return (
-    <div className={classes}>
+    <div className={classes} data-test-id={props['data-test-id']}>
       {props.title}
     </div>
   );

@@ -205,7 +205,7 @@ class MessageContainer extends Component {
       return (
         <div
           key={index}
-          data-test-id="chatMessage"
+          data-test-id="item_chatMessage"
           className={styles.messageWrapper}
         >
           <div

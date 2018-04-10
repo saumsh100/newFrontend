@@ -43,7 +43,7 @@ class MessageTextArea extends Component {
     };
 
     return (
-      <div {...sendButtonProps}>
+      <div {...sendButtonProps} data-test-id="button_sendMessage">
         <Icon
           icon="paper-plane"
           type="solid"

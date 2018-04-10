@@ -156,11 +156,12 @@ class DropdownSelect extends Component {
                 onChange(option.value);
                 this.close();
               }}
-              data-test-id={option.value}
+              data-test-id={`option_${i}`}
               ref={isSelected ? this.valueScrollComponentDidMount : null}
             >
               <div
                 className={styles.optionDiv}
+                data-test-id={isSelected ? this.props['data-test-id'] : null}
               >
                 <OptionTemplate option={option} />
               </div>

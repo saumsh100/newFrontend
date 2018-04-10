@@ -22,7 +22,7 @@ export default function ContactForm({ onSubmit, activeAccount, role }) {
       form="contactSettingsForm"
       onSubmit={onSubmit}
       initialValues={initialValues}
-      data-test-id="generalSettingsForm"
+      data-test-id="contactSettingsForm"
       alignSave="left"
     >
       <Field

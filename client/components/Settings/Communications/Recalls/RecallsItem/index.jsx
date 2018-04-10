@@ -179,6 +179,7 @@ class RecallsItem extends Component {
       selected,
       selectRecall,
       lastRecall,
+      index,
     } = this.props;
 
     const {
@@ -224,7 +225,10 @@ class RecallsItem extends Component {
 
         labelComponent={(
           <div className={styles.recallLabel}>
-            <TouchPointLabel title={`${Math.abs(num)} ${getTypeWord(num, type)}`} />
+            <TouchPointLabel
+              title={`${Math.abs(num)} ${getTypeWord(num, type)}`}
+              data-test-id={`touchPoint_recall_${index}`}
+            />
             <div className={styles.beforeAfterLabel}>{subType} due date</div>
           </div>
         )}

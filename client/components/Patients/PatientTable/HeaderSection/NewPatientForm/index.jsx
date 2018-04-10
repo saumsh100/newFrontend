@@ -38,18 +38,21 @@ export default function NewPatientForm({ onSubmit, formName }) {
       ignoreSaveButton
       asyncValidate={asyncValidateNewPatient}
       asyncBlurFields={['email', 'mobilePhoneNumber']}
+      data-test-id={formName}
     >
       <Field
         required
         name="firstName"
         validate={[maxLength(25)]}
         label="First Name"
+        data-test-id="firstName"
       />
       <Field
         required
         name="lastName"
         validate={[maxLength(25)]}
         label="Last Name"
+        data-test-id="lastName"
       />
       <div className={styles.spacing}>
       <Field
@@ -57,24 +60,28 @@ export default function NewPatientForm({ onSubmit, formName }) {
         label="Gender"
         component="DropdownSelect"
         options={options}
+        data-test-id="gender"
       />
       </div>
       <Field
         name="mobilePhoneNumber"
         type="tel"
         label="Mobile Phone Number"
+        data-test-id="mobilePhoneNumber"
       />
       <Field
         type="email"
         name="email"
         validate={[emailValidate]}
         label="Email"
+        data-test-id="email"
       />
       <Field
         normalize={normalizeBirthdate}
         validate={[validateBirthdate]}
         name="birthDate"
         label="Birth Date (MM/DD/YYYY)"
+        data-test-id="birthDate"
       />
     </Form>
   );

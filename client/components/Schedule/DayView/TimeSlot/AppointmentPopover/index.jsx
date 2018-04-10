@@ -39,7 +39,7 @@ export default function AppointmentPopover(props) {
   const textAreaTheme = {
     group: styles.textAreaGroup,
   };
-  
+
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
@@ -140,6 +140,7 @@ export default function AppointmentPopover(props) {
             dense
             compact
             className={styles.editButton}
+            data-test-id="button_editAppointment"
           >
             Edit
           </Button>
