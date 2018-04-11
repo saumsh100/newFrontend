@@ -30,6 +30,7 @@
     "test:api": "export $(cat .env | xargs) && jest tests/__tests__/api --verbose --runInBand --forceExit",
     "test:lib": "export $(cat .env | xargs) && jest tests/__tests__/lib --verbose --runInBand --forceExit",
     "test:graphql": "export $(cat .env | xargs) && jest tests/__tests__/graphql --verbose --runInBand --forceExit",
+    "test:lint": "jest",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rimraf statics/assets",
@@ -38,7 +39,34 @@
     "remind:cron": "nf start -j REMIND_CRON",
     "build-storybook": "build-storybook",
     "relay": "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx",
-    "update-schema": "node ./server/bin/build/updateSchema.bundle.js"
+    "update-schema": "node ./server/bin/build/updateSchema.bundle.js",
+    "format": "prettier-eslint --write",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,scss}": [
+      "npm run format",
+      "npm run test:lint",
+      "git add"
+    ]
+  },
+  "jest": {
+    "projects": [
+      {
+        "displayName": "test",
+        "moduleNameMapper": {
+          "^CareCruModels$": "<rootDir>/server/_models/index.js",
+          "^CareCruGraphQL/(.*)": "<rootDir>/server/graphql/$1"
+        }
+      },
+      {
+        "displayName": "lint",
+        "runner": "jest-runner-eslint",
+        "testMatch": [
+          "<rootDir>/client/**/*.jsx"
+        ]
+      }
+    ]
   },
   "dependencies": {
     "@storybook/addon-actions": "^3.2.6",
@@ -255,28 +283,23 @@
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^11.1.0",
     "eslint-import-resolver-webpack": "^0.9.0",
+    "eslint-plugin-bof-newline": "^1.0.1",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.2.2",
     "foreman": "^2.0.0",
+    "husky": "^0.14.3",
     "jest": "^22.2.2",
+    "jest-runner-eslint": "^0.4.0",
+    "lint-staged": "^7.0.3",
     "material-design-icons": "^2.2.3",
     "mocha": "^3.3.0",
     "nodemon": "^1.14.11",
     "prettier-eslint": "^8.8.1",
+    "prettier-eslint-cli": "^4.7.1",
     "pretty-bytes": "^4.0.2",
     "react-addons-perf": "^15.2.1",
     "sinon": "^1.15.3",
     "supertest": "^2.0.1"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^CareCruModels$": "<rootDir>/server/_models/index.js",
-      "^CareCruGraphQL/(.*)": "<rootDir>/server/graphql/$1"
-    }
-  },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all"
   }
 }
