@@ -40,8 +40,35 @@ const Time = {
       .toISOString();
   },
 
+  mergeDateAndTimeWithZone(date, time, timezone) {
+    if (timezone) {
+      // we keep these in UTC as we don't want to deal with
+      // day light savings time issues.
+      const dateMoment = moment.utc(date);
+
+      const timeMoment = moment.utc(time)
+        .year(dateMoment.year())
+        .month(dateMoment.month())
+        .date(dateMoment.date())
+        .toISOString();
+
+      // now combine the date and time together with the zone as
+      // daylight saving will no longer be an issue (time as the same date)
+      const timeOnly = moment.tz(timeMoment, timezone).format('HH:mm');
+      return moment.tz(`${date} ${timeOnly}`, timezone).toISOString();
+    }
+
+    return Time.combineDateAndTime(date, time);
+  },
+
   getHoursFromInterval({ startDate, endDate }) {
     return moment(endDate).diff(startDate, 'hours', true);
+  },
+
+  getProperDateWithZone(date, timezone) {
+    return timezone ?
+      moment.tz(date, timezone).format('YYYY-MM-DD') :
+      moment(date).format('YYYY-MM-DD');
   },
 
   m2s(num) {

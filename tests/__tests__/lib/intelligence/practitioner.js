@@ -1,11 +1,19 @@
 
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import { Appointment, Account, DailySchedule, WeeklySchedule, Practitioner, PractitionerRecurringTimeOff } from '../../../../server/_models';
 import {
   recurringTimeOffsFilter,
   practitionersTimeOffHours,
   practitionersTotalHours,
+  getPractitionerData,
 } from '../../../../server/lib/intelligence/practitioner';
+import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
+import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../../util/seedTestUsers';
+import { wipeTestPatients, patientId } from '../../../util/seedTestPatients';
+import { wipeTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { appointment, appointmentId, seedTestAppointments } from '../../../util/seedTestAppointments';
+import { weeklyScheduleId, seedTestWeeklySchedules } from '../../../util/seedTestWeeklySchedules';
 
 
 const timeOffs = [{
@@ -71,7 +79,7 @@ const timeOffsPostProcess = [
 
 const schedule = {
   id: '6cc033e5-927e-4abe-8127-d805c074b531',
-  startDate: null,
+  startDate: '2018-04-02T21:38:33.880Z',
   isAdvanced: false,
   monday: {
     breaks: [],
@@ -193,7 +201,39 @@ scheduleRepeat.weeklySchedules = [{
     endTime: '1970-01-31T23:50:00.000Z',
     pmsScheduleId: null,
   },
-}]
+}];
+
+const dailySchedules = [{
+  id: 'c19c17fd-7cb8-4e2c-9290-a092b95e9014',
+  pmsId: null,
+  practitionerId: '4f439ff8-c55d-4423-9316-a41240c4d329',
+  date: '2017-04-03',
+  startTime: '1970-02-01T01:00:00.000Z',
+  endTime: '1970-02-01T04:00:00.000Z',
+  breaks: [],
+  chairIds: [],
+  createdAt: '2018-04-02T21:38:33.880Z',
+  updatedAt: '2018-04-02T21:38:33.880Z',
+  deletedAt: null,
+}];
+
+const practitioner = {
+  fullAvatarUrl: null,
+  id: '4f439ff8-c55d-4423-9316-a41240c4d329',
+  accountId: '1aeab035-b72c-4f7a-ad73-09465cbf5654',
+  pmsId: null,
+  type: 'Hygienist',
+  isActive: true,
+  isHidden: false,
+  firstName: 'Chelsea',
+  lastName: 'Handler',
+  avatarUrl: null,
+  isCustomSchedule: true,
+  weeklyScheduleId: '39b9ed42-b82b-4fb5-be5e-9dfded032bdf',
+  createdAt: '2018-04-02T21:38:33.880Z',
+  updatedAt: '2018-04-02T21:38:33.880Z',
+  deletedAt: null,
+};
 
 describe('Intelligence - Practitioner', () => {
   describe('Practitioner', () => {
@@ -226,6 +266,163 @@ describe('Intelligence - Practitioner', () => {
       test('practitionersTotalHours - repeat schedule', async () => {
         const body = await practitionersTotalHours(scheduleRepeat, new Date(2017, 10, 1).toISOString(), new Date(2017, 11, 13).toISOString());
         expect(Math.round(body)).toBe(303);
+      });
+    });
+
+    describe('#getPractitionerData', () => {
+      beforeEach(async () => {
+        await wipeModel(DailySchedule);
+        await seedTestUsers();
+        await seedTestAppointments();
+        await Account.update({ weeklyScheduleId }, { where: { id: accountId } }).catch(err => console.log(err));
+
+        const practitionerCopy = JSON.parse(JSON.stringify(practitioner));
+        practitionerCopy.accountId = accountId;
+
+        const scheduleCopy = JSON.parse(JSON.stringify(schedule));
+
+        practitionerCopy.weeklyScheduleId = scheduleCopy.id;
+
+        await WeeklySchedule.create(scheduleCopy);
+        await Practitioner.create(practitionerCopy);
+      });
+
+      afterEach(async () => {
+        await wipeModel(DailySchedule);
+        await wipeModel(PractitionerRecurringTimeOff);
+        await wipeTestUsers();
+        await wipeModel(Account);
+        await wipeModel(WeeklySchedule);
+        await wipeModel(Appointment);
+        await wipeTestPatients();
+        await wipeTestPractitioners();
+        await wipeAllModels();
+      });
+
+      test('should return practitioner with their schedule as the practitioner has a custom schedule', async () => {
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.weeklySchedule.id).toBe('6cc033e5-927e-4abe-8127-d805c074b531');
+      });
+
+      test('should return practitioner with the account\'s schedule as the practitioner doesn\'t have a custom schedule', async () => {
+        await Practitioner.update({ isCustomSchedule: false }, { where: { id: practitioner.id } });
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.weeklySchedule.id).toBe('8ce3ba61-60cd-40c6-bc85-c018cabd4a40');
+      });
+
+      test('should return daily schedule as it is within the range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-03';
+        await DailySchedule.create(dailySchedule);
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.dailySchedules[0].id).toBe('c19c17fd-7cb8-4e2c-9290-a092b95e9014');
+      });
+
+      test('should return not daily schedule as it is not within the range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-01';
+        await DailySchedule.create(dailySchedule);
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.dailySchedules[0]).toBeUndefined();
+      });
+
+      test('should return timeoff as the end date is in range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-01';
+        await DailySchedule.create(dailySchedule);
+
+        const timeOff = {
+          startDate: '2018-04-02T16:00:00.000Z',
+          endDate: '2018-04-06T01:00:00.000Z',
+          practitionerId: practitioner.id,
+          allDay: true,
+        };
+
+        await PractitionerRecurringTimeOff.create(timeOff);
+
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.recurringTimeOffs).toHaveLength(1);
+      });
+
+      test('should return timeoff as time off covers the hole range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-01';
+        await DailySchedule.create(dailySchedule);
+
+        const timeOff = {
+          startDate: '2018-04-02T16:00:00.000Z',
+          endDate: '2018-04-22T01:00:00.000Z',
+          practitionerId: practitioner.id,
+          allDay: true,
+        };
+
+        await PractitionerRecurringTimeOff.create(timeOff);
+
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.recurringTimeOffs).toHaveLength(1);
+      });
+
+      test('should return timeoff as the start date is in range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-01';
+        await DailySchedule.create(dailySchedule);
+
+        const timeOff = {
+          startDate: '2018-04-04T16:00:00.000Z',
+          endDate: '2018-04-22T01:00:00.000Z',
+          practitionerId: practitioner.id,
+          allDay: true,
+        };
+
+        await PractitionerRecurringTimeOff.create(timeOff);
+
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.recurringTimeOffs).toHaveLength(1);
+      });
+
+      test('should not return timeoff as it\'s after the the range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-01';
+        await DailySchedule.create(dailySchedule);
+
+        const timeOff = {
+          startDate: '2018-04-22T00:00:00.000Z',
+          endDate: '2018-04-22T01:00:00.000Z',
+          practitionerId: practitioner.id,
+          allDay: true,
+        };
+
+        await PractitionerRecurringTimeOff.create(timeOff);
+
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.recurringTimeOffs).toHaveLength(0);
+      });
+
+      test('should not return timeoff as it\'s before the the range', async () => {
+        const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
+        dailySchedule.date = '2018-04-01';
+        await DailySchedule.create(dailySchedule);
+
+        const timeOff = {
+          startDate: '2018-04-01T00:00:00.000Z',
+          endDate: '2018-04-01T01:00:00.000Z',
+          practitionerId: practitioner.id,
+          allDay: true,
+        };
+
+        await PractitionerRecurringTimeOff.create(timeOff);
+
+        const body = await getPractitionerData(practitioner.id, '2018-04-02T21:38:33.880Z', '2018-04-21T21:38:33.880Z', 'America/Vancouver');
+
+        expect(body.recurringTimeOffs).toHaveLength(0);
       });
     });
   });

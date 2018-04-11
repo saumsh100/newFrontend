@@ -62,6 +62,19 @@ addressRouter.put('/:addressId', checkPermissions('accounts:update'), async (req
 
   try {
     const newAddress = await req.address.update(req.body);
+
+    // update timezone on account model
+    const account = await Account.findOne({
+      where: {
+        addressId: req.address.id,
+      },
+    });
+
+    const timezone = req.body.timezone;
+    if (account.timezone !== timezone) {
+      await account.update({ timezone: req.body.timezone });
+    }
+
     return res.status(201).send(normalize('address', newAddress.get({ plain: true })));
   } catch (error) {
     return next(error);

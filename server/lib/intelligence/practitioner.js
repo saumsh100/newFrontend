@@ -1,7 +1,14 @@
-import moment from 'moment';
-import { Account, Practitioner, Patient, PractitionerRecurringTimeOff, sequelize, WeeklySchedule } from '../../_models';
+import Moment from 'moment';
+import 'moment-timezone';
+import { extendMoment } from 'moment-range';
+import { Account, Practitioner, DailySchedule, PractitionerRecurringTimeOff, sequelize, WeeklySchedule } from '../../_models';
+import {
+  getProperDateWithZone,
+} from '../../util/time';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+const moment = extendMoment(Moment);
 
 function getDiffInMin(startDate, endDate) {
   return moment(endDate).diff(moment(startDate), 'minutes');
@@ -33,6 +40,64 @@ const generateDuringFilterSequelize = (startDate, endDate) => {
     ],
   };
 };
+
+export async function getPractitionerData(practitionerId, startDate, endDate, timezone) {
+  const startDateOnly = getProperDateWithZone(startDate, timezone);
+  const endDateOnly = getProperDateWithZone(endDate, timezone);
+
+  let practitioner = await Practitioner.findOne({
+    where: {
+      id: practitionerId,
+    },
+    include: [
+      {
+        model: PractitionerRecurringTimeOff,
+        as: 'recurringTimeOffs',
+        where: {
+          ...generateDuringFilterSequelize(startDate, endDate),
+        },
+        required: false,
+      },
+      {
+        model: DailySchedule,
+        as: 'dailySchedules',
+        where: {
+          date: {
+            $between: [startDateOnly, endDateOnly],
+          },
+        },
+        required: false,
+      },
+      {
+        model: WeeklySchedule,
+        as: 'weeklySchedule',
+        required: true,
+      },
+    ],
+  });
+
+  practitioner = practitioner.get({ plain: true });
+  if (!practitioner.isCustomSchedule) {
+    const account = await Account.findOne({
+      where: {
+        id: practitioner.accountId,
+      },
+      include: [
+        {
+          model: WeeklySchedule,
+          as: 'weeklySchedule',
+          required: true,
+        },
+      ],
+      raw: true,
+      nest: true,
+    });
+
+    practitioner.weeklySchedule = account.weeklySchedule;
+  }
+
+  return practitioner;
+}
 
 /**
  * [practitionersTotalHours calculates the total hours a practitioner will work

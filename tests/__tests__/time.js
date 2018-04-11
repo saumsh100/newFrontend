@@ -18,6 +18,8 @@ const {
   convertIntervalStringToObject,
   floorDateMinutes,
   ceilDateMinutes,
+  mergeDateAndTimeWithZone,
+  getProperDateWithZone,
 } = require('../../server/util/time');
 
 // Monday -> Friday 9 to 5 by default
@@ -147,6 +149,22 @@ describe('util/time', () => {
     })
   });
 
+  describe('#mergeDateAndTimeWithZone', () => {
+      it('should be a function', () => {
+        expect(typeof mergeDateAndTimeWithZone).toBe('function');
+      });
+
+      it('should return next day as our timestamps are UTC when the date and timezone is Vancouver', () => {
+        const result = mergeDateAndTimeWithZone('2018-04-02', '1970-02-01T01:00:00.000Z', 'America/Vancouver');
+        expect(result).toBe('2018-04-03T01:00:00.000Z');
+      });
+
+      it('should return same day as our timestamps are UTC when the date and timezone is Vancouver, but the day is the same in utc', () => {
+        const result = mergeDateAndTimeWithZone('2018-04-02', '1970-01-30T15:00:00.000Z', 'America/Vancouver');
+        expect(result).toBe('2018-04-02T15:00:00.000Z');
+      });
+    });
+
   describe('#createIntervalsFromDailySchedule', () => {
     it('should be a function', () => {
       expect(typeof createIntervalsFromDailySchedule).toBe('function');
@@ -274,6 +292,27 @@ describe('util/time', () => {
           closedEnd: true,
         },
       ]);
+    });
+  });
+
+  describe('#getProperDateWithZone', () => {
+    it('should be a function', () => {
+      expect(typeof getProperDateWithZone).toBe('function');
+    });
+
+    it('should return 2018-03-19 when New York', async () => {
+      const date = getProperDateWithZone('2018-03-19T04:54:18.572Z', 'America/New_York');
+      expect(date).toBe('2018-03-19');
+    });
+
+    it('should return 2018-03-18 when Vancouver', async () => {
+      const date = getProperDateWithZone('2018-03-19T04:54:18.572Z', 'America/Vancouver');
+      expect(date).toBe('2018-03-18');
+    });
+
+    it('should return 2018-03-19 when London', async () => {
+      const date = getProperDateWithZone('2018-03-19T04:54:18.572Z', 'Europe/London');
+      expect(date).toBe('2018-03-19');
     });
   });
 
