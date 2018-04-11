@@ -18,6 +18,7 @@ import {
   clearAllTimelineFilters,
 } from '../../../reducers/patientTable';
 import FilterTimeline from './FilterTimeline';
+import Loader from '../../Loader';
 import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
@@ -53,14 +54,33 @@ class PatientInfo extends Component {
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
     this.addRemoveFilter = this.addRemoveFilter.bind(this);
+    this.fetchPatientData = this.fetchPatientData.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const patientId = this.props.match.params.patientId;
     const url = `/api/patients/${patientId}`;
 
+    this.fetchPatientData(patientId, url);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const patientId = this.props.match.params.patientId;
+    if (patientId !== nextProps.match.params.patientId) {
+      const url = `/api/patients/${nextProps.match.params.patientId}`;
+
+      this.fetchPatientData(nextProps.match.params.patientId, url);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.selectAllTimelineFilters();
+  }
+
+  fetchPatientData(patientId, url) {
     Promise.all([
-      this.props.fetchEntities({
+      this.props.fetchEntitiesRequest({
+        id: 'fetchPatient',
         key: 'patients',
         url,
       }),
@@ -72,11 +92,13 @@ class PatientInfo extends Component {
         id: 'accountsPatientInfo',
         key: 'accounts',
       }),
+      this.props.fetchEntitiesRequest({
+        key: 'events',
+        id: 'getPatientEvents',
+        url: `/api/patients/${patientId}/events`,
+        params: { limit: 10 },
+      }),
     ]);
-  }
-
-  componentWillUnmount() {
-    this.props.selectAllTimelineFilters();
   }
 
   openModal() {
@@ -114,12 +136,15 @@ class PatientInfo extends Component {
       patient,
       patientStats,
       updateEntityRequest,
-      wasFetched,
+      wasStatsFetched,
       accountsFetched,
       activeAccount,
       role,
+      wasPatientFetched,
       accountViewer,
     } = this.props;
+
+    const wasAllFetched = accountsFetched && wasPatientFetched;
 
     return (
       <Grid className={styles.mainContainer}>
@@ -128,8 +153,9 @@ class PatientInfo extends Component {
             <TopDisplay
               patient={patient}
               patientStats={patientStats}
-              wasFetched={wasFetched}
+              wasStatsFetched={wasStatsFetched}
               accountsFetched={accountsFetched}
+              wasPatientFetched={wasPatientFetched}
               activeAccount={activeAccount}
             />
           </Col>
@@ -145,6 +171,7 @@ class PatientInfo extends Component {
                 isOpen={this.state.isOpen}
                 outerTabIndex={this.state.tabIndex}
                 role={role}
+                wasAllFetched={wasAllFetched}
               />
               <HeaderModalComponent
                 icon="pencil"
@@ -167,15 +194,15 @@ class PatientInfo extends Component {
                 <div className={styles.cardTitle}>Timeline & Activities</div>
                 <Popover
                   isOpen={this.state.filterOpen}
-                  body={[(
+                  body={[
                     <FilterTimeline
                       addRemoveFilter={this.addRemoveFilter}
                       defaultEvents={defaultEvents}
                       filters={this.props.filters}
                       clearFilters={this.props.clearAllTimelineFilters}
                       selectAllFilters={this.props.selectAllTimelineFilters}
-                    />
-                  )]}
+                    />,
+                  ]}
                   preferPlace="below"
                   tipSize={0.01}
                   onOuterAction={this.reinitializeState}
@@ -191,6 +218,7 @@ class PatientInfo extends Component {
               <Timeline
                 patientId={patientId}
                 filters={this.props.filters}
+                wasPatientFetched={wasPatientFetched}
               />
             </div>
           </Col>
@@ -207,6 +235,14 @@ PatientInfo.propTypes = {
   addRemoveTimelineFilters: PropTypes.func.isRequired,
   selectAllTimelineFilters: PropTypes.func.isRequired,
   clearAllTimelineFilters: PropTypes.func.isRequired,
+  filters: PropTypes.instanceOf(Object),
+  patient: PropTypes.instanceOf(Object),
+  updateEntityRequest: PropTypes.func.isRequired,
+  wasStatsFetched: PropTypes.bool,
+  accountsFetched: PropTypes.bool,
+  activeAccount: PropTypes.instanceOf(Object),
+  wasPatientFetched: PropTypes.bool,
+  role: PropTypes.string,
 };
 
 HeaderModalComponent.propTypes = {
@@ -217,35 +253,48 @@ HeaderModalComponent.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    fetchEntitiesRequest,
-    updateEntityRequest,
-    addRemoveTimelineFilters,
-    selectAllTimelineFilters,
-    clearAllTimelineFilters,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      fetchEntitiesRequest,
+      updateEntityRequest,
+      addRemoveTimelineFilters,
+      selectAllTimelineFilters,
+      clearAllTimelineFilters,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
-  const patientStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
-  const wasFetched = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').wasFetched : null);
+  const patientStats = apiRequests.get('patientIdStats')
+    ? apiRequests.get('patientIdStats').data
+    : null;
+  const wasStatsFetched = apiRequests.get('patientIdStats')
+    ? apiRequests.get('patientIdStats').wasFetched
+    : null;
+  const wasPatientFetched = apiRequests.get('fetchPatient')
+    ? apiRequests.get('fetchPatient').wasFetched
+    : null;
 
   const waitForAuth = auth.get('accountId');
   const role = auth.get('role');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
-  const accountsFetched = (apiRequests.get('accountsPatientInfo') ? apiRequests.get('accountsPatientInfo').wasFetched : null);
+  const accountsFetched = apiRequests.get('accountsPatientInfo')
+    ? apiRequests.get('accountsPatientInfo').wasFetched
+    : null;
 
   return {
     patient: patients.get(match.params.patientId),
     patientStats,
-    wasFetched,
+    wasStatsFetched,
     filters: patientTable.get('timelineFilters'),
     activeAccount,
     accountsFetched,
     role,
+    wasPatientFetched,
   };
 }
 
@@ -278,7 +327,7 @@ const query = graphql`
           }
           members(
             first: 2147483647 # MaxGraphQL Int
-          ) @connection(key:"PatientFamily_members", filters: ["first"]){
+          ) @connection(key: "PatientFamily_members", filters: ["first"]) {
             edges {
               node {
                 id
@@ -308,7 +357,7 @@ const PatientInfoRenderer = parentProps => ({ error, props }) => {
     return <div>Error!</div>;
   }
   if (!props) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
   return <PatientInfo {...parentProps} {...props} />;
 };
@@ -317,7 +366,7 @@ const PatientInfoWithData = (parentProps) => {
   if (!parentProps.patient || parentProps.patient === null) {
     return <PatientInfo {...parentProps} />;
   }
-  
+
   const { id } = parentProps.patient;
   return (
     <QueryRenderer

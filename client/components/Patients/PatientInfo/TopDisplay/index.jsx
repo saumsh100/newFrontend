@@ -22,21 +22,24 @@ const randomNum = getRandomIntInclusive(0, 4);
 export default function TopDisplay(props) {
   const {
     patient,
+    wasStatsFetched,
     patientStats,
-    wasFetched,
     accountsFetched,
     activeAccount,
+    wasPatientFetched,
   } = props;
 
 
   const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
 
-  const production = wasFetched && patientStats.get('productionCalendarYear') ? `$${patientStats.get('productionCalendarYear')}` : null;
+  const production = wasStatsFetched && patientStats.get('productionCalendarYear') ? `$${patientStats.get('productionCalendarYear')}` : null;
 
   const bgStyle = {
     background: `url('/images/banners/${bgImgs[randomNum]}')`,
     backgroundSize: '100%',
   };
+
+  const wasAllFetched = wasStatsFetched && patient && accountsFetched && wasPatientFetched;
 
   return (
     <Card className={styles.card} noBorder>
@@ -44,7 +47,7 @@ export default function TopDisplay(props) {
         <div className={styles.imageContainer} style={bgStyle}>
           {''}
         </div>
-        {wasFetched && patient && accountsFetched ? (<div className={styles.dataContainer}>
+        { wasAllFetched ? (<div className={styles.dataContainer}>
           <div className={styles.avatarContainer}>
             <div className={styles.avatarContainer_avatar}>
               <Avatar user={patient} size="xl" />

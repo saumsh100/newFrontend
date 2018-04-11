@@ -18,19 +18,6 @@ class Timeline extends Component {
     this.loadMoreEvents = this.loadMoreEvents.bind(this);
   }
 
-  componentDidMount() {
-    const query = {
-      limit: 10,
-    };
-
-    this.props.fetchEntitiesRequest({
-      key: 'events',
-      id: 'getPatientEvents',
-      url: `/api/patients/${this.props.patientId}/events`,
-      params: query,
-    });
-  }
-
   loadMoreEvents() {
     const {
       events
@@ -68,17 +55,20 @@ class Timeline extends Component {
   render() {
     const {
       events,
-      wasFetched,
       filters,
+      wasPatientFetched,
+      wasEventsFetched,
     } = this.props;
 
-    let style = {
+    const style = {
       overflow: 'scroll',
     };
 
+    const wasAllFetched = wasPatientFetched && wasEventsFetched;
+
     return (
-      <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasFetched}>
-        { wasFetched ?
+      <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasAllFetched}>
+        { wasAllFetched ?
           <div
             className={styles.eventsContainer}
             style={style}
@@ -105,13 +95,14 @@ class Timeline extends Component {
 Timeline.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
   events: PropTypes.arrayOf(Object),
-  wasFetched: PropTypes.bool,
+  wasEventsFetched: PropTypes.bool,
+  wasPatientFetched: PropTypes.bool,
   patientId: PropTypes.string,
   filters: PropTypes.instanceOf(Array),
 };
 
 function mapStateToProps({ entities, apiRequests }, { patientId }) {
-  const wasFetched = (apiRequests.get('getPatientEvents') ? apiRequests.get('getPatientEvents').wasFetched : null);
+  const wasEventsFetched = (apiRequests.get('getPatientEvents') ? apiRequests.get('getPatientEvents').wasFetched : null);
 
   const events = entities.getIn(['events', 'models']).toArray().filter((event) => {
     return event.get('patientId') === patientId;
@@ -119,7 +110,7 @@ function mapStateToProps({ entities, apiRequests }, { patientId }) {
 
   return {
     events,
-    wasFetched,
+    wasEventsFetched,
   };
 }
 

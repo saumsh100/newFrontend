@@ -147,7 +147,6 @@ class ConfirmAppointmentRequest extends Component {
             <div className={styles.containerApp}>
               <div className={styles.sameAppList}>
               {appointments.map((app) => {
-                console.log(app)
                 return (<SameAppointment
                   key={app.id}
                   patient={patient}

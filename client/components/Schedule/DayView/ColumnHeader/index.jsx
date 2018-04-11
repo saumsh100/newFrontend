@@ -12,6 +12,7 @@ export default function ShowColumnHeader(props) {
     headerComponentDidMount,
     leftColumnWidth,
     minWidth,
+    allFetched,
   } = props;
 
   const timeSlotContentStyle = {
@@ -24,28 +25,33 @@ export default function ShowColumnHeader(props) {
   };
 
   return (
-    <div className={styles.columnHeader} >
+    <div className={styles.columnHeader}>
       <div className={styles.columnHeader_empty} style={emptyStyle}>
         {''}
       </div>
       <div className={styles.scrollDiv}>
-        <div className={styles.columnHeader_body} ref={headerComponentDidMount}>
-          {entities.map((entity, i) => {
-            return (
-              <div key={i + Math.random()} className={styles.columnHeader_item} style={timeSlotContentStyle}>
-                {scheduleView === 'chair' ? <ChairHeader chair={entity} /> : <PractitionerHeader practitioner={entity} />}
+        {allFetched ? (
+          <div className={styles.columnHeader_body} ref={headerComponentDidMount}>
+            {entities.map((entity, i) => (
+              <div
+                key={i + Math.random()}
+                className={styles.columnHeader_item}
+                style={timeSlotContentStyle}
+              >
+                {scheduleView === 'chair' ? (
+                  <ChairHeader chair={entity} />
+                ) : (
+                  <PractitionerHeader practitioner={entity} />
+                )}
               </div>
-            );
-          })}
-        </div>
-        <div className={styles.blank}>
-          {''}
-        </div>
+            ))}
+          </div>
+        ) : null}
+        <div className={styles.blank}>{''}</div>
       </div>
     </div>
   );
 }
-
 
 ShowColumnHeader.propTypes = {
   scheduleView: PropTypes.string,
@@ -53,4 +59,5 @@ ShowColumnHeader.propTypes = {
   headerComponentDidMount: PropTypes.func,
   leftColumnWidth: PropTypes.number,
   minWidth: PropTypes.number,
+  allFetched: PropTypes.bool,
 };

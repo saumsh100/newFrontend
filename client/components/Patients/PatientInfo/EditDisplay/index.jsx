@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Card, Modal, Tabs, Tab, Button, Icon, DialogBox } from '../../../library';
+import { Tabs, Tab, Button, DialogBox } from '../../../library';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
 import InsuranceForm from './InsuranceForm';
@@ -36,7 +36,7 @@ class EditDisplay extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     /* if (nextProps.outerTabIndex !== this.state.tabIndex) {
       this.setState({
         tabIndex: nextProps.outerTabIndex,
@@ -90,7 +90,7 @@ class EditDisplay extends Component {
   }
 
   render() {
-    const { patient, reinitializeState, isOpen, role, accountViewer } = this.props;
+    const { patient, reinitializeState, isOpen, role, accountViewer, wasAllFetched } = this.props;
 
     if (!patient) {
       return null;
@@ -136,58 +136,56 @@ class EditDisplay extends Component {
           bodyStyles={styles.editModalBody}
           custom
         >
-          <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine>
-            <Tab label="Appointments" tabCard>
-              {role === 'SUPERADMIN' ? (
-                <AppointmentsForm
+          {wasAllFetched ? (
+            <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine>
+              <Tab label="Appointments" tabCard>
+                {role === 'SUPERADMIN' ? (
+                  <AppointmentsForm
+                    patient={patient}
+                    handleSubmit={this.handleSubmit}
+                    dropDownStyle={dropDownStyle}
+                    inputStyle={inputStyle}
+                  />
+                ) : (
+                  NoInfo('No Appointment Information')
+                )}
+              </Tab>
+              <Tab label="Personal" tabCard>
+                <PersonalForm
+                  patient={patient}
+                  handleSubmit={this.handleSubmit}
+                  setCountry={this.setCountry}
+                  country={this.state.country}
+                  dropDownStyle={dropDownStyle}
+                  inputStyle={inputStyle}
+                />
+              </Tab>
+              <Tab label="Insurance" tabCard>
+                <InsuranceForm
                   patient={patient}
                   handleSubmit={this.handleSubmit}
                   dropDownStyle={dropDownStyle}
                   inputStyle={inputStyle}
                 />
-              ) : (
-                <div className={styles.formContainer}>
-                  <div className={styles.disabledPage}>
-                    <div className={styles.disabledPage_text}>No Appointment Information</div>
-                  </div>
-                </div>
-              )}
-            </Tab>
-            <Tab label="Personal" tabCard>
-              <PersonalForm
-                patient={patient}
-                handleSubmit={this.handleSubmit}
-                setCountry={this.setCountry}
-                country={this.state.country}
-                dropDownStyle={dropDownStyle}
-                inputStyle={inputStyle}
-              />
-            </Tab>
-            <Tab label="Insurance" tabCard>
-              <InsuranceForm
-                patient={patient}
-                handleSubmit={this.handleSubmit}
-                dropDownStyle={dropDownStyle}
-                inputStyle={inputStyle}
-              />
-            </Tab>
-            <Tab label="Family" tabCard>
-              {role === 'SUPERADMIN' ? (
-                <FamilyForm
-                  family={family}
-                  familyLength={familyLength}
-                  patient={patient}
-                  patientNode={patientNode}
-                  handleSubmit={this.handleSubmit}
-                />
-              ) : (
-                NoFamilyInfo()
-              )}
-            </Tab>
-            <Tab label="Settings" tabCard>
-              <SettingsForm patient={patient} handleSubmit={this.handleSubmit} />
-            </Tab>
-          </Tabs>
+              </Tab>
+              <Tab label="Family" tabCard>
+                {role === 'SUPERADMIN' ? (
+                  <FamilyForm
+                    family={family}
+                    familyLength={familyLength}
+                    patient={patient}
+                    patientNode={patientNode}
+                    handleSubmit={this.handleSubmit}
+                  />
+                ) : (
+                  NoFamilyInfo()
+                )}
+              </Tab>
+              <Tab label="Settings" tabCard>
+                <SettingsForm patient={patient} handleSubmit={this.handleSubmit} />
+              </Tab>
+            </Tabs>
+          ) : null}
         </DialogBox>
       </div>
     );
@@ -195,9 +193,13 @@ class EditDisplay extends Component {
 }
 
 EditDisplay.propTypes = {
-  patient: PropTypes.object.isRequired,
+  patient: PropTypes.instanceOf(Object).isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   role: PropTypes.string.isRequired,
+  wasAllFetched: PropTypes.bool,
+  reinitializeState: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool,
+  accountViewer: PropTypes.instanceOf(Object),
 };
 
 export default EditDisplay;

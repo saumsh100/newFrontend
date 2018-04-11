@@ -17,21 +17,35 @@ class DayView extends Component {
       leftColumnWidth,
     } = this.props;
 
+    const pracColumns = {};
+    const chairColumns = {};
+
     const filteredAppointments = appointments.get('models').toArray().filter((app) => {
       const startDate = moment(app.startDate);
       const isSameDate = startDate.isSame(currentDate, 'day');
-      return (!app.isDeleted && isSameDate && !app.isCancelled && !app.isPending);
+
+      if (!app.isDeleted && isSameDate && !app.isCancelled && !app.isPending) {
+        pracColumns[app.practitionerId] = true;
+        chairColumns[app.chairId] = true;
+        return app;
+      }
     });
+
+    const filteredChairs = filteredAppointments.length ?
+      chairs.get('models').filter(ch => chairColumns[ch.id]) : chairs.get('models');
+
+    const filteredPracs = filteredAppointments.length ?
+      practitioners.filter(prac => pracColumns[prac.id]) : practitioners;
 
     return (
       <DayViewBody
         schedule={schedule}
         selectAppointment={selectAppointment}
         appointments={filteredAppointments}
-        chairs={chairs.get('models')}
+        chairs={filteredChairs}
         services={services.get('models')}
         patients={patients.get('models')}
-        practitioners={practitioners}
+        practitioners={filteredPracs}
         startHour={6}
         endHour={24}
         leftColumnWidth={leftColumnWidth}

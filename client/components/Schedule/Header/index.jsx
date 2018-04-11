@@ -195,6 +195,7 @@ class Header extends Component {
       pracsFetched,
       chairsFetched,
       waitSpotsFetched,
+      appointments,
     } = this.props;
 
     const leftColumnWidth = schedule.toJS().leftColumnWidth;
@@ -241,6 +242,8 @@ class Header extends Component {
                     schedule={schedule}
                     chairs={chairs}
                     practitioners={practitioners}
+                    appointments={appointments}
+                    currentDate={currentDate}
                   />) : null,
               ]}
               preferPlace="below"
@@ -385,7 +388,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ schedule, apiRequests, entities }) {
-  const scheduleView = schedule.toJS().scheduleView;
+  const scheduleObj = schedule.toJS();
+  const scheduleView = scheduleObj.scheduleView;
 
   const pracsFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
   const chairsFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);

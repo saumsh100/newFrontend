@@ -26,11 +26,19 @@ class DayViewBody extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const {
+      appsFetched,
+      chairsFetched,
+      pracsFetched,
+    } = this.props;
+
+    const allFetched = appsFetched && chairsFetched && pracsFetched;
+
     const currentDate = moment(this.props.schedule.get('scheduleDate'));
     const nextDate = moment(nextProps.schedule.get('scheduleDate'));
 
-    if ((nextProps.scheduleView !== this.props.scheduleView)
-      || (currentDate.toISOString() !== nextDate.toISOString())) {
+    if (((nextProps.scheduleView !== this.props.scheduleView)
+      || (currentDate.toISOString() !== nextDate.toISOString())) && allFetched) {
       this.headerComponent.scrollLeft = 0;
     }
   }
@@ -98,6 +106,8 @@ class DayViewBody extends Component {
       pracsFetched,
     } = this.props;
 
+    const allFetched = appsFetched && chairsFetched && pracsFetched;
+
     const timeSlots = [];
     for (let i = startHour; i <= endHour; i += 1) {
       timeSlots.push({ position: i });
@@ -129,7 +139,7 @@ class DayViewBody extends Component {
     const checkedPractitioners = schedule.toJS().practitionersFilter;
     practitionersArray = practitionersArray.filter(pr => checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive);
 
-    const practitionersSlot = appsFetched && chairsFetched && pracsFetched ? (
+    const practitionersSlot = allFetched ? (
       <PractitionersSlot
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
@@ -150,7 +160,7 @@ class DayViewBody extends Component {
     const checkedChairs = schedule.toJS().chairsFilter;
     const chairsArray = chairs.toArray().sort(SortByName).filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
 
-    const chairsSlot = appsFetched && chairsFetched && pracsFetched ? (
+    const chairsSlot = allFetched ? (
       <ChairsSlot
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
@@ -172,7 +182,7 @@ class DayViewBody extends Component {
     return (
       <SContainer noBorder className={styles.card} id="scheduleContainer">
         <SHeader className={styles.header}>
-          <ColumnHeader
+         <ColumnHeader
             scheduleView={scheduleView}
             entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
             headerComponentDidMount={this.headerComponentDidMount}
@@ -180,6 +190,7 @@ class DayViewBody extends Component {
             minWidth={schedule.toJS().columnWidth}
             headerComponent={this.headerComponent}
             schedule={schedule}
+            allFetched={allFetched}
           />
         </SHeader>
         <SBody className={styles.dayView} >

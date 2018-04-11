@@ -64,7 +64,9 @@ class ScheduleContainer extends Component {
 
     const nextPropsDate = moment(nextProps.schedule.toJS().scheduleDate);
 
-    if (!nextPropsDate.isSame(currentDate, 'month') || !nextPropsDate.isSame(currentDate, 'day') || !nextPropsDate.isSame(currentDate, 'year')) {
+    if (!nextPropsDate.isSame(currentDate, 'month')
+      || !nextPropsDate.isSame(currentDate, 'day')
+      || !nextPropsDate.isSame(currentDate, 'year')) {
       const startDate = nextPropsDate.startOf('day').toISOString();
       const endDate = nextPropsDate.endOf('day').toISOString();
       const query = {

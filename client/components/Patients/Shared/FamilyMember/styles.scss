@@ -57,6 +57,7 @@
   }
 
   &_row {
+    margin-bottom: 5px;
     &_head {
       padding: 0;
     }
@@ -75,7 +76,7 @@
 
   &_button {
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-    color: $primary-blue-green; 
+    color: $primary-blue-green;
     font-size: $extra-small-size;
     border: none;
     background: none;

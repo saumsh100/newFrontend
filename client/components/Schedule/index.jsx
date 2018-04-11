@@ -284,81 +284,82 @@ class ScheduleComponent extends Component {
 
     return (
       <div className={styles.rowMainContainer}>
-          <div className={styles.dayViewContainer}>
-            <Card
-              className={styles.card}
-              runAnimation
-              loaded={allFetched}
-            >
-              <SContainer>
-                <Header
-                  addNewAppointment={this.addNewAppointment}
-                  schedule={schedule}
-                  chairs={filterChairs}
+        <div className={styles.dayViewContainer}>
+          <Card
+            className={styles.card}
+            runAnimation
+            loaded={allFetched}
+          >
+            <SContainer>
+              <Header
+                addNewAppointment={this.addNewAppointment}
+                schedule={schedule}
+                chairs={filterChairs}
+                practitioners={filterPractitioners}
+                appointments={appointments}
+                previousDay={this.previousDay}
+                setCurrentDay={this.setCurrentDay}
+                nextDay={this.nextDay}
+                reinitializeState={this.reinitializeState}
+              />
+              <SBody>
+                <DayView
+                  currentDate={currentDate}
                   practitioners={filterPractitioners}
-                  previousDay={this.previousDay}
-                  setCurrentDay={this.setCurrentDay}
-                  nextDay={this.nextDay}
-                  reinitializeState={this.reinitializeState}
+                  patients={patients}
+                  chairs={chairs}
+                  services={services}
+                  appointments={appointments}
+                  schedule={schedule}
+                  selectAppointment={selectAppointment}
+                  leftColumnWidth={leftColumnWidth}
                 />
-                <SBody>
-                  <DayView
-                    currentDate={currentDate}
-                    practitioners={filterPractitioners}
-                    patients={patients}
-                    chairs={chairs}
-                    services={services}
-                    appointments={appointments}
-                    schedule={schedule}
-                    selectAppointment={selectAppointment}
-                    leftColumnWidth={leftColumnWidth}
-                  />
-                  {allFetched ? (
-                    <Modal
-                      active={
-                        (addNewAppointment ||
-                          (!!selectedAppointment && !selectedAppointment.nextAppt))
-                      }
-                      onEscKeyDown={this.reinitializeState}
-                      onOverlayClick={this.reinitializeState}
-                      custom
-                    >
-                      <AddNewAppointment
-                        formName={formName}
-                        chairs={filterChairs}
-                        practitioners={filterPractitioners}
-                        patients={patients.get('models')}
-                        reinitializeState={this.reinitializeState}
-                        weeklySchedules={weeklySchedules}
-                        setPatientSearched={this.setPatientSearched}
-                        patientSearched={this.state.patientSearched}
-                        unit={unit.get('unit')}
-                        currentDate={currentDate}
-                        showInput={this.state.showInput}
-                        setShowInput={this.setShowInput}
-                        selectedAppointment={this.props.selectedAppointment}
-                        setCreatingPatient={this.props.setCreatingPatient}
-                      />
-                    </Modal>) : null }
-                  {allFetched ?
-                    (<DialogBox
-                      title={displayTitle}
-                      type={createNewPatient ? 'small' : 'medium'}
-                      actions={actions}
-                      active={((selectedAppointment && selectedAppointment.nextAppt) ||
-                        !!mergingPatientData.patientUser) || createNewPatient}
-                      onEscKeyDown={this.reinitializeState}
-                      onOverlayClick={
-                        createNewPatient ? this.setCreatingPatient : this.reinitializeState
-                      }
-                    >
+                {allFetched ? (
+                  <Modal
+                    active={
+                      (addNewAppointment ||
+                        (!!selectedAppointment && !selectedAppointment.nextAppt))
+                    }
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={this.reinitializeState}
+                    custom
+                  >
+                    <AddNewAppointment
+                      formName={formName}
+                      chairs={filterChairs}
+                      practitioners={filterPractitioners}
+                      patients={patients.get('models')}
+                      reinitializeState={this.reinitializeState}
+                      weeklySchedules={weeklySchedules}
+                      setPatientSearched={this.setPatientSearched}
+                      patientSearched={this.state.patientSearched}
+                      unit={unit.get('unit')}
+                      currentDate={currentDate}
+                      showInput={this.state.showInput}
+                      setShowInput={this.setShowInput}
+                      selectedAppointment={this.props.selectedAppointment}
+                      setCreatingPatient={this.props.setCreatingPatient}
+                    />
+                  </Modal>) : null }
+                {allFetched ?
+                  (<DialogBox
+                    title={displayTitle}
+                    type={createNewPatient ? 'small' : 'medium'}
+                    actions={actions}
+                    active={((selectedAppointment && selectedAppointment.nextAppt) ||
+                      !!mergingPatientData.patientUser) || createNewPatient}
+                    onEscKeyDown={this.reinitializeState}
+                    onOverlayClick={
+                      createNewPatient ? this.setCreatingPatient : this.reinitializeState
+                    }
+                  >
 
-                      {displayModalComponent}
-                    </DialogBox>) : null}
-                </SBody>
-              </SContainer>
-            </Card>
-          </div>
+                    {displayModalComponent}
+                  </DialogBox>) : null}
+              </SBody>
+            </SContainer>
+          </Card>
+        </div>
         <div className={styles.sidebar}>
           <div className={styles.sidebar_rowCalendar}>
             <Card>

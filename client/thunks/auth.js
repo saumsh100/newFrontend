@@ -49,9 +49,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     localStorage.removeItem('session');
   }
 
-  const getSession = () => {
-    return axios.get('/api/users/me').then(({ data }) => data);
-  };
+  const getSession = () => axios.get('/api/users/me').then(({ data }) => data);
 
   return getSession()
     .then((session) => {
@@ -100,7 +98,9 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
             name: fullName,
             email,
             created_at: user.createdAt,
-            logrocketURL: `https://app.logrocket.com/${process.env.LOGROCKET_APP_ID}/sessions?u=${userId}`,
+            logrocketURL: `https://app.logrocket.com/${
+              process.env.LOGROCKET_APP_ID
+            }/sessions?u=${userId}`,
           });
         }
 
@@ -122,7 +122,8 @@ const reloadPage = () => {
 
 export function switchActiveAccount(accountId, redirectTo = '/') {
   return dispatch =>
-    axios.post(`/api/accounts/${accountId}/switch`, {})
+    axios
+      .post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(() => dispatch(push(redirectTo)))
       .then(reloadPage);
@@ -130,7 +131,8 @@ export function switchActiveAccount(accountId, redirectTo = '/') {
 
 export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
   return dispatch =>
-    axios.post('/api/enterprises/switch', { enterpriseId })
+    axios
+      .post('/api/enterprises/switch', { enterpriseId })
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(() => dispatch(push(redirectTo)))
       .then(reloadPage);
@@ -142,37 +144,32 @@ export function logout() {
     localStorage.removeItem('session');
     const { auth } = getState();
 
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`)
-      .then(() => {
-        dispatch(authLogout());
-        dispatch(push('/login'));
-      });
+    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
+      dispatch(authLogout());
+      dispatch(push('/login'));
+    });
   };
 }
 
 export function resetPassword(email) {
-  return (dispatch, getState) => {
-    return axios.post('/auth/resetpassword', { email })
-      .then(() => {
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  return (dispatch, getState) => axios
+    .post('/auth/resetpassword', { email })
+    .then(() => {})
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 export function resetUserPassword(location, values) {
   return (dispatch, getState) => {
     const url = `${location.pathname}`;
-    return axios
-      .post(url, values)
-      .catch((err) => {
-        const { data } = err;
-        throw new SubmissionError({
-          password: data,
-          confirmPassword: data,
-        });
+    return axios.post(url, values).catch((err) => {
+      const { data } = err;
+      throw new SubmissionError({
+        password: data,
+        confirmPassword: data,
       });
+    });
   };
 }
 

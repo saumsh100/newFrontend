@@ -1,11 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Avatar,
-  Icon,
-} from '../../library';
+import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
 import styles from './styles.scss';
 
@@ -29,39 +25,25 @@ class ToHeader extends Component {
           className={styles.patientListButton}
           onClick={onPatientListClick}
         />
-        {selectedPatient ?
-          (
-            <div className={styles.patientInfoWrapper}>
-              <Button
-                flat
-                fluid
-                onClick={onPatientInfoClick}
-                className={styles.patientInfoButton}
-              >
-                <Avatar
-                  size="sm"
-                  user={selectedPatient}
-                />
-                <div className={styles.patientInfoName}>
-                  {selectedPatient.firstName} {selectedPatient.lastName}
-                </div>
-                <Icon
-                  className={styles.infoArrow}
-                  icon="angle-right"
-                  type="light"
-                />
-              </Button>
-            </div>
-          ) : (
-            <PatientSearch
-              placeholder="To: Type the name of the person"
-              onSelect={this.props.onSearch}
-              inputProps={toInputProps}
-              theme={toInputTheme}
-              focusInputOnMount
-            />
-          )
-        }
+        {selectedPatient ? (
+          <div className={styles.patientInfoWrapper}>
+            <Button flat fluid onClick={onPatientInfoClick} className={styles.patientInfoButton}>
+              <Avatar size="sm" user={selectedPatient} />
+              <div className={styles.patientInfoName}>
+                {selectedPatient.firstName} {selectedPatient.lastName}
+              </div>
+              <Icon className={styles.infoArrow} icon="angle-right" type="light" />
+            </Button>
+          </div>
+        ) : (
+          <PatientSearch
+            placeholder="To: Type the name of the person"
+            onSelect={this.props.onSearch}
+            inputProps={toInputProps}
+            theme={toInputTheme}
+            focusInputOnMount
+          />
+        )}
       </div>
     );
   }
@@ -70,26 +52,22 @@ class ToHeader extends Component {
     const { selectedPatient } = this.props;
     return (
       <div className={styles.wrapper}>
-        {selectedPatient ?
-          (
-            <div className={styles.patientInfoWrapper}>
-              <Avatar
-                size="sm"
-                user={selectedPatient}
-              />
-              <div className={styles.patientInfoName}>
-                {selectedPatient.firstName} {selectedPatient.lastName}
-              </div>
+        {selectedPatient ? (
+          <div className={styles.patientInfoWrapper}>
+            <Avatar size="sm" user={selectedPatient} />
+            <div className={styles.patientInfoName}>
+              <span>{selectedPatient.firstName}</span>
+              <span>{selectedPatient.lastName}</span>
             </div>
-          ) : (
-            <PatientSearch
-              placeholder="To: Type the name of the person"
-              onSelect={this.props.onSearch}
-              inputProps={toInputProps}
-              theme={toInputTheme}
-            />
-          )
-        }
+          </div>
+        ) : (
+          <PatientSearch
+            placeholder="To: Type the name of the person"
+            onSelect={this.props.onSearch}
+            inputProps={toInputProps}
+            theme={toInputTheme}
+          />
+        )}
       </div>
     );
   }
@@ -100,9 +78,10 @@ class ToHeader extends Component {
 }
 
 ToHeader.propTypes = {
-  newChat: PropTypes.object,
-  activeAccount: PropTypes.object,
-  selectedChat: PropTypes.object,
+  newChat: PropTypes.instanceOf(Object),
+  activeAccount: PropTypes.instanceOf(Object),
+  selectedChat: PropTypes.instanceOf(Object),
+  selectedPatient: PropTypes.instanceOf(Object),
   setNewChat: PropTypes.func.isRequired,
   mergeNewChat: PropTypes.func.isRequired,
   setSelectedChatId: PropTypes.func.isRequired,

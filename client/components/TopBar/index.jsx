@@ -12,55 +12,39 @@ import {
   IconButton,
   Link,
   MenuItem,
-  MenuSeparator,
 } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import PatientSearch from '../PatientSearch';
 import styles from './styles.scss';
 
 const UserMenu = (props) => {
-  const {
-    user,
-    role,
-    activeAccount,
-    enterprise,
-  } = props;
+  const { user, role, activeAccount, enterprise } = props;
 
   const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
-  const isEnterprise = role === 'SUPERADMIN';//enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
-  const businessName = isEnterprise ?
-    enterprise.get('name') :
-    activeAccount && activeAccount.name;
+  const isEnterprise = role === 'SUPERADMIN'; // enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
+  const businessName = isEnterprise ? enterprise.get('name') : activeAccount && activeAccount.name;
 
   return (
     <Button flat {...newProps} className={styles.userMenuButton}>
       <div className={styles.userContainer}>
         <div className={styles.userMenuGreeting}>
-          <div className={styles.greeting}>
-            Hello, {user.get('firstName')}
-          </div>
-          <div className={styles.businessName}>
-            {businessName}
-          </div>
+          <div className={styles.greeting}>Hello, {user.get('firstName')}</div>
+          <div className={styles.businessName}>{businessName}</div>
         </div>
-        <Avatar
-          className={styles.userAvatar}
-          user={user.toJS()}
-          isPatient={false}
-          size="sm"
-        />
+        <Avatar className={styles.userAvatar} user={user.toJS()} isPatient={false} size="sm" />
         <Icon icon="caret-down" type="solid" />
       </div>
     </Button>
   );
 };
 
-const ActiveAccountButton = ({ account, onClick }) =>
+const ActiveAccountButton = ({ account, onClick }) => (
   <div onClick={onClick} className={styles.activeAccountButton}>
-    <span className={styles.activeAccountTitle}>{ account.name }</span>
+    <span className={styles.activeAccountTitle}>{account.name}</span>
     <Icon icon="caret-down" type="solid" />
-  </div>;
+  </div>
+);
 
 class TopBar extends Component {
   constructor(props) {
@@ -114,18 +98,12 @@ class TopBar extends Component {
 
     const topBarClassName = classNames(
       styles.topBarContainer,
-      isCollapsed ?
-        styles.topBarContainerCollapsed :
-        styles.topBarContainerUnCollapsed
+      isCollapsed ? styles.topBarContainerCollapsed : styles.topBarContainerUnCollapsed
     );
 
     // Conditionally change the image render ifCollapsed, media queries will decide to hide or not
     let logoImage = (
-      <img
-        className={styles.logoImageImage}
-        src="/images/carecru_logo.png"
-        alt="CareCru logo"
-      />
+      <img className={styles.logoImageImage} src="/images/carecru_logo.png" alt="CareCru logo" />
     );
 
     if (isCollapsed) {
@@ -155,7 +133,7 @@ class TopBar extends Component {
       return (
         <MenuItem
           key={account.id}
-          className={(isActive ? styles.menuItemSelected : null)}
+          className={isActive ? styles.menuItemSelected : null}
           onClick={isActive ? false : setActive}
           data-test-id={`option_${account.name}`}
         >
@@ -185,12 +163,12 @@ class TopBar extends Component {
       iconStyles = classNames(iconStyles, styles.iconSearchOpen);
     }
 
-
     const searchTheme = {
       group: groupStyles,
       bar: styles.barStyle,
       container: styles.patientSearchClass,
       suggestionsContainerOpen: styles.containerOpen,
+      suggestionsList: styles.suggestionsList,
     };
 
     return (
@@ -204,53 +182,53 @@ class TopBar extends Component {
         <div className={styles.rightContainer}>
           <div className={styles.searchContainer}>
             <div className={styles.wrapper}>
-              <Icon
-                icon="search"
-                className={iconStyles}
-                onClick={this.openSearch}
-              />
-              {!this.props.isSearchCollapsed ?
+              <Icon icon="search" className={iconStyles} onClick={this.openSearch} />
+              {!this.props.isSearchCollapsed ? (
                 <PatientSearch
                   onSelect={this.onSearchSelect}
                   inputProps={patientSearchInputProps}
                   theme={searchTheme}
                   focusInputOnMount
-                /> : null }
+                />
+              ) : null}
             </div>
           </div>
         </div>
         <div className={styles.rightOfBar}>
           <ul className={styles.pillsList}>
-            {withEnterprise && activeAccount ?
-              <li
-                data-test-id="dropDown_accounts"
-              >
+            {withEnterprise && activeAccount ? (
+              <li data-test-id="dropDown_accounts">
                 <DropdownMenu
                   className={styles.accountsDropdownMenu}
                   labelComponent={ActiveAccountButton}
                   labelProps={{ account: activeAccount }}
                 >
-                  <div>
-                    {accounts.map(renderAccountItem)}
-                  </div>
+                  <div>{accounts.map(renderAccountItem)}</div>
                 </DropdownMenu>
-              </li> :
-              null
-            }
+              </li>
+            ) : null}
             <li>
               <DropdownMenu
                 className={styles.userDropdownMenu}
-                labelComponent={(props) =>
-                  <UserMenu {...props} {...userMenuProps} />
-                }
+                labelComponent={props => <UserMenu {...props} {...userMenuProps} />}
               >
                 <Link to="/profile">
-                  <MenuItem className={styles.userMenuLi} icon="user">User Profile</MenuItem>
+                  <MenuItem className={styles.userMenuLi} icon="user">
+                    User Profile
+                  </MenuItem>
                 </Link>
                 <Link to="/settings">
-                  <MenuItem className={styles.userMenuLi} icon="cogs">Account Settings</MenuItem>
+                  <MenuItem className={styles.userMenuLi} icon="cogs">
+                    Account Settings
+                  </MenuItem>
                 </Link>
-                <MenuItem className={styles.userMenuLi} icon="power-off" onClick={this.props.logout}>Sign Out</MenuItem>
+                <MenuItem
+                  className={styles.userMenuLi}
+                  icon="power-off"
+                  onClick={this.props.logout}
+                >
+                  Sign Out
+                </MenuItem>
               </DropdownMenu>
             </li>
           </ul>

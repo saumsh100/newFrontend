@@ -74,7 +74,7 @@ context('Account Settings - Schedule', () => {
         .submitForm('advanceCreate')
         .get('[data-test-id="button_createPatternSchedule"]')
         .click({ force: true })
-        .wait(1500)
+        .wait(2500)
         .get('[data-test-id="pattern_0"]')
         .should('exist');
     });
@@ -105,4 +105,3 @@ context('Account Settings - Schedule', () => {
     });
   });
 });
-

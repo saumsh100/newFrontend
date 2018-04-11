@@ -11,9 +11,7 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const env = readEnv(path.resolve(process.cwd(), '.env'));
 
 // TODO: duplicate code with dev-server.config.js
-const {
-  serverPort = 5000,
-} = require('yargs').argv;
+const { serverPort = 5000 } = require('yargs').argv;
 
 const entries = appEntries(name => [
   'babel-polyfill',
@@ -21,12 +19,7 @@ const entries = appEntries(name => [
   `./client/entries/${name}.js`,
 ]);
 
-const {
-  INTERCOM_APP_ID,
-  LOGROCKET_APP_ID,
-  FACEBOOK_APP_ID,
-  FEATURE_FLAG_KEY,
-} = env;
+const { INTERCOM_APP_ID, LOGROCKET_APP_ID, FACEBOOK_APP_ID, FEATURE_FLAG_KEY } = env;
 
 const developmentConfig = merge(baseConfig, {
   entry: entries('app', 'reviews', 'my', 'connect'),
