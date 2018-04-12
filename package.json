@@ -44,7 +44,7 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,scss}": [
+    "client/**/*.{js,jsx,scss}": [
       "npm run format",
       "npm run test:lint",
       "git add"
@@ -63,7 +63,7 @@
         "displayName": "lint",
         "runner": "jest-runner-eslint",
         "testMatch": [
-          "<rootDir>/client/**/*.jsx"
+          "<rootDir>/client/**/*.{js,jsx,scss}"
         ]
       }
     ]
