@@ -29,6 +29,7 @@ import {
   SET_INSURANCE_CARRIER,
   SET_SENTRECALLID,
   SET_DUE_DATE,
+  SET_FAMILY_PATIENT_USER,
 } from '../constants';
 
 export const sixDaysShiftAction = createAction(SIX_DAYS_SHIFT);
@@ -54,6 +55,7 @@ export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_ST
 export const setHasWaitList = createAction(SET_HAS_WAITLIST);
 export const updateWaitSpot = createAction(UPDATE_WAITSPOT);
 export const setNotes = createAction(SET_NOTES);
+export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);
 export const setInsuranceMemberId = createAction(SET_INSURANCE_MEMBER_ID);
 export const setInsuranceCarrier = createAction(SET_INSURANCE_CARRIER);
 export const setSentRecallId = createAction(SET_SENTRECALLID);

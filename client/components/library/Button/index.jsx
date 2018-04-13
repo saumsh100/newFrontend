@@ -33,34 +33,25 @@ const mapper = getClassMapper(scheme, styles);
 
 function Button(props) {
   const baseClassName = mapper.map(props, styles.baseline, props.className);
-  let finalProps = mapper.omit(props, 'as', 'icon', 'submit', 'iconRight');
+  let finalProps = mapper.omit(props, 'as', 'icon', 'submit', 'iconRight', 'iconRightComponent');
+
   if (props.disabled) {
     finalProps = mapper.omit(finalProps, 'onClick');
     finalProps.type = 'button';
   }
 
-  let IconRightComponent = props.iconRightComponent || null;
+  const IconRightComponent = props.iconRightComponent || null;
 
   return (
-    <props.as
-      {...finalProps}
-      className={baseClassName}
-    >
-      {props.icon ? (
-        <i className={`fa fa-${props.icon} ${styles.icon}`}/>
-      ) : null}
+    <props.as {...finalProps} className={baseClassName}>
+      {props.icon && <i className={`fa fa-${props.icon} ${styles.icon}`} />}
 
-      {(props.children || props.title) ? (
-        <span className={styles.text}>{props.children || props.title}</span>
-      ) : null}
+      {props.children ||
+        (props.title && <span className={styles.text}>{props.children || props.title}</span>)}
 
-      {props.iconRightComponent &&
-        <props.iconRightComponent className={styles.iconRight} />
-      }
+      {IconRightComponent && <IconRightComponent className={styles.iconRight} />}
 
-      {props.iconRight ? (
-        <i className={`fa fa-${props.iconRight} ${styles.iconRight}`}/>
-      ) : null}
+      {props.iconRight && <i className={`fa fa-${props.iconRight} ${styles.iconRight}`} />}
     </props.as>
   );
 }
@@ -72,15 +63,11 @@ Button.defaultProps = {
 Button.propTypes = {
   ...mapper.types(),
   children: PropTypes.node,
-  as: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]),
-
+  as: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   className: PropTypes.string,
   icon: PropTypes.string,
   iconRight: PropTypes.string,
-  iconRightComponent: PropTypes.function,
+  iconRightComponent: PropTypes.func,
   title: PropTypes.string,
 };
 

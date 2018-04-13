@@ -149,16 +149,6 @@ module.exports = {
     return queryInterface.sequelize.transaction(async (t) => {
       await queryInterface.changeColumn(
         'PatientUsers',
-        'password',
-        {
-          type: Sequelize.STRING,
-          allowNull: false,
-        },
-        { transaction: t },
-      );
-
-      await queryInterface.changeColumn(
-        'PatientUsers',
         'phoneNumber',
         {
           type: Sequelize.STRING,

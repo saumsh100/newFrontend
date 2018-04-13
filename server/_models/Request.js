@@ -17,6 +17,11 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    requestingPatientUserId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+
     serviceId: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -141,6 +146,11 @@ export default function (sequelize, DataTypes) {
     Request.belongsTo(PatientUser, {
       foreignKey: 'patientUserId',
       as: 'patientUser',
+    });
+
+    Request.belongsTo(PatientUser, {
+      foreignKey: 'requestingPatientUserId',
+      as: 'requestingPatientUser',
     });
 
     Request.belongsTo(SentRecall, {

@@ -58,9 +58,6 @@
   font-family: $medium-font;
   text-transform: none !important;
 }
-.text-left{
-  text-align: left !important;
-}
 
 .service {
   @extend .bold;
@@ -105,15 +102,62 @@
     padding: 0;
   }
 }
-
+.dropDownList {
+  max-height: 220px;
+  overflow-y: auto;
+  position: relative;
+  padding-bottom: 40px;
+}
+.labelPatient{
+  flex:1;
+  padding: 13px;
+}
+.slotButton{
+  padding: 0;
+  text-align: left;
+}
+.editPatient{
+  text-transform: uppercase;
+  border:0;
+  color: $primary-darkgrey;
+  font-size: $small-size;
+  margin: 0 13px;
+  cursor: pointer;
+  &:hover{
+  color: $primary-dark;
+    
+  }
+}
+.addNewPatient{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  border:0;
+  background: $chat-lightgrey;
+  text-transform: uppercase;
+  color: $primary-dark;
+  line-height: 40px;
+  text-align: left;
+  font-family: $medium-font;
+  cursor: pointer;
+  padding: 0 0 0 12px;
+  &:hover{
+    background:$primary-lightgrey;
+  }
+}
 .fieldWrapper {
   padding: 0 20px;
-  display: flex;
   align-items: center;
   flex-wrap: wrap;
-  @media screen and (min-width: $widget-mobile-width) {
-    flex: 1;
-    box-sizing: border-box;
+  width: 100%;
+  &.flexibleField{
+    // display: flex;
+    @media screen and (min-width: $widget-mobile-width) {
+      // flex: 1;
+      box-sizing: border-box;
+    }
   }
   &.fullFieldWrapper{
     width: 100%;
@@ -122,7 +166,24 @@
     width: 100%;
   }
 }
-
+.toggleInput{
+  position: absolute;
+  right: 0;
+  bottom: 25px;
+  border: 0;
+  padding: 0;
+  outline:none;
+  cursor:pointer;
+}
+.inputError{
+  top:31px;
+}
+.errorIcon{
+  color: red;
+}
+.inputInsurance{
+  padding-top: 0;
+}
 .reviewAndBookSlot{
   text-align: left !important;
   justify-content: flex-start !important;
@@ -145,4 +206,10 @@
 
 .boxWrapper{
  margin-bottom: 20px;
+}
+.iconWrapper{
+  position: absolute;
+  right: 0;
+  bottom: 30px;
+  opacity: .5;
 }

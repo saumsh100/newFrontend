@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../Icon';
-import styles from './styles.scss';
-import { Input } from '..';
 
 /**
  * The component that shows and
@@ -17,9 +15,11 @@ class SuggestionToggle extends Component {
 
     this.state = {
       displayValue: '',
+      search: '',
       option: {},
     };
-    this.handleChange = this.handleChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.handleKeydown = this.handleKeydown.bind(this);
     this.displaySuggestions = this.displaySuggestions.bind(this);
   }
 
@@ -41,9 +41,7 @@ class SuggestionToggle extends Component {
    * let's focus on it
    */
   componentDidMount() {
-    if (this.props.asInput) {
-      this[`suggestion_toggle_${this.props.name}`].focus();
-    }
+    this[`suggestion_toggle_${this.props.name}`].focus();
   }
   /**
    * Check if the value of the update is
@@ -67,14 +65,20 @@ class SuggestionToggle extends Component {
    *
    * @param e
    */
-  handleChange(e) {
+  handleSearch(e) {
     const { handleChange } = this.props;
+    const search = e.target.value;
 
-    const displayValue = e.target.value;
-
-    this.setState({ displayValue }, () => {
-      handleChange(displayValue);
+    this.setState({ search }, () => {
+      handleChange(search);
     });
+  }
+
+  handleKeydown(e) {
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      e.preventDefault();
+    }
+    this.props.handleKeydown(e);
   }
 
   /**
@@ -82,17 +86,17 @@ class SuggestionToggle extends Component {
    * and select the input field.
    */
   displaySuggestions() {
-    const { name, toggleView, disabled, isOpen, asInput } = this.props;
+    this.setState({ search: '' });
+    const { toggleView, disabled, isOpen, asInput } = this.props;
 
     if (disabled || asInput) return;
-    if (!isOpen) { toggleView(); }
-
-    this[`suggestion_toggle_${name}`].focus();
-    this[`suggestion_toggle_${name}`].select();
+    if (!isOpen) {
+      toggleView();
+    }
   }
 
   render() {
-    const { name, handleKeydown, handleBlur, label, theme, error, disabled, isOpen, asInput } = this.props;
+    const { name, handleBlur, label, theme, error, disabled, isOpen, asInput } = this.props;
 
     const labelClassName = classNames(theme.label, {
       [theme.filled]: this.state.displayValue,
@@ -111,11 +115,6 @@ class SuggestionToggle extends Component {
       [theme.errorIcon]: error,
     });
 
-    const timesIconClassName = classNames(theme.times, {
-      [theme.activeIcon]: isOpen,
-      [theme.errorIcon]: error,
-    });
-
     return (
       <div
         className={disabled ? theme.toggleDivDisabled : toggleClassName}
@@ -123,31 +122,35 @@ class SuggestionToggle extends Component {
         data-test-id={this.props['data-test-id']}
       >
         <div className={theme.toggleValueDiv}>
-          <Input
-            type="text"
-            placeholder={this.props.placeholder}
-            value={this.state.displayValue}
-            onClick={this.displaySuggestions}
-            onFocus={this.displaySuggestions}
-            onChange={this.handleChange}
-            onBlur={handleBlur}
-            onKeyDown={handleKeydown}
-            className={styles.inputToggler}
-            theme={{ group: styles.groupFull }}
-            id={`suggestion_toggle_${name}`}
-            refCallBack={(input) => { this[`suggestion_toggle_${name}`] = input; }}
-          />
+          <label
+            htmlFor={`suggestion_toggle_${name}`}
+            style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+          >
+            <div>{this.state.displayValue}</div>
+            <select
+              size={this.props.options.length}
+              onChange={this.handleSearch}
+              onBlur={handleBlur}
+              onKeyDown={this.handleKeydown}
+              style={{ position: 'absolute', top: '-30px', zIndex: '-1' }}
+              id={`suggestion_toggle_${name}`}
+              ref={input => {
+                this[`suggestion_toggle_${name}`] = input;
+              }}
+            >
+              {this.props.options.map((opt, i) => (
+                <option key={i} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </label>
           <label htmlFor={`suggestion_toggle_${name}`} className={labelClassName}>
             {label}
           </label>
-          {this.props.asInput ?
-            <button onClick={this.props.toggleAsInput} className={theme.timesIconWrapper}>
-              <Icon className={timesIconClassName} icon="times" type="light" />
-            </button>
-            :
-            <div className={theme.caretIconWrapper}>
-              <Icon className={caretIconClassName} icon="caret-down" type="solid" />
-            </div>}
+          <div className={theme.caretIconWrapper}>
+            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
+          </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
       </div>

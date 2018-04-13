@@ -1,6 +1,5 @@
 
 import axios from 'axios';
-import jwt from 'jwt-decode';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout, setResetEmail } from '../actions/auth';
 import PatientUser from '../entities/models/PatientUser';
@@ -27,7 +26,6 @@ const updateSessionByToken = (token, dispatch) => {
     .then((session) => {
       const sessionId = session.sessionId;
       const patientUser = new PatientUser(session.patientUser);
-
       // set's isAuthenticated and user data
       dispatch(loginSuccess({ sessionId, patientUser }));
       return patientUser;
@@ -42,7 +40,8 @@ const updateSessionByToken = (token, dispatch) => {
 
 export function login(credentials) {
   return function (dispatch) {
-    return axios.post('/auth', credentials)
+    return axios
+      .post('/auth', credentials)
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then((patientUser) => {
         LogRocket.identify(patientUser.id, {
@@ -57,10 +56,9 @@ export function logout() {
   return (dispatch, getState) => {
     Token.remove();
     const { auth } = getState();
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`)
-      .then(() => {
-        dispatch(authLogout());
-      });
+    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
+      dispatch(authLogout());
+    });
   };
 }
 
@@ -68,10 +66,9 @@ export function resetPatientUserPassword(email) {
   return (dispatch, getState) => {
     const { availabilities } = getState();
     const accountId = availabilities.getIn(['account', 'id']);
-    return axios.post(`/auth/reset/${accountId}`, { email })
-      .then(() => {
-        dispatch(setResetEmail(email));
-      });
+    return axios.post(`/auth/reset/${accountId}`, { email }).then(() => {
+      dispatch(setResetEmail(email));
+    });
   };
 }
 
@@ -88,9 +85,7 @@ export function loadPatient() {
 }
 
 // TODO: make this like the sync data
-const fetchPatient = () => {
-  return axios.get('/auth/me').then(({ data }) => data);
-};
+const fetchPatient = () => axios.get('/auth/me').then(({ data }) => data);
 
 export function createPatient(values, ignoreConfirmationText) {
   return function (dispatch, getState) {
@@ -99,9 +94,12 @@ export function createPatient(values, ignoreConfirmationText) {
     const config = ignoreConfirmationText ? { params: { ignoreConfirmationText: true } } : null;
     const accountId = availabilities.getIn(['account', 'id']);
 
-    return axios.post(`/auth/signup/${accountId}`, values, config)
-      // TODO: dispatch function that successfully created patient, plug in, confirm code
-      // TODO: then allow them to create the patient
-      .then(({ data: { token } }) => updateSessionByToken(token, dispatch).then(() => token));
+    return (
+      axios
+        .post(`/auth/signup/${accountId}`, values, config)
+        // TODO: dispatch function that successfully created patient, plug in, confirm code
+        // TODO: then allow them to create the patient
+        .then(({ data: { token } }) => updateSessionByToken(token, dispatch).then(() => token))
+    );
   };
 }

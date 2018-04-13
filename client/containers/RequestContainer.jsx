@@ -1,21 +1,17 @@
 
 import React, { PropTypes, Component } from 'react';
-import Requests from '../components/Requests';
 import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import Requests from '../components/Requests';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
 class RequestContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchEntitiesRequest({
       id: 'scheduleRequests',
       key: 'requests',
-      join: ['service', 'patientUser', 'practitioner'],
+      join: ['service', 'patientUser', 'requestingPatientUser', 'practitioner'],
     });
   }
 
@@ -46,8 +42,9 @@ RequestContainer.propTypes = {
 };
 
 function mapStateToProps({ entities, apiRequests }) {
-
-  const scheduleRequestsFetched = (apiRequests.get('scheduleRequests') ? apiRequests.get('scheduleRequests').wasFetched : null);
+  const scheduleRequestsFetched = apiRequests.get('scheduleRequests')
+    ? apiRequests.get('scheduleRequests').wasFetched
+    : null;
 
   const patientUsers = entities.getIn(['patientUsers', 'models']);
   const services = entities.getIn(['services', 'models']);
@@ -64,12 +61,14 @@ function mapStateToProps({ entities, apiRequests }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(RequestContainer);
-

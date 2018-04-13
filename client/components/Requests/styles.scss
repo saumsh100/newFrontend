@@ -1,4 +1,3 @@
-
 @import '../../fonts.scss';
 @import '../../ui.scss';
 
@@ -25,7 +24,7 @@
   box-sizing: border-box;
 }
 
-.requestHeader{
+.requestHeader {
   //padding-left: 15px;
   position: static;
 }
@@ -39,7 +38,7 @@
   overflow-x: hidden;
 }
 
-.emptyList{
+.emptyList {
   background-color: lighten($primary-lightgrey, 2%);
   text-align: center;
   color: lighten($primary-darkgrey, 5%);
@@ -80,7 +79,7 @@
 
 .requestData {
   padding-left: 1em;
-  border-left: 1px solid #E4E4E4;
+  border-left: 1px solid #e4e4e4;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -89,7 +88,7 @@
   padding-top: 5px;
   padding-bottom: 5px;
 
-  @media screen and (max-width: 350px){
+  @media screen and (max-width: 350px) {
     max-width: 170px;
   }
 
@@ -110,7 +109,7 @@
     //line-height: 1.5em;
   }
 
-  &__nameAge{
+  &__nameAge {
     @extend .mediumFont;
     display: flex;
     text-decoration: none;
@@ -124,7 +123,7 @@
     text-overflow: ellipsis;
   }
 
-  &__age{
+  &__age {
     margin-right: 0px;
     padding-right: 0px;
     &:hover {
@@ -132,11 +131,11 @@
     }
   }
 
-  &__phoneNumber{
+  &__phoneNumber {
     color: $primary-dark-grey;
   }
 
-  &__service  {
+  &__service {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -145,18 +144,31 @@
     opacity: 0.6;
   }
 
-  &__createdAt {
-    padding-top: 10px;
-    font-size: $extra-small-size;
-    @extend .fontDefault;
-    color: #A7A9AC;
-    opacity: 0.6;
-  }
-
   &__icon {
     padding-right: 3px;
   }
+}
 
+.requestedText {
+  padding-top: 10px;
+
+  &__container {
+    padding-bottom: 5px;
+  }
+
+  &__createdAt {
+    font-size: $extra-small-size;
+    @extend .fontDefault;
+    color: #a7a9ac;
+    opacity: 0.6;
+  }
+
+  &__requestedBy {
+    font-size: $extra-small-size;
+    @extend .fontDefault;
+    color: $primary-dark-grey;
+    opacity: 1;
+  }
 }
 
 .monthDay {
@@ -174,7 +186,7 @@
     font-weight: $medium-weight;
     font-size: 19px;
     padding-bottom: 3px;
-    padding-top: 3px
+    padding-top: 3px;
   }
 
   &_month {
@@ -190,38 +202,39 @@
   font-size: 22px;
   top: 50%;
   align-items: center;
-  transform: translateY(-50%);    right: 10px;
+  transform: translateY(-50%);
+  right: 10px;
 
-  @media screen and (max-width: 1250px){
+  @media screen and (max-width: 1250px) {
     flex-direction: column;
     margin-right: 10px;
   }
 
-  &__newreqText{
+  &__newreqText {
     @extend .font-small-dark;
     position: absolute;
     color: #b5b5b5;
-    font-size: .9rem;
+    font-size: 0.9rem;
     top: 50%;
-    transform: translateY(-50%);    right: 20px;
-
+    transform: translateY(-50%);
+    right: 20px;
   }
 
-  &__remove{
+  &__remove {
     font-size: 22px;
     color: $inactive-color;
     margin-right: 15px;
     &:hover {
       color: darken($inactive-color, 10%);
     }
-    @media screen and (max-width: 1250px){
+    @media screen and (max-width: 1250px) {
       margin-right: 0px;
       flex-direction: column;
       margin-bottom: 10px;
     }
   }
 
-  &__confirm{
+  &__confirm {
     color: $primary-green;
     &:hover {
       color: darken($primary-green, 10%);

@@ -1,4 +1,3 @@
-
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
@@ -18,6 +17,9 @@ const requestSeed = {
   startDate: '2017-07-19T00:16:30.932Z',
   endDate: '2017-07-19T00:17:30.932Z',
   patientUserId,
+  insuranceCarrier: null,
+  insuranceMemberId: null,
+  requestingPatientUserId: patientUserId,
   accountId,
   serviceId,
   createdAt: '2017-07-19T00:14:30.932Z',
@@ -33,7 +35,7 @@ describe('/api/requests', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
-    await wipeModel(Request)
+    await wipeModel(Request);
     await seedTestUsers();
     await seedTestRequest();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
@@ -55,7 +57,8 @@ describe('/api/requests', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
 
@@ -66,14 +69,15 @@ describe('/api/requests', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['password', 'avatarUrl', 'patientUserId']);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
   });
 
   describe('POST /', () => {
-    beforeEach(async() => {
-      await wipeModel(Request)
+    beforeEach(async () => {
+      await wipeModel(Request);
     });
 
     test('create request', () => {
@@ -84,7 +88,8 @@ describe('/api/requests', () => {
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
   });
@@ -101,7 +106,8 @@ describe('/api/requests', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
 
@@ -116,7 +122,8 @@ describe('/api/requests', () => {
         .expect(201)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
 
@@ -131,7 +138,8 @@ describe('/api/requests', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
   });
@@ -144,7 +152,8 @@ describe('/api/requests', () => {
         .expect(204)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
+          expect(body)
+            .toMatchSnapshot();
         });
     });
   });

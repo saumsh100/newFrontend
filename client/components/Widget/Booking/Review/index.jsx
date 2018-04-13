@@ -1,24 +1,40 @@
+
+import React, { Component } from 'react';
 import moment from 'moment';
 import keys from 'lodash/keys';
 import omitBy from 'lodash/omitBy';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import styles from './styles.scss';
+import classnames from 'classnames';
 import data from './insurance_carriers';
-import { Button, Link, TextArea, Input } from '../../../library';
-import { setNotes, setInsuranceCarrier, setInsuranceMemberId } from '../../../../actions/availabilities';
-import DropdownSuggestion from '../../../library/DropdownSuggestion/index';
+import { Button, Link, TextArea, Input, Tooltip, Icon, Loading } from '../../../library';
+import {
+  setNotes,
+  setInsuranceCarrier,
+  setInsuranceMemberId,
+  setFamilyPatientUser,
+} from '../../../../actions/availabilities';
 import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
+import { fetchFamilyPatients } from '../../../../thunks/familyPatients';
+import InsuranceCarrier from './InsuranceCarrier';
+import FamilyPatient from './FamilyPatient';
+import styles from './styles.scss';
+/**
+ * This is the value that will turn the dropdown component
+ * into a input field component.
+ * This comes from the data source (insurance_carriers.js)
+ */
+const DROPDOWN_TOGGLE_VALUE = 'Other';
 
 /**
- * This is the value that will turn the dropdown component,
- * into a input field component. This comes from the data source,
- * that right now is the insurance_carriers.js
+ * This is the default value of the insurance's list
+ * we use it to manage the insurance's member id field,
+ * since this value won't require/accept a insurance's member id,
+ * consequently we don't display the member's id input, when this is the actual value.
  */
-const DROPDOWN_TOGGLE_VALUE = 'other';
+const DEFAULT_VALUE = 'Pay for myself';
 
 /**
  * Returns a string containing the key
@@ -28,33 +44,72 @@ const DROPDOWN_TOGGLE_VALUE = 'other';
  */
 const generateCSW = (object) => {
   const filtered = keys(omitBy(object, value => !value));
-  if (!filtered.length) { return 'none'; }
+  if (!filtered.length) {
+    return 'none';
+  }
   return filtered.join(', ');
 };
+
+/**
+ * Icon showing a Tooltip on the
+ * insurance's member id field.
+ */
+const iconMemberId = (
+  <Tooltip
+    placement="left"
+    overlay={
+      <span>
+        The ID is presented on your <br /> insurance's carrier card.
+      </span>
+    }
+    trigger={['click', 'hover']}
+  >
+    <div className={styles.iconWrapper}>
+      <Icon type="solid" icon="question-circle" />
+    </div>
+  </Tooltip>
+);
+
+/**
+ * Helper function to search for a carrier on the data source,
+ * using the value and the scope of the search, by default we look on the labels.
+ *
+ * @param {string} carrierLabel
+ * @param {string} key
+ */
+const findCarrierBy = (carrierLabel, key = 'label') => data.find(opt => opt[key] === carrierLabel);
 
 class Review extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      carrier: 'insurance_1',
-      customCarrier: '',
+      customCarrier: !findCarrierBy(props.selectedInsuranceCarrier),
       insuranceCarrierError: '',
+      isLoading: true,
     };
+
     this.submitRequest = this.submitRequest.bind(this);
     this.setNotes = this.setNotes.bind(this);
     this.setInsuranceMemberId = this.setInsuranceMemberId.bind(this);
     this.handleCarrier = this.handleCarrier.bind(this);
-    this.handleCarrierRendering = this.handleCarrierRendering.bind(this);
+    this.handlePatient = this.handlePatient.bind(this);
+
+    /**
+     * If we don't have a selectedPatient
+     * let's use the current user as default.
+     */
+    if (!props.familyPatientUser) {
+      this.handlePatient(props.user.id);
+    }
+
+    /**
+     * Fetch the family patients,
+     * after fetching set the loading as false.
+     */
+    props.fetchFamilyPatients().then(() => this.setState({ isLoading: false }));
   }
 
-  /**
-   * Set an initial value to the redux state.
-   */
-  componentDidMount() {
-    const label = data.find(opt => opt.value === this.state.carrier).label;
-    this.props.setInsuranceCarrier(label);
-    this.props.setInsuranceMemberId('');
-  }
   /**
    * Fires the redux action.
    *
@@ -75,12 +130,11 @@ class Review extends Component {
 
   /**
    * Before submiting the form let's check if
-   * there's a provided insurance carrier.
-   * If yes, just return the Promise,
-   * otherwise alert the user and stop the request.
+   * there's an insurance carrier.
+   * If not alert the user and stop the request.
    */
   submitRequest() {
-    if (this.state.carrier === DROPDOWN_TOGGLE_VALUE && !this.state.customCarrier) {
+    if (!this.props.selectedInsuranceCarrier) {
       return this.setState({
         insuranceCarrierError: "Please provide your insurance carrier's name.",
       });
@@ -101,54 +155,79 @@ class Review extends Component {
   }
 
   /**
-   * If the user selecfed the option other,
-   * he should be allowed to display anything,
-   * otherwise let's display the default label.
+   * Set the selected patientId
    *
    * @param {string} value
    */
-  handleCarrierRendering(value) {
-    if (this.state.carrier === DROPDOWN_TOGGLE_VALUE) {
-      return value;
-    }
-    return data.find(el => el.value === value).label;
+  handlePatient(value) {
+    this.props.setFamilyPatientUser(value);
   }
 
   /**
-   * If the actual carrier value is equal to DROPDOWN_TOGGLE_VALUE
-   * and the passed data is not a valid "value" from the data source,
-   * let's set it as a customCarrier value and fire the redux action.
+   * We support custom carrier and those on the defined list.
    *
-   * But if the user is changing between valid "value" data,
-   * let's just update the carrier attribute and fire the redux action.
+   * With the provied value, we will try to find the key on the original list.
+   * If we find it and the customCarrier state is false, let's set the Insurance Carrier
+   * using the label inside of the list.
+   *
+   * Otherwise we have a custom carrier,
+   * meaning that the user can type anything on the custom field.
    *
    */
-  handleCarrier(value) {
-    const src = data.find(opt => opt.value === value);
-    if (this.state.carrier === DROPDOWN_TOGGLE_VALUE && !src) {
-      this.setState({ carrier: DROPDOWN_TOGGLE_VALUE, customCarrier: value, insuranceCarrierError: '' });
-      return this.props.setInsuranceCarrier(value);
-    } else if (src) {
-      this.setState({ carrier: value, customCarrier: '', insuranceCarrierError: '' });
-      const label = data.find(opt => opt.value === value).label;
-      return this.props.setInsuranceCarrier(label);
+  handleCarrier(carrierValue) {
+    const carrier = findCarrierBy(carrierValue, 'value');
+
+    /**
+     * Custom carrier
+     */
+    if (this.state.customCarrier && !carrier) {
+      return this.props.setInsuranceCarrier(carrierValue);
     }
-    return false;
+
+    const isCustomCarrier = carrier.label === DROPDOWN_TOGGLE_VALUE;
+
+    this.setState({
+      customCarrier: isCustomCarrier,
+      insuranceCarrierError: '',
+    });
+
+    /**
+     * For a better UX, when the user select a custom carrier,
+     * let's clean the input field, showing just the placeholder.
+     */
+    const finalValue = isCustomCarrier ? '' : carrier.label;
+
+    /**
+     * When it's Pay for myself, we don't need to support insurance's member id.
+     */
+    if (carrier.label === DEFAULT_VALUE) {
+      this.props.setInsuranceMemberId('');
+    }
+
+    return this.props.setInsuranceCarrier(finalValue);
   }
 
   render() {
+    /**
+     * Wait until we fetch the family patients.
+     */
+    if (this.state.isLoading) {
+      return <Loading />;
+    }
+
     const { selectedAvailability, selectedService, hasWaitList, waitSpot, notes } = this.props;
 
     let serviceName = null;
     let selectedDay = null;
+    let preferredDays = null;
+    let preferredTime = null;
+
     if (selectedAvailability) {
       serviceName = selectedService.get('name');
       const mDate = moment(selectedAvailability.startDate);
       selectedDay = `${mDate.format('ddd, MMM Do')} at ${mDate.format('h:mm a')}`;
     }
 
-    let preferredDays = null;
-    let preferredTime = null;
     if (hasWaitList) {
       preferredDays = generateCSW(waitSpot.get('daysOfTheWeek').toJS());
       preferredTime = generateCSW(waitSpot.get('preferences').toJS());
@@ -178,7 +257,9 @@ class Review extends Component {
         <div className={styles.flexWrapper}>
           <div className={styles.label}>Appointment Summary</div>
           <div className={styles.editWrapper}>
-            <Link to="../book"><Button flat>Edit</Button></Link>
+            <Link to="../book">
+              <Button flat>Edit</Button>
+            </Link>
           </div>
         </div>
         <div className={styles.well}>
@@ -193,49 +274,47 @@ class Review extends Component {
         {renderSelectedAvailability}
         {renderWaitlistInformation}
         <div className={styles.preferencesWrapper}>
-          <div className={styles.fieldWrapper}>
-            <div className={styles.label}>Insurance Carrier</div>
-            <DropdownSuggestion
-              options={data}
-              renderValue={this.handleCarrierRendering}
-              value={this.state.carrier}
-              showAsInput={DROPDOWN_TOGGLE_VALUE}
-              toggleAsInput={() => { this.handleCarrier('insurance_1'); }}
-              onChange={this.handleCarrier}
-              placeholder="Your insurance carrier's name"
-              theme={{ slotButton: styles.reviewAndBookSlot, wrapper: styles.reviewAndBookInputWrapper }}
-              name="insuranceCarrier"
-              label=""
-              error={this.state.insuranceCarrierError}
-              data-test-id="text"
-              required
+          <div className={[styles.fieldWrapper]}>
+            <div className={styles.label}>Who will be seeing the dentist?</div>
+            <FamilyPatient
+              familyPatients={this.props.familyPatients}
+              value={this.props.familyPatientUser}
+              onChange={this.handlePatient}
             />
           </div>
-          {this.state.carrier !== 'insurance_1' &&
-            <div className={styles.fieldWrapper}>
+          <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
+            <div className={styles.label}>Insurance Carrier</div>
+            <InsuranceCarrier
+              error={this.state.insuranceCarrierError}
+              onChange={this.handleCarrier}
+              value={this.props.selectedInsuranceCarrier}
+              isCustomCarrier={this.state.customCarrier}
+            />
+          </div>
+          {this.props.selectedInsuranceCarrier !== DEFAULT_VALUE && (
+            <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
               <div className={styles.label}>Patient insurance member ID</div>
               <Input
+                name="insuranceMemberId"
+                value={this.props.insuranceMemberId}
+                iconComponent={iconMemberId}
+                placeholder="Optional"
+                onChange={this.setInsuranceMemberId}
                 classStyles={styles.reviewAndBookInputWrapper}
                 theme={{ input: styles.reviewAndBookPlaceholder }}
-                onChange={this.setInsuranceMemberId}
-                placeholder="Optional"
-                iconType="solid"
-                icon="question-circle"
               />
             </div>
-          }
+          )}
         </div>
         <div className={styles.label}>Notes for the Dental Office</div>
         <TextArea
-          value={notes || ''}
           maxLength="255"
+          value={notes || ''}
           onChange={this.setNotes}
           classStyles={styles.textArea}
         />
         <div className={styles.submitButtonWrapper}>
-          <Button onClick={this.submitRequest}>
-            Submit Request
-          </Button>
+          <Button onClick={this.submitRequest}>Submit Request</Button>
         </div>
       </div>
     );
@@ -243,23 +322,36 @@ class Review extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setNotes,
-    setInsuranceMemberId,
-    setInsuranceCarrier,
-    createRequest,
-    createWaitSpot,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchFamilyPatients,
+      setNotes,
+      setFamilyPatientUser,
+      setInsuranceMemberId,
+      setInsuranceCarrier,
+      createRequest,
+      createWaitSpot,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps({ auth, availabilities, entities }) {
   return {
     user: auth.get('patientUser'),
+    familyPatients: auth.get('familyPatients'),
     hasWaitList: availabilities.get('hasWaitList'),
     waitSpot: availabilities.get('waitSpot'),
     selectedAvailability: availabilities.get('selectedAvailability'),
+    selectedInsuranceCarrier: availabilities.get('insuranceCarrier'),
+    insuranceMemberId: availabilities.get('insuranceMemberId'),
     notes: availabilities.get('notes'),
-    selectedService: entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]),
+    selectedService: entities.getIn([
+      'services',
+      'models',
+      availabilities.get('selectedServiceId'),
+    ]),
+    familyPatientUser: availabilities.get('familyPatientUser'),
   };
 }
 

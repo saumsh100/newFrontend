@@ -3,23 +3,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Avatar,
-  DropdownMenu,
-  MenuItem,
-  Icon,
-  Button,
-} from '../../../library';
+import omit from 'lodash/omit';
+import { Avatar, DropdownMenu, MenuItem, Icon } from '../../../library';
 import * as AuthThunks from '../../../../thunks/patientAuth';
 import styles from './styles.scss';
 
-function UserAvatarButton(props) {
-  const {
-    user
-  } = props;
+const UserAvatarButton = (props) => {
+  const { user } = props;
+
+  const finalProps = omit(props, 'user');
 
   return (
-    <div {...props} className={styles.userMenuButton}>
+    <div {...finalProps} className={styles.userMenuButton}>
       <div className={styles.userContainer}>
         <Avatar
           size="sm"
@@ -28,19 +23,22 @@ function UserAvatarButton(props) {
         />
         <div className={styles.userMenuGreeting}>
           <div className={styles.greeting}>
-            {user.firstName + ' ' + user.lastName}
+            {`${user.firstName} ${user.lastName}`}
           </div>
         </div>
-        <Icon icon="caret-down" type="solid" className={styles.caretIcon} />
+        <Icon
+          icon="caret-down"
+          type="solid"
+          className={styles.caretIcon}
+        />
       </div>
     </div>
   );
-}
+};
 
 class PatientUserMenu extends Component {
   constructor(props) {
     super(props);
-
     this.logout = this.logout.bind(this);
   }
 
@@ -49,21 +47,20 @@ class PatientUserMenu extends Component {
   }
 
   render() {
-    const { user } = this.props;
-    const userMenuProps = {
-      user
-    };
+    const userMenuProps = { user: this.props.user };
 
     return (
       <div className={styles.userWrapper}>
         <DropdownMenu
+          labelComponent={props => (
+            <UserAvatarButton {...props} {...userMenuProps} />
+          )}
           className={styles.dropdownUserMenu}
-          labelComponent={props => <UserAvatarButton {...props} {...userMenuProps} />}
         >
           <MenuItem
+            onClick={this.logout}
             icon="power-off"
             className={styles.userMenuLi}
-            onClick={this.logout}
           >
             Sign Out
           </MenuItem>
@@ -74,9 +71,21 @@ class PatientUserMenu extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    logout: AuthThunks.logout,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      logout: AuthThunks.logout,
+    },
+    dispatch
+  );
 }
 
 export default connect(null, mapDispatchToProps)(PatientUserMenu);
+
+PatientUserMenu.propTypes = {
+  logout: PropTypes.func,
+  user: PropTypes.object,
+};
+
+UserAvatarButton.propTypes = {
+  user: PropTypes.object,
+};

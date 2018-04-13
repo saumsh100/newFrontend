@@ -4,7 +4,12 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ConnectedRouter as Router } from 'react-router-redux';
-import { /*BrowserRouter as Router, */Redirect, Route, Switch, withRouter } from 'react-router-dom';
+import {
+  /* BrowserRouter as Router, */ Redirect,
+  Route,
+  Switch,
+  withRouter,
+} from 'react-router-dom';
 import moment from 'moment';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { setSelectedStartDate, setIsFetching } from '../../../actions/availabilities';
@@ -21,8 +26,7 @@ const map = {
 };
 
 function generateIsDisabledDay(currentDate) {
-  return date =>
-    moment(date).isBefore(currentDate);
+  return date => moment(date).isBefore(currentDate);
 }
 
 class Header extends Component {
@@ -37,28 +41,13 @@ class Header extends Component {
   }
 
   render() {
-    const {
-      isAuth,
-      patientUser,
-      hasWaitList,
-      selectedStartDate,
-      account,
-      floorDate,
-    } = this.props;
+    const { isAuth, patientUser, hasWaitList, selectedStartDate, account, floorDate } = this.props;
 
     const backButton = path => () => (
-      <IconButton
-        icon="arrow-left"
-        onClick={this.goBack(path)}
-        className={styles.backButton}
-      />
+      <IconButton icon="arrow-left" onClick={this.goBack(path)} className={styles.backButton} />
     );
 
-    const titleDiv = title => () => (
-      <div className={styles.title}>
-        {title}
-      </div>
-    );
+    const titleDiv = title => () => <div className={styles.title}>{title}</div>;
 
     const accountTimezone = account.get('timezone');
 
@@ -72,6 +61,8 @@ class Header extends Component {
             <Route exact path={b('/login')} component={backButton('./book')} />
             <Route exact path={b('/book/review')} component={backButton('../book')} />
             <Route exact path={b('/book/wait')} component={backButton('../book')} />
+            <Route exact path={b('/patient/add')} component={backButton('../book/review')} />
+            <Route path={b('/patient/edit')} component={backButton('../../book/review')} />
           </Switch>
         </Router>
         {/* Title Div */}
@@ -79,38 +70,46 @@ class Header extends Component {
           <div className={styles.titleWrapper}>
             <Route exact path={b('/book')} component={titleDiv('Select Availability')} />
             <Route exact path={b('/book/review')} component={titleDiv('Review & Book')} />
-            <Route exact path={b('/book/wait')} component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)} />
+            <Route exact path={b('/patient/add')} component={titleDiv('Add New Patient')} />
+            <Route path={b('/patient/edit')} component={titleDiv('Edit Patient')} />
+            <Route
+              exact
+              path={b('/book/wait')}
+              component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)}
+            />
           </div>
         </Router>
         <div className={styles.pullRight}>
           <Router history={this.props.history}>
             <div>
-              <Route exact path={b('/book')} component={() => (
-                <div>
-                  {/*<IconButton
+              <Route
+                exact
+                path={b('/book')}
+                component={() => (
+                  <div>
+                    {/* <IconButton
                     icon="filter"
                     onClick={this.props.closeBookingModal}
                     className={styles.iconButton}
                   />*/}
-                  <DayPicker
-                    target="icon"
-                    value={selectedStartDate}
-                    onChange={(value) => {
-                      this.props.setIsFetching(true);
-                      this.props.setSelectedStartDate(value);
-                    }}
-                    tipSize={0.01}
-                    timezone={accountTimezone}
-                    disabledDays={generateIsDisabledDay(floorDate)}
-                    iconClassName={styles.calendarButton}
-                  />
-                </div>
-              )} />
+                    <DayPicker
+                      target="icon"
+                      value={selectedStartDate}
+                      onChange={(value) => {
+                        this.props.setIsFetching(true);
+                        this.props.setSelectedStartDate(value);
+                      }}
+                      tipSize={0.01}
+                      timezone={accountTimezone}
+                      disabledDays={generateIsDisabledDay(floorDate)}
+                      iconClassName={styles.calendarButton}
+                    />
+                  </div>
+                )}
+              />
             </div>
           </Router>
-          {isAuth ?
-            <PatientUserMenu user={patientUser} />
-          : null}
+          {isAuth ? <PatientUserMenu user={patientUser} /> : null}
           <IconButton
             icon="times"
             onClick={this.props.closeBookingModal}
@@ -136,11 +135,14 @@ function mapStateToProps({ auth, availabilities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    closeBookingModal,
-    setSelectedStartDate,
-    setIsFetching,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      closeBookingModal,
+      setSelectedStartDate,
+      setIsFetching,
+    },
+    dispatch
+  );
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

@@ -29,7 +29,6 @@
   border-top: 1px solid $primary-grey;
 }
 
-
 .searchContainer {
   height: 60px;
 }
@@ -39,11 +38,11 @@
 
   > input {
     width: 100%;
-    box-sizing: border-box;;
+    box-sizing: border-box;
   }
 
   input::placeholder {
-    color: #A7A9AC;
+    color: #a7a9ac;
     font-size: 15px;
     font-family: $dashboard-font;
   }
@@ -55,13 +54,13 @@
 }
 
 .inputStyle {
-  &:focus ~label {
+  &:focus ~ label {
     //display: none;
   }
 }
 
 .inputStyleAuto {
-  &:focus ~label {
+  &:focus ~ label {
     display: none;
   }
 }
@@ -86,7 +85,7 @@
     display: flex;
     flex-direction: column;
     composes: fontDefault from 'sass-loader!../../../fonts.scss';
-    color: #A7A9AC;
+    color: #a7a9ac;
     line-height: 1.3;
   }
 
@@ -104,7 +103,7 @@
   font-size: 1em !important;
   margin-right: 20px;
   padding-bottom: 3px;
-  color: #2F3844;
+  color: #2f3844;
   opacity: 1;
 }
 
@@ -121,13 +120,12 @@
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 
-
 .body {
   overflow: unset;
 }
 
 .grid {
-  padding:  10px 20px 0px 20px;
+  padding: 10px 20px 0px 20px;
   box-sizing: border-box;
 }
 
@@ -181,7 +179,7 @@
 
   &_label {
     composes: fontMedium from 'sass-loader!../../../fonts.scss';
-    color: #3D4956;
+    color: #3d4956;
     font-size: 12px;
     padding-bottom: 1px;
 
@@ -209,14 +207,13 @@
     padding: 10px;
     height: 80px;
     color: black;
-    background-color: #F4F4F4;
+    background-color: #f4f4f4;
     border-bottom: 0px;
   }
 
   label {
     font-family: $dashboard-font !important;
   }
-
 }
 
 .checkBox {
@@ -246,7 +243,7 @@
   &_icon {
     margin-left: auto;
     font-size: 1em !important;
-    color: #2F3844;
+    color: #2f3844;
   }
 }
 
@@ -261,6 +258,7 @@
   align-items: center;
   height: 35px;
   cursor: pointer;
+  border: none;
 }
 
 .noPatient {

@@ -12,15 +12,12 @@ export default function RFInput(props) {
     type,
     error,
     meta,
-    pattern,
   } = props;
 
-  const newProps = omit(props, ['input', 'meta',]);
+  const newProps = omit(props, ['input', 'meta']);
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || ((touched || dirty) ? meta.error : null);
-  const IconComponent = asyncValidating ?
-    (props) => <Icon {...props} icon="spinner" pulse /> :
-    null;
+  const IconComponent = asyncValidating && <Icon {...props} icon="spinner" pulse />;
 
   return (
     <Input
@@ -29,7 +26,7 @@ export default function RFInput(props) {
       type={type}
       label={label}
       error={finalError}
-      IconComponent={IconComponent}
+      iconComponent={IconComponent}
       icon={icon}
     />
   );

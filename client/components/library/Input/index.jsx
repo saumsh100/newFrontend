@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -13,7 +12,7 @@ function Input(props) {
     value,
     error,
     icon,
-    IconComponent,
+    iconComponent,
     type = 'text',
     theme,
     classStyles,
@@ -23,9 +22,20 @@ function Input(props) {
   // TODO: add support for hint attribute
   // TODO: its like a label except it doesn't go ontop (think Chat input)
 
-  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles', 'IconComponent', 'iconType', 'refCallBack']);
+  const inputProps = omit(props, [
+    'error',
+    'borderColor',
+    'theme',
+    'classStyles',
+    'iconComponent',
+    'iconType',
+    'refCallBack',
+  ]);
   const inputStyle = theme;
-  const valuePresent = value !== null && value !== undefined && value !== '' &&
+  const valuePresent =
+    value !== null &&
+    value !== undefined &&
+    value !== '' &&
     !(typeof value === 'number' && isNaN(value));
 
   let labelClassName = inputStyle.label;
@@ -46,25 +56,29 @@ function Input(props) {
 
   const errorClassName = inputStyle.error;
 
-  const errorComponent = error ? <span className={errorClassName}>{error}</span> : null;
+  const errorComponent = error && (
+    <span className={errorClassName}>{error}</span>
+  );
 
-  let iconComponent = null;
   // TODO: fix this so that it does not throw an error!
   /* if (IconComponent) {
     iconComponent = <IconComponent className={iconClassName} />;
   } else */
+  const icComponent = props.iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
 
-  if (icon) {
-    iconComponent = <Icon className={iconClassName} type={iconType} icon={icon} />;
-  }
   // TODO: use classNames to avoid "undefined" being a className
   return (
     <div className={`${inputStyle.group} ${classStyles}`}>
-      <input type={type} className={inputClassName} {...inputProps} ref={props.refCallBack} />
+      <input
+        type={type}
+        className={inputClassName}
+        {...inputProps}
+        ref={props.refCallBack}
+      />
       <span className={inputStyle.bar} />
       <label className={labelClassName}>{label}</label>
       {errorComponent}
-      {iconComponent}
+      {icComponent}
     </div>
   );
 }
@@ -72,10 +86,7 @@ function Input(props) {
 Input.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
+  value: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
   theme: PropTypes.object,
   type: PropTypes.string,
   icon: PropTypes.string,

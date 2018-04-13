@@ -7,7 +7,11 @@ import { push } from 'react-router-redux';
 import RequestListItem from './RequestListItem';
 import { List } from '../library';
 import styles from './styles.scss';
-import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../thunks/fetchEntities';
+import {
+  updateEntityRequest,
+  deleteEntityRequest,
+  createEntityRequest,
+} from '../../thunks/fetchEntities';
 import { setHoverRequestId, setUndoRequest } from '../../actions/requests';
 import { selectAppointment } from '../../actions/schedule';
 import { checkPatientUser } from '../../thunks/schedule';
@@ -26,10 +30,7 @@ class RequestList extends Component {
   }
 
   confirmAppointment(request, patientUser) {
-    const {
-      location,
-      push,
-    } = this.props;
+    const { location, push } = this.props;
 
     if (location === '/') {
       push('/schedule');
@@ -53,7 +54,6 @@ class RequestList extends Component {
     this.props.checkPatientUser(patientUser, requestData);
     this.openRequest(null);
   }
-
 
   removeRequest(request) {
     const confirmRemove = confirm('Are you sure you want to reject this request?');
@@ -79,15 +79,16 @@ class RequestList extends Component {
       patientUsers,
       practitioners,
       setHoverRequestId,
-      popoverRight
+      popoverRight,
     } = this.props;
 
-
     return (
-      <List className={styles.requestList} >
+      <List className={styles.requestList}>
         {sortedRequests.map((request) => {
           const practitionerId = request.get('practitionerId');
           const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
+
+          const requestingUser = patientUsers.get(request.get('requestingPatientUserId'));
 
           return (
             <RequestListItem
@@ -96,6 +97,7 @@ class RequestList extends Component {
               service={services.get(request.get('serviceId'))}
               practitioner={practitioner}
               patientUser={patientUsers.get(request.get('patientUserId'))}
+              requestingUser={requestingUser}
               confirmAppointment={this.confirmAppointment}
               removeRequest={this.removeRequest}
               setClickedId={setHoverRequestId}
@@ -122,16 +124,19 @@ RequestList.propTypes = {
 };
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-    deleteEntityRequest,
-    createEntityRequest,
-    setHoverRequestId,
-    selectAppointment,
-    checkPatientUser,
-    push,
-    setUndoRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+      deleteEntityRequest,
+      createEntityRequest,
+      setHoverRequestId,
+      selectAppointment,
+      checkPatientUser,
+      push,
+      setUndoRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapActionsToProps);

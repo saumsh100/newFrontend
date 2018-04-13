@@ -1,21 +1,11 @@
 
+import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment-timezone';
 import { Grid, Row, Col, Field } from '../../library';
 import { parseNum, notNegative } from '../../library/Form/validate';
 import styles from './styles.scss';
-import SuggestionSelect from '../../library/DropdownSuggestion/SuggestionSelect';
-
-Date.prototype.stdTimezoneOffset = function () {
-  const jan = new Date(this.getFullYear(), 0, 1);
-  const jul = new Date(this.getFullYear(), 6, 1);
-  return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
-};
-
-Date.prototype.dst = function () {
-  return this.getTimezoneOffset() < this.stdTimezoneOffset();
-};
-
+import SuggestionTimeSelect from '../../library/DropdownTimeSuggestion/SuggestionTimeSelect';
 
 /**
  * The default format for the value key must be
@@ -51,13 +41,14 @@ const renderTimeValue = (val) => {
  *
  * @param {string} val
  */
-const validateTimeField = val => moment(val, ['YYYY-MM-DDTHH:mm:ss.sssZ', 'LT'], true).isValid() && new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(val);
+const validateTimeField = val =>
+  moment(val, ['YYYY-MM-DDTHH:mm:ss.sssZ', 'LT'], true).isValid() &&
+  new RegExp('^((0?[0-9]|1[0-2]):[0-5][0-9] ([AP][M]))$', 'i').test(val);
 
 export default function AppointmentForm(props) {
   const {
     practitionerOptions,
     chairOptions,
-    time,
     unit,
     handleDurationChange,
     handleUnitChange,
@@ -66,7 +57,6 @@ export default function AppointmentForm(props) {
     timeOptions,
   } = props;
 
-
   const inputTheme = {
     input: styles.inputStyle,
   };
@@ -74,8 +64,6 @@ export default function AppointmentForm(props) {
   const dropDownTheme = {
     input: styles.inputStyle,
   };
-
-
   return (
     <Grid className={styles.grid}>
       <Row className={styles.row}>
@@ -96,12 +84,12 @@ export default function AppointmentForm(props) {
           <Col xs={5} className={styles.colDropDown}>
             <Field
               options={timeOptions}
-              component={SuggestionSelect}
+              component={SuggestionTimeSelect}
+              strict={false}
               name="startTime"
               label="Start Time"
               required
               data-test-id="time"
-              search="label"
               renderValue={renderTimeValue}
               formatValue={formatTimeField}
               validateValue={validateTimeField}
@@ -113,12 +101,12 @@ export default function AppointmentForm(props) {
           <Col xs={5} className={styles.colDropDown}>
             <Field
               options={timeOptions}
-              component={SuggestionSelect}
+              component={SuggestionTimeSelect}
+              strict={false}
               name="endTime"
               label="End Time"
               required
               data-test-id="time"
-              search="label"
               renderValue={renderTimeValue}
               formatValue={formatTimeField}
               validateValue={validateTimeField}
@@ -171,7 +159,7 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.row}>
-        <Col xs={9} >
+        <Col xs={9}>
           <Field
             options={practitionerOptions}
             component="DropdownSelect"
@@ -220,3 +208,23 @@ export default function AppointmentForm(props) {
     </Grid>
   );
 }
+
+const arrayPropShape = PropTypes.shape({
+  label: PropTypes.string,
+  value: PropTypes.string,
+});
+
+AppointmentForm.propTypes = {
+  chairOptions: PropTypes.arrayOf(arrayPropShape).isRequired,
+  handleDurationChange: PropTypes.func.isRequired,
+  handleEndTimeChange: PropTypes.func.isRequired,
+  handleStartTimeChange: PropTypes.func.isRequired,
+  handleUnitChange: PropTypes.func.isRequired,
+  practitionerOptions: PropTypes.arrayOf(arrayPropShape).isRequired,
+  unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  timeOptions: PropTypes.arrayOf(arrayPropShape).isRequired,
+};
+
+AppointmentForm.defaultProps = {
+  unit: 15,
+};

@@ -92,6 +92,7 @@ const requestSchema = () => {
     service: serviceSchema(),
     practitioner: practitionerSchema(),
     chair: chairSchema(),
+    requestingPatientUser: patientUserSchema(),
   });
 };
 

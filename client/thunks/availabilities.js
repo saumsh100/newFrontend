@@ -28,10 +28,9 @@ export function confirmCode(values) {
   return function (dispatch, getState) {
     const state = getState();
     const patientUser = state.auth.get('patientUser');
-    return axios.post(`/auth/signup/${patientUser.get('id')}/confirm`, values)
-      .then(({ data }) => {
-        dispatch(setPatientUser(new PatientUser(data)));
-      });
+    return axios.post(`/auth/signup/${patientUser.get('id')}/confirm`, values).then(({ data }) => {
+      dispatch(setPatientUser(new PatientUser(data)));
+    });
   };
 }
 
@@ -53,17 +52,19 @@ export function createRequest() {
       selectedServiceId,
       sentRecallId,
       notes,
+      familyPatientUser,
       insuranceCarrier,
       insuranceMemberId,
     } = state.availabilities.toJS();
 
-    const {
-      patientUser,
-    } = state.auth.toJS();
+    const { patientUser } = state.auth.toJS();
 
     let params = {
       accountId: account.id,
-      patientUserId: patientUser.id,
+      // This is the patient who will be seeing the dentist
+      patientUserId: familyPatientUser,
+      // This is the patient who requested the appointment
+      requestingPatientUserId: patientUser.id,
       serviceId: selectedServiceId,
       startDate,
       endDate,
@@ -82,7 +83,8 @@ export function createRequest() {
       });
     }
 
-    return axios.post('/requests', params)
+    return axios
+      .post('/requests', params)
       .then(() => {
         dispatch(setIsSuccessfulBooking(true));
       })
@@ -96,15 +98,9 @@ export function createRequest() {
 export function createWaitSpot() {
   return function (dispatch, getState) {
     const state = getState();
-    const {
-      account,
-      waitSpot,
-      selectedAvailability,
-    } = state.availabilities.toJS();
+    const { account, waitSpot, selectedAvailability } = state.availabilities.toJS();
 
-    const {
-      patientUser,
-    } = state.auth.toJS();
+    const { patientUser } = state.auth.toJS();
 
     const params = {
       accountId: account.id,
@@ -117,36 +113,36 @@ export function createWaitSpot() {
       endDate: selectedAvailability && selectedAvailability.startDate,
     };
 
-    return axios.post('/waitSpots', params)
-      .then(({ data }) => {
-        const waitSpots = data.entities.waitSpots;
-        const id = Object.keys(waitSpots)[0];
-        return waitSpots[id];
-      });
+    return axios.post('/waitSpots', params).then(({ data }) => {
+      const waitSpots = data.entities.waitSpots;
+      const id = Object.keys(waitSpots)[0];
+      return waitSpots[id];
+    });
   };
 }
 
 export function restartBookingProcess() {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     // This is a thunk because we may need to do some other maintanence here...
     dispatch(refreshAvailabilitiesState());
   };
 }
 
 export function setStartingAppointmentTime(startsAt) {
-  return function (dispatch, getState) {
+  return function (dispatch) {
     dispatch(setStartingAppointmentTimeAction(startsAt));
-  }
+  };
 }
 
 export function setRegistrationStep(registrationStep, accountId) {
   return function (dispatch, getState) {
-    if (registrationStep == 2) {
+    if (parseInt(registrationStep, 10) === 2) {
       const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
-      axios.post('/reservations', { practitionerId, serviceId, startsAt, accountId })
+      axios
+        .post('/reservations', { practitionerId, serviceId, startsAt, accountId })
         .then((reservation) => {
-          dispatch(setTemporaryReservationAction(reservation.data.result))
-        })
+          dispatch(setTemporaryReservationAction(reservation.data.result));
+        });
     }
 
     dispatch(setRegistrationStepAction(registrationStep));
@@ -154,32 +150,31 @@ export function setRegistrationStep(registrationStep, accountId) {
 }
 
 export function getClinicInfo(accountId) {
-  return function (dispatch, getState) {
-    axios.get(`/logo/${accountId}`).then( (data => {
+  return function (dispatch) {
+    axios.get(`/logo/${accountId}`).then((data) => {
       const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
-      dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }))
-    }).bind(this) )
-  }
+      dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }));
+    });
+  };
 }
 
 export function removeReservation(reservationId) {
-  return function(dispatch, getState) {
-    axios.delete(`/reservations/${reservationId}`)
-      .then(r => {
-        dispatch(removeReservationAction());
-      })
-  }
+  return function (dispatch) {
+    axios.delete(`/reservations/${reservationId}`).then(() => {
+      dispatch(removeReservationAction());
+    });
+  };
 }
 
 export function closeBookingModal() {
-  return (dispatch, getState) => {
+  return () => {
     // clean up state for closing the Modal
     window.parent.postMessage('message', '*');
     window.iframeClient && window.iframeClient.sendEvent('closeModal');
   };
 }
 
-let requestCount = 0;  // The number of availability requests sent
+let requestCount = 0; // The number of availability requests sent
 
 export function fetchAvailabilities() {
   return (dispatch, getState) => {
@@ -192,7 +187,9 @@ export function fetchAvailabilities() {
     const startDate = availabilities.get('selectedStartDate');
 
     // TODO: it should be calculating till end of endDate
-    const endDate = moment(startDate).add(5, 'days').toISOString();
+    const endDate = moment(startDate)
+      .add(5, 'days')
+      .toISOString();
     const params = {
       serviceId: availabilities.get('selectedServiceId'),
       practitionerId: availabilities.get('selectedPractitionerId'),
@@ -200,7 +197,8 @@ export function fetchAvailabilities() {
       endDate,
     };
 
-    return axios.get(`/accounts/${account.get('id')}/availabilities`, { params })
+    return axios
+      .get(`/accounts/${account.get('id')}/availabilities`, { params })
       .then(({ data }) => {
         const actions = [
           setAvailabilities(data.availabilities),
@@ -217,10 +215,7 @@ export function fetchAvailabilities() {
       })
       .catch((err) => {
         console.error('axios request error', err);
-        const actions = [
-          setAvailabilities([]),
-          setNextAvailability(null),
-        ];
+        const actions = [setAvailabilities([]), setNextAvailability(null)];
 
         requestCount -= 1;
         if (!requestCount) {

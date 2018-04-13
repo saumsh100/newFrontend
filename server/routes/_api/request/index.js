@@ -57,9 +57,23 @@ requestsRouter.post('/', async (req, res, next) => {
 
       const pub = req.app.get('pub');
       pub.publish('request.created', request.id);
+
+      if (patientUserId !== request.requestingPatientUserId) {
+        const patientUserFor = await PatientUser.findById(patientUserId);
+        const { firstName } = patientUserFor;
+        return {
+          patientRequestingId: request.requestingPatientUserId,
+          requestForName: firstName,
+        };
+      }
+
+      return {
+        patientRequestingId: patientUserId,
+        requestForName: null,
+      };
     })
-    .then(async () => {
-      const patientUser = await PatientUser.findById(patientUserId);
+    .then(async ({ patientRequestingId, requestForName }) => {
+      const patientUser = await PatientUser.findById(patientRequestingId);
       const account = await Account.findById(accountId);
       const users = await User.findAll({
         raw: true,
@@ -170,6 +184,10 @@ requestsRouter.post('/', async (req, res, next) => {
             name: 'APPOINTMENT_TIME',
             content: moment(req.body.startDate).format('h:mm a'),
           },
+          {
+            name: 'PATIENT_REQUEST_FOR',
+            content: requestForName,
+          },
         ],
       });
     })
@@ -194,7 +212,6 @@ requestsRouter.get('/', (req, res, next) => {
       accountId,
       isCancelled,
     },
-
     include: includeArray,
   }).then(requests => {
     const sendRequests = requests.map(r => r.get({ plain: true }));
@@ -309,13 +326,28 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       res.status(201).send(normalized);
       return { normalized };
     })
-    .then(({ normalized }) => {
+    .then(async ({ normalized }) => {
+      const patientUserId = req.request.patientUserId;
       const io = req.app.get('socketio');
       const ns = namespaces.dash;
-      return io.of(ns).in(accountId).emit('update:Request', normalized);
+      io.of(ns).in(accountId).emit('update:Request', normalized);
+
+      if (patientUserId !== request.requestingPatientUserId) {
+        const patientUserFor = await PatientUser.findById(patientUserId);
+        const { firstName } = patientUserFor;
+        return {
+          patientRequestingId: request.requestingPatientUserId,
+          requestForName: firstName,
+        };
+      }
+
+      return {
+        patientRequestingId: patientUserId,
+        requestForName: null,
+      };
     })
-    .then(async () => {
-      const patientUser = await PatientUser.findById(req.request.patientUserId);
+    .then(async ({ patientRequestingId, requestForName }) => {
+      const patientUser = await PatientUser.findById(patientRequestingId);
       const account = await Account.findById(accountId);
       const { email, firstName } = patientUser;
       const { name, phoneNumber, contactEmail, website } = account;
@@ -370,7 +402,11 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
           },
           {
             name: 'APPOINTMENT_TIME',
-            content: moment(startDate).format('h:mm:ss a'),
+            content: moment(startDate).format('h:mm a'),
+          },
+          {
+            name: 'PATIENT_REQUEST_FOR',
+            content: requestForName,
           },
         ],
       });
@@ -389,9 +425,24 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
     isSyncedWithPms: false,
   })
     .then(async (request) => {
-      const patientUser = await PatientUser.findById(request.dataValues.patientUserId);
-      const account = await Account.findById(request.dataValues.accountId);
+      const requestClean = request.get({ plain: true });
+      let patientUserId = requestClean.patientUserId;
+
+      let requestForName = null;
+
+      if (patientUserId !== requestClean.requestingPatientUserId) {
+        patientUserId = requestClean.requestingPatientUserId;
+
+        const patientUserFor = await PatientUser.findById(requestClean.patientUserId);
+        const { firstName } = patientUserFor;
+        requestForName = firstName;
+      }
+
+      const patientUser = await PatientUser.findById(patientUserId);
+
+      const account = await Account.findById(requestClean.accountId);
       const { email, firstName } = patientUser;
+
       const { name, phoneNumber, contactEmail, website } = account;
       const { startDate } = req.appointment;
 
@@ -400,8 +451,8 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
 
       const io = req.app.get('socketio');
       const ns = namespaces.dash;
-      const normalized = normalize('request', request.dataValues);
-      io.of(ns).in(request.dataValues.accountId).emit('update:Request', normalized);
+      const normalized = normalize('request', requestClean);
+      io.of(ns).in(requestClean.accountId).emit('update:Request', normalized);
       const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
       // Send Email
@@ -452,7 +503,11 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
           },
           {
             name: 'APPOINTMENT_TIME',
-            content: moment(startDate).format('h:mm:ss a'),
+            content: moment(startDate).format('h:mm a'),
+          },
+          {
+            name: 'PATIENT_REQUEST_FOR',
+            content: requestForName,
           },
         ],
       });

@@ -11,6 +11,7 @@ const RequestsSchema = {
   serviceId: null,
   practitionerId: null,
   patientUserId: null,
+  requestingPatientUserId: null,
   chairId: null,
   note: null,
   insuranceCarrier: null,

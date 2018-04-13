@@ -2,7 +2,7 @@
 
 .card {
   width: auto;
-  box-shadow: 0px 5px 25px 2px rgba(209,209,209,0.6);
+  box-shadow: 0px 5px 25px 2px rgba(209, 209, 209, 0.6);
   min-width: 270px;
   z-index: 5001;
 }
@@ -75,17 +75,18 @@
     padding-top: 1px;
   }
 }
-.multilineData{
+.multilineData {
   @extend .data;
   align-items: flex-start;
-  .data_text{
+  .data_text {
     padding-top: 0;
   }
 }
-    .subData{
-      composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
-      color: $primary-dark-grey;
-    }
+
+.subData {
+  composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
+  color: $primary-dark-grey;
+}
 
 .footer {
   border-top: 1px solid $primary-grey;
@@ -106,5 +107,20 @@
   font-size: $extra-small-size;
   composes: fontDefault from 'sass-loader!../../../fonts.scss';
   color: #808081;
-  opacity: 0.6;
+
+  &_diffUserContainer {
+    margin-bottom: 5px;
+  }
+
+  &_byDiffUser {
+    composes: fontDefault from 'sass-loader!../../../fonts.scss';
+    opacity: 1;
+    font-size: $extra-small-size;
+    color: $primary-dark;
+  }
+
+  &_on {
+    padding-right: 5px;
+    opacity: 0.6;
+  }
 }

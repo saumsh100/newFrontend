@@ -1,20 +1,21 @@
 
 import axios from 'axios';
 import zxcvbn from 'zxcvbn';
+import moment from 'moment';
 
 const asyncEmailValidatePatient = (values) => {
   if (!values.email) return;
-  return axios.post('/patientUsers/email', { email: values.email })
-    .then((response) => {
-      if (response.data.exists) {
-        throw { email: 'There is already a user with that email' };
-      }
-    });
+  return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
+    if (response.data.exists) {
+      throw { email: 'There is already a user with that email' };
+    }
+  });
 };
 
 const asyncPhoneNumberValidatePatient = (values) => {
   if (!values.phoneNumber) return;
-  return axios.post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
+  return axios
+    .post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
     .then((response) => {
       const { error } = response.data;
       if (error) {
@@ -27,16 +28,15 @@ const asyncEmailValidateNewPatient = (values, dispatch, props) => {
   if (!values.email) return;
 
   const initialValues = props.initialValues;
-  if (props.initialized && (initialValues.email === values.email.replace(/\s/g, ''))) {
+  if (props.initialized && initialValues.email === values.email.replace(/\s/g, '')) {
     return;
   }
 
-  return axios.post('/api/patients/emailCheck', { email: values.email })
-    .then((response) => {
-      if (response.data.exists) {
-        throw { email: 'There is already a user with that email' };
-      }
-    });
+  return axios.post('/api/patients/emailCheck', { email: values.email }).then((response) => {
+    if (response.data.exists) {
+      throw { email: 'There is already a user with that email' };
+    }
+  });
 };
 
 const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
@@ -44,13 +44,21 @@ const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
 
   const initialValues = props.initialValues;
 
-  if (props.initialized && (initialValues.mobilePhoneNumber === values.mobilePhoneNumber.replace(/\s/g, ''))) {
-    console.log('initial values are equal', initialValues.mobilePhoneNumber, values.mobilePhoneNumber)
+  if (
+    props.initialized &&
+    initialValues.mobilePhoneNumber === values.mobilePhoneNumber.replace(/\s/g, '')
+  ) {
+    console.log(
+      'initial values are equal',
+      initialValues.mobilePhoneNumber,
+      values.mobilePhoneNumber
+    );
     return;
   }
 
   // TODO: Check for valid mobile phone number
-  return axios.post('/api/patients/phoneNumberCheck', { phoneNumber: values.mobilePhoneNumber })
+  return axios
+    .post('/api/patients/phoneNumberCheck', { phoneNumber: values.mobilePhoneNumber })
     .then((response) => {
       if (response.data.exists) {
         throw { mobilePhoneNumber: 'There is already a user with that phone number' };
@@ -58,8 +66,14 @@ const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
     });
 };
 
-const asyncValidatePatient = composeAsyncValidators([asyncEmailValidatePatient, asyncPhoneNumberValidatePatient]);
-const asyncValidateNewPatient = composeAsyncValidators(([asyncEmailValidateNewPatient, asyncPhoneNumberValidateNewPatient]));
+const asyncValidatePatient = composeAsyncValidators([
+  asyncEmailValidatePatient,
+  asyncPhoneNumberValidatePatient,
+]);
+const asyncValidateNewPatient = composeAsyncValidators([
+  asyncEmailValidateNewPatient,
+  asyncPhoneNumberValidateNewPatient,
+]);
 
 function composeAsyncValidators(validatorFns) {
   return async (values, dispatch, props, field) => {
@@ -82,7 +96,11 @@ function composeAsyncValidators(validatorFns) {
 }
 
 const phoneValidate = (value) => {
-  if (!/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(value)) {
+  if (
+    !/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(
+      value
+    )
+  ) {
     return 'Invalid phone Number';
   }
 
@@ -90,73 +108,87 @@ const phoneValidate = (value) => {
 };
 
 const emailValidate = (value) => {
-  if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) && value !== undefined) {
+  if (
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) &&
+    value !== undefined &&
+    value !== null
+  ) {
     return 'Invalid email address';
   }
 };
 
 const phoneNumberValidate = (value) => {
-  if (!/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value)) {
+  if (
+    !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value)
+  ) {
     return 'Invalid phone number';
   }
 };
 
 const phoneValidateNullOkay = (value) => {
-  if (!/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) && value !== null && value !== '' && value !== undefined) {
+  if (
+    !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(
+      value
+    ) &&
+    value !== null &&
+    value !== '' &&
+    value !== undefined
+  ) {
     return 'Invalid phone number';
   }
 };
 
 const postalCodeValidate = (value) => {
-  const can = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+  const can = new RegExp(
+    /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
+  );
   if (!can.test(value) && value !== undefined) {
     return 'Invalid Postal Code';
   }
-}
+};
 
 const passwordsValidate = (value, values) => {
-  if (values.password && values.confirmPassword && (values.password !== values.confirmPassword)) {
+  if (values.password && values.confirmPassword && values.password !== values.confirmPassword) {
     return 'Password is not match';
   }
 
   return undefined;
 };
 
-
 const passwordsMatch = (values) => {
   const errors = {};
-  if (values.password && values.confirmPassword && (values.password !== values.confirmPassword)) {
+  if (values.password && values.confirmPassword && values.password !== values.confirmPassword) {
     errors.confirmPassword = 'Passwords do not match';
   }
 
   return errors;
 };
 
-
 const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 
 const asyncEmailValidateUser = values =>
-  axios.post('/userCheck', { email: values.email })
-    .then(response =>
-      (response.data.exists !== true) ||
+  axios
+    .post('/userCheck', { email: values.email })
+    .then(
+      response =>
+        response.data.exists !== true ||
         Promise.reject({ email: `User with ${values.email} already exists...` })
     );
 
 const asyncEmailPasswordReset = values =>
-  axios.post('/userCheck', { email: values.email })
-    .then((response) => {
-      if (response.data.exists !== true) {
-        return { email: 'User with this email does not exist' }
-      }
-    });
+  axios.post('/userCheck', { email: values.email }).then((response) => {
+    if (response.data.exists !== true) {
+      return { email: 'User with this email does not exist' };
+    }
+  });
 
 const numDigitsValidate = max => (value) => {
   if (!value || value.length >= max) return;
   return 'Not enough digits';
 };
 
-const compose = (validators) => (values) => {
+const compose = validators => (values) => {
   let errors = {};
   validators.forEach((validate) => {
     errors = Object.assign({}, errors, validate(values));
@@ -176,7 +208,23 @@ const passwordStrength = (value) => {
 
 const parseNum = value => value && parseInt(value);
 
-const notNegative = value => value && value <= 0 ? 'Negative value' : undefined;
+const notNegative = value => (value && value <= 0 ? 'Negative value' : undefined);
+
+const normalizeBirthdate = value => value.trim();
+
+const validateBirthdate = (value) => {
+  const format = 'MM/DD/YYYY';
+  const pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+
+  if (!pattern.test(value) && value !== undefined && value !== null) {
+    return format;
+  }
+  const date = moment(value, format);
+  const isValid = date.isValid();
+  if (!isValid && value !== undefined && value !== null) {
+    return format;
+  }
+};
 
 export {
   composeAsyncValidators,
@@ -201,4 +249,6 @@ export {
   phoneValidateNullOkay,
   parseNum,
   notNegative,
+  normalizeBirthdate,
+  validateBirthdate,
 };

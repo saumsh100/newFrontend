@@ -1,41 +1,37 @@
 
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import {
-  Form,
-  Field,
-} from '../../library';
+import { Map } from 'immutable';
+import { Form, Field } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import DisplaySearchedPatient from './DisplaySearchedPatient';
 import { setTime, getDuration } from '../../library/util/TimeOptions';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
 import styles from './styles.scss';
 
-const generateEntityOptions = (entities, label) => {
-  const options = [];
-  entities.sort(SortByName).map((entity) => {
-    options.push({ label: entity[label], value: entity.id });
-  });
-  return options;
-};
+const generateEntityOptions = (entities, label) =>
+  entities
+    .sort(SortByName)
+    .reduce((prev, curr) => [...prev, { label: curr[label], value: curr.id }], []);
 
-const generatePractitionerOptions = (practitioners) => {
-  const options = [];
-  practitioners.sort(SortByFirstName).map((pr) => {
-    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName || ''}`;
-    options.push({ label, value: pr.id });
-  });
-  return options;
-};
+const buildPractitionerTitle = practitioner =>
+  (practitioner.type === 'Dentist'
+    ? `Dr. ${practitioner.lastName}`
+    : `${practitioner.firstName} ${practitioner.lastName || ''}`);
+
+const generatePractitionerOptions = practitioners =>
+  practitioners
+    .sort(SortByFirstName)
+    .reduce((prev, curr) => [...prev, { label: buildPractitionerTitle(curr), value: curr.id }], []);
 
 /**
  * Generate an array containing valid time-slots,
  * incrementing the provided amount.
  *
- * @param {string} timeInput
- * @param {string} unitIncrement
+ * @param {string|null} timeInput
+ * @param {number} unitIncrement
  */
-const generateTimeOptions = (timeInput, unitIncrement = 30) => {
+const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = unitIncrement;
@@ -44,35 +40,31 @@ const generateTimeOptions = (timeInput, unitIncrement = 30) => {
   if (timeInput) {
     const minutes = moment(timeInput).minute();
     const remainder = minutes % increment;
-    const today = new Date();
-    const label = (today.dst() && !moment(new Date()).isDST() ? moment(timeInput).subtract(1, 'hours').format('LT') : moment(timeInput).format('LT'));
+    const label = moment(timeInput).format('LT');
     if (remainder) {
       timeOptions.push({ value: timeInput, label });
     }
   }
   let i;
-  for (i = 6; i < totalHours; i++) {
+  for (i = 6; i < totalHours; i += 1) {
     let j;
-    for (j = 0; j < increments; j++) {
+    for (j = 0; j < increments; j += 1) {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
-      const today = new Date();
       const value = time.toISOString();
-      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      const label = time.format('LT');
       timeOptions.push({ value, label });
     }
   }
 
-  for (i = 0; i < 6; i++) {
+  for (i = 0; i < 6; i += 1) {
     let j;
-    for (j = 0; j < increments; j++) {
+    for (j = 0; j < increments; j += 1) {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
-      const today = new Date();
       const value = time.toISOString();
-      const label = (today.dst() && !moment(new Date()).isDST() ? time.subtract(1, 'hours').format('LT') : time.format('LT'));
+      const label = time.format('LT');
       timeOptions.push({ value, label });
     }
   }
-
   return timeOptions;
 };
 
@@ -82,11 +74,14 @@ const generateTimeOptions = (timeInput, unitIncrement = 30) => {
  *
  * @param {*} value
  */
-const validatePatient = value => (value && typeof value === 'object' && value.id ? undefined : 'You must select a valid patient');
+const validatePatient = value =>
+  (value && typeof value === 'object' && value.id ? undefined : 'You must select a valid patient');
 
 const defaultStartTime = () => {
   const now = moment().add(60, 'minutes');
-  const nextAvailable = generateTimeOptions().find(opt => moment(opt.value).format('HH:mm') > now.format('HH:mm'));
+  const nextAvailable = generateTimeOptions().find(
+    opt => moment(opt.value).format('HH:mm') > now.format('HH:mm')
+  );
   return nextAvailable.value;
 };
 
@@ -127,7 +122,9 @@ class DisplayForm extends Component {
 
     const initDuration = 60;
     const initStartTime = defaultStartTime();
-    const initEndTime = moment(initStartTime).add(initDuration, 'minutes').toISOString();
+    const initEndTime = moment(initStartTime)
+      .add(initDuration, 'minutes')
+      .toISOString();
     const initUnit = getDuration(initStartTime, initEndTime, 0) / unit;
     let initialValues = {
       date: moment(currentDate),
@@ -214,7 +211,7 @@ class DisplayForm extends Component {
     const addNewPatientComponent = ({ containerProps, children }) => (
       <div {...containerProps}>
         {children}
-        <div
+        <button
           className={styles.addNewPatient}
           onClick={(e) => {
             e.stopPropagation();
@@ -224,7 +221,7 @@ class DisplayForm extends Component {
           }}
         >
           Add New Patient
-          </div>
+        </button>
       </div>
     );
 
@@ -278,18 +275,26 @@ class DisplayForm extends Component {
     );
   }
 }
-
-DisplayForm.PropTypes = {
-  formName: PropTypes.string.isRequired,
-  patients: PropTypes.object.isRequired,
-  services: PropTypes.object.isRequired,
-  chairs: PropTypes.object.isRequired,
-  practitioners: PropTypes.object.isRequired,
-  getSuggestions: PropTypes.func.isRequired,
-  selectedAppointment: PropTypes.object.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  handleAutoSuggest: PropTypes.func.isRequired,
-  handlePractitionerChange: PropTypes.func.isRequired,
-};
-
 export default DisplayForm;
+
+DisplayForm.propTypes = {
+  chairs: PropTypes.instanceOf(Map),
+  currentDate: PropTypes.instanceOf(moment),
+  formName: PropTypes.string.isRequired,
+  getSuggestions: PropTypes.func,
+  handleAutoSuggest: PropTypes.func,
+  handleDurationChange: PropTypes.func,
+  handleEndTimeChange: PropTypes.func,
+  handleStartTimeChange: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  handleUnitChange: PropTypes.func,
+  patientSearched: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string]),
+  patients: PropTypes.instanceOf(Map),
+  practitioners: PropTypes.instanceOf(Map),
+  selectedAppointment: PropTypes.string,
+  setCreatingPatient: PropTypes.func,
+  setPatientSearched: PropTypes.func,
+  setShowInput: PropTypes.func,
+  showInput: PropTypes.bool,
+  unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+};
