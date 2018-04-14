@@ -29,7 +29,7 @@ export default function RevenueDisplay(props) {
     <div className={styles.revenueDisplay}>
       <div className={styles.revenueDisplayTop}>
         <div className={styles.todaysProductionText}>
-          Todays est. Production
+          Today's est. Production
         </div>
         <div className={styles.todaysProductionValue}>
           <span className={styles.todaysProductionValue_dollar}>
