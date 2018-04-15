@@ -1,5 +1,10 @@
+
 import moment from 'moment';
-import { APPOITMENT_POSITION_LEFT_PADDING, APPOITMENT_POPOVER_DEFAULT_PLACEMENT } from '../../../../constants/schedule';
+import {
+  APPOITMENT_POSITION_LEFT_PADDING,
+  APPOITMENT_WIDTH_LEFT_PADDING,
+  APPOITMENT_POPOVER_DEFAULT_PLACEMENT,
+} from '../../../../constants/schedule';
 
 /**
  * Returns an array of appointments
@@ -15,7 +20,7 @@ export const intersectingAppointments = (appointments, startDate, endDate) => {
   return appointments.filter((app) => {
     const appStartDate = moment(app.startDate);
     const appEndDate = moment(app.endDate);
-    
+
     const dateIntersectsApp =
       sDate.isBetween(appStartDate, appEndDate, null, '[)') ||
       eDate.isBetween(appStartDate, appEndDate, null, '(]');
@@ -43,8 +48,7 @@ export const sortAppsByStartDate = (a, b) => (a.startDate > b.startDate ? 1 : -1
  *
  * @returns {number} HeightCalculated
  */
-export const calculateHeight = (duration, timeSlotHeight) =>
-  duration / 60 * timeSlotHeight;
+export const calculateHeight = (duration, timeSlotHeight) => duration / 60 * timeSlotHeight;
 
 export const getDuration = (startDate, endDate, customBufferTime) => {
   const end = moment(endDate);
@@ -82,26 +86,19 @@ export const setPopoverPlacement = (columnIndex, numOfColumns, minWidth) => {
  * @returns {appoitment} a new appointment with height and top positioning properties
  */
 export const calculateAppoitmentTop = params => (appointment) => {
-  const {
-    startHour,
-    timeSlotHeight,
-    unit,
-  } = params;
+  const { startHour, timeSlotHeight, unit } = params;
 
-  const {
-    startDate,
-    endDate,
-    customBufferTime,
-  } = appointment;
+  const { startDate, endDate, customBufferTime } = appointment;
 
   const durationTime = getDuration(startDate, endDate, customBufferTime);
   const startDateHours = moment(startDate).hours();
   const startDateMinutes = moment(startDate).minutes();
   const positionTopPadding = 0.05;
 
+  const startDateMinutesDived = startDateMinutes / 60;
+
   appointment.topCalc =
-    (startDateHours - startHour + (startDateMinutes / 60)) *
-    timeSlotHeight.height;
+    (startDateHours - startHour + startDateMinutesDived) * timeSlotHeight.height;
 
   appointment.heightCalc = calculateHeight(
     durationTime > unit ? durationTime : unit,
@@ -113,7 +110,7 @@ export const calculateAppoitmentTop = params => (appointment) => {
 
   // set the minimum height to display the hours below the name. Set to 30 min
   appointment.displayDurationHeight = calculateHeight(30, timeSlotHeight.height);
-  
+
   return appointment;
 };
 
@@ -158,11 +155,23 @@ export const buildAppoitmentProps = (params) => {
   // TODO: work on overlapping the appointments a little
   const splitRow = rowSort.length > 1 ? 100 * appPosition / rowSort.length : 0;
 
-  const left = `${splitRow}%`;
+  const multiAppLineLeft = `calc(${splitRow}% - ${
+    appPosition + 1 === rowSort.length
+      ? APPOITMENT_POSITION_LEFT_PADDING
+      : APPOITMENT_WIDTH_LEFT_PADDING
+  }px)`;
 
-  const width = rowSort.length > 1 ?
-          `calc(${(100 / rowSort.length)}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)` :
-          `calc(${(100)}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
+  const left = appPosition > 0 ? multiAppLineLeft : `${splitRow}%`;
+
+  const multiAppLineWidth =
+    appPosition > 0
+      ? `calc(${100 / rowSort.length}%)`
+      : `calc(${100 / rowSort.length}% - ${APPOITMENT_WIDTH_LEFT_PADDING}px)`;
+
+  const width =
+    rowSort.length > 1
+      ? multiAppLineWidth
+      : `calc(${100}% - ${APPOITMENT_POSITION_LEFT_PADDING}px)`;
 
   const containerStyle = {
     top,

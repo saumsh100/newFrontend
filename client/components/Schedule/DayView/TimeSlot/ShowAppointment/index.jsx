@@ -65,7 +65,6 @@ class ShowAppointment extends Component {
       scheduleView,
       displayDurationHeight,
       heightCalc,
-      patientData,
       placement,
       containerStyle,
       appStyle,
@@ -74,42 +73,38 @@ class ShowAppointment extends Component {
       isReminderSent,
       startDate,
       endDate,
-      shadowColor,
     } = this.props;
 
-    const {
-      isOpened,
-      nameContainerOffsetWidth,
-      nameContainerOffset,
-    } = this.state;
+    const { isOpened, nameContainerOffsetWidth, nameContainerOffset } = this.state;
 
-    appStyle.boxShadow = isOpened ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)' : 'none';
+    appStyle.boxShadow = isOpened
+      ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)'
+      : 'none';
 
     // functions to check if there is enough room to display the AppointmentHours inline
-    const canShowAppointmentBelow = () => (heightCalc >= displayDurationHeight);
+    const canShowAppointmentBelow = () => heightCalc >= displayDurationHeight;
 
-    const canInlineAppointment = () => (
-      !canShowAppointmentBelow() && nameContainerOffsetWidth >= nameContainerOffset
-    );
+    const canInlineAppointment = () =>
+      !canShowAppointmentBelow() && nameContainerOffsetWidth >= nameContainerOffset;
 
     return (
       <Popover
         isOpen={isOpened && !selectedAppointment}
-        body={[(
+        body={[
           <AppointmentPopover
             appointment={appointment}
             patient={patient}
             closePopover={this.closePopover}
             editAppointment={this.editAppointment}
             scheduleView={scheduleView}
-          />
-        )]}
+          />,
+        ]}
         preferPlace={placement}
         tipSize={12}
         onOuterAction={this.closePopover}
         className={styles.appPopover}
       >
-        <div
+        <button
           onClick={this.togglePopover}
           role="button"
           onDoubleClick={this.editAppointment}
@@ -117,55 +112,67 @@ class ShowAppointment extends Component {
           style={containerStyle}
           data-test-id={`appointment_${patient.get('firstName')}${patient.get('lastName')}`}
         >
-          <div
-            className={styles.showAppointment}
-            style={appStyle}
-          >
+          <div className={styles.showAppointment} style={appStyle}>
             {isPatientConfirmed || isReminderSent ? (
               <div className={styles.icon}>
-                {(isPatientConfirmed ? <Icon size={1} icon="check-circle" type="solid" /> : <Icon size={1} icon="clock-o" />)}
-              </div>) : null}
+                {isPatientConfirmed ? (
+                  <Icon size={1} icon="check-circle" type="solid" />
+                ) : (
+                  <Icon size={1} icon="clock-o" />
+                )}
+              </div>
+            ) : null}
 
-            <div className={styles.nameContainer} ref={(div) => { this.nameContainer = div; }}>
+            <div
+              className={styles.nameContainer}
+              ref={(div) => {
+                this.nameContainer = div;
+              }}
+            >
               <div className={styles.nameContainer_name}>
                 {`${patient.get('firstName')} ${patient.get('lastName')}`}
               </div>
 
-              {canInlineAppointment() &&
-                <AppointmentHours
-                  startDate={startDate}
-                  endDate={endDate}
-                  inline
-                />}
+              {canInlineAppointment() && (
+                <AppointmentHours startDate={startDate} endDate={endDate} inline />
+              )}
             </div>
 
-            {canShowAppointmentBelow() &&
-              <AppointmentHours
-                startDate={startDate}
-                endDate={endDate}
-              />}
+            {canShowAppointmentBelow() && (
+              <AppointmentHours startDate={startDate} endDate={endDate} />
+            )}
           </div>
-        </div>
+        </button>
       </Popover>
     );
   }
 }
 
 ShowAppointment.propTypes = {
-  appointment: PropTypes.object.isRequired,
-  bgColor: PropTypes.string,
-  patient: PropTypes.object,
+  appointment: PropTypes.shape({ id: PropTypes.string }).isRequired,
   selectAppointment: PropTypes.func.isRequired,
-  selectedAppointment: PropTypes.object,
-  startHour: PropTypes.number,
-  rowSort: PropTypes.arrayOf(Array),
-  isHovered: PropTypes.bool,
-  timeSlotHeight: PropTypes.object,
-  numOfColumns: PropTypes.number,
-  columnIndex: PropTypes.number,
-  minWidth: PropTypes.number,
+  selectedAppointment: PropTypes.shape({ id: PropTypes.string }),
   scheduleView: PropTypes.string,
-  unit: PropTypes.number,
+  displayDurationHeight: PropTypes.number,
+  heightCalc: PropTypes.number,
+  patientData: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  placement: PropTypes.string,
+  containerStyle: PropTypes.shape({
+    top: PropTypes.string,
+    width: PropTypes.string,
+    left: PropTypes.string,
+  }),
+  appStyle: PropTypes.shape({
+    height: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    zIndex: PropTypes.string,
+  }),
+  patient: PropTypes.shape({ id: PropTypes.string }),
+  isPatientConfirmed: PropTypes.bool,
+  isReminderSent: PropTypes.bool,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
+  shadowColor: PropTypes.string,
 };
 
 export default withHoverable(ShowAppointment);
