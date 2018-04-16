@@ -3,11 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import {
-  Grid,
-  Row,
-  Col,
-} from '../../../library';
 import styles from './styles.scss';
 
 export function TouchPointLabel(props) {
@@ -32,36 +27,38 @@ export default function TouchPointItem(props) {
     labelClass,
     linesBoxClass,
     connectLinesClass,
-    ...otherProps,
+    ...otherProps
   } = props;
 
   const { className } = otherProps;
   const finalProps = omit(otherProps, ['className']);
 
   return (
-    <div
-      className={classNames(className, styles.listItem)}
-      {...finalProps}
-    >
+    <div className={classNames(className, styles.listItem)} {...finalProps}>
       <div className={styles.gridSection}>
         <div className={styles.leftSection}>
-          <div className={classNames(toggleClass, styles.toggleCol)}>
-            {toggleComponent}
-          </div>
-          <div className={classNames(labelClass, styles.labelCol)}>
-            {labelComponent}
-          </div>
+          <div className={classNames(toggleClass, styles.toggleCol)}>{toggleComponent}</div>
+          <div className={classNames(labelClass, styles.labelCol)}>{labelComponent}</div>
         </div>
         <div className={styles.flexSection}>
-          <div className={classNames(linesBoxClass, noLines ? classNames(styles.linesBox, selected ? styles[`boxSelected_${color}`] : {}) : (selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines))}>
+          <div
+            className={classNames(
+              linesBoxClass,
+              noLines
+                ? classNames(styles.linesBox, selected ? styles[`boxSelected_${color}`] : {})
+                : selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines
+            )}
+          >
             {mainComponent}
-            {/*<div className={styles.downIconWrapper}>
-                  <Icon icon="caret-down" size={2} />
-                </div>*/}
           </div>
         </div>
         <div className={styles.rightSection}>
-          <div className={classNames(connectLinesClass, selected ? styles[`connectionLineSelected_${color}`] : styles.connectionLine)}>
+          <div
+            className={classNames(
+              connectLinesClass,
+              selected ? styles[`connectionLineSelected_${color}`] : styles.connectionLine
+            )}
+          >
             {rightComponent}
           </div>
         </div>
@@ -78,6 +75,12 @@ TouchPointItem.propTypes = {
   selected: PropTypes.bool,
   noLines: PropTypes.bool,
   color: PropTypes.string,
+};
+
+TouchPointLabel.propTypes = {
+  title: PropTypes.string,
+  'data-test-id': PropTypes.string,
+  className: PropTypes.string,
 };
 
 TouchPointItem.defaultProps = {

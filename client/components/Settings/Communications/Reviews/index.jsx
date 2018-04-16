@@ -6,7 +6,6 @@ import ReviewPreview from './ReviewPreview';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
-import ContactNotes from '../../../demo/ContactNotes';
 import styles from './styles.scss';
 
 class Reviews extends React.Component {
@@ -50,22 +49,18 @@ class Reviews extends React.Component {
       <div>
         <TouchPointItem
           className={styles.bottomItem}
-          mainComponent={(
+          mainComponent={
             <div className={styles.bottomBox}>
               <div className={styles.bottomIconContainer}>
-                <IconCircle
-                  icon="calendar"
-                  color="blue"
-                />
+                <IconCircle icon="calendar" color="blue" />
               </div>
               <div className={styles.bottomLabel}>
                 <TouchPointLabel title="Appointment" />
               </div>
             </div>
-          )}
+          }
         />
         {this.renderReviewItem()}
-        <ContactNotes />
       </div>
     );
   }
@@ -75,12 +70,7 @@ class Reviews extends React.Component {
       return null;
     }
 
-    return (
-      <ReviewPreview
-        review={this.state.reviewSettings}
-        account={this.props.activeAccount}
-      />
-    );
+    return <ReviewPreview review={this.state.reviewSettings} account={this.props.activeAccount} />;
   }
 
   renderReviewItem() {
