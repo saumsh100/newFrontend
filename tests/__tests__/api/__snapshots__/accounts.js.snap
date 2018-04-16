@@ -408,6 +408,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of daily schedule sync",
+        "name": "DAILY_SCHEDULE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -670,6 +679,15 @@ Object {
         "description": "Turns bidirectional sync functionality on or off.",
         "name": "BIDIRECTIONAL_SYNC_ENABLED",
         "value": "1",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of daily schedule sync",
+        "name": "DAILY_SCHEDULE_BATCH_SIZE",
+        "value": "100",
       },
       "type": "configuration",
     },
