@@ -10,6 +10,7 @@ import {
   asyncValidatePatient,
   normalizeBirthdate,
   validateBirthdate,
+  emailValidate,
 } from '../../library/Form/validate';
 import styles from './styles.scss';
 
@@ -77,8 +78,10 @@ class AddPatient extends Component {
             </Row>
           </Grid>
           <Field name="phoneNumber" label="Mobile Number" type="tel" />
-          <Field label="Email" name="email" type="email" />
-          <Button type="submit">Create Patient</Button>
+          <Field label="Email" name="email" validate={[emailValidate]} />
+          <div className={styles.submitButtonWrapper}>
+            <Button type="submit">Continue</Button>
+          </div>
         </Form>
       </div>
     );

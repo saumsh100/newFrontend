@@ -11,6 +11,7 @@ import {
   composeAsyncValidators,
   normalizeBirthdate,
   validateBirthdate,
+  emailValidate,
 } from '../../library/Form/validate';
 import { normalizePhone } from '../../library/Form/normalize';
 import { fetchFamilyPatients } from '../../../thunks/familyPatients';
@@ -147,10 +148,10 @@ class EditPatient extends Component {
             </Row>
           </Grid>
           <Field name="phoneNumber" label="Mobile Number" type="tel" />
-          <Field label="Email" name="email" type="email" />
-          <Button type="submit" className={styles.signup__footer_btn}>
-            Update Patient
-          </Button>
+          <Field label="Email" name="email" validate={[emailValidate]} />
+          <div className={styles.submitButtonWrapper}>
+            <Button type="submit">Update</Button>
+          </div>
         </Form>
       </div>
     );

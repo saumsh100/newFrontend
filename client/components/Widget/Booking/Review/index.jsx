@@ -280,6 +280,7 @@ class Review extends Component {
               familyPatients={this.props.familyPatients}
               value={this.props.familyPatientUser}
               onChange={this.handlePatient}
+              userId={this.props.user.id}
             />
           </div>
           <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
@@ -370,4 +371,33 @@ Review.propTypes = {
   history: PropTypes.object,
   selectedService: PropTypes.object,
   waitSpot: PropTypes.object,
+  familyPatientUser: PropTypes.shape({
+    birthDate: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    gender: PropTypes.string,
+    id: PropTypes.string,
+    isEmailConfirmed: PropTypes.bool,
+    isPhoneNumberConfirmed: PropTypes.bool,
+    patientUserFamilyId: PropTypes.string,
+    phoneNumber: PropTypes.string,
+  }),
+  fetchFamilyPatients: PropTypes.func,
+  setFamilyPatientUser: PropTypes.func,
+  insuranceMemberId: PropTypes.string,
+  familyPatients: PropTypes.arrayOf(
+    PropTypes.shape({
+      birthDate: PropTypes.string,
+      avatarUrl: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      gender: PropTypes.string,
+      id: PropTypes.string,
+      isEmailConfirmed: PropTypes.bool,
+      isPhoneNumberConfirmed: PropTypes.bool,
+      patientUserFamilyId: PropTypes.string,
+      phoneNumber: PropTypes.string,
+    })
+  ),
 };

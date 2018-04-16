@@ -16,21 +16,11 @@ const UserAvatarButton = (props) => {
   return (
     <div {...finalProps} className={styles.userMenuButton}>
       <div className={styles.userContainer}>
-        <Avatar
-          size="sm"
-          user={user}
-          className={styles.userAvatar}
-        />
+        <Avatar size="xs" user={user} className={styles.userAvatar} />
         <div className={styles.userMenuGreeting}>
-          <div className={styles.greeting}>
-            {`${user.firstName} ${user.lastName}`}
-          </div>
+          <div className={styles.greeting}>{`${user.firstName} ${user.lastName}`}</div>
         </div>
-        <Icon
-          icon="caret-down"
-          type="solid"
-          className={styles.caretIcon}
-        />
+        <Icon icon="caret-down" type="solid" className={styles.caretIcon} />
       </div>
     </div>
   );
@@ -52,16 +42,10 @@ class PatientUserMenu extends Component {
     return (
       <div className={styles.userWrapper}>
         <DropdownMenu
-          labelComponent={props => (
-            <UserAvatarButton {...props} {...userMenuProps} />
-          )}
+          labelComponent={props => <UserAvatarButton {...props} {...userMenuProps} />}
           className={styles.dropdownUserMenu}
         >
-          <MenuItem
-            onClick={this.logout}
-            icon="power-off"
-            className={styles.userMenuLi}
-          >
+          <MenuItem onClick={this.logout} icon="power-off" className={styles.userMenuLi}>
             Sign Out
           </MenuItem>
         </DropdownMenu>
