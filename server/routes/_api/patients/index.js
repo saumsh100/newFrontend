@@ -413,7 +413,12 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           lastName: {
             ilike: lastName,
           },
-        }, { email }, { mobilePhoneNumber }],
+        }, { email },
+          { mobilePhoneNumber },
+          { homePhoneNumber: mobilePhoneNumber },
+          { workPhoneNumber: mobilePhoneNumber },
+          { otherPhoneNumber: mobilePhoneNumber },
+          ],
       },
       include: [{
         model: Appointment,
