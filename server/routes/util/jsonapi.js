@@ -118,6 +118,7 @@ const ModelAttributes = {
     'startTime',
     'endTime',
     'breaks',
+    'chairIds',
     'createdAt',
     'updatedAt',
     'deletedAt',

@@ -26,6 +26,7 @@ Object {
     Object {
       "attributes": Object {
         "breaks": Array [],
+        "chairIds": Array [],
         "date": "2017-12-12",
         "endTime": "2017-07-19T00:17:30.932Z",
         "pmsId": "12",
@@ -50,6 +51,7 @@ Object {
   "data": Object {
     "attributes": Object {
       "breaks": Array [],
+      "chairIds": Array [],
       "date": "2017-12-12",
       "endTime": "2017-07-19T00:17:30.932Z",
       "pmsId": "12",
@@ -88,6 +90,7 @@ Object {
     Object {
       "attributes": Object {
         "breaks": Array [],
+        "chairIds": Array [],
         "date": "2017-12-12",
         "endTime": "2017-07-19T00:17:30.932Z",
         "pmsId": "12",
@@ -143,6 +146,7 @@ Object {
     Object {
       "attributes": Object {
         "breaks": Array [],
+        "chairIds": Array [],
         "date": "2017-12-12",
         "endTime": "2017-07-19T00:17:30.932Z",
         "pmsId": "12",
