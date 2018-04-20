@@ -1,0 +1,24 @@
+@import '../../ui';
+
+.toInput {
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  > input::placeholder {
+    color: $primary-gray;
+  }
+
+  > input {
+    height: 100%;
+    padding-left: 20px;
+    border-bottom: none;
+  }
+}
+
+.suggestionsContainerOpen {
+  top: 30px;
+}
+
+.suggestionsList {
+  background: $primary-white;
+}

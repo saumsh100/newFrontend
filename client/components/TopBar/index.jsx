@@ -1,20 +1,12 @@
 
 import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Map } from 'immutable';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import {
-  AppBar,
-  Avatar,
-  Button,
-  DropdownMenu,
-  Icon,
-  IconButton,
-  Link,
-  MenuItem,
-} from '../library';
+import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
-import PatientSearch from '../PatientSearch';
+import RelayPatientSearch from '../RelayPatientSearch';
 import styles from './styles.scss';
 
 const UserMenu = (props) => {
@@ -39,12 +31,28 @@ const UserMenu = (props) => {
   );
 };
 
+UserMenu.propTypes = {
+  user: PropTypes.instanceOf(Map),
+  role: PropTypes.string,
+  activeAccount: PropTypes.shape({
+    addressId: PropTypes.string,
+  }),
+  enterprise: PropTypes.instanceOf(Map),
+};
+
 const ActiveAccountButton = ({ account, onClick }) => (
-  <div onClick={onClick} className={styles.activeAccountButton}>
+  <Button onClick={onClick} className={styles.activeAccountButton}>
     <span className={styles.activeAccountTitle}>{account.name}</span>
     <Icon icon="caret-down" type="solid" />
-  </div>
+  </Button>
 );
+
+ActiveAccountButton.propTypes = {
+  account: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  onClick: PropTypes.func,
+};
 
 class TopBar extends Component {
   constructor(props) {
@@ -54,20 +62,21 @@ class TopBar extends Component {
       index: 0,
     };
 
-    this.sync = this.sync.bind(this);
     this.onSearchSelect = this.onSearchSelect.bind(this);
+    this.sync = this.sync.bind(this);
     this.openSearch = this.openSearch.bind(this);
     this.closeSearch = this.closeSearch.bind(this);
+  }
+
+  onSearchSelect(patient) {
+    document.getElementById('topBarPatientSearch').value = '';
+    this.props.push(`/patients/${patient.ccId}`);
+    this.closeSearch();
   }
 
   sync(e) {
     e.preventDefault();
     this.props.runOnDemandSync();
-  }
-
-  onSearchSelect(patient) {
-    document.getElementById('topBarPatientSearch').value = '';
-    this.props.push(`/patients/${patient.id}`);
   }
 
   openSearch() {
@@ -183,14 +192,14 @@ class TopBar extends Component {
           <div className={styles.searchContainer}>
             <div className={styles.wrapper}>
               <Icon icon="search" className={iconStyles} onClick={this.openSearch} />
-              {!this.props.isSearchCollapsed ? (
-                <PatientSearch
-                  onSelect={this.onSearchSelect}
+              {!this.props.isSearchCollapsed && (
+                <RelayPatientSearch
+                  onChange={this.onSearchSelect}
                   inputProps={patientSearchInputProps}
                   theme={searchTheme}
                   focusInputOnMount
                 />
-              ) : null}
+              )}
             </div>
           </div>
         </div>
@@ -246,10 +255,19 @@ TopBar.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string,
   }),
-
   push: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
+  accounts: PropTypes.arrayOf(Object),
+  enterprise: PropTypes.instanceOf(Map),
+  user: PropTypes.instanceOf(Map),
+  role: PropTypes.string,
+  activeAccount: PropTypes.shape({
+    addressId: PropTypes.string,
+  }),
+  runOnDemandSync: PropTypes.func,
+  withEnterprise: PropTypes.bool,
+  isAuth: PropTypes.bool,
 };
 
 export default withAuthProps(withRouter(TopBar));

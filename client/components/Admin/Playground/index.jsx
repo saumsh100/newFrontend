@@ -1,12 +1,13 @@
 
 import React from 'react';
-import ContactNotes from '../../demo/ContactNotes';
+import PatientSearch from '../../RelayPatientSearch';
+
 import styles from './styles.scss';
 
-export default function Playground(props) {
+export default function Playground() {
   return (
     <div className={styles.page}>
-      <ContactNotes />
+      <PatientSearch onChange={selectedItem => console.log(selectedItem)} />
     </div>
   );
 }

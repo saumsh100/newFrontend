@@ -1,5 +1,5 @@
 
-import { GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
 import { connectionDefinitions } from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
 import { Patient, Family } from 'CareCruModels';
@@ -26,6 +26,13 @@ const patientType = new GraphQLObjectType({
 });
 
 const { connectionType: patientConnection } = connectionDefinitions({
+  connectionFields: {
+    totalCount: {
+      type: GraphQLInt,
+      description: 'Total number of patients',
+      resolve: connection => connection.totalCount,
+    },
+  },
   name: Patient.name,
   nodeType: patientType,
 });

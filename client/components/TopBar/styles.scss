@@ -180,9 +180,10 @@ $padding-size-border: 10px;
 }
 
 .activeAccountButton {
-  padding-left: 1em;
+  color: $primary-dark-grey;
+  padding: 0 1em;
   border-right: 1px solid $primary-dark-grey;
-  padding-right: 1em;
+  background: none;
   cursor: pointer;
   line-height: 47px;
   white-space: nowrap;
@@ -262,9 +263,11 @@ $padding-size-border: 10px;
   height: 100%;
   border: 1px solid darken(#f4f4f4, 10%);
   border-radius: 45px;
+  padding: 0px;
   input {
     height: 100%;
     padding-left: 33px;
+    border: none;
   }
 
   input::placeholder {
@@ -305,12 +308,15 @@ $padding-size-border: 10px;
   padding-right: 12px;
   outline: none;
   box-shadow: unset;
+  max-height: 300px;
+  overflow: auto;
 }
 
 .suggestionsList {
   outline: none;
   box-sizing: border-box;
   box-shadow: 0px 8px 4px -1px rgba(0, 0, 0, 0.1);
+  background: $primary-white;
 }
 
 .animateSearch {

@@ -73,6 +73,7 @@ import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
 import Well from './Well';
 import PatientPopover from './PatientPopover';
+import RelayComponentRenderer from './RelayComponentRenderer';
 
 export {
   AccountLogo,
@@ -157,6 +158,7 @@ export {
   FBLoginButton,
   VCard,
   Well,
+  RelayComponentRenderer,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

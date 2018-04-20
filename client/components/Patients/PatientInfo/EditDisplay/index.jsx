@@ -12,15 +12,19 @@ import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import { familyDataSelector } from '../../Shared/helpers';
 import styles from './styles.scss';
 
+
 const NoInfo = text => (
   <div className={styles.formContainer}>
     <div className={styles.disabledPage}>
-      <div className={styles.disabledPage_text}>{text}</div>
+      <div className={styles.disabledPage_text}>
+        {text}
+      </div>
     </div>
   </div>
 );
 
 const NoFamilyInfo = () => NoInfo('No Family Information');
+
 
 class EditDisplay extends Component {
   constructor(props) {
@@ -55,7 +59,11 @@ class EditDisplay extends Component {
   }
 
   handleSubmit(values) {
-    const { updateEntityRequest, patient, reinitializeState } = this.props;
+    const {
+      updateEntityRequest,
+      patient,
+      reinitializeState,
+    } = this.props;
 
     if (values.mobilePhoneNumber === '') {
       values.mobilePhoneNumber = null;
@@ -97,7 +105,7 @@ class EditDisplay extends Component {
     }
 
     const { patientNode, family, familyLength } = familyDataSelector(accountViewer);
-
+    
     const dropDownStyle = {
       wrapper: styles.inputGroup,
       toggleDiv: styles.toggleDivStyle,
@@ -109,16 +117,14 @@ class EditDisplay extends Component {
     };
 
     const actions = [
-      {
-        label: 'Cancel',
+      { label: 'Cancel',
         onClick: () => {
           reinitializeState();
         },
         component: Button,
         props: { border: 'blue' },
       },
-      {
-        label: 'Save',
+      { label: 'Save',
         onClick: this.handleSubmit,
         component: RemoteSubmitButton,
         props: { color: 'blue', form: `Form${this.state.tabIndex + 1}` },

@@ -7,7 +7,6 @@ type AccountViewer implements Node {
   permissionId: String
   enterpriseId: String
   accountId: String
-  patients: [Patient]
   patient(
     id: String
 
@@ -16,6 +15,20 @@ type AccountViewer implements Node {
     """
     where: SequelizeJSON
   ): Patient
+  patients(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    limit: Int
+    order: String
+
+    """
+    A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
+    """
+    where: SequelizeJSON
+    offset: Int
+  ): PatientConnection
   families: [Family]
   family(id: String!): Family
 }
@@ -127,7 +140,20 @@ type Family implements Node {
   deletedAt: String
   ccId: String
   head: Patient
-  members(after: String, first: Int, before: String, last: Int): PatientConnection
+  members(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    limit: Int
+    order: String
+
+    """
+    A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
+    """
+    where: SequelizeJSON
+    offset: Int
+  ): PatientConnection
 }
 
 type Mutation {
@@ -226,6 +252,9 @@ type PatientConnection {
 
   """A list of edges."""
   edges: [PatientEdge]
+
+  """Total number of patients"""
+  totalCount: Int
 }
 
 """An edge in a connection."""

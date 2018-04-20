@@ -23,8 +23,7 @@ const toDashName = (name) => {
  * @param {Function} fn
  * @returns {object}
  */
-const listToObject = (list, fn) =>
-  list.reduce((obj, key) => ({ ...obj, [key]: fn(key) }), {});
+const listToObject = (list, fn) => list.reduce((obj, key) => ({ ...obj, [key]: fn(key) }), {});
 
 /**
  * Create object to manipulate with component style properties
@@ -45,12 +44,13 @@ const listToObject = (list, fn) =>
  * @returns {{map: (function(*=, ...[*]=)), omit: (function(*=))}}
  */
 export const getClassMapper = (scheme, styles) => {
-  const index = scheme.reduce((i, name) => ({
-    ...i,
-    [isArray(name) ? name[0] : name]: (isArray(name) ?
-      listToObject(name[1], () => true) :
-      true),
-  }), {});
+  const index = scheme.reduce(
+    (i, name) => ({
+      ...i,
+      [isArray(name) ? name[0] : name]: isArray(name) ? listToObject(name[1], () => true) : true,
+    }),
+    {}
+  );
 
   const indexKeys = Object.keys(index);
 
@@ -58,13 +58,10 @@ export const getClassMapper = (scheme, styles) => {
     const keys = Object.keys(pick(props, indexKeys));
 
     const mapKeysWithValues = (key, value) =>
-      ((index[key][value] === true) ?
-          `${toDashName(key)}-${toDashName(value)}` :
-          false
-      );
+      (index[key][value] === true ? `${toDashName(key)}-${toDashName(value)}` : false);
 
     const mapKeys = (key, value) =>
-      ((index[key] === true) ? toDashName(key) : mapKeysWithValues(key, value));
+      (index[key] === true ? toDashName(key) : mapKeysWithValues(key, value));
 
     const classes = keys
       .filter(key => props[key]) // can't be falsey
@@ -72,7 +69,7 @@ export const getClassMapper = (scheme, styles) => {
       .filter(i => i)
       .map(key => styles[key])
       .concat(rest)
-      .filter(i => (i && i.length))
+      .filter(i => i && i.length)
       .join(' ');
 
     return classes;
@@ -80,18 +77,20 @@ export const getClassMapper = (scheme, styles) => {
 
   const omit = (props, ...other) => lOmit(props, indexKeys.concat(other));
 
-  const types = () => indexKeys.reduce((propTypes, key) => ({
-    ...propTypes,
-    [key]: (index[key] === true) ? PropTypes.bool : PropTypes.string,
-  }), {});
+  const types = () =>
+    indexKeys.reduce(
+      (propTypes, key) => ({
+        ...propTypes,
+        [key]: index[key] === true ? PropTypes.bool : PropTypes.string,
+      }),
+      {}
+    );
 
   return { map, omit, types };
 };
 
 export const omitTypes = (Class, props) =>
-  (Class.propTypes ?
-    lOmit(props, Object.keys(Class.propTypes)) :
-    props);
+  (Class.propTypes ? lOmit(props, Object.keys(Class.propTypes)) : props);
 
 export const getModel = (state, entityType, id) => {
   const model = state.entities.getIn([entityType, 'models', id]);
@@ -103,3 +102,5 @@ export const getCollection = (state, entityType, filter = false) => {
   const filteredCollection = isFunction(filter) ? collection.filter(filter) : collection;
   return Object.values(filteredCollection.toJS());
 };
+
+export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
