@@ -12,7 +12,6 @@ import styles from './styles.scss';
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 class OfficeHours extends Component {
-
   constructor(props) {
     super(props);
 
@@ -59,7 +58,11 @@ class OfficeHours extends Component {
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    return this.props.updateEntityRequest({
+      key: 'weeklySchedule',
+      model: newWeeklySchedule,
+      alert,
+    });
   }
 
   sendEdit(i, values) {
@@ -105,12 +108,13 @@ class OfficeHours extends Component {
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
-    .then(() => {
-      this.setState({
-        active: false,
+    return this.props
+      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .then(() => {
+        this.setState({
+          active: false,
+        });
       });
-    });
   }
 
   createPattern() {
@@ -149,12 +153,13 @@ class OfficeHours extends Component {
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
-    .then(() => {
-      this.setState({
-        active: false,
+    return this.props
+      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .then(() => {
+        this.setState({
+          active: false,
+        });
       });
-    });
   }
 
   openModal() {
@@ -188,18 +193,18 @@ class OfficeHours extends Component {
         model: weeklySchedule.merge(newWeeklySchedule),
         alert,
       });
-
-
     };
 
     let schedules = null;
     if (weeklySchedule && weeklySchedule.toJS().weeklySchedules) {
-      schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => {
-        return (<div>
+      schedules = weeklySchedule.toJS().weeklySchedules.map((schedule, i) => (
+        <div>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader} data-test-id={`pattern_${i}`}>
             <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
-            <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
+            <Button className={styles.button} onClick={this.delete.bind(null, i)}>
+              Delete
+            </Button>
           </div>
           <OfficeHoursForm
             weeklySchedule={schedule}
@@ -213,20 +218,27 @@ class OfficeHours extends Component {
             formName={`officeHours${i}`}
             breaksName={`clinicBreaks${i}`}
           />
-        </div>);
-      });
+        </div>
+      ));
     }
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.changeStartDate, component: RemoteSubmitButton, props: { color: 'blue' }},
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.changeStartDate,
+        component: RemoteSubmitButton,
+        props: { color: 'blue' },
+      },
     ];
 
     return (
-      <SettingsCard
-        title="Office Hours"
-        bodyClass={styles.officeHoursBody}
-      >
+      <SettingsCard title="Office Hours" bodyClass={styles.officeHoursBody}>
         <DialogBox
           actions={actions}
           title="Update StartDate"
@@ -260,7 +272,6 @@ class OfficeHours extends Component {
               className={styles.button}
               onClick={this.createPattern}
               data-test-id="button_createPatternSchedule"
-              icon="plus"
               secondary
             >
               Add New Pattern
@@ -319,14 +330,14 @@ function mapStateToProps({ entities, auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+    },
+    dispatch
+  );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(OfficeHours);

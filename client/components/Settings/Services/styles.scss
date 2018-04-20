@@ -30,7 +30,7 @@
   // padding-left: 15px;
 }
 .badgeHeader {
-  padding: 15px 40px 15px 40px
+  padding: 15px 40px 15px 40px;
 }
 
 .addServiceButton {
@@ -44,22 +44,26 @@
 .displayFlexCenter {
   display: flex;
   align-items: center;
-  justify-content: center ;
+  justify-content: center;
 }
 
 .servicesListItem {
-  //display: flex;
-  //align-items: center;
   display: -webkit-box;
-  // height: 65px;
   padding: 30px;
   &_text {
     composes: listItemHeader from 'sass-loader!../../../fonts.scss';
-
-    //text-transform: capitalize;
     overflow: hidden;
     white-space: normal;
     text-overflow: ellipsis;
+  }
+
+  &_duration {
+    padding-top: 10px;
+    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+
+    &_text {
+      color: $primary-dark;
+    }
   }
 
   &_icon {
@@ -96,7 +100,6 @@
     &_text {
       font-family: $medium-font;
       padding-bottom: 5px;
-
     }
 
     &_toggle {
@@ -140,12 +143,11 @@
 .formContainer {
   display: flex;
   padding-left: 15px;
-  &__createForm{
+  &__createForm {
     //padding: 0px 15px 5px 15px;
     height: 100%;
   }
 }
-
 
 .servicesFormRow {
   width: 40%;
@@ -179,5 +181,4 @@
   &_contentHeader {
     margin-top: 35px;
   }
-
 }

@@ -30,13 +30,15 @@ class PractitionerItem extends Component {
         selectItem={selectedPractitioner}
         data-test-id={this.props['data-test-id']}
       >
-        <span className={styles.practListItem_avatarContainer}>
-          <Avatar user={practitioner.toJS()} className={styles.sizingThisAvatar} size="md" />
-        </span>
-        <div className={styles.practListItem_textContainer}>
-          <div className={styles.practListItem_name}>{fullName}</div>
-          <div className={styles.practListItem_type}>
-            {practitioner.get('type') || 'Dentist'}
+        <div className={styles.practListItem_container}>
+          <span className={styles.practListItem_avatarContainer}>
+            <Avatar user={practitioner.toJS()} className={styles.sizingThisAvatar} size="md" />
+          </span>
+          <div className={styles.practListItem_textContainer}>
+            <div className={styles.practListItem_name}>{fullName}</div>
+            <div className={styles.practListItem_type}>
+              {practitioner.get('type') || 'Dentist'}
+            </div>
           </div>
         </div>
       </ListItem>

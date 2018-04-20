@@ -62,84 +62,72 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
     return { breaks };
   });
 
-  const renderBreaks = (day) => {
-    return ({ fields, meta: { touched, error } }) => {
-      return (
-        <Grid className={styles.dayGrid}>
-          <Row className={styles.breakRow} >
-            <Col
-              xs={3}
-              className={styles.breaksDay}
-            >
-              {day}
-            </Col>
-            <Col
-              xs={2}
-              //className={styles.flexCentered}
-            >
-              <Button
-                type="button"
-                icon="plus"
-                onClick={() => fields.push({startTime: defaultStartTime, endTime: defaultEndTime})}
-                data-test-id={`button_${day}_addBreak`}
-                secondary
-              >
-                Add Break
-              </Button>
-            </Col>
-            <Col
-              xs={7}
-              //className={styles.flexCentered}
-            >
-              <Grid>
-                {fields.map((field, index) => {
-                  return (
-                    <Row key={index}>
-                      <Col xs={4} className={styles.flexCentered}>
-                        <Field
-                          component="DropdownSelect"
-                          options={timeOptions}
-                          name={`${field}.startTime`}
-                          className={styles.inlineBlock}
-                          label="Start Time"
-                          data-test-id={`input_${day}BreakStartTime`}
-                          search="label"
-                        />
-                      </Col>
-                      <Col xs={1} className={styles.flexCentered}>
-                        <div className={classNames(styles.inlineBlock, styles.toDiv)}>
-                          to
-                        </div>
-                      </Col>
-                      <Col xs={4} className={styles.flexCentered}>
-                        <Field
-                          className={styles.inlineBlock}
-                          component="DropdownSelect"
-                          options={timeOptions}
-                          name={`${field}.endTime`}
-                          label="End Time"
-                          search="label"
-                        />
-                      </Col>
-                      <Col xs={3} className={styles.flexCentered}>
-                        <IconButton
-                          type="button"
-                          icon="trash"
-                          className={styles.trashButton}
-                          onClick={() => fields.remove(index)}
-                          data-test-id={`button_${day}BreakTrash`}
-                        />
-                      </Col>
-                    </Row>
-                  );
-                })}
-              </Grid>
-            </Col>
-          </Row>
-        </Grid>
-      );
-    };
-  };
+  const renderBreaks = day => ({ fields, meta: { touched, error } }) => (
+    <Grid className={styles.dayGrid}>
+      <Row className={styles.breakRow}>
+        <Col xs={3} className={styles.breaksDay}>
+          {day}
+        </Col>
+        <Col
+          xs={2}
+          // className={styles.flexCentered}
+        >
+          <Button
+            type="button"
+            onClick={() => fields.push({ startTime: defaultStartTime, endTime: defaultEndTime })}
+            data-test-id={`button_${day}_addBreak`}
+            secondary
+          >
+            Add Break
+          </Button>
+        </Col>
+        <Col
+          xs={7}
+          // className={styles.flexCentered}
+        >
+          <Grid>
+            {fields.map((field, index) => (
+              <Row key={index}>
+                <Col xs={4} className={styles.flexCentered}>
+                  <Field
+                    component="DropdownSelect"
+                    options={timeOptions}
+                    name={`${field}.startTime`}
+                    className={styles.inlineBlock}
+                    label="Start Time"
+                    data-test-id={`input_${day}BreakStartTime`}
+                    search="label"
+                  />
+                </Col>
+                <Col xs={1} className={styles.flexCentered}>
+                  <div className={classNames(styles.inlineBlock, styles.toDiv)}>to</div>
+                </Col>
+                <Col xs={4} className={styles.flexCentered}>
+                  <Field
+                    className={styles.inlineBlock}
+                    component="DropdownSelect"
+                    options={timeOptions}
+                    name={`${field}.endTime`}
+                    label="End Time"
+                    search="label"
+                  />
+                </Col>
+                <Col xs={3} className={styles.flexCentered}>
+                  <IconButton
+                    type="button"
+                    icon="trash"
+                    className={styles.trashButton}
+                    onClick={() => fields.remove(index)}
+                    data-test-id={`button_${day}BreakTrash`}
+                  />
+                </Col>
+              </Row>
+            ))}
+          </Grid>
+        </Col>
+      </Row>
+    </Grid>
+  );
 
   const DayBreaksForm = ({ day }) => {
     // Hacky way of letting internal form values control component state
@@ -147,10 +135,7 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
     // const isDisabled = dayValues && dayValues.isClosed;
     return (
       <FormSection name={day}>
-        <FieldArray
-          name="breaks"
-          component={renderBreaks(day)}
-        />
+        <FieldArray name="breaks" component={renderBreaks(day)} />
       </FormSection>
     );
   };
@@ -175,7 +160,6 @@ function BreaksForm({ values, weeklySchedule, onSubmit, breaksName, dataId }) {
       </div>
     </Form>
   );
-
 }
 
 BreaksForm.propTypes = {
@@ -184,7 +168,7 @@ BreaksForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
-function mapStateToProps({ form }, {formName}) {
+function mapStateToProps({ form }, { formName }) {
   // form data is populated when component renders
   if (!form[formName]) {
     return {

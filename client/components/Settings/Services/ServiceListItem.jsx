@@ -1,6 +1,7 @@
 
-import React, { PropTypes, Component } from 'react';
-import { ListItem, Icon } from '../../library';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { ListItem } from '../../library';
 import styles from './styles.scss';
 
 class ServiceListItem extends Component {
@@ -14,19 +15,22 @@ class ServiceListItem extends Component {
   }
 
   render() {
-    const { service, serviceId, id } = this.props;
+    const { service, serviceId, id, duration } = this.props;
 
     const selectItem = serviceId === id;
 
-    return(
+    return (
       <ListItem
         onClick={this.showItem}
         className={styles.servicesListItem}
         selectItem={selectItem}
         data-test-id={service}
       >
-        <div className={styles.servicesListItem_text}>
-          {service}
+        <div>
+          <div className={styles.servicesListItem_text}>{service}</div>
+          <div className={styles.servicesListItem_duration}>
+            Duration: <span className={styles.servicesListItem_duration_text}>{duration} min</span>
+          </div>
         </div>
       </ListItem>
     );
@@ -36,7 +40,8 @@ class ServiceListItem extends Component {
 ServiceListItem.propTypes = {
   setServiceId: PropTypes.func,
   service: PropTypes.string,
+  serviceId: PropTypes.string,
+  duration: PropTypes.number,
 };
-
 
 export default ServiceListItem;

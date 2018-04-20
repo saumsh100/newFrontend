@@ -59,18 +59,24 @@
 
 
 .practListItem {
-  padding-left: 25px;
-  padding-bottom: 30px;
-  padding-top: 30px;
+  height: 100x !important;
+  min-height: 100px !important;
   text-transform: capitalize;
   background: $primary-white;
-  display: -webkit-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  &_container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-left: 30px;
+  }
   &_textContainer {
     height: 100%;
     padding-left: 5px;
     padding-top: 5px;
-    //width: 100%;
   }
   &_name {
     composes: listItemHeader from 'sass-loader!../../../fonts.scss';
@@ -278,7 +284,7 @@
 
 .pracHeaderClass {
   padding-bottom: 0;
-  height: auto;
+  height: auto !important;
 }
 
 

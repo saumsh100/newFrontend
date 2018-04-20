@@ -278,7 +278,6 @@ class Users extends Component{
         className={styles.inviteUser}
         onClick={this.addNewUser}
         data-test-id="addUserButton"
-        icon="plus"
         secondary
       >
         Add a User
@@ -344,7 +343,6 @@ class Users extends Component{
               className={styles.inviteUser}
               onClick={this.addUser}
               data-test-id="inviteUserButton"
-              icon="plus"
               secondary
             >
               Invite a User

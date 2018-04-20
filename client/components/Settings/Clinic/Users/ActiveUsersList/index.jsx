@@ -34,12 +34,12 @@ class ActiveUsersList extends Component {
     let button = null;
     if ((currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') && role !== 'SUPERADMIN') {
       button = (userId !== currentUserId ? <div className={styles.paddingRight}>
-        <Button className={styles.edit} onClick={edit} icon="edit" tertiary>Edit</Button></div> : null);
+        <Button className={styles.edit} onClick={edit} tertiary>Edit</Button></div> : null);
     }
 
     const check = (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') && (role !== 'SUPERADMIN' && role !== 'OWNER');
 
-    const deleteMe = check ? <Button className={styles.delete} icon="trash" onClick={() => this.deleteUser(activeUser.id, activeUser.firstName)}>Delete</Button> : null;
+    const deleteMe = check ? <Button className={styles.delete} onClick={() => this.deleteUser(activeUser.id, activeUser.firstName)}>Delete</Button> : null;
 
     return (
       <ListItem

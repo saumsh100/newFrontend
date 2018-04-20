@@ -1,17 +1,9 @@
 
-import React, {Component, PropTypes} from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  Button,
-  BadgeHeader,
-  Card,
-  SContainer,
-  SHeader,
-  SBody,
-  SFooter,
-} from '../../library';
-import Modal from '../../library/Modal';
+import { Button, BadgeHeader, Card, SContainer, SHeader, SBody } from '../../library';
 import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
@@ -46,11 +38,10 @@ class ServiceListContainer extends Component {
       },
     };
 
-    this.props.createEntityRequest({ key , entityData: values, alert })
-      .then((entities) => {
-        const id = Object.keys(entities[key])[0];
-        this.props.setServiceId({ id });
-      });
+    this.props.createEntityRequest({ key, entityData: values, alert }).then((entities) => {
+      const id = Object.keys(entities[key])[0];
+      this.props.setServiceId({ id });
+    });
     this.setState({ active: false });
   }
 
@@ -64,7 +55,12 @@ class ServiceListContainer extends Component {
     const formName = 'createServiceForm';
     const actions = [
       { label: 'Cancel', onClick: this.setActive, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.createService, component: RemoteSubmitButton, props: { color: 'blue', form: formName } },
+      {
+        label: 'Save',
+        onClick: this.createService,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: formName },
+      },
     ];
 
     return (
@@ -74,7 +70,6 @@ class ServiceListContainer extends Component {
             <div className={styles.modalContainer}>
               <div className={styles.displayFlexCenter}>
                 <Button
-                  icon="plus"
                   onClick={this.setActive}
                   className={styles.addServiceButton}
                   data-test-id="button_addService"
@@ -83,11 +78,7 @@ class ServiceListContainer extends Component {
                   Add New Service
                 </Button>
               </div>
-              <BadgeHeader
-                count={services.size}
-                title="Services"
-                className={styles.badgeHeader}
-              />
+              <BadgeHeader count={services.size} title="Services" className={styles.badgeHeader} />
               <DialogBox
                 active={this.state.active}
                 actions={actions}
@@ -95,25 +86,23 @@ class ServiceListContainer extends Component {
                 onOverlayClick={this.setActive}
                 title="Create New Service"
               >
-                <CreateServiceForm
-                  formName={formName}
-                  onSubmit={this.createService}
-                />
+                <CreateServiceForm formName={formName} onSubmit={this.createService} />
               </DialogBox>
             </div>
           </SHeader>
           <SBody>
-            {services.toArray().map((service) => {
-              return (
+            {services
+              .toArray()
+              .map(service => (
                 <ServiceListItem
                   key={service.get('id')}
                   id={service.get('id')}
                   service={service.get('name')}
                   setServiceId={this.props.setServiceId}
                   serviceId={serviceId}
+                  duration={service.get('duration')}
                 />
-              );
-            })}
+              ))}
           </SBody>
         </SContainer>
       </Card>
@@ -121,10 +110,20 @@ class ServiceListContainer extends Component {
   }
 }
 
+ServiceListContainer.propTypes = {
+  createEntityRequest: PropTypes.func,
+  setServiceId: PropTypes.func,
+  services: PropTypes.object,
+  serviceId: PropTypes.string,
+};
+
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    createEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      createEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapActionsToProps);

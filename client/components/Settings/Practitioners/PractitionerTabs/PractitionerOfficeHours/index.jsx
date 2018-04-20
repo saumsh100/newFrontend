@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -5,21 +6,26 @@ import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
 import OfficeHoursForm from '../../../Schedule/OfficeHours/OfficeHoursForm';
 import BreaksForm from '../../../Schedule/OfficeHours/BreaksForm';
-import { Toggle, Header, Row, Col, DialogBox, Form, Field, RemoteSubmitButton, Button } from '../../../../library';
+import {
+  Toggle,
+  Header,
+  DialogBox,
+  Form,
+  Field,
+  RemoteSubmitButton,
+  Button,
+} from '../../../../library';
 import styles from '../../styles.scss';
-import { SortByName } from "../../../../library/util/SortEntities";
+import { SortByName } from '../../../../library/util/SortEntities';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every((key) => {
-    return obj[key];
-  });
+  const allTrue = Object.keys(obj).every(key => obj[key]);
   return allTrue;
 }
 
-class PractitionerOfficeHours extends Component{
-
+class PractitionerOfficeHours extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +50,7 @@ class PractitionerOfficeHours extends Component{
 
   componentWillMount() {
     const { practitioner } = this.props;
-    const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null
+    const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null;
     const value = customScheduleValue ? 'on' : 'off';
     this.setState({ value });
   }
@@ -74,10 +80,7 @@ class PractitionerOfficeHours extends Component{
 
     const { chairs, allChairs } = this.props;
 
-
-    const actions = chairs.toArray().map((chair) => {
-        return change('chairs', chair.id, !allChairs);
-    });
+    const actions = chairs.toArray().map(chair => change('chairs', chair.id, !allChairs));
 
     this.props.batchActions(actions);
   }
@@ -86,7 +89,9 @@ class PractitionerOfficeHours extends Component{
     const { weeklySchedule } = this.props;
     const newWeeklySchedule = weeklySchedule.toJS();
 
-    newWeeklySchedule[day].chairIds = Object.keys(values).filter(key => values[key] && key !== 'day');
+    newWeeklySchedule[day].chairIds = Object.keys(values).filter(
+      key => values[key] && key !== 'day'
+    );
 
     const sendWeeklySchedule = weeklySchedule.merge(newWeeklySchedule);
 
@@ -99,13 +104,14 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: sendWeeklySchedule, alert })
-    .then(() => {
-      this.setState({
-        active: false,
-        activeChair: false,
+    return this.props
+      .updateEntityRequest({ key: 'weeklySchedule', model: sendWeeklySchedule, alert })
+      .then(() => {
+        this.setState({
+          active: false,
+          activeChair: false,
+        });
       });
-    });
   }
 
   changeStartDate(values) {
@@ -122,12 +128,13 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
-    .then(() => {
-      this.setState({
-        active: false,
+    return this.props
+      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .then(() => {
+        this.setState({
+          active: false,
+        });
       });
-    });
   }
 
   createPattern(values) {
@@ -165,12 +172,13 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
-    .then(() => {
-      this.setState({
-        active: false,
+    return this.props
+      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .then(() => {
+        this.setState({
+          active: false,
+        });
       });
-    });
   }
 
   delete(i) {
@@ -198,7 +206,11 @@ class PractitionerOfficeHours extends Component{
       },
     };
 
-    return this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    return this.props.updateEntityRequest({
+      key: 'weeklySchedule',
+      model: newWeeklySchedule,
+      alert,
+    });
   }
 
   sendEdit(values, j, k) {
@@ -235,8 +247,10 @@ class PractitionerOfficeHours extends Component{
     const { practitioner } = this.props;
     const { value } = this.state;
 
-    const modifiedPractitioner = ((value === 'off') ?
-      practitioner.set('isCustomSchedule', true) : practitioner.set('isCustomSchedule', false));
+    const modifiedPractitioner =
+      value === 'off'
+        ? practitioner.set('isCustomSchedule', true)
+        : practitioner.set('isCustomSchedule', false);
 
     const alert = {
       success: {
@@ -254,7 +268,7 @@ class PractitionerOfficeHours extends Component{
       alert,
     });
 
-    const newValue = (value === 'off') ? 'on' : 'off';
+    const newValue = value === 'off' ? 'on' : 'off';
     this.setState({ value: newValue });
   }
 
@@ -294,12 +308,14 @@ class PractitionerOfficeHours extends Component{
     if (weeklySchedule) {
       const allSchedules = weeklySchedule.toJS().weeklySchedules || [];
 
-      schedules = allSchedules.map((schedule, i) => {
-        return (<div className={styles.toggleContainer_hours}>
+      schedules = allSchedules.map((schedule, i) => (
+        <div className={styles.toggleContainer_hours}>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>
             <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
-            <Button className={styles.button} onClick={this.delete.bind(null, i)}>Delete</Button>
+            <Button className={styles.button} onClick={this.delete.bind(null, i)}>
+              Delete
+            </Button>
           </div>
           <OfficeHoursForm
             weeklySchedule={weeklySchedule.weeklySchedules[i]}
@@ -315,71 +331,85 @@ class PractitionerOfficeHours extends Component{
             breaksName={`clinicBreaks${i}`}
             dataId={i}
           />
-        </div>);
-      });
+        </div>
+      ));
 
-      const filteredChairs = chairs.toArray().filter((chair) => {
-        if (chair.isActive) {
-          return chair;
-        }
-      }).sort(SortByName);
+      const filteredChairs = chairs
+        .toArray()
+        .filter((chair) => {
+          if (chair.isActive) {
+            return chair;
+          }
+        })
+        .sort(SortByName);
 
       const chairFields = filteredChairs.map((chair) => {
-        initialValuesChairs[chair.id] = weeklySchedule[this.state.modalChairDay].chairIds.includes(chair.id);
-        return (<div className={styles.chairsContainer_fields}>
-          <span className={styles.chairsContainer_name}>{chair.name}</span>
-          <div className={styles.chairsContainer_toggle}>
-            <Field
-              component="Toggle"
-              name={chair.id}
-            />
+        initialValuesChairs[chair.id] = weeklySchedule[this.state.modalChairDay].chairIds.includes(
+          chair.id
+        );
+        return (
+          <div className={styles.chairsContainer_fields}>
+            <span className={styles.chairsContainer_name}>{chair.name}</span>
+            <div className={styles.chairsContainer_toggle}>
+              <Field component="Toggle" name={chair.id} />
+            </div>
           </div>
-        </div>);
+        );
       });
 
       const actionsChair = [
-        { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-        { label: 'Save', onClick: values => this.chairSubmit(values, this.state.modalChairDay), component: RemoteSubmitButton, props: { form: 'chairs', color: 'blue' } },
+        {
+          label: 'Cancel',
+          onClick: this.reinitializeState,
+          component: Button,
+          props: { border: 'blue' },
+        },
+        {
+          label: 'Save',
+          onClick: values => this.chairSubmit(values, this.state.modalChairDay),
+          component: RemoteSubmitButton,
+          props: { form: 'chairs', color: 'blue' },
+        },
       ];
-
 
       initialValuesChairs.day = this.state.modalChairDay;
 
-      dialogShow = (<DialogBox
-        actions={actionsChair}
-        title={this.state.modalChairDay.toUpperCase()}
-        type="small"
-        active={this.state.activeChair}
-        onEscKeyDown={this.reinitializeState}
-        onOverlayClick={this.reinitializeState}
-      >
-        {weeklySchedule[this.state.modalChairDay].pmsScheduleId ?
-          <div>Note: This day field is currently being synced via PMS.
-          Please use PMS to change this field for this day</div> : null}
-        <div className={styles.chairsContainer}>
-          <div className={styles.chairsContainer_all} >
-            <span className={styles.chairsContainer_all_text}>All Chairs</span>
-            <div className={styles.chairsContainer_toggle}>
-              <Toggle
-                name="allChairs"
-                onChange={this.setAllChairs}
-                checked={allChairs}
-              />
+      dialogShow = (
+        <DialogBox
+          actions={actionsChair}
+          title={this.state.modalChairDay.toUpperCase()}
+          type="small"
+          active={this.state.activeChair}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+        >
+          {weeklySchedule[this.state.modalChairDay].pmsScheduleId ? (
+            <div>
+              Note: This day field is currently being synced via PMS. Please use PMS to change this
+              field for this day
             </div>
+          ) : null}
+          <div className={styles.chairsContainer}>
+            <div className={styles.chairsContainer_all}>
+              <span className={styles.chairsContainer_all_text}>All Chairs</span>
+              <div className={styles.chairsContainer_toggle}>
+                <Toggle name="allChairs" onChange={this.setAllChairs} checked={allChairs} />
+              </div>
+            </div>
+            <Form
+              // className={formStyle}
+              form={'chairs'}
+              onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
+              initialValues={initialValuesChairs}
+              enableReinitialize
+              destroyOnUnmount
+              ignoreSaveButton
+            >
+              {chairFields}
+            </Form>
           </div>
-          <Form
-            // className={formStyle}
-            form={'chairs'}
-            onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
-            initialValues={initialValuesChairs}
-            enableReinitialize
-            destroyOnUnmount
-            ignoreSaveButton
-          >
-            {chairFields}
-          </Form>
-        </div>
-      </DialogBox>);
+        </DialogBox>
+      );
     }
 
     let showComponent = null;
@@ -390,8 +420,12 @@ class PractitionerOfficeHours extends Component{
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule" contentHeader />
             <div>
-              <Button className={styles.button} icon="plus" secondary create onClick={this.createPattern}>Add New Pattern</Button>
-              <Button className={styles.button} secondary onClick={this.openModal}>Change Start Date</Button>
+              <Button className={styles.button} secondary create onClick={this.createPattern}>
+                Add New Pattern
+              </Button>
+              <Button className={styles.button} secondary onClick={this.openModal}>
+                Change Start Date
+              </Button>
             </div>
           </div>
           <OfficeHoursForm
@@ -415,16 +449,25 @@ class PractitionerOfficeHours extends Component{
     } else {
       showComponent = (
         <div className={styles.notCustom}>
-          Currently, { practitioner.getFullName() } is inheriting the same weekly
-          schedule as the clinic's office hours,
-          to make it custom, click the toggle above.
+          Currently, {practitioner.getFullName()} is inheriting the same weekly schedule as the
+          clinic's office hours, to make it custom, click the toggle above.
         </div>
       );
     }
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.changeStartDate, component: RemoteSubmitButton, props: { form: 'advanceCreatePrac', color: 'blue' } },
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.changeStartDate,
+        component: RemoteSubmitButton,
+        props: { form: 'advanceCreatePrac', color: 'blue' },
+      },
     ];
 
     return (
@@ -444,12 +487,7 @@ class PractitionerOfficeHours extends Component{
             initialValues={weeklySchedule}
             ignoreSaveButton
           >
-            <Field
-              required
-              component="DayPicker"
-              name="startDate"
-              label="Start Date"
-            />
+            <Field required component="DayPicker" name="startDate" label="Start Date" />
           </Form>
         </DialogBox>
         {dialogShow}
@@ -493,9 +531,12 @@ function mapStateToProps({ form }) {
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    batchActions,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      batchActions,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapActionsToProps);
