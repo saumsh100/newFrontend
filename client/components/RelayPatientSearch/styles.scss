@@ -1,5 +1,14 @@
 @import '../../ui';
 
+.bold {
+  composes: fontBold from 'sass-loader!../../fonts.scss';
+}
+
+.footerText {
+  padding: 10px 0;
+  display: inline-block;
+}
+
 .toInput {
   padding: 0;
   box-sizing: border-box;
@@ -15,10 +24,21 @@
   }
 }
 
+.suggestionsWrapper {
+  box-shadow: $google-shadow;
+  margin: 0 12px;
+}
+
 .suggestionsContainerOpen {
   top: 30px;
 }
 
 .suggestionsList {
   background: $primary-white;
+}
+
+.totalCount {
+  background: $primary-lightgray;
+  border-top: 1px solid $disabled-color;
+  text-align: center;
 }

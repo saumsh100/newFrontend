@@ -1,26 +1,25 @@
-
 $container-padding: 10px 15px 0px 10px;
 
-$color-black: rgb(0,0,0);
-$color-white: rgb(255,255,255);
+$color-black: rgb(0, 0, 0);
+$color-white: rgb(255, 255, 255);
 
-$primary-color: #FF715A;
+$primary-color: #ff715a;
 $primary-color-hover: darken($primary-color, 5%);
 
 $widget-primary-color: var(--bookingWidgetPrimaryColor);
 
-$secondary-color1: #CAEBF2;
-$secondary-color2: #CAEBF2;
+$secondary-color1: #caebf2;
+$secondary-color2: #caebf2;
 $primary-yellow: #ffc45a;
-$primary-orange: #F5C673;
+$primary-orange: #f5c673;
 $primary-blue: #206477;
-$primary-green: #2CC4A7;
+$primary-green: #2cc4a7;
 $primary-dark-blue: #3a5199;
 $primary-navy-blue: #518493;
-$primary-light-blue: #8CBCD6;
+$primary-light-blue: #8cbcd6;
 
-$clr-border: #DEDEDE;
-$clr-bg-dark-grey: #CDCDCD;
+$clr-border: #dedede;
+$clr-bg-dark-grey: #cdcdcd;
 $clr-dark-grey: #808080;
 $clr-dark-blue: #29313c;
 
@@ -32,8 +31,8 @@ $clr-table-header-icons: #eff2f3;
 $primary-blue-green: #206477;
 
 $primary-dark: #2e3845;
-$primary-darker: #3D4551;
-$primary-darkdark: #242A34;
+$primary-darker: #3d4551;
+$primary-darkdark: #242a34;
 
 $inactive-color: #b4b4b5;
 $primary-darkgrey: #959596;
@@ -42,7 +41,7 @@ $primary-grey: #efefef;
 $primary-gray: darken($primary-grey, 20%);
 $primary-lightgrey: #f0f0f0;
 $primary-light-grey: #c9c9c9;
-$light-grey: #A7A9AC;
+$light-grey: #a7a9ac;
 
 $chat-lightgrey: #f4f4f4;
 $chat-tabs-color: #eaeaea;
@@ -50,17 +49,18 @@ $chat-border-color: #efefef;
 $chat-tabs-border-color: #e3e3e3;
 
 $primary-white: white;
-$primary-lightgray: #FAFAFA;
-$background-color: #E4E4E4;
-$primary-red: #FF715C;
-$primary-star: #FBF174;
+$primary-lightgray: #fafafa;
+$background-color: #e4e4e4;
+$primary-red: #ff715c;
+$primary-star: #fbf174;
 // $primary-color-dark: black;
-$box-shadow: 1px 1px 16px 0.1px rgba(0,0,0,0.3);
-$widget-box-shadow: 0 1px rgba(0,0,0,0.05);
+$box-shadow: 1px 1px 16px 0.1px rgba(0, 0, 0, 0.3);
+$widget-box-shadow: 0 1px rgba(0, 0, 0, 0.05);
 $disabled-color: lighten($primary-darkgrey, 25%);
 $empty-grey: darken(lightgrey, 5%);
 $card-border-color: #cdcdcd;
-
+$google-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12),
+  0 3px 5px -1px rgba(0, 0, 0, 0.2);
 
 // Feedback Colors
 $danger-color: red;

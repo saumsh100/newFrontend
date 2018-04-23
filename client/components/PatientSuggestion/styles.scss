@@ -2,6 +2,7 @@
 
 .bold {
   composes: fontBold from 'sass-loader!../../fonts.scss';
+  background: none;
 }
 
 .wrapper {

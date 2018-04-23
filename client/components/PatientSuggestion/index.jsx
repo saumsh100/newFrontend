@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
-import { Avatar } from '../library';
-import { capitalizeFirstLetter } from '../Utils';
+import { Avatar, Highlighter } from '../library';
+import { findChunksAtBeginningOfWords } from '../Utils';
 import { StyleExtender } from '../Utils/Themer';
 import styles from './styles.scss';
 
@@ -17,9 +17,11 @@ const PatientSuggestion = ({
   theme,
 }) => {
   const newTheme = StyleExtender(theme, styles);
-  const firstName = patient.firstName.slice(inputValue.length, patient.firstName.length);
-  const fullName = `${firstName} ${patient.lastName}`;
+  const fullName = `${patient.firstName} ${patient.lastName}`;
   const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
+  const patientString = `${fullName}${age}`;
+  const inputSearch = inputValue.split(' ').filter(v => v !== '');
+
   return (
     <div
       key={patient.id}
@@ -30,8 +32,13 @@ const PatientSuggestion = ({
         <Avatar user={patient} size="xs" />
         <div className={newTheme.suggestionContainer_details}>
           <div className={newTheme.suggestionContainer_fullName}>
-            <span className={newTheme.bold}>{`${capitalizeFirstLetter(inputValue)}`}</span>
-            {`${fullName}${age}`}
+            <Highlighter
+              highlightClassName={newTheme.bold}
+              searchWords={inputSearch}
+              findChunks={findChunksAtBeginningOfWords}
+              autoEscape
+              textToHighlight={patientString}
+            />
           </div>
           <div className={newTheme.suggestionContainer_date}>
             Last Appointment:{' '}

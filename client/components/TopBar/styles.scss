@@ -304,10 +304,7 @@ $padding-size-border: 10px;
 .containerOpen {
   top: 35px;
   box-sizing: border-box;
-  padding-left: 12px;
-  padding-right: 12px;
   outline: none;
-  box-shadow: unset;
   max-height: 300px;
   overflow: auto;
 }
@@ -315,7 +312,6 @@ $padding-size-border: 10px;
 .suggestionsList {
   outline: none;
   box-sizing: border-box;
-  box-shadow: 0px 8px 4px -1px rgba(0, 0, 0, 0.1);
   background: $primary-white;
 }
 

@@ -21,7 +21,7 @@ type AccountViewer implements Node {
     before: String
     last: Int
     limit: Int
-    order: String
+    order: [[String]]
 
     """
     A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
@@ -146,7 +146,7 @@ type Family implements Node {
     before: String
     last: Int
     limit: Int
-    order: String
+    order: [[String]]
 
     """
     A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/

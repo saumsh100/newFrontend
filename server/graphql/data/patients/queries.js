@@ -1,7 +1,9 @@
 
-import { connectionArgs, connectionFromArray } from 'graphql-relay';
+import { GraphQLString, GraphQLList } from 'graphql';
+import { connectionArgs, getOffsetWithDefault } from 'graphql-relay';
 import { resolver, defaultArgs, defaultListArgs } from 'graphql-sequelize';
 import { patientType, patientConnection } from './types';
+import { connectionFromArrayWithoutSlice } from '../../util';
 import { Patient } from 'CareCruModels';
 
 const patientResolver = resolverOptions => resolver(Patient, resolverOptions);
@@ -17,15 +19,33 @@ export default resolverOptions => ({
   patients: {
     type: patientConnection,
     // Here we join both connection args and sequelize args as possible
-    args: Object.assign(connectionArgs, defaultListArgs()),
-    resolve: async (_, args) => {
+    args: Object.assign(connectionArgs, defaultListArgs(), {
+      order: {
+        type: new GraphQLList(GraphQLList(GraphQLString)),
+      },
+    }),
+    resolve: async (_, args, context) => {
       // separate sequelize args from connections args
       const { limit, order, where, offset, ...rest } = args;
+
+      const limitDefaultValue = () => rest.first || rest.last;
+
+      const limitValue = limit || limitDefaultValue();
+
       // merge sequelize args to resolverOptions from the viewer
-      const options = Object.assign(resolverOptions, { limit, order, where, offset });
+      const options = {
+        limit: limitValue,
+        order,
+        where,
+        offset: getOffsetWithDefault(rest.after + 1, offset),
+      };
+
       // use the options on the sequelize call and the rest of the args on Relay
-      const data = await Patient.findAndCountAll(options);
-      return { ...connectionFromArray(data.rows, rest), totalCount: data.count };
+      const data = await Patient.findAndCountAll(resolverOptions.before(options, args, context));
+      const connectionData = connectionFromArrayWithoutSlice(data.rows, rest, {
+        arrayLength: data.count,
+      });
+      return { ...connectionData, totalCount: data.count };
     },
   },
 });

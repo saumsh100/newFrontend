@@ -51,7 +51,7 @@ import TextArea from './TextArea';
 import TrendLine from './TrendLine';
 import IconCard from './IconCard';
 import PractitionerAvatar from './PractitionerAvatar';
-import Search from './Search';
+import Search from './Search'; // eslint-disable-line
 import RangeSlider from './RangeSlider';
 import Star from './Star';
 import Stars from './Stars';
@@ -67,13 +67,15 @@ import ChartStats from './ChartGrid';
 import { FlexGrid, Stats } from './FlexGrid';
 import Filters from './Filters';
 import DoubleIcon from './DoubleIcon';
-import VButton from './Button';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 import FBLoginButton from './FBLoginButton';
 import VCard from './VCard';
 import Well from './Well';
 import PatientPopover from './PatientPopover';
 import RelayComponentRenderer from './RelayComponentRenderer';
+import Highlighter from './Highlighter';
+
+const VButton = Button;
 
 export {
   AccountLogo,
@@ -159,6 +161,7 @@ export {
   VCard,
   Well,
   RelayComponentRenderer,
+  Highlighter,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';
