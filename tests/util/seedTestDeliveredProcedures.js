@@ -16,6 +16,7 @@ const deliveredProcedure1 = {
   createdAt: '2017-07-19T00:14:30.932Z',
   entryDate: '2017-07-19T00:14:30.932Z',
   updatedAt: new Date(),
+  pmsId: '2',
   patientId,
   procedureCode: code,
   procedureCodeId: `CDA-${code}`,
@@ -48,4 +49,5 @@ async function wipeTestDeliveredProcedures() {
 module.exports = {
   seedTestDeliveredProcedures,
   wipeTestDeliveredProcedures,
+  deliveredProcedure1,
 };

@@ -7,7 +7,7 @@ import wipeModel from '../../util/wipeModel';
 import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { patientId, seedTestPatients, wipeTestPatients } from '../../util/seedTestPatients';
 import { code, seedTestProcedures, wipeTestProcedures } from '../../util/seedTestProcedures';
-import { seedTestDeliveredProcedures, wipeTestDeliveredProcedures } from '../../util/seedTestDeliveredProcedures';
+import { seedTestDeliveredProcedures, wipeTestDeliveredProcedures, deliveredProcedure1 } from '../../util/seedTestDeliveredProcedures';
 import { omitPropertiesFromBody, getModelsArray, omitProperties } from '../../util/selectors';
 
 import {
@@ -146,8 +146,42 @@ describe('/api/deliveredProcedures', () => {
         });
     });
   });
-});
 
+  describe('DELETE /', () => {
+    beforeEach(async () => {
+      await seedTestDeliveredProcedures();
+    });
+
+    test('/:deliveredProcedureId - delete a deliveredProcedure', () => {
+      return request(app)
+        .delete(`${rootUrl}/${deliveredProcedure1.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/:deliveredProcedureId - delete a delivered procedure Id then undelete it with batch', () => {
+      return request(app)
+        .delete(`${rootUrl}/${deliveredProcedure1.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204)
+        .then(() => {
+          return request(app)
+            .post(`${rootUrl}/connector/batch`)
+            .set('Authorization', `Bearer ${token}`)
+            .send([deliveredProcedure1])
+            .expect(201)
+            .then(({ body }) => {
+              body = omitPropertiesFromBody(body);
+              expect(body).toMatchSnapshot();
+            });
+        });
+    });
+  });
+});
 
 describe('Revenue Functions', () => {
   beforeAll(async () => {

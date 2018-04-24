@@ -1,4 +1,5 @@
-const { procedureExistsValidation } = require('../util/validators');
+
+const { procedureExistsValidation, validateAccountIdPmsId } = require('../util/validators');
 
 const CountryToDentalCode = {
   CA: 'CDA',
@@ -74,6 +75,12 @@ export default function (sequelize, DataTypes) {
 
     pmsId: {
       type: DataTypes.STRING,
+      validate: {
+        // validator for if pmsId and accountId are a unique combo
+        isUnique(value, next) {
+          return validateAccountIdPmsId(DeliveredProcedure, value, this, next);
+        },
+      },
     },
 
     units: {
