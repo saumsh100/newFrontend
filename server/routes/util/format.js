@@ -18,6 +18,7 @@ const pluralToSingularMap = {
   weeklySchedule: 'weeklySchedule',
   configurations: 'configuration',
   events: 'event',
+  patientRecalls: 'patientRecall',
 };
 
 const toNormalize = {

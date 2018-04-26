@@ -34,6 +34,7 @@ import callsRouter from './calls';
 import servicesRouter from './services';
 import segmentsRouter from './segments';
 import revenueRouter from './revenue';
+import patientRecallsRouter from './patientRecalls';
 
 import tableRouter from './table';
 import correspondencesRouter from './correspondences';
@@ -74,5 +75,6 @@ apiRouter.use('/services', servicesRouter);
 apiRouter.use('/table', tableRouter);
 apiRouter.use('/correspondences', correspondencesRouter);
 apiRouter.use('/revenue', revenueRouter);
+apiRouter.use('/patientRecalls', patientRecallsRouter);
 
 export default apiRouter;

@@ -47,6 +47,7 @@ const SUPERADMIN = {
   users: allowAll,
 
   deliveredProcedures: allowAll,
+  patientRecalls: allowAll,
 
   listings: allow('read'),
 

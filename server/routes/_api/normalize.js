@@ -174,6 +174,10 @@ const sentRecallSchema = () => {
   });
 };
 
+const patientRecallSchema = () => {
+  return new schema.Entity('patientRecalls');
+};
+
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
 var _chatSchema = chatSchema();
@@ -197,6 +201,7 @@ const SCHEMAS = {
   service: serviceSchema(),
   textMessage: textMessageSchema(),
   user: userSchema(),
+  patientRecall: patientRecallSchema(),
   patientUser: patientUserSchema(),
   permission: permissionSchema(),
   practitioner: practitionerSchema(),
@@ -232,6 +237,7 @@ const SCHEMAS = {
   syncClientErrors: [syncClientErrorSchema()],
   reminders: [reminderSchema()],
   recalls: [recallSchema()],
+  patientRecalls: [patientRecallSchema()],
   permissions: [permissionSchema()],
   practitioners: [practitionerSchema()],
   practitionerRecurringTimeOffs: [practitionerRecurringTimeOffsSchema()],

@@ -60,7 +60,7 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
       await d.validate(); // validate against schema
       validatedDocs.push(d);
     } catch (err) {
-      console.log(err)
+      console.error(err);
       errors.push(buildErrors(err, d));
     }
   }
