@@ -417,6 +417,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of patient recall sync",
+        "name": "PATIENT_RECALL_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -687,6 +696,15 @@ Object {
         "dataType": "integer",
         "description": "The batch size of daily schedule sync",
         "name": "DAILY_SCHEDULE_BATCH_SIZE",
+        "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "integer",
+        "description": "The batch size of patient recall sync",
+        "name": "PATIENT_RECALL_BATCH_SIZE",
         "value": "100",
       },
       "type": "configuration",

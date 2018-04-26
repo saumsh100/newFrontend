@@ -165,6 +165,17 @@ const ModelAttributes = {
     'status',
   ],
 
+  PatientRecall: [
+    'accountId',
+    'patientId',
+    'pmsId',
+    'dueDate',
+    'type',
+    'createdAt',
+    'updatedAt',
+    'deletedAt',
+  ],
+
   PatientUser: [
     'email',
     'phoneNumber',
@@ -299,6 +310,11 @@ const SERIALIZERS = {
 
   patient: new Serializer('patient', makeConfig({
     attributes: ModelAttributes.Patient,
+    pluralizeType: false,
+  })),
+
+  patientRecall: new Serializer('patientRecall', makeConfig({
+    attributes: ModelAttributes.PatientRecall,
     pluralizeType: false,
   })),
 
