@@ -1,6 +1,5 @@
 
 
-import moment from 'moment';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -9,6 +8,7 @@ import jsonapi from '../../util/jsonapi';
 import { Permission, PatientUser, Request, User, Account } from '../../../_models';
 import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
 import { formatPhoneNumber } from '../../../util/formatters';
+import { setDateToTimezone } from '../../../util/time';
 
 import {
   sendAppointmentRequested,
@@ -18,7 +18,6 @@ import {
 } from '../../../lib/mail';
 
 const { namespaces } = require('../../../config/globals');
-
 
 const requestsRouter = Router();
 
@@ -94,7 +93,8 @@ requestsRouter.post('/', async (req, res, next) => {
         },
       });
       const { email, firstName, lastName } = patientUser;
-      const { name, sendRequestEmail } = account;
+      const { name, sendRequestEmail, timezone } = account;
+
       // Send Email
 
       if (sendRequestEmail) {
@@ -126,11 +126,11 @@ requestsRouter.post('/', async (req, res, next) => {
                 },
                 {
                   name: 'APPOINTMENT_DATE',
-                  content: moment(req.body.startDate).format('MMMM Do YYYY'),
+                  content: setDateToTimezone(req.body.startDate, timezone).format('MMMM Do YYYY'),
                 },
                 {
                   name: 'APPOINTMENT_TIME',
-                  content: moment(req.body.startDate).format('h:mm a'),
+                  content: setDateToTimezone(req.body.startDate, timezone).format('h:mm a'),
                 },
               ],
             });
@@ -178,11 +178,11 @@ requestsRouter.post('/', async (req, res, next) => {
           },
           {
             name: 'APPOINTMENT_DATE',
-            content: moment(req.body.startDate).format('MMMM Do YYYY'),
+            content: setDateToTimezone(req.body.startDate, timezone).format('MMMM Do YYYY'),
           },
           {
             name: 'APPOINTMENT_TIME',
-            content: moment(req.body.startDate).format('h:mm a'),
+            content: setDateToTimezone(req.body.startDate, timezone).format('h:mm a'),
           },
           {
             name: 'PATIENT_REQUEST_FOR',
@@ -350,7 +350,7 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const patientUser = await PatientUser.findById(patientRequestingId);
       const account = await Account.findById(accountId);
       const { email, firstName } = patientUser;
-      const { name, phoneNumber, contactEmail, website } = account;
+      const { name, phoneNumber, contactEmail, website, timezone } = account;
       const { startDate } = req.request;
       const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
@@ -398,11 +398,11 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
           },
           {
             name: 'APPOINTMENT_DATE',
-            content: moment(startDate).format('MMMM Do YYYY'),
+            content: setDateToTimezone(startDate, timezone).format('MMMM Do YYYY'),
           },
           {
             name: 'APPOINTMENT_TIME',
-            content: moment(startDate).format('h:mm a'),
+            content: setDateToTimezone(startDate, timezone).format('h:mm a'),
           },
           {
             name: 'PATIENT_REQUEST_FOR',
@@ -443,7 +443,7 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
       const account = await Account.findById(requestClean.accountId);
       const { email, firstName } = patientUser;
 
-      const { name, phoneNumber, contactEmail, website } = account;
+      const { name, phoneNumber, contactEmail, website, timezone } = account;
       const { startDate } = req.appointment;
 
       // Early return so its not dependant on email sending
@@ -499,11 +499,11 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
           },
           {
             name: 'APPOINTMENT_DATE',
-            content: moment(startDate).format('MMMM Do YYYY'),
+            content: setDateToTimezone(startDate, timezone).format('MMMM Do YYYY'),
           },
           {
             name: 'APPOINTMENT_TIME',
-            content: moment(startDate).format('h:mm a'),
+            content: setDateToTimezone(startDate, timezone).format('h:mm a'),
           },
           {
             name: 'PATIENT_REQUEST_FOR',
