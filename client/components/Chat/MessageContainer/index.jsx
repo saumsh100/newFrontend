@@ -1,17 +1,11 @@
 
 import React, { PropTypes, Component } from 'react';
+import immutable from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import moment from 'moment';
-import {
-  Avatar,
-  SContainer,
-  SBody,
-  SFooter,
-  Icon,
-  Tooltip,
-} from '../../library';
+import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip } from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
 import { setNewChat } from '../../../reducers/chat';
@@ -45,12 +39,15 @@ class MessageContainer extends Component {
     this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
-  createNewChat(request) {
-    return this.props.createNewChat(request);
-  }
-
-  sendMessage(request) {
-    return this.props.sendChatMessage(request);
+  getMessageTime(message) {
+    return moment(message).calendar(null, {
+      sameDay: '[Today], h:mm a',
+      nextDay: '[Tomorrow]',
+      nextWeek: 'dddd',
+      lastDay: '[Yesterday], h:mm a',
+      lastWeek: '[Last] dddd h:mm a',
+      sameElse: 'YYYY/MM/DD, h:mm a',
+    });
   }
 
   sendMessageHandler(values) {
@@ -70,7 +67,7 @@ class MessageContainer extends Component {
       accountId,
     };
 
-    let requestObject = {
+    const requestObject = {
       message: values.message,
       patient,
       userId,
@@ -81,21 +78,21 @@ class MessageContainer extends Component {
     }
 
     if (!requestObject.chatId) {
-      return this.createNewChat(requestObject)
-          .then((chat) => {
-            const newChatId = Object.keys(chat.chats)[0];
-            requestObject.chatId = newChatId;
-            return this.sendMessage(requestObject);
-          })
-          .then(() => {
-            this.props.selectChat(requestObject.chatId);
-            this.props.setNewChat(null);
-            this.props.reset('chatMessageForm_newChat');
-            this.setState({ sendingMessage: false });
-          })
-          .catch(() => {
-            this.setState({ sendingMessage: false });
-          });
+      this.createNewChat(requestObject)
+        .then((chat) => {
+          requestObject.chatId = Object.keys(chat.chats)[0];
+          return this.sendMessage(requestObject);
+        })
+        .then(() => {
+          this.props.selectChat(requestObject.chatId);
+          this.props.setNewChat(null);
+          this.props.reset('chatMessageForm_newChat');
+          this.setState({ sendingMessage: false });
+        })
+        .catch(() => {
+          this.setState({ sendingMessage: false });
+        });
+      return;
     }
 
     this.sendMessage(requestObject)
@@ -108,15 +105,12 @@ class MessageContainer extends Component {
       .catch(() => this.setState({ sendingMessage: false }));
   }
 
-  getMessageTime(message) {
-    return moment(message).calendar(null, {
-      sameDay: '[Today], h:mm a',
-      nextDay: '[Tomorrow]',
-      nextWeek: 'dddd',
-      lastDay: '[Yesterday], h:mm a',
-      lastWeek: '[Last] dddd h:mm a',
-      sameElse: 'YYYY/MM/DD, h:mm a',
-    })
+  sendMessage(request) {
+    return this.props.sendChatMessage(request);
+  }
+
+  createNewChat(request) {
+    return this.props.createNewChat(request);
   }
 
   isWithinTimePeriod(startDate, testingDate, maxIntervalValue = 1, maxIntervalUnit = 'hours') {
@@ -126,12 +120,12 @@ class MessageContainer extends Component {
   }
 
   groupChatMessages(textMessages) {
-    let group = [];
+    const group = [];
     let currentGroup = {
       messages: [],
     };
 
-    textMessages.map((message) => {
+    textMessages.forEach((message) => {
       if (!currentGroup.time) {
         currentGroup.time = message.createdAt;
       }
@@ -149,7 +143,7 @@ class MessageContainer extends Component {
         };
       }
 
-      currentGroup.messages.push(message);
+      return currentGroup.messages.push(message);
     });
 
     group.push(currentGroup);
@@ -160,37 +154,33 @@ class MessageContainer extends Component {
     const { selectedPatient } = this.props;
 
     return messages.map((message, index) => {
-      const isFromPatient = message.get('from') !== this.props.activeAccount.toJS().twilioPhoneNumber;
+      const isFromPatient =
+        message.get('from') !== this.props.activeAccount.toJS().twilioPhoneNumber;
       const dotsIcon = (
-        <Icon
-          icon="ellipsis-h"
-          size={2}
-          className={styles.dotsIcon}
-          id={`dots_${message.id}`}
-        />
+        <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
       );
 
       const markUnreadText = (
         <div
           className={styles.markUnreadButton}
-          onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt')) }
+          onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
         >
           Mark unread
         </div>
       );
 
-      const avatar = isFromPatient ? (
-        <Avatar
-          size="xs"
-          className={styles.patientAvatar}
-          user={selectedPatient}
-        />
-      ) : null;
+      const avatarUser = isFromPatient ? selectedPatient : message.user;
+
+      const avatar = <Avatar size="xs" className={styles.bubbleAvatar} user={avatarUser} />;
 
       let optionsWrapper = null;
 
       const messageOptions = isFromPatient ? (
-        <div ref={(reference) => { optionsWrapper = reference; }}>
+        <div
+          ref={(reference) => {
+            optionsWrapper = reference;
+          }}
+        >
           <Tooltip
             trigger={['click', 'hover']}
             overlay={markUnreadText}
@@ -203,17 +193,14 @@ class MessageContainer extends Component {
       ) : null;
 
       return (
-        <div
-          key={index}
-          data-test-id="item_chatMessage"
-          className={styles.messageWrapper}
-        >
+        <div key={index} data-test-id="item_chatMessage" className={styles.messageWrapper}>
           <div
             key={message.get('id')}
             className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
           >
-            {avatar}
+            {isFromPatient && avatar}
             <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
+            {!isFromPatient && avatar}
             {messageOptions}
           </div>
         </div>
@@ -225,28 +212,19 @@ class MessageContainer extends Component {
     const { textMessages } = this.props;
 
     return this.groupChatMessages(textMessages).map((group, index) => {
-      const time = (
-        <div className={styles.time}>
-          {this.getMessageTime(group.time)}
-        </div>
-      );
+      const time = <div className={styles.time}>{this.getMessageTime(group.time)}</div>;
 
       return (
-        <div className={styles.groupWrapper}>
+        <div className={styles.groupWrapper} key={index}>
           {time}
-          <div>
-            {this.renderMessageGroup(group.messages)}
-          </div>
+          <div>{this.renderMessageGroup(group.messages)}</div>
         </div>
       );
     });
   }
 
   render() {
-    const {
-      selectedChat,
-      newChat,
-    } = this.props;
+    const { selectedChat, newChat } = this.props;
 
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
 
@@ -255,7 +233,7 @@ class MessageContainer extends Component {
         <SBody
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
-          refCallback={node => this.scrollContainer = node}
+          refCallback={node => (this.scrollContainer = node)}
         >
           {selectedChat && this.renderMessagesTree()}
           <div className={styles.raise} />
@@ -273,10 +251,21 @@ class MessageContainer extends Component {
 }
 
 MessageContainer.propTypes = {
-  textMessages: PropTypes.array,
-  activeAccount: PropTypes.object,
-  selectedChat: PropTypes.object,
-  newChat: PropTypes.object,
+  textMessages: PropTypes.oneOfType([
+    PropTypes.instanceOf(Array),
+    PropTypes.instanceOf(immutable.OrderedMap),
+  ]),
+  activeAccount: PropTypes.shape({
+    id: PropTypes.string,
+    twilioPhoneNumber: PropTypes.string,
+    toJS: PropTypes.func,
+  }),
+  selectedChat: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  newChat: PropTypes.shape({
+    id: PropTypes.string,
+  }),
   selectedPatient: PropTypes.shape({
     id: PropTypes.string,
   }),
@@ -286,6 +275,7 @@ MessageContainer.propTypes = {
   reset: PropTypes.func,
   sendChatMessage: PropTypes.func,
   createNewChat: PropTypes.func,
+  markAsUnread: PropTypes.func,
 };
 
 function mapStateToProps({ entities, auth, chat }) {
@@ -307,14 +297,17 @@ function mapStateToProps({ entities, auth, chat }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    selectChat,
-    setNewChat,
-    reset,
-    sendChatMessage,
-    createNewChat,
-    markAsUnread,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      selectChat,
+      setNewChat,
+      reset,
+      sendChatMessage,
+      createNewChat,
+      markAsUnread,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
