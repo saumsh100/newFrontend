@@ -12,6 +12,7 @@ const TextMessageSchema = {
   body: null,
   read: null,
   user: null,
+  userId: null,
 };
 
 export default class TextMessage extends createModel(TextMessageSchema) {

@@ -152,10 +152,15 @@ class MessageContainer extends Component {
 
   renderMessageGroup(messages) {
     const { selectedPatient } = this.props;
+    const activeAccount = this.props.activeAccount.toJS();
+    const accountTwilio = activeAccount.twilioPhoneNumber;
+    const botAvatar = {
+      fullAvatarUrl: '/images/donna.png',
+    };
 
     return messages.map((message, index) => {
-      const isFromPatient =
-        message.get('from') !== this.props.activeAccount.toJS().twilioPhoneNumber;
+      const isFromPatient = message.get('from') !== accountTwilio;
+
       const dotsIcon = (
         <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
       );
@@ -169,9 +174,20 @@ class MessageContainer extends Component {
         </div>
       );
 
-      const avatarUser = isFromPatient ? selectedPatient : message.user;
+      let avatarUser = selectedPatient;
 
-      const avatar = <Avatar size="xs" className={styles.bubbleAvatar} user={avatarUser} />;
+      if (!isFromPatient) {
+        avatarUser = message.userId && message.userId !== null ? message.user : botAvatar;
+      }
+
+      const avatar = (
+        <Avatar
+          size="xs"
+          className={styles.bubbleAvatar}
+          user={avatarUser}
+          isPatient={isFromPatient}
+        />
+      );
 
       let optionsWrapper = null;
 
