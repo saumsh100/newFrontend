@@ -1,4 +1,3 @@
-
 @import '../../../ui';
 
 .time {
@@ -8,7 +7,7 @@
   color: $inactive-color;
 }
 
-.patientAvatar {
+.bubbleAvatar {
   margin-top: -10px;
 }
 
@@ -19,7 +18,8 @@
   padding: 10px 20px;
   box-sizing: border-box;
 
-  &:hover, .visibleOptions {
+  &:hover,
+  .visibleOptions {
     .dotsIcon {
       opacity: 1;
     }
@@ -28,7 +28,7 @@
 
 .dotsIcon {
   opacity: 0;
-  transition: opacity .3s;
+  transition: opacity 0.3s;
   line-height: 0px;
   margin-left: 10px;
   cursor: pointer;
