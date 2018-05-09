@@ -12,6 +12,7 @@ import entities from './entities';
 import schedule from './schedule';
 import dialogs from './dialogs';
 import patientList from './patientList';
+import patientSearch from './patientSearch';
 import chat from './chat';
 import requests from './requests';
 import accountSettings from './accountSettings';
@@ -39,6 +40,7 @@ const appReducer = combineReducers({
   requests,
   currentDialog: dialogs,
   patientList,
+  patientSearch,
   chat,
   availabilities,
   apiRequests,

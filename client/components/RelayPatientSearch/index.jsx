@@ -1,6 +1,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Downshift from 'downshift';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
@@ -10,6 +12,7 @@ import Loader from '../Loader';
 import RelayPatientFetcher from '../RelayPatientFetcher';
 import PatientSuggestion from '../PatientSuggestion';
 import { StyleExtender } from '../Utils/Themer';
+import { setPatientRecentSearched } from '../../reducers/patientSearch';
 import styles from './styles.scss';
 
 const defaultState = {
@@ -31,6 +34,7 @@ class PatientSearch extends Component {
     this.handleLoadMore = this.handleLoadMore.bind(this);
     this.clearPatientsState = this.clearPatientsState.bind(this);
     this.scrollTo = this.scrollTo.bind(this);
+    this.renderList = this.renderList.bind(this);
   }
 
   componentDidMount() {
@@ -68,6 +72,110 @@ class PatientSearch extends Component {
     }
   }
 
+  /**
+   * State reducer for downshift
+   * @param {*} state current Downshift state
+   * @param {*} changes incoming changes
+   */
+  handleDownshiftStateChange(state, changes) {
+    console.log('downshift state', state);
+    console.log('downshift changes', changes);
+    switch (changes.type) {
+      /**
+       * do not clear the state on blur and mouseup
+       */
+      case Downshift.stateChangeTypes.blurInput:
+      case Downshift.stateChangeTypes.mouseUp:
+        return {
+          ...changes,
+          inputValue: state.inputValue,
+          isOpen: state.isOpen,
+          highlightedIndex: state.highlightedIndex,
+        };
+      default:
+        return changes;
+    }
+  }
+
+  /**
+   * Render function for the relay query renderer
+   * returns a function to be used as render prop
+   */
+  renderList({ newTheme, currValue, highlightedIndex, getItemProps, theme, renderListFooter }) {
+    return ({ props, error, ...data }) => {
+      if (error) {
+        console.error(error);
+      }
+
+      let hasNextPage = false;
+      let totalCount = this.state.totalCount;
+      let isLoading = this.state.isLoading;
+      let endCursor = '';
+      let results = [];
+
+      if (props !== null) {
+        ({ hasNextPage, endCursor } = props.accountViewer.patients.pageInfo);
+        results = props.accountViewer.patients.edges.map(v => v.node);
+        totalCount = props.accountViewer.patients.totalCount;
+        isLoading = false;
+      } else {
+        isLoading = true;
+      }
+
+      const patients = this.state.patients.concat(results);
+
+      return (
+        <div>
+          {totalCount > 0 && (
+            <div
+              className={newTheme.suggestionsContainerOpen}
+              ref={(node) => {
+                this.suggestionsNode = node;
+              }}
+            >
+              <InfiniteScroll
+                className={newTheme.suggestionsList}
+                loadMore={this.handleLoadMore(endCursor, patients, totalCount)}
+                loader={<Loader />}
+                hasMore={hasNextPage}
+                initialLoad
+                useWindow={false}
+                threshold={50}
+                pageStart={0}
+              >
+                {patients.map((patient, index) => (
+                  <PatientSuggestion
+                    key={patient.id}
+                    onKeyDown={this.handleKeyDown}
+                    patient={patient}
+                    index={index}
+                    inputValue={currValue}
+                    highlightedIndex={highlightedIndex}
+                    getItemProps={getItemProps}
+                    theme={theme}
+                    {...data}
+                  />
+                ))}
+              </InfiniteScroll>
+            </div>
+          )}
+          {isLoading
+            ? renderListFooter(currValue, 'Searching...', isLoading)
+            : renderListFooter(
+              currValue,
+              totalCount === 0
+                ? 'No results found for'
+                : `${totalCount} Patients found for the search`
+            )}
+        </div>
+      );
+    };
+  }
+
+  /**
+   * Factory function to create the footer component with the theme
+   * @param {*} newTheme
+   */
   renderListFooterFactory(newTheme) {
     return (inputValue, text, isLoading = false) => (
       <div className={newTheme.totalCount}>
@@ -80,7 +188,7 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const { onChange, inputProps, theme } = this.props;
+    const { onChange, inputProps, theme, recentSearchedPatients } = this.props;
     const newTheme = StyleExtender(theme, styles);
 
     const renderListFooter = this.renderListFooterFactory(newTheme);
@@ -93,7 +201,11 @@ class PatientSearch extends Component {
 
     return (
       <Downshift
-        onChange={onChange}
+        onChange={(patient) => {
+          this.props.setPatientRecentSearched(patient);
+          onChange(patient);
+        }}
+        stateReducer={this.handleDownshiftStateChange}
         onStateChange={debounce(({ inputValue }) => {
           if (typeof inputValue !== 'undefined') {
             this.setState({
@@ -123,84 +235,49 @@ class PatientSearch extends Component {
                 this.inputComponent = node;
               }}
             />
-            {isOpen && typeof currValue !== 'undefined' && currValue !== '' ? (
-              <RelayPatientFetcher
-                search={currValue}
-                after={this.state.endCursor}
-                handleSearchRequest={this.clearPatientsState}
-                render={({ props, ...data }) => {
-                  let hasNextPage = false;
-                  let totalCount = this.state.totalCount;
-                  let isLoading = this.state.isLoading;
-                  let endCursor = '';
-                  let results = [];
-
-                  if (props !== null) {
-                    ({ hasNextPage, endCursor } = props.accountViewer.patients.pageInfo);
-                    results = props.accountViewer.patients.edges.map(v => v.node);
-                    totalCount = props.accountViewer.patients.totalCount;
-                    isLoading = false;
-                  } else {
-                    isLoading = true;
-                  }
-
-                  const patients = this.state.patients.concat(results);
-
-                  return (
-                    <div className={newTheme.suggestionsWrapper}>
-                      {totalCount > 0 && (
-                        <div
-                          className={newTheme.suggestionsContainerOpen}
-                          ref={(node) => {
-                            this.suggestionsNode = node;
-                          }}
-                        >
-                          <InfiniteScroll
-                            className={newTheme.suggestionsList}
-                            loadMore={this.handleLoadMore(endCursor, patients, totalCount)}
-                            loader={<Loader />}
-                            hasMore={hasNextPage}
-                            initialLoad
-                            useWindow={false}
-                            threshold={50}
-                            pageStart={0}
-                          >
-                            {patients.map((patient, index) => (
-                              <PatientSuggestion
-                                key={patient.id}
-                                onKeyDown={this.handleKeyDown}
-                                patient={patient}
-                                index={index}
-                                inputValue={currValue}
-                                highlightedIndex={highlightedIndex}
-                                getItemProps={getItemProps}
-                                theme={theme}
-                                {...data}
-                              />
-                            ))}
-                          </InfiniteScroll>
-                        </div>
-                      )}
-                      {isLoading
-                        ? renderListFooter(currValue, 'Searching...', isLoading)
-                        : renderListFooter(
-                          currValue,
-                          totalCount === 0
-                            ? 'No results found for'
-                            : `${totalCount} Patients found for the search`
-                        )}
-                    </div>
-                  );
-                }}
-              />
-            ) : (
-              isOpen &&
-              inputValue !== '' && (
-                <div className={newTheme.suggestionsWrapper}>
-                  {renderListFooter(currValue, 'Searching...', true)}{' '}
+            <div className={newTheme.suggestionsWrapper}>
+              {isOpen && typeof currValue !== 'undefined' && currValue !== '' ? (
+                /**
+                 * typed something and state is already updated
+                 */
+                <RelayPatientFetcher
+                  search={currValue}
+                  after={this.state.endCursor}
+                  handleSearchRequest={this.clearPatientsState}
+                  render={this.renderList({
+                    newTheme,
+                    currValue,
+                    highlightedIndex,
+                    getItemProps,
+                    theme,
+                    renderListFooter,
+                    recentSearchedPatients,
+                  })}
+                />
+              ) : (
+                /**
+                 * typed something but relay ain't updated the state yet
+                 */
+                isOpen && inputValue !== '' && renderListFooter(currValue, 'Searching...', true)
+              )}
+              {recentSearchedPatients.length > 0 && (
+                /**
+                 * render recent searches if has any in the props
+                 */
+                <div className={newTheme.recentPatientsWrapper}>
+                  <div className={newTheme.recentPatientsTitle}>Recent patients</div>
+                  {recentSearchedPatients.map((patient, index) => (
+                    <PatientSuggestion
+                      key={patient.id}
+                      patient={patient}
+                      index={index}
+                      getItemProps={getItemProps}
+                      theme={newTheme}
+                    />
+                  ))}
                 </div>
-              )
-            )}
+              )}
+            </div>
           </div>
         )}
       />
@@ -220,6 +297,27 @@ PatientSearch.propTypes = {
   theme: PropTypes.shape({
     container: PropTypes.string,
   }),
+  recentSearchedPatients: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      ccId: PropTypes.string,
+      pmsId: PropTypes.string,
+      firstName: PropTypes.string,
+      lastName: PropTypes.string,
+      birthDate: PropTypes.string,
+      avatarUrl: PropTypes.string,
+      lastApptDate: PropTypes.string,
+    })
+  ),
+  setPatientRecentSearched: PropTypes.func,
 };
 
-export default PatientSearch;
+const mapStateToProps = ({ patientSearch }) => ({
+  recentSearchedPatients: patientSearch.get('recentSearchedPatients').toArray(),
+});
+
+const mapActionsToProps = dispatch => bindActionCreators({ setPatientRecentSearched }, dispatch);
+
+const enhance = connect(mapStateToProps, mapActionsToProps);
+
+export default enhance(PatientSearch);

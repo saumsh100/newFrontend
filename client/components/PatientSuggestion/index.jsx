@@ -50,13 +50,18 @@ const PatientSuggestion = ({
   );
 };
 
+PatientSuggestion.defaultProps = {
+  inputValue: '',
+  highlightedIndex: -1,
+};
+
 PatientSuggestion.propTypes = {
   patient: PropTypes.shape({
     id: PropTypes.string,
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     birthDate: PropTypes.string,
-  }),
+  }).isRequired,
   index: PropTypes.number,
   inputValue: PropTypes.string,
   highlightedIndex: PropTypes.number,

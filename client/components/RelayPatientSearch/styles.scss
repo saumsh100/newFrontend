@@ -42,3 +42,19 @@
   border-top: 1px solid $disabled-color;
   text-align: center;
 }
+
+.suggestionContainer {
+  cursor: pointer;
+  &:hover {
+    background: $chat-lightgrey;
+  }
+}
+
+.recentPatients {
+  &Wrapper {
+    background: $primary-lightgray;
+  }
+  &Title {
+    padding: 10px;
+  }
+}
