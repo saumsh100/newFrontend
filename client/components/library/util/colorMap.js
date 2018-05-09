@@ -12,7 +12,7 @@ export default {
   lightBlue: '#8CBCD6',
   facebookBlue: '#395998',
   lightBlue: '#8CBCD6',
-  white: '#FFFFFF'
+  white: '#FFFFFF',
 };
 
 export const hexToRgbA = (hex, opacity) => {
@@ -23,7 +23,7 @@ export const hexToRgbA = (hex, opacity) => {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
     c = `0x${c.join('')}`;
-    return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c &255].join(',')}, ${opacity})`;
+    return `rgba(${[(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',')}, ${opacity})`;
   }
   throw new Error('Bad Hex');
 };

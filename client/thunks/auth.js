@@ -152,12 +152,13 @@ export function logout() {
 }
 
 export function resetPassword(email) {
-  return (dispatch, getState) => axios
-    .post('/auth/resetpassword', { email })
-    .then(() => {})
-    .catch((err) => {
-      console.log(err);
-    });
+  return (dispatch, getState) =>
+    axios
+      .post('/auth/resetpassword', { email })
+      .then(() => {})
+      .catch((err) => {
+        console.log(err);
+      });
 }
 
 export function resetUserPassword(location, values) {

@@ -18,10 +18,8 @@ const renderFamilyMembers = head => (node, i, arr) => {
     lastName: node.lastName,
     birthDate: node.birthDate,
     age: moment().diff(moment(node.birthDate), 'years'),
-    lastApptDate:
-      node.lastApptDate && moment(node.lastApptDate).format('MMM D, YYYY'),
-    nextApptDate:
-      node.nextApptDate && moment(node.nextApptDate).format('MMM D, YYYY'),
+    lastApptDate: node.lastApptDate && moment(node.lastApptDate).format('MMM D, YYYY'),
+    nextApptDate: node.nextApptDate && moment(node.nextApptDate).format('MMM D, YYYY'),
     dueForHygieneDate: node.dueForHygieneDate,
     dueForRecallExamDate: node.dueForRecallExamDate,
   };
@@ -53,9 +51,7 @@ const Family = ({ family, render }) => {
 
   return (
     <div className={styles.familyMemberContainer}>
-      {render(
-        members.sort(sortFamilyMembers(head)).map(renderFamilyMembers(head))
-      )}
+      {render(members.sort(sortFamilyMembers(head)).map(renderFamilyMembers(head)))}
     </div>
   );
 };

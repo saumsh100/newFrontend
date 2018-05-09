@@ -16,7 +16,12 @@ const generateChartOptions = () => {
     beginAtZero: true,
     padding: 20,
     callback(value, index) {
-      if (typeof value === 'number' && value % 1000 === 0 && value !== 0 && ((value / 1000) % 2 === 0)) {
+      if (
+        typeof value === 'number' &&
+        value % 1000 === 0 &&
+        value !== 0 &&
+        (value / 1000) % 2 === 0
+      ) {
         return `${value / 1000}k`;
       }
       if (typeof value !== 'number' || value === 0) {
@@ -29,24 +34,28 @@ const generateChartOptions = () => {
     maintainAspectRatio: false,
     responsive: true,
     scales: {
-      yAxes: [{
-        ticks,
-        gridLines: {
-          display: true,
-          drawTicks: false,
-          color: '#00000',
-          tickMarkLength: 20,
-          offsetGridLines: true,
+      yAxes: [
+        {
+          ticks,
+          gridLines: {
+            display: true,
+            drawTicks: false,
+            color: '#00000',
+            tickMarkLength: 20,
+            offsetGridLines: true,
+          },
         },
-      }],
+      ],
 
-      xAxes: [{
-        ticks,
-        gridLines: {
-          display: false,
-          tickMarkLength: 20,
+      xAxes: [
+        {
+          ticks,
+          gridLines: {
+            display: false,
+            tickMarkLength: 20,
+          },
         },
-      }],
+      ],
       scaleLabel: {
         paddingTop: 30,
       },
@@ -64,9 +73,7 @@ const generateChartOptions = () => {
 
         return `${month} ${day}`;
       },
-      label: (tooltipItem, data) => {
-        return `$${tooltipItem.yLabel}`;
-      },
+      label: (tooltipItem, data) => `$${tooltipItem.yLabel}`,
     },
   };
 
@@ -81,49 +88,42 @@ const generateChartOptions = () => {
   };
 };
 
-const generateDataSet = (labels, data) => {
-  return {
-    labels,
-    datasets: [
-      {
-        fill: true,
-        lineTension: 0,
-        backgroundColor: '#242c36',
-        borderColor: colorMap.white,
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0.0,
-        borderJoinStyle: 'miter',
-        pointBorderColor: colorMap.white,
-        pointBackgroundColor: '#242c36',
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
-        pointHoverBackgroundColor: colorMap.green,
-        pointHoverBorderColor: colorMap.dark,
-        pointHoverBorderWidth: 2,
-        pointRadius: 5,
-        pointHitRadius: 10,
-        data,
-      },
-    ],
-  };
-};
+const generateDataSet = (labels, data) => ({
+  labels,
+  datasets: [
+    {
+      fill: true,
+      lineTension: 0,
+      backgroundColor: '#242c36',
+      borderColor: colorMap.white,
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: colorMap.white,
+      pointBackgroundColor: '#242c36',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: colorMap.green,
+      pointHoverBorderColor: colorMap.dark,
+      pointHoverBorderWidth: 2,
+      pointRadius: 5,
+      pointHitRadius: 10,
+      data,
+    },
+  ],
+});
 
 export default function RevenueChart(props) {
-  const {
-    labels,
-    data,
-    isValid,
-  } = props;
+  const { labels, data, isValid } = props;
 
   return (
     <div className={styles.chart}>
-      {isValid ?
-        <Line
-          options={generateChartOptions()}
-          data={generateDataSet(labels, data)}
-        /> :
-        <div className={styles.noRevenue}> No Revenue </div>}
+      {isValid ? (
+        <Line options={generateChartOptions()} data={generateDataSet(labels, data)} />
+      ) : (
+        <div className={styles.noRevenue}> No Revenue </div>
+      )}
     </div>
   );
 }

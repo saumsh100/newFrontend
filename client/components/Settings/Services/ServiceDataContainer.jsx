@@ -1,15 +1,16 @@
 
-import React, {Component, PropTypes, } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import ServiceDataItem from './ServiceDataItem';
-import { updateEntityRequest, deleteEntityRequest, createEntityRequest } from '../../../thunks/fetchEntities';
+import {
+  updateEntityRequest,
+  deleteEntityRequest,
+  createEntityRequest,
+} from '../../../thunks/fetchEntities';
 import ServicePractitioners from './ServicePractitioners';
 import SettingsCard from '../Shared/SettingsCard';
-import {
-  Card,
-  IconButton,
-} from '../../library';
+import { Card, IconButton } from '../../library';
 import styles from './styles.scss';
 
 class ServiceDataContainer extends Component {
@@ -48,17 +49,11 @@ class ServiceDataContainer extends Component {
         <SettingsCard
           title={selectedService.get('name')}
           bodyClass={styles.serviceDataBody}
-          rightActions={(
-            <div
-              data-test-id="removeService"
-              onClick={this.deleteService}
-            >
-              <IconButton
-                icon="trash"
-                iconType="solid"
-              />
+          rightActions={
+            <div data-test-id="removeService" onClick={this.deleteService}>
+              <IconButton icon="trash" iconType="solid" />
             </div>
-          )}
+          }
         >
           <ServiceDataItem
             key={`${selectedService.get('id')}basicdata`}
@@ -90,13 +85,15 @@ ServiceDataContainer.propTypes = {
   createEntityRequest: PropTypes.func,
 };
 
-
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-    deleteEntityRequest,
-    createEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+      deleteEntityRequest,
+      createEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapActionsToProps);

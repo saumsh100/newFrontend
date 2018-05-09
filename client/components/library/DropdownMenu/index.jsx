@@ -43,7 +43,13 @@ export class DropdownMenu extends Component {
       children,
       isOpen: this.state.isOpen,
       close: this.close,
-      toggle: <this.props.labelComponent {...labelProps} onClick={this.toggle} data-test-id={this.props['data-test-id']}/>,
+      toggle: (
+        <this.props.labelComponent
+          {...labelProps}
+          onClick={this.toggle}
+          data-test-id={this.props['data-test-id']}
+        />
+      ),
 
       // Default
       closeOnInsideClick,
@@ -89,13 +95,10 @@ export function MenuSeparator() {
 }
 
 export function NestedDropdownMenu(props) {
-  return <RNestedDropdownMenu {...props}/>;
+  return <RNestedDropdownMenu {...props} />;
 }
 
-DropdownMenu.propTypes = {
-
-
-};
+DropdownMenu.propTypes = {};
 
 MenuItem.propTypes = {
   icon: PropTypes.string,

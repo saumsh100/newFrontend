@@ -1,11 +1,12 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Form, Field, } from '../../../library';
+import { Form, Field } from '../../../library';
 import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
 import styles from './styles.scss';
 
-const maxUnitSize = value => value && value > 60 ? 'Must be less than or equal to 180' : undefined;
+const maxUnitSize = value =>
+  (value && value > 60 ? 'Must be less than or equal to 180' : undefined);
 
 export default function SuperAdminForm({ onSubmit, activeAccount }) {
   const initialValues = {
@@ -39,53 +40,33 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       {lastSyncComponent}
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
-          <div className={styles.paddingText} >
-            Can Send Reminders
-          </div>
+          <div className={styles.paddingText}>Can Send Reminders</div>
           <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReminders">
-            <Field
-              component="Toggle"
-              name="canSendReminders"
-            />
+            <Field component="Toggle" name="canSendReminders" />
           </div>
         </div>
       </div>
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
-          <div className={styles.paddingText}>
-            Can Send Reviews
-          </div>
+          <div className={styles.paddingText}>Can Send Reviews</div>
           <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReviews">
-            <Field
-              component="Toggle"
-              name="canSendReviews"
-            />
+            <Field component="Toggle" name="canSendReviews" />
           </div>
         </div>
       </div>
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
-          <div className={styles.paddingText} >
-            Can Send Recalls
-          </div>
+          <div className={styles.paddingText}>Can Send Recalls</div>
           <div className={styles.paddingField_toggle} data-test-id="toggle_canSendRecalls">
-            <Field
-              component="Toggle"
-              name="canSendRecalls"
-            />
+            <Field component="Toggle" name="canSendRecalls" />
           </div>
         </div>
       </div>
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
-          <div className={styles.paddingText} >
-            Send Request Emails
-          </div>
+          <div className={styles.paddingText}>Send Request Emails</div>
           <div className={styles.paddingField_toggle} data-test-id="toggle_sendRequestEmail">
-            <Field
-              component="Toggle"
-              name="sendRequestEmail"
-            />
+            <Field component="Toggle" name="sendRequestEmail" />
           </div>
         </div>
       </div>
@@ -101,11 +82,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         type="tel"
         data-test-id="destinationPhoneNumber"
       />
-      <Field
-        name="vendastaId"
-        label="Vendasta Id"
-        data-test-id="vendastaId"
-      />
+      <Field name="vendastaId" label="Vendasta Id" data-test-id="vendastaId" />
       <Field
         name="unit"
         label="Schedule Unit"
@@ -120,17 +97,8 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         validate={[notNegative, maxUnitSize]}
         data-test-id="timeInterval"
       />
-      <Field
-        name="facebookUrl"
-        label="Facebook URL"
-        data-test-id="facebookUrl"
-      />
-      <Field
-        name="googlePlaceId"
-        label="Google Place ID"
-        data-test-id="googlePlaceId"
-      />
+      <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
+      <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />
     </Form>
   );
-
 }

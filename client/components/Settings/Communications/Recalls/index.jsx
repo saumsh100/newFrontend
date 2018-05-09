@@ -3,7 +3,12 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
-import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
+import {
+  updateEntityRequest,
+  fetchEntities,
+  createEntityRequest,
+  deleteEntityRequest,
+} from '../../../../thunks/fetchEntities';
 import {
   Grid,
   Row,
@@ -80,12 +85,7 @@ class Recalls extends Component {
 
   saveAdvancedSettings(values) {
     const { activeAccount } = this.props;
-    const {
-      recallBufferNumber,
-      recallBufferInterval,
-      recallStartTime,
-      recallEndTime,
-    } = values;
+    const { recallBufferNumber, recallBufferInterval, recallStartTime, recallEndTime } = values;
 
     const newValues = {
       recallBuffer: `${recallBufferNumber} ${recallBufferInterval}`,
@@ -96,25 +96,22 @@ class Recalls extends Component {
     const alert = {
       success: {
         title: 'Recall Settings Updated',
-          body: `Successfully updated the advanced settings for recalls`,
+        body: 'Successfully updated the advanced settings for recalls',
       },
 
       error: {
         title: 'Failed to Update Recall Settings',
-          body: `Error trying to update the advanced settings for recalls`,
+        body: 'Error trying to update the advanced settings for recalls',
       },
     };
 
-    this.props.updateEntityRequest({ url: `/api/accounts/${activeAccount.id}`, values: newValues, alert })
+    this.props
+      .updateEntityRequest({ url: `/api/accounts/${activeAccount.id}`, values: newValues, alert })
       .then(this.toggleAdvancedSettings);
   }
 
   newRecall(values) {
-    const {
-      primaryType,
-      interval,
-      type,
-    } = values;
+    const { primaryType, interval, type } = values;
 
     let { number } = values;
     if (type === 'after') {
@@ -138,7 +135,12 @@ class Recalls extends Component {
       },
     };
 
-    this.props.createEntityRequest({ url: `/api/accounts/${this.props.activeAccount.id}/recalls`, entityData, alert })
+    this.props
+      .createEntityRequest({
+        url: `/api/accounts/${this.props.activeAccount.id}/recalls`,
+        entityData,
+        alert,
+      })
       .then(() => {
         this.setState({
           isAdding: false,
@@ -170,7 +172,11 @@ class Recalls extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ url: `/api/accounts/${this.props.activeAccount.id}`, values, alert });
+    this.props.updateEntityRequest({
+      url: `/api/accounts/${this.props.activeAccount.id}`,
+      values,
+      alert,
+    });
   }
 
   changeRecareDate(val) {
@@ -187,7 +193,11 @@ class Recalls extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ url: `/api/accounts/${this.props.activeAccount.id}`, values, alert });
+    this.props.updateEntityRequest({
+      url: `/api/accounts/${this.props.activeAccount.id}`,
+      values,
+      alert,
+    });
   }
 
   render() {
@@ -199,8 +209,18 @@ class Recalls extends Component {
     }
 
     const advancedSettingsActions = [
-      { label: 'Cancel', onClick: this.toggleAdvancedSettings, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.saveAdvancedSettings, component: RemoteSubmitButton, props: { color: 'blue', form: 'recallAdvancedSettings' } },
+      {
+        label: 'Cancel',
+        onClick: this.toggleAdvancedSettings,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.saveAdvancedSettings,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: 'recallAdvancedSettings' },
+      },
     ];
 
     const arr = activeAccount.recallBuffer.split(' ');
@@ -213,7 +233,12 @@ class Recalls extends Component {
 
     const addRecallActions = [
       { label: 'Cancel', onClick: this.toggleAdding, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.newReminder, component: RemoteSubmitButton, props: { color: 'blue', form: 'newRecall' } },
+      {
+        label: 'Save',
+        onClick: this.newReminder,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: 'newRecall' },
+      },
     ];
 
     const selectedRecall = this.props.recalls.get(selectedRecallId);
@@ -224,12 +249,7 @@ class Recalls extends Component {
 
     let previewComponent = null;
     if (selectedRecall) {
-      previewComponent = (
-        <RecallPreview
-          recall={selectedRecall}
-          account={activeAccount}
-        />
-      );
+      previewComponent = <RecallPreview recall={selectedRecall} account={activeAccount} />;
     }
 
     const numHygieneMonths = activeAccount.hygieneInterval || '6 months';
@@ -240,31 +260,27 @@ class Recalls extends Component {
         title="Recalls Settings"
         // TODO: we have removed add button for now
         rightActions={
-          role === 'SUPERADMIN' ?
-            (
-              <div>
-                <Button
-                  border="blue"
-                  onClick={this.toggleAdvancedSettings}
-                >
-                  Advanced Settings
-                </Button>
-                <Button
-                  onClick={this.toggleAdding}
-                  data-test-id="button_createNewRecall"
-                  color="blue"
-                >
-                  Add
-                </Button>
-              </div>
-            )
-          : null
+          role === 'SUPERADMIN' ? (
+            <div>
+              <Button border="blue" onClick={this.toggleAdvancedSettings}>
+                Advanced Settings
+              </Button>
+              <Button
+                onClick={this.toggleAdding}
+                data-test-id="button_createNewRecall"
+                color="blue"
+              >
+                Add
+              </Button>
+            </div>
+          ) : null
         }
-
-        leftColumn={(
+        leftColumn={
           <div>
-            {this.props.recalls.toArray().filter(r => convertIntervalToMs(r.interval) >= 0).map((recall, i) => {
-              return (
+            {this.props.recalls
+              .toArray()
+              .filter(r => convertIntervalToMs(r.interval) >= 0)
+              .map((recall, i) => (
                 <RecallsItem
                   key={recall.id}
                   recall={recall}
@@ -273,24 +289,19 @@ class Recalls extends Component {
                   selectRecall={this.selectRecall}
                   selected={recall.id === selectedRecallId}
                 />
-              );
-            })}
+              ))}
             <TouchPointItem
               className={styles.dueDateItem}
               linesBoxClass={styles.dueDateLinesBox}
-              labelComponent={(
+              labelComponent={
                 <div className={styles.dueDateWrapper}>
                   <TouchPointLabel title="Due Date" className={styles.dueDateLabel} />
                 </div>
-              )}
-
-              mainComponent={(
+              }
+              mainComponent={
                 <div className={styles.bottomBox}>
                   <div className={styles.bottomIconContainer}>
-                    <IconCircle
-                      icon="calendar"
-                      color="blue"
-                    />
+                    <IconCircle icon="calendar" color="blue" />
                   </div>
                   <div className={styles.bottomLabel}>
                     <Grid>
@@ -321,10 +332,12 @@ class Recalls extends Component {
                     </Grid>
                   </div>
                 </div>
-              )}
+              }
             />
-            {this.props.recalls.toArray().filter(r => convertIntervalToMs(r.interval) < 0).map((recall, i) => {
-              return (
+            {this.props.recalls
+              .toArray()
+              .filter(r => convertIntervalToMs(r.interval) < 0)
+              .map((recall, i) => (
                 <RecallsItem
                   lastRecall={recall.id === lastRecallId}
                   key={recall.id}
@@ -334,11 +347,9 @@ class Recalls extends Component {
                   selectRecall={this.selectRecall}
                   selected={recall.id === selectedRecallId}
                 />
-              );
-            })}
+              ))}
           </div>
-        )}
-
+        }
         rightColumn={previewComponent}
       >
         <DialogBox
@@ -362,10 +373,7 @@ class Recalls extends Component {
           onEscKeyDown={this.toggleAdding}
           onOverlayClick={this.toggleAdding}
         >
-          <CreateRecallsForm
-            formName="newRecall"
-            sendEdit={this.newRecall}
-          />
+          <CreateRecallsForm formName="newRecall" sendEdit={this.newRecall} />
         </DialogBox>
       </CommunicationSettingsCard>
     );
@@ -386,7 +394,8 @@ Recalls.propTypes = {
 function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-  const recalls = entities.getIn(['recalls', 'models'])
+  const recalls = entities
+    .getIn(['recalls', 'models'])
     .filter(r => !r.isDeleted && !!r.interval)
     .sortBy(r => -convertIntervalToMs(r.interval));
 
@@ -398,13 +407,16 @@ function mapStateToProps({ entities, auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    createEntityRequest,
-    deleteEntityRequest,
-    updateEntityRequest,
-    reset,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      createEntityRequest,
+      deleteEntityRequest,
+      updateEntityRequest,
+      reset,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

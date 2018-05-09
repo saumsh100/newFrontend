@@ -14,9 +14,7 @@ export default function withFeatureFlag(BackupComponent, featureKey) {
       }
 
       render() {
-        const {
-          flags,
-        } = this.props;
+        const { flags } = this.props;
 
         const flagged = flags[featureKey];
 
@@ -42,5 +40,4 @@ export default function withFeatureFlag(BackupComponent, featureKey) {
 
     return connect(mapStateToProps, null)(FeatureFlaggedComponent);
   };
-};
-
+}

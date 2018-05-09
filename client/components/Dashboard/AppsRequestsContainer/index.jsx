@@ -104,19 +104,16 @@ class AppsRequestsContainer extends Component {
   }
 
   render() {
-    const {
-      appointments,
-      requests,
-      patients,
-      dashAppointments,
-    } = this.props;
+    const { appointments, requests, patients, dashAppointments } = this.props;
 
     const { index } = this.state;
 
     const browserHistory = createBrowserHistory();
     const location = browserHistory.location.pathname;
 
-    const filteredRequests = requests.filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+    const filteredRequests = requests.filter(
+      req => !req.get('isCancelled') && !req.get('isConfirmed')
+    );
 
     const isLoaded = dashAppointments;
 

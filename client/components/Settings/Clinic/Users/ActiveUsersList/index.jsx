@@ -1,10 +1,10 @@
+
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Avatar, ListItem, Button } from '../../../../library';
 import { deleteEntityRequest } from '../../../../../thunks/fetchEntities';
 import styles from '../styles.scss';
-
 
 class ActiveUsersList extends Component {
   constructor(props) {
@@ -30,29 +30,48 @@ class ActiveUsersList extends Component {
 
   render() {
     const { activeUser, role, currentUserId, userId, currentUserRole, edit } = this.props;
-    const badge = (userId === currentUserId ? <span className={styles.badge}>You</span> : null);
+    const badge = userId === currentUserId ? <span className={styles.badge}>You</span> : null;
     let button = null;
-    if ((currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') && role !== 'SUPERADMIN') {
-      button = (userId !== currentUserId ? <div className={styles.paddingRight}>
-        <Button className={styles.edit} onClick={edit} tertiary>Edit</Button></div> : null);
+    if (
+      (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
+      role !== 'SUPERADMIN'
+    ) {
+      button =
+        userId !== currentUserId ? (
+          <div className={styles.paddingRight}>
+            <Button className={styles.edit} onClick={edit} tertiary>
+              Edit
+            </Button>
+          </div>
+        ) : null;
     }
 
-    const check = (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') && (role !== 'SUPERADMIN' && role !== 'OWNER');
+    const check =
+      (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
+      (role !== 'SUPERADMIN' && role !== 'OWNER');
 
-    const deleteMe = check ? <Button className={styles.delete} onClick={() => this.deleteUser(activeUser.id, activeUser.firstName)}>Delete</Button> : null;
+    const deleteMe = check ? (
+      <Button
+        className={styles.delete}
+        onClick={() => this.deleteUser(activeUser.id, activeUser.firstName)}
+      >
+        Delete
+      </Button>
+    ) : null;
 
     return (
-      <ListItem
-        className={styles.userListItem}
-        data-test-id={activeUser.getName()}
-      >
+      <ListItem className={styles.userListItem} data-test-id={activeUser.getName()}>
         <div className={styles.main}>
           <Avatar className={styles.image} user={activeUser} />
           <div className={styles.userName}>
             <div>
-              <p className={styles.name}>{activeUser.getName()} {badge}</p>
+              <p className={styles.name}>
+                {activeUser.getName()} {badge}
+              </p>
             </div>
-            <p className={styles.email}>{activeUser.getUsername()} - {role}</p>
+            <p className={styles.email}>
+              {activeUser.getUsername()} - {role}
+            </p>
           </div>
         </div>
         {deleteMe}
@@ -73,9 +92,12 @@ ActiveUsersList.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    deleteEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      deleteEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapDispatchToProps);

@@ -5,15 +5,9 @@ import styles from './styles.scss';
 
 class AppointmentsBooked extends Component {
   render() {
-    const {
-      borderColor,
-      cardTitle,
-      labels,
-      dataSets,
+    const { borderColor, cardTitle, labels, dataSets } = this.props;
 
-    } = this.props;
-
-    //const test = dataSets[0].data.length;
+    // const test = dataSets[0].data.length;
     const ticks = {
       fontSize: 16,
       fontFamily: 'Gotham-Book',
@@ -37,27 +31,31 @@ class AppointmentsBooked extends Component {
       maintainAspectRatio: false,
       responsive: true,
       scales: {
-        yAxes: [{
-          ticks,
-          gridLines: {
-            beginAtZero: true,
-            drawTicks: false,
+        yAxes: [
+          {
+            ticks,
+            gridLines: {
+              beginAtZero: true,
+              drawTicks: false,
+            },
           },
-        }],
+        ],
 
-        xAxes: [{
-          ticks,
-          gridLines: {
-            display: true,
-            drawTicks: false,
-            drawOnChartArea: false,
+        xAxes: [
+          {
+            ticks,
+            gridLines: {
+              display: true,
+              drawTicks: false,
+              drawOnChartArea: false,
+            },
           },
-        }],
+        ],
       },
       barValueSpacing: 2,
     };
     return (
-      <Card className={styles.booked} >
+      <Card className={styles.booked}>
         <div className={styles.booked__header}>
           <CardHeader title={cardTitle} />
         </div>
@@ -74,6 +72,5 @@ class AppointmentsBooked extends Component {
     );
   }
 }
-
 
 export default AppointmentsBooked;

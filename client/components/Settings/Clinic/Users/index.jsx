@@ -1,10 +1,24 @@
 
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
-import { fetchEntities, deleteEntityRequest, createEntityRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
-import { List, ListItem, Grid, Header, DialogBox, Row, Button, DropdownSelect } from '../../../library';
+import {
+  fetchEntities,
+  deleteEntityRequest,
+  createEntityRequest,
+  updateEntityRequest,
+} from '../../../../thunks/fetchEntities';
+import {
+  List,
+  ListItem,
+  Grid,
+  Header,
+  DialogBox,
+  Row,
+  Button,
+  DropdownSelect,
+} from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
 import NewUserForm from './NewUserForm';
@@ -13,7 +27,7 @@ import InviteUserForm from './InviteUserForm';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
-class Users extends Component{
+class Users extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -131,7 +145,7 @@ class Users extends Component{
       role: this.state.editValue,
     };
 
-    const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`
+    const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`;
     let userOwner = false;
     let numOfOwners = 0;
     this.props.users.toArray().map((user, i) => {
@@ -139,7 +153,10 @@ class Users extends Component{
       if (!permission) {
         return null;
       }
-      if (this.state.editPermissionId === permission.toJS().id && permission.toJS().role === 'OWNER') {
+      if (
+        this.state.editPermissionId === permission.toJS().id &&
+        permission.toJS().role === 'OWNER'
+      ) {
         userOwner = true;
       }
       if (permission.toJS().role === 'OWNER') {
@@ -149,7 +166,7 @@ class Users extends Component{
     });
 
     if (numOfOwners === 1 && userOwner === true) {
-      alert('There must be one Owner!')
+      alert('There must be one Owner!');
     } else {
       const alert = {
         success: {
@@ -165,7 +182,6 @@ class Users extends Component{
   }
 
   reinitializeState() {
-
     const newState = {
       active: false,
       editActive: false,
@@ -211,11 +227,7 @@ class Users extends Component{
   render() {
     const formName = 'emailInvite';
     const { users, permissions, accounts, invites } = this.props;
-    const {
-      active,
-      editActive,
-      newActive,
-    } = this.state;
+    const { active, editActive, newActive } = this.state;
 
     let clinicName = null;
 
@@ -226,68 +238,87 @@ class Users extends Component{
       }
     }
 
-
-    let usersInvited = (<div className={styles.userListItem}>
-      <div className={styles.main}>
-        <p className={styles.name}>Users you have invited will show up here.</p>
+    let usersInvited = (
+      <div className={styles.userListItem}>
+        <div className={styles.main}>
+          <p className={styles.name}>Users you have invited will show up here.</p>
+        </div>
       </div>
-    </div>);
+    );
 
     if (invites.size !== 0) {
-      usersInvited = invites.toArray().map((invite) => {
-        return (
-          <InviteUsersList
-            key={invite.id}
-            id={invite.id}
-            email={invite.get('email')}
-            currentUserRole={this.state.role}
-            date={invite.get('createdAt')}
-            onDelete={this.deleteInvite.bind(null, invite.get('id'))}
-            mainStyle={styles.main}
-            nameStyle={styles.name}
-            emailStyle={styles.email}
-            userListStyle={styles.userListItem}
-            editStyles={styles.cancel}
-          />
-        );
-      })
+      usersInvited = invites.toArray().map(invite => (
+        <InviteUsersList
+          key={invite.id}
+          id={invite.id}
+          email={invite.get('email')}
+          currentUserRole={this.state.role}
+          date={invite.get('createdAt')}
+          onDelete={this.deleteInvite.bind(null, invite.get('id'))}
+          mainStyle={styles.main}
+          nameStyle={styles.name}
+          emailStyle={styles.email}
+          userListStyle={styles.userListItem}
+          editStyles={styles.cancel}
+        />
+      ));
     }
-    const options = [
-          { value: 'OWNER' },
-          { value: 'ADMIN' },
-          { value: 'MANAGER' },
-    ];
+    const options = [{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }];
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.sendInvite, component: RemoteSubmitButton, props: { color: 'blue', form: formName } },
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.sendInvite,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: formName },
+      },
     ];
 
     const actionsNewUser = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.sendNewUser, component: RemoteSubmitButton, props: { color: 'blue', form: 'newUser' } },
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.sendNewUser,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: 'newUser' },
+      },
     ];
 
     const editActions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
       { label: 'Edit', onClick: this.sendEdit, component: Button, props: { color: 'blue' } },
     ];
 
-    const addUserButton = (this.props.role === 'SUPERADMIN' ? (
-      <Button
-        className={styles.inviteUser}
-        onClick={this.addNewUser}
-        data-test-id="addUserButton"
-        secondary
-      >
-        Add a User
-      </Button>) : null);
+    const addUserButton =
+      this.props.role === 'SUPERADMIN' ? (
+        <Button
+          className={styles.inviteUser}
+          onClick={this.addNewUser}
+          data-test-id="addUserButton"
+          secondary
+        >
+          Add a User
+        </Button>
+      ) : null;
 
     return (
-      <SettingsCard
-        title="Users"
-        bodyClass={styles.usersBodyClass}
-      >
+      <SettingsCard title="Users" bodyClass={styles.usersBodyClass}>
         <DialogBox
           actions={actions}
           title="Email Invite"
@@ -349,10 +380,7 @@ class Users extends Component{
             </Button>
           </div>
         </Row>
-        <List
-          className={styles.userList}
-          data-test-id="activeUsersList"
-        >
+        <List className={styles.userList} data-test-id="activeUsersList">
           {users.toArray().map((user, i) => {
             const permission = permissions.get(user.permissionId);
             if (!permission) {
@@ -367,17 +395,21 @@ class Users extends Component{
                 currentUserId={this.state.userId}
                 userId={user.get('id')}
                 currentUserRole={this.state.role}
-                edit={this.editUser.bind(null, user.get('id'), permission.get('id'), permission.get('role'), i)}
+                edit={this.editUser.bind(
+                  null,
+                  user.get('id'),
+                  permission.get('id'),
+                  permission.get('role'),
+                  i
+                )}
               />
             );
           })}
         </List>
         <Row>
-         <Header className={styles.header} contentHeader title="Pending Invitations" />
+          <Header className={styles.header} contentHeader title="Pending Invitations" />
         </Row>
-        <List className={styles.userList}>
-          {usersInvited}
-        </List>
+        <List className={styles.userList}>{usersInvited}</List>
       </SettingsCard>
     );
   }
@@ -410,12 +442,15 @@ function mapStateToProps({ entities, auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    deleteEntityRequest,
-    createEntityRequest,
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      deleteEntityRequest,
+      createEntityRequest,
+      updateEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

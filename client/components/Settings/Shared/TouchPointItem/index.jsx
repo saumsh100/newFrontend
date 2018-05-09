@@ -46,7 +46,9 @@ export default function TouchPointItem(props) {
               linesBoxClass,
               noLines
                 ? classNames(styles.linesBox, selected ? styles[`boxSelected_${color}`] : {})
-                : selected ? styles[`linesBoxSelected_${color}`] : styles.linesBoxWithLines
+                : selected
+                  ? styles[`linesBoxSelected_${color}`]
+                  : styles.linesBoxWithLines
             )}
           >
             {mainComponent}

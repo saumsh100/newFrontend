@@ -5,30 +5,28 @@ import moment from 'moment';
 import { Form, Field } from '../../../../library';
 import styles from '../../styles.scss';
 
-import { maxLength, emailValidate, asyncValidateNewPatient } from '../../../../library/Form/validate';
+import {
+  maxLength,
+  emailValidate,
+  asyncValidateNewPatient,
+} from '../../../../library/Form/validate';
 
-const normalizeBirthdate = (value) => {
-  return value.trim();
-};
+const normalizeBirthdate = value => value.trim();
 
 const validateBirthdate = (value) => {
   const format = 'MM/DD/YYYY';
-  const pattern =/^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
+  const pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
   if (!pattern.test(value) && value !== undefined) {
     return format;
-  } else {
-    const date = moment(value, format);
-    const isValid = date.isValid();
-    if (!isValid && value !== undefined) {
-      return format;
-    }
+  }
+  const date = moment(value, format);
+  const isValid = date.isValid();
+  if (!isValid && value !== undefined) {
+    return format;
   }
 };
 
-const options = [
-  { value: 'Male' },
-  { value: 'Female' },
-];
+const options = [{ value: 'Male' }, { value: 'Female' }];
 
 export default function NewPatientForm({ onSubmit, formName }) {
   return (
@@ -55,13 +53,13 @@ export default function NewPatientForm({ onSubmit, formName }) {
         data-test-id="lastName"
       />
       <div className={styles.spacing}>
-      <Field
-        name="gender"
-        label="Gender"
-        component="DropdownSelect"
-        options={options}
-        data-test-id="gender"
-      />
+        <Field
+          name="gender"
+          label="Gender"
+          component="DropdownSelect"
+          options={options}
+          data-test-id="gender"
+        />
       </div>
       <Field
         name="mobilePhoneNumber"

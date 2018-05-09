@@ -25,7 +25,8 @@
   }
 }
 
-.editModal {}
+.editModal {
+}
 
 .editModalBody {
   padding: 0;
@@ -61,7 +62,7 @@
 }
 
 .content {
-  background: #FFFFFF;
+  background: #ffffff;
   nav {
     background: $primary-white;
     font-weight: $large-weight;
@@ -125,14 +126,14 @@
 .formContainer {
   height: 520px;
   max-height: 520px;
-  background: #FFFFFF;
+  background: #ffffff;
   padding: 35px 40px 25px 40px;
 }
 
 .remoteSubmit {
   display: flex;
   justify-content: flex-end;
-  background: #FFFFFF;
+  background: #ffffff;
 
   &_buttonDelete {
     padding-right: 10px;

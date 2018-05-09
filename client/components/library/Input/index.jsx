@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -56,25 +57,19 @@ function Input(props) {
 
   const errorClassName = inputStyle.error;
 
-  const errorComponent = error && (
-    <span className={errorClassName}>{error}</span>
-  );
+  const errorComponent = error && <span className={errorClassName}>{error}</span>;
 
   // TODO: fix this so that it does not throw an error!
   /* if (IconComponent) {
     iconComponent = <IconComponent className={iconClassName} />;
   } else */
-  const icComponent = props.iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
+  const icComponent =
+    props.iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
 
   // TODO: use classNames to avoid "undefined" being a className
   return (
     <div className={`${inputStyle.group} ${classStyles}`}>
-      <input
-        type={type}
-        className={inputClassName}
-        {...inputProps}
-        ref={props.refCallBack}
-      />
+      <input type={type} className={inputClassName} {...inputProps} ref={props.refCallBack} />
       <span className={inputStyle.bar} />
       <label className={labelClassName}>{label}</label>
       {errorComponent}

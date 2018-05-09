@@ -1,5 +1,4 @@
-
-@import "../../../../../ui";
+@import '../../../../../ui';
 
 .familyFormContainer {
   display: flex;
@@ -24,8 +23,9 @@
 .patientSearchInput {
   height: 100%;
   background-color: $color-white;
-  
-  > span::before, span::after {
+
+  > span::before,
+  span::after {
     bottom: -1px;
   }
 

@@ -1,10 +1,9 @@
 
-import React, {Component, PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Form, Field } from '../../../library';
 import styles from './styles.scss';
 
-export default function IntervalForm({ handleSubmit, activeAccount, }) {
-
+export default function IntervalForm({ handleSubmit, activeAccount }) {
   const initialValues = {
     timeInterval: activeAccount.get('timeInterval'),
   };

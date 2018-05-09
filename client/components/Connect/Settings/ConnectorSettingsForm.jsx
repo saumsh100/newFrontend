@@ -1,10 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import {
-  Form,
-  Field,
-  VButton,
-} from '../../library';
+import { Form, Field, VButton } from '../../library';
 import styles from './form.scss';
 
 const options = [
@@ -58,16 +54,9 @@ export default function ConnectorSettingsForm({ initialValues, onSubmit }) {
         options={options}
         required
       />
-      <VButton
-        className={styles.nextButton}
-        color="dark"
-        iconRight="angle-right"
-        title="Next"
-      />
+      <VButton className={styles.nextButton} color="dark" iconRight="angle-right" title="Next" />
     </Form>
   );
 }
 
-ConnectorSettingsForm.propTypes = {
-
-};
+ConnectorSettingsForm.propTypes = {};

@@ -26,19 +26,18 @@ class DayViewBody extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const {
-      appsFetched,
-      chairsFetched,
-      pracsFetched,
-    } = this.props;
+    const { appsFetched, chairsFetched, pracsFetched } = this.props;
 
     const allFetched = appsFetched && chairsFetched && pracsFetched;
 
     const currentDate = moment(this.props.schedule.get('scheduleDate'));
     const nextDate = moment(nextProps.schedule.get('scheduleDate'));
 
-    if (((nextProps.scheduleView !== this.props.scheduleView)
-      || (currentDate.toISOString() !== nextDate.toISOString())) && allFetched) {
+    if (
+      (nextProps.scheduleView !== this.props.scheduleView ||
+        currentDate.toISOString() !== nextDate.toISOString()) &&
+      allFetched
+    ) {
       this.headerComponent.scrollLeft = 0;
     }
   }
@@ -87,7 +86,6 @@ class DayViewBody extends Component {
     this.timeComponent = node;
   }
 
-
   render() {
     const {
       startHour,
@@ -125,19 +123,23 @@ class DayViewBody extends Component {
     const reset = Math.ceil((sortedPractitioners.length - colorLen) / colorLen);
 
     for (let j = 1; j <= reset; j++) {
-      for (let i = 0; i < (sortedPractitioners.length - colorLen); i++) {
+      for (let i = 0; i < sortedPractitioners.length - colorLen; i++) {
         colors.push(colors[i]);
       }
     }
 
-    let practitionersArray = sortedPractitioners.map((prac, index) => Object.assign({}, prac.toJS(), {
-      color: colors[index],
-      prettyName: prac.getPrettyName(),
-    }));
+    let practitionersArray = sortedPractitioners.map((prac, index) =>
+      Object.assign({}, prac.toJS(), {
+        color: colors[index],
+        prettyName: prac.getPrettyName(),
+      })
+    );
 
     // Display the practitioners that have been checked on the filters card.
     const checkedPractitioners = schedule.toJS().practitionersFilter;
-    practitionersArray = practitionersArray.filter(pr => checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive);
+    practitionersArray = practitionersArray.filter(
+      pr => checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive
+    );
 
     const practitionersSlot = allFetched ? (
       <PractitionersSlot
@@ -158,7 +160,10 @@ class DayViewBody extends Component {
 
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
-    const chairsArray = chairs.toArray().sort(SortByName).filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
+    const chairsArray = chairs
+      .toArray()
+      .sort(SortByName)
+      .filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
 
     const chairsSlot = allFetched ? (
       <ChairsSlot
@@ -182,7 +187,7 @@ class DayViewBody extends Component {
     return (
       <SContainer noBorder className={styles.card} id="scheduleContainer">
         <SHeader className={styles.header}>
-         <ColumnHeader
+          <ColumnHeader
             scheduleView={scheduleView}
             entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
             headerComponentDidMount={this.headerComponentDidMount}
@@ -193,7 +198,7 @@ class DayViewBody extends Component {
             allFetched={allFetched}
           />
         </SHeader>
-        <SBody className={styles.dayView} >
+        <SBody className={styles.dayView}>
           <TimeColumn
             timeSlots={timeSlots}
             timeSlotHeight={timeSlotHeight}
@@ -224,13 +229,18 @@ DayViewBody.propTypes = {
   chairsFetched: PropTypes.bool,
 };
 
-
 function mapStateToProps({ schedule, apiRequests }) {
   const scheduleView = schedule.toJS().scheduleView;
 
-  const appsFetched = (apiRequests.get('appSchedule') ? apiRequests.get('appSchedule').wasFetched : null);
-  const pracsFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
-  const chairsFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);
+  const appsFetched = apiRequests.get('appSchedule')
+    ? apiRequests.get('appSchedule').wasFetched
+    : null;
+  const pracsFetched = apiRequests.get('pracSchedule')
+    ? apiRequests.get('pracSchedule').wasFetched
+    : null;
+  const chairsFetched = apiRequests.get('chairsSchedule')
+    ? apiRequests.get('chairsSchedule').wasFetched
+    : null;
 
   return {
     scheduleView,

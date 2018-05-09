@@ -5,10 +5,7 @@ import { List, ListItem } from '../../../../library';
 import styles from './styles.scss';
 
 export default function SmartFilters(props) {
-  const {
-    setSmartFilter,
-    smartFilter,
-  } = props;
+  const { setSmartFilter, smartFilter } = props;
 
   const smartFilters = [
     {
@@ -77,13 +74,15 @@ export default function SmartFilters(props) {
     },
   ];
 
-
   return (
     <List className={styles.smartFilter} data-test-id={'smartFiltersList'}>
       {smartFilters.map((filter, index) => {
         let borderStyle = {};
 
-        if ((smartFilter && filter.label === smartFilter.label) || (filter.label === 'All Patients' && !smartFilter)) {
+        if (
+          (smartFilter && filter.label === smartFilter.label) ||
+          (filter.label === 'All Patients' && !smartFilter)
+        ) {
           borderStyle = {
             borderLeft: '3px solid #FF715A',
           };

@@ -1,4 +1,3 @@
-
 @import '../../ui.scss';
 
 .dashboard {
@@ -23,7 +22,6 @@
     display: none;
   }
 }
-
 
 .dateInput {
   display: flex;
@@ -73,7 +71,7 @@
 }
 
 .revenueColFlex {
- @extend .colFlex;
+  @extend .colFlex;
   padding-top: 0px;
   @media screen and (max-width: 1266px) {
     flex-direction: column;

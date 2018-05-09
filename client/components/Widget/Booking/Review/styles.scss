@@ -1,4 +1,3 @@
-
 @import '../../../../ui';
 
 .reviewAndBookWrapper {
@@ -17,8 +16,8 @@
   height: 30px;
   display: flex;
   align-items: center;
-  color: #C1D2D8;
-  flex:1;
+  color: #c1d2d8;
+  flex: 1;
 }
 
 .gridContainer {
@@ -26,7 +25,6 @@
   box-sizing: border-box;
   clear: both;
 }
-
 
 .submitButtonWrapper {
   display: flex;
@@ -108,33 +106,32 @@
   position: relative;
   padding-bottom: 40px;
 }
-.labelPatient{
-  flex:1;
+.labelPatient {
+  flex: 1;
   padding: 13px;
 }
-.slotButton{
+.slotButton {
   padding: 0;
   text-align: left;
 }
-.editPatient{
+.editPatient {
   text-transform: uppercase;
-  border:0;
+  border: 0;
   color: $primary-darkgrey;
   font-size: $small-size;
   margin: 0 13px;
   cursor: pointer;
-  &:hover{
-  color: $primary-dark;
-    
+  &:hover {
+    color: $primary-dark;
   }
 }
-.addNewPatient{
+.addNewPatient {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 40px;
-  border:0;
+  border: 0;
   background: $chat-lightgrey;
   text-transform: uppercase;
   color: $primary-dark;
@@ -143,8 +140,8 @@
   font-family: $medium-font;
   cursor: pointer;
   padding: 0 0 0 12px;
-  &:hover{
-    background:$primary-lightgrey;
+  &:hover {
+    background: $primary-lightgrey;
   }
 }
 .fieldWrapper {
@@ -152,64 +149,64 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
-  &.flexibleField{
+  &.flexibleField {
     // display: flex;
     @media screen and (min-width: $widget-mobile-width) {
       // flex: 1;
       box-sizing: border-box;
     }
   }
-  &.fullFieldWrapper{
+  &.fullFieldWrapper {
     width: 100%;
   }
-  > div{
+  > div {
     width: 100%;
   }
 }
-.toggleInput{
+.toggleInput {
   position: absolute;
   right: 0;
   bottom: 25px;
   border: 0;
   padding: 0;
-  outline:none;
-  cursor:pointer;
+  outline: none;
+  cursor: pointer;
 }
-.inputError{
-  top:31px;
+.inputError {
+  top: 31px;
 }
-.errorIcon{
+.errorIcon {
   color: red;
 }
-.inputInsurance{
+.inputInsurance {
   padding-top: 0;
 }
-.reviewAndBookSlot{
+.reviewAndBookSlot {
   text-align: left !important;
   justify-content: flex-start !important;
 }
-.reviewAndBookInputWrapper{
+.reviewAndBookInputWrapper {
   padding: 0 0 20px !important;
 }
 
-.reviewAndBookPlaceholder{
-  &::placeholder{
+.reviewAndBookPlaceholder {
+  &::placeholder {
     font-style: italic;
     color: $inactive-color;
-    font-weight: 200
+    font-weight: 200;
   }
 }
 
-.flexWrapper{
+.flexWrapper {
   display: flex;
 }
 
-.boxWrapper{
- margin-bottom: 20px;
+.boxWrapper {
+  margin-bottom: 20px;
 }
-.iconWrapper{
+.iconWrapper {
   position: absolute;
   right: 0;
   bottom: 30px;
-  opacity: .5;
+  opacity: 0.5;
 }

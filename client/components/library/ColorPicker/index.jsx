@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { ChromePicker } from 'react-color';
 import Popover from 'react-popover';
@@ -25,7 +26,6 @@ class ColorPicker extends Component {
   }
 
   render() {
-
     const swatchColor = {
       background: this.props.color,
     };
@@ -37,11 +37,7 @@ class ColorPicker extends Component {
           className={styles.colorPickerPopover}
           onOuterAction={this.handleClose}
           isOpen={this.state.displayColorPicker}
-          body={[(
-            <ChromePicker
-              {...this.props}
-            />
-          )]}
+          body={[<ChromePicker {...this.props} />]}
           preferPlace="below"
           tipSize={12}
         >

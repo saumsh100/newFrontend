@@ -20,7 +20,7 @@ class DonnaToDoTabs extends Component {
     const divWidth = document.getElementById('imageWrapper').clientWidth;
     const divHeight = document.getElementById('imageWrapper').clientHeight;
     const indexHeight = document.getElementById('toDoTab').clientHeight;
-    const startingPosition = (indexHeight * (this.props.toDoIndex + 1)) - (indexHeight / 2);
+    const startingPosition = indexHeight * (this.props.toDoIndex + 1) - indexHeight / 2;
 
     this.setState({
       startingPosition,
@@ -34,7 +34,7 @@ class DonnaToDoTabs extends Component {
     if (this.props.toDoIndex !== nextProps.toDoIndex) {
       const indexHeight = document.getElementById('toDoTab').clientHeight + 11;
 
-      const startingPosition = (indexHeight * (nextProps.toDoIndex + 1)) - (indexHeight / 2);
+      const startingPosition = indexHeight * (nextProps.toDoIndex + 1) - indexHeight / 2;
       this.setState({
         startingPosition,
       });
@@ -55,7 +55,7 @@ class DonnaToDoTabs extends Component {
 
     if (this.state.startingPosition > this.state.divHeight) {
       top = `${this.state.divHeight}px`;
-      height = `${(this.state.startingPosition - this.state.divHeight) + 3}px`;
+      height = `${this.state.startingPosition - this.state.divHeight + 3}px`;
     }
 
     const lineStyle2 = {
@@ -87,7 +87,7 @@ class DonnaToDoTabs extends Component {
     };
 
     const lineStyle6 = {
-      top: `${this.state.divHeight + (this.state.indexHeight * 1.5)}px`,
+      top: `${this.state.divHeight + this.state.indexHeight * 1.5}px`,
       left: '85%',
       width: '15%',
       height: '2px',
@@ -95,14 +95,12 @@ class DonnaToDoTabs extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.header}>
-          Donna's To-Do List
-        </div>
+        <div className={styles.header}>Donna's To-Do List</div>
         <div className={styles.body}>
           <div className={styles.toDosList}>
             <Tabs
               index={this.props.toDoIndex}
-              onChange={(i) => this.props.changeTab(i)}
+              onChange={i => this.props.changeTab(i)}
               className={styles.tabs}
               noUnderLine
             >
@@ -133,11 +131,7 @@ class DonnaToDoTabs extends Component {
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />
-              <Tab
-                label={'Waitlist Queue'}
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
+              <Tab label={'Waitlist Queue'} className={styles.tab} activeClass={styles.activeTab} />
             </Tabs>
           </div>
 

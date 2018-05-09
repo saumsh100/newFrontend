@@ -43,6 +43,7 @@ class SuggestionToggle extends Component {
   componentDidMount() {
     this[`suggestion_toggle_${this.props.name}`].focus();
   }
+
   /**
    * Check if the value of the update is
    * different from the actual value, if so
@@ -124,7 +125,13 @@ class SuggestionToggle extends Component {
         <div className={theme.toggleValueDiv}>
           <label
             htmlFor={`suggestion_toggle_${name}`}
-            style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+            style={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
           >
             <div>{this.state.displayValue}</div>
             <select
@@ -134,7 +141,7 @@ class SuggestionToggle extends Component {
               onKeyDown={this.handleKeydown}
               style={{ position: 'absolute', top: '-30px', zIndex: '-1' }}
               id={`suggestion_toggle_${name}`}
-              ref={input => {
+              ref={(input) => {
                 this[`suggestion_toggle_${name}`] = input;
               }}
             >

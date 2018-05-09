@@ -29,7 +29,9 @@ class MessageTextArea extends Component {
     const { chat, textBoxValue } = this.props;
     const messageArea = document.getElementsByName('message')[0];
     const caretPossition = messageArea.selectionStart;
-    const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(caretPossition)}`;
+    const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(
+      caretPossition
+    )}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
     this.emojiDropdown.toggle();
   }
@@ -39,18 +41,14 @@ class MessageTextArea extends Component {
 
     const sendButtonProps = {
       className: canSend && !sendingMessage ? styles.sendIcon : styles.sendIconDisabled,
-      onClick: canSend && !sendingMessage ? () => this.props.submit(`chatMessageForm_${chat.id}`) : null,
+      onClick:
+        canSend && !sendingMessage ? () => this.props.submit(`chatMessageForm_${chat.id}`) : null,
     };
 
     return (
       <div {...sendButtonProps} data-test-id="button_sendMessage">
-        <Icon
-          icon="paper-plane"
-          type="solid"
-        />
-        <label>
-          SEND
-        </label>
+        <Icon icon="paper-plane" type="solid" />
+        <label>SEND</label>
       </div>
     );
   }
@@ -58,16 +56,16 @@ class MessageTextArea extends Component {
   renderEmojiDropdown() {
     const emojiButtonLabel = props => (
       <Button {...props}>
-        <Icon
-          icon="smile"
-        />
+        <Icon icon="smile" />
       </Button>
     );
 
     return (
       <div className={styles.smileIcon}>
         <DropdownMenu
-          ref={(dropdown) => { this.emojiDropdown = dropdown; }}
+          ref={(dropdown) => {
+            this.emojiDropdown = dropdown;
+          }}
           labelComponent={emojiButtonLabel}
           closeOnInsideClick={false}
           className={styles.emojiDropdown}
@@ -75,11 +73,7 @@ class MessageTextArea extends Component {
           upwards
         >
           <li className={styles.emojiContainer}>
-            <Picker
-              onClick={this.addEmoji}
-              showPreview={false}
-              emojiTooltip
-            />
+            <Picker onClick={this.addEmoji} showPreview={false} emojiTooltip />
           </li>
         </DropdownMenu>
       </div>
@@ -87,11 +81,7 @@ class MessageTextArea extends Component {
   }
 
   render() {
-    const {
-      chat,
-      canSend,
-      error,
-    } = this.props;
+    const { chat, canSend, error } = this.props;
 
     if (!chat) return null;
     return (
@@ -120,15 +110,13 @@ class MessageTextArea extends Component {
         </SBody>
         <SFooter className={styles.sendIconWrapper}>
           {this.renderEmojiDropdown()}
-          {canSend ?
-            this.renderSendButton() :
-            <Tooltip
-              placement="top"
-              overlay={error}
-            >
+          {canSend ? (
+            this.renderSendButton()
+          ) : (
+            <Tooltip placement="top" overlay={error}>
               {this.renderSendButton()}
             </Tooltip>
-          }
+          )}
         </SFooter>
       </SContainer>
     );
@@ -168,10 +156,13 @@ function mapStateToProps(state, { chat = {} }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    submit,
-    change,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      submit,
+      change,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

@@ -19,7 +19,14 @@ import {
   Tabs,
   Tab,
 } from '../library';
-import { defaultSelectedChatId, loadChatList, selectChat, loadUnreadChatList, loadFlaggedChatList, cleanChatList } from '../../thunks/chat';
+import {
+  defaultSelectedChatId,
+  loadChatList,
+  selectChat,
+  loadUnreadChatList,
+  loadFlaggedChatList,
+  cleanChatList,
+} from '../../thunks/chat';
 import { setNewChat } from '../../reducers/chat';
 import PatientSearch from '../PatientSearch';
 import styles from './styles.scss';
@@ -106,8 +113,9 @@ class ChatMessage extends Component {
   receivedChatsPostUpdate(result) {
     this.setState({
       chats: this.state.chats + Object.keys(result.chats || {}).length,
-      moreData: !(Object.keys(result).length === 0 ||
-                Object.keys(result.chats).length < CHAT_LIST_OFFSET),
+      moreData: !(
+        Object.keys(result).length === 0 || Object.keys(result.chats).length < CHAT_LIST_OFFSET
+      ),
     });
   }
 
@@ -127,12 +135,12 @@ class ChatMessage extends Component {
 
   loadChatList(initial = false) {
     return this.chatListLoader()(CHAT_LIST_OFFSET, this.state.chats)
-        .then(result => this.receivedChatsPostUpdate(result))
-        .then(() => {
-          if (initial) {
-            this.props.defaultSelectedChatId();
-          }
-        });
+      .then(result => this.receivedChatsPostUpdate(result))
+      .then(() => {
+        if (initial) {
+          this.props.defaultSelectedChatId();
+        }
+      });
   }
 
   changeTab(newIndex) {
@@ -142,16 +150,18 @@ class ChatMessage extends Component {
 
     this.props.selectChat(null);
 
-    this.setState({
-      tabIndex: newIndex,
-      chats: 0,
-    }, () => {
-      this.props.cleanChatList();
-      this.loadChatList()
-          .then(() => {
-            this.props.defaultSelectedChatId();
-          });
-    });
+    this.setState(
+      {
+        tabIndex: newIndex,
+        chats: 0,
+      },
+      () => {
+        this.props.cleanChatList();
+        this.loadChatList().then(() => {
+          this.props.defaultSelectedChatId();
+        });
+      }
+    );
   }
 
   renderHeading() {
@@ -174,15 +184,14 @@ class ChatMessage extends Component {
           />
         </div>
         <div className={styles.tabsSection}>
-          <Tabs
-            fluid
-            index={this.state.tabIndex}
-            onChange={this.changeTab}
-            noUnderLine
-          >
+          <Tabs fluid index={this.state.tabIndex} onChange={this.changeTab} noUnderLine>
             <Tab label="All" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
             <Tab label="Unread" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
-            <Tab label="Flagged" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
+            <Tab
+              label="Flagged"
+              inactiveClass={styles.inactiveTab}
+              activeClass={styles.activeTab}
+            />
           </Tabs>
         </div>
       </SHeader>
@@ -243,8 +252,8 @@ class ChatMessage extends Component {
     const slideStyle = showPatientsList ? styles.slideIn : {};
     const patientsListStyle = classnames(styles.patientsList, slideStyle);
 
-    const messageContainerSlideStyle = showMessageContainer || showPatientInfo ?
-      styles.slideIn : {};
+    const messageContainerSlideStyle =
+      showMessageContainer || showPatientInfo ? styles.slideIn : {};
     const messageContainerClass = classnames(styles.rightCard, messageContainerSlideStyle);
 
     return (
@@ -257,10 +266,7 @@ class ChatMessage extends Component {
             </SContainer>
           </Card>
         </div>
-        <Card
-          noBorder
-          className={messageContainerClass}
-        >
+        <Card noBorder className={messageContainerClass}>
           <SContainer>
             <SHeader className={styles.messageHeader}>
               <ToHeader
@@ -288,15 +294,18 @@ ChatMessage.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setNewChat,
-    defaultSelectedChatId,
-    selectChat,
-    loadChatList,
-    loadUnreadChatList,
-    loadFlaggedChatList,
-    cleanChatList,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setNewChat,
+      defaultSelectedChatId,
+      selectChat,
+      loadChatList,
+      loadUnreadChatList,
+      loadFlaggedChatList,
+      cleanChatList,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapDispatchToProps);

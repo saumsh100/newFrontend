@@ -80,6 +80,7 @@ class DropdownSuggestion extends Component {
   close() {
     this.setState({ isOpen: false });
   }
+
   /**
    * Toggle the dropdown
    */
@@ -207,9 +208,15 @@ class DropdownSuggestion extends Component {
   }
 
   renderList() {
-    return this.props.renderList(this.props, this.currentValue, this.scrollIndex, this.close, node => {
-      this.suggestionsNode = node;
-    });
+    return this.props.renderList(
+      this.props,
+      this.currentValue,
+      this.scrollIndex,
+      this.close,
+      (node) => {
+        this.suggestionsNode = node;
+      }
+    );
   }
 
   render() {
@@ -284,7 +291,7 @@ const renderList = (props, currentValue, scrollIndex, close, callback) => (
         {...props}
         selected={currentValue === option.value}
         option={option}
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault();
           props.onChange(option.value);
           scrollIndex = i;

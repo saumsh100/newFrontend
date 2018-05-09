@@ -1,8 +1,9 @@
+
 import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../library';
 import styles from './styles.scss';
 
-export default function PreferencesForm({ handleSubmit, activeAccount, }) {
+export default function PreferencesForm({ handleSubmit, activeAccount }) {
   const initialValues = {
     bookingWidgetPrimaryColor: activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
   };

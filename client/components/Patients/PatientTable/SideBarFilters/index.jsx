@@ -29,9 +29,7 @@ class SideBarFilters extends Component {
   }
 
   displayFilter(index) {
-    const {
-      openFilters,
-    } = this.state;
+    const { openFilters } = this.state;
 
     const newState = openFilters.map((filter, filterIndex) => {
       if (filterIndex !== index) {
@@ -46,10 +44,7 @@ class SideBarFilters extends Component {
   }
 
   removeTag(filter) {
-    const {
-      arrayRemoveAll,
-      removeFilter,
-    } = this.props;
+    const { arrayRemoveAll, removeFilter } = this.props;
 
     arrayRemoveAll(filter.formName, filter.formSection);
 
@@ -64,10 +59,7 @@ class SideBarFilters extends Component {
   }
 
   handleDemographics(values) {
-    const {
-      addFilter,
-      removeFilter
-    } = this.props;
+    const { addFilter, removeFilter } = this.props;
 
     let keys = Object.keys(values);
 
@@ -169,9 +161,7 @@ class SideBarFilters extends Component {
   }
 
   handleAppointments(values) {
-    const {
-      addFilter,
-    } = this.props;
+    const { addFilter } = this.props;
 
     let keys = Object.keys(values);
 
@@ -252,9 +242,7 @@ class SideBarFilters extends Component {
   }
 
   handlePractitioners(values) {
-    const {
-      addFilter,
-    } = this.props;
+    const { addFilter } = this.props;
 
     let keys = Object.keys(values);
     keys = keys.filter((key) => {
@@ -278,9 +266,7 @@ class SideBarFilters extends Component {
   }
 
   handleCommunications(values) {
-    const {
-      addFilter,
-    } = this.props;
+    const { addFilter } = this.props;
 
     let setFilter = 0;
     let keys = Object.keys(values);
@@ -395,7 +381,7 @@ class SideBarFilters extends Component {
       }
     });
 
-    if (keys.length === setFilter && keys.length > 0){
+    if (keys.length === setFilter && keys.length > 0) {
       batchFilters.forEach((filter) => {
         addFilter(filter);
       });
@@ -403,14 +389,9 @@ class SideBarFilters extends Component {
   }
 
   render() {
-    const {
-      practitioners,
-      filters,
-    } = this.props;
+    const { practitioners, filters } = this.props;
 
-    const {
-      openFilters,
-    } = this.state;
+    const { openFilters } = this.state;
 
     if (!practitioners) {
       return null;
@@ -427,48 +408,41 @@ class SideBarFilters extends Component {
       label: styles.dateLabelStyle,
     };
 
-    const filterBodyDisplay = ({ index, component, headerTitle }) => {
-      return (
-        <div className={styles.filterBody}>
-          <div
-            className={styles.filterHeader}
-            onClick={() => this.displayFilter(index)}
-            data-test-id={`collapsible_${index}`}
-          >
-            {headerTitle}
-            <span className={styles.filterHeader_icon}>
-              <Icon size={1.5} icon="caret-down" type="solid" />
-            </span>
-          </div>
-          {openFilters[index] ? <div className={styles.collapsible}>
-            {component}
-          </div> : null}
+    const filterBodyDisplay = ({ index, component, headerTitle }) => (
+      <div className={styles.filterBody}>
+        <div
+          className={styles.filterHeader}
+          onClick={() => this.displayFilter(index)}
+          data-test-id={`collapsible_${index}`}
+        >
+          {headerTitle}
+          <span className={styles.filterHeader_icon}>
+            <Icon size={1.5} icon="caret-down" type="solid" />
+          </span>
         </div>
-      );
-    };
+        {openFilters[index] ? <div className={styles.collapsible}>{component}</div> : null}
+      </div>
+    );
 
     let clearTextStyle = styles.header_clearText;
     if (filters && filters.size > 0) {
-      clearTextStyle = classnames(clearTextStyle, styles.header_clearTextDark)
+      clearTextStyle = classnames(clearTextStyle, styles.header_clearTextDark);
     }
 
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
-          <div className={styles.header_icon}> <Icon icon="filter" size={1.5} /> </div>
+          <div className={styles.header_icon}>
+            {' '}
+            <Icon icon="filter" size={1.5} />{' '}
+          </div>
           <div className={styles.header_text}> Filter </div>
-          <div
-            className={clearTextStyle}
-            onClick={this.clearTags}
-          >
+          <div className={clearTextStyle} onClick={this.clearTags}>
             Clear All
           </div>
         </div>
 
-        <FilterTags
-          filterTags={filters}
-          removeTag={this.removeTag}
-        />
+        <FilterTags filterTags={filters} removeTag={this.removeTag} />
 
         <div className={styles.filtersContainer}>
           {filterBodyDisplay({
@@ -481,30 +455,36 @@ class SideBarFilters extends Component {
           })}
           {filterBodyDisplay({
             index: 1,
-            component: <Appointments
-              handleAppointments={this.handleAppointments}
-              theme={inputStyles}
-              dateTheme={dateTheme}
-            />,
+            component: (
+              <Appointments
+                handleAppointments={this.handleAppointments}
+                theme={inputStyles}
+                dateTheme={dateTheme}
+              />
+            ),
             headerTitle: 'Appointments',
           })}
           {filterBodyDisplay({
             index: 2,
-            component: <Practitioners
-              handlePractitioners={this.handlePractitioners}
-              practitioners={practitioners}
-              theme={inputStyles}
-            />,
+            component: (
+              <Practitioners
+                handlePractitioners={this.handlePractitioners}
+                practitioners={practitioners}
+                theme={inputStyles}
+              />
+            ),
             headerTitle: 'Practitioners',
           })}
           {filterBodyDisplay({
             index: 3,
-            component: <Communications
-              handleCommunications={this.handleCommunications}
-              practitioners={practitioners}
-              theme={inputStyles}
-              dateTheme={dateTheme}
-            />,
+            component: (
+              <Communications
+                handleCommunications={this.handleCommunications}
+                practitioners={practitioners}
+                theme={inputStyles}
+                dateTheme={dateTheme}
+              />
+            ),
             headerTitle: 'Communications',
           })}
         </div>

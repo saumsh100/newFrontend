@@ -28,5 +28,5 @@ DataSlot.propTypes = {
   onClick: PropTypes.func,
   option: PropTypes.object,
   selected: PropTypes.bool,
-  theme: PropTypes.object
-}
+  theme: PropTypes.object,
+};

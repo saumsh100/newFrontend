@@ -2,15 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {
-  Card,
-  SBody,
-  SContainer,
-  Button,
-  Modal,
-  DialogBox,
-  DayPicker,
-} from '../library';
+import { Card, SBody, SContainer, Button, Modal, DialogBox, DayPicker } from '../library';
 import RequestsContainer from '../../containers/RequestContainer';
 import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
@@ -44,18 +36,11 @@ class ScheduleComponent extends Component {
   }
 
   handlePatientUserSubmit(values) {
-    const {
-      schedule,
-      selectAppointment,
-      createEntityRequest,
-    } = this.props;
+    const { schedule, selectAppointment, createEntityRequest } = this.props;
 
     const mergingPatientData = schedule.toJS().mergingPatientData;
 
-    const {
-      requestData,
-      patientUser,
-    } = mergingPatientData;
+    const { requestData, patientUser } = mergingPatientData;
 
     values.isSyncedWithPms = false;
     values.patientUserId = patientUser.id;
@@ -102,13 +87,15 @@ class ScheduleComponent extends Component {
       },
     };
 
-    this.props.createEntityRequest({
-      key: 'patients',
-      entityData: values,
-      alert,
-    }).then(() => {
-      this.props.setCreatingPatient({ createPatientBool: false });
-    });
+    this.props
+      .createEntityRequest({
+        key: 'patients',
+        entityData: values,
+        alert,
+      })
+      .then(() => {
+        this.props.setCreatingPatient({ createPatientBool: false });
+      });
   }
 
   setCreatingPatient(value = false) {
@@ -186,10 +173,7 @@ class ScheduleComponent extends Component {
       accountsFetched,
     } = this.props;
 
-    const {
-      addNewAppointment,
-    } = this.state;
-
+    const { addNewAppointment } = this.state;
 
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
@@ -204,7 +188,9 @@ class ScheduleComponent extends Component {
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
     const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
 
-    let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : 'Could this be the same appointment?';
+    let displayTitle = this.state.sendEmail
+      ? 'Send Confirmation Email?'
+      : 'Could this be the same appointment?';
 
     let displayModalComponent = null;
 
@@ -240,8 +226,18 @@ class ScheduleComponent extends Component {
       const patientFormName = 'Create New Patient User';
 
       actions = [
-        { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-        { label: 'Save', onClick: this.handlePatientUserSubmit, component: RemoteSubmitButton, props: { color: 'blue', form: patientFormName } },
+        {
+          label: 'Cancel',
+          onClick: this.reinitializeState,
+          component: Button,
+          props: { border: 'blue' },
+        },
+        {
+          label: 'Save',
+          onClick: this.handlePatientUserSubmit,
+          component: RemoteSubmitButton,
+          props: { color: 'blue', form: patientFormName },
+        },
       ];
 
       displayModalComponent = (
@@ -258,14 +254,16 @@ class ScheduleComponent extends Component {
       const patientFormName = 'Create New Patient';
 
       actions = [
-        { label: 'Cancel',
+        {
+          label: 'Cancel',
           onClick: () => {
             this.setCreatingPatient(false);
           },
           component: Button,
           props: { border: 'blue' },
         },
-        { label: 'Save',
+        {
+          label: 'Save',
           onClick: this.handlePatientSubmit,
           component: RemoteSubmitButton,
           props: { color: 'blue', form: patientFormName },
@@ -273,10 +271,7 @@ class ScheduleComponent extends Component {
       ];
 
       displayModalComponent = (
-        <AddPatient
-          formName={patientFormName}
-          onSubmit={this.handlePatientSubmit}
-        />
+        <AddPatient formName={patientFormName} onSubmit={this.handlePatientSubmit} />
       );
     }
 
@@ -285,11 +280,7 @@ class ScheduleComponent extends Component {
     return (
       <div className={styles.rowMainContainer}>
         <div className={styles.dayViewContainer}>
-          <Card
-            className={styles.card}
-            runAnimation
-            loaded={allFetched}
-          >
+          <Card className={styles.card} runAnimation loaded={allFetched}>
             <SContainer>
               <Header
                 addNewAppointment={this.addNewAppointment}
@@ -317,8 +308,7 @@ class ScheduleComponent extends Component {
                 {allFetched ? (
                   <Modal
                     active={
-                      (addNewAppointment ||
-                        (!!selectedAppointment && !selectedAppointment.nextAppt))
+                      addNewAppointment || (!!selectedAppointment && !selectedAppointment.nextAppt)
                     }
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={this.reinitializeState}
@@ -340,22 +330,26 @@ class ScheduleComponent extends Component {
                       selectedAppointment={this.props.selectedAppointment}
                       setCreatingPatient={this.props.setCreatingPatient}
                     />
-                  </Modal>) : null }
-                {allFetched ?
-                  (<DialogBox
+                  </Modal>
+                ) : null}
+                {allFetched ? (
+                  <DialogBox
                     title={displayTitle}
                     type={createNewPatient ? 'small' : 'medium'}
                     actions={actions}
-                    active={((selectedAppointment && selectedAppointment.nextAppt) ||
-                      !!mergingPatientData.patientUser) || createNewPatient}
+                    active={
+                      (selectedAppointment && selectedAppointment.nextAppt) ||
+                      !!mergingPatientData.patientUser ||
+                      createNewPatient
+                    }
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={
                       createNewPatient ? this.setCreatingPatient : this.reinitializeState
                     }
                   >
-
                     {displayModalComponent}
-                  </DialogBox>) : null}
+                  </DialogBox>
+                ) : null}
               </SBody>
             </SContainer>
           </Card>
@@ -373,10 +367,8 @@ class ScheduleComponent extends Component {
             </Card>
           </div>
           <div className={styles.sidebar_rowRequest}>
-            <div xs={12} className={styles.sidebar_request} >
-              <RequestsContainer
-                key={'scheduleRequests'}
-              />
+            <div xs={12} className={styles.sidebar_request}>
+              <RequestsContainer key={'scheduleRequests'} />
             </div>
           </div>
         </div>

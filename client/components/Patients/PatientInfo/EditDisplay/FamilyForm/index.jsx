@@ -40,7 +40,7 @@ const renderMemberList = ({ family, patientNode }) => (
                   removePatientFromFamily.commit(
                     graphQLEnvironment,
                     familyMember.node,
-                    patientNode.id,
+                    patientNode.id
                   )
                 }
               />
@@ -60,7 +60,7 @@ const renderAddFamily = ({ family, patientNode }) => (
           ? addFamilyWithMembers.commit(
             graphQLEnvironment,
             [patient.id, patientNode.ccId],
-            patientNode.id,
+            patientNode.id
           )
           : addPatientToFamily.commit(graphQLEnvironment, patient, family.ccId, patientNode.id))
       }

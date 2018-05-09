@@ -32,16 +32,18 @@ class DayPicker extends Component {
   }
 
   handleDayClick(day, { selected, disabled }) {
-    const {
-      multiple,
-      value,
-      onChange,
-      timezone,
-    } = this.props;
+    const { multiple, value, onChange, timezone } = this.props;
 
     const dates = moment(day).format('YYYY-MM-DD');
 
-    day = timezone ? moment.tz(dates, timezone).add(12, 'hours').toISOString() : moment(day).subtract(12, 'hours').toISOString();
+    day = timezone
+      ? moment
+        .tz(dates, timezone)
+        .add(12, 'hours')
+        .toISOString()
+      : moment(day)
+        .subtract(12, 'hours')
+        .toISOString();
     if (disabled) {
       return;
     }
@@ -126,11 +128,7 @@ class DayPicker extends Component {
           />
         );
       } else if (target === 'custom') {
-        dayPickerTargetComponent = (
-          <TargetComponent
-            onClick={this.togglePopOver}
-          />
-        );
+        dayPickerTargetComponent = <TargetComponent onClick={this.togglePopOver} />;
       }
     }
 
@@ -149,7 +147,7 @@ class DayPicker extends Component {
     // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
     return (
       <div>
-        {!noTarget ?
+        {!noTarget ? (
           <Popover
             preferPlace="below"
             onOuterAction={this.togglePopOver}
@@ -158,7 +156,10 @@ class DayPicker extends Component {
             body={[body]}
           >
             {dayPickerTargetComponent}
-          </Popover> : body}
+          </Popover>
+        ) : (
+          body
+        )}
       </div>
     );
   }

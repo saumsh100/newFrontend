@@ -6,14 +6,7 @@ import omit from 'lodash/omit';
 import { reset } from 'redux-form';
 import { connect } from 'react-redux';
 import React, { Component, PropTypes } from 'react';
-import {
-  Icon,
-  IconButton,
-  Button,
-  DialogBox,
-  SHeader,
-  Avatar
-} from '../../library/index';
+import { Icon, IconButton, Button, DialogBox, SHeader, Avatar } from '../../library/index';
 import styles from './styles.scss';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
@@ -21,7 +14,7 @@ import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import {
   fetchEntitiesRequest,
-  deleteEntityRequest ,
+  deleteEntityRequest,
   createEntityRequest,
 } from '../../../thunks/fetchEntities';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
@@ -52,7 +45,7 @@ class Header extends Component {
   componentDidMount() {
     const localStorageView = JSON.parse(localStorage.getItem('scheduleView'));
 
-    if (localStorageView && (localStorageView.view !== this.props.scheduleView)) {
+    if (localStorageView && localStorageView.view !== this.props.scheduleView) {
       const view = localStorageView.view;
       this.props.setScheduleView({ view });
     }
@@ -63,7 +56,9 @@ class Header extends Component {
       join: ['patientUser', 'patient'],
       params: {
         startTime: moment().toISOString(),
-        endTime: moment().add(360, 'days').toISOString(),
+        endTime: moment()
+          .add(360, 'days')
+          .toISOString(),
       },
     });
   }
@@ -100,12 +95,14 @@ class Header extends Component {
 
   handleAddToWaitlist(values) {
     const newValues = Object.assign(
-      { patientId: values.patientData.id,
-        endDate: moment().add(1, 'days').toISOString(),
+      {
+        patientId: values.patientData.id,
+        endDate: moment()
+          .add(1, 'days')
+          .toISOString(),
       },
-      omit(values, ['patientData']),
+      omit(values, ['patientData'])
     );
-
 
     const alertCreate = {
       success: {
@@ -117,17 +114,19 @@ class Header extends Component {
       },
     };
 
-    this.props.createEntityRequest({
-      key: 'waitSpots',
-      entityData: newValues,
-      alert: alertCreate,
-    }).then(() => {
-      this.openAddToWaitlist();
-      this.props.reset('Add to Waitlist Form');
-      this.setState({
-        patientSearched: null,
+    this.props
+      .createEntityRequest({
+        key: 'waitSpots',
+        entityData: newValues,
+        alert: alertCreate,
+      })
+      .then(() => {
+        this.openAddToWaitlist();
+        this.props.reset('Add to Waitlist Form');
+        this.setState({
+          patientSearched: null,
+        });
       });
-    });
   }
 
   removeWaitSpot(id) {
@@ -139,10 +138,13 @@ class Header extends Component {
   }
 
   getSuggestions(value) {
-    return this.props.fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
-      .then((searchData) => searchData.patients).then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          key => searchedPatients[key]) : [];
+    return this.props
+      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .then(searchData => searchData.patients)
+      .then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length
+          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
+          : [];
 
         patientList.map((patient) => {
           patient.display = (
@@ -150,10 +152,13 @@ class Header extends Component {
               <Avatar user={patient} size="xs" />
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''}`}
+                  {`${patient.firstName} ${patient.lastName}${
+                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+                  }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
-                  Last Appointment: {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                  Last Appointment:{' '}
+                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
                 </div>
               </div>
             </div>
@@ -205,10 +210,7 @@ class Header extends Component {
 
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate
-          currentDate={currentDate}
-          leftColumnWidth={leftColumnWidth}
-        >
+        <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
           <div className={styles.changeDay}>
             <IconButton
               icon="angle-left"
@@ -225,12 +227,7 @@ class Header extends Component {
             />
           </div>
 
-          <Button
-            border="blue"
-            onClick={() => this.props.setCurrentDay(new Date())}
-            dense
-            compact
-          >
+          <Button border="blue" onClick={() => this.props.setCurrentDay(new Date())} dense compact>
             Today
           </Button>
           <div className={styles.header}>
@@ -244,21 +241,15 @@ class Header extends Component {
                     practitioners={practitioners}
                     appointments={appointments}
                     currentDate={currentDate}
-                  />) : null,
+                  />
+                ) : null,
               ]}
               preferPlace="below"
-              tipSize={.01}
+              tipSize={0.01}
               onOuterAction={this.toggleFilters}
             >
-              <div
-                className={styles.headerLinks}
-                onClick={this.toggleFilters}
-              >
-                <Icon
-                  icon="filter"
-                  size={1.5}
-                  className={styles.headerLinks_icon}
-                />
+              <div className={styles.headerLinks} onClick={this.toggleFilters}>
+                <Icon icon="filter" size={1.5} className={styles.headerLinks_icon} />
               </div>
             </Popover>
 
@@ -273,13 +264,7 @@ class Header extends Component {
               Waitlist
             </Button>
 
-            <Button
-              onClick={this.setView}
-              border="blue"
-              iconRight="exchange"
-              dense
-              compact
-            >
+            <Button onClick={this.setView} border="blue" iconRight="exchange" dense compact>
               {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
             </Button>
 
@@ -319,7 +304,8 @@ class Header extends Component {
                   removeWaitSpot={this.removeWaitSpot}
                   openAddTo={this.openAddToWaitlist}
                 />
-              </DialogBox>) : null}
+              </DialogBox>
+            ) : null}
             <DialogBox
               title="Add to Waitlist"
               active={this.state.showAddToWaitlist}
@@ -334,7 +320,11 @@ class Header extends Component {
                   label: 'Cancel',
                 },
                 {
-                  props: { color: 'blue', form: addToFormName, 'data-test-id': 'button_submitForm' },
+                  props: {
+                    color: 'blue',
+                    form: addToFormName,
+                    'data-test-id': 'button_submitForm',
+                  },
                   component: RemoteSubmitButton,
                   onClick: this.openAddToWaitlist,
                   label: 'Save',
@@ -378,22 +368,31 @@ Header.PropTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setScheduleView,
-    fetchEntitiesRequest,
-    deleteEntityRequest,
-    createEntityRequest,
-    reset,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setScheduleView,
+      fetchEntitiesRequest,
+      deleteEntityRequest,
+      createEntityRequest,
+      reset,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps({ schedule, apiRequests, entities }) {
   const scheduleObj = schedule.toJS();
   const scheduleView = scheduleObj.scheduleView;
 
-  const pracsFetched = (apiRequests.get('pracSchedule') ? apiRequests.get('pracSchedule').wasFetched : null);
-  const chairsFetched = (apiRequests.get('chairsSchedule') ? apiRequests.get('chairsSchedule').wasFetched : null);
-  const waitSpotsFetched = (apiRequests.get('waitSpots') ? apiRequests.get('waitSpots').wasFetched : null);
+  const pracsFetched = apiRequests.get('pracSchedule')
+    ? apiRequests.get('pracSchedule').wasFetched
+    : null;
+  const chairsFetched = apiRequests.get('chairsSchedule')
+    ? apiRequests.get('chairsSchedule').wasFetched
+    : null;
+  const waitSpotsFetched = apiRequests.get('waitSpots')
+    ? apiRequests.get('waitSpots').wasFetched
+    : null;
 
   const waitSpots = entities.getIn(['waitSpots', 'models']);
   const patientUsers = entities.getIn(['patientUsers', 'models']);

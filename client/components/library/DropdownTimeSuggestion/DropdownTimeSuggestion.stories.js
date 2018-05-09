@@ -6,7 +6,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import moment from 'moment';
 import DropdownSuggestion from './index';
 
-const renderTimeValue = val => {
+const renderTimeValue = (val) => {
   let data;
   if (moment(val, 'LT', true).isValid()) {
     data = val.toUpperCase();
@@ -16,7 +16,7 @@ const renderTimeValue = val => {
   return data;
 };
 
-const formatTimeField = val => {
+const formatTimeField = (val) => {
   let data;
   if (moment(val, 'LT', true).isValid()) {
     data = moment(`1970-01-31 ${val}`, 'YYYY-MM-DD LT').toISOString();

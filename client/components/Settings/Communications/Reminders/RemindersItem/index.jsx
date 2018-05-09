@@ -2,19 +2,13 @@
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { ordinalSuffix, intervalToNumType, numTypeToInterval } from '../../../../../../server/util/time';
 import {
-  updateEntityRequest,
-} from '../../../../../thunks/fetchEntities';
-import {
-  Icon,
-  Grid,
-  Row,
-  Col,
-  Toggle,
-  Input,
-  DropdownSelect,
-} from '../../../../library';
+  ordinalSuffix,
+  intervalToNumType,
+  numTypeToInterval,
+} from '../../../../../../server/util/time';
+import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
+import { Icon, Grid, Row, Col, Toggle, Input, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
@@ -35,16 +29,13 @@ const wordMap = {
   email_sms: 'Email & SMS',
 };
 
-const typeOptions = [
-  { label: 'Hours', value: 'hours' },
-  { label: 'Days', value: 'days' },
-];
+const typeOptions = [{ label: 'Hours', value: 'hours' }, { label: 'Days', value: 'days' }];
 
 const primaryTypesOptions = [
   { label: 'Email', value: 'email' },
   { label: 'SMS', value: 'sms' },
   // { label: 'Voice', value: 'phone' },
-  { label: 'Email & SMS', value: 'email_sms' }
+  { label: 'Email & SMS', value: 'email_sms' },
 ];
 
 function SmallIconCircle(props) {
@@ -52,15 +43,11 @@ function SmallIconCircle(props) {
   // delete props.selected;
   // delete props.icon;
 
-  const wrapperClass = selected ?
-    styles.smallReminderSelectWrapperCircleSelected :
-    styles.smallReminderSelectWrapperCircle;
+  const wrapperClass = selected
+    ? styles.smallReminderSelectWrapperCircleSelected
+    : styles.smallReminderSelectWrapperCircle;
 
-  return (
-    <div className={wrapperClass}>
-      {icon ? <Icon icon={icon} type="solid" /> : null}
-    </div>
-  );
+  return <div className={wrapperClass}>{icon ? <Icon icon={icon} type="solid" /> : null}</div>;
 }
 
 function AdvancedSettingsButton(props) {
@@ -266,11 +253,7 @@ class RemindersItem extends Component {
       isSuperAdmin,
     } = this.props;
 
-    const {
-      interval,
-      primaryTypes,
-      isActive,
-    } = reminder;
+    const { interval, primaryTypes, isActive } = reminder;
 
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
 
@@ -285,35 +268,23 @@ class RemindersItem extends Component {
         selected={isSelected}
         className={styles.reminderListItem}
         onClick={() => onSelectReminder(reminder.id)}
-        toggleComponent={(
-          <Toggle
-            color="green"
-            checked={isActive}
-            onChange={this.editReminder}
-          />
-        )}
-
-        labelComponent={(
+        toggleComponent={<Toggle color="green" checked={isActive} onChange={this.editReminder} />}
+        labelComponent={
           <TouchPointLabel
             title={`${ordinalSuffix(index + 1)} Reminder`}
             data-test-id={`touchPoint_reminder_${index}`}
           />
-        )}
-
-        mainComponent={(
+        }
+        mainComponent={
           <div>
             <div className={styles.reminderIconContainer}>
-              <IconCircle
-                icon={icon}
-                selected={isSelected}
-              />
+              <IconCircle icon={icon} selected={isSelected} />
             </div>
-            <div className={isSelected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
+            <div
+              className={isSelected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}
+            >
               <div className={styles.smallIconContainer}>
-                <SmallIconCircle
-                  icon="bell"
-                  selected={isSelected}
-                />
+                <SmallIconCircle icon="bell" selected={isSelected} />
               </div>
               <div className={styles.dropdownsWrapper}>
                 <div className={styles.topRow}>
@@ -333,7 +304,7 @@ class RemindersItem extends Component {
                           classStyles={dropdownSelectClass}
                           value={number}
                           onChange={this.onChangeNumberInput}
-                          onBlur={(e) => this.changeNumber(e.target.value)}
+                          onBlur={e => this.changeNumber(e.target.value)}
                         />
                       </Col>
                       <Col xs={9} className={styles.rightDropdown}>
@@ -350,22 +321,18 @@ class RemindersItem extends Component {
               </div>
             </div>
           </div>
-        )}
-
-        rightComponent={(
+        }
+        rightComponent={
           <div className={styles.hoverWrapper}>
-            {isSuperAdmin ?
+            {isSuperAdmin ? (
               <AdvancedSettingsButton
                 className={styles.advancedSettingsButton}
                 onClick={() => onSelectAdvancedSettings(reminder.id)}
               />
-            : null}
-            <TinyDeleteButton
-              className={styles.deleteButton}
-              onClick={this.deleteReminder}
-            />
+            ) : null}
+            <TinyDeleteButton className={styles.deleteButton} onClick={this.deleteReminder} />
           </div>
-        )}
+        }
       />
     );
   }
@@ -377,9 +344,12 @@ RemindersItem.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapDispatchToProps);

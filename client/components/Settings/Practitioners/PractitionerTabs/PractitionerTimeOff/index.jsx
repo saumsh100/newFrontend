@@ -14,9 +14,7 @@ import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
-const mergeTime = (date, time, allDay) => {
-  return allDay ? date : new Date(date.setHours(time.getHours()));
-};
+const mergeTime = (date, time, allDay) => (allDay ? date : new Date(date.setHours(time.getHours())));
 
 class PractitionerTimeOff extends Component {
   constructor(props) {
@@ -36,21 +34,11 @@ class PractitionerTimeOff extends Component {
   }
 
   handleSubmit(values) {
-    const {
-      practitioner,
-      createEntityRequest,
-      updateEntityRequest,
-    } = this.props;
+    const { practitioner, createEntityRequest, updateEntityRequest } = this.props;
 
     const { selectedTimeOff } = this.state;
 
-    const {
-      startDate,
-      endDate,
-      startTime,
-      endTime,
-      allDay,
-    } = values;
+    const { startDate, endDate, startTime, endTime, allDay } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
     const mergedStartDate = mergeTime(new Date(startDate), new Date(startTime), allDay);
@@ -122,26 +110,22 @@ class PractitionerTimeOff extends Component {
   }
 
   render() {
-    const {
-      timeOffs,
-      practitioner,
-    } = this.props;
+    const { timeOffs, practitioner } = this.props;
 
-    const {
-      isAdding,
-      selectedTimeOff,
-    } = this.state;
+    const { isAdding, selectedTimeOff } = this.state;
 
     if (!timeOffs && !practitioner) {
       return null;
     }
 
-    const formTimeOff = selectedTimeOff || Map({
-      startDate: moment().format('L'),
-      endDate: moment().format('L'),
-      allDay: true,
-      note: '',
-    });
+    const formTimeOff =
+      selectedTimeOff ||
+      Map({
+        startDate: moment().format('L'),
+        endDate: moment().format('L'),
+        allDay: true,
+        note: '',
+      });
 
     let formName = `practitioner${practitioner.get('id')}_timeOff`;
     if (selectedTimeOff) {
@@ -150,7 +134,9 @@ class PractitionerTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button onClick={this.addTimeOff} secondary data-test-id="addTimeOffButton" create >Add Time Off</Button>
+        <Button onClick={this.addTimeOff} secondary data-test-id="addTimeOffButton" create>
+          Add Time Off
+        </Button>
       </div>
     );
 
@@ -162,17 +148,24 @@ class PractitionerTimeOff extends Component {
           onSelectTimeOff={this.selectTimeOff}
           deleteTimeOff={this.deleteTimeOff}
         >
-          <IconButton
-            icon="plus"
-            onClick={this.addTimeOff}
-          />
+          <IconButton icon="plus" onClick={this.addTimeOff} />
         </TimeOffList>
       );
     }
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { color: 'blue', form: formName } },
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.handleSubmit,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: formName },
+      },
     ];
 
     return (
@@ -198,7 +191,6 @@ class PractitionerTimeOff extends Component {
       </div>
     );
   }
-
 }
 
 PractitionerTimeOff.propTypes = {
@@ -210,11 +202,14 @@ PractitionerTimeOff.propTypes = {
 };
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    createEntityRequest,
-    deleteEntityRequest,
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      createEntityRequest,
+      deleteEntityRequest,
+      updateEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapActionsToProps);

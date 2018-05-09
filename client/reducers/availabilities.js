@@ -48,7 +48,7 @@ function getFloorDate(date) {
     .toISOString();
 }
 
-export const createInitialWidgetState = state => {
+export const createInitialWidgetState = (state) => {
   let selectedStartDate = moment()
     .add(1, 'hours')
     .toISOString();
@@ -190,7 +190,9 @@ export default handleActions(
     },
 
     [SET_IS_TIMER_EXPIRED](state, action) {
-      const form = window.store.getState().form.userSignUpForm ? window.store.getState().form.userSignUpForm : {};
+      const form = window.store.getState().form.userSignUpForm
+        ? window.store.getState().form.userSignUpForm
+        : {};
       const newState = form.values ? state.set('initialForm', form.values) : state;
 
       return newState.set('isTimerExpired', action.payload);
@@ -229,7 +231,12 @@ export default handleActions(
     },
 
     [SIX_DAYS_SHIFT](state, action) {
-      const { selectedStartDay, selectedEndDay, practitionerId, retrievedFirstTime } = action.payload;
+      const {
+        selectedStartDay,
+        selectedEndDay,
+        practitionerId,
+        retrievedFirstTime,
+      } = action.payload;
       return state.merge({
         [practitionerId]: { selectedEndDay, selectedStartDay, retrievedFirstTime },
       });
@@ -267,7 +274,9 @@ export default handleActions(
     },
 
     [SET_REGISTRATION_STEP](state, action) {
-      const form = window.store.getState().form.userSignUpForm ? window.store.getState().form.userSignUpForm : {};
+      const form = window.store.getState().form.userSignUpForm
+        ? window.store.getState().form.userSignUpForm
+        : {};
       const newState = form.values ? state.set('initialForm', form.values) : state;
 
       return newState.set('registrationStep', action.payload);

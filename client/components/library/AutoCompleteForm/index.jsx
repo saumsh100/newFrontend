@@ -8,13 +8,10 @@ import { Input, Icon } from '../';
 import { StyleExtender } from '../../Utils/Themer';
 import baseTheme from './theme.scss';
 
-const renderSuggestion = suggestion => {
-  const display = suggestion.display || `${suggestion.firstName} ${suggestion.lastName}` || suggestion.name;
-  return (
-    <div data-test-id={`${suggestion.name}Suggestion`}>
-      {display}
-    </div>
-  );
+const renderSuggestion = (suggestion) => {
+  const display =
+    suggestion.display || `${suggestion.firstName} ${suggestion.lastName}` || suggestion.name;
+  return <div data-test-id={`${suggestion.name}Suggestion`}>{display}</div>;
 };
 
 class AutoCompleteForm extends Component {
@@ -42,13 +39,12 @@ class AutoCompleteForm extends Component {
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested({ value }) {
     this.setState({ isFetchingSuggestions: true });
-    return this.props.getSuggestions(value)
-      .then((value2) => {
-        this.setState({
-          suggestions: value2,
-          isFetchingSuggestions: false,
-        });
+    return this.props.getSuggestions(value).then((value2) => {
+      this.setState({
+        suggestions: value2,
+        isFetchingSuggestions: false,
       });
+    });
   }
 
   // Autosuggest will call this function every time you need to clear suggestions.
@@ -73,17 +69,14 @@ class AutoCompleteForm extends Component {
       <Input
         {...props}
         ref={null}
-        refCallBack={node => this.inputComponent = node}
+        refCallBack={node => (this.inputComponent = node)}
         data-test-id={this.props['data-test-id']}
       />
     );
   }
 
   render() {
-    const {
-      suggestions,
-      isFetchingSuggestions,
-    } = this.state;
+    const { suggestions, isFetchingSuggestions } = this.state;
 
     const newProps = omit(this.props, ['value', 'theme', 'suggestionsContainerComponent']);
     // Autosuggest will pass through all these props to the input element.
@@ -105,7 +98,9 @@ class AutoCompleteForm extends Component {
 }
 
 AutoCompleteForm.defaultProps = {
-  renderSuggestionsContainer: ({ containerProps, children }) => <div {...containerProps}>{children}</div>,
+  renderSuggestionsContainer: ({ containerProps, children }) => (
+    <div {...containerProps}>{children}</div>
+  ),
 };
 
 // TODO; get proper propTypes and defaultValues

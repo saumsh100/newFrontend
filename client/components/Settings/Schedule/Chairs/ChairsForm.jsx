@@ -1,34 +1,30 @@
+
 import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../library';
 import styles from './styles.scss';
 
 const chairThatWasChanged = (values, formValues, initialValues) => {
-  const ids  = Object.keys(values)
-  let filterIds = []
+  const ids = Object.keys(values);
+  let filterIds = [];
 
   if (!Object.keys(formValues).length) {
-    filterIds = ids.filter(id => {
+    filterIds = ids.filter((id) => {
       if (initialValues[id] !== values[id]) {
         return id;
-      };
+      }
     });
   } else {
-    filterIds = ids.filter(id => {
+    filterIds = ids.filter((id) => {
       if (formValues[id] !== values[id]) {
         return id;
-      };
+      }
     });
   }
   return filterIds;
-}
+};
 
 export default function ChairsForm(props) {
-  const {
-    chairs,
-    handleSubmit,
-    initialValues,
-    formValues,
-  } = props;
+  const { chairs, handleSubmit, initialValues, formValues } = props;
 
   if (!chairs) {
     return null;
@@ -37,7 +33,7 @@ export default function ChairsForm(props) {
   return (
     <Form
       form="chairsForm"
-      onChange={ (values) => {
+      onChange={(values) => {
         handleSubmit(chairThatWasChanged(values, formValues, initialValues), values);
       }}
       enableReinitialize
@@ -49,26 +45,15 @@ export default function ChairsForm(props) {
       data-test-id="chairsForm"
     >
       <div className={styles.formContainer}>
-        {chairs.map((chair, index) => {
-          return (
-            <div className={styles.chairContainer}>
-              <span className={styles.chairContainer_name}>
-                {chair.get('name')}
-              </span>
-              <div
-                className={styles.chairContainer_toggle}
-                data-test-id={`chair_${index}`}
-              >
-                <Field
-                  component="Toggle"
-                  name={chair.get('id')}
-                />
-              </div>
+        {chairs.map((chair, index) => (
+          <div className={styles.chairContainer}>
+            <span className={styles.chairContainer_name}>{chair.get('name')}</span>
+            <div className={styles.chairContainer_toggle} data-test-id={`chair_${index}`}>
+              <Field component="Toggle" name={chair.get('id')} />
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </Form>
   );
 }
-

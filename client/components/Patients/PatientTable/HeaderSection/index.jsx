@@ -32,9 +32,7 @@ class HeaderSection extends Component {
   }
 
   handleSubmit(values) {
-    const {
-      createEntityRequest,
-    } = this.props;
+    const { createEntityRequest } = this.props;
 
     values.isSyncedWithPms = false;
 
@@ -52,35 +50,35 @@ class HeaderSection extends Component {
       entityData: values,
       alert,
     }).then(() => {
-      this.props.destroy('newUser')
+      this.props.destroy('newUser');
       this.reinitializeState();
     });
   }
 
   render() {
-    const {
-      totalPatients,
-      smartFilter,
-      setSmartFilter,
-      patientIds,
-    } = this.props;
+    const { totalPatients, smartFilter, setSmartFilter, patientIds } = this.props;
 
     const formName = 'newPatientForm';
 
     const actions = [
-      { label: 'Cancel', onClick: this.reinitializeState, component: Button, props: { border: 'blue' } },
-      { label: 'Save', onClick: this.handleSubmit, component: RemoteSubmitButton, props: { color: 'blue', form: formName }},
+      {
+        label: 'Cancel',
+        onClick: this.reinitializeState,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Save',
+        onClick: this.handleSubmit,
+        component: RemoteSubmitButton,
+        props: { color: 'blue', form: formName },
+      },
     ];
 
     const filterMenu = props => (
-      <div
-        {...props}
-        className={styles.filterMenuButton}
-      >
-        <div
-          className={styles.header_title}
-        >
-          {smartFilter ? smartFilter.label : 'All Patients' }
+      <div {...props} className={styles.filterMenuButton}>
+        <div className={styles.header_title}>
+          {smartFilter ? smartFilter.label : 'All Patients'}
           <div className={styles.header_icon}>
             <Icon icon="caret-down" type="solid" size={1.7} />
           </div>
@@ -90,17 +88,14 @@ class HeaderSection extends Component {
 
     const actionsMenu = props => (
       <div {...props} className={styles.buttonContainer_actions}>
-        <Button
-          iconRight="caret-down"
-          border="blue"
-        >
+        <Button iconRight="caret-down" border="blue">
           Actions
         </Button>
       </div>
     );
 
     return (
-      <div className={styles.header} >
+      <div className={styles.header}>
         <div>
           <DropdownMenu
             data-test-id="dropDown_smartFilters"
@@ -108,10 +103,7 @@ class HeaderSection extends Component {
             data-test-id="dropDown_smartFilters"
           >
             <div className={styles.filterContainer}>
-              <SmartFilters
-                setSmartFilter={setSmartFilter}
-                smartFilter={smartFilter}
-              />
+              <SmartFilters setSmartFilter={setSmartFilter} smartFilter={smartFilter} />
             </div>
           </DropdownMenu>
           <div className={styles.header_subHeader} data-test-id={'text_totalPatientsCount'}>
@@ -119,13 +111,8 @@ class HeaderSection extends Component {
           </div>
         </div>
         <div className={styles.buttonContainer}>
-          <DropdownMenu
-            labelComponent={actionsMenu}
-            className={styles.alignDD}
-          >
-            <Actions
-              patientIds={patientIds}
-            />
+          <DropdownMenu labelComponent={actionsMenu} className={styles.alignDD}>
+            <Actions patientIds={patientIds} />
           </DropdownMenu>
           <Button
             onClick={() => this.setActive()}
@@ -145,10 +132,7 @@ class HeaderSection extends Component {
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
         >
-          <NewPatientForm
-            onSubmit={this.handleSubmit}
-            formName={formName}
-          />
+          <NewPatientForm onSubmit={this.handleSubmit} formName={formName} />
         </DialogBox>
       </div>
     );

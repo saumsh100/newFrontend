@@ -1,18 +1,15 @@
 
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import PractServicesList from './PractServicesList';
-import { Form, Field, Toggle} from '../../../../library';
+import { Form, Field, Toggle } from '../../../../library';
 import { change } from 'redux-form';
 import _ from 'lodash';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 import styles from './styles.scss';
 
-
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every((key) => {
-    return obj[key];
-  });
+  const allTrue = Object.keys(obj).every(key => obj[key]);
   return allTrue;
 }
 
@@ -26,9 +23,7 @@ class PractServicesForm extends Component {
     e.stopPropagation();
     const { formName, values, allServices } = this.props;
 
-    const actions = Object.keys(values).map((key) => {
-        return change(formName, key, !allServices);
-    });
+    const actions = Object.keys(values).map(key => change(formName, key, !allServices));
 
     this.props.dispatch(batchActions(actions));
   }
@@ -41,7 +36,7 @@ class PractServicesForm extends Component {
     if (services) {
       showComponent = (
         <div className={styles.formContainer}>
-          <div className={styles.allContainer} >
+          <div className={styles.allContainer}>
             <div className={styles.allText}>All Services</div>
             <div className={styles.allToggle}>
               <Toggle
@@ -62,26 +57,20 @@ class PractServicesForm extends Component {
             alignSave="left"
           >
             <div className={styles.formContainer_content}>
-              {services.toArray().map((service, index) => {
-                return (
-                  <PractServicesList
-                    key={`${practitioner.get('id')}${index}`}
-                    service={service}
-                    index={index}
-                  />
-                );
-              })}
+              {services.toArray().map((service, index) => (
+                <PractServicesList
+                  key={`${practitioner.get('id')}${index}`}
+                  service={service}
+                  index={index}
+                />
+              ))}
             </div>
           </Form>
         </div>
-      )
+      );
     }
 
-    return (
-      <div>
-        {showComponent}
-      </div>
-    );
+    return <div>{showComponent}</div>;
   }
 }
 
@@ -90,7 +79,7 @@ function mapStateToProps({ form }, { formName }) {
   if (!form[formName]) {
     return {
       allServices: null,
-      values: {}
+      values: {},
     };
   }
 

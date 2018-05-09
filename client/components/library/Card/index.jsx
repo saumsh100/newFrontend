@@ -7,14 +7,7 @@ import styles from './styles.scss';
 import baseStyles from '../../../styles/default.scss';
 
 export default function Card(props) {
-  const {
-    children,
-    className,
-    noBorder,
-    runAnimation,
-    loaded,
-    loaderStyle,
-  } = props;
+  const { children, className, noBorder, runAnimation, loaded, loaderStyle } = props;
 
   let classes = classNames(className, styles.card);
   const loadBarClass = classNames(loaderStyle, styles.loadBar);
@@ -27,11 +20,13 @@ export default function Card(props) {
   return (
     // Order is important, classNames={classes} needs to override props.className
     <div {...newProps} className={classes}>
-      {runAnimation && !loaded ? <div className={loadBarClass}>
-        <div className={styles.bar} />
-        <div className={styles.bar} />
-        <div className={styles.bar} />
-      </div> : null}
+      {runAnimation && !loaded ? (
+        <div className={loadBarClass}>
+          <div className={styles.bar} />
+          <div className={styles.bar} />
+          <div className={styles.bar} />
+        </div>
+      ) : null}
       {children}
     </div>
   );

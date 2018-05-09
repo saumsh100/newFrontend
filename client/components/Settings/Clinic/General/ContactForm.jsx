@@ -1,6 +1,7 @@
+
 import React from 'react';
-import {Field, Form,} from '../../../library';
-import {emailValidate,} from '../../../library/Form/validate';
+import { Field, Form } from '../../../library';
+import { emailValidate } from '../../../library/Form/validate';
 
 const emailValidateNull = (str) => {
   if (str !== null && !str.length) {
@@ -39,5 +40,4 @@ export default function ContactForm({ onSubmit, activeAccount, role }) {
       />
     </Form>
   );
-
 }

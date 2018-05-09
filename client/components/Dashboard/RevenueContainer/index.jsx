@@ -19,9 +19,10 @@ export const sortByDate = (a, b) => {
 
 function generateLabels(data) {
   const dateKeys = Object.keys(data);
-  return dateKeys.filter(key => key !== 'average').sort(sortByDate).map((key) => {
-    return [moment(key).format('ddd'), moment(key).format('DD')];
-  });
+  return dateKeys
+    .filter(key => key !== 'average')
+    .sort(sortByDate)
+    .map(key => [moment(key).format('ddd'), moment(key).format('DD')]);
 }
 
 function getCurrentDate(data) {
@@ -31,9 +32,10 @@ function getCurrentDate(data) {
 
 function generateDataPoints(data) {
   const dateKeys = Object.keys(data);
-  return dateKeys.filter(key => key !== 'average').sort(sortByDate).map((key) => {
-    return Math.floor(data[key]);
-  });
+  return dateKeys
+    .filter(key => key !== 'average')
+    .sort(sortByDate)
+    .map(key => Math.floor(data[key]));
 }
 
 function renderDisplay(revenueData) {
@@ -43,12 +45,7 @@ function renderDisplay(revenueData) {
   const firstDate = getCurrentDate(revenue);
 
   return (
-    <RevenueDisplay
-      firstDate={firstDate}
-      data={data}
-      isValid={isValid}
-      average={revenue.average}
-    />
+    <RevenueDisplay firstDate={firstDate} data={data} isValid={isValid} average={revenue.average} />
   );
 }
 
@@ -60,13 +57,7 @@ function renderChart(revenueData) {
   const labels = isValid ? generateLabels(revenue) : [];
   const data = isValid ? generateDataPoints(revenue) : [];
 
-  return (
-    <RevenueChart
-      labels={labels}
-      data={data}
-      isValid={isValid}
-    />
-  );
+  return <RevenueChart labels={labels} data={data} isValid={isValid} />;
 }
 
 class RevenueContainer extends Component {
@@ -75,9 +66,7 @@ class RevenueContainer extends Component {
   }
 
   componentWillMount() {
-    const {
-      dashboardDate,
-    } = this.props;
+    const { dashboardDate } = this.props;
 
     const query = {
       date: dashboardDate,
@@ -112,10 +101,7 @@ class RevenueContainer extends Component {
   }
 
   render() {
-    const {
-      revenueData,
-      wasRevenueFetched,
-    } = this.props;
+    const { revenueData, wasRevenueFetched } = this.props;
 
     return (
       <Card
@@ -124,10 +110,8 @@ class RevenueContainer extends Component {
         loaded={wasRevenueFetched}
         loaderStyle={styles.loader}
       >
-        {wasRevenueFetched ?
-          renderDisplay(revenueData.get('data')) : null}
-        {wasRevenueFetched ?
-          renderChart(revenueData.get('data')) : null}
+        {wasRevenueFetched ? renderDisplay(revenueData.get('data')) : null}
+        {wasRevenueFetched ? renderChart(revenueData.get('data')) : null}
       </Card>
     );
   }
@@ -141,14 +125,19 @@ RevenueContainer.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps({ apiRequests }) {
-  const revenueData = (apiRequests.get('revenueFetch') ? apiRequests.get('revenueFetch').data : null);
-  const wasRevenueFetched = (apiRequests.get('revenueFetch') ? apiRequests.get('revenueFetch').wasFetched : null);
+  const revenueData = apiRequests.get('revenueFetch') ? apiRequests.get('revenueFetch').data : null;
+  const wasRevenueFetched = apiRequests.get('revenueFetch')
+    ? apiRequests.get('revenueFetch').wasFetched
+    : null;
 
   return {
     revenueData,
@@ -159,4 +148,3 @@ function mapStateToProps({ apiRequests }) {
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default withFeatureFlag(null, 'feature-revenue-card')(enhance(RevenueContainer));
-

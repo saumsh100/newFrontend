@@ -5,16 +5,7 @@ import moment from 'moment';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
-import {
-  Button,
-  Grid,
-  Row,
-  Col,
-  Form,
-  FormSection,
-  Field,
-  Icon,
-} from '../../../library';
+import { Button, Grid, Row, Col, Form, FormSection, Field, Icon } from '../../../library';
 import styles from './styles.scss';
 
 const generateTimeOptions = () => {
@@ -54,13 +45,11 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
   ]);
 
   // Need to do this so editing breaks does not screw up initialValues here
-  const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => {
-    return {
-      isClosed,
-      startTime,
-      endTime,
-    };
-  });
+  const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => ({
+    isClosed,
+    startTime,
+    endTime,
+  }));
 
   const DayHoursForm = ({ day }) => {
     // Hacky way of letting internal form values control component state
@@ -69,28 +58,27 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
     return (
       <FormSection name={day}>
         <Grid className={styles.dayGrid}>
-          <Row
-            className={styles.dayRow} data-test-id={day} >
+          <Row className={styles.dayRow} data-test-id={day}>
             <Col
               xs={3}
-              className={classNames(isDisabled ? styles.disabledDay : styles.day, styles.flexCentered)}
+              className={classNames(
+                isDisabled ? styles.disabledDay : styles.day,
+                styles.flexCentered
+              )}
             >
               {day}
             </Col>
-            <Col
-              xs={2}
-              className={styles.flexCentered}
-              data-test-id={`toggle_${day}`}
-            >
+            <Col xs={2} className={styles.flexCentered} data-test-id={`toggle_${day}`}>
               <Field component="Toggle" name="isClosed" flipped />
             </Col>
-            <Col
-              xs={7}
-              className={styles.flexCentered}
-            >
+            <Col xs={7} className={styles.flexCentered}>
               <Grid>
                 <Row>
-                  <Col xs={4} className={styles.flexCentered} data-test-id={`dropDown_${day}_startTime`} >
+                  <Col
+                    xs={4}
+                    className={styles.flexCentered}
+                    data-test-id={`dropDown_${day}_startTime`}
+                  >
                     <Field
                       component="DropdownSelect"
                       options={timeOptions}
@@ -102,7 +90,12 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
                     />
                   </Col>
                   <Col xs={1} className={styles.flexCentered}>
-                    <div className={classNames(styles.inlineBlock, isDisabled ? styles.toDivDisabled : styles.toDiv)}>
+                    <div
+                      className={classNames(
+                        styles.inlineBlock,
+                        isDisabled ? styles.toDivDisabled : styles.toDiv
+                      )}
+                    >
                       to
                     </div>
                   </Col>
@@ -117,11 +110,9 @@ function OfficeHoursForm({ values, weeklySchedule, onSubmit, formName, dataId, m
                       search="label"
                     />
                   </Col>
-                  {modal ? (<Icon
-                    className={styles.icon}
-                    icon="cog"
-                    onClick={() => openModal(day)}
-                  />) : null }
+                  {modal ? (
+                    <Icon className={styles.icon} icon="cog" onClick={() => openModal(day)} />
+                  ) : null}
                   <Col xs={3} />
                 </Row>
               </Grid>

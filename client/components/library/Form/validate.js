@@ -200,7 +200,10 @@ const compose = validators => (values) => {
 const passwordStrength = (value) => {
   if (!value) return;
   const result = zxcvbn(value);
-  const { score, feedback: { warning } } = result;
+  const {
+    score,
+    feedback: { warning },
+  } = result;
   if (score < 1) {
     return warning || 'Password not strong enough';
   }

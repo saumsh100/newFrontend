@@ -1,4 +1,3 @@
-
 .container {
   width: 50%;
   display: flex;
@@ -37,18 +36,14 @@
     flex-direction: column;
     margin-bottom: 5px;
   }
-
 }
 
 .stat {
-  flex: 1 0 50% ;
+  flex: 1 0 50%;
   padding: 7px;
   box-sizing: border-box;
 
-
-
   @media screen and (max-width: 1266px) {
-
     &:first-child {
       padding-left: 0px;
     }
@@ -67,7 +62,6 @@
       padding-bottom: 0;
       padding-right: 0px;
     }
-
   }
 
   @media screen and (max-width: 768px) {

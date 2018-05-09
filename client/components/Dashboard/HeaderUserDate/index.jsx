@@ -1,20 +1,12 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Form,
-  Field,
-  Icon,
-} from '../../library';
+import { Form, Field, Icon } from '../../library';
 import styles from '../styles.scss';
 
 class HeaderUserDate extends Component {
   render() {
-    const {
-      user,
-      dashboardDate,
-      setDashboardDate,
-    } = this.props;
+    const { user, dashboardDate, setDashboardDate } = this.props;
 
     const dateTheme = {
       group: styles.inputGroup,
@@ -25,9 +17,7 @@ class HeaderUserDate extends Component {
 
     return (
       <div className={styles.header}>
-        <div className={styles.userName}>
-          {userDisplay}
-        </div>
+        <div className={styles.userName}>{userDisplay}</div>
         <div className={styles.dateInput}>
           <Form
             form="Dashboard Date"
@@ -46,21 +36,16 @@ class HeaderUserDate extends Component {
               multiple={false}
               tipSize={0.01}
               theme={dateTheme}
-              refCallBack={(input) => this.inputNode = input}
+              refCallBack={input => (this.inputNode = input)}
             />
           </Form>
-          <div
-            className={styles.dateIconContainer}
-            onClick={() => this.inputNode.focus()}
-          >
+          <div className={styles.dateIconContainer} onClick={() => this.inputNode.focus()}>
             <Icon icon="calendar" />
           </div>
         </div>
       </div>
     );
   }
-
-
 }
 
 HeaderUserDate.propTypes = {

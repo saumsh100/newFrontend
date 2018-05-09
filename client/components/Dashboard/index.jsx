@@ -30,9 +30,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const {
-      users,
-    } = this.props;
+    const { users } = this.props;
 
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
@@ -49,22 +47,14 @@ class Dashboard extends React.Component {
           />
 
           <div className={styles.revenueColFlex}>
-            <RevenueContainer
-              dashboardDate={this.props.dashboardDate}
-            />
-            <StatsContainer
-              dashboardDate={this.props.dashboardDate}
-            />
+            <RevenueContainer dashboardDate={this.props.dashboardDate} />
+            <StatsContainer dashboardDate={this.props.dashboardDate} />
           </div>
 
           <div className={styles.colFlex}>
-            <AppsRequestsContainer
-              dashboardDate={this.props.dashboardDate}
-            />
+            <AppsRequestsContainer dashboardDate={this.props.dashboardDate} />
 
-            <PatientInsightsContainer
-              dashboardDate={this.props.dashboardDate}
-            />
+            <PatientInsightsContainer dashboardDate={this.props.dashboardDate} />
           </div>
 
           <DonnaToDoListContainer
@@ -93,11 +83,14 @@ function mapStateToProps({ entities, dashboard }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-    fetchDonnasToDos,
-    setDashboardDate,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+      fetchDonnasToDos,
+      setDashboardDate,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

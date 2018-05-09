@@ -25,10 +25,10 @@ import getParameterByName from '../components/My/PatientPage/Shared/getParameter
 const base = (path = '') => `/widgets/:accountId/app${path}`;
 
 const redirectNoAuth = (AuthComponent, isAuth, path) => props =>
-  isAuth ? <AuthComponent {...props} /> : <Redirect to={path} />;
+  (isAuth ? <AuthComponent {...props} /> : <Redirect to={path} />);
 
 const redirectAuth = (NoAuthComponent, isAuth, path) => props =>
-  isAuth ? <Redirect to={path} /> : <NoAuthComponent {...props} />;
+  (isAuth ? <Redirect to={path} /> : <NoAuthComponent {...props} />);
 
 const ReviewsRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
@@ -51,7 +51,11 @@ const BookingRouter = ({ match, isAuth, patientUser }) => {
         {/* <Redirect exact from={b()} to={b('/submitted')} />*/}
         <Route exact path={b()} component={Availabilities} />
         <Route exact path={b('/wait')} component={Waitlist} />
-        <Route exact path={b('/complete')} render={redirectNoAuth(BookingComplete, isAuth, '../login')} />
+        <Route
+          exact
+          path={b('/complete')}
+          render={redirectNoAuth(BookingComplete, isAuth, '../login')}
+        />
         <LoggedRoute isAuth={isAuth} patientUser={patientUser}>
           <Route exact path={b('/review')} render={props => <BookingReview {...props} />} />
         </LoggedRoute>

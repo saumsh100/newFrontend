@@ -44,7 +44,7 @@ const commit = (environment, patient, familyId, clientMutationId) => {
       // get the root field of the mutation return and find the patient record on the payload
       const payloadProxy = proxyStore.getRootField('updatePatientMutation');
       const newPatientNode = payloadProxy.getLinkedRecord('patient');
-      
+
       // find the patient node on the current store/cache
       const patientProxy = proxyStore.get(clientMutationId);
       // find its family record
@@ -60,7 +60,7 @@ const commit = (environment, patient, familyId, clientMutationId) => {
            * to have a directive, either first or last
            * */
           first: 2147483647, // max graphql int
-        },
+        }
       );
       /**
        * again because of relay style connection we need to first create
@@ -70,7 +70,7 @@ const commit = (environment, patient, familyId, clientMutationId) => {
         proxyStore,
         familyMembersConnection,
         newPatientNode,
-        'MembersEdge', // as convetion the egde name is always Type + Edge
+        'MembersEdge' // as convetion the egde name is always Type + Edge
       );
       // then add the edge to the end of the connection
       ConnectionHandler.insertEdgeAfter(familyMembersConnection, edge);

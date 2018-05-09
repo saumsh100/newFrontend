@@ -8,11 +8,7 @@ import styles from './styles.scss';
 import withTheme from '../../../hocs/withTheme';
 
 function DefaultOption({ option }) {
-  return (
-    <div>
-      {option.label || option.value}
-    </div>
-  );
+  return <div>{option.label || option.value}</div>;
 }
 
 class DropdownSelect extends Component {
@@ -70,8 +66,11 @@ class DropdownSelect extends Component {
   }
 
   searchListener(event) {
-    if ((event.keyCode >= 65 && event.keyCode <= 90) ||
-      (event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 186) {
+    if (
+      (event.keyCode >= 65 && event.keyCode <= 90) ||
+      (event.keyCode >= 48 && event.keyCode <= 57) ||
+      event.keyCode === 186
+    ) {
       this.searchValue = this.searchValue + event.key;
       this.handleSearch(this.searchValue);
     }
@@ -110,9 +109,7 @@ class DropdownSelect extends Component {
   }
 
   handleSearch(value) {
-    const {
-      options,
-    } = this.props;
+    const { options } = this.props;
 
     const height = 40;
 
@@ -129,12 +126,7 @@ class DropdownSelect extends Component {
   }
 
   renderList() {
-    const {
-      template,
-      onChange,
-      value,
-      options,
-    } = this.props;
+    const { template, onChange, value, options } = this.props;
 
     const OptionTemplate = template || DefaultOption;
 
@@ -173,17 +165,9 @@ class DropdownSelect extends Component {
   }
 
   renderToggle() {
-    const {
-      value,
-      options = [],
-      template,
-      theme,
-      error,
-      disabled,
-      label,
-    } = this.props;
+    const { value, options = [], template, theme, error, disabled, label } = this.props;
 
-    const defaultTemplate = ({ option }) => (<div>{option.label || option.value}</div>);
+    const defaultTemplate = ({ option }) => <div>{option.label || option.value}</div>;
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = null;
@@ -225,24 +209,18 @@ class DropdownSelect extends Component {
         />
         <div className={toggleValueClassName}>
           {toggleDiv}
-          <label className={labelClassName}>
-            {label}
-          </label>
+          <label className={labelClassName}>{label}</label>
           <div className={theme.caretIconWrapper}>
             <Icon className={caretIconClassName} icon="caret-down" type="solid" />
           </div>
         </div>
-        <div className={theme.error}>
-          {error || ''}
-        </div>
+        <div className={theme.error}>{error || ''}</div>
       </div>
     );
   }
 
   render() {
-    const {
-      theme,
-    } = this.props;
+    const { theme } = this.props;
 
     const children = this.renderList();
     const toggle = this.renderToggle();

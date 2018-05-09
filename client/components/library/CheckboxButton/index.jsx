@@ -5,14 +5,7 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function CheckboxButton(props) {
-  const {
-    id,
-    label,
-    checked,
-    onChange,
-    value,
-    labelStyles,
-  } = props;
+  const { id, label, checked, onChange, value, labelStyles } = props;
 
   // Pass in a className with a set width property
 
@@ -24,19 +17,8 @@ export default function CheckboxButton(props) {
 
   return (
     <div className={styles.checkboxButton} data-test-id={props['data-test-id']}>
-      <input
-        type="checkbox"
-        id={id}
-        checked={checked}
-        value={value}
-        onChange={() => {}}
-      />
-      <label
-        className={labelClasses}
-        htmlFor={id}
-        onClick={onChange}
-        onChange={onChange}
-      >
+      <input type="checkbox" id={id} checked={checked} value={value} onChange={() => {}} />
+      <label className={labelClasses} htmlFor={id} onClick={onChange} onChange={onChange}>
         {label}
       </label>
     </div>

@@ -4,9 +4,8 @@
   //margin: 0 5px;
   padding: 2px;
 
-  input[type=checkbox] {
+  input[type='checkbox'] {
     display: none;
-
   }
   &__title {
     margin-left: 5px;
@@ -64,7 +63,7 @@
 }
 
 .primaryYellow {
-  background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
+  background: linear-gradient(rgba(255, 196, 90, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-yellow;
   width: 40px;
@@ -78,9 +77,8 @@
 }
 
 .primaryBlueGreen {
-  background: linear-gradient(rgba(32,100,119,1), white 70%);
+  background: linear-gradient(rgba(32, 100, 119, 1), white 70%);
   border-radius: 50%;
   border-color: $primary-blue;
   width: 40px;
-
 }

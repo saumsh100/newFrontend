@@ -9,13 +9,7 @@ import styles from './styles.scss';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 
 export default function WaitListItem(props) {
-  const {
-    waitSpot,
-    patient,
-    removeWaitSpot,
-    isPatientUser,
-    removeBorder,
-  } = props;
+  const { waitSpot, patient, removeWaitSpot, isPatientUser, removeBorder } = props;
 
   if (!patient) {
     return null;
@@ -33,7 +27,7 @@ export default function WaitListItem(props) {
   let nextAppt = null;
 
   if (isPatientUser) {
-    nextAppt = moment(waitSpot.endDate).format('MMM Do YYYY')
+    nextAppt = moment(waitSpot.endDate).format('MMM Do YYYY');
   } else if (!isPatientUser && moment(patient.nextApptDate).isValid()) {
     nextAppt = moment(patient.nextApptDate).format('MMM Do YYYY');
   }
@@ -52,7 +46,9 @@ export default function WaitListItem(props) {
 
         <div className={styles.patientPrefInfo}>
           <PatientPopover
-            patient={isPatientUser ? Object.assign(patient, { endDate: waitSpot.endDate }) : patient}
+            patient={
+              isPatientUser ? Object.assign(patient, { endDate: waitSpot.endDate }) : patient
+            }
             isPatientUser={isPatientUser}
             placement="left"
           >
@@ -63,38 +59,30 @@ export default function WaitListItem(props) {
 
           <div className={styles.info}>
             <span className={styles.subHeader}> Next Appt: </span>
-            <span className={styles.dataText}>
-              {nextAppt || 'n/a'}
-            </span>
+            <span className={styles.dataText}>{nextAppt || 'n/a'}</span>
           </div>
 
           <div className={styles.info}>
             <span className={styles.subHeader}>Preferences: </span>
-            {prefKeys.map((pref, index, arry) => {
-              return (
-                preferences[pref] ? (
-                  <span className={styles.dataText} key={`preferences_${index}`}>
-                    {pref}
-                    {(index === arry.length - 1) ? '' : ','}
-                  </span>
-                ) : null
-              );
-            })}
+            {prefKeys.map((pref, index, arry) => (preferences[pref] ? (
+              <span className={styles.dataText} key={`preferences_${index}`}>
+                {pref}
+                {index === arry.length - 1 ? '' : ','}
+              </span>
+            ) : null))}
           </div>
 
-          { !checkIfAnyTrue ? <div className={styles.info}>
-            <span className={styles.subHeader}>Preferred Days: </span>
-            {dayWeekKeys.map((day, index, arry) => {
-              return (
-                daysOfTheWeek[day] ? (
-                  <span className={styles.dataText} key={`dayOfWeek_${index}`}>
-                    {day}
-                    {(index === arry.length - 1) ? '' : ','}
-                  </span>
-                ) : null
-              );
-            })}
-          </div> : null}
+          {!checkIfAnyTrue ? (
+            <div className={styles.info}>
+              <span className={styles.subHeader}>Preferred Days: </span>
+              {dayWeekKeys.map((day, index, arry) => (daysOfTheWeek[day] ? (
+                <span className={styles.dataText} key={`dayOfWeek_${index}`}>
+                  {day}
+                  {index === arry.length - 1 ? '' : ','}
+                </span>
+              ) : null))}
+            </div>
+          ) : null}
         </div>
 
         <div className={styles.patientGeneralInfo}>
@@ -102,13 +90,14 @@ export default function WaitListItem(props) {
             <div className={styles.infoContainer}>
               <Icon icon="phone" className={styles.icon} />
               <span className={styles.infoData}>{FormatPhoneNumber(patient[patientPhone])}</span>
-            </div>)
-            : null }
+            </div>
+          ) : null}
           {patient.email ? (
             <div className={styles.infoContainer}>
               <Icon icon="envelope" className={styles.icon} />
               <span className={styles.infoData}>{patient.email}</span>
-            </div>) : null}
+            </div>
+          ) : null}
         </div>
 
         <div className={styles.remove} onClick={removeWaitSpot}>

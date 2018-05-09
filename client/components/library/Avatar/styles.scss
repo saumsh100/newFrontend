@@ -1,4 +1,3 @@
-
 @import '../../../ui.scss';
 
 $extraSmall-size: 1.5rem;
@@ -105,7 +104,7 @@ $extraLarge-size: 9rem;
 }
 
 .yellow {
-  background: linear-gradient(rgba(255, 196, 90, 1), white 70% );
+  background: linear-gradient(rgba(255, 196, 90, 1), white 70%);
   border-radius: 50%;
   @extend .gradientPadding;
 }
@@ -115,9 +114,7 @@ $extraLarge-size: 9rem;
   @extend .gradientPadding;
 }
 .blue-green {
-  background: linear-gradient(rgba(32,100,119,1), white 70%);
+  background: linear-gradient(rgba(32, 100, 119, 1), white 70%);
   border-radius: 50%;
   @extend .gradientPadding;
-
 }
-

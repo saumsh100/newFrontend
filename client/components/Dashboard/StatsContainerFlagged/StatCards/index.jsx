@@ -1,24 +1,13 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  IconCard,
-  Grid,
-  Row,
-  Col,
-} from '../../../library';
+import { IconCard, Grid, Row, Col } from '../../../library';
 import styles from '../styles.scss';
 
 export default function StatCards(props) {
-  const {
-    requests,
-    appointments,
-    insightCount,
-  } = props;
+  const { requests, appointments, insightCount } = props;
 
-  const unConfirmedPatients = appointments.filter((app) => {
-    return !app.isPatientConfirmed;
-  });
+  const unConfirmedPatients = appointments.filter(app => !app.isPatientConfirmed);
 
   const onlineAppointmentRequest = {
     count: requests.size,

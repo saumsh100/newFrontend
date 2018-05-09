@@ -4,13 +4,8 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { intervalToNumType } from '../../../../../../server/util/time';
-import {
-  updateEntityRequest,
-} from '../../../../../thunks/fetchEntities';
-import {
-  Toggle,
-  DropdownSelect,
-} from '../../../../library';
+import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
+import { Toggle, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
@@ -44,9 +39,8 @@ const pluralType = {
 const getTypeWord = (num, type) => {
   if (Math.abs(num) === 1) {
     return singularType[type];
-  } else {
-    return pluralType[type];
   }
+  return pluralType[type];
 };
 
 class RecallsItem extends Component {
@@ -121,7 +115,9 @@ class RecallsItem extends Component {
     const { recall, account, selected, selectRecall } = this.props;
     const { num, type } = intervalToNumType(recall.interval);
     const subType = num >= 0 ? 'before' : 'after';
-    const sure = confirm(`Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`);
+    const sure = confirm(
+      `Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`
+    );
     if (!sure) {
       return;
     }
@@ -174,19 +170,9 @@ class RecallsItem extends Component {
   }
 
   render() {
-    const {
-      recall,
-      selected,
-      selectRecall,
-      lastRecall,
-      index,
-    } = this.props;
+    const { recall, selected, selectRecall, lastRecall, index } = this.props;
 
-    const {
-      interval,
-      primaryTypes,
-      isActive,
-    } = recall;
+    const { interval, primaryTypes, isActive } = recall;
 
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
 
@@ -196,13 +182,15 @@ class RecallsItem extends Component {
 
     // Pretty hacky way to decide length, should convert interval to days and use that
     let color = 'green';
-    if ((0 > num) && (num >= -6)) {
+    if (num < 0 && num >= -6) {
       color = 'yellow';
-    } else if (-6 > num) {
+    } else if (num < -6) {
       color = 'red';
     }
 
-    const dropdownSelectClass = selected ? styles[`dropdownSelectSelected_${color}`] : styles.dropdownSelect;
+    const dropdownSelectClass = selected
+      ? styles[`dropdownSelectSelected_${color}`]
+      : styles.dropdownSelect;
 
     return (
       <TouchPointItem
@@ -215,15 +203,8 @@ class RecallsItem extends Component {
         linesBoxClass={styles.linesBoxClass}
         connectLinesClass={styles.connectLinesClass}
         onClick={() => selectRecall(recall.id)}
-        toggleComponent={(
-          <Toggle
-            color={color}
-            checked={isActive}
-            onChange={this.changeIsActive}
-          />
-        )}
-
-        labelComponent={(
+        toggleComponent={<Toggle color={color} checked={isActive} onChange={this.changeIsActive} />}
+        labelComponent={
           <div className={styles.recallLabel}>
             <TouchPointLabel
               title={`${Math.abs(num)} ${getTypeWord(num, type)}`}
@@ -231,16 +212,11 @@ class RecallsItem extends Component {
             />
             <div className={styles.beforeAfterLabel}>{subType} due date</div>
           </div>
-        )}
-
-        mainComponent={(
+        }
+        mainComponent={
           <div>
             <div className={styles.reminderIconContainer}>
-              <IconCircle
-                icon={icon}
-                selected={selected}
-                color={color}
-              />
+              <IconCircle icon={icon} selected={selected} color={color} />
             </div>
             <div className={styles.dropdownWrapper}>
               <DropdownSelect
@@ -251,18 +227,17 @@ class RecallsItem extends Component {
                   { label: 'Email', value: 'email' },
                   { label: 'SMS', value: 'sms' },
                   // { label: 'Voice', value: 'phone' },
-                  { label: 'Email & SMS', value: 'email_sms' }
+                  { label: 'Email & SMS', value: 'email_sms' },
                 ]}
               />
             </div>
           </div>
-        )}
-
-        rightComponent={(
+        }
+        rightComponent={
           <div className={styles.deleteButtonWrapper} onClick={this.deleteRecall}>
             <TinyDeleteButton />
           </div>
-        )}
+        }
       />
     );
   }
@@ -273,9 +248,12 @@ RecallsItem.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapDispatchToProps);

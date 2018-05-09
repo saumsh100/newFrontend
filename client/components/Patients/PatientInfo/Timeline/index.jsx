@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -19,9 +20,7 @@ class Timeline extends Component {
   }
 
   loadMoreEvents() {
-    const {
-      events
-    } = this.props;
+    const { events } = this.props;
 
     const query = {
       limit: 5,
@@ -33,18 +32,20 @@ class Timeline extends Component {
         loaded: true,
       });
 
-      this.props.fetchEntities({
-        key: 'events',
-        id: 'getPatientEventsScroll',
-        url: `/api/patients/${this.props.patientId}/events`,
-        params: query,
-      }).then(() => {
-        this.setState({
-          loaded: false,
-          limit: this.state.limit + 5,
-          eventsLength: events.length,
+      this.props
+        .fetchEntities({
+          key: 'events',
+          id: 'getPatientEventsScroll',
+          url: `/api/patients/${this.props.patientId}/events`,
+          params: query,
+        })
+        .then(() => {
+          this.setState({
+            loaded: false,
+            limit: this.state.limit + 5,
+            eventsLength: events.length,
+          });
         });
-      });
     } else {
       this.setState({
         loaded: false,
@@ -53,12 +54,7 @@ class Timeline extends Component {
   }
 
   render() {
-    const {
-      events,
-      filters,
-      wasPatientFetched,
-      wasEventsFetched,
-    } = this.props;
+    const { events, filters, wasPatientFetched, wasEventsFetched } = this.props;
 
     const style = {
       overflow: 'scroll',
@@ -68,25 +64,24 @@ class Timeline extends Component {
 
     return (
       <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasAllFetched}>
-        { wasAllFetched ?
-          <div
-            className={styles.eventsContainer}
-            style={style}
-          >
+        {wasAllFetched ? (
+          <div className={styles.eventsContainer} style={style}>
             <InfiniteScroll
               loadMore={this.loadMoreEvents}
-              hasMore={events.length <= this.state.limit && !this.state.loaded && events.length !== this.state.eventsLength}
+              hasMore={
+                events.length <= this.state.limit &&
+                !this.state.loaded &&
+                events.length !== this.state.eventsLength
+              }
               initialLoad={false}
               useWindow={false}
               threshold={1}
               className={styles.fill}
             >
-              <EventList
-                events={events}
-                filters={filters}
-              />
+              <EventList events={events} filters={filters} />
             </InfiniteScroll>
-        </div> : null }
+          </div>
+        ) : null}
       </Card>
     );
   }
@@ -102,11 +97,14 @@ Timeline.propTypes = {
 };
 
 function mapStateToProps({ entities, apiRequests }, { patientId }) {
-  const wasEventsFetched = (apiRequests.get('getPatientEvents') ? apiRequests.get('getPatientEvents').wasFetched : null);
+  const wasEventsFetched = apiRequests.get('getPatientEvents')
+    ? apiRequests.get('getPatientEvents').wasFetched
+    : null;
 
-  const events = entities.getIn(['events', 'models']).toArray().filter((event) => {
-    return event.get('patientId') === patientId;
-  });
+  const events = entities
+    .getIn(['events', 'models'])
+    .toArray()
+    .filter(event => event.get('patientId') === patientId);
 
   return {
     events,
@@ -115,10 +113,13 @@ function mapStateToProps({ entities, apiRequests }, { patientId }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    fetchEntitiesRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      fetchEntitiesRequest,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

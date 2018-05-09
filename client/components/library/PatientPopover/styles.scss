@@ -1,4 +1,3 @@
-
 @import '../../../ui';
 
 .patientLink {
@@ -7,7 +6,7 @@
   color: $primary-blue;
   &:hover {
     transform: scale(1.02);
-    color: lighten($primary-blue, 10%),
+    color: lighten($primary-blue, 10%);
   }
 }
 
@@ -17,7 +16,7 @@
 
 .card {
   width: auto;
-  box-shadow: -2px 0px 45px -12px rgba(0,0,0,0.75);
+  box-shadow: -2px 0px 45px -12px rgba(0, 0, 0, 0.75);
   min-width: 300px;
 }
 

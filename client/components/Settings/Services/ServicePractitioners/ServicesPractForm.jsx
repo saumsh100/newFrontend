@@ -1,5 +1,5 @@
 
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { change } from 'redux-form';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
@@ -9,16 +9,14 @@ import { Form, Toggle } from '../../../library';
 import styles from '../styles.scss';
 
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every((key) => {
-    return obj[key];
-  });
+  const allTrue = Object.keys(obj).every(key => obj[key]);
   return allTrue;
 }
 
 function createInitialValues(practitionerIds, practitioners) {
-  return practitioners.map(p => {
-    return practitionerIds.indexOf(p.get('id')) > -1;
-  }).toJS();
+  return practitioners
+    .map(p => practitionerIds.indexOf(p.get('id')) > -1)
+    .toJS();
 }
 
 class ServicesPractForm extends Component {
@@ -32,9 +30,7 @@ class ServicesPractForm extends Component {
     e.stopPropagation();
     const { formName, values, allPractitioners } = this.props;
 
-    const actions = Object.keys(values).map((key) => {
-      return change(formName, key, !allPractitioners);
-    });
+    const actions = Object.keys(values).map(key => change(formName, key, !allPractitioners));
 
     this.props.dispatch(batchActions(actions));
   }
@@ -69,15 +65,13 @@ class ServicesPractForm extends Component {
           alignSave="left"
         >
           <div className={styles.servicesPractForm_serviceList}>
-            {practitioners.toArray().map((practitioner, index) => {
-              return (
-                <ServicesPractList
-                  key={`${practitioner.get('id')}${index}`}
-                  practitioner={practitioner}
-                  index={index}
-                />
-              );
-            })}
+            {practitioners.toArray().map((practitioner, index) => (
+              <ServicesPractList
+                key={`${practitioner.get('id')}${index}`}
+                practitioner={practitioner}
+                index={index}
+              />
+            ))}
           </div>
         </Form>
       );
@@ -85,7 +79,11 @@ class ServicesPractForm extends Component {
 
     return (
       <div>
-        <Header className={styles.header} title="Practitioners Performing This Service" contentHeader />
+        <Header
+          className={styles.header}
+          title="Practitioners Performing This Service"
+          contentHeader
+        />
         <div className={styles.servicesPractForm}>
           <div className={styles.servicesPractForm_all}>
             <span className={styles.servicesPractForm_all_text}> All Practitioners</span>

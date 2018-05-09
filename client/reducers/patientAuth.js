@@ -1,7 +1,13 @@
 
 import { fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
-import { LOGIN_SUCCESS, LOGOUT, SET_PATIENT_USER, SET_RESET_EMAIL, SET_FAMILY_PATIENTS } from '../constants';
+import {
+  LOGIN_SUCCESS,
+  LOGOUT,
+  SET_PATIENT_USER,
+  SET_RESET_EMAIL,
+  SET_FAMILY_PATIENTS,
+} from '../constants';
 
 const initialState = fromJS({
   isAuthenticated: false,

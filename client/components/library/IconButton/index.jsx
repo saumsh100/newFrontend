@@ -7,12 +7,7 @@ import Icon from '../Icon';
 import styles from './styles.scss';
 
 export default function IconButton(props) {
-  const {
-    className,
-    size,
-    icon,
-    iconType,
-  } = props;
+  const { className, size, icon, iconType } = props;
 
   const classes = classNames(className, styles.iconButton);
   const buttonProps = omit(props, ['icon', 'size']);

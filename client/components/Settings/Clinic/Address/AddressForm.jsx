@@ -1,7 +1,7 @@
 
-import React, { Component, PropTypes, } from 'react';
+import React, { Component, PropTypes } from 'react';
 import moment from 'moment-timezone';
-import { Row, Col, Form, Field, Select, } from '../../../library';
+import { Row, Col, Form, Field, Select } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
 import { change } from 'redux-form';
 import { bindActionCreators } from 'redux';
@@ -9,13 +9,14 @@ import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less, and no blank spaces` : undefined
+  (value && value.length > max
+    ? `Must be ${max} characters or less, and no blank spaces`
+    : undefined);
 const maxLength25 = maxLength(25);
 const maxPostalLength = maxLength(6);
 
 class AddressForm extends React.Component {
-
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       country: '',
@@ -23,10 +24,10 @@ class AddressForm extends React.Component {
       city: '',
       zipCode: '',
       state: '',
-      timezone: ''
-    }
+      timezone: '',
+    };
     this.changeCountry = this.changeCountry.bind(this);
-    this.zipPostalVal = this.zipPostalVal.bind(this)
+    this.zipPostalVal = this.zipPostalVal.bind(this);
   }
 
   changeCountry(event, newValue, previousValue) {
@@ -42,9 +43,11 @@ class AddressForm extends React.Component {
     if (!value) {
       return;
     }
-    const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+    const regex = new RegExp(
+      /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
+    );
 
-    if(this.state.country === 'US') {
+    if (this.state.country === 'US') {
       return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
@@ -70,20 +73,23 @@ class AddressForm extends React.Component {
   render() {
     const { onSubmit } = this.props;
 
-    let stateProv = (this.state.country === 'United States' ? usStates : caProvinces);
-    let zipPostal = (this.state.country === 'United States' ? 'Zipcode' : 'Postal Code');
+    const stateProv = this.state.country === 'United States' ? usStates : caProvinces;
+    const zipPostal = this.state.country === 'United States' ? 'Zipcode' : 'Postal Code';
 
-    const options = moment.tz.names().map((value) => {
-      const exp = new RegExp(/america/i);
-      if (exp.test(value)) {
+    const options = moment.tz
+      .names()
+      .map((value) => {
+        const exp = new RegExp(/america/i);
+        if (exp.test(value)) {
+          return {
+            value,
+          };
+        }
         return {
-          value,
+          value: null,
         };
-      }
-      return {
-        value: null,
-      };
-    }).filter(filterValue => filterValue.value !== null);
+      })
+      .filter(filterValue => filterValue.value !== null);
 
     return (
       <div className={styles.addressRow}>
@@ -116,12 +122,7 @@ class AddressForm extends React.Component {
               options={stateProv}
               data-test-id="state"
             />
-            <Field
-              name="city"
-              label="City"
-              validate={[maxLength25]}
-              data-test-id="city"
-            />
+            <Field name="city" label="City" validate={[maxLength25]} data-test-id="city" />
             <Field
               name="zipCode"
               label={zipPostal}
@@ -147,12 +148,15 @@ AddressForm.propTypes = {
   address: PropTypes.object,
   change: PropTypes.func,
   onSubmit: PropTypes.func,
-}
+};
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    change,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      change,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapDispatchToProps);

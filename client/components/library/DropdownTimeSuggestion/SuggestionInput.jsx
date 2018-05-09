@@ -104,7 +104,7 @@ class SuggestionInput extends Component {
             className={styles.inputToggler}
             theme={{ group: styles.groupFull }}
             id={`suggestion_time_toggle_${name}`}
-            refCallBack={input => {
+            refCallBack={(input) => {
               this[`suggestion_time_toggle_${name}`] = input;
             }}
           />

@@ -9,7 +9,7 @@ import { FilterAppointments } from '../Shared/filters';
 
 class StatsContainer extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
@@ -25,7 +25,6 @@ class StatsContainer extends React.Component {
       </div>
     );
   }
-
 }
 
 StatsContainer.propTypes = {
@@ -40,9 +39,7 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
 
   const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
 
-  const filteredRequests = requests.filter((req) => {
-    return !req.get('isCancelled') && !req.get('isConfirmed');
-  });
+  const filteredRequests = requests.filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
   return {
     requests: filteredRequests,
