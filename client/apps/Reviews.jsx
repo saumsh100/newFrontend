@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LDClient from 'ldclient-js';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import ReviewsRoutes from '../routes/Reviews';
 import ReviewsRoutesFlagged from '../routes/ReviewsV2';
 import { historyShape } from '../components/library/PropTypeShapes/routerShapes';
@@ -20,7 +20,10 @@ class ReviewsApp extends Component {
         ? JSON.parse(process.env.FEATURE_FLAG_KEY)
         : process.env.FEATURE_FLAG_KEY;
 
-    const client = LDClient.initialize(`${envKey}`, { key: 'carecru' });
+    const client = LDClient.initialize(`${envKey}`, {
+      key: 'carecru',
+      custom: { accountId: this.props.accountId },
+    });
     client.on('ready', () => this.setState({ flags: client.allFlags() }));
   }
 
@@ -42,10 +45,17 @@ class ReviewsApp extends Component {
   }
 }
 
-export default ReviewsApp;
+function mapStateToProps({ availabilities }) {
+  return {
+    accountId: availabilities.get('account').get('id'),
+  };
+}
+
+export default connect(mapStateToProps, null)(ReviewsApp);
 
 ReviewsApp.propTypes = {
   browserHistory: PropTypes.shape(historyShape),
+  accountId: PropTypes.string,
   store: PropTypes.shape({
     liftedStore: PropTypes.object,
     dispatch: PropTypes.func,
