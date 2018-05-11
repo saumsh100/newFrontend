@@ -1,0 +1,34 @@
+@import '../../styles';
+
+.customDialog {
+  padding: 20px;
+  width: 90%;
+  border-radius: 4px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.buttonsWrapper {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+}
+.negation {
+  margin-left: 8px;
+  color: $widget-grey-light;
+  box-sizing: border-box;
+  padding: 12px 8px;
+  width: 50%;
+  font-family: $medium-font;
+  font-size: 13px;
+}
+.confirmation {
+  margin-right: 8px;
+  color: #fff;
+  background: var(--primaryButtonColor);
+  box-sizing: border-box;
+  padding: 12px 8px;
+  width: 50%;
+  border-radius: 4px;
+  font-family: $medium-font;
+  font-size: 13px;
+}

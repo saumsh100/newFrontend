@@ -1,0 +1,149 @@
+@import '../styles';
+
+.daySlot {
+  flex: 1;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  background-color: #fff;
+  padding: 8px 0px;
+  border-right: 1px solid $widget-grey-lighter;
+  color: $widget-grey;
+  flex-wrap: wrap;
+  &:last-of-type {
+    border-right: 0;
+  }
+}
+.selectedDaySlot {
+  @extend .daySlot;
+  background: var(--primaryColor);
+  border-color: var(--primaryColor);
+  color: #fff;
+}
+.topWrapper {
+  display: flex;
+  width: 100%;
+  margin-bottom: var(--widget-spacer);
+}
+.weekDay,
+.month {
+  font-family: $book-font;
+  font-size: 10px;
+  width: 100%;
+}
+.day {
+  justify-content: center;
+  width: 100%;
+  font-family: $medium-font;
+  font-size: 20px;
+  line-height: 22px;
+}
+.datesWrapper {
+  display: flex;
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
+  flex: 1;
+}
+.datePicker {
+  margin-left: var(--widget-spacer);
+}
+.timeSlot {
+  background: #fff;
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
+  color: $widget-grey;
+  font-family: $medium-font;
+  text-transform: uppercase;
+  padding: var(--widget-spacer) 0px;
+  margin: 1%;
+  letter-spacing: 0px;
+  font-size: 11px;
+  width: 23%;
+}
+.selectedTimeSlot {
+  @extend .timeSlot;
+  background: var(--primaryColor);
+  border-color: var(--primaryColor);
+  color: #fff;
+}
+.availabilitiesWrapper {
+  margin: var(--widget-spacer) -1% 0;
+  flex-wrap: wrap;
+  display: flex;
+}
+.nextAvailabilityButton {
+  width: 100%;
+  border-radius: 4px;
+  font-family: $medium-font;
+  font-size: 14px;
+  padding: var(--widget-spacer) 0;
+}
+.waitlist {
+  @extend .content;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+}
+.contentWrapper {
+  width: 100%;
+}
+.waitlistWrapper {
+  flex: 1;
+}
+.waitlistTitle {
+  @extend .title;
+  width: 100%;
+  margin: 0px;
+}
+.waitlistSubtitle {
+  @extend .subtitle;
+  flex: 1;
+  padding-right: 8px;
+}
+.waitlistLink {
+  font-family: $medium-font;
+  font-size: 13px;
+  color: $widget-blue;
+  padding-bottom: 2px;
+  border-bottom: 1px solid $widget-blue;
+  align-self: center;
+}
+.datePicker {
+  border: 1px solid $widget-grey-lighter;
+  background: #fff;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: $medium-font;
+  font-size: 10px;
+  color: $widget-grey-dark;
+  padding: var(--widget-spacer);
+  box-sizing: border-box;
+  justify-content: center;
+  svg {
+    margin: 0 auto 4px;
+    fill: currentColor;
+  }
+}
+.nextButton {
+  border-radius: 4px;
+  width: 100%;
+  min-height: 40px;
+}
+.timeFrameTitle {
+  width: 100%;
+  margin: 0 1% 4px;
+  font-family: $medium-font;
+  font-size: 12px;
+  color: $widget-grey;
+}
+.timeFrameWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: var(--widget-spacer);
+}

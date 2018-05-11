@@ -30,6 +30,7 @@ import {
   SET_SENTRECALLID,
   SET_DUE_DATE,
   SET_FAMILY_PATIENT_USER,
+  SET_IS_BOOKING,
 } from '../constants';
 
 export const sixDaysShiftAction = createAction(SIX_DAYS_SHIFT);
@@ -60,6 +61,7 @@ export const setInsuranceMemberId = createAction(SET_INSURANCE_MEMBER_ID);
 export const setInsuranceCarrier = createAction(SET_INSURANCE_CARRIER);
 export const setSentRecallId = createAction(SET_SENTRECALLID);
 export const setDueDate = createAction(SET_DUE_DATE);
+export const setIsBooking = createAction(SET_IS_BOOKING);
 
 // This is on the auth reducer!
 export const setPatientUser = createAction(SET_PATIENT_USER);

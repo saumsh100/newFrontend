@@ -1,0 +1,101 @@
+@import '../../../ui.scss';
+
+.headerContainer {
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 48px;
+  box-shadow: 0 3px 6px -2px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
+  z-index: 1;
+}
+
+.headerLeftArea {
+  min-width: 48px;
+  .backButton {
+    @extend .iconButton;
+  }
+}
+
+.headerRightArea {
+  min-width: 48px;
+  justify-content: flex-end;
+  display: flex;
+  margin-left: auto;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .closeButton {
+    @extend .iconButton;
+  }
+}
+
+.iconButton {
+  justify-content: center;
+  font-size: 0;
+  padding: 0px;
+  box-sizing: border-box;
+  display: flex;
+  cursor: pointer;
+  height: 48px;
+  width: 48px;
+  color: $widget-grey;
+  background-color: transparent;
+  line-height: 29px;
+  align-items: center;
+  margin: 0;
+  svg {
+    fill: currentColor;
+    height: 14px;
+    width: 14px;
+  }
+  &:hover {
+    color: var(--primaryColor);
+  }
+}
+
+.headerCenterArea {
+  flex: 1;
+  .title {
+    font-family: $medium-font;
+    font-size: 18px;
+    color: $widget-grey-dark;
+    text-align: center;
+  }
+}
+
+.headerTabs {
+  width: 100%;
+  display: flex;
+  .headerTab {
+    color: $widget-grey-light;
+    cursor: pointer;
+    width: 50%;
+    font-family: $medium-font;
+    font-size: 14px;
+    letter-spacing: 0;
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    margin: 0;
+    line-height: 16px;
+    svg {
+      width: 10px;
+      height: 10px;
+      fill: currentColor;
+      margin-right: 8px;
+    }
+    &.active {
+      color: var(--primaryColor);
+      border-color: var(--primaryColor);
+    }
+    &:hover {
+      color: $widget-grey;
+    }
+  }
+}

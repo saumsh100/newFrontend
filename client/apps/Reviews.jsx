@@ -1,12 +1,56 @@
 
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import LDClient from 'ldclient-js';
 import { Provider } from 'react-redux';
-import React from 'react';
 import ReviewsRoutes from '../routes/Reviews';
-import '../styles/default.scss';
+import ReviewsRoutesFlagged from '../routes/ReviewsV2';
+import { historyShape } from '../components/library/PropTypeShapes/routerShapes';
+import styles from '../styles/default.scss';
 
-const ReviewsApp = ({ browserHistory, store }) =>
-  <Provider store={store}>
-    <ReviewsRoutes history={browserHistory} />
-  </Provider>;
+class ReviewsApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { flags: null };
+  }
+
+  componentDidMount() {
+    const envKey =
+      process.env.NODE_ENV !== 'production'
+        ? JSON.parse(process.env.FEATURE_FLAG_KEY)
+        : process.env.FEATURE_FLAG_KEY;
+
+    const client = LDClient.initialize(`${envKey}`, { key: 'carecru' });
+    client.on('ready', () => this.setState({ flags: client.allFlags() }));
+  }
+
+  render() {
+    const { store, browserHistory } = this.props;
+    if (!this.state.flags) {
+      return (
+        <div className={styles.displayContainer}>
+          <i className={'fas fa-spinner fa-spin fa-3x fa-fw'} />
+        </div>
+      );
+    }
+    const routingRender = this.state.flags['booking-widget-v2'] ? (
+      <ReviewsRoutesFlagged history={browserHistory} />
+    ) : (
+      <ReviewsRoutes history={browserHistory} />
+    );
+    return <Provider store={store}>{routingRender}</Provider>;
+  }
+}
 
 export default ReviewsApp;
+
+ReviewsApp.propTypes = {
+  browserHistory: PropTypes.shape(historyShape),
+  store: PropTypes.shape({
+    liftedStore: PropTypes.object,
+    dispatch: PropTypes.func,
+    getState: PropTypes.func,
+    replaceReducer: PropTypes.func,
+    subscribe: PropTypes.func,
+  }),
+};

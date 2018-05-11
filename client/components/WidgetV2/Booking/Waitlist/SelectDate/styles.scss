@@ -1,0 +1,34 @@
+@import '../../styles';
+
+.waitlistIndex {
+  font-size: 13px;
+  font-family: $book-font;
+  color: $widget-grey;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 8px;
+}
+.waitlistKey {
+  width: 100%;
+  display: block;
+  font-family: $medium-font;
+}
+.waitlistValue {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+.editLink {
+  background: $widget-grey-lightest;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  color: $widget-grey-light;
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    fill: currentColor;
+  }
+}

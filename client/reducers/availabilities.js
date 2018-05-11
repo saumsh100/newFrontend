@@ -31,6 +31,7 @@ import {
   SET_INSURANCE_CARRIER,
   SET_SENTRECALLID,
   SET_DUE_DATE,
+  SET_IS_BOOKING,
 } from '../constants';
 
 function getStartTimeForToday(account) {
@@ -69,6 +70,7 @@ export const createInitialWidgetState = (state) => {
         nextAvailability: null,
         patientUser: null,
         isFetching: true,
+        isBooking: true,
         familyPatientUser: null,
         insuranceCarrier: 'Pay for myself',
         insuranceMemberId: '',
@@ -118,7 +120,8 @@ export const createInitialWidgetState = (state) => {
 export default handleActions(
   {
     [REFRESH_AVAILABILITIES_STATE](state) {
-      // We can't re-fetch practitioners and services cause they are pulled from server, so don't purge those...
+      // We can't re-fetch practitioners and services cause they are pulled from server,
+      // so don't purge those...
       // We also don't wanna re-set user-selected state because why make them re-select?
       return state.merge({
         isFetching: true,
@@ -130,6 +133,7 @@ export default handleActions(
         reservationId: null,
         forgotPassword: false,
         selectedAvailability: null,
+        isBooking: true,
         insuranceCarrier: 'Pay for myself',
         insuranceMemberId: '',
         familyPatientUser: null,
@@ -171,6 +175,9 @@ export default handleActions(
 
     [SET_NEXT_AVAILABILITY](state, action) {
       return state.set('nextAvailability', action.payload);
+    },
+    [SET_IS_BOOKING](state, action) {
+      return state.set('isBooking', action.payload);
     },
 
     [SET_IS_FETCHING](state, action) {
@@ -299,7 +306,7 @@ export default handleActions(
       });
     },
 
-    [REMOVE_RESERVATION](state, action) {
+    [REMOVE_RESERVATION](state) {
       return state.merge({
         reservationId: null,
         messages: ['Reserved time for this practitioner has been expired...'],

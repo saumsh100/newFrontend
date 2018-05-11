@@ -1,0 +1,89 @@
+@import '../../../ui';
+
+.cardLink {
+  width: 50%;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.card {
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
+  width: 100%;
+  min-height: 74px;
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.5s ease;
+  background: white;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  height: 100%;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    box-shadow: 2px 3px 7px 0 hsla(0, 0%, 50%, 0.25);
+    transition: all 0.3s ease;
+    border-color: $widget-grey-light;
+    .cardArrow {
+      background: var(--primaryColor);
+      color: #fff;
+      border-radius: 50%;
+      transition: all 0.5s ease;
+    }
+  }
+  .cardArrow {
+    color: $widget-grey;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
+    border-radius: 50%;
+    svg {
+      fill: currentColor;
+    }
+  }
+  .cardWrapper {
+    flex: 1;
+  }
+  .title {
+    font-family: $medium-font;
+    font-size: 15px;
+    color: $widget-blue-grey;
+    margin: 0;
+    line-height: 18px;
+    font-weight: normal;
+  }
+  .centeredTitle {
+    @extend .title;
+    text-align: center;
+  }
+  .description {
+    font-family: $dashboard-font;
+    font-size: 13px;
+    color: $widget-grey;
+    line-height: 14px;
+    margin-top: 4px;
+    display: block;
+  }
+}
+.selectedCard {
+  @extend .card;
+  border-color: var(--primaryColor) !important;
+  .title {
+    color: var(--primaryColor) !important;
+  }
+}
+.square {
+  min-height: 120px;
+  .description {
+    margin-top: 12px;
+  }
+}
+.centered {
+  text-align: center;
+}
