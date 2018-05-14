@@ -23,8 +23,8 @@ export const sendConfirmationReminder = (config) => {
 };
 
 export const sendDueForRecare = (config) => {   // This function is used only for testing
-  config.subject = 'Appointment Reminder';
-  config.templateName = 'Patient Password Reset';
+  config.subject = 'Online Booking Now Available';
+  config.templateName = 'Online Booking Introduction';
   return exports.sendTemplate(config);
 };
 
@@ -94,6 +94,12 @@ export const sendReview = (config) => {
   return exports.sendTemplate(config);
 };
 
+export const sendMassOnlineBookingIntro = (config) => {
+  config.subject = 'Online Booking Now Available';
+  config.templateName = 'Online Booking Introduction';
+  return exports.sendTemplate(config);
+};
+
 /**
  * sendTemplate is used as a normilzation and promise wrapper for sending emails
  *
@@ -135,46 +141,46 @@ export function sendTemplate(config) {
     }
 
     mandrill.messages.sendTemplate({
-        template_name: templateName,
+      template_name: templateName,
 
-        // TODO: why is this needed?
-        template_content: [{
-          name: 'example name',
-          content: 'example content',
+      // TODO: why is this needed?
+      template_content: [{
+        name: 'example name',
+        content: 'example content',
+      }],
+
+      // Message Data
+      message: {
+        from: from,
+        subject: subject,
+        from_email: from,
+        from_name: fromName,
+        to: [{
+          email: toEmail,
+          type: 'to',
         }],
 
-        // Message Data
-        message: {
-          from: from,
-          subject: subject,
-          from_email: from,
-          from_name: fromName,
-          to: [{
-            email: toEmail,
-            type: 'to',
-          }],
-
-          headers: {
-            'Reply-To': replyTo,
-          },
-
-          global_merge_vars: mergeVars.concat(defaultMergeVars),
-          attachments,
+        headers: {
+          'Reply-To': replyTo,
         },
-      },
 
-      // Success Callback
-      (result) => {
-        resolve(result);
+        global_merge_vars: mergeVars.concat(defaultMergeVars),
+        attachments,
       },
+    },
 
-      // Error Callback
-      (err) => {
-        if (err) {
-          console.error(`Mandrill Error: ${err}`) ;
-          reject(err);
-        }
-      });
+    // Success Callback
+    (result) => {
+      resolve(result);
+    },
+
+    // Error Callback
+    (err) => {
+      if (err) {
+        console.error(`Mandrill Error: ${err}`) ;
+        reject(err);
+      }
+    });
   });
 }
 
@@ -187,22 +193,22 @@ export function renderTemplate(config) {
   const { mergeVars = [], templateName } = config;
   return new Promise((resolve, reject) => {
     mandrill.templates.render({
-        template_name: templateName,
-        template_content: [{
-          name: 'example name',
-          content: 'example content',
-        }],
+      template_name: templateName,
+      template_content: [{
+        name: 'example name',
+        content: 'example content',
+      }],
 
-        merge_vars: mergeVars,
-      },
+      merge_vars: mergeVars,
+    },
 
-      ({ html }) => {
-        resolve(html);
-      },
+    ({ html }) => {
+      resolve(html);
+    },
 
-      (err) => {
-        reject(err);
-      });
+    (err) => {
+      reject(err);
+    });
   });
 }
 

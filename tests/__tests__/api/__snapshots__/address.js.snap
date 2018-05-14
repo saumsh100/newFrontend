@@ -44,6 +44,7 @@ Object {
         "id": "52954241-3652-4792-bae5-5bfed53d37b7",
         "lastSyncDate": null,
         "logo": null,
+        "massOnlineEmailSentDate": null,
         "name": "Test Account 2",
         "phoneNumber": null,
         "recallBuffer": "1 days",

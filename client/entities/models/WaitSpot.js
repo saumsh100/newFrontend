@@ -10,6 +10,7 @@ const WaitSpotSchema = {
   daysOfTheWeek: null,
   unavailableDays: null,
   endDate: null,
+  createdAt: null,
 };
 
 export default class WaitSpot extends createModel(WaitSpotSchema) {

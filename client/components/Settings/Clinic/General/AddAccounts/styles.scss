@@ -78,7 +78,7 @@
   justify-content: center;
 
   &_dd {
-    width: 45%
+    width: 45%;
   }
 
   &_icon {
@@ -94,27 +94,24 @@
   align-items: center;
   width: 100%;
   min-width: 300px;
-  margin-left: 30px;
 
   &_text {
     width: 210px;
     color: $primary-darkgrey;
     font-weight: $large-weight;
-    padding-left:20px;
+    padding-left: 20px;
   }
   &_row {
     min-width: 400px;
-    width: 100%
+    width: 100%;
   }
 
   &_column {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
   }
 }
-
 
 .displayFlex {
   display: flex;
@@ -122,9 +119,11 @@
   padding-bottom: 5px;
 }
 
-
-
 @keyframes fadeinform {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

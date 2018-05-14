@@ -3,8 +3,8 @@ import { Record } from 'immutable';
 import createModel from '../createModel';
 
 // Helps parse off unnecessary API data
-//TODO: need a fromJS function to do this, nested Records are ignored
-/*const OfficeHoursRecord = Record({
+// TODO: need a fromJS function to do this, nested Records are ignored
+/* const OfficeHoursRecord = Record({
   monday: null,
   tuesday: null,
   wednesday: null,
@@ -35,12 +35,12 @@ const AccountSchema = {
   bookingWidgetPrimaryColor: null,
   destinationPhoneNumber: null,
   enterpriseId: null,
-  weeklyScheduleId: null, //new OfficeHoursRecord(),
+  weeklyScheduleId: null, // new OfficeHoursRecord(),
   unit: null,
   canSendReminders: null,
   canSendRecalls: null,
   canSendReviews: null,
-  lastSyncDate: (new Date(2016, 5, 1)).toISOString(),
+  lastSyncDate: new Date(2016, 5, 1).toISOString(),
   googlePlaceId: null,
   facebookUrl: null,
   vendastaMsId: null,
@@ -54,12 +54,11 @@ const AccountSchema = {
   recallStartTime: null,
   recallEndTime: null,
   reviewsInterval: null,
+  massOnlineEmailSentDate: null,
 };
 
 export default class Account extends createModel(AccountSchema) {
-
   getUrlRoot() {
     return `/api/accounts/${this.getId()}`;
   }
-
 }

@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -10,11 +11,23 @@ import AddAccounts from './AddAccounts';
 import ContactForm from './ContactForm';
 import SuperAdminForm from './SuperAdminForm';
 import Address from '../Address';
-import { Map } from 'immutable';
-import { updateEntityRequest, fetchEntities, createEntityRequest, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
-import { Dropzone, AccountLogo, Button, Header} from '../../../library';
+import {
+  updateEntityRequest,
+  fetchEntities,
+  createEntityRequest,
+  deleteEntityRequest,
+} from '../../../../thunks/fetchEntities';
+import {
+  uploadLogo,
+  deleteLogo,
+  downloadConnector,
+  sendEmailBlast,
+  getEmailBlastCount,
+} from '../../../../thunks/accounts';
+import EmailPreview from '../../Shared/EmailPreview';
+import { Dropzone, AccountLogo, Button, Header, DialogBox } from '../../../library';
 import SettingsCard from '../../Shared/SettingsCard';
+import MassEmailDisplay from './MassEmailDisplay';
 import styles from './styles.scss';
 
 class General extends Component {
@@ -24,6 +37,9 @@ class General extends Component {
       uploading: false,
       downloadLink: null,
       expired: null,
+      previewOpen: false,
+      emailCount: 0,
+      displayedCount: false,
     };
 
     this.updateName = this.updateName.bind(this);
@@ -32,6 +48,8 @@ class General extends Component {
     this.deleteAccounts = this.deleteAccounts.bind(this);
     this.updateApis = this.updateApis.bind(this);
     this.downloadConnector = this.downloadConnector.bind(this);
+    this.sendEmailBlast = this.sendEmailBlast.bind(this);
+    this.openPreviewModal = this.openPreviewModal.bind(this);
   }
 
   componentDidMount() {
@@ -43,16 +61,15 @@ class General extends Component {
   }
 
   downloadConnector() {
-    this.props.downloadConnector()
-      .then((downloadLink) => {
-        const reg = /Expires=([^&]*)/;
-        const matches = downloadLink.match(reg);
+    this.props.downloadConnector().then((downloadLink) => {
+      const reg = /Expires=([^&]*)/;
+      const matches = downloadLink.match(reg);
 
-        this.setState({
-          downloadLink,
-          expired: Number(matches[1] * 1000),
-        });
+      this.setState({
+        downloadLink,
+        expired: Number(matches[1] * 1000),
       });
+    });
   }
 
   uploadLogo(files) {
@@ -60,27 +77,24 @@ class General extends Component {
       uploading: true,
     });
 
-    this.props.uploadLogo(this.props.activeAccount.id, files[0])
-      .then(() => {
-        this.setState({
-          uploading: false,
-        });
+    this.props.uploadLogo(this.props.activeAccount.id, files[0]).then(() => {
+      this.setState({
+        uploading: false,
       });
+    });
   }
 
   deleteAccounts() {
-    const { activeAccount, createEntityRequest } = this.props;
-    createEntityRequest({ url: `/api/accounts/${activeAccount.id}/integrations`, params: {} });
+    const { activeAccount } = this.props;
+    this.props.createEntityRequest({
+      url: `/api/accounts/${activeAccount.id}/integrations`,
+      params: {},
+    });
   }
 
   async updateApis(values) {
-    const { activeAccount, createEntityRequest, deleteEntityRequest, address } = this.props;
-    const {
-      reputationManagement,
-      listings,
-      callTracking,
-      canSendReminders,
-    } = values;
+    const { activeAccount, address } = this.props;
+    const { reputationManagement, listings, callTracking, canSendReminders } = values;
 
     const sendingValuesCreate = {};
     sendingValuesCreate.integrations = [];
@@ -97,14 +111,7 @@ class General extends Component {
       website,
     } = activeAccount;
 
-    const {
-      city,
-      state,
-      country,
-      zipCode,
-      street,
-      timezone,
-    } = address;
+    const { city, state, country, zipCode, street, timezone } = address;
 
     if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
       return window.alert('Please enter Address and/or Clinic Website Info First');
@@ -176,11 +183,37 @@ class General extends Component {
     }
 
     if (sendingValuesCreate.integrations[0]) {
-      await createEntityRequest({ key: 'accounts', url: `/api/accounts/${activeAccount.id}/integrations`, entityData: sendingValuesCreate });
+      await this.props.createEntityRequest({
+        key: 'accounts',
+        url: `/api/accounts/${activeAccount.id}/integrations`,
+        entityData: sendingValuesCreate,
+      });
     }
 
     if (sendingValuesDelete.integrations[0]) {
-      await deleteEntityRequest({ key: 'accounts', url: `/api/accounts/${activeAccount.id}/integrations`, values: sendingValuesDelete });
+      await this.props.deleteEntityRequest({
+        key: 'accounts',
+        url: `/api/accounts/${activeAccount.id}/integrations`,
+        values: sendingValuesDelete,
+      });
+    }
+  }
+
+  sendEmailBlast() {
+    const { activeAccount } = this.props;
+
+    if (activeAccount.massOnlineEmailSentDate) {
+      return alert('Sorry but you have already performed this email campaign.');
+    }
+
+    const sendEmails = confirm('Are you sure you want to send this email blast?');
+    const sendEmailsForSure = sendEmails && confirm('Are you really sure?');
+
+    if (sendEmailsForSure) {
+      this.setState({
+        previewOpen: false,
+      });
+      this.props.sendEmailBlast(activeAccount.id);
     }
   }
 
@@ -189,7 +222,7 @@ class General extends Component {
   }
 
   updateName(values) {
-    const { activeAccount, updateEntityRequest } = this.props;
+    const { activeAccount } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
@@ -202,7 +235,13 @@ class General extends Component {
       },
     };
 
-    updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
+    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
+  }
+
+  openPreviewModal() {
+    this.setState({
+      previewOpen: !this.state.previewOpen,
+    });
   }
 
   render() {
@@ -210,16 +249,12 @@ class General extends Component {
 
     if (!activeAccount) return null;
 
-    const addAccounts = [(<Header
-      title="API Accounts"
-      contentHeader
-    />), (<div className={styles.formContainer}>
-      <AddAccounts
-        onSubmit={this.updateApis}
-        formName="apis"
-        activeAccount={activeAccount}
-      />
-    </div>)];
+    const addAccounts = [
+      <Header title="API Accounts" contentHeader />,
+      <div className={styles.formContainer}>
+        <AddAccounts onSubmit={this.updateApis} formName="apis" activeAccount={activeAccount} />
+      </div>,
+    ];
 
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
@@ -238,18 +273,17 @@ class General extends Component {
       const end = moment(new Date());
       const duration = moment.duration(now.diff(end)).asSeconds();
 
-      button = duration > 0 ? (<a
-        className={styles.linkAsButton}
-        href={this.state.downloadLink}
-        download
-      >Click to Download
-        <br /> {Math.floor(duration)} s
-      </a>) : (<a
-        className={styles.linkAsButton}
-        href={this.state.downloadLink}
-        download
-      >Link Expired
-      </a>);
+      button =
+        duration > 0 ? (
+          <a className={styles.linkAsButton} href={this.state.downloadLink} download>
+            Click to Download
+            <br /> {Math.floor(duration)} s
+          </a>
+        ) : (
+          <a className={styles.linkAsButton} href={this.state.downloadLink} download>
+            Link Expired
+          </a>
+        );
 
       setTimeout(() => {
         if (duration > 0) {
@@ -258,84 +292,100 @@ class General extends Component {
       }, 500);
     }
 
+    const massOnlineDate = activeAccount.massOnlineEmailSentDate
+      ? moment(activeAccount.massOnlineEmailSentDate).format('MMM DD, YYYY hh:mm A')
+      : null;
+
+    const url = `/api/accounts/${
+      activeAccount.id
+    }/emails/preview/?templateName=Online Booking Introduction`;
+
+    const actions = [
+      {
+        label: 'Cancel',
+        onClick: this.openPreviewModal,
+        component: Button,
+        props: { border: 'blue' },
+      },
+      {
+        label: 'Send Email Blast',
+        onClick: this.sendEmailBlast,
+        component: Button,
+        props: { color: 'blue' },
+      },
+    ];
+
     return (
-      <SettingsCard
-        title="General"
-        bodyClass={styles.generalBodyClass}
-      >
-          <div className={styles.generalMainContainer}>
-            <div className={styles.formContainer}>
-              <Header
-                title="Clinic Details"
-                contentHeader
-              />
-              <GeneralForm
-                role={role}
-                onSubmit={this.updateName}
-                activeAccount={activeAccount}
-              />
-            </div>
-            <div className={styles.drop}>
-              <Header
-                title="Logo"
-                contentHeader
-              />
-              <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
-                <AccountLogo account={activeAccount} size="original" />
-                <p>Drop logo here or click to select file.</p>
-              </Dropzone>
-              {activeAccount.fullLogoUrl ? <Button icon="trash" className={styles.deleteLogo} onClick={this.deleteLogo}>Remove Logo</Button> : null}
-            </div>
-          </div>
-          <Header
-            title="Contact Information"
-            contentHeader
-          />
+      <SettingsCard title="General" bodyClass={styles.generalBodyClass}>
+        <div className={styles.generalMainContainer}>
           <div className={styles.formContainer}>
-            <ContactForm
-              role={role}
-              onSubmit={this.updateName}
-              activeAccount={activeAccount}
-            />
+            <Header title="Clinic Details" contentHeader />
+            <GeneralForm role={role} onSubmit={this.updateName} activeAccount={activeAccount} />
           </div>
-          <Header
-            title="Address Information"
-            contentHeader
+          <div className={styles.drop}>
+            <Header title="Logo" contentHeader />
+            <Dropzone onDrop={this.uploadLogo} loaded={!this.state.uploading}>
+              <AccountLogo account={activeAccount} size="original" />
+              <p>Drop logo here or click to select file.</p>
+            </Dropzone>
+            {activeAccount.fullLogoUrl ? (
+              <Button icon="trash" className={styles.deleteLogo} onClick={this.deleteLogo}>
+                Remove Logo
+              </Button>
+            ) : null}
+          </div>
+        </div>
+        <Header title="Contact Information" contentHeader />
+        <div className={styles.formContainer}>
+          <ContactForm role={role} onSubmit={this.updateName} activeAccount={activeAccount} />
+        </div>
+        <Header title="Address Information" contentHeader />
+        <div className={styles.formContainer}>
+          <Address activeAccount={activeAccount} />
+        </div>
+        <Header title="Download Connector" contentHeader />
+        <div className={styles.formContainer}>
+          <div className={styles.buttonContainer}>{button}</div>
+        </div>
+        {role === 'SUPERADMIN' && (
+          <MassEmailDisplay
+            massOnlineDate={massOnlineDate}
+            openPreviewModal={this.openPreviewModal}
+            activeAccount={activeAccount}
+            getEmailBlastCount={this.props.getEmailBlastCount}
           />
-          <div className={styles.formContainer}>
-            <Address
-              activeAccount={activeAccount}
-            />
-          </div>
-          <Header
-            title="Download Connector"
-            contentHeader
-          />
-          <div className={styles.formContainer}>
-            {button}
-          </div>
-          {role === 'SUPERADMIN' ? <Header
-            title="Administrative Information"
-            contentHeader
-          /> : null }
+        )}
 
-          <div className={styles.formContainer}>
-            {role === 'SUPERADMIN' ? <SuperAdminForm
-              role={role}
-              onSubmit={this.updateName}
-              activeAccount={activeAccount}
-            /> : null }
-          </div>
+        {role === 'SUPERADMIN' ? <Header title="Administrative Information" contentHeader /> : null}
 
-          {role === 'SUPERADMIN' ? addAccounts : null }
+        <div className={styles.formContainer}>
+          {role === 'SUPERADMIN' ? (
+            <SuperAdminForm role={role} onSubmit={this.updateName} activeAccount={activeAccount} />
+          ) : null}
+        </div>
+
+        {role === 'SUPERADMIN' ? addAccounts : null}
+
+        {role === 'SUPERADMIN' && (
+          <DialogBox
+            title="Email Blast Preview"
+            actions={actions}
+            active={this.state.previewOpen}
+            onEscKeyDown={this.openPreviewModal}
+            onOverlayClick={this.openPreviewModal}
+            bodyStyles={styles.modalBody}
+          >
+            <EmailPreview url={url} />
+          </DialogBox>
+        )}
       </SettingsCard>
     );
   }
 }
 
 General.propTypes = {
-  activeAccount: PropTypes.object,
-  users: PropTypes.object,
+  activeAccount: PropTypes.objectOf(PropTypes.any),
+  users: PropTypes.objectOf(PropTypes.any),
   updateEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
   deleteEntityRequest: PropTypes.func,
@@ -343,18 +393,25 @@ General.propTypes = {
   uploadLogo: PropTypes.func,
   deleteLogo: PropTypes.func,
   downloadConnector: PropTypes.func,
+  sendEmailBlast: PropTypes.func,
+  getEmailBlastCount: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-    createEntityRequest,
-    deleteEntityRequest,
-    fetchEntities,
-    uploadLogo,
-    deleteLogo,
-    downloadConnector,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+      createEntityRequest,
+      deleteEntityRequest,
+      fetchEntities,
+      uploadLogo,
+      deleteLogo,
+      downloadConnector,
+      sendEmailBlast,
+      getEmailBlastCount,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps({ entities, auth }) {

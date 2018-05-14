@@ -30,7 +30,7 @@
   }
 }
 
-.generalForm{
+.generalForm {
   width: 100%;
 }
 
@@ -65,7 +65,6 @@
   button {
     margin-top: 10px;
   }
-
 }
 
 .paddingSave {
@@ -92,11 +91,33 @@
   margin: 0 0.35714em 0 0;
   line-height: 1em;
   text-align: center;
-  transition: background-color .1s ease, color .1s;
+  transition: background-color 0.1s ease, color 0.1s;
   display: block;
   width: 140px;
 }
 
 .generalBodyClass {
   padding: 40px;
+}
+
+.massOnlineEmail {
+  &_date {
+    color: $primary-color;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+
+  &_count {
+    color: $primary-color;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+}
+
+.buttonContainer {
+  margin-top: 10px;
+}
+
+.modalBody {
+  padding: 0px;
 }

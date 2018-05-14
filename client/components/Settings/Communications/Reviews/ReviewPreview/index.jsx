@@ -1,45 +1,34 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Header,
-  SContainer,
-  SHeader,
-  SBody,
-  SMSPreview,
-} from '../../../../library';
+import { Header, SContainer, SHeader, SBody, SMSPreview } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 import { createReviewText } from '../../../../../../server/lib/reviews/createReviewText';
 import styles from './styles.scss';
 
-const formatPhoneNumber = phone => `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
+const formatPhoneNumber = phone =>
+  `+1 (${phone.substr(2, 3)}) ${phone.substr(5, 3)}-${phone.substr(8, 4)}`;
 
 function ReviewSMSPreview({ patient, account }) {
   const link = 'carecru.co/a35fg';
   const recallMessage = createReviewText({ patient, account, link });
-  const smsPhoneNumber = account.twilioPhoneNumber ||
+  const smsPhoneNumber =
+    account.twilioPhoneNumber ||
     account.destinationPhoneNumber ||
     account.phoneNumber ||
     '+1112223333';
 
   return (
     <div className={styles.smsPreviewWrapper}>
-      <SMSPreview
-        from={formatPhoneNumber(smsPhoneNumber)}
-        message={recallMessage}
-      />
+      <SMSPreview from={formatPhoneNumber(smsPhoneNumber)} message={recallMessage} />
     </div>
   );
 }
 
 class ReviewPreview extends Component {
-
   render() {
-    const {
-      review,
-      account,
-    } = this.props;
+    const { review, account } = this.props;
 
     const { primaryTypes } = review;
 
@@ -50,42 +39,31 @@ class ReviewPreview extends Component {
     };
 
     // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
-    const commsPreviewSections = primaryTypes.slice().reverse().map((type) => {
-      let typePreview = null;
-      if (type === 'sms') {
-        typePreview = (
-          <div>
-            <ReviewSMSPreview
-              review={review}
-              patient={patient}
-              account={account}
-            />
-          </div>
-        );
-      } else if (type === 'email') {
-        // TODO URL NOT FOUND (NOT DONE)
-        const url = `/api/accounts/${account.id}/reviews/preview`;
-        typePreview = (
-          <div>
-            <EmailPreview url={url} />
-          </div>
-        );
-      } else if (type === 'phone') {
-        typePreview = (
-          <div className={styles.smsPreviewWrapper}>
-            Phone Preview
-          </div>
-        );
-      }
+    const commsPreviewSections = primaryTypes
+      .slice()
+      .reverse()
+      .map((type) => {
+        let typePreview = null;
+        if (type === 'sms') {
+          typePreview = (
+            <div>
+              <ReviewSMSPreview review={review} patient={patient} account={account} />
+            </div>
+          );
+        } else if (type === 'email') {
+          // TODO URL NOT FOUND (NOT DONE)
+          const url = `/api/accounts/${account.id}/emails/preview?templateName=Patient Review`;
+          typePreview = (
+            <div>
+              <EmailPreview url={url} />
+            </div>
+          );
+        } else if (type === 'phone') {
+          typePreview = <div className={styles.smsPreviewWrapper}>Phone Preview</div>;
+        }
 
-      return (
-        <CommsPreviewSection
-          key={`${type}`}
-        >
-          {typePreview}
-        </CommsPreviewSection>
-      );
-    });
+        return <CommsPreviewSection key={`${type}`}>{typePreview}</CommsPreviewSection>;
+      });
 
     return (
       <SContainer>
@@ -95,9 +73,7 @@ class ReviewPreview extends Component {
           </div>
         </SHeader>
         <SBody className={styles.previewSBody}>
-          <CommsPreview>
-            {commsPreviewSections}
-          </CommsPreview>
+          <CommsPreview>{commsPreviewSections}</CommsPreview>
         </SBody>
       </SContainer>
     );

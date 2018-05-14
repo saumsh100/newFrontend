@@ -24,7 +24,9 @@ import upload from '../../../lib/upload';
 import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
-import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
+import { renderTemplate, generateClinicMergeVars, sendMassOnlineBookingIntro } from '../../../lib/mail';
+import { getPatientsWithAppInRange, countPatientsWithAppInRange } from '../../../lib/patientsQuery/patientsWithinRange';
+import { formatPhoneNumber } from '../../../../client/components/library/util/Formatters';
 
 const accountsRouter = Router();
 
@@ -416,25 +418,24 @@ accountsRouter.get('/:accountId/reviews/outbox', async (req, res, next) => {
   }
 });
 
-
 /**
- * GET /:accountId/reviews/preview
+ * GET /:accountId/emails/preview
  *
  * - purpose of this route is mainly for email templates as we have to go to mandrill
  */
-accountsRouter.get('/:accountId/reviews/preview', checkPermissions('accounts:read'), async (req, res, next) => {
+accountsRouter.get('/:accountId/emails/preview', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
     if (req.accountId !== req.account.id) {
       return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
     }
 
     const { account } = req;
+    const { templateName } = req.query;
+
     const patient = {
       firstName: 'Jane',
       lastName: 'Doe',
     };
-
-    const templateName = 'Patient Review';
 
     const html = await renderTemplate({
       templateName,
@@ -444,6 +445,154 @@ accountsRouter.get('/:accountId/reviews/preview', checkPermissions('accounts:rea
     return res.send(html);
   } catch (err) {
     console.error(err);
+    return next(err);
+  }
+});
+
+/**
+ *  POST: /:accountId/onlineBookingEmailBlast
+ *
+ *  - This route is to create and deliver an email campaign to all active patients
+ *  of a clinic.
+ */
+accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('accounts:update'), async (req, res, next) => {
+  try {
+    const {
+      accountId,
+    } = req;
+
+    const {
+      startDate,
+      endDate,
+    } = req.query;
+
+    const patientFilters = {
+      email: {
+        $not: null,
+      },
+    };
+
+    const attributes = [
+      'Patient.email',
+      'Patient.firstName',
+    ];
+
+    const account = await Account.findById(accountId);
+    const { name, accountLogoUrl, massOnlineEmailSentDate } = account;
+
+    if (massOnlineEmailSentDate) {
+      return res.sendStatus(403);
+    }
+
+    const patients = await getPatientsWithAppInRange(accountId, patientFilters, startDate, endDate, attributes);
+    const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
+
+    res.sendStatus(200);
+
+    console.log(`Email campaign initiated for ${patients.length} patients`);
+
+    const promises = patients.map((patient) => {
+      return sendMassOnlineBookingIntro({
+        accountId: req.accountId,
+        toEmail: patient.email,
+        fromName: name,
+        mergeVars: [
+          {
+            name: 'PRIMARY_COLOR',
+            content: account.bookingWidgetPrimaryColor || '#206477',
+          },
+          {
+            name: 'ACCOUNT_CLINICNAME',
+            content: name,
+          },
+          {
+            name: 'PATIENT_FIRSTNAME',
+            content: patient.firstName,
+          },
+          {
+            name: 'ACCOUNT_LOGO_URL',
+            content: accountLogoUrl,
+          },
+          {
+            name: 'ACCOUNT_PHONENUMBER',
+            content: formatPhoneNumber(account.phoneNumber),
+          },
+          {
+            name: 'ACCOUNT_CITY',
+            content: `${account.address.city}, ${account.address.state}`,
+          },
+          {
+            name: 'ACCOUNT_CONTACTEMAIL',
+            content: account.contactEmail,
+          },
+          {
+            name: 'ACCOUNT_ADDRESS',
+            content: account.address.street,
+          },
+          {
+            name: 'BOOK_URL',
+            content: `${account.website}/?cc=book`,
+          },
+          {
+            name: 'FACEBOOK_URL',
+            content: account.facebookUrl,
+          },
+          {
+            name: 'GOOGLE_URL',
+            content: googlePlaceId,
+          },
+        ],
+      }).catch((err) => {
+        console.error(`Failed to send Online Booking Intro email to ${patient.email}`);
+        console.error(err);
+      });
+    });
+
+    const response = await Promise.all(promises);
+
+    response.forEach((resp) => {
+      if (resp[0].status === 'rejected') {
+        console.error(`Status Rejected. Failed to send Online Booking Intro email to ${resp[0].email}.`);
+      }
+    });
+
+    return await req.account.update({
+      massOnlineEmailSentDate: moment().toISOString(),
+    });
+  } catch (err) {
+    console.error(err)
+    return next(err);
+  }
+});
+
+/**
+ *  GET: /:accountId/onlineBookingEmailBlastCount
+ *
+ *  - This route is to get the count of patients that would receive the email blast.
+ *
+ */
+accountsRouter.get('/:accountId/onlineBookingEmailBlastCount', checkPermissions('accounts:read'), async (req, res, next) => {
+  try {
+    const {
+      accountId,
+    } = req;
+
+    const {
+      startDate,
+      endDate,
+    } = req.query;
+
+    const patientFilters = {
+      email: {
+        $not: null,
+      },
+    };
+
+    const patientCount = await countPatientsWithAppInRange(accountId, patientFilters, startDate, endDate);
+
+    return res.send({ patientEmailCount: patientCount });
+  } catch (err) {
+    console.error(err)
     return next(err);
   }
 });

@@ -132,6 +132,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     },
 
+    massOnlineEmailSentDate: {
+      type: DataTypes.DATE,
+    },
+
     googlePlaceId: {
       type: DataTypes.STRING,
     },

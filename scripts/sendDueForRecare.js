@@ -5,7 +5,7 @@ const { formatPhoneNumber } = require('../server/util/formatters');
 // dhillon.jatinder@gmail.com
 // justin@carecru.com
 mail.sendDueForRecare({
-  toEmail: 'jatinder@carecru.com',
+  toEmail: 'justin@carecru.com',
   mergeVars: [
     {
       name: 'PRIMARY_COLOR',
@@ -46,6 +46,10 @@ mail.sendDueForRecare({
     {
       name: 'ACCOUNT_WEBSITE',
       content: 'http://www.beckettdental.com',
+    },
+    {
+      name: 'BOOK_URL',
+      content: 'http://www.capitolhilldental.ca/?cc=book',
     },
   ]
 }).then(() => {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import moment from 'moment';
-import { Avatar, Icon, ListItem, PatientPopover } from '../../../library';
+import { Avatar, Icon, PatientPopover } from '../../../library';
 import styles from './styles.scss';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 
@@ -72,17 +72,27 @@ export default function WaitListItem(props) {
             ) : null))}
           </div>
 
-          {!checkIfAnyTrue ? (
-            <div className={styles.info}>
-              <span className={styles.subHeader}>Preferred Days: </span>
-              {dayWeekKeys.map((day, index, arry) => (daysOfTheWeek[day] ? (
-                <span className={styles.dataText} key={`dayOfWeek_${index}`}>
-                  {day}
-                  {index === arry.length - 1 ? '' : ','}
-                </span>
-              ) : null))}
-            </div>
-          ) : null}
+          { !checkIfAnyTrue ? <div className={styles.info}>
+            <span className={styles.subHeader}>Preferred Days: </span>
+            {dayWeekKeys.map((day, index, arry) => {
+              return (
+                daysOfTheWeek[day] ? (
+                  <span className={styles.dataText} key={`dayOfWeek_${index}`}>
+                    {day}
+                    {(index === arry.length - 1) ? '' : ','}
+                  </span>
+                ) : null
+              );
+            })}
+          </div> : null}
+
+          <div className={styles.info}>
+            <span className={styles.subHeader}> Requested on: </span>
+            <span className={styles.dataText}>
+              <br />
+              {moment(waitSpot.createdAt).format('MMM DD, YYYY h:mm A')}
+            </span>
+          </div>
         </div>
 
         <div className={styles.patientGeneralInfo}>

@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import RequestList from './RequestList';
 import { Card, CardHeader, IconButton } from '../library';
 import styles from './styles.scss';
+import { SortByCreatedAtDesc } from '../library/util/SortEntities';
 
 class Requests extends Component {
   constructor(props) {
@@ -28,9 +29,7 @@ class Requests extends Component {
       return !req.get('isCancelled') && !req.get('isConfirmed');
     });
 
-    const sortedRequests = filteredRequests.sort((a, b) => {
-      return Date.parse(b.startDate) - Date.parse(a.startDate);
-    });
+    const sortedRequests = filteredRequests.sort(SortByCreatedAtDesc);
 
     let requestHeaderClassNames = styles.requestHeader;
     if (disableHeader) {
