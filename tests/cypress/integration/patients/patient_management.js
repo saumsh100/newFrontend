@@ -24,7 +24,7 @@ describe('Patient Management Table Tests', () => {
       .contains('Showing 1 Patients');
   });
 
-  it('use smart filter - due in 60 days', () => {
+  it.skip('use smart filter - due in 60 days', () => {
     cy
       .wait(1500)
       .get('[data-test-id="dropDown_smartFilters"]')
@@ -33,7 +33,7 @@ describe('Patient Management Table Tests', () => {
       .get('[data-test-id="text_totalPatientsCount"]');
   });
 
-  it('use smart filter - missed/cancelled appointment', () => {
+  it.skip('use smart filter - missed/cancelled appointment', () => {
     cy
       .wait(1500)
       .get('[data-test-id="dropDown_smartFilters"]')

@@ -30,7 +30,7 @@ describe('Account Settings - Clinic', () => {
         .should('have.value', 'testclinic@gmail.com');
     });
 
-    it('update address details', () => {
+    it.skip('update address details', () => {
       cy
         .fillTextInput('addressSettingsForm', 'street', '88829 98th Ave')
         .selectOption('addressSettingsForm', 'country', 'option_0')
