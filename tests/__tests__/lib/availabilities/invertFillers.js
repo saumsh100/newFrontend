@@ -1,5 +1,5 @@
 
-import invertFillers from '../../../../server/lib/availabilities/invertTimeSlots';
+import invertFillers from '../../../../server/lib/availabilities/invertFillers';
 
 const d = (h, m = 0) => new Date(2018, 3, 8, h, m);
 const r = (h1, m1, h2, m2) => ({ startDate: d(h1, m1), endDate: d(h2, m2) });
@@ -10,6 +10,16 @@ describe('#invertFillers', () => {
   });
 
   describe('General Scenarios', () => {
+    test('it should return 1 timeslot equal to startDate->endDate with 0 fillers', () => {
+      const fillers = [];
+      const startDate = d(9, 0);
+      const endDate = d(9, 0);
+
+      expect(invertFillers(fillers, startDate, endDate)).toEqual([
+        { startDate, endDate }
+      ]);
+    });
+
     test('it should return 0 timeslots cause startDate === endDate', () => {
       const fillers = [
         r(11, 0, 12, 0),
@@ -131,6 +141,41 @@ describe('#invertFillers', () => {
       expect(result[0].endDate.toISOString()).toBe(d(8, 0).toISOString());
       expect(result[1].startDate.toISOString()).toBe(d(9, 0).toISOString());
       expect(result[1].endDate.toISOString()).toBe(d(10, 0).toISOString());
+    });
+  });
+
+  describe('ISO Strings for arguments', () => {
+    test('it should return 4 openings', () => {
+      const start = '2018-03-06T17:00:00.000Z';
+      const end = '2018-03-07T02:00:00.000Z';
+      const fillers = [
+        {
+          startDate: '2018-03-06T21:00:00.000Z',
+          endDate: '2018-03-06T22:00:00.000Z',
+        },
+        {
+          startDate: '2018-03-06T22:00:00.000Z',
+          endDate: '2018-03-06T23:00:00.000Z'
+        },
+        {
+          startDate: '2018-03-06T23:00:00.000Z',
+          endDate: '2018-03-07T00:00:00.000Z',
+        },
+        { startDate: '2018-03-07T01:00:00.000Z',
+          endDate: '2018-03-07T02:00:00.000Z',
+        },
+      ];
+
+      expect(invertFillers(fillers, start, end)).toEqual([
+        {
+          startDate: '2018-03-06T17:00:00.000Z',
+          endDate: '2018-03-06T21:00:00.000Z',
+        },
+        {
+          startDate: '2018-03-07T00:00:00.000Z',
+          endDate: '2018-03-07T01:00:00.000Z',
+        },
+      ]);
     });
   });
 

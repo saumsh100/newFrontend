@@ -20,7 +20,9 @@ const {
   ceilDateMinutes,
   mergeDateAndTimeWithZone,
   getProperDateWithZone,
+  getRangeOfDays,
 } = require('../../server/util/time');
+import moment from 'moment-timezone';
 
 // Monday -> Friday 9 to 5 by default
 const createWeeklySchedule = (custom = {}) => {
@@ -149,21 +151,68 @@ describe('util/time', () => {
     })
   });
 
-  describe('#mergeDateAndTimeWithZone', () => {
-      it('should be a function', () => {
-        expect(typeof mergeDateAndTimeWithZone).toBe('function');
-      });
-
-      it('should return next day as our timestamps are UTC when the date and timezone is Vancouver', () => {
-        const result = mergeDateAndTimeWithZone('2018-04-02', '1970-02-01T01:00:00.000Z', 'America/Vancouver');
-        expect(result).toBe('2018-04-03T01:00:00.000Z');
-      });
-
-      it('should return same day as our timestamps are UTC when the date and timezone is Vancouver, but the day is the same in utc', () => {
-        const result = mergeDateAndTimeWithZone('2018-04-02', '1970-01-30T15:00:00.000Z', 'America/Vancouver');
-        expect(result).toBe('2018-04-02T15:00:00.000Z');
-      });
+  describe('#combineDateAndTime', () => {
+    it('should be a function', () => {
+      expect(typeof combineDateAndTime).toBe('function');
     });
+
+    it('should return the correct time on the right day', () => {
+      const startTime = time(4, 56);
+      const day = (new Date(2017, 4, 1));
+      const combinedDate = combineDateAndTime(day, startTime);
+      expect(typeof combinedDate).toBe('string');
+      expect(combinedDate).toBe((new Date(2017, 4, 1, 4, 56)).toISOString());
+    });
+  });
+
+  describe('#mergeDateAndTimeWithZone', () => {
+    test('should be a function', () => {
+      expect(typeof mergeDateAndTimeWithZone).toBe('function');
+    });
+
+    test('should return next day as our timestamps are UTC when the date and timezone is Vancouver', () => {
+      const result = mergeDateAndTimeWithZone(
+        '2018-04-02',
+        '1970-02-01T01:00:00.000Z',
+        'America/Vancouver',
+      );
+
+      expect(result).toBe('2018-04-03T00:00:00.000Z');
+    });
+
+    test('should return same day as our timestamps are UTC when the date and timezone is Vancouver,' +
+      'but the day is the same in utc', () => {
+      const result = mergeDateAndTimeWithZone(
+        '2018-04-02',
+        '1970-01-30T15:00:00.000Z',
+        'America/Vancouver',
+      );
+
+      expect(result).toBe('2018-04-02T14:00:00.000Z');
+    });
+
+    test('should return the correct ISOString that takes DST into account - DST = false', () => {
+      const tz = 'America/Edmonton';
+      const result = mergeDateAndTimeWithZone(
+        '2018-03-10',
+        '1970-01-31T15:00:00.000Z',
+        tz,
+      );
+
+      expect(moment.tz(result, tz).format('h:mma')).toBe('8:00am');
+    });
+
+    test('should return the correct ISOString that takes DST into account - DST = true', () => {
+      const tz = 'America/Edmonton';
+      const result = mergeDateAndTimeWithZone(
+        '2018-03-12',
+        '1970-01-31T15:00:00.000Z',
+        tz,
+      );
+
+      expect(moment.tz(result, tz).format('h:mma')).toBe('8:00am');
+    });
+  });
 
   describe('#createIntervalsFromDailySchedule', () => {
     it('should be a function', () => {
@@ -383,20 +432,6 @@ describe('util/time', () => {
         weeklySchedule.thursday,
         weeklySchedule.friday,
       ]);
-    });
-  });
-
-  describe('#combineDateAndTime', () => {
-    it('should be a function', () => {
-      expect(typeof combineDateAndTime).toBe('function');
-    });
-
-    it('should return the correct time on the right day', () => {
-      const startTime = time(4, 56);
-      const day = (new Date(2017, 4, 1));
-      const combinedDate = combineDateAndTime(day, startTime);
-      expect(typeof combinedDate).toBe('string');
-      expect(combinedDate).toBe((new Date(2017, 4, 1, 4, 56)).toISOString());
     });
   });
 
@@ -821,6 +856,48 @@ describe('util/time', () => {
       const ceiled = new Date(ceilDateMinutes(date, 5));
       expect(ceiled.getHours()).toBe(12);
       expect(ceiled.getMinutes()).toBe(10);
+    });
+  });
+
+  describe('#getRangeOfDays', () => {
+    test('should return proper ranges for the gmt tz', () => {
+      const tz = 'Atlantic/Reykjavik'; // GMT
+
+      const startDate = moment.tz('2018-03-08 00:00:00', tz);
+      const endDate = startDate.clone().add(2, 'days');
+
+      const gmtRange = getRangeOfDays(startDate, endDate, tz);
+
+      expect(gmtRange).toEqual([
+        '2018-03-08',
+        '2018-03-09',
+        '2018-03-10',
+      ]);
+    });
+
+    test('should return proper ranges for the different tzs', () => {
+      const tz1 = 'Atlantic/Reykjavik'; // GMT
+      const tz2 = 'America/Edmonton'; // MST
+
+      const startDate = moment.tz('2018-03-08 01:00:00', tz1);
+      const endDate = startDate.clone().add(60, 'hours');
+
+      const gmtRange = getRangeOfDays(startDate.toISOString(), endDate.toISOString(), tz1);
+
+      expect(gmtRange).toEqual([
+        '2018-03-08',
+        '2018-03-09',
+        '2018-03-10',
+      ]);
+
+      const mstRange = getRangeOfDays(startDate.toISOString(), endDate.toISOString(), tz2);
+
+      expect(mstRange).toEqual([
+        '2018-03-07',
+        '2018-03-08',
+        '2018-03-09',
+        '2018-03-10',
+      ]);
     });
   });
 });

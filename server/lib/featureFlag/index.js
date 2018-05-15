@@ -1,9 +1,17 @@
+
 import LaunchDarkly from 'ldclient-node';
 import globals from '../../config/globals';
 
-const ldClient = LaunchDarkly.init(globals.launchDarkly.sdkKey);
+let ldClient;
+if (globals.env !== 'test') {
+  ldClient = LaunchDarkly.init(globals.launchDarkly.sdkKey);
+}
 
 function ldClientVariation(featureFlag, defaultValue, { userId, ...data }) {
+  if (globals.env === 'test') {
+    return resolve(true);
+  }
+
   const metaData = {
     key: userId,
     custom: {
@@ -25,8 +33,6 @@ function ldClientVariation(featureFlag, defaultValue, { userId, ...data }) {
  * @param Boolean defaultValue - The default value that is returned if non is retrieved
  * @param { String key, ...String} metaData  - Metadata ex: account id, enterprise id, etc.
  */
-async function isFeatureEnabled(featureFlag, defaultValue, metaData) {
+export default async function isFeatureEnabled(featureFlag, defaultValue, metaData) {
   return await ldClientVariation(featureFlag, defaultValue, metaData);
 }
-
-export default isFeatureEnabled;

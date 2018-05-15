@@ -1,3 +1,4 @@
+
 import Moment from 'moment';
 import 'moment-timezone';
 import { extendMoment } from 'moment-range';
@@ -353,12 +354,13 @@ export async function practitionersTimeOffs(startDate, endDate, accountId) {
 }
 
 /**
- * [recurringTimeOffsFilter converts
- * all time offs (including recurring) to timeoffs in a given period]
+ * recurringTimeOffsFilter converts
+ * all time offs (including recurring) to timeoffs in a given period
+ *
  * @param  {[array]} recurringTimeOffs
  * @param  {[date]} startDate
  * @param  {[date]} endDate
- * @return {[array]}                   [array of objects of timeOffs]
+ * @return {[array]} [array of objects of timeOffs]
  */
 export function recurringTimeOffsFilter(recurringTimeOffs, startDate, endDate) {
   const fullTimeOffs = [];

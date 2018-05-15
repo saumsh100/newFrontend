@@ -22,7 +22,7 @@ remindersRouter.param('reminderId', sequelizeLoader('reminder', 'Reminder'));
  */
 remindersRouter.get('/:accountId/reminders', checkPermissions('accounts:read'), async (req, res, next) => {
   if (req.account.id !== req.accountId) {
-    next(StatusError(403, 'req.accountId does not match URL account id'));
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
   try {
@@ -93,7 +93,7 @@ remindersRouter.get('/:accountId/reminders/outbox', checkPermissions('accounts:r
  */
 remindersRouter.post('/:accountId/reminders', checkPermissions('accounts:read'), (req, res, next) => {
   if (req.account.id !== req.accountId) {
-    next(StatusError(403, 'req.accountId does not match URL account id'));
+    return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
   const saveReminder = Object.assign({ accountId: req.accountId }, req.body);

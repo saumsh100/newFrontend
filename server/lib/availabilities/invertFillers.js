@@ -1,5 +1,4 @@
 
-
 /**
  * isBeforeRange is a function used to determine if a date is before a
  * certain range
@@ -45,18 +44,27 @@ export function isAfterRange(date, range) {
  * NOTE: This function assumes the supplied ranges are in order of startDate ASC and endDate
  * is always after startDate
  *
+ * NOTE: This function needs to have all dates to be the same type, can't supply a combo ISOStrings and
+ * Date objects
+ *
  * @param fillers - array of ranges that block/fill time
  * @param startDate
  * @param endDate
  * @returns [ranges] - array of ranges that are in between fillers
  */
 export default function invertFillers(fillers, startDate, endDate) {
-  let post = startDate;
-  const ranges = [];
   const length = fillers.length;
-  const lastIndex = length - 1;
+
+  // Because our function depends on looping through fillers, if there's no fillers
+  // do an early return
+  if (!length) {
+    return [{ startDate, endDate }];
+  }
 
   let i;
+  let post = startDate;
+  const lastIndex = length - 1;
+  const ranges = [];
   for (i = 0; i < length; i++) {
     // Important for rest of algorithm to assume the post is never after
     // the overall endDate
@@ -66,6 +74,7 @@ export default function invertFillers(fillers, startDate, endDate) {
 
     // Nested if statements are really for code clarity and performance optimization.
     const filler = fillers[i];
+
     if (isBeforeRange(post, filler)) {
       if (i === lastIndex) {
         if (isBeforeRange(endDate, filler)) {

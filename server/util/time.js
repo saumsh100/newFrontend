@@ -41,24 +41,19 @@ const Time = {
   },
 
   mergeDateAndTimeWithZone(date, time, timezone) {
-    if (timezone) {
-      // we keep these in UTC as we don't want to deal with
-      // day light savings time issues.
-      const dateMoment = moment.utc(date);
+    // we keep these in UTC as we don't want to deal with
+    // day light savings time issues.
+    const dateMoment = moment(date);
+    const timeMoment = moment(time)
+      .year(dateMoment.year())
+      .month(dateMoment.month())
+      .date(dateMoment.date())
+      .toISOString();
 
-      const timeMoment = moment.utc(time)
-        .year(dateMoment.year())
-        .month(dateMoment.month())
-        .date(dateMoment.date())
-        .toISOString();
-
-      // now combine the date and time together with the zone as
-      // daylight saving will no longer be an issue (time as the same date)
-      const timeOnly = moment.tz(timeMoment, timezone).format('HH:mm');
-      return moment.tz(`${date} ${timeOnly}`, timezone).toISOString();
-    }
-
-    return Time.combineDateAndTime(date, time);
+    // now combine the date and time together with the zone as
+    // daylight saving will no longer be an issue (time as the same date)
+    const timeOnly = moment.tz(timeMoment, timezone).format('HH:mm');
+    return moment.tz(`${date} ${timeOnly}`, timezone).toISOString();
   },
 
   getHoursFromInterval({ startDate, endDate }) {
@@ -514,6 +509,34 @@ const Time = {
 
   setDateToTimezone(date, timezone) {
     return timezone ? moment.tz(date, timezone) : moment(date);
+  },
+
+  getDayWithTimezone(date, tz) {
+    const formatStr = 'YYYY-MM-DD';
+    return moment.tz(date, tz).format(formatStr);
+  },
+
+  getRangeOfDays(startDate, endDate, tz) {
+    const startDay = Time.getDayWithTimezone(startDate, tz);
+    const endDay = Time.getDayWithTimezone(endDate, tz);
+
+    const numDays = moment(endDay).diff(startDay, 'days');
+    const days = [startDay];
+
+    let i;
+    let start = moment.tz(startDate, tz);
+    for (i = 0; i < numDays; i++) {
+      start = start.clone().add(1, 'days');
+      days.push(Time.getDayWithTimezone(start, tz));
+    }
+
+    return days;
+  },
+
+  convertToDate(date) {
+    return date instanceof Date ?
+      date :
+      new Date(date);
   },
 };
 

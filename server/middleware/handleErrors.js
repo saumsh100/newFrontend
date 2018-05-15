@@ -3,8 +3,8 @@ const chalk = require('chalk');
 const { env } = require('../config/globals');
 
 function logError(err, req, res, next) {
-  console.log(chalk.red('[ERROR]', (err.status) ? `[${err.status}]` : '', ':', err.message));
-  console.log(env);
+  console.error(chalk.red('[ERROR]', (err.status) ? `[${err.status}]` : '', ':', err.message));
+  console.error(err.stack);
   if (env === 'development' || env === 'test') {
     console.error(err);
   }
@@ -12,8 +12,7 @@ function logError(err, req, res, next) {
   next(err);
 }
 
-function sendError(err, req, res, next) {
-  console.log(err.message);
+function sendError(err, req, res) {
   const errorStatus = err.status || 500;
 
   // Prepare a JsonAPI-compliant error response for clients that request it

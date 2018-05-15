@@ -145,6 +145,10 @@ const recalls = {
 
 const staticPath = path.normalize(path.join(root, '../statics'));
 
+const logger = {
+  logLevel: environmentVariables.LOG_LEVEL || 'debug',
+};
+
 module.exports = {
   staticPath,
   root,
@@ -180,4 +184,5 @@ module.exports = {
   recalls,
   bitly,
   rebrandly,
+  logger,
 };

@@ -189,16 +189,17 @@ export default function (sequelize, DataTypes) {
     const {
       Address,
       Appointment,
+      Chair,
       Chat,
       Enterprise,
       Patient,
       Practitioner,
       Reminder,
       Recall,
-      Service,
       WeeklySchedule,
       Review,
       SentReview,
+      Service,
     } = models;
 
     Account.belongsTo(Enterprise, {
@@ -224,6 +225,11 @@ export default function (sequelize, DataTypes) {
     Account.hasMany(Chat, {
       foreignKey: 'accountId',
       as: 'chats',
+    });
+
+    Account.hasMany(Chair, {
+      foreignKey: 'accountId',
+      as: 'chairs',
     });
 
     Account.hasMany(Patient, {

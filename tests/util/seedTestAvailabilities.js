@@ -11,6 +11,7 @@ import {
   Practitioner_Service,
   Chair,
   Patient,
+  PatientUser,
   PractitionerRecurringTimeOff,
 } from '../../server/_models';
 import wipeModel, { wipeAllModels } from './wipeModel';
@@ -26,10 +27,10 @@ const timeOffId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
 const enterpriseId = uuid();
 
-
 const justinPatientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
+const justinPatientUserId = '6beab035-b72c-4f7a-ad73-09465cbf5654';
 
-const practitionerId3 = uuid();
+const practitionerId3 = '721fb9c1-1195-463f-9137-42c52d0707ab';
 const practitionerId4 = '4f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId5 = '7f439ff8-c55d-4423-9316-a41240c4d329';
 const practitionerId6 = '6f439ff8-c55d-4423-9316-a41240c4d329';
@@ -146,6 +147,8 @@ const Accounts = [
     enterpriseId,
     canSendReminders: true,
     canSendRecalls: true,
+    timezone: 'America/Vancouver',
+    timeInterval: 30,
   },
 ];
 
@@ -248,6 +251,15 @@ const Patients = [
   }
 ];
 
+const PatientUsers = [
+  {
+    id: justinPatientUserId,
+    firstName: 'Justin',
+    lastName: 'Sharp',
+    email: 'justin@carecru.com',
+  },
+];
+
 const Enterprises = [
   {
     id: enterpriseId,
@@ -262,7 +274,6 @@ const Practitioners = [
     accountId: accountId2,
     firstName: 'Jennifer',
     lastName: 'Love-Hewitt',
-    // weeklyScheduleId: weeklyScheduleId3,
     isCustomSchedule: false,
     // services: [],
   },
@@ -282,9 +293,6 @@ const Practitioners = [
     isCustomSchedule: false,
     // services: [],
   },
-];
-
-const Practitioners2 = [
   {
     id: practitionerId4,
     accountId: accountId2,
@@ -526,18 +534,6 @@ const Chairs = [
 
 async function seedTestAvailabilities() {
   await wipeAllModels();
-  await wipeModel(Appointment);
-  await wipeModel(Chair);
-  await wipeModel(Account);
-  await wipeModel(Address);
-  await wipeModel(PractitionerRecurringTimeOff);
-  await wipeModel(Practitioner);
-  await wipeModel(WeeklySchedule);
-  await wipeModel(Enterprise);
-  await wipeModel(Service);
-  await wipeModel(Practitioner_Service);
-  await wipeModel(Patient);
-
 
   const newWeeklySchedules = WeeklySchedules.map((weeklySchedule) => {
     delete weeklySchedule.accountId;
@@ -555,27 +551,17 @@ async function seedTestAvailabilities() {
   await WeeklySchedule.bulkCreate(newWeeklySchedules);
   await Address.bulkCreate([address]);
   await Account.bulkCreate(Accounts);
-  await Practitioner.bulkCreate(Practitioners2);
   await Practitioner.bulkCreate(Practitioners);
   await Service.bulkCreate(Services);
   await Practitioner_Service.bulkCreate(PractitionerServices);
   await PractitionerRecurringTimeOff.bulkCreate(PractitionerTimeOffs);
   await Chair.bulkCreate(Chairs);
   await Patient.bulkCreate(Patients);
+  await PatientUser.bulkCreate(PatientUsers);
   await Appointment.bulkCreate(Appointments);
 }
 
 async function wipeTestAvailabilities() {
-  await wipeModel(Appointment);
-  await wipeModel(Chair);
-  await wipeModel(Account);
-  await wipeModel(Address);
-  await wipeModel(PractitionerRecurringTimeOff);
-  await wipeModel(Practitioner);
-  await wipeModel(WeeklySchedule);
-  await wipeModel(Enterprise);
-  await wipeModel(Service);
-  await wipeModel(Practitioner_Service);
   await wipeAllModels();
 }
 
