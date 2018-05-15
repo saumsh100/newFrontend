@@ -70,7 +70,7 @@ export default function (sequelize, DataTypes) {
     },
 
     note: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: true,
     },
 
