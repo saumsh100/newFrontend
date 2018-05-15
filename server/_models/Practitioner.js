@@ -1,10 +1,6 @@
+
 const { validateAccountIdPmsId } = require('../util/validators');
 const globals = require('../config/globals');
-
-const TYPE = {
-  DENTIST: 'Dentist',
-  HYGIENIST: 'Hygienist',
-};
 
 export default function (sequelize, DataTypes) {
   const Practitioner = sequelize.define('Practitioner', {
@@ -30,9 +26,7 @@ export default function (sequelize, DataTypes) {
     },
 
     type: {
-      type: DataTypes.ENUM,
-      values: Object.keys(TYPE).map(key => TYPE[key]),
-      defaultValue: TYPE.HYGIENIST,
+      type: DataTypes.STRING,
     },
 
     isActive: {
@@ -133,22 +127,6 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'practitionerId',
     });
   };
-
-  /*Practitioner.prototype.getWeeklySchedule = function () {
-    const self = this;
-    return new Promise((resolve, reject) => {
-      if (self.isCustomSchedule) {
-        return WeeklySchedule.get(self.weeklyScheduleId)
-          .then(ws => resolve(ws))
-          .catch(err => reject(err));
-      }
-
-      return Account.get(self.accountId).getJoin({ weeklySchedule: true })
-        .then(account => resolve(account.weeklySchedule))
-        .catch(err => reject(err));
-  };*/
-
-  Practitioner.TYPE = TYPE;
 
   return Practitioner;
 }
