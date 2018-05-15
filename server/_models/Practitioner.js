@@ -47,7 +47,6 @@ export default function (sequelize, DataTypes) {
 
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
 
     lastName: {
