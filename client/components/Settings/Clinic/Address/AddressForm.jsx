@@ -1,11 +1,9 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { Row, Col, Form, Field, Select } from '../../../library';
+import { Form, Field } from '../../../library';
 import { usStates, caProvinces, countrySelector } from './selectConstants';
-import { change } from 'redux-form';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import styles from './styles.scss';
 
 const maxLength = max => value =>
@@ -15,27 +13,46 @@ const maxLength = max => value =>
 const maxLength25 = maxLength(25);
 const maxPostalLength = maxLength(6);
 
-class AddressForm extends React.Component {
+/**
+ * setLabel decides which element to render based on a default condition.
+ * @param country
+ * @param primary
+ * @param secondary
+ */
+const setLabel = (country, primary, secondary) => (country === 'US' ? primary : secondary);
+
+class AddressForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      country: '',
-      street: '',
-      city: '',
-      zipCode: '',
-      state: '',
-      timezone: '',
-    };
+    this.state = this.getInitialState();
     this.changeCountry = this.changeCountry.bind(this);
     this.zipPostalVal = this.zipPostalVal.bind(this);
   }
 
-  changeCountry(event, newValue, previousValue) {
+  getInitialState() {
+    const { address } = this.props;
+    const country = address.get('country');
+    const zipPostal = setLabel(country, 'ZipCode', 'Postal Code');
+    const labelStateProv = setLabel(country, 'State', 'Province');
+
+    return {
+      country,
+      zipPostal,
+      labelStateProv,
+    };
+  }
+
+  changeCountry(event, newValue) {
     this.props.change('addressSettingsForm', 'zipCode', '');
     this.props.change('addressSettingsForm', 'state', '');
 
+    const zipPostal = setLabel(newValue, 'Zipcode', 'Postal Code');
+    const labelStateProv = setLabel(newValue, 'State', 'Province');
+
     this.setState({
       country: newValue,
+      zipPostal,
+      labelStateProv,
     });
   }
 
@@ -56,25 +73,19 @@ class AddressForm extends React.Component {
     return undefined;
   }
 
-  componentWillMount() {
-    const { accountInfo, address } = this.props;
-    if (address) {
-      this.setState({
-        country: address.get('country'),
-        street: address.get('street'),
-        city: address.get('city'),
-        zipCode: address.get('zipCode'),
-        state: address.get('state'),
-        timezone: address.get('timezone'),
-      });
-    }
-  }
-
   render() {
-    const { onSubmit } = this.props;
+    const { onSubmit, address } = this.props;
 
-    const stateProv = this.state.country === 'United States' ? usStates : caProvinces;
-    const zipPostal = this.state.country === 'United States' ? 'Zipcode' : 'Postal Code';
+    const stateProv = setLabel(this.state.country, usStates, caProvinces);
+
+    const initialValues = {
+      country: address.get('country'),
+      street: address.get('street'),
+      city: address.get('city'),
+      zipCode: address.get('zipCode'),
+      state: address.get('state'),
+      timezone: address.get('timezone'),
+    };
 
     const options = moment.tz
       .names()
@@ -96,9 +107,8 @@ class AddressForm extends React.Component {
         <Form
           form="addressSettingsForm"
           onSubmit={onSubmit}
-          initialValues={this.state}
+          initialValues={initialValues}
           data-test-id="addressSettingsForm"
-          alignSave="left"
         >
           <div className={styles.addressForm}>
             <Field
@@ -117,7 +127,7 @@ class AddressForm extends React.Component {
             />
             <Field
               name="state"
-              label="State"
+              label={this.state.labelStateProv}
               component="DropdownSelect"
               options={stateProv}
               data-test-id="state"
@@ -125,7 +135,7 @@ class AddressForm extends React.Component {
             <Field name="city" label="City" validate={[maxLength25]} data-test-id="city" />
             <Field
               name="zipCode"
-              label={zipPostal}
+              label={this.state.zipPostal}
               validate={[maxPostalLength, this.zipPostalVal]}
               data-test-id="zipCode"
               maxLength="6"
@@ -145,20 +155,16 @@ class AddressForm extends React.Component {
 }
 
 AddressForm.propTypes = {
-  address: PropTypes.object,
+  address: PropTypes.shape({
+    country: PropTypes.string,
+    street: PropTypes.string,
+    city: PropTypes.string,
+    zipCode: PropTypes.string,
+    state: PropTypes.string,
+    timezone: PropTypes.string,
+  }),
   change: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      change,
-    },
-    dispatch
-  );
-}
-
-const enhance = connect(null, mapDispatchToProps);
-
-export default enhance(AddressForm);
+export default AddressForm;

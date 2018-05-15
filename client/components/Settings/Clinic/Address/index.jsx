@@ -1,23 +1,22 @@
 
-import React, { PropTypes, Component } from 'react';
-import { reset } from 'redux-form';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { change } from 'redux-form';
 import { Map } from 'immutable';
 import AddressForm from './AddressForm';
 import { updateEntityRequest, createEntityRequest } from '../../../../thunks/fetchEntities';
-import styles from './styles.scss';
-import { Grid } from '../../../library';
+import { accountShape } from '../../../library/PropTypeShapes/accountShape';
 
-
-class Address extends React.Component {
+class Address extends Component {
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
   }
 
   submit(values) {
-    const { activeAccount, updateEntityRequest, createEntityRequest } = this.props;
+    const { activeAccount } = this.props;
     values.city = values.city.trim();
     values.street = values.street.trim();
     const valuesMap = Map(values);
@@ -31,63 +30,68 @@ class Address extends React.Component {
       },
     };
 
-    updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
-    if (activeAccount.addressId) {
-      values.accountId = activeAccount.id;
-      updateEntityRequest({ key: 'addresses', values, url: `/api/addresses/${activeAccount.addressId}` })
-      .then(() => this.props.reset('addressSettingsForm'));
-    } else {
-      createEntityRequest({ key: 'addresses', values, url: '/api/addresses/' })
-      .then(() => this.props.reset('addressSettingsForm'));
-    }
+    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert }).then(() => {
+      if (activeAccount.addressId) {
+        values.accountId = activeAccount.id;
+        this.props.updateEntityRequest({
+          key: 'addresses',
+          values,
+          url: `/api/addresses/${activeAccount.addressId}`,
+        });
+      } else {
+        this.props.createEntityRequest({ key: 'addresses', values, url: '/api/addresses/' });
+      }
+    });
   }
 
   render() {
-    const { activeAccount, addresses } = this.props;
-    let showComponent = null;
-    if (activeAccount) {
-
-      let address = null;
-      if (activeAccount.addressId) {
-        address = addresses.get(activeAccount.addressId);
-      }
-
-      showComponent = (
+    const { activeAccount, address } = this.props;
+    return (
+      address && (
         <AddressForm
           onSubmit={this.submit}
           accountInfo={activeAccount}
           address={address}
+          change={this.props.change}
         />
-      );
-    }
-
-    return (
-      <div>
-        {showComponent}
-      </div>
+      )
     );
   }
-
 }
 
 Address.propTypes = {
-  activeAccount: PropTypes.object,
-  addresses: PropTypes.object,
+  activeAccount: PropTypes.objectOf(accountShape),
+  addresses: PropTypes.instanceOf(Map),
   updateEntityRequest: PropTypes.func,
-  reset: PropTypes.func,
+  createEntityRequest: PropTypes.func,
+  address: PropTypes.shape({
+    country: PropTypes.string,
+    street: PropTypes.string,
+    city: PropTypes.string,
+    zipCode: PropTypes.string,
+    state: PropTypes.string,
+    timezone: PropTypes.string,
+  }),
+  change: PropTypes.func,
 };
 
 function mapDispatchToActions(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-    createEntityRequest,
-    reset,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+      createEntityRequest,
+      change,
+    },
+    dispatch
+  );
 }
 
-function mapStateToProps({ entities }) {
+function mapStateToProps({ entities }, { activeAccount }) {
+  const addresses = entities.getIn(['addresses', 'models']);
+
   return {
-    addresses: entities.getIn(['addresses', 'models']),
+    address:
+      activeAccount && activeAccount.addressId ? addresses.get(activeAccount.addressId) : false,
   };
 }
 
