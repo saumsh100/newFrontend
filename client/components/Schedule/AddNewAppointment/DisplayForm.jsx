@@ -77,11 +77,15 @@ const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
 const validatePatient = value =>
   (value && typeof value === 'object' && value.id ? undefined : 'You must select a valid patient');
 
+/**
+ * Sets the defaultStartTime using the next time after the currentHour + 1hour.
+ */
 const defaultStartTime = () => {
   const now = moment().add(60, 'minutes');
-  const nextAvailable = generateTimeOptions().find(
-    opt => moment(opt.value).format('HH:mm') > now.format('HH:mm')
-  );
+  const sortedTimes = generateTimeOptions().sort((a, b) => (a.value < b.value ? -1 : 1));
+  const nextAvailable =
+    sortedTimes.find(opt => moment(opt.value).format('HH:mm') > now.format('HH:mm')) ||
+    sortedTimes[0];
   return nextAvailable.value;
 };
 
