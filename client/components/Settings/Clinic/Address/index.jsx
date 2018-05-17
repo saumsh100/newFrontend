@@ -17,8 +17,8 @@ class Address extends Component {
 
   submit(values) {
     const { activeAccount } = this.props;
-    values.city = values.city.trim();
-    values.street = values.street.trim();
+    values.city = values.city && values.city.trim();
+    values.street = values.street && values.street.trim();
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
