@@ -554,7 +554,7 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
     const response = await Promise.all(promises);
 
     response.forEach((resp) => {
-      if (resp[0].status === 'rejected') {
+      if (resp && resp[0] && resp[0].status === 'rejected') {
         console.error(`Status Rejected. Failed to send Online Booking Intro email to ${resp[0].email}.`);
       } else {
         console.log(`Sent Online Booking Intro email to ${resp[0].email}!`);
