@@ -473,6 +473,7 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
     };
 
     const attributes = [
+      'Patient.id',
       'Patient.email',
       'Patient.firstName',
     ];
@@ -493,9 +494,11 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
 
     const promises = patients.map((patient) => {
       return sendMassOnlineBookingIntro({
+        patientId: patient.id,
         accountId: req.accountId,
         toEmail: patient.email,
         fromName: name,
+        replyTo: account.contactEmail,
         mergeVars: [
           {
             name: 'PRIMARY_COLOR',
@@ -553,6 +556,8 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
     response.forEach((resp) => {
       if (resp[0].status === 'rejected') {
         console.error(`Status Rejected. Failed to send Online Booking Intro email to ${resp[0].email}.`);
+      } else {
+        console.log(`Sent Online Booking Intro email to ${resp[0].email}!`);
       }
     });
 
@@ -560,7 +565,7 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
       massOnlineEmailSentDate: moment().toISOString(),
     });
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return next(err);
   }
 });
@@ -592,7 +597,7 @@ accountsRouter.get('/:accountId/onlineBookingEmailBlastCount', checkPermissions(
 
     return res.send({ patientEmailCount: patientCount });
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return next(err);
   }
 });
