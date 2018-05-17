@@ -479,7 +479,9 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
     ];
 
     const account = await Account.findById(accountId);
-    const { name, accountLogoUrl, massOnlineEmailSentDate } = account;
+    const { name, massOnlineEmailSentDate } = account;
+
+    const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
     if (massOnlineEmailSentDate) {
       return res.sendStatus(403);
