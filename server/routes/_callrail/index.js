@@ -49,8 +49,6 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
     data.dateTime = moment(req.body.datetime).toISOString();
   }
 
-  console.log(callernum);
-
   Patient.findOne({ where: { accountId: req.account.id, mobilePhoneNumber: callernum }, raw: true })
     .then((patient) => {
       if (patient) {

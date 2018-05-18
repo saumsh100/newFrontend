@@ -1,0 +1,133 @@
+@import '../../../ui.scss';
+
+.callTableContainer {
+  display: flex;
+  flex-direction: column;
+  max-height: 900px;
+  overflow: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 25px;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  color: $primary-dark;
+  padding: 30px;
+}
+
+.callTableBody {
+  @extend .callTableContainer;
+  padding: 0;
+}
+
+.callListItem {
+  cursor: pointer;
+  &:hover {
+    background-color: $primary-grey;
+  }
+
+  &:last-child {
+    border-bottom: 0px;
+  }
+}
+
+.header {
+  border-bottom: 1px solid $primary-grey;
+}
+
+.rowHeader {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding-bottom: 20px;
+  color: $primary-dark-grey;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding-left: 30px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 55px;
+  color: $primary-dark;
+  font-size: 12px;
+  border-bottom: 1px solid $primary-grey;
+  padding-left: 30px;
+}
+
+.colStyling {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  text-transform: capitalize;
+}
+
+.col {
+  flex: 1;
+  width: 170px;
+  @extend .colStyling;
+}
+
+.colEmpty {
+  width: 20px;
+}
+
+.colSmall {
+  @extend .colStyling;
+  padding-left: 10px;
+  width: 100px;
+}
+
+.colExtraSmall {
+  width: 50px;
+  @extend .colStyling;
+}
+
+.phone {
+  color: $primary-green;
+}
+
+.phoneMissed {
+  color: $primary-red;
+}
+
+.appBooked {
+  width: 30%;
+  min-width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.playIcon {
+  cursor: pointer;
+}
+
+.unknown {
+  color: $primary-green;
+}
+
+.patientStyle {
+  display: flex;
+  align-items: center;
+
+  div {
+    margin-right: 5px;
+  }
+}
+
+.callerNum {
+  padding-top: 7px;
+}
+
+.callerName {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}

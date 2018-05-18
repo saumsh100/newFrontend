@@ -15,12 +15,9 @@ import DonnaToDoListContainer from './DonnaToDoListContainer/index';
 import { setDashboardDate } from '../../reducers/dashboard';
 import RevenueContainer from './RevenueContainer';
 import { fetchDonnasToDos } from '../../thunks/dashboard';
+import FeatureFlagWrapper from '../FeatureFlagWrapper';
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchEntitiesRequest({ key: 'users' });
     this.props.fetchEntitiesRequest({
@@ -47,7 +44,10 @@ class Dashboard extends React.Component {
           />
 
           <div className={styles.revenueColFlex}>
-            <RevenueContainer dashboardDate={this.props.dashboardDate} />
+            <FeatureFlagWrapper featureKey="feature-revenue-card">
+              <RevenueContainer dashboardDate={this.props.dashboardDate} />
+            </FeatureFlagWrapper>
+
             <StatsContainer dashboardDate={this.props.dashboardDate} />
           </div>
 
@@ -69,9 +69,20 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   users: PropTypes.object,
-  dashboardDate: PropTypes.instanceOf(Date),
+  dashboardDate: PropTypes.string,
   setDashboardDate: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
+  fetchDonnasToDos: PropTypes.func,
+  dashboard: PropTypes.shape({
+    dashboardDate: PropTypes.string,
+    loadingInsights: PropTypes.bool,
+    loadingToDos: PropTypes.bool,
+    insightCount: PropTypes.number,
+    insights: PropTypes.arrayOf(PropTypes.any),
+    reminders: PropTypes.arrayOf(PropTypes.any),
+    reviews: PropTypes.arrayOf(PropTypes.any),
+    recalls: PropTypes.arrayOf(PropTypes.any),
+  }),
 };
 
 function mapStateToProps({ entities, dashboard }) {

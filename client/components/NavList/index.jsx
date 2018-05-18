@@ -1,25 +1,19 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Nav, NavItem, Link, Icon, Tooltip } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
+import FeatureFlagWrapper from '../FeatureFlagWrapper';
 import styles from './styles.scss';
 
 const PATHS = {
-  '/patients': [
-    { },
-  ],
-
+  '/patients': [{}],
 };
 
 function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadChats }) {
-  const {
-    navItem,
-    activeItem,
-    label,
-    activeLabel,
-  } = styles;
+  const { navItem, activeItem, label, activeLabel } = styles;
 
   const inactiveClass = navItem;
   const activeClass = classNames(navItem, activeItem);
@@ -27,7 +21,15 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
 
-  const SingleNavItem = ({ path, icon, label, active, disabled, iconType = 'solid', badge = false }) => {
+  const SingleNavItem = ({
+    path,
+    icon,
+    label,
+    active,
+    disabled,
+    iconType = 'solid',
+    badge = false,
+  }) => {
     active = active || location.pathname === path;
     let classes = active ? activeClass : inactiveClass;
     if (disabled) {
@@ -37,9 +39,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
     let labelComponent = null;
     if (!isCollapsed) {
       labelComponent = (
-        <div className={active ? activeLabelClass : inactiveLabelClass}>
-          {label}
-        </div>
+        <div className={active ? activeLabelClass : inactiveLabelClass}>{label}</div>
       );
     }
 
@@ -58,11 +58,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
 
     let content = null;
     if (active && !isCollapsed) {
-      content = (
-        <ul className={styles.multiple_nav}>
-          {children}
-        </ul>
-      );
+      content = <ul className={styles.multiple_nav}>{children}</ul>;
     }
 
     return (
@@ -80,7 +76,11 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
       inactiveSubClass = classNames(inactiveSubClass, styles.disabledSubNavItem);
     }
 
-    const activeSubClass = classNames(inactiveSubClass, styles.activeSubNavItem, styles.multiple_nav__active);
+    const activeSubClass = classNames(
+      inactiveSubClass,
+      styles.activeSubNavItem,
+      styles.multiple_nav__active
+    );
     const className = active ? activeSubClass : inactiveSubClass;
     return (
       <li className={styles.multiple_nav__item}>
@@ -100,18 +100,22 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
     </div>
   );
 
-  const renderIf = (cond, render, alt) => cond ? render() : (alt && alt() || null);
+  const renderIf = (cond, render, alt) => (cond ? render() : (alt && alt()) || null);
 
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        {renderIf(withEnterprise, () =>
+        {renderIf(withEnterprise, () => (
           <MultiNavItem path="/enterprise" icon="building" label="Enterprise Dashboard">
             <SubNavItem path="/enterprise/patients" label="Patients" />
           </MultiNavItem>
-        )}
-        <SingleNavItem path="/" icon="tachometer" label={renderIf(withEnterprise, () => 'Clinic Dashboard', () => 'Dashboard')} />
-        {/*<MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
+        ))}
+        <SingleNavItem
+          path="/"
+          icon="tachometer"
+          label={renderIf(withEnterprise, () => 'Clinic Dashboard', () => 'Dashboard')}
+        />
+        {/* <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
           <SubNavItem path="/intelligence/overview" label="Overview" />
           <SubNavItem path="/intelligence/business" label="Business" />
           <SubNavItem path="/intelligence/social" label="Social" disabled/>
@@ -119,14 +123,17 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
         <SingleNavItem path="/schedule" icon="calendar-alt" label="Schedule" />
         <SingleNavItem path="/patients/list" icon="heart" label="Patient Management" />
         <SingleNavItem path="/chat" icon="comment-alt" label="Chat" badge={unreadChats} />
+        <FeatureFlagWrapper featureKey="feature-call-tracking">
+          <SingleNavItem path="/calls" icon="phone" label="Call Tracking" />
+        </FeatureFlagWrapper>
 
-        {/*<SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />*/}
+        {/* <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />*/}
 
-        <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing" >
+        <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing">
           <SubNavItem path="/reputation/listings" label="Listings" />
           <SubNavItem path="/reputation/reviews" label="Reviews" />
         </MultiNavItem>
-        {/*<MultiNavItem path="/social" icon="thumbs-up" label="Social Media" disabled>
+        {/* <MultiNavItem path="/social" icon="thumbs-up" label="Social Media" disabled>
           <SubNavItem path="/social/patient" label="Patient Posts" disabled/>
           <SubNavItem path="/social/practice" label="Practice Posts" disabled/>
         </MultiNavItem>
@@ -140,17 +147,26 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
           <SubNavItem path="/settings/communications" label="Communications" />
         </MultiNavItem>
 
-        {renderIf(isSuperAdmin, () =>
+        {renderIf(isSuperAdmin, () => (
           <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
             <SubNavItem path="/admin/enterprises" label="Enterprises" />
             <SubNavItem path="/admin/nasa" label="NASA" />
             <SubNavItem path="/admin/play" label="Playground" />
           </MultiNavItem>
-        )}
+        ))}
       </Nav>
     </div>
   );
 }
+
+NavList.propTypes = {
+  isCollapsed: PropTypes.bool,
+  isSuperAdmin: PropTypes.bool,
+  label: PropTypes.string,
+  active: PropTypes.bool,
+  disabled: PropTypes.bool,
+  iconType: PropTypes.string,
+};
 
 function mapStateToProps({ chat }) {
   const unreadChats = chat.get('unreadChats');

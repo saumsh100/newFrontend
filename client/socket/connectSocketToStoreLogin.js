@@ -1,37 +1,19 @@
 
-import jwt from 'jwt-decode';
-import {
-  addSocketEntity,
-  addEntity,
-  updateEntity,
-  deleteEntity,
-  receiveEntities,
-} from '../actions/entities';
+import { updateEntity, deleteEntity, receiveEntities } from '../actions/entities';
 
-import {
-  showAlertTimeout,
-} from '../thunks/alerts';
+import { showAlertTimeout } from '../thunks/alerts';
 
-import {
-  removeAlert,
-} from '../actions/alerts';
+// import { removeAlert } from '../actions/alerts';
 
-import {
-  setSyncingWithPMS,
-} from '../actions/schedule';
+import { setSyncingWithPMS } from '../actions/schedule';
 
-import {
-  addMessage,
-  socketLock,
-} from '../thunks/chat';
+import { addMessage, socketLock } from '../thunks/chat';
 
-import {
-  getModel,
-} from '../components/Utils';
+// import { formatPhoneNumber } from '../components/library/util/Formatters';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
-  const { dispatch, getState } = store;
+  const { dispatch } = store;
 
   socket
     .emit('authenticate', { token: jwtToken })
@@ -108,7 +90,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
       });
       socket.on('remove:Appointment', (data) => {
-       // console.log('remove:Appointment event, id=', data.id);
+        // console.log('remove:Appointment event, id=', data.id);
         dispatch(deleteEntity({ key: 'appointments', id: data.id }));
       });
 
@@ -116,35 +98,39 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Calls Socket
        */
       socket.on('call.started', (data) => {
-        const callId = Object.keys(data.entities.calls)[0];
+        /* const callId = Object.keys(data.entities.calls)[0];
         const patientId = data.entities.patients ? Object.keys(data.entities.patients)[0] : null;
-        const patient = patientId ? `${data.entities.patients[patientId].firstName} ${data.entities.patients[patientId].lastName}` : 'Unknown';
+        const patient = patientId
+          ? `${data.entities.patients[patientId].firstName} ${
+            data.entities.patients[patientId].lastName
+          }`
+          : 'Unknown';
         const alert = {
           id: callId,
           title: 'Incoming Call',
           caller: true,
           body: `${patient}`,
-          subText: `${data.entities.calls[callId].callerNum}`,
+          subText: `${formatPhoneNumber(data.entities.calls[callId].callerNum)}`,
           sticky: true,
           browserAlert: true,
           clickable: true,
-        };
+        }; */
 
         dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
-        dispatch(showAlertTimeout({ alert, type: 'success' }));
+        // dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
 
       socket.on('call.ended', (data) => {
-        const callId = Object.keys(data.entities.calls)[0];
+        // const callId = Object.keys(data.entities.calls)[0];
         dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
-        dispatch(removeAlert({ alert: { id: callId } }));
+        // dispatch(removeAlert({ alert: { id: callId } }));
       });
 
       /**
        * Patient Socket
        */
       socket.on('create:Patient', (data) => {
-        //console.log('Created Patient', data.entities);
+        // console.log('Created Patient', data.entities);
         dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
       });
 
@@ -169,38 +155,14 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(socketLock(data.entities.textMessages));
       });
 
-      socket.on('syncClientError', (data) => {
-        const {
-          model,
-          operation,
-        } = data;
-        const alert = {
-          title: 'Sync Error',
-          body: `SyncClientError: ${model} ${operation} failed in the PMS`,
-        };
-        // dispatch(showAlertTimeout({ alert, type: 'error' }));
-      });
+      socket.on('syncClientError', () => {});
 
       socket.on('syncFinished', (data) => {
-        const alert = {
-          title: 'Sync update',
-          body: 'Sync finished',
-        };
-
-        //dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
         dispatch(updateEntity({ key: 'accounts', entity: data }));
       });
 
-      socket.on('syncProgress', (data) => {
-        const percentDone = Math.floor((data.saved / data.total) * 100);
-        const alert = {
-          title: 'Sync progress',
-          body: `${data.collection} ${percentDone}%`,
-        };
-        //console.log(alert.body);
-        // dispatch(showAlertTimeout({ alert, type: 'success' }));
-      });
+      socket.on('syncProgress', () => {});
     })
     .on('unauthorized', (msg) => {
       console.log('unauthorized: ', JSON.stringify(msg.data));

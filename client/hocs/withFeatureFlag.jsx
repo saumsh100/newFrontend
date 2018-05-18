@@ -2,17 +2,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import jwt from 'jwt-decode';
-import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
 export default function withFeatureFlag(BackupComponent, featureKey) {
   return (FlaggedComponent) => {
     class FeatureFlaggedComponent extends Component {
-      constructor(props) {
-        super(props);
-      }
-
       render() {
         const { flags } = this.props;
 

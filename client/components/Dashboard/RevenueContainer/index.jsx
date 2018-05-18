@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import RevenueDisplay from './RevenueDisplay';
 import RevenueChart from './RevenueChart';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
-import withFeatureFlag from '../../../hocs/withFeatureFlag';
 import { Card } from '../../library';
 import styles from './styles.scss';
 
@@ -61,10 +60,6 @@ function renderChart(revenueData) {
 }
 
 class RevenueContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {
     const { dashboardDate } = this.props;
 
@@ -110,8 +105,8 @@ class RevenueContainer extends Component {
         loaded={wasRevenueFetched}
         loaderStyle={styles.loader}
       >
-        {wasRevenueFetched ? renderDisplay(revenueData.get('data')) : null}
-        {wasRevenueFetched ? renderChart(revenueData.get('data')) : null}
+        {wasRevenueFetched && renderDisplay(revenueData.get('data'))}
+        {wasRevenueFetched && renderChart(revenueData.get('data'))}
       </Card>
     );
   }
@@ -147,4 +142,5 @@ function mapStateToProps({ apiRequests }) {
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
-export default withFeatureFlag(null, 'feature-revenue-card')(enhance(RevenueContainer));
+export default enhance(RevenueContainer);
+

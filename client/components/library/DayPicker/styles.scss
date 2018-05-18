@@ -1,8 +1,8 @@
 @import '../../../ui.scss';
 
 .dayPickerContainer {
-  border-radius: .2rem;
-  box-shadow: 0 19px 60px rgba(0,0,0,.3), 0 15px 20px rgba(0,0,0,.22);
+  border-radius: 0.2rem;
+  box-shadow: 0 19px 60px rgba(0, 0, 0, 0.3), 0 15px 20px rgba(0, 0, 0, 0.22);
 }
 
 .wrapper {
@@ -24,10 +24,56 @@
 }
 
 .dateInput {
-  position:relative;
+  position: relative;
 }
 
 .calendarIcon {
   position: absolute;
   right: 0px;
+}
+
+.wrapperRange {
+  background-color: white;
+  border: 1px solid #e4e4e4;
+
+  div:first-child {
+    border: 0;
+  }
+}
+
+.rangeInputContainer {
+  display: flex;
+  width: 315px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.popOverBody {
+  > div {
+    margin-right: 41px;
+  }
+}
+
+.inputGroup {
+  width: 140px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+  input {
+    padding-left: 20px;
+    border: 1px solid $primary-grey;
+    cursor: pointer;
+  }
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  border-right: 1px solid $primary-blue;
+
+  button {
+    width: 100%;
+  }
 }

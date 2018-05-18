@@ -1,21 +1,18 @@
 
 import React, { PropTypes } from 'react';
-import moment from 'moment';
-import { Avatar, Icon, Button, Toggle } from '../../library';
 import classnames from 'classnames';
+import moment from 'moment';
+import { Avatar, Icon } from '../../library';
 import AppointmentBookedToggle from './AppointmentBookedToggle';
+import CallDisplayInfo from '../CallDisplayInfo';
 import styles from '../styles.scss';
 
 export default function CallerDisplay(props) {
-  const {
-    call,
-    patient,
-    patientIdStats,
-    clearSelectedChat,
-    updateEntityRequest,
-    push,
-    setScheduleDate,
-  } = props;
+  const { call, patient, clearSelectedCall, updateEntityRequest, push, setScheduleDate } = props;
+
+  if (!patient) {
+    return null;
+  }
 
   const isAnswered = call.answered;
   const isCallFinished = call.duration > 0;
@@ -34,34 +31,39 @@ export default function CallerDisplay(props) {
 
   const callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
 
-  const age = moment().diff(patient.birthDate, 'years');
+  const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : null;
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
-  const birthDate = moment(patient.birthDate).format('MMMM Do, YYYY');
+  const birthDate =
+    patient && patient.birthDate ? moment(patient.birthDate).format('MMMM Do, YYYY') : null;
 
-  const lastAppt = patientIdStats && patientIdStats.get('lastAppointment') ?
-    moment(patientIdStats.get('lastAppointment')).format('MMM Do, YYYY h:mm a') : '-';
-  const nextAppt = patientIdStats && patientIdStats.get('nextAppointment') ?
-    moment(patientIdStats.get('nextAppointment')).format('MMM Do, YYYY h:mm a') : '-';
+  const lastAppt =
+    patient && patient.lastApptDate
+      ? moment(patient.lastApptDate).format('MMM Do, YYYY h:mm a')
+      : null;
+  const nextAppt =
+    patient && patient.nextApptDate
+      ? moment(patient.nextApptDate).format('MMM Do, YYYY h:mm a')
+      : null;
 
   let nextApptStyling = styles.appointmentInfoContainer_date;
   let lastApptStyling = styles.appointmentInfoContainer_date;
 
-  if (nextAppt !== '-') {
+  if (nextAppt) {
     nextApptStyling = classnames(nextApptStyling, styles.appointmentInfoContainer_date_hover);
   }
-  if (lastAppt !== '-') {
+  if (lastAppt) {
     lastApptStyling = classnames(lastApptStyling, styles.appointmentInfoContainer_date_hover);
   }
+
   return (
-    <div className={callDisplayContainer} >
+    <div className={callDisplayContainer}>
       <div className={styles.headerContainer}>
-        <Avatar user={patient} size={"lg"} className={styles.callerAvatar} />
-        <div
-          className={styles.closeIcon}
-          onClick={clearSelectedChat}
-        >
-          x
+        <div className={styles.callerAvatar}>
+          <Avatar user={patient} size="xl" />
+        </div>
+        <div className={styles.closeIcon} onClick={clearSelectedCall}>
+          <Icon icon="times" />
         </div>
       </div>
       <div className={styles.callBody}>
@@ -76,18 +78,18 @@ export default function CallerDisplay(props) {
             <span>{patient.gender}</span>
           </div>
         </div>
-        <div className={styles.iconContainer} >
+        <div className={styles.iconContainer}>
           <Icon size={2} icon="phone" />
         </div>
         <div className={styles.appointmentInfoContainer}>
-          <div className={styles.appointmentInfoContainer_last} >
+          <div className={styles.appointmentInfoContainer_last}>
             <span>Last Appointment </span>
             <div
               className={lastApptStyling}
               onClick={() => {
-                if (lastAppt !== '-') {
-                  setScheduleDate({ scheduleDate: moment(patientIdStats.get('lastAppointment')) });
-                  clearSelectedChat();
+                if (lastAppt) {
+                  setScheduleDate({ scheduleDate: lastAppt });
+                  clearSelectedCall();
                   push('/schedule');
                 }
               }}
@@ -100,9 +102,9 @@ export default function CallerDisplay(props) {
             <div
               className={nextApptStyling}
               onClick={() => {
-                if (nextAppt !== '-') {
-                  setScheduleDate({ scheduleDate: moment(patientIdStats.get('nextAppointment')) });
-                  clearSelectedChat();
+                if (nextAppt) {
+                  setScheduleDate({ scheduleDate: nextAppt });
+                  clearSelectedCall();
                   push('/schedule');
                 }
               }}
@@ -112,49 +114,9 @@ export default function CallerDisplay(props) {
           </div>
         </div>
 
-        <div className={styles.callInfo_header} >Call Information</div>
-        <div className={styles.callInfo}>
-          <div className={styles.callInfo_content}>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Number: </div>
-              <div className={styles.callInfo_data}>{call.callerNum}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>City: </div>
-              <div className={styles.callInfo_data}>{call.callerCity}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Country: </div>
-              <div className={styles.callInfo_data}>{call.callerCountry}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>State: </div>
-              <div className={styles.callInfo_data}>{call.callerState}</div>
-            </div>
-          </div>
-          <div className={styles.callInfo_content2}>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Zip: </div>
-              <div className={styles.callInfo_data}>{call.callerZip}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Duration: </div>
-              <div className={styles.callInfo_data}>{call.duration}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Source: </div>
-              <div className={styles.callInfo_data}>{call.callSource}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Total Calls: </div>
-              <div className={styles.callInfo_data}>{call.totalCalls}</div>
-            </div>
-          </div>
-        </div>
-        <AppointmentBookedToggle
-          call={call}
-          updateEntityRequest={updateEntityRequest}
-        />
+        <div className={styles.callInfo_header}>Call Information</div>
+        <CallDisplayInfo call={call} />
+        <AppointmentBookedToggle call={call} updateEntityRequest={updateEntityRequest} />
       </div>
     </div>
   );
@@ -163,8 +125,8 @@ export default function CallerDisplay(props) {
 CallerDisplay.propTypes = {
   call: PropTypes.object,
   patient: PropTypes.object,
-  patientIdStats: PropTypes.object,
-  clearSelectedChat: PropTypes.func,
+  clearSelectedCall: PropTypes.func,
   push: PropTypes.func,
   setScheduleDate: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
 };

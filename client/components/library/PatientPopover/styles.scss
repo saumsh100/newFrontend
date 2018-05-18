@@ -34,6 +34,10 @@
     font-size: 15px;
     margin-right: 10px;
     composes: fontDefault from 'sass-loader!../../../fonts.scss';
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 250px;
+    white-space: nowrap;
   }
 }
 

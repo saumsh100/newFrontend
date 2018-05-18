@@ -140,6 +140,7 @@
     "font-awesome": "^4.7.0",
     "glob": "7.1.2",
     "globalize": "^1.1.2",
+    "google-map-react": "1.0.0",
     "graphql": "^0.13.2",
     "graphql-relay": "^0.5.4",
     "graphql-sequelize": "^8.0.0",

@@ -4,7 +4,7 @@ $extraSmall-size: 1.5rem;
 $small-size: 2.3rem;
 $medium-size: 3rem;
 $large-size: 5rem;
-$extraLarge-size: 9rem;
+$extra-Large-size: 9rem;
 
 .avatar {
   display: inline-flex;
@@ -74,10 +74,10 @@ $extraLarge-size: 9rem;
 }
 
 .xl {
-  width: $extraLarge-size;
-  height: $extraLarge-size;
-  min-width: $extraLarge-size;
-  min-height: $extraLarge-size;
+  width: $extra-Large-size;
+  height: $extra-Large-size;
+  min-width: $extra-Large-size;
+  min-height: $extra-Large-size;
   font-size: 45px;
 }
 

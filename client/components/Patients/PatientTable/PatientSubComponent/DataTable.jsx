@@ -25,6 +25,7 @@ export default function DataTable(props) {
           label="PRIMARY EMAIL"
           data={patient.email}
           className={styles.infoDump}
+          type="email"
         />
 
         <InfoDump

@@ -20,6 +20,7 @@ import CodeSnippet from './CodeSnippet';
 import Collapsible from './Collapsible';
 import ColorPicker from './ColorPicker';
 import DayPicker from './DayPicker';
+import DayPickerRange from './DayPicker/DayPickerRange';
 import DialogBox from './DialogBox';
 import DropdownSelect from './DropdownSelect';
 import Dropzone from './Dropzone';
@@ -102,6 +103,7 @@ export {
   Collapsible,
   ColorPicker,
   DayPicker,
+  DayPickerRange,
   DialogBox,
   DropdownSelect,
   Dropzone,

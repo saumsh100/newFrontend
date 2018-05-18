@@ -1,16 +1,13 @@
 
 import React, { PropTypes } from 'react';
 import classnames from 'classnames';
-import { Avatar, Icon } from '../../library'
+import { Avatar, Icon } from '../../library';
 import AppointmentBookedToggle from '../CallerDisplay/AppointmentBookedToggle';
+import CallDisplayInfo from '../CallDisplayInfo';
 import styles from '../styles.scss';
 
 export default function CallerDisplayUnknown(props) {
-  const {
-    call,
-    clearSelectedChat,
-    updateEntityRequest,
-  } = props;
+  const { call, clearSelectedCall, updateEntityRequest } = props;
 
   const isAnswered = call.answered;
   const isCallFinished = call.duration > 0;
@@ -30,14 +27,14 @@ export default function CallerDisplayUnknown(props) {
   const callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
 
   return (
-    <div className={callDisplayContainer} >
+    <div className={callDisplayContainer}>
       <div className={styles.headerContainerUnknown}>
-        <div className={styles.callerAvatarUnknown} ><span> ? </span></div> }
-        <div
-          className={styles.closeIcon}
-          onClick={clearSelectedChat}
-        >
-          x
+        <div className={styles.callerAvatarUnknown}>
+          <span> ? </span>
+        </div>{' '}
+        }
+        <div className={styles.closeIcon} onClick={clearSelectedCall}>
+          <Icon icon="times" />
         </div>
       </div>
       <div className={styles.callBody}>
@@ -46,52 +43,14 @@ export default function CallerDisplayUnknown(props) {
             <span>Unknown Caller</span>
           </div>
         </div>
-        <div className={styles.iconContainer} >
+        <div className={styles.iconContainer}>
           <Icon size={2} icon="phone" />
         </div>
-        <div className={styles.callInfo_header} >Call Information</div>
-        <div className={styles.callInfo}>
-          <div className={styles.callInfo_content}>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Number: </div>
-              <div className={styles.callInfo_data}>{call.callerNum}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>City: </div>
-              <div className={styles.callInfo_data}>{call.callerCity}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Country: </div>
-              <div className={styles.callInfo_data}>{call.callerCountry}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>State: </div>
-              <div className={styles.callInfo_data}>{call.callerState}</div>
-            </div>
-          </div>
-          <div className={styles.callInfo_content2}>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Zip: </div>
-              <div className={styles.callInfo_data}>{call.callerZip}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Duration: </div>
-              <div className={styles.callInfo_data}>{call.duration}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Source: </div>
-              <div className={styles.callInfo_data}>{call.callSource}</div>
-            </div>
-            <div className={styles.callInfo_body}>
-              <div className={styles.callInfo_desc}>Total Calls: </div>
-              <div className={styles.callInfo_data}>{call.totalCalls}</div>
-            </div>
-          </div>
-        </div>
-        <AppointmentBookedToggle
-          call={call}
-          updateEntityRequest={updateEntityRequest}
-        />
+        <div className={styles.callInfo_header}>Call Information</div>
+
+        <CallDisplayInfo call={call} />
+
+        <AppointmentBookedToggle call={call} updateEntityRequest={updateEntityRequest} />
       </div>
     </div>
   );
@@ -99,5 +58,6 @@ export default function CallerDisplayUnknown(props) {
 
 CallerDisplayUnknown.propTypes = {
   call: PropTypes.object,
-  clearSelectedChat: PropTypes.func,
+  clearSelectedCall: PropTypes.func,
+  updateEntityRequest: PropTypes.func,
 };

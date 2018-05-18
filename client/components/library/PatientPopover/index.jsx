@@ -7,6 +7,7 @@ import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import styles from './styles.scss';
 import PatientProfile from './PatientProfile';
+import { PatientShape } from '../PropTypeShapes';
 
 class PatientPopover extends Component {
   constructor(props) {
@@ -23,9 +24,8 @@ class PatientPopover extends Component {
   componentDidMount() {
     if (this.props.scrollId) {
       document.getElementById(this.props.scrollId).addEventListener('scroll', this.closeOnScroll);
+      window.addEventListener('scroll', this.closeOnScroll);
     }
-
-    window.addEventListener('scroll', this.closeOnScroll);
   }
 
   setOpen(value) {
@@ -45,39 +45,38 @@ class PatientPopover extends Component {
   }
 
   render() {
-    const {
-      placement,
-      children,
-      className,
-      patient,
-      closePopover,
-    } = this.props;
+    const { placement, children, patient, closePopover } = this.props;
+
+    if (!patient) {
+      return null;
+    }
 
     return (
       <Popover
         className={styles.patientPopover}
         {...this.props}
         isOpen={this.state.isOpen && !closePopover}
-        body={[(
+        body={[
           <PatientProfile
             closePopover={() => this.setOpen(false)}
             patient={patient}
             isPatientUser={this.props.isPatientUser}
             editPatient={this.editPatient}
-          />
-        )]}
+          />,
+        ]}
         preferPlace={placement || 'right'}
         tipSize={12}
         onOuterAction={() => this.setOpen(false)}
       >
         <div className={styles.patientLink}>
-          {React.Children.map(children, (patientLink) => {
-            return (
-              React.cloneElement(patientLink, {
-                onClick: () => this.setOpen(true),
-              })
-            );
-          })}
+          {React.Children.map(children, patientLink =>
+            React.cloneElement(patientLink, {
+              onClick: (e) => {
+                e.stopPropagation();
+                this.setOpen(true);
+              },
+            })
+          )}
         </div>
       </Popover>
     );
@@ -86,8 +85,8 @@ class PatientPopover extends Component {
 
 PatientPopover.propTypes = {
   children: PropTypes.element,
-  patient: PropTypes.object,
-  className: PropTypes.object,
+  patient: PropTypes.shape(PatientShape),
+  className: PropTypes.objectOf(PropTypes.string),
   placement: PropTypes.string,
   isPatientUser: PropTypes.bool,
   closePopover: PropTypes.bool,
@@ -96,9 +95,12 @@ PatientPopover.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    push,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      push,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(null, mapDispatchToProps);

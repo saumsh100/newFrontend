@@ -73,7 +73,6 @@
   color: #2F3844;
 }
 
-
 .DayPicker-NavButton--prev {
   left: 1rem;
   top: 0px;
@@ -87,9 +86,6 @@
   right: 1rem;
   background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjI2cHgiIGhlaWdodD0iNTBweCIgdmlld0JveD0iMCAwIDI2IDUwIiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zOnNrZXRjaD0iaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoL25zIj4KICAgIDwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy4zLjIgKDEyMDQzKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KICAgIDx0aXRsZT5uZXh0PC90aXRsZT4KICAgIDxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPgogICAgPGRlZnM+PC9kZWZzPgogICAgPGcgaWQ9IlBhZ2UtMSIgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSI+CiAgICAgICAgPGcgaWQ9Im5leHQiIHNrZXRjaDp0eXBlPSJNU0xheWVyR3JvdXAiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuOTUxNDUxLCAwLjAwMDAwMCkiIGZpbGw9IiM1NjVBNUMiPgogICAgICAgICAgICA8cGF0aCBkPSJNMCw0OS4xMjM3MzMxIEwwLDQ1LjM2NzQzNDUgTDIwLjEzMTg0NTksMjQuNzIzMDYxMiBMMCw0LjIzMTM4MzE0IEwwLDAuNDc1MDg0NDU5IEwyNSwyNC43MjMwNjEyIEwwLDQ5LjEyMzczMzEgTDAsNDkuMTIzNzMzMSBaIiBpZD0icmlnaHQiIHNrZXRjaDp0eXBlPSJNU1NoYXBlR3JvdXAiPjwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPgo=");
 }
-
-
-
 
 .DayPicker-Caption {
   display: table-caption;
@@ -114,7 +110,7 @@
   text-align: center;
   color: #808081;
   font-size: 11px;
-  font-family: Gotham-Medium;
+  opacity: 0.6;
 }
 
 .DayPicker-Body {
@@ -133,7 +129,9 @@
   vertical-align: middle;
   color: #808081;
   font-size: 11px;
+  font-family: Gotham-Medium;
 }
+
 .DayPicker-Day:focus {
   outline: none;
 }
@@ -169,7 +167,6 @@
   color: #dce0e0;
 }
 
-
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
   background-color: #206477;
   border-radius: 0px;
@@ -191,4 +188,27 @@
     width: auto;
     height: auto;
   }
+}
+
+.Range .DayPicker-Months {
+  flex-wrap: unset;
+}
+
+.Range .DayPicker-Months .DayPicker-Month {
+  width: unset;
+}
+
+.Range .DayPicker-Months .DayPicker-Month:first-child {
+  margin-right: 15px;
+}
+
+.Range .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #548D9F !important;
+  color: #ffffff;
+}
+
+.Range .DayPicker-Day--disabled {
+  background-color: #efefef;
+  color: #c9c9c9;
+  cursor: pointer;
 }

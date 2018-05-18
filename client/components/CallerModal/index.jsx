@@ -2,7 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DialogBox, Modal, Icon  } from '../library';
+import { DialogBox, Modal, Icon } from '../library';
 import { push } from 'react-router-redux';
 import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
@@ -14,65 +14,46 @@ import styles from './styles.scss';
 class CallerModal extends Component {
   constructor(props) {
     super(props);
-    this.clearSelectedChat = this.clearSelectedChat.bind(this);
+    this.clearSelectedCall = this.clearSelectedCall.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const {
-      patient,
-    } = this.props;
-
-    if (nextProps.patient && (!patient || (nextProps.patient.id !== this.props.patient.id))) {
-      this.props.fetchEntitiesRequest({
-        id: 'patientIdStats',
-        url: `/api/patients/${nextProps.patient.id}/stats`,
-      });
-    }
-  }
-
-  clearSelectedChat() {
+  clearSelectedCall() {
     this.props.unsetSelectedCallId();
   }
 
   render() {
-    const {
-      callerId,
-      call,
-      patient,
-      patientIdStats,
-      updateEntityRequest,
-      push,
-      setScheduleDate,
-    } = this.props;
-
+    const { callerId, call, patient, updateEntityRequest, push, setScheduleDate } = this.props;
 
     let callDisplay = null;
 
     if (call) {
-       if (patient) {
-         callDisplay = (<CallerDisplay
-           call={call}
-           patient={patient}
-           patientIdStats={patientIdStats}
-           clearSelectedChat={this.clearSelectedChat}
-           updateEntityRequest={updateEntityRequest}
-           push={push}
-           setScheduleDate={setScheduleDate}
-         />)
-       } else {
-         callDisplay = (<CallerDisplayUnknown
-           call={call}
-           clearSelectedChat={this.clearSelectedChat}
-           updateEntityRequest={updateEntityRequest}
-         />)
-       }
+      if (patient) {
+        callDisplay = (
+          <CallerDisplay
+            call={call}
+            patient={patient}
+            clearSelectedCall={this.clearSelectedCall}
+            updateEntityRequest={updateEntityRequest}
+            push={push}
+            setScheduleDate={setScheduleDate}
+          />
+        );
+      } else {
+        callDisplay = (
+          <CallerDisplayUnknown
+            call={call}
+            clearSelectedCall={this.clearSelectedCall}
+            updateEntityRequest={updateEntityRequest}
+          />
+        );
+      }
     }
 
     return (
       <Modal
-        active={!!callerId}
-        onEscKeyDown={this.clearSelectedChat}
-        onOverlayClick={this.clearSelectedChat}
+        active={!!callerId || patient}
+        onEscKeyDown={this.clearSelectedCall}
+        onOverlayClick={this.clearSelectedCall}
         custom
       >
         {callDisplay}
@@ -101,24 +82,24 @@ function mapStateToProps({ entities, caller, apiRequests }) {
     patient = patients.get(call.patientId).toJS();
   }
 
-  const patientIdStats = (apiRequests.get('patientIdStats') ? apiRequests.get('patientIdStats').data : null);
-
   return {
     call,
     callerId,
     patient,
-    patientIdStats,
   };
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    unsetSelectedCallId,
-    fetchEntitiesRequest,
-    updateEntityRequest,
-    push,
-    setScheduleDate,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      unsetSelectedCallId,
+      fetchEntitiesRequest,
+      updateEntityRequest,
+      push,
+      setScheduleDate,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapActionsToProps);

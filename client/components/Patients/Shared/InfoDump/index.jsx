@@ -9,6 +9,7 @@ export default function InfoDump(props) {
     data,
     className,
     component,
+    type,
   } = props;
 
   const classes = classNames(className, styles.container);
@@ -17,6 +18,10 @@ export default function InfoDump(props) {
 
   if (!data && !component) {
     dataClass = classNames(dataClass, styles.noData);
+  }
+
+  if (type === 'email') {
+    dataClass = classNames(dataClass, styles.email);
   }
 
   if (component) {

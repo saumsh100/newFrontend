@@ -1,0 +1,82 @@
+@import '../../../ui';
+
+.callInfoModal {
+  height: auto;
+  width: 600px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.leftPanel {
+  width: 60%;
+  height: 100%;
+  padding-right: 20px;
+  box-sizing: border-box;
+  border-right: 1px solid $primary-grey;
+}
+
+.rightPanel {
+  width: 40%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-left: 20px;
+}
+
+.row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+.map {
+  width: 100%;
+  height: 168px;
+  box-sizing: border-box;
+  border: 1px solid $primary-grey;
+}
+
+.title {
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.marker {
+  border: 3px solid $primary-color;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+}
+
+.playerWrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  width: 208px;
+  overflow: hidden;
+}
+
+.reactPlayer {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.appBooked {
+  form {
+    > div {
+      display: unset;
+    }
+  }
+}
+
+.noData {
+  color: $primary-dark;
+  composes: fontMedium from 'sass-loader!../../../fonts.scss';
+  margin-bottom: 20px;
+}
