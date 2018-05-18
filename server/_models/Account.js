@@ -183,6 +183,9 @@ export default function (sequelize, DataTypes) {
       defaultValue: '15 minutes',
     },
 
+    suggestedChairId: {
+      type: DataTypes.UUID,
+    },
   });
 
   Account.associate = (models) => {
@@ -215,6 +218,11 @@ export default function (sequelize, DataTypes) {
     Account.belongsTo(Address, {
       foreignKey: 'addressId',
       as: 'address',
+    });
+
+    Account.belongsTo(Chair, {
+      foreignKey: 'suggestedChairId',
+      as: 'suggestedChair',
     });
 
     Account.hasMany(Appointment, {

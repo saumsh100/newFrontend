@@ -10,6 +10,7 @@ import {
   getISOSortPredicate,
   convertToDate,
 } from '../../util/time';
+import getMostPopularValue from './helpers/getMostPopularValue';
 import invertFillers from './invertFillers';
 import createAvailabilitiesFromOpening from './createAvailabilitiesFromOpening';
 
@@ -40,7 +41,7 @@ export function getCorrectPractitionerWeeklySchedule(account, practitioner) {
  * @return mutated data w/ availabilities
  */
 export function addAvailabilitiesToOpeningsData(data, practitioner, duration, interval) {
-  const { openings, dailySchedule } = data;
+  const { fillers, openings, dailySchedule } = data;
 
   let availabilities = [];
   for (const opening of openings) {
@@ -52,9 +53,11 @@ export function addAvailabilitiesToOpeningsData(data, practitioner, duration, in
 
   const { chairIds } = dailySchedule;
   const suggestedPractitionerId = practitioner.id;
-  const suggestedChairId = isArray(chairIds) && chairIds.length ?
-    chairIds[0] :
-    null;
+  const suggestedChairId = getMostPopularValue(fillers, 'chairId') ||
+    isArray(chairIds) && chairIds.length ?
+      chairIds[0] :
+      null;
+
 
   availabilities = availabilities.map((availability) => {
     availability.suggestedPractitionerId = suggestedPractitionerId;
@@ -198,6 +201,13 @@ export default function computeOpeningsAndAvailabilities(options) {
   // Sort total availabilities by startDatre and then ensure unique startDates
   // Don't worry about losing important info, availabilities per practitioner per day is in practitionerData
   totalAvailabilities = unionBy(totalAvailabilities.sort(getISOSortPredicate('startDate')), 'startDate');
+
+  // Now ensure that availabilities that have suggestedChairId=null will get the account's suggestedChairId
+  totalAvailabilities = totalAvailabilities.map(availability => Object.assign(
+    {},
+    availability,
+    { suggestedChairId: availability.suggestedChairId || account.suggestedChairId },
+  ));
 
   return {
     availabilities: totalAvailabilities,

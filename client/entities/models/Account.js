@@ -1,18 +1,5 @@
 
-import { Record } from 'immutable';
 import createModel from '../createModel';
-
-// Helps parse off unnecessary API data
-// TODO: need a fromJS function to do this, nested Records are ignored
-/* const OfficeHoursRecord = Record({
-  monday: null,
-  tuesday: null,
-  wednesday: null,
-  thursday: null,
-  friday: null,
-  saturday: null,
-  sunday: null,
-});*/
 
 const AccountSchema = {
   id: null,
@@ -55,6 +42,7 @@ const AccountSchema = {
   recallEndTime: null,
   reviewsInterval: null,
   massOnlineEmailSentDate: null,
+  suggestedChairId: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

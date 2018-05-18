@@ -106,6 +106,10 @@ export default async function searchForAvailabilities(options) {
 
     if (availabilities.length) {
       logger.debug(`Try #${tryNum}: Found some! Total time = ${Date.now() - startTime}ms`);
+      if (availabilities.some(a => !a.suggestedChairId)) {
+        logger.debug(`Try #${tryNum}: WARNING - Contains availabilities without a suggestedChairId`);
+      }
+
       return {
         availabilities: returnMore || (i === 0) ? availabilities : [],
         nextAvailability,

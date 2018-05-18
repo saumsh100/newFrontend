@@ -1,3 +1,4 @@
+@import '../../../../ui.scss';
 
 .container {
   display: flex;
@@ -29,15 +30,23 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 10px;
-  span  {
+  span {
     width: 180px;
   }
   &_toggle {
-   // margin-left: auto;
+    // margin-left: auto;
   }
 
   &_name {
     padding-right: 20px;
+    padding-bottom: 5px;
+  }
+
+  &_id {
+    padding-right: 20px;
+    font-size: 10px;
+    color: $primary-darkgrey;
+    width: 250px;
   }
 }
 

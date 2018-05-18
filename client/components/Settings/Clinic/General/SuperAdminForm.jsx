@@ -1,5 +1,5 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../library';
 import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
@@ -15,6 +15,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     vendastaId: activeAccount.get('vendastaId'),
     unit: activeAccount.get('unit'),
     timeInterval: activeAccount.get('timeInterval'),
+    suggestedChairId: activeAccount.get('suggestedChairId'),
     canSendReminders: activeAccount.get('canSendReminders'),
     canSendRecalls: activeAccount.get('canSendRecalls'),
     canSendReviews: activeAccount.get('canSendReviews'),
@@ -97,8 +98,14 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         validate={[notNegative, maxUnitSize]}
         data-test-id="timeInterval"
       />
+      <Field name="suggestedChairId" label="Suggested Chair ID" data-test-id="suggestedChairId" />
       <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
       <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />
     </Form>
   );
 }
+
+SuperAdminForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  activeAccount: PropTypes.shape({}),
+};

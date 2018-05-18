@@ -53,6 +53,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,
         "timezone": null,
