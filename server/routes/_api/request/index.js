@@ -139,6 +139,8 @@ requestsRouter.post('/', async (req, res, next) => {
       }
 
       const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+      const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
+
       sendAppointmentRequested({
         accountId: req.accountId,
         toEmail: email,
@@ -187,6 +189,14 @@ requestsRouter.post('/', async (req, res, next) => {
           {
             name: 'PATIENT_REQUEST_FOR',
             content: requestForName,
+          },
+          {
+            name: 'FACEBOOK_URL',
+            content: account.facebookUrl,
+          },
+          {
+            name: 'GOOGLE_URL',
+            content: googlePlaceId,
           },
         ],
       });
@@ -354,6 +364,8 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
       const { startDate } = req.request;
       const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
 
+      const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
+
       // Send Email
       sendAppointmentRequestRejected({
         accountId: req.accountId,
@@ -408,6 +420,14 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
             name: 'PATIENT_REQUEST_FOR',
             content: requestForName,
           },
+          {
+            name: 'FACEBOOK_URL',
+            content: account.facebookUrl,
+          },
+          {
+            name: 'GOOGLE_URL',
+            content: googlePlaceId,
+          },
         ],
       });
     })
@@ -453,7 +473,9 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
       const ns = namespaces.dash;
       const normalized = normalize('request', requestClean);
       io.of(ns).in(requestClean.accountId).emit('update:Request', normalized);
+
       const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+      const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
 
       // Send Email
       return sendAppointmentRequestConfirmed({
@@ -508,6 +530,14 @@ requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('reque
           {
             name: 'PATIENT_REQUEST_FOR',
             content: requestForName,
+          },
+          {
+            name: 'FACEBOOK_URL',
+            content: account.facebookUrl,
+          },
+          {
+            name: 'GOOGLE_URL',
+            content: googlePlaceId,
           },
         ],
       });
