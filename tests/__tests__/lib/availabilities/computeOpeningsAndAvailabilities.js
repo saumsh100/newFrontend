@@ -212,9 +212,9 @@ describe('Availabilities Library', () => {
 
         // Check fillers
         expect(monday.fillers.length).toBe(4);
-        expect(monday.fillers[3].isBreak).toBe(true);
+        expect(monday.fillers[3].type).toBe('Break');
         expect(tuesday.fillers.length).toBe(5);
-        expect(tuesday.fillers[2].isBreak).toBe(true);
+        expect(tuesday.fillers[2].type).toBe('Break');
         expect(wednesday.fillers.length).toBe(4);
         expect(thursday.fillers.length).toBe(0);
 
@@ -292,7 +292,7 @@ describe('Availabilities Library', () => {
         // Check fillers
         expect(monday.fillers.length).toBe(3);
         expect(tuesday.fillers.length).toBe(5);
-        expect(tuesday.fillers[2].isBreak).toBe(true);
+        expect(tuesday.fillers[2].type).toBe('Break');
         expect(wednesday.fillers.length).toBe(4);
         expect(thursday.fillers.length).toBe(0);
 
@@ -349,7 +349,7 @@ describe('Availabilities Library', () => {
         // Check fillers
         expect(monday.fillers.length).toBe(4);
         expect(tuesday.fillers.length).toBe(5);
-        expect(tuesday.fillers[2].isBreak).toBe(true);
+        expect(tuesday.fillers[2].type).toBe('Break');
         expect(wednesday.fillers.length).toBe(4);
         expect(thursday.fillers.length).toBe(0);
 

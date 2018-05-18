@@ -103,7 +103,7 @@ export function printPractitionerData({ openingsData, ...practitioner }, { timez
       isModifiedByTimeOff ? 'Y' : 'N',
       moment.tz(startTime, timezone).format('h:mma'),
       moment.tz(endTime, timezone).format('h:mma'),
-      printRanges(fillers, { timezone, customField: filler => filler.isBreak ? 'Break' : 'Appnt' }),
+      printRanges(fillers, { timezone, customField: filler => filler.type }),
       printRanges(openings, { timezone }),
       printRanges(availabilities, { timezone }),
     ]);

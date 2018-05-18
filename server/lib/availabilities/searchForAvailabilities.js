@@ -106,8 +106,8 @@ export default async function searchForAvailabilities(options) {
 
     if (availabilities.length) {
       logger.debug(`Try #${tryNum}: Found some! Total time = ${Date.now() - startTime}ms`);
-      if (availabilities.some(a => !a.suggestedChairId)) {
-        logger.debug(`Try #${tryNum}: WARNING - Contains availabilities without a suggestedChairId`);
+      if (availabilities.some(a => !a.chairId)) {
+        logger.debug(`Try #${tryNum}: WARNING - Contains availabilities without a chairId`);
       }
 
       return {

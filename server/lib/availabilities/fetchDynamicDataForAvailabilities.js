@@ -86,10 +86,9 @@ export function fetchRequests({ accountId, startDate, endDate }) {
   return Request.findAll({
     attributes: [
       'id',
-      'practitionerId',
-      'serviceId',
       'startDate',
       'endDate',
+      'suggestedPractitionerId',
     ],
 
     where: {
@@ -205,6 +204,7 @@ export default async function fetchDynamicDataForAvailabilities({ account, pract
 
   // Group data now in an overall map of practitioners
   const practitionerAppointments = groupBy(appointments, a => a.practitionerId);
+  const practitionerRequests = groupBy(requests, d => d.suggestedPractitionerId);
   const practitionerTimeOffs = groupBy(timeOffs, t => t.practitionerId);
   const practitionerDailySchedules = groupBy(dailySchedules, d => d.practitionerId);
   const practitionersWithData = practitioners.map(practitioner => {
@@ -216,6 +216,7 @@ export default async function fetchDynamicDataForAvailabilities({ account, pract
         appointments: practitionerAppointments[practitionerId] || [],
         timeOffs: practitionerTimeOffs[practitionerId] || [],
         dailySchedules: practitionerDailySchedules[practitionerId] || [],
+        requests: practitionerRequests[practitionerId] || [],
       },
     );
   });

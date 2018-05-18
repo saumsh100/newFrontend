@@ -60,8 +60,8 @@ export function addAvailabilitiesToOpeningsData(data, practitioner, duration, in
 
 
   availabilities = availabilities.map((availability) => {
-    availability.suggestedPractitionerId = suggestedPractitionerId;
-    availability.suggestedChairId = suggestedChairId;
+    availability.practitionerId = suggestedPractitionerId;
+    availability.chairId = suggestedChairId;
     return availability;
   });
 
@@ -80,7 +80,21 @@ export function addAvailabilitiesToOpeningsData(data, practitioner, duration, in
  * @param appointments
  * @return {data}
  */
-export function computeOpeningsForPractitioner({ account, weeklySchedule, timeOffs, dailySchedules, appointments, startDate, endDate }) {
+export function computeOpeningsForPractitioner(options) {
+  const {
+    account,
+    weeklySchedule,
+    timeOffs,
+    dailySchedules,
+    appointments,
+    requests,
+  } = options;
+
+  let {
+    startDate,
+    endDate,
+  } = options;
+
   // invertFillers function needs consistency therefore need to ensure Date and not ISO string
   startDate = convertToDate(startDate);
   endDate = convertToDate(endDate);
@@ -97,6 +111,7 @@ export function computeOpeningsForPractitioner({ account, weeklySchedule, timeOf
 
   // Group fillers by day with timezone taken into account for the day
   const appointmentsByDay = groupBy(appointments, a => getProperDateWithZone(a.startDate, timezone));
+  const requestsByDay = groupBy(requests, r => getProperDateWithZone(r.startDate, timezone));
 
   // For each day in the range from startDate, endDate
   // Grab all fillers ordered by startDate (including breaks)
@@ -105,11 +120,14 @@ export function computeOpeningsForPractitioner({ account, weeklySchedule, timeOf
   const days = getRangeOfDays(startDate, endDate, timezone);
   for (const day of days) {
     const dailySchedule = finalDailySchedules[day] || {};
-    const appointments = appointmentsByDay[day] || [];
+    const appointmentsInDay = appointmentsByDay[day] || [];
+    const requestsInDay = requestsByDay[day] || [];
     const breaks = dailySchedule.breaks || [];
-    const properBreaks = breaks.map(b => ({ ...b, startDate: b.startTime, endDate: b.endTime, isBreak: true }));
+    const appointments = appointmentsInDay.map(a => ({ ...a, type: 'Appnt' }));
+    const requests = requestsInDay.map(r => ({ ...r, type: 'Reqst' }));
+    const properBreaks = breaks.map(b => ({ ...b, startDate: b.startTime, endDate: b.endTime, type: 'Break' }));
     const fillers = appointments
-      .concat(properBreaks)
+      .concat(requests, properBreaks)
       // As a safety check, convert all dates to Date objects
       .map(({ startDate, endDate, ...rest }) => ({
         ...rest,
@@ -166,12 +184,14 @@ export default function computeOpeningsAndAvailabilities(options) {
     dailySchedules,
     timeOffs,
     appointments,
+    requests,
   }) => computeOpeningsForPractitioner({
     account,
     weeklySchedule,
     dailySchedules,
     timeOffs,
     appointments,
+    requests,
     startDate,
     endDate,
   }));
@@ -206,7 +226,7 @@ export default function computeOpeningsAndAvailabilities(options) {
   totalAvailabilities = totalAvailabilities.map(availability => Object.assign(
     {},
     availability,
-    { suggestedChairId: availability.suggestedChairId || account.suggestedChairId },
+    { chairId: availability.chairId || account.suggestedChairId },
   ));
 
   return {
