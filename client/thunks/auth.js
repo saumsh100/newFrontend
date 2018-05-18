@@ -6,6 +6,7 @@ import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
 import { loginSuccess, logout as authLogout } from '../actions/auth';
+import { setPatientSearchedList } from './patientSearch';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
 import socket from '../socket';
@@ -59,6 +60,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
       getUserFeatureFlags(userSession, dispatch);
 
       dispatch(loginSuccess(userSession));
+      dispatch(setPatientSearchedList());
       return userSession;
     })
     .catch(() => {
@@ -152,7 +154,7 @@ export function logout() {
 }
 
 export function resetPassword(email) {
-  return (dispatch, getState) =>
+  return () =>
     axios
       .post('/auth/resetpassword', { email })
       .then(() => {})
@@ -162,7 +164,7 @@ export function resetPassword(email) {
 }
 
 export function resetUserPassword(location, values) {
-  return (dispatch, getState) => {
+  return () => {
     const url = `${location.pathname}`;
     return axios.post(url, values).catch((err) => {
       const { data } = err;

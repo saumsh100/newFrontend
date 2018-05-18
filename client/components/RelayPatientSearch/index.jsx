@@ -7,12 +7,12 @@ import Downshift from 'downshift';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import uniqBy from 'lodash/uniqBy';
-import patientFetcher from './patientFetcher';
+import fetchPatients from './fetchPatients';
 import { Input, InfiniteScroll } from '../library';
 import Loader from '../Loader';
 import PatientSuggestion from '../PatientSuggestion';
 import { StyleExtender } from '../Utils/Themer';
-import { setPatientRecentSearched } from '../../reducers/patientSearch';
+import { setPatientSearched, setSearchedList } from '../../thunks/patientSearch';
 import styles from './styles.scss';
 
 const defaultState = {
@@ -101,7 +101,7 @@ class PatientSearch extends Component {
   handleLoadMore() {
     this.setState({ isLoading: true }, () => {
       const { currValue, endCursor } = this.state;
-      patientFetcher({ search: currValue, after: endCursor }).then(
+      fetchPatients({ search: currValue, after: endCursor }).then(
         this.updateStateWithData(currValue)
       );
     });
@@ -143,7 +143,7 @@ class PatientSearch extends Component {
             {
               isLoading: true,
             },
-            () => patientFetcher({ search: inputValue }).then(this.updateStateWithData(inputValue))
+            () => fetchPatients({ search: inputValue }).then(this.updateStateWithData(inputValue))
           );
         }
       }
@@ -256,7 +256,7 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const { onChange, inputProps, theme, recentSearchedPatients } = this.props;
+    const { onChange, inputProps, theme, searchedPatients } = this.props;
     const newTheme = StyleExtender(theme, styles);
 
     const renderListFooter = this.renderListFooterFactory(newTheme);
@@ -270,7 +270,7 @@ class PatientSearch extends Component {
     return (
       <Downshift
         onChange={(patient) => {
-          this.props.setPatientRecentSearched(patient);
+          this.props.setPatientSearched(patient);
           onChange(patient);
         }}
         stateReducer={this.handleDownshiftStateReducer}
@@ -289,7 +289,7 @@ class PatientSearch extends Component {
             getItemProps,
             theme,
             renderListFooter,
-            recentSearchedPatients,
+            searchedPatients,
           };
 
           return (
@@ -309,13 +309,13 @@ class PatientSearch extends Component {
                   displaySearching,
                   ...suggestionsListProps,
                 })}
-                {recentSearchedPatients.length > 0 && (
+                {searchedPatients.length > 0 && (
                   /**
                    * render recent searches if has any in the props
                    */
                   <div className={newTheme.recentPatientsWrapper}>
                     <div className={newTheme.recentPatientsTitle}>Recent patients</div>
-                    {recentSearchedPatients.map((patient, index) => (
+                    {searchedPatients.map((patient, index) => (
                       <PatientSuggestion
                         key={patient.id}
                         patient={patient}
@@ -347,7 +347,7 @@ PatientSearch.propTypes = {
   theme: PropTypes.shape({
     container: PropTypes.string,
   }),
-  recentSearchedPatients: PropTypes.arrayOf(
+  searchedPatients: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
       ccId: PropTypes.string,
@@ -359,14 +359,16 @@ PatientSearch.propTypes = {
       lastApptDate: PropTypes.string,
     })
   ),
-  setPatientRecentSearched: PropTypes.func,
+  setPatientSearched: PropTypes.func,
+  setSearchedList: PropTypes.func,
 };
 
 const mapStateToProps = ({ patientSearch }) => ({
-  recentSearchedPatients: patientSearch.get('recentSearchedPatients').toArray(),
+  searchedPatients: patientSearch.get('searchedPatients').toArray(),
 });
 
-const mapActionsToProps = dispatch => bindActionCreators({ setPatientRecentSearched }, dispatch);
+const mapActionsToProps = dispatch =>
+  bindActionCreators({ setPatientSearched, setSearchedList }, dispatch);
 
 const enhance = connect(mapStateToProps, mapActionsToProps);
 

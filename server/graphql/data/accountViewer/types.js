@@ -4,6 +4,7 @@ import { globalIdField } from 'graphql-relay';
 import { nodeInterface, AccountViewer } from '../types';
 import { patientQuery } from '../patients';
 import { familyQuery } from '../families';
+import { patientSearchesQuery } from '../patientSearches';
 
 // Filter the acountId based on the context sessionData
 const accountIdFilter = {
@@ -33,6 +34,7 @@ const accountViewerType = new GraphQLObjectType({
     // Other exposed queries to this viewer
     ...patientQuery(accountIdFilter),
     ...familyQuery(accountIdFilter),
+    ...patientSearchesQuery(accountIdFilter),
   }),
 });
 

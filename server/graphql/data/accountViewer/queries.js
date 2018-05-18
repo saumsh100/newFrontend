@@ -9,4 +9,3 @@ export default {
     resolve: (obj, args, context) => new AccountViewer(context.sessionData),
   },
 };
-    

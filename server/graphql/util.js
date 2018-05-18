@@ -1,5 +1,8 @@
 
-import { getOffsetWithDefault, offsetToCursor } from 'graphql-relay';
+import { GraphQLString, GraphQLList } from 'graphql';
+import { getOffsetWithDefault, offsetToCursor, connectionArgs } from 'graphql-relay';
+import { defaultListArgs } from 'graphql-sequelize';
+import omit from 'lodash/omit';
 
 /**
  * A simple function that accepts an array and connection arguments, and returns
@@ -14,7 +17,6 @@ import { getOffsetWithDefault, offsetToCursor } from 'graphql-relay';
  *
  * For now, this only works with forward pagination.
  */
-// eslint-disable-next-line import/prefer-default-export
 export function connectionFromArrayWithoutSlice(array, args, meta) {
   const { after, first, last } = args;
   const { arrayLength } = meta;
@@ -55,3 +57,12 @@ export function connectionFromArrayWithoutSlice(array, args, meta) {
     },
   };
 }
+
+/**
+ * remove the default connectionArgs order and replace to the [[String]] sequelize format
+ */
+export const argsListWithOrder = Object.assign(omit(connectionArgs, 'order'), defaultListArgs(), {
+  order: {
+    type: new GraphQLList(GraphQLList(GraphQLString)),
+  },
+});

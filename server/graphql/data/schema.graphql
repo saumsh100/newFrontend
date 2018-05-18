@@ -31,6 +31,20 @@ type AccountViewer implements Node {
   ): PatientConnection
   families: [Family]
   family(id: String!): Family
+  patientSearches(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    limit: Int
+    order: String
+
+    """
+    A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
+    """
+    where: SequelizeJSON
+    offset: Int
+  ): PatientSearchesConnection
 }
 
 input addFamilyInput {
@@ -100,6 +114,18 @@ type addPatientPayload {
   clientMutationId: String
 }
 
+input addPatientSearchesInput {
+  userId: String!
+  accountId: String!
+  patientId: String!
+  clientMutationId: String
+}
+
+type addPatientSearchesPayload {
+  patientSearch: PatientSearches
+  clientMutationId: String
+}
+
 input createFamilyWithMembersInput {
   members: [String]!
   clientMutationId: String
@@ -146,7 +172,7 @@ type Family implements Node {
     before: String
     last: Int
     limit: Int
-    order: [[String]]
+    order: String
 
     """
     A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
@@ -164,6 +190,7 @@ type Mutation {
   updateFamilyMutation(input: updateFamilyInput!): updateFamilyPayload
   deleteFamilyMutation(input: deleteFamilyInput!): deleteFamilyPayload
   createFamilyWithMembersMutation(input: createFamilyWithMembersInput!): createFamilyWithMembersPayload
+  addPatientSearchesMutation(input: addPatientSearchesInput!): addPatientSearchesPayload
 }
 
 """An object with an ID"""
@@ -261,6 +288,37 @@ type PatientConnection {
 type PatientEdge {
   """The item at the end of the edge"""
   node: Patient
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""Patient recent search"""
+type PatientSearches implements Node {
+  """The ID of an object"""
+  id: ID!
+  userId: String!
+  accountId: String!
+  patientId: String!
+  createdAt: String!
+  updatedAt: String!
+  ccId: String
+  patient: Patient
+}
+
+"""A connection to a list of items."""
+type PatientSearchesConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [PatientSearchesEdge]
+}
+
+"""An edge in a connection."""
+type PatientSearchesEdge {
+  """The item at the end of the edge"""
+  node: PatientSearches
 
   """A cursor for use in pagination"""
   cursor: String!

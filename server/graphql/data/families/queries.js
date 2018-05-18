@@ -1,9 +1,5 @@
 
-import {
-    GraphQLList,
-    GraphQLNonNull,
-    GraphQLString,
-  } from 'graphql';
+import { GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
 import { resolver } from 'graphql-sequelize';
 import { familyType } from './types';
 import { Family } from 'CareCruModels';
@@ -25,4 +21,3 @@ export default resolverOptions => ({
     resolve: familyResolver(resolverOptions),
   },
 });
-    

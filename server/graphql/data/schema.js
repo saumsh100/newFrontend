@@ -1,13 +1,14 @@
 
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { Patient, Family, PatientSearches } from 'CareCruModels';
 import { nodeField, nodeTypeMapper, AccountViewer } from './types';
-import { Patient, Family } from 'CareCruModels';
 import { patientType, patientMutation } from './patients';
 import { familyType, familyMutation } from './families';
+import { patientSearchesType, patientSearchesMutation } from './patientSearches';
 import { accountViewerType, accountViewerQuery } from './accountViewer';
 
 /**
- * This is a importante step on making relay works with our server.
+ * This is a important step on making relay works with our server.
  * We need to map each type name to actual type object and also how to resolve it
  * so the Node type can resolve to any other type.
  * This is a mechanism so it can refetch specific objects in case of a change.
@@ -22,6 +23,7 @@ nodeTypeMapper.mapTypes({
   // All all sequelize types must follow this pattern.
   [Patient.name]: patientType,
   [Family.name]: familyType,
+  [PatientSearches.name]: patientSearchesType,
 
   // Other types should have the type and resolve function.
   [AccountViewer.name]: {
@@ -30,19 +32,22 @@ nodeTypeMapper.mapTypes({
   },
 });
 
-const rootQuery = Object.assign({},
-  accountViewerQuery,
-  {
-    node: nodeField,
-  },
-);
-
-const rootMutation = Object.assign({}, patientMutation, familyMutation);
+/**
+ * joining all queries that will be available to the user
+ */
+const rootQuery = Object.assign({}, accountViewerQuery, {
+  node: nodeField,
+});
 
 const queryType = new GraphQLObjectType({
   name: 'Query',
   fields: () => rootQuery,
 });
+
+/**
+ * joining all mutations that will be available to the user
+ */
+const rootMutation = Object.assign({}, patientMutation, familyMutation, patientSearchesMutation);
 
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',

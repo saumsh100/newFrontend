@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const moment = require('moment');
 const procedures = require('../fixtures/procedures/procedureDump.json');
 
+// eslint-disable-next-line
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -25,7 +26,6 @@ const weeklyScheduleId2 = '89b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const clinicPhoneNumber = '+17786558613';
 const addressId = uuid();
 const addressId2 = uuid();
-
 
 const ROLES = {
   MANAGER: 'MANAGER',
@@ -177,13 +177,11 @@ const weeklySchedule2 = {
 };
 
 module.exports = {
-  up: async function (queryInterface, Sequelize) { // eslint-disable-line
+  // eslint-disable-next-line
+  async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
 
-    await queryInterface.bulkInsert('WeeklySchedules', [
-      weeklySchedule1,
-      weeklySchedule2,
-    ]);
+    await queryInterface.bulkInsert('WeeklySchedules', [weeklySchedule1, weeklySchedule2]);
 
     await queryInterface.bulkInsert('Addresses', [address, address2]);
 
@@ -205,7 +203,7 @@ module.exports = {
     const families = [];
     const patients = [];
     const deliveredProcedures = [];
-    
+
     // Create some families
     for (let i = 0; i < 25; i += 1) {
       families.push({
@@ -233,7 +231,7 @@ module.exports = {
         id,
         pmsId,
         accountId,
-        familyId: (i > 5) ? families[familyPosition].id : null,
+        familyId: i > 5 ? families[familyPosition].id : null,
         firstName,
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
@@ -263,8 +261,11 @@ module.exports = {
 
       const discountAmount = faker.finance.amount(0, 200, 2);
 
-      const totalAmount = parseFloat(patientAmount) + parseFloat(secondaryInsuranceAmount) +
-      parseFloat(primaryInsuranceAmount) - parseFloat(discountAmount);
+      const totalAmount =
+        parseFloat(patientAmount) +
+        parseFloat(secondaryInsuranceAmount) +
+        parseFloat(primaryInsuranceAmount) -
+        parseFloat(discountAmount);
 
       let code = Math.floor(Math.random() * procedures.length);
 
@@ -280,7 +281,7 @@ module.exports = {
         patientAmount,
         discountAmount,
         totalAmount,
-        units: 1.00,
+        units: 1.0,
         createdAt: faker.date.past(),
         entryDate: faker.date.past(),
         updatedAt: new Date(),
@@ -299,7 +300,7 @@ module.exports = {
         id: uuid(),
         pmsId: uuid(),
         accountId,
-        familyId: (i > 5) ? families[familyPosition].id : null,
+        familyId: i > 5 ? families[familyPosition].id : null,
         firstName,
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
@@ -338,8 +339,12 @@ module.exports = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       }),
-      dueForHygieneDate: moment().add(1, 'months').toISOString(),
-      dueForRecallExamDate: moment().add(1, 'months').toISOString(),
+      dueForHygieneDate: moment()
+        .add(1, 'months')
+        .toISOString(),
+      dueForRecallExamDate: moment()
+        .add(1, 'months')
+        .toISOString(),
       createdAt: faker.date.past(),
       updatedAt: new Date(),
     });
@@ -383,8 +388,14 @@ module.exports = {
         accountId,
         practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: moment().add('-30', 'days').add('-5', 'minutes').toISOString(),
-        endDate: moment().add('-30', 'days').add('30', 'minutes').toISOString(),
+        startDate: moment()
+          .add('-30', 'days')
+          .add('-5', 'minutes')
+          .toISOString(),
+        endDate: moment()
+          .add('-30', 'days')
+          .add('30', 'minutes')
+          .toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -444,13 +455,41 @@ module.exports = {
         carrier: 'sadasadsadsads',
         sin: 'dsasdasdasdadsasad',
       }),
-      dueForHygieneDate: moment().add(1, 'months').toISOString(),
-      dueForRecallExamDate: moment().add(1, 'months').toISOString(),
+      dueForHygieneDate: moment()
+        .add(1, 'months')
+        .toISOString(),
+      dueForRecallExamDate: moment()
+        .add(1, 'months')
+        .toISOString(),
       createdAt: faker.date.past(),
       updatedAt: new Date(),
     });
 
     await queryInterface.bulkInsert('Patients', patients2);
+
+    await queryInterface.bulkInsert(
+      'PatientSearches',
+      patients.filter((_, index) => index < 10).map(patient => ({
+        id: uuid(),
+        userId: superAdminUser2.id,
+        accountId,
+        patientId: patient.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }))
+    );
+
+    await queryInterface.bulkInsert(
+      'PatientSearches',
+      patients2.filter((_, index) => index < 10).map(patient => ({
+        id: uuid(),
+        userId: superAdminUser2.id,
+        accountId: accountId2,
+        patientId: patient.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      }))
+    );
 
     const practitioners2 = [];
 
@@ -476,8 +515,14 @@ module.exports = {
         accountId: accountId2,
         practitionerId: practitioners2[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: moment().add('-30', 'days').add('-5', 'minutes').toISOString(),
-        endDate: moment().add('-30', 'days').add('30', 'minutes').toISOString(),
+        startDate: moment()
+          .add('-30', 'days')
+          .add('-5', 'minutes')
+          .toISOString(),
+        endDate: moment()
+          .add('-30', 'days')
+          .add('30', 'minutes')
+          .toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -487,31 +532,38 @@ module.exports = {
 
     const chair1Id = uuid();
     const chair2Id = uuid();
-    await queryInterface.bulkInsert('Chairs', [{
-      id: chair1Id,
-      accountId,
-      name: 'Chair 1',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }, {
-      id: chair2Id,
-      accountId,
-      name: 'Chair 2',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
+    await queryInterface.bulkInsert('Chairs', [
+      {
+        id: chair1Id,
+        accountId,
+        name: 'Chair 1',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: chair2Id,
+        accountId,
+        name: 'Chair 2',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
 
     const todaysApps = [];
     for (let i = 0; i < 5; i += 2) {
+      const startDateMinutes = i * 15;
       const patient = patients[i];
       const appointment = {
         id: uuid(),
         accountId,
         practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
         patientId: patient.id,
-        startDate: moment().add(`${i * 15}`, 'minutes').toISOString(),
-        endDate: moment().add(`${(i * 15) + 15}`, 'minutes').toISOString(),
+        startDate: moment()
+          .add(`${startDateMinutes}`, 'minutes')
+          .toISOString(),
+        endDate: moment()
+          .add(`${startDateMinutes + 15}`, 'minutes')
+          .toISOString(),
         createdAt: new Date(),
         updatedAt: new Date(),
         chairId: chair2Id,
@@ -528,7 +580,9 @@ module.exports = {
       practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
       patientId: patients[patients.length - 1].id,
       startDate: prevDay.toISOString(),
-      endDate: moment(prevDay).add(15, 'minutes').toISOString(),
+      endDate: moment(prevDay)
+        .add(15, 'minutes')
+        .toISOString(),
       createdAt: new Date(),
       updatedAt: new Date(),
       chairId: chair1Id,
@@ -541,7 +595,9 @@ module.exports = {
       practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
       patientId: patients[patients.length - 2].id,
       startDate: prevDay.toISOString(),
-      endDate: moment(prevDay).add(15, 'minutes').toISOString(),
+      endDate: moment(prevDay)
+        .add(15, 'minutes')
+        .toISOString(),
       createdAt: new Date(),
       updatedAt: new Date(),
       chairId: chair1Id,
@@ -553,8 +609,8 @@ module.exports = {
 
     await queryInterface.bulkInsert('Appointments', todaysApps);
   },
-
-  down(queryInterface, Sequelize) { // eslint-disable-line
+  // eslint-disable-next-line
+  down(queryInterface, Sequelize) {
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.

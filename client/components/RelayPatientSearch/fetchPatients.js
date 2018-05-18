@@ -3,7 +3,7 @@ import { fetchQuery, graphql } from 'relay-runtime'; // eslint-disable-line impo
 import graphQLEnvironment from '../../util/graphqlEnvironment';
 
 const query = graphql`
-  query patientFetcher_Query(
+  query fetchPatients_Query(
     $search: SequelizeJSON!
     $limit: Int
     $after: String
@@ -34,7 +34,7 @@ const query = graphql`
   }
 `;
 
-const patientFetcher = async (props) => {
+const fetchPatients = async (props) => {
   const { search, limit = 15, after, order = ['firstName', 'lastName'] } = props;
 
   /**
@@ -67,4 +67,4 @@ const patientFetcher = async (props) => {
   return await fetchQuery(graphQLEnvironment, query, queryVariables);
 };
 
-export default patientFetcher;
+export default fetchPatients;

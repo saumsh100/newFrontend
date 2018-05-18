@@ -9,14 +9,12 @@ const nodeVersion = packageJSON.engines.node;
 const projectRoot = path.resolve(__dirname, '../..');
 
 const externalModules = nodeModulesPath =>
-  fs.readdirSync(nodeModulesPath)
+  fs
+    .readdirSync(nodeModulesPath)
     .filter(f => ['.bin'].indexOf(f) === -1)
     .reduce((map, mod) => Object.assign(map, { [mod]: `commonjs ${mod}` }), {});
 
-const entries = appEntries(name => [
-  'babel-polyfill',
-  `./server/bin/${name}.js`,
-]);
+const entries = appEntries(name => ['babel-polyfill', `./server/bin/${name}.js`]);
 
 module.exports = {
   name: 'server',
@@ -25,8 +23,18 @@ module.exports = {
 
   context: projectRoot,
 
-  entry: entries('server', 'cron', 'reminders', 'recalls', 'reviews',
-    'events', 'firstNextLastApp', 'correspondences', 'patientCache', 'updateSchema'),
+  entry: entries(
+    'server',
+    'cron',
+    'reminders',
+    'recalls',
+    'reviews',
+    'events',
+    'firstNextLastApp',
+    'correspondences',
+    'patientCache',
+    'updateSchema'
+  ),
 
   resolve: {
     alias: {
@@ -51,11 +59,7 @@ module.exports = {
           options: {
             cacheDirectory: true,
             babelrc: false,
-            presets: [
-              ['env', { targets: { node: nodeVersion } }],
-              'react',
-              'stage-2',
-            ],
+            presets: [['env', { targets: { node: nodeVersion } }], 'react', 'stage-2'],
           },
         },
       },
@@ -70,13 +74,9 @@ module.exports = {
     ],
   },
 
-  externals: Object.assign(
-    {},
-    externalModules(path.resolve(projectRoot, 'node_modules')),
-    {
-      sharp: 'commonjs sharp',
-    }
-  ),
+  externals: Object.assign({}, externalModules(path.resolve(projectRoot, 'node_modules')), {
+    sharp: 'commonjs sharp',
+  }),
 
   node: {
     console: false,
@@ -91,7 +91,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.BROWSER': false,
       'process.env.BUNDLED': true,
-      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
   ],

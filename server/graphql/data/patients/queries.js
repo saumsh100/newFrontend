@@ -1,9 +1,8 @@
 
-import { GraphQLString, GraphQLList } from 'graphql';
-import { connectionArgs, getOffsetWithDefault } from 'graphql-relay';
-import { resolver, defaultArgs, defaultListArgs } from 'graphql-sequelize';
+import { getOffsetWithDefault } from 'graphql-relay';
+import { resolver, defaultArgs } from 'graphql-sequelize';
 import { patientType, patientConnection } from './types';
-import { connectionFromArrayWithoutSlice } from '../../util';
+import { connectionFromArrayWithoutSlice, argsListWithOrder } from '../../util';
 import { Patient } from 'CareCruModels';
 
 const patientResolver = resolverOptions => resolver(Patient, resolverOptions);
@@ -19,11 +18,7 @@ export default resolverOptions => ({
   patients: {
     type: patientConnection,
     // Here we join both connection args and sequelize args as possible
-    args: Object.assign(connectionArgs, defaultListArgs(), {
-      order: {
-        type: new GraphQLList(GraphQLList(GraphQLString)),
-      },
-    }),
+    args: argsListWithOrder,
     resolve: async (_, args, context) => {
       // separate sequelize args from connections args
       const { limit, order, where, offset, ...rest } = args;
