@@ -54,9 +54,9 @@ export function addAvailabilitiesToOpeningsData(data, practitioner, duration, in
   const { chairIds } = dailySchedule;
   const suggestedPractitionerId = practitioner.id;
   const suggestedChairId = getMostPopularValue(fillers, 'chairId') ||
-    isArray(chairIds) && chairIds.length ?
+    (isArray(chairIds) && chairIds.length ?
       chairIds[0] :
-      null;
+      null);
 
 
   availabilities = availabilities.map((availability) => {
