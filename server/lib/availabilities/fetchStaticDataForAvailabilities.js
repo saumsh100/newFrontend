@@ -44,7 +44,6 @@ export default async function fetchStaticDataForAvailabilities({ accountId, serv
           where: {
             id: practitionerIdsQuery,
             isActive: true,
-            isHidden: { $ne: true },
           },
 
           order: [['createdAt', 'ASC']],
