@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import classnames from 'classnames';
 import ChatList from './ChatList';
 import MessageContainer from './MessageContainer';
 import PatientInfo from './PatientInfo';
-import classnames from 'classnames';
 import ToHeader from './ToHeader';
 import {
   Button,
@@ -29,6 +29,7 @@ import {
 } from '../../thunks/chat';
 import { setNewChat } from '../../reducers/chat';
 import PatientSearch from '../PatientSearch';
+import Loader from '../Loader';
 import styles from './styles.scss';
 
 const patientSearchTheme = {
@@ -204,7 +205,7 @@ class ChatMessage extends Component {
         <List className={styles.chatsList}>
           <InfiniteScroll
             loadMore={this.loadChatList}
-            loader={<div style={{ clear: 'both' }}>Loading...</div>}
+            loader={<Loader />}
             hasMore={this.state.moreData}
             initialLoad={false}
             useWindow={false}
