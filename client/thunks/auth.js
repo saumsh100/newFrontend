@@ -28,11 +28,7 @@ const getUserFeatureFlags = (userSession, dispatch) => {
     },
   };
 
-  let envKey = process.env.FEATURE_FLAG_KEY;
-
-  if (process.env.NODE_ENV !== 'production') {
-    envKey = JSON.parse(process.env.FEATURE_FLAG_KEY);
-  }
+  const envKey = process.env.FEATURE_FLAG_KEY;
 
   const client = LDClient.initialize(`${envKey}`, userData);
 
