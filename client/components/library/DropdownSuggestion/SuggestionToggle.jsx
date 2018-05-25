@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Icon from '../Icon';
+import Button from '../Button';
+import styles from './styles.scss';
 
 /**
  * The component that shows and
@@ -105,7 +107,9 @@ class SuggestionToggle extends Component {
       [theme.errorLabel]: error,
     });
 
-    const toggleClassName = classNames(theme.toggleDiv, {
+    const toggleClassName = classNames({
+      [theme.toggleDiv]: !disabled,
+      [theme.toggleDivDisabled]: disabled,
       [theme.active]: isOpen,
       [theme.errorToggleDiv]: error,
       [theme.asInput]: asInput,
@@ -117,29 +121,20 @@ class SuggestionToggle extends Component {
     });
 
     return (
-      <div
-        className={disabled ? theme.toggleDivDisabled : toggleClassName}
+      <Button
+        className={toggleClassName}
         onClick={this.displaySuggestions}
         data-test-id={this.props['data-test-id']}
       >
         <div className={theme.toggleValueDiv}>
-          <label
-            htmlFor={`suggestion_toggle_${name}`}
-            style={{
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              cursor: 'pointer',
-            }}
-          >
+          <label htmlFor={`suggestion_toggle_${name}`} className={styles.selectLabel}>
             <div>{this.state.displayValue}</div>
             <select
               size={this.props.options.length}
               onChange={this.handleSearch}
               onBlur={handleBlur}
               onKeyDown={this.handleKeydown}
-              style={{ position: 'absolute', top: '-30px', zIndex: '-1' }}
+              className={styles.hiddenSelect}
               id={`suggestion_toggle_${name}`}
               ref={(input) => {
                 this[`suggestion_toggle_${name}`] = input;
@@ -160,7 +155,7 @@ class SuggestionToggle extends Component {
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
-      </div>
+      </Button>
     );
   }
 }
@@ -168,8 +163,9 @@ export default SuggestionToggle;
 
 SuggestionToggle.propTypes = {
   'data-test-id': PropTypes.string,
-  selected: PropTypes.object,
+  selected: PropTypes.shape({ label: PropTypes.string, value: PropTypes.string }),
   toggleAsInput: PropTypes.func,
+  options: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })),
   asInput: PropTypes.bool,
   handleKeydown: PropTypes.func,
   handleBlur: PropTypes.func,
@@ -181,5 +177,5 @@ SuggestionToggle.propTypes = {
   name: PropTypes.string,
   placeholder: PropTypes.string,
   error: PropTypes.string,
-  theme: PropTypes.object,
+  theme: PropTypes.objectOf(PropTypes.string),
 };

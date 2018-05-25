@@ -14,6 +14,10 @@ $empty-grey: darken(lightgrey, 5%);
   font-family: $dashboard-font;
   height: 30px;
   width: 100%;
+  padding: 0;
+  border: 0;
+  color: initial;
+  background: transparent;
   //padding: 5px 5px 5px 0px;
   cursor: pointer;
   border-bottom: 1px solid $disabled-color;
@@ -131,9 +135,6 @@ $empty-grey: darken(lightgrey, 5%);
   }
 }
 
-.caretIcon {
-}
-
 .activeIcon {
   color: $primary-dark;
 }
@@ -221,4 +222,18 @@ $empty-grey: darken(lightgrey, 5%);
 .groupFull {
   width: 100%;
   padding: 0;
+}
+
+.hiddenSelect {
+  position: absolute;
+  top: -9999999px;
+  left: -9999999px;
+  z-index: -1;
+}
+.selectLabel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }

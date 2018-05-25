@@ -114,7 +114,7 @@ class DropdownSuggestion extends Component {
       this.open();
     }
     const index = this.getIndex(value);
-    if (index) {
+    if (index > -1) {
       this.scrollIndex = index;
       this.currentValue = value;
       this.scrollTo(this.scrollIndex);

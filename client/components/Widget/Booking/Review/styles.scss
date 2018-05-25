@@ -149,6 +149,7 @@
   align-items: center;
   flex-wrap: wrap;
   width: 100%;
+  box-sizing: border-box;
   &.flexibleField {
     // display: flex;
     @media screen and (min-width: $widget-mobile-width) {
