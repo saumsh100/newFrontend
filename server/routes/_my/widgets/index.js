@@ -1,7 +1,7 @@
 
 import { Router } from 'express';
 import { protocol } from '../../../config/globals';
-import { Review, SentReview, sequelize } from '../../../_models';
+import { Practitioner, Review, SentReview, sequelize } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { readFile, replaceJavascriptFile } from '../../../util/file';
 import StatusError from '../../../util/StatusError';
@@ -12,10 +12,20 @@ const reviewsRouter = Router();
 reviewsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 reviewsRouter.param('reviewId', sequelizeLoader('review', 'Review'));
 reviewsRouter.param('sentReviewId', sequelizeLoader('sentReview', 'SentReview'));
-reviewsRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
-  { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
-  { association: 'practitioners', required: false, where: { isActive: true } },
-]));
+reviewsRouter.param(
+  'accountIdJoin',
+  sequelizeLoader('account', 'Account', [
+    {
+      association: 'services',
+      required: false,
+      where: { isHidden: { $ne: true } },
+      order: [['name', 'ASC']],
+      include: [{ model: Practitioner, as: 'practitioners' }],
+    },
+    { association: 'practitioners', required: false, where: { isActive: true } },
+    { association: 'weeklySchedule', required: false },
+  ])
+);
 
 /**
  * GET /:accountId/embed
@@ -26,7 +36,7 @@ reviewsRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
 reviewsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
   try {
     const { entities } = normalize('account', req.account.get({ plain: true }));
-    let selectedServiceId = (req.account.services[0] ? req.account.services[0].id : null);
+    let selectedServiceId = req.account.services[0] ? req.account.services[0].id : null;
     for (let i = 0; i < req.account.services.length; i++) {
       if (req.account.services[i].isDefault) {
         selectedServiceId = req.account.services[i].id;
@@ -34,22 +44,21 @@ reviewsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
     }
 
     const responseAccount = req.account.get({ plain: true });
-    const responseServices = req.account.services.map((service) => {
-      return service.get({ plain: true });
-    });
+    const responseServices = req.account.services.map(service => service.get({ plain: true }));
 
-    const responsePractitioners = req.account.practitioners.map((practitioner) => {
-      return practitioner.get({ plain: true });
-    });
+    const responsePractitioners = req.account.practitioners.map(practitioner => practitioner.get({ plain: true }));
 
     const { account } = req;
+    const { weeklySchedule } = account;
     const rawAccount = account.get({ plain: true });
+    const rawWeeklySchedule = weeklySchedule && weeklySchedule.get({ plain: true });
     const initialState = {
       availabilities: {
         account: responseAccount,
         services: responseServices,
         practitioners: responsePractitioners,
         selectedServiceId,
+        officeHours: rawWeeklySchedule,
       },
 
       entities,
@@ -103,19 +112,25 @@ reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
 
     // we specifically wrap the transaction in a try/catch
     try {
-      const review = await Review.create({
-        accountId: account.id,
-        practitionerId: sentReview.practitionerId,
-        patientId: sentReview.patientId,
-        stars,
-        description,
-      }, { transaction: t });
+      const review = await Review.create(
+        {
+          accountId: account.id,
+          practitionerId: sentReview.practitionerId,
+          patientId: sentReview.patientId,
+          stars,
+          description,
+        },
+        { transaction: t }
+      );
 
       // Update sentReview
-      await sentReview.update({
-        isCompleted: true,
-        reviewId: review.id,
-      }, { transaction: t });
+      await sentReview.update(
+        {
+          isCompleted: true,
+          reviewId: review.id,
+        },
+        { transaction: t }
+      );
 
       await t.commit();
       return res.status(201).send(review.get({ plain: true }));

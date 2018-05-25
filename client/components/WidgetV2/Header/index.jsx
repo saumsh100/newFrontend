@@ -44,7 +44,7 @@ class Header extends Component {
             </svg>
           </Button>
         </div>
-        <Tabs isBooking={isBooking} setIsBooking={toggleIsBooking} />
+        <Tabs isBooking={isBooking} history={history} setIsBooking={toggleIsBooking} />
       </div>
     );
   }

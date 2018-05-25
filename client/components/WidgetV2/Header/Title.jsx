@@ -43,18 +43,43 @@ export default function Title(props) {
         />
         <Route
           exact
-          path={pathBuilder('/book/waitlist/select-date')}
-          component={titleDiv('Select Waitlist Dates')}
-        />
-        <Route
-          exact
           path={pathBuilder('/book/waitlist/join')}
           component={titleDiv('Join Waitlist')}
         />
         <Route
           exact
+          path={pathBuilder('/book/waitlist/select-dates')}
+          component={titleDiv('Select Waitlist Dates')}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/waitlist/select-times')}
+          component={titleDiv('Pick Best Time')}
+        />
+        <Route
+          exact
           path={pathBuilder('/book/waitlist/remove-dates')}
           component={titleDiv('Remove Dates')}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/waitlist/days-unavailable')}
+          component={titleDiv('Days Unavailable')}
+        />
+        <Route exact path={pathBuilder('/login')} component={titleDiv('Login')} />
+        <Route exact path={pathBuilder('/reset')} component={titleDiv('Reset Password')} />
+        <Route exact path={pathBuilder('/reset-success')} component={titleDiv('Reset Password')} />
+        <Route exact path={pathBuilder('/signup')} component={titleDiv('Sign Up')} />
+        <Route exact path={pathBuilder('/signup/confirm')} component={titleDiv('Confirm Signup')} />
+        <Route
+          exact
+          path={pathBuilder('/book/personal-information')}
+          component={titleDiv('Personal Information')}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/additional-information')}
+          component={titleDiv('Additional Information')}
         />
         <Route exact path={pathBuilder('/book/review')} component={titleDiv('Review & Book')} />
         <Route exact path={pathBuilder('/patient/add')} component={titleDiv('Add New Patient')} />

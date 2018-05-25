@@ -10,6 +10,11 @@
 
 .logo {
 }
+.timesButton {
+  color: #2e3845;
+  font-size: 16px;
+  width: auto !important;
+}
 
 .header {
   box-sizing: border-box;
@@ -78,7 +83,7 @@
   justify-content: center;
 
   &_dd {
-    width: 45%
+    width: 45%;
   }
 
   &_icon {
@@ -98,11 +103,11 @@
     width: 210px;
     color: $primary-darkgrey;
     font-weight: $large-weight;
-    padding-left:20px;
+    padding-left: 20px;
   }
   &_row {
     min-width: 400px;
-    width: 100%
+    width: 100%;
   }
 
   &_column {
@@ -113,16 +118,17 @@
   }
 }
 
-
 .displayFlex {
   display: flex;
   align-items: center;
   padding-bottom: 5px;
 }
 
-
-
 @keyframes fadeinform {
-  0%   { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

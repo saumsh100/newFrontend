@@ -7,11 +7,10 @@ import Button from '../Button';
 import styles from './styles.scss';
 
 function WidgetCard(props) {
-  const finalProps = omit(props, ['description', 'centered', 'arrow', 'square', 'selected']);
+  const finalProps = omit(props, ['description', 'centered', 'arrow', 'selected']);
   const buttonClasses = classNames(styles.card, {
     [styles.selectedCard]: props.selected,
     [styles.centered]: props.centered,
-    [styles.square]: props.square,
   });
 
   return (
@@ -38,7 +37,6 @@ WidgetCard.propTypes = {
   selected: PropTypes.bool,
   arrow: PropTypes.bool,
   centered: PropTypes.bool,
-  square: PropTypes.bool,
   title: PropTypes.string.isRequired,
 };
 
@@ -46,5 +44,4 @@ WidgetCard.defaultProps = {
   description: '',
   arrow: false,
   centered: false,
-  square: false,
 };

@@ -32,7 +32,7 @@ class Widget extends Component {
             {this.props.isBooking ? this.props.children : 'Summary'}
           </div>
           <div className={styles.poweredBy}>
-            Powered by <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
+            We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
           </div>
         </div>
       </div>

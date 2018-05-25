@@ -47,16 +47,36 @@ function BackButton(props) {
         />
         <Route
           exact
-          path={pathBuilder('/book/waitlist/select-date')}
+          path={pathBuilder('/book/waitlist/select-dates')}
           component={backButton(props.goBack('../date-and-time'))}
         />
-        <Route exact path={pathBuilder('/signup')} component={backButton(props.goBack('./book'))} />
         <Route
           exact
-          path={pathBuilder('/signup/confirm')}
-          component={backButton(props.goBack('../book'))}
+          path={pathBuilder('/book/personal-information')}
+          component={backButton(props.goBack('./date-and-time'))}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/additional-information')}
+          component={backButton(props.goBack('./personal-information'))}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/waitlist/select-times')}
+          component={backButton(props.goBack('./select-dates'))}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/waitlist/days-unavailable')}
+          component={backButton(props.goBack('./select-times'))}
         />
         <Route exact path={pathBuilder('/login')} component={backButton(props.goBack('./book'))} />
+        <Route exact path={pathBuilder('/reset')} component={backButton(props.goBack('./login'))} />
+        <Route
+          exact
+          path={pathBuilder('/reset-success')}
+          component={backButton(props.goBack('./login'))}
+        />
         <Route
           exact
           path={pathBuilder('/book/review')}
@@ -70,11 +90,11 @@ function BackButton(props) {
         <Route
           exact
           path={pathBuilder('/patient/add')}
-          component={backButton(props.goBack('../book/review'))}
+          component={backButton(props.goBack('../book/additional-information'))}
         />
         <Route
           path={pathBuilder('/patient/edit')}
-          component={backButton(props.goBack('../../book/review'))}
+          component={backButton(props.goBack('../../book/additional-information'))}
         />
       </Switch>
     </Router>

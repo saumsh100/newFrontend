@@ -35,7 +35,7 @@ const accountShape = {
   sendRequestEmail: PropTypes.bool,
   services: PropTypes.array,
   syncClientAdapter: PropTypes.string,
-  timeInterval: PropTypes.string,
+  timeInterval: PropTypes.number,
   timezone: PropTypes.string,
   twilioPhoneNumber: PropTypes.string,
   unit: PropTypes.number,

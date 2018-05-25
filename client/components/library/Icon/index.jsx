@@ -12,40 +12,24 @@ const typeMap = {
 };
 
 export default function Icon(props) {
-  const { icon, size, className, onClick, style, type, pulse, badgeText } = props;
+  const { icon, size, className, style, type, pulse, badgeText } = props;
 
-  const baseClass = typeMap[type];
-  const fontAwesomeClass = `${baseClass} fa-${icon} ${styles.icon}`;
-  let classes = classNames(className, fontAwesomeClass);
-  if (pulse) {
-    classes = classNames(classes, 'fa-pulse');
-  }
+  const classes = classNames(className, `fa-${icon}`, styles.icon, typeMap[type], {
+    'fa-pulse': pulse,
+    [styles.pulse]: pulse,
+  });
 
   const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
 
-  if (!badgeText) {
-    return (
-      <i
-        className={classes}
-        data-test-id={props['data-test-id']}
-        style={finalStyles}
-        onClick={onClick}
-      />
-    );
-  }
-
-  return (
+  return badgeText ? (
     <div className={styles.iconWrapper}>
-      <i
-        className={classes}
-        data-test-id={props['data-test-id']}
-        style={finalStyles}
-        onClick={onClick}
-      />
+      <i className={classes} data-test-id={props['data-test-id']} style={finalStyles} />
       <div className={styles.badgeWrapper}>
         <span className={styles.badge}>{badgeText}</span>
       </div>
     </div>
+  ) : (
+    <i className={classes} data-test-id={props['data-test-id']} style={finalStyles} />
   );
 }
 
@@ -59,8 +43,7 @@ Icon.propTypes = {
   type: PropTypes.string,
   size: PropTypes.number,
   className: PropTypes.string,
-  onClick: PropTypes.func,
-  style: PropTypes.shape({}),
+  style: PropTypes.objectOf(PropTypes.string),
   'data-test-id': PropTypes.string,
   badgeText: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool]),
   pulse: PropTypes.bool,

@@ -231,30 +231,32 @@ $padding-size-border: 10px;
   height: 35px;
 }
 
-.searchIcon {
+.searchIconWrapper {
   position: absolute;
-  padding: 7px;
   box-sizing: border-box;
-  width: 30px;
   display: flex;
   justify-content: flex-start;
   left: 8px;
   top: 4px;
   z-index: 2;
-  color: $primary-dark;
   border: 1px solid darken(#f4f4f4, 10%);
-  border-radius: 50%;
-  background-color: darken(#f4f4f4, 5%);
-
+  border-radius: 50% !important;
+  background-color: darken(#f4f4f4, 5%) !important;
+  font-size: 12px;
+  width: 28px !important;
   &:hover {
     cursor: pointer;
     border-color: $primary-blue;
   }
 }
+.searchIcon {
+  padding: 7px;
+  color: $primary-dark;
+}
 .iconSearchOpen {
   pointer-events: none;
   border: 0px;
-  background-color: transparent;
+  background-color: transparent !important;
   color: $primary-dark;
 }
 

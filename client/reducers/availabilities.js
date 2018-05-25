@@ -32,6 +32,7 @@ import {
   SET_SENTRECALLID,
   SET_DUE_DATE,
   SET_IS_BOOKING,
+  UPDATE_WAITLIST_TIMES,
 } from '../constants';
 
 function getStartTimeForToday(account) {
@@ -64,6 +65,7 @@ export const createInitialWidgetState = (state) => {
     Object.assign(
       {
         account: null,
+        officeHours: null,
         practitioners: [],
         services: [],
         availabilities: [],
@@ -81,6 +83,10 @@ export const createInitialWidgetState = (state) => {
         isTimerExpired: false,
         isSuccessfulBooking: false,
         hasWaitList: false,
+        waitlist: {
+          dates: [],
+          times: [],
+        },
         waitSpot: {
           preferences: {
             mornings: true,
@@ -141,6 +147,10 @@ export default handleActions(
         // selectedPractitionerId: '',
         notes: null,
         hasWaitList: false,
+        waitlist: {
+          dates: [],
+          times: [],
+        },
         waitSpot: {
           preferences: {
             mornings: true,
@@ -213,6 +223,9 @@ export default handleActions(
       return state.mergeIn(['waitSpot'], action.payload);
     },
 
+    [UPDATE_WAITLIST_TIMES](state, action) {
+      return state.setIn(['waitlist', 'times'], action.payload);
+    },
     [SET_PATIENT_USER](state, action) {
       return state.set('patientUser', action.payload);
     },

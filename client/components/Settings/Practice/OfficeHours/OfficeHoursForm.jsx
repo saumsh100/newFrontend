@@ -6,7 +6,7 @@ import moment from 'moment';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Form, FormSection, Field, Icon } from '../../../library/index';
+import { Grid, Row, Col, Form, FormSection, Field, IconButton } from '../../../library/index';
 import { dayShape, weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
 
@@ -121,9 +121,9 @@ function OfficeHoursForm({
                       search="label"
                     />
                   </Col>
-                  {modal ? (
-                    <Icon className={styles.icon} icon="cog" onClick={() => openModal(day)} />
-                  ) : null}
+                  {modal && (
+                    <IconButton className={styles.icon} icon="cog" onClick={() => openModal(day)} />
+                  )}
                   <Col xs={3} />
                 </Row>
               </Grid>

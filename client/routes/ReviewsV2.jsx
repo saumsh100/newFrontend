@@ -7,13 +7,28 @@ import Widget from '../components/WidgetV2';
 import Reasons from '../components/WidgetV2/Booking/Reasons';
 import DateTime from '../components/WidgetV2/Booking/DateTime';
 import Practitioners from '../components/WidgetV2/Booking/Practitioners';
-import SelectDate from '../components/WidgetV2/Booking/Waitlist/SelectDate';
+import SelectDates from '../components/WidgetV2/Booking/Waitlist/SelectDates';
+import SelectTimes from '../components/WidgetV2/Booking/Waitlist/SelectTimes';
 import Join from '../components/WidgetV2/Booking/Waitlist/Join';
+import Login from '../components/WidgetV2/Booking/Login';
 import RemoveDates from '../components/WidgetV2/Booking/Waitlist/RemoveDates';
 import { historyShape } from '../components/library/PropTypeShapes/routerShapes';
 import PatientUser from '../entities/models/PatientUser';
+import SignUp from '../components/WidgetV2/Booking/SignUp';
+import SignUpConfirm from '../components/WidgetV2/Booking/SignUp/Confirm';
+import ResetPassword from '../components/WidgetV2/Booking/ResetPassword';
+import ResetSuccess from '../components/WidgetV2/Booking/ResetPassword/Success';
+import DaysUnavailable from '../components/WidgetV2/Booking/Waitlist/DaysUnavailable';
+import AdditionalInformation from '../components/WidgetV2/Booking/AdditionalInformation';
+import PersonalInformation from '../components/WidgetV2/Booking/PersonalInformation';
+import AddPatient from '../components/WidgetV2/Booking/Patient/AddPatient';
+import EditPatient from '../components/WidgetV2/Booking/Patient/EditPatient';
+import getParameterByName from '../components/My/PatientPage/Shared/getParameterByName';
 
 const base = (path = '') => `/widgets/:accountId/app${path}`;
+
+const redirectAuth = (NoAuthComponent, isAuth, path) => props =>
+  (isAuth ? <Redirect to={path} /> : <NoAuthComponent {...props} />);
 
 const BookingRouter = ({ match }) => {
   const b = (path = '') => `${match.url}${path}`;
@@ -25,8 +40,12 @@ const BookingRouter = ({ match }) => {
         <Route exact path={b('/reason')} component={Reasons} />
         <Route exact path={b('/date-and-time')} component={DateTime} />
         <Route exact path={b('/waitlist/join')} component={Join} />
-        <Route exact path={b('/waitlist/select-date')} component={SelectDate} />
+        <Route exact path={b('/waitlist/select-dates')} component={SelectDates} />
+        <Route exact path={b('/waitlist/select-times')} component={SelectTimes} />
         <Route exact path={b('/waitlist/remove-dates')} component={RemoveDates} />
+        <Route exact path={b('/waitlist/days-unavailable')} component={DaysUnavailable} />
+        <Route exact path={b('/personal-information')} component={PersonalInformation} />
+        <Route exact path={b('/additional-information')} component={AdditionalInformation} />
       </Switch>
     </div>
   );
@@ -54,12 +73,40 @@ const LoggedRoute = ({ isAuth, patientUser, children }) => {
 
 const EmbedRouter = ({ match, isAuth, patientUser }) => {
   const b = (path = '') => `${match.url}${path}`;
+  const params = getParameterByName('params');
   return (
     <Switch>
       <Redirect exact from={b()} to={b('/review')} />
       <Route
         path={b('/book')}
         render={props => <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+      />
+      <Route
+        exact
+        path={b('/login')}
+        component={redirectAuth(Login, isAuth, b('/book/practitioner'))}
+      />
+      <Route
+        exact
+        path={b('/signup')}
+        render={redirectAuth(SignUp, isAuth, b('/book/practitioner'))}
+      />
+      <Route exact path={b('/signup/confirm')} render={SignUpConfirm} />
+      <Route
+        exact
+        path={b('/reset')}
+        render={redirectAuth(ResetPassword, isAuth, b('/book/practitioner'))}
+      />
+      <Route
+        exact
+        path={b('/reset-success')}
+        render={redirectAuth(ResetSuccess, isAuth, b('/book/practitioner'))}
+      />
+      <Route exact path={b('/patient/add')} render={props => <AddPatient {...props} />} />
+      <Route
+        exact
+        path={b('/patient/edit/:patientId')}
+        render={props => <EditPatient {...props} {...params} />}
       />
     </Switch>
   );

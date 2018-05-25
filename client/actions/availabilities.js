@@ -31,6 +31,7 @@ import {
   SET_DUE_DATE,
   SET_FAMILY_PATIENT_USER,
   SET_IS_BOOKING,
+  UPDATE_WAITLIST_TIMES,
 } from '../constants';
 
 export const sixDaysShiftAction = createAction(SIX_DAYS_SHIFT);
@@ -54,6 +55,7 @@ export const setIsTimerExpired = createAction(SET_IS_TIMER_EXPIRED);
 export const setIsSuccessfulBooking = createAction(SET_IS_SUCCESSFUL_BOOKING);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 export const setHasWaitList = createAction(SET_HAS_WAITLIST);
+export const updateWaitlistTimes = createAction(UPDATE_WAITLIST_TIMES);
 export const updateWaitSpot = createAction(UPDATE_WAITSPOT);
 export const setNotes = createAction(SET_NOTES);
 export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);

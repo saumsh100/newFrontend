@@ -69,14 +69,13 @@ const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) 
  * @param selectedStartDate
  * @param accountTimezone
  */
-const generateDateRange = (numDaysForward, selectedStartDate, accountTimezone) =>
-  Array(numDaysForward)
-    .fill()
-    .reduce(
-      (acc, act, i) => [...acc, genericMoment(selectedStartDate, accountTimezone).add(i, 'days')],
-      []
-    );
-
+const generateDateRange = (numDaysForward, selectedStartDate, accountTimezone) => {
+  const dateRange = [];
+  for (let i = 0; i < numDaysForward; i += 1) {
+    dateRange.push(genericMoment(selectedStartDate, accountTimezone).add(i, 'days'));
+  }
+  return dateRange;
+};
 /**
  * Return the correct moment object checking if there's a timezone before.
  *
@@ -185,8 +184,8 @@ class DateTime extends Component {
        * @param {string} j
        */
       const renderTimesOnTimeFrame = (availability, index) => {
-        const availabilityClasses = classNames(styles.timeSlot, {
-          [styles.selectedTimeSlot]:
+        const availabilityClasses = classNames(styles.slot, {
+          [styles.selectedSlot]:
             selectedAvailability && selectedAvailability.startDate === availability.startDate,
         });
         return (
@@ -195,34 +194,34 @@ class DateTime extends Component {
             onClick={() => this.selectAvailability(availability)}
             className={availabilityClasses}
           >
-            {genericMoment(availability.startDate, account.timezeone).format('h:mm a')}
+            {genericMoment(availability.startDate, account.timezeone).format('LT')}
           </Button>
         );
       };
 
       return (
-        <div className={styles.waitlistWrapper}>
+        <div className={styles.subCardWrapper}>
           {selectedDayAvailabilities.morning.length > 0 && (
             <div className={styles.timeFrameWrapper}>
-              <span className={styles.timeFrameTitle}>Morning</span>
+              <span className={styles.slotsTitle}>Morning</span>
               {selectedDayAvailabilities.morning.map(renderTimesOnTimeFrame)}
             </div>
           )}
           {selectedDayAvailabilities.afternoon.length > 0 && (
             <div className={styles.timeFrameWrapper}>
-              <span className={styles.timeFrameTitle}>Afternoon</span>
+              <span className={styles.slotsTitle}>Afternoon</span>
               {selectedDayAvailabilities.afternoon.map(renderTimesOnTimeFrame)}
             </div>
           )}
           {selectedDayAvailabilities.evening.length > 0 && (
             <div className={styles.timeFrameWrapper}>
-              <span className={styles.timeFrameTitle}>Evening</span>
+              <span className={styles.slotsTitle}>Evening</span>
               {selectedDayAvailabilities.evening.map(renderTimesOnTimeFrame)}
             </div>
           )}
           <Button
             disabled={!selectedAvailability}
-            className={styles.nextButton}
+            className={styles.fullWidthButton}
             onClick={() => this.confirmDateTime()}
           >
             Next
@@ -240,14 +239,14 @@ class DateTime extends Component {
      */
     const renderAvailabilities = () =>
       (!selectedDayAvailabilities.length && !nextAvailability ? (
-        <Link to={'./waitlist/select-date'} className={styles.waitlist}>
-          <div className={styles.waitlistWrapper}>
-            <h3 className={styles.waitlistTitle}>No available appointments</h3>
-            <p className={styles.waitlistSubtitle}>
+        <Link to={'./waitlist/select-dates'} className={styles.subCard}>
+          <div className={styles.subCardWrapper}>
+            <h3 className={styles.subCardTitle}>No available appointments</h3>
+            <p className={styles.subCardSubtitle}>
               We did not find any availabilities for your criteria.
             </p>
           </div>
-          <span className={styles.waitlistLink}>Join Waitlist</span>
+          <span className={styles.subCardLink}>Join Waitlist</span>
         </Link>
       ) : (
         <div className={styles.contentWrapper}>
@@ -256,14 +255,14 @@ class DateTime extends Component {
             <p className={styles.subtitle}>Select a time that works best for you</p>
             <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
           </div>
-          <Link to={'./waitlist/select-date'} className={styles.waitlist}>
-            <div className={styles.waitlistWrapper}>
-              <h3 className={styles.waitlistTitle}>Want to come in sooner?</h3>
-              <p className={styles.waitlistSubtitle}>
+          <Link to={'./waitlist/select-dates'} className={styles.subCard}>
+            <div className={styles.subCardWrapper}>
+              <h3 className={styles.subCardTitle}>Want to come in sooner?</h3>
+              <p className={styles.subCardSubtitle}>
                 Be notified when an earlier appointment becomes available
               </p>
             </div>
-            <span className={styles.waitlistLink}>Join Waitlist</span>
+            <span className={styles.subCardLink}>Join Waitlist</span>
           </Link>
         </div>
       ));
@@ -279,7 +278,7 @@ class DateTime extends Component {
         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14">
           <path d="M10.684 1.332h-.667V0H8.68v1.332H3.34V0H2.003v1.332h-.667c-.742 0-1.33.6-1.33 1.333L0 11.99c0 .733.594 1.332 1.336 1.332h9.348c.735 0 1.336-.6 1.336-1.332V2.665c0-.733-.601-1.333-1.336-1.333zm0 10.659H1.336V4.663h9.348v7.328z" />
         </svg>
-        Pick a <br /> Date
+        Pick a<br /> Date
       </div>
     );
 

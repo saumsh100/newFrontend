@@ -1,8 +1,10 @@
-
 @import '../../../ui';
 
 .icon {
   display: inline;
+}
+.pulse {
+  display: inline-block;
 }
 
 .iconWrapper {
@@ -21,9 +23,9 @@
   max-width: 5em;
   min-width: 1.5em;
   overflow: hidden;
-  padding: .25em;
+  padding: 0.25em;
   text-overflow: ellipsis;
-  transform: scale(.80);
+  transform: scale(0.8);
   transform-origin: top right;
   text-align: center;
 

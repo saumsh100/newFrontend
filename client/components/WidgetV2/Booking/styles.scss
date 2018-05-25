@@ -13,7 +13,7 @@
   padding: 0 var(--widget-spacer);
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -4px;
+  margin: 0;
 }
 
 .content {
@@ -37,7 +37,183 @@
   font-family: $dashboard-font;
   font-size: 12px;
   color: $widget-grey;
-  line-height: 16px;
+  line-height: 18px;
   margin: 4px 0 0;
   margin-bottom: var(--widget-spacer);
+}
+.contentWrapper {
+  width: 100%;
+}
+.subCard {
+  @extend .content;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+}
+.subCardWrapper {
+  flex: 1;
+}
+.subCardTitle {
+  @extend .title;
+  width: 100%;
+  margin: 0px;
+}
+.subCardSubtitle {
+  @extend .subtitle;
+  flex: 1;
+  padding-right: 8px;
+  margin-bottom: 0;
+}
+.subCardLink {
+  font-family: $medium-font;
+  font-size: 13px;
+  color: $widget-blue;
+  padding-bottom: 2px;
+  border-bottom: 1px solid $widget-blue;
+  align-self: center;
+  display: inline-block;
+}
+.input {
+  border: 1px solid $widget-grey-lighter;
+  width: 100%;
+  color: $widget-grey-dark;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 16px var(--widget-spacer) 0;
+  box-sizing: border-box;
+  min-height: 56px;
+  &:focus ~ .label {
+    @extend .filled;
+  }
+}
+.textarea {
+  @extend .input;
+  min-height: 150px;
+  padding-top: 28px;
+}
+.group {
+  padding: 0;
+  margin-bottom: 32px;
+}
+.error {
+  left: var(--widget-spacer);
+  bottom: -16px;
+  color: $widget-red;
+  font-family: $medium-font;
+  font-size: 11px;
+  top: auto;
+}
+.erroredInput {
+  border-color: $widget-red;
+  color: $widget-grey-dark;
+}
+.bar {
+  display: none;
+}
+.erroredLabel {
+  color: $widget-grey-light !important;
+}
+.erroredLabelFilled {
+  color: $widget-grey-light !important;
+}
+.label {
+  left: var(--widget-spacer);
+  top: 21px;
+  font-size: 14px;
+  color: $widget-grey-light;
+}
+.filled {
+  left: var(--widget-spacer) !important;
+  top: 12px !important;
+  font-size: 11px !important;
+  color: $widget-grey-light;
+}
+.signInTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--widget-spacer);
+}
+.actionButton {
+  border-radius: 4px;
+  width: 100%;
+  font-family: $medium-font;
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+.slot {
+  background: #fff;
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px;
+  color: $widget-grey;
+  font-family: $medium-font;
+  margin: 1%;
+  letter-spacing: 0px;
+  font-size: 12px;
+  width: 48%;
+  padding: 16px 0;
+  @media screen and (min-width: 350px) {
+    width: 23%;
+    font-size: 11px;
+  }
+}
+.selectedSlot {
+  @extend .slot;
+  background: var(--primaryColor);
+  border-color: var(--primaryColor);
+  color: #fff;
+}
+
+.slotsTitle {
+  width: 100%;
+  margin: 0 1% 8px;
+  font-family: $medium-font;
+  font-size: 12px;
+  color: $widget-grey;
+  font-weight: normal;
+}
+
+.fullWidthButton {
+  border-radius: 4px;
+  width: 100%;
+  min-height: 40px;
+}
+
+.editLink {
+  background: $widget-grey-lightest;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  color: $widget-grey-light;
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  svg {
+    fill: currentColor;
+  }
+}
+
+.caretIconWrapper {
+  margin-top: -12px;
+}
+.errorIcon {
+  color: initial;
+}
+.closeIcon {
+  position: absolute;
+  right: var(--widget-spacer);
+  top: 22px;
+  width: auto !important;
+}
+
+.inputWithIcon {
+  padding-right: 28px;
+}
+
+.validationIcon {
+  position: absolute;
+  right: var(--widget-spacer);
+  top: 22px;
 }

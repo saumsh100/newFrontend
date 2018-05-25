@@ -164,13 +164,12 @@ class TopBar extends Component {
       onBlur: this.closeSearch,
     };
 
-    let groupStyles = styles.searchTheme;
-    let iconStyles = styles.searchIcon;
-
-    if (!isSearchCollapsed) {
-      groupStyles = classNames(styles.searchTheme, styles.animateSearch);
-      iconStyles = classNames(iconStyles, styles.iconSearchOpen);
-    }
+    const groupStyles = classNames(styles.searchTheme, {
+      [styles.animateSearch]: !isSearchCollapsed,
+    });
+    const iconStyles = classNames(styles.searchIconWrapper, {
+      [styles.iconSearchOpen]: !isSearchCollapsed,
+    });
 
     const searchTheme = {
       group: groupStyles,
@@ -191,7 +190,12 @@ class TopBar extends Component {
         <div className={styles.rightContainer}>
           <div className={styles.searchContainer}>
             <div className={styles.wrapper}>
-              <Icon icon="search" className={iconStyles} onClick={this.openSearch} />
+              <IconButton
+                icon="search"
+                className={iconStyles}
+                iconClassName={styles.searchIcon}
+                onClick={this.openSearch}
+              />
               {!this.props.isSearchCollapsed && (
                 <RelayPatientSearch
                   onChange={this.onSearchSelect}

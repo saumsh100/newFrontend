@@ -1,11 +1,11 @@
 
 import React from 'react';
+import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import omit from 'lodash/omit';
-import styles from './styles.scss';
 import Icon from '../Icon';
 import withTheme from '../../../hocs/withTheme';
+import styles from './styles.scss';
 
 function Input(props) {
   const {
@@ -20,9 +20,6 @@ function Input(props) {
     iconType,
   } = props;
 
-  // TODO: add support for hint attribute
-  // TODO: its like a label except it doesn't go ontop (think Chat input)
-
   const inputProps = omit(props, [
     'error',
     'borderColor',
@@ -32,46 +29,41 @@ function Input(props) {
     'iconType',
     'refCallBack',
   ]);
-  const inputStyle = theme;
-  const valuePresent =
+
+  const isFilled =
     value !== null &&
     value !== undefined &&
     value !== '' &&
     !(typeof value === 'number' && isNaN(value));
 
-  let labelClassName = inputStyle.label;
-  let iconClassName = inputStyle.icon;
+  const labelClassName = classNames(theme.label, {
+    [theme.erroredLabel]: error,
+    [theme.filled]: isFilled,
+    [theme.erroredLabelFilled]: isFilled && error,
+  });
 
-  if (valuePresent) {
-    labelClassName = classNames(labelClassName, inputStyle.filled);
-    iconClassName = classNames(inputStyle.hidden, iconClassName);
-  }
+  const iconClassName = classNames(theme.icon, {
+    [theme.erroredIcon]: error,
+    [theme.hidden]: isFilled,
+  });
 
-  let inputClassName = inputStyle.input;
+  const inputClassName = classNames(theme.input, {
+    [theme.erroredInput]: error,
+    [theme.inputWithIcon]: iconComponent || icon,
+  });
 
-  if (error) {
-    labelClassName = classNames(inputStyle.erroredLabel, labelClassName);
-    inputClassName = classNames(inputStyle.erroredInput, inputClassName);
-    iconClassName = classNames(inputStyle.erroredIcon, iconClassName);
-  }
-
-  const errorClassName = inputStyle.error;
+  const errorClassName = theme.error;
 
   const errorComponent = error && <span className={errorClassName}>{error}</span>;
 
-  // TODO: fix this so that it does not throw an error!
-  /* if (IconComponent) {
-    iconComponent = <IconComponent className={iconClassName} />;
-  } else */
   const icComponent =
-    props.iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
+    iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
 
-  // TODO: use classNames to avoid "undefined" being a className
   return (
-    <div className={`${inputStyle.group} ${classStyles}`}>
+    <div className={`${theme.group} ${classStyles}`}>
       <input type={type} className={inputClassName} {...inputProps} ref={props.refCallBack} />
-      <span className={inputStyle.bar} />
-      <label className={labelClassName}>{label}</label>
+      <span className={theme.bar} />
+      <span className={labelClassName}>{label}</span>
       {errorComponent}
       {icComponent}
     </div>
@@ -79,13 +71,16 @@ function Input(props) {
 }
 
 Input.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   label: PropTypes.string,
-  value: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-  theme: PropTypes.object,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  theme: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  refCallBack: PropTypes.func,
   type: PropTypes.string,
   icon: PropTypes.string,
-  IconComponent: PropTypes.func,
+  iconType: PropTypes.string,
+  classStyles: PropTypes.objectOf(PropTypes.string),
+  iconComponent: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 
 export default withTheme(Input, styles);
