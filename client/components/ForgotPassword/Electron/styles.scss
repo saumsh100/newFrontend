@@ -1,0 +1,21 @@
+@import '../../../ui.scss';
+@import '../../Login/Electron/styles.scss';
+
+.text {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.email {
+  font-weight: $large-weight;
+  color: $primary-darkgrey;
+}
+
+.displayCenter {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.text_only_bot_padding {
+  padding-bottom: 20px;
+}

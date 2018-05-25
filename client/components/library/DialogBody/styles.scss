@@ -1,5 +1,8 @@
-
 @import '../../../ui.scss';
+
+@mixin dialogBodyMobile-mixin() {
+  overflow: auto;
+}
 
 .dialogBody {
   display: flex;
@@ -9,9 +12,16 @@
   max-height: 96%;
   flex-direction: column;
   overflow: unset;
+  @media screen and (max-width: 700px) {
+    @include dialogBodyMobile-mixin();
+  }
 }
 
-.header{
+.dialogBodyMobile {
+  @include dialogBodyMobile-mixin();
+}
+
+.header {
   display: flex;
   align-items: center;
   border-bottom: 0;
@@ -24,7 +34,6 @@
 
 .title {
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
-
 }
 .cardHeader {
   padding-top: 0px !important;
@@ -37,6 +46,8 @@
   font-weight: 900;
   margin-left: auto;
   cursor: pointer;
+  padding: 0;
+  background: none;
 }
 
 .footer {

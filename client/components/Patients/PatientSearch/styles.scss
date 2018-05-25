@@ -1,0 +1,102 @@
+@import '../../../ui.scss';
+@import '../../../fonts.scss';
+
+.container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background: $primary-lightgray;
+}
+
+.searchIcon {
+  position: absolute;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 30px;
+  display: flex;
+  justify-content: flex-start;
+  z-index: 2;
+  color: $search-border-color;
+}
+
+.group {
+  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+  height: 50px;
+  background-color: $search-bg;
+  padding: 0px;
+
+  input {
+    font-size: 13px;
+    color: $primary-dark;
+    height: 100%;
+    padding-left: 40px;
+    border: none;
+  }
+
+  input::placeholder {
+    font-style: normal;
+    color: $search-border-color;
+  }
+}
+
+.suggestionsWrapper {
+  margin: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.suggestionsContainerOpen {
+  box-sizing: border-box;
+  outline: none;
+  overflow: auto;
+  flex: 1 1 auto;
+  padding-top: 5px;
+  max-height: 500px;
+  background: $primary-white;
+}
+
+.suggestionContainer {
+  padding: 20px 15px;
+}
+
+.suggestionContainer_details {
+  padding-left: 10px;
+}
+
+.suggestionContainer_fullName {
+  font-size: 13px;
+}
+
+.suggestionContainer_fullName,
+.footerText {
+  color: $search-border-color;
+}
+
+.suggestionContainer_date,
+.footerText {
+  font-size: 11px;
+}
+
+.footerText {
+  padding: 20px 0;
+}
+
+.bold {
+  @extend .fontDefault;
+  color: $primary-dark;
+}
+
+.totalCount {
+  text-align: center;
+}
+
+.recentPatientsWrapper {
+  height: 100%;
+  overflow: auto;
+  background: $primary-white;
+}

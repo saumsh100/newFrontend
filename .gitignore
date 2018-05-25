@@ -48,5 +48,7 @@ package-lock.json
 .ackrc
 .history/
 yarn.lock
+electron/dist
+electron/build
 **/__generated__
 .python-version

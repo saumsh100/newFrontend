@@ -9,6 +9,7 @@ const base = (path = '') => `/patients${path}`;
 const Routes = {
   list: LazyRoute(() => import('../../components/Patients/PatientTable')),
   patient: LazyRoute(() => import('../../components/Patients/PatientInfo')),
+  search: LazyRoute(() => import('../../components/Patients/PatientSearch')),
 };
 
 const Patients = () => (
@@ -16,6 +17,9 @@ const Patients = () => (
     <Switch>
       <Redirect exact from={base()} to={base('/list')} />
       <Route path={base('/list')} component={Routes.list} />
+      <Route path={base('/phone')} component={Routes.phone} />
+      <Route path={base('/search')} component={Routes.search} />
+      <Route path={base('/insight')} />
       <Route path={base('/:patientId')} component={Routes.patient} />
     </Switch>
   </DocumentTitle>

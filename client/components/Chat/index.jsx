@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import { push } from 'react-router-redux';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,6 +8,7 @@ import classnames from 'classnames';
 import ChatList from './ChatList';
 import MessageContainer from './MessageContainer';
 import PatientInfo from './PatientInfo';
+import PatientInfoPage from '../Patients/PatientInfo/Electron';
 import ToHeader from './ToHeader';
 import {
   Button,
@@ -27,8 +29,12 @@ import {
   loadFlaggedChatList,
   cleanChatList,
 } from '../../thunks/chat';
+import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { setNewChat } from '../../reducers/chat';
+import { setBackHandler, setTitle } from '../../reducers/electron';
 import PatientSearch from '../PatientSearch';
+import { isHub } from '../../util/hub';
+import { CHAT_PAGE } from '../../constants/PageTitle';
 import Loader from '../Loader';
 import styles from './styles.scss';
 
@@ -46,6 +52,7 @@ const CHAT_LIST_OFFSET = 15;
 class ChatMessage extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       tabIndex: 0,
       chats: 0,
@@ -66,7 +73,19 @@ class ChatMessage extends Component {
   }
 
   componentDidMount() {
-    this.loadChatList(true);
+    this.props.fetchEntitiesRequest({
+      id: 'dashAccount',
+      key: 'accounts',
+    });
+
+    this.loadChatList(true).then(() => {
+      const { params } = this.props.match;
+
+      if (params.chatId) {
+        this.props.selectChat(params.chatId);
+        this.toggleShowMessageContainer();
+      }
+    });
   }
 
   addNewChat() {
@@ -77,27 +96,49 @@ class ChatMessage extends Component {
   }
 
   togglePatientsList() {
-    this.setState({
-      showPatientsList: !this.state.showPatientsList,
-      showPatientInfo: false,
-      showMessageContainer: false,
-    });
+    this.setState(
+      {
+        showPatientsList: !this.state.showPatientsList,
+        showPatientInfo: false,
+        showMessageContainer: false,
+      },
+      () => {
+        this.props.setLocation('/chat');
+        this.props.selectChat(null);
+      }
+    );
   }
 
-  togglePatientsInfo() {
-    this.setState({
-      showPatientInfo: !this.state.showPatientInfo,
-      showPatientsList: false,
-      showMessageContainer: !this.state.showMessageContainer,
-    });
+  togglePatientsInfo(pageTitle) {
+    this.setState(
+      {
+        showPatientInfo: !this.state.showPatientInfo,
+        showPatientsList: false,
+        showMessageContainer: !this.state.showMessageContainer,
+      },
+      () => {
+        this.props.setTitle(pageTitle);
+        this.props.setBackHandler(() => {
+          this.props.setTitle(CHAT_PAGE);
+          this.toggleShowMessageContainer();
+        });
+      }
+    );
   }
 
   toggleShowMessageContainer() {
-    this.setState({
-      showMessageContainer: !this.state.showMessageContainer,
-      showPatientsList: false,
-      showPatientInfo: false,
-    });
+    this.setState(
+      {
+        showMessageContainer: !this.state.showMessageContainer,
+        showPatientsList: false,
+        showPatientInfo: false,
+      },
+      () => {
+        this.props.setBackHandler(() => {
+          this.togglePatientsList();
+        });
+      }
+    );
   }
 
   selectChatOrCreate(patient) {
@@ -108,6 +149,10 @@ class ChatMessage extends Component {
     } else {
       this.props.selectChat(null);
       this.props.setNewChat({ patientId: patient.id });
+    }
+
+    if (!this.state.showMessageContainer) {
+      this.toggleShowMessageContainer();
     }
   }
 
@@ -165,6 +210,65 @@ class ChatMessage extends Component {
     );
   }
 
+  showPatientInfo() {
+    if (isHub()) {
+      return this.state.showPatientInfo && <PatientInfoPage />;
+    }
+
+    return (
+      <div className={styles.rightInfo}>
+        <Button
+          icon="arrow-left"
+          onClick={this.togglePatientsInfo}
+          className={styles.closePatientInfo}
+        />
+        <PatientInfo />
+        <div className={styles.bottomInfo} />
+      </div>
+    );
+  }
+
+  renderChatList() {
+    return (
+      <SBody>
+        <List className={styles.chatsList}>
+          <InfiniteScroll
+            loadMore={this.loadChatList}
+            loader={<Loader />}
+            hasMore={this.state.moreData}
+            initialLoad={false}
+            useWindow={false}
+            threshold={1}
+          >
+            <ChatList
+              tabIndex={this.state.tabIndex}
+              onChatClick={this.toggleShowMessageContainer}
+            />
+          </InfiniteScroll>
+        </List>
+      </SBody>
+    );
+  }
+
+  renderMessageContainer() {
+    const { showPatientInfo } = this.state;
+    const patientInfoStyle = classnames(styles.rightSplit, {
+      [styles.slideIn]: showPatientInfo,
+      [styles.hubRightSplit]: isHub(),
+    });
+
+    return (
+      <SBody>
+        <div className={styles.splitWrapper}>
+          <div className={styles.leftSplit}>
+            <MessageContainer />
+          </div>
+          <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
+        </div>
+      </SBody>
+    );
+  }
+
   renderHeading() {
     return (
       <SHeader className={styles.leftCardHeader}>
@@ -199,55 +303,6 @@ class ChatMessage extends Component {
     );
   }
 
-  renderChatList() {
-    return (
-      <SBody>
-        <List className={styles.chatsList}>
-          <InfiniteScroll
-            loadMore={this.loadChatList}
-            loader={<Loader />}
-            hasMore={this.state.moreData}
-            initialLoad={false}
-            useWindow={false}
-            threshold={1}
-          >
-            <ChatList
-              tabIndex={this.state.tabIndex}
-              onChatClick={this.toggleShowMessageContainer}
-            />
-          </InfiniteScroll>
-        </List>
-      </SBody>
-    );
-  }
-
-  renderMessageContainer() {
-    const { showPatientInfo } = this.state;
-    const slideStyle = showPatientInfo ? styles.slideIn : {};
-    const patientInfoStyle = classnames(styles.rightSplit, slideStyle);
-
-    return (
-      <SBody>
-        <div className={styles.splitWrapper}>
-          <div className={styles.leftSplit}>
-            <MessageContainer />
-          </div>
-          <div className={patientInfoStyle}>
-            <div className={styles.rightInfo}>
-              <Button
-                icon="arrow-left"
-                onClick={this.togglePatientsInfo}
-                className={styles.closePatientInfo}
-              />
-              <PatientInfo />
-              <div className={styles.bottomInfo} />
-            </div>
-          </div>
-        </div>
-      </SBody>
-    );
-  }
-
   render() {
     const { showPatientsList, showMessageContainer, showPatientInfo } = this.state;
     const slideStyle = showPatientsList ? styles.slideIn : {};
@@ -256,9 +311,10 @@ class ChatMessage extends Component {
     const messageContainerSlideStyle =
       showMessageContainer || showPatientInfo ? styles.slideIn : {};
     const messageContainerClass = classnames(styles.rightCard, messageContainerSlideStyle);
+    const wrapperClass = !isHub() ? styles.chatWrapper : classnames(styles.chatWrapper, styles.hub);
 
     return (
-      <div className={styles.chatWrapper}>
+      <div className={wrapperClass}>
         <div className={patientsListStyle}>
           <Card className={styles.leftCard} noBorder>
             <SContainer>
@@ -285,6 +341,11 @@ class ChatMessage extends Component {
 }
 
 ChatMessage.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      chatId: PropTypes.string,
+    }),
+  }),
   setNewChat: PropTypes.func,
   defaultSelectedChatId: PropTypes.func,
   selectChat: PropTypes.func,
@@ -292,6 +353,10 @@ ChatMessage.propTypes = {
   loadUnreadChatList: PropTypes.func,
   loadFlaggedChatList: PropTypes.func,
   cleanChatList: PropTypes.func,
+  setLocation: PropTypes.func,
+  setBackHandler: PropTypes.func,
+  setTitle: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -304,6 +369,10 @@ function mapDispatchToProps(dispatch) {
       loadUnreadChatList,
       loadFlaggedChatList,
       cleanChatList,
+      setBackHandler,
+      setLocation: push,
+      setTitle,
+      fetchEntitiesRequest,
     },
     dispatch
   );

@@ -1,0 +1,33 @@
+@import '../../ui.scss';
+
+.icon {
+  font-size: 1.3em;
+}
+
+.navItem {
+  display: flex;
+  height: 15px;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: $electron-primary-menu !important;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+}
+
+.active {
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: $electron-toolbar-icon-hover-bg;
+    border-radius: 50%;
+    top: 50%;
+    margin: 0 auto;
+    transform: translateY(-50%);
+    z-index: -1;
+  }
+}

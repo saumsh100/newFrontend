@@ -5,6 +5,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { change, reset } from 'redux-form';
+import { push } from 'react-router-redux';
+import { isHub } from '../../../util/hub';
+import Requests from '../../../entities/models/Request';
 import { setTime, getDuration } from '../../library/util/TimeOptions';
 import DisplayForm from './DisplayForm';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
@@ -15,16 +18,7 @@ import {
   deleteEntityRequest,
   fetchEntitiesRequest,
 } from '../../../thunks/fetchEntities';
-import {
-  Button,
-  Avatar,
-  Card,
-  SContainer,
-  SFooter,
-  SHeader,
-  SBody,
-  Icon,
-} from '../../library';
+import { Button, Avatar, Card, SContainer, SFooter, SHeader, SBody, Icon } from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
@@ -53,80 +47,69 @@ class AddNewAppointment extends Component {
     const nextPropsDate = moment(nextProps.currentDate);
 
     if (!nextPropsDate.isSame(currentDate)) {
-      this.props.change(this.props.formName, 'date', nextPropsDate);
+      this.props.changeForm(this.props.formName, 'date', nextPropsDate);
     }
   }
 
-
   getSuggestions(value) {
-    return this.props.fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
-      .then(searchData => searchData.patients).then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          key => searchedPatients[key]) : [];
+    return this.props
+      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .then(searchData => searchData.patients)
+      .then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length
+          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
+          : [];
 
-        patientList.map((patient) => {
+        return patientList.map((patient) => {
           patient.display = (
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="xs" />
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''}`}
+                  {`${patient.firstName} ${patient.lastName}${
+                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+                  }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
-                  Last Appointment: {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                  Last Appointment:{' '}
+                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
                 </div>
               </div>
             </div>
           );
+          return patient;
         });
-
-        return patientList;
       });
   }
 
   handleStartTimeChange(value) {
-    const {
-      appFormValues,
-      formName,
-      unit,
-      change,
-    } = this.props;
+    const { appFormValues, formName, unit, changeForm } = this.props;
     const defaultDuration = appFormValues ? appFormValues.duration : 60;
     const endTime = moment(value).add(defaultDuration, 'minutes');
-    change(formName, 'endTime', setTime(endTime));
+    changeForm(formName, 'endTime', setTime(endTime));
     const duration = getDuration(value, endTime, 0);
     const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
-    change(formName, 'duration', duration);
-    change(formName, 'unit', unitValue);
+    changeForm(formName, 'duration', duration);
+    changeForm(formName, 'unit', unitValue);
   }
 
   handleEndTimeChange(value) {
-    const {
-      appFormValues,
-      unit,
-      formName,
-      change,
-    } = this.props;
+    const { appFormValues, unit, formName, changeForm } = this.props;
 
     if (appFormValues && appFormValues.startTime) {
       const duration = getDuration(appFormValues.startTime, value, 0);
       const unitValue = unit ? Number((duration / unit).toFixed(2)) : 0;
-      change(formName, 'duration', duration);
-      change(formName, 'unit', unitValue);
+      changeForm(formName, 'duration', duration);
+      changeForm(formName, 'unit', unitValue);
     }
   }
 
   handleDurationChange(value) {
-    const {
-      change,
-      formName,
-      unit,
-      appFormValues,
-    } = this.props;
+    const { changeForm, formName, unit, appFormValues } = this.props;
 
     if (appFormValues && appFormValues.startTime) {
       const time = moment(appFormValues.startTime).add(value, 'minutes');
-      change(formName, 'endTime', setTime(time));
+      changeForm(formName, 'endTime', setTime(time));
     } else {
       let startTime = moment();
       startTime.seconds(0);
@@ -138,32 +121,27 @@ class AddNewAppointment extends Component {
       const endTime = moment(startTime).add(value, 'minutes');
 
       if (!value % unit) {
-        change(formName, 'endTime', setTime(endTime));
+        changeForm(formName, 'endTime', setTime(endTime));
       }
 
       if (!value) {
-        change(formName, 'endTime', '');
+        changeForm(formName, 'endTime', '');
       }
-      change(formName, 'startTime', setTime(startTime));
+      changeForm(formName, 'startTime', setTime(startTime));
     }
 
-    change(formName, 'unit', (value / unit).toFixed(2));
+    changeForm(formName, 'unit', (value / unit).toFixed(2));
   }
 
   handleUnitChange(value) {
-    const {
-      change,
-      formName,
-      unit,
-      appFormValues,
-    } = this.props;
+    const { changeForm, formName, unit, appFormValues } = this.props;
 
     const duration = value * unit;
 
     if (duration >= unit) {
       if (appFormValues && appFormValues.startTime) {
         const time = moment(appFormValues.startTime).add(duration, 'minutes');
-        change(formName, 'endTime', setTime(time));
+        changeForm(formName, 'endTime', setTime(time));
       } else {
         let startTime = moment();
         startTime.seconds(0);
@@ -174,11 +152,11 @@ class AddNewAppointment extends Component {
 
         const endTime = moment(startTime).add(duration, 'minutes');
 
-        change(formName, 'startTime', setTime(startTime));
-        change(formName, 'endTime', setTime(endTime));
+        changeForm(formName, 'startTime', setTime(startTime));
+        changeForm(formName, 'endTime', setTime(endTime));
       }
 
-      change(formName, 'duration', duration);
+      changeForm(formName, 'duration', duration);
     }
   }
 
@@ -192,14 +170,7 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
-    const {
-      selectedAppointment,
-      createEntityRequest,
-      updateEntityRequest,
-      reinitializeState,
-      reset,
-      formName,
-    } = this.props;
+    const { selectedAppointment, reinitializeState, formName, redirect, setLocation } = this.props;
 
     const {
       date,
@@ -228,7 +199,6 @@ class AddNewAppointment extends Component {
       isSyncedWithPms: false,
     };
 
-
     const alertCreate = {
       success: {
         body: `Added a new Appointment for ${patientSelected.firstName}`,
@@ -256,34 +226,44 @@ class AddNewAppointment extends Component {
       },
     };
 
+    if (redirect) {
+      setLocation(redirect);
+    }
+
     // if an appointment is not selected then create the appointment else update the appointment
     if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
       const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
 
-      return createEntityRequest({
-        key: 'appointments',
-        entityData: newAppointment,
-        alert: alertCreate,
-      }).then((data) => {
-        if (selectedAppointment && selectedAppointment.request) {
-          return updateEntityRequest({
-            key: 'requests',
-            model: selectedAppointment.requestModel,
-            alert: alertRequestUpdate,
-          }).then(() => {
-            this.props.updateEntityRequest({
-              url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
-              values: {},
-            })
+      return this.props
+        .createEntityRequest({
+          key: 'appointments',
+          entityData: newAppointment,
+          alert: alertCreate,
+        })
+        .then((data) => {
+          if (selectedAppointment && selectedAppointment.request) {
+            return this.props
+              .updateEntityRequest({
+                key: 'requests',
+                model: selectedAppointment.requestModel,
+                alert: alertRequestUpdate,
+              })
               .then(() => {
-                reinitializeState();
-                reset(formName);
+                this.props
+                  .updateEntityRequest({
+                    url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
+                    values: {},
+                  })
+                  .then(() => {
+                    reinitializeState();
+                    this.props.reset(formName);
+                  });
               });
-          });
-        }
-        reinitializeState();
-        reset(formName);
-      });
+          }
+          reinitializeState();
+          this.props.reset(formName);
+          return null;
+        });
     }
 
     const appModel = selectedAppointment.appModel;
@@ -291,23 +271,21 @@ class AddNewAppointment extends Component {
     const valuesMap = Map(newAppointment);
     const modifiedAppointment = appModelSynced.merge(valuesMap);
 
-    return updateEntityRequest({
-      key: 'appointments',
-      model: modifiedAppointment,
-      alert: alertUpdate,
-    }).then(() => {
-      reinitializeState();
-    });
+    return this.props
+      .updateEntityRequest({
+        key: 'appointments',
+        model: modifiedAppointment,
+        alert: alertUpdate,
+      })
+      .then(() => {
+        reinitializeState();
+      });
   }
 
   deleteAppointment() {
-    const {
-      selectedAppointment,
-      reinitializeState,
-      updateEntityRequest,
-    } = this.props;
+    const { selectedAppointment, reinitializeState } = this.props;
 
-    const deleteApp = confirm('Are you sure you want to delete this appointment?');
+    const deleteApp = confirm('Are you sure you want to delete this appointment?'); // eslint-disable-line no-alert
 
     if (deleteApp) {
       const delModel = Map({
@@ -316,7 +294,7 @@ class AddNewAppointment extends Component {
       });
       const appModel = selectedAppointment.appModel;
       const deletedModel = appModel.merge(delModel);
-      updateEntityRequest({ key: 'appointments', model: deletedModel });
+      this.props.updateEntityRequest({ key: 'appointments', model: deletedModel });
     }
 
     reinitializeState();
@@ -339,7 +317,8 @@ class AddNewAppointment extends Component {
       form: formName,
     };
 
-    let title = selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
+    let title =
+      selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
     let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
 
     if (selectedAppointment && selectedAppointment.request) {
@@ -350,18 +329,20 @@ class AddNewAppointment extends Component {
     return (
       <Card className={styles.formContainer} noBorder>
         <SContainer>
-          <SHeader className={styles.header}>
-            <div>{title}</div>
-            <div
-              className={styles.close}
-              onClick={() => {
-                this.props.reset(formName);
-                this.props.reinitializeState();
-              }}
-            >
-              <Icon icon="times" />
-            </div>
-          </SHeader>
+          {!isHub() && (
+            <SHeader className={styles.header}>
+              <div>{title}</div>
+              <Button
+                className={styles.close}
+                onClick={() => {
+                  this.props.reset(formName);
+                  this.props.reinitializeState();
+                }}
+              >
+                <Icon icon="times" />
+              </Button>
+            </SHeader>
+          )}
           <SBody className={styles.body}>
             <DisplayForm
               key={formName}
@@ -386,26 +367,25 @@ class AddNewAppointment extends Component {
               setCreatingPatient={this.props.setCreatingPatient}
               patientSearched={this.props.patientSearched}
               setPatientSearched={this.props.setPatientSearched}
-              change={this.props.change}
+              change={this.props.changeForm}
               reset={this.props.reset}
             />
           </SBody>
           <SFooter className={styles.footer}>
-            <div className={styles.button_cancel}>
-              <Button
-                onClick={() => {
-                  this.props.reset(formName);
-                  this.props.reinitializeState();
-                }}
-                border="blue"
-              >
-                Cancel
-              </Button>
-            </div>
-            <RemoteSubmitButton
-              {...remoteButtonProps}
-              color="blue"
-            >
+            {!isHub() && (
+              <div className={styles.button_cancel}>
+                <Button
+                  onClick={() => {
+                    this.props.reset(formName);
+                    this.props.reinitializeState();
+                  }}
+                  border="blue"
+                >
+                  Cancel
+                </Button>
+              </div>
+            )}
+            <RemoteSubmitButton {...remoteButtonProps} color="blue">
               {buttonTitle}
             </RemoteSubmitButton>
           </SFooter>
@@ -415,47 +395,97 @@ class AddNewAppointment extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    fetchEntitiesRequest,
-    createEntityRequest,
-    updateEntityRequest,
-    deleteEntityRequest,
-    reset,
-    change,
-  }, dispatch);
-}
-
-
-function mapStateToProps({ form }, { formName }) {
-  if (!form[formName]) {
-    return {
-      values: {},
-    };
-  }
-
-  return {
-    appFormValues: form[formName].values,
-  };
-}
+const patientShape = {
+  accountId: PropTypes.string,
+  email: PropTypes.string,
+  firstApptId: PropTypes.string,
+  firstName: PropTypes.string,
+  gender: PropTypes.string,
+  id: PropTypes.string,
+  isDeleted: PropTypes.bool,
+  isFetching: PropTypes.bool,
+  isSyncedWithPms: PropTypes.bool,
+  lastName: PropTypes.string,
+  lastUpdated: PropTypes.number,
+  mobilePhoneNumber: PropTypes.string,
+  patientUserId: PropTypes.string,
+  status: PropTypes.string,
+};
 
 AddNewAppointment.propTypes = {
-  formName: PropTypes.string.isRequired,
-  services: PropTypes.object.isRequired,
-  patients: PropTypes.object.isRequired,
-  chairs: PropTypes.array,
-  practitioners: PropTypes.object.isRequired,
-  weeklySchedule: PropTypes.object,
-  unit: PropTypes.number,
-  selectedAppointment: PropTypes.object,
+  appFormValues: PropTypes.shape({
+    chairId: PropTypes.string,
+    date: PropTypes.string,
+    duration: 60,
+    endTime: PropTypes.string,
+    note: PropTypes.string,
+    patientSelected: PropTypes.shape(patientShape),
+    practitionerId: PropTypes.string,
+    serviceId: PropTypes.string,
+    startTime: PropTypes.string,
+    unit: PropTypes.number,
+  }),
+  chairs: PropTypes.instanceOf(Map),
+  changeForm: PropTypes.func,
+  createEntityRequest: PropTypes.func,
+  currentDate: PropTypes.instanceOf(moment),
   deleteEntityRequest: PropTypes.func,
-  reset: PropTypes.func,
-  change: PropTypes.func,
-  reinitializeState: PropTypes.func,
   fetchEntities: PropTypes.func,
+  fetchEntitiesRequest: PropTypes.func,
+  formName: PropTypes.string.isRequired,
+  patientSearched: PropTypes.shape(patientShape),
+  patients: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map),
+  redirect: PropTypes.shape({ pathname: PropTypes.string }),
+  reinitializeState: PropTypes.func,
+  reset: PropTypes.func,
+  selectedAppointment: PropTypes.shape({
+    createdAt: PropTypes.string,
+    customBufferTime: 0,
+    endDate: PropTypes.string,
+    isSyncedWithPms: PropTypes.bool,
+    note: PropTypes.string,
+    patientId: PropTypes.string,
+    practitionerId: PropTypes.string,
+    request: PropTypes.bool,
+    requestId: PropTypes.string,
+    requestModel: PropTypes.instanceOf(Requests),
+    serviceId: PropTypes.string,
+    startDate: PropTypes.string,
+  }),
+  setCreatingPatient: PropTypes.func,
+  setPatientSearched: PropTypes.func,
+  setShowInput: PropTypes.func,
+  setLocation: PropTypes.func,
+  showInput: PropTypes.bool,
+  unit: PropTypes.number,
   updateEntityRequest: PropTypes.func,
+  weeklySchedules: PropTypes.instanceOf(Map),
 };
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      fetchEntities,
+      fetchEntitiesRequest,
+      createEntityRequest,
+      updateEntityRequest,
+      deleteEntityRequest,
+      reset,
+      changeForm: change,
+      setLocation: push,
+    },
+    dispatch
+  );
+
+const mapStateToProps = ({ form }, { formName }) =>
+  (!form[formName]
+    ? {
+      values: {},
+    }
+    : {
+      appFormValues: form[formName].values,
+    });
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 

@@ -11,12 +11,11 @@
   color: $primary-dark;
   @extend .letterSpacing;
 }
-.font-header-title-white{
+.font-header-title-white {
   font-size: $title-size;
   color: $primary-white;
   @extend .letterSpacing;
 }
-
 
 .font-large {
   font-size: $large-size;
@@ -45,8 +44,6 @@
   @extend .letterSpacing;
 }
 
-
-
 .font-medium {
   font-family: $medium-font;
   font-size: $medium-size;
@@ -55,12 +52,11 @@
   @extend .letterSpacing;
 }
 
-.font-medium-noFont{
+.font-medium-noFont {
   font-size: $medium-size;
   font-weight: $medium-weight;
   @extend .letterSpacing;
 }
-
 
 //Font-sizes-weights-colors
 .font-jumbo-dark {
@@ -105,7 +101,6 @@
   @extend .letterSpacing;
 }
 
-
 //New Camel Case Class Structure
 
 .fontDefault {
@@ -131,7 +126,7 @@
 }
 
 .fontMedium {
-  font-family: Gotham-Medium !important;
+  font-family: Gotham-Medium;
   @extend .letterSpacing;
 }
 
@@ -151,7 +146,6 @@
   font-size: $large-size;
   font-weight: $large-weight;
   @extend .letterSpacing;
-
 }
 
 .fontMediumSize {
@@ -185,7 +179,6 @@
   @extend .letterSpacing;
 }
 
-
 .cardHeaderTitle {
   font-size: $title-size;
   color: $primary-dark;
@@ -199,7 +192,6 @@
   @extend .letterSpacing;
   @extend .fontMedium;
 }
-
 
 .listItemHeader {
   color: $primary-dark;
@@ -219,7 +211,6 @@
   font-weight: $jumbo-weight !important;
   @extend .letterSpacing;
 }
-
 
 .subHeader {
   color: $empty-grey;
@@ -255,5 +246,4 @@
 }
 
 .textPreviews {
-
 }

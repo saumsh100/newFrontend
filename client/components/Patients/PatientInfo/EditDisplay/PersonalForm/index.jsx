@@ -6,11 +6,12 @@ import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
 import styles from '../styles.scss';
 import { asyncValidateNewPatient } from '../../../../library/Form/validate';
+import { isResponsive } from '../../../../../util/hub';
+import PatientModel from '../../../../../entities/models/Patient';
 
 const normalizeBirthdate = value => value.trim();
 
-const validateBirthdate = (value) => {
-  const format = 'MM/DD/YYYY';
+const validateBirthdate = (value, format = 'MM/DD/YYYY') => {
   const pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
   if (!pattern.test(value)) {
     return format;
@@ -20,12 +21,11 @@ const validateBirthdate = (value) => {
   if (!isValid) {
     return format;
   }
+  return undefined;
 };
 
 const validateZipcodePostal = (value, country) => {
-  if (!value) {
-    return;
-  }
+  if (!value) return undefined;
 
   const regex = new RegExp(
     /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
@@ -93,7 +93,7 @@ export default function PersonalForm(props) {
       initialValues={initialValues}
       asyncValidate={asyncValidateNewPatient}
       asyncBlurFields={['email', 'mobilePhoneNumber']}
-      ignoreSaveButton
+      ignoreSaveButton={!isResponsive()}
     >
       <Grid className={styles.grid}>
         <div className={styles.formHeader}> Basic </div>
@@ -118,7 +118,7 @@ export default function PersonalForm(props) {
               normalize={normalizeBirthdate}
               validate={[validateBirthdate]}
               name="birthDate"
-              label="Birth Date (MM/DD/YYYY)"
+              label={isResponsive() ? 'Birth Date ' : 'Birth Date (MM/DD/YYYY)'}
               theme={theme}
             />
           </Col>
@@ -146,7 +146,7 @@ export default function PersonalForm(props) {
           <Col xs={6} className={styles.colLeft}>
             <Field
               name="zipCode"
-              label="Postal Code / Zip Code"
+              label={isResponsive() ? 'Zip Code' : 'Postal Code / Zip Code'}
               maxLength="6"
               theme={theme}
               validate={[value => validateZipcodePostal(value, country)]}
@@ -184,8 +184,9 @@ export default function PersonalForm(props) {
 
 PersonalForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  patient: PropTypes.object,
+  patient: PropTypes.instanceOf(PatientModel),
   country: PropTypes.string,
   setCountry: PropTypes.func.isRequired,
   inputStyle: PropTypes.string,
+  dropDownStyle: PropTypes.string,
 };

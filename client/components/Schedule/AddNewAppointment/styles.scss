@@ -1,10 +1,23 @@
 @import '../../../ui.scss';
 
+@mixin formContainer-mixin() {
+  width: auto;
+  min-width: 0;
+  height: 100%;
+}
+
 .formContainer {
   position: relative;
   width: 443px;
   min-width: 443px;
-  height: 525px;
+  height: 540px;
+  @media screen and (max-width: 700px) {
+    @include formContainer-mixin();
+  }
+}
+
+.formContainerMobile {
+  @include formContainer-mixin();
 }
 
 .header {
@@ -120,10 +133,6 @@
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 
-.body {
-  overflow: unset;
-}
-
 .grid {
   padding: 10px 20px 0px 20px;
   box-sizing: border-box;
@@ -150,6 +159,11 @@
   display: flex;
   justify-content: flex-end;
   padding-bottom: 10px;
+}
+
+.colConfirmCancelMobile {
+  @extend .colConfirmCancel;
+  justify-content: flex-start;
 }
 
 .colLeft {
@@ -268,6 +282,8 @@
 .close {
   margin-left: auto;
   cursor: pointer;
+  padding: 0px;
+  background: none;
 }
 
 .hideLabel {

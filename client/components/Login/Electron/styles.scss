@@ -1,0 +1,91 @@
+@import '../../../ui.scss';
+
+.backDrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: $primary-dark;
+  z-index: 199;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loginForm {
+  padding: 60px 30px 20px;
+  flex: 0 1 auto;
+  border-top: 3px solid $primary-blue;
+  transition: all 0.1s ease, color 0.1s ease;
+
+  .formTitle {
+    text-align: center;
+    margin: 35px 0px 25px;
+    font-size: 2em;
+  }
+
+  .formWrapper {
+    width: 350px;
+    padding: 0px 150px;
+    button {
+      text-transform: uppercase;
+      font-size: 14px;
+      background: $primary-blue;
+    }
+  }
+}
+
+.footer {
+  color: $primary-darkgrey;
+  position: relative;
+  flex: 1;
+  & > div {
+    position: static;
+    width: 100%;
+    color: $primary-darkgrey;
+    text-align: right;
+  }
+}
+
+.logoContainer {
+  text-align: center;
+}
+
+.loginLogo {
+  width: 100px;
+}
+
+.signInSubmitButton {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.fbLoginButton {
+  margin-top: 20px;
+}
+
+.secondaryLink {
+  display: flex;
+  width: 100%;
+  padding: 60px 0;
+  align-items: center;
+  justify-content: center;
+  &_text {
+    composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
+    padding: 0;
+    color: $primary-darkgrey;
+    background: none;
+
+    &:hover {
+      color: $primary-color;
+      cursor: pointer;
+    }
+  }
+}
+
+.versionFooter {
+  text-align: center;
+  color: $primary-darkgrey;
+}

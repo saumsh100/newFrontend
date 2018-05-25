@@ -2,8 +2,13 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import MainRegion from '../components/MainRegion';
+import MainRegionElectron from '../components/MainRegion/Electron';
+import { isHub } from '../util/hub';
 
 function MainRegionContainer(props) {
+  if (isHub()) {
+    return <MainRegionElectron {...props} />;
+  }
   return <MainRegion {...props} />;
 }
 

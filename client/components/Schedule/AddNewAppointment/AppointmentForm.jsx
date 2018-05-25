@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment-timezone';
+import { isHub } from '../../../util/hub';
 import { Grid, Row, Col, Field } from '../../library';
 import { parseNum, notNegative } from '../../library/Form/validate';
 import styles from './styles.scss';
@@ -67,7 +68,7 @@ export default function AppointmentForm(props) {
   return (
     <Grid className={styles.grid}>
       <Row className={styles.row}>
-        <Col xs={6}>
+        <Col xs={isHub() ? 12 : 6}>
           <Field
             component="DayPicker"
             name="date"
@@ -79,9 +80,48 @@ export default function AppointmentForm(props) {
             theme={inputTheme}
           />
         </Col>
-        <Col xs={6} className={styles.col}>
-          <Col xs={1} />
-          <Col xs={5} className={styles.colDropDown}>
+        {!isHub() && (
+          <Col xs={6} className={styles.col}>
+            <Col xs={1} />
+            <Col xs={5} className={styles.colDropDown}>
+              <Field
+                options={timeOptions}
+                component={SuggestionTimeSelect}
+                strict={false}
+                name="startTime"
+                label="Start Time"
+                required
+                data-test-id="time"
+                renderValue={renderTimeValue}
+                formatValue={formatTimeField}
+                validateValue={validateTimeField}
+                onChange={(e, value) => handleStartTimeChange(formatTimeField(value))}
+                theme={dropDownTheme}
+              />
+            </Col>
+            <Col xs={1} />
+            <Col xs={5} className={styles.colDropDown}>
+              <Field
+                options={timeOptions}
+                component={SuggestionTimeSelect}
+                strict={false}
+                name="endTime"
+                label="End Time"
+                required
+                data-test-id="time"
+                renderValue={renderTimeValue}
+                formatValue={formatTimeField}
+                validateValue={validateTimeField}
+                onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
+                theme={dropDownTheme}
+              />
+            </Col>
+          </Col>
+        )}
+      </Row>
+      {isHub() && (
+        <Row className={styles.row}>
+          <Col xs={6} className={styles.colDropDown}>
             <Field
               options={timeOptions}
               component={SuggestionTimeSelect}
@@ -97,25 +137,27 @@ export default function AppointmentForm(props) {
               theme={dropDownTheme}
             />
           </Col>
-          <Col xs={1} />
-          <Col xs={5} className={styles.colDropDown}>
-            <Field
-              options={timeOptions}
-              component={SuggestionTimeSelect}
-              strict={false}
-              name="endTime"
-              label="End Time"
-              required
-              data-test-id="time"
-              renderValue={renderTimeValue}
-              formatValue={formatTimeField}
-              validateValue={validateTimeField}
-              onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
-              theme={dropDownTheme}
-            />
+          <Col xs={6} className={styles.col}>
+            <Col xs={1} />
+            <Col xs={11} className={styles.colDropDown}>
+              <Field
+                options={timeOptions}
+                component={SuggestionTimeSelect}
+                strict={false}
+                name="endTime"
+                label="End Time"
+                required
+                data-test-id="time"
+                renderValue={renderTimeValue}
+                formatValue={formatTimeField}
+                validateValue={validateTimeField}
+                onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
+                theme={dropDownTheme}
+              />
+            </Col>
           </Col>
-        </Col>
-      </Row>
+        </Row>
+      )}
       <Row className={styles.row}>
         <Col xs={6} className={styles.colDropDown}>
           <Field
@@ -159,7 +201,7 @@ export default function AppointmentForm(props) {
         </Col>
       </Row>
       <Row className={styles.row}>
-        <Col xs={9}>
+        <Col xs={isHub() ? 12 : 9}>
           <Field
             options={practitionerOptions}
             component="DropdownSelect"
@@ -172,27 +214,57 @@ export default function AppointmentForm(props) {
             search="label"
           />
         </Col>
-        <Col xs={3} className={styles.colConfirmCancel}>
-          <div className={styles.confirmCancel}>
-            <Field
-              component="Checkbox"
-              name="isPatientConfirmed"
-              label="Confirmed"
-              className={styles.confirmCancel_label}
-              data-test-id="isPatientConfirmed"
-              labelClassNames={styles.checkBox}
-            />
-            <Field
-              component="Checkbox"
-              name="isCancelled"
-              label="Cancelled"
-              className={styles.confirmCancel_label}
-              data-test-id="isCancelled"
-              labelClassNames={styles.checkBox}
-            />
-          </div>
-        </Col>
+        {!isHub() && (
+          <Col xs={3} className={styles.colConfirmCancel}>
+            <div className={styles.confirmCancel}>
+              <Field
+                component="Checkbox"
+                name="isPatientConfirmed"
+                label="Confirmed"
+                className={styles.confirmCancel_label}
+                data-test-id="isPatientConfirmed"
+                labelClassNames={styles.checkBox}
+              />
+              <Field
+                component="Checkbox"
+                name="isCancelled"
+                label="Cancelled"
+                className={styles.confirmCancel_label}
+                data-test-id="isCancelled"
+                labelClassNames={styles.checkBox}
+              />
+            </div>
+          </Col>
+        )}
       </Row>
+      {isHub() && (
+        <Row className={styles.row}>
+          <Col xs={6} className={styles.colConfirmCancelMobile}>
+            <div className={styles.confirmCancel}>
+              <Field
+                component="Checkbox"
+                name="isPatientConfirmed"
+                label="Confirmed"
+                className={styles.confirmCancel_label}
+                data-test-id="isPatientConfirmed"
+                labelClassNames={styles.checkBox}
+              />
+            </div>
+          </Col>
+          <Col xs={6} className={styles.colConfirmCancelMobile}>
+            <div className={styles.confirmCancel}>
+              <Field
+                component="Checkbox"
+                name="isCancelled"
+                label="Cancelled"
+                className={styles.confirmCancel_label}
+                data-test-id="isCancelled"
+                labelClassNames={styles.checkBox}
+              />
+            </div>
+          </Col>
+        </Row>
+      )}
       <Row className={styles.rowTextArea}>
         <Col xs={12} className={styles.textAreaContainer}>
           <Field

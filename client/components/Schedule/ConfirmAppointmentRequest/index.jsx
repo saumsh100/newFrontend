@@ -1,10 +1,14 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
+import { Map } from 'immutable';
+import { selectAppointmentPropType } from '../index';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
-import { Button, Icon } from '../../library';
+import { Button } from '../../library';
 import SameAppointment from './SameAppointment';
 import styles from './styles.scss';
 import SendConfirmationEmail from './SendConfirmationEmail';
@@ -13,8 +17,12 @@ class ConfirmAppointmentRequest extends Component {
   constructor(props) {
     super(props);
 
+    const { selectedAppointment } = this.props;
+
+    const appointments = selectedAppointment.nextAppt;
+
     this.state = {
-      selectedApp: null,
+      selectedApp: appointments && appointments.length === 1 && appointments[0],
     };
 
     this.confirmRequest = this.confirmRequest.bind(this);
@@ -22,20 +30,25 @@ class ConfirmAppointmentRequest extends Component {
     this.setSelected = this.setSelected.bind(this);
   }
 
-  componentDidMount() {
-    const { selectedAppointment } = this.props;
+  setSelected(app) {
+    this.setState({
+      selectedApp: app,
+    });
+  }
 
-    const appointments = selectedAppointment.nextAppt;
-
-    if (appointments && appointments.length === 1) {
-      this.setState({
-        selectedApp: appointments[0],
-      });
-    }
+  createAppointment() {
+    const modifiedAppointment = this.props.selectedAppointment;
+    modifiedAppointment.nextAppt = false;
+    this.props.reinitializeState();
+    this.props.selectAppointment(modifiedAppointment);
   }
 
   confirmRequest(patient, sendEmail) {
-    const { selectedAppointment, updateEntityRequest, reinitializeState } = this.props;
+    const { selectedAppointment, reinitializeState, redirect, setLocation } = this.props;
+
+    if (redirect) {
+      setLocation(redirect);
+    }
 
     if (sendEmail) {
       const alertRequestUpdate = {
@@ -65,25 +78,14 @@ class ConfirmAppointmentRequest extends Component {
           body: `Request failed for ${patient.get('firstName')} Failed`,
         },
       };
-      updateEntityRequest({
-        key: 'requests',
-        model: selectedAppointment.requestModel,
-        alert: alertRequestUpdate,
-      }).then(() => reinitializeState());
+      this.props
+        .updateEntityRequest({
+          key: 'requests',
+          model: selectedAppointment.requestModel,
+          alert: alertRequestUpdate,
+        })
+        .then(() => reinitializeState());
     }
-  }
-
-  createAppointment() {
-    const modifiedAppointment = this.props.selectedAppointment;
-    modifiedAppointment.nextAppt = false;
-    this.props.reinitializeState();
-    this.props.selectAppointment(modifiedAppointment);
-  }
-
-  setSelected(app) {
-    this.setState({
-      selectedApp: app,
-    });
   }
 
   render() {
@@ -162,10 +164,12 @@ class ConfirmAppointmentRequest extends Component {
                 <Button
                   color="blue"
                   onClick={() => {
+                    // eslint-disable-next-line no-alert
                     if (confirm('Are you sure this is the correct Appointment?')) {
                       this.setSelected(appointments[0]);
                       return setSendEmail();
                     }
+                    return null;
                   }}
                 >
                   Yes
@@ -181,11 +185,11 @@ class ConfirmAppointmentRequest extends Component {
                   color={selectedApp ? 'blue' : 'grey'}
                   className={styles.buttonContainer_yes}
                   onClick={() => {
-                    if (selectedApp) {
-                      return confirm('Are you sure this is the correct Appointment?')
-                        ? setSendEmail()
-                        : null;
-                    }
+                    if (!selectedApp) return null;
+
+                    return confirm('Are you sure this is the correct Appointment?') // eslint-disable-line no-alert
+                      ? setSendEmail()
+                      : null;
                   }}
                 >
                   Yes
@@ -207,15 +211,23 @@ class ConfirmAppointmentRequest extends Component {
 }
 
 ConfirmAppointmentRequest.propTypes = {
-  updateEntityRequest: PropTypes.func.required,
+  patients: PropTypes.instanceOf(Map),
+  redirect: PropTypes.shape({ pathname: PropTypes.string }),
   reinitializeState: PropTypes.func.required,
   selectAppointment: PropTypes.func,
+  selectedAppointment: selectAppointmentPropType,
+  sendEmail: PropTypes.bool,
+  setCurrentDay: PropTypes.func,
+  setLocation: PropTypes.func,
+  setSendEmail: PropTypes.func,
+  updateEntityRequest: PropTypes.func.required,
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       updateEntityRequest,
+      setLocation: push,
     },
     dispatch
   );

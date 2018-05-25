@@ -9,6 +9,7 @@ import dashboard from './dashboard';
 import reviews from './vendastaReviews';
 import auth from './auth';
 import entities from './entities';
+import electron from './electron';
 import schedule from './schedule';
 import dialogs from './dialogs';
 import patientList from './patientList';
@@ -46,6 +47,7 @@ const appReducer = combineReducers({
   apiRequests,
   segments,
   patientTable,
+  electron,
 });
 
 const rootReducer = (state, action) => {

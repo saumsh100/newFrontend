@@ -8,7 +8,11 @@ import FormSection from './FormSection';
 import FormButton from './FormButton';
 import RemoteSubmitButton from './RemoteSubmitButton';
 import { asyncEmailValidate } from './validate';
-import styles from './styles.scss';
+import { isHub } from '../../../util/hub';
+import DashboardStyles from './styles.scss';
+import ElectronStyles from './Electron/styles.scss';
+
+const styles = isHub() ? ElectronStyles : DashboardStyles;
 
 function Form(props) {
   const {
@@ -22,10 +26,7 @@ function Form(props) {
   } = props;
 
   const showSubmitButton = ignoreSaveButton ? null : (
-    <SaveButton
-      pristine={pristine}
-      {...saveButtonProps}
-    />
+    <SaveButton pristine={pristine} {...saveButtonProps} />
   );
 
   return (
@@ -37,11 +38,7 @@ function Form(props) {
         data-test-id={props['data-test-id']}
       >
         {children}
-        {showSubmitButton && (
-          <div className={styles.submitButton}>
-            {showSubmitButton}
-          </div>
-        )}
+        {showSubmitButton && <div className={styles.submitButton}>{showSubmitButton}</div>}
       </form>
     </div>
   );
@@ -53,23 +50,13 @@ Form.propTypes = {
 };
 
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
-const withReduxForm = (BaseComponent) => {
-  return reduxForm({
-
-  })(BaseComponent);
-};
+const withReduxForm = BaseComponent => reduxForm({})(BaseComponent);
 
 const enhance = compose(
   // withValidate,
-  withReduxForm,
+  withReduxForm
 );
 
 export default enhance(Form);
 
-export {
-  Field,
-  FieldArray,
-  FormSection,
-  FormButton,
-  RemoteSubmitButton,
-};
+export { Field, FieldArray, FormSection, FormButton, RemoteSubmitButton };

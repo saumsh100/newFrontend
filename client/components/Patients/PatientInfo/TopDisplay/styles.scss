@@ -20,6 +20,12 @@
   img {
     display: none;
   }
+
+  @media screen and (max-width: 576px) {
+    height: 30%;
+    position: relative;
+    z-index: 5;
+  }
 }
 
 .dataContainer {
@@ -28,6 +34,11 @@
   height: 50%;
   width: 100%;
   background-color: #fafafa;
+
+  @media screen and (max-width: 576px) {
+    margin-top: -45px;
+    height: 100%;
+  }
 }
 
 .avatarContainer {
@@ -40,9 +51,6 @@
   &_avatar {
     top: -82px;
     position: absolute;
-    span {
-      font-size: 45px !important;
-    }
   }
 
   &_data {
@@ -99,10 +107,37 @@
       box-sizing: border-box;
     }
   }
+
+  @media screen and (max-width: 576px) {
+    border-right: none;
+    width: 100%;
+
+    &_avatar {
+      top: 20px;
+      z-index: 6;
+    }
+
+    &_data {
+      padding-top: 73px;
+
+      &_name {
+        font-size: 16px;
+      }
+
+      &_active {
+        padding: 11px;
+        font-size: 10px;
+      }
+    }
+  }
 }
 
 .paddingStatus {
   padding-top: 10px;
+
+  @media screen and (max-width: 576px) {
+    padding-top: 5px;
+  }
 }
 
 .rightContainer {
@@ -112,6 +147,10 @@
   justify-content: center;
   &_content {
     padding: 20px 20px 20px 30px;
+  }
+
+  @media screen and (max-width: 576px) {
+    display: none;
   }
 }
 

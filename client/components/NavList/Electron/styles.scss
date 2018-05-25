@@ -1,0 +1,301 @@
+@import '../../../ui';
+
+$intercom-icon: '/images/electron/intercom_icon_blue.svg';
+$intercom-icon-active: '/images/electron/intercom_icon_white.svg';
+$shortcut-icon: '/images/electron/shortcut_icon_blue.svg';
+$shortcut-icon-active: '/images/electron/shortcut_icon_white.svg';
+
+.navListWrapper {
+  position: fixed;
+  right: 0;
+  width: $electron-bar-width;
+  background: $primary-white;
+  top: $electron-anti-radius-padding;
+  bottom: $electron-anti-radius-padding;
+  z-index: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.14), -1px 1px 6px 0 rgba(0, 0, 0, 0.12);
+
+  // border-width: 1px;
+  // border-color: $electron-primary-menu;
+  // border-style: solid;
+
+  &.active {
+    box-shadow: 1px 4px 10px 0 rgba(0, 0, 0, 0.14), 1px 1px 6px 0 rgba(0, 0, 0, 0.12);
+  }
+
+  &.left {
+    left: 0;
+    right: auto;
+    @include borderTopRight;
+    @include borderBottomRight;
+  }
+
+  &.right {
+    @include borderTopLeft;
+    @include borderBottomLeft;
+  }
+}
+
+.contentShown {
+  &Left {
+    border-right: none;
+  }
+  &Right {
+    border-left: none;
+  }
+}
+
+.bottomNav {
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+}
+
+.buttonNoSpacing {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.logoBox {
+  right: 0;
+  display: block;
+  width: $electron-logo-size;
+  height: $electron-logo-size;
+  background: $electron-primary-menu;
+  cursor: pointer;
+  text-align: center;
+  margin: 0px 0px 10px;
+  padding: 0px 0px 0px 5px;
+
+  & > img {
+    height: 20px;
+    margin-top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.logoNotification {
+  @extend .logoBox;
+  background: $primary-red;
+}
+
+.navItem {
+  display: flex;
+  height: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-decoration: none;
+  color: $electron-primary-menu !important;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+  text-align: center;
+
+  &:hover {
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: $electron-toolbar-icon-hover-bg;
+      border-radius: 50%;
+      top: 50%;
+      margin: 0 auto;
+      transform: translateY(-50%);
+      z-index: -1;
+    }
+  }
+}
+
+.activeItem {
+  color: $primary-white !important;
+  border-radius: 50%;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    color: $primary-white !important;
+    background-color: $electron-primary-menu !important;
+    border-radius: 50%;
+    top: 50%;
+    margin: 0 auto;
+    transform: translateY(-50%);
+    z-index: -1;
+  }
+
+  .intercomIcon {
+    background-image: url($intercom-icon-active);
+  }
+
+  .shortcutIcon {
+    background-image: url($shortcut-icon-active);
+  }
+}
+
+.disabledItem {
+  color: $electron-disabled-items !important;
+  cursor: default;
+
+  &:hover {
+    background-color: transparent;
+    color: $electron-disabled-items !important;
+
+    &:before {
+      display: none;
+    }
+  }
+
+  &:active {
+    color: $electron-disabled-items !important;
+
+    .label {
+      font-size: 14px;
+    }
+  }
+}
+
+.label {
+  width: 95px;
+  text-align: left;
+  margin-top: 5px;
+  margin-left: 20px;
+}
+
+.activeLabel {
+  //font-size: 16px;
+}
+
+.ulSubNav {
+  margin-top: 10px;
+  list-style-type: disc;
+}
+
+.liSubNavItem {
+  height: 25px;
+  color: $inactive-color;
+
+  &:hover {
+    border-bottom: 1px solid;
+    color: $primary-white;
+  }
+}
+
+.disabledSubNavItem {
+  &:hover {
+    border-bottom: none;
+    color: $inactive-color;
+  }
+}
+
+.activeSubNavItem {
+  color: $primary-white;
+}
+
+.multiple_nav {
+  position: relative;
+  list-style: none;
+  margin-bottom: 10px;
+  padding-left: 55px;
+
+  &__item {
+    position: relative;
+    width: 2px;
+    padding-top: 20px;
+    list-style-type: none;
+    background: #fff;
+
+    &::after {
+      position: absolute;
+      bottom: 0;
+      width: 6px;
+      height: 6px;
+      margin-left: 1px;
+      content: '';
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: inherit;
+    }
+  }
+
+  &__wrapper {
+    width: 150px;
+    margin-left: 15px;
+    color: $primary-white;
+  }
+
+  &__active {
+    border-bottom: 1px solid;
+
+    &::after {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      left: 0;
+      width: 6px;
+      height: 6px;
+      margin-left: 1px;
+      content: '';
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: $primary-color !important;
+    }
+  }
+}
+
+.comingSoon {
+  font-size: 1.2em;
+}
+
+.svgIcon {
+  width: 1.3em !important;
+  display: block;
+  height: 16px;
+  background: no-repeat center;
+
+  .badge {
+    position: absolute;
+    right: 3px;
+    top: 0;
+    border-radius: 1em;
+    color: #fff;
+    background-color: $badge-notification-background;
+    height: 1.5em;
+    line-height: 1;
+    max-width: 5em;
+    min-width: 1.5em;
+    overflow: hidden;
+    padding: 0.25em;
+    text-overflow: ellipsis;
+    transform: scale(0.8);
+    transform-origin: top right;
+    text-align: center;
+
+    span {
+      color: white;
+      line-height: 18px;
+      font-size: 11px;
+    }
+  }
+}
+
+.intercomIcon {
+  @extend .svgIcon;
+  background-image: url($intercom-icon);
+}
+
+.shortcutIcon {
+  @extend .svgIcon;
+  background-image: url($shortcut-icon);
+}
+
+.buttonNoBg {
+  background: none;
+}

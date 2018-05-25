@@ -1,0 +1,38 @@
+{
+  "name": "carecru-hub",
+  "version": "0.0.32",
+  "main": "main.js",
+  "author": "CareCru Inc.",
+  "description": "A powerful growth and intelligence platform for dentists.",
+  "build": {
+    "appId": "com.carecru.hub",
+    "productName": "CareCru Hub",
+    "files": [
+      {
+        "from": "../statics",
+        "to": "./"
+      },
+      "src/**/*",
+      "src/*",
+      "*",
+      "assets/**/*",
+      "assets/*"
+    ],
+    "directories": {
+      "buildResources": "./assets",
+      "output": "./dist"
+    },
+    "publish": {
+      "provider": "s3",
+      "bucket": "carecru-electron-deployer"
+    },
+    "win": {
+      "publisherName": "carecru"
+    }
+  },
+  "dependencies": {
+    "electron-log": "^2.2.14",
+    "electron-store": "^1.3.0",
+    "electron-updater": "^2.21.1"
+  }
+}

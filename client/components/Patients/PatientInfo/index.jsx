@@ -5,8 +5,10 @@ import Popover from 'react-popover';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { graphql, QueryRenderer } from 'react-relay';
+import classNames from 'classnames';
+import { Map } from 'immutable';
 import graphQLEnvironment from '../../../util/graphqlEnvironment';
-import { Grid, Row, Col, Icon } from '../../library';
+import { Grid, Row, Col, Icon, Tabs, Tab, Button } from '../../library';
 import {
   fetchEntities,
   fetchEntitiesRequest,
@@ -17,23 +19,29 @@ import {
   selectAllTimelineFilters,
   clearAllTimelineFilters,
 } from '../../../reducers/patientTable';
+import { setTitle, setBackHandler } from '../../../reducers/electron';
 import FilterTimeline from './FilterTimeline';
 import Loader from '../../Loader';
 import EditDisplay from './EditDisplay';
 import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
 import LeftInfoDisplay from './LeftInfoDisplay';
+import { isHub, isResponsive } from '../../../util/hub';
 import styles from './styles.scss';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
-  <div className={styles.textContainer}>
+  <div
+    className={classNames(isResponsive() ? styles.editButton : styles.textContainer, {
+      [styles.editButtonMobile]: !isHub(),
+    })}
+  >
     <div className={styles.cardTitle}> {title} </div>
-    <div className={styles.textHeader} onClick={onClick}>
+    <Button className={classNames(styles.textHeader, styles.textHeaderButton)} onClick={onClick}>
       <div className={styles.textHeader_icon}>
         <Icon icon={icon} />
       </div>
       <div className={styles.textHeader_text}>{text}</div>
-    </div>
+    </Button>
   </div>
 );
 
@@ -47,8 +55,14 @@ class PatientInfo extends Component {
       isOpen: false,
       filterOpen: false,
       tabIndex: 0,
+      pageTab: 0,
+      persistedElectronData: {
+        backHandler: null,
+        title: null,
+      },
     };
 
+    this.changePageTab = this.changePageTab.bind(this);
     this.openModal = this.openModal.bind(this);
     this.openFilter = this.openFilter.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
@@ -60,7 +74,6 @@ class PatientInfo extends Component {
   componentDidMount() {
     const patientId = this.props.match.params.patientId;
     const url = `/api/patients/${patientId}`;
-
     this.fetchPatientData(patientId, url);
   }
 
@@ -75,6 +88,12 @@ class PatientInfo extends Component {
 
   componentWillUnmount() {
     this.props.selectAllTimelineFilters();
+  }
+
+  changePageTab(pageTab) {
+    this.setState({
+      pageTab,
+    });
   }
 
   fetchPatientData(patientId, url) {
@@ -102,9 +121,23 @@ class PatientInfo extends Component {
   }
 
   openModal() {
-    this.setState({
-      isOpen: true,
-    });
+    this.setState(
+      {
+        isOpen: true,
+        persistedElectronData: {
+          backHandler: this.props.currentBackHandler,
+          title: this.props.currentTitle,
+        },
+      },
+      () => {
+        if (!isHub()) {
+          return;
+        }
+
+        this.props.setTitle('Edit patient info');
+        this.props.setBackHandler(this.reinitializeState);
+      }
+    );
   }
 
   openFilter() {
@@ -114,10 +147,19 @@ class PatientInfo extends Component {
   }
 
   reinitializeState() {
-    this.setState({
-      isOpen: false,
-      filterOpen: false,
-    });
+    this.setState(
+      {
+        isOpen: false,
+        filterOpen: false,
+      },
+      () => {
+        if (isHub()) {
+          const { title, backHandler } = this.state.persistedElectronData;
+          this.props.setTitle(title);
+          this.props.setBackHandler(backHandler);
+        }
+      }
+    );
   }
 
   handleTabChange(index) {
@@ -135,7 +177,6 @@ class PatientInfo extends Component {
     const {
       patient,
       patientStats,
-      updateEntityRequest,
       wasStatsFetched,
       accountsFetched,
       activeAccount,
@@ -145,9 +186,15 @@ class PatientInfo extends Component {
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
+    const containerStyle = isHub()
+      ? classNames(styles.mainContainer, styles.responsiveContainer)
+      : styles.mainContainer;
+
+    const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
+    const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
 
     return (
-      <Grid className={styles.mainContainer}>
+      <Grid className={containerStyle}>
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
@@ -158,69 +205,102 @@ class PatientInfo extends Component {
               wasPatientFetched={wasPatientFetched}
               activeAccount={activeAccount}
             />
-          </Col>
-        </Row>
-        <Row className={styles.row}>
-          <Col xs={12} className={styles.body}>
-            <div className={styles.infoDisplay}>
-              <EditDisplay
-                accountViewer={accountViewer}
-                patient={patient}
-                updateEntityRequest={updateEntityRequest}
-                reinitializeState={this.reinitializeState}
-                isOpen={this.state.isOpen}
-                outerTabIndex={this.state.tabIndex}
-                role={role}
-                wasAllFetched={wasAllFetched}
-              />
+            {isResponsive() && (
               <HeaderModalComponent
                 icon="pencil"
                 text="Edit"
                 onClick={() => this.openModal()}
                 title="Patient Info"
               />
-              <LeftInfoDisplay
-                accountViewer={accountViewer}
-                patient={patient}
-                openModal={this.openModal}
-                reinitializeState={this.reinitializeState}
-                tabIndex={this.state.tabIndex}
-                handleTabChange={this.handleTabChange}
-                activeAccount={activeAccount}
-              />
+            )}
+            <EditDisplay
+              accountViewer={accountViewer}
+              patient={patient}
+              updateEntityRequest={this.props.updateEntityRequest}
+              reinitializeState={this.reinitializeState}
+              isOpen={this.state.isOpen}
+              outerTabIndex={this.state.tabIndex}
+              role={role}
+              wasAllFetched={wasAllFetched}
+            />
+          </Col>
+        </Row>
+        <Row className={styles.row}>
+          <Col xs={12} className={styles.body}>
+            <div className={styles.tabsSection}>
+              <Tabs fluid index={this.state.pageTab} onChange={this.changePageTab}>
+                <Tab
+                  label="Patient Info"
+                  inactiveClass={styles.inactiveTab}
+                  activeClass={styles.activeTab}
+                />
+                <Tab
+                  label="Timeline"
+                  inactiveClass={styles.inactiveTab}
+                  activeClass={styles.activeTab}
+                />
+              </Tabs>
             </div>
-            <div className={styles.timeline}>
-              <div className={styles.textContainer}>
-                <div className={styles.cardTitle}>Timeline & Activities</div>
-                <Popover
-                  isOpen={this.state.filterOpen}
-                  body={[
-                    <FilterTimeline
-                      addRemoveFilter={this.addRemoveFilter}
-                      defaultEvents={defaultEvents}
-                      filters={this.props.filters}
-                      clearFilters={this.props.clearAllTimelineFilters}
-                      selectAllFilters={this.props.selectAllTimelineFilters}
-                    />,
-                  ]}
-                  preferPlace="below"
-                  tipSize={0.01}
-                  onOuterAction={this.reinitializeState}
-                >
-                  <div className={styles.textHeader} onClick={this.openFilter}>
-                    <div className={styles.textHeader_icon}>
-                      <Icon icon="filter" />
-                    </div>
-                    <div className={styles.textHeader_text}>Filter</div>
-                  </div>
-                </Popover>
+            {shouldDisplayInfoPage && (
+              <div className={styles.infoDisplay}>
+                {!isResponsive() && (
+                  <HeaderModalComponent
+                    icon="pencil"
+                    text="Edit"
+                    onClick={() => this.openModal()}
+                    title="Patient Info"
+                  />
+                )}
+                <LeftInfoDisplay
+                  accountViewer={accountViewer}
+                  patient={patient}
+                  openModal={this.openModal}
+                  reinitializeState={this.reinitializeState}
+                  tabIndex={this.state.tabIndex}
+                  handleTabChange={this.handleTabChange}
+                  activeAccount={activeAccount}
+                />
               </div>
-              <Timeline
-                patientId={patientId}
-                filters={this.props.filters}
-                wasPatientFetched={wasPatientFetched}
-              />
-            </div>
+            )}
+            {shouldDisplayTimelinePage && (
+              <div className={styles.timeline}>
+                {!isResponsive() && (
+                  <div className={styles.textContainer}>
+                    <div className={styles.cardTitle}>Timeline & Activities</div>
+                    <Popover
+                      isOpen={this.state.filterOpen}
+                      body={[
+                        <FilterTimeline
+                          addRemoveFilter={this.addRemoveFilter}
+                          defaultEvents={defaultEvents}
+                          filters={this.props.filters}
+                          clearFilters={this.props.clearAllTimelineFilters}
+                          selectAllFilters={this.props.selectAllTimelineFilters}
+                        />,
+                      ]}
+                      preferPlace="below"
+                      tipSize={0.01}
+                      onOuterAction={this.reinitializeState}
+                    >
+                      <Button
+                        className={classNames(styles.textHeader, styles.textHeaderButton)}
+                        onClick={this.openFilter}
+                      >
+                        <div className={styles.textHeader_icon}>
+                          <Icon icon="filter" />
+                        </div>
+                        <div className={styles.textHeader_text}>Filter</div>
+                      </Button>
+                    </Popover>
+                  </div>
+                )}
+                <Timeline
+                  patientId={patientId}
+                  filters={this.props.filters}
+                  wasPatientFetched={wasPatientFetched}
+                />
+              </div>
+            )}
           </Col>
         </Row>
       </Grid>
@@ -243,6 +323,18 @@ PatientInfo.propTypes = {
   activeAccount: PropTypes.instanceOf(Object),
   wasPatientFetched: PropTypes.bool,
   role: PropTypes.string,
+  patientStats: PropTypes.instanceOf(Map),
+  accountViewer: PropTypes.shape({
+    id: PropTypes.string,
+    patient: PropTypes.shape({
+      ccId: PropTypes.string,
+      id: PropTypes.string,
+    }),
+  }),
+  currentBackHandler: PropTypes.func,
+  currentTitle: PropTypes.string,
+  setTitle: PropTypes.func,
+  setBackHandler: PropTypes.func,
 };
 
 HeaderModalComponent.propTypes = {
@@ -261,12 +353,14 @@ function mapDispatchToProps(dispatch) {
       addRemoveTimelineFilters,
       selectAllTimelineFilters,
       clearAllTimelineFilters,
+      setTitle,
+      setBackHandler,
     },
     dispatch
   );
 }
 
-function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match }) {
+function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
   const patientStats = apiRequests.get('patientIdStats')
     ? apiRequests.get('patientIdStats').data
@@ -295,6 +389,8 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth }, { match 
     accountsFetched,
     role,
     wasPatientFetched,
+    currentBackHandler: electron.get('backHandler'),
+    currentTitle: electron.get('title'),
   };
 }
 
@@ -352,6 +448,7 @@ const query = graphql`
   }
 `;
 
+// eslint-disable-next-line react/prop-types
 const PatientInfoRenderer = parentProps => ({ error, props }) => {
   if (error) {
     return <div>Error!</div>;

@@ -62,7 +62,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     const allChats = chats.map(chat => chat.get({ plain: true }));
     return res.send(normalize('chats', allChats));
   })
-  .catch(next);
+    .catch(next);
 });
 
 /**
@@ -448,27 +448,48 @@ chatsRouter.put('/:_chatId/textMessages/unread', checkPermissions('textMessages:
 /**
  * Set all of a chat's unread textMessages to read
  */
-chatsRouter.put('/:_chatId/textMessages/read', checkPermissions('textMessages:update'), (req, res, next) => {
+chatsRouter.put('/:_chatId/textMessages/read', checkPermissions('textMessages:update'), async (req, res, next) => {
+  try {
+    const io = req.app.get('socketio');
+    const chatId = req.params._chatId;
 
-  return TextMessage.update({ read: true }, { where: { chatId: req.params._chatId, read: false } })
-  .then((test) => {
-    return TextMessage.findAll({
-      raw: true,
-      nest: true,
-      where: { chatId: req.params._chatId },
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: {
-          exclude: 'password',
-        },
-        required: false,
-      }],
-    })
-    .then(textMessages => {
-      res.send(normalize('textMessages', textMessages));
+    const messages = await TextMessage.update({ read: true }, {
+      where: {
+        chatId,
+        read: false,
+      },
+    }).then(() => {
+      return TextMessage.findAll({
+        raw: true,
+        nest: true,
+        where: { chatId },
+        include: [{
+          model: User,
+          as: 'user',
+          attributes: {
+            exclude: 'password',
+          },
+          required: false,
+        }],
+      });
     });
-  }).catch(next);
+
+    const chat = await Chat.findOne({
+      where: {
+        id: chatId,
+      },
+    });
+
+    const normalizedMessages = normalize('textMessages', messages);
+
+    io && io.of(namespaces.dash)
+      .in(chat.accountId)
+      .emit('markRead', normalizedMessages);
+
+    res.send(normalizedMessages);
+  } catch (e) {
+    next(e);
+  }
 });
 
 /**

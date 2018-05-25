@@ -193,6 +193,7 @@ class MessageContainer extends Component {
 
       const messageOptions = isFromPatient ? (
         <div
+          className={styles.dotsWrapper}
           ref={(reference) => {
             optionsWrapper = reference;
           }}

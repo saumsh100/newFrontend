@@ -11,6 +11,11 @@
   }
 }
 
+.hubListItem {
+  @extend .chatListItem;
+  border-bottom: 1px solid $electron-chat-items-bottom-border;
+}
+
 .hoverSection {
   display: none;
   position: absolute;

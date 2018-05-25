@@ -1,8 +1,13 @@
 
 import axios from 'axios';
+import { isOnDevice, getApiUrl } from '../util/hub';
 
 // App uses 'token', Patient App uses 'auth_token', don't ask why...
 const getTokenDefault = () => localStorage.getItem('token');
+
+if (isOnDevice()) {
+  axios.defaults.baseURL = getApiUrl();
+}
 
 // Axios is a mutable library, so we need to make sure
 // this is obvious. Hence why we make it a "bind" function and call it

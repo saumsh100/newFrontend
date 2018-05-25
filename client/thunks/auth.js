@@ -142,10 +142,11 @@ export function logout() {
     localStorage.removeItem('session');
     const { auth } = getState();
 
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
-      dispatch(authLogout());
-      dispatch(push('/login'));
-    });
+    return axios.delete(`/auth/session/${auth.get('sessionId')}`)
+      .then(() => {
+        dispatch(authLogout());
+        dispatch(push('/login'));
+      });
   };
 }
 

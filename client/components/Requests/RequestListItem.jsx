@@ -1,19 +1,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
-import { ListItem, IconButton, Icon } from '../library';
+import { ListItem } from '../library';
+import { checkIfUsersEqual } from '../Utils';
 import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
 import RequestPopover from './RequestPopover';
 import withHoverable from '../../hocs/withHoverable';
-
-const checkIfUsersEqual = (patientUser, requestingUser) => {
-  if (requestingUser && patientUser && patientUser.get('id') !== requestingUser.get('id')) {
-    return requestingUser;
-  }
-  return null;
-};
 
 class RequestListItem extends Component {
   constructor(props) {
@@ -23,6 +17,7 @@ class RequestListItem extends Component {
     };
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
+    this.renderListItem = this.renderListItem.bind(this);
   }
 
   onClickConfirm() {
@@ -31,6 +26,29 @@ class RequestListItem extends Component {
 
   onClickRemove() {
     this.props.removeRequest(this.props.request);
+  }
+
+  renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest }) {
+    return (
+      <ListItem
+        className={styles.requestListItem}
+        data-test-id={`${patientUser.get('firstName')}${patientUser.get(
+          'lastName'
+        )}AppointmentRequest`}
+        onClick={() => openRequest(request.id)}
+      >
+        <MonthDay month={data.month} day={data.day} type={requestType} />
+        <RequestData
+          time={data.time}
+          name={data.name}
+          age={data.age}
+          phoneNumber={data.phoneNumber}
+          service={data.service}
+          requestCreatedAt={request.createdAt}
+          requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
+        />
+      </ListItem>
+    );
   }
 
   render() {
@@ -93,35 +111,33 @@ class RequestListItem extends Component {
         tipSize={12}
         onOuterAction={() => this.props.openRequest(null)}
       >
-        <ListItem
-          className={styles.requestListItem}
-          data-test-id={`${patientUser.get('firstName')}${patientUser.get(
-            'lastName'
-          )}AppointmentRequest`}
-          onClick={() => this.props.openRequest(request.id)}
-        >
-          <MonthDay month={data.month} day={data.day} type={requestType} />
-          <RequestData
-            time={data.time}
-            name={data.name}
-            age={data.age}
-            phoneNumber={data.phoneNumber}
-            service={data.service}
-            requestCreatedAt={request.createdAt}
-            requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
-          />
-        </ListItem>
+        {this.renderListItem({
+          patientUser,
+          data,
+          request,
+          requestingUser,
+          requestType,
+          openRequest: this.props.openRequest,
+        })}
       </Popover>
     );
   }
 }
 
 RequestListItem.propTypes = {
-  request: PropTypes.object.isRequired,
-  service: PropTypes.object,
+  request: PropTypes.shape({}).isRequired,
+  service: PropTypes.shape({}),
+  patientUser: PropTypes.shape({}),
+  practitioner: PropTypes.shape({}),
+  requestId: PropTypes.string,
+  popoverRight: PropTypes.string,
+  requestingUser: PropTypes.shape({}),
   updateEntityRequest: PropTypes.func,
   deleteEntityRequest: PropTypes.func,
   createEntityRequest: PropTypes.func,
+  confirmAppointment: PropTypes.func,
+  removeRequest: PropTypes.func,
+  openRequest: PropTypes.func,
   isHovered: PropTypes.bool,
 };
 

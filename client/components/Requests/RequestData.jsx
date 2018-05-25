@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import PatientUser from '../../entities/models/PatientUser';
 import styles from './styles.scss';
 
 export default function RequestData(props) {
@@ -34,8 +35,11 @@ export default function RequestData(props) {
 }
 
 RequestData.propTypes = {
-  time: PropTypes.instanceOf(Date),
-  service: PropTypes.string,
-  requestCreatedAt: PropTypes.instanceOf(Date),
+  age: PropTypes.string,
   name: PropTypes.string,
+  phoneNumber: PropTypes.string,
+  requestCreatedAt: PropTypes.string,
+  requestingUser: PropTypes.instanceOf(PatientUser),
+  service: PropTypes.string,
+  time: PropTypes.string,
 };

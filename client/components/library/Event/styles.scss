@@ -25,6 +25,11 @@
   padding-top: 15px;
   padding-right: 20px;
   height: 100%;
+
+  @media screen and (max-width: 576px) {
+    padding-top: 0;
+    padding-right: 10px;
+  }
 }
 
 .icon {
@@ -77,6 +82,18 @@
     font-style: italic;
     composes: fontSmall from 'sass-loader!../../../fonts.scss';
   }
+
+  @media screen and (max-width: 576px) {
+    padding: 10px 15px;
+
+    &_header {
+      font-size: 11px;
+    }
+
+    &_subHeaderItalic {
+      font-size: 10px;
+    }
+  }
 }
 
 .time {
@@ -90,7 +107,6 @@
     font-style: italic;
   }
 }
-
 
 .call {
   display: flex;
@@ -119,13 +135,27 @@
 
   audio {
     padding-left: 20px;
+
+    @media screen and (max-width: 576px) {
+      width: 40px;
+    }
   }
 
   &_duration {
+  }
 
+  @media screen and (max-width: 576px) {
+    padding: 10px 15px;
+
+    &_header {
+      font-size: 11px;
+    }
+
+    &_subHeaderItalic {
+      font-size: 10px;
+    }
   }
 }
-
 
 .primaryBgColor {
   background-color: white;
@@ -134,4 +164,3 @@
 .secondaryBgColor {
   background-color: #fafafa;
 }
-

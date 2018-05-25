@@ -3,6 +3,11 @@ import React, { PropTypes, Component } from 'react';
 import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
+import { selectedRequestBuilder } from '../components/Utils';
+import { isHub } from '../util/hub';
+import { setTitle } from '../reducers/electron';
+import RequestsModel from '../entities/models/Request';
 import Requests from '../components/Requests';
 import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
@@ -15,6 +20,14 @@ class RequestContainer extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { filteredRequests, selectedRequest } = nextProps;
+
+    if (isHub() && filteredRequests.length > 0 && !selectedRequest) {
+      this.props.setTitle(`${filteredRequests.length} Online Requests`);
+    }
+  }
+
   render() {
     const browserHistory = createBrowserHistory();
     const location = browserHistory.location.pathname;
@@ -22,12 +35,17 @@ class RequestContainer extends Component {
     return (
       <Requests
         requests={this.props.requests}
+        filteredRequests={this.props.filteredRequests}
+        sortedRequests={this.props.sortedRequests}
+        requestId={this.props.requestId}
+        selectedRequest={this.props.selectedRequest}
         services={this.props.services}
         patientUsers={this.props.patientUsers}
         practitioners={this.props.practitioners}
         location={location}
         isLoaded={this.props.scheduleRequestsFetched}
         runAnimation
+        redirect={this.props.redirect}
       />
     );
   }
@@ -35,13 +53,23 @@ class RequestContainer extends Component {
 
 RequestContainer.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
+  setTitle: PropTypes.func,
   scheduleRequestsFetched: PropTypes.bool,
-  requests: PropTypes.object,
-  services: PropTypes.object,
-  patientUsers: PropTypes.object,
+  redirect: PropTypes.shape({
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+  }),
+  requests: PropTypes.instanceOf(Map),
+  filteredRequests: PropTypes.arrayOf(RequestsModel),
+  sortedRequests: PropTypes.arrayOf(RequestsModel),
+  requestId: PropTypes.string,
+  selectedRequest: PropTypes.instanceOf(RequestsModel),
+  services: PropTypes.instanceOf(Map),
+  practitioners: PropTypes.instanceOf(Map),
+  patientUsers: PropTypes.instanceOf(Map),
 };
 
-function mapStateToProps({ entities, apiRequests }) {
+function mapStateToProps({ entities, apiRequests, routing }, ownProps) {
   const scheduleRequestsFetched = apiRequests.get('scheduleRequests')
     ? apiRequests.get('scheduleRequests').wasFetched
     : null;
@@ -51,12 +79,23 @@ function mapStateToProps({ entities, apiRequests }) {
   const requests = entities.getIn(['requests', 'models']);
   const practitioners = entities.getIn(['practitioners', 'models']);
 
+  const filteredRequests = requests
+    .toArray()
+    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+
+  const sortedRequests = filteredRequests.sort(
+    (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate)
+  );
+  const nextProps = { routing, sortedRequests, ...ownProps };
   return {
     requests,
+    filteredRequests,
+    sortedRequests,
     services,
     patientUsers,
     practitioners,
     scheduleRequestsFetched,
+    ...selectedRequestBuilder(nextProps),
   };
 }
 
@@ -64,6 +103,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       fetchEntitiesRequest,
+      setTitle,
     },
     dispatch
   );

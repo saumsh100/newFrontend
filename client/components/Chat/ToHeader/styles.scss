@@ -4,7 +4,7 @@
   flex: 1;
   background: transparent !important;
   color: $primary-dark !important;
-  padding: 0 0 0 10px;
+  padding: 0;
   margin-right: -10px;
   font-size: 28px;
   font-weight: 100 !important;
@@ -27,6 +27,7 @@
 .patientListButton {
   @extend .menuButton;
   & > i {
+    margin-left: 10px;
     font-weight: 100;
   }
 }
@@ -36,7 +37,7 @@
   padding-left: 0;
   text-align: center;
 
-  & > span > div {
+  & > div {
     display: inline-block;
   }
 }
@@ -60,7 +61,7 @@
   padding-left: 20px;
 
   @media (max-width: 576px) {
-    margin-left: -35px;
+    margin-left: -25px;
     padding-left: 0;
   }
 }
@@ -88,3 +89,14 @@
 //.autocompleteInput {
 //  height: 100%;
 //}
+
+.hubWrapper {
+  .patientInfoName,
+  .infoArrow {
+    color: $electron-chat-top-bar-name;
+  }
+
+  .patientInfoWrapper {
+    margin-left: 0;
+  }
+}

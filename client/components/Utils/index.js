@@ -1,5 +1,6 @@
 
 import PropTypes from 'prop-types';
+import { parse } from 'query-string';
 import { isArray, pick, omit as lOmit, isFunction } from 'lodash';
 
 /**
@@ -161,4 +162,31 @@ export const findChunksAtBeginningOfWords = ({ searchWords, textToHighlight }) =
   });
 
   return chunks;
+};
+
+/**
+ * Checks if the requesting user is the same user of the appoitment
+ * @param {*} patientUser
+ * @param {*} requestingUser
+ */
+export const checkIfUsersEqual = (patientUser, requestingUser) => {
+  if (requestingUser && patientUser && patientUser.get('id') !== requestingUser.get('id')) {
+    return requestingUser;
+  }
+  return null;
+};
+
+/**
+ * Builds the props for selected request based on url quer search
+ * @param props.routing.location.search query search from url
+ * @param props.sortedRequests sorted request from component props
+ */
+export const selectedRequestBuilder = (props) => {
+  const parsedSearch = parse(props.routing.location.search);
+  return {
+    requestId: parsedSearch.selectedRequest || null,
+    selectedRequest: parsedSearch.selectedRequest
+      ? props.sortedRequests.filter(req => req.id === parsedSearch.selectedRequest)[0]
+      : null,
+  };
 };

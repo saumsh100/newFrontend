@@ -22,7 +22,7 @@ const entries = appEntries(name => [
 const { INTERCOM_APP_ID, LOGROCKET_APP_ID, FACEBOOK_APP_ID, FEATURE_FLAG_KEY, GOOGLE_API_KEY } = env;
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'reviews', 'my', 'connect'),
+  entry: entries('app', 'reviews', 'my', 'connect', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
@@ -33,6 +33,7 @@ const developmentConfig = merge(baseConfig, {
         API_SERVER_PORT: `"${serverPort}"`,
         FEATURE_FLAG_KEY: FEATURE_FLAG_KEY || `"${'5a332a3c95e24c205546f0df'}"`,
         GOOGLE_API_KEY: `"${GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'}"`,
+        API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:5100'),
       },
     }),
 
@@ -43,7 +44,7 @@ const developmentConfig = merge(baseConfig, {
 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
-      chunks: ['app', 'reviews', 'my', 'connect'],
+      chunks: ['app', 'reviews', 'my', 'connect', 'hub'],
     }),
 
     new BrowserSyncPlugin(

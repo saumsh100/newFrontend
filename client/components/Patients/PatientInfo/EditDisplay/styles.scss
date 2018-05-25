@@ -32,14 +32,25 @@
   padding: 0;
   overflow: unset;
   width: 600px;
-  //padding-top: 15px;
   background: $primary-white;
+
   nav {
     background: $primary-white;
     font-weight: $large-weight;
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  @media screen and (max-width: 576px) {
+    width: auto;
+    overflow-y: auto;
+
+    form {
+      padding: 0;
+      max-height: none;
+      height: auto;
+    }
   }
 }
 
@@ -128,6 +139,10 @@
   max-height: 520px;
   background: #ffffff;
   padding: 35px 40px 25px 40px;
+
+  @media screen and (max-width: 576px) {
+    height: auto;
+  }
 }
 
 .remoteSubmit {
@@ -150,6 +165,10 @@
   color: $primary-dark-grey;
   font-size: $extra-small-size;
   opacity: 0.6;
+
+  @media screen and (max-width: 576px) {
+    padding-bottom: 15px;
+  }
 }
 
 .toggleContainer {

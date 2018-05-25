@@ -1,8 +1,10 @@
 
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
+import classnames from 'classnames';
 import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
+import { isHub } from '../../../util/hub';
 import styles from './styles.scss';
 
 const toInputTheme = {
@@ -18,19 +20,31 @@ class ToHeader extends Component {
   renderMobile() {
     const { selectedPatient, onPatientInfoClick, onPatientListClick } = this.props;
 
+    const wrapperStyle = !isHub() ? styles.wrapper : classnames(styles.wrapper, styles.hubWrapper);
+
     return (
-      <div className={styles.wrapper}>
-        <Button
-          icon="arrow-left"
-          className={styles.patientListButton}
-          onClick={onPatientListClick}
-        />
+      <div className={wrapperStyle}>
+        {!isHub() && (
+          <Button
+            icon="arrow-left"
+            className={styles.patientListButton}
+            onClick={onPatientListClick}
+          />
+        )}
         {selectedPatient ? (
           <div className={styles.patientInfoWrapper}>
-            <Button flat fluid onClick={onPatientInfoClick} className={styles.patientInfoButton}>
-              <Avatar size="sm" user={selectedPatient} />
+            <Button
+              flat
+              fluid
+              onClick={() => {
+                onPatientInfoClick(`${selectedPatient.firstName} ${selectedPatient.lastName}`);
+              }}
+              className={styles.patientInfoButton}
+            >
+              <Avatar size="xs" user={selectedPatient} />
               <div className={styles.patientInfoName}>
-                {selectedPatient.firstName} {selectedPatient.lastName}
+                <span>{selectedPatient.firstName}</span>
+                <span>{selectedPatient.lastName}</span>
               </div>
               <Icon className={styles.infoArrow} icon="angle-right" type="light" />
             </Button>
@@ -78,10 +92,16 @@ class ToHeader extends Component {
 }
 
 ToHeader.propTypes = {
+  selectedPatient: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+  }),
   newChat: PropTypes.instanceOf(Object),
   activeAccount: PropTypes.instanceOf(Object),
   selectedChat: PropTypes.instanceOf(Object),
-  selectedPatient: PropTypes.instanceOf(Object),
+  setNewChat: PropTypes.func.isRequired,
+  mergeNewChat: PropTypes.func.isRequired,
+  setSelectedChatId: PropTypes.func.isRequired,
   onPatientInfoClick: PropTypes.func,
   onPatientListClick: PropTypes.func,
   onSearch: PropTypes.func,
@@ -95,9 +115,6 @@ function mapStateToProps({ entities, chat }) {
   const selectedPatientId = selectedChat && selectedChat.patientId;
 
   return {
-    // TODO: this is not right... shouldn't be getting activeAccount this way
-    newChat: chat.get('newChat'),
-    activeAccount: entities.getIn(['accounts', 'models']).first(),
     selectedPatient: patients.get(selectedPatientId),
   };
 }

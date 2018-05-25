@@ -22,6 +22,7 @@ import ColorPicker from './ColorPicker';
 import DayPicker from './DayPicker';
 import DayPickerRange from './DayPicker/DayPickerRange';
 import DialogBox from './DialogBox';
+import DialogBody from './DialogBody';
 import DropdownSelect from './DropdownSelect';
 import Dropzone from './Dropzone';
 import DashboardStats from './DashboardStats';
@@ -75,6 +76,7 @@ import Well from './Well';
 import PatientPopover from './PatientPopover';
 import RelayComponentRenderer from './RelayComponentRenderer';
 import Highlighter from './Highlighter';
+import Media from './Media';
 
 const VButton = Button;
 
@@ -105,6 +107,7 @@ export {
   DayPicker,
   DayPickerRange,
   DialogBox,
+  DialogBody,
   DropdownSelect,
   Dropzone,
   DashboardStats,
@@ -164,6 +167,7 @@ export {
   Well,
   RelayComponentRenderer,
   Highlighter,
+  Media,
 };
 
 export { DropdownMenu, MenuItem, NestedDropdownMenu, MenuSeparator } from './DropdownMenu';

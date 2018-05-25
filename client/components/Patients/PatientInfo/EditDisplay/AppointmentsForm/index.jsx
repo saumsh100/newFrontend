@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
+import { isResponsive } from '../../../../../util/hub';
 import styles from '../styles.scss';
 
 export default function AppointmentsForm(props) {
@@ -26,7 +27,7 @@ export default function AppointmentsForm(props) {
       onSubmit={handleSubmit}
       className={styles.formContainer}
       initialValues={initialValues}
-      ignoreSaveButton
+      ignoreSaveButton={!isResponsive()}
     >
       <Grid className={styles.grid}>
         <div className={styles.formHeader}>Last Appointment</div>
@@ -57,7 +58,7 @@ export default function AppointmentsForm(props) {
             <Field
               component="DayPicker"
               name="dueForRecallExamDate"
-              label="Due for Recall Exam"
+              label={isResponsive() ? 'Due for Recall' : 'Due for Recall Exam'}
               theme={inputStyle}
             />
           </Col>

@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { push } from 'react-router-redux';
-import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Map } from 'immutable';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { FilterAppointments, FilterPatients } from '../Shared/filters';
 import { Card, Tabs, Tab } from '../../library';
+import { selectedRequestBuilder } from '../../../components/Utils';
 import Requests from '../../../components/Requests';
+import RequestsModel from '../../../entities/models/Request';
 import AppointmentsList from './AppointmentsList';
 import styles from './styles.scss';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
@@ -93,42 +95,49 @@ class AppsRequestsContainer extends Component {
   }
 
   handleEditAppointment(id) {
-    const { push, selectAppointment, appointments } = this.props;
+    const { appointments } = this.props;
 
     this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate) });
 
-    push('/schedule');
+    this.props.push('/schedule');
     const app = appointments.get(id);
     const mergeApp = Object.assign(app.toJS(), { appModel: app });
-    selectAppointment(mergeApp);
+    this.props.selectAppointment(mergeApp);
   }
 
   render() {
-    const { appointments, requests, patients, dashAppointments } = this.props;
+    const {
+      appointments,
+      filteredRequests,
+      sortedRequests,
+      requestId,
+      selectedRequest,
+      patients,
+      dashAppointments,
+    } = this.props;
 
     const { index } = this.state;
-
-    const browserHistory = createBrowserHistory();
-    const location = browserHistory.location.pathname;
-
-    const filteredRequests = requests.filter(
-      req => !req.get('isCancelled') && !req.get('isConfirmed')
-    );
 
     const isLoaded = dashAppointments;
 
     const displayRequests = isLoaded ? (
       <Requests
         requests={this.props.requests}
+        filteredRequests={filteredRequests}
+        sortedRequests={sortedRequests}
+        requestId={requestId}
+        selectedRequest={selectedRequest}
         services={this.props.services}
         patientUsers={this.props.patientUsers}
         practitioners={this.props.practitioners}
-        location={location}
         popoverRight="right"
         noBorder
         disableHeader
         runAnimation={false}
         isLoaded
+        redirect={{
+          pathname: '/schedule',
+        }}
       />
     ) : null;
 
@@ -151,7 +160,7 @@ class AppsRequestsContainer extends Component {
           {isLoaded && (
             <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
               <Tab
-                label={`${filteredRequests.size} Online Requests`}
+                label={`${filteredRequests.length} Online Requests`}
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />
@@ -170,23 +179,29 @@ class AppsRequestsContainer extends Component {
 }
 
 AppsRequestsContainer.propTypes = {
-  fetchEntitiesRequest: PropTypes.func,
-  requests: PropTypes.object,
-  services: PropTypes.object,
-  patientUsers: PropTypes.object,
-  practitioners: PropTypes.object,
-  appointments: PropTypes.object,
-  patients: PropTypes.object,
-  dashboardDate: PropTypes.instanceOf(Date),
-  selectAppointment: PropTypes.func,
-  push: PropTypes.func,
-  dashPracs: PropTypes.bool,
+  appointments: PropTypes.instanceOf(Map),
+  chairs: PropTypes.instanceOf(Map),
   dashAppointments: PropTypes.bool,
   dashChairs: PropTypes.bool,
+  dashPracs: PropTypes.bool,
   dashRequests: PropTypes.bool,
+  dashboardDate: PropTypes.instanceOf(Date),
+  fetchEntitiesRequest: PropTypes.func,
+  patientUsers: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map),
+  practitioners: PropTypes.instanceOf(Map),
+  push: PropTypes.func,
+  requests: PropTypes.instanceOf(Map),
+  filteredRequests: PropTypes.arrayOf(RequestsModel),
+  sortedRequests: PropTypes.arrayOf(RequestsModel),
+  requestId: PropTypes.string,
+  selectedRequest: PropTypes.instanceOf(RequestsModel),
+  selectAppointment: PropTypes.func,
+  services: PropTypes.instanceOf(Map),
+  setScheduleDate: PropTypes.func,
 };
 
-function mapStateToProps({ apiRequests, entities }, { dashboardDate }) {
+function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ...ownProps }) {
   const dashAppointments = apiRequests.get('dashAppointments')
     ? apiRequests.get('dashAppointments').wasFetched
     : null;
@@ -211,8 +226,20 @@ function mapStateToProps({ apiRequests, entities }, { dashboardDate }) {
 
   const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);
 
+  const filteredRequests = requests
+    .toArray()
+    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+
+  const sortedRequests = filteredRequests.sort(
+    (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate)
+  );
+
+  const nextProps = { routing, sortedRequests, ...ownProps };
+
   return {
     requests,
+    filteredRequests,
+    sortedRequests,
     services,
     patientUsers,
     practitioners,
@@ -223,6 +250,7 @@ function mapStateToProps({ apiRequests, entities }, { dashboardDate }) {
     dashPracs,
     dashAppointments,
     dashRequests,
+    ...selectedRequestBuilder(nextProps),
   };
 }
 

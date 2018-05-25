@@ -111,7 +111,8 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
         </MultiNavItem>*/}
         <SingleNavItem path="/schedule" icon="calendar-alt" label="Schedule" />
         <SingleNavItem path="/patients/list" icon="heart" label="Patient Management" />
-        <SingleNavItem path="/chat" icon="comment-alt" label="Chat" badge={unreadChats} />
+        <SingleNavItem path="/chat" icon="comment-alt" label="Chat" badge={unreadChats} active={location.pathname.indexOf('/chat') !== -1} />
+
         <FeatureFlagWrapper featureKey="feature-call-tracking">
           <SingleNavItem path="/calls" icon="phone" label="Call Tracking" />
         </FeatureFlagWrapper>

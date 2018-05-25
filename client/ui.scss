@@ -29,7 +29,6 @@ $clr-table-border: #f2f2f2;
 $clr-table-header-icons: #eff2f3;
 
 $primary-blue-green: #206477;
-
 $primary-dark: #2e3845;
 $primary-darker: #3d4551;
 $primary-darkdark: #242a34;
@@ -44,7 +43,7 @@ $primary-light-grey: #c9c9c9;
 $light-grey: #a7a9ac;
 
 $chat-lightgrey: #f4f4f4;
-$chat-tabs-color: #eaeaea;
+$chat-tabs-color: #f4f4f4;
 $chat-border-color: #efefef;
 $chat-tabs-border-color: #e3e3e3;
 
@@ -61,6 +60,28 @@ $empty-grey: darken(lightgrey, 5%);
 $card-border-color: #cdcdcd;
 $google-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12),
   0 3px 5px -1px rgba(0, 0, 0, 0.2);
+
+$electron-button-primary: #1c6576;
+$electron-button-primary-hover: #195566;
+
+$electron-disabled-items: #eaeaea;
+$electron-primary-menu: #1c6576;
+$electron-content-heading-bg: #2e3843;
+$electron-content-right-border: $clr-bg-dark-grey;
+$electron-chat-tabs-border: $clr-bg-dark-grey;
+$electron-chat-items-bottom-border: #e4e4e4;
+$electron-chat-message-bg-clinic: #175263;
+$electron-chat-top-bar-name: #1c6576;
+$electron-toolbar-icon-hover-bg: #ededed;
+$electron-external-link-icon: #dedede;
+$electron-border-bottom-color: #efefef;
+$electron-active-collapsible-bg: #f4f4f4;
+
+$electron-logo-size: 50px;
+$electron-header-size: calc(100% - 50px);
+$electron-bar-width: 50px;
+$electron-anti-radius-padding: 10px;
+$electron-border-radius: 4px;
 
 // Feedback Colors
 $danger-color: red;
@@ -144,3 +165,38 @@ $widget-grey: #808080;
 $widget-grey-light: #aaa;
 $widget-grey-lighter: #dddddd;
 $widget-grey-lightest: #f5f5f5;
+
+$search-bg: #f4f4f4;
+$search-border-color: #adadae;
+
+@mixin borderTopRight {
+  border-top-right-radius: $electron-border-radius;
+}
+
+@mixin borderBottomRight {
+  border-bottom-right-radius: $electron-border-radius;
+}
+
+@mixin borderTopLeft {
+  border-top-left-radius: $electron-border-radius;
+}
+
+@mixin borderBottomLeft {
+  border-bottom-left-radius: $electron-border-radius;
+}
+
+.borderTopRight {
+  @include borderTopRight;
+}
+
+.borderBottomRight {
+  @include borderBottomRight;
+}
+
+.borderTopLeft {
+  @include borderTopLeft;
+}
+
+.borderBottomLeft {
+  @include borderBottomLeft;
+}

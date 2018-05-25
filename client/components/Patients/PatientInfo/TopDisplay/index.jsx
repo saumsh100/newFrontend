@@ -7,6 +7,9 @@ import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
 import { formatPhoneNumber } from '../../../library/util/Formatters';
+import { isResponsive } from '../../../../util/hub';
+import ActiveAccountModel from '../../../../entities/models/ActiveAccount';
+import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
 const bgImgs = [
@@ -48,6 +51,7 @@ export default function TopDisplay(props) {
   };
 
   const wasAllFetched = wasStatsFetched && patient && accountsFetched && wasPatientFetched;
+  const avatarSize = isResponsive() ? 'md' : 'xl';
 
   return (
     <Card className={styles.card} noBorder>
@@ -59,7 +63,7 @@ export default function TopDisplay(props) {
           <div className={styles.dataContainer}>
             <div className={styles.avatarContainer}>
               <div className={styles.avatarContainer_avatar}>
-                <Avatar user={patient} size="xl" />
+                <Avatar user={patient} size={avatarSize} />
               </div>
               <div className={styles.avatarContainer_data}>
                 <div className={styles.avatarContainer_data_name}>
@@ -85,9 +89,11 @@ export default function TopDisplay(props) {
                     </div>
                   </div>
                 ) : null}
-                <div className={styles.paddingStatus}>
-                  <div className={styles.avatarContainer_data_active}>{patient.status}</div>
-                </div>
+                {!isResponsive() && (
+                  <div className={styles.paddingStatus}>
+                    <div className={styles.avatarContainer_data_active}>{patient.status}</div>
+                  </div>
+                )}
               </div>
             </div>
             <Grid className={styles.rightContainer}>
@@ -129,5 +135,10 @@ export default function TopDisplay(props) {
 
 TopDisplay.propTypes = {
   wasFetched: PropTypes.bool,
-  patient: PropTypes.instanceOf(Object),
+  wasStatsFetched: PropTypes.bool,
+  patientStats: PropTypes.instanceOf(Object),
+  accountsFetched: PropTypes.bool,
+  activeAccount: PropTypes.instanceOf(ActiveAccountModel),
+  wasPatientFetched: PropTypes.bool,
+  patient: PropTypes.instanceOf(PatientModel),
 };

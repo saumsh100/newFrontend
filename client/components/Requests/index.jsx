@@ -1,86 +1,91 @@
 
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import classNames from 'classnames';
+import { isHub } from '../../util/hub';
 import RequestList from './RequestList';
-import { Card, CardHeader, IconButton } from '../library';
+import RequestsModel from '../../entities/models/Request';
+import { Card, CardHeader } from '../library';
 import styles from './styles.scss';
-import { SortByCreatedAtDesc } from '../library/util/SortEntities';
 
-class Requests extends Component {
-  constructor(props) {
-    super(props);
+const Requests = (props) => {
+  const {
+    filteredRequests,
+    sortedRequests,
+    requestId,
+    selectedRequest,
+    services,
+    patientUsers,
+    practitioners,
+    popoverRight,
+    noBorder,
+    disableHeader,
+    runAnimation,
+    isLoaded,
+    redirect,
+  } = props;
+
+  let requestHeaderClassNames = styles.requestHeader;
+  if (disableHeader) {
+    requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
   }
 
-  render() {
-    const {
-      requests,
-      services,
-      patientUsers,
-      practitioners,
-      location,
-      popoverRight,
-      noBorder,
-      disableHeader,
-      runAnimation,
-      isLoaded,
-    } = this.props;
+  let display = (
+    <RequestList
+      sortedRequests={sortedRequests}
+      requestId={requestId}
+      selectedRequest={selectedRequest}
+      services={services}
+      patientUsers={patientUsers}
+      practitioners={practitioners}
+      popoverRight={popoverRight}
+      redirect={redirect}
+    />
+  );
 
-    const filteredRequests = requests.toArray().filter((req) => {
-      return !req.get('isCancelled') && !req.get('isConfirmed');
-    });
-
-    const sortedRequests = filteredRequests.sort(SortByCreatedAtDesc);
-
-    let requestHeaderClassNames = styles.requestHeader;
-    if (disableHeader) {
-      requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
-    }
-
-    let display = (
-      <RequestList
-        sortedRequests={sortedRequests}
-        services={services}
-        patientUsers={patientUsers}
-        location={location}
-        practitioners={practitioners}
-        popoverRight={popoverRight}
-      />
-    );
-
-    if (filteredRequests.length === 0) {
-      display = (
-        <div className={styles.noRequests}>
-          No Requests
-        </div>
-      );
-    }
-    return (
-      <Card
-        className={styles.requestCard}
-        noBorder={noBorder}
-        runAnimation={runAnimation}
-        loaded={isLoaded}
-      >
+  if (filteredRequests && filteredRequests.length === 0) {
+    display = <div className={styles.noRequests}>No Requests</div>;
+  }
+  return (
+    <Card
+      className={classNames(styles.requestCard, { [styles.requestCardMobile]: isHub() })}
+      noBorder={noBorder}
+      runAnimation={runAnimation}
+      loaded={isLoaded}
+    >
+      {!isHub() && (
         <div className={requestHeaderClassNames}>
           <CardHeader
             data-test-id="requestCount"
-            count={sortedRequests.length}
+            count={sortedRequests.length || 0}
             title={'Online Requests'}
-          >
-          </CardHeader>
+          />
         </div>
-        <div className={styles.requestBody}>
-          {isLoaded ? display : null}
-        </div>
-      </Card>
-    );
-  }
-}
+      )}
+      <div className={styles.requestBody}>{isLoaded && display}</div>
+    </Card>
+  );
+};
 
 Requests.propTypes = {
-  requests: PropTypes.object,
-  patients: PropTypes.object,
-  services: PropTypes.object,
+  disableHeader: PropTypes.bool,
+  isLoaded: PropTypes.bool,
+  noBorder: PropTypes.bool,
+  patientUsers: PropTypes.instanceOf(Map),
+  popoverRight: PropTypes.string,
+  practitioners: PropTypes.instanceOf(Map),
+  redirect: PropTypes.shape({
+    pathname: PropTypes.string,
+    search: PropTypes.string,
+  }),
+  requests: PropTypes.instanceOf(Map),
+  filteredRequests: PropTypes.arrayOf(RequestsModel),
+  sortedRequests: PropTypes.arrayOf(RequestsModel),
+  requestId: PropTypes.string,
+  selectedRequest: PropTypes.instanceOf(RequestsModel),
+  runAnimation: PropTypes.bool,
+  services: PropTypes.instanceOf(Map),
 };
 
 export default Requests;

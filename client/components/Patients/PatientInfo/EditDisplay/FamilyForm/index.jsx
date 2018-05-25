@@ -1,9 +1,8 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import graphQLEnvironment from '../../../../../util/graphqlEnvironment';
-import { Grid, Row, Col, IconButton, Form, FormSection } from '../../../../library';
+import { Grid, Row, Col, Form, FormSection } from '../../../../library';
 import Family from '../../../Shared/Family';
 import FamilyMember from '../../../Shared/FamilyMember';
 import PatientSearch from '../../../../PatientSearch';
@@ -11,6 +10,7 @@ import removePatientFromFamily from '../../graphQL/removePatientFromFamily';
 import addPatientToFamily from '../../graphQL/addPatientToFamily';
 import addFamilyWithMembers from '../../graphQL/addFamilyWithMembers';
 import makePatientHeadOfFamily from '../../graphQL/makePatientHeadOfFamily';
+import { isHub, isResponsive } from '../../../../../util/hub';
 import styles from './styles.scss';
 
 const patientSearchTheme = {
@@ -53,7 +53,7 @@ const renderMemberList = ({ family, patientNode }) => (
 );
 
 const renderAddFamily = ({ family, patientNode }) => (
-  <Row className={styles.withPadding}>
+  <Row className={!isResponsive() && styles.withPadding}>
     <PatientSearch
       onSelect={patient =>
         (family === null
@@ -75,7 +75,7 @@ const FamilyForm = (props) => {
   const { handleSubmit, familyLength } = props;
 
   return (
-    <Form form="Form4" onSubmit={handleSubmit} ignoreSaveButton>
+    <Form form="Form4" onSubmit={handleSubmit} ignoreSaveButton={!isResponsive()}>
       <FormSection name="family">
         <Grid>
           {renderAddFamily(props)}

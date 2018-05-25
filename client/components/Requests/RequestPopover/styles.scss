@@ -7,10 +7,23 @@
   z-index: 5001;
 }
 
+.cardMobile {
+  @extend .card;
+  position: absolute;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 299;
+  top: 0px;
+  right: 0px;
+  left: 0px;
+  bottom: 0px;
+}
+
 .header {
   display: flex;
   align-items: center;
-  height: 40px;
+  height: 45px;
   background-color: #313843;
   color: $primary-white;
   padding-left: 15px;
@@ -24,23 +37,47 @@
   }
 }
 
+.headerMobile {
+  @extend .header;
+  padding-left: 8px;
+}
+
 .closeIcon {
   margin-left: auto;
   composes: fontMediumSize from 'sass-loader!../../../fonts.scss';
   color: $primary-grey;
-
+  background: none;
+  font-size: 14px;
+  padding: 1px 7px 2px;
   &:hover {
     cursor: pointer;
   }
 }
 
+.closeIconMobile {
+  @extend .closeIcon;
+  margin-left: 0;
+}
+
+.calendarIcon {
+  padding-bottom: 2px;
+}
+
 .body {
-  background-color: $primary-white;
   padding: 15px 15px 15px 15px;
   height: auto;
   min-height: 200px;
   max-height: 350px;
   max-width: 285px;
+}
+
+.bodyMobile {
+  @extend .body;
+  max-height: none;
+  padding-left: 25px;
+  .container {
+    margin-bottom: 35px;
+  }
 }
 
 .container {
@@ -57,6 +94,19 @@
   composes: subHeaderExtraSmall from 'sass-loader!../../../fonts.scss';
   padding-bottom: 5px;
   text-transform: uppercase;
+}
+
+.subHeaderMobile {
+  @extend .header;
+  z-index: 1;
+  justify-content: center;
+  background-color: $primary-grey;
+  &_text {
+    @extend .header_text;
+    background: none;
+    color: $primary-blue-green;
+    cursor: none;
+  }
 }
 
 .data {
@@ -96,6 +146,72 @@
   width: 100%;
   justify-content: flex-end;
   align-items: center;
+}
+
+.footerMobile {
+  @extend .footer;
+  justify-content: flex-start;
+  border-top: none;
+  &_displayActions {
+    position: absolute;
+    top: 80px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    @extend .actionsOverlay;
+  }
+}
+
+@mixin blurred-mixin() {
+  background-color: $clr-dark-grey;
+  filter: url(#blurred);
+  position: absolute;
+  top: 90px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+}
+
+.blurredHub {
+  @include blurred-mixin();
+  top: 42px;
+}
+
+.blurred {
+  @include blurred-mixin();
+  top: 90px;
+}
+
+.actionButtonMobile {
+  height: auto;
+  font-size: 20px;
+  padding: 12px 13px;
+  composes: fontDefault from 'sass-loader!../../../fonts.scss';
+}
+
+.actionsOverlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.actionOverlayButtonMobile {
+  color: $primary-white;
+  background: none;
+  text-transform: uppercase;
+  padding: 0 0.5em;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.actionOverlayButtonIconMobile {
+  padding: 7px;
+  background: $primary-white;
+  color: $primary-blue-green;
+  border-radius: 20px;
+  margin-right: 10px;
 }
 
 .editButton {

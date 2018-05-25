@@ -259,8 +259,7 @@ class DropdownTimeSuggestion extends Component {
             {...this.props}
             selected={formatValue(this.currentValue) === option.value || value === option.value}
             option={option}
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               onChange(option.value);
               this.scrollIndex = i;
               this.close();

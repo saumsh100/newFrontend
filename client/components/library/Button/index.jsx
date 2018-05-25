@@ -2,7 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { getClassMapper } from '../../Utils';
-import styles from './vbutton.scss';
+import { isHub } from '../../../util/hub';
+import dashboardStyles from './vbutton.scss';
+import hubStyles from './Electron/vbutton.scss';
+
+const styles = isHub() ? hubStyles : dashboardStyles;
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],

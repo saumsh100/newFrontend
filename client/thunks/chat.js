@@ -1,13 +1,20 @@
 
 import axios from 'axios';
-import { pull, pullAll, uniq, union } from 'lodash';
-import { setSelectedChatId, setUnreadChats, setChatMessages, setLockedChats } from '../reducers/chat';
+import { push } from 'react-router-redux';
+import { pull, pullAll, uniq, union, without } from 'lodash';
+import {
+  setSelectedChatId,
+  setUnreadChats,
+  setChatMessages,
+  setLockedChats,
+} from '../reducers/chat';
 import { fetchEntities, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
 import { deleteAllEntity, receiveEntities } from '../actions/entities';
+import { isHub } from '../util/hub';
 
-function isOnChatPage() {
-  return location.pathname.indexOf('/chat') !== -1;
+function isOnChatPage(currentPath) {
+  return currentPath.indexOf('/chat') !== -1;
 }
 
 /**
@@ -21,6 +28,10 @@ function isOnChatPage() {
 export function defaultSelectedChatId() {
   return (dispatch, getState) => {
     const { chat, entities } = getState();
+
+    if (isHub()) {
+      return;
+    }
 
     // if it is already defined, leave it alone, its there for a reason
     if (chat.get('selectedChatId')) {
@@ -49,26 +60,29 @@ export function defaultSelectedChatId() {
 export function loadUnreadMessages() {
   return (dispatch) => {
     const url = '/api/chats/unread?limit=100';
-    return axios.get(url)
+    return axios
+      .get(url)
       .then(result => dispatch(createListOfUnreadedChats(result.data.entities.textMessages || {})));
   };
 }
 
 export function addMessage(message) {
   return (dispatch, getState) => {
-    const { chat } = getState();
+    const { chat, electron, routing } = getState();
     const selectedChatId = chat.get('selectedChatId');
+    const chatPageActive =
+      isOnChatPage(routing.location.pathname) && (!isHub() || electron.get('showContent'));
     dispatch(createListOfUnreadedChats(message.entities.textMessages));
 
     if (selectedChatId === message.result) {
       dispatch(setChatMessagesListForChat(selectedChatId));
 
-      if (isOnChatPage()) {
+      if (chatPageActive) {
         dispatch(markAsRead(selectedChatId));
       }
     }
 
-    if (!isOnChatPage()) {
+    if (!chatPageActive) {
       const { chats, textMessages, patients } = message.entities;
       const chatId = message.result;
       const conversation = chats[chatId];
@@ -86,7 +100,13 @@ export function addMessage(message) {
       DesktopNotification.showNotification(messageHeading, {
         body,
         onClick: () => {
-          dispatch(push('/chat'));
+          dispatch(push(`/chat/${chatId}`));
+
+          if (isHub()) {
+            import('./electron').then((electronThunk) => {
+              dispatch(electronThunk.displayContent());
+            });
+          }
         },
       });
     }
@@ -94,73 +114,92 @@ export function addMessage(message) {
 }
 
 function filterUnreadMessages(textMessagesList) {
-  return Object.values(textMessagesList)
-    .filter(message => !message.read);
+  return Object.values(textMessagesList).filter(message => !message.read);
+}
+
+function filterReadMessages(unreadList, textMessages) {
+  textMessages = Object.values(textMessages);
+  return unreadList.filter((unreadId) => {
+    const newList = textMessages.filter(message => message.read && unreadId === message.id);
+    return newList.length !== 0;
+  });
 }
 
 export function createListOfUnreadedChats(result) {
   return (dispatch, getState) => {
-    const { chat, auth } = getState();
-    const unreadChats = chat.get('unreadChats');
+    const { chat, auth, routing } = getState();
+    const unreadMessages = chat.get('unreadChats');
     const selectedChatId = chat.get('selectedChatId');
     const currentUser = auth.getIn(['user', 'id']);
+    const currentLocation = routing.location.pathname;
 
     if (result === {}) {
       return;
     }
 
+    const readList = filterReadMessages(unreadMessages, result);
+    const filteredUnreadList = without(unreadMessages, ...readList);
+
     result = filterUnreadMessages(result)
-        .filter(message => shouldUpdateUnreadChats(unreadChats, message.chatId, selectedChatId))
-        .filter(message => currentUser !== message.userId)
-        .map(message => message.id);
+      .filter(
+        message =>
+          shouldUpdateUnreadChats(currentLocation, message, selectedChatId) &&
+          currentUser !== message.userId
+      )
+      .map(message => message.id);
 
     result = uniq(result);
-    const newUnreadChatsList = union(unreadChats, result);
+    const newUnreadChatsList = union(filteredUnreadList, result);
     return dispatch(setUnreadChats(newUnreadChatsList));
   };
 }
 
-function shouldUpdateUnreadChats(unreadChatsList, unreadChatId, selectedChatId) {
-  return !unreadChatsList.includes(unreadChatId) &&
-    (!isOnChatPage() || selectedChatId !== unreadChatId);
+function shouldUpdateUnreadChats(currentLocation, message, selectedChatId) {
+  return !isOnChatPage(currentLocation) || selectedChatId !== message.chatId;
 }
 
-export function loadChatList(limit, skip = 0, url = '/api/chats', join = ['textMessages', 'patient']) {
+export function loadChatList(
+  limit,
+  skip = 0,
+  url = '/api/chats',
+  join = ['textMessages', 'patient']
+) {
   return dispatch =>
-    dispatch(fetchEntities({
-      key: 'chats',
-      join,
-      params: {
-        limit,
-        skip,
-      },
-      url,
-    }));
+    dispatch(
+      fetchEntities({
+        key: 'chats',
+        join,
+        params: {
+          limit,
+          skip,
+        },
+        url,
+      })
+    );
 }
 
 export function cleanChatList() {
-  return dispatch =>
-    dispatch(deleteAllEntity('chats'));
+  return dispatch => dispatch(deleteAllEntity('chats'));
 }
 
 export function loadUnreadChatList(limit, skip = 0) {
-  return dispatch =>
-     dispatch(loadChatList(limit, skip, '/api/chats/unread', ['patient']));
+  return dispatch => dispatch(loadChatList(limit, skip, '/api/chats/unread', ['patient']));
 }
 
 export function loadFlaggedChatList(limit, skip = 0) {
-  return dispatch =>
-     dispatch(loadChatList(limit, skip, '/api/chats/flagged'));
+  return dispatch => dispatch(loadChatList(limit, skip, '/api/chats/flagged'));
 }
 
 export function toggleFlagged(chatId, isFlagged) {
   return dispatch =>
-    dispatch(updateEntityRequest({
-      key: 'chats',
-      values: { isFlagged: !isFlagged },
-      url: `/api/chats/${chatId}`,
-      merge: true,
-    }));
+    dispatch(
+      updateEntityRequest({
+        key: 'chats',
+        values: { isFlagged: !isFlagged },
+        url: `/api/chats/${chatId}`,
+        merge: true,
+      })
+    );
 }
 
 export function markAsUnread(chatId, messageDate) {
@@ -169,14 +208,16 @@ export function markAsUnread(chatId, messageDate) {
     const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
     const accountTwilioNumber = activeAccount.get('twilioPhoneNumber');
 
-    dispatch(updateEntityRequest({
-      key: 'textMessages',
-      values: {
-        textMessageCreatedAt: messageDate,
-        accountTwilioNumber,
-      },
-      url: `/api/chats/${chatId}/textMessages/unread`,
-    })).then((response) => {
+    dispatch(
+      updateEntityRequest({
+        key: 'textMessages',
+        values: {
+          textMessageCreatedAt: messageDate,
+          accountTwilioNumber,
+        },
+        url: `/api/chats/${chatId}/textMessages/unread`,
+      })
+    ).then((response) => {
       const { chat } = getState();
       const unreadChats = chat.get('unreadChats');
 
@@ -191,7 +232,6 @@ export function markAsUnread(chatId, messageDate) {
   };
 }
 
-
 export function markAsRead(chatId) {
   return (dispatch, getState) => {
     const { chat } = getState();
@@ -201,11 +241,13 @@ export function markAsRead(chatId) {
       return;
     }
 
-    dispatch(updateEntityRequest({
-      key: 'textMessages',
-      values: {},
-      url: `/api/chats/${chatId}/textMessages/read`,
-    })).then((response) => {
+    dispatch(
+      updateEntityRequest({
+        key: 'textMessages',
+        values: {},
+        url: `/api/chats/${chatId}/textMessages/read`,
+      })
+    ).then((response) => {
       const unreadChats = chat.get('unreadChats');
       const listToRemove = Object.keys(response.textMessages);
 
@@ -219,10 +261,11 @@ export function setChatMessagesListForChat(chatId) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const allMessages = entities.getIn(['textMessages', 'models']);
-    const filteredChatMessages = allMessages.filter(message => message.chatId === chatId)
-                       .sort((messageOne, messageTwo) =>
-                          new Date(messageOne.createdAt) - new Date(messageTwo.createdAt)
-                       );
+    const filteredChatMessages = allMessages
+      .filter(message => message.chatId === chatId)
+      .sort(
+        (messageOne, messageTwo) => new Date(messageOne.createdAt) - new Date(messageTwo.createdAt)
+      );
 
     return dispatch(setChatMessages(filteredChatMessages || []));
   };
@@ -231,6 +274,8 @@ export function setChatMessagesListForChat(chatId) {
 export function selectChat(id) {
   return (dispatch) => {
     dispatch(setSelectedChatId(id));
+    dispatch(push(`/chat/${id || ''}`));
+
     if (id) {
       dispatch(markAsRead(id));
     }
@@ -241,20 +286,24 @@ export function selectChat(id) {
 
 export function createNewChat(entityData) {
   return dispatch =>
-    dispatch(createEntityRequest({
-      key: 'chats',
-      entityData,
-      url: '/api/chats',
-    }));
+    dispatch(
+      createEntityRequest({
+        key: 'chats',
+        entityData,
+        url: '/api/chats',
+      })
+    );
 }
 
 export function sendChatMessage(entityData) {
   return dispatch =>
-    dispatch(createEntityRequest({
-      key: 'chats',
-      entityData,
-      url: '/api/chats/textMessages',
-    }));
+    dispatch(
+      createEntityRequest({
+        key: 'chats',
+        entityData,
+        url: '/api/chats/textMessages',
+      })
+    );
 }
 
 export function socketLock(textMessages) {
@@ -265,8 +314,7 @@ export function socketLock(textMessages) {
 
     const chatListToLock = messages.map(message => message.chatId);
 
-    const unreadMessagesList = filterUnreadMessages(textMessages)
-      .map(message => message.id);
+    const unreadMessagesList = filterUnreadMessages(textMessages).map(message => message.id);
     const newUnreadChatsList = union(unreadChats, unreadMessagesList);
 
     dispatch(setUnreadChats(newUnreadChatsList));
@@ -280,10 +328,7 @@ export function lockChatList(chatListToLock) {
     const { chat } = getState();
 
     const lockedChats = chat.get('lockedChats');
-    const chatsToLock = uniq([
-      ...chatListToLock,
-      ...lockedChats,
-    ]);
+    const chatsToLock = uniq([...chatListToLock, ...lockedChats]);
 
     return dispatch(setLockedChats(chatsToLock));
   };

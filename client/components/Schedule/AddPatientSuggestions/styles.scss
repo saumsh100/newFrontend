@@ -17,7 +17,7 @@
   //border: 1px solid #efefef;
   //overflow: auto;
   width: 400px;
-  @media screen and (max-width: 450px){
+  @media screen and (max-width: 450px) {
     max-width: 270px;
   }
 }
@@ -42,7 +42,7 @@
 }
 .suggestionsListItem {
   display: flex;
-  padding: 10px 20px 20px 10px;
+  padding: 10px 0px 20px 10px;
   line-height: 1.5em;
 }
 
@@ -62,19 +62,19 @@
 .radioButton {
   margin-right: 10px;
 
-  input[type=radio] {
+  input[type='radio'] {
     width: 20px;
     height: 20px;
   }
 
-  input[type=radio]:checked {
+  input[type='radio']:checked {
     border: 1px solid $primary-color;
     background-color: $primary-blue;
   }
 }
 
 .patientContainer {
-  display: inline-block;
+  display: flex;
   align-content: center;
   align-items: center;
   font-size: $medium-size;
@@ -85,7 +85,7 @@
 
   &_fullName {
     composes: listItemHeader from 'sass-loader!../../../fonts.scss';
-    @media screen and (max-width: 850px){
+    @media screen and (max-width: 850px) {
       font-size: $medium-size;
     }
   }

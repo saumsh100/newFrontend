@@ -9,65 +9,43 @@ import styles from '../styles.scss';
 import { validDateValue } from '../../../Shared/helpers';
 
 export default function AppointmentsTab(props) {
-  const {
-    patient,
-    openModal,
-    editComponent,
-  } = props;
+  const { patient } = props;
 
-  const recallComp = <RecallDropDowns patient={patient} />
-  const reminderComp = <ReminderDropDowns patient={patient} />
+  const recallComp = <RecallDropDowns patient={patient} />;
+  const reminderComp = <ReminderDropDowns patient={patient} />;
 
   return (
     <Grid className={styles.grid}>
-      <Row className={styles.row}>
+      <Row className={styles.remindersRow}>
         <Col xs={12}>
-          <InfoDump
-            label="RECALLS SENT"
-            component={recallComp}
-          />
+          <InfoDump label="RECALLS SENT" component={recallComp} />
         </Col>
         <Col xs={12} className={styles.infoPadding}>
-          <InfoDump
-            label="REMINDERS SENT"
-            component={reminderComp}
-          />
+          <InfoDump label="REMINDERS SENT" component={reminderComp} />
         </Col>
       </Row>
-      <div className={styles.subHeader}> Last Appointment </div>
+      <div className={styles.lastAppointmentHeader}> Last Appointment </div>
       <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump
-            label="RECALL"
-            data={validDateValue(patient.lastRecallDate)}
-          />
+          <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate)} />
         </Col>
         <Col xs={6}>
-          <InfoDump
-            label="HYGIENE"
-            data={validDateValue(patient.lastHygieneDate)}
-          />
+          <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate)} />
         </Col>
       </Row>
       <div className={styles.subHeader}> Continuing Care </div>
       <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump
-            label="RECALL"
-          />
+          <InfoDump label="RECALL" />
         </Col>
         <Col xs={6}>
-          <InfoDump
-            label="HYGIENE"
-          />
+          <InfoDump label="HYGIENE" />
         </Col>
       </Row>
       <div className={styles.subHeader}> Other </div>
       <Row className={styles.row}>
         <Col xs={6} className={styles.paddingCol}>
-          <InfoDump
-            label="LAST X-RAY"
-          />
+          <InfoDump label="LAST X-RAY" />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump
@@ -76,30 +54,26 @@ export default function AppointmentsTab(props) {
           />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
-          <InfoDump
-            label="LAST RECALL VISIT"
-          />
+          <InfoDump label="LAST RECALL VISIT" />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
-          <InfoDump
-            label="TOTAL RECALL VISITS"
-          />
+          <InfoDump label="TOTAL RECALL VISITS" />
         </Col>
         <Col xs={6}>
-          <InfoDump
-            label="LAST HYGIENE VISIT"
-          />
+          <InfoDump label="LAST HYGIENE VISIT" />
         </Col>
         <Col xs={6}>
-          <InfoDump
-            label="TOTAL HYGIENCE VISITS"
-          />
+          <InfoDump label="TOTAL HYGIENCE VISITS" />
         </Col>
       </Row>
     </Grid>
-  )
+  );
 }
 
 AppointmentsTab.propTypes = {
-  patient: PropTypes.object.isRequired,
+  patient: PropTypes.shape({
+    lastRestorativeDate: PropTypes.string,
+    lastRecallDate: PropTypes.string,
+    lastHygieneDate: PropTypes.string,
+  }),
 };

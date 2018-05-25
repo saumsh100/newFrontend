@@ -1,15 +1,11 @@
 
+import { push } from 'react-router-redux';
 import { updateEntity, deleteEntity, receiveEntities } from '../actions/entities';
-
 import { showAlertTimeout } from '../thunks/alerts';
-
-// import { removeAlert } from '../actions/alerts';
-
 import { setSyncingWithPMS } from '../actions/schedule';
-
-import { addMessage, socketLock } from '../thunks/chat';
-
-// import { formatPhoneNumber } from '../components/library/util/Formatters';
+import { addMessage, createListOfUnreadedChats, socketLock } from '../thunks/chat';
+import { isHub } from '../util/hub';
+import DesktopNotification from '../util/desktopNotification';
 
 export default function connectSocketToStoreLogin(store, socket) {
   const jwtToken = localStorage.getItem('token');
@@ -32,6 +28,14 @@ export default function connectSocketToStoreLogin(store, socket) {
         };
 
         dispatch(showAlertTimeout({ alert, type: 'success' }));
+        if (isHub()) {
+          DesktopNotification.showNotification(alert.title, {
+            body: alert.body,
+            onClick: () => {
+              dispatch(push('/requests'));
+            },
+          });
+        }
       });
 
       socket.on('update:Request', (data) => {
@@ -155,9 +159,20 @@ export default function connectSocketToStoreLogin(store, socket) {
         dispatch(socketLock(data.entities.textMessages));
       });
 
+      socket.on('markRead', (data) => {
+        dispatch(receiveEntities({ key: 'textMessages', entities: data.entities }));
+        dispatch(createListOfUnreadedChats(data.entities.textMessages));
+      });
+
       socket.on('syncClientError', () => {});
 
       socket.on('syncFinished', (data) => {
+        const alert = {
+          title: 'Sync update',
+          body: 'Sync finished',
+        };
+
+        // dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
         dispatch(updateEntity({ key: 'accounts', entity: data }));
       });

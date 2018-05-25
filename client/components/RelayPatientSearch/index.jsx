@@ -7,6 +7,7 @@ import Downshift from 'downshift';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import uniqBy from 'lodash/uniqBy';
+import { isHub } from '../../util/hub';
 import fetchPatients from './fetchPatients';
 import { Input, InfiniteScroll } from '../library';
 import Loader from '../Loader';
@@ -74,7 +75,7 @@ class PatientSearch extends Component {
    */
   scrollTo(index) {
     if (this.suggestionsNode) {
-      this.suggestionsNode.scrollTop = index * 50;
+      this.suggestionsNode.scrollTop = index * (isHub() ? 70 : 50);
     }
   }
 
@@ -280,7 +281,8 @@ class PatientSearch extends Component {
           (patient === null ? '' : `${patient.firstName} ${patient.lastName}`)
         }
         render={({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
-          const displayList = isOpen && typeof currValue !== 'undefined' && currValue !== '';
+          const displayList =
+            isOpen && typeof currValue !== 'undefined' && currValue !== '' && inputValue !== '';
           const displaySearching = isOpen && inputValue !== '';
           const suggestionsListProps = {
             newTheme,
@@ -291,7 +293,6 @@ class PatientSearch extends Component {
             renderListFooter,
             searchedPatients,
           };
-
           return (
             <div className={newTheme.container}>
               <Input
@@ -309,10 +310,9 @@ class PatientSearch extends Component {
                   displaySearching,
                   ...suggestionsListProps,
                 })}
-                {searchedPatients.length > 0 && (
-                  /**
-                   * render recent searches if has any in the props
-                   */
+                {searchedPatients.length > 0 &&
+                  inputValue === '' && (
+                // render recent searches if has any in the props
                   <div className={newTheme.recentPatientsWrapper}>
                     <div className={newTheme.recentPatientsTitle}>Recent patients</div>
                     {searchedPatients.map((patient, index) => (

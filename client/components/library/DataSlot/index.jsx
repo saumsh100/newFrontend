@@ -11,22 +11,38 @@ import styles from './styles.scss';
  * @param {*} props
  */
 export default function DataSlot(props) {
-  const { selected, option, onClick, theme, children } = props;
+  const { type, selected, option, onClick, theme, children } = props;
 
   const className = classNames(styles.optionListItem, theme.slotButton, {
     [styles.selectedListItem]: selected,
   });
   return (
-    <Button onClick={onClick} tabIndex="-1" className={className} data-test-id={option.value}>
+    <Button
+      type={type}
+      onClick={onClick}
+      tabIndex="-1"
+      className={className}
+      data-test-id={option.value}
+    >
       {children || <div className={styles.optionDiv}>{option.label}</div>}
     </Button>
   );
 }
 
+DataSlot.defaultProps = {
+  type: 'button',
+};
+
 DataSlot.propTypes = {
-  children: PropTypes.any,
+  type: PropTypes.string,
+  children: PropTypes.element,
   onClick: PropTypes.func,
-  option: PropTypes.object,
+  option: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.string,
+  }),
   selected: PropTypes.bool,
-  theme: PropTypes.object,
+  theme: PropTypes.shape({
+    slotButton: PropTypes.string,
+  }),
 };

@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { Icon, ListItem, Avatar } from '../../../library';
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import styles from './styles.scss';
+import { isHub } from '../../../../util/hub';
 
 class ChatListItem extends Component {
   constructor(props) {
@@ -48,29 +49,18 @@ class ChatListItem extends Component {
           <div className={styles.nameWithAge}>
             {patient.firstName} {patient.lastName}
           </div>
-          {patient.birthDate && <div className={styles.age}>
-            {` ${moment().diff(patient.birthDate, 'years')}`}
-          </div>}
+          {patient.birthDate && (
+            <div className={styles.age}>{` ${moment().diff(patient.birthDate, 'years')}`}</div>
+          )}
         </div>
       );
     }
 
-    return (
-      <div className={styles.name}>
-        {patient.mobilePhoneNumber}
-      </div>
-    );
+    return <div className={styles.name}>{patient.mobilePhoneNumber}</div>;
   }
 
   render() {
-    const {
-      chat,
-      patient,
-      lastTextMessage,
-      hasUnread,
-      selectedChatId,
-      isLocked,
-    } = this.props;
+    const { chat, patient, lastTextMessage, hasUnread, selectedChatId } = this.props;
 
     if (!patient || !lastTextMessage) {
       return null;
@@ -78,38 +68,31 @@ class ChatListItem extends Component {
 
     const mDate = moment(lastTextMessage.createdAt);
     const daysDifference = moment().diff(mDate, 'days');
-    const isActive = selectedChatId === chat.id;
+    const isActive = selectedChatId === chat.id && !isHub();
 
-    const messageDate = daysDifference ?
-      mDate.format('YY/MM/DD') :
-      mDate.format('h:mma');
+    const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
-    const isUnread = (!isActive && hasUnread) || isLocked;
+    const isUnread = !isActive && hasUnread;
+
+    const listItemClass = isHub() ? styles.hubListItem : styles.chatListItem;
 
     return (
       <ListItem
         selectedClass={styles.selectedChatItem}
-        className={styles.chatListItem}
+        className={listItemClass}
         selectItem={isActive}
         onClick={this.selectChat}
       >
-        <div>
-          {this.renderStar(chat.isFlagged, this.toggleFlag)}
-        </div>
+        <div>{this.renderStar(chat.isFlagged, this.toggleFlag)}</div>
         <div className={styles.avatar}>
-          <Avatar
-            size="sm"
-            user={patient}
-          />
+          <Avatar size="sm" user={patient} />
         </div>
         <div className={styles.flexSection}>
           <div className={styles.topSection}>
             <div className={isUnread ? styles.fullNameUnread : styles.fullName}>
               {this.renderPatient()}
             </div>
-            <div className={styles.time}>
-              {messageDate}
-            </div>
+            <div className={styles.time}>{messageDate}</div>
           </div>
           <div className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}>
             {lastTextMessage && lastTextMessage.body}
@@ -138,7 +121,6 @@ ChatListItem.propTypes = {
     birthDate: PropTypes.string,
   }).isRequired,
   hasUnread: PropTypes.bool,
-  isLocked: PropTypes.bool,
   toggleFlagged: PropTypes.func,
   selectChat: PropTypes.func,
   selectedChatId: PropTypes.string,
@@ -149,27 +131,27 @@ function mapStateToProps(state, { chat = {} }) {
   const patients = state.entities.getIn(['patients', 'models']);
   const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
   const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
-  const lockedChats = state.chat.get('lockedChats');
-  const hasUnread = chat.textMessages
-      .filter(message => {
-        const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
-        return !messageEntity.read;
-      });
+  const hasUnread = chat.textMessages.filter((message) => {
+    const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
+    return !messageEntity.read;
+  });
 
   return {
     selectedChatId: state.chat.get('selectedChatId'),
     patient: patients.get(chat.patientId) || {},
-    isLocked: lockedChats.includes(chat.id),
     hasUnread: hasUnread.length > 0,
     lastTextMessage,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    toggleFlagged,
-    selectChat,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      toggleFlagged,
+      selectChat,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

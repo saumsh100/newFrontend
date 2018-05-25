@@ -10,7 +10,7 @@ const entries = appEntries(name => [
 ]);
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'reviews', 'my', 'cc', 'connect'),
+  entry: entries('app', 'reviews', 'my', 'cc', 'connect', 'hub'),
 
   plugins: [
     new webpack.DefinePlugin({
@@ -18,6 +18,7 @@ const developmentConfig = merge(baseConfig, {
         NODE_ENV: JSON.stringify('production'),
         LOGROCKET_APP_ID: JSON.stringify(process.env.LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
         INTERCOM_APP_ID: JSON.stringify(process.env.INTERCOM_APP_ID || 'enpxykhl'),
+        API_URL: JSON.stringify(process.env.API_URL || 'http://carecru.io'),
         FEATURE_FLAG_KEY: JSON.stringify(process.env.FEATURE_FLAG_KEY),
         GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
       },
@@ -30,7 +31,7 @@ const developmentConfig = merge(baseConfig, {
 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
-      chunks: ['app', 'reviews', 'my', 'connect'],
+      chunks: ['app', 'reviews', 'my', 'connect', 'hub'],
     }),
   ],
 });

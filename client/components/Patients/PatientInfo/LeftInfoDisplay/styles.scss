@@ -6,6 +6,18 @@
   box-sizing: border-box;
   min-height: 700px;
   flex: 1;
+
+  @media screen and (max-width: 576px) {
+    border-top: none;
+    padding-top: 10px;
+    min-height: unset;
+    height: 370px;
+    overflow-y: auto;
+
+    nav {
+      display: none;
+    }
+  }
 }
 
 .subHeader {
@@ -13,10 +25,59 @@
   font-size: 15px !important;
   color: $primary-dark;
   padding-top: 20px;
+
+  @media screen and (max-width: 576px) {
+    font-size: 13px !important;
+    padding-bottom: 8px;
+    font-family: $dashboard-font;
+    font-weight: 700;
+  }
+}
+
+.lastAppointmentHeader {
+  @extend .subHeader;
+
+  @media screen and (max-width: 576px) {
+    padding-top: 0;
+  }
 }
 
 .subHeader:first-child {
   padding-top: 0px;
+}
+
+.continuingCareHeader {
+  @extend .subHeader;
+
+  @media screen and (max-width: 576px) {
+    display: none;
+  }
+}
+
+.infoRow {
+  @media screen and (max-width: 576px) {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    & > div {
+      margin: 0;
+      font-size: 11px;
+      padding-top: 10px;
+
+      &:first-child {
+        color: black;
+        flex: 2;
+      }
+
+      &:last-child {
+        text-align: right;
+        font-family: $dashboard-font !important;
+        color: #616b75;
+        flex: 1;
+      }
+    }
+  }
 }
 
 .text {
@@ -40,8 +101,21 @@
   border-bottom: 0px;
 }
 
+.remindersRow,
+.continuingCareRow {
+  @extend .row;
+
+  @media screen and (max-width: 576px) {
+    display: none;
+  }
+}
+
 .paddingCol {
   padding-bottom: 40px;
+
+  @media screen and (max-width: 576px) {
+    padding-bottom: 15px;
+  }
 }
 
 .tab {
@@ -138,4 +212,12 @@
   font-size: $extra-small-size;
   height: 652px;
   opacity: 0.6;
+
+  @media screen and (max-width: 576px) {
+    display: block;
+    width: auto;
+    text-align: center;
+    height: 100%;
+    padding-bottom: 25px !important;
+  }
 }
