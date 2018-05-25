@@ -1,0 +1,114 @@
+@import '../../../../ui';
+
+.officeHoursBody {
+  padding: 40px;
+}
+
+.subHeader {
+  margin-bottom: 30px;
+  //margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 1px solid $primary-grey;
+  div {
+    font-size: 26px;
+  }
+}
+
+.day {
+  text-transform: capitalize;
+  composes: listItemHeader from 'sass-loader!../../../../fonts.scss';
+}
+
+.breaksDay {
+  @extend .day;
+  padding-top: 12px;
+  //padding-left: 15px;
+}
+
+.breakRow {
+  align-items: flex-start;
+}
+
+.disabledDay {
+  @extend .day;
+  color: lighten($primary-darkgrey, 25%);
+}
+
+.flexCentered {
+  display: flex;
+  align-items: center;
+  //padding-left: 15px;
+}
+
+.inlineBlock {
+  display: inline-block;
+  margin-top: 7px;
+  margin-bottom: 14px;
+}
+
+.toDiv {
+  width: 50px;
+  text-align: center;
+}
+
+.toDivDisabled {
+  @extend .toDiv;
+  color: lighten($primary-darkgrey, 25%);
+}
+
+.flexHeader {
+  //display: flex;
+  //justify-content: space-between;
+  margin-bottom: 30px;
+  //margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 1px solid $primary-grey;
+}
+
+.button {
+  margin: 15px 15px 15px 0px;
+  margin-right: 40px;
+}
+
+.orSpacer {
+  border-top: outset #b4b4b5;
+  margin: 30px auto 0 auto;
+  width: 90%;
+  position: relative;
+  border-width: thin;
+}
+
+.formContainer {
+  padding-bottom: 30px;
+}
+
+.dayGrid {
+  padding: 5px 5px 5px 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.paddingBottom {
+  padding-bottom: 15px;
+}
+
+.dayRow {
+  align-items: center;
+  margin-top: 7px;
+  margin-bottom: 9px;
+  height: 40px;
+}
+
+.icon {
+  cursor: pointer;
+  color: #b4b4b4;
+  font-size: 2em !important;
+  left: 40px;
+  position: relative;
+  padding: 10px;
+}
+
+.trashButton {
+  margin: 0 auto;
+}

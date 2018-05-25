@@ -2,6 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import TimeOffListItem from './TimeOffListItem';
 import { List } from '../../../../library';
+import { sortByFieldAsc } from '../../../../library/util/SortEntities';
 import styles from './styles.scss';
 
 class TimeOffList extends Component {
@@ -31,7 +32,7 @@ class TimeOffList extends Component {
     return (
       <List className={styles.timeOffList} data-test-id="timeOffList" >
         <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
-        {timeOffs.toArray().map((timeOff) => {
+        {sortByFieldAsc(timeOffs, 'startDate').toArray().map((timeOff) => {
           return (
             <TimeOffListItem
               key={timeOff.get('id')}

@@ -3,14 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { Nav, NavItem, Link, Icon, Tooltip } from '../library';
+import { Nav, NavItem, Link, Icon } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import FeatureFlagWrapper from '../FeatureFlagWrapper';
 import styles from './styles.scss';
-
-const PATHS = {
-  '/patients': [{}],
-};
 
 function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadChats }) {
   const { navItem, activeItem, label, activeLabel } = styles;
@@ -20,7 +16,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
 
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
-
+  
   const SingleNavItem = ({
     path,
     icon,
@@ -93,13 +89,6 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
     );
   };
 
-  const overlay = (
-    <div className={styles.comingSoon}>
-      Coming<br />
-      Soon!
-    </div>
-  );
-
   const renderIf = (cond, render, alt) => (cond ? render() : (alt && alt()) || null);
 
   return (
@@ -140,11 +129,10 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
         <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
         <SingleNavItem path="/website" icon="desktop" label="Website" disabled />*/}
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
-          <SubNavItem path="/settings/clinic" label="Clinic" />
-          <SubNavItem path="/settings/schedule" label="Schedule" />
-          <SubNavItem path="/settings/services" label="Services" />
+          <SubNavItem path="/settings/practice" label="Practice" />
+          <SubNavItem path="/settings/reasons" label="Reasons" />
           <SubNavItem path="/settings/practitioners" label="Practitioners" />
-          <SubNavItem path="/settings/communications" label="Communications" />
+          <SubNavItem path="/settings/donna" label="Donna" />
         </MultiNavItem>
 
         {renderIf(isSuperAdmin, () => (
@@ -166,6 +154,9 @@ NavList.propTypes = {
   active: PropTypes.bool,
   disabled: PropTypes.bool,
   iconType: PropTypes.string,
+  location: PropTypes.shape(PropTypes.string),
+  withEnterprise: PropTypes.bool,
+  unreadChats: PropTypes.number,
 };
 
 function mapStateToProps({ chat }) {

@@ -4,8 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
-import OfficeHoursForm from '../../../Schedule/OfficeHours/OfficeHoursForm';
-import BreaksForm from '../../../Schedule/OfficeHours/BreaksForm';
+import OfficeHoursForm from '../../../Practice/OfficeHours/OfficeHoursForm';
+import BreaksForm from '../../../Practice/OfficeHours/BreaksForm';
 import {
   Toggle,
   Header,
@@ -16,13 +16,16 @@ import {
   Button,
 } from '../../../../library';
 import styles from '../../styles.scss';
+import accountShape from '../../../../library/PropTypeShapes/accountShape';
+import { weeklyScheduleShape } from '../../../../library/PropTypeShapes/weeklyScheduleShape';
+import { chairShape } from '../../../../library/PropTypeShapes/chairShape';
+import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import { SortByName } from '../../../../library/util/SortEntities';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 function checkValues(obj) {
-  const allTrue = Object.keys(obj).every(key => obj[key]);
-  return allTrue;
+  return Object.keys(obj).every(key => obj[key]);
 }
 
 class PractitionerOfficeHours extends Component {
@@ -55,17 +58,14 @@ class PractitionerOfficeHours extends Component {
     this.setState({ value });
   }
 
-  reinitializeState() {
-    this.setState({
-      active: false,
-      activeChair: false,
-    });
-  }
+  setAllChairs(e) {
+    e.stopPropagation();
 
-  openModal() {
-    this.setState({
-      active: true,
-    });
+    const { chairs, allChairs } = this.props;
+
+    const actions = chairs.toArray().map(chair => change('chairs', chair.id, !allChairs));
+
+    this.props.batchActions(actions);
   }
 
   openModalChair(modalChairDay) {
@@ -75,14 +75,17 @@ class PractitionerOfficeHours extends Component {
     });
   }
 
-  setAllChairs(e) {
-    e.stopPropagation();
+  openModal() {
+    this.setState({
+      active: true,
+    });
+  }
 
-    const { chairs, allChairs } = this.props;
-
-    const actions = chairs.toArray().map(chair => change('chairs', chair.id, !allChairs));
-
-    this.props.batchActions(actions);
+  reinitializeState() {
+    this.setState({
+      active: false,
+      activeChair: false,
+    });
   }
 
   chairSubmit(values, day) {
@@ -137,7 +140,7 @@ class PractitionerOfficeHours extends Component {
       });
   }
 
-  createPattern(values) {
+  createPattern() {
     const createPattern = confirm('Are you sure you want to create a pattern?');
 
     if (!createPattern) {
@@ -213,7 +216,7 @@ class PractitionerOfficeHours extends Component {
     });
   }
 
-  sendEdit(values, j, k) {
+  sendEdit(index, values, j, k) {
     const i = k.dataId;
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
@@ -272,7 +275,7 @@ class PractitionerOfficeHours extends Component {
     this.setState({ value: newValue });
   }
 
-  handleFormUpdate(values) {
+  handleFormUpdate(index, values) {
     const { weeklySchedule, practitioner } = this.props;
     const newWeeklySchedule = Object.assign({}, weeklySchedule.toJS());
 
@@ -313,7 +316,7 @@ class PractitionerOfficeHours extends Component {
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>
             <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
-            <Button className={styles.button} onClick={this.delete.bind(null, i)}>
+            <Button className={styles.button} onClick={this.delete}>
               Delete
             </Button>
           </div>
@@ -435,6 +438,7 @@ class PractitionerOfficeHours extends Component {
             formName={`${weeklySchedule.get('id')}officeHours`}
             modal
             openModal={day => this.openModalChair(day)}
+            hoursIndex={0}
           />
           <Header title="Breaks" className={styles.subHeader} contentHeader />
           <BreaksForm
@@ -443,6 +447,7 @@ class PractitionerOfficeHours extends Component {
             onSubmit={this.handleFormUpdate}
             formName={`${weeklySchedule.get('id')}officeHours`}
             breaksName={`${weeklySchedule.get('id')}clinicBreaks`}
+            breaksIndex={0}
           />
         </div>
       );
@@ -509,13 +514,13 @@ class PractitionerOfficeHours extends Component {
 }
 
 PractitionerOfficeHours.propTypes = {
-  activeAccount: PropTypes.object,
-  weeklySchedule: PropTypes.object,
-  practitioner: PropTypes.object,
+  activeAccount: PropTypes.shape(accountShape),
+  weeklySchedule: PropTypes.shape(weeklyScheduleShape),
+  practitioner: PropTypes.shape(practitionerShape),
   allChairs: PropTypes.bool,
   updateEntityRequest: PropTypes.func.required,
   batchActions: PropTypes.func.required,
-  chairs: PropTypes.object,
+  chairs: PropTypes.shape(chairShape),
 };
 
 function mapStateToProps({ form }) {

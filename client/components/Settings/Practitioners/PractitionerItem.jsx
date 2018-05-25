@@ -1,6 +1,6 @@
 
 import React, { PropTypes, Component } from 'react';
-import { ListItem, Avatar } from '../../library';
+import { ListItem, Avatar, PractitionerAvatar } from '../../library';
 import styles from './styles.scss';
 
 class PractitionerItem extends Component {
@@ -27,7 +27,7 @@ class PractitionerItem extends Component {
       >
         <div className={styles.practListItem_container}>
           <span className={styles.practListItem_avatarContainer}>
-            <Avatar user={practitioner.toJS()} className={styles.sizingThisAvatar} size="md" />
+            <PractitionerAvatar practitioner={practitioner.toJS()} size="md" />
           </span>
           <div className={styles.practListItem_textContainer}>
             <div className={styles.practListItem_name}>{fullName}</div>

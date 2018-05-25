@@ -1,0 +1,67 @@
+@import '../../../../ui.scss';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.chairsBody {
+  padding: 40px;
+}
+
+.headerContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #efefef;
+  margin-right: 15px;
+}
+
+.formContainer {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  width: 350px;
+  min-width: 350px;
+}
+.chairContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+  padding: 10px;
+
+  span {
+    width: 180px;
+  }
+
+  &_name {
+    padding-right: 20px;
+    padding-bottom: 5px;
+  }
+
+  &_id {
+    padding-right: 20px;
+    font-size: 10px;
+    color: $primary-darkgrey;
+    width: 250px;
+  }
+}
+
+.allChairs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 15px;
+  span {
+    width: 180px;
+  }
+
+  &_text {
+    composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+    padding-right: 20px;
+  }
+}

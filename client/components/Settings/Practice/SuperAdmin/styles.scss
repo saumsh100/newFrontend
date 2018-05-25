@@ -1,0 +1,47 @@
+@import '../../../../ui';
+
+.generalBodyClass {
+  padding: 40px;
+}
+
+.formContainer {
+  width: 40%;
+  margin-bottom: 35px;
+
+  &_contact {
+    margin-left: 35px;
+  }
+}
+
+.lastSyncWrapper {
+  padding: 10px 0;
+}
+
+.paddingField {
+  padding-bottom: 15px;
+
+  &_flex {
+    width: 40%;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+  }
+
+  &_toggle {
+    margin-left: auto;
+  }
+}
+
+.massOnlineEmail {
+  &_date {
+    color: $primary-color;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+
+  &_count {
+    color: $primary-color;
+    margin-bottom: 15px;
+    margin-top: 10px;
+  }
+}

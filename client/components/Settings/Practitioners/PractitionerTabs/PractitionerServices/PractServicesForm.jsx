@@ -37,7 +37,7 @@ class PractServicesForm extends Component {
       showComponent = (
         <div className={styles.formContainer}>
           <div className={styles.allContainer}>
-            <div className={styles.allText}>All Services</div>
+            <div className={styles.allText}>All Reasons</div>
             <div className={styles.allToggle}>
               <Toggle
                 name="allServices"
@@ -57,13 +57,15 @@ class PractServicesForm extends Component {
             alignSave="left"
           >
             <div className={styles.formContainer_content}>
-              {services.toArray().map((service, index) => (
-                <PractServicesList
-                  key={`${practitioner.get('id')}${index}`}
-                  service={service}
-                  index={index}
-                />
-              ))}
+              {services
+                .toArray()
+                .map((service, index) => (
+                  <PractServicesList
+                    key={`${practitioner.get('id')}${index}`}
+                    service={service}
+                    index={index}
+                  />
+                ))}
             </div>
           </Form>
         </div>

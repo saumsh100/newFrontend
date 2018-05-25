@@ -1,13 +1,11 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { RouterTabs } from '../library';
-import styles from './styles.scss';
-
-const getRootPath = pathname => pathname;
 
 const ROUTES = {
   '/schedule': [
-   /* {
+    /* {
       to: '/schedule/calendar',
       label: 'Calendar View',
     },
@@ -20,24 +18,20 @@ const ROUTES = {
 
   '/settings': [
     {
-      to: '/settings/clinic',
-      label: 'Clinic',
+      to: '/settings/practice',
+      label: 'Practice',
     },
     {
-      to: '/settings/schedule',
-      label: 'Schedule',
-    },
-    {
-      to: '/settings/services',
-      label: 'Services',
+      to: '/settings/reasons',
+      label: 'Reasons',
     },
     {
       to: '/settings/practitioners',
       label: 'Practitioners',
     },
     {
-      to: '/settings/communications',
-      label: 'Communications',
+      to: '/settings/donna',
+      label: 'Donna',
     },
   ],
 
@@ -50,7 +44,7 @@ const ROUTES = {
       to: '/intelligence/business',
       label: 'Business',
     },
-    /*{
+    /* {
       to: '/intelligence/social',
       label: 'Social',
       disabled: true,
@@ -110,16 +104,16 @@ class SubTabs extends Component {
     this.setState({ index });
   }
 
-
   render() {
     const { location: { pathname } } = this.props;
-
     const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
-    return activeRoute ?
-      <RouterTabs routes={ROUTES[activeRoute]} /> :
-      null;
+    return activeRoute ? <RouterTabs routes={ROUTES[activeRoute]} /> : null;
   }
 }
+
+SubTabs.propTypes = {
+  location: PropTypes.shape(PropTypes.string),
+};
 
 export default SubTabs;

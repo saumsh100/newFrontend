@@ -70,12 +70,16 @@ class PractitionerTabs extends Component {
 
     let filteredTimeOffs = null;
     if (timeOffs) {
-      filteredTimeOffs = timeOffs.filter(timeOff => timeOff.practitionerId === practitioner.get('id'));
+      filteredTimeOffs = timeOffs.filter(
+        timeOff => timeOff.practitionerId === practitioner.get('id')
+      );
     }
     let filteredRecurringTimeOffs = null;
 
     if (recurringTimeOffs) {
-      filteredRecurringTimeOffs = recurringTimeOffs.filter(recurringTimeOff => recurringTimeOff.practitionerId === practitioner.get('id'));
+      filteredRecurringTimeOffs = recurringTimeOffs.filter(
+        recurringTimeOff => recurringTimeOff.practitionerId === practitioner.get('id')
+      );
     }
 
     const serviceIds = practitioner.get('services');
@@ -106,7 +110,7 @@ class PractitionerTabs extends Component {
           <Tabs index={this.state.index} onChange={this.handleTabChange}>
             <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
             <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
-            <Tab label="Services" data-test-id="tab_practitionerServices" />
+            <Tab label="Reasons" data-test-id="tab_practitionerServices" />
             <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
             <Tab label="Recurring Time Off" />
           </Tabs>

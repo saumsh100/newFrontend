@@ -118,7 +118,7 @@ Relay needs the graphQL queries to be compiled before sent to the server. After 
 
 `npm run relay`
 
-Alternatively, you can pass the `--watch` option to watch for file changes in your source code and automatically re-generate the compiled artifacts: 
+Alternatively, you can pass the `--watch` option to watch for file changes in your source code and automatically re-generate the compiled artifacts:
 >Note: Requires [watchman](https://facebook.github.io/watchman/) to be installed
 
 `npm run relay -- --watch`
@@ -213,7 +213,7 @@ To see example model go to `server/_models/Segment/segment.js`. Same structure c
 
 Inside folde `server/seeders/` are seeder files. You can use this to seed database.
 
-To see example usage in route, go to `server/api/routes/segment/index.jsx`
+To see example usage in route, go to `server/api/routes/segment/index.js`
 
 NOTE: I haven't added migrations
 
@@ -225,5 +225,5 @@ npm run rebuild
 ```
 
 ##### Adding new model
-You will find inside of `server/_models/index.jsx` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
+You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
 This line represent importing of a single model into the code. Just repeat that for all models.

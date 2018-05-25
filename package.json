@@ -9,8 +9,7 @@
   },
   "private": true,
   "scripts": {
-    "client:dev:server":
-      "webpack-dev-server --config ./webpack/client/webpack.development.config.js",
+    "client:dev:server": "webpack-dev-server --config ./webpack/client/webpack.development.config.js",
     "client:build:prod": "webpack -p --config ./webpack/client/webpack.production.config.js",
     "client:watch:widget": "webpack --config ./webpack/client/webpack.widget.config.js --watch",
     "server:watch": "webpack --watch --config ./webpack/server/webpack.config.js",
@@ -18,8 +17,7 @@
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
     "seeds": "babel-node ./server/bin/seeds.js",
-    "rebuild":
-      "export $(cat .env | xargs) && sequelize db:migrate:undo:all && sequelize db:migrate",
+    "rebuild": "export $(cat .env | xargs) && sequelize db:migrate:undo:all && sequelize db:migrate",
     "rebuild:seed": "npm run rebuild && sequelize db:seed:all",
     "start": "nf start -w -j Procfile_dev",
     "startdev": "nf start -w -j Procfile_dev_no_reminders",
@@ -29,30 +27,32 @@
     "test": "npm run test:api && npm run test:lib",
     "test:cypress": "cypress run",
     "test:jest": "export $(cat .env | xargs) && jest --verbose --forceExit",
-    "test:api":
-      "export $(cat .env | xargs) && jest tests/__tests__/api --verbose --runInBand --forceExit",
-    "test:lib":
-      "export $(cat .env | xargs) && jest tests/__tests__/lib --verbose --runInBand --forceExit",
-    "test:graphql":
-      "export $(cat .env | xargs) && jest tests/__tests__/graphql --verbose --runInBand --forceExit",
+    "test:api": "export $(cat .env | xargs) && jest tests/__tests__/api --verbose --runInBand --forceExit",
+    "test:lib": "export $(cat .env | xargs) && jest tests/__tests__/lib --verbose --runInBand --forceExit",
+    "test:graphql": "export $(cat .env | xargs) && jest tests/__tests__/graphql --verbose --runInBand --forceExit",
     "test:lint": "jest",
     "clean": "npm run clean:assets && npm run clean:modules && npm run clean:server:bundles",
     "clean:server:bundles": "rimraf server/bin/build",
     "clean:assets": "rimraf statics/assets",
     "clean:modules": "rimraf node_modules",
-    "postinstall":
-      "npm run server:build:prod && npm run update-schema && npm run relay && npm run client:build:prod",
+    "postinstall": "npm run server:build:prod && npm run update-schema && npm run relay && npm run client:build:prod",
     "remind:cron": "nf start -j REMIND_CRON",
     "build-storybook": "build-storybook",
-    "relay":
-      "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx",
+    "relay": "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx",
     "update-schema": "node ./server/bin/build/updateSchema.bundle.js",
     "format": "prettier-eslint --write",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "client/**/*.scss": ["npm run format", "git add"],
-    "client/**/*.{js,jsx}": ["npm run format", "npm run test:lint", "git add"]
+    "client/**/*.scss": [
+      "npm run format",
+      "git add"
+    ],
+    "client/**/*.{js,jsx}": [
+      "npm run format",
+      "npm run test:lint",
+      "git add"
+    ]
   },
   "jest": {
     "projects": [
@@ -66,7 +66,9 @@
       {
         "displayName": "lint",
         "runner": "jest-runner-eslint",
-        "testMatch": ["<rootDir>/client/**/*.{js,jsx}"]
+        "testMatch": [
+          "<rootDir>/client/**/*.{js,jsx}"
+        ]
       }
     ]
   },

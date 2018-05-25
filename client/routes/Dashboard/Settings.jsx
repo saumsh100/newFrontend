@@ -5,72 +5,73 @@ import DocumentTitle from 'react-document-title';
 import LazyRoute from '../LazyRoute';
 
 import Container from '../../containers/SettingsContainer';
-import Clinic from '../../components/Settings/Clinic';
-import Schedule from '../../components/Settings/Schedule';
-import Communications from '../../components/Settings/Communications';
+import Practice from '../../components/Settings/Practice';
+import Donna from '../../components/Settings/Donna';
 
 const base = (path = '') => `/settings${path}`;
-const clinicBase = (path = '') => base(`/clinic${path}`);
-const scheduleBase = (path = '') => base(`/schedule${path}`);
-const commsBase = (path = '') => base(`/communications${path}`);
+const practiceBase = (path = '') => base(`/practice${path}`);
+const donnaBase = (path = '') => base(`/donna${path}`);
 
 const Routes = {
-  clinicGeneral: LazyRoute(() => import('../../components/Settings/Clinic/General'), true),
-  clinicUsers: LazyRoute(() => import('../../components/Settings/Clinic/Users'), true),
+  clinicGeneral: LazyRoute(() => import('../../components/Settings/Practice/General'), true),
+  clinicUsers: LazyRoute(() => import('../../components/Settings/Practice/Users'), true),
 
-  scheduleOfficeHours: LazyRoute(() => import('../../components/Settings/Schedule/OfficeHours'), true),
-  scheduleOnlineBooking: LazyRoute(() => import('../../components/Settings/Schedule/OnlineBooking'), true),
-  chairs: LazyRoute(() => import('../../components/Settings/Schedule/Chairs'), true),
+  scheduleOfficeHours: LazyRoute(
+    () => import('../../components/Settings/Practice/OfficeHours'),
+    true
+  ),
+  scheduleOnlineBooking: LazyRoute(
+    () => import('../../components/Settings/Practice/OnlineBooking'),
+    true
+  ),
+  chairs: LazyRoute(() => import('../../components/Settings/Practice/Chairs'), true),
+  superAdmin: LazyRoute(() => import('../../components/Settings/Practice/SuperAdmin'), true),
 
-  reminders: LazyRoute(() => import('../../components/Settings/Communications/Reminders'), true),
-  recalls: LazyRoute(() => import('../../components/Settings/Communications/Recalls'), true),
-  reviews: LazyRoute(() => import('../../components/Settings/Communications/Reviews'), true),
+  reminders: LazyRoute(() => import('../../components/Settings/Donna/Reminders'), true),
+  recalls: LazyRoute(() => import('../../components/Settings/Donna/Recalls'), true),
+  reviews: LazyRoute(() => import('../../components/Settings/Donna/Reviews'), true),
 
-  services: LazyRoute(() => import('../../components/Settings/Services'), true),
+  reasons: LazyRoute(() => import('../../components/Settings/Reasons'), true),
   practitioners: LazyRoute(() => import('../../components/Settings/Practitioners'), true),
-}
+};
 
-const ClinicContainer = props =>
-  <Clinic {...props}>
+const PracticeContainer = props => (
+  <Practice {...props}>
     <Switch>
-      <Redirect exact from={clinicBase()} to={clinicBase('/general')} />
-      <Route path={clinicBase('/general')} component={Routes.clinicGeneral} />
-      <Route path={clinicBase('/users')} component={Routes.clinicUsers} />
+      <Redirect exact from={practiceBase()} to={practiceBase('/general')} />
+      <Route path={practiceBase('/general')} component={Routes.clinicGeneral} />
+      <Route path={practiceBase('/users')} component={Routes.clinicUsers} />
+      <Route path={practiceBase('/hours')} component={Routes.scheduleOfficeHours} />
+      <Route path={practiceBase('/onlinebooking')} component={Routes.scheduleOnlineBooking} />
+      <Route path={practiceBase('/chairs')} component={Routes.chairs} />
+      <Route path={practiceBase('/superadmin')} component={Routes.superAdmin} />
     </Switch>
-  </Clinic>;
+  </Practice>
+);
 
-const ScheduleContainer = props =>
-  <Schedule {...props}>
+const DonnaContainer = props => (
+  <Donna {...props}>
     <Switch>
-      <Redirect exact from={scheduleBase()} to={scheduleBase('/hours')} />
-      <Route path={scheduleBase('/hours')} component={Routes.scheduleOfficeHours} />
-      <Route path={scheduleBase('/onlinebooking')} component={Routes.scheduleOnlineBooking} />
-      <Route path={scheduleBase('/chairs')} component={Routes.chairs} />
+      <Redirect exact from={donnaBase()} to={donnaBase('/reminders')} />
+      <Route path={donnaBase('/reminders')} component={Routes.reminders} />
+      <Route path={donnaBase('/recalls')} component={Routes.recalls} />
+      <Route path={donnaBase('/reviews')} component={Routes.reviews} />
     </Switch>
-  </Schedule>;
+  </Donna>
+);
 
-const CommunicationsContainer = props =>
-  <Communications {...props}>
-    <Switch>
-      <Redirect exact from={commsBase()} to={commsBase('/reminders')} />
-      <Route path={commsBase('/reminders')} component={Routes.reminders} />
-      <Route path={commsBase('/recalls')} component={Routes.recalls} />
-      <Route path={commsBase('/reviews')} component={Routes.reviews} />
-    </Switch>
-  </Communications>;
-
-const Settings = props =>
+const Settings = props => (
   <Container {...props}>
     <DocumentTitle title="CareCru | Settings">
       <Switch>
-        <Redirect exact from={base()} to={base('/clinic')} />
-        <Route path={clinicBase()} component={ClinicContainer} />
-        <Route path={scheduleBase()} component={ScheduleContainer} />
-        <Route path={commsBase()} component={CommunicationsContainer} />
-        <Route path={base('/services')} component={Routes.services} />
+        <Redirect exact from={base()} to={base('/practice')} />
+        <Route path={practiceBase()} component={PracticeContainer} />
+        <Route path={donnaBase()} component={DonnaContainer} />
+        <Route path={base('/reasons')} component={Routes.reasons} />
         <Route path={base('/practitioners')} component={Routes.practitioners} />
       </Switch>
     </DocumentTitle>
-  </Container>;
+  </Container>
+);
 
 export default Settings;

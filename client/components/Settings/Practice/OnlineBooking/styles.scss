@@ -1,0 +1,40 @@
+@import '../../../../ui';
+
+.onlineBookingBody {
+  padding: 40px;
+}
+
+.mainContainer {
+  display: inline-block;
+  width: 100%;
+}
+
+.header {
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-lightgrey;
+}
+
+.formContainer {
+  &_pickerField {
+    margin-right: 10px;
+  }
+
+  &_intervalField {
+    width: 250px;
+  }
+}
+
+.preferencesForm {
+}
+.snippetContainer {
+  display: inline-block;
+  padding: 20px 0;
+}
+
+.label {
+  padding-top: 15px;
+  color: $primary-dark;
+  font-weight: $large-weight;
+  font-size: $medium-font;
+  padding-bottom: 5px;
+}

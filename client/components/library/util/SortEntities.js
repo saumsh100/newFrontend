@@ -34,3 +34,10 @@ export const sortByField = (collection, fieldDate) => {
   });
 };
 
+export const sortByFieldAsc = (collection, fieldDate) => {
+  return collection.sort((a, b) => {
+    if (moment(b[fieldDate]).isBefore(moment(a[fieldDate]))) return -1;
+    if (moment(b[fieldDate]).isAfter(moment(a[fieldDate]))) return 1;
+    return 0;
+  });
+};

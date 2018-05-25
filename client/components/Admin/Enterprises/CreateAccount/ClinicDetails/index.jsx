@@ -2,46 +2,41 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import { Form, Field } from '../../../../library';
-import { caProv, usStates } from '../../../../Settings/Clinic/Address/selectConstants';
+import { caProv, usStates } from '../../../../Settings/Practice/General/Address/selectConstants';
 import styles from '../styles.scss';
 
 const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
+  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength25 = maxLength(50);
 const maxPostalLength = maxLength(6);
 
-
-
-
 export default function ClinicDetails(props) {
-  const {
-    onSubmit,
-    index,
-    initialValues,
-    formName,
-    country,
-    setCountry,
-  } = props;
+  const { onSubmit, index, initialValues, formName, country, setCountry } = props;
 
-  const options = moment.tz.names().map((value) => {
-    const exp = new RegExp(/america/i);
-    if (exp.test(value)) {
+  const options = moment.tz
+    .names()
+    .map((value) => {
+      const exp = new RegExp(/america/i);
+      if (exp.test(value)) {
+        return {
+          value,
+        };
+      }
       return {
-        value,
+        value: null,
       };
-    }
-    return {
-      value: null,
-    };
-  }).filter(filterValue => filterValue.value !== null);
+    })
+    .filter(filterValue => filterValue.value !== null);
 
   const stateProv = country === 'US' ? usStates : caProv;
   const zipPostal = country === 'US' ? 'Zip Code' : 'Postal Code';
 
   const zipPostalVal = (value) => {
-    const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+    const regex = new RegExp(
+      /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
+    );
 
-    if(country === 'US') {
+    if (country === 'US') {
       return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
@@ -62,19 +57,10 @@ export default function ClinicDetails(props) {
     >
       <div className={styles.clinicDetailsContainer}>
         <div>
-          <Field
-            name="name"
-            label="Name"
-            required
-          />
+          <Field name="name" label="Name" required />
         </div>
         <div>
-          <Field
-            name="website"
-            label="Website"
-            type="url"
-            required
-          />
+          <Field name="website" label="Website" type="url" required />
         </div>
         <div className={styles.selectPadding}>
           <Field
@@ -136,7 +122,7 @@ export default function ClinicDetails(props) {
             required
           />
         </div>*/}
-        <div >
+        <div>
           <Field
             name="destinationPhoneNumber"
             label="Destination Phone Number"

@@ -11,12 +11,10 @@ import { validDateValue } from '../../Shared/helpers';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 
 export default function DataTable(props) {
-  const {
-    patient,
-  } = props;
+  const { patient } = props;
 
-  const recallComp = <RecallDropDowns patient={patient} />
-  const reminderComp = <ReminderDropDowns patient={patient} />
+  const recallComp = <RecallDropDowns patient={patient} />;
+  const reminderComp = <ReminderDropDowns patient={patient} />;
 
   return (
     <div className={styles.grid}>
@@ -35,29 +33,27 @@ export default function DataTable(props) {
         />
         <InfoDump
           label="SECONDARY-NUMBER"
-          data={FormatPhoneNumber(patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber)}
+          data={FormatPhoneNumber(
+            patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber
+          )}
           className={styles.infoDump}
         />
       </div>
       <div className={styles.row}>
-        <InfoDump
-          label="INSURANCE"
-        />
+        <InfoDump label="INSURANCE" />
       </div>
       <div className={styles.col}>
-        <InfoDump
-          label="RECALLS SENT"
-          component={recallComp}
-        />
-        {patient.nextApptDate ? (<div className={styles.subHeaderSmall}>
-          Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
-        </div>) : <div className={styles.subHeaderSmall}>Next Appointment: n/a </div>}
+        <InfoDump label="RECALLS SENT" component={recallComp} />
+        {patient.nextApptDate ? (
+          <div className={styles.subHeaderSmall}>
+            Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
+          </div>
+        ) : (
+          <div className={styles.subHeaderSmall}>Next Appointment: n/a </div>
+        )}
       </div>
       <div className={styles.col}>
-        <InfoDump
-          label="REMINDERS SENT"
-          component={reminderComp}
-        />
+        <InfoDump label="REMINDERS SENT" component={reminderComp} />
       </div>
       <div className={styles.row}>
         <InfoDump
@@ -70,13 +66,10 @@ export default function DataTable(props) {
           data={validDateValue(patient.lastHygieneDate)}
           className={styles.infoDump}
         />
-        <InfoDump
-          label="LAST X-RAY"
-          className={styles.infoDump}
-        />
+        <InfoDump label="LAST X-RAY" className={styles.infoDump} />
       </div>
     </div>
-  )
+  );
 }
 
 DataTable.propTypes = {

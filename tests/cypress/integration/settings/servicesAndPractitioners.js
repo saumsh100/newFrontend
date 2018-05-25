@@ -1,16 +1,16 @@
 
-context('Account Settings - Services and Practitioners', () => {
+context('Account Settings - Reasons and Practitioners', () => {
   beforeEach(() => {
     cy.login();
   });
 
-  context('Services Settings', () => {
+  context('Reason Settings', () => {
 
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/services');
+      cy.visit('http://localhost:5100/settings/reasons');
     });
 
-    it('create a service', () => {
+    it('create a reason', () => {
       cy
         .getAndClick('button_addService')
         .fillTextInput('createServiceForm', 'name', 'Test Service')
@@ -22,7 +22,7 @@ context('Account Settings - Services and Practitioners', () => {
         .should('have.value', 'Test Service');
     });
 
-    it('add practitioner to service', () => {
+    it('add practitioner to reason', () => {
       cy
         .getAndClick('toggle_prac_0')
         .submitForm('servicePractitionersForm')
@@ -38,7 +38,7 @@ context('Account Settings - Services and Practitioners', () => {
       cy.visit('http://localhost:5100/settings/practitioners');
     });
 
-    it('update enable/disable state of a service', () => {
+    it('update enable/disable state of a reason', () => {
       cy
         .getAndClick('tab_practitionerServices')
         .getAndClick('toggle_pracService_1')

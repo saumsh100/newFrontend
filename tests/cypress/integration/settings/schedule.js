@@ -6,7 +6,7 @@ context('Account Settings - Schedule', () => {
 
   context('Chairs', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/schedule/chairs');
+      cy.visit('http://localhost:5100/settings/practice/chairs');
     });
 
     it('update active chairs', () => {
@@ -23,7 +23,7 @@ context('Account Settings - Schedule', () => {
 
   context('Office Hours', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/schedule/hours');
+      cy.visit('http://localhost:5100/settings/practice/hours');
     });
 
     // As a user I want to...
@@ -83,7 +83,7 @@ context('Account Settings - Schedule', () => {
 
   context('Online Booking', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/schedule/onlinebooking');
+      cy.visit('http://localhost:5100/settings/practice/onlinebooking');
     });
 
     it('select a new widget color', () => {

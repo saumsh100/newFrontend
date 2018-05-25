@@ -143,4 +143,3 @@ function mapStateToProps({ apiRequests }) {
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(RevenueContainer);
-

@@ -1,10 +1,10 @@
-import React, {Component, PropTypes} from 'react';
+
+import React, { Component, PropTypes } from 'react';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../../../thunks/fetchEntities';
 import PractServicesForm from './PractServicesForm';
-
 
 const sortServicesAlphabetical = (a, b) => {
   if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
@@ -13,13 +13,12 @@ const sortServicesAlphabetical = (a, b) => {
 };
 
 function createInitialValues(serviceIds, services) {
-  return services.map(s => {
-    return serviceIds.indexOf(s.get('id')) > -1;
-  }).toJS();
+  return services
+    .map(s => serviceIds.indexOf(s.get('id')) > -1)
+    .toJS();
 }
 
 class PractitionerServices extends Component {
-
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,10 +32,10 @@ class PractitionerServices extends Component {
     const { practitioner, updatePractitioner } = this.props;
     const storeServiceIds = [];
 
-    for (let id in values) {
-        if (values[id]) {
-          storeServiceIds.push(id);
-        }
+    for (const id in values) {
+      if (values[id]) {
+        storeServiceIds.push(id);
+      }
     }
     const modifiedPractitioner = practitioner.set('services', storeServiceIds);
 
@@ -79,25 +78,23 @@ class PractitionerServices extends Component {
       }
     }
 
-    return (
-      <div style={{width: '25%'}}>
-        {showComponent}
-      </div>
-    );
+    return <div style={{ width: '25%' }}>{showComponent}</div>;
   }
-
 }
 
-function mapStateToProps({ entities }){
+function mapStateToProps({ entities }) {
   return {
     services: entities.getIn(['services', 'models']),
   };
 }
 
-function mapDispatchToProps(dispatch){
-  return bindActionCreators({
-    fetchEntities,
-  }, dispatch);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      fetchEntities,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

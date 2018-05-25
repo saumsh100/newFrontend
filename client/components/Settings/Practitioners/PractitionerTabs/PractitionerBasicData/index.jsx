@@ -124,7 +124,7 @@ class PractitionerBasicData extends Component {
             <PractitionerAvatar practitioner={initialValues} size="xl" />
             <p>Drop avatar here or click to select file.</p>
           </Dropzone>
-          {initialValues.fullAvatarUrl ? <Button className={styles.deleteAvatar} icon="trash" onClick={this.deleteAvatar}>Remove Avatar</Button> : null}
+          {initialValues.fullAvatarUrl ? <Button className={styles.deleteAvatar} onClick={this.deleteAvatar}>Remove Avatar</Button> : null}
         </div>
       </div>
     );

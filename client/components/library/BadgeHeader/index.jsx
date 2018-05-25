@@ -4,34 +4,19 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import styles from './styles.scss';
 
-export default function
-  BadgeHeader(props) {
-  const {
-    className,
-    children,
-    title,
-    count,
-    buttons,
-  } = props;
+export default function BadgeHeader(props) {
+  const { className, title, count } = props;
 
   const classes = classNames(className, styles.badgeHeader);
 
   let countComponent = null;
   if (count || count === 0) {
-    countComponent = (
-      <div className={styles.badgeCount}>
-        {count}
-      </div>
-    );
+    countComponent = <div className={styles.badgeCount}>{count}</div>;
   }
 
   let titleComponent = null;
   if (title) {
-    titleComponent = (
-      <div className={classes.title || styles.title}>
-        {title}
-      </div>
-    );
+    titleComponent = <div className={classes.title || styles.title}>{title}</div>;
   }
 
   const newProps = omit(props, ['count']);
@@ -41,9 +26,7 @@ export default function
     <div {...newProps} className={classes}>
       <div className={styles.displayFlex}>
         {titleComponent}
-        <div className={styles.countContainer}>
-          {countComponent}
-        </div>
+        <div className={styles.countContainer}>{countComponent}</div>
       </div>
     </div>
   );
@@ -51,4 +34,6 @@ export default function
 
 BadgeHeader.propTypes = {
   count: React.PropTypes.number,
+  className: PropTypes.string,
+  title: PropTypes.string,
 };

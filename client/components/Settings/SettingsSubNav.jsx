@@ -1,75 +1,59 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import find from 'lodash/find';
 import { RouterList } from '../library';
 
 const PATHS = {
-  '/settings/clinic': [
+  '/settings/practice': [
     {
-      to: '/settings/clinic/general',
+      to: '/settings/practice/general',
       label: 'General',
     },
     {
-      to: '/settings/clinic/users',
+      to: '/settings/practice/users',
       label: 'Users',
     },
     {
-      to: '',
-      label: 'Social Media',
-      disabled: true,
-    },
-    {
-      to: '',
-      label: 'Reputation',
-      disabled: true,
-    },
-    {
-      to: '',
-      label: 'Notifications',
-      disabled: true,
-    },
-  ],
-
-  '/settings/schedule': [
-    {
-      to: '/settings/schedule/hours',
+      to: '/settings/practice/hours',
       label: 'Office Hours',
     },
     {
-      to: '/settings/schedule/onlinebooking',
+      to: '/settings/practice/onlinebooking',
       label: 'Online Booking',
     },
     {
-      to: '/settings/schedule/chairs',
+      to: '/settings/practice/chairs',
       label: 'Chairs',
+    },
+    {
+      to: '/settings/practice/superadmin',
+      label: 'Super Admin',
+      adminOnly: true,
     },
   ],
 
-  '/settings/communications': [
+  '/settings/donna': [
     {
-      to: '/settings/communications/reminders',
+      to: '/settings/donna/reminders',
       label: 'Reminders',
       icon: 'clock',
     },
     {
-      to: '/settings/communications/recalls',
+      to: '/settings/donna/recalls',
       label: 'Recalls',
     },
     {
-      to: '/settings/communications/reviews',
+      to: '/settings/donna/reviews',
       label: 'Reviews',
-    },
-    {
-      to: '',
-      label: 'Waitlist',
-      disabled: true,
     },
   ],
 
-  '/settings/services': [
+  '/settings/reasons': [
     {
-      to: '/settings/services/serviceslist',
-      label: 'Services List',
+      to: '/settings/reasons/reasonslist',
+      label: 'Reasons List',
     },
   ],
 
@@ -81,13 +65,16 @@ const PATHS = {
   ],
 };
 
-export default function SettingsSubNav({ location, className, }) {
+export default function SettingsSubNav({ location, className, users }) {
   const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
-
   // Workaround for redirects
-  return routes ? <RouterList location={location} routes={routes} className={className} /> : null;
+  return routes ? (
+    <RouterList location={location} routes={routes} className={className} users={users} />
+  ) : null;
 }
 
 SettingsSubNav.propTypes = {
-  location: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  location: PropTypes.shape(PropTypes.string),
+  users: PropTypes.instanceOf(Map),
 };
