@@ -204,7 +204,9 @@ class MessageContainer extends Component {
             placement={'right'}
             getTooltipContainer={() => optionsWrapper}
           >
-            {dotsIcon}
+            <div className={styles.dotsIconWrapper}>
+              {dotsIcon}
+            </div>
           </Tooltip>
         </div>
       ) : null;

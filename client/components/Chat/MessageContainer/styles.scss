@@ -26,6 +26,10 @@
   }
 }
 
+.dotsIconWrapper{
+  height: 5px;
+}
+
 .dotsIcon {
   opacity: 0;
   transition: opacity 0.3s;
@@ -55,6 +59,7 @@
 
 .dotsWrapper {
   align-self: center;
+  margin-bottom: 5px;
 }
 
 .clinicMessage {
