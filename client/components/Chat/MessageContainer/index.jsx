@@ -4,6 +4,7 @@ import immutable from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
+import classNames from 'classnames';
 import moment from 'moment';
 import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip } from '../../library';
 import MessageBubble from './MessageBubble';
@@ -156,6 +157,7 @@ class MessageContainer extends Component {
     const accountTwilio = activeAccount.twilioPhoneNumber;
     const botAvatar = {
       fullAvatarUrl: '/images/donna.png',
+      bot: true,
     };
 
     return messages.map((message, index) => {
@@ -180,13 +182,12 @@ class MessageContainer extends Component {
         avatarUser = message.userId && message.userId !== null ? message.user : botAvatar;
       }
 
+      const avatarStyles = classNames(styles.bubbleAvatar, {
+        [styles.botAvatar]: avatarUser.bot,
+      });
+
       const avatar = (
-        <Avatar
-          size="xs"
-          className={styles.bubbleAvatar}
-          user={avatarUser}
-          isPatient={isFromPatient}
-        />
+        <Avatar size="xs" className={avatarStyles} user={avatarUser} isPatient={isFromPatient} />
       );
 
       let optionsWrapper = null;
@@ -204,9 +205,7 @@ class MessageContainer extends Component {
             placement={'right'}
             getTooltipContainer={() => optionsWrapper}
           >
-            <div className={styles.dotsIconWrapper}>
-              {dotsIcon}
-            </div>
+            <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
           </Tooltip>
         </div>
       ) : null;
