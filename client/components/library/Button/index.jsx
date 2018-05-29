@@ -1,12 +1,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { getClassMapper } from '../../Utils';
 import { isHub } from '../../../util/hub';
-import dashboardStyles from './vbutton.scss';
-import hubStyles from './Electron/vbutton.scss';
-
-const styles = isHub() ? hubStyles : dashboardStyles;
+import styles from './vbutton.scss';
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],
@@ -47,7 +45,12 @@ function Button(props) {
   const IconRightComponent = props.iconRightComponent || null;
 
   return (
-    <props.as {...finalProps} className={baseClassName}>
+    <props.as
+      {...finalProps}
+      className={classNames(baseClassName, {
+        [styles.hub]: isHub(),
+      })}
+    >
       {props.icon && <i className={`fa fa-${props.icon} ${styles.icon}`} />}
 
       {props.children ||

@@ -1,35 +1,26 @@
 
-import  React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import RCToggle from 'react-toggle';
+import { isHub } from '../../../util/hub';
 import styles from './styles.scss';
 
 export default function Toggle(props) {
-  const {
-    className,
-    icons,
-    color,
-    theme,
-    label,
-  } = props;
+  const { className, icons, color, theme, label, name } = props;
 
-  let classes = classNames(styles.toggle, 'CareCruToggle', `CareCruToggle-${color}`);
-  if (theme) {
-    classes = classNames(styles[`theme_${theme}Background`]);
-  }
+  const classes = theme
+    ? classNames(styles[`theme_${theme}Background`])
+    : classNames(styles.toggle, 'CareCruToggle', `CareCruToggle--${color}`);
 
   return (
     <div className={classNames(className, styles.toggleWrapper)}>
-      {label ?
-        <label className={styles.toggleLabel}>
+      {label && (
+        <label htmlFor={name || ''} className={styles.toggleLabel}>
           {label}
         </label>
-      : null}
-      <RCToggle
-        {...props}
-        icons={icons}
-        className={classes}
-      />
+      )}
+      <RCToggle {...props} icons={icons} className={classes} />
     </div>
   );
 }
@@ -40,9 +31,10 @@ Toggle.propTypes = {
   icons: PropTypes.bool,
   theme: PropTypes.string,
   label: PropTypes.string,
+  name: PropTypes.string,
 };
 
 Toggle.defaultProps = {
-  color: 'red',
+  color: isHub() ? 'electron' : 'red',
   icons: false,
 };
