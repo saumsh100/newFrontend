@@ -11,7 +11,8 @@ import PatientModel from '../../../../../entities/models/Patient';
 
 const normalizeBirthdate = value => value.trim();
 
-const validateBirthdate = (value, format = 'MM/DD/YYYY') => {
+const validateBirthdate = (value) => {
+  const format = 'MM/DD/YYYY';
   const pattern = /^([0-9]{2})\/([0-9]{2})\/([0-9]{4})$/;
   if (!pattern.test(value)) {
     return format;

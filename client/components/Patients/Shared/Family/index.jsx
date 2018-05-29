@@ -2,6 +2,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import moment from 'moment';
+import { isResponsive } from '../../../../util/hub';
 import styles from './styles.scss';
 
 const isMemberHead = (member, head) => head && member.ccId === head.ccId;
@@ -50,7 +51,9 @@ const Family = ({ family, render }) => {
   const members = family.members.edges.map(v => v.node);
 
   return (
-    <div className={styles.familyMemberContainer}>
+    <div
+      className={isResponsive() ? styles.familyMemberContainerMobile : styles.familyMemberContainer}
+    >
       {render(members.sort(sortFamilyMembers(head)).map(renderFamilyMembers(head)))}
     </div>
   );

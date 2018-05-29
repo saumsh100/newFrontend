@@ -139,6 +139,7 @@
   max-height: 520px;
   background: #ffffff;
   padding: 35px 40px 25px 40px;
+  overflow: auto;
 
   @media screen and (max-width: 576px) {
     height: auto;

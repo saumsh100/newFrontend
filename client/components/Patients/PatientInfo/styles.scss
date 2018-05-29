@@ -61,6 +61,8 @@
 }
 
 .mainContainer {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   padding: 35px 15px 15px 15px;
   min-width: 1200px;
@@ -88,7 +90,7 @@
 }
 
 .row {
-  //flex: 1;
+  flex: 1;
 }
 
 .topDisplay {

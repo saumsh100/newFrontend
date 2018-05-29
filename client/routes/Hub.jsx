@@ -45,31 +45,29 @@ const HubRouter = (properties) => {
   });
 
   const getAuthorizedRoutes = () => (
-    <div>
-      <Switch>
-        <Route path="/patients" component={Routes.patients} />
-        <Route path="/chat" component={Routes.chat} />
-        <Route path="/requests" component={Routes.requests} />
-        <Route path="/phone-calls" />
-        <Route path="/waitlist" />
-        <Route path="/marketing" />
-        <Route path="/intercom" component={Routes.intercom} />
-        <Route path="/shortcuts" component={Routes.shortcuts} />
-        {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-        {withEnterprise && <Route path="/enterprise" component={Routes.enterprise} />}
-        <Route component={FourZeroFour} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/patients" component={Routes.patients} />
+      <Route path="/chat" component={Routes.chat} />
+      <Route path="/requests" component={Routes.requests} />
+      <Route path="/phone-calls" />
+      <Route path="/waitlist" />
+      <Route path="/marketing" />
+      <Route path="/intercom" component={Routes.intercom} />
+      <Route path="/shortcuts" component={Routes.shortcuts} />
+      {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
+      {withEnterprise && <Route path="/enterprise" component={Routes.enterprise} />}
+      <Route component={FourZeroFour} />
+    </Switch>
   );
 
-  const Dashboard = props => (
-    <HubApp {...props}>
+  const Dashboard = ownProps => (
+    <HubApp {...ownProps}>
       <Route
         render={() =>
           (isAuth ? (
             getAuthorizedRoutes()
           ) : (
-            <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
+            <Redirect to={{ pathname: '/login', state: { from: ownProps.location } }} />
           ))
         }
       />

@@ -1,8 +1,9 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import graphQLEnvironment from '../../../../../util/graphqlEnvironment';
 import { Grid, Row, Col, Form, FormSection } from '../../../../library';
+import patientShape from '../../../../library/PropTypeShapes';
 import Family from '../../../Shared/Family';
 import FamilyMember from '../../../Shared/FamilyMember';
 import PatientSearch from '../../../../PatientSearch';
@@ -10,7 +11,7 @@ import removePatientFromFamily from '../../graphQL/removePatientFromFamily';
 import addPatientToFamily from '../../graphQL/addPatientToFamily';
 import addFamilyWithMembers from '../../graphQL/addFamilyWithMembers';
 import makePatientHeadOfFamily from '../../graphQL/makePatientHeadOfFamily';
-import { isHub, isResponsive } from '../../../../../util/hub';
+import { isResponsive } from '../../../../../util/hub';
 import styles from './styles.scss';
 
 const patientSearchTheme = {
@@ -20,6 +21,26 @@ const patientSearchTheme = {
 const patientSearchInputProps = {
   classStyles: styles.patientSearchInput,
   placeholder: 'Add a patient to this family',
+};
+
+const relayFamilyShape = PropTypes.shape({
+  id: PropTypes.string,
+  ccId: PropTypes.string,
+  head: PropTypes.shape(patientShape),
+  members: PropTypes.shape({
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({ cursor: PropTypes.string, node: PropTypes.shape(patientShape) })
+    ),
+    pageInfo: PropTypes.shape({
+      endCursor: PropTypes.string,
+      hasNextPage: PropTypes.bool,
+    }),
+  }),
+});
+
+const memberListPropTypes = {
+  family: relayFamilyShape,
+  patientNode: PropTypes.shape(patientShape),
 };
 
 const renderMemberList = ({ family, patientNode }) => (
@@ -52,8 +73,10 @@ const renderMemberList = ({ family, patientNode }) => (
   </Row>
 );
 
+renderMemberList.propTypes = memberListPropTypes;
+
 const renderAddFamily = ({ family, patientNode }) => (
-  <Row className={!isResponsive() && styles.withPadding}>
+  <Row className={styles.withPadding}>
     <PatientSearch
       onSelect={patient =>
         (family === null
@@ -71,11 +94,18 @@ const renderAddFamily = ({ family, patientNode }) => (
   </Row>
 );
 
+renderAddFamily.propTypes = memberListPropTypes;
+
 const FamilyForm = (props) => {
   const { handleSubmit, familyLength } = props;
 
   return (
-    <Form form="Form4" onSubmit={handleSubmit} ignoreSaveButton={!isResponsive()}>
+    <Form
+      form="Form4"
+      onSubmit={handleSubmit}
+      className={styles.formContainer}
+      ignoreSaveButton={!isResponsive()}
+    >
       <FormSection name="family">
         <Grid>
           {renderAddFamily(props)}

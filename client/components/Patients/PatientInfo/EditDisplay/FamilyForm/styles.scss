@@ -1,5 +1,17 @@
 @import '../../../../../ui';
 
+.formContainer {
+  height: 520px;
+  max-height: 520px;
+  background: $primary-white;
+  padding: 35px 0px 25px;
+  overflow: auto;
+
+  @media screen and (max-width: 576px) {
+    height: auto;
+  }
+}
+
 .familyFormContainer {
   display: flex;
   flex-direction: column;
@@ -10,7 +22,7 @@
 }
 
 .withPadding {
-  padding: 25px 25px 0px;
+  padding: 0px 25px;
 }
 
 .patientSearchClass {

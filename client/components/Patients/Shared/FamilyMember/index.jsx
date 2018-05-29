@@ -2,6 +2,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import classNames from 'classnames';
+import { isResponsive } from '../../../../util/hub';
 import { Grid, Row, Col, Avatar, Badge } from '../../../library';
 import HygieneData from '../HygieneColumn';
 import RecallData from '../RecallColumn';
@@ -97,10 +98,10 @@ class FamilyMember extends React.Component {
 
     return (
       <Row>
-        <Col xs={3} className={styles.familyMember_headColumn}>
+        <Col xs={2} md={3} className={styles.familyMember_headColumn}>
           <Avatar user={patient} size={avatarSize} />
         </Col>
-        <Col xs={9}>
+        <Col xs={10} md={9}>
           <Row className={styles.familyMember_row} middle="xs" start="xs">
             <Col>{this.renderNameAge(fullName, age)}</Col>
             <Col>{this.renderDisplayHead()}</Col>
@@ -131,7 +132,7 @@ class FamilyMember extends React.Component {
 
     return (
       <Row middle="xs" start="xs">
-        <Col xs={1}>
+        <Col xs={2} md={1}>
           <Avatar user={patient} size={avatarSize} />
         </Col>
         <Col xs className={styles.familyMember_config_col}>
@@ -159,7 +160,7 @@ class FamilyMember extends React.Component {
   render() {
     const { withBorder, handleMakeHead } = this.props;
 
-    const avatarSize = 'md';
+    const avatarSize = isResponsive() ? 'sm' : 'md';
 
     const finalProps = { ...this.props, avatarSize };
 

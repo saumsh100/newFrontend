@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card, Loading, InfiniteScroll } from '../../../library';
+import { Card, InfiniteScroll } from '../../../library';
 import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import EventList from './EventsList';
 import styles from './styles.scss';
@@ -64,7 +64,7 @@ class Timeline extends Component {
 
     return (
       <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasAllFetched}>
-        {wasAllFetched ? (
+        {wasAllFetched && (
           <div className={styles.eventsContainer} style={style}>
             <InfiniteScroll
               loadMore={this.loadMoreEvents}
@@ -81,13 +81,14 @@ class Timeline extends Component {
               <EventList events={events} filters={filters} />
             </InfiniteScroll>
           </div>
-        ) : null}
+        )}
       </Card>
     );
   }
 }
 
 Timeline.propTypes = {
+  fetchEntities: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   events: PropTypes.arrayOf(Object),
   wasEventsFetched: PropTypes.bool,

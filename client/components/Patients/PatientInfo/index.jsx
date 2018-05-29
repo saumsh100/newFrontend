@@ -186,15 +186,12 @@ class PatientInfo extends Component {
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
-    const containerStyle = isHub()
-      ? classNames(styles.mainContainer, styles.responsiveContainer)
-      : styles.mainContainer;
 
     const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
 
     return (
-      <Grid className={containerStyle}>
+      <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
