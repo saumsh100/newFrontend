@@ -15,10 +15,7 @@ class ReviewsApp extends Component {
   }
 
   componentDidMount() {
-    const envKey =
-      process.env.NODE_ENV !== 'production'
-        ? JSON.parse(process.env.FEATURE_FLAG_KEY)
-        : process.env.FEATURE_FLAG_KEY;
+    const envKey = process.env.FEATURE_FLAG_KEY;
 
     const client = LDClient.initialize(`${envKey}`, {
       key: 'carecru',
