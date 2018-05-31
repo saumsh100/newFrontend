@@ -1,10 +1,11 @@
 
 import { GraphQLObjectType, GraphQLSchema } from 'graphql';
-import { Patient, Family, PatientSearches } from 'CareCruModels';
+import { Patient, Family, PatientSearches, WaitSpot } from 'CareCruModels';
 import { nodeField, nodeTypeMapper, AccountViewer } from './types';
 import { patientType, patientMutation } from './patients';
 import { familyType, familyMutation } from './families';
 import { patientSearchesType, patientSearchesMutation } from './patientSearches';
+import { waitSpotType, waitSpotMutation } from './waitSpots';
 import { accountViewerType, accountViewerQuery } from './accountViewer';
 
 /**
@@ -24,6 +25,7 @@ nodeTypeMapper.mapTypes({
   [Patient.name]: patientType,
   [Family.name]: familyType,
   [PatientSearches.name]: patientSearchesType,
+  [WaitSpot.name]: waitSpotType,
 
   // Other types should have the type and resolve function.
   [AccountViewer.name]: {
@@ -47,7 +49,12 @@ const queryType = new GraphQLObjectType({
 /**
  * joining all mutations that will be available to the user
  */
-const rootMutation = Object.assign({}, patientMutation, familyMutation, patientSearchesMutation);
+const rootMutation = Object.assign({},
+  patientMutation,
+  familyMutation,
+  patientSearchesMutation,
+  waitSpotMutation,
+);
 
 const mutationType = new GraphQLObjectType({
   name: 'Mutation',

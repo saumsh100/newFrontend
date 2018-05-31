@@ -44,7 +44,7 @@
     "electron:publish:dev": "electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-dev.yaml'",
     "electron:publish:prod": "electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-prod.yaml'",
     "electron:build:publish": "npm run client:build:prod && npm run electron:publish",
-    "relay": "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx",
+    "relay": "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx --watch",
     "update-schema": "node ./server/bin/build/updateSchema.bundle.js",
     "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write",
     "precommit": "lint-staged"

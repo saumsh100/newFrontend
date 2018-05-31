@@ -26,6 +26,7 @@ import {
 } from '../../../thunks/fetchEntities';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+import { deleteWaitSpot } from '../../../thunks/waitlist';
 import styles from './styles.scss';
 
 class Header extends Component {
@@ -55,18 +56,6 @@ class Header extends Component {
       const view = localStorageView.view;
       this.props.setScheduleView({ view });
     }
-
-    this.props.fetchEntitiesRequest({
-      id: 'waitSpots',
-      key: 'waitSpots',
-      join: ['patientUser', 'patient'],
-      params: {
-        startTime: moment().toISOString(),
-        endTime: moment()
-          .add(360, 'days')
-          .toISOString(),
-      },
-    });
   }
 
   setView() {
@@ -79,45 +68,6 @@ class Header extends Component {
       localStorage.setItem('scheduleView', JSON.stringify(viewObj));
       this.props.setScheduleView({ view: 'chair' });
     }
-  }
-
-  getSuggestions(value) {
-    return this.props
-      .fetchEntitiesRequest({
-        url: '/api/patients/search',
-        params: { patients: value },
-      })
-      .then(searchData => searchData.patients)
-      .then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length
-          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
-          : [];
-
-        patientList.forEach((patient) => {
-          patient.display = (
-            <div className={styles.suggestionContainer}>
-              <Avatar user={patient} size="xs" />
-              <div className={styles.suggestionContainer_details}>
-                <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate
-                      ? `, ${moment().diff(patient.birthDate, 'years')}`
-                      : ''
-                  }`}
-                </div>
-                <div className={styles.suggestionContainer_date}>
-                  Last Appointment:{' '}
-                  {patient.lastApptDate
-                    ? moment(patient.lastApptDate).format('MMM D YYYY')
-                    : 'n/a'}
-                </div>
-              </div>
-            </div>
-          );
-        });
-
-        return patientList;
-      });
   }
 
   openAddToWaitlist() {
@@ -173,6 +123,46 @@ class Header extends Component {
         this.setState({
           patientSearched: null,
         });
+      });
+  }
+
+  removeWaitSpot(id) {
+    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
+
+    if (confirmDelete) {
+      this.props.deleteWaitSpot(id);
+    }
+  }
+
+  getSuggestions(value) {
+    return this.props
+      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .then(searchData => searchData.patients)
+      .then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length
+          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
+          : [];
+
+        patientList.map((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="xs" />
+              <div className={styles.suggestionContainer_details}>
+                <div className={styles.suggestionContainer_fullName}>
+                  {`${patient.firstName} ${patient.lastName}${
+                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+                  }`}
+                </div>
+                <div className={styles.suggestionContainer_date}>
+                  Last Appointment:{' '}
+                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                </div>
+              </div>
+            </div>
+          );
+        });
+
+        return patientList;
       });
   }
 
@@ -304,33 +294,32 @@ class Header extends Component {
               Quick Add
             </Button>
 
-            {waitSpotsFetched && waitSpots ? (
-              <DialogBox
-                title="Waitlist"
-                active={this.state.showWaitlist}
-                onEscKeyDown={this.openWaitlist}
-                onOverlayClick={this.openWaitlist}
-                bodyStyles={styles.dialogBodyList}
-                actions={[
-                  {
-                    props: { border: 'blue' },
-                    component: Button,
-                    onClick: this.openWaitlist,
-                    label: 'Cancel',
-                  },
-                ]}
-                custom
-              >
-                <Waitlist
-                  patients={patients}
-                  patientUsers={patientUsers}
-                  waitSpots={waitSpots}
-                  selectWaitSpot={this.selectWaitSpot}
-                  removeWaitSpot={this.removeWaitSpot}
-                  openAddTo={this.openAddToWaitlist}
-                />
-              </DialogBox>
-            ) : null}
+
+            <DialogBox
+              title="Waitlist"
+              active={this.state.showWaitlist}
+              onEscKeyDown={this.openWaitlist}
+              onOverlayClick={this.openWaitlist}
+              bodyStyles={styles.dialogBodyList}
+              actions={[
+                {
+                  props: { border: 'blue' },
+                  component: Button,
+                  onClick: this.openWaitlist,
+                  label: 'Cancel',
+                },
+              ]}
+              custom
+            >
+              <Waitlist
+                patients={patients}
+                patientUsers={patientUsers}
+                waitSpots={waitSpots}
+                selectWaitSpot={this.selectWaitSpot}
+                removeWaitSpot={this.removeWaitSpot}
+                openAddTo={this.openAddToWaitlist}
+              />
+            </DialogBox>
             <DialogBox
               title="Add to Waitlist"
               active={this.state.showAddToWaitlist}
@@ -395,9 +384,6 @@ function mapStateToProps({ schedule, apiRequests, entities }) {
   const chairsFetched = apiRequests.get('chairsSchedule')
     ? apiRequests.get('chairsSchedule').wasFetched
     : null;
-  const waitSpotsFetched = apiRequests.get('waitSpots')
-    ? apiRequests.get('waitSpots').wasFetched
-    : null;
 
   const waitSpots = entities.getIn(['waitSpots', 'models']);
   const patientUsers = entities.getIn(['patientUsers', 'models']);
@@ -407,7 +393,6 @@ function mapStateToProps({ schedule, apiRequests, entities }) {
     scheduleView,
     pracsFetched,
     chairsFetched,
-    waitSpotsFetched,
     waitSpots,
     patients,
     patientUsers,

@@ -23,7 +23,7 @@ export default function WaitListItem(props) {
     return null;
   }
 
-  const { preferences, daysOfTheWeek } = waitSpot.toJS();
+  const { preferences, daysOfTheWeek } = waitSpot
 
   const prefKeys = Object.keys(omit(preferences, ['weekdays', 'weekends']));
 
