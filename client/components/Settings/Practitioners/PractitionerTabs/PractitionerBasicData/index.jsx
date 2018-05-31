@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { PractitionerAvatar, Form, Field, Dropzone, Header, Button } from '../../../../library';
 import { uploadAvatar, deleteAvatar } from '../../../../../thunks/practitioners';
+import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import styles from '../../styles.scss';
+
 const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined;
+  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength25 = maxLength(25);
 
 class PractitionerBasicData extends Component {
@@ -21,6 +23,14 @@ class PractitionerBasicData extends Component {
     };
   }
 
+  componentWillReceiveProps(props) {
+    if (this.props.practitioner.avatarUrl !== props.practitioner.avatarUrl) {
+      this.setState({
+        uploading: false,
+      });
+    }
+  }
+
   uploadAvatar(files) {
     this.setState({
       uploading: true,
@@ -32,18 +42,10 @@ class PractitionerBasicData extends Component {
     this.props.deleteAvatar(this.props.practitioner.id);
   }
 
-  componentWillReceiveProps(props) {
-    if (this.props.practitioner.avatarUrl !== props.practitioner.avatarUrl) {
-      this.setState({
-        uploading: false,
-      });
-    }
-  }
-
   updatePractitioner(values) {
     const { practitioner } = this.props;
-    values.firstName = values.firstName.trim();
-    values.lastName = values.lastName.trim();
+    values.firstName = values && values.firstName && values.firstName.trim();
+    values.lastName = values && values.lastName && values.lastName.trim();
     const valuesMap = Map(values);
     const modifiedPractitioner = practitioner.merge(valuesMap);
     const alert = {
@@ -99,10 +101,7 @@ class PractitionerBasicData extends Component {
               name="type"
               label="Practitioner Type"
               component="DropdownSelect"
-              options={[
-                { value: 'Dentist' },
-                { value: 'Hygienist' },
-              ]}
+              options={[{ value: 'Dentist' }, { value: 'Hygienist' }]}
             />
             <div className={styles.practFormContainer_practHidden}>
               <span className={styles.practFormContainer_practHidden_text}>
@@ -110,10 +109,7 @@ class PractitionerBasicData extends Component {
                 widget?`}
               </span>
               <div className={styles.practFormContainer_practHidden_hiddenToggle}>
-                <Field
-                  name="isHidden"
-                  component="Toggle"
-                />
+                <Field name="isHidden" component="Toggle" />
               </div>
             </div>
           </div>
@@ -124,22 +120,34 @@ class PractitionerBasicData extends Component {
             <PractitionerAvatar practitioner={initialValues} size="xl" />
             <p>Drop avatar here or click to select file.</p>
           </Dropzone>
-          {initialValues.fullAvatarUrl ? <Button className={styles.deleteAvatar} onClick={this.deleteAvatar}>Remove Avatar</Button> : null}
+          {initialValues.fullAvatarUrl && (
+            <Button className={styles.deleteAvatar} onClick={this.deleteAvatar}>
+              Remove Avatar
+            </Button>
+          )}
         </div>
       </div>
     );
   }
 }
-function mapStateToProps(state) {
+function mapStateToProps() {
   return {};
 }
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    uploadAvatar,
-    deleteAvatar,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      uploadAvatar,
+      deleteAvatar,
+    },
+    dispatch
+  );
 }
+
 PractitionerBasicData.propTypes = {
-  practitioner: PropTypes.object.required,
-}
+  practitioner: PropTypes.shape(practitionerShape),
+  deleteAvatar: PropTypes.func,
+  uploadAvatar: PropTypes.func,
+  updatePractitioner: PropTypes.func,
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);
