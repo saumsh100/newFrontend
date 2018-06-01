@@ -24,3 +24,9 @@ export function collapseContent() {
     }, 300);
   };
 }
+
+export function collapseWithoutResizing() {
+  return (dispatch) => {
+    dispatch(hideContent());
+  };
+}

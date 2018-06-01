@@ -26,7 +26,6 @@ class Intercom extends Component {
   componentWillUnmount() {
     const intercomContainer = document.getElementById('intercom-container');
     intercomContainer.classList.remove('active');
-    intercomContainer.classList.remove('left');
   }
 
   setPosition() {

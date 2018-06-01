@@ -49,7 +49,7 @@ class UserModal extends WindowMain {
    * @returns {number}
    */
   get xCoordinate() {
-    const toolbarPosition = Store.get('toolbarPosition');
+    const toolbarPosition = Store.get('toolbarPosition', config.toolbar.position);
     const { size } = this.primaryScreen;
     const { userSettings } = config;
 

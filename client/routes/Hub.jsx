@@ -14,7 +14,7 @@ import ResetPassword from '../components/ForgotPassword/ResetPassword';
 import withAuthProps from '../hocs/withAuthProps';
 import titleGenerator from '../util/hubTitleGenerator';
 import { setTitle, setBackHandler } from '../reducers/electron';
-import { collapseContent } from '../thunks/electron';
+import { collapseContent, collapseWithoutResizing } from '../thunks/electron';
 
 const Routes = {
   patients: LazyRoute(() => import('./Dashboard/Patients'), true),
@@ -31,6 +31,10 @@ const HubRouter = (properties) => {
     const { pathname } = route;
     const title = titleGenerator(pathname);
     console.log(`Navigating to ${pathname}`);
+
+    if (pathname.indexOf('/intercom') > -1) {
+      properties.collapseWithoutResizing();
+    }
 
     properties.setBackHandler(null);
     if (title) {
@@ -133,6 +137,7 @@ const mapDispatchToProps = dispatch =>
       setTitle,
       setBackHandler,
       collapseContent,
+      collapseWithoutResizing,
     },
     dispatch
   );

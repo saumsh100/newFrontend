@@ -103,7 +103,9 @@ class MainBrowserWindow extends WindowMain {
   get xCoordinate() {
     const { size } = this.primaryScreen;
     const toolbarSize = this.isCollapsed ? COLLAPSED_SIZE : EXPANDED_SIZE;
-    return Store.get('toolbarPosition') === 'left' ? 0 : size.width - toolbarSize;
+    return Store.get('toolbarPosition', config.toolbar.position) === 'left'
+      ? 0
+      : size.width - toolbarSize;
   }
 
   /**

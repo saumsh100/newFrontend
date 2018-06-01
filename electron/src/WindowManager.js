@@ -86,6 +86,7 @@ class WindowManager {
    */
   createMainBrowserWindow() {
     const window = new BrowserWindow(config.mainWindow);
+    window.once('closed', WindowManager.closeApp);
     this.closeCurrentWindow();
     return this.mainWindow.setWindow(window);
   }
@@ -95,6 +96,7 @@ class WindowManager {
    */
   createToolbarBrowserWindow() {
     const window = new BrowserWindow(config.toolbar.toolbarWindow);
+    window.once('closed', WindowManager.closeApp);
     this.closeCurrentWindow();
     return this.mainWindow.setWindow(window);
   }
@@ -104,6 +106,7 @@ class WindowManager {
    */
   closeCurrentWindow() {
     if (this.mainWindow.window) {
+      this.mainWindow.window.removeListener('closed', WindowManager.closeApp);
       this.mainWindow.window.close();
     }
   }
@@ -135,6 +138,10 @@ class WindowManager {
    */
   hideUserModal() {
     this.userModalWindow.hideModal();
+  }
+
+  static closeApp() {
+    electron.app.quit();
   }
 
   /**

@@ -10,23 +10,23 @@ exports.trayMenuLoggedIn = (managerInstance) => [
     label: 'Check for updates',
     click: () => checkForUpdate(),
   },
-  {
-    label: 'Toolbar position',
-    submenu: [
-      {
-        label: 'Left',
-        click() {
-          managerInstance.changeToolbarPosition('left');
-        },
-      },
-      {
-        label: 'Right',
-        click() {
-          managerInstance.changeToolbarPosition('right');
-        },
-      },
-    ],
-  },
+  // {
+  //   label: 'Toolbar position',
+  //   submenu: [
+  //     {
+  //       label: 'Left',
+  //       click() {
+  //         managerInstance.changeToolbarPosition('left');
+  //       },
+  //     },
+  //     {
+  //       label: 'Right',
+  //       click() {
+  //         managerInstance.changeToolbarPosition('right');
+  //       },
+  //     },
+  //   ],
+  // },
   separator,
   {
     label: 'Logout',
