@@ -40,7 +40,7 @@ class ForgotPassword extends Component {
             </div>
             <h1 className={styles.formTitle}>FORGOT PASSWORD</h1>
             {this.state.submitted ? (
-              <EmailSuccess email={this.state.email} push={push} styles={styles} />
+              <EmailSuccess email={this.state.email} push={this.props.push} styles={styles} />
             ) : (
               <div className={styles.formWrapper}>
                 <div className={styles.text}>

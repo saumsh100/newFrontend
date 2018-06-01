@@ -116,7 +116,7 @@ const renderMobileFooter = ({
       className={styles.actionButtonMobile}
       onClick={toggleActionDisplay}
     >
-      <Icon icon="plus" />
+      <Icon icon={displayActions ? 'minus' : 'plus'} />
     </Button>
     {displayActions && (
       <svg height="0">
@@ -230,24 +230,24 @@ export default class RequestPopover extends Component {
                 <div className={styles.data}>n/a</div>
               </div>
             )}
-            {note ? (
+            {note && (
               <div className={styles.container}>
                 <div className={styles.subHeader}>Note</div>
                 <div className={styles.data}>
                   <div className={styles.data_note}>{note}</div>
                 </div>
               </div>
-            ) : null}
+            )}
 
             <div className={styles.requestedAt}>
-              {requestingUser ? (
+              {requestingUser && (
                 <div className={styles.requestedAt_diffUserContainer}>
                   <span className={styles.requestedAt_on}>Requested by:</span>
                   <span className={styles.requestedAt_byDiffUser}>
                     {requestingUser.get('firstName')} {requestingUser.get('lastName')}
                   </span>
                 </div>
-              ) : null}
+              )}
               <span className={styles.requestedAt_on}> Requested on: {requestedAt} </span>
             </div>
           </SBody>
