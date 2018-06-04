@@ -29,6 +29,7 @@ class RequestContainer extends Component {
   render() {
     const browserHistory = createBrowserHistory();
     const location = browserHistory.location.pathname;
+    console.log();
 
     return (
       <Requests
