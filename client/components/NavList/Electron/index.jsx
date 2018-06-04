@@ -11,7 +11,7 @@ import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../../util/hub';
 import styles from './styles.scss';
 
 function NavList(props) {
-  const { location, unreadChats, showContent, toolbarPosition } = props;
+  const { location, unreadChats, newRequests, showContent, toolbarPosition } = props;
 
   const { navItem, activeItem } = styles;
 
@@ -68,7 +68,7 @@ function NavList(props) {
       <Button
         className={classNames(
           styles.buttonNoSpacing,
-          unreadChats ? styles.logoNotification : styles.logoBox,
+          unreadChats || newRequests ? styles.logoNotification : styles.logoBox,
           {
             [styles.borderTopRight]: toolbarPosition === TOOLBAR_LEFT,
             [styles.borderTopLeft]: toolbarPosition === TOOLBAR_RIGHT,
@@ -92,6 +92,7 @@ function NavList(props) {
           icon="calendar-edit"
           label="Online Requests"
           iconType={'regular'}
+          badge={newRequests}
           active={location.pathname.indexOf('/requests') !== -1}
         />
         <SingleNavItem
@@ -122,7 +123,8 @@ function NavList(props) {
 
 NavList.propTypes = {
   location: PropTypes.string,
-  unreadChats: PropTypes.string,
+  unreadChats: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  newRequests: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   showContent: PropTypes.bool,
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
   displayContent: PropTypes.func,
@@ -140,12 +142,19 @@ const SingleNavPropTypes = {
   iconImage: PropTypes.node,
 };
 
-const mapStateToProps = ({ chat, electron }) => {
+const mapStateToProps = ({ chat, electron, entities }) => {
   const unreadChats = chat.get('unreadChats');
-  const length = unreadChats.length > 100 ? '99+' : unreadChats.length;
+  const requests = entities.getIn(['requests', 'models']);
+  const filteredRequests = requests
+    .toArray()
+    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+
+  const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
+  const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
 
   return {
-    unreadChats: length,
+    unreadChats: chatsLength,
+    newRequests: requestsLength,
     showContent: electron.get('showContent'),
     toolbarPosition: electron.get('toolbarPosition'),
   };

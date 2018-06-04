@@ -27,15 +27,19 @@ export default function connectSocketToStoreLogin(store, socket) {
           browserAlert: true,
         };
 
-        dispatch(showAlertTimeout({ alert, type: 'success' }));
         if (isHub()) {
-          DesktopNotification.showNotification(alert.title, {
+          return DesktopNotification.showNotification(alert.title, {
             body: alert.body,
             onClick: () => {
-              dispatch(push('/requests'));
+              import('../thunks/electron').then((electronThunk) => {
+                store.getState().routing.location.pathname.indexOf('/requests') === -1 &&
+                  dispatch(push('/requests'));
+                dispatch(electronThunk.displayContent());
+              });
             },
           });
         }
+        dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
 
       socket.on('update:Request', (data) => {
