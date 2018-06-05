@@ -44,12 +44,15 @@ const PatientShape = {
   patientId: PropTypes.string,
   patientUserId: PropTypes.string,
   photo: PropTypes.string,
-  preferences: PropTypes.objectOf(
-    PropTypes.shape({
-      type: PropTypes.string,
-      defaultValue: PropTypes.objectOf(PropTypes.bool),
-    })
-  ),
+  preferences: PropTypes.oneOfType([
+    PropTypes.objectOf(PropTypes.bool),
+    PropTypes.objectOf(
+      PropTypes.shape({
+        type: PropTypes.string,
+        defaultValue: PropTypes.objectOf(PropTypes.bool),
+      })
+    ),
+  ]),
   preferredPhoneNumber: PropTypes.number,
   status: PropTypes.string,
   workNumber: PropTypes.number,

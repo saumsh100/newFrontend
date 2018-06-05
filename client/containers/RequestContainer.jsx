@@ -21,7 +21,7 @@ class RequestContainer extends Component {
   componentWillReceiveProps(nextProps) {
     const { filteredRequests, selectedRequest } = nextProps;
 
-    if (isHub() && filteredRequests.length > 0 && !selectedRequest) {
+    if (isHub() && !selectedRequest) {
       this.props.setTitle(`${filteredRequests.length} Online Requests`);
     }
   }

@@ -1,17 +1,15 @@
 
-import React, { PropTypes } from 'react';
-import classnames from 'classnames';
+import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Icon,  ListItem } from '../../library';
+import classNames from 'classnames';
+import { Icon, Button } from '../../library';
+import { appointmentShape } from '../../library/PropTypeShapes';
+import Patient from '../../../entities/models/Patient';
 import styles from './styles.scss';
 
-export default function SameAppointment(props) {
-  const {
-    patient,
-    appointment,
-    setSelected,
-    selectedApp,
-  } = props;
+const SameAppointment = (props) => {
+  const { patient, appointment, setSelected, selectedApp } = props;
 
   if (!patient || !appointment) {
     return null;
@@ -20,38 +18,40 @@ export default function SameAppointment(props) {
   const startDate = moment(appointment.startDate);
   const endDate = moment(appointment.endDate);
 
-  const dataContainer = styles.dataContainer;
-
   return (
-    <div className={styles.singleItem}>
-      <input type="radio" checked={appointment.id === (selectedApp && selectedApp.id)} className={styles.radio}/>
-      <div
-        className={dataContainer}
-        onClick={()=> {
-          setSelected(appointment);
-        }}
-      >
-        <div className={styles.avatarContainer}>
-          <Icon size={2} icon="calendar" />
-        </div>
-        <div className={styles.dataContainer_body}>
-          <div className={styles.dataContainer_patientInfo}>
-            <div className={styles.dataContainer_patientInfo_date}>
-              {startDate.format('MMMM Do, YYYY')}
-            </div>
-            <div className={styles.dataContainer_patientInfo_date}>
-              {startDate.format('h:mma')} - {endDate.format('h:mma')}
-            </div>
-            <div className={styles.dataContainer_patientInfo_createdAt}>
-              Created At: {moment(appointment.createdAt).format('MMMM Do, YYYY h:mm A')}
-            </div>
+    <Button
+      className={classNames(styles.dataContainer, styles.singleItem, {
+        [styles.appointmentIsSelected]: appointment.id === (selectedApp && selectedApp.id),
+      })}
+      onClick={() => {
+        setSelected(appointment);
+      }}
+    >
+      <div className={styles.avatarContainer}>
+        <Icon size={2} icon="calendar" />
+      </div>
+      <div className={styles.dataContainer_body}>
+        <div className={styles.dataContainer_patientInfo}>
+          <div className={styles.dataContainer_patientInfo_date}>
+            {startDate.format('MMMM Do, YYYY')}
           </div>
-          <div className={styles.dataContainer_contactInfo}>
-            <div className={styles.dataContainer_contactInfo_email}>{patient.get('email')}</div>
-            <div className={styles.dataContainer_contactInfo_phone}>{patient.get('mobilePhoneNumber')}</div>
+          <div className={styles.dataContainer_patientInfo_date}>
+            {startDate.format('h:mma')} - {endDate.format('h:mma')}
+          </div>
+          <div className={styles.dataContainer_patientInfo_createdAt}>
+            Created At: {moment(appointment.createdAt).format('MMMM Do, YYYY h:mm A')}
           </div>
         </div>
       </div>
-    </div>
+    </Button>
   );
-}
+};
+
+SameAppointment.propTypes = {
+  patient: PropTypes.instanceOf(Patient),
+  appointment: PropTypes.shape(appointmentShape),
+  setSelected: PropTypes.func,
+  selectedApp: PropTypes.shape(appointmentShape),
+};
+
+export default SameAppointment;
