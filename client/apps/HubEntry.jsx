@@ -18,6 +18,7 @@ import configure from '../store';
 import { load } from '../thunks/auth';
 import { logout } from '../thunks/hubAuth';
 import { loadUnreadMessages } from '../thunks/chat';
+import { loadOnlineRequest } from '../thunks/onlineRequests';
 import { setToolbarPosition, expandContent } from '../reducers/electron';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import DesktopNotification from '../util/desktopNotification';
@@ -87,7 +88,8 @@ load()(store.dispatch).then(() => {
       }/sessions?u=${userId}`,
     });
 
-    loadUnreadMessages()(store.dispatch, store.getState());
+    store.dispatch(loadUnreadMessages());
+    store.dispatch(loadOnlineRequest());
     DesktopNotification.requestPermission();
     connectSocketToStoreLogin(store, socket);
 

@@ -8,7 +8,14 @@ import withAuthProps from '../../hocs/withAuthProps';
 import FeatureFlagWrapper from '../FeatureFlagWrapper';
 import styles from './styles.scss';
 
-function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadChats }) {
+function NavList({
+  location,
+  isCollapsed,
+  isSuperAdmin,
+  withEnterprise,
+  unreadChats,
+  onlineRequests,
+}) {
   const { navItem, activeItem, label, activeLabel } = styles;
 
   const inactiveClass = navItem;
@@ -16,7 +23,7 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
 
   const inactiveLabelClass = label;
   const activeLabelClass = classNames(label, activeLabel);
-  
+
   const SingleNavItem = ({
     path,
     icon,
@@ -109,9 +116,20 @@ function NavList({ location, isCollapsed, isSuperAdmin, withEnterprise, unreadCh
           <SubNavItem path="/intelligence/business" label="Business" />
           <SubNavItem path="/intelligence/social" label="Social" disabled/>
         </MultiNavItem>*/}
-        <SingleNavItem path="/schedule" icon="calendar-alt" label="Schedule" />
+        <SingleNavItem
+          path="/schedule"
+          icon="calendar-alt"
+          label="Schedule"
+          badge={onlineRequests}
+        />
         <SingleNavItem path="/patients/list" icon="heart" label="Patient Management" />
-        <SingleNavItem path="/chat" icon="comment-alt" label="Chat" badge={unreadChats} active={location.pathname.indexOf('/chat') !== -1} />
+        <SingleNavItem
+          path="/chat"
+          icon="comment-alt"
+          label="Chat"
+          badge={unreadChats}
+          active={location.pathname.indexOf('/chat') !== -1}
+        />
 
         <FeatureFlagWrapper featureKey="feature-call-tracking">
           <SingleNavItem path="/calls" icon="phone" label="Call Tracking" />
@@ -158,14 +176,22 @@ NavList.propTypes = {
   location: PropTypes.shape(PropTypes.string),
   withEnterprise: PropTypes.bool,
   unreadChats: PropTypes.number,
+  onlineRequests: PropTypes.number,
 };
 
-function mapStateToProps({ chat }) {
+function mapStateToProps({ chat, entities }) {
   const unreadChats = chat.get('unreadChats');
-  const length = unreadChats.length > 100 ? '99+' : unreadChats.length;
+  const requests = entities.getIn(['requests', 'models']);
+  const filteredRequests = requests
+    .toArray()
+    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+
+  const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
+  const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
 
   return {
-    unreadChats: length,
+    unreadChats: chatsLength,
+    onlineRequests: requestsLength,
   };
 }
 

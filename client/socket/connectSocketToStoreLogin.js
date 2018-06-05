@@ -1,7 +1,6 @@
 
 import { push } from 'react-router-redux';
 import { updateEntity, deleteEntity, receiveEntities } from '../actions/entities';
-import { showAlertTimeout } from '../thunks/alerts';
 import { setSyncingWithPMS } from '../actions/schedule';
 import { addMessage, createListOfUnreadedChats, socketLock } from '../thunks/chat';
 import { isHub } from '../util/hub';
@@ -27,15 +26,20 @@ export default function connectSocketToStoreLogin(store, socket) {
           browserAlert: true,
         };
 
-        dispatch(showAlertTimeout({ alert, type: 'success' }));
-        if (isHub()) {
-          DesktopNotification.showNotification(alert.title, {
-            body: alert.body,
-            onClick: () => {
-              dispatch(push('/requests'));
-            },
-          });
-        }
+        DesktopNotification.showNotification(alert.title, {
+          body: alert.body,
+          onClick: () => {
+            if (isHub()) {
+              import('../thunks/electron').then((electronThunk) => {
+                store.getState().routing.location.pathname.indexOf('/requests') === -1 &&
+                  dispatch(push('/requests'));
+                dispatch(electronThunk.displayContent());
+              });
+              return;
+            }
+            dispatch(push(`/schedule?selectedRequest=${data.result}`));
+          },
+        });
       });
 
       socket.on('update:Request', (data) => {

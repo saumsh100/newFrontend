@@ -54,8 +54,10 @@ requestsRouter.post('/', async (req, res, next) => {
         request.patientUser = pUser.get({ plain: true });
       }
 
-      const pub = req.app.get('pub');
-      pub.publish('request.created', request.id);
+      const io = req.app.get('socketio');
+      io && io.of(namespaces.dash)
+        .in(accountId)
+        .emit('request.created', normalize('request', request));
 
       if (patientUserId !== request.requestingPatientUserId) {
         const patientUserFor = await PatientUser.findById(patientUserId);
