@@ -3,6 +3,7 @@ const { BrowserWindow } = require('electron');
 const url = require('url');
 const Store = require('../store');
 const WindowMain = require('./Window');
+const ScreenManager = require('../ScreenManager');
 const config = require('../../config');
 const { SET_USER_DATA } = require('../constants');
 
@@ -50,12 +51,13 @@ class UserModal extends WindowMain {
    */
   get xCoordinate() {
     const toolbarPosition = Store.get('toolbarPosition', config.toolbar.position);
-    const { size } = this.primaryScreen;
+    const { workArea } = ScreenManager.instance.currentDisplay;
     const { userSettings } = config;
 
     return toolbarPosition === 'left'
-      ? config.userSettings.marginFromWindowBorder
-      : size.width - userSettings.marginFromWindowBorder - userSettings.modalWindow.width + 7;
+      ? workArea.x + config.userSettings.marginFromWindowBorder
+      : workArea.x + workArea.width -
+      userSettings.marginFromWindowBorder - userSettings.modalWindow.width + 7;
   }
 
   /**
@@ -65,10 +67,10 @@ class UserModal extends WindowMain {
    */
   get yCoordinate() {
     const { toolbar, userSettings } = config;
-    const { size } = this.primaryScreen;
+    const { workArea } = ScreenManager.instance.currentDisplay;
 
     const coordinate =
-      size.height / 2 +
+      workArea.height / 2 +
       toolbar.toolbarWindow.height / 2 -
       userSettings.modalWindow.height -
       userSettings.marginFromBottom;

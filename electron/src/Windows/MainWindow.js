@@ -3,6 +3,7 @@ const url = require('url');
 const config = require('../../config');
 const Store = require('../store');
 const WindowMain = require('./Window');
+const ScreenManager = require('../ScreenManager');
 const { TOOLBAR_POSITION_CHANGE, HIDDEN_USER_MODAL, REQUEST_USER_DATA } = require('../constants');
 
 const EXPANDED_SIZE = config.toolbar.expandedSize;
@@ -101,11 +102,11 @@ class MainBrowserWindow extends WindowMain {
    * @returns {number}
    */
   get xCoordinate() {
-    const { size } = this.primaryScreen;
+    const { workArea } = ScreenManager.instance.currentDisplay;
     const toolbarSize = this.isCollapsed ? COLLAPSED_SIZE : EXPANDED_SIZE;
     return Store.get('toolbarPosition', config.toolbar.position) === 'left'
-      ? 0
-      : size.width - toolbarSize;
+      ? workArea.x
+      : workArea.width - toolbarSize + workArea.x;
   }
 
   /**
@@ -114,9 +115,9 @@ class MainBrowserWindow extends WindowMain {
    */
   get yCoordinate() {
     const toolbarHeight = config.toolbar.toolbarWindow.height;
-    const { size } = this.primaryScreen;
+    const { workArea } = ScreenManager.instance.currentDisplay;
 
-    const coordinate = (size.height / 2) - (toolbarHeight / 2);
+    const coordinate = (workArea.height / 2) - (toolbarHeight / 2);
     return Math.floor(coordinate);
   }
 
