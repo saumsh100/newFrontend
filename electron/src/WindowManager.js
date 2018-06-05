@@ -2,6 +2,7 @@
 const electron = require('electron');
 const MainBrowserWindow = require('./Windows/MainWindow');
 const UserModalWindow = require('./Windows/UserModal');
+const ScreenManager = require('./ScreenManager');
 const Store = require('./store');
 const config = require('../config');
 const TrayManager = require('./TrayManager');
@@ -19,6 +20,7 @@ class WindowManager {
     this.createMainBrowserWindow();
     this.mainWindow.loadUrl();
     TrayManager.instance.showLoggedOutTray();
+    ScreenManager.instance.windowManager = this;
   }
 
   /**
@@ -79,6 +81,7 @@ class WindowManager {
     clearTimeout(this.userModalWindow.hideTimeout);
     this.toggleToolbar();
     TrayManager.instance.showLoggedOutTray();
+    ScreenManager.instance.resetToPrimaryDisplay();
   }
 
   /**
@@ -140,6 +143,30 @@ class WindowManager {
     this.userModalWindow.hideModal();
   }
 
+  /**
+   * Change default display the app is displayed at.
+   *
+   * @param display
+   */
+  changeDisplay(display) {
+    ScreenManager.instance.currentDisplay = display;
+    this.mainWindow.positionWindow();
+    this.userModalWindow.positionWindow();
+  }
+
+  /**
+   * Resets the tray menu.
+   */
+  resetTray() {
+    TrayManager.instance.clearTray();
+    this.isAuth
+      ? TrayManager.instance.showLoggedInTray(this)
+      : TrayManager.instance.showLoggedOutTray();
+  }
+
+  /**
+   * Exit the app.
+   */
   static closeApp() {
     electron.app.quit();
   }
@@ -151,6 +178,14 @@ class WindowManager {
    */
   set auth(value) {
     this.isAuth = value;
+  }
+
+  /**
+   * Returns currently used display from screen manager.
+   * @returns {*}
+   */
+  get currentlyUsedDisplay() {
+    return ScreenManager.instance.currentDisplay;
   }
 
   /**

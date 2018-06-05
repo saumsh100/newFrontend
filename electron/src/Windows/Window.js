@@ -3,8 +3,6 @@ const electron = require('electron');
 
 class Window {
   constructor() {
-    this.primaryScreen = electron.screen.getPrimaryDisplay();
-
     /** @type electron.BrowserWindow **/
     this.window;
   }

@@ -27,6 +27,14 @@ class TrayManager {
   }
 
   /**
+   * Clears the tray menu.
+   */
+  clearTray() {
+    const clearedMenu = Menu.buildFromTemplate([]);
+    this.tray.setContextMenu(clearedMenu);
+  }
+
+  /**
    * Get the instance of tray manager.
    *
    * @returns {TrayManager}
