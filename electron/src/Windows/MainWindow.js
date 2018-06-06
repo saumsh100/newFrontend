@@ -1,10 +1,16 @@
 
+const { webFrame } = require('electron');
 const url = require('url');
 const config = require('../../config');
 const Store = require('../store');
 const WindowMain = require('./Window');
 const ScreenManager = require('../ScreenManager');
-const { TOOLBAR_POSITION_CHANGE, HIDDEN_USER_MODAL, REQUEST_USER_DATA } = require('../constants');
+const {
+  TOOLBAR_POSITION_CHANGE,
+  HIDDEN_USER_MODAL,
+  REQUEST_USER_DATA,
+  ZOOM_FACTOR_CHANGE,
+} = require('../constants');
 
 const EXPANDED_SIZE = config.toolbar.expandedSize;
 const COLLAPSED_SIZE = config.toolbar.collapsedSize;
@@ -28,9 +34,22 @@ class MainBrowserWindow extends WindowMain {
   /**
    * Resize toolbar window
    */
-  setToolbarSize() {
+  setToolbarSize(sizeFactor) {
+    const prevFactor = Store.get('toolbarSizeFactor', 1);
+
+    if (sizeFactor && sizeFactor !== prevFactor) {
+      Store.set('toolbarSizeFactor', sizeFactor);
+    }
+
+    const factor = sizeFactor || prevFactor;
+
     const toolbarWidth = this.isCollapsed ? COLLAPSED_SIZE : EXPANDED_SIZE;
-    this.setSize(toolbarWidth, config.toolbar.toolbarWindow.height);
+
+    this.notifyZoomFactorChange();
+    this.setSize(
+      Math.floor(toolbarWidth * factor),
+      Math.floor(config.toolbar.toolbarWindow.height * factor)
+    );
   }
 
   /**
@@ -57,6 +76,14 @@ class MainBrowserWindow extends WindowMain {
       return;
     }
     this.isCollapsed = state;
+  }
+
+  /**
+   * Notify the render window about zoom factor change.
+   */
+  notifyZoomFactorChange() {
+    const factor = Store.get('toolbarSizeFactor', 1);
+    this.window.webContents.send(ZOOM_FACTOR_CHANGE, factor);
   }
 
   /**
@@ -114,10 +141,13 @@ class MainBrowserWindow extends WindowMain {
    * @returns {number}
    */
   get yCoordinate() {
-    const toolbarHeight = config.toolbar.toolbarWindow.height;
+    const toolbarHeight = Store.get('toolbarSizeFactor', 1) * config.toolbar.toolbarWindow.height;
     const { workArea } = ScreenManager.instance.currentDisplay;
 
-    const coordinate = (workArea.height / 2) - (toolbarHeight / 2);
+    const halfWorkAreaHeight = workArea.height / 2;
+    const halfToolbarHeight = toolbarHeight / 2;
+
+    const coordinate = halfWorkAreaHeight - halfToolbarHeight;
     return Math.floor(coordinate);
   }
 

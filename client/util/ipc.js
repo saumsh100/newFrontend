@@ -1,12 +1,10 @@
 
-// Workaround to force webpack to ignore it.
-
-
-
 import { isHub } from './hub';
 
 if (isHub()) {
-  const { ipcRenderer } = window.require('electron');
+  const { ipcRenderer, webFrame } = window.require('electron');
+
+  module.exports.webFrame = webFrame;
 
   module.exports.electron = {
     on: (channel, handler) => {
