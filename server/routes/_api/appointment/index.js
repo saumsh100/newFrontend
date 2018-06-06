@@ -494,11 +494,11 @@ appointmentsRouter.get('/insights', async (req, res, next) => {
     endDate,
   } = query;
 
-  startDate = startDate ? startDate : moment().startOf('day').toISOString();
-  endDate = endDate ? endDate : moment().startOf('day').add(1, 'days').toISOString();
+  startDate = startDate || moment().startOf('day').toISOString();
+  endDate = endDate || moment().startOf('day').add(1, 'days').toISOString();
 
   try {
-    const insightData = await formatingInsights(await allInsights(accountId, startDate, endDate));
+    const insightData = await allInsights(accountId, startDate, endDate);
     return res.send(insightData);
   } catch (e) {
     return next(e);

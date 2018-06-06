@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  Card,
-} from '../../library';
+import { Card } from '../../library';
 import styles from './styles.scss';
 import Insights from './Insights';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
@@ -14,10 +12,6 @@ import { fetchInsights } from '../../../thunks/dashboard';
 import { FilterPatients, FilterAppointments } from '../Shared/filters';
 
 class PatientInsightsContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.fetchInsights();
   }
@@ -26,38 +20,34 @@ class PatientInsightsContainer extends Component {
     const currentDate = moment(this.props.dashboardDate);
     const nextPropsDate = moment(nextProps.dashboardDate);
 
-    if (!nextPropsDate.isSame(currentDate, 'month')
-      || !nextPropsDate.isSame(currentDate, 'day')
-      || !nextPropsDate.isSame(currentDate, 'year')) {
+    if (
+      !nextPropsDate.isSame(currentDate, 'month') ||
+      !nextPropsDate.isSame(currentDate, 'day') ||
+      !nextPropsDate.isSame(currentDate, 'year')
+    ) {
       this.props.fetchInsights();
     }
   }
 
   render() {
-    const {
-      insights,
-      appointments,
-      patients,
-    } = this.props;
+    const { insights, appointments, patients } = this.props;
 
-    const loaded = !this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients;
+    const allFetched =
+      !this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients;
 
     return (
-      <Card className={styles.card} runAnimation loaded={loaded}>
+      <Card className={styles.card} runAnimation loaded={allFetched}>
         <div className={styles.container}>
-          {loaded ? (
+          {allFetched ? (
             <div className={styles.header}>
               <span className={styles.header_count}>{this.props.insightCount}&nbsp;</span>
               {this.props.insightCount === 1 ? 'Patient Insight' : 'Patient Insights'}
-            </div>) : null}
+            </div>
+          ) : null}
 
-          {loaded ?
-            <Insights
-              insights={insights}
-              appointments={appointments}
-              patients={patients}
-            />
-            : null }
+          {allFetched ? (
+            <Insights insights={insights} appointments={appointments} patients={patients} />
+          ) : null}
         </div>
       </Card>
     );
@@ -68,11 +58,11 @@ PatientInsightsContainer.propTypes = {
   insights: PropTypes.instanceOf(Array),
   loadingInsights: PropTypes.bool,
   dashAppointmentsFetched: PropTypes.bool,
-  appointments: PropTypes.object,
-  patients: PropTypes.object,
+  appointments: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map),
   insightCount: PropTypes.number,
   fetchInsights: PropTypes.func,
-  dasboardDate: PropTypes.instanceOf(Date),
+  dashboardDate: PropTypes.string,
 };
 
 function mapStateToProps({ apiRequests, dashboard, entities }) {
@@ -83,7 +73,9 @@ function mapStateToProps({ apiRequests, dashboard, entities }) {
   const insights = dash.insights;
   const insightCount = dash.insightCount;
 
-  const dashAppointmentsFetched = (apiRequests.get('dashAppointments') ? apiRequests.get('dashAppointments').wasFetched : null);
+  const dashAppointmentsFetched = apiRequests.get('dashAppointments')
+    ? apiRequests.get('dashAppointments').wasFetched
+    : null;
 
   const appointments = entities.getIn(['appointments', 'models']);
   const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
@@ -103,10 +95,13 @@ function mapStateToProps({ apiRequests, dashboard, entities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-    fetchInsights,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+      fetchInsights,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

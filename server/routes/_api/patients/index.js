@@ -407,18 +407,19 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
       where: {
         accountId,
         patientUserId: { $eq: null },
-        $or: [{ firstName: {
-          ilike: firstName,
-        },
+        $or: [{
+          firstName: {
+            ilike: firstName,
+          },
           lastName: {
             ilike: lastName,
           },
         }, { email },
-          { mobilePhoneNumber },
-          { homePhoneNumber: mobilePhoneNumber },
-          { workPhoneNumber: mobilePhoneNumber },
-          { otherPhoneNumber: mobilePhoneNumber },
-          ],
+        { mobilePhoneNumber },
+        { homePhoneNumber: mobilePhoneNumber },
+        { workPhoneNumber: mobilePhoneNumber },
+        { otherPhoneNumber: mobilePhoneNumber },
+        ],
       },
       include: [{
         model: Appointment,
@@ -429,8 +430,9 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           },
           isDeleted: false,
           isCancelled: false,
+          isPending: false,
         },
-        order: [['startDate', 'asc']],
+        order: [['startDate', 'ASC']],
         required: false,
       }],
     });

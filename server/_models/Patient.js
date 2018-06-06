@@ -270,7 +270,13 @@ export default function (sequelize, DataTypes) {
     ],
   });
 
-  Patient.associate = ({ Account, Appointment, Chat, SentRecall, DeliveredProcedure, Review, SentReview, SentReminder, PatientUser }) => {
+  Patient.associate = ({ Account, Appointment, Chat, SentRecall, DeliveredProcedure, Review, SentReview, SentReminder, PatientUser, Family }) => {
+
+    Patient.belongsTo(Family, {
+      foreignKey: 'familyId',
+      as: 'family',
+    });
+
     Patient.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',

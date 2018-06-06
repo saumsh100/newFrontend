@@ -9,7 +9,7 @@ describe('Dashboard Tests', () => {
       .get('[data-test-id="statCard_Online Requests"]')
       .contains('0')
       .get('[data-test-id="statCard_Patient Insights"]')
-      .contains('3')
+      .contains('0')
       .get('[data-test-id="statCard_Appointments Today"]')
       .contains('3')
       .get('[data-test-id="statCard_Patients Unconfirmed"]')
