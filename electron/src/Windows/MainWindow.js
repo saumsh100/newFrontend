@@ -144,10 +144,10 @@ class MainBrowserWindow extends WindowMain {
     const toolbarHeight = Store.get('toolbarSizeFactor', 1) * config.toolbar.toolbarWindow.height;
     const { workArea } = ScreenManager.instance.currentDisplay;
 
-    const workAreaHeight = workArea.height / 2;
-    const windowHeight = toolbarHeight / 2;
+    const halfWorkAreaHeight = workArea.height / 2;
+    const halfToolbarHeight = toolbarHeight / 2;
 
-    const coordinate = workAreaHeight - windowHeight;
+    const coordinate = halfWorkAreaHeight - halfToolbarHeight;
     return Math.floor(coordinate);
   }
 
