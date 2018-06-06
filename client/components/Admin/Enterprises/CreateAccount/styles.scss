@@ -3,17 +3,10 @@
 .mainContainer {
   background: $primary-white;
   animation: fadeinform 0.9s;
-  //border-radius: 10px;
-  padding: 10px 10px 10px 10px;
   position: relative;
 }
 
 .logo {
-}
-.timesButton {
-  color: #2e3845;
-  font-size: 16px;
-  width: auto !important;
 }
 
 .header {
@@ -21,10 +14,13 @@
   display: flex;
   align-items: center;
   color: $primary-dark;
-  composes: fontMediumLarge from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  font-size: 19px;
+
   &_text {
-    padding-left: 10px;
+    margin-bottom: 15px;
   }
+
   &_icon {
     margin-left: auto;
     font-size: 1rem;
@@ -38,7 +34,6 @@
 }
 
 .formContainer {
-  margin: 10px 10px 10px 10px;
   display: flex;
   flex-direction: column;
 }
@@ -48,8 +43,9 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  padding: 0px 10px 10px 10px;
+  margin-top: 15px;
 }
+
 .nextButton {
   margin-left: auto;
 }
@@ -62,14 +58,7 @@
   }
 }
 
-.selectPadding {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
 .dropDownEnterprise {
-  padding-top: 15px;
-  padding-bottom: 15px;
   z-index: 1000000;
 }
 
@@ -81,6 +70,7 @@
   width: 100%;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 
   &_dd {
     width: 45%;
@@ -103,10 +93,14 @@
     width: 210px;
     color: $primary-darkgrey;
     font-weight: $large-weight;
-    padding-left: 20px;
   }
+
+  &_icon {
+    width: 30px;
+  }
+
   &_row {
-    min-width: 400px;
+    min-width: 300px;
     width: 100%;
   }
 
@@ -121,7 +115,7 @@
 .displayFlex {
   display: flex;
   align-items: center;
-  padding-bottom: 5px;
+  padding-bottom: 15px;
 }
 
 @keyframes fadeinform {

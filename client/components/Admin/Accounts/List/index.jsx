@@ -13,8 +13,11 @@ import { VButton } from '../../../library';
 import styles from './styles.scss';
 
 class AccountsList extends Component {
-  componentWillMount() {
-    this.props.fetchEntities({ key: 'accounts', url: `/api/enterprises/${this.props.enterpriseId}/accounts` });
+  componentDidMount() {
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: `/api/enterprises/${this.props.enterpriseId}/accounts`,
+    });
   }
 
   render() {
@@ -30,23 +33,20 @@ class AccountsList extends Component {
 
     const baseUrl = (path = '') => `/admin/enterprises/${enterprise.id}/accounts${path}`;
     const navigateToEdit = ({ id }) => history.push(baseUrl(`/${id}/edit`));
-    const deleteAccount = ({ id }) => this.props.deleteEntityRequest({
-      key: 'accounts',
-      url: `/api/enterprises/${enterprise.id}/accounts/${id}`,
-      id,
-    });
+    const deleteAccount = ({ id }) =>
+      this.props.deleteEntityRequest({
+        key: 'accounts',
+        url: `/api/enterprises/${enterprise.id}/accounts/${id}`,
+        id,
+      });
 
-    const renderAddButton = () =>
-      <VButton
-        as={Link}
-        icon="plus"
-        positive
-        rounded
-        compact
-        to={baseUrl('/create')}
-      >Add Account</VButton>;
+    const renderAddButton = () => (
+      <VButton as={Link} icon="plus" positive rounded compact to={baseUrl('/create')}>
+        Add Account
+      </VButton>
+    );
 
-    const renderAccountDisplay = (account) => (
+    const renderAccountDisplay = account => (
       <div className={styles.wrapper}>
         <strong className={styles.list}>{account.name}</strong>
         <LastSyncDisplay className={styles.lastSyncDisplay} date={account.lastSyncDate} />
@@ -54,21 +54,25 @@ class AccountsList extends Component {
     );
 
     return (
-      <div>{ enterprise ? (
-        <PageContainer
-          title={pageTitle()}
-          breadcrumbs={breadcrumbs()}
-          renderButtons={renderAddButton}
-        >
-          <EditableList
-            items={accounts}
-            render={renderAccountDisplay}
-            onEdit={navigateToEdit}
-            onDelete={deleteAccount}
-            confirm={({ name }) => `Do you really want to delete ${name} Account?`}
-          />
-        </PageContainer>
-      ) : 'Loading...' }</div>
+      <div>
+        {enterprise ? (
+          <PageContainer
+            title={pageTitle()}
+            breadcrumbs={breadcrumbs()}
+            renderButtons={renderAddButton}
+          >
+            <EditableList
+              items={accounts}
+              render={renderAccountDisplay}
+              onEdit={navigateToEdit}
+              onDelete={deleteAccount}
+              confirm={({ name }) => `Do you really want to delete ${name} Account?`}
+            />
+          </PageContainer>
+        ) : (
+          'Loading...'
+        )}
+      </div>
     );
   }
 }
@@ -95,12 +99,20 @@ AccountsList.propTypes = {
 const stateToProps = (state, { match: { params: { enterpriseId } } }) => ({
   enterpriseId,
   enterprise: getModel(state, 'enterprises', enterpriseId),
-  accounts: getCollection(state, 'accounts', (account => account.get('enterpriseId') === enterpriseId)),
+  accounts: getCollection(
+    state,
+    'accounts',
+    account => account.get('enterpriseId') === enterpriseId
+  ),
 });
 
-const dispatchToProps = dispatch => bindActionCreators({
-  fetchEntities,
-  deleteEntityRequest,
-}, dispatch);
+const dispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      fetchEntities,
+      deleteEntityRequest,
+    },
+    dispatch
+  );
 
 export default connect(stateToProps, dispatchToProps)(AccountsList);
