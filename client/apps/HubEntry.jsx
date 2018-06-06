@@ -30,8 +30,9 @@ import {
   REQUEST_USER_DATA,
   SET_USER_DATA,
   REQUEST_TOOLBAR_POSITION,
+  ZOOM_FACTOR_CHANGE,
 } from '../constants';
-import { electron } from '../util/ipc';
+import { electron, webFrame } from '../util/ipc';
 
 // Binds the token setting in header
 bindAxiosInterceptors();
@@ -60,6 +61,10 @@ electron.on(SHOW_CONTENT, () => {
     return;
   }
   store.dispatch(expandContent());
+});
+
+electron.on(ZOOM_FACTOR_CHANGE, (e, data) => {
+  webFrame.setZoomFactor(data);
 });
 
 // TODO: move to Auth service layer?

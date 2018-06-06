@@ -72,6 +72,17 @@ class WindowManager {
   }
 
   /**
+   * Changes the toolbar size based on a percentage factor
+   *
+   * @param sizeFactor
+   */
+  changeToolbarSize(sizeFactor) {
+    this.mainWindow.changeState(true);
+    this.mainWindow.setToolbarSize(sizeFactor);
+    this.mainWindow.positionWindow();
+  }
+
+  /**
    * Logout the current user.
    */
   logoutUser() {
