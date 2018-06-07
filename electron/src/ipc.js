@@ -13,6 +13,7 @@ const {
   OPEN_EXTERNAL_LINK,
   REQUEST_USER_DATA,
   REQUEST_TOOLBAR_POSITION,
+  REQUEST_ZOOM_FACTOR,
 } = require('./constants');
 const WindowManager = require('./WindowManager');
 
@@ -75,4 +76,12 @@ ipcMain.on(SET_USER_DATA, (e, data) => {
 
 ipcMain.on(REQUEST_TOOLBAR_POSITION, () => {
   WindowManager.instance.mainWindow.notifyPositionChange();
+});
+
+ipcMain.on(REQUEST_ZOOM_FACTOR, (e, data) => {
+  if (data.window === 'toolbar') {
+    WindowManager.instance.mainWindow.notifyScale();
+  } else {
+    WindowManager.instance.userModalWindow.notifyScale();
+  }
 });

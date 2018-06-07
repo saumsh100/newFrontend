@@ -1,10 +1,27 @@
 
-const electron = require('electron');
+const Store = require('../store');
+const { ZOOM_FACTOR_CHANGE } = require('../constants');
 
 class Window {
   constructor() {
     /** @type electron.BrowserWindow **/
     this.window;
+  }
+
+  /**
+   * Update window scale
+   */
+  scaleWindow() {
+    if (this.window && this.window.webContents) {
+      this.notifyScale();
+    }
+  }
+
+  /**
+   * Send an IPC message.
+   */
+  notifyScale() {
+    this.window.webContents.send(ZOOM_FACTOR_CHANGE, this.zoomFactor);
   }
 
   /**
@@ -72,6 +89,15 @@ class Window {
    */
   hide() {
     this.window.hide();
+  }
+
+  /**
+   * Returns currently set zoom factor.
+   *
+   * @returns {number}
+   */
+  get zoomFactor() {
+    return Store.get('toolbarSizeFactor', 1);
   }
 }
 

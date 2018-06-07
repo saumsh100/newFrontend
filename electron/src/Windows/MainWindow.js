@@ -1,5 +1,4 @@
 
-const { webFrame } = require('electron');
 const url = require('url');
 const config = require('../../config');
 const Store = require('../store');
@@ -9,7 +8,6 @@ const {
   TOOLBAR_POSITION_CHANGE,
   HIDDEN_USER_MODAL,
   REQUEST_USER_DATA,
-  ZOOM_FACTOR_CHANGE,
 } = require('../constants');
 
 const EXPANDED_SIZE = config.toolbar.expandedSize;
@@ -34,18 +32,10 @@ class MainBrowserWindow extends WindowMain {
   /**
    * Resize toolbar window
    */
-  setToolbarSize(sizeFactor) {
-    const prevFactor = Store.get('toolbarSizeFactor', 1);
-
-    if (sizeFactor && sizeFactor !== prevFactor) {
-      Store.set('toolbarSizeFactor', sizeFactor);
-    }
-
-    const factor = sizeFactor || prevFactor;
-
+  setToolbarSize() {
+    const factor = this.zoomFactor;
     const toolbarWidth = this.isCollapsed ? COLLAPSED_SIZE : EXPANDED_SIZE;
 
-    this.notifyZoomFactorChange();
     this.setSize(
       Math.floor(toolbarWidth * factor),
       Math.floor(config.toolbar.toolbarWindow.height * factor)
@@ -76,14 +66,6 @@ class MainBrowserWindow extends WindowMain {
       return;
     }
     this.isCollapsed = state;
-  }
-
-  /**
-   * Notify the render window about zoom factor change.
-   */
-  notifyZoomFactorChange() {
-    const factor = Store.get('toolbarSizeFactor', 1);
-    this.window.webContents.send(ZOOM_FACTOR_CHANGE, factor);
   }
 
   /**
