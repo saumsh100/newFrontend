@@ -93,9 +93,6 @@ export default function AppointmentInfo(props) {
         </SBody>
 
         <SFooter className={styles.footer}>
-          <Button border="blue" dense compact onClick={() => props.closePopover()}>
-            Close
-          </Button>
           <Button
             color="blue"
             dense
@@ -103,7 +100,7 @@ export default function AppointmentInfo(props) {
             className={styles.editButton}
             onClick={() => props.editAppointment()}
           >
-            Edit
+            Edit Appointment
           </Button>
         </SFooter>
       </SContainer>

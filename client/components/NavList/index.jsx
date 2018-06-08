@@ -138,8 +138,8 @@ function NavList({
         {/* <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />*/}
 
         <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing">
-          <SubNavItem path="/reputation/listings" label="Listings" />
           <SubNavItem path="/reputation/reviews" label="Reviews" />
+          <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
         {/* <MultiNavItem path="/social" icon="thumbs-up" label="Social Media" disabled>
           <SubNavItem path="/social/patient" label="Patient Posts" disabled/>
@@ -177,6 +177,10 @@ NavList.propTypes = {
   withEnterprise: PropTypes.bool,
   unreadChats: PropTypes.number,
   onlineRequests: PropTypes.number,
+  path: PropTypes.string,
+  icon: PropTypes.string,
+  children: PropTypes.element,
+  badge: PropTypes.bool,
 };
 
 function mapStateToProps({ chat, entities }) {

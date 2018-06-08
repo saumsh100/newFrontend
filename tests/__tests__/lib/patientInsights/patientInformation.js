@@ -158,9 +158,7 @@ describe('Patient Insights', () => {
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 
-      expect(confirm.sms).toBe(0);
-      expect(confirm.phone).toBe(0);
-      expect(confirm.email).toBe(0);
+      expect(confirm).toBe(false);
     });
 
     test('should have no reminder - its not isConfirmable', async () => {
@@ -180,9 +178,7 @@ describe('Patient Insights', () => {
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 
-      expect(confirm.sms).toBe(0);
-      expect(confirm.phone).toBe(0);
-      expect(confirm.email).toBe(0);
+      expect(confirm).toBe(false);
     });
   });
 
@@ -206,18 +202,26 @@ describe('Patient Insights', () => {
 
     test('should return one insight with missingEmail and Mobile to be false', async () => {
       const time = moment(date(2017, 7, 5, 7));
-      const family = await Family.create(makeFamilyData());
-      await Patient.create(makePatientData({
+      const family = await Family.create(makeFamilyData({ headId: '123' }));
+      const patient = await Patient.create(makePatientData({
         firstName: 'WHAT',
         lastName: 'NO',
-        dueForHygieneDate: time.clone().subtract(7, 'months')._d,
         familyId: family.id,
+        pmsId: '123',
+      }));
+
+      await Patient.create(makePatientData({
+        firstName: 'When',
+        lastName: 'NO',
+        familyId: family.id,
+        pmsId: '124',
+        dueForHygieneDate: time.clone().subtract(7, 'months')._d,
       }));
 
       const reminder1 = await Reminder.create({ accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months' });
 
       const appts = await Appointment.bulkCreate([
-        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
+        makeApptData({ patientId: patient.id, ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
       await SentReminder.create(makeSentReminderData({
@@ -228,7 +232,6 @@ describe('Patient Insights', () => {
       }));
 
       const allInsightsResult = await allInsights(accountId, date(2017, 7, 5, 7), dates(2017, 7, 5, 9));
-
       expect(allInsightsResult.length).toBe(1);
     });
   });

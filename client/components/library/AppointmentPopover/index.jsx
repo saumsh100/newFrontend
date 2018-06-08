@@ -9,6 +9,7 @@ import { createBrowserHistory } from 'history';
 import Popover from 'react-popover';
 import AppointmentInfo from './AppointmentInfo';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
+import { appointmentShape, patientShape, practitionerShape, chairShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 
 class AppointmentPopover extends Component {
@@ -19,9 +20,8 @@ class AppointmentPopover extends Component {
     };
 
     this.setOpen = this.setOpen.bind(this);
-    this.editPatient = this.editPatient.bind(this);
     this.closeOnScroll = this.closeOnScroll.bind(this);
-    this.handleEditAppointment = this.handleEditAppointment.bind(this)
+    this.handleEditAppointment = this.handleEditAppointment.bind(this);
   }
 
   componentDidMount() {
@@ -32,12 +32,14 @@ class AppointmentPopover extends Component {
     window.addEventListener('scroll', this.closeOnScroll);
   }
 
+  setOpen(value) {
+    this.setState({
+      isOpen: value,
+    });
+  }
+
   handleEditAppointment() {
-    const {
-      push,
-      selectAppointment,
-      appointment,
-    } = this.props;
+    const { appointment } = this.props;
 
     const browserHistory = createBrowserHistory();
     const location = browserHistory.location.pathname;
@@ -47,18 +49,8 @@ class AppointmentPopover extends Component {
     }
 
     const mergeApp = Object.assign(appointment.toJS(), { appModel: appointment });
-    selectAppointment(mergeApp);
-    push('/schedule');
-  }
-
-  setOpen(value) {
-    this.setState({
-      isOpen: value,
-    });
-  }
-
-  editPatient(id) {
-    this.props.push(`/patients/${id}`);
+    this.props.selectAppointment(mergeApp);
+    this.props.push('/schedule');
   }
 
   closeOnScroll() {
@@ -68,20 +60,13 @@ class AppointmentPopover extends Component {
   }
 
   render() {
-    const {
-      placement,
-      patient,
-      appointment,
-      children,
-      chair,
-      practitioner,
-    } = this.props;
+    const { placement, patient, appointment, children, chair, practitioner } = this.props;
 
     return (
       <Popover
         className={styles.appPopover}
         isOpen={this.state.isOpen}
-        body={[(
+        body={[
           <AppointmentInfo
             closePopover={() => this.setOpen(false)}
             patient={patient}
@@ -89,20 +74,18 @@ class AppointmentPopover extends Component {
             editAppointment={this.handleEditAppointment}
             chair={chair[0]}
             practitioner={practitioner[0]}
-          />
-        )]}
+          />,
+        ]}
         preferPlace={placement || 'right'}
         tipSize={12}
         onOuterAction={() => this.setOpen(false)}
       >
-        <div className={styles.appLink}>
-          {React.Children.map(children, (patientLink) => {
-            return (
-              React.cloneElement(patientLink, {
-                onClick: () => this.setOpen(true),
-              })
-            );
-          })}
+        <div className={styles.appLink} onDoubleClick={this.handleEditAppointment}>
+          {React.Children.map(children, patientLink =>
+            React.cloneElement(patientLink, {
+              onClick: () => this.setOpen(true),
+            })
+          )}
         </div>
       </Popover>
     );
@@ -110,20 +93,32 @@ class AppointmentPopover extends Component {
 }
 
 AppointmentPopover.propTypes = {
-  patient: PropTypes.object,
-  appointment: PropTypes.object,
+  patient: PropTypes.shape(patientShape),
+  appointment: PropTypes.shape(appointmentShape),
   age: PropTypes.number,
   closePopover: PropTypes.func,
   editAppointment: PropTypes.func,
   scheduleView: PropTypes.string,
-  practitioner: PropTypes.object,
-  chair: PropTypes.object,
+  practitioner: PropTypes.shape(practitionerShape),
+  chair: PropTypes.shape(chairShape),
   placement: PropTypes.string,
+  scrollId: PropTypes.string,
+  push: PropTypes.func,
+  selectAppointment: PropTypes.func,
+  children: PropTypes.element,
+  dashboardDate: PropTypes.string,
+  setScheduleDate: PropTypes.func,
 };
 
 function mapStateToProps({ entities, dashboard }, { appointment }) {
-  const practitioner = entities.getIn(['practitioners', 'models']).toArray().filter(prac => prac.id === appointment.practitionerId);
-  const chair = entities.getIn(['chairs', 'models']).toArray().filter(ch => ch.id === appointment.chairId);
+  const practitioner = entities
+    .getIn(['practitioners', 'models'])
+    .toArray()
+    .filter(prac => prac.id === appointment.practitionerId);
+  const chair = entities
+    .getIn(['chairs', 'models'])
+    .toArray()
+    .filter(ch => ch.id === appointment.chairId);
 
   return {
     chair,
@@ -133,11 +128,14 @@ function mapStateToProps({ entities, dashboard }, { appointment }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    push,
-    selectAppointment,
-    setScheduleDate,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      push,
+      selectAppointment,
+      setScheduleDate,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

@@ -7,7 +7,7 @@ import Popover from 'react-popover';
 import PropTypes from 'prop-types';
 import styles from './styles.scss';
 import PatientProfile from './PatientProfile';
-import { PatientShape } from '../PropTypeShapes';
+import { patientShape } from '../PropTypeShapes';
 
 class PatientPopover extends Component {
   constructor(props) {
@@ -68,7 +68,7 @@ class PatientPopover extends Component {
         tipSize={12}
         onOuterAction={() => this.setOpen(false)}
       >
-        <div className={styles.patientLink}>
+        <div className={styles.patientLink} onDoubleClick={() => this.editPatient(patient.id)}>
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
               onClick: (e) => {
@@ -85,7 +85,7 @@ class PatientPopover extends Component {
 
 PatientPopover.propTypes = {
   children: PropTypes.element,
-  patient: PropTypes.shape(PatientShape),
+  patient: PropTypes.shape(patientShape),
   className: PropTypes.objectOf(PropTypes.string),
   placement: PropTypes.string,
   isPatientUser: PropTypes.bool,

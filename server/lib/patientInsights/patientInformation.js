@@ -35,9 +35,12 @@ export async function allInsights(accountId, startDate, endDate) {
         'Patient.email',
         'Patient.familyId',
       ],
-    }).filter(p => p.family.id === null || p.pmsId === p.family.headId); // Remove non-family heads
+    });
 
-    return await generateInsights(patients, startDate);
+    const filterNonFamilyHeads = patients.filter(p =>
+      p.family.id === null || p.pmsId === p.family.headId);
+
+    return await generateInsights(filterNonFamilyHeads, startDate);
   } catch (err) {
     console.error(err);
     throw err;
@@ -77,11 +80,13 @@ async function generateInsights(patients, startDate) {
 
     let i = j;
     const familiesDueRecare = [];
+    let familyId = null;
 
     while (i < patients.length && patient.id === patients[i].id) {
-      const data = familyRecare(patient.id, patients[i].family);
+      const data = familyRecare(patient.id, patients[i].family, familyId);
 
       if (data) {
+        familyId = data.id;
         familiesDueRecare.push(data);
       }
 
@@ -103,7 +108,8 @@ async function generateInsights(patients, startDate) {
 
     j = i;
   }
-  return uniqBy(insightsList, 'patientId');
+  const filteredInsights = insightsList.filter(ins => ins.insights.length);
+  return uniqBy(filteredInsights, 'patientId');
 }
 
 /**
@@ -141,13 +147,16 @@ function generateEmailInsight() {
 async function generateConfirmApptInsight(patient, appointment, startDate) {
   const confirmAttempts = await checkConfirmAttempts(appointment.id);
 
-  confirmAttempts.phoneNumber = patient.homePhoneNumber
+  const phoneNumber = patient.mobilePhoneNumber
     || patient.workPhoneNumber
-    || patient.mobilePhoneNumber;
+    || patient.homePhoneNumber;
+  if (confirmAttempts) {
+    confirmAttempts.phoneNumber = phoneNumber;
+  }
 
-  return confirmAttempts.phoneNumber && moment(startDate).isAfter(new Date()) ? {
+  return moment(startDate).isAfter(new Date()) && (phoneNumber || patient.email) ? {
     type: 'confirmAttempts',
-    value: confirmAttempts,
+    value: confirmAttempts || { phoneNumber },
   } : null;
 }
 
@@ -157,13 +166,14 @@ async function generateConfirmApptInsight(patient, appointment, startDate) {
  * @param  {[object]} family
  * @return {[object]} [patient Model with recareDate]
  */
-function familyRecare(patientId, family) {
+function familyRecare(patientId, family, familyMemberId) {
   if (family.id === null || family.patients.id === null
-    || family.patients.id === patientId) {
+    || family.patients.id === patientId || familyMemberId === family.patients.id) {
     return null;
   }
 
   const patient = family.patients;
+
   if (patient.dueForHygieneDate < patient.dueForRecallExamDate || !patient.dueForRecallExamDate) {
     patient.dateDue = patient.dueForHygieneDate;
   } else {
@@ -199,7 +209,14 @@ export async function checkConfirmAttempts(appointmentId) {
     confirmAttempts[sentReminder.primaryType] += 1;
   }
 
-  return confirmAttempts;
+  let approveInsight = false;
+  Object.keys(confirmAttempts).forEach((primaryType) => {
+    if (confirmAttempts[primaryType] > 0) {
+      approveInsight = true;
+    }
+  });
+
+  return approveInsight && confirmAttempts;
 }
 
 function appointmentsQuery(accountId, startDate, endDate) {

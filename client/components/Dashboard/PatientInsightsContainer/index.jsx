@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { Card } from '../../library';
 import styles from './styles.scss';
 import Insights from './Insights';
+import InsightsHeader from './Insights/InsightsHeader';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { fetchInsights } from '../../../thunks/dashboard';
 import { FilterPatients, FilterAppointments } from '../Shared/filters';
@@ -38,16 +39,13 @@ class PatientInsightsContainer extends Component {
     return (
       <Card className={styles.card} runAnimation loaded={allFetched}>
         <div className={styles.container}>
-          {allFetched ? (
-            <div className={styles.header}>
-              <span className={styles.header_count}>{this.props.insightCount}&nbsp;</span>
-              {this.props.insightCount === 1 ? 'Patient Insight' : 'Patient Insights'}
-            </div>
-          ) : null}
+          {allFetched && (
+            <InsightsHeader insightCount={this.props.insightCount} insights={insights} />
+          )}
 
-          {allFetched ? (
+          {allFetched && (
             <Insights insights={insights} appointments={appointments} patients={patients} />
-          ) : null}
+          )}
         </div>
       </Card>
     );
