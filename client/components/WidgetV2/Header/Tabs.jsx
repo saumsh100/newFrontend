@@ -50,7 +50,7 @@ function Tabs({ isBooking, setIsBooking, history }) {
         <Route exact path={pathBuilder('/book/waitlist/select-dates')} component={contentTabs()} />
         <Route exact path={pathBuilder('/book/waitlist/select-times')} component={contentTabs()} />
         <Route exact path={pathBuilder('/signup/confirm')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/personal-information')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/patient-information')} component={contentTabs()} />
         <Route exact path={pathBuilder('/book/additional-information')} component={contentTabs()} />
         <Route exact path={pathBuilder('/book/review')} component={contentTabs()} />
         <Route exact path={pathBuilder('/book/wait')} component={contentTabs()} />

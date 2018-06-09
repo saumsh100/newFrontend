@@ -7,6 +7,7 @@ import Link from '../../../library/Link';
 import WidgetCard from '../../../library/WidgetCard';
 import { setSelectedServiceId } from '../../../../actions/availabilities';
 import services from '../../../../entities/collections/services';
+import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function Reasons({
@@ -14,6 +15,7 @@ function Reasons({
   selectedServiceId,
   setSelectedService,
   selectedPractitionerId,
+  location,
 }) {
   /**
    * List of only active and not hidden practitioners
@@ -32,6 +34,10 @@ function Reasons({
     return acc;
   }, []);
 
+  /**
+   * Checks if there are a specific route to go onclicking a card or just the default one.
+   */
+  const contextualUrl = (location.state && location.state.nextRoute) || './date-and-time';
   return (
     <div className={styles.container}>
       {!servicesList.length ? (
@@ -45,7 +51,7 @@ function Reasons({
         </div>
       ) : (
         servicesList.map((service, i) => (
-          <Link to={'./date-and-time'} key={`reason_${i}`} className={styles.cardLink}>
+          <Link to={contextualUrl} key={`reason_${i}`} className={styles.cardLink}>
             <WidgetCard
               arrow
               title={service.label}
@@ -82,6 +88,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Reasons);
 Reasons.propTypes = {
   selectedPractitionerId: PropTypes.string,
   selectedServiceId: PropTypes.string,
+  location: PropTypes.shape(locationShape),
   servicesEntity: PropTypes.instanceOf(services),
   setSelectedService: PropTypes.func.isRequired,
 };

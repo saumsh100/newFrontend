@@ -64,6 +64,15 @@ export default function (sequelize, DataTypes) {
     avatarUrl: {
       type: DataTypes.STRING,
     },
+    insuranceCarrier: {
+      type: DataTypes.STRING,
+    },
+    insuranceMemberId: {
+      type: DataTypes.STRING,
+    },
+    insuranceGroupId: {
+      type: DataTypes.STRING,
+    },
   });
 
 

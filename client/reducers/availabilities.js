@@ -1,5 +1,5 @@
 
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import moment from 'moment-timezone';
 import { handleActions } from 'redux-actions';
 import {
@@ -17,6 +17,7 @@ import {
   SET_IS_CONFIRMING,
   SET_IS_TIMER_EXPIRED,
   SET_AVAILABILITIES,
+  SET_CONFIRM_AVAILABILITY,
   SET_PATIENT_USER,
   SET_IS_SUCCESSFUL_BOOKING,
   REFRESH_AVAILABILITIES_STATE,
@@ -32,7 +33,10 @@ import {
   SET_SENTRECALLID,
   SET_DUE_DATE,
   SET_IS_BOOKING,
-  UPDATE_WAITLIST_TIMES,
+  RESET_WAITLIST,
+  SET_WAITLIST_TIMES,
+  SET_WAITLIST_DATES,
+  SET_WAITLIST_UNAVAILABLE_DATES,
 } from '../constants';
 
 function getStartTimeForToday(account) {
@@ -85,6 +89,7 @@ export const createInitialWidgetState = (state) => {
         hasWaitList: false,
         waitlist: {
           dates: [],
+          unavailableDates: [],
           times: [],
         },
         waitSpot: {
@@ -108,6 +113,7 @@ export const createInitialWidgetState = (state) => {
         },
 
         selectedAvailability: null,
+        confirmedAvailability: false,
         selectedServiceId: null, // Will be set by the initialState from server
         selectedPractitionerId: '',
         selectedStartDate,
@@ -183,6 +189,10 @@ export default handleActions(
       return state.set('availabilities', action.payload);
     },
 
+    [SET_CONFIRM_AVAILABILITY](state, action) {
+      return state.set('confirmedAvailability', action.payload);
+    },
+
     [SET_NEXT_AVAILABILITY](state, action) {
       return state.set('nextAvailability', action.payload);
     },
@@ -223,8 +233,22 @@ export default handleActions(
       return state.mergeIn(['waitSpot'], action.payload);
     },
 
-    [UPDATE_WAITLIST_TIMES](state, action) {
+    [RESET_WAITLIST](state) {
+      const payload = {
+        dates: [],
+        unavailableDates: [],
+        times: [],
+      };
+      return state.set('waitlist', Map(payload));
+    },
+    [SET_WAITLIST_TIMES](state, action) {
       return state.setIn(['waitlist', 'times'], action.payload);
+    },
+    [SET_WAITLIST_DATES](state, action) {
+      return state.setIn(['waitlist', 'dates'], action.payload);
+    },
+    [SET_WAITLIST_UNAVAILABLE_DATES](state, action) {
+      return state.setIn(['waitlist', 'unavailableDates'], action.payload);
     },
     [SET_PATIENT_USER](state, action) {
       return state.set('patientUser', action.payload);

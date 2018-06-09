@@ -52,13 +52,13 @@ function BackButton(props) {
         />
         <Route
           exact
-          path={pathBuilder('/book/personal-information')}
+          path={pathBuilder('/book/patient-information')}
           component={backButton(props.goBack('./date-and-time'))}
         />
         <Route
           exact
           path={pathBuilder('/book/additional-information')}
-          component={backButton(props.goBack('./personal-information'))}
+          component={backButton(props.goBack('./patient-information'))}
         />
         <Route
           exact

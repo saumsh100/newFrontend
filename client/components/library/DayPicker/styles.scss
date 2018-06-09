@@ -43,7 +43,6 @@
 
 .rangeInputContainer {
   display: flex;
-  width: 315px;
   align-items: center;
   justify-content: space-between;
 }
@@ -76,4 +75,7 @@
   button {
     width: 100%;
   }
+}
+.arrowTo {
+  margin: 0 10px;
 }

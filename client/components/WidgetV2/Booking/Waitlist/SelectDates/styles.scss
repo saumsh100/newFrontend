@@ -18,17 +18,17 @@
   align-items: center;
   font-size: 12px;
 }
-.editLink {
-  background: $widget-grey-lightest;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  color: $widget-grey-light;
-  margin-left: 8px;
+.rangeInputContainer {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  svg {
-    fill: currentColor;
-  }
+  margin: 0 -8px;
+}
+
+.inputsGroup {
+  margin: 0 8px var(--widget-spacer);
+  padding: 0;
+  flex: 1;
+}
+
+.dateRangeButton {
+  margin-top: var(--widget-spacer);
 }

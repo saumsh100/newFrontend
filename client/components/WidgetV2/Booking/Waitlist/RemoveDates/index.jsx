@@ -2,25 +2,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Modal, Link } from '../../../../library';
+import { bindActionCreators } from 'redux';
+import { Modal, Button } from '../../../../library';
+import { setWaitlistUnavailableDates } from '../../../../../actions/availabilities';
+import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { patientShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
-function RemoveDates({ isAuth }) {
+function RemoveDates({ isAuth, setUnavailableDates, history, patientUser }) {
   /**
-   * Check if the user is logged, if it's send him to the personal-information route,
+   * Check if the user is logged, if it's send him to the patient-information route,
    * otherwise send him to the login
    */
-  const linkTo = isAuth ? '../personal-information' : '../../login';
+  const linkTo =
+    !isAuth || !patientUser || !patientUser.get('isPhoneNumberConfirmed')
+      ? {
+        pathname: '../../login',
+        state: {
+          nextRoute: './book/patient-information',
+        },
+      }
+      : '../patient-information';
+  /**
+   * If the user is negating his desire to join the waitlist,
+   * reset the wailist information, so if he joined by mistake or
+   * change his mind, he'll be able to not join the waitlist.
+   *
+   * @param {bool} confirmWaitlist
+   */
+  const handleUnavailableDaysConfirmation = (confirmWaitlist) => {
+    if (!confirmWaitlist) {
+      setUnavailableDates([]);
+    }
+    return history.push(confirmWaitlist ? './days-unavailable' : linkTo);
+  };
+
   return (
     <Modal active className={styles.customDialog}>
       <h3 className={styles.title}>Do you need to remove a specific date from your waitlist?</h3>
       <div className={styles.buttonsWrapper}>
-        <Link to={'./days-unavailable'} className={styles.confirmation}>
+        <Button
+          onClick={() => handleUnavailableDaysConfirmation(true)}
+          className={styles.confirmation}
+        >
           Yes
-        </Link>
-        <Link to={linkTo} className={styles.negation}>
+        </Button>
+        <Button
+          onClick={() => handleUnavailableDaysConfirmation(false)}
+          className={styles.negation}
+        >
           No
-        </Link>
+        </Button>
       </div>
     </Modal>
   );
@@ -29,10 +61,24 @@ function RemoveDates({ isAuth }) {
 function mapStateToProps({ auth }) {
   return {
     isAuth: auth.get('isAuthenticated'),
+    patientUser: auth.get('patientUser'),
   };
 }
-export default connect(mapStateToProps, null)(RemoveDates);
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setUnavailableDates: setWaitlistUnavailableDates,
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RemoveDates);
 
 RemoveDates.propTypes = {
+  patientUser: PropTypes.shape(patientShape),
   isAuth: PropTypes.bool.isRequired,
+  setUnavailableDates: PropTypes.func,
+  history: PropTypes.shape(historyShape),
 };

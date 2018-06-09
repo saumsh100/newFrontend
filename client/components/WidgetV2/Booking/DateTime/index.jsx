@@ -7,11 +7,11 @@ import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DateList from './DateList';
-import Link from '../../../library/Link';
 import {
   setSelectedStartDate,
   setSelectedAvailability,
   setIsFetching,
+  setConfirmAvailability,
 } from '../../../../actions/availabilities';
 import Button from '../../../library/Button';
 import DayPicker from '../../../library/DayPicker';
@@ -128,6 +128,12 @@ class DateTime extends Component {
    */
   selectAvailability(availability) {
     const { selectedAvailability } = this.props;
+
+    /**
+     * Set this as false everytime to make sure that
+     * we have accuracy on the availability selection.
+     */
+    this.props.setConfirmAvailability(false);
     if (!selectedAvailability || selectedAvailability.startDate !== availability.startDate) {
       return this.props.setSelectedAvailability(availability);
     }
@@ -138,7 +144,18 @@ class DateTime extends Component {
    * Send the user to the join waitlist's prompt, after clicking on the next button.
    */
   confirmDateTime() {
+    this.props.setConfirmAvailability(true);
     return this.props.history.push('./waitlist/join');
+  }
+
+  /**
+   * Send the user to the select waitlist's dates, after clicking on the Join Waitlist button.
+   */
+  joinWaitlist() {
+    this.props.setConfirmAvailability(false);
+    this.props.setSelectedAvailability(null);
+    this.props.setSelectedStartDate(new Date());
+    return this.props.history.push('./waitlist/select-dates');
   }
 
   render() {
@@ -239,15 +256,17 @@ class DateTime extends Component {
      */
     const renderAvailabilities = () =>
       (!selectedDayAvailabilities.length && !nextAvailability ? (
-        <Link to={'./waitlist/select-dates'} className={styles.subCard}>
+        <div className={styles.subCard}>
           <div className={styles.subCardWrapper}>
             <h3 className={styles.subCardTitle}>No available appointments</h3>
             <p className={styles.subCardSubtitle}>
               We did not find any availabilities for your criteria.
             </p>
           </div>
-          <span className={styles.subCardLink}>Join Waitlist</span>
-        </Link>
+          <Button className={styles.subCardLink} onClick={() => this.joinWaitlist()}>
+            Join Waitlist
+          </Button>
+        </div>
       ) : (
         <div className={styles.contentWrapper}>
           <div className={styles.content}>
@@ -255,15 +274,17 @@ class DateTime extends Component {
             <p className={styles.subtitle}>Select a time that works best for you</p>
             <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
           </div>
-          <Link to={'./waitlist/select-dates'} className={styles.subCard}>
+          <div className={styles.subCard}>
             <div className={styles.subCardWrapper}>
               <h3 className={styles.subCardTitle}>Want to come in sooner?</h3>
               <p className={styles.subCardSubtitle}>
                 Be notified when an earlier appointment becomes available
               </p>
             </div>
-            <span className={styles.subCardLink}>Join Waitlist</span>
-          </Link>
+            <Button className={styles.subCardLink} onClick={() => this.joinWaitlist()}>
+              Join Waitlist
+            </Button>
+          </div>
         </div>
       ));
 
@@ -332,6 +353,7 @@ function mapDispatchToProps(dispatch) {
       setIsFetching,
       fetchAvailabilities,
       setSelectedStartDate,
+      setConfirmAvailability,
       setSelectedAvailability,
     },
     dispatch
@@ -348,6 +370,7 @@ DateTime.propTypes = {
   selectedStartDate: PropTypes.string,
   selectedAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
   account: PropTypes.shape(accountShape),
+  setConfirmAvailability: PropTypes.func,
   setSelectedAvailability: PropTypes.func,
   history: PropTypes.shape(historyShape),
   nextAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
