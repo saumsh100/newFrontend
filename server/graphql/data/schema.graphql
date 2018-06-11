@@ -410,6 +410,11 @@ type Query {
 """The `JSON` scalar type represents raw JSON as values."""
 scalar SequelizeJSON
 
+type Subscription {
+  """Are you ready for the truth?"""
+  testSubType: WaitSpot
+}
+
 input updateFamilyInput {
   id: String!
   accountId: String!

@@ -5,7 +5,7 @@ import { nodeField, nodeTypeMapper, AccountViewer } from './types';
 import { patientType, patientMutation } from './patients';
 import { familyType, familyMutation } from './families';
 import { patientSearchesType, patientSearchesMutation } from './patientSearches';
-import { waitSpotType, waitSpotMutation } from './waitSpots';
+import { waitSpotType, waitSpotMutation, waitSpotSubscriptions } from './waitSpots';
 import { accountViewerType, accountViewerQuery } from './accountViewer';
 
 /**
@@ -62,10 +62,23 @@ const mutationType = new GraphQLObjectType({
 });
 
 /**
+ * Joining all subscriptions that will be available to the user.
+ */
+const rootSubscription = Object.assign({},
+  waitSpotSubscriptions,
+);
+
+const subscriptionType = new GraphQLObjectType({
+  name: 'Subscription',
+  fields: () => rootSubscription,
+});
+
+/**
  * This is the root endpoint of our serve.
  * Anything exposed needs to be inside this 2 objects.
  */
 export default new GraphQLSchema({
   query: queryType,
   mutation: mutationType,
+  subscription: subscriptionType,
 });

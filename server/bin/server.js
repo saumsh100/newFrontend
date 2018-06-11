@@ -1,4 +1,7 @@
 import rabbitjs from 'rabbit.js';
+import { execute, subscribe } from 'graphql';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import schema from 'CareCruGraphQL/data/schema';
 
 const http = require('http');
 
@@ -31,4 +34,13 @@ app.set('pub', pub);
 // Bind to supplied port
 server.listen(globals.port, () => {
   console.log(`CareCru HTTP Server is running on port ${globals.port}`);
+
+  new SubscriptionServer({
+    execute,
+    subscribe,
+    schema,
+  }, {
+    server,
+    path: '/subscriptions',
+  });
 });
