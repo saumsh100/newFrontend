@@ -23,6 +23,7 @@
 
 .header {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   border-bottom: 0;
   background-color: #313843;
@@ -53,6 +54,7 @@
 .footer {
   width: 100%;
   display: flex;
+  flex: 0 0 auto;
   padding: 20px 20px 20px 20px;
   border-top: 1px solid $primary-grey;
   box-sizing: border-box;

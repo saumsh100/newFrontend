@@ -1,4 +1,3 @@
-
 @import '../../../ui.scss';
 
 .tab {
@@ -32,10 +31,16 @@
 
 .nav {
   display: flex;
+  flex: 0 0 auto;
+}
+.tabs {
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
-
+  max-height: 520px;
+  overflow: auto;
 }
 
 .tabCard {

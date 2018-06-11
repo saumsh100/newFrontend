@@ -9,7 +9,7 @@ import styles from './styles.scss';
 
 // Workaround to be able compare class with type
 // https://github.com/gaearon/react-hot-loader/issues/304
-const tabType = (<Tab />).type;
+const tabType = <Tab />.type;
 
 class Tabs extends Component {
   constructor(props) {
@@ -45,9 +45,9 @@ class Tabs extends Component {
   }
 
   renderHeaders(headers, fluid) {
-    return headers.map((item, idx) => {
-      return React.cloneElement(item, {
-        fluid: fluid,
+    return headers.map((item, idx) =>
+      React.cloneElement(item, {
+        fluid,
         key: idx,
         index: idx,
         active: this.props.index === idx,
@@ -58,32 +58,25 @@ class Tabs extends Component {
         },
 
         noUnderLine: this.props.noUnderLine,
-      });
-    });
+      })
+    );
   }
 
   renderContents(contents) {
-    const contentElements = contents.map((item, idx) => {
-      return React.cloneElement(item, {
+    const contentElements = contents.map((item, idx) =>
+      React.cloneElement(item, {
         key: idx,
         active: this.props.index === idx,
         tabIndex: idx,
         noUnderLine: this.props.noUnderLine,
-      });
-    });
+      })
+    );
 
-    return contentElements.filter((item, idx) => (idx === this.props.index));
+    return contentElements.filter((item, idx) => idx === this.props.index);
   }
 
   render() {
-    const {
-      children,
-      className,
-      contentClass,
-      navClass,
-      noHeaders,
-      fluid,
-    } = this.props;
+    const { children, className, contentClass, navClass, noHeaders, fluid } = this.props;
 
     const newProps = omit(this.props, ['index', 'navClass', 'contentClass', 'noUnderLine']);
 
@@ -94,14 +87,12 @@ class Tabs extends Component {
     return (
       // Order is important, classNames={classes} needs to override props.className
       <div {...newProps} className={classes}>
-        {noHeaders ? null :
+        {!noHeaders && (
           <nav className={classNames(navClass, styles.nav)}>
             {this.renderHeaders(headers, fluid)}
           </nav>
-        }
-        <div className={contentClasses}>
-          {this.renderContents(contents)}
-        </div>
+        )}
+        <div className={contentClasses}>{this.renderContents(contents)}</div>
       </div>
     );
   }
