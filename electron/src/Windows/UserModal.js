@@ -83,6 +83,7 @@ class UserModal extends WindowMain {
     const { workArea } = ScreenManager.instance.currentDisplay;
 
     const coordinate =
+      workArea.y +
       workArea.height / 2 +
       (toolbar.toolbarWindow.height / 2 -
       userSettings.modalWindow.height -

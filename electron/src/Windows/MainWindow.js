@@ -129,7 +129,7 @@ class MainBrowserWindow extends WindowMain {
     const halfWorkAreaHeight = workArea.height / 2;
     const halfToolbarHeight = toolbarHeight / 2;
 
-    const coordinate = halfWorkAreaHeight - halfToolbarHeight;
+    const coordinate = halfWorkAreaHeight - halfToolbarHeight + workArea.y;
     return Math.floor(coordinate);
   }
 
