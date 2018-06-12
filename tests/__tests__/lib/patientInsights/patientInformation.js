@@ -158,7 +158,7 @@ describe('Patient Insights', () => {
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 
-      expect(confirm).toBe(false);
+      expect(confirm).toBe(null);
     });
 
     test('should have no reminder - its not isConfirmable', async () => {
@@ -178,7 +178,7 @@ describe('Patient Insights', () => {
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 
-      expect(confirm).toBe(false);
+      expect(confirm).toBe(null);
     });
   });
 

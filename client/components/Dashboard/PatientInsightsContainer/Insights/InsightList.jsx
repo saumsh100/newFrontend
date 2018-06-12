@@ -254,10 +254,10 @@ export default function InsightList(props) {
       </div>
 
       <div className={styles.insightContainer}>
-        {displayEmailInsight}
-        {displayPhoneInsight}
         {displayPatientConfirmed}
         {displayFamilyRecare}
+        {displayEmailInsight}
+        {displayPhoneInsight}
       </div>
     </div>
   );

@@ -36,6 +36,13 @@ class AppsRequestsContainer extends Component {
       startDate,
       endDate,
       limit: 100,
+      filters: [
+        {
+          isPending: false,
+          isCancelled: false,
+          isDeleted: false,
+        },
+      ],
     };
 
     Promise.all([
@@ -77,6 +84,13 @@ class AppsRequestsContainer extends Component {
         startDate,
         endDate,
         limit: 100,
+        filters: [
+          {
+            isPending: false,
+            isCancelled: false,
+            isDeleted: false,
+          },
+        ],
       };
 
       this.props.fetchEntitiesRequest({

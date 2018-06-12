@@ -50,7 +50,7 @@ export default function AppointmentInfo(props) {
         </SHeader>
         <SBody className={styles.body}>
           {popoverDataSections('Date', appointmentDate)}
-          {popoverDataSections('Name', `${patient.firstName} ${lastName} ${age}`)}
+          {popoverDataSections('Name', `${patient.firstName} ${lastName}`)}
 
           {patient.mobilePhoneNumber || patient.email ? (
             <div className={styles.container}>
@@ -76,7 +76,7 @@ export default function AppointmentInfo(props) {
 
           {popoverDataSections(
             'Practitioner',
-            `${practitioner.firstName} ${practitioner.lastName}`
+            `${practitioner.firstName} ${practitioner.lastName || null}`
           )}
 
           {chair && popoverDataSections('Chair', chair.name)}

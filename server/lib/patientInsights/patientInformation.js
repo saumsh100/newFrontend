@@ -17,6 +17,15 @@ export async function allInsights(accountId, startDate, endDate) {
     const patients = await Patient.findAll({
       where: {
         accountId,
+        $or: [{
+          birthDate: {
+            $eq: null,
+          },
+        }, {
+          birthDate: {
+            $lte: moment().subtract(16, 'years'),
+          },
+        }],
       },
       include: [
         appointmentsQuery(accountId, startDate, endDate),
@@ -100,16 +109,17 @@ async function generateInsights(patients, startDate) {
       });
     }
 
-    insightsList.push({
-      appointmentId: appointment.id,
-      patientId: patient.id,
-      insights,
-    });
-
+    if (insights.length) {
+      insightsList.push({
+        appointmentId: appointment.id,
+        patientId: patient.id,
+        insights,
+      });
+    }
     j = i;
   }
-  const filteredInsights = insightsList.filter(ins => ins.insights.length);
-  return uniqBy(filteredInsights, 'patientId');
+
+  return uniqBy(insightsList, 'patientId');
 }
 
 /**
@@ -145,25 +155,27 @@ function generateEmailInsight() {
  * @return [Object] Confirm Appointment Insight
  */
 async function generateConfirmApptInsight(patient, appointment, startDate) {
-  const confirmAttempts = await checkConfirmAttempts(appointment.id);
-
   const phoneNumber = patient.mobilePhoneNumber
     || patient.workPhoneNumber
     || patient.homePhoneNumber;
+
+  const confirmAttempts = (patient.mobilePhoneNumber && patient.email) && await checkConfirmAttempts(appointment.id);
+
   if (confirmAttempts) {
     confirmAttempts.phoneNumber = phoneNumber;
   }
 
-  return moment(startDate).isAfter(new Date()) && (phoneNumber || patient.email) ? {
+  return (moment(startDate).isAfter(new Date()) && (phoneNumber || patient.email)) && {
     type: 'confirmAttempts',
     value: confirmAttempts || { phoneNumber },
-  } : null;
+  };
 }
 
 /**
  * [familyRecare returns a recare date for family members who are past due. ]
  * @param  {[uuid]} patientId [patientId or array of patientIds ]
  * @param  {[object]} family
+ * @param  {[string]} familyMemberId [previous family member id]
  * @return {[object]} [patient Model with recareDate]
  */
 function familyRecare(patientId, family, familyMemberId) {
@@ -203,6 +215,10 @@ export async function checkConfirmAttempts(appointmentId) {
       isSent: true,
     },
   });
+
+  if (!sentReminders.length) {
+    return null;
+  }
 
   for (let i = 0; i < sentReminders.length; i += 1) {
     const sentReminder = sentReminders[i];

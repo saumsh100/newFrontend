@@ -1,6 +1,5 @@
 
 import React from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Icon } from '../../../library';
@@ -37,12 +36,12 @@ export default function RevenueDisplay(props) {
           </div>
           <div className={styles.yesterdayRight}>
             <div className={percentageBoxStyle}>
-              {percentage < 0 ? percentage * -1 : percentage}%
               <Icon
                 icon={percentage > 0 ? 'caret-up' : percentage !== 0 ? 'caret-down' : ''}
                 className={styles.percentageBox_icon}
                 type="solid"
               />
+              {percentage < 0 ? percentage * -1 : percentage}%
             </div>
           </div>
         </div>
@@ -59,6 +58,6 @@ export default function RevenueDisplay(props) {
 }
 
 RevenueDisplay.propTypes = {
-  data: PropTypes.instanceOf(Array),
+  data: PropTypes.arrayOf(PropTypes.number),
   average: PropTypes.number,
 };

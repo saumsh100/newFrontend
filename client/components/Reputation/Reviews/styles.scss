@@ -1,6 +1,5 @@
-
-@import "../../../ui.scss";
-@import "../styles.scss";
+@import '../../../ui.scss';
+@import '../styles.scss';
 
 .reviews {
   &__wrapper {
@@ -20,21 +19,21 @@
 
 .googleMapsRespond {
   display: flex;
-	flex-direction: row;
-	height: 168px;
-	align-items: center;
-	padding-left: 20px;
-	@media (max-width: 484px) {
-		flex-direction: column;
-		height: auto;
-	}
+  flex-direction: row;
+  height: 168px;
+  align-items: center;
+  padding-left: 20px;
+  @media (max-width: 484px) {
+    flex-direction: column;
+    height: auto;
+  }
 
-	&__video {
-		width: 20%;
-		height: 120px;
-		margin-right: 40px;
-		min-width: 250px;
-	}
+  &__video {
+    width: 20%;
+    height: 120px;
+    margin-right: 40px;
+    min-width: 250px;
+  }
 }
 
 .googleMapsRespondDescr {
@@ -53,45 +52,43 @@
   }
 }
 
-
 .stats {
   min-height: 180px;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	align-items: center;
-	width: 80%;
-	min-width: 250px;
-	margin: 0 auto;
-	padding: 15px 0 15px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  min-width: 250px;
+  margin: 0 auto;
+  padding: 15px 0 15px 0;
   position: relative;
 
-	&__count {
+  &__count {
     composes: fontExtraMediumLarge from 'sass-loader!../../../fonts.scss';
-	}
+  }
 
-	&__title {
-		font-size: $extra-medium-size;
-		font-weight: $large-weight;
-	}
+  &__title {
+    font-size: $extra-medium-size;
+    font-weight: $large-weight;
+  }
 
-	&__rating {
-		color: $primary-darkgrey;
-		font-weight: $large-weight;
-	}
+  &__rating {
+    color: $primary-darkgrey;
+    font-weight: $large-weight;
+  }
 
-	&__bottom {
-		width: 100%;
-		margin: 5px 0 0 0;
-		box-sizing: border-box;
-		padding-top: 15px;
-		text-align: center;
-		border-top: 2px solid $primary-grey;
-		color: lighten($primary-darkgrey,20%);
-		font-size: $medium-size;
-    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss'
-
-	}
+  &__bottom {
+    width: 100%;
+    margin: 5px 0 0 0;
+    box-sizing: border-box;
+    padding-top: 15px;
+    text-align: center;
+    border-top: 2px solid $primary-grey;
+    color: lighten($primary-darkgrey, 20%);
+    font-size: $medium-size;
+    composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
+  }
 
   &_noReviews {
     font-size: $medium-size;
@@ -102,7 +99,7 @@
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -125,17 +122,16 @@
     text-align: left;
     display: flex;
     align-items: center;
-		color: $primary-blue;
-		&__percent {
-			height: 16px;
+    color: $primary-blue;
+    &__percent {
+      height: 16px;
       padding-top: 10px;
-			margin-right: 4px;
-			background-color: $primary-blue;
-			display: inline-block;
-		}
-	}
+      margin-right: 4px;
+      background-color: $primary-blue;
+      display: inline-block;
+    }
+  }
 }
-
 
 .tags {
   border-top: $card-border-size $primary-darkgrey;
@@ -149,9 +145,9 @@
     height: 168px;
     &__update {
       margin-top: 10px;
-      color: lighten($primary-darkgrey,20%);
+      color: lighten($primary-darkgrey, 20%);
       font-size: $medium-size;
-      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss'
+      composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
     }
   }
 }
@@ -162,12 +158,12 @@
 }
 
 .reviewsComments {
-	width: 100%;
-	min-height: 168px;
+  width: 100%;
+  min-height: 168px;
   max-height: 745px;
-	overflow: auto;
+  overflow: auto;
   //margin-bottom: 15px;
-  height: calc(100vh - 385px);
+  //height: calc(100vh - 385px);
   position: relative;
 
   &__cardHeader {
@@ -177,13 +173,12 @@
     justify-content: flex-start;
   }
 
-	&__container {
-		//border-right: 2px solid $primary-lightgrey;
-		//padding: 10px 10px 0 0;
-	}
+  &__container {
+    //border-right: 2px solid $primary-lightgrey;
+    //padding: 10px 10px 0 0;
+  }
 
   &__comment {
-
   }
 }
 
@@ -200,7 +195,6 @@
   padding: 10px;
 }
 
-
 .clearedReviews {
   font-size: 20px;
   line-height: 1.5em;
@@ -212,7 +206,7 @@
   top: 50%;
   left: 50%;
   margin-right: -50%;
-  transform: translate(-50%, -50%)
+  transform: translate(-50%, -50%);
 }
 
 .ccReviews {

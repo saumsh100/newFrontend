@@ -1,6 +1,7 @@
 
 import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Loader from '../components/Loader';
@@ -12,14 +13,9 @@ import {
   setMergingPatient,
   setCreatingPatient,
 } from '../actions/schedule';
-
 import { setAllFilters } from '../thunks/schedule';
 
 class ScheduleContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const currentDate = moment(this.props.currentDate);
 
@@ -29,7 +25,14 @@ class ScheduleContainer extends Component {
     const query = {
       startDate,
       endDate,
-      limit: 350,
+      limit: 100,
+      filters: [
+        {
+          isPending: false,
+          isCancelled: false,
+          isDeleted: false,
+        },
+      ],
     };
 
     Promise.all([
@@ -74,7 +77,14 @@ class ScheduleContainer extends Component {
       const query = {
         startDate,
         endDate,
-        limit: 150,
+        limit: 100,
+        filters: [
+          {
+            isPending: false,
+            isCancelled: false,
+            isDeleted: false,
+          },
+        ],
       };
       this.props.fetchEntitiesRequest({
         id: 'appSchedule',
@@ -90,10 +100,6 @@ class ScheduleContainer extends Component {
       practitioners,
       schedule,
       appointments,
-      setScheduleDate,
-      setMergingPatient,
-      selectedAppointment,
-      selectAppointment,
       services,
       patients,
       chairs,
@@ -108,22 +114,22 @@ class ScheduleContainer extends Component {
           practitioners={practitioners}
           schedule={schedule}
           appointments={appointments}
-          setScheduleDate={setScheduleDate}
-          selectedAppointment={selectedAppointment}
-          selectAppointment={selectAppointment}
           services={services}
           patients={patients}
           chairs={chairs}
           weeklySchedules={weeklySchedules}
           timeOffs={timeOffs}
-          setMergingPatient={setMergingPatient}
           unit={activeAccount}
+          setMergingPatient={this.props.setMergingPatient}
           setCreatingPatient={this.props.setCreatingPatient}
           createEntityRequest={this.props.createEntityRequest}
           appsFetched={this.props.appsFetched}
           pracsFetched={this.props.pracsFetched}
           chairsFetched={this.props.chairsFetched}
           accountsFetched={this.props.accountsFetched}
+          setScheduleDate={this.props.setScheduleDate}
+          selectedAppointment={this.props.selectedAppointment}
+          selectAppointment={this.props.selectAppointment}
         />
       </Loader>
     );
@@ -135,19 +141,25 @@ ScheduleContainer.propTypes = {
   fetchEntities: PropTypes.func,
   fetchEntitiesRequest: PropTypes.func,
   setScheduleDate: PropTypes.func,
-  practitioners: PropTypes.object,
-  currentDate: PropTypes.object,
-  appointments: PropTypes.object,
-  schedule: PropTypes.object,
-  services: PropTypes.object,
-  patients: PropTypes.object,
-  chairs: PropTypes.object,
+  practitioners: PropTypes.instanceOf(Map),
+  currentDate: PropTypes.string,
+  appointments: PropTypes.instanceOf(Map),
+  schedule: PropTypes.instanceOf(Map),
+  services: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map),
+  chairs: PropTypes.instanceOf(Map),
   setCreatingPatient: PropTypes.func,
   appsFetched: PropTypes.bool,
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   accountsFetched: PropTypes.bool,
-  createEntityRequest: PropTypes.object,
+  createEntityRequest: PropTypes.func,
+  setMergingPatient: PropTypes.func,
+  selectedAppointment: PropTypes.func,
+  selectAppointment: PropTypes.func,
+  weeklySchedules: PropTypes.instanceOf(Map),
+  timeOffs: PropTypes.instanceOf(Map),
+  activeAccount: PropTypes.instanceOf(Map),
 };
 
 function mapStateToProps({ apiRequests, entities, schedule, auth }) {

@@ -16,6 +16,8 @@ export default function Insights(props) {
       return SortByStartDate(app1, app2);
     });
 
+  const scrollId = 'insightScrollDiv';
+
   const displayInsights = sortedInsights.map(insightData => (
     <div className={styles.outerInsightsWrapper}>
       <div className={styles.innerInsightsWrapper}>
@@ -28,8 +30,6 @@ export default function Insights(props) {
       </div>
     </div>
   ));
-
-  const scrollId = 'insightScrollDiv';
 
   return (
     <div className={styles.body} id={scrollId}>
