@@ -31,6 +31,7 @@ import {
   SET_USER_DATA,
   REQUEST_TOOLBAR_POSITION,
   ZOOM_FACTOR_CHANGE,
+  REQUEST_ZOOM_FACTOR,
 } from '../constants';
 import { electron, webFrame } from '../util/ipc';
 
@@ -55,16 +56,18 @@ electron.on(TOOLBAR_POSITION_CHANGE, (e, data) => {
 
 electron.send(REQUEST_TOOLBAR_POSITION);
 
+electron.on(ZOOM_FACTOR_CHANGE, (e, data) => {
+  webFrame.setZoomFactor(data);
+});
+
+electron.send(REQUEST_ZOOM_FACTOR, { window: 'toolbar' });
+
 electron.on(SHOW_CONTENT, () => {
   const location = store.getState().routing.location.pathname;
   if (location.indexOf('/intercom') > -1) {
     return;
   }
   store.dispatch(expandContent());
-});
-
-electron.on(ZOOM_FACTOR_CHANGE, (e, data) => {
-  webFrame.setZoomFactor(data);
 });
 
 // TODO: move to Auth service layer?

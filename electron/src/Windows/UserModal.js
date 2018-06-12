@@ -46,6 +46,19 @@ class UserModal extends WindowMain {
   }
 
   /**
+   * Resize user modal window
+   */
+  setUserModalSize() {
+    const factor = this.zoomFactor;
+    const { userSettings } = config;
+
+    this.setSize(
+      Math.floor(userSettings.modalWindow.width * factor),
+      Math.floor(userSettings.modalWindow.height * factor)
+    );
+  }
+
+  /**
    * Get the X coordinate of modal.
    * @returns {number}
    */
@@ -55,9 +68,9 @@ class UserModal extends WindowMain {
     const { userSettings } = config;
 
     return toolbarPosition === 'left'
-      ? workArea.x + config.userSettings.marginFromWindowBorder
-      : workArea.x + workArea.width -
-      userSettings.marginFromWindowBorder - userSettings.modalWindow.width + 7;
+      ? Math.floor(workArea.x + (config.userSettings.marginFromWindowBorder * this.zoomFactor))
+      : Math.floor(workArea.x + workArea.width -
+      (userSettings.marginFromWindowBorder * this.zoomFactor) - userSettings.modalWindow.width + 7);
   }
 
   /**
@@ -71,9 +84,9 @@ class UserModal extends WindowMain {
 
     const coordinate =
       workArea.height / 2 +
-      toolbar.toolbarWindow.height / 2 -
+      (toolbar.toolbarWindow.height / 2 -
       userSettings.modalWindow.height -
-      userSettings.marginFromBottom;
+      userSettings.marginFromBottom) * this.zoomFactor;
 
     return Math.floor(coordinate);
   }

@@ -40,6 +40,7 @@ class WindowManager {
     this.mainWindow.positionWindow();
     this.userModalWindow.openWindow();
     this.userModalWindow.positionWindow();
+    this.userModalWindow.setUserModalSize();
     TrayManager.instance.showLoggedInTray(this);
 
     this.userModalWindow.window.on('hide', () => {
@@ -69,17 +70,7 @@ class WindowManager {
     this.mainWindow.setToolbarSize();
     this.mainWindow.notifyPositionChange();
     this.userModalWindow.positionWindow();
-  }
-
-  /**
-   * Changes the toolbar size based on a percentage factor
-   *
-   * @param sizeFactor
-   */
-  changeToolbarSize(sizeFactor) {
-    this.mainWindow.changeState(true);
-    this.mainWindow.setToolbarSize(sizeFactor);
-    this.mainWindow.positionWindow();
+    this.userModalWindow.setUserModalSize();
   }
 
   /**
@@ -176,6 +167,28 @@ class WindowManager {
   }
 
   /**
+   * Set a new scale for windows.
+   *
+   * @param scale
+   */
+  setWindowScale(scale = 1) {
+    Store.set('toolbarSizeFactor', scale);
+    this.rescaleWindows();
+  }
+
+  /**
+   * Run rescaling on windows.
+   */
+  rescaleWindows() {
+    this.mainWindow.scaleWindow();
+    this.mainWindow.setToolbarSize();
+    this.mainWindow.positionWindow();
+    this.userModalWindow.scaleWindow();
+    this.userModalWindow.setUserModalSize();
+    this.userModalWindow.positionWindow();
+  }
+
+  /**
    * Exit the app.
    */
   static closeApp() {
@@ -189,6 +202,14 @@ class WindowManager {
    */
   set auth(value) {
     this.isAuth = value;
+  }
+
+  /**
+   * Returns currently used zoom factor.
+   * @returns {number}
+   */
+  get zoomFactor() {
+    return this.mainWindow.zoomFactor;
   }
 
   /**

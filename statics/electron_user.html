@@ -31,13 +31,15 @@
 </body>
 
 <script>
-  const { ipcRenderer } = require('electron');
+  const { ipcRenderer, webFrame } = require('electron');
   const HIDE_DIALOG = 'HIDE_USER_MODAL';
   const SHOW_DIALOG = 'SHOW_USER_MODAL';
   const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
   const SET_USER_DATA = 'SET_USER_DATA';
   const REQUEST_USER_DATA = 'REQUEST_USER_DATA';
   const OPEN_EXTERNAL_LINK = 'EXTERNAL_LINK';
+  const REQUEST_ZOOM_FACTOR = 'REQUEST_ZOOM_FACTOR';
+  const ZOOM_FACTOR_CHANGE = 'ZOOM_FACTOR_CHANGE';
   let storedUser = {};
 
   document.addEventListener("mouseover", () => {
@@ -62,6 +64,12 @@
     storedUser = data;
     renderUser();
   });
+
+  ipcRenderer.on(ZOOM_FACTOR_CHANGE, (e, data) => {
+    webFrame.setZoomFactor(data);
+  });
+
+  ipcRenderer.send(REQUEST_ZOOM_FACTOR, { window: 'userModal' });
 
   const renderUser = () => {
     const { user, role } = storedUser;

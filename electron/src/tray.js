@@ -3,8 +3,8 @@ const electron = require('electron');
 const { checkForUpdate } = require('./updater');
 
 const separator = { type: 'separator' };
-
 const quitButton = { role: 'quit' };
+
 /**
  * Generate the menu object for displays
  * @param {*} managerInstance
@@ -40,6 +40,8 @@ const buildSubMenu = (label, options, callback) => ({
     click() {
       callback(option.value || option);
     },
+    type: option.type,
+    checked: option.checked,
   })),
 });
 
@@ -51,11 +53,13 @@ const toolbarSizeMenu = managerInstance =>
   buildSubMenu(
     'Toolbar size',
     // initial set of options of zoom factors
-    [0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2].map(v => ({
+    [0.6, 0.8, 1, 1.2, 1.4].map(v => ({
       label: v === 1 ? '100% (normal)' : `${v * 100}%`,
       value: v,
+      type: 'radio',
+      checked: v === parseFloat(managerInstance.zoomFactor),
     })),
-    managerInstance.changeToolbarSize.bind(managerInstance)
+    managerInstance.setWindowScale.bind(managerInstance)
   );
 
 /**
