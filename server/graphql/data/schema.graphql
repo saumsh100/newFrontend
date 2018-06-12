@@ -193,6 +193,7 @@ input deleteWaitSpotInput {
 }
 
 type deleteWaitSpotPayload {
+  waitSpot: WaitSpot
   clientMutationId: String
 }
 
@@ -390,6 +391,9 @@ type PatientUser implements Node {
   isEmailConfirmed: Boolean!
   isPhoneNumberConfirmed: Boolean!
   avatarUrl: String
+  insuranceCarrier: String
+  insuranceMemberId: String
+  insuranceGroupId: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -411,8 +415,8 @@ type Query {
 scalar SequelizeJSON
 
 type Subscription {
-  """Are you ready for the truth?"""
-  testSubType: WaitSpot
+  """New wait spot created notification."""
+  newWaitSpot: WaitSpot
 }
 
 input updateFamilyInput {

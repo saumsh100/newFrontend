@@ -1,6 +1,6 @@
 
 import { fetchEntitiesRequest } from './fetchEntities';
-import deleteEntity from '../components/RelayWaitlist/deleteWaitSpot';
+import { Delete as deleteEntity } from '../components/RelayWaitlist';
 
 export function fetchWaitSpots(join = [], params = {}) {
   return (dispatch) => {
@@ -15,8 +15,8 @@ export function fetchWaitSpots(join = [], params = {}) {
   };
 }
 
-export function deleteWaitSpot(id) {
+export function deleteWaitSpot(waitSpot) {
   return () => {
-    deleteEntity.commit({ id });
+    deleteEntity.commit(waitSpot);
   };
 }

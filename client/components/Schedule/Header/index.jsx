@@ -126,11 +126,11 @@ class Header extends Component {
       });
   }
 
-  removeWaitSpot(id) {
+  removeWaitSpot(waitSpot) {
     const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
 
     if (confirmDelete) {
-      this.props.deleteWaitSpot(id);
+      this.props.deleteWaitSpot(waitSpot);
     }
   }
 
@@ -293,7 +293,6 @@ class Header extends Component {
             >
               Quick Add
             </Button>
-
 
             <DialogBox
               title="Waitlist"

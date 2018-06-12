@@ -1,20 +1,17 @@
 
-import {
-  GraphQLObjectType,
-} from 'graphql';
-import { WaitSpot } from 'CareCruModels';
+import PubSub from '../subscriptionsPubSub';
 import { waitSpotType } from './types';
+import { ADD_WAIT_SPOT } from '../channels';
 
-
-const testSubType = {
-  name: "newSub",
+const newWaitSpot = {
+  name: 'newWaitSpot',
   type: waitSpotType,
-  description: 'Are you ready for the truth?',
-  resolve(root, args, ctx, info) {
-    return 1;
+  description: 'New wait spot created notification.',
+  subscribe() {
+    return PubSub.asyncIterator(ADD_WAIT_SPOT);
   },
 };
 
 export default {
-  testSubType,
+  newWaitSpot,
 };

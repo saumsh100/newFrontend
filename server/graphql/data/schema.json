@@ -2468,6 +2468,42 @@
               "deprecationReason": null
             },
             {
+              "name": "insuranceCarrier",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "insuranceMemberId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "insuranceGroupId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdAt",
               "description": null,
               "args": [],
@@ -4637,6 +4673,18 @@
           "description": null,
           "fields": [
             {
+              "name": "waitSpot",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "OBJECT",
+                "name": "WaitSpot",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "clientMutationId",
               "description": null,
               "args": [],
@@ -4660,8 +4708,8 @@
           "description": null,
           "fields": [
             {
-              "name": "testSubType",
-              "description": "Are you ready for the truth?",
+              "name": "newWaitSpot",
+              "description": "New wait spot created notification.",
               "args": [],
               "type": {
                 "kind": "OBJECT",

@@ -6,7 +6,7 @@ import schema from './data/schema';
 
 const GraphQLRouter = Router();
 
-const PORT = 4000;
+const PORT = 5000;
 
 const GraphQLServer = graphQLHTTP({
   schema,

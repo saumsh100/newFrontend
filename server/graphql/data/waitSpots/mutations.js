@@ -3,6 +3,9 @@ import { mutationWithClientMutationId } from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
 import { waitSpotType } from './types';
 import { WaitSpot } from 'CareCruModels';
+import PubSub from '../subscriptionsPubSub';
+import { ADD_WAIT_SPOT } from '../channels';
+
 
 const addWaitSpotMutation = mutationWithClientMutationId({
   name: 'addWaitSpot',
@@ -15,7 +18,15 @@ const addWaitSpotMutation = mutationWithClientMutationId({
       resolve: payload => payload,
     },
   },
-  mutateAndGetPayload: async args => await WaitSpot.create(args),
+  mutateAndGetPayload: async (args) => {
+    try {
+      const newWaitSpot = await WaitSpot.create(args);
+      PubSub.publish(ADD_WAIT_SPOT, { newWaitSpot });
+      return newWaitSpot;
+    } catch (e) {
+      return null;
+    }
+  },
 });
 
 // /**
@@ -44,7 +55,12 @@ const deleteWaitSpotMutation = mutationWithClientMutationId({
   inputFields: attributeFields(WaitSpot, {
     only: ['id'],
   }),
-  outputFields: null,
+  outputFields: {
+    waitSpot: {
+      type: waitSpotType,
+      resolve: payload => payload,
+    },
+  },
   mutateAndGetPayload: async ({ id }) => await WaitSpot.findById(id).then(w => w.destroy()),
 });
 
