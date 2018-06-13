@@ -40,14 +40,32 @@ module.exports = {
     });
   },
 
-  down: (queryInterface, Sequelize) => {
-    queryInterface.bulkDelete('AccountConfigurations', {});
-    return queryInterface.bulkDelete('Configurations', {
-      name: [
-        'APPOINTMENT_CONFIRMED_STATUS_READ',
-        'APPOINTMENT_CONFIRMED_STATUS_WRITE',
-        'APPOINTMENT_UNCONFIRMED_STATUS_WRITE',
-      ],
+  down: (queryInterface) => {
+    return queryInterface.sequelize.transaction(async (t) => {
+      try {
+        const configurations = await queryInterface
+          .sequelize.query(`
+            SELECT * FROM "Configurations"
+            WHERE "name"='APPOINTMENT_CONFIRMED_STATUSES_READ' OR "name"='APPOINTMENT_CONFIRMED_STATUS_WRITE'
+             OR "name"='APPOINTMENT_UNCONFIRMED_STATUS_WRITE';
+          ` , { transaction: t });
+
+        const configurationIds = configurations[0].map(c => c.id);
+        await queryInterface.bulkDelete('AccountConfigurations', {
+          configurationId: configurationIds,
+        }, { transaction: t });
+
+        await queryInterface.bulkDelete('Configurations', {
+          name: [
+            'APPOINTMENT_CONFIRMED_STATUSES_READ',
+            'APPOINTMENT_CONFIRMED_STATUS_WRITE',
+            'APPOINTMENT_UNCONFIRMED_STATUS_WRITE',
+          ],
+        }, { transaction: t });
+      } catch (err) {
+        console.log(err);
+        t.rollback();
+      }
     });
-  }
+  },
 };
