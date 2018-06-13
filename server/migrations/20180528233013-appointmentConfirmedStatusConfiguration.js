@@ -7,10 +7,10 @@ module.exports = {
       try {
         await queryInterface.bulkInsert('Configurations', [{
           id: uuid(),
-          name: 'APPOINTMENT_CONFIRMED_STATUS_READ',
-          defaultValue: '',
-          description: 'A comma-separated list of statuses that will be used to determine if an Appointment is confirmed',
-          type: 'string',
+          name: 'APPOINTMENT_CONFIRMED_STATUSES_READ',
+          defaultValue: '[]',
+          description: 'A json array of statuses that will be used to determine if an Appointment is confirmed',
+          type: 'json',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -19,6 +19,15 @@ module.exports = {
           name: 'APPOINTMENT_CONFIRMED_STATUS_WRITE',
           defaultValue: '',
           description: 'The custom status that will be set on an Appointment when CareCru confirms it',
+          type: 'string',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuid(),
+          name: 'APPOINTMENT_UNCONFIRMED_STATUS_WRITE',
+          defaultValue: '',
+          description: 'The custom status that will be set on an Appointment when CareCru unconfirms it',
           type: 'string',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -37,6 +46,7 @@ module.exports = {
       name: [
         'APPOINTMENT_CONFIRMED_STATUS_READ',
         'APPOINTMENT_CONFIRMED_STATUS_WRITE',
+        'APPOINTMENT_UNCONFIRMED_STATUS_WRITE',
       ],
     });
   }
