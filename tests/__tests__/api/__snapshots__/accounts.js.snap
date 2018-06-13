@@ -434,6 +434,33 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of statuses that will be used to determine if an Appointment is confirmed",
+        "name": "APPOINTMENT_CONFIRMED_STATUSES_READ",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru confirms it",
+        "name": "APPOINTMENT_CONFIRMED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru unconfirms it",
+        "name": "APPOINTMENT_UNCONFIRMED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -716,6 +743,33 @@ Object {
         "description": "The batch size of patient recall sync",
         "name": "PATIENT_RECALL_BATCH_SIZE",
         "value": "100",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of statuses that will be used to determine if an Appointment is confirmed",
+        "name": "APPOINTMENT_CONFIRMED_STATUSES_READ",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru confirms it",
+        "name": "APPOINTMENT_CONFIRMED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru unconfirms it",
+        "name": "APPOINTMENT_UNCONFIRMED_STATUS_WRITE",
+        "value": "",
       },
       "type": "configuration",
     },
