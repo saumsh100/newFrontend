@@ -1,44 +1,52 @@
-import React, { Component, PropTypes } from 'react';
-import { ListItem, Button, Avatar } from '../../library';
+
+import React from 'react';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { Button, Avatar, Icon } from '../../library';
+import { patientShape } from '../../library/PropTypeShapes';
+import { FormatPhoneNumber } from '../../library/util/Formatters';
 import styles from './styles.scss';
 
-export default function PatientData(props) {
-  const {
-    patient,
-    handleUpdatePatient,
-    selectPatient,
-    selectedPatient
-  } = props;
+const PatientData = (props) => {
+  const { patient, selectPatient, selectedPatient } = props;
 
   const fullName = `${patient.firstName} ${patient.lastName}`;
 
   return (
-      <div
-        className={styles.singleSuggestion}
-        onClick={() => { selectPatient(patient)}}
-      >
-        <div className={styles.radioButton}>
-          <input type="radio" checked={selectedPatient && selectedPatient.id === patient.id} />
-        </div>
-        <div
-          className={styles.suggestionsListItem}
-        >
-          <Avatar size={'md'} className={styles.patientContainer_img} user={patient} alt="" />
-          <div className={styles.patientContainer} >
-            <div className={styles.patientContainer_fullName}>
-              {fullName}
+    <Button
+      className={classNames(styles.singleSuggestion, {
+        [styles.patientSelected]: selectedPatient && selectedPatient.id === patient.id,
+      })}
+      onClick={() => {
+        selectPatient(patient);
+      }}
+    >
+      <div className={styles.suggestionsListItem}>
+        <Avatar size={'md'} className={styles.patientContainer_img} user={patient} alt={fullName} />
+        <div className={styles.patientContainer}>
+          <div className={styles.patientContainer_fullName}>{fullName}</div>
+          <div className={styles.data}>
+            <Icon icon="phone" size={0.9} type="solid" />
+            <div className={styles.data_text}>
+              {patient.mobilePhoneNumber[0] === '+'
+                ? FormatPhoneNumber(patient.mobilePhoneNumber)
+                : patient.mobilePhoneNumber}
             </div>
-            <div className={styles.patientContainer_email}>
-              {patient.email}
-            </div>
-            <div className={styles.patientContainer_phone}>
-              {patient.mobilePhoneNumber}
-            </div>
+          </div>
+          <div className={styles.data}>
+            <Icon icon="envelope" size={0.9} type="solid" />
+            <div className={styles.data_text}>{patient.email}</div>
           </div>
         </div>
       </div>
+    </Button>
   );
-}
+};
 
 PatientData.propTypes = {
+  patient: PropTypes.shape(patientShape),
+  selectPatient: PropTypes.func,
+  selectedPatient: PropTypes.shape(patientShape),
 };
+
+export default PatientData;

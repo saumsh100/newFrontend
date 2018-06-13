@@ -73,8 +73,8 @@ export default function Title(props) {
         <Route exact path={pathBuilder('/signup/confirm')} component={titleDiv('Confirm Signup')} />
         <Route
           exact
-          path={pathBuilder('/book/personal-information')}
-          component={titleDiv('Personal Information')}
+          path={pathBuilder('/book/patient-information')}
+          component={titleDiv('Patient Information')}
         />
         <Route
           exact

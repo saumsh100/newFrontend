@@ -116,15 +116,8 @@ const renderMobileFooter = ({
       className={styles.actionButtonMobile}
       onClick={toggleActionDisplay}
     >
-      <Icon icon="plus" />
+      <Icon icon={displayActions ? 'minus' : 'plus'} />
     </Button>
-    {displayActions && (
-      <svg height="0">
-        <filter id="blurred">
-          <feGaussianBlur stdDeviation="3" />
-        </filter>
-      </svg>
-    )}
   </SFooter>
 );
 
@@ -177,6 +170,7 @@ export default class RequestPopover extends Component {
             [styles.blurredHub]: displayActions && isHub(),
             [styles.blurred]: displayActions && !isHub(),
           })}
+          onClick={this.toggleActionDisplay}
         >
           <SBody className={isMobile ? styles.bodyMobile : styles.body}>
             <div className={styles.container}>
@@ -230,28 +224,35 @@ export default class RequestPopover extends Component {
                 <div className={styles.data}>n/a</div>
               </div>
             )}
-            {note ? (
+            {note && (
               <div className={styles.container}>
                 <div className={styles.subHeader}>Note</div>
                 <div className={styles.data}>
                   <div className={styles.data_note}>{note}</div>
                 </div>
               </div>
-            ) : null}
+            )}
 
             <div className={styles.requestedAt}>
-              {requestingUser ? (
+              {requestingUser && (
                 <div className={styles.requestedAt_diffUserContainer}>
                   <span className={styles.requestedAt_on}>Requested by:</span>
                   <span className={styles.requestedAt_byDiffUser}>
                     {requestingUser.get('firstName')} {requestingUser.get('lastName')}
                   </span>
                 </div>
-              ) : null}
+              )}
               <span className={styles.requestedAt_on}> Requested on: {requestedAt} </span>
             </div>
           </SBody>
         </SContainer>
+        {displayActions && (
+          <svg height="0">
+            <filter id="blurred">
+              <feGaussianBlur stdDeviation="3" />
+            </filter>
+          </svg>
+        )}
         {isMobile
           ? renderMobileFooter({
             toggleActionDisplay: this.toggleActionDisplay,

@@ -1,13 +1,14 @@
 
-import React, {Component, PropTypes,} from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../thunks/fetchEntities';
 import PractitionerList from './PractitionerList';
-import { Col } from '../../library';
 import styles from './styles.scss';
 
 const sortPractitionersAlphabetical = (a, b) => {
+  if (!a.firstName || !b.firstName) return -1;
   if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
   if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
   return 0;
@@ -21,11 +22,7 @@ class Practitioners extends Component {
   }
 
   render() {
-    const {
-      practitioners,
-      services,
-      recurringTimeOffs,
-    } = this.props;
+    const { practitioners, services, recurringTimeOffs } = this.props;
 
     let showComponent = null;
     if (practitioners) {
@@ -39,21 +36,17 @@ class Practitioners extends Component {
       );
     }
 
-    return (
-      <div className={styles.practOuterContainer}>
-        {showComponent}
-      </div>
-    );
+    return <div className={styles.practOuterContainer}>{showComponent}</div>;
   }
 }
 
 Practitioners.propTypes = {
-  practitioners: PropTypes.object,
-  weeklySchedules: PropTypes.object,
+  practitioners: PropTypes.shape({}),
+  weeklySchedules: PropTypes.shape({}),
   fetchEntities: PropTypes.func,
-  timeOffs: PropTypes.object,
-  recurringTimeOffs: PropTypes.object,
-  services: PropTypes.object,
+  timeOffs: PropTypes.shape({}),
+  recurringTimeOffs: PropTypes.shape({}),
+  services: PropTypes.shape({}),
 };
 
 function mapStateToProps({ entities }) {
@@ -61,14 +54,17 @@ function mapStateToProps({ entities }) {
 
   return {
     practitioners,
-    services: entities.getIn(['services', 'models'])
+    services: entities.getIn(['services', 'models']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+    },
+    dispatch
+  );
 }
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);

@@ -6,6 +6,10 @@
 
 .familyMemberContainer {
   padding: 30px 25px 0px;
+  overflow: auto;
+  max-height: 644px;
+  box-sizing: border-box;
+
   @media screen and (max-width: 576px) {
     @include familyMemberContainerMobile-mobile;
   }

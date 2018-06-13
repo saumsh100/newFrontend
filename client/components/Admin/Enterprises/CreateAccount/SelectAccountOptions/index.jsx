@@ -1,18 +1,13 @@
 
-import React, { Component, PropTypes } from 'react';
-import { Form, Field, } from '../../../../library';
-import { emailValidate } from '../../../../library/Form/validate';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Form, Field } from '../../../../library';
 import styles from '../styles.scss';
-import Icon from "../../../../library/Icon/index";
-import {Grid, Row, Col} from "../../../../library/Grid/index";
+import Icon from '../../../../library/Icon/index';
+import { Grid, Row, Col } from '../../../../library/Grid/index';
 
 export default function SelectAccountOptions(props) {
-  const {
-    onSubmit,
-    index,
-    initialValues,
-    formName,
-  } = props;
+  const { onSubmit, index, initialValues, formName } = props;
 
   return (
     <Form
@@ -26,92 +21,62 @@ export default function SelectAccountOptions(props) {
     >
       <Grid className={styles.accountOptions}>
         <Row className={styles.accountOptions_row}>
-          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
+          <Col xs={12} sm={12} md={12} lg={12} className={styles.accountOptions_column}>
             <div className={styles.displayFlex}>
-              <span>
+              <span className={styles.accountOptions_icon}>
                 <Icon icon="star" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Reputation Management
-              </span>
+              <span className={styles.accountOptions_text}>Reputation Management</span>
               <div>
-                <Field
-                  component="Toggle"
-                  name="reputationManagement"
-                />
+                <Field component="Toggle" name="reputationManagement" />
               </div>
             </div>
             <div className={styles.displayFlex}>
-              <span>
-                <Icon icon="star" />
+              <span className={styles.accountOptions_icon}>
+                <Icon icon="book" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Directory Listings
-              </span>
+              <span className={styles.accountOptions_text}>Directory Listings</span>
               <div>
-                <Field
-                  component="Toggle"
-                  name="listings"
-                />
+                <Field component="Toggle" name="listings" />
               </div>
             </div>
 
             <div className={styles.displayFlex}>
-              <span>
+              <span className={styles.accountOptions_icon}>
                 <Icon icon="phone" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Call Tracking
-              </span>
+              <span className={styles.accountOptions_text}>Call Tracking</span>
               <div>
-                <Field
-                  component="Toggle"
-                  name="callTracking"
-                />
+                <Field component="Toggle" name="callTracking" />
               </div>
             </div>
           </Col>
-          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
+          <Col xs={12} sm={12} md={12} lg={12} className={styles.accountOptions_column}>
             <div className={styles.displayFlex}>
-              <span>
+              <span className={styles.accountOptions_icon}>
                 <Icon icon="clock" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Reminders
-              </span>
+              <span className={styles.accountOptions_text}>Reminders</span>
               <div>
-                <Field
-                  component="Toggle"
-                  name="canSendReminders"
-                />
+                <Field component="Toggle" name="canSendReminders" />
               </div>
             </div>
             <div className={styles.displayFlex}>
-              <span>
+              <span className={styles.accountOptions_icon}>
                 <Icon icon="bullhorn" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Recalls
-              </span>
+              <span className={styles.accountOptions_text}>Recalls</span>
               <div>
-                <Field
-                  component="Toggle"
-                  name="canSendRecalls"
-                />
+                <Field component="Toggle" name="canSendRecalls" />
               </div>
             </div>
             <div className={styles.displayFlex}>
-              <span>
-                <Icon icon="commenting" />
+              <span className={styles.accountOptions_icon}>
+                <Icon icon="comment" />
               </span>
-              <span className={styles.accountOptions_text}>
-                Reviews
-              </span>
+              <span className={styles.accountOptions_text}>Reviews</span>
               <div>
-                <Field
-                  component="Toggle"
-                  name="canSendReviews"
-                />
+                <Field component="Toggle" name="canSendReviews" />
               </div>
             </div>
           </Col>
@@ -120,3 +85,10 @@ export default function SelectAccountOptions(props) {
     </Form>
   );
 }
+
+SelectAccountOptions.propTypes = {
+  onSubmit: PropTypes.func,
+  index: PropTypes.number,
+  initialValues: PropTypes.objectOf(PropTypes.string),
+  formName: PropTypes.string,
+};

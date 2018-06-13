@@ -55,6 +55,7 @@ import IconCard from './IconCard';
 import PractitionerAvatar from './PractitionerAvatar';
 import Search from './Search'; // eslint-disable-line
 import RangeSlider from './RangeSlider';
+import DataTable from './DataTable';
 import Star from './Star';
 import Stars from './Stars';
 import Summary from './Summary';
@@ -104,6 +105,7 @@ export {
   CodeSnippet,
   Collapsible,
   ColorPicker,
+  DataTable,
   DayPicker,
   DayPickerRange,
   DialogBox,

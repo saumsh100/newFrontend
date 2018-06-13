@@ -1,15 +1,14 @@
-
 @import '../../../../ui';
 
 .container {
   width: 50%;
   height: 100%;
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 1164px) {
     width: 100%;
   }
 }
 .countHeader {
-  background-color: $primary-blue ;
+  background-color: $primary-blue;
   height: 50px;
   padding: 0px 20px 0px 20px;
   display: flex;
@@ -34,7 +33,7 @@
   flex-direction: row;
   padding: 0px 20px 0px 20px;
   box-sizing: border-box;
-  width:100%;
+  width: 100%;
   border: 0px;
   color: $primary-blue !important;
   text-transform: uppercase;
@@ -82,7 +81,7 @@
   width: 140px;
   text-transform: uppercase;
   @media screen and (max-width: 1000px) {
-  flex: 1;
+    flex: 1;
     width: unset;
     font-size: 8px;
     box-sizing: border-box;

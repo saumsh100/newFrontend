@@ -12,6 +12,9 @@ const PatientUserSchema = {
   avatarUrl: null,
   birthDate: null,
   gender: null,
+  insuranceCarrier: null,
+  insuranceMemberId: null,
+  insuranceGroupId: null,
 };
 
 export default class PatientUser extends createModel(PatientUserSchema) {

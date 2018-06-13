@@ -1,28 +1,46 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Modal, Link } from '../../../../library';
+import { Modal, Button } from '../../../../library';
+import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { resetWaitlist as resetWaitlistAction } from '../../../../../actions/availabilities';
 import styles from './styles.scss';
 
-function Join({ isAuth }) {
+function Join({ isAuth, history, resetWaitlist }) {
   /**
-   * Check if the user is logged, if it's send him to the personal-information route,
+   * Check if the user is logged, if it's send him to the patient-information route,
    * otherwise send him to the login
    */
-  const linkTo = isAuth ? '../personal-information' : '../../login';
+  const linkTo = isAuth ? '../patient-information' : '../../login';
+
+  /**
+   * If the user is negating his desire to join the waitlist,
+   * reset the wailist information, so if he joined by mistake or
+   * change his mind, he'll be able to not join the waitlist.
+   *
+   * @param {bool} confirmWaitlist
+   */
+  const handleWaitlistConfirmation = (confirmWaitlist) => {
+    if (!confirmWaitlist) {
+      resetWaitlist();
+    }
+    return history.push(confirmWaitlist ? './select-dates' : linkTo);
+  };
+
   return (
     <Modal active className={styles.customDialog}>
       <h3 className={styles.title}>
         Want to be notified if an earlier appointment becomes available?
       </h3>
       <div className={styles.buttonsWrapper}>
-        <Link to={'./select-dates'} className={styles.confirmation}>
+        <Button onClick={() => handleWaitlistConfirmation(true)} className={styles.confirmation}>
           Yes
-        </Link>
-        <Link to={linkTo} className={styles.negation}>
+        </Button>
+        <Button onClick={() => handleWaitlistConfirmation(false)} className={styles.negation}>
           No
-        </Link>
+        </Button>
       </div>
     </Modal>
   );
@@ -33,8 +51,20 @@ function mapStateToProps({ auth }) {
     isAuth: auth.get('isAuthenticated'),
   };
 }
-export default connect(mapStateToProps, null)(Join);
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      resetWaitlist: resetWaitlistAction,
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Join);
 
 Join.propTypes = {
+  resetWaitlist: PropTypes.func,
+  history: PropTypes.shape(historyShape),
   isAuth: PropTypes.bool.isRequired,
 };

@@ -1,15 +1,17 @@
 
-import React, { PropTypes, Component } from 'react';
-import { Form, Field, Button } from '../../../../library';
-import { emailValidate, maxLength, passwordsValidate, passwordStrength, asyncEmailValidateUser } from '../../../../library/Form/validate';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Form, Field } from '../../../../library';
+import {
+  emailValidate,
+  maxLength,
+  passwordsValidate,
+  passwordStrength,
+  asyncEmailValidateUser,
+} from '../../../../library/Form/validate';
 
 export default function AddUser(props) {
-  const {
-    onSubmit,
-    index,
-    initialValues,
-    formName,
-  } = props;
+  const { onSubmit, index, initialValues, formName } = props;
 
   return (
     <Form
@@ -20,27 +22,12 @@ export default function AddUser(props) {
       asyncValidate={asyncEmailValidateUser}
       initialValues={initialValues}
       destroyOnUnmount={false}
+      asyncBlurFields={['email']}
       ignoreSaveButton
     >
-      <Field
-        required
-        validate={[maxLength(25)]}
-        name="firstName"
-        label="First Name"
-      />
-      <Field
-        required
-        validate={[maxLength(25)]}
-        name="lastName"
-        label="Last Name"
-      />
-      <Field
-        required
-        validate={[emailValidate]}
-        type="email"
-        name="email"
-        label="Email"
-      />
+      <Field required validate={[maxLength(25)]} name="firstName" label="First Name" />
+      <Field required validate={[maxLength(25)]} name="lastName" label="Last Name" />
+      <Field required validate={[emailValidate]} type="email" name="email" label="Email" />
       <Field
         required
         type="password"
@@ -61,7 +48,7 @@ export default function AddUser(props) {
 
 AddUser.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.object,
+  initialValues: PropTypes.objectOf(PropTypes.string),
   index: PropTypes.number,
   formName: PropTypes.string,
 };

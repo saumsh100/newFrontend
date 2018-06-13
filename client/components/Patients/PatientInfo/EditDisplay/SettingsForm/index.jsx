@@ -27,9 +27,7 @@ export default function SettingsForm(props) {
           <Row className={styles.row}>
             <Col xs={12} className={styles.colToggle}>
               <div className={styles.toggleContainer}>
-                <div className={styles.toggleContainer_label}>
-                  Special/Holiday Messages Subscription
-                </div>
+                <div className={styles.toggleContainer_label}>Special/Holiday Messages</div>
                 <div className={styles.toggleContainer_toggle}>
                   <Field component="Toggle" name="birthdayMessage" />
                 </div>
@@ -37,7 +35,7 @@ export default function SettingsForm(props) {
             </Col>
             <Col xs={12} className={styles.colToggle}>
               <div className={styles.toggleContainer}>
-                <div className={styles.toggleContainer_label}>Newsletter Subscription</div>
+                <div className={styles.toggleContainer_label}>Newsletter</div>
                 <div className={styles.toggleContainer_toggle}>
                   <Field component="Toggle" name="newsletter" />
                 </div>

@@ -93,9 +93,12 @@ class CallsBody extends Component {
             <div className={styles.headerGraph_title}>Calls</div>
             <div>
               <DayPickerRange
+                popover
+                disabledDays={{ after: new Date() }}
                 from={startDate.toDate()}
                 to={endDate.toDate()}
                 onChange={handleDateRange}
+                monthsToShow={2}
                 maxDays={60}
               />
             </div>

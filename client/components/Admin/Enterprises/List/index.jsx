@@ -4,29 +4,39 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Link } from 'react-router-dom';
-import { fetchEntities, deleteEntityRequest } from '../../../../thunks/fetchEntities';
-import { VButton, Modal } from '../../../library/index';
-import PageContainer from '../../General/PageContainer';
-import EditableList from '../../General/EditableList';
+import { deleteEntityRequest, fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
+import { Button, DialogBox, Card } from '../../../library/index';
 import CreateAccount from '../CreateAccount';
-import { getCollection } from '../../../Utils';
 import withAuthProps from '../../../../hocs/withAuthProps';
+import Enterprise from '../../../../entities/models/Enterprise';
 import { switchActiveEnterprise } from '../../../../thunks/auth';
+import { getEntities } from './Shared/helpers';
+import GroupTable from './GroupTable';
 import styles from './styles.scss';
-import DialogBox from '../../../library/DialogBox/index';
 
 class EnterpriseList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       active: false,
+      expanded: {},
+      loaded: false,
+      data: [],
     };
     this.setActive = this.setActive.bind(this);
+    this.handleRowClick = this.handleRowClick.bind(this);
+    this.selectEnterprise = this.selectEnterprise.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchEntities({ key: 'enterprises' });
+  componentDidMount() {
+    this.props
+      .fetchEntitiesRequest({ id: 'fetchingEnterprises', key: 'enterprises' })
+      .then((data) => {
+        this.setState({
+          loaded: true,
+          data: getEntities(data),
+        });
+      });
   }
 
   setActive() {
@@ -39,104 +49,111 @@ class EnterpriseList extends Component {
     this.props.switchActiveEnterprise(enterpriseId, this.props.location.pathname);
   }
 
+  handleRowClick(rowInfo) {
+    const { expanded } = this.state;
+
+    this.setState({
+      expanded:
+        rowInfo && !expanded.hasOwnProperty(rowInfo.viewIndex) ? { [rowInfo.viewIndex]: true } : {},
+    });
+  }
+
   render() {
-    const { enterprises, enterpriseId } = this.props;
+    const { enterprises } = this.props;
 
     const baseUrl = (path = '') => `/admin/enterprises${path}`;
 
-    const deleteRequest = ({ id }) => this.props.deleteEntityRequest({ key: 'enterprises', id });
-    const navigateToEditPage = ({ id }) => this.props.navigate(baseUrl(`/${id}/edit`));
-
-    const breadcrumbs = [
-      { icon: 'home', key: 'home', home: true, link: '/admin' },
-      { title: 'Enterprises', key: 'enterprises', link: '/admin/enterprises' },
-    ];
-
-    const renderAddButton = () => {
-      return (<div>
-        <VButton
-          as={Link}
-          icon="plus"
-          positive
-          rounded
-          compact
-          to={baseUrl('/create')}
-        >Add Enterprise</VButton>
-        <VButton
-          icon="plus"
-          positive
-          rounded
-          compact
+    const renderAddButton = () => (
+      <div className={styles.addButtonWrapper}>
+        <Button
+          color="darkblue"
+          onClick={(e) => {
+            e.stopPropagation();
+            this.props.navigate(baseUrl('/create'));
+          }}
+        >
+          Add Group
+        </Button>
+        <Button
+          color="darkblue"
           onClick={(e) => {
             e.stopPropagation();
             this.setActive();
           }}
-        >Add Customer</VButton>
-      </div>);
-    }
-
-
-    const renderListItem = ({ id, name }) =>
-      <strong><Link to={baseUrl(`/${id}/accounts`)} className={styles.link}>{name}</Link></strong>;
+        >
+          Add Customer
+        </Button>
+      </div>
+    );
 
     return (
-      <div>
-        <PageContainer title="Enterprises" breadcrumbs={breadcrumbs} renderButtons={renderAddButton}>
-          <EditableList
-            items={enterprises}
-            render={renderListItem}
-            confirm={item => `Do you really want to delete "${item.name}" Enterprise?`}
-            onDelete={deleteRequest}
-            onEdit={navigateToEditPage}
-          />
-          <br /><br />
-          <br /><br />
-          <span className={styles.textPadding}>Switch Enterprise</span>
-          {enterprises ? (
-            <select onChange={e => this.selectEnterprise(e.target.value)} value={enterpriseId}>
-              { enterprises.map(enterprise =>
-                <option key={enterprise.id} value={enterprise.id}>{enterprise.name}</option>
-                ) }
-            </select>
-            ) : null}
-        </PageContainer>
-        <Modal
+      <div className={styles.enterpriseContainer}>
+        <Card className={styles.enterpriseCard} runAnimation loaded={this.state.loaded}>
+          <div className={styles.header}>
+            <span className={styles.header_title}>Groups</span>
+            <div>{renderAddButton()}</div>
+          </div>
+
+          <div className={styles.enterpriseTable}>
+            <GroupTable
+              data={this.state.data}
+              loaded={!this.state.loaded}
+              expanded={this.state.expanded}
+              handleRowClick={this.handleRowClick}
+              selectEnterprise={this.selectEnterprise}
+            />
+          </div>
+        </Card>
+        <DialogBox
           active={this.state.active}
           onEscKeyDown={this.setActive}
           onOverlayClick={this.setActive}
           className={styles.customDialog}
-          custom
+          title="New Customer Setup"
         >
-          {enterprises.length ? <CreateAccount
-            enterprises={enterprises}
-            setActive={this.setActive}
-          /> : null }
-        </Modal>
+          {this.props.enterprisesFetched ? (
+            <CreateAccount
+              enterprises={enterprises.toArray()}
+              setActive={this.setActive}
+              selectEnterprise={this.selectEnterprise}
+            />
+          ) : null}
+        </DialogBox>
       </div>
     );
   }
 }
 
 EnterpriseList.propTypes = {
-  fetchEntities: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   navigate: PropTypes.func.isRequired,
-  enterprises: PropTypes.arrayOf(
-    PropTypes.object
-  ),
+  enterprises: PropTypes.arrayOf(Enterprise),
+  location: PropTypes.objectOf(PropTypes.string),
+  switchActiveEnterprise: PropTypes.func,
+  enterpriseId: PropTypes.string,
+  enterprisesFetched: PropTypes.bool,
 };
 
-const stateToProps = state => ({
-  enterprises: getCollection(state, 'enterprises'),
-});
+function mapStateToProps({ entities, apiRequests }) {
+  const enterprisesFetched =
+    apiRequests.get('fetchingEnterprises') && apiRequests.get('fetchingEnterprises').wasFetched;
+
+  return {
+    enterprises: entities.getIn(['enterprises', 'models']),
+    enterprisesFetched,
+  };
+}
 
 const dispatchToProps = dispatch =>
-  bindActionCreators({
-    fetchEntities,
-    deleteEntityRequest,
-    switchActiveEnterprise,
-    navigate: push,
-  }, dispatch);
+  bindActionCreators(
+    {
+      fetchEntitiesRequest,
+      deleteEntityRequest,
+      switchActiveEnterprise,
+      navigate: push,
+    },
+    dispatch
+  );
 
-export default withAuthProps(connect(stateToProps, dispatchToProps)(EnterpriseList));
-
+export default withAuthProps(connect(mapStateToProps, dispatchToProps)(EnterpriseList));

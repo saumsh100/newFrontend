@@ -7,23 +7,21 @@ import { Map } from 'immutable';
 import { selectedRequestBuilder } from '../components/Utils';
 import { isHub } from '../util/hub';
 import { setTitle } from '../reducers/electron';
+import { loadOnlineRequest } from '../thunks/onlineRequests';
 import RequestsModel from '../entities/models/Request';
 import Requests from '../components/Requests';
-import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
 class RequestContainer extends Component {
   componentDidMount() {
-    this.props.fetchEntitiesRequest({
-      id: 'scheduleRequests',
-      key: 'requests',
-      join: ['service', 'patientUser', 'requestingPatientUser', 'practitioner'],
-    });
+    if (this.props.requests.size === 0) {
+      this.props.loadOnlineRequest();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
     const { filteredRequests, selectedRequest } = nextProps;
 
-    if (isHub() && filteredRequests.length > 0 && !selectedRequest) {
+    if (isHub() && !selectedRequest) {
       this.props.setTitle(`${filteredRequests.length} Online Requests`);
     }
   }
@@ -52,7 +50,7 @@ class RequestContainer extends Component {
 }
 
 RequestContainer.propTypes = {
-  fetchEntitiesRequest: PropTypes.func,
+  loadOnlineRequest: PropTypes.func,
   setTitle: PropTypes.func,
   scheduleRequestsFetched: PropTypes.bool,
   redirect: PropTypes.shape({
@@ -102,7 +100,7 @@ function mapStateToProps({ entities, apiRequests, routing }, ownProps) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      fetchEntitiesRequest,
+      loadOnlineRequest,
       setTitle,
     },
     dispatch

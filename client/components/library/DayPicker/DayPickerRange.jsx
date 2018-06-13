@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
@@ -24,7 +24,7 @@ function isSameAsInitialDates(initFrom, initTo, startDate, endDate) {
   );
 }
 
-class DayPickerRange extends React.Component {
+class DayPickerRange extends Component {
   constructor(props) {
     super(props);
     this.handleDayClick = this.handleDayClick.bind(this);
@@ -42,11 +42,11 @@ class DayPickerRange extends React.Component {
     const { from, to, maxDays } = this.props;
 
     return {
-      from: moment(from).isValid() ? from : null,
-      to: moment(to).isValid() ? to : null,
-      enteredTo: moment(to).isValid() ? to : null,
+      from: moment(from).isValid() ? from : '',
+      to: moment(to).isValid() ? to : '',
+      enteredTo: moment(to).isValid() ? to : '',
       isOpen: false,
-      maxDays: maxDays || 0,
+      maxDays,
       toInputFocused: false,
       fromInputFocused: false,
     };
@@ -81,29 +81,42 @@ class DayPickerRange extends React.Component {
    * what input is in focus.
    * @param day
    */
-  handleDayClick(day) {
+  handleDayClick(pickedDay) {
     const { from, to, toInputFocused, fromInputFocused } = this.state;
 
-    if (from && to && (day === from || day === to)) {
-      this.handleResetClick();
-      return;
-    }
+    const { disabledDays } = this.props;
 
-    if (fromInputFocused || DateUtils.isDayBefore(day, from) || !from) {
-      this.handleFromInput(day);
-    } else if (toInputFocused || DateUtils.isDayAfter(day, from) || !to) {
-      this.handleToInput(day);
+    if (
+      (disabledDays.before && DateUtils.isDayBefore(pickedDay, disabledDays.before)) ||
+      (disabledDays.after && DateUtils.isDayAfter(pickedDay, disabledDays.after))
+    ) {
+      return;
     }
 
     // If both dates are not set, set the start-date, then focus end-date input
     if (!from && !to) {
-      this.setState({
-        from: day,
-        to: null,
-        enteredTo: null,
-        toInputFocused: true,
-      });
-      this.toInput.focus();
+      this.setState(
+        {
+          from: pickedDay,
+          to: '',
+          enteredTo: '',
+          toInputFocused: true,
+        },
+        () => {
+          this.toInput.focus();
+          this.props.onChange({ from, to: '' });
+        }
+      );
+    }
+
+    if (from && to && (pickedDay === from || pickedDay === to)) {
+      this.handleResetClick();
+    }
+
+    if (fromInputFocused || !from || DateUtils.isDayBefore(pickedDay, from)) {
+      this.handleFromInput(pickedDay);
+    } else if (toInputFocused || !to || DateUtils.isDayAfter(pickedDay, from)) {
+      this.handleToInput(pickedDay);
     }
   }
 
@@ -112,52 +125,53 @@ class DayPickerRange extends React.Component {
    * and a user has clicked on a day.
    * @param day
    */
-  handleFromInput(day) {
+  handleFromInput(pickedDay) {
     const { from, to } = this.state;
 
+    let toDate = '';
     // If both dates are set and the user clicks on a date before the start-date
-    if (from && to && DateUtils.isDayBefore(day, from)) {
-      this.setState({
-        from: day,
-        to: null,
-        enteredTo: null,
-        fromInputFocused: false,
-        toInputFocused: true,
-      });
+    if (to && DateUtils.isDayBefore(pickedDay, to)) {
+      toDate = to;
+    }
+
+    if (
+      !from ||
+      (from &&
+        to &&
+        (DateUtils.isDayBefore(pickedDay, from) || DateUtils.isDayAfter(pickedDay, to)))
+    ) {
+      this.setState(
+        {
+          from: pickedDay,
+          to: '',
+          enteredTo: '',
+          fromInputFocused: false,
+          toInputFocused: true,
+        },
+        () => this.props.onChange({ from: pickedDay, to: '' })
+      );
     }
 
     // If both dates are set and the user clicks on a date between these dates
-    if (from && to && (DateUtils.isDayAfter(day, from) && DateUtils.isDayBefore(day, to))) {
-      this.setState({
-        from: day,
-        to,
-        enteredTo: to,
-        fromInputFocused: false,
-        toInputFocused: false,
-      });
+    if (
+      from &&
+      to &&
+      (DateUtils.isDayAfter(pickedDay, from) && DateUtils.isDayBefore(pickedDay, to))
+    ) {
+      this.setState(
+        {
+          from: pickedDay,
+          toDate,
+          enteredTo: toDate,
+          fromInputFocused: false,
+          toInputFocused: false,
+        },
+        () => {
+          this.toInput.focus();
+          !this.props.popover && this.applyDateRange();
+        }
+      );
     }
-    // If both dates are set and the user clicks on a date after the end-date
-    if (from && to && DateUtils.isDayAfter(day, to)) {
-      this.setState({
-        from: day,
-        to: null,
-        enteredTo: null,
-        fromInputFocused: false,
-        toInputFocused: true,
-      });
-    }
-
-    // If there is no initial start-date
-    if (!from) {
-      this.setState({
-        from: day,
-        to: null,
-        enteredTo: null,
-        fromInputFocused: false,
-        toInputFocused: true,
-      });
-    }
-    this.toInput.focus();
   }
 
   /**
@@ -166,64 +180,63 @@ class DayPickerRange extends React.Component {
    * @param day
    */
   handleToInput(day) {
-    const { from, to, maxDays } = this.state;
+    const { from, maxDays } = this.state;
 
-    // When both dates are set and user clicks on any day after the start-date.
-    if (
-      from &&
-      to &&
-      (DateUtils.isDayAfter(day, to) ||
-        (DateUtils.isDayBefore(day, to) && !DateUtils.isDayBefore(day, from)))
-    ) {
-      this.setState({
-        from,
+    if (!from || (from && !DateUtils.isDayAfter(day, from))) {
+      return '';
+    }
+
+    let fromDate = from;
+    if (maxDays && moment(from).diff(moment(day), 'days') * -1 > maxDays) {
+      fromDate = moment(day)
+        .subtract(maxDays, 'days')
+        .toDate();
+    }
+
+    return this.setState(
+      {
         to: day,
         enteredTo: day,
+        from: fromDate,
         toInputFocused: false,
-      });
-    }
-
-    // When start-date is set and user clicks on any day after the start-date.
-    if (from && !to && DateUtils.isDayAfter(day, from)) {
-      // Checking if maxDays is set and adjusting the start-date
-      // if the end-date is larger than maxDays
-
-      if (maxDays && moment(from).diff(moment(day), 'days') * -1 > maxDays) {
-        const d = new Date(day);
-        d.setDate(d.getDate() - maxDays);
-
-        this.setState({
-          from: d,
-          to: day,
-          enteredTo: day,
-        });
-      } else {
-        this.setState({
-          from,
-          to: day,
-          enteredTo: day,
-        });
+      },
+      () => {
+        !this.props.popover && this.applyDateRange();
       }
-    }
+    );
   }
 
   handleDayMouseEnter(day) {
     const { from, to } = this.state;
+    const { disabledDays } = this.props;
+
+    if (
+      (disabledDays.before && DateUtils.isDayBefore(day, disabledDays.before)) ||
+      (disabledDays.after && DateUtils.isDayAfter(day, disabledDays.after))
+    ) {
+      return '';
+    }
+
     if (!isSelectingFirstDay(from, to, day)) {
-      this.setState({
+      return this.setState({
         enteredTo: day,
       });
     }
+
+    return '';
   }
 
   handleResetClick() {
-    this.setState({
-      enteredTo: null,
-      from: null,
-      to: null,
-      toInputFocused: false,
-      fromInputFocused: true,
-    });
+    this.setState(
+      {
+        enteredTo: '',
+        from: '',
+        to: '',
+        toInputFocused: false,
+        fromInputFocused: true,
+      },
+      () => this.props.onChange({ from: '', to: '' })
+    );
   }
 
   applyDateRange() {
@@ -239,40 +252,54 @@ class DayPickerRange extends React.Component {
 
   render() {
     const { from, to, enteredTo } = this.state;
+    const { monthsToShow, popover, disabledDays, readOnly, fieldsWrapper } = this.props;
 
-    const modifiers = { start: from, end: enteredTo };
+    const modifiers = this.props.modifiers || { start: from, end: enteredTo };
     const selectedDays = [from, { from, to: enteredTo }];
-    // const disabledDays = { before: from, after: to };
 
     const body = (
       <div className={styles.wrapperRange}>
         <DayPicker
           className="Range"
-          numberOfMonths={2}
+          disabledDays={disabledDays}
+          numberOfMonths={monthsToShow}
           selectedDays={selectedDays}
           modifiers={modifiers}
-          onDayClick={this.handleDayClick}
+          onDayClick={this.props.handleDayClick || this.handleDayClick}
           onDayMouseEnter={this.handleDayMouseEnter}
           initialMonth={from || new Date()}
         />
-        <div className={styles.buttonContainer}>
-          <Button onClick={this.applyDateRange} color="blue">
-            Set Range
-          </Button>
-        </div>
+        {popover && (
+          <div className={styles.buttonContainer}>
+            <Button onClick={this.applyDateRange} color="blue">
+              Set Range
+            </Button>
+          </div>
+        )}
       </div>
     );
 
     const format = 'MMM DD YYYY';
 
-    const fromFormatted = from && moment(from).isValid() && (moment(from).format(format) || null);
-    const toFormatted = to && moment(to).isValid() && (moment(to).format(format) || null);
+    const fromFormatted = from && moment(from).isValid() && (moment(from).format(format) || '');
+    const toFormatted = to && moment(to).isValid() && (moment(to).format(format) || '');
 
-    const inputStyle = {
-      group: styles.inputGroup,
-    };
+    const fieldsWrapperImplementation = fieldsWrapper(
+      {
+        fromReadOnly: readOnly,
+        fromValue: fromFormatted,
+        fromRef: el => (this.fromInput = el),
+        fromOnClick: this.openPopOver,
+      },
+      {
+        toReadOnly: readOnly,
+        toValue: toFormatted,
+        toRef: el => (this.toInput = el),
+        toOnClick: this.openPopOver,
+      }
+    );
 
-    return (
+    return popover ? (
       <div>
         <Popover
           preferPlace="below"
@@ -282,33 +309,84 @@ class DayPickerRange extends React.Component {
           body={[body]}
           className={classnames(styles.popOverBody, this.props.popOverStyles)}
         >
-          <div className={styles.rangeInputContainer}>
-            <Input
-              refCallBack={el => (this.fromInput = el)}
-              value={fromFormatted}
-              onClick={this.openPopOver}
-              theme={inputStyle}
-            />
-            <Icon icon="arrow-right" />
-            <Input
-              refCallBack={el => (this.toInput = el)}
-              value={toFormatted}
-              onClick={this.openPopOver}
-              theme={inputStyle}
-            />
-          </div>
+          {fieldsWrapperImplementation}
         </Popover>
+      </div>
+    ) : (
+      <div>
+        {fieldsWrapperImplementation}
+        {body}
       </div>
     );
   }
 }
 
+/**
+ * Displays both the date inputs and the right arrow icon
+ */
+const inputsAndNavigation = (
+  { fromReadOnly, fromValue, fromRef, fromOnClick },
+  { toReadOnly, toValue, toRef, toOnClick }
+) => (
+  <div className={styles.rangeInputContainer}>
+    <Input
+      readOnly={fromReadOnly}
+      refCallBack={fromRef}
+      value={fromValue}
+      onClick={fromOnClick}
+      theme={{ group: styles.inputGroup }}
+    />
+    <Icon icon="arrow-right" className={styles.arrowTo} />
+    <Input
+      readOnly={toReadOnly}
+      refCallBack={toRef}
+      value={toValue}
+      onClick={toOnClick}
+      theme={{ group: styles.inputGroup }}
+    />
+  </div>
+);
+
+inputsAndNavigation.propTypes = {
+  fromReadOnly: PropTypes.bool,
+  fromValue: PropTypes.string,
+  fromRef: PropTypes.func,
+  fromOnClick: PropTypes.func,
+  toReadOnly: PropTypes.bool,
+  toValue: PropTypes.string,
+  toRef: PropTypes.func,
+  toOnClick: PropTypes.func,
+};
+
 DayPickerRange.propTypes = {
   from: PropTypes.string,
   to: PropTypes.string,
   onChange: PropTypes.func,
-  popOverStyles: PropTypes.objectOf(String),
+  popOverStyles: PropTypes.objectOf(PropTypes.string),
+  disabledDays: PropTypes.objectOf(
+    PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string])
+  ),
+  handleDayClick: PropTypes.func,
   maxDays: PropTypes.number,
+  popover: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  monthsToShow: PropTypes.number,
+  fieldsWrapper: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  modifiers: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.object,
+    PropTypes.instanceOf(Date),
+    PropTypes.string,
+  ]),
+};
+
+DayPickerRange.defaultProps = {
+  popover: false,
+  maxDays: 0,
+  monthsToShow: 1,
+  readOnly: true,
+  disabledDays: {},
+  fieldsWrapper: inputsAndNavigation,
 };
 
 export default DayPickerRange;

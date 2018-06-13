@@ -14,6 +14,7 @@ import {
   SET_SELECTED_AVAILABILITY,
   SET_IS_FETCHING,
   SET_AVAILABILITIES,
+  SET_CONFIRM_AVAILABILITY,
   SET_NEXT_AVAILABILITY,
   SET_IS_CONFIRMING,
   SET_IS_LOGIN,
@@ -31,7 +32,10 @@ import {
   SET_DUE_DATE,
   SET_FAMILY_PATIENT_USER,
   SET_IS_BOOKING,
-  UPDATE_WAITLIST_TIMES,
+  RESET_WAITLIST,
+  SET_WAITLIST_TIMES,
+  SET_WAITLIST_DATES,
+  SET_WAITLIST_UNAVAILABLE_DATES,
 } from '../constants';
 
 export const sixDaysShiftAction = createAction(SIX_DAYS_SHIFT);
@@ -47,6 +51,7 @@ export const removeReservationAction = createAction(REMOVE_RESERVATION);
 export const setSelectedAvailability = createAction(SET_SELECTED_AVAILABILITY);
 export const setIsFetching = createAction(SET_IS_FETCHING);
 export const setAvailabilities = createAction(SET_AVAILABILITIES);
+export const setConfirmAvailability = createAction(SET_CONFIRM_AVAILABILITY);
 export const setNextAvailability = createAction(SET_NEXT_AVAILABILITY);
 export const setIsConfirming = createAction(SET_IS_CONFIRMING);
 export const setIsLogin = createAction(SET_IS_LOGIN);
@@ -54,8 +59,11 @@ export const setForgotPassword = createAction(SET_FORGOT_PASSWORD);
 export const setIsTimerExpired = createAction(SET_IS_TIMER_EXPIRED);
 export const setIsSuccessfulBooking = createAction(SET_IS_SUCCESSFUL_BOOKING);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
+export const resetWaitlist = createAction(RESET_WAITLIST);
 export const setHasWaitList = createAction(SET_HAS_WAITLIST);
-export const updateWaitlistTimes = createAction(UPDATE_WAITLIST_TIMES);
+export const setWaitlistTimes = createAction(SET_WAITLIST_TIMES);
+export const setWaitlistDates = createAction(SET_WAITLIST_DATES);
+export const setWaitlistUnavailableDates = createAction(SET_WAITLIST_UNAVAILABLE_DATES);
 export const updateWaitSpot = createAction(UPDATE_WAITSPOT);
 export const setNotes = createAction(SET_NOTES);
 export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);

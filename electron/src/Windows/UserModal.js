@@ -3,6 +3,7 @@ const { BrowserWindow } = require('electron');
 const url = require('url');
 const Store = require('../store');
 const WindowMain = require('./Window');
+const ScreenManager = require('../ScreenManager');
 const config = require('../../config');
 const { SET_USER_DATA } = require('../constants');
 
@@ -45,17 +46,31 @@ class UserModal extends WindowMain {
   }
 
   /**
+   * Resize user modal window
+   */
+  setUserModalSize() {
+    const factor = this.zoomFactor;
+    const { userSettings } = config;
+
+    this.setSize(
+      Math.floor(userSettings.modalWindow.width * factor),
+      Math.floor(userSettings.modalWindow.height * factor)
+    );
+  }
+
+  /**
    * Get the X coordinate of modal.
    * @returns {number}
    */
   get xCoordinate() {
-    const toolbarPosition = Store.get('toolbarPosition');
-    const { size } = this.primaryScreen;
+    const toolbarPosition = Store.get('toolbarPosition', config.toolbar.position);
+    const { workArea } = ScreenManager.instance.currentDisplay;
     const { userSettings } = config;
 
     return toolbarPosition === 'left'
-      ? config.userSettings.marginFromWindowBorder
-      : size.width - userSettings.marginFromWindowBorder - userSettings.modalWindow.width + 7;
+      ? Math.floor(workArea.x + (config.userSettings.marginFromWindowBorder * this.zoomFactor))
+      : Math.floor(workArea.x + workArea.width -
+      (userSettings.marginFromWindowBorder * this.zoomFactor) - userSettings.modalWindow.width + 7);
   }
 
   /**
@@ -65,13 +80,14 @@ class UserModal extends WindowMain {
    */
   get yCoordinate() {
     const { toolbar, userSettings } = config;
-    const { size } = this.primaryScreen;
+    const { workArea } = ScreenManager.instance.currentDisplay;
 
     const coordinate =
-      size.height / 2 +
-      toolbar.toolbarWindow.height / 2 -
+      workArea.y +
+      workArea.height / 2 +
+      (toolbar.toolbarWindow.height / 2 -
       userSettings.modalWindow.height -
-      userSettings.marginFromBottom;
+      userSettings.marginFromBottom) * this.zoomFactor;
 
     return Math.floor(coordinate);
   }

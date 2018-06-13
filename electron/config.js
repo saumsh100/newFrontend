@@ -32,7 +32,7 @@ module.exports = {
      *
      * enum: ['right' | 'left']
      */
-    position: 'right',
+    position: 'left',
 
     collapsedSize: 57,
     expandedSize: 410,

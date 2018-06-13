@@ -1,27 +1,114 @@
-
 @import '../../../../ui';
+
+.body {
+  height: 100%;
+  width: 100%;
+  padding-top: 20px;
+
+  overflow: auto;
+  box-sizing: border-box;
+
+  @media screen and (max-width: 420px) {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+.header {
+  border-bottom: 0;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  padding: 20px 20px 15px 40px;
+  font-size: 23px;
+  display: flex;
+  align-items: center;
+
+  &_count {
+    background-color: $primary-yellow;
+    composes: fontDefault from 'sass-loader!../../../../fonts.scss';
+    color: $primary-white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    padding: 6px;
+    font-size: 14px;
+    margin-right: 8px;
+  }
+
+  @media screen and (max-width: 1254px) {
+    padding: 20px;
+  }
+
+  @media screen and (max-width: 420px) {
+    padding-left: 15px;
+  }
+}
+
+.outerInsightsWrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 30px 40px 25px 40px;
+  box-sizing: border-box;
+  border-bottom: 1px solid $primary-grey;
+  align-items: center;
+
+  @media screen and (max-width: 1254px) {
+    padding: 20px;
+    height: auto;
+  }
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: 0px;
+  }
+}
+
+.innerInsightsWrapper {
+  @media screen and (max-width: 1254px) {
+    padding-left: 0px;
+    border-left: 0px;
+  }
+
+  min-height: 35px;
+  height: 100%;
+}
+
+.insightsList {
+  display: flex;
+  flex-direction: row;
+
+  @media screen and (max-width: 1174px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
 
 .insightContainer {
   display: flex;
   flex-direction: column;
   height: 100%;
   justify-content: center;
-  margin-left: 15px;
-  @media screen and (max-width: 1000px) {
-    margin-top: 10px;
-    margin-left: 10px;
+  margin-left: 25px;
+  @media screen and (max-width: 1174px) {
+    margin-left: 0px;
   }
 }
 
 .insight {
-  padding-bottom: 30px;
+  padding-bottom: 20px;
   box-sizing: border-box;
 
   &:last-child {
     padding-bottom: 0px;
   }
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 1174px) {
     padding-bottom: 10px;
   }
 }
@@ -34,14 +121,32 @@
 }
 
 .iconContainer {
-  width: 20px;
-  color: $primary-dark-grey;
+  width: 18px;
+  min-width: 18px;
+  color: $primary-yellow;
+
+  &_sub {
+    width: 18px;
+    min-width: 18px;
+    opacity: 0.6;
+    padding-top: 5px;
+  }
 }
 
 .displayFlex {
   display: flex;
   width: 100%;
   align-items: center;
+}
+
+.displayFlexSubHeader {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  @media screen and (max-width: 420px) {
+    margin-left: 0px;
+  }
 }
 
 .insightHeader {
@@ -52,75 +157,59 @@
 .insightSubHeader {
   composes: fontDefault from 'sass-loader!../../../../fonts.scss';
   color: $light-grey;
-  font-size: $extra-small-size;
-  width: 100%;
+  font-size: $small-size;
   box-sizing: border-box;
-  padding-top: 3px;
-  padding-left: 20px;
+  width: 100%;
 
-  @media screen and (max-width: 1000px) {
-    padding-left: 0;
-    width: 80%;
+  @media screen and (max-width: 1174px) {
+    width: 100%;
   }
 }
 
 .insightSubHeaderList {
-  margin-left: 10px;
-  list-style: dash;
   composes: fontDefault from 'sass-loader!../../../../fonts.scss';
-  color: $light-grey;
-  font-size: 10px;
-  width: 100%;
+  color: $primary-dark-grey;
+  font-size: 11px;
   box-sizing: border-box;
-  padding-top: 3px;
-}
+  opacity: 0.6;
+  padding-top: 5px;
+  padding-left: 18px;
 
+  @media screen and (max-width: 1174px) {
+  }
+}
 
 .patientName {
   text-transform: capitalize;
 }
 
-.patientNameAvatar {
-  display: flex;
-  align-items: center;
-
-  &_text {
-    margin-left: 20px;
-    max-width: 95px;
-    min-width: 95px;
-  }
-}
-
 .patientInfo {
-  margin-right: 10px;
-  @media screen and (max-width: 1000px) {
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    width: 100%;
-    padding-bottom: 15px;
-    border-right: 0;
-  }
-
-  &_body {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    @media screen and (max-width: 1000px) {
-      margin: 0;
-    }
-    color: $primary-dark;
-  }
-
   &_name {
     composes: fontMedium from 'sass-loader!../../../../fonts.scss';
     font-size: 15px;
     line-height: 1.2em;
     margin-left: 15px;
     white-space: nowrap;
-    //color: $primary-dark;
+    padding-left: 40px;
+    border-left: 1px solid #efefef;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 1174px) {
+      border-left: 0px;
+      margin-bottom: 15px;
+      flex: 0 0 25%;
+      align-items: flex-start;
+    }
+
+    @media screen and (max-width: 440px) {
+      margin-left: unset;
+      max-width: unset;
+      min-width: unset;
+      padding-left: unset;
+    }
   }
 
   &_firstLast {
@@ -142,7 +231,29 @@
     justify-content: space-between;
     align-items: center;
   }
+}
 
+.patientNameAvatar {
+  display: flex;
+  align-items: center;
+
+  &_avatar {
+    @media screen and (max-width: 475px) {
+      display: none;
+    }
+  }
+
+  &_text {
+    margin-left: 20px;
+    max-width: 95px;
+    min-width: 95px;
+
+    @media screen and (max-width: 440px) {
+      margin-left: unset;
+      max-width: unset;
+      min-width: unset;
+    }
+  }
 }
 
 .insightCount {
@@ -160,17 +271,29 @@
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
 }
 
+.appBody {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  @media screen and (max-width: 1174px) {
+    margin: 0;
+    flex: 0 0 10%;
+    align-items: flex-start;
+  }
+  color: $primary-dark;
+}
+
 .apptData {
   display: flex;
   flex-direction: column;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   justify-content: flex-start;
-  line-height: 1.5em;
   text-align: left;
 
   align-items: left;
   width: 100px;
-  margin-left: 30px;
 
   &_time {
     font-size: 15px;
@@ -184,5 +307,5 @@
 }
 
 .removePadding {
-  padding: 0 !important
+  padding: 0 !important;
 }

@@ -1,6 +1,7 @@
 
-import React, { Component, PropTypes } from 'react';
-import { submit } from 'redux-form';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { submit, destroy } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ClinicDetails from './ClinicDetails';
@@ -9,9 +10,18 @@ import AddUser from './AddUser';
 import AddEnterprise from './AddEnterprise';
 import EnterpriseList from './EnterpriseList';
 import SelectAccountOptions from './SelectAccountOptions';
-import { Button, IconButton } from '../../../library';
+import Enterprise from '../../../../entities/models/Enterprise';
+import { Button } from '../../../library';
 import { setAllAccountInfo } from '../../../../thunks/admin';
 import styles from './styles.scss';
+
+const formNames = [
+  'addEnterprise',
+  'clinicDetails',
+  'addressDetails',
+  'addUser',
+  'selectAccountOptions',
+];
 
 class CreateAccount extends Component {
   constructor(props) {
@@ -69,20 +79,15 @@ class CreateAccount extends Component {
     });
 
     if (index === this.state.formLength - 1) {
-      this.props.setAllAccountInfo({ formData: newValues });
+      this.props.setAllAccountInfo({ formData: newValues }).then((enterpriseId) => {
+        formNames.map(formName => this.props.destroy(formName));
+        this.props.selectEnterprise(enterpriseId);
+      });
     }
   }
 
   render() {
-    const { submitCreation, enterprises } = this.props;
-
-    const formNames = [
-      'addEnterprise',
-      'clinicDetails',
-      'addressDetails',
-      'addUser',
-      'selectAccountOptions',
-    ];
+    const { enterprises } = this.props;
 
     const component = this.state.create ? (
       AddEnterprise({
@@ -102,11 +107,11 @@ class CreateAccount extends Component {
 
     const formList = [
       {
-        title: this.state.create ? 'Add Enterprise' : 'Add or Select Enterprise',
+        title: this.state.create ? 'Add Group' : 'Group Options',
         component,
       },
       {
-        title: 'Clinic Details',
+        title: 'Practice Details',
         component: ClinicDetails({
           onSubmit: this.next,
           index: 1,
@@ -150,47 +155,38 @@ class CreateAccount extends Component {
     return (
       <div key={this.state.index} className={styles.mainContainer}>
         <div className={styles.header}>
-          <div className={styles.logoContainer}>
-            <img
-              className={styles.logo}
-              src="/images/logo_notext.png"
-              alt="CareCru Logo"
-              width="80px"
-            />
-          </div>
           <div className={styles.header_text}>{formList[this.state.index].title}</div>
-          <div className={styles.header_icon}>
-            <IconButton
-              icon="times"
-              onClick={() => this.props.setActive()}
-              className={styles.timesButton}
-            />
-          </div>
         </div>
         <div className={styles.formContainer}>{formList[this.state.index].component}</div>
         <div className={styles.buttonContainer}>
-          {this.state.index ||
-            (this.state.create && <Button onClick={() => this.previous()}>Previous</Button>)}
+          {(this.state.index || this.state.create) && (
+            <Button onClick={() => this.previous()} color="blue">
+              Previous
+            </Button>
+          )}
 
           {this.state.formLength - 1 > this.state.index &&
             (this.state.index >= 1 || this.state.create) && (
             <Button
-              onClick={() => submitCreation(formNames[this.state.index])}
+              onClick={() => {
+                this.props.submit(formNames[this.state.index]);
+              }}
               className={styles.nextButton}
+              color="blue"
             >
                 Next
             </Button>
           )}
-
           {this.state.formLength - 1 === this.state.index && (
             <Button
               onClick={() => {
-                submitCreation(formNames[this.state.index]);
+                this.props.submit(formNames[this.state.index]);
                 this.props.setActive();
               }}
               className={styles.nextButton}
+              color="blue"
             >
-              Submit All
+              Add New Customer
             </Button>
           )}
         </div>
@@ -200,25 +196,19 @@ class CreateAccount extends Component {
 }
 
 CreateAccount.propTypes = {
-  submitCreation: PropTypes.func,
+  submit: PropTypes.func,
   setAllAccountInfo: PropTypes.func,
   setActive: PropTypes.func,
-  enterprises: PropTypes.arrayOf(
-    PropTypes.shape({
-      createdAt: PropTypes.string,
-      id: PropTypes.string,
-      isFetching: PropTypes.bool,
-      lastUpdated: PropTypes.number,
-      name: PropTypes.string,
-      plan: PropTypes.string,
-    })
-  ),
+  enterprises: PropTypes.arrayOf(Enterprise),
+  selectEnterprise: PropTypes.func,
+  destroy: PropTypes.func,
 };
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
     {
-      submitCreation: submit,
+      submit,
+      destroy,
       setAllAccountInfo,
     },
     dispatch

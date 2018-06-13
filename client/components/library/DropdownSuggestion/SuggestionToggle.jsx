@@ -122,12 +122,13 @@ class SuggestionToggle extends Component {
 
     return (
       <Button
+        type="button"
         className={toggleClassName}
         onClick={this.displaySuggestions}
         data-test-id={this.props['data-test-id']}
       >
         <div className={theme.toggleValueDiv}>
-          <label htmlFor={`suggestion_toggle_${name}`} className={styles.selectLabel}>
+          <div className={styles.selectLabel}>
             <div>{this.state.displayValue}</div>
             <select
               size={this.props.options.length}
@@ -146,10 +147,8 @@ class SuggestionToggle extends Component {
                 </option>
               ))}
             </select>
-          </label>
-          <label htmlFor={`suggestion_toggle_${name}`} className={labelClassName}>
-            {label}
-          </label>
+          </div>
+          <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
             <Icon className={caretIconClassName} icon="caret-down" type="solid" />
           </div>

@@ -494,11 +494,11 @@ appointmentsRouter.get('/insights', async (req, res, next) => {
     endDate,
   } = query;
 
-  startDate = startDate ? startDate : moment().startOf('day').toISOString();
-  endDate = endDate ? endDate : moment().startOf('day').add(1, 'days').toISOString();
+  startDate = startDate || moment().startOf('day').toISOString();
+  endDate = endDate || moment().startOf('day').add(1, 'days').toISOString();
 
   try {
-    const insightData = await formatingInsights(await allInsights(accountId, startDate, endDate));
+    const insightData = await allInsights(accountId, startDate, endDate);
     return res.send(insightData);
   } catch (e) {
     return next(e);
@@ -515,6 +515,7 @@ appointmentsRouter.get('/', (req, res, next) => {
   const {
     limit,
     skip,
+    filters = [],
   } = query;
 
   const skipped = skip || 0;
@@ -525,8 +526,13 @@ appointmentsRouter.get('/', (req, res, next) => {
     endDate,
   } = query;
 
-  startDate = startDate ? startDate : moment().toISOString();
-  endDate = endDate ? endDate : moment().add(1, 'years').toISOString();
+  startDate = startDate || moment().toISOString();
+  endDate = endDate || moment().add(1, 'years').toISOString();
+
+  let filterObj = {};
+  if (filters && filters.length) {
+    filterObj = JSON.parse(filters[0]);
+  }
 
   return Appointment.findAll({
     where: {
@@ -535,6 +541,7 @@ appointmentsRouter.get('/', (req, res, next) => {
         $gte: startDate,
         $lte: endDate,
       },
+      ...filterObj,
     },
     limit: parseInt(limitted),
     include: includeArray,

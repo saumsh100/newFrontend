@@ -141,7 +141,7 @@ $fb-fg-color: #fff;
 
 $browser-context: 14;
 
-$badge-notification-background: darken($primary-red, 10%);
+$badge-notification-background: $primary-color;
 
 @function em($pixels, $context: $browser-context) {
   @if (unitless($pixels)) {

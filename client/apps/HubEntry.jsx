@@ -18,6 +18,7 @@ import configure from '../store';
 import { load } from '../thunks/auth';
 import { logout } from '../thunks/hubAuth';
 import { loadUnreadMessages } from '../thunks/chat';
+import { loadOnlineRequest } from '../thunks/onlineRequests';
 import { setToolbarPosition, expandContent } from '../reducers/electron';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import DesktopNotification from '../util/desktopNotification';
@@ -29,8 +30,10 @@ import {
   REQUEST_USER_DATA,
   SET_USER_DATA,
   REQUEST_TOOLBAR_POSITION,
+  ZOOM_FACTOR_CHANGE,
+  REQUEST_ZOOM_FACTOR,
 } from '../constants';
-import { electron } from '../util/ipc';
+import { electron, webFrame } from '../util/ipc';
 
 // Binds the token setting in header
 bindAxiosInterceptors();
@@ -52,6 +55,12 @@ electron.on(TOOLBAR_POSITION_CHANGE, (e, data) => {
 });
 
 electron.send(REQUEST_TOOLBAR_POSITION);
+
+electron.on(ZOOM_FACTOR_CHANGE, (e, data) => {
+  webFrame.setZoomFactor(data);
+});
+
+electron.send(REQUEST_ZOOM_FACTOR, { window: 'toolbar' });
 
 electron.on(SHOW_CONTENT, () => {
   const location = store.getState().routing.location.pathname;
@@ -87,7 +96,8 @@ load()(store.dispatch).then(() => {
       }/sessions?u=${userId}`,
     });
 
-    loadUnreadMessages()(store.dispatch, store.getState());
+    store.dispatch(loadUnreadMessages());
+    store.dispatch(loadOnlineRequest());
     DesktopNotification.requestPermission();
     connectSocketToStoreLogin(store, socket);
 

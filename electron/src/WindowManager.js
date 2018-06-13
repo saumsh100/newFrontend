@@ -2,6 +2,7 @@
 const electron = require('electron');
 const MainBrowserWindow = require('./Windows/MainWindow');
 const UserModalWindow = require('./Windows/UserModal');
+const ScreenManager = require('./ScreenManager');
 const Store = require('./store');
 const config = require('../config');
 const TrayManager = require('./TrayManager');
@@ -19,6 +20,7 @@ class WindowManager {
     this.createMainBrowserWindow();
     this.mainWindow.loadUrl();
     TrayManager.instance.showLoggedOutTray();
+    ScreenManager.instance.windowManager = this;
   }
 
   /**
@@ -38,6 +40,7 @@ class WindowManager {
     this.mainWindow.positionWindow();
     this.userModalWindow.openWindow();
     this.userModalWindow.positionWindow();
+    this.userModalWindow.setUserModalSize();
     TrayManager.instance.showLoggedInTray(this);
 
     this.userModalWindow.window.on('hide', () => {
@@ -67,6 +70,7 @@ class WindowManager {
     this.mainWindow.setToolbarSize();
     this.mainWindow.notifyPositionChange();
     this.userModalWindow.positionWindow();
+    this.userModalWindow.setUserModalSize();
   }
 
   /**
@@ -79,6 +83,7 @@ class WindowManager {
     clearTimeout(this.userModalWindow.hideTimeout);
     this.toggleToolbar();
     TrayManager.instance.showLoggedOutTray();
+    ScreenManager.instance.resetToPrimaryDisplay();
   }
 
   /**
@@ -86,6 +91,7 @@ class WindowManager {
    */
   createMainBrowserWindow() {
     const window = new BrowserWindow(config.mainWindow);
+    window.once('closed', WindowManager.closeApp);
     this.closeCurrentWindow();
     return this.mainWindow.setWindow(window);
   }
@@ -95,6 +101,7 @@ class WindowManager {
    */
   createToolbarBrowserWindow() {
     const window = new BrowserWindow(config.toolbar.toolbarWindow);
+    window.once('closed', WindowManager.closeApp);
     this.closeCurrentWindow();
     return this.mainWindow.setWindow(window);
   }
@@ -104,6 +111,7 @@ class WindowManager {
    */
   closeCurrentWindow() {
     if (this.mainWindow.window) {
+      this.mainWindow.window.removeListener('closed', WindowManager.closeApp);
       this.mainWindow.window.close();
     }
   }
@@ -138,12 +146,78 @@ class WindowManager {
   }
 
   /**
+   * Change default display the app is displayed at.
+   *
+   * @param display
+   */
+  changeDisplay(display) {
+    ScreenManager.instance.currentDisplay = display;
+    this.mainWindow.positionWindow();
+    this.userModalWindow.positionWindow();
+  }
+
+  /**
+   * Resets the tray menu.
+   */
+  resetTray() {
+    TrayManager.instance.clearTray();
+    this.isAuth
+      ? TrayManager.instance.showLoggedInTray(this)
+      : TrayManager.instance.showLoggedOutTray();
+  }
+
+  /**
+   * Set a new scale for windows.
+   *
+   * @param scale
+   */
+  setWindowScale(scale = 1) {
+    Store.set('toolbarSizeFactor', scale);
+    this.rescaleWindows();
+  }
+
+  /**
+   * Run rescaling on windows.
+   */
+  rescaleWindows() {
+    this.mainWindow.scaleWindow();
+    this.mainWindow.setToolbarSize();
+    this.mainWindow.positionWindow();
+    this.userModalWindow.scaleWindow();
+    this.userModalWindow.setUserModalSize();
+    this.userModalWindow.positionWindow();
+  }
+
+  /**
+   * Exit the app.
+   */
+  static closeApp() {
+    electron.app.quit();
+  }
+
+  /**
    * Set auth value.
    *
    * @param value
    */
   set auth(value) {
     this.isAuth = value;
+  }
+
+  /**
+   * Returns currently used zoom factor.
+   * @returns {number}
+   */
+  get zoomFactor() {
+    return this.mainWindow.zoomFactor;
+  }
+
+  /**
+   * Returns currently used display from screen manager.
+   * @returns {*}
+   */
+  get currentlyUsedDisplay() {
+    return ScreenManager.instance.currentDisplay;
   }
 
   /**

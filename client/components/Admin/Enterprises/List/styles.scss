@@ -1,16 +1,61 @@
 @import '../../../../ui.scss';
 
+.enterpriseContainer {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+
+.enterpriseCard {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.enterpriseTable {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.header {
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid $primary-grey;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  min-height: 80px;
+
+  &_title {
+    font-size: 19px;
+  }
+}
+
 .link {
-  color: $color-black;
-  font-family: "Gotham-Book";
-  font-size: 16px;
-  font-weight: 900;
+  color: $primary-dark;
+  font-size: 14px;
+  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   text-decoration: none;
+  width: 100px;
 
   &:hover {
     text-decoration: underline;
-    color: #FF715A;
+    color: $primary-blue;
     cursor: pointer;
+  }
+}
+
+.groupName {
+  width: 100%;
+}
+
+.addButtonWrapper {
+  button {
+    margin-right: 20px;
   }
 }
 
@@ -21,4 +66,13 @@
 
 .textPadding {
   padding-right: 10px;
+}
+
+.accountsTableContainer {
+  padding: 20px;
+  background: #fafafa;
+}
+
+.rowStyling {
+  cursor: pointer;
 }

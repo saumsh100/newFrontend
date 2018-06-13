@@ -18,6 +18,7 @@
   align-items: center;
   font-size: 12px;
 }
+
 .timeListWrapper {
   margin-bottom: var(--widget-spacer);
 }
@@ -31,4 +32,7 @@
   display: block;
   margin-top: 8px;
   text-align: center;
+}
+.timeFrameButton {
+  flex: 1;
 }

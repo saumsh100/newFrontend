@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import moment from 'moment';
 import { Map } from 'immutable';
-import { isHub } from '../../util/hub';
+import { isHub, isResponsive } from '../../util/hub';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import Requests from '../../entities/models/Request';
 import Practitioners from '../../entities/models/Practitioners';
@@ -239,7 +239,7 @@ class ScheduleComponent extends Component {
     const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
     const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
 
-    const sameApptTitle = isHub()
+    const sameApptTitle = isResponsive()
       ? 'Is this the same appointment?'
       : 'Could this be the same appointment?';
 

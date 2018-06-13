@@ -37,7 +37,7 @@ enterprisesRouter.param('accountId', sequelizeLoader('account', 'Account'));
  * GET /
  */
 enterprisesRouter.get('/', checkPermissions('enterprises:read'), (req, res, next) => {
-  return Enterprise.all({ raw: true })
+  return Enterprise.findAll({ raw: true, order: [['name', 'ASC']] })
     .then(enterprises => res.send(normalize('enterprises', enterprises)))
     .catch(next);
 });
