@@ -150,12 +150,11 @@
 
 .footerMobile {
   @extend .footer;
+  width: auto;
   justify-content: flex-start;
   border-top: none;
   &_displayActions {
     position: absolute;
-    top: 80px;
-    right: 0;
     bottom: 0;
     left: 0;
     @extend .actionsOverlay;
@@ -212,6 +211,12 @@
   color: $primary-blue-green;
   border-radius: 20px;
   margin-right: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: $primary-blue-green;
+    color: $primary-white;
+  }
 }
 
 .editButton {

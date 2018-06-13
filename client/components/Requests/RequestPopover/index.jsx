@@ -118,13 +118,6 @@ const renderMobileFooter = ({
     >
       <Icon icon={displayActions ? 'minus' : 'plus'} />
     </Button>
-    {displayActions && (
-      <svg height="0">
-        <filter id="blurred">
-          <feGaussianBlur stdDeviation="3" />
-        </filter>
-      </svg>
-    )}
   </SFooter>
 );
 
@@ -177,6 +170,7 @@ export default class RequestPopover extends Component {
             [styles.blurredHub]: displayActions && isHub(),
             [styles.blurred]: displayActions && !isHub(),
           })}
+          onClick={this.toggleActionDisplay}
         >
           <SBody className={isMobile ? styles.bodyMobile : styles.body}>
             <div className={styles.container}>
@@ -252,6 +246,13 @@ export default class RequestPopover extends Component {
             </div>
           </SBody>
         </SContainer>
+        {displayActions && (
+          <svg height="0">
+            <filter id="blurred">
+              <feGaussianBlur stdDeviation="3" />
+            </filter>
+          </svg>
+        )}
         {isMobile
           ? renderMobileFooter({
             toggleActionDisplay: this.toggleActionDisplay,
