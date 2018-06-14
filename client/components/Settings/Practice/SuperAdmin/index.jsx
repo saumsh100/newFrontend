@@ -19,18 +19,16 @@ import AddAccounts from './AddAccounts';
 import SettingsCard from '../../Shared/SettingsCard';
 import SuperAdminForm from './SuperAdminForm';
 import MassEmailDisplay from './MassEmailDisplay';
-import { accountShape } from '../../../library/PropTypeShapes/index';
+import Account from '../../../../entities/models/Account';
+import User from '../../../../entities/models/User';
 import styles from './styles.scss';
 
 class SuperAdmin extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      downloadLink: null,
-      expired: null,
       previewOpen: false,
     };
-    this.downloadConnector = this.downloadConnector.bind(this);
     this.sendEmailBlast = this.sendEmailBlast.bind(this);
     this.openPreviewModal = this.openPreviewModal.bind(this);
     this.updateApis = this.updateApis.bind(this);
@@ -43,18 +41,6 @@ class SuperAdmin extends Component {
     const url = `/api/users/${decodedToken.userId}`;
 
     this.props.fetchEntities({ url });
-  }
-
-  downloadConnector() {
-    this.props.downloadConnector().then((downloadLink) => {
-      const reg = /Expires=([^&]*)/;
-      const matches = downloadLink.match(reg);
-
-      this.setState({
-        downloadLink,
-        expired: Number(matches[1] * 1000),
-      });
-    });
   }
 
   updateAdminForm(values) {
@@ -81,8 +67,8 @@ class SuperAdmin extends Component {
       return alert('Sorry but you have already performed this email campaign.');
     }
 
-    const sendEmails = confirm('Are you sure you want to send this email blast?');
-    const sendEmailsForSure = sendEmails && confirm('Are you really sure?');
+    const sendEmails = window.confirm('Are you sure you want to send this email blast?');
+    const sendEmailsForSure = sendEmails && window.confirm('Are you really sure?');
 
     if (sendEmailsForSure) {
       this.setState({
@@ -95,7 +81,9 @@ class SuperAdmin extends Component {
 
   async updateApis(values) {
     const { activeAccount, address } = this.props;
-    const { reputationManagement, listings, callTracking, canSendReminders } = values;
+    const {
+      reputationManagement, listings, callTracking, canSendReminders,
+    } = values;
 
     const sendingValuesCreate = {};
     sendingValuesCreate.integrations = [];
@@ -112,7 +100,9 @@ class SuperAdmin extends Component {
       website,
     } = activeAccount;
 
-    const { city, state, country, zipCode, street, timezone } = address;
+    const {
+      city, state, country, zipCode, street, timezone,
+    } = address;
 
     if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
       return window.alert('Please enter Address and/or Clinic Website Info First');
@@ -198,6 +188,7 @@ class SuperAdmin extends Component {
         values: sendingValuesDelete,
       });
     }
+    return null;
   }
 
   openPreviewModal() {
@@ -232,9 +223,8 @@ class SuperAdmin extends Component {
       ? moment(activeAccount.massOnlineEmailSentDate).format('MMM DD, YYYY hh:mm A')
       : null;
 
-    const url = `/api/accounts/${
-      activeAccount.id
-    }/emails/preview/?templateName=Online Booking Introduction`;
+    const emailTemplate = 'General Introduction Announcement';
+    const url = `/api/accounts/${activeAccount.id}/emails/preview/?templateName=${emailTemplate}`;
 
     const actions = [
       {
@@ -285,15 +275,14 @@ class SuperAdmin extends Component {
 }
 
 SuperAdmin.propTypes = {
-  activeAccount: PropTypes.shape(accountShape),
-  updateEntityRequest: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
-  fetchEntities: PropTypes.func,
-  downloadConnector: PropTypes.func,
-  sendEmailBlast: PropTypes.func,
-  getEmailBlastCount: PropTypes.func,
-  users: PropTypes.instanceOf(Map),
+  activeAccount: PropTypes.instanceOf(Account).isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  sendEmailBlast: PropTypes.func.isRequired,
+  getEmailBlastCount: PropTypes.func.isRequired,
+  users: PropTypes.arrayOf(PropTypes.instanceOf(User)).isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
@@ -323,7 +312,7 @@ function mapDispatchToProps(dispatch) {
       deleteEntityRequest,
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
