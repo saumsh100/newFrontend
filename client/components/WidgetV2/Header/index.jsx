@@ -9,10 +9,10 @@ import Title from './Title';
 import BackButton from './BackButton';
 import Button from '../../library/Button';
 import PatientUserMenu from './PatientUserMenu';
-import PatientUser from '../../../entities/models/PatientUser';
 import { setIsBooking } from '../../../actions/availabilities';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { historyShape } from '../../library/PropTypeShapes/routerShapes';
+import PatientUser from '../../../entities/models/PatientUser';
 import styles from './styles.scss';
 
 class Header extends Component {
@@ -26,7 +26,9 @@ class Header extends Component {
   }
 
   render() {
-    const { isAuth, patientUser, hasWaitList, history, isBooking, toggleIsBooking } = this.props;
+    const {
+      isAuth, patientUser, hasWaitList, history, isBooking, toggleIsBooking,
+    } = this.props;
 
     return (
       <div className={styles.headerContainer}>
@@ -38,7 +40,7 @@ class Header extends Component {
         </div>
         <div className={styles.headerRightArea}>
           {isAuth && <PatientUserMenu user={patientUser} />}
-          <Button className={styles.closeButton} onClick={closeBookingModal}>
+          <Button className={styles.closeButton} onClick={this.props.closeBookingModal}>
             <svg xmlns="http://www.w3.org/2000/svg">
               <path d="M6.44 7.146L.796 1.504A.51.51 0 0 1 .782.782a.51.51 0 0 1 .722.015L7.146 6.44 12.79.797a.51.51 0 0 1 .721-.015.51.51 0 0 1-.014.722L7.854 7.146l5.642 5.643a.51.51 0 0 1 .014.721.51.51 0 0 1-.721-.014L7.146 7.854l-5.642 5.642a.51.51 0 0 1-.722.014.51.51 0 0 1 .015-.721L6.44 7.146z" />
             </svg>
@@ -49,15 +51,6 @@ class Header extends Component {
     );
   }
 }
-
-Header.propTypes = {
-  hasWaitList: PropTypes.bool,
-  history: PropTypes.shape(historyShape),
-  isAuth: PropTypes.bool,
-  isBooking: PropTypes.bool,
-  patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(PatientUser)]),
-  toggleIsBooking: PropTypes.func,
-};
 
 function mapStateToProps({ auth, availabilities }) {
   return {
@@ -73,8 +66,18 @@ function mapDispatchToProps(dispatch) {
       closeBookingModal,
       toggleIsBooking: setIsBooking,
     },
-    dispatch
+    dispatch,
   );
 }
+
+Header.propTypes = {
+  hasWaitList: PropTypes.bool.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  isAuth: PropTypes.bool.isRequired,
+  isBooking: PropTypes.bool.isRequired,
+  patientUser: PropTypes.instanceOf(PatientUser).isRequired,
+  toggleIsBooking: PropTypes.func.isRequired,
+  closeBookingModal: PropTypes.func.isRequired,
+};
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
