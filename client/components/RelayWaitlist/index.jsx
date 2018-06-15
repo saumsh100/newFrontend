@@ -1,6 +1,6 @@
 
 import Delete from './deleteWaitSpot';
 import Fetch from './fetchWaitSpot';
-import Subscription from './subscriptionWaitSpot';
+import Create from './addWaitSpot';
 
-export { Delete, Fetch, Subscription };
+export { Delete, Fetch, Create };

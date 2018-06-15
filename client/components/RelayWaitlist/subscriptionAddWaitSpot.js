@@ -2,10 +2,11 @@
 import { graphql, requestSubscription } from 'react-relay';
 import { ConnectionHandler } from 'relay-runtime';
 import environment from '../../util/graphqlEnvironment';
+import DesktopNotification from '../../util/desktopNotification';
 
 const subscription = graphql`
-  subscription subscriptionWaitSpot_Subscription {
-    newWaitSpot {
+  subscription subscriptionAddWaitSpot_Subscription($accountId: String!) {
+    newWaitSpot(accountId: $accountId) {
       id
       ccId
       patientUserId
@@ -40,11 +41,14 @@ const subscription = graphql`
   }
 `;
 
-const register = () => {
+const register = accountId =>
   requestSubscription(environment, {
     subscription,
+    variables: {
+      accountId,
+    },
     onError: error => console.error(error),
-    updater: (proxyStore) => {
+    updater: (proxyStore, data) => {
       const nodeToInsert = proxyStore.getRootField('newWaitSpot');
       const root = proxyStore.getRoot();
       const accountViewerProxy = root.getLinkedRecord('accountViewer');
@@ -66,9 +70,18 @@ const register = () => {
       );
 
       ConnectionHandler.insertEdgeAfter(waitSpotsConnection, edge);
+
+      const { newWaitSpot } = data;
+      const patient = newWaitSpot.patient ? newWaitSpot.patient : newWaitSpot.patientUser;
+
+      const fullName = `${patient.firstName} ${patient.lastName}`;
+
+      const messageHeading = 'New wait spot request';
+      DesktopNotification.showNotification(messageHeading, {
+        body: `New wait spot request by ${fullName}.`,
+      });
     },
   });
-};
 
 export default {
   register,

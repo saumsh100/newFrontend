@@ -9,6 +9,7 @@ import { patientShape } from '../../../library/PropTypeShapes';
 import WaitSpotModel from '../../../../entities/models/WaitSpot';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import { isHub } from '../../../../util/hub';
+import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
 export default function WaitListItem(props) {
@@ -21,8 +22,6 @@ export default function WaitListItem(props) {
     onSelect,
     selected,
   } = props;
-
-  const isOnHub = isHub();
 
   if (!patient) {
     return null;
@@ -46,8 +45,8 @@ export default function WaitListItem(props) {
   }
 
   const wrapperStyle = classNames({
-    [styles.wrapper]: !isOnHub,
-    [styles.listItemWrapperHub]: isOnHub,
+    [styles.wrapper]: !isHub(),
+    [styles.listItemWrapperHub]: isHub(),
     [styles.removeBorder]: removeBorder,
   });
 
@@ -55,7 +54,7 @@ export default function WaitListItem(props) {
     [styles.checked]: selected,
   });
 
-  const patientInfoSectionHub = isOnHub ? (
+  const patientInfoSectionHub = isHub() && (
     <div className={styles.heading}>
       <Avatar user={patient} size="xs" />
       <PatientPopover
@@ -68,25 +67,25 @@ export default function WaitListItem(props) {
         </div>
       </PatientPopover>
     </div>
-  ) : null;
+  );
 
   return (
     <div className={styles.waitListItem} data-test-id="list_waitListItem">
-      {isOnHub && (
+      {isHub() && (
         <Checkbox customContainer={checkboxStyle} onChange={onSelect} checked={selected} />
       )}
 
       <div className={wrapperStyle}>
         {patientInfoSectionHub}
 
-        {!isOnHub && (
+        {!isHub() && (
           <div className={styles.avatar}>
             <Avatar user={patient} size="sm" />
           </div>
         )}
 
         <div className={styles.patientPrefInfo}>
-          {!isOnHub && (
+          {!isHub() && (
             <PatientPopover
               patient={
                 isPatientUser ? Object.assign(patient, { endDate: waitSpot.endDate }) : patient
@@ -138,7 +137,7 @@ export default function WaitListItem(props) {
           </div>
         </div>
 
-        {!isOnHub && (
+        {!isHub() && (
           <div className={styles.patientGeneralInfo}>
             {patient[patientPhone] ? (
               <div className={styles.infoContainer}>
@@ -155,7 +154,7 @@ export default function WaitListItem(props) {
           </div>
         )}
 
-        {!isOnHub && (
+        {!isHub() && (
           <div className={styles.remove}>
             <IconButton icon="times" onClick={removeWaitSpot} />
           </div>

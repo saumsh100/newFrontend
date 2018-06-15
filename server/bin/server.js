@@ -39,6 +39,7 @@ server.listen(globals.port, () => {
     execute,
     subscribe,
     schema,
+    onConnect: params => params,
   }, {
     server,
     path: '/subscriptions',

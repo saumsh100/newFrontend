@@ -4,7 +4,7 @@ import { attributeFields } from 'graphql-sequelize';
 import { waitSpotType } from './types';
 import { WaitSpot } from 'CareCruModels';
 import PubSub from '../subscriptionsPubSub';
-import { ADD_WAIT_SPOT } from '../channels';
+import { ADD_WAIT_SPOT, REMOVE_WAIT_SPOT } from '../channels';
 
 
 const addWaitSpotMutation = mutationWithClientMutationId({
@@ -29,27 +29,6 @@ const addWaitSpotMutation = mutationWithClientMutationId({
   },
 });
 
-// /**
-//  * Updates a patient for the provided id in the arguments object
-//  * the other provided attributes will be used to update to model.
-//  * Returns the updated patient model
-//  */
-// const updatePatientMutation = mutationWithClientMutationId({
-//   name: 'updatePatient',
-//   inputFields: attributeFields(Patient, {
-//     exclude: ['status', 'createdAt', 'updatedAt', 'deletedAt'],
-//   }),
-//   outputFields: {
-//     patient: {
-//       type: patientType,
-//       resolve: payload => payload,
-//     },
-//   },
-//   mutateAndGetPayload: async ({ id, ...args }) =>
-//     await Patient.findById(id).then(p => p.update(args)),
-// });
-//
-
 const deleteWaitSpotMutation = mutationWithClientMutationId({
   name: 'deleteWaitSpot',
   inputFields: attributeFields(WaitSpot, {
@@ -61,11 +40,19 @@ const deleteWaitSpotMutation = mutationWithClientMutationId({
       resolve: payload => payload,
     },
   },
-  mutateAndGetPayload: async ({ id }) => await WaitSpot.findById(id).then(w => w.destroy()),
+  mutateAndGetPayload: async ({ id }) => {
+    try {
+      const removeWaitSpot = await WaitSpot.findById(id);
+      removeWaitSpot.destroy();
+      PubSub.publish(REMOVE_WAIT_SPOT, { removeWaitSpot });
+      return removeWaitSpot;
+    } catch (e) {
+      return null;
+    }
+  },
 });
 
 export default {
   addWaitSpotMutation,
-  // updatePatientMutation,
   deleteWaitSpotMutation,
 };

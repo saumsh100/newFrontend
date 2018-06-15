@@ -19,7 +19,7 @@ import { loadUnreadMessages } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import DesktopNotification from '../util/desktopNotification';
-import registerSubscriptions from '../util/graphqlSubscriptions';
+import SubscriptionManager from '../util/graphqlSubscriptions';
 
 // Binds the token setting in header
 bindAxiosInterceptors();
@@ -58,7 +58,8 @@ load()(store.dispatch).then(() => {
         }/sessions?u=${userId}`,
       });
     }
-    registerSubscriptions();
+
+    SubscriptionManager.accountId = auth.get('accountId');
     store.dispatch(loadUnreadMessages());
     store.dispatch(loadOnlineRequest());
     DesktopNotification.requestPermission();

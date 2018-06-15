@@ -26,16 +26,24 @@ const fetchQuery = (getToken = getTokenDefault) => (operation, variables) => {
 
 const setupSubscription = (config, variables, cacheConfig, observer) => {
   const query = config.text;
+  const token = getTokenDefault();
 
   const subscriptionClient = new SubscriptionClient('ws://localhost:5000/subscriptions', {
     reconnect: true,
+    connectionParams: {
+      Authorization: token,
+    },
   });
 
-  subscriptionClient.request({ query, variables }).subscribe((response) => {
+  const client = subscriptionClient.request({ query, variables }).subscribe((response) => {
     observer.onNext({
       data: response.data,
     });
   });
+
+  return {
+    dispose: client.unsubscribe,
+  };
 };
 
 const environment = new Environment({

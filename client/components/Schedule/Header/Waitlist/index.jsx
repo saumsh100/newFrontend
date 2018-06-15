@@ -75,10 +75,7 @@ export default function Waitlist(props) {
                   patientData = waitSpot.patient;
                 }
 
-                let removeBorder = false;
-                if (index === arr.length - 1 && arr.length > 1) {
-                  removeBorder = true;
-                }
+                const removeBorder = index === arr.length - 1 && arr.length > 1;
 
                 return (
                   <WaitListItem

@@ -27,6 +27,7 @@ import {
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import { deleteWaitSpot } from '../../../thunks/waitlist';
+import { Create as CreateWaitSpot } from '../../RelayWaitlist';
 import styles from './styles.scss';
 
 class Header extends Component {
@@ -97,41 +98,17 @@ class Header extends Component {
         endDate: moment()
           .add(1, 'days')
           .toISOString(),
+        accountId: this.props.accountId,
       },
       omit(values, ['patientData']),
     );
 
-    const alertCreate = {
-      success: {
-        body: 'Added Wait Spot.',
-      },
-      error: {
-        title: 'Wait Spot Error',
-        body: 'Wait spot could not be added.',
-      },
-    };
-
-    this.props
-      .createEntityRequest({
-        key: 'waitSpots',
-        entityData: newValues,
-        alert: alertCreate,
-      })
-      .then(() => {
-        this.openAddToWaitlist();
-        this.props.reset('Add to Waitlist Form');
-        this.setState({
-          patientSearched: null,
-        });
-      });
-  }
-
-  removeWaitSpot(waitSpot) {
-    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
-
-    if (confirmDelete) {
-      this.props.deleteWaitSpot(waitSpot);
-    }
+    CreateWaitSpot.commit(newValues);
+    this.openAddToWaitlist();
+    this.props.reset('Add to Waitlist Form');
+    this.setState({
+      patientSearched: null,
+    });
   }
 
   getSuggestions(value) {
@@ -373,7 +350,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStateToProps({ schedule, apiRequests, entities }) {
+function mapStateToProps({ schedule, apiRequests, entities, auth }) {
   const scheduleObj = schedule.toJS();
   const scheduleView = scheduleObj.scheduleView;
 
@@ -388,6 +365,8 @@ function mapStateToProps({ schedule, apiRequests, entities }) {
   const patientUsers = entities.getIn(['patientUsers', 'models']);
   const patients = entities.getIn(['patients', 'models']);
 
+  const accountId = auth.get('accountId');
+
   return {
     scheduleView,
     pracsFetched,
@@ -395,6 +374,7 @@ function mapStateToProps({ schedule, apiRequests, entities }) {
     waitSpots,
     patients,
     patientUsers,
+    accountId,
   };
 }
 

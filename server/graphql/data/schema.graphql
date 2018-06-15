@@ -416,7 +416,10 @@ scalar SequelizeJSON
 
 type Subscription {
   """New wait spot created notification."""
-  newWaitSpot: WaitSpot
+  newWaitSpot(accountId: String!): WaitSpot
+
+  """Wait spot removed."""
+  removeWaitSpot(accountId: String!): WaitSpot
 }
 
 input updateFamilyInput {

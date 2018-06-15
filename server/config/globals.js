@@ -120,7 +120,7 @@ const postgres = {
   password: pgPassword || (environmentVariables.POSTGRESQL_PASSWORD || ''),
   database: environmentVariables.POSTGRESQL_DATABASE || defaultDBName,
   ssl: !!environmentVariables.POSTGRESQL_SSL,
-  logging: console.log,
+  logging: !!environmentVariables.POSTGRESQL_LOGGING,
 };
 
 const reminders = {
