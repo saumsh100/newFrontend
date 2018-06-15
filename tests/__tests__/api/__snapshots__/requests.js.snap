@@ -13,7 +13,7 @@ Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
-        "chairId": null,
+        "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "insuranceCarrier": null,
@@ -22,7 +22,7 @@ Object {
         "isConfirmed": false,
         "isDeleted": false,
         "isSyncedWithPms": false,
-        "note": null,
+        "note": "a standard note",
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
@@ -31,8 +31,8 @@ Object {
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
         "startDate": "2017-07-19T00:16:30.932Z",
-        "suggestedChairId": null,
-        "suggestedPractitionerId": null,
+        "suggestedChairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
+        "suggestedPractitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       },
     },
   },
@@ -66,7 +66,7 @@ Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
-        "chairId": null,
+        "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "insuranceCarrier": null,
@@ -75,7 +75,7 @@ Object {
         "isConfirmed": false,
         "isDeleted": false,
         "isSyncedWithPms": false,
-        "note": null,
+        "note": "a standard note",
         "patientId": null,
         "patientUser": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
@@ -85,8 +85,8 @@ Object {
         "service": "c5beec65-73a0-4b58-ba48-65986931d054",
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
         "startDate": "2017-07-19T00:16:30.932Z",
-        "suggestedChairId": null,
-        "suggestedPractitionerId": null,
+        "suggestedChairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
+        "suggestedPractitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       },
     },
     "services": Object {
@@ -109,6 +109,37 @@ Object {
 }
 `;
 
+exports[`/api/requests GET / get all unSynced requests with patientUsers 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "attributes": Object {
+        "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "endDate": "2017-07-19T00:17:30.932Z",
+        "formattedNote": "***CHANGES TO THIS APPOINTMENT REQUEST WILL NOT BE SAVED***
+Please go to www.CareCru.io to accept/reject the request!
+
+At Tue Jul 18 2017 17:14:30 GMT-0700 (PDT) Jack Daniels requested an appointment.
+Email: testpatientuser@test.com
+Phone: +16049999999
+Note: a standard note",
+        "insuranceCarrier": null,
+        "insuranceMemberId": null,
+        "isDeleted": false,
+        "note": "a standard note",
+        "patientId": null,
+        "pmsId": null,
+        "startDate": "2017-07-19T00:16:30.932Z",
+        "suggestedChairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
+        "suggestedPractitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
+      },
+      "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
+      "type": "appointmentRequest",
+    },
+  ],
+}
+`;
+
 exports[`/api/requests POST / create request 1`] = `
 Object {
   "entities": Object {
@@ -116,7 +147,7 @@ Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
-        "chairId": null,
+        "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "insuranceCarrier": null,
@@ -124,7 +155,7 @@ Object {
         "isCancelled": false,
         "isConfirmed": false,
         "isSyncedWithPms": false,
-        "note": null,
+        "note": "a standard note",
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
@@ -133,8 +164,8 @@ Object {
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
         "startDate": "2017-07-19T00:16:30.932Z",
-        "suggestedChairId": null,
-        "suggestedPractitionerId": null,
+        "suggestedChairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
+        "suggestedPractitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       },
     },
   },
@@ -149,7 +180,7 @@ Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
-        "chairId": null,
+        "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "insuranceCarrier": null,
@@ -157,7 +188,7 @@ Object {
         "isCancelled": true,
         "isConfirmed": false,
         "isSyncedWithPms": false,
-        "note": null,
+        "note": "a standard note",
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
@@ -166,8 +197,8 @@ Object {
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
         "startDate": "2017-07-19T00:16:30.932Z",
-        "suggestedChairId": null,
-        "suggestedPractitionerId": null,
+        "suggestedChairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
+        "suggestedPractitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       },
     },
   },
@@ -182,7 +213,7 @@ Object {
       "272d86fc-f743-4cd6-b0c8-7906959bcc9f": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "appointmentId": null,
-        "chairId": null,
+        "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:18:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
         "insuranceCarrier": null,
@@ -190,7 +221,7 @@ Object {
         "isCancelled": false,
         "isConfirmed": false,
         "isSyncedWithPms": false,
-        "note": null,
+        "note": "a standard note",
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
@@ -199,8 +230,8 @@ Object {
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
         "startDate": "2017-07-19T00:16:30.932Z",
-        "suggestedChairId": null,
-        "suggestedPractitionerId": null,
+        "suggestedChairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
+        "suggestedPractitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
       },
     },
   },
