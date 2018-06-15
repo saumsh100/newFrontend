@@ -1,6 +1,7 @@
 
+
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {Card, Icon, Well} from '../../../library/index';
 import ClassyDiv from '../../../library/util/ClassyDiv';
 import Section from '../Shared/Section';
@@ -23,6 +24,7 @@ export default function ConfirmedAppointment({ params }) {
     contactEmail,
     bookingWidgetPrimaryColor,
     website,
+    timezone,
   } = account;
 
   const { street, city, state } = address;
@@ -52,8 +54,8 @@ export default function ConfirmedAppointment({ params }) {
           Appointment Information
         </WellHeader>
         <Well>
-          <WellItem>{moment(startDate).format('dddd, MMMM Do YYYY')}</WellItem>
-          <WellItem>{moment(startDate).format('h:mma')} - {moment(endDate).format('h:mma')}</WellItem>
+          <WellItem>{moment.tz(startDate, timezone).format('dddd, MMMM Do YYYY')}</WellItem>
+          <WellItem>{moment.tz(startDate, timezone).format('h:mma')} - {moment.tz(endDate, timezone).format('h:mma')}</WellItem>
         </Well>
       </Section>
       <Section>

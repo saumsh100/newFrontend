@@ -16,7 +16,7 @@ export function getIsConfirmable(appointment, reminder) {
 }
 
 export const createConfirmationText = ({ patient, account, appointment, reminder }) => {
-  const mDate = moment(appointment.startDate);
+  const mDate = moment.tz(appointment.startDate, account.timezone);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
   const action = reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed';
@@ -26,7 +26,7 @@ export const createConfirmationText = ({ patient, account, appointment, reminder
 
 const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
 const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
-  const mDate = moment(appointment.startDate);
+  const mDate = moment.tz(appointment.startDate, account.timezone);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
   return `${BASE_URL}/${sentReminder.id}/?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;

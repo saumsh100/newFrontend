@@ -11,6 +11,7 @@ const ALLOWED_ATTRS = [
   'facebookUrl',
   'googlePlaceId',
   'bookingWidgetPrimaryColor',
+  'timezone',
 ];
 
 export function generateAccountParams(account) {
