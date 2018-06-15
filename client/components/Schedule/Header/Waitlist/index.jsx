@@ -55,7 +55,9 @@ export default function Waitlist(props) {
           >
             {!isHub() && (
               <div className={styles.header}>
-                {waitSpots.length} {waitSpots.length === 1 ? 'Patient' : 'Patients'} on Waitlist
+                <span data-test-id="waitListLength">{waitSpots.length}</span>
+                &nbsp;
+                {waitSpots.length === 1 ? 'Patient' : 'Patients'} on Waitlist
                 <div className={styles.addTo}>
                   <Button color="blue" onClick={openAddTo} data-test-id="button_addToWaitlist">
                     Add to Waitlist
