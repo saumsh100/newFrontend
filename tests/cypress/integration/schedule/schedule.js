@@ -45,7 +45,7 @@ describe("Schedule Tests", () => {
       .submitForm("createAppointmentForm");
   });
 
-  it.only("add patient to waitlist", () => {
+  it("add patient to waitlist", () => {
     cy.getAndClick("button_headerWaitlist")
       .getAndClick("button_addToWaitlist")
       .get('[data-test-id="Add to Waitlist Form"]')
@@ -59,9 +59,8 @@ describe("Schedule Tests", () => {
       .getAndClick("monday")
       .get('[data-test-id="button_submitForm"]')
       .click()
-      .wait(2000)
-      .get('[data-test-id="waitListLength"]')
-      .contains("1");
+      .get('[data-test-id="list_waitListItem"]')
+      .should("have.length", 1);
   });
 
   it("load appointments from the previous day", () => {
