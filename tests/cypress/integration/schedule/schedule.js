@@ -1,13 +1,11 @@
-
-describe('Schedule Tests', () => {
+describe("Schedule Tests", () => {
   beforeEach(() => {
     cy.login();
-    cy.visit('http://localhost:5100/schedule');
+    cy.visit("http://localhost:5100/schedule");
   });
 
-  it('add an appointment to the schedule', () => {
-    cy
-      .getAndClick('button_appointmentQuickAdd')
+  it("add an appointment to the schedule", () => {
+    cy.getAndClick("button_appointmentQuickAdd")
       .get('[data-test-id="createAppointmentForm"]')
       .find('[data-test-id="chairId"]')
       .click({ force: true })
@@ -22,20 +20,19 @@ describe('Schedule Tests', () => {
       .click({ force: true })
       .get('[data-test-id="createAppointmentForm"]')
       .find('[data-test-id="patientSelected"]')
-      .type('Testy Testerson')
+      .type("Testy Testerson")
       .parent()
       .next()
-      .contains('Testy Testerson')
+      .contains("Testy Testerson")
       .click()
-      .submitForm('createAppointmentForm')
+      .submitForm("createAppointmentForm")
       .reload()
       .get('[data-test-id="appointment_TestyTesterson"]')
-      .should('exist');
+      .should("exist");
   });
 
-  it('update an appointment', () => {
-    cy
-      .get('[data-test-id="appointment_TestyTesterson"]')
+  it("update an appointment", () => {
+    cy.get('[data-test-id="appointment_TestyTesterson"]')
       .click()
       .get('[data-test-id="button_editAppointment"]')
       .click()
@@ -45,32 +42,31 @@ describe('Schedule Tests', () => {
       .next()
       .get('[data-test-id="option_1"]')
       .click({ force: true })
-      .submitForm('createAppointmentForm');
+      .submitForm("createAppointmentForm");
   });
 
-  it('add patient to waitlist', () => {
-    cy
-      .getAndClick('button_headerWaitlist')
-      .getAndClick('button_addToWaitlist')
+  it("add patient to waitlist", () => {
+    cy.getAndClick("button_headerWaitlist")
+      .getAndClick("button_addToWaitlist")
       .get('[data-test-id="Add to Waitlist Form"]')
       .find('[data-test-id="patientData"]')
-      .type('Testy Testerson')
+      .type("Testy Testerson")
       .parent()
       .next()
-      .contains('Testy Testerson')
+      .contains("Testy Testerson")
       .click()
       .get('[data-test-id="Add to Waitlist Form"]')
-      .getAndClick('monday')
+      .getAndClick("monday")
       .get('[data-test-id="button_submitForm"]')
       .click()
+      .wait(2000)
       .get('[data-test-id="list_waitListItem"]')
-      .should('have.length', 1);
+      .should("have.length", 1);
   });
 
-  it('load appointments from the previous day', () => {
-    cy
-      .getAndClick('button_previousDay')
+  it("load appointments from the previous day", () => {
+    cy.getAndClick("button_previousDay")
       .get('[data-test-id="appointment_TestyTesterson"]')
-      .should('exist');
+      .should("exist");
   });
 });

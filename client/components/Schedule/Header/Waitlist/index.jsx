@@ -13,10 +13,6 @@ import styles from './styles.scss';
 export default function Waitlist(props) {
   const { removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots } = props;
 
-  const wrapperClass = classNames(styles.waitList, {
-    [styles.hubWrapper]: isHub(),
-  });
-
   return (
     <RelayFetchWaitlist
       render={(relayProps) => {
@@ -52,7 +48,11 @@ export default function Waitlist(props) {
         });
 
         return (
-          <div className={wrapperClass}>
+          <div
+            className={classNames(styles.waitList, {
+              [styles.hubWrapper]: isHub(),
+            })}
+          >
             {!isHub() && (
               <div className={styles.header}>
                 {waitSpots.length} {waitSpots.length === 1 ? 'Patient' : 'Patients'} on Waitlist
