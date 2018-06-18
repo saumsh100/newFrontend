@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Map } from 'immutable';
 import classNames from 'classnames';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
@@ -10,22 +9,6 @@ import Request from '../../../entities/models/Request';
 import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
 import { FormatPhoneNumber } from '../../library/util/Formatters';
 import styles from './styles.scss';
-
-const propTypes = {
-  acceptRequest: PropTypes.func,
-  closePopover: PropTypes.func,
-  insuranceCarrier: PropTypes.string,
-  insuranceMemberId: PropTypes.string,
-  isMobile: PropTypes.bool,
-  note: PropTypes.string,
-  patient: PropTypes.instanceOf(PatientUser),
-  practitioner: PropTypes.instanceOf(Map),
-  rejectRequest: PropTypes.func,
-  request: PropTypes.instanceOf(Request),
-  requestingUser: PropTypes.instanceOf(PatientUser),
-  service: PropTypes.string,
-  time: PropTypes.string,
-};
 
 const renderDesktopHeader = ({ patient, closePopover }) => (
   <SHeader className={styles.header}>
@@ -39,7 +22,10 @@ const renderDesktopHeader = ({ patient, closePopover }) => (
   </SHeader>
 );
 
-renderDesktopHeader.propTypes = propTypes;
+renderDesktopHeader.propTypes = {
+  closePopover: PropTypes.func.isRequired,
+  patient: PropTypes.instanceOf(PatientUser).isRequired,
+};
 
 const renderMobileHeader = ({ time, closePopover }) => (
   <SHeader className={styles.headerMobile}>
@@ -51,21 +37,26 @@ const renderMobileHeader = ({ time, closePopover }) => (
   </SHeader>
 );
 
-renderMobileHeader.propTypes = propTypes;
+renderMobileHeader.propTypes = {
+  closePopover: PropTypes.func.isRequired,
+  time: PropTypes.string.isRequired,
+};
 
 const renderMobileSubHeader = ({ patient }) => {
   const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
   return (
     <div className={styles.subHeaderMobile}>
       <Avatar user={patient} size="xs" />
-      <Button as={'div'} className={styles.subHeaderMobile_text}>
+      <Button as="div" className={styles.subHeaderMobile_text}>
         {`${patient.firstName} ${patient.lastName}${age}`}
       </Button>
     </div>
   );
 };
 
-renderMobileSubHeader.propTypes = propTypes;
+renderMobileSubHeader.propTypes = {
+  patient: PropTypes.instanceOf(PatientUser).isRequired,
+};
 
 const renderDesktopFooter = ({ acceptRequest, rejectRequest }) => (
   <SFooter className={styles.footer}>
@@ -78,7 +69,10 @@ const renderDesktopFooter = ({ acceptRequest, rejectRequest }) => (
   </SFooter>
 );
 
-renderDesktopFooter.propTypes = propTypes;
+renderDesktopFooter.propTypes = {
+  acceptRequest: PropTypes.func.isRequired,
+  rejectRequest: PropTypes.func.isRequired,
+};
 
 const renderMobileFooter = ({
   toggleActionDisplay,
@@ -122,9 +116,10 @@ const renderMobileFooter = ({
 );
 
 renderMobileFooter.propTypes = {
-  ...propTypes,
-  toggleActionDisplay: PropTypes.func,
-  displayActions: PropTypes.bool,
+  acceptRequest: PropTypes.func.isRequired,
+  displayActions: PropTypes.bool.isRequired,
+  rejectRequest: PropTypes.func.isRequired,
+  toggleActionDisplay: PropTypes.func.isRequired,
 };
 
 export default class RequestPopover extends Component {
@@ -170,7 +165,7 @@ export default class RequestPopover extends Component {
             [styles.blurredHub]: displayActions && isHub(),
             [styles.blurred]: displayActions && !isHub(),
           })}
-          onClick={this.toggleActionDisplay}
+          onClick={displayActions && this.toggleActionDisplay}
         >
           <SBody className={isMobile ? styles.bodyMobile : styles.body}>
             <div className={styles.container}>
@@ -255,14 +250,32 @@ export default class RequestPopover extends Component {
         )}
         {isMobile
           ? renderMobileFooter({
-            toggleActionDisplay: this.toggleActionDisplay,
-            displayActions,
-            ...this.props,
-          })
+              toggleActionDisplay: this.toggleActionDisplay,
+              displayActions,
+              ...this.props,
+            })
           : renderDesktopFooter(this.props)}
       </Card>
     );
   }
 }
 
-RequestPopover.propTypes = propTypes;
+RequestPopover.propTypes = {
+  insuranceCarrier: PropTypes.string,
+  insuranceMemberId: PropTypes.string,
+  isMobile: PropTypes.bool,
+  note: PropTypes.string,
+  patient: PropTypes.instanceOf(PatientUser).isRequired,
+  request: PropTypes.instanceOf(Request).isRequired,
+  requestingUser: PropTypes.instanceOf(PatientUser),
+  service: PropTypes.string.isRequired,
+  time: PropTypes.string.isRequired,
+};
+
+RequestPopover.defaultProps = {
+  insuranceCarrier: null,
+  insuranceMemberId: null,
+  isMobile: false,
+  note: null,
+  requestingUser: null,
+};
