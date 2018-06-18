@@ -57,10 +57,6 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
     },
 
-    formattedNote: {
-      type: DataTypes.VIRTUAL,
-    },
-
     isConfirmed: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

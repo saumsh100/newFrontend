@@ -256,19 +256,23 @@ requestsRouter.get('/notSynced', (req, res, next) => {
       as: 'patientUser',
     }],
   }).then((requests) => {
-    requests.forEach((r) => {
-      const patientUser = r.get('patientUser');
-      const string = '***CHANGES TO THIS APPOINTMENT REQUEST WILL NOT BE SAVED***'
-      + '\r\nPlease go to www.CareCru.io to accept/reject the request!'
-      + '\r\n'
-      + `\r\nAt ${r.get('createdAt')} ${patientUser.get('firstName')} ${patientUser.get('lastName')} requested an appointment.`
-      + `\r\nEmail: ${patientUser.get('email') == null ? '' : patientUser.get('email')}`
-      + `\r\nPhone: ${patientUser.get('phoneNumber') == null ? '' : patientUser.get('phoneNumber')}`
-      + `\r\nNote: ${r.get('note') == null ? '' : r.get('note')}`;
+    const sendRequests = requests.map((request) => {
+      const patientUser = request.get('patientUser');
+      const formattedString = '***CHANGES TO THIS APPOINTMENT REQUEST WILL NOT BE SAVED***'
+       + '\r\nPlease go to www.CareCru.io to accept/reject the request!'
+       + '\r\n'
+       + `\r\nAt ${request.get('createdAt')} `
+       + `${patientUser.get('firstName') == null ? '' : patientUser.get('firstName')} `
+       + `${patientUser.get('lastName') == null ? '' : patientUser.get('lastName')} requested an appointment.`
+       + `\r\nEmail: ${patientUser.get('email') == null ? '' : patientUser.get('email')}`
+       + `\r\nPhone: ${patientUser.get('phoneNumber') == null ? '' : patientUser.get('phoneNumber')}`
+       + `\r\nNote: ${request.get('note') == null ? '' : request.get('note')}`;
 
-      r.formattedNote = string;
+      request = request.get({ plain: true });
+      request.formattedNote = formattedString;
+      return request;
     });
-    const sendRequests = requests.map(r => r.get({ plain: true }));
+
     const normalized = jsonapi('request', sendRequests);
     return res.send(normalized);
   })

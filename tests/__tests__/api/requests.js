@@ -52,12 +52,7 @@ describe('/api/requests', () => {
   });
 
   afterAll(async () => {
-    await wipeModel(Request);
-    await wipeModel(Service);
-    await wipeModel(Appointment);
-    await wipeModel(PatientUser);
-    await wipeModel(Chair);
-    await wipeTestUsers();
+    await wipeAllModels();
   });
 
   describe('GET /', () => {
