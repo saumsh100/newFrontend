@@ -58,6 +58,16 @@ const register = accountId =>
         'AccountViewer_waitSpots'
       );
 
+      const { newWaitSpot } = data;
+      const patient = newWaitSpot.patient ? newWaitSpot.patient : newWaitSpot.patientUser;
+
+      const fullName = `${patient.firstName} ${patient.lastName}`;
+
+      const messageHeading = 'New wait spot request';
+      DesktopNotification.showNotification(messageHeading, {
+        body: `New wait spot request by ${fullName}.`,
+      });
+
       if (!waitSpotsConnection) {
         return;
       }
@@ -70,16 +80,6 @@ const register = accountId =>
       );
 
       ConnectionHandler.insertEdgeAfter(waitSpotsConnection, edge);
-
-      const { newWaitSpot } = data;
-      const patient = newWaitSpot.patient ? newWaitSpot.patient : newWaitSpot.patientUser;
-
-      const fullName = `${patient.firstName} ${patient.lastName}`;
-
-      const messageHeading = 'New wait spot request';
-      DesktopNotification.showNotification(messageHeading, {
-        body: `New wait spot request by ${fullName}.`,
-      });
     },
   });
 
