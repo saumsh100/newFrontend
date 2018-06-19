@@ -14,16 +14,16 @@ const mutation = graphql`
   }
 `;
 
-const commit = input =>
+const commit = ({ id, accountViewerClientId }) =>
   commitMutation(graphQLEnvironment, {
     mutation,
     variables: {
-      input: { id: input.id },
+      input: { id },
     },
     updater: (proxyStore) => {
       const root = proxyStore.getRootField('deleteWaitSpotMutation');
       const idToDelete = root.getLinkedRecord('waitSpot').getValue('id');
-      const accountProxy = proxyStore.get(input.accountViewerClientId);
+      const accountProxy = proxyStore.get(accountViewerClientId);
 
       const waitSpotsConnection = ConnectionHandler.getConnection(
         accountProxy,
