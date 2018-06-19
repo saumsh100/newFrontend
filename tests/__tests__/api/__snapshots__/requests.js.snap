@@ -121,9 +121,9 @@ Patient Name: Jack Daniels
 Reason for Booking: Test Service
 Preferred Practitioner: Colonel Sanders
 Email: testpatientuser@test.com
-Phone: +16049999999
+Phone: (604) 999-9999
 Note: a standard note
-Requested By: self",
+Requested By: Self",
         "insuranceCarrier": null,
         "insuranceMemberId": null,
         "isDeleted": false,

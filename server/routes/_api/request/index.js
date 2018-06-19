@@ -274,10 +274,8 @@ requestsRouter.get('/notSynced', (req,res,next) => {
     }],
   }).then((requests) => {
     const sendRequests = requests.map((request) => {
-      const formattedString = appointmentRequestNoteStringFormatter(request);
-
       request = request.get({ plain: true });
-      request.formattedNote = formattedString;
+      request.formattedNote = appointmentRequestNoteStringFormatter(request);
       return request;
     });
     const normalized = jsonapi('request', sendRequests);
