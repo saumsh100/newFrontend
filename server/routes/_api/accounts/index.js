@@ -5,12 +5,15 @@ import { v4 as uuid } from 'uuid';
 import { UserAuth } from '../../../lib/_auth';
 import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
 import { callRail, twilioSetup, vendastaFullSetup } from '../../../lib/createAccount';
-import { getAccountConnectorConfigurations, updateAccountConnectorConfigurations } from '../../../lib/accountConnectorConfigurations';
+import {
+  getAccountConnectorConfigurations,
+  updateAccountConnectorConfigurations,
+} from '../../../lib/accountConnectorConfigurations';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
 import { getDayStart, getDayEnd } from '../../../util/time';
-import StatusError from'../../../util/StatusError';
+import StatusError from '../../../util/StatusError';
 import {
   Account,
   Enterprise,
@@ -24,14 +27,25 @@ import upload from '../../../lib/upload';
 import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
-import { renderTemplate, generateClinicMergeVars, sendMassOnlineBookingIntro, sendMassGeneralIntroAnnouncement } from '../../../lib/mail';
-import { getPatientsWithAppInRange, countPatientsWithAppInRange } from '../../../lib/patientsQuery/patientsWithinRange';
+import {
+  renderTemplate,
+  generateClinicMergeVars,
+  sendMassOnlineBookingIntro,
+  sendMassGeneralIntroAnnouncement,
+} from '../../../lib/mail';
+import {
+  getPatientsWithAppInRange,
+  countPatientsWithAppInRange,
+} from '../../../lib/patientsQuery/patientsWithinRange';
 import { formatPhoneNumber } from '../../../../client/components/library/util/Formatters';
 
 const accountsRouter = Router();
 
 accountsRouter.param('accountId', sequelizeLoader('account', 'Account'));
-accountsRouter.param('joinAccountId', sequelizeLoader('account', 'Account', [{ model: Enterprise, as: 'enterprise' }]));
+accountsRouter.param(
+  'joinAccountId',
+  sequelizeLoader('account', 'Account', [{ model: Enterprise, as: 'enterprise' }]),
+);
 accountsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
 accountsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
 
@@ -56,13 +70,15 @@ const apiFunctionsDelete = {
  */
 accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
-    const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
+    const {
+      accountId, role, enterpriseRole, enterpriseId, sessionData,
+    } = req;
     // Fetch all if correct role, just fetch current account if not
     let accounts;
 
     if (role === 'SUPERADMIN') {
       // Return all accounts...
-      const accountsFind = await Account.findAll({ });
+      const accountsFind = await Account.findAll({});
       accounts = accountsFind.map(a => a.get({ plain: true }));
     } else if (enterpriseRole === 'OWNER') {
       // Return all accounts under enterprise
@@ -91,35 +107,43 @@ accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next
  *
  * - Upload a accounts's logo
  */
-accountsRouter.post('/:accountId/logo', checkPermissions('accounts:update'), async (req, res, next) => {
-  // TODO: there are no tests for this, easy route to change
-  const fileKey = `logos/${req.account.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
-  try {
-    await upload(fileKey, req.files.file.data);
+accountsRouter.post(
+  '/:accountId/logo',
+  checkPermissions('accounts:update'),
+  async (req, res, next) => {
+    // TODO: there are no tests for this, easy route to change
+    const fileKey = `logos/${req.account.id}/${uuid.v4()}_[size]_${req.files.file.name}`;
+    try {
+      await upload(fileKey, req.files.file.data);
 
-    req.account.logo = fileKey;
-    const savedAccount = await req.account.update({ logo: fileKey });
+      req.account.logo = fileKey;
+      const savedAccount = await req.account.update({ logo: fileKey });
 
-    return res.send(normalize('account', savedAccount.get({ plain: true })));
-  } catch (error) {
-    return next(error);
-  }
-});
+      return res.send(normalize('account', savedAccount.get({ plain: true })));
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
 
 /**
  * DELETE /:accountId/logo
  *
  * - remove the account logo
  */
-accountsRouter.delete('/:accountId/logo', checkPermissions('accounts:update'), async (req, res, next) => {
-  try {
-    req.account.logo = null;
-    const savedAccount = await req.account.save();
-    res.send(normalize('account', savedAccount.get({ plain: true })));
-  } catch (error) {
-    next(error);
-  }
-});
+accountsRouter.delete(
+  '/:accountId/logo',
+  checkPermissions('accounts:update'),
+  async (req, res, next) => {
+    try {
+      req.account.logo = null;
+      const savedAccount = await req.account.save();
+      res.send(normalize('account', savedAccount.get({ plain: true })));
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 /**
  * POST /:accountId/switch
@@ -128,7 +152,9 @@ accountsRouter.delete('/:accountId/logo', checkPermissions('accounts:update'), a
  *
  */
 accountsRouter.post('/:accountId/switch', (req, res, next) => {
-  const { account, role, sessionId, permissionId, userId, sessionData } = req;
+  const {
+    account, role, sessionId, permissionId, userId, sessionData,
+  } = req;
   if (role !== 'SUPERADMIN' && role !== 'OWNER' && role !== 'ADMIN') {
     return next(StatusError(403, 'Operation not permitted'));
   }
@@ -137,17 +163,23 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
   const modelId = userId;
 
   // User.hasOne(permission)
-  return Permission.findOne({ where: { id: permissionId } })
-    .then(permission => (permission || (role === 'SUPERADMIN')) || Promise.reject(StatusError(403, 'User don\'t have permissions for this account.')))
-    .then(() => UserAuth.updateSession(sessionId, sessionData, { accountId }))
-    // TODO: do we need to do a newSession.id?
-    .then(newSession => UserAuth.signToken({
-      userId: modelId,
-      activeAccountId: accountId,
-      sessionId: newSession.id,
-    }))
-    .then(signedToken => res.json({ token: signedToken }))
-    .catch(next);
+  return (
+    Permission.findOne({ where: { id: permissionId } })
+      .then(permission =>
+        permission ||
+          role === 'SUPERADMIN' ||
+          Promise.reject(StatusError(403, "User don't have permissions for this account.")))
+      .then(() => UserAuth.updateSession(sessionId, sessionData, { accountId }))
+      // TODO: do we need to do a newSession.id?
+      .then(newSession =>
+        UserAuth.signToken({
+          userId: modelId,
+          activeAccountId: accountId,
+          sessionId: newSession.id,
+        }))
+      .then(signedToken => res.json({ token: signedToken }))
+      .catch(next)
+  );
 });
 
 /**
@@ -165,7 +197,7 @@ accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
       account = await apiFunctionsCreate[integrations[i].type](account, integrations[i]);
     }
   } catch (e) {
-    console.log(e)
+    console.error(e);
   }
   // if (role !== 'SUPERADMIN') {
   //   return next(StatusError(403, 'Operation not permitted'));
@@ -173,7 +205,6 @@ accountsRouter.post('/:accountId/integrations', async (req, res, next) => {
   // await vendastaDelete(req.account);
   return res.send(normalize('account', account.get({ plain: true })));
 });
-
 
 /**
  * POST /:accountId/switch
@@ -191,7 +222,7 @@ accountsRouter.delete('/:accountId/integrations', async (req, res, next) => {
       account = await apiFunctionsDelete[data.type](account, data);
     }
   } catch (e) {
-    console.log(e)
+    console.error(e);
   }
   // if (role !== 'SUPERADMIN') {
   //   return next(StatusError(403, 'Operation not permitted'));
@@ -222,20 +253,22 @@ accountsRouter.get('/configurations', checkPermissions('accounts:read'), async (
  * - get connector configuration settings.
  *
  */
-accountsRouter.get('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    if (!req.account) {
-      return req.sendStatus(404);
+accountsRouter.get(
+  '/:accountId/configurations',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      if (!req.account) {
+        return req.sendStatus(404);
+      }
+      const configs = await getAccountConnectorConfigurations(req.account.id);
+
+      return res.send(format(req, res, 'configurations', configs));
+    } catch (err) {
+      return next(err);
     }
-    const configs = await getAccountConnectorConfigurations(req.account.id);
-
-    return res.send(format(req, res, 'configurations', configs));
-  } catch (err) {
-    return next(err);
-  }
-});
-
-
+  },
+);
 
 /**
  * GET /:accountId
@@ -248,9 +281,7 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
-  const {
-    includeArray,
-  } = req;
+  const { includeArray } = req;
 
   // TODO: need to add joinObject mapping to include...
 
@@ -284,18 +315,21 @@ accountsRouter.put('/configurations', checkPermissions('accounts:read'), async (
  * - Update connector configuration settings.
  *
  */
-accountsRouter.put('/:accountId/configurations', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    const io = req.app.get('socketio');
+accountsRouter.put(
+  '/:accountId/configurations',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      const io = req.app.get('socketio');
 
-    const config = await updateAccountConnectorConfigurations(req.body, req.account.id, io);
+      const config = await updateAccountConnectorConfigurations(req.body, req.account.id, io);
 
-    return res.send(format(req, res, 'configuration', config));
-  } catch (err) {
-    return next(err);
-  }
-});
-
+      return res.send(format(req, res, 'configuration', config));
+    } catch (err) {
+      return next(err);
+    }
+  },
+);
 
 /**
  * POST /:accountId/newUser
@@ -308,20 +342,20 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
     return next(StatusError(403, 'requesting user does not have permission to change user role/permissions'));
   }
 
-  if ((req.account.id !== req.accountId) && req.role !== 'SUPERADMIN') {
+  if (req.account.id !== req.accountId && req.role !== 'SUPERADMIN') {
     return next(StatusError(403, 'req.accountId does not match URL account id'));
   }
 
   return Permission.create({ role: req.body.role })
-    .then((permission) => {
-      return UserAuth.signup({
+    .then(permission =>
+      UserAuth.signup({
         ...req.body,
         username: req.body.email,
         activeAccountId: req.account.id,
         enterpriseId: req.account.enterprise.id,
         permissionId: permission.id,
-      }).then(({ model: user }) => {
-        return User.findOne({
+      }).then(({ model: user }) =>
+        User.findOne({
           where: { id: user.dataValues.id },
           include: [
             {
@@ -334,9 +368,7 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
         }).then((userSend) => {
           delete userSend.password;
           return res.status(201).send(normalize('user', userSend));
-        });
-      });
-    })
+        })))
     .catch(next);
 });
 
@@ -345,27 +377,27 @@ accountsRouter.post('/:joinAccountId/newUser', (req, res, next) => {
  *
  * - update clinic account data
  */
-accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) => {
-  return req.account.update(req.body)
+accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res, next) =>
+  req.account
+    .update(req.body)
     .then(account => res.send(normalize('account', account.get({ plain: true }))))
-    .catch(next);
-});
+    .catch(next));
 
 /**
  * GET /:accountId/users
  *
  * - get all of the user's in the clinic
  */
-accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
-  return User.findAll({
-      //raw: true,
-      include: [{ model: Permission, as: 'permission' }],
-      where: {
-        enterpriseId: req.account.enterprise.id,
-        // TODO: i don't think this should be there...
-        activeAccountId: req.account.id,
-      },
-    })
+accountsRouter.get('/:joinAccountId/users', (req, res, next) =>
+  User.findAll({
+    // raw: true,
+    include: [{ model: Permission, as: 'permission' }],
+    where: {
+      enterpriseId: req.account.enterprise.id,
+      // TODO: i don't think this should be there...
+      activeAccountId: req.account.id,
+    },
+  })
     .then((users) => {
       users = users.filter(user => user.permission.role !== 'SUPERADMIN');
       users = users.map(u => u.get({ plain: true }));
@@ -379,8 +411,7 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
 
       res.send(obj);
     })
-    .catch(next);
-});
+    .catch(next));
 
 /**
  * GET /:accountId/reviews/list DEPRECATED
@@ -389,14 +420,14 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) => {
  */
 accountsRouter.get('/:accountId/reviews/list', async (req, res, next) => {
   try {
-    const date = (new Date()).toISOString();
+    const date = new Date().toISOString();
 
     // Get the review appointments and filter out
     const data = await getReviewPatients({ date, account: req.account });
 
     res.send(data);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     next(err);
   }
 });
@@ -423,31 +454,35 @@ accountsRouter.get('/:accountId/reviews/outbox', async (req, res, next) => {
  *
  * - purpose of this route is mainly for email templates as we have to go to mandrill
  */
-accountsRouter.get('/:accountId/emails/preview', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    if (req.accountId !== req.account.id) {
-      return next(StatusError(403, 'Requesting user\'s activeAccountId does not match account.id'));
+accountsRouter.get(
+  '/:accountId/emails/preview',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      if (req.accountId !== req.account.id) {
+        return next(StatusError(403, "Requesting user's activeAccountId does not match account.id"));
+      }
+
+      const { account } = req;
+      const { templateName } = req.query;
+
+      const patient = {
+        firstName: 'Jane',
+        lastName: 'Doe',
+      };
+
+      const html = await renderTemplate({
+        templateName,
+        mergeVars: generateClinicMergeVars({ account, patient }),
+      });
+
+      return res.send(html);
+    } catch (err) {
+      console.error(err);
+      return next(err);
     }
-
-    const { account } = req;
-    const { templateName } = req.query;
-
-    const patient = {
-      firstName: 'Jane',
-      lastName: 'Doe',
-    };
-
-    const html = await renderTemplate({
-      templateName,
-      mergeVars: generateClinicMergeVars({ account, patient }),
-    });
-
-    return res.send(html);
-  } catch (err) {
-    console.error(err);
-    return next(err);
-  }
-});
+  },
+);
 
 /**
  *  POST: /:accountId/onlineBookingEmailBlast
@@ -455,126 +490,134 @@ accountsRouter.get('/:accountId/emails/preview', checkPermissions('accounts:read
  *  - This route is to create and deliver an email campaign to all active patients
  *  of a clinic.
  */
-accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('accounts:update'), async (req, res, next) => {
-  try {
-    const {
-      accountId,
-    } = req;
+accountsRouter.post(
+  '/:accountId/onlineBookingEmailBlast',
+  checkPermissions('accounts:update'),
+  async (req, res, next) => {
+    try {
+      const { accountId } = req;
 
-    const {
-      startDate,
-      endDate,
-    } = req.query;
+      const { startDate, endDate } = req.query;
 
-    const patientFilters = {
-      email: {
-        $not: null,
-      },
-    };
+      const patientFilters = {
+        email: {
+          $not: null,
+        },
+      };
 
-    const attributes = [
-      'Patient.id',
-      'Patient.email',
-      'Patient.firstName',
-    ];
+      const attributes = ['Patient.id', 'Patient.email', 'Patient.firstName'];
 
-    const account = await Account.findById(accountId);
-    const { name, massOnlineEmailSentDate } = account;
+      const account = await Account.findById(accountId);
+      const { name, massOnlineEmailSentDate } = account;
 
-    const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+      const accountLogoUrl =
+        typeof account.fullLogoUrl === 'string' &&
+        account.fullLogoUrl.replace('[size]', 'original');
 
-    if (massOnlineEmailSentDate) {
-      return res.sendStatus(403);
-    }
-
-    const patients = await getPatientsWithAppInRange(accountId, patientFilters, startDate, endDate, attributes);
-    const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
-
-    res.sendStatus(200);
-
-    console.log(`Email campaign initiated for ${patients.length} patients`);
-
-    const promises = patients.map((patient) => {
-      return sendMassGeneralIntroAnnouncement({
-        patientId: patient.id,
-        accountId: req.accountId,
-        toEmail: patient.email,
-        fromName: name,
-        replyTo: account.contactEmail,
-        mergeVars: [
-          {
-            name: 'PRIMARY_COLOR',
-            content: account.bookingWidgetPrimaryColor || '#206477',
-          },
-          {
-            name: 'ACCOUNT_CLINICNAME',
-            content: name,
-          },
-          {
-            name: 'PATIENT_FIRSTNAME',
-            content: patient.firstName,
-          },
-          {
-            name: 'ACCOUNT_LOGO_URL',
-            content: accountLogoUrl,
-          },
-          {
-            name: 'ACCOUNT_PHONENUMBER',
-            content: formatPhoneNumber(account.phoneNumber),
-          },
-          {
-            name: 'ACCOUNT_TWILIONUMBER',
-            content: formatPhoneNumber(account.twilioPhoneNumber),
-          },
-          {
-            name: 'ACCOUNT_CITY',
-            content: `${account.address.city}, ${account.address.state}`,
-          },
-          {
-            name: 'ACCOUNT_CONTACTEMAIL',
-            content: account.contactEmail,
-          },
-          {
-            name: 'ACCOUNT_ADDRESS',
-            content: account.address.street,
-          },
-          {
-            name: 'BOOK_URL',
-            content: `${account.website}/?cc=book`,
-          },
-          {
-            name: 'FACEBOOK_URL',
-            content: account.facebookUrl,
-          },
-          {
-            name: 'GOOGLE_URL',
-            content: googlePlaceId,
-          },
-        ],
-      }).catch((err) => {
-        console.error(`Failed to send General Intro email to ${patient.email}`);
-        console.error(err);
-      });
-    });
-
-    const response = await Promise.all(promises);
-
-    response.forEach((resp) => {
-      if (resp && resp[0] && resp[0].status === 'rejected') {
-        console.error(`Status Rejected. Failed to send General Intro email to ${resp[0].email}.`);
-      } else {
-        console.log(`Sent General Intro email to ${resp[0].email}!`);
+      if (massOnlineEmailSentDate) {
+        return res.sendStatus(403);
       }
-    });
 
-    return await req.account.update({
-      massOnlineEmailSentDate: moment().toISOString(),
-    });
-  } catch (err) {
-    console.error(err);
-    return next(err);
-  }
-});
+      const patients = await getPatientsWithAppInRange(
+        accountId,
+        patientFilters,
+        startDate,
+        endDate,
+        attributes,
+      );
+      const googlePlaceId = account.googlePlaceId
+        ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`
+        : null;
+
+      res.sendStatus(200);
+
+      console.log(`Email campaign initiated for ${patients.length} patients`);
+
+      const promises = patients.map(patient =>
+        sendMassGeneralIntroAnnouncement({
+          patientId: patient.id,
+          accountId: req.accountId,
+          toEmail: patient.email,
+          fromName: name,
+          replyTo: account.contactEmail,
+          mergeVars: [
+            {
+              name: 'PRIMARY_COLOR',
+              content: account.bookingWidgetPrimaryColor || '#206477',
+            },
+            {
+              name: 'ACCOUNT_CLINICNAME',
+              content: name,
+            },
+            {
+              name: 'PATIENT_FIRSTNAME',
+              content: patient.firstName,
+            },
+            {
+              name: 'ACCOUNT_LOGO_URL',
+              content: accountLogoUrl,
+            },
+            {
+              name: 'ACCOUNT_PHONENUMBER',
+              content: formatPhoneNumber(account.phoneNumber),
+            },
+            {
+              name: 'ACCOUNT_TWILIONUMBER',
+              content: account.twilioPhoneNumber,
+            },
+            {
+              name: 'ACCOUNT_TWILIONUMBER_FORMATTED',
+              content: formatPhoneNumber(account.twilioPhoneNumber),
+            },
+            {
+              name: 'ACCOUNT_CITY',
+              content: `${account.address.city}, ${account.address.state}`,
+            },
+            {
+              name: 'ACCOUNT_CONTACTEMAIL',
+              content: account.contactEmail,
+            },
+            {
+              name: 'ACCOUNT_ADDRESS',
+              content: account.address.street,
+            },
+            {
+              name: 'BOOK_URL',
+              content: `${account.website}/?cc=book`,
+            },
+            {
+              name: 'FACEBOOK_URL',
+              content: account.facebookUrl,
+            },
+            {
+              name: 'GOOGLE_URL',
+              content: googlePlaceId,
+            },
+          ],
+        }).catch((err) => {
+          console.error(`Failed to send General Intro email to ${patient.email}`);
+          console.error(err);
+        }));
+
+      const response = await Promise.all(promises);
+
+      response.forEach((resp) => {
+        if (resp && resp[0] && resp[0].status === 'rejected') {
+          console.error(`Status Rejected. Failed to send General Intro email to ${resp[0].email}.`);
+        } else {
+          console.log(`Sent General Intro email to ${resp[0].email}!`);
+        }
+      });
+
+      return await req.account.update({
+        massOnlineEmailSentDate: moment().toISOString(),
+      });
+    } catch (err) {
+      console.error(err);
+      return next(err);
+    }
+  },
+);
 
 /**
  *  GET: /:accountId/onlineBookingEmailBlastCount
@@ -582,31 +625,34 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
  *  - This route is to get the count of patients that would receive the email blast.
  *
  */
-accountsRouter.get('/:accountId/onlineBookingEmailBlastCount', checkPermissions('accounts:read'), async (req, res, next) => {
-  try {
-    const {
-      accountId,
-    } = req;
+accountsRouter.get(
+  '/:accountId/onlineBookingEmailBlastCount',
+  checkPermissions('accounts:read'),
+  async (req, res, next) => {
+    try {
+      const { accountId } = req;
 
-    const {
-      startDate,
-      endDate,
-    } = req.query;
+      const { startDate, endDate } = req.query;
 
-    const patientFilters = {
-      email: {
-        $not: null,
-      },
-    };
+      const patientFilters = {
+        email: {
+          $not: null,
+        },
+      };
 
-    const patientCount = await countPatientsWithAppInRange(accountId, patientFilters, startDate, endDate);
+      const patientCount = await countPatientsWithAppInRange(
+        accountId,
+        patientFilters,
+        startDate,
+        endDate,
+      );
 
-    return res.send({ patientEmailCount: patientCount });
-  } catch (err) {
-    console.error(err);
-    return next(err);
-  }
-});
+      return res.send({ patientEmailCount: patientCount });
+    } catch (err) {
+      console.error(err);
+      return next(err);
+    }
+  },
+);
 
 module.exports = accountsRouter;
-
