@@ -1,4 +1,5 @@
 
+import { GraphQLString, GraphQLList } from 'graphql';
 import { mutationWithClientMutationId } from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
 import { waitSpotType } from './types';
@@ -52,7 +53,40 @@ const deleteWaitSpotMutation = mutationWithClientMutationId({
   },
 });
 
+const deleteMultipleWaitSpotsMutation = mutationWithClientMutationId({
+  name: 'deleteMultipleWaitSpots',
+  inputFields: {
+    ids: {
+      type: GraphQLList(GraphQLString),
+    },
+  },
+  outputFields: {
+    waitSpots: {
+      type: GraphQLList(waitSpotType),
+      resolve: payload => payload,
+    },
+  },
+  mutateAndGetPayload: async ({ ids }) => {
+    try {
+      const query = {
+        where: { id: ids },
+      };
+      const listToRemove = await WaitSpot.findAll(query);
+      await WaitSpot.destroy(query);
+
+      listToRemove.forEach((removeWaitSpot) => {
+        PubSub.publish(REMOVE_WAIT_SPOT, { removeWaitSpot });
+      });
+
+      return listToRemove;
+    } catch (e) {
+      return null;
+    }
+  },
+});
+
 export default {
   addWaitSpotMutation,
   deleteWaitSpotMutation,
+  deleteMultipleWaitSpotsMutation,
 };

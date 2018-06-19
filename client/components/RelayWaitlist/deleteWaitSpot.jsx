@@ -27,7 +27,7 @@ const commit = input =>
 
       const waitSpotsConnection = ConnectionHandler.getConnection(
         accountProxy,
-        'AccountViewer_waitSpots'
+        'AccountViewer_waitSpots',
       );
       ConnectionHandler.deleteNode(waitSpotsConnection, idToDelete);
     },

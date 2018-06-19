@@ -178,6 +178,16 @@ type deleteFamilyPayload {
   clientMutationId: String
 }
 
+input deleteMultipleWaitSpotsInput {
+  ids: [String]
+  clientMutationId: String
+}
+
+type deleteMultipleWaitSpotsPayload {
+  waitSpots: [WaitSpot]
+  clientMutationId: String
+}
+
 input deletePatientInput {
   id: String!
   clientMutationId: String
@@ -236,6 +246,7 @@ type Mutation {
   addPatientSearchesMutation(input: addPatientSearchesInput!): addPatientSearchesPayload
   addWaitSpotMutation(input: addWaitSpotInput!): addWaitSpotPayload
   deleteWaitSpotMutation(input: deleteWaitSpotInput!): deleteWaitSpotPayload
+  deleteMultipleWaitSpotsMutation(input: deleteMultipleWaitSpotsInput!): deleteMultipleWaitSpotsPayload
 }
 
 """An object with an ID"""
