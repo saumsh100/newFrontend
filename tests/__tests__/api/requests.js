@@ -22,6 +22,7 @@ const requestSeed = {
   endDate: '2017-07-19T00:17:30.932Z',
   chairId,
   patientUserId,
+  practitionerId,
   note: 'a standard note',
   insuranceCarrier: null,
   insuranceMemberId: null,

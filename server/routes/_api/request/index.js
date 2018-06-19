@@ -5,10 +5,11 @@ import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import jsonapi from '../../util/jsonapi';
-import { Permission, PatientUser, Request, User, Account } from '../../../_models';
+import { Permission, PatientUser, Request, User, Account, Service, Practitioner } from '../../../_models';
 import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
 import { formatPhoneNumber } from '../../../util/formatters';
 import { setDateToTimezone } from '../../../util/time';
+import {appointmentRequestNoteStringFormatter} from '../../../lib/appointmentRequestNoteStringFormatter';
 
 import {
   sendAppointmentRequested,
@@ -235,7 +236,7 @@ requestsRouter.get('/', (req, res, next) => {
 /**
  * Get all requests that need to be synced
  */
-requestsRouter.get('/notSynced', (req, res, next) => {
+requestsRouter.get('/notSynced', (req,res,next) => {
   const {
     accountId,
   } = req;
@@ -254,31 +255,31 @@ requestsRouter.get('/notSynced', (req, res, next) => {
     include: [{
       model: PatientUser,
       as: 'patientUser',
+    },
+    {
+      model: PatientUser,
+      as: 'requestingPatientUser',
+    },
+    {
+      model: Service,
+      as: 'service',
+    },
+    {
+      model: Account,
+      as: 'account',
+    },
+    {
+      model: Practitioner,
+      as: 'practitioner',
     }],
   }).then((requests) => {
     const sendRequests = requests.map((request) => {
-      const patientUser = request.get('patientUser');
-      const createdAt = request.get('createdAt') == null? '' : request.get('createdAt');
-      const firstName = patientUser.get('firstName') == null ? '' : patientUser.get('firstName');
-      const lastName = patientUser.get('lastName') == null ? '' : patientUser.get('lastName');
-      const email = patientUser.get('email') == null ? '' : patientUser.get('email');
-      const phone = patientUser.get('phoneNumber') == null ? '' : patientUser.get('phoneNumber');
-      const note = request.get('note') == null ? '' : request.get('note');
-
-      const formattedString = '***CHANGES TO THIS APPOINTMENT REQUEST WILL NOT BE SAVED***'
-       + '\r\nPlease go to www.CareCru.io to accept/reject the request!'
-       + '\r\n'
-       + '\r\nAt ' + createdAt + ' '
-       + firstName + ' ' + lastName + ' requested an appointment.'
-       + '\r\nEmail: ' + email
-       + '\r\nPhone: ' + phone
-       + '\r\nNote: ' + note;
+      const formattedString = appointmentRequestNoteStringFormatter(request);
 
       request = request.get({ plain: true });
       request.formattedNote = formattedString;
       return request;
     });
-
     const normalized = jsonapi('request', sendRequests);
     return res.send(normalized);
   })

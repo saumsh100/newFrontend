@@ -26,7 +26,7 @@ Object {
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
-        "practitionerId": null,
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "requestingPatientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
@@ -79,7 +79,7 @@ Object {
         "patientId": null,
         "patientUser": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
-        "practitionerId": null,
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "requestingPatientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "sentRecallId": null,
         "service": "c5beec65-73a0-4b58-ba48-65986931d054",
@@ -116,13 +116,14 @@ Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "endDate": "2017-07-19T00:17:30.932Z",
-        "formattedNote": "***CHANGES TO THIS APPOINTMENT REQUEST WILL NOT BE SAVED***
-Please go to www.CareCru.io to accept/reject the request!
-
-At Tue Jul 18 2017 17:14:30 GMT-0700 (PDT) Jack Daniels requested an appointment.
+        "formattedNote": "Date Requested: July 18th, 2017 in America/Vancouver
+Patient Name: Jack Daniels
+Reason for Booking: Test Service
+Preferred Practitioner: Colonel Sanders
 Email: testpatientuser@test.com
 Phone: +16049999999
-Note: a standard note",
+Note: a standard note
+Requested By: self",
         "insuranceCarrier": null,
         "insuranceMemberId": null,
         "isDeleted": false,
@@ -159,7 +160,7 @@ Object {
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
-        "practitionerId": null,
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "requestingPatientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
@@ -192,7 +193,7 @@ Object {
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
-        "practitionerId": null,
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "requestingPatientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
@@ -225,7 +226,7 @@ Object {
         "patientId": null,
         "patientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "pmsId": null,
-        "practitionerId": null,
+        "practitionerId": "497ff59a-4bae-4013-bdce-b6b5be91a1f5",
         "requestingPatientUserId": "b8665c97-1e98-41ac-bf13-090b742de400",
         "sentRecallId": null,
         "serviceId": "c5beec65-73a0-4b58-ba48-65986931d054",
