@@ -26,6 +26,7 @@ const weeklyScheduleId2 = '89b9ed42-b82b-4fb5-be5e-9dfded032bdf';
 const clinicPhoneNumber = '+17786558613';
 const addressId = uuid();
 const addressId2 = uuid();
+const timezone = 'America/Vancouver';
 
 const ROLES = {
   MANAGER: 'MANAGER',
@@ -54,6 +55,7 @@ const account = {
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
   canSendReviews: false,
+  timezone,
 };
 
 const address = {
@@ -80,6 +82,7 @@ const account2 = {
   phoneNumber: '+17808508886',
   canSendReviews: true,
   twilioPhoneNumber: '+15874003884',
+  timezone,
 };
 
 const address2 = {
