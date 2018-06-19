@@ -90,6 +90,10 @@ export default function (sequelize, DataTypes) {
     insuranceMemberId: {
       type: DataTypes.STRING,
     },
+    
+    insuranceGroupId: {
+      type: DataTypes.STRING,
+    },
 
     pmsId: {
       type: DataTypes.STRING,
