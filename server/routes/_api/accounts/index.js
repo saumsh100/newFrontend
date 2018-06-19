@@ -24,7 +24,7 @@ import upload from '../../../lib/upload';
 import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
-import { renderTemplate, generateClinicMergeVars, sendMassOnlineBookingIntro } from '../../../lib/mail';
+import { renderTemplate, generateClinicMergeVars, sendMassOnlineBookingIntro, sendMassGeneralIntroAnnouncement } from '../../../lib/mail';
 import { getPatientsWithAppInRange, countPatientsWithAppInRange } from '../../../lib/patientsQuery/patientsWithinRange';
 import { formatPhoneNumber } from '../../../../client/components/library/util/Formatters';
 
@@ -495,7 +495,7 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
     console.log(`Email campaign initiated for ${patients.length} patients`);
 
     const promises = patients.map((patient) => {
-      return sendMassOnlineBookingIntro({
+      return sendMassGeneralIntroAnnouncement({
         patientId: patient.id,
         accountId: req.accountId,
         toEmail: patient.email,
@@ -523,6 +523,10 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
             content: formatPhoneNumber(account.phoneNumber),
           },
           {
+            name: 'ACCOUNT_TWILIONUMBER',
+            content: formatPhoneNumber(account.twilioPhoneNumber),
+          },
+          {
             name: 'ACCOUNT_CITY',
             content: `${account.address.city}, ${account.address.state}`,
           },
@@ -548,7 +552,7 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
           },
         ],
       }).catch((err) => {
-        console.error(`Failed to send Online Booking Intro email to ${patient.email}`);
+        console.error(`Failed to send General Intro email to ${patient.email}`);
         console.error(err);
       });
     });
@@ -557,9 +561,9 @@ accountsRouter.post('/:accountId/onlineBookingEmailBlast', checkPermissions('acc
 
     response.forEach((resp) => {
       if (resp && resp[0] && resp[0].status === 'rejected') {
-        console.error(`Status Rejected. Failed to send Online Booking Intro email to ${resp[0].email}.`);
+        console.error(`Status Rejected. Failed to send General Intro email to ${resp[0].email}.`);
       } else {
-        console.log(`Sent Online Booking Intro email to ${resp[0].email}!`);
+        console.log(`Sent General Intro email to ${resp[0].email}!`);
       }
     });
 

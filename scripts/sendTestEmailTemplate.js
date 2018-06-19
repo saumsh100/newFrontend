@@ -4,8 +4,8 @@ const { formatPhoneNumber } = require('../server/util/formatters');
 
 // dhillon.jatinder@gmail.com
 // justin@carecru.com
-mail.sendDueForRecare({
-  toEmail: 'justin@carecru.com',
+mail.sendTestEmailTemplate({
+  toEmail: 'dhillon.jatinder@gmail.com',
   mergeVars: [
     {
       name: 'PRIMARY_COLOR',
@@ -22,6 +22,10 @@ mail.sendDueForRecare({
     {
       name: 'ACCOUNT_PHONENUMBER',
       content: formatPhoneNumber('+16049809999'),
+    },
+    {
+      name: 'ACCOUNT_TWILIONUMBER',
+      content: formatPhoneNumber('+1555555555'),
     },
     {
       name: 'ACCOUNT_CITY',

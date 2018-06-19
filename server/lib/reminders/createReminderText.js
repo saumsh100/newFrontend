@@ -5,8 +5,8 @@ import { formatPhoneNumber } from '../../util/formatters';
 
 const nowISO = () => (new Date()).toISOString();
 
-const getDateAndTime = (date) => {
-  const mDate = moment(date);
+const getDateAndTime = (date, timezone) => {
+  const mDate = moment.tz(date, timezone);
   return {
     date: mDate.format('MMMM Do'),
     time: mDate.format('h:mma'),
@@ -15,14 +15,14 @@ const getDateAndTime = (date) => {
 
 const weeksAway = {
   unconfirmed: ({ patient, account, appointment, action }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, your next appointment ` +
       `with ${account.name} is on ${date} at ${time}. ` +
       `Reply "C" to ${action} your appointment.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, this is just a friendly reminder ` +
       `that your next appointment with ${account.name} ` +
       `is on ${date} at ${time}.`;
@@ -31,13 +31,13 @@ const weeksAway = {
 
 const weekAway = {
   unconfirmed: ({ patient, account, appointment, action }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, your upcoming appointment is at ` +
       `${time} on ${date}. Respond with the letter "C" to ${action}.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, your upcoming appointment is at ` +
       `${time} on ${date}.`;
   },
@@ -45,14 +45,14 @@ const weekAway = {
 
 const sameWeek = {
   unconfirmed: ({ patient, account, appointment, action }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, your upcoming appointment at ` +
       `${account.name} is on ${date} at ${time}. ` +
       `To ${action}, please reply with the letter "C".`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, your upcoming appointment at ` +
       `${account.name} is on ${date} at ${time}.`;
   },
@@ -60,14 +60,14 @@ const sameWeek = {
 
 const sameDay = {
   unconfirmed: ({ patient, account, appointment, action }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}, please ${action} today's ${time} ` +
       `appointment at ${account.name}. ` +
       `Reply with "C" to ${action} or call us at ${formatPhoneNumber(account.destinationPhoneNumber)} to reschedule.`;
   },
 
   confirmed: ({ patient, account, appointment }) => {
-    const { date, time } = getDateAndTime(appointment.startDate);
+    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
     return `Hi ${patient.firstName}! We'll see you at ${time} today ` +
       `for your appointment at ${account.name}.`;
   },

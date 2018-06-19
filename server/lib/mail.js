@@ -22,9 +22,9 @@ export const sendConfirmationReminder = (config) => {
   return exports.sendTemplate(config);
 };
 
-export const sendDueForRecare = (config) => {   // This function is used only for testing
-  config.subject = 'Online Booking Now Available';
-  config.templateName = 'Online Booking Introduction';
+export const sendTestEmailTemplate = (config) => {   // This function is used only for testing
+  config.subject = 'Exciting New Updates';
+  config.templateName = 'General Introduction Announcement';
   return exports.sendTemplate(config);
 };
 
@@ -98,6 +98,14 @@ export const sendMassOnlineBookingIntro = (config) => {
   config.subject = 'Online Booking Now Available';
   config.templateName = 'Online Booking Introduction';
   return exports.sendTemplate(config);
+};
+
+export const sendMassGeneralIntroAnnouncement = (config) => {
+  return exports.sendTemplate({
+    ...config,
+    subject: 'Introducing Online Scheduling',
+    templateName: 'General Introduction Announcement',
+  });
 };
 
 /**
@@ -237,6 +245,10 @@ export function generateClinicMergeVars({ patient, account }) {
     {
       name: 'ACCOUNT_PHONENUMBER',
       content: formatPhoneNumber(account.phoneNumber),
+    },
+    {
+      name: 'ACCOUNT_TWILIONUMBER',
+      content: formatPhoneNumber(account.twilioPhoneNumber),
     },
     {
       name: 'ACCOUNT_CONTACTEMAIL',

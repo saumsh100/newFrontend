@@ -1,9 +1,21 @@
+
 import { Error } from 'jsonapi-serializer';
+
 const chalk = require('chalk');
 const { env } = require('../config/globals');
 
+/**
+ * Logging express errors on server console and calling the
+ * next middleware (which is the function below sendError)
+ * All parameters are required for error handling middleware.
+ *
+ * @param {*} err
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
 function logError(err, req, res, next) {
-  console.error(chalk.red('[ERROR]', (err.status) ? `[${err.status}]` : '', ':', err.message));
+  console.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
   console.error(err.stack);
   if (env === 'development' || env === 'test') {
     console.error(err);
@@ -12,7 +24,16 @@ function logError(err, req, res, next) {
   next(err);
 }
 
-function sendError(err, req, res) {
+/**
+ * Builds the error response to the client.
+ * All parameters are required for error handling middleware.
+ *
+ * @param {*} err
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ */
+function sendError(err, req, res, next) {
   const errorStatus = err.status || 500;
 
   // Prepare a JsonAPI-compliant error response for clients that request it

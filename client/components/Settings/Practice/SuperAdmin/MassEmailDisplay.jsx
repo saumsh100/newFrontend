@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Header } from '../../../library';
+import Account from '../../../../entities/models/Account';
 import styles from './styles.scss';
 
 class MassEmailDisplay extends Component {
@@ -27,7 +28,7 @@ class MassEmailDisplay extends Component {
 
     return (
       <div className={styles.formContainer}>
-        <Header title="Online Booking Intro. Email Blast" contentHeader />
+        <Header title="General Intro. Email Blast" contentHeader />
         {massOnlineDate && (
           <div className={styles.massOnlineEmail_date}>Last sent: {massOnlineDate}</div>
         )}
@@ -45,10 +46,14 @@ class MassEmailDisplay extends Component {
 }
 
 MassEmailDisplay.propTypes = {
-  activeAccount: PropTypes.objectOf(PropTypes.any),
+  activeAccount: PropTypes.instanceOf(Account).isRequired,
   massOnlineDate: PropTypes.string,
-  openPreviewModal: PropTypes.func,
-  getEmailBlastCount: PropTypes.func,
+  openPreviewModal: PropTypes.func.isRequired,
+  getEmailBlastCount: PropTypes.func.isRequired,
+};
+
+MassEmailDisplay.defaultProps = {
+  massOnlineDate: 0,
 };
 
 export default MassEmailDisplay;
