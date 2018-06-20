@@ -69,6 +69,9 @@ export default function WaitListItem(props) {
     </div>
   );
 
+  const filteredPreferencesList = prefKeys.filter(pref => preferences[pref]).join(', ');
+  const filteredDaysList = dayWeekKeys.filter(day => daysOfTheWeek[day]).join(', ');
+
   return (
     <div className={styles.waitListItem} data-test-id="list_waitListItem">
       {isHub() && (
@@ -106,25 +109,13 @@ export default function WaitListItem(props) {
 
           <div className={styles.info}>
             <span className={styles.subHeader}>Preferences: </span>
-            {prefKeys.map((pref, index, arry) =>
-                preferences[pref] && (
-                  <span className={styles.dataText} key={`preferences_${pref}`}>
-                    {pref}
-                    {index === arry.length - 1 ? '' : ','}
-                  </span>
-                ))}
+            <span className={styles.dataText}>{filteredPreferencesList}</span>
           </div>
 
           {!checkIfAnyTrue && (
             <div className={styles.info}>
               <span className={styles.subHeader}>Preferred Days: </span>
-              {dayWeekKeys.map((day, index, arry) =>
-                  daysOfTheWeek[day] && (
-                    <span className={styles.dataText} key={`dayOfWeek_${day}`}>
-                      {day}
-                      {index === arry.length - 1 ? '' : ','}
-                    </span>
-                  ))}
+              <span className={styles.dataText}>{filteredDaysList}</span>
             </div>
           )}
 
@@ -155,8 +146,8 @@ export default function WaitListItem(props) {
         )}
 
         {!isHub() && (
-          <div className={styles.remove}>
-            <IconButton icon="times" onClick={removeWaitSpot} />
+          <div className={styles.remove} onClick={removeWaitSpot}>
+            <Icon icon="times" />
           </div>
         )}
       </div>
@@ -166,8 +157,25 @@ export default function WaitListItem(props) {
 
 WaitListItem.propTypes = {
   removeWaitSpot: PropTypes.func.isRequired,
-  patient: PropTypes.shape(patientShape),
-  waitSpot: PropTypes.instanceOf(WaitSpotModel),
+  patient: PropTypes.instanceOf(PatientModel),
+  waitSpot: PropTypes.shape({
+    endDate: PropTypes.string,
+    createdAt: PropTypes.string,
+    preferences: PropTypes.shape({
+      evenings: PropTypes.bool,
+      mornings: PropTypes.bool,
+      afternoons: PropTypes.bool,
+    }),
+    daysOfTheWeek: PropTypes.shape({
+      friday: PropTypes.bool,
+      monday: PropTypes.bool,
+      sunday: PropTypes.bool,
+      tuesday: PropTypes.bool,
+      saturday: PropTypes.bool,
+      thursday: PropTypes.bool,
+      wednesday: PropTypes.bool,
+    }),
+  }).isRequired,
   isPatientUser: PropTypes.bool,
   removeBorder: PropTypes.bool,
   onSelect: PropTypes.func.isRequired,
@@ -178,5 +186,5 @@ WaitListItem.defaultProps = {
   isPatientUser: false,
   removeBorder: false,
   patient: null,
-  waitSpot: null,
+  selected: false,
 };
