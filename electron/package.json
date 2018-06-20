@@ -1,6 +1,6 @@
 {
   "name": "carecru-hub",
-  "version": "0.0.37",
+  "version": "0.0.39",
   "main": "main.js",
   "author": "CareCru Inc.",
   "description": "A powerful growth and intelligence platform for dentists.",
@@ -23,8 +23,7 @@
       "output": "./dist"
     },
     "publish": {
-      "provider": "s3",
-      "bucket": "carecru-electron-deployer"
+      "provider": "s3"
     },
     "win": {
       "publisherName": "carecru"
