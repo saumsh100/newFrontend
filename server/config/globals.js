@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 
-const root = path.normalize(path.join(__dirname, (process.env.BUNDLED ? '/../..' : '/..')));
+const root = path.normalize(path.join(__dirname, process.env.BUNDLED ? '/../..' : '/..'));
 const tokenSecret = 'notsosecret';
 const tokenExpiry = '30d';
 const passwordHashSaltRounds = 10;
@@ -45,8 +45,9 @@ if (rabbitConfig.username && rabbitConfig.password) {
   user = `${rabbitConfig.username}:${rabbitConfig.password}@`;
 }
 
-const rabbit = rabbitConfig.port ? `amqp://${user}${rabbitConfig.host}:${rabbitConfig.port}?heartbeat=380` :
-`amqp://${user}${rabbitConfig.host}?heartbeat=380`;
+const rabbit = rabbitConfig.port
+  ? `amqp://${user}${rabbitConfig.host}:${rabbitConfig.port}?heartbeat=380`
+  : `amqp://${user}${rabbitConfig.host}?heartbeat=380`;
 
 const namespaces = {
   dash: '/dash',
@@ -166,7 +167,9 @@ module.exports = {
   db,
   caCert,
   redis,
-  rabbit: environmentVariables.RABBITMQ_URL ? `${environmentVariables.RABBITMQ_URL}?heartbeat=380` : rabbit,
+  rabbit: environmentVariables.RABBITMQ_URL
+    ? `${environmentVariables.RABBITMQ_URL}?heartbeat=380`
+    : rabbit,
   launchDarkly,
   vendasta,
   twilio,

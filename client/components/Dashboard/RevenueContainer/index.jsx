@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import RevenueDisplay from './RevenueDisplay';
@@ -60,7 +61,7 @@ function renderChart(revenueData) {
 }
 
 class RevenueContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     const { dashboardDate } = this.props;
 
     const query = {
@@ -112,19 +113,12 @@ class RevenueContainer extends Component {
   }
 }
 
-RevenueContainer.propTypes = {
-  fetchEntitiesRequest: PropTypes.func.isRequired,
-  dashboardDate: PropTypes.instanceOf(Date),
-  revenueData: PropTypes.instanceOf(Object),
-  wasRevenueFetched: PropTypes.bool,
-};
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       fetchEntitiesRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -140,6 +134,16 @@ function mapStateToProps({ apiRequests }) {
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+RevenueContainer.propTypes = {
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  revenueData: PropTypes.instanceOf(Map),
+  wasRevenueFetched: PropTypes.bool,
+};
 
-export default enhance(RevenueContainer);
+RevenueContainer.defaultProps = {
+  wasRevenueFetched: false,
+  revenueData: Map,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RevenueContainer);

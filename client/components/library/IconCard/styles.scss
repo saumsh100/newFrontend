@@ -10,9 +10,6 @@
   color: $color-white;
   overflow: hidden;
 
-  @media screen and (max-width: 414px) {
-  }
-
   &__wrapper {
     display: flex;
     justify-content: center;

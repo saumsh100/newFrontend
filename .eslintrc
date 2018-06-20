@@ -1,6 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": [ "prettier", "prettier/react",
+    "prettier/standard", "airbnb"],
   "plugins": ["react", "bof-newline"],
   "parserOptions": {
     "ecmaFeatures": {
@@ -24,7 +25,8 @@
     "lines-between-class-members": ["error", "always"],
     "bof-newline/bof-newline": ["error", "always"],
     "prefer-destructuring": "warn",
-    "no-alert": "off"
+    "no-alert": "off",
+    "react/no-did-mount-set-state": "off"
   },
   "env": {
     "browser": true,

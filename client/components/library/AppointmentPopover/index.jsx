@@ -45,10 +45,14 @@ class AppointmentPopover extends Component {
     const location = browserHistory.location.pathname;
 
     if (location === '/') {
-      this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate) });
+      this.props.setScheduleDate({
+        scheduleDate: moment(this.props.dashboardDate),
+      });
     }
 
-    const mergeApp = Object.assign(appointment.toJS(), { appModel: appointment });
+    const mergeApp = Object.assign(appointment.toJS(), {
+      appModel: appointment,
+    });
     this.props.selectAppointment(mergeApp);
     this.props.push('/schedule');
   }
@@ -60,7 +64,9 @@ class AppointmentPopover extends Component {
   }
 
   render() {
-    const { placement, patient, appointment, children, chair, practitioner } = this.props;
+    const {
+      placement, patient, appointment, children, chair, practitioner,
+    } = this.props;
 
     return (
       <Popover
@@ -84,31 +90,12 @@ class AppointmentPopover extends Component {
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
               onClick: () => this.setOpen(true),
-            })
-          )}
+            }))}
         </div>
       </Popover>
     );
   }
 }
-
-AppointmentPopover.propTypes = {
-  patient: PropTypes.shape(patientShape),
-  appointment: PropTypes.shape(appointmentShape),
-  age: PropTypes.number,
-  closePopover: PropTypes.func,
-  editAppointment: PropTypes.func,
-  scheduleView: PropTypes.string,
-  practitioner: PropTypes.shape(practitionerShape),
-  chair: PropTypes.shape(chairShape),
-  placement: PropTypes.string,
-  scrollId: PropTypes.string,
-  push: PropTypes.func,
-  selectAppointment: PropTypes.func,
-  children: PropTypes.element,
-  dashboardDate: PropTypes.string,
-  setScheduleDate: PropTypes.func,
-};
 
 function mapStateToProps({ entities, dashboard }, { appointment }) {
   const practitioner = entities
@@ -134,9 +121,30 @@ function mapDispatchToProps(dispatch) {
       selectAppointment,
       setScheduleDate,
     },
-    dispatch
+    dispatch,
   );
 }
+
+AppointmentPopover.propTypes = {
+  patient: PropTypes.shape(patientShape).isRequired,
+  appointment: PropTypes.shape(appointmentShape).isRequired,
+  practitioner: PropTypes.arrayOf(PropTypes.shape(practitionerShape)),
+  chair: PropTypes.arrayOf(PropTypes.shape(chairShape)),
+  placement: PropTypes.string,
+  scrollId: PropTypes.string,
+  push: PropTypes.func.isRequired,
+  selectAppointment: PropTypes.func.isRequired,
+  children: PropTypes.element.isRequired,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  setScheduleDate: PropTypes.func.isRequired,
+};
+
+AppointmentPopover.defaultProps = {
+  practitioner: null,
+  chair: null,
+  placement: 'right',
+  scrollId: '',
+};
 
 const enhance = connect(mapStateToProps, mapDispatchToProps);
 export default enhance(AppointmentPopover);

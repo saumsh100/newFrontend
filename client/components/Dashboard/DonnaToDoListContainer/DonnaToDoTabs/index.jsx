@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from '../../../library';
-
 import styles from './styles.scss';
 
 class DonnaToDoTabs extends Component {
@@ -10,31 +10,32 @@ class DonnaToDoTabs extends Component {
     this.state = {
       lineWidth: 23,
       divHeight: 0,
-      divWidth: 0,
       startingPosition: 0,
       indexHeight: 0,
     };
   }
 
   componentDidMount() {
-    const divWidth = document.getElementById('imageWrapper').clientWidth;
     const divHeight = document.getElementById('imageWrapper').clientHeight;
     const indexHeight = document.getElementById('toDoTab').clientHeight;
-    const startingPosition = indexHeight * (this.props.toDoIndex + 1) - indexHeight / 2;
+    const addToHeight = indexHeight * (this.props.toDoIndex + 1);
+    const divideHeight = indexHeight / 2;
+    const startingPosition = addToHeight - divideHeight;
 
     this.setState({
       startingPosition,
       divHeight: divHeight * 0.35,
       indexHeight,
-      divWidth,
     });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.toDoIndex !== nextProps.toDoIndex) {
       const indexHeight = document.getElementById('toDoTab').clientHeight + 11;
+      const addToHeight = indexHeight * (nextProps.toDoIndex + 1);
+      const divideHeight = indexHeight / 2;
+      const startingPosition = addToHeight - divideHeight;
 
-      const startingPosition = indexHeight * (nextProps.toDoIndex + 1) - indexHeight / 2;
       this.setState({
         startingPosition,
       });
@@ -83,11 +84,12 @@ class DonnaToDoTabs extends Component {
       top: `${this.state.divHeight}px`,
       left: '85%',
       width: '2px',
-      height: `${this.state.indexHeight * 1.5}`,
+      height: `${this.state.indexHeight * 1.5}px`,
     };
 
+    const multipleHeight = this.state.indexHeight * 1.5;
     const lineStyle6 = {
-      top: `${this.state.divHeight + this.state.indexHeight * 1.5}px`,
+      top: `${this.state.divHeight + multipleHeight}px`,
       left: '85%',
       width: '15%',
       height: '2px',
@@ -95,7 +97,7 @@ class DonnaToDoTabs extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.header}>Donna's To-Do List</div>
+        <div className={styles.header}>Donna&apos;s To-Do List</div>
         <div className={styles.body}>
           <div className={styles.toDosList}>
             <Tabs
@@ -105,33 +107,29 @@ class DonnaToDoTabs extends Component {
               noUnderLine
             >
               <Tab
-                label={'Appointment Reminders'}
+                label="Appointment Reminders"
                 className={styles.tab}
                 activeClass={styles.activeTab}
                 id="toDoTab"
               />
+              <Tab label="Patient Recalls" className={styles.tab} activeClass={styles.activeTab} />
               <Tab
-                label={'Patient Recalls'}
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
-              <Tab
-                label={'Review Requests'}
+                label="Review Requests"
                 className={styles.tab}
                 activeClass={styles.activeTab}
                 data-test-id="reviewRequestsTab"
               />
               <Tab
-                label={'Referral Requests'}
+                label="Referral Requests"
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />
               <Tab
-                label={'Referral Follow Ups'}
+                label="Referral Follow Ups"
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />
-              <Tab label={'Waitlist Queue'} className={styles.tab} activeClass={styles.activeTab} />
+              <Tab label="Waitlist Queue" className={styles.tab} activeClass={styles.activeTab} />
             </Tabs>
           </div>
 
@@ -161,5 +159,10 @@ class DonnaToDoTabs extends Component {
     );
   }
 }
+
+DonnaToDoTabs.propTypes = {
+  toDoIndex: PropTypes.number.isRequired,
+  changeTab: PropTypes.func.isRequired,
+};
 
 export default DonnaToDoTabs;

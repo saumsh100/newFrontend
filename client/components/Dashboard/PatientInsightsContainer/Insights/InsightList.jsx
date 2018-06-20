@@ -30,11 +30,12 @@ function displayInsightDiv(header, subHeader) {
 /**
  * displaySubHeaderDiv renders a custom sub header.
  * @param content
+ * @param index
  * @returns {XML}
  */
-function displaySubHeaderDiv(content) {
+function displaySubHeaderDiv(content, index) {
   return (
-    <div className={styles.displayFlexSubHeader}>
+    <div className={styles.displayFlexSubHeader} key={`subHeaderDiv_${index}`}>
       <div className={styles.insightSubHeaderList}>{content}</div>
     </div>
   );
@@ -71,15 +72,17 @@ function buildFamilyData(insightObj, patient, gender) {
   );
   const subHeader = (
     <div>
-      {insightObj.value.map((famMember) => {
+      {insightObj.value.map((famMember, index) => {
         if (moment(famMember.dateDue).isValid()) {
-          return displaySubHeaderDiv(
+          const subHeaderDiv = (
             <div>
               {famMember.firstName} {famMember.lastName} was due for{' '}
               {moment(famMember.dateDue).format('MMM Do YYYY')}
             </div>
           );
+          return displaySubHeaderDiv(subHeaderDiv, index);
         }
+        return null;
       })}
     </div>
   );
@@ -120,19 +123,18 @@ function buildConfirmData(insightObj, patient, gender) {
   const smsCount = insightObj.value.sms;
   const total = emailCount + smsCount + phoneCount;
 
-  const subHeader =
-    total > 0 &&
-    displaySubHeaderDiv(
-      <div>
-        <span className={styles.patientName}>{patient.firstName} </span>
-        has not yet confirmed {gender} appointment despite CareCru's {total} attempt{total > 1 &&
-          's'}. ({buildAttemptData({
-          email: emailCount,
-          sms: smsCount,
-          phone: phoneCount,
-        })})
-      </div>
-    );
+  const subHeaderDiv = total > 0 && (
+    <div>
+      <span className={styles.patientName}>{patient.firstName} </span>
+      has not yet confirmed {gender} appointment despite CareCru&apos;s {total} attempt{total > 1 &&
+        's'}. ({buildAttemptData({
+        email: emailCount,
+        sms: smsCount,
+        phone: phoneCount,
+      })})
+    </div>
+  );
+  const subHeader = total > 0 && displaySubHeaderDiv(subHeaderDiv, 0);
 
   return displayInsightDiv(header, subHeader);
 }
@@ -189,7 +191,9 @@ function buildMissingPhoneData(patient, gender) {
 }
 
 export default function InsightList(props) {
-  const { patient, insightData, scrollId, appointment } = props;
+  const {
+    patient, insightData, scrollId, appointment,
+  } = props;
 
   let displayEmailInsight = null;
   let displayPhoneInsight = null;
@@ -221,60 +225,66 @@ export default function InsightList(props) {
   });
 
   return (
-    <div className={styles.insightsList}>
-      <div className={styles.appBody}>
-        <AppointmentPopover scrollId={scrollId} appointment={appointment} patient={patient}>
-          <div className={styles.apptData}>
-            <div className={styles.apptData_time}>
-              {moment(appointment.startDate).format('h:mm a')}
-            </div>
-            <div className={styles.apptData_date}>
-              {moment(appointment.startDate).format('MMM DD')}
-            </div>
+    <div className={styles.outerInsightsWrapper}>
+      <div className={styles.innerInsightsWrapper}>
+        <div className={styles.insightsList}>
+          <div className={styles.appBody}>
+            <AppointmentPopover scrollId={scrollId} appointment={appointment} patient={patient}>
+              <div className={styles.apptData}>
+                <div className={styles.apptData_time}>
+                  {moment(appointment.startDate).format('h:mm a')}
+                </div>
+                <div className={styles.apptData_date}>
+                  {moment(appointment.startDate).format('MMM DD')}
+                </div>
+              </div>
+            </AppointmentPopover>
           </div>
-        </AppointmentPopover>
-      </div>
 
-      <div className={styles.patientInfo_name}>
-        <PatientPopover scrollId={scrollId} patient={patient}>
-          <div className={styles.patientNameAvatar}>
-            <Avatar
-              user={patient}
-              size="sm"
-              noPadding
-              className={styles.patientNameAvatar_avatar}
-            />
+          <div className={styles.patientInfo_name}>
+            <PatientPopover scrollId={scrollId} patient={patient}>
+              <div className={styles.patientNameAvatar}>
+                <Avatar
+                  user={patient}
+                  size="sm"
+                  noPadding
+                  className={styles.patientNameAvatar_avatar}
+                />
 
-            <div className={styles.patientNameAvatar_text}>
-              <div className={styles.patientInfo_firstLast}>{patient.firstName}</div>
-              <div className={styles.patientInfo_firstLast}>{patient.lastName}</div>
-            </div>
+                <div className={styles.patientNameAvatar_text}>
+                  <div className={styles.patientInfo_firstLast}>{patient.firstName}</div>
+                  <div className={styles.patientInfo_firstLast}>{patient.lastName}</div>
+                </div>
+              </div>
+            </PatientPopover>
           </div>
-        </PatientPopover>
-      </div>
 
-      <div className={styles.insightContainer}>
-        {displayPatientConfirmed}
-        {displayFamilyRecare}
-        {displayEmailInsight}
-        {displayPhoneInsight}
+          <div className={styles.insightContainer}>
+            {displayPatientConfirmed}
+            {displayFamilyRecare}
+            {displayEmailInsight}
+            {displayPhoneInsight}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 InsightList.propTypes = {
-  patient: PropTypes.shape(patientShape),
+  patient: PropTypes.shape(patientShape).isRequired,
   insightData: PropTypes.shape({
     appointmentId: PropTypes.string,
     patientId: PropTypes.string,
-    insights: PropTypes.arrayOf(
-      PropTypes.shape({
-        type: PropTypes.string,
-        value: PropTypes.any,
-      })
-    ),
-  }),
+    insights: PropTypes.arrayOf(PropTypes.shape({
+      type: PropTypes.string,
+      value: PropTypes.any,
+    })),
+  }).isRequired,
   scrollId: PropTypes.string,
-  appointment: PropTypes.shape(appointmentShape),
+  appointment: PropTypes.shape(appointmentShape).isRequired,
+};
+
+InsightList.defaultProps = {
+  scrollId: '',
 };

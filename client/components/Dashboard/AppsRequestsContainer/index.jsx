@@ -111,7 +111,9 @@ class AppsRequestsContainer extends Component {
   handleEditAppointment(id) {
     const { appointments } = this.props;
 
-    this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate) });
+    this.props.setScheduleDate({
+      scheduleDate: moment(this.props.dashboardDate),
+    });
 
     this.props.push('/schedule');
     const app = appointments.get(id);
@@ -192,28 +194,7 @@ class AppsRequestsContainer extends Component {
   }
 }
 
-AppsRequestsContainer.propTypes = {
-  appointments: PropTypes.instanceOf(Map),
-  chairs: PropTypes.instanceOf(Map),
-  dashAppointments: PropTypes.bool,
-  dashChairs: PropTypes.bool,
-  dashPracs: PropTypes.bool,
-  dashRequests: PropTypes.bool,
-  dashboardDate: PropTypes.instanceOf(Date),
-  fetchEntitiesRequest: PropTypes.func,
-  patientUsers: PropTypes.instanceOf(Map),
-  patients: PropTypes.instanceOf(Map),
-  practitioners: PropTypes.instanceOf(Map),
-  push: PropTypes.func,
-  requests: PropTypes.instanceOf(Map),
-  filteredRequests: PropTypes.arrayOf(RequestsModel),
-  sortedRequests: PropTypes.arrayOf(RequestsModel),
-  requestId: PropTypes.string,
-  selectedRequest: PropTypes.instanceOf(RequestsModel),
-  selectAppointment: PropTypes.func,
-  services: PropTypes.instanceOf(Map),
-  setScheduleDate: PropTypes.func,
-};
+const dateFilter = (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate);
 
 function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ...ownProps }) {
   const dashAppointments = apiRequests.get('dashAppointments')
@@ -244,9 +225,7 @@ function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ..
     .toArray()
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
-  const sortedRequests = filteredRequests.sort(
-    (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate)
-  );
+  const sortedRequests = filteredRequests.sort(dateFilter);
 
   const nextProps = { routing, sortedRequests, ...ownProps };
 
@@ -276,10 +255,43 @@ function mapDispatchToProps(dispatch) {
       selectAppointment,
       push,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+AppsRequestsContainer.propTypes = {
+  appointments: PropTypes.instanceOf(Map),
+  chairs: PropTypes.instanceOf(Map),
+  dashAppointments: PropTypes.bool,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  patientUsers: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map),
+  practitioners: PropTypes.instanceOf(Map),
+  push: PropTypes.func.isRequired,
+  requests: PropTypes.instanceOf(Map),
+  filteredRequests: PropTypes.arrayOf(RequestsModel),
+  sortedRequests: PropTypes.arrayOf(RequestsModel),
+  requestId: PropTypes.string,
+  selectedRequest: PropTypes.instanceOf(RequestsModel),
+  selectAppointment: PropTypes.func.isRequired,
+  services: PropTypes.instanceOf(Map),
+  setScheduleDate: PropTypes.func.isRequired,
+};
 
-export default enhance(AppsRequestsContainer);
+AppsRequestsContainer.defaultProps = {
+  appointments: Map,
+  chairs: Map,
+  dashAppointments: false,
+  patientUsers: Map,
+  patients: Map,
+  practitioners: Map,
+  requests: Map,
+  filteredRequests: [],
+  sortedRequests: [],
+  selectedRequest: RequestsModel,
+  services: Map,
+  requestId: '',
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppsRequestsContainer);

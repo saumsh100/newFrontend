@@ -28,13 +28,11 @@ function Input(props) {
     'iconComponent',
     'iconType',
     'refCallBack',
+    'tipSize',
   ]);
 
   const isFilled =
-    value !== null &&
-    value !== undefined &&
-    value !== '' &&
-    !(typeof value === 'number' && isNaN(value));
+    value !== null && value !== undefined && value !== '' && !(typeof value === 'number');
 
   const labelClassName = classNames(theme.label, {
     [theme.erroredLabel]: error,
@@ -81,6 +79,19 @@ Input.propTypes = {
   iconType: PropTypes.string,
   classStyles: PropTypes.objectOf(PropTypes.string),
   iconComponent: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
+};
+
+Input.defaultProps = {
+  error: undefined,
+  label: '',
+  value: undefined,
+  theme: null,
+  type: 'text',
+  icon: null,
+  iconType: 'solid',
+  classStyles: {},
+  iconComponent: null,
+  refCallBack: () => {},
 };
 
 export default withTheme(Input, styles);
