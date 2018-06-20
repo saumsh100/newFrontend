@@ -46,6 +46,18 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.ARRAY(DataTypes.DATEONLY),
     },
 
+    unavailableDates: {
+      type: DataTypes.ARRAY(DataTypes.DATEONLY),
+    },
+
+    availableDates: {
+      type: DataTypes.ARRAY(DataTypes.DATEONLY),
+    },
+
+    availableTimes: {
+      type: DataTypes.ARRAY(DataTypes.DATEONLY),
+    },
+
     endDate: {
       type: DataTypes.DATE,
     },
