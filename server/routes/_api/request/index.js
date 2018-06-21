@@ -9,7 +9,7 @@ import { Permission, PatientUser, Request, User, Account, Service, Practitioner 
 import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
 import { formatPhoneNumber } from '../../../util/formatters';
 import { setDateToTimezone } from '../../../util/time';
-import {appointmentRequestNoteStringFormatter} from '../../../lib/appointmentRequestNoteStringFormatter';
+import { appointmentRequestNoteStringFormatter } from '../../../lib/appointmentRequestNoteStringFormatter';
 
 import {
   sendAppointmentRequested,
@@ -236,7 +236,7 @@ requestsRouter.get('/', (req, res, next) => {
 /**
  * Get all requests that need to be synced
  */
-requestsRouter.get('/notSynced', (req,res,next) => {
+requestsRouter.get('/notSynced', (req, res, next) => {
   const {
     accountId,
   } = req;
