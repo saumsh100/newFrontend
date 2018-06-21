@@ -1,16 +1,17 @@
 
 import React, { PropTypes, Component } from 'react';
-import immutable from 'immutable';
+import { OrderedMap } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment';
-import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip } from '../../library';
+import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip, Button } from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
 import { setNewChat } from '../../../reducers/chat';
 import { sendChatMessage, createNewChat, selectChat, markAsUnread } from '../../../thunks/chat';
+import ChatTextMessage from '../../../entities/models/TextMessage';
 import styles from './styles.scss';
 
 class MessageContainer extends Component {
@@ -160,7 +161,7 @@ class MessageContainer extends Component {
       bot: true,
     };
 
-    return messages.map((message, index) => {
+    return messages.map((message) => {
       const isFromPatient = message.get('from') !== accountTwilio;
 
       const dotsIcon = (
@@ -168,22 +169,22 @@ class MessageContainer extends Component {
       );
 
       const markUnreadText = (
-        <div
+        <Button
           className={styles.markUnreadButton}
           onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
         >
           Mark unread
-        </div>
+        </Button>
       );
 
       let avatarUser = selectedPatient;
 
       if (!isFromPatient) {
-        avatarUser = message.userId && message.userId !== null ? message.user : botAvatar;
+        avatarUser = message.user && message.user.id ? message.user : botAvatar;
       }
 
       const avatarStyles = classNames(styles.bubbleAvatar, {
-        [styles.botAvatar]: avatarUser.bot,
+        [styles.botAvatar]: avatarUser && avatarUser.bot,
       });
 
       const avatar = (
@@ -202,7 +203,7 @@ class MessageContainer extends Component {
           <Tooltip
             trigger={['click', 'hover']}
             overlay={markUnreadText}
-            placement={'right'}
+            placement="right"
             getTooltipContainer={() => optionsWrapper}
           >
             <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
@@ -211,7 +212,7 @@ class MessageContainer extends Component {
       ) : null;
 
       return (
-        <div key={index} data-test-id="item_chatMessage" className={styles.messageWrapper}>
+        <div key={message.id} data-test-id="item_chatMessage" className={styles.messageWrapper}>
           <div
             key={message.get('id')}
             className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
@@ -229,11 +230,11 @@ class MessageContainer extends Component {
   renderMessagesTree() {
     const { textMessages } = this.props;
 
-    return this.groupChatMessages(textMessages).map((group, index) => {
+    return this.groupChatMessages(textMessages).map((group) => {
       const time = <div className={styles.time}>{this.getMessageTime(group.time)}</div>;
 
       return (
-        <div className={styles.groupWrapper} key={index}>
+        <div className={styles.groupWrapper} key={group.time}>
           {time}
           <div>{this.renderMessageGroup(group.messages)}</div>
         </div>
@@ -251,7 +252,9 @@ class MessageContainer extends Component {
         <SBody
           id="careCruChatScrollIntoView"
           className={styles.allMessages}
-          refCallback={node => (this.scrollContainer = node)}
+          refCallback={(node) => {
+            this.scrollContainer = node;
+          }}
         >
           {selectedChat && this.renderMessagesTree()}
           <div className={styles.raise} />
@@ -270,30 +273,30 @@ class MessageContainer extends Component {
 
 MessageContainer.propTypes = {
   textMessages: PropTypes.oneOfType([
-    PropTypes.instanceOf(Array),
-    PropTypes.instanceOf(immutable.OrderedMap),
-  ]),
+    PropTypes.arrayOf(ChatTextMessage),
+    PropTypes.instanceOf(OrderedMap),
+  ]).isRequired,
   activeAccount: PropTypes.shape({
     id: PropTypes.string,
     twilioPhoneNumber: PropTypes.string,
     toJS: PropTypes.func,
-  }),
+  }).isRequired,
   selectedChat: PropTypes.shape({
     id: PropTypes.string,
-  }),
+  }).isRequired,
   newChat: PropTypes.shape({
     id: PropTypes.string,
-  }),
+  }).isRequired,
   selectedPatient: PropTypes.shape({
     id: PropTypes.string,
-  }),
-  userId: PropTypes.string,
-  selectChat: PropTypes.func,
-  setNewChat: PropTypes.func,
-  reset: PropTypes.func,
-  sendChatMessage: PropTypes.func,
-  createNewChat: PropTypes.func,
-  markAsUnread: PropTypes.func,
+  }).isRequired,
+  userId: PropTypes.string.isRequired,
+  selectChat: PropTypes.func.isRequired,
+  setNewChat: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  sendChatMessage: PropTypes.func.isRequired,
+  createNewChat: PropTypes.func.isRequired,
+  markAsUnread: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, auth, chat }) {
@@ -324,7 +327,7 @@ function mapDispatchToProps(dispatch) {
       createNewChat,
       markAsUnread,
     },
-    dispatch
+    dispatch,
   );
 }
 
