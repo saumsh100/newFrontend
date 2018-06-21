@@ -1,7 +1,5 @@
 
-import moment from 'moment';
-import 'moment-timezone';
-import 'moment-interval';
+import moment from 'moment-timezone';
 import isEmpty from 'lodash/isEmpty';
 
 // OS of the computer will add timezone to this function
@@ -13,7 +11,7 @@ const Time = {
     const another = now.clone();
     another.tz(timezone);
     now.add(-1 * another.utcOffset(), 'minutes');
-    return now._d;
+    return now.toDate();
   },
 
   tzIso: (date = new Date(), timezone) => moment.tz(date, timezone).toISOString(),

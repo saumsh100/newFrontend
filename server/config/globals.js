@@ -2,7 +2,10 @@
 const path = require('path');
 const fs = require('fs');
 
-const root = path.normalize(path.join(__dirname, process.env.BUNDLED ? '/../..' : '/..'));
+// Fix paths if env is BUNDLED
+const relativePath = process.env.BUNDLED ? '/../..' : '/..';
+
+const root = path.normalize(path.join(__dirname, relativePath));
 const tokenSecret = 'notsosecret';
 const tokenExpiry = '30d';
 const passwordHashSaltRounds = 10;
@@ -15,12 +18,6 @@ const myHost = environmentVariables.MY_HOST || 'my.care.cru:5100';
 const protocol = env === 'production' ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
-const db = {
-  authKey: environmentVariables.RETHINKDB_AUTHKEY || '',
-  host: environmentVariables.RETHINKDB_HOST || 'localhost',
-  port: environmentVariables.RETHINKDB_PORT || '28015',
-  db: environmentVariables.RETHINKDB_DB || defaultDBName,
-};
 
 let caCert = environmentVariables.COMPOSE_CA_CERT;
 if (environmentVariables.CERT_PATH) {
@@ -164,7 +161,6 @@ module.exports = {
   myHost,
   protocol,
   bundlePort,
-  db,
   caCert,
   redis,
   rabbit: environmentVariables.RABBITMQ_URL

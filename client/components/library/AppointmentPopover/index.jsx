@@ -146,5 +146,7 @@ AppointmentPopover.defaultProps = {
   scrollId: '',
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-export default enhance(AppointmentPopover);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppointmentPopover);

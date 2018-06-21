@@ -1,6 +1,5 @@
 
-import moment from 'moment';
-import 'moment-timezone';
+import moment from 'moment-timezone';
 import omit from 'lodash/omit';
 import { env } from '../../config/globals';
 import {

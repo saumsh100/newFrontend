@@ -36,17 +36,15 @@ const signTokenAndSend = res => ({ session, model }) => {
     .then(() => model);
 };
 
-const createConfirmationText = (pinCode) => {
-  return `${pinCode} is your CareCru verification code.`;
-};
+const createConfirmationText = pinCode => `${pinCode} is your CareCru verification code.`;
 
-const generateEmailConfirmationURL = (tokenId, protocol, host) => {
-  return `${protocol}://${host}/auth/signup/${tokenId}/email`;
-};
+const generateEmailConfirmationURL = (tokenId, protocol, host) => `${protocol}://${host}/auth/signup/${tokenId}/email`;
 
 async function sendConfirmationMessage(patientUser) {
   // Leave console.log here, it is helpful
-  console.log(`Sending Confirmation Message to ${patientUser.firstName} ${patientUser.lastName} at ${patientUser.phoneNumber}`);
+  console.log(`Sending Confirmation Message to ${patientUser.firstName} ${patientUser.lastName} at ${
+    patientUser.phoneNumber
+  }`);
   const { pinCode } = await PinCode.create({ modelId: patientUser.id });
   return twilio.sendMessage({
     to: patientUser.phoneNumber,
@@ -59,7 +57,7 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
   const { body: patient } = req;
   const { ignoreConfirmationText } = req.query;
   if (patient.password !== patient.confirmPassword) {
-    next({ status: 400, message: 'Passwords doesn\'t match.' });
+    next({ status: 400, message: "Passwords doesn't match." });
   }
 
   return PatientAuth.signup(patient)
@@ -88,7 +86,9 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
 
       // Generate the URL to confirm email
       const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
-      const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+      const accountLogoUrl =
+        typeof account.fullLogoUrl === 'string' &&
+        account.fullLogoUrl.replace('[size]', 'original');
 
       // Send Mandrill email async
       sendPatientSignup({
@@ -137,12 +137,16 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
 });
 
 authRouter.post('/signup/:patientUserId/confirm', (req, res, next) => {
-  const { body: { confirmCode }, patientUser } = req;
+  const {
+    body: { confirmCode },
+    patientUser,
+  } = req;
   return PinCode.findById(confirmCode)
     .then((pc) => {
       const { pinCode, modelId } = pc;
       if (patientUser.id === modelId && pinCode === confirmCode) {
-        patientUser.update({ isPhoneNumberConfirmed: true })
+        patientUser
+          .update({ isPhoneNumberConfirmed: true })
           .then(p => res.send(p))
           .then(() => pc.destroy());
       }
@@ -195,10 +199,7 @@ authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
 });
 
 authRouter.post('/reset/:accountId', (req, res, next) => {
-  const {
-    body,
-    account,
-  } = req;
+  const { body, account } = req;
 
   const email = body.email;
   const token = crypto.randomBytes(12).toString('hex');
@@ -226,7 +227,9 @@ authRouter.post('/reset/:accountId', (req, res, next) => {
       });
 
       const accountJson = account.get({ plain: true });
-      const accountLogoUrl = typeof accountJson.fullLogoUrl === 'string' && accountJson.fullLogoUrl.replace('[size]', 'original');
+      const accountLogoUrl =
+        typeof accountJson.fullLogoUrl === 'string' &&
+        accountJson.fullLogoUrl.replace('[size]', 'original');
 
       // TODO: use merge_var generator
       const mergeVars = [
@@ -278,14 +281,12 @@ authRouter.post('/reset/:accountId', (req, res, next) => {
 authRouter.post('/', ({ body: { email, password } }, res, next) =>
   PatientAuth.login(email, password)
     .then(signTokenAndSend(res))
-    .catch(next)
-);
+    .catch(next));
 
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   PatientAuth.logout(sessionId)
     .then(() => res.send(200))
-    .catch(next)
-);
+    .catch(next));
 
 authRouter.get('/me', sequelizeAuthMiddleware, (req, res, next) => {
   const { patientUserId, sessionId } = req;
@@ -295,8 +296,7 @@ authRouter.get('/me', sequelizeAuthMiddleware, (req, res, next) => {
       res.json({
         sessionId,
         patientUser,
-      })
-    )
+      }))
     .catch(next);
 });
 

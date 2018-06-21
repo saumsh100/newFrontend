@@ -4,10 +4,7 @@ const merge = require('webpack-merge');
 const baseConfig = require('./webpack.base.config');
 const { appEntries } = require('../utils');
 
-const entries = appEntries(name => [
-  'babel-polyfill',
-  `./client/entries/${name}.js`,
-]);
+const entries = appEntries(name => ['babel-polyfill', `./client/entries/${name}.js`]);
 
 const developmentConfig = merge(baseConfig, {
   entry: entries('app', 'reviews', 'my', 'cc', 'connect', 'hub'),

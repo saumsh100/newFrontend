@@ -3,35 +3,36 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
-import 'moment-timezone';
+import moment from 'moment-timezone';
 import classNames from 'classnames';
 // import PerfectScrollbar from 'react-perfect-scrollbar';
-import {
-  Grid,
-  Row,
-  Col,
-  IconButton,
-  Icon,
-} from '../../../../library';
+import { Grid, Row, Col, Icon, Button } from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
 import * as Thunks from '../../../../../thunks/availabilities';
 import styles from './styles.scss';
+import { availabilityShape, accountShape } from '../../../../library/PropTypeShapes';
 
-const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) => {
+const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) =>
   // TODO: This could be sped up, we can assume availabilities are in order
-  return availabilities.filter((a) => {
-    return accountTimezone ? moment.tz(a.startDate, accountTimezone).isSame(momentDate, 'd')
-    : moment(a.startDate).isSame(momentDate, 'd');
-  });
-  // return filteredAvailabilities.sort((a, b) => moment(a).diff(b));
+  availabilities.filter(a =>
+    (accountTimezone
+      ? moment.tz(a.startDate, accountTimezone).isSame(momentDate, 'd')
+      : moment(a.startDate).isSame(momentDate, 'd')));
+// return filteredAvailabilities.sort((a, b) => moment(a).diff(b));
+
+const CaretButton = props => (
+  <div
+    {...props}
+    className={classNames(props.className, styles[`${props.direction}CaretButton`])}
+  />
+);
+
+CaretButton.propTypes = {
+  direction: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
 };
 
-function CaretButton(props) {
-  const name = `${props.direction}CaretButton`;
-  const classes = classNames(props.className, styles[name]);
-  return <div {...props} className={classes} />;
-}
+const NoBgButton = props => <Button className={styles.noBgButton} {...props} />;
 
 class AvailabilitiesDisplay extends Component {
   constructor(props) {
@@ -56,9 +57,10 @@ class AvailabilitiesDisplay extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const shouldFetchAvailabilities = (nextProps.selectedPractitionerId !== this.props.selectedPractitionerId) ||
-                                      (nextProps.selectedServiceId !== this.props.selectedServiceId) ||
-                                      (nextProps.selectedStartDate !== this.props.selectedStartDate);
+    const shouldFetchAvailabilities =
+      nextProps.selectedPractitionerId !== this.props.selectedPractitionerId ||
+      nextProps.selectedServiceId !== this.props.selectedServiceId ||
+      nextProps.selectedStartDate !== this.props.selectedStartDate;
 
     if (shouldFetchAvailabilities) {
       // this.setState({ fetching: true });
@@ -67,25 +69,31 @@ class AvailabilitiesDisplay extends Component {
   }
 
   setDateBack(numDays = 4) {
-    const newStartDate = moment(this.props.selectedStartDate).subtract(numDays, 'days').toISOString();
+    const newStartDate = moment(this.props.selectedStartDate)
+      .subtract(numDays, 'days')
+      .toISOString();
     this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
     this.props.setSelectedStartDate(newStartDate);
   }
 
   setDateForward(numDays = 4) {
-    const newStartDate = moment(this.props.selectedStartDate).add(numDays, 'days').toISOString();
+    const newStartDate = moment(this.props.selectedStartDate)
+      .add(numDays, 'days')
+      .toISOString();
     this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
     this.props.setSelectedStartDate(newStartDate);
   }
 
   jumpToNext(startDate) {
-    const newStartDate = moment(startDate).subtract(2, 'hours').toISOString();
+    const newStartDate = moment(startDate)
+      .subtract(2, 'hours')
+      .toISOString();
     this.props.setSelectedStartDate(newStartDate);
   }
 
   debounceFetchAvailabilities() {
     this.props.fetchAvailabilities();
-      // .then(() => this.setState({ fetching: false }));
+    // .then(() => this.setState({ fetching: false }));
   }
 
   scrollY() {
@@ -94,7 +102,7 @@ class AvailabilitiesDisplay extends Component {
 
     // Determine if certain padding away from bottom and if so, hide scroll
     const height = n.scrollHeight - n.offsetHeight;
-    if ((height - n.scrollTop) <= padding) {
+    if (height - n.scrollTop <= padding) {
       this.setState({
         scrollDown: false,
       });
@@ -122,13 +130,12 @@ class AvailabilitiesDisplay extends Component {
   }
 
   render() {
-    let {
+    const {
       isFetching,
       availabilities,
       nextAvailability,
       selectedStartDate,
       selectedAvailability,
-      setSelectedAvailability,
       account,
     } = this.props;
 
@@ -137,32 +144,34 @@ class AvailabilitiesDisplay extends Component {
 
     const accountTimezone = account.timezone;
 
-    let i;
-    for (i = 0; i <= numDaysForward; i++) {
-      const momentDate = accountTimezone ?
-        moment.tz(selectedStartDate, accountTimezone).add(i, 'days') :
-        moment(selectedStartDate).add(i, 'days');
+    for (let i = 0; i <= numDaysForward; i += 1) {
+      const momentDate = accountTimezone
+        ? moment.tz(selectedStartDate, accountTimezone).add(i, 'days')
+        : moment(selectedStartDate).add(i, 'days');
 
-      const sortedAvailabilities = getSortedAvailabilities(momentDate, availabilities, accountTimezone);
+      const sortedAvailabilities = getSortedAvailabilities(
+        momentDate,
+        availabilities,
+        accountTimezone,
+      );
       dayAvailabilities.push({ momentDate, sortedAvailabilities });
     }
 
     const headerClasses = classNames(styles.datesRow);
     const header = (
       <div className={headerClasses}>
-        {dayAvailabilities.map((a, i) => {
+        {dayAvailabilities.map((a) => {
           // TODO: do we need to add timeZone here
-          const isSameDay = !!selectedAvailability && a.momentDate.isSame(selectedAvailability.startDate, 'day');
-          const classes = isSameDay ? classNames(styles.selectedDayHeader, styles.appointment__list) : styles.appointment__list;
+          const isSameDay =
+            !!selectedAvailability && a.momentDate.isSame(selectedAvailability.startDate, 'day');
+          const classes = isSameDay
+            ? classNames(styles.selectedDayHeader, styles.appointment__list)
+            : styles.appointment__list;
           return (
-            <ul className={classes} key={`${a.momentDate.toISOString()}_header_${i}`}>
+            <ul className={classes} key={`${a.momentDate.toISOString()}_header`}>
               <div className={styles.appointment__list_header}>
-                <div className={styles.list__header_day}>
-                  {a.momentDate.format('ddd')}
-                </div>
-                <div className={styles.list__header_number}>
-                  {a.momentDate.format('MMM Do')}
-                </div>
+                <div className={styles.list__header_day}>{a.momentDate.format('ddd')}</div>
+                <div className={styles.list__header_number}>{a.momentDate.format('MMM Do')}</div>
               </div>
             </ul>
           );
@@ -172,7 +181,7 @@ class AvailabilitiesDisplay extends Component {
 
     // TODO: use array.some?
     let display = false;
-    for (let i = 0; i < dayAvailabilities.length; i++) {
+    for (let i = 0; i < dayAvailabilities.length; i += 1) {
       if (dayAvailabilities[i].sortedAvailabilities.length) {
         display = true;
         break;
@@ -180,7 +189,7 @@ class AvailabilitiesDisplay extends Component {
     }
 
     const needsToScrollMoreDesktop = dayAvailabilities.some(d => d.sortedAvailabilities.length > 5);
-    const needsToScrollMoreMobile = dayAvailabilities[0].length > 3;
+    // const needsToScrollMoreMobile = dayAvailabilities[0].length > 3;
 
     // console.log(dayAvailabilities);
     let availabilitiesDisplay = (
@@ -195,7 +204,8 @@ class AvailabilitiesDisplay extends Component {
       </div>
     );
 
-    if (!isFetching) {  /*&& !this.state.fetching) {*/
+    if (!isFetching) {
+      /* && !this.state.fetching) { */
       if (display) {
         availabilitiesDisplay = (
           <div
@@ -203,29 +213,32 @@ class AvailabilitiesDisplay extends Component {
             className={styles.displayAvailabilitiesContainer}
           >
             <div className={styles.appointment__table_elements}>
-              {dayAvailabilities.map((a, i) => {
-                return (
-                  <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list_${i}`}>
-                    {a.sortedAvailabilities.map((availability, j) => {
-                      let classes = styles.appointment__list_item;
-                      if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
-                        classes = `${classes} ${styles.appointment__list_selected}`;
-                      }
+              {dayAvailabilities.map(a => (
+                <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
+                  {a.sortedAvailabilities.map((availability) => {
+                    let classes = styles.appointment__list_item;
+                    if (
+                      selectedAvailability &&
+                      selectedAvailability.startDate === availability.startDate
+                    ) {
+                      classes = `${classes} ${styles.appointment__list_selected}`;
+                    }
 
-                      return (
-                        <li
-                          key={`${availability.startDate}_item_${j}`}
+                    return (
+                      <li key={`${availability.startDate}_item`} className={classes}>
+                        <NoBgButton
                           onClick={() => this.selectAvailability(availability)}
-                          className={classes}
+                          onKeyUp={e => e.key === 'Enter' && this.selectAvailability(availability)}
                         >
-                          {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
+                          {accountTimezone
+                            ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
                             : moment(availability.startDate).format('h:mm a')}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                );
-              })}
+                        </NoBgButton>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ))}
             </div>
           </div>
         );
@@ -244,12 +257,14 @@ class AvailabilitiesDisplay extends Component {
           // But this is easiest to implement
           mobileAvailabilitiesDisplay = (
             <div className={styles.mobileDisplayContainer}>
-              <li
-                onClick={() => this.jumpToNext(startDate)}
-                className={styles.nextAvailabilityButton}
-              >
-                <span>Next Availablility on</span>
-                <div>{' ' + displayDate}</div>
+              <li className={styles.nextAvailabilityButton}>
+                <NoBgButton
+                  onClick={() => this.jumpToNext(startDate)}
+                  onKeyUp={e => e.key === 'Enter' && this.jumpToNext(startDate)}
+                >
+                  <span>Next Availablility on</span>
+                  <div>{` ${displayDate}`}</div>
+                </NoBgButton>
               </li>
             </div>
           );
@@ -259,18 +274,23 @@ class AvailabilitiesDisplay extends Component {
               <ul className={styles.appointmentListMobile}>
                 {dayAvailabilities[0].sortedAvailabilities.map((availability) => {
                   let classes = styles.appointment__list_item;
-                  if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
+                  if (
+                    selectedAvailability &&
+                    selectedAvailability.startDate === availability.startDate
+                  ) {
                     classes = `${classes} ${styles.appointment__list_selected}`;
                   }
 
                   return (
-                    <li
-                      key={`${availability.startDate}_item`}
-                      onClick={() => this.selectAvailability(availability)}
-                      className={classes}
-                    >
-                      {accountTimezone ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
-                        : moment(availability.startDate).format('h:mm a')}
+                    <li key={`${availability.startDate}_item`} className={classes}>
+                      <NoBgButton
+                        onClick={() => this.selectAvailability(availability)}
+                        onKeyUp={e => e.key === 'Enter' && this.selectAvailability(availability)}
+                      >
+                        {accountTimezone
+                          ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
+                          : moment(availability.startDate).format('h:mm a')}
+                      </NoBgButton>
                     </li>
                   );
                 })}
@@ -283,37 +303,29 @@ class AvailabilitiesDisplay extends Component {
         const mDate = accountTimezone ? moment.tz(startDate, accountTimezone) : moment(startDate);
         const displayDate = mDate.format('ddd, MMM D');
         const nextLink = (
-          <li
-            onClick={() => this.jumpToNext(startDate)}
-            className={styles.nextAvailabilityButton}
-          >
-            <span>Next Availablility on</span>
-            <div>{' ' + displayDate}</div>
+          <li className={styles.nextAvailabilityButton}>
+            <NoBgButton
+              onClick={() => this.jumpToNext(startDate)}
+              onKeyUp={e => e.key === 'Enter' && this.jumpToNext(startDate)}
+            >
+              <span>Next Availablility on</span>
+              <div>{` ${displayDate}`}</div>
+            </NoBgButton>
           </li>
         );
 
-        availabilitiesDisplay = (
-          <div className={styles.displayContainer}>
-            {nextLink}
-          </div>
-        );
+        availabilitiesDisplay = <div className={styles.displayContainer}>{nextLink}</div>;
 
         mobileAvailabilitiesDisplay = (
-          <div className={styles.mobileDisplayContainer}>
-            {nextLink}
-          </div>
+          <div className={styles.mobileDisplayContainer}>{nextLink}</div>
         );
       } else {
         availabilitiesDisplay = (
-          <div className={styles.displayContainer}>
-            There are no available appointments
-          </div>
+          <div className={styles.displayContainer}>There are no available appointments</div>
         );
 
         mobileAvailabilitiesDisplay = (
-          <div className={styles.mobileDisplayContainer}>
-            There are no available appointments
-          </div>
+          <div className={styles.mobileDisplayContainer}>There are no available appointments</div>
         );
       }
     }
@@ -327,36 +339,26 @@ class AvailabilitiesDisplay extends Component {
         </div>
         <Row className={styles.desktopContainer}>
           <Col xs={1}>
-            {canGoBack ?
-              <CaretButton
-                direction="left"
-                onClick={() => this.setDateBack()}
-              /> : null}
+            {canGoBack ? <CaretButton direction="left" onClick={() => this.setDateBack()} /> : null}
           </Col>
           <Col xs={10} className={styles.columnsWrapper}>
             <div className={styles.displayWrapperForHorizontalScroll}>
               {header}
               {availabilitiesDisplay}
               <div className={styles.scrollDownSpace}>
-                {!isFetching && this.state.scrollDown && needsToScrollMoreDesktop ?
+                {!isFetching && this.state.scrollDown && needsToScrollMoreDesktop ? (
                   <div className={styles.scrollDown}>
                     <span>Scroll for More</span>
                     <div>
-                      <Icon
-                        icon="caret-down"
-                        type="solid"
-                      />
+                      <Icon icon="caret-down" type="solid" />
                     </div>
                   </div>
-                : null}
+                ) : null}
               </div>
             </div>
           </Col>
           <Col xs={1}>
-            <CaretButton
-              direction="right"
-              onClick={() => this.setDateForward()}
-            />
+            <CaretButton direction="right" onClick={() => this.setDateForward()} />
           </Col>
         </Row>
         <Row className={styles.mobileContainer}>
@@ -374,22 +376,6 @@ class AvailabilitiesDisplay extends Component {
   // TODO: break out the availabilities component into columns and lists
 }
 
-AvailabilitiesDisplay.propTypes = {
-  // startsAt: PropTypes.prop,
-  availabilities: PropTypes.arrayOf(PropTypes.object),
-  nextAvailability: PropTypes.object,
-  onSelect: PropTypes.func.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  fetchAvailabilities: PropTypes.func.isRequired,
-  selectedStartDate: PropTypes.string.isRequired,
-  selectedPractitionerId: PropTypes.string,
-  selectedServiceId: PropTypes.string.isRequired,
-  selectedAvailability: PropTypes.object,
-  account: PropTypes.object,
-  setSelectedStartDate: PropTypes.func.isRequired,
-  setSelectedAvailability: PropTypes.func.isRequired,
-};
-
 function mapStateToProps({ availabilities }) {
   const account = availabilities.get('account').toJS();
   return {
@@ -404,14 +390,35 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchAvailabilities: Thunks.fetchAvailabilities,
-    setSelectedStartDate: Actions.setSelectedStartDate,
-    setSelectedAvailability: Actions.setSelectedAvailability,
-    setIsFetching: Actions.setIsFetching,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchAvailabilities: Thunks.fetchAvailabilities,
+      setSelectedStartDate: Actions.setSelectedStartDate,
+      setSelectedAvailability: Actions.setSelectedAvailability,
+      setIsFetching: Actions.setIsFetching,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AvailabilitiesDisplay);
+AvailabilitiesDisplay.propTypes = {
+  // startsAt: PropTypes.prop,
+  setIsFetching: PropTypes.func.isRequired,
+  setSelectedAvailability: PropTypes.func.isRequired,
+  availabilities: PropTypes.arrayOf(PropTypes.shape(availabilityShape)).isRequired,
+  nextAvailability: PropTypes.shape(availabilityShape).isRequired,
+  selectedAvailability: PropTypes.shape(availabilityShape).isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  fetchAvailabilities: PropTypes.func.isRequired,
+  selectedStartDate: PropTypes.string.isRequired,
+  selectedPractitionerId: PropTypes.string.isRequired,
+  selectedServiceId: PropTypes.string.isRequired,
+  account: PropTypes.shape(accountShape).isRequired,
+  setSelectedStartDate: PropTypes.func.isRequired,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AvailabilitiesDisplay);

@@ -110,6 +110,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(PatientInsightsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInsightsContainer);

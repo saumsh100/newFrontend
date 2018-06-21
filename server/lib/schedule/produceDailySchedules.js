@@ -1,13 +1,9 @@
 
-import Moment from 'moment';
-import 'moment-timezone';
+import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import isArray from 'lodash/isArray';
 import mapValues from 'lodash/mapValues';
-import {
-  mergeDateAndTimeWithZone,
-  getRangeOfDays,
-} from '../../util/time';
+import { mergeDateAndTimeWithZone, getRangeOfDays } from '../../util/time';
 
 const moment = extendMoment(Moment);
 
@@ -40,7 +36,9 @@ export function getWeeklyScheduleFromAdvanced(weeklySchedule, date) {
     return weeklySchedule;
   }
 
-  const week = moment(date).diff(weeklySchedule.startDate, 'week') % (weeklySchedule.weeklySchedules.length + 1);
+  const week =
+    moment(date).diff(weeklySchedule.startDate, 'week') %
+    (weeklySchedule.weeklySchedules.length + 1);
   if (week > 0) {
     return weeklySchedule.weeklySchedules[week - 1];
   }
@@ -57,9 +55,14 @@ export function getWeeklyScheduleFromAdvanced(weeklySchedule, date) {
  * @returns {string} - the day of the week (lowercase)
  */
 export function getDayofWeek(date, timezone) {
-  return timezone ?
-    moment.tz(date, timezone).format('dddd').toLowerCase() :
-    moment(date).format('dddd').toLowerCase();
+  return timezone
+    ? moment
+      .tz(date, timezone)
+      .format('dddd')
+      .toLowerCase()
+    : moment(date)
+      .format('dddd')
+      .toLowerCase();
 }
 
 /**
@@ -84,10 +87,16 @@ export function getDayofWeek(date, timezone) {
  * @param timezone - the timezone as a string
  * @returns {object} - object of dailySchedule with the date as key
  */
-export default function produceDailySchedules(weeklySchedule, dailySchedules, startDate, endDate, timezone) {
+export default function produceDailySchedules(
+  weeklySchedule,
+  dailySchedules,
+  startDate,
+  endDate,
+  timezone,
+) {
   const dailyScheduleObject = mapDailySchedule(dailySchedules);
 
-  let dailySchedulesMap = {};
+  const dailySchedulesMap = {};
   const days = getRangeOfDays(startDate, endDate, timezone);
   for (const day of days) {
     const dailySchedule = dailyScheduleObject[day];
@@ -112,12 +121,12 @@ export default function produceDailySchedules(weeklySchedule, dailySchedules, st
     newValue.isClosed = !!newValue.isClosed;
     newValue.startTime = mergeDateAndTimeWithZone(key, value.startTime, timezone);
     newValue.endTime = mergeDateAndTimeWithZone(key, value.endTime, timezone);
-    newValue.breaks = isArray(value.breaks) ? value.breaks.map((b) => {
-      return {
+    newValue.breaks = isArray(value.breaks)
+      ? value.breaks.map(b => ({
         startTime: mergeDateAndTimeWithZone(key, b.startTime, timezone),
         endTime: mergeDateAndTimeWithZone(key, b.endTime, timezone),
-      };
-    }) : [];
+      }))
+      : [];
 
     return newValue;
   });

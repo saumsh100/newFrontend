@@ -1,6 +1,5 @@
 
-import Moment from 'moment';
-import 'moment-timezone';
+import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import { Account, Practitioner, DailySchedule, PractitionerRecurringTimeOff, sequelize, WeeklySchedule } from '../../_models';
 import {

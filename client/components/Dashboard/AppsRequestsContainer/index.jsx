@@ -294,4 +294,7 @@ AppsRequestsContainer.defaultProps = {
   requestId: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppsRequestsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppsRequestsContainer);
