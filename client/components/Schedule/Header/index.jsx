@@ -6,13 +6,7 @@ import { Map, List } from 'immutable';
 import Popover from 'react-popover';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import {
-  IconButton,
-  Button,
-  DialogBox,
-  SHeader,
-  Avatar,
-} from '../../library/index';
+import { IconButton, Button, DialogBox, SHeader } from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
@@ -20,8 +14,6 @@ import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import { deleteWaitSpot } from '../../../thunks/waitlist';
-import AppointmentsCollection from '../../../entities/collections/appointments';
-import { Create as CreateWaitSpot } from '../../RelayWaitlist';
 import styles from './styles.scss';
 
 class Header extends Component {
@@ -62,32 +54,28 @@ class Header extends Component {
     }
   }
 
-  openAddToWaitlist() {
-    this.setState(prevState => ({
-      showAddToWaitlist: !prevState.showAddToWaitlist,
-    }));
-  }
-
   openWaitlist() {
-    this.setState(prevState => ({
-      showWaitlist: !prevState.showWaitlist,
-    }));
+    this.setState({
+      showWaitlist: !this.state.showWaitlist,
+    });
   }
 
-  removeWaitSpot(id) {
-    const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
-
-    if (confirmDelete) {
-      this.props.deleteEntityRequest({ key: 'waitSpots', id });
-    }
+  openAddToWaitlist() {
+    this.setState({
+      showAddToWaitlist: !this.state.showAddToWaitlist,
+    });
   }
 
   handleAddToWaitlist() {
     this.openAddToWaitlist();
-    this.props.reset('Add to Waitlist Form');
-    this.setState({
-      patientSearched: null,
-    });
+  }
+
+  removeWaitSpot(waitSpot) {
+    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
+
+    if (confirmDelete) {
+      this.props.deleteWaitSpot(waitSpot);
+    }
   }
 
   toggleFilters() {
@@ -102,9 +90,6 @@ class Header extends Component {
       scheduleView,
       schedule,
       chairs,
-      waitSpots,
-      patients,
-      patientUsers,
       practitioners,
       pracsFetched,
       chairsFetched,
@@ -222,14 +207,7 @@ class Header extends Component {
               ]}
               custom
             >
-              <Waitlist
-                patients={patients}
-                patientUsers={patientUsers}
-                waitSpots={waitSpots}
-                selectWaitSpot={this.selectWaitSpot}
-                removeWaitSpot={this.removeWaitSpot}
-                openAddTo={this.openAddToWaitlist}
-              />
+              <Waitlist removeWaitSpot={this.removeWaitSpot} openAddTo={this.openAddToWaitlist} />
             </DialogBox>
             <DialogBox
               title="Add to Waitlist"
@@ -266,7 +244,15 @@ class Header extends Component {
   }
 }
 
+Header.defaultProps = {
+  pracsFetched: false,
+  chairsFetched: false,
+};
+
 Header.propTypes = {
+  appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
   addNewAppointment: PropTypes.func.isRequired,
   scheduleView: PropTypes.string.isRequired,
   setScheduleView: PropTypes.func.isRequired,
@@ -276,24 +262,11 @@ Header.propTypes = {
   waitSpots: PropTypes.instanceOf(Map).isRequired,
   patients: PropTypes.instanceOf(Map).isRequired,
   patientUsers: PropTypes.instanceOf(Map).isRequired,
-  appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
   previousDay: PropTypes.func.isRequired,
   nextDay: PropTypes.func.isRequired,
   setCurrentDay: PropTypes.func.isRequired,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
-  deleteEntityRequest: PropTypes.func.isRequired,
-  createEntityRequest: PropTypes.func.isRequired,
-  reset: PropTypes.func.isRequired,
-  pracsFetched: PropTypes.bool,
-  chairsFetched: PropTypes.bool,
-  waitSpotsFetched: PropTypes.bool,
-};
-
-Header.defaultProps = {
-  pracsFetched: false,
-  chairsFetched: false,
-  waitSpotsFetched: false,
-  appointments: Map,
+  reinitializeState: PropTypes.func.isRequired,
+  deleteWaitSpot: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -317,7 +290,6 @@ const mapStateToProps = ({ schedule, apiRequests, entities }) => {
     ? apiRequests.get('chairsSchedule').wasFetched
     : null;
 
-  const waitSpots = entities.getIn(['waitSpots', 'models']);
   const patientUsers = entities.getIn(['patientUsers', 'models']);
   const patients = entities.getIn(['patients', 'models']);
 
@@ -325,7 +297,6 @@ const mapStateToProps = ({ schedule, apiRequests, entities }) => {
     scheduleView,
     pracsFetched,
     chairsFetched,
-    waitSpots,
     patients,
     patientUsers,
   };

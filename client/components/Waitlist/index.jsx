@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from 'moment/moment';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
 import WaitlistSchedule from '../Schedule/Header/Waitlist';
 import { fetchWaitSpots, deleteMultipleWaitSpots } from '../../thunks/waitlist';
+import { setBackHandler, setTitle } from '../../reducers/electron';
 import SelectedCounter from './SelectedCounter';
 import ExtraOptionsHubMenu from '../ExtraOptionsHubMenu';
+import AddToWaitlistPage from './AddToWaitlistPage';
+import { WAITLIST_PAGE, WATILIST_ADD } from '../../constants/PageTitle';
 
 class Waitlist extends Component {
   constructor(props) {
@@ -16,11 +18,14 @@ class Waitlist extends Component {
 
     this.state = {
       selectedElements: [],
+      showAddForm: false,
     };
 
     this.selectWaitSpot = this.selectWaitSpot.bind(this);
     this.deleteSelectedElements = this.deleteSelectedElements.bind(this);
     this.clearSelectedList = this.clearSelectedList.bind(this);
+    this.showAddForm = this.showAddForm.bind(this);
+    this.hideAddForm = this.hideAddForm.bind(this);
   }
 
   componentDidMount() {
@@ -52,7 +57,7 @@ class Waitlist extends Component {
       {
         icon: 'plus',
         text: 'ADD',
-        onClick: () => console.log(),
+        onClick: this.showAddForm,
       },
       {
         icon: 'rocket',
@@ -88,16 +93,40 @@ class Waitlist extends Component {
     });
   }
 
+  showAddForm() {
+    this.setState(
+      {
+        showAddForm: true,
+      },
+      () => {
+        this.props.setBackHandler(() => {
+          this.hideAddForm();
+        });
+        this.props.setTitle(WATILIST_ADD);
+      },
+    );
+  }
+
+  hideAddForm() {
+    this.setState(
+      {
+        showAddForm: false,
+      },
+      () => {
+        this.props.setBackHandler(null);
+        this.props.setTitle(WAITLIST_PAGE);
+      },
+    );
+  }
+
   render() {
-    const { patients, patientUsers, waitSpots } = this.props;
+    const { showAddForm } = this.state;
 
     return (
       <div>
+        {showAddForm && <AddToWaitlistPage onSubmit={this.hideAddForm} />}
         <ExtraOptionsHubMenu options={this.getMenuOptions()}>
           <WaitlistSchedule
-            patients={patients}
-            patientUsers={patientUsers}
-            waitSpots={waitSpots}
             selectWaitSpot={this.selectWaitSpot}
             selectedWaitSpots={this.state.selectedElements}
           />
@@ -111,21 +140,8 @@ class Waitlist extends Component {
 Waitlist.propTypes = {
   fetchWaitSpots: PropTypes.func.isRequired,
   deleteMultipleWaitSpots: PropTypes.func.isRequired,
-  waitSpots: PropTypes.instanceOf(Map).isRequired,
-  patients: PropTypes.instanceOf(Map).isRequired,
-  patientUsers: PropTypes.instanceOf(Map).isRequired,
-};
-
-const mapStateToProps = ({ entities }) => {
-  const waitSpots = entities.getIn(['waitSpots', 'models']);
-  const patientUsers = entities.getIn(['patientUsers', 'models']);
-  const patients = entities.getIn(['patients', 'models']);
-
-  return {
-    waitSpots,
-    patients,
-    patientUsers,
-  };
+  setBackHandler: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch =>
@@ -133,8 +149,10 @@ const mapDispatchToProps = dispatch =>
     {
       fetchWaitSpots,
       deleteMultipleWaitSpots,
+      setBackHandler,
+      setTitle,
     },
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Waitlist);
+export default connect(null, mapDispatchToProps)(Waitlist);

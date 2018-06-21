@@ -53,11 +53,6 @@ const register = accountId =>
       const root = proxyStore.getRoot();
       const accountViewerProxy = root.getLinkedRecord('accountViewer');
 
-      const waitSpotsConnection = ConnectionHandler.getConnection(
-        accountViewerProxy,
-        'AccountViewer_waitSpots'
-      );
-
       const { newWaitSpot } = data;
       const patient = newWaitSpot.patient ? newWaitSpot.patient : newWaitSpot.patientUser;
 
@@ -68,18 +63,23 @@ const register = accountId =>
         body: `New wait spot request by ${fullName}.`,
       });
 
-      if (!waitSpotsConnection) {
-        return;
+      if (!accountViewerProxy) {
+        return null;
       }
+
+      const waitSpotsConnection = ConnectionHandler.getConnection(
+        accountViewerProxy,
+        'AccountViewer_waitSpots',
+      );
 
       const edge = ConnectionHandler.createEdge(
         proxyStore,
         waitSpotsConnection,
         nodeToInsert,
-        'WaitSpotEdge'
+        'WaitSpotEdge',
       );
 
-      ConnectionHandler.insertEdgeAfter(waitSpotsConnection, edge);
+      return ConnectionHandler.insertEdgeAfter(waitSpotsConnection, edge);
     },
   });
 

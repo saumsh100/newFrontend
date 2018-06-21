@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Map } from 'immutable';
 import WaitListItem from './WaitListItem';
 import { List, Button } from '../../../library';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
@@ -11,7 +10,9 @@ import { Fetch as RelayFetchWaitlist } from '../../../RelayWaitlist';
 import styles from './styles.scss';
 
 export default function Waitlist(props) {
-  const { removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots } = props;
+  const {
+    removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots,
+  } = props;
 
   return (
     <RelayFetchWaitlist
@@ -23,18 +24,18 @@ export default function Waitlist(props) {
         const waitSpots = relayProps.props.accountViewer.waitSpots.edges.map((edge) => {
           const patient = edge.node.patient
             ? {
-              ...edge.node.patient,
-              clientId: edge.node.patient.id,
-              id: edge.node.patient.ccId,
-            }
+                ...edge.node.patient,
+                clientId: edge.node.patient.id,
+                id: edge.node.patient.ccId,
+              }
             : undefined;
 
           const patientUser = edge.node.patientUser
             ? {
-              ...edge.node.patientUser,
-              clientId: edge.node.patient.id,
-              id: edge.node.patientUser.ccId,
-            }
+                ...edge.node.patientUser,
+                clientId: edge.node.patient.id,
+                id: edge.node.patientUser.ccId,
+              }
             : undefined;
 
           return {
@@ -104,18 +105,14 @@ export default function Waitlist(props) {
   );
 }
 
+Waitlist.defaultProps = {
+  selectedWaitSpots: [],
+  selectWaitSpot: () => {},
+};
+
 Waitlist.propTypes = {
-  waitSpots: PropTypes.instanceOf(Map),
-  patientUsers: PropTypes.instanceOf(Map),
-  patients: PropTypes.instanceOf(Map),
   removeWaitSpot: PropTypes.func.isRequired,
   openAddTo: PropTypes.func.isRequired,
   selectWaitSpot: PropTypes.func,
   selectedWaitSpots: PropTypes.arrayOf(PropTypes.string),
-};
-
-Waitlist.defaultProps = {
-  waitSpots: Map,
-  patientUsers: Map,
-  patients: Map,
 };

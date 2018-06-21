@@ -1,14 +1,16 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import moment from 'moment/moment';
 import omit from 'lodash/omit';
 import { reset } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { fetchEntitiesRequest } from '../../../../../thunks/fetchEntities';
 import { Form, FormSection, Field, Grid, Row, Col, Avatar, Icon } from '../../../../library/index';
-import styles from './styles.scss';
 import { Create as CreateWaitSpot } from '../../../../RelayWaitlist';
+import { isHub } from '../../../../../util/hub';
+import styles from './styles.scss';
 
 const autoStyles = {
   group: styles.groupStyle,
@@ -145,8 +147,9 @@ class AddToWaitlist extends Component {
         form={formName}
         onSubmit={this.handleCreateWaitSpot}
         initialValues={initialValues}
-        ignoreSaveButton
+        ignoreSaveButton={!isHub()}
         data-test-id={formName}
+        className={classNames({ [styles.responsiveFormWrapper]: isHub() })}
       >
         <Grid className={styles.addToContainer}>
           <Row className={styles.searchContainer}>

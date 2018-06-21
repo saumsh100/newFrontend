@@ -24,14 +24,14 @@ const register = accountId =>
       const proxyRoot = proxyStore.getRoot();
       const accountViewerProxy = proxyRoot.getLinkedRecord('accountViewer');
 
-      const waitSpotsConnection = ConnectionHandler.getConnection(
-        accountViewerProxy,
-        'AccountViewer_waitSpots'
-      );
-
-      if (!waitSpotsConnection) {
+      if (!accountViewerProxy) {
         return;
       }
+
+      const waitSpotsConnection = ConnectionHandler.getConnection(
+        accountViewerProxy,
+        'AccountViewer_waitSpots',
+      );
 
       ConnectionHandler.deleteNode(waitSpotsConnection, idToDelete);
     },
