@@ -30,7 +30,7 @@
 .activeItem {
   color: $primary-white !important;
   border-left: $selection-border $primary-color;
-  background-color: #41464c;
+  background-color: darken(#59616b, 5%);
 }
 
 .disabledItem {
@@ -142,5 +142,5 @@
 }
 
 .comingSoon {
-  fontSize: 1.2em;
+  fontsize: 1.2em;
 }

@@ -1,4 +1,3 @@
-
 @import '../../../../../ui.scss';
 
 @mixin setBgColorAndHover($baseColor) {
@@ -8,7 +7,13 @@
   }
 }
 
-$gray-color: #D3D2D3;
+$gray-color: #d3d2d3;
+
+.noBgButton {
+  background: inherit;
+  color: inherit;
+  transition: none;
+}
 
 .appointment {
   &__table {
@@ -100,7 +105,6 @@ $gray-color: #D3D2D3;
       border: 1px solid var(--primaryColor);
       font-family: $medium-font;
     }
-
   }
 }
 
@@ -306,7 +310,7 @@ $height: 30px;
   height: 30px;
   display: flex;
   align-items: center;
-  color: #C1D2D8;
+  color: #c1d2d8;
   > i {
     margin-left: 10px;
     font-size: 1.3em !important;

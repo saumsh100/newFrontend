@@ -34,7 +34,6 @@ xterm*
 screen-256color.ti
 server/public/assets/s
 .env
-rethinkdb_data/
 *.swp
 *.swo
 *.vim

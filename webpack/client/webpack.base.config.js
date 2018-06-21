@@ -1,7 +1,8 @@
 
-const cssnext = require('postcss-cssnext');
+const postcssPresetEnv = require('postcss-preset-env');
 const path = require('path');
 const { projectRoot } = require('../utils');
+
 const localIdentName = '[name]__[local]___[hash:base64:5]';
 
 module.exports = {
@@ -49,7 +50,7 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               plugins: () => [
-                cssnext({
+                postcssPresetEnv({
                   features: {
                     customProperties: false,
                   },
@@ -64,7 +65,7 @@ module.exports = {
               sourceMap: true,
             },
           },
-        ]
+        ],
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -91,7 +92,7 @@ module.exports = {
               minimize: true,
               localIdentName,
             },
-          }
+          },
         ],
         include: /flexboxgrid/,
       },

@@ -16,13 +16,13 @@ function NavList({
   unreadChats,
   onlineRequests,
 }) {
-  const { navItem, activeItem, label, activeLabel } = styles;
+  const { navItem, activeItem, activeLabel } = styles;
 
   const inactiveClass = navItem;
   const activeClass = classNames(navItem, activeItem);
 
-  const inactiveLabelClass = label;
-  const activeLabelClass = classNames(label, activeLabel);
+  const inactiveLabelClass = styles.label;
+  const activeLabelClass = classNames(styles.label, activeLabel);
 
   const SingleNavItem = ({
     path,
@@ -47,7 +47,7 @@ function NavList({
     }
 
     return (
-      <Link to={path} disabled={disabled}>
+      <Link to={path} disabled={disabled} href={path}>
         <NavItem className={classes}>
           <Icon icon={icon} className={styles.icon} size={1.5} type={iconType} badgeText={badge} />
           {labelComponent}
@@ -56,9 +56,26 @@ function NavList({
     );
   };
 
-  const MultiNavItem = ({ path, icon, label, children, iconType }) => {
-    const active = location.pathname.indexOf(path) === 0;
+  SingleNavItem.propTypes = {
+    label: PropTypes.string.isRequired,
+    active: PropTypes.bool,
+    disabled: PropTypes.bool,
+    iconType: PropTypes.string,
+    path: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    badge: PropTypes.number,
+  };
+  SingleNavItem.defaultProps = {
+    disabled: false,
+    badge: 0,
+    iconType: 'solid',
+    active: false,
+  };
 
+  const MultiNavItem = ({
+    path, icon, label, children, iconType,
+  }) => {
+    const active = location.pathname.indexOf(path) === 0;
     let content = null;
     if (active && !isCollapsed) {
       content = <ul className={styles.multiple_nav}>{children}</ul>;
@@ -72,6 +89,21 @@ function NavList({
     );
   };
 
+  MultiNavItem.propTypes = {
+    label: PropTypes.string.isRequired,
+    iconType: PropTypes.string,
+    path: PropTypes.string.isRequired,
+    icon: PropTypes.string.isRequired,
+    children: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.element),
+      PropTypes.objectOf(PropTypes.any),
+    ]).isRequired,
+  };
+
+  MultiNavItem.defaultProps = {
+    iconType: 'solid',
+  };
+
   const SubNavItem = ({ path, label, disabled }) => {
     const active = location.pathname.indexOf(path) === 0;
     let inactiveSubClass = styles.liSubNavItem;
@@ -82,18 +114,28 @@ function NavList({
     const activeSubClass = classNames(
       inactiveSubClass,
       styles.activeSubNavItem,
-      styles.multiple_nav__active
+      styles.multiple_nav__active,
     );
     const className = active ? activeSubClass : inactiveSubClass;
     return (
       <li className={styles.multiple_nav__item}>
         <div className={styles.multiple_nav__wrapper}>
-          <Link to={path} className={className} disabled={disabled}>
+          <Link to={path} className={className} disabled={disabled} href={path}>
             {label}
           </Link>
         </div>
       </li>
     );
+  };
+
+  SubNavItem.propTypes = {
+    label: PropTypes.string.isRequired,
+    disabled: PropTypes.bool,
+    path: PropTypes.string.isRequired,
+  };
+
+  SubNavItem.defaultProps = {
+    disabled: false,
   };
 
   const renderIf = (cond, render, alt) => (cond ? render() : (alt && alt()) || null);
@@ -109,13 +151,9 @@ function NavList({
         <SingleNavItem
           path="/"
           icon="tachometer"
-          label={renderIf(withEnterprise, () => 'Clinic Dashboard', () => 'Dashboard')}
+          label={renderIf(withEnterprise, () => 'Dashboard', () => 'Dashboard')}
         />
-        {/* <MultiNavItem path="/intelligence" icon="bar-chart" label="Practice Intelligence">
-          <SubNavItem path="/intelligence/overview" label="Overview" />
-          <SubNavItem path="/intelligence/business" label="Business" />
-          <SubNavItem path="/intelligence/social" label="Social" disabled/>
-        </MultiNavItem>*/}
+
         <SingleNavItem
           path="/schedule"
           icon="calendar-alt"
@@ -135,18 +173,11 @@ function NavList({
           <SingleNavItem path="/calls" icon="phone" label="Call Tracking" />
         </FeatureFlagWrapper>
 
-        {/* <SingleNavItem path="/social" icon="thumbs-up" label="Social Media" disabled />*/}
-
         <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing">
           <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
-        {/* <MultiNavItem path="/social" icon="thumbs-up" label="Social Media" disabled>
-          <SubNavItem path="/social/patient" label="Patient Posts" disabled/>
-          <SubNavItem path="/social/practice" label="Practice Posts" disabled/>
-        </MultiNavItem>
-        <SingleNavItem path="/newsletters" icon="envelope" label="Email Newsletters" disabled />
-        <SingleNavItem path="/website" icon="desktop" label="Website" disabled />*/}
+
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
           <SubNavItem path="/settings/practice" label="Practice" />
           <SubNavItem path="/settings/reasons" label="Reasons" />
@@ -167,20 +198,18 @@ function NavList({
 }
 
 NavList.propTypes = {
-  isCollapsed: PropTypes.bool,
+  isCollapsed: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool,
-  label: PropTypes.string,
-  active: PropTypes.bool,
-  disabled: PropTypes.bool,
-  iconType: PropTypes.string,
-  location: PropTypes.shape(PropTypes.string),
-  withEnterprise: PropTypes.bool,
+  withEnterprise: PropTypes.bool.isRequired,
   unreadChats: PropTypes.number,
   onlineRequests: PropTypes.number,
-  path: PropTypes.string,
-  icon: PropTypes.string,
-  children: PropTypes.element,
-  badge: PropTypes.bool,
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
+};
+
+NavList.defaultProps = {
+  isSuperAdmin: false,
+  unreadChats: 0,
+  onlineRequests: 0,
 };
 
 function mapStateToProps({ chat, entities }) {

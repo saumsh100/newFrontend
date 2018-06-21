@@ -5,6 +5,7 @@ import availabilityShape from './availabilityShape';
 import chairShape from './chairShape';
 import patientShape from './patient';
 import practitionerShape from './practitionerShape';
+import reminderShape from './reminderShape';
 import { weeklyScheduleShape, dayShape } from './weeklyScheduleShape';
 
 export {
@@ -15,5 +16,6 @@ export {
   dayShape,
   patientShape,
   practitionerShape,
+  reminderShape,
   weeklyScheduleShape,
 };

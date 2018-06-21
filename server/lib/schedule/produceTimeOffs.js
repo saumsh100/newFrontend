@@ -1,6 +1,5 @@
 
-import Moment from 'moment';
-import 'moment-timezone';
+import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 
 const moment = extendMoment(Moment);
@@ -43,7 +42,9 @@ export default function produceTimeOffs(recurringTimeOffs, startDate, endDate) {
     const start = moment(startDay);
     const end = moment(endDay);
 
-    const dayOfWeek = moment().day(recurringTimeOffs[i].dayOfWeek).isoWeekday();
+    const dayOfWeek = moment()
+      .day(recurringTimeOffs[i].dayOfWeek)
+      .isoWeekday();
 
     const tmpStart = start.clone().day(dayOfWeek);
     const tmpEnd = end.clone().day(dayOfWeek);
@@ -53,7 +54,6 @@ export default function produceTimeOffs(recurringTimeOffs, startDate, endDate) {
     // test for first day of the week (seeing if it comes before or after when we changed the day of the week)
 
     if (tmpStart.isAfter(start, 'd') || tmpStart.isSame(start, 'd')) {
-
       if (tmpStart.isAfter(startDate)) {
         fullTimeOffs.push({
           startDate: tmpStart.toISOString(),
@@ -70,7 +70,6 @@ export default function produceTimeOffs(recurringTimeOffs, startDate, endDate) {
       tmpEnd.add(7, 'days');
 
       if (tmpStart.isAfter(startDate)) {
-
         fullTimeOffs.push({
           startDate: tmpStart.toISOString(),
           endDate: tmpEnd.toISOString(),
@@ -85,7 +84,11 @@ export default function produceTimeOffs(recurringTimeOffs, startDate, endDate) {
 
     // loop through and create regular time offs until the end date of the requested avaliabilities
     while (tmpStart.isBefore(moment(recurringTimeOffs[i].endDate)) && tmpStart.isBefore(endDate)) {
-      if ((count % recurringTimeOffs[i].interval === 0) && (count >= recurringTimeOffs[i].interval) && moment(startDate).isBefore(tmpStart)) {
+      if (
+        count % recurringTimeOffs[i].interval === 0 &&
+        count >= recurringTimeOffs[i].interval &&
+        moment(startDate).isBefore(tmpStart)
+      ) {
         fullTimeOffs.push({
           startDate: tmpStart.toISOString(),
           endDate: tmpEnd.toISOString(),

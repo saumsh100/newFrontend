@@ -3,35 +3,42 @@
 This repository is for all code necessary to the CareCru Platform but not including the CareCru Connector.
 
 ##### Backend
+
 NodeJS, ExpressJS, PassportJS, PostgreSQL (Sequelize ORM)
 
 ##### Frontend
+
 React, Redux, CSS Modules w/ SASS
 
 ## Install
 
-1. Install Postgres if not already installed (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04).
-2. Use node and npm versions in package.json file, install them if not already installed. To do so, use
-Node Version Manager (https://github.com/creationix/nvm).
-3. Install Redis if not already installed (https://redis.io/)
-4. Clone the Repository: `git clone git@github.com:carecru/carecru.git`
-5. Navigate into root directory: `cd carecru`
-6. Install node modules: `npm install`
-7. Install postgres and setup sequelize (Info at the bottom)
+1.  Install Postgres if not already installed (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04).
+2.  Use node and npm versions in package.json file, install them if not already installed. To do so, use
+    Node Version Manager (https://github.com/creationix/nvm).
+3.  Install Redis if not already installed (https://redis.io/)
+4.  Clone the Repository: `git clone git@github.com:carecru/carecru.git`
+5.  Navigate into root directory: `cd carecru`
+6.  Install node modules: `npm install`
+7.  Install postgres and setup sequelize (Info at the bottom)
 
 ### Installation on Windows 10 (work in progress)
+
 Run all commands PowerShell as admin:
 
 clone the repo:
+
 - git clone <repo url>
 
 install node-gyp globally
+
 - npm install -g node-gyp
 
 installs MS build tools, python, sets PATH correctly for builds
+
 - npm install --g --production windows-build-tools
 
 go into project dir and try bcrypt - it's the one that files due to incorrect build tools setup
+
 - cd carecru
 - npm install bcrypt
 
@@ -39,10 +46,9 @@ If there are problems with build and you are changing order of installation, bui
 
 ## Database Setup
 
-1. Start up PostgreSQL in background (use brew if using mac, see the guide above)
-2. Seed the database with development data: `npm run rebuild:seed`
-> **Note:**
-> `npm run rebuild:seed` can be re-run whenever a fresh DB is needed
+1.  Start up PostgreSQL in background (use brew if using mac, see the guide above)
+2.  Seed the database with development data: `npm run rebuild:seed`
+    > **Note:** > `npm run rebuild:seed` can be re-run whenever a fresh DB is needed
 
 ## Redis Setup
 
@@ -63,16 +69,19 @@ vim ~/.profile
 ```
 
 Add to file
+
 ```
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 ```
 
 Start RabbitMQ
+
 ```
 rabbitmq-server
 ```
 
 Stop RabbitMQ
+
 ```
 rabbitmqctl stop
 ```
@@ -86,20 +95,21 @@ Contact the repo admin to acquire the `.env` file.
 
 ## Run
 
-1. If not already running, start up RethinkDB: `rethinkdb`
-2. In a separate tab: `npm start`
-3. Navigate to `localhost:5000` to see application running
-4. Add the following subdomains to your `/etc/hosts` file:
+1.  In a separate tab: `npm start`
+2.  Navigate to `localhost:5000` to see application running
+3.  Add the following subdomains to your `/etc/hosts` file:
+
 ```
 127.0.0.1           care.cru
 127.0.0.1        my.care.cru
 127.0.0.1       api.care.cru
 ```
+
 > **Note:**
 > For purposes of testing and effective development, please continue this README to run the build-tools, and use localhost:5100 instead of localhost:5000.
 
-
 ## Build Tools
+
 ### Front-end
 
 Run the following command in a separate tab, to see changes on the fly:
@@ -119,10 +129,10 @@ Relay needs the graphQL queries to be compiled before sent to the server. After 
 `npm run relay`
 
 Alternatively, you can pass the `--watch` option to watch for file changes in your source code and automatically re-generate the compiled artifacts:
->Note: Requires [watchman](https://facebook.github.io/watchman/) to be installed
+
+> Note: Requires [watchman](https://facebook.github.io/watchman/) to be installed
 
 `npm run relay -- --watch`
-
 
 ### Back-end
 
@@ -139,7 +149,8 @@ Everytime a change is made to the GraphQL Schema a new static json representatio
 `npm run update-schema`
 
 ### Running on custom `host:port`
-By default `npm start` will run the Node server on `localhost:5000`. Webpack then starts a proxy server that will run on `localhost:5100`, which is the address that we ultimately connect to.  However, it is possible to run both Webpack server and Node server on a different localhost:port. Changing Node's server host and port is not really needed, but if you run a VM or want to expose the Carecru application on your local network, you can use environment variables to set the host and port for Webpack. `npm` spins up Webpack in a new shell, so it does not care for `.env` file that the Node server sources. Hence, you can't put these vars in there. It has a global environment and environment vars that were part of the start command. Long story short, to set the host and port for Webpack, put the following into your `$HOME/.profile` file (or another bash file that is sourced when a login shell is created).
+
+By default `npm start` will run the Node server on `localhost:5000`. Webpack then starts a proxy server that will run on `localhost:5100`, which is the address that we ultimately connect to. However, it is possible to run both Webpack server and Node server on a different localhost:port. Changing Node's server host and port is not really needed, but if you run a VM or want to expose the Carecru application on your local network, you can use environment variables to set the host and port for Webpack. `npm` spins up Webpack in a new shell, so it does not care for `.env` file that the Node server sources. Hence, you can't put these vars in there. It has a global environment and environment vars that were part of the start command. Long story short, to set the host and port for Webpack, put the following into your `$HOME/.profile` file (or another bash file that is sourced when a login shell is created).
 
 ```
 export SERVER_HOST="localhost"
@@ -153,11 +164,14 @@ If you use `carecru.dev` for the proxy host in the code above, make sure that it
 If no environment variables are provided, then Node server defaults to `localhost:5000` and Webpack defaults to `localhost:5100`.
 
 #### Optional
+
 If you use tmux you can run `sh scripts/run-server.sh`. This will spin up 3 panes with the Node server and two Webpack processes in those panes.
 
 ## Running Tests
+
 Before running Cypress E2E tests, please restart the server with the following command:
 `NODE_ENV="test" npm run start dev`
+
 > **Note:**
 > You can use this command instead of `npm start` when developing.
 > Each time you run the Cypress test suite, the test database is re-seeded. Cypress runs this command: `NODE_ENV="test" npm run seeds`
@@ -176,11 +190,6 @@ To run server jest tests only:
 To view pull-request app on Heroku domain for it is created as follows:
 https://carecru-staging-pr-[PR_NUMBER].herokuapp.com
 
-
-## Useful notes
-
-This will run it in the background as daemon process so you won't need to keep a terminal window for it. To kill it use your systems task manager or run `pkill rethinkdb` and then check that it's killed `ps -ef | grep rethinkdb`. However, you should not need to do this often.
-
 ### Sequelize/Postgres
 
 Run `npm install` to install sequelize and other libraries for postgres
@@ -197,12 +206,15 @@ POSTGRESQL_DATABASE="database-name-you-created"
 ```
 
 install sequelize-cli (https://github.com/sequelize/cli)
+
 ```
 npm install sequelize-cli
 ```
+
 You can install it also as a global module, but then change package.json for `rebuild` command
 
 To get info about commands type
+
 ```
 sequelize help
 ```
@@ -218,6 +230,7 @@ To see example usage in route, go to `server/api/routes/segment/index.js`
 NOTE: I haven't added migrations
 
 ##### Rebuild/Seed database
+
 To rebuild database schemas just type
 
 ```
@@ -225,5 +238,6 @@ npm run rebuild
 ```
 
 ##### Adding new model
+
 You will find inside of `server/_models/index.js` file a line `models.push((require('./Segment').default(sequelize, Sequelize)));`
 This line represent importing of a single model into the code. Just repeat that for all models.

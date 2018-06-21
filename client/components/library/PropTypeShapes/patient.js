@@ -13,14 +13,12 @@ const PatientShape = {
   firstApptId: PropTypes.string,
   firstName: PropTypes.string,
   gender: PropTypes.string,
-  homePhoneNumber: PropTypes.number,
+  homePhoneNumber: PropTypes.string,
   id: PropTypes.string,
-  insurance: PropTypes.objectOf(
-    PropTypes.shape({
-      type: PropTypes.string,
-      defaultValue: PropTypes.objectOf(PropTypes.bool),
-    })
-  ),
+  insurance: PropTypes.objectOf(PropTypes.shape({
+    type: PropTypes.string,
+    defaultValue: PropTypes.objectOf(PropTypes.bool),
+  })),
   insuranceInterval: PropTypes.string,
   isDeleted: PropTypes.bool,
   isFetching: PropTypes.bool,
@@ -40,18 +38,16 @@ const PatientShape = {
   mobilePhoneNumber: PropTypes.string,
   nextApptDate: PropTypes.string,
   nextApptId: PropTypes.string,
-  otherPhoneNumber: PropTypes.number,
+  otherPhoneNumber: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   patientId: PropTypes.string,
   patientUserId: PropTypes.string,
   photo: PropTypes.string,
   preferences: PropTypes.oneOfType([
     PropTypes.objectOf(PropTypes.bool),
-    PropTypes.objectOf(
-      PropTypes.shape({
-        type: PropTypes.string,
-        defaultValue: PropTypes.objectOf(PropTypes.bool),
-      })
-    ),
+    PropTypes.objectOf(PropTypes.shape({
+      type: PropTypes.string,
+      defaultValue: PropTypes.objectOf(PropTypes.bool),
+    })),
   ]),
   preferredPhoneNumber: PropTypes.number,
   status: PropTypes.string,

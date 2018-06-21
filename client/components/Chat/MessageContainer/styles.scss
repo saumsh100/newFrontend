@@ -55,6 +55,9 @@
 
 .markUnreadButton {
   cursor: pointer;
+  background-color: transparent;
+  color: $primary-white;
+  padding: 0;
 }
 
 .sharedMessage {

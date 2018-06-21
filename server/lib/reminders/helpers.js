@@ -1,6 +1,5 @@
 
-import moment from 'moment';
-import 'moment-timezone';
+import moment from 'moment-timezone';
 import uniqWith from 'lodash/uniqWith';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';

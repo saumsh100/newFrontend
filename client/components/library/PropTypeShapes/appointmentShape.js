@@ -5,7 +5,7 @@ const appointmentShape = {
   accountId: PropTypes.string,
   chairId: PropTypes.string,
   createdAt: PropTypes.string,
-  customBufferTime: PropTypes.string,
+  customBufferTime: PropTypes.number,
   deletedAt: PropTypes.string,
   endDate: PropTypes.string,
   estimatedRevenue: PropTypes.string,

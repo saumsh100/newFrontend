@@ -1,9 +1,9 @@
 
-import Moment from 'moment';
-import 'moment-timezone';
+import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import { getRangeOfDays } from '../../util/time';
 import mapValues from 'lodash/mapValues';
+
 const moment = extendMoment(Moment);
 
 /**
@@ -58,7 +58,10 @@ export default function modifyDailySchedulesWithTimeoffs(dailySchedules, timeOff
         if (timeOff.allDay) {
           dailySchedule.isClosed = true;
         } else {
-          const scheduleRange = moment.range(moment(dailySchedule.startTime), moment(dailySchedule.endTime));
+          const scheduleRange = moment.range(
+            moment(dailySchedule.startTime),
+            moment(dailySchedule.endTime),
+          );
           const isStartDateBetweenSchedule = scheduleRange.contains(moment(tstart));
           const isEndDateBetweenSchedule = scheduleRange.contains(moment(tend));
           const isStartDateBeforeStartTime = moment(tstart).isBefore(dailySchedule.startTime);

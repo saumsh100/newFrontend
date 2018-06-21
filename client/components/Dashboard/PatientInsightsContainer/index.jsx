@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Card } from '../../library';
@@ -33,8 +34,7 @@ class PatientInsightsContainer extends Component {
   render() {
     const { insights, appointments, patients } = this.props;
 
-    const allFetched =
-      !this.props.loadingInsights && this.props.dashAppointmentsFetched && appointments && patients;
+    const allFetched = !this.props.loadingInsights && this.props.dashAppointmentsFetched;
 
     return (
       <Card className={styles.card} runAnimation loaded={allFetched}>
@@ -59,8 +59,17 @@ PatientInsightsContainer.propTypes = {
   appointments: PropTypes.instanceOf(Map),
   patients: PropTypes.instanceOf(Map),
   insightCount: PropTypes.number,
-  fetchInsights: PropTypes.func,
-  dashboardDate: PropTypes.string,
+  fetchInsights: PropTypes.func.isRequired,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+};
+
+PatientInsightsContainer.defaultProps = {
+  insights: [],
+  loadingInsights: false,
+  dashAppointmentsFetched: false,
+  appointments: Map,
+  patients: Map,
+  insightCount: 0,
 };
 
 function mapStateToProps({ apiRequests, dashboard, entities }) {
@@ -71,9 +80,8 @@ function mapStateToProps({ apiRequests, dashboard, entities }) {
   const insights = dash.insights;
   const insightCount = dash.insightCount;
 
-  const dashAppointmentsFetched = apiRequests.get('dashAppointments')
-    ? apiRequests.get('dashAppointments').wasFetched
-    : null;
+  const dashAppointmentsFetched =
+    apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
 
   const appointments = entities.getIn(['appointments', 'models']);
   const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
@@ -98,10 +106,11 @@ function mapDispatchToProps(dispatch) {
       fetchEntitiesRequest,
       fetchInsights,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(PatientInsightsContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInsightsContainer);

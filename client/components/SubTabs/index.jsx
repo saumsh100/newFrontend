@@ -13,7 +13,7 @@ const ROUTES = {
       to: '/schedule/appointments',
       label: 'Appointments List',
       disabled: true,
-    },*/
+    }, */
   ],
 
   '/settings': [
@@ -48,7 +48,7 @@ const ROUTES = {
       to: '/intelligence/social',
       label: 'Social',
       disabled: true,
-    },*/
+    }, */
   ],
 
   '/reputation': [
@@ -92,20 +92,17 @@ class SubTabs extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      index: 0,
-    };
-
     this.handleTabChange = this.handleTabChange.bind(this);
   }
 
   handleTabChange(index) {
     alert(`Changing to tab ${index}`);
-    this.setState({ index });
   }
 
   render() {
-    const { location: { pathname } } = this.props;
+    const {
+      location: { pathname },
+    } = this.props;
     const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
     return activeRoute ? <RouterTabs routes={ROUTES[activeRoute]} /> : null;
@@ -113,7 +110,7 @@ class SubTabs extends Component {
 }
 
 SubTabs.propTypes = {
-  location: PropTypes.shape(PropTypes.string),
+  location: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default SubTabs;

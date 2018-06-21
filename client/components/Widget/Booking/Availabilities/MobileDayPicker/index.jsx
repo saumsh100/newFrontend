@@ -1,25 +1,15 @@
 
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
-import moment from 'moment';
-import 'moment-timezone';
-import classNames from 'classnames';
-import {
-  Grid,
-  Row,
-  Col,
-  IconButton,
-  Button,
-  DayPicker,
-} from '../../../../library';
+import moment from 'moment-timezone';
+import { Grid, Row, Col, IconButton, DayPicker } from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
+import { accountShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
 function generateIsDisabledDay(currentDate) {
-  return date =>
-    moment(date).isBefore(currentDate);
+  return date => moment(date).isBefore(currentDate);
 }
 
 class MobileDayPicker extends Component {
@@ -32,13 +22,17 @@ class MobileDayPicker extends Component {
   }
 
   oneDayBackward() {
-    const newStartDate = moment(this.props.selectedStartDate).subtract(1, 'days').toISOString();
+    const newStartDate = moment(this.props.selectedStartDate)
+      .subtract(1, 'days')
+      .toISOString();
     this.props.setIsFetching(true);
     this.props.setSelectedStartDate(newStartDate);
   }
 
   oneDayForward() {
-    const newStartDate = moment(this.props.selectedStartDate).add(1, 'days').toISOString();
+    const newStartDate = moment(this.props.selectedStartDate)
+      .add(1, 'days')
+      .toISOString();
     this.props.setIsFetching(true);
     this.props.setSelectedStartDate(newStartDate);
   }
@@ -49,11 +43,7 @@ class MobileDayPicker extends Component {
   }
 
   render() {
-    const {
-      selectedStartDate,
-      floorDate,
-      account,
-    } = this.props;
+    const { selectedStartDate, floorDate, account } = this.props;
 
     // TODO: do we need to do anything with this?
     const accountTimezone = account.timezone;
@@ -70,25 +60,20 @@ class MobileDayPicker extends Component {
       dayString = 'Tomorrow';
     }
 
-    const dateTarget = (props) => (
-      <div
-        {...props}
-      >
-        {`${dayString}, ${mDate.format('MMM Do')}`}
-      </div>
-    );
+    const dateTarget = props => <div {...props}>{`${dayString}, ${mDate.format('MMM Do')}`}</div>;
 
     return (
       <Grid className={styles.wrapper}>
         <Row>
           <Col xs={1}>
-            {canGoBack ?
+            {canGoBack && (
               <IconButton
                 className={styles.caretButton}
                 icon="caret-left"
                 iconType="solid"
                 onClick={() => this.oneDayBackward()}
-              /> : null}
+              />
+            )}
           </Col>
           <Col xs={10} className={styles.date}>
             <DayPicker
@@ -118,13 +103,6 @@ class MobileDayPicker extends Component {
   // TODO: break out the availabilities component into columns and lists
 }
 
-MobileDayPicker.propTypes = {
-  selectedStartDate: PropTypes.string.isRequired,
-  floorDate: PropTypes.string.isRequired,
-  account: PropTypes.object,
-  setSelectedStartDate: PropTypes.func.isRequired,
-};
-
 function mapStateToProps({ availabilities }) {
   const account = availabilities.get('account').toJS();
   return {
@@ -134,12 +112,25 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setSelectedStartDate: Actions.setSelectedStartDate,
-    setIsFetching: Actions.setIsFetching,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setSelectedStartDate: Actions.setSelectedStartDate,
+      setIsFetching: Actions.setIsFetching,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MobileDayPicker);
+MobileDayPicker.propTypes = {
+  selectedStartDate: PropTypes.string.isRequired,
+  floorDate: PropTypes.string.isRequired,
+  account: PropTypes.shape(accountShape).isRequired,
+  setIsFetching: PropTypes.func.isRequired,
+  setSelectedStartDate: PropTypes.func.isRequired,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MobileDayPicker);

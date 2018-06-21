@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Line } from 'react-chartjs-2';
 import colorMap from '../../../library/util/colorMap';
 import styles from './styles.scss';
@@ -15,7 +14,7 @@ const generateChartOptions = () => {
     autoSkip: true,
     beginAtZero: true,
     padding: 20,
-    callback(value, index) {
+    callback(value) {
       if (
         typeof value === 'number' &&
         value % 1000 === 0 &&
@@ -27,6 +26,7 @@ const generateChartOptions = () => {
       if (typeof value !== 'number' || value === 0) {
         return value;
       }
+      return '';
     },
   };
 
@@ -67,13 +67,13 @@ const generateChartOptions = () => {
     fontFamily: 'Gotham-Book',
     fontSize: 10,
     callbacks: {
-      title: (tooltipItem, data) => {
+      title: (tooltipItem) => {
         const month = tooltipItem[0].xLabel[0];
         const day = tooltipItem[0].xLabel[1];
 
         return `${month} ${day}`;
       },
-      label: (tooltipItem, data) => `$${tooltipItem.yLabel}`,
+      label: tooltipItem => `$${tooltipItem.yLabel}`,
     },
   };
 
@@ -129,7 +129,11 @@ export default function RevenueChart(props) {
 }
 
 RevenueChart.propTypes = {
-  labels: PropTypes.instanceOf(Array),
-  data: PropTypes.instanceOf(Array),
-  isValid: PropTypes.bool,
+  labels: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
+  data: PropTypes.arrayOf(PropTypes.number).isRequired,
+  isValid: PropTypes.number,
+};
+
+RevenueChart.defaultProps = {
+  isValid: 0,
 };

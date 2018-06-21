@@ -22,7 +22,8 @@ export const sendConfirmationReminder = (config) => {
   return exports.sendTemplate(config);
 };
 
-export const sendTestEmailTemplate = (config) => {   // This function is used only for testing
+export const sendTestEmailTemplate = (config) => {
+  // This function is used only for testing
   config.subject = 'Exciting New Updates';
   config.templateName = 'General Introduction Announcement';
   return exports.sendTemplate(config);
@@ -100,13 +101,11 @@ export const sendMassOnlineBookingIntro = (config) => {
   return exports.sendTemplate(config);
 };
 
-export const sendMassGeneralIntroAnnouncement = (config) => {
-  return exports.sendTemplate({
-    ...config,
-    subject: 'Introducing Online Scheduling',
-    templateName: 'General Introduction Announcement',
-  });
-};
+export const sendMassGeneralIntroAnnouncement = config => exports.sendTemplate({
+  ...config,
+  subject: 'Introducing Online Scheduling',
+  templateName: 'General Introduction Announcement',
+});
 
 /**
  * sendTemplate is used as a normilzation and promise wrapper for sending emails
@@ -117,7 +116,9 @@ export const sendMassGeneralIntroAnnouncement = (config) => {
 export function sendTemplate(config) {
   const accountString = config.accountId ? `:${config.accountId}` : '';
   const string = config.email + accountString;
-  const encoded = config.patientId ? new Buffer(config.patientId).toString('base64') : new Buffer(string).toString('base64');
+  const encoded = config.patientId
+    ? new Buffer(config.patientId).toString('base64')
+    : new Buffer(string).toString('base64');
   const unsubContent = `${protocol}://${myHost}/unsubscribe/${encoded}`;
   const defaultMergeVars = [
     {
@@ -148,47 +149,53 @@ export function sendTemplate(config) {
       return resolve({});
     }
 
-    mandrill.messages.sendTemplate({
-      template_name: templateName,
+    mandrill.messages.sendTemplate(
+      {
+        template_name: templateName,
 
-      // TODO: why is this needed?
-      template_content: [{
-        name: 'example name',
-        content: 'example content',
-      }],
+        // TODO: why is this needed?
+        template_content: [
+          {
+            name: 'example name',
+            content: 'example content',
+          },
+        ],
 
-      // Message Data
-      message: {
-        from: from,
-        subject: subject,
-        from_email: from,
-        from_name: fromName,
-        to: [{
-          email: toEmail,
-          type: 'to',
-        }],
+        // Message Data
+        message: {
+          from,
+          subject,
+          from_email: from,
+          from_name: fromName,
+          to: [
+            {
+              email: toEmail,
+              type: 'to',
+            },
+          ],
 
-        headers: {
-          'Reply-To': replyTo,
+          headers: {
+            'Reply-To': replyTo,
+          },
+
+          global_merge_vars: mergeVars.concat(defaultMergeVars),
+          attachments,
         },
-
-        global_merge_vars: mergeVars.concat(defaultMergeVars),
-        attachments,
       },
-    },
 
-    // Success Callback
-    (result) => {
-      resolve(result);
-    },
+      // Success Callback
+      (result) => {
+        resolve(result);
+      },
 
-    // Error Callback
-    (err) => {
-      if (err) {
-        console.error(`Mandrill Error: ${err}`) ;
-        reject(err);
-      }
-    });
+      // Error Callback
+      (err) => {
+        if (err) {
+          console.error(`Mandrill Error: ${err}`);
+          reject(err);
+        }
+      },
+    );
   });
 }
 
@@ -200,28 +207,33 @@ export function sendTemplate(config) {
 export function renderTemplate(config) {
   const { mergeVars = [], templateName } = config;
   return new Promise((resolve, reject) => {
-    mandrill.templates.render({
-      template_name: templateName,
-      template_content: [{
-        name: 'example name',
-        content: 'example content',
-      }],
+    mandrill.templates.render(
+      {
+        template_name: templateName,
+        template_content: [
+          {
+            name: 'example name',
+            content: 'example content',
+          },
+        ],
 
-      merge_vars: mergeVars,
-    },
+        merge_vars: mergeVars,
+      },
 
-    ({ html }) => {
-      resolve(html);
-    },
+      ({ html }) => {
+        resolve(html);
+      },
 
-    (err) => {
-      reject(err);
-    });
+      (err) => {
+        reject(err);
+      },
+    );
   });
 }
 
 export function generateClinicMergeVars({ patient, account }) {
-  const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+  const accountLogoUrl =
+    typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
   return [
     // Patient Variables
     {
@@ -248,6 +260,10 @@ export function generateClinicMergeVars({ patient, account }) {
     },
     {
       name: 'ACCOUNT_TWILIONUMBER',
+      content: account.twilioPhoneNumber,
+    },
+    {
+      name: 'ACCOUNT_TWILIONUMBER_FORMATTED',
       content: formatPhoneNumber(account.twilioPhoneNumber),
     },
     {

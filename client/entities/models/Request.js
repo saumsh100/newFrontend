@@ -16,6 +16,7 @@ const RequestsSchema = {
   note: null,
   insuranceCarrier: null,
   insuranceMemberId: null,
+  insuranceGroupId: null,
   isConfirmed: null,
   isCancelled: null,
   sentRecallId: null,

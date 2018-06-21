@@ -1,6 +1,5 @@
 
-import moment from 'moment';
-import 'moment-timezone';
+import moment from 'moment-timezone';
 import { Appointment, DeliveredProcedure, WeeklySchedule, Account, sequelize } from '../../_models';
 
 /**
@@ -15,41 +14,48 @@ import { Appointment, DeliveredProcedure, WeeklySchedule, Account, sequelize } f
 export async function calcRevenueDays(revParams) {
   try {
     const {
-      date,
-      pastDaysLimit,
-      maxDates,
-      accountId,
+      date, pastDaysLimit, maxDates, accountId,
     } = revParams;
 
     const accountData = await Account.findOne({
       where: {
         id: accountId,
       },
-      include: [{
-        model: WeeklySchedule,
-        as: 'weeklySchedule',
-      }],
+      include: [
+        {
+          model: WeeklySchedule,
+          as: 'weeklySchedule',
+        },
+      ],
       nest: true,
       raw: true,
     });
 
     const timeZone = accountData.timezone || 'America/Vancouver';
 
-    const selectedDate = moment.tz(date, timeZone).endOf('day').toISOString();
+    const selectedDate = moment
+      .tz(date, timeZone)
+      .endOf('day')
+      .toISOString();
     const dateRangeInt = pastDaysLimit;
 
     const weeklySchedule = accountData.weeklySchedule;
 
     const closedDates = getClosedClinicDates(weeklySchedule, selectedDate, dateRangeInt, timeZone);
 
-    const totalRevObj =
-      await getAllDatesWithAppointments(selectedDate, closedDates, dateRangeInt, maxDates, accountId, timeZone);
+    const totalRevObj = await getAllDatesWithAppointments(
+      selectedDate,
+      closedDates,
+      dateRangeInt,
+      maxDates,
+      accountId,
+      timeZone,
+    );
 
-    const {
-      datesAfter,
-      datesBefore,
-      dateBetween,
-    } = getBeforeAfterTodayDates(totalRevObj, timeZone);
+    const { datesAfter, datesBefore, dateBetween } = getBeforeAfterTodayDates(
+      totalRevObj,
+      timeZone,
+    );
 
     if (datesAfter.length) {
       const sDateAfter = datesAfter[datesAfter.length - 1];
@@ -63,8 +69,16 @@ export async function calcRevenueDays(revParams) {
           isPending: false,
           isDeleted: false,
           startDate: {
-            $between: [moment.tz(sDateAfter,timeZone).startOf('day').toISOString(),
-              moment.tz(eDateAfter,timeZone).endOf('day').toISOString()],
+            $between: [
+              moment
+                .tz(sDateAfter, timeZone)
+                .startOf('day')
+                .toISOString(),
+              moment
+                .tz(eDateAfter, timeZone)
+                .endOf('day')
+                .toISOString(),
+            ],
           },
           estimatedRevenue: {
             $not: null,
@@ -72,7 +86,13 @@ export async function calcRevenueDays(revParams) {
         },
       });
 
-      sumEstimatedProcedureRevenue(appointments, 'startDate', totalRevObj, 'estimatedRevenue', timeZone);
+      sumEstimatedProcedureRevenue(
+        appointments,
+        'startDate',
+        totalRevObj,
+        'estimatedRevenue',
+        timeZone,
+      );
     }
 
     if (datesBefore.length) {
@@ -84,8 +104,16 @@ export async function calcRevenueDays(revParams) {
         where: {
           accountId,
           entryDate: {
-            $between: [moment.tz(sDateBefore, timeZone).startOf('day').toISOString(),
-              moment.tz(eDateBefore, timeZone).endOf('day').toISOString()],
+            $between: [
+              moment
+                .tz(sDateBefore, timeZone)
+                .startOf('day')
+                .toISOString(),
+              moment
+                .tz(eDateBefore, timeZone)
+                .endOf('day')
+                .toISOString(),
+            ],
           },
           isCompleted: true,
         },
@@ -96,7 +124,13 @@ export async function calcRevenueDays(revParams) {
         ],
       });
 
-      sumEstimatedProcedureRevenue(deliveredProc, 'entryDate', totalRevObj, 'totalRevenue', timeZone);
+      sumEstimatedProcedureRevenue(
+        deliveredProc,
+        'entryDate',
+        totalRevObj,
+        'totalRevenue',
+        timeZone,
+      );
     }
 
     if (dateBetween.length) {
@@ -105,7 +139,15 @@ export async function calcRevenueDays(revParams) {
         where: {
           accountId,
           entryDate: {
-            $between: [moment().tz(timeZone).startOf('day').toISOString(), moment().tz(timeZone).toISOString()],
+            $between: [
+              moment()
+                .tz(timeZone)
+                .startOf('day')
+                .toISOString(),
+              moment()
+                .tz(timeZone)
+                .toISOString(),
+            ],
           },
           isCompleted: true,
         },
@@ -124,7 +166,15 @@ export async function calcRevenueDays(revParams) {
           isPending: false,
           isDeleted: false,
           startDate: {
-            $between: [moment().tz(timeZone).toISOString(), moment().tz(timeZone).endOf('day').toISOString()],
+            $between: [
+              moment()
+                .tz(timeZone)
+                .toISOString(),
+              moment()
+                .tz(timeZone)
+                .endOf('day')
+                .toISOString(),
+            ],
           },
           estimatedRevenue: {
             $not: null,
@@ -192,8 +242,18 @@ function getBeforeAfterTodayDates(dateObj, timeZone) {
   dateObjKeys.forEach((date) => {
     const subDate = moment.tz(date, timeZone);
     const isBefore = subDate.isBefore(moment().tz(timeZone));
-    const isBetween = (subDate.isBetween(moment().tz(timeZone).startOf('day'), moment().tz(timeZone).endOf('day')) ||
-      subDate.isSame(moment().tz(timeZone).endOf('day')));
+    const isBetween =
+      subDate.isBetween(
+        moment()
+          .tz(timeZone)
+          .startOf('day'),
+        moment()
+          .tz(timeZone)
+          .endOf('day'),
+      ) ||
+      subDate.isSame(moment()
+        .tz(timeZone)
+        .endOf('day'));
 
     const isAfter = subDate.isAfter(moment().tz(timeZone));
 
@@ -222,15 +282,30 @@ function getBeforeAfterTodayDates(dateObj, timeZone) {
  * between a date range
  *
  */
-async function getAllDatesWithAppointments(selectedDate, closedDates, dateRangeInt, limit, accountId, timeZone) {
+async function getAllDatesWithAppointments(
+  selectedDate,
+  closedDates,
+  dateRangeInt,
+  limit,
+  accountId,
+  timeZone,
+) {
   const appointments = await Appointment.findAll({
     where: {
       accountId,
       $and: [
         {
           startDate: {
-            $between: [moment.tz(selectedDate, timeZone).subtract(dateRangeInt, 'days').toISOString(),
-              moment.tz(selectedDate,timeZone).endOf('day').toISOString()],
+            $between: [
+              moment
+                .tz(selectedDate, timeZone)
+                .subtract(dateRangeInt, 'days')
+                .toISOString(),
+              moment
+                .tz(selectedDate, timeZone)
+                .endOf('day')
+                .toISOString(),
+            ],
           },
         },
         {
@@ -255,7 +330,10 @@ async function getAllDatesWithAppointments(selectedDate, closedDates, dateRangeI
 
   while (countDates < limit && i < appointments.length) {
     const app = appointments[i];
-    const startDate = moment.tz(app.startDate, timeZone).endOf('day').toISOString();
+    const startDate = moment
+      .tz(app.startDate, timeZone)
+      .endOf('day')
+      .toISOString();
 
     if (!(startDate in appointmentObj)) {
       appointmentObj[startDate] = 0;
@@ -277,14 +355,17 @@ function calculateAverage(dateObj) {
       total += dateObj[entry];
     });
 
-    return total / (entries.length);
+    return total / entries.length;
   }
   return 0;
 }
 
 function sumEstimatedProcedureRevenue(entities, dateType, totalRevObj, entityField, timeZone) {
   entities.map((entity) => {
-    const date = moment.tz(entity[dateType],timeZone).endOf('day').toISOString();
+    const date = moment
+      .tz(entity[dateType], timeZone)
+      .endOf('day')
+      .toISOString();
     if (date in totalRevObj) {
       totalRevObj[date] += entity[entityField];
     }

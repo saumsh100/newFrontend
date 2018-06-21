@@ -3,10 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { createMemoryHistory } from 'history';
-import moment from 'moment';
 import { extendMoment } from 'moment-range';
-import 'moment-timezone';
-import 'moment-interval';
+import moment from 'moment-timezone';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
@@ -135,7 +133,7 @@ load()(store.dispatch).then(() => {
       <AppContainer>
         <Component {...appProps} />
       </AppContainer>,
-      document.getElementById('root')
+      document.getElementById('root'),
     );
   };
 

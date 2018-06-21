@@ -4,10 +4,11 @@ import { omit } from 'lodash';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import styles from './styles.scss';
-import baseStyles from '../../../styles/default.scss';
 
 export default function Card(props) {
-  const { children, className, noBorder, runAnimation, loaded, loaderStyle } = props;
+  const {
+    children, className, noBorder, runAnimation, loaded, loaderStyle,
+  } = props;
 
   let classes = classNames(className, styles.card);
   const loadBarClass = classNames(loaderStyle, styles.loadBar);
@@ -16,7 +17,7 @@ export default function Card(props) {
     classes = classNames(classes, styles.noBorder);
   }
 
-  const newProps = omit(props, ['noBorder', 'className', 'runAnimation', 'loaded']);
+  const newProps = omit(props, ['noBorder', 'className', 'runAnimation', 'loaded', 'loaderStyle']);
   return (
     // Order is important, classNames={classes} needs to override props.className
     <div {...newProps} className={classes}>
@@ -36,4 +37,16 @@ Card.propTypes = {
   noBorder: PropTypes.bool,
   className: PropTypes.string,
   children: PropTypes.node,
+  runAnimation: PropTypes.bool,
+  loaded: PropTypes.bool,
+  loaderStyle: PropTypes.string,
+};
+
+Card.defaultProps = {
+  noBorder: false,
+  className: '',
+  runAnimation: false,
+  loaded: false,
+  loaderStyle: '',
+  children: null,
 };

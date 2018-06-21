@@ -171,12 +171,6 @@ export default function connectSocketToStoreLogin(store, socket) {
       socket.on('syncClientError', () => {});
 
       socket.on('syncFinished', (data) => {
-        const alert = {
-          title: 'Sync update',
-          body: 'Sync finished',
-        };
-
-        // dispatch(showAlertTimeout({ alert, type: 'success' }));
         dispatch(setSyncingWithPMS({ isSyncing: false }));
         dispatch(updateEntity({ key: 'accounts', entity: data }));
       });

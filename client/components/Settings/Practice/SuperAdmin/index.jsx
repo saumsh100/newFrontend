@@ -57,7 +57,11 @@ class SuperAdmin extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
+    this.props.updateEntityRequest({
+      key: 'accounts',
+      model: modifiedAccount,
+      alert,
+    });
   }
 
   sendEmailBlast() {
@@ -316,6 +320,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
-
-export default enhance(SuperAdmin);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SuperAdmin);

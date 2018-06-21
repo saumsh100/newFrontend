@@ -15,7 +15,15 @@ autoUpdater.on('update-available', () => {
   updateNotification.show();
 });
 
-autoUpdater.on('update-downloaded', (event) => {
+autoUpdater.on('error', (error) => {
+  log.info(`Error in auto updater: ${error}.`);
+});
+
+autoUpdater.on('download-progress', (progress) => {
+  log.info(`Auto update progress ${progress}`);
+});
+
+autoUpdater.on('update-downloaded', () => {
   dialog.showMessageBox({
     type: 'question',
     buttons: ['Install and Relaunch', 'Later'],
@@ -25,7 +33,6 @@ autoUpdater.on('update-downloaded', (event) => {
   }, (response) => {
     if (response === 0) {
       setTimeout(() => autoUpdater.quitAndInstall(), 1);
-      event.stopPropagation();
     }
   });
 });

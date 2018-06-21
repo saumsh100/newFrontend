@@ -6,14 +6,14 @@ import {
   Patient,
   TextMessage,
   SentReminder,
-  Appointment
+  Appointment,
+  User,
 } from '../../../_models';
 import { getValidSmsReminders } from '../../../lib/reminders/helpers';
 import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import { sequelizeLoader } from '../../util/loaders';
 import { sanitizeTwilioSmsData } from '../util';
 import { isSmsConfirmationResponse } from '../../../lib/comms/util/responseChecks';
-import twilio from 'twilio';
 import twilioClient from '../../../config/twilio';
 import { namespaces } from '../../../config/globals';
 import normalize from '../../_api/normalize';
@@ -31,6 +31,14 @@ function sendSocket(io, chatId) {
         as: 'textMessages',
         required: false,
         order: ['createdAt', 'ASC'],
+        include: {
+          model: User,
+          as: 'user',
+          attributes: {
+            exclude: 'password',
+          },
+          required: false,
+        },
       },
       {
         model: Patient,

@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Field, Icon } from '../../library';
+import { Form, Field, IconButton } from '../../library';
 import styles from '../styles.scss';
 
 class HeaderUserDate extends Component {
@@ -36,11 +36,19 @@ class HeaderUserDate extends Component {
               multiple={false}
               tipSize={0.01}
               theme={dateTheme}
-              refCallBack={input => (this.inputNode = input)}
+              refCallBack={(input) => {
+                this.inputNode = input;
+                return null;
+              }}
             />
           </Form>
-          <div className={styles.dateIconContainer} onClick={() => this.inputNode.focus()}>
-            <Icon icon="calendar" />
+          <div className={styles.dateIconContainer}>
+            <IconButton
+              type="solid"
+              icon="calendar"
+              onClick={() => this.inputNode.focus()}
+              className={styles.iconColor}
+            />
           </div>
         </div>
       </div>
@@ -50,8 +58,12 @@ class HeaderUserDate extends Component {
 
 HeaderUserDate.propTypes = {
   user: PropTypes.string,
-  dashboardDate: PropTypes.instanceOf(Date),
-  setDashboardDate: PropTypes.func,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  setDashboardDate: PropTypes.func.isRequired,
+};
+
+HeaderUserDate.defaultProps = {
+  user: '',
 };
 
 export default HeaderUserDate;

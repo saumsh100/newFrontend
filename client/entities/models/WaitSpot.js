@@ -9,6 +9,9 @@ const WaitSpotSchema = {
   preferences: null,
   daysOfTheWeek: null,
   unavailableDays: null,
+  unavailableDates: [],
+  availableDates: [],
+  availableTimes: [],
   endDate: null,
   createdAt: null,
 };
