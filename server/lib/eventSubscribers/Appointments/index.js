@@ -1,10 +1,10 @@
 
 import moment from 'moment';
-import { Patient, Appointment } from '../../../_models';
+import { Account, Appointment, Patient } from '../../../_models';
 import { calcFirstNextLastAppointment } from '../../../lib/firstNextLastAppointment';
-import { updatePatientDueDate } from '../../../lib/dueDate';
 import { updateMostRecentHygiene } from '../../../lib/lastHygiene';
 import { updateMostRecentRecall } from '../../../lib/lastRecall';
+import { getConfigsForDueDates, updatePatientDueDatesForAccount } from '../../../lib/dueDate';
 
 /**
  * does the firstNextLast calculation by grabbing all the patients appointments
@@ -166,7 +166,7 @@ function firstNextLastAppointmentBatchCalc(appointmentIds) {
  * @param  {[array]} - array of appointment ids that got updated
  */
 async function dueDateCalculation(ids) {
-  const patients = await Appointment.findAll({
+  const appointments = await Appointment.findAll({
     raw: true,
     group: ['patientId', 'accountId'],
     paranoid: false,
@@ -178,11 +178,18 @@ async function dueDateCalculation(ids) {
       },
     },
   });
-  if (patients.length) {
-    const patientIds = patients.map(p => p.patientId);
-    await updateMostRecentHygiene(patients[0].accountId, patientIds);
-    await updateMostRecentRecall(patients[0].accountId, patientIds);
-    await updatePatientDueDate(patients[0].accountId, patientIds);
+
+  if (appointments.length) {
+    const patientIds = appointments.map(p => p.patientId);
+    const accountId = appointments[0].accountId;
+    await updateMostRecentHygiene(accountId, patientIds);
+    await updateMostRecentRecall(accountId, patientIds);
+
+    // Fetch account and other configurations that are important for the dueDates job
+    const account = await Account.findById(accountId);
+    const configurationsMap = await getConfigsForDueDates(account);
+    const date = (new Date()).toISOString();
+    await updatePatientDueDatesForAccount({ account, date, patientIds, ...configurationsMap });
   }
 }
 
@@ -191,7 +198,6 @@ function registerAppointmentCalc(sub, push) {
     return push.write(data, 'utf8');
   });
 }
-
 
 function registerAppointmentBatchCalc(sub, push) {
   sub.on('data', async (data) => {
@@ -225,7 +231,7 @@ export default function registerAppointmentsSubscriber(context, io) {
   singleWorker.setEncoding('utf8');
   singleWorker.on('data', async (data) => {
     await dueDateCalculation([data]);
-    firstNextLastAppointmentCalc(data);
+    await firstNextLastAppointmentCalc(data);
     return singleWorker.ack();
   });
 

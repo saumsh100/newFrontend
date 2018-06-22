@@ -3,7 +3,7 @@ const uuid = require('uuid').v4;
 
 module.exports = {
   up: (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [{
           id: uuid(),
@@ -22,11 +22,28 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    queryInterface.bulkDelete('AccountConfigurations', {});
-    return queryInterface.bulkDelete('Configurations', {
-      name: [
-        'PATIENT_RECALL_BATCH_SIZE',
-      ],
+    return queryInterface.sequelize.transaction(async (t) => {
+      try {
+        const configurations = await queryInterface
+          .sequelize.query(`
+            SELECT * FROM "Configurations"
+            WHERE "name"='PATIENT_RECALL_BATCH_SIZE';
+          ` , { transaction: t });
+
+        const configurationIds = configurations[0].map(c => c.id);
+        await queryInterface.bulkDelete('AccountConfigurations', {
+          configurationId: configurationIds,
+        }, { transaction: t });
+
+        await queryInterface.bulkDelete('Configurations', {
+          name: [
+            'PATIENT_RECALL_BATCH_SIZE',
+          ],
+        }, {transaction: t});
+      } catch (err) {
+        console.log(err);
+        t.rollback();
+      }
     });
   },
 };

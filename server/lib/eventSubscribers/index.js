@@ -5,6 +5,7 @@ import registerAppointmentsSubscriber from './Appointments';
 import registerRecallsSubscriber from './Recalls';
 import registerRemindersSubscriber from './Reminders';
 import registerReviewsSubscriber from './Reviews';
+import registerPatientRecallSubscriber from './PatientRecalls';
 
 export default function registerEventSubscribers(context, io) {
   context.on('ready', () => {
@@ -15,5 +16,6 @@ export default function registerEventSubscribers(context, io) {
     registerRecallsSubscriber(context, io);
     registerRemindersSubscriber(context, io);
     registerReviewsSubscriber(context, io);
+    registerPatientRecallSubscriber(context);
   });
 }

@@ -20,7 +20,7 @@ export default function Icon(props) {
   });
 
   const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
-  
+
   return badgeText ? (
     <div className={styles.iconWrapper}>
       <i

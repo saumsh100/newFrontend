@@ -21,19 +21,14 @@ class TimeOffList extends Component {
   }
 
   render() {
-    const {
-      timeOffs,
-      practitioner,
-      onSelectTimeOff,
-      deleteTimeOff,
-      children,
-    } = this.props;
+    const { timeOffs, practitioner, onSelectTimeOff, deleteTimeOff, children } = this.props;
 
     return (
-      <List className={styles.timeOffList} data-test-id="timeOffList" >
+      <List className={styles.timeOffList} data-test-id="timeOffList">
         <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
-        {sortByFieldAsc(timeOffs, 'startDate').toArray().map((timeOff) => {
-          return (
+        {sortByFieldAsc(timeOffs, 'startDate')
+          .toArray()
+          .map(timeOff => (
             <TimeOffListItem
               key={timeOff.get('id')}
               timeOff={timeOff}
@@ -41,8 +36,7 @@ class TimeOffList extends Component {
               onClick={() => onSelectTimeOff(timeOff)}
               deleteTimeOff={this.deleteTimeOff}
             />
-          );
-        })}
+          ))}
       </List>
     );
   }
@@ -56,4 +50,4 @@ TimeOffList.propTypes = {
   deleteTimeOff: PropTypes.func.isRequired,
 };
 
-export default TimeOffList
+export default TimeOffList;

@@ -110,7 +110,10 @@ class ScheduleComponent extends Component {
   }
 
   updateHubData(props) {
-    const { routing: { location }, pageTitle } = props;
+    const {
+      routing: { location },
+      pageTitle,
+    } = props;
 
     props.setTitle(pageTitle);
     props.setBackHandler(() => {

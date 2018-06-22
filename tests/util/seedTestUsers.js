@@ -127,6 +127,7 @@ module.exports = {
   enterprise,
   enterpriseId,
   accountId,
+  addressId,
   managerPermissionId,
   ownerPermissionId,
   superAdminPermissionId,

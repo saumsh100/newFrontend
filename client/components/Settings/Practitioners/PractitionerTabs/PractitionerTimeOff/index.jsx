@@ -14,7 +14,8 @@ import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
-const mergeTime = (date, time, allDay) => (allDay ? date : new Date(date.setHours(time.getHours())));
+const mergeTime = (date, time, allDay) =>
+  (allDay ? date : new Date(date.setHours(time.getHours())));
 
 class PractitionerTimeOff extends Component {
   constructor(props) {

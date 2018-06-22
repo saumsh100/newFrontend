@@ -96,7 +96,14 @@ AccountsList.propTypes = {
   }).isRequired,
 };
 
-const stateToProps = (state, { match: { params: { enterpriseId } } }) => ({
+const stateToProps = (
+  state,
+  {
+    match: {
+      params: { enterpriseId },
+    },
+  }
+) => ({
   enterpriseId,
   enterprise: getModel(state, 'enterprises', enterpriseId),
   accounts: getCollection(

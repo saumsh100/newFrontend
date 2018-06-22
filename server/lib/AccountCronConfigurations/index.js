@@ -1,9 +1,10 @@
+
 import { CronConfiguration, AccountCronConfiguration } from '../../_models';
 
-
 /**
- * [getAccountCronConfigurations returns the Cron Configs for an account. If they aren't there
- * return the defaults]
+ * getAccountCronConfigurations returns the Cron Configs for an account. If they aren't there
+ * return the defaults
+ *
  * @param  {[type]} accountId [id of account]
  * @return {[type]}           Cron Configs for account
  */
@@ -43,8 +44,9 @@ export async function getAccountCronConfigurations(accountId) {
 }
 
 /**
- * [updateAccountCronConfigurations updates the Cron Config of an account]
- * @param  {[type]} configChange [object of config name and value to set]
+ * updateAccountCronConfigurations updates the Cron Config of an account
+ *
+ * @param  {[type]} configChange [object of config name and value to set
  * @param  {[type]} accountId
  * @return {[type]}
  */
