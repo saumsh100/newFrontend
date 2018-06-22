@@ -18,30 +18,30 @@ $intercom-side-margin: 50px;
 
     #intercom-container {
       position: absolute !important;
-      left: $electron-anti-radius-padding;
+      right: $electron-anti-radius-padding;
+      left: $intercom-side-margin !important;
       top: $electron-anti-radius-padding;
       bottom: $electron-anti-radius-padding;
-      right: $intercom-side-margin !important;
       width: auto !important;
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 0 !important;
-      transform: translateX(100%);
+      transform: translateX(-100%);
 
       &.active {
         transform: translateX(0) !important;
         opacity: 1;
       }
 
-      &.left {
-        left: $intercom-side-margin !important;
-        right: $electron-anti-radius-padding !important;
-        transform: translateX(-100%);
+      &.right {
+        right: $intercom-side-margin !important;
+        left: $electron-anti-radius-padding !important;
+        transform: translateX(100%) !important;
 
         .intercom-messenger-frame {
           border-radius: 0 !important;
-          border-bottom-right-radius: $electron-border-radius !important;
-          border-top-right-radius: $electron-border-radius !important;
+          border-bottom-left-radius: $electron-border-radius !important;
+          border-top-left-radius: $electron-border-radius !important;
         }
       }
 
@@ -51,8 +51,8 @@ $intercom-side-margin: 50px;
         bottom: $electron-anti-radius-padding !important;
         height: auto !important;
         min-height: 655px - 3 * $electron-anti-radius-padding - 1px !important;
-        border-top-left-radius: $electron-border-radius !important;
-        border-bottom-left-radius: $electron-border-radius !important;
+        border-top-right-radius: $electron-border-radius !important;
+        border-bottom-right-radius: $electron-border-radius !important;
         box-shadow: 0px 4px 10px 2px rgba(0, 0, 0, 0.14), -1px 1px 6px 0 rgba(0, 0, 0, 0.12) !important;
       }
 
