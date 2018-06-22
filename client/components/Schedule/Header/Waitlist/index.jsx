@@ -10,9 +10,7 @@ import { Fetch as RelayFetchWaitlist } from '../../../RelayWaitlist';
 import styles from './styles.scss';
 
 export default function Waitlist(props) {
-  const {
-    removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots,
-  } = props;
+  const { removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots } = props;
 
   return (
     <RelayFetchWaitlist
@@ -24,18 +22,18 @@ export default function Waitlist(props) {
         const waitSpots = relayProps.props.accountViewer.waitSpots.edges.map((edge) => {
           const patient = edge.node.patient
             ? {
-                ...edge.node.patient,
-                clientId: edge.node.patient.id,
-                id: edge.node.patient.ccId,
-              }
+              ...edge.node.patient,
+              clientId: edge.node.patient.id,
+              id: edge.node.patient.ccId,
+            }
             : undefined;
 
           const patientUser = edge.node.patientUser
             ? {
-                ...edge.node.patientUser,
-                clientId: edge.node.patient.id,
-                id: edge.node.patientUser.ccId,
-              }
+              ...edge.node.patientUser,
+              clientId: edge.node.patient.id,
+              id: edge.node.patientUser.ccId,
+            }
             : undefined;
 
           return {
@@ -52,6 +50,7 @@ export default function Waitlist(props) {
           <div
             className={classNames(styles.waitList, {
               [styles.hubWrapper]: isHub(),
+              [styles.withSelectedElements]: isHub() && selectedWaitSpots.length > 0,
             })}
           >
             {!isHub() && (

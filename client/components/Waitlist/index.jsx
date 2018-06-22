@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import moment from 'moment/moment';
 import PropTypes from 'prop-types';
 import WaitlistSchedule from '../Schedule/Header/Waitlist';
 import { fetchWaitSpots, deleteMultipleWaitSpots } from '../../thunks/waitlist';
@@ -26,15 +25,6 @@ class Waitlist extends Component {
     this.clearSelectedList = this.clearSelectedList.bind(this);
     this.showAddForm = this.showAddForm.bind(this);
     this.hideAddForm = this.hideAddForm.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.fetchWaitSpots(['patientUser', 'patient'], {
-      startTime: moment().toISOString(),
-      endTime: moment()
-        .add(360, 'days')
-        .toISOString(),
-    });
   }
 
   getMenuOptions() {
@@ -103,7 +93,7 @@ class Waitlist extends Component {
           this.hideAddForm();
         });
         this.props.setTitle(WATILIST_ADD);
-      },
+      }
     );
   }
 
@@ -115,7 +105,7 @@ class Waitlist extends Component {
       () => {
         this.props.setBackHandler(null);
         this.props.setTitle(WAITLIST_PAGE);
-      },
+      }
     );
   }
 
@@ -152,7 +142,7 @@ const mapDispatchToProps = dispatch =>
       setBackHandler,
       setTitle,
     },
-    dispatch,
+    dispatch
   );
 
 export default connect(null, mapDispatchToProps)(Waitlist);

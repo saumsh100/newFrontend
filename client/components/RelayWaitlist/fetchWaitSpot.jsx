@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, QueryRenderer } from 'react-relay';
 import graphQLEnvironment from '../../util/graphqlEnvironment';
@@ -34,6 +34,7 @@ const query = graphql`
               gender
               nextApptDate
               lastApptDate
+              address
             }
             patientUser {
               id
@@ -50,7 +51,7 @@ const query = graphql`
   }
 `;
 
-function FetchWaitSpot(props) {
+export default function FetchWaitSpot(props) {
   const { render, ...rest } = props;
 
   return (
@@ -72,5 +73,3 @@ FetchWaitSpot.propTypes = {
   handleSearchRequest: PropTypes.func,
   render: PropTypes.func.isRequired,
 };
-
-export default FetchWaitSpot;
