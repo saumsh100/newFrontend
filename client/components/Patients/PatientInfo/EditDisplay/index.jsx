@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { Tabs, Tab, Button, DialogBox } from '../../../library';
+import RecallModel from '../../../../entities/models/Recall';
+import ReminderModel from '../../../../entities/models/Reminder';
+import PatientModel from '../../../../entities/models/Patient';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
 import InsuranceForm from './InsuranceForm';
@@ -28,7 +31,6 @@ class EditDisplay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOpen: false,
       tabIndex: 1,
       country: '',
     };
@@ -36,12 +38,6 @@ class EditDisplay extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
     this.setCountry = this.setCountry.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  setCountry(value) {
-    this.setState({
-      country: value,
-    });
   }
 
   get dropDownStyle() {
@@ -56,6 +52,12 @@ class EditDisplay extends Component {
       input: styles.inputBarStyle,
       group: styles.inputGroup,
     };
+  }
+
+  setCountry(value) {
+    this.setState({
+      country: value,
+    });
   }
 
   handleTabChange(index) {
@@ -158,9 +160,16 @@ class EditDisplay extends Component {
   }
 
   renderSettingsForm() {
-    const { patient } = this.props;
+    const { patient, reminders, recalls } = this.props;
 
-    return <SettingsForm patient={patient} handleSubmit={this.handleSubmit} />;
+    return (
+      <SettingsForm
+        patient={patient}
+        handleSubmit={this.handleSubmit}
+        reminders={reminders}
+        recalls={recalls}
+      />
+    );
   }
 
   renderDesktop() {
@@ -196,11 +205,11 @@ class EditDisplay extends Component {
 
     return (
       <div>
-        <CollapsibleTab title={'Appointments'}>{this.renderAppointmentsForm()}</CollapsibleTab>
-        <CollapsibleTab title={'Personal'}>{this.renderPersonalForm()}</CollapsibleTab>
-        <CollapsibleTab title={'Insurance'}>{this.renderInsuranceForm()}</CollapsibleTab>
-        <CollapsibleTab title={'Family'}>{this.renderFamilyForm()}</CollapsibleTab>
-        <CollapsibleTab title={'Settings'}>{this.renderSettingsForm()}</CollapsibleTab>
+        <CollapsibleTab title="Appointments">{this.renderAppointmentsForm()}</CollapsibleTab>
+        <CollapsibleTab title="Personal">{this.renderPersonalForm()}</CollapsibleTab>
+        <CollapsibleTab title="Insurance">{this.renderInsuranceForm()}</CollapsibleTab>
+        <CollapsibleTab title="Family">{this.renderFamilyForm()}</CollapsibleTab>
+        <CollapsibleTab title="Settings">{this.renderSettingsForm()}</CollapsibleTab>
       </div>
     );
   }
@@ -252,13 +261,20 @@ class EditDisplay extends Component {
 }
 
 EditDisplay.propTypes = {
-  patient: PropTypes.instanceOf(Object).isRequired,
-  updateEntityRequest: PropTypes.func.isRequired,
-  role: PropTypes.string.isRequired,
-  wasAllFetched: PropTypes.bool,
-  reinitializeState: PropTypes.func.isRequired,
+  accountViewer: PropTypes.instanceOf(Object).isRequired,
   isOpen: PropTypes.bool,
-  accountViewer: PropTypes.instanceOf(Object),
+  patient: PropTypes.instanceOf(PatientModel).isRequired,
+  recalls: PropTypes.objectOf(ReminderModel).isRequired,
+  reinitializeState: PropTypes.func.isRequired,
+  reminders: PropTypes.objectOf(RecallModel).isRequired,
+  role: PropTypes.string.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  wasAllFetched: PropTypes.bool,
+};
+
+EditDisplay.defaultProps = {
+  isOpen: false,
+  wasAllFetched: false,
 };
 
 export default EditDisplay;

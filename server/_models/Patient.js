@@ -256,6 +256,18 @@ export default function (sequelize, DataTypes) {
     avatarUrl: {
       type: DataTypes.STRING,
     },
+
+    omitReminderIds: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: [],
+      allowNull: false,
+    },
+
+    omitRecallIds: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: [],
+      allowNull: false,
+    },
   }, {
     // Model Config
     indexes: [

@@ -196,3 +196,15 @@
 
 .toggleDivStyle {
 }
+
+.omitFormWrapper {
+  padding: 0px 0px 0px 10px;
+  margin-bottom: 15px;
+  border-left: 1px solid $card-border-color;
+}
+
+.omitToggleWrapper {
+  padding: 7px 0 0;
+  font-size: 11px;
+  color: $clr-dark-grey;
+}

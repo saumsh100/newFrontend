@@ -62,7 +62,7 @@ describe('Recalls Calculation Library', () => {
     await seedTestPractitioners();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await wipeAllModels();
   });
 
@@ -81,11 +81,6 @@ describe('Recalls Calculation Library', () => {
           }),
         ]);
       });
-
-      afterAll(async () => {
-        await wipeAllModels();
-      });
-
       test('should be a function', () => {
         expect(typeof mapPatientsToRecalls).toBe('function');
       });
@@ -117,6 +112,32 @@ describe('Recalls Calculation Library', () => {
 
         expect(oneMonthRecalls.success.length).toBe(1);
         expect(twoMonthRecalls.success.length).toBe(0);
+      });
+
+      test('should not return the patient cause the omitRecallIds is populate', async () => {
+        const recallId = uuid();
+        await patients[0].update({ omitRecallIds: [recallId] });
+        const result = await mapPatientsToRecalls({
+          recalls: [{
+            id: recallId,
+            interval: '1 months',
+            primaryTypes: ['email'],
+          }],
+
+          account: {
+            id: accountId,
+            recallBuffer: '1 days',
+          },
+
+          startDate: date(2016, 10, 5, 8),
+          endDate: date(2018, 10, 5, 8),
+        });
+
+        const [
+          oneMonthRecalls,
+        ] = result;
+
+        expect(oneMonthRecalls.success.length).toBe(0);
       });
     });
 

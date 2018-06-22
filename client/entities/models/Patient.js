@@ -8,7 +8,7 @@ const PatientSchema = {
   middleName: null,
   lastName: null,
   startDate: null,
-  //phoneNumber: null,
+  // phoneNumber: null,
   homePhoneNumber: null,
   mobilePhoneNumber: null,
   workPhoneNumber: null,
@@ -46,6 +46,8 @@ const PatientSchema = {
   firstApptDate: null,
   dueForHygieneDate: null,
   dueForRecallExamDate: null,
+  omitReminderIds: null,
+  omitRecallIds: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {
@@ -60,7 +62,7 @@ export default class Patient extends createModel(PatientSchema) {
     return moment().diff(this.get('birthDate'), 'years');
   }
 
-  getInsurance(){
+  getInsurance() {
     return this.get('insurance');
   }
 

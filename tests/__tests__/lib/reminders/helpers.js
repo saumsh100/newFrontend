@@ -296,7 +296,7 @@ describe('RemindersList Calculation Library', () => {
       });
     });
 
-    describe('#getAppointmentsFromReminder - ingoreSendIfConfirmed', () => {
+    describe('#getAppointmentsFromReminder - ignoreSendIfConfirmed', () => {
       let reminder;
       let appointments;
       let patients;
@@ -359,7 +359,7 @@ describe('RemindersList Calculation Library', () => {
       });
     });
 
-    describe('#getAppointmentsFromReminder - ingoreSendIfConfirmed + isCustomConfirm', () => {
+    describe('#getAppointmentsFromReminder - ignoreSendIfConfirmed + isCustomConfirm', () => {
       let reminder;
       let appointments;
       let patients;
@@ -485,6 +485,57 @@ describe('RemindersList Calculation Library', () => {
         // Has to send for Monday and Tuesday's appts but not Wednesday's
         const appts = await getAppointmentsFromReminder({ reminder, account, startDate });
         expect(appts.length).toBe(2);
+      });
+    });
+
+    describe('#getAppointmentsFromReminder - Patient.omitReminderIds', () => {
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          interval: '4 weeks',
+          primaryTypes: ['email', 'sms'],
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 8), patientId: patients[0].id }), // in 4 weeks at 8am
+          makeApptData({ ...dates(2017, 8, 5, 9), patientId: patients[1].id }), // in 4 weeks at 9am
+        ]);
+      });
+
+      test.only('should return 2 appointments because they have no omitReminderIds that relate to this reminder', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[1].patientId).toBe(patients[1].id);
+      });
+
+      test.only('should return 1 appointments because 1 has a omitReminderId that relates to this reminder', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        await patients[0].update({ omitReminderIds: [reminder.id] })
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(1);
+        expect(appts[0].patientId).toBe(patients[1].id);
+      });
+
+      test.only('should return 2 appointments because 1 has a omitReminderId that does not relate to this reminder', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        await patients[0].update({ omitReminderIds: [uuid()] })
+        const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[1].patientId).toBe(patients[1].id);
       });
     });
 

@@ -9,6 +9,9 @@ import classNames from 'classnames';
 import { Map } from 'immutable';
 import graphQLEnvironment from '../../../util/graphqlEnvironment';
 import { Grid, Row, Col, Icon, Tabs, Tab, Button } from '../../library';
+import PatientModel from '../../../entities/models/Patient';
+import RecallModel from '../../../entities/models/Recall';
+import ReminderModel from '../../../entities/models/Reminder';
 import {
   fetchEntities,
   fetchEntitiesRequest,
@@ -29,7 +32,9 @@ import LeftInfoDisplay from './LeftInfoDisplay';
 import { isHub, isResponsive } from '../../../util/hub';
 import styles from './styles.scss';
 
-const HeaderModalComponent = ({ icon, text, onClick, title }) => (
+const HeaderModalComponent = ({
+  icon, text, onClick, title,
+}) => (
   <div
     className={classNames(isResponsive() ? styles.editButton : styles.textContainer, {
       [styles.editButtonMobile]: !isHub(),
@@ -44,6 +49,13 @@ const HeaderModalComponent = ({ icon, text, onClick, title }) => (
     </Button>
   </div>
 );
+
+HeaderModalComponent.propTypes = {
+  icon: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+};
 
 // The default list of events shown on the time-line. Add to this when a new event typed is added.
 const defaultEvents = ['appointment', 'reminder', 'review', 'call', 'new patient'];
@@ -97,7 +109,8 @@ class PatientInfo extends Component {
   }
 
   fetchPatientData(patientId, url) {
-    Promise.all([
+    const { activeAccount } = this.props;
+    return Promise.all([
       this.props.fetchEntitiesRequest({
         id: 'fetchPatient',
         key: 'patients',
@@ -110,6 +123,16 @@ class PatientInfo extends Component {
       this.props.fetchEntitiesRequest({
         id: 'accountsPatientInfo',
         key: 'accounts',
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'fetchReminders',
+        key: 'reminders',
+        url: `/api/accounts/${activeAccount.id}/reminders`,
+      }),
+      this.props.fetchEntitiesRequest({
+        id: 'fetchRecalls',
+        key: 'recalls',
+        url: `/api/accounts/${activeAccount.id}/recalls`,
       }),
       this.props.fetchEntitiesRequest({
         key: 'events',
@@ -136,7 +159,7 @@ class PatientInfo extends Component {
 
         this.props.setTitle('Edit patient info');
         this.props.setBackHandler(this.reinitializeState);
-      }
+      },
     );
   }
 
@@ -158,7 +181,7 @@ class PatientInfo extends Component {
           this.props.setTitle(title);
           this.props.setBackHandler(backHandler);
         }
-      }
+      },
     );
   }
 
@@ -183,6 +206,8 @@ class PatientInfo extends Component {
       role,
       wasPatientFetched,
       accountViewer,
+      reminders,
+      recalls,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
@@ -218,6 +243,8 @@ class PatientInfo extends Component {
               isOpen={this.state.isOpen}
               outerTabIndex={this.state.tabIndex}
               role={role}
+              reminders={reminders}
+              recalls={recalls}
               wasAllFetched={wasAllFetched}
             />
           </Col>
@@ -305,42 +332,6 @@ class PatientInfo extends Component {
   }
 }
 
-PatientInfo.propTypes = {
-  fetchEntities: PropTypes.func.isRequired,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
-  match: PropTypes.instanceOf(Object),
-  addRemoveTimelineFilters: PropTypes.func.isRequired,
-  selectAllTimelineFilters: PropTypes.func.isRequired,
-  clearAllTimelineFilters: PropTypes.func.isRequired,
-  filters: PropTypes.instanceOf(Object),
-  patient: PropTypes.instanceOf(Object),
-  updateEntityRequest: PropTypes.func.isRequired,
-  wasStatsFetched: PropTypes.bool,
-  accountsFetched: PropTypes.bool,
-  activeAccount: PropTypes.instanceOf(Object),
-  wasPatientFetched: PropTypes.bool,
-  role: PropTypes.string,
-  patientStats: PropTypes.instanceOf(Map),
-  accountViewer: PropTypes.shape({
-    id: PropTypes.string,
-    patient: PropTypes.shape({
-      ccId: PropTypes.string,
-      id: PropTypes.string,
-    }),
-  }),
-  currentBackHandler: PropTypes.func,
-  currentTitle: PropTypes.string,
-  setTitle: PropTypes.func,
-  setBackHandler: PropTypes.func,
-};
-
-HeaderModalComponent.propTypes = {
-  icon: PropTypes.string,
-  text: PropTypes.string,
-  onClick: PropTypes.func.isRequired,
-  title: PropTypes.string,
-};
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
@@ -353,12 +344,16 @@ function mapDispatchToProps(dispatch) {
       setTitle,
       setBackHandler,
     },
-    dispatch
+    dispatch,
   );
 }
 
-function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
+function mapStateToProps({
+  entities, apiRequests, patientTable, auth, electron,
+}, { match }) {
   const patients = entities.getIn(['patients', 'models']);
+  const reminders = entities.getIn(['reminders', 'models']).filter(v => v.isActive);
+  const recalls = entities.getIn(['recalls', 'models']).filter(v => v.isActive);
   const patientStats = apiRequests.get('patientIdStats')
     ? apiRequests.get('patientIdStats').data
     : null;
@@ -367,6 +362,12 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
     : null;
   const wasPatientFetched = apiRequests.get('fetchPatient')
     ? apiRequests.get('fetchPatient').wasFetched
+    : null;
+  const wasRemindersFetched = apiRequests.get('fetchReminders')
+    ? apiRequests.get('fetchReminders').wasFetched
+    : null;
+  const wasRecallsFetched = apiRequests.get('fetchRecalls')
+    ? apiRequests.get('fetchRecalls').wasFetched
     : null;
 
   const waitForAuth = auth.get('accountId');
@@ -386,12 +387,61 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
     accountsFetched,
     role,
     wasPatientFetched,
+    reminders,
+    recalls,
+    wasRemindersFetched,
+    wasRecallsFetched,
     currentBackHandler: electron.get('backHandler'),
     currentTitle: electron.get('title'),
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+PatientInfo.propTypes = {
+  accountsFetched: PropTypes.bool,
+  accountViewer: PropTypes.shape({
+    id: PropTypes.string,
+    patient: PropTypes.shape({
+      ccId: PropTypes.string,
+      id: PropTypes.string,
+    }),
+  }),
+  activeAccount: PropTypes.instanceOf(Object).isRequired,
+  addRemoveTimelineFilters: PropTypes.func.isRequired,
+  clearAllTimelineFilters: PropTypes.func.isRequired,
+  currentBackHandler: PropTypes.func,
+  currentTitle: PropTypes.string,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  filters: PropTypes.instanceOf(Object).isRequired,
+  match: PropTypes.instanceOf(Object).isRequired,
+  patient: PropTypes.instanceOf(PatientModel),
+  patientStats: PropTypes.instanceOf(Map),
+  recalls: PropTypes.objectOf(ReminderModel).isRequired,
+  reminders: PropTypes.objectOf(RecallModel).isRequired,
+  role: PropTypes.string,
+  selectAllTimelineFilters: PropTypes.func.isRequired,
+  setBackHandler: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  wasPatientFetched: PropTypes.bool,
+  wasStatsFetched: PropTypes.bool,
+};
+
+PatientInfo.defaultProps = {
+  accountsFetched: false,
+  accountViewer: null,
+  currentBackHandler: e => e,
+  currentTitle: '',
+  patient: null,
+  patientStats: null,
+  role: '',
+  wasPatientFetched: false,
+  wasStatsFetched: false,
+};
+
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const query = graphql`
   query PatientInfo_Query($patientId: String!) {
