@@ -9,7 +9,7 @@ export const metaShape = {
   dispatch: PropTypes.func,
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   form: PropTypes.string,
-  initial: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  initial: PropTypes.oneOfType([PropTypes.bool, PropTypes.string, PropTypes.number]),
   invalid: PropTypes.bool,
   pristine: PropTypes.bool,
   submitFailed: PropTypes.bool,
@@ -22,7 +22,7 @@ export const metaShape = {
 
 export const inputShape = {
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   onDragStart: PropTypes.func,
