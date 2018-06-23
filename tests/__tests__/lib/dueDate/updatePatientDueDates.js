@@ -70,7 +70,7 @@ describe('Due Date Job - updatePatientDueDatesForAllAccounts', () => {
           hygieneInterval: '6 months',
         });
 
-        await updateAccountConnectorConfigurations({ name: 'ADAPTER_TYPE', value: 'TRACKER_11' }, accountId);
+        await updateAccountConnectorConfigurations({ name: 'ADAPTER_TYPE', value: 'TRACKER_V11' }, accountId);
         await updateAccountConnectorConfigurations({ name: 'ADAPTER_TYPE', value: 'DENTRIX_G6' }, newAccount.id);
 
         patients = await Patient.bulkCreate([
