@@ -23,7 +23,7 @@ import {
   updatePatientDueDateFromPatientRecalls,
 } from './patientRecalls';
 
-const isPendingApptCheck = ({ adapterType }) => adapterType === 'TRACKER_11';
+const isPendingApptCheck = ({ adapterType }) => adapterType === 'TRACKER_V11';
 
 /**
  * getConfigsForDueDates is an async function that will return the data needed to run
