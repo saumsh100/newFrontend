@@ -13,9 +13,7 @@ const sortServicesAlphabetical = (a, b) => {
 };
 
 function createInitialValues(serviceIds, services) {
-  return services
-    .map(s => serviceIds.indexOf(s.get('id')) > -1)
-    .toJS();
+  return services.map(s => serviceIds.indexOf(s.get('id')) > -1).toJS();
 }
 
 class PractitionerServices extends Component {

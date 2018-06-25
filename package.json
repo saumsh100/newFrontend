@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "1.73.0",
+  "version": "1.75.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -38,8 +38,8 @@
     "remind:cron": "nf start -j REMIND_CRON",
     "build-storybook": "build-storybook",
     "electron:dev": "NODE_ENV=development electron ./electron/",
-    "electron:build:mac": "electron-builder build -m --projectDir='./electron'",
-    "electron:build:win": "electron-builder build -w --projectDir='./electron'",
+    "electron:build:mac": "electron-builder build -m --projectDir='./electron' --config='electron-builder-dev.yaml'",
+    "electron:build:win": "electron-builder build -w --projectDir='./electron' --config='electron-builder-dev.yaml'",
     "electron:build": "electron-builder build -mw --projectDir='./electron'",
     "electron:publish:dev": "electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-dev.yaml'",
     "electron:publish:prod": "electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-prod.yaml'",

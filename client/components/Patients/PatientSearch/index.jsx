@@ -42,7 +42,7 @@ class PatientSearch extends Component {
             showPatientInfo: false,
           });
         });
-      },
+      }
     );
   }
 
@@ -83,7 +83,7 @@ const mapActionsToProps = dispatch =>
       setBackHandler,
       setTitle,
     },
-    dispatch,
+    dispatch
   );
 
 const enhance = connect(null, mapActionsToProps);

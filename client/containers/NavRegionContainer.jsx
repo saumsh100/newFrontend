@@ -7,9 +7,9 @@ import { isHub } from '../util/hub';
 
 function NavRegionContainer(props) {
   if (isHub()) {
-    return <NavRegionElectron {...props}/>
+    return <NavRegionElectron {...props} />;
   }
-  return <NavRegion {...props}/>;
+  return <NavRegion {...props} />;
 }
 
 NavRegionContainer.propTypes = {

@@ -31,8 +31,7 @@ function Input(props) {
     'tipSize',
   ]);
 
-  const isFilled =
-    value !== null && value !== undefined && value !== '' && !(typeof value === 'number');
+  const isFilled = (value || value === 0) && !(typeof value === 'number' && Number.isNaN(value));
 
   const labelClassName = classNames(theme.label, {
     [theme.erroredLabel]: error,

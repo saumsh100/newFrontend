@@ -24,7 +24,13 @@ patientRecallsRouter.post('/connector/batch', checkPermissions('patientRecalls:c
 
   return batchCreate(cleanedPatientRecalls, PatientRecall, 'patientRecall')
     .then(prs => prs.map(pr => pr.get({ plain: true })))
-    .then(prs => res.status(201).send(format(req, res, 'patientRecalls', prs)))
+    .then((prs) => {
+      const prIds = prs.map(app => app.id);
+      const pub = req.app.get('pub');
+      pub && pub.publish('PATIENTRECALL:CREATED:BATCH', JSON.stringify(prIds));
+
+      return res.status(201).send(format(req, res, 'patientRecalls', prs));
+    })
     .catch((err) => {
       let { errors, docs } = err;
       if (!isArray(errors) || !isArray(docs)) {
@@ -37,6 +43,10 @@ patientRecallsRouter.post('/connector/batch', checkPermissions('patientRecalls:c
       errors.forEach((err) => {
         console.error(err);
       });
+
+      const prIds = docs.map(app => app.id);
+      const pub = req.app.get('pub');
+      pub && pub.publish('PATIENTRECALL:CREATED:BATCH', JSON.stringify(prIds));
 
       const data = format(req, res, 'patientRecalls', docs);
       return res.status(201).send(Object.assign({}, data));
@@ -51,7 +61,13 @@ patientRecallsRouter.put('/connector/batch', checkPermissions('patientRecalls:up
   const patientRecalls = req.body;
   return batchUpdate(patientRecalls, PatientRecall, 'PatientRecall')
     .then(prs => prs.map(pr => pr.get({ plain: true })))
-    .then(prs => res.send(format(req, res, 'patientRecalls', prs)))
+    .then((prs) => {
+      const prIds = prs.map(app => app.id);
+      const pub = req.app.get('pub');
+      pub && pub.publish('PATIENTRECALL:CREATED:BATCH', JSON.stringify(prIds));
+
+      return res.status(201).send(format(req, res, 'patientRecalls', prs));
+    })
     .catch(({ errors, docs }) => {
       docs = docs.map(d => d.get({ plain: true }));
 
@@ -59,6 +75,10 @@ patientRecallsRouter.put('/connector/batch', checkPermissions('patientRecalls:up
       errors.forEach((err) => {
         console.error(err);
       });
+
+      const prIds = docs.map(app => app.id);
+      const pub = req.app.get('pub');
+      pub && pub.publish('PATIENTRECALL:CREATED:BATCH', JSON.stringify(prIds));
 
       const data = format(req, res, 'patientRecalls', docs);
       return res.send(Object.assign({}, data));

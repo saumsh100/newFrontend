@@ -30,6 +30,7 @@ const ORDER = [
   'PractitionerRecurringTimeOff',
   'DailySchedule',
   'Appointment',
+  'PatientRecall',
   'Request',
   'Recall',
   'Reminder',

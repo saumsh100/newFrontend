@@ -50,7 +50,7 @@ export const getClassMapper = (scheme, styles) => {
       ...i,
       [isArray(name) ? name[0] : name]: isArray(name) ? listToObject(name[1], () => true) : true,
     }),
-    {}
+    {},
   );
 
   const indexKeys = Object.keys(index);
@@ -84,7 +84,7 @@ export const getClassMapper = (scheme, styles) => {
         ...propTypes,
         [key]: index[key] === true ? PropTypes.bool : PropTypes.string,
       }),
-      {}
+      {},
     );
 
   return { map, omit, types };
@@ -105,6 +105,12 @@ export const getCollection = (state, entityType, filter = false) => {
 };
 
 export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
+
+export const capitalizeText = string =>
+  string
+    .split(' ')
+    .map(word => capitalizeFirstLetter(word))
+    .join(' ');
 
 /**
  * Util function to use as findChunks parameter of the highlighter component.

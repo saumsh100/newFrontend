@@ -10,6 +10,7 @@ import {
   SentReminder,
   Reminder,
   WeeklySchedule,
+  Sequelize,
 } from '../../_models';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
@@ -154,11 +155,15 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
       {
         model: Patient,
         as: 'patient',
-        required: true,
+        where: {
+          $not: {
+            omitReminderIds: { $contains: [reminder.id] },
+          },
+        },
+
         include: [{
           model: Appointment,
           as: 'appointments',
-          required: false,
           where: {
             isDeleted: false,
             isCancelled: false,
@@ -171,7 +176,9 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
               $lt: start,
             },
           },
+          required: false,
         }],
+        required: true,
       },
       {
         model: SentReminder,

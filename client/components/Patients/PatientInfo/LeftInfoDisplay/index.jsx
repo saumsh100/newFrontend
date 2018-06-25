@@ -15,12 +15,8 @@ export default function DataDisplay(props) {
 
   const { family, familyLength } = familyDataSelector(accountViewer);
 
-  const appointmentsTab = patient && (
-    <AppointmentsTab patient={patient} openModal={openModal} />
-  );
-  const personalTab = patient && (
-    <PersonalTab patient={patient} openModal={openModal} />
-  );
+  const appointmentsTab = patient && <AppointmentsTab patient={patient} openModal={openModal} />;
+  const personalTab = patient && <PersonalTab patient={patient} openModal={openModal} />;
   const insuranceTab = <div className={styles.noData}>No Insurance Information</div>;
   const familyTab =
     familyLength > 0 ? (

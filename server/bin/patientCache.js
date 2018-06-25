@@ -10,10 +10,11 @@ global.io = createSocketServer();
 
 jobQueue.process('patientCache', async (job, done) => {
   try {
+    const { data: { date } } = job;
     await mostRecentRestorativeAllAccounts();
     await mostRecentHygieneAllAccounts();
     await mostRecentRecallAllAccounts();
-    await mostRecentDueDateAllAccounts();
+    await mostRecentDueDateAllAccounts({ date });
     done();
   } catch (err) {
     done(err);

@@ -1,217 +1,120 @@
-import moment from 'moment';
-import { uniq } from 'lodash';
 
+import keyBy from 'lodash/keyBy';
+import isArray from 'lodash/isArray';
+import logger from '../../config/logger';
 import {
+  Account,
   Appointment,
   AppointmentCode,
   Patient,
-  Account,
-  sequelize,
 } from '../../_models';
-import { getAccountCronConfigurations, updateAccountCronConfigurations } from '../AccountCronConfigurations';
-import { recallCodes } from '../lastRecall';
+import {
+  getAccountCronConfigurations,
+  updateAccountCronConfigurations,
+} from '../AccountCronConfigurations';
+import {
+  getAccountConnectorConfigurations,
+} from '../accountConnectorConfigurations';
+import {
+  updatePatientDueDate,
+} from './pendingAppts';
+import {
+  getPatientsWithChangedDueDateInfo,
+  updatePatientDueDateFromPatientRecalls,
+} from './patientRecalls';
 
- /**
- * finds the next most recent  Appointment of
- * code from the now date with the patient model
- *
- * @param  {[query]} object - query of patient
- * @param  {[object]} code - sequelize filter on code
- * @return {[array]} - an array of patients with appointments
- */
-function getPatientsWithAppointmentBasedOnCode(query, code) {
-  return Patient.findAll({
-    where: query,
-    order: [
-      [{ model: Appointment, as: 'appointments' }, 'startDate', 'ASC'],
-    ],
-    include: [{
-      model: Appointment,
-      as: 'appointments',
-      where: {
-        isCancelled: false,
-        isPending: true,
-      },
-      include: [{
-        model: AppointmentCode,
-        as: 'appointmentCodes',
-        where: {
-          code,
-        },
-        required: true,
-      }],
-      required: true,
-    }],
-  });
-}
-
+const isPendingApptCheck = ({ adapterType }) => adapterType === 'TRACKER_V11';
 
 /**
- * [getPatientsChangedAppointment finds the patients which could have
- * changed the one of due dates ]
- * @param  {[isoString]} date - an isoStringDate
- * @param  {[uuid]} accountId
- * @return {[array]} - array of patientIds
+ * getConfigsForDueDates is an async function that will return the data needed to run
+ * the dueDates cron job and the real-time event handlers for dueDates
+ *
+ * @param account
+ * @return object - data that is need to run the dueDates calculations
  */
-export async function getPatientsChangedAppointment(date, accountId) {
-  date = moment(date).toISOString();
-  const patientsFromAppointments = await Appointment.findAll({
-    raw: true,
-    group: ['patientId'],
-    paranoid: false,
-    attributes: ['patientId'],
-    where: {
-      accountId,
-      $or: {
-        createdAt: {
-          $gte: date,
-        },
-        updatedAt: {
-          $gte: date,
-        },
-        deletedAt: {
-          $gte: date,
-        },
-      },
-    },
-  });
-
-  const patientIds = patientsFromAppointments.map(p => p.patientId);
-
-  const patients = await Patient.findAll({
-    raw: true,
-    paranoid: false,
-    attributes: ['id'],
-    where: {
-      accountId,
-      $or: {
-        createdAt: {
-          $gte: date,
-        },
-        updatedAt: {
-          $gte: date,
-        },
-        deletedAt: {
-          $gte: date,
-        },
-        dueForHygieneDate: {
-          $lte: date,
-        },
-        dueForRecallExamDate: {
-          $lte: date,
-        },
-      },
-    },
-  });
-
-  return uniq(patientIds.concat(patients.map(p => p.id)));
+export async function getConfigsForDueDates(account) {
+  const cronConfigs = await getAccountCronConfigurations(account.id);
+  const accountConfigs = await getAccountConnectorConfigurations(account.id);
+  const cronConfigsMap = keyBy(cronConfigs, 'name');
+  const accountConfigsMap = keyBy(accountConfigs, 'name');
+  return {
+    adapterType: accountConfigsMap['ADAPTER_TYPE'].value,
+    cronDueDate: cronConfigsMap['CRON_DUE_DATE'].value,
+    hygieneTypes: JSON.parse(accountConfigsMap['HYGIENE_TYPES'].value),
+    recallTypes: JSON.parse(accountConfigsMap['RECALL_TYPES'].value),
+  };
 }
 
- /**
- * checks to see if the patientIds have a lastHygieneDate or
- * lastRecallDate. If they do their due dates are null, if they don't search for their next recall
- * date in the future
+/**
+ * updatePatientDueDatesForAccount is an async function that will updated the dueDates for
+ * a patients in an account based on the account's configurations
  *
- * @param  {[uuid]} accountId - uuid of accountId
- * @param  {[array]} patientIds - array of patientIds if not sent then assume all patients
+ * @param {object} config.account - the account that is having its dueDates updated
+ * @param {date} config.date - the date the job is being run on
+ * @param {[string]} config.adapterType - the date the job is being run on
+ * @param {[uuid]} config.patientIds - the date the job is being run on
+ * @param {[string]} config.hygieneTypes - the date the job is being run on
+ * @param {[string]} config.recallTypes - the date the job is being run on
+ * @return undefined
  */
-export async function updatePatientDueDate(accountId, patientIds) {
-  const idQuery = patientIds || { $not: null };
+export async function updatePatientDueDatesForAccount(config) {
+  const { account, date, adapterType, patientIds, hygieneTypes, recallTypes } = config;
+  const isUsingPendingAppointments = isPendingApptCheck({ adapterType });
+  const isNotAllPatients = isArray(patientIds);
 
-  try {
-    await Patient.update({
-      dueForHygieneDate: null,
-      dueForRecallExamDate: null,
-      recallPendingAppointmentId: null,
-      hygienePendingAppointmentId: null,
-    }, {
-      where: { id: idQuery, accountId },
+  logger.info(
+    `Updating dueDates for ` +
+    (isNotAllPatients ? `${patientIds.length} patients with recently changed dueDate info ` : 'all patients ') +
+    `based on ${isUsingPendingAppointments ? 'pending appointments' : 'patient recalls'} ` +
+    `for ${account.name} with ADAPTER_TYPE=${adapterType}...`
+  );
+
+  return isUsingPendingAppointments ?
+    await updatePatientDueDate(account.id, patientIds) :
+    await updatePatientDueDateFromPatientRecalls({
+      accountId: account.id,
+      date,
+      hygieneTypes,
+      recallTypes,
+      patientIds,
+      hygieneInterval: account.hygieneInterval,
+      recallInterval: account.recallInterval,
     });
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-
-  try {
-    const patientsHygiene = await getPatientsWithAppointmentBasedOnCode({
-      id: idQuery,
-      accountId,
-      lastHygieneDate: {
-        $not: null,
-      },
-    }, { $like: '111%' });
-
-    const patientsRecall = await getPatientsWithAppointmentBasedOnCode({
-      id: idQuery,
-      accountId,
-      lastRecallDate: {
-        $not: null,
-      },
-    }, recallCodes);
-
-    // for the patients with lastHygieneDate null find their due date for hygiene
-    for (let i = 0; i < patientsHygiene.length; i += 1) {
-      await patientsHygiene[i].update({
-        dueForHygieneDate: patientsHygiene[i].appointments[0].originalDate,
-        hygienePendingAppointmentId: patientsHygiene[i].appointments[0].id,
-      });
-    }
-
-    for (let i = 0; i < patientsRecall.length; i += 1) {
-      await patientsRecall[i].update({
-        dueForRecallExamDate: patientsRecall[i].appointments[0].originalDate,
-        recallPendingAppointmentId: patientsRecall[i].appointments[0].id,
-      });
-    }
-  } catch (e) {
-    console.log('DueDate job failed for Patients');
-    return null;
-  }
-
-  console.log(`Updated the due date info for ${patientIds ? patientIds.length : 'all'} patients. accountId=${accountId}`);
-
-  return null;
 }
 
 /**
-* checks if the most recent hygiene has been run before for an account
-* if it has only do it for patients who have hygiene procedures
-*
-* @param  {[uuid]} accountId
-*/
-export async function mostRecentDueDate(accountId) {
-  const configs = await getAccountCronConfigurations(accountId);
-  let date;
-  for (let i = 0; i < configs.length; i += 1) {
-    if (configs[i].name === 'CRON_DUE_DATE') {
-      date = configs[i].value;
+ * updatePatientDueDatesForAllAccounts is an async function that will fetch all accounts and
+ * loop through all those accounts and call the updatePatientDueDatesForAccount function
+ *
+ * @param {date} - date the job was invoked on
+ * @returns undefined
+ */
+export default async function updatePatientDueDatesForAllAccounts({ date }) {
+  const accounts = await Account.findAll({});
+  for (const account of accounts) {
+    try {
+      // Fetch configurations that are important for the dueDates job
+      const configurationsMap = await getConfigsForDueDates(account);
+
+      // If this cron job has already been run, only bother grabbing patients that
+      // have had updated info since last job completed
+      const patientIds = configurationsMap.cronDueDate ?
+        await getPatientsWithChangedDueDateInfo(configurationsMap.cronDueDate, account.id) :
+        null;
+
+      // Update the patients dueDates and the last run cron's date
+      await exports.updatePatientDueDatesForAccount({ account, date, patientIds, ...configurationsMap });
+      await updateAccountCronConfigurations({
+        name: 'CRON_DUE_DATE',
+        // We grab the current timestamp because if we use the cronDate we will perpetually
+        // update patients cause the differ checks for patients updatedAt since cronDate
+        value: (new Date()).toISOString(),
+      }, account.id);
+
+      logger.info(`Completed dueDates for ${account.name} on ${date}.`);
+    } catch (err) {
+      logger.error(`Failed updating dueDates for account=${account.name} on ${date}`);
+      logger.error(err);
     }
-  }
-  // check if there's a date for the last cron for this account
-  // if there is we find patients with newer invoices else
-  // do the whole
-  if (!date) {
-    await updatePatientDueDate(accountId);
-  } else {
-    const patientIds = await getPatientsChangedAppointment(date, accountId);
-    await updatePatientDueDate(accountId, patientIds);
-  }
-
-  await updateAccountCronConfigurations({
-    name: 'CRON_DUE_DATE',
-    value: moment().toISOString(),
-  }, accountId);
-}
-
-/**
-* Loops through all accounts and calculates
-* the Due Date of Patients in each.
-*/
-export default async function mostRecentDueDateAllAccounts() {
-  const accounts = await Account.findAll();
-
-  for (let i = 0; i < accounts.length; i += 1) {
-    console.log(`Updating the due date info for ${accounts[i].name}. accountId=${accounts[i].id}`);
-    await mostRecentDueDate(accounts[i].id);
   }
 }

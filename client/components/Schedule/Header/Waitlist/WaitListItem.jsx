@@ -64,27 +64,28 @@ export default function WaitListItem(props) {
 
           <div className={styles.info}>
             <span className={styles.subHeader}>Preferences: </span>
-            {prefKeys.map((pref, index, arry) => (preferences[pref] ? (
-              <span className={styles.dataText} key={`preferences_${index}`}>
-                {pref}
-                {index === arry.length - 1 ? '' : ','}
-              </span>
-            ) : null))}
+            {prefKeys.map(
+              (pref, index, arry) =>
+                (preferences[pref] ? (
+                  <span className={styles.dataText} key={`preferences_${index}`}>
+                    {pref}
+                    {index === arry.length - 1 ? '' : ','}
+                  </span>
+                ) : null)
+            )}
           </div>
 
-          { !checkIfAnyTrue ? <div className={styles.info}>
-            <span className={styles.subHeader}>Preferred Days: </span>
-            {dayWeekKeys.map((day, index, arry) => {
-              return (
-                daysOfTheWeek[day] ? (
-                  <span className={styles.dataText} key={`dayOfWeek_${index}`}>
-                    {day}
-                    {(index === arry.length - 1) ? '' : ','}
-                  </span>
-                ) : null
-              );
-            })}
-          </div> : null}
+          {!checkIfAnyTrue ? (
+            <div className={styles.info}>
+              <span className={styles.subHeader}>Preferred Days: </span>
+              {dayWeekKeys.map((day, index, arry) => (daysOfTheWeek[day] ? (
+                <span className={styles.dataText} key={`dayOfWeek_${index}`}>
+                  {day}
+                  {index === arry.length - 1 ? '' : ','}
+                </span>
+              ) : null))}
+            </div>
+          ) : null}
 
           <div className={styles.info}>
             <span className={styles.subHeader}> Requested on: </span>

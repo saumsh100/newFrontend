@@ -197,6 +197,9 @@ export async function getPatientsForRecallTouchPoint({
     accountId: account.id,
     status: 'Active',
     preferences: { recalls: true },
+    $not: {
+      omitRecallIds: { $contains: [recall.id] },
+    },
   };
 
   const twoWeeksAgo = moment(startDate).subtract(14, 'days');

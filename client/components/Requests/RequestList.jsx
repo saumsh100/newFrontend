@@ -57,7 +57,10 @@ class RequestList extends Component {
   }
 
   confirmAppointment(request, patientUser) {
-    const { routing: { location }, redirect } = this.props;
+    const {
+      routing: { location },
+      redirect,
+    } = this.props;
 
     const modifiedRequest = request.set('isConfirmed', true);
     const requestData = {
@@ -95,7 +98,9 @@ class RequestList extends Component {
   }
 
   openRequest(id) {
-    const { routing: { location } } = this.props;
+    const {
+      routing: { location },
+    } = this.props;
 
     this.props.push({ ...location, search: stringify({ selectedRequest: id || undefined }) });
   }

@@ -75,6 +75,8 @@ Array [
       "mobilePhoneNumber": null,
       "nextApptDate": null,
       "nextApptId": null,
+      "omitRecallIds": Array [],
+      "omitReminderIds": Array [],
       "otherPhoneNumber": null,
       "patientUserId": null,
       "phoneNumber": null,

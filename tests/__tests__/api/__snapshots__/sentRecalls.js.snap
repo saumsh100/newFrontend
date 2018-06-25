@@ -38,6 +38,8 @@ Object {
         "mobilePhoneNumber": "+17789999999",
         "nextApptDate": null,
         "nextApptId": null,
+        "omitRecallIds": Array [],
+        "omitReminderIds": Array [],
         "patientUserId": null,
         "phoneNumber": null,
         "pmsCreatedAt": null,

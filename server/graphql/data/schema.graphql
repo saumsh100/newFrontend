@@ -106,6 +106,8 @@ input addPatientInput {
   insuranceInterval: String
   contCareInterval: String
   avatarUrl: String
+  omitReminderIds: [String]!
+  omitRecallIds: [String]!
   clientMutationId: String
 }
 
@@ -265,6 +267,8 @@ type Patient implements Node {
   insuranceInterval: String
   contCareInterval: String
   avatarUrl: String
+  omitReminderIds: [String]!
+  omitRecallIds: [String]!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -403,6 +407,8 @@ input updatePatientInput {
   insuranceInterval: String
   contCareInterval: String
   avatarUrl: String
+  omitReminderIds: [String]!
+  omitRecallIds: [String]!
   clientMutationId: String
 }
 

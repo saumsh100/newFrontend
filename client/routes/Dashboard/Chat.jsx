@@ -10,12 +10,13 @@ const Routes = {
   chat: LazyRoute(() => import('../../components/Chat')),
 };
 
-const Patients = () =>
+const Patients = () => (
   <DocumentTitle title="CareCru | Chat">
     <Switch>
       <Route exact path={base()} component={Routes.chat} />
       <Route path={base('/:chatId')} component={Routes.chat} />
     </Switch>
-  </DocumentTitle>;
+  </DocumentTitle>
+);
 
 export default Patients;

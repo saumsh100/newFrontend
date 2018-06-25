@@ -3,12 +3,10 @@ import cron from 'node-cron';
 import { createJob } from '../config/jobQueue';
 import GLOBALS from '../config/globals';
 
+const NODE_ENV = GLOBALS.env;
 const REMINDERS_INTERVAL_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const REVIEWS_INTERVAL_MINUTES = GLOBALS.reviews.cronIntervalMinutes;
 const RECALLS_INTERVAL_MINUTES = GLOBALS.recalls.cronIntervalMinutes;
-
-// TODO: put these in globals.js
-const NODE_ENV = process.env.NODE_ENV || 'development';
 
 // Run every X min
 const remindersPattern = `0 */${REMINDERS_INTERVAL_MINUTES} * * * *`;

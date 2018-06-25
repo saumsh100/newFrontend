@@ -6,8 +6,9 @@ import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 
 class Intercom extends Component {
   componentDidMount() {
-    window.Intercom('show');
     this.setPosition();
+    window.Intercom('show');
+
     const intercomContainer = document.getElementById('intercom-container');
 
     this.runWithinTimeout(() => {
@@ -32,14 +33,14 @@ class Intercom extends Component {
     const intercomContainer = document.getElementById('intercom-container');
 
     if (
-      !intercomContainer.classList.contains('left') &&
-      this.props.toolbarPosition === TOOLBAR_LEFT
+      !intercomContainer.classList.contains('right') &&
+      this.props.toolbarPosition === TOOLBAR_RIGHT
     ) {
-      intercomContainer.classList.add('left');
+      intercomContainer.classList.add('right');
     }
 
-    if (this.props.toolbarPosition === TOOLBAR_RIGHT) {
-      intercomContainer.classList.remove('left');
+    if (this.props.toolbarPosition === TOOLBAR_LEFT) {
+      intercomContainer.classList.remove('right');
     }
   }
 
@@ -53,7 +54,7 @@ class Intercom extends Component {
 }
 
 Intercom.propTypes = {
-  toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
+  toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]).isRequired,
 };
 
 const mapStateToProps = ({ electron }) => ({
