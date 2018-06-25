@@ -29,6 +29,7 @@ const makeApptData = (data = {}) => Object.assign({
   accountId,
   patientId,
   practitionerId,
+  isPatientConfirmed: true,
 }, data);
 
 const makePatientData = (data = {}) => Object.assign({
@@ -242,6 +243,22 @@ describe('Reviews Calculation Library', () => {
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
           expect(appts[0].patientId).toBe(patients[3].id);
+        });
+      });
+
+      describe('Sending to Unconfirmed Appointments', () => {
+        test('should return one appt as the other is unconfirmed', async () => {
+          const startDate = date(2017, 7, 5, 9, 15);
+          const appts = await getReviewAppointments({ account, startDate });
+          expect(appts.length).toBe(1);
+        });
+
+        test('should return two appts as account has the setting to unconfirmed as well', async () => {
+          account.sendUnconfirmedReviews = true;
+          await appointments[0].update({ isPatientConfirmed: false });
+          const startDate = date(2017, 7, 5, 9, 15);
+          const appts = await getReviewAppointments({ account, startDate });
+          expect(appts.length).toBe(1);
         });
       });
     });

@@ -1,20 +1,25 @@
 
-import React, { PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Button, DialogBox, RemoteSubmitButton } from '../../../library';
 import ReviewItem from './ReviewItem';
 import ReviewPreview from './ReviewPreview';
+import AdvancedSettingsForm from './AdvancedSettingsForm';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import IconCircle from '../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
-import ContactNotes from '../../../demo/ContactNotes';
+import { updateReviewsSettings } from '../../../../thunks/accounts';
 import styles from './styles.scss';
 
-class Reviews extends React.Component {
+class Reviews extends Component {
   constructor(props) {
     super(props);
     const { activeAccount } = props;
 
     this.state = {
+      isAdvancedSettingsOpen: false,
       selectedReview: false,
       reviewSettings: {
         interval: activeAccount.get('reviewsInterval'),
@@ -22,6 +27,10 @@ class Reviews extends React.Component {
         primaryTypes: ['email', 'sms'],
       },
     };
+
+    this.toggleAdvancedSettings = this.toggleAdvancedSettings.bind(this);
+    this.saveAdvancedSettings = this.saveAdvancedSettings.bind(this);
+    this.selectReview = this.selectReview.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -38,6 +47,30 @@ class Reviews extends React.Component {
         interval,
       },
     });
+  }
+
+  toggleAdvancedSettings() {
+    this.setState({ isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen });
+  }
+
+  saveAdvancedSettings(values) {
+    const { activeAccount } = this.props;
+    const { sendUnconfirmedReviews } = values;
+    const alert = {
+      success: {
+        title: 'Reviews Settings Updated',
+        body: 'Successfully updated the advanced settings for reviews',
+      },
+
+      error: {
+        title: 'Failed to Update Reviews Settings',
+        body: 'Error trying to update the advanced settings for reviews',
+      },
+    };
+
+    this.props
+      .updateReviewsSettings(activeAccount.id, { sendUnconfirmedReviews }, alert)
+      .then(this.toggleAdvancedSettings);
   }
 
   selectReview() {
@@ -66,6 +99,14 @@ class Reviews extends React.Component {
     );
   }
 
+  renderRightActions() {
+    return this.props.role === 'SUPERADMIN' ? (
+      <Button border="blue" onClick={this.toggleAdvancedSettings}>
+        Advanced Settings
+      </Button>
+    ) : null;
+  }
+
   renderPreviewColumn() {
     if (!this.state.selectedReview) {
       return null;
@@ -84,7 +125,7 @@ class Reviews extends React.Component {
         key="select"
         noLines
         selected={this.state.selectedReview}
-        onSelect={this.selectReview.bind(this)}
+        onSelect={this.selectReview}
         account={this.props.activeAccount}
         reviewSettings={this.state.reviewSettings}
       />
@@ -95,22 +136,60 @@ class Reviews extends React.Component {
     return (
       <CommunicationSettingsCard
         title="Reviews Settings"
+        rightActions={this.renderRightActions()}
         leftColumn={this.renderLeftColumn()}
         rightColumn={this.renderPreviewColumn()}
-      />
+      >
+        <DialogBox
+          actions={[
+            {
+              label: 'Cancel',
+              onClick: this.toggleAdvancedSettings,
+              component: Button,
+              props: { border: 'blue' },
+            },
+            {
+              label: 'Save',
+              onClick: this.saveAdvancedSettings,
+              component: RemoteSubmitButton,
+              props: { color: 'blue', form: 'reviewsAdvancedSettings' },
+            },
+          ]}
+          title="Reviews Advanced Settings"
+          type="medium"
+          active={this.state.isAdvancedSettingsOpen}
+          onEscKeyDown={this.toggleAdvancedSettings}
+          onOverlayClick={this.toggleAdvancedSettings}
+        >
+          <AdvancedSettingsForm
+            form="reviewsAdvancedSettings"
+            initialValues={this.props.activeAccount.toJS()}
+            onSubmit={this.saveAdvancedSettings}
+          />
+        </DialogBox>
+      </CommunicationSettingsCard>
     );
   }
 }
 
 Reviews.propTypes = {
+  role: PropTypes.string.isRequired,
   activeAccount: PropTypes.shape({
     id: PropTypes.string,
     reviewSettings: PropTypes.string,
-  }),
+    toJS: PropTypes.func,
+  }).isRequired,
+
+  updateReviewsSettings: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ entities, auth }) => ({
+  role: auth.get('role'),
   activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
 });
 
-export default connect(mapStateToProps, null)(Reviews);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ updateReviewsSettings }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Reviews);

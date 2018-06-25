@@ -186,6 +186,12 @@ export default function (sequelize, DataTypes) {
     suggestedChairId: {
       type: DataTypes.UUID,
     },
+
+    sendUnconfirmedReviews: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   });
 
   Account.associate = (models) => {
