@@ -64,12 +64,5 @@ export default function FetchWaitSpot(props) {
 }
 
 FetchWaitSpot.propTypes = {
-  search: PropTypes.string,
-  limit: PropTypes.number,
-  after: PropTypes.string,
-  order: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)])
-  ),
-  handleSearchRequest: PropTypes.func,
   render: PropTypes.func.isRequired,
 };

@@ -69,14 +69,14 @@ const register = accountId =>
 
       const waitSpotsConnection = ConnectionHandler.getConnection(
         accountViewerProxy,
-        'AccountViewer_waitSpots'
+        'AccountViewer_waitSpots',
       );
 
       const edge = ConnectionHandler.createEdge(
         proxyStore,
         waitSpotsConnection,
         nodeToInsert,
-        'WaitSpotEdge'
+        'WaitSpotEdge',
       );
 
       return ConnectionHandler.insertEdgeAfter(waitSpotsConnection, edge);

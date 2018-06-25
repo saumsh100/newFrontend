@@ -30,5 +30,8 @@
     "browser": true,
     "mocha": true,
     "node": true
+  },
+  "settings": {
+    "import/core-modules": ["relay-runtime"]
   }
 }

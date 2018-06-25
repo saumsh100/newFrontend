@@ -10,7 +10,9 @@ import { Fetch as RelayFetchWaitlist } from '../../../RelayWaitlist';
 import styles from './styles.scss';
 
 export default function Waitlist(props) {
-  const { removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots } = props;
+  const {
+    removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots,
+  } = props;
 
   return (
     <RelayFetchWaitlist
@@ -18,7 +20,6 @@ export default function Waitlist(props) {
         if (relayProps.props === null) {
           return null;
         }
-
         const waitSpots = relayProps.props.accountViewer.waitSpots.edges.map((edge) => {
           const patient = edge.node.patient && {
             ...edge.node.patient,

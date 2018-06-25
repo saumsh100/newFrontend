@@ -1,7 +1,7 @@
 
 import { getOffsetWithDefault } from 'graphql-relay';
-import { resolver, defaultArgs } from 'graphql-sequelize';
-import { waitSpotType, waitSpotConnection } from './types';
+import moment from 'moment/moment';
+import { waitSpotConnection } from './types';
 import { connectionFromArrayWithoutSlice, argsListWithOrder } from '../../util';
 import { WaitSpot } from 'CareCruModels';
 
@@ -22,7 +22,15 @@ export default resolverOptions => ({
       const options = {
         limit: limitValue,
         order,
-        where,
+        where: {
+          ...where,
+          endDate: {
+            $lte: moment()
+              .add(360, 'days')
+              .toISOString(),
+            $gte: moment().toISOString(),
+          },
+        },
         offset: getOffsetWithDefault(rest.after + 1, offset),
       };
 
