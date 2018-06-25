@@ -22,13 +22,13 @@ const PatientData = (props) => {
       }}
     >
       <div className={styles.suggestionsListItem}>
-        <Avatar size={'md'} className={styles.patientContainer_img} user={patient} alt={fullName} />
+        <Avatar size="md" className={styles.patientContainer_img} user={patient} alt={fullName} />
         <div className={styles.patientContainer}>
           <div className={styles.patientContainer_fullName}>{fullName}</div>
           <div className={styles.data}>
             <Icon icon="phone" size={0.9} type="solid" />
             <div className={styles.data_text}>
-              {patient.mobilePhoneNumber[0] === '+'
+              {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
                 ? FormatPhoneNumber(patient.mobilePhoneNumber)
                 : patient.mobilePhoneNumber}
             </div>
@@ -44,9 +44,13 @@ const PatientData = (props) => {
 };
 
 PatientData.propTypes = {
-  patient: PropTypes.shape(patientShape),
-  selectPatient: PropTypes.func,
+  patient: PropTypes.shape(patientShape).isRequired,
+  selectPatient: PropTypes.func.isRequired,
   selectedPatient: PropTypes.shape(patientShape),
+};
+
+PatientData.defaultProps = {
+  selectedPatient: null,
 };
 
 export default PatientData;
