@@ -16,6 +16,10 @@ export function getApiUrl() {
   return PRODUCTION_API;
 }
 
+export function getSubscriptionUrl() {
+  return PRODUCTION_API.split('://')[1];
+}
+
 export function getSocketUrl() {
   if (!isOnDevice()) {
     return '';

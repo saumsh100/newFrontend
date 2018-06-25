@@ -112,7 +112,7 @@ function NavList(props) {
           path="/requests"
           icon="calendar-edit"
           label="Online Requests"
-          iconType="regular"
+          iconType={'regular'}
           badge={newRequests}
           active={location.pathname.indexOf('/requests') !== -1}
         />

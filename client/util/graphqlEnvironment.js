@@ -1,7 +1,7 @@
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { isOnDevice, getApiUrl } from './hub';
+import { isOnDevice, getApiUrl, getSubscriptionUrl } from './hub';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const path = '/graphql';
@@ -28,7 +28,7 @@ const setupSubscription = (config, variables, cacheConfig, observer) => {
   const query = config.text;
   const token = getTokenDefault();
 
-  const subscriptionClient = new SubscriptionClient('ws://localhost:5000/subscriptions', {
+  const subscriptionClient = new SubscriptionClient(`ws://${getSubscriptionUrl()}/subscriptions`, {
     reconnect: true,
     connectionParams: {
       Authorization: token,
