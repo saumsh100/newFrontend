@@ -12,25 +12,43 @@ export function appointmentRequestNoteStringFormatter(request) {
     service,
     account,
     requestingPatientUser,
+    insuranceCarrier,
+    insuranceMemberId,
+    insuranceGroupId,
   } = request;
 
   const nullHandler = (val, fallback = '') => val === null ? fallback : val;
   const nameFormatter = ({ firstName, lastName }) => nullHandler(firstName) + ' ' + nullHandler(lastName);
+  const birthDateHandler = (birthDate) => birthDate === null ? 'none' : moment(birthDate).format('DD/MM/YYYY');
 
   const practitionerName = practitioner === null ? 'No Preference' : nameFormatter(practitioner);
-  const requestingPatientName = patientUser.id === requestingPatientUser.id ?
-    'Self' : nameFormatter(requestingPatientUser);
+  const requestNote =
+    'Date Requested: ' +
+    moment.tz(createdAt, account.timezone || 'America/Vancouver').format('h:mmA, DD/MM/YY') + '\r\n' +
+    'Reason for Booking: ' + service.name + '\r\n' +
+    'Preferred Practitioner: ' + practitionerName + '\r\n' +
+    'Note: ' + nullHandler(note, 'none') + '\r\n\r\n' +
+    'Patient Name: ' + nameFormatter(patientUser) + '\r\n' +
+    'Phone Number: ' + nullHandler((formatPhoneNumber(patientUser.phoneNumber)), 'none') + '\r\n' +
+    'Email: ' + nullHandler(patientUser.email, 'none') + '\r\n' +
+    'Birth Date: ' + birthDateHandler(patientUser.birthDate) + '\r\n\r\n';
 
-  const formattedString =
-    'Date Requested: ' + moment(createdAt).format('MMMM Do, YYYY')
-    + ' in ' + nullHandler(account.timezone) + '\r\n'
-    + 'Patient Name: ' + nameFormatter(patientUser) + '\r\n'
-    + 'Reason for Booking: ' + service.name + '\r\n'
-    + 'Preferred Practitioner: ' + practitionerName + '\r\n'
-    + 'Email: ' + nullHandler(patientUser.email, 'none') + '\r\n'
-    + 'Phone: ' + nullHandler((formatPhoneNumber(patientUser.phoneNumber)), 'none') + '\r\n'
-    + 'Note: ' + nullHandler(note, 'none') + '\r\n'
-    + 'Requested By: ' + requestingPatientName;
+  const sameRequestingPatientNote = 'Requested By: Self\r\n\r\n';
+  const differentRequestingPatientNote =
+    'Requested By: ' + nameFormatter(requestingPatientUser) + '\r\n' +
+    'Phone Number: ' + nullHandler((formatPhoneNumber(requestingPatientUser.phoneNumber)), 'none') + '\r\n' +
+    'Email: ' + nullHandler(requestingPatientUser.email, 'none') + '\r\n' +
+    'Birth Date: ' + birthDateHandler(requestingPatientUser.birthDate) + '\r\n\r\n';
+  const requestingPatientInfo = (patientUser.id === requestingPatientUser.id) ?
+    sameRequestingPatientNote : differentRequestingPatientNote;
 
-  return formattedString;
+  const payForMySelfNote = 'Insurance Plan: Pay for myself';
+  const insurancePlanNote = 'Insurance Plan: ' + insuranceCarrier + '\r\n' +
+    'Insurer Name: ' + null + '\r\n' +
+    'Member Id: ' + nullHandler(insuranceMemberId, 'none') + '\r\n' +
+    'Group Id: ' + nullHandler(insuranceGroupId, 'none');
+
+  return (requestNote + requestingPatientInfo) +
+    ((insuranceCarrier === null || insuranceCarrier === 'Pay for myself') ?
+      payForMySelfNote : insurancePlanNote);
 }

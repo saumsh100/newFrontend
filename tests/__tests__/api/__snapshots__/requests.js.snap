@@ -16,9 +16,9 @@ Object {
         "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
-        "insuranceCarrier": null,
+        "insuranceCarrier": "test",
         "insuranceGroupId": null,
-        "insuranceMemberId": null,
+        "insuranceMemberId": "53245",
         "isCancelled": false,
         "isConfirmed": false,
         "isDeleted": false,
@@ -48,7 +48,7 @@ Object {
   "entities": Object {
     "patientUsers": Object {
       "b8665c97-1e98-41ac-bf13-090b742de400": Object {
-        "birthDate": null,
+        "birthDate": "1996-07-19T00:14:30.932Z",
         "email": "testpatientuser@test.com",
         "firstName": "Jack",
         "gender": null,
@@ -70,9 +70,9 @@ Object {
         "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
-        "insuranceCarrier": null,
+        "insuranceCarrier": "test",
         "insuranceGroupId": null,
-        "insuranceMemberId": null,
+        "insuranceMemberId": "53245",
         "isCancelled": false,
         "isConfirmed": false,
         "isDeleted": false,
@@ -118,16 +118,24 @@ Object {
       "attributes": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
         "endDate": "2017-07-19T00:17:30.932Z",
-        "formattedNote": "Date Requested: July 18th, 2017 in America/Vancouver
-Patient Name: Jack Daniels
+        "formattedNote": "Date Requested: 5:14PM, 18/07/17
 Reason for Booking: Test Service
 Preferred Practitioner: Colonel Sanders
-Email: testpatientuser@test.com
-Phone: (604) 999-9999
 Note: a standard note
-Requested By: Self",
-        "insuranceCarrier": null,
-        "insuranceMemberId": null,
+
+Patient Name: Jack Daniels
+Phone Number: (604) 999-9999
+Email: testpatientuser@test.com
+Birth Date: 18/07/1996
+
+Requested By: Self
+
+Insurance Plan: test
+Insurer Name: null
+Member Id: 53245
+Group Id: none",
+        "insuranceCarrier": "test",
+        "insuranceMemberId": "53245",
         "isDeleted": false,
         "note": "a standard note",
         "patientId": null,
@@ -153,9 +161,9 @@ Object {
         "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
-        "insuranceCarrier": null,
+        "insuranceCarrier": "test",
         "insuranceGroupId": null,
-        "insuranceMemberId": null,
+        "insuranceMemberId": "53245",
         "isCancelled": false,
         "isConfirmed": false,
         "isSyncedWithPms": false,
@@ -187,9 +195,9 @@ Object {
         "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:17:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
-        "insuranceCarrier": null,
+        "insuranceCarrier": "test",
         "insuranceGroupId": null,
-        "insuranceMemberId": null,
+        "insuranceMemberId": "53245",
         "isCancelled": true,
         "isConfirmed": false,
         "isSyncedWithPms": false,
@@ -221,9 +229,9 @@ Object {
         "chairId": "24d4e661-1455-4494-8fdb-c4ec0ddf804d",
         "endDate": "2017-07-19T00:18:30.932Z",
         "id": "272d86fc-f743-4cd6-b0c8-7906959bcc9f",
-        "insuranceCarrier": null,
+        "insuranceCarrier": "test",
         "insuranceGroupId": null,
-        "insuranceMemberId": null,
+        "insuranceMemberId": "53245",
         "isCancelled": false,
         "isConfirmed": false,
         "isSyncedWithPms": false,
