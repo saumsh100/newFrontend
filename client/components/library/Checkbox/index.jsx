@@ -4,8 +4,6 @@ import classNames from 'classnames/bind';
 import withTheme from '../../../hocs/withTheme';
 import styles from './styles.scss';
 
-const cx = classNames.bind(styles);
-
 function Checkbox(props) {
   const {
     id,
@@ -16,28 +14,37 @@ function Checkbox(props) {
     hidden,
     labelClassNames,
     theme,
+    customContainer,
   } = props;
 
-  let classes = theme.cbx;
-  let containerClasses = theme.cbxContainer;
+  const labelClasses = classNames(theme.label, {
+    [labelClassNames]: labelClassNames,
+  });
 
-  let labelClasses = theme.label;
+  const classes = classNames(theme.cbx, {
+    [theme.cbxChecked]: checked,
+  });
 
-  if (labelClassNames) {
-    labelClasses = classNames(labelClasses, labelClassNames);
-  }
+  const containerClasses = classNames(theme.cbxContainer, {
+    [styles.hidden]: hidden,
+    [customContainer]: customContainer,
+  });
 
-  if (checked) {
-    classes = classNames(classes, theme.cbxChecked);
-  }
-
-  if (hidden) {
-    containerClasses = classNames(containerClasses, styles.hidden);
-  }
+  const onKeyDown = (e) => {
+    if (e.keyCode === 13 || e.keyCode === 32) {
+      onChange(e);
+    }
+  };
 
   return (
     <div className={containerClasses}>
-      <div className={classes} onClick={onChange} onChange={onChange}>
+      <div
+        className={classes}
+        onClick={onChange}
+        onChange={onChange}
+        role="button"
+        onKeyDown={onKeyDown}
+      >
         <input
           id={id}
           type="checkbox"
@@ -56,6 +63,7 @@ function Checkbox(props) {
 }
 
 Checkbox.propTypes = {
+  customContainer: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
   onChange: PropTypes.func,

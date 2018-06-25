@@ -54,7 +54,7 @@ const register = accountId =>
       const accountViewerProxy = root.getLinkedRecord('accountViewer');
 
       const { newWaitSpot } = data;
-      const patient = newWaitSpot.patient ? newWaitSpot.patient : newWaitSpot.patientUser;
+      const patient = newWaitSpot.patient || newWaitSpot.patientUser;
 
       const fullName = `${patient.firstName} ${patient.lastName}`;
 
@@ -69,14 +69,14 @@ const register = accountId =>
 
       const waitSpotsConnection = ConnectionHandler.getConnection(
         accountViewerProxy,
-        'AccountViewer_waitSpots',
+        'AccountViewer_waitSpots'
       );
 
       const edge = ConnectionHandler.createEdge(
         proxyStore,
         waitSpotsConnection,
         nodeToInsert,
-        'WaitSpotEdge',
+        'WaitSpotEdge'
       );
 
       return ConnectionHandler.insertEdgeAfter(waitSpotsConnection, edge);

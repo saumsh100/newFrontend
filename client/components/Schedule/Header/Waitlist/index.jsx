@@ -20,21 +20,17 @@ export default function Waitlist(props) {
         }
 
         const waitSpots = relayProps.props.accountViewer.waitSpots.edges.map((edge) => {
-          const patient = edge.node.patient
-            ? {
-              ...edge.node.patient,
-              clientId: edge.node.patient.id,
-              id: edge.node.patient.ccId,
-            }
-            : undefined;
+          const patient = edge.node.patient && {
+            ...edge.node.patient,
+            clientId: edge.node.patient.id,
+            id: edge.node.patient.ccId,
+          };
 
-          const patientUser = edge.node.patientUser
-            ? {
-              ...edge.node.patientUser,
-              clientId: edge.node.patient.id,
-              id: edge.node.patientUser.ccId,
-            }
-            : undefined;
+          const patientUser = edge.node.patientUser && {
+            ...edge.node.patientUser,
+            clientId: edge.node.patient.id,
+            id: edge.node.patientUser.ccId,
+          };
 
           return {
             ...edge.node,
@@ -67,16 +63,12 @@ export default function Waitlist(props) {
             )}
             <List className={styles.list}>
               {waitSpots.sort(SortByCreatedAtDesc).map((waitSpot, index, arr) => {
-                let patientData = null;
-                let isPatientUser = false;
-
-                if (waitSpot.patientUserId && !waitSpot.patientId) {
-                  patientData = waitSpot.patientUser;
-                  isPatientUser = true;
-                } else if (waitSpot.patientId) {
-                  patientData = waitSpot.patient;
+                if (!waitSpot.patientUserId && !waitSpot.patientId) {
+                  return null;
                 }
 
+                const patientData = waitSpot.patientId ? waitSpot.patient : waitSpot.patientUser;
+                const isPatientUser = !!waitSpot.patientId;
                 const removeBorder = index === arr.length - 1 && arr.length > 1;
 
                 return (

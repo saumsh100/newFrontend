@@ -58,9 +58,8 @@ class AddToWaitlist extends Component {
               <Avatar user={patient} size="xs" />
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
-                    }`}
+                  {`${patient.firstName} ${patient.lastName}`}
+                  {patient.birthDate && `, ${moment().diff(patient.birthDate, 'years')}`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
                   Last Appointment:{' '}
@@ -77,14 +76,8 @@ class AddToWaitlist extends Component {
   }
 
   handleAutoSuggest(newValue) {
-    if (typeof newValue === 'object') {
-      this.setState({
-        patientSearched: newValue,
-      });
-    } else if (newValue === '') {
-      this.setState({
-        patientSearched: '',
-      });
+    if (typeof newValue === 'object' || newValue === '') {
+      this.setState({ patientSearched: newValue });
     }
   }
 
@@ -97,7 +90,7 @@ class AddToWaitlist extends Component {
           .toISOString(),
         accountId: this.props.accountId,
       },
-      omit(values, ['patientData']),
+      omit(values, ['patientData'])
     );
 
     CreateWaitSpot.commit(newValues);
@@ -211,8 +204,12 @@ class AddToWaitlist extends Component {
   }
 }
 
+AddToWaitlist.defaultProps = {
+  formName: 'Add to Waitlist Form',
+};
+
 AddToWaitlist.propTypes = {
-  formName: PropTypes.string.isRequired,
+  formName: PropTypes.string,
   accountId: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,

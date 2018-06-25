@@ -14,10 +14,21 @@ export default class ExtraOptionsMenu extends Component {
     };
 
     this.toggle = this.toggle.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   toggle() {
-    this.setState({ show: !this.state.show });
+    this.setState(prevState => ({ show: !prevState.show }));
+  }
+
+  handleKeyDown(e) {
+    if (!this.state.show) {
+      return;
+    }
+
+    if (e.keyCode === 27) {
+      this.toggle();
+    }
   }
 
   renderOptions() {
@@ -53,7 +64,8 @@ export default class ExtraOptionsMenu extends Component {
         <div
           className={classNames({ [styles.blurBg]: this.state.show })}
           onClick={() => this.state.show && this.toggle()}
-          role="presentation"
+          role="button"
+          onKeyDown={this.handleKeyDown}
         >
           <div className={styles.blurredContent}>{this.props.children}</div>
         </div>
@@ -80,9 +92,11 @@ ExtraOptionsMenu.defaultProps = {
 
 ExtraOptionsMenu.propTypes = {
   children: PropTypes.node.isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    icon: PropTypes.string,
-    text: PropTypes.string,
-    onClick: PropTypes.func,
-  })),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      icon: PropTypes.string,
+      text: PropTypes.string,
+      onClick: PropTypes.func,
+    })
+  ),
 };

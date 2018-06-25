@@ -79,9 +79,7 @@ class Header extends Component {
   }
 
   toggleFilters() {
-    this.setState({
-      openFilters: !this.state.openFilters,
-    });
+    this.setState(prevState => ({ openFilters: !prevState.openFilters }));
   }
 
   render() {
@@ -96,8 +94,8 @@ class Header extends Component {
       appointments,
     } = this.props;
 
-    const scheduleJS = schedule.toJS();
-    const { leftColumnWidth, scheduleDate } = scheduleJS;
+    const leftColumnWidth = schedule.get('leftColumnWidth');
+    const scheduleDate = schedule.get('scheduleDate');
     const currentDate = moment(scheduleDate);
     const addToFormName = 'Add to Waitlist Form';
 
@@ -149,6 +147,7 @@ class Header extends Component {
               tipSize={0.01}
               onOuterAction={this.toggleFilters}
             >
+
               <div className={styles.headerLinks}>
                 <IconButton
                   onClick={this.toggleFilters}
@@ -160,9 +159,9 @@ class Header extends Component {
             </Popover>
 
             <Button
-              border="blue"
               dense
               compact
+              border="blue"
               className={styles.headerLinks_waitlist}
               onClick={this.openWaitlist}
               data-test-id="button_headerWaitlist"
@@ -181,10 +180,10 @@ class Header extends Component {
             </Button>
 
             <Button
-              color="blue"
-              onClick={addNewAppointment}
               dense
               compact
+              color="blue"
+              onClick={addNewAppointment}
               className={styles.headerLinks_add}
               data-test-id="button_appointmentQuickAdd"
             >
@@ -192,6 +191,7 @@ class Header extends Component {
             </Button>
 
             <DialogBox
+              custom
               title="Waitlist"
               active={this.state.showWaitlist}
               onEscKeyDown={this.openWaitlist}
@@ -205,11 +205,11 @@ class Header extends Component {
                   label: 'Cancel',
                 },
               ]}
-              custom
             >
               <Waitlist removeWaitSpot={this.removeWaitSpot} openAddTo={this.openAddToWaitlist} />
             </DialogBox>
             <DialogBox
+              custom
               title="Add to Waitlist"
               active={this.state.showAddToWaitlist}
               onEscKeyDown={this.openAddToWaitlist}
@@ -233,7 +233,6 @@ class Header extends Component {
                   label: 'Save',
                 },
               ]}
-              custom
             >
               <AddToWaitlist formName={addToFormName} onSubmit={this.handleAddToWaitlist} />
             </DialogBox>
@@ -280,8 +279,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const mapStateToProps = ({ schedule, apiRequests, entities }) => {
-  const scheduleObj = schedule.toJS();
-  const { scheduleView } = scheduleObj;
+  const scheduleView = schedule.get('scheduleView');
 
   const pracsFetched = apiRequests.get('pracSchedule')
     ? apiRequests.get('pracSchedule').wasFetched

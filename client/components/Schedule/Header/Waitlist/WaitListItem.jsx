@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import moment from 'moment';
 import { Avatar, Icon, PatientPopover, IconButton, Checkbox, Collapsible, Button } from '../../../library';
-import { patientShape } from '../../../library/PropTypeShapes';
-import WaitSpotModel from '../../../../entities/models/WaitSpot';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import { isHub } from '../../../../util/hub';
 import PatientModel from '../../../../entities/models/Patient';

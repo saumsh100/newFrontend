@@ -5,11 +5,9 @@ import AddToWaitlistForm from '../../Schedule/Header/Waitlist/AddToWaitlist';
 import styles from './styles.scss';
 
 function AddToWaitlistPage({ onSubmit }) {
-  const addToFormName = 'Add to Waitlist Form';
-
   return (
     <div className={styles.pageContainer}>
-      <AddToWaitlistForm onSubmit={onSubmit} formName={addToFormName} />
+      <AddToWaitlistForm onSubmit={onSubmit} />
     </div>
   );
 }
