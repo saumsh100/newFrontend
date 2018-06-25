@@ -193,7 +193,7 @@ class MessageContainer extends Component {
 
       let optionsWrapper = null;
 
-      const messageOptions = isFromPatient ? (
+      const messageOptions = isFromPatient && (
         <div
           className={styles.dotsWrapper}
           ref={(reference) => {
@@ -209,7 +209,7 @@ class MessageContainer extends Component {
             <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
           </Tooltip>
         </div>
-      ) : null;
+      );
 
       return (
         <div key={message.id} data-test-id="item_chatMessage" className={styles.messageWrapper}>
@@ -231,11 +231,12 @@ class MessageContainer extends Component {
     const { textMessages } = this.props;
 
     return this.groupChatMessages(textMessages).map((group) => {
-      const time = <div className={styles.time}>{this.getMessageTime(group.time)}</div>;
+      const headingContent =
+        group.messages.length !== 0 ? this.getMessageTime(group.time) : 'No messages';
 
       return (
         <div className={styles.groupWrapper} key={group.time}>
-          {time}
+          <div className={styles.time}>{headingContent}</div>
           <div>{this.renderMessageGroup(group.messages)}</div>
         </div>
       );

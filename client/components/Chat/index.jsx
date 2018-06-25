@@ -70,6 +70,7 @@ class ChatMessage extends Component {
     this.togglePatientsInfo = this.togglePatientsInfo.bind(this);
     this.toggleShowMessageContainer = this.toggleShowMessageContainer.bind(this);
     this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
+    this.hubChatPage = this.hubChatPage.bind(this);
   }
 
   componentDidMount() {
@@ -105,7 +106,7 @@ class ChatMessage extends Component {
       () => {
         this.props.setLocation('/chat');
         this.props.selectChat(null);
-      }
+      },
     );
   }
 
@@ -122,7 +123,7 @@ class ChatMessage extends Component {
           this.props.setTitle(CHAT_PAGE);
           this.toggleShowMessageContainer();
         });
-      }
+      },
     );
   }
 
@@ -133,12 +134,15 @@ class ChatMessage extends Component {
         showPatientsList: false,
         showPatientInfo: false,
       },
-      () => {
-        this.props.setBackHandler(() => {
-          this.togglePatientsList();
-        });
-      }
+      this.hubChatPage,
     );
+  }
+
+  hubChatPage() {
+    this.props.setTitle(CHAT_PAGE);
+    this.props.setBackHandler(() => {
+      this.togglePatientsList();
+    });
   }
 
   selectChatOrCreate(patient) {
@@ -154,6 +158,8 @@ class ChatMessage extends Component {
     if (!this.state.showMessageContainer) {
       this.toggleShowMessageContainer();
     }
+
+    this.hubChatPage();
   }
 
   receivedChatsPostUpdate(result) {
@@ -206,7 +212,7 @@ class ChatMessage extends Component {
         this.loadChatList().then(() => {
           this.props.defaultSelectedChatId();
         });
-      }
+      },
     );
   }
 
@@ -340,23 +346,31 @@ class ChatMessage extends Component {
   }
 }
 
+ChatMessage.defaultProps = {
+  match: {
+    params: {
+      chatId: null,
+    },
+  },
+};
+
 ChatMessage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       chatId: PropTypes.string,
     }),
   }),
-  setNewChat: PropTypes.func,
-  defaultSelectedChatId: PropTypes.func,
-  selectChat: PropTypes.func,
-  loadChatList: PropTypes.func,
-  loadUnreadChatList: PropTypes.func,
-  loadFlaggedChatList: PropTypes.func,
-  cleanChatList: PropTypes.func,
-  setLocation: PropTypes.func,
-  setBackHandler: PropTypes.func,
-  setTitle: PropTypes.func,
-  fetchEntitiesRequest: PropTypes.func,
+  setNewChat: PropTypes.func.isRequired,
+  defaultSelectedChatId: PropTypes.func.isRequired,
+  selectChat: PropTypes.func.isRequired,
+  loadChatList: PropTypes.func.isRequired,
+  loadUnreadChatList: PropTypes.func.isRequired,
+  loadFlaggedChatList: PropTypes.func.isRequired,
+  cleanChatList: PropTypes.func.isRequired,
+  setLocation: PropTypes.func.isRequired,
+  setBackHandler: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -374,7 +388,7 @@ function mapDispatchToProps(dispatch) {
       setTitle,
       fetchEntitiesRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
