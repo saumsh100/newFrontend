@@ -41,17 +41,15 @@ class AddToWaitlist extends Component {
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
     this.handleCreateWaitSpot = this.handleCreateWaitSpot.bind(this);
+    this.handleOnKeyDown = this.handleOnKeyDown.bind(this);
   }
 
   getSuggestions(value) {
     return this.props
       .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
       .then(searchData => searchData.patients)
-      .then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length
-          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
-          : [];
-
+      .then(searchedPatients => Object.values(searchedPatients))
+      .then(patientList =>
         patientList.map((patient) => {
           patient.display = (
             <div className={styles.suggestionContainer}>
@@ -69,15 +67,18 @@ class AddToWaitlist extends Component {
             </div>
           );
           return patient;
-        });
-
-        return patientList;
-      });
+        }));
   }
 
   handleAutoSuggest(newValue) {
     if (typeof newValue === 'object' || newValue === '') {
       this.setState({ patientSearched: newValue });
+    }
+  }
+
+  handleOnKeyDown(e) {
+    if (e.keyCode === 13) {
+      this.handleAutoSuggest('');
     }
   }
 
@@ -90,7 +91,7 @@ class AddToWaitlist extends Component {
           .toISOString(),
         accountId: this.props.accountId,
       },
-      omit(values, ['patientData'])
+      omit(values, ['patientData']),
     );
 
     CreateWaitSpot.commit(newValues);
@@ -108,6 +109,7 @@ class AddToWaitlist extends Component {
 
     const displayField = !patientSearched ? (
       <Field
+        required
         component="AutoComplete"
         name="patientData"
         label="Enter Patient Name"
@@ -117,13 +119,13 @@ class AddToWaitlist extends Component {
         onChange={(e, newValue) => this.handleAutoSuggest(newValue)}
         icon="search"
         data-test-id="patientData"
-        required
       />
     ) : (
       <div
         className={styles.patientContainer}
         onClick={() => this.handleAutoSuggest('')}
-        role="presentation"
+        role="button"
+        onKeyDown={this.handleOnKeyDown}
       >
         <Avatar user={patientSearched} size="sm" />
         <div className={styles.patientContainer_name}>
@@ -233,4 +235,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddToWaitlist);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddToWaitlist);

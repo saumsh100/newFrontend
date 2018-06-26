@@ -10,21 +10,21 @@ import { isHub } from '../../../../util/hub';
 import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
-export default class WaitListItem extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onSelect = this.onSelect.bind(this);
-  }
-
-  onSelect(event) {
+export default function WaitListItem({
+  waitSpot,
+  patient,
+  removeWaitSpot,
+  isPatientUser,
+  removeBorder,
+  selected,
+  onSelect: onSelectCallback,
+}) {
+  const onSelect = (event) => {
     event.stopPropagation();
-    this.props.onSelect();
-  }
+    onSelectCallback();
+  };
 
-  renderPatientHeading() {
-    const { waitSpot, patient, isPatientUser } = this.props;
-
+  const renderPatientHeading = () => {
     if (isHub()) {
       return (
         <div className={styles.name}>
@@ -44,11 +44,9 @@ export default class WaitListItem extends Component {
         </div>
       </PatientPopover>
     );
-  }
+  };
 
-  renderContent() {
-    const { waitSpot, patient, removeWaitSpot, isPatientUser, removeBorder, selected } = this.props;
-
+  const renderContent = () => {
     if (!patient) {
       return null;
     }
@@ -83,7 +81,7 @@ export default class WaitListItem extends Component {
     const patientInfoSectionHub = isHub() && (
       <div className={styles.heading}>
         <Avatar user={patient} size="xs" />
-        {this.renderPatientHeading()}
+        {renderPatientHeading()}
       </div>
     );
 
@@ -93,7 +91,7 @@ export default class WaitListItem extends Component {
     return (
       <div className={styles.waitListItem} data-test-id="list_waitListItem">
         {isHub() && (
-          <Checkbox customContainer={checkboxStyle} onChange={this.onSelect} checked={selected} />
+          <Checkbox customContainer={checkboxStyle} onChange={onSelect} checked={selected} />
         )}
 
         <div className={wrapperStyle}>
@@ -106,7 +104,7 @@ export default class WaitListItem extends Component {
           )}
 
           <div className={styles.patientPrefInfo}>
-            {!isHub() && this.renderPatientHeading()}
+            {!isHub() && renderPatientHeading()}
 
             <div className={styles.info}>
               <span className={styles.subHeader}> Next Appt: </span>
@@ -135,20 +133,20 @@ export default class WaitListItem extends Component {
 
           {!isHub() && (
             <div className={styles.patientGeneralInfo}>
-              {patient[patientPhone] ? (
+              {patient[patientPhone] && (
                 <div className={styles.infoContainer}>
                   <Icon icon="phone" className={styles.icon} />
                   <span className={styles.infoData}>
                     {FormatPhoneNumber(patient[patientPhone])}
                   </span>
                 </div>
-              ) : null}
-              {patient.email ? (
+              )}
+              {patient.email && (
                 <div className={styles.infoContainer}>
                   <Icon icon="envelope" className={styles.icon} />
                   <span className={styles.infoData}>{patient.email}</span>
                 </div>
-              ) : null}
+              )}
             </div>
           )}
 
@@ -160,10 +158,9 @@ export default class WaitListItem extends Component {
         </div>
       </div>
     );
-  }
+  };
 
-  renderPatientProfile() {
-    const { patient, isPatientUser } = this.props;
+  const renderPatientProfile = () => {
     const patientPhone = isPatientUser ? 'phoneNumber' : 'mobilePhoneNumber';
 
     return (
@@ -220,19 +217,17 @@ export default class WaitListItem extends Component {
         </div>
       </div>
     );
+  };
+
+  if (isHub()) {
+    return (
+      <Collapsible hasIcon={false} title={renderContent()}>
+        {renderPatientProfile()}
+      </Collapsible>
+    );
   }
 
-  render() {
-    if (isHub()) {
-      return (
-        <Collapsible hasIcon={false} title={this.renderContent()}>
-          {this.renderPatientProfile()}
-        </Collapsible>
-      );
-    }
-
-    return this.renderContent();
-  }
+  return renderContent();
 }
 
 WaitListItem.defaultProps = {

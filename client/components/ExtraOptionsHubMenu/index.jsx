@@ -71,10 +71,10 @@ export default class ExtraOptionsMenu extends Component {
         </div>
         {this.state.show && this.renderOptions()}
         <Button
-          color="blue"
           dense
           compact
           rounded
+          color="blue"
           className={styles.actionButton}
           onClick={this.toggle}
         >
@@ -92,11 +92,9 @@ ExtraOptionsMenu.defaultProps = {
 
 ExtraOptionsMenu.propTypes = {
   children: PropTypes.node.isRequired,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      icon: PropTypes.string,
-      text: PropTypes.string,
-      onClick: PropTypes.func,
-    })
-  ),
+  options: PropTypes.arrayOf(PropTypes.shape({
+    icon: PropTypes.string,
+    text: PropTypes.string,
+    onClick: PropTypes.func,
+  })),
 };
