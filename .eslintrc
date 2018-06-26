@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
-  "extends": ["prettier", "prettier/react", "prettier/standard", "airbnb"],
-  "plugins": ["react", "bof-newline"],
+  "extends": ["prettier", "airbnb"],
+  "plugins": ["react"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true,
@@ -22,7 +22,6 @@
     "no-trailing-spaces": ["warn", { "skipBlankLines": true }],
     "class-methods-use-this": "off",
     "lines-between-class-members": ["error", "always"],
-    "bof-newline/bof-newline": ["error", "always"],
     "prefer-destructuring": "warn",
     "no-alert": "off",
     "react/no-did-mount-set-state": "off"

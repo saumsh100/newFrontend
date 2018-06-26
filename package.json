@@ -46,7 +46,7 @@
     "electron:build:publish": "npm run client:build:prod && npm run electron:publish",
     "relay": "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx",
     "update-schema": "node ./server/bin/build/updateSchema.bundle.js",
-    "format": "prettier-eslint --write",
+    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write",
     "precommit": "lint-staged"
   },
   "lint-staged": {

@@ -1,0 +1,7 @@
+{
+  "extends": ["./.eslintrc", "prettier/react", "prettier/standard"],
+  "plugins": ["bof-newline"],
+  "rules": {
+    "bof-newline/bof-newline": ["error", "always"]
+  }
+}
