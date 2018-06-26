@@ -1,6 +1,5 @@
 
 import { graphql, commitMutation } from 'react-relay';
-import { ConnectionHandler } from 'relay-runtime';
 import graphQLEnvironment from '../../util/graphqlEnvironment';
 
 const mutation = graphql`

@@ -126,6 +126,7 @@ class AddToWaitlist extends Component {
         onClick={() => this.handleAutoSuggest('')}
         role="button"
         onKeyDown={this.handleOnKeyDown}
+        tabIndex="0"
       >
         <Avatar user={patientSearched} size="sm" />
         <div className={styles.patientContainer_name}>

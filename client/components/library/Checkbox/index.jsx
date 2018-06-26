@@ -44,6 +44,7 @@ function Checkbox(props) {
         onChange={onChange}
         role="button"
         onKeyDown={onKeyDown}
+        tabIndex="0"
       >
         <input
           id={id}
@@ -68,6 +69,10 @@ Checkbox.propTypes = {
   label: PropTypes.string,
   onChange: PropTypes.func,
   // checked: PropTypes.bool,
+};
+
+Checkbox.defaultProps = {
+  customContainer: null,
 };
 
 export default withTheme(Checkbox, styles);

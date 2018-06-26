@@ -49,7 +49,8 @@ const queryType = new GraphQLObjectType({
 /**
  * joining all mutations that will be available to the user
  */
-const rootMutation = Object.assign({},
+const rootMutation = Object.assign(
+  {},
   patientMutation,
   familyMutation,
   patientSearchesMutation,
@@ -64,7 +65,8 @@ const mutationType = new GraphQLObjectType({
 /**
  * Joining all subscriptions that will be available to the user.
  */
-const rootSubscription = Object.assign({},
+const rootSubscription = Object.assign(
+  {},
   waitSpotSubscriptions,
 );
 

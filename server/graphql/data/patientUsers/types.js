@@ -1,5 +1,5 @@
 
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLObjectType, GraphQLString } from 'graphql';
 import { connectionDefinitions } from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
 import { PatientUser, Family } from 'CareCruModels';

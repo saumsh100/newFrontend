@@ -34,8 +34,7 @@ app.set('pub', pub);
 // Bind to supplied port
 server.listen(globals.port, () => {
   console.log(`CareCru HTTP Server is running on port ${globals.port}`);
-
-  new SubscriptionServer({
+  SubscriptionServer.create({
     execute,
     subscribe,
     schema,

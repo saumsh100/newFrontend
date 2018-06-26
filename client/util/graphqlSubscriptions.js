@@ -9,8 +9,7 @@ class GraphQLSubscriptionsManager {
 
   initializeSubscription(accountId) {
     this.registeredSubscriptions = this.SubscriptionList.map(subscription =>
-      subscription.register(accountId)
-    );
+      subscription.register(accountId));
   }
 
   destroySubscriptions() {

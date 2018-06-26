@@ -14,8 +14,9 @@ const newWaitSpot = {
     },
   },
   description: 'New wait spot created notification.',
-  subscribe: withFilter(() => PubSub.asyncIterator(ADD_WAIT_SPOT), (payload, variables) =>
-    payload.newWaitSpot.dataValues.accountId === variables.accountId
+  subscribe: withFilter(
+    () => PubSub.asyncIterator(ADD_WAIT_SPOT),
+    (payload, variables) => payload.newWaitSpot.dataValues.accountId === variables.accountId,
   ),
 };
 
@@ -28,8 +29,9 @@ const removeWaitSpot = {
     },
   },
   description: 'Wait spot removed.',
-  subscribe: withFilter(() => PubSub.asyncIterator(REMOVE_WAIT_SPOT), (payload, variables) =>
-    payload.removeWaitSpot.dataValues.accountId === variables.accountId
+  subscribe: withFilter(
+    () => PubSub.asyncIterator(REMOVE_WAIT_SPOT),
+    (payload, variables) => payload.removeWaitSpot.dataValues.accountId === variables.accountId,
   ),
 };
 

@@ -71,7 +71,7 @@ class Header extends Component {
   }
 
   removeWaitSpot(waitSpot) {
-    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
+    const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
 
     if (confirmDelete) {
       this.props.deleteWaitSpot(waitSpot);
@@ -101,10 +101,7 @@ class Header extends Component {
 
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate
-          currentDate={currentDate}
-          leftColumnWidth={leftColumnWidth}
-        >
+        <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
           <div className={styles.changeDay}>
             <IconButton
               icon="angle-left"
@@ -121,12 +118,7 @@ class Header extends Component {
             />
           </div>
 
-          <Button
-            border="blue"
-            onClick={() => this.props.setCurrentDay(new Date())}
-            dense
-            compact
-          >
+          <Button border="blue" onClick={() => this.props.setCurrentDay(new Date())} dense compact>
             Today
           </Button>
           <div className={styles.header}>
@@ -147,7 +139,6 @@ class Header extends Component {
               tipSize={0.01}
               onOuterAction={this.toggleFilters}
             >
-
               <div className={styles.headerLinks}>
                 <IconButton
                   onClick={this.toggleFilters}
@@ -169,13 +160,7 @@ class Header extends Component {
               Waitlist
             </Button>
 
-            <Button
-              onClick={this.setView}
-              border="blue"
-              iconRight="exchange"
-              dense
-              compact
-            >
+            <Button onClick={this.setView} border="blue" iconRight="exchange" dense compact>
               {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
             </Button>
 
@@ -246,6 +231,7 @@ class Header extends Component {
 Header.defaultProps = {
   pracsFetched: false,
   chairsFetched: false,
+  appointments: List,
 };
 
 Header.propTypes = {
@@ -258,13 +244,9 @@ Header.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
   chairs: PropTypes.instanceOf(Map).isRequired,
   practitioners: PropTypes.instanceOf(Map).isRequired,
-  waitSpots: PropTypes.instanceOf(Map).isRequired,
-  patients: PropTypes.instanceOf(Map).isRequired,
-  patientUsers: PropTypes.instanceOf(Map).isRequired,
   previousDay: PropTypes.func.isRequired,
   nextDay: PropTypes.func.isRequired,
   setCurrentDay: PropTypes.func.isRequired,
-  reinitializeState: PropTypes.func.isRequired,
   deleteWaitSpot: PropTypes.func.isRequired,
 };
 
@@ -278,7 +260,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const mapStateToProps = ({ schedule, apiRequests, entities }) => {
+const mapStateToProps = ({ schedule, apiRequests }) => {
   const scheduleView = schedule.get('scheduleView');
 
   const pracsFetched = apiRequests.get('pracSchedule')
@@ -288,15 +270,10 @@ const mapStateToProps = ({ schedule, apiRequests, entities }) => {
     ? apiRequests.get('chairsSchedule').wasFetched
     : null;
 
-  const patientUsers = entities.getIn(['patientUsers', 'models']);
-  const patients = entities.getIn(['patients', 'models']);
-
   return {
     scheduleView,
     pracsFetched,
     chairsFetched,
-    patients,
-    patientUsers,
   };
 };
 

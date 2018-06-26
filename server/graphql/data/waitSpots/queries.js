@@ -12,7 +12,9 @@ export default resolverOptions => ({
     args: argsListWithOrder,
     resolve: async (_, args, context) => {
       // separate sequelize args from connections args
-      const { limit, order, where, offset, ...rest } = args;
+      const {
+        limit, order, where, offset, ...rest
+      } = args;
 
       const limitDefaultValue = () => rest.first || rest.last;
 

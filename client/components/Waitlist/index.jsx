@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import WaitlistSchedule from '../Schedule/Header/Waitlist';
-import { fetchWaitSpots, deleteMultipleWaitSpots } from '../../thunks/waitlist';
+import { deleteMultipleWaitSpots } from '../../thunks/waitlist';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import SelectedCounter from './SelectedCounter';
 import ExtraOptionsHubMenu from '../ExtraOptionsHubMenu';
@@ -93,7 +93,7 @@ class Waitlist extends Component {
           this.hideAddForm();
         });
         this.props.setTitle(WATILIST_ADD);
-      }
+      },
     );
   }
 
@@ -105,7 +105,7 @@ class Waitlist extends Component {
       () => {
         this.props.setBackHandler(null);
         this.props.setTitle(WAITLIST_PAGE);
-      }
+      },
     );
   }
 
@@ -128,7 +128,6 @@ class Waitlist extends Component {
 }
 
 Waitlist.propTypes = {
-  fetchWaitSpots: PropTypes.func.isRequired,
   deleteMultipleWaitSpots: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
@@ -137,12 +136,14 @@ Waitlist.propTypes = {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchWaitSpots,
       deleteMultipleWaitSpots,
       setBackHandler,
       setTitle,
     },
-    dispatch
+    dispatch,
   );
 
-export default connect(null, mapDispatchToProps)(Waitlist);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Waitlist);

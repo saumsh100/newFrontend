@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import moment from 'moment';
-import { Avatar, Icon, PatientPopover, IconButton, Checkbox, Collapsible, Button } from '../../../library';
+import { Avatar, Icon, PatientPopover, IconButton, Checkbox, Collapsible } from '../../../library';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import { isHub } from '../../../../util/hub';
-import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
 export default function WaitListItem({
@@ -151,9 +150,9 @@ export default function WaitListItem({
           )}
 
           {!isHub() && (
-            <Button className={styles.remove} onClick={removeWaitSpot}>
-              <Icon icon="times" />
-            </Button>
+            <div className={styles.remove}>
+              <IconButton icon="times" onClick={removeWaitSpot} />
+            </div>
           )}
         </div>
       </div>
@@ -239,7 +238,27 @@ WaitListItem.defaultProps = {
 
 WaitListItem.propTypes = {
   removeWaitSpot: PropTypes.func.isRequired,
-  patient: PropTypes.instanceOf(PatientModel),
+  patient: PropTypes.shape({
+    address: PropTypes.shape({
+      city: PropTypes.string,
+      street: PropTypes.string,
+      state: PropTypes.string,
+      country: PropTypes.string,
+    }),
+    birthDate: PropTypes.string,
+    ccId: PropTypes.string,
+    clientId: PropTypes.string,
+    email: PropTypes.string,
+    endDate: PropTypes.string,
+    firstName: PropTypes.string,
+    gender: PropTypes.string,
+    id: PropTypes.string,
+    lastApptDate: PropTypes.string,
+    lastName: PropTypes.string,
+    mobilePhoneNumber: PropTypes.string,
+    nextApptDate: PropTypes.string,
+    phoneNumber: PropTypes.string,
+  }),
   waitSpot: PropTypes.shape({
     endDate: PropTypes.string,
     createdAt: PropTypes.string,

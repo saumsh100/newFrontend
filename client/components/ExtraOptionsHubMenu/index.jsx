@@ -66,6 +66,7 @@ export default class ExtraOptionsMenu extends Component {
           onClick={() => this.state.show && this.toggle()}
           role="button"
           onKeyDown={this.handleKeyDown}
+          tabIndex="0"
         >
           <div className={styles.blurredContent}>{this.props.children}</div>
         </div>
