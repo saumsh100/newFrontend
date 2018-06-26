@@ -1,9 +1,9 @@
 
 import { getOffsetWithDefault } from 'graphql-relay';
 import moment from 'moment/moment';
+import { WaitSpot } from 'CareCruModels';
 import { waitSpotConnection } from './types';
 import { connectionFromArrayWithoutSlice, argsListWithOrder } from '../../util';
-import { WaitSpot } from 'CareCruModels';
 
 export default resolverOptions => ({
   waitSpots: {

@@ -2,8 +2,8 @@
 import { GraphQLString, GraphQLList } from 'graphql';
 import { mutationWithClientMutationId } from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
-import { waitSpotType } from './types';
 import { WaitSpot } from 'CareCruModels';
+import { waitSpotType } from './types';
 import PubSub from '../subscriptionsPubSub';
 import { ADD_WAIT_SPOT, REMOVE_WAIT_SPOT } from '../channels';
 
