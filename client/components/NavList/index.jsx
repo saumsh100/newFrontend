@@ -153,7 +153,6 @@ function NavList({
           icon="tachometer"
           label={renderIf(withEnterprise, () => 'Dashboard', () => 'Dashboard')}
         />
-
         <SingleNavItem
           path="/schedule"
           icon="calendar-alt"
@@ -177,7 +176,6 @@ function NavList({
           <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
-
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
           <SubNavItem path="/settings/practice" label="Practice" />
           <SubNavItem path="/settings/reasons" label="Reasons" />

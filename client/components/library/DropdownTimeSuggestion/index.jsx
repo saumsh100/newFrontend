@@ -111,7 +111,7 @@ class DropdownTimeSuggestion extends Component {
    */
   sortOptions() {
     return this.props.options
-      .map((opt, index) => (opt = { ...opt, index }))
+      .map((opt, index) => ({ ...opt, index }))
       .sort((a, b) => (a.value < b.value ? -1 : 1));
   }
 
@@ -244,7 +244,9 @@ class DropdownTimeSuggestion extends Component {
    * containing the DataSlots.
    */
   renderList() {
-    const { options, formatValue, onChange, value } = this.props;
+    const {
+      options, formatValue, onChange, value,
+    } = this.props;
     return (
       <div
         tabIndex="-1"
@@ -255,10 +257,11 @@ class DropdownTimeSuggestion extends Component {
       >
         {options.map((option, i) => (
           <DataSlot
-            key={i}
+            key={`options_${option.value}`}
             {...this.props}
             selected={formatValue(this.currentValue) === option.value || value === option.value}
             option={option}
+            type="button"
             onClick={() => {
               onChange(option.value);
               this.scrollIndex = i;
@@ -296,12 +299,10 @@ class DropdownTimeSuggestion extends Component {
 DropdownTimeSuggestion.propTypes = {
   renderValue: PropTypes.func,
   align: PropTypes.string,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string,
-    })
-  ).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.string,
+  })).isRequired,
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
@@ -335,4 +336,8 @@ DropdownTimeSuggestion.defaultProps = {
   renderValue,
   theme: null,
   strict: true,
+  className: undefined,
+  value: undefined,
+  'data-test-id': undefined,
+  align: undefined,
 };

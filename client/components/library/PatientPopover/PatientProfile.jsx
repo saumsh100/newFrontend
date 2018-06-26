@@ -2,13 +2,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Card, SContainer, SHeader, SBody, SFooter, Avatar, Icon, Button } from '../../library';
+import {
+  Card,
+  SContainer,
+  SHeader,
+  SBody,
+  SFooter,
+  Avatar,
+  Icon,
+  IconButton,
+  Button,
+} from '../../library';
 import { patientShape } from '../PropTypeShapes';
 import { FormatPhoneNumber } from '../util/Formatters';
 import styles from './styles.scss';
 
 export default function PatientProfile(props) {
-  const { patient, age, closePopover, isPatientUser } = props;
+  const {
+    patient, age, closePopover, isPatientUser,
+  } = props;
 
   const lastName = age ? `${patient.lastName},` : patient.lastName;
 
@@ -31,8 +43,8 @@ export default function PatientProfile(props) {
           <div className={styles.header_text}>
             {patient.firstName} {lastName} {age}
           </div>
-          <div className={styles.closeIcon} onClick={closePopover}>
-            <Icon icon="times" />
+          <div className={styles.closeIcon}>
+            <IconButton icon="times" onClick={closePopover} />
           </div>
         </SHeader>
         <SBody className={styles.body}>
@@ -129,9 +141,14 @@ export default function PatientProfile(props) {
 }
 
 PatientProfile.propTypes = {
-  patient: PropTypes.shape(patientShape),
+  patient: PropTypes.shape(patientShape).isRequired,
   closePopover: PropTypes.func.isRequired,
-  editPatient: PropTypes.func,
+  editPatient: PropTypes.func.isRequired,
   isPatientUser: PropTypes.bool,
   age: PropTypes.number,
+};
+
+PatientProfile.defaultProps = {
+  isPatientUser: false,
+  age: null,
 };

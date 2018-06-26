@@ -81,16 +81,16 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
-  error: undefined,
+  error: '',
   label: '',
-  value: undefined,
+  value: '',
   theme: null,
   type: 'text',
-  icon: null,
+  icon: '',
   iconType: 'solid',
   classStyles: {},
   iconComponent: null,
-  refCallBack: () => {},
+  refCallBack: null,
 };
 
 export default withTheme(Input, styles);

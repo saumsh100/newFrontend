@@ -35,7 +35,15 @@ const mapper = getClassMapper(scheme, styles);
 
 function Button(props) {
   const baseClassName = mapper.map(props, styles.baseline, props.className);
-  let finalProps = mapper.omit(props, 'as', 'icon', 'submit', 'iconRight', 'iconRightComponent');
+  let finalProps = mapper.omit(
+    props,
+    'as',
+    'icon',
+    'submit',
+    'iconRight',
+    'iconRightComponent',
+    'isPristine',
+  );
 
   if (props.disabled) {
     finalProps = mapper.omit(finalProps, 'onClick');
@@ -46,6 +54,7 @@ function Button(props) {
 
   return (
     <props.as
+      type="button"
       {...finalProps}
       className={classNames(baseClassName, {
         [styles.hub]: isHub(),
@@ -63,19 +72,24 @@ function Button(props) {
   );
 }
 
-Button.defaultProps = {
-  as: 'button',
-};
-
 Button.propTypes = {
   ...mapper.types(),
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   className: PropTypes.string,
   icon: PropTypes.string,
   iconRight: PropTypes.string,
   iconRightComponent: PropTypes.func,
   title: PropTypes.string,
+};
+
+Button.defaultProps = {
+  as: 'button',
+  className: '',
+  icon: '',
+  iconRight: '',
+  iconRightComponent: undefined,
+  title: '',
 };
 
 export default Button;

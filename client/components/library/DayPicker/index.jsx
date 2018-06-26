@@ -3,19 +3,17 @@ import React, { Component, PropTypes } from 'react';
 import Popover from 'react-popover';
 import moment from 'moment-timezone';
 import 'react-day-picker/lib/style.css';
-import pick from 'lodash/pick';
 import isArray from 'lodash/isArray';
+import omit from 'lodash/omit';
 import RDayPicker, { DateUtils } from 'react-day-picker';
-import DayPickerStyles from './styles.css';
 import Input from '../Input';
 import IconButton from '../IconButton';
 import styles from './styles.scss';
 
-const convertValueToDate = (value, timezone) => {
+const convertValueToDate = (value) => {
   if (isArray(value)) {
     return value.map(v => new Date(v));
   }
-
   return new Date(value);
 };
 
@@ -31,8 +29,10 @@ class DayPicker extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleDayClick(day, { selected, disabled }) {
-    const { multiple, value, onChange, timezone } = this.props;
+  handleDayClick(day, { disabled }) {
+    const {
+      multiple, value, onChange, timezone,
+    } = this.props;
 
     const dates = moment(day).format('YYYY-MM-DD');
 
@@ -53,7 +53,7 @@ class DayPicker extends Component {
       this.setState({ isOpen: false });
     } else {
       const selectedIndex = value.findIndex((v) => {
-        const date = moment(new Date(v))._d;
+        const date = moment(new Date(v)).toDate();
         return DateUtils.isSameDay(new Date(date), new Date(day));
       });
 
@@ -96,16 +96,23 @@ class DayPicker extends Component {
       iconClassName,
       value,
       timezone,
-      icon,
       noTarget,
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
     const displayValue = value ? moment(value).format('l') : value;
 
+    const newPickerProps = omit(this.props, [
+      'iconClassName',
+      'timezone',
+      'handleThisInput',
+      'noTarget',
+      'TargetComponent',
+    ]);
+
     let dayPickerTargetComponent = (
       <Input
-        {...this.props}
+        {...newPickerProps}
         value={displayValue}
         onChange={this.handleInputChange}
         onKeyDown={e => this.handleClose(e)}
@@ -144,7 +151,6 @@ class DayPicker extends Component {
       </div>
     );
 
-    // TODO: we need to accept all types of values, ISOStrings, Dates, moments, etc. and arrays of those!
     return (
       <div>
         {!noTarget ? (
@@ -167,10 +173,30 @@ class DayPicker extends Component {
 
 DayPicker.propTypes = {
   target: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   iconClassName: PropTypes.string,
   timezone: PropTypes.string,
   multiple: PropTypes.bool,
+  TargetComponent: PropTypes.element,
+  'data-test-id': PropTypes.string,
+  tipSize: PropTypes.number,
+  noTarget: PropTypes.bool,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.any)]),
+  handleThisInput: PropTypes.func,
+};
+
+DayPicker.defaultProps = {
+  onChange: e => e,
+  target: null,
+  iconClassName: '',
+  timezone: '',
+  multiple: false,
+  TargetComponent: null,
+  'data-test-id': '',
+  tipSize: 12,
+  noTarget: false,
+  handleThisInput: e => e,
+  value: '',
 };
 
 export default DayPicker;

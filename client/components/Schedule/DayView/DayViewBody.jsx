@@ -2,21 +2,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Map } from 'immutable';
 import { connect } from 'react-redux';
+import Appointment from '../../../entities/models/Appointments';
 import TimeColumn from './TimeColumn/TimeColumn';
 import PractitionersSlot from './PractitionersSlot';
 import ColumnHeader from './ColumnHeader/index';
 import ChairsSlot from './ChairsSlot';
 import styles from './styles.scss';
 import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
-import { Card, SContainer, SBody, SHeader } from '../../library';
+import { SContainer, SBody, SHeader } from '../../library';
 
 class DayViewBody extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      removed: false,
-    };
     this.scrollComponentDidMount = this.scrollComponentDidMount.bind(this);
     this.scrollComponentDidMountChair = this.scrollComponentDidMountChair.bind(this);
     this.headerComponentDidMount = this.headerComponentDidMount.bind(this);
@@ -122,8 +121,8 @@ class DayViewBody extends Component {
     const colorLen = colors.length;
     const reset = Math.ceil((sortedPractitioners.length - colorLen) / colorLen);
 
-    for (let j = 1; j <= reset; j++) {
-      for (let i = 0; i < sortedPractitioners.length - colorLen; i++) {
+    for (let j = 1; j <= reset; j += 1) {
+      for (let i = 0; i < sortedPractitioners.length - colorLen; i += 1) {
         colors.push(colors[i]);
       }
     }
@@ -132,16 +131,18 @@ class DayViewBody extends Component {
       Object.assign({}, prac.toJS(), {
         color: colors[index],
         prettyName: prac.getPrettyName(),
-      })
-    );
+      }));
 
     // Display the practitioners that have been checked on the filters card.
     const checkedPractitioners = schedule.toJS().practitionersFilter;
-    practitionersArray = practitionersArray.filter(
-      pr => checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive
-    );
+    practitionersArray = practitionersArray.filter((pr) => {
+      if (checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive) {
+        return pr;
+      }
+      return null;
+    });
 
-    const practitionersSlot = allFetched ? (
+    const practitionersSlot = allFetched && (
       <PractitionersSlot
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
@@ -156,7 +157,7 @@ class DayViewBody extends Component {
         selectAppointment={selectAppointment}
         scrollComponentDidMount={this.scrollComponentDidMount}
       />
-    ) : null;
+    );
 
     // Display chairs that have been selected on the filters
     const checkedChairs = schedule.toJS().chairsFilter;
@@ -165,7 +166,7 @@ class DayViewBody extends Component {
       .sort(SortByName)
       .filter(chair => checkedChairs.indexOf(chair.id) > -1 && chair.isActive);
 
-    const chairsSlot = allFetched ? (
+    const chairsSlot = allFetched && (
       <ChairsSlot
         timeSlots={timeSlots}
         timeSlotHeight={timeSlotHeight}
@@ -182,10 +183,10 @@ class DayViewBody extends Component {
         selectAppointment={selectAppointment}
         scrollComponentDidMountChair={this.scrollComponentDidMountChair}
       />
-    ) : null;
+    );
 
     return (
-      <SContainer noBorder className={styles.card} id="scheduleContainer">
+      <SContainer className={styles.card} id="scheduleContainer">
         <SHeader className={styles.header}>
           <ColumnHeader
             scheduleView={scheduleView}
@@ -212,23 +213,6 @@ class DayViewBody extends Component {
   }
 }
 
-DayViewBody.propTypes = {
-  startHour: PropTypes.number,
-  endHour: PropTypes.number,
-  appointments: PropTypes.arrayOf(PropTypes.object),
-  patients: PropTypes.object.isRequired,
-  services: PropTypes.object.isRequired,
-  chairs: PropTypes.object.isRequired,
-  practitioners: PropTypes.object.isRequired,
-  schedule: PropTypes.object,
-  selectAppointment: PropTypes.func.isRequired,
-  scheduleView: PropTypes.string.isRequired,
-  leftColumnWidth: PropTypes.number,
-  appsFetched: PropTypes.bool,
-  pracsFetched: PropTypes.bool,
-  chairsFetched: PropTypes.bool,
-};
-
 function mapStateToProps({ schedule, apiRequests }) {
   const scheduleView = schedule.toJS().scheduleView;
 
@@ -250,6 +234,27 @@ function mapStateToProps({ schedule, apiRequests }) {
   };
 }
 
-const enhance = connect(mapStateToProps, null);
+DayViewBody.propTypes = {
+  startHour: PropTypes.number.isRequired,
+  endHour: PropTypes.number.isRequired,
+  appointments: PropTypes.arrayOf(PropTypes.instanceOf(Appointment)).isRequired,
+  patients: PropTypes.instanceOf(Map).isRequired,
+  services: PropTypes.instanceOf(Map).isRequired,
+  chairs: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  schedule: PropTypes.instanceOf(Map).isRequired,
+  selectAppointment: PropTypes.func.isRequired,
+  scheduleView: PropTypes.string.isRequired,
+  leftColumnWidth: PropTypes.number.isRequired,
+  appsFetched: PropTypes.bool,
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
+};
 
-export default enhance(DayViewBody);
+DayViewBody.defaultProps = {
+  appsFetched: false,
+  pracsFetched: false,
+  chairsFetched: false,
+};
+
+export default connect(mapStateToProps, null)(DayViewBody);

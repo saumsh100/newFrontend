@@ -91,7 +91,7 @@ function mapDispatchToProps(dispatch) {
     {
       fetchEntities,
     },
-    dispatch
+    dispatch,
   );
 }
 

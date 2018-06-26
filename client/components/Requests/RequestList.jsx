@@ -46,21 +46,16 @@ class RequestList extends Component {
     if (isHub()) {
       if (nextSelected && !selected) {
         this.props.setBackHandler(this.backHandler);
-        this.props.setTitle(
-          <p>
-            <Icon icon="calendar" type="regular" size={0.9} className={styles.calendarIcon} />
-            {nextSelected.getFormattedTime()}
-          </p>
-        );
+        this.props.setTitle(<p>
+          <Icon icon="calendar" type="regular" size={0.9} className={styles.calendarIcon} />
+          {nextSelected.getFormattedTime()}
+                            </p>);
       }
     }
   }
 
   confirmAppointment(request, patientUser) {
-    const {
-      routing: { location },
-      redirect,
-    } = this.props;
+    const { routing: { location }, redirect } = this.props;
 
     const modifiedRequest = request.set('isConfirmed', true);
     const requestData = {
@@ -98,15 +93,15 @@ class RequestList extends Component {
   }
 
   openRequest(id) {
-    const {
-      routing: { location },
-    } = this.props;
+    const { routing: { location } } = this.props;
 
     this.props.push({ ...location, search: stringify({ selectedRequest: id || undefined }) });
   }
 
   renderSelectedRequest(props) {
-    const { services, patientUsers, practitioners, selectedRequest } = props;
+    const {
+      services, patientUsers, practitioners, selectedRequest,
+    } = props;
 
     const patientUser = patientUsers.get(selectedRequest.get('patientUserId'));
     const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
@@ -150,7 +145,9 @@ class RequestList extends Component {
   }
 
   renderRequestList(props) {
-    const { sortedRequests, services, patientUsers, practitioners, popoverRight } = props;
+    const {
+      sortedRequests, services, patientUsers, practitioners, popoverRight,
+    } = props;
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
@@ -240,7 +237,7 @@ const mapActionsToProps = dispatch =>
       setBackHandler,
       setTitle,
     },
-    dispatch
+    dispatch,
   );
 
 const enhance = connect(mapStateToProps, mapActionsToProps);

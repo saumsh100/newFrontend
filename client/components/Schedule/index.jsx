@@ -5,16 +5,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import moment from 'moment';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { isHub, isResponsive } from '../../util/hub';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import Requests from '../../entities/models/Request';
-import Practitioners from '../../entities/models/Practitioners';
 import Account from '../../entities/models/Account';
-import Service from '../../entities/models/Service';
-import Patient from '../../entities/models/Patient';
-import Chair from '../../entities/models/Chair';
-import Appointments from '../../entities/models/Appointments';
+
 import {
   Card,
   SBody,
@@ -110,10 +106,7 @@ class ScheduleComponent extends Component {
   }
 
   updateHubData(props) {
-    const {
-      routing: { location },
-      pageTitle,
-    } = props;
+    const { routing: { location }, pageTitle } = props;
 
     props.setTitle(pageTitle);
     props.setBackHandler(() => {
@@ -215,7 +208,6 @@ class ScheduleComponent extends Component {
       selectAppointment,
       selectedAppointment,
       setMergingPatient,
-      weeklySchedules,
       unit,
       appsFetched,
       pracsFetched,
@@ -349,30 +341,29 @@ class ScheduleComponent extends Component {
       <div className={styles.hubWrapper}>
         {allFetched &&
           isAddNewAppointment && (
-          <AddNewAppointment
-            formName={formName}
-            chairs={filterChairs}
-            practitioners={filterPractitioners}
-            patients={patients.get('models')}
-            reinitializeState={this.reinitializeState}
-            weeklySchedules={weeklySchedules}
-            setPatientSearched={this.setPatientSearched}
-            patientSearched={this.state.patientSearched}
-            unit={unit.get('unit')}
-            currentDate={currentDate}
-            showInput={this.state.showInput}
-            setShowInput={this.setShowInput}
-            selectedAppointment={this.props.selectedAppointment}
-            setCreatingPatient={this.props.setCreatingPatient}
-            redirect={isHub() && hubRedirect}
-          />
-        )}
+            <AddNewAppointment
+              formName={formName}
+              chairs={filterChairs}
+              practitioners={filterPractitioners}
+              patients={patients.get('models')}
+              reinitializeState={this.reinitializeState}
+              setPatientSearched={this.setPatientSearched}
+              patientSearched={this.state.patientSearched}
+              unit={unit.get('unit')}
+              currentDate={currentDate}
+              showInput={this.state.showInput}
+              setShowInput={this.setShowInput}
+              selectedAppointment={this.props.selectedAppointment}
+              setCreatingPatient={this.props.setCreatingPatient}
+              redirect={isHub() && hubRedirect}
+            />
+          )}
         {allFetched &&
           showDialog && (
-          <DialogBody actions={actions.filter(v => v.label !== 'Cancel')}>
-            {displayModalComponent}
-          </DialogBody>
-        )}
+            <DialogBody actions={actions.filter(v => v.label !== 'Cancel')}>
+              {displayModalComponent}
+            </DialogBody>
+          )}
       </div>
     ) : (
       <div className={styles.rowMainContainer}>
@@ -415,7 +406,6 @@ class ScheduleComponent extends Component {
                       practitioners={filterPractitioners}
                       patients={patients.get('models')}
                       reinitializeState={this.reinitializeState}
-                      weeklySchedules={weeklySchedules}
                       setPatientSearched={this.setPatientSearched}
                       patientSearched={this.state.patientSearched}
                       unit={unit.get('unit')}
@@ -458,8 +448,8 @@ class ScheduleComponent extends Component {
             </Card>
           </div>
           <div className={styles.sidebar_rowRequest}>
-            <div xs={12} className={styles.sidebar_request}>
-              <RequestsContainer key={'scheduleRequests'} />
+            <div className={styles.sidebar_request}>
+              <RequestsContainer key="scheduleRequests" />
             </div>
           </div>
         </div>
@@ -467,13 +457,6 @@ class ScheduleComponent extends Component {
     );
   }
 }
-
-const routingPropType = PropTypes.shape({
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-    search: PropTypes.string,
-  }),
-});
 
 export const selectAppointmentPropType = PropTypes.shape({
   createdAt: PropTypes.string,
@@ -492,28 +475,32 @@ export const selectAppointmentPropType = PropTypes.shape({
 
 ScheduleComponent.propTypes = {
   accountsFetched: PropTypes.bool,
-  appointments: PropTypes.instanceOf(Appointments),
   appsFetched: PropTypes.bool,
-  chairs: PropTypes.instanceOf(Chair),
   chairsFetched: PropTypes.bool,
-  createEntityRequest: PropTypes.func,
-  patients: PropTypes.instanceOf(Patient),
   pracsFetched: PropTypes.bool,
-  practitioners: PropTypes.instanceOf(Practitioners),
-  push: PropTypes.func,
-  routing: routingPropType,
-  schedule: PropTypes.instanceOf(Map),
-  selectAppointment: PropTypes.func,
+  unit: PropTypes.instanceOf(Account).isRequired,
+  schedule: PropTypes.instanceOf(Map).isRequired,
   selectedAppointment: selectAppointmentPropType,
-  services: PropTypes.instanceOf(Service),
-  setBackHandler: PropTypes.func,
-  setCreatingPatient: PropTypes.func,
-  setMergingPatient: PropTypes.func,
-  setScheduleDate: PropTypes.func,
-  setTitle: PropTypes.func,
-  timeOffs: PropTypes.instanceOf(Map),
-  unit: PropTypes.instanceOf(Account),
-  weeklySchedules: PropTypes.instanceOf(Map),
+  selectAppointment: PropTypes.func.isRequired,
+  setCreatingPatient: PropTypes.func.isRequired,
+  setMergingPatient: PropTypes.func.isRequired,
+  setScheduleDate: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
+  services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  patients: PropTypes.objectOf(PropTypes.instanceOf(List)),
+  chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+};
+
+ScheduleComponent.defaultProps = {
+  accountsFetched: false,
+  chairsFetched: false,
+  pracsFetched: false,
+  appsFetched: false,
+  appointments: null,
+  selectedAppointment: null,
+  patients: null,
 };
 
 const mapStateToProps = ({ routing }) => ({
@@ -527,7 +514,7 @@ const mapActionsToProps = dispatch =>
       setBackHandler,
       setTitle,
     },
-    dispatch
+    dispatch,
   );
 
 const enhance = connect(mapStateToProps, mapActionsToProps);

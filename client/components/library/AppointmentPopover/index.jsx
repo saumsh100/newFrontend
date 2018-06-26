@@ -146,7 +146,4 @@ AppointmentPopover.defaultProps = {
   scrollId: '',
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AppointmentPopover);
+export default connect(mapStateToProps, mapDispatchToProps)(AppointmentPopover);

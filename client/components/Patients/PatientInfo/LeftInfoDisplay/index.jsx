@@ -11,7 +11,9 @@ import CollapsibleTab from '../CollapsibleTab';
 import styles from './styles.scss';
 
 export default function DataDisplay(props) {
-  const { patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer } = props;
+  const {
+    patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer,
+  } = props;
 
   const { family, familyLength } = familyDataSelector(accountViewer);
 
@@ -33,10 +35,10 @@ export default function DataDisplay(props) {
   if (isResponsive()) {
     return (
       <Card className={styles.mainContainer} runAnimation loaded={patient}>
-        <CollapsibleTab title={'Appointments'}>{appointmentsTab}</CollapsibleTab>
-        <CollapsibleTab title={'Personal'}>{personalTab}</CollapsibleTab>
-        <CollapsibleTab title={'Insurance'}>{insuranceTab}</CollapsibleTab>
-        <CollapsibleTab title={'Family'}>{familyTab}</CollapsibleTab>
+        <CollapsibleTab title="Appointments">{appointmentsTab}</CollapsibleTab>
+        <CollapsibleTab title="Personal">{personalTab}</CollapsibleTab>
+        <CollapsibleTab title="Insurance">{insuranceTab}</CollapsibleTab>
+        <CollapsibleTab title="Family">{familyTab}</CollapsibleTab>
       </Card>
     );
   }

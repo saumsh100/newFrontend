@@ -74,7 +74,7 @@ function OfficeHoursForm({
               xs={3}
               className={classNames(
                 isDisabled ? styles.disabledDay : styles.day,
-                styles.flexCentered
+                styles.flexCentered,
               )}
             >
               {day}
@@ -104,7 +104,7 @@ function OfficeHoursForm({
                     <div
                       className={classNames(
                         styles.inlineBlock,
-                        isDisabled ? styles.toDivDisabled : styles.toDiv
+                        isDisabled ? styles.toDivDisabled : styles.toDiv,
                       )}
                     >
                       to

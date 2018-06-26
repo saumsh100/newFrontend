@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
 import styles from '../styles.scss';
-import { Icon } from '../../../../library';
+import { Icon, Button } from '../../../../library';
 import AppointmentPopover from '../AppointmentPopover';
 import AppointmentHours from '../AppointmentHours';
 import withHoverable from '../../../../../hocs/withHoverable';
@@ -36,7 +36,6 @@ class ShowAppointment extends Component {
   componentDidMount() {
     // This prevents setState to be called indefinitely
     if (this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth) {
-      /* eslint-disable react/no-did-mount-set-state */
       this.setState({ nameContainerOffsetWidth: this.nameContainer.offsetWidth });
     }
   }
@@ -104,9 +103,8 @@ class ShowAppointment extends Component {
         onOuterAction={this.closePopover}
         className={styles.appPopover}
       >
-        <button
+        <Button
           onClick={this.togglePopover}
-          role="button"
           onDoubleClick={this.editAppointment}
           className={styles.appointmentContainer}
           style={containerStyle}
@@ -142,7 +140,7 @@ class ShowAppointment extends Component {
               <AppointmentHours startDate={startDate} endDate={endDate} />
             )}
           </div>
-        </button>
+        </Button>
       </Popover>
     );
   }
@@ -152,10 +150,9 @@ ShowAppointment.propTypes = {
   appointment: PropTypes.shape({ id: PropTypes.string }).isRequired,
   selectAppointment: PropTypes.func.isRequired,
   selectedAppointment: PropTypes.shape({ id: PropTypes.string }),
-  scheduleView: PropTypes.string,
-  displayDurationHeight: PropTypes.number,
-  heightCalc: PropTypes.number,
-  patientData: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  scheduleView: PropTypes.string.isRequired,
+  displayDurationHeight: PropTypes.number.isRequired,
+  heightCalc: PropTypes.number.isRequired,
   placement: PropTypes.string,
   containerStyle: PropTypes.shape({
     top: PropTypes.string,
@@ -165,14 +162,24 @@ ShowAppointment.propTypes = {
   appStyle: PropTypes.shape({
     height: PropTypes.string,
     backgroundColor: PropTypes.string,
-    zIndex: PropTypes.string,
+    zIndex: PropTypes.number,
   }),
-  patient: PropTypes.shape({ id: PropTypes.string }),
+  patient: PropTypes.shape({ id: PropTypes.string }).isRequired,
   isPatientConfirmed: PropTypes.bool,
   isReminderSent: PropTypes.bool,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
-  shadowColor: PropTypes.string,
+};
+
+ShowAppointment.defaultProps = {
+  selectedAppointment: {},
+  placement: 'right',
+  containerStyle: {},
+  appStyle: {},
+  isPatientConfirmed: false,
+  isReminderSent: false,
+  startDate: '',
+  endDate: '',
 };
 
 export default withHoverable(ShowAppointment);

@@ -1,12 +1,16 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
 import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
+import { appointmentShape } from '../components/library/PropTypeShapes';
+import Account from '../entities/models/Account';
+import Appointment from '../entities/models/Appointments';
 import {
   setScheduleDate,
   selectAppointment,
@@ -45,7 +49,7 @@ class ScheduleContainer extends Component {
       this.props.fetchEntitiesRequest({
         id: 'pracSchedule',
         key: 'practitioners',
-        join: ['weeklySchedule', 'services'],
+        join: ['services'],
       }),
       this.props.fetchEntitiesRequest({
         id: 'chairsSchedule',
@@ -103,8 +107,6 @@ class ScheduleContainer extends Component {
       services,
       patients,
       chairs,
-      weeklySchedules,
-      timeOffs,
       activeAccount,
     } = this.props;
 
@@ -117,8 +119,6 @@ class ScheduleContainer extends Component {
           services={services}
           patients={patients}
           chairs={chairs}
-          weeklySchedules={weeklySchedules}
-          timeOffs={timeOffs}
           unit={activeAccount}
           setMergingPatient={this.props.setMergingPatient}
           setCreatingPatient={this.props.setCreatingPatient}
@@ -136,35 +136,9 @@ class ScheduleContainer extends Component {
   }
 }
 
-ScheduleContainer.propTypes = {
-  setAllFilters: PropTypes.func,
-  fetchEntities: PropTypes.func,
-  fetchEntitiesRequest: PropTypes.func,
-  setScheduleDate: PropTypes.func,
-  practitioners: PropTypes.instanceOf(Map),
-  currentDate: PropTypes.string,
-  appointments: PropTypes.instanceOf(Map),
-  schedule: PropTypes.instanceOf(Map),
-  services: PropTypes.instanceOf(Map),
-  patients: PropTypes.instanceOf(Map),
-  chairs: PropTypes.instanceOf(Map),
-  setCreatingPatient: PropTypes.func,
-  appsFetched: PropTypes.bool,
-  pracsFetched: PropTypes.bool,
-  chairsFetched: PropTypes.bool,
-  accountsFetched: PropTypes.bool,
-  createEntityRequest: PropTypes.func,
-  setMergingPatient: PropTypes.func,
-  selectedAppointment: PropTypes.func,
-  selectAppointment: PropTypes.func,
-  weeklySchedules: PropTypes.instanceOf(Map),
-  timeOffs: PropTypes.instanceOf(Map),
-  activeAccount: PropTypes.instanceOf(Map),
-};
-
-function mapStateToProps({ apiRequests, entities, schedule, auth }) {
-  const weeklySchedules = entities.getIn(['weeklySchedules', 'models']);
-  const timeOffs = entities.getIn(['timeOffs', 'models']);
+function mapStateToProps({
+  apiRequests, entities, schedule, auth,
+}) {
   const waitForAuth = auth.get('accountId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
@@ -190,8 +164,6 @@ function mapStateToProps({ apiRequests, entities, schedule, auth }) {
     patients: entities.get('patients'),
     services: entities.get('services'),
     chairs: entities.get('chairs'),
-    weeklySchedules,
-    timeOffs,
     activeAccount,
     appsFetched,
     pracsFetched,
@@ -212,10 +184,44 @@ function mapDispatchToProps(dispatch) {
       setMergingPatient,
       setCreatingPatient,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+ScheduleContainer.propTypes = {
+  schedule: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)]),
+  appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  patients: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  chairs: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  activeAccount: PropTypes.instanceOf(Account),
+  selectedAppointment: PropTypes.oneOfType([
+    PropTypes.instanceOf(Appointment),
+    PropTypes.shape(appointmentShape),
+  ]),
+  setCreatingPatient: PropTypes.func.isRequired,
+  setAllFilters: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  setScheduleDate: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  setMergingPatient: PropTypes.func.isRequired,
+  selectAppointment: PropTypes.func.isRequired,
+  appsFetched: PropTypes.bool,
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
+  accountsFetched: PropTypes.bool,
+};
 
-export default enhance(ScheduleContainer);
+ScheduleContainer.defaultProps = {
+  currentDate: new Date(),
+  appsFetched: false,
+  pracsFetched: false,
+  chairsFetched: false,
+  accountsFetched: false,
+  selectedAppointment: null,
+  activeAccount: undefined,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleContainer);

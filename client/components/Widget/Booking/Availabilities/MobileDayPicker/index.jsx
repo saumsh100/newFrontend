@@ -130,7 +130,4 @@ MobileDayPicker.propTypes = {
   setSelectedStartDate: PropTypes.func.isRequired,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MobileDayPicker);
+export default connect(mapStateToProps, mapDispatchToProps)(MobileDayPicker);

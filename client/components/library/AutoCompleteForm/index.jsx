@@ -1,10 +1,9 @@
 
 import React, { Component, PropTypes } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { Provider } from 'react-redux';
 import omit from 'lodash/omit';
 import debounce from 'lodash/debounce';
-import { Input, Icon } from '../';
+import { Input } from '../';
 import { StyleExtender } from '../../Utils/Themer';
 import baseTheme from './theme.scss';
 
@@ -23,7 +22,6 @@ class AutoCompleteForm extends Component {
     this.displayField = this.displayField.bind(this);
     this.state = {
       suggestions: [],
-      isFetchingSuggestions: false,
     };
 
     this.getSuggestions = debounce(this.onSuggestionsFetchRequested, 300);
@@ -38,11 +36,9 @@ class AutoCompleteForm extends Component {
   // Autosuggest will call this function every time you need to update suggestions.
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested({ value }) {
-    this.setState({ isFetchingSuggestions: true });
     return this.props.getSuggestions(value).then((value2) => {
       this.setState({
         suggestions: value2,
-        isFetchingSuggestions: false,
       });
     });
   }
@@ -69,14 +65,17 @@ class AutoCompleteForm extends Component {
       <Input
         {...props}
         ref={null}
-        refCallBack={node => (this.inputComponent = node)}
+        refCallBack={(node) => {
+          this.inputComponent = node;
+          return null;
+        }}
         data-test-id={this.props['data-test-id']}
       />
     );
   }
 
   render() {
-    const { suggestions, isFetchingSuggestions } = this.state;
+    const { suggestions } = this.state;
 
     const newProps = omit(this.props, ['value', 'theme', 'suggestionsContainerComponent']);
     // Autosuggest will pass through all these props to the input element.
@@ -97,22 +96,32 @@ class AutoCompleteForm extends Component {
   }
 }
 
-AutoCompleteForm.defaultProps = {
-  renderSuggestionsContainer: ({ containerProps, children }) => (
-    <div {...containerProps}>{children}</div>
-  ),
-};
-
-// TODO; get proper propTypes and defaultValues
 AutoCompleteForm.propTypes = {
   label: PropTypes.string,
-  classStyles: PropTypes.object,
-  className: PropTypes.object,
-  theme: PropTypes.object,
-  suggestionsContainerComponent: PropTypes.component,
+  classStyles: PropTypes.string,
+  className: PropTypes.objectOf(PropTypes.string),
+  theme: PropTypes.objectOf(PropTypes.string),
+  suggestionsContainerComponent: PropTypes.element,
   renderSuggestionsContainer: PropTypes.func,
   getSuggestionValue: PropTypes.func.isRequired,
   focusInputOnMount: PropTypes.bool,
+  getSuggestions: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  refCallBack: PropTypes.func,
+  'data-test-id': PropTypes.string,
+};
+
+AutoCompleteForm.defaultProps = {
+  value: '',
+  classStyles: '',
+  className: {},
+  theme: {},
+  suggestionsContainerComponent: null,
+  focusInputOnMount: false,
+  label: '',
+  renderSuggestionsContainer: undefined,
+  'data-test-id': '',
+  refCallBack: e => e,
 };
 
 export default AutoCompleteForm;

@@ -100,9 +100,7 @@ class SubTabs extends Component {
   }
 
   render() {
-    const {
-      location: { pathname },
-    } = this.props;
+    const { location: { pathname } } = this.props;
     const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
     return activeRoute ? <RouterTabs routes={ROUTES[activeRoute]} /> : null;

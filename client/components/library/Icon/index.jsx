@@ -12,7 +12,9 @@ const typeMap = {
 };
 
 export default function Icon(props) {
-  const { icon, size, className, style, type, pulse, badgeText, onClick } = props;
+  const {
+    icon, size, className, style, type, pulse, badgeText, onClick,
+  } = props;
 
   const classes = classNames(className, `fa-${icon}`, styles.icon, typeMap[type], {
     'fa-pulse': pulse,

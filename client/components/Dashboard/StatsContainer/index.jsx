@@ -41,9 +41,7 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
 
   const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
 
-  const filteredRequests = requests.filter(
-    req => !req.get('isCancelled') && !req.get('isConfirmed')
-  );
+  const filteredRequests = requests.filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
   return {
     requests: filteredRequests,
@@ -54,6 +52,4 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
 
 const enhance = connect(mapStateToProps, null);
 
-export default withFeatureFlag(StatsContainerFlagged, 'feature-revenue-card')(
-  enhance(StatsContainer)
-);
+export default withFeatureFlag(StatsContainerFlagged, 'feature-revenue-card')(enhance(StatsContainer));

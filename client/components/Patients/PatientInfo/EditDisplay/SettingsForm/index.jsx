@@ -299,7 +299,4 @@ SettingsForm.propTypes = {
   recallsField: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SettingsForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsForm);

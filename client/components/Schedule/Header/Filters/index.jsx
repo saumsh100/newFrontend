@@ -1,13 +1,15 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import moment from 'moment';
 import styles from './styles.scss';
 import FiltersAll from './FiltersAll';
 
 export default function Filters(props) {
-  const { practitioners, schedule, chairs, appointments, currentDate } = props;
+  const {
+    practitioners, schedule, chairs, appointments, currentDate,
+  } = props;
 
   const pracColumns = {};
   const chairColumns = {};
@@ -68,13 +70,10 @@ export default function Filters(props) {
 }
 
 Filters.propTypes = {
-  addPractitionerToFilter: PropTypes.func,
-  selectAppointmentType: PropTypes.func,
-  removePractitionerFromFilter: PropTypes.func,
-  addServiceFilter: PropTypes.func,
-  practitioners: PropTypes.instanceOf(Object),
-  schedule: PropTypes.instanceOf(Object),
-  chairs: PropTypes.instanceOf(Object),
-  appointments: PropTypes.instanceOf(Object),
-  currentDate: PropTypes.date,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  schedule: PropTypes.instanceOf(Map).isRequired,
+  chairs: PropTypes.instanceOf(Map).isRequired,
+  appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
+  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)])
+    .isRequired,
 };

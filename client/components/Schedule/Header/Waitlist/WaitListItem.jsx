@@ -4,12 +4,16 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import moment from 'moment';
-import { Avatar, Icon, PatientPopover } from '../../../library';
-import styles from './styles.scss';
+import { Avatar, Icon, PatientPopover, IconButton } from '../../../library';
+import { patientShape } from '../../../library/PropTypeShapes';
+import WaitSpotModel from '../../../../entities/models/WaitSpot';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
+import styles from './styles.scss';
 
 export default function WaitListItem(props) {
-  const { waitSpot, patient, removeWaitSpot, isPatientUser, removeBorder } = props;
+  const {
+    waitSpot, patient, removeWaitSpot, isPatientUser, removeBorder,
+  } = props;
 
   if (!patient) {
     return null;
@@ -64,28 +68,27 @@ export default function WaitListItem(props) {
 
           <div className={styles.info}>
             <span className={styles.subHeader}>Preferences: </span>
-            {prefKeys.map(
-              (pref, index, arry) =>
-                (preferences[pref] ? (
-                  <span className={styles.dataText} key={`preferences_${index}`}>
+            {prefKeys.map((pref, index, arry) =>
+                preferences[pref] && (
+                  <span className={styles.dataText} key={`preferences_${pref}`}>
                     {pref}
                     {index === arry.length - 1 ? '' : ','}
                   </span>
-                ) : null)
-            )}
+                ))}
           </div>
 
-          {!checkIfAnyTrue ? (
+          {!checkIfAnyTrue && (
             <div className={styles.info}>
               <span className={styles.subHeader}>Preferred Days: </span>
-              {dayWeekKeys.map((day, index, arry) => (daysOfTheWeek[day] ? (
-                <span className={styles.dataText} key={`dayOfWeek_${index}`}>
-                  {day}
-                  {index === arry.length - 1 ? '' : ','}
-                </span>
-              ) : null))}
+              {dayWeekKeys.map((day, index, arry) =>
+                  daysOfTheWeek[day] && (
+                    <span className={styles.dataText} key={`dayOfWeek_${day}`}>
+                      {day}
+                      {index === arry.length - 1 ? '' : ','}
+                    </span>
+                  ))}
             </div>
-          ) : null}
+          )}
 
           <div className={styles.info}>
             <span className={styles.subHeader}> Requested on: </span>
@@ -97,22 +100,22 @@ export default function WaitListItem(props) {
         </div>
 
         <div className={styles.patientGeneralInfo}>
-          {patient[patientPhone] ? (
+          {patient[patientPhone] && (
             <div className={styles.infoContainer}>
               <Icon icon="phone" className={styles.icon} />
               <span className={styles.infoData}>{FormatPhoneNumber(patient[patientPhone])}</span>
             </div>
-          ) : null}
-          {patient.email ? (
+          )}
+          {patient.email && (
             <div className={styles.infoContainer}>
               <Icon icon="envelope" className={styles.icon} />
               <span className={styles.infoData}>{patient.email}</span>
             </div>
-          ) : null}
+          )}
         </div>
 
-        <div className={styles.remove} onClick={removeWaitSpot}>
-          <Icon icon="times" />
+        <div className={styles.remove}>
+          <IconButton icon="times" onClick={removeWaitSpot} />
         </div>
       </div>
     </div>
@@ -120,9 +123,16 @@ export default function WaitListItem(props) {
 }
 
 WaitListItem.propTypes = {
-  removeWaitSpot: PropTypes.func,
-  patient: PropTypes.object,
-  waitSpot: PropTypes.object,
+  removeWaitSpot: PropTypes.func.isRequired,
+  patient: PropTypes.shape(patientShape),
+  waitSpot: PropTypes.instanceOf(WaitSpotModel),
   isPatientUser: PropTypes.bool,
   removeBorder: PropTypes.bool,
+};
+
+WaitListItem.defaultProps = {
+  isPatientUser: false,
+  removeBorder: false,
+  patient: null,
+  waitSpot: null,
 };

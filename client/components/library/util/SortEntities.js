@@ -26,14 +26,16 @@ export const SortByCreatedAtDesc = (a, b) => {
   return 0;
 };
 
-export const sortByField = (collection, fieldDate) => collection.sort((a, b) => {
-  if (moment(a[fieldDate]).isBefore(moment(b[fieldDate]))) return -1;
-  if (moment(a[fieldDate]).isAfter(moment(b[fieldDate]))) return 1;
-  return 0;
-});
+export const sortByField = (collection, fieldDate) =>
+  collection.sort((a, b) => {
+    if (moment(a[fieldDate]).isBefore(moment(b[fieldDate]))) return -1;
+    if (moment(a[fieldDate]).isAfter(moment(b[fieldDate]))) return 1;
+    return 0;
+  });
 
-export const sortByFieldAsc = (collection, fieldDate) => collection.sort((a, b) => {
-  if (moment(b[fieldDate]).isBefore(moment(a[fieldDate]))) return -1;
-  if (moment(b[fieldDate]).isAfter(moment(a[fieldDate]))) return 1;
-  return 0;
-});
+export const sortByFieldAsc = (collection, fieldDate) =>
+  collection.sort((a, b) => {
+    if (moment(b[fieldDate]).isBefore(moment(a[fieldDate]))) return -1;
+    if (moment(b[fieldDate]).isAfter(moment(a[fieldDate]))) return 1;
+    return 0;
+  });

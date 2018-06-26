@@ -63,6 +63,7 @@ const address = {
   city: 'Belgrade',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  timezone,
 };
 
 const account2 = {
@@ -92,6 +93,7 @@ const address2 = {
   street: '10204 112th St.',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  timezone,
 };
 
 const managerPermission = {

@@ -320,7 +320,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SuperAdmin);
+export default connect(mapStateToProps, mapDispatchToProps)(SuperAdmin);

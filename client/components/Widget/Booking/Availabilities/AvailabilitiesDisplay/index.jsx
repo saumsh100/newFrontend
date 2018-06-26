@@ -418,7 +418,4 @@ AvailabilitiesDisplay.propTypes = {
   setSelectedStartDate: PropTypes.func.isRequired,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AvailabilitiesDisplay);
+export default connect(mapStateToProps, mapDispatchToProps)(AvailabilitiesDisplay);

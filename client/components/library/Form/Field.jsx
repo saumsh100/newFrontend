@@ -9,7 +9,7 @@ import { normalizePhone } from './normalize';
 import { phoneValidateNullOkay } from './validate';
 import styles from './field.scss';
 
-const requiredValidation = val => val ? undefined : 'Required';
+const requiredValidation = val => (val ? undefined : 'Required');
 
 class ReduxField extends Component {
   constructor(props) {
@@ -36,7 +36,6 @@ class ReduxField extends Component {
 
     // add normalizer for phone numbers
     if (type === 'tel') {
-      // TODO: we are currently overriding the normalize for tel, they should be able to stack (compose)
       normalize = normalizePhone;
       validate = validate || [];
       validate = [...validate, phoneValidateNullOkay];
@@ -44,16 +43,12 @@ class ReduxField extends Component {
 
     // need to remove required attribute from ReduxField as the Input component uses it
     // extend component attribute for reduxForm's Field props
-    const newProps = Object.assign(
-      {},
-      omit(this.props, ['required']),
-      {
-        component,
-        normalize,
-        validate,
-        onClick: this.togglePopOver,
-      }
-    );
+    const newProps = Object.assign({}, omit(this.props, ['required', 'popover']), {
+      component,
+      normalize,
+      validate,
+      onClick: this.togglePopOver,
+    });
 
     if (popover) {
       return (
@@ -62,11 +57,7 @@ class ReduxField extends Component {
           onOuterAction={this.togglePopOver}
           isOpen={this.state.isOpen}
           tipSize={4}
-          body={(
-            <div className={styles.toggle}>
-              {popover}
-            </div>
-          )}
+          body={<div className={styles.toggle}>{popover}</div>}
         >
           <Field {...newProps} />
         </Popover>
@@ -80,12 +71,18 @@ ReduxField.propTypes = {
   popover: PropTypes.string,
   required: PropTypes.bool,
   validate: PropTypes.arrayOf(PropTypes.func),
-  component: PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element,
-  ]),
-
   type: PropTypes.string,
+  component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  normalize: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+};
+
+ReduxField.defaultProps = {
+  popover: undefined,
+  required: false,
+  validate: [],
+  type: 'text',
+  component: 'Input',
+  normalize: undefined,
 };
 
 const withValidate = withProps(({ required, validate = [] }) => {
@@ -96,8 +93,6 @@ const withValidate = withProps(({ required, validate = [] }) => {
   };
 });
 
-const enhance = compose(
-  withValidate,
-);
+const enhance = compose(withValidate);
 
 export default enhance(ReduxField);

@@ -146,7 +146,4 @@ RevenueContainer.defaultProps = {
   revenueData: Map,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(RevenueContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(RevenueContainer);

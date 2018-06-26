@@ -26,7 +26,9 @@ class AccountsList extends Component {
     const pageTitle = () => `${enterprise.name}`;
 
     const breadcrumbs = () => [
-      { icon: 'home', key: 'home', home: true, link: '/admin' },
+      {
+        icon: 'home', key: 'home', home: true, link: '/admin',
+      },
       { title: 'Enterprises', key: 'enterprises', link: '/admin/enterprises' },
       { title: pageTitle(), key: enterprise.id },
     ];
@@ -86,30 +88,21 @@ AccountsList.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   enterpriseId: PropTypes.string.isRequired,
-  accounts: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-    })
-  ),
+  accounts: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  })),
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
 
-const stateToProps = (
-  state,
-  {
-    match: {
-      params: { enterpriseId },
-    },
-  }
-) => ({
+const stateToProps = (state, { match: { params: { enterpriseId } } }) => ({
   enterpriseId,
   enterprise: getModel(state, 'enterprises', enterpriseId),
   accounts: getCollection(
     state,
     'accounts',
-    account => account.get('enterpriseId') === enterpriseId
+    account => account.get('enterpriseId') === enterpriseId,
   ),
 });
 
@@ -119,7 +112,7 @@ const dispatchToProps = dispatch =>
       fetchEntities,
       deleteEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 
 export default connect(stateToProps, dispatchToProps)(AccountsList);

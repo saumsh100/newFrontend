@@ -36,9 +36,7 @@ class Login extends Component {
   }
 
   handleLogin(values) {
-    const {
-      location: { state },
-    } = this.props;
+    const { location: { state } } = this.props;
     return this.props.login({ values, redirectedFrom: state && state.from }).catch((err) => {
       const { data } = err;
       throw new SubmissionError({
@@ -90,7 +88,7 @@ function mapActionsToProps(dispatch) {
       login,
       push,
     },
-    dispatch
+    dispatch,
   );
 }
 

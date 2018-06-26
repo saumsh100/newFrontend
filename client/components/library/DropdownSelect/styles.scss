@@ -1,4 +1,3 @@
-
 @import '../../../ui.scss';
 
 $empty-grey: darken(lightgrey, 5%);
@@ -20,8 +19,9 @@ $empty-grey: darken(lightgrey, 5%);
   border-bottom: 1px solid $disabled-color;
   display: flex;
   align-items: center;
-  transition : border 500ms ease-out;
+  transition: border 500ms ease-out;
   box-sizing: border-box;
+  outline: none;
 }
 
 .primaryColorBorder {
@@ -37,10 +37,10 @@ $empty-grey: darken(lightgrey, 5%);
     font-size: $small-size !important;
     letter-spacing: 2px;
   }
-  &_primaryBlueBorder{
+  &_primaryBlueBorder {
     border-bottom: 1px solid $primary-blue;
   }
-  &_primaryBlueCaret{
+  &_primaryBlueCaret {
     color: $primary-blue !important;
   }
 }
@@ -79,6 +79,7 @@ $empty-grey: darken(lightgrey, 5%);
   background-color: $primary-white;
   border-bottom: 1px solid;
   border-bottom-color: $primary-grey;
+  outline: none;
 
   &:hover {
     cursor: pointer;
@@ -98,7 +99,7 @@ $empty-grey: darken(lightgrey, 5%);
 .selectedListItem {
   padding-left: 15px;
   border-left: var(--primaryButtonColor) $selection-border;
-
+  outline: none;
 }
 
 .toggleValueDiv {
@@ -111,7 +112,7 @@ $empty-grey: darken(lightgrey, 5%);
 .caretIconWrapper {
   margin-left: auto;
   color: $primary-darkgrey;
-  transition : color 500ms ease-out;
+  transition: color 500ms ease-out;
 }
 
 .caretIcon {

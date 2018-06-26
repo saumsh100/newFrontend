@@ -45,7 +45,9 @@ class PatientPopover extends Component {
   }
 
   render() {
-    const { placement, children, patient, closePopover } = this.props;
+    const {
+      placement, children, patient, closePopover,
+    } = this.props;
 
     if (!patient) {
       return null;
@@ -75,33 +77,40 @@ class PatientPopover extends Component {
                 e.stopPropagation();
                 this.setOpen(true);
               },
-            })
-          )}
+            }))}
         </div>
       </Popover>
     );
   }
 }
 
-PatientPopover.propTypes = {
-  children: PropTypes.element,
-  patient: PropTypes.shape(patientShape),
-  className: PropTypes.objectOf(PropTypes.string),
-  placement: PropTypes.string,
-  isPatientUser: PropTypes.bool,
-  closePopover: PropTypes.bool,
-  push: PropTypes.func,
-  scrollId: PropTypes.string,
-};
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       push,
     },
-    dispatch
+    dispatch,
   );
 }
+
+PatientPopover.propTypes = {
+  children: PropTypes.element.isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
+  className: PropTypes.string,
+  placement: PropTypes.string,
+  isPatientUser: PropTypes.bool,
+  closePopover: PropTypes.bool,
+  push: PropTypes.func.isRequired,
+  scrollId: PropTypes.string,
+};
+
+PatientPopover.defaultProps = {
+  isPatientUser: false,
+  closePopover: false,
+  scrollId: '',
+  placement: 'right',
+  className: '',
+};
 
 const enhance = connect(null, mapDispatchToProps);
 export default enhance(PatientPopover);

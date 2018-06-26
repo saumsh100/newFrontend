@@ -1,13 +1,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import WaitListItem from './WaitListItem';
 import { List, Button } from '../../../library';
-import styles from './styles.scss';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
+import styles from './styles.scss';
 
 export default function Waitlist(props) {
-  const { waitSpots, patientUsers, patients, removeWaitSpot, openAddTo } = props;
+  const {
+    waitSpots, patientUsers, patients, removeWaitSpot, openAddTo,
+  } = props;
 
   return (
     <div className={styles.waitList}>
@@ -58,9 +61,15 @@ export default function Waitlist(props) {
 }
 
 Waitlist.propTypes = {
-  waitSpots: PropTypes.object,
-  patientUsers: PropTypes.object,
-  patients: PropTypes.object,
-  removeWaitSpot: PropTypes.func,
-  openAddTo: PropTypes.bool,
+  waitSpots: PropTypes.instanceOf(Map),
+  patientUsers: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map),
+  removeWaitSpot: PropTypes.func.isRequired,
+  openAddTo: PropTypes.func.isRequired,
+};
+
+Waitlist.defaultProps = {
+  waitSpots: Map,
+  patientUsers: Map,
+  patients: Map,
 };

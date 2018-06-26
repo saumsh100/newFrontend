@@ -21,7 +21,9 @@ class TimeOffList extends Component {
   }
 
   render() {
-    const { timeOffs, practitioner, onSelectTimeOff, deleteTimeOff, children } = this.props;
+    const {
+      timeOffs, practitioner, onSelectTimeOff, deleteTimeOff, children,
+    } = this.props;
 
     return (
       <List className={styles.timeOffList} data-test-id="timeOffList">

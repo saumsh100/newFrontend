@@ -39,7 +39,9 @@ class PractitionerTimeOff extends Component {
 
     const { selectedTimeOff } = this.state;
 
-    const { startDate, endDate, startTime, endTime, allDay } = values;
+    const {
+      startDate, endDate, startTime, endTime, allDay,
+    } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
     const mergedStartDate = mergeTime(new Date(startDate), new Date(startTime), allDay);
@@ -173,7 +175,7 @@ class PractitionerTimeOff extends Component {
       <div>
         {showAddOrListComponent}
         <DialogBox
-          key={'addTimeOff'}
+          key="addTimeOff"
           actions={actions}
           title="Add Time Off"
           type="medium"
@@ -209,7 +211,7 @@ function mapActionsToProps(dispatch) {
       deleteEntityRequest,
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
