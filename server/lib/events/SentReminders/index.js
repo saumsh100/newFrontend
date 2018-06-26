@@ -16,6 +16,7 @@ export function fetchSentReminderEvents(patientId, accountId, query) {
         isDeleted: false,
         isCancelled: false,
         isPending: false,
+        isMissed: false,
       },
       required: true,
     }],

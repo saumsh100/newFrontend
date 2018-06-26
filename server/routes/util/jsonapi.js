@@ -33,6 +33,7 @@ const ModelAttributes = {
     'isSyncedWithPms',
     'isCancelled',
     'isShortCancelled',
+    'isMissed',
     'isPending',
     'customBufferTime',
     'mark',

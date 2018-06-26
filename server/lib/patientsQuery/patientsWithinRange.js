@@ -74,6 +74,7 @@ function appointmentQueryParams(startDate, endDate) {
   return {
     isCancelled: false,
     isDeleted: false,
+    isMissed: false,
     isPending: false,
     startDate: {
       $between: [startDate, endDate],

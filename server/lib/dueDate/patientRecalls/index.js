@@ -68,6 +68,7 @@ export async function getPatientsThatAreDue(config) {
         attributes: ['id', 'reason'],
         where: {
           isCancelled: false,
+          isMissed: false,
           isPending: false,
           startDate: { $gt: date },
         },

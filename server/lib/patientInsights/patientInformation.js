@@ -246,6 +246,7 @@ function appointmentsQuery(accountId, startDate, endDate) {
         $lte: endDate,
       },
       isCancelled: false,
+      isMissed: false,
       isPending: false,
       isDeleted: false,
     },

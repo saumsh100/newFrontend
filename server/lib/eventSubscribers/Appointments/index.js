@@ -17,6 +17,7 @@ function calcPatientFNLAllApps(app) {
       patientId: app.patientId,
       isCancelled: false,
       isDeleted: false,
+      isMissed: false,
       isPending: false,
     },
     order: [['startDate', 'DESC']],
@@ -111,7 +112,7 @@ function firstNextLastAppointmentCalc(id) {
       const patient = app.patient;
       const startDate = app.startDate;
 
-      if (!app.isDeleted && !app.isPending && !app.isCancelled) {
+      if (!app.isDeleted && !app.isPending && !app.isMissed && !app.isCancelled) {
         return calcPatientFNLSingleApp(app, patient, startDate);
       }
 
@@ -133,6 +134,7 @@ function firstNextLastAppointmentBatchCalc(appointmentIds) {
       id: appointmentIds,
       isCancelled: false,
       isDeleted: false,
+      isMissed: false,
       isPending: false,
       patientId: {
         $not: null,
