@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -7,7 +8,9 @@ import styles from '../../styles/default.scss';
 class Loader extends React.Component {
   render() {
     if (!this.props.isLoaded) {
-      const barStyle = this.props.inContainer ? classNames(styles.loadBar, styles.barInContainer) : styles.loadBar;
+      const barStyle = this.props.inContainer
+        ? classNames(styles.loadBar, styles.barInContainer)
+        : styles.loadBar;
 
       return (
         <div className={barStyle}>

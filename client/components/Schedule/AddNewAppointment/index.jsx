@@ -19,7 +19,16 @@ import {
   deleteEntityRequest,
   fetchEntitiesRequest,
 } from '../../../thunks/fetchEntities';
-import { Button, Avatar, Card, SContainer, SFooter, SHeader, SBody, Icon } from '../../library';
+import {
+  Button,
+  Avatar,
+  Card,
+  SContainer,
+  SFooter,
+  SHeader,
+  SBody,
+  Icon,
+} from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
@@ -54,7 +63,10 @@ class AddNewAppointment extends Component {
 
   getSuggestions(value) {
     return this.props
-      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
       .then(searchData => searchData.patients)
       .then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length
@@ -68,12 +80,16 @@ class AddNewAppointment extends Component {
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
                   {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+                    patient.birthDate
+                      ? `, ${moment().diff(patient.birthDate, 'years')}`
+                      : ''
                   }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
                   Last Appointment:{' '}
-                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                  {patient.lastApptDate
+                    ? moment(patient.lastApptDate).format('MMM D YYYY')
+                    : 'n/a'}
                 </div>
               </div>
             </div>
@@ -180,7 +196,11 @@ class AddNewAppointment extends Component {
 
   handleSubmit(values) {
     const {
-      selectedAppointment, reinitializeState, formName, redirect, setLocation,
+      selectedAppointment,
+      reinitializeState,
+      formName,
+      redirect,
+      setLocation,
     } = this.props;
 
     const {
@@ -242,8 +262,13 @@ class AddNewAppointment extends Component {
     }
 
     // if an appointment is not selected then create the appointment else update the appointment
-    if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
-      const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
+    if (
+      !selectedAppointment ||
+      (selectedAppointment && selectedAppointment.request)
+    ) {
+      const requestId = selectedAppointment
+        ? selectedAppointment.requestModel.get('id')
+        : null;
 
       return this.props
         .createEntityRequest({
@@ -262,7 +287,9 @@ class AddNewAppointment extends Component {
               .then(() => {
                 this.props
                   .updateEntityRequest({
-                    url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
+                    url: `/api/requests/${requestId}/confirm/${
+                      Object.keys(data.appointments)[0]
+                    }`,
                     values: {},
                   })
                   .then(() => {
@@ -305,7 +332,10 @@ class AddNewAppointment extends Component {
       });
       const appModel = selectedAppointment.appModel;
       const deletedModel = appModel.merge(delModel);
-      this.props.updateEntityRequest({ key: 'appointments', model: deletedModel });
+      this.props.updateEntityRequest({
+        key: 'appointments',
+        model: deletedModel,
+      });
     }
 
     reinitializeState();
@@ -329,8 +359,11 @@ class AddNewAppointment extends Component {
     };
 
     let title =
-      selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
-    let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
+      selectedAppointment && !selectedAppointment.request
+        ? 'Edit Appointment'
+        : 'Add Appointment';
+    let buttonTitle =
+      selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
 
     if (selectedAppointment && selectedAppointment.request) {
       title = 'Accept Appointment';
@@ -450,11 +483,17 @@ const mapStateToProps = ({ form }, { formName }) =>
 AddNewAppointment.propTypes = {
   appFormValues: PropTypes.shape({
     chairId: PropTypes.string,
-    date: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.any)]),
+    date: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.objectOf(PropTypes.any),
+    ]),
     duration: PropTypes.number,
     endTime: PropTypes.string,
     note: PropTypes.string,
-    patientSelected: PropTypes.oneOfType([PropTypes.shape(patientShape), PropTypes.string]),
+    patientSelected: PropTypes.oneOfType([
+      PropTypes.shape(patientShape),
+      PropTypes.string,
+    ]),
     practitionerId: PropTypes.string,
     serviceId: PropTypes.string,
     startTime: PropTypes.string,
@@ -506,4 +545,7 @@ AddNewAppointment.defaultProps = {
   appFormValues: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewAppointment);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddNewAppointment);

@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  Button,
-  Link,
-} from '../../../library';
+import { Button, Link } from '../../../library';
 import Footer from '../../Footer';
 import WaitlistPreferences from './WaitlistPreferences';
-import { setHasWaitList, updateWaitSpot } from '../../../../actions/availabilities';
+import {
+  setHasWaitList,
+  updateWaitSpot,
+} from '../../../../actions/availabilities';
 import styles from './styles.scss';
 
 class Waitlist extends Component {
@@ -61,9 +61,11 @@ class Waitlist extends Component {
       <div className={styles.wrapper}>
         <WaitlistPreferences />
         <div className={styles.waitlistInfo}>
-          {hasWaitList ? 'Do you want to be removed from the waitlist? Remove yourself below.' : 'You\'ll be notified when an earlier time becomes available.'}
+          {hasWaitList
+            ? 'Do you want to be removed from the waitlist? Remove yourself below.'
+            : "You'll be notified when an earlier time becomes available."}
         </div>
-        {hasWaitList ?
+        {hasWaitList ? (
           <div className={styles.buttonWrapperRemove}>
             <Button
               className={styles.removeButton}
@@ -71,21 +73,17 @@ class Waitlist extends Component {
             >
               Remove Me
             </Button>
-            <Button
-              className={styles.saveButton}
-              onClick={this.joinWaitlist}
-            >
+            <Button className={styles.saveButton} onClick={this.joinWaitlist}>
               Save Waitlist
             </Button>
-          </div> :
+          </div>
+        ) : (
           <div className={styles.buttonWrapper}>
-            <Button
-              className={styles.joinButton}
-              onClick={this.joinWaitlist}
-            >
+            <Button className={styles.joinButton} onClick={this.joinWaitlist}>
               Join Waitlist
             </Button>
-          </div>}
+          </div>
+        )}
       </div>
     );
   }
@@ -98,10 +96,16 @@ function mapStateToProps({ availabilities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setHasWaitList,
-    updateWaitSpot,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setHasWaitList,
+      updateWaitSpot,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Waitlist));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Waitlist));

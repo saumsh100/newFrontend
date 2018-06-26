@@ -35,10 +35,16 @@ function Join({ isAuth, history, resetWaitlist }) {
         Want to be notified if an earlier appointment becomes available?
       </h3>
       <div className={styles.buttonsWrapper}>
-        <Button onClick={() => handleWaitlistConfirmation(true)} className={styles.confirmation}>
+        <Button
+          onClick={() => handleWaitlistConfirmation(true)}
+          className={styles.confirmation}
+        >
           Yes
         </Button>
-        <Button onClick={() => handleWaitlistConfirmation(false)} className={styles.negation}>
+        <Button
+          onClick={() => handleWaitlistConfirmation(false)}
+          className={styles.negation}
+        >
           No
         </Button>
       </div>
@@ -57,11 +63,14 @@ function mapDispatchToProps(dispatch) {
     {
       resetWaitlist: resetWaitlistAction,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Join);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Join);
 
 Join.propTypes = {
   resetWaitlist: PropTypes.func,

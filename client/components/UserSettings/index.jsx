@@ -3,7 +3,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { NavItem, Icon } from '../library';
 import { electron } from '../../util/ipc';
-import { SHOW_USER_MODAL, HIDE_USER_MODAL, HIDDEN_USER_MODAL } from '../../constants';
+import {
+  SHOW_USER_MODAL,
+  HIDE_USER_MODAL,
+  HIDDEN_USER_MODAL,
+} from '../../constants';
 import styles from './style.scss';
 
 class UserSettings extends React.Component {
@@ -38,7 +42,9 @@ class UserSettings extends React.Component {
   }
 
   render() {
-    const navStyle = !this.state.show ? styles.navItem : classNames(styles.navItem, styles.active);
+    const navStyle = !this.state.show
+      ? styles.navItem
+      : classNames(styles.navItem, styles.active);
 
     return (
       <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>

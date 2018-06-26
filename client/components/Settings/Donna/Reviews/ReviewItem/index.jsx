@@ -3,9 +3,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { intervalToNumType, numTypeToInterval } from '../../../../../../server/util/time';
+import {
+  intervalToNumType,
+  numTypeToInterval,
+} from '../../../../../../server/util/time';
 import { updateReviewsSettings } from '../../../../../thunks/accounts';
-import { Icon, Grid, Row, Col, Input, DropdownSelect } from '../../../../library';
+import {
+  Icon,
+  Grid,
+  Row,
+  Col,
+  Input,
+  DropdownSelect,
+} from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
@@ -38,7 +48,11 @@ function SmallIconCircle(props) {
     ? styles.smallReviewSelectWrapperCircleSelected
     : styles.smallReviewSelectWrapperCircle;
 
-  return <div className={wrapperClass}>{icon ? <Icon icon={icon} type="solid" /> : null}</div>;
+  return (
+    <div className={wrapperClass}>
+      {icon ? <Icon icon={icon} type="solid" /> : null}
+    </div>
+  );
 }
 
 SmallIconCircle.propTypes = {
@@ -73,7 +87,7 @@ class ReviewItem extends Component {
 
     this.setState({
       number: newNumType.num,
-      intervalType: newNumType.type,
+      intervalType: newNumType.type
     });
     /* eslint-enable */
   }
@@ -144,7 +158,9 @@ class ReviewItem extends Component {
   }
 
   renderLabel() {
-    return <TouchPointLabel title="Review Request" className={styles.reviewLabel} />;
+    return (
+      <TouchPointLabel title="Review Request" className={styles.reviewLabel} />
+    );
   }
 
   renderMainComponent() {
@@ -153,7 +169,9 @@ class ReviewItem extends Component {
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
     const icon = iconsMap[primaryTypesKey];
     const { number } = this.state;
-    const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
+    const dropdownSelectClass = selected
+      ? styles.dropdownSelectSelected
+      : styles.dropdownSelect;
     const { type } = intervalToNumType(interval);
 
     return (
@@ -161,7 +179,13 @@ class ReviewItem extends Component {
         <div className={styles.reviewIconContainer}>
           <IconCircle icon={icon} selected={selected} color="yellow" />
         </div>
-        <div className={selected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
+        <div
+          className={
+            selected
+              ? styles.secondaryLinesBoxSelected
+              : styles.secondaryLinesBox
+          }
+        >
           <div className={styles.smallIconContainer}>
             <SmallIconCircle icon="bell" selected={selected} />
           </div>
@@ -237,6 +261,9 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updateReviewsSettings }, dispatch);
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(ReviewItem);

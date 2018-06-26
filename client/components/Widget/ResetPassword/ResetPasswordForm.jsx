@@ -3,13 +3,13 @@ import React, { PropTypes } from 'react';
 import { Button, Form, Field, VButton } from '../../library';
 import { emailValidate } from '../../library/Form/validate';
 
-const defaultSubmitButton = (
-  <Button type="submit">
-    Reset your password
-  </Button>
-);
+const defaultSubmitButton = <Button type="submit">Reset your password</Button>;
 
-export default function ResetPasswordForm({ onSubmit, className, submitButton = defaultSubmitButton }) {
+export default function ResetPasswordForm({
+  onSubmit,
+  className,
+  submitButton = defaultSubmitButton,
+}) {
   return (
     <Form
       form="patientResetPassword"

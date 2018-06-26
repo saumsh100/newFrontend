@@ -17,7 +17,10 @@ export default function IconCard(props) {
   return (
     <Card className={classes} noBorder>
       <div className={styles.iconCard__wrapper}>
-        <div className={styles.iconCard__count} data-test-id={`statCard_${title}`}>
+        <div
+          className={styles.iconCard__count}
+          data-test-id={`statCard_${title}`}
+        >
           {count}
         </div>
         <div className={styles.iconCard__title}>{title}</div>

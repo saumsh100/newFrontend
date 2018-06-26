@@ -92,11 +92,15 @@ class ScheduleComponent extends Component {
   }
 
   nextDay(currentDay) {
-    this.props.setScheduleDate({ scheduleDate: moment(currentDay).add(1, 'days') });
+    this.props.setScheduleDate({
+      scheduleDate: moment(currentDay).add(1, 'days'),
+    });
   }
 
   previousDay(currentDay) {
-    this.props.setScheduleDate({ scheduleDate: moment(currentDay).subtract(1, 'days') });
+    this.props.setScheduleDate({
+      scheduleDate: moment(currentDay).subtract(1, 'days'),
+    });
   }
 
   addNewAppointment() {
@@ -106,7 +110,10 @@ class ScheduleComponent extends Component {
   }
 
   updateHubData(props) {
-    const { routing: { location }, pageTitle } = props;
+    const {
+      routing: { location },
+      pageTitle,
+    } = props;
 
     props.setTitle(pageTitle);
     props.setBackHandler(() => {
@@ -231,14 +238,20 @@ class ScheduleComponent extends Component {
     const leftColumnWidth = schedule.toJS().leftColumnWidth;
     const currentDate = moment(schedule.toJS().scheduleDate);
 
-    const filterPractitioners = practitioners.get('models').filter(prac => prac.get('isActive'));
-    const filterChairs = chairs.get('models').filter(chair => chair.get('isActive'));
+    const filterPractitioners = practitioners
+      .get('models')
+      .filter(prac => prac.get('isActive'));
+    const filterChairs = chairs
+      .get('models')
+      .filter(chair => chair.get('isActive'));
 
     const sameApptTitle = isResponsive()
       ? 'Is this the same appointment?'
       : 'Could this be the same appointment?';
 
-    let displayTitle = this.state.sendEmail ? 'Send Confirmation Email?' : sameApptTitle;
+    let displayTitle = this.state.sendEmail
+      ? 'Send Confirmation Email?'
+      : sameApptTitle;
 
     let displayModalComponent = null;
     let actions = [];
@@ -258,7 +271,10 @@ class ScheduleComponent extends Component {
       );
     }
 
-    if (mergingPatientData.patientUser && mergingPatientData.suggestions.length > 0) {
+    if (
+      mergingPatientData.patientUser &&
+      mergingPatientData.suggestions.length > 0
+    ) {
       displayTitle = 'Create or Connect a Patient';
       displayModalComponent = (
         <AddPatientSuggestions
@@ -318,12 +334,16 @@ class ScheduleComponent extends Component {
       ];
 
       displayModalComponent = (
-        <AddPatient formName={patientFormName} onSubmit={this.handlePatientSubmit} />
+        <AddPatient
+          formName={patientFormName}
+          onSubmit={this.handlePatientSubmit}
+        />
       );
     }
 
     const isAddNewAppointment =
-      addNewAppointment || (!!selectedAppointment && !selectedAppointment.nextAppt);
+      addNewAppointment ||
+      (!!selectedAppointment && !selectedAppointment.nextAppt);
 
     if (isAddNewAppointment) {
       displayTitle = 'Accept Appointment';
@@ -335,7 +355,8 @@ class ScheduleComponent extends Component {
       createNewPatient;
 
     this.pageTitle = displayTitle;
-    const allFetched = appsFetched && accountsFetched && chairsFetched && pracsFetched;
+    const allFetched =
+      appsFetched && accountsFetched && chairsFetched && pracsFetched;
 
     return isHub() ? (
       <div className={styles.hubWrapper}>
@@ -425,7 +446,9 @@ class ScheduleComponent extends Component {
                     active={showDialog}
                     onEscKeyDown={this.reinitializeState}
                     onOverlayClick={
-                      createNewPatient ? this.setCreatingPatient : this.reinitializeState
+                      createNewPatient
+                        ? this.setCreatingPatient
+                        : this.reinitializeState
                     }
                   >
                     {displayModalComponent}
@@ -439,7 +462,12 @@ class ScheduleComponent extends Component {
           <div className={styles.sidebar_rowCalendar}>
             <Card>
               <DayPicker
-                month={new Date(moment(currentDate).year(), moment(currentDate).month())}
+                month={
+                  new Date(
+                    moment(currentDate).year(),
+                    moment(currentDate).month(),
+                  )
+                }
                 selectedDays={new Date(currentDate)}
                 onDayClick={this.setCurrentDay}
                 className={styles.sidebar_calendar}
@@ -517,6 +545,9 @@ const mapActionsToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(ScheduleComponent);

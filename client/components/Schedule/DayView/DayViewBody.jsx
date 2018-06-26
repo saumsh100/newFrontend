@@ -43,9 +43,15 @@ class DayViewBody extends Component {
 
   componentWillUnmount() {
     if (this.scrollComponentChair) {
-      this.scrollComponentChair.removeEventListener('scroll', this.onScrollChair.bind(this));
+      this.scrollComponentChair.removeEventListener(
+        'scroll',
+        this.onScrollChair.bind(this),
+      );
     } else if (this.scrollComponent) {
-      this.scrollComponent.removeEventListener('scroll', this.onScroll.bind(this));
+      this.scrollComponent.removeEventListener(
+        'scroll',
+        this.onScroll.bind(this),
+      );
     }
   }
 
@@ -190,7 +196,9 @@ class DayViewBody extends Component {
         <SHeader className={styles.header}>
           <ColumnHeader
             scheduleView={scheduleView}
-            entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
+            entities={
+              scheduleView === 'chair' ? chairsArray : practitionersArray
+            }
             headerComponentDidMount={this.headerComponentDidMount}
             leftColumnWidth={leftColumnWidth}
             minWidth={schedule.toJS().columnWidth}
@@ -257,4 +265,7 @@ DayViewBody.defaultProps = {
   chairsFetched: false,
 };
 
-export default connect(mapStateToProps, null)(DayViewBody);
+export default connect(
+  mapStateToProps,
+  null,
+)(DayViewBody);

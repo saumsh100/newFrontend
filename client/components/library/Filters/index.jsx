@@ -14,11 +14,7 @@ class Filters extends Component {
   }
 
   clearAll() {
-    const {
-      change,
-      filterKey,
-      initialValues,
-    } = this.props;
+    const { change, filterKey, initialValues } = this.props;
 
     const firstKey = Object.keys(initialValues)[0];
     const firstKeys = Object.keys(initialValues[firstKey]);
@@ -35,10 +31,7 @@ class Filters extends Component {
   }
 
   handleSubmit(values) {
-    const {
-      setReputationFilter,
-      filterKey,
-    } = this.props;
+    const { setReputationFilter, filterKey } = this.props;
 
     if (filterKey === 'listingsFilter') {
       const filterSources = [];
@@ -72,9 +65,9 @@ class Filters extends Component {
     }
 
     if (filterKey === 'reviewsFilter') {
-      const filterSources = []
+      const filterSources = [];
       if (values && values.sources) {
-        const v = values.sources
+        const v = values.sources;
         Object.keys(v).forEach((k) => {
           if (v[k] === false) {
             delete values[k];
@@ -83,7 +76,7 @@ class Filters extends Component {
           }
         });
       }
-      const filterRatings = []
+      const filterRatings = [];
       if (values && values.ratings) {
         const v = values.ratings;
         Object.keys(v).forEach((k) => {
@@ -104,7 +97,14 @@ class Filters extends Component {
   }
 
   render() {
-    const { filters, selectAll, setAll, initialValues, reset, filterKey} = this.props;
+    const {
+      filters,
+      selectAll,
+      setAll,
+      initialValues,
+      reset,
+      filterKey,
+    } = this.props;
 
     return (
       <Card className={styles.card}>
@@ -115,16 +115,10 @@ class Filters extends Component {
               <span>Filters</span>
             </div>
             <div className={styles.filters__header__right}>
-              <Button
-                flat
-                onClick={()=> reset(filterKey)}
-              >
+              <Button flat onClick={() => reset(filterKey)}>
                 Select All
               </Button>
-              <Button
-                flat
-                onClick={()=> this.clearAll()}
-              >
+              <Button flat onClick={() => this.clearAll()}>
                 Clear All
               </Button>
             </div>

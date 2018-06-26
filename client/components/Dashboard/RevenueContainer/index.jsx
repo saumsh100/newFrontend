@@ -27,7 +27,9 @@ function generateLabels(data) {
 
 function getCurrentDate(data) {
   const dateKeys = Object.keys(data);
-  return dateKeys.filter(key => key !== 'average').sort(sortByDate)[dateKeys.length - 2];
+  return dateKeys.filter(key => key !== 'average').sort(sortByDate)[
+    dateKeys.length - 2
+  ];
 }
 
 function generateDataPoints(data) {
@@ -45,7 +47,12 @@ function renderDisplay(revenueData) {
   const firstDate = getCurrentDate(revenue);
 
   return (
-    <RevenueDisplay firstDate={firstDate} data={data} isValid={isValid} average={revenue.average} />
+    <RevenueDisplay
+      firstDate={firstDate}
+      data={data}
+      isValid={isValid}
+      average={revenue.average}
+    />
   );
 }
 
@@ -123,7 +130,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ apiRequests }) {
-  const revenueData = apiRequests.get('revenueFetch') ? apiRequests.get('revenueFetch').data : null;
+  const revenueData = apiRequests.get('revenueFetch')
+    ? apiRequests.get('revenueFetch').data
+    : null;
   const wasRevenueFetched = apiRequests.get('revenueFetch')
     ? apiRequests.get('revenueFetch').wasFetched
     : null;
@@ -136,7 +145,10 @@ function mapStateToProps({ apiRequests }) {
 
 RevenueContainer.propTypes = {
   fetchEntitiesRequest: PropTypes.func.isRequired,
-  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  dashboardDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.string,
+  ]).isRequired,
   revenueData: PropTypes.instanceOf(Map),
   wasRevenueFetched: PropTypes.bool,
 };
@@ -146,4 +158,7 @@ RevenueContainer.defaultProps = {
   revenueData: Map,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RevenueContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RevenueContainer);

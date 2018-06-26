@@ -33,9 +33,9 @@ export default function DataTable(props) {
         />
         <InfoDump
           label="SECONDARY-NUMBER"
-          data={FormatPhoneNumber(
-            patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber
-          )}
+          data={FormatPhoneNumber(patient.homePhoneNumber ||
+              patient.prefPhoneNumber ||
+              patient.workPhoneNumber)}
           className={styles.infoDump}
         />
       </div>
@@ -46,7 +46,8 @@ export default function DataTable(props) {
         <InfoDump label="RECALLS SENT" component={recallComp} />
         {patient.nextApptDate ? (
           <div className={styles.subHeaderSmall}>
-            Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
+            Next Appointment:{' '}
+            {moment(patient.nextApptDate).format('MMMM Do YYYY')}
           </div>
         ) : (
           <div className={styles.subHeaderSmall}>Next Appointment: n/a </div>

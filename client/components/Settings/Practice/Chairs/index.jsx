@@ -4,7 +4,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
-import { fetchEntities, updateEntityRequest } from '../../../../thunks/fetchEntities';
+import {
+  fetchEntities,
+  updateEntityRequest,
+} from '../../../../thunks/fetchEntities';
 import { showAlertTimeout } from '../../../../thunks/alerts';
 import { Toggle } from '../../../library/index';
 import { SortByName } from '../../../library/util/SortEntities';
@@ -46,8 +49,7 @@ class Chairs extends Component {
     const { chairs } = this.props;
 
     const actions = Object.keys(chairs.toJS()).map(key =>
-      this.props.change('chairsForm', key, !this.props.allChairs)
-    );
+      this.props.change('chairsForm', key, !this.props.allChairs));
 
     this.props.dispatch(batchActions(actions));
   }
@@ -78,11 +80,13 @@ class Chairs extends Component {
           });
       }
 
-      return this.props.updateEntityRequest({ key: 'chairs', model: modifiedService }).then(() => {
-        this.setState({
-          previousValues,
+      return this.props
+        .updateEntityRequest({ key: 'chairs', model: modifiedService })
+        .then(() => {
+          this.setState({
+            previousValues,
+          });
         });
-      });
     });
   }
 
@@ -105,7 +109,11 @@ class Chairs extends Component {
         <div className={styles.container}>
           <div className={styles.allChairs}>
             <span className={styles.allChairs_text}> All Chairs Active </span>
-            <Toggle name="allChairs" onChange={this.setAllChairs} checked={this.props.allChairs} />
+            <Toggle
+              name="allChairs"
+              onChange={this.setAllChairs}
+              checked={this.props.allChairs}
+            />
           </div>
           {sortedChairs.length ? (
             <ChairsForm
@@ -157,10 +165,13 @@ function mapDispatchToProps(dispatch) {
       change,
       dispatch,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Chairs);

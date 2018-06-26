@@ -5,11 +5,7 @@ import { passwordsMatch, passwordStrength } from '../library/Form/validate';
 
 export default function ChangePasswordForm({ onSubmit }) {
   return (
-    <Form
-      form="changePassword"
-      onSubmit={onSubmit}
-      validate={passwordsMatch}
-    >
+    <Form form="changePassword" onSubmit={onSubmit} validate={passwordsMatch}>
       <Field
         required
         type="password"

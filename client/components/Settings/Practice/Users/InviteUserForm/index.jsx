@@ -1,12 +1,17 @@
 
 import React, { PropTypes, Component } from 'react';
 import { Form, Field } from '../../../../library';
-import { emailValidate, asyncEmailValidateUser } from '../../../../library/Form/validate';
+import {
+  emailValidate,
+  asyncEmailValidateUser,
+} from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
 class InviteUserForm extends Component {
   render() {
-    const { sendInvite, formName, mainStyle, formStyle } = this.props;
+    const {
+      sendInvite, formName, mainStyle, formStyle,
+    } = this.props;
 
     const optionsInterval = [
       {

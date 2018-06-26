@@ -12,12 +12,12 @@ class Success extends Component {
           We've sent you an email with password reset instructions.
         </div>
         <div className={styles.message}>
-          If the email doesn't show up soon, please check your spam folder. We sent the email from <span className={styles.email}>noreply@carecru.com</span>.
+          If the email doesn't show up soon, please check your spam folder. We
+          sent the email from{' '}
+          <span className={styles.email}>noreply@carecru.com</span>.
         </div>
         <div className={styles.linkWrapper}>
-          <Link to="./login">
-            Back to login
-          </Link>
+          <Link to="./login">Back to login</Link>
         </div>
       </div>
     );

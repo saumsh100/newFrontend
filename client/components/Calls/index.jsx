@@ -45,9 +45,17 @@ class Calls extends Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
-    const { startDate, endDate, skip, limit } = this.state;
+    const {
+      startDate, endDate, skip, limit,
+    } = this.state;
 
-    const params = paramBuilder(startDate, endDate, decodedToken.activeAccountId, skip, limit);
+    const params = paramBuilder(
+      startDate,
+      endDate,
+      decodedToken.activeAccountId,
+      skip,
+      limit,
+    );
 
     this.fetchCallData(params).then((data) => {
       const dataLength = Object.keys(data[1].calls || {}).length;
@@ -92,7 +100,14 @@ class Calls extends Component {
   }
 
   loadMore() {
-    const { startDate, endDate, accountId, skip, limit, callsLength } = this.state;
+    const {
+      startDate,
+      endDate,
+      accountId,
+      skip,
+      limit,
+      callsLength,
+    } = this.state;
 
     const params = paramBuilder(startDate, endDate, accountId, skip, limit);
 
@@ -144,7 +159,13 @@ class Calls extends Component {
   }
 
   render() {
-    const { callGraphStats, calls, patients, wasCallsFetched, wasStatsFetched } = this.props;
+    const {
+      callGraphStats,
+      calls,
+      patients,
+      wasCallsFetched,
+      wasStatsFetched,
+    } = this.props;
 
     return (
       <CallsBody
@@ -183,9 +204,12 @@ Calls.propTypes = {
 function mapStateToProps({ entities, apiRequests }) {
   const callGraphStats = apiRequests.get('callGraphStats') || null;
   const wasStatsFetched =
-    (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
+    (apiRequests.get('callGraphStats') &&
+      apiRequests.get('callGraphStats').wasFetched) ||
+    null;
 
-  const wasCallsFetched = (apiRequests.get('calls') && apiRequests.get('calls').wasFetched) || null;
+  const wasCallsFetched =
+    (apiRequests.get('calls') && apiRequests.get('calls').wasFetched) || null;
 
   return {
     callGraphStats,
@@ -204,10 +228,13 @@ function mapDispatchToProps(dispatch) {
       fetchEntities,
       deleteAllEntity,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Calls);

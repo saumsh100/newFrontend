@@ -47,18 +47,25 @@ class DigitalWaitList extends Component {
   }
 
   getSuggestions(value) {
-    return this.props.fetchEntities({ url: '/api/patients/search', params:  { patients: value } })
-      .then((searchData) => {
-        return searchData.patients;})
+    return this.props
+      .fetchEntities({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
+      .then(searchData => searchData.patients)
       .then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length ? Object.keys(searchedPatients).map(
-          (key) => searchedPatients[key]) : [];
+        const patientList = Object.keys(searchedPatients).length
+          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
+          : [];
         patientList.map((patient) => {
           patient.display = (
             <div className={styles.suggestionContainer}>
               <Avatar user={patient} size="sm" />
               <span className={styles.suggestionContainer_fullName}>
-                {`${patient.firstName} ${patient.lastName}, ${moment().diff(patient.birthDate, 'years')}`}
+                {`${patient.firstName} ${patient.lastName}, ${moment().diff(
+                  patient.birthDate,
+                  'years',
+                )}`}
               </span>
             </div>
           );
@@ -79,20 +86,29 @@ class DigitalWaitList extends Component {
 
     if (!selectedWaitSpot) {
       newValues = Object.assign(
-        { patientId: values.patientData.id,
-          endDate: moment().add(1, 'days').toISOString(),
+        {
+          patientId: values.patientData.id,
+          endDate: moment()
+            .add(1, 'days')
+            .toISOString(),
         },
-        omit(values, ['patientData'])
+        omit(values, ['patientData']),
       );
     }
     if (selectedWaitSpot && selectedWaitSpot.patientId) {
-      newValues = Object.assign({
-        patientId: selectedWaitSpot.patientId,
-      }, values);
+      newValues = Object.assign(
+        {
+          patientId: selectedWaitSpot.patientId,
+        },
+        values,
+      );
     } else if (selectedWaitSpot && selectedWaitSpot.patientUserId) {
-      newValues = Object.assign({
-        patientUserId: selectedWaitSpot.patientUserId,
-      }, values);
+      newValues = Object.assign(
+        {
+          patientUserId: selectedWaitSpot.patientUserId,
+        },
+        values,
+      );
     }
 
     const alertCreate = {
@@ -215,40 +231,50 @@ class DigitalWaitList extends Component {
             title="Digital Waitlist"
             data-test-id="waitListCount"
           >
-            <Button
-              flat
-              compact
-              onClick={this.toggleWaitSpotForm}
-            >
-              <div style={{display: 'flex', alignItems: 'center' }}>
-                Add to Waitlist <Icon style={{ marginLeft: '5px' }} size={1.5} icon="plus-circle" />
+            <Button flat compact onClick={this.toggleWaitSpotForm}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                Add to Waitlist{' '}
+                <Icon
+                  style={{ marginLeft: '5px' }}
+                  size={1.5}
+                  icon="plus-circle"
+                />
               </div>
             </Button>
           </CardHeader>
         </div>
         <div className={styles.reminders__body}>
           <List className={styles.patients}>
-            {waitSpots.get('models').toArray().map((waitSpot, index) => {
-              let patientData = null;
+            {waitSpots
+              .get('models')
+              .toArray()
+              .map((waitSpot, index) => {
+                let patientData = null;
 
-              if (waitSpot.patientUserId && !waitSpot.patientId) {
-                patientData = patientUsers.getIn(['models', waitSpot.get('patientUserId')]);
-              } else if (waitSpot.patientId) {
-                patientData = patients.getIn(['models', waitSpot.get('patientId')]);
-              }
+                if (waitSpot.patientUserId && !waitSpot.patientId) {
+                  patientData = patientUsers.getIn([
+                    'models',
+                    waitSpot.get('patientUserId'),
+                  ]);
+                } else if (waitSpot.patientId) {
+                  patientData = patients.getIn([
+                    'models',
+                    waitSpot.get('patientId'),
+                  ]);
+                }
 
-              return (
-                <DigitalWaitListItem
-                  key={waitSpot.id}
-                  index={index}
-                  waitSpot={waitSpot}
-                  patientUser={patientData}
-                  setSelectedWaitSpot={setSelectedWaitSpot}
-                  handlePatientClick={this.handlePatientClick}
-                  removeWaitSpot={this.removeWaitSpot}
-                />
-              );
-            })}
+                return (
+                  <DigitalWaitListItem
+                    key={waitSpot.id}
+                    index={index}
+                    waitSpot={waitSpot}
+                    patientUser={patientData}
+                    setSelectedWaitSpot={setSelectedWaitSpot}
+                    handlePatientClick={this.handlePatientClick}
+                    removeWaitSpot={this.removeWaitSpot}
+                  />
+                );
+              })}
           </List>
         </div>
       </Card>
@@ -280,14 +306,17 @@ function mapStateToProps({ entities, schedule }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    createEntityRequest,
-    updateEntityRequest,
-    deleteEntityRequest,
-    setSelectedWaitSpot,
-    reset,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      createEntityRequest,
+      updateEntityRequest,
+      deleteEntityRequest,
+      setSelectedWaitSpot,
+      reset,
+    },
+    dispatch,
+  );
 }
 
 const enhance = compose(
@@ -297,11 +326,16 @@ const enhance = compose(
     join: ['patientUser', 'patient'],
     params: {
       startTime: moment().toISOString(),
-      endTime: moment().add(360, 'days').toISOString(),
+      endTime: moment()
+        .add(360, 'days')
+        .toISOString(),
     },
   }),
 
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
 );
 
 export default enhance(DigitalWaitList);

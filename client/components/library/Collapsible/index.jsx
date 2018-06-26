@@ -40,10 +40,14 @@ class Collapsible extends Component {
       ? classname(wrapperClass, styles.collapibleContainer)
       : styles.collapibleContainer;
 
-    const titleStyle = titleClass ? classname(titleClass, styles.title) : styles.title;
+    const titleStyle = titleClass
+      ? classname(titleClass, styles.title)
+      : styles.title;
 
     const titleStyleWithStatus =
-      activeClass && this.state.isExpanded ? classname(titleStyle, activeClass) : titleStyle;
+      activeClass && this.state.isExpanded
+        ? classname(titleStyle, activeClass)
+        : titleStyle;
 
     const contentStyle = contentClass
       ? classname(contentClass, styles.collapsed)

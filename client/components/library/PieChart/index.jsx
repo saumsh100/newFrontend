@@ -5,12 +5,7 @@ import colorMap from '../util/colorMap';
 
 export default function PieChart(props) {
   const {
-    type,
-    data,
-    displayLegend,
-    displayTooltips,
-    width,
-    height,
+    type, data, displayLegend, displayTooltips, width, height,
   } = props;
 
   const PieChartComponent = type === 'doughnut' ? Doughnut : Pie;

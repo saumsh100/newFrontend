@@ -43,13 +43,20 @@ class AddPatientSuggestions extends Component {
   }
 
   handleConnectPatient() {
-    const { patients, reinitializeState, selectAppointment, mergingPatientData } = this.props;
+    const {
+      patients,
+      reinitializeState,
+      selectAppointment,
+      mergingPatientData,
+    } = this.props;
 
     const requestData = mergingPatientData.requestData;
     const patient = this.state.selectedPatient;
 
     const futureAppointments =
-      patient.appointments && patient.appointments.length ? patient.appointments : false;
+      patient.appointments && patient.appointments.length
+        ? patient.appointments
+        : false;
 
     const appointment = {
       startDate: requestData.startDate,
@@ -95,8 +102,9 @@ class AddPatientSuggestions extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.patientSpeel}>
-          <span className={styles.bold}>{fullName}</span>, don't have a patient record in your PMS.
-          Please select one to <span className={styles.bold}>Connect</span> or{' '}
+          <span className={styles.bold}>{fullName}</span>, don't have a patient
+          record in your PMS. Please select one to{' '}
+          <span className={styles.bold}>Connect</span> or{' '}
           <span className={styles.bold}>Create a New Patient</span>.
         </div>
         <div className={styles.suggestionsList}>
@@ -115,7 +123,11 @@ class AddPatientSuggestions extends Component {
           <Button border="blue" onClick={this.handleCreatePatient}>
             Create New Patient
           </Button>
-          <Button color="blue" onClick={this.handleConnectPatient} className={styles.connectButton}>
+          <Button
+            color="blue"
+            onClick={this.handleConnectPatient}
+            className={styles.connectButton}
+          >
             Connect Patient
           </Button>
         </div>
@@ -144,13 +156,16 @@ const mapDispatchToProps = dispatch =>
     {
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 
 const mapStateToProps = ({ entities }) => ({
   patients: entities.getIn(['patients', 'models']),
 });
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(AddPatientSuggestions);

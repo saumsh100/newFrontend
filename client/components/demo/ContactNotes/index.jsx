@@ -9,11 +9,7 @@ function HighlightPreferences({ preferences }) {
   return (
     <div className={styles.prefsWrapper}>
       {map(preferences, (val, key) => (
-        <Toggle
-          key={`${key}_toggle`}
-          checked={val}
-          label={key}
-        />
+        <Toggle key={`${key}_toggle`} checked={val} label={key} />
       ))}
     </div>
   );
@@ -47,20 +43,14 @@ class ContactNotes extends React.Component {
     return (
       <div className={styles.contactMethodWrapper}>
         <h3>Contact Method Note</h3>
-        <textarea onChange={this.onChange}>
-          {this.state.notes}
-        </textarea>
+        <textarea onChange={this.onChange}>{this.state.notes}</textarea>
         <h3>Patient Preferences</h3>
-        <HighlightPreferences
-          preferences={this.state.prefs}
-        />
+        <HighlightPreferences preferences={this.state.prefs} />
       </div>
     );
   }
 }
 
-ContactNotes.propTypes = {
-
-};
+ContactNotes.propTypes = {};
 
 export default ContactNotes;

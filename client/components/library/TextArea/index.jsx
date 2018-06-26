@@ -23,9 +23,17 @@ function TextArea(props) {
 
   const styles = theme;
 
-  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles']);
+  const inputProps = omit(props, [
+    'error',
+    'borderColor',
+    'theme',
+    'classStyles',
+  ]);
 
-  const valuePresent = value !== null && value !== undefined && value !== '' &&
+  const valuePresent =
+    value !== null &&
+    value !== undefined &&
+    value !== '' &&
     !(typeof value === 'number' && isNaN(value));
 
   // Without this the label would fall back onBlur
@@ -49,15 +57,15 @@ function TextArea(props) {
     inputClassName = classNames(styles[`theme_${theme}Input`], inputClassName);
   }
 
-  const errorComponent = error ? <span className={styles.error}>{error}</span> : null;
+  const errorComponent = error ? (
+    <span className={styles.error}>{error}</span>
+  ) : null;
 
   return (
     <div className={`${styles.group} ${classStyles}`}>
       <textarea className={inputClassName} {...inputProps} />
       <span className={styles.bar} />
-      <label className={labelClassName}>
-        {label}
-      </label>
+      <label className={labelClassName}>{label}</label>
       {errorComponent}
     </div>
   );
@@ -66,10 +74,7 @@ function TextArea(props) {
 TextArea.propTypes = {
   error: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number,
-  ]),
+  value: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
 
   type: PropTypes.string,
   icon: PropTypes.string,

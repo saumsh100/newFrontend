@@ -28,9 +28,10 @@ const relayFamilyShape = PropTypes.shape({
   ccId: PropTypes.string,
   head: PropTypes.shape(patientShape),
   members: PropTypes.shape({
-    edges: PropTypes.arrayOf(
-      PropTypes.shape({ cursor: PropTypes.string, node: PropTypes.shape(patientShape) })
-    ),
+    edges: PropTypes.arrayOf(PropTypes.shape({
+      cursor: PropTypes.string,
+      node: PropTypes.shape(patientShape),
+    })),
     pageInfo: PropTypes.shape({
       endCursor: PropTypes.string,
       hasNextPage: PropTypes.bool,
@@ -55,13 +56,17 @@ const renderMemberList = ({ family, patientNode }) => (
                 key={familyMember.id}
                 {...familyMember}
                 handleMakeHead={() =>
-                  makePatientHeadOfFamily.commit(graphQLEnvironment, familyMember.node, family)
+                  makePatientHeadOfFamily.commit(
+                    graphQLEnvironment,
+                    familyMember.node,
+                    family,
+                  )
                 }
                 handleRemoveFromFamily={() =>
                   removePatientFromFamily.commit(
                     graphQLEnvironment,
                     familyMember.node,
-                    patientNode.id
+                    patientNode.id,
                   )
                 }
               />
@@ -81,11 +86,16 @@ const renderAddFamily = ({ family, patientNode }) => (
       onSelect={patient =>
         (family === null
           ? addFamilyWithMembers.commit(
-            graphQLEnvironment,
-            [patient.id, patientNode.ccId],
-            patientNode.id
-          )
-          : addPatientToFamily.commit(graphQLEnvironment, patient, family.ccId, patientNode.id))
+              graphQLEnvironment,
+              [patient.id, patientNode.ccId],
+              patientNode.id,
+            )
+          : addPatientToFamily.commit(
+              graphQLEnvironment,
+              patient,
+              family.ccId,
+              patientNode.id,
+            ))
       }
       theme={patientSearchTheme}
       inputProps={patientSearchInputProps}

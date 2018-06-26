@@ -99,9 +99,7 @@ RelayPatientFetcher.propTypes = {
   limit: PropTypes.number,
   render: PropTypes.func.isRequired,
   after: PropTypes.string,
-  order: PropTypes.arrayOf(
-    PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)])
-  ),
+  order: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)])),
   handleSearchRequest: PropTypes.func,
 };
 

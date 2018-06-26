@@ -17,7 +17,10 @@ import {
   Field,
   FieldArray,
 } from '../../../library/index';
-import { dayShape, weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
+import {
+  dayShape,
+  weeklyScheduleShape,
+} from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
 
 const generateTimeOptions = () => {
@@ -45,7 +48,13 @@ const defaultEndTime = moment(new Date(1970, 1, 0, 13, 0)).toISOString();
 
 const timeOptions = generateTimeOptions();
 
-function BreaksForm({ weeklySchedule, onSubmit, breaksName, dataId, breaksIndex }) {
+function BreaksForm({
+  weeklySchedule,
+  onSubmit,
+  breaksName,
+  dataId,
+  breaksIndex,
+}) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -76,7 +85,12 @@ function BreaksForm({ weeklySchedule, onSubmit, breaksName, dataId, breaksIndex 
         >
           <Button
             type="button"
-            onClick={() => fields.push({ startTime: defaultStartTime, endTime: defaultEndTime })}
+            onClick={() =>
+              fields.push({
+                startTime: defaultStartTime,
+                endTime: defaultEndTime,
+              })
+            }
             data-test-id={`button_${day}_addBreak`}
             secondary
           >
@@ -102,7 +116,9 @@ function BreaksForm({ weeklySchedule, onSubmit, breaksName, dataId, breaksIndex 
                   />
                 </Col>
                 <Col xs={1} className={styles.flexCentered}>
-                  <div className={classNames(styles.inlineBlock, styles.toDiv)}>to</div>
+                  <div className={classNames(styles.inlineBlock, styles.toDiv)}>
+                    to
+                  </div>
                 </Col>
                 <Col xs={4} className={styles.flexCentered}>
                   <Field
@@ -186,4 +202,7 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(mapStateToProps, null)(BreaksForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(BreaksForm);

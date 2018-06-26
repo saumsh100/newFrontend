@@ -37,18 +37,25 @@ export default function TouchPointItem(props) {
     <div className={classNames(className, styles.listItem)} {...finalProps}>
       <div className={styles.gridSection}>
         <div className={styles.leftSection}>
-          <div className={classNames(toggleClass, styles.toggleCol)}>{toggleComponent}</div>
-          <div className={classNames(labelClass, styles.labelCol)}>{labelComponent}</div>
+          <div className={classNames(toggleClass, styles.toggleCol)}>
+            {toggleComponent}
+          </div>
+          <div className={classNames(labelClass, styles.labelCol)}>
+            {labelComponent}
+          </div>
         </div>
         <div className={styles.flexSection}>
           <div
             className={classNames(
               linesBoxClass,
               noLines
-                ? classNames(styles.linesBox, selected ? styles[`boxSelected_${color}`] : {})
+                ? classNames(
+                    styles.linesBox,
+                    selected ? styles[`boxSelected_${color}`] : {},
+                  )
                 : selected
                   ? styles[`linesBoxSelected_${color}`]
-                  : styles.linesBoxWithLines
+                  : styles.linesBoxWithLines,
             )}
           >
             {mainComponent}
@@ -58,7 +65,9 @@ export default function TouchPointItem(props) {
           <div
             className={classNames(
               connectLinesClass,
-              selected ? styles[`connectionLineSelected_${color}`] : styles.connectionLine
+              selected
+                ? styles[`connectionLineSelected_${color}`]
+                : styles.connectionLine,
             )}
           >
             {rightComponent}

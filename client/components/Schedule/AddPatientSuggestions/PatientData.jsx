@@ -15,14 +15,20 @@ const PatientData = (props) => {
   return (
     <Button
       className={classNames(styles.singleSuggestion, {
-        [styles.patientSelected]: selectedPatient && selectedPatient.id === patient.id,
+        [styles.patientSelected]:
+          selectedPatient && selectedPatient.id === patient.id,
       })}
       onClick={() => {
         selectPatient(patient);
       }}
     >
       <div className={styles.suggestionsListItem}>
-        <Avatar size="md" className={styles.patientContainer_img} user={patient} alt={fullName} />
+        <Avatar
+          size="md"
+          className={styles.patientContainer_img}
+          user={patient}
+          alt={fullName}
+        />
         <div className={styles.patientContainer}>
           <div className={styles.patientContainer_fullName}>{fullName}</div>
           <div className={styles.data}>

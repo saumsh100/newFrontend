@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { deleteEntityRequest, fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
+import {
+  deleteEntityRequest,
+  fetchEntitiesRequest,
+} from '../../../../thunks/fetchEntities';
 import { Button, DialogBox, Card } from '../../../library/index';
 import CreateAccount from '../CreateAccount';
 import withAuthProps from '../../../../hocs/withAuthProps';
@@ -46,7 +49,10 @@ class EnterpriseList extends Component {
   }
 
   selectEnterprise(enterpriseId) {
-    this.props.switchActiveEnterprise(enterpriseId, this.props.location.pathname);
+    this.props.switchActiveEnterprise(
+      enterpriseId,
+      this.props.location.pathname,
+    );
   }
 
   handleRowClick(rowInfo) {
@@ -54,7 +60,9 @@ class EnterpriseList extends Component {
 
     this.setState({
       expanded:
-        rowInfo && !expanded.hasOwnProperty(rowInfo.viewIndex) ? { [rowInfo.viewIndex]: true } : {},
+        rowInfo && !expanded.hasOwnProperty(rowInfo.viewIndex)
+          ? { [rowInfo.viewIndex]: true }
+          : {},
     });
   }
 
@@ -88,7 +96,11 @@ class EnterpriseList extends Component {
 
     return (
       <div className={styles.enterpriseContainer}>
-        <Card className={styles.enterpriseCard} runAnimation loaded={this.state.loaded}>
+        <Card
+          className={styles.enterpriseCard}
+          runAnimation
+          loaded={this.state.loaded}
+        >
           <div className={styles.header}>
             <span className={styles.header_title}>Groups</span>
             <div>{renderAddButton()}</div>
@@ -137,7 +149,8 @@ EnterpriseList.propTypes = {
 
 function mapStateToProps({ entities, apiRequests }) {
   const enterprisesFetched =
-    apiRequests.get('fetchingEnterprises') && apiRequests.get('fetchingEnterprises').wasFetched;
+    apiRequests.get('fetchingEnterprises') &&
+    apiRequests.get('fetchingEnterprises').wasFetched;
 
   return {
     enterprises: entities.getIn(['enterprises', 'models']),
@@ -153,7 +166,10 @@ const dispatchToProps = dispatch =>
       switchActiveEnterprise,
       navigate: push,
     },
-    dispatch
+    dispatch,
   );
 
-export default withAuthProps(connect(mapStateToProps, dispatchToProps)(EnterpriseList));
+export default withAuthProps(connect(
+  mapStateToProps,
+  dispatchToProps,
+)(EnterpriseList));

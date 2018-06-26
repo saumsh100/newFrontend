@@ -12,7 +12,9 @@ class RelayComponentRenderer extends Component {
   }
 
   render() {
-    const { render, error, props, ...parentProps } = this.props;
+    const {
+      render, error, props, ...parentProps
+    } = this.props;
     if (error) {
       return <div>Error!</div>;
     }

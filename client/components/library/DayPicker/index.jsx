@@ -135,7 +135,9 @@ class DayPicker extends Component {
           />
         );
       } else if (target === 'custom') {
-        dayPickerTargetComponent = <TargetComponent onClick={this.togglePopOver} />;
+        dayPickerTargetComponent = (
+          <TargetComponent onClick={this.togglePopOver} />
+        );
       }
     }
 
@@ -145,7 +147,9 @@ class DayPicker extends Component {
           onDayClick={this.handleDayClick}
           selectedDays={convertValueToDate(value, timezone)}
           handleInputChange={this.handleInputChange}
-          initialMonth={value ? new Date(convertValueToDate(value, timezone)) : new Date()}
+          initialMonth={
+            value ? new Date(convertValueToDate(value, timezone)) : new Date()
+          }
           {...this.props}
         />
       </div>
@@ -181,7 +185,10 @@ DayPicker.propTypes = {
   'data-test-id': PropTypes.string,
   tipSize: PropTypes.number,
   noTarget: PropTypes.bool,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.any)]),
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.objectOf(PropTypes.any),
+  ]),
   handleThisInput: PropTypes.func,
 };
 

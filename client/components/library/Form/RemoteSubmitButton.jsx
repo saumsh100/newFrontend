@@ -8,12 +8,8 @@ import Button from '../Button';
 
 function RemoteSubmitButton(props) {
   const {
-    form,
-    onClick,
-    submit,
-    isPristine,
+    form, onClick, submit, isPristine,
   } = props;
-
 
   const newProps = omit(props, ['form', 'onClick']);
   const newOnClick = (e) => {
@@ -38,9 +34,15 @@ function mapStateToProps(state, { form }) {
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    submit,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      submit,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapActionsToProps)(RemoteSubmitButton);
+export default connect(
+  mapStateToProps,
+  mapActionsToProps,
+)(RemoteSubmitButton);

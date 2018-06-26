@@ -2,23 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {
-  Grid,
-  Row,
-  Col,
-} from '../../../library';
+import { Grid, Row, Col } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import styles from './styles.scss';
 
-const prettyApptDate = (date) => date ? moment(date).format('MM DD, YYYY') : 'n/a';
+const prettyApptDate = date =>
+  (date ? moment(date).format('MM DD, YYYY') : 'n/a');
 
 export default function Appointments({ patient }) {
   return (
     <div>
-      <PatientAvatarTitle
-        patient={patient}
-      />
+      <PatientAvatarTitle patient={patient} />
       <div className={styles.content}>
         <Grid>
           <Row>

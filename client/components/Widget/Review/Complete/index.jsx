@@ -24,20 +24,14 @@ class Complete extends Component {
         <div className={styles.row}>
           <Picture reviewedPractitioner={reviewedPractitioner} />
         </div>
-        <div className={styles.completeHeader}>
-          Feedback sent.
-        </div>
+        <div className={styles.completeHeader}>Feedback sent.</div>
         <div className={styles.starsWrapper}>
-          <Stars
-            value={stars}
-            isStatic
-            isMinimal
-          />
+          <Stars value={stars} isStatic isMinimal />
         </div>
         <div className={styles.footer}>
           <Button
             className={styles.button}
-            color='red'
+            color="red"
             onClick={this.props.closeBookingModal}
           >
             Done
@@ -58,9 +52,9 @@ function mapStateToProps({ entities, reviews }) {
   const account = reviews.get('account');
   const pracId = review.get('practitionerId');
   const pracModels = entities.getIn(['practitioners', 'models']);
-  const reviewedPractitioner = review.get('practitionerId') ?
-    pracModels.get(pracId) :
-    pracModels.first();
+  const reviewedPractitioner = review.get('practitionerId')
+    ? pracModels.get(pracId)
+    : pracModels.first();
 
   return {
     review,
@@ -70,11 +64,17 @@ function mapStateToProps({ entities, reviews }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    mergeReviewValues,
-    saveReview,
-    closeBookingModal,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      mergeReviewValues,
+      saveReview,
+      closeBookingModal,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Complete));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Complete));

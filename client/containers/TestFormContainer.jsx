@@ -1,12 +1,13 @@
+
 import React, { PropTypes } from 'react';
-import TestForm  from '../components/demo/TestForm';
+import TestForm from '../components/demo/TestForm';
 
 const uuid = require('uuid').v4;
+
 const accountId = uuid();
 const justinPatientId = uuid();
 
-class TestFormContainer extends React.Component{
-
+class TestFormContainer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -17,7 +18,7 @@ class TestFormContainer extends React.Component{
         mobilePhoneNumber: '+17808508886',
         id: justinPatientId,
         accountId,
-        birthday: moment({year: 1993, month: 6, day: 15})._d,
+        birthday: moment({ year: 1993, month: 6, day: 15 })._d,
         gender: 'male',
         language: 'English',
         insurance: {
@@ -25,16 +26,19 @@ class TestFormContainer extends React.Component{
           memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
           contract: '4234rerwefsdfsd',
           carrier: 'sadasadsadsads',
-          sin: 'dsasdasdasdadsasad'
-        }
-      }
-    }
+          sin: 'dsasdasdasdadsasad',
+        },
+      },
+    };
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <div>
-        <TestForm patient={this.state.patient} onSubmit={values => alert(JSON.stringify(values))} />
+        <TestForm
+          patient={this.state.patient}
+          onSubmit={values => alert(JSON.stringify(values))}
+        />
       </div>
     );
   }
@@ -43,6 +47,5 @@ class TestFormContainer extends React.Component{
 TestFormContainer.propTypes = {
   patient: PropTypes.object.isRequired,
 };
-
 
 export default TestFormContainer;

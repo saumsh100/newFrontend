@@ -1,18 +1,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
-import {
-  List,
-  ListItem,
-  Tab,
-  Tabs,
-} from '../library';
+import { List, ListItem, Tab, Tabs } from '../library';
 import OutboxReminders from './Reminders';
 import OutboxRecalls from './Recalls';
 import OutboxReviews from './Reviews';
 import styles from './styles.scss';
 
-const power = bool => <div className={bool ? styles['on'] : styles['off']} />;
+const power = bool => <div className={bool ? styles.on : styles.off} />;
 const label = (title, bool) => (
   <div className={styles.label}>
     {title}
@@ -37,11 +32,7 @@ export default class Outbox extends Component {
 
   render() {
     const { account } = this.props;
-    const {
-      canSendReminders,
-      canSendRecalls,
-      canSendReviews,
-    } = account;
+    const { canSendReminders, canSendRecalls, canSendReviews } = account;
 
     return (
       <div className={styles.outboxWrapper}>

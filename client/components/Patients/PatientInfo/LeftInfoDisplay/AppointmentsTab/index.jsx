@@ -27,10 +27,16 @@ export default function AppointmentsTab(props) {
       <div className={styles.lastAppointmentHeader}> Last Appointment </div>
       <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate)} />
+          <InfoDump
+            label="RECALL"
+            data={validDateValue(patient.lastRecallDate)}
+          />
         </Col>
         <Col xs={6}>
-          <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate)} />
+          <InfoDump
+            label="HYGIENE"
+            data={validDateValue(patient.lastHygieneDate)}
+          />
         </Col>
       </Row>
       <div className={styles.subHeader}> Continuing Care </div>

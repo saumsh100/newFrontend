@@ -1,10 +1,10 @@
 
 import React, { PropTypes, Component } from 'react';
-import { Card, Row, Col, Tabs, Tab, Icon } from '../../../../library'
+import { Card, Row, Col, Tabs, Tab, Icon } from '../../../../library';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
-class DataStats extends Component{
+class DataStats extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,14 +16,11 @@ class DataStats extends Component{
   handleTabChange(index) {
     this.setState({ index });
   }
+
   render() {
     const {
-      borderColor,
-      data,
-      data1,
-      data2,
+      borderColor, data, data1, data2,
     } = this.props;
-
 
     return (
       <Card className={styles.dataStats}>
@@ -31,21 +28,23 @@ class DataStats extends Component{
           <Col className={styles.dataStats__left} sm={12} md={4}>
             <div className={styles.left}>
               <Tabs index={this.state.index} onChange={this.handleTabChange}>
-                {data.map((obj,i) => {
-                  return (
-                    <Tab key={i} label={obj.label}>
-                      <div className={styles.left__wrapper}>
-                        <Icon className={styles.left__icon} icon={obj.data.icon} size={6}/>
-                        <div className={styles.left__count}>
-                          {obj.data.count}
-                        </div>
-                        <div className={styles.left__title}>
-                          {obj.data.title}
-                        </div>
+                {data.map((obj, i) => (
+                  <Tab key={i} label={obj.label}>
+                    <div className={styles.left__wrapper}>
+                      <Icon
+                        className={styles.left__icon}
+                        icon={obj.data.icon}
+                        size={6}
+                      />
+                      <div className={styles.left__count}>
+                        {obj.data.count}
                       </div>
-                    </Tab>
-                  )
-                })}
+                      <div className={styles.left__title}>
+                        {obj.data.title}
+                      </div>
+                    </div>
+                  </Tab>
+                  ))}
               </Tabs>
             </div>
           </Col>
@@ -53,19 +52,23 @@ class DataStats extends Component{
             <div className={styles.right}>
               <Col className={styles.right__item} sm={12} md={7}>
                 <ul className={styles.right__list}>
-                  {data1.map((d,i) => {
-                    return (
-                      <li key={i} className={styles.right__list_item}>
-                        <div className={styles.data}>
-                          <div className={styles.data__wrapper}>
-                            <span className={styles.data__count}>{d.count}</span>
-                            <Icon className={styles.data__icon} icon={d.icon} size={2.5}/>
-                          </div>
+                  {data1.map((d, i) => (
+                    <li key={i} className={styles.right__list_item}>
+                      <div className={styles.data}>
+                        <div className={styles.data__wrapper}>
+                          <span className={styles.data__count}>
+                            {d.count}
+                          </span>
+                          <Icon
+                            className={styles.data__icon}
+                            icon={d.icon}
+                            size={2.5}
+                          />
                         </div>
-                        <div className={styles.arrow}></div>
-                      </li>
-                    )
-                  })}
+                      </div>
+                      <div className={styles.arrow} />
+                    </li>
+                    ))}
                 </ul>
               </Col>
             </div>

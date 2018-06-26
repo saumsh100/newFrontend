@@ -25,7 +25,9 @@ const Routes = {
 };
 
 const HubRouter = (properties) => {
-  const { history, isAuth, isSuperAdmin, withEnterprise } = properties;
+  const {
+    history, isAuth, isSuperAdmin, withEnterprise,
+  } = properties;
 
   history.listen((route) => {
     const { pathname } = route;
@@ -59,7 +61,9 @@ const HubRouter = (properties) => {
       <Route path="/intercom" component={Routes.intercom} />
       <Route path="/shortcuts" component={Routes.shortcuts} />
       {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-      {withEnterprise && <Route path="/enterprise" component={Routes.enterprise} />}
+      {withEnterprise && (
+        <Route path="/enterprise" component={Routes.enterprise} />
+      )}
       <Route component={FourZeroFour} />
     </Switch>
   );
@@ -71,7 +75,9 @@ const HubRouter = (properties) => {
           (isAuth ? (
             getAuthorizedRoutes()
           ) : (
-            <Redirect to={{ pathname: '/login', state: { from: ownProps.location } }} />
+            <Redirect
+              to={{ pathname: '/login', state: { from: ownProps.location } }}
+            />
           ))
         }
       />
@@ -79,7 +85,9 @@ const HubRouter = (properties) => {
   );
 
   const signUp = /^\/signup\/.+$/i;
-  const urlTest = signUp.test(history.location.pathname) ? history.location.pathname : '/signup';
+  const urlTest = signUp.test(history.location.pathname)
+    ? history.location.pathname
+    : '/signup';
 
   const reset = /^\/resetpassword\/.+$/i;
   const resetTest = reset.test(history.location.pathname)
@@ -93,22 +101,30 @@ const HubRouter = (properties) => {
           <Route
             exact
             path="/login"
-            render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)}
+            render={props =>
+              (isAuth ? <Redirect to="/" /> : <Login {...props} />)
+            }
           />
           <Route
             exact
             path={urlTest}
-            render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
+            render={props =>
+              (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)
+            }
           />
           <Route
             exact
             path="/forgot"
-            render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
+            render={props =>
+              (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)
+            }
           />
           <Route
             exact
             path={resetTest}
-            render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
+            render={props =>
+              (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)
+            }
           />
           <Route path="/" component={Dashboard} />
         </Switch>
@@ -139,7 +155,10 @@ const mapDispatchToProps = dispatch =>
       collapseContent,
       collapseWithoutResizing,
     },
-    dispatch
+    dispatch,
   );
 
-export default connect(null, mapDispatchToProps)(withAuthProps(HubRouter));
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withAuthProps(HubRouter));

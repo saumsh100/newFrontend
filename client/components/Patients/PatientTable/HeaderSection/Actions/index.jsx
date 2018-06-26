@@ -1,5 +1,6 @@
+
 import React, { PropTypes } from 'react';
-import { ListItem, List } from '../../../../library'
+import { ListItem, List } from '../../../../library';
 
 import styles from './styles.scss';
 
@@ -15,21 +16,22 @@ const actionsList = [
 ];
 
 export default function Actions(props) {
-  const {
-    patientIds,
-  } = props;
+  const { patientIds } = props;
 
   console.log(patientIds);
 
   return (
     <List className={styles.actionsContainer}>
-      {actionsList.map((action, index) => {
-        return (
-          <ListItem key={`patientIds_${index}`} className={styles.actionItem} onClick={() =>{} } disabled>
-            {action}
-          </ListItem>
-        );
-      })}
+      {actionsList.map((action, index) => (
+        <ListItem
+          key={`patientIds_${index}`}
+          className={styles.actionItem}
+          onClick={() => {}}
+          disabled
+        >
+          {action}
+        </ListItem>
+        ))}
     </List>
   );
 }

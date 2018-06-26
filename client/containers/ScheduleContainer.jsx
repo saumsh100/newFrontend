@@ -7,7 +7,11 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import Loader from '../components/Loader';
 import ScheduleComponent from '../components/Schedule';
-import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../thunks/fetchEntities';
+import {
+  fetchEntities,
+  fetchEntitiesRequest,
+  createEntityRequest,
+} from '../thunks/fetchEntities';
 import { appointmentShape } from '../components/library/PropTypeShapes';
 import Account from '../entities/models/Account';
 import Appointment from '../entities/models/Appointments';
@@ -191,7 +195,10 @@ function mapDispatchToProps(dispatch) {
 ScheduleContainer.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
   practitioners: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
-  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)]),
+  currentDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.instanceOf(moment),
+  ]),
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   services: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
   patients: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
@@ -224,4 +231,7 @@ ScheduleContainer.defaultProps = {
   activeAccount: undefined,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduleContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ScheduleContainer);

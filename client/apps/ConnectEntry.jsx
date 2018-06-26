@@ -19,7 +19,10 @@ import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 bindAxiosInterceptors();
 
 const browserHistory = createBrowserHistory();
-const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
+const store = configure({
+  initialState: window.__INITIAL_STATE__,
+  browserHistory,
+});
 
 // Bind event handlers from parent
 loadUser()(store.dispatch).then(() => {
@@ -45,7 +48,7 @@ loadUser()(store.dispatch).then(() => {
       <AppContainer>
         <Component {...appProps} />
       </AppContainer>,
-      document.getElementById('root')
+      document.getElementById('root'),
     );
   };
 
@@ -53,13 +56,9 @@ loadUser()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Connect', () => {
-      const NextApp = require('./Connect').default; // eslint-disable-line
+      const NextApp = require("./Connect").default; // eslint-disable-line
 
       return render(NextApp);
     });
   }
 });
-
-
-
-

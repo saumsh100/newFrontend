@@ -38,7 +38,10 @@ export default function TopDisplay(props) {
     wasPatientFetched,
   } = props;
 
-  const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
+  const age =
+    patient && patient.birthDate
+      ? moment().diff(patient.birthDate, 'years')
+      : '';
 
   const production =
     wasStatsFetched && patientStats.get('productionCalendarYear')
@@ -50,7 +53,8 @@ export default function TopDisplay(props) {
     backgroundSize: '100%',
   };
 
-  const wasAllFetched = wasStatsFetched && patient && accountsFetched && wasPatientFetched;
+  const wasAllFetched =
+    wasStatsFetched && patient && accountsFetched && wasPatientFetched;
   const avatarSize = isResponsive() ? 'md' : 'xl';
 
   return (
@@ -75,7 +79,9 @@ export default function TopDisplay(props) {
                       {' '}
                       <Icon icon="envelope" />{' '}
                     </span>
-                    <div className={styles.avatarContainer_data_email}>{patient.email}</div>
+                    <div className={styles.avatarContainer_data_email}>
+                      {patient.email}
+                    </div>
                   </div>
                 ) : null}
                 {patient.mobilePhoneNumber ? (
@@ -91,7 +97,9 @@ export default function TopDisplay(props) {
                 ) : null}
                 {!isResponsive() && (
                   <div className={styles.paddingStatus}>
-                    <div className={styles.avatarContainer_data_active}>{patient.status}</div>
+                    <div className={styles.avatarContainer_data_active}>
+                      {patient.status}
+                    </div>
                   </div>
                 )}
               </div>
@@ -101,11 +109,18 @@ export default function TopDisplay(props) {
                 <Col xs={4}>
                   <InfoDump
                     label="PATIENT DUE FOR HYGIENE"
-                    component={HygieneData({ patient, className: styles.fontStyle, activeAccount })}
+                    component={HygieneData({
+                      patient,
+                      className: styles.fontStyle,
+                      activeAccount,
+                    })}
                   />
                 </Col>
                 <Col xs={4}>
-                  <InfoDump label="INSURANCE INTERVAL" data={patient.insuranceInterval} />
+                  <InfoDump
+                    label="INSURANCE INTERVAL"
+                    data={patient.insuranceInterval}
+                  />
                 </Col>
                 <Col xs={4}>
                   <InfoDump label="INSURANCE" />
@@ -115,14 +130,21 @@ export default function TopDisplay(props) {
                 <Col xs={4}>
                   <InfoDump
                     label="PATIENT DUE FOR RECALL"
-                    component={RecallData({ patient, className: styles.fontStyle, activeAccount })}
+                    component={RecallData({
+                      patient,
+                      className: styles.fontStyle,
+                      activeAccount,
+                    })}
                   />
                 </Col>
                 <Col xs={4}>
                   <InfoDump label="UNITS LEFT FOR COVERAGE" />
                 </Col>
                 <Col xs={4}>
-                  <InfoDump label="PRODUCTION IN CALENDAR YEAR" data={production} />
+                  <InfoDump
+                    label="PRODUCTION IN CALENDAR YEAR"
+                    data={production}
+                  />
                 </Col>
               </Row>
             </Grid>

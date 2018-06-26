@@ -36,12 +36,8 @@ function SuccessfulList({ success }) {
               <Col xs={4}>
                 {patient.firstName} {patient.lastName}
               </Col>
-              <Col xs={4}>
-                {getAttrFromPatient(patient, primaryType)}
-              </Col>
-              <Col xs={4}>
-                {reminderApptDate}
-              </Col>
+              <Col xs={4}>{getAttrFromPatient(patient, primaryType)}</Col>
+              <Col xs={4}>{reminderApptDate}</Col>
             </Row>
           </Grid>
         );
@@ -71,18 +67,18 @@ class ReminderListItem extends Component {
     const { reminder } = this.props;
     return (
       <div className={styles.listItemWrapper}>
-        <ListItem
-          className={styles.listItem}
-          onClick={this.toggleExpanded}
-        >
+        <ListItem className={styles.listItem} onClick={this.toggleExpanded}>
           <div className={styles.col}>Type: {reminder.primaryType}</div>
           <div className={styles.col}>Length: {reminder.lengthSeconds}</div>
           <div className={styles.col}>Success: {reminder.success.length}</div>
           <div className={styles.col}>Fail: {reminder.errors.length}</div>
         </ListItem>
-        {this.state.expanded ?
-          <SuccessfulList success={reminder.success} primaryType={reminder.primaryType}/>
-        : null}
+        {this.state.expanded ? (
+          <SuccessfulList
+            success={reminder.success}
+            primaryType={reminder.primaryType}
+          />
+        ) : null}
       </div>
     );
   }
@@ -103,8 +99,8 @@ export default class OutboxReminders extends Component {
   componentWillMount() {
     const { account } = this.props;
     return Promise.all([
-        axios.get(`/api/accounts/${account.id}/reminders/list`),
-      ])
+      axios.get(`/api/accounts/${account.id}/reminders/list`),
+    ])
       .then(([remindersData]) => {
         console.log('remindersData', remindersData);
         this.setState({
@@ -136,27 +132,19 @@ export default class OutboxReminders extends Component {
 
     return (
       <div className={styles.remindersWrapper}>
-        {!reminders.length ?
-          <div>No Reminders</div> :
+        {!reminders.length ? (
+          <div>No Reminders</div>
+        ) : (
           <div>
-            <h4>
-              Total Success: {totalSuccess}
-            </h4>
-            <h4>
-              Total Errors: {totalErrors}
-            </h4>
+            <h4>Total Success: {totalSuccess}</h4>
+            <h4>Total Errors: {totalErrors}</h4>
             <List>
-              {reminders.map((reminder) => {
-                return (
-                  <ReminderListItem
-                    key={reminder.id}
-                    reminder={reminder}
-                  />
-                );
-              })}
+              {reminders.map(reminder => (
+                <ReminderListItem key={reminder.id} reminder={reminder} />
+                ))}
             </List>
           </div>
-        }
+        )}
       </div>
     );
   }

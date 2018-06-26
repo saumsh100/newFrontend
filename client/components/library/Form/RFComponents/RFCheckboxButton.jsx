@@ -5,17 +5,16 @@ import CheckboxButton from '../../CheckboxButton';
 
 export default function RFCheckboxButton(props) {
   const {
-    input,
-    icon,
-    label,
-    error,
-    meta,
-    flipped,
+    input, icon, label, error, meta, flipped,
   } = props;
 
   const { touched, asyncValidating, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
-  const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+  const finalError = error || (touched || dirty ? meta.error : null);
+  const finalIcon = asyncValidating ? (
+    <i className="fa fa-cog fa-spin fa-fw" />
+  ) : (
+    icon
+  );
   const checked = flipped ? !input.value : input.value;
 
   return (
@@ -39,4 +38,3 @@ RFCheckboxButton.propTypes = {
   error: PropTypes.string,
   flipped: PropTypes.bool,
 };
-

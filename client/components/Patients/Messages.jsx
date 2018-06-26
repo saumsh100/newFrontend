@@ -6,8 +6,7 @@ function Messages({ patient, patients }) {
   return (
     <div>
       Messages
-      {/*<ChatContainer patient={patient} patients={patients} />*/}
-
+      {/* <ChatContainer patient={patient} patients={patients} /> */}
     </div>
   );
 }
@@ -19,9 +18,8 @@ Messages.propTypes = {
 
 export default Messages;
 
-
-      // <Chat patient={patient}
-      // 	patients={patients}
-      // 	patientList={patientList}
-      // 	textMessages={textMessages}
-      // />
+// <Chat patient={patient}
+// 	patients={patients}
+// 	patientList={patientList}
+// 	textMessages={textMessages}
+// />

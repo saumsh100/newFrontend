@@ -39,7 +39,8 @@ export default function ChairsSlot(props) {
 
                 const practitioner = practitioners.get(app.get('practitionerId'));
                 const practitionersFilter =
-                  practitioner && filteredPractitionerIds.indexOf(practitioner.get('id')) > -1;
+                  practitioner &&
+                  filteredPractitionerIds.indexOf(practitioner.get('id')) > -1;
 
                 return app.chairId === chair.id && practitionersFilter;
               })
@@ -91,7 +92,8 @@ ChairsSlot.propTypes = {
   practitioners: PropTypes.instanceOf(Map).isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
   selectAppointment: PropTypes.func.isRequired,
-  practitionersArray: PropTypes.arrayOf(PropTypes.shape(practitionerShape)).isRequired,
+  practitionersArray: PropTypes.arrayOf(PropTypes.shape(practitionerShape))
+    .isRequired,
   chairsArray: PropTypes.arrayOf(PropTypes.instanceOf(Chair)).isRequired,
   timeSlots: PropTypes.arrayOf(PropTypes.shape({
     position: PropTypes.number,

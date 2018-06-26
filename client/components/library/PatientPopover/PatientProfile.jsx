@@ -62,7 +62,9 @@ export default function PatientProfile(props) {
               <div className={styles.subHeader}>Contact Info</div>
 
               <div className={styles.data}>
-                {patient[patientPhone] ? <Icon icon="phone" size={0.9} /> : null}
+                {patient[patientPhone] ? (
+                  <Icon icon="phone" size={0.9} />
+                ) : null}
                 <div className={styles.data_text}>
                   {patient[patientPhone] && patient[patientPhone][0] === '+'
                     ? FormatPhoneNumber(patient[patientPhone])

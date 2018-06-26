@@ -43,7 +43,8 @@ function SignUpConfirm({
           <p className={styles.subtitle}>
             We have sent a confirmation code via SMS to{' '}
             <span className={styles.phone}>{patientPhoneNumber}</span>. <br />
-            Please type in the code below and submit to complete your booking request. <br />
+            Please type in the code below and submit to complete your booking
+            request. <br />
             If you did not receive your SMS and want it sent again, click
             {
               <Button
@@ -57,7 +58,11 @@ function SignUpConfirm({
               </Button>
             }.
           </p>
-          <Form form="confirmNumberForm" onSubmit={handleConfirmation} ignoreSaveButton>
+          <Form
+            form="confirmNumberForm"
+            onSubmit={handleConfirmation}
+            ignoreSaveButton
+          >
             <Field
               required
               name="confirmCode"
@@ -105,8 +110,11 @@ function mapDispatchToProps(dispatch) {
       handleConfirmationCode: confirmCode,
       handleResendPinCode: resendPinCode,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUpConfirm));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUpConfirm));

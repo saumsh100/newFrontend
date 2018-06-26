@@ -8,7 +8,15 @@ import {
   numTypeToInterval,
 } from '../../../../../../server/util/time';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
-import { Icon, Grid, Row, Col, Toggle, Input, DropdownSelect } from '../../../../library';
+import {
+  Icon,
+  Grid,
+  Row,
+  Col,
+  Toggle,
+  Input,
+  DropdownSelect,
+} from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
@@ -29,7 +37,10 @@ const wordMap = {
   email_sms: 'Email & SMS',
 };
 
-const typeOptions = [{ label: 'Hours', value: 'hours' }, { label: 'Days', value: 'days' }];
+const typeOptions = [
+  { label: 'Hours', value: 'hours' },
+  { label: 'Days', value: 'days' },
+];
 
 const primaryTypesOptions = [
   { label: 'Email', value: 'email' },
@@ -47,7 +58,11 @@ function SmallIconCircle(props) {
     ? styles.smallReminderSelectWrapperCircleSelected
     : styles.smallReminderSelectWrapperCircle;
 
-  return <div className={wrapperClass}>{icon ? <Icon icon={icon} type="solid" /> : null}</div>;
+  return (
+    <div className={wrapperClass}>
+      {icon ? <Icon icon={icon} type="solid" /> : null}
+    </div>
+  );
 }
 
 function AdvancedSettingsButton(props) {
@@ -123,7 +138,9 @@ class RemindersItem extends Component {
     // So that it doesn't bubble up and try to select this reminder
     e.stopPropagation();
     e.preventDefault();
-    const { reminder, account, isSelected, selectReminder } = this.props;
+    const {
+      reminder, account, isSelected, selectReminder,
+    } = this.props;
     const { num, type } = intervalToNumType(reminder.interval);
     const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
     if (!sure) {
@@ -261,14 +278,22 @@ class RemindersItem extends Component {
     const { type } = intervalToNumType(interval);
     const { number } = this.state;
 
-    const dropdownSelectClass = isSelected ? styles.dropdownSelectSelected : styles.dropdownSelect;
+    const dropdownSelectClass = isSelected
+      ? styles.dropdownSelectSelected
+      : styles.dropdownSelect;
 
     return (
       <TouchPointItem
         selected={isSelected}
         className={styles.reminderListItem}
         onClick={() => onSelectReminder(reminder.id)}
-        toggleComponent={<Toggle color="green" checked={isActive} onChange={this.editReminder} />}
+        toggleComponent={
+          <Toggle
+            color="green"
+            checked={isActive}
+            onChange={this.editReminder}
+          />
+        }
         labelComponent={
           <TouchPointLabel
             title={`${ordinalSuffix(index + 1)} Reminder`}
@@ -281,7 +306,11 @@ class RemindersItem extends Component {
               <IconCircle icon={icon} selected={isSelected} />
             </div>
             <div
-              className={isSelected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}
+              className={
+                isSelected
+                  ? styles.secondaryLinesBoxSelected
+                  : styles.secondaryLinesBox
+              }
             >
               <div className={styles.smallIconContainer}>
                 <SmallIconCircle icon="bell" selected={isSelected} />
@@ -330,7 +359,10 @@ class RemindersItem extends Component {
                 onClick={() => onSelectAdvancedSettings(reminder.id)}
               />
             ) : null}
-            <TinyDeleteButton className={styles.deleteButton} onClick={this.deleteReminder} />
+            <TinyDeleteButton
+              className={styles.deleteButton}
+              onClick={this.deleteReminder}
+            />
           </div>
         }
       />
@@ -348,10 +380,13 @@ function mapDispatchToProps(dispatch) {
     {
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(RemindersItem);

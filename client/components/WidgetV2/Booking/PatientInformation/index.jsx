@@ -7,7 +7,11 @@ import merge from 'lodash/merge';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { change as handleChange, formValueSelector, SubmissionError } from 'redux-form';
+import {
+  change as handleChange,
+  formValueSelector,
+  SubmissionError,
+} from 'redux-form';
 import carriers from './insurance_carriers';
 import { Button, Field, Form, IconButton, Loading } from '../../../library';
 import { fetchFamilyPatients } from '../../../../thunks/familyPatients';
@@ -28,7 +32,10 @@ import styles from './styles.scss';
 /**
  * Gender's array
  */
-const genders = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
+const genders = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+];
 
 /**
  * Find the first option that matches the passed string.
@@ -63,7 +70,9 @@ class PatientInformation extends Component {
 
     if (props.familyPatientUser) {
       const patient = this.getPatient(props.familyPatientUser);
-      patient.birthDate = patient.birthDate ? moment(patient.birthDate).format('MM/DD/YYYY') : '';
+      patient.birthDate = patient.birthDate
+        ? moment(patient.birthDate).format('MM/DD/YYYY')
+        : '';
       merge(initialValues, patient, {
         patientUser: props.familyPatientUser,
       });
@@ -80,7 +89,11 @@ class PatientInformation extends Component {
     } else {
       this.props.change('patientInformation', 'customCarrier', true);
     }
-    return this.props.change('patientInformation', 'insuranceCarrier', patient.insuranceCarrier);
+    return this.props.change(
+      'patientInformation',
+      'insuranceCarrier',
+      patient.insuranceCarrier,
+    );
   }
 
   /**
@@ -115,16 +128,18 @@ class PatientInformation extends Component {
     const patient = this.getPatient(patientId);
     let isCustomCarrier = false;
     if (patient) {
-      patient.birthDate = patient.birthDate ? moment(patient.birthDate).format('MM/DD/YYYY') : '';
+      patient.birthDate = patient.birthDate
+        ? moment(patient.birthDate).format('MM/DD/YYYY')
+        : '';
       isCustomCarrier = !carriers.some(carrier => carrier.value === patient.insuranceCarrier);
     }
     Object.keys(initialValues).map(key =>
       change(
         'patientInformation',
         key,
-        (patient && patient[key]) || (key === 'customCarrier' ? isCustomCarrier : '')
-      )
-    );
+        (patient && patient[key]) ||
+          (key === 'customCarrier' ? isCustomCarrier : ''),
+      ));
   }
 
   async updateUserProfile(values) {
@@ -146,7 +161,7 @@ class PatientInformation extends Component {
       try {
         const newPatient = await axios.post(
           `/families/${user.patientUserFamilyId}/patients`,
-          values
+          values,
         );
         await this.props.setFamilyPatientUser(newPatient.data.id);
       } catch (err) {
@@ -156,7 +171,7 @@ class PatientInformation extends Component {
       try {
         await axios.put(
           `/families/${user.patientUserFamilyId}/patients/${familyPatientUser}`,
-          values
+          values,
         );
         await this.props.fetchFamilyPatients();
       } catch (err) {
@@ -173,7 +188,12 @@ class PatientInformation extends Component {
     if (this.state.isLoading) {
       return <Loading />;
     }
-    const { isCustomCarrier, change, familyPatients, familyPatientUser } = this.props;
+    const {
+      isCustomCarrier,
+      change,
+      familyPatients,
+      familyPatientUser,
+    } = this.props;
 
     let patients = familyPatients.sort(SortByFirstName).map(patient => ({
       value: patient.id,
@@ -192,11 +212,15 @@ class PatientInformation extends Component {
       if (!values.email || (patient && values.email === patient.email)) {
         return false;
       }
-      return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
-        if (response.data.exists) {
-          throw new SubmissionError({ email: 'There is already a user with that email' });
-        }
-      });
+      return axios
+        .post('/patientUsers/email', { email: values.email })
+        .then((response) => {
+          if (response.data.exists) {
+            throw new SubmissionError({
+              email: 'There is already a user with that email',
+            });
+          }
+        });
     };
     /**
      * Check if the passed phoneNumber is not already used,
@@ -238,7 +262,9 @@ class PatientInformation extends Component {
           >
             <div className={styles.content}>
               <h3 className={styles.title}>Select the Patient</h3>
-              <p className={styles.subtitle}>Please select who's going to the clinic.</p>
+              <p className={styles.subtitle}>
+                Please select who's going to the clinic.
+              </p>
               <div className={styles.patientWrapper}>
                 <Field
                   name="patientUser"
@@ -260,7 +286,9 @@ class PatientInformation extends Component {
                     bar: styles.bar,
                     erroredLabel: styles.erroredLabel,
                   }}
-                  validateValue={value => validateField(patients, value) || value === null}
+                  validateValue={value =>
+                    validateField(patients, value) || value === null
+                  }
                   renderValue={value =>
                     (value === 'Someone Else' || value === ''
                       ? value
@@ -273,7 +301,9 @@ class PatientInformation extends Component {
             </div>
             <div className={styles.content}>
               <h3 className={styles.title}>Patient Information</h3>
-              <p className={styles.subtitle}>Fill your data to finish your booking.</p>
+              <p className={styles.subtitle}>
+                Fill your data to finish your booking.
+              </p>
               <Field
                 theme={{
                   inputWithIcon: styles.inputWithIcon,
@@ -388,9 +418,13 @@ class PatientInformation extends Component {
                     bar: styles.bar,
                     erroredLabel: styles.erroredLabel,
                   }}
-                  validateValue={value => validateField(genders, value) || value === ''}
+                  validateValue={value =>
+                    validateField(genders, value) || value === ''
+                  }
                   renderValue={value =>
-                    (validateField(genders, value) && validateField(genders, value).label) || ''
+                    (validateField(genders, value) &&
+                      validateField(genders, value).label) ||
+                    ''
                   }
                   options={genders}
                   data-test-id="gender"
@@ -446,9 +480,13 @@ class PatientInformation extends Component {
                       bar: styles.bar,
                       erroredLabel: styles.erroredLabel,
                     }}
-                    validateValue={value => validateField(carriers, value) || value === null}
+                    validateValue={value =>
+                      validateField(carriers, value) || value === null
+                    }
                     renderValue={value =>
-                      (validateField(carriers, value) && validateField(carriers, value).label) || ''
+                      (validateField(carriers, value) &&
+                        validateField(carriers, value).label) ||
+                      ''
                     }
                     options={carriers}
                     data-test-id="insuranceCarrier"
@@ -489,7 +527,11 @@ class PatientInformation extends Component {
                 label="Group ID"
                 name="insuranceGroupId"
               />
-              <Button type="submit" className={styles.actionButton} disabled={!familyPatientUser}>
+              <Button
+                type="submit"
+                className={styles.actionButton}
+                disabled={!familyPatientUser}
+              >
                 Next
               </Button>
             </div>
@@ -507,7 +549,7 @@ function mapDispatchToProps(dispatch) {
       setFamilyPatientUser,
       change: handleChange,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -523,7 +565,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PatientInformation));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInformation));
 
 PatientInformation.propTypes = {
   isCustomCarrier: PropTypes.bool,

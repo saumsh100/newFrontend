@@ -36,14 +36,18 @@ class Login extends Component {
   }
 
   handleLogin(values) {
-    const { location: { state } } = this.props;
-    return this.props.login({ values, redirectedFrom: state && state.from }).catch((err) => {
-      const { data } = err;
-      throw new SubmissionError({
-        email: data,
-        password: data,
+    const {
+      location: { state },
+    } = this.props;
+    return this.props
+      .login({ values, redirectedFrom: state && state.from })
+      .catch((err) => {
+        const { data } = err;
+        throw new SubmissionError({
+          email: data,
+          password: data,
+        });
       });
-    });
   }
 
   render() {
@@ -52,10 +56,17 @@ class Login extends Component {
         <div className={styles.backDrop}>
           <Card className={styles.loginForm}>
             <div className={styles.logoContainer}>
-              <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
+              <img
+                className={styles.loginLogo}
+                src="/images/logo_black.png"
+                alt="CareCru Logo"
+              />
             </div>
             <h1 className={styles.formTitle}>LOG IN</h1>
-            <LoginForm onSubmit={this.handleLogin} className={styles.formWrapper} />
+            <LoginForm
+              onSubmit={this.handleLogin}
+              className={styles.formWrapper}
+            />
             <div className={styles.secondaryLink}>
               <Button
                 className={styles.secondaryLink_text}
@@ -92,6 +103,9 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(Login);

@@ -21,7 +21,9 @@ class ReadAllBar extends Component {
     return (
       <div className={styles.barStyle}>
         <span>Messages marked as unread.</span>
-        <span className={styles.markRead} onClick={this.unlockChat.bind(this)}>Mark as read</span>
+        <span className={styles.markRead} onClick={this.unlockChat.bind(this)}>
+          Mark as read
+        </span>
       </div>
     );
   }
@@ -44,11 +46,17 @@ function mapStateToProps({ chat }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    unlockChat,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      unlockChat,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(ReadAllBar);

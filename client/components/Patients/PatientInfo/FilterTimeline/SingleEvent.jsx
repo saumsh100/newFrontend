@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Icon } from '../../../library';
-import styles from './styles.scss'
+import styles from './styles.scss';
 
 export default function SingleEvent({ type, onClick, checked }) {
   let icon = '';
@@ -41,12 +41,9 @@ export default function SingleEvent({ type, onClick, checked }) {
   }
 
   return (
-    <div
-      className={styles.singleEvent}
-      onClick={onClick}
-    >
+    <div className={styles.singleEvent} onClick={onClick}>
       <div className={iconStyle}>
-        <Icon icon={icon} size={2} type={iconType}/>
+        <Icon icon={icon} size={2} type={iconType} />
       </div>
       <div className={styles.textEvent}>{type}s</div>
     </div>

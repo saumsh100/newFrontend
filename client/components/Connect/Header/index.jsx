@@ -13,7 +13,9 @@ function Header(props) {
       className={styles.button}
       icon="angle-left"
       onClick={() => {
-        props.logout().then(() => window.JavaParent && window.JavaParent.onLogoutSuccess());
+        props
+          .logout()
+          .then(() => window.JavaParent && window.JavaParent.onLogoutSuccess());
       }}
       title="Sign Out"
     />
@@ -41,10 +43,16 @@ function Header(props) {
 Header.propTypes = {};
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    logout,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      logout,
+    },
+    dispatch,
+  );
 }
 
 // need with Router so that it re-renders on changing routes
-export default withRouter(connect(null, mapDispatchToProps)(Header));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(Header));

@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Col, Grid, Row, Filters, Calendar } from '../../library';
@@ -14,58 +15,90 @@ class Patient extends Component {
   }
 
   render() {
-    const DataBigComment = [{
-      doubleIcon: {
-        smallIcon: { icon: 'facebook', iconColor: '#ffffff', background: colorMap.facebookBlue, iconAlign: 'center' },
-        bigIcon: { src: '/images/logo_dent.png' },
-      },
-      actions: true,
-      headerLinkName: 'S. Lalala',
-      headerLinkSite: 'yelp.ca',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-      comments: [{
-        imageSrc: 'https://placeimg.com/80/80/animals',
-        userName: 'Scott Bell',
-        message: 'Discounted cleanup?',
-        sentAt: moment()._d,
-      }],
-    }, {
-
-      doubleIcon: {
-        smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
-        bigIcon: { src: '/images/logo_dent.png' },
-      },
-      actions: true,
-      headerLinkName: 'L. Linda',
-      headerLinkSite: 'yelp.ca',
-      siteStars: 5,
-      siteTitle: 'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-      comments: [{
-        imageSrc: 'https://placeimg.com/80/80/animals',
-        userName: 'Monica Lee',
-        message: 'Congrats!',
-        sentAt: moment()._d,
+    const DataBigComment = [
+      {
+        doubleIcon: {
+          smallIcon: {
+            icon: 'facebook',
+            iconColor: '#ffffff',
+            background: colorMap.facebookBlue,
+            iconAlign: 'center',
+          },
+          bigIcon: { src: '/images/logo_dent.png' },
+        },
+        actions: true,
+        headerLinkName: 'S. Lalala',
+        headerLinkSite: 'yelp.ca',
+        sitePreview:
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        createdAt: moment()
+          .subtract(10, 'days')
+          .fromNow(),
+        comments: [
+          {
+            imageSrc: 'https://placeimg.com/80/80/animals',
+            userName: 'Scott Bell',
+            message: 'Discounted cleanup?',
+            sentAt: moment()._d,
+          },
+        ],
       },
       {
-        imageSrc: 'https://placeimg.com/80/80/animals',
-        userName: 'Kaiya Bush',
-        message: 'Can you post a reminder before the launch day?',
-        sentAt: moment()._d,
-      }],
-    }, {
-      doubleIcon: {
-        smallIcon: { icon: 'twitter', iconColor: '#ffffff', background: colorMap.lightBlue, iconAlign: 'center' },
-        bigIcon: { src: '/images/logo_dent.png' },
+        doubleIcon: {
+          smallIcon: {
+            icon: 'twitter',
+            iconColor: '#ffffff',
+            background: colorMap.lightBlue,
+            iconAlign: 'center',
+          },
+          bigIcon: { src: '/images/logo_dent.png' },
+        },
+        actions: true,
+        headerLinkName: 'L. Linda',
+        headerLinkSite: 'yelp.ca',
+        siteStars: 5,
+        siteTitle:
+          'Lorem Ipsum is simply dummy text of theeMaker including versions of Lorem Ipsum.',
+        sitePreview:
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        createdAt: moment()
+          .subtract(10, 'days')
+          .fromNow(),
+        comments: [
+          {
+            imageSrc: 'https://placeimg.com/80/80/animals',
+            userName: 'Monica Lee',
+            message: 'Congrats!',
+            sentAt: moment()._d,
+          },
+          {
+            imageSrc: 'https://placeimg.com/80/80/animals',
+            userName: 'Kaiya Bush',
+            message: 'Can you post a reminder before the launch day?',
+            sentAt: moment()._d,
+          },
+        ],
       },
-      actions: true,
-      headerLinkName: 'N. Blabla',
-      headerLinkSite: 'yelp.ca',
-      sitePreview: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-      createdAt: moment().subtract(10, 'days').fromNow(),
-    }];
+      {
+        doubleIcon: {
+          smallIcon: {
+            icon: 'twitter',
+            iconColor: '#ffffff',
+            background: colorMap.lightBlue,
+            iconAlign: 'center',
+          },
+          bigIcon: { src: '/images/logo_dent.png' },
+        },
+        actions: true,
+        headerLinkName: 'N. Blabla',
+        headerLinkSite: 'yelp.ca',
+        sitePreview:
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheetscontaining Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+        createdAt: moment()
+          .subtract(10, 'days')
+          .fromNow(),
+      },
+    ];
 
     const filters = [
       {
@@ -78,16 +111,16 @@ class Patient extends Component {
           { type: 'checkbox', value: 'ADC Dental Care' },
           { type: 'checkbox', value: 'Carecru Dental Care' },
         ],
-      }, {
+      },
+      {
         title: 'Twitter',
         titleIcon: {
           color: colorMap.lightBlue,
           icon: 'twitter',
         },
-        items: [
-          { type: 'checkbox', value: 'ADC Dental Care' },
-        ],
-      }, {
+        items: [{ type: 'checkbox', value: 'ADC Dental Care' }],
+      },
+      {
         title: 'Action Filter',
         items: [
           { type: 'checkbox', value: 'Avaiting Response' },
@@ -96,28 +129,35 @@ class Patient extends Component {
         ],
       },
     ];
-    const headerTabs = [{
-      icon: 'facebook',
-      color: 'facebookBlue',
-      company: 'ABC Dental Care',
-    }, {
-      icon: 'twitter',
-      color: 'lightBlue',
-      company: 'ABCCare',
-    }, {
-      icon: 'facebook',
-      color: 'facebookBlue',
-      company: 'ABC Dental Care',
-    }];
-    const socialPreview = [{
-      company: 'Facebook',
-      message: 'Have you heard about our new Teeth Whitening Promotion?',
-      image: '/images/dental.png',
-    }, {
-      company: 'Twitter',
-      message: 'Have you heard about our new Teeth Whitening Promotion?',
-      image: '/images/dental.png',
-    }];
+    const headerTabs = [
+      {
+        icon: 'facebook',
+        color: 'facebookBlue',
+        company: 'ABC Dental Care',
+      },
+      {
+        icon: 'twitter',
+        color: 'lightBlue',
+        company: 'ABCCare',
+      },
+      {
+        icon: 'facebook',
+        color: 'facebookBlue',
+        company: 'ABC Dental Care',
+      },
+    ];
+    const socialPreview = [
+      {
+        company: 'Facebook',
+        message: 'Have you heard about our new Teeth Whitening Promotion?',
+        image: '/images/dental.png',
+      },
+      {
+        company: 'Twitter',
+        message: 'Have you heard about our new Teeth Whitening Promotion?',
+        image: '/images/dental.png',
+      },
+    ];
     return (
       <Grid className={styles.reviews}>
         <Row>
@@ -130,7 +170,7 @@ class Patient extends Component {
           </Col>
           <Col className={styles.padding} xs={12} sm={4} md={4} lg={4}>
             <Row>
-              <Col xs={12} >
+              <Col xs={12}>
                 <Filters filters={filters} />
               </Col>
             </Row>

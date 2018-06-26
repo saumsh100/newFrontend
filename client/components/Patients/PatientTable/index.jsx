@@ -10,7 +10,11 @@ import { connect } from 'react-redux';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Grid, Row, Col, Card } from '../../library';
-import { fetchEntities, fetchEntitiesRequest, createEntityRequest } from '../../../thunks/fetchEntities';
+import {
+  fetchEntities,
+  fetchEntitiesRequest,
+  createEntityRequest,
+} from '../../../thunks/fetchEntities';
 import { fetchPatientTableData } from '../../../thunks/patientTable';
 import {
   setTableData,
@@ -130,9 +134,7 @@ class PatientTable extends Component {
   }
 
   handleRowClick(rowInfo) {
-    const {
-      expanded,
-    } = this.state;
+    const { expanded } = this.state;
 
     if (rowInfo && !expanded.hasOwnProperty(rowInfo.index)) {
       const indexObj = {};
@@ -148,9 +150,7 @@ class PatientTable extends Component {
   }
 
   handlePatientSelection(id) {
-    const {
-      patientIds,
-    } = this.state;
+    const { patientIds } = this.state;
 
     let newIds = patientIds;
 
@@ -166,18 +166,16 @@ class PatientTable extends Component {
   }
 
   selectAllPatients() {
-    const {
-      patientTable,
-    } = this.props;
+    const { patientTable } = this.props;
 
-    const length = this.state.patientIds.length
+    const length = this.state.patientIds.length;
 
     if (length !== patientTable.data.length) {
       const patients = patientTable.data;
       const patientIds = [];
 
       patients.forEach((patient) => {
-        patientIds.push(patient.id)
+        patientIds.push(patient.id);
       });
 
       this.setState({
@@ -194,8 +192,10 @@ class PatientTable extends Component {
 
   searchPatients(values) {
     this.props.setTableData({
-      searchFirstName: values && values.searchFirstName ? values.searchFirstName : '',
-      searchLastName: values && values.searchLastName ? values.searchLastName : '',
+      searchFirstName:
+        values && values.searchFirstName ? values.searchFirstName : '',
+      searchLastName:
+        values && values.searchLastName ? values.searchLastName : '',
       page: 0,
     });
 
@@ -217,9 +217,7 @@ class PatientTable extends Component {
       activeAccount,
     } = this.props;
 
-    const {
-      patientIds,
-    } = this.state;
+    const { patientIds } = this.state;
 
     const columns = [
       {
@@ -237,24 +235,20 @@ class PatientTable extends Component {
         },
       },
       {
-        Header: (row) => {
-          return (
-            <SelectAllPatients
-              selectAllPatients={this.selectAllPatients}
-              patientIds={patientIds}
-              maxPatients={row.data.length}
-            />
-          );
-        },
-        Cell: row => {
-          return (
-            <SelectPatientColumn
-              patientIds={patientIds}
-              handlePatientSelection={this.handlePatientSelection}
-              id={row.original.id}
-            />
-          );
-        },
+        Header: row => (
+          <SelectAllPatients
+            selectAllPatients={this.selectAllPatients}
+            patientIds={patientIds}
+            maxPatients={row.data.length}
+          />
+        ),
+        Cell: row => (
+          <SelectPatientColumn
+            patientIds={patientIds}
+            handlePatientSelection={this.handlePatientSelection}
+            id={row.original.id}
+          />
+        ),
         filterable: false,
         sortable: false,
         maxWidth: 50,
@@ -262,15 +256,13 @@ class PatientTable extends Component {
       },
       {
         Header: '#',
-        Cell: (props) => {
-          return (
-            <div className={styles.displayFlex}>
-              <div className={styles.cellText}>
-                {((patientTable.page * patientTable.limit) + props.index) + 1}
-              </div>
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText}>
+              {patientTable.page * patientTable.limit + props.index + 1}
             </div>
-          );
-        },
+          </div>
+        ),
 
         filterable: false,
         sortable: false,
@@ -280,20 +272,18 @@ class PatientTable extends Component {
       {
         Header: '',
         accessor: '',
-        Cell: (row) => {
-          return (
-            <div className={styles.displayFlex}>
-              <PatientNameColumn
-                value={row.value}
-                patient={row.original}
-                redirect={() => {
+        Cell: row => (
+          <div className={styles.displayFlex}>
+            <PatientNameColumn
+              value={row.value}
+              patient={row.original}
+              redirect={() => {
                   push(`/patients/${row.original.id}`);
                 }}
-                text={''}
-              />
-            </div>
-          );
-        },
+              text=""
+            />
+          </div>
+        ),
         sortable: false,
         filterable: false,
         className: styles.colBg,
@@ -302,42 +292,38 @@ class PatientTable extends Component {
       {
         Header: 'First Name',
         accessor: 'firstName',
-        Cell: (row) => {
-          return (
-            <div className={styles.displayFlex}>
-              <PatientNameColumn
-                value={row.value}
-                patient={row.original}
-                redirect={() => {
+        Cell: row => (
+          <div className={styles.displayFlex}>
+            <PatientNameColumn
+              value={row.value}
+              patient={row.original}
+              redirect={() => {
                   push(`/patients/${row.original.id}`);
                 }}
-                text={row.original.firstName}
-                noAvatar
-              />
-            </div>
-          );
-        },
+              text={row.original.firstName}
+              noAvatar
+            />
+          </div>
+        ),
         filterable: false,
         className: styles.colBg,
       },
       {
         Header: 'Last Name',
         accessor: 'lastName',
-        Cell: (row) => {
-          return (
-            <div className={styles.displayFlex}>
-              <PatientNameColumn
-                value={row.value}
-                patient={row.original}
-                redirect={() => {
+        Cell: row => (
+          <div className={styles.displayFlex}>
+            <PatientNameColumn
+              value={row.value}
+              patient={row.original}
+              redirect={() => {
                   push(`/patients/${row.original.id}`);
                 }}
-                text={row.original.lastName}
-                noAvatar
-              />
-            </div>
-          );
-        },
+              text={row.original.lastName}
+              noAvatar
+            />
+          </div>
+        ),
         filterable: false,
         className: styles.colBg,
       },
@@ -348,7 +334,11 @@ class PatientTable extends Component {
           const dateValue = moment().diff(d.birthDate, 'years');
           return Number.isInteger(dateValue) ? dateValue : '';
         },
-        Cell: props => <div className={styles.displayFlex}><div className={styles.cellText}>{props.value}</div></div>,
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText}>{props.value}</div>
+          </div>
+        ),
         filterable: false,
         className: styles.colBg,
         show: false,
@@ -358,9 +348,7 @@ class PatientTable extends Component {
         accessor: 'status',
         Cell: props => (
           <div className={styles.displayFlex}>
-            <div className={styles.cellText}>
-              {props.value}
-            </div>
+            <div className={styles.cellText}>{props.value}</div>
           </div>
         ),
         show: false,
@@ -373,19 +361,17 @@ class PatientTable extends Component {
         id: 'lastApptDate',
         accessor: (d) => {
           if (d.hasOwnProperty('lastApptDate')) {
-            const dateValue = moment(d['lastApptDate']);
+            const dateValue = moment(d.lastApptDate);
             return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
           return '-';
         },
 
-        Cell: (props) => {
-          return (
-            <div className={styles.displayFlex}>
-              <div className={styles.cellText_lastAppt}>{props.value}</div>
-            </div>
-          );
-        },
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText_lastAppt}>{props.value}</div>
+          </div>
+        ),
 
         filterable: false,
         className: styles.colBg,
@@ -395,20 +381,18 @@ class PatientTable extends Component {
         id: 'lastHygieneDate',
         accessor: (d) => {
           if (d.hasOwnProperty('lastHygieneDate')) {
-            const dateValue = moment(d['lastHygieneDate']);
+            const dateValue = moment(d.lastHygieneDate);
             return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
 
           return '-';
         },
 
-        Cell: (props) => {
-          return (
-            <div className={styles.displayFlex}>
-              <div className={styles.cellText_lastAppt}>{props.value}</div>
-            </div>
-          );
-        },
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText_lastAppt}>{props.value}</div>
+          </div>
+        ),
         filterable: false,
         className: styles.colBg,
       },
@@ -417,20 +401,18 @@ class PatientTable extends Component {
         id: 'lastRecallDate',
         accessor: (d) => {
           if (d.hasOwnProperty('lastRecallDate')) {
-            const dateValue = moment(d['lastRecallDate']);
+            const dateValue = moment(d.lastRecallDate);
             return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
 
           return '-';
         },
 
-        Cell: (props) => {
-          return (
-            <div className={styles.displayFlex}>
-              <div className={styles.cellText_lastAppt}>{props.value}</div>
-            </div>
-          );
-        },
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText_lastAppt}>{props.value}</div>
+          </div>
+        ),
 
         filterable: false,
         className: styles.colBg,
@@ -440,21 +422,17 @@ class PatientTable extends Component {
         id: 'nextApptDate',
         accessor: (d) => {
           if (d.hasOwnProperty('nextApptDate')) {
-            const dateValue = moment(d['nextApptDate']);
+            const dateValue = moment(d.nextApptDate);
             return dateValue.isValid() ? dateValue.format('MMM DD YYYY') : '-';
           }
           return '-';
         },
 
-        Cell: (props) => {
-          return (
-            <div className={styles.displayFlex}>
-              <div className={styles.cellText_lastAppt}>
-                {props.value}
-              </div>
-            </div>
-          );
-        },
+        Cell: props => (
+          <div className={styles.displayFlex}>
+            <div className={styles.cellText_lastAppt}>{props.value}</div>
+          </div>
+        ),
 
         filterable: false,
         className: styles.colBg,
@@ -462,15 +440,13 @@ class PatientTable extends Component {
       {
         Header: 'Due for Hygiene',
         id: 'dueForHygieneDate',
-        Cell: (props) => {
-          return (
-            <HygieneColumn
-              showTable
-              patient={props.original}
-              activeAccount={activeAccount}
-            />
-          );
-        },
+        Cell: props => (
+          <HygieneColumn
+            showTable
+            patient={props.original}
+            activeAccount={activeAccount}
+          />
+        ),
         sortable: true,
         filterable: false,
         className: styles.colBg,
@@ -478,15 +454,13 @@ class PatientTable extends Component {
       {
         Header: 'Due for Recall',
         id: 'dueForRecallExamDate',
-        Cell: (props) => {
-          return (
-            <RecallColumn
-              showTable
-              patient={props.original}
-              activeAccount={activeAccount}
-            />
-          );
-        },
+        Cell: props => (
+          <RecallColumn
+            showTable
+            patient={props.original}
+            activeAccount={activeAccount}
+          />
+        ),
         sortable: true,
         filterable: false,
         className: styles.colBg,
@@ -494,15 +468,13 @@ class PatientTable extends Component {
       {
         Header: 'Production in Calendar Year',
         id: 'totalAmount',
-        accessor: (d) => {
-          return d.hasOwnProperty('totalAmount') && d.totalAmount ? `$${d.totalAmount.toFixed(2)}` : '';
-        },
+        accessor: d => (d.hasOwnProperty('totalAmount') && d.totalAmount
+          ? `$${d.totalAmount.toFixed(2)}`
+          : ''),
 
         Cell: props => (
           <div className={styles.displayFlex}>
-            <div className={styles.cellText_revenue}>
-              {props.value}
-            </div>
+            <div className={styles.cellText_revenue}>{props.value}</div>
           </div>
         ),
         show: false,
@@ -569,7 +541,11 @@ class PatientTable extends Component {
         </Row>
         <Row className={styles.rowTable}>
           <Col xs={12} className={styles.tableColWrapper}>
-            <Card className={styles.tableContainer} runAnimation loaded={!patientTable.isLoadingTable}>
+            <Card
+              className={styles.tableContainer}
+              runAnimation
+              loaded={!patientTable.isLoadingTable}
+            >
               <ReactTable
                 data={patientTable.data}
                 page={patientTable.page}
@@ -587,13 +563,7 @@ class PatientTable extends Component {
                 showPageSizeOptions={false}
                 noDataText="No Patients Found"
                 loadingText=""
-                SubComponent={(row) => {
-                  return (
-                    <PatientSubComponent
-                      patient={row.original}
-                    />
-                  );
-                }}
+                SubComponent={row => <PatientSubComponent patient={row.original} />}
                 onPageChange={(pageIndex) => {
                   this.pageChange(pageIndex);
                 }}
@@ -609,7 +579,10 @@ class PatientTable extends Component {
                   };
 
                   if (rowInfo) {
-                    style.background = patientIds.indexOf(rowInfo.original.id) > -1 ? '#efefef' : 'inherit';
+                    style.background =
+                      patientIds.indexOf(rowInfo.original.id) > -1
+                        ? '#efefef'
+                        : 'inherit';
                   }
 
                   return {
@@ -622,15 +595,13 @@ class PatientTable extends Component {
                     style,
                   };
                 }}
-                getTableProps={() => {
-                  return backgroundWhite;
-                }}
-                getTheadTrProps={() => {
-                  return headerStyle;
-                }}
-
+                getTableProps={() => backgroundWhite}
+                getTheadTrProps={() => headerStyle}
                 getTheadThProps={(state, rowInfo, column) => {
-                  const compare = patientTable.sort && patientTable.sort.length ? patientTable.sort[0].id : null;
+                  const compare =
+                    patientTable.sort && patientTable.sort.length
+                      ? patientTable.sort[0].id
+                      : null;
                   let sortedClasses = styles.theadAsc;
                   if (column.id === compare && patientTable.sort[0].desc) {
                     sortedClasses = styles.theadDesc;
@@ -641,13 +612,8 @@ class PatientTable extends Component {
                     className: column.id === compare ? sortedClasses : null,
                   };
                 }}
-                getTfootThProps={() => {
-                  return backgroundWhite;
-                }}
-                getTbodyProps={() => {
-                  return bodyStyle;
-                }}
-
+                getTfootThProps={() => backgroundWhite}
+                getTbodyProps={() => bodyStyle}
                 style={tableStyle}
               />
             </Card>
@@ -688,7 +654,9 @@ PatientTable.propTypes = {
   fetchEntitiesRequest: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({ entities, patientTable, apiRequests, auth }) {
+function mapStateToProps({
+  entities, patientTable, apiRequests, auth,
+}) {
   const practitioners = entities.getIn(['practitioners', 'models']);
 
   const filters = patientTable.get('filters');
@@ -696,7 +664,9 @@ function mapStateToProps({ entities, patientTable, apiRequests, auth }) {
   const waitForAuth = auth.get('accountId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
-  const accountsFetched = (apiRequests.get('accountsTable') ? apiRequests.get('accountsTable').wasFetched : null);
+  const accountsFetched = apiRequests.get('accountsTable')
+    ? apiRequests.get('accountsTable').wasFetched
+    : null;
 
   return {
     practitioners,
@@ -708,23 +678,29 @@ function mapStateToProps({ entities, patientTable, apiRequests, auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    createEntityRequest,
-    fetchPatientTableData,
-    fetchEntitiesRequest,
-    push,
-    destroy,
-    arrayRemoveAll,
-    setTableData,
-    setSmartFilter,
-    setFilters,
-    removeFilter,
-    clearFilters,
-    clearSearch,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      createEntityRequest,
+      fetchPatientTableData,
+      fetchEntitiesRequest,
+      push,
+      destroy,
+      arrayRemoveAll,
+      setTableData,
+      setSmartFilter,
+      setFilters,
+      removeFilter,
+      clearFilters,
+      clearSearch,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(PatientTable);

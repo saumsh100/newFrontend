@@ -20,7 +20,8 @@ class ConfirmSignUp extends Component {
 
   confirmAndBook(values) {
     // true argument is to ignore sending confirmation text on API
-    return this.props.confirmCode(values)
+    return this.props
+      .confirmCode(values)
       .then(() => {
         // TODO: this should be conditional based on where the component came from
         // Important to return so that it will not navigate if errored
@@ -39,21 +40,21 @@ class ConfirmSignUp extends Component {
   }
 
   render() {
-    const {
-      patientUser,
-    } = this.props;
+    const { patientUser } = this.props;
 
     const resendAnchor = (
       <a
         href="#resend"
-        onClick={(e) => { e.preventDefault(); this.resendCode(); }}
+        onClick={(e) => {
+          e.preventDefault();
+          this.resendCode();
+        }}
       >
         here
       </a>
     );
 
-
-    /*const formComponent = (
+    /* const formComponent = (
       <div>
         <div className={styles.messageWrapper}>
           <span>You are currently logged in as <strong>{patientUser.getFullName()}</strong>.
@@ -71,17 +72,17 @@ class ConfirmSignUp extends Component {
           If you did not receive your SMS and want it sent again, click {resendAnchor}.
         </div>
       </div>
-    );*/
+    ); */
 
     return (
       <div className={styles.signUpWrapper}>
-        <div className={styles.header}>
-          Confirm Signup
-        </div>
+        <div className={styles.header}>Confirm Signup</div>
         <div className={styles.message}>
-          We have sent a confirmation code via SMS to <span className={styles.phone}>{patientUser.get('phoneNumber')}</span>.
-          Please type in the code below and submit to complete your booking request.
-          If you did not receive your SMS and want it sent again, click {resendAnchor}.
+          We have sent a confirmation code via SMS to{' '}
+          <span className={styles.phone}>{patientUser.get('phoneNumber')}</span>.
+          Please type in the code below and submit to complete your booking
+          request. If you did not receive your SMS and want it sent again, click{' '}
+          {resendAnchor}.
         </div>
         <ConfirmNumberForm
           initialValues={{}}
@@ -104,10 +105,16 @@ function mapStateToProps({ auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    confirmCode,
-    resendPinCode,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      confirmCode,
+      resendPinCode,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ConfirmSignUp));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ConfirmSignUp));

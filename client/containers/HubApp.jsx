@@ -13,13 +13,19 @@ import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../util/hub';
 import styles from './styles.scss';
 
 function HubApp(props) {
-  const { location, children, isSearchCollapsed, showContent, toolbarPosition } = props;
+  const {
+    location,
+    children,
+    isSearchCollapsed,
+    showContent,
+    toolbarPosition,
+  } = props;
 
   let AppContainer = (
     <div>
-      {/* <CallerModal />*/}
-      {/* <TopBarContainer />*/}
-      {/* {overlay}*/}
+      {/* <CallerModal /> */}
+      {/* <TopBarContainer /> */}
+      {/* {overlay} */}
       <div
         className={classNames(styles.hubContentContainer, {
           [styles.left]: toolbarPosition === TOOLBAR_LEFT,
@@ -82,10 +88,13 @@ function mapActionsToProps(dispatch) {
     {
       dispatch,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(HubApp);

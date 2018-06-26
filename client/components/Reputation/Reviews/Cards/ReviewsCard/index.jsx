@@ -1,7 +1,14 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardHeader, BigCommentBubble, Col, Button, DialogBox } from '../../../../library';
+import {
+  Card,
+  CardHeader,
+  BigCommentBubble,
+  Col,
+  Button,
+  DialogBox,
+} from '../../../../library';
 import content from '../../howToContent';
 import styles from '../../styles.scss';
 
@@ -10,7 +17,8 @@ const companyIcons = {
   Facebook: '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
   Yelp: '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
   'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
-  CareCru: 'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
+  CareCru:
+    'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
 };
 
 const capitalize = (str) => {
@@ -26,7 +34,8 @@ const isCareCruReview = r => r.icon === 'CareCru';
  * @param nonCCReviews
  * @param ccReviews
  */
-const nonCareCruReviewsCount = (nonCCReviews, ccReviews) => nonCCReviews - ccReviews;
+const nonCareCruReviewsCount = (nonCCReviews, ccReviews) =>
+  nonCCReviews - ccReviews;
 
 class ReviewsCard extends Component {
   constructor(props) {
@@ -63,7 +72,7 @@ class ReviewsCard extends Component {
         <CardHeader
           count={nonCareCruReviewsCount(data.length, ccLength)}
           className={styles.reviewsComments__cardHeader}
-          title={'REVIEWS'}
+          title="REVIEWS"
         >
           <div className={styles.ccReviews}>
             {`${ccLength} CARECRU REVIEW${ccLength === 1 ? '' : 'S'}`}
@@ -97,7 +106,9 @@ class ReviewsCard extends Component {
                   );
                 })
               ) : (
-                <div className={styles.clearedReviews}>Please Remove a Filter Option.</div>
+                <div className={styles.clearedReviews}>
+                  Please Remove a Filter Option.
+                </div>
               )}
             </Col>
           </div>

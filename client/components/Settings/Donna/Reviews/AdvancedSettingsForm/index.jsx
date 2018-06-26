@@ -3,7 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../../library';
 
-export default function AdvancedSettingsForm({ form, initialValues, onSubmit }) {
+export default function AdvancedSettingsForm({
+  form,
+  initialValues,
+  onSubmit,
+}) {
   return (
     <Form
       ignoreSaveButton

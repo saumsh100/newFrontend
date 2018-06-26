@@ -28,7 +28,9 @@ class FamilyMember extends React.Component {
   }
 
   renderNameAge(fullName, age) {
-    return <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>;
+    return (
+      <span className={styles.familyMember_name}>{`${fullName}, ${age}`}</span>
+    );
   }
 
   renderHeadBadge(text) {
@@ -44,7 +46,7 @@ class FamilyMember extends React.Component {
   renderButton(text, handler, remove = false) {
     return (
       <button
-        type={'button'}
+        type="button"
         className={classNames([styles.familyMember_config_button], {
           [styles.familyMember_config_button_remove]: remove,
         })}
@@ -111,7 +113,10 @@ class FamilyMember extends React.Component {
               <InfoDump label="LAST APPT" data={lastApp} />
             </Col>
             <Col xs={6}>
-              <InfoDump label="DUE FOR HYGIENE" component={HygieneData(recallHygieneData)} />
+              <InfoDump
+                label="DUE FOR HYGIENE"
+                component={HygieneData(recallHygieneData)}
+              />
             </Col>
           </Row>
           <Row className={styles.familyMember_row}>
@@ -119,7 +124,10 @@ class FamilyMember extends React.Component {
               <InfoDump label="NEXT APPT" data={nextApp} />
             </Col>
             <Col xs={6}>
-              <InfoDump label="DUE FOR RECALL" component={RecallData(recallHygieneData)} />
+              <InfoDump
+                label="DUE FOR RECALL"
+                component={RecallData(recallHygieneData)}
+              />
             </Col>
           </Row>
         </Col>
@@ -128,7 +136,9 @@ class FamilyMember extends React.Component {
   }
 
   renderFamilyConfig(props) {
-    const { fullName, age, patient, isHead, avatarSize } = props;
+    const {
+      fullName, age, patient, isHead, avatarSize,
+    } = props;
 
     return (
       <Row middle="xs" start="xs">
@@ -169,8 +179,10 @@ class FamilyMember extends React.Component {
         className={classNames({
           [styles.familyMember]: !this.props.handleMakeHead,
           [styles.familyMember_config]: this.props.handleMakeHead,
-          [styles.familyMember_withBorder]: !this.props.handleMakeHead && withBorder,
-          [styles.familyMember_config_withBorder]: this.props.handleMakeHead && withBorder,
+          [styles.familyMember_withBorder]:
+            !this.props.handleMakeHead && withBorder,
+          [styles.familyMember_config_withBorder]:
+            this.props.handleMakeHead && withBorder,
         })}
         onMouseLeave={() => this.mouseLeave()}
         onMouseOver={() => this.mouseOver()}

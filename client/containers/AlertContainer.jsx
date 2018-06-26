@@ -18,10 +18,7 @@ class AlertContainer extends Component {
   }
 
   render() {
-    const {
-      alerts,
-      removeAlert,
-    } = this.props;
+    const { alerts, removeAlert } = this.props;
 
     if (!alerts) {
       return null;
@@ -31,7 +28,9 @@ class AlertContainer extends Component {
       <div className={styles.alertsContainer}>
         {alerts.toArray().map((alert, index) => {
           const alertData = alert.toJS();
-          const func = alertData.caller ? () => this.callerId(alertData.id) : () => null;
+          const func = alertData.caller
+            ? () => this.callerId(alertData.id)
+            : () => null;
 
           return (
             <Alert
@@ -61,12 +60,18 @@ function mapStateToProps({ alerts }) {
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    setSelectedCallId,
-    removeAlert,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setSelectedCallId,
+      removeAlert,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(AlertContainer);

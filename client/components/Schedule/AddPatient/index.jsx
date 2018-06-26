@@ -19,7 +19,14 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
   if (mergingPatientData) {
     const patientUser = mergingPatientData.patientUser;
 
-    const { firstName, lastName, email, phoneNumber, birthDate, gender } = patientUser;
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      birthDate,
+      gender,
+    } = patientUser;
 
     initialValues = {
       firstName,
@@ -43,11 +50,31 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
       ignoreSaveButton
       key={`Patient Creation Form Name_${formName}`}
     >
-      <Field required name="firstName" validate={[maxLength(15)]} label="First Name" />
-      <Field required name="lastName" validate={[maxLength(15)]} label="Last Name" />
-      <Field name="gender" label="Gender" component="DropdownSelect" options={options} />
+      <Field
+        required
+        name="firstName"
+        validate={[maxLength(15)]}
+        label="First Name"
+      />
+      <Field
+        required
+        name="lastName"
+        validate={[maxLength(15)]}
+        label="Last Name"
+      />
+      <Field
+        name="gender"
+        label="Gender"
+        component="DropdownSelect"
+        options={options}
+      />
       <Field name="mobilePhoneNumber" label="Mobile Phone Number" type="tel" />
-      <Field type="email" name="email" validate={[emailValidate]} label="Email" />
+      <Field
+        type="email"
+        name="email"
+        validate={[emailValidate]}
+        label="Email"
+      />
       <Field
         normalize={normalizeBirthdate}
         validate={[validateBirthdate]}

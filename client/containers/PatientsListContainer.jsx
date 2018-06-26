@@ -10,26 +10,23 @@ class PatientsListContainer extends Component {
   }
 
   render() {
-    return (
-      <Patients />
-    );
+    return <Patients />;
   }
 }
 
-PatientsListContainer.PropTypes = {
-
-};
+PatientsListContainer.PropTypes = {};
 
 function mapStateToProps({ entities }) {
-  return {
-  };
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-  }, dispatch);
+  return bindActionCreators({}, dispatch);
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(PatientsListContainer);

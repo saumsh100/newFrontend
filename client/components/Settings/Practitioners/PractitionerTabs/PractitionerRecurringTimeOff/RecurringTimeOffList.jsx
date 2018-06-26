@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import RecurringTimeOffListItem from './RecurringTimeOffListItem';
 import { List } from '../../../../library';
@@ -28,19 +29,19 @@ class RecurringTimeOffList extends Component {
     } = this.props;
 
     return (
-      <List className={styles.timeOffList} data-test-id="timeOffList" >
-        <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
-        {recurringTimeOffs.toArray().map((timeOff) => {
-          return (
-            <RecurringTimeOffListItem
-              key={timeOff.get('id')}
-              timeOff={timeOff}
-              practitioner={practitioner}
-              onClick={() => onSelectTimeOff(timeOff)}
-              deleteTimeOff={this.deleteTimeOff}
-            />
-          );
-        })}
+      <List className={styles.timeOffList} data-test-id="timeOffList">
+        <div className={styles.timeOffList_addTimeOffText}>
+          Add Time Off{children}
+        </div>
+        {recurringTimeOffs.toArray().map(timeOff => (
+          <RecurringTimeOffListItem
+            key={timeOff.get('id')}
+            timeOff={timeOff}
+            practitioner={practitioner}
+            onClick={() => onSelectTimeOff(timeOff)}
+            deleteTimeOff={this.deleteTimeOff}
+          />
+          ))}
       </List>
     );
   }
@@ -54,4 +55,4 @@ RecurringTimeOffList.propTypes = {
   deleteTimeOff: PropTypes.func.isRequired,
 };
 
-export default RecurringTimeOffList
+export default RecurringTimeOffList;

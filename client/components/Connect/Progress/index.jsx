@@ -18,16 +18,7 @@ const collectionOrder = [
   'appointments',
 ];
 
-const collectionWeights = [
-  10,
-  5,
-  5,
-  10,
-  25,
-  10,
-  10,
-  25,
-];
+const collectionWeights = [10, 5, 5, 10, 25, 10, 10, 25];
 
 const getPercentageFromProgress = (progress) => {
   const { collection, saved, total } = progress;
@@ -49,7 +40,9 @@ class Progress extends Component {
   }
 
   render() {
-    const { account, isSyncing, progress, isDone } = this.props;
+    const {
+      account, isSyncing, progress, isDone,
+    } = this.props;
     if (!account) return null;
 
     let percentage = 0;
@@ -69,14 +62,12 @@ class Progress extends Component {
 
     if (isDone) {
       classes = styles.progressText;
-      syncingText = 'Done.'
+      syncingText = 'Done.';
     }
 
     return (
       <div>
-        <div className={classes}>
-          {syncingText}
-        </div>
+        <div className={classes}>{syncingText}</div>
         <ProgressBar percentage={percentage} />
       </div>
     );
@@ -100,10 +91,16 @@ function mapStateToProps({ entities, auth, connect }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    startSync,
-    stopSync,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      startSync,
+      stopSync,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Progress));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Progress));

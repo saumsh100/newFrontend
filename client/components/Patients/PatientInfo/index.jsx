@@ -36,12 +36,18 @@ const HeaderModalComponent = ({
   icon, text, onClick, title,
 }) => (
   <div
-    className={classNames(isResponsive() ? styles.editButton : styles.textContainer, {
-      [styles.editButtonMobile]: !isHub(),
-    })}
+    className={classNames(
+      isResponsive() ? styles.editButton : styles.textContainer,
+      {
+        [styles.editButtonMobile]: !isHub(),
+      },
+    )}
   >
     <div className={styles.cardTitle}> {title} </div>
-    <Button className={classNames(styles.textHeader, styles.textHeaderButton)} onClick={onClick}>
+    <Button
+      className={classNames(styles.textHeader, styles.textHeaderButton)}
+      onClick={onClick}
+    >
       <div className={styles.textHeader_icon}>
         <Icon icon={icon} />
       </div>
@@ -58,7 +64,13 @@ HeaderModalComponent.propTypes = {
 };
 
 // The default list of events shown on the time-line. Add to this when a new event typed is added.
-const defaultEvents = ['appointment', 'reminder', 'review', 'call', 'new patient'];
+const defaultEvents = [
+  'appointment',
+  'reminder',
+  'review',
+  'call',
+  'new patient',
+];
 
 class PatientInfo extends Component {
   constructor(props) {
@@ -213,10 +225,15 @@ class PatientInfo extends Component {
     const wasAllFetched = accountsFetched && wasPatientFetched;
 
     const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
-    const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
+    const shouldDisplayTimelinePage =
+      !isResponsive() || this.state.pageTab === 1;
 
     return (
-      <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
+      <Grid
+        className={classNames(styles.mainContainer, {
+          [styles.responsiveContainer]: isHub(),
+        })}
+      >
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
@@ -252,7 +269,11 @@ class PatientInfo extends Component {
         <Row className={styles.row}>
           <Col xs={12} className={styles.body}>
             <div className={styles.tabsSection}>
-              <Tabs fluid index={this.state.pageTab} onChange={this.changePageTab}>
+              <Tabs
+                fluid
+                index={this.state.pageTab}
+                onChange={this.changePageTab}
+              >
                 <Tab
                   label="Patient Info"
                   inactiveClass={styles.inactiveTab}
@@ -290,7 +311,9 @@ class PatientInfo extends Component {
               <div className={styles.timeline}>
                 {!isResponsive() && (
                   <div className={styles.textContainer}>
-                    <div className={styles.cardTitle}>Timeline & Activities</div>
+                    <div className={styles.cardTitle}>
+                      Timeline & Activities
+                    </div>
                     <Popover
                       isOpen={this.state.filterOpen}
                       body={[
@@ -307,7 +330,10 @@ class PatientInfo extends Component {
                       onOuterAction={this.reinitializeState}
                     >
                       <Button
-                        className={classNames(styles.textHeader, styles.textHeaderButton)}
+                        className={classNames(
+                          styles.textHeader,
+                          styles.textHeaderButton,
+                        )}
                         onClick={this.openFilter}
                       >
                         <div className={styles.textHeader_icon}>
@@ -348,11 +374,16 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStateToProps({
-  entities, apiRequests, patientTable, auth, electron,
-}, { match }) {
+function mapStateToProps(
+  {
+    entities, apiRequests, patientTable, auth, electron,
+  },
+  { match },
+) {
   const patients = entities.getIn(['patients', 'models']);
-  const reminders = entities.getIn(['reminders', 'models']).filter(v => v.isActive);
+  const reminders = entities
+    .getIn(['reminders', 'models'])
+    .filter(v => v.isActive);
   const recalls = entities.getIn(['recalls', 'models']).filter(v => v.isActive);
   const patientStats = apiRequests.get('patientIdStats')
     ? apiRequests.get('patientIdStats').data
@@ -438,7 +469,10 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const query = graphql`
   query PatientInfo_Query($patientId: String!) {

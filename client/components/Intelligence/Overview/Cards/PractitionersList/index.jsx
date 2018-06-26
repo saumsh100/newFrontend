@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Guage, PractitionerAvatar } from '../../../../library';
@@ -14,9 +15,13 @@ class PractitionersList extends Component {
       newPatients,
       practitioner,
       color,
-      percentage } = this.props;
+      percentage,
+    } = this.props;
 
-    const gradientStyle = classNames(styles[color], styles.practitioner__item_gradient);
+    const gradientStyle = classNames(
+      styles[color],
+      styles.practitioner__item_gradient,
+    );
 
     return (
       <li className={styles.practitioner__item}>
@@ -24,7 +29,11 @@ class PractitionersList extends Component {
           <div className={styles.practitioner__item_header}>
             <div className={styles.practitioner__item_img}>
               <div className={gradientStyle}>
-                <PractitionerAvatar className={styles.practitioner__item_avatar} size="lg" practitioner={practitioner} />
+                <PractitionerAvatar
+                  className={styles.practitioner__item_avatar}
+                  size="lg"
+                  practitioner={practitioner}
+                />
               </div>
             </div>
             <div className={styles.practitioner__item_about}>
@@ -39,11 +48,15 @@ class PractitionersList extends Component {
           <div className={styles.practitioner__item_footer}>
             <div className={styles.practitioner__item_text}>
               <span>Production Hours Booked</span>
-              <span data-test-id={`${name} hours booked`}>{appointmentBooked}h</span>
+              <span data-test-id={`${name} hours booked`}>
+                {appointmentBooked}h
+              </span>
             </div>
             <div className={styles.practitioner__item_text}>
               <span>Production Hours Not Filled</span>
-              <span data-test-id={`${name} hours not filled`}>{appointmentNotFiltred}h</span>
+              <span data-test-id={`${name} hours not filled`}>
+                {appointmentNotFiltred}h
+              </span>
             </div>
             <div className={styles.practitioner__item_text}>
               <span>New Patients</span>
@@ -56,6 +69,5 @@ class PractitionersList extends Component {
     );
   }
 }
-
 
 export default PractitionersList;

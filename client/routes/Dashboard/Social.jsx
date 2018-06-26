@@ -8,15 +8,16 @@ import Practice from '../../components/Social/Practice';
 
 const base = (path = '') => `/social${path}`;
 
-const Patients = () =>
+const Patients = () => (
   <Container>
     <DocumentTitle title="CareCru | Social">
       <Switch>
         <Redirect exact from={base()} to={base('/patient')} />
-        {/*<Route path={base('/patient')} component={Patient} />*/}
+        {/* <Route path={base('/patient')} component={Patient} /> */}
         <Route path={base('/practice')} component={Practice} />
       </Switch>
     </DocumentTitle>
-  </Container>;
+  </Container>
+);
 
 export default Patients;

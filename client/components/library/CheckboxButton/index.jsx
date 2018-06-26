@@ -18,7 +18,13 @@ export default function CheckboxButton(props) {
 
   return (
     <div className={styles.checkboxButton} data-test-id={props['data-test-id']}>
-      <input type="checkbox" id={id} checked={checked} value={value} onChange={() => {}} />
+      <input
+        type="checkbox"
+        id={id}
+        checked={checked}
+        value={value}
+        onChange={() => {}}
+      />
       <Button className={labelClasses} onClick={onChange} onChange={onChange}>
         {label}
       </Button>

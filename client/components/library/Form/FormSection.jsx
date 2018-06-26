@@ -6,6 +6,4 @@ export default function FormSection(props) {
   return <RFFormSection {...props} />;
 }
 
-FormSection.propTypes = {
-
-};
+FormSection.propTypes = {};

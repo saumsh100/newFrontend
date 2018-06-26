@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import Icon from '../Icon';
 import styles from './styles.scss';
@@ -8,46 +9,35 @@ class ListBullets extends Component {
   }
 
   render() {
-    const {
-      length,
-      index,
-      setIndex,
-    } = this.props;
+    const { length, index, setIndex } = this.props;
 
     const bullets = [];
 
-    for (let i=0; i<length; i++) {
+    for (let i = 0; i < length; i++) {
       if (i !== index) {
-        bullets.push(
-          <div className={styles.padding}>
-            <Icon
-              icon="circle-thin"
-              onClick={() => {
+        bullets.push(<div className={styles.padding}>
+          <Icon
+            icon="circle-thin"
+            onClick={() => {
                 if (i < index) {
                   setIndex(i);
                 }
               }}
-            />
-          </div>
-        );
+          />
+        </div>);
       } else {
-        bullets.push(
-          <div className={styles.padding}>
-            <Icon icon="circle" />
-          </div>
-        );
+        bullets.push(<div className={styles.padding}>
+          <Icon icon="circle" />
+        </div>);
       }
     }
 
     return (
       <div className={styles.listBullets}>
-        {bullets.map((bullet) => {
-          return bullet;
-        })}
+        {bullets.map(bullet => bullet)}
       </div>
-    )
+    );
   }
 }
-
 
 export default ListBullets;

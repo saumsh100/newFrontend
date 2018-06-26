@@ -6,7 +6,11 @@ import List from '../../components/Admin/Accounts/List';
 import Form from '../../components/Admin/Accounts/Form';
 
 const Accounts = (props) => {
-  const { match: { params: { enterpriseId } } } = props;
+  const {
+    match: {
+      params: { enterpriseId },
+    },
+  } = props;
 
   const getPath = (id, path = '') => `/admin/enterprises/${id}/accounts${path}`;
 

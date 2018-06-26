@@ -19,7 +19,9 @@ class SignUpInvite extends Component {
               alt="CareCru Logo"
             />
           </div>
-          <InviteForm onSubmit={this.props.invite.bind(null, this.props.location)} />
+          <InviteForm
+            onSubmit={this.props.invite.bind(null, this.props.location)}
+          />
         </Card>
       </div>
     );
@@ -31,13 +33,18 @@ SignUpInvite.propTypes = {
   location: PropTypes.object,
 };
 
-
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    invite,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      invite,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(SignUpInvite);

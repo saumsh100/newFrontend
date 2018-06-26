@@ -38,10 +38,11 @@ class WidgetContainer extends Component {
 
     return (
       <div className={styles.container}>
-        {!sentReviewId || isLoadingSentReview ?
-          <LoadingView /> :
+        {!sentReviewId || isLoadingSentReview ? (
+          <LoadingView />
+        ) : (
           this.props.children
-        }
+        )}
       </div>
     );
   }
@@ -57,9 +58,15 @@ function mapStateToProps({ reviews }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    loadSentReview,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      loadSentReview,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WidgetContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WidgetContainer);

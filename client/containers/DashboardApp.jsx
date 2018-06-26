@@ -4,7 +4,7 @@ import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import jwt from 'jwt-decode';
-import { push } from 'react-router-redux'
+import { push } from 'react-router-redux';
 import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
@@ -27,7 +27,12 @@ function DashboardApp(props) {
 
   let overlay = null;
   if (!isCollapsed) {
-    overlay = <div className={styles.overlay} onClick={() => setIsCollapsed(!isCollapsed)} />;
+    overlay = (
+      <div
+        className={styles.overlay}
+        onClick={() => setIsCollapsed(!isCollapsed)}
+      />
+    );
   }
 
   let AppContainer = (
@@ -39,10 +44,11 @@ function DashboardApp(props) {
         <NavList location={location} isCollapsed={isCollapsed} />
       </NavRegionContainer>
       <MainRegionContainer>
-        {isSearchCollapsed ?
+        {isSearchCollapsed ? (
           <div className={styles.subTabs}>
             <SubTabs location={location} />
-          </div> : null}
+          </div>
+        ) : null}
         <div className={styles.mainRegionChildren}>
           {children}
           <AlertContainer />
@@ -54,11 +60,7 @@ function DashboardApp(props) {
   const isLoginPage = location.pathname.includes('login');
 
   if (isLoginPage) {
-    AppContainer = (
-      <div>
-        {children}
-      </div>
-    );
+    AppContainer = <div>{children}</div>;
   }
 
   return AppContainer;
@@ -72,7 +74,9 @@ DashboardApp.propTypes = {
   isSearchCollapsed: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ toolbar, entities, auth, caller }) {
+function mapStateToProps({
+  toolbar, entities, auth, caller,
+}) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
@@ -81,11 +85,17 @@ function mapStateToProps({ toolbar, entities, auth, caller }) {
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
+  return bindActionCreators(
+    {
+      dispatch,
+    },
     dispatch,
-  }, dispatch);
+  );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(DashboardApp);

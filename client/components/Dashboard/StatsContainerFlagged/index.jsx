@@ -37,7 +37,10 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
   const appointments = entities.getIn(['appointments', 'models']);
   const requests = entities.getIn(['requests', 'models']);
 
-  const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
+  const filteredAppointments = FilterAppointments(
+    appointments,
+    moment(dashboardDate),
+  );
 
   const filteredRequests = requests.filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
@@ -48,6 +51,9 @@ function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
   };
 }
 
-const enhance = connect(mapStateToProps, null);
+const enhance = connect(
+  mapStateToProps,
+  null,
+);
 
 export default enhance(StatsContainer);

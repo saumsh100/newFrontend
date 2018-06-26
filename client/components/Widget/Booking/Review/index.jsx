@@ -9,14 +9,25 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import data from './insurance_carriers';
-import { Button, Link, TextArea, Input, Tooltip, Icon, Loading } from '../../../library';
+import {
+  Button,
+  Link,
+  TextArea,
+  Input,
+  Tooltip,
+  Icon,
+  Loading,
+} from '../../../library';
 import {
   setNotes,
   setInsuranceCarrier,
   setInsuranceMemberId,
   setFamilyPatientUser,
 } from '../../../../actions/availabilities';
-import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
+import {
+  createRequest,
+  createWaitSpot,
+} from '../../../../thunks/availabilities';
 import { fetchFamilyPatients } from '../../../../thunks/familyPatients';
 import InsuranceCarrier from './InsuranceCarrier';
 import FamilyPatient from './FamilyPatient';
@@ -77,7 +88,8 @@ const iconMemberId = (
  * @param {string} carrierLabel
  * @param {string} key
  */
-const findCarrierBy = (carrierLabel, key = 'label') => data.find(opt => opt[key] === carrierLabel);
+const findCarrierBy = (carrierLabel, key = 'label') =>
+  data.find(opt => opt[key] === carrierLabel);
 
 class Review extends Component {
   constructor(props) {
@@ -215,7 +227,13 @@ class Review extends Component {
       return <Loading />;
     }
 
-    const { selectedAvailability, selectedService, hasWaitList, waitSpot, notes } = this.props;
+    const {
+      selectedAvailability,
+      selectedService,
+      hasWaitList,
+      waitSpot,
+      notes,
+    } = this.props;
 
     let serviceName = null;
     let selectedDay = null;
@@ -283,7 +301,9 @@ class Review extends Component {
               userId={this.props.user.id}
             />
           </div>
-          <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
+          <div
+            className={classnames(styles.fieldWrapper, styles.flexibleField)}
+          >
             <div className={styles.label}>Insurance Carrier</div>
             <InsuranceCarrier
               error={this.state.insuranceCarrierError}
@@ -293,7 +313,9 @@ class Review extends Component {
             />
           </div>
           {this.props.selectedInsuranceCarrier !== DEFAULT_VALUE && (
-            <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
+            <div
+              className={classnames(styles.fieldWrapper, styles.flexibleField)}
+            >
               <div className={styles.label}>Patient insurance member ID</div>
               <Input
                 name="insuranceMemberId"
@@ -333,7 +355,7 @@ function mapDispatchToProps(dispatch) {
       createRequest,
       createWaitSpot,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -356,7 +378,10 @@ function mapStateToProps({ auth, availabilities, entities }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Review));
 
 Review.propTypes = {
   createWaitSpot: PropTypes.func,
@@ -386,18 +411,16 @@ Review.propTypes = {
   fetchFamilyPatients: PropTypes.func,
   setFamilyPatientUser: PropTypes.func,
   insuranceMemberId: PropTypes.string,
-  familyPatients: PropTypes.arrayOf(
-    PropTypes.shape({
-      birthDate: PropTypes.string,
-      avatarUrl: PropTypes.string,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      gender: PropTypes.string,
-      id: PropTypes.string,
-      isEmailConfirmed: PropTypes.bool,
-      isPhoneNumberConfirmed: PropTypes.bool,
-      patientUserFamilyId: PropTypes.string,
-      phoneNumber: PropTypes.string,
-    })
-  ),
+  familyPatients: PropTypes.arrayOf(PropTypes.shape({
+    birthDate: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    gender: PropTypes.string,
+    id: PropTypes.string,
+    isEmailConfirmed: PropTypes.bool,
+    isPhoneNumberConfirmed: PropTypes.bool,
+    patientUserFamilyId: PropTypes.string,
+    phoneNumber: PropTypes.string,
+  })),
 };

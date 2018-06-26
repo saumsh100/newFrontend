@@ -86,6 +86,9 @@ const mapActionsToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(PatientSearch);

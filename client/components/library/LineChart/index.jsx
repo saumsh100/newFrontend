@@ -66,12 +66,20 @@ export default function LineChart(props) {
           pointRadius: 5,
           pointHitRadius: 10,
           hitRadius: 0,
-        }
+        },
       );
     }),
   };
 
-  return <Line {...props} data={newData} options={finalOptions} height={height} width={width} />;
+  return (
+    <Line
+      {...props}
+      data={newData}
+      options={finalOptions}
+      height={height}
+      width={width}
+    />
+  );
 }
 
 LineChart.propTypes = {

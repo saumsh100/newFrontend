@@ -9,15 +9,24 @@ import styles from './styles.scss';
 
 export default function Waitlist(props) {
   const {
-    waitSpots, patientUsers, patients, removeWaitSpot, openAddTo,
+    waitSpots,
+    patientUsers,
+    patients,
+    removeWaitSpot,
+    openAddTo,
   } = props;
 
   return (
     <div className={styles.waitList}>
       <div className={styles.header}>
-        {waitSpots.size} {waitSpots.size === 1 ? 'Patient' : 'Patients'} on Waitlist
+        {waitSpots.size} {waitSpots.size === 1 ? 'Patient' : 'Patients'} on
+        Waitlist
         <div className={styles.addTo}>
-          <Button color="blue" onClick={openAddTo} data-test-id="button_addToWaitlist">
+          <Button
+            color="blue"
+            onClick={openAddTo}
+            data-test-id="button_addToWaitlist"
+          >
             Add to Waitlist
           </Button>
         </div>

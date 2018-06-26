@@ -1,5 +1,13 @@
+
 import React, { Component } from 'react';
-import { Card, Col, BackgroundIcon, Icon, IconButton, Label } from '../../../../library';
+import {
+  Card,
+  Col,
+  BackgroundIcon,
+  Icon,
+  IconButton,
+  Label,
+} from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from './styles.scss';
 
@@ -12,20 +20,19 @@ class ComposePost extends Component {
     };
     this.handlerImageUpload = this.handlerImageUpload.bind(this);
   }
+
   handlerImageUpload() {
     this.setState({
       imageUpload: !this.state.imageUpload,
     });
   }
+
   render() {
     const { maxPostLength } = this.state;
     const { headerTabs, socialPreview } = this.props;
     return (
       <Card className={styles.post}>
-        <Col
-          sm={12} md={8}
-          className={styles.post__left}
-        >
+        <Col sm={12} md={8} className={styles.post__left}>
           <div className={styles.post__left_header}>
             <div className={styles.post__left_headerTitle}>Compose a Post</div>
             <div className={styles.header}>
@@ -35,16 +42,11 @@ class ComposePost extends Component {
                   color={colorMap.blue}
                   fontSize={1.4}
                 />
-                <span>
-                  Add Profile
-                </span>
+                <span>Add Profile</span>
               </div>
               <div className={styles.header__tags}>
                 {headerTabs.map((obj, i) => (
-                  <Label
-                    key={i}
-                    text={obj.company}
-                  >
+                  <Label key={i} text={obj.company}>
                     <BackgroundIcon
                       icon={obj.icon}
                       color={colorMap[obj.color]}
@@ -72,54 +74,50 @@ class ComposePost extends Component {
               <div className={styles.body__footer}>
                 <div className={styles.body__footer_element}>
                   <Icon icon="link" />
-                  <span>
-                    Shared Link
-                  </span>
+                  <span>Shared Link</span>
                 </div>
                 <div
                   onClick={this.handlerImageUpload}
                   className={styles.body__footer_element}
                 >
-                  {!this.state.imageUpload ?
+                  {!this.state.imageUpload ? (
                     <div>
                       <Icon icon="picture-o" />
-                      <span>
-                      Upload a Images
-                    </span>
-                    </div> : <div className={styles.body__footer_tag}>
+                      <span>Upload a Images</span>
+                    </div>
+                  ) : (
+                    <div className={styles.body__footer_tag}>
                       <Label text="Dentist 2.jpeg(1,5MB)">
                         <Icon icon="image" />
                       </Label>
-                    </div>}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </Col>
-        <Col
-          sm={12} md={4}
-          className={styles.post__right}
-        >
-          <IconButton
-            icon="trash"
-            className={styles.post__right_icon}
-          />
+        <Col sm={12} md={4} className={styles.post__right}>
+          <IconButton icon="trash" className={styles.post__right_icon} />
           <div className={styles.post__right_preview}>
             {socialPreview.map((obj, i) => (
-              <div
-                key={i}
-                className={styles.preview}
-              >
-                <div className={styles.preview__title}>{`${obj.company} Preview`}</div>
+              <div key={i} className={styles.preview}>
+                <div className={styles.preview__title}>{`${
+                  obj.company
+                } Preview`}
+                </div>
                 <div className={styles.preview__body}>
                   <div className={styles.preview__body_text}>
                     {obj.message}
-                    {obj.image && <img className={styles.preview__body_img} src={obj.image} alt="dental" />}
+                    {obj.image && (
+                      <img
+                        className={styles.preview__body_img}
+                        src={obj.image}
+                        alt="dental"
+                      />
+                    )}
                   </div>
-                  <Icon
-                    className={styles.preview__body_icon}
-                    icon="times"
-                  />
+                  <Icon className={styles.preview__body_icon} icon="times" />
                 </div>
               </div>
             ))}
@@ -141,4 +139,3 @@ class ComposePost extends Component {
 }
 
 export default ComposePost;
-

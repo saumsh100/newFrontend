@@ -56,7 +56,12 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   confirmRequest(patient, sendEmail) {
-    const { selectedAppointment, reinitializeState, redirect, setLocation } = this.props;
+    const {
+      selectedAppointment,
+      reinitializeState,
+      redirect,
+      setLocation,
+    } = this.props;
 
     if (redirect) {
       setLocation(redirect);
@@ -74,7 +79,9 @@ class ConfirmAppointmentRequest extends Component {
       const requestId = selectedAppointment.requestModel;
       this.props
         .updateEntityRequest({
-          url: `/api/requests/${requestId.get('id')}/confirm/${this.state.selectedApp.id}`,
+          url: `/api/requests/${requestId.get('id')}/confirm/${
+            this.state.selectedApp.id
+          }`,
           values: {},
           alert: alertRequestUpdate,
         })
@@ -101,7 +108,13 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   render() {
-    const { patients, selectedAppointment, setCurrentDay, setSendEmail, sendEmail } = this.props;
+    const {
+      patients,
+      selectedAppointment,
+      setCurrentDay,
+      setSendEmail,
+      sendEmail,
+    } = this.props;
 
     if (!selectedAppointment) {
       return null;
@@ -156,14 +169,16 @@ class ConfirmAppointmentRequest extends Component {
           {appointments.length > 1 ? (
             <span>
               <br />
-              Select one of these appointments to <span className={styles.bold}>Connect</span> with
-              this request or simply <span className={styles.bold}>Create New Appointment</span> to
-              add a new one.
+              Select one of these appointments to{' '}
+              <span className={styles.bold}>Connect</span> with this request or
+              simply <span className={styles.bold}>Create New Appointment</span>{' '}
+              to add a new one.
             </span>
           ) : (
             <span>
               <br />
-              Would you like to connect the appointment request with this appointment?
+              Would you like to connect the appointment request with this
+              appointment?
             </span>
           )}
         </div>
@@ -237,10 +252,13 @@ function mapDispatchToProps(dispatch) {
       updateEntityRequest,
       setLocation: push,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(ConfirmAppointmentRequest);

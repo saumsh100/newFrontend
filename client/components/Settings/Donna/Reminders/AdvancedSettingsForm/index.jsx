@@ -52,7 +52,9 @@ const isValidTime = (val) => {
 };
 
 function AdvancedSettingsForm(props) {
-  const { reminder, onSubmit, isCustomConfirmValue, isDailyValue } = props;
+  const {
+    reminder, onSubmit, isCustomConfirmValue, isDailyValue,
+  } = props;
   const {
     ignoreSendIfConfirmed,
     isCustomConfirm,
@@ -66,7 +68,9 @@ function AdvancedSettingsForm(props) {
   const initialValues = {
     ignoreSendIfConfirmed,
     isCustomConfirm,
-    customConfirmString: customConfirmData ? JSON.stringify(customConfirmData) : '',
+    customConfirmString: customConfirmData
+      ? JSON.stringify(customConfirmData)
+      : '',
     omitPractitionerIdsString: omitPractitionerIds.join(','),
     dontSendWhenClosed,
     isDaily,
@@ -111,9 +115,19 @@ function AdvancedSettingsForm(props) {
         name="dontSendWhenClosed"
         label="Don't Sent When Closed?"
       />
-      <Field className={styles.toggle} component="Toggle" name="isDaily" label="Only Run Daily?" />
+      <Field
+        className={styles.toggle}
+        component="Toggle"
+        name="isDaily"
+        label="Only Run Daily?"
+      />
       {isDailyValue ? (
-        <Field required name="dailyRunTime" label="Daily Run Time" validate={[isValidTime]} />
+        <Field
+          required
+          name="dailyRunTime"
+          label="Daily Run Time"
+          validate={[isValidTime]}
+        />
       ) : null}
     </Form>
   );
@@ -132,4 +146,7 @@ function mapStateToProps(state, { reminder }) {
   };
 }
 
-export default connect(mapStateToProps, null)(AdvancedSettingsForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(AdvancedSettingsForm);

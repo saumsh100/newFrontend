@@ -12,14 +12,25 @@ import styles from './styles.scss';
 
 export default function DataDisplay(props) {
   const {
-    patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer,
+    patient,
+    activeAccount,
+    handleTabChange,
+    tabIndex,
+    openModal,
+    accountViewer,
   } = props;
 
   const { family, familyLength } = familyDataSelector(accountViewer);
 
-  const appointmentsTab = patient && <AppointmentsTab patient={patient} openModal={openModal} />;
-  const personalTab = patient && <PersonalTab patient={patient} openModal={openModal} />;
-  const insuranceTab = <div className={styles.noData}>No Insurance Information</div>;
+  const appointmentsTab = patient && (
+    <AppointmentsTab patient={patient} openModal={openModal} />
+  );
+  const personalTab = patient && (
+    <PersonalTab patient={patient} openModal={openModal} />
+  );
+  const insuranceTab = (
+    <div className={styles.noData}>No Insurance Information</div>
+  );
   const familyTab =
     familyLength > 0 ? (
       <FamilyTab

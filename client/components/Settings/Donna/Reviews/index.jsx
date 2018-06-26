@@ -50,7 +50,9 @@ class Reviews extends Component {
   }
 
   toggleAdvancedSettings() {
-    this.setState({ isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen });
+    this.setState({
+      isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen,
+    });
   }
 
   saveAdvancedSettings(values) {
@@ -69,7 +71,11 @@ class Reviews extends Component {
     };
 
     this.props
-      .updateReviewsSettings(activeAccount.id, { sendUnconfirmedReviews }, alert)
+      .updateReviewsSettings(
+        activeAccount.id,
+        { sendUnconfirmedReviews },
+        alert,
+      )
       .then(this.toggleAdvancedSettings);
   }
 
@@ -112,7 +118,12 @@ class Reviews extends Component {
       return null;
     }
 
-    return <ReviewPreview review={this.state.reviewSettings} account={this.props.activeAccount} />;
+    return (
+      <ReviewPreview
+        review={this.state.reviewSettings}
+        account={this.props.activeAccount}
+      />
+    );
   }
 
   renderReviewItem() {
@@ -192,4 +203,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ updateReviewsSettings }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Reviews);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Reviews);

@@ -11,7 +11,8 @@ import styles from './styles.scss';
 class Widget extends Component {
   componentWillMount() {
     // Without this, none of our themed styles would work
-    const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
+    const color =
+      this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
     document.documentElement.style.setProperty('--primaryColor', color);
     document.documentElement.style.setProperty('--primaryButtonColor', color);
   }
@@ -28,11 +29,18 @@ class Widget extends Component {
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
           <Header isBooking={this.props.isBooking} />
-          <div className={styles.container} ref={node => (this.containerNode = node)}>
+          <div
+            className={styles.container}
+            ref={node => (this.containerNode = node)}
+          >
             {this.props.isBooking ? this.props.children : 'Summary'}
           </div>
           <div className={styles.poweredBy}>
-            We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
+            We run on{' '}
+            <img
+              src="/images/carecru_logo_color_horizontal.png"
+              alt="CareCru"
+            />
           </div>
         </div>
       </div>
@@ -43,7 +51,10 @@ class Widget extends Component {
 Widget.propTypes = {
   account: PropTypes.instanceOf(Map),
   isBooking: PropTypes.bool.isRequired,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   location: PropTypes.shape(locationShape),
 };
 
@@ -54,4 +65,7 @@ function mapStateToProps({ reviews, availabilities }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, null)(Widget));
+export default withRouter(connect(
+  mapStateToProps,
+  null,
+)(Widget));

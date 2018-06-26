@@ -7,16 +7,10 @@ class PatientsContainer extends React.Component {
   }
 
   render() {
-    return (
-      <div>
-        {this.props.children}
-      </div>
-    );
+    return <div>{this.props.children}</div>;
   }
 }
 
-PatientsContainer.propTypes = {
-
-};
+PatientsContainer.propTypes = {};
 
 export default PatientsContainer;

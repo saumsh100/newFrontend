@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Card, CardHeader } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
@@ -15,12 +16,17 @@ export default function GoogleMapsVideo(props) {
           />
         </div>
         <div className={styles.googleMapsRespondDescr}>
-          <div className={styles.googleMapsRespondDescr_header}> Respond to Google Reviews! </div>
-          <div className={styles.googleMapsRespondDescr_subHeader}> You can respond on Google from here! Connect your Google My Business
+          <div className={styles.googleMapsRespondDescr_header}>
+            {' '}
+            Respond to Google Reviews!{' '}
+          </div>
+          <div className={styles.googleMapsRespondDescr_subHeader}>
+            {' '}
+            You can respond on Google from here! Connect your Google My Business
             account to get started.
           </div>
         </div>
       </div>
     </Card>
-  )
+  );
 }

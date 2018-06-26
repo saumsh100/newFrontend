@@ -4,16 +4,16 @@ import DropdownSelect from '../../DropdownSelect';
 
 export default function RFDropdownSelect(props) {
   const {
-    input,
-    icon,
-    label,
-    error,
-    meta,
+    input, icon, label, error, meta,
   } = props;
 
   const { touched, asyncValidating, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
-  const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+  const finalError = error || (touched || dirty ? meta.error : null);
+  const finalIcon = asyncValidating ? (
+    <i className="fa fa-cog fa-spin fa-fw" />
+  ) : (
+    icon
+  );
   return (
     <DropdownSelect
       {...props}

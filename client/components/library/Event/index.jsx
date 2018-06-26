@@ -13,11 +13,7 @@ import NewPatientEvent from './NewPatientEvent';
 
 class Event extends Component {
   render() {
-    const {
-      type,
-      data,
-      bgColor,
-    } = this.props;
+    const { type, data, bgColor } = this.props;
 
     let content = null;
     let icon = '';
@@ -68,13 +64,20 @@ class Event extends Component {
         <div className={styles.event}>
           <div className={styles.iconContainer}>
             <div className={bgIconStyle}>
-              <Icon size={1} icon={icon} className={styles.icon} type={iconType} />
+              <Icon
+                size={1}
+                icon={icon}
+                className={styles.icon}
+                type={iconType}
+              />
             </div>
           </div>
           {content}
         </div>
         <div className={styles.time}>
-          <span className={styles.time_text}>{moment(data.createdAt).format('h:mm a')}</span>
+          <span className={styles.time_text}>
+            {moment(data.createdAt).format('h:mm a')}
+          </span>
         </div>
       </div>
     );

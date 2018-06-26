@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import TimeSlotColumn from './TimeSlotColumn';
 import ShowAppointment from './ShowAppointment';
@@ -7,7 +8,8 @@ import {
   calculateAppoitmentTop,
   intersectingAppointments,
   sortAppsByStartDate,
-  buildAppoitmentProps } from './helpers';
+  buildAppoitmentProps,
+} from './helpers';
 
 /**
  * Function to calculate the intersection of appointments,
@@ -31,9 +33,9 @@ const renderDisplayComponent = params => (app, index, array) => {
   const intersectingApps = intersectingAppointments(
     array,
     app.startDate,
-    app.endDate
+    app.endDate,
   );
-  
+
   const rowSort = intersectingApps.sort(sortAppsByStartDate);
 
   const appoitmentParams = {
@@ -87,13 +89,17 @@ export default function TimeSlot(props) {
     minWidth: `${minWidth}px`,
   };
 
-  return (<div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
-    <TimeSlotColumn timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
+  return (
+    <div style={timeSlotContentStyle} className={styles.timeSlotColumn}>
+      <TimeSlotColumn timeSlots={timeSlots} timeSlotHeight={timeSlotHeight} />
 
-    {filteredApps && filteredApps.sort(sortAppsByStartDate)
+      {filteredApps &&
+        filteredApps
+          .sort(sortAppsByStartDate)
           .map(calculateAppoitmentTop({ startHour, timeSlotHeight, unit }))
           .map(renderDisplayComponent(props))}
-  </div>);
+    </div>
+  );
 }
 
 TimeSlot.propTypes = {
@@ -116,4 +122,3 @@ TimeSlot.propTypes = {
   columnIndex: PropTypes.number,
   unit: PropTypes.number,
 };
-

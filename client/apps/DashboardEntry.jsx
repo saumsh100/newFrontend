@@ -90,7 +90,7 @@ load()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Dashboard', () => {
-      const NextApp = require('./Dashboard').default; // eslint-disable-line
+      const NextApp = require("./Dashboard").default; // eslint-disable-line
 
       return render(NextApp);
     });

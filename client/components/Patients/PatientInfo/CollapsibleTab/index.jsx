@@ -12,8 +12,8 @@ export default function CollapsibleTab({ title, children }) {
       titleClass={styles.collapsibleTitle}
       contentClass={styles.collapsibleContent}
       activeClass={styles.collapsibleExpanded}
-      openIcon={'caret-down'}
-      closeIcon={'caret-up'}
+      openIcon="caret-down"
+      closeIcon="caret-up"
     >
       {children}
     </Collapsible>

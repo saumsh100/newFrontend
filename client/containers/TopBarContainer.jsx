@@ -12,8 +12,8 @@ import runOnDemandSync from '../thunks/runOnDemandSync';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { getCollection, getModel } from '../components/Utils';
 
-const fetchAccounts =
-  () => fetchEntities({ key: 'accounts', url: '/api/accounts' });
+const fetchAccounts = () =>
+  fetchEntities({ key: 'accounts', url: '/api/accounts' });
 
 class TopBarContainer extends Component {
   componentWillMount() {
@@ -37,24 +37,34 @@ TopBarContainer.propTypes = {
 const mapStateToProps = state => ({
   isCollapsed: state.toolbar.get('isCollapsed'),
   isSearchCollapsed: state.toolbar.get('isSearchCollapsed'),
-  accounts: getCollection(state, 'accounts', account => (account.enterpriseId === state.auth.get('enterpriseId'))),
+  accounts: getCollection(
+    state,
+    'accounts',
+    account => account.enterpriseId === state.auth.get('enterpriseId'),
+  ),
   activeAccount: getModel(state, 'accounts', state.auth.get('accountId')),
   user: state.auth.get('user'),
   enterprise: state.auth.get('enterprise'),
 });
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    setIsCollapsed,
-    setIsSearchCollapsed,
-    logout,
-    runOnDemandSync,
-    fetchAccounts,
-    switchActiveAccount,
-    push,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setIsCollapsed,
+      setIsSearchCollapsed,
+      logout,
+      runOnDemandSync,
+      fetchAccounts,
+      switchActiveAccount,
+      push,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(TopBarContainer);

@@ -24,7 +24,10 @@ export default function CallerDisplayUnknown(props) {
     borderStyling = styles.missed;
   }
 
-  const callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
+  const callDisplayContainer = classnames(
+    styles.callDisplayContainer,
+    borderStyling,
+  );
 
   return (
     <div className={callDisplayContainer}>
@@ -50,7 +53,10 @@ export default function CallerDisplayUnknown(props) {
 
         <CallDisplayInfo call={call} />
 
-        <AppointmentBookedToggle call={call} updateEntityRequest={updateEntityRequest} />
+        <AppointmentBookedToggle
+          call={call}
+          updateEntityRequest={updateEntityRequest}
+        />
       </div>
     </div>
   );

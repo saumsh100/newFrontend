@@ -1,29 +1,14 @@
 
 import React, { Component, PropTypes } from 'react';
-import {
-  ListItem,
-  Grid,
-  Row,
-  Col,
-  Toggle,
-  IconButton,
-} from '../../library';
+import { ListItem, Grid, Row, Col, Toggle, IconButton } from '../../library';
 import LastSyncDisplay from '../../LastSyncDisplay';
 import Advanced from './Advanced';
 import styles from './item.scss';
 
 const toggleIcons = {
-  checked: (
-    <div>
-      ON
-    </div>
-  ),
+  checked: <div>ON</div>,
 
-  unchecked: (
-    <div>
-      OFF
-    </div>
-  ),
+  unchecked: <div>OFF</div>,
 };
 
 export default class ConnectorsListItem extends Component {
@@ -41,7 +26,9 @@ export default class ConnectorsListItem extends Component {
 
   toggleConnector(e) {
     const { account } = this.props;
-    if (confirm(`Are you sure you want to turn on the connector for ${account.name}?`)) {
+    if (
+      confirm(`Are you sure you want to turn on the connector for ${account.name}?`)
+    ) {
       this.setState({ active: !this.state.active });
     }
   }
@@ -55,20 +42,13 @@ export default class ConnectorsListItem extends Component {
 
     return (
       <div className={styles.itemWrapper}>
-        <ListItem
-          onClick={this.toggleCollapsed}
-          className={styles.listItem}
-        >
+        <ListItem onClick={this.toggleCollapsed} className={styles.listItem}>
           <Grid className={styles.grid}>
             <Row className={styles.row}>
               <Col xs={4} className={styles.col}>
                 <div>
-                  <div className={styles.name}>
-                    {account.name}
-                  </div>
-                  <div className={styles.id}>
-                    {account.id}
-                  </div>
+                  <div className={styles.name}>{account.name}</div>
+                  <div className={styles.id}>{account.id}</div>
                 </div>
               </Col>
               <Col xs={4} className={styles.col}>
@@ -79,13 +59,13 @@ export default class ConnectorsListItem extends Component {
               </Col>
               <Col xs={4} className={styles.lastCol}>
                 {/* This is here so that the collapsed click does not also get called */}
-                {/*<div onClick={e => e.stopPropagation()}>
+                {/* <div onClick={e => e.stopPropagation()}>
                   <Toggle
                     value={this.state.active}
                     onChange={this.toggleConnector}
                     // icons={toggleIcons}
                   />
-                </div>*/}
+                </div> */}
                 <div>
                   <IconButton
                     icon={this.state.isCollapsed ? 'caret-up' : 'caret-down'}
@@ -97,12 +77,9 @@ export default class ConnectorsListItem extends Component {
             </Row>
           </Grid>
         </ListItem>
-        {!this.state.isCollapsed ?
-          <Advanced
-            key={`Advanced_${account.id}`}
-            account={account}
-          />
-        : null}
+        {!this.state.isCollapsed ? (
+          <Advanced key={`Advanced_${account.id}`} account={account} />
+        ) : null}
       </div>
     );
   }

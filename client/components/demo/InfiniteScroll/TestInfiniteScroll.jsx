@@ -1,6 +1,6 @@
 
-import React, { Component }  from 'react';
-import{ InfiniteScroll } from '../../library';
+import React, { Component } from 'react';
+import { InfiniteScroll } from '../../library';
 
 function createNumbersArray(start, length) {
   const arr = new Array(length);
@@ -41,7 +41,7 @@ export default class TestInfiniteScroll extends Component {
   }
 
   componentDidMount() {
-     //this.loadMore();
+    // this.loadMore();
   }
 
   loadMore() {
@@ -49,22 +49,26 @@ export default class TestInfiniteScroll extends Component {
     const oldItems = this.state.items;
     const start = this.state.start + LIMIT;
     fetchNumbers(start, LIMIT)
-      .then(newItems => this.setState({ items: [...oldItems, ...newItems], start }))
+      .then(newItems =>
+        this.setState({ items: [...oldItems, ...newItems], start }))
       .catch(err => console.log(err));
   }
 
   render() {
     const { items } = this.state;
-    const itemComponents = items.map((item) => {
-      return (
-        <div
-          style={{ height: '50px', padding: '5px', border: '1px solid grey', backgroundColor: 'white' }}
-          key={item}
-        >
-          {item}
-        </div>
-      );
-    });
+    const itemComponents = items.map(item => (
+      <div
+        style={{
+            height: '50px',
+            padding: '5px',
+            border: '1px solid grey',
+            backgroundColor: 'white',
+          }}
+        key={item}
+      >
+        {item}
+      </div>
+    ));
 
     const hasMore = items.length < 100;
     return (
@@ -85,5 +89,3 @@ export default class TestInfiniteScroll extends Component {
     );
   }
 }
-
-

@@ -12,7 +12,11 @@ import styles from './styles.scss';
 
 export default function WaitListItem(props) {
   const {
-    waitSpot, patient, removeWaitSpot, isPatientUser, removeBorder,
+    waitSpot,
+    patient,
+    removeWaitSpot,
+    isPatientUser,
+    removeBorder,
   } = props;
 
   if (!patient) {
@@ -51,7 +55,9 @@ export default function WaitListItem(props) {
         <div className={styles.patientPrefInfo}>
           <PatientPopover
             patient={
-              isPatientUser ? Object.assign(patient, { endDate: waitSpot.endDate }) : patient
+              isPatientUser
+                ? Object.assign(patient, { endDate: waitSpot.endDate })
+                : patient
             }
             isPatientUser={isPatientUser}
             placement="left"
@@ -103,7 +109,9 @@ export default function WaitListItem(props) {
           {patient[patientPhone] && (
             <div className={styles.infoContainer}>
               <Icon icon="phone" className={styles.icon} />
-              <span className={styles.infoData}>{FormatPhoneNumber(patient[patientPhone])}</span>
+              <span className={styles.infoData}>
+                {FormatPhoneNumber(patient[patientPhone])}
+              </span>
             </div>
           )}
           {patient.email && (

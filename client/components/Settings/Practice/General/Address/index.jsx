@@ -6,7 +6,10 @@ import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { Map } from 'immutable';
 import AddressForm from './AddressForm';
-import { updateEntityRequest, createEntityRequest } from '../../../../../thunks/fetchEntities';
+import {
+  updateEntityRequest,
+  createEntityRequest,
+} from '../../../../../thunks/fetchEntities';
 import { accountShape } from '../../../../library/PropTypeShapes/accountShape';
 
 class Address extends Component {
@@ -30,18 +33,24 @@ class Address extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert }).then(() => {
-      if (activeAccount.addressId) {
-        values.accountId = activeAccount.id;
-        this.props.updateEntityRequest({
-          key: 'addresses',
-          values,
-          url: `/api/addresses/${activeAccount.addressId}`,
-        });
-      } else {
-        this.props.createEntityRequest({ key: 'addresses', values, url: '/api/addresses/' });
-      }
-    });
+    this.props
+      .updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert })
+      .then(() => {
+        if (activeAccount.addressId) {
+          values.accountId = activeAccount.id;
+          this.props.updateEntityRequest({
+            key: 'addresses',
+            values,
+            url: `/api/addresses/${activeAccount.addressId}`,
+          });
+        } else {
+          this.props.createEntityRequest({
+            key: 'addresses',
+            values,
+            url: '/api/addresses/',
+          });
+        }
+      });
   }
 
   render() {
@@ -82,7 +91,7 @@ function mapDispatchToActions(dispatch) {
       createEntityRequest,
       change,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -91,9 +100,14 @@ function mapStateToProps({ entities }, { activeAccount }) {
 
   return {
     address:
-      activeAccount && activeAccount.addressId ? addresses.get(activeAccount.addressId) : false,
+      activeAccount && activeAccount.addressId
+        ? addresses.get(activeAccount.addressId)
+        : false,
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToActions);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToActions,
+);
 export default enhance(Address);

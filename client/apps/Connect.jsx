@@ -4,9 +4,10 @@ import React from 'react';
 import ConnectRoutes from '../routes/Connect';
 import '../styles/default.scss';
 
-const ConnectApp = ({ browserHistory, store }) =>
+const ConnectApp = ({ browserHistory, store }) => (
   <Provider store={store}>
     <ConnectRoutes history={browserHistory} />
-  </Provider>;
+  </Provider>
+);
 
 export default ConnectApp;

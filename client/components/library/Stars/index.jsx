@@ -28,7 +28,9 @@ export default class Stars extends Component {
   }
 
   render() {
-    const { size, value, isStatic, isMinimal } = this.props;
+    const {
+      size, value, isStatic, isMinimal,
+    } = this.props;
 
     const CustomStar = (props) => {
       const { i } = props;
@@ -45,10 +47,11 @@ export default class Stars extends Component {
       }
 
       const wrapperClass = isStatic ? '' : styles.starWrapper;
-      const labelClass = isSelected && !isStatic ? styles.labelSelected : styles.label;
+      const labelClass =
+        isSelected && !isStatic ? styles.labelSelected : styles.label;
       const iconProps = {
         className: starClass,
-        size: size,
+        size,
         icon: 'star',
         type,
       };
@@ -60,9 +63,7 @@ export default class Stars extends Component {
       return (
         <div className={wrapperClass}>
           <Icon {...iconProps} />
-          <div className={labelClass}>
-            {starRatingsMap[i]}
-          </div>
+          <div className={labelClass}>{starRatingsMap[i]}</div>
         </div>
       );
     };
@@ -70,17 +71,13 @@ export default class Stars extends Component {
     const text = value ? `${starRatingsMap[value]} Experience` : null;
     return (
       <div>
-        {!isMinimal ? <div className={styles.fractionWrapper}>
-          <div className={styles.numerator}>
-            {value || '?'}
+        {!isMinimal ? (
+          <div className={styles.fractionWrapper}>
+            <div className={styles.numerator}>{value || '?'}</div>
+            <div className={styles.denominator}>/5</div>
           </div>
-          <div className={styles.denominator}>
-            /5
-          </div>
-        </div> : null}
-        {!isMinimal ? <div className={styles.ratingsText}>
-          {text}
-        </div> : null}
+        ) : null}
+        {!isMinimal ? <div className={styles.ratingsText}>{text}</div> : null}
         <div className={styles.starsContainer}>
           <CustomStar i={1} />
           <CustomStar i={2} />
@@ -88,9 +85,9 @@ export default class Stars extends Component {
           <CustomStar i={4} />
           <CustomStar i={5} />
         </div>
-        {isMinimal ? <div className={styles.minimalRatingsText}>
-          {text}
-        </div> : null}
+        {isMinimal ? (
+          <div className={styles.minimalRatingsText}>{text}</div>
+        ) : null}
       </div>
     );
   }

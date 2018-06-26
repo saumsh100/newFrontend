@@ -52,6 +52,4 @@ export default function PatientPreferencesForm({ initialValues, onSubmit }) {
   );
 }
 
-PatientPreferencesForm.propTypes = {
-
-};
+PatientPreferencesForm.propTypes = {};

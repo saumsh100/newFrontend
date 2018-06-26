@@ -5,11 +5,9 @@ import { Card, Guage, PieChart, LineChart, BarChart } from '../library';
 export default function GuageTest() {
   return (
     <Card>
-      <Guage
-        percentage={75}
-      />
+      <Guage percentage={75} />
       <PieChart
-        displayTooltips={true}
+        displayTooltips
         data={[
           { value: 10, color: 'green', label: 'Facebook' },
           { value: 20, color: 'red', label: 'Twitter' },
@@ -18,7 +16,7 @@ export default function GuageTest() {
       />
       <PieChart
         type="doughnut"
-        displayTooltips={true}
+        displayTooltips
         data={[
           { value: 10, color: 'green', label: 'Facebook' },
           { value: 20, color: 'red', label: 'Twitter' },
@@ -26,8 +24,16 @@ export default function GuageTest() {
         ]}
       />
       <LineChart
-        displayTooltips={true}
-        labels={['January', 'February', 'March', 'April', 'May', 'June', 'July']}
+        displayTooltips
+        labels={[
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+        ]}
         dataSets={[
           {
             label: 'Appointments Booked',
@@ -42,7 +48,7 @@ export default function GuageTest() {
         ]}
       />
       <BarChart
-        displayTooltips={true}
+        displayTooltips
         labels={['January', 'February', 'March', 'April']}
         dataSets={[
           {
@@ -54,7 +60,7 @@ export default function GuageTest() {
       />
       <BarChart
         type="horizontal"
-        displayTooltips={true}
+        displayTooltips
         labels={['January', 'February', 'March', 'April']}
         dataSets={[
           {
@@ -68,6 +74,4 @@ export default function GuageTest() {
   );
 }
 
-Guage.propTypes = {
-
-};
+Guage.propTypes = {};

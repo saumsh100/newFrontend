@@ -1,3 +1,4 @@
+
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
@@ -6,11 +7,25 @@ import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import { bindActionCreators } from 'redux';
 import FilterPractitioners from '../../Schedule/Header/Filters/FilterPractitioners';
-import { fetchEntities, fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import {
-  Card, DialogBox, Col, Grid, Row, Button,
-  DashboardStats, ContainerList,
-  Form, RemoteSubmitButton, Field, FlexGrid, DropdownMenu, Icon,
+  fetchEntities,
+  fetchEntitiesRequest,
+} from '../../../thunks/fetchEntities';
+import {
+  Card,
+  DialogBox,
+  Col,
+  Grid,
+  Row,
+  Button,
+  DashboardStats,
+  ContainerList,
+  Form,
+  RemoteSubmitButton,
+  Field,
+  FlexGrid,
+  DropdownMenu,
+  Icon,
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import PractitionersList from './Cards/PractitionersList';
@@ -26,14 +41,18 @@ import { SortByFirstName } from '../../library/util/SortEntities';
 import nFormatter from '../nFormatter';
 import * as Actions from '../../../actions/intelligence';
 
-
 class Overview extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       endDate: this.props.endDate ? this.props.endDate : moment(new Date()),
-      startDate: this.props.startDate ? this.props.startDate : moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      startDate: this.props.startDate
+        ? this.props.startDate
+        : moment(new Date()).subtract(
+          moment(new Date()).get('date') - 1,
+          'days',
+        ),
       active: false,
       loader: false,
       displayPractitioners: [],
@@ -49,8 +68,12 @@ class Overview extends Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
-    const startDate = this.props.startDate ? this.props.startDate._d : this.state.startDate._d;
-    const endDate = this.props.endDate ? this.props.endDate._d : this.state.endDate._d;
+    const startDate = this.props.startDate
+      ? this.props.startDate._d
+      : this.state.startDate._d;
+    const endDate = this.props.endDate
+      ? this.props.endDate._d
+      : this.state.endDate._d;
 
     const params = {
       startDate,
@@ -105,16 +128,15 @@ class Overview extends Component {
         url: '/api/patients/revenueStatsTotal',
         params,
       }),
-    ])
-      .then((data) => {
-        const displayPractitioners = data[0].map(p => p.id);
-        this.setState({
-          startDate: moment(startDate),
-          endDate: moment(endDate),
-          loader: true,
-          displayPractitioners,
-        });
+    ]).then((data) => {
+      const displayPractitioners = data[0].map(p => p.id);
+      this.setState({
+        startDate: moment(startDate),
+        endDate: moment(endDate),
+        loader: true,
+        displayPractitioners,
       });
+    });
   }
 
   handleFilterClick(bool, id) {
@@ -211,34 +233,43 @@ class Overview extends Component {
   }
 
   render() {
-    const appointmentStats = (this.props.appointmentStats ?
-      this.props.appointmentStats.toObject() : null);
+    const appointmentStats = this.props.appointmentStats
+      ? this.props.appointmentStats.toObject()
+      : null;
 
-    const practitionerWorked = (this.props.practitionerWorked ?
-      this.props.practitionerWorked.toJS() : null);
+    const practitionerWorked = this.props.practitionerWorked
+      ? this.props.practitionerWorked.toJS()
+      : null;
 
-    const appointmentsBookedStats = (this.props.appointmentsBooked ?
-      this.props.appointmentsBooked.toObject() : null);
+    const appointmentsBookedStats = this.props.appointmentsBooked
+      ? this.props.appointmentsBooked.toObject()
+      : null;
 
-    const mostAppointments = (this.props.mostAppointments ?
-      this.props.mostAppointments.toJS() : null);
+    const mostAppointments = this.props.mostAppointments
+      ? this.props.mostAppointments.toJS()
+      : null;
 
-    const totalRevenueStats = (this.props.totalRevenueStats ?
-      this.props.totalRevenueStats.toObject().totalAmountClinic : 0);
+    const totalRevenueStats = this.props.totalRevenueStats
+      ? this.props.totalRevenueStats.toObject().totalAmountClinic
+      : 0;
 
-    const patientStats = (this.props.patientStats ? this.props.patientStats.toObject() : null);
-    const patientRevenueStats = (this.props.patientRevenueStats ? this.props.patientRevenueStats.toJS() : []);
+    const patientStats = this.props.patientStats
+      ? this.props.patientStats.toObject()
+      : null;
+    const patientRevenueStats = this.props.patientRevenueStats
+      ? this.props.patientRevenueStats.toJS()
+      : [];
 
-    let male = (patientStats ? patientStats.male : 0);
-    let female = (patientStats ? patientStats.female : 0);
-    const ageRange = (patientStats ? patientStats.ageData.toArray() : []);
-    const newVisitors = (appointmentStats ? appointmentStats.newPatients : 0);
-    const allApp = (appointmentStats ? appointmentStats.activePatients : 0);
+    let male = patientStats ? patientStats.male : 0;
+    let female = patientStats ? patientStats.female : 0;
+    const ageRange = patientStats ? patientStats.ageData.toArray() : [];
+    const newVisitors = appointmentStats ? appointmentStats.newPatients : 0;
+    const allApp = appointmentStats ? appointmentStats.activePatients : 0;
     const returning = allApp - newVisitors;
-    const newVisitorPercent = Math.floor((newVisitors * 100 / allApp) + 0.5);
+    const newVisitorPercent = Math.floor((newVisitors * 100) / allApp + 0.5);
     const returningPercent = 100 - newVisitorPercent;
 
-    male = Math.floor((male * 100 / (male + female)) + 0.5);
+    male = Math.floor((male * 100) / (male + female) + 0.5);
     female = 100 - male;
 
     const totalData = {
@@ -247,7 +278,9 @@ class Overview extends Component {
     };
 
     let serviceData = patientRevenueStats.map((patient) => {
-      const age = patient.birthDate ? moment().diff(patient.birthDate, 'years') : 'N/A';
+      const age = patient.birthDate
+        ? moment().diff(patient.birthDate, 'years')
+        : 'N/A';
       return {
         name: `${patient.firstName} ${patient.lastName}`,
         age,
@@ -256,18 +289,18 @@ class Overview extends Component {
       };
     });
 
-    const prac = (practitionerWorked || []).filter(p => {
-      return this.state.displayPractitioners.includes(p.id);
-    });
-
-
+    const prac = (practitionerWorked || []).filter(p => this.state.displayPractitioners.includes(p.id));
 
     serviceData = serviceData.sort((a, b) => b.hours - a.hours);
 
-    const colors = ['primaryColor', 'primaryBlueGreen', 'primaryYellow', 'primaryGreen'];
+    const colors = [
+      'primaryColor',
+      'primaryBlueGreen',
+      'primaryYellow',
+      'primaryGreen',
+    ];
     const colorLen = colors.length;
     const colorArray = [];
-
 
     const reset = Math.ceil((prac.length - colorLen) / colorLen);
 
@@ -277,54 +310,66 @@ class Overview extends Component {
       }
     }
 
-    const realData = (practitionerWorked ? (
-      prac.sort((pracData, pracData2) => {
-        const a = pracData;
-        const b = pracData2;
-        if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
-        if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
-        return 0;
-      }).map((key, index) => {
-        const data = {};
-        data.appointmentBooked = key.booked;
-        data.appointmentNotFiltred = key.notFilled;
-        data.appointmentNotFiltred = (data.appointmentNotFiltred > 0 ? data.appointmentNotFiltred : 0);
-        data.percentage = Math.floor(100 * data.appointmentBooked / (data.appointmentNotFiltred + data.appointmentBooked));
-        data.name = (/Dentist/g.test(key.type) ? `Dr. ${key.lastName}` : `${key.firstName} ${key.lastName || ''}`);
-        data.img = '/images/avatar.png';
-        totalData.appointmentBooked += data.appointmentBooked;
-        totalData.appointmentNotFiltred += data.appointmentNotFiltred;
-        data.newPatients = key.newPatientsTotal;
+    const realData = practitionerWorked ? (
+      prac
+        .sort((pracData, pracData2) => {
+          const a = pracData;
+          const b = pracData2;
+          if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
+          if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
+          return 0;
+        })
+        .map((key, index) => {
+          const data = {};
+          data.appointmentBooked = key.booked;
+          data.appointmentNotFiltred = key.notFilled;
+          data.appointmentNotFiltred =
+            data.appointmentNotFiltred > 0 ? data.appointmentNotFiltred : 0;
+          data.percentage = Math.floor((100 * data.appointmentBooked) /
+              (data.appointmentNotFiltred + data.appointmentBooked));
+          data.name = /Dentist/g.test(key.type)
+            ? `Dr. ${key.lastName}`
+            : `${key.firstName} ${key.lastName || ''}`;
+          data.img = '/images/avatar.png';
+          totalData.appointmentBooked += data.appointmentBooked;
+          totalData.appointmentNotFiltred += data.appointmentNotFiltred;
+          data.newPatients = key.newPatientsTotal;
 
-        return (
-          <PractitionersList
-            img={data.img}
-            name={data.name}
-            profession={key.type}
-            appointmentBooked={data.appointmentBooked}
-            appointmentNotFiltred={data.appointmentNotFiltred}
-            newPatients={data.newPatients}
-            percentage={data.percentage}
-            practitioner={key}
-            color={colorArray[index]}
-          />);
-      })) : <div />);
+          return (
+            <PractitionersList
+              img={data.img}
+              name={data.name}
+              profession={key.type}
+              appointmentBooked={data.appointmentBooked}
+              appointmentNotFiltred={data.appointmentNotFiltred}
+              newPatients={data.newPatients}
+              percentage={data.percentage}
+              practitioner={key}
+              color={colorArray[index]}
+            />
+          );
+        })
+    ) : (
+      <div />
+    );
 
-    const allAppointments = (appointmentsBookedStats ?
-      appointmentsBookedStats.appointmentsBooked : 0);
+    const allAppointments = appointmentsBookedStats
+      ? appointmentsBookedStats.appointmentsBooked
+      : 0;
 
-    const confirmedAppointmentsBooked = (appointmentsBookedStats ?
-      appointmentsBookedStats.confirmedAppointments : 0);
+    const confirmedAppointmentsBooked = appointmentsBookedStats
+      ? appointmentsBookedStats.confirmedAppointments
+      : 0;
 
-    const sortedPatients = (mostAppointments ? mostAppointments.map(key => {
-      return {
+    const sortedPatients = mostAppointments
+      ? mostAppointments.map(key => ({
         name: `${key.firstName} ${key.lastName}`,
         age: moment().diff(moment(key.birthDate), 'years'),
         number: key.numAppointments,
         firstName: key.firstName,
         lastName: key.lastName,
-      };
-    }) : []);
+      }))
+      : [];
 
     const data = [
       {
@@ -357,12 +402,13 @@ class Overview extends Component {
       },
     ];
 
-    const graphData = (this.props.appointmentStatsLastYear ? this.props.appointmentStatsLastYear.toObject() : null);
-    const dataPoints = (graphData ? graphData.data.toArray() : []);
-    const dataMonths = (graphData ? graphData.months.toArray() : []);
-    let dayStats = (this.props.dayStats ? this.props.dayStats.toObject() : {});
-    dayStats = (dayStats.days ? dayStats.days.toArray() : new Array(6).fill(0));
-
+    const graphData = this.props.appointmentStatsLastYear
+      ? this.props.appointmentStatsLastYear.toObject()
+      : null;
+    const dataPoints = graphData ? graphData.data.toArray() : [];
+    const dataMonths = graphData ? graphData.months.toArray() : [];
+    let dayStats = this.props.dayStats ? this.props.dayStats.toObject() : {};
+    dayStats = dayStats.days ? dayStats.days.toArray() : new Array(6).fill(0);
 
     const actions = [];
 
@@ -373,28 +419,32 @@ class Overview extends Component {
 
     const UserMenu = props => (
       <Button flat {...props} className={styles.userMenuButton}>
-        <span className={styles.userRole}><i className="fa fa-calendar" /> {this.state.startDate.format('MMMM Do YYYY')} - {this.state.endDate.format('MMMM Do YYYY')}&nbsp;</span>
+        <span className={styles.userRole}>
+          <i className="fa fa-calendar" />{' '}
+          {this.state.startDate.format('MMMM Do YYYY')} -{' '}
+          {this.state.endDate.format('MMMM Do YYYY')}&nbsp;
+        </span>
         <Icon icon="caret-down" />
       </Button>
-      );
+    );
 
     return (
       <Grid className={styles.intelligence}>
-      <DialogBox
-        actions={actions}
-        title="Filter Practitioners"
-        type="small"
-        active={this.state.active}
-        onEscKeyDown={this.reinitializeState}
-        onOverlayClick={this.reinitializeState}
-      >
-        <FilterPractitioners
-          filterKey="practitionersFilter"
-          practitioners={practitionerWorked}
-          selectedFilterItem={this.state.displayPractitioners}
-          handleEntityCheck={this.handleFilterClick}
-        />
-      </DialogBox>
+        <DialogBox
+          actions={actions}
+          title="Filter Practitioners"
+          type="small"
+          active={this.state.active}
+          onEscKeyDown={this.reinitializeState}
+          onOverlayClick={this.reinitializeState}
+        >
+          <FilterPractitioners
+            filterKey="practitionersFilter"
+            practitioners={practitionerWorked}
+            selectedFilterItem={this.state.displayPractitioners}
+            handleEntityCheck={this.handleFilterClick}
+          />
+        </DialogBox>
         <Row>
           <Col className={styles.intelligence__header} xs={12}>
             <Card className={styles.intelligence__header_title}>
@@ -416,12 +466,16 @@ class Overview extends Component {
                     }}
                     initialValues={initialValues}
                     data-test-id="dates"
-                    enableReinitialize={true}
+                    enableReinitialize
                   >
                     <Field
                       required
                       component="DayPicker"
-                      disabledDays={date => moment().subtract(5, 'years').isAfter(date)}
+                      disabledDays={date =>
+                        moment()
+                          .subtract(5, 'years')
+                          .isAfter(date)
+                      }
                       name="startDate"
                       label="Start Date"
                       data-test-id="startDate"
@@ -441,8 +495,11 @@ class Overview extends Component {
         </Row>
         <Loader loaded={this.state.loader} color="#FF715C">
           <Row className={styles.intelligence__body}>
-            <Col xs={12} >
-              <DashboardStats data={data} data-test-id={`${allAppointments}_appointmentsConfirmed`}/>
+            <Col xs={12}>
+              <DashboardStats
+                data={data}
+                data-test-id={`${allAppointments}_appointmentsConfirmed`}
+              />
             </Col>
             <Col xs={12} sm={6} className={styles.padding}>
               <AppointmentFilled
@@ -455,7 +512,7 @@ class Overview extends Component {
             </Col>
             <Col xs={12} sm={6} className={styles.padding}>
               <TopReference
-                ref={(ref) => this.myinput = ref}
+                ref={ref => (this.myinput = ref)}
                 title="Most Business"
                 data={serviceData}
                 className={styles.maxHeight}
@@ -463,26 +520,29 @@ class Overview extends Component {
               />
             </Col>
             <div className={styles.background}>
-            <Button
-              onClick={this.filterFunction}
-              className={styles.filterButton}
-            >
-              Filter
-            </Button>
+              <Button
+                onClick={this.filterFunction}
+                className={styles.filterButton}
+              >
+                Filter
+              </Button>
 
-              <FlexGrid className={styles.white} columnCount="4" columnWidth={12}>
+              <FlexGrid
+                className={styles.white}
+                columnCount="4"
+                columnWidth={12}
+              >
                 {realData}
               </FlexGrid>
             </div>
-            <Col
-              className={styles.padding}
-              xs={12}
-              md={6}
-            >
+            <Col className={styles.padding} xs={12} md={6}>
               <NewVsReturning
                 newVisitors={newVisitorPercent || 0}
                 returningVisitors={returningPercent || 0}
-                chartData={[{ value: newVisitorPercent, color: 'green' }, { value: returning, color: 'blue' }]}
+                chartData={[
+                  { value: newVisitorPercent, color: 'green' },
+                  { value: returning, color: 'blue' },
+                ]}
               />
             </Col>
             <Col className={styles.padding} xs={12} md={6}>
@@ -493,9 +553,7 @@ class Overview extends Component {
               />
             </Col>
             <Col className={styles.padding} xs={12} md={6}>
-              <AgeRange
-                chartData={ageRange}
-              />
+              <AgeRange chartData={ageRange} />
             </Col>
             <Col className={styles.padding} cxs={12} md={6}>
               <MaleVsFemale
@@ -521,10 +579,27 @@ class Overview extends Component {
             <Col className={styles.padding} xs={12} sm={12}>
               <WebsiteTrafficSources
                 title="Appointments By Day for the Last 12 Months"
-                labels={['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']}
+                labels={[
+                  'Sunday',
+                  'Monday',
+                  'Tuesday',
+                  'Wednesday',
+                  'Thursday',
+                  'Friday',
+                  'Saturday',
+                ]}
                 chartData={[
-                  { label: 'Appointments Booked',
-                    color: ['lightgrey', 'yellow', 'red', 'green', 'blue', 'darkblue', 'grey'],
+                  {
+                    label: 'Appointments Booked',
+                    color: [
+                      'lightgrey',
+                      'yellow',
+                      'red',
+                      'green',
+                      'blue',
+                      'darkblue',
+                      'grey',
+                    ],
                     data: dayStats,
                   },
                 ]}
@@ -557,17 +632,35 @@ Overview.propTypes = {
 function mapStateToProps({ apiRequests, intelligence }) {
   const startDate = intelligence.toJS().startDate;
   const endDate = intelligence.toJS().endDate;
-  const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
-  const appointmentStatsLastYear = (apiRequests.get('appointmentStatsLastYear') ? apiRequests.get('appointmentStatsLastYear').data : null);
-  const dayStats = (apiRequests.get('dayStats') ? apiRequests.get('dayStats').data : null);
-  const patientStats = (apiRequests.get('patientStats') ? apiRequests.get('patientStats').data : null);
-  const patientRevenueStats = (apiRequests.get('patientRevenueStats') ? apiRequests.get('patientRevenueStats').data : null);
-  const totalRevenueStats = (apiRequests.get('totalRevenueStats') ? apiRequests.get('totalRevenueStats').data : null);
+  const appointmentStats = apiRequests.get('appointmentStats')
+    ? apiRequests.get('appointmentStats').data
+    : null;
+  const appointmentStatsLastYear = apiRequests.get('appointmentStatsLastYear')
+    ? apiRequests.get('appointmentStatsLastYear').data
+    : null;
+  const dayStats = apiRequests.get('dayStats')
+    ? apiRequests.get('dayStats').data
+    : null;
+  const patientStats = apiRequests.get('patientStats')
+    ? apiRequests.get('patientStats').data
+    : null;
+  const patientRevenueStats = apiRequests.get('patientRevenueStats')
+    ? apiRequests.get('patientRevenueStats').data
+    : null;
+  const totalRevenueStats = apiRequests.get('totalRevenueStats')
+    ? apiRequests.get('totalRevenueStats').data
+    : null;
 
-  //new stuff
-  const appointmentsBooked = (apiRequests.get('appointmentsBooked') ? apiRequests.get('appointmentsBooked').data : null);
-  const practitionerWorked = (apiRequests.get('practitionerWorked') ? apiRequests.get('practitionerWorked').data : null);
-  const mostAppointments = (apiRequests.get('mostAppointments') ? apiRequests.get('mostAppointments').data : null);
+  // new stuff
+  const appointmentsBooked = apiRequests.get('appointmentsBooked')
+    ? apiRequests.get('appointmentsBooked').data
+    : null;
+  const practitionerWorked = apiRequests.get('practitionerWorked')
+    ? apiRequests.get('practitionerWorked').data
+    : null;
+  const mostAppointments = apiRequests.get('mostAppointments')
+    ? apiRequests.get('mostAppointments').data
+    : null;
 
   return {
     appointmentStats,
@@ -585,13 +678,19 @@ function mapStateToProps({ apiRequests, intelligence }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    fetchEntitiesRequest,
-    setQueryDates: Actions.setQueryDates,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      fetchEntitiesRequest,
+      setQueryDates: Actions.setQueryDates,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Overview);

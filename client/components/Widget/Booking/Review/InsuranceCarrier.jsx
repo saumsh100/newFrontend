@@ -21,7 +21,10 @@ export default function InsuranceCarrier(props) {
       value={props.value}
       onChange={e => props.onChange(e.target.value)}
       iconComponent={
-        <button className={styles.toggleInput} onClick={() => props.onChange('insurance_1')}>
+        <button
+          className={styles.toggleInput}
+          onClick={() => props.onChange('insurance_1')}
+        >
           <Icon icon="times" type="light" className={iconClasses} />
         </button>
       }

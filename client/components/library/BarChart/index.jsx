@@ -10,7 +10,6 @@ export default function BarChart(props) {
     labels = [],
     displayLegend,
     displayTooltips,
-
   } = props;
 
   const BarChartComponent = type === 'horizontal' ? HorizontalBar : Bar;
@@ -45,27 +44,25 @@ export default function BarChart(props) {
         borderColor = color.map(c => colorMap[c]);
       }
 
-      return Object.assign({ data, label }, {
-        // DEFAULT STYLES, we will adapt this as we go
-        borderCapStyle: 'butt',
-        borderDash: [],
-        borderDashOffset: 0,
-        borderJoinStyle: 'miter',
-        borderWidth: 1,
-        pointRadius: 1,
-        pointHitRadius: 10,
-        backgroundColor,
-        borderColor,
-      });
+      return Object.assign(
+        { data, label },
+        {
+          // DEFAULT STYLES, we will adapt this as we go
+          borderCapStyle: 'butt',
+          borderDash: [],
+          borderDashOffset: 0,
+          borderJoinStyle: 'miter',
+          borderWidth: 1,
+          pointRadius: 1,
+          pointHitRadius: 10,
+          backgroundColor,
+          borderColor,
+        },
+      );
     }),
   };
 
-  return (
-    <BarChartComponent
-      data={newData}
-      options={options}
-    />
-  );
+  return <BarChartComponent data={newData} options={options} />;
 }
 
 BarChart.propTypes = {

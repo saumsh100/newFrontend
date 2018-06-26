@@ -3,12 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import axios from 'axios';
 import findIndex from 'lodash/findIndex';
 import isEmpty from 'lodash/isEmpty';
-import {
-  Button,
-  DialogBox,
-  List,
-  ListItem,
-} from '../../../library';
+import { Button, DialogBox, List, ListItem } from '../../../library';
 import ConfigurationItem from './ConfigurationItem';
 import Outbox from '../Outbox';
 import DonnasOutbox from '../../../DonnasOutbox';
@@ -16,7 +11,7 @@ import styles from './styles.scss';
 
 const headersConfig = {
   headers: {
-    'Accept': 'application/vnd.api+json',
+    Accept: 'application/vnd.api+json',
   },
 };
 
@@ -46,8 +41,8 @@ export default class Advanced extends Component {
 
     const { account } = this.props;
     return Promise.all([
-        axios.get(`/api/accounts/${account.id}/configurations`, headersConfig),
-      ])
+      axios.get(`/api/accounts/${account.id}/configurations`, headersConfig),
+    ])
       .then(([{ data }]) => {
         this.setState({
           isLoading: false,
@@ -59,11 +54,19 @@ export default class Advanced extends Component {
 
   onUpdateConfiguration(configuration) {
     const { account } = this.props;
-    return axios.put(`/api/accounts/${account.id}/configurations`, configuration,headersConfig)
+    return axios
+      .put(
+        `/api/accounts/${account.id}/configurations`,
+        configuration,
+        headersConfig,
+      )
       .then(({ data }) => {
         const newConfig = data.data;
         const { configurations } = this.state;
-        const index = findIndex(configurations, c => c.attributes.name === newConfig.attributes.name);
+        const index = findIndex(
+          configurations,
+          c => c.attributes.name === newConfig.attributes.name,
+        );
         const newConfigurations = this.state.configurations.slice();
         newConfigurations[index] = newConfig;
         this.setState({ configurations: newConfigurations });
@@ -85,15 +88,13 @@ export default class Advanced extends Component {
 
   render() {
     const { account } = this.props;
-    const { configurations, recalls, reminders, reviews } = this.state;
+    const {
+      configurations, recalls, reminders, reviews,
+    } = this.state;
     return (
       <div className={styles.advancedWrapper}>
-        <Button
-          onClick={this.toggleDonnaOutbox}
-        >
-          View Donna's Outbox
-        </Button>
-        {this.state.isDonnaOutboxOpen ?
+        <Button onClick={this.toggleDonnaOutbox}>View Donna's Outbox</Button>
+        {this.state.isDonnaOutboxOpen ? (
           <DialogBox
             className={styles.outboxDialog}
             title={`Donna's Outbox for ${account.name}`}
@@ -111,14 +112,12 @@ export default class Advanced extends Component {
           >
             <Outbox account={account} />
           </DialogBox>
-        : null}
+        ) : null}
 
-        <Button
-          onClick={this.toggleDonnaTODOList}
-        >
+        <Button onClick={this.toggleDonnaTODOList}>
           View Donna's TODO List
         </Button>
-        {this.state.isDonnaTODOListOpen ?
+        {this.state.isDonnaTODOListOpen ? (
           <DialogBox
             className={styles.outboxDialog}
             title={`Donna's TODO List for ${account.name}`}
@@ -136,19 +135,17 @@ export default class Advanced extends Component {
           >
             <DonnasOutbox account={account} />
           </DialogBox>
-          : null}
+        ) : null}
 
         <h3>Configurations</h3>
-        {configurations.map((config) => {
-          return (
-            <ConfigurationItem
-              key={config.id}
-              configuration={config}
-              account={account}
-              onUpdateConfiguration={this.onUpdateConfiguration}
-            />
-          );
-        })}
+        {configurations.map(config => (
+          <ConfigurationItem
+            key={config.id}
+            configuration={config}
+            account={account}
+            onUpdateConfiguration={this.onUpdateConfiguration}
+          />
+          ))}
       </div>
     );
   }

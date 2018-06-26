@@ -7,8 +7,18 @@ import { Grid, Row, Col } from '../../../../library/Grid/index';
 import { accountShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
-export default function AddAccounts({ onSubmit, index, formName, activeAccount }) {
-  const { callrailId, twilioPhoneNumber, vendastaMsId, vendastaSrId } = activeAccount;
+export default function AddAccounts({
+  onSubmit,
+  index,
+  formName,
+  activeAccount,
+}) {
+  const {
+    callrailId,
+    twilioPhoneNumber,
+    vendastaMsId,
+    vendastaSrId,
+  } = activeAccount;
 
   const initialValues = {
     reputationManagement: !!vendastaSrId,
@@ -27,12 +37,20 @@ export default function AddAccounts({ onSubmit, index, formName, activeAccount }
     >
       <Grid className={styles.accountOptions}>
         <Row className={styles.accountOptions_row}>
-          <Col xs={12} sm={12} md={12} lg={6} className={styles.accountOptions_column}>
+          <Col
+            xs={12}
+            sm={12}
+            md={12}
+            lg={6}
+            className={styles.accountOptions_column}
+          >
             <div className={styles.displayFlex}>
               <span className={styles.icon}>
                 <Icon icon="star" />
               </span>
-              <span className={styles.accountOptions_text}>Reputation Management</span>
+              <span className={styles.accountOptions_text}>
+                Reputation Management
+              </span>
               <div>
                 <Field component="Toggle" name="reputationManagement" />
               </div>
@@ -41,7 +59,9 @@ export default function AddAccounts({ onSubmit, index, formName, activeAccount }
               <span className={styles.icon}>
                 <Icon icon="star" />
               </span>
-              <span className={styles.accountOptions_text}>Directory Listings</span>
+              <span className={styles.accountOptions_text}>
+                Directory Listings
+              </span>
               <div>
                 <Field component="Toggle" name="listings" />
               </div>

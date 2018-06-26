@@ -27,7 +27,9 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
   const lastSyncDate = activeAccount.get('lastSyncDate');
   let lastSyncComponent = null;
   if (lastSyncDate) {
-    lastSyncComponent = <LastSyncDisplay date={lastSyncDate} className={styles.lastSyncWrapper} />;
+    lastSyncComponent = (
+      <LastSyncDisplay date={lastSyncDate} className={styles.lastSyncWrapper} />
+    );
   }
 
   return (
@@ -42,7 +44,10 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Can Send Reminders</div>
-          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReminders">
+          <div
+            className={styles.paddingField_toggle}
+            data-test-id="toggle_canSendReminders"
+          >
             <Field component="Toggle" name="canSendReminders" />
           </div>
         </div>
@@ -50,7 +55,10 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Can Send Reviews</div>
-          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReviews">
+          <div
+            className={styles.paddingField_toggle}
+            data-test-id="toggle_canSendReviews"
+          >
             <Field component="Toggle" name="canSendReviews" />
           </div>
         </div>
@@ -58,7 +66,10 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Can Send Recalls</div>
-          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendRecalls">
+          <div
+            className={styles.paddingField_toggle}
+            data-test-id="toggle_canSendRecalls"
+          >
             <Field component="Toggle" name="canSendRecalls" />
           </div>
         </div>
@@ -66,7 +77,10 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Send Request Emails</div>
-          <div className={styles.paddingField_toggle} data-test-id="toggle_sendRequestEmail">
+          <div
+            className={styles.paddingField_toggle}
+            data-test-id="toggle_sendRequestEmail"
+          >
             <Field component="Toggle" name="sendRequestEmail" />
           </div>
         </div>
@@ -98,9 +112,21 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         validate={[notNegative, maxUnitSize]}
         data-test-id="timeInterval"
       />
-      <Field name="suggestedChairId" label="Suggested Chair ID" data-test-id="suggestedChairId" />
-      <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
-      <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />
+      <Field
+        name="suggestedChairId"
+        label="Suggested Chair ID"
+        data-test-id="suggestedChairId"
+      />
+      <Field
+        name="facebookUrl"
+        label="Facebook URL"
+        data-test-id="facebookUrl"
+      />
+      <Field
+        name="googlePlaceId"
+        label="Google Place ID"
+        data-test-id="googlePlaceId"
+      />
     </Form>
   );
 }

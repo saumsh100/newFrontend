@@ -28,13 +28,18 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request);
   }
 
-  renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest }) {
+  renderListItem({
+    patientUser,
+    data,
+    request,
+    requestingUser,
+    requestType,
+    openRequest,
+  }) {
     return (
       <ListItem
         className={styles.requestListItem}
-        data-test-id={`${patientUser.get('firstName')}${patientUser.get(
-          'lastName'
-        )}AppointmentRequest`}
+        data-test-id={`${patientUser.get('firstName')}${patientUser.get('lastName')}AppointmentRequest`}
         onClick={() => openRequest(request.id)}
       >
         <MonthDay month={data.month} day={data.day} type={requestType} />
@@ -68,7 +73,9 @@ class RequestListItem extends Component {
 
     const serviceName = service ? service.name : '';
 
-    const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
+    const fullName = patientUser
+      .get('firstName')
+      .concat(' ', patientUser.get('lastName'));
 
     const data = {
       time: request.getFormattedTime(),

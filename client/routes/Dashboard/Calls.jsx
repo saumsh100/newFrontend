@@ -13,7 +13,7 @@ const Calls = () => (
   <DocumentTitle title="CareCru | Call Tracking">
     <Switch>
       <FeatureFlagWrapper featureKey="feature-call-tracking">
-        <Route path={'/calls'} component={Routes.calls} />
+        <Route path="/calls" component={Routes.calls} />
       </FeatureFlagWrapper>
     </Switch>
   </DocumentTitle>

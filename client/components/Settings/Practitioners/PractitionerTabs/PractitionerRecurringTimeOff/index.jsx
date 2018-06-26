@@ -34,11 +34,24 @@ class PractitionerRecurringTimeOff extends Component {
   }
 
   handleSubmit(values) {
-    const { practitioner, createEntityRequest, updateEntityRequest } = this.props;
+    const {
+      practitioner,
+      createEntityRequest,
+      updateEntityRequest,
+    } = this.props;
 
     const { selectedTimeOff } = this.state;
 
-    const { startDate, endDate, startTime, dayOfWeek, endTime, interval, allDay, note } = values;
+    const {
+      startDate,
+      endDate,
+      startTime,
+      dayOfWeek,
+      endTime,
+      interval,
+      allDay,
+      note,
+    } = values;
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
@@ -62,7 +75,11 @@ class PractitionerRecurringTimeOff extends Component {
         },
       };
 
-      createEntityRequest({ key: 'practitionerRecurringTimeOffs', entityData: trimValues, alert });
+      createEntityRequest({
+        key: 'practitionerRecurringTimeOffs',
+        entityData: trimValues,
+        alert,
+      });
     } else if (selectedTimeOff) {
       // We assume selected practitioner is
       const alert = {
@@ -76,7 +93,11 @@ class PractitionerRecurringTimeOff extends Component {
 
       const valuesMap = Map(trimValues);
       const modifiedAccount = selectedTimeOff.merge(valuesMap);
-      updateEntityRequest({ key: 'practitionerRecurringTimeOffs', model: modifiedAccount, alert });
+      updateEntityRequest({
+        key: 'practitionerRecurringTimeOffs',
+        model: modifiedAccount,
+        alert,
+      });
     } else {
       throw new Error('Form was submitted without added or selected time off');
     }
@@ -85,7 +106,10 @@ class PractitionerRecurringTimeOff extends Component {
   }
 
   deleteTimeOff(timeOff) {
-    this.props.deleteEntityRequest({ key: 'practitionerRecurringTimeOffs', id: timeOff.get('id') });
+    this.props.deleteEntityRequest({
+      key: 'practitionerRecurringTimeOffs',
+      id: timeOff.get('id'),
+    });
   }
 
   reinitializeState() {
@@ -171,7 +195,7 @@ class PractitionerRecurringTimeOff extends Component {
       <div>
         {showAddOrListComponent}
         <DialogBox
-          key={'addTimeOff'}
+          key="addTimeOff"
           actions={actions}
           title="Add Time Off"
           type="medium"
@@ -206,10 +230,13 @@ function mapActionsToProps(dispatch) {
       deleteEntityRequest,
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(PractitionerRecurringTimeOff);

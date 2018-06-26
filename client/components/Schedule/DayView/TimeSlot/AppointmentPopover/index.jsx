@@ -19,7 +19,9 @@ import styles from './styles.scss';
 export default function AppointmentPopover(props) {
   const { patient, appointment, scheduleView } = props;
 
-  const { startDate, endDate, practitionerData, chairData, note } = appointment;
+  const {
+    startDate, endDate, practitionerData, chairData, note,
+  } = appointment;
 
   const age = moment().diff(patient.get('birthDate'), 'years') || '';
 
@@ -51,7 +53,8 @@ export default function AppointmentPopover(props) {
           <div className={styles.container}>
             <div className={styles.subHeader}>Time</div>
             <div className={styles.data}>
-              {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
+              {moment(startDate).format('h:mm a')} -{' '}
+              {moment(endDate).format('h:mm a')}
             </div>
           </div>
 
@@ -60,7 +63,9 @@ export default function AppointmentPopover(props) {
               {scheduleView === 'chair' ? 'Practitioner' : 'Chair'}
             </div>
             <div className={styles.data}>
-              {scheduleView === 'chair' ? practitionerData.prettyName : chairData}
+              {scheduleView === 'chair'
+                ? practitionerData.prettyName
+                : chairData}
             </div>
           </div>
 
@@ -69,9 +74,12 @@ export default function AppointmentPopover(props) {
               <div className={styles.subHeader}>Patient Info</div>
 
               <div className={styles.data}>
-                {patient.mobilePhoneNumber ? <Icon icon="phone" size={0.9} /> : null}
+                {patient.mobilePhoneNumber ? (
+                  <Icon icon="phone" size={0.9} />
+                ) : null}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
+                  {patient.mobilePhoneNumber &&
+                  patient.mobilePhoneNumber[0] === '+'
                     ? FormatPhoneNumber(patient.mobilePhoneNumber)
                     : patient.mobilePhoneNumber}
                 </div>

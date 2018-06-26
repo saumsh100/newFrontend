@@ -12,7 +12,14 @@ export default function SearchPatientTable(props) {
     bar: styles.bar,
   };
 
-  return <Field name="0" theme={searchTheme} icon="search" data-test-id={props['data-test-id']} />;
+  return (
+    <Field
+      name="0"
+      theme={searchTheme}
+      icon="search"
+      data-test-id={props['data-test-id']}
+    />
+  );
 }
 
 SearchPatientTable.propTypes = {};

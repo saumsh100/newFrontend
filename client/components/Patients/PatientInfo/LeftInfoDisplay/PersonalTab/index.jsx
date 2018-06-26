@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import { Grid, Row, Col, Icon } from '../../../../library';
@@ -6,27 +7,24 @@ import { formatPhoneNumber } from '../../../../library/util/Formatters';
 import styles from '../styles.scss';
 
 export default function PersonalTab(props) {
-  const {
-    patient,
-  } = props;
+  const { patient } = props;
 
-  const componentAddress = patient && patient.address && Object.keys(patient.address).length ? (<div className={styles.text}>
-    <div>{patient.address.street} </div>
-    <div>{patient.address.country} </div>
-    <div>{patient.address.state} </div>
-    <div>{patient.address.zipCode} </div>
-  </div>
-  ) : null;
+  const componentAddress =
+    patient && patient.address && Object.keys(patient.address).length ? (
+      <div className={styles.text}>
+        <div>{patient.address.street} </div>
+        <div>{patient.address.country} </div>
+        <div>{patient.address.state} </div>
+        <div>{patient.address.zipCode} </div>
+      </div>
+    ) : null;
 
   return (
     <Grid className={styles.grid}>
       <div className={styles.subHeader}> Basic </div>
       <Row className={styles.row}>
         <Col xs={6}>
-          <InfoDump
-            label="GENDER"
-            data={patient.gender}
-          />
+          <InfoDump label="GENDER" data={patient.gender} />
         </Col>
         <Col xs={6}>
           <InfoDump
@@ -56,30 +54,21 @@ export default function PersonalTab(props) {
           />
         </Col>
         <Col xs={6}>
-          <InfoDump
-            label="EMAIL"
-            data={patient.email}
-          />
+          <InfoDump label="EMAIL" data={patient.email} />
         </Col>
       </Row>
       <Row className={styles.row}>
-        <Col xs={6} >
-          <InfoDump
-            label="ADDRESS"
-            component={componentAddress}
-          />
+        <Col xs={6}>
+          <InfoDump label="ADDRESS" component={componentAddress} />
         </Col>
       </Row>
       <Row className={styles.row}>
-        <Col xs={6} >
-          <InfoDump
-            label="LANGUAGE"
-            data={patient.language}
-          />
+        <Col xs={6}>
+          <InfoDump label="LANGUAGE" data={patient.language} />
         </Col>
       </Row>
     </Grid>
-  )
+  );
 }
 
 PersonalTab.propTypes = {

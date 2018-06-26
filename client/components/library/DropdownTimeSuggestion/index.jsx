@@ -206,11 +206,13 @@ class DropdownTimeSuggestion extends Component {
     let nextIndex = this.scrollIndex > -1 ? this.scrollIndex : -1;
 
     if (direction === 'ArrowDown') {
-      nextIndex = this.scrollIndex >= options.length - 1 ? 0 : this.scrollIndex + 1;
+      nextIndex =
+        this.scrollIndex >= options.length - 1 ? 0 : this.scrollIndex + 1;
     }
 
     if (direction === 'ArrowUp') {
-      nextIndex = this.scrollIndex <= 0 ? options.length - 1 : this.scrollIndex - 1;
+      nextIndex =
+        this.scrollIndex <= 0 ? options.length - 1 : this.scrollIndex - 1;
     }
     this.scrollIndex = nextIndex;
     onChange(options[nextIndex].value);
@@ -259,7 +261,10 @@ class DropdownTimeSuggestion extends Component {
           <DataSlot
             key={`options_${option.value}`}
             {...this.props}
-            selected={formatValue(this.currentValue) === option.value || value === option.value}
+            selected={
+              formatValue(this.currentValue) === option.value ||
+              value === option.value
+            }
             option={option}
             type="button"
             onClick={() => {
@@ -306,7 +311,10 @@ DropdownTimeSuggestion.propTypes = {
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
-  theme: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string]),
+  theme: PropTypes.oneOfType([
+    PropTypes.objectOf(PropTypes.any),
+    PropTypes.string,
+  ]),
   formatValue: PropTypes.func,
   validateValue: PropTypes.func,
   'data-test-id': PropTypes.string,

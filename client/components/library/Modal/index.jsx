@@ -32,7 +32,10 @@ class Modal extends Component {
   }
 
   handleEscKeyDown(e) {
-    this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
+    this.props.active &&
+      e.which === 27 &&
+      this.props.onEscKeyDown &&
+      this.props.onEscKeyDown(e);
   }
 
   handleOverlayClick(e) {
@@ -52,23 +55,35 @@ class Modal extends Component {
 
     let modalContainerClassName = styles.modalContainer;
     if (active) {
-      modalContainerClassName = classNames(styles.active, modalContainerClassName);
+      modalContainerClassName = classNames(
+        styles.active,
+        modalContainerClassName,
+      );
     }
 
     let modalBodyClassName = classNames(className, styles.modalBody);
 
     if (!custom) {
-      modalBodyClassName = type ? classNames(styles[type], modalBodyClassName) : classNames(styles.medium, modalBodyClassName);
+      modalBodyClassName = type
+        ? classNames(styles[type], modalBodyClassName)
+        : classNames(styles.medium, modalBodyClassName);
     }
 
-    const backDropClassName = classNames(styles.backDropDefault, backDropStyles);
+    const backDropClassName = classNames(
+      styles.backDropDefault,
+      backDropStyles,
+    );
 
     return (
       <div className={modalContainerClassName}>
-        {showOverlay ? <div
-          onClick={() => { this.handleOverlayClick(); }}
-          className={backDropClassName}
-        /> : null}
+        {showOverlay ? (
+          <div
+            onClick={() => {
+              this.handleOverlayClick();
+            }}
+            className={backDropClassName}
+          />
+        ) : null}
         <Card className={modalBodyClassName} noBorder>
           {children}
         </Card>

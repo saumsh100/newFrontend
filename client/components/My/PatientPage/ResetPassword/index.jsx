@@ -22,8 +22,9 @@ class ResetPassword extends Component {
 
   handleSubmit(values) {
     // This just posts right back to location URL...
-    return this.props.resetUserPassword(this.props.location, values)
-      .then((data) => this.setState({ submitted: true }));
+    return this.props
+      .resetUserPassword(this.props.location, values)
+      .then(data => this.setState({ submitted: true }));
   }
 
   render() {
@@ -35,16 +36,12 @@ class ResetPassword extends Component {
       <div>
         <Section>
           <div className={styles.header}>
-            {submitted ?
-              'Password Reset Done' :
-              'Reset Password'
-            }
+            {submitted ? 'Password Reset Done' : 'Reset Password'}
           </div>
           <div className={styles.text}>
-            {submitted ?
-              'You\'re password has been changed. To go back to the online booking\'s login portal, click on the button below.' :
-              'Change your password by completing the form below.'
-            }
+            {submitted
+              ? "You're password has been changed. To go back to the online booking's login portal, click on the button below."
+              : 'Change your password by completing the form below.'}
           </div>
         </Section>
         <Section className={styles.formSection}>
@@ -78,12 +75,18 @@ ResetPassword.propTypes = {
 };
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    resetUserPassword,
-    push,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      resetUserPassword,
+      push,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(ResetPassword);

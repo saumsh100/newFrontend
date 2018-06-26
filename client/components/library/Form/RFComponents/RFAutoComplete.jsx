@@ -5,7 +5,7 @@ import Icon from '../../Icon';
 
 class RFAutoComplete extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       value: this.props.input.value,
     };
@@ -13,9 +13,7 @@ class RFAutoComplete extends Component {
   }
 
   setValue(newValue) {
-    const {
-      input,
-    } = this.props;
+    const { input } = this.props;
 
     if (typeof newValue === 'string') {
       input.onChange(newValue);
@@ -23,25 +21,22 @@ class RFAutoComplete extends Component {
     } else if (typeof newValue === 'object') {
       this.setState({ value: `${newValue.firstName} ${newValue.lastName}` });
       return input.onChange(newValue);
-    } else {
-      return null;
     }
+    return null;
   }
 
   render() {
     const {
-      icon,
-      label,
-      error,
-      meta,
-      input,
-      theme,
-      placeholder,
+      icon, label, error, meta, input, theme, placeholder,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
-    const finalError = error || ((touched || dirty) ? meta.error : null);
-    const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+    const finalError = error || (touched || dirty ? meta.error : null);
+    const finalIcon = asyncValidating ? (
+      <i className="fa fa-cog fa-spin fa-fw" />
+    ) : (
+      icon
+    );
 
     let propsValue = input.value;
     if (typeof propsValue === 'object') {
@@ -50,9 +45,7 @@ class RFAutoComplete extends Component {
 
     const inputProps = {
       value: propsValue,
-      onChange: (e, { newValue }) => {
-        return this.setValue(newValue);
-      },
+      onChange: (e, { newValue }) => this.setValue(newValue),
       error: finalError,
       icon: finalIcon,
       theme,

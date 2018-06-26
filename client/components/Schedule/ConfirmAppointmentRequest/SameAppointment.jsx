@@ -9,7 +9,9 @@ import Patient from '../../../entities/models/Patient';
 import styles from './styles.scss';
 
 const SameAppointment = (props) => {
-  const { patient, appointment, setSelected, selectedApp } = props;
+  const {
+    patient, appointment, setSelected, selectedApp,
+  } = props;
 
   if (!patient || !appointment) {
     return null;
@@ -21,7 +23,8 @@ const SameAppointment = (props) => {
   return (
     <Button
       className={classNames(styles.dataContainer, styles.singleItem, {
-        [styles.appointmentIsSelected]: appointment.id === (selectedApp && selectedApp.id),
+        [styles.appointmentIsSelected]:
+          appointment.id === (selectedApp && selectedApp.id),
       })}
       onClick={() => {
         setSelected(appointment);
@@ -39,7 +42,8 @@ const SameAppointment = (props) => {
             {startDate.format('h:mma')} - {endDate.format('h:mma')}
           </div>
           <div className={styles.dataContainer_patientInfo_createdAt}>
-            Created At: {moment(appointment.createdAt).format('MMMM Do, YYYY h:mm A')}
+            Created At:{' '}
+            {moment(appointment.createdAt).format('MMMM Do, YYYY h:mm A')}
           </div>
         </div>
       </div>

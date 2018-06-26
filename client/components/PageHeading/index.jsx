@@ -8,7 +8,9 @@ import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 import { setBackHandler } from '../../reducers/electron';
 import styles from './styles.scss';
 
-const PageHeading = ({ title, backHandler, toolbarPosition, ...props }) => (
+const PageHeading = ({
+  title, backHandler, toolbarPosition, ...props
+}) => (
   <div
     className={classNames(styles.pageHeading, {
       [styles.borderTopRight]: toolbarPosition === TOOLBAR_LEFT,
@@ -49,8 +51,11 @@ function mapDispatchToProps(dispatch) {
     {
       setBackHandler,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PageHeading);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PageHeading);

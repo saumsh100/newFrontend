@@ -56,7 +56,12 @@ class HeaderSection extends Component {
   }
 
   render() {
-    const { totalPatients, smartFilter, setSmartFilter, patientIds } = this.props;
+    const {
+      totalPatients,
+      smartFilter,
+      setSmartFilter,
+      patientIds,
+    } = this.props;
 
     const formName = 'newPatientForm';
 
@@ -103,10 +108,16 @@ class HeaderSection extends Component {
             data-test-id="dropDown_smartFilters"
           >
             <div className={styles.filterContainer}>
-              <SmartFilters setSmartFilter={setSmartFilter} smartFilter={smartFilter} />
+              <SmartFilters
+                setSmartFilter={setSmartFilter}
+                smartFilter={smartFilter}
+              />
             </div>
           </DropdownMenu>
-          <div className={styles.header_subHeader} data-test-id={'text_totalPatientsCount'}>
+          <div
+            className={styles.header_subHeader}
+            data-test-id="text_totalPatientsCount"
+          >
             {`Showing ${totalPatients} Patients`}
           </div>
         </div>

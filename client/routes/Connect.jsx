@@ -13,8 +13,10 @@ import AuthorizedContainer from '../components/Connect/Authorized';
 import FourZeroFour from '../components/FourZeroFour';
 import withAuthProps from '../hocs/withAuthProps';
 
-const ConnectRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
-  const getAuthorizedRoutes = () =>
+const ConnectRouter = ({
+  history, isAuth, isSuperAdmin, withEnterprise,
+}) => {
+  const getAuthorizedRoutes = () => (
     <AuthorizedContainer>
       <Switch>
         <Redirect exact from="/" to="/settings" />
@@ -26,21 +28,34 @@ const ConnectRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
         {/* withEnterprise ? (<LazyRoute path="/enterprise" load={loadEnterprise} name="enterprise" />) : null */}
         <Route component={FourZeroFour} />
       </Switch>
-    </AuthorizedContainer>;
+    </AuthorizedContainer>
+  );
 
-  const Connect = props =>
+  const Connect = props => (
     <Route
-      render={() => (isAuth ?
-          getAuthorizedRoutes() :
-          <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-      )}
-    />;
+      render={() =>
+        (isAuth ? (
+          getAuthorizedRoutes()
+        ) : (
+          <Redirect
+            to={{ pathname: '/login', state: { from: props.location } }}
+          />
+        ))
+      }
+    />
+  );
 
   return (
     <Router history={history}>
       <ConnectContainer>
         <Switch>
-          <Route exact path="/login" render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)} />
+          <Route
+            exact
+            path="/login"
+            render={props =>
+              (isAuth ? <Redirect to="/" /> : <Login {...props} />)
+            }
+          />
           <Route path="/" component={Connect} />
         </Switch>
       </ConnectContainer>

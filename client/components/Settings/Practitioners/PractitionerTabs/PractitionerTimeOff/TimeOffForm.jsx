@@ -3,14 +3,7 @@ import React, { PropTypes } from 'react';
 import { withState } from 'recompose';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import {
-  Form,
-  Field,
-  Icon,
-  Grid,
-  Row,
-  Col,
-} from '../../../../library';
+import { Form, Field, Icon, Grid, Row, Col } from '../../../../library';
 import TimeOffDisplay from './TimeOffDisplay';
 import styles from './styles.scss';
 
@@ -58,7 +51,9 @@ const checkDates = ({ startDate, endDate }) => {
 };
 
 const maxLength = max => value =>
-  value && (value.length > max || value.length < max) ? 'Please enter a date: DD/MM/YYYY.' : undefined
+  (value && (value.length > max || value.length < max)
+    ? 'Please enter a date: DD/MM/YYYY.'
+    : undefined);
 const maxLength10 = maxLength(10);
 
 function TimeOffForm(props) {
@@ -68,14 +63,11 @@ function TimeOffForm(props) {
     handleSubmit,
     values,
     showOption,
-    setOption
+    setOption,
   } = props;
 
   const {
-    startDate,
-    endDate,
-    allDay,
-    note,
+    startDate, endDate, allDay, note,
   } = timeOff.toJS();
 
   const initialValues = {
@@ -94,7 +86,8 @@ function TimeOffForm(props) {
       name="startTime"
       label="Start Time"
       className={styles.inlineBlock}
-    />) : null;
+    />
+  ) : null;
   const endTimeComponent = !values.allDay ? (
     <Field
       component="DropdownSelect"
@@ -102,9 +95,12 @@ function TimeOffForm(props) {
       name="endTime"
       label="End Time"
       className={styles.inlineBlock}
-    />) : null;
+    />
+  ) : null;
 
-  const showNoteComponent = showOption ? <Field name="note" label="Note" data-test-id="noteInput" /> : null;
+  const showNoteComponent = showOption ? (
+    <Field name="note" label="Note" data-test-id="noteInput" />
+  ) : null;
   const optionsIcon = showOption ? 'minus' : 'plus';
 
   const columnSizeDate = values.allDay ? 12 : 8;
@@ -122,11 +118,7 @@ function TimeOffForm(props) {
       <Grid>
         <Row>
           <Col xs={12} md={columnSizeDate}>
-            <Field
-              component="DayPicker"
-              name="startDate"
-              label="Start Date"
-            />
+            <Field component="DayPicker" name="startDate" label="Start Date" />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
             {startTimeComponent}
@@ -134,11 +126,7 @@ function TimeOffForm(props) {
         </Row>
         <Row>
           <Col xs={12} md={columnSizeDate}>
-            <Field
-              component="DayPicker"
-              name="endDate"
-              label="End Date"
-            />
+            <Field component="DayPicker" name="endDate" label="End Date" />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
             {endTimeComponent}
@@ -147,18 +135,16 @@ function TimeOffForm(props) {
         <Row className={styles.flexCenter}>
           <Col xs={6} className={styles.allDay}>
             <div className={styles.allDay_text}> All Day </div>
-            <Field
-              component="Toggle"
-              name="allDay"
-            />
+            <Field component="Toggle" name="allDay" />
           </Col>
           <Col xs={6}>
-            <div onClick={() => setOption(!showOption)} className={styles.moreOptions} data-test-id="moreOptionsButton">
+            <div
+              onClick={() => setOption(!showOption)}
+              className={styles.moreOptions}
+              data-test-id="moreOptionsButton"
+            >
               More Options
-              <Icon
-                icon={optionsIcon}
-                className={styles.moreOptions_icon}
-              />
+              <Icon icon={optionsIcon} className={styles.moreOptions_icon} />
             </div>
           </Col>
         </Row>
@@ -188,6 +174,9 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-const enhance = withState('showOption', 'setOption', false)
+const enhance = withState('showOption', 'setOption', false);
 
-export default enhance(connect(mapStateToProps,null)(TimeOffForm));
+export default enhance(connect(
+  mapStateToProps,
+  null,
+)(TimeOffForm));

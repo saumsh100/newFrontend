@@ -2,7 +2,12 @@
 import Avatar from '../Avatar';
 import React, { PropTypes } from 'react';
 
-export default function PractitionerAvatar({ practitioner, className, size, onClick = () => {} }) {
+export default function PractitionerAvatar({
+  practitioner,
+  className,
+  size,
+  onClick = () => {},
+}) {
   let replaceSize = 100;
   if (size === 'extralg') {
     replaceSize = 400;
@@ -21,7 +26,6 @@ export default function PractitionerAvatar({ practitioner, className, size, onCl
         avatarUrl,
         firstName: practitioner.firstName,
       }}
-
       className={className}
       size={size}
       onClick={onClick}

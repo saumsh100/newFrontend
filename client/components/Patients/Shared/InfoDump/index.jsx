@@ -4,7 +4,9 @@ import classNames from 'classnames';
 import styles from './styles.scss';
 
 export default function InfoDump(props) {
-  const { label, data, className, component, type } = props;
+  const {
+    label, data, className, component, type,
+  } = props;
 
   const classes = classNames(className, styles.container);
 

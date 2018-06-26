@@ -14,7 +14,9 @@ class PractitionerItem extends Component {
   }
 
   render() {
-    const { fullName, id, practitionerId, practitioner } = this.props;
+    const {
+      fullName, id, practitionerId, practitioner,
+    } = this.props;
 
     const selectedPractitioner = practitionerId === id;
 
@@ -31,7 +33,9 @@ class PractitionerItem extends Component {
           </span>
           <div className={styles.practListItem_textContainer}>
             <div className={styles.practListItem_name}>{fullName}</div>
-            <div className={styles.practListItem_type}>{practitioner.get('type') || 'Dentist'}</div>
+            <div className={styles.practListItem_type}>
+              {practitioner.get('type') || 'Dentist'}
+            </div>
           </div>
         </div>
       </ListItem>

@@ -10,9 +10,14 @@ function DateList({ dayAvailabilities, selectDate, onChangeDate }) {
     <div className={styles.datesWrapper}>
       {dayAvailabilities.map((date, i) => {
         const isoDate = date.toISOString();
-        const buttonClass = selectDate === isoDate ? styles.selectedDaySlot : styles.daySlot;
+        const buttonClass =
+          selectDate === isoDate ? styles.selectedDaySlot : styles.daySlot;
         return (
-          <Button className={buttonClass} key={`date_${i}`} onClick={() => onChangeDate(isoDate)}>
+          <Button
+            className={buttonClass}
+            key={`date_${i}`}
+            onClick={() => onChangeDate(isoDate)}
+          >
             <span className={styles.weekDay}>{date.format('ddd')}</span>
             <span className={styles.day}>{date.format('DD')}</span>
             <span className={styles.month}>{date.format('MMM')}</span>

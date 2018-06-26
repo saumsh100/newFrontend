@@ -12,7 +12,6 @@ const sortAlphabetical = (a, b) => {
 };
 
 export default function FilterEntities(props) {
-
   const {
     display,
     label,
@@ -40,7 +39,7 @@ export default function FilterEntities(props) {
   const sortedEntities = entities.sort(sortAlphabetical);
 
   return (
-    <div className={styles.fillContainer} >
+    <div className={styles.fillContainer}>
       <div className={styles.filter_options__title}>{label}</div>
       <div className={styles.filter_options__item}>
         {showAllCheck}
@@ -51,25 +50,31 @@ export default function FilterEntities(props) {
 
           const checked = selectedFilterItem.indexOf(entity.get('id')) > -1;
           return (
-            <div key={index} className={styles.filter_options__checkLabelContainer}>
+            <div
+              key={index}
+              className={styles.filter_options__checkLabelContainer}
+            >
               <Checkbox
                 key={entity.get(display)}
                 checked={checked}
-                onChange={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+                onChange={() =>
+                  handleEntityCheck(checked, entity.get('id'), filterKey)
+                }
               />
               <div
                 className={styles.filter_options__label}
-                onClick={() => handleEntityCheck(checked, entity.get('id'), filterKey)}
+                onClick={() =>
+                  handleEntityCheck(checked, entity.get('id'), filterKey)
+                }
               >
                 {entity.get(display)}
               </div>
             </div>
-
           );
         })}
       </div>
     </div>
-  )
+  );
 }
 
 FilterEntities.propTypes = {

@@ -23,11 +23,15 @@ const optionsCity = [
   { value: 'Winnipeg' },
 ];
 
-const optionsStatus = [{ value: 'Active' }, { label: 'Inactive', value: 'Inactive' }];
+const optionsStatus = [
+  { value: 'Active' },
+  { label: 'Inactive', value: 'Inactive' },
+];
 
 const parseNum = value => value && parseInt(value);
 
-const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
+const notNegative = value =>
+  (value && value <= 0 ? 'Must be greater than 0' : undefined);
 
 export default function Demographics(props) {
   const { handleDemographics, searchPatients } = props;

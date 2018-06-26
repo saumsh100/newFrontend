@@ -23,7 +23,9 @@ class PatientPopover extends Component {
 
   componentDidMount() {
     if (this.props.scrollId) {
-      document.getElementById(this.props.scrollId).addEventListener('scroll', this.closeOnScroll);
+      document
+        .getElementById(this.props.scrollId)
+        .addEventListener('scroll', this.closeOnScroll);
       window.addEventListener('scroll', this.closeOnScroll);
     }
   }
@@ -70,7 +72,10 @@ class PatientPopover extends Component {
         tipSize={12}
         onOuterAction={() => this.setOpen(false)}
       >
-        <div className={styles.patientLink} onDoubleClick={() => this.editPatient(patient.id)}>
+        <div
+          className={styles.patientLink}
+          onDoubleClick={() => this.editPatient(patient.id)}
+        >
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
               onClick: (e) => {
@@ -112,5 +117,8 @@ PatientPopover.defaultProps = {
   className: '',
 };
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 export default enhance(PatientPopover);

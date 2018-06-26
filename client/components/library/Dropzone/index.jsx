@@ -1,22 +1,28 @@
+
 import Dropzone from 'react-dropzone';
 import React, { PropTypes } from 'react';
 import styles from './styles.scss';
 import Loading from 'react-loader';
 
-export default function DropzoneWrapper({ children, onDrop, multiple, loaded, accept }) {
+export default function DropzoneWrapper({
+  children,
+  onDrop,
+  multiple,
+  loaded,
+  accept,
+}) {
   return (
-    <div onChange={e => e.stopPropagation()}><Dropzone
-      onDrop={onDrop}
-      multiple={multiple}
-      accept={accept}
-      className={styles.dropzone}
-    >
-      <Loading
-        loaded={loaded}
+    <div onChange={e => e.stopPropagation()}>
+      <Dropzone
+        onDrop={onDrop}
+        multiple={multiple}
+        accept={accept}
+        className={styles.dropzone}
       >
-        {children}
-      </Loading>
-    </Dropzone></div>);
+        <Loading loaded={loaded}>{children}</Loading>
+      </Dropzone>
+    </div>
+  );
 }
 
 DropzoneWrapper.propTypes = {
@@ -33,4 +39,3 @@ DropzoneWrapper.defaultProps = {
   accept: 'image/jpeg, image/png',
   loaded: true,
 };
-

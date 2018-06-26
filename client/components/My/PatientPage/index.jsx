@@ -1,5 +1,5 @@
 
-import React, { Component }  from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card } from '../../library';
 import getParameterByName from './Shared/getParameterByName';
@@ -19,32 +19,36 @@ class PatientPage extends Component {
   componentWillMount() {
     const { bookingWidgetPrimaryColor } = this.props.params.account;
     console.log(bookingWidgetPrimaryColor);
-    document.documentElement.style.setProperty('--primaryColor', bookingWidgetPrimaryColor || '#ff715a');
-    document.documentElement.style.setProperty('--primaryButtonColor', bookingWidgetPrimaryColor || '#ff715a');
+    document.documentElement.style.setProperty(
+      '--primaryColor',
+      bookingWidgetPrimaryColor || '#ff715a',
+    );
+    document.documentElement.style.setProperty(
+      '--primaryButtonColor',
+      bookingWidgetPrimaryColor || '#ff715a',
+    );
   }
 
   render() {
-    const {
-      params,
-      children,
-    } = this.props;
+    const { params, children } = this.props;
 
     const { account } = params;
-    const {
-      fullLogoUrl,
-      bookingWidgetPrimaryColor,
-    } = account;
+    const { fullLogoUrl, bookingWidgetPrimaryColor } = account;
 
     return (
       <div className={styles.patientPage}>
-        <Card style={{ borderTop: `5px solid ${bookingWidgetPrimaryColor}` }} className={styles.centerWrapper}>
+        <Card
+          style={{ borderTop: `5px solid ${bookingWidgetPrimaryColor}` }}
+          className={styles.centerWrapper}
+        >
           <Section>
-            {fullLogoUrl ?
+            {fullLogoUrl ? (
               <img
                 className={styles.logoClinic}
                 src={fullLogoUrl.replace('[size]', 'original')}
                 alt={`Logo for ${account.name}`}
-              /> : null}
+              />
+            ) : null}
           </Section>
           {children}
           <div className={styles.spaceFiller} />

@@ -8,7 +8,13 @@ import moment from 'moment';
 import omit from 'lodash/omit';
 import { reset } from 'redux-form';
 import { connect } from 'react-redux';
-import { IconButton, Button, DialogBox, SHeader, Avatar } from '../../library/index';
+import {
+  IconButton,
+  Button,
+  DialogBox,
+  SHeader,
+  Avatar,
+} from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
@@ -77,7 +83,10 @@ class Header extends Component {
 
   getSuggestions(value) {
     return this.props
-      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
       .then(searchData => searchData.patients)
       .then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length
@@ -91,12 +100,16 @@ class Header extends Component {
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
                   {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+                    patient.birthDate
+                      ? `, ${moment().diff(patient.birthDate, 'years')}`
+                      : ''
                   }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
                   Last Appointment:{' '}
-                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                  {patient.lastApptDate
+                    ? moment(patient.lastApptDate).format('MMM D YYYY')
+                    : 'n/a'}
                 </div>
               </div>
             </div>
@@ -203,7 +216,10 @@ class Header extends Component {
 
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
+        <CurrentDate
+          currentDate={currentDate}
+          leftColumnWidth={leftColumnWidth}
+        >
           <div className={styles.changeDay}>
             <IconButton
               icon="angle-left"
@@ -220,7 +236,12 @@ class Header extends Component {
             />
           </div>
 
-          <Button border="blue" onClick={() => this.props.setCurrentDay(new Date())} dense compact>
+          <Button
+            border="blue"
+            onClick={() => this.props.setCurrentDay(new Date())}
+            dense
+            compact
+          >
             Today
           </Button>
           <div className={styles.header}>
@@ -262,7 +283,13 @@ class Header extends Component {
               Waitlist
             </Button>
 
-            <Button onClick={this.setView} border="blue" iconRight="exchange" dense compact>
+            <Button
+              onClick={this.setView}
+              border="blue"
+              iconRight="exchange"
+              dense
+              compact
+            >
               {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
             </Button>
 
@@ -417,4 +444,7 @@ Header.defaultProps = {
   appointments: Map,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);
