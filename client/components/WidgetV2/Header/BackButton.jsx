@@ -1,11 +1,9 @@
 
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'react-router-redux';
+import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
 import Button from '../../library/Button';
-import availabilityShape from '../../library/PropTypeShapes/availabilityShape';
 import { historyShape } from '../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
@@ -70,16 +68,8 @@ function BackButton(props) {
           path={pathBuilder('/book/waitlist/days-unavailable')}
           component={backButton(props.goBack('./select-times'))}
         />
-        <Route
-          exact
-          path={pathBuilder('/login')}
-          component={backButton(props.goBack('./book'))}
-        />
-        <Route
-          exact
-          path={pathBuilder('/reset')}
-          component={backButton(props.goBack('./login'))}
-        />
+        <Route exact path={pathBuilder('/login')} component={backButton(props.goBack('./book'))} />
+        <Route exact path={pathBuilder('/reset')} component={backButton(props.goBack('./login'))} />
         <Route
           exact
           path={pathBuilder('/reset-success')}
@@ -88,7 +78,7 @@ function BackButton(props) {
         <Route
           exact
           path={pathBuilder('/book/review')}
-          component={backButton(props.goBack('../book'))}
+          component={backButton(props.goBack('./additional-information'))}
         />
         <Route
           exact
@@ -109,22 +99,9 @@ function BackButton(props) {
   );
 }
 
-function mapStateToProps({ availabilities }) {
-  return {
-    selectedAvailability: availabilities.get('selectedAvailability'),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  null,
-)(BackButton);
+export default BackButton;
 
 BackButton.propTypes = {
-  history: PropTypes.shape(historyShape),
   goBack: PropTypes.func.isRequired,
-  selectedAvailability: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape(availabilityShape),
-  ]),
+  history: PropTypes.shape(historyShape).isRequired,
 };

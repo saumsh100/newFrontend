@@ -22,10 +22,7 @@ function Reasons({
    * containing their name value and type.
    */
   const servicesList = servicesEntity.get('models').reduce((acc, actual) => {
-    if (
-      !selectedPractitionerId ||
-      actual.get('practitioners').includes(selectedPractitionerId)
-    ) {
+    if (!selectedPractitionerId || actual.get('practitioners').includes(selectedPractitionerId)) {
       return [
         ...acc,
         {
@@ -40,35 +37,26 @@ function Reasons({
   /**
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
-  const contextualUrl =
-    (location.state && location.state.nextRoute) || './date-and-time';
+  const contextualUrl = (location.state && location.state.nextRoute) || './date-and-time';
   return (
     <div className={styles.container}>
       {!servicesList.length ? (
         <div className={styles.subCard}>
           <div className={styles.subCardWrapper}>
-            <h3 className={styles.subCardTitle}>
-              You still have some configuration to do.
-            </h3>
+            <h3 className={styles.subCardTitle}>You still have some configuration to do.</h3>
             <p className={styles.subCardSubtitle}>
-              It looks like you did not assign service to the selected
-              practitioner.
+              It looks like you did not assign service to the selected practitioner.
             </p>
           </div>
         </div>
       ) : (
-        servicesList.map((service, i) => (
-          <Link
-            to={contextualUrl}
-            key={`reason_${i}`}
-            className={styles.cardLink}
-          >
+        servicesList.map(service => (
+          <Link to={contextualUrl} key={`reason_${selectedServiceId}`} className={styles.cardLink}>
             <WidgetCard
               arrow
               title={service.label}
               selected={service.value === selectedServiceId}
               onClick={() => setSelectedService(service.value)}
-              description="Lorem Ipsum is simply dummy text of the."
             />
           </Link>
         ))
@@ -79,9 +67,9 @@ function Reasons({
 
 function mapStateToProps({ entities, availabilities }) {
   return {
-    servicesEntity: entities.get('services'),
-    selectedServiceId: availabilities.get('selectedServiceId'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
+    selectedServiceId: availabilities.get('selectedServiceId'),
+    servicesEntity: entities.get('services'),
   };
 }
 
@@ -100,9 +88,9 @@ export default connect(
 )(Reasons);
 
 Reasons.propTypes = {
-  selectedPractitionerId: PropTypes.string,
-  selectedServiceId: PropTypes.string,
-  location: PropTypes.shape(locationShape),
-  servicesEntity: PropTypes.instanceOf(services),
+  location: PropTypes.shape(locationShape).isRequired,
+  selectedPractitionerId: PropTypes.string.isRequired,
+  selectedServiceId: PropTypes.string.isRequired,
+  servicesEntity: PropTypes.instanceOf(services).isRequired,
   setSelectedService: PropTypes.func.isRequired,
 };

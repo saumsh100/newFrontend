@@ -47,7 +47,8 @@
   flex: 1;
 }
 .datePicker {
-  margin-left: var(--widget-spacer);
+  margin: 0 0 0 var(--widget-spacer);
+  line-height: 1.15em;
 }
 
 .availabilitiesWrapper {

@@ -47,14 +47,14 @@ export function createRequest() {
     const state = getState();
     const {
       account,
-      selectedAvailability: { startDate, endDate, practitionerId, chairId },
+      selectedAvailability: {
+        startDate, endDate, practitionerId, chairId,
+      },
       selectedPractitionerId,
       selectedServiceId,
       sentRecallId,
       notes,
       familyPatientUser,
-      insuranceCarrier,
-      insuranceMemberId,
     } = state.availabilities.toJS();
 
     const { patientUser } = state.auth.toJS();
@@ -71,8 +71,9 @@ export function createRequest() {
       suggestedPractitionerId: practitionerId,
       suggestedChairId: chairId,
       note: notes,
-      insuranceCarrier,
-      insuranceMemberId,
+      insuranceCarrier: patientUser.insuranceCarrier,
+      insuranceMemberId: patientUser.insuranceMemberId,
+      insuranceGroupId: patientUser.insuranceGroupId,
       sentRecallId,
     };
 
@@ -98,10 +99,11 @@ export function createRequest() {
 export function createWaitSpot() {
   return function (dispatch, getState) {
     const state = getState();
-    const { account, waitSpot, selectedAvailability } = state.availabilities.toJS();
+    const {
+      account, waitSpot, selectedAvailability, waitlist,
+    } = state.availabilities.toJS();
 
     const { patientUser } = state.auth.toJS();
-
     const params = {
       accountId: account.id,
       patientUserId: patientUser.id,
@@ -109,12 +111,15 @@ export function createWaitSpot() {
       unavailableDays: waitSpot.unavailableDays,
       daysOfTheWeek: waitSpot.daysOfTheWeek,
 
+      availableDates: waitlist.dates,
+      availableTimes: waitlist.times,
+      unavailableDates: waitlist.unavailableDates,
+
       // If availability is selected, add this to the waitspot, so we can know when to remove
       endDate: selectedAvailability && selectedAvailability.startDate,
     };
 
-    return axios.post('/waitSpots', params).then(({ data }) => {
-      const waitSpots = data.entities.waitSpots;
+    return axios.post('/waitSpots', params).then(({ data: { entities: waitSpots } }) => {
       const id = Object.keys(waitSpots)[0];
       return waitSpots[id];
     });
@@ -139,7 +144,12 @@ export function setRegistrationStep(registrationStep, accountId) {
     if (parseInt(registrationStep, 10) === 2) {
       const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
       axios
-        .post('/reservations', { practitionerId, serviceId, startsAt, accountId })
+        .post('/reservations', {
+          practitionerId,
+          serviceId,
+          startsAt,
+          accountId,
+        })
         .then((reservation) => {
           dispatch(setTemporaryReservationAction(reservation.data.result));
         });
@@ -152,8 +162,15 @@ export function setRegistrationStep(registrationStep, accountId) {
 export function getClinicInfo(accountId) {
   return function (dispatch) {
     axios.get(`/logo/${accountId}`).then((data) => {
-      const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
-      dispatch(setClinicInfoAction({ logo, address, clinicName, bookingWidgetPrimaryColor }));
+      const {
+        logo, address, clinicName, bookingWidgetPrimaryColor,
+      } = data.data;
+      dispatch(setClinicInfoAction({
+        logo,
+        address,
+        clinicName,
+        bookingWidgetPrimaryColor,
+      }));
     });
   };
 }

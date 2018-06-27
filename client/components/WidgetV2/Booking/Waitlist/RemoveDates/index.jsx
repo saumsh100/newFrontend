@@ -3,21 +3,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Modal, Button } from '../../../../library';
+import { Button, Modal } from '../../../../library';
 import { setWaitlistUnavailableDates } from '../../../../../actions/availabilities';
 import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
-import { patientShape } from '../../../../library/PropTypeShapes';
+import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
 import styles from './styles.scss';
 
 function RemoveDates({
-  isAuth, setUnavailableDates, history, patientUser,
+  history, isAuth, patientUser, ...props
 }) {
   /**
    * Check if the user is logged, if it's send him to the patient-information route,
    * otherwise send him to the login
    */
   const linkTo =
-    !isAuth || !patientUser || !patientUser.get('isPhoneNumberConfirmed')
+    !isAuth || !patientUser || !patientUser.isPhoneNumberConfirmed
       ? {
         pathname: '../../login',
         state: {
@@ -34,16 +34,14 @@ function RemoveDates({
    */
   const handleUnavailableDaysConfirmation = (confirmWaitlist) => {
     if (!confirmWaitlist) {
-      setUnavailableDates([]);
+      props.setWaitlistUnavailableDates([]);
     }
     return history.push(confirmWaitlist ? './days-unavailable' : linkTo);
   };
 
   return (
     <Modal active className={styles.customDialog}>
-      <h3 className={styles.title}>
-        Do you need to remove a specific date from your waitlist?
-      </h3>
+      <h3 className={styles.title}>Do you need to remove a specific date from your waitlist?</h3>
       <div className={styles.buttonsWrapper}>
         <Button
           onClick={() => handleUnavailableDaysConfirmation(true)}
@@ -72,7 +70,7 @@ function mapStateToProps({ auth }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setUnavailableDates: setWaitlistUnavailableDates,
+      setWaitlistUnavailableDates,
     },
     dispatch,
   );
@@ -84,8 +82,9 @@ export default connect(
 )(RemoveDates);
 
 RemoveDates.propTypes = {
-  patientUser: PropTypes.shape(patientShape),
+  history: PropTypes.shape(historyShape).isRequired,
   isAuth: PropTypes.bool.isRequired,
-  setUnavailableDates: PropTypes.func,
-  history: PropTypes.shape(historyShape),
+  patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.string])
+    .isRequired,
+  setWaitlistUnavailableDates: PropTypes.func.isRequired,
 };

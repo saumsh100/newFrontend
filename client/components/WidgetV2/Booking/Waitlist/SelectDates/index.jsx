@@ -8,7 +8,7 @@ import Service from '../../../../../entities/models/Service';
 import { getRangeOfDays } from '../../../../../../server/util/time';
 import { setWaitlistDates } from '../../../../../actions/availabilities';
 import { Button, DayPickerRange, Input } from '../../../../library';
-import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function SelectDates({
@@ -18,6 +18,7 @@ function SelectDates({
   timezone,
   setWaitlist,
   waitlist,
+  location,
 }) {
   /**
    * Extracts dates on a date-range and also set these date to the reducer.
@@ -28,6 +29,12 @@ function SelectDates({
     const dates = from && to ? getRangeOfDays(from, to, timezone) : [];
     return setWaitlist(dates);
   };
+
+  /**
+   * Checks if there are a specific route to go onclicking a card or just the default one.
+   */
+  const contextualUrl = (location.state && location.state.nextRoute) || './select-times';
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -84,7 +91,7 @@ function SelectDates({
         <Button
           disabled={!waitlist.dates.length}
           className={`${styles.fullWidthButton} ${styles.dateRangeButton}`}
-          onClick={() => history.push('./select-times')}
+          onClick={() => history.push(contextualUrl)}
         >
           Next
         </Button>
@@ -93,14 +100,14 @@ function SelectDates({
   );
 }
 
-const dayPickerFields = (
-  {
+const dayPickerFields = ({
+  from: {
     fromReadOnly, fromValue, fromRef, fromOnClick,
   },
-  {
+  to: {
     toReadOnly, toValue, toRef, toOnClick,
   },
-) => (
+}) => (
   <div className={styles.rangeInputContainer}>
     <Input
       readOnly={fromReadOnly}
@@ -146,14 +153,18 @@ const dayPickerFields = (
 );
 
 dayPickerFields.propTypes = {
-  fromReadOnly: PropTypes.bool,
-  fromValue: PropTypes.string,
-  fromRef: PropTypes.func,
-  fromOnClick: PropTypes.func,
-  toReadOnly: PropTypes.bool,
-  toValue: PropTypes.string,
-  toRef: PropTypes.func,
-  toOnClick: PropTypes.func,
+  from: PropTypes.shape({
+    fromReadOnly: PropTypes.bool,
+    fromValue: PropTypes.string,
+    fromRef: PropTypes.func,
+    fromOnClick: PropTypes.func,
+  }).isRequired,
+  to: PropTypes.shape({
+    toReadOnly: PropTypes.bool,
+    toValue: PropTypes.string,
+    toRef: PropTypes.func,
+    toOnClick: PropTypes.func,
+  }).isRequired,
 };
 
 function mapStateToProps({ availabilities, entities }) {
@@ -186,9 +197,10 @@ export default connect(
 )(SelectDates);
 
 SelectDates.propTypes = {
-  history: PropTypes.shape(historyShape),
-  timezone: PropTypes.string,
-  setWaitlist: PropTypes.func,
+  location: PropTypes.shape(locationShape).isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  timezone: PropTypes.string.isRequired,
+  setWaitlist: PropTypes.func.isRequired,
   waitlist: PropTypes.shape({
     dates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
@@ -205,4 +217,9 @@ SelectDates.propTypes = {
     PropTypes.string,
     PropTypes.instanceOf(Service),
   ]),
+};
+SelectDates.defaultProps = {
+  waitlist: { dates: [], unavailableDates: [], times: [] },
+  selectedAvailability: false,
+  selectedService: '',
 };

@@ -4,9 +4,9 @@ import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as AuthThunks from '../../../../thunks/patientAuth';
-import PatientUser from '../../../../entities/models/PatientUser';
-import { Avatar, DropdownMenu, MenuItem, Icon } from '../../../library';
+import { logout } from '../../../../thunks/patientAuth';
+import { Avatar, DropdownMenu, Icon, MenuItem } from '../../../library';
+import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import styles from './styles.scss';
 
 const UserAvatarButton = (props) => {
@@ -39,16 +39,10 @@ class PatientUserMenu extends Component {
     return (
       <div className={styles.userWrapper}>
         <DropdownMenu
-          labelComponent={props => (
-            <UserAvatarButton {...props} {...userMenuProps} />
-          )}
+          labelComponent={props => <UserAvatarButton {...props} {...userMenuProps} />}
           className={styles.dropdownUserMenu}
         >
-          <MenuItem
-            onClick={this.logout}
-            icon="power-off"
-            className={styles.userMenuLi}
-          >
+          <MenuItem onClick={this.logout} icon="power-off" className={styles.userMenuLi}>
             Sign Out
           </MenuItem>
         </DropdownMenu>
@@ -60,7 +54,7 @@ class PatientUserMenu extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      logout: AuthThunks.logout,
+      logout,
     },
     dispatch,
   );
@@ -72,10 +66,10 @@ export default connect(
 )(PatientUserMenu);
 
 PatientUserMenu.propTypes = {
-  logout: PropTypes.func,
-  user: PropTypes.instanceOf(PatientUser),
+  logout: PropTypes.func.isRequired,
+  user: PropTypes.shape(patientUserShape).isRequired,
 };
 
 UserAvatarButton.propTypes = {
-  user: PropTypes.instanceOf(PatientUser),
+  user: PropTypes.shape(patientUserShape).isRequired,
 };

@@ -40,7 +40,7 @@ function SignUp({ history, handleNewPatient }) {
             validate={passwordsMatch}
             initialValues={{}}
             asyncValidate={asyncValidatePatient}
-            asyncBlurFields={['email']}
+            asyncBlurFields={['email', 'phoneNumber']}
             ignoreSaveButton
           >
             <Field
@@ -78,6 +78,25 @@ function SignUp({ history, handleNewPatient }) {
               required
               name="lastName"
               label="Last Name"
+            />
+            <Field
+              theme={{
+                inputWithIcon: styles.inputWithIcon,
+                iconClassName: styles.validationIcon,
+                erroredLabelFilled: styles.erroredLabelFilled,
+                input: styles.input,
+                filled: styles.filled,
+                label: styles.label,
+                group: styles.group,
+                error: styles.error,
+                erroredInput: styles.erroredInput,
+                bar: styles.bar,
+                erroredLabel: styles.erroredLabel,
+              }}
+              required
+              name="phoneNumber"
+              label="Mobile Number"
+              type="tel"
             />
             <Field
               theme={{

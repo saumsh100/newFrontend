@@ -8,17 +8,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import DateList from './DateList';
 import {
-  setSelectedStartDate,
-  setSelectedAvailability,
-  setIsFetching,
   setConfirmAvailability,
+  setIsFetching,
+  setSelectedAvailability,
+  setSelectedStartDate,
 } from '../../../../actions/availabilities';
 import Button from '../../../library/Button';
 import DayPicker from '../../../library/DayPicker';
 import { fetchAvailabilities } from '../../../../thunks/availabilities';
-import accountShape from '../../../library/PropTypeShapes/accountShape';
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
-import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
+import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import styles from './styles.scss';
 
 /**
@@ -27,8 +27,7 @@ import styles from './styles.scss';
  * @param currentDate
  * @returns {function(*=): *}
  */
-const generateIsDisabledDay = currentDate => date =>
-  moment(date).isBefore(currentDate);
+const generateIsDisabledDay = currentDate => date => genericMoment(date).isBefore(currentDate);
 
 /**
  * Loop a list of Moment object and
@@ -41,34 +40,15 @@ const generateIsDisabledDay = currentDate => date =>
  * @param accountTimezone
  * @returns {*}
  */
-const getSortedAvailabilities = (
-  selectedDate,
-  availabilities,
-  accountTimezone,
-) =>
+const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) =>
   availabilities
-    .filter(date =>
-      genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'd'))
-    .reduce(
-      (acc, act) => {
-        const splitAfternoon = 12;
-        const splitEvening = 17;
-        const currentHour = parseFloat(moment(act.startDate).format('HH'));
-
-        if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
-          acc = { ...acc, afternoon: [...acc.afternoon, act] };
-        } else if (currentHour >= splitEvening) {
-          acc = { ...acc, evening: [...acc.evening, act] };
-        } else {
-          acc = { ...acc, morning: [...acc.morning, act] };
-        }
-
-        return acc;
-      },
-      {
-        morning: [], afternoon: [], evening: [], total: availabilities.length,
-      },
-    );
+    .filter(date => genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'd'))
+    .reduce(groupTimesPerPeriod, {
+      morning: [],
+      afternoon: [],
+      evening: [],
+      total: 0,
+    });
 
 /**
  * Generates the amount of days forward using the selectedStartDate.
@@ -77,11 +57,7 @@ const getSortedAvailabilities = (
  * @param selectedStartDate
  * @param accountTimezone
  */
-const generateDateRange = (
-  numDaysForward,
-  selectedStartDate,
-  accountTimezone,
-) => {
+const generateDateRange = (numDaysForward, selectedStartDate, accountTimezone) => {
   const dateRange = [];
   for (let i = 0; i < numDaysForward; i += 1) {
     dateRange.push(genericMoment(selectedStartDate, accountTimezone).add(i, 'days'));
@@ -95,8 +71,7 @@ const generateDateRange = (
  * @param timezone
  * @returns {*}
  */
-const genericMoment = (time, timezone) =>
-  (timezone ? moment.tz(time, timezone) : moment(time));
+const genericMoment = (time, timezone) => (timezone ? moment.tz(time, timezone) : moment(time));
 
 class DateTime extends Component {
   constructor(props) {
@@ -147,10 +122,7 @@ class DateTime extends Component {
      * we have accuracy on the availability selection.
      */
     this.props.setConfirmAvailability(false);
-    if (
-      !selectedAvailability ||
-      selectedAvailability.startDate !== availability.startDate
-    ) {
+    if (!selectedAvailability || selectedAvailability.startDate !== availability.startDate) {
       return this.props.setSelectedAvailability(availability);
     }
     return this.props.setSelectedAvailability(null);
@@ -161,7 +133,12 @@ class DateTime extends Component {
    */
   confirmDateTime() {
     this.props.setConfirmAvailability(true);
-    return this.props.history.push('./waitlist/join');
+    /**
+     * Checks if there are a specific route to go onclicking a card or just the default one.
+     */
+    const contextualUrl =
+      (this.props.location.state && this.props.location.state.nextRoute) || './waitlist/join';
+    return this.props.history.push(contextualUrl);
   }
 
   /**
@@ -176,25 +153,73 @@ class DateTime extends Component {
 
   render() {
     const {
-      selectedStartDate,
-      selectedAvailability,
-      nextAvailability,
-      floorDate,
+      accountTimezone,
       availabilities,
-      account,
+      floorDate,
       isFetching,
+      nextAvailability,
+      selectedAvailability,
+      selectedStartDate,
     } = this.props;
 
-    const dayAvailabilities = generateDateRange(
-      5,
-      selectedStartDate,
-      account.timezone,
-    );
     const selectedDayAvailabilities = getSortedAvailabilities(
       selectedStartDate,
       availabilities,
-      account.timezone,
+      accountTimezone,
     );
+
+    /**
+     * What we display if there's not availabilities for today,
+     * but we have a future availability.
+     */
+    const nextAvailabilityButton = ({ startDate }) => (
+      <Button
+        onClick={() => this.changeSelectedDate(startDate)}
+        className={styles.nextAvailabilityButton}
+      >
+        Next Availablility on {genericMoment(startDate, accountTimezone).format('ddd, MMM D')}
+      </Button>
+    );
+
+    /**
+     * What we display when there's not availabilities for today,
+     * or in the future.
+     */
+    const availabilitiesNotFound = (
+      <div className={styles.subCard}>
+        <div className={styles.subCardWrapper}>
+          <h3 className={styles.subCardTitle}>No available appointments</h3>
+          <p className={styles.subCardSubtitle}>
+            We did not find any availabilities for your criteria.
+          </p>
+        </div>
+        <Button className={styles.subCardLink} onClick={this.joinWaitlist}>
+          Join Waitlist
+        </Button>
+      </div>
+    );
+
+    /**
+     * Renders a single slot of time.
+     *
+     * @param {object} availability
+     * @param {string} j
+     */
+    const renderTimesOnTimeFrame = (availability, index) => {
+      const availabilityClasses = classNames(styles.slot, {
+        [styles.selectedSlot]:
+          selectedAvailability && selectedAvailability.startDate === availability.startDate,
+      });
+      return (
+        <Button
+          key={`${availability.startDate}_item_${index}`}
+          onClick={() => this.selectAvailability(availability)}
+          className={availabilityClasses}
+        >
+          {genericMoment(availability.startDate, accountTimezone).format('LT')}
+        </Button>
+      );
+    };
 
     /**
      * Render the availabilities, if there is none options on the current selected date
@@ -203,40 +228,8 @@ class DateTime extends Component {
      */
     const availabilitiesDisplay = () => {
       if (!selectedDayAvailabilities.total && nextAvailability) {
-        const { startDate } = nextAvailability;
-        return (
-          <Button
-            onClick={() => this.changeSelectedDate(startDate)}
-            className={styles.nextAvailabilityButton}
-          >
-            Next Availablility on{' '}
-            {genericMoment(startDate, account.timezeone).format('ddd, MMM D')}
-          </Button>
-        );
+        return nextAvailabilityButton(nextAvailability);
       }
-
-      /**
-       * Renders a single slot of time.
-       *
-       * @param {object} availability
-       * @param {string} j
-       */
-      const renderTimesOnTimeFrame = (availability, index) => {
-        const availabilityClasses = classNames(styles.slot, {
-          [styles.selectedSlot]:
-            selectedAvailability &&
-            selectedAvailability.startDate === availability.startDate,
-        });
-        return (
-          <Button
-            key={`${availability.startDate}_item_${index}`}
-            onClick={() => this.selectAvailability(availability)}
-            className={availabilityClasses}
-          >
-            {genericMoment(availability.startDate, account.timezeone).format('LT')}
-          </Button>
-        );
-      };
 
       return (
         <div className={styles.subCardWrapper}>
@@ -261,7 +254,7 @@ class DateTime extends Component {
           <Button
             disabled={!selectedAvailability}
             className={styles.fullWidthButton}
-            onClick={() => this.confirmDateTime()}
+            onClick={this.confirmDateTime}
           >
             Next
           </Button>
@@ -278,30 +271,13 @@ class DateTime extends Component {
      */
     const renderAvailabilities = () =>
       (!selectedDayAvailabilities.length && !nextAvailability ? (
-        <div className={styles.subCard}>
-          <div className={styles.subCardWrapper}>
-            <h3 className={styles.subCardTitle}>No available appointments</h3>
-            <p className={styles.subCardSubtitle}>
-              We did not find any availabilities for your criteria.
-            </p>
-          </div>
-          <Button
-            className={styles.subCardLink}
-            onClick={() => this.joinWaitlist()}
-          >
-            Join Waitlist
-          </Button>
-        </div>
+        <availabilitiesNotFound />
       ) : (
         <div className={styles.contentWrapper}>
           <div className={styles.content}>
             <h3 className={styles.title}>Select Time</h3>
-            <p className={styles.subtitle}>
-              Select a time that works best for you
-            </p>
-            <div className={styles.availabilitiesWrapper}>
-              {availabilitiesDisplay()}
-            </div>
+            <p className={styles.subtitle}>Select a time that works best for you</p>
+            <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
           </div>
           <div className={styles.subCard}>
             <div className={styles.subCardWrapper}>
@@ -310,10 +286,7 @@ class DateTime extends Component {
                 Be notified when an earlier appointment becomes available
               </p>
             </div>
-            <Button
-              className={styles.subCardLink}
-              onClick={() => this.joinWaitlist()}
-            >
+            <Button className={styles.subCardLink} onClick={this.joinWaitlist}>
               Join Waitlist
             </Button>
           </div>
@@ -327,24 +300,19 @@ class DateTime extends Component {
      * @returns {*}
      */
     const CalendarButtonTrigger = props => (
-      <div {...props} className={styles.datePicker}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="13"
-          height="14"
-          viewBox="0 0 13 14"
-        >
+      <Button {...props} className={styles.datePicker}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14">
           <path d="M10.684 1.332h-.667V0H8.68v1.332H3.34V0H2.003v1.332h-.667c-.742 0-1.33.6-1.33 1.333L0 11.99c0 .733.594 1.332 1.336 1.332h9.348c.735 0 1.336-.6 1.336-1.332V2.665c0-.733-.601-1.333-1.336-1.333zm0 10.659H1.336V4.663h9.348v7.328z" />
         </svg>
         Pick a<br /> Date
-      </div>
+      </Button>
     );
 
     return (
       <div className={styles.container}>
         <div className={styles.topWrapper}>
           <DateList
-            dayAvailabilities={dayAvailabilities}
+            dayAvailabilities={generateDateRange(5, selectedStartDate, accountTimezone)}
             selectDate={selectedStartDate}
             onChangeDate={this.changeSelectedDate}
           />
@@ -370,28 +338,27 @@ class DateTime extends Component {
 }
 
 function mapStateToProps({ availabilities }) {
-  const account = availabilities.get('account').toJS();
   return {
+    accountTimezone: availabilities.get('account').get('timezone'),
+    availabilities: availabilities.get('availabilities'),
     floorDate: availabilities.get('floorDate'),
     isFetching: availabilities.get('isFetching'),
-    availabilities: availabilities.get('availabilities'),
     nextAvailability: availabilities.get('nextAvailability'),
-    selectedStartDate: availabilities.get('selectedStartDate'),
+    selectedAvailability: availabilities.get('selectedAvailability'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedServiceId: availabilities.get('selectedServiceId'),
-    selectedAvailability: availabilities.get('selectedAvailability'),
-    account,
+    selectedStartDate: availabilities.get('selectedStartDate'),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setIsFetching,
       fetchAvailabilities,
-      setSelectedStartDate,
       setConfirmAvailability,
+      setIsFetching,
       setSelectedAvailability,
+      setSelectedStartDate,
     },
     dispatch,
   );
@@ -403,25 +370,24 @@ export default connect(
 )(DateTime);
 
 DateTime.propTypes = {
-  isFetching: PropTypes.bool,
-  floorDate: PropTypes.string,
-  fetchAvailabilities: PropTypes.func,
-  setSelectedStartDate: PropTypes.func,
+  accountTimezone: PropTypes.string.isRequired,
+  availabilities: PropTypes.oneOfType([PropTypes.instanceOf(List), PropTypes.array]),
+  fetchAvailabilities: PropTypes.func.isRequired,
+  floorDate: PropTypes.string.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+  nextAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
+  selectedAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
   selectedStartDate: PropTypes.string,
-  selectedAvailability: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape(availabilityShape),
-  ]),
-  account: PropTypes.shape(accountShape),
-  setConfirmAvailability: PropTypes.func,
-  setSelectedAvailability: PropTypes.func,
-  history: PropTypes.shape(historyShape),
-  nextAvailability: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.shape(availabilityShape),
-  ]),
-  availabilities: PropTypes.oneOfType([
-    PropTypes.instanceOf(List),
-    PropTypes.array,
-  ]),
+  setConfirmAvailability: PropTypes.func.isRequired,
+  setSelectedAvailability: PropTypes.func.isRequired,
+  setSelectedStartDate: PropTypes.func.isRequired,
+};
+
+DateTime.defaultProps = {
+  availabilities: [],
+  nextAvailability: '',
+  selectedAvailability: '',
+  selectedStartDate: '',
 };

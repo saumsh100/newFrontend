@@ -5,17 +5,16 @@ import PropTypes from 'prop-types';
 import Button from '../../../library/Button';
 import styles from './styles.scss';
 
-function DateList({ dayAvailabilities, selectDate, onChangeDate }) {
+function DateList({ dayAvailabilities, onChangeDate, selectDate }) {
   return (
     <div className={styles.datesWrapper}>
-      {dayAvailabilities.map((date, i) => {
+      {dayAvailabilities.map((date) => {
         const isoDate = date.toISOString();
-        const buttonClass =
-          selectDate === isoDate ? styles.selectedDaySlot : styles.daySlot;
+        const buttonClass = selectDate === isoDate ? styles.selectedDaySlot : styles.daySlot;
         return (
           <Button
             className={buttonClass}
-            key={`date_${i}`}
+            key={`date_${isoDate}`}
             onClick={() => onChangeDate(isoDate)}
           >
             <span className={styles.weekDay}>{date.format('ddd')}</span>
@@ -31,7 +30,7 @@ function DateList({ dayAvailabilities, selectDate, onChangeDate }) {
 export default DateList;
 
 DateList.propTypes = {
-  dayAvailabilities: PropTypes.arrayOf(PropTypes.instanceOf(moment)),
+  dayAvailabilities: PropTypes.arrayOf(PropTypes.instanceOf(moment)).isRequired,
   selectDate: PropTypes.string.isRequired,
   onChangeDate: PropTypes.func.isRequired,
 };
