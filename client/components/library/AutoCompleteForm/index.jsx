@@ -9,9 +9,7 @@ import baseTheme from './theme.scss';
 
 const renderSuggestion = (suggestion) => {
   const display =
-    suggestion.display ||
-    `${suggestion.firstName} ${suggestion.lastName}` ||
-    suggestion.name;
+    suggestion.display || `${suggestion.firstName} ${suggestion.lastName}` || suggestion.name;
   return <div data-test-id={`${suggestion.name}Suggestion`}>{display}</div>;
 };
 
@@ -55,12 +53,10 @@ class AutoCompleteForm extends Component {
   // TODO: is this really necessary
   displayField(props) {
     delete props.className;
-
     if (props.className) {
       props.className = this.props.className;
     }
     props.theme = this.props.theme;
-    props.value = this.props.value;
     props.ref = this.props.refCallBack;
 
     return (
@@ -79,11 +75,7 @@ class AutoCompleteForm extends Component {
   render() {
     const { suggestions } = this.state;
 
-    const newProps = omit(this.props, [
-      'value',
-      'theme',
-      'suggestionsContainerComponent',
-    ]);
+    const newProps = omit(this.props, ['value', 'theme', 'suggestionsContainerComponent']);
     // Autosuggest will pass through all these props to the input element.
     // Finally, render it
     return (
