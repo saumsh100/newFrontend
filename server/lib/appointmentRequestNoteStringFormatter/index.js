@@ -51,7 +51,6 @@ export function appointmentRequestNoteStringFormatter(request) {
     'Birth Date: ' + birthDateHandler(requestingPatientUser.birthDate) + '\r\n';
   const requestedPatientNote = (patientUser.id === requestingPatientUser.id) ?
     insuranceNote + '\r\n\r\n' + sameRequestedPatientNote : '\r\n' + differentRequestedPatientNote + insuranceNote;
-
-  console.log(generalRequestNote + requestedPatientNote);
+  
   return generalRequestNote + requestedPatientNote;
 }
