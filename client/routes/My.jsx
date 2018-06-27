@@ -23,47 +23,28 @@ const MyRouter = ({ history }) => {
           <Route
             exact
             path="/reset-password/:tokenId"
-            render={props => (
-              <ResetPassword
-                {...props}
-                params={params}
-              />
-            )}
+            render={props => <ResetPassword {...props} params={params} />}
           />
           <Route
             exact
             path="/sentReminders/:sentReminderId/confirmed"
             render={props => (
-              <ConfirmedAppointment
-                {...props}
-                params={params}
-              />
+              <ConfirmedAppointment {...props} params={params} />
             )}
           />
           <Route
             path="/unsubscribe"
-            render={props => (
-              <Unsubscribe
-                {...props}
-                params={params}
-              />
-            )}
+            render={props => <Unsubscribe {...props} params={params} />}
           />
           <Route
             path="/signup/confirmed"
-            render={props => (
-              <ConfirmedEmail
-                {...props}
-                params={params}
-              />
-            )}
+            render={props => <ConfirmedEmail {...props} params={params} />}
           />
           <Route component={FourZeroFour} />
         </Switch>
       </PatientPage>
     );
   };
-
 
   // We keep a main Router in case we change things down the Road
   return (

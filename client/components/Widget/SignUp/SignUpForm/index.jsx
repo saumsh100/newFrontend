@@ -1,19 +1,25 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field, Grid, Row, Col } from '../../../library';
-import { asyncValidatePatient, passwordsMatch, passwordStrength } from '../../../library/Form/validate';
+import {
+  asyncValidatePatient,
+  passwordsMatch,
+  passwordStrength,
+} from '../../../library/Form/validate';
 import styles from './styles.scss';
 
 const defaultSubmitButton = (
-  <Button
-    type="submit"
-    className={styles.signup__footer_btn}
-  >
+  <Button type="submit" className={styles.signup__footer_btn}>
     Sign Up and Book
   </Button>
 );
 
-export default function SignUpForm({ onSubmit, initialValues, className, submitButton = defaultSubmitButton }) {
+export default function SignUpForm({
+  onSubmit,
+  initialValues,
+  className,
+  submitButton = defaultSubmitButton,
+}) {
   return (
     <Form
       form="userSignUpForm"
@@ -28,33 +34,15 @@ export default function SignUpForm({ onSubmit, initialValues, className, submitB
       <Grid>
         <Row>
           <Col xs={6} className={styles.colLeft}>
-            <Field
-              required
-              name="firstName"
-              label="First Name"
-            />
+            <Field required name="firstName" label="First Name" />
           </Col>
           <Col xs={6} className={styles.colRight}>
-            <Field
-              required
-              name="lastName"
-              label="Last Name"
-            />
+            <Field required name="lastName" label="Last Name" />
           </Col>
         </Row>
       </Grid>
-      <Field
-        required
-        name="phoneNumber"
-        label="Mobile Number"
-        type="tel"
-      />
-      <Field
-        required
-        label="Email"
-        name="email"
-        type="email"
-      />
+      <Field required name="phoneNumber" label="Mobile Number" type="tel" />
+      <Field required label="Email" name="email" type="email" />
       <Field
         required
         label="Password"

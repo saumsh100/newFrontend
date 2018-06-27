@@ -6,6 +6,4 @@ export default function FieldArray(props) {
   return <RFFieldArray {...props} />;
 }
 
-FieldArray.propTypes = {
-
-};
+FieldArray.propTypes = {};

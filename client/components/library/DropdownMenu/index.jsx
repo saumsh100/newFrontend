@@ -35,7 +35,14 @@ export class DropdownMenu extends Component {
   }
 
   render() {
-    const { children, className, labelProps, closeOnInsideClick, align, upwards } = this.props;
+    const {
+      children,
+      className,
+      labelProps,
+      closeOnInsideClick,
+      align,
+      upwards,
+    } = this.props;
     const classes = classNames(className, styles.dropdownContainer);
 
     const menuOptions = {
@@ -81,7 +88,11 @@ export function MenuItem(props) {
 
   const classes = classNames(props.className, styles.menuItemLi);
   return (
-    <ListItem className={classes} onClick={props.onClick} data-test-id={props['data-test-id']}>
+    <ListItem
+      className={classes}
+      onClick={props.onClick}
+      data-test-id={props['data-test-id']}
+    >
       <div className={`dd-item-ignore ${styles.menuItemContent}`}>
         {icon}
         {props.children}

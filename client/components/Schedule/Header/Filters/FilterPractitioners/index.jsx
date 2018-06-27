@@ -38,9 +38,10 @@ export default function FilterPractitioners(props) {
     }
   }
 
-  practitionersSort = practitionersSort.map((prac, index) => Object.assign({}, prac.toJS ? prac.toJS() : prac, {
-    color: colorArray[index],
-  }));
+  practitionersSort = practitionersSort.map((prac, index) =>
+    Object.assign({}, prac.toJS ? prac.toJS() : prac, {
+      color: colorArray[index],
+    }));
 
   return (
     <div>
@@ -48,7 +49,7 @@ export default function FilterPractitioners(props) {
       <ul className={styles.filter_practitioner__wrapper}>
         <Checkbox
           hidden
-          label={'All'}
+          label="All"
           checked={allChecked}
           onChange={() => handleAllCheck(filterKey)}
         />
@@ -57,31 +58,37 @@ export default function FilterPractitioners(props) {
             return null;
           }
 
-          const displayName = pr.type === 'Dentist' ? `Dr. ${pr.lastName || pr.firstName}` : `${pr.firstName} ${pr.lastName || ''}`;
+          const displayName =
+            pr.type === 'Dentist'
+              ? `Dr. ${pr.lastName || pr.firstName}`
+              : `${pr.firstName} ${pr.lastName || ''}`;
           const checked = selectedFilterItem.indexOf(pr.id) > -1;
 
           const label = (
             <div className={styles.filter_practitioner__name}>
               {displayName}
-              <div className={styles.filter_practitioner__type}>
-                {pr.type}
-              </div>
+              <div className={styles.filter_practitioner__type}>{pr.type}</div>
             </div>
           );
-          const url = (pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null);
+          const url = pr.fullAvatarUrl
+            ? pr.fullAvatarUrl.replace('[size]', 400)
+            : null;
 
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
               <CheckboxImage
                 key={pr.id}
                 checked={checked}
-                onChange={() => { handleEntityCheck(checked, pr.id, filterKey); }}
+                onChange={() => {
+                  handleEntityCheck(checked, pr.id, filterKey);
+                }}
                 id={`checkbox-${i}`}
                 label={label}
                 imgColor={pr.color}
                 url={url}
                 firstName={pr.firstName}
-                imageSrc="https://randomuser.me/api/portraits/men/44.jpg" alt="practitioner"
+                imageSrc="https://randomuser.me/api/portraits/men/44.jpg"
+                alt="practitioner"
               />
             </div>
           );

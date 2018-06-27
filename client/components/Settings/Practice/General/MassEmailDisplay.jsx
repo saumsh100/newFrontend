@@ -29,7 +29,9 @@ class MassEmailDisplay extends Component {
       <div className={styles.formContainer}>
         <Header title="Online Booking Intro. Email Blast" contentHeader />
         {massOnlineDate && (
-          <div className={styles.massOnlineEmail_date}>Last sent: {massOnlineDate}</div>
+          <div className={styles.massOnlineEmail_date}>
+            Last sent: {massOnlineDate}
+          </div>
         )}
         {!massOnlineDate && (
           <div className={styles.massOnlineEmail_count}>

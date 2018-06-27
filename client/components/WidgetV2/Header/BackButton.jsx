@@ -70,8 +70,16 @@ function BackButton(props) {
           path={pathBuilder('/book/waitlist/days-unavailable')}
           component={backButton(props.goBack('./select-times'))}
         />
-        <Route exact path={pathBuilder('/login')} component={backButton(props.goBack('./book'))} />
-        <Route exact path={pathBuilder('/reset')} component={backButton(props.goBack('./login'))} />
+        <Route
+          exact
+          path={pathBuilder('/login')}
+          component={backButton(props.goBack('./book'))}
+        />
+        <Route
+          exact
+          path={pathBuilder('/reset')}
+          component={backButton(props.goBack('./login'))}
+        />
         <Route
           exact
           path={pathBuilder('/reset-success')}
@@ -107,10 +115,16 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-export default connect(mapStateToProps, null)(BackButton);
+export default connect(
+  mapStateToProps,
+  null,
+)(BackButton);
 
 BackButton.propTypes = {
   history: PropTypes.shape(historyShape),
   goBack: PropTypes.func.isRequired,
-  selectedAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
+  selectedAvailability: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape(availabilityShape),
+  ]),
 };

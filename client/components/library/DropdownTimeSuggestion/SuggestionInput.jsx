@@ -54,7 +54,9 @@ class SuggestionInput extends Component {
    * and select the input field.
    */
   displaySuggestions() {
-    const { name, toggleView, disabled, isOpen } = this.props;
+    const {
+      name, toggleView, disabled, isOpen,
+    } = this.props;
 
     if (disabled) return;
     if (!isOpen) {
@@ -67,7 +69,16 @@ class SuggestionInput extends Component {
   }
 
   render() {
-    const { name, label, handleKeydown, handleBlur, theme, error, disabled, isOpen } = this.props;
+    const {
+      name,
+      label,
+      handleKeydown,
+      handleBlur,
+      theme,
+      error,
+      disabled,
+      isOpen,
+    } = this.props;
 
     const labelClassName = classNames(theme.label, {
       [theme.filled]: this.state.displayValue,
@@ -108,11 +119,18 @@ class SuggestionInput extends Component {
               this[`suggestion_time_toggle_${name}`] = input;
             }}
           />
-          <label htmlFor={`suggestion_time_toggle_${name}`} className={labelClassName}>
+          <label
+            htmlFor={`suggestion_time_toggle_${name}`}
+            className={labelClassName}
+          >
             {label}
           </label>
           <div className={theme.caretIconWrapper}>
-            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
+            <Icon
+              className={caretIconClassName}
+              icon="caret-down"
+              type="solid"
+            />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>

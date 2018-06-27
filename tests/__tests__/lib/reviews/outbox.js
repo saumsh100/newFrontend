@@ -24,6 +24,7 @@ const makeApptData = (data = {}) => Object.assign({
   accountId,
   patientId,
   practitionerId,
+  isPatientConfirmed: true,
 }, data);
 
 const makePatientData = (data = {}) => Object.assign({

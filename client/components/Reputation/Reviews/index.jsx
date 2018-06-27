@@ -194,7 +194,10 @@ class Reviews extends Component {
             <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
               <Card className={styles.card}>
                 <div className={styles.stats}>
-                  <span className={styles.stats__count}> {reviewsData.totalCount} </span>
+                  <span className={styles.stats__count}>
+                    {' '}
+                    {reviewsData.totalCount}{' '}
+                  </span>
                   <span className={styles.stats__title}>Total Reviews</span>
                   <div className={styles.stats__rating}>
                     {reviewsData.ratingCounts['0'] || '0'} with no star rating
@@ -209,7 +212,14 @@ class Reviews extends Component {
               <RatingsChart rating={reviewsData.ratingCounts} />
             </Col>
             <Row className={styles.rowReviewsFilter}>
-              <Col Col style={{ paddingLeft: '10px' }} xs={12} md={8} sm={9} lg={9}>
+              <Col
+                Col
+                style={{ paddingLeft: '10px' }}
+                xs={12}
+                md={8}
+                sm={9}
+                lg={9}
+              >
                 <ReviewsCard
                   data={constructBigComment}
                   startDate={this.state.startDate}
@@ -261,9 +271,12 @@ Reviews.propTypes = {
   change: PropTypes.func,
 };
 
-function mapStateToProps({ apiRequests, entities, auth, reputation }) {
+function mapStateToProps({
+  apiRequests, entities, auth, reputation,
+}) {
   const reviews = apiRequests.get('reviews') && apiRequests.get('reviews').data;
-  const reviewsFilter = apiRequests.get('reviews') && reputation.get('reviewsFilter');
+  const reviewsFilter =
+    apiRequests.get('reviews') && reputation.get('reviewsFilter');
   return {
     reviews,
     reviewsFilter,
@@ -280,10 +293,13 @@ function mapDispatchToProps(dispatch) {
       reset,
       change,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Reviews);

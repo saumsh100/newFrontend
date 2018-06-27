@@ -8,7 +8,14 @@ import CallDisplayInfo from '../CallDisplayInfo';
 import styles from '../styles.scss';
 
 export default function CallerDisplay(props) {
-  const { call, patient, clearSelectedCall, updateEntityRequest, push, setScheduleDate } = props;
+  const {
+    call,
+    patient,
+    clearSelectedCall,
+    updateEntityRequest,
+    push,
+    setScheduleDate,
+  } = props;
 
   if (!patient) {
     return null;
@@ -29,13 +36,21 @@ export default function CallerDisplay(props) {
     borderStyling = styles.missed;
   }
 
-  const callDisplayContainer = classnames(styles.callDisplayContainer, borderStyling);
+  const callDisplayContainer = classnames(
+    styles.callDisplayContainer,
+    borderStyling,
+  );
 
-  const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : null;
+  const age =
+    patient && patient.birthDate
+      ? moment().diff(patient.birthDate, 'years')
+      : null;
   const fullName = `${patient.firstName} ${patient.lastName}`;
   const fullNameDisplay = age ? fullName.concat(', ', age) : fullName;
   const birthDate =
-    patient && patient.birthDate ? moment(patient.birthDate).format('MMMM Do, YYYY') : null;
+    patient && patient.birthDate
+      ? moment(patient.birthDate).format('MMMM Do, YYYY')
+      : null;
 
   const lastAppt =
     patient && patient.lastApptDate
@@ -50,10 +65,16 @@ export default function CallerDisplay(props) {
   let lastApptStyling = styles.appointmentInfoContainer_date;
 
   if (nextAppt) {
-    nextApptStyling = classnames(nextApptStyling, styles.appointmentInfoContainer_date_hover);
+    nextApptStyling = classnames(
+      nextApptStyling,
+      styles.appointmentInfoContainer_date_hover,
+    );
   }
   if (lastAppt) {
-    lastApptStyling = classnames(lastApptStyling, styles.appointmentInfoContainer_date_hover);
+    lastApptStyling = classnames(
+      lastApptStyling,
+      styles.appointmentInfoContainer_date_hover,
+    );
   }
 
   return (
@@ -116,7 +137,10 @@ export default function CallerDisplay(props) {
 
         <div className={styles.callInfo_header}>Call Information</div>
         <CallDisplayInfo call={call} />
-        <AppointmentBookedToggle call={call} updateEntityRequest={updateEntityRequest} />
+        <AppointmentBookedToggle
+          call={call}
+          updateEntityRequest={updateEntityRequest}
+        />
       </div>
     </div>
   );

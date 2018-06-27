@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { VCard, DropdownSelect, LineChart } from '../../library';
@@ -10,6 +11,7 @@ class Graph extends Component {
       selected: 'activePatients',
     };
   }
+
   render() {
     const data = {};
     const labels = [];
@@ -25,34 +27,38 @@ class Graph extends Component {
       values.push(data[key]);
     });
 
-    return (<VCard noPadding>
-      <DropdownSelect
-        className={styles.dropdown}
-        align="left"
-        options={[
-          { label: 'Total Active Patients', value: 'activePatients' },
-          { label: 'Total Hygiene Patients', value: 'hygienePatients' },
-          { label: 'Total New Patients', value: 'newPatients' },
-        ]}
-        name="city"
-        value={this.state.selected}
-        required
-        onChange={(graph) => {
-          this.setState({
-            ...this.state,
-            selected: graph,
-          });
-        }}
-      />
-      <LineChart
-        labels={labels}
-        dataSets={[{
-          label: 'asd',
-          color: 'blue',
-          data: values,
-        }]}
-      />
-    </VCard>);
+    return (
+      <VCard noPadding>
+        <DropdownSelect
+          className={styles.dropdown}
+          align="left"
+          options={[
+            { label: 'Total Active Patients', value: 'activePatients' },
+            { label: 'Total Hygiene Patients', value: 'hygienePatients' },
+            { label: 'Total New Patients', value: 'newPatients' },
+          ]}
+          name="city"
+          value={this.state.selected}
+          required
+          onChange={(graph) => {
+            this.setState({
+              ...this.state,
+              selected: graph,
+            });
+          }}
+        />
+        <LineChart
+          labels={labels}
+          dataSets={[
+            {
+              label: 'asd',
+              color: 'blue',
+              data: values,
+            },
+          ]}
+        />
+      </VCard>
+    );
   }
 }
 

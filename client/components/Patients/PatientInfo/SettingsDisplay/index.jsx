@@ -39,9 +39,7 @@ class SettingsDisplay extends Component {
   }
 
   render() {
-    const {
-      patient,
-    } = this.props;
+    const { patient } = this.props;
 
     const remoteButtonProps = {
       onClick: this.reinitializeState,
@@ -73,11 +71,9 @@ class SettingsDisplay extends Component {
               </div>
             </div>
             <div className={styles.content}>
-              <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} >
-                <Tab label="Reminders" >
-                  <div>
-                    test
-                  </div>
+              <Tabs index={this.state.tabIndex} onChange={this.handleTabChange}>
+                <Tab label="Reminders">
+                  <div>test</div>
                 </Tab>
               </Tabs>
             </div>

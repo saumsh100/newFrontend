@@ -1,3 +1,4 @@
+
 import React, { PropTypes } from 'react';
 import omit from 'lodash/omit';
 import classNames from 'classnames';
@@ -5,15 +6,11 @@ import ColorPicker from '../../ColorPicker';
 
 export default function RFColorPicker(props) {
   const {
-    input,
-    error,
-    label,
-    value,
-    meta,
+    input, error, label, value, meta,
   } = props;
 
   const { touched, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
+  const finalError = error || (touched || dirty ? meta.error : null);
   const newProps = omit(props, ['meta', 'error', 'input']);
   const newInput = omit(input, ['value']);
 
@@ -22,7 +19,7 @@ export default function RFColorPicker(props) {
       {...newProps}
       {...newInput}
       color={input.value}
-      onChange={(color) => input.onChange(color.hex)}
+      onChange={color => input.onChange(color.hex)}
     />
   );
 }

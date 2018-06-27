@@ -14,6 +14,7 @@ Object {
         "isBookable": false,
         "isCancelled": false,
         "isDeleted": false,
+        "isMissed": false,
         "isPatientConfirmed": false,
         "isPending": false,
         "isPreConfirmed": null,

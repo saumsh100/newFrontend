@@ -44,11 +44,17 @@ export default function withEntitiesRequest(data) {
     }
 
     function mapDispatchToProps(dispatch) {
-      return bindActionCreators({
-        fetchEntitiesRequest,
-      }, dispatch);
+      return bindActionCreators(
+        {
+          fetchEntitiesRequest,
+        },
+        dispatch,
+      );
     }
 
-    return connect(mapStateToProps, mapDispatchToProps)(LoadedComponent);
+    return connect(
+      mapStateToProps,
+      mapDispatchToProps,
+    )(LoadedComponent);
   };
 }

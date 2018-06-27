@@ -29,8 +29,18 @@ class ActiveUsersList extends Component {
   }
 
   render() {
-    const { activeUser, role, currentUserId, userId, currentUserRole, edit } = this.props;
-    const badge = userId === currentUserId ? <span className={styles.badge}>You</span> : null;
+    const {
+      activeUser,
+      role,
+      currentUserId,
+      userId,
+      currentUserRole,
+      edit,
+    } = this.props;
+    const badge =
+      userId === currentUserId ? (
+        <span className={styles.badge}>You</span>
+      ) : null;
     let button = null;
     if (
       (currentUserRole === 'SUPERADMIN' || currentUserRole === 'OWNER') &&
@@ -61,7 +71,10 @@ class ActiveUsersList extends Component {
     ) : null;
 
     return (
-      <ListItem className={styles.userListItem} data-test-id={activeUser.getName()}>
+      <ListItem
+        className={styles.userListItem}
+        data-test-id={activeUser.getName()}
+      >
         <div className={styles.main}>
           <Avatar className={styles.image} user={activeUser} />
           <div className={styles.userName}>
@@ -97,10 +110,13 @@ function mapDispatchToProps(dispatch) {
     {
       deleteEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(ActiveUsersList);

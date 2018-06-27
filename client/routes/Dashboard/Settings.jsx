@@ -13,26 +13,50 @@ const practiceBase = (path = '') => base(`/practice${path}`);
 const donnaBase = (path = '') => base(`/donna${path}`);
 
 const Routes = {
-  clinicGeneral: LazyRoute(() => import('../../components/Settings/Practice/General'), true),
-  clinicUsers: LazyRoute(() => import('../../components/Settings/Practice/Users'), true),
+  clinicGeneral: LazyRoute(
+    () => import('../../components/Settings/Practice/General'),
+    true,
+  ),
+  clinicUsers: LazyRoute(
+    () => import('../../components/Settings/Practice/Users'),
+    true,
+  ),
 
   scheduleOfficeHours: LazyRoute(
     () => import('../../components/Settings/Practice/OfficeHours'),
-    true
+    true,
   ),
   scheduleOnlineBooking: LazyRoute(
     () => import('../../components/Settings/Practice/OnlineBooking'),
-    true
+    true,
   ),
-  chairs: LazyRoute(() => import('../../components/Settings/Practice/Chairs'), true),
-  superAdmin: LazyRoute(() => import('../../components/Settings/Practice/SuperAdmin'), true),
+  chairs: LazyRoute(
+    () => import('../../components/Settings/Practice/Chairs'),
+    true,
+  ),
+  superAdmin: LazyRoute(
+    () => import('../../components/Settings/Practice/SuperAdmin'),
+    true,
+  ),
 
-  reminders: LazyRoute(() => import('../../components/Settings/Donna/Reminders'), true),
-  recalls: LazyRoute(() => import('../../components/Settings/Donna/Recalls'), true),
-  reviews: LazyRoute(() => import('../../components/Settings/Donna/Reviews'), true),
+  reminders: LazyRoute(
+    () => import('../../components/Settings/Donna/Reminders'),
+    true,
+  ),
+  recalls: LazyRoute(
+    () => import('../../components/Settings/Donna/Recalls'),
+    true,
+  ),
+  reviews: LazyRoute(
+    () => import('../../components/Settings/Donna/Reviews'),
+    true,
+  ),
 
   reasons: LazyRoute(() => import('../../components/Settings/Reasons'), true),
-  practitioners: LazyRoute(() => import('../../components/Settings/Practitioners'), true),
+  practitioners: LazyRoute(
+    () => import('../../components/Settings/Practitioners'),
+    true,
+  ),
 };
 
 const PracticeContainer = props => (
@@ -41,8 +65,14 @@ const PracticeContainer = props => (
       <Redirect exact from={practiceBase()} to={practiceBase('/general')} />
       <Route path={practiceBase('/general')} component={Routes.clinicGeneral} />
       <Route path={practiceBase('/users')} component={Routes.clinicUsers} />
-      <Route path={practiceBase('/hours')} component={Routes.scheduleOfficeHours} />
-      <Route path={practiceBase('/onlinebooking')} component={Routes.scheduleOnlineBooking} />
+      <Route
+        path={practiceBase('/hours')}
+        component={Routes.scheduleOfficeHours}
+      />
+      <Route
+        path={practiceBase('/onlinebooking')}
+        component={Routes.scheduleOnlineBooking}
+      />
       <Route path={practiceBase('/chairs')} component={Routes.chairs} />
       <Route path={practiceBase('/superadmin')} component={Routes.superAdmin} />
     </Switch>

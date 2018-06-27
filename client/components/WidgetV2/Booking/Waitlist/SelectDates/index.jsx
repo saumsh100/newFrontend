@@ -33,7 +33,8 @@ function SelectDates({
       <div className={styles.content}>
         <h3 className={styles.title}>Waitlist Summary</h3>
         <p className={styles.subtitle}>
-          Here are the informations that you already defined to your appointment.
+          Here are the informations that you already defined to your
+          appointment.
         </p>
         <p className={styles.waitlistIndex}>
           <span className={styles.waitlistKey}>Reason</span>
@@ -58,20 +59,25 @@ function SelectDates({
       <div className={styles.content}>
         <h3 className={styles.title}>Select Dates</h3>
         <p className={styles.subtitle}>
-          Select the first and last day of your availability. You will be able to customize your
-          schedule later.
+          Select the first and last day of your availability. You will be able
+          to customize your schedule later.
         </p>
         <DayPickerRange
           fieldsWrapper={dayPickerFields}
-          from={(waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || ''}
+          from={
+            (waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || ''
+          }
           to={
-            (waitlist.dates.length && moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
+            (waitlist.dates.length &&
+              moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
             ''
           }
           disabledDays={{
             before: new Date(),
             after:
-              (selectedAvailability && moment(selectedAvailability.startDate).toDate()) || null,
+              (selectedAvailability &&
+                moment(selectedAvailability.startDate).toDate()) ||
+              null,
           }}
           onChange={values => extractRange(values)}
         />
@@ -88,8 +94,12 @@ function SelectDates({
 }
 
 const dayPickerFields = (
-  { fromReadOnly, fromValue, fromRef, fromOnClick },
-  { toReadOnly, toValue, toRef, toOnClick }
+  {
+    fromReadOnly, fromValue, fromRef, fromOnClick,
+  },
+  {
+    toReadOnly, toValue, toRef, toOnClick,
+  },
 ) => (
   <div className={styles.rangeInputContainer}>
     <Input
@@ -151,7 +161,8 @@ function mapStateToProps({ availabilities, entities }) {
     timezone: availabilities.get('account').get('timezone'),
     waitlist: availabilities.get('waitlist').toJS(),
     selectedAvailability:
-      availabilities.get('confirmedAvailability') && availabilities.get('selectedAvailability'),
+      availabilities.get('confirmedAvailability') &&
+      availabilities.get('selectedAvailability'),
     selectedService: entities.getIn([
       'services',
       'models',
@@ -165,11 +176,14 @@ function mapDispatchToProps(dispatch) {
     {
       setWaitlist: setWaitlistDates,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectDates);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectDates);
 
 SelectDates.propTypes = {
   history: PropTypes.shape(historyShape),
@@ -187,5 +201,8 @@ SelectDates.propTypes = {
       startDate: PropTypes.string,
     }),
   ]),
-  selectedService: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Service)]),
+  selectedService: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Service),
+  ]),
 };

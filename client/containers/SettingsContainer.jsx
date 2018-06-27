@@ -30,7 +30,11 @@ SettingsContainer.propTypes = {
 
 function mapStateToProps({ entities, auth }) {
   return {
-    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+    activeAccount: entities.getIn([
+      'accounts',
+      'models',
+      auth.get('accountId'),
+    ]),
     users: entities.getIn(['users', 'models']),
   };
 }
@@ -40,10 +44,13 @@ function mapDispatchToProps(dispatch) {
     {
       fetchEntities,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(SettingsContainer);

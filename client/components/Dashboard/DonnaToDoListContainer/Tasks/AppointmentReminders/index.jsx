@@ -16,19 +16,26 @@ export default function AppointmentReminders({ reminders }) {
         const { appointment } = patient;
 
         return (
-          <ListItem className={styles.listItem} key={`appointmentReminders_${index + 1}`}>
+          <ListItem
+            className={styles.listItem}
+            key={`appointmentReminders_${index + 1}`}
+          >
             <div className={styles2.avatar}>
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
-            <div className={styles2.smallCol}>{moment(sendDate).format('h:mm A')}</div>
+            <div className={styles2.smallCol}>
+              {moment(sendDate).format('h:mm A')}
+            </div>
             <div className={styles2.col}>
               {patient.firstName} {patient.lastName}
             </div>
             <div className={styles2.col}>
               {moment(appointment.startDate).format('MMM Do, YYYY - h:mm A')}
             </div>
-            <div className={styles2.smallCol}>{appointment.isPatientConfirmed ? 'YES' : 'NO'}</div>
+            <div className={styles2.smallCol}>
+              {appointment.isPatientConfirmed ? 'YES' : 'NO'}
+            </div>
           </ListItem>
         );
       })}

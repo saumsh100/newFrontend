@@ -36,7 +36,10 @@ const isValidTime = (val) => {
   }
 };
 
-const options = [{ value: 'days', label: 'Days' }, { value: 'weeks', label: 'Weeks' }];
+const options = [
+  { value: 'days', label: 'Days' },
+  { value: 'weeks', label: 'Weeks' },
+];
 
 class AdvancedSettingsForm extends Component {
   render() {

@@ -10,19 +10,20 @@ const base = (path = '') => `/intelligence${path}`;
 
 const Routes = {
   overview: LazyRoute(() => import('../../components/Intelligence/Overview')),
-  business: LazyRoute(() => import('../../components/Intelligence/Business'))
-}
+  business: LazyRoute(() => import('../../components/Intelligence/Business')),
+};
 
-const Patients = () =>
+const Patients = () => (
   <Container>
     <DocumentTitle title="CareCru | Intelligence">
       <Switch>
         <Redirect exact from={base()} to={base('/overview')} />
         <Route path={base('/overview')} component={Routes.overview} />
         <Route path={base('/business')} component={Routes.business} />
-        {/*<Route path={base('/social')} component={Social} />*/}
+        {/* <Route path={base('/social')} component={Social} /> */}
       </Switch>
     </DocumentTitle>
-  </Container>;
+  </Container>
+);
 
 export default Patients;

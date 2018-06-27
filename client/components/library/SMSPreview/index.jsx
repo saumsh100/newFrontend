@@ -5,10 +5,7 @@ import Icon from '../Icon';
 import styles from './styles.scss';
 
 export default function SMSPreview(props) {
-  const {
-    from,
-    message,
-  } = props;
+  const { from, message } = props;
 
   return (
     <div className={styles.smsWrapper}>
@@ -17,27 +14,18 @@ export default function SMSPreview(props) {
           <div className={styles.smsIcon}>
             <Icon icon="comment" type="solid" />
           </div>
-          <div className={styles.title}>
-            MESSAGES
-          </div>
+          <div className={styles.title}>MESSAGES</div>
         </div>
         <div className={styles.rightSection}>
-          <div className={styles.titleText}>
-            now
-          </div>
+          <div className={styles.titleText}>now</div>
         </div>
       </div>
       <div className={styles.body}>
-        <div className={styles.from}>
-          {from}
-        </div>
-        <div className={styles.message}>
-          {message}
-        </div>
+        <div className={styles.from}>{from}</div>
+        <div className={styles.message}>{message}</div>
       </div>
     </div>
   );
-
 }
 
 SMSPreview.propTypes = {

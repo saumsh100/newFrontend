@@ -7,11 +7,16 @@ import { formatedDate } from './Shared/helpers';
 import styles from './styles.scss';
 
 const subComponent = enterprise => (
-  <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
+  <AccountsSubComponent
+    enterpriseId={enterprise.original.id}
+    enterprise={enterprise}
+  />
 );
 
 export default function GroupTable(props) {
-  const { data, loaded, expanded, handleRowClick } = props;
+  const {
+    data, loaded, expanded, handleRowClick,
+  } = props;
 
   const columns = [
     {
@@ -79,14 +84,12 @@ GroupTable.propTypes = {
   original: PropTypes.shape({
     id: PropTypes.string,
   }),
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      createdAt: PropTypes.string,
-      deletedAt: PropTypes.string,
-      id: PropTypes.string,
-      name: PropTypes.string,
-      plan: PropTypes.string,
-      updatedAt: PropTypes.string,
-    })
-  ),
+  data: PropTypes.arrayOf(PropTypes.shape({
+    createdAt: PropTypes.string,
+    deletedAt: PropTypes.string,
+    id: PropTypes.string,
+    name: PropTypes.string,
+    plan: PropTypes.string,
+    updatedAt: PropTypes.string,
+  })),
 };

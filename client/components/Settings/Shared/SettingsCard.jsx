@@ -22,21 +22,13 @@ export default function SettingsCard(props) {
       <SHeader className={headerClasses}>
         <div className={styles.mainHeader}>
           <Header title={title} />
-          {rightActions ?
-            <div className={styles.pullRight}>
-              {rightActions}
-            </div>
-          : null}
+          {rightActions ? (
+            <div className={styles.pullRight}>{rightActions}</div>
+          ) : null}
         </div>
-        {subHeader ?
-          <div className={styles.subHeader}>
-            {subHeader}
-          </div>
-        : null}
+        {subHeader ? <div className={styles.subHeader}>{subHeader}</div> : null}
       </SHeader>
-      <SBody className={bodyClass}>
-        {children}
-      </SBody>
+      <SBody className={bodyClass}>{children}</SBody>
     </SContainer>
   );
 }

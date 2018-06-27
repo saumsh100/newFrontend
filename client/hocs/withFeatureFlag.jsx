@@ -31,6 +31,9 @@ export default function withFeatureFlag(BackupComponent, featureKey) {
       };
     }
 
-    return connect(mapStateToProps, null)(FeatureFlaggedComponent);
+    return connect(
+      mapStateToProps,
+      null,
+    )(FeatureFlaggedComponent);
   };
 }

@@ -18,9 +18,15 @@ const toInputProps = {
 
 class ToHeader extends Component {
   renderMobile() {
-    const { selectedPatient, onPatientInfoClick, onPatientListClick } = this.props;
+    const {
+      selectedPatient,
+      onPatientInfoClick,
+      onPatientListClick,
+    } = this.props;
 
-    const wrapperStyle = !isHub() ? styles.wrapper : classnames(styles.wrapper, styles.hubWrapper);
+    const wrapperStyle = !isHub()
+      ? styles.wrapper
+      : classnames(styles.wrapper, styles.hubWrapper);
 
     return (
       <div className={wrapperStyle}>
@@ -46,7 +52,11 @@ class ToHeader extends Component {
                 <span>{selectedPatient.firstName}</span>
                 <span>{selectedPatient.lastName}</span>
               </div>
-              <Icon className={styles.infoArrow} icon="angle-right" type="light" />
+              <Icon
+                className={styles.infoArrow}
+                icon="angle-right"
+                type="light"
+              />
             </Button>
           </div>
         ) : (

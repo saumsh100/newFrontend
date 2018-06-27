@@ -31,4 +31,3 @@ export default class TestSelect extends Component {
     );
   }
 }
-

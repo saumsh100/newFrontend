@@ -1,11 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  SContainer,
-  SHeader,
-  SBody,
-} from '../../../library';
+import { SContainer, SHeader, SBody } from '../../../library';
 import AppointmentReminders from './AppointmentReminders';
 import ReviewsRequests from './ReviewsRequests';
 import PatientRecalls from './PatientRecalls';
@@ -20,18 +16,16 @@ const toDoListNames = [
   'Waitlist Queue',
 ];
 
-const defaultHeaderTemplate = () => {
-  return (
-    <SHeader className={styles.header}>
-      <div className={styles.avatar}>{''}</div>
-      <div className={styles.smallCol}>Task</div>
-      <div className={styles.smallCol}>Scheduled</div>
-      <div className={styles.col}>Name</div>
-      <div className={styles.col}>Appointment</div>
-      <div className={styles.smallCol}>Confirmed</div>
-    </SHeader>
-  );
-};
+const defaultHeaderTemplate = () => (
+  <SHeader className={styles.header}>
+    <div className={styles.avatar} />
+    <div className={styles.smallCol}>Task</div>
+    <div className={styles.smallCol}>Scheduled</div>
+    <div className={styles.col}>Name</div>
+    <div className={styles.col}>Appointment</div>
+    <div className={styles.smallCol}>Confirmed</div>
+  </SHeader>
+);
 
 class Tasks extends Component {
   constructor(props) {
@@ -40,19 +34,13 @@ class Tasks extends Component {
 
   render() {
     const {
-      toDoIndex,
-      loadingToDos,
-      reminders,
-      reviews,
-      recalls,
+      toDoIndex, loadingToDos, reminders, reviews, recalls,
     } = this.props;
 
     let count = 0;
     let header = <SHeader className={styles.header} />;
     let body = loadingToDos ? null : (
-      <div className={styles.noReminders}>
-        No {toDoListNames[toDoIndex]}
-      </div>
+      <div className={styles.noReminders}>No {toDoListNames[toDoIndex]}</div>
     );
 
     if (toDoIndex === 0 && reminders && reminders.size && !loadingToDos) {
@@ -64,7 +52,7 @@ class Tasks extends Component {
       body = <PatientRecalls recalls={recalls.toJS()} />;
       header = (
         <SHeader className={styles.header}>
-          <div className={styles.avatar}>{''}</div>
+          <div className={styles.avatar} />
           <div className={styles.mediumCol}>Type</div>
           <div className={styles.smallCol}>Task</div>
           <div className={styles.smallCol}>Scheduled</div>
@@ -77,7 +65,7 @@ class Tasks extends Component {
       count = reviews.size;
       header = (
         <SHeader className={styles.header}>
-          <div className={styles.avatar}>{''}</div>
+          <div className={styles.avatar} />
           <div className={styles.smallCol}>Task</div>
           <div className={styles.smallCol}>Scheduled</div>
           <div className={styles.col}>Name</div>
@@ -91,12 +79,11 @@ class Tasks extends Component {
     return (
       <SContainer className={styles.container}>
         <SHeader className={styles.countHeader}>
-          <span className={styles.countHeader_count}>{count}&nbsp;</span> {toDoListNames[toDoIndex]}
+          <span className={styles.countHeader_count}>{count}&nbsp;</span>{' '}
+          {toDoListNames[toDoIndex]}
         </SHeader>
         {header}
-        <SBody className={styles.body}>
-          {body}
-        </SBody>
+        <SBody className={styles.body}>{body}</SBody>
       </SContainer>
     );
   }

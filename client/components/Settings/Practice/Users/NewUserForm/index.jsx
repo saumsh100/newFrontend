@@ -11,7 +11,9 @@ import {
 
 class NewUserForm extends Component {
   render() {
-    const { sendNewUser, formName, mainStyle, formStyle } = this.props;
+    const {
+      sendNewUser, formName, mainStyle, formStyle,
+    } = this.props;
     return (
       <Form
         className={formStyle}
@@ -47,7 +49,11 @@ class NewUserForm extends Component {
           name="role"
           label="Role"
           component="DropdownSelect"
-          options={[{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }]}
+          options={[
+            { value: 'OWNER' },
+            { value: 'ADMIN' },
+            { value: 'MANAGER' },
+          ]}
           data-test-id="role"
         />
         <Field

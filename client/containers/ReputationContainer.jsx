@@ -22,5 +22,4 @@ ReputationContainer.propTypes = {
   openForm: PropTypes.func,
 };
 
-
 export default ReputationContainer;

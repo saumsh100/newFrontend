@@ -43,13 +43,9 @@ export default function withTimer(BasicComponent) {
     }
 
     render() {
-      const {
-        totalSeconds,
-      } = this.props;
+      const { totalSeconds } = this.props;
 
-      const {
-        _secondsLeft,
-      } = this.state;
+      const { _secondsLeft } = this.state;
 
       return (
         <BasicComponent

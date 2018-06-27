@@ -25,16 +25,10 @@ class FilterTimeline extends Component {
           <Icon icon="filter" className={styles.filterIcon} />
           Filter Timeline
           <div className={styles.headerOptions}>
-            <div
-              className={styles.selectText}
-              onClick={selectAllFilters}
-            >
+            <div className={styles.selectText} onClick={selectAllFilters}>
               Select All
             </div>
-            <div
-              className={styles.clearText}
-              onClick={clearFilters}
-            >
+            <div className={styles.clearText} onClick={clearFilters}>
               Clear All
             </div>
           </div>

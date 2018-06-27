@@ -88,7 +88,11 @@ class CallsBody extends Component {
 
     return (
       <div className={styles.callsContainer} id="callsContainer">
-        <Card runAnimation loaded={wasStatsFetched} className={styles.cardGraph}>
+        <Card
+          runAnimation
+          loaded={wasStatsFetched}
+          className={styles.cardGraph}
+        >
           <div className={styles.headerGraph}>
             <div className={styles.headerGraph_title}>Calls</div>
             <div>
@@ -104,7 +108,11 @@ class CallsBody extends Component {
             </div>
           </div>
           {wasStatsFetched && (
-            <CallsGraph callGraphStats={callGraphStats} startDate={startDate} endDate={endDate} />
+            <CallsGraph
+              callGraphStats={callGraphStats}
+              startDate={startDate}
+              endDate={endDate}
+            />
           )}
         </Card>
         <Card
@@ -137,7 +145,10 @@ class CallsBody extends Component {
               custom
             >
               {this.state.selectedCall && (
-                <CallInfo call={this.state.selectedCall} handleCallUpdate={handleCallUpdate} />
+                <CallInfo
+                  call={this.state.selectedCall}
+                  handleCallUpdate={handleCallUpdate}
+                />
               )}
             </DialogBox>
           )}

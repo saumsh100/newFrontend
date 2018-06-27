@@ -35,7 +35,10 @@ export default function StatCards(props) {
 
   const patientsUnConfirmed = {
     count: unConfirmedPatients.size,
-    title: unConfirmedPatients.size === 1 ? 'Patient Unconfirmed' : 'Patients Unconfirmed',
+    title:
+      unConfirmedPatients.size === 1
+        ? 'Patient Unconfirmed'
+        : 'Patients Unconfirmed',
     src: '/images/icons/Unconfirmed-Patients.png',
     size: 6,
     color: 'grey',

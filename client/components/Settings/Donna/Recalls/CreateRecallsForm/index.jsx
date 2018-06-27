@@ -10,7 +10,10 @@ const primaryTypesOptions = [
   { label: 'Email & SMS', value: 'email_sms' },
 ];
 
-const intervalOptions = [{ label: 'Months', value: 'months' }, { label: 'Weeks', value: 'weeks' }];
+const intervalOptions = [
+  { label: 'Months', value: 'months' },
+  { label: 'Weeks', value: 'weeks' },
+];
 
 const typeOptions = [
   { label: 'Before Due Date', value: 'before' },

@@ -6,7 +6,9 @@ import styles from '../styles.scss';
 const options = [{ value: 'ENTERPRISE' }, { value: 'GROWTH' }];
 
 export default function AddEnterprise(props) {
-  const { onSubmit, index, initialValues, formName } = props;
+  const {
+    onSubmit, index, initialValues, formName,
+  } = props;
 
   return (
     <Form
@@ -19,7 +21,13 @@ export default function AddEnterprise(props) {
       destroyOnUnmount={false}
     >
       <div className={styles.dropDownEnterprise}>
-        <Field required name="plan" label="Plan" component="DropdownSelect" options={options} />
+        <Field
+          required
+          name="plan"
+          label="Plan"
+          component="DropdownSelect"
+          options={options}
+        />
       </div>
       <Field required name="name" label="Name" />
     </Form>

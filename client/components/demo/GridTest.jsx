@@ -15,27 +15,19 @@ import {
 function GridTest({ isHovered }) {
   return (
     <div>
-      { isHovered ? 'ALIVE' : 'DEAD' }
+      {isHovered ? 'ALIVE' : 'DEAD'}
       <Grid>
         <Row>
           <Col xs>
-            <Card>
-              Patients List
-            </Card>
+            <Card>Patients List</Card>
           </Col>
           <Col xs>
             <Row>
-              <Col xs>
-                Picture
-              </Col>
+              <Col xs>Picture</Col>
             </Row>
             <Row>
-              <Col xs>
-                Event Log
-              </Col>
-              <Col xs>
-                Settings
-              </Col>
+              <Col xs>Event Log</Col>
+              <Col xs>Settings</Col>
             </Row>
           </Col>
         </Row>

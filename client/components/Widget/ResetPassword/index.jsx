@@ -11,10 +11,7 @@ import ResetPasswordForm from './ResetPasswordForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (
-  <Button
-    type="submit"
-    className={styles.customSubmitButton}
-  >
+  <Button type="submit" className={styles.customSubmitButton}>
     Reset Password
   </Button>
 );
@@ -27,7 +24,8 @@ class ResetPassword extends Component {
   }
 
   handleResetPassword({ email }) {
-    return this.props.resetPatientUserPassword(email)
+    return this.props
+      .resetPatientUserPassword(email)
       .then(() => {
         this.props.history.push('./reset-success');
       })
@@ -39,20 +37,17 @@ class ResetPassword extends Component {
   render() {
     return (
       <div className={styles.loginWrapper}>
-        <div className={styles.header}>
-          Reset Password
-        </div>
+        <div className={styles.header}>Reset Password</div>
         <div className={styles.message}>
-          Enter your email below and if you are a user, we will send you a link to reset your password.
+          Enter your email below and if you are a user, we will send you a link
+          to reset your password.
         </div>
         <ResetPasswordForm
           onSubmit={this.handleResetPassword}
           submitButton={customSubmitButton}
         />
         <div className={styles.linkWrapper}>
-          <Link to="./login">
-            I remember my password
-          </Link>
+          <Link to="./login">I remember my password</Link>
         </div>
       </div>
     );
@@ -64,9 +59,15 @@ ResetPassword.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    resetPatientUserPassword
-  }, dispatch);
+  return bindActionCreators(
+    {
+      resetPatientUserPassword,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(ResetPassword));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(ResetPassword));

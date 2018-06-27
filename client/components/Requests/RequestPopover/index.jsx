@@ -6,7 +6,16 @@ import classNames from 'classnames';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Request from '../../../entities/models/Request';
-import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
+import {
+  Card,
+  Avatar,
+  Icon,
+  SContainer,
+  SHeader,
+  SBody,
+  SFooter,
+  Button,
+} from '../../library';
 import { FormatPhoneNumber } from '../../library/util/Formatters';
 import styles from './styles.scss';
 
@@ -43,7 +52,9 @@ renderMobileHeader.propTypes = {
 };
 
 const renderMobileSubHeader = ({ patient }) => {
-  const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
+  const age = patient.birthDate
+    ? `, ${moment().diff(patient.birthDate, 'years')}`
+    : '';
   return (
     <div className={styles.subHeaderMobile}>
       <Avatar user={patient} size="xs" />
@@ -63,7 +74,13 @@ const renderDesktopFooter = ({ acceptRequest, rejectRequest }) => (
     <Button border="blue" dense compact onClick={rejectRequest}>
       Reject
     </Button>
-    <Button color="blue" dense compact className={styles.editButton} onClick={acceptRequest}>
+    <Button
+      color="blue"
+      dense
+      compact
+      className={styles.editButton}
+      onClick={acceptRequest}
+    >
       Accept
     </Button>
   </SFooter>
@@ -86,13 +103,23 @@ const renderMobileFooter = ({
     })}
   >
     {displayActions && (
-      <Button className={styles.actionOverlayButtonMobile} onClick={acceptRequest}>
-        <Icon icon="check" size={1.5} className={styles.actionOverlayButtonIconMobile} />
+      <Button
+        className={styles.actionOverlayButtonMobile}
+        onClick={acceptRequest}
+      >
+        <Icon
+          icon="check"
+          size={1.5}
+          className={styles.actionOverlayButtonIconMobile}
+        />
         <span>Accept</span>
       </Button>
     )}
     {displayActions && (
-      <Button className={styles.actionOverlayButtonMobile} onClick={rejectRequest}>
+      <Button
+        className={styles.actionOverlayButtonMobile}
+        onClick={rejectRequest}
+      >
         <Icon
           icon="times"
           style={{ padding: '7px 9px' }}
@@ -158,7 +185,10 @@ export default class RequestPopover extends Component {
     const requestedAt = moment(request.createdAt).format('MMM D, hh:mm A');
     return (
       <Card className={isMobile ? styles.cardMobile : styles.card} noBorder>
-        {!isHub() && (isMobile ? renderMobileHeader(this.props) : renderDesktopHeader(this.props))}
+        {!isHub() &&
+          (isMobile
+            ? renderMobileHeader(this.props)
+            : renderDesktopHeader(this.props))}
         {isMobile && renderMobileSubHeader(this.props)}
         <SContainer
           className={classNames({
@@ -188,7 +218,9 @@ export default class RequestPopover extends Component {
                 <div className={styles.subHeader}>Patient Info</div>
 
                 <div className={styles.data}>
-                  {patient.phoneNumber && <Icon icon="phone" size={0.9} type="solid" />}
+                  {patient.phoneNumber && (
+                    <Icon icon="phone" size={0.9} type="solid" />
+                  )}
                   <div className={styles.data_text}>
                     {patient.phoneNumber && patient.phoneNumber[0] === '+'
                       ? FormatPhoneNumber(patient.phoneNumber)
@@ -197,11 +229,15 @@ export default class RequestPopover extends Component {
                 </div>
 
                 <div className={styles.data}>
-                  {patient.email ? <Icon icon="envelope" size={0.9} type="solid" /> : null}
+                  {patient.email ? (
+                    <Icon icon="envelope" size={0.9} type="solid" />
+                  ) : null}
                   <div className={styles.data_text}>{patient.email}</div>
                 </div>
                 <div className={styles.multilineData}>
-                  {insuranceCarrier && <Icon icon="medkit" size={0.9} type="solid" />}
+                  {insuranceCarrier && (
+                    <Icon icon="medkit" size={0.9} type="solid" />
+                  )}
                   <div className={styles.data_text}>
                     {insuranceCarrier || 'n/a'}
                     {insuranceMemberId && (
@@ -233,11 +269,15 @@ export default class RequestPopover extends Component {
                 <div className={styles.requestedAt_diffUserContainer}>
                   <span className={styles.requestedAt_on}>Requested by:</span>
                   <span className={styles.requestedAt_byDiffUser}>
-                    {requestingUser.get('firstName')} {requestingUser.get('lastName')}
+                    {requestingUser.get('firstName')}{' '}
+                    {requestingUser.get('lastName')}
                   </span>
                 </div>
               )}
-              <span className={styles.requestedAt_on}> Requested on: {requestedAt} </span>
+              <span className={styles.requestedAt_on}>
+                {' '}
+                Requested on: {requestedAt}{' '}
+              </span>
             </div>
           </SBody>
         </SContainer>

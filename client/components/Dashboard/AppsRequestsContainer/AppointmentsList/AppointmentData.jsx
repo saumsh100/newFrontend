@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 import styles from '../styles.scss';
 
 export default function AppointmentData(props) {
-  const {
-    appointment,
-  } = props;
+  const { appointment } = props;
 
   return (
     <div className={styles.appData}>

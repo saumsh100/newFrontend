@@ -30,7 +30,7 @@ export default function withHoverable(BasicComponent) {
 
     handleMouseLeave(e) {
       if (this.state.isHovered) {
-        this.setState({ isHovered: false});
+        this.setState({ isHovered: false });
       }
     }
 
@@ -41,10 +41,7 @@ export default function withHoverable(BasicComponent) {
           onMouseOver={this.handleMouseOver}
           onMouseLeave={this.handleMouseLeave}
         >
-          <BasicComponent
-            {...this.props}
-            isHovered={isHovered}
-          />
+          <BasicComponent {...this.props} isHovered={isHovered} />
         </div>
       );
     }

@@ -17,7 +17,7 @@ const generateSVGPoints = (width, height, values) => {
   for (i = 0; i < len; i++) {
     const yValue = values[i];
     const yRatio = (yValue - yMin) / valuesHeight;
-    const y = height - (yRatio * height);
+    const y = height - yRatio * height;
     const x = increment * i;
     points.push({ x, y });
   }
@@ -39,12 +39,7 @@ const convertPointsToPathDescription = (points) => {
 
 export default function TrendLine(props) {
   const {
-    className,
-    color,
-    strokeWidth,
-    values,
-    width,
-    height,
+    className, color, strokeWidth, values, width, height,
   } = props;
   if (values.length < 1) {
     return null;

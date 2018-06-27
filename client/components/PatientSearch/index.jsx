@@ -6,10 +6,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
-import {
-  Avatar,
-  AutoCompleteForm,
-} from '../library';
+import { Avatar, AutoCompleteForm } from '../library';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { StyleExtender } from '../Utils/Themer';
 import styles from './styles.scss';
@@ -24,12 +21,17 @@ function Suggestion(patient) {
       <Avatar user={patient} size="xs" />
       <div className={styles.suggestionContainer_details}>
         <div className={styles.suggestionContainer_fullName}>
-          {`${patient.firstName} ${patient.lastName}${patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''}`}
+          {`${patient.firstName} ${patient.lastName}${
+            patient.birthDate
+              ? `, ${moment().diff(patient.birthDate, 'years')}`
+              : ''
+          }`}
         </div>
         <div className={styles.suggestionContainer_date}>
-          Last Appointment: {patient.lastApptDate ?
-            moment(patient.lastApptDate).format('MMM D YYYY') :
-            'n/a'}
+          Last Appointment:{' '}
+          {patient.lastApptDate
+            ? moment(patient.lastApptDate).format('MMM D YYYY')
+            : 'n/a'}
         </div>
       </div>
     </div>
@@ -53,7 +55,11 @@ class PatientSearch extends Component {
   searchPatients(value) {
     // The reason we use fetchEntities is to populate the store with joined data
     // like chats and textMessages while we search
-    return this.props.fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+    return this.props
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
       .then(({ patients }) => {
         // need to merge in chat information
         const suggestions = toArray(patients).map((patient) => {
@@ -74,16 +80,9 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const {
-      inputProps,
-      theme,
-      focusInputOnMount,
-    } = this.props;
+    const { inputProps, theme, focusInputOnMount } = this.props;
 
-    const {
-      suggestions,
-      value,
-    } = this.state;
+    const { suggestions, value } = this.state;
 
     const finalInputProps = Object.assign({}, inputProps, {
       value: value || '',
@@ -116,9 +115,15 @@ PatientSearch.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+    },
+    dispatch,
+  );
 }
 
-export default connect(null, mapDispatchToProps)(PatientSearch);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(PatientSearch);

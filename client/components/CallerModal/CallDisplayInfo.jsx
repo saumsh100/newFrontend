@@ -10,7 +10,9 @@ export default function CallDisplayInfo({ call }) {
       <div className={styles.callInfo_content}>
         <div className={styles.callInfo_body}>
           <div className={styles.callInfo_desc}>Number: </div>
-          <div className={styles.callInfo_data}>{formatPhoneNumber(call.callerNum)}</div>
+          <div className={styles.callInfo_data}>
+            {formatPhoneNumber(call.callerNum)}
+          </div>
         </div>
         <div className={styles.callInfo_body}>
           <div className={styles.callInfo_desc}>City: </div>

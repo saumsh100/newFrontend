@@ -5,11 +5,7 @@ import { Checkbox } from '../../../library';
 import styles from '../styles.scss';
 
 export default function SelectAllPatients(props) {
-  const {
-    patientIds,
-    selectAllPatients,
-    maxPatients,
-  } = props;
+  const { patientIds, selectAllPatients, maxPatients } = props;
 
   const theme = {
     cbx: styles.cbxStyle,

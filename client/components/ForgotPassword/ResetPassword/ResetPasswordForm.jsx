@@ -1,14 +1,14 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../../library';
-import { passwordsValidate, passwordStrength } from '../../library/Form/validate';
+import {
+  passwordsValidate,
+  passwordStrength,
+} from '../../library/Form/validate';
 
 export default function ResetPasswordForm(props) {
   return (
-    <Form
-      form="login"
-      {...props}
-    >
+    <Form form="login" {...props}>
       <Field
         required
         type="password"

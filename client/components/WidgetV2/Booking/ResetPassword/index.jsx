@@ -33,10 +33,14 @@ function ResetPassword(props) {
         <div className={styles.content}>
           <h3 className={styles.title}>Reset</h3>
           <p className={styles.subtitle}>
-            Enter your email below and if you are a user, we will send you a link to reset your
-            password.
+            Enter your email below and if you are a user, we will send you a
+            link to reset your password.
           </p>
-          <Form form="patientResetPassword" onSubmit={handleResetPassword} ignoreSaveButton>
+          <Form
+            form="patientResetPassword"
+            onSubmit={handleResetPassword}
+            ignoreSaveButton
+          >
             <Field
               type="email"
               name="email"
@@ -69,11 +73,14 @@ function mapDispatchToProps(dispatch) {
     {
       resetPatientUserPassword,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(ResetPassword));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(ResetPassword));
 
 ResetPassword.propTypes = {
   resetPatientUserPassword: PropTypes.func,

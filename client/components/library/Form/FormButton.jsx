@@ -5,18 +5,10 @@ import omit from 'lodash/omit';
 import Button from '../Button';
 
 export default function FormButton(props) {
-  const {
-    pristine,
-  } = props;
+  const { pristine } = props;
 
   const buttonProps = omit(props, ['pristine']);
-  return (
-    <Button
-      type="submit"
-      disabled={pristine}
-      {...buttonProps}
-    />
-  );
+  return <Button type="submit" disabled={pristine} {...buttonProps} />;
 }
 
 FormButton.propTypes = {

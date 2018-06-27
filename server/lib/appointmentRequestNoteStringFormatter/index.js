@@ -52,8 +52,5 @@ export function appointmentRequestNoteStringFormatter(request) {
   const requestedPatientNote = (patientUser.id === requestingPatientUser.id) ?
     insuranceNote + '\r\n\r\n' + sameRequestedPatientNote : '\r\n' + differentRequestedPatientNote + insuranceNote;
 
-  const formattedNote = generalRequestNote + requestedPatientNote;
-
-  console.log(formattedNote);
-  return formattedNote;
+  return generalRequestNote + requestedPatientNote;
 }

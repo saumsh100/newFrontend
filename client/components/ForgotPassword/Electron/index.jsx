@@ -36,16 +36,24 @@ class ForgotPassword extends Component {
         <div className={styles.backDrop}>
           <Card className={styles.loginForm}>
             <div className={styles.logoContainer}>
-              <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
+              <img
+                className={styles.loginLogo}
+                src="/images/logo_black.png"
+                alt="CareCru Logo"
+              />
             </div>
             <h1 className={styles.formTitle}>FORGOT PASSWORD</h1>
             {this.state.submitted ? (
-              <EmailSuccess email={this.state.email} push={this.props.push} styles={styles} />
+              <EmailSuccess
+                email={this.state.email}
+                push={this.props.push}
+                styles={styles}
+              />
             ) : (
               <div className={styles.formWrapper}>
                 <div className={styles.text}>
-                  Enter your email below and if you are a user, we will send you a link to reset
-                  your password.
+                  Enter your email below and if you are a user, we will send you
+                  a link to reset your password.
                 </div>
 
                 <div>
@@ -86,10 +94,13 @@ function mapActionsToProps(dispatch) {
       resetPassword,
       push,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(ForgotPassword);

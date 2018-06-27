@@ -15,7 +15,9 @@ export default class ConfigurationItem extends Component {
     const { attributes } = configuration;
     const { name } = attributes;
     // Put together configuration object and call parent function
-    if (confirm(`Are you sure you want to change ${name} in ${account.name}?`)) {
+    if (
+      confirm(`Are you sure you want to change ${name} in ${account.name}?`)
+    ) {
       this.props.onUpdateConfiguration({ name, value });
     }
   }
@@ -26,21 +28,14 @@ export default class ConfigurationItem extends Component {
     const initialValues = { value: attributes.value };
     return (
       <div className={styles.configWrapper}>
-        <div className={styles.name}>
-          {attributes.name}
-        </div>
-        <div className={styles.description}>
-          {attributes.description}
-        </div>
+        <div className={styles.name}>{attributes.name}</div>
+        <div className={styles.description}>{attributes.description}</div>
         <Form
           initialValues={initialValues}
           onSubmit={this.handleValueChange}
           form={`account_configuration_${account.id}_${configuration.id}`}
         >
-          <Field
-            label="Value"
-            name="value"
-          />
+          <Field label="Value" name="value" />
         </Form>
       </div>
     );

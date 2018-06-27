@@ -2,10 +2,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  Icon,
-  ListItem,
-} from '../../library';
+import { Icon, ListItem } from '../../library';
 import ChatListItem from './ChatListItem';
 import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
 import { setNewChat } from '../../../reducers/chat';
@@ -62,13 +59,13 @@ class ChatListContainer extends Component {
   }
 
   renderChatList() {
-    return this.sortChatList().map(chat =>
+    return this.sortChatList().map(chat => (
       <ChatListItem
         key={`${chat.id}_listItem`}
         onChatClick={this.props.onChatClick}
         chat={chat}
       />
-    );
+    ));
   }
 
   renderNewChat() {
@@ -92,16 +89,12 @@ class ChatListContainer extends Component {
         selectedClass={listItemStyles.selectedChatItem}
         onClick={this.selectNewChat}
       >
-        <div className={listItemStyles.fullName}>
-          {title}
-        </div>
+        <div className={listItemStyles.fullName}>{title}</div>
         <div
           onClick={this.removeNewChat}
           className={listItemStyles.hoverSection}
         >
-          <Icon
-            icon="times"
-          />
+          <Icon icon="times" />
         </div>
       </ListItem>
     );
@@ -148,13 +141,19 @@ function mapStateToProps({ entities, chat }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setNewChat,
-    defaultSelectedChatId,
-    selectChat,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setNewChat,
+      defaultSelectedChatId,
+      selectChat,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(ChatListContainer);

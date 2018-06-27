@@ -21,11 +21,19 @@ class TimeOffList extends Component {
   }
 
   render() {
-    const { timeOffs, practitioner, onSelectTimeOff, deleteTimeOff, children } = this.props;
+    const {
+      timeOffs,
+      practitioner,
+      onSelectTimeOff,
+      deleteTimeOff,
+      children,
+    } = this.props;
 
     return (
       <List className={styles.timeOffList} data-test-id="timeOffList">
-        <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
+        <div className={styles.timeOffList_addTimeOffText}>
+          Add Time Off{children}
+        </div>
         {sortByFieldAsc(timeOffs, 'startDate')
           .toArray()
           .map(timeOff => (

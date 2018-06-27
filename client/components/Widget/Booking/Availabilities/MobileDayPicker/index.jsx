@@ -60,7 +60,9 @@ class MobileDayPicker extends Component {
       dayString = 'Tomorrow';
     }
 
-    const dateTarget = props => <div {...props}>{`${dayString}, ${mDate.format('MMM Do')}`}</div>;
+    const dateTarget = props => (
+      <div {...props}>{`${dayString}, ${mDate.format('MMM Do')}`}</div>
+    );
 
     return (
       <Grid className={styles.wrapper}>

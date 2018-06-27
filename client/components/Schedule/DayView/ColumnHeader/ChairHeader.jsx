@@ -4,16 +4,9 @@ import PropTypes from 'prop-types';
 import styles from './styles.scss';
 
 export default function ChairHeader(props) {
-  const {
-    scheduleView,
-    chair
-  } = props;
+  const { scheduleView, chair } = props;
 
-  return (
-    <div className={styles.chairContainer}>
-      {chair.name}
-    </div>
-  );
+  return <div className={styles.chairContainer}>{chair.name}</div>;
 }
 
 ChairHeader.propTypes = {

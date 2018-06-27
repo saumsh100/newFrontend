@@ -95,7 +95,9 @@ export default function AppointmentForm(props) {
                 renderValue={renderTimeValue}
                 formatValue={formatTimeField}
                 validateValue={validateTimeField}
-                onChange={(e, value) => handleStartTimeChange(formatTimeField(value))}
+                onChange={(e, value) =>
+                  handleStartTimeChange(formatTimeField(value))
+                }
                 theme={dropDownTheme}
               />
             </Col>
@@ -112,7 +114,9 @@ export default function AppointmentForm(props) {
                 renderValue={renderTimeValue}
                 formatValue={formatTimeField}
                 validateValue={validateTimeField}
-                onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
+                onChange={(e, value) =>
+                  handleEndTimeChange(formatTimeField(value))
+                }
                 theme={dropDownTheme}
               />
             </Col>
@@ -133,7 +137,9 @@ export default function AppointmentForm(props) {
               renderValue={renderTimeValue}
               formatValue={formatTimeField}
               validateValue={validateTimeField}
-              onChange={(e, value) => handleStartTimeChange(formatTimeField(value))}
+              onChange={(e, value) =>
+                handleStartTimeChange(formatTimeField(value))
+              }
               theme={dropDownTheme}
             />
           </Col>
@@ -151,7 +157,9 @@ export default function AppointmentForm(props) {
                 renderValue={renderTimeValue}
                 formatValue={formatTimeField}
                 validateValue={validateTimeField}
-                onChange={(e, value) => handleEndTimeChange(formatTimeField(value))}
+                onChange={(e, value) =>
+                  handleEndTimeChange(formatTimeField(value))
+                }
                 theme={dropDownTheme}
               />
             </Col>

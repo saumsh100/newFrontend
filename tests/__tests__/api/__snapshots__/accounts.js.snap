@@ -34,6 +34,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "sendUnconfirmedReviews": false,
         "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,
@@ -98,6 +99,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "sendUnconfirmedReviews": false,
         "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,
@@ -164,6 +166,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "sendUnconfirmedReviews": false,
         "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,
@@ -230,6 +233,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "sendUnconfirmedReviews": false,
         "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,
@@ -479,6 +483,33 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of statuses that will be used to determine if an Appointment is missed",
+        "name": "APPOINTMENT_MISSED_STATUSES_READ",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru marks it as isMissed=true",
+        "name": "APPOINTMENT_MISSED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru marks it as isMissed=false",
+        "name": "APPOINTMENT_UNMISSED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -526,6 +557,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "sendUnconfirmedReviews": false,
         "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,
@@ -809,6 +841,33 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of statuses that will be used to determine if an Appointment is missed",
+        "name": "APPOINTMENT_MISSED_STATUSES_READ",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru marks it as isMissed=true",
+        "name": "APPOINTMENT_MISSED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom status that will be set on an Appointment when CareCru marks it as isMissed=false",
+        "name": "APPOINTMENT_UNMISSED_STATUS_WRITE",
+        "value": "",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -874,6 +933,7 @@ Object {
         "recallStartTime": "17:00:00",
         "reviewsInterval": "15 minutes",
         "sendRequestEmail": true,
+        "sendUnconfirmedReviews": false,
         "suggestedChairId": null,
         "syncClientAdapter": null,
         "timeInterval": 30,

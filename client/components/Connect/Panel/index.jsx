@@ -15,7 +15,8 @@ class Panel extends Component {
   }
 
   startSync() {
-    this.props.startSync()
+    this.props
+      .startSync()
       .then(() => this.props.history.push('./progress'))
       .catch(err => console.error('Error starting sync', err));
   }
@@ -29,11 +30,7 @@ class Panel extends Component {
         <div className={styles.subHeader}>
           All systems are go captain! Click the button below to start the sync.
         </div>
-        <VButton
-          color="dark"
-          className={styles.btn}
-          onClick={this.startSync}
-        >
+        <VButton color="dark" className={styles.btn} onClick={this.startSync}>
           Start Sync
         </VButton>
       </div>
@@ -57,9 +54,15 @@ function mapStateToProps({ entities, auth, connect }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    startSync,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      startSync,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Panel));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Panel));

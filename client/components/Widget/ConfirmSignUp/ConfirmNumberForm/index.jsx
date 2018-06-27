@@ -9,11 +9,7 @@ const MAX_DIGITS = 4;
 
 export default function ConfirmNumberForm({ onSubmit }) {
   return (
-    <Form
-      form="confirmNumberForm"
-      onSubmit={onSubmit}
-      ignoreSaveButton
-    >
+    <Form form="confirmNumberForm" onSubmit={onSubmit} ignoreSaveButton>
       <Field
         required
         name="confirmCode"
@@ -21,10 +17,7 @@ export default function ConfirmNumberForm({ onSubmit }) {
         validate={[numDigitsValidate(MAX_DIGITS)]}
         normalize={maxDigits(MAX_DIGITS)}
       />
-      <Button
-        type="submit"
-        className={styles.signup__footer_btn}
-      >
+      <Button type="submit" className={styles.signup__footer_btn}>
         Confirm Signup
       </Button>
     </Form>

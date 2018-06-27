@@ -46,12 +46,15 @@ class RequestList extends Component {
     if (isHub()) {
       if (nextSelected && !selected) {
         this.props.setBackHandler(this.backHandler);
-        this.props.setTitle(
-          <p>
-            <Icon icon="calendar" type="regular" size={0.9} className={styles.calendarIcon} />
-            {nextSelected.getFormattedTime()}
-          </p>
-        );
+        this.props.setTitle(<p>
+          <Icon
+            icon="calendar"
+            type="regular"
+            size={0.9}
+            className={styles.calendarIcon}
+          />
+          {nextSelected.getFormattedTime()}
+                            </p>);
       }
     }
   }
@@ -102,18 +105,27 @@ class RequestList extends Component {
       routing: { location },
     } = this.props;
 
-    this.props.push({ ...location, search: stringify({ selectedRequest: id || undefined }) });
+    this.props.push({
+      ...location,
+      search: stringify({ selectedRequest: id || undefined }),
+    });
   }
 
   renderSelectedRequest(props) {
-    const { services, patientUsers, practitioners, selectedRequest } = props;
+    const {
+      services, patientUsers, practitioners, selectedRequest,
+    } = props;
 
     const patientUser = patientUsers.get(selectedRequest.get('patientUserId'));
-    const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
+    const fullName = patientUser
+      .get('firstName')
+      .concat(' ', patientUser.get('lastName'));
     const service = services.get(selectedRequest.get('serviceId'));
     const serviceName = service ? service.name : '';
     const practitionerId = selectedRequest.get('practitionerId');
-    const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
+    const practitioner = practitionerId
+      ? practitioners.get(practitionerId)
+      : null;
     const requestingUser = patientUsers.get(selectedRequest.get('requestingPatientUserId'));
     const data = {
       time: selectedRequest.getFormattedTime(),
@@ -141,7 +153,9 @@ class RequestList extends Component {
         patient={patientUser}
         request={selectedRequest}
         closePopover={this.backHandler}
-        acceptRequest={() => this.confirmAppointment(selectedRequest, patientUser)}
+        acceptRequest={() =>
+          this.confirmAppointment(selectedRequest, patientUser)
+        }
         rejectRequest={() => this.removeRequest(selectedRequest)}
         requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
         isMobile
@@ -150,12 +164,20 @@ class RequestList extends Component {
   }
 
   renderRequestList(props) {
-    const { sortedRequests, services, patientUsers, practitioners, popoverRight } = props;
+    const {
+      sortedRequests,
+      services,
+      patientUsers,
+      practitioners,
+      popoverRight,
+    } = props;
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
           const practitionerId = request.get('practitionerId');
-          const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
+          const practitioner = practitionerId
+            ? practitioners.get(practitionerId)
+            : null;
 
           const requestingUser = patientUsers.get(request.get('requestingPatientUserId'));
 
@@ -240,9 +262,12 @@ const mapActionsToProps = dispatch =>
       setBackHandler,
       setTitle,
     },
-    dispatch
+    dispatch,
   );
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(RequestList);

@@ -48,12 +48,8 @@ class Completed extends Component {
             alt="CareCru Logo"
           />
         </div>
-        <div className={styles.header}>
-          Congratulations!
-        </div>
-        <div className={styles.subHeader}>
-          CareCru is now connected.
-        </div>
+        <div className={styles.header}>Congratulations!</div>
+        <div className={styles.subHeader}>CareCru is now connected.</div>
         <div className={styles.subHeader}>
           Click {dashboardLink} to view your data in the dashboard.
         </div>
@@ -78,10 +74,16 @@ function mapStateToProps({ entities, auth, connect }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    startSync,
-    stopSync,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      startSync,
+      stopSync,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Completed));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Completed));

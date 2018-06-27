@@ -19,7 +19,8 @@ const maxPostalLength = maxLength(6);
  * @param primary
  * @param secondary
  */
-const setLabel = (country, primary, secondary) => (country === 'US' ? primary : secondary);
+const setLabel = (country, primary, secondary) =>
+  (country === 'US' ? primary : secondary);
 
 class AddressForm extends Component {
   constructor(props) {
@@ -60,12 +61,12 @@ class AddressForm extends Component {
     if (!value) {
       return;
     }
-    const regex = new RegExp(
-      /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
-    );
+    const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
 
     if (this.state.country === 'US') {
-      return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
+      return value && /^\d{5}(-\d{4})?$/.test(value)
+        ? undefined
+        : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
     }
@@ -132,7 +133,12 @@ class AddressForm extends Component {
               options={stateProv}
               data-test-id="state"
             />
-            <Field name="city" label="City" validate={[maxLength25]} data-test-id="city" />
+            <Field
+              name="city"
+              label="City"
+              validate={[maxLength25]}
+              data-test-id="city"
+            />
             <Field
               name="zipCode"
               label={this.state.zipPostal}

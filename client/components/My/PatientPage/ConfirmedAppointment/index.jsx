@@ -6,7 +6,11 @@ import { Icon, Well } from '../../../library/index';
 import ClassyDiv from '../../../library/util/ClassyDiv';
 import Section from '../Shared/Section';
 import styles from './styles.scss';
-import { accountShape, appointmentShape, reminderShape } from '../../../library/PropTypeShapes';
+import {
+  accountShape,
+  appointmentShape,
+  reminderShape,
+} from '../../../library/PropTypeShapes';
 
 const WellHeader = ClassyDiv(styles.wellHeader);
 const WellItem = ClassyDiv(styles.wellItem);
@@ -43,13 +47,16 @@ export default function ConfirmedAppointment({ params }) {
       <Section>
         <div className={styles.header}>Thank you!</div>
         <div className={styles.text}>
-          Your appointment has been {reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed'}.
+          Your appointment has been{' '}
+          {reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed'}.
         </div>
       </Section>
       <Section>
         <WellHeader>Appointment Information</WellHeader>
         <Well>
-          <WellItem>{moment.tz(startDate, timezone).format('dddd, MMMM Do YYYY')}</WellItem>
+          <WellItem>
+            {moment.tz(startDate, timezone).format('dddd, MMMM Do YYYY')}
+          </WellItem>
           <WellItem>{appointmentTime}</WellItem>
         </Well>
       </Section>

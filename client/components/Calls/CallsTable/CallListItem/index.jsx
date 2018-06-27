@@ -18,7 +18,9 @@ const formatDuration = (answered, duration) => {
   if (!answered) {
     return 'unanswered';
   }
-  return duration > 60 ? `${Math.round(duration / 60)}min ${duration % 60}sec` : `${duration}s`;
+  return duration > 60
+    ? `${Math.round(duration / 60)}min ${duration % 60}sec`
+    : `${duration}s`;
 };
 
 export default function CallListItem(props) {
@@ -62,16 +64,22 @@ export default function CallListItem(props) {
                 <span className={styles.callerName}>{callerName}</span>
               </div>
             </PatientPopover>
-            <div className={styles.callerNum}>{formatPhoneNumber(callerNum)}</div>
+            <div className={styles.callerNum}>
+              {formatPhoneNumber(callerNum)}
+            </div>
           </div>
         ) : (
           <div className={styles.callerInfo}>
             <div>{callerName || 'Unknown'}</div>
-            <div className={styles.callerNum}>{formatPhoneNumber(callerNum)}</div>
+            <div className={styles.callerNum}>
+              {formatPhoneNumber(callerNum)}
+            </div>
           </div>
         )}
       </div>
-      <div className={styles.col}>{moment(startTime).format('MMM DD, h:mma')}</div>
+      <div className={styles.col}>
+        {moment(startTime).format('MMM DD, h:mma')}
+      </div>
       <div className={styles.col}>{durationMissed}</div>
       <div className={styles.col}>{callerCity}</div>
       <div className={styles.col}>

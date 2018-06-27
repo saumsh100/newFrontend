@@ -1,5 +1,5 @@
 
-import React, { Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import styles from './styles.scss';
 import classNames from 'classnames';
 import IconButton from '../IconButton';
@@ -10,20 +10,14 @@ class CodeSnippet extends Component {
   }
 
   render() {
-    const {
-      codeSnippet,
-      hideClipBoard,
-      className,
-    } = this.props;
+    const { codeSnippet, hideClipBoard, className } = this.props;
 
-    const classes = classNames(
-      className
-    );
+    const classes = classNames(className);
 
-    let showClipBoard = !hideClipBoard ? (
+    const showClipBoard = !hideClipBoard ? (
       <IconButton
         icon="clipboard"
-        onClick={()=> {
+        onClick={() => {
           const emailLink = document.querySelector('#js-emaillink');
           const range = document.createRange();
           range.selectNode(emailLink);
@@ -33,8 +27,8 @@ class CodeSnippet extends Component {
             // Now that we've selected the anchor text, execute the copy command
             const successful = document.execCommand('copy');
             const msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copy command was ' + msg);
-          } catch(err) {
+            console.log(`Copy command was ${msg}`);
+          } catch (err) {
             console.log('Oops, unable to copy');
           }
 
@@ -45,9 +39,11 @@ class CodeSnippet extends Component {
       />
     ) : null;
     return (
-      <div className={classes} style={{display: 'flex'}}>
+      <div className={classes} style={{ display: 'flex' }}>
         <div className={styles.codeSnippet}>
-          <span id="js-emaillink" className={styles.codeSnippet_code}>{codeSnippet}</span>
+          <span id="js-emaillink" className={styles.codeSnippet_code}>
+            {codeSnippet}
+          </span>
         </div>
         {showClipBoard}
       </div>

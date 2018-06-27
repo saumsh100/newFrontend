@@ -1,14 +1,20 @@
 
 import React, { PropTypes } from 'react';
 import { Button, Form, Field } from '../library';
-import { maxLength, asyncEmailValidateUser, emailValidate, passwordsValidate, passwordStrength } from '../library/Form/validate';
-
+import {
+  maxLength,
+  asyncEmailValidateUser,
+  emailValidate,
+  passwordsValidate,
+  passwordStrength,
+} from '../library/Form/validate';
 
 export default function Invite({ onSubmit }) {
   return (
-    <Form form="login"
+    <Form
+      form="login"
       onSubmit={onSubmit}
-      ignoreSaveButton={true}
+      ignoreSaveButton
       asyncValidate={asyncEmailValidateUser}
       asyncBlurFields={['email']}
     >
@@ -45,10 +51,7 @@ export default function Invite({ onSubmit }) {
         validate={[passwordsValidate, passwordStrength]}
         label="Password Confirmation"
       />
-      <Button
-        type="submit"
-        style={{ width: '100%' }}
-      >
+      <Button type="submit" style={{ width: '100%' }}>
         Sign Up
       </Button>
     </Form>

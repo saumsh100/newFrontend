@@ -2,7 +2,10 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment-timezone';
 import { Form, Field } from '../../../../library';
-import { caProv, usStates } from '../../../../Settings/Practice/General/Address/selectConstants';
+import {
+  caProv,
+  usStates,
+} from '../../../../Settings/Practice/General/Address/selectConstants';
 import styles from '../styles.scss';
 
 const maxLength = max => value =>
@@ -11,7 +14,14 @@ const maxLength25 = maxLength(50);
 const maxPostalLength = maxLength(6);
 
 export default function ClinicDetails(props) {
-  const { onSubmit, index, initialValues, formName, country, setCountry } = props;
+  const {
+    onSubmit,
+    index,
+    initialValues,
+    formName,
+    country,
+    setCountry,
+  } = props;
 
   const options = moment.tz
     .names()
@@ -32,12 +42,12 @@ export default function ClinicDetails(props) {
   const zipPostal = country === 'US' ? 'Zip Code' : 'Postal Code';
 
   const zipPostalVal = (value) => {
-    const regex = new RegExp(
-      /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
-    );
+    const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
 
     if (country === 'US') {
-      return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
+      return value && /^\d{5}(-\d{4})?$/.test(value)
+        ? undefined
+        : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
     }
@@ -121,7 +131,7 @@ export default function ClinicDetails(props) {
             maxLength="6"
             required
           />
-        </div>*/}
+        </div> */}
         <div>
           <Field
             name="destinationPhoneNumber"

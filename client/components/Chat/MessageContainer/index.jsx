@@ -6,11 +6,24 @@ import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment';
-import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip, Button } from '../../library';
+import {
+  Avatar,
+  SContainer,
+  SBody,
+  SFooter,
+  Icon,
+  Tooltip,
+  Button,
+} from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
 import { setNewChat } from '../../../reducers/chat';
-import { sendChatMessage, createNewChat, selectChat, markAsUnread } from '../../../thunks/chat';
+import {
+  sendChatMessage,
+  createNewChat,
+  selectChat,
+  markAsUnread,
+} from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
 import styles from './styles.scss';
 
@@ -115,10 +128,17 @@ class MessageContainer extends Component {
     return this.props.createNewChat(request);
   }
 
-  isWithinTimePeriod(startDate, testingDate, maxIntervalValue = 1, maxIntervalUnit = 'hours') {
+  isWithinTimePeriod(
+    startDate,
+    testingDate,
+    maxIntervalValue = 1,
+    maxIntervalUnit = 'hours',
+  ) {
     const firstDate = moment(startDate);
     const secondDate = moment(testingDate);
-    return firstDate.diff(secondDate, maxIntervalUnit) > -Math.abs(maxIntervalValue);
+    return (
+      firstDate.diff(secondDate, maxIntervalUnit) > -Math.abs(maxIntervalValue)
+    );
   }
 
   groupChatMessages(textMessages) {
@@ -165,13 +185,23 @@ class MessageContainer extends Component {
       const isFromPatient = message.get('from') !== accountTwilio;
 
       const dotsIcon = (
-        <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
+        <Icon
+          icon="ellipsis-h"
+          size={2}
+          className={styles.dotsIcon}
+          id={`dots_${message.id}`}
+        />
       );
 
       const markUnreadText = (
         <Button
           className={styles.markUnreadButton}
-          onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
+          onClick={() =>
+            this.props.markAsUnread(
+              message.get('chatId'),
+              message.get('createdAt'),
+            )
+          }
         >
           Mark unread
         </Button>
@@ -188,12 +218,17 @@ class MessageContainer extends Component {
       });
 
       const avatar = (
-        <Avatar size="xs" className={avatarStyles} user={avatarUser} isPatient={isFromPatient} />
+        <Avatar
+          size="xs"
+          className={avatarStyles}
+          user={avatarUser}
+          isPatient={isFromPatient}
+        />
       );
 
       let optionsWrapper = null;
 
-      const messageOptions = isFromPatient ? (
+      const messageOptions = isFromPatient && (
         <div
           className={styles.dotsWrapper}
           ref={(reference) => {
@@ -209,16 +244,25 @@ class MessageContainer extends Component {
             <div className={styles.dotsIconWrapper}>{dotsIcon}</div>
           </Tooltip>
         </div>
-      ) : null;
+      );
 
       return (
-        <div key={message.id} data-test-id="item_chatMessage" className={styles.messageWrapper}>
+        <div
+          key={message.id}
+          data-test-id="item_chatMessage"
+          className={styles.messageWrapper}
+        >
           <div
             key={message.get('id')}
-            className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
+            className={
+              isFromPatient ? styles.patientMessage : styles.clinicMessage
+            }
           >
             {isFromPatient && avatar}
-            <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
+            <MessageBubble
+              textMessage={message}
+              isFromPatient={isFromPatient}
+            />
             {!isFromPatient && avatar}
             {messageOptions}
           </div>
@@ -231,11 +275,14 @@ class MessageContainer extends Component {
     const { textMessages } = this.props;
 
     return this.groupChatMessages(textMessages).map((group) => {
-      const time = <div className={styles.time}>{this.getMessageTime(group.time)}</div>;
+      const headingContent =
+        group.messages.length !== 0
+          ? this.getMessageTime(group.time)
+          : 'No messages';
 
       return (
         <div className={styles.groupWrapper} key={group.time}>
-          {time}
+          <div className={styles.time}>{headingContent}</div>
           <div>{this.renderMessageGroup(group.messages)}</div>
         </div>
       );
@@ -312,7 +359,11 @@ function mapStateToProps({ entities, auth, chat }) {
     selectedChat,
     newChat: chat.get('newChat'),
     userId: auth.getIn(['user', 'id']),
-    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+    activeAccount: entities.getIn([
+      'accounts',
+      'models',
+      auth.get('accountId'),
+    ]),
     selectedPatient: patients.get(selectedPatientId),
   };
 }
@@ -331,6 +382,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(MessageContainer);

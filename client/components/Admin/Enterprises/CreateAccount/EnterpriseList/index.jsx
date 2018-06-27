@@ -6,7 +6,9 @@ import Enterprise from '../../../../../entities/models/Enterprise';
 import styles from '../styles.scss';
 
 export default function EnterpriseList(props) {
-  const { enterprises, onSubmit, index, setCreate } = props;
+  const {
+    enterprises, onSubmit, index, setCreate,
+  } = props;
 
   const enterpriseOptions = enterprises
     .filter(enterprise => enterprise.plan === 'ENTERPRISE' && enterprise)

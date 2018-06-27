@@ -12,7 +12,10 @@ import SelectTimes from '../components/WidgetV2/Booking/Waitlist/SelectTimes';
 import Join from '../components/WidgetV2/Booking/Waitlist/Join';
 import Login from '../components/WidgetV2/Booking/Login';
 import RemoveDates from '../components/WidgetV2/Booking/Waitlist/RemoveDates';
-import { historyShape, locationShape } from '../components/library/PropTypeShapes/routerShapes';
+import {
+  historyShape,
+  locationShape,
+} from '../components/library/PropTypeShapes/routerShapes';
 import PatientUser from '../entities/models/PatientUser';
 import SignUp from '../components/WidgetV2/Booking/SignUp';
 import SignUpConfirm from '../components/WidgetV2/Booking/SignUp/Confirm';
@@ -43,10 +46,26 @@ const BookingRouter = ({ match, isAuth }) => {
         <Route exact path={b('/reason')} component={Reasons} />
         <Route exact path={b('/date-and-time')} component={DateTime} />
         <Route exact path={b('/waitlist/join')} component={Join} />
-        <Route exact path={b('/waitlist/select-dates')} component={SelectDates} />
-        <Route exact path={b('/waitlist/select-times')} component={SelectTimes} />
-        <Route exact path={b('/waitlist/remove-dates')} component={RemoveDates} />
-        <Route exact path={b('/waitlist/days-unavailable')} component={DaysUnavailable} />
+        <Route
+          exact
+          path={b('/waitlist/select-dates')}
+          component={SelectDates}
+        />
+        <Route
+          exact
+          path={b('/waitlist/select-times')}
+          component={SelectTimes}
+        />
+        <Route
+          exact
+          path={b('/waitlist/remove-dates')}
+          component={RemoveDates}
+        />
+        <Route
+          exact
+          path={b('/waitlist/days-unavailable')}
+          component={DaysUnavailable}
+        />
         <Route
           exact
           path={b('/patient-information')}
@@ -76,13 +95,19 @@ const BookingRouter = ({ match, isAuth }) => {
 const LoggedRoute = ({ isAuth, patientUser, children }) => {
   if (!isAuth && !patientUser) {
     return <Redirect to="../login" />;
-  } else if (isAuth && patientUser && !patientUser.get('isPhoneNumberConfirmed')) {
+  } else if (
+    isAuth &&
+    patientUser &&
+    !patientUser.get('isPhoneNumberConfirmed')
+  ) {
     return <Redirect to="../signup/confirm" />;
   }
   return children;
 };
 
-const EmbedRouter = ({ match, isAuth, patientUser, location }) => {
+const EmbedRouter = ({
+  match, isAuth, patientUser, location,
+}) => {
   const b = (path = '') => `${match.url}${path}`;
   const params = getParameterByName('params');
   return (
@@ -90,7 +115,9 @@ const EmbedRouter = ({ match, isAuth, patientUser, location }) => {
       <Redirect exact from={b()} to={b('/review')} />
       <Route
         path={b('/book')}
-        render={props => <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+        render={props => (
+          <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />
+        )}
       />
       <Route
         exact
@@ -98,7 +125,8 @@ const EmbedRouter = ({ match, isAuth, patientUser, location }) => {
         component={redirectAuth(
           Login,
           isAuth,
-          (location.state && location.state.nextRoute) || b('/book/practitioner')
+          (location.state && location.state.nextRoute) ||
+            b('/book/practitioner'),
         )}
       />
       <Route
@@ -117,7 +145,11 @@ const EmbedRouter = ({ match, isAuth, patientUser, location }) => {
         path={b('/reset-success')}
         render={redirectAuth(ResetSuccess, isAuth, b('/book/practitioner'))}
       />
-      <Route exact path={b('/patient/add')} render={props => <AddPatient {...props} />} />
+      <Route
+        exact
+        path={b('/patient/add')}
+        render={props => <AddPatient {...props} />}
+      />
       <Route
         exact
         path={b('/patient/edit/:patientId')}
@@ -131,12 +163,18 @@ const WidgetRouter = ({ history, isAuth, patientUser }) => (
   <Router history={history}>
     <div>
       {/* TODO: Booking widget will soon become part of app */}
-      {/* <Route exact path={base('/book')} component={PatientApp} />*/}
+      {/* <Route exact path={base('/book')} component={PatientApp} /> */}
       <Widget>
         <Switch>
           <Route
             path={base()}
-            render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+            render={props => (
+              <EmbedRouter
+                {...props}
+                isAuth={isAuth}
+                patientUser={patientUser}
+              />
+            )}
           />
         </Switch>
       </Widget>
@@ -183,7 +221,10 @@ EmbedRouter.propTypes = {
 };
 
 LoggedRoute.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
   isAuth: PropTypes.bool.isRequired,
   patientUser: PropTypes.instanceOf(PatientUser),
 };

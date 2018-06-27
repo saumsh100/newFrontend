@@ -45,7 +45,7 @@ export function deleteLogo(accountId) {
 }
 
 export function downloadConnector() {
-  return function (dispatch) {
+  return function () {
     return axios.get('/api/connector/download').then(response => response.data);
   };
 }
@@ -83,14 +83,12 @@ export function getEmailBlastCount(accountId) {
   };
 }
 
-export function updateReviewInterval(accountId, newInterval, alert) {
+export function updateReviewsSettings(accountId, values, alert) {
   return dispatch =>
-    dispatch(
-      updateEntityRequest({
-        key: 'accounts',
-        url: `/api/accounts/${accountId}`,
-        values: { reviewsInterval: newInterval },
-        alert,
-      })
-    );
+    dispatch(updateEntityRequest({
+      key: 'accounts',
+      url: `/api/accounts/${accountId}`,
+      values,
+      alert,
+    }));
 }

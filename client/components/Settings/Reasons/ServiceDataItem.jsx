@@ -10,7 +10,8 @@ const parseNum = value => value && parseInt(value, 10);
 const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength45 = maxLength(45);
-const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
+const notNegative = value =>
+  (value && value <= 0 ? 'Must be greater than 0' : undefined);
 const maxDuration = value =>
   (value && value > 180 ? 'Must be less than or equal to 180' : undefined);
 
@@ -68,7 +69,13 @@ class ServiceDataItem extends Component {
           data-test-id="serviceDataForm"
           alignSave="left"
         >
-          <Field required name="name" label="Name" validate={[maxLength45]} data-test-id="name" />
+          <Field
+            required
+            name="name"
+            label="Name"
+            validate={[maxLength45]}
+            data-test-id="name"
+          />
           <Field
             required
             name="duration"
@@ -99,13 +106,19 @@ class ServiceDataItem extends Component {
           >
             <div className={styles.servicesFormRow_widget_content}>
               <div className={styles.servicesFormRow_hiddenText}>
-                <span className={styles.servicesFormRow_hiddenText_text}> Set as hidden </span>
+                <span className={styles.servicesFormRow_hiddenText_text}>
+                  {' '}
+                  Set as hidden{' '}
+                </span>
                 <div className={styles.servicesFormRow_hiddenText_toggle}>
                   <Field name="isHidden" component="Toggle" />
                 </div>
               </div>
               <div className={styles.servicesFormRow_hiddenText}>
-                <span className={styles.servicesFormRow_hiddenText_text}> Set as default </span>
+                <span className={styles.servicesFormRow_hiddenText_text}>
+                  {' '}
+                  Set as default{' '}
+                </span>
                 <div className={styles.servicesFormRow_hiddenText_toggle}>
                   <Field name="isDefault" component="Toggle" />
                 </div>

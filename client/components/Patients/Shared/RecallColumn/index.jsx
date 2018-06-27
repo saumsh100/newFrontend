@@ -6,11 +6,7 @@ import classnames from 'classnames';
 import styles from '../../PatientTable/styles.scss';
 
 export default function RecallColumn(props) {
-  const {
-    patient,
-    className,
-    showTable,
-  } = props;
+  const { patient, className, showTable } = props;
 
   const recallDueDate = moment(patient.dueForRecallExamDate);
   if (!recallDueDate.isValid()) {
@@ -32,10 +28,8 @@ export default function RecallColumn(props) {
     <div className={styles.displayFlex}>
       <div className={`${styles.date} ${className}`}>
         {recallDueDate.format('MMM DD YYYY')}
-        </div>
-      <div className={dotStyle}>
-        &nbsp;
       </div>
+      <div className={dotStyle}>&nbsp;</div>
     </div>
   );
 }

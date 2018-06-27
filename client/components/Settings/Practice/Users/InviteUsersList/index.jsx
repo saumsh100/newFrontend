@@ -95,10 +95,13 @@ function mapDispatchToProps(dispatch) {
     {
       createEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(InviteUsersList);

@@ -18,7 +18,9 @@ const chairThatWasChanged = (values, formValues, initialValues) => {
 };
 
 export default function ChairsForm(props) {
-  const { chairs, handleSubmit, initialValues, formValues } = props;
+  const {
+    chairs, handleSubmit, initialValues, formValues,
+  } = props;
 
   if (!chairs) {
     return null;
@@ -28,7 +30,10 @@ export default function ChairsForm(props) {
     <Form
       form="chairsForm"
       onChange={(values) => {
-        handleSubmit(chairThatWasChanged(values, formValues, initialValues), values);
+        handleSubmit(
+          chairThatWasChanged(values, formValues, initialValues),
+          values,
+        );
       }}
       enableReinitialize
       keepDirtyOnReinitialize
@@ -42,10 +47,15 @@ export default function ChairsForm(props) {
         {chairs.map((chair, index) => (
           <div className={styles.chairContainer}>
             <div>
-              <div className={styles.chairContainer_name}>{chair.get('name')}</div>
+              <div className={styles.chairContainer_name}>
+                {chair.get('name')}
+              </div>
               <div className={styles.chairContainer_id}>{chair.get('id')}</div>
             </div>
-            <div className={styles.chairContainer_toggle} data-test-id={`chair_${index}`}>
+            <div
+              className={styles.chairContainer_toggle}
+              data-test-id={`chair_${index}`}
+            >
               <Field component="Toggle" name={chair.get('id')} />
             </div>
           </div>

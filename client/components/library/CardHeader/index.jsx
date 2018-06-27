@@ -4,14 +4,9 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import styles from './styles.scss';
 
-export default function
-  CardHeader(props) {
+export default function CardHeader(props) {
   const {
-    className,
-    children,
-    title,
-    count,
-    buttons,
+    className, children, title, count, buttons,
   } = props;
 
   const classes = classNames(className, styles.cardHeader);
@@ -28,9 +23,7 @@ export default function
   let titleComponent = null;
   if (title) {
     titleComponent = (
-      <div className={classes.title || styles.title}>
-        {title}
-      </div>
+      <div className={classes.title || styles.title}>{title}</div>
     );
   }
 
@@ -43,9 +36,7 @@ export default function
         {countComponent}
         {titleComponent}
       </div>
-      <div className={styles.displayFlex}>
-        {children}
-      </div>
+      <div className={styles.displayFlex}>{children}</div>
     </div>
   );
 }

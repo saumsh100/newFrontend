@@ -8,11 +8,7 @@ import FormSection from '../Form/FormSection';
 
 function FilterForm(props) {
   const {
-    filters,
-    handleSubmit,
-    formName,
-    flipped,
-    initialValues,
+    filters, handleSubmit, formName, flipped, initialValues,
   } = props;
 
   return (
@@ -23,28 +19,29 @@ function FilterForm(props) {
       initialValues={initialValues}
     >
       {filters.map((f, i) => {
-        const content =
-          f.items.map((item, index) => {
-            return <FilterField key={`filterField_${index}`} item={item} flipped={flipped} />;
-          });
+        const content = f.items.map((item, index) => (
+          <FilterField
+            key={`filterField_${index}`}
+            item={item}
+            flipped={flipped}
+          />
+          ));
 
         return (
           <FormSection name={f.title}>
             <div key={`filterForm_${i}`}>
               <div className={styles.filters__title}>
-                {f.titleIcon &&
-                <div
-                  style={{ backgroundColor: f.titleIcon.color }}
-                  className={styles.filters__title__icon}
-                >
-                  <span className={`fa fa-${f.titleIcon.icon}`} />
-                </div>
-                }
+                {f.titleIcon && (
+                  <div
+                    style={{ backgroundColor: f.titleIcon.color }}
+                    className={styles.filters__title__icon}
+                  >
+                    <span className={`fa fa-${f.titleIcon.icon}`} />
+                  </div>
+                )}
                 {f.title}
               </div>
-              <div className={styles.filters__checkFilter}>
-                {content}
-              </div>
+              <div className={styles.filters__checkFilter}>{content}</div>
             </div>
           </FormSection>
         );

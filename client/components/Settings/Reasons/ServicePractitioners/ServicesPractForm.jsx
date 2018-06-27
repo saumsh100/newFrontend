@@ -12,7 +12,9 @@ function checkValues(obj) {
 }
 
 function createInitialValues(practitionerIds, practitioners) {
-  return practitioners.map(p => practitionerIds.indexOf(p.get('id')) > -1).toJS();
+  return practitioners
+    .map(p => practitionerIds.indexOf(p.get('id')) > -1)
+    .toJS();
 }
 
 class ServicesPractForm extends Component {
@@ -26,7 +28,8 @@ class ServicesPractForm extends Component {
     e.stopPropagation();
     const { formName, values, allPractitioners } = this.props;
 
-    const actions = Object.keys(values).map(key => change(formName, key, !allPractitioners));
+    const actions = Object.keys(values).map(key =>
+      change(formName, key, !allPractitioners));
 
     this.props.dispatch(batchActions(actions));
   }
@@ -84,7 +87,10 @@ class ServicesPractForm extends Component {
         />
         <div className={styles.servicesPractForm}>
           <div className={styles.servicesPractForm_all}>
-            <span className={styles.servicesPractForm_all_text}> All Practitioners</span>
+            <span className={styles.servicesPractForm_all_text}>
+              {' '}
+              All Practitioners
+            </span>
             <div className={styles.servicesPractForm_all_toggle}>
               <Toggle
                 name="allPractitioners"
@@ -124,4 +130,7 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(mapStateToProps, null)(ServicesPractForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(ServicesPractForm);

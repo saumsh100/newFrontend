@@ -22,7 +22,10 @@ bindAxiosInterceptors(() => localStorage.getItem('auth_token'));
 LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const browserHistory = createBrowserHistory();
-const store = configure({ initialState: window.__INITIAL_STATE__, browserHistory });
+const store = configure({
+  initialState: window.__INITIAL_STATE__,
+  browserHistory,
+});
 
 // Bind event handlers from parent
 connectStoreToHost(store);
@@ -56,7 +59,7 @@ loadPatient()(store.dispatch).then(() => {
       <AppContainer>
         <Component {...appProps} />
       </AppContainer>,
-      document.getElementById('root')
+      document.getElementById('root'),
     );
   };
 
@@ -64,13 +67,9 @@ loadPatient()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Reviews', () => {
-      const NextApp = require('./Reviews').default; // eslint-disable-line
-      
+      const NextApp = require("./Reviews").default; // eslint-disable-line
+
       render(App);
     });
   }
 });
-
-
-
-

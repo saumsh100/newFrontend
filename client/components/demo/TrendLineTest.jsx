@@ -1,8 +1,6 @@
 
 import React from 'react';
-import {
-  TrendLine,
-} from '../library';
+import { TrendLine } from '../library';
 
 function GridTest() {
   return (

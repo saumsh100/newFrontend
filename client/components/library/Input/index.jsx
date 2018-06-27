@@ -31,7 +31,9 @@ function Input(props) {
     'tipSize',
   ]);
 
-  const isFilled = (value || value === 0) && !(typeof value === 'number' && Number.isNaN(value));
+  const isFilled =
+    (value || value === 0) &&
+    !(typeof value === 'number' && Number.isNaN(value));
 
   const labelClassName = classNames(theme.label, {
     [theme.erroredLabel]: error,
@@ -51,14 +53,22 @@ function Input(props) {
 
   const errorClassName = theme.error;
 
-  const errorComponent = error && <span className={errorClassName}>{error}</span>;
+  const errorComponent = error && (
+    <span className={errorClassName}>{error}</span>
+  );
 
   const icComponent =
-    iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
+    iconComponent ||
+    (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
 
   return (
     <div className={`${theme.group} ${classStyles}`}>
-      <input type={type} className={inputClassName} {...inputProps} ref={props.refCallBack} />
+      <input
+        type={type}
+        className={inputClassName}
+        {...inputProps}
+        ref={props.refCallBack}
+      />
       <span className={theme.bar} />
       <span className={labelClassName}>{label}</span>
       {errorComponent}
@@ -81,16 +91,16 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
-  error: undefined,
+  error: '',
   label: '',
-  value: undefined,
+  value: '',
   theme: null,
   type: 'text',
-  icon: null,
+  icon: '',
   iconType: 'solid',
   classStyles: {},
   iconComponent: null,
-  refCallBack: () => {},
+  refCallBack: null,
 };
 
 export default withTheme(Input, styles);

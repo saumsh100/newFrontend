@@ -7,7 +7,8 @@ import styles from './styles.scss';
 
 export default function PreferencesForm({ handleSubmit, activeAccount }) {
   const initialValues = {
-    bookingWidgetPrimaryColor: activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
+    bookingWidgetPrimaryColor:
+      activeAccount.get('bookingWidgetPrimaryColor') || '#FF715A',
   };
 
   return (

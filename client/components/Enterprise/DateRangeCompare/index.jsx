@@ -12,11 +12,7 @@ import {
 } from '../../library';
 
 export default function CompareRangeForm(props) {
-  const {
-    onSubmit,
-    onClear,
-    onCancel,
-  } = props;
+  const { onSubmit, onClear, onCancel } = props;
 
   const initialValues = {
     from: {
@@ -29,18 +25,16 @@ export default function CompareRangeForm(props) {
 
   return (
     <Form
-      //className={styles.formDrop}
+      // className={styles.formDrop}
       // TODO: should probably make this a prop so that we can re-use on Intelligence page
       form="enterprise-range"
       onSubmit={onSubmit}
       initialValues={initialValues}
       data-test-id="enterprise-range"
-      ignoreSaveButton={true}
+      ignoreSaveButton
     >
       <Grid>
-        <Row>
-          Date Range
-        </Row>
+        <Row>Date Range</Row>
         <FormSection name="from">
           <Row className={styles.inputsWrapper}>
             <Col xs={5}>
@@ -95,11 +89,7 @@ export default function CompareRangeForm(props) {
         </FormSection>
         <Row>
           <div className={styles.buttons}>
-            <Button
-              flat
-              type="button"
-              onClick={onClear}
-            >
+            <Button flat type="button" onClick={onClear}>
               Clear
             </Button>
             <div className={styles.rightButtons}>
@@ -111,11 +101,7 @@ export default function CompareRangeForm(props) {
               >
                 Apply
               </Button>
-              <Button
-                flat
-                type="button"
-                onClick={onCancel}
-              >
+              <Button flat type="button" onClick={onCancel}>
                 Cancel
               </Button>
             </div>

@@ -27,7 +27,8 @@ import styles from './styles.scss';
  * @param currentDate
  * @returns {function(*=): *}
  */
-const generateIsDisabledDay = currentDate => date => moment(date).isBefore(currentDate);
+const generateIsDisabledDay = currentDate => date =>
+  moment(date).isBefore(currentDate);
 
 /**
  * Loop a list of Moment object and
@@ -40,9 +41,14 @@ const generateIsDisabledDay = currentDate => date => moment(date).isBefore(curre
  * @param accountTimezone
  * @returns {*}
  */
-const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) =>
+const getSortedAvailabilities = (
+  selectedDate,
+  availabilities,
+  accountTimezone,
+) =>
   availabilities
-    .filter(date => genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'd'))
+    .filter(date =>
+      genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'd'))
     .reduce(
       (acc, act) => {
         const splitAfternoon = 12;
@@ -59,7 +65,9 @@ const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) 
 
         return acc;
       },
-      { morning: [], afternoon: [], evening: [], total: availabilities.length }
+      {
+        morning: [], afternoon: [], evening: [], total: availabilities.length,
+      },
     );
 
 /**
@@ -69,7 +77,11 @@ const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) 
  * @param selectedStartDate
  * @param accountTimezone
  */
-const generateDateRange = (numDaysForward, selectedStartDate, accountTimezone) => {
+const generateDateRange = (
+  numDaysForward,
+  selectedStartDate,
+  accountTimezone,
+) => {
   const dateRange = [];
   for (let i = 0; i < numDaysForward; i += 1) {
     dateRange.push(genericMoment(selectedStartDate, accountTimezone).add(i, 'days'));
@@ -83,7 +95,8 @@ const generateDateRange = (numDaysForward, selectedStartDate, accountTimezone) =
  * @param timezone
  * @returns {*}
  */
-const genericMoment = (time, timezone) => (timezone ? moment.tz(time, timezone) : moment(time));
+const genericMoment = (time, timezone) =>
+  (timezone ? moment.tz(time, timezone) : moment(time));
 
 class DateTime extends Component {
   constructor(props) {
@@ -134,7 +147,10 @@ class DateTime extends Component {
      * we have accuracy on the availability selection.
      */
     this.props.setConfirmAvailability(false);
-    if (!selectedAvailability || selectedAvailability.startDate !== availability.startDate) {
+    if (
+      !selectedAvailability ||
+      selectedAvailability.startDate !== availability.startDate
+    ) {
       return this.props.setSelectedAvailability(availability);
     }
     return this.props.setSelectedAvailability(null);
@@ -169,11 +185,15 @@ class DateTime extends Component {
       isFetching,
     } = this.props;
 
-    const dayAvailabilities = generateDateRange(5, selectedStartDate, account.timezone);
+    const dayAvailabilities = generateDateRange(
+      5,
+      selectedStartDate,
+      account.timezone,
+    );
     const selectedDayAvailabilities = getSortedAvailabilities(
       selectedStartDate,
       availabilities,
-      account.timezone
+      account.timezone,
     );
 
     /**
@@ -189,7 +209,8 @@ class DateTime extends Component {
             onClick={() => this.changeSelectedDate(startDate)}
             className={styles.nextAvailabilityButton}
           >
-            Next Availablility on {genericMoment(startDate, account.timezeone).format('ddd, MMM D')}
+            Next Availablility on{' '}
+            {genericMoment(startDate, account.timezeone).format('ddd, MMM D')}
           </Button>
         );
       }
@@ -203,7 +224,8 @@ class DateTime extends Component {
       const renderTimesOnTimeFrame = (availability, index) => {
         const availabilityClasses = classNames(styles.slot, {
           [styles.selectedSlot]:
-            selectedAvailability && selectedAvailability.startDate === availability.startDate,
+            selectedAvailability &&
+            selectedAvailability.startDate === availability.startDate,
         });
         return (
           <Button
@@ -263,7 +285,10 @@ class DateTime extends Component {
               We did not find any availabilities for your criteria.
             </p>
           </div>
-          <Button className={styles.subCardLink} onClick={() => this.joinWaitlist()}>
+          <Button
+            className={styles.subCardLink}
+            onClick={() => this.joinWaitlist()}
+          >
             Join Waitlist
           </Button>
         </div>
@@ -271,8 +296,12 @@ class DateTime extends Component {
         <div className={styles.contentWrapper}>
           <div className={styles.content}>
             <h3 className={styles.title}>Select Time</h3>
-            <p className={styles.subtitle}>Select a time that works best for you</p>
-            <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
+            <p className={styles.subtitle}>
+              Select a time that works best for you
+            </p>
+            <div className={styles.availabilitiesWrapper}>
+              {availabilitiesDisplay()}
+            </div>
           </div>
           <div className={styles.subCard}>
             <div className={styles.subCardWrapper}>
@@ -281,7 +310,10 @@ class DateTime extends Component {
                 Be notified when an earlier appointment becomes available
               </p>
             </div>
-            <Button className={styles.subCardLink} onClick={() => this.joinWaitlist()}>
+            <Button
+              className={styles.subCardLink}
+              onClick={() => this.joinWaitlist()}
+            >
               Join Waitlist
             </Button>
           </div>
@@ -296,7 +328,12 @@ class DateTime extends Component {
      */
     const CalendarButtonTrigger = props => (
       <div {...props} className={styles.datePicker}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="13"
+          height="14"
+          viewBox="0 0 13 14"
+        >
           <path d="M10.684 1.332h-.667V0H8.68v1.332H3.34V0H2.003v1.332h-.667c-.742 0-1.33.6-1.33 1.333L0 11.99c0 .733.594 1.332 1.336 1.332h9.348c.735 0 1.336-.6 1.336-1.332V2.665c0-.733-.601-1.333-1.336-1.333zm0 10.659H1.336V4.663h9.348v7.328z" />
         </svg>
         Pick a<br /> Date
@@ -322,7 +359,7 @@ class DateTime extends Component {
         </div>
         {isFetching ? (
           <div>
-            <i className={'fas fa-spinner fa-spin fa-3x fa-fw'} />
+            <i className="fas fa-spinner fa-spin fa-3x fa-fw" />
           </div>
         ) : (
           renderAvailabilities()
@@ -356,11 +393,14 @@ function mapDispatchToProps(dispatch) {
       setConfirmAvailability,
       setSelectedAvailability,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DateTime);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DateTime);
 
 DateTime.propTypes = {
   isFetching: PropTypes.bool,
@@ -368,11 +408,20 @@ DateTime.propTypes = {
   fetchAvailabilities: PropTypes.func,
   setSelectedStartDate: PropTypes.func,
   selectedStartDate: PropTypes.string,
-  selectedAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
+  selectedAvailability: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape(availabilityShape),
+  ]),
   account: PropTypes.shape(accountShape),
   setConfirmAvailability: PropTypes.func,
   setSelectedAvailability: PropTypes.func,
   history: PropTypes.shape(historyShape),
-  nextAvailability: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(availabilityShape)]),
-  availabilities: PropTypes.oneOfType([PropTypes.instanceOf(List), PropTypes.array]),
+  nextAvailability: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape(availabilityShape),
+  ]),
+  availabilities: PropTypes.oneOfType([
+    PropTypes.instanceOf(List),
+    PropTypes.array,
+  ]),
 };

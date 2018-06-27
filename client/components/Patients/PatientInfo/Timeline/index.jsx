@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, InfiniteScroll } from '../../../library';
-import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
+import {
+  fetchEntitiesRequest,
+  fetchEntities,
+} from '../../../../thunks/fetchEntities';
 import EventList from './EventsList';
 import styles from './styles.scss';
 
@@ -54,7 +57,9 @@ class Timeline extends Component {
   }
 
   render() {
-    const { events, filters, wasPatientFetched, wasEventsFetched } = this.props;
+    const {
+      events, filters, wasPatientFetched, wasEventsFetched,
+    } = this.props;
 
     const style = {
       overflow: 'scroll',
@@ -63,7 +68,11 @@ class Timeline extends Component {
     const wasAllFetched = wasPatientFetched && wasEventsFetched;
 
     return (
-      <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasAllFetched}>
+      <Card
+        className={styles.card}
+        runAnimation
+        loaded={!this.state.loaded && wasAllFetched}
+      >
         {wasAllFetched && (
           <div className={styles.eventsContainer} style={style}>
             <InfiniteScroll
@@ -119,9 +128,12 @@ function mapDispatchToProps(dispatch) {
       fetchEntities,
       fetchEntitiesRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 export default enhance(Timeline);

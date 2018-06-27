@@ -8,14 +8,7 @@ export default function ConnectorsList(props) {
   const accounts = props.accounts.get('models').toArray();
   return (
     <List className={styles.list}>
-      {accounts.map((account) => {
-        return (
-          <ConnectorListItem
-            key={account.id}
-            account={account}
-          />
-        );
-      })}
+      {accounts.map(account => <ConnectorListItem key={account.id} account={account} />)}
     </List>
   );
 }

@@ -8,6 +8,7 @@ import { graphql, QueryRenderer } from 'react-relay';
 import classNames from 'classnames';
 import { Map } from 'immutable';
 import graphQLEnvironment from '../../../util/graphqlEnvironment';
+import { convertIntervalToMs } from '../../../../server/util/time';
 import { Grid, Row, Col, Icon, Tabs, Tab, Button } from '../../library';
 import PatientModel from '../../../entities/models/Patient';
 import RecallModel from '../../../entities/models/Recall';
@@ -36,7 +37,9 @@ const HeaderModalComponent = ({
   icon, text, onClick, title,
 }) => (
   <div
-    className={classNames(isResponsive() ? styles.editButton : styles.textContainer, {
+    className={classNames({
+      [styles.editButton]: isResponsive(),
+      [styles.textContainer]: !isResponsive(),
       [styles.editButtonMobile]: !isHub(),
     })}
   >
@@ -216,7 +219,11 @@ class PatientInfo extends Component {
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
 
     return (
-      <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
+      <Grid
+        className={classNames(styles.mainContainer, {
+          [styles.responsiveContainer]: isHub(),
+        })}
+      >
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
@@ -352,8 +359,14 @@ function mapStateToProps({
   entities, apiRequests, patientTable, auth, electron,
 }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
-  const reminders = entities.getIn(['reminders', 'models']).filter(v => v.isActive);
-  const recalls = entities.getIn(['recalls', 'models']).filter(v => v.isActive);
+  const reminders = entities
+    .getIn(['reminders', 'models'])
+    .filter(v => v.isActive)
+    .sortBy(r => -convertIntervalToMs(r.interval));
+  const recalls = entities
+    .getIn(['recalls', 'models'])
+    .filter(v => v.isActive)
+    .sortBy(r => -convertIntervalToMs(r.interval));
   const patientStats = apiRequests.get('patientIdStats')
     ? apiRequests.get('patientIdStats').data
     : null;

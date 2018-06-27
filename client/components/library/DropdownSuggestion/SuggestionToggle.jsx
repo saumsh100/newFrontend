@@ -90,7 +90,9 @@ class SuggestionToggle extends Component {
    */
   displaySuggestions() {
     this.setState({ search: '' });
-    const { toggleView, disabled, isOpen, asInput } = this.props;
+    const {
+      toggleView, disabled, isOpen, asInput,
+    } = this.props;
 
     if (disabled || asInput) return;
     if (!isOpen) {
@@ -99,7 +101,16 @@ class SuggestionToggle extends Component {
   }
 
   render() {
-    const { name, handleBlur, label, theme, error, disabled, isOpen, asInput } = this.props;
+    const {
+      name,
+      handleBlur,
+      label,
+      theme,
+      error,
+      disabled,
+      isOpen,
+      asInput,
+    } = this.props;
 
     const labelClassName = classNames(theme.label, {
       [theme.filled]: this.state.displayValue,
@@ -150,7 +161,11 @@ class SuggestionToggle extends Component {
           </div>
           <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
-            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
+            <Icon
+              className={caretIconClassName}
+              icon="caret-down"
+              type="solid"
+            />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
@@ -162,7 +177,10 @@ export default SuggestionToggle;
 
 SuggestionToggle.propTypes = {
   'data-test-id': PropTypes.string,
-  selected: PropTypes.shape({ label: PropTypes.string, value: PropTypes.string }),
+  selected: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.string,
+  }),
   toggleAsInput: PropTypes.func,
   options: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })),
   asInput: PropTypes.bool,

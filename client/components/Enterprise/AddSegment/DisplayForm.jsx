@@ -5,7 +5,20 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
 
-import { Grid, Row, Col, Form, Tabs, Tab, Pill, SelectPill, InfoSection, Button, Field, Summary } from '../../library';
+import {
+  Grid,
+  Row,
+  Col,
+  Form,
+  Tabs,
+  Tab,
+  Pill,
+  SelectPill,
+  InfoSection,
+  Button,
+  Field,
+  Summary,
+} from '../../library';
 import Gauge from './Gauge';
 import { fetchCities } from '../../../thunks/segments';
 
@@ -37,11 +50,8 @@ class DisplayForm extends Component {
 
   render() {
     const {
-    formName,
-    handleSubmit,
-    segments,
-    edit,
-  } = this.props;
+      formName, handleSubmit, segments, edit,
+    } = this.props;
 
     const title = edit ? 'Edit Segment' : 'Create New Segment';
     return (
@@ -64,12 +74,16 @@ class DisplayForm extends Component {
                 contentClass={styles.tabContent}
                 onChange={this.onTabChange}
               >
-                <Tab label="Demographics" className={styles.tab} activeClass={styles.activeTab}>
+                <Tab
+                  label="Demographics"
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                >
                   <Grid className={styles.grid}>
                     <Row>
                       <Col xs={2} sm={2} md={2} className={styles.fieldLabel}>
-                          Age
-                        </Col>
+                        Age
+                      </Col>
                       <Col xs={10} sm={10} md={10}>
                         <SelectPill
                           multiselect
@@ -89,8 +103,8 @@ class DisplayForm extends Component {
                     </Row>
                     <Row>
                       <Col xs={2} sm={2} md={2} className={styles.fieldLabel}>
-                          Gender
-                        </Col>
+                        Gender
+                      </Col>
                       <Col xs={10} sm={10} md={10}>
                         <SelectPill
                           onChange={this.props.handleGenderChange}
@@ -104,17 +118,16 @@ class DisplayForm extends Component {
                     </Row>
                     <Row>
                       <Col xs={2} sm={2} md={2} className={styles.fieldLabel}>
-                          City
-                        </Col>
+                        City
+                      </Col>
                       <Col xs={10} sm={10} md={10}>
                         <Field
                           component="DropdownSelect"
                           align="left"
-                          options={
-                            this.props.segments.cities.map(city => ({
-                              label: city.city, value: city.city,
-                            }))
-                          }
+                          options={this.props.segments.cities.map(city => ({
+                            label: city.city,
+                            value: city.city,
+                          }))}
                           name="city"
                           borderColor="primaryColor"
                           required
@@ -122,66 +135,71 @@ class DisplayForm extends Component {
                       </Col>
                     </Row>
                   </Grid>
-
                 </Tab>
-                <Tab label="Behavior" className={styles.tab} activeClass={styles.activeTab}>
+                <Tab
+                  label="Behavior"
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                >
                   <span>Coming soon</span>
                 </Tab>
-                <Tab label="Custom" className={styles.tab} activeClass={styles.activeTab}>
+                <Tab
+                  label="Custom"
+                  className={styles.tab}
+                  activeClass={styles.activeTab}
+                >
                   <span>Coming soon</span>
                 </Tab>
               </Tabs>
             </Form>
 
             <div className={styles.buttons}>
-              <Button
-                flat
-                onClick={this.props.handleApply}
-              >
+              <Button flat onClick={this.props.handleApply}>
                 Apply
               </Button>
-              <Button
-                flat
-                form={formName}
-                onClick={this.props.handleSubmit}
-              >
-                  Save
+              <Button flat form={formName} onClick={this.props.handleSubmit}>
+                Save
               </Button>
-              <Button
-                flat
-                onClick={this.props.handleCancel}
-              >
+              <Button flat onClick={this.props.handleCancel}>
                 Cancel
               </Button>
             </div>
           </Col>
           <Col xs={3} sm={3} md={3}>
             <div className={styles.rightPane}>
-              {this.props.segments.loading || !this.props.segments.preview ?
-                <Loader loaded={false} color="#FF715A" /> :
+              {this.props.segments.loading || !this.props.segments.preview ? (
+                <Loader loaded={false} color="#FF715A" />
+              ) : (
                 <div>
                   <Gauge
-                    percentage={
-                      this.calculatePercentage(
-                        segments.preview.segmentActiveUsers,
-                        segments.preview.totalActiveUsers
-                      )
-                    }
+                    percentage={this.calculatePercentage(
+                      segments.preview.segmentActiveUsers,
+                      segments.preview.totalActiveUsers,
+                    )}
                   >
-                  of patients
-                </Gauge>
-                  <InfoSection title={segments.preview.segmentActiveUsers || ''}>
-                  # of patients
-                </InfoSection>
-                  <InfoSection title={segments.preview.segmentAppointments || ''}>
-                    {`${this.calculatePercentage(segments.preview.segmentAppointments, segments.preview.totalAppointments)}% of total appointments`}
+                    of patients
+                  </Gauge>
+                  <InfoSection
+                    title={segments.preview.segmentActiveUsers || ''}
+                  >
+                    # of patients
+                  </InfoSection>
+                  <InfoSection
+                    title={segments.preview.segmentAppointments || ''}
+                  >
+                    {`${this.calculatePercentage(
+                      segments.preview.segmentAppointments,
+                      segments.preview.totalAppointments,
+                    )}% of total appointments`}
                   </InfoSection>
                   <Summary
                     title="Demographics"
                     items={[
                       {
                         label: 'Age',
-                        value: this.props.age ? this.props.age.join(', ') : 'All',
+                        value: this.props.age
+                          ? this.props.age.join(', ')
+                          : 'All',
                       },
                       {
                         label: 'Gender',
@@ -194,8 +212,7 @@ class DisplayForm extends Component {
                     ]}
                   />
                 </div>
-              }
-
+              )}
             </div>
           </Col>
         </Row>
@@ -219,21 +236,21 @@ DisplayForm.propTypes = {
   segments: PropTypes.shape({
     preview: PropTypes.shape({}),
     loading: PropTypes.bool,
-    cities: PropTypes.arrayOf(
-      PropTypes.shape({
-        city: PropTypes.string,
-      })
-    ),
+    cities: PropTypes.arrayOf(PropTypes.shape({
+      city: PropTypes.string,
+    })),
   }).isRequired,
   enterpriseId: PropTypes.string.isRequired,
   fetchCities: PropTypes.func,
-
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchCities,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchCities,
+    },
+    dispatch,
+  );
 }
 
 function mapStateToProps(state) {
@@ -243,6 +260,9 @@ function mapStateToProps(state) {
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(DisplayForm);

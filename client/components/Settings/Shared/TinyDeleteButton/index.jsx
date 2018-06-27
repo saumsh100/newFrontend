@@ -5,6 +5,4 @@ import styles from './styles.scss';
 
 const RedButton = ClassyDiv(styles.tinyDeleteButton);
 
-export default (props) => <RedButton children="-" {...props} />;
-
-
+export default props => <RedButton children="-" {...props} />;

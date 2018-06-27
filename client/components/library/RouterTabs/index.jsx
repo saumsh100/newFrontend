@@ -17,26 +17,14 @@ class RouterTabs extends Component {
   }
 
   renderChildren(routes) {
-    return routes.map(({ label, disabled }, idx) => {
-      return (
-        <Tab
-          key={`${label}${idx}`}
-          label={label}
-          disabled={disabled}
-        />
-      );
-    });
+    return routes.map(({ label, disabled }, idx) => <Tab key={`${label}${idx}`} label={label} disabled={disabled} />);
   }
 
   render() {
     const { location, routes } = this.props;
     const index = routes.findIndex(route => location.pathname.indexOf(route.to) === 0);
     return (
-      <Tabs
-        index={index}
-        onChange={this.handleRouterTabChange}
-        noUnderLine
-      >
+      <Tabs index={index} onChange={this.handleRouterTabChange} noUnderLine>
         {this.renderChildren(routes)}
       </Tabs>
     );

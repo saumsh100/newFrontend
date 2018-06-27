@@ -5,7 +5,9 @@ import styles from './styles.scss';
 
 class AppointmentsBooked extends Component {
   render() {
-    const { borderColor, cardTitle, labels, dataSets } = this.props;
+    const {
+      borderColor, cardTitle, labels, dataSets,
+    } = this.props;
 
     // const test = dataSets[0].data.length;
     const ticks = {

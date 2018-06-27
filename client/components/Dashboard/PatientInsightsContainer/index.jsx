@@ -34,17 +34,25 @@ class PatientInsightsContainer extends Component {
   render() {
     const { insights, appointments, patients } = this.props;
 
-    const allFetched = !this.props.loadingInsights && this.props.dashAppointmentsFetched;
+    const allFetched =
+      !this.props.loadingInsights && this.props.dashAppointmentsFetched;
 
     return (
       <Card className={styles.card} runAnimation loaded={allFetched}>
         <div className={styles.container}>
           {allFetched && (
-            <InsightsHeader insightCount={this.props.insightCount} insights={insights} />
+            <InsightsHeader
+              insightCount={this.props.insightCount}
+              insights={insights}
+            />
           )}
 
           {allFetched && (
-            <Insights insights={insights} appointments={appointments} patients={patients} />
+            <Insights
+              insights={insights}
+              appointments={appointments}
+              patients={patients}
+            />
           )}
         </div>
       </Card>
@@ -60,7 +68,10 @@ PatientInsightsContainer.propTypes = {
   patients: PropTypes.instanceOf(Map),
   insightCount: PropTypes.number,
   fetchInsights: PropTypes.func.isRequired,
-  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  dashboardDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.string,
+  ]).isRequired,
 };
 
 PatientInsightsContainer.defaultProps = {
@@ -81,13 +92,22 @@ function mapStateToProps({ apiRequests, dashboard, entities }) {
   const insightCount = dash.insightCount;
 
   const dashAppointmentsFetched =
-    apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
+    apiRequests.get('dashAppointments') &&
+    apiRequests.get('dashAppointments').wasFetched;
 
   const appointments = entities.getIn(['appointments', 'models']);
-  const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
+  const filteredAppointments = FilterAppointments(
+    appointments,
+    moment(dashboardDate),
+  );
 
-  const appPatientIds = filteredAppointments.toArray().map(app => app.get('patientId'));
-  const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);
+  const appPatientIds = filteredAppointments
+    .toArray()
+    .map(app => app.get('patientId'));
+  const patients = FilterPatients(
+    entities.getIn(['patients', 'models']),
+    appPatientIds,
+  );
 
   return {
     dashboardDate,

@@ -48,8 +48,10 @@ class EditPatient extends Component {
     const { user } = this.props;
     try {
       await axios.put(
-        `/families/${user.patientUserFamilyId}/patients/${this.props.match.params.patientId}`,
-        values
+        `/families/${user.patientUserFamilyId}/patients/${
+          this.props.match.params.patientId
+        }`,
+        values,
       );
       await this.props.fetchFamilyPatients();
     } catch (err) {
@@ -69,14 +71,19 @@ class EditPatient extends Component {
      * @param {object} values
      */
     const asyncEmailValidation = (values) => {
-      if (!values.email || values.email === this.props.formValues.initial.email) {
+      if (
+        !values.email ||
+        values.email === this.props.formValues.initial.email
+      ) {
         return;
       }
-      return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
-        if (response.data.exists) {
-          throw { email: 'There is already a user with that email' };
-        }
-      });
+      return axios
+        .post('/patientUsers/email', { email: values.email })
+        .then((response) => {
+          if (response.data.exists) {
+            throw { email: 'There is already a user with that email' };
+          }
+        });
     };
     /**
      * Check if the passed phoneNumber is not already used,
@@ -88,7 +95,8 @@ class EditPatient extends Component {
       if (
         !values.phoneNumber ||
         values.phoneNumber === this.props.formValues.values.phoneNumber ||
-        values.phoneNumber === normalizePhone(this.props.formValues.values.phoneNumber)
+        values.phoneNumber ===
+          normalizePhone(this.props.formValues.values.phoneNumber)
       ) {
         return;
       }
@@ -105,7 +113,9 @@ class EditPatient extends Component {
     const { birthDate } = this.props.patientUser;
 
     const initialValues = this.props.patientUser;
-    initialValues.birthDate = birthDate ? moment(birthDate).format('MM/DD/YYYY') : null;
+    initialValues.birthDate = birthDate
+      ? moment(birthDate).format('MM/DD/YYYY')
+      : null;
 
     return (
       <div className={styles.main}>
@@ -114,7 +124,10 @@ class EditPatient extends Component {
           form="editFamilyPatient"
           onSubmit={this.handleSubmit}
           initialValues={initialValues}
-          asyncValidate={composeAsyncValidators([asyncEmailValidation, asyncPhoneNumberValidation])}
+          asyncValidate={composeAsyncValidators([
+            asyncEmailValidation,
+            asyncPhoneNumberValidation,
+          ])}
           asyncBlurFields={['email', 'phoneNumber', 'birthDate']}
         >
           <Grid>
@@ -201,7 +214,9 @@ function mapStateToProps({ auth, form }, { match }) {
   return {
     formValues: form.editFamilyPatient,
     user: auth.get('patientUser'),
-    patientUser: auth.get('familyPatients').find(patient => patient.id === match.params.patientId),
+    patientUser: auth
+      .get('familyPatients')
+      .find(patient => patient.id === match.params.patientId),
     familyPatients: auth.get('familyPatients'),
   };
 }
@@ -211,8 +226,11 @@ function mapDispatchToProps(dispatch) {
     {
       fetchFamilyPatients,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPatient));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditPatient));

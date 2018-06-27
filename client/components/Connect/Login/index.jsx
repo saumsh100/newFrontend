@@ -29,14 +29,16 @@ class Login extends Component {
   }
 
   handleLogin(values) {
-    return this.props.login({ values, connect: true })
+    return this.props
+      .login({ values, connect: true })
       .then(() => {
-        window.JavaParent
-          && window.JavaParent.onLoginSuccess
-          && window.JavaParent.onLoginSuccess(
+        window.JavaParent &&
+          window.JavaParent.onLoginSuccess &&
+          window.JavaParent.onLoginSuccess(
             values.email,
             values.password,
-            window.localStorage.getItem('token'));
+            window.localStorage.getItem('token'),
+          );
       })
       .then(() => {
         this.props.history.push('./');
@@ -60,12 +62,8 @@ class Login extends Component {
             alt="CareCru Logo"
           />
         </div>
-        <div className={styles.header}>
-          Welcome to CareCru.
-        </div>
-        <div className={styles.subHeader}>
-          Get started by logging in below.
-        </div>
+        <div className={styles.header}>Welcome to CareCru.</div>
+        <div className={styles.subHeader}>Get started by logging in below.</div>
         <LoginForm
           onSubmit={this.handleLogin}
           submitButton={customSubmitButton}
@@ -81,9 +79,15 @@ Login.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    login,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      login,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(Login));

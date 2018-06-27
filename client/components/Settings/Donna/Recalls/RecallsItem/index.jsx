@@ -112,12 +112,12 @@ class RecallsItem extends Component {
     // So that it doesn't bubble up and try to select this reminder
     e.stopPropagation();
     e.preventDefault();
-    const { recall, account, selected, selectRecall } = this.props;
+    const {
+      recall, account, selected, selectRecall,
+    } = this.props;
     const { num, type } = intervalToNumType(recall.interval);
     const subType = num >= 0 ? 'before' : 'after';
-    const sure = confirm(
-      `Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`
-    );
+    const sure = confirm(`Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`);
     if (!sure) {
       return;
     }
@@ -170,7 +170,9 @@ class RecallsItem extends Component {
   }
 
   render() {
-    const { recall, selected, selectRecall, lastRecall, index } = this.props;
+    const {
+      recall, selected, selectRecall, lastRecall, index,
+    } = this.props;
 
     const { interval, primaryTypes, isActive } = recall;
 
@@ -203,7 +205,13 @@ class RecallsItem extends Component {
         linesBoxClass={styles.linesBoxClass}
         connectLinesClass={styles.connectLinesClass}
         onClick={() => selectRecall(recall.id)}
-        toggleComponent={<Toggle color={color} checked={isActive} onChange={this.changeIsActive} />}
+        toggleComponent={
+          <Toggle
+            color={color}
+            checked={isActive}
+            onChange={this.changeIsActive}
+          />
+        }
         labelComponent={
           <div className={styles.recallLabel}>
             <TouchPointLabel
@@ -234,7 +242,10 @@ class RecallsItem extends Component {
           </div>
         }
         rightComponent={
-          <div className={styles.deleteButtonWrapper} onClick={this.deleteRecall}>
+          <div
+            className={styles.deleteButtonWrapper}
+            onClick={this.deleteRecall}
+          >
             <TinyDeleteButton />
           </div>
         }
@@ -252,10 +263,13 @@ function mapDispatchToProps(dispatch) {
     {
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(RecallsItem);

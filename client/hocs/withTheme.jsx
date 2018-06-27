@@ -5,7 +5,7 @@ import { StyleExtender } from '../components/Utils/Themer';
 
 export default function withTheme(BasicComponent, baseStyle) {
   return class extends React.Component {
-    constructor(props){
+    constructor(props) {
       super(props);
       this.state = {
         componentStyle: baseStyle,

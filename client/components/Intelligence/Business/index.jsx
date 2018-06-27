@@ -1,3 +1,4 @@
+
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
@@ -6,8 +7,16 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import {
-  Card, Col, Grid, Row, Button, ContainerList,
-  Form, Field, DropdownMenu, Icon,
+  Card,
+  Col,
+  Grid,
+  Row,
+  Button,
+  ContainerList,
+  Form,
+  Field,
+  DropdownMenu,
+  Icon,
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import BusinessStats from './Cards/BusinessStats';
@@ -17,14 +26,21 @@ import stylesOverview from '../Overview/styles.scss';
 import * as Actions from '../../../actions/intelligence';
 
 class Business extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       endDate: this.props.endDate ? this.props.endDate : moment(new Date()),
-      startDate: this.props.startDate ? this.props.startDate : moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      startDate: this.props.startDate
+        ? this.props.startDate
+        : moment(new Date()).subtract(
+          moment(new Date()).get('date') - 1,
+          'days',
+        ),
       compareEndDate: moment(new Date()),
-      compareStartDate: moment(new Date()).subtract(moment(new Date()).get('date') - 1, 'days'),
+      compareStartDate: moment(new Date()).subtract(
+        moment(new Date()).get('date') - 1,
+        'days',
+      ),
       compare: false,
       loader: false,
     };
@@ -36,8 +52,12 @@ class Business extends Component {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
 
-    const startDate = this.props.startDate ? this.props.startDate._d : this.state.startDate._d;
-    const endDate = this.props.endDate ? this.props.endDate._d : this.state.endDate._d;
+    const startDate = this.props.startDate
+      ? this.props.startDate._d
+      : this.state.startDate._d;
+    const endDate = this.props.endDate
+      ? this.props.endDate._d
+      : this.state.endDate._d;
 
     const params = {
       startDate,
@@ -49,7 +69,8 @@ class Business extends Component {
       this.props.fetchEntitiesRequest({
         id: 'callStats',
         url: '/api/calls/stats',
-        params }),
+        params,
+      }),
       this.props.fetchEntitiesRequest({
         id: 'appointmentStats',
         url: '/api/appointments/stats',
@@ -58,20 +79,20 @@ class Business extends Component {
       this.props.fetchEntitiesRequest({
         id: 'businessStats',
         url: '/api/appointments/business',
-        params }),
+        params,
+      }),
       this.props.fetchEntitiesRequest({
         id: 'practitionerWorked',
         url: '/api/appointments/practitionerWorked',
         params,
       }),
-    ])
-      .then(() => {
-        this.setState({
-          startDate: moment(startDate),
-          endDate: moment(endDate),
-          loader: true,
-        });
+    ]).then(() => {
+      this.setState({
+        startDate: moment(startDate),
+        endDate: moment(endDate),
+        loader: true,
       });
+    });
   }
 
   submit(values) {
@@ -98,31 +119,33 @@ class Business extends Component {
         this.props.fetchEntitiesRequest({
           id: 'callStatsCompare',
           url: '/api/calls/',
-          params: paramsCompare }),
+          params: paramsCompare,
+        }),
         this.props.fetchEntitiesRequest({
           id: 'callStats',
           url: '/api/calls/',
-          params }),
+          params,
+        }),
         this.props.fetchEntitiesRequest({
           id: 'practitionerWorked',
           url: '/api/appointments/practitionerWorked',
           params,
         }),
-      ])
-        .then(() => {
-          this.setState({
-            startDate: moment(values.startDate),
-            endDate: moment(values.endDate),
-            loader: true,
-            compare: true,
-          });
+      ]).then(() => {
+        this.setState({
+          startDate: moment(values.startDate),
+          endDate: moment(values.endDate),
+          loader: true,
+          compare: true,
         });
+      });
     } else {
       Promise.all([
         this.props.fetchEntitiesRequest({
           id: 'callStats',
           url: '/api/calls/',
-          params }),
+          params,
+        }),
         this.props.fetchEntitiesRequest({
           id: 'appointmentStats',
           url: '/api/appointments/stats',
@@ -131,35 +154,40 @@ class Business extends Component {
         this.props.fetchEntitiesRequest({
           id: 'businessStats',
           url: '/api/appointments/business',
-          params }),
+          params,
+        }),
         this.props.fetchEntitiesRequest({
           id: 'practitionerWorked',
           url: '/api/appointments/practitionerWorked',
           params,
         }),
-      ])
-        .then(() => {
-          this.props.setQueryDates({
-            startDate: moment(values.startDate),
-            endDate: moment(values.endDate),
-          });
-          this.setState({
-            startDate: moment(values.startDate),
-            endDate: moment(values.endDate),
-            loader: true,
-            compare: false,
-          });
+      ]).then(() => {
+        this.props.setQueryDates({
+          startDate: moment(values.startDate),
+          endDate: moment(values.endDate),
         });
+        this.setState({
+          startDate: moment(values.startDate),
+          endDate: moment(values.endDate),
+          loader: true,
+          compare: false,
+        });
+      });
     }
   }
 
   render() {
-    const callStats = (this.props.callStats ? this.props.callStats.toJS() : {});
-    const businessStats = (this.props.businessStats ? this.props.businessStats.toJS() : { productionEarnings: [] });
-    const appointmentStats = (this.props.appointmentStats ? this.props.appointmentStats.toJS() : {});
+    const callStats = this.props.callStats ? this.props.callStats.toJS() : {};
+    const businessStats = this.props.businessStats
+      ? this.props.businessStats.toJS()
+      : { productionEarnings: [] };
+    const appointmentStats = this.props.appointmentStats
+      ? this.props.appointmentStats.toJS()
+      : {};
 
-    const practitionerWorked = (this.props.practitionerWorked ?
-      this.props.practitionerWorked.toJS() : []);
+    const practitionerWorked = this.props.practitionerWorked
+      ? this.props.practitionerWorked.toJS()
+      : [];
 
     const activePatients = appointmentStats.activePatients;
     let unfilledHours = 0;
@@ -174,15 +202,17 @@ class Business extends Component {
 
     filledHours = filledHours.toFixed(0);
 
-    const serviceData = businessStats.productionEarnings.map(pro => {
-      return {
-        title: `${pro.description} - ${pro.type}`,
-        data: `${Math.floor(pro.totalAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
-      };
-    });
+    const serviceData = businessStats.productionEarnings.map(pro => ({
+      title: `${pro.description} - ${pro.type}`,
+      data: `${Math.floor(pro.totalAmount)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`,
+    }));
 
-    const pickupPercent = Math.floor(100 * callStats.pickup / callStats.total) || null;
-    const bookingPercent = Math.floor(100 * callStats.booked / callStats.total) || null;
+    const pickupPercent =
+      Math.floor((100 * callStats.pickup) / callStats.total) || null;
+    const bookingPercent =
+      Math.floor((100 * callStats.booked) / callStats.total) || null;
 
     const data = [
       {
@@ -228,7 +258,8 @@ class Business extends Component {
         count: businessStats.hygieneAppts,
         title: 'Patients with Hygiene Appts',
         date: moment({ year: 2016, month: 10, day: 10 }).fromNow(),
-        color: 'primaryGreen' },
+        color: 'primaryGreen',
+      },
     ];
 
     const patientsData2 = [
@@ -252,7 +283,6 @@ class Business extends Component {
       },
     ];
 
-
     const initialValues = {
       endDate: this.state.endDate._d,
       startDate: this.state.startDate._d,
@@ -260,14 +290,16 @@ class Business extends Component {
       compareStartDate: this.state.compareStartDate._d,
     };
 
-    const UserMenu = (props) => {
-      return (
-        <Button flat {...props} className={stylesOverview.userMenuButton}>
-          <span className={stylesOverview.userRole}><i className="fa fa-calendar" /> {this.state.startDate.format('MMMM Do YYYY')} - {this.state.endDate.format('MMMM Do YYYY')}&nbsp;</span>
-          <Icon icon="caret-down" />
-        </Button>
-      );
-    };
+    const UserMenu = props => (
+      <Button flat {...props} className={stylesOverview.userMenuButton}>
+        <span className={stylesOverview.userRole}>
+          <i className="fa fa-calendar" />{' '}
+          {this.state.startDate.format('MMMM Do YYYY')} -{' '}
+          {this.state.endDate.format('MMMM Do YYYY')}&nbsp;
+        </span>
+        <Icon icon="caret-down" />
+      </Button>
+    );
 
     return (
       <Grid className={styles.business}>
@@ -275,7 +307,10 @@ class Business extends Component {
           <Col className={styles.business__header} xs={12}>
             <Card className={stylesOverview.intelligence__header_title}>
               <b>Business</b>
-              <div className={stylesOverview.floatRight} data-test-id="businessDatePicker" >
+              <div
+                className={stylesOverview.floatRight}
+                data-test-id="businessDatePicker"
+              >
                 <DropdownMenu
                   labelComponent={UserMenu}
                   closeOnInsideClick={false}
@@ -290,7 +325,11 @@ class Business extends Component {
                     <Field
                       required
                       component="DayPicker"
-                      disabledDays={date => moment().subtract(5, 'years').isAfter(date)}
+                      disabledDays={date =>
+                        moment()
+                          .subtract(5, 'years')
+                          .isAfter(date)
+                      }
                       name="startDate"
                       label="Start Date"
                       data-test-id="startDate"
@@ -319,7 +358,7 @@ class Business extends Component {
                       component="DayPicker"
                       name="compareEndDate"
                       label="Compare End Date"
-                    />*/}
+                    /> */}
                   </Form>
                 </DropdownMenu>
               </div>
@@ -328,7 +367,10 @@ class Business extends Component {
           <Col className={styles.business__body} xs={12}>
             <Row>
               <Col xs={12}>
-                <BusinessStats data={data} className={styles.business__body_arrows} />
+                <BusinessStats
+                  data={data}
+                  className={styles.business__body_arrows}
+                />
               </Col>
               <Col xs={12}>
                 <Patients
@@ -375,16 +417,26 @@ Business.propTypes = {
   endDate: PropTypes.object,
   practitionerWorked: PropTypes.object,
   fetchEntitiesRequest: PropTypes.func,
-}
+};
 
 function mapStateToProps({ apiRequests, intelligence }) {
   const startDate = intelligence.toJS().startDate;
   const endDate = intelligence.toJS().endDate;
-  const callStats = (apiRequests.get('callStats') ? apiRequests.get('callStats').data : null);
-  const businessStats = (apiRequests.get('businessStats') ? apiRequests.get('businessStats').data : null);
-  const appointmentStats = (apiRequests.get('appointmentStats') ? apiRequests.get('appointmentStats').data : null);
-  const callStatsCompare = (apiRequests.get('callStatsCompare') ? apiRequests.get('callStatsCompare').data : null);
-  const practitionerWorked = (apiRequests.get('practitionerWorked') ? apiRequests.get('practitionerWorked').data : null);
+  const callStats = apiRequests.get('callStats')
+    ? apiRequests.get('callStats').data
+    : null;
+  const businessStats = apiRequests.get('businessStats')
+    ? apiRequests.get('businessStats').data
+    : null;
+  const appointmentStats = apiRequests.get('appointmentStats')
+    ? apiRequests.get('appointmentStats').data
+    : null;
+  const callStatsCompare = apiRequests.get('callStatsCompare')
+    ? apiRequests.get('callStatsCompare').data
+    : null;
+  const practitionerWorked = apiRequests.get('practitionerWorked')
+    ? apiRequests.get('practitionerWorked').data
+    : null;
 
   return {
     callStats,
@@ -398,12 +450,18 @@ function mapStateToProps({ apiRequests, intelligence }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-    setQueryDates: Actions.setQueryDates,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+      setQueryDates: Actions.setQueryDates,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Business);

@@ -178,7 +178,11 @@ class EditDisplay extends Component {
     }
 
     return (
-      <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine>
+      <Tabs
+        index={this.state.tabIndex}
+        onChange={this.handleTabChange}
+        noUnderLine
+      >
         <Tab label="Appointments" tabCard>
           {this.renderAppointmentsForm()}
         </Tab>
@@ -205,11 +209,21 @@ class EditDisplay extends Component {
 
     return (
       <div>
-        <CollapsibleTab title="Appointments">{this.renderAppointmentsForm()}</CollapsibleTab>
-        <CollapsibleTab title="Personal">{this.renderPersonalForm()}</CollapsibleTab>
-        <CollapsibleTab title="Insurance">{this.renderInsuranceForm()}</CollapsibleTab>
-        <CollapsibleTab title="Family">{this.renderFamilyForm()}</CollapsibleTab>
-        <CollapsibleTab title="Settings">{this.renderSettingsForm()}</CollapsibleTab>
+        <CollapsibleTab title="Appointments">
+          {this.renderAppointmentsForm()}
+        </CollapsibleTab>
+        <CollapsibleTab title="Personal">
+          {this.renderPersonalForm()}
+        </CollapsibleTab>
+        <CollapsibleTab title="Insurance">
+          {this.renderInsuranceForm()}
+        </CollapsibleTab>
+        <CollapsibleTab title="Family">
+          {this.renderFamilyForm()}
+        </CollapsibleTab>
+        <CollapsibleTab title="Settings">
+          {this.renderSettingsForm()}
+        </CollapsibleTab>
       </div>
     );
   }

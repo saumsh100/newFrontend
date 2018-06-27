@@ -20,9 +20,13 @@ class Tab extends Component {
       tabCard,
     } = this.props;
 
-    let classes = !tabCard ? classNames(className, styles.tab) : classNames(className, styles.tabCard);
+    let classes = !tabCard
+      ? classNames(className, styles.tab)
+      : classNames(className, styles.tabCard);
     if (active) {
-      classes = !tabCard ? classNames(classes, activeClass, styles.activeTab) : classNames(classes, activeClass, styles.activeTabCard);
+      classes = !tabCard
+        ? classNames(classes, activeClass, styles.activeTab)
+        : classNames(classes, activeClass, styles.activeTabCard);
     } else {
       classes = classNames(classes, inactiveClass);
     }

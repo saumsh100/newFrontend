@@ -6,14 +6,10 @@ import styles from './styles.scss';
 
 function Timer(props) {
   const {
-    secondsLeft,
-    totalSeconds,
-    strokeWidth,
-    color,
-    className,
+    secondsLeft, totalSeconds, strokeWidth, color, className,
   } = props;
 
-  const radius = 50 - (strokeWidth / 2);
+  const radius = 50 - strokeWidth / 2;
   const pathDescription = `
       M 50,50 m 0,-${radius}
       a ${radius},${radius} 0 1 1 0,${2 * radius}
@@ -28,10 +24,11 @@ function Timer(props) {
   };
 
   const minutesLeft = Math.floor(secondsLeft / 60);
-  const seconds = secondsLeft - (minutesLeft * 60);
+  const seconds = secondsLeft - minutesLeft * 60;
   const time = moment()
     .minutes(minutesLeft)
-    .seconds(seconds).format('m:ss');
+    .seconds(seconds)
+    .format('m:ss');
 
   return (
     <svg

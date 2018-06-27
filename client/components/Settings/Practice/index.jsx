@@ -12,8 +12,7 @@ export default function Practice({ children, activeAccount }) {
       {React.Children.map(children, child =>
         React.cloneElement(child, {
           activeAccount,
-        })
-      )}
+        }))}
     </div>
   );
 }

@@ -7,7 +7,12 @@ import Button from '../Button';
 import styles from './styles.scss';
 
 function WidgetCard(props) {
-  const finalProps = omit(props, ['description', 'centered', 'arrow', 'selected']);
+  const finalProps = omit(props, [
+    'description',
+    'centered',
+    'arrow',
+    'selected',
+  ]);
   const buttonClasses = classNames(styles.card, {
     [styles.selectedCard]: props.selected,
     [styles.centered]: props.centered,
@@ -17,7 +22,9 @@ function WidgetCard(props) {
     <Button {...finalProps} className={buttonClasses}>
       <div className={styles.cardWrapper}>
         <h3 className={styles.title}>{props.title}</h3>
-        {props.description && <span className={styles.description}>{props.description}</span>}
+        {props.description && (
+          <span className={styles.description}>{props.description}</span>
+        )}
       </div>
       {props.arrow && (
         <span className={styles.cardArrow}>

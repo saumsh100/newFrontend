@@ -1,19 +1,16 @@
+
 import React, { PropTypes } from 'react';
 import { Card, CardHeader, LineChart } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
 export default function Audience(props) {
-  const {
-    title,
-    labels,
-    data,
-  } = props;
+  const { title, labels, data } = props;
 
   return (
-    <Card className={styles.booked} >
+    <Card className={styles.booked}>
       <div className={styles.booked__header}>
-        <CardHeader  title={title} />
+        <CardHeader title={title} />
       </div>
       <div className={styles.booked__body}>
         <LineChart
@@ -23,8 +20,8 @@ export default function Audience(props) {
             {
               label: 'Appointments Booked',
               color: 'yellow',
-              data
-            }
+              data,
+            },
           ]}
         />
       </div>
@@ -35,5 +32,5 @@ export default function Audience(props) {
 Audience.propTypes = {
   title: PropTypes.string,
   labels: PropTypes.arrayOf(PropTypes.string),
-  data: PropTypes.arrayOf(PropTypes.number)
+  data: PropTypes.arrayOf(PropTypes.number),
 };

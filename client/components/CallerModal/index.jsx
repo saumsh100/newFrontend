@@ -8,7 +8,10 @@ import { unsetSelectedCallId } from '../../actions/caller';
 import CallerDisplay from './CallerDisplay/';
 import CallerDisplayUnknown from './CallerDisplayUnknown/';
 import { setScheduleDate } from '../../actions/schedule';
-import { fetchEntitiesRequest, updateEntityRequest } from '../../thunks/fetchEntities';
+import {
+  fetchEntitiesRequest,
+  updateEntityRequest,
+} from '../../thunks/fetchEntities';
 import styles from './styles.scss';
 
 class CallerModal extends Component {
@@ -22,7 +25,14 @@ class CallerModal extends Component {
   }
 
   render() {
-    const { callerId, call, patient, updateEntityRequest, push, setScheduleDate } = this.props;
+    const {
+      callerId,
+      call,
+      patient,
+      updateEntityRequest,
+      push,
+      setScheduleDate,
+    } = this.props;
 
     let callDisplay = null;
 
@@ -98,10 +108,13 @@ function mapActionsToProps(dispatch) {
       push,
       setScheduleDate,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(CallerModal);

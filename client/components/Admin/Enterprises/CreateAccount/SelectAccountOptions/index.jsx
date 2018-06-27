@@ -7,7 +7,9 @@ import Icon from '../../../../library/Icon/index';
 import { Grid, Row, Col } from '../../../../library/Grid/index';
 
 export default function SelectAccountOptions(props) {
-  const { onSubmit, index, initialValues, formName } = props;
+  const {
+    onSubmit, index, initialValues, formName,
+  } = props;
 
   return (
     <Form
@@ -21,12 +23,20 @@ export default function SelectAccountOptions(props) {
     >
       <Grid className={styles.accountOptions}>
         <Row className={styles.accountOptions_row}>
-          <Col xs={12} sm={12} md={12} lg={12} className={styles.accountOptions_column}>
+          <Col
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            className={styles.accountOptions_column}
+          >
             <div className={styles.displayFlex}>
               <span className={styles.accountOptions_icon}>
                 <Icon icon="star" />
               </span>
-              <span className={styles.accountOptions_text}>Reputation Management</span>
+              <span className={styles.accountOptions_text}>
+                Reputation Management
+              </span>
               <div>
                 <Field component="Toggle" name="reputationManagement" />
               </div>
@@ -35,7 +45,9 @@ export default function SelectAccountOptions(props) {
               <span className={styles.accountOptions_icon}>
                 <Icon icon="book" />
               </span>
-              <span className={styles.accountOptions_text}>Directory Listings</span>
+              <span className={styles.accountOptions_text}>
+                Directory Listings
+              </span>
               <div>
                 <Field component="Toggle" name="listings" />
               </div>
@@ -51,7 +63,13 @@ export default function SelectAccountOptions(props) {
               </div>
             </div>
           </Col>
-          <Col xs={12} sm={12} md={12} lg={12} className={styles.accountOptions_column}>
+          <Col
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            className={styles.accountOptions_column}
+          >
             <div className={styles.displayFlex}>
               <span className={styles.accountOptions_icon}>
                 <Icon icon="clock" />

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
@@ -9,13 +10,11 @@ import styles from './fb-login-button.scss';
 
 window.oauthHandler = (data) => {
   console.log(data);
-  debugger;
 };
 
 const DIALOG_URL = 'https://www.facebook.com/dialog/oauth';
 
-const getApiPort = () =>
-  process.env.API_SERVER_PORT || window.location.port;
+const getApiPort = () => process.env.API_SERVER_PORT || window.location.port;
 
 /**
  * Absolute path to api without proxy port
@@ -34,15 +33,19 @@ const getDialogUrl = (appId, scope) => {
     client_id: appId,
     display: 'popup',
     redirect_uri: getUrl('/oauth/facebook'),
-    ...((scope && scope.length) ? {
-      scope: isArray(scope) ? scope.join(',') : scope,
-    } : {}),
+    ...(scope && scope.length
+      ? {
+        scope: isArray(scope) ? scope.join(',') : scope,
+      }
+      : {}),
   });
 
   return `${DIALOG_URL}?${options}`;
 };
 
-const openLoginDialog = ({ appId, width, height, scope }) => () => {
+const openLoginDialog = ({
+  appId, width, height, scope,
+}) => () => {
   const dialogWindow = window.open(
     getDialogUrl(appId, scope),
     'Login with Facebook',

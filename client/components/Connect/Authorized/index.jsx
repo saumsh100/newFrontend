@@ -16,9 +16,7 @@ class Authorized extends Component {
   }
 
   render() {
-    const {
-      children,
-    } = this.props;
+    const { children } = this.props;
 
     return (
       <div className={styles.authWrapper}>
@@ -30,11 +28,17 @@ class Authorized extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(Authorized);

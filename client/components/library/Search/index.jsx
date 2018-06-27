@@ -13,13 +13,12 @@ export class Search extends Component {
     this.state = {
       searchModeActive: false,
       displayModal: false,
-    }
+    };
   }
 
   toggleSearchMode() {
     const { searchModeActive } = this.state;
     this.setState({ searchModeActive: !searchModeActive });
-
   }
 
   handleClickOutside() {
@@ -31,42 +30,47 @@ export class Search extends Component {
   }
 
   render() {
-    const {
-      className,
-      searchClassName,
-      calendar,
-    } = this.props;
+    const { className, searchClassName, calendar } = this.props;
     const { searchModeActive } = this.state;
     const classes = classNames(styles.search, searchClassName);
     return (
       <div className={classes}>
-        {!searchModeActive && <Icon size={1.4} icon="search"  onClick={this.toggleSearchMode} />}
+        {!searchModeActive && (
+          <Icon size={1.4} icon="search" onClick={this.toggleSearchMode} />
+        )}
 
-        { searchModeActive ?
+        {searchModeActive ? (
           <Input
             placeholder="Search..."
             className={styles.search__searchInput}
             autofocus
             min
-            refCallback={(input) => { input && input.focus(); }}
+            refCallback={(input) => {
+              input && input.focus();
+            }}
           />
-          : <span className={styles.search__text} onClick={this.toggleSearchMode}>Search... </span>  }
-        {calendar ?
+        ) : (
+          <span className={styles.search__text} onClick={this.toggleSearchMode}>
+            Search...{' '}
+          </span>
+        )}
+        {calendar ? (
           <div>
             <Icon size={1.4} icon="calendar" onClick={this.toggleModal} />
             <Modal
               active={this.state.displayModal}
               onEscKeyDown={this.toggleModal}
-              onOverlayClick={this.toggleModal}>
-              <Calendar/>
+              onOverlayClick={this.toggleModal}
+            >
+              <Calendar />
             </Modal>
           </div>
-          : ''
-        }
+        ) : (
+          ''
+        )}
       </div>
     );
   }
-
 }
 Search.defaultProps = {
   size: 1,
@@ -75,6 +79,5 @@ Search.propTypes = {
   icon: PropTypes.string,
   size: PropTypes.number,
 };
-
 
 export default enhanceWithClickOutside(Search);

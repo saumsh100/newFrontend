@@ -1,31 +1,35 @@
+
 import React, { Component, PropTypes } from 'react';
 import { Card, Icon } from '../../../../library';
 import styles from './styles.scss';
 
 class Total extends Component {
   render() {
-    const {
-      borderColor,
-      data,
-    } = this.props;
+    const { borderColor, data } = this.props;
 
     const allDataCount = data.reduce((sum, cur) => sum + cur.count, 0);
     return (
-      <Card
-        className={styles.total}>
+      <Card className={styles.total}>
         <div className={styles.total__header}>
           {data.map((obj, i) => (
-            <div
-              key={i}
-              className={styles.total__header_list}>
+            <div key={i} className={styles.total__header_list}>
               <div className={styles.total__header_item}>
                 <div className={styles.total__item}>
                   <div className={styles.total__header_wrapper}>
-                    <Icon className={`${styles.total__header_icon} ${styles[`fa-${obj.icon}`]}`} icon={obj.icon} />
+                    <Icon
+                      className={`${styles.total__header_icon} ${
+                        styles[`fa-${obj.icon}`]
+                      }`}
+                      icon={obj.icon}
+                    />
                   </div>
                   <span className={styles.total__header_text}>{obj.title}</span>
                 </div>
-                <div className={`${styles.total__item} ${styles[`fa-${obj.icon}`]}`}>
+                <div
+                  className={`${styles.total__item} ${
+                    styles[`fa-${obj.icon}`]
+                  }`}
+                >
                   {obj.count}
                 </div>
               </div>

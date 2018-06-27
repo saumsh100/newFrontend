@@ -1,20 +1,32 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import WaitListItem from './WaitListItem';
 import { List, Button } from '../../../library';
-import styles from './styles.scss';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
+import styles from './styles.scss';
 
 export default function Waitlist(props) {
-  const { waitSpots, patientUsers, patients, removeWaitSpot, openAddTo } = props;
+  const {
+    waitSpots,
+    patientUsers,
+    patients,
+    removeWaitSpot,
+    openAddTo,
+  } = props;
 
   return (
     <div className={styles.waitList}>
       <div className={styles.header}>
-        {waitSpots.size} {waitSpots.size === 1 ? 'Patient' : 'Patients'} on Waitlist
+        {waitSpots.size} {waitSpots.size === 1 ? 'Patient' : 'Patients'} on
+        Waitlist
         <div className={styles.addTo}>
-          <Button color="blue" onClick={openAddTo} data-test-id="button_addToWaitlist">
+          <Button
+            color="blue"
+            onClick={openAddTo}
+            data-test-id="button_addToWaitlist"
+          >
             Add to Waitlist
           </Button>
         </div>
@@ -58,9 +70,15 @@ export default function Waitlist(props) {
 }
 
 Waitlist.propTypes = {
-  waitSpots: PropTypes.object,
-  patientUsers: PropTypes.object,
-  patients: PropTypes.object,
-  removeWaitSpot: PropTypes.func,
-  openAddTo: PropTypes.bool,
+  waitSpots: PropTypes.instanceOf(Map),
+  patientUsers: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map),
+  removeWaitSpot: PropTypes.func.isRequired,
+  openAddTo: PropTypes.func.isRequired,
+};
+
+Waitlist.defaultProps = {
+  waitSpots: Map,
+  patientUsers: Map,
+  patients: Map,
 };

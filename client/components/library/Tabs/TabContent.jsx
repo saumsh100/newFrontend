@@ -7,19 +7,13 @@ class TabContent extends Component {
   constructor(props) {
     super(props);
   }
-  
+
   render() {
-    const {
-      children,
-      className,
-      label,
-    } = this.props;
-    
+    const { children, className, label } = this.props;
+
     return (
       // Order is important, classNames={classes} needs to override props.className
-      <div className={className}>
-        {children}
-      </div>
+      <div className={className}>{children}</div>
     );
   }
 }

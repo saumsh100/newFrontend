@@ -1,3 +1,4 @@
+
 import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
@@ -9,12 +10,12 @@ export default function Summary({ title, items, className }) {
   return (
     <div className={style}>
       <div className={styles.title}>{title}</div>
-      {items.map(item =>
+      {items.map(item => (
         <div key={item.label} className={styles.container}>
           <strong>{item.label}</strong>
           <span>{item.value}</span>
         </div>
-      )}
+      ))}
     </div>
   );
 }

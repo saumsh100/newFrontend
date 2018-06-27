@@ -12,7 +12,15 @@ import accountShape from '../../../library/PropTypeShapes/accountShape';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
-const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+const daysOfWeek = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
 
 class OfficeHours extends Component {
   constructor(props) {
@@ -94,7 +102,11 @@ class OfficeHours extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    this.props.updateEntityRequest({
+      key: 'weeklySchedule',
+      model: newWeeklySchedule,
+      alert,
+    });
   }
 
   changeStartDate(values) {
@@ -112,7 +124,11 @@ class OfficeHours extends Component {
     };
 
     return this.props
-      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .updateEntityRequest({
+        key: 'weeklySchedule',
+        model: newWeeklySchedule,
+        alert,
+      })
       .then(() => {
         this.setState({
           active: false,
@@ -128,7 +144,10 @@ class OfficeHours extends Component {
     }
 
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
-    const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
+    const weeklyScheduleNew = Object.assign(
+      {},
+      this.props.weeklySchedule.toJS(),
+    );
 
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
@@ -157,7 +176,11 @@ class OfficeHours extends Component {
     };
 
     return this.props
-      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .updateEntityRequest({
+        key: 'weeklySchedule',
+        model: newWeeklySchedule,
+        alert,
+      })
       .then(() => {
         this.setState({
           active: false,
@@ -204,7 +227,11 @@ class OfficeHours extends Component {
         <div>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader} data-test-id={`pattern_${i}`}>
-            <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
+            <Header
+              contentHeader
+              title={`Week ${i + 2} Pattern`}
+              className={styles.header}
+            />
             <Button className={styles.button} onClick={this.delete}>
               Delete
             </Button>
@@ -270,7 +297,11 @@ class OfficeHours extends Component {
           </Form>
         </DialogBox>
         <div className={styles.flexHeader}>
-          <Header title="Weekly Schedule" contentHeader className={styles.header} />
+          <Header
+            title="Weekly Schedule"
+            contentHeader
+            className={styles.header}
+          />
           <div>
             <Button
               className={styles.button}
@@ -317,7 +348,11 @@ OfficeHours.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const activeAccount = entities.getIn([
+    'accounts',
+    'models',
+    auth.get('accountId'),
+  ]);
 
   if (!activeAccount) {
     return {};
@@ -340,10 +375,13 @@ function mapDispatchToProps(dispatch) {
     {
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(OfficeHours);

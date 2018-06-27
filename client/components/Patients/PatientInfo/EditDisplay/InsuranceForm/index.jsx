@@ -26,7 +26,12 @@ export default function InsuranceForm(props) {
       <Grid className={styles.grid}>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field required name="insuranceCarrier" label="Insurance Carrier" theme={inputStyle} />
+            <Field
+              required
+              name="insuranceCarrier"
+              label="Insurance Carrier"
+              theme={inputStyle}
+            />
           </Col>
         </Row>
         <Row className={styles.row}>

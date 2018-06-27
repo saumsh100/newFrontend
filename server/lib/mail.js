@@ -101,11 +101,12 @@ export const sendMassOnlineBookingIntro = (config) => {
   return exports.sendTemplate(config);
 };
 
-export const sendMassGeneralIntroAnnouncement = config => exports.sendTemplate({
-  ...config,
-  subject: 'Introducing Online Scheduling',
-  templateName: 'General Introduction Announcement',
-});
+export const sendMassGeneralIntroAnnouncement = config =>
+  exports.sendTemplate({
+    ...config,
+    subject: 'Introducing Online Scheduling',
+    templateName: 'General Introduction Announcement',
+  });
 
 /**
  * sendTemplate is used as a normilzation and promise wrapper for sending emails

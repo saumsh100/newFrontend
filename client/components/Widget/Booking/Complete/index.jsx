@@ -7,10 +7,7 @@ import { withRouter } from 'react-router-dom';
 import moment from 'moment';
 import keys from 'lodash/keys';
 import omitBy from 'lodash/omitBy';
-import {
-  Button,
-  Link,
-} from '../../../library';
+import { Button, Link } from '../../../library';
 import { refreshAvailabilitiesState } from '../../../../actions/availabilities';
 import styles from './styles.scss';
 
@@ -53,7 +50,6 @@ class Complete extends Component {
       selectedDay = `${mDate.format('ddd, MMM Do')} at ${mDate.format('h:mm a')}`;
     }
 
-
     let preferredDays = null;
     let preferredTime = null;
     if (hasWaitList) {
@@ -63,30 +59,23 @@ class Complete extends Component {
 
     return (
       <div className={styles.completedWrapper}>
-        <div className={styles.header}>
-          Thank you!
-        </div>
+        <div className={styles.header}>Thank you!</div>
         <div className={styles.message}>
-          Your appointment has been successfully requested.
-          We will be in touch shortly.
-          Please wait for our confirmation.
+          Your appointment has been successfully requested. We will be in touch
+          shortly. Please wait for our confirmation.
         </div>
-        {selectedAvailability ?
+        {selectedAvailability ? (
           <div>
-            <div className={styles.label}>
-              Appointment Summary
-            </div>
+            <div className={styles.label}>Appointment Summary</div>
             <div className={styles.well}>
               <div className={styles.service}>{serviceName}</div>
               <div className={styles.date}>{selectedDay}</div>
             </div>
           </div>
-          : null}
-        {hasWaitList ?
+        ) : null}
+        {hasWaitList ? (
           <div>
-            <div className={styles.label}>
-              Waitlist Information
-            </div>
+            <div className={styles.label}>Waitlist Information</div>
             <div className={styles.well}>
               <div className={styles.bold}>Preferred Day of the Week:</div>
               <div>{preferredDays}</div>
@@ -94,13 +83,9 @@ class Complete extends Component {
               <div>{preferredTime}</div>
             </div>
           </div>
-          : null}
+        ) : null}
         <div className={styles.doneButtonWrapper}>
-          <Button
-            onClick={this.complete}
-          >
-            Sounds good. Take me back
-          </Button>
+          <Button onClick={this.complete}>Sounds good. Take me back</Button>
         </div>
       </div>
     );
@@ -108,9 +93,12 @@ class Complete extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    refreshAvailabilitiesState,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      refreshAvailabilitiesState,
+    },
+    dispatch,
+  );
 }
 
 function mapStateToProps({ availabilities, entities }) {
@@ -119,8 +107,15 @@ function mapStateToProps({ availabilities, entities }) {
     waitSpot: availabilities.get('waitSpot'),
     selectedAvailability: availabilities.get('selectedAvailability'),
     notes: availabilities.get('notes'),
-    selectedService: entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]),
+    selectedService: entities.getIn([
+      'services',
+      'models',
+      availabilities.get('selectedServiceId'),
+    ]),
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Complete));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Complete));

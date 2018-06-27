@@ -14,13 +14,11 @@ export default function EventsList({ events, filters }) {
     );
   }
 
-  const filteredEvents = events.filter((event) => {
-    return filters.indexOf(event.get('type').toLowerCase()) > -1;
-  });
+  const filteredEvents = events.filter(event => filters.indexOf(event.get('type').toLowerCase()) > -1);
 
   const sortedEvents = filteredEvents.sort((a, b) => {
-    if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
-    if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
+    if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) { return -1; }
+    if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) { return 1; }
     return 0;
   });
 
@@ -41,15 +39,15 @@ export default function EventsList({ events, filters }) {
 
   return (
     <div className={styles.eventsList}>
-      {dateSections.length ? dateSections.map((date, index) => {
-        return (
+      {dateSections.length
+        ? dateSections.map((date, index) => (
           <EventDateSections
             key={`eventSection_${index}`}
             dateHeader={date}
             events={dateObj[date]}
           />
-        );
-      }) : null}
+            ))
+        : null}
     </div>
   );
 }

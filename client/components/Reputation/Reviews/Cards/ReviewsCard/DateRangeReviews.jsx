@@ -1,19 +1,13 @@
+
 import React, { PropTypes } from 'react';
-import { DropdownMenu, Form, Field} from '../../../../library';
+import { DropdownMenu, Form, Field } from '../../../../library';
 import styles from '../../styles.scss';
 
 export default function DateRangeReviews(props) {
-  const {
-    UserMenu,
-    submitDate,
-    initialValues,
-  } = props;
+  const { UserMenu, submitDate, initialValues } = props;
 
   return (
-    <DropdownMenu
-      labelComponent={UserMenu}
-      closeOnInsideClick={false}
-    >
+    <DropdownMenu labelComponent={UserMenu} closeOnInsideClick={false}>
       <Form
         form="dates"
         onSubmit={submitDate}
@@ -27,14 +21,8 @@ export default function DateRangeReviews(props) {
           name="startDate"
           label="Start Date"
         />
-        <Field
-          required
-          component="DayPicker"
-          name="endDate"
-          label="End Date"
-        />
+        <Field required component="DayPicker" name="endDate" label="End Date" />
       </Form>
     </DropdownMenu>
-
   );
 }

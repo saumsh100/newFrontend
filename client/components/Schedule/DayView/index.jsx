@@ -27,7 +27,12 @@ class DayView extends Component {
         const startDate = moment(app.startDate);
         const isSameDate = startDate.isSame(currentDate, 'day');
 
-        if (!app.isDeleted && isSameDate && !app.isCancelled && !app.isPending) {
+        if (
+          !app.isDeleted &&
+          isSameDate &&
+          !app.isCancelled &&
+          !app.isPending
+        ) {
           pracColumns[app.practitionerId] = true;
           chairColumns[app.chairId] = true;
           return app;

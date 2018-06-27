@@ -1,7 +1,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Header, SContainer, SHeader, SBody, SMSPreview } from '../../../../library';
+import {
+  Header,
+  SContainer,
+  SHeader,
+  SBody,
+  SMSPreview,
+} from '../../../../library';
 import createRecallText from '../../../../../../server/lib/recalls/createRecallText';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
@@ -19,7 +25,9 @@ const wordMap = {
 
 function RecallSMSPreview({ patient, account, recall }) {
   const link = 'carecru.co/gg58h';
-  const recallMessage = createRecallText({ patient, account, recall, link });
+  const recallMessage = createRecallText({
+    patient, account, recall, link,
+  });
   const smsPhoneNumber =
     account.twilioPhoneNumber ||
     account.destinationPhoneNumber ||
@@ -28,7 +36,10 @@ function RecallSMSPreview({ patient, account, recall }) {
 
   return (
     <div className={styles.smsPreviewWrapper}>
-      <SMSPreview from={formatPhoneNumber(smsPhoneNumber)} message={recallMessage} />
+      <SMSPreview
+        from={formatPhoneNumber(smsPhoneNumber)}
+        message={recallMessage}
+      />
     </div>
   );
 }
@@ -40,7 +51,7 @@ class RecallPreview extends Component {
 
   /* componentWillReceiveProps(nextProps) {
 
-  }*/
+  } */
 
   render() {
     const { recall, account } = this.props;
@@ -62,22 +73,32 @@ class RecallPreview extends Component {
         if (type === 'sms') {
           typePreview = (
             <div>
-              <RecallSMSPreview recall={recall} patient={patient} account={account} />
+              <RecallSMSPreview
+                recall={recall}
+                patient={patient}
+                account={account}
+              />
             </div>
           );
         } else if (type === 'email') {
-          const url = `/api/accounts/${account.id}/recalls/${recall.id}/preview`;
+          const url = `/api/accounts/${account.id}/recalls/${
+            recall.id
+          }/preview`;
           typePreview = (
             <div>
               <EmailPreview url={url} />
             </div>
           );
         } else if (type === 'phone') {
-          typePreview = <div className={styles.smsPreviewWrapper}>{'Phone Preview'}</div>;
+          typePreview = (
+            <div className={styles.smsPreviewWrapper}>Phone Preview</div>
+          );
         }
 
         return (
-          <CommsPreviewSection key={`${recall.id}_${type}`}>{typePreview}</CommsPreviewSection>
+          <CommsPreviewSection key={`${recall.id}_${type}`}>
+            {typePreview}
+          </CommsPreviewSection>
         );
       });
 

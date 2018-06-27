@@ -8,11 +8,11 @@ export default (componentLoader, hideLoader = false) => {
     loader: componentLoader,
     loading: () => {
       if (hideLoader) {
-          return null;
+        return null;
       }
-      return <Loader inContainer={true} />;
-    }
+      return <Loader inContainer />;
+    },
   };
 
   return Loadable(loaderData);
-}
+};

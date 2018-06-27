@@ -3,23 +3,15 @@ import React, { PropTypes } from 'react';
 import { Field } from '../../library';
 import styles from './styles.scss';
 
-
 function FilterField(props) {
-  const {
-    item,
-    flipped,
-  } = props;
+  const { item, flipped } = props;
 
   let showFieldComponent = null;
   if (item.type === 'checkbox') {
     showFieldComponent = (
-      <div className={styles.filters__checkFilter__chbox} >
+      <div className={styles.filters__checkFilter__chbox}>
         <span>{item.value}</span>
-        <Field
-          component="Checkbox"
-          name={item.value}
-          flipped={flipped}
-        />
+        <Field component="Checkbox" name={item.value} flipped={flipped} />
       </div>
     );
   } else {

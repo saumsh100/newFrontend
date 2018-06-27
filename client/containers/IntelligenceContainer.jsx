@@ -24,11 +24,12 @@ function mapStateToProps({ entities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-
-  }, dispatch);
+  return bindActionCreators({}, dispatch);
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(IntelligenceContainer);

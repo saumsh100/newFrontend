@@ -9,7 +9,9 @@ import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
-function RemoveDates({ isAuth, setUnavailableDates, history, patientUser }) {
+function RemoveDates({
+  isAuth, setUnavailableDates, history, patientUser,
+}) {
   /**
    * Check if the user is logged, if it's send him to the patient-information route,
    * otherwise send him to the login
@@ -39,7 +41,9 @@ function RemoveDates({ isAuth, setUnavailableDates, history, patientUser }) {
 
   return (
     <Modal active className={styles.customDialog}>
-      <h3 className={styles.title}>Do you need to remove a specific date from your waitlist?</h3>
+      <h3 className={styles.title}>
+        Do you need to remove a specific date from your waitlist?
+      </h3>
       <div className={styles.buttonsWrapper}>
         <Button
           onClick={() => handleUnavailableDaysConfirmation(true)}
@@ -70,11 +74,14 @@ function mapDispatchToProps(dispatch) {
     {
       setUnavailableDates: setWaitlistUnavailableDates,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RemoveDates);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RemoveDates);
 
 RemoveDates.propTypes = {
   patientUser: PropTypes.shape(patientShape),

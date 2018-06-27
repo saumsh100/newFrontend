@@ -1,3 +1,4 @@
+
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
@@ -33,18 +34,14 @@ class SelectPill extends PureComponent {
         this.props.onChange([pillId]);
       }
     } else {
-      const pills = new Set([
-        ...this.state.selectedPills,
-      ]);
+      const pills = new Set([...this.state.selectedPills]);
 
       if (pills.has(pillId)) {
         pills.delete(pillId);
       } else {
         pills.add(pillId);
       }
-      const change = [
-        ...pills,
-      ];
+      const change = [...pills];
       this.setState({
         selectedPills: change,
       });
@@ -53,15 +50,12 @@ class SelectPill extends PureComponent {
   }
 
   render() {
-    const childrenWithProps = React.Children.map(this.props.children,
-      child => React.cloneElement(child, {
+    const childrenWithProps = React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
         onClick: pillId => this.onPillClick(pillId),
         selected: this.state.selectedPills.includes(child.props.pillId),
-      })
-    );
-    return (
-      <div>{childrenWithProps}</div>
-    );
+      }));
+    return <div>{childrenWithProps}</div>;
   }
 }
 
@@ -79,4 +73,3 @@ SelectPill.defaultProps = {
 };
 
 export default SelectPill;
- 

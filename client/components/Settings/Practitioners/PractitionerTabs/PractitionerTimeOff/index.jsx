@@ -35,15 +35,29 @@ class PractitionerTimeOff extends Component {
   }
 
   handleSubmit(values) {
-    const { practitioner, createEntityRequest, updateEntityRequest } = this.props;
+    const {
+      practitioner,
+      createEntityRequest,
+      updateEntityRequest,
+    } = this.props;
 
     const { selectedTimeOff } = this.state;
 
-    const { startDate, endDate, startTime, endTime, allDay } = values;
+    const {
+      startDate, endDate, startTime, endTime, allDay,
+    } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
-    const mergedStartDate = mergeTime(new Date(startDate), new Date(startTime), allDay);
-    const mergedEndDate = mergeTime(new Date(endDate), new Date(endTime), allDay);
+    const mergedStartDate = mergeTime(
+      new Date(startDate),
+      new Date(startTime),
+      allDay,
+    );
+    const mergedEndDate = mergeTime(
+      new Date(endDate),
+      new Date(endTime),
+      allDay,
+    );
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
@@ -63,7 +77,11 @@ class PractitionerTimeOff extends Component {
         },
       };
 
-      createEntityRequest({ key: 'practitionerRecurringTimeOffs', entityData: trimValues, alert });
+      createEntityRequest({
+        key: 'practitionerRecurringTimeOffs',
+        entityData: trimValues,
+        alert,
+      });
     } else if (selectedTimeOff) {
       // We assume selected practitioner is
       const alert = {
@@ -77,7 +95,11 @@ class PractitionerTimeOff extends Component {
 
       const valuesMap = Map(trimValues);
       const modifiedAccount = selectedTimeOff.merge(valuesMap);
-      updateEntityRequest({ key: 'practitionerRecurringTimeOffs', model: modifiedAccount, alert });
+      updateEntityRequest({
+        key: 'practitionerRecurringTimeOffs',
+        model: modifiedAccount,
+        alert,
+      });
     } else {
       throw new Error('Form was submitted without added or selected time off');
     }
@@ -86,7 +108,10 @@ class PractitionerTimeOff extends Component {
   }
 
   deleteTimeOff(timeOff) {
-    this.props.deleteEntityRequest({ key: 'practitionerRecurringTimeOffs', id: timeOff.get('id') });
+    this.props.deleteEntityRequest({
+      key: 'practitionerRecurringTimeOffs',
+      id: timeOff.get('id'),
+    });
   }
 
   reinitializeState() {
@@ -135,7 +160,12 @@ class PractitionerTimeOff extends Component {
 
     let showAddOrListComponent = (
       <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button onClick={this.addTimeOff} secondary data-test-id="addTimeOffButton" create>
+        <Button
+          onClick={this.addTimeOff}
+          secondary
+          data-test-id="addTimeOffButton"
+          create
+        >
           Add Time Off
         </Button>
       </div>
@@ -173,7 +203,7 @@ class PractitionerTimeOff extends Component {
       <div>
         {showAddOrListComponent}
         <DialogBox
-          key={'addTimeOff'}
+          key="addTimeOff"
           actions={actions}
           title="Add Time Off"
           type="medium"
@@ -209,10 +239,13 @@ function mapActionsToProps(dispatch) {
       deleteEntityRequest,
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(PractitionerTimeOff);

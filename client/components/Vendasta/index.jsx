@@ -7,13 +7,11 @@ function Dashboard({ isActive, setIsActive }) {
   const toggle = () => setIsActive(!isActive);
   return (
     <div>
-      <h1></h1>
+      <h1 />
     </div>
   );
 }
 
-const enhance = compose(
-  withState('isActive', 'setIsActive', false)
-);
+const enhance = compose(withState('isActive', 'setIsActive', false));
 
 export default enhance(Dashboard);

@@ -3,10 +3,7 @@ import React, { PropTypes } from 'react';
 import styles from './styles.scss';
 
 export default function ProgressBar(props) {
-  const {
-    percentage,
-    noTextDisplay,
-  } = props;
+  const { percentage, noTextDisplay } = props;
 
   const roundedPercentage = Math.round(percentage);
   // Make sure its not less than 0 or greater than 100
@@ -17,9 +14,11 @@ export default function ProgressBar(props) {
 
   return (
     <div className={styles.wrapper}>
-      {percentage ? <div style={{ width }} className={styles.bar}>
-        {text}
-      </div> : null}
+      {percentage ? (
+        <div style={{ width }} className={styles.bar}>
+          {text}
+        </div>
+      ) : null}
     </div>
   );
 }

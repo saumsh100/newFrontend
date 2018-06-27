@@ -9,7 +9,11 @@ import practitioners from '../../../../entities/collections/practitioners';
 import { setSelectedPractitionerId } from '../../../../actions/availabilities';
 import styles from './styles.scss';
 
-function Practitioners({ practitionersEntity, selectedPractitionerId, setSelectedPractitioner }) {
+function Practitioners({
+  practitionersEntity,
+  selectedPractitionerId,
+  setSelectedPractitioner,
+}) {
   /**
    * List of only active and not hidden practitioners
    * containing their name value and type.
@@ -26,13 +30,13 @@ function Practitioners({ practitionersEntity, selectedPractitionerId, setSelecte
           description: actual.get('type'),
         },
       ],
-      [{ label: 'No Preference', value: '' }]
+      [{ label: 'No Preference', value: '' }],
     );
 
   return (
     <div className={styles.container}>
       {practitionerList.map(prac => (
-        <Link to={'./reason'} key={prac.value} className={styles.link}>
+        <Link to="./reason" key={prac.value} className={styles.link}>
           <WidgetCard
             title={prac.label}
             description={prac.description}
@@ -58,11 +62,14 @@ function mapDispatchToProps(dispatch) {
     {
       setSelectedPractitioner: setSelectedPractitionerId,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Practitioners);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Practitioners);
 
 Practitioners.propTypes = {
   practitionersEntity: PropTypes.instanceOf(practitioners),

@@ -22,6 +22,9 @@ function mapStateToProps({ toolbar }) {
   };
 }
 
-const enhance = connect(mapStateToProps, null);
+const enhance = connect(
+  mapStateToProps,
+  null,
+);
 
 export default enhance(MainRegionContainer);

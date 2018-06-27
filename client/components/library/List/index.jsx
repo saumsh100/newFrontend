@@ -11,7 +11,9 @@ export function List(props) {
 }
 
 export function ListItem(props) {
-  const { className, disabledClass, selectedClass, selectItem } = props;
+  const {
+    className, disabledClass, selectedClass, selectItem,
+  } = props;
 
   let classes = className;
   if (props.disabled) {
@@ -20,12 +22,12 @@ export function ListItem(props) {
     classes = classNames(classes, styles.listItem);
   }
 
-  classes = selectItem ? classNames(classes, styles.selected, selectedClass) : classes;
+  classes = selectItem
+    ? classNames(classes, styles.selected, selectedClass)
+    : classes;
 
   const newProps = omit(props, ['selectItem', 'className']);
-  return (
-    <li {...newProps} className={classes} />
-  );
+  return <li {...newProps} className={classes} />;
 }
 
 ListItem.propTypes = {

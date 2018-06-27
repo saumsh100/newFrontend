@@ -13,11 +13,7 @@ export default function LastSyncDisplay(props) {
   const statusClass = isOff ? styles.off : styles.on;
   const classes = classNames(className, statusClass);
   const displayString = `Last synced ${mDate.fromNow(true)} ago`;
-  return (
-    <div className={classes}>
-      {displayString}
-    </div>
-  );
+  return <div className={classes}>{displayString}</div>;
 }
 
 LastSyncDisplay.defaultProps = {

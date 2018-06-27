@@ -33,7 +33,12 @@ export default function AppointmentsForm(props) {
         <div className={styles.formHeader}>Last Appointment</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="lastRecallDate" label="Recall" component="DayPicker" theme={inputStyle} />
+            <Field
+              name="lastRecallDate"
+              label="Recall"
+              component="DayPicker"
+              theme={inputStyle}
+            />
           </Col>
           <Col xs={6}>
             <Field

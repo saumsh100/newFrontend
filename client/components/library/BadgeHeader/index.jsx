@@ -16,7 +16,9 @@ export default function BadgeHeader(props) {
 
   let titleComponent = null;
   if (title) {
-    titleComponent = <div className={classes.title || styles.title}>{title}</div>;
+    titleComponent = (
+      <div className={classes.title || styles.title}>{title}</div>
+    );
   }
 
   const newProps = omit(props, ['count']);

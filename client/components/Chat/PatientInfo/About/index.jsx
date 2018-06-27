@@ -2,11 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {
-  Grid,
-  Row,
-  Col,
-} from '../../../library';
+import { Grid, Row, Col } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import styles from './styles.scss';
@@ -19,16 +15,18 @@ const genderMap = {
 export default function About({ patient }) {
   return (
     <div>
-      <PatientAvatarTitle
-        patient={patient}
-      />
+      <PatientAvatarTitle patient={patient} />
       <div className={styles.content}>
         <Grid>
           <Row>
             <Col xs={6}>
               <Content
                 title="Age"
-                value={patient.birthDate ? moment().diff(patient.birthDate, 'years') : 'n/a'}
+                value={
+                  patient.birthDate
+                    ? moment().diff(patient.birthDate, 'years')
+                    : 'n/a'
+                }
               />
               <Content
                 title="Gender"
@@ -36,29 +34,33 @@ export default function About({ patient }) {
               />
               <Content
                 title="City"
-                value={patient.address && patient.address.city ? patient.address.city : 'n/a'}
+                value={
+                  patient.address && patient.address.city
+                    ? patient.address.city
+                    : 'n/a'
+                }
               />
             </Col>
             <Col xs={6}>
               <Content
                 title="Birthday"
-                value={patient.birthDate ? moment(patient.birthDate).format('MMM DD, YYYY') : 'n/a'}
+                value={
+                  patient.birthDate
+                    ? moment(patient.birthDate).format('MMM DD, YYYY')
+                    : 'n/a'
+                }
               />
-              <Content
-                title="Language"
-                value="n/a"
-              />
-              <Content
-                title="Family"
-                value="n/a"
-              />
+              <Content title="Language" value="n/a" />
+              <Content title="Family" value="n/a" />
             </Col>
           </Row>
           <Row className={styles.otherSection}>
             <Col xs={6}>
               <Content
                 title="Mobile Phone"
-                value={patient.mobilePhoneNumber ? patient.mobilePhoneNumber : 'n/a'}
+                value={
+                  patient.mobilePhoneNumber ? patient.mobilePhoneNumber : 'n/a'
+                }
               />
               <Content
                 title="Email"
@@ -68,7 +70,9 @@ export default function About({ patient }) {
             <Col xs={6}>
               <Content
                 title="Home Phone"
-                value={patient.homePhoneNumber ? patient.homePhoneNumber : 'n/a'}
+                value={
+                  patient.homePhoneNumber ? patient.homePhoneNumber : 'n/a'
+                }
               />
             </Col>
           </Row>

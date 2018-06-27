@@ -79,7 +79,11 @@ class SideBarFilters extends Component {
     });
 
     keys.forEach((key) => {
-      if (key === 'firstName' && values[key].length === 1 && values[key] !== '') {
+      if (
+        key === 'firstName' &&
+        values[key].length === 1 &&
+        values[key] !== ''
+      ) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 0,
@@ -91,7 +95,11 @@ class SideBarFilters extends Component {
         });
       }
 
-      if (key === 'lastName' && values[key].length === 1 && values[key] !== '') {
+      if (
+        key === 'lastName' &&
+        values[key].length === 1 &&
+        values[key] !== ''
+      ) {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 1,
@@ -420,7 +428,9 @@ class SideBarFilters extends Component {
             <Icon size={1.5} icon="caret-down" type="solid" />
           </span>
         </div>
-        {openFilters[index] ? <div className={styles.collapsible}>{component}</div> : null}
+        {openFilters[index] ? (
+          <div className={styles.collapsible}>{component}</div>
+        ) : null}
       </div>
     );
 

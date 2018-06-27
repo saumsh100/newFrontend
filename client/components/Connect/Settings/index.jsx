@@ -31,19 +31,20 @@ class Settings extends Component {
       },
     };
 
-    return axios.put('/api/accounts/configurations', body, config)
+    return axios
+      .put('/api/accounts/configurations', body, config)
       .then(() => {
-        window.JavaParent
-        && window.JavaParent.onAdapterSave
-        && window.JavaParent.onAdapterSave(values.adapterType);
+        window.JavaParent &&
+          window.JavaParent.onAdapterSave &&
+          window.JavaParent.onAdapterSave(values.adapterType);
         history.push('./panel');
       })
       .catch(err => console.error('Could not save', err));
 
-    /*return this.props.updateEntityRequest({ key: 'accounts', model })
+    /* return this.props.updateEntityRequest({ key: 'accounts', model })
       .then(() => {
         history.push('./panel');
-      });*/
+      }); */
   }
 
   render() {
@@ -55,7 +56,8 @@ class Settings extends Component {
     return (
       <div className={styles.settingsWrapper}>
         <div className={styles.subHeader}>
-          Select your practice management software with the correct version (ie. Tracker 11).
+          Select your practice management software with the correct version (ie.
+          Tracker 11).
         </div>
         <ConnectorSettingsForm
           initialValues={initialValues}
@@ -67,7 +69,7 @@ class Settings extends Component {
 }
 
 Settings.propTypes = {
-  //updateReview: PropTypes.func.isRequired,
+  // updateReview: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
@@ -78,9 +80,15 @@ function mapStateToProps({ entities, auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateEntityRequest,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Settings));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Settings));

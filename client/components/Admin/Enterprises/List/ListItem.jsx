@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { ListItem, VButton } from '../../../library/index';
 import withHoverable from '../../../../hocs/withHoverable';
@@ -8,7 +9,9 @@ const confirmDelete = fn => () =>
 
 const renderIf = (cmp, render) => (cmp ? render() : null);
 
-const EnterprisesListItem = ({ isHovered, name, id, onDelete, onEdit }) =>
+const EnterprisesListItem = ({
+  isHovered, name, id, onDelete, onEdit,
+}) => (
   <ListItem className={styles.listItem}>
     <strong>{name}</strong>
 
@@ -31,6 +34,7 @@ const EnterprisesListItem = ({ isHovered, name, id, onDelete, onEdit }) =>
         />
       </div>
     ))}
-  </ListItem>;
+  </ListItem>
+);
 
 export default withHoverable(EnterprisesListItem);

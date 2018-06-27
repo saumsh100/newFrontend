@@ -42,14 +42,22 @@ function NavList({
     let labelComponent = null;
     if (!isCollapsed) {
       labelComponent = (
-        <div className={active ? activeLabelClass : inactiveLabelClass}>{label}</div>
+        <div className={active ? activeLabelClass : inactiveLabelClass}>
+          {label}
+        </div>
       );
     }
 
     return (
       <Link to={path} disabled={disabled} href={path}>
         <NavItem className={classes}>
-          <Icon icon={icon} className={styles.icon} size={1.5} type={iconType} badgeText={badge} />
+          <Icon
+            icon={icon}
+            className={styles.icon}
+            size={1.5}
+            type={iconType}
+            badgeText={badge}
+          />
           {labelComponent}
         </NavItem>
       </Link>
@@ -83,7 +91,13 @@ function NavList({
 
     return (
       <div>
-        <SingleNavItem path={path} icon={icon} label={label} active={active} iconType={iconType} />
+        <SingleNavItem
+          path={path}
+          icon={icon}
+          label={label}
+          active={active}
+          iconType={iconType}
+        />
         {content}
       </div>
     );
@@ -108,7 +122,10 @@ function NavList({
     const active = location.pathname.indexOf(path) === 0;
     let inactiveSubClass = styles.liSubNavItem;
     if (disabled) {
-      inactiveSubClass = classNames(inactiveSubClass, styles.disabledSubNavItem);
+      inactiveSubClass = classNames(
+        inactiveSubClass,
+        styles.disabledSubNavItem,
+      );
     }
 
     const activeSubClass = classNames(
@@ -138,13 +155,18 @@ function NavList({
     disabled: false,
   };
 
-  const renderIf = (cond, render, alt) => (cond ? render() : (alt && alt()) || null);
+  const renderIf = (cond, render, alt) =>
+    (cond ? render() : (alt && alt()) || null);
 
   return (
     <div className={styles.navListWrapper}>
       <Nav>
         {renderIf(withEnterprise, () => (
-          <MultiNavItem path="/enterprise" icon="building" label="Enterprise Dashboard">
+          <MultiNavItem
+            path="/enterprise"
+            icon="building"
+            label="Enterprise Dashboard"
+          >
             <SubNavItem path="/enterprise/patients" label="Patients" />
           </MultiNavItem>
         ))}
@@ -153,14 +175,17 @@ function NavList({
           icon="tachometer"
           label={renderIf(withEnterprise, () => 'Dashboard', () => 'Dashboard')}
         />
-
         <SingleNavItem
           path="/schedule"
           icon="calendar-alt"
           label="Schedule"
           badge={onlineRequests}
         />
-        <SingleNavItem path="/patients/list" icon="heart" label="Patient Management" />
+        <SingleNavItem
+          path="/patients/list"
+          icon="heart"
+          label="Patient Management"
+        />
         <SingleNavItem
           path="/chat"
           icon="comment-alt"
@@ -177,7 +202,6 @@ function NavList({
           <SubNavItem path="/reputation/reviews" label="Reviews" />
           <SubNavItem path="/reputation/listings" label="Listings" />
         </MultiNavItem>
-
         <MultiNavItem path="/settings" icon="cogs" label="Account Settings">
           <SubNavItem path="/settings/practice" label="Practice" />
           <SubNavItem path="/settings/reasons" label="Reasons" />
@@ -186,7 +210,12 @@ function NavList({
         </MultiNavItem>
 
         {renderIf(isSuperAdmin, () => (
-          <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
+          <MultiNavItem
+            path="/admin"
+            icon="superpowers"
+            label="Super Admin"
+            iconType="brand"
+          >
             <SubNavItem path="/admin/enterprises" label="Enterprises" />
             <SubNavItem path="/admin/nasa" label="NASA" />
             <SubNavItem path="/admin/play" label="Playground" />
@@ -220,7 +249,8 @@ function mapStateToProps({ chat, entities }) {
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
   const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
-  const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
+  const requestsLength =
+    filteredRequests.length > 100 ? '99+' : filteredRequests.length;
 
   return {
     unreadChats: chatsLength,
