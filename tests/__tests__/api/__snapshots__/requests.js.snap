@@ -127,13 +127,12 @@ Patient Name: Jack Daniels
 Phone Number: (604) 999-9999
 Email: testpatientuser@test.com
 Birth Date: 18/07/1996
-
-Requested By: Self
-
 Insurance Plan: test
-Insurer Name: null
+Insurer Name: n/a
 Member Id: 53245
-Group Id: none",
+Group Id: none
+
+Requested By: Self",
         "insuranceCarrier": "test",
         "insuranceMemberId": "53245",
         "isDeleted": false,
