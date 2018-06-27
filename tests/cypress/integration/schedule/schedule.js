@@ -1,4 +1,4 @@
-describe.skip('Schedule Tests', () => {
+describe('Schedule Tests', () => {
   beforeEach(() => {
     cy.login();
     cy.visit('http://localhost:5100/schedule');

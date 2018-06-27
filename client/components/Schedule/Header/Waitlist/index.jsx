@@ -29,7 +29,7 @@ export default function Waitlist(props) {
 
           const patientUser = edge.node.patientUser && {
             ...edge.node.patientUser,
-            clientId: edge.node.patient.id,
+            clientId: edge.node.patientUser.id,
             id: edge.node.patientUser.ccId,
           };
 

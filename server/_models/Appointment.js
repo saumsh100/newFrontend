@@ -114,6 +114,12 @@ export default function (sequelize, DataTypes) {
       },
     },
 
+    isMissed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+
     isPending: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

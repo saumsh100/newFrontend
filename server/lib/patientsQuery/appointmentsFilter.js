@@ -61,6 +61,7 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
           accountId,
           isCancelled: false,
           isDeleted: false,
+          isMissed: false,
           isPending: false,
           patientId: {
             $not: null,

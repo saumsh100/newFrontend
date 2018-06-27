@@ -38,6 +38,7 @@ const query = graphql`
             }
             patientUser {
               id
+              ccId
               firstName
               lastName
               phoneNumber

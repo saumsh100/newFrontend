@@ -24,14 +24,16 @@
     "lines-between-class-members": ["error", "always"],
     "prefer-destructuring": "warn",
     "no-alert": "off",
-    "react/no-did-mount-set-state": "off"
+    "react/no-did-mount-set-state": "off",
+    "import/no-unresolved": "off",
+    "import/extensions": "off"
   },
   "env": {
     "browser": true,
     "mocha": true,
     "node": true
   },
-  "settings": {
-    "import/core-modules": ["relay-runtime"]
+  "globals": {
+    "cy": true
   }
 }

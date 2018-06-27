@@ -6,6 +6,7 @@ import { isOnDevice, getApiUrl, getSubscriptionUrl } from './hub';
 const getTokenDefault = () => localStorage.getItem('token');
 const path = '/graphql';
 
+const socketProtocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
 const url = !isOnDevice() ? path : getApiUrl() + path;
 
 const fetchQuery = (getToken = getTokenDefault) => (operation, variables) => {
@@ -28,12 +29,15 @@ const setupSubscription = (config, variables, cacheConfig, observer) => {
   const query = config.text;
   const token = getTokenDefault();
 
-  const subscriptionClient = new SubscriptionClient(`ws://${getSubscriptionUrl()}/subscriptions`, {
-    reconnect: true,
-    connectionParams: {
-      Authorization: token,
+  const subscriptionClient = new SubscriptionClient(
+    `${socketProtocol}://${getSubscriptionUrl()}/subscriptions`,
+    {
+      reconnect: true,
+      connectionParams: {
+        Authorization: token,
+      },
     },
-  });
+  );
 
   const client = subscriptionClient.request({ query, variables }).subscribe((response) => {
     observer.onNext({

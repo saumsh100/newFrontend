@@ -89,6 +89,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
     where: {
       isDeleted: false,
       isCancelled: false,
+      isMissed: false,
       isPending: false,
       accountId: account.id,
       endDate: {
@@ -124,6 +125,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
             where: {
               isDeleted: false,
               isCancelled: false,
+              isMissed: false,
               isPending: false,
               accountId: account.id,
               endDate: {

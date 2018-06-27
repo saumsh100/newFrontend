@@ -25,6 +25,7 @@ export async function PractitionersFilter({ data }, filterIds, query, accountId)
           accountId,
           isCancelled: false,
           isDeleted: false,
+          isMissed: false,
           isPending: false,
           practitionerId: data[0],
         },

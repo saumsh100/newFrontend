@@ -83,6 +83,8 @@ class AddToWaitlist extends Component {
   }
 
   handleCreateWaitSpot(values) {
+    if (!values.patientData) return;
+
     const newValues = Object.assign(
       {
         patientId: values.patientData.id,

@@ -66,6 +66,7 @@ export async function calcRevenueDays(revParams) {
         where: {
           accountId,
           isCancelled: false,
+          isMissed: false,
           isPending: false,
           isDeleted: false,
           startDate: {
@@ -163,6 +164,7 @@ export async function calcRevenueDays(revParams) {
         where: {
           accountId,
           isCancelled: false,
+          isMissed: false,
           isPending: false,
           isDeleted: false,
           startDate: {
@@ -314,6 +316,7 @@ async function getAllDatesWithAppointments(
           },
         },
       ],
+      isMissed: false,
       isPending: false,
       isCancelled: false,
       isDeleted: false,

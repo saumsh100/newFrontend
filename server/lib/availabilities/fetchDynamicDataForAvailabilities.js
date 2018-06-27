@@ -62,6 +62,7 @@ export function fetchAppointments({ practitionerIds, startDate, endDate }) {
     where: {
       isDeleted: false,
       isCancelled: false,
+      isMissed: false,
       isPending: false,
       isBookable: false,
       practitionerId: { $in: practitionerIds },

@@ -132,6 +132,7 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
       isDeleted: false,
       isCancelled: false,
       isShortCancelled: false,
+      isMissed: false,
       isPending: false,
       accountId: reminder.accountId,
       startDate: {
@@ -168,6 +169,7 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
             isDeleted: false,
             isCancelled: false,
             isShortCancelled: false,
+            isMissed: false,
             isPending: false,
             accountId: reminder.accountId,
             // Do not include the upper-bound, or else you'll always get the same appointment as above
