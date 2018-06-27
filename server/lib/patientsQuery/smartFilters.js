@@ -61,6 +61,7 @@ export function CancelledAppointmentsFilter(accountId, offSetLimit) {
         accountId,
         isCancelled: true,
         isDeleted: false,
+        isMissed: false,
         isPending: false,
         startDate: {
           $between: [moment().subtract(48, 'hours').toISOString(), new Date()],
@@ -109,6 +110,7 @@ export function UnConfirmedPatientsFilter(accountId, offSetLimit, smFilter) {
         isPatientConfirmed: false,
         isCancelled: false,
         isDeleted: false,
+        isMissed: false,
         isPending: false,
       },
       attributes: ['startDate'],

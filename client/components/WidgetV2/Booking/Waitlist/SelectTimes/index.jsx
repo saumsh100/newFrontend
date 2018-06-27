@@ -14,7 +14,14 @@ import officeHoursShape from '../../../../library/PropTypeShapes/officeHoursShap
 import createAvailabilitiesFromOpening from '../../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import styles from './styles.scss';
 
-function SelectTimes({ selectedService, officeHours, waitlist, timezone, setWaitlist, history }) {
+function SelectTimes({
+  selectedService,
+  officeHours,
+  waitlist,
+  timezone,
+  setWaitlist,
+  history,
+}) {
   /**
    * Return the correct moment object checking if there's a timezone before.
    *
@@ -37,7 +44,8 @@ function SelectTimes({ selectedService, officeHours, waitlist, timezone, setWait
    *
    * @param {object} startDate
    */
-  const checkIfIncludesTime = ({ startDate }) => waitlist.times.includes(startDate);
+  const checkIfIncludesTime = ({ startDate }) =>
+    waitlist.times.includes(startDate);
 
   /**
    * Look over the officeHours object and find the earliest startTime of the clinic.
@@ -84,7 +92,9 @@ function SelectTimes({ selectedService, officeHours, waitlist, timezone, setWait
 
       return acc;
     },
-    { morning: [], afternoon: [], evening: [], total: 0 }
+    {
+      morning: [], afternoon: [], evening: [], total: 0,
+    },
   );
 
   /**
@@ -101,7 +111,9 @@ function SelectTimes({ selectedService, officeHours, waitlist, timezone, setWait
         {value}
         <Button
           className={styles.editLink}
-          onClick={() => history.push({ pathname: link, state: { nextRoute: goBack } })}
+          onClick={() =>
+            history.push({ pathname: link, state: { nextRoute: goBack } })
+          }
         >
           <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 9.5V12h2.5l7.372-7.372-2.5-2.5L0 9.5zm11.805-6.805c.26-.26.26-.68 0-.94l-1.56-1.56a.664.664 0 0 0-.94 0l-1.22 1.22 2.5 2.5 1.22-1.22z" />
@@ -126,7 +138,10 @@ function SelectTimes({ selectedService, officeHours, waitlist, timezone, setWait
         availabilities.total === waitlist.times.length,
     });
     return (
-      <Button className={classes} onClick={() => handleSelectFrameAvailability(frame)}>
+      <Button
+        className={classes}
+        onClick={() => handleSelectFrameAvailability(frame)}
+      >
         {label}
       </Button>
     );
@@ -212,32 +227,36 @@ function SelectTimes({ selectedService, officeHours, waitlist, timezone, setWait
       <div className={styles.content}>
         <h3 className={styles.title}>Waitlist Summary</h3>
         <p className={styles.subtitle}>
-          Here are the informations that you already defined to your appointment.
+          Here are the informations that you already defined to your
+          appointment.
         </p>
         {renderSummaryItem(
           'Reason',
           selectedService.get('name'),
           '../reason',
-          './waitlist/select-times'
+          './waitlist/select-times',
         )}
         {renderSummaryItem(
           'Days on Waitlist',
           `${waitlist.dates[0]} > ${waitlist.dates[waitlist.dates.length - 1]}`,
           './select-dates',
-          './select-times'
+          './select-times',
         )}
       </div>
       <div className={styles.content}>
         <h3 className={styles.title}>Select Times</h3>
         <p className={styles.subtitle}>
-          Select the times you are available to come for an earlier appointment. (Select all that
-          apply)
+          Select the times you are available to come for an earlier appointment.
+          (Select all that apply)
         </p>
         <div className={styles.timeFrameWrapper}>
           {timeFrameButton('all', 'All Day')}
-          {availabilities.morning.length > 0 && timeFrameButton('morning', 'Morning')}
-          {availabilities.afternoon.length > 0 && timeFrameButton('afternoon', 'Afternoon')}
-          {availabilities.evening.length > 0 && timeFrameButton('evening', 'Evening')}
+          {availabilities.morning.length > 0 &&
+            timeFrameButton('morning', 'Morning')}
+          {availabilities.afternoon.length > 0 &&
+            timeFrameButton('afternoon', 'Afternoon')}
+          {availabilities.evening.length > 0 &&
+            timeFrameButton('evening', 'Evening')}
         </div>
         <div>
           <span className={styles.helper}>Or</span>
@@ -275,11 +294,14 @@ function mapDispatchToProps(dispatch) {
     {
       setWaitlist: setWaitlistTimes,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectTimes);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectTimes);
 
 SelectTimes.propTypes = {
   timezone: PropTypes.string,
@@ -290,5 +312,8 @@ SelectTimes.propTypes = {
   }),
   history: PropTypes.shape(historyShape),
   officeHours: PropTypes.shape(officeHoursShape),
-  selectedService: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Service)]),
+  selectedService: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Service),
+  ]),
 };

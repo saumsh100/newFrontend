@@ -5,25 +5,19 @@ import ColumnHeader from '../ColumnHeader/index';
 import styles from '../styles.scss';
 
 export default function TimeSlotColumn(props) {
-  const {
-    timeSlots,
-    timeSlotHeight,
-  } = props;
-
+  const { timeSlots, timeSlotHeight } = props;
 
   return (
     <div>
-      {timeSlots.map((slot, i) => {
-        return (
-          <div
-            key={i + Math.random()}
-            className={styles.timeSlotColumnItem}
-            style={timeSlotHeight}
-          >
-            {''}
-          </div>
-        );
-      })}
+      {timeSlots.map((slot, i) => (
+        <div
+          key={i + Math.random()}
+          className={styles.timeSlotColumnItem}
+          style={timeSlotHeight}
+        >
+          {''}
+        </div>
+        ))}
     </div>
   );
 }

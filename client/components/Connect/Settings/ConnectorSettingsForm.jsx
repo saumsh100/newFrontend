@@ -54,7 +54,12 @@ export default function ConnectorSettingsForm({ initialValues, onSubmit }) {
         options={options}
         required
       />
-      <VButton className={styles.nextButton} color="dark" iconRight="angle-right" title="Next" />
+      <VButton
+        className={styles.nextButton}
+        color="dark"
+        iconRight="angle-right"
+        title="Next"
+      />
     </Form>
   );
 }

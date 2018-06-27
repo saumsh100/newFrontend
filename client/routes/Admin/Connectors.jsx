@@ -6,16 +6,12 @@ import Connectors from '../../components/Admin/Connectors';
 
 const base = (path = '') => `/admin/nasa${path}`;
 
-const ConnectorsRoutes = (props) => {
-  return (
-    <Switch>
-      <Route exact path={base()} component={Connectors} />
-    </Switch>
-  );
-};
+const ConnectorsRoutes = props => (
+  <Switch>
+    <Route exact path={base()} component={Connectors} />
+  </Switch>
+);
 
-ConnectorsRoutes.propTypes = {
-
-};
+ConnectorsRoutes.propTypes = {};
 
 export default ConnectorsRoutes;

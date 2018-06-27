@@ -37,11 +37,7 @@ function Checkbox(props) {
 
   return (
     <div className={containerClasses}>
-      <div
-        className={classes}
-        onClick={onChange}
-        onChange={onChange}
-      >
+      <div className={classes} onClick={onChange} onChange={onChange}>
         <input
           id={id}
           type="checkbox"
@@ -50,15 +46,11 @@ function Checkbox(props) {
           onChange={() => {}}
           className={classes}
         />
-        <label
-          htmlFor={id}
-        />
+        <label htmlFor={id} />
       </div>
-      <span
-        onClick={onChange}
-        onChange={onChange}
-        className={labelClasses}
-      >{label}</span>
+      <span onClick={onChange} onChange={onChange} className={labelClasses}>
+        {label}
+      </span>
     </div>
   );
 }

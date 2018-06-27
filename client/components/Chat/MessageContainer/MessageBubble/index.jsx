@@ -9,22 +9,26 @@ import { isHub } from '../../../../util/hub';
 function MessageBubble(props) {
   const { textMessage, isFromPatient } = props;
 
-  const fromClinicBody = isHub() ? styles.fromClinicBodyHub : styles.fromClinicBody;
+  const fromClinicBody = isHub()
+    ? styles.fromClinicBodyHub
+    : styles.fromClinicBody;
 
   const bodyClasses = classNames(
     isFromPatient ? styles.fromPatientBody : fromClinicBody,
-    styles.bubbleBody
+    styles.bubbleBody,
   );
 
   const timeClasses = classNames(
     isFromPatient ? styles.fromPatientTime : styles.fromClinicTime,
-    styles.bubbleTime
+    styles.bubbleTime,
   );
 
   return (
     <div className={styles.bubbleWrapper}>
       <div className={bodyClasses}>{textMessage.get('body')}</div>
-      <div className={timeClasses}>{moment(textMessage.get('createdAt')).format('h:mm a')}</div>
+      <div className={timeClasses}>
+        {moment(textMessage.get('createdAt')).format('h:mm a')}
+      </div>
     </div>
   );
 }

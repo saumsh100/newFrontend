@@ -1,27 +1,17 @@
 
 import React, { PropTypes } from 'react';
-import moment from 'moment'
+import moment from 'moment';
 import omit from 'lodash/omit';
 import DayPicker from '../../DayPicker';
 
 export default function RFDayPicker(props) {
-  const {
-    input,
-    error,
-    meta,
-  } = props;
+  const { input, error, meta } = props;
 
   const { touched, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
+  const finalError = error || (touched || dirty ? meta.error : null);
   const newProps = omit(props, ['input', 'meta']);
 
-  return (
-    <DayPicker
-      {...newProps}
-      {...input}
-      error={finalError}
-    />
-  );
+  return <DayPicker {...newProps} {...input} error={finalError} />;
 }
 
 /* eslint react/forbid-prop-types: 0 */

@@ -8,12 +8,12 @@ import { Card } from '../library';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import EmailSuccess from './EmailSuccess';
 import styles from './styles.scss';
-import { resetPassword  } from '../../thunks/auth';
+import { resetPassword } from '../../thunks/auth';
 import CopyrightFooter from '../Login/CopyrightFooter';
 
 class ForgotPassword extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       submitted: false,
       email: null,
@@ -30,7 +30,10 @@ class ForgotPassword extends Component {
   }
 
   render() {
-    const { location: { state }, push } = this.props;
+    const {
+      location: { state },
+      push,
+    } = this.props;
 
     return (
       <DocumentTitle title="CareCru | Reset Password">
@@ -43,22 +46,25 @@ class ForgotPassword extends Component {
                 alt="CareCru Logo"
               />
             </div>
-            <div className={styles.text}>Enter your email below and if you are a user, we will send you a link to reset your password.</div>
-            {this.state.submitted ?
+            <div className={styles.text}>
+              Enter your email below and if you are a user, we will send you a
+              link to reset your password.
+            </div>
+            {this.state.submitted ? (
               <EmailSuccess email={this.state.email} push={push} />
-              :
+            ) : (
               <div>
-                <ForgotPasswordForm onSubmit={this.handleSubmit}/>
+                <ForgotPasswordForm onSubmit={this.handleSubmit} />
                 <div
-                  className = {styles.textLogin}
+                  className={styles.textLogin}
                   onClick={() => {
                     push('/login');
                   }}
                 >
-                Back to Login Page
+                  Back to Login Page
                 </div>
               </div>
-            }
+            )}
           </Card>
           <CopyrightFooter />
         </div>
@@ -73,13 +79,18 @@ ForgotPassword.propTypes = {
 };
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    resetPassword,
-    push,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      resetPassword,
+      push,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(ForgotPassword);
-

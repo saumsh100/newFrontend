@@ -11,11 +11,18 @@ import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../../util/hub';
 import styles from './styles.scss';
 
 function NavList(props) {
-  const { location, unreadChats, newRequests, showContent, toolbarPosition } = props;
+  const {
+    location,
+    unreadChats,
+    newRequests,
+    showContent,
+    toolbarPosition,
+  } = props;
 
   const { navItem, activeItem } = styles;
 
-  const onClickToggle = active => (active ? props.collapseContent() : props.displayContent());
+  const onClickToggle = active =>
+    (active ? props.collapseContent() : props.displayContent());
 
   const SingleNavItem = ({
     path,
@@ -40,7 +47,9 @@ function NavList(props) {
               [styles.disabledItem]: disabled,
             })}
           >
-            {icon && <Icon icon={icon} size={1.3} type={iconType} badgeText={badge} />}
+            {icon && (
+              <Icon icon={icon} size={1.3} type={iconType} badgeText={badge} />
+            )}
             {iconImage}
           </NavItem>
         </Button>
@@ -61,8 +70,10 @@ function NavList(props) {
         [styles.active]: showContent,
         [styles.left]: toolbarPosition === TOOLBAR_LEFT,
         [styles.right]: toolbarPosition === TOOLBAR_RIGHT,
-        [styles.contentShownLeft]: showContent && toolbarPosition === TOOLBAR_LEFT,
-        [styles.contentShownRight]: showContent && toolbarPosition === TOOLBAR_RIGHT,
+        [styles.contentShownLeft]:
+          showContent && toolbarPosition === TOOLBAR_LEFT,
+        [styles.contentShownRight]:
+          showContent && toolbarPosition === TOOLBAR_RIGHT,
       })}
     >
       <Button
@@ -72,7 +83,7 @@ function NavList(props) {
           {
             [styles.borderTopRight]: toolbarPosition === TOOLBAR_LEFT,
             [styles.borderTopLeft]: toolbarPosition === TOOLBAR_RIGHT,
-          }
+          },
         )}
         onClick={props.collapseContent}
       >
@@ -83,15 +94,25 @@ function NavList(props) {
           path="/patients/search"
           icon="search"
           label="Patient search"
-          iconType={'light'}
+          iconType="light"
         />
-        <SingleNavItem path="/patients/insight" disabled icon="lightbulb" label="Patient insight" />
-        <SingleNavItem path="/patients/list" disabled icon="heart" label="Patient Management" />
+        <SingleNavItem
+          path="/patients/insight"
+          disabled
+          icon="lightbulb"
+          label="Patient insight"
+        />
+        <SingleNavItem
+          path="/patients/list"
+          disabled
+          icon="heart"
+          label="Patient Management"
+        />
         <SingleNavItem
           path="/requests"
           icon="calendar-edit"
           label="Online Requests"
-          iconType={'regular'}
+          iconType="regular"
           badge={newRequests}
           active={location.pathname.indexOf('/requests') !== -1}
         />
@@ -102,19 +123,37 @@ function NavList(props) {
           badge={unreadChats}
           active={location.pathname.indexOf('/chat') !== -1}
         />
-        <SingleNavItem path="/phone-calls" disabled icon="phone" label="Phone Calls" />
+        <SingleNavItem
+          path="/phone-calls"
+          disabled
+          icon="phone"
+          label="Phone Calls"
+        />
         <SingleNavItem
           path="/waitlist"
           disabled
           icon="clipboard"
           label="Waitlist"
-          iconType={'light'}
+          iconType="light"
         />
-        <SingleNavItem path="/marketing" disabled icon="bullhorn" label="Marketing" />
+        <SingleNavItem
+          path="/marketing"
+          disabled
+          icon="bullhorn"
+          label="Marketing"
+        />
       </Nav>
       <Nav className={styles.bottomNav}>
-        <SingleNavItem path="/intercom" label="Intercom" iconImage={intercomIcon} />
-        <SingleNavItem path="/shortcuts" label="Shortcuts" iconImage={shortcutIcon} />
+        <SingleNavItem
+          path="/intercom"
+          label="Intercom"
+          iconImage={intercomIcon}
+        />
+        <SingleNavItem
+          path="/shortcuts"
+          label="Shortcuts"
+          iconImage={shortcutIcon}
+        />
         <UserSettings />
       </Nav>
     </div>
@@ -150,7 +189,8 @@ const mapStateToProps = ({ chat, electron, entities }) => {
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
   const chatsLength = unreadChats.length > 100 ? '99+' : unreadChats.length;
-  const requestsLength = filteredRequests.length > 100 ? '99+' : filteredRequests.length;
+  const requestsLength =
+    filteredRequests.length > 100 ? '99+' : filteredRequests.length;
 
   return {
     unreadChats: chatsLength,
@@ -166,9 +206,12 @@ const mapDispatchToProps = dispatch =>
       displayContent,
       collapseContent,
     },
-    dispatch
+    dispatch,
   );
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(withAuthProps(NavList));

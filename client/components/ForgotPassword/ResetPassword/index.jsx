@@ -22,32 +22,33 @@ class ResetPassword extends Component {
 
   handleSubmit(values) {
     // This just posts right back to location URL...
-    return this.props.resetUserPassword(this.props.location, values)
-    .then((data) => {
-      this.setState({ submitted: true });
-    });
+    return this.props
+      .resetUserPassword(this.props.location, values)
+      .then((data) => {
+        this.setState({ submitted: true });
+      });
   }
 
   render() {
     const { submitted } = this.state;
-    const display = submitted ?
-      (
-        <div>
-          <div className={styles.textSuccess2}>Password Successfully Changed!</div>
-          <Button
-            onClick={() => this.props.push('/login')}
-            className={styles.displayCenter}
-          >
-            Return to Login
-          </Button>
+    const display = submitted ? (
+      <div>
+        <div className={styles.textSuccess2}>
+          Password Successfully Changed!
         </div>
-      ) :
-      (
-        <ResetPasswordForm
-          onSubmit={this.handleSubmit}
-          saveButtonProps={{ fluid: true, title: 'Reset Password' }}
-        />
-      );
+        <Button
+          onClick={() => this.props.push('/login')}
+          className={styles.displayCenter}
+        >
+          Return to Login
+        </Button>
+      </div>
+    ) : (
+      <ResetPasswordForm
+        onSubmit={this.handleSubmit}
+        saveButtonProps={{ fluid: true, title: 'Reset Password' }}
+      />
+    );
 
     return (
       <div className={styles.backDrop}>
@@ -67,17 +68,21 @@ class ResetPassword extends Component {
   }
 }
 
-ResetPassword.propTypes = {
-
-};
+ResetPassword.propTypes = {};
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    resetUserPassword,
-    push,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      resetUserPassword,
+      push,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(ResetPassword);

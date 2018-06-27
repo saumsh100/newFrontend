@@ -8,7 +8,5 @@ import styles from './styles.scss';
 export default function Footer(props) {
   const footerProps = omit(props, ['className']);
   const classes = classNames(props.className, styles.footer);
-  return (
-    <div className={classes} {...footerProps} />
-  );
+  return <div className={classes} {...footerProps} />;
 }

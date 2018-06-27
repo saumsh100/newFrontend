@@ -13,7 +13,8 @@ class Widget extends Component {
 
   componentWillMount() {
     // Without this, none of our themed styles would work
-    const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
+    const color =
+      this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
     document.documentElement.style.setProperty('--primaryColor', color);
     document.documentElement.style.setProperty('--primaryButtonColor', color);
   }
@@ -26,15 +27,13 @@ class Widget extends Component {
   }
 
   render() {
-    const {
-      children,
-    } = this.props;
+    const { children } = this.props;
 
     return (
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
           <Header />
-          {/*<div className={styles.tmpContainer}>
+          {/* <div className={styles.tmpContainer}>
             <div className={styles.col}>
               <Avatar
                 user={{ avatarUrl: "//dsw5h1xg5uvx.cloudfront.net/dc7c40b4-ed5e-44e3-9e99-a179df958ca1circle_medium__v1__.png" }}
@@ -48,8 +47,11 @@ class Widget extends Component {
                 Fri, Oct. 10th - 1:30 PM
               </div>
             </div>
-          </div>*/}
-          <div className={styles.container} ref={node => this.containerNode = node}>
+          </div> */}
+          <div
+            className={styles.container}
+            ref={node => (this.containerNode = node)}
+          >
             {children}
           </div>
         </div>
@@ -67,4 +69,7 @@ function mapStateToProps({ reviews }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, null)(Widget));
+export default withRouter(connect(
+  mapStateToProps,
+  null,
+)(Widget));

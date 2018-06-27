@@ -9,28 +9,24 @@ class RFCheckbox extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-
   handleChange() {
-    const {
-      input,
-    } = this.props;
+    const { input } = this.props;
 
     input.onChange(!input.value);
   }
 
   render() {
     const {
-      input,
-      icon,
-      label,
-      error,
-      meta,
-      flipped,
+      input, icon, label, error, meta, flipped,
     } = this.props;
 
     const { touched, asyncValidating, dirty } = meta;
-    const finalError = error || ((touched || dirty) ? meta.error : null);
-    const finalIcon = asyncValidating ? (<i className={'fa fa-cog fa-spin fa-fw'} />) : icon;
+    const finalError = error || (touched || dirty ? meta.error : null);
+    const finalIcon = asyncValidating ? (
+      <i className="fa fa-cog fa-spin fa-fw" />
+    ) : (
+      icon
+    );
     const checked = flipped ? !input.value : input.value;
 
     return (

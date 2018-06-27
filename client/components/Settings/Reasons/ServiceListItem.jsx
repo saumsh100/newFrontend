@@ -15,7 +15,9 @@ class ServiceListItem extends Component {
   }
 
   render() {
-    const { service, serviceId, id, duration } = this.props;
+    const {
+      service, serviceId, id, duration,
+    } = this.props;
 
     const selectItem = serviceId === id;
 
@@ -29,7 +31,10 @@ class ServiceListItem extends Component {
         <div>
           <div className={styles.servicesListItem_text}>{service}</div>
           <div className={styles.servicesListItem_duration}>
-            Duration: <span className={styles.servicesListItem_duration_text}>{duration} min</span>
+            Duration:{' '}
+            <span className={styles.servicesListItem_duration_text}>
+              {duration} min
+            </span>
           </div>
         </div>
       </ListItem>

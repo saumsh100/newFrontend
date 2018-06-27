@@ -8,8 +8,15 @@ import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import GeneralForm from './GeneralForm';
 import Address from './Address';
-import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
-import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
+import {
+  updateEntityRequest,
+  fetchEntities,
+} from '../../../../thunks/fetchEntities';
+import {
+  uploadLogo,
+  deleteLogo,
+  downloadConnector,
+} from '../../../../thunks/accounts';
 import { Dropzone, AccountLogo, Button, Header, Link } from '../../../library';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
@@ -81,7 +88,11 @@ class General extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
+    this.props.updateEntityRequest({
+      key: 'accounts',
+      model: modifiedAccount,
+      alert,
+    });
   }
 
   render() {
@@ -99,7 +110,9 @@ class General extends Component {
       return null;
     });
 
-    let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
+    let button = (
+      <Button onClick={this.downloadConnector}>Generate Download Link</Button>
+    );
 
     if (this.state.downloadLink) {
       const now = moment(this.state.expired);
@@ -108,12 +121,20 @@ class General extends Component {
 
       button =
         duration > 0 ? (
-          <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
+          <Link
+            className={styles.linkAsButton}
+            href={this.state.downloadLink}
+            download
+          >
             Click to Download
             <br /> {Math.floor(duration)} s
           </Link>
         ) : (
-          <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
+          <Link
+            className={styles.linkAsButton}
+            href={this.state.downloadLink}
+            download
+          >
             Link Expired
           </Link>
         );
@@ -130,7 +151,11 @@ class General extends Component {
         <div className={styles.generalMainContainer}>
           <div className={styles.formContainer}>
             <Header title="Practice Details" contentHeader />
-            <GeneralForm role={role} onSubmit={this.updateName} activeAccount={activeAccount} />
+            <GeneralForm
+              role={role}
+              onSubmit={this.updateName}
+              activeAccount={activeAccount}
+            />
           </div>
           <div className={styles.drop}>
             <Header title="Logo" contentHeader />
@@ -177,16 +202,22 @@ function mapDispatchToProps(dispatch) {
       deleteLogo,
       downloadConnector,
     },
-    dispatch
+    dispatch,
   );
 }
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const activeAccount = entities.getIn([
+    'accounts',
+    'models',
+    auth.get('accountId'),
+  ]);
   const addresses = entities.getIn(['addresses', 'models']);
 
   const address =
-    activeAccount && activeAccount.addressId ? addresses.get(activeAccount.addressId) : null;
+    activeAccount && activeAccount.addressId
+      ? addresses.get(activeAccount.addressId)
+      : null;
 
   return {
     users: entities.getIn(['users', 'models']),
@@ -195,6 +226,9 @@ function mapStateToProps({ entities, auth }) {
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(General);

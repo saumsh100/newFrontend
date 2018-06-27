@@ -21,7 +21,6 @@ function DigitalWaitListItem(props) {
     index,
   } = props;
 
-
   if (!patientUser) {
     return null;
   }
@@ -33,7 +32,11 @@ function DigitalWaitListItem(props) {
   if (notAllTrue(preferences)) {
     availComponent = map(preferences, (val, key) => {
       if (!val) return null;
-      return <div key={key} className={styles.data}>{key}</div>;
+      return (
+        <div key={key} className={styles.data}>
+          {key}
+        </div>
+      );
     });
   }
 
@@ -42,7 +45,11 @@ function DigitalWaitListItem(props) {
   if (notAllFalse(daysOfTheWeek)) {
     daysComponent = map(daysOfTheWeek, (val, key) => {
       if (!val) return null;
-      return <div key={key} className={styles.data}>{key.slice(0, 3)}</div>;
+      return (
+        <div key={key} className={styles.data}>
+          {key.slice(0, 3)}
+        </div>
+      );
     });
   }
 
@@ -56,21 +63,12 @@ function DigitalWaitListItem(props) {
     waitSpotModel: waitSpot,
   });
 
-
   let showHoverComponents = (
     <div className={styles.patients__item_right}>
-      <div className={styles.availability}>
-        Preferred Timeframe
-      </div>
-      <div className={styles.patients__item_days}>
-        {availComponent}
-      </div>
-      <div className={styles.availability}>
-        Preferred Days
-      </div>
-      <div className={styles.patients__item_days}>
-        {daysComponent}
-      </div>
+      <div className={styles.availability}>Preferred Timeframe</div>
+      <div className={styles.patients__item_days}>{availComponent}</div>
+      <div className={styles.availability}>Preferred Days</div>
+      <div className={styles.patients__item_days}>{daysComponent}</div>
     </div>
   );
 
@@ -78,7 +76,7 @@ function DigitalWaitListItem(props) {
     showHoverComponents = (
       <div className={styles.patients__item_clickIcons}>
         <IconButton
-          icon={'times-circle-o'}
+          icon="times-circle-o"
           onClick={(e) => {
             e.stopPropagation();
             removeWaitSpot(waitSpot.get('id'));
@@ -93,7 +91,7 @@ function DigitalWaitListItem(props) {
           }}
         >
           <Icon
-            icon={'pencil'}
+            icon="pencil"
             className={styles.patients__item_pencilBorder_pencil}
             size={0.9}
           />

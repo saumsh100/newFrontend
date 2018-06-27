@@ -1,4 +1,3 @@
-
 @import '../../../ui';
 
 .buttonLabel {
@@ -18,16 +17,16 @@
   line-height: 1em;
   text-align: center;
 
-  transition: background-color .1s ease, color .1s ease;
-  min-width: 60px;
+  transition: background-color 0.1s ease, color 0.1s ease;
+  min-width: 100px;
 }
 
 .checkboxButton input {
-  display: none!important;
+  display: none !important;
 }
 
-.checkboxButton input[type=checkbox]:checked + label {
+.checkboxButton input[type='checkbox']:checked + button {
   background-color: $primary-blue;
-  border-color:  $primary-blue;
+  border-color: $primary-blue;
   color: #ffffff;
 }

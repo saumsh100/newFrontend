@@ -5,23 +5,23 @@ import { Form, Field, FormSection } from '../../../../library';
 import { parseNum, notNegative } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
-const mathSymbols = [{
-  label: 'Greater than',
-  value: '>=',
-},{
-  label: 'Less than',
-  value: '<=',
-}, {
-  label: 'Equal to',
-  value: '=',
-}];
+const mathSymbols = [
+  {
+    label: 'Greater than',
+    value: '>=',
+  },
+  {
+    label: 'Less than',
+    value: '<=',
+  },
+  {
+    label: 'Equal to',
+    value: '=',
+  },
+];
 
 export default function Appointments(props) {
-  const {
-    handleAppointments,
-    theme,
-    dateTheme,
-  } = props;
+  const { handleAppointments, theme, dateTheme } = props;
 
   return (
     <Form
@@ -32,7 +32,10 @@ export default function Appointments(props) {
     >
       <div className={styles.formContainer}>
         <div className={styles.formHeaderInput}>First Appointment</div>
-        <FormSection name="firstAppointment" className={styles.formContainer_row} >
+        <FormSection
+          name="firstAppointment"
+          className={styles.formContainer_row}
+        >
           <Field
             component="DayPicker"
             name="0"
@@ -48,7 +51,10 @@ export default function Appointments(props) {
           />
         </FormSection>
         <div className={styles.formHeaderInput}>Last Appointment</div>
-        <FormSection name="lastAppointment" className={styles.formContainer_row} >
+        <FormSection
+          name="lastAppointment"
+          className={styles.formContainer_row}
+        >
           <Field
             component="DayPicker"
             name="0"
@@ -64,7 +70,7 @@ export default function Appointments(props) {
           />
         </FormSection>
         <div className={styles.formHeader}> Production </div>
-        <FormSection name="production" className={styles.formContainer_row} >
+        <FormSection name="production" className={styles.formContainer_row}>
           <Field
             name="0"
             type="number"
@@ -83,11 +89,13 @@ export default function Appointments(props) {
             data-test-id="duration"
             label="Amount"
             theme={theme}
-
           />
         </FormSection>
         <div className={styles.formHeader}>Number of Appointments </div>
-        <FormSection name="appointmentsCount" className={styles.formContainer_row} >
+        <FormSection
+          name="appointmentsCount"
+          className={styles.formContainer_row}
+        >
           <span className={styles.formContainer_dropDownInput}>
             <Field
               component="DropdownSelect"
@@ -99,19 +107,22 @@ export default function Appointments(props) {
             />
           </span>
           <span className={styles.formContainer_numberInput}>
-           <Field
-             name="1"
-             type="number"
-             validate={[notNegative]}
-             normalize={parseNum}
-             data-test-id="duration"
-             label="Amount"
-             theme={theme}
-           />
+            <Field
+              name="1"
+              type="number"
+              validate={[notNegative]}
+              normalize={parseNum}
+              data-test-id="duration"
+              label="Amount"
+              theme={theme}
+            />
           </span>
         </FormSection>
         <div className={styles.formHeader}> Online Appointments </div>
-        <FormSection name="onlineAppointments" className={styles.formContainer_row} >
+        <FormSection
+          name="onlineAppointments"
+          className={styles.formContainer_row}
+        >
           <span className={styles.formContainer_dropDownInput}>
             <Field
               component="DropdownSelect"

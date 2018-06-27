@@ -23,7 +23,7 @@ function SignUp({ history, handleNewPatient }) {
   return (
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
-        <Link to={'./login'} className={styles.subCard}>
+        <Link to="./login" className={styles.subCard}>
           <div className={styles.subCardWrapper}>
             <h3 className={styles.subCardTitle}>Already have an account?</h3>
           </div>
@@ -31,7 +31,9 @@ function SignUp({ history, handleNewPatient }) {
         </Link>
         <div className={styles.content}>
           <h3 className={styles.title}>Sign Up</h3>
-          <p className={styles.subtitle}>Fill your data to finish your booking.</p>
+          <p className={styles.subtitle}>
+            Fill your data to finish your booking.
+          </p>
           <Form
             form="userSignUpForm"
             onSubmit={handleSignUp}
@@ -150,7 +152,7 @@ function mapDispatchToProps(dispatch) {
     {
       handleNewPatient: createPatient,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -159,4 +161,7 @@ SignUp.propTypes = {
   history: PropTypes.shape(historyShape),
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(SignUp));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(SignUp));

@@ -27,4 +27,7 @@ function mapStateToProps({ auth }, { featureKey }) {
   };
 }
 
-export default connect(mapStateToProps, null)(FeatureFlagWrapper);
+export default connect(
+  mapStateToProps,
+  null,
+)(FeatureFlagWrapper);

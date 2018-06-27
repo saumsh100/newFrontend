@@ -29,7 +29,11 @@ class OnlineBooking extends Component {
         body: 'Booking Widget Update Failed',
       },
     };
-    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert });
+    this.props.updateEntityRequest({
+      key: 'accounts',
+      model: modifiedAccount,
+      alert,
+    });
   }
 
   render() {
@@ -42,26 +46,34 @@ class OnlineBooking extends Component {
     const location = window.location;
 
     const port = location.port ? `:${location.port}` : '';
-    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${
-      location.hostname
-    }${port}/widgets/${activeAccount.id}/cc.js"></script>`;
+    const snippet = `<script type="text/javascript" src="${
+      location.protocol
+    }//my.${location.hostname}${port}/widgets/${
+      activeAccount.id
+    }/cc.js"></script>`;
 
     return (
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>
         <div className={styles.formContainer}>
           <Header title="Color Options" contentHeader />
-          <PreferencesForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+          <PreferencesForm
+            activeAccount={activeAccount}
+            handleSubmit={this.handleSubmit}
+          />
         </div>
         <div className={styles.snippetContainer}>
           <div className={styles.label}>
-            HTML SNIPPET Copy and paste the snippet below into your website, at the bottom of your
-            body tag.
+            HTML SNIPPET Copy and paste the snippet below into your website, at
+            the bottom of your body tag.
           </div>
           <CodeSnippet codeSnippet={snippet} />
         </div>
         <div className={styles.formContainer}>
           <Header title="Interval Options" contentHeader />
-          <IntervalForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+          <IntervalForm
+            activeAccount={activeAccount}
+            handleSubmit={this.handleSubmit}
+          />
         </div>
       </SettingsCard>
     );
@@ -74,7 +86,11 @@ OnlineBooking.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const activeAccount = entities.getIn([
+    'accounts',
+    'models',
+    auth.get('accountId'),
+  ]);
 
   if (!activeAccount) {
     return {};
@@ -90,10 +106,13 @@ function mapDispatchToProps(dispatch) {
     {
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(OnlineBooking);

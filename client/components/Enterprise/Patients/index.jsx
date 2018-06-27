@@ -1,3 +1,4 @@
+
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
@@ -25,7 +26,10 @@ const fetchEnterpriseDashboard = (segmentId, rawWhere) => {
     rawWhere: rawWhere ? JSON.stringify(rawWhere) : undefined,
   };
 
-  return fetchEntities({ key: 'enterpriseDashboard', url: `/api/enterprises/dashboard/patients?${queryString.stringify(qs)}` });
+  return fetchEntities({
+    key: 'enterpriseDashboard',
+    url: `/api/enterprises/dashboard/patients?${queryString.stringify(qs)}`,
+  });
 };
 
 class PatientsPage extends Component {
@@ -34,7 +38,9 @@ class PatientsPage extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (JSON.stringify(this.props.rawWhere) !== JSON.stringify(props.rawWhere)) {
+    if (
+      JSON.stringify(this.props.rawWhere) !== JSON.stringify(props.rawWhere)
+    ) {
       this.props.fetchEnterpriseDashboard(null, props.rawWhere);
     }
   }
@@ -42,26 +48,26 @@ class PatientsPage extends Component {
   render() {
     const isLoaded = this.props.enterpriseDashboardPatients;
     if (!isLoaded) {
-      return <Loader inContainer={true}/>;
+      return <Loader inContainer />;
     }
 
     return (
-        <Page>
-          <Grid className={styles.container}>
-            <Row>
-              <Col md={9}>
-                <Graph
-                  clinics={this.props.enterpriseDashboardPatients.clinics}
-                  totals={this.props.enterpriseDashboardPatients.totals}
-                />
-              </Col>
-            </Row>
-          </Grid>
-          <Table
-            clinics={this.props.enterpriseDashboardPatients.clinics}
-            totals={this.props.enterpriseDashboardPatients.totals}
-          />
-        </Page>
+      <Page>
+        <Grid className={styles.container}>
+          <Row>
+            <Col md={9}>
+              <Graph
+                clinics={this.props.enterpriseDashboardPatients.clinics}
+                totals={this.props.enterpriseDashboardPatients.totals}
+              />
+            </Col>
+          </Row>
+        </Grid>
+        <Table
+          clinics={this.props.enterpriseDashboardPatients.clinics}
+          totals={this.props.enterpriseDashboardPatients.totals}
+        />
+      </Page>
     );
   }
 }
@@ -82,14 +88,28 @@ PatientsPage.propTypes = {
   applied: PropTypes.bool.isRequired,
 };
 
-const stateToProps = (state, { isSuperAdmin }) => (isSuperAdmin ? {
-  enterpriseDashboardPatients: getModel(state, 'enterpriseDashboard', 'patients'),
-  applied: state.segments.applied,
-  rawWhere: state.segments.rawWhere,
-} : {});
+const stateToProps = (state, { isSuperAdmin }) =>
+  (isSuperAdmin
+    ? {
+      enterpriseDashboardPatients: getModel(
+        state,
+        'enterpriseDashboard',
+        'patients',
+      ),
+      applied: state.segments.applied,
+      rawWhere: state.segments.rawWhere,
+    }
+    : {});
 
-const actionsToProps = dispatch => bindActionCreators({
-  fetchEnterpriseDashboard,
-}, dispatch);
+const actionsToProps = dispatch =>
+  bindActionCreators(
+    {
+      fetchEnterpriseDashboard,
+    },
+    dispatch,
+  );
 
-export default withAuthProps(connect(stateToProps, actionsToProps)(PatientsPage));
+export default withAuthProps(connect(
+  stateToProps,
+  actionsToProps,
+)(PatientsPage));

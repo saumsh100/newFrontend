@@ -9,7 +9,8 @@ const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength25 = maxLength(35);
 
-const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
+const notNegative = value =>
+  (value && value <= 0 ? 'Must be greater than 0' : undefined);
 
 const maxDuration = value =>
   (value && value > 180 ? 'Must be less than or equal to 180' : undefined);
@@ -19,7 +20,12 @@ export default function CreateServiceForm(props) {
   return (
     <Row className={styles.formContainer__createForm}>
       <Col xs={12}>
-        <Form form={formName} onSubmit={onSubmit} data-test-id="createServiceForm" ignoreSaveButton>
+        <Form
+          form={formName}
+          onSubmit={onSubmit}
+          data-test-id="createServiceForm"
+          ignoreSaveButton
+        >
           <Row className={styles.servicesFormRow__createRow}>
             <Col xs={12}>
               <Field

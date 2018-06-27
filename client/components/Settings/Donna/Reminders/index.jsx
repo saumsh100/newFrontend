@@ -10,7 +10,10 @@ import {
   deleteEntityRequest,
 } from '../../../../thunks/fetchEntities';
 import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
-import { ordinalSuffix, convertIntervalToMs } from '../../../../../server/util/time';
+import {
+  ordinalSuffix,
+  convertIntervalToMs,
+} from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
@@ -103,7 +106,12 @@ class Reminders extends Component {
     }
 
     const newValues = Object.assign({}, values);
-    const { isCustomConfirm, customConfirmString, omitPractitionerIdsString, isDaily } = newValues;
+    const {
+      isCustomConfirm,
+      customConfirmString,
+      omitPractitionerIdsString,
+      isDaily,
+    } = newValues;
 
     if (isCustomConfirm && customConfirmString) {
       newValues.customConfirmData = JSON.parse(customConfirmString);
@@ -174,7 +182,10 @@ class Reminders extends Component {
         label: 'Save',
         onClick: this.saveAdvancedSettingsReminder,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: `advancedSettingsReminders_${selectedAdvancedReminderId}` },
+        props: {
+          color: 'blue',
+          form: `advancedSettingsReminders_${selectedAdvancedReminderId}`,
+        },
       },
     ];
 
@@ -197,19 +208,27 @@ class Reminders extends Component {
 
     let previewComponent = null;
     if (selectedReminder) {
-      previewComponent = <ReminderPreview reminder={selectedReminder} account={activeAccount} />;
+      previewComponent = (
+        <ReminderPreview reminder={selectedReminder} account={activeAccount} />
+      );
     }
 
     // Used to display the cogs button to open Advanced Settings
     const isSuperAdmin = role === 'SUPERADMIN';
     const advancedReminder = reminders.get(selectedAdvancedReminderId);
-    const advancedIndex = reminders.toArray().findIndex(r => r.id === selectedAdvancedReminderId);
+    const advancedIndex = reminders
+      .toArray()
+      .findIndex(r => r.id === selectedAdvancedReminderId);
 
     return (
       <CommunicationSettingsCard
         title="Reminders Settings"
         rightActions={
-          <Button color="blue" onClick={this.toggleAdding} data-test-id="button_createNewReminder">
+          <Button
+            color="blue"
+            onClick={this.toggleAdding}
+            data-test-id="button_createNewReminder"
+          >
             Add
           </Button>
         }
@@ -270,7 +289,10 @@ class Reminders extends Component {
           onEscKeyDown={this.toggleAdding}
           onOverlayClick={this.toggleAdding}
         >
-          <CreateRemindersForm formName="newReminder" sendEdit={this.newReminder} />
+          <CreateRemindersForm
+            formName="newReminder"
+            sendEdit={this.newReminder}
+          />
         </DialogBox>
       </CommunicationSettingsCard>
     );
@@ -290,7 +312,11 @@ Reminders.propTypes = {
 
 function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const activeAccount = entities.getIn([
+    'accounts',
+    'models',
+    auth.get('accountId'),
+  ]);
   const reminders = entities
     .getIn(['reminders', 'models'])
     .filter(r => !r.isDeleted && !!r.interval)
@@ -312,10 +338,13 @@ function mapDispatchToProps(dispatch) {
       updateEntityRequest,
       reset,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Reminders);

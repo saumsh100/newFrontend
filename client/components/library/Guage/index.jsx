@@ -5,10 +5,7 @@ import colorMap from '../util/colorMap';
 
 export default function Guage(props) {
   const {
-    percentage,
-    color = 'red',
-    width,
-    height,
+    percentage, color = 'red', width, height,
   } = props;
 
   const legend = {
@@ -30,41 +27,22 @@ export default function Guage(props) {
   const greyColor = colorMap.lightgrey;
 
   const data = {
-    labels: [
-      'Left',
-      'Right',
-    ],
+    labels: ['Left', 'Right'],
     datasets: [
       {
         data: [percentage, 100 - percentage],
-        backgroundColor: [
-          hexColor,
-          greyColor,
-        ],
-        hoverBackgroundColor: [
-          hexColor,
-          greyColor,
-        ],
+        backgroundColor: [hexColor, greyColor],
+        hoverBackgroundColor: [hexColor, greyColor],
       },
     ],
   };
 
   return (
-    <Doughnut
-      data={data}
-      options={options}
-      width={width}
-      height={height}
-    />
+    <Doughnut data={data} options={options} width={width} height={height} />
   );
 }
 
 Guage.propTypes = {
   percentage: PropTypes.number,
-  color: PropTypes.oneOf([
-    'red',
-    'green',
-    'blue',
-    'yellow',
-  ]),
+  color: PropTypes.oneOf(['red', 'green', 'blue', 'yellow']),
 };

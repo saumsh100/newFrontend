@@ -8,6 +8,7 @@ export function fetchAppointmentEvents(patientId, accountId, query) {
       patientId,
       isDeleted: false,
       isCancelled: false,
+      isMissed: false,
       isPending: false,
     },
     ...query,

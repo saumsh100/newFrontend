@@ -22,7 +22,10 @@ function Reasons({
    * containing their name value and type.
    */
   const servicesList = servicesEntity.get('models').reduce((acc, actual) => {
-    if (!selectedPractitionerId || actual.get('practitioners').includes(selectedPractitionerId)) {
+    if (
+      !selectedPractitionerId ||
+      actual.get('practitioners').includes(selectedPractitionerId)
+    ) {
       return [
         ...acc,
         {
@@ -37,21 +40,29 @@ function Reasons({
   /**
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
-  const contextualUrl = (location.state && location.state.nextRoute) || './date-and-time';
+  const contextualUrl =
+    (location.state && location.state.nextRoute) || './date-and-time';
   return (
     <div className={styles.container}>
       {!servicesList.length ? (
         <div className={styles.subCard}>
           <div className={styles.subCardWrapper}>
-            <h3 className={styles.subCardTitle}>You still have some configuration to do.</h3>
+            <h3 className={styles.subCardTitle}>
+              You still have some configuration to do.
+            </h3>
             <p className={styles.subCardSubtitle}>
-              It looks like you did not assign service to the selected practitioner.
+              It looks like you did not assign service to the selected
+              practitioner.
             </p>
           </div>
         </div>
       ) : (
         servicesList.map((service, i) => (
-          <Link to={contextualUrl} key={`reason_${i}`} className={styles.cardLink}>
+          <Link
+            to={contextualUrl}
+            key={`reason_${i}`}
+            className={styles.cardLink}
+          >
             <WidgetCard
               arrow
               title={service.label}
@@ -79,11 +90,14 @@ function mapDispatchToProps(dispatch) {
     {
       setSelectedService: setSelectedServiceId,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Reasons);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Reasons);
 
 Reasons.propTypes = {
   selectedPractitionerId: PropTypes.string,

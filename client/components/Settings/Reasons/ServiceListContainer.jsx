@@ -4,7 +4,14 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
-import { Button, BadgeHeader, Card, SContainer, SHeader, SBody } from '../../library';
+import {
+  Button,
+  BadgeHeader,
+  Card,
+  SContainer,
+  SHeader,
+  SBody,
+} from '../../library';
 import CreateServiceForm from './CreateServiceForm';
 import ServiceListItem from './ServiceListItem';
 import { createEntityRequest } from '../../../thunks/fetchEntities';
@@ -39,10 +46,12 @@ class ServiceListContainer extends Component {
       },
     };
 
-    this.props.createEntityRequest({ key, entityData: values, alert }).then((entities) => {
-      const id = Object.keys(entities[key])[0];
-      this.props.setServiceId({ id });
-    });
+    this.props
+      .createEntityRequest({ key, entityData: values, alert })
+      .then((entities) => {
+        const id = Object.keys(entities[key])[0];
+        this.props.setServiceId({ id });
+      });
     this.setState({ active: false });
   }
 
@@ -55,7 +64,12 @@ class ServiceListContainer extends Component {
 
     const formName = 'createServiceForm';
     const actions = [
-      { label: 'Cancel', onClick: this.setActive, component: Button, props: { border: 'blue' } },
+      {
+        label: 'Cancel',
+        onClick: this.setActive,
+        component: Button,
+        props: { border: 'blue' },
+      },
       {
         label: 'Save',
         onClick: this.createService,
@@ -79,7 +93,11 @@ class ServiceListContainer extends Component {
                   Add New Reason
                 </Button>
               </div>
-              <BadgeHeader count={services.size} title="Reasons" className={styles.badgeHeader} />
+              <BadgeHeader
+                count={services.size}
+                title="Reasons"
+                className={styles.badgeHeader}
+              />
               <DialogBox
                 active={this.state.active}
                 actions={actions}
@@ -87,7 +105,10 @@ class ServiceListContainer extends Component {
                 onOverlayClick={this.setActive}
                 title="Create New Reason"
               >
-                <CreateServiceForm formName={formName} onSubmit={this.createService} />
+                <CreateServiceForm
+                  formName={formName}
+                  onSubmit={this.createService}
+                />
               </DialogBox>
             </div>
           </SHeader>
@@ -123,10 +144,13 @@ function mapActionsToProps(dispatch) {
     {
       createEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 
 export default enhance(ServiceListContainer);

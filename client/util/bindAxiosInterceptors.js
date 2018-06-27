@@ -26,8 +26,7 @@ export default function bindAxiosInterceptors(getToken = getTokenDefault) {
     },
     error =>
       // Do something with request error
-      Promise.reject(error)
-    
+      Promise.reject(error),
   );
 
   // Add a response interceptor
@@ -39,9 +38,8 @@ export default function bindAxiosInterceptors(getToken = getTokenDefault) {
       /* if (error.status === 401) {
      localStorage.setItem('token', '');
      browserHistory.push('/login');
-     }*/
+     } */
 
-      Promise.reject(error)
-    
+      Promise.reject(error),
   );
 }

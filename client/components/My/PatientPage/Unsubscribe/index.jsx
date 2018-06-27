@@ -4,8 +4,11 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {  } from '../../../library';
-import { fetchEntitiesRequest, updateEntityRequest } from '../../../../thunks/fetchEntities';
+import {} from '../../../library';
+import {
+  fetchEntitiesRequest,
+  updateEntityRequest,
+} from '../../../../thunks/fetchEntities';
 import Section from '../Shared/Section';
 import PatientPreferencesForm from './PatientPreferencesForm';
 import styles from './styles.scss';
@@ -38,7 +41,8 @@ class Unsubscribe extends Component {
 
   render() {
     // If patient is pulled, display the form
-    const initialValues = this.props.patient && this.props.patient.toJS().preferences;
+    const initialValues =
+      this.props.patient && this.props.patient.toJS().preferences;
 
     console.log(initialValues);
 
@@ -46,16 +50,18 @@ class Unsubscribe extends Component {
       <div>
         <Section>
           <div className={styles.header}>Unsubscribe</div>
-          <div className={styles.text}>Manage your communication preferences below.</div>
+          <div className={styles.text}>
+            Manage your communication preferences below.
+          </div>
         </Section>
-        {initialValues ?
+        {initialValues ? (
           <Section className={styles.formSection}>
             <PatientPreferencesForm
               onSubmit={this.updatePreferences}
               initialValues={initialValues}
             />
           </Section>
-        : null}
+        ) : null}
       </div>
     );
   }
@@ -71,12 +77,17 @@ function mapStateToProps({ entities }, { params }) {
   return { patient };
 }
 
-
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-    updateEntityRequest,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+      updateEntityRequest,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Unsubscribe);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Unsubscribe);

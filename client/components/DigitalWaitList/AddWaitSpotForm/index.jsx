@@ -10,15 +10,24 @@ import {
   Grid,
   Row,
   Col,
-  Header
+  Header,
 } from '../../library';
 import styles from './styles.scss';
 
 function validatePatient(value) {
-  return (value && (typeof value !== 'object')) ? 'No Patient With That Name' : undefined;
+  return value && typeof value !== 'object'
+    ? 'No Patient With That Name'
+    : undefined;
 }
 
-function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot, patientUsers, patients }) {
+function AddWaitSpotForm({
+  onSubmit,
+  getSuggestions,
+  formName,
+  selectedWaitSpot,
+  patientUsers,
+  patients,
+}) {
   let initialValues = {
     preferences: {
       mornings: true,
@@ -43,28 +52,26 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
     />
   );
 
-
   // Dealing with patientId and patientUserId
   if (selectedWaitSpot) {
     // If unavailabledays is set to null then set it to an empty array otherwise the daypicker throws an error.
-     if (selectedWaitSpot.unavailableDays === null) {
-       initialValues = selectedWaitSpot;
-       initialValues.unavailableDays = [];
-     } else {
-       initialValues = selectedWaitSpot;
-     }
+    if (selectedWaitSpot.unavailableDays === null) {
+      initialValues = selectedWaitSpot;
+      initialValues.unavailableDays = [];
+    } else {
+      initialValues = selectedWaitSpot;
+    }
 
     if (!selectedWaitSpot.patientId && selectedWaitSpot.patientUserId) {
-      const patientUser = patientUsers.getIn(['models', selectedWaitSpot.patientUserId]);
-      displayField = (
-        <Header title={patientUser.getFullName()} />
-      );
+      const patientUser = patientUsers.getIn([
+        'models',
+        selectedWaitSpot.patientUserId,
+      ]);
+      displayField = <Header title={patientUser.getFullName()} />;
     } else if (selectedWaitSpot.patientId) {
       const patient = patients.getIn(['models', selectedWaitSpot.patientId]);
       initialValues.patientData = patient.toJS();
-      displayField = (
-        <Header title={patient.getFullName()} />
-      );
+      displayField = <Header title={patient.getFullName()} />;
     }
   }
 
@@ -81,9 +88,7 @@ function AddWaitSpotForm({ onSubmit, getSuggestions, formName, selectedWaitSpot,
           <Col xs={12} md={6}>
             <Row>
               <Col xs={12}>
-                <div className={styles.label}>
-                  Preferences
-                </div>
+                <div className={styles.label}>Preferences</div>
               </Col>
             </Row>
             <FormSection name="preferences">

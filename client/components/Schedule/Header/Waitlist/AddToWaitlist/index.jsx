@@ -15,7 +15,13 @@ import DisplaySearchedPatient from '../../../AddNewAppointment/DisplaySearchedPa
 import styles from './styles.scss';
 
 export default function AddToWaitlist(props) {
-  const { onSubmit, getSuggestions, formName, handleAutoSuggest, patientSearched } = props;
+  const {
+    onSubmit,
+    getSuggestions,
+    formName,
+    handleAutoSuggest,
+    patientSearched,
+  } = props;
 
   const initialValues = {
     preferences: {
@@ -49,7 +55,10 @@ export default function AddToWaitlist(props) {
       required
     />
   ) : (
-    <div className={styles.patientContainer} onClick={() => handleAutoSuggest('')}>
+    <div
+      className={styles.patientContainer}
+      onClick={() => handleAutoSuggest('')}
+    >
       <Avatar user={patientSearched} size="sm" />
       <div className={styles.patientContainer_name}>
         {patientSearched.firstName} {patientSearched.lastName}
@@ -85,7 +94,12 @@ export default function AddToWaitlist(props) {
               <Field component="CheckboxButton" name="sunday" label="Sun" />
             </div>
             <div className={styles.colSpacing}>
-              <Field component="CheckboxButton" name="monday" label="Mon" data-test-id="monday" />
+              <Field
+                component="CheckboxButton"
+                name="monday"
+                label="Mon"
+                data-test-id="monday"
+              />
             </div>
             <div className={styles.colSpacing}>
               <Field component="CheckboxButton" name="tuesday" label="Tue" />
@@ -108,15 +122,29 @@ export default function AddToWaitlist(props) {
           <Col xs={12} md={6}>
             <Row>
               <Col xs={12}>
-                <div className={styles.subHeaderExtended}>Preferred Timeframe</div>
+                <div className={styles.subHeaderExtended}>
+                  Preferred Timeframe
+                </div>
               </Col>
             </Row>
             <FormSection name="preferences">
               <Row>
                 <Col xs={12} md={12}>
-                  <Field name="mornings" component="Checkbox" label="Mornings" />
-                  <Field name="afternoons" component="Checkbox" label="Afternoons" />
-                  <Field name="evenings" component="Checkbox" label="Evenings" />
+                  <Field
+                    name="mornings"
+                    component="Checkbox"
+                    label="Mornings"
+                  />
+                  <Field
+                    name="afternoons"
+                    component="Checkbox"
+                    label="Afternoons"
+                  />
+                  <Field
+                    name="evenings"
+                    component="Checkbox"
+                    label="Evenings"
+                  />
                 </Col>
               </Row>
             </FormSection>

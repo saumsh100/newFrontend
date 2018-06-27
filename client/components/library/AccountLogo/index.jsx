@@ -3,7 +3,12 @@ import Avatar from '../Avatar';
 import React, { PropTypes } from 'react';
 import styles from './styles.scss';
 
-export default function AccountLogo({ account, className, size, onClick = () => {} }) {
+export default function AccountLogo({
+  account,
+  className,
+  size,
+  onClick = () => {},
+}) {
   let replaceSize = 100;
   if (size === 'extralg') {
     replaceSize = 400;

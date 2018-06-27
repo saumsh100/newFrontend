@@ -7,19 +7,15 @@ export default function Tag(props) {
   const { label, color } = props;
 
   const classname = classNames(styles.tagsContainer);
-  const iconClass = classNames(styles.close, "fa fa-close");
+  const iconClass = classNames(styles.close, 'fa fa-close');
   return (
-    <div style={{ borderLeft: `4px solid ${color}` }} className={classname} >
+    <div style={{ borderLeft: `4px solid ${color}` }} className={classname}>
       {label}
       <i className={iconClass} />
     </div>
   );
 }
 
-Tag.defaultProps = {
+Tag.defaultProps = {};
 
-};
-
-Tag.propTypes = {
-
-};
+Tag.propTypes = {};

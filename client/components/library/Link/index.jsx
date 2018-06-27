@@ -2,13 +2,10 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import { Link as RRLink } from 'react-router-dom';
-import styles from  './styles.scss';
+import styles from './styles.scss';
 
 export default function Link(props) {
-  const {
-    className,
-    disabled = false,
-  } = props;
+  const { className, disabled = false } = props;
 
   let classes = classNames(className, styles.link);
   let onClick = () => {};

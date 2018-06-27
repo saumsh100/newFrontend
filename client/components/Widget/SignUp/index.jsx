@@ -10,10 +10,7 @@ import SignUpForm from './SignUpForm';
 import styles from './styles.scss';
 
 const customSubmitButton = (
-  <Button
-    type="submit"
-    className={styles.customSubmitButton}
-  >
+  <Button type="submit" className={styles.customSubmitButton}>
     Save and continue
   </Button>
 );
@@ -27,13 +24,12 @@ class SignUp extends Component {
 
   handleSignUp(values) {
     // true argument is to ignore sending confirmation text on API
-    return this.props.createPatient(values)
+    return this.props
+      .createPatient(values)
       .then(() => {
         // TODO: this should be conditional based on where the component came from
         // Important to return so that it will not navigate if errored
         // return this.props.updateReview();
-
-
       })
       .then(() => {
         // TODO: this should be conditional based on where the component came from
@@ -44,12 +40,8 @@ class SignUp extends Component {
   render() {
     return (
       <div className={styles.signUpWrapper}>
-        <div className={styles.header}>
-          Sign Up
-        </div>
-        <Link to="./login">
-          Already have an account? Log in.
-        </Link>
+        <div className={styles.header}>Sign Up</div>
+        <Link to="./login">Already have an account? Log in.</Link>
         <SignUpForm
           initialValues={{}}
           onSubmit={this.handleSignUp}
@@ -66,10 +58,16 @@ SignUp.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    createPatient,
-    updateReview,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      createPatient,
+      updateReview,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(SignUp));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(SignUp));

@@ -1,11 +1,12 @@
-import React, { PropTypes, Component } from 'react'
+
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import Loader from '../../Loader';
 import { Col, Grid, Row, Filters } from '../../library';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
-import { setReputationFilter} from '../../../actions/reputation';
+import { setReputationFilter } from '../../../actions/reputation';
 import colorMap from '../../library/util/colorMap';
 import Score from './Cards/Score';
 import Total from './Cards/Total';
@@ -15,29 +16,29 @@ import styles from './styles.scss';
 import ReputationDisabled from '../ReputationDisabled';
 
 function generateSearchData(entityList, statuses) {
-  return entityList.filter((entity) => {
-    if (statuses.length) {
-      const listings = entity.listings;
-      let accurateListing = 'Not Found';
-      if (listings.length) {
-        accurateListing = 'Accurate';
-        const warning = listings[0].anchorDataWarningFlag;
+  return entityList
+    .filter((entity) => {
+      if (statuses.length) {
+        const listings = entity.listings;
+        let accurateListing = 'Not Found';
+        if (listings.length) {
+          accurateListing = 'Accurate';
+          const warning = listings[0].anchorDataWarningFlag;
 
-        if (warning) {
-          accurateListing = 'Found with Possible Errors';
+          if (warning) {
+            accurateListing = 'Found with Possible Errors';
+          }
+        }
+        if (statuses.indexOf(accurateListing) > -1) {
+          return entity;
         }
       }
-      if (statuses.indexOf(accurateListing) > -1) {
-        return entity
-      }
-    }
-  }).map((entity) => {
-    return {
+    })
+    .map(entity => ({
       img: entity.iconUrl,
       name: entity.sourceName,
       listing: entity.listings,
-    };
-  });
+    }));
 }
 
 class Listings extends Component {
@@ -51,13 +52,14 @@ class Listings extends Component {
   }
 
   componentWillMount() {
-    const {
-      activeAccount,
-    } = this.props;
+    const { activeAccount } = this.props;
 
     let hasAccount = false;
 
-    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
+    if (
+      activeAccount.get('vendataId') ||
+      activeAccount.get('vendastaId') !== ''
+    ) {
       hasAccount = true;
     }
 
@@ -78,16 +80,19 @@ class Listings extends Component {
           id: 'listings',
           url: '/api/reputation/listings',
         }),
-      ]).then(() => {
-        this.setState({
-          loaded: true,
+      ])
+        .then(() => {
+          this.setState({
+            loaded: true,
+          });
+        })
+        .catch(() => {
+          this.setState({
+            hasAccount: false,
+            activationText:
+              'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
+          });
         });
-      }).catch(() => {
-        this.setState({
-          hasAccount: false,
-          activationText: 'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
-        });
-      });
     }
   }
 
@@ -101,25 +106,35 @@ class Listings extends Component {
     } = this.props;
 
     if (!this.state.hasAccount) {
-      return <ReputationDisabled activationText={this.state.activationText} />
+      return <ReputationDisabled activationText={this.state.activationText} />;
     }
 
     if (!listings) {
-      return <Loader inContainer={true} />
+      return <Loader inContainer />;
     }
 
     const listingsData = listings.get('data').toJS();
     const getInfo = listings.get('accountInfo').toJS();
-    const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]]
+    const listingsAcctInfo = getInfo[Object.keys(getInfo)[0]];
 
     const scoreData = [
-      { title: 'Industry Average', count: listingsData.listingPointScore.industryAverage },
-      { title: 'Industry Leaders Average', count: listingsData.listingPointScore.industryLeadersAverage },
+      {
+        title: 'Industry Average',
+        count: listingsData.listingPointScore.industryAverage,
+      },
+      {
+        title: 'Industry Leaders Average',
+        count: listingsData.listingPointScore.industryLeadersAverage,
+      },
     ];
 
     const totalData = [
       { icon: 'check', title: 'Accurate', count: listingsData.sourcesFound },
-      { icon: 'exclamation', title: 'Found with Possible Errors', count: listingsData.sourcesFoundWithErrors },
+      {
+        icon: 'exclamation',
+        title: 'Found with Possible Errors',
+        count: listingsData.sourcesFoundWithErrors,
+      },
       { icon: 'times', title: 'Not Found', count: listingsData.sourcesNotFound },
     ];
 
@@ -134,7 +149,7 @@ class Listings extends Component {
     ];
 
     const listingsSearchData = listings.get('searchData').toJS();
-    console.log(listingsSearchData)
+    console.log(listingsSearchData);
     const filterData = listingsFilter.toJS();
 
     const tableData2 = [];
@@ -144,25 +159,37 @@ class Listings extends Component {
         if (lf === 'Search Engines') {
           tableData2.push({
             title: 'Search Engines',
-            data: generateSearchData(listingsSearchData.searchengines, filterData.listingStatuses),
+            data: generateSearchData(
+              listingsSearchData.searchengines,
+              filterData.listingStatuses,
+            ),
           });
         }
         if (lf === 'Review Sites') {
           tableData2.push({
             title: 'Review Sites',
-            data: generateSearchData(listingsSearchData.reviewengines, filterData.listingStatuses),
+            data: generateSearchData(
+              listingsSearchData.reviewengines,
+              filterData.listingStatuses,
+            ),
           });
         }
         if (lf === 'Directories') {
           tableData2.push({
             title: 'Directories',
-            data: generateSearchData(listingsSearchData.directories, filterData.listingStatuses),
+            data: generateSearchData(
+              listingsSearchData.directories,
+              filterData.listingStatuses,
+            ),
           });
         }
         if (lf === 'Social Sites') {
           tableData2.push({
             title: 'Social Sites',
-            data: generateSearchData(listingsSearchData.socialengines, filterData.listingStatuses ),
+            data: generateSearchData(
+              listingsSearchData.socialengines,
+              filterData.listingStatuses,
+            ),
           });
         }
       });
@@ -257,9 +284,15 @@ Listings.propTypes = {
   fetchEntitiesRequest: PropTypes.func,
 };
 
-function mapStateToProps({ apiRequests, entities, auth, reputation }) {
-  const listings = (apiRequests.get('listings') ? apiRequests.get('listings').data : null);
-  const listingsFilter = (apiRequests.get('listings') ? reputation.get('listingsFilter') : null);
+function mapStateToProps({
+  apiRequests, entities, auth, reputation,
+}) {
+  const listings = apiRequests.get('listings')
+    ? apiRequests.get('listings').data
+    : null;
+  const listingsFilter = apiRequests.get('listings')
+    ? reputation.get('listingsFilter')
+    : null;
 
   return {
     listings,
@@ -269,13 +302,19 @@ function mapStateToProps({ apiRequests, entities, auth, reputation }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntitiesRequest,
-    reset,
-    change,
-    setReputationFilter,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntitiesRequest,
+      reset,
+      change,
+      setReputationFilter,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 export default enhance(Listings);

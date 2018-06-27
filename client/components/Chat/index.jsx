@@ -70,6 +70,7 @@ class ChatMessage extends Component {
     this.togglePatientsInfo = this.togglePatientsInfo.bind(this);
     this.toggleShowMessageContainer = this.toggleShowMessageContainer.bind(this);
     this.selectChatOrCreate = this.selectChatOrCreate.bind(this);
+    this.hubChatPage = this.hubChatPage.bind(this);
   }
 
   componentDidMount() {
@@ -105,7 +106,7 @@ class ChatMessage extends Component {
       () => {
         this.props.setLocation('/chat');
         this.props.selectChat(null);
-      }
+      },
     );
   }
 
@@ -122,7 +123,7 @@ class ChatMessage extends Component {
           this.props.setTitle(CHAT_PAGE);
           this.toggleShowMessageContainer();
         });
-      }
+      },
     );
   }
 
@@ -133,12 +134,15 @@ class ChatMessage extends Component {
         showPatientsList: false,
         showPatientInfo: false,
       },
-      () => {
-        this.props.setBackHandler(() => {
-          this.togglePatientsList();
-        });
-      }
+      this.hubChatPage,
     );
+  }
+
+  hubChatPage() {
+    this.props.setTitle(CHAT_PAGE);
+    this.props.setBackHandler(() => {
+      this.togglePatientsList();
+    });
   }
 
   selectChatOrCreate(patient) {
@@ -154,13 +158,16 @@ class ChatMessage extends Component {
     if (!this.state.showMessageContainer) {
       this.toggleShowMessageContainer();
     }
+
+    this.hubChatPage();
   }
 
   receivedChatsPostUpdate(result) {
     this.setState({
       chats: this.state.chats + Object.keys(result.chats || {}).length,
       moreData: !(
-        Object.keys(result).length === 0 || Object.keys(result.chats).length < CHAT_LIST_OFFSET
+        Object.keys(result).length === 0 ||
+        Object.keys(result.chats).length < CHAT_LIST_OFFSET
       ),
     });
   }
@@ -206,7 +213,7 @@ class ChatMessage extends Component {
         this.loadChatList().then(() => {
           this.props.defaultSelectedChatId();
         });
-      }
+      },
     );
   }
 
@@ -273,7 +280,10 @@ class ChatMessage extends Component {
     return (
       <SHeader className={styles.leftCardHeader}>
         <div className={styles.searchSection}>
-          <div className={styles.searchInputWrapper} data-test-id="input_chatSearch">
+          <div
+            className={styles.searchInputWrapper}
+            data-test-id="input_chatSearch"
+          >
             <PatientSearch
               onSelect={this.selectChatOrCreate}
               theme={patientSearchTheme}
@@ -289,9 +299,22 @@ class ChatMessage extends Component {
           />
         </div>
         <div className={styles.tabsSection}>
-          <Tabs fluid index={this.state.tabIndex} onChange={this.changeTab} noUnderLine>
-            <Tab label="All" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
-            <Tab label="Unread" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
+          <Tabs
+            fluid
+            index={this.state.tabIndex}
+            onChange={this.changeTab}
+            noUnderLine
+          >
+            <Tab
+              label="All"
+              inactiveClass={styles.inactiveTab}
+              activeClass={styles.activeTab}
+            />
+            <Tab
+              label="Unread"
+              inactiveClass={styles.inactiveTab}
+              activeClass={styles.activeTab}
+            />
             <Tab
               label="Flagged"
               inactiveClass={styles.inactiveTab}
@@ -304,14 +327,23 @@ class ChatMessage extends Component {
   }
 
   render() {
-    const { showPatientsList, showMessageContainer, showPatientInfo } = this.state;
+    const {
+      showPatientsList,
+      showMessageContainer,
+      showPatientInfo,
+    } = this.state;
     const slideStyle = showPatientsList ? styles.slideIn : {};
     const patientsListStyle = classnames(styles.patientsList, slideStyle);
 
     const messageContainerSlideStyle =
       showMessageContainer || showPatientInfo ? styles.slideIn : {};
-    const messageContainerClass = classnames(styles.rightCard, messageContainerSlideStyle);
-    const wrapperClass = !isHub() ? styles.chatWrapper : classnames(styles.chatWrapper, styles.hub);
+    const messageContainerClass = classnames(
+      styles.rightCard,
+      messageContainerSlideStyle,
+    );
+    const wrapperClass = !isHub()
+      ? styles.chatWrapper
+      : classnames(styles.chatWrapper, styles.hub);
 
     return (
       <div className={wrapperClass}>
@@ -340,23 +372,31 @@ class ChatMessage extends Component {
   }
 }
 
+ChatMessage.defaultProps = {
+  match: {
+    params: {
+      chatId: null,
+    },
+  },
+};
+
 ChatMessage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       chatId: PropTypes.string,
     }),
   }),
-  setNewChat: PropTypes.func,
-  defaultSelectedChatId: PropTypes.func,
-  selectChat: PropTypes.func,
-  loadChatList: PropTypes.func,
-  loadUnreadChatList: PropTypes.func,
-  loadFlaggedChatList: PropTypes.func,
-  cleanChatList: PropTypes.func,
-  setLocation: PropTypes.func,
-  setBackHandler: PropTypes.func,
-  setTitle: PropTypes.func,
-  fetchEntitiesRequest: PropTypes.func,
+  setNewChat: PropTypes.func.isRequired,
+  defaultSelectedChatId: PropTypes.func.isRequired,
+  selectChat: PropTypes.func.isRequired,
+  loadChatList: PropTypes.func.isRequired,
+  loadUnreadChatList: PropTypes.func.isRequired,
+  loadFlaggedChatList: PropTypes.func.isRequired,
+  cleanChatList: PropTypes.func.isRequired,
+  setLocation: PropTypes.func.isRequired,
+  setBackHandler: PropTypes.func.isRequired,
+  setTitle: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -374,10 +414,13 @@ function mapDispatchToProps(dispatch) {
       setTitle,
       fetchEntitiesRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(ChatMessage);

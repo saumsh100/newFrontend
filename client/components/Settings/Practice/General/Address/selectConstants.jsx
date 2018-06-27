@@ -398,7 +398,8 @@ export const languages = [
     value: 'Ojibwe, Ojibwa',
   },
   {
-    value: 'Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic',
+    value:
+      'Old Church Slavonic, Church Slavic, Church Slavonic, Old Bulgarian, Old Slavonic',
   },
   {
     value: 'Oromo',

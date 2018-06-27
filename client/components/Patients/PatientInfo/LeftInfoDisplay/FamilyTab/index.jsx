@@ -7,7 +7,9 @@ import FamilyMember from '../../../Shared/FamilyMember';
 const FamilyTab = ({ family }) => (
   <Family
     family={family}
-    render={familyMembers => familyMembers.map(familyMember => <FamilyMember {...familyMember} />)}
+    render={familyMembers =>
+      familyMembers.map(familyMember => <FamilyMember {...familyMember} />)
+    }
   />
 );
 

@@ -27,7 +27,9 @@ class AccountsSubComponent extends Component {
   render() {
     const { accounts } = this.props;
 
-    return accounts && <AccountsTable accounts={accounts} loaded={accounts.size} />;
+    return (
+      accounts && <AccountsTable accounts={accounts} loaded={accounts.size} />
+    );
   }
 }
 
@@ -43,7 +45,7 @@ const stateToProps = (state, { enterpriseId }) => ({
   accounts: getCollection(
     state,
     'accounts',
-    account => account.get('enterpriseId') === enterpriseId
+    account => account.get('enterpriseId') === enterpriseId,
   ),
 });
 
@@ -53,7 +55,10 @@ const dispatchToProps = dispatch =>
       fetchEntitiesRequest,
       switchActiveEnterprise,
     },
-    dispatch
+    dispatch,
   );
 
-export default connect(stateToProps, dispatchToProps)(AccountsSubComponent);
+export default connect(
+  stateToProps,
+  dispatchToProps,
+)(AccountsSubComponent);

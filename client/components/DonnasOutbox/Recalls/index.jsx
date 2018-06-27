@@ -36,12 +36,8 @@ function SuccessfulList({ success, primaryType }) {
               <Col xs={4}>
                 {patient.firstName} {patient.lastName}
               </Col>
-              <Col xs={4}>
-                {getAttrFromPatient(patient, primaryType)}
-              </Col>
-              <Col xs={4}>
-                {lastApptDate}
-              </Col>
+              <Col xs={4}>{getAttrFromPatient(patient, primaryType)}</Col>
+              <Col xs={4}>{lastApptDate}</Col>
             </Row>
           </Grid>
         );
@@ -71,18 +67,18 @@ class RecallListItem extends Component {
     const { recall } = this.props;
     return (
       <div className={styles.listItemWrapper}>
-        <ListItem
-          className={styles.listItem}
-          onClick={this.toggleExpanded}
-        >
+        <ListItem className={styles.listItem} onClick={this.toggleExpanded}>
           <div className={styles.col}>Type: {recall.primaryType}</div>
           <div className={styles.col}>Length: {recall.lengthSeconds}</div>
           <div className={styles.col}>Success: {recall.success.length}</div>
           <div className={styles.col}>Fail: {recall.errors.length}</div>
         </ListItem>
-        {this.state.expanded ?
-          <SuccessfulList success={recall.success} primaryType={recall.primaryType}/>
-        : null}
+        {this.state.expanded ? (
+          <SuccessfulList
+            success={recall.success}
+            primaryType={recall.primaryType}
+          />
+        ) : null}
       </div>
     );
   }
@@ -106,9 +102,7 @@ export default class OutboxRecalls extends Component {
     // this.setState({ isLoading: true });
 
     const { account } = this.props;
-    return Promise.all([
-        axios.get(`/api/accounts/${account.id}/recalls/list`),
-      ])
+    return Promise.all([axios.get(`/api/accounts/${account.id}/recalls/list`)])
       .then(([recallsData]) => {
         console.log('recallsData', recallsData);
         this.setState({
@@ -144,27 +138,17 @@ export default class OutboxRecalls extends Component {
 
     return (
       <div className={styles.recallsWrapper}>
-        {!recalls.length ?
-          <div>No Recalls</div> :
+        {!recalls.length ? (
+          <div>No Recalls</div>
+        ) : (
           <div>
-            <h4>
-              Total Success: {totalSuccess}
-            </h4>
-            <h4>
-              Total Errors: {totalErrors}
-            </h4>
+            <h4>Total Success: {totalSuccess}</h4>
+            <h4>Total Errors: {totalErrors}</h4>
             <List>
-              {recalls.map((recall) => {
-                return (
-                  <RecallListItem
-                    key={recall.id}
-                    recall={recall}
-                  />
-                );
-              })}
+              {recalls.map(recall => <RecallListItem key={recall.id} recall={recall} />)}
             </List>
           </div>
-        }
+        )}
       </div>
     );
   }

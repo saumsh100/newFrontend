@@ -41,7 +41,11 @@ function CallsGraph(props) {
 
       if (index % 2 !== 0 && x.length < 45 && typeof value !== 'number') {
         return value;
-      } else if (x.length > 45 && typeof value !== 'number' && index % 5 === 0) {
+      } else if (
+        x.length > 45 &&
+        typeof value !== 'number' &&
+        index % 5 === 0
+      ) {
         return value;
       }
 
@@ -95,7 +99,8 @@ function CallsGraph(props) {
   return (
     <div className={styles.callsGraphContainer}>
       <div className={styles.subHeader}>
-        {props.startDate.format('MMMM DD, YYYY')} - {props.endDate.format('MMMM DD, YYYY')}
+        {props.startDate.format('MMMM DD, YYYY')} -{' '}
+        {props.endDate.format('MMMM DD, YYYY')}
       </div>
       <div className={styles.callGraph}>
         <LineChart

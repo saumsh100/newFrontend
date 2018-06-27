@@ -31,7 +31,11 @@ const patientList = (props, currentValue, scrollIndex, close, callback) => {
           >
             {option.value === userId ? `${option.label} (Me)` : option.label}
           </span>
-          <Link to={`../patient/edit/${option.value}`} className={styles.editPatient} tabIndex="-1">
+          <Link
+            to={`../patient/edit/${option.value}`}
+            className={styles.editPatient}
+            tabIndex="-1"
+          >
             EDIT
           </Link>
         </DataSlot>
@@ -56,7 +60,9 @@ export default function FamilyPatient(props) {
       name="patientWidgetId"
       value={props.value}
       onChange={props.onChange}
-      renderValue={value => patients.find(patient => patient.value === value).label}
+      renderValue={value =>
+        patients.find(patient => patient.value === value).label
+      }
       renderList={patientList}
       theme={{
         slotButton: styles.reviewAndBookSlot,
@@ -69,29 +75,25 @@ export default function FamilyPatient(props) {
 
 patientList.propTypes = {
   userId: PropTypes.string,
-  options: PropTypes.arrayOf(
-    PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    })
-  ),
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string,
+    label: PropTypes.string,
+  })),
 };
 
 FamilyPatient.propTypes = {
-  familyPatients: PropTypes.arrayOf(
-    PropTypes.shape({
-      birthDate: PropTypes.string,
-      avatarUrl: PropTypes.string,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      gender: PropTypes.string,
-      id: PropTypes.string,
-      isEmailConfirmed: PropTypes.bool,
-      isPhoneNumberConfirmed: PropTypes.bool,
-      patientUserFamilyId: PropTypes.string,
-      phoneNumber: PropTypes.string,
-    })
-  ),
+  familyPatients: PropTypes.arrayOf(PropTypes.shape({
+    birthDate: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    gender: PropTypes.string,
+    id: PropTypes.string,
+    isEmailConfirmed: PropTypes.bool,
+    isPhoneNumberConfirmed: PropTypes.bool,
+    patientUserFamilyId: PropTypes.string,
+    phoneNumber: PropTypes.string,
+  })),
   onChange: PropTypes.func,
   value: PropTypes.string,
   userId: PropTypes.string,

@@ -30,7 +30,9 @@ function Tabs({ isBooking, setIsBooking, history }) {
         Booking
       </Button>
       <Button
-        className={classnames(styles.headerTab, { [styles.active]: !isBooking })}
+        className={classnames(styles.headerTab, {
+          [styles.active]: !isBooking,
+        })}
         onClick={() => setIsBooking(false)}
       >
         <svg xmlns="http://www.w3.org/2000/svg">
@@ -44,17 +46,61 @@ function Tabs({ isBooking, setIsBooking, history }) {
   return (
     <Router history={history}>
       <Switch>
-        <Route exact path={pathBuilder('/book/practitioner')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/reason')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/date-and-time')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/waitlist/select-dates')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/waitlist/select-times')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/signup/confirm')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/patient-information')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/additional-information')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/review')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/book/wait')} component={contentTabs()} />
-        <Route exact path={pathBuilder('/patient/add')} component={contentTabs()} />
+        <Route
+          exact
+          path={pathBuilder('/book/practitioner')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/reason')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/date-and-time')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/waitlist/select-dates')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/waitlist/select-times')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/signup/confirm')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/patient-information')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/additional-information')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/review')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/book/wait')}
+          component={contentTabs()}
+        />
+        <Route
+          exact
+          path={pathBuilder('/patient/add')}
+          component={contentTabs()}
+        />
         <Route path={pathBuilder('/patient/edit')} component={contentTabs()} />
       </Switch>
     </Router>
@@ -67,7 +113,10 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-export default connect(mapStateToProps, null)(Tabs);
+export default connect(
+  mapStateToProps,
+  null,
+)(Tabs);
 
 Tabs.propTypes = {
   isBooking: PropTypes.bool.isRequired,

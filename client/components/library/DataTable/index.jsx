@@ -30,7 +30,9 @@ export default function DataTable(props) {
         },
         ...tdStyle,
       })}
-      getTheadThProps={(state, rowInfo, column) => getTheadStyles(state, column)}
+      getTheadThProps={(state, rowInfo, column) =>
+        getTheadStyles(state, column)
+      }
       {...props}
     />
   );

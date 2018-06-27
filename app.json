@@ -1,7 +1,6 @@
 {
   "name": "carecru",
-  "scripts": {
-  },
+  "scripts": {},
   "env": {
     "NODE_ENV": {
       "required": true
@@ -62,6 +61,9 @@
     },
     "FEATURE_FLAG_KEY": {
       "required": true
+    },
+    "LAUNCH_DARKLY_SDK_KEY": {
+      "required": true
     }
   },
   "formation": {
@@ -69,9 +71,7 @@
       "quantity": 1
     }
   },
-  "addons": [
-
-  ],
+  "addons": [],
   "buildpacks": [
     {
       "url": "heroku/nodejs"

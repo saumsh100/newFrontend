@@ -20,6 +20,9 @@ const withOnClick = withHandlers({
   },
 });
 
-const enhance = compose(withRouter, withOnClick);
+const enhance = compose(
+  withRouter,
+  withOnClick,
+);
 
 export default enhance(RouterButton);

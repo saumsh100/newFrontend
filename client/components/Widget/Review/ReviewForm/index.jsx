@@ -1,9 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import {
-  Form,
-  Field,
-} from '../../../library';
+import { Form, Field } from '../../../library';
 
 function ReviewForm(props) {
   const { onSubmit, initialValues } = props;
@@ -15,16 +12,8 @@ function ReviewForm(props) {
       enableReinitialize
       ignoreSaveButton
     >
-      <Field
-        required
-        name="stars"
-        component="Stars"
-      />
-      <Field
-        required
-        name="description"
-        label="Description"
-      />
+      <Field required name="stars" component="Stars" />
+      <Field required name="description" label="Description" />
     </Form>
   );
 }

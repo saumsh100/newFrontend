@@ -17,10 +17,9 @@ class Review extends Component {
 
   createReview(values) {
     // Create review then send to next step
-    return this.props.createReview(values)
-      .then(() => {
-        this.props.history.push('./signup');
-      });
+    return this.props.createReview(values).then(() => {
+      this.props.history.push('./signup');
+    });
   }
 
   render() {
@@ -34,9 +33,7 @@ class Review extends Component {
             initialValues={initialValues}
             onSubmit={this.createReview}
           />
-          <Button>
-            Next
-          </Button>
+          <Button>Next</Button>
         </div>
       </div>
     );
@@ -55,9 +52,15 @@ function mapStateToProps({ reviews }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    createReview,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      createReview,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Review));

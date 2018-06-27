@@ -22,7 +22,7 @@ class SingleShortcut extends React.Component {
     return (
       <div className={styles.wrapper} onClick={this.onClick}>
         <span>{label}</span>
-        <Icon size={1.6} icon={'external-link'} className={styles.icon} />
+        <Icon size={1.6} icon="external-link" className={styles.icon} />
       </div>
     );
   }

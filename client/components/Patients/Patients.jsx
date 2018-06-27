@@ -2,15 +2,9 @@
 import React, { PropTypes } from 'react';
 
 function Patients({ patient, patients }) {
-  return (
-    <div>
-      Patients
-    </div>
-  );
+  return <div>Patients</div>;
 }
 
-Patients.propTypes = {
-
-};
+Patients.propTypes = {};
 
 export default Patients;

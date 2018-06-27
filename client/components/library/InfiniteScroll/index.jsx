@@ -6,6 +6,4 @@ export default function InfiniteScroll(props) {
   return <RInfiniteScroller {...props} />;
 }
 
-InfiniteScroll.propTypes = {
-
-};
+InfiniteScroll.propTypes = {};

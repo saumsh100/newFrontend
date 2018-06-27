@@ -9,18 +9,17 @@ import styles from '../styles.scss';
 const generatePractitionerOptions = (practitioners) => {
   const options = [];
   practitioners.sort(SortByFirstName).map((pr) => {
-    const label = pr.type === 'Dentist' ? `Dr. ${pr.lastName}` : `${pr.firstName} ${pr.lastName || ''}`;
+    const label =
+      pr.type === 'Dentist'
+        ? `Dr. ${pr.lastName}`
+        : `${pr.firstName} ${pr.lastName || ''}`;
     options.push({ label, value: pr.id });
   });
   return options;
 };
 
 export default function Practitioners(props) {
-  const {
-    handlePractitioners,
-    practitioners,
-    theme,
-  } = props;
+  const { handlePractitioners, practitioners, theme } = props;
 
   const practitionerOptions = generatePractitionerOptions(practitioners);
 
@@ -34,7 +33,7 @@ export default function Practitioners(props) {
       <div className={styles.formContainer}>
         <FormSection name="practitioners">
           <div className={styles.formHeader}> Name </div>
-          <div className={styles.formContainer_row} >
+          <div className={styles.formContainer_row}>
             <Field
               component="DropdownSelect"
               name="0"
@@ -43,7 +42,7 @@ export default function Practitioners(props) {
               label="Doctor / Hygienist"
             />
           </div>
-          {/*<div className={styles.formHeader}> Type </div>
+          {/* <div className={styles.formHeader}> Type </div>
           <div className={styles.formContainer_row} >
             <Field
               component="DropdownSelect"
@@ -58,15 +57,15 @@ export default function Practitioners(props) {
               className={styles.ddSelect}
               required
             />
-          </div>*/}
+          </div> */}
         </FormSection>
       </div>
     </Form>
-  )
+  );
 }
 
 Practitioners.propTypes = {
   handlePractitioners: PropTypes.func.isRequired,
   practitioners: PropTypes.object.isRequired,
   theme: PropTypes.object,
-}
+};

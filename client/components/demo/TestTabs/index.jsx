@@ -5,18 +5,18 @@ import { Card, Tabs, Tab } from '../../library';
 class TestTabs extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       index: 0,
     };
-    
+
     this.handleTabChange = this.handleTabChange.bind(this);
   }
-  
+
   handleTabChange(index) {
     this.setState({ index });
   }
-  
+
   render() {
     return (
       <Card>

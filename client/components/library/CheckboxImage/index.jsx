@@ -6,13 +6,7 @@ import Avatar from '../Avatar';
 
 export default function CheckboxImage(props) {
   const {
-    id,
-    label,
-    checked,
-    onChange,
-    imgColor,
-    url,
-    firstName,
+    id, label, checked, onChange, imgColor, url, firstName,
   } = props;
 
   let bgColor = '';
@@ -23,13 +17,15 @@ export default function CheckboxImage(props) {
 
   return (
     <div className={styles.checkBoxImage}>
-      <input
-        type="checkbox" checked={checked} id={id}
-        onChange={onChange}
-      />
+      <input type="checkbox" checked={checked} id={id} onChange={onChange} />
       <label className={styles.checkBoxImage__label} htmlFor={id}>
         <li className={styles.checkBoxImage__list}>
-          <Avatar className={styles.checkBoxImage__avatar} user={{ avatarUrl: url, firstName }} size="sm" bgColor={bgColor} />
+          <Avatar
+            className={styles.checkBoxImage__avatar}
+            user={{ avatarUrl: url, firstName }}
+            size="sm"
+            bgColor={bgColor}
+          />
           {label}
         </li>
       </label>

@@ -52,7 +52,7 @@ class CallInfo extends Component {
           this.setState({
             loaded: false,
           });
-        }
+        },
       );
   }
 
@@ -66,7 +66,9 @@ class CallInfo extends Component {
     const { call } = this.props;
 
     const callerId =
-      call.callerCity && call.callerState ? `${call.callerCity}, ${call.callerState}` : null;
+      call.callerCity && call.callerState
+        ? `${call.callerCity}, ${call.callerState}`
+        : null;
 
     return (
       <div className={styles.leftPanel}>
@@ -76,8 +78,14 @@ class CallInfo extends Component {
           <InfoDump label="Initial Source" data={call.callSource} />
         </div>
         <div className={styles.row}>
-          <InfoDump label="Received" data={moment(call.startTime).format('MMM DD, YYYY h:mm A')} />
-          <InfoDump label="Phone number" data={formatPhoneNumber(call.callerNum)} />
+          <InfoDump
+            label="Received"
+            data={moment(call.startTime).format('MMM DD, YYYY h:mm A')}
+          />
+          <InfoDump
+            label="Phone number"
+            data={formatPhoneNumber(call.callerNum)}
+          />
         </div>
         <div className={styles.row}>
           <InfoDump label="Total calls" data={call.totalCalls} />

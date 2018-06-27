@@ -47,4 +47,7 @@ function AdditionalInformation() {
   );
 }
 
-export default withRouter(connect(null, null)(AdditionalInformation));
+export default withRouter(connect(
+  null,
+  null,
+)(AdditionalInformation));

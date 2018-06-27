@@ -8,10 +8,10 @@ import Container from '../../containers/EnterpriseContainer';
 const base = (path = '') => `/enterprise${path}`;
 
 const Routes = {
-  patients: LazyRoute(() => import('../../components/Enterprise/Patients'))
-}
+  patients: LazyRoute(() => import('../../components/Enterprise/Patients')),
+};
 
-const EnterpriseRouter = () =>
+const EnterpriseRouter = () => (
   <Container>
     <DocumentTitle title="CareCru | Enterprise">
       <Switch>
@@ -19,6 +19,7 @@ const EnterpriseRouter = () =>
         <Route path={base('/patients')} component={Routes.patients} />
       </Switch>
     </DocumentTitle>
-  </Container>;
+  </Container>
+);
 
 export default EnterpriseRouter;

@@ -25,7 +25,9 @@ export default function ReviewRequests({ reviews }) {
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
-            <div className={styles2.smallCol}>{moment(sendDate).format('h:mm A')}</div>
+            <div className={styles2.smallCol}>
+              {moment(sendDate).format('h:mm A')}
+            </div>
             <div className={styles2.col}>
               {patient.firstName} {patient.lastName}
             </div>

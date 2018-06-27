@@ -38,7 +38,9 @@ function Form(props) {
         data-test-id={props['data-test-id']}
       >
         {children}
-        {showSubmitButton && <div className={styles.submitButton}>{showSubmitButton}</div>}
+        {showSubmitButton && (
+          <div className={styles.submitButton}>{showSubmitButton}</div>
+        )}
       </form>
     </div>
   );
@@ -54,8 +56,7 @@ const withReduxForm = BaseComponent => reduxForm({})(BaseComponent);
 
 const enhance = compose(
   // withValidate,
-  withReduxForm
-);
+  withReduxForm);
 
 export default enhance(Form);
 

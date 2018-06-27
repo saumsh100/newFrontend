@@ -12,12 +12,27 @@ const typeMap = {
 };
 
 export default function Icon(props) {
-  const { icon, size, className, style, type, pulse, badgeText, onClick } = props;
+  const {
+    icon,
+    size,
+    className,
+    style,
+    type,
+    pulse,
+    badgeText,
+    onClick,
+  } = props;
 
-  const classes = classNames(className, `fa-${icon}`, styles.icon, typeMap[type], {
-    'fa-pulse': pulse,
-    [styles.pulse]: pulse,
-  });
+  const classes = classNames(
+    className,
+    `fa-${icon}`,
+    styles.icon,
+    typeMap[type],
+    {
+      'fa-pulse': pulse,
+      [styles.pulse]: pulse,
+    },
+  );
 
   const finalStyles = Object.assign({}, { fontSize: `${size}em` }, style);
 
@@ -56,6 +71,10 @@ Icon.propTypes = {
   className: PropTypes.string,
   style: PropTypes.objectOf(PropTypes.string),
   'data-test-id': PropTypes.string,
-  badgeText: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.bool]),
+  badgeText: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+    PropTypes.bool,
+  ]),
   pulse: PropTypes.bool,
 };

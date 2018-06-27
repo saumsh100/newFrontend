@@ -19,7 +19,10 @@ import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 /**
  * Gender's array
  */
-const genders = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
+const genders = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+];
 
 /**
  * Find the first option that matches the passed string.
@@ -47,7 +50,10 @@ class AddPatient extends Component {
     return axios
       .post(`/families/${patientUserFamilyId}/patients`, values)
       .then(response => this.props.setFamilyPatientUser(response.data.id))
-      .then(() => this.props.history.goBack({ pathname: '../book/additional-information' }));
+      .then(() =>
+        this.props.history.goBack({
+          pathname: '../book/additional-information',
+        }));
   }
 
   render() {
@@ -118,9 +124,13 @@ class AddPatient extends Component {
                     bar: styles.bar,
                     erroredLabel: styles.erroredLabel,
                   }}
-                  validateValue={value => validateField(genders, value) || value === null}
+                  validateValue={value =>
+                    validateField(genders, value) || value === null
+                  }
                   renderValue={value =>
-                    (validateField(genders, value) && validateField(genders, value).label) || ''
+                    (validateField(genders, value) &&
+                      validateField(genders, value).label) ||
+                    ''
                   }
                   options={genders}
                   data-test-id="gender"
@@ -205,7 +215,7 @@ function mapDispatchToProps(dispatch) {
     {
       setFamilyPatientUser,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -215,4 +225,7 @@ function mapStateToProps({ auth }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddPatient));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddPatient));

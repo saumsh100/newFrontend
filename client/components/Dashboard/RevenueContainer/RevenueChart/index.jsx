@@ -120,7 +120,10 @@ export default function RevenueChart(props) {
   return (
     <div className={styles.chart}>
       {isValid ? (
-        <Line options={generateChartOptions()} data={generateDataSet(labels, data)} />
+        <Line
+          options={generateChartOptions()}
+          data={generateDataSet(labels, data)}
+        />
       ) : (
         <div className={styles.noRevenue}> No Revenue </div>
       )}

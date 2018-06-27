@@ -88,10 +88,13 @@ function mapDispatchToProps(dispatch) {
       fetchEntities,
       setServiceId,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Reasons);

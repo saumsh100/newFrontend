@@ -5,13 +5,11 @@ describe('Chat Tests', () => {
   });
 
   beforeEach(() => {
-    cy
-      .visit(`${Cypress.env('siteURL')}/chat`);
+    cy.visit(`${Cypress.env('siteURL')}/chat`);
   });
 
   it('initiate a new conversation with a patiemt', () => {
-    cy
-      .getAndClick('dropDown_accounts')
+    cy.getAndClick('dropDown_accounts')
       .get('[data-test-id="option_Liberty Chiropractic"]')
       .click({ force: true })
       .wait(1000)
@@ -23,7 +21,7 @@ describe('Chat Tests', () => {
       .parent()
       .next()
       .contains('Testy Testerson')
-      .click()
+      .click({ force: true })
       .get('[data-test-id="chatMessageForm"]')
       .get('[data-test-id="message"]')
       .click({ force: true })
@@ -36,8 +34,7 @@ describe('Chat Tests', () => {
   });
 
   it.skip('send a message from the patient', () => {
-    cy
-      .getAndClick('dropDown_accounts')
+    cy.getAndClick('dropDown_accounts')
       .get('[data-test-id="account_1"]')
       .click({ force: true })
       .wait(1000)

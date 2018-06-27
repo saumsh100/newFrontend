@@ -19,15 +19,12 @@ class RangeSlider extends Component {
   }
 
   componentWillMount() {
-    const {
-      setRangeState,
-    } = this.props;
+    const { setRangeState } = this.props;
 
     if (setRangeState) {
       this.setState({ value: setRangeState });
     }
   }
-
 
   onRangeChange(value) {
     const duration = this.state.value[0];
@@ -39,14 +36,12 @@ class RangeSlider extends Component {
         value: newValue,
       });
       this.props.onChange(newValue);
-
-    } else if (value[1] === (value[0] + 1)) {
+    } else if (value[1] === value[0] + 1) {
       const newValue = [value[0], value[0]];
       this.setState({
         value: newValue,
       });
       this.props.onChange(newValue);
-
     } else {
       this.setState({
         value,
@@ -66,7 +61,7 @@ class RangeSlider extends Component {
 
     const maximumTrackStyle = {
       backgroundColor: '#ff715a',
-      width: `${((this.props.value[0] - min)/(max - min)) * 100}%`,
+      width: `${((this.props.value[0] - min) / (max - min)) * 100}%`,
     };
 
     const newProps = omit(this.props, ['onChange']);

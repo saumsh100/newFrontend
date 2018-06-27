@@ -72,17 +72,20 @@ class CreateAccount extends Component {
 
     newValues[index] = values;
 
-    const newIndex = this.state.formLength - 1 > index ? index + 1 : this.state.index;
+    const newIndex =
+      this.state.formLength - 1 > index ? index + 1 : this.state.index;
     this.setState({
       index: newIndex,
       values: newValues,
     });
 
     if (index === this.state.formLength - 1) {
-      this.props.setAllAccountInfo({ formData: newValues }).then((enterpriseId) => {
-        formNames.map(formName => this.props.destroy(formName));
-        this.props.selectEnterprise(enterpriseId);
-      });
+      this.props
+        .setAllAccountInfo({ formData: newValues })
+        .then((enterpriseId) => {
+          formNames.map(formName => this.props.destroy(formName));
+          this.props.selectEnterprise(enterpriseId);
+        });
     }
   }
 
@@ -155,9 +158,13 @@ class CreateAccount extends Component {
     return (
       <div key={this.state.index} className={styles.mainContainer}>
         <div className={styles.header}>
-          <div className={styles.header_text}>{formList[this.state.index].title}</div>
+          <div className={styles.header_text}>
+            {formList[this.state.index].title}
+          </div>
         </div>
-        <div className={styles.formContainer}>{formList[this.state.index].component}</div>
+        <div className={styles.formContainer}>
+          {formList[this.state.index].component}
+        </div>
         <div className={styles.buttonContainer}>
           {(this.state.index || this.state.create) && (
             <Button onClick={() => this.previous()} color="blue">
@@ -167,16 +174,16 @@ class CreateAccount extends Component {
 
           {this.state.formLength - 1 > this.state.index &&
             (this.state.index >= 1 || this.state.create) && (
-            <Button
-              onClick={() => {
-                this.props.submit(formNames[this.state.index]);
-              }}
-              className={styles.nextButton}
-              color="blue"
-            >
+              <Button
+                onClick={() => {
+                  this.props.submit(formNames[this.state.index]);
+                }}
+                className={styles.nextButton}
+                color="blue"
+              >
                 Next
-            </Button>
-          )}
+              </Button>
+            )}
           {this.state.formLength - 1 === this.state.index && (
             <Button
               onClick={() => {
@@ -211,9 +218,12 @@ function mapActionsToProps(dispatch) {
       destroy,
       setAllAccountInfo,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 export default enhance(CreateAccount);

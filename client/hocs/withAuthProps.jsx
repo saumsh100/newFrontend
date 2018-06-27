@@ -3,8 +3,7 @@ import React from 'react';
 import { omit } from 'lodash';
 import { connect } from 'react-redux';
 
-const InnerComponent = props =>
-  <props.el {...omit(props, 'el')} />;
+const InnerComponent = props => <props.el {...omit(props, 'el')} />;
 
 const ConnectedInnerComponent = connect((state) => {
   const session = state.auth.toJS();
@@ -18,12 +17,13 @@ const ConnectedInnerComponent = connect((state) => {
     role,
     isAuth: session.isAuthenticated,
     isSuperAdmin,
-    withEnterprise: isSuperAdmin,//isEnterpriseOwner(),
+    withEnterprise: isSuperAdmin, // isEnterpriseOwner(),
     enterpriseId: session.enterpriseId,
   };
 })(InnerComponent);
 
-const withAuthProps = el =>
-  props => <ConnectedInnerComponent {...({ ...props, el })} />;
+const withAuthProps = el => props => (
+  <ConnectedInnerComponent {...{ ...props, el }} />
+);
 
 export default withAuthProps;

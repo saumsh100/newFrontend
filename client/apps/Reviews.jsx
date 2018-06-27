@@ -29,7 +29,7 @@ class ReviewsApp extends Component {
     if (!this.state.flags) {
       return (
         <div className={styles.displayContainer}>
-          <i className={'fas fa-spinner fa-spin fa-3x fa-fw'} />
+          <i className="fas fa-spinner fa-spin fa-3x fa-fw" />
         </div>
       );
     }
@@ -48,7 +48,10 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-export default connect(mapStateToProps, null)(ReviewsApp);
+export default connect(
+  mapStateToProps,
+  null,
+)(ReviewsApp);
 
 ReviewsApp.propTypes = {
   browserHistory: PropTypes.shape(historyShape),

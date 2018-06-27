@@ -18,7 +18,12 @@ import {
   DialogBox,
   DropdownSelect,
 } from '../../../library';
-import { convertIntervalToMs, w2s, s2m, m2s } from '../../../../../server/util/time';
+import {
+  convertIntervalToMs,
+  w2s,
+  s2m,
+  m2s,
+} from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import AdvancedSettingsForm from './AdvancedSettingsForm';
@@ -71,7 +76,9 @@ class Recalls extends Component {
   }
 
   toggleAdvancedSettings() {
-    this.setState({ isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen });
+    this.setState({
+      isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen,
+    });
   }
 
   openModal() {
@@ -85,7 +92,12 @@ class Recalls extends Component {
 
   saveAdvancedSettings(values) {
     const { activeAccount } = this.props;
-    const { recallBufferNumber, recallBufferInterval, recallStartTime, recallEndTime } = values;
+    const {
+      recallBufferNumber,
+      recallBufferInterval,
+      recallStartTime,
+      recallEndTime,
+    } = values;
 
     const newValues = {
       recallBuffer: `${recallBufferNumber} ${recallBufferInterval}`,
@@ -106,7 +118,11 @@ class Recalls extends Component {
     };
 
     this.props
-      .updateEntityRequest({ url: `/api/accounts/${activeAccount.id}`, values: newValues, alert })
+      .updateEntityRequest({
+        url: `/api/accounts/${activeAccount.id}`,
+        values: newValues,
+        alert,
+      })
       .then(this.toggleAdvancedSettings);
   }
 
@@ -163,12 +179,16 @@ class Recalls extends Component {
     const alert = {
       success: {
         title: 'Account Updated',
-        body: `Successfully updated the default hygiene due date to ${val[0]} months`,
+        body: `Successfully updated the default hygiene due date to ${
+          val[0]
+        } months`,
       },
 
       error: {
         title: 'Failed to Update Account',
-        body: `Error trying to update the default hygiene due date to ${val[0]} months`,
+        body: `Error trying to update the default hygiene due date to ${
+          val[0]
+        } months`,
       },
     };
 
@@ -184,12 +204,16 @@ class Recalls extends Component {
     const alert = {
       success: {
         title: 'Account Updated',
-        body: `Successfully updated the default recare due date to ${val[0]} months`,
+        body: `Successfully updated the default recare due date to ${
+          val[0]
+        } months`,
       },
 
       error: {
         title: 'Failed to Update Account',
-        body: `Error trying to update the default recare due date to ${val[0]} months`,
+        body: `Error trying to update the default recare due date to ${
+          val[0]
+        } months`,
       },
     };
 
@@ -232,7 +256,12 @@ class Recalls extends Component {
     };
 
     const addRecallActions = [
-      { label: 'Cancel', onClick: this.toggleAdding, component: Button, props: { border: 'blue' } },
+      {
+        label: 'Cancel',
+        onClick: this.toggleAdding,
+        component: Button,
+        props: { border: 'blue' },
+      },
       {
         label: 'Save',
         onClick: this.newReminder,
@@ -249,7 +278,9 @@ class Recalls extends Component {
 
     let previewComponent = null;
     if (selectedRecall) {
-      previewComponent = <RecallPreview recall={selectedRecall} account={activeAccount} />;
+      previewComponent = (
+        <RecallPreview recall={selectedRecall} account={activeAccount} />
+      );
     }
 
     const numHygieneMonths = activeAccount.hygieneInterval || '6 months';
@@ -295,7 +326,10 @@ class Recalls extends Component {
               linesBoxClass={styles.dueDateLinesBox}
               labelComponent={
                 <div className={styles.dueDateWrapper}>
-                  <TouchPointLabel title="Due Date" className={styles.dueDateLabel} />
+                  <TouchPointLabel
+                    title="Due Date"
+                    className={styles.dueDateLabel}
+                  />
                 </div>
               }
               mainComponent={
@@ -393,7 +427,11 @@ Recalls.propTypes = {
 
 function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
-  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const activeAccount = entities.getIn([
+    'accounts',
+    'models',
+    auth.get('accountId'),
+  ]);
   const recalls = entities
     .getIn(['recalls', 'models'])
     .filter(r => !r.isDeleted && !!r.interval)
@@ -415,10 +453,13 @@ function mapDispatchToProps(dispatch) {
       updateEntityRequest,
       reset,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Recalls);

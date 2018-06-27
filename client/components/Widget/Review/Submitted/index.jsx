@@ -42,7 +42,8 @@ class Submitted extends Component {
   }
 
   submitBad() {
-    return this.props.saveReview()
+    return this.props
+      .saveReview()
       .then(() => this.props.history.push('./review/complete'))
       .catch(err => console.log('error in submitBad', err));
   }
@@ -50,7 +51,8 @@ class Submitted extends Component {
   submitGood() {
     // Save review
     this.share();
-    return this.props.saveReview()
+    return this.props
+      .saveReview()
       .then(() => this.props.history.push('./review/complete'))
       .catch(err => console.log('error in submitGood', err));
   }
@@ -59,11 +61,7 @@ class Submitted extends Component {
     const { review, reviewedPractitioner } = this.props;
     const poorReview = review.get('stars') < 4;
     const noStars = review.get('stars') === 0;
-    const sentiment = noStars ?
-      'empty' :
-      poorReview ?
-        'sorry' :
-        'grateful';
+    const sentiment = noStars ? 'empty' : poorReview ? 'sorry' : 'grateful';
 
     const content = sentimentContent[sentiment];
     const stars = review.get('stars');
@@ -74,12 +72,8 @@ class Submitted extends Component {
         <div className={styles.row}>
           <Picture reviewedPractitioner={reviewedPractitioner} />
         </div>
-        <div className={styles.header}>
-          {content.header}
-        </div>
-        <div className={styles.message}>
-          {content.response}
-        </div>
+        <div className={styles.header}>{content.header}</div>
+        <div className={styles.message}>{content.response}</div>
         <div className={styles.starsWrapper}>
           <Stars
             value={stars}
@@ -90,30 +84,34 @@ class Submitted extends Component {
         </div>
         <div className={styles.footer}>
           <div className={styles.textAreaWrapper}>
-            {!noStars && poorReview ?
+            {!noStars && poorReview ? (
               <TextArea
                 label="FEEDBACK"
                 value={description}
                 onChange={this.handleChange('description')}
                 classStyles={styles.textArea}
-              /> : null}
+              />
+            ) : null}
           </div>
-          {poorReview ?
+          {poorReview ? (
             <Button
               className={styles.button}
               onClick={this.submitBad}
               disabled={noStars && !description}
             >
               Share Feedback
-            </Button> :
+            </Button>
+          ) : (
             <Button
               className={styles.googleButton}
-              iconRightComponent={(props) => <Icon {...props} icon="google-plus-g" type="brand" />}
+              iconRightComponent={props => (
+                <Icon {...props} icon="google-plus-g" type="brand" />
+              )}
               onClick={this.submitGood}
             >
               Share Review on Google
             </Button>
-          }
+          )}
         </div>
       </div>
     );
@@ -130,9 +128,9 @@ function mapStateToProps({ entities, reviews }) {
   const account = reviews.get('account');
   const pracId = review.get('practitionerId');
   const pracModels = entities.getIn(['practitioners', 'models']);
-  const reviewedPractitioner = review.get('practitionerId') ?
-    pracModels.get(pracId) :
-    pracModels.first();
+  const reviewedPractitioner = review.get('practitionerId')
+    ? pracModels.get(pracId)
+    : pracModels.first();
 
   return {
     review,
@@ -142,10 +140,16 @@ function mapStateToProps({ entities, reviews }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    mergeReviewValues,
-    saveReview,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      mergeReviewValues,
+      saveReview,
+    },
+    dispatch,
+  );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Submitted));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Submitted));

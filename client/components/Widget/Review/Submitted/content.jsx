@@ -4,16 +4,12 @@ import React, { Component, PropTypes } from 'react';
 export default {
   // If less than 4 stars
   sorry: {
-    header: (
-      <div>
-        Thanks for being honest!
-      </div>
-    ),
+    header: <div>Thanks for being honest!</div>,
 
     response: (
       <div>
-        Your feedback is important to us. Please
-        share your experience to help us improve.
+        Your feedback is important to us. Please share your experience to help
+        us improve.
       </div>
     ),
   },
@@ -22,15 +18,14 @@ export default {
   grateful: {
     header: (
       <div>
-        Thanks!<br/>
+        Thanks!<br />
         We appreciate you too.
       </div>
     ),
 
     response: (
       <div>
-        Reviews are important to us to help
-        grow our practice. Please take a
+        Reviews are important to us to help grow our practice. Please take a
         minute to leave us a Google review.
       </div>
     ),
@@ -40,15 +35,11 @@ export default {
   empty: {
     header: (
       <div>
-        We hope you had<br/>
+        We hope you had<br />
         a lovely visit!
       </div>
     ),
 
-    response: (
-      <div>
-        Let us know how it went.
-      </div>
-    ),
-  }
+    response: <div>Let us know how it went.</div>,
+  },
 };

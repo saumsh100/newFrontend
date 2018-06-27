@@ -42,8 +42,6 @@ export async function generateReviewsOutbox({ account, startDate, endDate }) {
   const organizedList = organizeReviewsOutboxList(success);
   const intervalObject = convertIntervalStringToObject(account.reviewsInterval);
 
-  console.log('reviewsInterval');
-
   const outboxReviews = organizedList.map((pa) => {
     const sendDate = moment(pa.patient.appointment.endDate).add(intervalObject).toISOString();
     return {
@@ -85,17 +83,21 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
   const begin = moment(startDate).subtract(intervalObject).toISOString();
   const end = moment(endDate).subtract(intervalObject).toISOString();
   const sameDayEnd = moment(end).add(SAME_DAY_HOURS, 'hours').toISOString();
+  const isConfirmedQuery = account.sendUnconfirmedReviews ? {} : { isPatientConfirmed: true };
 
   const appointments = await Appointment.findAll({
     where: {
       isDeleted: false,
       isCancelled: false,
+      isMissed: false,
       isPending: false,
       accountId: account.id,
       endDate: {
         $gte: begin,
         $lt: end,
       },
+
+      ...isConfirmedQuery,
     },
 
     order: [['endDate', 'DESC']],
@@ -123,6 +125,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
             where: {
               isDeleted: false,
               isCancelled: false,
+              isMissed: false,
               isPending: false,
               accountId: account.id,
               endDate: {

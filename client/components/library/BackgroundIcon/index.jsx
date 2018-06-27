@@ -21,7 +21,11 @@ export default function BackgroundIcon(props) {
   return (
     <div
       className={bckGroundClasses}
-      style={{ background: color, width: `${fontSize}rem`, height: `${fontSize}rem` }}
+      style={{
+        background: color,
+        width: `${fontSize}rem`,
+        height: `${fontSize}rem`,
+      }}
     >
       <i
         style={{ fontSize: `${fontSize / 2}rem` }}
@@ -31,7 +35,6 @@ export default function BackgroundIcon(props) {
     </div>
   );
 }
-
 
 BackgroundIcon.defaultProps = {
   size: 1,

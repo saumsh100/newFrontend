@@ -5,29 +5,25 @@ import styles from './styles.scss';
 import FBLoginButton from '../library/FBLoginButton';
 
 const defaultSubmitButton = (
-  <Button
-    type="submit"
-    className={styles.signInSubmitButton}
-  >
+  <Button type="submit" className={styles.signInSubmitButton}>
     Sign In
   </Button>
 );
 
-export default function Login({ onSubmit, submitButton = defaultSubmitButton, className }) {
+export default function Login({
+  onSubmit,
+  submitButton = defaultSubmitButton,
+  className,
+}) {
   return (
-    <Form form="login" onSubmit={onSubmit} ignoreSaveButton={true} className={className}>
-      <Field
-        type="email"
-        name="email"
-        label="Email"
-        required
-      />
-      <Field
-        type="password"
-        name="password"
-        label="Password"
-        required
-      />
+    <Form
+      form="login"
+      onSubmit={onSubmit}
+      ignoreSaveButton
+      className={className}
+    >
+      <Field type="email" name="email" label="Email" required />
+      <Field type="password" name="password" label="Password" required />
       {submitButton}
     </Form>
   );

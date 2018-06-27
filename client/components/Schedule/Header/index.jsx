@@ -1,13 +1,20 @@
 
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+import { Map, List } from 'immutable';
 import Popover from 'react-popover';
 import moment from 'moment';
 import omit from 'lodash/omit';
 import { reset } from 'redux-form';
 import { connect } from 'react-redux';
-import React, { Component, PropTypes } from 'react';
-import { Icon, IconButton, Button, DialogBox, SHeader, Avatar } from '../../library/index';
-import styles from './styles.scss';
+import {
+  IconButton,
+  Button,
+  DialogBox,
+  SHeader,
+  Avatar,
+} from '../../library/index';
 import Filters from './Filters/index';
 import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
@@ -19,6 +26,7 @@ import {
 } from '../../../thunks/fetchEntities';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
+import styles from './styles.scss';
 
 class Header extends Component {
   constructor(props) {
@@ -26,7 +34,6 @@ class Header extends Component {
     this.state = {
       openFilters: false,
       showWaitlist: false,
-      selectedWaitSpot: null,
       showAddToWaitlist: false,
       patientSearched: null,
     };
@@ -34,7 +41,6 @@ class Header extends Component {
     this.setView = this.setView.bind(this);
     this.toggleFilters = this.toggleFilters.bind(this);
     this.openWaitlist = this.openWaitlist.bind(this);
-    this.selectWaitSpot = this.selectWaitSpot.bind(this);
     this.removeWaitSpot = this.removeWaitSpot.bind(this);
     this.openAddToWaitlist = this.openAddToWaitlist.bind(this);
     this.getSuggestions = this.getSuggestions.bind(this);
@@ -75,22 +81,63 @@ class Header extends Component {
     }
   }
 
-  openWaitlist() {
-    this.setState({
-      showWaitlist: !this.state.showWaitlist,
-    });
+  getSuggestions(value) {
+    return this.props
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
+      .then(searchData => searchData.patients)
+      .then((searchedPatients) => {
+        const patientList = Object.keys(searchedPatients).length
+          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
+          : [];
+
+        patientList.forEach((patient) => {
+          patient.display = (
+            <div className={styles.suggestionContainer}>
+              <Avatar user={patient} size="xs" />
+              <div className={styles.suggestionContainer_details}>
+                <div className={styles.suggestionContainer_fullName}>
+                  {`${patient.firstName} ${patient.lastName}${
+                    patient.birthDate
+                      ? `, ${moment().diff(patient.birthDate, 'years')}`
+                      : ''
+                  }`}
+                </div>
+                <div className={styles.suggestionContainer_date}>
+                  Last Appointment:{' '}
+                  {patient.lastApptDate
+                    ? moment(patient.lastApptDate).format('MMM D YYYY')
+                    : 'n/a'}
+                </div>
+              </div>
+            </div>
+          );
+        });
+
+        return patientList;
+      });
   }
 
   openAddToWaitlist() {
-    this.setState({
-      showAddToWaitlist: !this.state.showAddToWaitlist,
-    });
+    this.setState(prevState => ({
+      showAddToWaitlist: !prevState.showAddToWaitlist,
+    }));
   }
 
-  selectWaitSpot(id) {
-    this.setState({
-      selectedWaitSpot: id,
-    });
+  openWaitlist() {
+    this.setState(prevState => ({
+      showWaitlist: !prevState.showWaitlist,
+    }));
+  }
+
+  removeWaitSpot(id) {
+    const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
+
+    if (confirmDelete) {
+      this.props.deleteEntityRequest({ key: 'waitSpots', id });
+    }
   }
 
   handleAddToWaitlist(values) {
@@ -101,7 +148,7 @@ class Header extends Component {
           .add(1, 'days')
           .toISOString(),
       },
-      omit(values, ['patientData'])
+      omit(values, ['patientData']),
     );
 
     const alertCreate = {
@@ -129,46 +176,6 @@ class Header extends Component {
       });
   }
 
-  removeWaitSpot(id) {
-    const confirmDelete = confirm('Are you sure you want to remove this wait spot?');
-
-    if (confirmDelete) {
-      this.props.deleteEntityRequest({ key: 'waitSpots', id });
-    }
-  }
-
-  getSuggestions(value) {
-    return this.props
-      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
-      .then(searchData => searchData.patients)
-      .then((searchedPatients) => {
-        const patientList = Object.keys(searchedPatients).length
-          ? Object.keys(searchedPatients).map(key => searchedPatients[key])
-          : [];
-
-        patientList.map((patient) => {
-          patient.display = (
-            <div className={styles.suggestionContainer}>
-              <Avatar user={patient} size="xs" />
-              <div className={styles.suggestionContainer_details}>
-                <div className={styles.suggestionContainer_fullName}>
-                  {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
-                  }`}
-                </div>
-                <div className={styles.suggestionContainer_date}>
-                  Last Appointment:{' '}
-                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
-                </div>
-              </div>
-            </div>
-          );
-        });
-
-        return patientList;
-      });
-  }
-
   handleAutoSuggest(newValue) {
     if (typeof newValue === 'object') {
       this.setState({
@@ -182,9 +189,9 @@ class Header extends Component {
   }
 
   toggleFilters() {
-    this.setState({
-      openFilters: !this.state.openFilters,
-    });
+    this.setState(prevState => ({
+      openFilters: !prevState.openFilters,
+    }));
   }
 
   render() {
@@ -205,12 +212,14 @@ class Header extends Component {
 
     const leftColumnWidth = schedule.toJS().leftColumnWidth;
     const currentDate = moment(schedule.toJS().scheduleDate);
-
     const addToFormName = 'Add to Waitlist Form';
 
     return (
       <SHeader className={styles.headerContainer}>
-        <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
+        <CurrentDate
+          currentDate={currentDate}
+          leftColumnWidth={leftColumnWidth}
+        >
           <div className={styles.changeDay}>
             <IconButton
               icon="angle-left"
@@ -227,7 +236,12 @@ class Header extends Component {
             />
           </div>
 
-          <Button border="blue" onClick={() => this.props.setCurrentDay(new Date())} dense compact>
+          <Button
+            border="blue"
+            onClick={() => this.props.setCurrentDay(new Date())}
+            dense
+            compact
+          >
             Today
           </Button>
           <div className={styles.header}>
@@ -248,8 +262,13 @@ class Header extends Component {
               tipSize={0.01}
               onOuterAction={this.toggleFilters}
             >
-              <div className={styles.headerLinks} onClick={this.toggleFilters}>
-                <Icon icon="filter" size={1.5} className={styles.headerLinks_icon} />
+              <div className={styles.headerLinks}>
+                <IconButton
+                  onClick={this.toggleFilters}
+                  icon="filter"
+                  size={1.5}
+                  className={styles.headerLinks_icon}
+                />
               </div>
             </Popover>
 
@@ -264,7 +283,13 @@ class Header extends Component {
               Waitlist
             </Button>
 
-            <Button onClick={this.setView} border="blue" iconRight="exchange" dense compact>
+            <Button
+              onClick={this.setView}
+              border="blue"
+              iconRight="exchange"
+              dense
+              compact
+            >
               {scheduleView === 'chair' ? 'Practitioner View' : 'Chair View'}
             </Button>
 
@@ -347,26 +372,6 @@ class Header extends Component {
   }
 }
 
-Header.PropTypes = {
-  addNewAppointment: PropTypes.func,
-  runOnDemandSync: PropTypes.func,
-  setSyncingWithPMS: PropTypes.func,
-  syncingWithPMS: PropTypes.bool,
-  scheduleView: PropTypes.string,
-  setScheduleView: PropTypes.func,
-  schedule: PropTypes.object,
-  chairs: PropTypes.object,
-  practitioners: PropTypes.object,
-  previousDay: PropTypes.func.isRequired,
-  nextDay: PropTypes.func.isRequired,
-  setCurrentDay: PropTypes.func.isRequired,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
-  deleteEntityRequest: PropTypes.func.isRequired,
-  createEntityRequest: PropTypes.func.isRequired,
-  reinitializeState: PropTypes.func.isRequired,
-  reset: PropTypes.func.isRequired,
-};
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
@@ -376,7 +381,7 @@ function mapDispatchToProps(dispatch) {
       createEntityRequest,
       reset,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -409,6 +414,37 @@ function mapStateToProps({ schedule, apiRequests, entities }) {
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+Header.propTypes = {
+  addNewAppointment: PropTypes.func.isRequired,
+  scheduleView: PropTypes.string.isRequired,
+  setScheduleView: PropTypes.func.isRequired,
+  schedule: PropTypes.instanceOf(Map).isRequired,
+  chairs: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  waitSpots: PropTypes.instanceOf(Map).isRequired,
+  patients: PropTypes.instanceOf(Map).isRequired,
+  patientUsers: PropTypes.instanceOf(Map).isRequired,
+  appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
+  previousDay: PropTypes.func.isRequired,
+  nextDay: PropTypes.func.isRequired,
+  setCurrentDay: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  pracsFetched: PropTypes.bool,
+  chairsFetched: PropTypes.bool,
+  waitSpotsFetched: PropTypes.bool,
+};
 
-export default enhance(Header);
+Header.defaultProps = {
+  pracsFetched: false,
+  chairsFetched: false,
+  waitSpotsFetched: false,
+  appointments: Map,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);

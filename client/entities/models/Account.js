@@ -43,6 +43,7 @@ const AccountSchema = {
   reviewsInterval: null,
   massOnlineEmailSentDate: null,
   suggestedChairId: null,
+  sendUnconfirmedReviews: null,
 };
 
 export default class Account extends createModel(AccountSchema) {

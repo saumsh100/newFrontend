@@ -6,7 +6,9 @@ import PatientUser from '../../entities/models/PatientUser';
 import styles from './styles.scss';
 
 export default function RequestData(props) {
-  const { time, service, name, requestCreatedAt, requestingUser } = props;
+  const {
+    time, service, name, requestCreatedAt, requestingUser,
+  } = props;
 
   return (
     <div className={styles.requestData}>
@@ -20,7 +22,10 @@ export default function RequestData(props) {
       <div className={styles.requestedText}>
         {requestingUser && (
           <div className={styles.requestedText__container}>
-            <span className={styles.requestedText__createdAt}> Requested by: </span>
+            <span className={styles.requestedText__createdAt}>
+              {' '}
+              Requested by:{' '}
+            </span>
             <span className={styles.requestedText__requestedBy}>
               {requestingUser.get('firstName')} {requestingUser.get('lastName')}
             </span>

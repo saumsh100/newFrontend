@@ -15,7 +15,9 @@ class CallsTable extends Component {
   }
 
   render() {
-    const { calls, patients, callsLength, openCallModal } = this.props;
+    const {
+      calls, patients, callsLength, openCallModal,
+    } = this.props;
 
     const sortedCalls = calls
       .toArray()
@@ -39,13 +41,18 @@ class CallsTable extends Component {
       const callJS = call.toJS();
       const patient = callJS.patientId ? patients.get(callJS.patientId) : null;
       const callerName = callJS.patientId
-        ? `${patients.get(callJS.patientId).firstName} ${patients.get(callJS.patientId).lastName}`
+        ? `${patients.get(callJS.patientId).firstName} ${
+          patients.get(callJS.patientId).lastName
+        }`
         : callJS.callerName;
 
       callJS.callerName = callerName;
 
       return (
-        <div className={styles.callListItem} onClick={() => openCallModal(callJS)}>
+        <div
+          className={styles.callListItem}
+          onClick={() => openCallModal(callJS)}
+        >
           <CallListItem
             key={callJS.id}
             id={callJS.id}

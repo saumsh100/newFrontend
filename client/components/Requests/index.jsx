@@ -28,7 +28,10 @@ const Requests = (props) => {
 
   let requestHeaderClassNames = styles.requestHeader;
   if (disableHeader) {
-    requestHeaderClassNames = classNames(requestHeaderClassNames, styles.hidden);
+    requestHeaderClassNames = classNames(
+      requestHeaderClassNames,
+      styles.hidden,
+    );
   }
 
   let display = (
@@ -49,7 +52,9 @@ const Requests = (props) => {
   }
   return (
     <Card
-      className={classNames(styles.requestCard, { [styles.requestCardMobile]: isHub() })}
+      className={classNames(styles.requestCard, {
+        [styles.requestCardMobile]: isHub(),
+      })}
       noBorder={noBorder}
       runAnimation={runAnimation}
       loaded={isLoaded}
@@ -59,7 +64,7 @@ const Requests = (props) => {
           <CardHeader
             data-test-id="requestCount"
             count={sortedRequests.length || 0}
-            title={'Online Requests'}
+            title="Online Requests"
           />
         </div>
       )}

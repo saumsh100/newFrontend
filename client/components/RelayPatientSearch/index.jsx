@@ -13,7 +13,10 @@ import { Input, InfiniteScroll } from '../library';
 import Loader from '../Loader';
 import PatientSuggestion from '../PatientSuggestion';
 import { StyleExtender } from '../Utils/Themer';
-import { setPatientSearched, setSearchedList } from '../../thunks/patientSearch';
+import {
+  setPatientSearched,
+  setSearchedList,
+} from '../../thunks/patientSearch';
 import styles from './styles.scss';
 
 const defaultState = {
@@ -102,9 +105,7 @@ class PatientSearch extends Component {
   handleLoadMore() {
     this.setState({ isLoading: true }, () => {
       const { currValue, endCursor } = this.state;
-      fetchPatients({ search: currValue, after: endCursor }).then(
-        this.updateStateWithData(currValue)
-      );
+      fetchPatients({ search: currValue, after: endCursor }).then(this.updateStateWithData(currValue));
     });
   }
 
@@ -126,7 +127,9 @@ class PatientSearch extends Component {
           totalCount: data.accountViewer.patients.totalCount,
           results,
           patients:
-            inputValue === currValue ? uniqBy(prevState.patients.concat(results), 'id') : results,
+            inputValue === currValue
+              ? uniqBy(prevState.patients.concat(results), 'id')
+              : results,
         };
       });
   }
@@ -144,7 +147,8 @@ class PatientSearch extends Component {
             {
               isLoading: true,
             },
-            () => fetchPatients({ search: inputValue }).then(this.updateStateWithData(inputValue))
+            () =>
+              fetchPatients({ search: inputValue }).then(this.updateStateWithData(inputValue)),
           );
         }
       }
@@ -178,8 +182,17 @@ class PatientSearch extends Component {
    * Render function for the relay query renderer
    * returns a function to be used as render prop
    */
-  renderList({ newTheme, currValue, highlightedIndex, getItemProps, theme, renderListFooter }) {
-    const { hasNextPage, totalCount, isLoading, patients } = this.state;
+  renderList({
+    newTheme,
+    currValue,
+    highlightedIndex,
+    getItemProps,
+    theme,
+    renderListFooter,
+  }) {
+    const {
+      hasNextPage, totalCount, isLoading, patients,
+    } = this.state;
 
     return (
       <div>
@@ -218,11 +231,11 @@ class PatientSearch extends Component {
         {isLoading
           ? renderListFooter(currValue, 'Searching...', isLoading)
           : renderListFooter(
-            currValue,
-            totalCount === 0
-              ? 'No results found for'
-              : `${totalCount} Patients found for the search`
-          )}
+              currValue,
+              totalCount === 0
+                ? 'No results found for'
+                : `${totalCount} Patients found for the search`,
+            )}
       </div>
     );
   }
@@ -234,7 +247,11 @@ class PatientSearch extends Component {
    * @param {bool} displaySearching typed something but relay ain't updated the state yet
    * @param {*} suggestionsListProps args needed for this.renderList
    */
-  renderSuggestionList({ displayList, displaySearching, ...suggestionsListProps }) {
+  renderSuggestionList({
+    displayList,
+    displaySearching,
+    ...suggestionsListProps
+  }) {
     const { renderListFooter, currValue } = suggestionsListProps;
     return displayList
       ? this.renderList(suggestionsListProps)
@@ -249,15 +266,24 @@ class PatientSearch extends Component {
     return (inputValue, text, isLoading = false) => (
       <div className={newTheme.totalCount}>
         <span
-          className={classNames(newTheme.footerText, { [newTheme.bold]: isLoading })}
-        >{`${text}`}</span>
-        {isLoading ? <Loader /> : <span className={newTheme.bold}>{` ${inputValue}`}</span>}
+          className={classNames(newTheme.footerText, {
+            [newTheme.bold]: isLoading,
+          })}
+        >{`${text}`}
+        </span>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <span className={newTheme.bold}>{` ${inputValue}`}</span>
+        )}
       </div>
     );
   }
 
   render() {
-    const { onChange, inputProps, theme, searchedPatients } = this.props;
+    const {
+      onChange, inputProps, theme, searchedPatients,
+    } = this.props;
     const newTheme = StyleExtender(theme, styles);
 
     const renderListFooter = this.renderListFooterFactory(newTheme);
@@ -280,9 +306,18 @@ class PatientSearch extends Component {
         itemToString={patient =>
           (patient === null ? '' : `${patient.firstName} ${patient.lastName}`)
         }
-        render={({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => {
+        render={({
+          getInputProps,
+          getItemProps,
+          isOpen,
+          inputValue,
+          highlightedIndex,
+        }) => {
           const displayList =
-            isOpen && typeof currValue !== 'undefined' && currValue !== '' && inputValue !== '';
+            isOpen &&
+            typeof currValue !== 'undefined' &&
+            currValue !== '' &&
+            inputValue !== '';
           const displaySearching = isOpen && inputValue !== '';
           const suggestionsListProps = {
             newTheme,
@@ -312,20 +347,22 @@ class PatientSearch extends Component {
                 })}
                 {searchedPatients.length > 0 &&
                   inputValue === '' && (
-                // render recent searches if has any in the props
-                  <div className={newTheme.recentPatientsWrapper}>
-                    <div className={newTheme.recentPatientsTitle}>Recent patients</div>
-                    {searchedPatients.map((patient, index) => (
-                      <PatientSuggestion
-                        key={patient.id}
-                        patient={patient}
-                        index={index}
-                        getItemProps={getItemProps}
-                        theme={newTheme}
-                      />
-                    ))}
-                  </div>
-                )}
+                    // render recent searches if has any in the props
+                    <div className={newTheme.recentPatientsWrapper}>
+                      <div className={newTheme.recentPatientsTitle}>
+                        Recent patients
+                      </div>
+                      {searchedPatients.map((patient, index) => (
+                        <PatientSuggestion
+                          key={patient.id}
+                          patient={patient}
+                          index={index}
+                          getItemProps={getItemProps}
+                          theme={newTheme}
+                        />
+                      ))}
+                    </div>
+                  )}
               </div>
             </div>
           );
@@ -347,18 +384,16 @@ PatientSearch.propTypes = {
   theme: PropTypes.shape({
     container: PropTypes.string,
   }),
-  searchedPatients: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      ccId: PropTypes.string,
-      pmsId: PropTypes.string,
-      firstName: PropTypes.string,
-      lastName: PropTypes.string,
-      birthDate: PropTypes.string,
-      avatarUrl: PropTypes.string,
-      lastApptDate: PropTypes.string,
-    })
-  ),
+  searchedPatients: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string,
+    ccId: PropTypes.string,
+    pmsId: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    birthDate: PropTypes.string,
+    avatarUrl: PropTypes.string,
+    lastApptDate: PropTypes.string,
+  })),
   setPatientSearched: PropTypes.func,
   setSearchedList: PropTypes.func,
 };
@@ -370,6 +405,9 @@ const mapStateToProps = ({ patientSearch }) => ({
 const mapActionsToProps = dispatch =>
   bindActionCreators({ setPatientSearched, setSearchedList }, dispatch);
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(PatientSearch);

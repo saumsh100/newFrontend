@@ -125,7 +125,7 @@ function mapDispatchToProps(dispatch) {
     {
       setFamilyPatientUser,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -135,4 +135,7 @@ function mapStateToProps({ auth }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddPatient));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddPatient));

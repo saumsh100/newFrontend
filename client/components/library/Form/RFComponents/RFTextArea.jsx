@@ -6,23 +6,13 @@ import TextArea from '../../TextArea';
 
 export default function RFTextArea(props) {
   const {
-    input,
-    error,
-    label,
-    value,
-    meta,
-    theme,
+    input, error, label, value, meta, theme,
   } = props;
 
   const { touched, dirty } = meta;
-  const finalError = error || ((touched || dirty) ? meta.error : null);
-  const newProps = omit(props, ['input', 'meta', 'error',]);
-  return (
-    <TextArea
-      {...newProps}
-      {...input}
-    />
-  );
+  const finalError = error || (touched || dirty ? meta.error : null);
+  const newProps = omit(props, ['input', 'meta', 'error']);
+  return <TextArea {...newProps} {...input} />;
 }
 
 /* eslint react/forbid-prop-types: 0 */

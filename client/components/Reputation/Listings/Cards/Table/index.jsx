@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { List, ListItem, Card, Icon } from '../../../../library';
 import styles from './styles.scss';
 import ShowDetails from './ShowDetails';
-import Collapsible from "../../../../library/Collapsible/index";
+import Collapsible from '../../../../library/Collapsible/index';
 
 class Table extends Component {
   constructor(props) {
@@ -13,103 +13,125 @@ class Table extends Component {
       detailsModeActive: false,
     };
   }
+
   toggleDetailes() {
     this.setState({
       detailsModeActive: !this.state.detailsModeActive,
     });
   }
+
   render() {
-    const {
-      borderColor,
-      cardTitle,
-      data,
-    } = this.props;
+    const { borderColor, cardTitle, data } = this.props;
 
     const { detailsModeActive } = this.state;
 
     return (
-      <Card
-        className={styles.mostLoyal}
-      >
-
+      <Card className={styles.mostLoyal}>
         <div className={styles.mostLoyal__wrapper}>
-          {data.length ? data.map((obj, i) => (
-            <div
-              key={i}
-              className={styles.mostLoyal__body}
-            >
-              {obj.title ? (
-                <div className={styles.mostLoyal__subheader}>
-                  <div className={styles.mostLoyal__subheader_title}>
-                    <div>{obj.title}</div>
+          {data.length ? (
+            data.map((obj, i) => (
+              <div key={i} className={styles.mostLoyal__body}>
+                {obj.title ? (
+                  <div className={styles.mostLoyal__subheader}>
+                    <div className={styles.mostLoyal__subheader_title}>
+                      <div>{obj.title}</div>
+                    </div>
+                    <div className={styles.mostLoyal__subheader_cell} />
                   </div>
-                  <div className={styles.mostLoyal__subheader_cell} />
-                </div>) : ''}
-              <List className={styles.data}>
-                {obj.data.map((obj, i) => {
-                  const listingInfo = obj.listing.length ? obj.listing[0].url : null;
+                ) : (
+                  ''
+                )}
+                <List className={styles.data}>
+                  {obj.data.map((obj, i) => {
+                    const listingInfo = obj.listing.length
+                      ? obj.listing[0].url
+                      : null;
 
-                  let accurateListing = <div>Listing not found</div>;
-                  let accurateListingIcon = <Icon className={styles.status__icon_times} icon="times" />;
+                    let accurateListing = <div>Listing not found</div>;
+                    let accurateListingIcon = (
+                      <Icon
+                        className={styles.status__icon_times}
+                        icon="times"
+                      />
+                    );
 
-                  if (obj.listing.length) {
-                    accurateListing = <div>Accurate listing found</div>;
-                    accurateListingIcon = <Icon className={styles.status__icon_check} icon="check" />;
-                    const warning = obj.listing[0].anchorDataWarningFlag;
+                    if (obj.listing.length) {
+                      accurateListing = <div>Accurate listing found</div>;
+                      accurateListingIcon = (
+                        <Icon
+                          className={styles.status__icon_check}
+                          icon="check"
+                        />
+                      );
+                      const warning = obj.listing[0].anchorDataWarningFlag;
 
-                    if (warning) {
-                      accurateListing = <div> Listing found with possible errors </div>;
-                      accurateListingIcon = <Icon className={styles.status__icon_exclamation} icon="exclamation" />;
+                      if (warning) {
+                        accurateListing = (
+                          <div> Listing found with possible errors </div>
+                        );
+                        accurateListingIcon = (
+                          <Icon
+                            className={styles.status__icon_exclamation}
+                            icon="exclamation"
+                          />
+                        );
+                      }
                     }
-                  }
 
-                  return (
-                    <ListItem
-                      key={i}
-                      className={styles.data__item}
-                    >
-                      <div className={styles.data__item_wrapper}>
-                        <div className={styles.data__item_left}>
-                          <img className={styles.data__item_img} src={obj.img} alt="" />
-                          <div className={styles.data__item_personal}>
-                            <div className={styles.data__item_name}>
-                              {obj.name}
+                    return (
+                      <ListItem key={i} className={styles.data__item}>
+                        <div className={styles.data__item_wrapper}>
+                          <div className={styles.data__item_left}>
+                            <img
+                              className={styles.data__item_img}
+                              src={obj.img}
+                              alt=""
+                            />
+                            <div className={styles.data__item_personal}>
+                              <div className={styles.data__item_name}>
+                                {obj.name}
+                              </div>
+                            </div>
+                          </div>
+                          <div className={styles.data__item_center}>
+                            <div className={styles.data__item_status}>
+                              <div className={styles.status__icon}>
+                                {accurateListingIcon}
+                              </div>
+                            </div>
+                          </div>
+                          <div className={styles.data__item_right}>
+                            <div
+                              onClick={this.toggleDetailes}
+                              className={styles.data__item_table}
+                            >
+                              <div className={styles.table__text}>
+                                {accurateListing}
+                              </div>
+                              {!obj.listing.length ? null : (
+                                <div className={styles.table__button}>
+                                  <Collapsible title="show details">
+                                    <ShowDetails
+                                      listingData={obj.listing}
+                                      url={listingInfo}
+                                    />
+                                  </Collapsible>
+                                </div>
+                              )}
                             </div>
                           </div>
                         </div>
-                        <div className={styles.data__item_center}>
-                          <div className={styles.data__item_status}>
-                            <div className={styles.status__icon}>
-                              {accurateListingIcon}
-                            </div>
-                          </div>
-                        </div>
-                        <div className={styles.data__item_right}>
-                          <div
-                            onClick={this.toggleDetailes}
-                            className={styles.data__item_table}
-                          >
-                            <div className={styles.table__text}>
-                              {accurateListing}
-                            </div>
-                            {!obj.listing.length ?
-                              null :
-                              (<div className={styles.table__button}>
-                                <Collapsible title="show details">
-                                  <ShowDetails
-                                    listingData={obj.listing}
-                                    url={listingInfo}
-                                  />
-                                </Collapsible>
-                              </div>)}
-                          </div>
-                        </div>
-                      </div>
-                    </ListItem>
-                  )})}
-              </List>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              </div>
+            ))
+          ) : (
+            <div className={styles.clearedListings}>
+              Please Select a Filter Option
             </div>
-          )) : <div className={styles.clearedListings}>Please Select a Filter Option</div>}
+          )}
         </div>
       </Card>
     );

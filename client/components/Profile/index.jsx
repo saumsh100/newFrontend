@@ -8,7 +8,7 @@ import ChangePasswordForm from './ChangePasswordForm';
 import TestForm from '../demo/TestForm';
 import TooltipsTest from '../demo/TooltipsTest';
 import { changePassword } from '../../thunks/user';
-import styles from './styles.scss'
+import styles from './styles.scss';
 
 function Profile(props) {
   return (
@@ -17,8 +17,8 @@ function Profile(props) {
         <div className={styles.passwordFormContainer}>
           <ChangePasswordForm onSubmit={props.changePassword} />
         </div>
-        {/*<TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} />*/}
-        {/*<TooltipsTest />*/}
+        {/* <TestForm patient={{ firstName: 'Justin', middleName: 'Daniel', lastName: 'Sharp' }} /> */}
+        {/* <TooltipsTest /> */}
       </Card>
     </DocumentTitle>
   );
@@ -28,19 +28,22 @@ Profile.propTypes = {
   changePassword: PropTypes.func,
 };
 
-
 function mapStateToProps() {
-  return {
-
-  };
+  return {};
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators({
-    changePassword,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      changePassword,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(Profile);

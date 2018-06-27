@@ -4,25 +4,27 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import moment from 'moment';
-import { Grid, Row, Col, DayPicker, DropdownSelect, PractitionerAvatar } from '../../../../library';
+import {
+  Grid,
+  Row,
+  Col,
+  DayPicker,
+  DropdownSelect,
+  PractitionerAvatar,
+} from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
 import styles from './styles.scss';
 
 function PractitionerListItem({ option }) {
   const {
-    value,
-    label,
-    practitioner,
-    ignore,
+    value, label, practitioner, ignore,
   } = option;
 
-  if (ignore) return <div className={styles.practitionerItem}>{label || value}</div>;
+  if (ignore) { return <div className={styles.practitionerItem}>{label || value}</div>; }
   return (
     <div className={styles.practitionerItem}>
       <PractitionerAvatar practitioner={practitioner} size="xs" />
-      <div className={styles.labelText}>
-        {label}
-      </div>
+      <div className={styles.labelText}>{label}</div>
     </div>
   );
 }
@@ -38,19 +40,22 @@ function Preferences(props) {
     account,
   } = props;
 
-  const serviceOptions = services.get('models').map(s => ({ label: s.get('name'), value: s.get('id') })).toArray();
+  const serviceOptions = services
+    .get('models')
+    .map(s => ({ label: s.get('name'), value: s.get('id') }))
+    .toArray();
 
-  const filteredPractitioners = practitioners.get('models').filter((prac) => {
-    return prac.get('isActive') && !prac.get('isHidden');
-  });
+  const filteredPractitioners = practitioners.get('models').filter(prac => prac.get('isActive') && !prac.get('isHidden'));
 
   const practitionerOptions = [
     { label: 'No Preference', value: '', ignore: true },
-    ...filteredPractitioners.map(p => ({
-      label: p.getPrettyName(),
-      value: p.get('id'),
-      practitioner: p.toJS(),
-    })).toArray(),
+    ...filteredPractitioners
+      .map(p => ({
+        label: p.getPrettyName(),
+        value: p.get('id'),
+        practitioner: p.toJS(),
+      }))
+      .toArray(),
   ];
 
   return (
@@ -102,10 +107,16 @@ function mapStateToProps({ entities, availabilities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    setSelectedServiceId: Actions.setSelectedServiceId,
-    setSelectedPractitionerId: Actions.setSelectedPractitionerId,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      setSelectedServiceId: Actions.setSelectedServiceId,
+      setSelectedPractitionerId: Actions.setSelectedPractitionerId,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Preferences);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Preferences);

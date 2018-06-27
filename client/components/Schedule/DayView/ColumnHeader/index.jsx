@@ -31,7 +31,10 @@ export default function ShowColumnHeader(props) {
       </div>
       <div className={styles.scrollDiv}>
         {allFetched ? (
-          <div className={styles.columnHeader_body} ref={headerComponentDidMount}>
+          <div
+            className={styles.columnHeader_body}
+            ref={headerComponentDidMount}
+          >
             {entities.map((entity, i) => (
               <div
                 key={i + Math.random()}
@@ -47,7 +50,7 @@ export default function ShowColumnHeader(props) {
             ))}
           </div>
         ) : null}
-        <div className={styles.blank}>{''}</div>
+        <div className={styles.blank} />
       </div>
     </div>
   );

@@ -62,15 +62,15 @@ function mapStateToProps({ entities, chat }) {
   const selectedChat = chat.get('selectedChatId');
   const finalChat = selectedChat || chat.get('newChat');
 
-  const selectedPatientId = finalChat && finalChat.patientId ?
-                            finalChat.patientId
-                            : entities.getIn(['chats', 'models', finalChat, 'patientId']);
+  const selectedPatientId =
+    finalChat && finalChat.patientId
+      ? finalChat.patientId
+      : entities.getIn(['chats', 'models', finalChat, 'patientId']);
 
   return {
     patient: entities.getIn(['patients', 'models', selectedPatientId]),
   };
 }
-
 
 const enhance = connect(mapStateToProps);
 

@@ -14,7 +14,11 @@ import {
   IconButton,
 } from '../index.js';
 import { formatPhoneNumber } from '../../library/util/Formatters';
-import { patientShape, chairShape, practitionerShape } from '../PropTypeShapes/index';
+import {
+  patientShape,
+  chairShape,
+  practitionerShape,
+} from '../PropTypeShapes/index';
 import styles from './styles.scss';
 
 const popoverDataSections = (subHeaderText, data) => (
@@ -25,7 +29,9 @@ const popoverDataSections = (subHeaderText, data) => (
 );
 
 export default function AppointmentInfo(props) {
-  const { patient, appointment, age, practitioner, chair } = props;
+  const {
+    patient, appointment, age, practitioner, chair,
+  } = props;
 
   const { startDate, endDate, note } = appointment;
 
@@ -42,7 +48,8 @@ export default function AppointmentInfo(props) {
         <SHeader className={styles.header}>
           <Icon icon="calendar" size={1.5} />
           <div className={styles.header_text}>
-            {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
+            {moment(startDate).format('h:mm a')} -{' '}
+            {moment(endDate).format('h:mm a')}
           </div>
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={() => props.closePopover()} />
@@ -57,16 +64,21 @@ export default function AppointmentInfo(props) {
               <div className={styles.subHeader}>Contact Info</div>
 
               <div className={styles.data}>
-                {patient.mobilePhoneNumber ? <Icon icon="phone" size={0.9} type="solid" /> : null}
+                {patient.mobilePhoneNumber ? (
+                  <Icon icon="phone" size={0.9} type="solid" />
+                ) : null}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
+                  {patient.mobilePhoneNumber &&
+                  patient.mobilePhoneNumber[0] === '+'
                     ? formatPhoneNumber(patient.mobilePhoneNumber)
                     : patient.mobilePhoneNumber}
                 </div>
               </div>
 
               <div className={styles.data}>
-                {patient.email ? <Icon icon="envelope" size={0.9} type="solid" /> : null}
+                {patient.email ? (
+                  <Icon icon="envelope" size={0.9} type="solid" />
+                ) : null}
                 <div className={styles.data_text}>{patient.email}</div>
               </div>
             </div>
@@ -76,7 +88,7 @@ export default function AppointmentInfo(props) {
 
           {popoverDataSections(
             'Practitioner',
-            `${practitioner.firstName} ${practitioner.lastName || null}`
+            `${practitioner.firstName} ${practitioner.lastName || null}`,
           )}
 
           {chair && popoverDataSections('Chair', chair.name)}
@@ -88,7 +100,7 @@ export default function AppointmentInfo(props) {
                 <TextArea disabled="disabled" theme={textAreaTheme}>
                   {note}
                 </TextArea>
-              </div>
+              </div>,
             )}
         </SBody>
 

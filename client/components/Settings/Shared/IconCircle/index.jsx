@@ -14,26 +14,26 @@ export default function IconCircle(props) {
     const [primaryIcon, secondaryIcon] = icon.split('_');
     iconComponent = (
       <div className={styles.stackedIconsWrapper}>
-        <Icon icon={secondaryIcon} className={styles.secondaryIcon} type="solid" />
+        <Icon
+          icon={secondaryIcon}
+          className={styles.secondaryIcon}
+          type="solid"
+        />
         <Icon icon={primaryIcon} className={styles.primaryIcon} type="solid" />
       </div>
     );
   } else if (icon) {
-    iconComponent = (
-      <Icon icon={icon} type="solid" />
-    );
+    iconComponent = <Icon icon={icon} type="solid" />;
   }
 
-  const wrapperClass = selected ?
-    styles[`selectWrapperCircleSelected_${color}`] :
-    styles.selectWrapperCircle;
+  const wrapperClass = selected
+    ? styles[`selectWrapperCircleSelected_${color}`]
+    : styles.selectWrapperCircle;
 
   return (
     <div className={wrapperClass}>
       <div className={styles.wrapperCircle}>
-        <div className={styles[`iconCircle_${color}`]}>
-          {iconComponent}
-        </div>
+        <div className={styles[`iconCircle_${color}`]}>{iconComponent}</div>
       </div>
     </div>
   );

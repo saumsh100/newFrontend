@@ -4,18 +4,31 @@ import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
+import {
+  AppBar,
+  Avatar,
+  Button,
+  DropdownMenu,
+  Icon,
+  IconButton,
+  Link,
+  MenuItem,
+} from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import RelayPatientSearch from '../RelayPatientSearch';
 import styles from './styles.scss';
 
 const UserMenu = (props) => {
-  const { user, role, activeAccount, enterprise } = props;
+  const {
+    user, role, activeAccount, enterprise,
+  } = props;
 
   const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
   const isEnterprise = role === 'SUPERADMIN'; // enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
-  const businessName = isEnterprise ? enterprise.get('name') : activeAccount && activeAccount.name;
+  const businessName = isEnterprise
+    ? enterprise.get('name')
+    : activeAccount && activeAccount.name;
 
   return (
     <Button flat {...newProps} className={styles.userMenuButton}>
@@ -24,7 +37,12 @@ const UserMenu = (props) => {
           <div className={styles.greeting}>Hello, {user.get('firstName')}</div>
           <div className={styles.businessName}>{businessName}</div>
         </div>
-        <Avatar className={styles.userAvatar} user={user.toJS()} isPatient={false} size="sm" />
+        <Avatar
+          className={styles.userAvatar}
+          user={user.toJS()}
+          isPatient={false}
+          size="sm"
+        />
         <Icon icon="caret-down" type="solid" />
       </div>
     </Button>
@@ -107,12 +125,18 @@ class TopBar extends Component {
 
     const topBarClassName = classNames(
       styles.topBarContainer,
-      isCollapsed ? styles.topBarContainerCollapsed : styles.topBarContainerUnCollapsed
+      isCollapsed
+        ? styles.topBarContainerCollapsed
+        : styles.topBarContainerUnCollapsed,
     );
 
     // Conditionally change the image render ifCollapsed, media queries will decide to hide or not
     let logoImage = (
-      <img className={styles.logoImageImage} src="/images/carecru_logo.png" alt="CareCru logo" />
+      <img
+        className={styles.logoImageImage}
+        src="/images/carecru_logo.png"
+        alt="CareCru logo"
+      />
     );
 
     if (isCollapsed) {
@@ -126,8 +150,16 @@ class TopBar extends Component {
     }
 
     const logoComponent = (
-      <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>
-        <div className={!isCollapsed ? styles.logoImage : styles.logoImageCollapsed}>
+      <div
+        className={
+          !isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed
+        }
+      >
+        <div
+          className={
+            !isCollapsed ? styles.logoImage : styles.logoImageCollapsed
+          }
+        >
           {logoImage}
         </div>
       </div>
@@ -223,7 +255,9 @@ class TopBar extends Component {
             <li>
               <DropdownMenu
                 className={styles.userDropdownMenu}
-                labelComponent={props => <UserMenu {...props} {...userMenuProps} />}
+                labelComponent={props => (
+                  <UserMenu {...props} {...userMenuProps} />
+                )}
               >
                 <Link to="/profile">
                   <MenuItem className={styles.userMenuLi} icon="user">

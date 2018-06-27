@@ -23,7 +23,9 @@ class PatientPopover extends Component {
 
   componentDidMount() {
     if (this.props.scrollId) {
-      document.getElementById(this.props.scrollId).addEventListener('scroll', this.closeOnScroll);
+      document
+        .getElementById(this.props.scrollId)
+        .addEventListener('scroll', this.closeOnScroll);
       window.addEventListener('scroll', this.closeOnScroll);
     }
   }
@@ -45,7 +47,9 @@ class PatientPopover extends Component {
   }
 
   render() {
-    const { placement, children, patient, closePopover } = this.props;
+    const {
+      placement, children, patient, closePopover,
+    } = this.props;
 
     if (!patient) {
       return null;
@@ -68,40 +72,53 @@ class PatientPopover extends Component {
         tipSize={12}
         onOuterAction={() => this.setOpen(false)}
       >
-        <div className={styles.patientLink} onDoubleClick={() => this.editPatient(patient.id)}>
+        <div
+          className={styles.patientLink}
+          onDoubleClick={() => this.editPatient(patient.id)}
+        >
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
               onClick: (e) => {
                 e.stopPropagation();
                 this.setOpen(true);
               },
-            })
-          )}
+            }))}
         </div>
       </Popover>
     );
   }
 }
 
-PatientPopover.propTypes = {
-  children: PropTypes.element,
-  patient: PropTypes.shape(patientShape),
-  className: PropTypes.objectOf(PropTypes.string),
-  placement: PropTypes.string,
-  isPatientUser: PropTypes.bool,
-  closePopover: PropTypes.bool,
-  push: PropTypes.func,
-  scrollId: PropTypes.string,
-};
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       push,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+PatientPopover.propTypes = {
+  children: PropTypes.element.isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
+  className: PropTypes.string,
+  placement: PropTypes.string,
+  isPatientUser: PropTypes.bool,
+  closePopover: PropTypes.bool,
+  push: PropTypes.func.isRequired,
+  scrollId: PropTypes.string,
+};
+
+PatientPopover.defaultProps = {
+  isPatientUser: false,
+  closePopover: false,
+  scrollId: '',
+  placement: 'right',
+  className: '',
+};
+
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 export default enhance(PatientPopover);

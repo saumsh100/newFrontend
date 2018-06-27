@@ -75,7 +75,7 @@ export default function SmartFilters(props) {
   ];
 
   return (
-    <List className={styles.smartFilter} data-test-id={'smartFiltersList'}>
+    <List className={styles.smartFilter} data-test-id="smartFiltersList">
       {smartFilters.map((filter, index) => {
         let borderStyle = {};
 

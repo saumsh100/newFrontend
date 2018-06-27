@@ -5,7 +5,9 @@ import withEntitiesRequest from '../../../hocs/withEntities';
 import ConnectorsList from './ConnectorsList';
 
 const breadcrumbs = [
-  { icon: 'home', key: 'home', home: true, link: '/admin/nasa' },
+  {
+    icon: 'home', key: 'home', home: true, link: '/admin/nasa',
+  },
   { title: 'Connectors', key: 'connectors', link: '/admin/nasa' },
 ];
 
@@ -17,11 +19,11 @@ class Connectors extends Component {
   render() {
     return (
       <PageContainer title="NASA" breadcrumbs={breadcrumbs}>
-        {
-          this.props.isFetching ?
-            <div>Fetching...</div> :
-            <ConnectorsList accounts={this.props.accounts} />
-        }
+        {this.props.isFetching ? (
+          <div>Fetching...</div>
+        ) : (
+          <ConnectorsList accounts={this.props.accounts} />
+        )}
       </PageContainer>
     );
   }

@@ -11,9 +11,7 @@ import {
   addAllScheduleFilter,
 } from '../../../../actions/schedule';
 
-import {
-  setAllFilters
-} from '../../../../thunks/schedule'
+import { setAllFilters } from '../../../../thunks/schedule';
 
 class FiltersAll extends Component {
   constructor(props) {
@@ -28,26 +26,23 @@ class FiltersAll extends Component {
   }
 
   handleEntityCheck(checked, id, filterKey) {
-    const temp = {}
+    const temp = {};
     if (checked) {
-      this.props.removeScheduleFilter({ key: filterKey, id })
+      this.props.removeScheduleFilter({ key: filterKey, id });
       temp[filterKey] = false;
       this.setState(temp);
-    } else  {
+    } else {
       this.props.addScheduleFilter({ key: filterKey, id });
       this.isAllChecked(filterKey);
     }
   }
 
   isAllChecked(filterKey) {
-    const {
-      selectedFilters,
-      entities,
-    } = this.props;
+    const { selectedFilters, entities } = this.props;
 
     const temp = {};
     temp[filterKey] = true;
-    const lenFilter = selectedFilters[filterKey].length ;
+    const lenFilter = selectedFilters[filterKey].length;
     const lenEntities = entities[filterKey].length;
 
     if (lenEntities > 2) {
@@ -60,11 +55,7 @@ class FiltersAll extends Component {
   }
 
   handleAllCheck(filterKey) {
-    const {
-      entities,
-      clearScheduleFilter,
-      addAllScheduleFilter,
-    } = this.props;
+    const { entities, clearScheduleFilter, addAllScheduleFilter } = this.props;
 
     if (this.state[filterKey]) {
       clearScheduleFilter({ key: filterKey });
@@ -89,11 +80,7 @@ class FiltersAll extends Component {
   }
 
   handleSelectAll() {
-    const {
-      entities,
-      addAllScheduleFilter,
-      setAllFilters,
-    } = this.props;
+    const { entities, addAllScheduleFilter, setAllFilters } = this.props;
 
     const objArr = Object.keys(this.state);
     setAllFilters(['services']);
@@ -128,15 +115,21 @@ FiltersAll.propTypes = {
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    addScheduleFilter,
-    removeScheduleFilter,
-    clearScheduleFilter,
-    addAllScheduleFilter,
-    setAllFilters,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      addScheduleFilter,
+      removeScheduleFilter,
+      clearScheduleFilter,
+      addAllScheduleFilter,
+      setAllFilters,
+    },
+    dispatch,
+  );
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(FiltersAll);

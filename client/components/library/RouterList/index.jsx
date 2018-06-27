@@ -6,7 +6,9 @@ import Link from '../Link';
 import { List, ListItem } from '../List';
 import styles from './styles.scss';
 
-export default function RouterList({ location, routes, className, users }) {
+export default function RouterList({
+  location, routes, className, users,
+}) {
   const token = localStorage.getItem('token');
   const decodedToken = jwt(token);
 
@@ -18,7 +20,9 @@ export default function RouterList({ location, routes, className, users }) {
     return null;
   });
 
-  const listItems = routes.map(({ to, label, disabled, adminOnly }) => {
+  const listItems = routes.map(({
+    to, label, disabled, adminOnly,
+  }) => {
     if (adminOnly && role !== 'SUPERADMIN') {
       return null;
     }
@@ -43,12 +47,10 @@ export default function RouterList({ location, routes, className, users }) {
 }
 
 RouterList.propTypes = {
-  routes: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      to: PropTypes.string,
-    })
-  ),
+  routes: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    to: PropTypes.string,
+  })),
   location: PropTypes.objectOf(PropTypes.string),
   className: PropTypes.string,
   users: PropTypes.instanceOf(Map),

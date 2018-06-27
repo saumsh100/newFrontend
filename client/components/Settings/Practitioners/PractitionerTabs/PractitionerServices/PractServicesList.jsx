@@ -15,8 +15,13 @@ class PractServicesList extends Component {
 
     if (service) {
       showComponent = (
-        <div className={styles.formContainer_service} data-test-id={`${service.get('name')}Toggle`}>
-          <span className={styles.formContainer_service_name}>{service.get('name')}</span>
+        <div
+          className={styles.formContainer_service}
+          data-test-id={`${service.get('name')}Toggle`}
+        >
+          <span className={styles.formContainer_service_name}>
+            {service.get('name')}
+          </span>
           <div
             className={styles.formContainer_service_toggle}
             data-test-id={`toggle_pracService_${index}`}

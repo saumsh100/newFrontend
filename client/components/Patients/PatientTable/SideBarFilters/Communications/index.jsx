@@ -5,11 +5,7 @@ import { FormSection, Field, Form } from '../../../../library';
 import styles from '../styles.scss';
 
 export default function Communications(props) {
-  const {
-    handleCommunications,
-    theme,
-    dateTheme,
-  } = props;
+  const { handleCommunications, theme, dateTheme } = props;
 
   return (
     <Form
@@ -19,7 +15,7 @@ export default function Communications(props) {
       destroyOnUnmount={false}
     >
       <div className={styles.formContainer}>
-        {/*<div className={styles.formHeaderInput}>Reminders</div>
+        {/* <div className={styles.formHeaderInput}>Reminders</div>
         <div className={styles.formSubHeader}>Sent Via Email</div>
         <FormSection name="remindersEmail" className={styles.formContainer_row} >
           <Field
@@ -92,9 +88,12 @@ export default function Communications(props) {
             component="DayPicker"
             name="1"
           />
-        </FormSection>*/}
+        </FormSection> */}
         <div className={styles.formHeader}> Last Reminder Sent</div>
-        <FormSection name="lastReminderSent" className={styles.formContainer_row} >
+        <FormSection
+          name="lastReminderSent"
+          className={styles.formContainer_row}
+        >
           <Field
             component="DayPicker"
             name="0"
@@ -110,7 +109,7 @@ export default function Communications(props) {
           />
         </FormSection>
         <div className={styles.formHeader}> Last Recall Sent</div>
-        <FormSection name="lastRecareSent" className={styles.formContainer_row} >
+        <FormSection name="lastRecareSent" className={styles.formContainer_row}>
           <Field
             component="DayPicker"
             name="0"
@@ -126,7 +125,7 @@ export default function Communications(props) {
           />
         </FormSection>
         <div className={styles.formHeader}> Reviews</div>
-        <FormSection name="reviews" className={styles.formContainer_row} >
+        <FormSection name="reviews" className={styles.formContainer_row}>
           <Field
             component="DayPicker"
             name="0"
@@ -141,7 +140,7 @@ export default function Communications(props) {
             label="Date"
           />
         </FormSection>
-        {/*<div className={styles.formHeader}> Surveys </div>
+        {/* <div className={styles.formHeader}> Surveys </div>
         <div className={styles.formContainer_row} >
           <Field
             required
@@ -168,7 +167,7 @@ export default function Communications(props) {
             component="DayPicker"
             name="lastApp2"
           />
-        </div>*/}
+        </div> */}
       </div>
     </Form>
   );
@@ -178,4 +177,4 @@ Communications.propTypes = {
   handleCommunications: PropTypes.func.isRequired,
   theme: PropTypes.object,
   dateTheme: PropTypes.object,
-}
+};

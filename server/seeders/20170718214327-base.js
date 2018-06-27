@@ -63,6 +63,7 @@ const address = {
   city: 'Belgrade',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  timezone,
 };
 
 const account2 = {
@@ -92,6 +93,7 @@ const address2 = {
   street: '10204 112th St.',
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  timezone,
 };
 
 const managerPermission = {
@@ -479,7 +481,7 @@ module.exports = {
         patientId: patient.id,
         createdAt: new Date(),
         updatedAt: new Date(),
-      }))
+      })),
     );
 
     await queryInterface.bulkInsert(
@@ -491,7 +493,7 @@ module.exports = {
         patientId: patient.id,
         createdAt: new Date(),
         updatedAt: new Date(),
-      }))
+      })),
     );
 
     const practitioners2 = [];
@@ -571,6 +573,7 @@ module.exports = {
         updatedAt: new Date(),
         chairId: chair2Id,
         isCancelled: false,
+        isPatientConfirmed: i === 0,
       };
 
       todaysApps.push(appointment);
@@ -590,6 +593,7 @@ module.exports = {
       updatedAt: new Date(),
       chairId: chair1Id,
       isCancelled: false,
+      isPatientConfirmed: false,
     };
 
     const prevDayCancelledApp = {
@@ -597,7 +601,7 @@ module.exports = {
       accountId,
       practitionerId: practitioners[Math.floor(Math.random() * 10) + 0].id,
       patientId: patients[patients.length - 2].id,
-      startDate: prevDay.toISOString(),
+      startDate: moment().toISOString(),
       endDate: moment(prevDay)
         .add(15, 'minutes')
         .toISOString(),
@@ -605,6 +609,7 @@ module.exports = {
       updatedAt: new Date(),
       chairId: chair1Id,
       isCancelled: true,
+      isPatientConfirmed: false,
     };
 
     todaysApps.push(prevDayApp);

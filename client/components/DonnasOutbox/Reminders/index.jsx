@@ -27,15 +27,9 @@ class ReminderListItem extends Component {
       <ListItem>
         <Grid>
           <Row>
-            <Col xs={3}>
-              {primaryTypes.join('&')}
-            </Col>
-            <Col xs={3}>
-              {moment(sendDate).format('h:mma')}
-            </Col>
-            <Col xs={3}>
-              {`${patient.firstName} ${patient.lastName}`}
-            </Col>
+            <Col xs={3}>{primaryTypes.join('&')}</Col>
+            <Col xs={3}>{moment(sendDate).format('h:mma')}</Col>
+            <Col xs={3}>{`${patient.firstName} ${patient.lastName}`}</Col>
             <Col xs={3}>
               {moment(appointment.startDate).format('dddd, MMMM Do h:mma')}
             </Col>
@@ -61,8 +55,8 @@ export default class OutboxReminders extends Component {
   componentWillMount() {
     const { account } = this.props;
     return Promise.all([
-        axios.get(`/api/accounts/${account.id}/reminders/outbox`),
-      ])
+      axios.get(`/api/accounts/${account.id}/reminders/outbox`),
+    ])
       .then(([remindersData]) => {
         console.log('outboxData', remindersData);
         this.setState({
@@ -87,21 +81,20 @@ export default class OutboxReminders extends Component {
 
     return (
       <div className={styles.remindersWrapper}>
-        {!reminders.length ?
-          <div>No Reminders</div> :
+        {!reminders.length ? (
+          <div>No Reminders</div>
+        ) : (
           <div>
             <List>
-              {reminders.map((item) => {
-                return (
-                  <ReminderListItem
-                    key={`${item.patient.appointment.id}_reminder`}
-                    data={item}
-                  />
-                );
-              })}
+              {reminders.map(item => (
+                <ReminderListItem
+                  key={`${item.patient.appointment.id}_reminder`}
+                  data={item}
+                />
+                ))}
             </List>
           </div>
-        }
+        )}
       </div>
     );
   }

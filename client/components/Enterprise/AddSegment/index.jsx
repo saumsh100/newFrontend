@@ -3,7 +3,15 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { change, reset } from 'redux-form';
-import { Modal, Input, Row, Col, Grid, Button, IconButton } from '../../library';
+import {
+  Modal,
+  Input,
+  Row,
+  Col,
+  Grid,
+  Button,
+  IconButton,
+} from '../../library';
 import DisplayForm from './DisplayForm';
 import {
   fetchEntities,
@@ -11,9 +19,7 @@ import {
   updateEntityRequest,
   deleteEntityRequest,
 } from '../../../thunks/fetchEntities';
-import {
-  applySegment,
-} from '../../../actions/segments';
+import { applySegment } from '../../../actions/segments';
 import { previewSegment } from '../../../thunks/segments';
 import styles from './styles.scss';
 
@@ -40,12 +46,14 @@ class AddSegment extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)) {
+    if (
+      JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)
+    ) {
       this.props.previewSegment(props.formData);
       this.closeNameinput = this.closeNameinput.bind(this);
     }
   }
-  
+
   handleApply() {
     this.props.applySegment({
       rawWhere: this.props.formData,
@@ -68,7 +76,8 @@ class AddSegment extends Component {
         rawWhere: this.props.formData,
         name: this.state.name,
       },
-      url: '/_api/segments/' });
+      url: '/_api/segments/',
+    });
     this.props.applySegment({
       rawWhere: this.props.formData,
       name: this.state.name,
@@ -85,7 +94,8 @@ class AddSegment extends Component {
         rawWhere: this.props.formData,
         name: this.state.name,
       },
-      url: `/_api/segments/${this.props.segmentId || ''}` });
+      url: `/_api/segments/${this.props.segmentId || ''}`,
+    });
     this.props.applySegment({
       rawWhere: this.props.formData,
       name: this.state.name,
@@ -95,7 +105,6 @@ class AddSegment extends Component {
     this.closeNameinput();
     this.props.reset(this.props.formName);
   }
-
 
   addSegmentName(name) {
     this.setState({
@@ -114,28 +123,21 @@ class AddSegment extends Component {
   }
 
   handleAgeChange(value) {
-    const {
-      formName,
-    } = this.props;
+    const { formName } = this.props;
 
     this.props.change(formName, 'age', value);
     return false;
   }
 
   handleGenderChange(value) {
-    const {
-      formName,
-    } = this.props;
+    const { formName } = this.props;
 
     this.props.change(formName, 'gender', value[0] || null);
   }
 
   render() {
-    const {
-      formName,
-      reinitializeState,
-    } = this.props;
-  
+    const { formName, reinitializeState } = this.props;
+
     return (
       <div className={styles.formContainer}>
         <DisplayForm
@@ -154,7 +156,6 @@ class AddSegment extends Component {
             this.props.reset(formName);
             return reinitializeState();
           }}
-        
         />
         <Modal
           active={this.state.addSegmentName}
@@ -191,9 +192,13 @@ class AddSegment extends Component {
                 <Col xs={2} sm={2} md={2}>
                   <Button
                     onClick={() => {
-                      (this.props.segmentId ? this.updateSegment : this.saveSegment)();
+                      (this.props.segmentId
+                        ? this.updateSegment
+                        : this.saveSegment)();
                     }}
-                  >Save</Button>
+                  >
+                    Save
+                  </Button>
                 </Col>
               </Row>
             </Grid>
@@ -205,18 +210,20 @@ class AddSegment extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    fetchEntities,
-    createEntityRequest,
-    updateEntityRequest,
-    deleteEntityRequest,
-    reset,
-    change,
-    previewSegment,
-    applySegment,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      fetchEntities,
+      createEntityRequest,
+      updateEntityRequest,
+      deleteEntityRequest,
+      reset,
+      change,
+      previewSegment,
+      applySegment,
+    },
+    dispatch,
+  );
 }
-
 
 function mapStateToProps(state) {
   return {
@@ -245,10 +252,11 @@ AddSegment.propTypes = {
     gender: PropTypes.string,
     city: PropTypes.string,
   }).isRequired,
-  
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(AddSegment);
-

@@ -8,7 +8,7 @@ import Tasks from './Tasks';
 import styles from './styles.scss';
 
 class DonnaToDoListContainer extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       toDoIndex: 0,
@@ -38,9 +38,7 @@ class DonnaToDoListContainer extends Component {
   }
 
   render() {
-    const {
-      dashboard,
-    } = this.props;
+    const { dashboard } = this.props;
 
     const loadingToDos = dashboard.get('loadingToDos');
     const reminders = dashboard.get('reminders');

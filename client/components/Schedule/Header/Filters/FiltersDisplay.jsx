@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import FilterPractitioners from './FilterPractitioners';
 import FilterEntities from './FilterEntities';
-import { Card, Icon, SContainer, SHeader, SBody, } from '../../../library';
+import { Card, Icon, SContainer, SHeader, SBody } from '../../../library';
 import styles from './styles.scss';
 
 export default function FiltersDisplay(props) {
@@ -23,10 +23,8 @@ export default function FiltersDisplay(props) {
           <div className={styles.filter_header__icon}>
             <Icon size={1.2} icon="filter" />
           </div>
-          <div className={styles.filter_header__title}>
-            Filters
-          </div>
-          <div className={styles.filter_header__link} >
+          <div className={styles.filter_header__title}>Filters</div>
+          <div className={styles.filter_header__link}>
             <div
               className={styles.filter_header__link__selectText}
               onClick={handleSelectAll}
@@ -36,7 +34,8 @@ export default function FiltersDisplay(props) {
             <div
               onClick={handleClearAll}
               className={styles.filter_header__link__clearText}
-            >Clear All
+            >
+              Clear All
             </div>
           </div>
         </div>
@@ -51,7 +50,7 @@ export default function FiltersDisplay(props) {
           handleEntityCheck={handleEntityCheck}
         />
         <div className={styles.filter_options}>
-          {/*<FilterEntities
+          {/* <FilterEntities
             display="name"
             label="Services"
             filterKey="servicesFilter"
@@ -60,7 +59,7 @@ export default function FiltersDisplay(props) {
             selectedFilterItem={selectedFilters.servicesFilter}
             handleAllCheck={handleAllCheck}
             handleEntityCheck={handleEntityCheck}
-          />*/}
+          /> */}
           <FilterEntities
             display="name"
             label="Chairs"

@@ -1,3 +1,4 @@
+
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 import { Card, CardHeader, BarChart } from '../../../../library';
@@ -5,11 +6,7 @@ import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
 export default function WebsiteTrafficSources(props) {
-  const {
-    chartData,
-    labels,
-    title,
-  } = props;
+  const { chartData, labels, title } = props;
 
   const ticks = {
     fontSize: 16,
@@ -33,27 +30,31 @@ export default function WebsiteTrafficSources(props) {
   const lineChartOptions = {
     maintainAspectRatio: false,
     scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true,
-          min: 0,
-          ...ticks,
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+            min: 0,
+            ...ticks,
+          },
+          gridLines: {
+            beginAtZero: true,
+            drawTicks: false,
+          },
         },
-        gridLines: {
-          beginAtZero: true,
-          drawTicks: false,
-        },
-      }],
+      ],
 
-      xAxes: [{
-        ticks,
-        gridLines: {
-          offsetGridLines: true,
-          display: true,
-          drawTicks: false,
-          drawOnChartArea: false,
+      xAxes: [
+        {
+          ticks,
+          gridLines: {
+            offsetGridLines: true,
+            display: true,
+            drawTicks: false,
+            drawOnChartArea: false,
+          },
         },
-      }],
+      ],
     },
   };
 

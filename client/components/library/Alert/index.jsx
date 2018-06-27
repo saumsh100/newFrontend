@@ -5,39 +5,34 @@ import Icon from '../Icon';
 import styles from './styles.scss';
 
 export default function Alert(props) {
-  const {
-    alert,
-    removeAlert,
-    alertClick,
-  } = props;
+  const { alert, removeAlert, alertClick } = props;
 
   let alertStyle = styles.alert;
   alertStyle = classNames(styles[`alert--${alert.type}`], alertStyle);
 
-  const cursorStyle = alert && alert.clickable ? {
-    cursor: 'pointer',
-  } : {};
+  const cursorStyle =
+    alert && alert.clickable
+      ? {
+        cursor: 'pointer',
+      }
+      : {};
 
   let iconStyle = styles.iconContainer;
   iconStyle = classNames(styles[`${alert.type}Hover`], iconStyle);
 
   return (
-    <div
-      className={alertStyle}
-    >
-      <div className={styles.textContainer} >
+    <div className={alertStyle}>
+      <div className={styles.textContainer}>
         <div className={styles.title}>
           <span>{alert.title}</span>
         </div>
         <div className={styles.alertBodyText}>{alert.body}</div>
         <div className={styles.alertBodyText}>{alert.subText}</div>
-        {alert.clickable ? <div className={styles.clickableLink}>
-          <div
-            onClick={alertClick}
-          >
-            Click to View
+        {alert.clickable ? (
+          <div className={styles.clickableLink}>
+            <div onClick={alertClick}>Click to View</div>
           </div>
-        </div> : null }
+        ) : null}
       </div>
       <div className={iconStyle}>
         <Icon
@@ -59,4 +54,3 @@ Alert.propTypes = {
   handleAction: PropTypes.func,
   alertClick: PropTypes.func,
 };
-

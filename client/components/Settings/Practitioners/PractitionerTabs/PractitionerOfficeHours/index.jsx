@@ -22,7 +22,15 @@ import { chairShape } from '../../../../library/PropTypeShapes/chairShape';
 import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import { SortByName } from '../../../../library/util/SortEntities';
 
-const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+const daysOfWeek = [
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+  'sunday',
+];
 
 function checkValues(obj) {
   return Object.keys(obj).every(key => obj[key]);
@@ -53,7 +61,9 @@ class PractitionerOfficeHours extends Component {
 
   componentWillMount() {
     const { practitioner } = this.props;
-    const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null;
+    const customScheduleValue = practitioner
+      ? practitioner.get('isCustomSchedule')
+      : null;
     const value = customScheduleValue ? 'on' : 'off';
     this.setState({ value });
   }
@@ -63,7 +73,9 @@ class PractitionerOfficeHours extends Component {
 
     const { chairs, allChairs } = this.props;
 
-    const actions = chairs.toArray().map(chair => change('chairs', chair.id, !allChairs));
+    const actions = chairs
+      .toArray()
+      .map(chair => change('chairs', chair.id, !allChairs));
 
     this.props.batchActions(actions);
   }
@@ -92,9 +104,7 @@ class PractitionerOfficeHours extends Component {
     const { weeklySchedule } = this.props;
     const newWeeklySchedule = weeklySchedule.toJS();
 
-    newWeeklySchedule[day].chairIds = Object.keys(values).filter(
-      key => values[key] && key !== 'day'
-    );
+    newWeeklySchedule[day].chairIds = Object.keys(values).filter(key => values[key] && key !== 'day');
 
     const sendWeeklySchedule = weeklySchedule.merge(newWeeklySchedule);
 
@@ -108,7 +118,11 @@ class PractitionerOfficeHours extends Component {
     };
 
     return this.props
-      .updateEntityRequest({ key: 'weeklySchedule', model: sendWeeklySchedule, alert })
+      .updateEntityRequest({
+        key: 'weeklySchedule',
+        model: sendWeeklySchedule,
+        alert,
+      })
       .then(() => {
         this.setState({
           active: false,
@@ -132,7 +146,11 @@ class PractitionerOfficeHours extends Component {
     };
 
     return this.props
-      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .updateEntityRequest({
+        key: 'weeklySchedule',
+        model: newWeeklySchedule,
+        alert,
+      })
       .then(() => {
         this.setState({
           active: false,
@@ -148,7 +166,10 @@ class PractitionerOfficeHours extends Component {
     }
 
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
-    const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
+    const weeklyScheduleNew = Object.assign(
+      {},
+      this.props.weeklySchedule.toJS(),
+    );
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
     if (!weeklyScheduleNew.startDate) {
@@ -176,7 +197,11 @@ class PractitionerOfficeHours extends Component {
     };
 
     return this.props
-      .updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert })
+      .updateEntityRequest({
+        key: 'weeklySchedule',
+        model: newWeeklySchedule,
+        alert,
+      })
       .then(() => {
         this.setState({
           active: false,
@@ -242,7 +267,11 @@ class PractitionerOfficeHours extends Component {
       },
     };
 
-    this.props.updateEntityRequest({ key: 'weeklySchedule', model: newWeeklySchedule, alert });
+    this.props.updateEntityRequest({
+      key: 'weeklySchedule',
+      model: newWeeklySchedule,
+      alert,
+    });
   }
 
   handleToggle(e) {
@@ -302,7 +331,9 @@ class PractitionerOfficeHours extends Component {
   }
 
   render() {
-    const { weeklySchedule, practitioner, chairs, allChairs } = this.props;
+    const {
+      weeklySchedule, practitioner, chairs, allChairs,
+    } = this.props;
 
     let schedules = null;
     const initialValuesChairs = {};
@@ -315,7 +346,11 @@ class PractitionerOfficeHours extends Component {
         <div className={styles.toggleContainer_hours}>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>
-            <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
+            <Header
+              contentHeader
+              title={`Week ${i + 2} Pattern`}
+              className={styles.header}
+            />
             <Button className={styles.button} onClick={this.delete}>
               Delete
             </Button>
@@ -347,9 +382,9 @@ class PractitionerOfficeHours extends Component {
         .sort(SortByName);
 
       const chairFields = filteredChairs.map((chair) => {
-        initialValuesChairs[chair.id] = weeklySchedule[this.state.modalChairDay].chairIds.includes(
-          chair.id
-        );
+        initialValuesChairs[chair.id] = weeklySchedule[
+          this.state.modalChairDay
+        ].chairIds.includes(chair.id);
         return (
           <div className={styles.chairsContainer_fields}>
             <span className={styles.chairsContainer_name}>{chair.name}</span>
@@ -388,21 +423,29 @@ class PractitionerOfficeHours extends Component {
         >
           {weeklySchedule[this.state.modalChairDay].pmsScheduleId ? (
             <div>
-              Note: This day field is currently being synced via PMS. Please use PMS to change this
-              field for this day
+              Note: This day field is currently being synced via PMS. Please use
+              PMS to change this field for this day
             </div>
           ) : null}
           <div className={styles.chairsContainer}>
             <div className={styles.chairsContainer_all}>
-              <span className={styles.chairsContainer_all_text}>All Chairs</span>
+              <span className={styles.chairsContainer_all_text}>
+                All Chairs
+              </span>
               <div className={styles.chairsContainer_toggle}>
-                <Toggle name="allChairs" onChange={this.setAllChairs} checked={allChairs} />
+                <Toggle
+                  name="allChairs"
+                  onChange={this.setAllChairs}
+                  checked={allChairs}
+                />
               </div>
             </div>
             <Form
               // className={formStyle}
-              form={'chairs'}
-              onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
+              form="chairs"
+              onSubmit={values =>
+                this.chairSubmit(values, this.state.modalChairDay)
+              }
               initialValues={initialValuesChairs}
               enableReinitialize
               destroyOnUnmount
@@ -423,10 +466,19 @@ class PractitionerOfficeHours extends Component {
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule" contentHeader />
             <div>
-              <Button className={styles.button} secondary create onClick={this.createPattern}>
+              <Button
+                className={styles.button}
+                secondary
+                create
+                onClick={this.createPattern}
+              >
                 Add New Pattern
               </Button>
-              <Button className={styles.button} secondary onClick={this.openModal}>
+              <Button
+                className={styles.button}
+                secondary
+                onClick={this.openModal}
+              >
                 Change Start Date
               </Button>
             </div>
@@ -454,8 +506,9 @@ class PractitionerOfficeHours extends Component {
     } else {
       showComponent = (
         <div className={styles.notCustom}>
-          Currently, {practitioner.getFullName()} is inheriting the same weekly schedule as the
-          clinic's office hours, to make it custom, click the toggle above.
+          Currently, {practitioner.getFullName()} is inheriting the same weekly
+          schedule as the clinic's office hours, to make it custom, click the
+          toggle above.
         </div>
       );
     }
@@ -492,7 +545,12 @@ class PractitionerOfficeHours extends Component {
             initialValues={weeklySchedule}
             ignoreSaveButton
           >
-            <Field required component="DayPicker" name="startDate" label="Start Date" />
+            <Field
+              required
+              component="DayPicker"
+              name="startDate"
+              label="Start Date"
+            />
           </Form>
         </DialogBox>
         {dialogShow}
@@ -540,10 +598,13 @@ function mapActionsToProps(dispatch) {
     {
       batchActions,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(PractitionerOfficeHours);

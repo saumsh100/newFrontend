@@ -1,12 +1,12 @@
+
 import React, { PropTypes } from 'react';
 import styles from '../PatientInfo/LeftInfoDisplay/styles.scss';
 import { Icon, DropdownMenu, List, ListItem } from '../../library/index';
 
-export default function ReminderDropDowns(props){
-
+export default function ReminderDropDowns(props) {
   const reminderSmsMenu = props => (
     <div {...props}>
-      <div className={styles.iconContainer} >
+      <div className={styles.iconContainer}>
         <Icon icon="comment" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
@@ -17,7 +17,7 @@ export default function ReminderDropDowns(props){
 
   const reminderEmailMenu = props => (
     <div {...props}>
-      <div className={styles.iconContainer} >
+      <div className={styles.iconContainer}>
         <Icon icon="envelope" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
@@ -28,7 +28,7 @@ export default function ReminderDropDowns(props){
 
   const reminderPhoneMenu = props => (
     <div {...props}>
-      <div className={styles.iconContainer} >
+      <div className={styles.iconContainer}>
         <Icon icon="phone" size={1.2} type="solid" />
         <span className={styles.iconContainer_caret}>
           <Icon icon="caret-down" size={1.2} type="solid" />
@@ -39,10 +39,7 @@ export default function ReminderDropDowns(props){
 
   return (
     <div className={styles.recallContainer}>
-      <DropdownMenu
-        labelComponent={reminderEmailMenu}
-        align="left"
-      >
+      <DropdownMenu labelComponent={reminderEmailMenu} align="left">
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>
             Send a Custom Email Reminder
@@ -55,10 +52,7 @@ export default function ReminderDropDowns(props){
           </ListItem>
         </List>
       </DropdownMenu>
-      <DropdownMenu
-        labelComponent={reminderSmsMenu}
-        align="left"
-      >
+      <DropdownMenu labelComponent={reminderSmsMenu} align="left">
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>
             Send a Custom SMS Reminder
@@ -71,10 +65,7 @@ export default function ReminderDropDowns(props){
           </ListItem>
         </List>
       </DropdownMenu>
-      <DropdownMenu
-        labelComponent={reminderPhoneMenu}
-        align="left"
-      >
+      <DropdownMenu labelComponent={reminderPhoneMenu} align="left">
         <List className={styles.ddList}>
           <ListItem className={styles.ddListItem} disabled>
             Send a Custom Phone Reminder

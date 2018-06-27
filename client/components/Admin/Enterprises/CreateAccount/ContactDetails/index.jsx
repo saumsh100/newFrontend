@@ -1,15 +1,11 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Form, Field, } from '../../../../library';
+import { Form, Field } from '../../../../library';
 import { emailValidate } from '../../../../library/Form/validate';
-
 
 export default function ContactDetails(props) {
   const {
-    onSubmit,
-    index,
-    initialValues,
-    formName,
+    onSubmit, index, initialValues, formName,
   } = props;
 
   return (
@@ -21,11 +17,7 @@ export default function ContactDetails(props) {
       initialValues={initialValues}
       ignoreSaveButton
     >
-      <Field
-        name="phoneNumber"
-        label="Contact Phone Number"
-        type="tel"
-      />
+      <Field name="phoneNumber" label="Contact Phone Number" type="tel" />
       <Field
         name="contactEmail"
         label="Contact Email"

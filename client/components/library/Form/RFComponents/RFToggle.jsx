@@ -19,7 +19,9 @@ export default function RFToggle(props) {
       label={label}
       className={className}
       checked={flipped ? !input.value : input.value}
-      onChange={e => input.onChange(flipped ? !e.target.checked : e.target.checked)}
+      onChange={e =>
+        input.onChange(flipped ? !e.target.checked : e.target.checked)
+      }
     />
   );
 }

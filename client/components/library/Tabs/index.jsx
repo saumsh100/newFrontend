@@ -58,8 +58,7 @@ class Tabs extends Component {
         },
 
         noUnderLine: this.props.noUnderLine,
-      })
-    );
+      }));
   }
 
   renderContents(contents) {
@@ -69,16 +68,27 @@ class Tabs extends Component {
         active: this.props.index === idx,
         tabIndex: idx,
         noUnderLine: this.props.noUnderLine,
-      })
-    );
+      }));
 
     return contentElements.filter((item, idx) => idx === this.props.index);
   }
 
   render() {
-    const { children, className, contentClass, navClass, noHeaders, fluid } = this.props;
+    const {
+      children,
+      className,
+      contentClass,
+      navClass,
+      noHeaders,
+      fluid,
+    } = this.props;
 
-    const newProps = omit(this.props, ['index', 'navClass', 'contentClass', 'noUnderLine']);
+    const newProps = omit(this.props, [
+      'index',
+      'navClass',
+      'contentClass',
+      'noUnderLine',
+    ]);
 
     const classes = classNames(className, styles.tabs);
     const contentClasses = classNames(contentClass, styles.content);

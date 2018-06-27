@@ -112,7 +112,11 @@ class DonnaToDoTabs extends Component {
                 activeClass={styles.activeTab}
                 id="toDoTab"
               />
-              <Tab label="Patient Recalls" className={styles.tab} activeClass={styles.activeTab} />
+              <Tab
+                label="Patient Recalls"
+                className={styles.tab}
+                activeClass={styles.activeTab}
+              />
               <Tab
                 label="Review Requests"
                 className={styles.tab}
@@ -129,12 +133,21 @@ class DonnaToDoTabs extends Component {
                 className={styles.tab}
                 activeClass={styles.activeTab}
               />
-              <Tab label="Waitlist Queue" className={styles.tab} activeClass={styles.activeTab} />
+              <Tab
+                label="Waitlist Queue"
+                className={styles.tab}
+                activeClass={styles.activeTab}
+              />
             </Tabs>
           </div>
 
           <div className={styles.imageWrapper} id="imageWrapper">
-            <img src="/images/donna.png" height="335px" width="338px" alt="Donna" />
+            <img
+              src="/images/donna.png"
+              height="335px"
+              width="338px"
+              alt="Donna"
+            />
             <div style={lineStyle} className={styles.dynamicLines}>
               {''}
             </div>

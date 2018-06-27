@@ -6,7 +6,10 @@ import { Form, Field } from '../../../../library';
 
 const OmitForm = (props) => {
   const generateInitialValues = (value, toggles) => {
-    const trueValues = toggles.reduce((acc, toggle) => ({ ...acc, [toggle.id]: true }), {});
+    const trueValues = toggles.reduce(
+      (acc, toggle) => ({ ...acc, [toggle.id]: true }),
+      {},
+    );
 
     const falseValues = value.reduce((acc, v) => ({ ...acc, [v]: false }), {});
 
@@ -22,7 +25,11 @@ const OmitForm = (props) => {
   };
 
   const {
-    value, toggles, formName, renderToggles, toggleComponentProps,
+    value,
+    toggles,
+    formName,
+    renderToggles,
+    toggleComponentProps,
   } = props;
 
   return (
@@ -59,7 +66,10 @@ OmitForm.propTypes = {
     popover: PropTypes.string,
     required: PropTypes.bool,
     validate: PropTypes.arrayOf(PropTypes.func),
-    component: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
+    component: PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.element,
+    ]),
     type: PropTypes.string,
   }),
 };

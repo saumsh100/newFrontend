@@ -12,7 +12,13 @@ import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { setWaitlistUnavailableDates } from '../../../../../actions/availabilities';
 import { patientShape } from '../../../../library/PropTypeShapes';
 
-function DaysUnavailable({ history, waitlist, setUnavailableDates, isAuth, patientUser }) {
+function DaysUnavailable({
+  history,
+  waitlist,
+  setUnavailableDates,
+  isAuth,
+  patientUser,
+}) {
   /**
    * This gets a date and format it to check if it's present on the
    * waitlist's available dates, if so checks if it's on the unavailableDates list.
@@ -38,9 +44,10 @@ function DaysUnavailable({ history, waitlist, setUnavailableDates, isAuth, patie
   /**
    * It shows the days that are on the waitlist selection and are not on the unavailableDates list.
    */
-  const daysToDisplay = difference(waitlist.dates, waitlist.unavailableDates).map(
-    value => (value = moment(value).toDate())
-  );
+  const daysToDisplay = difference(
+    waitlist.dates,
+    waitlist.unavailableDates,
+  ).map(value => (value = moment(value).toDate()));
 
   const handleSubmitting = () => {
     let followUrl = '../patient-information';
@@ -60,8 +67,8 @@ function DaysUnavailable({ history, waitlist, setUnavailableDates, isAuth, patie
       <div className={styles.content}>
         <h3 className={styles.title}>Select Waitlist Dates Unavailable</h3>
         <p className={styles.subtitle}>
-          Select all days that you are UNAVAILABLE for an earlier appointment. (Select all that
-          apply)
+          Select all days that you are UNAVAILABLE for an earlier appointment.
+          (Select all that apply)
         </p>
         <DayPickerRange
           fieldsWrapper={() => undefined}
@@ -102,11 +109,14 @@ function mapDispatchToProps(dispatch) {
     {
       setUnavailableDates: setWaitlistUnavailableDates,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DaysUnavailable);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DaysUnavailable);
 
 DaysUnavailable.propTypes = {
   history: PropTypes.shape(historyShape),
@@ -117,5 +127,8 @@ DaysUnavailable.propTypes = {
     dates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
   }),
-  selectedService: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Service)]),
+  selectedService: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.instanceOf(Service),
+  ]),
 };

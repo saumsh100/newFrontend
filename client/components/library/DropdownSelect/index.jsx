@@ -1,15 +1,23 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import RDropdownMenu from 'react-dd-menu';
 import classNames from 'classnames';
 import Icon from '../Icon';
 import Input from '../Input';
-import styles from './styles.scss';
 import withTheme from '../../../hocs/withTheme';
+import styles from './styles.scss';
 
 function DefaultOption({ option }) {
   return <div>{option.label || option.value}</div>;
 }
+
+DefaultOption.propTypes = {
+  option: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.string,
+  }).isRequired,
+};
 
 class DropdownSelect extends Component {
   constructor(props) {
@@ -25,6 +33,7 @@ class DropdownSelect extends Component {
     this.valueScrollComponentDidMount = this.valueScrollComponentDidMount.bind(this);
     this.searchListener = this.searchListener.bind(this);
     this.clearSearchValue = this.clearSearchValue.bind(this);
+    this.selectOption = this.selectOption.bind(this);
   }
 
   getInitialState() {
@@ -34,7 +43,7 @@ class DropdownSelect extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.clearSearchValue();
   }
 
@@ -49,7 +58,8 @@ class DropdownSelect extends Component {
         }
       });
 
-      this.scrollComponent.scrollTop = valueHeight * this.valueScrollComponent.scrollHeight;
+      this.scrollComponent.scrollTop =
+        valueHeight * this.valueScrollComponent.scrollHeight;
     }
 
     if (this.state.isOpen) {
@@ -89,7 +99,6 @@ class DropdownSelect extends Component {
     if (this.state.isOpen) {
       this.setState({
         isOpen: false,
-        value: '',
       });
     } else {
       this.setState({
@@ -104,7 +113,6 @@ class DropdownSelect extends Component {
 
     this.setState({
       isOpen: false,
-      value: '',
     });
   }
 
@@ -114,7 +122,7 @@ class DropdownSelect extends Component {
     const height = 40;
 
     if (value !== '') {
-      for (let i = 0; i < options.length; i++) {
+      for (let i = 0; i < options.length; i += 1) {
         const option = options[i];
         const whichToSearch = option.label ? 'label' : 'value';
         if (new RegExp(value, 'i').test(option[whichToSearch])) {
@@ -125,8 +133,16 @@ class DropdownSelect extends Component {
     }
   }
 
+  selectOption(e, value) {
+    e.stopPropagation();
+    this.props.onChange(value);
+    this.close();
+  }
+
   renderList() {
-    const { template, onChange, value, options } = this.props;
+    const {
+      template, onChange, value, options,
+    } = this.props;
 
     const OptionTemplate = template || DefaultOption;
 
@@ -142,14 +158,20 @@ class DropdownSelect extends Component {
 
           return (
             <div
-              key={`dropDownSelect_${i}`}
+              key={`dropDownSelect_${option.value}`}
               className={className}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 onChange(option.value);
                 this.close();
               }}
+              role="Button"
               data-test-id={`option_${i}`}
-              ref={isSelected ? this.valueScrollComponentDidMount : null}
+              ref={isSelected && this.valueScrollComponentDidMount}
+              tabIndex={0}
+              onKeyUp={e =>
+                e.keyCode === 13 && this.selectOption(e, option.value)
+              }
             >
               <div
                 className={styles.optionDiv}
@@ -165,9 +187,19 @@ class DropdownSelect extends Component {
   }
 
   renderToggle() {
-    const { value, options = [], template, theme, error, disabled, label } = this.props;
+    const {
+      value,
+      options,
+      template,
+      theme,
+      error,
+      disabled,
+      label,
+    } = this.props;
 
-    const defaultTemplate = ({ option }) => <div>{option.label || option.value}</div>;
+    const defaultTemplate = ({ option }) => (
+      <div>{option.label || option.value}</div>
+    );
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = null;
@@ -201,6 +233,9 @@ class DropdownSelect extends Component {
         className={disabled ? theme.toggleDivDisabled : toggleClassName}
         onClick={disabled ? false : this.toggle}
         data-test-id={this.props['data-test-id']}
+        role="Button"
+        tabIndex={0}
+        onKeyUp={() => {}}
       >
         <Input
           onFocus={disabled ? false : this.toggle}
@@ -209,9 +244,13 @@ class DropdownSelect extends Component {
         />
         <div className={toggleValueClassName}>
           {toggleDiv}
-          <label className={labelClassName}>{label}</label>
+          <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
-            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
+            <Icon
+              className={caretIconClassName}
+              icon="caret-down"
+              type="solid"
+            />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
@@ -249,14 +288,31 @@ DropdownSelect.defaultProps = {
 DropdownSelect.propTypes = {
   label: PropTypes.string,
   template: PropTypes.func,
-  options: PropTypes.array.isRequired,
+  options: PropTypes.arrayOf(PropTypes.any),
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   disabled: PropTypes.bool,
   align: PropTypes.string,
   search: PropTypes.string,
-  theme: PropTypes.string,
+  theme: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.objectOf(PropTypes.string),
+  ]),
+  error: PropTypes.string,
+  'data-test-id': PropTypes.string,
+};
+
+DropdownSelect.defaultProps = {
+  className: '',
+  disabled: false,
+  theme: {},
+  error: '',
+  label: '',
+  search: '',
+  template: undefined,
+  'data-test-id': '',
+  options: [],
 };
 
 export default withTheme(DropdownSelect, styles);

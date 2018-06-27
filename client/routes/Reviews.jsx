@@ -35,7 +35,7 @@ const ReviewsRouter = ({ match }) => {
   return (
     <WidgetContainer>
       <Switch>
-        {/* <Redirect exact from={b()} to={b('/submitted')} />*/}
+        {/* <Redirect exact from={b()} to={b('/submitted')} /> */}
         <Route exact path={b()} component={Submitted} />
         <Route exact path={b('/complete')} component={Complete} />
       </Switch>
@@ -48,7 +48,7 @@ const BookingRouter = ({ match, isAuth, patientUser }) => {
   return (
     <div>
       <Switch>
-        {/* <Redirect exact from={b()} to={b('/submitted')} />*/}
+        {/* <Redirect exact from={b()} to={b('/submitted')} /> */}
         <Route exact path={b()} component={Availabilities} />
         <Route exact path={b('/wait')} component={Waitlist} />
         <Route
@@ -57,7 +57,11 @@ const BookingRouter = ({ match, isAuth, patientUser }) => {
           render={redirectNoAuth(BookingComplete, isAuth, '../login')}
         />
         <LoggedRoute isAuth={isAuth} patientUser={patientUser}>
-          <Route exact path={b('/review')} render={props => <BookingReview {...props} />} />
+          <Route
+            exact
+            path={b('/review')}
+            render={props => <BookingReview {...props} />}
+          />
         </LoggedRoute>
       </Switch>
     </div>
@@ -78,7 +82,11 @@ const BookingRouter = ({ match, isAuth, patientUser }) => {
 const LoggedRoute = ({ isAuth, patientUser, children }) => {
   if (!isAuth && !patientUser) {
     return <Redirect to="../login" />;
-  } else if (isAuth && patientUser && !patientUser.get('isPhoneNumberConfirmed')) {
+  } else if (
+    isAuth &&
+    patientUser &&
+    !patientUser.get('isPhoneNumberConfirmed')
+  ) {
     return <Redirect to="../signup/confirm" />;
   }
   return children;
@@ -90,7 +98,11 @@ const PatientRouter = ({ match, isAuth, patientUser }) => {
   return (
     <div>
       <Switch>
-        <Route exact path={b('/add')} render={props => <AddPatient {...props} />} />
+        <Route
+          exact
+          path={b('/add')}
+          render={props => <AddPatient {...props} />}
+        />
         <Route
           exact
           path={b('/edit/:patientId')}
@@ -101,7 +113,9 @@ const PatientRouter = ({ match, isAuth, patientUser }) => {
   );
 };
 
-const EmbedRouter = ({ match, isAuth, patientUser, history }) => {
+const EmbedRouter = ({
+  match, isAuth, patientUser, history,
+}) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <Switch>
@@ -109,7 +123,9 @@ const EmbedRouter = ({ match, isAuth, patientUser, history }) => {
       <Route path={b('/review')} component={ReviewsRouter} />
       <Route
         path={b('/book')}
-        render={props => <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+        render={props => (
+          <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />
+        )}
       />
       <Route
         path={b('/patient')}
@@ -119,10 +135,22 @@ const EmbedRouter = ({ match, isAuth, patientUser, history }) => {
           </LoggedRoute>
         )}
       />
-      <Route exact path={b('/login')} render={redirectAuth(Login, isAuth, b('/book'))} />
-      <Route exact path={b('/signup')} render={redirectAuth(SignUp, isAuth, b('/book'))} />
+      <Route
+        exact
+        path={b('/login')}
+        render={redirectAuth(Login, isAuth, b('/book'))}
+      />
+      <Route
+        exact
+        path={b('/signup')}
+        render={redirectAuth(SignUp, isAuth, b('/book'))}
+      />
       <Route exact path={b('/signup/confirm')} component={ConfirmSignUp} />
-      <Route exact path={b('/reset')} render={redirectAuth(ResetPassword, isAuth, b('/book'))} />
+      <Route
+        exact
+        path={b('/reset')}
+        render={redirectAuth(ResetPassword, isAuth, b('/book'))}
+      />
       <Route
         exact
         path={b('/reset-success')}
@@ -136,12 +164,18 @@ const WidgetRouter = ({ history, isAuth, patientUser }) => (
   <Router history={history}>
     <div>
       {/* TODO: Booking widget will soon become part of app */}
-      {/* <Route exact path={base('/book')} component={PatientApp} />*/}
+      {/* <Route exact path={base('/book')} component={PatientApp} /> */}
       <Widget>
         <Switch>
           <Route
             path={base()}
-            render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+            render={props => (
+              <EmbedRouter
+                {...props}
+                isAuth={isAuth}
+                patientUser={patientUser}
+              />
+            )}
           />
         </Switch>
       </Widget>

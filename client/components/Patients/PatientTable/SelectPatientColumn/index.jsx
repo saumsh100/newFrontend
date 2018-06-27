@@ -5,11 +5,7 @@ import { Checkbox } from '../../../library';
 import styles from '../styles.scss';
 
 export default function SelectPatient(props) {
-  const {
-    patientIds,
-    handlePatientSelection,
-    id,
-  } = props;
+  const { patientIds, handlePatientSelection, id } = props;
 
   const checked = patientIds.indexOf(id) > -1;
   const theme = {

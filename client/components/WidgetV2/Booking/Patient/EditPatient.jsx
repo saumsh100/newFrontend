@@ -22,7 +22,10 @@ import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 /**
  * Gender's array
  */
-const genders = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
+const genders = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+];
 
 /**
  * Find the first option that matches the passed string.
@@ -61,8 +64,10 @@ class EditPatient extends Component {
     const { user } = this.props;
     try {
       await axios.put(
-        `/families/${user.patientUserFamilyId}/patients/${this.props.match.params.patientId}`,
-        values
+        `/families/${user.patientUserFamilyId}/patients/${
+          this.props.match.params.patientId
+        }`,
+        values,
       );
       await this.props.fetchFamilyPatients();
     } catch (err) {
@@ -82,15 +87,22 @@ class EditPatient extends Component {
      * @param {object} values
      */
     const asyncEmailValidation = (values) => {
-      if (!values.email || values.email === this.props.formValues.initial.email) {
+      if (
+        !values.email ||
+        values.email === this.props.formValues.initial.email
+      ) {
         return null;
       }
-      return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
-        if (response.data.exists) {
-          return Promise.reject({ email: 'There is already a user with that email' });
-        }
-        return null;
-      });
+      return axios
+        .post('/patientUsers/email', { email: values.email })
+        .then((response) => {
+          if (response.data.exists) {
+            return Promise.reject({
+              email: 'There is already a user with that email',
+            });
+          }
+          return null;
+        });
     };
     /**
      * Check if the passed phoneNumber is not already used,
@@ -102,7 +114,8 @@ class EditPatient extends Component {
       if (
         !values.phoneNumber ||
         values.phoneNumber === this.props.formValues.values.phoneNumber ||
-        values.phoneNumber === normalizePhone(this.props.formValues.values.phoneNumber)
+        values.phoneNumber ===
+          normalizePhone(this.props.formValues.values.phoneNumber)
       ) {
         return null;
       }
@@ -120,7 +133,9 @@ class EditPatient extends Component {
     const { birthDate } = this.props.patientUser;
 
     const initialValues = this.props.patientUser;
-    initialValues.birthDate = birthDate ? moment(birthDate).format('MM/DD/YYYY') : null;
+    initialValues.birthDate = birthDate
+      ? moment(birthDate).format('MM/DD/YYYY')
+      : null;
 
     return (
       <div className={styles.container}>
@@ -193,9 +208,13 @@ class EditPatient extends Component {
                     bar: styles.bar,
                     erroredLabel: styles.erroredLabel,
                   }}
-                  validateValue={value => validateField(genders, value) || value === null}
+                  validateValue={value =>
+                    validateField(genders, value) || value === null
+                  }
                   renderValue={value =>
-                    (validateField(genders, value) && validateField(genders, value).label) || ''
+                    (validateField(genders, value) &&
+                      validateField(genders, value).label) ||
+                    ''
                   }
                   options={genders}
                   data-test-id="gender"
@@ -313,7 +332,9 @@ function mapStateToProps({ auth, form }, { match }) {
   return {
     formValues: form.editFamilyPatient,
     user: auth.get('patientUser'),
-    patientUser: auth.get('familyPatients').find(patient => patient.id === match.params.patientId),
+    patientUser: auth
+      .get('familyPatients')
+      .find(patient => patient.id === match.params.patientId),
     familyPatients: auth.get('familyPatients'),
   };
 }
@@ -323,8 +344,11 @@ function mapDispatchToProps(dispatch) {
     {
       fetchFamilyPatients,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPatient));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditPatient));

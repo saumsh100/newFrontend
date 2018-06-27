@@ -6,9 +6,7 @@ import styles from './styles.scss';
 
 class CommsPreview extends Component {
   render() {
-    return (
-      <div className={styles.commsPreview}>{this.props.children}</div>
-    );
+    return <div className={styles.commsPreview}>{this.props.children}</div>;
   }
 }
 

@@ -1,5 +1,4 @@
+
 import React, { PropTypes } from 'react';
 
-export default function RemindersForm(props) {
-
-}
+export default function RemindersForm(props) {}

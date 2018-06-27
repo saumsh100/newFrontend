@@ -15,10 +15,14 @@ const PatientShape = {
   gender: PropTypes.string,
   homePhoneNumber: PropTypes.string,
   id: PropTypes.string,
-  insurance: PropTypes.objectOf(PropTypes.shape({
+  insurance: PropTypes.shape({
     type: PropTypes.string,
     defaultValue: PropTypes.objectOf(PropTypes.bool),
-  })),
+    carrier: PropTypes.string,
+    insurance: PropTypes.string,
+    memberId: PropTypes.string,
+    sin: PropTypes.string,
+  }),
   insuranceInterval: PropTypes.string,
   isDeleted: PropTypes.bool,
   isFetching: PropTypes.bool,

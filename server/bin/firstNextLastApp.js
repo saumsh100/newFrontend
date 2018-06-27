@@ -43,6 +43,7 @@ jobQueue.process('firstNextLastApp', async (job, done) => {
           where: {
             accountId: accounts[i].id,
             isCancelled: false,
+            isMissed: false,
             isPending: false,
             isDeleted: false,
             patientId: {

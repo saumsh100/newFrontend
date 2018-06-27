@@ -18,7 +18,10 @@ const UserAvatarButton = (props) => {
       <div className={styles.userContainer}>
         <Avatar size="xs" user={user} className={styles.userAvatar} />
         <div className={styles.userMenuGreeting}>
-          <div className={styles.greeting}>{`${user.firstName} ${user.lastName}`}</div>
+          <div className={styles.greeting}>{`${user.firstName} ${
+            user.lastName
+          }`}
+          </div>
         </div>
         <Icon icon="caret-down" type="solid" className={styles.caretIcon} />
       </div>
@@ -42,10 +45,16 @@ class PatientUserMenu extends Component {
     return (
       <div className={styles.userWrapper}>
         <DropdownMenu
-          labelComponent={props => <UserAvatarButton {...props} {...userMenuProps} />}
+          labelComponent={props => (
+            <UserAvatarButton {...props} {...userMenuProps} />
+          )}
           className={styles.dropdownUserMenu}
         >
-          <MenuItem onClick={this.logout} icon="power-off" className={styles.userMenuLi}>
+          <MenuItem
+            onClick={this.logout}
+            icon="power-off"
+            className={styles.userMenuLi}
+          >
             Sign Out
           </MenuItem>
         </DropdownMenu>
@@ -59,11 +68,14 @@ function mapDispatchToProps(dispatch) {
     {
       logout: AuthThunks.logout,
     },
-    dispatch
+    dispatch,
   );
 }
 
-export default connect(null, mapDispatchToProps)(PatientUserMenu);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(PatientUserMenu);
 
 PatientUserMenu.propTypes = {
   logout: PropTypes.func,

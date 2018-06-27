@@ -23,7 +23,11 @@ class ServiceDataContainer extends Component {
   }
 
   updateService(modifiedService, alert) {
-    this.props.updateEntityRequest({ key: 'services', model: modifiedService, alert });
+    this.props.updateEntityRequest({
+      key: 'services',
+      model: modifiedService,
+      alert,
+    });
   }
 
   deleteService() {
@@ -42,7 +46,9 @@ class ServiceDataContainer extends Component {
       return null;
     }
 
-    const selectedService = serviceId ? services.get(serviceId) : services.first();
+    const selectedService = serviceId
+      ? services.get(serviceId)
+      : services.first();
     let component = null;
     if (selectedService) {
       const practitionerIds = selectedService.get('practitioners');
@@ -97,9 +103,12 @@ function mapActionsToProps(dispatch) {
       deleteEntityRequest,
       createEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(null, mapActionsToProps);
+const enhance = connect(
+  null,
+  mapActionsToProps,
+);
 export default enhance(ServiceDataContainer);

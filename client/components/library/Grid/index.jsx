@@ -2,7 +2,11 @@
 import React from 'react';
 
 import classNames from 'classnames';
-import { Grid as RFBGrid, Col as RFBCol, Row as RFBRow } from 'react-flexbox-grid';
+import {
+  Grid as RFBGrid,
+  Col as RFBCol,
+  Row as RFBRow,
+} from 'react-flexbox-grid';
 import styles from './styles.scss';
 
 export function Grid(props) {

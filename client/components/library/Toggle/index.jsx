@@ -7,7 +7,9 @@ import { isHub } from '../../../util/hub';
 import styles from './styles.scss';
 
 export default function Toggle(props) {
-  const { className, icons, color, theme, label, name } = props;
+  const {
+    className, icons, color, theme, label, name,
+  } = props;
 
   const classes = theme
     ? classNames(styles[`theme_${theme}Background`])

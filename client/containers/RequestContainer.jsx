@@ -81,9 +81,7 @@ function mapStateToProps({ entities, apiRequests, routing }, ownProps) {
     .toArray()
     .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
 
-  const sortedRequests = filteredRequests.sort(
-    (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate)
-  );
+  const sortedRequests = filteredRequests.sort((a, b) => Date.parse(b.startDate) - Date.parse(a.startDate));
   const nextProps = { routing, sortedRequests, ...ownProps };
   return {
     requests,
@@ -103,10 +101,13 @@ function mapDispatchToProps(dispatch) {
       loadOnlineRequest,
       setTitle,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(RequestContainer);

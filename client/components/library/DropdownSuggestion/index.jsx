@@ -180,11 +180,13 @@ class DropdownSuggestion extends Component {
     let nextIndex = this.scrollIndex > -1 ? this.scrollIndex : -1;
 
     if (direction === 'ArrowDown') {
-      nextIndex = this.scrollIndex >= options.length - 1 ? 0 : this.scrollIndex + 1;
+      nextIndex =
+        this.scrollIndex >= options.length - 1 ? 0 : this.scrollIndex + 1;
     }
 
     if (direction === 'ArrowUp') {
-      nextIndex = this.scrollIndex <= 0 ? options.length - 1 : this.scrollIndex - 1;
+      nextIndex =
+        this.scrollIndex <= 0 ? options.length - 1 : this.scrollIndex - 1;
     }
     this.scrollIndex = nextIndex;
     onChange(options[nextIndex].value);
@@ -215,7 +217,7 @@ class DropdownSuggestion extends Component {
       this.close,
       (node) => {
         this.suggestionsNode = node;
-      }
+      },
     );
   }
 

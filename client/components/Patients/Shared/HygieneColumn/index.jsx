@@ -6,11 +6,7 @@ import classnames from 'classnames';
 import styles from '../../PatientTable/styles.scss';
 
 export default function HygieneColumn(props) {
-  const {
-    patient,
-    className,
-    showTable,
-  } = props;
+  const { patient, className, showTable } = props;
 
   const hygieneDueDate = moment(patient.dueForHygieneDate);
 
@@ -34,9 +30,7 @@ export default function HygieneColumn(props) {
       <div className={`${styles.date} ${className}`}>
         {hygieneDueDate.format('MMM DD YYYY')}
       </div>
-      <div className={dotStyle}>
-        &nbsp;
-      </div>
+      <div className={dotStyle}>&nbsp;</div>
     </div>
   );
 }

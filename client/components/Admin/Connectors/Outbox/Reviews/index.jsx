@@ -36,12 +36,8 @@ function SuccessfulList({ success, primaryType }) {
               <Col xs={4}>
                 {patient.firstName} {patient.lastName}
               </Col>
-              <Col xs={4}>
-                {getAttrFromPatient(patient, primaryType)}
-              </Col>
-              <Col xs={4}>
-                {reviewApptDate}
-              </Col>
+              <Col xs={4}>{getAttrFromPatient(patient, primaryType)}</Col>
+              <Col xs={4}>{reviewApptDate}</Col>
             </Row>
           </Grid>
         );
@@ -71,18 +67,15 @@ class ReminderListItem extends Component {
     const { review } = this.props;
     return (
       <div className={styles.listItemWrapper}>
-        <ListItem
-          className={styles.listItem}
-          onClick={this.toggleExpanded}
-        >
+        <ListItem className={styles.listItem} onClick={this.toggleExpanded}>
           <div className={styles.col}>Type: {'email'}</div>
           <div className={styles.col}>Length: {'1 week'}</div>
           <div className={styles.col}>Success: {review.success.length}</div>
           <div className={styles.col}>Fail: {review.errors.length}</div>
         </ListItem>
-        {this.state.expanded ?
-          <SuccessfulList success={review.success} primaryType={'email'}/>
-        : null}
+        {this.state.expanded ? (
+          <SuccessfulList success={review.success} primaryType="email" />
+        ) : null}
       </div>
     );
   }
@@ -103,9 +96,7 @@ export default class OutboxReviews extends Component {
 
   componentWillMount() {
     const { account } = this.props;
-    return Promise.all([
-        axios.get(`/api/accounts/${account.id}/reviews/list`),
-      ])
+    return Promise.all([axios.get(`/api/accounts/${account.id}/reviews/list`)])
       .then(([reviewsData]) => {
         console.log('reviewsData', reviewsData);
         this.setState({
@@ -132,27 +123,24 @@ export default class OutboxReviews extends Component {
       );
     }
 
-    let totalSuccess = reviews && reviews.success ? reviews.success.length : 'error';
-    let totalErrors = reviews && reviews.errors ? reviews.errors.length : 'error';
+    const totalSuccess =
+      reviews && reviews.success ? reviews.success.length : 'error';
+    const totalErrors =
+      reviews && reviews.errors ? reviews.errors.length : 'error';
 
     return (
       <div className={styles.reviewsWrapper}>
-        {!reviews ?
-          <div>No Reviews</div> :
+        {!reviews ? (
+          <div>No Reviews</div>
+        ) : (
           <div>
-            <h4>
-              Total Success: {totalSuccess}
-            </h4>
-            <h4>
-              Total Errors: {totalErrors}
-            </h4>
+            <h4>Total Success: {totalSuccess}</h4>
+            <h4>Total Errors: {totalErrors}</h4>
             <List>
-              <ReminderListItem
-                review={reviews}
-              />
+              <ReminderListItem review={reviews} />
             </List>
           </div>
-        }
+        )}
       </div>
     );
   }

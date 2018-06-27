@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -18,7 +19,16 @@ import {
   deleteEntityRequest,
   fetchEntitiesRequest,
 } from '../../../thunks/fetchEntities';
-import { Button, Avatar, Card, SContainer, SFooter, SHeader, SBody, Icon } from '../../library';
+import {
+  Button,
+  Avatar,
+  Card,
+  SContainer,
+  SFooter,
+  SHeader,
+  SBody,
+  Icon,
+} from '../../library';
 import styles from './styles.scss';
 
 const mergeTime = (date, time) => {
@@ -53,7 +63,10 @@ class AddNewAppointment extends Component {
 
   getSuggestions(value) {
     return this.props
-      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
       .then(searchData => searchData.patients)
       .then((searchedPatients) => {
         const patientList = Object.keys(searchedPatients).length
@@ -67,12 +80,16 @@ class AddNewAppointment extends Component {
               <div className={styles.suggestionContainer_details}>
                 <div className={styles.suggestionContainer_fullName}>
                   {`${patient.firstName} ${patient.lastName}${
-                    patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
+                    patient.birthDate
+                      ? `, ${moment().diff(patient.birthDate, 'years')}`
+                      : ''
                   }`}
                 </div>
                 <div className={styles.suggestionContainer_date}>
                   Last Appointment:{' '}
-                  {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
+                  {patient.lastApptDate
+                    ? moment(patient.lastApptDate).format('MMM D YYYY')
+                    : 'n/a'}
                 </div>
               </div>
             </div>
@@ -83,7 +100,9 @@ class AddNewAppointment extends Component {
   }
 
   handleStartTimeChange(value) {
-    const { appFormValues, formName, unit, changeForm } = this.props;
+    const {
+      appFormValues, formName, unit, changeForm,
+    } = this.props;
     const defaultDuration = appFormValues ? appFormValues.duration : 60;
     const endTime = moment(value).add(defaultDuration, 'minutes');
     changeForm(formName, 'endTime', setTime(endTime));
@@ -94,7 +113,9 @@ class AddNewAppointment extends Component {
   }
 
   handleEndTimeChange(value) {
-    const { appFormValues, unit, formName, changeForm } = this.props;
+    const {
+      appFormValues, unit, formName, changeForm,
+    } = this.props;
 
     if (appFormValues && appFormValues.startTime) {
       const duration = getDuration(appFormValues.startTime, value, 0);
@@ -105,7 +126,9 @@ class AddNewAppointment extends Component {
   }
 
   handleDurationChange(value) {
-    const { changeForm, formName, unit, appFormValues } = this.props;
+    const {
+      changeForm, formName, unit, appFormValues,
+    } = this.props;
 
     if (appFormValues && appFormValues.startTime) {
       const time = moment(appFormValues.startTime).add(value, 'minutes');
@@ -134,7 +157,9 @@ class AddNewAppointment extends Component {
   }
 
   handleUnitChange(value) {
-    const { changeForm, formName, unit, appFormValues } = this.props;
+    const {
+      changeForm, formName, unit, appFormValues,
+    } = this.props;
 
     const duration = value * unit;
 
@@ -170,7 +195,13 @@ class AddNewAppointment extends Component {
   }
 
   handleSubmit(values) {
-    const { selectedAppointment, reinitializeState, formName, redirect, setLocation } = this.props;
+    const {
+      selectedAppointment,
+      reinitializeState,
+      formName,
+      redirect,
+      setLocation,
+    } = this.props;
 
     const {
       date,
@@ -231,8 +262,13 @@ class AddNewAppointment extends Component {
     }
 
     // if an appointment is not selected then create the appointment else update the appointment
-    if (!selectedAppointment || (selectedAppointment && selectedAppointment.request)) {
-      const requestId = selectedAppointment ? selectedAppointment.requestModel.get('id') : null;
+    if (
+      !selectedAppointment ||
+      (selectedAppointment && selectedAppointment.request)
+    ) {
+      const requestId = selectedAppointment
+        ? selectedAppointment.requestModel.get('id')
+        : null;
 
       return this.props
         .createEntityRequest({
@@ -251,7 +287,9 @@ class AddNewAppointment extends Component {
               .then(() => {
                 this.props
                   .updateEntityRequest({
-                    url: `/api/requests/${requestId}/confirm/${Object.keys(data.appointments)[0]}`,
+                    url: `/api/requests/${requestId}/confirm/${
+                      Object.keys(data.appointments)[0]
+                    }`,
                     values: {},
                   })
                   .then(() => {
@@ -285,7 +323,7 @@ class AddNewAppointment extends Component {
   deleteAppointment() {
     const { selectedAppointment, reinitializeState } = this.props;
 
-    const deleteApp = confirm('Are you sure you want to delete this appointment?'); // eslint-disable-line no-alert
+    const deleteApp = window.confirm('Are you sure you want to delete this appointment?');
 
     if (deleteApp) {
       const delModel = Map({
@@ -294,7 +332,10 @@ class AddNewAppointment extends Component {
       });
       const appModel = selectedAppointment.appModel;
       const deletedModel = appModel.merge(delModel);
-      this.props.updateEntityRequest({ key: 'appointments', model: deletedModel });
+      this.props.updateEntityRequest({
+        key: 'appointments',
+        model: deletedModel,
+      });
     }
 
     reinitializeState();
@@ -318,8 +359,11 @@ class AddNewAppointment extends Component {
     };
 
     let title =
-      selectedAppointment && !selectedAppointment.request ? 'Edit Appointment' : 'Add Appointment';
-    let buttonTitle = selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
+      selectedAppointment && !selectedAppointment.request
+        ? 'Edit Appointment'
+        : 'Add Appointment';
+    let buttonTitle =
+      selectedAppointment && !selectedAppointment.request ? 'Save' : 'Add';
 
     if (selectedAppointment && selectedAppointment.request) {
       title = 'Accept Appointment';
@@ -412,57 +456,6 @@ const patientShape = {
   status: PropTypes.string,
 };
 
-AddNewAppointment.propTypes = {
-  appFormValues: PropTypes.shape({
-    chairId: PropTypes.string,
-    date: PropTypes.string,
-    duration: 60,
-    endTime: PropTypes.string,
-    note: PropTypes.string,
-    patientSelected: PropTypes.shape(patientShape),
-    practitionerId: PropTypes.string,
-    serviceId: PropTypes.string,
-    startTime: PropTypes.string,
-    unit: PropTypes.number,
-  }),
-  chairs: PropTypes.instanceOf(Map),
-  changeForm: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  currentDate: PropTypes.instanceOf(moment),
-  deleteEntityRequest: PropTypes.func,
-  fetchEntities: PropTypes.func,
-  fetchEntitiesRequest: PropTypes.func,
-  formName: PropTypes.string.isRequired,
-  patientSearched: PropTypes.shape(patientShape),
-  patients: PropTypes.instanceOf(Map).isRequired,
-  practitioners: PropTypes.instanceOf(Map),
-  redirect: PropTypes.shape({ pathname: PropTypes.string }),
-  reinitializeState: PropTypes.func,
-  reset: PropTypes.func,
-  selectedAppointment: PropTypes.shape({
-    createdAt: PropTypes.string,
-    customBufferTime: 0,
-    endDate: PropTypes.string,
-    isSyncedWithPms: PropTypes.bool,
-    note: PropTypes.string,
-    patientId: PropTypes.string,
-    practitionerId: PropTypes.string,
-    request: PropTypes.bool,
-    requestId: PropTypes.string,
-    requestModel: PropTypes.instanceOf(Requests),
-    serviceId: PropTypes.string,
-    startDate: PropTypes.string,
-  }),
-  setCreatingPatient: PropTypes.func,
-  setPatientSearched: PropTypes.func,
-  setShowInput: PropTypes.func,
-  setLocation: PropTypes.func,
-  showInput: PropTypes.bool,
-  unit: PropTypes.number,
-  updateEntityRequest: PropTypes.func,
-  weeklySchedules: PropTypes.instanceOf(Map),
-};
-
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
@@ -475,7 +468,7 @@ const mapDispatchToProps = dispatch =>
       changeForm: change,
       setLocation: push,
     },
-    dispatch
+    dispatch,
   );
 
 const mapStateToProps = ({ form }, { formName }) =>
@@ -487,6 +480,72 @@ const mapStateToProps = ({ form }, { formName }) =>
       appFormValues: form[formName].values,
     });
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+AddNewAppointment.propTypes = {
+  appFormValues: PropTypes.shape({
+    chairId: PropTypes.string,
+    date: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.objectOf(PropTypes.any),
+    ]),
+    duration: PropTypes.number,
+    endTime: PropTypes.string,
+    note: PropTypes.string,
+    patientSelected: PropTypes.oneOfType([
+      PropTypes.shape(patientShape),
+      PropTypes.string,
+    ]),
+    practitionerId: PropTypes.string,
+    serviceId: PropTypes.string,
+    startTime: PropTypes.string,
+    unit: PropTypes.number,
+  }),
+  chairs: PropTypes.instanceOf(Map).isRequired,
+  changeForm: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  currentDate: PropTypes.instanceOf(moment).isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  formName: PropTypes.string.isRequired,
+  patientSearched: PropTypes.shape(patientShape),
+  patients: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  redirect: PropTypes.shape({ pathname: PropTypes.string }),
+  reinitializeState: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  selectedAppointment: PropTypes.shape({
+    createdAt: PropTypes.string,
+    customBufferTime: PropTypes.number,
+    endDate: PropTypes.string,
+    isSyncedWithPms: PropTypes.bool,
+    note: PropTypes.string,
+    patientId: PropTypes.string,
+    practitionerId: PropTypes.string,
+    request: PropTypes.bool,
+    requestId: PropTypes.string,
+    requestModel: PropTypes.instanceOf(Requests),
+    serviceId: PropTypes.string,
+    startDate: PropTypes.string,
+  }),
+  setCreatingPatient: PropTypes.func.isRequired,
+  setPatientSearched: PropTypes.func.isRequired,
+  setShowInput: PropTypes.func.isRequired,
+  setLocation: PropTypes.func.isRequired,
+  showInput: PropTypes.bool,
+  unit: PropTypes.number,
+  updateEntityRequest: PropTypes.func.isRequired,
+};
 
-export default enhance(AddNewAppointment);
+AddNewAppointment.defaultProps = {
+  patientSearched: {},
+  showInput: true,
+  unit: 15,
+  selectedAppointment: null,
+  redirect: {},
+  appFormValues: null,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddNewAppointment);

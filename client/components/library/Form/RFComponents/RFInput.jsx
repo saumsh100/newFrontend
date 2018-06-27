@@ -6,7 +6,9 @@ import Input from '../../Input';
 import { inputShape, metaShape } from '../../PropTypeShapes/inputShape';
 
 export default function RFInput(props) {
-  const { input, icon, label, type, error, meta, theme, iconComponent } = props;
+  const {
+    input, icon, label, type, error, meta, theme, iconComponent,
+  } = props;
   const newProps = omit(props, ['input', 'meta']);
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || (touched || dirty ? meta.error : null);
@@ -21,6 +23,7 @@ export default function RFInput(props) {
         pulse
       />
     ));
+
   return (
     <Input
       {...newProps}
@@ -36,11 +39,21 @@ export default function RFInput(props) {
 
 RFInput.propTypes = {
   theme: PropTypes.objectOf(PropTypes.string),
-  input: PropTypes.shape(inputShape),
+  input: PropTypes.shape(inputShape).isRequired,
   meta: PropTypes.shape(metaShape),
   icon: PropTypes.node,
   iconComponent: PropTypes.node,
   label: PropTypes.node,
   type: PropTypes.string,
-  error: PropTypes.func,
+  error: PropTypes.string,
+};
+
+RFInput.defaultProps = {
+  theme: {},
+  meta: {},
+  icon: undefined,
+  iconComponent: null,
+  label: undefined,
+  type: 'text',
+  error: undefined,
 };

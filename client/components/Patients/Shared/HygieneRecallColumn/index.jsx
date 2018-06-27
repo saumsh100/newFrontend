@@ -1,16 +1,12 @@
+
 import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from '../../PatientTable/styles.scss';
 
-
 export default function HygieneRecallColumn(props) {
-  const {
-    patient,
-    className,
-    activeAccount,
-  } = props;
+  const { patient, className, activeAccount } = props;
 
   const lastHygieneDate = moment(patient.lastHygieneDate);
   const lastRecallDate = moment(patient.lastRecallDate);
@@ -36,7 +32,10 @@ export default function HygieneRecallColumn(props) {
     recallIntervalNum = Number(recallInterval[0]);
   }
 
-  const hygieneDueDate = moment(lastHygieneDate).add(hygieneIntervalNum, 'months');
+  const hygieneDueDate = moment(lastHygieneDate).add(
+    hygieneIntervalNum,
+    'months',
+  );
   const recallDueDate = moment(lastRecallDate).add(recallIntervalNum, 'months');
   let showDate = null;
 

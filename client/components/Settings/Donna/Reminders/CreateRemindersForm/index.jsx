@@ -11,7 +11,10 @@ const primaryTypesOptions = [
   { label: 'Email & SMS', value: 'email_sms' },
 ];
 
-const typeOptions = [{ value: 'hours', label: 'Hours' }, { value: 'days', label: 'Days' }];
+const typeOptions = [
+  { value: 'hours', label: 'Hours' },
+  { value: 'days', label: 'Days' },
+];
 
 class CreateRemindersForm extends Component {
   render() {

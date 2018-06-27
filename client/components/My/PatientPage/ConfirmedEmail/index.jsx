@@ -11,7 +11,8 @@ export default function ConfirmedEmail({ params }) {
       <Section>
         <div className={styles.header}>Email is confirmed.</div>
         <div className={styles.text}>
-          Thank you, we have confirmed your email. To go back to the clinic website, click on the button below.
+          Thank you, we have confirmed your email. To go back to the clinic
+          website, click on the button below.
         </div>
       </Section>
       <Section>
@@ -28,6 +29,4 @@ export default function ConfirmedEmail({ params }) {
   );
 }
 
-ConfirmedEmail.propTypes = {
-
-};
+ConfirmedEmail.propTypes = {};

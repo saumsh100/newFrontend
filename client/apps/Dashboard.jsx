@@ -4,9 +4,10 @@ import React from 'react';
 import DashboardRoutes from '../routes/Dashboard';
 import '../styles/default.scss';
 
-const DashboardApp = ({ browserHistory, store }) =>
+const DashboardApp = ({ browserHistory, store }) => (
   <Provider store={store}>
     <DashboardRoutes history={browserHistory} />
-  </Provider>;
+  </Provider>
+);
 
 export default DashboardApp;

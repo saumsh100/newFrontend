@@ -9,7 +9,7 @@ const Routes = {
   calendar: LazyRoute(() => import('../../components/Schedule/DayView')),
 };
 
-const Schedule = () =>
+const Schedule = () => (
   <ScheduleContainer>
     <DocumentTitle title="CareCru | Schedule">
       <Switch>
@@ -17,6 +17,7 @@ const Schedule = () =>
         <Route path="/schedule/calendar" component={Routes.calendar} />
       </Switch>
     </DocumentTitle>
-  </ScheduleContainer>;
+  </ScheduleContainer>
+);
 
 export default Schedule;

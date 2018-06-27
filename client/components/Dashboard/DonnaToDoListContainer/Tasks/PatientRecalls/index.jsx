@@ -25,21 +25,30 @@ export default function PatientRecalls({ recalls }) {
         }
 
         return (
-          <ListItem className={styles.listItem} key={`donnaToDoRecalls_${r.id || index}`}>
+          <ListItem
+            className={styles.listItem}
+            key={`donnaToDoRecalls_${r.id || index}`}
+          >
             <div className={styles2.avatar}>
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles2.mediumCol}>{type}</div>
             <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
-            <div className={styles2.smallCol}>{moment(sendDate).format('h:mm A')}</div>
+            <div className={styles2.smallCol}>
+              {moment(sendDate).format('h:mm A')}
+            </div>
             <div className={styles2.col}>
               {patient.firstName} {patient.lastName}
             </div>
             <div className={styles2.col}>
-              {dueForHygieneDate ? moment(dueForHygieneDate).format('MMM Do, YYYY') : 'n/a'}
+              {dueForHygieneDate
+                ? moment(dueForHygieneDate).format('MMM Do, YYYY')
+                : 'n/a'}
             </div>
             <div className={styles2.col}>
-              {dueForRecallExamDate ? moment(dueForRecallExamDate).format('MMM Do, YYYY') : 'n/a'}
+              {dueForRecallExamDate
+                ? moment(dueForRecallExamDate).format('MMM Do, YYYY')
+                : 'n/a'}
             </div>
           </ListItem>
         );

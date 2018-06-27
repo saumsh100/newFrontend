@@ -35,7 +35,7 @@ export function appointmentRequestNoteStringFormatter(request) {
     'Email: ' + nullHandler(patientUser.email, 'none') + '\r\n' +
     'Birth Date: ' + birthDateHandler(patientUser.birthDate) + '\r\n';
 
-  const payForMySelfNote = 'Insurance Plan: Pay for myself\r\n';
+  const payForMySelfNote = 'Insurance Plan: Pay for myself';
   const insurancePlanNote = 'Insurance Plan: ' + insuranceCarrier + '\r\n' +
     'Insurer Name: ' + undefinedAndNullHandler(insurerName, 'n/a') + '\r\n' +
     'Member Id: ' + nullHandler(insuranceMemberId, 'none') + '\r\n' +
@@ -52,8 +52,6 @@ export function appointmentRequestNoteStringFormatter(request) {
   const requestedPatientNote = (patientUser.id === requestingPatientUser.id) ?
     insuranceNote + '\r\n\r\n' + sameRequestedPatientNote : '\r\n' + differentRequestedPatientNote + insuranceNote;
 
-  const formattedNote = generalRequestNote + requestedPatientNote;
-
-  console.log(formattedNote);
-  return formattedNote;
+  console.log(generalRequestNote + requestedPatientNote);
+  return generalRequestNote + requestedPatientNote;
 }

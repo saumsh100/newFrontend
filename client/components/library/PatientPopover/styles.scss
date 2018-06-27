@@ -46,6 +46,11 @@
   composes: fontMediumSize from 'sass-loader!../../../fonts.scss';
   color: $primary-grey;
 
+  button {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   &:hover {
     cursor: pointer;
   }

@@ -31,7 +31,12 @@ export default function GeneralForm({ role, onSubmit, activeAccount }) {
       initialValues={initialValues}
       data-test-id="clinicDetailsForm"
     >
-      <Field name="name" label="Name" validate={[maxLength25]} data-test-id="name" />
+      <Field
+        name="name"
+        label="Name"
+        validate={[maxLength25]}
+        data-test-id="name"
+      />
       <Field name="website" label="Website" data-test-id="website" />
       <Field
         name="phoneNumber"

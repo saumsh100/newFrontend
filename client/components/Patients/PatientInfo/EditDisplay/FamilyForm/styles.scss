@@ -1,8 +1,7 @@
 @import '../../../../../ui';
 
 .formContainer {
-  height: 520px;
-  max-height: 520px;
+  min-height: 460px;
   background: $primary-white;
   padding: 35px 0px 25px;
   overflow: auto;

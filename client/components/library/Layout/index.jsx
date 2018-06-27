@@ -9,9 +9,4 @@ const SHeader = ClassyDiv(styles.header);
 const SBody = ClassyDiv(styles.body);
 const SFooter = ClassyDiv(styles.footer);
 
-export {
-  SContainer,
-  SHeader,
-  SBody,
-  SFooter,
-};
+export { SContainer, SHeader, SBody, SFooter };

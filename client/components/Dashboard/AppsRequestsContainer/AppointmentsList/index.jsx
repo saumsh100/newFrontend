@@ -2,42 +2,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popover from 'react-popover';
-import {
-  List,
-  ListItem,
-  Card,
-  AppointmentPopover,
-} from '../../../library';
+import { List, ListItem, Card, AppointmentPopover } from '../../../library';
 import PatientData from './PatientData';
 import AppointmentData from './AppointmentData';
 import styles from '../styles.scss';
 import { SortByStartDate } from '../../../library/util/SortEntities';
 
 class AppointmentsList extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
   render() {
     const {
-      patients,
-      appointments,
-      chairs,
-      practitioners,
+      patients, appointments, chairs, practitioners,
     } = this.props;
 
     if (!appointments.size) {
-      return (
-        <div className={styles.noApps}>
-          No Appointments
-        </div>
-      );
+      return <div className={styles.noApps}>No Appointments</div>;
     }
 
     const sortedApps = appointments.sort(SortByStartDate);
 
     return (
-      <Card noBorder className={styles.appCard} >
+      <Card noBorder className={styles.appCard}>
         <List className={styles.appList} id="appListDiv">
           {sortedApps.map((app) => {
             const patient = patients.get(app.patientId);
@@ -59,9 +47,7 @@ class AppointmentsList extends Component {
                     this.props.handleAppointmentClick(app.id);
                   }}
                 >
-                  <AppointmentData
-                    appointment={app}
-                  />
+                  <AppointmentData appointment={app} />
                   <PatientData
                     appointment={app}
                     patient={patient}

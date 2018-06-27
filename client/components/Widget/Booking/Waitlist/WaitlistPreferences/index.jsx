@@ -2,13 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  Checkbox,
-  Grid,
-  Row,
-  Col,
-  DayPicker,
-} from '../../../../library';
+import { Checkbox, Grid, Row, Col, DayPicker } from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
 import styles from './styles.scss';
 
@@ -56,10 +50,7 @@ class WaitlistPreferences extends Component {
     const BigCheckbox = ({ name, label }) => {
       const classes = daysOfTheWeek.get(name) ? styles.on : styles.off;
       return (
-        <div
-          className={classes}
-          onClick={this.updateDaysOfTheWeekField(name)}
-        >
+        <div className={classes} onClick={this.updateDaysOfTheWeekField(name)}>
           {label}
         </div>
       );
@@ -78,50 +69,25 @@ class WaitlistPreferences extends Component {
           <Col>
             <Row>
               <Col xs={12}>
-                <div className={styles.label}>
-                  Preferred Day Of The Week
-                </div>
+                <div className={styles.label}>Preferred Day Of The Week</div>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <BigCheckbox
-                  name="sunday"
-                  label="Sun"
-                />
-                <BigCheckbox
-                  name="monday"
-                  label="Mon"
-                />
-                <BigCheckbox
-                  name="tuesday"
-                  label="Tues"
-                />
-                <BigCheckbox
-                  name="wednesday"
-                  label="Wed"
-                />
-                <BigCheckbox
-                  name="thursday"
-                  label="Thurs"
-                />
-                <BigCheckbox
-                  name="friday"
-                  label="Fri"
-                />
-                <BigCheckbox
-                  name="saturday"
-                  label="Sat"
-                />
+                <BigCheckbox name="sunday" label="Sun" />
+                <BigCheckbox name="monday" label="Mon" />
+                <BigCheckbox name="tuesday" label="Tues" />
+                <BigCheckbox name="wednesday" label="Wed" />
+                <BigCheckbox name="thursday" label="Thurs" />
+                <BigCheckbox name="friday" label="Fri" />
+                <BigCheckbox name="saturday" label="Sat" />
               </Col>
             </Row>
           </Col>
           <Col xs={12} className={styles.preferredTimeWrapper}>
             <Row>
               <Col xs={12}>
-                <div className={styles.label}>
-                  Preferred Timeframe
-                </div>
+                <div className={styles.label}>Preferred Timeframe</div>
               </Col>
             </Row>
             <Row>
@@ -168,9 +134,15 @@ function mapStateToProps({ availabilities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    updateWaitSpot: Actions.updateWaitSpot,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      updateWaitSpot: Actions.updateWaitSpot,
+    },
+    dispatch,
+  );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(WaitlistPreferences);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(WaitlistPreferences);

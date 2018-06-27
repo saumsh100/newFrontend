@@ -1,14 +1,21 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-  ordinalSuffix,
   intervalToNumType,
   numTypeToInterval,
 } from '../../../../../../server/util/time';
-import { updateReviewInterval } from '../../../../../thunks/accounts';
-import { Icon, Grid, Row, Col, Input, DropdownSelect } from '../../../../library';
+import { updateReviewsSettings } from '../../../../../thunks/accounts';
+import {
+  Icon,
+  Grid,
+  Row,
+  Col,
+  Input,
+  DropdownSelect,
+} from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TouchPointItem, { TouchPointLabel } from '../../../Shared/TouchPointItem';
@@ -41,8 +48,17 @@ function SmallIconCircle(props) {
     ? styles.smallReviewSelectWrapperCircleSelected
     : styles.smallReviewSelectWrapperCircle;
 
-  return <div className={wrapperClass}>{icon ? <Icon icon={icon} type="solid" /> : null}</div>;
+  return (
+    <div className={wrapperClass}>
+      {icon ? <Icon icon={icon} type="solid" /> : null}
+    </div>
+  );
 }
+
+SmallIconCircle.propTypes = {
+  selected: PropTypes.bool.isRequired,
+  icon: PropTypes.string.isRequired,
+};
 
 class ReviewItem extends Component {
   constructor(props) {
@@ -54,9 +70,14 @@ class ReviewItem extends Component {
       number: num,
       intervalType: type,
     };
+
+    this.onChangeInterval = this.onChangeInterval.bind(this);
+    this.onIntervalNumberBlur = this.onIntervalNumberBlur.bind(this);
+    this.updateNumberInput = this.updateNumberInput.bind(this);
   }
 
   componentWillUpdate(nextProps) {
+    /* eslint-disable */
     // Need function to abstract
     const oldNumType = intervalToNumType(this.props.reviewSettings.interval);
     const newNumType = intervalToNumType(nextProps.reviewSettings.interval);
@@ -66,22 +87,9 @@ class ReviewItem extends Component {
 
     this.setState({
       number: newNumType.num,
-      intervalType: newNumType.type,
+      intervalType: newNumType.type
     });
-  }
-
-  updateNumberInput(event) {
-    const val = event.target.value;
-
-    // \D = all non digits
-    let cleanVal = val.replace(/\D/g, '');
-
-    // If zero, default to 1
-    if (parseInt(cleanVal) === 0) {
-      cleanVal = 1;
-    }
-
-    return this.setState({ number: cleanVal || 1 });
+    /* eslint-enable */
   }
 
   onChangeInterval(newType) {
@@ -97,7 +105,7 @@ class ReviewItem extends Component {
       },
       () => {
         this.updateInterval();
-      }
+      },
     );
   }
 
@@ -110,6 +118,20 @@ class ReviewItem extends Component {
     }
 
     this.updateInterval();
+  }
+
+  updateNumberInput(event) {
+    const val = event.target.value;
+
+    // \D = all non digits
+    let cleanVal = val.replace(/\D/g, '');
+
+    // If zero, default to 1
+    if (parseInt(cleanVal, 10) === 0) {
+      cleanVal = 1;
+    }
+
+    return this.setState({ number: cleanVal || 1 });
   }
 
   updateInterval() {
@@ -128,11 +150,17 @@ class ReviewItem extends Component {
       },
     };
 
-    this.props.updateReviewInterval(account.id, numTypeToInterval(number, intervalType), alert);
+    this.props.updateReviewsSettings(
+      account.id,
+      { reviewsInterval: numTypeToInterval(number, intervalType) },
+      alert,
+    );
   }
 
   renderLabel() {
-    return <TouchPointLabel title={'Review Request'} className={styles.reviewLabel} />;
+    return (
+      <TouchPointLabel title="Review Request" className={styles.reviewLabel} />
+    );
   }
 
   renderMainComponent() {
@@ -141,15 +169,23 @@ class ReviewItem extends Component {
     const primaryTypesKey = convertPrimaryTypesToKey(primaryTypes);
     const icon = iconsMap[primaryTypesKey];
     const { number } = this.state;
-    const dropdownSelectClass = selected ? styles.dropdownSelectSelected : styles.dropdownSelect;
+    const dropdownSelectClass = selected
+      ? styles.dropdownSelectSelected
+      : styles.dropdownSelect;
     const { type } = intervalToNumType(interval);
 
     return (
       <div>
         <div className={styles.reviewIconContainer}>
-          <IconCircle icon={icon} selected={selected} color={'yellow'} />
+          <IconCircle icon={icon} selected={selected} color="yellow" />
         </div>
-        <div className={selected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}>
+        <div
+          className={
+            selected
+              ? styles.secondaryLinesBoxSelected
+              : styles.secondaryLinesBox
+          }
+        >
           <div className={styles.smallIconContainer}>
             <SmallIconCircle icon="bell" selected={selected} />
           </div>
@@ -170,13 +206,13 @@ class ReviewItem extends Component {
                     <Input
                       classStyles={dropdownSelectClass}
                       value={number}
-                      onChange={this.updateNumberInput.bind(this)}
-                      onBlur={this.onIntervalNumberBlur.bind(this)}
+                      onChange={this.updateNumberInput}
+                      onBlur={this.onIntervalNumberBlur}
                     />
                   </Col>
                   <Col xs={9} className={styles.rightDropdown}>
                     <DropdownSelect
-                      onChange={this.onChangeInterval.bind(this)}
+                      onChange={this.onChangeInterval}
                       className={dropdownSelectClass}
                       value={type}
                       options={typeOptions}
@@ -193,12 +229,11 @@ class ReviewItem extends Component {
 
   render() {
     const { selected } = this.props;
-
     return (
       <TouchPointItem
         selected={selected}
         noLines
-        color={'yellow'}
+        color="yellow"
         className={styles.reviewListItem}
         onClick={() => this.props.onSelect()}
         toggleComponent={null}
@@ -217,20 +252,18 @@ ReviewItem.propTypes = {
     primaryType: PropTypes.string,
     primaryTypes: PropTypes.array,
   }).isRequired,
-  selected: PropTypes.bool,
+  selected: PropTypes.bool.isRequired,
   account: PropTypes.shape({}).isRequired,
-  updateReviewInterval: PropTypes.fun,
+  updateReviewsSettings: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      updateReviewInterval,
-    },
-    dispatch
-  );
+  return bindActionCreators({ updateReviewsSettings }, dispatch);
 }
 
-const enhance = connect(null, mapDispatchToProps);
+const enhance = connect(
+  null,
+  mapDispatchToProps,
+);
 
 export default enhance(ReviewItem);

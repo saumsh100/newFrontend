@@ -38,15 +38,16 @@ class DialogBody extends Component {
       actions &&
       actions.length > 0 && (
         <SFooter className={styles.footer}>
-          {actions.map((action, index) => {
+          {actions.map((action) => {
             if (this.props['data-test-id']) {
               action.props = action.props || [];
-              action.props['data-test-id'] = this.props['data-test-id'] + action.label;
+              action.props['data-test-id'] =
+                this.props['data-test-id'] + action.label;
             }
 
             return (
               <action.component
-                key={`action_${index}`}
+                key={`action_${action.label}`}
                 onClick={action.onClick}
                 className={styles.action}
                 {...action.props}
@@ -65,7 +66,9 @@ class DialogBody extends Component {
     return (
       <SContainer data-test-id={this.props['data-test-id']}>
         {!isHub() && this.renderHeader()}
-        <SBody className={classNames(styles.dialogBody, bodyStyles)}>{children}</SBody>
+        <SBody className={classNames(styles.dialogBody, bodyStyles)}>
+          {children}
+        </SBody>
         {this.renderFooter()}
       </SContainer>
     );
@@ -75,20 +78,24 @@ class DialogBody extends Component {
 DialogBody.propTypes = {
   'data-test-id': PropTypes.string,
   children: PropTypes.element,
-  onOverlayClick: PropTypes.func,
-  actions: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      onClick: PropTypes.func,
-      component: PropTypes.element,
-      props: PropTypes.shape({
-        color: PropTypes.string,
-        form: PropTypes.string,
-      }),
-    })
-  ),
-  title: PropTypes.string,
-  bodyStyles: PropTypes.func,
+  onOverlayClick: PropTypes.func.isRequired,
+  actions: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string,
+    onClick: PropTypes.func,
+    props: PropTypes.shape({
+      color: PropTypes.string,
+      form: PropTypes.string,
+    }),
+  })),
+  title: PropTypes.string.isRequired,
+  bodyStyles: PropTypes.string,
+};
+
+DialogBody.defaultProps = {
+  'data-test-id': undefined,
+  actions: [],
+  bodyStyles: undefined,
+  children: null,
 };
 
 export default DialogBody;

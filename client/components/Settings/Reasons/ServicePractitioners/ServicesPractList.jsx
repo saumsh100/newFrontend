@@ -16,7 +16,9 @@ class ServicesPractList extends Component {
         className={styles.servicesPractForm_service}
         data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
       >
-        <span className={styles.servicesPractForm_service_text}>{practitioner.getFullName()}</span>
+        <span className={styles.servicesPractForm_service_text}>
+          {practitioner.getFullName()}
+        </span>
         <div
           className={styles.servicesPractForm_service_toggle}
           data-test-id={`toggle_prac_${index}`}

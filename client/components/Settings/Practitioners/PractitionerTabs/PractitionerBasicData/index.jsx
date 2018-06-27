@@ -3,8 +3,18 @@ import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { PractitionerAvatar, Form, Field, Dropzone, Header, Button } from '../../../../library';
-import { uploadAvatar, deleteAvatar } from '../../../../../thunks/practitioners';
+import {
+  PractitionerAvatar,
+  Form,
+  Field,
+  Dropzone,
+  Header,
+  Button,
+} from '../../../../library';
+import {
+  uploadAvatar,
+  deleteAvatar,
+} from '../../../../../thunks/practitioners';
 import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import styles from '../../styles.scss';
 
@@ -108,7 +118,9 @@ class PractitionerBasicData extends Component {
                 {`Would you like to set this practitioner to be hidden on the booking
                 widget?`}
               </span>
-              <div className={styles.practFormContainer_practHidden_hiddenToggle}>
+              <div
+                className={styles.practFormContainer_practHidden_hiddenToggle}
+              >
                 <Field name="isHidden" component="Toggle" />
               </div>
             </div>
@@ -139,7 +151,7 @@ function mapDispatchToProps(dispatch) {
       uploadAvatar,
       deleteAvatar,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -150,4 +162,7 @@ PractitionerBasicData.propTypes = {
   updatePractitioner: PropTypes.func,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PractitionerBasicData);

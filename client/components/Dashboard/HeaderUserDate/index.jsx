@@ -58,7 +58,10 @@ class HeaderUserDate extends Component {
 
 HeaderUserDate.propTypes = {
   user: PropTypes.string,
-  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
+  dashboardDate: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.string,
+  ]).isRequired,
   setDashboardDate: PropTypes.func.isRequired,
 };
 

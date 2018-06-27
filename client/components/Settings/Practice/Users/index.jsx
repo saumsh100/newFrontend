@@ -77,7 +77,9 @@ class Users extends Component {
     };
 
     const url = `/api/accounts/${accountId}/invites/${id}`;
-    this.props.deleteEntityRequest({ key: 'invites', id, url, alert });
+    this.props.deleteEntityRequest({
+      key: 'invites', id, url, alert,
+    });
   }
 
   sendNewUser(entityData) {
@@ -100,7 +102,9 @@ class Users extends Component {
       },
     };
 
-    this.props.createEntityRequest({ key: 'user', entityData, url, alert });
+    this.props.createEntityRequest({
+      key: 'user', entityData, url, alert,
+    });
 
     // resetting inputs to empty
     entityData.firstName = '';
@@ -130,7 +134,9 @@ class Users extends Component {
       },
     };
 
-    this.props.createEntityRequest({ key: 'invites', entityData, url, alert });
+    this.props.createEntityRequest({
+      key: 'invites', entityData, url, alert,
+    });
     entityData.email = '';
   }
 
@@ -145,7 +151,9 @@ class Users extends Component {
       role: this.state.editValue,
     };
 
-    const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`;
+    const url = `/api/accounts/${accountId}/permissions/${
+      this.state.editPermissionId
+    }`;
     let userOwner = false;
     let numOfOwners = 0;
     this.props.users.toArray().map((user, i) => {
@@ -177,7 +185,9 @@ class Users extends Component {
         },
       };
 
-      this.props.updateEntityRequest({ key: 'accounts', values, url, alert });
+      this.props.updateEntityRequest({
+        key: 'accounts', values, url, alert,
+      });
     }
   }
 
@@ -226,7 +236,9 @@ class Users extends Component {
 
   render() {
     const formName = 'emailInvite';
-    const { users, permissions, accounts, invites } = this.props;
+    const {
+      users, permissions, accounts, invites,
+    } = this.props;
     const { active, editActive, newActive } = this.state;
 
     let clinicName = null;
@@ -241,7 +253,9 @@ class Users extends Component {
     let usersInvited = (
       <div className={styles.userListItem}>
         <div className={styles.main}>
-          <p className={styles.name}>Users you have invited will show up here.</p>
+          <p className={styles.name}>
+            Users you have invited will show up here.
+          </p>
         </div>
       </div>
     );
@@ -265,7 +279,11 @@ class Users extends Component {
           />
         ));
     }
-    const options = [{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }];
+    const options = [
+      { value: 'OWNER' },
+      { value: 'ADMIN' },
+      { value: 'MANAGER' },
+    ];
 
     const actions = [
       {
@@ -304,7 +322,12 @@ class Users extends Component {
         component: Button,
         props: { border: 'blue' },
       },
-      { label: 'Edit', onClick: this.sendEdit, component: Button, props: { color: 'blue' } },
+      {
+        label: 'Edit',
+        onClick: this.sendEdit,
+        component: Button,
+        props: { color: 'blue' },
+      },
     ];
 
     const addUserButton =
@@ -350,7 +373,7 @@ class Users extends Component {
             mainStyle={styles.emailInvite}
             formStyle={styles.form}
             sendNewUser={this.sendNewUser}
-            formName={'newUser'}
+            formName="newUser"
           />
         </DialogBox>
         <DialogBox
@@ -369,7 +392,11 @@ class Users extends Component {
           />
         </DialogBox>
         <Row className={styles.mainHead}>
-          <Header className={styles.header} contentHeader title={`Users in ${clinicName}`} />
+          <Header
+            className={styles.header}
+            contentHeader
+            title={`Users in ${clinicName}`}
+          />
           <div className={styles.paddingRight}>
             {addUserButton}
             <Button
@@ -402,14 +429,18 @@ class Users extends Component {
                   user.get('id'),
                   permission.get('id'),
                   permission.get('role'),
-                  i
+                  i,
                 )}
               />
             );
           })}
         </List>
         <Row className={styles.mainHeadInvites}>
-          <Header className={styles.header} contentHeader title="Pending Invitations" />
+          <Header
+            className={styles.header}
+            contentHeader
+            title="Pending Invitations"
+          />
         </Row>
         <List className={styles.userList}>{usersInvited}</List>
       </SettingsCard>
@@ -451,10 +482,13 @@ function mapDispatchToProps(dispatch) {
       createEntityRequest,
       updateEntityRequest,
     },
-    dispatch
+    dispatch,
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Users);
