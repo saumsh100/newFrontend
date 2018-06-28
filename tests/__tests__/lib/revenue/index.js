@@ -6,7 +6,7 @@ import {
   WeeklySchedule,
   Account,
 } from '../../../../server/_models';
-import { calcRevenueDays } from '../../../../server/lib/revenue/index';
+import calcRevenueDays from '../../../../server/lib/revenue/index';
 import { seedTestUsers, accountId, wipeTestUsers} from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId, wipeTestPatients } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId, wipeTestPractitioners } from '../../../util/seedTestPractitioners';

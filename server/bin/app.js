@@ -1,20 +1,23 @@
 
-require('../config/initializeCodeTranspiler');
+import '../config/initializeCodeTranspiler';
+import chalk from 'chalk';
+import expressReactNews from 'express-react-views';
+import globals from '../config/globals';
+import handleErrors from '../middleware/handleErrors';
+import app from '../config/express';
+import EventsService from '../config/events';
+import '../_models';
 
-const chalk = require('chalk');
-const globals = require('../config/globals');
-const handleErrors = require('../middleware/handleErrors');
-const app = require('../config/express');
-const expressReactNews = require('express-react-views');
-require('../_models');
+// Connect the EventsService and pass to express app so the
+// route handlers can use it
+const pub = EventsService.socket('PUB', { routing: 'topic' });
+pub.connect('events');
 
-// require('../config/kue');
+// Set the events service for the routes to be able to use
+app.set('pub', pub);
 
 // Uses the NODE_ENV to determine logging full stack or not
 app.set('showStackError', true);
-
-// Load in webpack configurations
-// applyWebpack(app);
 
 // Set the JSX view engine
 app.set('views', `${globals.root}/views`);
@@ -37,13 +40,5 @@ app.use(require('../routes'));
 
 // Catch errors, log and respond to client
 app.use(handleErrors);
-
-// assume 404 since no middleware responded
-/* app.use((req, res) => {
-  res.status(404).render('404', {
-    url: req.originalUrl,
-    error: 'Not found',
-  });
-});*/
 
 module.exports = app;

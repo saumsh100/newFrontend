@@ -14,3 +14,27 @@ export function fetchFamilyPatients() {
     }
   };
 }
+
+export function addNewFamilyPatient(values) {
+  return async (_, getState) => {
+    const { auth } = getState();
+    const user = auth.get('patientUser');
+    try {
+      return axios.post(`/families/${user.patientUserFamilyId}/patients`, values);
+    } catch (err) {
+      return console.error('add new familyPatient request error', err);
+    }
+  };
+}
+
+export function updateFamilyPatient(values, patientId) {
+  return async (_, getState) => {
+    const { auth } = getState();
+    const user = auth.get('patientUser');
+    try {
+      return axios.put(`/families/${user.patientUserFamilyId}/patients/${patientId}`, values);
+    } catch (err) {
+      return console.error('add new familyPatient request error', err);
+    }
+  };
+}

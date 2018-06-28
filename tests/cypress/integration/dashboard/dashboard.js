@@ -1,11 +1,11 @@
-
 describe('Dashboard Tests', () => {
   beforeEach(() => {
     cy.login();
   });
 
   it('confirming correct stats count for all cards', () => {
-    cy.get('[data-test-id="statCard_Online Requests"]')
+    cy
+      .get('[data-test-id="statCard_Online Requests"]')
       .contains('0')
       .get('[data-test-id="statCard_Patient Insights"]')
       .contains('0')
@@ -16,7 +16,8 @@ describe('Dashboard Tests', () => {
   });
 
   it('confirming the correct number of reviews', () => {
-    cy.getAndClick('reviewRequestsTab')
+    cy
+      .getAndClick('reviewRequestsTab')
       .get('[data-test-id="list_donnaReviews"]')
       .should('have.length', 1);
   });

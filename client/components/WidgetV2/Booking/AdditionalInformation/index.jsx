@@ -1,11 +1,25 @@
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Button, Field, Form } from '../../../library';
+import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
+import { setNotes } from '../../../../actions/availabilities';
 import styles from './styles.scss';
 
-function AdditionalInformation() {
+function AdditionalInformation({ history: { push }, notes, ...props }) {
+  /**
+   * Set the notes and send the user to the review's page.
+   *
+   * @param {string} notes
+   */
+  const handleNotesSubmit = (values) => {
+    props.setNotes(values.notes);
+    return push('./review');
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
@@ -16,23 +30,24 @@ function AdditionalInformation() {
           </p>
           <Form
             form="additionalInformation"
+            initialValues={{ notes: notes || '' }}
             ignoreSaveButton
-            onSubmit={values => console.log(values)}
+            onSubmit={handleNotesSubmit}
           >
             <Field
               component="TextArea"
               theme={{
-                inputWithIcon: styles.inputWithIcon,
-                iconClassName: styles.validationIcon,
-                erroredLabelFilled: styles.erroredLabelFilled,
-                input: styles.textarea,
-                filled: styles.filled,
-                label: styles.label,
-                group: styles.group,
+                bar: styles.bar,
                 error: styles.error,
                 erroredInput: styles.erroredInput,
-                bar: styles.bar,
                 erroredLabel: styles.erroredLabel,
+                erroredLabelFilled: styles.erroredLabelFilled,
+                filled: styles.filled,
+                group: styles.group,
+                iconClassName: styles.validationIcon,
+                input: styles.textarea,
+                inputWithIcon: styles.inputWithIcon,
+                label: styles.label,
               }}
               label="Notes"
               name="notes"
@@ -47,7 +62,25 @@ function AdditionalInformation() {
   );
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setNotes,
+    },
+    dispatch,
+  );
+}
+
 export default withRouter(connect(
   null,
-  null,
+  mapDispatchToProps,
 )(AdditionalInformation));
+
+AdditionalInformation.propTypes = {
+  history: PropTypes.shape(historyShape).isRequired,
+  notes: PropTypes.string,
+  setNotes: PropTypes.func.isRequired,
+};
+AdditionalInformation.defaultProps = {
+  notes: '',
+};

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import AccountsSubComponent from './AccountsSubComponent';
@@ -7,10 +6,7 @@ import { formatedDate } from './Shared/helpers';
 import styles from './styles.scss';
 
 const subComponent = enterprise => (
-  <AccountsSubComponent
-    enterpriseId={enterprise.original.id}
-    enterprise={enterprise}
-  />
+  <AccountsSubComponent enterpriseId={enterprise.original.id} enterprise={enterprise} />
 );
 
 export default function GroupTable(props) {
@@ -59,19 +55,23 @@ export default function GroupTable(props) {
     },
   ];
 
+  const tableStyle = {
+    height: '100%',
+  };
+
   return (
     <DataTable
       key="Group Table"
       data={data}
       columns={columns}
-      defaultPageSize={20}
       loading={loaded}
       SubComponent={subComponent}
       expanded={expanded}
       handleRowClick={handleRowClick}
       loadingText=""
       noDataText="No Groups Found"
-      showPagination={false}
+      showPageSizeOptions
+      style={tableStyle}
     />
   );
 }
@@ -79,8 +79,8 @@ export default function GroupTable(props) {
 GroupTable.propTypes = {
   loaded: PropTypes.bool,
   expanded: PropTypes.arrayOf(PropTypes.string),
-  handleRowClick: PropTypes.func,
-  selectEnterprise: PropTypes.func,
+  handleRowClick: PropTypes.func.isRequired,
+  selectEnterprise: PropTypes.func.isRequired,
   original: PropTypes.shape({
     id: PropTypes.string,
   }),
@@ -92,4 +92,11 @@ GroupTable.propTypes = {
     plan: PropTypes.string,
     updatedAt: PropTypes.string,
   })),
+};
+
+GroupTable.defaultProps = {
+  loaded: false,
+  expanded: [],
+  original: {},
+  data: [],
 };

@@ -185,6 +185,7 @@
   background: $widget-grey-lightest;
   border-radius: 50%;
   width: 24px;
+  min-width: 24px;
   height: 24px;
   color: $widget-grey-light;
   margin-left: 8px;
@@ -259,4 +260,41 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom: var(--widget-spacer);
+}
+
+.waitlistIndex {
+  font-size: 13px;
+  font-family: $book-font;
+  color: $widget-grey;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 8px;
+}
+.waitlistKey {
+  width: 100%;
+  display: block;
+  font-family: $medium-font;
+}
+.waitlistValue {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.timeListWrapper {
+  margin-bottom: var(--widget-spacer);
+}
+
+.helper {
+  font-family: $medium-font;
+  font-size: 11px;
+  color: $widget-grey-light;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  display: block;
+  margin-top: 8px;
+  text-align: center;
+}
+.timeFrameButton {
+  flex: 1;
 }

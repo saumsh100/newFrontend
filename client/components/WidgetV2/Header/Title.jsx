@@ -1,8 +1,9 @@
 
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ConnectedRouter as Router } from 'react-router-redux';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { historyShape } from '../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 /**
@@ -21,9 +22,9 @@ const pathBuilder = (path = '') => `/widgets/:accountId/app${path}`;
  */
 const titleDiv = title => () => <div className={styles.title}>{title}</div>;
 
-export default function Title(props) {
+function Title({ hasWaitList, history }) {
   return (
-    <Router history={props.history}>
+    <Router history={history}>
       <Switch>
         <Route
           exact
@@ -35,11 +36,7 @@ export default function Title(props) {
           path={pathBuilder('/book/practitioner')}
           component={titleDiv('Select Practitioner')}
         />
-        <Route
-          exact
-          path={pathBuilder('/book/reason')}
-          component={titleDiv('Select Reason')}
-        />
+        <Route exact path={pathBuilder('/book/reason')} component={titleDiv('Select Reason')} />
         <Route
           exact
           path={pathBuilder('/book/date-and-time')}
@@ -70,31 +67,11 @@ export default function Title(props) {
           path={pathBuilder('/book/waitlist/days-unavailable')}
           component={titleDiv('Days Unavailable')}
         />
-        <Route
-          exact
-          path={pathBuilder('/login')}
-          component={titleDiv('Login')}
-        />
-        <Route
-          exact
-          path={pathBuilder('/reset')}
-          component={titleDiv('Reset Password')}
-        />
-        <Route
-          exact
-          path={pathBuilder('/reset-success')}
-          component={titleDiv('Reset Password')}
-        />
-        <Route
-          exact
-          path={pathBuilder('/signup')}
-          component={titleDiv('Sign Up')}
-        />
-        <Route
-          exact
-          path={pathBuilder('/signup/confirm')}
-          component={titleDiv('Confirm Signup')}
-        />
+        <Route exact path={pathBuilder('/login')} component={titleDiv('Login')} />
+        <Route exact path={pathBuilder('/reset')} component={titleDiv('Reset Password')} />
+        <Route exact path={pathBuilder('/reset-success')} component={titleDiv('Reset Password')} />
+        <Route exact path={pathBuilder('/signup')} component={titleDiv('Sign Up')} />
+        <Route exact path={pathBuilder('/signup/confirm')} component={titleDiv('Confirm Signup')} />
         <Route
           exact
           path={pathBuilder('/book/patient-information')}
@@ -105,54 +82,22 @@ export default function Title(props) {
           path={pathBuilder('/book/additional-information')}
           component={titleDiv('Additional Information')}
         />
-        <Route
-          exact
-          path={pathBuilder('/book/review')}
-          component={titleDiv('Review & Book')}
-        />
-        <Route
-          exact
-          path={pathBuilder('/patient/add')}
-          component={titleDiv('Add New Patient')}
-        />
-        <Route
-          path={pathBuilder('/patient/edit')}
-          component={titleDiv('Edit Patient')}
-        />
+        <Route exact path={pathBuilder('/book/review')} component={titleDiv('Review & Book')} />
+        <Route exact path={pathBuilder('/patient/add')} component={titleDiv('Add New Patient')} />
+        <Route path={pathBuilder('/patient/edit')} component={titleDiv('Edit Patient')} />
         <Route
           exact
           path={pathBuilder('/book/wait')}
-          component={titleDiv(`${props.hasWaitList ? 'Edit' : 'Join'} Waitlist`)}
+          component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)}
         />
       </Switch>
     </Router>
   );
 }
 
-const location = {
-  pathname: PropTypes.string,
-  search: PropTypes.string,
-  hash: PropTypes.string,
-  state: PropTypes.string,
-  key: PropTypes.string,
+Title.propTypes = {
+  hasWaitList: PropTypes.bool.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
 };
 
-Title.propTypes = {
-  hasWaitList: PropTypes.bool,
-  history: PropTypes.shape({
-    length: PropTypes.number,
-    action: PropTypes.string,
-    location: PropTypes.shape(location),
-    index: PropTypes.number,
-    entries: PropTypes.arrayOf(PropTypes.shape(location)),
-    createHref: PropTypes.func,
-    push: PropTypes.func,
-    replace: PropTypes.func,
-    go: PropTypes.func,
-    goBack: PropTypes.func,
-    goForward: PropTypes.func,
-    canGo: PropTypes.func,
-    block: PropTypes.func,
-    listen: PropTypes.func,
-  }),
-};
+export default withRouter(Title);

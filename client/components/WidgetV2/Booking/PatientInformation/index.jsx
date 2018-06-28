@@ -1,20 +1,20 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+import { List } from 'immutable';
 import moment from 'moment';
-import merge from 'lodash/merge';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import {
-  change as handleChange,
-  formValueSelector,
-  SubmissionError,
-} from 'redux-form';
+import { change, formValueSelector } from 'redux-form';
 import carriers from './insurance_carriers';
 import { Button, Field, Form, IconButton, Loading } from '../../../library';
-import { fetchFamilyPatients } from '../../../../thunks/familyPatients';
+import {
+  addNewFamilyPatient,
+  fetchFamilyPatients,
+  updateFamilyPatient,
+} from '../../../../thunks/familyPatients';
 import {
   emailValidate,
   composeAsyncValidators,
@@ -23,7 +23,7 @@ import {
 } from '../../../library/Form/validate';
 import { normalizePhone } from '../../../library/Form/normalize';
 import { SortByFirstName } from '../../../library/util/SortEntities';
-import { setFamilyPatientUser } from '../../../../actions/availabilities';
+import { setFamilyPatientUser, setPatientUser } from '../../../../actions/availabilities';
 import SuggestionSelect from '../../../library/DropdownSuggestion/SuggestionSelect';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
@@ -32,10 +32,9 @@ import styles from './styles.scss';
 /**
  * Gender's array
  */
-const genders = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
-];
+const genders = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
+
+const NEW_PATIENT = 'new';
 
 /**
  * Find the first option that matches the passed string.
@@ -45,42 +44,32 @@ const genders = [
  */
 const validateField = (data, value) => data.find(item => item.value === value);
 
-const initialValues = {
-  customCarrier: false,
-  firstName: '',
-  lastName: '',
-  email: '',
+const defaultValues = {
   birthDate: '',
-  phoneNumber: '',
+  customCarrier: false,
+  email: '',
+  firstName: '',
   gender: '',
-  insuranceCarrier: '',
-  insuranceMemberId: '',
+  insuranceCarrier: carriers[0].value,
   insuranceGroupId: '',
+  insuranceMemberId: '',
+  lastName: '',
   patientUser: '',
+  phoneNumber: '',
 };
 
 class PatientInformation extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isLoading: this.props.fetchFamilyPatients() && false,
-    };
+
+    this.handleFormChanges = this.handleFormChanges.bind(this);
     this.updateUserProfile = this.updateUserProfile.bind(this);
     this.handlePatientChanges = this.handlePatientChanges.bind(this);
-
-    if (props.familyPatientUser) {
-      const patient = this.getPatient(props.familyPatientUser);
-      patient.birthDate = patient.birthDate
-        ? moment(patient.birthDate).format('MM/DD/YYYY')
-        : '';
-      merge(initialValues, patient, {
-        patientUser: props.familyPatientUser,
-      });
-    }
   }
 
   componentDidMount() {
-    const patient = this.getPatient(this.props.familyPatientUser);
+    this.props.fetchFamilyPatients();
+    const patient = this.props.patientUser;
     if (!patient || !patient.insuranceCarrier) {
       return false;
     }
@@ -89,32 +78,18 @@ class PatientInformation extends Component {
     } else {
       this.props.change('patientInformation', 'customCarrier', true);
     }
-    return this.props.change(
-      'patientInformation',
-      'insuranceCarrier',
-      patient.insuranceCarrier,
-    );
+    return this.props.change('patientInformation', 'insuranceCarrier', patient.insuranceCarrier);
   }
 
   /**
    * If the user selected Other as insurance carrier,
    * set the custom-carrier attribute to true.
    */
-  componentWillUpdate(nextProps) {
-    const { isCustomCarrier, insuranceCarrierValue, change } = nextProps;
-    if (insuranceCarrierValue === 'Other' && isCustomCarrier === false) {
-      change('patientInformation', 'customCarrier', true);
-      change('patientInformation', 'insuranceCarrier', '');
+  componentWillUpdate({ insuranceCarrierValue, ...nextProps }) {
+    if (insuranceCarrierValue === carriers[1]) {
+      nextProps.change('patientInformation', 'customCarrier', true);
+      nextProps.change('patientInformation', 'insuranceCarrier', '');
     }
-  }
-
-  /**
-   *
-   *
-   * @param {string} patientId
-   */
-  getPatient(patientId) {
-    return this.props.familyPatients.find(patient => patient.id === patientId);
   }
 
   /**
@@ -123,83 +98,93 @@ class PatientInformation extends Component {
    * @param {string} patientId
    */
   handlePatientChanges(_, patientId) {
-    const { change } = this.props;
+    const { familyPatients } = this.props;
     this.props.setFamilyPatientUser(patientId);
-    const patient = this.getPatient(patientId);
+    const patient = familyPatients.find(pt => pt.id === patientId);
     let isCustomCarrier = false;
     if (patient) {
-      patient.birthDate = patient.birthDate
-        ? moment(patient.birthDate).format('MM/DD/YYYY')
-        : '';
-      isCustomCarrier = !carriers.some(carrier => carrier.value === patient.insuranceCarrier);
+      patient.birthDate = patient.birthDate ? moment(patient.birthDate).format('MM/DD/YYYY') : '';
+      isCustomCarrier =
+        patient.insuranceCarrier &&
+        !carriers.some(carrier => carrier.value === patient.insuranceCarrier);
     }
-    Object.keys(initialValues).map(key =>
-      change(
+    Object.keys(defaultValues).map(key =>
+      this.props.change(
         'patientInformation',
         key,
         (patient && patient[key]) ||
-          (key === 'customCarrier' ? isCustomCarrier : ''),
+          (key === 'customCarrier' ? isCustomCarrier : defaultValues[key]),
       ));
   }
 
   async updateUserProfile(values) {
-    const { familyPatientUser, user } = this.props;
+    const { familyPatientUser, location } = this.props;
+
+    /**
+     * Checks if there are a specific route to go onclicking a card or just the default one.
+     */
+    const contextualUrl =
+      (location.state && location.state.nextRoute) || './additional-information';
+
     /**
      * If there's not patientUser or we are not able to find
      * the uid on the familyPatients list.
      */
-    if (
-      !familyPatientUser ||
-      (familyPatientUser !== 'new' && !this.getPatient(familyPatientUser))
-    ) {
+    if (!familyPatientUser || (familyPatientUser !== NEW_PATIENT && !this.props.patientUser)) {
       return false;
     }
+
     /**
      * If the patientUser is new, let's create a new family member.
      */
-    if (familyPatientUser === 'new') {
+    if (familyPatientUser === NEW_PATIENT) {
       try {
-        const newPatient = await axios.post(
-          `/families/${user.patientUserFamilyId}/patients`,
-          values,
-        );
-        await this.props.setFamilyPatientUser(newPatient.data.id);
-      } catch (err) {
-        console.error('Error updating patient!', err);
-      }
-    } else {
-      try {
-        await axios.put(
-          `/families/${user.patientUserFamilyId}/patients/${familyPatientUser}`,
-          values,
-        );
+        const newPatient = await this.props.addNewFamilyPatient(values);
+        this.props.setFamilyPatientUser(newPatient.data.id);
         await this.props.fetchFamilyPatients();
+        this.props.setPatientUser(this.props.patientUser);
+        return this.props.history.push(contextualUrl);
       } catch (err) {
-        console.error('Error updating patient!', err);
+        console.error('Error creating patient!', err);
       }
     }
-    return this.props.history.push('./additional-information');
+    try {
+      await this.props.updateFamilyPatient(values, familyPatientUser);
+      await this.props.fetchFamilyPatients();
+      this.props.setPatientUser(this.props.patientUser);
+      return this.props.history.push(contextualUrl);
+    } catch (err) {
+      console.error('Error updating patient!', err);
+    }
+    return false;
+  }
+
+  /**
+   * Check if the user is changing the form,
+   * but did not select any patient yet set the patientUser to a new-one.
+   *
+   * @param {object} values
+   */
+  handleFormChanges(values) {
+    if (values && !values.patientUser) {
+      this.props.change('patientInformation', 'patientUser', NEW_PATIENT);
+    }
   }
 
   render() {
     /**
      * Wait until we fetch the family patients.
      */
-    if (this.state.isLoading) {
+    if (this.props.isLoading) {
       return <Loading />;
     }
-    const {
-      isCustomCarrier,
-      change,
-      familyPatients,
-      familyPatientUser,
-    } = this.props;
+    const { isCustomCarrier, familyPatients, familyPatientUser } = this.props;
 
     let patients = familyPatients.sort(SortByFirstName).map(patient => ({
       value: patient.id,
       label: `${patient.firstName} ${patient.lastName}`,
     }));
-    patients = [...patients, { value: 'new', label: 'Someone Else' }];
+    patients = [...patients, { value: NEW_PATIENT, label: 'Someone Else' }];
 
     /**
      * Check if the passed email is not already used,
@@ -208,19 +193,18 @@ class PatientInformation extends Component {
      * @param {object} values
      */
     const asyncEmailValidation = (values) => {
-      const patient = this.getPatient(this.props.familyPatientUser);
+      const patient = this.props.patientUser;
       if (!values.email || (patient && values.email === patient.email)) {
         return false;
       }
-      return axios
-        .post('/patientUsers/email', { email: values.email })
-        .then((response) => {
-          if (response.data.exists) {
-            throw new SubmissionError({
-              email: 'There is already a user with that email',
-            });
-          }
-        });
+      return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
+        if (response.data.exists) {
+          const emailError = {
+            email: 'There is already a user with that email',
+          };
+          throw emailError;
+        }
+      });
     };
     /**
      * Check if the passed phoneNumber is not already used,
@@ -229,7 +213,7 @@ class PatientInformation extends Component {
      * @param {object} values
      */
     const asyncPhoneNumberValidation = (values) => {
-      const patient = this.getPatient(this.props.familyPatientUser);
+      const patient = this.props.patientUser;
       if (
         !values.phoneNumber ||
         (patient && values.phoneNumber === patient.phoneNumber) ||
@@ -242,10 +226,27 @@ class PatientInformation extends Component {
         .then((response) => {
           const { error } = response.data;
           if (error) {
-            throw new SubmissionError({ phoneNumber: error });
+            throw error;
           }
         });
     };
+    /**
+     * If there's a patient already selected,
+     * set his data on the initialValues,
+     * otherwise use the default data.
+     */
+    const { patientUser, familyPatientUser: patientId } = this.props;
+    const initialValues =
+      patientUser && patientId
+        ? {
+          ...defaultValues,
+          ...patientUser,
+          patientUser: patientId,
+          birthDate: patientUser.birthDate
+            ? moment(patientUser.birthDate).format('MM/DD/YYYY')
+            : '',
+        }
+        : defaultValues;
     return (
       <div className={styles.container}>
         <div className={styles.contentWrapper}>
@@ -253,6 +254,7 @@ class PatientInformation extends Component {
             ignoreSaveButton
             form="patientInformation"
             initialValues={initialValues}
+            onChange={this.handleFormChanges}
             onSubmit={this.updateUserProfile}
             asyncValidate={composeAsyncValidators([
               asyncEmailValidation,
@@ -262,9 +264,7 @@ class PatientInformation extends Component {
           >
             <div className={styles.content}>
               <h3 className={styles.title}>Select the Patient</h3>
-              <p className={styles.subtitle}>
-                Please select who's going to the clinic.
-              </p>
+              <p className={styles.subtitle}>Please select who is going to the clinic.</p>
               <div className={styles.patientWrapper}>
                 <Field
                   name="patientUser"
@@ -273,22 +273,20 @@ class PatientInformation extends Component {
                   onChange={this.handlePatientChanges}
                   required
                   theme={{
-                    wrapper: styles.wrapper,
-                    toggleDiv: styles.input,
+                    bar: styles.bar,
                     caretIconWrapper: styles.caretIconWrapper,
-                    erroredLabelFilled: styles.erroredLabelFilled,
-                    input: styles.input,
-                    filled: styles.filled,
-                    label: styles.label,
                     error: styles.error,
+                    erroredLabel: styles.erroredLabel,
+                    erroredLabelFilled: styles.erroredLabelFilled,
                     errorIcon: styles.errorIcon,
                     errorToggleDiv: styles.erroredInput,
-                    bar: styles.bar,
-                    erroredLabel: styles.erroredLabel,
+                    filled: styles.filled,
+                    input: styles.input,
+                    label: styles.label,
+                    toggleDiv: styles.input,
+                    wrapper: styles.wrapper,
                   }}
-                  validateValue={value =>
-                    validateField(patients, value) || value === null
-                  }
+                  validateValue={value => validateField(patients, value) || value === null}
                   renderValue={value =>
                     (value === 'Someone Else' || value === ''
                       ? value
@@ -301,22 +299,20 @@ class PatientInformation extends Component {
             </div>
             <div className={styles.content}>
               <h3 className={styles.title}>Patient Information</h3>
-              <p className={styles.subtitle}>
-                Fill your data to finish your booking.
-              </p>
+              <p className={styles.subtitle}>Fill your data to finish your booking.</p>
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 required
                 name="firstName"
@@ -324,17 +320,17 @@ class PatientInformation extends Component {
               />
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 required
                 name="lastName"
@@ -342,17 +338,17 @@ class PatientInformation extends Component {
               />
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 label="Email"
                 name="email"
@@ -361,17 +357,17 @@ class PatientInformation extends Component {
               />
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 required
                 normalize={normalizeBirthdate}
@@ -381,17 +377,17 @@ class PatientInformation extends Component {
               />
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 required
                 name="phoneNumber"
@@ -405,26 +401,22 @@ class PatientInformation extends Component {
                   component={SuggestionSelect}
                   required
                   theme={{
-                    wrapper: styles.wrapper,
-                    toggleDiv: styles.input,
+                    bar: styles.bar,
                     caretIconWrapper: styles.caretIconWrapper,
-                    erroredLabelFilled: styles.erroredLabelFilled,
-                    input: styles.input,
-                    filled: styles.filled,
-                    label: styles.label,
                     error: styles.error,
+                    erroredLabel: styles.erroredLabel,
+                    erroredLabelFilled: styles.erroredLabelFilled,
                     errorIcon: styles.errorIcon,
                     errorToggleDiv: styles.erroredInput,
-                    bar: styles.bar,
-                    erroredLabel: styles.erroredLabel,
+                    filled: styles.filled,
+                    input: styles.input,
+                    label: styles.label,
+                    toggleDiv: styles.input,
+                    wrapper: styles.wrapper,
                   }}
-                  validateValue={value =>
-                    validateField(genders, value) || value === ''
-                  }
+                  validateValue={value => validateField(genders, value) || value === ''}
                   renderValue={value =>
-                    (validateField(genders, value) &&
-                      validateField(genders, value).label) ||
-                    ''
+                    (validateField(genders, value) && validateField(genders, value).label) || ''
                   }
                   options={genders}
                   data-test-id="gender"
@@ -433,17 +425,17 @@ class PatientInformation extends Component {
               {isCustomCarrier ? (
                 <Field
                   theme={{
-                    inputWithIcon: styles.inputWithIcon,
-                    iconClassName: styles.validationIcon,
-                    erroredLabelFilled: styles.erroredLabelFilled,
-                    input: styles.input,
-                    filled: styles.filled,
-                    label: styles.label,
-                    group: styles.group,
+                    bar: styles.bar,
                     error: styles.error,
                     erroredInput: styles.erroredInput,
-                    bar: styles.bar,
                     erroredLabel: styles.erroredLabel,
+                    erroredLabelFilled: styles.erroredLabelFilled,
+                    filled: styles.filled,
+                    group: styles.group,
+                    iconClassName: styles.validationIcon,
+                    input: styles.input,
+                    inputWithIcon: styles.inputWithIcon,
+                    label: styles.label,
                   }}
                   iconComponent={
                     <IconButton
@@ -451,8 +443,12 @@ class PatientInformation extends Component {
                       iconType="light"
                       className={styles.closeIcon}
                       onClick={() => {
-                        change('patientInformation', 'customCarrier', false);
-                        change('patientInformation', 'insuranceCarrier', '');
+                        this.props.change('patientInformation', 'customCarrier', false);
+                        this.props.change(
+                          'patientInformation',
+                          'insuranceCarrier',
+                          carriers[0].value,
+                        );
                         return false;
                       }}
                     />
@@ -467,26 +463,22 @@ class PatientInformation extends Component {
                     label="Insurance Carrier"
                     component={SuggestionSelect}
                     theme={{
-                      wrapper: styles.wrapper,
-                      toggleDiv: styles.input,
+                      bar: styles.bar,
                       caretIconWrapper: styles.caretIconWrapper,
-                      erroredLabelFilled: styles.erroredLabelFilled,
-                      input: styles.input,
-                      filled: styles.filled,
-                      label: styles.label,
                       error: styles.error,
+                      erroredLabel: styles.erroredLabel,
+                      erroredLabelFilled: styles.erroredLabelFilled,
                       errorIcon: styles.errorIcon,
                       errorToggleDiv: styles.erroredInput,
-                      bar: styles.bar,
-                      erroredLabel: styles.erroredLabel,
+                      filled: styles.filled,
+                      input: styles.input,
+                      label: styles.label,
+                      toggleDiv: styles.input,
+                      wrapper: styles.wrapper,
                     }}
-                    validateValue={value =>
-                      validateField(carriers, value) || value === null
-                    }
+                    validateValue={value => validateField(carriers, value) || value === null}
                     renderValue={value =>
-                      (validateField(carriers, value) &&
-                        validateField(carriers, value).label) ||
-                      ''
+                      (validateField(carriers, value) && validateField(carriers, value).label) || ''
                     }
                     options={carriers}
                     data-test-id="insuranceCarrier"
@@ -495,43 +487,39 @@ class PatientInformation extends Component {
               )}
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 label="Insurance Member ID"
                 name="insuranceMemberId"
               />
               <Field
                 theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
+                  bar: styles.bar,
                   error: styles.error,
                   erroredInput: styles.erroredInput,
-                  bar: styles.bar,
                   erroredLabel: styles.erroredLabel,
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  filled: styles.filled,
+                  group: styles.group,
+                  iconClassName: styles.validationIcon,
+                  input: styles.input,
+                  inputWithIcon: styles.inputWithIcon,
+                  label: styles.label,
                 }}
                 label="Group ID"
                 name="insuranceGroupId"
               />
-              <Button
-                type="submit"
-                className={styles.actionButton}
-                disabled={!familyPatientUser}
-              >
+              <Button type="submit" className={styles.actionButton} disabled={!familyPatientUser}>
                 Next
               </Button>
             </div>
@@ -545,23 +533,33 @@ class PatientInformation extends Component {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
+      addNewFamilyPatient,
+      change,
       fetchFamilyPatients,
       setFamilyPatientUser,
-      change: handleChange,
+      setPatientUser,
+      updateFamilyPatient,
     },
     dispatch,
   );
 }
 
-function mapStateToProps(state) {
+function mapStateToProps({ auth, availabilities, ...state }) {
   const selector = formValueSelector('patientInformation');
-  const { auth, availabilities } = state;
+  const getPatientUser =
+    availabilities.get('familyPatientUser') &&
+    auth.get('familyPatients').length > 0 &&
+    auth
+      .get('familyPatients')
+      .find(patient => patient.id === availabilities.get('familyPatientUser'));
   return {
-    user: auth.get('patientUser'),
-    isCustomCarrier: selector(state, 'customCarrier'),
     familyPatients: auth.get('familyPatients'),
     familyPatientUser: availabilities.get('familyPatientUser'),
     insuranceCarrierValue: selector(state, 'insuranceCarrier'),
+    isCustomCarrier: selector(state, 'customCarrier'),
+    isLoading: Array.isArray(auth.get('patientUser')),
+    patientUser: getPatientUser,
+    user: auth.get('patientUser'),
   };
 }
 
@@ -571,12 +569,27 @@ export default withRouter(connect(
 )(PatientInformation));
 
 PatientInformation.propTypes = {
-  isCustomCarrier: PropTypes.bool,
-  change: PropTypes.func,
+  addNewFamilyPatient: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  familyPatients: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.shape(patientUserShape)),
+    PropTypes.instanceOf(List),
+  ]).isRequired,
   familyPatientUser: PropTypes.string,
-  history: PropTypes.shape(historyShape),
-  fetchFamilyPatients: PropTypes.func,
-  familyPatients: PropTypes.arrayOf(PropTypes.shape(patientUserShape)),
+  fetchFamilyPatients: PropTypes.func.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
   insuranceCarrierValue: PropTypes.string,
-  setFamilyPatientUser: PropTypes.func,
+  isCustomCarrier: PropTypes.bool,
+  isLoading: PropTypes.bool.isRequired,
+  patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),
+  setFamilyPatientUser: PropTypes.func.isRequired,
+  setPatientUser: PropTypes.func.isRequired,
+  updateFamilyPatient: PropTypes.func.isRequired,
+};
+
+PatientInformation.defaultProps = {
+  familyPatientUser: '',
+  insuranceCarrierValue: carriers[0].value,
+  isCustomCarrier: false,
+  patientUser: false,
 };

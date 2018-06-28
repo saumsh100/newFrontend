@@ -55,7 +55,7 @@ export default function (sequelize, DataTypes) {
     },
 
     availableTimes: {
-      type: DataTypes.ARRAY(DataTypes.DATEONLY),
+      type: DataTypes.ARRAY(DataTypes.DATE),
     },
 
     endDate: {

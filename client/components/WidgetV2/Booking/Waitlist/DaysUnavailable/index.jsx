@@ -1,23 +1,25 @@
 
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import difference from 'lodash/difference';
+import { List } from 'immutable';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import difference from 'lodash/difference';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Button, DayPickerRange } from '../../../../library';
-import Service from '../../../../../entities/models/Service';
-import styles from './styles.scss';
-import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { setWaitlistUnavailableDates } from '../../../../../actions/availabilities';
-import { patientShape } from '../../../../library/PropTypeShapes';
+import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
+import styles from './styles.scss';
 
 function DaysUnavailable({
   history,
-  waitlist,
-  setUnavailableDates,
   isAuth,
+  location,
   patientUser,
+  setUnavailableDates,
+  waitlistDates,
+  waitlistUnavailableDates,
 }) {
   /**
    * This gets a date and format it to check if it's present on the
@@ -29,54 +31,53 @@ function DaysUnavailable({
    */
   const toggleDateFromWaitlist = (clickedDay) => {
     const formatedValue = moment(clickedDay).format('YYYY-MM-DD');
-    if (waitlist.dates.indexOf(formatedValue) <= -1) {
+    if (waitlistDates.indexOf(formatedValue) <= -1) {
       return;
     }
-    let unavailableDates = waitlist.unavailableDates;
-    if (unavailableDates.indexOf(formatedValue) > -1) {
-      unavailableDates = unavailableDates.filter(value => value !== formatedValue);
-    } else {
-      unavailableDates = [...unavailableDates, formatedValue];
-    }
+    const unavailableDates =
+      waitlistUnavailableDates.indexOf(formatedValue) > -1
+        ? waitlistUnavailableDates.filter(value => value !== formatedValue)
+        : [...waitlistUnavailableDates, formatedValue];
     setUnavailableDates(unavailableDates);
   };
 
   /**
    * It shows the days that are on the waitlist selection and are not on the unavailableDates list.
    */
-  const daysToDisplay = difference(
-    waitlist.dates,
-    waitlist.unavailableDates,
-  ).map(value => (value = moment(value).toDate()));
+  const daysToDisplay = difference(waitlistDates, waitlistUnavailableDates).map(value =>
+    moment(value).toDate());
 
   const handleSubmitting = () => {
-    let followUrl = '../patient-information';
-    if (!isAuth || !patientUser || !patientUser.get('isPhoneNumberConfirmed')) {
-      followUrl = {
+    if (!isAuth || !patientUser || !patientUser.isPhoneNumberConfirmed) {
+      return history.push({
         pathname: '../../login',
         state: {
           nextRoute: './book/patient-information',
         },
-      };
+      });
     }
-    return history.push(followUrl);
+    /**
+     * Checks if there are a specific route to go onclicking a card or just the default one.
+     */
+    const contextualUrl = (location.state && location.state.nextRoute) || '../patient-information';
+    return history.push(contextualUrl);
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <h3 className={styles.title}>Select Waitlist Dates Unavailable</h3>
         <p className={styles.subtitle}>
-          Select all days that you are UNAVAILABLE for an earlier appointment.
-          (Select all that apply)
+          Select all days that you are UNAVAILABLE for an earlier appointment. (Select all that
+          apply)
         </p>
         <DayPickerRange
           fieldsWrapper={() => undefined}
           handleDayClick={day => toggleDateFromWaitlist(day)}
           modifiers={{ highlighted: daysToDisplay }}
+          onChange={e => e}
           disabledDays={{
-            before: moment(waitlist.dates[0]).toDate(),
-            after: moment(waitlist.dates[waitlist.dates.length - 1]).toDate(),
+            before: moment(waitlistDates[0]).toDate(),
+            after: moment(waitlistDates[waitlistDates.length - 1]).toDate(),
           }}
         />
         <Button
@@ -91,16 +92,12 @@ function DaysUnavailable({
   );
 }
 
-function mapStateToProps({ availabilities, entities, auth }) {
+function mapStateToProps({ availabilities, auth }) {
   return {
     isAuth: auth.get('isAuthenticated'),
     patientUser: auth.get('patientUser'),
-    waitlist: availabilities.get('waitlist').toJS(),
-    selectedService: entities.getIn([
-      'services',
-      'models',
-      availabilities.get('selectedServiceId'),
-    ]),
+    waitlistDates: availabilities.get('waitlist').get('dates'),
+    waitlistUnavailableDates: availabilities.get('waitlist').get('unavailableDates'),
   };
 }
 
@@ -119,16 +116,19 @@ export default connect(
 )(DaysUnavailable);
 
 DaysUnavailable.propTypes = {
-  history: PropTypes.shape(historyShape),
-  setUnavailableDates: PropTypes.func,
-  isAuth: PropTypes.bool,
-  patientUser: PropTypes.shape(patientShape),
-  waitlist: PropTypes.shape({
-    dates: PropTypes.arrayOf(PropTypes.string),
-    times: PropTypes.arrayOf(PropTypes.string),
-  }),
-  selectedService: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(Service),
+  history: PropTypes.shape(historyShape).isRequired,
+  isAuth: PropTypes.bool.isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+  patientUser: PropTypes.shape(patientUserShape).isRequired,
+  setUnavailableDates: PropTypes.func.isRequired,
+  waitlistDates: PropTypes.arrayOf(PropTypes.string),
+  waitlistUnavailableDates: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.string),
+    PropTypes.instanceOf(List),
   ]),
+};
+
+DaysUnavailable.defaultProps = {
+  waitlistDates: [],
+  waitlistUnavailableDates: [],
 };
