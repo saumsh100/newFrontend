@@ -1,7 +1,6 @@
 
+import moment from 'moment-timezone';
 import { formatPhoneNumber } from '../../../client/components/library/util/Formatters';
-
-const moment = require('moment');
 
 export function appointmentRequestNoteStringFormatter(request) {
   const {
@@ -18,39 +17,49 @@ export function appointmentRequestNoteStringFormatter(request) {
     insuranceGroupId,
   } = request;
 
-  const nullHandler = (val, fallback = '') => val === null ? fallback : val;
-  const undefinedAndNullHandler = (val, fallback = '') => (val === undefined || val === null) ? fallback : val;
-  const nameFormatter = ({ firstName, lastName }) => nullHandler(firstName) + ' ' + nullHandler(lastName);
-  const birthDateHandler = (birthDate) => birthDate === null ? 'none' : moment(birthDate).format('DD/MM/YYYY');
+  const invalidValueHandler = (val, fallback = '') => !val ? fallback : val;
+  const nameFormatter = ({ firstName, lastName }) => invalidValueHandler(firstName) + ' ' + invalidValueHandler(lastName);
+  const birthDateHandler = (birthDate) => !birthDate ? 'none' : moment(birthDate).format('DD/MM/YYYY');
 
-  const practitionerName = practitioner === null ? 'No Preference' : nameFormatter(practitioner);
+  /**
+   * Display the general request information
+   */
+  const practitionerName = !practitioner ? 'No Preference' : nameFormatter(practitioner);
   const generalRequestNote =
     'Date Requested: ' +
     moment.tz(createdAt, account.timezone || 'America/Vancouver').format('h:mmA, DD/MM/YY') + '\r\n' +
     'Reason for Booking: ' + service.name + '\r\n' +
     'Preferred Practitioner: ' + practitionerName + '\r\n' +
-    'Note: ' + nullHandler(note, 'none') + '\r\n\r\n' +
+    'Note: ' + invalidValueHandler(note, 'none') + '\r\n\r\n' +
     'Patient Name: ' + nameFormatter(patientUser) + '\r\n' +
-    'Phone Number: ' + nullHandler((formatPhoneNumber(patientUser.phoneNumber)), 'none') + '\r\n' +
-    'Email: ' + nullHandler(patientUser.email, 'none') + '\r\n' +
+    'Phone Number: ' + invalidValueHandler((formatPhoneNumber(patientUser.phoneNumber)), 'none') + '\r\n' +
+    'Email: ' + invalidValueHandler(patientUser.email, 'none') + '\r\n' +
     'Birth Date: ' + birthDateHandler(patientUser.birthDate) + '\r\n';
 
+  /**
+   * Display the insurance plan information if it is valid and not "Pay for myself"
+   */
   const payForMySelfNote = 'Insurance Plan: Pay for myself';
   const insurancePlanNote = 'Insurance Plan: ' + insuranceCarrier + '\r\n' +
-    'Insurer Name: ' + undefinedAndNullHandler(insurerName, 'n/a') + '\r\n' +
-    'Member Id: ' + nullHandler(insuranceMemberId, 'none') + '\r\n' +
-    'Group Id: ' + nullHandler(insuranceGroupId, 'none');
-  const insuranceNote = (insuranceCarrier === null || insuranceCarrier === 'Pay for myself') ?
+    'Insurer Name: ' + invalidValueHandler(insurerName, 'n/a') + '\r\n' +
+    'Member Id: ' + invalidValueHandler(insuranceMemberId, 'none') + '\r\n' +
+    'Group Id: ' + invalidValueHandler(insuranceGroupId, 'none');
+  const insuranceNote = (!insuranceCarrier || insuranceCarrier === 'Pay for myself') ?
     payForMySelfNote : insurancePlanNote;
 
+  /**
+   * Set the requested patient note chunk, if the patient user is the same as requested patient
+   * user,insurance note will be appended to the patient note above and requestedPatientNote would
+   * just be "requested by self"
+   */
   const sameRequestedPatientNote = 'Requested By: Self';
   const differentRequestedPatientNote =
     'Requested By: ' + nameFormatter(requestingPatientUser) + '\r\n' +
-    'Phone Number: ' + nullHandler((formatPhoneNumber(requestingPatientUser.phoneNumber)), 'none') + '\r\n' +
-    'Email: ' + nullHandler(requestingPatientUser.email, 'none') + '\r\n' +
+    'Phone Number: ' + invalidValueHandler((formatPhoneNumber(requestingPatientUser.phoneNumber)), 'none') + '\r\n' +
+    'Email: ' + invalidValueHandler(requestingPatientUser.email, 'none') + '\r\n' +
     'Birth Date: ' + birthDateHandler(requestingPatientUser.birthDate) + '\r\n';
   const requestedPatientNote = (patientUser.id === requestingPatientUser.id) ?
     insuranceNote + '\r\n\r\n' + sameRequestedPatientNote : '\r\n' + differentRequestedPatientNote + insuranceNote;
-  
+
   return generalRequestNote + requestedPatientNote;
 }
