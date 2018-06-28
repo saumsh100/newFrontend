@@ -1,4 +1,3 @@
-
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
@@ -622,7 +621,6 @@ module.exports = {
     /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.
-
       Example:
       return queryInterface.bulkDelete('Person', null, {});
     */
