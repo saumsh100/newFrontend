@@ -13,13 +13,11 @@ import { convertIntervalStringToObject } from '../../server/util/time';
 export function fetchInsights() {
   return async function (dispatch, getState) {
     try {
-      const {
-        dashboard,
-      } = getState();
+      const { dashboard } = getState();
 
       dispatch(setLoading({ key: 'loadingInsights', value: true }));
 
-      const currentDate = moment(dashboard.toJS().dashboardDate);
+      const currentDate = moment(dashboard.get('dashboardDate'));
       const startDate = currentDate.startOf('day').toISOString();
       const endDate = currentDate.endOf('day').toISOString();
 
@@ -47,24 +45,15 @@ const toDoFunctions = {
 
 export function fetchDonnasToDos(index) {
   return async function (dispatch, getState) {
-    const {
-      auth,
-      dashboard,
-      entities,
-    } = getState();
-
-    const currentDate = moment(dashboard.toJS().dashboardDate);
-    let startDate = currentDate.startOf('day').toISOString();
-    let endDate = currentDate.endOf('day').toISOString();
+    const { auth, dashboard, entities } = getState();
     const account = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-    let recallBuffer;
-    if (account && account.toJS()) {
-      recallBuffer = account.toJS().recallBuffer;
-      if (account.timezone) {
-        startDate = moment.tz(currentDate, account.timezone).startOf('day').toISOString();
-        endDate = moment.tz(currentDate, account.timezone).endOf('day').toISOString();
-      }
-    }
+    const timezone = account.get('timezone');
+
+    const currentDate = moment.tz(dashboard.get('dashboardDate'), timezone);
+    const startDate = currentDate.startOf('day').toISOString();
+    const endDate = currentDate.endOf('day').toISOString();
+
+    const recallBuffer = account.get('recallBuffer');
 
     if (toDoFunctions[index]) {
       const accountId = auth.get('accountId');
@@ -81,7 +70,9 @@ export function fetchDonnasToDos(index) {
 async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
   try {
     const params = { startDate, endDate };
-    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, { params });
+    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, {
+      params,
+    });
     dispatch(setToDoReminders(remindersData.data));
   } catch (err) {
     console.error('fetchToDoReminders', err);
@@ -105,7 +96,8 @@ async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallB
     let endDateQuery = endDate;
     if (recallBuffer) {
       endDateQuery = moment(startDate)
-      .add(convertIntervalStringToObject(recallBuffer)).toISOString();
+        .add(convertIntervalStringToObject(recallBuffer))
+        .toISOString();
     }
 
     const params = { startDate, endDate: endDateQuery };
@@ -116,4 +108,3 @@ async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallB
     throw err;
   }
 }
-
