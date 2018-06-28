@@ -46,6 +46,8 @@ const rabbit = rabbitConfig.port
   ? `amqp://${user}${rabbitConfig.host}:${rabbitConfig.port}?heartbeat=380`
   : `amqp://${user}${rabbitConfig.host}?heartbeat=380`;
 
+const stubEventsService = !!environmentVariables.STUB_EVENTS_SERVICE || env === 'test';
+
 const namespaces = {
   dash: '/dash',
   sync: '/sync',
@@ -153,8 +155,9 @@ module.exports = {
   tokenSecret,
   tokenExpiry,
   passwordHashSaltRounds,
+  environmentVariables,
 
-  // Environment Variable Related
+  // Parsed from environment variables
   env,
   port,
   host,
@@ -166,6 +169,7 @@ module.exports = {
   rabbit: environmentVariables.RABBITMQ_URL
     ? `${environmentVariables.RABBITMQ_URL}?heartbeat=380`
     : rabbit,
+  stubEventsService,
   launchDarkly,
   vendasta,
   twilio,
