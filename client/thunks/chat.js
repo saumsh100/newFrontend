@@ -141,16 +141,14 @@ export function createListOfUnreadedChats(result) {
     const filteredUnreadList = without(unreadMessages, ...readList);
 
     result = filterUnreadMessages(result)
-      .filter(
-        message =>
-          shouldUpdateUnreadChats(currentLocation, message, selectedChatId) &&
-          currentUser !== message.userId
-      )
+      .filter(message =>
+        shouldUpdateUnreadChats(currentLocation, message, selectedChatId) &&
+          currentUser !== message.userId)
       .map(message => message.id);
 
     result = uniq(result);
     const newUnreadChatsList = union(filteredUnreadList, result);
-    return dispatch(setUnreadChats(newUnreadChatsList));
+    dispatch(setUnreadChats(newUnreadChatsList));
   };
 }
 
@@ -162,20 +160,18 @@ export function loadChatList(
   limit,
   skip = 0,
   url = '/api/chats',
-  join = ['textMessages', 'patient']
+  join = ['textMessages', 'patient'],
 ) {
   return dispatch =>
-    dispatch(
-      fetchEntities({
-        key: 'chats',
-        join,
-        params: {
-          limit,
-          skip,
-        },
-        url,
-      })
-    );
+    dispatch(fetchEntities({
+      key: 'chats',
+      join,
+      params: {
+        limit,
+        skip,
+      },
+      url,
+    }));
 }
 
 export function cleanChatList() {
@@ -192,14 +188,12 @@ export function loadFlaggedChatList(limit, skip = 0) {
 
 export function toggleFlagged(chatId, isFlagged) {
   return dispatch =>
-    dispatch(
-      updateEntityRequest({
-        key: 'chats',
-        values: { isFlagged: !isFlagged },
-        url: `/api/chats/${chatId}`,
-        merge: true,
-      })
-    );
+    dispatch(updateEntityRequest({
+      key: 'chats',
+      values: { isFlagged: !isFlagged },
+      url: `/api/chats/${chatId}`,
+      merge: true,
+    }));
 }
 
 export function markAsUnread(chatId, messageDate) {
@@ -208,16 +202,14 @@ export function markAsUnread(chatId, messageDate) {
     const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
     const accountTwilioNumber = activeAccount.get('twilioPhoneNumber');
 
-    dispatch(
-      updateEntityRequest({
-        key: 'textMessages',
-        values: {
-          textMessageCreatedAt: messageDate,
-          accountTwilioNumber,
-        },
-        url: `/api/chats/${chatId}/textMessages/unread`,
-      })
-    ).then((response) => {
+    dispatch(updateEntityRequest({
+      key: 'textMessages',
+      values: {
+        textMessageCreatedAt: messageDate,
+        accountTwilioNumber,
+      },
+      url: `/api/chats/${chatId}/textMessages/unread`,
+    })).then((response) => {
       const { chat } = getState();
       const unreadChats = chat.get('unreadChats');
 
@@ -241,13 +233,11 @@ export function markAsRead(chatId) {
       return;
     }
 
-    dispatch(
-      updateEntityRequest({
-        key: 'textMessages',
-        values: {},
-        url: `/api/chats/${chatId}/textMessages/read`,
-      })
-    ).then((response) => {
+    dispatch(updateEntityRequest({
+      key: 'textMessages',
+      values: {},
+      url: `/api/chats/${chatId}/textMessages/read`,
+    })).then((response) => {
       const unreadChats = chat.get('unreadChats');
       const listToRemove = Object.keys(response.textMessages);
 
@@ -263,18 +253,20 @@ export function setChatMessagesListForChat(chatId) {
     const allMessages = entities.getIn(['textMessages', 'models']);
     const filteredChatMessages = allMessages
       .filter(message => message.chatId === chatId)
-      .sort(
-        (messageOne, messageTwo) => new Date(messageOne.createdAt) - new Date(messageTwo.createdAt)
-      );
+      .sort((messageOne, messageTwo) => new Date(messageOne.createdAt) - new Date(messageTwo.createdAt));
 
     return dispatch(setChatMessages(filteredChatMessages || []));
   };
 }
 
 export function selectChat(id) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { routing } = getState();
     dispatch(setSelectedChatId(id));
-    dispatch(push(`/chat/${id || ''}`));
+
+    if (isOnChatPage(routing.location.pathname)) {
+      dispatch(push(`/chat/${id || ''}`));
+    }
 
     if (id) {
       dispatch(markAsRead(id));
@@ -286,24 +278,20 @@ export function selectChat(id) {
 
 export function createNewChat(entityData) {
   return dispatch =>
-    dispatch(
-      createEntityRequest({
-        key: 'chats',
-        entityData,
-        url: '/api/chats',
-      })
-    );
+    dispatch(createEntityRequest({
+      key: 'chats',
+      entityData,
+      url: '/api/chats',
+    }));
 }
 
 export function sendChatMessage(entityData) {
   return dispatch =>
-    dispatch(
-      createEntityRequest({
-        key: 'chats',
-        entityData,
-        url: '/api/chats/textMessages',
-      })
-    );
+    dispatch(createEntityRequest({
+      key: 'chats',
+      entityData,
+      url: '/api/chats/textMessages',
+    }));
 }
 
 export function socketLock(textMessages) {
