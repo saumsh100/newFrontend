@@ -21,7 +21,7 @@ function Login(props) {
     props
       .login(values)
       .then(() => {
-        this.props.history.push('./book/review');
+        this.props.history.push('./book/patient-information');
       })
       .catch(({ data }) => {
         throw new SubmissionError({

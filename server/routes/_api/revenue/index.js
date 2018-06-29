@@ -1,7 +1,6 @@
-
 import { Router } from 'express';
 import checkPermissions from '../../../middleware/checkPermissions';
-import { calcRevenueDays } from '../../../lib/revenue/';
+import calcRevenueDays from '../../../lib/revenue/';
 
 const revenueRouter = Router();
 

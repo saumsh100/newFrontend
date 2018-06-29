@@ -27,7 +27,7 @@ function SignUpConfirm({
   const handleConfirmation = values =>
     handleConfirmationCode(values)
       .then(() => {
-        history.push('../book');
+        history.push('../book/patient-information');
       })
       .catch(({ data }) => {
         throw new SubmissionError({
@@ -92,10 +92,10 @@ function SignUpConfirm({
 }
 
 SignUpConfirm.propTypes = {
-  handleResendPinCode: PropTypes.func,
-  handleConfirmationCode: PropTypes.func,
-  history: PropTypes.shape(historyShape),
-  patientPhoneNumber: PropTypes.string,
+  handleResendPinCode: PropTypes.func.isRequired,
+  handleConfirmationCode: PropTypes.func.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  patientPhoneNumber: PropTypes.string.isRequired,
 };
 
 function mapStateToProps({ auth }) {

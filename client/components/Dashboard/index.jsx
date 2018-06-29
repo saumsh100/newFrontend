@@ -16,7 +16,6 @@ import DonnaToDoListContainer from './DonnaToDoListContainer/index';
 import { setDashboardDate } from '../../reducers/dashboard';
 import RevenueContainer from './RevenueContainer';
 import { fetchDonnasToDos } from '../../thunks/dashboard';
-import FeatureFlagWrapper from '../FeatureFlagWrapper';
 
 class Dashboard extends React.Component {
   componentDidMount() {
@@ -44,19 +43,13 @@ class Dashboard extends React.Component {
           />
 
           <div className={styles.revenueColFlex}>
-            <FeatureFlagWrapper featureKey="feature-revenue-card">
-              <RevenueContainer dashboardDate={this.props.dashboardDate} />
-            </FeatureFlagWrapper>
-
+            <RevenueContainer dashboardDate={this.props.dashboardDate} />
             <StatsContainer dashboardDate={this.props.dashboardDate} />
           </div>
 
           <div className={styles.colFlex}>
             <AppsRequestsContainer dashboardDate={this.props.dashboardDate} />
-
-            <PatientInsightsContainer
-              dashboardDate={this.props.dashboardDate}
-            />
+            <PatientInsightsContainer dashboardDate={this.props.dashboardDate} />
           </div>
 
           <DonnaToDoListContainer
@@ -90,18 +83,12 @@ function mapDispatchToProps(dispatch) {
 
 Dashboard.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
-  dashboardDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.string,
-  ]).isRequired,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   setDashboardDate: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   fetchDonnasToDos: PropTypes.func.isRequired,
   dashboard: PropTypes.shape({
-    dashboardDate: PropTypes.oneOfType([
-      PropTypes.instanceOf(Date),
-      PropTypes.string,
-    ]),
+    dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
     loadingInsights: PropTypes.bool,
     loadingToDos: PropTypes.bool,
     insightCount: PropTypes.number,
@@ -111,7 +98,4 @@ Dashboard.propTypes = {
     recalls: PropTypes.arrayOf(PropTypes.any),
   }).isRequired,
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

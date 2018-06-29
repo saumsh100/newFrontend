@@ -6,7 +6,7 @@ export default [
   },
   {
     label: 'Other',
-    value: 'Other',
+    value: 'new_insurance_carrier',
   },
   {
     label: 'Sun Life Financial',

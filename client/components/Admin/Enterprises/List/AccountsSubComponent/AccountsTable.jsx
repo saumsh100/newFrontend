@@ -36,6 +36,11 @@ const columns = [
     accessor: d => d.lastSyncDate,
     Cell: ({ row }) => formatedDate(row.createdAt),
   },
+  {
+    Header: 'Account ID',
+    id: 'id',
+    accessor: d => d.id,
+  },
 ];
 
 export default function AccountsTable(props) {
@@ -57,6 +62,10 @@ export default function AccountsTable(props) {
 }
 
 AccountsTable.propTypes = {
-  accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)),
+  accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)).isRequired,
   loaded: PropTypes.bool,
+};
+
+AccountsTable.defaultProps = {
+  loaded: false,
 };

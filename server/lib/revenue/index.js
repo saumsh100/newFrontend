@@ -1,4 +1,3 @@
-
 import moment from 'moment-timezone';
 import { Appointment, DeliveredProcedure, WeeklySchedule, Account, sequelize } from '../../_models';
 
@@ -11,7 +10,7 @@ import { Appointment, DeliveredProcedure, WeeklySchedule, Account, sequelize } f
  * @param  {endDate} The current selected date
  * @returns {totalRevObj} object with estimated revenue for the date range and the average
  */
-export async function calcRevenueDays(revParams) {
+export default async function calcRevenueDays(revParams) {
   try {
     const {
       date, pastDaysLimit, maxDates, accountId,
@@ -37,11 +36,19 @@ export async function calcRevenueDays(revParams) {
       .tz(date, timeZone)
       .endOf('day')
       .toISOString();
+
     const dateRangeInt = pastDaysLimit;
 
     const weeklySchedule = accountData.weeklySchedule;
 
     const closedDates = getClosedClinicDates(weeklySchedule, selectedDate, dateRangeInt, timeZone);
+
+    // If the chosen date correspondes with a date the office is closed it will return no revenue.
+    if (closedDates.indexOf(selectedDate) > -1) {
+      return {
+        average: 0,
+      };
+    }
 
     const totalRevObj = await getAllDatesWithAppointments(
       selectedDate,
@@ -363,8 +370,19 @@ function calculateAverage(dateObj) {
   return 0;
 }
 
+/**
+ * sumeEstimatedProdecureRevenue sums either the estimatedRevenue from a set of appointments
+ * or totalRevenue from a set of deliveredProdecures. totalRevObj is a reference object that is
+ * being mutated for this summation, based on if the entities corresponding startDate/entryDate
+ * matches a field in totalRevObj.
+ * @param {Array} entities DeliveredProcedures or Appointments
+ * @param {String} dateType startDate or entryDate
+ * @param {Object} totalRevObj object with dates and total revenue for set date
+ * @param {String} entityField access delivered Procedure revenue or appointment estimatedRevenue
+ * @param {String} timeZone timezone of the office
+ */
 function sumEstimatedProcedureRevenue(entities, dateType, totalRevObj, entityField, timeZone) {
-  entities.map((entity) => {
+  return entities.forEach((entity) => {
     const date = moment
       .tz(entity[dateType], timeZone)
       .endOf('day')

@@ -7,12 +7,11 @@ import Link from '../../../library/Link';
 import WidgetCard from '../../../library/WidgetCard';
 import practitioners from '../../../../entities/collections/practitioners';
 import { setSelectedPractitionerId } from '../../../../actions/availabilities';
+import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function Practitioners({
-  practitionersEntity,
-  selectedPractitionerId,
-  setSelectedPractitioner,
+  practitionersEntity, selectedPractitionerId, location, ...props
 }) {
   /**
    * List of only active and not hidden practitioners
@@ -32,16 +31,20 @@ function Practitioners({
       ],
       [{ label: 'No Preference', value: '' }],
     );
+  /**
+   * Checks if there are a specific route to go onclicking a card or just the default one.
+   */
+  const contextualUrl = (location.state && location.state.nextRoute) || './reason';
 
   return (
     <div className={styles.container}>
       {practitionerList.map(prac => (
-        <Link to="./reason" key={prac.value} className={styles.link}>
+        <Link to={contextualUrl} key={prac.value} className={styles.link}>
           <WidgetCard
             title={prac.label}
             description={prac.description}
             arrow
-            onClick={() => setSelectedPractitioner(prac.value)}
+            onClick={() => props.setSelectedPractitionerId(prac.value)}
             selected={prac.value === selectedPractitionerId}
           />
         </Link>
@@ -60,7 +63,7 @@ function mapStateToProps({ entities, availabilities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setSelectedPractitioner: setSelectedPractitionerId,
+      setSelectedPractitionerId,
     },
     dispatch,
   );
@@ -72,7 +75,12 @@ export default connect(
 )(Practitioners);
 
 Practitioners.propTypes = {
-  practitionersEntity: PropTypes.instanceOf(practitioners),
+  practitionersEntity: PropTypes.instanceOf(practitioners).isRequired,
   selectedPractitionerId: PropTypes.string,
-  setSelectedPractitioner: PropTypes.func.isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+  setSelectedPractitionerId: PropTypes.func.isRequired,
+};
+
+Practitioners.defaultProps = {
+  selectedPractitionerId: '',
 };

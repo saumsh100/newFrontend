@@ -9,9 +9,10 @@ import difference from 'lodash/difference';
 import { Button } from '../../../../library';
 import Service from '../../../../../entities/models/Service';
 import { setWaitlistTimes } from '../../../../../actions/availabilities';
-import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import officeHoursShape from '../../../../library/PropTypeShapes/officeHoursShape';
 import createAvailabilitiesFromOpening from '../../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
+import groupTimesPerPeriod from '../../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import styles from './styles.scss';
 
 function SelectTimes({
@@ -21,31 +22,22 @@ function SelectTimes({
   timezone,
   setWaitlist,
   history,
+  location,
 }) {
-  /**
-   * Return the correct moment object checking if there's a timezone before.
-   *
-   * @param time
-   * @param tz
-   * @returns {*}
-   */
-  const genericMoment = (time, tz) => (tz ? moment.tz(time, tz) : moment(time));
-
   /**
    * Add the current.startDate to the accumulator.
    *
    * @param {array} acc
    * @param {object} current
    */
-  const reduceStartTime = (acc, current) => (acc = [...acc, current.startDate]);
+  const reduceStartTime = (acc, current) => [...acc, current.startDate];
 
   /**
    * Check if the passed startDate is included on the already selected waitlist times.
    *
    * @param {object} startDate
    */
-  const checkIfIncludesTime = ({ startDate }) =>
-    waitlist.times.includes(startDate);
+  const checkIfIncludesTime = ({ startDate }) => waitlist.times.includes(startDate);
 
   /**
    * Look over the officeHours object and find the earliest startTime of the clinic.
@@ -73,29 +65,15 @@ function SelectTimes({
    */
   const availabilities = createAvailabilitiesFromOpening({
     startDate: earliestStartTime,
-    endDate: moment(latestEndTime),
+    endDate: moment.tz(latestEndTime, timezone),
     duration: selectedService.get('duration'),
     interval: 60,
-  }).reduce(
-    (acc, act, index) => {
-      const splitAfternoon = 12;
-      const splitEvening = 17;
-      const currentHour = parseFloat(genericMoment(act.startDate, timezone).format('HH'));
-
-      if (currentHour >= splitAfternoon && currentHour <= splitEvening) {
-        acc = { ...acc, afternoon: [...acc.afternoon, act], total: index + 1 };
-      } else if (currentHour >= splitEvening) {
-        acc = { ...acc, evening: [...acc.evening, act], total: index + 1 };
-      } else {
-        acc = { ...acc, morning: [...acc.morning, act], total: index + 1 };
-      }
-
-      return acc;
-    },
-    {
-      morning: [], afternoon: [], evening: [], total: 0,
-    },
-  );
+  }).reduce(groupTimesPerPeriod, {
+    morning: [],
+    afternoon: [],
+    evening: [],
+    total: 0,
+  });
 
   /**
    * Renders the title, value and edit button for the provided data.
@@ -108,12 +86,10 @@ function SelectTimes({
     <p className={styles.waitlistIndex}>
       <span className={styles.waitlistKey}>{key}</span>
       <span className={styles.waitlistValue}>
-        {value}
+        <span>{value}</span>
         <Button
           className={styles.editLink}
-          onClick={() =>
-            history.push({ pathname: link, state: { nextRoute: goBack } })
-          }
+          onClick={() => history.push({ pathname: link, state: { nextRoute: goBack } })}
         >
           <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 9.5V12h2.5l7.372-7.372-2.5-2.5L0 9.5zm11.805-6.805c.26-.26.26-.68 0-.94l-1.56-1.56a.664.664 0 0 0-.94 0l-1.22 1.22 2.5 2.5 1.22-1.22z" />
@@ -138,10 +114,7 @@ function SelectTimes({
         availabilities.total === waitlist.times.length,
     });
     return (
-      <Button
-        className={classes}
-        onClick={() => handleSelectFrameAvailability(frame)}
-      >
+      <Button className={classes} onClick={() => handleSelectFrameAvailability(frame)}>
         {label}
       </Button>
     );
@@ -205,30 +178,33 @@ function SelectTimes({
     timeframe.length > 0 && (
       <div className={styles.timeListWrapper}>
         <h3 className={styles.slotsTitle}>{label}</h3>
-        {timeframe.map((availability, index) => {
+        {timeframe.map((availability) => {
           const classes = classnames(styles.slot, {
             [styles.selectedSlot]: checkIfIncludesTime(availability),
           });
           return (
             <Button
-              key={`${availability.startDate}_item_${index}`}
+              key={`${availability.startDate}`}
               onClick={() => handleAvailability(availability)}
               className={classes}
             >
-              {genericMoment(availability.startDate, timezone).format('LT')}
+              {moment.tz(availability.startDate, timezone).format('LT')}
             </Button>
           );
         })}
       </div>
     );
-
+  /**
+   * Checks if there are a specific route to go onclicking a card or just the default one.
+   */
+  const contextualUrl = (location.state && location.state.nextRoute) || './remove-dates';
+  const lastDateOnTheWaitlist = waitlist.dates[waitlist.dates.length - 1];
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <h3 className={styles.title}>Waitlist Summary</h3>
         <p className={styles.subtitle}>
-          Here are the informations that you already defined to your
-          appointment.
+          Here are the informations that you already defined to your appointment.
         </p>
         {renderSummaryItem(
           'Reason',
@@ -237,8 +213,12 @@ function SelectTimes({
           './waitlist/select-times',
         )}
         {renderSummaryItem(
-          'Days on Waitlist',
-          `${waitlist.dates[0]} > ${waitlist.dates[waitlist.dates.length - 1]}`,
+          waitlist.dates[0] === lastDateOnTheWaitlist ? "Waitlist's Date" : "Waitlist's Dates",
+          waitlist.dates[0] === lastDateOnTheWaitlist
+            ? moment.tz(waitlist.dates[0], timezone).format('MMM Do')
+            : `From: ${moment.tz(waitlist.dates[0], timezone).format('MMM Do')} - To: ${moment
+                .tz(lastDateOnTheWaitlist, timezone)
+                .format('MMM Do')}`,
           './select-dates',
           './select-times',
         )}
@@ -246,17 +226,14 @@ function SelectTimes({
       <div className={styles.content}>
         <h3 className={styles.title}>Select Times</h3>
         <p className={styles.subtitle}>
-          Select the times you are available to come for an earlier appointment.
-          (Select all that apply)
+          Select the times you are available to come for an earlier appointment. (Select all that
+          apply)
         </p>
         <div className={styles.timeFrameWrapper}>
           {timeFrameButton('all', 'All Day')}
-          {availabilities.morning.length > 0 &&
-            timeFrameButton('morning', 'Morning')}
-          {availabilities.afternoon.length > 0 &&
-            timeFrameButton('afternoon', 'Afternoon')}
-          {availabilities.evening.length > 0 &&
-            timeFrameButton('evening', 'Evening')}
+          {availabilities.morning.length > 0 && timeFrameButton('morning', 'Morning')}
+          {availabilities.afternoon.length > 0 && timeFrameButton('afternoon', 'Afternoon')}
+          {availabilities.evening.length > 0 && timeFrameButton('evening', 'Evening')}
         </div>
         <div>
           <span className={styles.helper}>Or</span>
@@ -267,7 +244,7 @@ function SelectTimes({
         <Button
           disabled={!waitlist.times.length}
           className={styles.fullWidthButton}
-          onClick={() => history.push('./remove-dates')}
+          onClick={() => history.push(contextualUrl)}
         >
           Next
         </Button>
@@ -304,16 +281,24 @@ export default connect(
 )(SelectTimes);
 
 SelectTimes.propTypes = {
-  timezone: PropTypes.string,
-  setWaitlist: PropTypes.func,
+  timezone: PropTypes.string.isRequired,
+  setWaitlist: PropTypes.func.isRequired,
   waitlist: PropTypes.shape({
     dates: PropTypes.arrayOf(PropTypes.string),
+    unavailableDates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
   }),
-  history: PropTypes.shape(historyShape),
-  officeHours: PropTypes.shape(officeHoursShape),
-  selectedService: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(Service),
-  ]),
+  location: PropTypes.shape(locationShape).isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  officeHours: PropTypes.shape(officeHoursShape).isRequired,
+  selectedService: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Service)])
+    .isRequired,
+};
+
+SelectTimes.defaultProps = {
+  waitlist: {
+    dates: [],
+    unavailableDates: [],
+    times: [],
+  },
 };

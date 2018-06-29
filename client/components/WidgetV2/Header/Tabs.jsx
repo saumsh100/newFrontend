@@ -17,7 +17,7 @@ import styles from './styles.scss';
  */
 const pathBuilder = (path = '') => `/widgets/:accountId/app${path}`;
 
-function Tabs({ isBooking, setIsBooking, history }) {
+function Tabs({ history, isBooking, setIsBooking }) {
   const contentTabs = () => () => (
     <div className={styles.headerTabs}>
       <Button
@@ -46,61 +46,16 @@ function Tabs({ isBooking, setIsBooking, history }) {
   return (
     <Router history={history}>
       <Switch>
-        <Route
-          exact
-          path={pathBuilder('/book/practitioner')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/reason')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/date-and-time')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/waitlist/select-dates')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/waitlist/select-times')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/signup/confirm')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/patient-information')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/additional-information')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/review')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/book/wait')}
-          component={contentTabs()}
-        />
-        <Route
-          exact
-          path={pathBuilder('/patient/add')}
-          component={contentTabs()}
-        />
+        <Route exact path={pathBuilder('/book/practitioner')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/reason')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/date-and-time')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/waitlist/select-dates')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/waitlist/select-times')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/signup/confirm')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/patient-information')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/additional-information')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/book/wait')} component={contentTabs()} />
+        <Route exact path={pathBuilder('/patient/add')} component={contentTabs()} />
         <Route path={pathBuilder('/patient/edit')} component={contentTabs()} />
       </Switch>
     </Router>
@@ -119,7 +74,7 @@ export default connect(
 )(Tabs);
 
 Tabs.propTypes = {
+  history: PropTypes.shape(historyShape).isRequired,
   isBooking: PropTypes.bool.isRequired,
   setIsBooking: PropTypes.func.isRequired,
-  history: PropTypes.shape(historyShape),
 };

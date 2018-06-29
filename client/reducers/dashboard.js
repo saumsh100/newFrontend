@@ -25,56 +25,61 @@ export const setLoading = createAction(SET_LOADING);
 /**
  * Initial State
  */
-export const createInitialDashboardState = (state) => {
-  return fromJS(Object.assign({
-    dashboardDate: new Date(),
-    loadingInsights: false,
-    loadingToDos: false,
-    insightCount: 0,
-    insights: [],
-    reminders: [],
-    reviews: [],
-    recalls: [],
-  }, state));
-};
+export const createInitialDashboardState = state =>
+  fromJS(Object.assign(
+    {
+      dashboardDate: new Date().toISOString(),
+      loadingInsights: false,
+      loadingToDos: false,
+      insightCount: 0,
+      insights: [],
+      reminders: [],
+      reviews: [],
+      recalls: [],
+    },
+    state,
+  ));
 
 export const initialState = createInitialDashboardState();
 
 /**
  * Reducer
  */
-export default handleActions({
-  [SET_DASHBOARD_DATE](state, { payload }) {
-    return state.set('dashboardDate', payload);
+export default handleActions(
+  {
+    [SET_DASHBOARD_DATE](state, { payload }) {
+      return state.set('dashboardDate', payload);
+    },
+
+    [SET_LOADING](state, { payload }) {
+      return state.set(payload.key, payload.value);
+    },
+
+    [SET_INSIGHTS](state, { payload }) {
+      const insights = payload.data;
+
+      let insightCount = 0;
+      insights.forEach((data) => {
+        insightCount += data.insights.length;
+      });
+
+      return state.merge({
+        insights,
+        insightCount,
+      });
+    },
+
+    [SET_TODO_REMINDERS](state, { payload }) {
+      return state.merge({ reminders: payload });
+    },
+
+    [SET_TODO_RECALLS](state, { payload }) {
+      return state.merge({ recalls: payload });
+    },
+
+    [SET_TODO_REVIEWS](state, { payload }) {
+      return state.merge({ reviews: payload });
+    },
   },
-
-  [SET_LOADING](state, { payload }) {
-    return state.set(payload.key, payload.value);
-  },
-
-  [SET_INSIGHTS](state, { payload }) {
-    const insights = payload.data;
-
-    let insightCount = 0;
-    insights.forEach((data) => {
-      insightCount += data.insights.length;
-    });
-
-    return state.merge({
-      insights,
-      insightCount,
-    });
-  },
-
-  [SET_TODO_REMINDERS](state, { payload }) {
-    return state.merge({ reminders: payload });
-  },
-
-  [SET_TODO_RECALLS](state, { payload }) {
-    return state.merge({ recalls: payload });
-  },
-
-  [SET_TODO_REVIEWS](state, { payload }) {
-    return state.merge({ reviews: payload });
-  },
-}, initialState);
+  initialState,
+);
