@@ -274,12 +274,13 @@ requestsRouter.get('/notSynced', (req, res, next) => {
     }],
   }).then((requests) => {
     const sendRequests = requests.map((request) => {
-      request = request.get({ plain: true });
-      request.formattedNote = appointmentRequestNoteStringFormatter(request);
-      return request;
+      const r = request.get({ plain: true });
+      return {
+        ...r,
+        formattedNote: appointmentRequestNoteStringFormatter(r),
+      };
     });
-    const normalized = jsonapi('request', sendRequests);
-    return res.send(normalized);
+    return res.send(jsonapi('request', sendRequests));
   })
     .catch(next);
 });

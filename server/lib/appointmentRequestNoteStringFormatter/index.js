@@ -24,9 +24,9 @@ export function appointmentRequestNoteStringFormatter(request) {
     insuranceGroupId,
   } = request;
 
-  const invalidValueHandler = (val, fallback = '') => !val ? fallback : val;
+  const invalidValueHandler = (val, fallback = '') => val || fallback;
   const nameFormatter = ({ firstName, lastName }) => invalidValueHandler(firstName) + ' ' + invalidValueHandler(lastName);
-  const birthDateHandler = (birthDate) => !birthDate ? 'none' : moment(birthDate).format('DD/MM/YYYY');
+  const birthDateHandler = (birthDate) => birthDate ? moment(birthDate).format('DD/MM/YYYY') : 'none';
 
 
   // Display the general request information
