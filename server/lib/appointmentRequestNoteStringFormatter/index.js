@@ -28,9 +28,8 @@ export function appointmentRequestNoteStringFormatter(request) {
   const nameFormatter = ({ firstName, lastName }) => invalidValueHandler(firstName) + ' ' + invalidValueHandler(lastName);
   const birthDateHandler = (birthDate) => !birthDate ? 'none' : moment(birthDate).format('DD/MM/YYYY');
 
-  /**
-   * Display the general request information
-   */
+
+  // Display the general request information
   const practitionerName = !practitioner ? 'No Preference' : nameFormatter(practitioner);
   const generalRequestNote =
     'Date Requested: ' +
@@ -43,9 +42,7 @@ export function appointmentRequestNoteStringFormatter(request) {
     'Email: ' + invalidValueHandler(patientUser.email, 'none') + '\r\n' +
     'Birth Date: ' + birthDateHandler(patientUser.birthDate) + '\r\n';
 
-  /**
-   * Display the insurance plan information if it is valid and not "Pay for myself"
-   */
+  // Display the insurance plan information if it is valid and not "Pay for myself"
   const payForMySelfNote = 'Insurance Plan: Pay for myself';
   const insurancePlanNote = 'Insurance Plan: ' + insuranceCarrier + '\r\n' +
     'Insurer Name: ' + invalidValueHandler(insurerName, 'n/a') + '\r\n' +
@@ -54,11 +51,9 @@ export function appointmentRequestNoteStringFormatter(request) {
   const insuranceNote = (!insuranceCarrier || insuranceCarrier === 'Pay for myself') ?
     payForMySelfNote : insurancePlanNote;
 
-  /**
-   * Set the requested patient note chunk, if the patient user is the same as requested patient
-   * user,insurance note will be appended to the patient note above and requestedPatientNote would
-   * just be "requested by self"
-   */
+  // Set the requested patient note chunk, if the patient user is the same as requested patient
+  // user,insurance note will be appended to the patient note above and requestedPatientNote would
+  // just be "requested by self"
   const sameRequestedPatientNote = 'Requested By: Self';
   const differentRequestedPatientNote =
     'Requested By: ' + nameFormatter(requestingPatientUser) + '\r\n' +
