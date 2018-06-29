@@ -1,0 +1,39 @@
+@import '../styles';
+
+.heading {
+  font-size: 1rem;
+  color: $widget-grey-dark;
+  margin-bottom: var(--widget-spacer);
+}
+.container {
+  @extend .container;
+  text-align: center;
+}
+.content {
+  padding: 0;
+}
+.requestTitle {
+  @extend .subtitle;
+  margin-bottom: 8px;
+}
+.requestPatient {
+  @extend .title;
+  margin-bottom: 12px;
+}
+.requestCard {
+  background: $widget-grey-lightest;
+  padding: var(--widget-spacer);
+}
+.requestInfo {
+  @extend .subtitle;
+  margin-bottom: 0;
+}
+.buttonWrapper {
+  padding: var(--widget-spacer);
+}
+.afterCardMessage {
+  @extend .subtitle;
+  margin-top: var(--widget-spacer);
+  margin-bottom: 4px;
+  padding: 0 var(--widget-spacer);
+}

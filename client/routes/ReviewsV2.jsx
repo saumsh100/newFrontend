@@ -21,8 +21,9 @@ import ResetSuccess from '../components/WidgetV2/Booking/ResetPassword/Success';
 import DaysUnavailable from '../components/WidgetV2/Booking/Waitlist/DaysUnavailable';
 import AdditionalInformation from '../components/WidgetV2/Booking/AdditionalInformation';
 import PatientInformation from '../components/WidgetV2/Booking/PatientInformation';
-import Review from '../components/WidgetV2/Booking/Review';
 import patientUserShape from '../components/library/PropTypeShapes/patientUserShape';
+import Review from '../components/WidgetV2/Booking/Review';
+import Complete from '../components/WidgetV2/Booking/Complete';
 
 const base = (path = '') => `/widgets/:accountId/app${path}`;
 
@@ -57,6 +58,11 @@ const BookingRouter = ({ match, isAuth }) => {
           component={redirectNoAuth(AdditionalInformation, isAuth, '../login')}
         />
         <Route exact path={b('/review')} component={redirectNoAuth(Review, isAuth, '../login')} />
+        <Route
+          exact
+          path={b('/complete')}
+          component={redirectNoAuth(Complete, isAuth, '../login')}
+        />
       </Switch>
     </div>
   );
