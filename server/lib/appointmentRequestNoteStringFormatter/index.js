@@ -2,6 +2,13 @@
 import moment from 'moment-timezone';
 import { formatPhoneNumber } from '../../../client/components/library/util/Formatters';
 
+/**
+ * appointmentRequestNoteStringFormatter will format and return the appointment request note
+ * based on the general appointment request info, booked patient user info, requesting patient user
+ * info and insurance plan info.
+ * @param request
+ * @returns {string}
+ */
 export function appointmentRequestNoteStringFormatter(request) {
   const {
     patientUser,
