@@ -9,6 +9,7 @@ import { loginSuccess, logout as authLogout } from '../actions/auth';
 import { setPatientSearchedList } from './patientSearch';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
+import SubscriptionManager from '../util/graphqlSubscriptions';
 import socket from '../socket';
 
 const getUserFeatureFlags = (userSession, dispatch) => {
@@ -81,7 +82,7 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
     return axios
       .post('/auth', loginDetails)
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-      .then(({ user }) => {
+      .then(({ user, accountId }) => {
         const userId = user.id;
         const fullName = `${user.firstName} ${user.lastName}`;
         const email = user.username;
@@ -101,6 +102,8 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
             }/sessions?u=${userId}`,
           });
         }
+
+        SubscriptionManager.accountId = accountId;
 
         if (connect) {
           connectSocketToConnectStore({ dispatch, getState }, socket);
@@ -142,11 +145,13 @@ export function logout() {
     localStorage.removeItem('session');
     const { auth } = getState();
 
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
-      dispatch(authLogout());
-      dispatch(push('/login'));
-    });
-  };
+    return axios.delete(`/auth/session/${auth.get('sessionId')}`)
+      .then(() => {
+        dispatch(authLogout());
+        dispatch(push('/login'));
+        SubscriptionManager.accountId = null;
+      });
+    };
 }
 
 export function resetPassword(email) {

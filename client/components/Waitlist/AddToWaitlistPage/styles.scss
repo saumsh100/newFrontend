@@ -1,0 +1,10 @@
+@import '../../../ui';
+
+.pageContainer {
+  background: $primary-white;
+  position: fixed;
+  overflow: hidden;
+  bottom: 0;
+  top: 50px;
+  z-index: 5;
+}

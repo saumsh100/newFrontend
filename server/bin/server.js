@@ -1,5 +1,8 @@
 
 import http from 'http';
+import { execute, subscribe } from 'graphql';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import schema from 'CareCruGraphQL/data/schema';
 import app from './app';
 import globals from '../config/globals';
 import createSocketIOServer from '../sockets/createSocketServer';
@@ -20,4 +23,13 @@ app.set('socketio', io);
 // Bind to supplied port
 server.listen(globals.port, () => {
   console.log(`CareCru HTTP Server is running on port ${globals.port}`);
+  SubscriptionServer.create({
+    execute,
+    subscribe,
+    schema,
+    onConnect: params => params,
+  }, {
+    server,
+    path: '/subscriptions',
+  });
 });

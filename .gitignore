@@ -51,3 +51,4 @@ electron/dist
 electron/build
 **/__generated__
 .python-version
+yarn-error.log

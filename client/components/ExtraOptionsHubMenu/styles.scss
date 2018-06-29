@@ -1,0 +1,80 @@
+@import '../../ui.scss';
+
+.blurBg {
+  overflow: hidden;
+  position: fixed;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  &:before {
+    background: gray;
+    opacity: 0.6;
+    display: block;
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .blurredContent {
+    @include blurred-mixin();
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+}
+
+.actionButton {
+  height: auto;
+  font-size: 20px;
+  padding: 12px 13px;
+  composes: fontDefault from 'sass-loader!../../fonts.scss';
+  position: fixed;
+  bottom: 15px;
+  left: 15px;
+  z-index: 3;
+}
+
+.blurContainer {
+  background: $primary-white;
+  height: 100%;
+}
+
+.optionsWrapper {
+  position: fixed;
+  left: 15px;
+  bottom: 60px;
+  z-index: 3;
+}
+
+.actionOverlayButton {
+  color: $primary-white;
+  background: none;
+  text-transform: uppercase;
+  padding: 0 0.5em;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .actionOverlayButtonIcon {
+    padding: 7px;
+    background: $primary-white;
+    color: $primary-blue-green;
+    border-radius: 20px;
+    margin-right: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      background: $primary-blue-green;
+      color: $primary-white;
+    }
+  }
+}

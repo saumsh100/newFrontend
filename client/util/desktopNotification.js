@@ -2,7 +2,7 @@
 import Push from 'push.js';
 
 const NotificationConfiguration = {
-  body: 'default',
+  body: '',
   timeout: 4000,
   icon: '/images/logo_notext.png',
 };

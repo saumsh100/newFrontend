@@ -1,84 +1,110 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
+import classNames from 'classnames';
 import WaitListItem from './WaitListItem';
 import { List, Button } from '../../../library';
 import { SortByCreatedAtDesc } from '../../../library/util/SortEntities';
+import { isHub } from '../../../../util/hub';
+import { Fetch as RelayFetchWaitlist } from '../../../RelayWaitlist';
 import styles from './styles.scss';
 
 export default function Waitlist(props) {
   const {
-    waitSpots,
-    patientUsers,
-    patients,
-    removeWaitSpot,
-    openAddTo,
+    removeWaitSpot, openAddTo, selectWaitSpot, selectedWaitSpots,
   } = props;
 
   return (
-    <div className={styles.waitList}>
-      <div className={styles.header}>
-        {waitSpots.size} {waitSpots.size === 1 ? 'Patient' : 'Patients'} on
-        Waitlist
-        <div className={styles.addTo}>
-          <Button
-            color="blue"
-            onClick={openAddTo}
-            data-test-id="button_addToWaitlist"
+    <RelayFetchWaitlist
+      render={(relayProps) => {
+        if (relayProps.props === null) {
+          return null;
+        }
+        const waitSpots = relayProps.props.accountViewer.waitSpots.edges.map((edge) => {
+          const patient = edge.node.patient && {
+            ...edge.node.patient,
+            clientId: edge.node.patient.id,
+            id: edge.node.patient.ccId,
+          };
+
+          const patientUser = edge.node.patientUser && {
+            ...edge.node.patientUser,
+            clientId: edge.node.patientUser.id,
+            id: edge.node.patientUser.ccId,
+          };
+
+          return {
+            ...edge.node,
+            clientId: edge.node.id,
+            id: edge.node.ccId,
+            accountViewerClientId: relayProps.props.accountViewer.id,
+            patient,
+            patientUser,
+          };
+        });
+
+        return (
+          <div
+            className={classNames(styles.waitList, {
+              [styles.hubWrapper]: isHub(),
+              [styles.withSelectedElements]: isHub() && selectedWaitSpots.length > 0,
+            })}
           >
-            Add to Waitlist
-          </Button>
-        </div>
-      </div>
-      <List className={styles.list}>
-        {waitSpots
-          .sort(SortByCreatedAtDesc)
-          .toArray()
-          .map((waitSpot, index, arr) => {
-            let patientData = null;
-            let isPatientUser = false;
+            {!isHub() && (
+              <div className={styles.header}>
+                <span data-test-id="waitListLength">{waitSpots.length}</span>
+                &nbsp;
+                {waitSpots.length === 1 ? 'Patient' : 'Patients'} on Waitlist
+                <div className={styles.addTo}>
+                  <Button color="blue" onClick={openAddTo} data-test-id="button_addToWaitlist">
+                    Add to Waitlist
+                  </Button>
+                </div>
+              </div>
+            )}
+            <List className={styles.list}>
+              {waitSpots.sort(SortByCreatedAtDesc).map((waitSpot, index, arr) => {
+                if (!waitSpot.patientUserId && !waitSpot.patientId) {
+                  return null;
+                }
 
-            if (waitSpot.patientUserId && !waitSpot.patientId) {
-              patientData = patientUsers.get(waitSpot.patientUserId);
-              isPatientUser = true;
-            } else if (waitSpot.patientId) {
-              patientData = patients.get(waitSpot.patientId);
-            }
+                const patientData = waitSpot.patientId ? waitSpot.patient : waitSpot.patientUser;
+                const isPatientUser = !!waitSpot.patientId;
+                const removeBorder = index === arr.length - 1 && arr.length > 1;
 
-            let removeBorder = false;
-            if (index === arr.length - 1 && arr.length > 1) {
-              removeBorder = true;
-            }
-
-            return (
-              <WaitListItem
-                key={`waitSpot_${waitSpot.id}`}
-                waitSpot={waitSpot}
-                patient={patientData}
-                removeWaitSpot={() => {
-                  removeWaitSpot(waitSpot.id);
-                }}
-                isPatientUser={isPatientUser}
-                removeBorder={removeBorder}
-              />
-            );
-          })}
-      </List>
-    </div>
+                return (
+                  <WaitListItem
+                    key={`waitSpot_${waitSpot.id}`}
+                    waitSpot={waitSpot}
+                    patient={patientData}
+                    removeWaitSpot={() => {
+                      removeWaitSpot(waitSpot);
+                    }}
+                    isPatientUser={isPatientUser}
+                    removeBorder={removeBorder}
+                    onSelect={() => {
+                      selectWaitSpot(waitSpot.id);
+                    }}
+                    selected={selectedWaitSpots && selectedWaitSpots.indexOf(waitSpot.id) > -1}
+                  />
+                );
+              })}
+            </List>
+          </div>
+        );
+      }}
+    />
   );
 }
 
-Waitlist.propTypes = {
-  waitSpots: PropTypes.instanceOf(Map),
-  patientUsers: PropTypes.instanceOf(Map),
-  patients: PropTypes.instanceOf(Map),
-  removeWaitSpot: PropTypes.func.isRequired,
-  openAddTo: PropTypes.func.isRequired,
+Waitlist.defaultProps = {
+  selectedWaitSpots: [],
+  selectWaitSpot: () => {},
 };
 
-Waitlist.defaultProps = {
-  waitSpots: Map,
-  patientUsers: Map,
-  patients: Map,
+Waitlist.propTypes = {
+  removeWaitSpot: PropTypes.func.isRequired,
+  openAddTo: PropTypes.func.isRequired,
+  selectWaitSpot: PropTypes.func,
+  selectedWaitSpots: PropTypes.arrayOf(PropTypes.string),
 };
