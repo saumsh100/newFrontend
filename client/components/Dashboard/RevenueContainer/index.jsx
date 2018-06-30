@@ -134,7 +134,7 @@ RevenueContainer.propTypes = {
 
 RevenueContainer.defaultProps = {
   wasRevenueFetched: false,
-  revenueData: Map,
+  revenueData: new Map(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RevenueContainer);

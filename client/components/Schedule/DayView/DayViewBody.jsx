@@ -43,15 +43,9 @@ class DayViewBody extends Component {
 
   componentWillUnmount() {
     if (this.scrollComponentChair) {
-      this.scrollComponentChair.removeEventListener(
-        'scroll',
-        this.onScrollChair.bind(this),
-      );
+      this.scrollComponentChair.removeEventListener('scroll', this.onScrollChair.bind(this));
     } else if (this.scrollComponent) {
-      this.scrollComponent.removeEventListener(
-        'scroll',
-        this.onScroll.bind(this),
-      );
+      this.scrollComponent.removeEventListener('scroll', this.onScroll.bind(this));
     }
   }
 
@@ -140,7 +134,7 @@ class DayViewBody extends Component {
       }));
 
     // Display the practitioners that have been checked on the filters card.
-    const checkedPractitioners = schedule.toJS().practitionersFilter;
+    const checkedPractitioners = schedule.get('practitionersFilter');
     practitionersArray = practitionersArray.filter((pr) => {
       if (checkedPractitioners.indexOf(pr.id) > -1 && pr.isActive) {
         return pr;
@@ -166,7 +160,7 @@ class DayViewBody extends Component {
     );
 
     // Display chairs that have been selected on the filters
-    const checkedChairs = schedule.toJS().chairsFilter;
+    const checkedChairs = schedule.get('chairsFilter');
     const chairsArray = chairs
       .toArray()
       .sort(SortByName)
@@ -196,12 +190,10 @@ class DayViewBody extends Component {
         <SHeader className={styles.header}>
           <ColumnHeader
             scheduleView={scheduleView}
-            entities={
-              scheduleView === 'chair' ? chairsArray : practitionersArray
-            }
+            entities={scheduleView === 'chair' ? chairsArray : practitionersArray}
             headerComponentDidMount={this.headerComponentDidMount}
             leftColumnWidth={leftColumnWidth}
-            minWidth={schedule.toJS().columnWidth}
+            minWidth={schedule.get('columnWidth')}
             headerComponent={this.headerComponent}
             schedule={schedule}
             allFetched={allFetched}
@@ -265,7 +257,4 @@ DayViewBody.defaultProps = {
   chairsFetched: false,
 };
 
-export default connect(
-  mapStateToProps,
-  null,
-)(DayViewBody);
+export default connect(mapStateToProps, null)(DayViewBody);

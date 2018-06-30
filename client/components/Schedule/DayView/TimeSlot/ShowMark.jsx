@@ -31,14 +31,11 @@ export default function ShowMark(props) {
 
   const startDateMinutesDived = startDateMinutes / 60;
 
-  const topCalc =
-    (startDateHours - startHour + startDateMinutesDived) *
-    timeSlotHeight.height;
+  const topCalc = (startDateHours - startHour + startDateMinutesDived) * timeSlotHeight.height;
 
-  const heightCalc = (durationTime / 60) * timeSlotHeight.height;
+  const heightCalc = durationTime / 60 * timeSlotHeight.height;
 
-  const splitRow =
-    rowSort.length > 1 ? 100 * (appPosition / rowSort.length) : 0;
+  const splitRow = rowSort.length > 1 ? 100 * (appPosition / rowSort.length) : 0;
   const top = `${topCalc + 0.05}px`;
   const left = `${splitRow + 0.07}%`;
 
@@ -59,9 +56,7 @@ export default function ShowMark(props) {
     top,
     height,
     backgroundColor: hexToRgbA('#b4b4b5', 1),
-    border: `0.5px solid ${
-      appPosition === 0 ? hexToRgbA('#b4b4b5', 1) : '#FFFFFF'
-    }`,
+    border: `0.5px solid ${appPosition === 0 ? hexToRgbA('#b4b4b5', 1) : '#FFFFFF'}`,
     zIndex: appPosition,
   };
 

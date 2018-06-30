@@ -1,9 +1,12 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import styles from '../styles.scss';
+import { List } from 'immutable';
+import Event from '../../../../../entities/models/Event';
 import EventDateSections from '../EventDateSections';
+import { sortEvents } from '../../../Shared/helpers';
+import styles from '../styles.scss';
 
 export default function EventsList({ events, filters }) {
   if (events && events.length === 0) {
@@ -16,11 +19,7 @@ export default function EventsList({ events, filters }) {
 
   const filteredEvents = events.filter(event => filters.indexOf(event.get('type').toLowerCase()) > -1);
 
-  const sortedEvents = filteredEvents.sort((a, b) => {
-    if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) { return -1; }
-    if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) { return 1; }
-    return 0;
-  });
+  const sortedEvents = sortEvents(filteredEvents);
 
   const dateObj = {};
 
@@ -28,7 +27,7 @@ export default function EventsList({ events, filters }) {
     const meta = ev.get('metaData');
     const key = moment(meta.createdAt).format('MMMM Do YYYY');
 
-    if (dateObj.hasOwnProperty(key)) {
+    if (key in dateObj) {
       dateObj[key].push(ev);
     } else {
       dateObj[key] = [ev];
@@ -39,20 +38,24 @@ export default function EventsList({ events, filters }) {
 
   return (
     <div className={styles.eventsList}>
-      {dateSections.length
-        ? dateSections.map((date, index) => (
+      {dateSections.length > 0 &&
+        dateSections.map(date => (
           <EventDateSections
-            key={`eventSection_${index}`}
+            key={`eventSection_${date}`}
             dateHeader={date}
             events={dateObj[date]}
           />
-            ))
-        : null}
+        ))}
     </div>
   );
 }
 
 EventsList.propTypes = {
-  events: PropTypes.instanceOf(Array),
-  filters: PropTypes.instanceOf(Array),
+  events: PropTypes.arrayOf(PropTypes.instanceOf(Event)),
+  filters: PropTypes.instanceOf(List),
+};
+
+EventsList.defaultProps = {
+  filters: List,
+  events: [],
 };

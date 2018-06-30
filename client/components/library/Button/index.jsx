@@ -8,10 +8,7 @@ import styles from './vbutton.scss';
 
 const scheme = [
   ['size', ['sm', 'md', 'lg', 'xlg']],
-  [
-    'color',
-    ['white', 'red', 'grey', 'green', 'blue', 'yellow', 'darkgrey', 'darkblue'],
-  ],
+  ['color', ['white', 'red', 'grey', 'green', 'blue', 'yellow', 'darkgrey', 'darkblue']],
   ['border', ['blue']],
 
   'primary',
@@ -66,17 +63,11 @@ function Button(props) {
       {props.icon && <i className={`fa fa-${props.icon} ${styles.icon}`} />}
 
       {props.children ||
-        (props.title && (
-          <span className={styles.text}>{props.children || props.title}</span>
-        ))}
+        (props.title && <span className={styles.text}>{props.children || props.title}</span>)}
 
-      {IconRightComponent && (
-        <IconRightComponent className={styles.iconRight} />
-      )}
+      {IconRightComponent && <IconRightComponent className={styles.iconRight} />}
 
-      {props.iconRight && (
-        <i className={`fa fa-${props.iconRight} ${styles.iconRight}`} />
-      )}
+      {props.iconRight && <i className={`fa fa-${props.iconRight} ${styles.iconRight}`} />}
     </props.as>
   );
 }

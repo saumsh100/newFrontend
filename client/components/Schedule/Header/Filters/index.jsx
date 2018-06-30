@@ -74,8 +74,6 @@ Filters.propTypes = {
   schedule: PropTypes.instanceOf(Map).isRequired,
   chairs: PropTypes.instanceOf(Map).isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)).isRequired,
-  currentDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.instanceOf(moment),
-  ]).isRequired,
+  currentDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.instanceOf(moment)])
+    .isRequired,
 };

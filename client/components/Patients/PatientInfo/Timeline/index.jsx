@@ -3,11 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import { Card, InfiniteScroll } from '../../../library';
-import {
-  fetchEntitiesRequest,
-  fetchEntities,
-} from '../../../../thunks/fetchEntities';
+import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
+import EventModel from '../../../../entities/models/Event';
 import EventList from './EventsList';
 import styles from './styles.scss';
 
@@ -68,11 +67,7 @@ class Timeline extends Component {
     const wasAllFetched = wasPatientFetched && wasEventsFetched;
 
     return (
-      <Card
-        className={styles.card}
-        runAnimation
-        loaded={!this.state.loaded && wasAllFetched}
-      >
+      <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasAllFetched}>
         {wasAllFetched && (
           <div className={styles.eventsContainer} style={style}>
             <InfiniteScroll
@@ -95,16 +90,6 @@ class Timeline extends Component {
     );
   }
 }
-
-Timeline.propTypes = {
-  fetchEntities: PropTypes.func,
-  fetchEntitiesRequest: PropTypes.func,
-  events: PropTypes.arrayOf(Object),
-  wasEventsFetched: PropTypes.bool,
-  wasPatientFetched: PropTypes.bool,
-  patientId: PropTypes.string,
-  filters: PropTypes.instanceOf(Array),
-};
 
 function mapStateToProps({ entities, apiRequests }, { patientId }) {
   const wasEventsFetched = apiRequests.get('getPatientEvents')
@@ -132,8 +117,20 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-export default enhance(Timeline);
+Timeline.propTypes = {
+  fetchEntities: PropTypes.func.isRequired,
+  events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)),
+  filters: PropTypes.instanceOf(List),
+  wasEventsFetched: PropTypes.bool,
+  wasPatientFetched: PropTypes.bool,
+  patientId: PropTypes.string.isRequired,
+};
+
+Timeline.defaultProps = {
+  events: null,
+  filters: List,
+  wasEventsFetched: false,
+  wasPatientFetched: false,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Timeline);

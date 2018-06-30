@@ -5,12 +5,12 @@ import { Map } from 'immutable';
 import { Tabs, Tab, Button, DialogBox } from '../../../library';
 import RecallModel from '../../../../entities/models/Recall';
 import ReminderModel from '../../../../entities/models/Reminder';
-import PatientModel from '../../../../entities/models/Patient';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
 import InsuranceForm from './InsuranceForm';
 import FamilyForm from './FamilyForm';
 import SettingsForm from './SettingsForm';
+import PatientModel from '../../../../entities/models/Patient';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import { familyDataSelector } from '../../Shared/helpers';
 import { isResponsive } from '../../../../util/hub';
@@ -178,11 +178,7 @@ class EditDisplay extends Component {
     }
 
     return (
-      <Tabs
-        index={this.state.tabIndex}
-        onChange={this.handleTabChange}
-        noUnderLine
-      >
+      <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine>
         <Tab label="Appointments" tabCard>
           {this.renderAppointmentsForm()}
         </Tab>
@@ -209,21 +205,11 @@ class EditDisplay extends Component {
 
     return (
       <div>
-        <CollapsibleTab title="Appointments">
-          {this.renderAppointmentsForm()}
-        </CollapsibleTab>
-        <CollapsibleTab title="Personal">
-          {this.renderPersonalForm()}
-        </CollapsibleTab>
-        <CollapsibleTab title="Insurance">
-          {this.renderInsuranceForm()}
-        </CollapsibleTab>
-        <CollapsibleTab title="Family">
-          {this.renderFamilyForm()}
-        </CollapsibleTab>
-        <CollapsibleTab title="Settings">
-          {this.renderSettingsForm()}
-        </CollapsibleTab>
+        <CollapsibleTab title="Appointments">{this.renderAppointmentsForm()}</CollapsibleTab>
+        <CollapsibleTab title="Personal">{this.renderPersonalForm()}</CollapsibleTab>
+        <CollapsibleTab title="Insurance">{this.renderInsuranceForm()}</CollapsibleTab>
+        <CollapsibleTab title="Family">{this.renderFamilyForm()}</CollapsibleTab>
+        <CollapsibleTab title="Settings">{this.renderSettingsForm()}</CollapsibleTab>
       </div>
     );
   }
@@ -275,9 +261,9 @@ class EditDisplay extends Component {
 }
 
 EditDisplay.propTypes = {
-  accountViewer: PropTypes.instanceOf(Object).isRequired,
+  accountViewer: PropTypes.instanceOf(Object),
   isOpen: PropTypes.bool,
-  patient: PropTypes.instanceOf(PatientModel).isRequired,
+  patient: PropTypes.instanceOf(PatientModel),
   recalls: PropTypes.objectOf(ReminderModel).isRequired,
   reinitializeState: PropTypes.func.isRequired,
   reminders: PropTypes.objectOf(RecallModel).isRequired,
@@ -287,8 +273,10 @@ EditDisplay.propTypes = {
 };
 
 EditDisplay.defaultProps = {
-  isOpen: false,
+  patient: null,
   wasAllFetched: false,
+  isOpen: false,
+  accountViewer: null,
 };
 
 export default EditDisplay;

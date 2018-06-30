@@ -24,6 +24,14 @@ export default function CallEvent(props) {
 }
 
 CallEvent.propTypes = {
-  data: PropTypes.object,
-  callStyle: PropTypes.object,
+  data: PropTypes.shape({
+    duration: PropTypes.number,
+    callerCity: PropTypes.string,
+    startTime: PropTypes.string,
+  }).isRequired,
+  callStyle: PropTypes.string,
+};
+
+CallEvent.defaultProps = {
+  callStyle: '',
 };
