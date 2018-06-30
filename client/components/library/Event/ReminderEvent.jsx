@@ -6,7 +6,6 @@ import styles from './styles.scss';
 
 export default function ReminderEvent(props) {
   const { data, bodyStyle } = props;
-  console.log(data);
   return (
     <div className={bodyStyle}>
       <div className={styles.body_subHeader}>
@@ -18,6 +17,12 @@ export default function ReminderEvent(props) {
 }
 
 ReminderEvent.propTypes = {
-  data: PropTypes.object,
-  bodyStyle: PropTypes.object,
+  data: PropTypes.shape({
+    appointmentStartDate: PropTypes.string,
+  }).isRequired,
+  bodyStyle: PropTypes.string,
+};
+
+ReminderEvent.defaultProps = {
+  bodyStyle: '',
 };

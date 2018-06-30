@@ -9,12 +9,7 @@ import { createBrowserHistory } from 'history';
 import Popover from 'react-popover';
 import AppointmentInfo from './AppointmentInfo';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
-import {
-  appointmentShape,
-  patientShape,
-  practitionerShape,
-  chairShape,
-} from '../PropTypeShapes';
+import { appointmentShape, patientShape, practitionerShape, chairShape } from '../PropTypeShapes';
 import styles from './styles.scss';
 
 class AppointmentPopover extends Component {
@@ -31,9 +26,7 @@ class AppointmentPopover extends Component {
 
   componentDidMount() {
     if (this.props.scrollId) {
-      document
-        .getElementById(this.props.scrollId)
-        .addEventListener('scroll', this.closeOnScroll);
+      document.getElementById(this.props.scrollId).addEventListener('scroll', this.closeOnScroll);
     }
 
     window.addEventListener('scroll', this.closeOnScroll);
@@ -72,12 +65,7 @@ class AppointmentPopover extends Component {
 
   render() {
     const {
-      placement,
-      patient,
-      appointment,
-      children,
-      chair,
-      practitioner,
+      placement, patient, appointment, children, chair, practitioner,
     } = this.props;
 
     return (
@@ -98,10 +86,7 @@ class AppointmentPopover extends Component {
         tipSize={12}
         onOuterAction={() => this.setOpen(false)}
       >
-        <div
-          className={styles.appLink}
-          onDoubleClick={this.handleEditAppointment}
-        >
+        <div className={styles.appLink} onDoubleClick={this.handleEditAppointment}>
           {React.Children.map(children, patientLink =>
             React.cloneElement(patientLink, {
               onClick: () => this.setOpen(true),
@@ -150,10 +135,7 @@ AppointmentPopover.propTypes = {
   push: PropTypes.func.isRequired,
   selectAppointment: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
-  dashboardDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.string,
-  ]).isRequired,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   setScheduleDate: PropTypes.func.isRequired,
 };
 
@@ -164,7 +146,4 @@ AppointmentPopover.defaultProps = {
   scrollId: '',
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AppointmentPopover);
+export default connect(mapStateToProps, mapDispatchToProps)(AppointmentPopover);

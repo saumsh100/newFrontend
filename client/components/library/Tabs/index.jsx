@@ -75,12 +75,7 @@ class Tabs extends Component {
 
   render() {
     const {
-      children,
-      className,
-      contentClass,
-      navClass,
-      noHeaders,
-      fluid,
+      children, className, contentClass, navClass, noHeaders, fluid,
     } = this.props;
 
     const newProps = omit(this.props, [
@@ -88,6 +83,8 @@ class Tabs extends Component {
       'navClass',
       'contentClass',
       'noUnderLine',
+      'fluid',
+      'noHeaders',
     ]);
 
     const classes = classNames(className, styles.tabs);
@@ -119,6 +116,16 @@ Tabs.propTypes = {
   noHeaders: PropTypes.bool,
   noUnderLine: PropTypes.bool,
   fluid: PropTypes.bool,
+};
+
+Tabs.defaultProps = {
+  className: '',
+  contentClass: '',
+  navClass: '',
+  disabled: false,
+  noHeaders: false,
+  noUnderLine: false,
+  fluid: false,
 };
 
 export default Tabs;

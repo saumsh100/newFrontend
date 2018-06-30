@@ -22,7 +22,7 @@ const pathBuilder = (path = '') => `/widgets/:accountId/app${path}`;
  */
 const titleDiv = title => () => <div className={styles.title}>{title}</div>;
 
-function Title({ hasWaitList, history }) {
+function Title({ history }) {
   return (
     <Router history={history}>
       <Switch>
@@ -83,20 +83,13 @@ function Title({ hasWaitList, history }) {
           component={titleDiv('Additional Information')}
         />
         <Route exact path={pathBuilder('/book/review')} component={titleDiv('Review & Book')} />
-        <Route exact path={pathBuilder('/patient/add')} component={titleDiv('Add New Patient')} />
-        <Route path={pathBuilder('/patient/edit')} component={titleDiv('Edit Patient')} />
-        <Route
-          exact
-          path={pathBuilder('/book/wait')}
-          component={titleDiv(`${hasWaitList ? 'Edit' : 'Join'} Waitlist`)}
-        />
+        <Route exact path={pathBuilder('/book/complete')} component={titleDiv('Confirmation')} />
       </Switch>
     </Router>
   );
 }
 
 Title.propTypes = {
-  hasWaitList: PropTypes.bool.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
 };
 

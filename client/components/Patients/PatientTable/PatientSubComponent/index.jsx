@@ -3,17 +3,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Grid, Row, Col, Card, Loading } from '../../../library';
+import { Card } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
+import Event from '../../../../entities/models/Event';
+import { patientShape } from '../../../library/PropTypeShapes';
 import DataTable from './DataTable';
 import EventsTable from './EventsTable';
 import styles from './styles.scss';
 
 class PatientSubComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { patient } = this.props;
 
@@ -37,9 +35,7 @@ class PatientSubComponent extends Component {
         <div className={styles.content}>
           <div className={styles.dataTable}>
             <div className={styles.patientInfoHeader}> Patient Info </div>
-            <Card className={styles.card}>
-              {patient ? <DataTable patient={patient} /> : null}
-            </Card>
+            <Card className={styles.card}>{patient && <DataTable patient={patient} />}</Card>
           </div>
           <div className={styles.timeLineTable}>
             <div className={styles.timeLineHeader}> Timeline & Activities </div>
@@ -49,13 +45,9 @@ class PatientSubComponent extends Component {
               loaded={wasFetched}
               loaderStyle={styles.loaderStyle}
             >
-              {wasFetched ? (
-                <EventsTable
-                  wasFetched={wasFetched}
-                  events={events}
-                  patientId={patient.id}
-                />
-              ) : null}
+              {wasFetched && (
+                <EventsTable wasFetched={wasFetched} events={events} patientId={patient.id} />
+              )}
             </Card>
           </div>
         </div>
@@ -63,13 +55,6 @@ class PatientSubComponent extends Component {
     );
   }
 }
-
-PatientSubComponent.propTypes = {
-  patient: PropTypes.object.isRequired,
-  events: PropTypes.object.isRequired,
-  wasFetched: PropTypes.bool.isRequired,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
-};
 
 function mapStateToProps({ entities, apiRequests }, { patient }) {
   const wasFetched = apiRequests.get('getPatientEvents')
@@ -96,9 +81,16 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+PatientSubComponent.propTypes = {
+  patient: PropTypes.shape(patientShape).isRequired,
+  events: PropTypes.arrayOf(PropTypes.instanceOf(Event)),
+  wasFetched: PropTypes.bool,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+};
 
-export default enhance(PatientSubComponent);
+PatientSubComponent.defaultProps = {
+  events: [],
+  wasFetched: false,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PatientSubComponent);

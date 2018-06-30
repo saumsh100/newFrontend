@@ -7,12 +7,7 @@ import styles from './styles.scss';
 
 export default function Card(props) {
   const {
-    children,
-    className,
-    noBorder,
-    runAnimation,
-    loaded,
-    loaderStyle,
+    children, className, noBorder, runAnimation, loaded, loaderStyle,
   } = props;
 
   let classes = classNames(className, styles.card);
@@ -22,13 +17,7 @@ export default function Card(props) {
     classes = classNames(classes, styles.noBorder);
   }
 
-  const newProps = omit(props, [
-    'noBorder',
-    'className',
-    'runAnimation',
-    'loaded',
-    'loaderStyle',
-  ]);
+  const newProps = omit(props, ['noBorder', 'className', 'runAnimation', 'loaded', 'loaderStyle']);
   return (
     // Order is important, classNames={classes} needs to override props.className
     <div {...newProps} className={classes}>
@@ -49,7 +38,7 @@ Card.propTypes = {
   className: PropTypes.string,
   children: PropTypes.node,
   runAnimation: PropTypes.bool,
-  loaded: PropTypes.bool,
+  loaded: PropTypes.oneOfType([PropTypes.bool, PropTypes.objectOf(PropTypes.any)]),
   loaderStyle: PropTypes.string,
 };
 

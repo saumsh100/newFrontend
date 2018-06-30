@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import moment from 'moment';
 import styles from './styles.scss';
 
@@ -19,6 +18,13 @@ export default function AppointmentEvent(props) {
 }
 
 AppointmentEvent.propTypes = {
-  data: PropTypes.object,
-  bodyStyle: PropTypes.object,
+  data: PropTypes.shape({
+    startDate: PropTypes.string,
+    note: PropTypes.string,
+  }).isRequired,
+  bodyStyle: PropTypes.string,
+};
+
+AppointmentEvent.defaultProps = {
+  bodyStyle: undefined,
 };

@@ -1,13 +1,15 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Map } from 'immutable';
 import { Card, Avatar, Icon, Grid, Row, Col } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
 import { formatPhoneNumber } from '../../../library/util/Formatters';
 import { isResponsive } from '../../../../util/hub';
+import { accountShape } from '../../../library/PropTypeShapes';
 import ActiveAccountModel from '../../../../entities/models/ActiveAccount';
 import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
@@ -38,10 +40,7 @@ export default function TopDisplay(props) {
     wasPatientFetched,
   } = props;
 
-  const age =
-    patient && patient.birthDate
-      ? moment().diff(patient.birthDate, 'years')
-      : '';
+  const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
 
   const production =
     wasStatsFetched && patientStats.get('productionCalendarYear')
@@ -53,8 +52,7 @@ export default function TopDisplay(props) {
     backgroundSize: '100%',
   };
 
-  const wasAllFetched =
-    wasStatsFetched && patient && accountsFetched && wasPatientFetched;
+  const wasAllFetched = wasStatsFetched && patient && accountsFetched && wasPatientFetched;
   const avatarSize = isResponsive() ? 'md' : 'xl';
 
   return (
@@ -73,18 +71,16 @@ export default function TopDisplay(props) {
                 <div className={styles.avatarContainer_data_name}>
                   {patient.getFullName()}, {age}
                 </div>
-                {patient.email ? (
+                {patient.email && (
                   <div className={styles.displayFlex}>
                     <span className={styles.avatarContainer_data_icon}>
                       {' '}
                       <Icon icon="envelope" />{' '}
                     </span>
-                    <div className={styles.avatarContainer_data_email}>
-                      {patient.email}
-                    </div>
+                    <div className={styles.avatarContainer_data_email}>{patient.email}</div>
                   </div>
-                ) : null}
-                {patient.mobilePhoneNumber ? (
+                )}
+                {patient.mobilePhoneNumber && (
                   <div className={styles.displayFlex}>
                     <span className={styles.avatarContainer_data_icon}>
                       {' '}
@@ -94,12 +90,10 @@ export default function TopDisplay(props) {
                       {formatPhoneNumber(patient.mobilePhoneNumber)}
                     </div>
                   </div>
-                ) : null}
+                )}
                 {!isResponsive() && (
                   <div className={styles.paddingStatus}>
-                    <div className={styles.avatarContainer_data_active}>
-                      {patient.status}
-                    </div>
+                    <div className={styles.avatarContainer_data_active}>{patient.status}</div>
                   </div>
                 )}
               </div>
@@ -117,10 +111,7 @@ export default function TopDisplay(props) {
                   />
                 </Col>
                 <Col xs={4}>
-                  <InfoDump
-                    label="INSURANCE INTERVAL"
-                    data={patient.insuranceInterval}
-                  />
+                  <InfoDump label="INSURANCE INTERVAL" data={patient.insuranceInterval} />
                 </Col>
                 <Col xs={4}>
                   <InfoDump label="INSURANCE" />
@@ -141,10 +132,7 @@ export default function TopDisplay(props) {
                   <InfoDump label="UNITS LEFT FOR COVERAGE" />
                 </Col>
                 <Col xs={4}>
-                  <InfoDump
-                    label="PRODUCTION IN CALENDAR YEAR"
-                    data={production}
-                  />
+                  <InfoDump label="PRODUCTION IN CALENDAR YEAR" data={production} />
                 </Col>
               </Row>
             </Grid>
@@ -156,11 +144,19 @@ export default function TopDisplay(props) {
 }
 
 TopDisplay.propTypes = {
-  wasFetched: PropTypes.bool,
   wasStatsFetched: PropTypes.bool,
-  patientStats: PropTypes.instanceOf(Object),
+  patientStats: PropTypes.instanceOf(Map),
   accountsFetched: PropTypes.bool,
-  activeAccount: PropTypes.instanceOf(ActiveAccountModel),
+  activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   wasPatientFetched: PropTypes.bool,
+  patient: PropTypes.oneOfType([PropTypes.instanceOf(PatientModel), PropTypes.func]),
+};
+
+TopDisplay.defaultProps = {
+  wasStatsFetched: false,
+  accountsFetched: false,
+  wasPatientFetched: false,
+  patientStats: null,
+  activeAccount: PropTypes.instanceOf(ActiveAccountModel),
   patient: PropTypes.instanceOf(PatientModel),
 };

@@ -54,10 +54,10 @@ function getFloorDate(date) {
     .toISOString();
 }
 
+let selectedStartDate = moment()
+  .add(1, 'hours')
+  .toISOString();
 export const createInitialWidgetState = (state) => {
-  let selectedStartDate = moment()
-    .add(1, 'hours')
-    .toISOString();
   if (state) {
     selectedStartDate = getStartTimeForToday(state.account);
   }
@@ -65,68 +65,66 @@ export const createInitialWidgetState = (state) => {
   const floorDate = getFloorDate(selectedStartDate);
 
   // selectedStartDate = timezone ?
-  return fromJS(
-    Object.assign(
-      {
-        account: null,
-        officeHours: null,
-        practitioners: [],
-        services: [],
-        availabilities: [],
-        nextAvailability: null,
-        patientUser: null,
-        isFetching: true,
-        isBooking: true,
-        familyPatientUser: null,
-        insuranceCarrier: 'Pay for myself',
-        insuranceMemberId: '',
-        isConfirming: false,
-        isLogin: false,
-        forgotPassword: false,
-        initialForm: {},
-        isTimerExpired: false,
-        isSuccessfulBooking: false,
-        hasWaitList: false,
-        waitlist: {
-          dates: [],
-          unavailableDates: [],
-          times: [],
-        },
-        waitSpot: {
-          preferences: {
-            mornings: true,
-            afternoons: true,
-            evenings: true,
-          },
-
-          daysOfTheWeek: {
-            sunday: false,
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-          },
-
-          unavailableDays: [],
-        },
-
-        selectedAvailability: null,
-        confirmedAvailability: false,
-        selectedServiceId: null, // Will be set by the initialState from server
-        selectedPractitionerId: '',
-        selectedStartDate,
-        registrationStep: 1,
-        reservationId: null,
-        notes: null,
-        sentRecallId: null,
-        dueDate: null,
-        floorDate,
+  return fromJS(Object.assign(
+    {
+      account: null,
+      officeHours: null,
+      practitioners: [],
+      services: [],
+      availabilities: [],
+      nextAvailability: null,
+      patientUser: null,
+      isFetching: true,
+      isBooking: true,
+      familyPatientUser: null,
+      insuranceCarrier: 'Pay for myself',
+      insuranceMemberId: '',
+      isConfirming: false,
+      isLogin: false,
+      forgotPassword: false,
+      initialForm: {},
+      isTimerExpired: false,
+      isSuccessfulBooking: false,
+      hasWaitList: false,
+      waitlist: {
+        dates: [],
+        unavailableDates: [],
+        times: [],
       },
-      state
-    )
-  );
+      waitSpot: {
+        preferences: {
+          mornings: true,
+          afternoons: true,
+          evenings: true,
+        },
+
+        daysOfTheWeek: {
+          sunday: false,
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false,
+          friday: false,
+          saturday: false,
+        },
+
+        unavailableDays: [],
+      },
+
+      selectedAvailability: null,
+      confirmedAvailability: false,
+      selectedServiceId: null, // Will be set by the initialState from server
+      selectedPractitionerId: '',
+      selectedStartDate,
+      registrationStep: 1,
+      reservationId: null,
+      notes: null,
+      sentRecallId: null,
+      dueDate: null,
+      floorDate,
+    },
+    state,
+  ));
 };
 
 export default handleActions(
@@ -149,8 +147,8 @@ export default handleActions(
         insuranceCarrier: 'Pay for myself',
         insuranceMemberId: '',
         familyPatientUser: null,
-        // selectedServiceId: null, // Will be set by the initialState from server
-        // selectedPractitionerId: '',
+        selectedPractitionerId: '',
+        selectedStartDate,
         notes: null,
         hasWaitList: false,
         waitlist: {
@@ -327,7 +325,9 @@ export default handleActions(
     },
 
     [SET_CLINIC_INFO](state, action) {
-      const { address, logo, clinicName, bookingWidgetPrimaryColor } = action.payload;
+      const {
+        address, logo, clinicName, bookingWidgetPrimaryColor,
+      } = action.payload;
       return state.merge({
         logo,
         address,
@@ -367,5 +367,5 @@ export default handleActions(
       return newState;
     },
   },
-  createInitialWidgetState()
+  createInitialWidgetState(),
 );

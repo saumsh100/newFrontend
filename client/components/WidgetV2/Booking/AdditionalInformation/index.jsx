@@ -70,9 +70,14 @@ function mapDispatchToProps(dispatch) {
     dispatch,
   );
 }
+function mapStateToProps({ availabilities }) {
+  return {
+    notes: availabilities.get('notes'),
+  };
+}
 
 export default withRouter(connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(AdditionalInformation));
 

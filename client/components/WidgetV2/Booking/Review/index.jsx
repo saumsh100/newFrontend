@@ -17,6 +17,7 @@ import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursSha
 import { capitalizeFirstLetter } from '../../../Utils';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
+import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
 import styles from './styles.scss';
 
 function Review({
@@ -80,7 +81,7 @@ function Review({
       ...(hasWaitList ? [props.createWaitSpot()] : []),
     ];
     return Promise.all(creationPromises)
-      .then(data => console.log('data', data))
+      .then(() => history.push('./complete'))
       .catch(err => console.error('Creating request failed', err));
   };
 
@@ -138,67 +139,67 @@ function Review({
      * It shows the days that are on the unavailableDates list.
      */
     return waitlist.unavailableDates
-      .sort((a, b) => (a < b ? -1 : 1))
+      .sort(sortAsc)
       .map(value => dateFormatter(value, 'MMM Do'))
       .join(', ');
   };
 
   /**
-   * Display a linear list of times that were selected from the user on the waitlist's steps.
+   * Checks if the passed array contains the
+   * specified string.
+   *
+   * @param {array} data
+   * @param {string} startDate
    */
-  const waitlistTimes = () => {
-    if (waitlist.times.length === 0) {
-      return null;
+  const checkIfItContains = (data, startDate) => data.includes(startDate);
+
+  /**
+   * With the provided array of strings,
+   * build the text tha will be displayed on the Review's page.
+   *
+   * @param {array} selected
+   */
+  const handleAvailabilitiesTimes = selected => (acc, value) => {
+    if (value === 'total') {
+      return acc;
+    }
+    /**
+     * Displays 'All day (starTime - endTime)'
+     */
+    if (availabilities.total === selected.length) {
+      return `All day (${dateFormatter(selected[0])} - ${dateFormatter(selected[selected.length - 1])})`;
+    }
+    const timeframe = availabilities[value];
+    const checkIfIsAllDay = timeframe.every(({ startDate }) =>
+      checkIfItContains(selected, startDate));
+    if (timeframe.length > 0 && checkIfIsAllDay) {
+      /**
+       * Displays 'Timeframe (starTime - endTime)'
+       */
+      const timeFrame = capitalizeFirstLetter(value);
+      const startTimeOnTimeFrame = dateFormatter(timeframe[0].startDate);
+      const endTimeOnTimeFrame = dateFormatter(timeframe[timeframe.length - 1].startDate);
+      acc += ` ${timeFrame} (${startTimeOnTimeFrame} - ${endTimeOnTimeFrame}), `;
+    } else {
+      /**
+       * Displays an inline list of
+       */
+      acc += ` ${timeframe
+        .filter(({ startDate }) => checkIfItContains(selected, startDate))
+        .map(el => dateFormatter(el.startDate))
+        .join(', ')}, `;
     }
 
-    /**
-     * Checks if the passed array contains the
-     * specified string.
-     *
-     * @param {array} data
-     * @param {string} startDate
-     */
-    const checkIfItContains = (data, startDate) => data.includes(startDate);
-
-    /**
-     * With the provided array of strings,
-     * build the text tha will be displayed on the Review's page.
-     *
-     * @param {array} selected
-     */
-    const handleAvailabilitiesTimes = selected => (acc, value) => {
-      /**
-       * Displays 'All day (starTime - endTime)'
-       */
-      if (availabilities.total === selected.length) {
-        return `All day (${dateFormatter(selected[0])} - ${dateFormatter(selected[selected.length - 1])})`;
-      }
-      const timeframe = availabilities[value];
-      const checkIfIsAllDay = timeframe.every(({ startDate }) =>
-        checkIfItContains(selected, startDate));
-      if (timeframe.length > 0 && checkIfIsAllDay) {
-        /**
-         * Displays 'Timeframe (starTime - endTime)'
-         */
-        const timeFrame = capitalizeFirstLetter(value);
-        const startTimeOnTimeFrame = dateFormatter(timeframe[0].startDate);
-        const endTimeOnTimeFrame = dateFormatter(timeframe[timeframe.length - 1].startDate);
-        acc += ` ${timeFrame} (${startTimeOnTimeFrame} - ${endTimeOnTimeFrame}), `;
-      } else {
-        /**
-         * Displays an inline list of
-         */
-        acc += ` ${timeframe
-          .filter(({ startDate }) => checkIfItContains(selected, startDate))
-          .map(el => dateFormatter(el.startDate))
-          .join(', ')}, `;
-      }
-
-      return acc.slice(0, -2);
-    };
-
-    return Object.keys(availabilities).reduce(handleAvailabilitiesTimes(waitlist.times), '');
+    return acc.slice(0, -2);
   };
+
+  /**
+   * Display a linear list of times that were selected from the user on the waitlist's steps.
+   */
+  const waitlistTimes = () =>
+    waitlist.times.length > 0 &&
+    Object.keys(availabilities).reduce(handleAvailabilitiesTimes(waitlist.times), '');
+
   /**
    * Check if the user is on the Review's route
    * or just on the summary tab.

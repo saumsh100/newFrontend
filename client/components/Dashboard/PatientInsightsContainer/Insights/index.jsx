@@ -7,7 +7,9 @@ import styles from './styles.scss';
 import { SortByStartDate } from '../../../library/util/SortEntities';
 
 export default function Insights(props) {
-  const { insights, patients, appointments } = props;
+  const {
+    insights, patients, appointments, timezone,
+  } = props;
 
   const sortedInsights = insights
     .filter(insightData => patients.get(insightData.patientId))
@@ -28,6 +30,7 @@ export default function Insights(props) {
         appointment={appointments.get(insightData.appointmentId)}
         insightData={insightData}
         scrollId={scrollId}
+        timezone={timezone}
         index={index}
       />
     );
@@ -44,6 +47,7 @@ Insights.propTypes = {
   insights: PropTypes.instanceOf(Array),
   appointments: PropTypes.instanceOf(Map),
   patients: PropTypes.instanceOf(Map),
+  timezone: PropTypes.string.isRequired,
 };
 
 Insights.defaultProps = {

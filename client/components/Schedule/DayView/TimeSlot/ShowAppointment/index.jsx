@@ -35,9 +35,7 @@ class ShowAppointment extends Component {
 
   componentDidMount() {
     // This prevents setState to be called indefinitely
-    if (
-      this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth
-    ) {
+    if (this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth) {
       this.setState({
         nameContainerOffsetWidth: this.nameContainer.offsetWidth,
       });
@@ -78,11 +76,7 @@ class ShowAppointment extends Component {
       endDate,
     } = this.props;
 
-    const {
-      isOpened,
-      nameContainerOffsetWidth,
-      nameContainerOffset,
-    } = this.state;
+    const { isOpened, nameContainerOffsetWidth, nameContainerOffset } = this.state;
 
     appStyle.boxShadow = isOpened
       ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)'
@@ -92,8 +86,7 @@ class ShowAppointment extends Component {
     const canShowAppointmentBelow = () => heightCalc >= displayDurationHeight;
 
     const canInlineAppointment = () =>
-      !canShowAppointmentBelow() &&
-      nameContainerOffsetWidth >= nameContainerOffset;
+      !canShowAppointmentBelow() && nameContainerOffsetWidth >= nameContainerOffset;
 
     return (
       <Popover
@@ -141,11 +134,7 @@ class ShowAppointment extends Component {
               </div>
 
               {canInlineAppointment() && (
-                <AppointmentHours
-                  startDate={startDate}
-                  endDate={endDate}
-                  inline
-                />
+                <AppointmentHours startDate={startDate} endDate={endDate} inline />
               )}
             </div>
 

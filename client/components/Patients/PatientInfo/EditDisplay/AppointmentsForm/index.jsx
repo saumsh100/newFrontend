@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { isResponsive } from '../../../../../util/hub';
+import PatientModel from '../../../../../entities/models/Patient';
 import styles from '../styles.scss';
 
 export default function AppointmentsForm(props) {
@@ -33,12 +34,7 @@ export default function AppointmentsForm(props) {
         <div className={styles.formHeader}>Last Appointment</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field
-              name="lastRecallDate"
-              label="Recall"
-              component="DayPicker"
-              theme={inputStyle}
-            />
+            <Field name="lastRecallDate" label="Recall" component="DayPicker" theme={inputStyle} />
           </Col>
           <Col xs={6}>
             <Field
@@ -75,7 +71,11 @@ export default function AppointmentsForm(props) {
 
 AppointmentsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  dropDownStyle: PropTypes.string,
-  inputStyle: PropTypes.string,
-  patient: PropTypes.instanceOf(Object),
+  inputStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
+  patient: PropTypes.instanceOf(PatientModel),
+};
+
+AppointmentsForm.defaultProps = {
+  patient: null,
+  inputStyle: '',
 };

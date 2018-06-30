@@ -3,14 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
-import {
-  usStates,
-  caProv,
-} from '../../../../Settings/Practice/General/Address/selectConstants';
-import styles from '../styles.scss';
+import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
 import { asyncValidateNewPatient } from '../../../../library/Form/validate';
 import { isResponsive } from '../../../../../util/hub';
 import PatientModel from '../../../../../entities/models/Patient';
+import styles from '../styles.scss';
 
 const normalizeBirthdate = value => value.trim();
 
@@ -34,9 +31,7 @@ const validateZipcodePostal = (value, country) => {
   const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
 
   if (country === 'US') {
-    return value && /^\d{5}(-\d{4})?$/.test(value)
-      ? undefined
-      : 'This is not a valid zip code.';
+    return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'This is not a valid zip code.';
   } else if (!regex.test(value)) {
     return 'This is not a valid postal code.';
   }
@@ -171,28 +166,13 @@ export default function PersonalForm(props) {
         <div className={styles.formHeader}> Contact </div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field
-              name="homePhoneNumber"
-              type="tel"
-              label="Home Number"
-              theme={theme}
-            />
+            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={theme} />
           </Col>
           <Col xs={6}>
-            <Field
-              name="mobilePhoneNumber"
-              type="tel"
-              label="Mobile Number"
-              theme={theme}
-            />
+            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={theme} />
           </Col>
           <Col xs={6} className={styles.colLeft}>
-            <Field
-              name="workPhoneNumber"
-              type="tel"
-              label="Work Number"
-              theme={theme}
-            />
+            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={theme} />
           </Col>
           <Col xs={6}>
             <Field name="email" label="Email" theme={theme} />
@@ -208,6 +188,13 @@ PersonalForm.propTypes = {
   patient: PropTypes.instanceOf(PatientModel),
   country: PropTypes.string,
   setCountry: PropTypes.func.isRequired,
-  inputStyle: PropTypes.string,
-  dropDownStyle: PropTypes.string,
+  inputStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
+  dropDownStyle: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
+};
+
+PersonalForm.defaultProps = {
+  patient: null,
+  country: '',
+  inputStyle: '',
+  dropDownStyle: '',
 };

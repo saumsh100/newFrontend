@@ -1,4 +1,3 @@
-
 import uniqBy from 'lodash/uniqBy';
 import moment from 'moment';
 import { Patient, Appointment, Family, SentReminder } from '../../_models';
@@ -17,15 +16,18 @@ export async function allInsights(accountId, startDate, endDate) {
     const patients = await Patient.findAll({
       where: {
         accountId,
-        $or: [{
-          birthDate: {
-            $eq: null,
+        $or: [
+          {
+            birthDate: {
+              $eq: null,
+            },
           },
-        }, {
-          birthDate: {
-            $lte: moment().subtract(16, 'years'),
+          {
+            birthDate: {
+              $lte: moment().subtract(16, 'years'),
+            },
           },
-        }],
+        ],
       },
       include: [
         appointmentsQuery(accountId, startDate, endDate),
@@ -46,8 +48,7 @@ export async function allInsights(accountId, startDate, endDate) {
       ],
     });
 
-    const filterNonFamilyHeads = patients.filter(p =>
-      p.family.id === null || p.pmsId === p.family.headId);
+    const filterNonFamilyHeads = patients.filter(p => p.family.id === null || p.pmsId === p.family.headId);
 
     return await generateInsights(filterNonFamilyHeads, startDate);
   } catch (err) {
@@ -98,7 +99,6 @@ async function generateInsights(patients, startDate) {
         familyId = data.id;
         familiesDueRecare.push(data);
       }
-
       i += 1;
     }
 
@@ -155,20 +155,23 @@ function generateEmailInsight() {
  * @return [Object] Confirm Appointment Insight
  */
 async function generateConfirmApptInsight(patient, appointment, startDate) {
-  const phoneNumber = patient.mobilePhoneNumber
-    || patient.workPhoneNumber
-    || patient.homePhoneNumber;
+  const phoneNumber =
+    patient.mobilePhoneNumber || patient.workPhoneNumber || patient.homePhoneNumber;
 
-  const confirmAttempts = (patient.mobilePhoneNumber && patient.email) && await checkConfirmAttempts(appointment.id);
+  const confirmAttempts =
+    patient.mobilePhoneNumber && patient.email && (await checkConfirmAttempts(appointment.id));
 
   if (confirmAttempts) {
     confirmAttempts.phoneNumber = phoneNumber;
   }
 
-  return (moment(startDate).isAfter(new Date()) && (phoneNumber || patient.email)) && {
-    type: 'confirmAttempts',
-    value: confirmAttempts || { phoneNumber },
-  };
+  return (
+    moment(startDate).isAfter(new Date()) &&
+    (phoneNumber || patient.email) && {
+      type: 'confirmAttempts',
+      value: confirmAttempts || { phoneNumber },
+    }
+  );
 }
 
 /**
@@ -179,21 +182,39 @@ async function generateConfirmApptInsight(patient, appointment, startDate) {
  * @return {[object]} [patient Model with recareDate]
  */
 function familyRecare(patientId, family, familyMemberId) {
-  if (family.id === null || family.patients.id === null
-    || family.patients.id === patientId || familyMemberId === family.patients.id) {
+  if (
+    family.id === null ||
+    family.patients.id === null ||
+    family.patients.id === patientId ||
+    familyMemberId === family.patients.id
+  ) {
     return null;
   }
 
   const patient = family.patients;
 
-  if (patient.dueForHygieneDate < patient.dueForRecallExamDate || !patient.dueForRecallExamDate) {
-    patient.dateDue = patient.dueForHygieneDate;
+  const { dueForHygieneDate, dueForRecallExamDate } = patient;
+
+  if (!dueForHygieneDate && !dueForRecallExamDate) {
+    return null;
+  }
+
+  if (dueForHygieneDate && dueForRecallExamDate) {
+    patient.dateDue = comparePatientDateDue(dueForHygieneDate, dueForRecallExamDate);
+  } else if (!dueForRecallExamDate) {
+    patient.dateDue = dueForHygieneDate;
   } else {
-    patient.dateDue = patient.dueForRecallExamDate;
+    patient.dateDue = dueForRecallExamDate;
   }
 
   return patient;
 }
+
+/**
+ * compares a patients due dates for hygiene and recall exams.
+ */
+const comparePatientDateDue = (dueForHygieneDate, dueForRecallExamDate) =>
+  (dueForHygieneDate < dueForRecallExamDate ? dueForHygieneDate : dueForRecallExamDate);
 
 /**
  * [checkConfirmAttempts checks how many attempts CareCru tried for a Appointment Confirmation]
@@ -263,34 +284,30 @@ function familyQuery(accountId, startDate) {
     where: {
       accountId,
     },
-    include: [{
-      model: Patient,
-      as: 'patients',
-      where: {
-        accountId,
-        $or: {
-          dueForHygieneDate: {
-            $lt: new Date(startDate).toISOString(),
-            $ne: null,
+    include: [
+      {
+        model: Patient,
+        as: 'patients',
+        where: {
+          accountId,
+          $or: {
+            dueForHygieneDate: {
+              $lt: new Date(startDate).toISOString(),
+              $ne: null,
+            },
+            dueForRecallExamDate: {
+              $lt: new Date(startDate).toISOString(),
+              $ne: null,
+            },
           },
-          dueForRecallExamDate: {
-            $lt: new Date(startDate).toISOString(),
-            $ne: null,
-          },
+          nextApptDate: null,
+          status: 'Active',
         },
-        nextApptDate: null,
-        status: 'Active',
+        required: false,
+        attributes: ['id', 'dueForRecallExamDate', 'dueForHygieneDate', 'firstName', 'lastName'],
       },
-      required: false,
-      attributes: [
-        'id',
-        'dueForRecallExamDate',
-        'dueForHygieneDate',
-        'firstName',
-        'lastName'],
-    }],
+    ],
     required: false,
     attributes: ['id', 'headId'],
   };
 }
-

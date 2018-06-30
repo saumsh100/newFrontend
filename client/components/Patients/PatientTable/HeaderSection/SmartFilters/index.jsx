@@ -1,12 +1,11 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from '../../../../library';
 import styles from './styles.scss';
 
 export default function SmartFilters(props) {
   const { setSmartFilter, smartFilter } = props;
-
   const smartFilters = [
     {
       index: -1,
@@ -94,6 +93,7 @@ export default function SmartFilters(props) {
             onClick={() => setSmartFilter(filter)}
             style={borderStyle}
             data-test-id={`option_${index}`}
+            key={`smartFilter_${filter.label}`}
           >
             {filter.label}
           </ListItem>
@@ -105,5 +105,14 @@ export default function SmartFilters(props) {
 
 SmartFilters.propTypes = {
   setSmartFilter: PropTypes.func.isRequired,
-  smartFilter: PropTypes.object,
+  smartFilter: PropTypes.shape({
+    index: PropTypes.number,
+    label: PropTypes.string,
+    startMonth: PropTypes.number,
+    endMonth: PropTypes.number,
+  }),
+};
+
+SmartFilters.defaultProps = {
+  smartFilter: {},
 };
