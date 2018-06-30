@@ -63,9 +63,7 @@ class SettingsForm extends Component {
         () => {
           const settingFieldName = this.getSettingType(setting);
 
-          const settingNextState =
-            this.state[setting].length !==
-            this.props[settingFieldName].toArray().length;
+          const settingNextState = this.state[setting].length !== this.props[settingFieldName].size;
 
           // check if all child toggles are on/off and updates the parent accordingly
           if (this.props[`${settingFieldName}Field`] !== settingNextState) {
@@ -150,9 +148,7 @@ class SettingsForm extends Component {
             <Row className={styles.row}>
               <Col xs={12} className={styles.colToggle}>
                 <div className={styles.toggleContainer}>
-                  <div className={styles.toggleContainer_label}>
-                    Special/Holiday Messages
-                  </div>
+                  <div className={styles.toggleContainer_label}>Special/Holiday Messages</div>
                   <div className={styles.toggleContainer_toggle}>
                     <Field component="Toggle" name="birthdayMessage" />
                   </div>
@@ -171,18 +167,13 @@ class SettingsForm extends Component {
             <Row className={styles.row}>
               <Col xs={12} className={styles.colToggle}>
                 <div className={styles.toggleContainer}>
-                  <div className={styles.toggleContainer_label}>
-                    Appointment Reminders
-                  </div>
+                  <div className={styles.toggleContainer_label}>Appointment Reminders</div>
                   <div className={styles.toggleContainer_toggle}>
                     <Field component="Toggle" name="reminders" />
                   </div>
                 </div>
               </Col>
-              <Col
-                xs={12}
-                className={classNames(styles.colToggle, styles.omitFormWrapper)}
-              >
+              <Col xs={12} className={classNames(styles.colToggle, styles.omitFormWrapper)}>
                 <OmitForm
                   formName={`omitReminderIds_${patient.id}`}
                   value={omitReminderIds}
@@ -203,18 +194,13 @@ class SettingsForm extends Component {
               </Col>
               <Col xs={12} className={styles.colToggle}>
                 <div className={styles.toggleContainer}>
-                  <div className={styles.toggleContainer_label}>
-                    Patient Recalls
-                  </div>
+                  <div className={styles.toggleContainer_label}>Patient Recalls</div>
                   <div className={styles.toggleContainer_toggle}>
                     <Field component="Toggle" name="recalls" />
                   </div>
                 </div>
               </Col>
-              <Col
-                xs={12}
-                className={classNames(styles.colToggle, styles.omitFormWrapper)}
-              >
+              <Col xs={12} className={classNames(styles.colToggle, styles.omitFormWrapper)}>
                 <OmitForm
                   formName={`omitRecallIds_${patient.id}`}
                   value={omitRecallIds}
@@ -239,9 +225,7 @@ class SettingsForm extends Component {
               </Col>
               <Col xs={12} className={styles.colToggle}>
                 <div className={styles.toggleContainer}>
-                  <div className={styles.toggleContainer_label}>
-                    Review Requests
-                  </div>
+                  <div className={styles.toggleContainer_label}>Review Requests</div>
                   <div className={styles.toggleContainer_toggle}>
                     <Field component="Toggle" name="reviews" />
                   </div>
@@ -249,9 +233,7 @@ class SettingsForm extends Component {
               </Col>
               <Col xs={12} className={styles.colToggle}>
                 <div className={styles.toggleContainer}>
-                  <div className={styles.toggleContainer_label}>
-                    Referral Requests
-                  </div>
+                  <div className={styles.toggleContainer_label}>Referral Requests</div>
                   <div className={styles.toggleContainer_toggle}>
                     <Field component="Toggle" name="referrals" />
                   </div>
@@ -311,18 +293,12 @@ SettingsForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   patient: PropTypes.shape({
     preferences: PropTypes.objectOf(PropTypes.bool),
-    omitReminderIds: PropTypes.objectOf(PropTypes.bool),
-    omitRecallIds: PropTypes.objectOf(PropTypes.bool),
+    omitReminderIds: PropTypes.arrayOf(PropTypes.bool),
+    omitRecallIds: PropTypes.arrayOf(PropTypes.bool),
   }).isRequired,
   reminders: PropTypes.objectOf(RecallModel).isRequired,
   recalls: PropTypes.objectOf(ReminderModel).isRequired,
   change: PropTypes.func.isRequired,
-  // Those props are not being called by their name so they throw this lint error
-  remindersField: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
-  recallsField: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SettingsForm);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsForm);

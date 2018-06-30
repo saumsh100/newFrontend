@@ -1,4 +1,3 @@
-
 describe('Schedule Tests', () => {
   beforeEach(() => {
     cy.login();
@@ -6,8 +5,7 @@ describe('Schedule Tests', () => {
   });
 
   it('add an appointment to the schedule', () => {
-    cy
-      .getAndClick('button_appointmentQuickAdd')
+    cy.getAndClick('button_appointmentQuickAdd')
       .get('[data-test-id="createAppointmentForm"]')
       .find('[data-test-id="chairId"]')
       .click({ force: true })
@@ -34,8 +32,7 @@ describe('Schedule Tests', () => {
   });
 
   it('update an appointment', () => {
-    cy
-      .get('[data-test-id="appointment_TestyTesterson"]')
+    cy.get('[data-test-id="appointment_TestyTesterson"]')
       .click()
       .get('[data-test-id="button_editAppointment"]')
       .click()
@@ -49,8 +46,7 @@ describe('Schedule Tests', () => {
   });
 
   it('add patient to waitlist', () => {
-    cy
-      .getAndClick('button_headerWaitlist')
+    cy.getAndClick('button_headerWaitlist')
       .getAndClick('button_addToWaitlist')
       .get('[data-test-id="Add to Waitlist Form"]')
       .find('[data-test-id="patientData"]')
@@ -68,8 +64,7 @@ describe('Schedule Tests', () => {
   });
 
   it('load appointments from the previous day', () => {
-    cy
-      .getAndClick('button_previousDay')
+    cy.getAndClick('button_previousDay')
       .get('[data-test-id="appointment_TestyTesterson"]')
       .should('exist');
   });

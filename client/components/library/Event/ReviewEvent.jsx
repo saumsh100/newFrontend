@@ -15,6 +15,12 @@ export default function ReviewEvent(props) {
 }
 
 ReviewEvent.propTypes = {
-  data: PropTypes.object,
-  bodyStyle: PropTypes.object,
+  data: PropTypes.shape({
+    description: PropTypes.string,
+  }).isRequired,
+  bodyStyle: PropTypes.string,
+};
+
+ReviewEvent.defaultProps = {
+  bodyStyle: undefined,
 };

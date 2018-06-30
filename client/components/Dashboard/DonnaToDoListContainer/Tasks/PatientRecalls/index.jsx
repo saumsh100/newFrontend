@@ -1,17 +1,17 @@
 
 import React from 'react';
+import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import orderBy from 'lodash/orderBy';
 import { List, ListItem, Avatar } from '../../../../library';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 import styles2 from '../styles.scss';
 
-export default function PatientRecalls({ recalls }) {
+export default function PatientRecalls({ recalls, timezone }) {
   return (
     <List className={styles.list}>
-      {orderBy(recalls, 'sendDate').map((r, index) => {
+      {orderBy(recalls, 'sendDate').map((r) => {
         const {
  patient, primaryTypes, recall, sendDate,
 } = r;
@@ -25,29 +25,24 @@ export default function PatientRecalls({ recalls }) {
         }
 
         return (
-          <ListItem
-            className={styles.listItem}
-            key={`donnaToDoRecalls_${r.id || index}`}
-          >
+          <ListItem className={styles.listItem} key={`donnaToDoRecalls_${patient.id}`}>
             <div className={styles2.avatar}>
               <Avatar size="sm" user={patient} />
             </div>
             <div className={styles2.mediumCol}>{type}</div>
             <div className={styles2.smallCol}>{primaryTypes.join(' & ')}</div>
-            <div className={styles2.smallCol}>
-              {moment(sendDate).format('h:mm A')}
-            </div>
+            <div className={styles2.smallCol}>{moment.tz(sendDate, timezone).format('h:mm A')}</div>
             <div className={styles2.col}>
               {patient.firstName} {patient.lastName}
             </div>
             <div className={styles2.col}>
               {dueForHygieneDate
-                ? moment(dueForHygieneDate).format('MMM Do, YYYY')
+                ? moment.tz(dueForHygieneDate, timezone).format('MMM Do, YYYY')
                 : 'n/a'}
             </div>
             <div className={styles2.col}>
               {dueForRecallExamDate
-                ? moment(dueForRecallExamDate).format('MMM Do, YYYY')
+                ? moment.tz(dueForRecallExamDate, timezone).format('MMM Do, YYYY')
                 : 'n/a'}
             </div>
           </ListItem>
@@ -64,6 +59,7 @@ PatientRecalls.propTypes = {
     recall: PropTypes.shape(),
     sendDate: PropTypes.string,
   })),
+  timezone: PropTypes.string.isRequired,
 };
 
 PatientRecalls.defaultProps = {

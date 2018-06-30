@@ -41,6 +41,7 @@
     "node": true
   },
   "globals": {
-    "cy": true
+    "cy": true,
+    "expect": true
   }
 }

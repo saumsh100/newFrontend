@@ -7,18 +7,17 @@ import FamilyMember from '../../../Shared/FamilyMember';
 const FamilyTab = ({ family }) => (
   <Family
     family={family}
-    render={familyMembers =>
-      familyMembers.map(familyMember => <FamilyMember {...familyMember} />)
-    }
+    render={familyMembers => familyMembers.map(familyMember => <FamilyMember {...familyMember} />)}
   />
 );
 
 FamilyTab.propTypes = {
   family: PropTypes.shape({
-    members: {
-      edges: PropTypes.array,
-    },
-  }),
+    id: PropTypes.string,
+    head: PropTypes.shape({
+      accountId: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default FamilyTab;

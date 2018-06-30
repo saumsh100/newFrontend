@@ -128,13 +128,13 @@ function mapStateToProps({ apiRequests }) {
 RevenueContainer.propTypes = {
   fetchEntitiesRequest: PropTypes.func.isRequired,
   dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
-  revenueData: PropTypes.instanceOf(Map),
+  revenueData: PropTypes.oneOfType([PropTypes.func, PropTypes.instanceOf(Map)]),
   wasRevenueFetched: PropTypes.bool,
 };
 
 RevenueContainer.defaultProps = {
   wasRevenueFetched: false,
-  revenueData: Map,
+  revenueData: new Map(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RevenueContainer);

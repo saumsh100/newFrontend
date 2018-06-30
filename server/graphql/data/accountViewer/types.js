@@ -5,6 +5,7 @@ import { nodeInterface, AccountViewer } from '../types';
 import { patientQuery } from '../patients';
 import { familyQuery } from '../families';
 import { patientSearchesQuery } from '../patientSearches';
+import { waitSpotQuery } from '../waitSpots';
 
 // Filter the acountId based on the context sessionData
 const accountIdFilter = {
@@ -35,6 +36,7 @@ const accountViewerType = new GraphQLObjectType({
     ...patientQuery(accountIdFilter),
     ...familyQuery(accountIdFilter),
     ...patientSearchesQuery(accountIdFilter),
+    ...waitSpotQuery(accountIdFilter),
   }),
 });
 

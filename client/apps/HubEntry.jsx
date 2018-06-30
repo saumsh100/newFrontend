@@ -32,6 +32,7 @@ import {
   REQUEST_ZOOM_FACTOR,
 } from '../constants';
 import { electron, webFrame } from '../util/ipc';
+import SubscriptionManager from '../util/graphqlSubscriptions';
 
 // Binds the token setting in header
 bindAxiosInterceptors();
@@ -94,6 +95,7 @@ load()(store.dispatch).then(() => {
       }/sessions?u=${userId}`,
     });
 
+    SubscriptionManager.accountId = auth.get('accountId');
     store.dispatch(loadUnreadMessages());
     store.dispatch(loadOnlineRequest());
     DesktopNotification.requestPermission();

@@ -1,7 +1,8 @@
 
 import axios from 'axios';
 import LogRocket from 'logrocket';
-import { loginSuccess, logout as authLogout, setResetEmail } from '../actions/auth';
+import { loginSuccess, logout as authLogout } from '../reducers/auth';
+import { setResetEmail } from '../actions/auth';
 import PatientUser from '../entities/models/PatientUser';
 
 const Token = {

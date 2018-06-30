@@ -21,6 +21,7 @@ class Collapsible extends Component {
 
   render() {
     const {
+      hasIcon,
       children,
       title,
       openIcon,
@@ -40,14 +41,10 @@ class Collapsible extends Component {
       ? classname(wrapperClass, styles.collapibleContainer)
       : styles.collapibleContainer;
 
-    const titleStyle = titleClass
-      ? classname(titleClass, styles.title)
-      : styles.title;
+    const titleStyle = titleClass ? classname(titleClass, styles.title) : styles.title;
 
     const titleStyleWithStatus =
-      activeClass && this.state.isExpanded
-        ? classname(titleStyle, activeClass)
-        : titleStyle;
+      activeClass && this.state.isExpanded ? classname(titleStyle, activeClass) : titleStyle;
 
     const contentStyle = contentClass
       ? classname(contentClass, styles.collapsed)
@@ -56,7 +53,7 @@ class Collapsible extends Component {
     return (
       <div className={wrapperStyle}>
         <div className={titleStyleWithStatus} onClick={this.setCollapsed}>
-          <Icon icon={icon} className={styles.icon} />
+          {hasIcon && <Icon icon={icon} className={styles.icon} />}
           {title}
         </div>
         <div className={contentStyle}>
@@ -67,9 +64,15 @@ class Collapsible extends Component {
   }
 }
 
+Collapsible.defaultProps = {
+  hasIcon: true,
+  title: null,
+};
+
 Collapsible.propTypes = {
+  hasIcon: PropTypes.bool,
   children: PropTypes.node,
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   openIcon: PropTypes.string,
   closeIcon: PropTypes.string,
   wrapperClass: PropTypes.string,

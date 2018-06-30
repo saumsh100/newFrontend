@@ -1,12 +1,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { formatPhoneNumber } from '../../../library/util/Formatters';
-import {
-  patientShape,
-  appointmentShape,
-} from '../../../library/PropTypeShapes';
+import { patientShape, appointmentShape } from '../../../library/PropTypeShapes';
 import { PatientPopover, Avatar, AppointmentPopover } from '../../../library';
 import styles from './styles.scss';
 
@@ -24,9 +21,7 @@ function displayInsightDiv(header, subHeader) {
           <div className={styles.iconContainer}>&#x25CF;</div>
           <div className={styles.insightHeader}>{header}</div>
         </div>
-        {subHeader && (
-          <div className={styles.insightSubHeader}>{subHeader}</div>
-        )}
+        {subHeader && <div className={styles.insightSubHeader}>{subHeader}</div>}
       </div>
     </div>
   );
@@ -52,7 +47,7 @@ function displaySubHeaderDiv(content, index) {
  * @param patient
  * @param gender
  */
-function buildFamilyData(insightObj, patient, gender) {
+function buildFamilyData(insightObj, patient, gender, timezone) {
   const numOfFam = insightObj.value.length;
   let textPlural = 'family members';
 
@@ -70,9 +65,9 @@ function buildFamilyData(insightObj, patient, gender) {
 
   const header = (
     <div>
-      <span className={styles.patientName}>{patient.firstName}</span> has{' '}
-      {numOfFam} {textPlural} due for Recare. Ask if {genderOption2} would like
-      to schedule {numOfFam > 1 ? 'a' : 'this'} family member.
+      <span className={styles.patientName}>{patient.firstName}</span> has {numOfFam} {textPlural}{' '}
+      due for Recare. Ask if {genderOption2} would like to schedule {numOfFam > 1 ? 'a' : 'this'}{' '}
+      family member.
     </div>
   );
   const subHeader = (
@@ -82,7 +77,7 @@ function buildFamilyData(insightObj, patient, gender) {
           const subHeaderDiv = (
             <div>
               {famMember.firstName} {famMember.lastName} was due for{' '}
-              {moment(famMember.dateDue).format('MMM Do YYYY')}
+              {moment.tz(famMember.dateDue, timezone).format('MMM Do YYYY')}
             </div>
           );
           return displaySubHeaderDiv(subHeaderDiv, index);
@@ -115,8 +110,8 @@ function buildConfirmData(insightObj, patient, gender) {
   } else if (!phoneNumber && patient.email) {
     header = (
       <div>
-        Email <span className={styles.patientName}>{patient.firstName}</span> at{' '}
-        {patient.email} to confirm {gender} appointment.
+        Email <span className={styles.patientName}>{patient.firstName}</span> at {patient.email} to
+        confirm {gender} appointment.
       </div>
     );
   } else {
@@ -131,8 +126,8 @@ function buildConfirmData(insightObj, patient, gender) {
   const subHeaderDiv = total > 0 && (
     <div>
       <span className={styles.patientName}>{patient.firstName} </span>
-      has not yet confirmed {gender} appointment despite CareCru&apos;s {total}{' '}
-      attempt{total > 1 && 's'}. ({buildAttemptData({
+      has not yet confirmed {gender} appointment despite CareCru&apos;s {total} attempt{total > 1 &&
+        's'}. ({buildAttemptData({
         email: emailCount,
         sms: smsCount,
         phone: phoneCount,
@@ -154,10 +149,7 @@ function buildAttemptData(countObj) {
 
   let sentence = '';
   keys.filter(k => countObj[k] > 0).forEach((k, index, arr) => {
-    const addTo =
-      index < arr.length - 1
-        ? `${countObj[k]} ${k} and `
-        : `${countObj[k]} ${k}`;
+    const addTo = index < arr.length - 1 ? `${countObj[k]} ${k} and ` : `${countObj[k]} ${k}`;
     if (addTo) {
       sentence += addTo;
     }
@@ -175,8 +167,8 @@ function buildAttemptData(countObj) {
 function buildMissingEmailData(patient, gender) {
   const header = (
     <div>
-      Ask <span className={styles.patientName}>{patient.firstName}</span> for{' '}
-      {gender} email to receive email reminders.
+      Ask <span className={styles.patientName}>{patient.firstName}</span> for {gender} email to
+      receive email reminders.
     </div>
   );
   return displayInsightDiv(header);
@@ -191,8 +183,8 @@ function buildMissingEmailData(patient, gender) {
 function buildMissingPhoneData(patient, gender) {
   const header = (
     <div>
-      Ask <span className={styles.patientName}>{patient.firstName}</span> for{' '}
-      {gender} cell phone number to receive sms reminders.
+      Ask <span className={styles.patientName}>{patient.firstName}</span> for {gender} cell phone
+      number to receive sms reminders.
     </div>
   );
   return displayInsightDiv(header);
@@ -200,7 +192,7 @@ function buildMissingPhoneData(patient, gender) {
 
 export default function InsightList(props) {
   const {
-    patient, insightData, scrollId, appointment,
+    patient, insightData, scrollId, appointment, timezone,
   } = props;
 
   let displayEmailInsight = null;
@@ -212,9 +204,7 @@ export default function InsightList(props) {
     let gender = 'their';
 
     if (patient && patient.gender) {
-      patient.gender.toLowerCase() === 'male'
-        ? (gender = 'his')
-        : (gender = 'her');
+      patient.gender.toLowerCase() === 'male' ? (gender = 'his') : (gender = 'her');
     }
 
     if (insightObj && insightObj.type === 'missingEmail') {
@@ -230,7 +220,7 @@ export default function InsightList(props) {
     }
 
     if (insightObj && insightObj.type === 'familiesDueRecare') {
-      displayFamilyRecare = buildFamilyData(insightObj, patient, gender);
+      displayFamilyRecare = buildFamilyData(insightObj, patient, gender, timezone);
     }
   });
 
@@ -239,11 +229,7 @@ export default function InsightList(props) {
       <div className={styles.innerInsightsWrapper}>
         <div className={styles.insightsList}>
           <div className={styles.appBody}>
-            <AppointmentPopover
-              scrollId={scrollId}
-              appointment={appointment}
-              patient={patient}
-            >
+            <AppointmentPopover scrollId={scrollId} appointment={appointment} patient={patient}>
               <div className={styles.apptData}>
                 <div className={styles.apptData_time}>
                   {moment(appointment.startDate).format('h:mm a')}
@@ -266,12 +252,8 @@ export default function InsightList(props) {
                 />
 
                 <div className={styles.patientNameAvatar_text}>
-                  <div className={styles.patientInfo_firstLast}>
-                    {patient.firstName}
-                  </div>
-                  <div className={styles.patientInfo_firstLast}>
-                    {patient.lastName}
-                  </div>
+                  <div className={styles.patientInfo_firstLast}>{patient.firstName}</div>
+                  <div className={styles.patientInfo_firstLast}>{patient.lastName}</div>
                 </div>
               </div>
             </PatientPopover>
@@ -301,6 +283,7 @@ InsightList.propTypes = {
   }).isRequired,
   scrollId: PropTypes.string,
   appointment: PropTypes.shape(appointmentShape).isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 InsightList.defaultProps = {

@@ -6,7 +6,6 @@ import styles from './styles.scss';
 
 export default function NewPatientEvent(props) {
   const { data, bodyStyle } = props;
-
   return (
     <div className={bodyStyle}>
       <div className={styles.body_header}>
@@ -18,6 +17,14 @@ export default function NewPatientEvent(props) {
 }
 
 NewPatientEvent.propTypes = {
-  data: PropTypes.object,
-  bodyStyle: PropTypes.object,
+  data: PropTypes.shape({
+    createdAt: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+  }).isRequired,
+  bodyStyle: PropTypes.string,
+};
+
+NewPatientEvent.defaultProps = {
+  bodyStyle: '',
 };

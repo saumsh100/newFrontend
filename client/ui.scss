@@ -186,6 +186,16 @@ $search-border-color: #adadae;
   border-bottom-left-radius: $electron-border-radius;
 }
 
+@mixin blurred-mixin() {
+  background-color: $clr-dark-grey;
+  filter: url(#blurred);
+  position: absolute;
+  top: 90px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+}
+
 .borderTopRight {
   @include borderTopRight;
 }

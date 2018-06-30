@@ -49,12 +49,7 @@ class AppsRequestsContainer extends Component {
       this.props.fetchEntitiesRequest({
         id: 'dashRequests',
         key: 'requests',
-        join: [
-          'service',
-          'patientUser',
-          'requestingPatientUser',
-          'practitioner',
-        ],
+        join: ['service', 'patientUser', 'requestingPatientUser', 'practitioner'],
       }),
       this.props.fetchEntitiesRequest({
         id: 'dashAppointments',
@@ -179,11 +174,7 @@ class AppsRequestsContainer extends Component {
       <Card runAnimation loaded={isLoaded} className={styles.card}>
         <div>
           {isLoaded && (
-            <Tabs
-              index={index}
-              onChange={i => this.setState({ index: i })}
-              noUnderLine
-            >
+            <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
               <Tab
                 label={`${filteredRequests.length} Online Requests`}
                 className={styles.tab}
@@ -197,9 +188,7 @@ class AppsRequestsContainer extends Component {
             </Tabs>
           )}
         </div>
-        <div className={styles.container}>
-          {index === 0 ? displayRequests : displayApps}
-        </div>
+        <div className={styles.container}>{index === 0 ? displayRequests : displayApps}</div>
       </Card>
     );
   }
@@ -207,22 +196,16 @@ class AppsRequestsContainer extends Component {
 
 const dateFilter = (a, b) => Date.parse(b.startDate) - Date.parse(a.startDate);
 
-function mapStateToProps(
-  { apiRequests, entities, routing },
-  { dashboardDate, ...ownProps },
-) {
-  const dashAppointments = apiRequests.get('dashAppointments')
-    ? apiRequests.get('dashAppointments').wasFetched
-    : null;
-  const dashRequests = apiRequests.get('dashRequests')
-    ? apiRequests.get('dashRequests').wasFetched
-    : null;
-  const dashChairs = apiRequests.get('dashChairs')
-    ? apiRequests.get('dashChairs').wasFetched
-    : null;
-  const dashPracs = apiRequests.get('dashPracs')
-    ? apiRequests.get('dashPracs').wasFetched
-    : null;
+function mapStateToProps({ apiRequests, entities, routing }, { dashboardDate, ...ownProps }) {
+  const dashAppointments =
+    apiRequests.get('dashAppointments') && apiRequests.get('dashAppointments').wasFetched;
+
+  const dashRequests =
+    apiRequests.get('dashRequests') && apiRequests.get('dashRequests').wasFetched;
+
+  const dashChairs = apiRequests.get('dashChairs') && apiRequests.get('dashChairs').wasFetched;
+
+  const dashPracs = apiRequests.get('dashPracs') && apiRequests.get('dashPracs').wasFetched;
 
   const patientUsers = entities.getIn(['patientUsers', 'models']);
   const services = entities.getIn(['services', 'models']);
@@ -231,23 +214,15 @@ function mapStateToProps(
   const chairs = entities.getIn(['chairs', 'models']);
   const appointments = entities.getIn(['appointments', 'models']);
 
-  const filteredAppointments = FilterAppointments(
-    appointments,
-    moment(dashboardDate),
-  );
+  const filteredAppointments = FilterAppointments(appointments, moment(dashboardDate));
 
-  const appPatientIds = filteredAppointments
-    .toArray()
-    .map(app => app.get('patientId'));
+  const appPatientIds = filteredAppointments.map(app => app.get('patientId')).toArray();
 
-  const patients = FilterPatients(
-    entities.getIn(['patients', 'models']),
-    appPatientIds,
-  );
+  const patients = FilterPatients(entities.getIn(['patients', 'models']), appPatientIds);
 
   const filteredRequests = requests
-    .toArray()
-    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
+    .filter(req => !req.get('isCancelled') && !req.get('isConfirmed'))
+    .toArray();
 
   const sortedRequests = filteredRequests.sort(dateFilter);
 
@@ -287,10 +262,7 @@ AppsRequestsContainer.propTypes = {
   appointments: PropTypes.instanceOf(Map),
   chairs: PropTypes.instanceOf(Map),
   dashAppointments: PropTypes.bool,
-  dashboardDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.string,
-  ]).isRequired,
+  dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   patientUsers: PropTypes.instanceOf(Map),
   patients: PropTypes.instanceOf(Map),
@@ -321,7 +293,4 @@ AppsRequestsContainer.defaultProps = {
   requestId: '',
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AppsRequestsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AppsRequestsContainer);

@@ -5,14 +5,15 @@ import LDClient from 'ldclient-js';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
-import { loginSuccess, logout as authLogout } from '../actions/auth';
+import { loginSuccess, featureFlagsSet, logout as authLogout } from '../reducers/auth';
 import { setPatientSearchedList } from './patientSearch';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
+import SubscriptionManager from '../util/graphqlSubscriptions';
 import socket from '../socket';
 
 const getUserFeatureFlags = (userSession, dispatch) => {
-  const user = userSession.user;
+  const { user } = userSession;
 
   const userData = {
     firstName: user.firstName,
@@ -34,7 +35,7 @@ const getUserFeatureFlags = (userSession, dispatch) => {
 
   client.on('ready', () => {
     const flags = client.allFlags();
-    dispatch(loginSuccess({ flags }));
+    dispatch(featureFlagsSet(flags));
   });
 };
 
@@ -81,7 +82,7 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
     return axios
       .post('/auth', loginDetails)
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
-      .then(({ user }) => {
+      .then(({ user, accountId }) => {
         const userId = user.id;
         const fullName = `${user.firstName} ${user.lastName}`;
         const email = user.username;
@@ -101,6 +102,8 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
             }/sessions?u=${userId}`,
           });
         }
+
+        SubscriptionManager.accountId = accountId;
 
         if (connect) {
           connectSocketToConnectStore({ dispatch, getState }, socket);
@@ -145,6 +148,7 @@ export function logout() {
     return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
       dispatch(authLogout());
       dispatch(push('/login'));
+      SubscriptionManager.accountId = null;
     });
   };
 }

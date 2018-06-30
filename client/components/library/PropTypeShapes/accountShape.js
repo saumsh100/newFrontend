@@ -7,7 +7,7 @@ const accountShape = {
   addressId: PropTypes.string,
   bookingWidgetPrimaryColor: PropTypes.string,
   bumpInterval: PropTypes.string,
-  callrailId: PropTypes.string,
+  callrailId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   canSendRecalls: PropTypes.bool,
   canSendReminders: PropTypes.bool,
   canSendReviews: PropTypes.bool,

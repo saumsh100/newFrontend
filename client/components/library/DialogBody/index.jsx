@@ -41,8 +41,7 @@ class DialogBody extends Component {
           {actions.map((action) => {
             if (this.props['data-test-id']) {
               action.props = action.props || [];
-              action.props['data-test-id'] =
-                this.props['data-test-id'] + action.label;
+              action.props['data-test-id'] = this.props['data-test-id'] + action.label;
             }
 
             return (
@@ -66,9 +65,7 @@ class DialogBody extends Component {
     return (
       <SContainer data-test-id={this.props['data-test-id']}>
         {!isHub() && this.renderHeader()}
-        <SBody className={classNames(styles.dialogBody, bodyStyles)}>
-          {children}
-        </SBody>
+        <SBody className={classNames(styles.dialogBody, bodyStyles)}>{children}</SBody>
         {this.renderFooter()}
       </SContainer>
     );

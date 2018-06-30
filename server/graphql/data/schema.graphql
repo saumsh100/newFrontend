@@ -45,6 +45,20 @@ type AccountViewer implements Node {
     where: SequelizeJSON
     offset: Int
   ): PatientSearchesConnection
+  waitSpots(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    limit: Int
+    order: [[String]]
+
+    """
+    A JSON object conforming the the shape specified in http://docs.sequelizejs.com/en/latest/docs/querying/
+    """
+    where: SequelizeJSON
+    offset: Int
+  ): WaitSpotConnection
 }
 
 input addFamilyInput {
@@ -128,6 +142,26 @@ type addPatientSearchesPayload {
   clientMutationId: String
 }
 
+input addWaitSpotInput {
+  accountId: String!
+  patientId: String
+  patientUserId: String
+  preferences: SequelizeJSON
+  daysOfTheWeek: SequelizeJSON
+  unavailableDays: [String]
+  unavailableDates: [String]
+  availableDates: [String]
+  availableTimes: [String]
+  endDate: String
+  appointmentId: String
+  clientMutationId: String
+}
+
+type addWaitSpotPayload {
+  waitSpot: WaitSpot
+  clientMutationId: String
+}
+
 input createFamilyWithMembersInput {
   members: [String]!
   clientMutationId: String
@@ -147,12 +181,32 @@ type deleteFamilyPayload {
   clientMutationId: String
 }
 
+input deleteMultipleWaitSpotsInput {
+  ids: [String]
+  clientMutationId: String
+}
+
+type deleteMultipleWaitSpotsPayload {
+  waitSpots: [WaitSpot]
+  clientMutationId: String
+}
+
 input deletePatientInput {
   id: String!
   clientMutationId: String
 }
 
 type deletePatientPayload {
+  clientMutationId: String
+}
+
+input deleteWaitSpotInput {
+  id: String!
+  clientMutationId: String
+}
+
+type deleteWaitSpotPayload {
+  waitSpot: WaitSpot
   clientMutationId: String
 }
 
@@ -193,6 +247,9 @@ type Mutation {
   deleteFamilyMutation(input: deleteFamilyInput!): deleteFamilyPayload
   createFamilyWithMembersMutation(input: createFamilyWithMembersInput!): createFamilyWithMembersPayload
   addPatientSearchesMutation(input: addPatientSearchesInput!): addPatientSearchesPayload
+  addWaitSpotMutation(input: addWaitSpotInput!): addWaitSpotPayload
+  deleteWaitSpotMutation(input: deleteWaitSpotInput!): deleteWaitSpotPayload
+  deleteMultipleWaitSpotsMutation(input: deleteMultipleWaitSpotsInput!): deleteMultipleWaitSpotsPayload
 }
 
 """An object with an ID"""
@@ -333,6 +390,31 @@ enum PatientstatusEnumType {
   Inactive
 }
 
+"""Details of a patient user"""
+type PatientUser implements Node {
+  """The ID of an object"""
+  id: ID!
+  patientUserFamilyId: String
+  email: String
+  password: String
+  phoneNumber: String
+  firstName: String!
+  lastName: String!
+  gender: String
+  birthDate: String
+  isEmailConfirmed: Boolean!
+  isPhoneNumberConfirmed: Boolean!
+  avatarUrl: String
+  insuranceCarrier: String
+  insuranceMemberId: String
+  insuranceGroupId: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  ccId: String
+  family: Family
+}
+
 type Query {
   accountViewer: AccountViewer
 
@@ -345,6 +427,14 @@ type Query {
 
 """The `JSON` scalar type represents raw JSON as values."""
 scalar SequelizeJSON
+
+type Subscription {
+  """New wait spot created notification."""
+  newWaitSpot(accountId: String!): WaitSpot
+
+  """Wait spot removed."""
+  removeWaitSpot(accountId: String!): WaitSpot
+}
 
 input updateFamilyInput {
   id: String!
@@ -415,4 +505,48 @@ input updatePatientInput {
 type updatePatientPayload {
   patient: Patient
   clientMutationId: String
+}
+
+"""Waitspot details"""
+type WaitSpot implements Node {
+  """The ID of an object"""
+  id: ID!
+  accountId: String!
+  patientId: String
+  patientUserId: String
+  preferences: SequelizeJSON
+  daysOfTheWeek: SequelizeJSON
+  unavailableDays: [String]
+  unavailableDates: [String]
+  availableDates: [String]
+  availableTimes: [String]
+  endDate: String
+  appointmentId: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  ccId: String
+  patient: Patient
+  patientUser: PatientUser
+}
+
+"""A connection to a list of items."""
+type WaitSpotConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [WaitSpotEdge]
+
+  """Total number of wait spots"""
+  totalCount: Int
+}
+
+"""An edge in a connection."""
+type WaitSpotEdge {
+  """The item at the end of the edge"""
+  node: WaitSpot
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
