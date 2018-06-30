@@ -9,8 +9,6 @@ export const FETCH_REVIEWS = 'vendasta/fetchReviews';
 export const FETCH_REVIEWS_SUCCESS = 'vendasta/fetchReviewsSuccess';
 export const FETCH_REVIEWS_ERROR = 'vendasta/fetchReviewsError';
 
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGOUT = 'LOGOUT';
 export const SET_RESET_EMAIL = 'SET_RESET_EMAIL';
 export const SET_FAMILY_PATIENTS = 'SET_FAMILY_PATIENTS';
 export const SET_FAMILY_PATIENT_USER = 'SET_FAMILY_PATIENT_USER';

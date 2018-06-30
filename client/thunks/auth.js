@@ -5,7 +5,7 @@ import LDClient from 'ldclient-js';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
-import { loginSuccess, logout as authLogout } from '../actions/auth';
+import { loginSuccess, featureFlagsSet, logout as authLogout } from '../reducers/auth';
 import { setPatientSearchedList } from './patientSearch';
 import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
@@ -13,7 +13,7 @@ import SubscriptionManager from '../util/graphqlSubscriptions';
 import socket from '../socket';
 
 const getUserFeatureFlags = (userSession, dispatch) => {
-  const user = userSession.user;
+  const { user } = userSession;
 
   const userData = {
     firstName: user.firstName,
@@ -35,7 +35,7 @@ const getUserFeatureFlags = (userSession, dispatch) => {
 
   client.on('ready', () => {
     const flags = client.allFlags();
-    dispatch(loginSuccess({ flags }));
+    dispatch(featureFlagsSet(flags));
   });
 };
 
@@ -145,13 +145,12 @@ export function logout() {
     localStorage.removeItem('session');
     const { auth } = getState();
 
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`)
-      .then(() => {
-        dispatch(authLogout());
-        dispatch(push('/login'));
-        SubscriptionManager.accountId = null;
-      });
-    };
+    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
+      dispatch(authLogout());
+      dispatch(push('/login'));
+      SubscriptionManager.accountId = null;
+    });
+  };
 }
 
 export function resetPassword(email) {

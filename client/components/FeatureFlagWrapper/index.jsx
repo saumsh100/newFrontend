@@ -1,6 +1,7 @@
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { isFeatureEnabledSelector } from '../../reducers/auth';
 
 function FeatureFlagWrapper(props) {
   const { flagged, backupComponent } = props;
@@ -23,7 +24,7 @@ FeatureFlagWrapper.propTypes = {
 
 function mapStateToProps({ auth }, { featureKey }) {
   return {
-    flagged: auth.get('flags').get(featureKey),
+    flagged: isFeatureEnabledSelector(auth.get('flags'), featureKey),
   };
 }
 
