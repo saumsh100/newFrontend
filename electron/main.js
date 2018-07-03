@@ -50,6 +50,7 @@ function createWindow() {
   Menu.setApplicationMenu(menuFromTemplate);
 
   createWindowListeners();
+  updateChecker();
 }
 
 function createWindowListeners() {
@@ -100,10 +101,8 @@ app.on('activate', () => {
  * Run update check every hour.
  */
 const updateChecker = () => {
+  checkForUpdate();
   setTimeout(() => {
-    checkForUpdate();
     updateChecker();
   }, 1000 * 60 * config.updateInterval);
 };
-
-updateChecker();

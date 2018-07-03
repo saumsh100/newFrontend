@@ -1,5 +1,5 @@
 
-const Store = require('../store');
+const { userSessionStore: Store } = require('../store');
 const { ZOOM_FACTOR_CHANGE } = require('../constants');
 
 class Window {

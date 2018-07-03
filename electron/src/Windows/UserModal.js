@@ -1,7 +1,7 @@
 
 const { BrowserWindow } = require('electron');
 const url = require('url');
-const Store = require('../store');
+const { userSessionStore: Store } = require('../store');
 const WindowMain = require('./Window');
 const ScreenManager = require('../ScreenManager');
 const config = require('../../config');
