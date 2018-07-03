@@ -1,6 +1,6 @@
 
 const electron = require('electron');
-const Store = require('./store');
+const { userSessionStore: Store } = require('./store');
 
 let instance = null;
 

@@ -1,10 +1,25 @@
 
 const { Notification, dialog } = require('electron');
 const { autoUpdater } = require('electron-updater');
+const { applicationStore: Store } = require('./store');
+const { getChannelFromVersion } = require('./util');
 const log = require('electron-log');
 
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
+
+if (process.env.NODE_ENV !== 'development') {
+  const persistedChannel = Store.get('updateChannel');
+
+  if (!persistedChannel) {
+    const extractedChannel = getChannelFromVersion(autoUpdater.currentVersion);
+    Store.set('updateChannel', extractedChannel);
+  }
+
+  autoUpdater.channel = Store.get('updateChannel');
+  log.info(`Update channel set to: ${autoUpdater.channel}`);
+}
+
 
 autoUpdater.on('update-available', () => {
   const updateNotification = new Notification({
@@ -19,8 +34,8 @@ autoUpdater.on('error', (error) => {
   log.info(`Error in auto updater: ${error}.`);
 });
 
-autoUpdater.on('download-progress', (progress) => {
-  log.info(`Auto update progress ${progress}`);
+autoUpdater.on('download-progress', ({ percent }) => {
+  log.info(`Auto update progress ${Math.floor(percent)}%`);
 });
 
 autoUpdater.on('update-downloaded', () => {
