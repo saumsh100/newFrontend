@@ -38,9 +38,9 @@ const BookingRouter = ({ match, isAuth }) => {
   return (
     <div>
       <Switch>
-        <Redirect exact from={b()} to={b('/practitioner')} />
-        <Route exact path={b('/practitioner')} component={Practitioners} />
+        <Redirect exact from={b()} to={b('/reason')} />
         <Route exact path={b('/reason')} component={Reasons} />
+        <Route exact path={b('/practitioner')} component={Practitioners} />
         <Route exact path={b('/date-and-time')} component={DateTime} />
         <Route exact path={b('/waitlist/join')} component={Join} />
         <Route exact path={b('/waitlist/select-dates')} component={SelectDates} />
