@@ -59,6 +59,7 @@ const patientUser = {
   lastName: 'Daniels',
   email: 'testpatientuser@test.com',
   phoneNumber: '+16049999999',
+  birthDate: '1996-07-19T00:14:30.932Z',
   password: bcrypt.hashSync('!@CityOfBudaTest#$', passwordHashSaltRounds),
   createdAt: '2017-07-19T00:14:30.932Z',
 };
