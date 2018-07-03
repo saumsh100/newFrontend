@@ -380,10 +380,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Review));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
 
 Review.propTypes = {
   createRequest: PropTypes.func.isRequired,

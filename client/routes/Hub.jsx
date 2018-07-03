@@ -147,7 +147,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(withAuthProps(HubRouter));
+export default connect(null, mapDispatchToProps)(withAuthProps(HubRouter));

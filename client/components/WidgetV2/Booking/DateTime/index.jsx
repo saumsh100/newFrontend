@@ -364,10 +364,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DateTime);
+export default connect(mapStateToProps, mapDispatchToProps)(DateTime);
 
 DateTime.propTypes = {
   accountTimezone: PropTypes.string.isRequired,

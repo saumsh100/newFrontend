@@ -93,10 +93,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Practitioners);
+export default connect(mapStateToProps, mapDispatchToProps)(Practitioners);
 
 Practitioners.propTypes = {
   practitionersEntity: PropTypes.instanceOf(practitioners).isRequired,

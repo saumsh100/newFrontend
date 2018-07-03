@@ -75,10 +75,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Reasons);
+export default connect(mapStateToProps, mapDispatchToProps)(Reasons);
 
 Reasons.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,

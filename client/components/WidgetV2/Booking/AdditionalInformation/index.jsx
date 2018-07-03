@@ -76,10 +76,7 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AdditionalInformation));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdditionalInformation));
 
 AdditionalInformation.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

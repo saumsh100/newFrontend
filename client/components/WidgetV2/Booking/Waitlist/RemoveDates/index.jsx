@@ -76,10 +76,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(RemoveDates);
+export default connect(mapStateToProps, mapDispatchToProps)(RemoveDates);
 
 RemoveDates.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

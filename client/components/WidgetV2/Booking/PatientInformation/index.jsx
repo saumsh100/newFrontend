@@ -563,10 +563,7 @@ function mapStateToProps({ auth, availabilities, ...state }) {
   };
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientInformation));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PatientInformation));
 
 PatientInformation.propTypes = {
   addNewFamilyPatient: PropTypes.func.isRequired,

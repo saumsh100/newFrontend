@@ -22,7 +22,7 @@
       "export $(cat .env | xargs) && sequelize db:migrate:undo:all && sequelize db:migrate",
     "rebuild:seed": "npm run rebuild && sequelize db:seed:all",
     "start": "nf start -w -j Procfile_dev",
-    "startdev": "nf start -w -j Procfile_dev_no_reminders",
+    "startdev": "nf start -j Procfile_dev_no_reminders",
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "storybook": "start-storybook -s ./statics/fonts -p 6006",

@@ -36,9 +36,7 @@ function Login(props) {
         <Link to="./signup" className={styles.subCard}>
           <div className={styles.subCardWrapper}>
             <h3 className={styles.subCardTitle}>Don’t have an account?</h3>
-            <p className={styles.subCardSubtitle}>
-              Create an account to confirm your request.
-            </p>
+            <p className={styles.subCardSubtitle}>Create an account to confirm your request.</p>
           </div>
           <span className={styles.subCardLink}>Sign Up</span>
         </Link>
@@ -109,7 +107,4 @@ Login.propTypes = {
   login: PropTypes.func,
 };
 
-export default withRouter(connect(
-  null,
-  mapDispatchToProps,
-)(Login));
+export default withRouter(connect(null, mapDispatchToProps)(Login));

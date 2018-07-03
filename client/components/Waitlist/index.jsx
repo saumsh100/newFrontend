@@ -143,7 +143,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(Waitlist);
+export default connect(null, mapDispatchToProps)(Waitlist);

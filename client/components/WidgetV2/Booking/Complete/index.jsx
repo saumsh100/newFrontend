@@ -305,10 +305,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Complete);
+export default connect(mapStateToProps, mapDispatchToProps)(Complete);
 
 Complete.propTypes = {
   dateAndTime: PropTypes.shape({

@@ -60,10 +60,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  null,
-  mapDispatchToProps,
-)(PatientUserMenu);
+export default connect(null, mapDispatchToProps)(PatientUserMenu);
 
 PatientUserMenu.propTypes = {
   logout: PropTypes.func.isRequired,

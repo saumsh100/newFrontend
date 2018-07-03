@@ -1,5 +1,9 @@
 # CareCru Platform
 
+This README is outdated, but kept here anyways.
+Please refer to this article in order to get up and running:
+Running CareCru With Docker (https://carecru.atlassian.net/wiki/spaces/DEV/pages/71434254/How+to+Run+CareCru+with+Docker)
+
 This repository is for all code necessary to the CareCru Platform but not including the CareCru Connector.
 
 ##### Backend

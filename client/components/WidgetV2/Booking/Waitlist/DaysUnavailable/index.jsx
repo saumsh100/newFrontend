@@ -110,10 +110,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DaysUnavailable);
+export default connect(mapStateToProps, mapDispatchToProps)(DaysUnavailable);
 
 DaysUnavailable.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

@@ -180,9 +180,6 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(withAuthProps(NavList));
