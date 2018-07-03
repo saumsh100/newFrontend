@@ -1,8 +1,10 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import { Map } from 'immutable';
 import {
   updateEntityRequest,
   fetchEntities,
@@ -18,12 +20,8 @@ import {
   DialogBox,
   DropdownSelect,
 } from '../../../library';
-import {
-  convertIntervalToMs,
-  w2s,
-  s2m,
-  m2s,
-} from '../../../../../server/util/time';
+import { accountShape } from '../../../library/PropTypeShapes';
+import { convertIntervalToMs } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import AdvancedSettingsForm from './AdvancedSettingsForm';
@@ -93,10 +91,7 @@ class Recalls extends Component {
   saveAdvancedSettings(values) {
     const { activeAccount } = this.props;
     const {
-      recallBufferNumber,
-      recallBufferInterval,
-      recallStartTime,
-      recallEndTime,
+      recallBufferNumber, recallBufferInterval, recallStartTime, recallEndTime,
     } = values;
 
     const newValues = {
@@ -179,16 +174,12 @@ class Recalls extends Component {
     const alert = {
       success: {
         title: 'Account Updated',
-        body: `Successfully updated the default hygiene due date to ${
-          val[0]
-        } months`,
+        body: `Successfully updated the default hygiene due date to ${val[0]} months`,
       },
 
       error: {
         title: 'Failed to Update Account',
-        body: `Error trying to update the default hygiene due date to ${
-          val[0]
-        } months`,
+        body: `Error trying to update the default hygiene due date to ${val[0]} months`,
       },
     };
 
@@ -204,16 +195,12 @@ class Recalls extends Component {
     const alert = {
       success: {
         title: 'Account Updated',
-        body: `Successfully updated the default recare due date to ${
-          val[0]
-        } months`,
+        body: `Successfully updated the default recare due date to ${val[0]} months`,
       },
 
       error: {
         title: 'Failed to Update Account',
-        body: `Error trying to update the default recare due date to ${
-          val[0]
-        } months`,
+        body: `Error trying to update the default recare due date to ${val[0]} months`,
       },
     };
 
@@ -278,13 +265,15 @@ class Recalls extends Component {
 
     let previewComponent = null;
     if (selectedRecall) {
-      previewComponent = (
-        <RecallPreview recall={selectedRecall} account={activeAccount} />
-      );
+      previewComponent = <RecallPreview recall={selectedRecall} account={activeAccount} />;
     }
 
     const numHygieneMonths = activeAccount.hygieneInterval || '6 months';
     const numRecareMonths = activeAccount.recallInterval || '6 months';
+
+    const dropDownTheme = {
+      filled: styles.filledLabel,
+    };
 
     return (
       <CommunicationSettingsCard
@@ -326,10 +315,7 @@ class Recalls extends Component {
               linesBoxClass={styles.dueDateLinesBox}
               labelComponent={
                 <div className={styles.dueDateWrapper}>
-                  <TouchPointLabel
-                    title="Due Date"
-                    className={styles.dueDateLabel}
-                  />
+                  <TouchPointLabel title="Due Date" className={styles.dueDateLabel} />
                 </div>
               }
               mainComponent={
@@ -348,6 +334,7 @@ class Recalls extends Component {
                               value={numHygieneMonths}
                               options={dueDateOptions}
                               onChange={this.changeHygieneDate}
+                              theme={dropDownTheme}
                             />
                           </div>
                         </Col>
@@ -359,6 +346,7 @@ class Recalls extends Component {
                               value={numRecareMonths}
                               options={dueDateOptions}
                               onChange={this.changeRecareDate}
+                              theme={dropDownTheme}
                             />
                           </div>
                         </Col>
@@ -415,23 +403,23 @@ class Recalls extends Component {
 }
 
 Recalls.propTypes = {
-  activeAccount: PropTypes.object,
-  recalls: PropTypes.object,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
+  recalls: PropTypes.instanceOf(Map),
   role: PropTypes.string,
-  updateEntityRequest: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
-  fetchEntities: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  reset: PropTypes.func,
+  updateEntityRequest: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+};
+
+Recalls.defaultProps = {
+  role: '',
+  recalls: new Map(),
 };
 
 function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
-  const activeAccount = entities.getIn([
-    'accounts',
-    'models',
-    auth.get('accountId'),
-  ]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const recalls = entities
     .getIn(['recalls', 'models'])
     .filter(r => !r.isDeleted && !!r.interval)
@@ -457,9 +445,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Recalls);

@@ -44,19 +44,14 @@ class AddPatientSuggestions extends Component {
 
   handleConnectPatient() {
     const {
-      patients,
-      reinitializeState,
-      selectAppointment,
-      mergingPatientData,
+      patients, reinitializeState, selectAppointment, mergingPatientData,
     } = this.props;
 
     const requestData = mergingPatientData.requestData;
     const patient = this.state.selectedPatient;
 
     const futureAppointments =
-      patient.appointments && patient.appointments.length
-        ? patient.appointments
-        : false;
+      patient.appointments && patient.appointments.length ? patient.appointments : false;
 
     const appointment = {
       startDate: requestData.startDate,
@@ -76,7 +71,7 @@ class AddPatientSuggestions extends Component {
     const patientUserId = mergingPatientData.patientUser.id;
     const modifiedPatient = patientModel.set('patientUserId', patientUserId);
 
-    const confirmSuggestion = confirm('Are you sure you want to connect these patients?');
+    const confirmSuggestion = window.confirm('Are you sure you want to connect these patients?');
 
     if (confirmSuggestion) {
       this.props
@@ -102,10 +97,11 @@ class AddPatientSuggestions extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.patientSpeel}>
-          <span className={styles.bold}>{fullName}</span>, don't have a patient
-          record in your PMS. Please select one to{' '}
-          <span className={styles.bold}>Connect</span> or{' '}
-          <span className={styles.bold}>Create a New Patient</span>.
+          <span className={styles.bold}>{fullName}</span> could not be found in your Practice
+          Management Software, however we have found some similar matches. If one of these are
+          correct, please select the option and then click on{' '}
+          <span className={styles.bold}>Connect Patient</span>. Otherwise, please click{' '}
+          <span className={styles.bold}>Create New Patient</span> to add a new patient record.{' '}
         </div>
         <div className={styles.suggestionsList}>
           {suggestions.map(patient => (
@@ -123,11 +119,7 @@ class AddPatientSuggestions extends Component {
           <Button border="blue" onClick={this.handleCreatePatient}>
             Create New Patient
           </Button>
-          <Button
-            color="blue"
-            onClick={this.handleConnectPatient}
-            className={styles.connectButton}
-          >
+          <Button color="blue" onClick={this.handleConnectPatient} className={styles.connectButton}>
             Connect Patient
           </Button>
         </div>
@@ -138,17 +130,21 @@ class AddPatientSuggestions extends Component {
 
 AddPatientSuggestions.propTypes = {
   patients: PropTypes.instanceOf(Map),
-  reinitializeState: PropTypes.func,
-  selectAppointment: PropTypes.func,
-  setMergingPatient: PropTypes.func,
-  updateEntityRequest: PropTypes.func,
+  reinitializeState: PropTypes.func.isRequired,
+  selectAppointment: PropTypes.func.isRequired,
+  setMergingPatient: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
   mergingPatientData: PropTypes.shape({
     patientUser: PropTypes.instanceOf(PatientUser),
     requestData: PropTypes.shape({
       requestModel: PropTypes.instanceOf(RequestModel),
     }),
     suggestions: PropTypes.arrayOf(PropTypes.shape(patientShape)),
-  }),
+  }).isRequired,
+};
+
+AddPatientSuggestions.defaultProps = {
+  patients: new Map(),
 };
 
 const mapDispatchToProps = dispatch =>
@@ -163,9 +159,6 @@ const mapStateToProps = ({ entities }) => ({
   patients: entities.getIn(['patients', 'models']),
 });
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(AddPatientSuggestions);
