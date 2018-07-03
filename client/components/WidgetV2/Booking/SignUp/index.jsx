@@ -14,10 +14,10 @@ import { createPatient } from '../../../../thunks/patientAuth';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
-function SignUp({ history, handleNewPatient }) {
+function SignUp(props) {
   const handleSignUp = values =>
-    handleNewPatient(values).then(() => {
-      history.push('../signup/confirm');
+    props.createPatient(values).then(() => {
+      props.history.push('../app/signup/confirm');
     });
 
   return (
@@ -167,15 +167,18 @@ function SignUp({ history, handleNewPatient }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      handleNewPatient: createPatient,
+      createPatient,
     },
     dispatch,
   );
 }
 
 SignUp.propTypes = {
-  handleNewPatient: PropTypes.func,
-  history: PropTypes.shape(historyShape),
+  createPatient: PropTypes.func.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(SignUp));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(SignUp));

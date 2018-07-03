@@ -8,6 +8,7 @@ import { SubmissionError } from 'redux-form';
 import { Link, Form, Field, Button } from '../../../library';
 import { login } from '../../../../thunks/patientAuth';
 import { updateReview } from '../../../../thunks/reviews';
+import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function Login(props) {
@@ -21,7 +22,7 @@ function Login(props) {
     props
       .login(values)
       .then(() => {
-        this.props.history.push('./book/patient-information');
+        props.history.push('./book/patient-information');
       })
       .catch(({ data }) => {
         throw new SubmissionError({
@@ -104,7 +105,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 Login.propTypes = {
-  login: PropTypes.func,
+  history: PropTypes.shape(historyShape).isRequired,
+  login: PropTypes.func.isRequired,
 };
 
-export default withRouter(connect(null, mapDispatchToProps)(Login));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(Login));

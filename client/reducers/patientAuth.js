@@ -1,13 +1,13 @@
 
 import { fromJS } from 'immutable';
-import { handleActions } from 'redux-actions';
-import {
-  LOGIN_SUCCESS,
-  LOGOUT,
-  SET_PATIENT_USER,
-  SET_RESET_EMAIL,
-  SET_FAMILY_PATIENTS,
-} from '../constants';
+import { createAction, handleActions } from 'redux-actions';
+import { SET_PATIENT_USER, SET_RESET_EMAIL, SET_FAMILY_PATIENTS } from '../constants';
+
+export const PATIENT_LOGIN_SUCCESS = '@patient-auth/PATIENT_LOGIN_SUCCESS';
+export const PATIENT_AUTH_LOGOUT = '@patient-auth/PATIENT_AUTH_LOGOUT';
+
+export const patientLoginSuccess = createAction(PATIENT_LOGIN_SUCCESS);
+export const patientAuthLogout = createAction(PATIENT_AUTH_LOGOUT);
 
 const initialState = fromJS({
   isAuthenticated: false,
@@ -19,7 +19,7 @@ const initialState = fromJS({
 
 export default handleActions(
   {
-    [LOGIN_SUCCESS](state, { payload }) {
+    [PATIENT_LOGIN_SUCCESS](state, { payload }) {
       return state.merge({
         ...payload,
         isAuthenticated: true,
@@ -38,9 +38,9 @@ export default handleActions(
       return state.set('familyPatients', payload);
     },
 
-    [LOGOUT]() {
+    [PATIENT_AUTH_LOGOUT]() {
       return initialState;
     },
   },
-  initialState
+  initialState,
 );
