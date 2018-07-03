@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
-import { Button } from '../library';
+import { IconButton } from '../library';
 import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 import { setBackHandler } from '../../reducers/electron';
 import styles from './styles.scss';
@@ -18,7 +18,7 @@ const PageHeading = ({
     })}
   >
     {backHandler && (
-      <Button
+      <IconButton
         icon="arrow-left"
         className={styles.backButton}
         onClick={() => {
@@ -36,6 +36,13 @@ PageHeading.propTypes = {
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
   backHandler: PropTypes.func,
   setBackHandler: PropTypes.func,
+};
+
+PageHeading.defaultProps = {
+  title: null,
+  toolbarPosition: TOOLBAR_LEFT,
+  backHandler: null,
+  setBackHandler: () => {},
 };
 
 function mapStateToProps({ electron }) {

@@ -33,7 +33,7 @@ class Tabs extends Component {
       if (item.type === tabType) {
         headers.push(item);
         if (item.props.children) {
-          contents.push(<TabContent children={item.props.children} />);
+          contents.push(<TabContent>{item.props.children}</TabContent>);
         }
       }
     });
@@ -119,9 +119,9 @@ Tabs.propTypes = {
 };
 
 Tabs.defaultProps = {
-  className: '',
-  contentClass: '',
-  navClass: '',
+  className: null,
+  contentClass: null,
+  navClass: null,
   disabled: false,
   noHeaders: false,
   noUnderLine: false,

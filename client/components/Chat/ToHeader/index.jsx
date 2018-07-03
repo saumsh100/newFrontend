@@ -1,7 +1,8 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
 import { isHub } from '../../../util/hub';
@@ -18,18 +19,14 @@ const toInputProps = {
 
 class ToHeader extends Component {
   renderMobile() {
-    const {
-      selectedPatient,
-      onPatientInfoClick,
-      onPatientListClick,
-    } = this.props;
-
-    const wrapperStyle = !isHub()
-      ? styles.wrapper
-      : classnames(styles.wrapper, styles.hubWrapper);
+    const { selectedPatient, onPatientInfoClick, onPatientListClick } = this.props;
 
     return (
-      <div className={wrapperStyle}>
+      <div
+        className={classNames(styles.wrapper, {
+          [styles.hubWrapper]: isHub(),
+        })}
+      >
         {!isHub() && (
           <Button
             icon="arrow-left"
@@ -52,11 +49,7 @@ class ToHeader extends Component {
                 <span>{selectedPatient.firstName}</span>
                 <span>{selectedPatient.lastName}</span>
               </div>
-              <Icon
-                className={styles.infoArrow}
-                icon="angle-right"
-                type="light"
-              />
+              <Icon className={styles.infoArrow} icon="angle-right" type="light" />
             </Button>
           </div>
         ) : (
@@ -106,15 +99,13 @@ ToHeader.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
   }),
-  newChat: PropTypes.instanceOf(Object),
-  activeAccount: PropTypes.instanceOf(Object),
-  selectedChat: PropTypes.instanceOf(Object),
-  setNewChat: PropTypes.func.isRequired,
-  mergeNewChat: PropTypes.func.isRequired,
-  setSelectedChatId: PropTypes.func.isRequired,
-  onPatientInfoClick: PropTypes.func,
-  onPatientListClick: PropTypes.func,
-  onSearch: PropTypes.func,
+  onPatientInfoClick: PropTypes.func.isRequired,
+  onPatientListClick: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+};
+
+ToHeader.defaultProps = {
+  selectedPatient: null,
 };
 
 function mapStateToProps({ entities, chat }) {

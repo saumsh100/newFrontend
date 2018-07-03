@@ -147,13 +147,11 @@ class ChatMessage extends Component {
 
   selectChatOrCreate(patient) {
     // If this patient has a chat, select the chat
-    if (patient.chatId) {
-      this.props.selectChat(patient.chatId);
-      this.props.setNewChat(null);
-    } else {
-      this.props.selectChat(null);
-      this.props.setNewChat({ patientId: patient.id });
-    }
+    const chatToSelect = patient.chatId || null;
+    const newChat = patient.chatId ? null : { patientId: patient.id };
+
+    this.props.selectChat(chatToSelect);
+    this.props.setNewChat(newChat);
 
     if (!this.state.showMessageContainer) {
       this.toggleShowMessageContainer();
@@ -166,8 +164,7 @@ class ChatMessage extends Component {
     this.setState({
       chats: this.state.chats + Object.keys(result.chats || {}).length,
       moreData: !(
-        Object.keys(result).length === 0 ||
-        Object.keys(result.chats).length < CHAT_LIST_OFFSET
+        Object.keys(result).length === 0 || Object.keys(result.chats).length < CHAT_LIST_OFFSET
       ),
     });
   }
@@ -241,7 +238,7 @@ class ChatMessage extends Component {
         <List className={styles.chatsList}>
           <InfiniteScroll
             loadMore={this.loadChatList}
-            loader={<Loader />}
+            loader={<Loader key="loader" />}
             hasMore={this.state.moreData}
             initialLoad={false}
             useWindow={false}
@@ -280,10 +277,7 @@ class ChatMessage extends Component {
     return (
       <SHeader className={styles.leftCardHeader}>
         <div className={styles.searchSection}>
-          <div
-            className={styles.searchInputWrapper}
-            data-test-id="input_chatSearch"
-          >
+          <div className={styles.searchInputWrapper} data-test-id="input_chatSearch">
             <PatientSearch
               onSelect={this.selectChatOrCreate}
               theme={patientSearchTheme}
@@ -299,22 +293,9 @@ class ChatMessage extends Component {
           />
         </div>
         <div className={styles.tabsSection}>
-          <Tabs
-            fluid
-            index={this.state.tabIndex}
-            onChange={this.changeTab}
-            noUnderLine
-          >
-            <Tab
-              label="All"
-              inactiveClass={styles.inactiveTab}
-              activeClass={styles.activeTab}
-            />
-            <Tab
-              label="Unread"
-              inactiveClass={styles.inactiveTab}
-              activeClass={styles.activeTab}
-            />
+          <Tabs fluid index={this.state.tabIndex} onChange={this.changeTab} noUnderLine>
+            <Tab label="All" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
+            <Tab label="Unread" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
             <Tab
               label="Flagged"
               inactiveClass={styles.inactiveTab}
@@ -327,27 +308,19 @@ class ChatMessage extends Component {
   }
 
   render() {
-    const {
-      showPatientsList,
-      showMessageContainer,
-      showPatientInfo,
-    } = this.state;
-    const slideStyle = showPatientsList ? styles.slideIn : {};
-    const patientsListStyle = classnames(styles.patientsList, slideStyle);
-
-    const messageContainerSlideStyle =
-      showMessageContainer || showPatientInfo ? styles.slideIn : {};
-    const messageContainerClass = classnames(
-      styles.rightCard,
-      messageContainerSlideStyle,
-    );
-    const wrapperClass = !isHub()
-      ? styles.chatWrapper
-      : classnames(styles.chatWrapper, styles.hub);
+    const { showPatientsList, showMessageContainer, showPatientInfo } = this.state;
 
     return (
-      <div className={wrapperClass}>
-        <div className={patientsListStyle}>
+      <div
+        className={classnames(styles.chatWrapper, {
+          [styles.hub]: isHub(),
+        })}
+      >
+        <div
+          className={classnames(styles.patientsList, {
+            [styles.slideIn]: showPatientsList,
+          })}
+        >
           <Card className={styles.leftCard} noBorder>
             <SContainer>
               {this.renderHeading()}
@@ -355,7 +328,12 @@ class ChatMessage extends Component {
             </SContainer>
           </Card>
         </div>
-        <Card noBorder className={messageContainerClass}>
+        <Card
+          noBorder
+          className={classnames(styles.rightCard, {
+            [styles.slideIn]: showMessageContainer || showPatientInfo,
+          })}
+        >
           <SContainer>
             <SHeader className={styles.messageHeader}>
               <ToHeader

@@ -26,5 +26,5 @@ NewPatientEvent.propTypes = {
 };
 
 NewPatientEvent.defaultProps = {
-  bodyStyle: '',
+  bodyStyle: null,
 };

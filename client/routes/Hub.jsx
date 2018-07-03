@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import { connect } from 'react-redux';
@@ -62,9 +63,7 @@ const HubRouter = (properties) => {
       <Route path="/intercom" component={Routes.intercom} />
       <Route path="/shortcuts" component={Routes.shortcuts} />
       {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-      {withEnterprise && (
-        <Route path="/enterprise" component={Routes.enterprise} />
-      )}
+      {withEnterprise && <Route path="/enterprise" component={Routes.enterprise} />}
       <Route component={FourZeroFour} />
     </Switch>
   );
@@ -76,9 +75,7 @@ const HubRouter = (properties) => {
           (isAuth ? (
             getAuthorizedRoutes()
           ) : (
-            <Redirect
-              to={{ pathname: '/login', state: { from: ownProps.location } }}
-            />
+            <Redirect to={{ pathname: '/login', state: { from: ownProps.location } }} />
           ))
         }
       />
@@ -86,9 +83,7 @@ const HubRouter = (properties) => {
   );
 
   const signUp = /^\/signup\/.+$/i;
-  const urlTest = signUp.test(history.location.pathname)
-    ? history.location.pathname
-    : '/signup';
+  const urlTest = signUp.test(history.location.pathname) ? history.location.pathname : '/signup';
 
   const reset = /^\/resetpassword\/.+$/i;
   const resetTest = reset.test(history.location.pathname)
@@ -102,30 +97,22 @@ const HubRouter = (properties) => {
           <Route
             exact
             path="/login"
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <Login {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)}
           />
           <Route
             exact
             path={urlTest}
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
           />
           <Route
             exact
             path="/forgot"
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
           />
           <Route
             exact
             path={resetTest}
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
           />
           <Route path="/" component={Dashboard} />
         </Switch>
@@ -144,8 +131,9 @@ HubRouter.propTypes = {
   isAuth: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   withEnterprise: PropTypes.bool.isRequired,
-  setTitle: PropTypes.func,
-  collapseContent: PropTypes.func,
+  setTitle: PropTypes.func.isRequired,
+  collapseContent: PropTypes.func.isRequired,
+  collapseWithoutResizing: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch =>

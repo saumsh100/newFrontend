@@ -22,16 +22,12 @@ function Suggestion(patient) {
       <div className={styles.suggestionContainer_details}>
         <div className={styles.suggestionContainer_fullName}>
           {`${patient.firstName} ${patient.lastName}${
-            patient.birthDate
-              ? `, ${moment().diff(patient.birthDate, 'years')}`
-              : ''
+            patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : ''
           }`}
         </div>
         <div className={styles.suggestionContainer_date}>
           Last Appointment:{' '}
-          {patient.lastApptDate
-            ? moment(patient.lastApptDate).format('MMM D YYYY')
-            : 'n/a'}
+          {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
         </div>
       </div>
     </div>
@@ -52,6 +48,14 @@ class PatientSearch extends Component {
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
   }
 
+  onSuggestionSelected(event, { suggestion }) {
+    this.props.onSelect(suggestion);
+  }
+
+  onInputChange(e) {
+    this.setState({ value: e.target.value });
+  }
+
   searchPatients(value) {
     // The reason we use fetchEntities is to populate the store with joined data
     // like chats and textMessages while we search
@@ -69,14 +73,6 @@ class PatientSearch extends Component {
 
         this.setState({ suggestions });
       });
-  }
-
-  onInputChange(e) {
-    this.setState({ value: e.target.value });
-  }
-
-  onSuggestionSelected(event, { suggestion }) {
-    this.props.onSelect(suggestion);
   }
 
   render() {
@@ -109,9 +105,16 @@ class PatientSearch extends Component {
 
 PatientSearch.propTypes = {
   onSelect: PropTypes.func.isRequired,
-  inputProps: PropTypes.object,
-  theme: PropTypes.object,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  inputProps: PropTypes.objectOf(PropTypes.any),
+  theme: PropTypes.objectOf(PropTypes.string),
   focusInputOnMount: PropTypes.bool,
+};
+
+PatientSearch.defaultProps = {
+  focusInputOnMount: true,
+  inputProps: {},
+  theme: {},
 };
 
 function mapDispatchToProps(dispatch) {

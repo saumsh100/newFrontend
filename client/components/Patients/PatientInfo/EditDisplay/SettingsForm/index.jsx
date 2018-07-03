@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { change, formValueSelector } from 'redux-form';
+import { Map } from 'immutable';
 import classNames from 'classnames';
 import { intervalToNumType } from '../../../../../../server/util/time';
-import RecallModel from '../../../../../entities/models/Recall';
-import ReminderModel from '../../../../../entities/models/Reminder';
 import OmitForm from '../OmitForm';
 import { Grid, Row, Col, Form, Field, FormSection } from '../../../../library';
 import { capitalizeText } from '../../../../../components/Utils';
@@ -89,7 +88,7 @@ class SettingsForm extends Component {
         form="Form5"
         onSubmit={values =>
           handleSubmit({
-            values,
+            ...values,
             ...this.state,
           })
         }
@@ -296,9 +295,17 @@ SettingsForm.propTypes = {
     omitReminderIds: PropTypes.arrayOf(PropTypes.bool),
     omitRecallIds: PropTypes.arrayOf(PropTypes.bool),
   }).isRequired,
-  reminders: PropTypes.objectOf(RecallModel).isRequired,
-  recalls: PropTypes.objectOf(ReminderModel).isRequired,
+  reminders: PropTypes.instanceOf(Map).isRequired,
+  recalls: PropTypes.instanceOf(Map).isRequired,
   change: PropTypes.func.isRequired,
+  // Those props are not being called by their name so they throw this lint error
+  remindersField: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+  recallsField: PropTypes.bool, // eslint-disable-line react/no-unused-prop-types
+};
+
+SettingsForm.defaultProps = {
+  remindersField: null,
+  recallsField: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsForm);

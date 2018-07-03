@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
@@ -20,13 +21,7 @@ function NavList(props) {
   const onClickToggle = active => (active ? props.collapseContent() : props.displayContent());
 
   const SingleNavItem = ({
-    path,
-    icon,
-    active,
-    disabled,
-    iconType = 'solid',
-    badge = false,
-    iconImage = null,
+    path, icon, active, disabled, iconType, badge, iconImage,
   }) => {
     active = active || location.pathname === path;
 
@@ -50,7 +45,24 @@ function NavList(props) {
     );
   };
 
-  SingleNavItem.propTypes = SingleNavPropTypes;
+  SingleNavItem.propTypes = {
+    path: PropTypes.string.isRequired,
+    icon: PropTypes.string,
+    active: PropTypes.bool,
+    disabled: PropTypes.bool,
+    iconType: PropTypes.string,
+    badge: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    iconImage: PropTypes.node,
+  };
+
+  SingleNavItem.defaultProps = {
+    icon: null,
+    active: false,
+    disabled: false,
+    iconType: 'solid',
+    badge: null,
+    iconImage: null,
+  };
 
   // TODO ADD NOTIFICATION BADGE WHEN READY
   // <div className={styles.badge}><span>{props.intercomNotifications}</span></div>
@@ -124,24 +136,21 @@ function NavList(props) {
 }
 
 NavList.propTypes = {
-  location: PropTypes.string,
+  location: PropTypes.shape({
+    pathname: PropTypes.string,
+  }).isRequired,
   unreadChats: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   newRequests: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  showContent: PropTypes.bool,
+  showContent: PropTypes.bool.isRequired,
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
-  displayContent: PropTypes.func,
-  collapseContent: PropTypes.func,
+  displayContent: PropTypes.func.isRequired,
+  collapseContent: PropTypes.func.isRequired,
 };
 
-const SingleNavPropTypes = {
-  path: PropTypes.string,
-  icon: PropTypes.string,
-  label: PropTypes.string,
-  active: PropTypes.bool,
-  disabled: PropTypes.bool,
-  iconType: PropTypes.string,
-  badge: PropTypes.string,
-  iconImage: PropTypes.node,
+NavList.defaultProps = {
+  unreadChats: 0,
+  newRequests: 0,
+  toolbarPosition: TOOLBAR_LEFT,
 };
 
 const mapStateToProps = ({ chat, electron, entities }) => {

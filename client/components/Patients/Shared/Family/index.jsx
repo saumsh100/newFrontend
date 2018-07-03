@@ -38,10 +38,10 @@ const renderFamilyMembers = head => (node, i, arr) => {
   };
 
   return {
-    key: node.ccId,
     ...familyMemberData,
     withBorder: arr.length - 1 !== i,
     isHead: isMemberHead(node, head),
+    key: node.id,
     node,
   };
 };
@@ -64,6 +64,19 @@ Family.propTypes = {
     id: PropTypes.string,
     head: PropTypes.shape({
       accountId: PropTypes.string,
+    }),
+    members: PropTypes.shape({
+      edges: PropTypes.arrayOf(PropTypes.shape({
+        fullName: PropTypes.string,
+        age: PropTypes.number,
+        patient: PropTypes.shape({
+          avatarUrl: PropTypes.string,
+          firstName: PropTypes.string,
+          lastName: PropTypes.string,
+        }),
+        lastApp: PropTypes.string,
+        nextApp: PropTypes.string,
+      })),
     }),
   }).isRequired,
   render: PropTypes.func.isRequired,
