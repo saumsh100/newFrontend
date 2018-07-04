@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { omit } from 'lodash';
@@ -15,7 +14,7 @@ List.propTypes = {
 };
 
 List.defaultProps = {
-  className: null,
+  className: '',
 };
 
 export function ListItem(props) {
@@ -45,8 +44,8 @@ ListItem.propTypes = {
 
 ListItem.defaultProps = {
   disabled: false,
-  className: null,
-  disabledClass: null,
-  selectedClass: null,
+  className: '',
+  disabledClass: '',
+  selectedClass: '',
   selectItem: false,
 };

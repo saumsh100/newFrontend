@@ -19,7 +19,7 @@ export default function Avatar({
 
   const url = user.fullAvatarUrl || user.avatarUrl;
   const centerContent = url ? (
-    <img className={styles.img} src={url} alt={`Image of ${user.firstName}`} />
+    <img className={styles.img} src={url} alt={user.firstName} />
   ) : (
     <span className={styles.text}>
       {user.firstName && user.firstName[0]}
@@ -43,7 +43,13 @@ export default function Avatar({
 
   return (
     <div className={gradientStyle}>
-      <div className={classes} onClick={onClick}>
+      <div
+        className={classes}
+        onClick={onClick}
+        role="button"
+        tabIndex={0}
+        onKeyDown={e => e.keyCode === '13' && onClick}
+      >
         {centerContent}
       </div>
     </div>
@@ -52,16 +58,22 @@ export default function Avatar({
 
 Avatar.defaultProps = {
   isPatient: true,
+  onClick: e => e,
+  className: '',
+  size: 'md',
+  bgColor: '',
+  noPadding: false,
 };
 
 Avatar.propTypes = {
-  title: PropTypes.string,
   className: PropTypes.string,
   onClick: PropTypes.func,
   user: PropTypes.shape({
     avatarUrl: PropTypes.string,
-    firstName: PropTypes.string.isRequired,
-  }),
-
-  isPatient: PropTypes.bool.isRequired,
+    firstName: PropTypes.string,
+  }).isRequired,
+  size: PropTypes.string,
+  isPatient: PropTypes.bool,
+  bgColor: PropTypes.string,
+  noPadding: PropTypes.bool,
 };

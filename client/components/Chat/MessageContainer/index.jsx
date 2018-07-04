@@ -231,12 +231,12 @@ class MessageContainer extends Component {
   renderMessagesTree() {
     const { textMessages } = this.props;
 
-    return this.groupChatMessages(textMessages).map((group) => {
+    return this.groupChatMessages(textMessages).map((group, index) => {
       const headingContent =
         group.messages.length !== 0 ? this.getMessageTime(group.time) : 'No messages';
 
       return (
-        <div className={styles.groupWrapper} key={`msg_group_${group.time}`}>
+        <div className={styles.groupWrapper} key={group.time || index}>
           <div className={styles.time}>{headingContent}</div>
           <div>{this.renderMessageGroup(group.messages)}</div>
         </div>
@@ -273,40 +273,6 @@ class MessageContainer extends Component {
   }
 }
 
-MessageContainer.propTypes = {
-  textMessages: PropTypes.oneOfType([
-    PropTypes.arrayOf(ChatTextMessage),
-    PropTypes.instanceOf(OrderedMap),
-  ]).isRequired,
-  activeAccount: PropTypes.shape({
-    id: PropTypes.string,
-    twilioPhoneNumber: PropTypes.string,
-    toJS: PropTypes.func,
-  }).isRequired,
-  selectedChat: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  newChat: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  selectedPatient: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  userId: PropTypes.string.isRequired,
-  selectChat: PropTypes.func.isRequired,
-  setNewChat: PropTypes.func.isRequired,
-  reset: PropTypes.func.isRequired,
-  sendChatMessage: PropTypes.func.isRequired,
-  createNewChat: PropTypes.func.isRequired,
-  markAsUnread: PropTypes.func.isRequired,
-};
-
-MessageContainer.defaultProps = {
-  selectedChat: null,
-  newChat: null,
-  selectedPatient: null,
-};
-
 function mapStateToProps({ entities, auth, chat }) {
   const chats = entities.getIn(['chats', 'models']);
   const patients = entities.getIn(['patients', 'models']);
@@ -339,9 +305,40 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+MessageContainer.propTypes = {
+  textMessages: PropTypes.oneOfType([
+    PropTypes.arrayOf(ChatTextMessage),
+    PropTypes.instanceOf(OrderedMap),
+  ]).isRequired,
+  activeAccount: PropTypes.shape({
+    id: PropTypes.string,
+    twilioPhoneNumber: PropTypes.string,
+    toJS: PropTypes.func,
+  }).isRequired,
+  selectedChat: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  newChat: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  selectedPatient: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  userId: PropTypes.string.isRequired,
+  selectChat: PropTypes.func.isRequired,
+  setNewChat: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  sendChatMessage: PropTypes.func.isRequired,
+  createNewChat: PropTypes.func.isRequired,
+  markAsUnread: PropTypes.func.isRequired,
+};
+
+MessageContainer.defaultProps = {
+  selectedPatient: null,
+  newChat: null,
+  selectedChat: null,
+};
+
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(MessageContainer);
