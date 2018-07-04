@@ -510,6 +510,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of PMS Practitioner Ids whose patients are not synced",
+        "name": "IGNORED_PRACTITIONER_PMS_IDS",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -865,6 +874,15 @@ Object {
         "description": "The custom status that will be set on an Appointment when CareCru marks it as isMissed=false",
         "name": "APPOINTMENT_UNMISSED_STATUS_WRITE",
         "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of PMS Practitioner Ids whose patients are not synced",
+        "name": "IGNORED_PRACTITIONER_PMS_IDS",
+        "value": "[]",
       },
       "type": "configuration",
     },
