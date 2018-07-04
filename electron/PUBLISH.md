@@ -2,15 +2,14 @@
 
 The base of hub application resides within `/electron` folder. Before doing anything else, it is important to install electron's app dependencies.
 
-- Go to `electron` folder
-- Install electron app modules `npm install`
-- Switch back to root dir of carecru repo
+- Install electron dependencies using `npm run electron:install`
+- Fill your `.env` file with `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
 - Build frontend side with API_URL env included (if required, assumed `https://carecru.io` by default) which is the backend address hub is going to connect to
 `API_URL=http://localhost:5000 npm run client:build:prod`
 - Edit `/electron/package.json` and set the version you want to publish. If channel is required, include it after version (ex. 1.0.0-beta)
 - Within root dir, run:
-    - `AWS_ACCESS_KEY_ID=<AWS_KEY> AWS_SECRET_ACCESS_KEY=<AWS_SECRET> npm run electron:publish:dev` to publish new version to **DEVELOPMENT** bucket
-    - Or `AWS_ACCESS_KEY_ID=<AWS_KEY> AWS_SECRET_ACCESS_KEY=<AWS_SECRET> npm run electron:publish:prod` to publish new version to **PRODUCTION** bucket.
+    - `npm run electron:publish:dev` to publish new version to **DEVELOPMENT** bucket
+    - Or `npm run electron:publish:prod` to publish new version to **PRODUCTION** bucket.
 
 
 Rest of the job is done by the updater.

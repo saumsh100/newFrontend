@@ -2,9 +2,7 @@
 
 The base of hub application resides within `/electron` folder. Before doing anything else, it is important to install electron's app dependencies.
 
-- Go to `electron` folder
-- Install electron app modules `npm install`
-- Switch back to root dir of carecru repo
+- Install electron dependencies using `npm run electron:install`
 - Run backend server as its usually run (`npm start`)
 - Run frontend dev server `npm run client:dev:server`
 - Run Electron app `npm run electron:dev`
