@@ -38,6 +38,7 @@ class ChatListContainer extends Component {
   sortChatList() {
     const { textMessages } = this.props;
     return this.state.chatList.sort((a, b) => {
+      if (!a.textMessages.length || !b.textMessages.length) return -1;
       const aLastId = a.textMessages[a.textMessages.length - 1];
       const aLastTm = textMessages.get(aLastId);
       const bLastId = b.textMessages[b.textMessages.length - 1];
@@ -155,9 +156,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ChatListContainer);
