@@ -1,9 +1,11 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from '../../library';
 import About from './About';
 import Appointments from './Appointments';
+import { patientShape } from '../../library/PropTypeShapes/';
 import Insurance from './Insurance';
 import styles from './styles.scss';
 
@@ -28,25 +30,13 @@ class PatientInfo extends Component {
         index={this.state.tabIndex}
         onChange={i => this.setState({ tabIndex: i })}
       >
-        <Tab
-          label="About"
-          activeClass={styles.activeTab}
-          inactiveClass={styles.inactiveTab}
-        >
+        <Tab label="About" activeClass={styles.activeTab} inactiveClass={styles.inactiveTab}>
           <About patient={patient} />
         </Tab>
-        <Tab
-          label="Appointments"
-          activeClass={styles.activeTab}
-          inactiveClass={styles.inactiveTab}
-        >
+        <Tab label="Appointments" activeClass={styles.activeTab} inactiveClass={styles.inactiveTab}>
           <Appointments patient={patient} />
         </Tab>
-        <Tab
-          label="Insurance"
-          activeClass={styles.activeTab}
-          inactiveClass={styles.inactiveTab}
-        >
+        <Tab label="Insurance" activeClass={styles.activeTab} inactiveClass={styles.inactiveTab}>
           <Insurance patient={patient} />
         </Tab>
       </Tabs>
@@ -55,7 +45,11 @@ class PatientInfo extends Component {
 }
 
 PatientInfo.propTypes = {
-  patient: PropTypes.object,
+  patient: PropTypes.shape(patientShape),
+};
+
+PatientInfo.defaultProps = {
+  patient: null,
 };
 
 function mapStateToProps({ entities, chat }) {

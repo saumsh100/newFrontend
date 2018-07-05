@@ -1,4 +1,3 @@
-
 import React from 'react';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
@@ -80,7 +79,7 @@ Input.propTypes = {
   type: PropTypes.string,
   icon: PropTypes.string,
   iconType: PropTypes.string,
-  classStyles: PropTypes.string,
+  classStyles: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.string), PropTypes.string]),
   iconComponent: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 

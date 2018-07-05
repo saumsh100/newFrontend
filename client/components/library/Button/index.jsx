@@ -89,8 +89,9 @@ Button.defaultProps = {
   className: '',
   icon: '',
   iconRight: '',
-  iconRightComponent: undefined,
+  iconRightComponent: null,
   title: '',
+  children: '',
 };
 
 export default Button;

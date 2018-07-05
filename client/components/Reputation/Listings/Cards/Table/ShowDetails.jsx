@@ -1,5 +1,7 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Link from '../../../../library/Link';
 import styles from './styles.scss';
 
 export default function ShowDetails(props) {
@@ -24,21 +26,9 @@ export default function ShowDetails(props) {
 
   return (
     <div className={styles.showDetails}>
-      {matchKeys.map((mk, index) => {
+      {matchKeys.map((mk) => {
         let colorStyle = {};
         const displayData = data[mk];
-
-        /* if (mk === 'website') {
-          displayData = (
-            <a
-              href={data[mk]}
-              target="_blank"
-              className={styles.showDetails_website}
-            >
-              {data[mk]}
-            </a>
-          );
-        } */
 
         if (!matches[mk] && mk !== 'country' && mk !== 'website') {
           colorStyle = {
@@ -47,7 +37,7 @@ export default function ShowDetails(props) {
         }
 
         return (
-          <div className={styles.showDetails_info} key={index}>
+          <div className={styles.showDetails_info} key={mk}>
             <div className={styles.showDetails_text} style={colorStyle}>
               {displayData}
             </div>
@@ -55,14 +45,18 @@ export default function ShowDetails(props) {
         );
       })}
       <div className={styles.showDetails_links}>
-        <a href={url} target="_blank" className={styles.showDetails_view}>
+        <Link to={url} target="_blank" className={styles.showDetails_view}>
           view
-        </a>
+        </Link>
       </div>
     </div>
   );
 }
 
 ShowDetails.propTypes = {
-  listingData: PropTypes.object,
+  listingData: PropTypes.arrayOf(PropTypes.shape({
+    anchorData: PropTypes.objectOf(PropTypes.string),
+    anchorDataMatches: PropTypes.objectOf(PropTypes.bool),
+  })).isRequired,
+  url: PropTypes.string.isRequired,
 };

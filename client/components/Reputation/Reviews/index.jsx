@@ -22,7 +22,6 @@ class Reviews extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
       hasAccount: false,
       activationText: '',
       endDate: null,
@@ -63,9 +62,6 @@ class Reviews extends Component {
         .then(() => {
           this.props.setReputationFilterState();
           this.reviewsContainerHeight = document.getElementById('reviewsContainerRep').clientHeight;
-          this.setState({
-            loaded: true,
-          });
         })
         .catch(() => {
           this.setState({
@@ -78,10 +74,6 @@ class Reviews extends Component {
   }
 
   submitDate(values) {
-    this.setState({
-      loaded: false,
-    });
-
     const params = {
       startDate: moment(values.startDate).toLocaleString(),
       endDate: moment(values.endDate).toLocaleString(),
@@ -194,10 +186,7 @@ class Reviews extends Component {
             <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
               <Card className={styles.card}>
                 <div className={styles.stats}>
-                  <span className={styles.stats__count}>
-                    {' '}
-                    {reviewsData.totalCount}{' '}
-                  </span>
+                  <span className={styles.stats__count}> {reviewsData.totalCount} </span>
                   <span className={styles.stats__title}>Total Reviews</span>
                   <div className={styles.stats__rating}>
                     {reviewsData.ratingCounts['0'] || '0'} with no star rating
@@ -212,14 +201,7 @@ class Reviews extends Component {
               <RatingsChart rating={reviewsData.ratingCounts} />
             </Col>
             <Row className={styles.rowReviewsFilter}>
-              <Col
-                Col
-                style={{ paddingLeft: '10px' }}
-                xs={12}
-                md={8}
-                sm={9}
-                lg={9}
-              >
+              <Col style={{ paddingLeft: '10px' }} xs={12} md={8} sm={9} lg={9}>
                 <ReviewsCard
                   data={constructBigComment}
                   startDate={this.state.startDate}
@@ -261,22 +243,26 @@ class Reviews extends Component {
 }
 
 Reviews.propTypes = {
-  setReputationFilter: PropTypes.func,
-  setReputationFilterState: PropTypes.func,
+  setReputationFilter: PropTypes.func.isRequired,
+  setReputationFilterState: PropTypes.func.isRequired,
   reviewsFilter: PropTypes.instanceOf(Map),
   reviews: PropTypes.instanceOf(Map),
-  activeAccount: PropTypes.shape(accountShape),
-  fetchEntitiesRequest: PropTypes.func,
-  reset: PropTypes.func,
-  change: PropTypes.func,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+};
+
+Reviews.defaultProps = {
+  reviews: null,
+  reviewsFilter: null,
 };
 
 function mapStateToProps({
   apiRequests, entities, auth, reputation,
 }) {
   const reviews = apiRequests.get('reviews') && apiRequests.get('reviews').data;
-  const reviewsFilter =
-    apiRequests.get('reviews') && reputation.get('reviewsFilter');
+  const reviewsFilter = apiRequests.get('reviews') && reputation.get('reviewsFilter');
   return {
     reviews,
     reviewsFilter,
@@ -297,9 +283,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Reviews);

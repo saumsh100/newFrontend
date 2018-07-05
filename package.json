@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "1.78.0",
+  "version": "1.81.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -43,6 +43,7 @@
       "npm run server:build:prod && npm run update-schema && npm run relay && npm run client:build:prod",
     "remind:cron": "nf start -j REMIND_CRON",
     "build-storybook": "build-storybook",
+    "electron:install": "npm --prefix ./electron install",
     "electron:dev": "NODE_ENV=development electron ./electron/",
     "electron:build:mac":
       "electron-builder build -m --projectDir='./electron' --config='electron-builder-dev.yaml'",
@@ -50,9 +51,9 @@
       "electron-builder build -w --projectDir='./electron' --config='electron-builder-dev.yaml'",
     "electron:build": "electron-builder build -mw --projectDir='./electron'",
     "electron:publish:dev":
-      "electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-dev.yaml'",
+      "export $(cat .env | xargs) && electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-dev.yaml'",
     "electron:publish:prod":
-      "electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-prod.yaml'",
+      "export $(cat .env | xargs) && electron-builder build -mw --projectDir='./electron' --publish always --config='electron-builder-prod.yaml'",
     "electron:build:publish": "npm run client:build:prod && npm run electron:publish",
     "relay:watch": "npm run relay -- --watch",
     "relay":
