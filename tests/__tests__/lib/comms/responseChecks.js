@@ -3,6 +3,7 @@ import {
   getIndicesOf,
   isWordy,
   isNotInWord,
+  wordCheck,
   isSmsConfirmationResponse,
 } from '../../../../server/lib/comms/util/responseChecks';
 
@@ -79,39 +80,66 @@ describe('Communications Utility - Response Checks', () => {
     });
   });
 
-  describe('isSmsConfirmationResponse', () => {
+  describe('wordCheck', () => {
     test('should be a function', () => {
-      expect(typeof isSmsConfirmationResponse).toBe('function');
+      expect(typeof wordCheck).toBe('function');
     });
 
     test('should return true if completely equal to magic word', () => {
       const text = 'C';
-      expect(isSmsConfirmationResponse(text, 'C')).toBe(true);
+      expect(wordCheck(text, 'C')).toBe(true);
     });
 
     test('should return false if has C but it is in words', () => {
       const text = 'I Can\'t make it, sorry Caroline';
-      expect(isSmsConfirmationResponse(text, 'C')).toBe(false);
+      expect(wordCheck(text, 'C')).toBe(false);
     });
 
     test('should return true if surrounded by spaces', () => {
       const text = ' C ';
-      expect(isSmsConfirmationResponse(text, 'C')).toBe(true);
+      expect(wordCheck(text, 'C')).toBe(true);
     });
 
     test('should return true', () => {
       const text = 'C... Thanks! Canada';
-      expect(isSmsConfirmationResponse(text, 'C')).toBe(true);
+      expect(wordCheck(text, 'C')).toBe(true);
     });
 
     test('should return false', () => {
       const text = 'Camera';
-      expect(isSmsConfirmationResponse(text, 'C')).toBe(false);
+      expect(wordCheck(text, 'C')).toBe(false);
     });
 
     test('should return true', () => {
       const text = '.......C';
+      expect(wordCheck(text, 'C')).toBe(true);
+    });
+  });
+
+  describe('isSmsConfirmationResponse', () => {
+    test('should return true', () => {
+      const text = 'c';
       expect(isSmsConfirmationResponse(text, 'C')).toBe(true);
+    });
+
+    test('should return true', () => {
+      const text = 'c';
+      expect(isSmsConfirmationResponse(text, { C: true })).toBe(true);
+    });
+
+    test('should return true', () => {
+      const text = 'y';
+      expect(isSmsConfirmationResponse(text, { C: true, Y: true })).toBe(true);
+    });
+
+    test('should return false', () => {
+      const text = 'yes';
+      expect(isSmsConfirmationResponse(text, { C: true, Y: true })).toBe(false);
+    });
+
+    test('should return true', () => {
+      const text = 'Y... Great!';
+      expect(isSmsConfirmationResponse(text, { C: true, Y: true })).toBe(true);
     });
   });
 });
