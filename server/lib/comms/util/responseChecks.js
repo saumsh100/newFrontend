@@ -1,5 +1,10 @@
 
-const THE_MAGIC_WORD = 'C';
+import find from 'lodash/find';
+
+const THE_MAGIC_WORDS = {
+  C: true,
+  Y: true,
+};
 
 /**
  * getIndicesOf will return the indices in the text
@@ -70,14 +75,13 @@ export function isNotInWord(text, magicWord) {
 }
 
 /**
- * isSmsConfirmationResponse determines if a certain string of text is
- * a valid confirmation response
+ * Determines if a certain string of text is a valid confirmation response
  *
  * @param text
  * @param magicWord
- * @returns {*}
+ * @returns {boolean}
  */
-export function isSmsConfirmationResponse(text, magicWord = THE_MAGIC_WORD) {
+export function wordCheck(text, magicWord) {
   // If exactly equal to magicWord then don't go any further
   if (text === magicWord) {
     return true;
@@ -92,4 +96,20 @@ export function isSmsConfirmationResponse(text, magicWord = THE_MAGIC_WORD) {
 
   // This function plays nicer with checking AND for all booleans
   return hasMagicWord && magicWordIsNotInWord;
+}
+
+/**
+ * isSmsConfirmationResponse determines if a certain string of text is
+ * a valid confirmation response
+ *
+ * @param text
+ * @param magicWords
+ * @returns {boolean}
+ */
+export function isSmsConfirmationResponse(text, magicWords = THE_MAGIC_WORDS) {
+  text = text.toUpperCase();
+
+  return typeof magicWords !== 'string'
+    ? !!find(magicWords, (value, key) => wordCheck(text, key))
+    : wordCheck(text, magicWords);
 }
