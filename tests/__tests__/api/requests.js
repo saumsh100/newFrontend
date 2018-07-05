@@ -1,12 +1,16 @@
+
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Request, Appointment, PatientUser, Patient, Service } from '../../../server/_models';
+import { Request, Appointment, PatientUser, Patient, Service, Chair } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { serviceId, seedTestService } from '../../util/seedTestServices';
 import { patientUserId, seedTestPatients } from '../../util/seedTestPatients';
 import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
+import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
+import { chairId, seedTestChairs } from '../../util/seedTestChairs';
+
 import { omitPropertiesFromBody } from '../../util/selectors';
 
 const rootUrl = '/_api/requests';
@@ -16,16 +20,23 @@ const requestSeed = {
   id: requestId,
   startDate: '2017-07-19T00:16:30.932Z',
   endDate: '2017-07-19T00:17:30.932Z',
+  chairId,
   patientUserId,
-  insuranceCarrier: null,
-  insuranceMemberId: null,
+  practitionerId,
+  note: 'a standard note',
   requestingPatientUserId: patientUserId,
+  suggestedChairId: chairId,
+  suggestedPractitionerId: practitionerId,
+  insuranceCarrier: 'test',
+  insuranceMemberId: '53245',
+  insuranceGroupId: null,
   accountId,
   serviceId,
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
 async function seedTestRequest() {
+  await seedTestChairs();
   await seedTestAppointments();
   await seedTestService();
   await Request.create(requestSeed);
@@ -36,17 +47,14 @@ describe('/api/requests', () => {
   let token = null;
   beforeEach(async () => {
     await wipeModel(Request);
+    await wipeModel(Chair);
     await seedTestUsers();
     await seedTestRequest();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
   });
 
   afterAll(async () => {
-    await wipeModel(Request);
-    await wipeModel(Service);
-    await wipeModel(Appointment);
-    await wipeModel(PatientUser);
-    await wipeTestUsers();
+    await wipeAllModels();
   });
 
   describe('GET /', () => {
@@ -69,6 +77,18 @@ describe('/api/requests', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['password', 'avatarUrl', 'patientUserId']);
+          expect(body)
+            .toMatchSnapshot();
+        });
+    });
+
+    test('get all unSynced requests with patientUsers', () => {
+      return request(app)
+        .get(`${rootUrl}/notSynced`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          body = omitPropertiesFromBody(body, ['patientUser'], true);
           expect(body)
             .toMatchSnapshot();
         });

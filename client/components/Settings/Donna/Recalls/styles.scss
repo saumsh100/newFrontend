@@ -102,3 +102,7 @@ $wrapper-thickness: 6px;
   top: -($width + 2 * $wrapper-thickness) / 2;
   left: -($width + 2 * $wrapper-thickness) / 2;
 }
+
+.filledLabel {
+  top: -15px !important;
+}

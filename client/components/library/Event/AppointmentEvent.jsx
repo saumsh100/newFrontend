@@ -26,5 +26,5 @@ AppointmentEvent.propTypes = {
 };
 
 AppointmentEvent.defaultProps = {
-  bodyStyle: undefined,
+  bodyStyle: null,
 };

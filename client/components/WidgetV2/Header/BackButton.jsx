@@ -35,13 +35,13 @@ function BackButton(props) {
       <Switch>
         <Route
           exact
-          path={pathBuilder('/book/reason')}
-          component={backButton(props.goBack('./practitioner'))}
+          path={pathBuilder('/book/practitioner')}
+          component={backButton(props.goBack('./reason'))}
         />
         <Route
           exact
           path={pathBuilder('/book/date-and-time')}
-          component={backButton(props.goBack('./reason'))}
+          component={backButton(props.goBack('./practitioner'))}
         />
         <Route
           exact

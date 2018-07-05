@@ -1,12 +1,15 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
+import { Map } from 'immutable';
 import Loader from '../../Loader';
 import { Col, Grid, Row, Filters } from '../../library';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { setReputationFilter } from '../../../actions/reputation';
+import AccountModel from '../../../entities/models/Account';
 import colorMap from '../../library/util/colorMap';
 import Score from './Cards/Score';
 import Total from './Cards/Total';
@@ -33,6 +36,7 @@ function generateSearchData(entityList, statuses) {
           return entity;
         }
       }
+      return null;
     })
     .map(entity => ({
       img: entity.iconUrl,
@@ -45,7 +49,6 @@ class Listings extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
       hasAccount: false,
       activationText: '',
     };
@@ -56,10 +59,7 @@ class Listings extends Component {
 
     let hasAccount = false;
 
-    if (
-      activeAccount.get('vendataId') ||
-      activeAccount.get('vendastaId') !== ''
-    ) {
+    if (activeAccount.get('vendataId') || activeAccount.get('vendastaId') !== '') {
       hasAccount = true;
     }
 
@@ -70,40 +70,23 @@ class Listings extends Component {
 
   componentDidMount() {
     if (this.state.hasAccount) {
-      const params = {
-        startDate: moment().subtract(30, 'days')._d,
-        endDate: moment()._d,
-      };
-
       Promise.all([
         this.props.fetchEntitiesRequest({
           id: 'listings',
           url: '/api/reputation/listings',
         }),
-      ])
-        .then(() => {
-          this.setState({
-            loaded: true,
-          });
-        })
-        .catch(() => {
-          this.setState({
-            hasAccount: false,
-            activationText:
-              'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
-          });
+      ]).catch(() => {
+        this.setState({
+          hasAccount: false,
+          activationText:
+            'Activate Listings/Reputation Management package or contact your CareCru account manager for further assistance.',
         });
+      });
     }
   }
 
   render() {
-    const {
-      listings,
-      reset,
-      setReputationFilter,
-      listingsFilter,
-      change,
-    } = this.props;
+    const { listings, listingsFilter } = this.props;
 
     if (!this.state.hasAccount) {
       return <ReputationDisabled activationText={this.state.activationText} />;
@@ -149,47 +132,34 @@ class Listings extends Component {
     ];
 
     const listingsSearchData = listings.get('searchData').toJS();
-    console.log(listingsSearchData);
     const filterData = listingsFilter.toJS();
 
     const tableData2 = [];
 
     if (filterData.sourceTypes.length) {
-      filterData.sourceTypes.map((lf) => {
+      filterData.sourceTypes.forEach((lf) => {
         if (lf === 'Search Engines') {
           tableData2.push({
             title: 'Search Engines',
-            data: generateSearchData(
-              listingsSearchData.searchengines,
-              filterData.listingStatuses,
-            ),
+            data: generateSearchData(listingsSearchData.searchengines, filterData.listingStatuses),
           });
         }
         if (lf === 'Review Sites') {
           tableData2.push({
             title: 'Review Sites',
-            data: generateSearchData(
-              listingsSearchData.reviewengines,
-              filterData.listingStatuses,
-            ),
+            data: generateSearchData(listingsSearchData.reviewengines, filterData.listingStatuses),
           });
         }
         if (lf === 'Directories') {
           tableData2.push({
             title: 'Directories',
-            data: generateSearchData(
-              listingsSearchData.directories,
-              filterData.listingStatuses,
-            ),
+            data: generateSearchData(listingsSearchData.directories, filterData.listingStatuses),
           });
         }
         if (lf === 'Social Sites') {
           tableData2.push({
             title: 'Social Sites',
-            data: generateSearchData(
-              listingsSearchData.socialengines,
-              filterData.listingStatuses,
-            ),
+            data: generateSearchData(listingsSearchData.socialengines, filterData.listingStatuses),
           });
         }
       });
@@ -241,34 +211,22 @@ class Listings extends Component {
             />
           </Col>
           <Col className={styles.padding} xs={12} md={4}>
-            <Total
-              borderColor={colorMap.blue}
-              title="Listing Score"
-              data={totalData}
-            />
+            <Total borderColor={colorMap.blue} title="Listing Score" data={totalData} />
           </Col>
           <Col className={styles.padding} xs={12} md={5}>
-            <Information
-              borderColor={colorMap.blue}
-              title="Listing Score"
-              data={informationData}
-            />
+            <Information borderColor={colorMap.blue} title="Listing Score" data={informationData} />
           </Col>
           <Col className={styles.padding} xs={12} md={9}>
-            <Table
-              borderColor={colorMap.blue}
-              cardTitle="Primary Listings"
-              data={tableData2}
-            />
+            <Table borderColor={colorMap.blue} cardTitle="Primary Listings" data={tableData2} />
           </Col>
           <Col className={styles.padding} xs={12} md={3}>
             <Filters
               key="listingsFilter"
               filters={filters}
               filterKey="listingsFilter"
-              setReputationFilter={setReputationFilter}
-              reset={reset}
-              change={change}
+              setReputationFilter={this.props.setReputationFilter}
+              reset={this.props.reset}
+              change={this.props.change}
               initialValues={initialValues}
             />
           </Col>
@@ -278,21 +236,11 @@ class Listings extends Component {
   }
 }
 
-Listings.propTypes = {
-  listings: PropTypes.object.isRequired,
-  activeAccount: PropTypes.object.isRequired,
-  fetchEntitiesRequest: PropTypes.func,
-};
-
 function mapStateToProps({
   apiRequests, entities, auth, reputation,
 }) {
-  const listings = apiRequests.get('listings')
-    ? apiRequests.get('listings').data
-    : null;
-  const listingsFilter = apiRequests.get('listings')
-    ? reputation.get('listingsFilter')
-    : null;
+  const listings = apiRequests.get('listings') && apiRequests.get('listings').data;
+  const listingsFilter = apiRequests.get('listings') && reputation.get('listingsFilter');
 
   return {
     listings,
@@ -313,8 +261,19 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-export default enhance(Listings);
+Listings.propTypes = {
+  listings: PropTypes.instanceOf(Map),
+  listingsFilter: PropTypes.instanceOf(Map),
+  activeAccount: PropTypes.instanceOf(AccountModel).isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  setReputationFilter: PropTypes.func.isRequired,
+};
+
+Listings.defaultProps = {
+  listings: null,
+  listingsFilter: null,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Listings);

@@ -1,13 +1,13 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { reduxForm } from 'redux-form';
-import { compose, withProps } from 'recompose';
+import { compose } from 'recompose';
 import Field from './Field';
 import FieldArray from './FieldArray';
 import FormSection from './FormSection';
 import FormButton from './FormButton';
 import RemoteSubmitButton from './RemoteSubmitButton';
-import { asyncEmailValidate } from './validate';
 import { isHub } from '../../../util/hub';
 import DashboardStyles from './styles.scss';
 import ElectronStyles from './Electron/styles.scss';
@@ -21,11 +21,11 @@ function Form(props) {
     handleSubmit,
     pristine,
     ignoreSaveButton,
-    SaveButton = FormButton,
-    saveButtonProps = {},
+    SaveButton,
+    saveButtonProps,
   } = props;
 
-  const showSubmitButton = ignoreSaveButton ? null : (
+  const showSubmitButton = !ignoreSaveButton && (
     <SaveButton pristine={pristine} {...saveButtonProps} />
   );
 
@@ -38,25 +38,37 @@ function Form(props) {
         data-test-id={props['data-test-id']}
       >
         {children}
-        {showSubmitButton && (
-          <div className={styles.submitButton}>{showSubmitButton}</div>
-        )}
+        {showSubmitButton && <div className={styles.submitButton}>{showSubmitButton}</div>}
       </form>
     </div>
   );
 }
 
 Form.propTypes = {
-  // name: PropTypes.string.isRequired,
-  requiredFields: PropTypes.array,
+  children: PropTypes.node,
+  className: PropTypes.string,
+  handleSubmit: PropTypes.func.isRequired,
+  pristine: PropTypes.bool,
+  ignoreSaveButton: PropTypes.bool,
+  SaveButton: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
+  saveButtonProps: PropTypes.instanceOf(Object),
+  'data-test-id': PropTypes.string,
+};
+
+Form.defaultProps = {
+  children: null,
+  className: null,
+  pristine: false,
+  ignoreSaveButton: false,
+  SaveButton: FormButton,
+  saveButtonProps: {},
+  'data-test-id': null,
 };
 
 // Name attribute becomes a location in state ({ form: { [name]: { FORM_DATA } } })
 const withReduxForm = BaseComponent => reduxForm({})(BaseComponent);
 
-const enhance = compose(
-  // withValidate,
-  withReduxForm);
+const enhance = compose(withReduxForm);
 
 export default enhance(Form);
 

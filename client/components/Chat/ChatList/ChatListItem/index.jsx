@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -43,33 +44,23 @@ class ChatListItem extends Component {
   renderPatient() {
     const { patient } = this.props;
 
-    if (patient.firstName || patient.lastName) {
-      return (
-        <div className={styles.nameAgeWrapper}>
-          <div className={styles.nameWithAge}>
-            {patient.firstName} {patient.lastName}
-          </div>
-          {patient.birthDate && (
-            <div className={styles.age}>{` ${moment().diff(
-              patient.birthDate,
-              'years',
-            )}`}
-            </div>
-          )}
+    return patient.firstName || patient.lastName ? (
+      <div className={styles.nameAgeWrapper}>
+        <div className={styles.nameWithAge}>
+          {patient.firstName} {patient.lastName}
         </div>
-      );
-    }
-
-    return <div className={styles.name}>{patient.mobilePhoneNumber}</div>;
+        {patient.birthDate && (
+          <div className={styles.age}>{moment().diff(patient.birthDate, 'years')}</div>
+        )}
+      </div>
+    ) : (
+      <div className={styles.name}>{patient.mobilePhoneNumber}</div>
+    );
   }
 
   render() {
     const {
-      chat,
-      patient,
-      lastTextMessage,
-      hasUnread,
-      selectedChatId,
+      chat, patient, lastTextMessage, hasUnread, selectedChatId,
     } = this.props;
 
     if (!patient || !lastTextMessage) {
@@ -80,9 +71,7 @@ class ChatListItem extends Component {
     const daysDifference = moment().diff(mDate, 'days');
     const isActive = selectedChatId === chat.id && !isHub();
 
-    const messageDate = daysDifference
-      ? mDate.format('YY/MM/DD')
-      : mDate.format('h:mma');
+    const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
     const isUnread = !isActive && hasUnread;
 
@@ -106,11 +95,7 @@ class ChatListItem extends Component {
             </div>
             <div className={styles.time}>{messageDate}</div>
           </div>
-          <div
-            className={
-              isUnread ? styles.bottomSectionUnread : styles.bottomSection
-            }
-          >
+          <div className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}>
             {lastTextMessage && lastTextMessage.body}
           </div>
         </div>
@@ -137,26 +122,24 @@ ChatListItem.propTypes = {
     birthDate: PropTypes.string,
   }).isRequired,
   hasUnread: PropTypes.bool,
-  toggleFlagged: PropTypes.func,
-  selectChat: PropTypes.func,
+  toggleFlagged: PropTypes.func.isRequired,
+  selectChat: PropTypes.func.isRequired,
   selectedChatId: PropTypes.string,
   onChatClick: PropTypes.func,
+};
+
+ChatListItem.defaultProps = {
+  hasUnread: false,
+  selectedChatId: null,
+  onChatClick: e => e,
 };
 
 function mapStateToProps(state, { chat = {} }) {
   const patients = state.entities.getIn(['patients', 'models']);
   const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
-  const lastTextMessage = state.entities.getIn([
-    'textMessages',
-    'models',
-    lastTextMessageId,
-  ]);
+  const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
   const hasUnread = chat.textMessages.filter((message) => {
-    const messageEntity = state.entities.getIn([
-      'textMessages',
-      'models',
-      message,
-    ]);
+    const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
     return !messageEntity.read;
   });
 

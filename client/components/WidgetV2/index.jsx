@@ -61,7 +61,4 @@ function mapStateToProps({ availabilities, reviews }) {
   };
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  null,
-)(Widget));
+export default withRouter(connect(mapStateToProps, null)(Widget));

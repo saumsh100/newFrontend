@@ -23,6 +23,10 @@
   right: 10px;
   cursor: pointer;
 
+  & > button {
+    width: auto !important;
+  }
+
   @media (max-width: 576px) {
     display: block;
   }

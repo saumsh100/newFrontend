@@ -210,6 +210,7 @@ const ModelAttributes = {
     'suggestedPractitionerId',
     'suggestedChairId',
     'note',
+    'formattedNote',
     'insuranceMemberId',
     'insuranceCarrier',
     'pmsId',

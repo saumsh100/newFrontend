@@ -5,10 +5,11 @@ import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import jsonapi from '../../util/jsonapi';
-import { Permission, PatientUser, Request, User, Account } from '../../../_models';
+import { Permission, PatientUser, Request, User, Account, Service, Practitioner } from '../../../_models';
 import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
 import { formatPhoneNumber } from '../../../util/formatters';
 import { setDateToTimezone } from '../../../util/time';
+import { appointmentRequestNoteStringFormatter } from '../../../lib/appointmentRequestNoteStringFormatter';
 
 import {
   sendAppointmentRequested,
@@ -240,7 +241,6 @@ requestsRouter.get('/notSynced', (req, res, next) => {
     accountId,
   } = req;
 
-
   return Request.findAll({
     where: {
       accountId,
@@ -255,11 +255,32 @@ requestsRouter.get('/notSynced', (req, res, next) => {
     include: [{
       model: PatientUser,
       as: 'patientUser',
+    },
+    {
+      model: PatientUser,
+      as: 'requestingPatientUser',
+    },
+    {
+      model: Service,
+      as: 'service',
+    },
+    {
+      model: Account,
+      as: 'account',
+    },
+    {
+      model: Practitioner,
+      as: 'practitioner',
     }],
   }).then((requests) => {
-    const sendRequests = requests.map(r => r.get({ plain: true }));
-    const normalized = jsonapi('request', sendRequests);
-    return res.send(normalized);
+    const sendRequests = requests.map((request) => {
+      const r = request.get({ plain: true });
+      return {
+        ...r,
+        formattedNote: appointmentRequestNoteStringFormatter(r),
+      };
+    });
+    return res.send(jsonapi('request', sendRequests));
   })
     .catch(next);
 });

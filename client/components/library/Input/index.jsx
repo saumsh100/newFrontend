@@ -1,4 +1,3 @@
-
 import React from 'react';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
@@ -49,6 +48,10 @@ function Input(props) {
     [theme.inputWithIcon]: iconComponent || icon,
   });
 
+  const inputWrapperClassName = classNames(theme.group, {
+    [classStyles]: classStyles,
+  });
+
   const errorClassName = theme.error;
 
   const errorComponent = error && <span className={errorClassName}>{error}</span>;
@@ -57,7 +60,7 @@ function Input(props) {
     iconComponent || (icon && <Icon className={iconClassName} type={iconType} icon={icon} />);
 
   return (
-    <div className={`${theme.group} ${classStyles}`}>
+    <div className={inputWrapperClassName}>
       <input type={type} className={inputClassName} {...inputProps} ref={props.refCallBack} />
       <span className={theme.bar} />
       <span className={labelClassName}>{label}</span>
@@ -76,7 +79,7 @@ Input.propTypes = {
   type: PropTypes.string,
   icon: PropTypes.string,
   iconType: PropTypes.string,
-  classStyles: PropTypes.objectOf(PropTypes.string),
+  classStyles: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.string), PropTypes.string]),
   iconComponent: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 
@@ -88,7 +91,7 @@ Input.defaultProps = {
   type: 'text',
   icon: '',
   iconType: 'solid',
-  classStyles: {},
+  classStyles: '',
   iconComponent: null,
   refCallBack: null,
 };

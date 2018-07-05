@@ -16,4 +16,5 @@ publish:
   bucket: carecru-dev-builds
 win:
   publisherName: carecru
+generateUpdatesFilesForAllChannels: true
 electronVersion: 2.0.2

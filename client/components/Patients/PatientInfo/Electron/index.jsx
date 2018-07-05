@@ -21,7 +21,7 @@ function PatientInfoPage({ patientId }) {
 }
 
 PatientInfoPage.propTypes = {
-  patientId: PropTypes.string,
+  patientId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = ({ entities, chat }, { patientId }) => {

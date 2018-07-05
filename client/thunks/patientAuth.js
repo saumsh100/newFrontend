@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import LogRocket from 'logrocket';
-import { loginSuccess, logout as authLogout } from '../reducers/auth';
+import { patientLoginSuccess, patientAuthLogout } from '../reducers/patientAuth';
 import { setResetEmail } from '../actions/auth';
 import PatientUser from '../entities/models/PatientUser';
 
@@ -28,13 +28,13 @@ const updateSessionByToken = (token, dispatch) => {
       const sessionId = session.sessionId;
       const patientUser = new PatientUser(session.patientUser);
       // set's isAuthenticated and user data
-      dispatch(loginSuccess({ sessionId, patientUser }));
+      dispatch(patientLoginSuccess({ sessionId, patientUser }));
       return patientUser;
     })
     .catch((err) => {
       // Catch 401 from /auth/me and logout, or errors from React renders
       Token.remove();
-      dispatch(authLogout());
+      dispatch(patientAuthLogout());
       throw err;
     });
 };
@@ -58,7 +58,7 @@ export function logout() {
     Token.remove();
     const { auth } = getState();
     return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
-      dispatch(authLogout());
+      dispatch(patientAuthLogout());
     });
   };
 }

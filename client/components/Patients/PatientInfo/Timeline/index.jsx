@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { List } from 'immutable';
-import { Card, InfiniteScroll } from '../../../library';
-import { fetchEntitiesRequest, fetchEntities } from '../../../../thunks/fetchEntities';
 import EventModel from '../../../../entities/models/Event';
+import { Card, InfiniteScroll } from '../../../library';
+import { fetchEntities } from '../../../../thunks/fetchEntities';
 import EventList from './EventsList';
 import styles from './styles.scss';
 
@@ -111,7 +111,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       fetchEntities,
-      fetchEntitiesRequest,
     },
     dispatch,
   );
@@ -120,17 +119,17 @@ function mapDispatchToProps(dispatch) {
 Timeline.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)),
-  filters: PropTypes.instanceOf(List),
   wasEventsFetched: PropTypes.bool,
   wasPatientFetched: PropTypes.bool,
   patientId: PropTypes.string.isRequired,
+  filters: PropTypes.instanceOf(List),
 };
 
 Timeline.defaultProps = {
-  events: null,
-  filters: List,
   wasEventsFetched: false,
   wasPatientFetched: false,
+  filters: null,
+  events: [],
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Timeline);

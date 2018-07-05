@@ -41,9 +41,7 @@ class CallsTable extends Component {
       const callJS = call.toJS();
       const patient = callJS.patientId ? patients.get(callJS.patientId) : null;
       const callerName = callJS.patientId
-        ? `${patients.get(callJS.patientId).firstName} ${
-          patients.get(callJS.patientId).lastName
-        }`
+        ? `${patients.get(callJS.patientId).firstName} ${patients.get(callJS.patientId).lastName}`
         : callJS.callerName;
 
       callJS.callerName = callerName;
@@ -52,6 +50,10 @@ class CallsTable extends Component {
         <div
           className={styles.callListItem}
           onClick={() => openCallModal(callJS)}
+          key={`callContainer_${callJS.id}`}
+          role="button"
+          tabIndex={index}
+          onKeyDown={e => e.keyCode === '13' && openCallModal(callJS)}
         >
           <CallListItem
             key={callJS.id}
@@ -98,12 +100,18 @@ CallsTable.propTypes = {
   calls: PropTypes.instanceOf(Map),
   patients: PropTypes.instanceOf(Map),
   moreData: PropTypes.bool,
-  loadMore: PropTypes.func,
-  startDate: PropTypes.instanceOf(moment),
-  endDate: PropTypes.instanceOf(moment),
+  loadMore: PropTypes.func.isRequired,
   callGraphStats: PropTypes.instanceOf(Record),
   callsLength: PropTypes.number,
-  openCallModal: PropTypes.func,
+  openCallModal: PropTypes.func.isRequired,
+};
+
+CallsTable.defaultProps = {
+  calls: new Map(),
+  patients: new Map(),
+  moreData: false,
+  callsLength: 0,
+  callGraphStats: new Record(),
 };
 
 export default CallsTable;

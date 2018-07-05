@@ -1,8 +1,8 @@
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Map, Record } from 'immutable';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import jwt from 'jwt-decode';
@@ -49,13 +49,7 @@ class Calls extends Component {
       startDate, endDate, skip, limit,
     } = this.state;
 
-    const params = paramBuilder(
-      startDate,
-      endDate,
-      decodedToken.activeAccountId,
-      skip,
-      limit,
-    );
+    const params = paramBuilder(startDate, endDate, decodedToken.activeAccountId, skip, limit);
 
     this.fetchCallData(params).then((data) => {
       const dataLength = Object.keys(data[1].calls || {}).length;
@@ -101,12 +95,7 @@ class Calls extends Component {
 
   loadMore() {
     const {
-      startDate,
-      endDate,
-      accountId,
-      skip,
-      limit,
-      callsLength,
+      startDate, endDate, accountId, skip, limit, callsLength,
     } = this.state;
 
     const params = paramBuilder(startDate, endDate, accountId, skip, limit);
@@ -160,11 +149,7 @@ class Calls extends Component {
 
   render() {
     const {
-      callGraphStats,
-      calls,
-      patients,
-      wasCallsFetched,
-      wasStatsFetched,
+      callGraphStats, calls, patients, wasCallsFetched, wasStatsFetched,
     } = this.props;
 
     return (
@@ -187,29 +172,12 @@ class Calls extends Component {
   }
 }
 
-Calls.propTypes = {
-  appointments: PropTypes.instanceOf(Map),
-  callGraphStats: PropTypes.instanceOf(Record),
-  patients: PropTypes.instanceOf(Map),
-  calls: PropTypes.instanceOf(Map),
-  fetchEntitiesRequest: PropTypes.func.isRequired,
-  fetchEntities: PropTypes.func.isRequired,
-  createEntityRequest: PropTypes.func.isRequired,
-  updateEntityRequest: PropTypes.func.isRequired,
-  deleteAllEntity: PropTypes.func.isRequired,
-  wasCallsFetched: PropTypes.bool,
-  wasStatsFetched: PropTypes.bool,
-};
-
 function mapStateToProps({ entities, apiRequests }) {
   const callGraphStats = apiRequests.get('callGraphStats') || null;
   const wasStatsFetched =
-    (apiRequests.get('callGraphStats') &&
-      apiRequests.get('callGraphStats').wasFetched) ||
-    null;
+    (apiRequests.get('callGraphStats') && apiRequests.get('callGraphStats').wasFetched) || null;
 
-  const wasCallsFetched =
-    (apiRequests.get('calls') && apiRequests.get('calls').wasFetched) || null;
+  const wasCallsFetched = (apiRequests.get('calls') && apiRequests.get('calls').wasFetched) || null;
 
   return {
     callGraphStats,
@@ -232,9 +200,24 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+Calls.propTypes = {
+  callGraphStats: PropTypes.instanceOf(Record),
+  patients: PropTypes.instanceOf(Map),
+  calls: PropTypes.instanceOf(Map),
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  deleteAllEntity: PropTypes.func.isRequired,
+  wasCallsFetched: PropTypes.bool,
+  wasStatsFetched: PropTypes.bool,
+};
 
-export default enhance(Calls);
+Calls.defaultProps = {
+  wasCallsFetched: false,
+  wasStatsFetched: false,
+  calls: null,
+  patients: null,
+  callGraphStats: null,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calls);

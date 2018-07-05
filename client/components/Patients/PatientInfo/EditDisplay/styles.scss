@@ -141,6 +141,7 @@
   overflow: auto;
 
   @media screen and (max-width: 576px) {
+    min-height: unset;
     height: auto;
   }
 }

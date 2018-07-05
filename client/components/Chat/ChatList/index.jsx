@@ -1,8 +1,11 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Icon, ListItem } from '../../library';
+import { Map } from 'immutable';
+import PatientModel from '../../../entities/models/Patient';
+import { ListItem, IconButton } from '../../library';
 import ChatListItem from './ChatListItem';
 import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
 import { setNewChat } from '../../../reducers/chat';
@@ -35,13 +38,12 @@ class ChatListContainer extends Component {
   sortChatList() {
     const { textMessages } = this.props;
     return this.state.chatList.sort((a, b) => {
+      if (!a.textMessages.length || !b.textMessages.length) return -1;
       const aLastId = a.textMessages[a.textMessages.length - 1];
       const aLastTm = textMessages.get(aLastId);
       const bLastId = b.textMessages[b.textMessages.length - 1];
       const bLastTm = textMessages.get(bLastId);
-      if (bLastTm && aLastTm) {
-        return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
-      }
+      return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
     });
   }
 
@@ -60,11 +62,7 @@ class ChatListContainer extends Component {
 
   renderChatList() {
     return this.sortChatList().map(chat => (
-      <ChatListItem
-        key={`${chat.id}_listItem`}
-        onChatClick={this.props.onChatClick}
-        chat={chat}
-      />
+      <ChatListItem key={`${chat.id}_listItem`} onChatClick={this.props.onChatClick} chat={chat} />
     ));
   }
 
@@ -90,11 +88,8 @@ class ChatListContainer extends Component {
         onClick={this.selectNewChat}
       >
         <div className={listItemStyles.fullName}>{title}</div>
-        <div
-          onClick={this.removeNewChat}
-          className={listItemStyles.hoverSection}
-        >
-          <Icon icon="times" />
+        <div className={listItemStyles.hoverSection}>
+          <IconButton icon="times" onClick={this.removeNewChat} />
         </div>
       </ListItem>
     );
@@ -111,18 +106,28 @@ class ChatListContainer extends Component {
 }
 
 ChatListContainer.propTypes = {
-  textMessages: PropTypes.object,
-  chats: PropTypes.object,
+  textMessages: PropTypes.instanceOf(Map),
+  chats: PropTypes.instanceOf(Map),
   tabIndex: PropTypes.number,
   newChat: PropTypes.shape({
     patientId: PropTypes.string,
   }),
-  newChatPatient: PropTypes.object,
+  newChatPatient: PropTypes.instanceOf(PatientModel),
   selectedChatId: PropTypes.string,
-  setNewChat: PropTypes.func,
-  defaultSelectedChatId: PropTypes.func,
-  selectChat: PropTypes.func,
+  setNewChat: PropTypes.func.isRequired,
+  defaultSelectedChatId: PropTypes.func.isRequired,
+  selectChat: PropTypes.func.isRequired,
   onChatClick: PropTypes.func,
+};
+
+ChatListContainer.defaultProps = {
+  textMessages: null,
+  chats: null,
+  tabIndex: 0,
+  newChat: null,
+  newChatPatient: null,
+  selectedChatId: null,
+  onChatClick: e => e,
 };
 
 function mapStateToProps({ entities, chat }) {
@@ -151,9 +156,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(ChatListContainer);

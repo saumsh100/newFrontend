@@ -11,33 +11,27 @@ import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function Reasons({
-  servicesEntity,
-  selectedServiceId,
-  setSelectedService,
-  selectedPractitionerId,
-  location,
+  servicesEntity, selectedServiceId, setSelectedService, location,
 }) {
   /**
    * List of only active and not hidden practitioners
    * containing their name value and type.
    */
-  const servicesList = servicesEntity.get('models').reduce((acc, actual) => {
-    if (!selectedPractitionerId || actual.get('practitioners').includes(selectedPractitionerId)) {
-      return [
-        ...acc,
-        {
-          label: actual.get('name'),
-          value: actual.get('id'),
-        },
-      ];
-    }
-    return acc;
-  }, []);
+  const servicesList = servicesEntity.get('models').reduce(
+    (acc, actual) => [
+      ...acc,
+      {
+        label: actual.get('name'),
+        value: actual.get('id'),
+      },
+    ],
+    [],
+  );
 
   /**
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
-  const contextualUrl = (location.state && location.state.nextRoute) || './date-and-time';
+  const contextualUrl = (location.state && location.state.nextRoute) || './practitioner';
   return (
     <div className={styles.container}>
       {!servicesList.length ? (
@@ -51,7 +45,7 @@ function Reasons({
         </div>
       ) : (
         servicesList.map(service => (
-          <Link to={contextualUrl} key={`reason_${selectedServiceId}`} className={styles.cardLink}>
+          <Link to={contextualUrl} key={`reason_${service.value}`} className={styles.cardLink}>
             <WidgetCard
               arrow
               title={service.label}
@@ -67,7 +61,6 @@ function Reasons({
 
 function mapStateToProps({ entities, availabilities }) {
   return {
-    selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedServiceId: availabilities.get('selectedServiceId'),
     servicesEntity: entities.get('services'),
   };
@@ -82,14 +75,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Reasons);
+export default connect(mapStateToProps, mapDispatchToProps)(Reasons);
 
 Reasons.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
-  selectedPractitionerId: PropTypes.string.isRequired,
   selectedServiceId: PropTypes.string.isRequired,
   servicesEntity: PropTypes.instanceOf(services).isRequired,
   setSelectedService: PropTypes.func.isRequired,

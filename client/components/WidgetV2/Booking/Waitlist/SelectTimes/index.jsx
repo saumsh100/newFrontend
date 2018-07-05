@@ -275,10 +275,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SelectTimes);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectTimes);
 
 SelectTimes.propTypes = {
   timezone: PropTypes.string.isRequired,

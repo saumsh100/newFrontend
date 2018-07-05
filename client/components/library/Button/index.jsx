@@ -74,7 +74,7 @@ function Button(props) {
 
 Button.propTypes = {
   ...mapper.types(),
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   className: PropTypes.string,
   icon: PropTypes.string,
@@ -84,12 +84,14 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  children: null,
   as: 'button',
   className: '',
   icon: '',
   iconRight: '',
-  iconRightComponent: undefined,
+  iconRightComponent: null,
   title: '',
+  children: '',
 };
 
 export default Button;

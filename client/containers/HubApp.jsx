@@ -1,7 +1,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
@@ -14,18 +13,17 @@ import styles from './styles.scss';
 
 function HubApp(props) {
   const {
-    location,
-    children,
-    isSearchCollapsed,
-    showContent,
-    toolbarPosition,
+    location, children, isSearchCollapsed, showContent, toolbarPosition,
   } = props;
 
-  let AppContainer = (
+  const isLoginPage = location.pathname.includes('login');
+
+  if (isLoginPage) {
+    return <div>{children}</div>;
+  }
+
+  return (
     <div>
-      {/* <CallerModal /> */}
-      {/* <TopBarContainer /> */}
-      {/* {overlay} */}
       <div
         className={classNames(styles.hubContentContainer, {
           [styles.left]: toolbarPosition === TOOLBAR_LEFT,
@@ -56,14 +54,6 @@ function HubApp(props) {
       </NavRegionContainer>
     </div>
   );
-
-  const isLoginPage = location.pathname.includes('login');
-
-  if (isLoginPage) {
-    AppContainer = <div>{children}</div>;
-  }
-
-  return AppContainer;
 }
 
 HubApp.propTypes = {
@@ -73,6 +63,13 @@ HubApp.propTypes = {
   }),
   isSearchCollapsed: PropTypes.bool.isRequired,
   showContent: PropTypes.bool.isRequired,
+  toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
+};
+
+HubApp.defaultProps = {
+  toolbarPosition: TOOLBAR_LEFT,
+  children: null,
+  location: null,
 };
 
 function mapStateToProps({ toolbar, electron }) {
@@ -83,18 +80,4 @@ function mapStateToProps({ toolbar, electron }) {
   };
 }
 
-function mapActionsToProps(dispatch) {
-  return bindActionCreators(
-    {
-      dispatch,
-    },
-    dispatch,
-  );
-}
-
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
-
-export default enhance(HubApp);
+export default connect(mapStateToProps)(HubApp);

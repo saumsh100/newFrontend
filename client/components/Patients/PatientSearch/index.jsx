@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { push } from 'react-router-redux';
+import { fetchEntities } from '../../../thunks/fetchEntities';
 import { setBackHandler, setTitle } from '../../../reducers/electron';
 import { PATIENT_SEARCH_PAGE } from '../../../constants/PageTitle';
 import { Icon } from '../../library';
@@ -26,11 +26,15 @@ class PatientSearch extends Component {
     this.togglePatientsInfo = this.togglePatientsInfo.bind(this);
   }
 
+  componentDidMount() {
+    this.props.fetchEntities({ key: 'accounts', url: '/api/accounts' });
+  }
+
   togglePatientsInfo(patient) {
     this.setState(
       {
-        selectedPatient: patient,
         showPatientInfo: true,
+        selectedPatient: patient,
       },
       () => {
         this.props.setTitle(`${patient.firstName} ${patient.lastName}`);
@@ -58,10 +62,10 @@ class PatientSearch extends Component {
           <div>
             <Icon icon="search" className={styles.searchIcon} />
             <RelayPatientSearch
+              focusInputOnMount
               onChange={this.togglePatientsInfo}
               inputProps={patientSearchInputProps}
               theme={styles}
-              focusInputOnMount
             />
           </div>
         )}
@@ -71,17 +75,17 @@ class PatientSearch extends Component {
 }
 
 PatientSearch.propTypes = {
-  push: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
 };
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(
     {
-      push,
       setBackHandler,
       setTitle,
+      fetchEntities,
     },
     dispatch,
   );

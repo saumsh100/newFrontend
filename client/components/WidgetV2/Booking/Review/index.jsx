@@ -276,12 +276,6 @@ function Review({
           <p className={styles.subtitle}>
             Here are the informations that you already defined to your appointment.
           </p>
-          {renderSummaryItem(
-            'Practitioner',
-            (selectedPractitioner && selectedPractitioner.getPrettyName()) || 'No Preference',
-            './practitioner',
-            contextualUrl('./review'),
-          )}
           {selectedService.get('name') &&
             renderSummaryItem(
               'Reason',
@@ -289,6 +283,12 @@ function Review({
               './reason',
               contextualUrl('./review'),
             )}
+          {renderSummaryItem(
+            'Practitioner',
+            (selectedPractitioner && selectedPractitioner.getPrettyName()) || 'No Preference',
+            './practitioner',
+            contextualUrl('./review'),
+          )}
           {dateAndTime &&
             renderSummaryItem(
               'Date and Time',
@@ -380,10 +380,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Review));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
 
 Review.propTypes = {
   createRequest: PropTypes.func.isRequired,

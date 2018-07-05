@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { omit } from 'lodash';
@@ -10,23 +9,28 @@ export function List(props) {
   return <ul {...props} className={classes} />;
 }
 
+List.propTypes = {
+  className: PropTypes.string,
+};
+
+List.defaultProps = {
+  className: '',
+};
+
 export function ListItem(props) {
   const {
     className, disabledClass, selectedClass, selectItem,
   } = props;
 
-  let classes = className;
-  if (props.disabled) {
-    classes = classNames(classes, styles.disabledListItem, disabledClass);
-  } else {
-    classes = classNames(classes, styles.listItem);
-  }
+  const classes = classNames(className, {
+    [styles.disabledListItem]: props.disabled,
+    [disabledClass]: props.disabled && disabledClass,
+    [styles.listItem]: !props.disabled,
+    [styles.selected]: selectItem,
+    [selectedClass]: selectItem && selectedClass,
+  });
 
-  classes = selectItem
-    ? classNames(classes, styles.selected, selectedClass)
-    : classes;
-
-  const newProps = omit(props, ['selectItem', 'className']);
+  const newProps = omit(props, ['selectItem', 'className', 'selectedClass', 'disabledClass']);
   return <li {...newProps} className={classes} />;
 }
 
@@ -36,4 +40,12 @@ ListItem.propTypes = {
   disabledClass: PropTypes.string,
   selectedClass: PropTypes.string,
   selectItem: PropTypes.bool,
+};
+
+ListItem.defaultProps = {
+  disabled: false,
+  className: '',
+  disabledClass: '',
+  selectedClass: '',
+  selectItem: false,
 };

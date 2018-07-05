@@ -18,7 +18,13 @@ export default function Badge(props) {
 }
 
 Badge.propTypes = {
-  badgeStyle: PropTypes.stirng,
-  containerStyle: PropTypes.stirng,
-  children: PropTypes.element,
+  badgeStyle: PropTypes.string,
+  containerStyle: PropTypes.string,
+  children: PropTypes.node,
+};
+
+Badge.defaultProps = {
+  badgeStyle: null,
+  containerStyle: null,
+  children: null,
 };

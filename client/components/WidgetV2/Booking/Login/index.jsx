@@ -8,6 +8,7 @@ import { SubmissionError } from 'redux-form';
 import { Link, Form, Field, Button } from '../../../library';
 import { login } from '../../../../thunks/patientAuth';
 import { updateReview } from '../../../../thunks/reviews';
+import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function Login(props) {
@@ -21,7 +22,7 @@ function Login(props) {
     props
       .login(values)
       .then(() => {
-        this.props.history.push('./book/patient-information');
+        props.history.push('./book/patient-information');
       })
       .catch(({ data }) => {
         throw new SubmissionError({
@@ -36,9 +37,7 @@ function Login(props) {
         <Link to="./signup" className={styles.subCard}>
           <div className={styles.subCardWrapper}>
             <h3 className={styles.subCardTitle}>Don’t have an account?</h3>
-            <p className={styles.subCardSubtitle}>
-              Create an account to confirm your request.
-            </p>
+            <p className={styles.subCardSubtitle}>Create an account to confirm your request.</p>
           </div>
           <span className={styles.subCardLink}>Sign Up</span>
         </Link>
@@ -106,7 +105,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 Login.propTypes = {
-  login: PropTypes.func,
+  history: PropTypes.shape(historyShape).isRequired,
+  login: PropTypes.func.isRequired,
 };
 
 export default withRouter(connect(

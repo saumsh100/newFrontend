@@ -3,14 +3,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { Tabs, Tab, Button, DialogBox } from '../../../library';
-import RecallModel from '../../../../entities/models/Recall';
-import ReminderModel from '../../../../entities/models/Reminder';
+import PatientModel from '../../../../entities/models/Patient';
 import PersonalForm from './PersonalForm';
 import AppointmentsForm from './AppointmentsForm/index';
 import InsuranceForm from './InsuranceForm';
 import FamilyForm from './FamilyForm';
 import SettingsForm from './SettingsForm';
-import PatientModel from '../../../../entities/models/Patient';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import { familyDataSelector } from '../../Shared/helpers';
 import { isResponsive } from '../../../../util/hub';
@@ -106,7 +104,6 @@ class EditDisplay extends Component {
       <AppointmentsForm
         patient={patient}
         handleSubmit={this.handleSubmit}
-        dropDownStyle={this.dropDownStyle}
         inputStyle={this.inputStyle}
       />
     ) : (
@@ -136,7 +133,6 @@ class EditDisplay extends Component {
       <InsuranceForm
         patient={patient}
         handleSubmit={this.handleSubmit}
-        dropDownStyle={this.dropDownStyle}
         inputStyle={this.inputStyle}
       />
     );
@@ -264,19 +260,19 @@ EditDisplay.propTypes = {
   accountViewer: PropTypes.instanceOf(Object),
   isOpen: PropTypes.bool,
   patient: PropTypes.instanceOf(PatientModel),
-  recalls: PropTypes.objectOf(ReminderModel).isRequired,
+  recalls: PropTypes.instanceOf(Map).isRequired,
+  reminders: PropTypes.instanceOf(Map).isRequired,
   reinitializeState: PropTypes.func.isRequired,
-  reminders: PropTypes.objectOf(RecallModel).isRequired,
   role: PropTypes.string.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   wasAllFetched: PropTypes.bool,
 };
 
 EditDisplay.defaultProps = {
-  patient: null,
-  wasAllFetched: false,
-  isOpen: false,
   accountViewer: null,
+  patient: null,
+  isOpen: false,
+  wasAllFetched: false,
 };
 
 export default EditDisplay;

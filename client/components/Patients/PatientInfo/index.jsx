@@ -11,8 +11,7 @@ import graphQLEnvironment from '../../../util/graphqlEnvironment';
 import { convertIntervalToMs } from '../../../../server/util/time';
 import { Grid, Row, Col, Icon, Tabs, Tab, Button } from '../../library';
 import PatientModel from '../../../entities/models/Patient';
-import RecallModel from '../../../entities/models/Recall';
-import ReminderModel from '../../../entities/models/Reminder';
+import AccountModel from '../../../entities/models/Account';
 import {
   fetchEntities,
   fetchEntitiesRequest,
@@ -411,6 +410,10 @@ function mapStateToProps({
 
 PatientInfo.propTypes = {
   accountsFetched: PropTypes.bool,
+  wasPatientFetched: PropTypes.bool,
+  wasStatsFetched: PropTypes.bool,
+  currentTitle: PropTypes.string,
+  role: PropTypes.string,
   accountViewer: PropTypes.shape({
     id: PropTypes.string,
     patient: PropTypes.shape({
@@ -418,25 +421,21 @@ PatientInfo.propTypes = {
       id: PropTypes.string,
     }),
   }),
-  activeAccount: PropTypes.instanceOf(Object).isRequired,
-  addRemoveTimelineFilters: PropTypes.func.isRequired,
-  clearAllTimelineFilters: PropTypes.func.isRequired,
-  currentBackHandler: PropTypes.func,
-  currentTitle: PropTypes.string,
-  fetchEntitiesRequest: PropTypes.func.isRequired,
+  patientStats: PropTypes.instanceOf(Map),
+  patient: PropTypes.instanceOf(PatientModel),
+  activeAccount: PropTypes.instanceOf(AccountModel).isRequired,
   filters: PropTypes.instanceOf(Object).isRequired,
   match: PropTypes.instanceOf(Object).isRequired,
-  patient: PropTypes.instanceOf(PatientModel),
-  patientStats: PropTypes.instanceOf(Map),
-  recalls: PropTypes.objectOf(ReminderModel).isRequired,
-  reminders: PropTypes.objectOf(RecallModel).isRequired,
-  role: PropTypes.string,
+  recalls: PropTypes.instanceOf(Map).isRequired,
+  reminders: PropTypes.instanceOf(Map).isRequired,
+  currentBackHandler: PropTypes.func,
   selectAllTimelineFilters: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
-  wasPatientFetched: PropTypes.bool,
-  wasStatsFetched: PropTypes.bool,
+  addRemoveTimelineFilters: PropTypes.func.isRequired,
+  clearAllTimelineFilters: PropTypes.func.isRequired,
+  fetchEntitiesRequest: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {

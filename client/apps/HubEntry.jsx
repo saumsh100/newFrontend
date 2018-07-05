@@ -143,7 +143,7 @@ load()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Hub', () => {
-      const NextApp = require("./Hub").default; // eslint-disable-line
+      const NextApp = require('./Hub').default; // eslint-disable-line
       return render(NextApp);
     });
   }

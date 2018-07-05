@@ -68,10 +68,7 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(Tabs);
+export default connect(mapStateToProps, null)(Tabs);
 
 Tabs.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

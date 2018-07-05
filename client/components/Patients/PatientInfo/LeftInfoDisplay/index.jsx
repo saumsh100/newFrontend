@@ -11,14 +11,11 @@ import { patientShape, accountShape } from '../../../library/PropTypeShapes';
 import CollapsibleTab from '../CollapsibleTab';
 import styles from './styles.scss';
 
-export default function LeftInfoDisplay({
-  patient,
-  activeAccount,
-  handleTabChange,
-  tabIndex,
-  openModal,
-  accountViewer,
-}) {
+export default function LeftInfoDisplay(props) {
+  const {
+    patient, activeAccount, handleTabChange, tabIndex, openModal, accountViewer,
+  } = props;
+
   const { family, familyLength } = familyDataSelector(accountViewer);
 
   const appointmentsTab = patient && <AppointmentsTab patient={patient} openModal={openModal} />;
@@ -38,7 +35,7 @@ export default function LeftInfoDisplay({
 
   if (isResponsive()) {
     return (
-      <Card className={styles.mainContainer} runAnimation loaded={patient}>
+      <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
         <CollapsibleTab title="Appointments">{appointmentsTab}</CollapsibleTab>
         <CollapsibleTab title="Personal">{personalTab}</CollapsibleTab>
         <CollapsibleTab title="Insurance">{insuranceTab}</CollapsibleTab>
@@ -48,7 +45,7 @@ export default function LeftInfoDisplay({
   }
 
   return (
-    <Card className={styles.mainContainer} runAnimation loaded={patient}>
+    <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
       <Tabs index={tabIndex} onChange={handleTabChange} noUnderLine>
         <Tab label="Appointments" tabCard>
           {appointmentsTab}

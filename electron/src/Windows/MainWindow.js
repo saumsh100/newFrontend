@@ -1,7 +1,7 @@
 
 const url = require('url');
 const config = require('../../config');
-const Store = require('../store');
+const { userSessionStore: Store } = require('../store');
 const WindowMain = require('./Window');
 const ScreenManager = require('../ScreenManager');
 const {

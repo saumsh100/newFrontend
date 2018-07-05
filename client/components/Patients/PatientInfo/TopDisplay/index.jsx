@@ -10,7 +10,6 @@ import RecallData from '../../Shared/RecallColumn';
 import { formatPhoneNumber } from '../../../library/util/Formatters';
 import { isResponsive } from '../../../../util/hub';
 import { accountShape } from '../../../library/PropTypeShapes';
-import ActiveAccountModel from '../../../../entities/models/ActiveAccount';
 import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
@@ -61,7 +60,7 @@ export default function TopDisplay(props) {
         <div className={styles.imageContainer} style={bgStyle}>
           {''}
         </div>
-        {wasAllFetched ? (
+        {wasAllFetched && (
           <div className={styles.dataContainer}>
             <div className={styles.avatarContainer}>
               <div className={styles.avatarContainer_avatar}>
@@ -137,7 +136,7 @@ export default function TopDisplay(props) {
               </Row>
             </Grid>
           </div>
-        ) : null}
+        )}
       </div>
     </Card>
   );
@@ -145,10 +144,10 @@ export default function TopDisplay(props) {
 
 TopDisplay.propTypes = {
   wasStatsFetched: PropTypes.bool,
-  patientStats: PropTypes.instanceOf(Map),
-  accountsFetched: PropTypes.bool,
-  activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   wasPatientFetched: PropTypes.bool,
+  accountsFetched: PropTypes.bool,
+  patientStats: PropTypes.instanceOf(Map),
+  activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   patient: PropTypes.oneOfType([PropTypes.instanceOf(PatientModel), PropTypes.func]),
 };
 
@@ -157,6 +156,6 @@ TopDisplay.defaultProps = {
   accountsFetched: false,
   wasPatientFetched: false,
   patientStats: null,
-  activeAccount: PropTypes.instanceOf(ActiveAccountModel),
-  patient: PropTypes.instanceOf(PatientModel),
+  activeAccount: null,
+  patient: null,
 };
