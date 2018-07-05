@@ -25,10 +25,28 @@ module.exports = {
   },
 
   down: (queryInterface) => {
-    return queryInterface.bulkDelete('Configurations', {
-      name: [
-        migrationFieldName,
-      ],
+    return queryInterface.sequelize.transaction(async (t) => {
+      try {
+        const configurations = await queryInterface
+          .sequelize.query(`
+            SELECT * FROM "Configurations"
+            WHERE "name" = ?;
+          ` , { replacements: [migrationFieldName], transaction: t });
+
+        const configurationIds = configurations[0].map(c => c.id);
+        await queryInterface.bulkDelete('AccountConfigurations', {
+          configurationId: configurationIds,
+        }, { transaction: t });
+
+        await queryInterface.bulkDelete('Configurations', {
+          name: [
+            migrationFieldName
+          ],
+        }, { transaction: t });
+      } catch (err) {
+        console.error(err);
+        t.rollback();
+      }
     });
   },
 };
