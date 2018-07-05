@@ -1,13 +1,11 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { batchActions } from 'redux-batched-actions';
-import {
-  fetchEntities,
-  updateEntityRequest,
-} from '../../../../thunks/fetchEntities';
+import { fetchEntities, updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { showAlertTimeout } from '../../../../thunks/alerts';
 import { Toggle } from '../../../library/index';
 import { SortByName } from '../../../library/util/SortEntities';
@@ -80,13 +78,11 @@ class Chairs extends Component {
           });
       }
 
-      return this.props
-        .updateEntityRequest({ key: 'chairs', model: modifiedService })
-        .then(() => {
-          this.setState({
-            previousValues,
-          });
+      return this.props.updateEntityRequest({ key: 'chairs', model: modifiedService }).then(() => {
+        this.setState({
+          previousValues,
         });
+      });
     });
   }
 
@@ -96,6 +92,7 @@ class Chairs extends Component {
     if (!chairs) {
       return null;
     }
+
     const sortedChairs = chairs.sort(SortByName).toArray();
 
     const initialValues = createInitialValues(sortedChairs);
@@ -109,20 +106,16 @@ class Chairs extends Component {
         <div className={styles.container}>
           <div className={styles.allChairs}>
             <span className={styles.allChairs_text}> All Chairs Active </span>
-            <Toggle
-              name="allChairs"
-              onChange={this.setAllChairs}
-              checked={this.props.allChairs}
-            />
+            <Toggle name="allChairs" onChange={this.setAllChairs} checked={this.props.allChairs} />
           </div>
-          {sortedChairs.length ? (
+          {sortedChairs.length > 0 && (
             <ChairsForm
               chairs={sortedChairs}
               handleSubmit={this.handleSubmit}
               initialValues={initialValues}
               formValues={this.state.previousValues}
             />
-          ) : null}
+          )}
         </div>
       </SettingsCard>
     );
@@ -130,12 +123,16 @@ class Chairs extends Component {
 }
 
 Chairs.propTypes = {
-  chairs: PropTypes.shape(chairShape),
+  chairs: PropTypes.shape(chairShape).isRequired,
   fetchEntities: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
   allChairs: PropTypes.bool,
   change: PropTypes.func.isRequired,
+};
+
+Chairs.defaultProps = {
+  allChairs: false,
 };
 
 function mapStateToProps({ entities, form }) {
@@ -169,9 +166,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
-
-export default enhance(Chairs);
+export default connect(mapStateToProps, mapDispatchToProps)(Chairs);

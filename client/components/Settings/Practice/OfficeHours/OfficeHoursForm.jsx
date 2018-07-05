@@ -6,19 +6,8 @@ import moment from 'moment';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
-import {
-  Grid,
-  Row,
-  Col,
-  Form,
-  FormSection,
-  Field,
-  IconButton,
-} from '../../../library/index';
-import {
-  dayShape,
-  weeklyScheduleShape,
-} from '../../../library/PropTypeShapes/weeklyScheduleShape';
+import { Grid, Row, Col, Form, FormSection, Field, IconButton } from '../../../library/index';
+import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
 
 const generateTimeOptions = () => {
@@ -67,14 +56,11 @@ function OfficeHoursForm({
   ]);
 
   // Need to do this so editing breaks does not screw up initialValues here
-  const initialValues = mapValues(
-    parsedWeeklySchedule,
-    ({ isClosed, startTime, endTime }) => ({
-      isClosed,
-      startTime,
-      endTime,
-    }),
-  );
+  const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => ({
+    isClosed,
+    startTime,
+    endTime,
+  }));
 
   const DayHoursForm = ({ day }) => {
     // Hacky way of letting internal form values control component state
@@ -93,11 +79,7 @@ function OfficeHoursForm({
             >
               {day}
             </Col>
-            <Col
-              xs={2}
-              className={styles.flexCentered}
-              data-test-id={`toggle_${day}`}
-            >
+            <Col xs={2} className={styles.flexCentered} data-test-id={`toggle_${day}`}>
               <Field component="Toggle" name="isClosed" flipped />
             </Col>
             <Col xs={7} className={styles.flexCentered}>
@@ -140,11 +122,7 @@ function OfficeHoursForm({
                     />
                   </Col>
                   {modal && (
-                    <IconButton
-                      className={styles.icon}
-                      icon="cog"
-                      onClick={() => openModal(day)}
-                    />
+                    <IconButton className={styles.icon} icon="cog" onClick={() => openModal(day)} />
                   )}
                   <Col xs={3} />
                 </Row>
@@ -154,6 +132,10 @@ function OfficeHoursForm({
         </Grid>
       </FormSection>
     );
+  };
+
+  DayHoursForm.propTypes = {
+    day: PropTypes.string.isRequired,
   };
 
   return (
@@ -181,18 +163,27 @@ function OfficeHoursForm({
 }
 
 OfficeHoursForm.propTypes = {
-  values: PropTypes.objectOf(PropTypes.string),
+  values: PropTypes.objectOf(PropTypes.shape({
+    endTime: PropTypes.string,
+    startTime: PropTypes.string,
+    isClosed: PropTypes.bool,
+  })),
   weeklySchedule: PropTypes.shape(weeklyScheduleShape),
-  onSubmit: PropTypes.func,
-  breaksName: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
   dataId: PropTypes.string,
-  fields: PropTypes.arrayOf(PropTypes.element),
-  day: PropTypes.shape(dayShape),
-  breaksIndex: PropTypes.number,
-  formName: PropTypes.string,
+  formName: PropTypes.string.isRequired,
   modal: PropTypes.bool,
   openModal: PropTypes.func,
   hoursIndex: PropTypes.number,
+};
+
+OfficeHoursForm.defaultProps = {
+  values: {},
+  weeklySchedule: null,
+  modal: false,
+  hoursIndex: 0,
+  dataId: '',
+  openModal: e => e,
 };
 
 function mapStateToProps({ form }, { formName }) {
@@ -208,7 +199,4 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(OfficeHoursForm);
+export default connect(mapStateToProps, null)(OfficeHoursForm);

@@ -13,18 +13,13 @@ import {
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import {
-  downloadConnector,
-  sendEmailBlast,
-  getEmailBlastCount,
-} from '../../../../thunks/accounts';
+import { downloadConnector, sendEmailBlast, getEmailBlastCount } from '../../../../thunks/accounts';
 import EmailPreview from '../../Shared/EmailPreview';
 import AddAccounts from './AddAccounts';
 import SettingsCard from '../../Shared/SettingsCard';
 import SuperAdminForm from './SuperAdminForm';
 import MassEmailDisplay from './MassEmailDisplay';
 import Account from '../../../../entities/models/Account';
-import User from '../../../../entities/models/User';
 import styles from './styles.scss';
 
 class SuperAdmin extends Component {
@@ -76,8 +71,7 @@ class SuperAdmin extends Component {
     }
 
     const sendEmails = window.confirm('Are you sure you want to send this email blast?');
-    const sendEmailsForSure =
-      sendEmails && window.confirm('Are you really sure?');
+    const sendEmailsForSure = sendEmails && window.confirm('Are you really sure?');
 
     if (sendEmailsForSure) {
       this.setState({
@@ -91,10 +85,7 @@ class SuperAdmin extends Component {
   async updateApis(values) {
     const { activeAccount, address } = this.props;
     const {
-      reputationManagement,
-      listings,
-      callTracking,
-      canSendReminders,
+      reputationManagement, listings, callTracking, canSendReminders,
     } = values;
 
     const sendingValuesCreate = {};
@@ -116,15 +107,7 @@ class SuperAdmin extends Component {
       city, state, country, zipCode, street, timezone,
     } = address;
 
-    if (
-      !city ||
-      !state ||
-      !country ||
-      !street ||
-      !zipCode ||
-      !timezone ||
-      !website
-    ) {
+    if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
       return window.alert('Please enter Address and/or Clinic Website Info First');
     }
 
@@ -144,11 +127,9 @@ class SuperAdmin extends Component {
         options: 'delete',
       };
 
-      optionsCreate.reputationManagement =
-        !vendastaSrId && reputationManagement;
+      optionsCreate.reputationManagement = !vendastaSrId && reputationManagement;
       optionsCreate.listings = !vendastaMsId && listings;
-      optionsDelete.reputationManagement =
-        vendastaSrId && !reputationManagement;
+      optionsDelete.reputationManagement = vendastaSrId && !reputationManagement;
       optionsDelete.listings = vendastaMsId && !listings;
 
       if (optionsCreate.reputationManagement || optionsCreate.listings) {
@@ -235,13 +216,9 @@ class SuperAdmin extends Component {
     });
 
     const addAccounts = [
-      <Header title="API Accounts" contentHeader />,
-      <div className={styles.formContainer}>
-        <AddAccounts
-          onSubmit={this.updateApis}
-          formName="apis"
-          activeAccount={activeAccount}
-        />
+      <Header title="API Accounts" contentHeader key="API Accounts" />,
+      <div className={styles.formContainer} key="API Accounts Form">
+        <AddAccounts onSubmit={this.updateApis} formName="apis" activeAccount={activeAccount} />
       </div>,
     ];
 
@@ -250,9 +227,7 @@ class SuperAdmin extends Component {
       : null;
 
     const emailTemplate = 'General Introduction Announcement';
-    const url = `/api/accounts/${
-      activeAccount.id
-    }/emails/preview/?templateName=${emailTemplate}`;
+    const url = `/api/accounts/${activeAccount.id}/emails/preview/?templateName=${emailTemplate}`;
 
     const actions = [
       {
@@ -272,12 +247,9 @@ class SuperAdmin extends Component {
     return (
       role === 'SUPERADMIN' && (
         <SettingsCard title="Super Admin" bodyClass={styles.generalBodyClass}>
-          <Header title="Practice Settings" contentHeader />
+          <Header title="Practice Settings" contentHeader key="Practice Settings" />
           <div className={styles.formContainer}>
-            <SuperAdminForm
-              onSubmit={this.updateAdminForm}
-              activeAccount={activeAccount}
-            />
+            <SuperAdminForm onSubmit={this.updateAdminForm} activeAccount={activeAccount} />
           </div>
 
           {addAccounts}
@@ -313,15 +285,11 @@ SuperAdmin.propTypes = {
   fetchEntities: PropTypes.func.isRequired,
   sendEmailBlast: PropTypes.func.isRequired,
   getEmailBlastCount: PropTypes.func.isRequired,
-  users: PropTypes.arrayOf(PropTypes.instanceOf(User)).isRequired,
+  users: PropTypes.instanceOf(Map).isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn([
-    'accounts',
-    'models',
-    auth.get('accountId'),
-  ]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   const addresses = entities.getIn(['addresses', 'models']);
   let address;
@@ -351,7 +319,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SuperAdmin);
+export default connect(mapStateToProps, mapDispatchToProps)(SuperAdmin);

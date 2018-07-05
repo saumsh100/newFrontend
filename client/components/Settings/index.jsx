@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { Card } from '../library';
 import SettingsSubNav from './SettingsSubNav';
@@ -40,7 +41,7 @@ export default function Settings(props) {
 }
 
 Settings.propTypes = {
-  location: PropTypes.shape(PropTypes.string),
+  location: PropTypes.objectOf(PropTypes.string).isRequired,
   children: PropTypes.element.isRequired,
-  users: PropTypes.instanceOf(Map),
+  users: PropTypes.instanceOf(Map).isRequired,
 };

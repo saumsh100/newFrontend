@@ -1,14 +1,17 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Tabs, Tab, IconButton, Header } from '../../../library';
+import { Tabs, Tab, IconButton } from '../../../library';
 import PractitionerBasicData from './PractitionerBasicData';
 import PractitionerOfficeHours from './PractitionerOfficeHours';
 import PractitionerServices from './PractitionerServices';
 import PractitionerTimeOff from './PractitionerTimeOff';
 import PractitionerRecurringTimeOff from './PractitionerRecurringTimeOff';
 import PractitionerActive from './PractitionerActive';
+import WeeklyScheduleModel from '../../../../entities/models/WeeklySchedule';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from '../styles.scss';
 
@@ -53,7 +56,7 @@ class PractitionerTabs extends Component {
   deletePractitioner() {
     const { practitioner } = this.props;
 
-    const deletePrac = confirm('Delete Practitioner?');
+    const deletePrac = window.confirm('Delete Practitioner?');
 
     if (deletePrac) {
       this.props.deleteEntityRequest({
@@ -70,10 +73,7 @@ class PractitionerTabs extends Component {
 
   render() {
     const {
-      practitioner,
-      weeklySchedule,
-      timeOffs,
-      recurringTimeOffs,
+      practitioner, weeklySchedule, timeOffs, recurringTimeOffs,
     } = this.props;
 
     if (!practitioner) {
@@ -87,8 +87,7 @@ class PractitionerTabs extends Component {
     let filteredRecurringTimeOffs = null;
 
     if (recurringTimeOffs) {
-      filteredRecurringTimeOffs = recurringTimeOffs.filter(recurringTimeOff =>
-        recurringTimeOff.practitionerId === practitioner.get('id'));
+      filteredRecurringTimeOffs = recurringTimeOffs.filter(recurringTimeOff => recurringTimeOff.practitionerId === practitioner.get('id'));
     }
 
     const serviceIds = practitioner.get('services');
@@ -118,17 +117,14 @@ class PractitionerTabs extends Component {
         subHeader={
           <Tabs index={this.state.index} onChange={this.handleTabChange}>
             <Tab label="Basic" data-test-id="tab_practitionerBasicData" />
-            <Tab
-              label="Practitioner Schedule"
-              data-test-id="tab_practitionerOfficeHours"
-            />
+            <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
             <Tab label="Reasons" data-test-id="tab_practitionerServices" />
             <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
             <Tab label="Recurring Time Off" />
           </Tabs>
         }
       >
-        <Tabs index={this.state.index} noHeaders>
+        <Tabs index={this.state.index} noHeaders contentClass={styles.content}>
           <Tab label=" ">
             <PractitionerBasicData
               key={practitioner.get('id')}
@@ -177,13 +173,8 @@ function mapStateToProps({ entities }, { practitioner }) {
   const weeklyScheduleId = practitioner.get('isCustomSchedule')
     ? practitioner.get('weeklyScheduleId')
     : null;
-  const weeklySchedule = entities
-    .getIn(['weeklySchedules', 'models'])
-    .get(weeklyScheduleId);
-  const allTimeOffs = entities.getIn([
-    'practitionerRecurringTimeOffs',
-    'models',
-  ]);
+  const weeklySchedule = entities.getIn(['weeklySchedules', 'models']).get(weeklyScheduleId);
+  const allTimeOffs = entities.getIn(['practitionerRecurringTimeOffs', 'models']);
   const timeOffs = allTimeOffs.filter(timeOff => !timeOff.toJS().interval);
 
   const recurringTimeOffs = allTimeOffs.filter(timeOff => timeOff.toJS().interval);
@@ -207,9 +198,23 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+PractitionerTabs.propTypes = {
+  practitioner: PropTypes.shape().isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  setPractitionerId: PropTypes.func.isRequired,
+  chairs: PropTypes.instanceOf(Map),
+  timeOffs: PropTypes.instanceOf(Map),
+  recurringTimeOffs: PropTypes.instanceOf(Map),
+  weeklySchedule: PropTypes.instanceOf(WeeklyScheduleModel),
+};
 
-export default enhance(PractitionerTabs);
+PractitionerTabs.defaultProps = {
+  chairs: null,
+  timeOffs: null,
+  recurringTimeOffs: null,
+  weeklySchedule: null,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(PractitionerTabs);

@@ -1,5 +1,7 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { List, Map } from 'immutable';
 import { change } from 'redux-form';
 import { connect } from 'react-redux';
 import { batchActions } from 'redux-batched-actions';
@@ -12,9 +14,7 @@ function checkValues(obj) {
 }
 
 function createInitialValues(practitionerIds, practitioners) {
-  return practitioners
-    .map(p => practitionerIds.indexOf(p.get('id')) > -1)
-    .toJS();
+  return practitioners.map(p => practitionerIds.indexOf(p.get('id')) > -1).toJS();
 }
 
 class ServicesPractForm extends Component {
@@ -28,8 +28,7 @@ class ServicesPractForm extends Component {
     e.stopPropagation();
     const { formName, values, allPractitioners } = this.props;
 
-    const actions = Object.keys(values).map(key =>
-      change(formName, key, !allPractitioners));
+    const actions = Object.keys(values).map(key => change(formName, key, !allPractitioners));
 
     this.props.dispatch(batchActions(actions));
   }
@@ -68,7 +67,7 @@ class ServicesPractForm extends Component {
               .toArray()
               .map((practitioner, index) => (
                 <ServicesPractList
-                  key={`${practitioner.get('id')}${index}`}
+                  key={`${practitioner.get('id') || index}`}
                   practitioner={practitioner}
                   index={index}
                 />
@@ -87,10 +86,7 @@ class ServicesPractForm extends Component {
         />
         <div className={styles.servicesPractForm}>
           <div className={styles.servicesPractForm_all}>
-            <span className={styles.servicesPractForm_all_text}>
-              {' '}
-              All Practitioners
-            </span>
+            <span className={styles.servicesPractForm_all_text}> All Practitioners</span>
             <div className={styles.servicesPractForm_all_toggle}>
               <Toggle
                 name="allPractitioners"
@@ -109,11 +105,21 @@ class ServicesPractForm extends Component {
 ServicesPractForm.propTypes = {
   allPractitioners: PropTypes.bool,
   practitioners: PropTypes.instanceOf(Map),
-  practitionerIds: PropTypes.arrayOf(PropTypes.string),
-  formName: PropTypes.string,
-  values: PropTypes.objectOf(PropTypes.string),
-  dispatch: PropTypes.func,
-  handleSubmit: PropTypes.func,
+  practitionerIds: PropTypes.oneOfType([
+    PropTypes.instanceOf(List),
+    PropTypes.arrayOf(PropTypes.string),
+  ]),
+  formName: PropTypes.string.isRequired,
+  values: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
+  dispatch: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+};
+
+ServicesPractForm.defaultProps = {
+  values: {},
+  practitionerIds: null,
+  allPractitioners: false,
+  practitioners: null,
 };
 
 function mapStateToProps({ form }, { formName }) {
@@ -130,7 +136,4 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(ServicesPractForm);
+export default connect(mapStateToProps, null)(ServicesPractForm);

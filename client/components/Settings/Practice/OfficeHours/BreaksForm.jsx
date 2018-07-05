@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import moment from 'moment';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
-import { connect } from 'react-redux';
 import {
   Button,
   IconButton,
@@ -17,10 +16,7 @@ import {
   Field,
   FieldArray,
 } from '../../../library/index';
-import {
-  dayShape,
-  weeklyScheduleShape,
-} from '../../../library/PropTypeShapes/weeklyScheduleShape';
+import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
 
 const generateTimeOptions = () => {
@@ -49,11 +45,7 @@ const defaultEndTime = moment(new Date(1970, 1, 0, 13, 0)).toISOString();
 const timeOptions = generateTimeOptions();
 
 function BreaksForm({
-  weeklySchedule,
-  onSubmit,
-  breaksName,
-  dataId,
-  breaksIndex,
+  weeklySchedule, onSubmit, breaksName, dataId, breaksIndex,
 }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
@@ -103,7 +95,7 @@ function BreaksForm({
         >
           <Grid>
             {fields.map((field, index) => (
-              <Row key={index}>
+              <Row key={`startTime_${field}`}>
                 <Col xs={4} className={styles.flexCentered}>
                   <Field
                     component="DropdownSelect"
@@ -116,9 +108,7 @@ function BreaksForm({
                   />
                 </Col>
                 <Col xs={1} className={styles.flexCentered}>
-                  <div className={classNames(styles.inlineBlock, styles.toDiv)}>
-                    to
-                  </div>
+                  <div className={classNames(styles.inlineBlock, styles.toDiv)}>to</div>
                 </Col>
                 <Col xs={4} className={styles.flexCentered}>
                   <Field
@@ -155,6 +145,11 @@ function BreaksForm({
       <FieldArray name="breaks" component={renderBreaks(day)} />
     </FormSection>
   );
+
+  DayBreaksForm.propTypes = {
+    day: PropTypes.string.isRequired,
+  };
+
   return (
     <Form
       enableReinitialize
@@ -179,30 +174,17 @@ function BreaksForm({
 }
 
 BreaksForm.propTypes = {
-  values: PropTypes.objectOf(PropTypes.string),
-  weeklySchedule: PropTypes.shape(weeklyScheduleShape),
-  onSubmit: PropTypes.func,
+  weeklySchedule: PropTypes.shape(weeklyScheduleShape).isRequired,
+  onSubmit: PropTypes.func.isRequired,
   breaksName: PropTypes.string,
   dataId: PropTypes.string,
-  fields: PropTypes.arrayOf(PropTypes.element),
-  day: PropTypes.shape(dayShape),
   breaksIndex: PropTypes.number,
 };
 
-function mapStateToProps({ form }, { formName }) {
-  // form data is populated when component renders
-  if (!form[formName]) {
-    return {
-      values: {},
-    };
-  }
+BreaksForm.defaultProps = {
+  breaksIndex: 0,
+  dataId: '',
+  breaksName: '',
+};
 
-  return {
-    values: form[formName].values,
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  null,
-)(BreaksForm);
+export default BreaksForm;

@@ -74,7 +74,7 @@ class DialogBody extends Component {
 
 DialogBody.propTypes = {
   'data-test-id': PropTypes.string,
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.node]),
   onOverlayClick: PropTypes.func.isRequired,
   actions: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string,

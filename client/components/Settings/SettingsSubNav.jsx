@@ -66,23 +66,19 @@ const PATHS = {
 };
 
 export default function SettingsSubNav({ location, className, users }) {
-  const routes = find(
-    PATHS,
-    (route, key) => location.pathname.indexOf(key) === 0,
-  );
+  const routes = find(PATHS, (route, key) => location.pathname.indexOf(key) === 0);
   // Workaround for redirects
   return routes ? (
-    <RouterList
-      location={location}
-      routes={routes}
-      className={className}
-      users={users}
-    />
+    <RouterList location={location} routes={routes} className={className} users={users} />
   ) : null;
 }
 
 SettingsSubNav.propTypes = {
   className: PropTypes.string,
-  location: PropTypes.shape(PropTypes.string),
-  users: PropTypes.instanceOf(Map),
+  location: PropTypes.objectOf(PropTypes.string).isRequired,
+  users: PropTypes.instanceOf(Map).isRequired,
+};
+
+SettingsSubNav.defaultProps = {
+  className: '',
 };

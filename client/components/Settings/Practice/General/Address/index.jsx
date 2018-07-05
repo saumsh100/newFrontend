@@ -6,10 +6,7 @@ import { connect } from 'react-redux';
 import { change } from 'redux-form';
 import { Map } from 'immutable';
 import AddressForm from './AddressForm';
-import {
-  updateEntityRequest,
-  createEntityRequest,
-} from '../../../../../thunks/fetchEntities';
+import { updateEntityRequest, createEntityRequest } from '../../../../../thunks/fetchEntities';
 import { accountShape } from '../../../../library/PropTypeShapes/accountShape';
 
 class Address extends Component {
@@ -33,24 +30,22 @@ class Address extends Component {
       },
     };
 
-    this.props
-      .updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert })
-      .then(() => {
-        if (activeAccount.addressId) {
-          values.accountId = activeAccount.id;
-          this.props.updateEntityRequest({
-            key: 'addresses',
-            values,
-            url: `/api/addresses/${activeAccount.addressId}`,
-          });
-        } else {
-          this.props.createEntityRequest({
-            key: 'addresses',
-            values,
-            url: '/api/addresses/',
-          });
-        }
-      });
+    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert }).then(() => {
+      if (activeAccount.addressId) {
+        values.accountId = activeAccount.id;
+        this.props.updateEntityRequest({
+          key: 'addresses',
+          values,
+          url: `/api/addresses/${activeAccount.addressId}`,
+        });
+      } else {
+        this.props.createEntityRequest({
+          key: 'addresses',
+          values,
+          url: '/api/addresses/',
+        });
+      }
+    });
   }
 
   render() {
@@ -69,10 +64,9 @@ class Address extends Component {
 }
 
 Address.propTypes = {
-  activeAccount: PropTypes.objectOf(accountShape),
-  addresses: PropTypes.instanceOf(Map),
-  updateEntityRequest: PropTypes.func,
-  createEntityRequest: PropTypes.func,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
   address: PropTypes.shape({
     country: PropTypes.string,
     street: PropTypes.string,
@@ -81,7 +75,11 @@ Address.propTypes = {
     state: PropTypes.string,
     timezone: PropTypes.string,
   }),
-  change: PropTypes.func,
+  change: PropTypes.func.isRequired,
+};
+
+Address.defaultProps = {
+  address: null,
 };
 
 function mapDispatchToActions(dispatch) {
@@ -100,14 +98,9 @@ function mapStateToProps({ entities }, { activeAccount }) {
 
   return {
     address:
-      activeAccount && activeAccount.addressId
-        ? addresses.get(activeAccount.addressId)
-        : false,
+      activeAccount && activeAccount.addressId ? addresses.get(activeAccount.addressId) : false,
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToActions,
-);
+const enhance = connect(mapStateToProps, mapDispatchToActions);
 export default enhance(Address);

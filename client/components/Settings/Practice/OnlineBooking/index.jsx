@@ -1,10 +1,12 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { Header, CodeSnippet } from '../../../library/index';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
+import accountModel from '../../../../entities/models/Account';
 import PreferencesForm from './PreferencesForm';
 import IntervalForm from './IntervalForm';
 import SettingsCard from '../../Shared/SettingsCard';
@@ -46,34 +48,26 @@ class OnlineBooking extends Component {
     const location = window.location;
 
     const port = location.port ? `:${location.port}` : '';
-    const snippet = `<script type="text/javascript" src="${
-      location.protocol
-    }//my.${location.hostname}${port}/widgets/${
-      activeAccount.id
-    }/cc.js"></script>`;
+    const snippet = `<script type="text/javascript" src="${location.protocol}//my.${
+      location.hostname
+    }${port}/widgets/${activeAccount.id}/cc.js"></script>`;
 
     return (
       <SettingsCard title="Online Booking" bodyClass={styles.onlineBookingBody}>
         <div className={styles.formContainer}>
           <Header title="Color Options" contentHeader />
-          <PreferencesForm
-            activeAccount={activeAccount}
-            handleSubmit={this.handleSubmit}
-          />
+          <PreferencesForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
         </div>
         <div className={styles.snippetContainer}>
           <div className={styles.label}>
-            HTML SNIPPET Copy and paste the snippet below into your website, at
-            the bottom of your body tag.
+            HTML SNIPPET Copy and paste the snippet below into your website, at the bottom of your
+            body tag.
           </div>
           <CodeSnippet codeSnippet={snippet} />
         </div>
         <div className={styles.formContainer}>
           <Header title="Interval Options" contentHeader />
-          <IntervalForm
-            activeAccount={activeAccount}
-            handleSubmit={this.handleSubmit}
-          />
+          <IntervalForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
         </div>
       </SettingsCard>
     );
@@ -81,24 +75,18 @@ class OnlineBooking extends Component {
 }
 
 OnlineBooking.propTypes = {
-  activeAccount: PropTypes.object.required,
-  updateEntityRequest: PropTypes.func.required,
+  activeAccount: PropTypes.instanceOf(accountModel).isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn([
-    'accounts',
-    'models',
-    auth.get('accountId'),
-  ]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
-  if (!activeAccount) {
-    return {};
-  }
-
-  return {
-    activeAccount,
-  };
+  return activeAccount
+    ? {
+      activeAccount,
+    }
+    : {};
 }
 
 function mapDispatchToProps(dispatch) {
@@ -110,9 +98,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(OnlineBooking);

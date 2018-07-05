@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component, Children } from 'react';
+import React, { Component, Children } from 'react';
+import PropTypes from 'prop-types';
 import omit from 'lodash/omit';
 import classNames from 'classnames';
 
@@ -111,7 +112,7 @@ Tabs.propTypes = {
   navClass: PropTypes.string,
   children: PropTypes.node.isRequired,
   index: PropTypes.number.isRequired,
-  onChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   disabled: PropTypes.bool,
   noHeaders: PropTypes.bool,
   noUnderLine: PropTypes.bool,
@@ -126,6 +127,7 @@ Tabs.defaultProps = {
   noHeaders: false,
   noUnderLine: false,
   fluid: false,
+  onChange: e => e,
 };
 
 export default Tabs;

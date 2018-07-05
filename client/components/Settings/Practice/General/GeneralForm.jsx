@@ -1,7 +1,9 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Form, Field } from '../../../library';
 import { emailValidate } from '../../../library/Form/validate';
+import { accountShape } from '../../../library/PropTypeShapes';
 
 const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
@@ -31,12 +33,7 @@ export default function GeneralForm({ role, onSubmit, activeAccount }) {
       initialValues={initialValues}
       data-test-id="clinicDetailsForm"
     >
-      <Field
-        name="name"
-        label="Name"
-        validate={[maxLength25]}
-        data-test-id="name"
-      />
+      <Field name="name" label="Name" validate={[maxLength25]} data-test-id="name" />
       <Field name="website" label="Website" data-test-id="website" />
       <Field
         name="phoneNumber"
@@ -55,7 +52,11 @@ export default function GeneralForm({ role, onSubmit, activeAccount }) {
 }
 
 GeneralForm.propTypes = {
-  activeAccount: PropTypes.object.required,
-  onSubmit: PropTypes.func,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
+  onSubmit: PropTypes.func.isRequired,
   role: PropTypes.string,
+};
+
+GeneralForm.defaultProps = {
+  role: '',
 };

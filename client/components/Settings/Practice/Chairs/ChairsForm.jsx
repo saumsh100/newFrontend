@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
+import { chairShape } from '../../../library/PropTypeShapes';
 import { Form, Field } from '../../../library/index';
 import styles from './styles.scss';
 
@@ -30,10 +30,7 @@ export default function ChairsForm(props) {
     <Form
       form="chairsForm"
       onChange={(values) => {
-        handleSubmit(
-          chairThatWasChanged(values, formValues, initialValues),
-          values,
-        );
+        handleSubmit(chairThatWasChanged(values, formValues, initialValues), values);
       }}
       enableReinitialize
       keepDirtyOnReinitialize
@@ -45,17 +42,12 @@ export default function ChairsForm(props) {
     >
       <div className={styles.formContainer}>
         {chairs.map((chair, index) => (
-          <div className={styles.chairContainer}>
+          <div className={styles.chairContainer} key={`chair_${chair.get('id')}`}>
             <div>
-              <div className={styles.chairContainer_name}>
-                {chair.get('name')}
-              </div>
+              <div className={styles.chairContainer_name}>{chair.get('name')}</div>
               <div className={styles.chairContainer_id}>{chair.get('id')}</div>
             </div>
-            <div
-              className={styles.chairContainer_toggle}
-              data-test-id={`chair_${index}`}
-            >
+            <div className={styles.chairContainer_toggle} data-test-id={`chair_${index}`}>
               <Field component="Toggle" name={chair.get('id')} />
             </div>
           </div>
@@ -66,8 +58,14 @@ export default function ChairsForm(props) {
 }
 
 ChairsForm.propTypes = {
-  chairs: PropTypes.arrayOf(PropTypes.shape({})),
+  chairs: PropTypes.arrayOf(PropTypes.shape(chairShape)),
   handleSubmit: PropTypes.func.isRequired,
-  initialValues: PropTypes.shape({}),
-  formValues: PropTypes.shape({}),
+  initialValues: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
+  formValues: PropTypes.objectOf(PropTypes.string),
+};
+
+ChairsForm.defaultProps = {
+  chairs: null,
+  initialValues: {},
+  formValues: {},
 };

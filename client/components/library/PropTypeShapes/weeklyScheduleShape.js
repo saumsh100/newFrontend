@@ -2,7 +2,7 @@
 import Proptypes from 'prop-types';
 
 export const dayShape = {
-  breaks: Proptypes.arrayOf(Proptypes.string),
+  breaks: Proptypes.arrayOf(Proptypes.objectOf(Proptypes.string)),
   chairIds: Proptypes.arrayOf(Proptypes.string),
   endTime: Proptypes.string,
   isClosed: Proptypes.bool,

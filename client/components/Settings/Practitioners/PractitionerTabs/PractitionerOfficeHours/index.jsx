@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { change } from 'redux-form';
@@ -15,22 +16,13 @@ import {
   RemoteSubmitButton,
   Button,
 } from '../../../../library';
-import styles from '../../styles.scss';
-import accountShape from '../../../../library/PropTypeShapes/accountShape';
 import { weeklyScheduleShape } from '../../../../library/PropTypeShapes/weeklyScheduleShape';
 import { chairShape } from '../../../../library/PropTypeShapes/chairShape';
 import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import { SortByName } from '../../../../library/util/SortEntities';
+import styles from '../../styles.scss';
 
-const daysOfWeek = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-];
+const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 function checkValues(obj) {
   return Object.keys(obj).every(key => obj[key]);
@@ -61,9 +53,7 @@ class PractitionerOfficeHours extends Component {
 
   componentWillMount() {
     const { practitioner } = this.props;
-    const customScheduleValue = practitioner
-      ? practitioner.get('isCustomSchedule')
-      : null;
+    const customScheduleValue = practitioner ? practitioner.get('isCustomSchedule') : null;
     const value = customScheduleValue ? 'on' : 'off';
     this.setState({ value });
   }
@@ -73,9 +63,7 @@ class PractitionerOfficeHours extends Component {
 
     const { chairs, allChairs } = this.props;
 
-    const actions = chairs
-      .toArray()
-      .map(chair => change('chairs', chair.id, !allChairs));
+    const actions = chairs.map(chair => change('chairs', chair.id, !allChairs)).toArray();
 
     this.props.batchActions(actions);
   }
@@ -159,17 +147,15 @@ class PractitionerOfficeHours extends Component {
   }
 
   createPattern() {
-    const createPattern = confirm('Are you sure you want to create a pattern?');
+    const createPattern = window.confirm('Are you sure you want to create a pattern?');
 
     if (!createPattern) {
       return null;
     }
 
-    const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
-    const weeklyScheduleNew = Object.assign(
-      {},
-      this.props.weeklySchedule.toJS(),
-    );
+    const weeklyScheduleJS = this.props.weeklySchedule.toJS();
+    const weeklySchedule = Object.assign({}, weeklyScheduleJS);
+    const weeklyScheduleNew = Object.assign({}, weeklyScheduleJS);
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
     if (!weeklyScheduleNew.startDate) {
@@ -210,7 +196,7 @@ class PractitionerOfficeHours extends Component {
   }
 
   delete(i) {
-    const deleteSche = confirm('Delete Schedule?');
+    const deleteSche = window.confirm('Delete Schedule?');
 
     if (!deleteSche) {
       return null;
@@ -346,11 +332,7 @@ class PractitionerOfficeHours extends Component {
         <div className={styles.toggleContainer_hours}>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader}>
-            <Header
-              contentHeader
-              title={`Week ${i + 2} Pattern`}
-              className={styles.header}
-            />
+            <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
             <Button className={styles.button} onClick={this.delete}>
               Delete
             </Button>
@@ -378,15 +360,15 @@ class PractitionerOfficeHours extends Component {
           if (chair.isActive) {
             return chair;
           }
+          return null;
         })
         .sort(SortByName);
 
       const chairFields = filteredChairs.map((chair) => {
-        initialValuesChairs[chair.id] = weeklySchedule[
-          this.state.modalChairDay
-        ].chairIds.includes(chair.id);
+        const modalChairDay = this.state.modalChairDay;
+        initialValuesChairs[chair.id] = weeklySchedule[modalChairDay].chairIds.includes(chair.id);
         return (
-          <div className={styles.chairsContainer_fields}>
+          <div className={styles.chairsContainer_fields} key={chair.id}>
             <span className={styles.chairsContainer_name}>{chair.name}</span>
             <div className={styles.chairsContainer_toggle}>
               <Field component="Toggle" name={chair.id} />
@@ -421,35 +403,26 @@ class PractitionerOfficeHours extends Component {
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
         >
-          {weeklySchedule[this.state.modalChairDay].pmsScheduleId ? (
+          {weeklySchedule[this.state.modalChairDay].pmsScheduleId && (
             <div>
-              Note: This day field is currently being synced via PMS. Please use
-              PMS to change this field for this day
+              Note: This day field is currently being synced via PMS. Please use PMS to change this
+              field for this day
             </div>
-          ) : null}
+          )}
           <div className={styles.chairsContainer}>
             <div className={styles.chairsContainer_all}>
-              <span className={styles.chairsContainer_all_text}>
-                All Chairs
-              </span>
+              <span className={styles.chairsContainer_all_text}>All Chairs</span>
               <div className={styles.chairsContainer_toggle}>
-                <Toggle
-                  name="allChairs"
-                  onChange={this.setAllChairs}
-                  checked={allChairs}
-                />
+                <Toggle name="allChairs" onChange={this.setAllChairs} checked={allChairs} />
               </div>
             </div>
             <Form
-              // className={formStyle}
-              form="chairs"
-              onSubmit={values =>
-                this.chairSubmit(values, this.state.modalChairDay)
-              }
-              initialValues={initialValuesChairs}
               enableReinitialize
               destroyOnUnmount
               ignoreSaveButton
+              form="chairs"
+              onSubmit={values => this.chairSubmit(values, this.state.modalChairDay)}
+              initialValues={initialValuesChairs}
             >
               {chairFields}
             </Form>
@@ -466,19 +439,10 @@ class PractitionerOfficeHours extends Component {
           <div className={styles.flexHeader}>
             <Header title="Weekly Schedule" contentHeader />
             <div>
-              <Button
-                className={styles.button}
-                secondary
-                create
-                onClick={this.createPattern}
-              >
+              <Button className={styles.button} secondary onClick={this.createPattern}>
                 Add New Pattern
               </Button>
-              <Button
-                className={styles.button}
-                secondary
-                onClick={this.openModal}
-              >
+              <Button className={styles.button} secondary onClick={this.openModal}>
                 Change Start Date
               </Button>
             </div>
@@ -506,9 +470,8 @@ class PractitionerOfficeHours extends Component {
     } else {
       showComponent = (
         <div className={styles.notCustom}>
-          Currently, {practitioner.getFullName()} is inheriting the same weekly
-          schedule as the clinic's office hours, to make it custom, click the
-          toggle above.
+          Currently, {practitioner.getFullName()} is inheriting the same weekly schedule as the
+          clinic&#39;s office hours, to make it custom, click the toggle above.
         </div>
       );
     }
@@ -539,18 +502,12 @@ class PractitionerOfficeHours extends Component {
           onOverlayClick={this.reinitializeState}
         >
           <Form
-            // className={formStyle}
+            ignoreSaveButton
             form="advanceCreatePrac"
             onSubmit={this.changeStartDate}
             initialValues={weeklySchedule}
-            ignoreSaveButton
           >
-            <Field
-              required
-              component="DayPicker"
-              name="startDate"
-              label="Start Date"
-            />
+            <Field required component="DayPicker" name="startDate" label="Start Date" />
           </Form>
         </DialogBox>
         {dialogShow}
@@ -572,13 +529,18 @@ class PractitionerOfficeHours extends Component {
 }
 
 PractitionerOfficeHours.propTypes = {
-  activeAccount: PropTypes.shape(accountShape),
   weeklySchedule: PropTypes.shape(weeklyScheduleShape),
-  practitioner: PropTypes.shape(practitionerShape),
+  practitioner: PropTypes.shape(practitionerShape).isRequired,
   allChairs: PropTypes.bool,
-  updateEntityRequest: PropTypes.func.required,
-  batchActions: PropTypes.func.required,
+  updateEntityRequest: PropTypes.func.isRequired,
+  batchActions: PropTypes.func.isRequired,
   chairs: PropTypes.shape(chairShape),
+};
+
+PractitionerOfficeHours.defaultProps = {
+  weeklySchedule: null,
+  allChairs: false,
+  chairs: null,
 };
 
 function mapStateToProps({ form }) {
@@ -602,9 +564,6 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+const enhance = connect(mapStateToProps, mapActionsToProps);
 
 export default enhance(PractitionerOfficeHours);

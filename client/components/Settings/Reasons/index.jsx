@@ -10,6 +10,7 @@ import ServiceDataContainer from './ServiceDataContainer';
 import styles from './styles.scss';
 
 const sortPractitionersAlphabetical = (a, b) => {
+  if (!a.firstName || !b.firstName) return -1;
   if (a.firstName.toLowerCase() < b.firstName.toLowerCase()) return -1;
   if (a.firstName.toLowerCase() > b.firstName.toLowerCase()) return 1;
   return 0;
@@ -57,8 +58,14 @@ Reasons.propTypes = {
   services: PropTypes.instanceOf(Map),
   practitioners: PropTypes.instanceOf(Map),
   serviceId: PropTypes.string,
-  setServiceId: PropTypes.func,
-  fetchEntities: PropTypes.func,
+  setServiceId: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+};
+
+Reasons.defaultProps = {
+  services: null,
+  practitioners: null,
+  serviceId: '',
 };
 
 function mapStateToProps({ entities, accountSettings }) {
@@ -92,9 +99,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Reasons);

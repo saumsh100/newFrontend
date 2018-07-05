@@ -15,7 +15,7 @@ function DefaultOption({ option }) {
 DefaultOption.propTypes = {
   option: PropTypes.shape({
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   }).isRequired,
 };
 
@@ -58,8 +58,7 @@ class DropdownSelect extends Component {
         }
       });
 
-      this.scrollComponent.scrollTop =
-        valueHeight * this.valueScrollComponent.scrollHeight;
+      this.scrollComponent.scrollTop = valueHeight * this.valueScrollComponent.scrollHeight;
     }
 
     if (this.state.isOpen) {
@@ -169,9 +168,7 @@ class DropdownSelect extends Component {
               data-test-id={`option_${i}`}
               ref={isSelected && this.valueScrollComponentDidMount}
               tabIndex={0}
-              onKeyUp={e =>
-                e.keyCode === 13 && this.selectOption(e, option.value)
-              }
+              onKeyUp={e => e.keyCode === 13 && this.selectOption(e, option.value)}
             >
               <div
                 className={styles.optionDiv}
@@ -188,18 +185,10 @@ class DropdownSelect extends Component {
 
   renderToggle() {
     const {
-      value,
-      options,
-      template,
-      theme,
-      error,
-      disabled,
-      label,
+      value, options, template, theme, error, disabled, label,
     } = this.props;
 
-    const defaultTemplate = ({ option }) => (
-      <div>{option.label || option.value}</div>
-    );
+    const defaultTemplate = ({ option }) => <div>{option.label || option.value}</div>;
     const ToggleTemplate = template || defaultTemplate;
 
     let toggleDiv = null;
@@ -246,11 +235,7 @@ class DropdownSelect extends Component {
           {toggleDiv}
           <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
-            <Icon
-              className={caretIconClassName}
-              icon="caret-down"
-              type="solid"
-            />
+            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
@@ -291,14 +276,11 @@ DropdownSelect.propTypes = {
   options: PropTypes.arrayOf(PropTypes.any),
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   disabled: PropTypes.bool,
   align: PropTypes.string,
   search: PropTypes.string,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.objectOf(PropTypes.string),
-  ]),
+  theme: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
   error: PropTypes.string,
   'data-test-id': PropTypes.string,
 };
