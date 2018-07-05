@@ -1,5 +1,5 @@
 
-import { find } from 'lodash';
+import find from 'lodash/find';
 
 const THE_MAGIC_WORDS = {
   C: true,
