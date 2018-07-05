@@ -35,5 +35,5 @@ export function getSocketUrl() {
 }
 
 export function isResponsive() {
-  return isHub() || window.screen.width <= 576;
+  return isHub() || window.innerWidth <= 576;
 }

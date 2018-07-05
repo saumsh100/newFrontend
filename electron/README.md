@@ -9,6 +9,8 @@ The base of hub application resides within `/electron` folder. Before doing anyt
 
 That's it, the application should be up and running.
 
+Application is set to run in development mode by running `electron:dev` command, as it adds `NODE_ENV=development` env variable. If no `NODE_ENV` is set, it is assumed that application is run in production mode.
+
 To check logs: `tail -f -n 40 ~/Library/Logs/carecru-hub/log.log` (mac).
 
 [Publish instructions](PUBLISH.md)

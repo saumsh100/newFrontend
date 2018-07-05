@@ -38,10 +38,6 @@ function createWindow() {
     });
   });
 
-  if (process.env.NODE_ENV === 'production') {
-    setTimeout(checkForUpdate, 1000);
-  }
-
   const windowHelper = WindowManager.instance;
 
   mainWindow = windowHelper.mainWindow.window;
@@ -50,7 +46,9 @@ function createWindow() {
   Menu.setApplicationMenu(menuFromTemplate);
 
   createWindowListeners();
-  updateChecker();
+  if (process.env.NODE_ENV === 'development') {
+    updateChecker();
+  }
 }
 
 function createWindowListeners() {
@@ -62,7 +60,8 @@ function createWindowListeners() {
 
   mainWindow.on('closed', () => {
     if (!windowHelper.mainWindow.window) {
-      return (mainWindow = null);
+      mainWindow = null;
+      return;
     }
     mainWindow = windowHelper.mainWindow.window;
     createWindowListeners();
