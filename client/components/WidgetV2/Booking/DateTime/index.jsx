@@ -312,9 +312,9 @@ class DateTime extends Component {
       <div className={styles.container}>
         <div className={styles.topWrapper}>
           <DateList
-            dayAvailabilities={generateDateRange(5, selectedStartDate, accountTimezone)}
+            dayAvailabilities={generateDateRange(3, selectedStartDate, accountTimezone)}
             selectDate={selectedStartDate}
-            onChangeDate={this.changeSelectedDate}
+            onDateChange={this.changeSelectedDate}
           />
           <DayPicker
             value={selectedStartDate}
@@ -364,7 +364,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DateTime);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DateTime);
 
 DateTime.propTypes = {
   accountTimezone: PropTypes.string.isRequired,

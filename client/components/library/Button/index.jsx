@@ -55,6 +55,7 @@ function Button(props) {
   return (
     <props.as
       type="button"
+      disabled={props.disabled}
       {...finalProps}
       className={classNames(baseClassName, {
         [styles.hub]: isHub(),
@@ -91,7 +92,6 @@ Button.defaultProps = {
   iconRight: '',
   iconRightComponent: null,
   title: '',
-  children: '',
 };
 
 export default Button;

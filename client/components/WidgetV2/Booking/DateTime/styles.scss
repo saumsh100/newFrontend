@@ -8,10 +8,14 @@
   text-align: center;
   margin: 0;
   background-color: #fff;
-  padding: 8px 0px;
+  padding: 8px 0;
   border-right: 1px solid $widget-grey-lighter;
   color: $widget-grey;
   flex-wrap: wrap;
+  &:hover {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.15);
+    color: var(--primaryColor) !important;
+  }
   &:last-of-type {
     border-right: 0;
   }
@@ -21,6 +25,9 @@
   background: var(--primaryColor);
   border-color: var(--primaryColor);
   color: #fff;
+  &:hover {
+    color: #fff !important;
+  }
 }
 .topWrapper {
   display: flex;
@@ -40,11 +47,19 @@
   font-size: 20px;
   line-height: 22px;
 }
+.datesContainer {
+  display: flex;
+  flex: 1;
+}
 .datesWrapper {
   display: flex;
   border: 1px solid $widget-grey-lighter;
   border-radius: 4px;
   flex: 1;
+  margin-right: 8px;
+  @media (min-width: 576px) {
+    margin-right: var(--widget-spacer);
+  }
 }
 .datePicker {
   margin: 0 0 0 var(--widget-spacer);
@@ -81,5 +96,34 @@
   svg {
     margin: 0 auto 4px;
     fill: currentColor;
+  }
+}
+
+.arrows {
+  background: white !important;
+  color: $widget-grey-dark;
+  border: 1px solid $widget-grey-lighter;
+  border-radius: 4px !important;
+  margin-right: 8px;
+  width: 32px !important;
+  transition: all 0.35s ease;
+  @media (min-width: 576px) {
+    width: 50px !important;
+    margin-right: var(--widget-spacer);
+  }
+  &[disabled] {
+    background: $widget-grey-lighter !important;
+    border-color: $widget-grey-lighter !important;
+    &:hover {
+      border-color: $widget-grey-lighter !important;
+      background: $widget-grey-lighter !important;
+      color: $widget-grey-dark !important;
+    }
+  }
+  &:hover {
+    transition: all 0.35s ease;
+    background: white !important;
+    border-color: var(--primaryColor) !important;
+    color: var(--primaryColor) !important;
   }
 }
