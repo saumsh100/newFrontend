@@ -278,7 +278,14 @@ class DateTime extends Component {
           <div className={styles.content}>
             <h3 className={styles.title}>Select Time</h3>
             <p className={styles.subtitle}>Select a time that works best for you</p>
-            <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
+            {isFetching ? (
+              <div className={styles.spinnerWrapper}>
+                <i className="fas fa-spinner fa-spin fa-3x fa-fw" />
+                <h3>Loading availabilities…</h3>
+              </div>
+            ) : (
+              <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
+            )}
           </div>
           <div className={styles.subCard}>
             <div className={styles.subCardWrapper}>
@@ -326,13 +333,7 @@ class DateTime extends Component {
             disabledDays={generateIsDisabledDay(floorDate)}
           />
         </div>
-        {isFetching ? (
-          <div>
-            <i className="fas fa-spinner fa-spin fa-3x fa-fw" />
-          </div>
-        ) : (
-          renderAvailabilities()
-        )}
+        {renderAvailabilities()}
       </div>
     );
   }
