@@ -64,60 +64,70 @@ const serviceTemplate = {
   updatedAt: new Date(),
 };
 
-const devAddress = {
-  id: devAddressId,
-  street: '666 sample street',
-  country: 'CA',
-  state: 'BC',
-  city: 'Vancouver',
-  zipCode: 'V6J 0Z0',
-  timezone: devTimezone,
-  createdAt: '2017-08-04T00:14:30.932Z',
-  updatedAt: '2017-08-04T00:14:30.932Z',
-};
+const devAddress = [
+  {
+    id: devAddressId,
+    street: '666 sample street',
+    country: 'CA',
+    state: 'BC',
+    city: 'Vancouver',
+    zipCode: 'V6J 0Z0',
+    timezone: devTimezone,
+    createdAt: '2017-08-04T00:14:30.932Z',
+    updatedAt: '2017-08-04T00:14:30.932Z',
+  },
+];
 
-const devEnterprise = {
-  id: devEnterpriseId,
-  name: 'Dev Enterprise',
-  createdAt: '2017-08-04T00:14:30.932Z',
-  updatedAt: '2017-08-04T00:14:30.932Z',
-  plan: 'ENTERPRISE',
-};
+const devEnterprise = [
+  {
+    id: devEnterpriseId,
+    name: 'Dev Enterprise',
+    createdAt: '2017-08-04T00:14:30.932Z',
+    updatedAt: '2017-08-04T00:14:30.932Z',
+    plan: 'ENTERPRISE',
+  },
+];
 
-const devAccount = {
-  id: devAccountId,
-  enterpriseId: devEnterpriseId,
-  weeklyScheduleId: devWeeklyScheduleId,
-  addressId: devAddressId,
-  name: 'Dev Account',
-  destinationPhoneNumber: '+16041111111',
-  timeInterval: 30,
-  website: 'carecru_dev.com',
-  timezone: devTimezone,
-  createdAt: '2017-08-04T00:14:30.932Z',
-  updatedAt: '2017-08-04T00:14:30.932Z',
-  canSendReviews: false,
-};
+const devAccount = [
+  {
+    id: devAccountId,
+    enterpriseId: devEnterpriseId,
+    weeklyScheduleId: devWeeklyScheduleId,
+    addressId: devAddressId,
+    name: 'Dev Account',
+    destinationPhoneNumber: '+16041111111',
+    timeInterval: 30,
+    website: 'carecru_dev.com',
+    timezone: devTimezone,
+    createdAt: '2017-08-04T00:14:30.932Z',
+    updatedAt: '2017-08-04T00:14:30.932Z',
+    canSendReviews: false,
+  },
+];
 
-const devOwnerPermission = {
-  id: devOwnerPermissionId,
-  role: 'OWNER',
-  createdAt: '2017-08-04T00:14:30.932Z',
-  updatedAt: '2017-08-04T00:14:30.932Z',
-};
+const devOwnerPermission = [
+  {
+    id: devOwnerPermissionId,
+    role: 'OWNER',
+    createdAt: '2017-08-04T00:14:30.932Z',
+    updatedAt: '2017-08-04T00:14:30.932Z',
+  },
+];
 
-const devUser = {
-  id: devUserId,
-  enterpriseId: devEnterpriseId,
-  activeAccountId: devAccountId,
-  permissionId: devOwnerPermissionId,
-  username: 'dev@carecru.com',
-  password: bcrypt.hashSync('asdzxcqwe', passwordHashSaltRounds),
-  firstName: 'dev',
-  lastName: 'carecru',
-  createdAt: '2017-08-04T00:14:30.932Z',
-  updatedAt: '2017-08-04T00:14:30.932Z',
-};
+const devUser = [
+  {
+    id: devUserId,
+    enterpriseId: devEnterpriseId,
+    activeAccountId: devAccountId,
+    permissionId: devOwnerPermissionId,
+    username: 'dev@carecru.com',
+    password: bcrypt.hashSync('asdzxcqwe', passwordHashSaltRounds),
+    firstName: 'dev',
+    lastName: 'carecru',
+    createdAt: '2017-08-04T00:14:30.932Z',
+    updatedAt: '2017-08-04T00:14:30.932Z',
+  },
+];
 
 const devRecalls = [
   {
@@ -255,28 +265,30 @@ const devReminders = [
   },
 ];
 
-const devWeeklySchedule = {
-  id: devWeeklyScheduleId,
-  monday: defaultDailySchedule,
-  tuesday: defaultDailySchedule,
-  wednesday: defaultDailySchedule,
-  thursday: defaultDailySchedule,
-  friday: defaultDailySchedule,
-  saturday: defaultDailySchedule,
-  sunday: defaultDailySchedule,
-  createdAt: '2017-08-04T00:14:30.932Z',
-  updatedAt: '2017-08-04T00:14:30.932Z',
-};
+const devWeeklySchedule = [
+  {
+    id: devWeeklyScheduleId,
+    monday: defaultDailySchedule,
+    tuesday: defaultDailySchedule,
+    wednesday: defaultDailySchedule,
+    thursday: defaultDailySchedule,
+    friday: defaultDailySchedule,
+    saturday: defaultDailySchedule,
+    sunday: defaultDailySchedule,
+    createdAt: '2017-08-04T00:14:30.932Z',
+    updatedAt: '2017-08-04T00:14:30.932Z',
+  },
+];
 
 module.exports = {
   async up(queryInterface) {
-    await queryInterface.bulkInsert('Enterprises', [devEnterprise]);
+    await queryInterface.bulkInsert('Enterprises', devEnterprise);
 
-    await queryInterface.bulkInsert('Addresses', [devAddress]);
+    await queryInterface.bulkInsert('Addresses', devAddress);
 
-    await queryInterface.bulkInsert('WeeklySchedules', [devWeeklySchedule]);
+    await queryInterface.bulkInsert('WeeklySchedules', devWeeklySchedule);
 
-    await queryInterface.bulkInsert('Accounts', [devAccount]);
+    await queryInterface.bulkInsert('Accounts', devAccount);
 
     await queryInterface.bulkInsert('Reminders', devReminders);
 
@@ -284,11 +296,11 @@ module.exports = {
 
     await queryInterface.bulkInsert('Recalls', devRecalls);
 
-    await queryInterface.bulkInsert('Permissions', [devOwnerPermission]);
+    await queryInterface.bulkInsert('Permissions', devOwnerPermission);
 
-    await queryInterface.bulkInsert('Users', [devUser]);
+    await queryInterface.bulkInsert('Users', devUser);
   },
 
-  down: function () {
+  down() {
   },
 };
