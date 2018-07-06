@@ -257,9 +257,12 @@ function Review({
               )}
             </div>
           ) : (
-            <div>
-              <p className={styles.subtitle}>Looks like you did not set any waitlist</p>
+            <div className={styles.joinWaitlist}>
+              <div className={styles.subCardWrapper}>
+                <p className={styles.subCardSubtitle}>Looks like you did not set any waitlist</p>
+              </div>
               <Button
+                className={styles.subCardLink}
                 onClick={() => {
                   if (!isBooking) {
                     props.setIsBooking(true);

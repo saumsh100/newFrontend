@@ -64,6 +64,12 @@
 .datePicker {
   margin: 0 0 0 var(--widget-spacer);
   line-height: 1.15em;
+  transition: all 0.2s ease;
+  &:hover {
+    border-color: var(--primaryColor);
+    color: var(--primaryColor);
+    transition: all 0.2s ease;
+  }
 }
 
 .availabilitiesWrapper {
