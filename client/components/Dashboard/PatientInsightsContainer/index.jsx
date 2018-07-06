@@ -114,7 +114,7 @@ PatientInsightsContainer.propTypes = {
   fetchInsights: PropTypes.func.isRequired,
   dashboardDate: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]).isRequired,
   wasAccountFetched: PropTypes.bool,
-  account: PropTypes.shape(accountShape).isRequired,
+  account: PropTypes.shape(accountShape),
 };
 
 PatientInsightsContainer.defaultProps = {
@@ -125,6 +125,7 @@ PatientInsightsContainer.defaultProps = {
   patients: Map,
   insightCount: 0,
   wasAccountFetched: false,
+  account: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PatientInsightsContainer);

@@ -6,17 +6,10 @@ import { connect } from 'react-redux';
 import { fetchEntitiesRequest } from '../../../../../thunks/fetchEntities';
 import { getCollection } from '../../../../Utils';
 import { switchActiveEnterprise } from '../../../../../thunks/auth';
+import { accountShape } from '../../../../library/PropTypeShapes';
 import AccountsTable from './AccountsTable';
 
 class AccountsSubComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      accounts: [],
-      loaded: false,
-    };
-  }
-
   componentDidMount() {
     this.props.fetchEntitiesRequest({
       key: 'accounts',
@@ -27,17 +20,14 @@ class AccountsSubComponent extends Component {
   render() {
     const { accounts } = this.props;
 
-    return (
-      accounts && <AccountsTable accounts={accounts} loaded={accounts.size} />
-    );
+    return accounts && <AccountsTable accounts={accounts} loaded={accounts.size} />;
   }
 }
 
 AccountsSubComponent.propTypes = {
-  fetchEntitiesRequest: PropTypes.func,
-  enterpriseId: PropTypes.string,
-  switchActiveEnterprise: PropTypes.func,
-  accounts: PropTypes.instanceOf(Map),
+  fetchEntitiesRequest: PropTypes.func.isRequired,
+  enterpriseId: PropTypes.string.isRequired,
+  accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)).isRequired,
 };
 
 const stateToProps = (state, { enterpriseId }) => ({
@@ -58,7 +48,4 @@ const dispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(
-  stateToProps,
-  dispatchToProps,
-)(AccountsSubComponent);
+export default connect(stateToProps, dispatchToProps)(AccountsSubComponent);

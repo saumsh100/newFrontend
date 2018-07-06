@@ -79,12 +79,8 @@ export default function GroupTable(props) {
 
 GroupTable.propTypes = {
   loaded: PropTypes.bool,
-  expanded: PropTypes.arrayOf(PropTypes.string),
+  expanded: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
   handleRowClick: PropTypes.func.isRequired,
-  selectEnterprise: PropTypes.func.isRequired,
-  original: PropTypes.shape({
-    id: PropTypes.string,
-  }),
   data: PropTypes.arrayOf(PropTypes.shape({
     createdAt: PropTypes.string,
     deletedAt: PropTypes.string,

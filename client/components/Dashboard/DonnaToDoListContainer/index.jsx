@@ -86,7 +86,7 @@ function mapStateToProps({
 DonnaToDoListContainer.propTypes = {
   wasAccountFetched: PropTypes.bool,
   fetchDonnasToDos: PropTypes.func.isRequired,
-  account: PropTypes.shape(accountShape).isRequired,
+  account: PropTypes.shape(accountShape),
   loadingToDos: PropTypes.bool,
   reviews: PropTypes.instanceOf(List),
   recalls: PropTypes.instanceOf(List),
@@ -100,6 +100,7 @@ DonnaToDoListContainer.defaultProps = {
   recalls: List,
   reminders: List,
   loadingToDos: false,
+  account: null,
 };
 
 export default connect(mapStateToProps, null)(DonnaToDoListContainer);

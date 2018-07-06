@@ -1,26 +1,13 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Form, Field } from '../../../../library';
-import {
-  caProv,
-  usStates,
-} from '../../../../Settings/Practice/General/Address/selectConstants';
 import styles from '../styles.scss';
-
-const maxLength = max => value =>
-  (value && value.length > max ? `Must be ${max} characters or less` : undefined);
-const maxLength25 = maxLength(50);
-const maxPostalLength = maxLength(6);
 
 export default function ClinicDetails(props) {
   const {
-    onSubmit,
-    index,
-    initialValues,
-    formName,
-    country,
-    setCountry,
+    onSubmit, index, initialValues, formName,
   } = props;
 
   const options = moment.tz
@@ -37,23 +24,6 @@ export default function ClinicDetails(props) {
       };
     })
     .filter(filterValue => filterValue.value !== null);
-
-  const stateProv = country === 'US' ? usStates : caProv;
-  const zipPostal = country === 'US' ? 'Zip Code' : 'Postal Code';
-
-  const zipPostalVal = (value) => {
-    const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
-
-    if (country === 'US') {
-      return value && /^\d{5}(-\d{4})?$/.test(value)
-        ? undefined
-        : 'Please enter a proper zipcode.';
-    } else if (!regex.test(value)) {
-      return 'Please enter a proper postal code.';
-    }
-
-    return undefined;
-  };
 
   return (
     <Form
@@ -78,60 +48,9 @@ export default function ClinicDetails(props) {
             label="Timezone"
             component="DropdownSelect"
             options={options}
-            search
             required
           />
         </div>
-        {/*
-        <div >
-          <Field
-            required
-            name="street"
-            label="Street Address"
-          />
-        </div>
-
-        <div className={styles.selectPadding}>
-          <Field
-            name="country"
-            label="Country"
-            component="DropdownSelect"
-            options={[{
-              value: 'CA',
-              label: 'Canada',
-            }, {
-              value: 'US',
-              label: 'United States',
-            }]}
-            onChange={(e, value) => setCountry(value)}
-            required
-          />
-        </div>
-        <div className={styles.selectPadding}>
-          <Field
-            required
-            name="state"
-            label="State"
-            component="DropdownSelect"
-            options={stateProv}
-          />
-        </div>
-        <div className={styles.addressColPlain}>
-          <Field
-            required
-            name="city"
-            label="City"
-          />
-        </div>
-        <div className={styles.addressColPlain_padding}>
-          <Field
-            name="zipCode"
-            label={zipPostal}
-            validate={[maxPostalLength, zipPostalVal]}
-            maxLength="6"
-            required
-          />
-        </div> */}
         <div>
           <Field
             name="destinationPhoneNumber"
@@ -146,8 +65,12 @@ export default function ClinicDetails(props) {
 }
 
 ClinicDetails.propTypes = {
-  onSubmit: PropTypes.func,
-  initialValues: PropTypes.object,
-  index: PropTypes.number,
-  formName: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
+  initialValues: PropTypes.objectOf(PropTypes.string),
+  index: PropTypes.number.isRequired,
+  formName: PropTypes.string.isRequired,
+};
+
+ClinicDetails.defaultProps = {
+  initialValues: {},
 };
