@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { Nav, NavItem, Link, Icon } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
-import FeatureFlagWrapper from '../FeatureFlagWrapper';
+import EnabledFeature from '../library/EnabledFeature';
 import styles from './styles.scss';
 
 function NavList({
@@ -135,21 +135,19 @@ function NavList({
     disabled: false,
   };
 
-  const renderIf = (cond, render, alt) => (cond ? render() : (alt && alt()) || null);
-
   return (
     <div className={styles.navListWrapper}>
       <Nav>
-        {renderIf(withEnterprise, () => (
-          <MultiNavItem path="/enterprise" icon="building" label="Enterprise Dashboard">
-            <SubNavItem path="/enterprise/patients" label="Patients" />
-          </MultiNavItem>
-        ))}
-        <SingleNavItem
-          path="/"
-          icon="tachometer"
-          label={renderIf(withEnterprise, () => 'Dashboard', () => 'Dashboard')}
+        <EnabledFeature
+          predicate={() => withEnterprise}
+          render={() => (
+            <MultiNavItem path="/enterprise" icon="building" label="Enterprise Dashboard">
+              <SubNavItem path="/enterprise/patients" label="Patients" />
+            </MultiNavItem>
+          )}
         />
+
+        <SingleNavItem path="/" icon="tachometer" label="Dashboard" />
         <SingleNavItem
           path="/schedule"
           icon="calendar-alt"
@@ -165,9 +163,10 @@ function NavList({
           active={location.pathname.indexOf('/chat') !== -1}
         />
 
-        <FeatureFlagWrapper featureKey="feature-call-tracking">
-          <SingleNavItem path="/calls" icon="phone" label="Call Tracking" />
-        </FeatureFlagWrapper>
+        <EnabledFeature
+          predicate={({ flags }) => flags.get('feature-call-tracking')}
+          render={<SingleNavItem path="/calls" icon="phone" label="Call Tracking" />}
+        />
 
         <MultiNavItem path="/reputation" icon="bullhorn" label="Marketing">
           <SubNavItem path="/reputation/reviews" label="Reviews" />
@@ -180,13 +179,16 @@ function NavList({
           <SubNavItem path="/settings/donna" label="Donna" />
         </MultiNavItem>
 
-        {renderIf(isSuperAdmin, () => (
-          <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
-            <SubNavItem path="/admin/enterprises" label="Enterprises" />
-            <SubNavItem path="/admin/nasa" label="NASA" />
-            <SubNavItem path="/admin/play" label="Playground" />
-          </MultiNavItem>
-        ))}
+        <EnabledFeature
+          predicate={() => isSuperAdmin}
+          render={() => (
+            <MultiNavItem path="/admin" icon="superpowers" label="Super Admin" iconType="brand">
+              <SubNavItem path="/admin/enterprises" label="Enterprises" />
+              <SubNavItem path="/admin/nasa" label="NASA" />
+              <SubNavItem path="/admin/play" label="Playground" />
+            </MultiNavItem>
+          )}
+        />
       </Nav>
     </div>
   );

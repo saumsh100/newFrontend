@@ -3,7 +3,7 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import { Switch, Route } from 'react-router-dom';
 import LazyRoute from '../LazyRoute';
-import FeatureFlagWrapper from '../../components/FeatureFlagWrapper';
+import EnabledFeature from '../../components/library/EnabledFeature';
 
 const Routes = {
   calls: LazyRoute(() => import('../../components/Calls')),
@@ -12,9 +12,10 @@ const Routes = {
 const Calls = () => (
   <DocumentTitle title="CareCru | Call Tracking">
     <Switch>
-      <FeatureFlagWrapper featureKey="feature-call-tracking">
-        <Route path="/calls" component={Routes.calls} />
-      </FeatureFlagWrapper>
+      <EnabledFeature
+        predicate={({ flags }) => flags.get('feature-call-tracking')}
+        render={<Route path="/calls" component={Routes.calls} />}
+      />
     </Switch>
   </DocumentTitle>
 );
