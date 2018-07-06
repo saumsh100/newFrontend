@@ -13,14 +13,7 @@ const devUserId = 'f55ea49b-5cb2-40b8-a3b8-53f90742e252';
 const devWeeklyScheduleId = 'ef85ef48-0521-4d3d-83cd-8f7ebcb398ee';
 const devTimezone = 'America/Vancouver';
 
-const timeWithZone = (hours, minutes, timezone) => {
-  const now = moment(new Date(Date.UTC(1970, 1, 0, hours, minutes)));
-  const another = now.clone();
-  another.tz(timezone);
-  now.add(-1 * another.utcOffset(), 'minutes');
-  return now.toDate();
-};
-
+const timeWithZone = (hours, minutes, timezone) => moment(new Date(1970, 1, 0, hours, minutes)).tz(timezone).toDate();
 const d2s = num => 60 * 60 * 24 * num;
 const w2s = num => 60 * 60 * 24 * 7 * num;
 const h2s = num => 60 * 60 * num;
@@ -38,6 +31,38 @@ const defaultDailySchedule = JSON.stringify({
     endTime: breakEndTime,
   }],
 });
+
+const recallTemplate = {
+  id: uuid(),
+  accountId: devAccountId,
+  primaryType: 'email',
+  primaryTypes: ['email', 'sms'],
+  lengthSeconds: w2s(4),
+  interval: '1 months',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+const reminderTemplate = {
+  id: uuid(),
+  accountId: devAccountId,
+  primaryType: 'email',
+  primaryTypes: ['email', 'sms'],
+  lengthSeconds: d2s(21),
+  interval: '21 days',
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
+
+const serviceTemplate = {
+  id: uuid(),
+  accountId: devAccountId,
+  bufferTime: 0,
+  name: 'New Patient Consultation',
+  duration: 30,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+};
 
 const devAddress = {
   id: devAddressId,
@@ -96,234 +121,137 @@ const devUser = {
 
 const devRecalls = [
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
-    lengthSeconds: w2s(4),
-    interval: '1 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(1),
     interval: '1 weeks',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-1),
     interval: '-1 weeks',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-4),
     interval: '-1 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-8),
     interval: '-2 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-12),
     interval: '-4 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-20),
     interval: '-6 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-28),
     interval: '-8 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-36),
     interval: '-10 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-44),
     interval: '-12 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-52),
     interval: '-14 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-60),
     interval: '-16 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...recallTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: w2s(-68),
     interval: '-18 months',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
 ];
 
 const devServices = [
   {
+    ...serviceTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    bufferTime: 0,
-    name: 'New Patient Consultation',
-    duration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...serviceTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    bufferTime: 0,
     name: 'Lost Filling',
-    duration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...serviceTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    bufferTime: 0,
     name: 'Emergency Appointment',
-    duration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...serviceTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    bufferTime: 0,
     name: 'Regular Checkup & Cleaning',
-    duration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...serviceTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    bufferTime: 0,
     name: 'Regular Consultation',
-    duration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...serviceTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    bufferTime: 0,
     name: 'Child Dental Exam',
-    duration: 30,
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
 ];
 
 const devReminders = [
   {
+    ...reminderTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
-    lengthSeconds: d2s(21),
-    interval: '21 days',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...reminderTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: d2s(7),
     interval: '7 days',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...reminderTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: d2s(2),
     interval: '2 days',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
   {
+    ...reminderTemplate,
     id: uuid(),
-    accountId: devAccountId,
-    primaryType: 'email',
-    primaryTypes: ['email', 'sms'],
     lengthSeconds: h2s(2),
     interval: '2 hours',
-    createdAt: new Date(),
-    updatedAt: new Date(),
   },
 ];
 
@@ -341,7 +269,6 @@ const devWeeklySchedule = {
 };
 
 module.exports = {
-
   async up(queryInterface) {
     await queryInterface.bulkInsert('Enterprises', [devEnterprise]);
 
@@ -362,13 +289,6 @@ module.exports = {
     await queryInterface.bulkInsert('Users', [devUser]);
   },
 
-  down: function (queryInterface) {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('Person', null, {});
-    */
+  down: function () {
   },
 };
