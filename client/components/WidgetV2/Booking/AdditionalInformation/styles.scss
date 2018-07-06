@@ -1,60 +1,31 @@
 @import '../styles';
 
-.wrapper {
-  padding: 0;
+.filled {
+  top: -5px !important;
+  width: 100%;
+  position: relative;
+  left: 0 !important;
 }
 
-.dropDownList {
-  max-height: 220px;
-  overflow-y: auto;
-  position: relative;
-  padding-bottom: 40px;
-}
-.labelPatient {
-  flex: 1;
-  padding: 13px;
-  background: transparent;
-  text-align: left;
-  color: $widget-grey;
-}
-.slotButton {
-  padding: 0;
-  height: 48px;
-  text-align: left;
-  border-bottom: 0px;
-}
-.editLink {
-  @extend .editLink;
-  margin-right: 8px;
-  margin-left: 0;
-}
-.editPatient {
-  text-transform: uppercase;
-  border: 0;
-  color: $widget-grey;
-  font-size: $small-size;
-  margin: 0 13px;
-  cursor: pointer;
-  &:hover {
-    color: $primary-dark;
-  }
-}
-.addNewPatient {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  border: 0;
-  background: $widget-grey-lightest;
-  text-transform: uppercase;
-  color: $widget-grey-dark;
-  line-height: 40px;
-  text-align: left;
+.label {
+  color: $empty-grey;
+  font-weight: normal;
+  pointer-events: none;
   font-family: $medium-font;
-  cursor: pointer;
-  padding: 0 0 0 12px;
-  &:hover {
-    background: $primary-lightgrey;
-  }
+  transition: 0.2s ease all;
+  top: 0;
+  left: 0 !important;
+}
+.labelWrapper {
+  left: 1px;
+  position: absolute;
+  width: calc((100% - 2px) - var(--widget-spacer));
+  font-size: 14px;
+  padding-top: 12px;
+  padding-bottom: 2px;
+  color: $widget-grey-light;
+  background: #fff;
+  top: 1px;
+  border-radius: 4px;
+  padding-left: var(--widget-spacer);
 }

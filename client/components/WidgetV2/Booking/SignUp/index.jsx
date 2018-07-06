@@ -17,7 +17,7 @@ import styles from './styles.scss';
 function SignUp(props) {
   const handleSignUp = values =>
     props.createPatient(values).then(() => {
-      props.history.push('../app/signup/confirm');
+      props.history.push('./confirm');
     });
 
   return (

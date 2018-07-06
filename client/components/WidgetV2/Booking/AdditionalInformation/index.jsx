@@ -48,6 +48,7 @@ function AdditionalInformation({ history: { push }, notes, ...props }) {
                 input: styles.textarea,
                 inputWithIcon: styles.inputWithIcon,
                 label: styles.label,
+                labelWrapper: styles.labelWrapper,
               }}
               label="Notes"
               name="notes"
@@ -76,7 +77,10 @@ function mapStateToProps({ availabilities }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdditionalInformation));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AdditionalInformation));
 
 AdditionalInformation.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

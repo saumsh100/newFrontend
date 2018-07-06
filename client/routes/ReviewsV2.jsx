@@ -30,10 +30,14 @@ const base = (path = '') => `/widgets/:accountId/app${path}`;
 const redirectAuth = (NoAuthComponent, isAuth, path) => props =>
   (isAuth ? <Redirect to={path} /> : <NoAuthComponent {...props} />);
 
-const redirectNoAuth = (AuthComponent, isAuth, path) => props =>
-  (isAuth ? <AuthComponent {...props} /> : <Redirect to={path} />);
-
-const BookingRouter = ({ match, isAuth }) => {
+const redirectNoAuth = (AuthComponent, { isAuth, patientUser }, path) => (props) => {
+  if (!isAuth) return <Redirect to={path} />;
+  if (patientUser && !patientUser.isPhoneNumberConfirmed) {
+    return <Redirect to="../signup/confirm" />;
+  }
+  return <AuthComponent {...props} />;
+};
+const BookingRouter = ({ match, isAuth, patientUser }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <div>
@@ -50,18 +54,22 @@ const BookingRouter = ({ match, isAuth }) => {
         <Route
           exact
           path={b('/patient-information')}
-          component={redirectNoAuth(PatientInformation, isAuth, '../login')}
+          component={redirectNoAuth(PatientInformation, { isAuth, patientUser }, '../login')}
         />
         <Route
           exact
           path={b('/additional-information')}
-          component={redirectNoAuth(AdditionalInformation, isAuth, '../login')}
+          component={redirectNoAuth(AdditionalInformation, { isAuth, patientUser }, '../login')}
         />
-        <Route exact path={b('/review')} component={redirectNoAuth(Review, isAuth, '../login')} />
+        <Route
+          exact
+          path={b('/review')}
+          component={redirectNoAuth(Review, { isAuth, patientUser }, '../login')}
+        />
         <Route
           exact
           path={b('/complete')}
-          component={redirectNoAuth(Complete, isAuth, '../login')}
+          component={redirectNoAuth(Complete, { isAuth, patientUser }, '../login')}
         />
       </Switch>
     </div>
@@ -142,12 +150,24 @@ BookingRouter.propTypes = {
     path: PropTypes.string,
     url: PropTypes.string,
   }).isRequired,
+  patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(patientUserShape)]),
+};
+BookingRouter.defaultProps = {
+  patientUser: null,
+};
+
+BookingRouter.defaultProps = {
+  patientUser: null,
 };
 
 WidgetRouter.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   isAuth: PropTypes.bool.isRequired,
-  patientUser: PropTypes.shape(patientUserShape).isRequired,
+  patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(patientUserShape)]),
+};
+
+WidgetRouter.defaultProps = {
+  patientUser: null,
 };
 
 EmbedRouter.propTypes = {
@@ -159,5 +179,8 @@ EmbedRouter.propTypes = {
     path: PropTypes.string,
     url: PropTypes.string,
   }).isRequired,
-  patientUser: PropTypes.shape(patientUserShape).isRequired,
+  patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(patientUserShape)]),
+};
+EmbedRouter.defaultProps = {
+  patientUser: null,
 };

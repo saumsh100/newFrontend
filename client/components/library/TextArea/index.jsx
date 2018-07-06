@@ -1,84 +1,54 @@
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import textAreaStyles from './styles.scss';
+import PropTypes from 'prop-types';
 import withTheme from '../../../hocs/withTheme';
+import styles from './styles.scss';
 
 function TextArea(props) {
   const {
-    label,
-    value,
-    error,
-    icon,
-    type = 'text',
-    min,
-    borderColor,
-    theme,
-    classStyles,
+    label, value, error, borderColor, theme, classStyles,
   } = props;
 
-  // TODO: add support for hint attribute
-  // TODO: its like a label except it doesn't go ontop (think Chat input)
+  const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles']);
 
-  const styles = theme;
+  const labelClass = classNames(theme[`theme_${theme}Label`], theme.label, {
+    [theme.filled]: value.length,
+    [theme.erroredLabel]: error,
+  });
 
-  const inputProps = omit(props, [
-    'error',
-    'borderColor',
-    'theme',
-    'classStyles',
-  ]);
-
-  const valuePresent =
-    value !== null &&
-    value !== undefined &&
-    value !== '' &&
-    !(typeof value === 'number' && isNaN(value));
-
-  // Without this the label would fall back onBlur
-  let labelClassName = styles.label;
-  if (valuePresent) {
-    labelClassName = classNames(styles.filled, labelClassName);
-  }
-
-  let inputClassName = styles.input;
-  if (error) {
-    labelClassName = classNames(styles.erroredLabel, labelClassName);
-    inputClassName = classNames(styles.erroredInput, inputClassName);
-  }
-
-  if (borderColor) {
-    inputClassName = classNames(styles[`${borderColor}Border`], inputClassName);
-  }
-
-  if (theme) {
-    labelClassName = classNames(styles[`theme_${theme}Label`], labelClassName);
-    inputClassName = classNames(styles[`theme_${theme}Input`], inputClassName);
-  }
-
-  const errorComponent = error ? (
-    <span className={styles.error}>{error}</span>
-  ) : null;
-
+  const inputClassName = classNames(theme.input, theme[`theme_${theme}Input`], {
+    [theme[`${borderColor}Border`]]: borderColor,
+    [theme.erroredInput]: error,
+  });
   return (
-    <div className={`${styles.group} ${classStyles}`}>
+    <div className={classNames(theme.group, classStyles)}>
       <textarea className={inputClassName} {...inputProps} />
-      <span className={styles.bar} />
-      <label className={labelClassName}>{label}</label>
-      {errorComponent}
+      <span className={theme.bar} />
+      <div className={theme.labelWrapper}>
+        <span className={labelClass}>{label}</span>
+      </div>
+      {error && <span className={theme.error}>{error}</span>}
     </div>
   );
 }
 
 TextArea.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   label: PropTypes.string,
-  value: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-
-  type: PropTypes.string,
-  icon: PropTypes.string,
-  theme: PropTypes.object,
+  value: PropTypes.string.isRequired,
+  borderColor: PropTypes.string,
+  classStyles: PropTypes.string,
+  theme: PropTypes.objectOf(PropTypes.string),
 };
 
-export default withTheme(TextArea, textAreaStyles);
+TextArea.defaultProps = {
+  error: '',
+  label: '',
+  borderColor: '',
+  classStyles: '',
+  theme: {},
+};
+
+export default withTheme(TextArea, styles);

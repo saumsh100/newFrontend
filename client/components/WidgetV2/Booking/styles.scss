@@ -279,6 +279,10 @@
   display: flex;
   align-items: center;
   font-size: 12px;
+  line-height: 16px;
+  p {
+    word-break: break-all;
+  }
 }
 
 .timeListWrapper {

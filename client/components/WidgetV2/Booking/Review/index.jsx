@@ -145,6 +145,15 @@ function Review({
   };
 
   /**
+   * If the text is longer than 200 characters,
+   * slice the text and add an ellipsis.
+   *
+   * @param {string} value
+   */
+  const ellipsisText = (value, delimiter) =>
+    (value.length > delimiter ? `${value.slice(0, delimiter)}...` : value);
+
+  /**
    * Renders the title, value and edit button for the provided data.
    *
    * @param {string} key
@@ -154,8 +163,8 @@ function Review({
   const renderSummaryItem = (key, value, link, goBack) => (
     <div className={styles.waitlistIndex}>
       <span className={styles.waitlistKey}>{key}</span>
-      <span className={styles.waitlistValueWrapper}>
-        <p className={styles.waitlistValue}>{value}</p>
+      <span className={styles.waitlistValue}>
+        <p>{ellipsisText(value, 200)}</p>
         <Button
           className={styles.editLink}
           onClick={() => {

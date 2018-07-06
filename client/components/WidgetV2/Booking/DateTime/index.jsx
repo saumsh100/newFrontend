@@ -80,6 +80,7 @@ class DateTime extends Component {
     this.confirmDateTime = this.confirmDateTime.bind(this);
     this.changeSelectedDate = this.changeSelectedDate.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
+    this.joinWaitlist = this.joinWaitlist.bind(this);
   }
 
   componentWillMount() {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { Form, Field, Button } from '../../../library';
 import { maxDigits } from '../../../library/Form/normalize';
 import { numDigitsValidate } from '../../../library/Form/validate';
@@ -34,7 +34,9 @@ function SignUpConfirm({
           confirmCode: data,
         });
       });
-
+  if (!patientPhoneNumber) {
+    return <Redirect to="../login" />;
+  }
   return (
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
@@ -95,7 +97,7 @@ SignUpConfirm.propTypes = {
 
 function mapStateToProps({ auth }) {
   return {
-    patientPhoneNumber: auth.get('patientUser').get('phoneNumber'),
+    patientPhoneNumber: auth.get('patientUser') && auth.get('patientUser').get('phoneNumber'),
   };
 }
 
@@ -109,4 +111,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUpConfirm));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignUpConfirm));

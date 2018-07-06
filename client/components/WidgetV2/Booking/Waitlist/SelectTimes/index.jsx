@@ -199,6 +199,7 @@ function SelectTimes({
    */
   const contextualUrl = (location.state && location.state.nextRoute) || './remove-dates';
   const lastDateOnTheWaitlist = waitlist.dates[waitlist.dates.length - 1];
+  const waitlistFirstDate = waitlist.dates[0];
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -213,10 +214,10 @@ function SelectTimes({
           './waitlist/select-times',
         )}
         {renderSummaryItem(
-          waitlist.dates[0] === lastDateOnTheWaitlist ? "Waitlist's Date" : "Waitlist's Dates",
-          waitlist.dates[0] === lastDateOnTheWaitlist
-            ? moment.tz(waitlist.dates[0], timezone).format('MMM Do')
-            : `From: ${moment.tz(waitlist.dates[0], timezone).format('MMM Do')} - To: ${moment
+          waitlistFirstDate === lastDateOnTheWaitlist ? 'Available Date' : 'Available Dates',
+          waitlistFirstDate === lastDateOnTheWaitlist
+            ? moment.tz(waitlistFirstDate, timezone).format('MMM Do')
+            : `From: ${moment.tz(waitlistFirstDate, timezone).format('MMM Do')} - To: ${moment
                 .tz(lastDateOnTheWaitlist, timezone)
                 .format('MMM Do')}`,
           './select-dates',
@@ -275,7 +276,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectTimes);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectTimes);
 
 SelectTimes.propTypes = {
   timezone: PropTypes.string.isRequired,
