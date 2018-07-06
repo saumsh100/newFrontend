@@ -13,7 +13,11 @@ const devUserId = 'f55ea49b-5cb2-40b8-a3b8-53f90742e252';
 const devWeeklyScheduleId = 'ef85ef48-0521-4d3d-83cd-8f7ebcb398ee';
 const devTimezone = 'America/Vancouver';
 
-const timeWithZone = (hours, minutes, timezone) => moment(new Date(1970, 1, 0, hours, minutes)).tz(timezone).toDate();
+const timeWithZone = (hours, minutes, timezone) =>
+  moment(new Date(1970, 1, 0, hours, minutes))
+    .tz(timezone)
+    .toDate();
+
 const d2s = num => 60 * 60 * 24 * num;
 const w2s = num => 60 * 60 * 24 * 7 * num;
 const h2s = num => 60 * 60 * num;
