@@ -1,43 +1,16 @@
 
 import axios from 'axios';
 import jwt from 'jwt-decode';
-import LDClient from 'ldclient-js';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
 import LogRocket from 'logrocket';
-import { loginSuccess, featureFlagsSet, logout as authLogout } from '../reducers/auth';
-import { setPatientSearchedList } from './patientSearch';
-import connectSocketToStoreLogin from '../socket/connectSocketToStoreLogin';
-import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
-import SubscriptionManager from '../util/graphqlSubscriptions';
-import socket from '../socket';
-
-const getUserFeatureFlags = (userSession, dispatch) => {
-  const { user } = userSession;
-
-  const userData = {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.username,
-    key: userSession.userId,
-    custom: {
-      plan: userSession.enterprise.plan,
-      role: userSession.role,
-      accountId: userSession.accountId,
-      enterpriseName: userSession.enterprise.name,
-      enterpriseId: userSession.enterprise.id,
-    },
-  };
-
-  const envKey = process.env.FEATURE_FLAG_KEY;
-
-  const client = LDClient.initialize(`${envKey}`, userData);
-
-  client.on('ready', () => {
-    const flags = client.allFlags();
-    dispatch(featureFlagsSet(flags));
-  });
-};
+import { loginSuccess, authLogout } from '../../reducers/auth';
+import { updateFeatureFlagsContext, resetFeatureFlagsState } from '../featureFlags';
+import { setPatientSearchedList } from '../patientSearch';
+import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
+import connectSocketToConnectStore from '../../socket/connectSocketToConnectStore';
+import SubscriptionManager from '../../util/graphqlSubscriptions';
+import socket from '../../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
   localStorage.setItem('token', token);
@@ -54,13 +27,30 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
       const userSession = { ...session, sessionId };
       localStorage.setItem('session', JSON.stringify(userSession));
 
-      getUserFeatureFlags(userSession, dispatch);
+      const { user } = userSession;
+
+      const userData = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.username,
+        key: userSession.userId,
+        custom: {
+          plan: userSession.enterprise.plan,
+          role: userSession.role,
+          accountId: userSession.accountId,
+          enterpriseName: userSession.enterprise.name,
+          enterpriseId: userSession.enterprise.id,
+        },
+      };
+
+      dispatch(updateFeatureFlagsContext(userData));
 
       dispatch(loginSuccess(userSession));
       dispatch(setPatientSearchedList());
       return userSession;
     })
-    .catch(() => {
+    .catch((error) => {
+      console.error(error);
       // Catch 401 from /api/users/me and logout
       localStorage.removeItem('token');
       localStorage.removeItem('session');
@@ -146,6 +136,7 @@ export function logout() {
     const { auth } = getState();
 
     return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
+      dispatch(resetFeatureFlagsState());
       dispatch(authLogout());
       dispatch(push('/login'));
       SubscriptionManager.accountId = null;

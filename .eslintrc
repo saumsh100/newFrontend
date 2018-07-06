@@ -42,6 +42,7 @@
   },
   "globals": {
     "cy": true,
-    "expect": true
+    "expect": true,
+    "jest": true
   }
 }

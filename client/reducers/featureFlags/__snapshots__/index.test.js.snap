@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`featureFlags reducer action creator works 1`] = `
+Object {
+  "payload": Object {
+    "key": "carecru",
+  },
+  "type": "@feature-flags/CONTEXT_SET",
+}
+`;
+
+exports[`featureFlags reducer action creator works 2`] = `
+Object {
+  "payload": Object {
+    "custom": Object {
+      "accountId": "5086adbe-22a9-4b76-981b-b68f0a3d6113",
+      "enterpriseId": "906367fd-587a-4209-8022-edc549a3ec7f",
+      "enterpriseName": "Dr. Goers",
+      "plan": "GROWTH",
+      "role": "SUPERADMIN",
+    },
+    "email": "justin@carecru.com",
+    "firstName": "Justin",
+    "key": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
+    "lastName": "Sharp",
+  },
+  "type": "@feature-flags/CONTEXT_CHANGED",
+}
+`;
+
+exports[`featureFlags reducer action creator works 3`] = `
+Object {
+  "payload": Object {
+    "availabilities-2.0": true,
+    "booking-widget-v2": false,
+    "feature-call-tracking": true,
+    "feature-revenue-card": true,
+  },
+  "type": "@feature-flags/FEATURE_FLAGS_SET",
+}
+`;
+
+exports[`featureFlags reducer action creator works 4`] = `
+Object {
+  "payload": Object {
+    "availabilities-2.0": false,
+    "booking-widget-v2": true,
+    "feature-call-tracking": false,
+    "feature-revenue-card": false,
+  },
+  "type": "@feature-flags/FEATURE_FLAGS_CHANGED",
+}
+`;
+
+exports[`featureFlags reducer action creator works 5`] = `
+Object {
+  "payload": undefined,
+  "type": "@feature-flags/RESET_STATE",
+}
+`;
+
+exports[`featureFlags reducer reducer works 1`] = `
+Immutable.Map {
+  "flags": Immutable.Map {},
+  "context": Object {
+    "key": "carecru",
+  },
+}
+`;
+
+exports[`featureFlags reducer reducer works 2`] = `
+Immutable.Map {
+  "flags": Immutable.Map {},
+  "context": Object {
+    "custom": Object {
+      "accountId": "5086adbe-22a9-4b76-981b-b68f0a3d6113",
+      "enterpriseId": "906367fd-587a-4209-8022-edc549a3ec7f",
+      "enterpriseName": "Dr. Goers",
+      "plan": "GROWTH",
+      "role": "SUPERADMIN",
+    },
+    "email": "justin@carecru.com",
+    "firstName": "Justin",
+    "key": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
+    "lastName": "Sharp",
+  },
+}
+`;
+
+exports[`featureFlags reducer reducer works 3`] = `
+Immutable.Map {
+  "flags": Immutable.Map {
+    "availabilities-2.0": true,
+    "booking-widget-v2": false,
+    "feature-call-tracking": true,
+    "feature-revenue-card": true,
+  },
+  "context": Immutable.Map {},
+}
+`;
+
+exports[`featureFlags reducer reducer works 4`] = `
+Immutable.Map {
+  "flags": Immutable.Map {
+    "availabilities-2.0": false,
+    "booking-widget-v2": true,
+    "feature-call-tracking": false,
+    "feature-revenue-card": false,
+  },
+  "context": Immutable.Map {},
+}
+`;
+
+exports[`featureFlags reducer reducer works 5`] = `
+Immutable.Map {
+  "flags": Immutable.Map {},
+  "context": Immutable.Map {},
+}
+`;

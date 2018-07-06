@@ -17,6 +17,7 @@ import configure from '../store';
 import { load } from '../thunks/auth';
 import { loadUnreadMessages } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
+import { initializeFeatureFlags } from '../thunks/featureFlags';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
@@ -33,6 +34,8 @@ if (process.env.NODE_ENV === 'production') {
 
 const browserHistory = createBrowserHistory();
 const store = configure({ browserHistory });
+
+store.dispatch(initializeFeatureFlags());
 
 // TODO: move to Auth service layer?
 load()(store.dispatch).then(() => {
@@ -93,7 +96,7 @@ load()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Dashboard', () => {
-      const NextApp = require('./Dashboard').default; // eslint-disable-line
+      const NextApp = require('./Dashboard').default; // eslint-disable-line global-require
 
       return render(NextApp);
     });

@@ -2,60 +2,97 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import moment from 'moment';
-import StatCards from './StatCards';
-import styles from './styles.scss';
+import { IconCard } from '../../library';
 import { FilterAppointments } from '../Shared/filters';
-import withFeatureFlag from '../../../hocs/withFeatureFlag';
-import StatsContainerFlagged from '../StatsContainerFlagged';
+import { setDateToTimezone } from '../../../../server/util/time';
+import styles from './styles.scss';
 
-class StatsContainer extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+function StatsContainer({
+  appointmentsCount,
+  insightCount,
+  requestsCount,
+  unConfirmedPatientsCount,
+}) {
+  const cardsToRender = [
+    {
+      key: 0,
+      count: requestsCount,
+      title: requestsCount === 1 ? 'Online Request' : 'Online Requests',
+      src: '/images/icons/Appt-Requests.png',
+      size: 6,
+      color: 'blue',
+    },
+    {
+      key: 1,
+      count: appointmentsCount,
+      title: appointmentsCount === 1 ? 'Appointment Today' : 'Appointments Today',
+      src: '/images/icons/Appts-Today.png',
+      size: 6,
+      color: 'red',
+    },
+    {
+      key: 2,
+      count: insightCount,
+      title: insightCount === 1 ? 'Patient Insight' : 'Patient Insights',
+      src: '/images/icons/Patient-Insights.png',
+      size: 6,
+      color: 'yellow',
+    },
+    {
+      key: 3,
+      count: unConfirmedPatientsCount,
+      title: unConfirmedPatientsCount === 1 ? 'Patient Unconfirmed' : 'Patients Unconfirmed',
+      src: '/images/icons/Unconfirmed-Patients.png',
+      size: 6,
+      color: 'grey',
+    },
+  ];
 
-  render() {
-    return (
-      <div className={styles.container}>
-        <div className={styles.statCardsContainer}>
-          <StatCards
-            requests={this.props.requests}
-            appointments={this.props.appointments}
-            insightCount={this.props.insightCount}
-          />
+  return (
+    <div className={styles.container}>
+      <div className={styles.statCardsContainer}>
+        <div className={styles.statCards}>
+          {cardsToRender.map(options => (
+            <div key={options.key} className={styles.stat}>
+              <IconCard {...options} />
+            </div>
+          ))}
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 StatsContainer.propTypes = {
-  requests: PropTypes.object,
-  appointments: PropTypes.object,
+  appointmentsCount: PropTypes.number,
   insightCount: PropTypes.number,
+  requestsCount: PropTypes.number,
+  unConfirmedPatientsCount: PropTypes.number,
+};
+
+StatsContainer.defaultProps = {
+  appointmentsCount: 0,
+  insightCount: 0,
+  requestsCount: 0,
+  unConfirmedPatientsCount: 0,
 };
 
 function mapStateToProps({ dashboard, entities }, { dashboardDate }) {
-  const appointments = entities.getIn(['appointments', 'models']);
-  const requests = entities.getIn(['requests', 'models']);
-
-  const filteredAppointments = FilterAppointments(
-    appointments,
-    moment(dashboardDate),
+  const appointments = FilterAppointments(
+    entities.getIn(['appointments', 'models']),
+    setDateToTimezone(dashboardDate),
   );
-
-  const filteredRequests = requests.filter(req => !req.get('isCancelled') && !req.get('isConfirmed'));
-
   return {
-    requests: filteredRequests,
-    appointments: filteredAppointments,
-    insightCount: dashboard.toJS().insightCount,
+    appointmentsCount: appointments.size,
+    insightCount: dashboard.get('insightCount'),
+    requestsCount: entities
+      .getIn(['requests', 'models'])
+      .filter(req => !req.get('isCancelled') && !req.get('isConfirmed')).size,
+    unConfirmedPatientsCount: appointments.filter(app => !app.isPatientConfirmed).size,
   };
 }
 
-const enhance = connect(
+export default connect(
   mapStateToProps,
   null,
-);
-
-export default withFeatureFlag(StatsContainerFlagged, 'feature-revenue-card')(enhance(StatsContainer));
+)(StatsContainer);

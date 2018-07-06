@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`auth action creator works 1`] = `
+exports[`auth reducer action creator works 1`] = `
 Object {
   "payload": Object {
     "accountId": "c05ade0e-eb8a-44ed-bf3c-a83bfa4bc5a3",
@@ -27,26 +27,14 @@ Object {
 }
 `;
 
-exports[`auth action creator works 2`] = `
+exports[`auth reducer action creator works 2`] = `
 Object {
   "payload": undefined,
   "type": "@auth/LOGOUT",
 }
 `;
 
-exports[`auth action creator works 3`] = `
-Object {
-  "payload": Object {
-    "availabilities-2.0": true,
-    "booking-widget-v2": false,
-    "feature-call-tracking": true,
-    "feature-revenue-card": true,
-  },
-  "type": "@auth/FEATURE_FLAGS_SET",
-}
-`;
-
-exports[`auth action creator works 4`] = `
+exports[`auth reducer action creator works 3`] = `
 Object {
   "payload": Object {
     "can-add-patient": true,
@@ -57,7 +45,7 @@ Object {
 }
 `;
 
-exports[`auth reducer works 1`] = `
+exports[`auth reducer reducer works 1`] = `
 Immutable.Map {
   "enterprise": Immutable.Map {
     "id": "f1405909-55cf-422a-9ec0-9f80de72b0bf",
@@ -69,7 +57,6 @@ Immutable.Map {
   },
   "isAuthenticated": true,
   "userId": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
-  "flags": Immutable.Map {},
   "accountId": "c05ade0e-eb8a-44ed-bf3c-a83bfa4bc5a3",
   "user": Immutable.Map {
     "id": "6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c",
@@ -85,45 +72,26 @@ Immutable.Map {
 }
 `;
 
-exports[`auth reducer works 2`] = `
+exports[`auth reducer reducer works 2`] = `
 Immutable.Map {
-  "enterprise": null,
   "isAuthenticated": false,
-  "flags": Immutable.Map {},
+  "forgotPassword": false,
+  "role": null,
   "accountId": null,
+  "enterprise": null,
   "user": null,
   "sessionId": null,
   "adapterPermissions": Immutable.Map {},
-  "role": null,
-  "forgotPassword": false,
 }
 `;
 
-exports[`auth reducer works 3`] = `
+exports[`auth reducer reducer works 3`] = `
 Immutable.Map {
-  "enterprise": null,
   "isAuthenticated": false,
-  "flags": Immutable.Map {
-    "availabilities-2.0": true,
-    "booking-widget-v2": false,
-    "feature-call-tracking": true,
-    "feature-revenue-card": true,
-  },
-  "accountId": null,
-  "user": null,
-  "sessionId": null,
-  "adapterPermissions": Immutable.Map {},
-  "role": null,
   "forgotPassword": false,
-}
-`;
-
-exports[`auth reducer works 4`] = `
-Immutable.Map {
-  "enterprise": null,
-  "isAuthenticated": false,
-  "flags": Immutable.Map {},
+  "role": null,
   "accountId": null,
+  "enterprise": null,
   "user": null,
   "sessionId": null,
   "adapterPermissions": Immutable.Map {
@@ -131,7 +99,5 @@ Immutable.Map {
     "can-update-appointment": false,
     "can-set-ismissing": true,
   },
-  "role": null,
-  "forgotPassword": false,
 }
 `;

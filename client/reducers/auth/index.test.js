@@ -4,13 +4,11 @@ import reducer, {
   initialState,
   loginSuccess,
   logout,
-  featureFlagsSet,
   adapterPermissionsSet,
-  isFeatureEnabledSelector,
   isAdapterPermissionEnabledSelector,
 } from './index';
 
-describe('auth', () => {
+describe('auth reducer', () => {
   const loginSuccessAction = loginSuccess({
     userId: '6603fe66-aa03-4ffe-8de6-ce07a4ae9c5c',
     role: 'SUPERADMIN',
@@ -35,13 +33,6 @@ describe('auth', () => {
 
   const logoutAction = logout(undefined);
 
-  const featureFlagsSetAction = featureFlagsSet({
-    'availabilities-2.0': true,
-    'booking-widget-v2': false,
-    'feature-call-tracking': true,
-    'feature-revenue-card': true,
-  });
-
   const adapterPermissionsSetAction = adapterPermissionsSet({
     'can-add-patient': true,
     'can-update-appointment': false,
@@ -51,17 +42,10 @@ describe('auth', () => {
   test('action creator works', () => {
     expect(loginSuccessAction).toMatchSnapshot();
     expect(logoutAction).toMatchSnapshot();
-    expect(featureFlagsSetAction).toMatchSnapshot();
     expect(adapterPermissionsSetAction).toMatchSnapshot();
   });
 
   test('selectors works', () => {
-    const flags = fromJS(featureFlagsSetAction.payload);
-    expect(isFeatureEnabledSelector(flags, 'availabilities-2.0')).toEqual(true);
-    expect(isFeatureEnabledSelector(flags, 'booking-widget-v2')).toEqual(false);
-    expect(isFeatureEnabledSelector(flags, 'feature-call-tracking')).toEqual(true);
-    expect(isFeatureEnabledSelector(flags, 'feature-revenue-card')).toEqual(true);
-
     const adapterPermissions = fromJS(adapterPermissionsSetAction.payload);
     expect(isAdapterPermissionEnabledSelector(adapterPermissions, 'can-add-patient')).toEqual(true);
     expect(isAdapterPermissionEnabledSelector(adapterPermissions, 'can-update-appointment')).toEqual(false);
@@ -71,7 +55,6 @@ describe('auth', () => {
     expect(reducer(initialState, {})).toEqual(initialState);
     expect(reducer(initialState, loginSuccessAction)).toMatchSnapshot();
     expect(reducer(initialState, logoutAction)).toMatchSnapshot();
-    expect(reducer(initialState, featureFlagsSetAction)).toMatchSnapshot();
     expect(reducer(initialState, adapterPermissionsSetAction)).toMatchSnapshot();
   });
 });

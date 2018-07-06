@@ -6,13 +6,15 @@ import mapValues from 'lodash/mapValues';
 import auth from './auth';
 import connect from './connect';
 import entities, { createInitialEntitiesState } from './entities';
+import featureFlags from './featureFlags';
 
 export default combineReducers({
-  routing,
-  form,
   auth,
-  entities,
   connect,
+  entities,
+  featureFlags,
+  form,
+  routing,
 });
 
 const reducerCreators = {
@@ -20,7 +22,5 @@ const reducerCreators = {
 };
 
 export function createInitialState(initialState) {
-  return mapValues(initialState, (value, key) => {
-    return reducerCreators[key](value);
-  });
+  return mapValues(initialState, (value, key) => reducerCreators[key](value));
 }

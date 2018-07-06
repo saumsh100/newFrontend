@@ -15,6 +15,7 @@ import configure from '../store/reviewsStore';
 import connectStoreToHost from '../widget/connectStoreToHost';
 import { loadPatient } from '../thunks/patientAuth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
+import { initializeFeatureFlags } from '../thunks/featureFlags';
 
 // getToken function is custom
 bindAxiosInterceptors(() => localStorage.getItem('auth_token'));
@@ -23,9 +24,12 @@ LogRocket.init(process.env.LOGROCKET_APP_ID);
 
 const browserHistory = createBrowserHistory();
 const store = configure({
-  initialState: window.__INITIAL_STATE__,
+  initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
   browserHistory,
 });
+
+// initialize feature flag client and get initial flags
+store.dispatch(initializeFeatureFlags());
 
 // Bind event handlers from parent
 connectStoreToHost(store);
@@ -67,9 +71,9 @@ loadPatient()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Reviews', () => {
-      const NextApp = require("./Reviews").default; // eslint-disable-line
+      const NextApp = require('./Reviews').default; // eslint-disable-line global-require
 
-      render(App);
+      return render(NextApp);
     });
   }
 });

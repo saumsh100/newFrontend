@@ -12,20 +12,24 @@ import socket from '../socket';
 import App from './Connect';
 import configure from '../store/connectStore';
 import connectSocketToConnectStore from '../socket/connectSocketToConnectStore';
-import { load as loadUser } from '../thunks/auth';
+import { load } from '../thunks/auth';
 import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
+import { initializeFeatureFlags } from '../thunks/featureFlags';
 
 // Bind the token setting in header
 bindAxiosInterceptors();
 
 const browserHistory = createBrowserHistory();
 const store = configure({
-  initialState: window.__INITIAL_STATE__,
+  initialState: window.__INITIAL_STATE__, // eslint-disable-line no-underscore-dangle
   browserHistory,
 });
 
+// initialize feature flag client and get initial flags
+store.dispatch(initializeFeatureFlags());
+
 // Bind event handlers from parent
-loadUser()(store.dispatch).then(() => {
+load()(store.dispatch).then(() => {
   const { auth } = store.getState();
   if (auth.get('isAuthenticated')) {
     // hook up sockets to the connecter status update events
@@ -56,7 +60,7 @@ loadUser()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Connect', () => {
-      const NextApp = require("./Connect").default; // eslint-disable-line
+      const NextApp = require('./Connect').default; // eslint-disable-line global-require
 
       return render(NextApp);
     });

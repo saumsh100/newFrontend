@@ -33,6 +33,7 @@ import {
 } from '../constants';
 import { electron, webFrame } from '../util/ipc';
 import SubscriptionManager from '../util/graphqlSubscriptions';
+import { initializeFeatureFlags } from '../thunks/featureFlags';
 
 // Binds the token setting in header
 bindAxiosInterceptors();
@@ -48,6 +49,9 @@ window.Intercom('boot', {
 
 const browserHistory = createMemoryHistory();
 const store = configure({ browserHistory });
+
+// initialize feature flag client and get initial flags
+store.dispatch(initializeFeatureFlags());
 
 electron.on(TOOLBAR_POSITION_CHANGE, (e, data) => {
   store.dispatch(setToolbarPosition(data));
@@ -143,7 +147,7 @@ load()(store.dispatch).then(() => {
 
   if (module.hot) {
     module.hot.accept('./Hub', () => {
-      const NextApp = require('./Hub').default; // eslint-disable-line
+      const NextApp = require('./Hub').default; // eslint-disable-line global-require
       return render(NextApp);
     });
   }
