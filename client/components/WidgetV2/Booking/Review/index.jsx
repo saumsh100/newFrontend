@@ -17,15 +17,84 @@ import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursSha
 import { capitalizeFirstLetter } from '../../../Utils';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
+import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
 import styles from './styles.scss';
 
+const NOT_PROVIDED_TEXT = 'Not Provided';
+
+/**
+ * Check if the user is on the Review's route
+ * or just on the summary tab.
+ * If it's on the Review's page set the return the path passed,
+ * otherwise just return false.
+ *
+ * @param {string} path
+ */
+const contextualUrl = (actualPathname, nextRoute) => {
+  const match = matchPath(actualPathname, {
+    path: '/widgets/:accountId/app/book/review',
+    exact: true,
+  });
+
+  if (!match) {
+    return false;
+  }
+  return nextRoute;
+};
+
+/**
+ * With the provided unavailableDates array,
+ * return not provided if the array is empty,
+ * otherwhise sort it, format it and add a comma after each values.
+ *
+ * @param {array} unavailableDates
+ */
+const waitlistUnavailableDates = (unavailableDates) => {
+  if (!unavailableDates.length) return NOT_PROVIDED_TEXT;
+
+  // It shows the days that are on the unavailableDates list.
+  return unavailableDates
+    .sort(sortAsc)
+    .map(value => dateFormatter(value, 'MMM Do'))
+    .join(', ');
+};
+
+/**
+ * Display the dates selected on the waitlist's steps.
+ * If is a regular range display the first and the last day,
+ * otherwise display a list of dates.
+ */
+const waitlistDates = (dates) => {
+  if (dates.length === 0) {
+    return null;
+  }
+  const firstDate = dateFormatter(dates[0], 'MMM Do');
+  const lastDate = dateFormatter(dates[dates.length - 1], 'MMM Do');
+  /**
+   * It shows the days that are on the waitlist.
+   */
+  return `From: ${firstDate} - To: ${lastDate}`;
+};
+
+const compareTimes = earlier => (value, ref) => (value && earlier ? value < ref : value > ref);
+const isValueEarlier = compareTimes(true);
+const isValueLater = compareTimes(false);
+
+const getOfficeHours = (key, comparison) => (acc, curr) => {
+  if (!acc || (acc && curr && comparison(curr[key], acc))) {
+    acc = curr[key];
+  }
+  return acc;
+};
+
 function Review({
+  confirmedAvailability,
   dateAndTime,
   hasWaitList,
   history,
   isBooking,
-  location,
+  location: { pathname },
   notes,
   officeHours,
   patientUser,
@@ -35,26 +104,16 @@ function Review({
   waitlist,
   ...props
 }) {
-  const dateFormatter = (value, format = 'LT') => moment.tz(value, timezone).format(format);
+  const officeHoursValues = Object.values(officeHours);
   /**
    * Look over the officeHours object and find the earliest startTime of the clinic.
    */
-  const earliestStartTime = Object.values(officeHours).reduce((acc, curr) => {
-    if (!acc || (acc && curr && curr.startTime && curr.startTime < acc)) {
-      acc = curr.startTime;
-    }
-    return acc;
-  });
+  const earliestStartTime = officeHoursValues.reduce(getOfficeHours('startTime', isValueEarlier));
 
   /**
    * Look over the officeHours object and find the latest endTime of the clinic.
    */
-  const latestEndTime = Object.values(officeHours).reduce((acc, curr) => {
-    if (!acc || (acc && curr && curr.endTime && curr.endTime > acc)) {
-      acc = curr.endTime;
-    }
-    return acc;
-  });
+  const latestEndTime = officeHoursValues.reduce(getOfficeHours('endTime', isValueLater));
 
   /**
    * Generates the availabilities using the office openings,
@@ -95,8 +154,8 @@ function Review({
   const renderSummaryItem = (key, value, link, goBack) => (
     <div className={styles.waitlistIndex}>
       <span className={styles.waitlistKey}>{key}</span>
-      <span className={styles.waitlistValue}>
-        <p>{value}</p>
+      <span className={styles.waitlistValueWrapper}>
+        <p className={styles.waitlistValue}>{value}</p>
         <Button
           className={styles.editLink}
           onClick={() => {
@@ -115,45 +174,6 @@ function Review({
   );
 
   /**
-   * Display the dates selected on the waitlist's steps.
-   * If is a regular range display the first and the last day,
-   * otherwise display a list of dates.
-   */
-  const waitlistDates = () => {
-    if (waitlist.dates.length === 0) {
-      return null;
-    }
-    const firstDate = dateFormatter(waitlist.dates[0], 'MMM Do');
-    const lastDate = dateFormatter(waitlist.dates[waitlist.dates.length - 1], 'MMM Do');
-    /**
-     * It shows the days that are on the waitlist.
-     */
-    return `From: ${firstDate} - To: ${lastDate}`;
-  };
-
-  const waitlistUnavailableDates = () => {
-    if (waitlist.unavailableDates.length === 0) {
-      return 'Not Provided';
-    }
-    /**
-     * It shows the days that are on the unavailableDates list.
-     */
-    return waitlist.unavailableDates
-      .sort(sortAsc)
-      .map(value => dateFormatter(value, 'MMM Do'))
-      .join(', ');
-  };
-
-  /**
-   * Checks if the passed array contains the
-   * specified string.
-   *
-   * @param {array} data
-   * @param {string} startDate
-   */
-  const checkIfItContains = (data, startDate) => data.includes(startDate);
-
-  /**
    * With the provided array of strings,
    * build the text tha will be displayed on the Review's page.
    *
@@ -163,29 +183,21 @@ function Review({
     if (value === 'total') {
       return acc;
     }
-    /**
-     * Displays 'All day (starTime - endTime)'
-     */
+    // Displays 'All day (starTime - endTime)'
     if (availabilities.total === selected.length) {
       return `All day (${dateFormatter(selected[0])} - ${dateFormatter(selected[selected.length - 1])})`;
     }
     const timeframe = availabilities[value];
-    const checkIfIsAllDay = timeframe.every(({ startDate }) =>
-      checkIfItContains(selected, startDate));
-    if (timeframe.length > 0 && checkIfIsAllDay) {
-      /**
-       * Displays 'Timeframe (starTime - endTime)'
-       */
+    if (timeframe.length > 0 && timeframe.every(({ startDate }) => selected.includes(startDate))) {
+      // Displays 'Timeframe (starTime - endTime)'
       const timeFrame = capitalizeFirstLetter(value);
       const startTimeOnTimeFrame = dateFormatter(timeframe[0].startDate);
       const endTimeOnTimeFrame = dateFormatter(timeframe[timeframe.length - 1].startDate);
       acc += ` ${timeFrame} (${startTimeOnTimeFrame} - ${endTimeOnTimeFrame}), `;
     } else {
-      /**
-       * Displays an inline list of
-       */
+      // Displays an inline list of dates
       acc += ` ${timeframe
-        .filter(({ startDate }) => checkIfItContains(selected, startDate))
+        .filter(({ startDate }) => selected.includes(startDate))
         .map(el => dateFormatter(el.startDate))
         .join(', ')}, `;
     }
@@ -199,26 +211,6 @@ function Review({
   const waitlistTimes = () =>
     waitlist.times.length > 0 &&
     Object.keys(availabilities).reduce(handleAvailabilitiesTimes(waitlist.times), '');
-
-  /**
-   * Check if the user is on the Review's route
-   * or just on the summary tab.
-   * If it's on the Review's page set the return the path passed,
-   * otherwise just return false.
-   *
-   * @param {string} path
-   */
-  const contextualUrl = (path) => {
-    const match = matchPath(location.pathname, {
-      path: '/widgets/:accountId/app/book/review',
-      exact: true,
-    });
-
-    if (!match) {
-      return false;
-    }
-    return path;
-  };
 
   return (
     <div className={styles.container}>
@@ -234,25 +226,25 @@ function Review({
                 'Reason',
                 selectedService.get('name'),
                 './reason',
-                contextualUrl('./review'),
+                contextualUrl(pathname, './review'),
               )}
               {renderSummaryItem(
                 'Available Dates',
-                waitlistDates(),
+                waitlistDates(waitlist.dates),
                 './waitlist/select-dates',
-                contextualUrl('../review'),
+                contextualUrl(pathname, '../review'),
               )}
               {renderSummaryItem(
                 'Unavailable Dates',
-                waitlistUnavailableDates(),
+                waitlistUnavailableDates(waitlist.unavailableDates),
                 './waitlist/days-unavailable',
-                contextualUrl('../review'),
+                contextualUrl(pathname, '../review'),
               )}
               {renderSummaryItem(
                 'Times',
                 waitlistTimes(),
                 './waitlist/select-times',
-                contextualUrl('../review'),
+                contextualUrl(pathname, '../review'),
               )}
             </div>
           ) : (
@@ -281,13 +273,13 @@ function Review({
               'Reason',
               selectedService.get('name'),
               './reason',
-              contextualUrl('./review'),
+              contextualUrl(pathname, './review'),
             )}
           {renderSummaryItem(
             'Practitioner',
             (selectedPractitioner && selectedPractitioner.getPrettyName()) || 'No Preference',
             './practitioner',
-            contextualUrl('./review'),
+            contextualUrl(pathname, './review'),
           )}
           {dateAndTime &&
             renderSummaryItem(
@@ -297,42 +289,44 @@ function Review({
                 'h:mm a',
               )}`,
               './date-and-time',
-              contextualUrl('./review'),
+              contextualUrl(pathname, './review'),
             )}
           {patientUser &&
             renderSummaryItem(
               'Patient',
               `${patientUser.firstName} ${patientUser.lastName}`,
               './patient-information',
-              contextualUrl('./review'),
+              contextualUrl(pathname, './review'),
             )}
           {patientUser &&
             renderSummaryItem(
               'Insurance Carrier',
-              `${patientUser.insuranceCarrier || 'Not provided'}`,
+              `${patientUser.insuranceCarrier || NOT_PROVIDED_TEXT}`,
               './patient-information',
-              contextualUrl('./review'),
+              contextualUrl(pathname, './review'),
             )}
           {patientUser &&
             renderSummaryItem(
               'Insurance Member ID & Group ID',
               `${patientUser.insuranceMemberId ||
-                'Not provided'} - ${patientUser.insuranceGroupId || 'Not provided'}`,
+                NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`,
               './patient-information',
-              contextualUrl('./review'),
+              contextualUrl(pathname, './review'),
             )}
 
           {patientUser &&
             renderSummaryItem(
               'Notes',
-              `${notes || 'Not provided'}`,
+              `${notes || NOT_PROVIDED_TEXT}`,
               './additional-information',
-              contextualUrl('./review'),
+              contextualUrl(pathname, './review'),
             )}
         </div>
-        <Button className={styles.fullWidthButton} onClick={() => submitRequest()}>
-          Confirm Booking
-        </Button>
+        {((dateAndTime && confirmedAvailability) || hasWaitList) && (
+          <Button className={styles.fullWidthButton} onClick={submitRequest}>
+            Confirm Booking
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -352,6 +346,7 @@ function mapStateToProps({ availabilities, entities, auth }) {
     isBooking: availabilities.get('isBooking'),
     notes: availabilities.get('notes'),
     officeHours: availabilities.get('officeHours').toJS(),
+    confirmedAvailability: availabilities.get('confirmedAvailability'),
     patientUser: getPatientUser,
     selectedPractitioner: entities.getIn([
       'practitioners',
@@ -380,9 +375,13 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Review));
 
 Review.propTypes = {
+  confirmedAvailability: PropTypes.bool.isRequired,
   createRequest: PropTypes.func.isRequired,
   createWaitSpot: PropTypes.func.isRequired,
   dateAndTime: PropTypes.shape({

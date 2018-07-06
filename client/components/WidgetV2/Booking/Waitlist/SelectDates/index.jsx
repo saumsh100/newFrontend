@@ -9,6 +9,7 @@ import { getRangeOfDays } from '../../../../../../server/util/time';
 import { setWaitlistDates } from '../../../../../actions/availabilities';
 import { Button, DayPickerRange, Input } from '../../../../library';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { isResponsive } from '../../../../../util/hub';
 import styles from './styles.scss';
 
 function SelectDates({
@@ -70,6 +71,7 @@ function SelectDates({
         </p>
         <DayPickerRange
           fieldsWrapper={dayPickerFields}
+          monthsToShow={isResponsive() ? 2 : 1}
           from={(waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || ''}
           to={
             (waitlist.dates.length && moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
