@@ -14,7 +14,10 @@ import { convertIntervalStringToObject } from '../../../util/time';
 import unionAndMerge from '../../../util/unionAndMerge';
 
 // Use to check if the appointment's reason string contains one of the types
-const reasonMatchesType = (reason, types) => types.some(t => reason.indexOf(t) > -1);
+const reasonMatchesType = (reason, types) => {
+  if (!reason) return false;
+  return types.some(t => reason.indexOf(t) > -1);
+};
 
 /**
  * getPatientsThatAreDue is an async function that will get the patients that are due for something

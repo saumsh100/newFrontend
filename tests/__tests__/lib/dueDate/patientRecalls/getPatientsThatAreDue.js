@@ -85,6 +85,13 @@ describe('Due Date Calculations - patientRecalls', () => {
         expect(ps.length).toBe(0);
       });
 
+      test('should return 1 patients because now they have a booked appointment but reason is null', async () => {
+        await Appointment.create(makeApptData({ patientId: patients[0].id, ...dates('2018-05-15 08:00:00'), reason: null }));
+        const date = moment('2018-04-20 08:00:00').toISOString();
+        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        expect(ps.length).toBe(1);
+      });
+
       test('should return 1 patient because the future booked appointment is not the right type', async () => {
         await Appointment.create(makeApptData({ patientId: patients[0].id, ...dates('2018-05-15 08:00:00'), reason: 'CAT' }));
         const date = moment('2018-04-20 08:00:00').toISOString();
