@@ -71,7 +71,7 @@ function SelectDates({
         </p>
         <DayPickerRange
           fieldsWrapper={dayPickerFields}
-          monthsToShow={isResponsive() ? 2 : 1}
+          monthsToShow={isResponsive() ? 1 : 2}
           from={(waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || ''}
           to={
             (waitlist.dates.length && moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
@@ -186,7 +186,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectDates);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectDates);
 
 SelectDates.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,

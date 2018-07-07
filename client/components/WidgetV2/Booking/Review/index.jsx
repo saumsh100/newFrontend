@@ -50,13 +50,13 @@ const contextualUrl = (actualPathname, nextRoute) => {
  *
  * @param {array} unavailableDates
  */
-const waitlistUnavailableDates = (unavailableDates) => {
+const waitlistUnavailableDates = (unavailableDates, timezone) => {
   if (!unavailableDates.length) return NOT_PROVIDED_TEXT;
 
   // It shows the days that are on the unavailableDates list.
   return unavailableDates
     .sort(sortAsc)
-    .map(value => dateFormatter(value, 'MMM Do'))
+    .map(value => dateFormatter(value, timezone, 'MMM Do'))
     .join(', ');
 };
 
@@ -65,12 +65,12 @@ const waitlistUnavailableDates = (unavailableDates) => {
  * If is a regular range display the first and the last day,
  * otherwise display a list of dates.
  */
-const waitlistDates = (dates) => {
+const waitlistDates = (dates, timezone) => {
   if (dates.length === 0) {
     return null;
   }
-  const firstDate = dateFormatter(dates[0], 'MMM Do');
-  const lastDate = dateFormatter(dates[dates.length - 1], 'MMM Do');
+  const firstDate = dateFormatter(dates[0], timezone, 'MMM Do');
+  const lastDate = dateFormatter(dates[dates.length - 1], timezone, 'MMM Do');
   /**
    * It shows the days that are on the waitlist.
    */
@@ -194,20 +194,28 @@ function Review({
     }
     // Displays 'All day (starTime - endTime)'
     if (availabilities.total === selected.length) {
-      return `All day (${dateFormatter(selected[0])} - ${dateFormatter(selected[selected.length - 1])})`;
+      return `All day (${dateFormatter(selected[0], timezone, 'LT')} - ${dateFormatter(
+        selected[selected.length - 1],
+        timezone,
+        'LT',
+      )})`;
     }
     const timeframe = availabilities[value];
     if (timeframe.length > 0 && timeframe.every(({ startDate }) => selected.includes(startDate))) {
       // Displays 'Timeframe (starTime - endTime)'
       const timeFrame = capitalizeFirstLetter(value);
-      const startTimeOnTimeFrame = dateFormatter(timeframe[0].startDate);
-      const endTimeOnTimeFrame = dateFormatter(timeframe[timeframe.length - 1].startDate);
+      const startTimeOnTimeFrame = dateFormatter(timeframe[0].startDate, timezone, 'LT');
+      const endTimeOnTimeFrame = dateFormatter(
+        timeframe[timeframe.length - 1].startDate,
+        timezone,
+        'LT',
+      );
       acc += ` ${timeFrame} (${startTimeOnTimeFrame} - ${endTimeOnTimeFrame}), `;
     } else {
       // Displays an inline list of dates
       acc += ` ${timeframe
         .filter(({ startDate }) => selected.includes(startDate))
-        .map(el => dateFormatter(el.startDate))
+        .map(el => dateFormatter(el.startDate, timezone, 'LT'))
         .join(', ')}, `;
     }
 
@@ -239,13 +247,13 @@ function Review({
               )}
               {renderSummaryItem(
                 'Available Dates',
-                waitlistDates(waitlist.dates),
+                waitlistDates(waitlist.dates, timezone),
                 './waitlist/select-dates',
                 contextualUrl(pathname, '../review'),
               )}
               {renderSummaryItem(
                 'Unavailable Dates',
-                waitlistUnavailableDates(waitlist.unavailableDates),
+                waitlistUnavailableDates(waitlist.unavailableDates, timezone),
                 './waitlist/days-unavailable',
                 contextualUrl(pathname, '../review'),
               )}
@@ -296,8 +304,9 @@ function Review({
           {dateAndTime &&
             renderSummaryItem(
               'Date and Time',
-              `${dateFormatter(dateAndTime.startDate, 'ddd, MMM Do')} at ${dateFormatter(
+              `${dateFormatter(dateAndTime.startDate, timezone, 'ddd, MMM Do')} at ${dateFormatter(
                 dateAndTime.startDate,
+                timezone,
                 'h:mm a',
               )}`,
               './date-and-time',

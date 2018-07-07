@@ -10,6 +10,7 @@ import { Button, DayPickerRange } from '../../../../library';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { setWaitlistUnavailableDates } from '../../../../../actions/availabilities';
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
+import { isResponsive } from '../../../../../util/hub';
 import styles from './styles.scss';
 
 function DaysUnavailable({
@@ -74,6 +75,7 @@ function DaysUnavailable({
           fieldsWrapper={() => undefined}
           handleDayClick={day => toggleDateFromWaitlist(day)}
           modifiers={{ highlighted: daysToDisplay }}
+          monthsToShow={isResponsive() ? 1 : 2}
           onChange={e => e}
           disabledDays={{
             before: moment(waitlistDates[0]).toDate(),
@@ -110,7 +112,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DaysUnavailable);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DaysUnavailable);
 
 DaysUnavailable.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
