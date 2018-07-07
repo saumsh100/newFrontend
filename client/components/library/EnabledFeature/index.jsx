@@ -43,30 +43,35 @@ import { connect } from 'react-redux';
  *  render={() => <UpdateAppointmentButton>}
  * />
  *
- * @param {object || immutable.Map} props.adapterPermissions
- * @param {function || component} props.fallback
- * @param {object || immutable.Map} props.flags
+ * @param {object|immutable.Map} props.adapterPermissions
+ * @param {function|component} props.fallback
+ * @param {object|immutable.Map} props.flags
  * @param {function} props.predicate
- * @param {function || component} props.render
+ * @param {function|component} props.render
  * @param {object} props.subject
  * @param {string} props.userRole
  */
-function EnabledFeature(props) {
-  const {
-    predicate, subject, render, fallback,
-  } = props;
-
-  if (predicate(subject)) {
-    return renderFunctionOrComponent(render, subject);
-  }
-
-  return renderFunctionOrComponent(fallback, subject);
+function EnabledFeature({
+  predicate, subject, render, fallback,
+}) {
+  return renderFunctionOrComponent(predicate(subject) ? render : fallback, subject);
 }
 
-const renderFunctionOrComponent = (functionOrComponent, newProps = {}) =>
-  (typeof functionOrComponent === 'function'
+/**
+ * This function decides the proper way of rendering what is passed on functionOrComponent.
+ * This is meant to be used on render props that need to support both functions and components.
+ *
+ * Function will be called with the newProps as args.
+ * Components will be cloned and the newProps will be passed down to it.
+ *
+ * @param {function|component} functionOrComponent
+ * @param {object} newProps
+ */
+function renderFunctionOrComponent(functionOrComponent, newProps = {}) {
+  return typeof functionOrComponent === 'function'
     ? functionOrComponent(newProps)
-    : cloneElement(functionOrComponent, newProps));
+    : cloneElement(functionOrComponent, newProps);
+}
 
 function mapStateToProps({ featureFlags, auth }, { flags, adapterPermissions, userRole }) {
   return {
@@ -78,18 +83,22 @@ function mapStateToProps({ featureFlags, auth }, { flags, adapterPermissions, us
   };
 }
 
+const objectOrMapPropType = PropTypes.oneOfType([
+  PropTypes.objectOf(PropTypes.bool),
+  PropTypes.instanceOf(Map),
+]);
+
+const functionOrNodePropType = PropTypes.oneOfType([PropTypes.func, PropTypes.node]);
+
 EnabledFeature.propTypes = {
-  adapterPermissions: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.bool),
-    PropTypes.instanceOf(Map),
-  ]),
-  fallback: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-  flags: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.bool), PropTypes.instanceOf(Map)]),
+  adapterPermissions: objectOrMapPropType,
+  fallback: functionOrNodePropType,
+  flags: objectOrMapPropType,
   predicate: PropTypes.func.isRequired,
-  render: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+  render: functionOrNodePropType.isRequired,
   subject: PropTypes.shape({
-    adapterPermissions: PropTypes.instanceOf(Map),
-    flags: PropTypes.instanceOf(Map),
+    adapterPermissions: objectOrMapPropType,
+    flags: objectOrMapPropType,
     userRole: PropTypes.string,
   }),
   userRole: PropTypes.string,

@@ -29,7 +29,16 @@ const store = configure({
 });
 
 // initialize feature flag client and get initial flags
-store.dispatch(initializeFeatureFlags());
+// Booking widget needs the account on init
+store.dispatch(initializeFeatureFlags({
+  key: 'carecru',
+  custom: {
+    accountId: store
+      .getState()
+      .availabilities.get('account')
+      .get('id'),
+  },
+}));
 
 // Bind event handlers from parent
 connectStoreToHost(store);
