@@ -9,11 +9,9 @@ import classNames from 'classnames';
 import { Grid, Row, Col, Icon, Button } from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
 import * as Thunks from '../../../../../thunks/availabilities';
+import { availabilityShape, accountShape } from '../../../../library/PropTypeShapes';
+import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
-import {
-  availabilityShape,
-  accountShape,
-} from '../../../../library/PropTypeShapes';
 
 const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) =>
   // TODO: This could be sped up, we can assume availabilities are in order
@@ -26,10 +24,7 @@ const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) =>
 const CaretButton = props => (
   <div
     {...props}
-    className={classNames(
-      props.className,
-      styles[`${props.direction}CaretButton`],
-    )}
+    className={classNames(props.className, styles[`${props.direction}CaretButton`])}
   />
 );
 
@@ -52,10 +47,7 @@ class AvailabilitiesDisplay extends Component {
     this.setDateBack = this.setDateBack.bind(this);
     this.setDateForward = this.setDateForward.bind(this);
     this.jumpToNext = this.jumpToNext.bind(this);
-    this.debounceFetchAvailabilities = debounce(
-      this.debounceFetchAvailabilities,
-      500,
-    );
+    this.debounceFetchAvailabilities = debounce(this.debounceFetchAvailabilities, 500);
     this.scrollY = this.scrollY.bind(this);
     this.desktopContainerDidMount = this.desktopContainerDidMount.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
@@ -131,10 +123,7 @@ class AvailabilitiesDisplay extends Component {
 
   selectAvailability(availability) {
     const { selectedAvailability } = this.props;
-    if (
-      selectedAvailability &&
-      selectedAvailability.startDate === availability.startDate
-    ) {
+    if (selectedAvailability && selectedAvailability.startDate === availability.startDate) {
       this.props.setSelectedAvailability(null);
     } else {
       this.props.setSelectedAvailability(availability);
@@ -172,25 +161,22 @@ class AvailabilitiesDisplay extends Component {
     const headerClasses = classNames(styles.datesRow);
     const header = (
       <div className={headerClasses}>
-        {dayAvailabilities.map((a) => {
+        {dayAvailabilities.map((availability) => {
           // TODO: do we need to add timeZone here
           const isSameDay =
             !!selectedAvailability &&
-            a.momentDate.isSame(selectedAvailability.startDate, 'day');
+            availability.momentDate.isSame(selectedAvailability.startDate, 'day');
           const classes = isSameDay
             ? classNames(styles.selectedDayHeader, styles.appointment__list)
             : styles.appointment__list;
           return (
-            <ul
-              className={classes}
-              key={`${a.momentDate.toISOString()}_header`}
-            >
+            <ul className={classes} key={`${availability.momentDate.toISOString()}_header`}>
               <div className={styles.appointment__list_header}>
                 <div className={styles.list__header_day}>
-                  {a.momentDate.format('ddd')}
+                  {availability.momentDate.format('ddd')}
                 </div>
                 <div className={styles.list__header_number}>
-                  {a.momentDate.format('MMM Do')}
+                  {availability.momentDate.format('MMM Do')}
                 </div>
               </div>
             </ul>
@@ -214,21 +200,13 @@ class AvailabilitiesDisplay extends Component {
     // console.log(dayAvailabilities);
     let availabilitiesDisplay = (
       <div className={styles.displayContainer}>
-        <i
-          className={`fas fa-spinner fa-spin fa-3x fa-fw ${
-            styles.loadingSpinnerIcon
-          }`}
-        />
+        <i className={`fas fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
       </div>
     );
 
     let mobileAvailabilitiesDisplay = (
       <div className={styles.mobileDisplayContainer}>
-        <i
-          className={`fas fa-spinner fa-spin fa-3x fa-fw ${
-            styles.loadingSpinnerIcon
-          }`}
-        />
+        <i className={`fas fa-spinner fa-spin fa-3x fa-fw ${styles.loadingSpinnerIcon}`} />
       </div>
     );
 
@@ -242,37 +220,24 @@ class AvailabilitiesDisplay extends Component {
           >
             <div className={styles.appointment__table_elements}>
               {dayAvailabilities.map(a => (
-                <ul
-                  className={styles.appointment__list}
-                  key={`${a.momentDate.toISOString()}_list`}
-                >
+                <ul className={styles.appointment__list} key={`${a.momentDate.toISOString()}_list`}>
                   {a.sortedAvailabilities.map((availability) => {
                     let classes = styles.appointment__list_item;
                     if (
                       selectedAvailability &&
                       selectedAvailability.startDate === availability.startDate
                     ) {
-                      classes = `${classes} ${
-                        styles.appointment__list_selected
-                      }`;
+                      classes = `${classes} ${styles.appointment__list_selected}`;
                     }
 
                     return (
-                      <li
-                        key={`${availability.startDate}_item`}
-                        className={classes}
-                      >
+                      <li key={`${availability.startDate}_item`} className={classes}>
                         <NoBgButton
                           onClick={() => this.selectAvailability(availability)}
-                          onKeyUp={e =>
-                            e.key === 'Enter' &&
-                            this.selectAvailability(availability)
-                          }
+                          onKeyUp={e => e.key === 'Enter' && this.selectAvailability(availability)}
                         >
                           {accountTimezone
-                            ? moment
-                                .tz(availability.startDate, accountTimezone)
-                                .format('h:mm a')
+                            ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
                             : moment(availability.startDate).format('h:mm a')}
                         </NoBgButton>
                       </li>
@@ -286,16 +251,12 @@ class AvailabilitiesDisplay extends Component {
 
         // If the selectedDay does not have any availabilities, get next day's availability with
         // and display Next Availablity
-        const noAvailabilitiesToday = !dayAvailabilities[0].sortedAvailabilities
-          .length;
+        const noAvailabilitiesToday = !dayAvailabilities[0].sortedAvailabilities.length;
         if (noAvailabilitiesToday) {
           // Find the next day with an availability
           const dayAvail = dayAvailabilities.find(d => d.sortedAvailabilities.length);
           const { startDate } = dayAvail.sortedAvailabilities[0];
-          const mDate = accountTimezone
-            ? moment.tz(startDate, accountTimezone)
-            : moment(startDate);
-          const displayDate = mDate.format('ddd, MMM D');
+          const displayDate = dateFormatter(startDate, accountTimezone, 'ddd, MMM D');
 
           // This is basically like just having nextAvailability, so this could use a refactor
           // But this is easiest to implement
@@ -307,7 +268,7 @@ class AvailabilitiesDisplay extends Component {
                   onKeyUp={e => e.key === 'Enter' && this.jumpToNext(startDate)}
                 >
                   <span>Next Availablility on</span>
-                  <div>{` ${displayDate}`}</div>
+                  <span>{` ${displayDate}`}</span>
                 </NoBgButton>
               </li>
             </div>
@@ -326,21 +287,13 @@ class AvailabilitiesDisplay extends Component {
                   }
 
                   return (
-                    <li
-                      key={`${availability.startDate}_item`}
-                      className={classes}
-                    >
+                    <li key={`${availability.startDate}_item`} className={classes}>
                       <NoBgButton
                         onClick={() => this.selectAvailability(availability)}
-                        onKeyUp={e =>
-                          e.key === 'Enter' &&
-                          this.selectAvailability(availability)
-                        }
+                        onKeyUp={e => e.key === 'Enter' && this.selectAvailability(availability)}
                       >
                         {accountTimezone
-                          ? moment
-                              .tz(availability.startDate, accountTimezone)
-                              .format('h:mm a')
+                          ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
                           : moment(availability.startDate).format('h:mm a')}
                       </NoBgButton>
                     </li>
@@ -352,40 +305,30 @@ class AvailabilitiesDisplay extends Component {
         }
       } else if (nextAvailability) {
         const { startDate } = nextAvailability;
-        const mDate = accountTimezone
-          ? moment.tz(startDate, accountTimezone)
-          : moment(startDate);
-        const displayDate = mDate.format('ddd, MMM D');
+        const displayDate = dateFormatter(startDate, accountTimezone, 'ddd, MMM D');
         const nextLink = (
           <li className={styles.nextAvailabilityButton}>
             <NoBgButton
               onClick={() => this.jumpToNext(startDate)}
               onKeyUp={e => e.key === 'Enter' && this.jumpToNext(startDate)}
             >
-              <span>Next Availablility on</span>
-              <div>{` ${displayDate}`}</div>
+              <span>Next Availablility on {` ${displayDate}`}</span>
             </NoBgButton>
           </li>
         );
 
-        availabilitiesDisplay = (
-          <div className={styles.displayContainer}>{nextLink}</div>
-        );
+        availabilitiesDisplay = <div className={styles.displayContainer}>{nextLink}</div>;
 
         mobileAvailabilitiesDisplay = (
           <div className={styles.mobileDisplayContainer}>{nextLink}</div>
         );
       } else {
         availabilitiesDisplay = (
-          <div className={styles.displayContainer}>
-            There are no available appointments
-          </div>
+          <div className={styles.displayContainer}>There are no available appointments</div>
         );
 
         mobileAvailabilitiesDisplay = (
-          <div className={styles.mobileDisplayContainer}>
-            There are no available appointments
-          </div>
+          <div className={styles.mobileDisplayContainer}>There are no available appointments</div>
         );
       }
     }
@@ -399,12 +342,7 @@ class AvailabilitiesDisplay extends Component {
         </div>
         <Row className={styles.desktopContainer}>
           <Col xs={1}>
-            {canGoBack ? (
-              <CaretButton
-                direction="left"
-                onClick={() => this.setDateBack()}
-              />
-            ) : null}
+            {canGoBack && <CaretButton direction="left" onClick={() => this.setDateBack()} />}
           </Col>
           <Col xs={10} className={styles.columnsWrapper}>
             <div className={styles.displayWrapperForHorizontalScroll}>
@@ -412,23 +350,20 @@ class AvailabilitiesDisplay extends Component {
               {availabilitiesDisplay}
               <div className={styles.scrollDownSpace}>
                 {!isFetching &&
-                this.state.scrollDown &&
-                needsToScrollMoreDesktop ? (
-                  <div className={styles.scrollDown}>
-                    <span>Scroll for More</span>
-                    <div>
-                      <Icon icon="caret-down" type="solid" />
+                  this.state.scrollDown &&
+                  needsToScrollMoreDesktop && (
+                    <div className={styles.scrollDown}>
+                      <span>Scroll for More</span>
+                      <div>
+                        <Icon icon="caret-down" type="solid" />
+                      </div>
                     </div>
-                  </div>
-                ) : null}
+                  )}
               </div>
             </div>
           </Col>
           <Col xs={1}>
-            <CaretButton
-              direction="right"
-              onClick={() => this.setDateForward()}
-            />
+            <CaretButton direction="right" onClick={this.setDateForward} />
           </Col>
         </Row>
         <Row className={styles.mobileContainer}>
@@ -476,8 +411,7 @@ AvailabilitiesDisplay.propTypes = {
   // startsAt: PropTypes.prop,
   setIsFetching: PropTypes.func.isRequired,
   setSelectedAvailability: PropTypes.func.isRequired,
-  availabilities: PropTypes.arrayOf(PropTypes.shape(availabilityShape))
-    .isRequired,
+  availabilities: PropTypes.arrayOf(PropTypes.shape(availabilityShape)).isRequired,
   nextAvailability: PropTypes.shape(availabilityShape).isRequired,
   selectedAvailability: PropTypes.shape(availabilityShape).isRequired,
   isFetching: PropTypes.bool.isRequired,

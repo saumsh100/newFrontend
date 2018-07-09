@@ -23,7 +23,6 @@ class DayPicker extends Component {
     this.state = {
       isOpen: false,
     };
-
     this.handleDayClick = this.handleDayClick.bind(this);
     this.togglePopOver = this.togglePopOver.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -66,7 +65,7 @@ class DayPicker extends Component {
   }
 
   togglePopOver() {
-    this.setState({ isOpen: !this.state.isOpen });
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
 
   handleInputChange(e) {
@@ -151,23 +150,19 @@ class DayPicker extends Component {
       </div>
     );
 
-    return (
-      <div>
-        {!noTarget ? (
-          <Popover
-            preferPlace="below"
-            onOuterAction={this.togglePopOver}
-            isOpen={this.state.isOpen}
-            tipSize={tipSize}
-            body={[body]}
-          >
-            {dayPickerTargetComponent}
-          </Popover>
-        ) : (
-          body
-        )}
-      </div>
+    const popOverWrapper = (
+      <Popover
+        preferPlace="below"
+        onOuterAction={this.togglePopOver}
+        isOpen={this.state.isOpen}
+        tipSize={tipSize}
+        body={[body]}
+      >
+        {target === 'custom' ? <div>{dayPickerTargetComponent}</div> : dayPickerTargetComponent}
+      </Popover>
     );
+
+    return <div>{noTarget ? body : popOverWrapper}</div>;
   }
 }
 
