@@ -30,7 +30,8 @@
 
 .editModalBody {
   padding: 0;
-  overflow: unset;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 600px;
   background: $primary-white;
 
@@ -49,6 +50,7 @@
     form {
       padding: 0;
       max-height: none;
+      min-height: initial;
       height: auto;
     }
   }

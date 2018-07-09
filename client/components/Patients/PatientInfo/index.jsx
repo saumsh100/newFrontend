@@ -255,84 +255,86 @@ class PatientInfo extends Component {
             />
           </Col>
         </Row>
-        <Row className={styles.row}>
-          <Col xs={12} className={styles.body}>
-            <div className={styles.tabsSection}>
-              <Tabs fluid index={this.state.pageTab} onChange={this.changePageTab}>
-                <Tab
-                  label="Patient Info"
-                  inactiveClass={styles.inactiveTab}
-                  activeClass={styles.activeTab}
-                />
-                <Tab
-                  label="Timeline"
-                  inactiveClass={styles.inactiveTab}
-                  activeClass={styles.activeTab}
-                />
-              </Tabs>
-            </div>
-            {shouldDisplayInfoPage && (
-              <div className={styles.infoDisplay}>
-                {!isResponsive() && (
-                  <HeaderModalComponent
-                    icon="pencil"
-                    text="Edit"
-                    onClick={() => this.openModal()}
-                    title="Patient Info"
+        {(!isHub() || (isHub() && !this.state.isOpen)) && (
+          <Row className={styles.row}>
+            <Col xs={12} className={styles.body}>
+              <div className={styles.tabsSection}>
+                <Tabs fluid index={this.state.pageTab} onChange={this.changePageTab}>
+                  <Tab
+                    label="Patient Info"
+                    inactiveClass={styles.inactiveTab}
+                    activeClass={styles.activeTab}
                   />
-                )}
-                <LeftInfoDisplay
-                  accountViewer={accountViewer}
-                  patient={patient}
-                  openModal={this.openModal}
-                  reinitializeState={this.reinitializeState}
-                  tabIndex={this.state.tabIndex}
-                  handleTabChange={this.handleTabChange}
-                  activeAccount={activeAccount}
-                />
+                  <Tab
+                    label="Timeline"
+                    inactiveClass={styles.inactiveTab}
+                    activeClass={styles.activeTab}
+                  />
+                </Tabs>
               </div>
-            )}
-            {shouldDisplayTimelinePage && (
-              <div className={styles.timeline}>
-                {!isResponsive() && (
-                  <div className={styles.textContainer}>
-                    <div className={styles.cardTitle}>Timeline & Activities</div>
-                    <Popover
-                      isOpen={this.state.filterOpen}
-                      body={[
-                        <FilterTimeline
-                          addRemoveFilter={this.addRemoveFilter}
-                          defaultEvents={defaultEvents}
-                          filters={this.props.filters}
-                          clearFilters={this.props.clearAllTimelineFilters}
-                          selectAllFilters={this.props.selectAllTimelineFilters}
-                        />,
-                      ]}
-                      preferPlace="below"
-                      tipSize={0.01}
-                      onOuterAction={this.reinitializeState}
-                    >
-                      <Button
-                        className={classNames(styles.textHeader, styles.textHeaderButton)}
-                        onClick={this.openFilter}
+              {shouldDisplayInfoPage && (
+                <div className={styles.infoDisplay}>
+                  {!isResponsive() && (
+                    <HeaderModalComponent
+                      icon="pencil"
+                      text="Edit"
+                      onClick={() => this.openModal()}
+                      title="Patient Info"
+                    />
+                  )}
+                  <LeftInfoDisplay
+                    accountViewer={accountViewer}
+                    patient={patient}
+                    openModal={this.openModal}
+                    reinitializeState={this.reinitializeState}
+                    tabIndex={this.state.tabIndex}
+                    handleTabChange={this.handleTabChange}
+                    activeAccount={activeAccount}
+                  />
+                </div>
+              )}
+              {shouldDisplayTimelinePage && (
+                <div className={styles.timeline}>
+                  {!isResponsive() && (
+                    <div className={styles.textContainer}>
+                      <div className={styles.cardTitle}>Timeline & Activities</div>
+                      <Popover
+                        isOpen={this.state.filterOpen}
+                        body={[
+                          <FilterTimeline
+                            addRemoveFilter={this.addRemoveFilter}
+                            defaultEvents={defaultEvents}
+                            filters={this.props.filters}
+                            clearFilters={this.props.clearAllTimelineFilters}
+                            selectAllFilters={this.props.selectAllTimelineFilters}
+                          />,
+                        ]}
+                        preferPlace="below"
+                        tipSize={0.01}
+                        onOuterAction={this.reinitializeState}
                       >
-                        <div className={styles.textHeader_icon}>
-                          <Icon icon="filter" />
-                        </div>
-                        <div className={styles.textHeader_text}>Filter</div>
-                      </Button>
-                    </Popover>
-                  </div>
-                )}
-                <Timeline
-                  patientId={patientId}
-                  filters={this.props.filters}
-                  wasPatientFetched={wasPatientFetched}
-                />
-              </div>
-            )}
-          </Col>
-        </Row>
+                        <Button
+                          className={classNames(styles.textHeader, styles.textHeaderButton)}
+                          onClick={this.openFilter}
+                        >
+                          <div className={styles.textHeader_icon}>
+                            <Icon icon="filter" />
+                          </div>
+                          <div className={styles.textHeader_text}>Filter</div>
+                        </Button>
+                      </Popover>
+                    </div>
+                  )}
+                  <Timeline
+                    patientId={patientId}
+                    filters={this.props.filters}
+                    wasPatientFetched={wasPatientFetched}
+                  />
+                </div>
+              )}
+            </Col>
+          </Row>
+        )}
       </Grid>
     );
   }
@@ -450,7 +452,10 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const query = graphql`
   query PatientInfo_Query($patientId: String!) {
