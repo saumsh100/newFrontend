@@ -20,13 +20,15 @@
   }
 
   &_clearText {
-    margin-left: auto;
     composes: fontSmall from 'sass-loader!../../../../fonts.scss';
     color: darken($primary-grey, 10%);
+    background: initial;
+    padding: 0;
+    margin: 0 0 0 auto;
     cursor: pointer;
-     &:hover {
-       color: $primary-blue;
-     }
+    &:hover {
+      color: $primary-blue;
+    }
   }
 
   &_clearTextDark {
@@ -51,10 +53,11 @@
   align-items: center;
   width: 100%;
   height: 40px;
-  background: #EFEFEF;
+  background: #efefef;
   padding: 10px;
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   justify-content: space-between;
+  color: initial;
   cursor: pointer;
   &_icon {
     padding-right: 10px;
@@ -76,7 +79,6 @@
     opacity: 1;
   }
 }
-
 
 .formContainer {
   padding-bottom: 15px;
@@ -138,13 +140,13 @@
 
 .groupInputStyle {
   padding: 0;
-  input:focus ~label {
+  input:focus ~ label {
     display: none;
   }
 }
 
 .groupInputStyle2 {
-  input:focus ~label {
+  input:focus ~ label {
     display: none;
   }
 }

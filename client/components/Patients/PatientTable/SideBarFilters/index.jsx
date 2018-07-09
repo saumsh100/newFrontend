@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Map } from 'immutable';
-import { Icon, Card } from '../../../library';
+import { Icon, Card, Button } from '../../../library';
 import Demographics from './Demographics';
 import Appointments from './Appointments';
 import Practitioners from './Practitioners';
@@ -53,9 +53,6 @@ class SideBarFilters extends Component {
 
   clearTags() {
     this.props.clearFilters();
-    this.setState({
-      filterTags: Map(),
-    });
   }
 
   handleDemographics(values) {
@@ -73,17 +70,11 @@ class SideBarFilters extends Component {
         removeFilter(1);
       }
 
-      if (values[key] && values[key].length !== 0) {
-        return key;
-      }
+      return values[key] && values[key].length !== 0;
     });
 
     keys.forEach((key) => {
-      if (
-        key === 'firstName' &&
-        values[key].length === 1 &&
-        values[key] !== ''
-      ) {
+      if (key === 'firstName' && values[key].length === 1 && values[key] !== '') {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 0,
@@ -95,11 +86,7 @@ class SideBarFilters extends Component {
         });
       }
 
-      if (
-        key === 'lastName' &&
-        values[key].length === 1 &&
-        values[key] !== ''
-      ) {
+      if (key === 'lastName' && values[key].length === 1 && values[key] !== '') {
         setFilter += 1;
         batchFilters.push({
           indexFunc: 1,
@@ -176,11 +163,7 @@ class SideBarFilters extends Component {
     let setFilter = 0;
     const batchFilters = [];
 
-    keys = keys.filter((key) => {
-      if (values[key] && values[key].length !== 0) {
-        return key;
-      }
-    });
+    keys = keys.filter(key => values[key] && values[key].length !== 0);
 
     keys.forEach((key) => {
       if (key === 'firstAppointment' && values[key].length === 2) {
@@ -218,6 +201,7 @@ class SideBarFilters extends Component {
           intensive: true,
         });
       }
+
       if (key === 'production' && values[key].length === 2) {
         setFilter += 1;
         batchFilters.push({
@@ -253,11 +237,7 @@ class SideBarFilters extends Component {
     const { addFilter } = this.props;
 
     let keys = Object.keys(values);
-    keys = keys.filter((key) => {
-      if (values[key] && values[key].length !== 0) {
-        return key;
-      }
-    });
+    keys = keys.filter(key => values[key] && values[key].length !== 0);
     keys.forEach((key) => {
       if (key && values[key].length === 1) {
         const pracObj = {
@@ -281,11 +261,7 @@ class SideBarFilters extends Component {
 
     const batchFilters = [];
 
-    keys = keys.filter((key) => {
-      if (values[key] && values[key].length !== 0) {
-        return key;
-      }
-    });
+    keys = keys.filter(key => values[key] && values[key].length !== 0);
 
     keys.forEach((key) => {
       if (key === 'remindersEmail' && values[key].length === 2) {
@@ -418,7 +394,7 @@ class SideBarFilters extends Component {
 
     const filterBodyDisplay = ({ index, component, headerTitle }) => (
       <div className={styles.filterBody}>
-        <div
+        <Button
           className={styles.filterHeader}
           onClick={() => this.displayFilter(index)}
           data-test-id={`collapsible_${index}`}
@@ -427,29 +403,27 @@ class SideBarFilters extends Component {
           <span className={styles.filterHeader_icon}>
             <Icon size={1.5} icon="caret-down" type="solid" />
           </span>
-        </div>
-        {openFilters[index] ? (
-          <div className={styles.collapsible}>{component}</div>
-        ) : null}
+        </Button>
+        {openFilters[index] && <div className={styles.collapsible}>{component}</div>}
       </div>
     );
 
-    let clearTextStyle = styles.header_clearText;
-    if (filters && filters.size > 0) {
-      clearTextStyle = classnames(clearTextStyle, styles.header_clearTextDark);
-    }
-
+    const hasFiltersOn = filters && filters.size > 0;
     return (
       <Card className={styles.sideBar}>
         <div className={styles.header}>
           <div className={styles.header_icon}>
-            {' '}
-            <Icon icon="filter" size={1.5} />{' '}
+            <Icon icon="filter" size={1.5} />
           </div>
           <div className={styles.header_text}> Filter </div>
-          <div className={clearTextStyle} onClick={this.clearTags}>
+          <Button
+            className={classnames(styles.header_clearText, {
+              [styles.header_clearTextDark]: hasFiltersOn,
+            })}
+            onClick={hasFiltersOn && this.clearTags}
+          >
             Clear All
-          </div>
+          </Button>
         </div>
 
         <FilterTags filterTags={filters} removeTag={this.removeTag} />
@@ -504,11 +478,17 @@ class SideBarFilters extends Component {
 }
 
 SideBarFilters.propTypes = {
-  practitioners: PropTypes.object.isRequired,
+  addFilter: PropTypes.func.isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
   clearFilters: PropTypes.func.isRequired,
+  filters: PropTypes.instanceOf(Map),
   arrayRemoveAll: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
   searchPatients: PropTypes.func.isRequired,
+};
+
+SideBarFilters.defaultProps = {
+  filters: new Map(),
 };
 
 export default SideBarFilters;
