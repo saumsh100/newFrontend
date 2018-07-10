@@ -10,11 +10,18 @@ import Input from '../Input';
 import IconButton from '../IconButton';
 import styles from './styles.scss';
 
+const getUTCDate = (value) => {
+  const {
+    years, months, date, hours,
+  } = moment.utc(value).toObject();
+  return new Date(years, months, date, hours);
+};
+
 const convertValueToDate = (value) => {
   if (isArray(value)) {
-    return value.map(v => new Date(v));
+    return value.map(v => getUTCDate(v));
   }
-  return new Date(value);
+  return getUTCDate(value);
 };
 
 class DayPicker extends Component {
@@ -142,9 +149,9 @@ class DayPicker extends Component {
       <div className={styles.wrapper}>
         <RDayPicker
           onDayClick={this.handleDayClick}
-          selectedDays={convertValueToDate(value, timezone)}
+          selectedDays={convertValueToDate(value)}
           handleInputChange={this.handleInputChange}
-          initialMonth={value ? new Date(convertValueToDate(value, timezone)) : new Date()}
+          initialMonth={value ? new Date(convertValueToDate(value)) : new Date()}
           {...this.props}
         />
       </div>

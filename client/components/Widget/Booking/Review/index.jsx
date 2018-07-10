@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import keys from 'lodash/keys';
 import omitBy from 'lodash/omitBy';
 import PropTypes from 'prop-types';
@@ -242,7 +242,7 @@ class Review extends Component {
 
     if (selectedAvailability) {
       serviceName = selectedService.get('name');
-      const mDate = moment(selectedAvailability.startDate);
+      const mDate = moment.tz(selectedAvailability.startDate, this.props.accountTimezone);
       selectedDay = `${mDate.format('ddd, MMM Do')} at ${mDate.format('h:mm a')}`;
     }
 
@@ -369,6 +369,7 @@ function mapStateToProps({ auth, availabilities, entities }) {
     selectedInsuranceCarrier: availabilities.get('insuranceCarrier'),
     insuranceMemberId: availabilities.get('insuranceMemberId'),
     notes: availabilities.get('notes'),
+    accountTimezone: availabilities.get('account').get('timezone'),
     selectedService: entities.getIn([
       'services',
       'models',
@@ -388,6 +389,7 @@ Review.propTypes = {
   selectedAvailability: PropTypes.object,
   hasWaitList: PropTypes.bool,
   setNotes: PropTypes.func,
+  accountTimezone: PropTypes.string,
   setInsuranceMemberId: PropTypes.func,
   setInsuranceCarrier: PropTypes.func,
   user: PropTypes.object,

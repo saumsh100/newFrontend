@@ -8,8 +8,8 @@ import * as Actions from '../../../../../actions/availabilities';
 import { accountShape } from '../../../../library/PropTypeShapes';
 import styles from './styles.scss';
 
-function generateIsDisabledDay(currentDate) {
-  return date => moment(date).isBefore(currentDate);
+function generateIsDisabledDay(currentDate, accountTimezone) {
+  return date => moment.tz(date, accountTimezone).isBefore(moment.tz(currentDate, accountTimezone), 'day');
 }
 
 class MobileDayPicker extends Component {
@@ -22,7 +22,8 @@ class MobileDayPicker extends Component {
   }
 
   oneDayBackward() {
-    const newStartDate = moment(this.props.selectedStartDate)
+    const newStartDate = moment
+      .tz(this.props.selectedStartDate, this.props.account.timezone)
       .subtract(1, 'days')
       .toISOString();
     this.props.setIsFetching(true);
@@ -30,7 +31,8 @@ class MobileDayPicker extends Component {
   }
 
   oneDayForward() {
-    const newStartDate = moment(this.props.selectedStartDate)
+    const newStartDate = moment
+      .tz(this.props.selectedStartDate, this.props.account.timezone)
       .add(1, 'days')
       .toISOString();
     this.props.setIsFetching(true);
@@ -47,11 +49,16 @@ class MobileDayPicker extends Component {
 
     // TODO: do we need to do anything with this?
     const accountTimezone = account.timezone;
-
-    const mDate = moment(selectedStartDate);
-    const canGoBack = !generateIsDisabledDay(floorDate)(moment(selectedStartDate).subtract(1, 'day'));
-    const isToday = mDate.isSame(moment(), 'day');
-    const isTomorrow = mDate.isSame(moment().add(1, 'day'), 'day');
+    const mDate = moment.tz(selectedStartDate, accountTimezone);
+    const currentDate = moment(selectedStartDate).subtract(1, 'day').toISOString();
+    const canGoBack = !generateIsDisabledDay(floorDate, accountTimezone)(currentDate);
+    const isToday = mDate.isSame(moment().tz(accountTimezone), 'day');
+    const isTomorrow = mDate.isSame(
+      moment()
+        .tz(accountTimezone)
+        .add(1, 'day'),
+      'day',
+    );
 
     let dayString = mDate.format('ddd');
     if (isToday) {
@@ -60,9 +67,7 @@ class MobileDayPicker extends Component {
       dayString = 'Tomorrow';
     }
 
-    const dateTarget = props => (
-      <div {...props}>{`${dayString}, ${mDate.format('MMM Do')}`}</div>
-    );
+    const dateTarget = props => <div {...props}>{`${dayString}, ${mDate.format('MMM Do')}`}</div>;
 
     return (
       <Grid className={styles.wrapper}>
@@ -85,7 +90,7 @@ class MobileDayPicker extends Component {
               tipSize={0.01}
               onChange={this.setSelectedDate}
               timezone={accountTimezone}
-              disabledDays={generateIsDisabledDay(floorDate)}
+              disabledDays={generateIsDisabledDay(floorDate, accountTimezone)}
             />
           </Col>
           <Col xs={1}>

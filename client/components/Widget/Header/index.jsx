@@ -12,10 +12,7 @@ import {
 } from 'react-router-dom';
 import moment from 'moment';
 import { closeBookingModal } from '../../../thunks/availabilities';
-import {
-  setSelectedStartDate,
-  setIsFetching,
-} from '../../../actions/availabilities';
+import { setSelectedStartDate, setIsFetching } from '../../../actions/availabilities';
 import { Avatar, IconButton, DayPicker } from '../../library';
 import PatientUserMenu from './PatientUserMenu';
 import styles from './styles.scss';
@@ -45,20 +42,11 @@ class Header extends Component {
 
   render() {
     const {
-      isAuth,
-      patientUser,
-      hasWaitList,
-      selectedStartDate,
-      account,
-      floorDate,
+      isAuth, patientUser, hasWaitList, selectedStartDate, account, floorDate,
     } = this.props;
 
     const backButton = path => () => (
-      <IconButton
-        icon="arrow-left"
-        onClick={this.goBack(path)}
-        className={styles.backButton}
-      />
+      <IconButton icon="arrow-left" onClick={this.goBack(path)} className={styles.backButton} />
     );
 
     const titleDiv = title => () => <div className={styles.title}>{title}</div>;
@@ -71,55 +59,21 @@ class Header extends Component {
         <Router history={this.props.history}>
           <Switch>
             <Route exact path={b('/signup')} component={backButton('./book')} />
-            <Route
-              exact
-              path={b('/signup/confirm')}
-              component={backButton('../book')}
-            />
+            <Route exact path={b('/signup/confirm')} component={backButton('../book')} />
             <Route exact path={b('/login')} component={backButton('./book')} />
-            <Route
-              exact
-              path={b('/book/review')}
-              component={backButton('../book')}
-            />
-            <Route
-              exact
-              path={b('/book/wait')}
-              component={backButton('../book')}
-            />
-            <Route
-              exact
-              path={b('/patient/add')}
-              component={backButton('../book/review')}
-            />
-            <Route
-              path={b('/patient/edit')}
-              component={backButton('../../book/review')}
-            />
+            <Route exact path={b('/book/review')} component={backButton('../book')} />
+            <Route exact path={b('/book/wait')} component={backButton('../book')} />
+            <Route exact path={b('/patient/add')} component={backButton('../book/review')} />
+            <Route path={b('/patient/edit')} component={backButton('../../book/review')} />
           </Switch>
         </Router>
         {/* Title Div */}
         <Router history={this.props.history}>
           <div className={styles.titleWrapper}>
-            <Route
-              exact
-              path={b('/book')}
-              component={titleDiv('Select Availability')}
-            />
-            <Route
-              exact
-              path={b('/book/review')}
-              component={titleDiv('Review & Book')}
-            />
-            <Route
-              exact
-              path={b('/patient/add')}
-              component={titleDiv('Add New Patient')}
-            />
-            <Route
-              path={b('/patient/edit')}
-              component={titleDiv('Edit Patient')}
-            />
+            <Route exact path={b('/book')} component={titleDiv('Select Availability')} />
+            <Route exact path={b('/book/review')} component={titleDiv('Review & Book')} />
+            <Route exact path={b('/patient/add')} component={titleDiv('Add New Patient')} />
+            <Route path={b('/patient/edit')} component={titleDiv('Edit Patient')} />
             <Route
               exact
               path={b('/book/wait')}

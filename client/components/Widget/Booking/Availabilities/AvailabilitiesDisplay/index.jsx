@@ -15,10 +15,7 @@ import styles from './styles.scss';
 
 const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) =>
   // TODO: This could be sped up, we can assume availabilities are in order
-  availabilities.filter(a =>
-    (accountTimezone
-      ? moment.tz(a.startDate, accountTimezone).isSame(momentDate, 'd')
-      : moment(a.startDate).isSame(momentDate, 'd')));
+  availabilities.filter(a => moment.tz(a.startDate, accountTimezone).isSame(momentDate, 'd'));
 // return filteredAvailabilities.sort((a, b) => moment(a).diff(b));
 
 const CaretButton = props => (
@@ -35,6 +32,7 @@ CaretButton.propTypes = {
 
 const NoBgButton = props => <Button className={styles.noBgButton} {...props} />;
 
+const JUMP_DAYS = 4;
 class AvailabilitiesDisplay extends Component {
   constructor(props) {
     super(props);
@@ -69,24 +67,31 @@ class AvailabilitiesDisplay extends Component {
     }
   }
 
-  setDateBack(numDays = 4) {
-    const newStartDate = moment(this.props.selectedStartDate)
-      .subtract(numDays, 'days')
-      .toISOString();
-    this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
-    this.props.setSelectedStartDate(newStartDate);
+  setDateBack(numDays = JUMP_DAYS) {
+    return () => {
+      const newStartDate = moment
+        .tz(this.props.selectedStartDate, this.props.account.timezone)
+        .subtract(numDays, 'days')
+        .toISOString();
+      this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
+      this.props.setSelectedStartDate(newStartDate);
+    };
   }
 
-  setDateForward(numDays = 4) {
-    const newStartDate = moment(this.props.selectedStartDate)
-      .add(numDays, 'days')
-      .toISOString();
-    this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
-    this.props.setSelectedStartDate(newStartDate);
+  setDateForward(numDays = JUMP_DAYS) {
+    return () => {
+      const newStartDate = moment
+        .tz(this.props.selectedStartDate, this.props.account.timezone)
+        .add(numDays, 'days')
+        .toISOString();
+      this.props.setIsFetching(true); // put here so that it doesn't flash the tail end of days
+      this.props.setSelectedStartDate(newStartDate);
+    };
   }
 
   jumpToNext(startDate) {
-    const newStartDate = moment(startDate)
+    const newStartDate = moment
+      .tz(startDate, this.props.account.timezone)
       .subtract(2, 'hours')
       .toISOString();
     this.props.setSelectedStartDate(newStartDate);
@@ -140,15 +145,12 @@ class AvailabilitiesDisplay extends Component {
       account,
     } = this.props;
 
-    const numDaysForward = 4;
     const dayAvailabilities = [];
 
     const accountTimezone = account.timezone;
 
-    for (let i = 0; i <= numDaysForward; i += 1) {
-      const momentDate = accountTimezone
-        ? moment.tz(selectedStartDate, accountTimezone).add(i, 'days')
-        : moment(selectedStartDate).add(i, 'days');
+    for (let i = 0; i <= JUMP_DAYS; i += 1) {
+      const momentDate = moment.tz(selectedStartDate, accountTimezone).add(i, 'days');
 
       const sortedAvailabilities = getSortedAvailabilities(
         momentDate,
@@ -236,9 +238,7 @@ class AvailabilitiesDisplay extends Component {
                           onClick={() => this.selectAvailability(availability)}
                           onKeyUp={e => e.key === 'Enter' && this.selectAvailability(availability)}
                         >
-                          {accountTimezone
-                            ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
-                            : moment(availability.startDate).format('h:mm a')}
+                          {moment.tz(availability.startDate, accountTimezone).format('h:mm a')}
                         </NoBgButton>
                       </li>
                     );
@@ -292,9 +292,7 @@ class AvailabilitiesDisplay extends Component {
                         onClick={() => this.selectAvailability(availability)}
                         onKeyUp={e => e.key === 'Enter' && this.selectAvailability(availability)}
                       >
-                        {accountTimezone
-                          ? moment.tz(availability.startDate, accountTimezone).format('h:mm a')
-                          : moment(availability.startDate).format('h:mm a')}
+                        {moment.tz(availability.startDate, accountTimezone).format('h:mm a')}
                       </NoBgButton>
                     </li>
                   );
@@ -333,7 +331,10 @@ class AvailabilitiesDisplay extends Component {
       }
     }
 
-    const canGoBack = moment(selectedStartDate).diff(Date.now(), 'days') > 0;
+    const canGoBack =
+      moment
+        .tz(selectedStartDate, this.props.account.timezone)
+        .diff(moment().tz(this.props.account.timezone), 'days') > 0;
 
     return (
       <Grid className={styles.availabilitiesContainer}>
@@ -342,7 +343,7 @@ class AvailabilitiesDisplay extends Component {
         </div>
         <Row className={styles.desktopContainer}>
           <Col xs={1}>
-            {canGoBack && <CaretButton direction="left" onClick={() => this.setDateBack()} />}
+            {canGoBack && <CaretButton direction="left" onClick={this.setDateBack(JUMP_DAYS)} />}
           </Col>
           <Col xs={10} className={styles.columnsWrapper}>
             <div className={styles.displayWrapperForHorizontalScroll}>
@@ -363,7 +364,7 @@ class AvailabilitiesDisplay extends Component {
             </div>
           </Col>
           <Col xs={1}>
-            <CaretButton direction="right" onClick={this.setDateForward} />
+            <CaretButton direction="right" onClick={this.setDateForward(JUMP_DAYS)} />
           </Col>
         </Row>
         <Row className={styles.mobileContainer}>
