@@ -14,7 +14,7 @@ function TextArea(props) {
   const inputProps = omit(props, ['error', 'borderColor', 'theme', 'classStyles']);
 
   const labelClass = classNames(theme[`theme_${theme}Label`], theme.label, {
-    [theme.filled]: value.length,
+    [theme.filled]: value && value.length,
     [theme.erroredLabel]: error,
   });
 
@@ -37,7 +37,7 @@ function TextArea(props) {
 TextArea.propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.string.isRequired,
   borderColor: PropTypes.string,
   classStyles: PropTypes.string,
   theme: PropTypes.objectOf(PropTypes.string),
@@ -49,7 +49,6 @@ TextArea.defaultProps = {
   borderColor: '',
   classStyles: '',
   theme: {},
-  value: '',
 };
 
 export default withTheme(TextArea, styles);

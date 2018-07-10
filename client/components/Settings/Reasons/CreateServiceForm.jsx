@@ -1,16 +1,16 @@
 
-import React, { Component, PropTypes } from 'react';
-import { CardHeader, Row, Col, Form, Grid, Field } from '../../library';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Row, Col, Form, Field } from '../../library';
 import styles from './styles.scss';
 
-const parseNum = value => value && parseInt(value);
+const parseNum = value => value && parseInt(value, 0);
 
 const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 const maxLength25 = maxLength(35);
 
-const notNegative = value =>
-  (value && value <= 0 ? 'Must be greater than 0' : undefined);
+const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
 
 const maxDuration = value =>
   (value && value > 180 ? 'Must be less than or equal to 180' : undefined);
@@ -20,12 +20,7 @@ export default function CreateServiceForm(props) {
   return (
     <Row className={styles.formContainer__createForm}>
       <Col xs={12}>
-        <Form
-          form={formName}
-          onSubmit={onSubmit}
-          data-test-id="createServiceForm"
-          ignoreSaveButton
-        >
+        <Form form={formName} onSubmit={onSubmit} data-test-id="createServiceForm" ignoreSaveButton>
           <Row className={styles.servicesFormRow__createRow}>
             <Col xs={12}>
               <Field
@@ -50,18 +45,6 @@ export default function CreateServiceForm(props) {
               />
             </Col>
           </Row>
-          <Row className={styles.servicesFormRow__createRow}>
-            <Col xs={12}>
-              <Field
-                name="bufferTime"
-                label="Buffer Time"
-                type="number"
-                validate={[notNegative, maxDuration]}
-                normalize={parseNum}
-                data-test-id="bufferTime"
-              />
-            </Col>
-          </Row>
         </Form>
       </Col>
     </Row>
@@ -69,5 +52,6 @@ export default function CreateServiceForm(props) {
 }
 
 CreateServiceForm.propTypes = {
-  onSubmit: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
+  formName: PropTypes.string.isRequired,
 };
