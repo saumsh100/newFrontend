@@ -37,7 +37,7 @@ function TextArea(props) {
 TextArea.propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   label: PropTypes.string,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   borderColor: PropTypes.string,
   classStyles: PropTypes.string,
   theme: PropTypes.objectOf(PropTypes.string),
@@ -49,6 +49,7 @@ TextArea.defaultProps = {
   borderColor: '',
   classStyles: '',
   theme: {},
+  value: '',
 };
 
 export default withTheme(TextArea, styles);
