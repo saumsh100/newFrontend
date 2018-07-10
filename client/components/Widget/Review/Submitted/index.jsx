@@ -27,9 +27,6 @@ class Submitted extends Component {
       return;
     }
 
-    // TODO: save review, and then link to google
-
-    console.log('opening!');
     const url = `https://search.google.com/local/writereview?placeid=${placeId}`;
     window.open(url, '_blank');
   }
@@ -61,12 +58,11 @@ class Submitted extends Component {
     const { review, reviewedPractitioner } = this.props;
     const poorReview = review.get('stars') < 4;
     const noStars = review.get('stars') === 0;
-    const sentiment = noStars ? 'empty' : poorReview ? 'sorry' : 'grateful';
-
+    const filledSentiment = poorReview ? 'sorry' : 'grateful';
+    const sentiment = noStars ? 'empty' : filledSentiment;
     const content = sentimentContent[sentiment];
     const stars = review.get('stars');
     const description = review.get('description');
-
     return (
       <div className={styles.main}>
         <div className={styles.row}>
@@ -75,19 +71,14 @@ class Submitted extends Component {
         <div className={styles.header}>{content.header}</div>
         <div className={styles.message}>{content.response}</div>
         <div className={styles.starsWrapper}>
-          <Stars
-            value={stars}
-            isStatic={false}
-            isMinimal
-            onChange={this.handleChange('stars')}
-          />
+          <Stars value={stars} isStatic={false} isMinimal onChange={this.handleChange('stars')} />
         </div>
         <div className={styles.footer}>
           <div className={styles.textAreaWrapper}>
             {!noStars && poorReview ? (
               <TextArea
                 label="FEEDBACK"
-                value={description}
+                value={description || ''}
                 onChange={this.handleChange('description')}
                 classStyles={styles.textArea}
               />
@@ -104,9 +95,7 @@ class Submitted extends Component {
           ) : (
             <Button
               className={styles.googleButton}
-              iconRightComponent={props => (
-                <Icon {...props} icon="google-plus-g" type="brand" />
-              )}
+              iconRightComponent={props => <Icon {...props} icon="google-plus-g" type="brand" />}
               onClick={this.submitGood}
             >
               Share Review on Google
@@ -119,8 +108,18 @@ class Submitted extends Component {
 }
 
 Submitted.propTypes = {
-  review: PropTypes.object.isRequired,
-  reviewedPractitioner: PropTypes.object.isRequired,
+  review: PropTypes.shape({}).isRequired,
+  reviewedPractitioner: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+
+  account: PropTypes.shape({
+    get: PropTypes.func.isRequired,
+  }).isRequired,
+
+  saveReview: PropTypes.func.isRequired,
+  mergeReviewValues: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, reviews }) {
@@ -149,7 +148,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Submitted));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Submitted));
