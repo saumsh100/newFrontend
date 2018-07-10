@@ -32,42 +32,16 @@ export default function Appointments(props) {
     >
       <div className={styles.formContainer}>
         <div className={styles.formHeaderInput}>First Appointment</div>
-        <FormSection
-          name="firstAppointment"
-          className={styles.formContainer_row}
-        >
-          <Field
-            component="DayPicker"
-            name="0"
-            theme={dateTheme}
-            label="Date"
-          />
+        <FormSection name="firstAppointment" className={styles.formContainer_row}>
+          <Field component="DayPicker" name="0" theme={dateTheme} label="Date" />
           <span className={styles.formContainer_middleText}> to </span>
-          <Field
-            component="DayPicker"
-            name="1"
-            theme={dateTheme}
-            label="Date"
-          />
+          <Field component="DayPicker" name="1" theme={dateTheme} label="Date" />
         </FormSection>
         <div className={styles.formHeaderInput}>Last Appointment</div>
-        <FormSection
-          name="lastAppointment"
-          className={styles.formContainer_row}
-        >
-          <Field
-            component="DayPicker"
-            name="0"
-            theme={dateTheme}
-            label="Date"
-          />
+        <FormSection name="lastAppointment" className={styles.formContainer_row}>
+          <Field component="DayPicker" name="0" theme={dateTheme} label="Date" />
           <span className={styles.formContainer_middleText}> to </span>
-          <Field
-            component="DayPicker"
-            name="1"
-            theme={dateTheme}
-            label="Date"
-          />
+          <Field component="DayPicker" name="1" theme={dateTheme} label="Date" />
         </FormSection>
         <div className={styles.formHeader}> Production </div>
         <FormSection name="production" className={styles.formContainer_row}>
@@ -91,11 +65,8 @@ export default function Appointments(props) {
             theme={theme}
           />
         </FormSection>
-        <div className={styles.formHeader}>Number of Appointments </div>
-        <FormSection
-          name="appointmentsCount"
-          className={styles.formContainer_row}
-        >
+        <div className={styles.formHeader}>Booked Appointments</div>
+        <FormSection name="appointmentsCount" className={styles.formContainer_row}>
           <span className={styles.formContainer_dropDownInput}>
             <Field
               component="DropdownSelect"
@@ -119,10 +90,7 @@ export default function Appointments(props) {
           </span>
         </FormSection>
         <div className={styles.formHeader}> Online Appointments </div>
-        <FormSection
-          name="onlineAppointments"
-          className={styles.formContainer_row}
-        >
+        <FormSection name="onlineAppointments" className={styles.formContainer_row}>
           <span className={styles.formContainer_dropDownInput}>
             <Field
               component="DropdownSelect"
@@ -152,6 +120,11 @@ export default function Appointments(props) {
 
 Appointments.propTypes = {
   handleAppointments: PropTypes.func.isRequired,
-  theme: PropTypes.object,
-  dateTheme: PropTypes.object,
+  theme: PropTypes.objectOf(PropTypes.string),
+  dateTheme: PropTypes.objectOf(PropTypes.string),
+};
+
+Appointments.defaultProps = {
+  theme: {},
+  dateTheme: {},
 };

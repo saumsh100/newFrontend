@@ -3,14 +3,22 @@ import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import patientShape from '../../../library/PropTypeShapes/patient';
 import styles from '../../PatientTable/styles.scss';
 
 export default function RecallColumn(props) {
   const { patient, className, showTable } = props;
 
+  const displayNa = <div className={styles.displayFlex}>{showTable ? '-' : 'n/a'}</div>;
+
+  if (!patient.dueForRecallExamDate) {
+    return displayNa;
+  }
+
   const recallDueDate = moment(patient.dueForRecallExamDate);
+
   if (!recallDueDate.isValid()) {
-    return <div className={styles.displayFlex}>{showTable ? '-' : 'n/a'}</div>;
+    return displayNa;
   }
 
   const monthsDiff = moment().diff(recallDueDate, 'months');
@@ -26,14 +34,19 @@ export default function RecallColumn(props) {
 
   return (
     <div className={styles.displayFlex}>
-      <div className={`${styles.date} ${className}`}>
-        {recallDueDate.format('MMM DD YYYY')}
-      </div>
+      <div className={`${styles.date} ${className}`}>{recallDueDate.format('MMM DD YYYY')}</div>
       <div className={dotStyle}>&nbsp;</div>
     </div>
   );
 }
 
 RecallColumn.propTypes = {
-  patient: PropTypes.object,
+  className: PropTypes.string,
+  patient: PropTypes.shape(patientShape).isRequired,
+  showTable: PropTypes.bool,
+};
+
+RecallColumn.defaultProps = {
+  className: null,
+  showTable: false,
 };

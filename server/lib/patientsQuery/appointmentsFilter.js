@@ -1,6 +1,12 @@
-
 import moment from 'moment';
-import { Patient, Appointment, DeliveredProcedure, sequelize, PatientUser, Request } from '../../_models';
+import {
+  Patient,
+  Appointment,
+  DeliveredProcedure,
+  sequelize,
+  PatientUser,
+  Request,
+} from '../../_models';
 import { ManualLimitOffset, getIds, patientAttributes } from './helpers';
 
 export async function FirstLastAppointmentFilter({ data, key }, filterIds, query, accountId) {
@@ -40,7 +46,7 @@ export async function FirstLastAppointmentFilter({ data, key }, filterIds, query
 
 export async function AppointmentsCountFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
@@ -66,6 +72,9 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
           patientId: {
             $not: null,
           },
+          startDate: {
+            $lt: new Date(),
+          },
         },
         attributes: [],
         required: true,
@@ -86,10 +95,9 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
   }
 }
 
-
 export async function ProductionFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null }  }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
@@ -101,14 +109,18 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
         accountId,
         ...prevFilterIds,
       },
-      attributes: patientAttributes.concat([[sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount']]),
+      attributes: patientAttributes.concat([
+        [sequelize.fn('sum', sequelize.col('deliveredProcedures.totalAmount')), 'totalAmount'],
+      ]),
       include: [
         {
           model: DeliveredProcedure,
           as: 'deliveredProcedures',
           where: {
             entryDate: {
-              gt: moment().subtract(1, 'years').toISOString(),
+              gt: moment()
+                .subtract(1, 'years')
+                .toISOString(),
               lt: new Date(),
             },
           },
@@ -134,7 +146,7 @@ export async function ProductionFilter({ data }, filterIds, query, accountId) {
 
 export async function OnlineAppointmentsFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {

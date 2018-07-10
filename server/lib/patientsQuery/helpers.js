@@ -1,11 +1,5 @@
-
 export function ManualLimitOffset(eventsArray, query) {
-  const {
-    limit,
-    offset,
-    order,
-  } = query;
-
+  const { limit, offset, order } = query;
 
   let filterArray = eventsArray;
 
@@ -21,9 +15,7 @@ export function ManualLimitOffset(eventsArray, query) {
 }
 
 export function getIds(patients, key) {
-  return patients.map((patient) => {
-    return patient[key];
-  });
+  return patients.map(patient => patient[key]);
 }
 
 export const patientAttributes = [
@@ -56,4 +48,6 @@ export const patientAttributes = [
   'Patient.language',
   'Patient.type',
   'Patient.insuranceInterval',
+  'Patient.dueForRecallExamDate',
+  'Patient.dueForHygieneDate',
 ];
