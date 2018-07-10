@@ -153,7 +153,7 @@ remindersRouter.get('/:accountId/reminders/:reminderId/preview', checkPermission
     const appointmentDate = formattedDate.format('dddd, MMMM Do');
     const appointmentTime = formattedDate.format('h:mma');
 
-    const templateName = getReminderTemplateName({ isConfirmable, reminder });
+    const templateName = getReminderTemplateName({ isConfirmable, reminder, account });
     const html = await renderTemplate({
       templateName,
       mergeVars: [

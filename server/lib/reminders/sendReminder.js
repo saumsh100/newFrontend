@@ -63,7 +63,7 @@ export default {
       fromName: account.name,
       replyTo: account.contactEmail,
       subject: 'Appointment Reminder',
-      templateName: getReminderTemplateName({ isConfirmable, reminder }),
+      templateName: getReminderTemplateName({ isConfirmable, reminder, account }),
       mergeVars: [
         {
           name: 'PRIMARY_COLOR',

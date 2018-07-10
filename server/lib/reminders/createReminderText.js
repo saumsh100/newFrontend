@@ -81,13 +81,13 @@ const createText = {
 };
 
 export default function createReminderText({ patient, account, appointment, reminder = {}, currentDate = nowISO() }) {
-  const type = getReminderType({ appointment, reminder, currentDate });
+  const type = getReminderType({ account, appointment, reminder, currentDate });
   const subtype = appointment.isPatientConfirmed ? 'confirmed' : 'unconfirmed';
   const action = reminder.isCustomConfirm ? 'pre-confirm' : 'confirm';
   return createText[type][subtype]({ patient, account, appointment, action });
 }
 
-export function getReminderType({ appointment, reminder, currentDate = nowISO() }) {
+export function getReminderType({ account, appointment, reminder, currentDate = nowISO() }) {
   if (!appointment && !reminder) {
     throw new Error('Must pass in at least an appointment or a reminder to determine type');
   }
@@ -101,7 +101,10 @@ export function getReminderType({ appointment, reminder, currentDate = nowISO() 
   }
 
   // Now see how many days away it is, and categorize it
+
   const daysDiff = apptDate.diff(currentDate, 'days');
+  const { timezone } = account;
+  const isSameDay = moment.tz(apptDate, timezone).isSame(currentDate, 'day');
   if (daysDiff >= 8) {
     return 'weeksAway';
   } else if (8 >= daysDiff && daysDiff >= 5) {
@@ -109,12 +112,14 @@ export function getReminderType({ appointment, reminder, currentDate = nowISO() 
   } else if (5 >= daysDiff && daysDiff > 0) {
     return 'sameWeek';
   } else if (daysDiff === 0) {
-    return 'sameDay';
+    return isSameDay ?
+      'sameDay' :
+      'sameWeek';
   }
 }
 
 
-export function getReminderTemplateName({ isConfirmable, reminder }) {
+export function getReminderTemplateName({ isConfirmable, reminder, account }) {
   const typeMap = {
     weeksAway: 'Weeks Away',
     weekAway: 'Week Away',
@@ -122,7 +127,7 @@ export function getReminderTemplateName({ isConfirmable, reminder }) {
     sameDay: 'Same Day',
   };
 
-  const type = getReminderType({ reminder });
+  const type = getReminderType({ reminder, account });
   const confirmType = isConfirmable === 'true' ?
     (reminder.isCustomConfirm ? 'Preconfirmed' : 'Unconfirmed') :
     'Confirmed';

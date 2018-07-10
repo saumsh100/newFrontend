@@ -313,10 +313,13 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
     ],
   });
 
+  // Only grab sentReminders with appointments that are booked and in the future
   return sentReminders.filter(({ appointment }) => {
-    // - if appointment is upcoming or is cancelled
-    const isAfter = moment(appointment.startDate).isAfter(date);
-    return !appointment.isCancelled && isAfter && !appointment.isDeleted;
+    return moment(appointment.startDate).isAfter(date) &&
+      !appointment.isCancelled &&
+      !appointment.isDeleted &&
+      !appointment.isPending &&
+      !appointment.isMissed;
   });
 }
 
