@@ -4,6 +4,13 @@
   --widget-spacer: 12px;
 }
 
+:global {
+  html {
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 @media screen and (min-width: 350px) {
   :root {
     --widget-spacer: 16px;
