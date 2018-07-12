@@ -519,6 +519,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom db url that the connector will use.",
+        "name": "DB_CONNECTION_URL",
+        "value": "",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -883,6 +892,15 @@ Object {
         "description": "A json array of PMS Practitioner Ids whose patients are not synced",
         "name": "IGNORED_PRACTITIONER_PMS_IDS",
         "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "The custom db url that the connector will use.",
+        "name": "DB_CONNECTION_URL",
+        "value": "",
       },
       "type": "configuration",
     },
