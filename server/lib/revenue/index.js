@@ -32,7 +32,10 @@ export default async function calcRevenueDays(revParams) {
 
     const timezone = accountData.timezone || 'America/Vancouver';
     const weeklySchedule = accountData.weeklySchedule;
-    const dateTimezone = moment.tz(date, timezone).toISOString();
+    const dateTimezone = moment
+      .tz(date, timezone)
+      .endOf('day')
+      .toISOString();
 
     const closedDates = getClosedClinicDates(weeklySchedule, dateTimezone, pastDaysLimit, timezone);
 
@@ -104,6 +107,7 @@ export default async function calcRevenueDays(revParams) {
 
       const appointments = await Appointment.findAll({
         raw: true,
+        nest: true,
         where: {
           accountId,
           isCancelled: false,
@@ -111,12 +115,20 @@ export default async function calcRevenueDays(revParams) {
           isPending: false,
           isDeleted: false,
           startDate: {
-            $between: [moment(sDateAfter).toISOString(), moment(eDateAfter).toISOString()],
+            $between: [
+              moment(sDateAfter)
+                .startOf('day')
+                .toISOString(),
+              moment(eDateAfter)
+                .endOf('day')
+                .toISOString(),
+            ],
           },
           estimatedRevenue: {
             $not: null,
           },
         },
+        attributes: ['estimatedRevenue', 'startDate'],
       });
 
       sumEstimatedProcedureRevenue(
@@ -176,12 +188,11 @@ export default async function calcRevenueDays(revParams) {
             $not: null,
           },
         },
+        attributes: ['estimatedRevenue', 'startDate'],
       });
-
       sumEstimatedProcedureRevenue(delProc, 'entryDate', totalRevObj, 'totalRevenue', timezone);
       sumEstimatedProcedureRevenue(apps, 'startDate', totalRevObj, 'estimatedRevenue', timezone);
     }
-
     totalRevObj.average = calculateAverage(totalRevObj);
 
     return totalRevObj;
