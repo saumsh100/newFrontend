@@ -96,6 +96,7 @@
   padding: 16px var(--widget-spacer) 0;
   box-sizing: border-box;
   min-height: 56px;
+  -webkit-appearance: none;
   &:focus ~ .label {
     @extend .filled;
   }
@@ -173,10 +174,12 @@
   width: 48%;
   padding: 16px 0;
   transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
   @media screen and (min-width: 350px) {
     width: 23%;
     font-size: 11px;
   }
+
   &:hover {
     transition: all 0.2s ease;
     color: var(--primaryColor);
