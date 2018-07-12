@@ -133,13 +133,25 @@ class DateTime extends Component {
    * Send the user to the join waitlist's prompt, after clicking on the next button.
    */
   confirmDateTime() {
+    const { selectedAvailability, accountTimezone } = this.props;
+
     this.props.setConfirmAvailability(true);
+
+    const currentDayPlus24 = moment()
+      .tz(accountTimezone)
+      .add(1, 'day')
+      .toISOString();
+
+    const nextLoc = this.props.location.state && this.props.location.state.nextRoute;
+
+    if (selectedAvailability.startDate < currentDayPlus24) {
+      return this.props.history.push(nextLoc || './patient-information');
+    }
+
     /**
      * Checks if there are a specific route to go onclicking a card or just the default one.
      */
-    const contextualUrl =
-      (this.props.location.state && this.props.location.state.nextRoute) || './waitlist/join';
-    return this.props.history.push(contextualUrl);
+    return this.props.history.push(nextLoc || './waitlist/join');
   }
 
   /**
@@ -366,10 +378,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DateTime);
+export default connect(mapStateToProps, mapDispatchToProps)(DateTime);
 
 DateTime.propTypes = {
   accountTimezone: PropTypes.string.isRequired,
