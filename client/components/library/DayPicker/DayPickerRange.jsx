@@ -9,6 +9,8 @@ import DayPicker, { DateUtils } from 'react-day-picker';
 import Input from '../Input';
 import Icon from '../Icon';
 import Button from '../Button';
+import { StyleExtender } from '../../Utils/Themer';
+import { rangePickerTheme } from './defaultTheme';
 import styles from './styles.scss';
 
 function isSelectingFirstDay(startDate, endDate, day) {
@@ -258,10 +260,10 @@ class DayPickerRange extends Component {
   render() {
     const { from, to, enteredTo } = this.state;
     const {
-      monthsToShow, popover, disabledDays, readOnly, fieldsWrapper,
+      monthsToShow, popover, disabledDays, readOnly, fieldsWrapper, theme,
     } = this.props;
 
-    const modifiers = this.props.modifiers || { start: from, end: enteredTo };
+    const modifiers = { [styles.start]: from, [styles.end]: enteredTo, ...this.props.modifiers };
     const selectedDays = [from, { from, to: enteredTo }];
 
     const body = (
@@ -275,6 +277,7 @@ class DayPickerRange extends Component {
           onDayClick={this.handleDayClick}
           onDayMouseEnter={this.handleDayMouseEnter}
           initialMonth={from || new Date()}
+          classNames={StyleExtender(theme, rangePickerTheme)}
         />
         {popover && (
           <div className={styles.buttonContainer}>
@@ -396,6 +399,7 @@ DayPickerRange.propTypes = {
   popOverStyles: PropTypes.objectOf(PropTypes.string),
   readOnly: PropTypes.bool,
   to: PropTypes.oneOfType(dateShape),
+  theme: PropTypes.objectOf(PropTypes.string),
 };
 
 DayPickerRange.defaultProps = {
@@ -404,12 +408,13 @@ DayPickerRange.defaultProps = {
   from: '',
   handleDayClick: null,
   maxDays: 0,
-  modifiers: {},
   monthsToShow: 1,
   popover: false,
   popOverStyles: {},
   readOnly: true,
   to: '',
+  modifiers: '',
+  theme: {},
 };
 
 export default DayPickerRange;

@@ -8,6 +8,8 @@ import omit from 'lodash/omit';
 import RDayPicker, { DateUtils } from 'react-day-picker';
 import Input from '../Input';
 import IconButton from '../IconButton';
+import { dayPickerTheme } from './defaultTheme';
+import { StyleExtender } from '../../Utils/Themer';
 import styles from './styles.scss';
 
 const getUTCDate = (value) => {
@@ -103,6 +105,7 @@ class DayPicker extends Component {
       value,
       timezone,
       noTarget,
+      theme,
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
@@ -144,14 +147,14 @@ class DayPicker extends Component {
         dayPickerTargetComponent = <TargetComponent onClick={this.togglePopOver} />;
       }
     }
-
     const body = (
-      <div className={styles.wrapper}>
+      <div className={styles.outerContainer}>
         <RDayPicker
           onDayClick={this.handleDayClick}
           selectedDays={convertValueToDate(value)}
           handleInputChange={this.handleInputChange}
           initialMonth={value ? new Date(convertValueToDate(value)) : new Date()}
+          classNames={StyleExtender(dayPickerTheme, theme)}
           {...this.props}
         />
       </div>
@@ -185,6 +188,7 @@ DayPicker.propTypes = {
   noTarget: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.any)]),
   handleThisInput: PropTypes.func,
+  theme: PropTypes.objectOf(PropTypes.string),
 };
 
 DayPicker.defaultProps = {
@@ -199,6 +203,7 @@ DayPicker.defaultProps = {
   noTarget: false,
   handleThisInput: e => e,
   value: '',
+  theme: {},
 };
 
 export default DayPicker;

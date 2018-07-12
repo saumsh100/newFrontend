@@ -32,3 +32,31 @@
 .dateRangeButton {
   margin-top: var(--widget-spacer);
 }
+
+.today {
+  color: var(--primaryColor);
+}
+
+.selectedDay {
+  color: white;
+  background: var(--primaryColor);
+
+  &:hover:not(.outside) {
+    opacity: 0.9;
+    background: var(--primaryColor);
+  }
+}
+
+.outside {
+  cursor: default;
+  color: #dce0e0;
+  background: transparent;
+}
+
+.start {
+  opacity: 0.75;
+}
+
+.end {
+  opacity: 0.75;
+}
