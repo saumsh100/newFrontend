@@ -1,4 +1,4 @@
-import { setDateToTimezone } from '../../../../server/util/time';
+import dateFormatterFactory from '../dateFormatterFactory';
 
 /**
  * With the passed dateTime, format it taking in consideration the timezone as well.
@@ -8,6 +8,6 @@ import { setDateToTimezone } from '../../../../server/util/time';
  * @param {string} format
  */
 const dateFormatter = (dateTime, timezone = '', format) =>
-  setDateToTimezone(dateTime, timezone).format(format);
+  dateFormatterFactory(format)(timezone)(dateTime);
 
 export default dateFormatter;
