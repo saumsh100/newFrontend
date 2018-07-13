@@ -30,19 +30,21 @@ export default async function calcRevenueDays(revParams) {
       raw: true,
     });
 
-    const timezone = accountData.timezone || 'America/Vancouver';
-    const weeklySchedule = accountData.weeklySchedule;
-    const dateTimezone = moment
-      .tz(date, timezone)
+    const timeZone = accountData.timezone || 'America/Vancouver';
+
+    const selectedDate = moment
+      .tz(date, timeZone)
       .endOf('day')
       .toISOString();
+    const dateRangeInt = pastDaysLimit;
 
-    const closedDates = getClosedClinicDates(weeklySchedule, dateTimezone, pastDaysLimit, timezone);
+    const weeklySchedule = accountData.weeklySchedule;
 
-    // If the chosen date correspondes with a date the office is closed it will return no revenue.
+    const closedDates = getClosedClinicDates(weeklySchedule, selectedDate, dateRangeInt, timeZone);
+
     if (
       closedDates.indexOf(moment
-        .tz(date, timezone)
+        .tz(date, timeZone)
         .endOf('day')
         .toISOString()) > -1
     ) {
@@ -52,18 +54,58 @@ export default async function calcRevenueDays(revParams) {
     }
 
     const totalRevObj = await getAllDatesWithAppointments(
-      dateTimezone,
+      selectedDate,
       closedDates,
-      pastDaysLimit,
+      dateRangeInt,
       maxDates,
       accountId,
-      timezone,
+      timeZone,
     );
 
     const { datesAfter, datesBefore, dateBetween } = getBeforeAfterTodayDates(
       totalRevObj,
-      timezone,
+      timeZone,
     );
+
+    if (datesAfter.length) {
+      const sDateAfter = datesAfter[datesAfter.length - 1];
+      const eDateAfter = datesAfter[0];
+
+      const appointments = await Appointment.findAll({
+        raw: true,
+        where: {
+          accountId,
+          isCancelled: false,
+          isPending: false,
+          isDeleted: false,
+          isMissed: false,
+          startDate: {
+            $between: [
+              moment
+                .tz(sDateAfter, timeZone)
+                .startOf('day')
+                .toISOString(),
+              moment
+                .tz(eDateAfter, timeZone)
+                .endOf('day')
+                .toISOString(),
+            ],
+          },
+          estimatedRevenue: {
+            $not: null,
+          },
+        },
+        attributes: ['estimatedRevenue', 'startDate'],
+      });
+
+      sumEstimatedProcedureRevenue(
+        appointments,
+        'startDate',
+        totalRevObj,
+        'estimatedRevenue',
+        timeZone,
+      );
+    }
 
     if (datesBefore.length) {
       const sDateBefore = datesBefore[datesBefore.length - 1];
@@ -75,10 +117,12 @@ export default async function calcRevenueDays(revParams) {
           accountId,
           entryDate: {
             $between: [
-              moment(sDateBefore)
+              moment
+                .tz(sDateBefore, timeZone)
                 .startOf('day')
                 .toISOString(),
-              moment(eDateBefore)
+              moment
+                .tz(eDateBefore, timeZone)
                 .endOf('day')
                 .toISOString(),
             ],
@@ -97,54 +141,11 @@ export default async function calcRevenueDays(revParams) {
         'entryDate',
         totalRevObj,
         'totalRevenue',
-        timezone,
-      );
-    }
-
-    if (datesAfter.length) {
-      const sDateAfter = datesAfter[datesAfter.length - 1];
-      const eDateAfter = datesAfter[0];
-
-      const appointments = await Appointment.findAll({
-        raw: true,
-        nest: true,
-        where: {
-          accountId,
-          isCancelled: false,
-          isMissed: false,
-          isPending: false,
-          isDeleted: false,
-          startDate: {
-            $between: [
-              moment(sDateAfter)
-                .startOf('day')
-                .toISOString(),
-              moment(eDateAfter)
-                .endOf('day')
-                .toISOString(),
-            ],
-          },
-          estimatedRevenue: {
-            $not: null,
-          },
-        },
-        attributes: ['estimatedRevenue', 'startDate'],
-      });
-
-      sumEstimatedProcedureRevenue(
-        appointments,
-        'startDate',
-        totalRevObj,
-        'estimatedRevenue',
-        timezone,
+        timeZone,
       );
     }
 
     if (dateBetween.length) {
-      const currentDate = moment()
-        .tz(timezone)
-        .toISOString();
-
       const delProc = await DeliveredProcedure.findAll({
         raw: true,
         where: {
@@ -152,10 +153,12 @@ export default async function calcRevenueDays(revParams) {
           entryDate: {
             $between: [
               moment()
-                .tz(timezone)
+                .tz(timeZone)
                 .startOf('day')
                 .toISOString(),
-              currentDate,
+              moment()
+                .tz(timeZone)
+                .toISOString(),
             ],
           },
           isCompleted: true,
@@ -172,14 +175,16 @@ export default async function calcRevenueDays(revParams) {
         where: {
           accountId,
           isCancelled: false,
-          isMissed: false,
           isPending: false,
           isDeleted: false,
+          isMissed: false,
           startDate: {
             $between: [
-              currentDate,
               moment()
-                .tz(timezone)
+                .tz(timeZone)
+                .toISOString(),
+              moment()
+                .tz(timeZone)
                 .endOf('day')
                 .toISOString(),
             ],
@@ -190,9 +195,12 @@ export default async function calcRevenueDays(revParams) {
         },
         attributes: ['estimatedRevenue', 'startDate'],
       });
-      sumEstimatedProcedureRevenue(delProc, 'entryDate', totalRevObj, 'totalRevenue', timezone);
-      sumEstimatedProcedureRevenue(apps, 'startDate', totalRevObj, 'estimatedRevenue', timezone);
+
+      sumEstimatedProcedureRevenue(delProc, 'entryDate', totalRevObj, 'totalRevenue', timeZone);
+
+      sumEstimatedProcedureRevenue(apps, 'startDate', totalRevObj, 'estimatedRevenue', timeZone);
     }
+
     totalRevObj.average = calculateAverage(totalRevObj);
 
     return totalRevObj;
@@ -211,12 +219,12 @@ export default async function calcRevenueDays(revParams) {
  * @param  {numOfDays} numOfDays is the max range of dates to query
  */
 
-function getClosedClinicDates(weeklySchedule, date, numOfDays, timezone) {
+function getClosedClinicDates(weeklySchedule, date, numOfDays, timeZone) {
   const closedDates = [];
   let i = 0;
 
   while (i < numOfDays) {
-    const subDate = moment.tz(date, timezone).subtract(i, 'days');
+    const subDate = moment.tz(date, timeZone).subtract(i, 'days');
 
     const dayofWeek = subDate.format('dddd').toLowerCase();
     const isClosed = weeklySchedule[dayofWeek].isClosed;
@@ -242,7 +250,7 @@ async function getAllDatesWithAppointments(
   dateRangeInt,
   limit,
   accountId,
-  timezone,
+  timeZone,
 ) {
   const appointments = await Appointment.findAll({
     where: {
@@ -251,20 +259,22 @@ async function getAllDatesWithAppointments(
         {
           startDate: {
             $between: [
-              moment(selectedDate)
+              moment
+                .tz(selectedDate, timeZone)
                 .subtract(dateRangeInt, 'days')
                 .toISOString(),
-              moment(selectedDate)
+              moment
+                .tz(selectedDate, timeZone)
                 .endOf('day')
                 .toISOString(),
             ],
           },
         },
       ],
-      isMissed: false,
       isPending: false,
       isCancelled: false,
       isDeleted: false,
+      isMissed: false,
     },
     raw: true,
     required: true,
@@ -279,16 +289,16 @@ async function getAllDatesWithAppointments(
   while (countDates < limit && i < appointments.length) {
     const app = appointments[i];
     const startDate = moment
-      .tz(app.startDate, timezone)
+      .tz(app.startDate, timeZone)
       .endOf('day')
       .toISOString();
-
     if (!(startDate in appointmentObj) && closedDates.indexOf(startDate) === -1) {
       appointmentObj[startDate] = 0;
       countDates += 1;
     }
     i += 1;
   }
+
   return appointmentObj;
 }
 
@@ -299,7 +309,7 @@ async function getAllDatesWithAppointments(
  * @param  {dateObj} dateObj object of dates
  * @returns {datesAfter,datesBefore,dateBetween} 3 arrays with corresponding dates
  */
-function getBeforeAfterTodayDates(dateObj, timezone) {
+function getBeforeAfterTodayDates(dateObj, timeZone) {
   const datesBefore = [];
   const datesAfter = [];
   const dateBetween = [];
@@ -307,16 +317,22 @@ function getBeforeAfterTodayDates(dateObj, timezone) {
   const dateObjKeys = Object.keys(dateObj);
 
   dateObjKeys.forEach((date) => {
-    const subDate = moment.tz(date, timezone);
-    const currentTime = moment().tz(timezone);
-
-    const isBefore = subDate.isBefore(currentTime);
-
+    const subDate = moment.tz(date, timeZone);
+    const isBefore = subDate.isBefore(moment().tz(timeZone));
     const isBetween =
-      subDate.isBetween(currentTime.startOf('day'), currentTime.endOf('day')) ||
-      subDate.isSame(currentTime.endOf('day'));
+      subDate.isBetween(
+        moment()
+          .tz(timeZone)
+          .startOf('day'),
+        moment()
+          .tz(timeZone)
+          .endOf('day'),
+      ) ||
+      subDate.isSame(moment()
+        .tz(timeZone)
+        .endOf('day'));
 
-    const isAfter = subDate.isAfter(currentTime);
+    const isAfter = subDate.isAfter(moment().tz(timeZone));
 
     if (isBefore && !isBetween) {
       datesBefore.push(subDate.toISOString());
@@ -349,14 +365,14 @@ function getBeforeAfterTodayDates(dateObj, timezone) {
  * @param {String} entityField access delivered Procedure revenue or appointment estimatedRevenue
  * @param {String} timezone timezone of the office
  */
-function sumEstimatedProcedureRevenue(entities, dateType, totalRevObj, entityField, timezone) {
-  return entities.forEach((entity) => {
-    const endOfDay = moment
-      .tz(entity[dateType], timezone)
+function sumEstimatedProcedureRevenue(entities, dateType, totalRevObj, entityField, timeZone) {
+  entities.forEach((entity) => {
+    const date = moment
+      .tz(entity[dateType], timeZone)
       .endOf('day')
       .toISOString();
-    if (endOfDay in totalRevObj) {
-      totalRevObj[endOfDay] += entity[entityField];
+    if (date in totalRevObj) {
+      totalRevObj[date] += entity[entityField];
     }
   });
 }
