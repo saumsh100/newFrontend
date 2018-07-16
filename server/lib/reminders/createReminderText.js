@@ -1,9 +1,8 @@
-
 import moment from 'moment-timezone';
 import { convertIntervalStringToObject } from '../../util/time';
 import { formatPhoneNumber } from '../../util/formatters';
 
-const nowISO = () => (new Date()).toISOString();
+const nowISO = () => new Date().toISOString();
 
 const getDateAndTime = (date, timezone) => {
   const mDate = moment.tz(date, timezone);
@@ -14,62 +13,86 @@ const getDateAndTime = (date, timezone) => {
 };
 
 const weeksAway = {
-  unconfirmed: ({ patient, account, appointment, action }) => {
+  unconfirmed: ({
+    patient, account, appointment, action,
+  }) => {
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, your next appointment ` +
+    return (
+      `Hi ${patient.firstName}, your next appointment ` +
       `with ${account.name} is on ${date} at ${time}. ` +
-      `Reply "C" to ${action} your appointment.`;
+      `Reply "C" to ${action} your appointment.`
+    );
   },
 
   confirmed: ({ patient, account, appointment }) => {
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, this is just a friendly reminder ` +
+    return (
+      `Hi ${patient.firstName}, this is just a friendly reminder ` +
       `that your next appointment with ${account.name} ` +
-      `is on ${date} at ${time}.`;
+      `is on ${date} at ${time}.`
+    );
   },
 };
 
 const weekAway = {
-  unconfirmed: ({ patient, account, appointment, action }) => {
+  unconfirmed: ({
+    patient, account, appointment, action,
+  }) => {
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, your upcoming appointment is at ` +
-      `${time} on ${date}. Respond with the letter "C" to ${action}.`;
+    return (
+      `Hi ${patient.firstName}, your upcoming appointment at ${account.name} is on ` +
+      `${date} at ${time}. Respond with the letter "C" to ${action}.`
+    );
   },
 
   confirmed: ({ patient, account, appointment }) => {
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, your upcoming appointment is at ` +
-      `${time} on ${date}.`;
+    return (
+      `Hi ${patient.firstName}, your upcoming appointment at ${account.name} is on ` +
+      `${date} at ${time}.`
+    );
   },
 };
 
 const sameWeek = {
-  unconfirmed: ({ patient, account, appointment, action }) => {
+  unconfirmed: ({
+    patient, account, appointment, action,
+  }) => {
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, your upcoming appointment at ` +
+    return (
+      `Hi ${patient.firstName}, your upcoming appointment at ` +
       `${account.name} is on ${date} at ${time}. ` +
-      `To ${action}, please reply with the letter "C".`;
+      `To ${action}, please reply with the letter "C".`
+    );
   },
 
   confirmed: ({ patient, account, appointment }) => {
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, your upcoming appointment at ` +
-      `${account.name} is on ${date} at ${time}.`;
+    return (
+      `Hi ${patient.firstName}, your upcoming appointment at ` +
+      `${account.name} is on ${date} at ${time}.`
+    );
   },
 };
 
 const sameDay = {
-  unconfirmed: ({ patient, account, appointment, action }) => {
-    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}, please ${action} today's ${time} ` +
+  unconfirmed: ({
+    patient, account, appointment, action,
+  }) => {
+    const { time } = getDateAndTime(appointment.startDate, account.timezone);
+    return (
+      `Hi ${patient.firstName}, please ${action} today's ${time} ` +
       `appointment at ${account.name}. ` +
-      `Reply with "C" to ${action} or call us at ${formatPhoneNumber(account.destinationPhoneNumber)} to reschedule.`;
+      `Reply with "C" to ${action} or call us at ${formatPhoneNumber(account.destinationPhoneNumber)} to reschedule.`
+    );
   },
 
   confirmed: ({ patient, account, appointment }) => {
-    const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
-    return `Hi ${patient.firstName}! We'll see you at ${time} today ` +
-      `for your appointment at ${account.name}.`;
+    const { time } = getDateAndTime(appointment.startDate, account.timezone);
+    return (
+      `Hi ${patient.firstName}! We'll see you at ${time} today ` +
+      `for your appointment at ${account.name}.`
+    );
   },
 };
 
@@ -80,44 +103,62 @@ const createText = {
   sameDay,
 };
 
-export default function createReminderText({ patient, account, appointment, reminder = {}, currentDate = nowISO() }) {
-  const type = getReminderType({ account, appointment, reminder, currentDate });
+export default function createReminderText({
+  patient,
+  account,
+  appointment,
+  reminder = {},
+  currentDate = nowISO(),
+}) {
+  const type = getReminderType({
+    account,
+    appointment,
+    reminder,
+    currentDate,
+  });
   const subtype = appointment.isPatientConfirmed ? 'confirmed' : 'unconfirmed';
   const action = reminder.isCustomConfirm ? 'pre-confirm' : 'confirm';
-  return createText[type][subtype]({ patient, account, appointment, action });
+  return createText[type][subtype]({
+    patient,
+    account,
+    appointment,
+    action,
+  });
 }
 
-export function getReminderType({ account, appointment, reminder, currentDate = nowISO() }) {
+export function getReminderType({
+  account: { timezone },
+  appointment,
+  reminder,
+  currentDate = nowISO(),
+}) {
   if (!appointment && !reminder) {
     throw new Error('Must pass in at least an appointment or a reminder to determine type');
   }
 
-  // If appointment is not defined, assume reminder is there and get apptDate from there to determine type
-  let apptDate;
-  if (appointment && appointment.startDate) {
-    apptDate = moment(appointment.startDate);
-  } else {
-    apptDate = moment().add(convertIntervalStringToObject(reminder.interval));
-  }
+  // If appointment is not defined,
+  // assume reminder is there and get apptDate from there to determine type
+  const apptDate =
+    appointment && appointment.startDate
+      ? moment(appointment.startDate)
+      : moment().add(convertIntervalStringToObject(reminder.interval));
 
   // Now see how many days away it is, and categorize it
+  const isSameDay = moment.tz(apptDate, timezone).isSame(currentDate, 'day');
+
+  if (isSameDay) {
+    return 'sameDay';
+  }
 
   const daysDiff = apptDate.diff(currentDate, 'days');
-  const { timezone } = account;
-  const isSameDay = moment.tz(apptDate, timezone).isSame(currentDate, 'day');
-  if (daysDiff >= 8) {
-    return 'weeksAway';
-  } else if (8 >= daysDiff && daysDiff >= 5) {
-    return 'weekAway';
-  } else if (5 >= daysDiff && daysDiff > 0) {
+  if (daysDiff < 5) {
     return 'sameWeek';
-  } else if (daysDiff === 0) {
-    return isSameDay ?
-      'sameDay' :
-      'sameWeek';
+  } else if (daysDiff < 8) {
+    return 'weekAway';
   }
-}
 
+  return 'weeksAway';
+}
 
 export function getReminderTemplateName({ isConfirmable, reminder, account }) {
   const typeMap = {
@@ -128,9 +169,8 @@ export function getReminderTemplateName({ isConfirmable, reminder, account }) {
   };
 
   const type = getReminderType({ reminder, account });
-  const confirmType = isConfirmable === 'true' ?
-    (reminder.isCustomConfirm ? 'Preconfirmed' : 'Unconfirmed') :
-    'Confirmed';
+  const isCustomConfirm = reminder.isCustomConfirm ? 'Preconfirmed' : 'Unconfirmed';
+  const confirmType = isConfirmable === 'true' ? isCustomConfirm : 'Confirmed';
 
   return `Patient Reminder - ${typeMap[type]} - ${confirmType}`;
 }
