@@ -48,6 +48,8 @@
   "globals": {
     "cy": true,
     "expect": true,
-    "jest": true
+    "jest": true,
+    "beforeAll": true,
+    "afterAll": true
   }
 }

@@ -19,6 +19,10 @@ export function omitProperties(object, omitProps = []) {
   return omit(object, omitProps);
 }
 
+export function omitPropertiesFromArray(array, omitProps) {
+  return array.map(element => omitProperties(element, omitProps));
+}
+
 export function omitPropertiesFromBody(responseBody, omitProps, jsonApi = false) {
   if (jsonApi) {
     return omitPropertiesFromBodyJsonApi(responseBody, omitProps);

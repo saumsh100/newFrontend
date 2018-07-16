@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`services.chat creates a new chat 1`] = `
+Object {
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "id": "3180a744-f6b0-4a09-8046-4e713bf5b566",
+  "isFlagged": false,
+  "lastTextMessageDate": 2017-07-22T00:14:30.932Z,
+  "lastTextMessageId": null,
+  "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  "patientPhoneNumber": "+16045555555",
+}
+`;
+
+exports[`services.chat updates info for last message 1`] = `
+Object {
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "id": "3180a744-f6b0-4a09-8046-4e713bf5b566",
+  "isFlagged": false,
+  "lastTextMessageDate": 2017-07-19T00:14:30.932Z,
+  "lastTextMessageId": "059987cb-3051-4656-98d0-72cda34d32a6",
+  "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+  "patientPhoneNumber": "+16045555555",
+}
+`;

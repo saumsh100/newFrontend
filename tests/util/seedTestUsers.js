@@ -25,6 +25,7 @@ const account = {
   addressId,
   enterpriseId,
   name: 'Test Account',
+  twilioPhoneNumber: '+16043333333',
   destinationPhoneNumber: '+16041234567',
   timezone: 'America/Vancouver',
   createdAt: '2017-07-19T00:14:30.932Z',
