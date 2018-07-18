@@ -11,7 +11,7 @@ const maxLength = max => value =>
     ? `Must be ${max} characters or less, and no blank spaces`
     : undefined);
 const maxLength25 = maxLength(25);
-const maxPostalLength = maxLength(6);
+const maxPostalLength = maxLength(7);
 
 /**
  * setLabel decides which element to render based on a default condition.
@@ -19,8 +19,7 @@ const maxPostalLength = maxLength(6);
  * @param primary
  * @param secondary
  */
-const setLabel = (country, primary, secondary) =>
-  (country === 'US' ? primary : secondary);
+const setLabel = (country, primary, secondary) => (country === 'US' ? primary : secondary);
 
 class AddressForm extends Component {
   constructor(props) {
@@ -59,14 +58,12 @@ class AddressForm extends Component {
 
   zipPostalVal(value) {
     if (!value) {
-      return;
+      return undefined;
     }
     const regex = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
 
     if (this.state.country === 'US') {
-      return value && /^\d{5}(-\d{4})?$/.test(value)
-        ? undefined
-        : 'Please enter a proper zipcode.';
+      return value && /^\d{5}(-\d{4})?$/.test(value) ? undefined : 'Please enter a proper zipcode.';
     } else if (!regex.test(value)) {
       return 'Please enter a proper postal code.';
     }
@@ -106,18 +103,14 @@ class AddressForm extends Component {
     return (
       <div className={styles.addressRow}>
         <Form
+          enableReinitialize
           form="addressSettingsForm"
           onSubmit={onSubmit}
           initialValues={initialValues}
           data-test-id="addressSettingsForm"
         >
           <div className={styles.addressForm}>
-            <Field
-              name="street"
-              label="Street Address"
-              validate={[maxLength25]}
-              data-test-id="street"
-            />
+            <Field name="street" label="Street Address" data-test-id="street" />
             <Field
               name="country"
               label="Country"
@@ -133,18 +126,12 @@ class AddressForm extends Component {
               options={stateProv}
               data-test-id="state"
             />
-            <Field
-              name="city"
-              label="City"
-              validate={[maxLength25]}
-              data-test-id="city"
-            />
+            <Field name="city" label="City" validate={[maxLength25]} data-test-id="city" />
             <Field
               name="zipCode"
               label={this.state.zipPostal}
               validate={[maxPostalLength, this.zipPostalVal]}
               data-test-id="zipCode"
-              maxLength="6"
             />
             <Field
               name="timezone"
@@ -169,8 +156,12 @@ AddressForm.propTypes = {
     state: PropTypes.string,
     timezone: PropTypes.string,
   }),
-  change: PropTypes.func,
-  onSubmit: PropTypes.func,
+  change: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+AddressForm.defaultProps = {
+  address: null,
 };
 
 export default AddressForm;

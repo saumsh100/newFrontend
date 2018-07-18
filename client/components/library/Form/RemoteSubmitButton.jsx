@@ -1,34 +1,29 @@
 
 import React, { PropTypes } from 'react';
 import { omit } from 'lodash';
-import { submit, isPristine } from 'redux-form';
+import { submit, isInvalid, isPristine } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from '../Button';
 
 function RemoteSubmitButton(props) {
-  const {
-    form, onClick, submit, isPristine,
-  } = props;
+  const { form } = props;
 
-  const newProps = omit(props, ['form', 'onClick']);
-  const newOnClick = (e) => {
-    submit(form);
+  const newProps = omit(props, ['form', 'onClick', 'isInValid']);
+  const newOnClick = () => {
+    props.submit(form);
   };
 
   return (
-    <Button {...newProps} onClick={newOnClick}>
+    <Button disabled={props.isInValid || props.isPristine} {...newProps} onClick={newOnClick}>
       {props.children}
     </Button>
   );
 }
 
-RemoteSubmitButton.propTypes = {
-  form: PropTypes.string,
-};
-
 function mapStateToProps(state, { form }) {
   return {
+    isInValid: isInvalid(form)(state),
     isPristine: isPristine(form)(state),
   };
 }
@@ -42,7 +37,12 @@ function mapActionsToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps,
-)(RemoteSubmitButton);
+RemoteSubmitButton.propTypes = {
+  form: PropTypes.string.isRequired,
+  children: PropTypes.node.isRequired,
+  isInValid: PropTypes.bool.isRequired,
+  submit: PropTypes.func.isRequired,
+  isPristine: PropTypes.bool.isRequired,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(RemoteSubmitButton);

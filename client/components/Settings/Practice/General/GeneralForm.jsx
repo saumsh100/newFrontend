@@ -28,6 +28,7 @@ export default function GeneralForm({ role, onSubmit, activeAccount }) {
 
   return (
     <Form
+      enableReinitialize
       form="clinicDetailsForm"
       onSubmit={onSubmit}
       initialValues={initialValues}

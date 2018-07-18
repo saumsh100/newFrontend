@@ -3,10 +3,10 @@ import React, { PropTypes } from 'react';
 import { Form, Field } from '../../../library';
 import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
+import AccountModel from '../../../../entities/models/Account';
 import styles from './styles.scss';
 
-const maxUnitSize = value =>
-  value && value > 60 && 'Must be less than or equal to 180';
+const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
 
 export default function SuperAdminForm({ onSubmit, activeAccount }) {
   const initialValues = {
@@ -31,20 +31,17 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
 
   return (
     <Form
+      enableReinitialize
       form="superAdminSettingsForm"
       onSubmit={onSubmit}
       initialValues={initialValues}
       data-test-id="superAdminSettingsForm"
-      alignSave="left"
     >
       {lastSyncComponent}
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Can Send Reminders</div>
-          <div
-            className={styles.paddingField_toggle}
-            data-test-id="toggle_canSendReminders"
-          >
+          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReminders">
             <Field component="Toggle" name="canSendReminders" />
           </div>
         </div>
@@ -52,10 +49,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Can Send Reviews</div>
-          <div
-            className={styles.paddingField_toggle}
-            data-test-id="toggle_canSendReviews"
-          >
+          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendReviews">
             <Field component="Toggle" name="canSendReviews" />
           </div>
         </div>
@@ -63,10 +57,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Can Send Recalls</div>
-          <div
-            className={styles.paddingField_toggle}
-            data-test-id="toggle_canSendRecalls"
-          >
+          <div className={styles.paddingField_toggle} data-test-id="toggle_canSendRecalls">
             <Field component="Toggle" name="canSendRecalls" />
           </div>
         </div>
@@ -74,10 +65,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <div className={styles.paddingField}>
         <div className={styles.paddingField_flex}>
           <div className={styles.paddingText}>Send Request Emails</div>
-          <div
-            className={styles.paddingField_toggle}
-            data-test-id="toggle_sendRequestEmail"
-          >
+          <div className={styles.paddingField_toggle} data-test-id="toggle_sendRequestEmail">
             <Field component="Toggle" name="sendRequestEmail" />
           </div>
         </div>
@@ -102,26 +90,18 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         validate={[notNegative, maxUnitSize]}
         data-test-id="unit"
       />
-      <Field
-        name="suggestedChairId"
-        label="Suggested Chair ID"
-        data-test-id="suggestedChairId"
-      />
-      <Field
-        name="facebookUrl"
-        label="Facebook URL"
-        data-test-id="facebookUrl"
-      />
-      <Field
-        name="googlePlaceId"
-        label="Google Place ID"
-        data-test-id="googlePlaceId"
-      />
+      <Field name="suggestedChairId" label="Suggested Chair ID" data-test-id="suggestedChairId" />
+      <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
+      <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />
     </Form>
   );
 }
 
 SuperAdminForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  activeAccount: PropTypes.shape({}),
+  activeAccount: PropTypes.instanceOf(AccountModel),
+};
+
+SuperAdminForm.defaultProps = {
+  activeAccount: null,
 };

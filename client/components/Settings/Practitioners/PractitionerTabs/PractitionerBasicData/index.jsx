@@ -1,20 +1,11 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  PractitionerAvatar,
-  Form,
-  Field,
-  Dropzone,
-  Header,
-  Button,
-} from '../../../../library';
-import {
-  uploadAvatar,
-  deleteAvatar,
-} from '../../../../../thunks/practitioners';
+import { PractitionerAvatar, Form, Field, Dropzone, Header, Button } from '../../../../library';
+import { uploadAvatar, deleteAvatar } from '../../../../../thunks/practitioners';
 import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import styles from '../../styles.scss';
 
@@ -86,11 +77,11 @@ class PractitionerBasicData extends Component {
     return (
       <div className={styles.practFormContainer}>
         <Form
+          enableReinitialize
           form={`${practitioner.get('id')}Form`}
           onSubmit={this.updatePractitioner}
           initialValues={initialValues}
           data-test-id="practitionerBasicDataForm"
-          alignSave="left"
         >
           <div className={styles.practFormContainer_basicForm}>
             <Header title="Personal Details" contentHeader />
@@ -118,9 +109,7 @@ class PractitionerBasicData extends Component {
                 {`Would you like to set this practitioner to be hidden on the booking
                 widget?`}
               </span>
-              <div
-                className={styles.practFormContainer_practHidden_hiddenToggle}
-              >
+              <div className={styles.practFormContainer_practHidden_hiddenToggle}>
                 <Field name="isHidden" component="Toggle" />
               </div>
             </div>
@@ -156,13 +145,10 @@ function mapDispatchToProps(dispatch) {
 }
 
 PractitionerBasicData.propTypes = {
-  practitioner: PropTypes.shape(practitionerShape),
-  deleteAvatar: PropTypes.func,
-  uploadAvatar: PropTypes.func,
-  updatePractitioner: PropTypes.func,
+  practitioner: PropTypes.shape(practitionerShape).isRequired,
+  deleteAvatar: PropTypes.func.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
+  updatePractitioner: PropTypes.func.isRequired,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PractitionerBasicData);
+export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);
