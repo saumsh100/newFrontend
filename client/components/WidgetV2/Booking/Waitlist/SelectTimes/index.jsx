@@ -13,6 +13,7 @@ import { historyShape, locationShape } from '../../../../library/PropTypeShapes/
 import officeHoursShape from '../../../../library/PropTypeShapes/officeHoursShape';
 import createAvailabilitiesFromOpening from '../../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import groupTimesPerPeriod from '../../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
+import { bookingWaitlistSelectTimesSVG } from '../../../SVGs';
 import styles from './styles.scss';
 
 function SelectTimes({
@@ -91,9 +92,7 @@ function SelectTimes({
           className={styles.editLink}
           onClick={() => history.push({ pathname: link, state: { nextRoute: goBack } })}
         >
-          <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 9.5V12h2.5l7.372-7.372-2.5-2.5L0 9.5zm11.805-6.805c.26-.26.26-.68 0-.94l-1.56-1.56a.664.664 0 0 0-.94 0l-1.22 1.22 2.5 2.5 1.22-1.22z" />
-          </svg>
+          {bookingWaitlistSelectTimesSVG}
         </Button>
       </span>
     </p>
@@ -276,10 +275,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SelectTimes);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectTimes);
 
 SelectTimes.propTypes = {
   timezone: PropTypes.string.isRequired,

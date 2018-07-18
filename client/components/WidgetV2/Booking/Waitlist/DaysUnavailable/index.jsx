@@ -12,6 +12,7 @@ import { setWaitlistUnavailableDates } from '../../../../../actions/availabiliti
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
 import { isResponsive } from '../../../../../util/hub';
 import styles from './styles.scss';
+import dayPickerStyles from '../../dayPickerStyles.scss';
 
 function DaysUnavailable({
   history,
@@ -63,6 +64,7 @@ function DaysUnavailable({
     const contextualUrl = (location.state && location.state.nextRoute) || '../patient-information';
     return history.push(contextualUrl);
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -74,13 +76,16 @@ function DaysUnavailable({
         <DayPickerRange
           fieldsWrapper={() => undefined}
           handleDayClick={day => toggleDateFromWaitlist(day)}
-          modifiers={{ highlighted: daysToDisplay }}
+          modifiers={{
+            [dayPickerStyles.selected]: daysToDisplay,
+          }}
           monthsToShow={isResponsive() ? 1 : 2}
           onChange={e => e}
           disabledDays={{
             before: moment(waitlistDates[0]).toDate(),
             after: moment(waitlistDates[waitlistDates.length - 1]).toDate(),
           }}
+          theme={dayPickerStyles}
         />
         <Button
           disabled={!daysToDisplay.length}
@@ -112,10 +117,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DaysUnavailable);
+export default connect(mapStateToProps, mapDispatchToProps)(DaysUnavailable);
 
 DaysUnavailable.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

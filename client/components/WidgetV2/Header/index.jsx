@@ -13,6 +13,7 @@ import { setIsBooking } from '../../../actions/availabilities';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { historyShape } from '../../library/PropTypeShapes/routerShapes';
 import patientUserShape from '../../library/PropTypeShapes/patientUserShape';
+import { closeBookingModalSVG } from '../SVGs';
 import styles from './styles.scss';
 
 class Header extends Component {
@@ -41,9 +42,7 @@ class Header extends Component {
         <div className={styles.headerRightArea}>
           {isAuth && <PatientUserMenu user={patientUser} />}
           <Button className={styles.closeButton} onClick={this.props.closeBookingModal}>
-            <svg xmlns="http://www.w3.org/2000/svg">
-              <path d="M6.44 7.146L.796 1.504A.51.51 0 0 1 .782.782a.51.51 0 0 1 .722.015L7.146 6.44 12.79.797a.51.51 0 0 1 .721-.015.51.51 0 0 1-.014.722L7.854 7.146l5.642 5.643a.51.51 0 0 1 .014.721.51.51 0 0 1-.721-.014L7.146 7.854l-5.642 5.642a.51.51 0 0 1-.722.014.51.51 0 0 1 .015-.721L6.44 7.146z" />
-            </svg>
+            {closeBookingModalSVG}
           </Button>
         </div>
         <Tabs isBooking={isBooking} history={history} setIsBooking={this.props.setIsBooking} />

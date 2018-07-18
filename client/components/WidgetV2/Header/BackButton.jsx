@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import Button from '../../library/Button';
 import { historyShape } from '../../library/PropTypeShapes/routerShapes';
+import { backButtonSVG } from '../SVGs';
 import styles from './styles.scss';
 
 /**
@@ -23,9 +24,7 @@ const pathBuilder = (path = '') => `/widgets/:accountId/app${path}`;
  */
 const backButton = goBack => () => (
   <Button className={styles.backButton} onClick={goBack}>
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <path d="M2.207 7.5l5.147 5.146a.5.5 0 1 1-.708.708l-6-6a.5.5 0 0 1 .01-.717l5.99-5.99a.5.5 0 0 1 .708.707L2.207 6.5H12a.5.5 0 1 1 0 1H2.207z" />
-    </svg>
+    {backButtonSVG}
   </Button>
 );
 

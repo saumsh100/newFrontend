@@ -21,6 +21,7 @@ import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter
 import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
 import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
+import { bookingReviewSVG } from '../../SVGs';
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
@@ -176,9 +177,7 @@ function Review({
             return history.push({ pathname: link, state: { nextRoute: goBack } });
           }}
         >
-          <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 9.5V12h2.5l7.372-7.372-2.5-2.5L0 9.5zm11.805-6.805c.26-.26.26-.68 0-.94l-1.56-1.56a.664.664 0 0 0-.94 0l-1.22 1.22 2.5 2.5 1.22-1.22z" />
-          </svg>
+          {bookingReviewSVG}
         </Button>
       </span>
     </div>
@@ -471,10 +470,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Review));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
 
 Review.propTypes = {
   confirmedAvailability: PropTypes.bool.isRequired,

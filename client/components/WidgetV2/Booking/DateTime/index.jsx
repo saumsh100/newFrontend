@@ -19,7 +19,9 @@ import { fetchAvailabilities } from '../../../../thunks/availabilities';
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
+import { bookingPickDateSVG } from '../../SVGs';
 import styles from './styles.scss';
+import dayPickerStyles from '../dayPickerStyles.scss';
 
 /**
  * Checks if a date is before the currentDate.
@@ -321,9 +323,7 @@ class DateTime extends Component {
      */
     const CalendarButtonTrigger = props => (
       <Button {...props} className={styles.datePicker}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14">
-          <path d="M10.684 1.332h-.667V0H8.68v1.332H3.34V0H2.003v1.332h-.667c-.742 0-1.33.6-1.33 1.333L0 11.99c0 .733.594 1.332 1.336 1.332h9.348c.735 0 1.336-.6 1.336-1.332V2.665c0-.733-.601-1.333-1.336-1.333zm0 10.659H1.336V4.663h9.348v7.328z" />
-        </svg>
+        {bookingPickDateSVG}
         Pick a<br /> Date
       </Button>
     );
@@ -343,6 +343,7 @@ class DateTime extends Component {
             tipSize={0.01}
             onChange={this.changeSelectedDate}
             disabledDays={generateIsDisabledDay(floorDate)}
+            theme={dayPickerStyles}
           />
         </div>
         {renderAvailabilities()}

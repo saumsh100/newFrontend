@@ -11,6 +11,7 @@ import { Button, DayPickerRange, Input } from '../../../../library';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { isResponsive } from '../../../../../util/hub';
 import styles from './styles.scss';
+import dayPickerStyles from '../../dayPickerStyles.scss';
 
 function SelectDates({
   selectedService,
@@ -35,13 +36,6 @@ function SelectDates({
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
   const contextualUrl = (location.state && location.state.nextRoute) || './select-times';
-  const rangePickerTheme = {
-    selected: styles.selectedDay,
-    today: styles.today,
-    start: styles.start,
-    outside: styles.outside,
-    day: styles.day,
-  };
 
   return (
     <div className={styles.container}>
@@ -90,10 +84,11 @@ function SelectDates({
               (selectedAvailability && moment(selectedAvailability.startDate).toDate()) || null,
           }}
           onChange={values => extractRange(values)}
-          theme={rangePickerTheme}
+          theme={dayPickerStyles}
           modifiers={{
-            [styles.start]: (waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || '',
-            [styles.end]:
+            [dayPickerStyles.start]:
+              (waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || '',
+            [dayPickerStyles.end]:
               (waitlist.dates.length &&
                 moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
               '',

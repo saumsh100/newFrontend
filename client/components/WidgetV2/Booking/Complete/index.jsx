@@ -16,6 +16,7 @@ import Service from '../../../../entities/models/Service';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { capitalizeFirstLetter } from '../../../Utils';
 import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
+import { bookingConfirmedSVG } from '../../SVGs';
 import styles from './styles.scss';
 
 function Complete({
@@ -165,49 +166,7 @@ function Complete({
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
         <div className={styles.content}>
-          <div>
-            <svg width="145" height="104" xmlns="http://www.w3.org/2000/svg">
-              <g fill="none" fillRule="evenodd">
-                <g transform="translate(34 32)" stroke="var(--primaryColor)">
-                  <rect fill="#FFF" x=".5" y="7.5" width="74" height="64" rx="4" />
-                  <path
-                    d="M.5 24.5h74V11A3.5 3.5 0 0 0 71 7.5H4A3.5 3.5 0 0 0 .5 11v13.5z"
-                    fill="#FFF"
-                  />
-                  <g transform="translate(11)" fill="#FFF">
-                    <rect x=".5" y=".5" width="4.855" height="17" rx="2.428" />
-                    <rect x="48.645" y=".5" width="4.855" height="17" rx="2.428" />
-                  </g>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M25 46.803l9.839 10.24L55.059 36"
-                  />
-                </g>
-                <g opacity=".5" transform="translate(0 -4)">
-                  <circle stroke="var(--primaryColor)" cx="123" cy="18" r="3" />
-                  <circle stroke="var(--primaryColor)" cx="122.5" cy="62.5" r="2.5" />
-                  <circle fill="var(--primaryColor)" cx="103.5" cy="12.5" r="1.5" />
-                  <circle fill="var(--primaryColor)" cx="120" cy="36" r="2" />
-                  <circle fill="var(--primaryColor)" cx="57.5" cy="25.5" r="1.5" />
-                  <circle fill="var(--primaryColor)" cx="12.5" cy="66.5" r="1.5" />
-                  <circle fill="var(--primaryColor)" cx="1" cy="51" r="1" />
-                  <circle stroke="var(--primaryColor)" cx="21" cy="51" r="3" />
-                  <circle stroke="var(--primaryColor)" cx="34" cy="13" r="3" />
-                  <circle stroke="var(--primaryColor)" cx="85" cy="26" r="2" />
-                  <g stroke="var(--primaryColor)" strokeLinecap="round">
-                    <path d="M139.717 40.55l.507 8.68M144.282 44.833h-8.493" />
-                  </g>
-                  <g stroke="var(--primaryColor)" strokeLinecap="round">
-                    <path d="M73.717 4.55l.507 8.68M78.282 8.833h-8.493" />
-                  </g>
-                  <g stroke="var(--primaryColor)" strokeLinecap="round">
-                    <path d="M14.04 27.55l.506 8.68M18.604 31.833h-8.493" />
-                  </g>
-                </g>
-              </g>
-            </svg>
-          </div>
+          <div>{bookingConfirmedSVG}</div>
           <h2 className={styles.heading}>Thank You!</h2>
           <p className={styles.requestTitle}>These are the details of your request:</p>
           <div className={styles.requestCard}>
