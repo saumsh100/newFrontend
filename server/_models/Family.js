@@ -43,6 +43,10 @@ export default function (sequelize, DataTypes) {
     headId: {
       type: DataTypes.STRING,
     },
+
+    pmsCreatedAt: {
+      type: DataTypes.DATE,
+    },
   });
 
   Family.associate = (({ Account, Patient }) => {

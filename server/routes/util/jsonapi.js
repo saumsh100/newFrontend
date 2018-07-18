@@ -132,6 +132,7 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'pmsCreatedAt',
   ],
 
   Patient: [
