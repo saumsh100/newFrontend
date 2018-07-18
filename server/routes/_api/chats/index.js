@@ -1,3 +1,4 @@
+import uuid from 'uuid';
 import { Chat, Account, TextMessage, User, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 
@@ -172,35 +173,20 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
       return twilioClient.sendMessage(twilioMessageData).then((sms) => {
         // Add twilio sid as our uniqueId
         twilioMessageData.id = sms.sid;
-        if (!chatId) {
-          Chat.create(chatMerge).then((chat) => {
-            twilioMessageData.chatId = chat.id;
-            TextMessage.create(twilioMessageData).then((textMessage) => {
-              Chat.findOne({
-                where: { id: chat.id },
-                include,
-              }).then((chat) => {
-                const send = normalize('chat', chat.get({ plain: true }));
-                io
-                  .of(namespaces.dash)
-                  .in(account.id)
-                  .emit('newMessage', send);
-
-                res.send(send);
-              });
-            });
-          });
-        } else {
-          TextMessage.create(twilioMessageData)
-            .then((tm) => {
-              const lastTextMessageId = tm.id;
-              const lastTextMessageDate = tm.createdAt;
-              Chat.update(
-                { lastTextMessageId, lastTextMessageDate },
-                { where: { id: chatId } },
-              ).then(() => {
+      })
+        .catch(() => {
+          // If sending fails, use temporary id and set status to failed.
+          twilioMessageData.id = uuid();
+          twilioMessageData.smsStatus = 'failed';
+        })
+        .finally(() => {
+          // Create message anyway
+          if (!chatId) {
+            Chat.create(chatMerge).then((chat) => {
+              twilioMessageData.chatId = chat.id;
+              TextMessage.create(twilioMessageData).then((textMessage) => {
                 Chat.findOne({
-                  where: { id: chatId },
+                  where: { id: chat.id },
                   include,
                 }).then((chat) => {
                   const send = normalize('chat', chat.get({ plain: true }));
@@ -212,12 +198,103 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
                   res.send(send);
                 });
               });
-            })
-            .catch(next);
-        }
-      });
+            });
+          } else {
+            TextMessage.create(twilioMessageData)
+              .then((tm) => {
+                const lastTextMessageId = tm.id;
+                const lastTextMessageDate = tm.createdAt;
+                Chat.update(
+                  { lastTextMessageId, lastTextMessageDate },
+                  { where: { id: chatId } },
+                ).then(() => {
+                  Chat.findOne({
+                    where: { id: chatId },
+                    include,
+                  }).then((chat) => {
+                    const send = normalize('chat', chat.get({ plain: true }));
+                    io
+                      .of(namespaces.dash)
+                      .in(account.id)
+                      .emit('newMessage', send);
+
+                    res.send(send);
+                  });
+                });
+              })
+              .catch(next);
+          }
+        });
     })
     .catch(next);
+});
+
+/**
+ * Tries to resend a message that failed to send initialy.
+ */
+chatsRouter.put('/textMessage/:messageId/resend', checkPermissions('textMessages:create'), async (req, res, next) => {
+  try {
+    const { messageId } = req.params;
+    const { patientId } = req.body;
+
+    const patient = await Patient.findById(patientId, { raw: true });
+    const account = await Account.findById(patient.accountId, { raw: true });
+    const textMessage = await TextMessage.findById(messageId);
+    const chatId = textMessage.get('chatId');
+
+    const twilioMessageData = {
+      body: textMessage.get('body'),
+      from: account.twilioPhoneNumber,
+      to: patient.mobilePhoneNumber,
+    };
+    const sms = await twilioClient.sendMessage(twilioMessageData);
+
+    // Create a new message composed from data of previous
+    // but with the newly composed data.
+    await TextMessage.create({
+      id: sms.sid,
+      chatId,
+      userId: textMessage.get('userId'),
+      from: twilioMessageData.from,
+      to: twilioMessageData.to,
+      body: twilioMessageData.body,
+      read: true,
+    });
+
+    // Destroy an old message, that failed to send.
+    await textMessage.destroy();
+
+    const chat = await Chat.findById(chatId, {
+      nest: true,
+      include: [
+        {
+          model: Patient,
+          as: 'patient',
+        },
+        {
+          model: TextMessage,
+          as: 'textMessages',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: {
+                exclude: 'password',
+              },
+
+              required: false,
+            },
+          ],
+          required: true,
+        },
+      ],
+    });
+
+    const sendChat = normalize('chat', chat.get({ plain: true }));
+    return res.send(sendChat);
+  } catch (exception) {
+    return next(exception);
+  }
 });
 
 /**

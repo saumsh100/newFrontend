@@ -11,7 +11,13 @@ import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip, Button } from '../..
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
 import { setNewChat } from '../../../reducers/chat';
-import { sendChatMessage, createNewChat, selectChat, markAsUnread } from '../../../thunks/chat';
+import {
+  sendChatMessage,
+  createNewChat,
+  selectChat,
+  markAsUnread,
+  resendMessage,
+} from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
 import styles from './styles.scss';
 
@@ -164,6 +170,7 @@ class MessageContainer extends Component {
 
     return messages.map((message) => {
       const isFromPatient = message.get('from') !== accountTwilio;
+      const patientId = selectedPatient.get('id');
 
       const dotsIcon = (
         <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
@@ -175,6 +182,17 @@ class MessageContainer extends Component {
           onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
         >
           Mark unread
+        </Button>
+      );
+
+      const resendMessageButton = (
+        <Button
+          className={styles.markUnreadButton}
+          onClick={() =>
+            this.props.resendMessage(message.get('id'), patientId, message.get('chatId'))
+          }
+        >
+          Failed to send message, click to retry.
         </Button>
       );
 
@@ -193,6 +211,25 @@ class MessageContainer extends Component {
       );
 
       let optionsWrapper = null;
+      let failedMessageWrapper = null;
+
+      const failedMessage = message.get('smsStatus') === 'failed' && (
+        <div
+          className={styles.failedMessage}
+          ref={(reference) => {
+            failedMessageWrapper = reference;
+          }}
+        >
+          <Tooltip
+            trigger={['click', 'hover']}
+            overlay={resendMessageButton}
+            placement="left"
+            getTooltipContainer={() => failedMessageWrapper}
+          >
+            <Icon icon="exclamation-circle" size={2} />
+          </Tooltip>
+        </div>
+      );
 
       const messageOptions = isFromPatient && (
         <div
@@ -219,6 +256,7 @@ class MessageContainer extends Component {
             className={isFromPatient ? styles.patientMessage : styles.clinicMessage}
           >
             {isFromPatient && avatar}
+            {failedMessage}
             <MessageBubble textMessage={message} isFromPatient={isFromPatient} />
             {!isFromPatient && avatar}
             {messageOptions}
@@ -300,6 +338,7 @@ function mapDispatchToProps(dispatch) {
       sendChatMessage,
       createNewChat,
       markAsUnread,
+      resendMessage,
     },
     dispatch,
   );
@@ -331,6 +370,7 @@ MessageContainer.propTypes = {
   sendChatMessage: PropTypes.func.isRequired,
   createNewChat: PropTypes.func.isRequired,
   markAsUnread: PropTypes.func.isRequired,
+  resendMessage: PropTypes.func.isRequired,
 };
 
 MessageContainer.defaultProps = {
@@ -339,6 +379,9 @@ MessageContainer.defaultProps = {
   selectedChat: null,
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(MessageContainer);

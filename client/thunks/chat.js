@@ -10,7 +10,7 @@ import {
 } from '../reducers/chat';
 import { fetchEntities, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
-import { deleteAllEntity, receiveEntities } from '../actions/entities';
+import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
 import { isHub } from '../util/hub';
 
 function isOnChatPage(currentPath) {
@@ -347,4 +347,16 @@ export function unlockChat(chatId) {
     dispatch(setLockedChats(lockedChats));
     dispatch(markAsRead(chatId));
   };
+}
+
+export function resendMessage(messageId, patientId, chatId) {
+  return dispatch =>
+    dispatch(updateEntityRequest({
+      key: 'chats',
+      values: { patientId },
+      url: `/api/chats/textMessage/${messageId}/resend`,
+    })).then(() => {
+      dispatch(deleteEntity({ key: 'textMessages', id: messageId }));
+      dispatch(setChatMessagesListForChat(chatId));
+    });
 }

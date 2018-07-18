@@ -140,7 +140,7 @@ function mapStateToProps(state, { chat = {} }) {
   const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
   const hasUnread = chat.textMessages.filter((message) => {
     const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
-    return !messageEntity.read;
+    return messageEntity && !messageEntity.read;
   });
 
   return {

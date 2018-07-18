@@ -47,3 +47,8 @@
 .fromClinicTime {
   float: right;
 }
+
+.failedMessage {
+  background-color: $clr-bg-dark-grey;
+  color: $clr-dark-grey;
+}

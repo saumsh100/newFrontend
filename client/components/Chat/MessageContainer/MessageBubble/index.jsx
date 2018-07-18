@@ -9,11 +9,14 @@ import styles from './styles.scss';
 
 function MessageBubble(props) {
   const { textMessage, isFromPatient } = props;
+  const smsStatus = textMessage.get('smsStatus');
+  const failedMessage = smsStatus && smsStatus === 'failed';
 
   const bodyClasses = classNames(styles.bubbleBody, {
     [styles.fromPatientBody]: isFromPatient,
     [styles.fromClinicBodyHub]: !isFromPatient && isHub(),
     [styles.fromClinicBody]: !isFromPatient && !isHub(),
+    [styles.failedMessage]: !isFromPatient && failedMessage,
   });
 
   const timeClasses = classNames(styles.bubbleTime, {
