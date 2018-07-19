@@ -7,15 +7,19 @@ import { bindActionCreators } from 'redux';
 import Button from '../Button';
 
 function RemoteSubmitButton(props) {
-  const { form } = props;
+  const { form, removePristineCheck } = props;
 
-  const newProps = omit(props, ['form', 'onClick', 'isInValid']);
+  const newProps = omit(props, ['form', 'onClick', 'isInValid', 'removePristineCheck']);
   const newOnClick = () => {
     props.submit(form);
   };
 
   return (
-    <Button disabled={props.isInValid || props.isPristine} {...newProps} onClick={newOnClick}>
+    <Button
+      disabled={props.isInValid || (!removePristineCheck ? props.isPristine : false)}
+      {...newProps}
+      onClick={newOnClick}
+    >
       {props.children}
     </Button>
   );
@@ -43,6 +47,14 @@ RemoteSubmitButton.propTypes = {
   isInValid: PropTypes.bool.isRequired,
   submit: PropTypes.func.isRequired,
   isPristine: PropTypes.bool.isRequired,
+  removePristineCheck: PropTypes.bool,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(RemoteSubmitButton);
+RemoteSubmitButton.defaultProps = {
+  removePristineCheck: false,
+};
+
+export default connect(
+  mapStateToProps,
+  mapActionsToProps,
+)(RemoteSubmitButton);
