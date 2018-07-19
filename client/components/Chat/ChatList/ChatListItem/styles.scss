@@ -4,6 +4,7 @@
   height: 100px;
   padding: 20px;
   box-sizing: border-box;
+  transition: all 0.2s ease;
   &:hover {
     > .hoverSection {
       display: block;
