@@ -8,7 +8,7 @@ import {
   setChatMessages,
   setLockedChats,
 } from '../reducers/chat';
-import { fetchEntities, updateEntityRequest, createEntityRequest } from './fetchEntities';
+import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
 import { isHub } from '../util/hub';
@@ -163,8 +163,9 @@ export function loadChatList(
   join = ['textMessages', 'patient'],
 ) {
   return dispatch =>
-    dispatch(fetchEntities({
+    dispatch(fetchEntitiesRequest({
       key: 'chats',
+      id: 'fetchingChats',
       join,
       params: {
         limit,
@@ -253,7 +254,11 @@ export function setChatMessagesListForChat(chatId) {
     const allMessages = entities.getIn(['textMessages', 'models']);
     const filteredChatMessages = allMessages
       .filter(message => message.chatId === chatId)
-      .sort((messageOne, messageTwo) => new Date(messageOne.createdAt) - new Date(messageTwo.createdAt));
+      .sort((messageOne, messageTwo) => {
+        const dateOne = new Date(messageOne.createdAt);
+        const dateTwo = new Date(messageTwo.createdAt);
+        return dateOne - dateTwo;
+      });
 
     return dispatch(setChatMessages(filteredChatMessages || []));
   };

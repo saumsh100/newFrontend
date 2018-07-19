@@ -29,13 +29,13 @@ import {
   loadFlaggedChatList,
   cleanChatList,
 } from '../../thunks/chat';
+import Loader from '../Loader';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { setNewChat } from '../../reducers/chat';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import PatientSearch from '../PatientSearch';
 import { isHub } from '../../util/hub';
 import { CHAT_PAGE } from '../../constants/PageTitle';
-import Loader from '../Loader';
 import styles from './styles.scss';
 
 const patientSearchTheme = {
@@ -194,10 +194,9 @@ class ChatMessage extends Component {
   }
 
   changeTab(newIndex) {
-    if (this.state.tabIndex === newIndex) {
+    if (this.state.tabIndex === newIndex || !this.props.wasChatsFetched) {
       return;
     }
-
     this.props.selectChat(null);
 
     this.setState(
@@ -321,7 +320,7 @@ class ChatMessage extends Component {
             [styles.slideIn]: showPatientsList,
           })}
         >
-          <Card className={styles.leftCard} noBorder>
+          <Card noBorder className={styles.leftCard}>
             <SContainer>
               {this.renderHeading()}
               {this.renderChatList()}
@@ -356,6 +355,7 @@ ChatMessage.defaultProps = {
       chatId: null,
     },
   },
+  wasChatsFetched: false,
 };
 
 ChatMessage.propTypes = {
@@ -375,7 +375,17 @@ ChatMessage.propTypes = {
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
+  wasChatsFetched: PropTypes.bool,
 };
+
+function mapStateToProps({ apiRequests }) {
+  const wasChatsFetched =
+    apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
+
+  return {
+    wasChatsFetched,
+  };
+}
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
@@ -397,7 +407,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 const enhance = connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 );
 
