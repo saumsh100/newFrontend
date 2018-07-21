@@ -6,30 +6,28 @@ import classNames from 'classnames';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import DateList from './DateList';
+import { CSSTransition } from 'react-transition-group';
+import { Element, scroller } from 'react-scroll';
+import { stringify, parse } from 'query-string';
 import {
   setConfirmAvailability,
-  setIsFetching,
   setSelectedAvailability,
   setSelectedStartDate,
+  setTimeFrame,
 } from '../../../../actions/availabilities';
 import Button from '../../../library/Button';
 import DayPicker from '../../../library/DayPicker';
+import Join from '../Waitlist/Join';
 import { fetchAvailabilities } from '../../../../thunks/availabilities';
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
-import { bookingPickDateSVG } from '../../SVGs';
-import styles from './styles.scss';
+import { Link } from '../../../library';
+import { isResponsive } from '../../../../util/hub';
+import FloatingButton from '../../FloatingButton';
+import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
-
-/**
- * Checks if a date is before the currentDate.
- *
- * @param currentDate
- * @returns {function(*=): *}
- */
-const generateIsDisabledDay = currentDate => date => genericMoment(date).isBefore(currentDate);
+import styles from './styles.scss';
 
 /**
  * Loop a list of Moment object and
@@ -53,20 +51,6 @@ const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) 
     });
 
 /**
- * Generates the amount of days forward using the selectedStartDate.
- *
- * @param numDaysForward
- * @param selectedStartDate
- * @param accountTimezone
- */
-const generateDateRange = (numDaysForward, selectedStartDate, accountTimezone) => {
-  const dateRange = [];
-  for (let i = 0; i < numDaysForward; i += 1) {
-    dateRange.push(genericMoment(selectedStartDate, accountTimezone).add(i, 'days'));
-  }
-  return dateRange;
-};
-/**
  * Return the correct moment object checking if there's a timezone before.
  *
  * @param time
@@ -79,24 +63,29 @@ class DateTime extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      isModal: false,
+    };
+
     this.confirmDateTime = this.confirmDateTime.bind(this);
     this.changeSelectedDate = this.changeSelectedDate.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
     this.joinWaitlist = this.joinWaitlist.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchAvailabilities();
-  }
+  componentDidMount() {
+    const { timeframe } = parse(this.props.location.search);
 
-  /**
-   * Fetch availabilities if the new selectedStartDate is different than the existent one.
-   *
-   * @param nextProps
-   */
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedStartDate !== this.props.selectedStartDate) {
-      this.props.fetchAvailabilities();
+    const finalTimeFrame = timeframe || this.props.timeframe;
+    if (finalTimeFrame && finalTimeFrame !== '') {
+      setTimeout(() => {
+        this.scrollTo(finalTimeFrame);
+      }, 100);
+    }
+
+    // This can be removed when the new booking widget is released
+    if (!this.props.nextAvailability && this.props.availabilities.total === 0) {
+      this.props.setSelectedStartDate('');
     }
   }
 
@@ -107,8 +96,10 @@ class DateTime extends Component {
    * @param date
    */
   changeSelectedDate(date) {
-    if (date !== this.props.selectedStartDate) {
+    if (!moment.tz(date, this.props.accountTimezone).isSame(this.props.selectedStartDate, 'day')) {
+      this.props.setSelectedAvailability(null);
       this.props.setSelectedStartDate(date);
+      this.props.fetchAvailabilities();
     }
   }
 
@@ -128,6 +119,7 @@ class DateTime extends Component {
     if (!selectedAvailability || selectedAvailability.startDate !== availability.startDate) {
       return this.props.setSelectedAvailability(availability);
     }
+    this.props.setTimeFrame(null);
     return this.props.setSelectedAvailability(null);
   }
 
@@ -139,49 +131,58 @@ class DateTime extends Component {
 
     this.props.setConfirmAvailability(true);
 
+    const nextLoc = this.props.location.state && this.props.location.state.nextRoute;
+    if (nextLoc) {
+      return this.props.history.push(nextLoc);
+    }
+
     const currentDayPlus24 = moment()
       .tz(accountTimezone)
       .add(1, 'day')
       .toISOString();
 
-    const nextLoc = this.props.location.state && this.props.location.state.nextRoute;
-
     if (selectedAvailability.startDate < currentDayPlus24) {
-      return this.props.history.push(nextLoc || './patient-information');
+      return this.props.history.push('./patient-information');
     }
 
-    /**
-     * Checks if there are a specific route to go onclicking a card or just the default one.
-     */
-    return this.props.history.push(nextLoc || './waitlist/join');
+    return this.setState({
+      isModal: true,
+    });
   }
 
   /**
    * Send the user to the select waitlist's dates, after clicking on the Join Waitlist button.
    */
   joinWaitlist() {
+    const { timeframe } = parse(this.props.location.search);
     this.props.setConfirmAvailability(false);
     this.props.setSelectedAvailability(null);
+    this.props.setTimeFrame(timeframe);
     this.props.setSelectedStartDate(new Date());
     return this.props.history.push('./waitlist/select-dates');
+  }
+
+  scrollTo(name) {
+    scroller.scrollTo(name, {
+      duration: 500,
+      delay: 150,
+      smooth: 'easeInOutQuart',
+      containerId: 'scrollableContainer',
+      offset: 160,
+    });
   }
 
   render() {
     const {
       accountTimezone,
       availabilities,
-      floorDate,
-      isFetching,
       nextAvailability,
       selectedAvailability,
       selectedStartDate,
+      isFetching,
+      history,
+      location,
     } = this.props;
-
-    const selectedDayAvailabilities = getSortedAvailabilities(
-      selectedStartDate,
-      availabilities,
-      accountTimezone,
-    );
 
     /**
      * What we display if there's not availabilities for today,
@@ -197,42 +198,34 @@ class DateTime extends Component {
     );
 
     /**
-     * What we display when there's not availabilities for today,
-     * or in the future.
-     */
-    const availabilitiesNotFound = (
-      <div className={styles.subCard}>
-        <div className={styles.subCardWrapper}>
-          <h3 className={styles.subCardTitle}>No available appointments</h3>
-          <p className={styles.subCardSubtitle}>
-            We did not find any availabilities for your criteria.
-          </p>
-        </div>
-        <Button className={styles.subCardLink} onClick={this.joinWaitlist}>
-          Join Waitlist
-        </Button>
-      </div>
-    );
-
-    /**
      * Renders a single slot of time.
      *
      * @param {object} availability
      * @param {string} j
      */
-    const renderTimesOnTimeFrame = (availability, index) => {
+    const renderTimesOnTimeFrame = timeframe => (availability) => {
       const availabilityClasses = classNames(styles.slot, {
         [styles.selectedSlot]:
           selectedAvailability && selectedAvailability.startDate === availability.startDate,
       });
       return (
-        <Button
-          key={`${availability.startDate}_item_${index}`}
-          onClick={() => this.selectAvailability(availability)}
-          className={availabilityClasses}
-        >
-          {genericMoment(availability.startDate, accountTimezone).format('LT')}
-        </Button>
+        <div className={styles.cardWrapper} key={`${availability.startDate}`}>
+          <Button
+            onClick={() => {
+              history.replace({
+                location,
+                search: stringify({
+                  timeframe,
+                }),
+              });
+              this.props.setTimeFrame(timeframe);
+              this.selectAvailability(availability);
+            }}
+            className={availabilityClasses}
+          >
+            {genericMoment(availability.startDate, accountTimezone).format('LT')}
+          </Button>
+        </div>
       );
     };
 
@@ -242,127 +235,136 @@ class DateTime extends Component {
      * @returns {*}
      */
     const availabilitiesDisplay = () => {
-      if (!selectedDayAvailabilities.total && nextAvailability) {
+      if (availabilities.total === 0 && nextAvailability && !isFetching) {
         return nextAvailabilityButton(nextAvailability);
       }
-
       return (
-        <div className={styles.subCardWrapper}>
-          {selectedDayAvailabilities.morning.length > 0 && (
-            <div className={styles.timeFrameWrapper}>
-              <span className={styles.slotsTitle}>Morning</span>
-              {selectedDayAvailabilities.morning.map(renderTimesOnTimeFrame)}
+        selectedStartDate &&
+        !isFetching && (
+          <div className={styles.cardsWrapper}>
+            {availabilities.morning.length > 0 && (
+              <Element className={styles.timeFrameWrapper} name="morning">
+                <span className={styles.slotsTitle}>Morning</span>
+                {availabilities.morning.map(renderTimesOnTimeFrame('morning'))}
+              </Element>
+            )}
+            {availabilities.afternoon.length > 0 && (
+              <Element className={styles.timeFrameWrapper} name="afternoon">
+                <span className={styles.slotsTitle}>Afternoon</span>
+                {availabilities.afternoon.map(renderTimesOnTimeFrame('afternoon'))}
+              </Element>
+            )}
+            {availabilities.evening.length > 0 && (
+              <Element className={styles.timeFrameWrapper} name="evening">
+                <span className={styles.slotsTitle}>Evening</span>
+                {availabilities.evening.map(renderTimesOnTimeFrame('evening'))}
+              </Element>
+            )}
+          </div>
+        )
+      );
+    };
+
+    return (
+      <Element
+        id="scrollableContainer"
+        className={styles.scrollableContainer}
+        ref={(node) => {
+          this.availabilitiesNode = node;
+          return this.availabilitiesNode;
+        }}
+      >
+        <div className={styles.contentWrapper}>
+          <div className={styles.container}>
+            <h1 className={styles.heading}>Select Date and Time</h1>
+            <p className={styles.description}>
+              Select a date and the time that works best for you <br /> or{' '}
+              <Link className={styles.subCardLink} to="./waitlist/select-dates">
+                Join the Waitlist
+              </Link>
+            </p>
+          </div>
+        </div>
+        <Element name="contentWrapperToScroll" className={styles.contentWrapper}>
+          <div className={styles.rowCard}>
+            <div className={styles.container}>
+              <DayPicker
+                noTarget
+                disabledDays={{
+                  before: new Date(),
+                }}
+                modifiers={{
+                  disabled: {
+                    before: new Date(),
+                  },
+                }}
+                numberOfMonths={isResponsive() ? 1 : 2}
+                value={selectedStartDate}
+                tipSize={0.01}
+                showPreviousMonth={false}
+                theme={dayPickerStyles}
+                onChange={this.changeSelectedDate}
+              />
             </div>
-          )}
-          {selectedDayAvailabilities.afternoon.length > 0 && (
-            <div className={styles.timeFrameWrapper}>
-              <span className={styles.slotsTitle}>Afternoon</span>
-              {selectedDayAvailabilities.afternoon.map(renderTimesOnTimeFrame)}
-            </div>
-          )}
-          {selectedDayAvailabilities.evening.length > 0 && (
-            <div className={styles.timeFrameWrapper}>
-              <span className={styles.slotsTitle}>Evening</span>
-              {selectedDayAvailabilities.evening.map(renderTimesOnTimeFrame)}
-            </div>
-          )}
+          </div>
+          <div className={styles.availabilitiesWrapper}>
+            <CSSTransition
+              timeout={{
+                enter: 3000,
+                exit: 1000,
+              }}
+              in={isFetching}
+              classNames={transitions}
+              onExiting={() => this.scrollTo('contentWrapperToScroll')}
+            >
+              <div className={styles.spinnerWrapper} key="fetching">
+                <h3>
+                  Fetching availabilities
+                  <span>.</span>
+                  <span>.</span>
+                  <span>.</span>
+                </h3>
+              </div>
+            </CSSTransition>
+            {availabilitiesDisplay()}
+          </div>
+        </Element>
+        <FloatingButton visible={selectedAvailability !== null}>
           <Button
-            disabled={!selectedAvailability}
-            className={styles.fullWidthButton}
+            disabled={!(!!availabilities.total && !!selectedAvailability)}
+            className={styles.floatingButton}
             onClick={this.confirmDateTime}
           >
             Next
           </Button>
-        </div>
-      );
-    };
-
-    /**
-     * Checks if we have at least a single valid availability,
-     * it can be on the current selected date or in a future date,
-     * if there is none availabilities invite the user to join the waitlist.
-     *
-     * @returns {*}
-     */
-    const renderAvailabilities = () =>
-      (!selectedDayAvailabilities.length && !nextAvailability ? (
-        <availabilitiesNotFound />
-      ) : (
-        <div className={styles.contentWrapper}>
-          <div className={styles.content}>
-            <h3 className={styles.title}>Select Time</h3>
-            <p className={styles.subtitle}>Select a time that works best for you</p>
-            {isFetching ? (
-              <div className={styles.spinnerWrapper}>
-                <i className="fas fa-spinner fa-spin fa-3x fa-fw" />
-                <h3>Loading availabilities…</h3>
-              </div>
-            ) : (
-              <div className={styles.availabilitiesWrapper}>{availabilitiesDisplay()}</div>
-            )}
-          </div>
-          <div className={styles.subCard}>
-            <div className={styles.subCardWrapper}>
-              <h3 className={styles.subCardTitle}>Want to come in sooner?</h3>
-              <p className={styles.subCardSubtitle}>
-                Be notified when an earlier appointment becomes available
-              </p>
-            </div>
-            <Button className={styles.subCardLink} onClick={this.joinWaitlist}>
-              Join Waitlist
-            </Button>
-          </div>
-        </div>
-      ));
-
-    /**
-     * HTML that displays the Pick a Date button.
-     *
-     * @param props
-     * @returns {*}
-     */
-    const CalendarButtonTrigger = props => (
-      <Button {...props} className={styles.datePicker}>
-        {bookingPickDateSVG}
-        Pick a<br /> Date
-      </Button>
-    );
-
-    return (
-      <div className={styles.container}>
-        <div className={styles.topWrapper}>
-          <DateList
-            dayAvailabilities={generateDateRange(3, selectedStartDate, accountTimezone)}
-            selectDate={selectedStartDate}
-            onDateChange={this.changeSelectedDate}
-          />
-          <DayPicker
-            value={selectedStartDate}
-            target="custom"
-            TargetComponent={CalendarButtonTrigger}
-            tipSize={0.01}
-            onChange={this.changeSelectedDate}
-            disabledDays={generateIsDisabledDay(floorDate)}
-            theme={dayPickerStyles}
-          />
-        </div>
-        {renderAvailabilities()}
-      </div>
+        </FloatingButton>
+        {this.state.isModal && <Join history={history} />}
+      </Element>
     );
   }
 }
 
 function mapStateToProps({ availabilities }) {
+  const selectedStartDate = availabilities.get('selectedStartDate');
+  const accountTimezone = availabilities.get('account').get('timezone');
+  const isFetching = availabilities.get('isFetching');
+  const availabilitiesSorted = selectedStartDate
+    ? getSortedAvailabilities(
+      selectedStartDate,
+      availabilities.get('availabilities'),
+      accountTimezone,
+    )
+    : {};
   return {
-    accountTimezone: availabilities.get('account').get('timezone'),
-    availabilities: availabilities.get('availabilities'),
-    floorDate: availabilities.get('floorDate'),
-    isFetching: availabilities.get('isFetching'),
+    accountTimezone,
+    availabilities: availabilitiesSorted,
+    isFetching,
     nextAvailability: availabilities.get('nextAvailability'),
     selectedAvailability: availabilities.get('selectedAvailability'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
     selectedServiceId: availabilities.get('selectedServiceId'),
-    selectedStartDate: availabilities.get('selectedStartDate'),
+    selectedStartDate,
+    timeframe: availabilities.get('timeframe'),
   };
 }
 
@@ -371,21 +373,23 @@ function mapDispatchToProps(dispatch) {
     {
       fetchAvailabilities,
       setConfirmAvailability,
-      setIsFetching,
       setSelectedAvailability,
       setSelectedStartDate,
+      setTimeFrame,
     },
     dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DateTime);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DateTime);
 
 DateTime.propTypes = {
   accountTimezone: PropTypes.string.isRequired,
-  availabilities: PropTypes.oneOfType([PropTypes.instanceOf(List), PropTypes.array]),
+  availabilities: PropTypes.oneOfType([PropTypes.instanceOf(List), PropTypes.object]),
   fetchAvailabilities: PropTypes.func.isRequired,
-  floorDate: PropTypes.string.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   isFetching: PropTypes.bool.isRequired,
   location: PropTypes.shape(locationShape).isRequired,
@@ -395,6 +399,8 @@ DateTime.propTypes = {
   setConfirmAvailability: PropTypes.func.isRequired,
   setSelectedAvailability: PropTypes.func.isRequired,
   setSelectedStartDate: PropTypes.func.isRequired,
+  setTimeFrame: PropTypes.func.isRequired,
+  timeframe: PropTypes.string,
 };
 
 DateTime.defaultProps = {
@@ -402,4 +408,5 @@ DateTime.defaultProps = {
   nextAvailability: '',
   selectedAvailability: '',
   selectedStartDate: '',
+  timeframe: '',
 };

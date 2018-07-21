@@ -9,6 +9,7 @@ import {
   sixDaysShiftAction,
   setIsSuccessfulBooking,
   setStartingAppointmentTimeAction,
+  setSelectedStartDate,
   setRegistrationStepAction,
   setClinicInfoAction,
   setTemporaryReservationAction,
@@ -193,7 +194,7 @@ export function closeBookingModal() {
 
 let requestCount = 0; // The number of availability requests sent
 
-export function fetchAvailabilities() {
+export function fetchAvailabilities(date) {
   return (dispatch, getState) => {
     // Set the loading symbol
     dispatch(setIsFetching(true));
@@ -201,7 +202,7 @@ export function fetchAvailabilities() {
     // Make request with current selected options
     const { availabilities, entities } = getState();
     const account = entities.getIn(['accounts', 'models']).first();
-    const startDate = availabilities.get('selectedStartDate');
+    const startDate = date || availabilities.get('selectedStartDate');
 
     // TODO: it should be calculating till end of endDate
     const endDate = moment(startDate)
@@ -222,13 +223,28 @@ export function fetchAvailabilities() {
           setNextAvailability(data.nextAvailability),
         ];
 
-        requestCount -= 1;
-        // Remove loading symbol
-        if (!requestCount) {
-          actions.push(setIsFetching(false));
+        if (date) {
+          actions.push(setSelectedStartDate(date));
         }
 
         dispatch(batchActions(actions));
+      })
+      .then(data =>
+        new Promise((resolve, reject) => {
+          Promise.all([
+            data,
+            new Promise((interResolve) => {
+              setTimeout(interResolve, 1000);
+            }),
+          ]).then(([result]) => {
+            resolve(result);
+          }, reject);
+        }))
+      .then(() => {
+        requestCount -= 1;
+        if (!requestCount) {
+          dispatch(setIsFetching(false));
+        }
       })
       .catch((err) => {
         console.error('axios request error', err);

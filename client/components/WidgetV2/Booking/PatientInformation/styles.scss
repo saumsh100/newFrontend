@@ -20,7 +20,7 @@
   color: $primary-dark;
   line-height: 40px;
   text-align: left;
-  font-family: $medium-font;
+  font-family: 'Roboto';
   cursor: pointer;
   padding: 0 0 0 12px;
   &:hover {
@@ -38,4 +38,81 @@
 .slotButton {
   padding: 0;
   text-align: left;
+}
+
+.dataSlot {
+  background: $widget-white;
+  border: 0;
+  text-align: left;
+  justify-content: flex-start;
+  padding: calc(var(--widget-spacer) * 1.25) 4px;
+  height: auto;
+  box-sizing: border-box;
+  transition: all 0.2s ease-out;
+  border-top: 1px solid $widget-grey-lighter;
+  &:hover {
+    background: $widget-white !important;
+    transform: translateX(10px);
+    transition: all 0.2s ease-out;
+  }
+  > div {
+    color: $widget-grey-light;
+    font-size: 14px;
+    font-family: 'Roboto' !important;
+    font-weight: 500;
+  }
+}
+.selectedListItem {
+  &:before {
+    color: var(--primaryColor);
+    content: '•';
+    font-size: 18px;
+  }
+  > div {
+    color: $widget-grey;
+    margin-left: 3px;
+  }
+}
+:global {
+  .dd-menu {
+    box-sizing: border-box;
+    .dd-menu-items {
+      margin: -4px 0 0;
+      left: 0 !important;
+      transform: translateX(0) !important;
+      box-sizing: border-box;
+      .dd-items-center {
+        box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+        background: $widget-white !important;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        border: 1px solid $widget-grey-lighter;
+        border-top: 0;
+        > div {
+          padding: 0 var(--widget-spacer) !important;
+          box-shadow: none !important;
+          background: $widget-white !important;
+        }
+      }
+    }
+  }
+}
+
+.erroredDropdown {
+  @extend .erroredInput;
+  margin-bottom: 19px;
+  position: relative;
+}
+
+.erroredLabelDropdown {
+  @extend .error;
+  position: absolute;
+  bottom: -20px;
+  left: 0px;
+}
+.erroredDropdown ~ div {
+  margin-top: -23px !important;
+  > ul {
+    border-color: $widget-red !important;
+  }
 }

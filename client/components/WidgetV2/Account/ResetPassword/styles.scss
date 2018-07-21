@@ -1,0 +1,9 @@
+@import '../styles';
+
+.signInTop {
+  @extend .signInTop;
+  width: 100%;
+}
+.signInBottom {
+  width: 100%;
+}

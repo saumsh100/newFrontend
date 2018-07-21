@@ -1,0 +1,22 @@
+.enter {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  transition: opacity 200ms ease-out;
+}
+.enter.enter-active {
+  opacity: 1;
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: opacity 200ms ease-out;
+}
+.exit {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: opacity 200ms ease-out;
+}

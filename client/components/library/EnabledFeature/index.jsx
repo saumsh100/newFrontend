@@ -48,12 +48,22 @@ import { connect } from 'react-redux';
  * @param {object|immutable.Map} props.flags
  * @param {function} props.predicate
  * @param {function|component} props.render
+ * @param {boolean} props.renderBeforeFlags if true, don't wait for feature flags
+ *  to load always rendering the fallback first
  * @param {object} props.subject
  * @param {string} props.userRole
  */
 function EnabledFeature({
-  predicate, subject, render, fallback,
+  predicate, subject, render, renderBeforeFlags, fallback,
 }) {
+  const flagsSize = Map.isMap(subject.flags)
+    ? subject.flags.size
+    : Object.values(subject.flags).length;
+
+  if (!renderBeforeFlags && flagsSize === 0) {
+    return null;
+  }
+
   return renderFunctionOrComponent(predicate(subject) ? render : fallback, subject);
 }
 
@@ -78,6 +88,7 @@ function mapStateToProps({ featureFlags, auth }, { flags, adapterPermissions, us
     subject: {
       adapterPermissions: adapterPermissions || auth.get('adapterPermissions'),
       flags: flags || featureFlags.get('flags'),
+      flagsLoaded: featureFlags.get('flagsLoaded'),
       userRole: userRole || auth.get('role'),
     },
   };
@@ -96,6 +107,7 @@ EnabledFeature.propTypes = {
   flags: objectOrMapPropType,
   predicate: PropTypes.func.isRequired,
   render: functionOrNodePropType.isRequired,
+  renderBeforeFlags: PropTypes.bool,
   subject: PropTypes.shape({
     adapterPermissions: objectOrMapPropType,
     flags: objectOrMapPropType,
@@ -107,6 +119,7 @@ EnabledFeature.propTypes = {
 EnabledFeature.defaultProps = {
   flags: null,
   adapterPermissions: null,
+  renderBeforeFlags: false,
   role: null,
   fallback: () => null,
 };

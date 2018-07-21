@@ -5,6 +5,7 @@
 }
 * {
   -webkit-font-smoothing: antialiased;
+  font-family: Roboto;
 }
 
 .reviewsWidgetContainer {
@@ -19,7 +20,6 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  max-width: 650px;
   width: 100%;
   //max-height: 675px;
   > h1 {
@@ -32,7 +32,6 @@
   flex: 1;
   width: 100%;
   overflow: auto;
-  padding-top: var(--widget-spacer);
   > div {
     display: flex;
     flex: 1;
@@ -57,7 +56,7 @@
 
 .service {
   font-size: 12px;
-  font-family: $medium-font;
+  font-family: 'Roboto';
   padding-bottom: 5px;
 }
 
@@ -68,15 +67,24 @@
 .poweredBy {
   padding-top: var(--widget-spacer);
   text-align: center;
-  font-size: 12px;
-  font-family: $medium-font;
-  color: $widget-grey;
-  letter-spacing: 0.05rem;
+  color: $widget-grey-light;
+  background: $widget-white;
+  border-top: 1px solid $widget-grey-lighter;
   padding-bottom: var(--widget-spacer);
-  box-shadow: 0 -3px 6px -2px rgba(0, 0, 0, 0.1);
   z-index: 2;
+  transform: translateY(60px);
+  animation: movePoweredBy 0.75s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
   img {
     max-height: 16px;
     margin-bottom: -2px;
+    margin-left: 3px;
+  }
+}
+@keyframes movePoweredBy {
+  100% {
+    transform: translateY(0);
   }
 }

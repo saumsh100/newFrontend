@@ -2,7 +2,7 @@
 
 .heading {
   font-size: 1rem;
-  color: $widget-grey-dark;
+  color: var(--primaryColor);
   margin-bottom: var(--widget-spacer);
 }
 .container {
@@ -18,22 +18,42 @@
 }
 .requestPatient {
   @extend .title;
+  text-align: center;
   margin-bottom: 12px;
 }
 .requestCard {
   background: $widget-grey-lightest;
   padding: var(--widget-spacer);
+  text-align: center;
 }
 .requestInfo {
   @extend .subtitle;
-  margin-bottom: 0;
-}
-.buttonWrapper {
-  padding: var(--widget-spacer);
+  margin-bottom: 10px;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+  > strong {
+    display: block;
+    font-size: 13px;
+    color: $widget-grey;
+  }
 }
 .afterCardMessage {
   @extend .subtitle;
   margin-top: var(--widget-spacer);
   margin-bottom: 4px;
   padding: 0 var(--widget-spacer);
+}
+
+.svgWrapper {
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+.bookingType {
+  color: $widget-grey;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  margin-top: 0;
 }

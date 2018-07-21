@@ -2,10 +2,10 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { matchPath } from 'react-router';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, matchPath } from 'react-router-dom';
+import { stringify } from 'query-string';
 import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import { Button } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
@@ -21,30 +21,11 @@ import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter
 import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
 import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
-import { bookingReviewSVG } from '../../SVGs';
+import { BookingReviewSVG } from '../../SVGs';
+import FloatingButton from '../../FloatingButton';
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
-
-/**
- * Check if the user is on the Review's route
- * or just on the summary tab.
- * If it's on the Review's page set the return the path passed,
- * otherwise just return false.
- *
- * @param {string} path
- */
-const contextualUrl = (actualPathname, nextRoute) => {
-  const match = matchPath(actualPathname, {
-    path: '/widgets/:accountId/app/book/review',
-    exact: true,
-  });
-
-  if (!match) {
-    return false;
-  }
-  return nextRoute;
-};
 
 /**
  * With the provided unavailableDates array,
@@ -92,6 +73,7 @@ const getOfficeHours = (key, comparison) => (acc, curr) => {
 };
 
 function Review({
+  canConfirm,
   confirmedAvailability,
   dateAndTime,
   hasWaitList,
@@ -107,6 +89,13 @@ function Review({
   waitlist,
   ...props
 }) {
+  const b = path =>
+    pathname
+      .split('/')
+      .filter((v, index) => index < 5)
+      .concat(path)
+      .join('/');
+
   const officeHoursValues = Object.values(officeHours);
   /**
    * Look over the officeHours object and find the earliest startTime of the clinic.
@@ -163,25 +152,33 @@ function Review({
    * @param {string} value
    * @param {string} link
    */
-  const renderSummaryItem = (key, value, link, goBack) => (
-    <div className={styles.waitlistIndex}>
-      <span className={styles.waitlistKey}>{key}</span>
-      <span className={styles.waitlistValue}>
-        {typeof value === 'string' ? <p>{ellipsisText(value, 200)}</p> : value}
-        <Button
-          className={styles.editLink}
-          onClick={() => {
-            if (!isBooking) {
-              props.setIsBooking(true);
+  const renderSummaryItem = (key, value, link) => {
+    const match = matchPath(pathname, {
+      path: `/widgets/:accountId/app/book${link.slice(1)}`,
+      exact: true,
+    });
+
+    return (
+      <div className={styles.waitlistIndex}>
+        <span className={styles.waitlistKey}>{key}</span>
+        <span className={styles.waitlistValue}>
+          {typeof value === 'string' ? <p>{ellipsisText(value, 200)}</p> : value}
+          <Button
+            className={styles.editLink}
+            onClick={() =>
+              history.push({
+                pathname: link,
+                state: { nextRoute: match ? false : pathname },
+                search: stringify({ edit: true }),
+              })
             }
-            return history.push({ pathname: link, state: { nextRoute: goBack } });
-          }}
-        >
-          {bookingReviewSVG}
-        </Button>
-      </span>
-    </div>
-  );
+          >
+            <BookingReviewSVG />
+          </Button>
+        </span>
+      </div>
+    );
+  };
 
   /**
    * Configured formatter for the current account timezone and ha format.
@@ -304,8 +301,15 @@ function Review({
     );
 
   return (
-    <div className={styles.container}>
+    <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>Summary of your booking</h1>
+          <p className={styles.description}>
+            Here you can see and change all the informations that you already provided on the{' '}
+            <strong>Booking</strong> tab
+          </p>
+        </div>
         <div className={styles.content}>
           <h3 className={styles.title}>Waitlist Information</h3>
           {waitlist.dates.length > 0 ? (
@@ -313,30 +317,18 @@ function Review({
               <p className={styles.subtitle}>
                 Here are the informations that you already defined to your appointment.
               </p>
-              {renderSummaryItem(
-                'Reason',
-                selectedService.get('name'),
-                './reason',
-                contextualUrl(pathname, './review'),
-              )}
+              {renderSummaryItem('Reason', selectedService.get('name'), b('reason'))}
               {renderSummaryItem(
                 'Available Dates',
                 waitlistDates(waitlist.dates, timezone),
-                './waitlist/select-dates',
-                contextualUrl(pathname, '../review'),
+                b('waitlist/select-dates'),
               )}
               {renderSummaryItem(
                 'Unavailable Dates',
                 waitlistUnavailableDates(waitlist.unavailableDates, timezone),
-                './waitlist/days-unavailable',
-                contextualUrl(pathname, '../review'),
+                b('waitlist/days-unavailable'),
               )}
-              {renderSummaryItem(
-                'Times',
-                waitlistTimes(),
-                './waitlist/select-times',
-                contextualUrl(pathname, '../review'),
-              )}
+              {renderSummaryItem('Times', waitlistTimes(), b('waitlist/select-times'))}
             </div>
           ) : (
             <div className={styles.joinWaitlist}>
@@ -349,7 +341,7 @@ function Review({
                   if (!isBooking) {
                     props.setIsBooking(true);
                   }
-                  history.push('./waitlist/select-dates');
+                  history.push(b('waitlist/select-dates'));
                 }}
               >
                 Join Waitlist
@@ -363,17 +355,11 @@ function Review({
             Here are the informations that you already defined to your appointment.
           </p>
           {selectedService.get('name') &&
-            renderSummaryItem(
-              'Reason',
-              selectedService.get('name'),
-              './reason',
-              contextualUrl(pathname, './review'),
-            )}
+            renderSummaryItem('Reason', selectedService.get('name'), b('reason'))}
           {renderSummaryItem(
             'Practitioner',
             (selectedPractitioner && selectedPractitioner.getPrettyName()) || 'No Preference',
-            './practitioner',
-            contextualUrl(pathname, './review'),
+            b('practitioner'),
           )}
           {dateAndTime &&
             renderSummaryItem(
@@ -383,45 +369,43 @@ function Review({
                 timezone,
                 'h:mm a',
               )}`,
-              './date-and-time',
-              contextualUrl(pathname, './review'),
+              b('date-and-time'),
             )}
           {patientUser &&
             renderSummaryItem(
               'Patient',
               `${patientUser.firstName} ${patientUser.lastName}`,
               './patient-information',
-              contextualUrl(pathname, './review'),
             )}
           {patientUser &&
             renderSummaryItem(
               'Insurance Carrier',
               `${patientUser.insuranceCarrier || NOT_PROVIDED_TEXT}`,
-              './patient-information',
-              contextualUrl(pathname, './review'),
+              b('patient-information'),
             )}
           {patientUser &&
             renderSummaryItem(
               'Insurance Member ID & Group ID',
               `${patientUser.insuranceMemberId ||
                 NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`,
-              './patient-information',
-              contextualUrl(pathname, './review'),
+              b('patient-information'),
             )}
 
           {patientUser &&
             renderSummaryItem(
               'Notes',
               `${notes || NOT_PROVIDED_TEXT}`,
-              './additional-information',
-              contextualUrl(pathname, './review'),
+              b('additional-information'),
             )}
         </div>
-        {((dateAndTime && confirmedAvailability) || hasWaitList) && (
-          <Button className={styles.fullWidthButton} onClick={submitRequest}>
-            Confirm Booking
-          </Button>
-        )}
+        {canConfirm &&
+          (dateAndTime || hasWaitList) && (
+            <FloatingButton visible={canConfirm}>
+              <Button className={styles.floatingButton} onClick={submitRequest}>
+                Confirm Booking
+              </Button>
+            </FloatingButton>
+          )}
       </div>
     </div>
   );
@@ -470,9 +454,13 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Review));
 
 Review.propTypes = {
+  canConfirm: PropTypes.bool,
   confirmedAvailability: PropTypes.bool.isRequired,
   createRequest: PropTypes.func.isRequired,
   createWaitSpot: PropTypes.func.isRequired,
@@ -500,6 +488,7 @@ Review.propTypes = {
 };
 
 Review.defaultProps = {
+  canConfirm: true,
   dateAndTime: {
     startDate: '',
     endDate: '',

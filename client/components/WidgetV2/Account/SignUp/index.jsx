@@ -11,14 +11,10 @@ import {
 } from '../../../library/Form/validate';
 import { Link, Form, Field, Button } from '../../../library';
 import { createPatient } from '../../../../thunks/patientAuth';
-import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function SignUp(props) {
-  const handleSignUp = values =>
-    props.createPatient(values).then(() => {
-      props.history.push('./confirm');
-    });
+  const handleSignUp = values => props.createPatient(values);
 
   return (
     <div className={styles.container}>
@@ -175,7 +171,6 @@ function mapDispatchToProps(dispatch) {
 
 SignUp.propTypes = {
   createPatient: PropTypes.func.isRequired,
-  history: PropTypes.shape(historyShape).isRequired,
 };
 
 export default withRouter(connect(

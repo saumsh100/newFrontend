@@ -16,7 +16,7 @@ export default function DataSlot(props) {
   } = props;
 
   const className = classNames(styles.optionListItem, theme.slotButton, {
-    [styles.selectedListItem]: selected,
+    [theme.selectedListItem || styles.selectedListItem]: selected,
   });
   return (
     <Button

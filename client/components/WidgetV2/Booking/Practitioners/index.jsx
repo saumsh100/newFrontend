@@ -3,11 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Link from '../../../library/Link';
 import WidgetCard from '../../../library/WidgetCard';
 import practitioners from '../../../../entities/collections/practitioners';
 import { setSelectedPractitionerId } from '../../../../actions/availabilities';
-import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
+import { locationShape, historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import services from '../../../../entities/collections/services';
 import styles from './styles.scss';
 
@@ -17,6 +16,7 @@ function Practitioners({
   servicesEntity,
   selectedServiceId,
   location,
+  history,
   ...props
 }) {
   /**
@@ -47,20 +47,32 @@ function Practitioners({
    */
   const contextualUrl = (location.state && location.state.nextRoute) || './date-and-time';
 
+  const selectPractitioner = (practitioner) => {
+    props.setSelectedPractitionerId(practitioner);
+    return history.push(contextualUrl);
+  };
+
   return (
-    <div className={styles.container}>
+    <div className={styles.cardContainer}>
       {practitionerIds.length > 0 ? (
-        practitionerList.map(prac => (
-          <Link to={contextualUrl} key={prac.value} className={styles.link}>
-            <WidgetCard
-              title={prac.label}
-              description={prac.description}
-              arrow
-              onClick={() => props.setSelectedPractitionerId(prac.value)}
-              selected={prac.value === selectedPractitionerId}
-            />
-          </Link>
-        ))
+        <div className={styles.contentWrapper}>
+          <h1 className={styles.heading}>Select the Practitioner</h1>
+          <p className={styles.description}>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, modi!
+          </p>
+          <div className={styles.cardsWrapper}>
+            {practitionerList.map(prac => (
+              <span className={styles.cardWrapper} key={prac.value}>
+                <WidgetCard
+                  title={prac.label}
+                  description={prac.description}
+                  onClick={() => selectPractitioner(prac.value)}
+                  selected={prac.value === selectedPractitionerId}
+                />
+              </span>
+            ))}
+          </div>
+        </div>
       ) : (
         <div className={styles.subCard}>
           <div className={styles.subCardWrapper}>
@@ -93,7 +105,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Practitioners);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Practitioners);
 
 Practitioners.propTypes = {
   practitionersEntity: PropTypes.instanceOf(practitioners).isRequired,
@@ -102,6 +117,7 @@ Practitioners.propTypes = {
   setSelectedPractitionerId: PropTypes.func.isRequired,
   selectedServiceId: PropTypes.string.isRequired,
   servicesEntity: PropTypes.instanceOf(services).isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
 };
 
 Practitioners.defaultProps = {

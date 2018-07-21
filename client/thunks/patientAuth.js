@@ -43,7 +43,10 @@ export function login(credentials) {
   return function (dispatch) {
     return axios
       .post('/auth', credentials)
-      .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
+      .then(({ data: { token } }) => {
+        dispatch(setResetEmail(null));
+        return updateSessionByToken(token, dispatch);
+      })
       .then((patientUser) => {
         LogRocket.identify(patientUser.id, {
           name: `${patientUser.firstName} ${patientUser.lastName}`,

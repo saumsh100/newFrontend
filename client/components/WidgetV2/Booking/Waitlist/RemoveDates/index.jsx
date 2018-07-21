@@ -40,7 +40,7 @@ function RemoveDates({
   };
 
   return (
-    <Modal active className={styles.customDialog}>
+    <Modal active className={styles.customDialog} containerStyles={styles.modalContainerStyles}>
       <h3 className={styles.title}>Do you need to remove a specific date from your waitlist?</h3>
       <div className={styles.buttonsWrapper}>
         <Button
@@ -76,7 +76,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RemoveDates);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RemoveDates);
 
 RemoveDates.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

@@ -1,0 +1,30 @@
+@import '../styles';
+
+.floating {
+  position: fixed;
+  bottom: 0px;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  width: 100%;
+  opacity: 1;
+  height: 49px;
+  transition: all 0.35s ease;
+}
+
+.enter {
+  opacity: 0.5;
+  bottom: -50px;
+  transition: all 0.35s ease-in;
+}
+.enter-active {
+  opacity: 1;
+  transition: all 0.35s ease-in;
+  bottom: 0px;
+}
+
+.exit {
+  opacity: 0;
+  bottom: -50px;
+  transition: all 0.35s ease-out;
+}

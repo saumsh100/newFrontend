@@ -21,13 +21,14 @@ export const isFeatureEnabledSelector = (features, featureName) =>
 
 export const initialState = fromJS({
   flags: {},
+  flagsLoaded: false,
   context: {},
 });
 
 export default handleActions(
   {
     [FEATURE_FLAGS_SET](state, { payload }) {
-      return state.set('flags', fromJS(payload));
+      return state.set('flags', fromJS(payload)).set('flagsLoaded', true);
     },
 
     [FEATURE_FLAGS_CHANGED](state, { payload }) {

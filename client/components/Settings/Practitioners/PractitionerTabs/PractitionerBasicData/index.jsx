@@ -151,4 +151,7 @@ PractitionerBasicData.propTypes = {
   updatePractitioner: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PractitionerBasicData);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PractitionerBasicData);

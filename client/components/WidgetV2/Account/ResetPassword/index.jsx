@@ -20,12 +20,9 @@ function ResetPassword(props) {
    * @param {string} email
    */
   const handleResetPassword = ({ email }) =>
-    props
-      .resetPatientUserPassword(email)
-      .then(() => props.history.push('./reset-success'))
-      .catch(({ data }) => {
-        throw new SubmissionError({ email: data });
-      });
+    props.resetPatientUserPassword(email).catch(({ data }) => {
+      throw new SubmissionError({ email: data });
+    });
 
   return (
     <div className={styles.container}>
@@ -33,14 +30,10 @@ function ResetPassword(props) {
         <div className={styles.content}>
           <h3 className={styles.title}>Reset</h3>
           <p className={styles.subtitle}>
-            Enter your email below and if you are a user, we will send you a
-            link to reset your password.
+            Enter your email below and if you are a user, we will send you a link to reset your
+            password.
           </p>
-          <Form
-            form="patientResetPassword"
-            onSubmit={handleResetPassword}
-            ignoreSaveButton
-          >
+          <Form form="patientResetPassword" onSubmit={handleResetPassword} ignoreSaveButton>
             <Field
               type="email"
               name="email"
@@ -83,5 +76,5 @@ export default withRouter(connect(
 )(ResetPassword));
 
 ResetPassword.propTypes = {
-  resetPatientUserPassword: PropTypes.func,
+  resetPatientUserPassword: PropTypes.func.isRequired,
 };

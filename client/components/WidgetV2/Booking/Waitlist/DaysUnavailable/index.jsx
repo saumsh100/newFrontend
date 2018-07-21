@@ -11,8 +11,9 @@ import { historyShape, locationShape } from '../../../../library/PropTypeShapes/
 import { setWaitlistUnavailableDates } from '../../../../../actions/availabilities';
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
 import { isResponsive } from '../../../../../util/hub';
-import styles from './styles.scss';
+import FloatingButton from '../../../FloatingButton';
 import dayPickerStyles from '../../dayPickerStyles.scss';
+import styles from './styles.scss';
 
 function DaysUnavailable({
   history,
@@ -66,34 +67,44 @@ function DaysUnavailable({
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.content}>
-        <h3 className={styles.title}>Select Waitlist Dates Unavailable</h3>
-        <p className={styles.subtitle}>
-          Select all days that you are UNAVAILABLE for an earlier appointment. (Select all that
-          apply)
-        </p>
-        <DayPickerRange
-          fieldsWrapper={() => undefined}
-          handleDayClick={day => toggleDateFromWaitlist(day)}
-          modifiers={{
-            [dayPickerStyles.selected]: daysToDisplay,
-          }}
-          monthsToShow={isResponsive() ? 1 : 2}
-          onChange={e => e}
-          disabledDays={{
-            before: moment(waitlistDates[0]).toDate(),
-            after: moment(waitlistDates[waitlistDates.length - 1]).toDate(),
-          }}
-          theme={dayPickerStyles}
-        />
-        <Button
-          disabled={!daysToDisplay.length}
-          className={styles.fullWidthButton}
-          onClick={handleSubmitting}
-        >
-          Next
-        </Button>
+    <div className={styles.scrollableContainer}>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>Select Unavailable Dates</h1>
+          <p className={styles.description}>
+            Select all days that you are <strong>UNAVAILABLE</strong> for an earlier appointment.
+            (Select all that apply)
+          </p>
+        </div>
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.rowCard}>
+          <div className={styles.container}>
+            <DayPickerRange
+              fieldsWrapper={() => undefined}
+              handleDayClick={day => toggleDateFromWaitlist(day)}
+              modifiers={{
+                [dayPickerStyles.selected]: daysToDisplay,
+              }}
+              monthsToShow={isResponsive() ? 1 : 2}
+              onChange={e => e}
+              disabledDays={{
+                before: moment(waitlistDates[0]).toDate(),
+                after: moment(waitlistDates[waitlistDates.length - 1]).toDate(),
+              }}
+              theme={dayPickerStyles}
+            />
+            <FloatingButton visible={daysToDisplay.length > 0}>
+              <Button
+                disabled={!daysToDisplay.length}
+                className={styles.floatingButton}
+                onClick={handleSubmitting}
+              >
+                Next
+              </Button>
+            </FloatingButton>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -117,7 +128,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DaysUnavailable);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DaysUnavailable);
 
 DaysUnavailable.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,

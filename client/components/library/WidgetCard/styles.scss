@@ -10,7 +10,7 @@
   border: 1px solid $widget-grey-lighter;
   border-radius: 4px;
   width: 100%;
-  min-height: 74px;
+  min-height: 80px;
   padding: 12px;
   cursor: pointer;
   text-align: center;
@@ -18,13 +18,15 @@
   background: white;
   display: flex;
   align-items: center;
-  text-align: left;
-  height: 100%;
+  height: auto;
+  text-align: center;
+  margin: 0 4px 8px !important;
+  box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
   &:focus {
     outline: none;
   }
   &:hover {
-    box-shadow: 2px 3px 7px 0 hsla(0, 0%, 50%, 0.25);
+    box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
     transition: all 0.3s ease;
     border-color: $widget-grey-light;
     .cardArrow {
@@ -52,31 +54,33 @@
     flex: 1;
   }
   .title {
-    font-family: $medium-font;
-    font-size: 15px;
-    color: $widget-blue-grey;
+    font-size: 16px;
+    color: $widget-grey;
     margin: 0;
     line-height: 18px;
-    font-weight: normal;
+    font-weight: 500;
   }
   .centeredTitle {
     @extend .title;
     text-align: center;
   }
   .description {
-    font-family: $dashboard-font;
     font-size: 13px;
-    color: $widget-grey;
-    line-height: 18px;
-    margin-top: 4px;
+    color: $widget-grey-light;
+    line-height: 16px;
+    margin-top: 2px;
     display: block;
   }
 }
 .selectedCard {
   @extend .card;
-  border-color: var(--primaryColor) !important;
+  background: var(--primaryColor);
+  color: white;
   .title {
-    color: var(--primaryColor) !important;
+    color: white;
+  }
+  .description {
+    color: white;
   }
 }
 

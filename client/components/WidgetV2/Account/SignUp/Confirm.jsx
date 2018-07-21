@@ -4,20 +4,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { SubmissionError } from 'redux-form';
-import { withRouter, Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Form, Field, Button } from '../../../library';
 import { maxDigits } from '../../../library/Form/normalize';
 import { numDigitsValidate } from '../../../library/Form/validate';
-import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import { confirmCode, resendPinCode } from '../../../../thunks/availabilities';
 import styles from './styles.scss';
 
-function SignUpConfirm({
-  handleConfirmationCode,
-  patientPhoneNumber,
-  handleResendPinCode,
-  history,
-}) {
+function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResendPinCode }) {
   /**
    * If it's a valid PIN code send the user back,
    * otherwise show the errors to the user.
@@ -25,18 +19,12 @@ function SignUpConfirm({
    * @param {object} values
    */
   const handleConfirmation = values =>
-    handleConfirmationCode(values)
-      .then(() => {
-        history.push('../book/patient-information');
-      })
-      .catch(({ data }) => {
-        throw new SubmissionError({
-          confirmCode: data,
-        });
+    handleConfirmationCode(values).catch(({ data }) => {
+      throw new SubmissionError({
+        confirmCode: data,
       });
-  if (!patientPhoneNumber) {
-    return <Redirect to="../login" />;
-  }
+    });
+
   return (
     <div className={styles.container}>
       <div className={styles.contentWrapper}>
@@ -91,7 +79,6 @@ function SignUpConfirm({
 SignUpConfirm.propTypes = {
   handleResendPinCode: PropTypes.func.isRequired,
   handleConfirmationCode: PropTypes.func.isRequired,
-  history: PropTypes.shape(historyShape).isRequired,
   patientPhoneNumber: PropTypes.string.isRequired,
 };
 

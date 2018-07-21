@@ -37,6 +37,7 @@ import {
   SET_WAITLIST_TIMES,
   SET_WAITLIST_DATES,
   SET_WAITLIST_UNAVAILABLE_DATES,
+  SET_TIMEFRAME,
 } from '../constants';
 
 function getStartTimeForToday(account) {
@@ -74,7 +75,7 @@ export const createInitialWidgetState = (state) => {
       availabilities: [],
       nextAvailability: null,
       patientUser: null,
-      isFetching: true,
+      isFetching: false,
       isBooking: true,
       familyPatientUser: null,
       insuranceCarrier: 'Pay for myself',
@@ -122,6 +123,7 @@ export const createInitialWidgetState = (state) => {
       sentRecallId: null,
       dueDate: null,
       floorDate,
+      timeframe: null,
     },
     state,
   ));
@@ -134,7 +136,7 @@ export default handleActions(
       // so don't purge those...
       // We also don't wanna re-set user-selected state because why make them re-select?
       return state.merge({
-        isFetching: true,
+        isFetching: false,
         isLogin: false,
         isConfirming: false,
         isTimerExpired: false,
@@ -212,6 +214,10 @@ export default handleActions(
 
     [SET_FORGOT_PASSWORD](state, action) {
       return state.set('forgotPassword', action.payload);
+    },
+
+    [SET_TIMEFRAME](state, action) {
+      return state.set('timeframe', action.payload);
     },
 
     [SET_IS_TIMER_EXPIRED](state, action) {

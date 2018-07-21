@@ -7,6 +7,7 @@ import auth from './patientAuth';
 import availabilities, { createInitialWidgetState } from './availabilities';
 import entities, { createInitialEntitiesState } from './entities';
 import featureFlags from './featureFlags';
+import widgetNavigation from './widgetNavigation';
 import reviews, { createInitialReviewsState } from './reviewsWidget';
 
 export default combineReducers({
@@ -17,6 +18,7 @@ export default combineReducers({
   form,
   reviews,
   routing,
+  widgetNavigation,
 });
 
 const reducerCreators = {

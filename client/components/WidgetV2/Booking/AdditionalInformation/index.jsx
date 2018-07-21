@@ -8,6 +8,7 @@ import { Button, Field, Form } from '../../../library';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import { setNotes } from '../../../../actions/availabilities';
 import styles from './styles.scss';
+import FloatingButton from '../../FloatingButton';
 
 function AdditionalInformation({ history: { push }, notes, ...props }) {
   /**
@@ -21,13 +22,17 @@ function AdditionalInformation({ history: { push }, notes, ...props }) {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
-        <div className={styles.content}>
-          <h3 className={styles.title}>Additional Information</h3>
-          <p className={styles.subtitle}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>Additional Information</h1>
+          <p className={styles.description}>
             Add family members and leave any necessary notes for the practice.
           </p>
+        </div>
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
           <Form
             form="additionalInformation"
             initialValues={{ notes: notes || '' }}
@@ -53,9 +58,11 @@ function AdditionalInformation({ history: { push }, notes, ...props }) {
               label="Notes"
               name="notes"
             />
-            <Button type="submit" className={styles.actionButton}>
-              Next
-            </Button>
+            <FloatingButton visible>
+              <Button type="submit" className={styles.floatingButton}>
+                Next
+              </Button>
+            </FloatingButton>
           </Form>
         </div>
       </div>

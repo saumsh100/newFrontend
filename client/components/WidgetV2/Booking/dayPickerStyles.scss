@@ -1,19 +1,5 @@
 @import '../../../ui';
 
-.today {
-  color: var(--primaryColor);
-}
-
-.selected {
-  color: white;
-  background: var(--primaryColor);
-
-  &:hover:not(.outside) {
-    opacity: 0.9;
-    background: var(--primaryColor);
-  }
-}
-
 .outside {
   cursor: default;
   color: #dce0e0;
@@ -26,4 +12,71 @@
 
 .end {
   opacity: 0.75;
+}
+.weekDay,
+.month {
+  font-size: 10px;
+  flex: 1;
+  margin: 0 calc(var(--widget-spacer) / 2);
+  &:first-child {
+    margin: 0 calc(var(--widget-spacer) / 2) !important;
+  }
+}
+.outWrapper {
+  width: 100%;
+}
+
+.months {
+  margin: 0 calc(calc(var(--widget-spacer) * -1) / 2);
+}
+
+.navButtonPrev {
+  left: 0;
+}
+.navButtonNext {
+  right: 0;
+}
+.container {
+  border: 0;
+  padding: 0;
+}
+.wrapperRange {
+  border: 0;
+  margin: var(--widget-spacer) 0;
+}
+.day {
+  font-family: 'Roboto';
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: $widget-grey;
+  width: calc(100% / 7);
+  &:hover:not(.outside):not(.disabled):not(.selected) {
+    background-color: $widget-grey-lightest !important;
+    color: var(--primaryColor);
+  }
+}
+.today {
+  color: var(--primaryColor);
+}
+
+.disabled {
+  color: $widget-grey-light;
+}
+
+.caption {
+  font-family: 'Roboto';
+  color: $widget-grey;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.selected {
+  color: white;
+  background: var(--primaryColor);
+
+  &:hover:not(.outside) {
+    opacity: 0.9;
+    background: var(--primaryColor);
+  }
 }

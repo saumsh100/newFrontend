@@ -3,15 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Link from '../../../library/Link';
 import WidgetCard from '../../../library/WidgetCard';
 import { setSelectedServiceId } from '../../../../actions/availabilities';
 import services from '../../../../entities/collections/services';
-import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
+import { locationShape, historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
 function Reasons({
-  servicesEntity, selectedServiceId, setSelectedService, location,
+  servicesEntity, selectedServiceId, location, history, ...props
 }) {
   /**
    * List of only active and not hidden practitioners
@@ -32,8 +31,13 @@ function Reasons({
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
   const contextualUrl = (location.state && location.state.nextRoute) || './practitioner';
+
+  const selectReason = (practitioner) => {
+    props.setSelectedServiceId(practitioner);
+    return history.push(contextualUrl);
+  };
   return (
-    <div className={styles.container}>
+    <div className={styles.cardContainer}>
       {!servicesList.length ? (
         <div className={styles.subCard}>
           <div className={styles.subCardWrapper}>
@@ -44,16 +48,25 @@ function Reasons({
           </div>
         </div>
       ) : (
-        servicesList.map(service => (
-          <Link to={contextualUrl} key={`reason_${service.value}`} className={styles.cardLink}>
-            <WidgetCard
-              arrow
-              title={service.label}
-              selected={service.value === selectedServiceId}
-              onClick={() => setSelectedService(service.value)}
-            />
-          </Link>
-        ))
+        <div className={styles.contentWrapper}>
+          <div>
+            <h1 className={styles.heading}>Select the Reason</h1>
+            <p className={styles.description}>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, modi!
+            </p>
+          </div>
+          <div className={styles.cardsWrapper}>
+            {servicesList.map(service => (
+              <span className={styles.cardWrapper} key={service.value}>
+                <WidgetCard
+                  title={service.label}
+                  selected={service.value === selectedServiceId}
+                  onClick={() => selectReason(service.value)}
+                />
+              </span>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
@@ -69,17 +82,21 @@ function mapStateToProps({ entities, availabilities }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setSelectedService: setSelectedServiceId,
+      setSelectedServiceId,
     },
     dispatch,
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Reasons);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Reasons);
 
 Reasons.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
   selectedServiceId: PropTypes.string.isRequired,
   servicesEntity: PropTypes.instanceOf(services).isRequired,
-  setSelectedService: PropTypes.func.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  setSelectedServiceId: PropTypes.func.isRequired,
 };

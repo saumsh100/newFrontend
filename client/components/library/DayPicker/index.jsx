@@ -98,14 +98,7 @@ class DayPicker extends Component {
 
   render() {
     const {
-      target,
-      TargetComponent,
-      tipSize,
-      iconClassName,
-      value,
-      timezone,
-      noTarget,
-      theme,
+      target, TargetComponent, tipSize, iconClassName, value, noTarget, theme,
     } = this.props;
 
     // If value is defined, format to 10/8/2017 style
@@ -172,7 +165,7 @@ class DayPicker extends Component {
       </Popover>
     );
 
-    return <div>{noTarget ? body : popOverWrapper}</div>;
+    return noTarget ? body : popOverWrapper;
   }
 }
 

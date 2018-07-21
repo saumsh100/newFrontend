@@ -267,7 +267,7 @@ class DayPickerRange extends Component {
     const selectedDays = [from, { from, to: enteredTo }];
 
     const body = (
-      <div className={styles.wrapperRange}>
+      <div className={theme.wrapperRange || styles.wrapperRange}>
         <DayPicker
           className="Range"
           disabledDays={disabledDays}
@@ -327,7 +327,7 @@ class DayPickerRange extends Component {
         {fieldsWrapperImplementation}
       </Popover>
     ) : (
-      <div>
+      <div className={theme.outWrapper}>
         {fieldsWrapperImplementation}
         {body}
       </div>

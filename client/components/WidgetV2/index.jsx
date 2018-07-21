@@ -1,13 +1,19 @@
 
 import React, { Component } from 'react';
-import { Map } from 'immutable';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { Map } from 'immutable';
+import { withRouter, matchPath } from 'react-router-dom';
+import { parse } from 'query-string';
 import Header from './Header';
+import Logon from './Account/Logon';
 import { locationShape } from '../library/PropTypeShapes/routerShapes';
 import Review from './Booking/Review';
 import styles from './styles.scss';
+
+const BOOKING_TAB = undefined;
+const ACCOUNT_TAB = 'account';
+const REVIEW_TAB = 'summary';
 
 class Widget extends Component {
   componentWillMount() {
@@ -25,10 +31,49 @@ class Widget extends Component {
   }
 
   render() {
+    const { pathname, search } = this.props.location;
+    const parsedSearch = parse(search);
+
+    const isEditing = !!parsedSearch.edit;
+
+    const isSummaryRoute =
+      parsedSearch.tab !== ACCOUNT_TAB && (parsedSearch.tab === REVIEW_TAB || parsedSearch.edit);
+
+    const isReviewRoute = !!matchPath(pathname, {
+      path: '/widgets/:accountId/app/book/review',
+    });
+
+    const isCompleteRoute = !!matchPath(pathname, {
+      path: '/widgets/:accountId/app/book/complete',
+    });
+
+    const isAccountRoute = !!matchPath(pathname, {
+      path: '/widgets/:accountId/app/account',
+    });
+
+    const isAccountTab = parsedSearch.tab === ACCOUNT_TAB;
+
+    const isBookingRoute = !isAccountTab && parsedSearch.tab === BOOKING_TAB;
+
+    const tabState = {
+      isEditing,
+      isReviewRoute,
+      isAccountRoute,
+      isAccountTab,
+      isBookingRoute,
+      isSummaryRoute,
+      isCompleteRoute,
+    };
+    const tabs = {
+      BOOKING_TAB,
+      ACCOUNT_TAB,
+      REVIEW_TAB,
+    };
+
     return (
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
-          <Header />
+          <Header tabs={tabs} tabState={tabState} />
           <div
             className={styles.container}
             ref={(node) => {
@@ -36,7 +81,10 @@ class Widget extends Component {
               return this.containerNode;
             }}
           >
-            {this.props.isBooking ? this.props.children : <Review />}
+            {isSummaryRoute && !isEditing && <Review canConfirm={false} />}
+            {isAccountTab && !isAccountRoute && !isReviewRoute && <Logon isAccountTab />}
+            {(isBookingRoute || isAccountRoute || isEditing) &&
+              this.props.children({ tabState, tabs })}
           </div>
           <div className={styles.poweredBy}>
             We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
@@ -49,8 +97,7 @@ class Widget extends Component {
 
 Widget.propTypes = {
   account: PropTypes.instanceOf(Map).isRequired,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
-  isBooking: PropTypes.bool.isRequired,
+  children: PropTypes.func.isRequired,
   location: PropTypes.shape(locationShape).isRequired,
 };
 
@@ -61,4 +108,7 @@ function mapStateToProps({ availabilities, reviews }) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, null)(Widget));
+export default withRouter(connect(
+  mapStateToProps,
+  null,
+)(Widget));

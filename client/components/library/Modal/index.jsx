@@ -32,10 +32,7 @@ class Modal extends Component {
   }
 
   handleEscKeyDown(e) {
-    this.props.active &&
-      e.which === 27 &&
-      this.props.onEscKeyDown &&
-      this.props.onEscKeyDown(e);
+    this.props.active && e.which === 27 && this.props.onEscKeyDown && this.props.onEscKeyDown(e);
   }
 
   handleOverlayClick(e) {
@@ -50,34 +47,26 @@ class Modal extends Component {
       custom,
       className,
       showOverlay,
+      containerStyles,
       backDropStyles,
     } = this.props;
 
-    let modalContainerClassName = styles.modalContainer;
-    if (active) {
-      modalContainerClassName = classNames(
-        styles.active,
-        modalContainerClassName,
-      );
-    }
+    const modalContainerClassName = classNames(styles.modalContainer, containerStyles, {
+      [styles.active]: active,
+    });
 
-    let modalBodyClassName = classNames(className, styles.modalBody);
+    const modalBodyClassName = classNames(className, styles.modalBody, {
+      [styles[type]]: !custom && type,
+      [styles.medium]: !custom && !type,
+    });
 
-    if (!custom) {
-      modalBodyClassName = type
-        ? classNames(styles[type], modalBodyClassName)
-        : classNames(styles.medium, modalBodyClassName);
-    }
-
-    const backDropClassName = classNames(
-      styles.backDropDefault,
-      backDropStyles,
-    );
+    const backDropClassName = classNames(styles.backDropDefault, backDropStyles);
 
     return (
       <div className={modalContainerClassName}>
         {showOverlay ? (
           <div
+            role="presentation"
             onClick={() => {
               this.handleOverlayClick();
             }}
@@ -94,14 +83,27 @@ class Modal extends Component {
 
 Modal.propTypes = {
   active: PropTypes.bool,
-  children: PropTypes.object,
+  backDropStyles: PropTypes.string,
+  children: PropTypes.node.isRequired,
+  className: PropTypes.string,
+  containerStyles: PropTypes.string,
+  custom: PropTypes.bool,
   onEscKeyDown: PropTypes.func,
   onOverlayClick: PropTypes.func,
   showOverlay: PropTypes.bool,
+  type: PropTypes.string,
 };
 
 Modal.defaultProps = {
+  active: false,
+  backDropStyles: null,
+  className: null,
+  containerStyles: null,
+  custom: false,
+  onEscKeyDown: null,
+  onOverlayClick: null,
   showOverlay: true,
+  type: null,
 };
 
 export default Modal;

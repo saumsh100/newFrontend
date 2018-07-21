@@ -1,0 +1,17 @@
+@import '../../styles';
+
+.container {
+  @extend .container;
+  > div {
+    width: 100%;
+  }
+}
+.buttonsWrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.actionButton {
+  @extend .actionButton;
+  flex: 0 50%;
+  content: 'as';
+}

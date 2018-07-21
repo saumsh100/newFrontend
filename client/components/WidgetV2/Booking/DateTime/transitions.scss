@@ -1,0 +1,34 @@
+.appear {
+  opacity: 1 !important;
+}
+.appear-done {
+  opacity: 1 !important;
+}
+
+.enter {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: all 0.5s ease;
+}
+.enter-active {
+  opacity: 1 !important;
+  transition: all 0.5s ease;
+}
+.enter-done {
+  transition: all 0.5s ease;
+  opacity: 1 !important;
+}
+
+.exit {
+  opacity: 1 !important;
+  transition: all 0.5s ease;
+  // opacity: 0.5;
+}
+.exit-active {
+  opacity: 1 !important;
+  transition: all 0.5s ease;
+}
+.exit-done {
+  opacity: 0 !important;
+  transition: all 0.5s ease;
+}

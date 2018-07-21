@@ -7,7 +7,7 @@
   justify-content: center;
   text-align: center;
   margin: 0;
-  background-color: #fff;
+  background-color: $widget-white;
   padding: 8px 0;
   border-right: 1px solid $widget-grey-lighter;
   color: $widget-grey;
@@ -24,9 +24,9 @@
   @extend .daySlot;
   background: var(--primaryColor);
   border-color: var(--primaryColor);
-  color: #fff;
+  color: $widget-white;
   &:hover {
-    color: #fff !important;
+    color: $widget-white !important;
   }
 }
 .topWrapper {
@@ -34,19 +34,7 @@
   width: 100%;
   margin-bottom: var(--widget-spacer);
 }
-.weekDay,
-.month {
-  font-family: $book-font;
-  font-size: 10px;
-  width: 100%;
-}
-.day {
-  justify-content: center;
-  width: 100%;
-  font-family: $medium-font;
-  font-size: 20px;
-  line-height: 22px;
-}
+
 .datesContainer {
   display: flex;
   flex: 1;
@@ -73,27 +61,37 @@
 }
 
 .availabilitiesWrapper {
-  margin: var(--widget-spacer) -1% 0;
+  @extend .container;
+  margin: var(--widget-spacer) 0 0;
   flex-wrap: wrap;
   display: flex;
+  padding: 0 12px;
+  position: relative;
+  min-height: 45px;
+}
+
+.cardWrapper {
+  @extend .cardWrapper;
+  flex: 0 33.33%;
+  @media (min-width: 576px) {
+    flex: 0 25%;
+  }
 }
 .nextAvailabilityButton {
   width: 100%;
   border-radius: 4px;
-  font-family: $medium-font;
   font-size: 14px;
   padding: var(--widget-spacer) 0;
 }
 .datePicker {
   border: 1px solid $widget-grey-lighter;
-  background: #fff;
+  background: $widget-white;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
   height: 100%;
   text-align: center;
   text-transform: uppercase;
-  font-family: $medium-font;
   font-size: 10px;
   color: $widget-grey-dark;
   padding: var(--widget-spacer);
@@ -136,4 +134,45 @@
 .spinnerWrapper {
   text-align: center;
   color: var(--primaryColor);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  background: $widget-grey-lightest;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  h3 {
+    span {
+      font-size: 23px;
+      animation-name: blink;
+      animation-duration: 1.4s;
+      animation-iteration-count: infinite;
+      animation-fill-mode: both;
+      line-height: 12px;
+      &:nth-child(1) {
+        margin-left: 2px;
+      }
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.2;
+  }
 }

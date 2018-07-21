@@ -9,20 +9,23 @@ import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import { setDateToTimezone } from '../../../../../server/util/time';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
-import { refreshAvailabilitiesState } from '../../../../actions/availabilities';
-import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
 import Service from '../../../../entities/models/Service';
+import { refreshAvailabilitiesState } from '../../../../actions/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { capitalizeFirstLetter } from '../../../Utils';
 import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
-import { bookingConfirmedSVG } from '../../SVGs';
+import { BookingConfirmedSVG } from '../../SVGs';
 import styles from './styles.scss';
+import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
+import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 
 function Complete({
   dateAndTime,
   history,
-  patientUser: { firstName, lastName },
+  location,
+  patientUser,
   selectedService,
   officeHours,
   selectedPractitioner,
@@ -102,7 +105,8 @@ function Complete({
    * @param {array} data
    * @param {string} startDate
    */
-  const checkForStartdate = (data, startDate) => data.includes(startDate);
+
+  const formatReviewDates = dateFormatterFactory('ha')(timezone);
 
   /**
    * With the provided array of strings,
@@ -114,66 +118,131 @@ function Complete({
     if (value === 'total') {
       return acc;
     }
-    /**
-     * Displays 'All day (starTime - endTime)'
-     */
+    // Displays 'All day (starTime - endTime)'
     if (availabilities.total === selected.length) {
-      return `All day (${dateFormatter(selected[0], timezone, 'LT')} - ${dateFormatter(
-        selected[selected.length - 1],
-        timezone,
-        'LT',
-      )})`;
-    }
-    const timeframe = availabilities[value];
-    const checkIfIsAllDay = timeframe.every(({ startDate }) =>
-      checkForStartdate(selected, startDate));
-    if (timeframe.length > 0 && checkIfIsAllDay) {
-      /**
-       * Displays 'Timeframe (starTime - endTime)'
-       */
-      const timeFrame = capitalizeFirstLetter(value);
-      const startTimeOnTimeFrame = dateFormatter(timeframe[0].startDate, timezone, 'LT');
-      const endTimeOnTimeFrame = dateFormatter(
-        timeframe[timeframe.length - 1].startDate,
-        timezone,
-        'LT',
-      );
-      acc += ` ${timeFrame} (${startTimeOnTimeFrame} - ${endTimeOnTimeFrame}), `;
-    } else {
-      /**
-       * Displays an inline list of
-       */
-      acc += ` ${timeframe
-        .filter(({ startDate }) => checkForStartdate(selected, startDate))
-        .map(el => dateFormatter(el.startDate, timezone, 'LT'))
-        .join(', ')}, `;
+      return [
+        <div>
+          <strong>
+            {`All day (${formatReviewDates(selected[0])} - ${formatReviewDates(selected[selected.length - 1])})`}
+          </strong>
+        </div>,
+      ];
     }
 
-    return acc.slice(0, -2);
+    const timeframe = availabilities[value];
+    // early return if theres no availabilitis on this time frame
+    if (!availabilities[value].length) {
+      return acc;
+    }
+
+    const timeFrame = capitalizeFirstLetter(value);
+    // all positive messages are displayed in bold.
+    let boldedText = '';
+    // normal text
+    let text = '';
+
+    if (timeframe.length > 0 && timeframe.every(({ startDate }) => selected.includes(startDate))) {
+      // Displays 'Timeframe starTime to endTime'
+      const startTimeOnTimeFrame = formatReviewDates(timeframe[0].startDate);
+      const endTimeOnTimeFrame = formatReviewDates(timeframe[timeframe.length - 1].startDate);
+      boldedText += ` All (${startTimeOnTimeFrame} to ${endTimeOnTimeFrame})`;
+    } else {
+      // Displays an inline list of dates
+      const timesReduced = timeframe.reduce(
+        (dates, { startDate }) => {
+          if (selected.includes(startDate)) {
+            dates.in.push(startDate);
+          } else {
+            dates.out.push(startDate);
+          }
+          dates.total += 1;
+          return dates;
+        },
+        { in: [], out: [], total: 0 },
+      );
+
+      if (timesReduced.in.length > 0) {
+        if (timesReduced.in.length > timesReduced.total / 2) {
+          const startTimeOnTimeFrame = timesReduced.in[0];
+          const endTimeOnTimeFrame = timesReduced.in[timesReduced.in.length - 1];
+          /**
+           * add this to string
+           */
+          boldedText = ` ${formatReviewDates(startTimeOnTimeFrame)} to ${formatReviewDates(endTimeOnTimeFrame)}`;
+
+          if (timesReduced.out.length > 0) {
+            const excludedTimes = timesReduced.out.reduce(
+              (but, time) =>
+                (time < endTimeOnTimeFrame && time > startTimeOnTimeFrame
+                  ? [...but, ...[time]]
+                  : but),
+              [],
+            );
+
+            const excludedText =
+              excludedTimes.length > 0
+                ? `but ${excludedTimes
+                  .map(el => formatReviewDates(el))
+                  .reduce(toHumanCommaSeparated)}`
+                : '';
+            text += ` ${excludedText}`;
+          }
+        } else {
+          boldedText = ` ${timesReduced.in
+            .map(el => formatReviewDates(el))
+            .reduce(toHumanCommaSeparated)}`;
+        }
+      } else {
+        text += ' None';
+      }
+    }
+    // adding the new text line to the previous ones.
+    return [
+      ...acc,
+      ...[
+        <div>
+          {`${timeFrame}: `}
+          {boldedText.length > 0 && <strong>{boldedText}</strong>}
+          {` ${text}`}
+        </div>,
+      ],
+    ];
   };
 
   /**
    * Display a linear list of times that were selected from the user on the waitlist's steps.
    */
-  const waitlistTimes = () => {
-    if (waitlist.times.length === 0) {
-      return null;
-    }
-    return Object.keys(availabilities).reduce(handleAvailabilitiesTimes(waitlist.times), '');
-  };
+  const waitlistTimes = () =>
+    waitlist.times.length > 0 && (
+      <span>
+        {Object.keys(availabilities)
+          .reduce(handleAvailabilitiesTimes(waitlist.times), [])
+          .map(text => text)}
+      </span>
+    );
 
   return (
-    <div className={styles.container}>
+    <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
-        <div className={styles.content}>
-          <div>{bookingConfirmedSVG}</div>
-          <h2 className={styles.heading}>Thank You!</h2>
-          <p className={styles.requestTitle}>These are the details of your request:</p>
-          <div className={styles.requestCard}>
-            <h3 className={styles.requestPatient}>{`${firstName} ${lastName}`}</h3>
+        <div className={styles.container}>
+          <div className={styles.svgWrapper}>
+            <BookingConfirmedSVG />
+          </div>
+          <h1 className={styles.heading}>
+            Thank You, {patientUser && `${patientUser.firstName} ${patientUser.lastName}`}!
+          </h1>
+          <p className={styles.description}>
+            Your request has been successfully created. <br />
+            We will be in touch soon, please wait for our confirmation.
+          </p>
+        </div>
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <div className={styles.rowCard}>
             {dateAndTime && (
-              <div>
-                <h4>Appointment</h4>
+              <div className={styles.bookingGroup}>
+                <h4 className={styles.bookingType}>{"Appointment's Details"}:</h4>
                 <p className={styles.requestInfo}>
                   <strong>Date:</strong>{' '}
                   {`${dateFormatter(
@@ -193,34 +262,38 @@ function Complete({
                 </p>
               </div>
             )}
-            {waitlist.dates.length > 0 && (
-              <div>
-                <h4>Waitlist</h4>
-                <p className={styles.requestInfo}>
-                  <strong>Reason:</strong> {selectedService.get('name')}
-                </p>
-                <p className={styles.requestInfo}>
-                  <strong>Available Dates:</strong> {waitlistDates()}
-                </p>
-                <p className={styles.requestInfo}>
-                  <strong>Unavailable Dates:</strong> {waitlistUnavailableDates()}
-                </p>
-                <p className={styles.requestInfo}>
-                  <strong>Available Times:</strong> {waitlistTimes()}
-                </p>
-              </div>
-            )}
           </div>
-          <p className={styles.afterCardMessage}>
-            Your appointment has been successfully requested. <br />
-            We will be in touch shortly. Please wait for our confirmation.
-          </p>
-          <div className={styles.buttonWrapper}>
+
+          {waitlist.dates.length > 0 && (
+            <div className={styles.rowCard}>
+              <h4 className={styles.bookingType}>{"Waitlist's Details"}:</h4>
+              <p className={styles.requestInfo}>
+                <strong>Reason:</strong> {selectedService.get('name')}
+              </p>
+              <p className={styles.requestInfo}>
+                <strong>Available Dates:</strong> {waitlistDates()}
+              </p>
+              <p className={styles.requestInfo}>
+                <strong>Unavailable Dates:</strong> {waitlistUnavailableDates()}
+              </p>
+              <p className={styles.requestInfo}>
+                <strong>Available Times:</strong> {waitlistTimes()}
+              </p>
+            </div>
+          )}
+          <div className={styles.contentWrapper}>
             <Button
-              className={styles.fullWidthButton}
+              className={styles.actionButton}
               onClick={() => {
                 props.refreshAvailabilitiesState();
-                history.push('../book');
+                history.push({
+                  ...location,
+                  pathname: '../book/reason',
+                  state: {
+                    ...location.state,
+                    isCompleteRoute: false,
+                  },
+                });
               }}
             >
               Start New Booking
@@ -264,7 +337,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Complete);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Complete);
 
 Complete.propTypes = {
   dateAndTime: PropTypes.shape({
@@ -272,6 +348,7 @@ Complete.propTypes = {
     endDate: PropTypes.string,
     practitionerId: PropTypes.string,
   }),
+  location: PropTypes.shape(locationShape).isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   officeHours: PropTypes.shape(officeHoursShape).isRequired,
   patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),

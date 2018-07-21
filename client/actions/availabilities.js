@@ -36,6 +36,7 @@ import {
   SET_WAITLIST_TIMES,
   SET_WAITLIST_DATES,
   SET_WAITLIST_UNAVAILABLE_DATES,
+  SET_TIMEFRAME,
 } from '../constants';
 
 export const sixDaysShiftAction = createAction(SIX_DAYS_SHIFT);
@@ -72,6 +73,7 @@ export const setInsuranceCarrier = createAction(SET_INSURANCE_CARRIER);
 export const setSentRecallId = createAction(SET_SENTRECALLID);
 export const setDueDate = createAction(SET_DUE_DATE);
 export const setIsBooking = createAction(SET_IS_BOOKING);
+export const setTimeFrame = createAction(SET_TIMEFRAME);
 
 // This is on the auth reducer!
 export const setPatientUser = createAction(SET_PATIENT_USER);

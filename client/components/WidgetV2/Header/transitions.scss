@@ -1,0 +1,48 @@
+@keyframes enter {
+  0% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  20% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  30% {
+    opacity: 0.4;
+    transform: scaleY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes exit {
+  0% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  20% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+  30% {
+    opacity: 0.8;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+}
+
+.enter {
+  animation-name: enter;
+  animation-duration: 400ms;
+  animation-fill-mode: forwards;
+}
+.exit {
+  animation-name: exit;
+  animation-duration: 400ms;
+  animation-fill-mode: forwards;
+}
