@@ -230,7 +230,7 @@ class EditDisplay extends Component {
         label: 'Save',
         onClick: this.handleSubmit,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: `Form${this.state.tabIndex + 1}` },
+        props: { color: 'blue', form: `Form${this.state.tabIndex + 1}`, removePristineCheck: true },
       },
     ];
 
