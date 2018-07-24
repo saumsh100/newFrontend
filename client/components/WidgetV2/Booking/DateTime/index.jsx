@@ -278,9 +278,9 @@ class DateTime extends Component {
           <div className={styles.container}>
             <h1 className={styles.heading}>Select Date and Time</h1>
             <p className={styles.description}>
-              Select a date and the time that works best for you <br /> or{' '}
+              or{' '}
               <Link className={styles.subCardLink} to="./waitlist/select-dates">
-                Join the Waitlist
+                Join Waitlist
               </Link>
             </p>
           </div>
@@ -319,7 +319,7 @@ class DateTime extends Component {
             >
               <div className={styles.spinnerWrapper} key="fetching">
                 <h3>
-                  Fetching availabilities
+                  Checking availabilities
                   <span>.</span>
                   <span>.</span>
                   <span>.</span>

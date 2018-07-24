@@ -35,11 +35,7 @@ function SelectDates({
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
-          <h1 className={styles.heading}>Select Dates</h1>
-          <p className={styles.description}>
-            Select the first and last day of your availability. You will be able to customize your
-            schedule later.
-          </p>
+          <h1 className={styles.heading}>Select Waitlist Date Range</h1>
         </div>
       </div>
       <div className={styles.contentWrapper}>
@@ -77,7 +73,7 @@ function SelectDates({
                 className={styles.floatingButton}
                 onClick={() => history.push(contextualUrl)}
               >
-                Next
+                Select times available
               </Button>
             </FloatingButton>
           </div>

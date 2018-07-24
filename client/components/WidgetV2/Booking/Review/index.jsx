@@ -79,7 +79,7 @@ function Review({
   hasWaitList,
   history,
   isBooking,
-  location: { pathname },
+  location,
   notes,
   officeHours,
   patientUser,
@@ -90,7 +90,7 @@ function Review({
   ...props
 }) {
   const b = path =>
-    pathname
+    location.pathname
       .split('/')
       .filter((v, index) => index < 5)
       .concat(path)
@@ -153,7 +153,7 @@ function Review({
    * @param {string} link
    */
   const renderSummaryItem = (key, value, link) => {
-    const match = matchPath(pathname, {
+    const match = matchPath(location.pathname, {
       path: `/widgets/:accountId/app/book${link.slice(1)}`,
       exact: true,
     });
@@ -168,7 +168,7 @@ function Review({
             onClick={() =>
               history.push({
                 pathname: link,
-                state: { nextRoute: match ? false : pathname },
+                state: { nextRoute: match ? false : location.pathname },
                 search: stringify({ edit: true }),
               })
             }
@@ -236,7 +236,11 @@ function Review({
           dates.total += 1;
           return dates;
         },
-        { in: [], out: [], total: 0 },
+        {
+          in: [],
+          out: [],
+          total: 0,
+        },
       );
 
       if (timesReduced.in.length > 0) {
@@ -304,14 +308,12 @@ function Review({
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
-          <h1 className={styles.heading}>Summary of your booking</h1>
-          <p className={styles.description}>
-            Here you can see and change all the informations that you already provided on the{' '}
-            <strong>Booking</strong> tab
-          </p>
+          <h1 className={styles.heading}>
+            {location.state && location.state.isReviewRoute ? 'Almost Done' : 'Booking Summary'}
+          </h1>
         </div>
         <div className={styles.content}>
-          <h3 className={styles.title}>Waitlist Information</h3>
+          <h3 className={styles.title}>Waitlist Summary</h3>
           {waitlist.dates.length > 0 ? (
             <div>
               <p className={styles.subtitle}>
@@ -350,7 +352,7 @@ function Review({
           )}
         </div>
         <div className={styles.content}>
-          <h3 className={styles.title}>Appointment Information</h3>
+          <h3 className={styles.title}>Appointment Summary</h3>
           <p className={styles.subtitle}>
             Here are the informations that you already defined to your appointment.
           </p>

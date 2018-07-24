@@ -31,7 +31,6 @@ class Header extends Component {
     const {
       history,
       isBooking,
-      clinicName,
       tabState: { isCompleteRoute },
     } = this.props;
 
@@ -52,7 +51,7 @@ class Header extends Component {
                 [styles.complete]: isCompleteRoute,
               })}
             >
-              {clinicName}
+              Schedule your Appointment
             </h2>
           </div>
           <div className={styles.headerRightArea}>
@@ -75,7 +74,6 @@ class Header extends Component {
 
 function mapStateToProps({ auth, availabilities }) {
   return {
-    clinicName: availabilities.get('account').get('name'),
     hasWaitList: availabilities.get('hasWaitList'),
     isAuth: auth.get('isAuthenticated'),
     isBooking: availabilities.get('isBooking'),
@@ -98,7 +96,6 @@ Header.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   isBooking: PropTypes.bool.isRequired,
   setIsBooking: PropTypes.func.isRequired,
-  clinicName: PropTypes.string.isRequired,
   tabs: PropTypes.objectOf(PropTypes.string).isRequired,
   tabState: PropTypes.objectOf(PropTypes.bool).isRequired,
 };

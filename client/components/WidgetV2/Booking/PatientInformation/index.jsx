@@ -264,8 +264,7 @@ class PatientInformation extends Component {
       <Element id="contentWrapperToScroll" className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
-            <h1 className={styles.heading}>Select the Patient</h1>
-            <p className={styles.description}>Please select who is going to the clinic.</p>
+            <h1 className={styles.heading}>Who is this appointment for?</h1>
           </div>
         </div>
         <div className={styles.contentWrapper}>
@@ -286,7 +285,7 @@ class PatientInformation extends Component {
                 <div className={styles.group}>
                   <Field
                     name="patientUser"
-                    label="Who will be seeing the dentist?"
+                    label="Select Patient"
                     component={SuggestionSelect}
                     onChange={this.handlePatientChanges}
                     required

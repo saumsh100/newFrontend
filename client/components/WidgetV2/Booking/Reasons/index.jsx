@@ -49,12 +49,7 @@ function Reasons({
         </div>
       ) : (
         <div className={styles.contentWrapper}>
-          <div>
-            <h1 className={styles.heading}>Select the Reason</h1>
-            <p className={styles.description}>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, modi!
-            </p>
-          </div>
+          <h1 className={styles.heading}>Select Reason</h1>
           <div className={styles.cardsWrapper}>
             {servicesList.map(service => (
               <span className={styles.cardWrapper} key={service.value}>

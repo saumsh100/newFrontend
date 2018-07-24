@@ -1,7 +1,7 @@
 @import '../../../ui.scss';
 
 .pageTitle {
-  font-size: 20px;
+  font-size: 17px;
   color: $widget-white;
   letter-spacing: 0;
   text-align: center;
@@ -9,7 +9,11 @@
   font-weight: 500;
   margin: 0;
   padding-bottom: 21px;
+  @media (min-width: 350px) {
+    font-size: 20px;
+  }
 }
+
 .complete {
   padding-bottom: 0;
 }
@@ -40,6 +44,7 @@
     @extend .iconButton;
   }
 }
+
 .backComplete {
   opacity: 0;
   visibility: hidden;
@@ -104,6 +109,7 @@
     transform: translateY(-21px);
   }
 }
+
 .tabsWrapper {
   display: flex;
   transform: translateY(0);
@@ -177,6 +183,7 @@
     }
   }
 }
+
 .topHead {
   margin-bottom: -21px;
 }

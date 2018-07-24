@@ -26,9 +26,6 @@ function AdditionalInformation({ history: { push }, notes, ...props }) {
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
           <h1 className={styles.heading}>Additional Information</h1>
-          <p className={styles.description}>
-            Add family members and leave any necessary notes for the practice.
-          </p>
         </div>
       </div>
       <div className={styles.contentWrapper}>

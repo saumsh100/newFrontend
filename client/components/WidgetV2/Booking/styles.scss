@@ -30,6 +30,7 @@
   margin-bottom: var(--widget-spacer);
   box-sizing: border-box;
 }
+
 .title {
   font-size: 14px;
   color: $widget-blue-grey;
@@ -39,6 +40,7 @@
   text-align: center;
   display: block;
 }
+
 .subtitle {
   font-family: 'Roboto';
   font-size: 12px;
@@ -49,29 +51,38 @@
   display: block;
   text-align: center;
 }
+
 .contentWrapper {
   width: 100%;
+  + .contentWrapper {
+    margin-top: var(--widget-spacer);
+  }
 }
+
 .subCard {
   @extend .content;
   flex-wrap: wrap;
   display: flex;
   justify-content: center;
 }
+
 .subCardWrapper {
   flex: 1;
 }
+
 .subCardTitle {
   @extend .title;
   width: 100%;
   margin: 0px;
 }
+
 .subCardSubtitle {
   @extend .subtitle;
   flex: 1;
   padding-right: 8px;
   margin-bottom: 0;
 }
+
 .subCardLink {
   color: $widget-blue;
   border-bottom: 1px solid;
@@ -88,10 +99,12 @@
     transition: all 0.2s ease;
   }
 }
+
 .subCardLinkDanger {
   @extend .subCardLink;
   color: $widget-red;
 }
+
 .input {
   border: 1px solid $widget-grey-lighter;
   width: 100%;
@@ -110,16 +123,19 @@
     @extend .filled;
   }
 }
+
 .textarea {
   @extend .input;
   min-height: 150px;
   padding-top: 28px;
 }
+
 .group {
   padding: 0;
   width: 100%;
   margin-bottom: var(--widget-spacer);
 }
+
 .error {
   left: var(--widget-spacer);
   bottom: -16px;
@@ -132,37 +148,45 @@
   padding-left: var(--widget-spacer);
   padding-top: 6px;
 }
+
 .erroredInput {
   border-color: $widget-red;
   color: $widget-grey-dark;
 }
+
 .bar {
   display: none;
 }
+
 .erroredLabel {
   color: $widget-grey-light !important;
 }
+
 .erroredLabelFilled {
   color: $widget-grey-light !important;
 }
+
 .label {
   left: var(--widget-spacer);
   top: 21px;
   font-size: 14px;
   color: $widget-grey-light;
 }
+
 .filled {
   left: var(--widget-spacer) !important;
   top: 12px !important;
   font-size: 11px !important;
   color: $widget-grey-light;
 }
+
 .signInTop {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: var(--widget-spacer);
 }
+
 .actionButton {
   border-radius: 4px;
   width: 100%;
@@ -213,6 +237,7 @@
     border-color: var(--primaryColor);
   }
 }
+
 .selectedSlot {
   @extend .slot;
   background: var(--primaryColor);
@@ -263,9 +288,11 @@
 .caretIconWrapper {
   margin-top: -12px;
 }
+
 .errorIcon {
   color: initial;
 }
+
 .closeIcon {
   position: absolute;
   right: var(--widget-spacer);
@@ -291,11 +318,13 @@
   box-sizing: border-box;
   position: relative;
 }
+
 .buttonsWrapper {
   display: flex;
   margin-top: 20px;
   justify-content: center;
 }
+
 .negation {
   margin-left: 8px;
   color: $widget-grey-light;
@@ -304,13 +333,14 @@
   padding: 12px 8px;
   width: 50%;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
   &:hover {
     transition: all 0.2s ease;
     color: $widget-grey-dark;
   }
 }
+
 .confirmation {
   margin-right: 8px;
   color: $widget-white;
@@ -321,7 +351,7 @@
   border-radius: 4px;
   font-size: 13px;
   transition: all 0.2s ease;
-  font-weight: 500;
+  font-weight: 600;
   &:hover {
     transition: all 0.2s ease;
     opacity: 0.9;
@@ -342,6 +372,7 @@
   flex-wrap: wrap;
   margin: 0 0 8px;
 }
+
 .waitlistKey {
   width: 100%;
   display: block;
@@ -350,6 +381,7 @@
   color: $widget-grey;
   font-family: 'Roboto';
 }
+
 .waitlistValue {
   display: flex;
   align-items: center;
@@ -376,6 +408,7 @@
   margin-top: 8px;
   text-align: center;
 }
+
 .timeFrameButton {
   flex: 1;
 }
@@ -388,6 +421,9 @@
   margin-bottom: calc(var(--widget-spacer) / 2);
   display: block;
   width: 100%;
+  + .cardsWrapper {
+    margin-top: var(--widget-spacer);
+  }
 }
 
 .description {
@@ -397,7 +433,7 @@
   text-align: center;
   line-height: 18px;
   margin-top: 0;
-  margin-bottom: var(--widget-spacer);
+  margin-bottom: 0;
   display: block;
   width: 100%;
 }
@@ -415,6 +451,7 @@
     margin: 0 4px 8px !important;
   }
 }
+
 .rowCard {
   width: 100%;
   border: 1px solid $widget-grey-lighter;

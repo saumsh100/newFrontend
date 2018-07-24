@@ -56,10 +56,7 @@ function Practitioners({
     <div className={styles.cardContainer}>
       {practitionerIds.length > 0 ? (
         <div className={styles.contentWrapper}>
-          <h1 className={styles.heading}>Select the Practitioner</h1>
-          <p className={styles.description}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet, modi!
-          </p>
+          <h1 className={styles.heading}>Select Practitioner</h1>
           <div className={styles.cardsWrapper}>
             {practitionerList.map(prac => (
               <span className={styles.cardWrapper} key={prac.value}>

@@ -14,7 +14,6 @@ import SelectTimes from '../components/WidgetV2/Booking/Waitlist/SelectTimes';
 import Logon from '../components/WidgetV2/Account/Logon';
 import Account from '../components/WidgetV2/Account';
 import { historyShape, locationShape } from '../components/library/PropTypeShapes/routerShapes';
-import DaysUnavailable from '../components/WidgetV2/Booking/Waitlist/DaysUnavailable';
 import AdditionalInformation from '../components/WidgetV2/Booking/AdditionalInformation';
 import PatientInformation from '../components/WidgetV2/Booking/PatientInformation';
 import patientUserShape from '../components/library/PropTypeShapes/patientUserShape';
@@ -47,7 +46,6 @@ const BookingRouter = ({
           <Route path={b('/date-and-time')} component={DateTime} />
           <Route exact path={b('/waitlist/select-dates')} component={SelectDates} />
           <Route exact path={b('/waitlist/select-times')} component={SelectTimes} />
-          <Route exact path={b('/waitlist/days-unavailable')} component={DaysUnavailable} />
           <Route
             exact
             path={b('/patient-information')}

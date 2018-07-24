@@ -32,14 +32,14 @@ function Join({ isAuth, history, resetWaitlist }) {
   return (
     <Modal active className={styles.customDialog} containerStyles={styles.modalContainerStyles}>
       <h3 className={styles.title}>
-        Want to be notified if an earlier appointment becomes available?
+        Join our waitlist and be notified if an earlier appointment becomes available?
       </h3>
       <div className={styles.buttonsWrapper}>
         <Button onClick={() => handleWaitlistConfirmation(true)} className={styles.confirmation}>
-          Yes
+          Yes, join waitlist
         </Button>
         <Button onClick={() => handleWaitlistConfirmation(false)} className={styles.negation}>
-          No
+          No, thanks!
         </Button>
       </div>
     </Modal>

@@ -82,6 +82,7 @@
     font-weight: 500;
   }
 }
+
 .selectedListItem {
   &:before {
     color: var(--primaryColor);
@@ -106,9 +107,19 @@
   bottom: -20px;
   left: 0px;
 }
+
 .erroredDropdown ~ div {
   margin-top: -23px !important;
   > ul {
     border-color: $widget-red !important;
+  }
+}
+
+form {
+  .contentWrapper {
+    margin-top: 0;
+    + .contentWrapper {
+      margin-top: 0;
+    }
   }
 }
