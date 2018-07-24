@@ -27,7 +27,7 @@ class Reviews extends React.Component {
           {helpers.productionCSS('reviews-commons.js')}
           {helpers.productionCSS('reviews')}
         </head>
-        <body style={{ fontFamily: 'Roboto' }} className="Dashboard Widget">
+        <body style={{ fontFamily: 'Gotham-Book' }} className="Dashboard Widget">
           {/* Regions */}
           <div id="root" />
 

@@ -2,6 +2,9 @@
 
 :root {
   --widget-spacer: 12px;
+  @media screen and (min-width: 350px) {
+    --widget-spacer: 16px;
+  }
 }
 
 :global {
@@ -11,11 +14,6 @@
   }
 }
 
-@media screen and (min-width: 350px) {
-  :root {
-    --widget-spacer: 16px;
-  }
-}
 .container {
   padding: 0 var(--widget-spacer);
   display: flex;

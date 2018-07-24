@@ -1,18 +1,12 @@
 @import '../../ui.scss';
 
-:global(.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside)) {
-  background-color: var(--primaryColor);
-}
-* {
-  -webkit-font-smoothing: antialiased;
-  font-family: Roboto;
-}
-
 .reviewsWidgetContainer {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
+  font-family: Roboto;
+  -webkit-font-smoothing: antialiased;
 }
 
 .reviewsWidgetCenter {
