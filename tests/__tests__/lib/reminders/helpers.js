@@ -8,6 +8,7 @@ import moment from 'moment';
 import {
   Account,
   Appointment,
+  Chair,
   Patient,
   Practitioner,
   Reminder,
@@ -67,54 +68,6 @@ describe('RemindersList Calculation Library', () => {
   });
 
   describe('Helpers', () => {
-    test.skip('#getAppointmentsFromReminder - creating later on reminder first - should return 1', async () => {
-      // Seed 3 SentReminders for the patient
-      const reminder1 = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '1086410 seconds' });
-      const reminder2 = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '1086400 seconds' });
-
-      const appts = await Appointment.bulkCreate([
-        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
-      ]);
-
-      const currentDate = date(2017, 7, 5, 7);
-
-      await SentReminder.create(makeSentReminderData({
-        reminderId: reminder1.id,
-        appointmentId: appts[0].id,
-        interval: '1086410 seconds',
-      }));
-
-      const appts2 = await getAppointmentsFromReminder({ reminder: reminder2, startDate: currentDate });
-
-      expect(appts2.length).toBe(1);
-    });
-
-    test.skip('#getAppointmentsFromReminder - creating earlier reminder first - should return 0', async () => {
-      // Seed 3 SentReminders for the patient
-
-      const reminder1 = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '1086410 seconds' });
-      const reminder2 = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '1086400 seconds' });
-
-
-      await Appointment.bulkCreate([
-        makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
-      ]);
-
-      const currentDate = date(2017, 7, 5, 7);
-
-      const appts = await getAppointmentsFromReminder({ reminder: reminder2, startDate: currentDate });
-
-      await SentReminder.create(makeSentReminderData({
-        reminderId: reminder1.id,
-        appointmentId: appts[0].id,
-        interval: '1086410 seconds',
-      }));
-
-      const appts2 = await getAppointmentsFromReminder({ reminder: reminder1, startDate: currentDate });
-
-      expect(appts2.length).toBe(0);
-    });
-
     test('#getAppointmentsFromReminder - with past appointment', async () => {
       // 2 hour sms reminder
       const reminder = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '7200 seconds' });
@@ -289,6 +242,53 @@ describe('RemindersList Calculation Library', () => {
         const startDate = date(2017, 7, 8, 8);
         const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
         const newReminder = await reminder.update({ omitPractitionerIds: [] });
+        const appts = await getAppointmentsFromReminder({ reminder: newReminder, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[1].patientId).toBe(patients[1].id);
+      });
+    });
+
+    describe('#getAppointmentsFromReminder - omitChairIds', () => {
+      let chair;
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        chair = await Chair.create({
+          accountId,
+          name: 'Chair 1',
+        });
+
+        reminder = await Reminder.create({
+          accountId,
+          interval: '4 weeks',
+          primaryTypes: ['email', 'sms'],
+          omitChairIds: [chair.id],
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 8, 5, 8), patientId: patients[0].id, chairId: chair.id }), // in 4 weeks at 8am
+          makeApptData({ ...dates(2017, 8, 5, 9), patientId: patients[1].id, chairId: chair.id }), // in 4 weeks at 9am
+        ]);
+      });
+
+      test('should not return any appointments because of omitChairIds', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        const appointments = await getAppointmentsFromReminder({ reminder, startDate, endDate });
+        expect(appointments.length).toBe(0);
+      });
+
+      test('should return 2 appointments because we updated omitChairIds on reminder to be []', async () => {
+        const startDate = date(2017, 7, 8, 8);
+        const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
+        const newReminder = await reminder.update({ omitChairIds: [] });
         const appts = await getAppointmentsFromReminder({ reminder: newReminder, startDate, endDate });
         expect(appts.length).toBe(2);
         expect(appts[0].patientId).toBe(patients[0].id);
@@ -510,7 +510,7 @@ describe('RemindersList Calculation Library', () => {
         ]);
       });
 
-      test.only('should return 2 appointments because they have no omitReminderIds that relate to this reminder', async () => {
+      test('should return 2 appointments because they have no omitReminderIds that relate to this reminder', async () => {
         const startDate = date(2017, 7, 8, 8);
         const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
         const appts = await getAppointmentsFromReminder({ reminder, startDate, endDate });
@@ -519,7 +519,7 @@ describe('RemindersList Calculation Library', () => {
         expect(appts[1].patientId).toBe(patients[1].id);
       });
 
-      test.only('should return 1 appointments because 1 has a omitReminderId that relates to this reminder', async () => {
+      test('should return 1 appointments because 1 has a omitReminderId that relates to this reminder', async () => {
         const startDate = date(2017, 7, 8, 8);
         const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
         await patients[0].update({ omitReminderIds: [reminder.id] })
@@ -528,7 +528,7 @@ describe('RemindersList Calculation Library', () => {
         expect(appts[0].patientId).toBe(patients[1].id);
       });
 
-      test.only('should return 2 appointments because 1 has a omitReminderId that does not relate to this reminder', async () => {
+      test('should return 2 appointments because 1 has a omitReminderId that does not relate to this reminder', async () => {
         const startDate = date(2017, 7, 8, 8);
         const endDate = date(2017, 7, 8, 10); // make it 2 hours because we don't include endDate in boundary
         await patients[0].update({ omitReminderIds: [uuid()] })

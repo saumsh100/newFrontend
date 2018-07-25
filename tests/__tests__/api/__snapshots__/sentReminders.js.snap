@@ -111,6 +111,7 @@ Object {
         "isDaily": false,
         "isDeleted": false,
         "lengthSeconds": null,
+        "omitChairIds": Array [],
         "omitPractitionerIds": Array [],
         "primaryType": "email",
         "primaryTypes": Array [

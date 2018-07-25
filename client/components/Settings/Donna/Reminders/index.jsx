@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
@@ -7,13 +8,10 @@ import {
   updateEntityRequest,
   fetchEntities,
   createEntityRequest,
-  deleteEntityRequest,
 } from '../../../../thunks/fetchEntities';
 import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
-import {
-  ordinalSuffix,
-  convertIntervalToMs,
-} from '../../../../../server/util/time';
+import { accountShape } from '../../../library/PropTypeShapes';
+import { ordinalSuffix, convertIntervalToMs } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
@@ -109,6 +107,7 @@ class Reminders extends Component {
     const {
       isCustomConfirm,
       customConfirmString,
+      omitChairIdsString,
       omitPractitionerIdsString,
       isDaily,
     } = newValues;
@@ -123,9 +122,10 @@ class Reminders extends Component {
       newValues.dailyRunTime = null;
     }
 
-    if (omitPractitionerIdsString) {
-      newValues.omitPractitionerIds = omitPractitionerIdsString.split(',');
-    }
+    newValues.omitChairIds = omitChairIdsString ? omitChairIdsString.split(',') : [];
+    newValues.omitPractitionerIds = omitPractitionerIdsString
+      ? omitPractitionerIdsString.split(',')
+      : [];
 
     const alert = {
       success: {
@@ -208,27 +208,19 @@ class Reminders extends Component {
 
     let previewComponent = null;
     if (selectedReminder) {
-      previewComponent = (
-        <ReminderPreview reminder={selectedReminder} account={activeAccount} />
-      );
+      previewComponent = <ReminderPreview reminder={selectedReminder} account={activeAccount} />;
     }
 
     // Used to display the cogs button to open Advanced Settings
     const isSuperAdmin = role === 'SUPERADMIN';
     const advancedReminder = reminders.get(selectedAdvancedReminderId);
-    const advancedIndex = reminders
-      .toArray()
-      .findIndex(r => r.id === selectedAdvancedReminderId);
+    const advancedIndex = reminders.toArray().findIndex(r => r.id === selectedAdvancedReminderId);
 
     return (
       <CommunicationSettingsCard
         title="Reminders Settings"
         rightActions={
-          <Button
-            color="blue"
-            onClick={this.toggleAdding}
-            data-test-id="button_createNewReminder"
-          >
+          <Button color="blue" onClick={this.toggleAdding} data-test-id="button_createNewReminder">
             Add
           </Button>
         }
@@ -289,10 +281,7 @@ class Reminders extends Component {
           onEscKeyDown={this.toggleAdding}
           onOverlayClick={this.toggleAdding}
         >
-          <CreateRemindersForm
-            formName="newReminder"
-            sendEdit={this.newReminder}
-          />
+          <CreateRemindersForm formName="newReminder" sendEdit={this.newReminder} />
         </DialogBox>
       </CommunicationSettingsCard>
     );
@@ -300,23 +289,20 @@ class Reminders extends Component {
 }
 
 Reminders.propTypes = {
-  activeAccount: PropTypes.object,
-  reminders: PropTypes.object,
-  role: PropTypes.string,
-  updateEntityRequest: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
-  fetchEntities: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  reset: PropTypes.func,
+  activeAccount: PropTypes.shape(accountShape).isRequired,
+  reminders: PropTypes.shape({
+    get: PropTypes.func.isRequired,
+  }).isRequired,
+  role: PropTypes.string.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {
   const role = auth.get('role');
-  const activeAccount = entities.getIn([
-    'accounts',
-    'models',
-    auth.get('accountId'),
-  ]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const reminders = entities
     .getIn(['reminders', 'models'])
     .filter(r => !r.isDeleted && !!r.interval)
@@ -334,7 +320,6 @@ function mapDispatchToProps(dispatch) {
     {
       fetchEntities,
       createEntityRequest,
-      deleteEntityRequest,
       updateEntityRequest,
       reset,
     },
@@ -342,9 +327,6 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(Reminders);

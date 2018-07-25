@@ -14,6 +14,7 @@ const reminderShape = {
   customConfirmData: PropTypes.string,
   isConfirmable: PropTypes.bool,
   omitPractitionerIds: PropTypes.arrayOf(PropTypes.string),
+  omitChairIds: PropTypes.arrayOf(PropTypes.string),
   ignoreSendIfConfirmed: PropTypes.bool,
   isDaily: PropTypes.bool,
   dailyRunTime: PropTypes.string,

@@ -31,7 +31,9 @@
         "components": ["Link"],
         "specialLink": ["to"]
       }
-    ]
+    ],
+
+    "consistent-return": "warn"
   },
   "settings": {
     "import/resolver": {

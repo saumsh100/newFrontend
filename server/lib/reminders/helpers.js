@@ -140,6 +140,10 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
         $lt: end,
       },
 
+      chairId: {
+        $notIn: reminder.omitChairIds,
+      },
+
       practitionerId: {
         $notIn: reminder.omitPractitionerIds,
       },

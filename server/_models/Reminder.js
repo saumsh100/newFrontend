@@ -68,6 +68,12 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    omitChairIds: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: [],
+      allowNull: false,
+    },
+
     omitPractitionerIds: {
       type: DataTypes.ARRAY(DataTypes.UUID),
       defaultValue: [],
