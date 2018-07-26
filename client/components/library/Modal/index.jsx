@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Card from '../Card';
 import styles from './styles.scss';
@@ -15,7 +16,7 @@ class Modal extends Component {
 
   componentDidMount() {
     if (this.props.active && this.props.onEscKeyDown) {
-      document.body.addEventListener('keydown', this.handleEscKey);
+      document.body.addEventListener('keydown', this.handleEscKeyDown);
     }
   }
 
@@ -64,7 +65,7 @@ class Modal extends Component {
 
     return (
       <div className={modalContainerClassName}>
-        {showOverlay ? (
+        {showOverlay && (
           <div
             role="presentation"
             onClick={() => {
@@ -72,7 +73,7 @@ class Modal extends Component {
             }}
             className={backDropClassName}
           />
-        ) : null}
+        )}
         <Card className={modalBodyClassName} noBorder>
           {children}
         </Card>

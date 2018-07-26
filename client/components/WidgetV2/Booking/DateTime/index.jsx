@@ -35,7 +35,7 @@ import styles from './styles.scss';
  * taking in consideration the account's timezone.
  * It also group times that are on the same timeframe (morning, afternoon, evening).
  *
- * @param momentDate
+ * @param selectedDate
  * @param availabilities
  * @param accountTimezone
  * @returns {*}
@@ -71,6 +71,7 @@ class DateTime extends Component {
     this.changeSelectedDate = this.changeSelectedDate.bind(this);
     this.selectAvailability = this.selectAvailability.bind(this);
     this.joinWaitlist = this.joinWaitlist.bind(this);
+    this.handleClosingModal = this.handleClosingModal.bind(this);
   }
 
   componentDidMount() {
@@ -99,9 +100,12 @@ class DateTime extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.floatingButtonIsClicked && !prevProps.floatingButtonIsClicked) {
       this.props.setIsClicked(false);
-      this.props.hideButton();
       this.confirmDateTime();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.hideButton();
   }
 
   /**
@@ -117,6 +121,10 @@ class DateTime extends Component {
       this.props.setSelectedStartDate(date);
       this.props.fetchAvailabilities();
     }
+  }
+
+  handleClosingModal() {
+    return this.setState({ isModal: false });
   }
 
   /**
@@ -348,7 +356,7 @@ class DateTime extends Component {
             {availabilitiesDisplay()}
           </div>
         </Element>
-        {this.state.isModal && <Join history={history} />}
+        {this.state.isModal && <Join toCloseModal={this.handleClosingModal} history={history} />}
       </Element>
     );
   }

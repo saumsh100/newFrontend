@@ -5,10 +5,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Button } from '../../../../library';
 import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
-import { resetWaitlist as resetWaitlistAction } from '../../../../../actions/availabilities';
+import { resetWaitlist } from '../../../../../actions/availabilities';
+import { hideButton } from '../../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
 
-function Join({ isAuth, history, resetWaitlist }) {
+function Join({
+  isAuth, history, toCloseModal, ...props
+}) {
   /**
    * Check if the user is logged, if it's send him to the patient-information route,
    * otherwise send him to the login
@@ -20,17 +23,24 @@ function Join({ isAuth, history, resetWaitlist }) {
    * reset the wailist information, so if he joined by mistake or
    * change his mind, he'll be able to not join the waitlist.
    *
-   * @param {bool} confirmWaitlist
+   * @param {boolean} confirmWaitlist
    */
   const handleWaitlistConfirmation = (confirmWaitlist) => {
+    props.hideButton();
     if (!confirmWaitlist) {
-      resetWaitlist();
+      props.resetWaitlist();
     }
     return history.push(confirmWaitlist ? './waitlist/select-dates' : linkTo);
   };
 
   return (
-    <Modal active className={styles.customDialog} containerStyles={styles.modalContainerStyles}>
+    <Modal
+      active
+      onOverlayClick={toCloseModal}
+      onEscKeyDown={toCloseModal}
+      className={styles.customDialog}
+      containerStyles={styles.modalContainerStyles}
+    >
       <h3 className={styles.title}>
         Join our waitlist and be notified if an earlier appointment becomes available?
       </h3>
@@ -55,7 +65,8 @@ function mapStateToProps({ auth }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      resetWaitlist: resetWaitlistAction,
+      resetWaitlist,
+      hideButton,
     },
     dispatch,
   );
@@ -65,6 +76,8 @@ Join.propTypes = {
   resetWaitlist: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   isAuth: PropTypes.bool.isRequired,
+  hideButton: PropTypes.func.isRequired,
+  toCloseModal: PropTypes.func.isRequired,
 };
 
 export default connect(
