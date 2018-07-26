@@ -54,6 +54,10 @@ class Widget extends Component {
       path: '/widgets/:accountId/app/book/review',
     });
 
+    const isFirstRoute = !!matchPath(pathname, {
+      path: '/widgets/:accountId/app/book/reason',
+    });
+
     const isCompleteRoute = !!matchPath(pathname, {
       path: '/widgets/:accountId/app/book/complete',
     });
@@ -67,6 +71,7 @@ class Widget extends Component {
     const isBookingRoute = !isAccountTab && parsedSearch.tab === BOOKING_TAB;
 
     const tabState = {
+      isFirstRoute,
       isEditing,
       isReviewRoute,
       isAccountRoute,

@@ -15,7 +15,6 @@ import Service from '../../../../entities/models/Service';
 import { refreshAvailabilitiesState } from '../../../../actions/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { capitalizeFirstLetter } from '../../../Utils';
-import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
 import { BookingConfirmedSVG } from '../../SVGs';
 import styles from './styles.scss';
 import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
@@ -84,18 +83,6 @@ function Complete({
      * It shows the days that are on the waitlist.
      */
     return `From: ${firstDate} - To: ${lastDate}`;
-  };
-  const waitlistUnavailableDates = () => {
-    if (waitlist.unavailableDates.length === 0) {
-      return 'Not Provided';
-    }
-    /**
-     * It shows the days that are on the unavailableDates list.
-     */
-    return waitlist.unavailableDates
-      .sort(sortAsc)
-      .map(value => dateFormatter(value, timezone, 'MMM Do'))
-      .join(', ');
   };
 
   /**
@@ -274,9 +261,6 @@ function Complete({
                 <strong>Available Dates:</strong> {waitlistDates()}
               </p>
               <p className={styles.requestInfo}>
-                <strong>Unavailable Dates:</strong> {waitlistUnavailableDates()}
-              </p>
-              <p className={styles.requestInfo}>
                 <strong>Available Times:</strong> {waitlistTimes()}
               </p>
             </div>
@@ -358,7 +342,6 @@ Complete.propTypes = {
   refreshAvailabilitiesState: PropTypes.func.isRequired,
   waitlist: PropTypes.shape({
     dates: PropTypes.arrayOf(PropTypes.string),
-    unavailableDates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
   }),
 };
@@ -374,7 +357,6 @@ Complete.defaultProps = {
   selectedService: '',
   waitlist: {
     dates: [],
-    unavailableDates: [],
     times: [],
   },
 };

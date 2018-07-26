@@ -16,7 +16,7 @@
 .weekDay,
 .month {
   font-size: 10px;
-  flex: 0 0 49%;
+  flex: 1 0 49%;
 }
 .month {
   width: 100%;
@@ -46,7 +46,7 @@
   margin: var(--widget-spacer) 0;
 }
 .day {
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 14px;
@@ -66,7 +66,7 @@
 }
 
 .caption {
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
   color: $widget-grey;
   font-weight: 500;
   font-size: 16px;

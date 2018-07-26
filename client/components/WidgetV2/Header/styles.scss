@@ -1,7 +1,7 @@
 @import '../../../ui.scss';
 
 .pageTitle {
-  font-size: 17px;
+  font-size: 16px;
   color: $widget-white;
   letter-spacing: 0;
   text-align: center;
@@ -45,7 +45,7 @@
   }
 }
 
-.backComplete {
+.hideBack {
   opacity: 0;
   visibility: hidden;
 }
@@ -96,7 +96,7 @@
   flex: 1;
   align-self: flex-start;
   .title {
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 18px;
     color: $widget-grey-dark;
@@ -143,12 +143,11 @@
   .tab {
     cursor: pointer;
     flex: 1;
-    font-family: 'Roboto';
+    font-family: 'Roboto', sans-serif;
     font-weight: 500;
     font-size: 14px;
     letter-spacing: 0;
     text-align: center;
-    border-bottom: 2px solid transparent;
     background-color: transparent;
     margin: 0;
     line-height: 16px;

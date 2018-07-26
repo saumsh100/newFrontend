@@ -31,7 +31,7 @@ class Header extends Component {
     const {
       history,
       isBooking,
-      tabState: { isCompleteRoute },
+      tabState: { isCompleteRoute, isFirstRoute },
     } = this.props;
 
     return (
@@ -39,7 +39,7 @@ class Header extends Component {
         <div className={styles.headerContainer}>
           <div
             className={classNames(styles.headerLeftArea, {
-              [styles.backComplete]: isCompleteRoute,
+              [styles.hideBack]: isCompleteRoute || isFirstRoute,
             })}
           >
             <BackButton history={history} goBack={this.goBack} />

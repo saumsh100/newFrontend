@@ -16,11 +16,8 @@ import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursSha
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
-import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
-import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
 import { SummaryItemFactory } from './SummaryItem';
 import { handleAvailabilitiesTimes } from './helpers';
-
 import {
   showButton,
   hideButton,
@@ -30,23 +27,6 @@ import {
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
-
-/**
- * With the provided unavailableDates array,
- * return not provided if the array is empty,
- * otherwhise sort it, format it and add a comma after each values.
- *
- * @param {array} unavailableDates
- */
-const waitlistUnavailableDates = (unavailableDates, timezone) => {
-  if (!unavailableDates.length) return NOT_PROVIDED_TEXT;
-
-  // It shows the days that are on the unavailableDates list.
-  return unavailableDates
-    .sort(sortAsc)
-    .map(value => dateFormatter(value, timezone, 'MMM Do'))
-    .reduce(toHumanCommaSeparated);
-};
 
 /**
  * Display the dates selected on the waitlist's steps.
@@ -121,10 +101,7 @@ class Review extends PureComponent {
 
   render() {
     const {
-      canConfirm,
-      confirmedAvailability,
       dateAndTime,
-      hasWaitList,
       history,
       isBooking,
       location,
@@ -187,7 +164,10 @@ class Review extends PureComponent {
     /**
      * Returns the component that renders the title, value and edit button for the provided data.
      */
-    const SummaryItem = SummaryItemFactory({ location, history });
+    const SummaryItem = SummaryItemFactory({
+      location,
+      history,
+    });
 
     return (
       <div className={styles.scrollableContainer}>
@@ -213,11 +193,6 @@ class Review extends PureComponent {
                   label="Available Dates"
                   value={waitlistDates(waitlist.dates, timezone)}
                   link={b('waitlist/select-dates')}
-                />
-                <SummaryItem
-                  label="Unavailable Dates"
-                  value={waitlistUnavailableDates(waitlist.unavailableDates, timezone)}
-                  link={b('waitlist/days-unavailable')}
                 />
                 <SummaryItem
                   label="Times"

@@ -2,7 +2,7 @@
 
 .waitlistIndex {
   font-size: 13px;
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
   color: $widget-grey;
   display: flex;
   flex-wrap: wrap;
@@ -11,7 +11,7 @@
 .waitlistKey {
   width: 100%;
   display: block;
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
 }
 .waitlistValue {
   display: flex;
