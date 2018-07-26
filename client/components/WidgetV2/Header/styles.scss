@@ -33,7 +33,7 @@
 
 @keyframes move {
   100% {
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 }
 
@@ -69,7 +69,7 @@
 .iconButton {
   justify-content: center;
   font-size: 0;
-  padding: 0px;
+  padding: 0;
   box-sizing: border-box;
   display: flex;
   cursor: pointer;

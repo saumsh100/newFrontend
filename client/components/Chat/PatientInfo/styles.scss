@@ -32,12 +32,12 @@
 }
 
 .sendButton {
-  padding: 20px 0 0 0;
+  padding: 20px 0 0;
   opacity: 0.6;
 }
 
 .sendButtonOff {
-  padding: 20px 0 0 0;
+  padding: 20px 0 0;
   opacity: 0.2;
 }
 
@@ -65,7 +65,7 @@
   position: absolute;
   right: 10px;
   top: 35%;
-  padding: 2px 6px 0px 6px;
+  padding: 2px 6px 0;
   background-color: $primary-light-blue;
   border-radius: 4px;
   color: white;
@@ -129,7 +129,7 @@
   color: #2e3845;
   font-size: 16px;
   text-align: center;
-  margin: 15px auto 15px auto;
+  margin: 15px auto;
   font-weight: 900;
 }
 
@@ -147,7 +147,7 @@
 }
 
 .chatSearch {
-  padding: 0px;
+  padding: 0;
 }
 
 .sendMessage {

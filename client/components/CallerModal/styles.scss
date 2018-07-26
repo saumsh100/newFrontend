@@ -10,7 +10,7 @@
 
   button {
     width: 100%;
-    border-radius: 0px;
+    border-radius: 0;
     height: 50px;
     box-shadow: none;
   }
@@ -106,7 +106,7 @@
   //disabled for now!
   display: none;
   position: absolute;
-  top: 0px;
+  top: 0;
   color: $primary-dark;
   animation: pulse 1s ease infinite;
 }

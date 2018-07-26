@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  padding: 30px 30px 20px 30px;
+  padding: 30px 30px 20px;
   margin-right: 10px;
 
   @media screen and (max-width: 500px) {
@@ -31,7 +31,7 @@
     font-size: 14px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    box-shadow: 0px 2px 0px -4px rgba(0,0,0,0.33);
+    box-shadow: 0 2px 0 -4px rgba(0,0,0,0.33);
 
     &__header {
       composes: fontMedium from 'sass-loader!../../../fonts.scss';
@@ -71,7 +71,7 @@
       font-size: 12px;
       font-weight: $large-weight;
       color: lighten($primary-color, 5%);
-      margin: 10px 0 10px 0;
+      margin: 10px 0;
     }
     &__title {
       color: $primary-green;
@@ -81,10 +81,10 @@
     }
     &__rating {
       color: $primary-star;
-      margin: 10px 0 10px 0;
+      margin: 10px 0;
     }
     &__preview {
-      letter-spacing: 0px;
+      letter-spacing: 0;
       line-height: 20px;
       color: $primary-dark;
       composes: letterSpacing from 'sass-loader!../../../fonts.scss';
@@ -102,7 +102,7 @@
     &__createdAt {
       color: lighten($primary-darkgrey, 20%);
       composes: subHeaderSmall from 'sass-loader!../../../fonts.scss';
-      margin: 10px 0 10px 0;
+      margin: 10px 0;
     }
   }
 
@@ -131,12 +131,12 @@
   &__respondBlock {
     height: 35px;
     box-sizing: border-box;
-    padding: 10px 20px 10px 20px;
+    padding: 10px 20px;
     background-color: $primary-blue;
     border-bottom: 2px solid $primary-blue;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    box-shadow: 0px 11px 16px -10px rgba(0,0,0,0.33);
+    box-shadow: 0 11px 16px -10px rgba(0,0,0,0.33);
     color: $primary-white;
     display: flex;
     flex-direction: row;
@@ -228,7 +228,7 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  padding: 0px 25px;
+  padding: 0 25px;
 }
 
 .howToLink {

@@ -4,7 +4,7 @@
   margin-left: 15px;
   height: auto;
   background: $primary-white;
-  padding: 25px 15px 15px 15px;
+  padding: 25px 15px 15px;
   margin-bottom: 20px;
 }
 
@@ -65,7 +65,7 @@
 }
 
 .collapsible {
-  padding: 25px 15px 15px 15px;
+  padding: 25px 15px 15px;
   animation: fadein 0.5s ease;
   opacity: 1;
   background-color: #fafafa;
@@ -91,7 +91,7 @@
     padding-bottom: 25px;
     height: 40px;
     &:last-child {
-      padding-bottom: 0px;
+      padding-bottom: 0;
     }
   }
 

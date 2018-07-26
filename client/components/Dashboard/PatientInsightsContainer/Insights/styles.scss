@@ -9,8 +9,8 @@
   box-sizing: border-box;
 
   @media screen and (max-width: 420px) {
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -50,7 +50,7 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  padding: 30px 40px 25px 40px;
+  padding: 30px 40px 25px;
   box-sizing: border-box;
   border-bottom: 1px solid $primary-grey;
   align-items: center;
@@ -65,14 +65,14 @@
   }
 
   &:last-child {
-    border-bottom: 0px;
+    border-bottom: 0;
   }
 }
 
 .innerInsightsWrapper {
   @media screen and (max-width: 1254px) {
-    padding-left: 0px;
-    border-left: 0px;
+    padding-left: 0;
+    border-left: 0;
   }
 
   min-height: 35px;
@@ -96,7 +96,7 @@
   justify-content: center;
   margin-left: 25px;
   @media screen and (max-width: 1174px) {
-    margin-left: 0px;
+    margin-left: 0;
   }
 }
 
@@ -105,7 +105,7 @@
   box-sizing: border-box;
 
   &:last-child {
-    padding-bottom: 0px;
+    padding-bottom: 0;
   }
 
   @media screen and (max-width: 1174px) {
@@ -145,7 +145,7 @@
   align-items: center;
 
   @media screen and (max-width: 420px) {
-    margin-left: 0px;
+    margin-left: 0;
   }
 }
 
@@ -198,7 +198,7 @@
     justify-content: center;
 
     @media screen and (max-width: 1174px) {
-      border-left: 0px;
+      border-left: 0;
       margin-bottom: 15px;
       flex: 0 0 25%;
       align-items: flex-start;

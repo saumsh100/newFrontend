@@ -74,13 +74,13 @@
 }
 
 .preferencesWrapper {
-  padding: 40px 20px 0 20px;
+  padding: 40px 20px 0;
   // padding-bottom: 20px;
   display: flex;
   flex-direction: row;
   @media screen and (max-width: $widget-mobile-width) {
     flex-direction: column;
-    padding: 20px 0 0 0;
+    padding: 20px 0 0;
   }
 }
 

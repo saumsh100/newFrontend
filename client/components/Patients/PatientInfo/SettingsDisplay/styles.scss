@@ -53,7 +53,7 @@
 }
 
 .content {
-  padding: 0px 5px 0px 5px;
+  padding: 0 5px;
 }
 
 .grid {
@@ -67,8 +67,8 @@
   margin-bottom: 20px;
 }
 .row:last-child {
-  border-bottom: 0px;
-  margin-bottom: 0px;
+  border-bottom: 0;
+  margin-bottom: 0;
 }
 
 .colLeft {
@@ -91,7 +91,7 @@
 }
 
 .formContainer {
-  padding: 15px 25px 5px 25px;
+  padding: 15px 25px 5px;
   background: #FFFFFF;
 }
 

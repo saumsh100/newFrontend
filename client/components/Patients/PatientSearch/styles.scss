@@ -27,7 +27,7 @@
   composes: fontDefault from 'sass-loader!../../../fonts.scss';
   height: 50px;
   background-color: $search-bg;
-  padding: 0px;
+  padding: 0;
 
   input {
     font-size: 13px;

@@ -21,7 +21,7 @@
 }
 
 @mixin requestCardMobile-mixin() {
-  border-top: 0px;
+  border-top: 0;
 }
 
 .requestCard {
@@ -139,8 +139,8 @@
   }
 
   &__age {
-    margin-right: 0px;
-    padding-right: 0px;
+    margin-right: 0;
+    padding-right: 0;
     &:hover {
       color: $primary-color;
     }
@@ -243,7 +243,7 @@
       color: darken($inactive-color, 10%);
     }
     @media screen and (max-width: 1250px) {
-      margin-right: 0px;
+      margin-right: 0;
       flex-direction: column;
       margin-bottom: 10px;
     }

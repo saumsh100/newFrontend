@@ -32,7 +32,7 @@
     align-items: center;
     flex-direction: row;
     //margin: 10px 0;
-    margin: 10px 0px 10px 15px;
+    margin: 10px 0 10px 15px;
     &__left {
       //width: 55%;
       display: flex;
@@ -58,7 +58,7 @@
       }
 
       > button {
-        padding: 0px;
+        padding: 0;
       }
     }
   }

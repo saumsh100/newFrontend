@@ -20,11 +20,11 @@
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   color: $primary-dark;
   font-size: 23px;
-  padding: 20px 0px 10px 20px;
+  padding: 20px 0 10px 20px;
 }
 
 .eventsContainer {
-  padding: 30px 30px 10px 30px;
+  padding: 30px 30px 10px;
   display: flex;
   max-height: 100%;
   overflow: scroll;

@@ -25,7 +25,7 @@
   transition: 300ms all cubic-bezier(0.4, 0, 0.2, 1);
   border-style: solid;
   border-color: $primary-white;
-  border-width: 1px 1px 0px 1px;
+  border-width: 1px 1px 0;
   &_mark {
     overflow: hidden;
   }
@@ -98,5 +98,5 @@
 
 .appPopover > :global(svg.Popover-tip) {
   fill: white;
-  filter: drop-shadow(0px 2px 38px rgba(0, 0, 0, 0.14));
+  filter: drop-shadow(0 2px 38px rgba(0, 0, 0, 0.14));
 }

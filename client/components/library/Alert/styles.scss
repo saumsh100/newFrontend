@@ -71,7 +71,7 @@
 .alert--error {
   visibility: visible;
   opacity: 1;
-  margin-top: 0px;
+  margin-top: 0;
   border: 1px solid $primary-color;
   border-left: 10px solid $primary-color;
   background-color: $primary-white;
@@ -85,7 +85,7 @@
 .alert--success {
   visibility: visible;
   opacity: 1;
-  margin-top: 0px;
+  margin-top: 0;
   border: 1px solid $primary-green;
   border-left: 10px solid $primary-green;
   background-color: $primary-white;

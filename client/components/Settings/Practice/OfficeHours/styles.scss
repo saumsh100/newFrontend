@@ -66,13 +66,13 @@
 }
 
 .button {
-  margin: 15px 15px 15px 0px;
+  margin: 15px 15px 15px 0;
   margin-right: 40px;
 }
 
 .orSpacer {
   border-top: outset #b4b4b5;
-  margin: 30px auto 0 auto;
+  margin: 30px auto 0;
   width: 90%;
   position: relative;
   border-width: thin;
@@ -83,7 +83,7 @@
 }
 
 .dayGrid {
-  padding: 5px 5px 5px 5px;
+  padding: 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;

@@ -3,7 +3,7 @@
 .formContainer {
   min-height: 460px;
   background: $primary-white;
-  padding: 35px 0px 25px;
+  padding: 35px 0 25px;
   overflow: auto;
 
   @media screen and (max-width: 576px) {
@@ -21,7 +21,7 @@
 }
 
 .withPadding {
-  padding: 0px 25px;
+  padding: 0 25px;
 }
 
 .patientSearchClass {
@@ -41,7 +41,7 @@
   }
 
   > input {
-    padding-left: 0px;
+    padding-left: 0;
     &::placeholder {
       color: $primary-darkgrey;
     }

@@ -15,7 +15,7 @@
 }
 
 .addSegmentNameRow {
-  padding: 0 0 20px 0;
+  padding: 0 0 20px;
 }
 
 .gauge {
@@ -84,8 +84,8 @@
     &:before {
       position: absolute;
       content: " ";
-      width: 0px;
-      height: 0px;
+      width: 0;
+      height: 0;
       border-top: 5px solid transparent;
       border-bottom: 5px solid transparent;
       border-left: 5px solid $clr-bg-dark-grey;
@@ -253,7 +253,7 @@
 
 .patientSearch {
   display: inline-block;
-  border: 0px solid $primary-white;
+  border: 0 solid $primary-white;
   width: 100%;
   height: 145px;
   align-items: center;

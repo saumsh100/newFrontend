@@ -35,7 +35,7 @@
 
 .body {
   background-color: $primary-white;
-  padding: 15px 15px 0px 15px;
+  padding: 15px 15px 0;
   height: auto;
   min-height: 200px;
   max-height: 290px;
@@ -72,8 +72,8 @@
     textarea {
       color: black;
       font-family: $medium-font;
-      border-bottom: 0px;
-      padding: 0px;
+      border-bottom: 0;
+      padding: 0;
       height: auto;
     }
   }
@@ -85,7 +85,7 @@
 }
 
 .textAreaGroup {
-  padding: 0px;
+  padding: 0;
 }
 
 .footer {

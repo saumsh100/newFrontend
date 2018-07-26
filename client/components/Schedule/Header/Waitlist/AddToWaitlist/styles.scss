@@ -56,7 +56,7 @@
 .groupStyle {
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 0px;
+  padding-bottom: 0;
 }
 
 .suggestionOpen {
@@ -86,7 +86,7 @@
 }
 
 .patientContainer {
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   width: 100%;

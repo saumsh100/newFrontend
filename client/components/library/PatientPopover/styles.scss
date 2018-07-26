@@ -16,7 +16,7 @@
 
 .card {
   width: auto;
-  box-shadow: -2px 0px 45px -12px rgba(0, 0, 0, 0.75);
+  box-shadow: -2px 0 45px -12px rgba(0, 0, 0, 0.75);
   min-width: 300px;
 }
 
@@ -58,7 +58,7 @@
 
 .body {
   background-color: $primary-white;
-  padding: 15px 15px 10px 15px;
+  padding: 15px 15px 10px;
   height: auto;
   min-height: 200px;
   max-height: 290px;
@@ -96,8 +96,8 @@
     textarea {
       color: black;
       font-family: $medium-font;
-      border-bottom: 0px;
-      padding: 0px;
+      border-bottom: 0;
+      padding: 0;
       height: auto;
     }
   }
@@ -109,7 +109,7 @@
 }
 
 .textAreaGroup {
-  padding: 0px;
+  padding: 0;
 }
 
 .footer {

@@ -60,7 +60,7 @@ $empty-grey: darken(lightgrey, 5%);
 }
 
 .optionDiv {
-  padding: 0px !important;
+  padding: 0 !important;
   font-family: $dashboard-font !important;
   white-space: normal !important;
 }
@@ -131,7 +131,7 @@ $empty-grey: darken(lightgrey, 5%);
   font-weight: normal;
   position: absolute;
   pointer-events: none;
-  left: 0px;
+  left: 0;
   transition: 0.2s ease all;
   top: 6px;
   font-size: $medium-size;
@@ -140,7 +140,7 @@ $empty-grey: darken(lightgrey, 5%);
 .filled {
   position: absolute;
   top: -10px !important;
-  left: 0px !important;
+  left: 0 !important;
   font-size: $extra-small-size !important;
 }
 
@@ -169,8 +169,8 @@ $empty-grey: darken(lightgrey, 5%);
 
 .hiddenInput {
   position: absolute;
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
   opacity: 0;
 }
 

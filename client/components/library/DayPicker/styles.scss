@@ -24,7 +24,7 @@
 
 .calendarIcon {
   position: absolute;
-  right: 0px;
+  right: 0;
 }
 
 .wrapperRange {
@@ -50,8 +50,8 @@
 
 .inputGroup {
   width: 140px;
-  padding-bottom: 0px;
-  padding-top: 0px;
+  padding-bottom: 0;
+  padding-top: 0;
   input {
     padding-left: 20px;
     border: 1px solid $primary-grey;

@@ -29,7 +29,7 @@
   background-color: #313843;
   height: 45px;
   color: $primary-white;
-  padding: 0px 20px 0px 20px;
+  padding: 0 20px;
   font-size: 18px;
 }
 
@@ -37,7 +37,7 @@
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
 }
 .cardHeader {
-  padding-top: 0px !important;
+  padding-top: 0 !important;
   color: $primary-white !important;
 }
 
@@ -55,7 +55,7 @@
   width: 100%;
   display: flex;
   flex: 0 0 auto;
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
   border-top: 1px solid $primary-grey;
   box-sizing: border-box;
   justify-content: flex-end;

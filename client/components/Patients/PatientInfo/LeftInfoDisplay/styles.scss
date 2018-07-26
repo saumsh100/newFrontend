@@ -42,7 +42,7 @@
 }
 
 .subHeader:first-child {
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 .continuingCareHeader {
@@ -84,7 +84,7 @@
 }
 .grid {
   box-sizing: border-box;
-  padding: 45px 35px 20px 35px;
+  padding: 45px 35px 20px;
   //border-top: 1px solid $primary-grey;
 }
 
@@ -94,10 +94,10 @@
   padding-bottom: 20px;
 }
 .row:first-child {
-  padding-top: 0px;
+  padding-top: 0;
 }
 .row:last-child {
-  border-bottom: 0px;
+  border-bottom: 0;
 }
 
 .remindersRow,

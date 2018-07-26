@@ -5,7 +5,7 @@
 }
 
 .filterItem {
-  padding: 0px 10px 0px 10px;
+  padding: 0 10px;
   color: $primary-darkgrey;
   background: white;
   &:hover {
@@ -48,7 +48,7 @@
   align-content: center;
   justify-content: center;
   composes: fontSmall from 'sass-loader!../../../../../fonts.scss';
-  padding: 6px 11px 6px 11px;
+  padding: 6px 11px;
   border-radius: 16px;
   box-sizing: border-box;
   background: $primary-light-grey;

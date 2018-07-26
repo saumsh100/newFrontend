@@ -8,7 +8,7 @@ $padding-size-border: 10px;
 }
 
 .topBarContainerCollapsed {
-  padding-left: 0px;
+  padding-left: 0;
 }
 
 .topBarContainerUnCollapsed {
@@ -255,7 +255,7 @@ $padding-size-border: 10px;
 }
 .iconSearchOpen {
   pointer-events: none;
-  border: 0px;
+  border: 0;
   background-color: transparent !important;
   color: $primary-dark;
 }
@@ -265,7 +265,7 @@ $padding-size-border: 10px;
   height: 100%;
   border: 1px solid darken(#f4f4f4, 10%);
   border-radius: 45px;
-  padding: 0px;
+  padding: 0;
   input {
     height: 100%;
     padding-left: 33px;
@@ -327,7 +327,7 @@ $padding-size-border: 10px;
 
 @keyframes animateThis {
   0% {
-    width: 0px;
+    width: 0;
   }
   100% {
     width: 600px;

@@ -26,7 +26,7 @@
   align-items: center;
   border-bottom: 0;
   height: 43px;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px;
   background-color: #313843;
   font-size: 18px;
   color: $primary-white;
@@ -38,7 +38,7 @@
 .footer {
   display: flex;
   justify-content: flex-end;
-  padding: 20px 20px 20px 20px;
+  padding: 20px;
   border-top: 1px solid $primary-grey;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .searchDropDownBar {
-  padding: 0px 20px 0px 20px;
+  padding: 0 20px;
   box-sizing: border-box;
 }
 
@@ -134,7 +134,7 @@
 }
 
 .grid {
-  padding: 10px 20px 0px 20px;
+  padding: 10px 20px 0;
   box-sizing: border-box;
 }
 
@@ -198,8 +198,8 @@
     padding-bottom: 1px;
 
     label {
-      margin-left: 0px;
-      margin-right: 0px;
+      margin-left: 0;
+      margin-right: 0;
     }
   }
 }
@@ -222,7 +222,7 @@
     height: 80px;
     color: black;
     background-color: #f4f4f4;
-    border-bottom: 0px;
+    border-bottom: 0;
   }
 
   label {
@@ -240,7 +240,7 @@
 }
 
 .patientContainer {
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   width: 100%;
@@ -264,7 +264,7 @@
 .addNewPatient {
   width: 100%;
   background-color: #efefef;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px;
   box-sizing: border-box;
   color: #929293;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
@@ -282,7 +282,7 @@
 .close {
   margin-left: auto;
   cursor: pointer;
-  padding: 0px;
+  padding: 0;
   background: none;
 }
 

@@ -31,7 +31,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: 40px 0 20px 0;
+  padding: 40px 0 20px;
 }
 
 .avatar {
@@ -43,11 +43,11 @@
   text-align: center;
   width: 75%;
   max-width: 400px;
-  margin: 0px auto;
+  margin: 0 auto;
 }
 
 .starsWrapper {
-  padding: 40px 0 10px 0;
+  padding: 40px 0 10px;
   box-sizing: border-box;
 }
 
@@ -59,7 +59,7 @@
   @extend .text-centered;
   @extend .row;
   box-sizing: border-box;
-  padding: 20px 10px 10px 10px;
+  padding: 20px 10px 10px;
   margin: 0 auto; // when you add max-width you need this
   // max-width: 210px;
   font-size: 1.8em;
@@ -102,7 +102,7 @@
 
 .from {
   @extend .message;
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 .blurBackground {

@@ -40,7 +40,7 @@
   width: 100%;
   border-top: 5px solid $inactive-color;
   background-color: $primary-white;
-  margin: 0px 5px;
+  margin: 0 5px;
   position: relative;
 }
 
@@ -102,18 +102,18 @@
       min-height: 635px;
     }
     @media screen and (max-width: 450px) {
-      padding: 0 5px 45px 5px;
+      padding: 0 5px 45px;
     }
   }
 }
 
 
 .padding {
-  padding: 15px 5px 5px 5px;
+  padding: 15px 5px 5px;
 }
 
 .paddingFlexBox {
-  padding: 20px 5px 10px 5px;
+  padding: 20px 5px 10px;
 }
 
 .paddingLine {
@@ -288,7 +288,7 @@
 
   &__rowContainer {
     flex-direction: row;
-    margin: 20px 0px 60px 0px;
+    margin: 20px 0 60px;
     display: flex;
     justify-content: center;
   }
@@ -431,7 +431,7 @@
   min-width: 250px;
 
     &__content {
-      padding: 25px 30px 0px 45px;
+      padding: 25px 30px 0 45px;
       canvas {
         max-height: 98%;
         max-width: 98%;

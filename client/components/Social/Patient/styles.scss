@@ -68,7 +68,7 @@
   width: 80%;
   min-width: 250px;
   margin: 0 auto;
-  padding: 10px 0 10px 0;
+  padding: 10px 0;
   &__count {
     font-size: $x-large-size;
     font-weight: $small-weight;
@@ -86,7 +86,7 @@
 
   &__bottom {
     width: 100%;
-    margin: 5px 0 0 0;
+    margin: 5px 0 0;
     box-shadow: border-box;
     padding-top: 15px;
     text-align: center;

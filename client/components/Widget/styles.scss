@@ -22,7 +22,7 @@
   max-height: 675px;
   background-color: white;
   > h1 {
-    margin: 0px;
+    margin: 0;
   }
 }
 
@@ -46,7 +46,7 @@
   flex-direction: row;
   align-items: center;
   height: 60px;
-  box-shadow: 0 1px 0px rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
+  box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 2px 5px rgba(0,0,0,.16);
 }
 
 .col {
