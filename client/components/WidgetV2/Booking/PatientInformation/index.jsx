@@ -8,9 +8,9 @@ import { Element, scroller } from 'react-scroll';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { change, formValueSelector } from 'redux-form';
+import { submit, touch, change, formValueSelector } from 'redux-form';
 import carriers from './insurance_carriers';
-import { Button, Field, Form, IconButton, Loading } from '../../../library';
+import { Field, Form, IconButton, Loading } from '../../../library';
 import {
   addNewFamilyPatient,
   fetchFamilyPatients,
@@ -28,8 +28,13 @@ import { setFamilyPatientUser, setPatientUser } from '../../../../actions/availa
 import SuggestionSelect from '../../../library/DropdownSuggestion/SuggestionSelect';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
+import {
+  showButton,
+  hideButton,
+  setIsClicked,
+  setText,
+} from '../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
-import FloatingButton from '../../FloatingButton';
 
 /**
  * Gender's array
@@ -72,9 +77,12 @@ class PatientInformation extends Component {
   componentDidMount() {
     this.props.fetchFamilyPatients();
     const patient = this.props.patientUser;
+    this.props.showButton();
+    this.props.touch('patientInformation', ...Object.keys(defaultValues));
     if (!patient || !patient.insuranceCarrier) {
       return false;
     }
+
     if (carriers.find(carrier => carrier.value === patient.insuranceCarrier)) {
       this.props.change('patientInformation', 'customCarrier', false);
     } else {
@@ -87,11 +95,25 @@ class PatientInformation extends Component {
    * If the user selected Other as insurance carrier,
    * set the custom-carrier attribute to true.
    */
-  componentWillUpdate({ insuranceCarrierValue, ...nextProps }) {
+  componentWillUpdate({ insuranceCarrierValue, selectedPatientForm, ...nextProps }) {
     if (insuranceCarrierValue === carriers[1].value) {
       nextProps.change('patientInformation', 'customCarrier', true);
       nextProps.change('patientInformation', 'insuranceCarrier', '');
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.floatingButtonIsClicked && this.props.floatingButtonIsClicked) {
+      this.props.setIsClicked(false);
+      if (this.props.formError !== '') {
+        return this.scrollTo(this.props.formError);
+      }
+      this.props.hideButton();
+      this.props.setText();
+      return this.props.submit('patientInformation');
+    }
+
+    return undefined;
   }
 
   /**
@@ -248,7 +270,7 @@ class PatientInformation extends Component {
      * set his data on the initialValues,
      * otherwise use the default data.
      */
-    const { patientUser, selectedPatientForm, familyPatientUser: patientId } = this.props;
+    const { patientUser, familyPatientUser: patientId } = this.props;
     const initialValues =
       patientUser && patientId
         ? {
@@ -559,21 +581,6 @@ class PatientInformation extends Component {
                   name="insuranceGroupId"
                 />
               </Element>
-              <FloatingButton visible={selectedPatientForm !== ''}>
-                <Button
-                  type="submit"
-                  className={styles.floatingButton}
-                  disabled={!selectedPatientForm}
-                  onClick={() => {
-                    if (this.props.formError !== '') {
-                      return this.scrollTo(this.props.formError);
-                    }
-                    return this.updateUserProfile;
-                  }}
-                >
-                  Next
-                </Button>
-              </FloatingButton>
             </div>
           </Form>
         </div>
@@ -587,16 +594,24 @@ function mapDispatchToProps(dispatch) {
     {
       addNewFamilyPatient,
       change,
+      submit,
       fetchFamilyPatients,
       setFamilyPatientUser,
       setPatientUser,
       updateFamilyPatient,
+      touch,
+      showButton,
+      hideButton,
+      setIsClicked,
+      setText,
     },
     dispatch,
   );
 }
 
-function mapStateToProps({ auth, availabilities, ...state }) {
+function mapStateToProps({
+  auth, availabilities, widgetNavigation, ...state
+}) {
   const selector = formValueSelector('patientInformation');
   const getPatientUser =
     availabilities.get('familyPatientUser') &&
@@ -617,17 +632,15 @@ function mapStateToProps({ auth, availabilities, ...state }) {
     patientUser: getPatientUser,
     selectedPatientForm: selector(state, 'patientUser'),
     user: auth.get('patientUser'),
+    floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
   };
 }
-
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientInformation));
 
 PatientInformation.propTypes = {
   addNewFamilyPatient: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
+  touch: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
   familyPatients: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.shape(patientUserShape)),
     PropTypes.instanceOf(List),
@@ -644,6 +657,11 @@ PatientInformation.propTypes = {
   setFamilyPatientUser: PropTypes.func.isRequired,
   setPatientUser: PropTypes.func.isRequired,
   updateFamilyPatient: PropTypes.func.isRequired,
+  floatingButtonIsClicked: PropTypes.bool.isRequired,
+  setIsClicked: PropTypes.func.isRequired,
+  showButton: PropTypes.func.isRequired,
+  hideButton: PropTypes.func.isRequired,
+  setText: PropTypes.func.isRequired,
 };
 
 PatientInformation.defaultProps = {
@@ -653,3 +671,8 @@ PatientInformation.defaultProps = {
   patientUser: false,
   selectedPatientForm: '',
 };
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInformation));

@@ -1,11 +1,10 @@
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
-import { withRouter, matchPath } from 'react-router-dom';
-import { stringify } from 'query-string';
+import { withRouter } from 'react-router-dom';
 import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import { Button } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
@@ -14,15 +13,20 @@ import Service from '../../../../entities/models/Service';
 import { setIsBooking } from '../../../../actions/availabilities';
 import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
-import { capitalizeFirstLetter } from '../../../Utils';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
-import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
 import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
-import { BookingReviewSVG } from '../../SVGs';
-import FloatingButton from '../../FloatingButton';
+import { SummaryItemFactory } from './SummaryItem';
+import { handleAvailabilitiesTimes } from './helpers';
+
+import {
+  showButton,
+  hideButton,
+  setIsClicked,
+  setText,
+} from '../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
@@ -72,61 +76,40 @@ const getOfficeHours = (key, comparison) => (acc, curr) => {
   return acc;
 };
 
-function Review({
-  canConfirm,
-  confirmedAvailability,
-  dateAndTime,
-  hasWaitList,
-  history,
-  isBooking,
-  location,
-  notes,
-  officeHours,
-  patientUser,
-  selectedPractitioner,
-  selectedService,
-  timezone,
-  waitlist,
-  ...props
-}) {
-  const b = path =>
-    location.pathname
-      .split('/')
-      .filter((v, index) => index < 5)
-      .concat(path)
-      .join('/');
+class Review extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  const officeHoursValues = Object.values(officeHours);
-  /**
-   * Look over the officeHours object and find the earliest startTime of the clinic.
-   */
-  const earliestStartTime = officeHoursValues.reduce(getOfficeHours('startTime', isValueEarlier));
+    this.submitRequest = this.submitRequest.bind(this);
+  }
 
-  /**
-   * Look over the officeHours object and find the latest endTime of the clinic.
-   */
-  const latestEndTime = officeHoursValues.reduce(getOfficeHours('endTime', isValueLater));
+  componentDidMount() {
+    const { dateAndTime, hasWaitList, canConfirm } = this.props;
+    this.props.setText('Confirm Booking');
+    if (canConfirm && (dateAndTime || hasWaitList)) {
+      this.props.showButton();
+    }
+  }
 
-  /**
-   * Generates the availabilities using the office openings,
-   * also group them inside the specific time-frame.
-   */
-  const availabilities = createAvailabilitiesFromOpening({
-    startDate: earliestStartTime,
-    endDate: moment.tz(latestEndTime, timezone),
-    duration: selectedService.get('duration'),
-    interval: 60,
-  }).reduce(groupTimesPerPeriod, {
-    morning: [],
-    afternoon: [],
-    evening: [],
-    total: 0,
-  });
+  componentDidUpdate(prevProps) {
+    if (!prevProps.floatingButtonIsClicked && this.props.floatingButtonIsClicked) {
+      this.props.setIsClicked(false);
+      this.props.hideButton();
+      this.props.setText();
+      return this.submitRequest();
+    }
+
+    return undefined;
+  }
 
   /**
    * Manages if we should create a waitlist and an availability or both
    */
-  const submitRequest = () => {
+  submitRequest() {
+    const {
+      dateAndTime, hasWaitList, history, ...props
+    } = this.props;
+
     const creationPromises = [
       ...(dateAndTime ? [props.createRequest()] : []),
       ...(hasWaitList ? [props.createWaitSpot()] : []),
@@ -134,286 +117,200 @@ function Review({
     return Promise.all(creationPromises)
       .then(() => history.push('./complete'))
       .catch(err => console.error('Creating request failed', err));
-  };
+  }
 
-  /**
-   * If the text is longer than 200 characters,
-   * slice the text and add an ellipsis.
-   *
-   * @param {string} value
-   */
-  const ellipsisText = (value, delimiter) =>
-    (value.length > delimiter ? `${value.slice(0, delimiter)}...` : value);
+  render() {
+    const {
+      canConfirm,
+      confirmedAvailability,
+      dateAndTime,
+      hasWaitList,
+      history,
+      isBooking,
+      location,
+      notes,
+      officeHours,
+      patientUser,
+      selectedPractitioner,
+      selectedService,
+      timezone,
+      waitlist,
+      ...props
+    } = this.props;
 
-  /**
-   * Renders the title, value and edit button for the provided data.
-   *
-   * @param {string} key
-   * @param {string} value
-   * @param {string} link
-   */
-  const renderSummaryItem = (key, value, link) => {
-    const match = matchPath(location.pathname, {
-      path: `/widgets/:accountId/app/book${link.slice(1)}`,
-      exact: true,
+    const b = path =>
+      location.pathname
+        .split('/')
+        .filter((v, index) => index < 5)
+        .concat(path)
+        .join('/');
+
+    const officeHoursValues = Object.values(officeHours);
+    /**
+     * Look over the officeHours object and find the earliest startTime of the clinic.
+     */
+    const earliestStartTime = officeHoursValues.reduce(getOfficeHours('startTime', isValueEarlier));
+
+    /**
+     * Look over the officeHours object and find the latest endTime of the clinic.
+     */
+    const latestEndTime = officeHoursValues.reduce(getOfficeHours('endTime', isValueLater));
+
+    /**
+     * Generates the availabilities using the office openings,
+     * also group them inside the specific time-frame.
+     */
+    const availabilities = createAvailabilitiesFromOpening({
+      startDate: earliestStartTime,
+      endDate: moment.tz(latestEndTime, timezone),
+      duration: selectedService.get('duration'),
+      interval: 60,
+    }).reduce(groupTimesPerPeriod, {
+      morning: [],
+      afternoon: [],
+      evening: [],
+      total: 0,
     });
 
-    return (
-      <div className={styles.waitlistIndex}>
-        <span className={styles.waitlistKey}>{key}</span>
-        <span className={styles.waitlistValue}>
-          {typeof value === 'string' ? <p>{ellipsisText(value, 200)}</p> : value}
-          <Button
-            className={styles.editLink}
-            onClick={() =>
-              history.push({
-                pathname: link,
-                state: { nextRoute: match ? false : location.pathname },
-                search: stringify({ edit: true }),
-              })
-            }
-          >
-            <BookingReviewSVG />
-          </Button>
+    /**
+     * Display a linear list of times that were selected from the user on the waitlist's steps.
+     */
+    const waitlistTimes = () =>
+      waitlist.times.length > 0 && (
+        <span>
+          {Object.keys(availabilities)
+            .reduce(handleAvailabilitiesTimes(waitlist.times, availabilities, timezone), [])
+            .map(text => text)}
         </span>
-      </div>
-    );
-  };
-
-  /**
-   * Configured formatter for the current account timezone and ha format.
-   */
-  const formatReviewDates = dateFormatterFactory('ha')(timezone);
-
-  /**
-   * With the provided array of strings,
-   * build the text tha will be displayed on the Review's page.
-   *
-   * @param {array} selected
-   */
-  const handleAvailabilitiesTimes = selected => (acc, value) => {
-    if (value === 'total') {
-      return acc;
-    }
-    // Displays 'All day (starTime - endTime)'
-    if (availabilities.total === selected.length) {
-      return [
-        <div>
-          <strong>
-            {`All day (${formatReviewDates(selected[0])} - ${formatReviewDates(selected[selected.length - 1])})`}
-          </strong>
-        </div>,
-      ];
-    }
-
-    const timeframe = availabilities[value];
-
-    // early return if theres no availabilitis on this time frame
-    if (!availabilities[value].length) {
-      return acc;
-    }
-
-    const timeFrame = capitalizeFirstLetter(value);
-    // all positive messages are displayed in bold.
-    let boldedText = '';
-    // normal text
-    let text = '';
-
-    if (timeframe.length > 0 && timeframe.every(({ startDate }) => selected.includes(startDate))) {
-      // Displays 'Timeframe starTime to endTime'
-      const startTimeOnTimeFrame = formatReviewDates(timeframe[0].startDate);
-      const endTimeOnTimeFrame = formatReviewDates(timeframe[timeframe.length - 1].startDate);
-      boldedText += ` All (${startTimeOnTimeFrame} to ${endTimeOnTimeFrame})`;
-    } else {
-      // Displays an inline list of dates
-      const timesReduced = timeframe.reduce(
-        (dates, { startDate }) => {
-          if (selected.includes(startDate)) {
-            dates.in.push(startDate);
-          } else {
-            dates.out.push(startDate);
-          }
-          dates.total += 1;
-          return dates;
-        },
-        {
-          in: [],
-          out: [],
-          total: 0,
-        },
       );
 
-      if (timesReduced.in.length > 0) {
-        if (timesReduced.in.length > timesReduced.total / 2) {
-          const startTimeOnTimeFrame = timesReduced.in[0];
-          const endTimeOnTimeFrame = timesReduced.in[timesReduced.in.length - 1];
-          /**
-           * add this to string
-           */
-          boldedText = ` ${formatReviewDates(startTimeOnTimeFrame)} to ${formatReviewDates(endTimeOnTimeFrame)}`;
+    /**
+     * Returns the component that renders the title, value and edit button for the provided data.
+     */
+    const SummaryItem = SummaryItemFactory({ location, history });
 
-          if (timesReduced.out.length > 0) {
-            const excludedTimes = timesReduced.out.reduce(
-              (but, time) =>
-                (time < endTimeOnTimeFrame && time > startTimeOnTimeFrame
-                  ? [...but, ...[time]]
-                  : but),
-              [],
-            );
-
-            const excludedText =
-              excludedTimes.length > 0
-                ? `but ${excludedTimes
-                  .map(el => formatReviewDates(el))
-                  .reduce(toHumanCommaSeparated)}`
-                : '';
-            text += ` ${excludedText}`;
-          }
-        } else {
-          boldedText = ` ${timesReduced.in
-            .map(el => formatReviewDates(el))
-            .reduce(toHumanCommaSeparated)}`;
-        }
-      } else {
-        text += ' None';
-      }
-    }
-
-    // adding the new text line to the previous ones.
-    return [
-      ...acc,
-      ...[
-        <div>
-          {`${timeFrame}: `}
-          {boldedText.length > 0 && <strong>{boldedText}</strong>}
-          {` ${text}`}
-        </div>,
-      ],
-    ];
-  };
-
-  /**
-   * Display a linear list of times that were selected from the user on the waitlist's steps.
-   */
-  const waitlistTimes = () =>
-    waitlist.times.length > 0 && (
-      <span>
-        {Object.keys(availabilities)
-          .reduce(handleAvailabilitiesTimes(waitlist.times), [])
-          .map(text => text)}
-      </span>
-    );
-
-  return (
-    <div className={styles.scrollableContainer}>
-      <div className={styles.contentWrapper}>
-        <div className={styles.container}>
-          <h1 className={styles.heading}>
-            {location.state && location.state.isReviewRoute ? 'Almost Done' : 'Booking Summary'}
-          </h1>
-        </div>
-        <div className={styles.content}>
-          <h3 className={styles.title}>Waitlist Summary</h3>
-          {waitlist.dates.length > 0 ? (
-            <div>
-              <p className={styles.subtitle}>
-                Here are the informations that you already defined to your appointment.
-              </p>
-              {renderSummaryItem('Reason', selectedService.get('name'), b('reason'))}
-              {renderSummaryItem(
-                'Available Dates',
-                waitlistDates(waitlist.dates, timezone),
-                b('waitlist/select-dates'),
-              )}
-              {renderSummaryItem(
-                'Unavailable Dates',
-                waitlistUnavailableDates(waitlist.unavailableDates, timezone),
-                b('waitlist/days-unavailable'),
-              )}
-              {renderSummaryItem('Times', waitlistTimes(), b('waitlist/select-times'))}
-            </div>
-          ) : (
-            <div className={styles.joinWaitlist}>
-              <div className={styles.subCardWrapper}>
-                <p className={styles.subCardSubtitle}>Looks like you did not set any waitlist</p>
+    return (
+      <div className={styles.scrollableContainer}>
+        <div className={styles.contentWrapper}>
+          <div className={styles.container}>
+            <h1 className={styles.heading}>
+              {location.state && location.state.isReviewRoute ? 'Almost Done' : 'Booking Summary'}
+            </h1>
+          </div>
+          <div className={styles.content}>
+            <h3 className={styles.title}>Waitlist Summary</h3>
+            {waitlist.dates.length > 0 ? (
+              <div>
+                <p className={styles.subtitle}>
+                  Here are the informations that you already defined to your appointment.
+                </p>
+                <SummaryItem
+                  label="Reason"
+                  value={selectedService.get('name')}
+                  link={b('reason')}
+                />
+                <SummaryItem
+                  label="Available Dates"
+                  value={waitlistDates(waitlist.dates, timezone)}
+                  link={b('waitlist/select-dates')}
+                />
+                <SummaryItem
+                  label="Unavailable Dates"
+                  value={waitlistUnavailableDates(waitlist.unavailableDates, timezone)}
+                  link={b('waitlist/days-unavailable')}
+                />
+                <SummaryItem
+                  label="Times"
+                  value={waitlistTimes()}
+                  link={b('waitlist/select-times')}
+                />
               </div>
-              <Button
-                className={styles.subCardLink}
-                onClick={() => {
-                  if (!isBooking) {
-                    props.setIsBooking(true);
-                  }
-                  history.push(b('waitlist/select-dates'));
-                }}
-              >
-                Join Waitlist
-              </Button>
-            </div>
-          )}
-        </div>
-        <div className={styles.content}>
-          <h3 className={styles.title}>Appointment Summary</h3>
-          <p className={styles.subtitle}>
-            Here are the informations that you already defined to your appointment.
-          </p>
-          {selectedService.get('name') &&
-            renderSummaryItem('Reason', selectedService.get('name'), b('reason'))}
-          {renderSummaryItem(
-            'Practitioner',
-            (selectedPractitioner && selectedPractitioner.getPrettyName()) || 'No Preference',
-            b('practitioner'),
-          )}
-          {dateAndTime &&
-            renderSummaryItem(
-              'Date and Time',
-              `${dateFormatter(dateAndTime.startDate, timezone, 'ddd, MMM Do')} at ${dateFormatter(
-                dateAndTime.startDate,
-                timezone,
-                'h:mm a',
-              )}`,
-              b('date-and-time'),
+            ) : (
+              <div className={styles.joinWaitlist}>
+                <div className={styles.subCardWrapper}>
+                  <p className={styles.subCardSubtitle}>Looks like you did not set any waitlist</p>
+                </div>
+                <Button
+                  className={styles.subCardLink}
+                  onClick={() => {
+                    if (!isBooking) {
+                      props.setIsBooking(true);
+                    }
+                    history.push(b('waitlist/select-dates'));
+                  }}
+                >
+                  Join Waitlist
+                </Button>
+              </div>
             )}
-          {patientUser &&
-            renderSummaryItem(
-              'Patient',
-              `${patientUser.firstName} ${patientUser.lastName}`,
-              './patient-information',
+          </div>
+          <div className={styles.content}>
+            <h3 className={styles.title}>Appointment Summary</h3>
+            <p className={styles.subtitle}>
+              Here are the informations that you already defined to your appointment.
+            </p>
+            {selectedService.get('name') && (
+              <SummaryItem label="Reason" value={selectedService.get('name')} link={b('reason')} />
             )}
-          {patientUser &&
-            renderSummaryItem(
-              'Insurance Carrier',
-              `${patientUser.insuranceCarrier || NOT_PROVIDED_TEXT}`,
-              b('patient-information'),
+            <SummaryItem
+              label="Practitioner"
+              value={
+                (selectedPractitioner && selectedPractitioner.getPrettyName()) || 'No Preference'
+              }
+              link={b('practitioner')}
+            />
+
+            {dateAndTime && (
+              <SummaryItem
+                label="Date and Time"
+                value={`${dateFormatter(
+                  dateAndTime.startDate,
+                  timezone,
+                  'ddd, MMM Do',
+                )} at ${dateFormatter(dateAndTime.startDate, timezone, 'h:mm a')}`}
+                link={b('date-and-time')}
+              />
             )}
-          {patientUser &&
-            renderSummaryItem(
-              'Insurance Member ID & Group ID',
-              `${patientUser.insuranceMemberId ||
-                NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`,
-              b('patient-information'),
+            {patientUser && (
+              <SummaryItem
+                label="Patient"
+                value={`${patientUser.firstName} ${patientUser.lastName}`}
+                link="./patient-information"
+              />
+            )}
+            {patientUser && (
+              <SummaryItem
+                label="Insurance Carrier"
+                value={`${patientUser.insuranceCarrier || NOT_PROVIDED_TEXT}`}
+                link={b('patient-information')}
+              />
+            )}
+            {patientUser && (
+              <SummaryItem
+                label="Insurance Member ID & Group ID"
+                value={`${patientUser.insuranceMemberId ||
+                  NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`}
+                link={b('patient-information')}
+              />
             )}
 
-          {patientUser &&
-            renderSummaryItem(
-              'Notes',
-              `${notes || NOT_PROVIDED_TEXT}`,
-              b('additional-information'),
+            {patientUser && (
+              <SummaryItem
+                label="Notes"
+                value={`${notes || NOT_PROVIDED_TEXT}`}
+                link={b('additional-information')}
+              />
             )}
+          </div>
         </div>
-        {canConfirm &&
-          (dateAndTime || hasWaitList) && (
-            <FloatingButton visible={canConfirm}>
-              <Button className={styles.floatingButton} onClick={submitRequest}>
-                Confirm Booking
-              </Button>
-            </FloatingButton>
-          )}
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-function mapStateToProps({ availabilities, entities, auth }) {
+function mapStateToProps({
+  availabilities, entities, auth, widgetNavigation,
+}) {
   const getPatientUser =
     availabilities.get('familyPatientUser') && auth.get('familyPatients').length > 0
       ? auth
@@ -442,6 +339,7 @@ function mapStateToProps({ availabilities, entities, auth }) {
     timezone: availabilities.get('account').get('timezone'),
     user: auth.get('patientUser'),
     waitlist: availabilities.get('waitlist').toJS(),
+    floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
   };
 }
 
@@ -451,6 +349,10 @@ function mapDispatchToProps(dispatch) {
       createRequest,
       createWaitSpot,
       setIsBooking,
+      hideButton,
+      setIsClicked,
+      setText,
+      showButton,
     },
     dispatch,
   );
@@ -487,6 +389,11 @@ Review.propTypes = {
     unavailableDates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
   }),
+  floatingButtonIsClicked: PropTypes.bool.isRequired,
+  setIsClicked: PropTypes.func.isRequired,
+  showButton: PropTypes.func.isRequired,
+  hideButton: PropTypes.func.isRequired,
+  setText: PropTypes.func.isRequired,
 };
 
 Review.defaultProps = {

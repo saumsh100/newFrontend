@@ -19,12 +19,12 @@ import Button from '../../../library/Button';
 import DayPicker from '../../../library/DayPicker';
 import Join from '../Waitlist/Join';
 import { fetchAvailabilities } from '../../../../thunks/availabilities';
+import { showButton, hideButton, setIsClicked } from '../../../../reducers/widgetNavigation';
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import { Link } from '../../../library';
 import { isResponsive } from '../../../../util/hub';
-import FloatingButton from '../../FloatingButton';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
 import styles from './styles.scss';
@@ -87,6 +87,21 @@ class DateTime extends Component {
     if (!this.props.nextAvailability && this.props.availabilities.total === 0) {
       this.props.setSelectedStartDate('');
     }
+
+    if (
+      this.props.selectedAvailability !== null &&
+      (!!this.props.availabilities.total && !!this.props.selectedAvailability)
+    ) {
+      this.props.showButton();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.floatingButtonIsClicked && !prevProps.floatingButtonIsClicked) {
+      this.props.setIsClicked(false);
+      this.props.hideButton();
+      this.confirmDateTime();
+    }
   }
 
   /**
@@ -97,6 +112,7 @@ class DateTime extends Component {
    */
   changeSelectedDate(date) {
     if (!moment.tz(date, this.props.accountTimezone).isSame(this.props.selectedStartDate, 'day')) {
+      this.props.hideButton();
       this.props.setSelectedAvailability(null);
       this.props.setSelectedStartDate(date);
       this.props.fetchAvailabilities();
@@ -117,9 +133,11 @@ class DateTime extends Component {
      */
     this.props.setConfirmAvailability(false);
     if (!selectedAvailability || selectedAvailability.startDate !== availability.startDate) {
+      this.props.showButton();
       return this.props.setSelectedAvailability(availability);
     }
     this.props.setTimeFrame(null);
+    this.props.hideButton();
     return this.props.setSelectedAvailability(null);
   }
 
@@ -155,6 +173,7 @@ class DateTime extends Component {
    */
   joinWaitlist() {
     const { timeframe } = parse(this.props.location.search);
+    this.props.hideButton();
     this.props.setConfirmAvailability(false);
     this.props.setSelectedAvailability(null);
     this.props.setTimeFrame(timeframe);
@@ -329,22 +348,13 @@ class DateTime extends Component {
             {availabilitiesDisplay()}
           </div>
         </Element>
-        <FloatingButton visible={selectedAvailability !== null}>
-          <Button
-            disabled={!(!!availabilities.total && !!selectedAvailability)}
-            className={styles.floatingButton}
-            onClick={this.confirmDateTime}
-          >
-            Next
-          </Button>
-        </FloatingButton>
         {this.state.isModal && <Join history={history} />}
       </Element>
     );
   }
 }
 
-function mapStateToProps({ availabilities }) {
+function mapStateToProps({ availabilities, widgetNavigation }) {
   const selectedStartDate = availabilities.get('selectedStartDate');
   const accountTimezone = availabilities.get('account').get('timezone');
   const isFetching = availabilities.get('isFetching');
@@ -365,6 +375,7 @@ function mapStateToProps({ availabilities }) {
     selectedServiceId: availabilities.get('selectedServiceId'),
     selectedStartDate,
     timeframe: availabilities.get('timeframe'),
+    floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
   };
 }
 
@@ -373,6 +384,9 @@ function mapDispatchToProps(dispatch) {
     {
       fetchAvailabilities,
       setConfirmAvailability,
+      hideButton,
+      setIsClicked,
+      showButton,
       setSelectedAvailability,
       setSelectedStartDate,
       setTimeFrame,
@@ -401,6 +415,10 @@ DateTime.propTypes = {
   setSelectedStartDate: PropTypes.func.isRequired,
   setTimeFrame: PropTypes.func.isRequired,
   timeframe: PropTypes.string,
+  hideButton: PropTypes.func.isRequired,
+  floatingButtonIsClicked: PropTypes.bool.isRequired,
+  setIsClicked: PropTypes.func.isRequired,
+  showButton: PropTypes.func.isRequired,
 };
 
 DateTime.defaultProps = {

@@ -127,9 +127,8 @@ function Tabs({
   );
 }
 
-function mapStateToProps({ availabilities, widgetNavigation }) {
+function mapStateToProps({ availabilities }) {
   return {
-    isEditing: widgetNavigation.get('isEditing'),
     selectedAvailability: availabilities.get('selectedAvailability'),
   };
 }

@@ -1,13 +1,17 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { withRouter, matchPath } from 'react-router-dom';
 import { parse } from 'query-string';
 import Header from './Header';
 import Logon from './Account/Logon';
-import { locationShape } from '../library/PropTypeShapes/routerShapes';
+import FloatingButton from './FloatingButton';
+import Button from '../library/Button';
+import { setIsClicked } from '../../reducers/widgetNavigation';
+import { locationShape, historyShape } from '../library/PropTypeShapes/routerShapes';
 import Review from './Booking/Review';
 import styles from './styles.scss';
 
@@ -31,6 +35,13 @@ class Widget extends Component {
   }
 
   render() {
+    const {
+      floatingButtonIsVisible,
+      floatingButtonIsDisabled,
+      floatingButtonText,
+      history,
+    } = this.props;
+
     const { pathname, search } = this.props.location;
     const parsedSearch = parse(search);
 
@@ -75,7 +86,7 @@ class Widget extends Component {
         <div className={styles.reviewsWidgetCenter}>
           <Header tabs={tabs} tabState={tabState} />
           <div
-            className={styles.container}
+            className={styles.widgetContainer}
             ref={(node) => {
               this.containerNode = node;
               return this.containerNode;
@@ -84,31 +95,70 @@ class Widget extends Component {
             {isSummaryRoute && !isEditing && <Review canConfirm={false} />}
             {isAccountTab && !isAccountRoute && !isReviewRoute && <Logon isAccountTab />}
             {(isBookingRoute || isAccountRoute || isEditing) &&
-              this.props.children({ tabState, tabs })}
+              React.Children.map(this.props.children, child =>
+                React.cloneElement(child, {
+                  location: {
+                    ...history.location,
+                    state: {
+                      ...history.location.state,
+                      ...tabState,
+                      ...tabs,
+                    },
+                  },
+                }))}
           </div>
           <div className={styles.poweredBy}>
             We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
           </div>
+          <FloatingButton visible={floatingButtonIsVisible}>
+            <Button
+              disabled={floatingButtonIsDisabled}
+              className={styles.floatingButton}
+              onClick={() => {
+                this.props.setIsClicked(true);
+              }}
+            >
+              {floatingButtonText}
+            </Button>
+          </FloatingButton>
         </div>
       </div>
     );
   }
 }
 
-Widget.propTypes = {
-  account: PropTypes.instanceOf(Map).isRequired,
-  children: PropTypes.func.isRequired,
-  location: PropTypes.shape(locationShape).isRequired,
-};
-
-function mapStateToProps({ availabilities, reviews }) {
+function mapStateToProps({ availabilities, reviews, widgetNavigation }) {
   return {
     account: reviews.get('account'),
     isBooking: availabilities.get('isBooking'),
+    floatingButtonIsVisible: widgetNavigation.getIn(['floatingButton', 'isVisible']),
+    floatingButtonIsDisabled: widgetNavigation.getIn(['floatingButton', 'isDisabled']),
+    floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
+    floatingButtonText: widgetNavigation.getIn(['floatingButton', 'text']),
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      setIsClicked,
+    },
+    dispatch,
+  );
+}
+
+Widget.propTypes = {
+  account: PropTypes.instanceOf(Map).isRequired,
+  children: PropTypes.node.isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+  floatingButtonIsVisible: PropTypes.bool.isRequired,
+  floatingButtonIsDisabled: PropTypes.bool.isRequired,
+  setIsClicked: PropTypes.func.isRequired,
+  floatingButtonText: PropTypes.string.isRequired,
+};
+
 export default withRouter(connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 )(Widget));

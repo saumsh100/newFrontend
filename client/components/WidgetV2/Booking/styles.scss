@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import "../styles";
 
 :root {
   --widget-spacer: 12px;
@@ -42,7 +42,7 @@
 }
 
 .subtitle {
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-size: 12px;
   color: $widget-grey;
   line-height: 18px;
@@ -92,7 +92,7 @@
   padding: 0 0 1px;
   transition: all 0.2s ease;
   line-height: 1;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   &:hover {
     color: $widget-blue-dark;
     border-bottom: 1px solid $widget-blue-dark;
@@ -115,7 +115,7 @@
   padding: 16px var(--widget-spacer) 0;
   box-sizing: border-box;
   min-height: 56px;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   background: $widget-white;
   -webkit-appearance: none;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
@@ -187,30 +187,6 @@
   margin-bottom: var(--widget-spacer);
 }
 
-.actionButton {
-  border-radius: 4px;
-  width: 100%;
-  font-size: 14px;
-  padding: 12px 0;
-  transition: all 0.2s ease;
-  min-height: 49px;
-  font-family: 'Roboto';
-  font-weight: 500;
-  &:hover {
-    transition: all 0.2s ease;
-    opacity: 0.9;
-  }
-}
-
-.floatingButton {
-  @extend .actionButton;
-  height: 100%;
-  border-radius: 0;
-  text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
 .slot {
   background: $widget-white;
   border: 1px solid $widget-grey-lighter;
@@ -220,7 +196,7 @@
   transition: all 0.2s ease;
   -webkit-tap-highlight-color: transparent;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 13px;
   color: $widget-grey;
   line-height: 16px;
@@ -379,7 +355,7 @@
   font-weight: 500;
   font-size: 14px;
   color: $widget-grey;
-  font-family: 'Roboto';
+  font-family: "Roboto";
 }
 
 .waitlistValue {
@@ -493,7 +469,8 @@
 
 .cardContainer {
   @extend .container;
-  padding: calc(calc(var(--widget-spacer) * 2) + 21px) calc(var(--widget-spacer) - 4px) 0;
+  padding: calc(calc(var(--widget-spacer) * 2) + 21px)
+    calc(var(--widget-spacer) - 4px) 0;
   transition: all 0.2s ease;
   .heading,
   .description {

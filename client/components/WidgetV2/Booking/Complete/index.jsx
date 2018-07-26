@@ -239,8 +239,8 @@ function Complete({
       </div>
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
-          <div className={styles.rowCard}>
-            {dateAndTime && (
+          {dateAndTime && (
+            <div className={styles.rowCard}>
               <div className={styles.bookingGroup}>
                 <h4 className={styles.bookingType}>{"Appointment's Details"}:</h4>
                 <p className={styles.requestInfo}>
@@ -261,8 +261,8 @@ function Complete({
                   <strong>Reason:</strong> {selectedService.get('name')}
                 </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {waitlist.dates.length > 0 && (
             <div className={styles.rowCard}>

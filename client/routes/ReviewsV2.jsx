@@ -23,16 +23,73 @@ import fade from '../styles/fade.scss';
 
 const base = (path = '') => `/widgets/:accountId/app${path}`;
 
-// const redirectAuth = (NoAuthComponent, isAuth, path) => props =>
-//   (isAuth ? <Redirect to={path} /> : <NoAuthComponent {...props} />);
+const GuestRoute = ({
+  component: Component,
+  isAuth,
+  redirecPath,
+  redirecAccountPath,
+  patientUser,
+  ...rest
+}) => (
+  <Route
+    {...rest}
+    render={(props) => {
+      if (isAuth && (patientUser && patientUser.isPhoneNumberConfirmed)) {
+        return <Redirect to={redirecPath} />;
+      } else if (isAuth && (patientUser && !patientUser.isPhoneNumberConfirmed)) {
+        return <Redirect to={redirecAccountPath} />;
+      }
+      return <Component {...props} />;
+    }}
+  />
+);
 
-const redirectNoAuth = (AuthComponent, { isAuth, patientUser }, path) => (props) => {
-  if (!isAuth) return <Redirect to={path} />;
-  if (patientUser && !patientUser.isPhoneNumberConfirmed) {
-    return <Redirect to="../signup/confirm" />;
-  }
-  return <AuthComponent {...props} />;
+GuestRoute.propTypes = {
+  component: PropTypes.func.isRequired,
+  isAuth: PropTypes.bool.isRequired,
+  patientUser: PropTypes.shape({
+    isPhoneNumberConfirmed: PropTypes.bool,
+  }),
+  redirecPath: PropTypes.string,
+  redirecAccountPath: PropTypes.string,
 };
+
+GuestRoute.defaultProps = {
+  patientUser: {
+    isPhoneNumberConfirmed: false,
+  },
+  redirecPath: 'book/patient-information',
+  redirecAccountPath: 'account',
+};
+
+const AuthenticatedRoute = ({
+  component: Component,
+  isAuth,
+  patientUser,
+  redirecPath,
+  ...rest
+}) => (
+  <Route
+    {...rest}
+    render={props =>
+      (!isAuth || (isAuth && (patientUser && !patientUser.isPhoneNumberConfirmed)) ? (
+        <Redirect to={redirecPath} />
+      ) : (
+        <Component {...props} />
+      ))
+    }
+  />
+);
+
+AuthenticatedRoute.propTypes = GuestRoute.propTypes;
+
+AuthenticatedRoute.defaultProps = {
+  patientUser: {
+    isPhoneNumberConfirmed: false,
+  },
+  redirecPath: '../login',
+};
+
 const BookingRouter = ({
   match, isAuth, patientUser, location,
 }) => {
@@ -46,25 +103,33 @@ const BookingRouter = ({
           <Route path={b('/date-and-time')} component={DateTime} />
           <Route exact path={b('/waitlist/select-dates')} component={SelectDates} />
           <Route exact path={b('/waitlist/select-times')} component={SelectTimes} />
-          <Route
+          <AuthenticatedRoute
             exact
             path={b('/patient-information')}
-            component={redirectNoAuth(PatientInformation, { isAuth, patientUser }, '../login')}
+            component={PatientInformation}
+            isAuth={isAuth}
+            patientUser={patientUser}
           />
-          <Route
+          <AuthenticatedRoute
             exact
             path={b('/additional-information')}
-            component={redirectNoAuth(AdditionalInformation, { isAuth, patientUser }, '../login')}
+            component={AdditionalInformation}
+            isAuth={isAuth}
+            patientUser={patientUser}
           />
-          <Route
+          <AuthenticatedRoute
             exact
             path={b('/review')}
-            component={redirectNoAuth(Review, { isAuth, patientUser }, '../login')}
+            component={Review}
+            isAuth={isAuth}
+            patientUser={patientUser}
           />
-          <Route
+          <AuthenticatedRoute
             exact
             path={b('/complete')}
-            component={redirectNoAuth(Complete, { isAuth, patientUser }, '../login')}
+            component={Complete}
+            isAuth={isAuth}
+            patientUser={patientUser}
           />
         </Switch>
       </CSSTransition>
@@ -82,29 +147,14 @@ const EmbedRouter = ({ match, isAuth, patientUser }) => {
         path={b('/book')}
         render={props => <BookingRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
       />
-      <Route exact path={b('/login')} component={Logon} />
+      <GuestRoute
+        exact
+        path={b('/login')}
+        component={Logon}
+        isAuth={isAuth}
+        patientUser={patientUser}
+      />
       <Route exact path={b('/account')} component={Account} />
-      {/* redirectAuth(
-          Logon,
-          isAuth,
-          (location.state && location.state.nextRoute) || b('/book/patient-information'),
-        )
-      <Route
-        exact
-        path={b('/signup')}
-        render={redirectAuth(SignUp, isAuth, b('/book/patient-information'))}
-      />
-      <Route exact path={b('/signup/confirm')} render={SignUpConfirm} />
-      <Route
-        exact
-        path={b('/reset')}
-        render={redirectAuth(ResetPassword, isAuth, b('/book/patient-information'))}
-      />
-      <Route
-        exact
-        path={b('/reset-success')}
-        render={redirectAuth(ResetSuccess, isAuth, b('/book/patient-information'))}
-      /> */}
     </Switch>
   );
 };
@@ -115,23 +165,12 @@ const WidgetRouter = ({ history, isAuth, patientUser }) => (
       {/* TODO: Booking widget will soon become part of app */}
       {/* <Route exact path={base('/book')} component={PatientApp} /> */}
       <Widget>
-        {state => (
-          <Switch
-            location={{
-              ...history.location,
-              state: {
-                ...history.location.state,
-                ...state.tabState,
-                ...state.tabs,
-              },
-            }}
-          >
-            <Route
-              path={base()}
-              render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
-            />
-          </Switch>
-        )}
+        <Switch>
+          <Route
+            path={base()}
+            render={props => <EmbedRouter {...props} isAuth={isAuth} patientUser={patientUser} />}
+          />
+        </Switch>
       </Widget>
     </div>
   </Router>
