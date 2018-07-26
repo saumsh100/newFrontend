@@ -1,14 +1,8 @@
 
-import Client from  'ifrau/client';
+import Client from 'ifrau/client';
 import { push } from 'react-router-redux';
-import {
-  mergeReviewValues,
-  mergeSentReviewValues,
-} from '../reducers/reviewsWidget';
-import {
-  setSentRecallId,
-  setDueDate,
-} from '../actions/availabilities';
+import { mergeReviewValues, mergeSentReviewValues } from '../reducers/reviewsWidget';
+import { setSentRecallId, setDueDate } from '../actions/availabilities';
 
 const allowedRoutes = {
   book: true,
@@ -23,13 +17,13 @@ export default function connectStoreToHost(store) {
   const base = (path = '') => `/widgets/${account.id}/app${path}`;
 
   // Create new ifrau Client to connect to a host app (clinic website)
-  const client = new Client();
-  client.connect().then(function() {
+  const client = new Client({ syncLang: false });
+  client.connect().then(() => {
     console.log('connected to host!');
   });
 
   // For testing...
-  /*window.changeBaseRoute = (route) => {
+  /* window.changeBaseRoute = (route) => {
     if (!allowedRoutes[route]) {
       return;
     }
@@ -37,8 +31,7 @@ export default function connectStoreToHost(store) {
     // Route SPA to that route and view
     console.log('dispatching changeBaseRoute!');
     store.dispatch(push(base(`/${route}`)));
-  };*/
-
+  }; */
 
   client.onEvent('changeBaseRoute', (route) => {
     if (!allowedRoutes[route]) {
@@ -71,4 +64,3 @@ export default function connectStoreToHost(store) {
 
   window.iframeClient = client;
 }
-
