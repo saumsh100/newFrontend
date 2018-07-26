@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -7,25 +7,31 @@ import { withRouter, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Logged from './Logged';
 import { setResetEmail } from '../../../../actions/auth';
-import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
+import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 
-function Logon({
-  isAuthenticated, location, history, isAccountTab, ...props
-}) {
-  const componentToRender = () => {
+class Logon extends PureComponent {
+  componentDidMount() {
+    this.props.setResetEmail(null);
+  }
+
+  componentToRender({ isAuthenticated, isAccountTab, history }) {
     if (!isAuthenticated) {
       return <Login />;
     } else if (!isAccountTab) {
-      if (history.action !== 'POP') {
-        return <Redirect to="./account" />;
-      }
-      return <Redirect to="./book/date-and-time" />;
+      return history.action !== 'POP' ? (
+        <Redirect to="./account" />
+      ) : (
+        <Redirect to="./book/date-and-time" />
+      );
     }
     return <Logged />;
-  };
-  props.setResetEmail(null);
+  }
 
-  return componentToRender();
+  render() {
+    const { isAuthenticated, isAccountTab, history } = this.props;
+
+    return this.componentToRender({ isAuthenticated, isAccountTab, history });
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -45,8 +51,9 @@ function mapStateToProps({ auth }) {
 
 Logon.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  location: PropTypes.shape(locationShape).isRequired,
+  history: PropTypes.shape(historyShape).isRequired,
   isAccountTab: PropTypes.bool,
+  setResetEmail: PropTypes.func.isRequired,
 };
 
 Logon.defaultProps = {

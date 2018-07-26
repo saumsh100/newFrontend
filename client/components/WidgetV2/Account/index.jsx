@@ -16,44 +16,28 @@ function Account({
   patientUser, isAuthenticated, resetEmail, location, history,
 }) {
   const parsedSearch = parse(location.search);
-  return (
-    <div>
-      {!isAuthenticated &&
-        parsedSearch.signUp && (
-          <div>
-            <SignUp />
-          </div>
-        )}
-      {isAuthenticated &&
-        !patientUser.isPhoneNumberConfirmed && (
-          <div>
-            <SignUpConfirm />
-          </div>
-        )}
-      {!isAuthenticated &&
-        parsedSearch.reset &&
-        !resetEmail && (
-          <div>
-            <ResetPassword />
-          </div>
-        )}
-      {!isAuthenticated &&
-        !parsedSearch.signUp &&
-        resetEmail && (
-          <div>
-            <ResetSuccess />
-          </div>
-        )}
-      {isAuthenticated &&
-        patientUser.isPhoneNumberConfirmed &&
-        !location.state.isAccountTab && <Redirect to="./book/patient-information" />}
 
-      {isAuthenticated &&
-        patientUser.isPhoneNumberConfirmed &&
-        location.state.isAccountTab &&
-        history.goBack()}
-    </div>
-  );
+  if (isAuthenticated) {
+    if (!patientUser.isPhoneNumberConfirmed) {
+      return <SignUpConfirm />;
+    }
+
+    return <Redirect to="./book/patient-information" />;
+  }
+
+  if (parsedSearch.signUp) {
+    return <SignUp />;
+  }
+
+  if (parsedSearch.reset && !resetEmail) {
+    return <ResetPassword />;
+  }
+
+  if (!parsedSearch.signUp && resetEmail) {
+    return <ResetSuccess />;
+  }
+
+  return history.goBack();
 }
 
 function mapDispatchToProps(dispatch) {
@@ -69,10 +53,15 @@ function mapStateToProps({ auth }) {
 
 Account.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  resetEmail: PropTypes.string.isRequired,
-  patientUser: PropTypes.shape(patientUserShape).isRequired,
+  resetEmail: PropTypes.string,
+  patientUser: PropTypes.shape(patientUserShape),
   location: PropTypes.shape(locationShape).isRequired,
   history: PropTypes.shape(historyShape).isRequired,
+};
+
+Account.defaultProps = {
+  resetEmail: null,
+  patientUser: null,
 };
 
 export default withRouter(connect(
