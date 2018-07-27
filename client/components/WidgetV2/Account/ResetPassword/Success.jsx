@@ -1,22 +1,33 @@
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { Link } from '../../../library';
+import Button from '../../../library/Button';
 import styles from './styles.scss';
+import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 
-function ResetSuccess() {
+function ResetSuccess({ history }) {
   return (
-    <div className={styles.container}>
+    <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
-        <div className={styles.content}>
-          <h3 className={styles.title}>Password Reset Sent</h3>
-          <p className={styles.subtitle}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>Password Reset Sent</h1>
+          <p className={styles.description}>
             {`We've sent you an email with password reset instructions. If the email doesn't show up
             soon, please check your spam folder. We sent the email from noreply@carecru.com.`}
           </p>
-          <Link to="./login">
-            <span className={styles.subCardLink}>Back to Login</span>
-          </Link>
+        </div>
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <Button
+            onClick={() => {
+              history.push('./login');
+            }}
+            className={styles.actionButton}
+          >
+            Back to Login
+          </Button>
         </div>
       </div>
     </div>
@@ -24,3 +35,7 @@ function ResetSuccess() {
 }
 
 export default withRouter(ResetSuccess);
+
+ResetSuccess.propTypes = {
+  history: PropTypes.shape(historyShape).isRequired,
+};

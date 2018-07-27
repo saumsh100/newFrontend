@@ -25,36 +25,42 @@ function ResetPassword(props) {
     });
 
   return (
-    <div className={styles.container}>
+    <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
-        <div className={styles.content}>
-          <h3 className={styles.title}>Reset</h3>
-          <p className={styles.subtitle}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>Reset</h1>
+          <p className={styles.description}>
             Enter your email below and if you are a user, we will send you a link to reset your
             password.
           </p>
-          <Form form="patientResetPassword" onSubmit={handleResetPassword} ignoreSaveButton>
-            <Field
-              type="email"
-              name="email"
-              theme={{
-                erroredLabelFilled: styles.erroredLabelFilled,
-                input: styles.input,
-                filled: styles.filled,
-                label: styles.label,
-                group: styles.group,
-                error: styles.error,
-                erroredInput: styles.erroredInput,
-                bar: styles.bar,
-                erroredLabel: styles.erroredLabel,
-              }}
-              label="Email"
-              validate={[emailValidate]}
-            />
-            <Button type="submit" className={styles.actionButton}>
-              Reset your password
-            </Button>
-          </Form>
+        </div>
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <div className={styles.contentWrapper}>
+            <Form form="patientResetPassword" onSubmit={handleResetPassword} ignoreSaveButton>
+              <Field
+                type="email"
+                name="email"
+                theme={{
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  input: styles.input,
+                  filled: styles.filled,
+                  label: styles.label,
+                  group: styles.group,
+                  error: styles.error,
+                  erroredInput: styles.erroredInput,
+                  bar: styles.bar,
+                  erroredLabel: styles.erroredLabel,
+                }}
+                label="Email"
+                validate={[emailValidate]}
+              />
+              <Button type="submit" className={styles.actionButton}>
+                Reset your password
+              </Button>
+            </Form>
+          </div>
         </div>
       </div>
     </div>

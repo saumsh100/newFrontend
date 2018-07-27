@@ -26,11 +26,11 @@ function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResen
     });
 
   return (
-    <div className={styles.container}>
+    <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
-        <div className={styles.content}>
-          <h3 className={styles.title}>Confirm</h3>
-          <p className={styles.subtitle}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>Confirm</h1>
+          <p className={styles.description}>
             We have sent a confirmation code via SMS to{' '}
             <span className={styles.phone}>{patientPhoneNumber}</span>. <br />
             Please type in the code below and submit to complete your booking request. <br />
@@ -47,29 +47,35 @@ function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResen
               </Button>
             }.
           </p>
-          <Form form="confirmNumberForm" onSubmit={handleConfirmation} ignoreSaveButton>
-            <Field
-              required
-              name="confirmCode"
-              label="Confirmation Code"
-              validate={[numDigitsValidate(4)]}
-              normalize={maxDigits(4)}
-              theme={{
-                erroredLabelFilled: styles.erroredLabelFilled,
-                input: styles.input,
-                filled: styles.filled,
-                label: styles.label,
-                group: styles.group,
-                error: styles.error,
-                erroredInput: styles.erroredInput,
-                bar: styles.bar,
-                erroredLabel: styles.erroredLabel,
-              }}
-            />
-            <Button type="submit" className={styles.actionButton}>
-              Confirm Signup
-            </Button>
-          </Form>
+        </div>
+      </div>
+      <div className={styles.contentWrapper}>
+        <div className={styles.container}>
+          <div className={styles.contentWrapper}>
+            <Form form="confirmNumberForm" onSubmit={handleConfirmation} ignoreSaveButton>
+              <Field
+                required
+                name="confirmCode"
+                label="Confirmation Code"
+                validate={[numDigitsValidate(4)]}
+                normalize={maxDigits(4)}
+                theme={{
+                  erroredLabelFilled: styles.erroredLabelFilled,
+                  input: styles.input,
+                  filled: styles.filled,
+                  label: styles.label,
+                  group: styles.group,
+                  error: styles.error,
+                  erroredInput: styles.erroredInput,
+                  bar: styles.bar,
+                  erroredLabel: styles.erroredLabel,
+                }}
+              />
+              <Button type="submit" className={styles.actionButton}>
+                Confirm Signup
+              </Button>
+            </Form>
+          </div>
         </div>
       </div>
     </div>

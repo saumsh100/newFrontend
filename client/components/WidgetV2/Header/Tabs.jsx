@@ -73,7 +73,6 @@ function Tabs({
             <Button
               className={classnames(styles.tab, {
                 [styles.active]: isAccountTab,
-                [styles.active]: isAccountRoute,
               })}
               onClick={() =>
                 push({
