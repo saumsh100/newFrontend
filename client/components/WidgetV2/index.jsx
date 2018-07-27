@@ -20,6 +20,12 @@ const ACCOUNT_TAB = 'account';
 const REVIEW_TAB = 'summary';
 
 class Widget extends Component {
+  constructor(props) {
+    super(props);
+
+    this.renderChildren = this.renderChildren.bind(this);
+  }
+
   componentWillMount() {
     // Without this, none of our themed styles would work
     const color = this.props.account.get('bookingWidgetPrimaryColor') || '#ff715a';
@@ -32,6 +38,43 @@ class Widget extends Component {
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.containerNode.scrollTop = 0;
     }
+  }
+
+  renderTabs({
+    isAccountRoute, isAccountTab, isEditing, isReviewRoute, isSummaryRoute,
+  }) {
+    if (isSummaryRoute && !isEditing) {
+      return <Review canConfirm={false} />;
+    }
+
+    if (isAccountTab && !isAccountRoute && !isReviewRoute) {
+      return <Logon isAccountTab />;
+    }
+
+    return null;
+  }
+
+  renderChildren(tabState, tabs, history) {
+    const { isAccountRoute, isBookingRoute, isEditing } = tabState;
+
+    const isChildrenRoute = isBookingRoute || isAccountRoute || isEditing;
+    if (!isChildrenRoute) {
+      return (
+        // we need this div here for styling purposes
+        <div>{this.renderTabs(tabState)}</div>
+      );
+    }
+    return React.Children.map(this.props.children, child =>
+      React.cloneElement(child, {
+        location: {
+          ...history.location,
+          state: {
+            ...history.location.state,
+            ...tabState,
+            ...tabs,
+          },
+        },
+      }));
   }
 
   render() {
@@ -97,20 +140,7 @@ class Widget extends Component {
               return this.containerNode;
             }}
           >
-            {isSummaryRoute && !isEditing && <Review canConfirm={false} />}
-            {isAccountTab && !isAccountRoute && !isReviewRoute && <Logon isAccountTab />}
-            {(isBookingRoute || isAccountRoute || isEditing) &&
-              React.Children.map(this.props.children, child =>
-                React.cloneElement(child, {
-                  location: {
-                    ...history.location,
-                    state: {
-                      ...history.location.state,
-                      ...tabState,
-                      ...tabs,
-                    },
-                  },
-                }))}
+            {this.renderChildren(tabState, tabs, history)}
           </div>
           <div className={styles.poweredBy}>
             We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
