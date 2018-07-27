@@ -39,14 +39,23 @@ import styles from './styles.scss';
 /**
  * Gender's array
  */
-const genders = [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }];
+const genders = [
+  {
+    value: 'male',
+    label: 'Male',
+  },
+  {
+    value: 'female',
+    label: 'Female',
+  },
+];
 
 const NEW_PATIENT = 'new';
 
 /**
  * Find the first option that matches the passed string.
  *
- * @param {array} data
+ * @param {{label, value}} data
  * @param {string} value
  */
 const validateField = (data, value) => data.find(item => item.value === value);
@@ -197,7 +206,6 @@ class PatientInformation extends Component {
   }
 
   scrollTo(name) {
-    console.log(name);
     scroller.scrollTo(name, {
       duration: 500,
       delay: 150,
@@ -220,7 +228,13 @@ class PatientInformation extends Component {
       value: patient.id,
       label: `${patient.firstName} ${patient.lastName}`,
     }));
-    patients = [...patients, { value: NEW_PATIENT, label: 'Someone Else' }];
+    patients = [
+      ...patients,
+      {
+        value: NEW_PATIENT,
+        label: 'Someone Else',
+      },
+    ];
 
     /**
      * Check if the passed email is not already used,
@@ -314,6 +328,7 @@ class PatientInformation extends Component {
                     required
                     className={styles.ddMenu}
                     theme={{
+                      active: styles.inputActive,
                       bar: styles.bar,
                       caretIconWrapper: styles.caretIconWrapper,
                       error: styles.erroredLabelDropdown,
@@ -452,6 +467,7 @@ class PatientInformation extends Component {
                     component={SuggestionSelect}
                     required
                     theme={{
+                      active: styles.inputActive,
                       bar: styles.bar,
                       caretIconWrapper: styles.caretIconWrapper,
                       error: styles.erroredLabelDropdown,
@@ -479,6 +495,7 @@ class PatientInformation extends Component {
               <Element name="insuranceCarrier" className={styles.contentWrapper}>
                 {isCustomCarrier ? (
                   <Field
+                    autoFocus
                     theme={{
                       bar: styles.bar,
                       error: styles.error,
@@ -518,6 +535,7 @@ class PatientInformation extends Component {
                       label="Insurance Carrier"
                       component={SuggestionSelect}
                       theme={{
+                        active: styles.inputActive,
                         bar: styles.bar,
                         caretIconWrapper: styles.caretIconWrapper,
                         error: styles.erroredLabelDropdown,

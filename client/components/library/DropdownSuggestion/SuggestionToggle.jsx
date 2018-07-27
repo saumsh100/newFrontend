@@ -17,8 +17,6 @@ class SuggestionToggle extends Component {
 
     this.state = {
       displayValue: '',
-      search: '',
-      option: {},
     };
     this.handleSearch = this.handleSearch.bind(this);
     this.handleKeydown = this.handleKeydown.bind(this);
@@ -33,7 +31,6 @@ class SuggestionToggle extends Component {
     if (this.props.selected) {
       this.setState({
         displayValue: this.props.selected.label,
-        option: this.props.selected,
       });
     }
   }
@@ -57,7 +54,6 @@ class SuggestionToggle extends Component {
     if (nextProps.selected) {
       this.setState({
         displayValue: nextProps.selected.label,
-        option: nextProps.selected,
       });
     }
   }
@@ -72,9 +68,7 @@ class SuggestionToggle extends Component {
     const { handleChange } = this.props;
     const search = e.target.value;
 
-    this.setState({ search }, () => {
-      handleChange(search);
-    });
+    handleChange(search);
   }
 
   handleKeydown(e) {
@@ -89,27 +83,20 @@ class SuggestionToggle extends Component {
    * and select the input field.
    */
   displaySuggestions() {
-    this.setState({ search: '' });
     const {
-      toggleView, disabled, isOpen, asInput,
+      toggleView, disabled, asInput, isOpen, name,
     } = this.props;
-
     if (disabled || asInput) return;
+
     if (!isOpen) {
-      toggleView();
+      this[`suggestion_toggle_${name}`].focus();
     }
+    return toggleView();
   }
 
   render() {
     const {
-      name,
-      handleBlur,
-      label,
-      theme,
-      error,
-      disabled,
-      isOpen,
-      asInput,
+      name, handleBlur, label, theme, error, disabled, isOpen, asInput,
     } = this.props;
 
     const labelClassName = classNames(theme.label, {
@@ -148,12 +135,13 @@ class SuggestionToggle extends Component {
               onKeyDown={this.handleKeydown}
               className={styles.hiddenSelect}
               id={`suggestion_toggle_${name}`}
+              tabIndex={-1}
               ref={(input) => {
                 this[`suggestion_toggle_${name}`] = input;
               }}
             >
-              {this.props.options.map((opt, i) => (
-                <option key={i} value={opt.value}>
+              {this.props.options.map(opt => (
+                <option key={opt.value} value={opt.value}>
                   {opt.label}
                 </option>
               ))}
@@ -161,11 +149,7 @@ class SuggestionToggle extends Component {
           </div>
           <span className={labelClassName}>{label}</span>
           <div className={theme.caretIconWrapper}>
-            <Icon
-              className={caretIconClassName}
-              icon="caret-down"
-              type="solid"
-            />
+            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>
@@ -176,23 +160,27 @@ class SuggestionToggle extends Component {
 export default SuggestionToggle;
 
 SuggestionToggle.propTypes = {
-  'data-test-id': PropTypes.string,
+  'data-test-id': PropTypes.string.isRequired,
   selected: PropTypes.shape({
     label: PropTypes.string,
     value: PropTypes.string,
-  }),
-  toggleAsInput: PropTypes.func,
-  options: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, value: PropTypes.string })),
-  asInput: PropTypes.bool,
-  handleKeydown: PropTypes.func,
-  handleBlur: PropTypes.func,
-  handleChange: PropTypes.func,
-  toggleView: PropTypes.func,
-  disabled: PropTypes.bool,
-  isOpen: PropTypes.bool,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  placeholder: PropTypes.string,
+  }).isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, value: PropTypes.string }))
+    .isRequired,
+  asInput: PropTypes.bool.isRequired,
+  handleKeydown: PropTypes.func.isRequired,
+  handleBlur: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  toggleView: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  label: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   error: PropTypes.string,
   theme: PropTypes.objectOf(PropTypes.string),
+};
+
+SuggestionToggle.defaultProps = {
+  theme: {},
+  error: '',
 };
