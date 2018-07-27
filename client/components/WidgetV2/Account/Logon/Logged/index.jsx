@@ -6,11 +6,11 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import axios from 'axios';
-import { Form, Field, Button } from '../../../../library';
+import { Button, Field, Form } from '../../../../library';
 import { logout } from '../../../../../thunks/patientAuth';
 import { refreshAvailabilitiesState } from '../../../../../actions/availabilities';
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
-import { locationShape, historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { composeAsyncValidators } from '../../../../library/Form/validate';
 import { normalizePhone } from '../../../../library/Form/normalize';
 import { updateFamilyPatient } from '../../../../../thunks/familyPatients';
@@ -25,7 +25,6 @@ function Logged({
       .filter((v, index) => index < 4)
       .concat(path)
       .join('/');
-
   /**
    * Check if the passed email is not already used,
    * but first check if the email is not the same as the patient.
@@ -74,7 +73,6 @@ function Logged({
     phoneNumber: patientUser.phoneNumber,
     email: patientUser.email,
   };
-
   const handleUserUpdate = (values) => {
     try {
       props.updateFamilyPatient(values, patientUser.id);

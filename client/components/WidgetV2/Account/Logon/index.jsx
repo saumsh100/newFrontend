@@ -8,10 +8,12 @@ import Login from './Login';
 import Logged from './Logged';
 import { setResetEmail } from '../../../../actions/auth';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
+import { hideButton } from '../../../../reducers/widgetNavigation';
 
 class Logon extends PureComponent {
   componentDidMount() {
     this.props.setResetEmail(null);
+    this.props.hideButton();
   }
 
   componentToRender({ isAuthenticated, isAccountTab, history }) {
@@ -38,6 +40,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setResetEmail,
+      hideButton,
     },
     dispatch,
   );
@@ -51,6 +54,7 @@ function mapStateToProps({ auth }) {
 
 Logon.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
+  hideButton: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   isAccountTab: PropTypes.bool,
   setResetEmail: PropTypes.func.isRequired,

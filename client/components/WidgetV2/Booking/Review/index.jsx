@@ -65,10 +65,12 @@ class Review extends PureComponent {
 
   componentDidMount() {
     const { dateAndTime, hasWaitList, canConfirm } = this.props;
-    this.props.setText('Confirm Booking');
     if (canConfirm && (dateAndTime || hasWaitList)) {
-      this.props.showButton();
+      this.props.setText('Confirm Booking');
+      return this.props.showButton();
     }
+    this.props.setText();
+    return this.props.hideButton();
   }
 
   componentDidUpdate(prevProps) {
@@ -80,6 +82,10 @@ class Review extends PureComponent {
     }
 
     return undefined;
+  }
+
+  componentWillUnmount() {
+    return this.props.setText();
   }
 
   /**
