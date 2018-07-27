@@ -45,7 +45,10 @@ function Practitioners({
   /**
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
-  const contextualUrl = (location.state && location.state.nextRoute) || './date-and-time';
+  const contextualUrl = {
+    ...location,
+    pathname: './date-and-time',
+  };
 
   const selectPractitioner = (practitioner) => {
     props.setSelectedPractitionerId(practitioner);

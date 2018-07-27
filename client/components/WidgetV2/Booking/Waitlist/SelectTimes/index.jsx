@@ -20,6 +20,7 @@ import {
   setText,
 } from '../../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
+import { patientUserShape } from '../../../../library/PropTypeShapes';
 
 /**
  * Checks if there are a specific route to go onclicking a card or just the default one.
@@ -35,6 +36,7 @@ class SelectTimes extends React.Component {
   }
 
   componentDidMount() {
+    this.props.setText();
     this.shouldShowNextButton(this.props.waitlist.times.length > 0);
   }
 
@@ -43,7 +45,7 @@ class SelectTimes extends React.Component {
       this.props.setIsClicked(false);
       this.props.hideButton();
       this.props.setText();
-      this.props.history.push(contextualUrl(this.props.location));
+      this.props.history.push(this.props.patientUser ? '../review' : contextualUrl(this.props.location));
     }
   }
 
@@ -241,7 +243,15 @@ class SelectTimes extends React.Component {
   }
 }
 
-function mapStateToProps({ availabilities, entities, widgetNavigation }) {
+function mapStateToProps({
+  availabilities, auth, entities, widgetNavigation,
+}) {
+  const getPatientUser =
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').length > 0
+      ? auth
+        .get('familyPatients')
+        .find(patient => patient.id === availabilities.get('familyPatientUser'))
+      : false;
   return {
     timezone: availabilities.get('account').get('timezone'),
     waitlist: availabilities.get('waitlist').toJS(),
@@ -252,6 +262,7 @@ function mapStateToProps({ availabilities, entities, widgetNavigation }) {
       availabilities.get('selectedServiceId'),
     ]),
     floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
+    patientUser: getPatientUser,
   };
 }
 
@@ -277,6 +288,7 @@ SelectTimes.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   officeHours: PropTypes.shape(officeHoursShape).isRequired,
+  patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),
   selectedService: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Service)])
     .isRequired,
   setWaitlist: PropTypes.func.isRequired,
@@ -294,6 +306,7 @@ SelectTimes.propTypes = {
 };
 
 SelectTimes.defaultProps = {
+  patientUser: false,
   waitlist: {
     dates: [],
     unavailableDates: [],

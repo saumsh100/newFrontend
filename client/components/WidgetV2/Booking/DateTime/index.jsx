@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -19,7 +19,12 @@ import Button from '../../../library/Button';
 import DayPicker from '../../../library/DayPicker';
 import Join from '../Waitlist/Join';
 import { fetchAvailabilities } from '../../../../thunks/availabilities';
-import { showButton, hideButton, setIsClicked } from '../../../../reducers/widgetNavigation';
+import {
+  showButton,
+  hideButton,
+  setText,
+  setIsClicked,
+} from '../../../../reducers/widgetNavigation';
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
@@ -59,12 +64,13 @@ const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) 
  */
 const genericMoment = (time, timezone) => (timezone ? moment.tz(time, timezone) : moment(time));
 
-class DateTime extends Component {
+class DateTime extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       isModal: false,
+      needToUpdateWaitlist: false,
     };
 
     this.confirmDateTime = this.confirmDateTime.bind(this);
@@ -78,10 +84,11 @@ class DateTime extends Component {
     const { timeframe } = parse(this.props.location.search);
 
     const finalTimeFrame = timeframe || this.props.timeframe;
+
+    this.props.setText();
+
     if (finalTimeFrame && finalTimeFrame !== '') {
-      setTimeout(() => {
-        this.scrollTo(finalTimeFrame);
-      }, 100);
+      this.scrollTo(finalTimeFrame);
     }
 
     // This can be removed when the new booking widget is released
@@ -104,10 +111,6 @@ class DateTime extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.props.hideButton();
-  }
-
   /**
    * If the provided date is different than the actual selectedStartDate,
    * set the new date.
@@ -115,7 +118,10 @@ class DateTime extends Component {
    * @param date
    */
   changeSelectedDate(date) {
-    if (!moment.tz(date, this.props.accountTimezone).isSame(this.props.selectedStartDate, 'day')) {
+    const momentDate = genericMoment(date, this.props.accountTimezone);
+
+    if (!momentDate.isSame(this.props.selectedStartDate, 'day')) {
+      this.setState({ needToUpdateWaitlist: true });
       this.props.hideButton();
       this.props.setSelectedAvailability(null);
       this.props.setSelectedStartDate(date);
@@ -153,13 +159,16 @@ class DateTime extends Component {
    * Send the user to the join waitlist's prompt, after clicking on the next button.
    */
   confirmDateTime() {
-    const { selectedAvailability, accountTimezone } = this.props;
+    const {
+      selectedAvailability, accountTimezone, location, history,
+    } = this.props;
 
     this.props.setConfirmAvailability(true);
 
-    const nextLoc = this.props.location.state && this.props.location.state.nextRoute;
-    if (nextLoc) {
-      return this.props.history.push(nextLoc);
+    const nextLoc = location.state && location.state.nextRoute;
+    if (nextLoc && !this.state.needToUpdateWaitlist) {
+      this.props.hideButton();
+      return history.push(nextLoc);
     }
 
     const currentDayPlus24 = moment()
@@ -168,7 +177,8 @@ class DateTime extends Component {
       .toISOString();
 
     if (selectedAvailability.startDate < currentDayPlus24) {
-      return this.props.history.push('./patient-information');
+      this.props.hideButton();
+      return history.push(nextLoc || './patient-information');
     }
 
     return this.setState({
@@ -186,7 +196,10 @@ class DateTime extends Component {
     this.props.setSelectedAvailability(null);
     this.props.setTimeFrame(timeframe);
     this.props.setSelectedStartDate(new Date());
-    return this.props.history.push('./waitlist/select-dates');
+    return this.props.history.push({
+      ...this.props.location,
+      pathname: './waitlist/select-dates',
+    });
   }
 
   scrollTo(name) {
@@ -240,8 +253,9 @@ class DateTime extends Component {
           <Button
             onClick={() => {
               history.replace({
-                location,
+                ...location,
                 search: stringify({
+                  ...parse(location.search),
                   timeframe,
                 }),
               });
@@ -356,7 +370,9 @@ class DateTime extends Component {
             {availabilitiesDisplay()}
           </div>
         </Element>
-        {this.state.isModal && <Join toCloseModal={this.handleClosingModal} history={history} />}
+        {this.state.isModal && (
+          <Join toCloseModal={this.handleClosingModal} history={history} location={location} />
+        )}
       </Element>
     );
   }
@@ -384,6 +400,7 @@ function mapStateToProps({ availabilities, widgetNavigation }) {
     selectedStartDate,
     timeframe: availabilities.get('timeframe'),
     floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
+    waitListDates: availabilities.getIn(['waitlist', 'dates']),
   };
 }
 
@@ -394,6 +411,7 @@ function mapDispatchToProps(dispatch) {
       setConfirmAvailability,
       hideButton,
       setIsClicked,
+      setText,
       showButton,
       setSelectedAvailability,
       setSelectedStartDate,
@@ -427,6 +445,7 @@ DateTime.propTypes = {
   floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
   showButton: PropTypes.func.isRequired,
+  setText: PropTypes.func.isRequired,
 };
 
 DateTime.defaultProps = {

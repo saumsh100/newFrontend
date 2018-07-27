@@ -4,20 +4,18 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Button } from '../../../../library';
-import { historyShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { resetWaitlist } from '../../../../../actions/availabilities';
 import { hideButton } from '../../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
 
 function Join({
-  isAuth, history, toCloseModal, ...props
+  isAuth, history, location, toCloseModal, ...props
 }) {
   /**
-   * Check if the user is logged, if it's send him to the patient-information route,
-   * otherwise send him to the login
+   * Check if the route comes from edit mode.
    */
-  const linkTo = isAuth ? './patient-information' : '../login';
-
+  const nextLoc = (location.state && location.state.nextRoute) || './patient-information';
   /**
    * If the user is negating his desire to join the waitlist,
    * reset the wailist information, so if he joined by mistake or
@@ -26,11 +24,13 @@ function Join({
    * @param {boolean} confirmWaitlist
    */
   const handleWaitlistConfirmation = (confirmWaitlist) => {
-    props.hideButton();
     if (!confirmWaitlist) {
       props.resetWaitlist();
     }
-    return history.push(confirmWaitlist ? './waitlist/select-dates' : linkTo);
+    return history.push({
+      ...location,
+      pathname: confirmWaitlist ? './waitlist/select-dates' : nextLoc,
+    });
   };
 
   return (
@@ -75,6 +75,7 @@ function mapDispatchToProps(dispatch) {
 Join.propTypes = {
   resetWaitlist: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
   isAuth: PropTypes.bool.isRequired,
   hideButton: PropTypes.func.isRequired,
   toCloseModal: PropTypes.func.isRequired,

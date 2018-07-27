@@ -75,9 +75,10 @@ class PatientInformation extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchFamilyPatients();
     const patient = this.props.patientUser;
+    this.props.setText();
     this.props.showButton();
+    this.props.fetchFamilyPatients();
     this.props.touch('patientInformation', ...Object.keys(defaultValues));
     if (!patient || !patient.insuranceCarrier) {
       return false;

@@ -19,9 +19,14 @@ import styles from './styles.scss';
 import dayPickerStyles from '../../dayPickerStyles.scss';
 
 /**
+ * Next default route for this component
+ */
+const nextRoute = './select-times';
+
+/**
  * Checks if there are a specific route to go onclicking a card or just the default one.
  */
-const contextualUrl = location => (location.state && location.state.nextRoute) || './select-times';
+const contextualUrl = location => (location.state && location.state.nextRoute) || nextRoute;
 
 class SelectDates extends PureComponent {
   componentDidMount() {
@@ -33,17 +38,28 @@ class SelectDates extends PureComponent {
     props.setText('Select times available');
     if (dates.length > 0) {
       props.showButton();
+    } else {
+      props.hideButton();
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { floatingButtonIsClicked, history, ...props } = this.props;
+    const {
+      floatingButtonIsClicked,
+      history,
+      location,
+      waitlist: { times },
+      ...props
+    } = this.props;
 
     if (floatingButtonIsClicked && !prevProps.floatingButtonIsClicked) {
       props.setIsClicked(false);
       props.hideButton();
       props.setText();
-      history.push(contextualUrl(this.props.location));
+      history.push({
+        ...location,
+        pathname: times.length > 0 ? contextualUrl(this.props.location) : nextRoute,
+      });
     }
   }
 

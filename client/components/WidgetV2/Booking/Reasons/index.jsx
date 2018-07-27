@@ -30,7 +30,10 @@ function Reasons({
   /**
    * Checks if there are a specific route to go onclicking a card or just the default one.
    */
-  const contextualUrl = (location.state && location.state.nextRoute) || './practitioner';
+  const contextualUrl = {
+    ...location,
+    pathname: './practitioner',
+  };
 
   const selectReason = (practitioner) => {
     props.setSelectedServiceId(practitioner);

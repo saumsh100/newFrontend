@@ -3,6 +3,7 @@ import React from 'react';
 import { capitalizeFirstLetter } from '../../../Utils';
 import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
+import styles from './styles.scss';
 
 /**
  * Configured formatter for the current account timezone and ha format.
@@ -22,12 +23,11 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
     }
     // Displays 'All day (starTime - endTime)'
     if (availabilities.total === selected.length) {
+      const text = `All day (${formatReviewDates(selected[0])} - ${formatReviewDates(selected[selected.length - 1])})`;
       return [
-        <div>
-          <strong>
-            {`All day (${formatReviewDates(selected[0])} - ${formatReviewDates(selected[selected.length - 1])})`}
-          </strong>
-        </div>,
+        <span className={styles.block} key={btoa(text)}>
+          <strong>{text}</strong>
+        </span>,
       ];
     }
 
@@ -108,11 +108,11 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
     return [
       ...acc,
       ...[
-        <div>
+        <span className={styles.block} key={btoa(`${timeFrame}_${text}`)}>
           {`${timeFrame}: `}
           {boldedText.length > 0 && <strong>{boldedText}</strong>}
           {` ${text}`}
-        </div>,
+        </span>,
       ],
     ];
   };

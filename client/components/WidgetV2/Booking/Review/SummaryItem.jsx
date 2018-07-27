@@ -58,7 +58,7 @@ const SummaryItem = ({
 
 SummaryItem.propTypes = {
   label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   link: PropTypes.string.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   location: PropTypes.shape(locationShape).isRequired,
@@ -70,8 +70,10 @@ SummaryItem.propTypes = {
  * @param {object} history
  * @param {object} location
  */
-export const SummaryItemFactory = ({ location, history }) => props => (
-  <SummaryItem {...props} location={location} history={history} />
-);
+export const SummaryItemFactory = ({ location, history }) => {
+  const Wrapped = props => <SummaryItem {...props} location={location} history={history} />;
+  Wrapped.displayName = 'SummaryItemFactory';
+  return Wrapped;
+};
 
 export default SummaryItem;

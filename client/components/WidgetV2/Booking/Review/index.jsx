@@ -84,10 +84,6 @@ class Review extends PureComponent {
     return undefined;
   }
 
-  componentWillUnmount() {
-    return this.props.setText();
-  }
-
   /**
    * Manages if we should create a waitlist and an availability or both
    */
@@ -175,6 +171,14 @@ class Review extends PureComponent {
       history,
     });
 
+    const dateTimeSummaryText = dateAndTime
+      ? `${dateFormatter(dateAndTime.startDate, timezone, 'ddd, MMM Do')} at ${dateFormatter(
+        dateAndTime.startDate,
+        timezone,
+        'h:mm a',
+      )}`
+      : NOT_PROVIDED_TEXT;
+
     return (
       <div className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
@@ -190,11 +194,6 @@ class Review extends PureComponent {
                 <p className={styles.subtitle}>
                   Here are the informations that you already defined to your appointment.
                 </p>
-                <SummaryItem
-                  label="Reason"
-                  value={selectedService.get('name')}
-                  link={b('reason')}
-                />
                 <SummaryItem
                   label="Available Dates"
                   value={waitlistDates(waitlist.dates, timezone)}
@@ -241,14 +240,10 @@ class Review extends PureComponent {
               link={b('practitioner')}
             />
 
-            {dateAndTime && (
+            {(dateAndTime || waitlist.dates.length > 0) && (
               <SummaryItem
                 label="Date and Time"
-                value={`${dateFormatter(
-                  dateAndTime.startDate,
-                  timezone,
-                  'ddd, MMM Do',
-                )} at ${dateFormatter(dateAndTime.startDate, timezone, 'h:mm a')}`}
+                value={dateTimeSummaryText}
                 link={b('date-and-time')}
               />
             )}
