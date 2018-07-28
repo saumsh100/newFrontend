@@ -65,6 +65,7 @@
   "jest": {
     "projects": [
       {
+        "testURL": "http://localhost/",
         "setupTestFrameworkScriptFile": "<rootDir>/tests/util/jestSetup.js",
         "displayName": "test",
         "moduleNameMapper": {
@@ -73,6 +74,7 @@
         }
       },
       {
+        "testURL": "http://localhost/",
         "displayName": "lint",
         "runner": "jest-runner-eslint",
         "testMatch": [
