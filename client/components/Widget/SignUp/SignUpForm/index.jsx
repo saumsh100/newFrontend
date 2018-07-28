@@ -5,6 +5,8 @@ import {
   asyncValidatePatient,
   passwordsMatch,
   passwordStrength,
+  normalizeBirthdate,
+  validateBirthdate,
 } from '../../../library/Form/validate';
 import styles from './styles.scss';
 
@@ -41,6 +43,13 @@ export default function SignUpForm({
           </Col>
         </Row>
       </Grid>
+      <Field
+        normalize={normalizeBirthdate}
+        validate={[validateBirthdate]}
+        required
+        name="birthDate"
+        label="Birth Date (MM/DD/YYYY)"
+      />
       <Field required name="phoneNumber" label="Mobile Number" type="tel" />
       <Field required label="Email" name="email" type="email" />
       <Field

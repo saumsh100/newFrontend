@@ -71,6 +71,7 @@ class AddPatient extends Component {
                 <Field
                   normalize={normalizeBirthdate}
                   validate={[validateBirthdate]}
+                  required
                   name="birthDate"
                   label="Birth Date (MM/DD/YYYY)"
                 />
