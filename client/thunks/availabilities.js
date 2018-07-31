@@ -101,7 +101,12 @@ export function createWaitSpot() {
   return function (dispatch, getState) {
     const state = getState();
     const {
-      account, waitSpot, selectedAvailability, waitlist,
+      account,
+      waitSpot,
+      selectedAvailability,
+      waitlist,
+      selectedServiceId,
+      selectedPractitionerId,
     } = state.availabilities.toJS();
 
     const { patientUser } = state.auth.toJS();
@@ -116,8 +121,16 @@ export function createWaitSpot() {
       availableTimes: waitlist.times,
       unavailableDates: waitlist.unavailableDates,
 
+      reasonId: selectedServiceId,
+      practitionerId: selectedPractitionerId !== '' ? selectedPractitionerId : null,
+
       // If availability is selected, add this to the waitspot, so we can know when to remove
-      endDate: selectedAvailability && selectedAvailability.startDate,
+      endDate:
+        (selectedAvailability && selectedAvailability.startDate) ||
+        waitlist.dates[waitlist.dates.length - 1] ||
+        moment()
+          .add(60, 'days')
+          .toISOString(),
     };
 
     return axios.post('/waitSpots', params).then(({ data: { entities: waitSpots } }) => {

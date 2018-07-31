@@ -155,6 +155,8 @@ input addWaitSpotInput {
   availableTimes: [String]
   endDate: String
   appointmentId: String
+  reasonId: String
+  practitionerId: String
   clientMutationId: String
 }
 
@@ -525,6 +527,8 @@ type WaitSpot implements Node {
   availableTimes: [String]
   endDate: String
   appointmentId: String
+  reasonId: String
+  practitionerId: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String

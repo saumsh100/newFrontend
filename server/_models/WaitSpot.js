@@ -1,4 +1,3 @@
-
 export default function (sequelize, DataTypes) {
   const WaitSpot = sequelize.define('WaitSpot', {
     id: {
@@ -65,9 +64,19 @@ export default function (sequelize, DataTypes) {
     appointmentId: {
       type: DataTypes.UUID,
     },
+
+    reasonId: {
+      type: DataTypes.UUID,
+    },
+
+    practitionerId: {
+      type: DataTypes.UUID,
+    },
   });
 
-  WaitSpot.associate = ({ Appointment, Account, Patient, PatientUser }) => {
+  WaitSpot.associate = ({
+    Appointment, Account, Patient, PatientUser, Practitioner, Service,
+  }) => {
     WaitSpot.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -86,6 +95,15 @@ export default function (sequelize, DataTypes) {
     WaitSpot.belongsTo(PatientUser, {
       foreignKey: 'patientUserId',
       as: 'patientUser',
+    });
+    WaitSpot.belongsTo(Practitioner, {
+      foreignKey: 'practitionerId',
+      as: 'practitioner',
+    });
+
+    WaitSpot.belongsTo(Service, {
+      foreignKey: 'reasonId',
+      as: 'reason',
     });
   };
 

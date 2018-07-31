@@ -1,4 +1,3 @@
-
 import { Service } from '../../server/_models';
 import wipeModel from './wipeModel';
 import { accountId } from './seedTestUsers';
@@ -18,8 +17,13 @@ async function seedTestService() {
   await Service.create(service);
 }
 
+async function wipeTestService() {
+  await wipeModel(Service);
+}
+
 module.exports = {
   serviceId,
   service,
   seedTestService,
+  wipeTestService,
 };

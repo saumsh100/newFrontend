@@ -12,6 +12,8 @@ const WaitSpotSchema = {
   unavailableDates: [],
   availableDates: [],
   availableTimes: [],
+  reasonId: null,
+  practitionerId: null,
   endDate: null,
   createdAt: null,
 };
