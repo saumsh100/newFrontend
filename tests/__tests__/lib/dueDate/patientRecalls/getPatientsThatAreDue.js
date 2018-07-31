@@ -73,7 +73,14 @@ describe('Due Date Calculations - patientRecalls', () => {
 
       test('should return 1 patient because they dont have a future booked appt', async () => {
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(1);
         expect(ps[0].id).toBe(patients[0].id);
       });
@@ -81,21 +88,42 @@ describe('Due Date Calculations - patientRecalls', () => {
       test('should return 0 patients because now they have a booked appointment', async () => {
         await Appointment.create(makeApptData({ patientId: patients[0].id, ...dates('2018-05-15 08:00:00') }));
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(0);
       });
 
       test('should return 1 patients because now they have a booked appointment but reason is null', async () => {
         await Appointment.create(makeApptData({ patientId: patients[0].id, ...dates('2018-05-15 08:00:00'), reason: null }));
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(1);
       });
 
       test('should return 1 patient because the future booked appointment is not the right type', async () => {
         await Appointment.create(makeApptData({ patientId: patients[0].id, ...dates('2018-05-15 08:00:00'), reason: 'CAT' }));
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(1);
         expect(ps[0].id).toBe(patients[0].id);
       });
@@ -103,7 +131,14 @@ describe('Due Date Calculations - patientRecalls', () => {
       test('should return 0 patients because the patientRecalls are all later than lastHygieneDate', async () => {
         await patients[0].update({ lastHygieneDate: moment('2018-06-20 08:00:00').toISOString() });
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(0);
       });
 
@@ -123,7 +158,8 @@ describe('Due Date Calculations - patientRecalls', () => {
         const ps = await getPatientsThatAreDue({
           accountId,
           date,
-          types: ['CRAZY_HYGIENE_REASON'], // needs to be different than default so they are not returned
+          appointmentTypes: ['CRAZY_HYGIENE_REASON'], // needs to be different than default so they are not returned
+          patientRecallTypes: ['CRAZY_HYGIENE_REASON'],
           patientAttribute: 'lastHygieneDate',
           codesQuery: { $like: '111%' },
         });
@@ -147,7 +183,8 @@ describe('Due Date Calculations - patientRecalls', () => {
         const ps = await getPatientsThatAreDue({
           accountId,
           date,
-          types: ['CRAZY_HYGIENE_REASON'], // needs to be different than default so they are not returned
+          appointmentTypes: ['CRAZY_HYGIENE_REASON'],
+          patientRecallTypes: ['CRAZY_HYGIENE_REASON'], // needs to be different than default so they are not returned
           patientAttribute: 'lastHygieneDate',
           codesQuery: { $like: '111%' },
         });
@@ -186,7 +223,14 @@ describe('Due Date Calculations - patientRecalls', () => {
 
       test('should return 0 patients cause the appointments are booked', async () => {
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(0);
       });
 
@@ -194,7 +238,14 @@ describe('Due Date Calculations - patientRecalls', () => {
         await appointments[0].update({ ...dates('2018-03-20 08:00:00') });
         await appointments[1].update({ ...dates('2018-03-20 08:00:00') });
         const date = moment('2018-04-20 08:00:00').toISOString();
-        const ps = await getPatientsThatAreDue({ accountId, date, types: [DEFAULT_TYPE], patientAttribute: 'lastHygieneDate' });
+        const ps = await getPatientsThatAreDue({
+          accountId,
+          date,
+          appointmentTypes: [DEFAULT_TYPE],
+          patientRecallTypes: [DEFAULT_TYPE],
+          patientAttribute: 'lastHygieneDate',
+        });
+
         expect(ps.length).toBe(2);
       });
     });

@@ -3,9 +3,10 @@ import moment from 'moment';
 import keyBy from 'lodash/keyBy';
 import {
   Appointment,
+  AppointmentCode,
   Patient,
   PatientRecall,
-} from '../../../../../server/_models';
+} from 'CareCruModels';
 import { updatePatientDueDateFromPatientRecalls } from '../../../../../server/lib/dueDate/patientRecalls';
 import { seedTestUsers, accountId } from '../../../../util/seedTestUsers';
 import { patientId } from '../../../../util/seedTestPatients';
@@ -117,7 +118,7 @@ describe('Due Date Calculations - patientRecalls', () => {
         expect(ps.length).toBe(4);
       });
 
-      test('should return 4 patients cause the appointments are not booked and its using the accouns fallback', async () => {
+      test('should return 4 patients cause the appointments are not booked and its using the account fallback', async () => {
         await wipeModel(Appointment);
         await wipeModel(PatientRecall);
         const date = moment('2018-04-20 08:00:00').toISOString();
@@ -143,6 +144,33 @@ describe('Due Date Calculations - patientRecalls', () => {
         expect(nps[2].dueForRecallExamDate.toISOString()).toBe(d);
         expect(nps[3].dueForHygieneDate.toISOString()).toBe(d);
         expect(nps[3].dueForRecallExamDate.toISOString()).toBe(d);
+      });
+
+      test('should return 0 patients because the patient dueForRecallExam has a future booked hygiene appointment', async () => {
+        const date = moment('2018-04-20 08:00:00').toISOString();
+        await appointments[2].update({ reason: DEFAULT_HYGIENE });
+        const ps = await updatePatientDueDateFromPatientRecalls({
+          accountId,
+          date,
+          hygieneTypes: [DEFAULT_HYGIENE],
+          recallTypes: [DEFAULT_RECALL],
+        });
+
+        expect(ps.length).toBe(0);
+      });
+
+      test('should return 0 patients because the patient dueForRecallExam has a future booked hygiene appointment (based on appointmentCodes)', async () => {
+        const date = moment('2018-04-20 08:00:00').toISOString();
+        await appointments[2].update({ reason: null });
+        await AppointmentCode.create({ appointmentId: appointments[2].id, code: '11101' });
+        const ps = await updatePatientDueDateFromPatientRecalls({
+          accountId,
+          date,
+          hygieneTypes: [DEFAULT_HYGIENE],
+          recallTypes: [DEFAULT_RECALL],
+        });
+
+        expect(ps.length).toBe(0);
       });
 
       test('should return 2 patients', async () => {

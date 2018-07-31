@@ -25,7 +25,8 @@ const reasonMatchesType = (reason, types) => {
  *
  * @param {uuid} config.accountId - id of the account
  * @param {date} config.date - usually date of "now"
- * @param {[string]} config.types - types of the appointment that are needed to be checked
+ * @param {[string]} config.appointmentTypes - types of the appointment that are needed to be checked
+ * @param {[string]} config.patientRecallTypes - types of the patientRecall that we pull dueDates from
  * @param {[uuid]} config.patientIds - an array of patientIds that we specifically want to check
  * @param {string} config.patientAttribute - attribute that we are checking lastDate for
  * @param {object} config.codesQuery - a where query for the appointmentCodes
@@ -35,7 +36,8 @@ export async function getPatientsThatAreDue(config) {
   const {
     accountId,
     date,
-    types,
+    appointmentTypes,
+    patientRecallTypes,
     patientIds,
     patientAttribute,
     codesQuery,
@@ -60,7 +62,7 @@ export async function getPatientsThatAreDue(config) {
         as: 'patientRecalls',
         attributes: ['dueDate', 'type'],
         where: {
-          type: { $in: types },
+          type: { $in: patientRecallTypes },
         },
 
         required: false,
@@ -96,7 +98,8 @@ export async function getPatientsThatAreDue(config) {
       p.patientRecalls = p.patientRecalls.filter(r => p[patientAttribute] < r.dueDate);
 
       // Get future appointments of this "type", through either reason or appointmentCodes
-      p.appointments = p.appointments.filter(a => reasonMatchesType(a.reason, types) || a.appointmentCodes.length);
+      p.appointments = p.appointments.filter(a =>
+        reasonMatchesType(a.reason, appointmentTypes) || a.appointmentCodes.length);
 
       return p;
     })
@@ -238,22 +241,32 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
     recallInterval,
   } = config;
 
+  // Concatenate the appointments query parameters together
+  // - Someone should not be dueForRecallExam if they have a future booked hygiene appointment
+  // - Someone should not be dueForHygiene if they have a future booked recall appointment
+  const appointmentTypes = hygieneTypes.concat(recallTypes);
+  const hygieneCodesQuery = { $like: '111%' };
+  const recallCodesQuery = { $in: ['00121', '01202'] };
+  const codesQuery = { $or: [hygieneCodesQuery, recallCodesQuery] };
+
   let patientsDueForHygiene = await getPatientsThatAreDue({
     accountId,
     date,
-    types: hygieneTypes,
+    appointmentTypes,
+    patientRecallTypes: hygieneTypes,
     patientIds,
     patientAttribute: 'lastHygieneDate',
-    codesQuery: { $like: '111%' },
+    codesQuery,
   });
 
   let patientsDueForRecall = await getPatientsThatAreDue({
     accountId,
     date,
-    types: recallTypes,
+    appointmentTypes,
+    patientRecallTypes: recallTypes,
     patientIds,
     patientAttribute: 'lastRecallDate',
-    codesQuery: { $in: ['00121', '01202'] },
+    codesQuery,
   });
 
   patientsDueForHygiene = patientsDueForHygiene
