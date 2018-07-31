@@ -17,6 +17,7 @@ import {
   fetchEntitiesRequest,
   updateEntityRequest,
 } from '../../../thunks/fetchEntities';
+import { deleteAllEntity } from '../../../actions/entities';
 import {
   addRemoveTimelineFilters,
   selectAllTimelineFilters,
@@ -60,7 +61,7 @@ HeaderModalComponent.propTypes = {
 };
 
 // The default list of events shown on the time-line. Add to this when a new event typed is added.
-const defaultEvents = ['appointment', 'reminder', 'review', 'call', 'new patient'];
+const defaultEvents = ['appointment', 'reminder', 'review', 'call', 'newpatient'];
 
 class PatientInfo extends Component {
   constructor(props) {
@@ -83,12 +84,17 @@ class PatientInfo extends Component {
     this.handleTabChange = this.handleTabChange.bind(this);
     this.addRemoveFilter = this.addRemoveFilter.bind(this);
     this.fetchPatientData = this.fetchPatientData.bind(this);
+    this.fetchEvents = this.fetchEvents.bind(this);
   }
 
   componentDidMount() {
     const patientId = this.props.match.params.patientId;
     const url = `/api/patients/${patientId}`;
     this.fetchPatientData(patientId, url);
+
+    if (this.props.patient) {
+      this.fetchEvents();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -97,16 +103,29 @@ class PatientInfo extends Component {
       const url = `/api/patients/${nextProps.match.params.patientId}`;
 
       this.fetchPatientData(nextProps.match.params.patientId, url);
+      this.fetchEvents();
     }
   }
 
   componentWillUnmount() {
+    this.props.deleteAllEntity('events');
     this.props.selectAllTimelineFilters();
   }
 
   changePageTab(pageTab) {
     this.setState({
       pageTab,
+    });
+  }
+
+  fetchEvents() {
+    this.props.fetchEntitiesRequest({
+      key: 'events',
+      id: 'getPatientEvents',
+      url: `/api/patients/${this.props.patient.id}/events`,
+      params: {
+        limit: 10,
+      },
     });
   }
 
@@ -135,12 +154,6 @@ class PatientInfo extends Component {
         id: 'fetchRecalls',
         key: 'recalls',
         url: `/api/accounts/${activeAccount.id}/recalls`,
-      }),
-      this.props.fetchEntitiesRequest({
-        key: 'events',
-        id: 'getPatientEvents',
-        url: `/api/patients/${patientId}/events`,
-        params: { limit: 10 },
       }),
     ]);
   }
@@ -351,6 +364,7 @@ function mapDispatchToProps(dispatch) {
       clearAllTimelineFilters,
       setTitle,
       setBackHandler,
+      deleteAllEntity,
     },
     dispatch,
   );
@@ -438,6 +452,7 @@ PatientInfo.propTypes = {
   addRemoveTimelineFilters: PropTypes.func.isRequired,
   clearAllTimelineFilters: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
+  deleteAllEntity: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {

@@ -164,3 +164,10 @@
 .secondaryBgColor {
   background-color: #fafafa;
 }
+
+.review {
+  &_stars {
+    color: $primary-yellow;
+    margin-bottom: 5px;
+  }
+}

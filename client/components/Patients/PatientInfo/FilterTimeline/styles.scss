@@ -1,12 +1,11 @@
-
-@import '../../../../ui';
+@import "../../../../ui";
 
 .filterContainer {
   width: 330px;
   height: auto;
   background: white;
   border: 1px solid $primary-grey;
-  box-shadow: 0 0 25px 1px rgba(209,209,209,0.5) !important;
+  box-shadow: 0 0 25px 1px rgba(209, 209, 209, 0.5) !important;
 }
 
 .header {
@@ -15,7 +14,7 @@
   width: 100%;
   padding: 15px;
   box-sizing: border-box;
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from "sass-loader!../../../../fonts.scss";
   font-size: 13px;
 }
 
@@ -45,7 +44,7 @@
   @extend .selectClear;
 }
 
-.body{
+.body {
   padding: 20px;
   padding-bottom: 0;
   padding-right: 0;
@@ -54,7 +53,7 @@
 }
 
 .subHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from "sass-loader!../../../../fonts.scss";
   font-size: 10px;
   color: $primary-dark-grey;
   margin-bottom: 15px;
@@ -74,6 +73,7 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  outline: none;
   cursor: pointer;
 }
 
@@ -93,7 +93,7 @@
 }
 
 .textEvent {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
+  composes: fontMedium from "sass-loader!../../../../fonts.scss";
   font-size: 10px;
   text-transform: uppercase;
   margin-top: 10px;

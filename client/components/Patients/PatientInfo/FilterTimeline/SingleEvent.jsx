@@ -28,9 +28,11 @@ export default function SingleEvent({ type, onClick, checked }) {
       icon = 'phone';
       color = 'Yellow';
       break;
-    case 'new patient':
+    case 'newpatient':
       icon = 'user';
       color = 'Green';
+      break;
+    default:
       break;
   }
 
@@ -41,7 +43,13 @@ export default function SingleEvent({ type, onClick, checked }) {
   }
 
   return (
-    <div className={styles.singleEvent} onClick={onClick}>
+    <div
+      className={styles.singleEvent}
+      role="button"
+      tabIndex={0}
+      onKeyDown={e => e.keyCode === '13' && onClick}
+      onClick={onClick}
+    >
       <div className={iconStyle}>
         <Icon icon={icon} size={2} type={iconType} />
       </div>
@@ -49,3 +57,9 @@ export default function SingleEvent({ type, onClick, checked }) {
     </div>
   );
 }
+
+SingleEvent.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+};

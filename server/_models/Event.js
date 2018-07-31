@@ -1,18 +1,3 @@
-
-const TYPE = {
-  APPOINTMENT: 'Appointment',
-  CALL: 'Call',
-  REMINDER: 'Reminder',
-  REQUEST: 'Request',
-};
-
-const ACTION = {
-  CREATE: 'Create',
-  READ: 'Read',
-  UPDATE: 'Update',
-  DELETE: 'Delete',
-};
-
 export default function (sequelize, DataTypes) {
   const Event = sequelize.define('Event', {
     id: {
@@ -32,13 +17,11 @@ export default function (sequelize, DataTypes) {
     },
 
     type: {
-      type: DataTypes.ENUM,
-      values: Object.keys(TYPE).map(key => TYPE[key]),
+      type: DataTypes.STRING,
     },
 
     action: {
-      type: DataTypes.ENUM,
-      values: Object.keys(ACTION).map(key => ACTION[key]),
+      type: DataTypes.STRING,
     },
 
     metaData: {

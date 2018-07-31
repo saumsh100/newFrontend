@@ -10,7 +10,7 @@ export default function ReminderEvent(props) {
     <div className={bodyStyle}>
       <div className={styles.body_subHeader}>
         Reminder Sent: For appointment on{' '}
-        {moment(data.appointmentStartDate).format('MMMM Do, YYYY h:mma')}
+        {moment(data.appointment.startDate).format('MMMM Do, YYYY h:mma')}
       </div>
     </div>
   );

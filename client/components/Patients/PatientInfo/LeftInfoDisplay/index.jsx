@@ -46,7 +46,7 @@ export default function LeftInfoDisplay(props) {
 
   return (
     <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
-      <Tabs index={tabIndex} onChange={handleTabChange} noUnderLine>
+      <Tabs index={tabIndex} onChange={handleTabChange} noUnderLine contentClass={styles.content}>
         <Tab label="Appointments" tabCard>
           {appointmentsTab}
         </Tab>

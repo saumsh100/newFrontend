@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
+import { deleteAllEntity } from '../../../../actions/entities';
 import Event from '../../../../entities/models/Event';
 import { patientShape } from '../../../library/PropTypeShapes';
 import DataTable from './DataTable';
@@ -25,6 +26,10 @@ class PatientSubComponent extends Component {
       url: `/api/patients/${patient.id}/events`,
       params: query,
     });
+  }
+
+  componentWillUnmount() {
+    this.props.deleteAllEntity('events');
   }
 
   render() {
@@ -76,6 +81,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       fetchEntitiesRequest,
+      deleteAllEntity,
     },
     dispatch,
   );
@@ -86,6 +92,7 @@ PatientSubComponent.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(Event)),
   wasFetched: PropTypes.bool,
   fetchEntitiesRequest: PropTypes.func.isRequired,
+  deleteAllEntity: PropTypes.func.isRequired,
 };
 
 PatientSubComponent.defaultProps = {
@@ -93,4 +100,7 @@ PatientSubComponent.defaultProps = {
   wasFetched: false,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientSubComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientSubComponent);

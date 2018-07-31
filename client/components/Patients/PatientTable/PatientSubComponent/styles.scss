@@ -4,7 +4,7 @@
   width: 100%;
   height: 100%;
   //padding-left: 35px;
-  background: #FAFAFA;
+  background: #fafafa;
   border-top: 1px solid $primary-lightgrey;
   min-width: 550px;
   box-sizing: border-box;
@@ -74,7 +74,6 @@
   height: 100%;
 }
 
-
 .lineEventContainer {
   position: relative;
 }
@@ -90,8 +89,8 @@
   top: 24px;
   height: 100%;
   z-index: 0;
-  border-left: 1.5px dashed darken($primary-grey, 10%);
-};
+  border-left: 1px dashed darken($primary-grey, 10%);
+}
 
 .eventsList {
   z-index: 2;
@@ -163,7 +162,7 @@
     top: 50%;
     left: 50%;
     margin-right: -50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -193,8 +192,8 @@
 
 @keyframes pulsate {
   0% {
-    transform: scale(.1);
-    opacity: 0.0;
+    transform: scale(0.1);
+    opacity: 0;
   }
   50% {
     opacity: 1;

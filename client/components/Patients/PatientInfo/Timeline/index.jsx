@@ -27,31 +27,31 @@ class Timeline extends Component {
     const query = {
       limit: 5,
       offset: this.state.limit,
+      retrieveEvents: ['appointments'],
     };
 
     if (events.length !== this.state.eventsLength) {
-      this.setState({
-        loaded: true,
-      });
-
-      this.props
-        .fetchEntities({
-          key: 'events',
-          id: 'getPatientEventsScroll',
-          url: `/api/patients/${this.props.patientId}/events`,
-          params: query,
-        })
-        .then(() => {
-          this.setState({
-            loaded: false,
-            limit: this.state.limit + 5,
-            eventsLength: events.length,
-          });
-        });
-    } else {
-      this.setState({
-        loaded: false,
-      });
+      this.setState(
+        {
+          loaded: true,
+        },
+        () => {
+          this.props
+            .fetchEntities({
+              key: 'events',
+              id: 'getPatientEventsScroll',
+              url: `/api/patients/${this.props.patientId}/events`,
+              params: query,
+            })
+            .then(() => {
+              this.setState({
+                limit: this.state.limit + 5,
+                eventsLength: events.length,
+                loaded: false,
+              });
+            });
+        },
+      );
     }
   }
 
@@ -65,18 +65,18 @@ class Timeline extends Component {
     };
 
     const wasAllFetched = wasPatientFetched && wasEventsFetched;
+    const hasMore =
+      events.length >= this.state.limit &&
+      events.length !== this.state.eventsLength &&
+      !this.state.loaded;
 
     return (
-      <Card className={styles.card} runAnimation loaded={!this.state.loaded && wasAllFetched}>
+      <Card className={styles.card} runAnimation loaded={wasAllFetched && !this.state.loaded}>
         {wasAllFetched && (
           <div className={styles.eventsContainer} style={style}>
             <InfiniteScroll
               loadMore={this.loadMoreEvents}
-              hasMore={
-                events.length <= this.state.limit &&
-                !this.state.loaded &&
-                events.length !== this.state.eventsLength
-              }
+              hasMore={hasMore}
               initialLoad={false}
               useWindow={false}
               threshold={1}
@@ -92,9 +92,8 @@ class Timeline extends Component {
 }
 
 function mapStateToProps({ entities, apiRequests }, { patientId }) {
-  const wasEventsFetched = apiRequests.get('getPatientEvents')
-    ? apiRequests.get('getPatientEvents').wasFetched
-    : null;
+  const wasEventsFetched =
+    apiRequests.get('getPatientEvents') && apiRequests.get('getPatientEvents').get('wasFetched');
 
   const events = entities
     .getIn(['events', 'models'])
@@ -132,4 +131,7 @@ Timeline.defaultProps = {
   events: [],
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Timeline);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Timeline);

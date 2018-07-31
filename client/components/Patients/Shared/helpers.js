@@ -28,7 +28,7 @@ export const familyDataSelector = (accountViewer) => {
 
 export const sortEvents = collection =>
   collection.sort((a, b) => {
-    if (b.metaData.createdAt < a.metaData.createdAT) return -1;
+    if (b.metaData.createdAt < a.metaData.createdAt) return -1;
     if (b.metaData.createdAt > a.metaData.createdAt) return 1;
     return 0;
   });

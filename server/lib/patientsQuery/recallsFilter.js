@@ -1,11 +1,10 @@
-
 import moment from 'moment';
 import { Patient, SentRecall } from '../../_models';
 import { getIds, patientAttributes } from './helpers';
 
 export async function RecallsFilter({ data, key }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
@@ -28,6 +27,7 @@ export async function RecallsFilter({ data, key }, filterIds, query, accountId) 
           createdAt: {
             $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
           },
+          isSent: true,
         },
         attributes: [],
         required: true,
@@ -38,11 +38,10 @@ export async function RecallsFilter({ data, key }, filterIds, query, accountId) 
       ...query,
     });
 
-    return ({
+    return {
       rows: patientData.rows,
       count: patientData.count.length,
-    });
-
+    };
   } catch (err) {
     console.log(err);
   }
@@ -50,7 +49,7 @@ export async function RecallsFilter({ data, key }, filterIds, query, accountId) 
 
 export async function LastRecallFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
@@ -77,10 +76,13 @@ export async function LastRecallFilter({ data }, filterIds, query, accountId) {
         duplicating: false,
         required: true,
       },
-      group: ['patient.id', 'SentRecall.patientId', 'SentRecall.createdAt', 'SentRecall.primaryType'],
-      attributes: [
+      group: [
         'patient.id',
+        'SentRecall.patientId',
+        'SentRecall.createdAt',
+        'SentRecall.primaryType',
       ],
+      attributes: ['patient.id'],
       order: [['patientId', 'desc'], ['createdAt', 'desc']],
       raw: true,
     });

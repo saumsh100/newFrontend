@@ -34,111 +34,116 @@ export const clearAllTimelineFilters = createAction(CLEAR_ALL_TIMELINE_FILTERS);
 /**
  * Initial State
  */
-export const createInitialPatientState = (state) => {
-  return fromJS(Object.assign({
-    data: [],
-    totalPatients: 0,
-    isLoadingTable: false,
-    limit: 15,
-    page: 0,
-    sort: [],
-    filters: Map(),
-    filterTags: Map(),
-    smartFilter: null,
-    searchFirstName: '',
-    searchLastName: '',
+export const createInitialPatientState = state =>
+  fromJS(Object.assign(
+    {
+      data: [],
+      totalPatients: 0,
+      isLoadingTable: false,
+      limit: 15,
+      page: 0,
+      sort: [],
+      filters: Map(),
+      filterTags: Map(),
+      smartFilter: null,
+      searchFirstName: '',
+      searchLastName: '',
 
-    timelineFilters: ['appointment', 'reminder', 'review', 'call', 'new patient'],
-  }, state));
-};
+      timelineFilters: ['appointment', 'reminder', 'review', 'call', 'newpatient', 'request'],
+    },
+    state,
+  ));
 
 export const initialState = createInitialPatientState();
 
 /**
  * Reducer
  */
-export default handleActions({
-  [SET_TABLE_DATA](state, { payload }) {
-    return state.merge(payload);
-  },
+export default handleActions(
+  {
+    [SET_TABLE_DATA](state, { payload }) {
+      return state.merge(payload);
+    },
 
-  [SET_IS_LOADING_TABLE](state, { payload }) {
-    return state.set('isLoadingTable', payload);
-  },
+    [SET_IS_LOADING_TABLE](state, { payload }) {
+      return state.set('isLoadingTable', payload);
+    },
 
-  [SET_TABLE_FILTERS](state, { payload }) {
-    const filters = state.get('filters');
-    const newFilters = filters.set(`${payload.filter.indexFunc}`, payload.filter);
-    return state.merge({
-      filters: newFilters,
-      page: 0,
-    });
-  },
-
-  [REMOVE_TABLE_FILTER](state, { payload }) {
-    const filters = state.get('filters');
-    const size = filters.size;
-
-    if (size) {
-      const modifiedFilters = filters.delete(`${payload.index}`);
-      return state.set('filters', modifiedFilters);
-    }
-    return state;
-  },
-
-  [SET_SMART_FILTER](state, { payload }) {
-    const index = payload.smFilter.index;
-
-    if (index !== -1) {
+    [SET_TABLE_FILTERS](state, { payload }) {
+      const filters = state.get('filters');
+      const newFilters = filters.set(`${payload.filter.indexFunc}`, payload.filter);
       return state.merge({
-        smartFilter: payload.smFilter,
+        filters: newFilters,
         page: 0,
       });
-    }
-    return initialState;
-  },
+    },
 
-  [CLEAR_TABLE_FILTERS](state) {
-    const filters = state.get('filters').clear();
-    return state.set('filters', filters);
-  },
+    [REMOVE_TABLE_FILTER](state, { payload }) {
+      const filters = state.get('filters');
+      const size = filters.size;
 
-  [CLEAR_TABLE_SEARCH](state) {
-    state.set('searchFirstName', '');
-    state.set('searchLastName', '');
-    return state;
-  },
+      if (size) {
+        const modifiedFilters = filters.delete(`${payload.index}`);
+        return state.set('filters', modifiedFilters);
+      }
+      return state;
+    },
 
-  [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
-    let filters = state.get('timelineFilters');
-    if (filters.size >= 0) {
-      filters = filters.toJS();
-    }
-    const type = payload.type;
+    [SET_SMART_FILTER](state, { payload }) {
+      const index = payload.smFilter.index;
 
-    if (filters.indexOf(type) > -1) {
-      const index = filters.indexOf(type);
+      if (index !== -1) {
+        return state.merge({
+          smartFilter: payload.smFilter,
+          page: 0,
+        });
+      }
+      return initialState;
+    },
+
+    [CLEAR_TABLE_FILTERS](state) {
+      const filters = state.get('filters').clear();
+      return state.set('filters', filters);
+    },
+
+    [CLEAR_TABLE_SEARCH](state) {
+      state.set('searchFirstName', '');
+      state.set('searchLastName', '');
+      return state;
+    },
+
+    [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
+      let filters = state.get('timelineFilters');
+      if (filters.size >= 0) {
+        filters = filters.toJS();
+      }
+      const type = payload.type;
+
+      if (filters.indexOf(type) > -1) {
+        const index = filters.indexOf(type);
+        const newFilters = filters;
+        newFilters.splice(index, 1);
+
+        return state.merge({
+          timelineFilters: newFilters,
+        });
+      }
+
       const newFilters = filters;
-      newFilters.splice(index, 1);
-
+      newFilters.push(type);
       return state.merge({
         timelineFilters: newFilters,
       });
-    }
+    },
 
-    const newFilters = filters;
-    newFilters.push(type);
-    return state.merge({
-      timelineFilters: newFilters,
-    });
-  },
+    [CLEAR_ALL_TIMELINE_FILTERS](state) {
+      return state.set('timelineFilters', []);
+    },
 
-  [CLEAR_ALL_TIMELINE_FILTERS](state) {
-    return state.set('timelineFilters', []);
+    [SELECT_ALL_TIMELINE_FILTERS](state) {
+      const defaultEvents = initialState.get('timelineFilters');
+      return state.set('timelineFilters', defaultEvents);
+    },
   },
-
-  [SELECT_ALL_TIMELINE_FILTERS](state) {
-    const defaultEvents = initialState.get('timelineFilters');
-    return state.set('timelineFilters', defaultEvents);
-  },
-}, initialState);
+  initialState,
+);

@@ -1,11 +1,10 @@
-
 import moment from 'moment';
 import { Patient, SentReminder } from '../../_models';
 import { getIds, patientAttributes } from './helpers';
 
 export async function RemindersFilter({ data, key }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
@@ -38,11 +37,10 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
       ...query,
     });
 
-    return ({
+    return {
       rows: patientData.rows,
       count: patientData.count.length,
-    });
-
+    };
   } catch (err) {
     console.log(err);
   }
@@ -50,7 +48,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
 
 export async function LastReminderFilter({ data }, filterIds, query, accountId) {
   try {
-    let prevFilterIds = { id: { $not: null } }
+    let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
       prevFilterIds = {
@@ -65,6 +63,7 @@ export async function LastReminderFilter({ data }, filterIds, query, accountId) 
           $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
           $notBetween: [moment(data[1]).toISOString(), moment().toISOString()],
         },
+        isSent: true,
       },
       include: {
         model: Patient,
@@ -77,10 +76,13 @@ export async function LastReminderFilter({ data }, filterIds, query, accountId) 
         duplicating: false,
         required: true,
       },
-      group: ['patient.id', 'SentReminder.patientId', 'SentReminder.createdAt', 'SentReminder.primaryType'],
-      attributes: [
+      group: [
         'patient.id',
+        'SentReminder.patientId',
+        'SentReminder.createdAt',
+        'SentReminder.primaryType',
       ],
+      attributes: ['patient.id'],
       order: [['patientId', 'desc'], ['createdAt', 'desc']],
       raw: true,
     });
@@ -99,16 +101,14 @@ export async function LastReminderFilter({ data }, filterIds, query, accountId) 
   } catch (err) {
     console.log(err);
   }
-
 }
-
 
 export function calcLastReminderSent(reminderData) {
   let j = 0;
   const lastReminderData = [];
   while (j < reminderData.length) {
     const currentPatient = reminderData[j].id;
-    lastReminderData.push(reminderData[j])
+    lastReminderData.push(reminderData[j]);
     let i = j;
 
     while (i < reminderData.length && currentPatient === reminderData[i].id) {

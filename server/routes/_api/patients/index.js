@@ -10,17 +10,12 @@ import { mostBusinessPatient, mostBusinessClinic, mostBusinessSinglePatient } fr
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
-import { Appointment, Chat, Patient, Event } from '../../../_models';
-import { fetchAppointmentEvents } from '../../../lib/events/Appointments';
-import { fetchSentReminderEvents } from '../../../lib/events/SentReminders';
-import { fetchCallEvents } from '../../../lib/events/Calls';
-import { fetchRequestEvents } from '../../../lib/events/Requests';
-import { fetchReviewEvents } from '../../../lib/events/Reviews';
+import { Appointment, Chat, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
+import patientEventsAggregator from '../../../lib/events';
 
 const patientsRouter = new Router();
-
 
 patientsRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
 
@@ -28,24 +23,6 @@ const eventsRouter = new Router();
 
 patientsRouter.get('/:patientId/events', eventsRouter);
 
-function filterEventsByQuery(eventsArray, query) {
-  const {
-    limit,
-    offset,
-  } = query;
-
-  let filterArray = eventsArray;
-
-  if (offset && eventsArray.length > offset) {
-    filterArray = filterArray.slice(offset, eventsArray.length);
-  }
-
-  if (limit) {
-    filterArray = filterArray.slice(0, limit);
-  }
-
-  return filterArray;
-}
 
 function ageRange(age, array) {
   if (age < 18) {
@@ -535,41 +512,8 @@ patientsRouter.get('/connector/notSynced', checkPermissions('patients:read'), as
 
 eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async (req, res, next) => {
   try {
-    const accountId = req.accountId;
-
-    const patient = await Patient.findById(req.patient.id);
-
-    const buildData = {
-      id: patient.id,
-      patientId: patient.id,
-      accountId,
-      type: 'New Patient',
-      metaData: {
-        createdAt: patient.pmsCreatedAt || patient.createdAt,
-        firstName: patient.firstName,
-        lastName: patient.lastName,
-      },
-    };
-
-    const patientEvent = Event.build(buildData).get({ plain: true });
-
-    const appointmentEvents = await fetchAppointmentEvents(req.patient.id, accountId, req.query);
-    const callEvents = await fetchCallEvents(req.patient.id, accountId, req.query);
-    const reminderEvents = await fetchSentReminderEvents(req.patient.id, accountId, req.query);
-    const requestEvents = await fetchRequestEvents(req.patient.id, accountId, req.query);
-    const reviewEvents = await fetchReviewEvents(req.patient.id, accountId, req.query);
-
-    const totalEvents = appointmentEvents.concat(callEvents, reminderEvents, requestEvents, reviewEvents, patientEvent);
-
-    const sortedEvents = totalEvents.sort((a, b) => {
-      if (moment(b.metaData.createdAt).isBefore(moment(a.metaData.createdAt))) return -1;
-      if (moment(b.metaData.createdAt).isAfter(moment(a.metaData.createdAt))) return 1;
-      return 0;
-    });
-
-    const filteredEvents = filterEventsByQuery(sortedEvents, req.query);
-
-    res.send(normalize('events', filteredEvents));
+    const allEvents = await patientEventsAggregator(req.patient.id, req.accountId, req.query);
+    res.send(normalize('events', allEvents));
   } catch (error) {
     next(error);
   }
