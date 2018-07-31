@@ -1,4 +1,6 @@
 # CareCru Platform
+[![CodeFactor](https://www.codefactor.io/repository/github/carecru/carecru/badge)](https://www.codefactor.io/repository/github/carecru/carecru)
+[ ![Codeship Status for CareCru/carecru](https://app.codeship.com/projects/609e8860-1974-0135-f0cd-2681b2cba166/status?branch=master)](https://app.codeship.com/projects/219293)
 
 This README is outdated, but kept here anyways.
 Please refer to this article in order to get up and running:
