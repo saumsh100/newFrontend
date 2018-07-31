@@ -68,29 +68,32 @@ class Calls extends Component {
   }
 
   handleDateRange(values) {
-    this.props.deleteAllEntity('calls');
-
-    const { limit, accountId } = this.state;
-
     const startDate = moment(values.from);
     const endDate = moment(values.to);
 
-    this.setState({
-      startDate,
-      endDate,
-    });
+    if (
+      startDate.isValid() &&
+      endDate.isValid() &&
+      !(startDate.toISOString() === endDate.toISOString())
+    ) {
+      this.props.deleteAllEntity('calls');
 
-    const params = paramBuilder(startDate, endDate, accountId, 0, limit);
+      const { limit, accountId } = this.state;
 
-    this.fetchCallData(params).then((data) => {
-      const dataLength = Object.keys(data[1].calls).length;
-      const moreData = dataLength === limit;
-      this.setState({
-        moreData,
-        skip: limit,
-        callsLength: dataLength,
+      const params = paramBuilder(startDate, endDate, accountId, 0, limit);
+
+      this.fetchCallData(params).then((data) => {
+        const dataLength = Object.keys(data[1].calls).length;
+        const moreData = dataLength === limit;
+        this.setState({
+          moreData,
+          skip: limit,
+          callsLength: dataLength,
+          startDate,
+          endDate,
+        });
       });
-    });
+    }
   }
 
   loadMore() {
@@ -220,4 +223,7 @@ Calls.defaultProps = {
   callGraphStats: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calls);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Calls);
