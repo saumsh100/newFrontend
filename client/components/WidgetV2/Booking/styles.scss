@@ -493,6 +493,7 @@
   padding-top: calc(calc(var(--widget-spacer) * 2) + 21px);
   overflow: auto;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .modalContainerStyles {

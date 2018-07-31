@@ -59,10 +59,7 @@ class Widget extends Component {
 
     const isChildrenRoute = isBookingRoute || isAccountRoute || isEditing;
     if (!isChildrenRoute) {
-      return (
-        // we need this div here for styling purposes
-        <div>{this.renderTabs(tabState)}</div>
-      );
+      return this.renderTabs(tabState);
     }
     return React.Children.map(this.props.children, child =>
       React.cloneElement(child, {
