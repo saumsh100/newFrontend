@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import axios from 'axios';
 import { List } from 'immutable';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -21,6 +20,8 @@ import {
   composeAsyncValidators,
   normalizeBirthdate,
   validateBirthdate,
+  asyncPhoneNumberValidatePatient,
+  asyncEmailValidatePatient,
 } from '../../../library/Form/validate';
 import { normalizePhone } from '../../../library/Form/normalize';
 import { SortByFirstName } from '../../../library/util/SortEntities';
@@ -247,14 +248,7 @@ class PatientInformation extends Component {
       if (!values.email || (patient && values.email === patient.email)) {
         return false;
       }
-      return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
-        if (response.data.exists) {
-          const emailError = {
-            email: 'There is already a user with that email',
-          };
-          throw emailError;
-        }
-      });
+      return asyncEmailValidatePatient(values);
     };
     /**
      * Check if the passed phoneNumber is not already used,
@@ -271,14 +265,7 @@ class PatientInformation extends Component {
       ) {
         return false;
       }
-      return axios
-        .post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
-        .then((response) => {
-          const { error } = response.data;
-          if (error) {
-            throw error;
-          }
-        });
+      return asyncPhoneNumberValidatePatient(values);
     };
     /**
      * If there's a patient already selected,
