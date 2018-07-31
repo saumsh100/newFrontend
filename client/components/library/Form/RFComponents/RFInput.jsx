@@ -1,38 +1,48 @@
 
 import React, { PropTypes } from 'react';
-import omit from 'lodash/omit';
 import Icon from '../../Icon';
 import Input from '../../Input';
 import { inputShape, metaShape } from '../../PropTypeShapes/inputShape';
+import normalizePhone from '../../../../../iso/helpers/string/normalizePhone';
 
-export default function RFInput(props) {
-  const {
-    input, icon, label, type, error, meta, theme, iconComponent,
-  } = props;
-  const newProps = omit(props, ['input', 'meta']);
+export default function RFInput({
+  input,
+  icon,
+  label,
+  type,
+  error,
+  meta,
+  theme,
+  iconComponent,
+  ...props
+}) {
+  const inputProps = {
+    ...input,
+    value: type === 'tel' ? normalizePhone(input.value) : input.value,
+  };
   const { touched, asyncValidating, dirty } = meta;
   const finalError = error || (touched || dirty ? meta.error : null);
   const IconComponent =
     iconComponent ||
     (asyncValidating && (
       <Icon
-        {...props}
+        pulse
         className={theme && theme.iconClassName}
         icon="spinner"
         type="regular"
-        pulse
+        {...props}
       />
     ));
-
   return (
     <Input
-      {...newProps}
-      {...input}
+      theme={theme}
       type={type}
       label={label}
       error={finalError}
       iconComponent={IconComponent}
       icon={icon}
+      {...inputProps}
+      {...props}
     />
   );
 }
@@ -42,7 +52,7 @@ RFInput.propTypes = {
   input: PropTypes.shape(inputShape).isRequired,
   meta: PropTypes.shape(metaShape),
   icon: PropTypes.node,
-  iconComponent: PropTypes.node,
+  iconComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   label: PropTypes.node,
   type: PropTypes.string,
   error: PropTypes.string,
