@@ -30,5 +30,5 @@ const query = graphql`
 
 export default async () => {
   const payload = await fetchQuery(graphQLEnvironment, query);
-  return payload.accountViewer.patientSearches.edges.map(v => v.node.patient);
+  return payload.accountViewer.patientSearches.edges.map(v => v.node.patient).filter(p => !!p);
 };
