@@ -308,6 +308,8 @@ export default handleActions(
           .tz(payload, account.timezone)
           .hours(0)
           .minutes(0)
+          .seconds(0)
+          .milliseconds(0)
           .toISOString();
       }
 

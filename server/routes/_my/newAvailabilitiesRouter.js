@@ -16,24 +16,21 @@ availabilitiesRouter.param('accountId', sequelizeLoader('account', 'Account'));
  */
 availabilitiesRouter.get('/accounts/:accountId/availabilities', async (req, res, next) => {
   try {
-    const canUseNewAvailabilities = await isFeatureEnabled(
-      'availabilities-2.0',
-      false,
-      { userId: 'my.carecru public api', accountId: req.params.accountId },
-    );
+    const canUseNewAvailabilities = await isFeatureEnabled('availabilities-2.0', false, {
+      userId: 'my.carecru public api',
+      accountId: req.params.accountId,
+    });
 
     if (canUseNewAvailabilities) {
       logger.info('Using NEW availabilities');
-      const data = Object.assign({}, req.query, {
+      const data = {
+        ...req.query,
         accountId: req.account.id,
         maxRetryAttempts: 10,
         numDaysJump: 7,
-      });
+      };
 
-      const {
-        availabilities,
-        nextAvailability,
-      } = await searchForAvailabilities(data);
+      const { availabilities, nextAvailability } = await searchForAvailabilities(data);
 
       res.send({
         availabilities,
@@ -41,10 +38,11 @@ availabilitiesRouter.get('/accounts/:accountId/availabilities', async (req, res,
       });
     } else {
       logger.info('Using OLD availabilities');
-      const data = Object.assign({}, req.query, {
+      const data = {
+        ...req.query,
         accountId: req.account.id,
         timeInterval: req.account.timeInterval,
-      });
+      };
 
       // Fetch availabilities for date range
       const availabilities = await fetchAvailabilities(data);
@@ -58,7 +56,9 @@ availabilitiesRouter.get('/accounts/:accountId/availabilities', async (req, res,
         // Yes its a naive attempt, will be better to refactor availabilities first,
         // and have a function that does an early return
         data.startDate = data.endDate;
-        data.endDate = moment(data.endDate).add(10, 'weeks').toISOString();
+        data.endDate = moment(data.endDate)
+          .add(10, 'weeks')
+          .toISOString();
         const more = await fetchAvailabilities(data);
         res.send({
           availabilities: [],
