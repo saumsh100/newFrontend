@@ -103,7 +103,6 @@ class PatientInformation extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    // console.log(this.props.isCustomCarrier, this.props.insuranceCarrierValue);
     if (this.props.isCustomCarrier && this.props.insuranceCarrierValue === carriers[1].value) {
       this.props.change(FORM_NAME, 'insuranceCarrier', '');
     }
@@ -114,12 +113,11 @@ class PatientInformation extends PureComponent {
       this.props.showButton();
     }
     if (!prevProps.floatingButtonIsClicked && this.props.floatingButtonIsClicked) {
-      this.props.setIsClicked(false);
       if (this.props.formError) {
-        this.props.hideButton();
         this.props.touch(FORM_NAME, ...Object.keys(defaultValues));
         return this.scrollTo(this.props.formError);
       }
+      this.props.setIsClicked(false);
       this.props.setText();
       return this.props.submit(FORM_NAME);
     }
@@ -335,11 +333,9 @@ class PatientInformation extends PureComponent {
                         icon="times"
                         iconType="light"
                         className={styles.closeIcon}
-                        onClick={() => {
-                          this.props.change(FORM_NAME, 'customCarrier', false);
-                          this.props.change(FORM_NAME, 'insuranceCarrier', carriers[0].value);
-                          return false;
-                        }}
+                        onClick={() =>
+                          this.props.change(FORM_NAME, 'insuranceCarrier', carriers[0].value)
+                        }
                       />
                     }
                     name="insuranceCarrier"
