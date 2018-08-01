@@ -223,7 +223,4 @@ Calls.defaultProps = {
   callGraphStats: null,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Calls);
+export default connect(mapStateToProps, mapDispatchToProps)(Calls);

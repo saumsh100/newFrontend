@@ -100,7 +100,4 @@ PatientSubComponent.defaultProps = {
   wasFetched: false,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientSubComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(PatientSubComponent);

@@ -245,7 +245,7 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
   // - Someone should not be dueForRecallExam if they have a future booked hygiene appointment
   // - Someone should not be dueForHygiene if they have a future booked recall appointment
   const appointmentTypes = hygieneTypes.concat(recallTypes);
-  const hygieneCodesQuery = { $like: '111%' };
+  const hygieneCodesQuery = { $or: [{ $like: '111%' }, { $like: '4342%' }] };
   const recallCodesQuery = { $in: ['00121', '01202'] };
   const codesQuery = { $or: [hygieneCodesQuery, recallCodesQuery] };
 

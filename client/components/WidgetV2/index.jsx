@@ -194,7 +194,4 @@ Widget.propTypes = {
   floatingButtonText: PropTypes.string.isRequired,
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Widget));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Widget));

@@ -131,7 +131,4 @@ Timeline.defaultProps = {
   events: [],
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Timeline);
+export default connect(mapStateToProps, mapDispatchToProps)(Timeline);

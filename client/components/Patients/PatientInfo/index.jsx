@@ -467,10 +467,7 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 const query = graphql`
   query PatientInfo_Query($patientId: String!) {

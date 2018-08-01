@@ -678,7 +678,4 @@ PatientInformation.defaultProps = {
   selectedPatientForm: '',
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientInformation));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PatientInformation));
