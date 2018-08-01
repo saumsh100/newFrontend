@@ -42,7 +42,7 @@ export default [
   },
   {
     label: 'Industrial Alliance',
-    value: '0Industrial Alliance',
+    value: 'Industrial Alliance',
   },
   {
     label: 'Insurance and Financial Services Inc',

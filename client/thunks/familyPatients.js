@@ -1,14 +1,25 @@
 
 import axios from 'axios';
-import { setFamilyPatients } from '../actions/auth';
-import { setPatientUser } from '../actions/availabilities';
+import { setFamilyPatientUser } from '../actions/availabilities';
+import {
+  addPatientToFamily,
+  setFamilyPatients,
+  updateFamilyPatient,
+  updatePatientUser,
+} from '../reducers/patientAuth';
 
-export function fetchFamilyPatients() {
+const getAuth = getState => getState().auth;
+
+const handleFamilyId = (patientFamilyId, getState) =>
+  patientFamilyId ||
+  getAuth(getState)
+    .get('patientUser')
+    .get('patientUserFamilyId');
+
+export function fetchFamilyPatients(patientFamilyId) {
   return async (dispatch, getState) => {
-    const { auth } = getState();
-    const user = auth.get('patientUser');
     try {
-      const familyData = await axios.get(`/families/${user.patientUserFamilyId}/patients`);
+      const familyData = await axios.get(`/families/${handleFamilyId(patientFamilyId, getState)}/patients`);
       return dispatch(setFamilyPatients(familyData.data));
     } catch (err) {
       return console.error('fetching familyPatients request error', err);
@@ -16,33 +27,38 @@ export function fetchFamilyPatients() {
   };
 }
 
-export function addNewFamilyPatient(values) {
+export function addNewFamilyPatient(values, patientFamilyId) {
   return async (dispatch, getState) => {
-    const { auth } = getState();
-    const user = auth.get('patientUser');
     try {
-      const newUser = await axios.post(`/families/${user.patientUserFamilyId}/patients`, values);
-      dispatch(fetchFamilyPatients());
-      return newUser;
+      const { data } = await axios.post(
+        `/families/${handleFamilyId(patientFamilyId, getState)}/patients`,
+        values,
+      );
+      dispatch(addPatientToFamily(data));
+      return dispatch(setFamilyPatientUser(data.id));
     } catch (err) {
       return console.error('add new familyPatient request error', err);
     }
   };
 }
 
-export function updateFamilyPatient(values, patientId) {
+export function updatePatient(values, patientId, patientFamilyId) {
   return async (dispatch, getState) => {
-    const { auth } = getState();
-    const user = auth.get('patientUser');
     try {
       const updatedUser = await axios.put(
-        `/families/${user.patientUserFamilyId}/patients/${patientId}`,
+        `/families/${handleFamilyId(patientFamilyId, getState)}/patients/${patientId}`,
         values,
       );
-      if (patientId === user.id) {
-        dispatch(setPatientUser({ ...user.toJS(), ...values }));
+      dispatch(updateFamilyPatient({ patientId, values }));
+      if (
+        patientId ===
+        getAuth(getState)
+          .get('patientUser')
+          .get('id')
+      ) {
+        dispatch(updatePatientUser(values));
       }
-      dispatch(fetchFamilyPatients());
+
       return updatedUser;
     } catch (err) {
       return console.error('add new familyPatient request error', err);

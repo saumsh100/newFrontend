@@ -14,10 +14,12 @@ import {
   setIsClicked,
   setText,
 } from '../../../../reducers/widgetNavigation';
+import { inputTextarea } from '../../theme';
 import styles from './styles.scss';
 
 class AdditionalInformation extends PureComponent {
   componentDidMount() {
+    this.props.setText();
     this.props.showButton();
   }
 
@@ -65,20 +67,7 @@ class AdditionalInformation extends PureComponent {
             >
               <Field
                 component="TextArea"
-                theme={{
-                  bar: styles.bar,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  erroredLabel: styles.erroredLabel,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  filled: styles.filled,
-                  group: styles.group,
-                  iconClassName: styles.validationIcon,
-                  input: styles.textarea,
-                  inputWithIcon: styles.inputWithIcon,
-                  label: styles.label,
-                  labelWrapper: styles.labelWrapper,
-                }}
+                theme={inputTextarea(styles)}
                 label="Notes"
                 name="notes"
               />

@@ -1,5 +1,6 @@
 
 import createModel from '../createModel';
+import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
 
 const PatientUserSchema = {
   id: null,
@@ -23,5 +24,10 @@ export default class PatientUser extends createModel(PatientUserSchema) {
    */
   getFullName() {
     return `${this.get('firstName')} ${this.get('lastName')}`;
+  }
+
+  getBirthDate() {
+    const birthDate = this.get('birthDate');
+    return birthDate ? dateFormatter(birthDate, '', 'MM/DD/YYYY') : '';
   }
 }

@@ -2,22 +2,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { isPristine } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import axios from 'axios';
 import { Button, Field, Form } from '../../../../library';
 import { logout } from '../../../../../thunks/patientAuth';
 import { refreshAvailabilitiesState } from '../../../../../actions/availabilities';
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
-import { composeAsyncValidators } from '../../../../library/Form/validate';
+import {
+  asyncEmailValidatePatient,
+  asyncPhoneNumberValidatePatient,
+  composeAsyncValidators,
+} from '../../../../library/Form/validate';
 import { normalizePhone } from '../../../../library/Form/normalize';
-import { updateFamilyPatient } from '../../../../../thunks/familyPatients';
+import { updatePatient } from '../../../../../thunks/familyPatients';
+import { inputTheme } from '../../../theme';
 import styles from './styles.scss';
 
 function Logged({
-  patientUser, location, history, ...props
+  patientUser, location, history, pristine, ...props
 }) {
   const b = path =>
     location.pathname
@@ -31,42 +36,20 @@ function Logged({
    *
    * @param {object} values
    */
-  const asyncEmailValidation = (values) => {
-    if (!values.email || (patientUser && values.email === patientUser.email)) {
-      return false;
-    }
-    return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
-      if (response.data.exists) {
-        const emailError = {
-          email: 'There is already a user with that email',
-        };
-        throw emailError;
-      }
-    });
-  };
+  const asyncEmailValidation = values =>
+    (values.email === this.props.patientUser.email ? false : asyncEmailValidatePatient(values));
   /**
    * Check if the passed phoneNumber is not already used,
    * but first check if the phoneNumber is not the same as the patient.
    *
    * @param {object} values
    */
-  const asyncPhoneNumberValidation = (values) => {
-    if (
-      !values.phoneNumber ||
-      (patientUser && values.phoneNumber === patientUser.phoneNumber) ||
-      (patientUser && values.phoneNumber === normalizePhone(patientUser.phoneNumber))
-    ) {
-      return false;
-    }
-    return axios
-      .post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
-      .then((response) => {
-        const { error } = response.data;
-        if (error) {
-          throw error;
-        }
-      });
-  };
+  const asyncPhoneNumberValidation = values =>
+    (values.phoneNumber === this.props.patientUser.phoneNumber ||
+    values.phoneNumber === normalizePhone(this.props.patientUser.phoneNumber)
+      ? false
+      : asyncPhoneNumberValidatePatient(values));
+
   const initialValues = patientUser && {
     firstName: patientUser.firstName,
     lastName: patientUser.lastName,
@@ -75,7 +58,7 @@ function Logged({
   };
   const handleUserUpdate = (values) => {
     try {
-      props.updateFamilyPatient(values, patientUser.id);
+      props.updatePatient(values, patientUser.get('id'), patientUser.get('patientUserFamilyId'));
     } catch (err) {
       console.error('Error updating patient!', err);
     }
@@ -85,7 +68,7 @@ function Logged({
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
           <h1 className={styles.heading}>
-            Hello, {patientUser ? `${patientUser.firstName} ${patientUser.lastName}` : 'Guest'}!
+            Hello, {patientUser ? patientUser.getFullName() : 'Guest'}!
           </h1>
           <p className={styles.description}>Manage and update your account information.</p>
         </div>
@@ -95,6 +78,7 @@ function Logged({
           {patientUser && (
             <Form
               ignoreSaveButton
+              enableReinitialize
               form="loggedUserForm"
               onSubmit={handleUserUpdate}
               initialValues={initialValues}
@@ -104,80 +88,16 @@ function Logged({
               ])}
               asyncBlurFields={['email', 'phoneNumber']}
             >
+              <Field theme={inputTheme(styles)} required name="firstName" label="First Name" />
+              <Field theme={inputTheme(styles)} required name="lastName" label="Last Name" />
               <Field
-                theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
-                required
-                name="firstName"
-                label="First Name"
-              />
-              <Field
-                theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
-                required
-                name="lastName"
-                label="Last Name"
-              />
-              <Field
-                theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
+                theme={inputTheme(styles)}
                 required
                 name="phoneNumber"
                 label="Mobile Number"
                 type="tel"
               />
-              <Field
-                theme={{
-                  inputWithIcon: styles.inputWithIcon,
-                  iconClassName: styles.validationIcon,
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
-                required
-                label="Email"
-                name="email"
-                type="email"
-              />
+              <Field theme={inputTheme(styles)} required label="Email" name="email" type="email" />
               <div className={styles.buttonsWrapper}>
                 <Button
                   onClick={() => {
@@ -193,7 +113,7 @@ function Logged({
                 >
                   Sign Out
                 </Button>
-                <Button type="submit" className={styles.actionButton}>
+                <Button type="submit" className={styles.actionButton} disabled={pristine}>
                   Update Account
                 </Button>
               </div>
@@ -209,14 +129,15 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       logout,
-      updateFamilyPatient,
+      updatePatient,
       refreshAvailabilitiesState,
     },
     dispatch,
   );
 }
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, ...state }) {
   return {
+    pristine: isPristine('loggedUserForm')(state),
     patientUser: auth.get('patientUser'),
     isAuthenticated: auth.get('isAuthenticated'),
   };
@@ -227,7 +148,8 @@ Logged.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   patientUser: PropTypes.shape(patientUserShape).isRequired,
   logout: PropTypes.func.isRequired,
-  updateFamilyPatient: PropTypes.func.isRequired,
+  updatePatient: PropTypes.func.isRequired,
+  pristine: PropTypes.bool.isRequired,
   refreshAvailabilitiesState: PropTypes.func.isRequired,
 };
 

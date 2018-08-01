@@ -9,8 +9,9 @@ import { parse, stringify } from 'query-string';
 import { Link, Form, Field, Button } from '../../../../library';
 import { login } from '../../../../../thunks/patientAuth';
 import { updateReview } from '../../../../../thunks/reviews';
-import styles from './styles.scss';
 import { locationShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { inputTheme } from '../../../theme';
+import styles from './styles.scss';
 
 function Login(props) {
   /**
@@ -67,35 +68,9 @@ function Login(props) {
         <div className={styles.container}>
           <div className={styles.signInBottom}>
             <Form form="login" onSubmit={handleLogin} ignoreSaveButton>
+              <Field type="email" name="email" label="Email" required theme={inputTheme(styles)} />
               <Field
-                type="email"
-                name="email"
-                label="Email"
-                required
-                theme={{
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
-              />
-              <Field
-                theme={{
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
+                theme={inputTheme(styles)}
                 type="password"
                 name="password"
                 label="Password"

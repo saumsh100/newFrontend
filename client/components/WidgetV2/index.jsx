@@ -99,10 +99,13 @@ class Widget extends Component {
       path: '/widgets/:accountId/app/book/complete',
     });
 
-    const isAccountRoute = !!matchPath(pathname, {
-      path: '/widgets/:accountId/app/account',
-    });
-
+    const isAccountRoute =
+      !!matchPath(pathname, {
+        path: '/widgets/:accountId/app/account',
+      }) ||
+      !!matchPath(pathname, {
+        path: '/widgets/:accountId/app/login',
+      });
     const isAccountTab = parsedSearch.tab === ACCOUNT_TAB;
 
     const isBookingRoute = !isAccountTab && parsedSearch.tab === BOOKING_TAB;

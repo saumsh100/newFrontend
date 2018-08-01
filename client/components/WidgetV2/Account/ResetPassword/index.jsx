@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Field, Button } from '../../../library';
 import { emailValidate } from '../../../library/Form/validate';
 import { resetPatientUserPassword } from '../../../../thunks/patientAuth';
+import { inputTheme } from '../../theme';
 import styles from './styles.scss';
 
 function ResetPassword(props) {
@@ -42,17 +43,7 @@ function ResetPassword(props) {
               <Field
                 type="email"
                 name="email"
-                theme={{
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
+                theme={inputTheme(styles)}
                 label="Email"
                 validate={[emailValidate]}
               />

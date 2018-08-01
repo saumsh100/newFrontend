@@ -9,25 +9,14 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import classnames from 'classnames';
 import data from './insurance_carriers';
-import {
-  Button,
-  Link,
-  TextArea,
-  Input,
-  Tooltip,
-  Icon,
-  Loading,
-} from '../../../library';
+import { Button, Link, TextArea, Input, Tooltip, Icon, Loading } from '../../../library';
 import {
   setNotes,
   setInsuranceCarrier,
   setInsuranceMemberId,
   setFamilyPatientUser,
 } from '../../../../actions/availabilities';
-import {
-  createRequest,
-  createWaitSpot,
-} from '../../../../thunks/availabilities';
+import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
 import { fetchFamilyPatients } from '../../../../thunks/familyPatients';
 import InsuranceCarrier from './InsuranceCarrier';
 import FamilyPatient from './FamilyPatient';
@@ -88,8 +77,7 @@ const iconMemberId = (
  * @param {string} carrierLabel
  * @param {string} key
  */
-const findCarrierBy = (carrierLabel, key = 'label') =>
-  data.find(opt => opt[key] === carrierLabel);
+const findCarrierBy = (carrierLabel, key = 'label') => data.find(opt => opt[key] === carrierLabel);
 
 class Review extends Component {
   constructor(props) {
@@ -228,11 +216,7 @@ class Review extends Component {
     }
 
     const {
-      selectedAvailability,
-      selectedService,
-      hasWaitList,
-      waitSpot,
-      notes,
+      selectedAvailability, selectedService, hasWaitList, waitSpot, notes,
     } = this.props;
 
     let serviceName = null;
@@ -301,9 +285,7 @@ class Review extends Component {
               userId={this.props.user.id}
             />
           </div>
-          <div
-            className={classnames(styles.fieldWrapper, styles.flexibleField)}
-          >
+          <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
             <div className={styles.label}>Insurance Carrier</div>
             <InsuranceCarrier
               error={this.state.insuranceCarrierError}
@@ -313,9 +295,7 @@ class Review extends Component {
             />
           </div>
           {this.props.selectedInsuranceCarrier !== DEFAULT_VALUE && (
-            <div
-              className={classnames(styles.fieldWrapper, styles.flexibleField)}
-            >
+            <div className={classnames(styles.fieldWrapper, styles.flexibleField)}>
               <div className={styles.label}>Patient insurance member ID</div>
               <Input
                 name="insuranceMemberId"
@@ -362,7 +342,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps({ auth, availabilities, entities }) {
   return {
     user: auth.get('patientUser'),
-    familyPatients: auth.get('familyPatients'),
+    familyPatients: auth.get('familyPatients').toJS(),
     hasWaitList: availabilities.get('hasWaitList'),
     waitSpot: availabilities.get('waitSpot'),
     selectedAvailability: availabilities.get('selectedAvailability'),

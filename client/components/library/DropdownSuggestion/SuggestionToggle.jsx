@@ -84,9 +84,9 @@ class SuggestionToggle extends Component {
    */
   displaySuggestions() {
     const {
-      toggleView, disabled, asInput, isOpen, name,
+      toggleView, disabled, isOpen, name,
     } = this.props;
-    if (disabled || asInput) return;
+    if (disabled) return;
 
     if (!isOpen) {
       this[`suggestion_toggle_${name}`].focus();
@@ -96,7 +96,7 @@ class SuggestionToggle extends Component {
 
   render() {
     const {
-      name, handleBlur, label, theme, error, disabled, isOpen, asInput,
+      name, handleBlur, label, theme, error, disabled, isOpen,
     } = this.props;
 
     const labelClassName = classNames(theme.label, {
@@ -110,7 +110,6 @@ class SuggestionToggle extends Component {
       [theme.toggleDivDisabled]: disabled,
       [theme.active]: isOpen,
       [theme.errorToggleDiv]: error,
-      [theme.asInput]: asInput,
     });
 
     const caretIconClassName = classNames(theme.caretIcon, {
@@ -167,12 +166,11 @@ SuggestionToggle.propTypes = {
   }).isRequired,
   options: PropTypes.arrayOf(PropTypes.shape({ label: PropTypes.string, value: PropTypes.string }))
     .isRequired,
-  asInput: PropTypes.bool.isRequired,
   handleKeydown: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   toggleView: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   isOpen: PropTypes.bool.isRequired,
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -183,4 +181,5 @@ SuggestionToggle.propTypes = {
 SuggestionToggle.defaultProps = {
   theme: {},
   error: '',
+  disabled: false,
 };

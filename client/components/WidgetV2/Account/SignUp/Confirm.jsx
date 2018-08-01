@@ -9,6 +9,7 @@ import { Form, Field, Button } from '../../../library';
 import { maxDigits } from '../../../library/Form/normalize';
 import { numDigitsValidate } from '../../../library/Form/validate';
 import { confirmCode, resendPinCode } from '../../../../thunks/availabilities';
+import { inputTheme } from '../../theme';
 import styles from './styles.scss';
 
 function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResendPinCode }) {
@@ -45,7 +46,8 @@ function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResen
               >
                 here
               </Button>
-            }.
+            }
+            .
           </p>
         </div>
       </div>
@@ -59,17 +61,7 @@ function SignUpConfirm({ handleConfirmationCode, patientPhoneNumber, handleResen
                 label="Confirmation Code"
                 validate={[numDigitsValidate(4)]}
                 normalize={maxDigits(4)}
-                theme={{
-                  erroredLabelFilled: styles.erroredLabelFilled,
-                  input: styles.input,
-                  filled: styles.filled,
-                  label: styles.label,
-                  group: styles.group,
-                  error: styles.error,
-                  erroredInput: styles.erroredInput,
-                  bar: styles.bar,
-                  erroredLabel: styles.erroredLabel,
-                }}
+                theme={inputTheme(styles)}
               />
               <Button type="submit" className={styles.actionButton}>
                 Confirm Signup

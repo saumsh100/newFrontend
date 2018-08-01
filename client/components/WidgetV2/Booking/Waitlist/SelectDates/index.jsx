@@ -15,8 +15,9 @@ import {
   setText,
 } from '../../../../../reducers/widgetNavigation';
 import { isResponsive } from '../../../../../util/hub';
-import styles from './styles.scss';
+import { inputTheme } from '../../../theme';
 import dayPickerStyles from '../../dayPickerStyles.scss';
+import styles from './styles.scss';
 
 /**
  * Next default route for this component
@@ -141,19 +142,7 @@ const dayPickerFields = ({
       value={fromValue}
       onClick={fromOnClick}
       label="Start Date"
-      theme={{
-        inputWithIcon: styles.inputWithIcon,
-        iconClassName: styles.validationIcon,
-        erroredLabelFilled: styles.erroredLabelFilled,
-        input: styles.input,
-        filled: styles.filled,
-        label: styles.label,
-        group: styles.inputsGroup,
-        error: styles.error,
-        erroredInput: styles.erroredInput,
-        bar: styles.bar,
-        erroredLabel: styles.erroredLabel,
-      }}
+      theme={inputTheme(styles)}
     />
     <Input
       readOnly={toReadOnly}
@@ -161,19 +150,7 @@ const dayPickerFields = ({
       value={toValue}
       onClick={toOnClick}
       label="End Date"
-      theme={{
-        inputWithIcon: styles.inputWithIcon,
-        iconClassName: styles.validationIcon,
-        erroredLabelFilled: styles.erroredLabelFilled,
-        input: styles.input,
-        filled: styles.filled,
-        label: styles.label,
-        group: styles.inputsGroup,
-        error: styles.error,
-        erroredInput: styles.erroredInput,
-        bar: styles.bar,
-        erroredLabel: styles.erroredLabel,
-      }}
+      theme={inputTheme(styles)}
     />
   </div>
 );

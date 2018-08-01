@@ -6,9 +6,9 @@ import { bindActionCreators } from 'redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import Login from './Login';
 import Logged from './Logged';
-import { setResetEmail } from '../../../../actions/auth';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import { hideButton } from '../../../../reducers/widgetNavigation';
+import { setResetEmail } from '../../../../reducers/patientAuth';
 
 class Logon extends PureComponent {
   componentDidMount() {
