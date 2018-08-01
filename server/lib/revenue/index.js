@@ -178,7 +178,7 @@ export default async function calcRevenueDays(revParams) {
           isPending: false,
           isDeleted: false,
           isMissed: false,
-          startDate: {
+          endDate: {
             $between: [
               moment()
                 .tz(timezone)
