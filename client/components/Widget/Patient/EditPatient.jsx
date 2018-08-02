@@ -86,11 +86,11 @@ class EditPatient extends Component {
      * @param {object} values
      */
     const asyncPhoneNumberValidation = ({ phoneNumber }) => {
-      const { formValues } = this.props;
+      const { initial } = this.props.formValues;
       if (
         !phoneNumber ||
-        phoneNumber === formValues.phoneNumber ||
-        phoneNumber === normalizePhone(formValues.phoneNumber)
+        phoneNumber === initial.phoneNumber ||
+        phoneNumber === normalizePhone(initial.phoneNumber)
       ) {
         return;
       }
