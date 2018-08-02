@@ -1,16 +1,23 @@
-
-import moment from 'moment';
 import { Patient } from '../../_models';
-import { LateAppointmentsFilter, CancelledAppointmentsFilter, UnConfirmedPatientsFilter, MissedPreAppointed } from './smartFilters';
+import {
+  LateAppointmentsFilter,
+  CancelledAppointmentsFilter,
+  UnConfirmedPatientsFilter,
+  MissedPreAppointed,
+} from './smartFilters';
 import { DemographicsFilter } from './demographicsFilter';
-import { FirstLastAppointmentFilter, AppointmentsCountFilter, ProductionFilter, OnlineAppointmentsFilter } from './appointmentsFilter';
+import {
+  FirstLastAppointmentFilter,
+  AppointmentsCountFilter,
+  ProductionFilter,
+  OnlineAppointmentsFilter,
+} from './appointmentsFilter';
 import { PractitionersFilter } from './practitionersFilter';
 import { RemindersFilter, LastReminderFilter } from './remindersFilter';
 import { RecallsFilter, LastRecallFilter } from './recallsFilter';
 import { ReviewsFilter } from './reviewsFilter';
-import { mostBusinessSinglePatient } from '../intelligence/revenue';
 import { getIds } from './helpers';
-import { PatientSearch, PatientSearchFirstLastName } from './patientSearch';
+import { PatientSearchFirstLastName } from './patientSearch';
 
 const filterFunctions = [
   PatientSearchFirstLastName,
@@ -43,16 +50,11 @@ const smartFilterFunctions = [
   UnConfirmedPatientsFilter,
 ];
 
-export async function PatientQuery(config) {
+export default async function PatientQuery(config) {
   try {
     const start = Date.now();
     const {
-      limit,
-      filters,
-      smartFilter,
-      sort,
-      page,
-      accountId,
+      limit, filters, smartFilter, sort, page, accountId,
     } = config;
 
     const filterBy = {
@@ -70,6 +72,8 @@ export async function PatientQuery(config) {
 
       const descOrAsc = sortObj.desc ? 'DESC' : 'ASC';
       order.push([sortObj.id, descOrAsc]);
+      order.push('firstName');
+      order.push('lastName');
     }
 
     const defaultQuery = {
@@ -97,7 +101,11 @@ export async function PatientQuery(config) {
         offSetLimit.order = order;
       }
 
-      filteredPatients = await smartFilterFunctions[smFilter.index](accountId, offSetLimit, smFilter);
+      filteredPatients = await smartFilterFunctions[smFilter.index](
+        accountId,
+        offSetLimit,
+        smFilter,
+      );
     }
 
     if (filters && filters.length) {
@@ -155,15 +163,13 @@ export async function PatientQuery(config) {
 
     console.log(`--- ${Date.now() - start}ms elapsed patientFindAll`);
 
-    /**
-     * Calculating Revenue (Temporarily disabled)
-
-    const ids = getIds(patients, 'id');
-
-    patients = await mostBusinessSinglePatient(moment().subtract(1, 'years').toISOString(), new Date(), accountId, ids, order);
-    **/
-
-    const patientTotal = { id: 'totalPatients',
+    /*
+     Calculating Revenue (Temporarily disabled)
+     const ids = getIds(patients, 'id');
+     patients = await mostBusinessSinglePatient(moment().subtract(1, 'years').toISOString(), new Date(), accountId, ids, order);
+    */
+    const patientTotal = {
+      id: 'totalPatients',
       count: patientCount,
     };
 
