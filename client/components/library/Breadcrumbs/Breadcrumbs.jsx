@@ -1,5 +1,5 @@
 
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './breadcrumbs.scss';

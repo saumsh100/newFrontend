@@ -1,5 +1,5 @@
 
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import Models from '../server/_models';
 
 const ACCOUNT_ID = process.env.ACCOUNT_ID;
@@ -26,7 +26,7 @@ async function wipeModel(Model, accountId) {
 }
 
 async function wipeAccountData(accountId) {
-  const reversedOrder = _.clone(ORDER).reverse();
+  const reversedOrder = clone(ORDER).reverse();
   for (const modelName of reversedOrder) {
     await wipeModel(Models[modelName], accountId);
   }

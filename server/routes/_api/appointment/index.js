@@ -1,7 +1,7 @@
 
 import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
-import _ from 'lodash';
+import omit from 'lodash/omit';
 import { Router } from 'express';
 import { sequelizeLoader } from '../../util/loaders';
 import { mostBusinessProcedure } from '../../../lib/intelligence/revenue';
@@ -775,7 +775,7 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
   const { appointments } = req.body;
   const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
-      _.omit(appointment, ['id']),
+      omit(appointment, ['id']),
       { accountId: req.accountId }
     ));
   return Appointment.batchSave(cleanedAppointments)

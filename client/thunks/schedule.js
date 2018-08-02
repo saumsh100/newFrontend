@@ -1,4 +1,6 @@
-import { set } from 'lodash';
+import set from 'lodash/set';
+import values from 'lodash/values';
+import each from 'lodash/each';
 import moment from 'moment';
 import axios from 'axios';
 import {
@@ -25,7 +27,7 @@ export function checkPatientUser(patientUser, requestData) {
       const patientData = await axios.get('/api/patients', { params: query });
 
       const { data } = patientData;
-      const checkObjEmpty = !_.values(data.entities['patients']).some(x => x !== undefined);
+      const checkObjEmpty = !values(data.entities['patients']).some(x => x !== undefined);
 
       if (!checkObjEmpty) {
         return connectedPatientUser(dispatch, requestData, data);
@@ -121,8 +123,8 @@ export function setAllFilters(entityKeys) {
 
 function getEntities(entities) {
   const data = [];
-  _.each(entities, (collectionMap) => {
-    _.each(collectionMap, (modelData) => {
+  each(entities, (collectionMap) => {
+    each(collectionMap, (modelData) => {
       data.push(modelData);
     });
   });

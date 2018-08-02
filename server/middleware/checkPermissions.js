@@ -1,5 +1,5 @@
 
-import { isArray } from 'lodash';
+import isArray from 'lodash/isArray';
 import StatusError from '../util/StatusError';
 
 module.exports = function checkPermission(permission) {

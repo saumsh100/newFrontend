@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isFunction } from 'lodash';
+import isFunction from 'lodash/isFunction';
 import { List, ListItem, VButton, Row, Col } from '../../library';
 import styles from './editable-list.scss';
 

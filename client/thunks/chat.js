@@ -1,7 +1,11 @@
 
 import axios from 'axios';
 import { push } from 'react-router-redux';
-import { pull, pullAll, uniq, union, without } from 'lodash';
+import pull from 'lodash/pull';
+import pullAll from 'lodash/pullAll';
+import uniq from 'lodash/uniq';
+import union from 'lodash/union';
+import without from 'lodash/without';
 import {
   setSelectedChatId,
   setUnreadChats,

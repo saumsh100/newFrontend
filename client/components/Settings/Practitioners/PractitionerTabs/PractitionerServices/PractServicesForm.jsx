@@ -3,7 +3,6 @@ import React, { Component, PropTypes } from 'react';
 import PractServicesList from './PractServicesList';
 import { Form, Field, Toggle } from '../../../../library';
 import { change } from 'redux-form';
-import _ from 'lodash';
 import { batchActions } from 'redux-batched-actions';
 import { connect } from 'react-redux';
 import styles from './styles.scss';

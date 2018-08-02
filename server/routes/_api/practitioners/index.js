@@ -10,7 +10,8 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 
 const normalize = require('../normalize');
 
-const _ = require('lodash');
+const isArray = require('lodash/isArray');
+const mergeWith = require('lodash/mergeWith');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
 
@@ -292,7 +293,7 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
  * else return undefined and follow merge.
  */
 function mergeCopyArrays(objValue, srcValue) {
-  if (_.isArray(objValue)) {
+  if (isArray(objValue)) {
     return srcValue;
   }
 }
@@ -314,7 +315,7 @@ practitionersRouter.put('/:practitionerId/weeklySchedule', async (req, res, next
 
     const scheduleEntryCopy = schedule.get({ plain: true });
 
-    const updateSchedule = _.mergeWith({}, scheduleEntryCopy, bodyCopy, mergeCopyArrays);
+    const updateSchedule = mergeWith({}, scheduleEntryCopy, bodyCopy, mergeCopyArrays);
 
 
     schedule.setDataValue('pmsId', req.body.pmsId);

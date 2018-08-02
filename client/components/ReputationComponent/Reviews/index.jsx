@@ -1,5 +1,9 @@
 
 import React, { PropTypes, Component } from 'react';
+import keys from 'lodash/keys';
+import values from 'lodash/values';
+import max from 'lodash/max';
+import moment from 'moment';
 import {
   Card,
   Col,
@@ -14,8 +18,6 @@ import {
 } from '../../library';
 import colorMap from '../../library/util/colorMap';
 import styles from './styles.scss';
-import _ from 'lodash';
-import moment from 'moment';
 
 class Reviews extends Component {
   render() {
@@ -27,8 +29,8 @@ class Reviews extends Component {
       1: 1,
     };
 
-    const ratingStars = _.keys(rating).sort((a, b) => a > b);
-    const maxValue = _.max(_.values(rating));
+    const ratingStars = keys(rating).sort((a, b) => a > b);
+    const maxValue = max(values(rating));
 
     const DataBigComment = [
       {

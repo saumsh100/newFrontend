@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import _ from 'lodash';
+import isArray from 'lodash/isArray';
 import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
@@ -655,7 +655,7 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     return res.status(201).send(normalize('patients', savedPatientsResult));
   } catch (err) {
     const { errors, docs } = err;
-    if (!_.isArray(errors) || !_.isArray(docs)) {
+    if (!isArray(errors) || !isArray(docs)) {
       return next(err);
     }
 

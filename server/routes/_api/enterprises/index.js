@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import { Router } from 'express';
-import { pick } from 'lodash';
+import pick from 'lodash/pick';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import StatusError from '../../../util/StatusError';

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { connect } from 'react-redux';
 
 const InnerComponent = props => <props.el {...omit(props, 'el')} />;

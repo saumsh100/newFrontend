@@ -1,11 +1,11 @@
 
-const _ = require('lodash');
+const isArray = require('lodash/isArray');
 const StatusError = require('../util/StatusError');
 
 module.exports = function checkIsArray(key) {
   return function checkIsArrayMiddleware(req, res, next) {
     const set = req.body[key];
-    if (_.isArray(set)) {
+    if (isArray(set)) {
       return next();
     }
 

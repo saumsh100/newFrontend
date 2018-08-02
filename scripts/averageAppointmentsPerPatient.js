@@ -1,6 +1,7 @@
 
 import moment from 'moment';
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
+import size from 'lodash/size';
 import { Appointment, Request } from '../server/_models';
 
 const { ACCOUNT_ID, START_DATE, END_DATE } = process.env;
@@ -27,8 +28,8 @@ async function calculateAverageAppointmentsPerPatient(accountId, startDate, endD
   });
 
   const numAppointments = appointments.length;
-  const groupedByPatient = _.groupBy(appointments, 'patientId');
-  const numGroups = _.size(groupedByPatient);
+  const groupedByPatient = groupBy(appointments, 'patientId');
+  const numGroups = size(groupedByPatient);
 
   console.log(`${numAppointments} appointments fetched`);
   console.log(`${numGroups} groups found`);

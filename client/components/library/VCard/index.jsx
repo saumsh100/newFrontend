@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isString } from 'lodash';
+import isString from 'lodash/isString';
 import { getClassMapper, omitTypes } from '../../Utils';
 import styles from './vcard.scss';
 

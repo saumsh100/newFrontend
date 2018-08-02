@@ -1,6 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
+const pick = require('lodash/pick');
+const isEqual = require('lodash/isEqual');
 const convertToCommsPreferences = require('../util/convertToCommsPreferences');
 
 module.exports = {
@@ -13,11 +14,11 @@ module.exports = {
 
     for (let i = 0; i < patients.length; i++) {
       const { id, preferences, contactMethodNote } = patients[i];
-      const oldCommsPrefs = _.pick(preferences, ['sms', 'phone', 'emailNotifications']);
+      const oldCommsPrefs = pick(preferences, ['sms', 'phone', 'emailNotifications']);
       const newCommsPrefs = convertToCommsPreferences(contactMethodNote);
 
       // Don't bother the query if they are the same
-      if (_.isEqual(oldCommsPrefs, newCommsPrefs)) continue;
+      if (isEqual(oldCommsPrefs, newCommsPrefs)) continue;
 
       const newPreferences = Object.assign({}, preferences, newCommsPrefs);
       await queryInterface.sequelize

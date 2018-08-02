@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import classNames from 'classnames';
 import styles from './styles.scss';
 

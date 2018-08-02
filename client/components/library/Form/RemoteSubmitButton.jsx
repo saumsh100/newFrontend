@@ -1,6 +1,6 @@
 
 import React, { PropTypes } from 'react';
-import { omit } from 'lodash';
+import omit from 'lodash/omit';
 import { submit, isInvalid, isPristine } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

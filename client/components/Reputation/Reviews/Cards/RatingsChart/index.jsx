@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
+import max from 'lodash/max';
+import values from 'lodash/values';
 import { Card, Star } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
@@ -9,7 +10,7 @@ export default function RatingsChart(props) {
   const { rating } = props;
   // const ratingStars = _.keys(rating).sort((a,b) => a < b);
   const ratingStars = ['5', '4', '3', '2', '1', '0'];
-  const maxValue = _.max(_.values(rating));
+  const maxValue = max(values(rating));
 
   const hasRatings = Object.keys(rating).length;
 

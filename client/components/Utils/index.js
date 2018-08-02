@@ -1,7 +1,11 @@
 
 import PropTypes from 'prop-types';
 import { parse } from 'query-string';
-import { isArray, pick, omit as lOmit, isFunction } from 'lodash';
+import lOmit from 'lodash/omit';
+import isArray from 'lodash/isArray';
+import pick from 'lodash/pick';
+import isFunction from 'lodash/isFunction';
+
 
 /**
  * Conver camelCase names to dashed-names

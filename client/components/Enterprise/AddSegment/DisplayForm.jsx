@@ -3,7 +3,7 @@ import React, { PropTypes, Component } from 'react';
 import Loader from 'react-loader';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import _ from 'lodash';
+import round from 'lodash/round';
 
 import {
   Grid,
@@ -45,7 +45,7 @@ class DisplayForm extends Component {
     if (total === 0) {
       return 100;
     }
-    return _.round((num / total) * 100, 2);
+    return round((num / total) * 100, 2);
   }
 
   render() {

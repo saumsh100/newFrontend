@@ -1,6 +1,4 @@
 
-import moment from 'moment';
-import { uniq } from 'lodash';
 import {
   Appointment,
   AppointmentCode,

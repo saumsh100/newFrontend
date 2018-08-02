@@ -1,6 +1,5 @@
 
 import React, { Component, PropTypes } from 'react';
-import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../../../thunks/fetchEntities';

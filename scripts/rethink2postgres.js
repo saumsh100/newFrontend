@@ -1,5 +1,6 @@
 
-import _ from 'lodash';
+import clone from 'lodash/clone';
+import isArray from 'lodash/isArray';
 import winston from 'winston';
 import * as ThinkyModels from '../server/models';
 import SequelizeModels from '../server/_models';
@@ -165,7 +166,7 @@ const postFetch = {
  * @returns {Promise.<void>}
  */
 async function wipeSequelize() {
-  const reversedOrder = _.clone(ORDER).reverse();
+  const reversedOrder = clone(ORDER).reverse();
   for (const modelName of reversedOrder) {
     await wipeModelSequelize(SequelizeModels[modelName]);
   }
@@ -237,7 +238,7 @@ async function main() {
           successes = models.length;
         } catch (error) {
           const { errors: errs, docs } = error;
-          if (!_.isArray(errs) || !_.isArray(docs)) {
+          if (!isArray(errs) || !isArray(docs)) {
             throw error;
           }
 

@@ -1,5 +1,5 @@
 
-import _ from 'lodash';
+import size from 'lodash/size';
 import thinky from '../../../../server/config/thinky';
 import {
   createTableName,
@@ -77,7 +77,7 @@ test.skip('createModel/auxilliary Helpers', () => {
       };
 
       const auxTables = createAuxilliaryTables(modelName, auxConfig);
-      expect(_.size(auxTables)).toBe(2);
+      expect(size(auxTables)).toBe(2);
     });
   });
 

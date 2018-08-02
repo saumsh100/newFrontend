@@ -1,6 +1,6 @@
 
 import { v4 as uuid } from 'uuid';
-import { omit as omit } from 'lodash';
+import omit from 'lodash/omit';
 
 const createModel = require('../../../../server/models/createModel');
 const thinky = require('../../../../server/config/thinky');
