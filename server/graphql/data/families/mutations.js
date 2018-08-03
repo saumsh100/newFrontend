@@ -45,8 +45,7 @@ const updateFamilyMutation = mutationWithClientMutationId({
       resolve: payload => payload,
     },
   },
-  mutateAndGetPayload: async ({ id, ...args }) =>
-    await Family.findById(id).then(p => p.update(args)),
+  mutateAndGetPayload: async ({ id, ...args }) => Family.findById(id).then(p => p.update(args)),
 });
 
 /**
@@ -59,8 +58,7 @@ const deleteFamilyMutation = mutationWithClientMutationId({
     only: ['id'],
   }),
   outputFields: null,
-  mutateAndGetPayload: async ({ id }) =>
-    await Family.findById(id).then(p => p.destroy()),
+  mutateAndGetPayload: async ({ id }) => Family.findById(id).then(p => p.destroy()),
 });
 
 /**
@@ -81,7 +79,7 @@ const createFamilyWithMembersMutation = mutationWithClientMutationId({
       resolve: payload => payload,
     },
   },
-  mutateAndGetPayload: async ({ family, members }, context) => {
+  mutateAndGetPayload: async ({ members }, context) => {
     const newFamily = await Family.create({
       accountId: context.sessionData.accountId,
     });
@@ -92,7 +90,7 @@ const createFamilyWithMembersMutation = mutationWithClientMutationId({
         where: {
           id: members,
         },
-      }
+      },
     );
 
     return newFamily;

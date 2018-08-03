@@ -1,6 +1,10 @@
 
 import { GraphQLObjectType, GraphQLString } from 'graphql';
-import { connectionDefinitions, connectionArgs, connectionFromPromisedArray } from 'graphql-relay';
+import {
+  connectionDefinitions,
+  connectionArgs,
+  connectionFromPromisedArray,
+} from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
 import { Patient, Family } from 'CareCruModels';
 import { patientType, patientConnection } from 'CareCruGraphQL/data/patients';
@@ -20,13 +24,18 @@ const familyType = new GraphQLObjectType({
     // Queries for the head of the family
     head: {
       type: patientType,
-      resolve: async family => await Patient.findOne({ where: { pmsId: family.headId } }),
+      resolve: async family =>
+        Patient.findOne({ where: { id: family.headId } }),
     },
     // Queries for all members of this family
     members: {
       type: patientConnection,
       args: connectionArgs,
-      resolve: (family, args) => connectionFromPromisedArray(Patient.findAll({ where: { familyId: family.id } }), args),
+      resolve: (family, args) =>
+        connectionFromPromisedArray(
+          Patient.findAll({ where: { familyId: family.id } }),
+          args,
+        ),
     },
   }),
 });

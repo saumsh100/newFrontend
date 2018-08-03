@@ -1,3 +1,4 @@
+
 import uniqBy from 'lodash/uniqBy';
 import moment from 'moment';
 import { Patient, Appointment, Family, SentReminder } from '../../_models';
@@ -48,9 +49,9 @@ export async function allInsights(accountId, startDate, endDate) {
       ],
     });
 
-    const filterNonFamilyHeads = patients.filter(p => p.family.id === null || p.pmsId === p.family.headId);
+    const familyHeads = patients.filter(p => p.family.id === null || p.id === p.family.headId);
 
-    return await generateInsights(filterNonFamilyHeads, startDate);
+    return await generateInsights(familyHeads, startDate);
   } catch (err) {
     console.error(err);
     throw err;

@@ -31,7 +31,7 @@ const mutation = graphql`
 const commit = (environment, patient, family) => {
   const input = {
     id: family.ccId,
-    headId: patient.pmsId,
+    headId: patient.ccId,
     accountId: patient.accountId,
     clientMutationId: family.id,
   };

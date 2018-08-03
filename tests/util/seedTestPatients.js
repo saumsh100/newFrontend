@@ -38,7 +38,7 @@ const patient = {
   appointmentPreference: 'both',
   // avatarUrl: '',
   // pmsId: 0,
-  //pmsId: null,
+  // pmsId: null,
   /*
    middleName: '',
 
@@ -68,7 +68,7 @@ const family = {
   id: familyId,
   accountId,
   pmsId: '12',
-  headId: '12',
+  headId: patientId,
 };
 
 async function seedTestPatients() {
