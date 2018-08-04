@@ -170,7 +170,7 @@ describe('/api/appointments', () => {
           data, age, entities, months,
         } = omitPropertiesFromBody(body);
         expect({
-          age, data, entities, months: months.sort(),
+          age, data: data.sort(), entities, months: months.sort(),
         }).toMatchSnapshot();
       }));
 

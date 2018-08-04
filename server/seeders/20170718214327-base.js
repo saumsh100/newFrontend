@@ -1,3 +1,4 @@
+
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
@@ -228,7 +229,7 @@ module.exports = {
       const familyPosition = i % families.length;
 
       if (!families[familyPosition].headId) {
-        families[familyPosition].headId = pmsId;
+        families[familyPosition].headId = id;
       }
 
       patients.push({
