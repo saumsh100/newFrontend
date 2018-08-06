@@ -4,9 +4,9 @@ import { electron } from '../util/ipc';
 import { hideContent } from '../reducers/electron';
 import { RESIZE_WINDOW } from '../constants';
 
-export function displayContent() {
+export function displayContent(isExpensive = false) {
   return () => {
-    electron.send(RESIZE_WINDOW, { expanded: true });
+    electron.send(RESIZE_WINDOW, { expanded: true, isExpensive });
   };
 }
 

@@ -24,9 +24,10 @@ class MainBrowserWindow extends WindowMain {
   /**
    * Trigger the position change of toolbar according to the default config or
    * user settings.
+   * @param setDelay {boolean}
    */
-  setToolbarPosition() {
-    this.positionWindow();
+  setToolbarPosition(setDelay) {
+    this.positionWindow(setDelay);
   }
 
   /**
@@ -38,7 +39,7 @@ class MainBrowserWindow extends WindowMain {
 
     this.setSize(
       Math.floor(toolbarWidth * factor),
-      Math.floor(config.toolbar.toolbarWindow.height * factor)
+      Math.floor(config.toolbar.toolbarWindow.height * factor),
     );
   }
 

@@ -36,7 +36,7 @@ $intercom-side-margin: 50px;
       &.right {
         right: $intercom-side-margin !important;
         left: $electron-anti-radius-padding !important;
-        transform: translateX(100%) !important;
+        transform: translateX(0) !important;
 
         .intercom-messenger-frame {
           border-radius: 0 !important;

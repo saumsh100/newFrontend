@@ -11,6 +11,14 @@ import { displayContent, collapseContent } from '../../../thunks/electron';
 import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../../util/hub';
 import styles from './styles.scss';
 
+const expensiveRoutesList = {
+  '/requests': true,
+};
+
+function isExpensiveRoute(routePath) {
+  return expensiveRoutesList[routePath];
+}
+
 function NavList(props) {
   const {
     location, unreadChats, newRequests, showContent, toolbarPosition,
@@ -18,7 +26,8 @@ function NavList(props) {
 
   const { navItem, activeItem } = styles;
 
-  const onClickToggle = active => (active ? props.collapseContent() : props.displayContent());
+  const onClickToggle = (active, expensive) =>
+    (active ? props.collapseContent() : props.displayContent(expensive));
 
   const SingleNavItem = ({
     path, icon, active, disabled, iconType, badge, iconImage,
@@ -28,7 +37,7 @@ function NavList(props) {
     return (
       <Link to={path} disabled={disabled}>
         <Button
-          onClick={() => !disabled && onClickToggle(active)}
+          onClick={() => !disabled && onClickToggle(active, isExpensiveRoute(path))}
           className={classNames(styles.buttonNoSpacing, styles.buttonNoBg)}
         >
           <NavItem
@@ -180,6 +189,9 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(withAuthProps(NavList));

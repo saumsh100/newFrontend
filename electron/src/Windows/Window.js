@@ -54,10 +54,15 @@ class Window {
   /**
    * Position the window based on get xCoordinate and get yCoordinate functions.
    */
-  positionWindow() {
+  positionWindow(delay = false) {
     const x = this.xCoordinate || 0;
     const y = this.yCoordinate || 0;
-    this.setCoordinates(x, y);
+    if (delay) {
+      return setTimeout(() => {
+        this.setCoordinates(x, y);
+      }, 100);
+    }
+    return this.setCoordinates(x, y);
   }
 
   /**

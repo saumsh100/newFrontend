@@ -33,11 +33,11 @@ ipcMain.on(SHOW_TOOLBAR, (event, data) => {
 
 ipcMain.on(RESIZE_WINDOW, (event, data) => {
   const window = WindowManager.instance;
-  const { expanded } = data;
+  const { expanded, isExpensive } = data;
 
   window.mainWindow.changeState(!expanded);
-  window.mainWindow.setToolbarPosition();
   window.mainWindow.setToolbarSize();
+  window.mainWindow.setToolbarPosition(expanded && isExpensive);
 
   if (expanded) {
     event.sender.send(SHOW_CONTENT);
