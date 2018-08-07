@@ -22,6 +22,7 @@ export const initialState = fromJS({
   user: null,
   sessionId: null,
   adapterPermissions: {},
+  timezone: null,
 });
 
 export default handleActions(

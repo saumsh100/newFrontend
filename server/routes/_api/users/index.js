@@ -1,13 +1,7 @@
 
-import bcrypt from 'bcrypt';
 import zxcvbn from 'zxcvbn';
 import { Router } from 'express';
-import omit from  'lodash/omit';
-import {
-  Enterprise,
-  Permission,
-  User,
-} from '../../../_models';
+import { Enterprise, Permission, User, Account } from '../../../_models';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import StatusError from '../../../util/StatusError';
@@ -20,22 +14,34 @@ userRouter.param('userId', sequelizeLoader('profile', 'User'));
 /**
  * GET /me
  */
-userRouter.get('/me', (req, res, next) => {
-  const { userId, accountId, sessionData } = req;
-  return User.findOne({
-    where: {
-      id: userId,
-    },
+userRouter.get('/me', async (req, res, next) => {
+  try {
+    const { userId, accountId, sessionData } = req;
 
-    include: [
-      { model: Enterprise, as: 'enterprise' },
-      { model: Permission, as: 'permission' },
-    ],
-  }).then(user => {
-    user = user.get({ plain: true });
+    const [accountData, userData] = await Promise.all([
+      Account.findOne({
+        where: {
+          id: accountId,
+        },
+        attributes: ['timezone'],
+      }),
+      User.findOne({
+        where: {
+          id: userId,
+        },
+
+        include: [{ model: Enterprise, as: 'enterprise' }, { model: Permission, as: 'permission' }],
+      }),
+    ]);
+
+    const account = accountData.get({ plain: true });
+    const user = userData.get({ plain: true });
     const role = user.permission.role;
+
+    const { permissions, ...remainingSessionData } = sessionData;
+
     return res.json({
-      ...(omit(sessionData, ['permissions'])),
+      ...remainingSessionData,
       enterprise: user.enterprise,
       role,
       user: {
@@ -44,33 +50,32 @@ userRouter.get('/me', (req, res, next) => {
         lastName: user.lastName,
         username: user.username,
       },
+      timezone: account.timezone,
     });
-  }).catch(next);
+  } catch (error) {
+    next();
+  }
 });
 
 /**
  * GET /:userId
  */
-userRouter.get('/:userId', checkPermissions('users:read'), (req, res, next) => {
-  return Permission.findById(req.profile.permissionId)
-  .then((permission) => {
-    if (!permission) throw StatusError(500, 'No permission found');
-    const user = req.profile.get({ plain: true });
-    delete user.password;
-    user.role = permission.role;
-    return res.send(normalize('user', user));
-  }).catch(next);
-
-});
+userRouter.get('/:userId', checkPermissions('users:read'), (req, res, next) =>
+  Permission.findById(req.profile.permissionId)
+    .then((permission) => {
+      if (!permission) throw StatusError(500, 'No permission found');
+      const user = req.profile.get({ plain: true });
+      delete user.password;
+      user.role = permission.role;
+      return res.send(normalize('user', user));
+    })
+    .catch(next));
 
 /**
  * GET /
  */
 userRouter.get('/', checkPermissions('users:read'), (req, res, next) => {
-  const {
-    accountId,
-    includeArray,
-  } = req;
+  const { accountId, includeArray } = req;
 
   const queryData = {
     raw: true,
@@ -86,13 +91,12 @@ userRouter.get('/', checkPermissions('users:read'), (req, res, next) => {
     .catch(next);
 });
 
-
 /**
  * PUT /:userId
  */
 userRouter.put('/:userId', (req, res, next) => {
   Promise.resolve(req.profile)
-    .then(((user) => {
+    .then((user) => {
       // TODO: allow users to change more than just password here...
       // TODO: ensure all the attributes are here before performing this logic
       const { oldPassword, password, confirmPassword } = req.body;
@@ -103,26 +107,27 @@ userRouter.put('/:userId', (req, res, next) => {
       // Check if the password is valid,
       // if so, we must set the new password, other attrs and then save
       // if all is well, we respond with the updated user
-      return user.isValidPasswordAsync(oldPassword)
+      return user
+        .isValidPasswordAsync(oldPassword)
         .then(() => {
           // TODO: this code is duplicated on frontend, refactor for isomoprohic functions
           const result = zxcvbn(password);
-          const { score, feedback: { warning } } = result;
+          const {
+            score,
+            feedback: { warning },
+          } = result;
           if (score < 2) {
             throw StatusError(401, warning || 'New password not strong enough');
           }
 
-          return user.setPasswordAsync(password)
-            .then((updatedUser) => {
-              // Now save and respond finally!
-              return updatedUser.save()
-                .then(savedUser => res.send(normalize('user', savedUser.dataValues)));
-            });
+          return user.setPasswordAsync(password).then(updatedUser =>
+            // Now save and respond finally!
+            updatedUser.save().then(savedUser => res.send(normalize('user', savedUser.dataValues))));
         })
         .catch((err) => {
           throw StatusError(401, err.message || 'Invalid current password');
         });
-    }))
+    })
     .catch(next);
 });
 
@@ -133,7 +138,8 @@ userRouter.delete('/:userId', (req, res, next) => {
   if (req.role !== 'SUPERADMIN' && req.role !== 'OWNER') {
     return res.sendStatus(401);
   }
-  return req.profile.destroy()
+  return req.profile
+    .destroy()
     .then(() => res.sendStatus(204))
     .catch(next);
 });

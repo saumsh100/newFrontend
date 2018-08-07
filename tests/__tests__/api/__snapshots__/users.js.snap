@@ -67,6 +67,7 @@ Object {
   "enterpriseId": "c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4",
   "entities": Object {},
   "role": "MANAGER",
+  "timezone": "America/Vancouver",
   "user": Object {
     "firstName": "Harvey",
     "id": "6668f250-e8c9-46e3-bfff-0249f1eec6b8",
