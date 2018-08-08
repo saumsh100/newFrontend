@@ -27,7 +27,6 @@ COPY app.json /app/
 COPY cypress.json /app/
 COPY nodemon.json /app/
 COPY package.json /app/
-COPY package-lock.json /app/
 COPY Procfile /app/
 COPY Procfile_dev /app/
 COPY Procfile_dev_no_reminders /app/
