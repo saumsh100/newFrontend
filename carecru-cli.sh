@@ -1,3 +1,5 @@
+#!/bin/bash
+
 initialize() {
 	echo "Initializing Development Environment"
 	dockerComposeUp
