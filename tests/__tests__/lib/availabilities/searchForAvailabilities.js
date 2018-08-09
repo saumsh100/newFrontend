@@ -69,7 +69,7 @@ describe('Availabilities Library', () => {
       expect(typeof searchForAvailabilities).toBe('function');
     });
 
-    describe('seedTestAvailabilities Data', () =>{
+    describe('seedTestAvailabilities Data', () => {
       test('should return 0 availabilities', async () => {
         const startDate = (new Date()).toISOString();
         const endDate = (new Date()).toISOString();
@@ -313,21 +313,21 @@ describe('Availabilities Library', () => {
 
         await Account.update(
           { weeklyScheduleId: weeklySchedules[0].id, timeInterval: 60 },
-          { where: { id: accountId } }
+          { where: { id: accountId } },
         );
 
         await Practitioner.update(
           { isCustomSchedule: true, weeklyScheduleId: weeklySchedules[1].id },
-          { where: { id: practitionerId } }
+          { where: { id: practitionerId } },
         );
 
         await Service.update(
           { duration: 120 },
-          { where: { id: serviceId } }
+          { where: { id: serviceId } },
         );
       });
 
-      test('should return 8 availabilites with scenario above', async () => {
+      test('should return 8 availabilities with scenario above', async () => {
         const startDate = iso('06:00', '03-05'); // Monday morning
         const endDate = iso('18:00', '03-08'); // Thursday evening
         const options = {
@@ -424,6 +424,52 @@ describe('Availabilities Library', () => {
         expect(Array.isArray(availabilities)).toBe(true);
         expect(availabilities.length).toBe(0);
         expect(nextAvailability).toBe(null);
+      });
+
+      test('should return 5 availabilities for Jennifer', async () => {
+        const startDate = iso('15:00', '03-05'); // Monday afternoon
+        const endDate = iso('18:00', '03-08'); // Thursday evening
+
+        const options = {
+          accountId,
+          practitionerId: practitionerId2,
+          serviceId,
+          startDate,
+          maxRetryAttempts: 5,
+          endDate,
+        };
+        
+        const { availabilities, retryAttempts } = await searchForAvailabilities(options);
+
+        expect(retryAttempts).toBe(0);
+        expect(Array.isArray(availabilities)).toBe(true);
+        expect(availabilities.length).toBe(5);
+      });
+
+      test('should return 3 availabilities if first day is off', async () => {
+        const startDate = iso('15:00', '03-05'); // Monday afternoon
+        const endDate = iso('18:00', '03-08'); // Thursday evening
+
+        const toStart = iso('06:00', '03-05');
+        const toEnd = iso('06:00', '03-05');
+        await PractitionerRecurringTimeOff.bulkCreate([
+          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
+        ]);
+
+        const options = {
+          accountId,
+          practitionerId: practitionerId2,
+          serviceId,
+          startDate,
+          maxRetryAttempts: 5,
+          endDate,
+        };
+        
+        const { availabilities, retryAttempts } = await searchForAvailabilities(options);
+
+        expect(retryAttempts).toBe(0);
+        expect(Array.isArray(availabilities)).toBe(true);
+        expect(availabilities.length).toBe(3);
       });
     });
   });

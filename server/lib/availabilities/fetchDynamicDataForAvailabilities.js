@@ -13,32 +13,30 @@ import {
 } from '../../_models';
 import { getProperDateWithZone } from '../../util/time';
 
-const generateDuringFilterSequelize = (startDate, endDate) => {
-  return {
-    $or: [
-      {
-        startDate: {
-          gte: new Date(startDate).toISOString(),
-          lte: new Date(endDate).toISOString(),
-        },
+const generateDuringFilterSequelize = (startDate, endDate) => ({
+  $or: [
+    {
+      startDate: {
+        gte: new Date(startDate).toISOString(),
+        lte: new Date(endDate).toISOString(),
       },
-      {
-        endDate: {
-          gte: new Date(startDate).toISOString(),
-          lte: new Date(endDate).toISOString(),
-        },
+    },
+    {
+      endDate: {
+        gte: new Date(startDate).toISOString(),
+        lte: new Date(endDate).toISOString(),
       },
-      {
-        startDate: {
-          lte: new Date(startDate).toISOString(),
-        },
-        endDate: {
-          gte: new Date(endDate).toISOString(),
-        },
+    },
+    {
+      startDate: {
+        lte: new Date(startDate).toISOString(),
       },
-    ],
-  };
-};
+      endDate: {
+        gte: new Date(endDate).toISOString(),
+      },
+    },
+  ],
+});
 
 /**
  * fetchAppointments is an async function that will return the promised query
@@ -96,7 +94,7 @@ export function fetchRequests({ accountId, startDate, endDate }) {
       accountId,
       isConfirmed: false,
       isCancelled: false,
-      ... generateDuringFilterSequelize(startDate, endDate),
+      ...generateDuringFilterSequelize(startDate, endDate),
     },
 
     order: [['startDate', 'ASC']],
@@ -146,7 +144,9 @@ export function fetchTimeOffs({ practitionerIds, startDate, endDate }) {
  * @param timezone
  * @return [dailySchedules]
  */
-export function fetchDailySchedules({ practitionerIds, startDate, endDate, timezone }) {
+export function fetchDailySchedules({
+  practitionerIds, startDate, endDate, timezone,
+}) {
   const startDateOnly = getProperDateWithZone(startDate, timezone);
   const endDateOnly = getProperDateWithZone(endDate, timezone);
   return DailySchedule.findAll({
@@ -166,7 +166,6 @@ export function fetchDailySchedules({ practitionerIds, startDate, endDate, timez
         $between: [startDateOnly, endDateOnly],
       },
     },
-
     raw: true,
   });
 }
@@ -181,15 +180,27 @@ export function fetchDailySchedules({ practitionerIds, startDate, endDate, timez
  * @param endDate
  * @return {Promise<{requests, practitioners}>}
  */
-export default async function fetchDynamicDataForAvailabilities({ account, practitioners, startDate, endDate }) {
+export default async function fetchDynamicDataForAvailabilities({
+  account, practitioners, startDate, endDate,
+}) {
   const practitionerIds = practitioners.map(p => p.id);
+  
+  // This is a temporary fix to properly get the allDay availabilities
+  const dayBeforeDate = new Date(startDate);
+  dayBeforeDate.setHours(dayBeforeDate.getHours() - 24);
 
   // Start all queries in parallel
   const getAppointments = fetchAppointments({ practitionerIds, startDate, endDate });
   const getRequests = fetchRequests({ accountId: account.id, startDate, endDate });
-  const getTimeOffs = fetchTimeOffs({ practitionerIds, startDate, endDate });
-  const getDailySchedules = fetchDailySchedules({ practitionerIds, startDate, endDate, timezone: account.timezone });
-
+  const getTimeOffs = fetchTimeOffs({
+    practitionerIds,
+    startDate: dayBeforeDate.toISOString(),
+    endDate,
+  });
+  const getDailySchedules = fetchDailySchedules({
+    practitionerIds, startDate, endDate, timezone: account.timezone,
+  });
+  
   // Wait for all queries to finish together but send at same time
   const [
     appointments,
@@ -208,7 +219,7 @@ export default async function fetchDynamicDataForAvailabilities({ account, pract
   const practitionerRequests = groupBy(requests, d => d.suggestedPractitionerId);
   const practitionerTimeOffs = groupBy(timeOffs, t => t.practitionerId);
   const practitionerDailySchedules = groupBy(dailySchedules, d => d.practitionerId);
-  const practitionersWithData = practitioners.map(practitioner => {
+  const practitionersWithData = practitioners.map((practitioner) => {
     const practitionerId = practitioner.id;
     return Object.assign(
       {},
