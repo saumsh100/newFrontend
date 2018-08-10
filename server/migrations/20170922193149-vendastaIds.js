@@ -17,7 +17,7 @@ module.exports = {
           {
             type: Sequelize.STRING,
           },
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.addColumn(
@@ -26,7 +26,7 @@ module.exports = {
           {
             type: Sequelize.STRING,
           },
-          { transaction: t }
+          { transaction: t },
         );
 
       } catch (e) {
@@ -49,13 +49,13 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'vendastaMsId',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
           'Accounts',
           'vendastaSrId',
-          { transaction: t }
+          { transaction: t },
         );
 
       } catch (e) {
@@ -63,5 +63,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

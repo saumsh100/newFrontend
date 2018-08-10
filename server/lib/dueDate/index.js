@@ -66,7 +66,7 @@ export async function updatePatientDueDatesForAccount(config) {
     `Updating dueDates for ` +
     (isNotAllPatients ? `${patientIds.length} patients with recently changed dueDate info ` : 'all patients ') +
     `based on ${isUsingPendingAppointments ? 'pending appointments' : 'patient recalls'} ` +
-    `for ${account.name} with ADAPTER_TYPE=${adapterType}...`
+    `for ${account.name} with ADAPTER_TYPE=${adapterType}...`,
   );
 
   return isUsingPendingAppointments ?

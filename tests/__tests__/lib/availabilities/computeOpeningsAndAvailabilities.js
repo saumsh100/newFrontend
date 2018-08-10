@@ -422,7 +422,7 @@ describe('Availabilities Library', () => {
             endTime: iso('21:00'),
           },
         });
-        service = { duration: 120,  };
+        service = { duration: 120  };
 
         officeHours = generateWeeklySchedule({
           monday: {

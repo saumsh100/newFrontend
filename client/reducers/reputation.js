@@ -15,7 +15,7 @@ const initialState = fromJS({
   listingsFilter: {
     sourceTypes: ['Search Engines', 'Review Sites', 'Directories', 'Social Sites'],
     listingStatuses: ['Accurate', 'Found with Possible Errors', 'Not Found'],
-  }
+  },
 });
 
 export default handleActions({

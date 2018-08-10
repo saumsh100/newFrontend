@@ -18,5 +18,5 @@ module.exports = {
       'Accounts',
       'sendUnconfirmedReviews',
     );
-  }
+  },
 };

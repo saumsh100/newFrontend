@@ -9,7 +9,7 @@ const makeData = (data = {}) => (Object.assign({
   minor: 1.1,
   patch: 1.13,
   build: 1.4,
-  url: 'cats'
+  url: 'cats',
 }, data));
 
 const fail = 'Your code should be failing but it is passing';

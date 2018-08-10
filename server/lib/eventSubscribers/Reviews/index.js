@@ -101,7 +101,7 @@ function sendReviewCompletedSocket(sub, io) {
           model: Review,
           as: 'review',
           required: true,
-        }]
+        }],
       });
 
       const newCorrespondence = await Correspondence.create({

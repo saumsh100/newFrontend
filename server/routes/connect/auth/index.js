@@ -25,16 +25,16 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
           userId: user.id,
           sessionId: session.id,
           activeAccountId: user.activeAccountId,
-        }))
+        })),
     )
     .then(token => res.json({ token }))
-    .catch(err => next(err))
+    .catch(err => next(err)),
 );
 
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   UserAuth.logout(sessionId)
     .then(() => res.send(200))
-    .catch(next)
+    .catch(next),
 );
 
 export default authRouter;

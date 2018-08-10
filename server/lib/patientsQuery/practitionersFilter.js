@@ -1,5 +1,5 @@
 
-import { Patient, Appointment, } from '../../_models';
+import { Patient, Appointment } from '../../_models';
 import { patientAttributes } from './helpers';
 
 export async function PractitionersFilter({ data }, filterIds, query, accountId) {

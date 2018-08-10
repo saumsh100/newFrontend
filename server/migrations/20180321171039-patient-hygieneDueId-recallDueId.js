@@ -16,7 +16,7 @@ module.exports = {
             onUpdate: 'cascade',
             onDelete: 'set null',
           },
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.addColumn(
@@ -31,7 +31,7 @@ module.exports = {
             onUpdate: 'cascade',
             onDelete: 'set null',
           },
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);
@@ -50,5 +50,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

@@ -34,7 +34,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Requests',
           'insuranceCarrier',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(

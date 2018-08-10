@@ -55,7 +55,7 @@ mail.sendTestEmailTemplate({
       name: 'BOOK_URL',
       content: 'http://www.capitolhilldental.ca/?cc=book',
     },
-  ]
+  ],
 }).then(() => {
   console.log('Email Sent');
   process.exit();

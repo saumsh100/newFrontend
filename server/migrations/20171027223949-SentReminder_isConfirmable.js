@@ -41,7 +41,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'SentReminders',
           'isConfirmable',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.error(e);

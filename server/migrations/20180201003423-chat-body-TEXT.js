@@ -7,7 +7,7 @@ module.exports = {
       'body',
       {
         type: Sequelize.TEXT,
-      }
+      },
     );
   },
 
@@ -19,5 +19,5 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-  }
+  },
 };

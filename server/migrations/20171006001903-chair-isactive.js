@@ -16,7 +16,7 @@ module.exports = {
       {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
-      }
+      },
     );
   },
 
@@ -32,5 +32,5 @@ module.exports = {
       'Chairs',
       'isActive',
     );
-  }
+  },
 };

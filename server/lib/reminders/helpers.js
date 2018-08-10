@@ -153,7 +153,7 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
     // and this one. If it is, we ignore this touchpoint
     order: [
       ['startDate', 'ASC'],
-      [{ model: SentReminder, as: 'sentReminders' }, 'createdAt', 'desc']
+      [{ model: SentReminder, as: 'sentReminders' }, 'createdAt', 'desc'],
     ],
 
     include: [
@@ -220,11 +220,11 @@ export function filterReminderAppointments({ appointments, reminder }) {
   let filteredAppointments = [];
   forEach(groupedAppointmentsByBuffer, (appointmentsGroup) => {
     let filteredAppointmentsGroup = uniqWith(appointmentsGroup, (a, b) =>
-      a.patient.id === b.patient.id
+      a.patient.id === b.patient.id,
     );
 
     filteredAppointmentsGroup = filteredAppointmentsGroup.filter(a =>
-      exports.shouldSendReminder({ appointment: a, reminder })
+      exports.shouldSendReminder({ appointment: a, reminder }),
     );
 
     filteredAppointments = [...filteredAppointments, ...filteredAppointmentsGroup];

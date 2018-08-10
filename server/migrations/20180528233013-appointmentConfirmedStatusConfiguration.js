@@ -31,7 +31,7 @@ module.exports = {
           type: 'string',
           createdAt: new Date(),
           updatedAt: new Date(),
-        }
+        },
         ], { transaction: t });
       } catch (e) {
         console.log(e);

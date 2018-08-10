@@ -18,5 +18,5 @@ module.exports = {
       'Reminders',
       'omitChairIds',
     );
-  }
+  },
 };

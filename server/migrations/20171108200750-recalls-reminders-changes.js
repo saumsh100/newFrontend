@@ -122,56 +122,56 @@ module.exports = {
         await queryInterface.removeColumn(
           'Recalls',
           'isActive',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove isActive column to Reminders
         await queryInterface.removeColumn(
           'Reminders',
           'isActive',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove isActive column to Recalls
         await queryInterface.removeColumn(
           'Recalls',
           'isDeleted',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove isActive column to Reminders
         await queryInterface.removeColumn(
           'Reminders',
           'isDeleted',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove dueDateSeconds column to Patients
         await queryInterface.removeColumn(
           'Patients',
           'recareDueDateSeconds',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove dueDateSeconds column to Patients
         await queryInterface.removeColumn(
           'Patients',
           'hygieneDueDateSeconds',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove dueDateSeconds column to Accounts
         await queryInterface.removeColumn(
           'Accounts',
           'recareDueDateSeconds',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Remove dueDateSeconds column to Accounts
         await queryInterface.removeColumn(
           'Accounts',
           'hygieneDueDateSeconds',
-          { transaction: t }
+          { transaction: t },
         );
 
         // Change back to what it was before
@@ -184,5 +184,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

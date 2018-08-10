@@ -25,12 +25,12 @@ module.exports = {
         await queryInterface.removeColumn(
           'Patients',
           'avatarUrl',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.error(err);
         t.rollback();
       }
     });
-  }
+  },
 };

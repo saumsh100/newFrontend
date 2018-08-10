@@ -18,7 +18,7 @@ export function previewSegment(rawWhere) {
         },
         (error) => {
           dispatch(previewSegmentError(new Error(error)));
-        }
+        },
       );
   };
 }
@@ -34,7 +34,7 @@ export function fetchCities(enterpriseId) {
         },
         (error) => {
           dispatch(fetchCitiesError(new Error(error)));
-        }
+        },
       );
   };
 }

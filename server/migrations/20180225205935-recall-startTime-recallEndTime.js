@@ -36,17 +36,17 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'recallStartTime',
-          { transaction: t }
+          { transaction: t },
         );
         await queryInterface.removeColumn(
           'Accounts',
           'recallEndTime',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);
         t.rollback();
       }
     });
-  }
+  },
 };

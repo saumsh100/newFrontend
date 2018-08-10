@@ -57,7 +57,7 @@ export default async function searchForAvailabilities(options) {
   logger.debug(
     `Searching for availabilities for a '${service.name}' ` +
     `at '${account.name}' from ${printRange({ startDate, endDate }, account.timezone)} in '${account.timezone}'. `  +
-    `Fetched static data in ${Date.now() - startTime}ms.`
+    `Fetched static data in ${Date.now() - startTime}ms.`,
   );
 
   // Since there's no availabilities in initial range, let's continuously search further
@@ -83,7 +83,7 @@ export default async function searchForAvailabilities(options) {
 
     logger.debug(
       `Try #${tryNum}: Fetched date-range-sensitive-data from ` +
-      `${printRange({ startDate, endDate }, account.timezone)} in ${Date.now() - tryStartTime}ms.`
+      `${printRange({ startDate, endDate }, account.timezone)} in ${Date.now() - tryStartTime}ms.`,
     );
 
     const computeTime = Date.now();
@@ -101,7 +101,7 @@ export default async function searchForAvailabilities(options) {
 
     logger.debug(
       `Try #${tryNum}: Computed availabilities in ${Date.now() - computeTime}ms. \n` +
-      printPractitionersData(practitionersData, account)
+      printPractitionersData(practitionersData, account),
     );
 
     if (availabilities.length) {

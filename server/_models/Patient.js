@@ -135,7 +135,7 @@ export default function (sequelize, DataTypes) {
         const smartPrefs = convertToCommsPreferences(val);
         const newPrefs = Object.assign({}, oldPrefs, smartPrefs);
         this.setDataValue('preferences', newPrefs);
-      }
+      },
     },
 
     birthDate: {

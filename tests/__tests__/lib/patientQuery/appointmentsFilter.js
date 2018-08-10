@@ -89,8 +89,8 @@ describe('Appointment Filters Tests', () => {
   describe('Number of Appointments Filter', () => {
     test('Find Patients with number of appointments greater than 3', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient' }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
       const appointments = await Appointment.bulkCreate([
@@ -108,8 +108,8 @@ describe('Appointment Filters Tests', () => {
 
     test('Find Patients with number of appointments less than 4', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient' }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
       const appointments = await Appointment.bulkCreate([
@@ -129,8 +129,8 @@ describe('Appointment Filters Tests', () => {
 
     test('Find Patients with number of appointments less than 4', async () => {
       const patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient', }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient', }),
+        makePatientData({ firstName: 'Old', lastName: 'Patient' }),
+        makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
       ]);
 
       const appointments = await Appointment.bulkCreate([

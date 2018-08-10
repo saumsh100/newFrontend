@@ -267,7 +267,7 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
       if (reminder.isDaily) {
         sendDate = moment.tz(
           `${moment(subtractedDate).format('YYYY-MM-DD')} ${reminder.dailyRunTime}`,
-          account.timezone
+          account.timezone,
         ).toISOString();
       }
 

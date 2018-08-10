@@ -27,7 +27,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Users',
           'sendBookingRequestEmail',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);

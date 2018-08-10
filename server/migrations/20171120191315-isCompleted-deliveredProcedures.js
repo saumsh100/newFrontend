@@ -19,7 +19,7 @@ module.exports = {
             defaultValue: true,
             allowNull: false,
           },
-          { transaction: t }
+          { transaction: t },
         );
       } catch (e) {
         console.log(e);

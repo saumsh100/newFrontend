@@ -642,7 +642,7 @@ appointmentsRouter.post('/connector/batch', checkPermissions('appointments:creat
     {
       accountId: req.accountId,
       isSyncedWithPms: true,
-    }
+    },
   ));
 
   return batchCreate(cleanedAppointments, Appointment, 'Appointment', [], [], createAppointmentCodes)
@@ -707,7 +707,7 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
     {
       accountId: req.accountId,
       isSyncedWithPms: true,
-    }
+    },
   ));
 
   const appointmentCodes = [];
@@ -776,7 +776,7 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
   const cleanedAppointments = appointments.map((appointment) => Object.assign(
       {},
       omit(appointment, ['id']),
-      { accountId: req.accountId }
+      { accountId: req.accountId },
     ));
   return Appointment.batchSave(cleanedAppointments)
     .then((apps) => {

@@ -31,7 +31,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Requests',
           'requestingPatientUserId',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.error(err);

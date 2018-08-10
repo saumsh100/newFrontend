@@ -12,7 +12,7 @@ mail.sendConfirmationReminder({
       name: 'CONFIRMATION_URL',
       content: `${protocol}://${host}/confirmation/${token}`,
     },
-  ]
+  ],
 }).then(() => {
   console.log('Email Sent');
   process.exit();

@@ -40,7 +40,7 @@ module.exports = {
 
         await queryInterface.bulkDelete('Configurations', {
           name: [
-            migrationFieldName
+            migrationFieldName,
           ],
         }, { transaction: t });
       } catch (err) {

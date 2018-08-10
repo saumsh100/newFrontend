@@ -22,7 +22,7 @@ module.exports = {
             },
             onUpdate: 'cascade',
           },
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.addColumn(
@@ -36,7 +36,7 @@ module.exports = {
             },
             onUpdate: 'cascade',
           },
-          { transaction: t }
+          { transaction: t },
         );
       } catch (e) {
         console.log(e);
@@ -58,18 +58,18 @@ module.exports = {
         await queryInterface.removeColumn(
           'WaitSpots',
           'appointmentId',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
           'Calls',
           'appointmentId',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (e) {
         console.log(e);
         t.rollback();
       }
     });
-  }
+  },
 };

@@ -33,5 +33,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

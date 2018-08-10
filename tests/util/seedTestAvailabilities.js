@@ -248,7 +248,7 @@ const Patients = [
       sin: 'dsasdasdasdadsasad',
     },
     isSyncedWithPms: false,
-  }
+  },
 ];
 
 const PatientUsers = [

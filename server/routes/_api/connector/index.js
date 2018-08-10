@@ -22,8 +22,8 @@ connectorRouter.post('/', checkPermissions('connectorVersion:create'), (req, res
   return ConnectorVersion.create(req.body)
     .then(
       connectorVersion => res.status(201).send(
-        format(req, res, 'connectorVersion', connectorVersion.get({ plain: true }))
-      )
+        format(req, res, 'connectorVersion', connectorVersion.get({ plain: true })),
+      ),
     )
     .catch(next);
 });

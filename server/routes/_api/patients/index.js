@@ -569,7 +569,7 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
     {
       accountId: req.accountId,
       isSyncedWithPms: true,
-    }
+    },
   ));
 
   return batchCreate(
@@ -577,7 +577,7 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
     Patient,
     'Patient',
     [Patient.uniqueAgainstEachOther],
-    [Patient.uniqueValidate]
+    [Patient.uniqueValidate],
   )
     .then((savedPatients) => {
       const patientData = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));
@@ -609,7 +609,7 @@ patientsRouter.put('/connector/batch', checkPermissions('patients:update'),
       {
         accountId: req.accountId,
         isSyncedWithPms: true,
-      }
+      },
     ));
 
     return batchUpdate(

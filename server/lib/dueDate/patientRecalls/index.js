@@ -328,11 +328,11 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
       logger.error(
         `Failed updating dueForHygieneDate=${dueForHygieneDate} ` +
         `and dueForRecallExamDate=${dueForRecallExamDate} ` +
-        `for patient with id=${patient.id}`
+        `for patient with id=${patient.id}`,
       );
 
       logger.error(err);
-    })
+    }),
   );
 
   return await Promise.all(patientsDuePromises);

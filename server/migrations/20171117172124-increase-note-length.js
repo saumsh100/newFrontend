@@ -7,10 +7,10 @@ module.exports = {
       'note',
       {
         type: Sequelize.STRING(511),
-      }
+      },
     );
   },
 
   down: function (queryInterface, Sequelize) {
-  }
+  },
 };

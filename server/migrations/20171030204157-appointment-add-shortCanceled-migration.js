@@ -16,7 +16,7 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
         allowNull: false,
-      }
+      },
     );
   },
 
@@ -30,7 +30,7 @@ module.exports = {
     */
     return queryInterface.removeColumn(
       'Appointments',
-      'isShortCancelled'
+      'isShortCancelled',
     );
-  }
+  },
 };

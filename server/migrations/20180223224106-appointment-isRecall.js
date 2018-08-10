@@ -8,7 +8,7 @@ module.exports = {
                 'Appointments',
                 'isRecall',
                 {
-                    type: Sequelize.BOOLEAN
+                    type: Sequelize.BOOLEAN,
                 },
                 { transaction: t },
               );
@@ -26,7 +26,7 @@ module.exports = {
                 'Appointments',
                 'isRecall',
                 {
-                    type: Sequelize.BOOLEAN
+                    type: Sequelize.BOOLEAN,
                 },
                 { transaction: t },
               );
@@ -35,5 +35,5 @@ module.exports = {
               t.rollback();
           }
       });
-  }
+  },
 };

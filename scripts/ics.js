@@ -14,7 +14,7 @@ const sampleEvent = {
   geo: { lat: 40.0095, lon: 105.2669 },
   attendees: [
     { name: 'Adam Gibbons', email: 'adam@example.com' },
-    { name: 'Brittany Seaton', email: 'brittany@example2.org' }
+    { name: 'Brittany Seaton', email: 'brittany@example2.org' },
   ],
   categories: ['10k races', 'Memorial Day Weekend', 'Boulder CO'],
   alarms:[
@@ -25,7 +25,7 @@ const sampleEvent = {
 
 const sampleData = {
   appointment: {
-    startDate: new Date(201)
+    startDate: new Date(201),
   },
 
   patient: {

@@ -54,7 +54,7 @@ class UserModal extends WindowMain {
 
     this.setSize(
       Math.floor(userSettings.modalWindow.width * factor),
-      Math.floor(userSettings.modalWindow.height * factor)
+      Math.floor(userSettings.modalWindow.height * factor),
     );
   }
 

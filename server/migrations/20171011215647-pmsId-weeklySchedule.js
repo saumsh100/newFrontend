@@ -14,7 +14,7 @@ module.exports = {
       'pmsId',
       {
         type: Sequelize.STRING,
-      }
+      },
     );
   },
 

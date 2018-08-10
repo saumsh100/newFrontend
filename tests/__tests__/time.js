@@ -72,7 +72,7 @@ const createWeeklySchedule = (custom = {}) => {
         breaks: [],
       },
     },
-    custom
+    custom,
   );
 };
 

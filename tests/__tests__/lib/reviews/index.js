@@ -114,7 +114,7 @@ describe('Reviews Job Integration Tests', () => {
                 id: patientId,
                 email: 'justin+test@carecru.com',
               };
-            }
+            },
           },
         },
       ]);
@@ -148,7 +148,7 @@ describe('Reviews Job Integration Tests', () => {
               return {
                 id: patientId,
               };
-            }
+            },
           },
         },
       ]);

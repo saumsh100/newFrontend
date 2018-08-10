@@ -35,12 +35,12 @@ module.exports = {
         await queryInterface.removeColumn(
           'Patients',
           'dueForRecallExamDate',
-          { transaction: t }
+          { transaction: t },
         );
         await queryInterface.removeColumn(
           'Patients',
           'dueForHygieneDate',
-          { transaction: t }
+          { transaction: t },
         );
 
         const cronConfig = await queryInterface

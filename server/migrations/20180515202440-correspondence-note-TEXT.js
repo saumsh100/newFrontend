@@ -7,7 +7,7 @@ module.exports = {
       'note',
       {
         type: Sequelize.TEXT,
-      }
+      },
     );
   },
 
@@ -17,7 +17,7 @@ module.exports = {
       'note',
       {
         type: Sequelize.STRING(3000),
-      }
+      },
     );
-  }
+  },
 };

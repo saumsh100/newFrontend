@@ -35,9 +35,9 @@ export default handleActions(
         newList
           .groupBy(x => x.ccId)
           .map(x => x.first())
-          .toList()
+          .toList(),
       );
     },
   },
-  initialState
+  initialState,
 );

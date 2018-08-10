@@ -33,7 +33,7 @@ module.exports = {
     'firstNextLastApp',
     'correspondences',
     'patientCache',
-    'updateSchema'
+    'updateSchema',
   ),
 
   resolve: {

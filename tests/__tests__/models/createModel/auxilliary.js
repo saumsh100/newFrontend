@@ -51,7 +51,7 @@ test.skip('createModel/auxilliary Helpers', () => {
         'name',
         {
           value: 'id',
-        }
+        },
       );
 
       expect(2).toBe(2);

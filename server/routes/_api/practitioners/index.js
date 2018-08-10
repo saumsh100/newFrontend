@@ -183,7 +183,7 @@ practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:upda
     promises.push(Practitioner.update(req.body,
       {
         where: {
-          id: req.practitioner.id
+          id: req.practitioner.id,
         },
       },
     ));

@@ -26,12 +26,12 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'reviewsInterval',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);
         t.rollback();
       }
     });
-  }
+  },
 };

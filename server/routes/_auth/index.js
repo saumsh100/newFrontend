@@ -30,7 +30,7 @@ authRouter.post('/', ({ body: { username, password } }, res, next) => {
           userId: user.id,
           sessionId: session.id,
           activeAccountId: user.activeAccountId,
-        }))
+        })),
     )
     .then(token => res.json({token}))
     .catch(err => next(err));
@@ -39,7 +39,7 @@ authRouter.post('/', ({ body: { username, password } }, res, next) => {
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   UserAuth.logout(sessionId)
     .then(() => res.send(200))
-    .catch(next)
+    .catch(next),
 );
 
 authRouter.post('/resetpassword', (req, res, next) => {

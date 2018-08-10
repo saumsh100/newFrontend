@@ -179,7 +179,7 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
     dataArray,
     Model,
     extraSetValidators,
-    extraModelValidators
+    extraModelValidators,
   );
 
   const savableCopies = docs.map(d => d.get({ plain: true }));

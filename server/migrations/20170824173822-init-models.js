@@ -667,7 +667,7 @@ module.exports = {
       ['accountId', 'email'],
       {
         indicesType: 'UNIQUE',
-      }
+      },
     );
 
     await queryInterface.removeIndex(
@@ -675,7 +675,7 @@ module.exports = {
       ['accountId', 'mobilePhoneNumber'],
       {
         indicesType: 'UNIQUE',
-      }
+      },
     );
 
     await queryInterface.addIndex(
@@ -683,7 +683,7 @@ module.exports = {
       ['accountId', 'email'],
       {
         indicesType: 'UNIQUE',
-      }
+      },
     );
 
     await queryInterface.addIndex(
@@ -691,7 +691,7 @@ module.exports = {
       ['accountId', 'mobilePhoneNumber'],
       {
         indicesType: 'UNIQUE',
-      }
+      },
     );
 
     await queryInterface.createTable('Services', {
@@ -2346,5 +2346,5 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
     await queryInterface.dropAllTables();
-  }
+  },
 };

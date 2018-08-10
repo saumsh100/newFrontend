@@ -24,7 +24,7 @@ export function setAllAccountInfo(payload) {
             key: 'enterprises',
             entityData: payload.formData[0],
             alert: alertCreateEnterprise,
-          })
+          }),
         );
         enterpriseId = Object.keys(createEnterprise.enterprises)[0];
       } else {
@@ -50,7 +50,7 @@ export function setAllAccountInfo(payload) {
           url: `/api/enterprises/${enterpriseId}/accounts`,
           params: query,
           alert: alertCreateAccount,
-        })
+        }),
       );
 
       // updating account information
@@ -62,7 +62,7 @@ export function setAllAccountInfo(payload) {
           key: 'accounts',
           values: Object.assign({}, payload.formData[1], payload.formData[2], payload.formData[4]),
           url,
-        })
+        }),
       );
 
       // creating a user for this account
@@ -86,7 +86,7 @@ export function setAllAccountInfo(payload) {
           entityData: userData,
           url: urlNewUser,
           alert: alertCreatedUser,
-        })
+        }),
       );
 
       return enterpriseId;

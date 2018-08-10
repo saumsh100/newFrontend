@@ -12,7 +12,7 @@ passport.use(new LocalStrategy(
       return done(null, false, { message: 'Incorrect password.' });
     }
     return done(null, { username, id: 1 });
-  }
+  },
 ));
 
 passport.serializeUser((user, cb) => {

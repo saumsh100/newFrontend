@@ -35,7 +35,7 @@ const sequelize = new Sequelize(
   postgres.database,
   postgres.username,
   postgres.password,
-  sequelizeConfig
+  sequelizeConfig,
 );
 
 // Test the connection for logs
@@ -45,7 +45,7 @@ sequelize
     console.log(
       `Sequelize connected to database=${postgres.database} at host:port=${postgres.host}:${
         postgres.port
-      }`
+      }`,
     );
   })
   .catch((err) => {

@@ -8,7 +8,7 @@ export function loadOnlineRequest() {
         id: 'scheduleRequests',
         key: 'requests',
         join: ['service', 'patientUser', 'requestingPatientUser', 'practitioner'],
-      })
+      }),
     );
   };
 }

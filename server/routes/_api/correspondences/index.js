@@ -14,12 +14,12 @@ const correspondencesRouter = Router();
 
 correspondencesRouter.param(
   'accountId',
-  sequelizeLoader('account', 'Account')
+  sequelizeLoader('account', 'Account'),
 );
 
 correspondencesRouter.param(
   'correspondenceId',
-  sequelizeLoader('correspondence', 'Correspondence')
+  sequelizeLoader('correspondence', 'Correspondence'),
 );
 
 /**
@@ -53,13 +53,13 @@ correspondencesRouter.post('/connector/batch', checkPermissions('correspondences
     {
       accountId: req.accountId,
       isSyncedWithPms: true,
-    }
+    },
   ));
 
   return batchCreate(cleanedCorrespondences, Correspondence, 'Correspondence')
     .then((correspondencesCreated) => {
       const correspondenceData = correspondencesCreated.map(
-        correspondence => correspondence.get({ plain: true }
+        correspondence => correspondence.get({ plain: true },
       ));
       res.status(201).send(jsonapi('correspondence', correspondenceData));
     })
@@ -127,7 +127,7 @@ correspondencesRouter.put('/connector/batch', checkPermissions('correspondences:
     {
       accountId: req.accountId,
       isSyncedWithPms: true,
-    }
+    },
   ));
 
   const correspondencesUpdates = cleanedCorrespondences.map(correspondence =>
@@ -137,7 +137,7 @@ correspondencesRouter.put('/connector/batch', checkPermissions('correspondences:
   return Promise.all(correspondencesUpdates)
     .then((existingCorrespondences) => {
       const correspondenceData = existingCorrespondences.map(
-        correspondence => correspondence.get({ plain: true })
+        correspondence => correspondence.get({ plain: true }),
       );
       res.send(jsonapi('correspondence', correspondenceData));
     })

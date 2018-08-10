@@ -142,7 +142,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     const textMessage = await TextMessage.create(Object.assign(
       {},
       textMessageData,
-      { chatId: chatClean.id }
+      { chatId: chatClean.id },
     ));
 
     const textMessageClean = textMessage.get({ plain: true });
@@ -190,7 +190,7 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     let responseTextMessage = await TextMessage.create(Object.assign(
       {},
       responseTextMessageData,
-      { chatId: chatClean.id, read: true }
+      { chatId: chatClean.id, read: true },
     ));
 
     responseTextMessage = responseTextMessage.get({ plain: true });

@@ -47,7 +47,7 @@ const commit = (environment, patient, clientMutationId) => {
            * to have a directive, either first or last
            * */
           first: 2147483647,
-        }
+        },
       );
       // get the edges from the connection
       const edges = familyMembersConnection.getLinkedRecords('edges');

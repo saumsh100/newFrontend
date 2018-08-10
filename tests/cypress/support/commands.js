@@ -56,7 +56,7 @@ Cypress.Commands.add('login', (username, secret) => {
   return cy.request({
       method: "POST",
       url: `${Cypress.env('siteURL')}/auth`,
-      body: { username: email, password }
+      body: { username: email, password },
     }).then((resp) => {
       return window.localStorage.setItem('token', resp.body.token);
     }).visit(`${Cypress.env('siteURL')}`)

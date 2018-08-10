@@ -55,7 +55,7 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
       allowNull: false,
-    }
+    },
   });
 
   SentRecall.associate = ({ Account, Recall, Patient }) => {

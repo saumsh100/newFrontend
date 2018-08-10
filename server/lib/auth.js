@@ -43,7 +43,7 @@ export const Auth = (Model, uniqueKey) => ({
           ))
           // TODO: remove AuthSession creation from here ?
           .then(() => AuthSession.save({ modelId: model.id }))
-          .then(session => ({ session, model }))
+          .then(session => ({ session, model })),
       );
   },
 
@@ -59,7 +59,7 @@ export const Auth = (Model, uniqueKey) => ({
       .then(() => Model.save(model))
       .then(model =>
         AuthSession.save({ modelId: model.id })
-          .then(session => ({ model, session }))
+          .then(session => ({ model, session })),
       );
   },
 
@@ -83,7 +83,7 @@ export const Auth = (Model, uniqueKey) => ({
     return new Promise((fulfill, reject) => {
       // TODO: This needs to be slowly phased out as we move towards session storage
       jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (err, token) =>
-        (err ? reject(err) : fulfill(token))
+        (err ? reject(err) : fulfill(token)),
       );
     });
   },

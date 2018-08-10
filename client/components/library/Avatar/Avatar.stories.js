@@ -6,7 +6,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import Avatar from './';
 
 const displayFlex = {
-  display: 'flex'
+  display: 'flex',
 }
 
 storiesOf('Avatar', module)

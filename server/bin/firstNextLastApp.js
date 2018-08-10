@@ -1,7 +1,7 @@
 
 import jobQueue from '../config/jobQueue';
 import createSocketServer from '../sockets/createSocketServer';
-import { Appointment, Patient, Account, } from '../_models';
+import { Appointment, Patient, Account } from '../_models';
 
 const { calcFirstNextLastAppointment } = require('../lib/firstNextLastAppointment');
 

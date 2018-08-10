@@ -19,5 +19,5 @@ export default [
     accountId,
     primaryType: 'email',
     lengthSeconds: 6 * 30 * 24 * 60 * 60,
-  }
+  },
 ];

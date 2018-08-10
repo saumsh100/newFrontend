@@ -55,5 +55,5 @@ module.exports = {
       return queryInterface.dropTable('users');
     */
     await queryInterface.dropTable('PasswordResets');
-  }
+  },
 };

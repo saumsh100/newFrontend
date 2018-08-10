@@ -24,7 +24,7 @@ reviewsRouter.param(
     },
     { association: 'practitioners', required: false, where: { isActive: true } },
     { association: 'weeklySchedule', required: false },
-  ])
+  ]),
 );
 
 /**
@@ -120,7 +120,7 @@ reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
           stars,
           description,
         },
-        { transaction: t }
+        { transaction: t },
       );
 
       // Update sentReview
@@ -129,7 +129,7 @@ reviewsRouter.post('/:accountId/:sentReviewId', async (req, res, next) => {
           isCompleted: true,
           reviewId: review.id,
         },
-        { transaction: t }
+        { transaction: t },
       );
 
       await t.commit();

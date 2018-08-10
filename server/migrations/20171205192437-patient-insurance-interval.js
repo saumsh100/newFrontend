@@ -25,7 +25,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Patients',
           'insuranceInterval',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.error(err);

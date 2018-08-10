@@ -294,7 +294,7 @@ enterprisesRouter.put(
     req.account.update(pick(req.body, ['name']))
       .then(account => res.send(normalize('account', account.get({ plain: true }))))
       .catch(next);
-  }
+  },
 );
 
 enterprisesRouter.delete('/:enterpriseId', checkPermissions('enterprises:delete'), (req, res, next) => {
@@ -310,7 +310,7 @@ enterprisesRouter.delete(
     req.account.destroy()
       .then(() => res.sendStatus(204))
       .catch(next);
-  }
+  },
 );
 
 enterprisesRouter.get('/:enterpriseId/accounts/cities', checkPermissions(['enterprises:read', 'accounts:read']), async (req, res, next) => {

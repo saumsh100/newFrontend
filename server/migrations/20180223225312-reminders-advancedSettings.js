@@ -101,5 +101,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

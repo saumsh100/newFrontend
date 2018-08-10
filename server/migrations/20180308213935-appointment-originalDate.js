@@ -23,7 +23,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Appointments',
           'originalDate',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);

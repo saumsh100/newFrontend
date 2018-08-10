@@ -63,24 +63,24 @@ module.exports = {
         await queryInterface.removeColumn(
           'SentReminders',
           'errorCode',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
           'SentRecalls',
           'errorCode',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
           'SentReviews',
           'errorCode',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (e) {
         console.log(e);
         t.rollback();
       }
     });
-  }
+  },
 };

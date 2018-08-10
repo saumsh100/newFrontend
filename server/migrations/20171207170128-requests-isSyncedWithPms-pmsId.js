@@ -37,7 +37,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Requests',
           'pmsId',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
@@ -50,5 +50,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

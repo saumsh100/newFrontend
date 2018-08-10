@@ -164,7 +164,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
     const patientHasNoLaterAppt = !a.patient.appointments.length;
     const patientHasNoRecentSentReview = !a.patient.sentReviews.some(sr =>
       sr.isSent &&
-      moment().diff(sr.createdAt, 'days') < 30
+      moment().diff(sr.createdAt, 'days') < 30,
     );
 
     return reviewNotSentForAppointment &&
@@ -193,7 +193,7 @@ export function getEarliestLatestAppointment({ appointments, account }) {
     // Group appointments by day
     // Take the earliest day but latest appt in that day
     const groupedAppts = groupBy(appts, a =>
-      moment.tz(a.startDate, account.timezone).format('YYYY-MM-DD')
+      moment.tz(a.startDate, account.timezone).format('YYYY-MM-DD'),
     );
 
     // Take earliest day and latest one in that day

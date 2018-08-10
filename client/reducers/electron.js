@@ -46,5 +46,5 @@ export default handleActions(
       return state.set('backHandler', payload);
     },
   },
-  initialState
+  initialState,
 );

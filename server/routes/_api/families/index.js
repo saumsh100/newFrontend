@@ -46,7 +46,7 @@ familiesRouter.post('/connector/batch', checkPermissions('family:create'), (req,
   const cleanedFamilies = families.map(family => Object.assign(
     {},
     family,
-    { accountId: req.accountId }
+    { accountId: req.accountId },
   ));
 
   return batchCreate(cleanedFamilies, Family, 'family')
@@ -74,7 +74,7 @@ familiesRouter.post('/batch', checkPermissions('family:create'), checkIsArray('f
   const cleanedFamilies = families.map((family) => Object.assign(
     {},
     family,
-    { accountId: req.accountId }
+    { accountId: req.accountId },
   ));
 
   return Family.batchSave(cleanedFamilies)

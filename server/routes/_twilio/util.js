@@ -6,7 +6,7 @@ export function snakeCaseToCamelCase(str) {
   const convert =  matches => matches[1].toUpperCase();
   return str.replace(
     find,
-    convert
+    convert,
   );
 }
 

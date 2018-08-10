@@ -16,7 +16,7 @@ describe('#invertFillers', () => {
       const endDate = d(9, 0);
 
       expect(invertFillers(fillers, startDate, endDate)).toEqual([
-        { startDate, endDate }
+        { startDate, endDate },
       ]);
     });
 
@@ -155,7 +155,7 @@ describe('#invertFillers', () => {
         },
         {
           startDate: '2018-03-06T22:00:00.000Z',
-          endDate: '2018-03-06T23:00:00.000Z'
+          endDate: '2018-03-06T23:00:00.000Z',
         },
         {
           startDate: '2018-03-06T23:00:00.000Z',

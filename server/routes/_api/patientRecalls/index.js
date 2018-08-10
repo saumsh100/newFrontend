@@ -19,7 +19,7 @@ patientRecallsRouter.post('/connector/batch', checkPermissions('patientRecalls:c
   const cleanedPatientRecalls = patientRecalls.map(patientRecall => Object.assign(
     {},
     patientRecall,
-    { accountId: req.accountId }
+    { accountId: req.accountId },
   ));
 
   return batchCreate(cleanedPatientRecalls, PatientRecall, 'patientRecall')

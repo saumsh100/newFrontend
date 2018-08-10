@@ -23,7 +23,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'massOnlineEmailSentDate',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);

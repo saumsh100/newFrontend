@@ -52,7 +52,7 @@ module.exports = {
         return queryInterface.bulkInsert(
           'Procedures',
           syncProcedures,
-          { transaction: t }
+          { transaction: t },
         );
       } catch (e) {
         console.log(e);

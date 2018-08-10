@@ -38,7 +38,7 @@ export default resolverOptions => ({
       // merge sequelize args to resolverOptions from the viewer
       // use the options on the sequelize call and the rest of the args on Relay
       const data = await PatientSearches.findAndCountAll(
-        resolverOptions.before(options, args, context)
+        resolverOptions.before(options, args, context),
       );
       const connectionData = connectionFromArrayWithoutSlice(data.rows, rest, {
         arrayLength: data.count,

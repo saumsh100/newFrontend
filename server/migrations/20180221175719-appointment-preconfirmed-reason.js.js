@@ -8,7 +8,7 @@ module.exports = {
               'Appointments',
               'reason',
               {
-                  type: Sequelize.STRING
+                  type: Sequelize.STRING,
               },
               { transaction: t },
             );
@@ -17,7 +17,7 @@ module.exports = {
               'Appointments',
               'isPreConfirmed',
               {
-                type: Sequelize.BOOLEAN
+                type: Sequelize.BOOLEAN,
               },
               { transaction: t },
             );
@@ -26,7 +26,7 @@ module.exports = {
               'Appointments',
               'estimatedRevenue',
               {
-                type: Sequelize.FLOAT
+                type: Sequelize.FLOAT,
               },
               { transaction: t },
             );
@@ -44,7 +44,7 @@ module.exports = {
               'Appointments',
               'reason',
               {
-                  type: Sequelize.STRING
+                  type: Sequelize.STRING,
               },
               { transaction: t },
             );
@@ -53,7 +53,7 @@ module.exports = {
               'Appointments',
               'isPreConfirmed',
               {
-                type: Sequelize.BOOLEAN
+                type: Sequelize.BOOLEAN,
               },
               { transaction: t },
             );
@@ -62,7 +62,7 @@ module.exports = {
               'Appointments',
               'estimatedRevenue',
               {
-                type: Sequelize.FLOAT
+                type: Sequelize.FLOAT,
               },
               { transaction: t },
             );
@@ -71,5 +71,5 @@ module.exports = {
             t.rollback();
         }
       });
-  }
+  },
 };

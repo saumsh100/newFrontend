@@ -29,7 +29,7 @@ export function printRange({ startDate, endDate }, tz) {
  */
 export function printRanges(ranges, { timezone, customField }) {
   const rangesTable = new Table({
-    style: { compact: true }
+    style: { compact: true },
   });
 
   if (!ranges.length) return 'None';

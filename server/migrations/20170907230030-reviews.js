@@ -232,5 +232,5 @@ module.exports = {
         return t.rollback();
       }
     });
-  }
+  },
 };

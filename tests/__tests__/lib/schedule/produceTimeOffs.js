@@ -23,7 +23,7 @@ const timeOffs = [
     fromPMS: false,
     pmsId: null,
     dayOfWeek: null,
-  }
+  },
 ];
 
 describe('Schedule Library', () => {
@@ -32,7 +32,7 @@ describe('Schedule Library', () => {
       const result = produceTimeOffs(
         timeOffs,
         new Date(2017, 10, 1).toISOString(),
-        new Date(2017, 10, 8).toISOString()
+        new Date(2017, 10, 8).toISOString(),
       );
 
       expect(result).toMatchSnapshot();

@@ -27,7 +27,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'bumpInterval',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.error(err);

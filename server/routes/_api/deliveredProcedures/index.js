@@ -29,7 +29,7 @@ deliveredProceduresRouter.post('/connector/batch', checkPermissions('deliveredPr
   const cleanedDeliveredProcedures = deliveredProcedures.map(deliveredProcedure => Object.assign(
     {},
     deliveredProcedure,
-    { accountId: req.accountId }
+    { accountId: req.accountId },
   ));
 
   return batchCreate(cleanedDeliveredProcedures, DeliveredProcedure, 'deliveredProcedure')

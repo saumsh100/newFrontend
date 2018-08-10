@@ -127,7 +127,7 @@ describe('models/Patient', () => {
         const mobilePhoneNumber = '111 222 3333';
         const patients = await Patient.batchSave([
           makeData(),
-          makeData({ email, mobilePhoneNumber })
+          makeData({ email, mobilePhoneNumber }),
         ]);
 
         expect(patients.length).toBe(2);

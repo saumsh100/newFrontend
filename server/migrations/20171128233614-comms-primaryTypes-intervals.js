@@ -93,13 +93,13 @@ module.exports = {
         await queryInterface.removeColumn(
           'Recalls',
           'primaryTypes',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
           'Reminders',
           'primaryTypes',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
@@ -130,5 +130,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

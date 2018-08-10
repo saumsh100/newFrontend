@@ -56,5 +56,5 @@ module.exports = {
 
   down: async function (queryInterface, Sequelize) {
     await queryInterface.dropTable('ConnectorVersions');
-  }
+  },
 };

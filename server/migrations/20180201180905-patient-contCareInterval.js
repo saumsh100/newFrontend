@@ -16,13 +16,13 @@ module.exports = {
         await queryInterface.removeColumn(
           'Patients',
           'recareDueDateSeconds',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
           'Patients',
           'hygieneDueDateSeconds',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);
@@ -37,7 +37,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Patients',
           'contCareInterval',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.addColumn(

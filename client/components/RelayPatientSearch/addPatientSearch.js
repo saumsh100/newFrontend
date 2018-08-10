@@ -46,7 +46,7 @@ const commit = input =>
       onError: (error) => {
         reject(error);
       },
-    })
+    }),
   );
 
 export default { commit };

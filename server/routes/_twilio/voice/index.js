@@ -35,7 +35,7 @@ voiceRouter.post('/sentReminders/:sentReminderId', async (req, res, next) => {
 
     include: [
       { model: Appointment, as: 'appointment' },
-      { model: Reminder, as: 'reminder' }
+      { model: Reminder, as: 'reminder' },
     ],
 
     raw: true,

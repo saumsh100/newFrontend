@@ -27,7 +27,7 @@ const getSuggestions = value => {
     const inputLength = inputValue.length;
 
     const suggestions = inputLength === 0 ? [] : languages.filter(lang =>
-      lang.name.toLowerCase().slice(0, inputLength) === inputValue
+      lang.name.toLowerCase().slice(0, inputLength) === inputValue,
     );
 
     //resolve(suggestions.length ? suggestions : [{ none: true }]);
@@ -82,7 +82,7 @@ class AsyncAutoComplete extends React.Component {
     // and they are initially empty because the Autosuggest is closed.
     this.state = {
       value: '',
-      suggestions: []
+      suggestions: [],
     };
 
     this.onChange = this.onChange.bind(this);
@@ -90,7 +90,7 @@ class AsyncAutoComplete extends React.Component {
 
   onChange(event, { newValue }) {
     this.setState({
-      value: newValue
+      value: newValue,
     });
   }
 
@@ -101,7 +101,7 @@ class AsyncAutoComplete extends React.Component {
     const inputProps = {
       placeholder: 'Type a programming language',
       value,
-      onChange: this.onChange
+      onChange: this.onChange,
     };
 
     return (

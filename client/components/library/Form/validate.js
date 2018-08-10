@@ -51,7 +51,7 @@ const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
     console.log(
       'initial values are equal',
       initialValues.mobilePhoneNumber,
-      values.mobilePhoneNumber
+      values.mobilePhoneNumber,
     );
     return;
   }
@@ -98,7 +98,7 @@ function composeAsyncValidators(validatorFns) {
 const phoneValidate = (value) => {
   if (
     !/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(
-      value
+      value,
     )
   ) {
     return 'Invalid phone Number';
@@ -128,7 +128,7 @@ const phoneNumberValidate = (value) => {
 const phoneValidateNullOkay = (value) => {
   if (
     !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(
-      value
+      value,
     ) &&
     value !== null &&
     value !== '' &&
@@ -140,7 +140,7 @@ const phoneValidateNullOkay = (value) => {
 
 const postalCodeValidate = (value) => {
   const can = new RegExp(
-    /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i
+    /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i,
   );
   if (!can.test(value) && value !== undefined) {
     return 'Invalid Postal Code';
@@ -173,7 +173,7 @@ const asyncEmailValidateUser = values =>
     .then(
       response =>
         response.data.exists !== true ||
-        Promise.reject({ email: `User with ${values.email} already exists...` })
+        Promise.reject({ email: `User with ${values.email} already exists...` }),
     );
 
 const asyncEmailPasswordReset = values =>

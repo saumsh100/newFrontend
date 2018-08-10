@@ -16,7 +16,7 @@ module.exports = {
       {
         type: Sequelize.JSONB,
         allowNull: true,
-      }
+      },
     );
   },
 
@@ -31,7 +31,7 @@ module.exports = {
 
     return queryInterface.removeColumn(
       'WaitSpots',
-      'daysOfTheWeek'
+      'daysOfTheWeek',
     );
-  }
+  },
 };

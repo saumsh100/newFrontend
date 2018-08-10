@@ -56,5 +56,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

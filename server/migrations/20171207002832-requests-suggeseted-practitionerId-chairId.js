@@ -46,7 +46,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Requests',
           'suggestedChairId',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.removeColumn(
@@ -59,5 +59,5 @@ module.exports = {
         t.rollback();
       }
     });
-  }
+  },
 };

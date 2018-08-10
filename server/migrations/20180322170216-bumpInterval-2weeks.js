@@ -7,7 +7,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'bumpInterval',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.addColumn(
@@ -33,7 +33,7 @@ module.exports = {
         await queryInterface.removeColumn(
           'Accounts',
           'bumpInterval',
-          { transaction: t }
+          { transaction: t },
         );
 
         await queryInterface.addColumn(

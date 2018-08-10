@@ -102,7 +102,7 @@ export const calculateAppoitmentTop = params => (appointment) => {
 
   appointment.heightCalc = calculateHeight(
     durationTime > unit ? durationTime : unit,
-    timeSlotHeight.height
+    timeSlotHeight.height,
   );
 
   appointment.top = `${appointment.topCalc + positionTopPadding}px`;

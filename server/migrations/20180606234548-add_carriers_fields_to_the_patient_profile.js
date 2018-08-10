@@ -11,7 +11,7 @@ module.exports = {
           {
             type: Sequelize.STRING,
           },
-          { transaction: t }
+          { transaction: t },
         );
         await queryInterface.addColumn(
           'PatientUsers',
@@ -19,7 +19,7 @@ module.exports = {
           {
             type: Sequelize.STRING,
           },
-          { transaction: t }
+          { transaction: t },
         );
         await queryInterface.addColumn(
           'PatientUsers',
@@ -27,7 +27,7 @@ module.exports = {
           {
             type: Sequelize.STRING,
           },
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.log(err);

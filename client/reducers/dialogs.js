@@ -26,6 +26,6 @@ export default handleActions({
     return state.merge({
       allowDialogScroll: action.payload.allowDialogScroll.allowDialogScroll,
     })
-  }
+  },
 
 }, initialState);

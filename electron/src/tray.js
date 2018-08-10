@@ -59,7 +59,7 @@ const toolbarSizeMenu = managerInstance =>
       type: 'radio',
       checked: v === parseFloat(managerInstance.zoomFactor),
     })),
-    managerInstance.setWindowScale.bind(managerInstance)
+    managerInstance.setWindowScale.bind(managerInstance),
   );
 
 /**
@@ -70,7 +70,7 @@ const toolbarPositionMenu = managerInstance =>
   buildSubMenu(
     'Toolbar position',
     ['left', 'right'],
-    managerInstance.changeToolbarPosition.bind(managerInstance)
+    managerInstance.changeToolbarPosition.bind(managerInstance),
   );
 
 exports.trayMenuLoggedIn = managerInstance => [

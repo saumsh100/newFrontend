@@ -12,7 +12,7 @@ const accountIdFilter = {
   before: (findOptions, args, context) => {
     findOptions.where = Object.assign(
       { accountId: context.sessionData.accountId },
-      findOptions.where
+      findOptions.where,
     );
     return findOptions;
   },

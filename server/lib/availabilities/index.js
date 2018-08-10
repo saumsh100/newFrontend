@@ -446,7 +446,7 @@ function fetchAvailabilities(options) {
                     isBookable: false,
                   },
                   {
-                    ...generateDuringFilterSequelize(startDate, endDate)
+                    ...generateDuringFilterSequelize(startDate, endDate),
                   },
                 ],
               },

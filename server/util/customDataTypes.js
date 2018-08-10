@@ -5,7 +5,7 @@ const createObject = (extraConfig = {}, config) =>
   Object.assign(
     {},
     config,
-    extraConfig
+    extraConfig,
   );
 
 module.exports = {

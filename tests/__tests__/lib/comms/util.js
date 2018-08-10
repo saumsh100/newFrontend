@@ -108,17 +108,17 @@ describe('Communications Utility Library', () => {
         {
           appointment: { id: 1 },
           patient: { id: 2, preferences },
-          primaryType: 'email'
+          primaryType: 'email',
         },
         {
           appointment: { id: 1 },
           patient: { id: 2, preferences },
-          primaryType: 'sms'
+          primaryType: 'sms',
         },
         {
           appointment: { id: 2 },
           patient: { id: 1, preferences },
-          primaryType: 'sms'
+          primaryType: 'sms',
         },
       ];
 

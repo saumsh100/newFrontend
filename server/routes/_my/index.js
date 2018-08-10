@@ -88,7 +88,7 @@ myRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
     }
 
     lookupsClient.phoneNumbers(phoneNumber).get({
-      type: 'carrier'
+      type: 'carrier',
     }, function(error, number) {
       if (error) {
         return res.sendStatus(200);

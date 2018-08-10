@@ -124,7 +124,7 @@ reputationRouter.get('/reviews', checkPermission('reviews:read'), async (req, re
     const vendastaReviews = await fetchReviewsLookup(
       account,
       minDateTime,
-      maxDateTime
+      maxDateTime,
     );
 
     const careCruReviews = await Review.findAll({

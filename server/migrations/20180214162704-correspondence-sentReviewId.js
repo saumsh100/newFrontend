@@ -25,12 +25,12 @@ module.exports = {
         await queryInterface.removeColumn(
           'Correspondences',
           'sentReviewId',
-          { transaction: t }
+          { transaction: t },
         );
       } catch (err) {
         console.error(err);
         t.rollback();
       }
     });
-  }
+  },
 };

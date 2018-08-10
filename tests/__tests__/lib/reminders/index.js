@@ -162,7 +162,7 @@ describe('Reminders Job Integration Tests', () => {
                 mobilePhoneNumber: '+16042433796',
                 preferences: { sms: true },
               };
-            }
+            },
           },
 
           update() {
@@ -202,7 +202,7 @@ describe('Reminders Job Integration Tests', () => {
               return {
                 id: patientId,
               };
-            }
+            },
           },
 
           update() {
@@ -247,7 +247,7 @@ describe('Reminders Job Integration Tests', () => {
         {
           accountId: newAccountId,
           primaryTypes: ['sms'],
-          interval: '2 hours'
+          interval: '2 hours',
         },
         {
           accountId: newAccountId,
@@ -387,14 +387,14 @@ describe('Reminders Job Integration Tests', () => {
         {
           accountId: newAccountId,
           primaryTypes: ['sms'],
-          interval: '2 hours'
+          interval: '2 hours',
         },
         {
           accountId: newAccountId,
           primaryTypes: ['email', 'sms'],
           interval: '2 days',
           isDaily: true,
-          dailyRunTime: '11:00:00'
+          dailyRunTime: '11:00:00',
         },
       ]);
 
