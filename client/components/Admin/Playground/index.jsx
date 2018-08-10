@@ -1,13 +1,17 @@
 
 import React from 'react';
-import PatientSearch from '../../RelayPatientSearch';
+import TimezoneFormatter from '../../Utils/TimezoneFormatter';
 
 import styles from './styles.scss';
 
 export default function Playground() {
   return (
     <div className={styles.page}>
-      {/* <PatientSearch onChange={selectedItem => console.log(selectedItem)} /> */}
+      <TimezoneFormatter
+        date={new Date()}
+        format="MMM dd YYYY"
+        render={({ formattedDate }) => <span>{formattedDate}</span>}
+      />
     </div>
   );
 }
