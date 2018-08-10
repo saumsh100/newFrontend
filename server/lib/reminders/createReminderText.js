@@ -1,3 +1,4 @@
+
 import moment from 'moment-timezone';
 import { convertIntervalStringToObject } from '../../util/time';
 import { formatPhoneNumber } from '../../util/formatters';
@@ -109,6 +110,7 @@ export default function createReminderText({
   appointment,
   reminder = {},
   currentDate = nowISO(),
+  isConfirmable,
 }) {
   const type = getReminderType({
     account,
@@ -116,7 +118,7 @@ export default function createReminderText({
     reminder,
     currentDate,
   });
-  const subtype = appointment.isPatientConfirmed ? 'confirmed' : 'unconfirmed';
+  const subtype = !isConfirmable ? 'confirmed' : 'unconfirmed';
   const action = reminder.isCustomConfirm ? 'pre-confirm' : 'confirm';
   return createText[type][subtype]({
     patient,

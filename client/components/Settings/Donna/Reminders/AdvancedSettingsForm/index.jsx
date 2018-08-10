@@ -67,6 +67,7 @@ function AdvancedSettingsForm(props) {
     dontSendWhenClosed,
     isDaily,
     dailyRunTime,
+    isConfirmable,
   } = reminder;
 
   const initialValues = {
@@ -78,6 +79,7 @@ function AdvancedSettingsForm(props) {
     dontSendWhenClosed,
     isDaily,
     dailyRunTime,
+    isConfirmable,
   };
 
   return (
@@ -87,6 +89,13 @@ function AdvancedSettingsForm(props) {
       initialValues={initialValues}
       ignoreSaveButton
     >
+      <Field
+        className={styles.toggle}
+        component="Toggle"
+        name="isConfirmable"
+        label="Is Confirmable?"
+      />
+
       <Field
         className={styles.toggle}
         component="Toggle"
@@ -142,4 +151,7 @@ function mapStateToProps(state, { reminder }) {
   };
 }
 
-export default connect(mapStateToProps, null)(AdvancedSettingsForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(AdvancedSettingsForm);
