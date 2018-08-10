@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import Tabs from './Tabs';
 import BackButton from './BackButton';
 import Button from '../../library/Button';
 import { setIsBooking } from '../../../actions/availabilities';
@@ -30,7 +29,6 @@ class Header extends Component {
   render() {
     const {
       history,
-      isBooking,
       tabState: { isCompleteRoute, isFirstRoute },
     } = this.props;
 
@@ -60,13 +58,6 @@ class Header extends Component {
             </Button>
           </div>
         </div>
-        <Tabs
-          tabs={this.props.tabs}
-          tabState={this.props.tabState}
-          isBooking={isBooking}
-          history={history}
-          setIsBooking={this.props.setIsBooking}
-        />
       </div>
     );
   }
@@ -94,9 +85,7 @@ function mapDispatchToProps(dispatch) {
 Header.propTypes = {
   closeBookingModal: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
-  isBooking: PropTypes.bool.isRequired,
   setIsBooking: PropTypes.func.isRequired,
-  tabs: PropTypes.objectOf(PropTypes.string).isRequired,
   tabState: PropTypes.objectOf(PropTypes.bool).isRequired,
 };
 

@@ -19,9 +19,9 @@
   display: flex;
   align-items: center;
   height: auto;
-  text-align: center;
   margin: 0 4px 8px !important;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
+  font-family: inherit;
   &:focus {
     outline: none;
   }

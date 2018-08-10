@@ -28,7 +28,6 @@ import {
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
-import { Link } from '../../../library';
 import { isResponsive } from '../../../../util/hub';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
@@ -207,7 +206,7 @@ class DateTime extends PureComponent {
       duration: 500,
       delay: 150,
       smooth: 'easeInOutQuart',
-      containerId: 'scrollableContainer',
+      containerId: 'widgetContainer',
       offset: 160,
     });
   }
@@ -307,23 +306,10 @@ class DateTime extends PureComponent {
     };
 
     return (
-      <Element
-        id="scrollableContainer"
-        className={styles.scrollableContainer}
-        ref={(node) => {
-          this.availabilitiesNode = node;
-          return this.availabilitiesNode;
-        }}
-      >
+      <Element id="scrollableContainer" className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
             <h1 className={styles.heading}>Select Date and Time</h1>
-            <p className={styles.description}>
-              or{' '}
-              <Link className={styles.subCardLink} to="./waitlist/select-dates">
-                Join Waitlist
-              </Link>
-            </p>
           </div>
         </div>
         <Element name="contentWrapperToScroll" className={styles.contentWrapper}>

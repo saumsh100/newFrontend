@@ -8,7 +8,6 @@
   line-height: 48px;
   font-weight: 500;
   margin: 0;
-  padding-bottom: 21px;
   @media (min-width: 350px) {
     font-size: 20px;
   }
@@ -102,87 +101,4 @@
     color: $widget-grey-dark;
     text-align: center;
   }
-}
-
-@keyframes moveTabsWrapper {
-  100% {
-    transform: translateY(-21px);
-  }
-}
-
-.tabsWrapper {
-  display: flex;
-  transform: translateY(0);
-  animation: moveTabsWrapper 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
-  margin-bottom: -21px;
-  flex-wrap: wrap;
-  position: relative;
-  min-height: 42px;
-  width: 100%;
-  z-index: 10;
-  .tabsContainer {
-    min-height: 42px;
-    background: $widget-white;
-    width: calc(100% - calc(var(--widget-spacer) * 2));
-    box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
-    border-radius: 4px;
-    display: flex;
-    position: absolute;
-    left: var(--widget-spacer);
-  }
-  .editMode {
-    @extend .tabsContainer;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    font-weight: 600;
-    font-size: 14px;
-    color: $widget-grey;
-    text-transform: uppercase;
-  }
-  .tab {
-    cursor: pointer;
-    flex: 1;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    font-size: 14px;
-    letter-spacing: 0;
-    text-align: center;
-    background-color: transparent;
-    margin: 0;
-    line-height: 16px;
-    padding: 8px 0;
-    .content {
-      color: $widget-grey-light;
-      transition: all 0.15s ease-out;
-      border-right: 1px solid $widget-grey-lighter;
-      padding: 4px 0;
-      display: block;
-      svg {
-        width: 10px;
-        height: 10px;
-        fill: currentColor;
-        margin-right: 6px;
-      }
-      &:hover {
-        transition: all 0.15s ease-out;
-        color: $widget-grey;
-      }
-    }
-    &:last-of-type {
-      .content {
-        border-right-color: transparent;
-      }
-    }
-    &.active {
-      .content {
-        transition: all 0.15s ease-out;
-        color: var(--primaryColor);
-      }
-    }
-  }
-}
-
-.topHead {
-  margin-bottom: -21px;
 }

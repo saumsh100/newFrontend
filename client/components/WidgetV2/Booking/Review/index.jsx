@@ -183,9 +183,7 @@ class Review extends PureComponent {
       <div className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
-            <h1 className={styles.heading}>
-              {location.state && location.state.isReviewRoute ? 'Almost Done' : 'Booking Summary'}
-            </h1>
+            <h1 className={styles.heading}>Review & Book</h1>
           </div>
           <div className={styles.content}>
             <h3 className={styles.title}>Waitlist Summary</h3>
@@ -288,7 +286,7 @@ function mapStateToProps({
   availabilities, entities, auth, widgetNavigation,
 }) {
   const getPatientUser =
-    availabilities.get('familyPatientUser') && auth.get('familyPatients').length > 0
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
       ? auth
         .get('familyPatients')
         .find(patient => patient.id === availabilities.get('familyPatientUser'))

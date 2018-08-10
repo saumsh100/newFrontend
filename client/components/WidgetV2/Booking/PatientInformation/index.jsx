@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { submit, touch, change, formValueSelector } from 'redux-form';
+import classNames from 'classnames';
+import { logout } from '../../../../thunks/patientAuth';
 import carriers from './insurance_carriers';
 import { Field, Form, IconButton, Loading } from '../../../library';
 import {
@@ -35,6 +37,7 @@ import {
   setText,
 } from '../../../../reducers/widgetNavigation';
 import { dropdownTheme, inputTheme } from '../../theme';
+import Button from '../../../library/Button';
 import styles from './styles.scss';
 
 /**
@@ -94,6 +97,7 @@ class PatientInformation extends PureComponent {
   componentDidMount() {
     this.props.setText();
     this.props.fetchFamilyPatients();
+    this.props.setFamilyPatientUser(this.props.selectedFamilyPatientUserId);
     this.props.touch(FORM_NAME, ...Object.keys(defaultValues));
     if (this.props.formError) {
       this.props.hideButton();
@@ -187,13 +191,23 @@ class PatientInformation extends PureComponent {
   }
 
   render() {
+    const {
+      isCustomCarrier,
+      familyPatients,
+      isLoading,
+      patientUser,
+      history,
+      userName,
+      initialValues,
+      insuranceCarrierValue,
+    } = this.props;
+
     /**
      * Wait until we fetch the family patients.
      */
-    if (this.props.isLoading) {
+    if (isLoading) {
       return <Loading />;
     }
-    const { isCustomCarrier, familyPatients } = this.props;
 
     const patients = familyPatients
       .sort(SortByFirstName)
@@ -214,7 +228,7 @@ class PatientInformation extends PureComponent {
      * @param {object} values
      */
     const asyncEmailValidation = values =>
-      (values.email === this.props.patientUser.email ? false : asyncEmailValidatePatient(values));
+      (values.email === patientUser.email ? false : asyncEmailValidatePatient(values));
     /**
      * Check if the passed phoneNumber is not already used,
      * but first check if the phoneNumber is not the same as the patient.
@@ -222,15 +236,28 @@ class PatientInformation extends PureComponent {
      * @param {object} values
      */
     const asyncPhoneNumberValidation = values =>
-      (values.phoneNumber === this.props.patientUser.phoneNumber ||
-      values.phoneNumber === normalizePhone(this.props.patientUser.phoneNumber)
+      (values.phoneNumber === patientUser.phoneNumber ||
+      values.phoneNumber === normalizePhone(patientUser.phoneNumber)
         ? false
         : asyncPhoneNumberValidatePatient(values));
+
+    const onSignOut = () => {
+      if (window.confirm('By signing out you will reset your current booking. Want to continue?')) {
+        this.props.logout();
+        history.push('../login');
+      }
+    };
     return (
       <Element id="contentWrapperToScroll" className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
             <h1 className={styles.heading}>Who is this appointment for?</h1>
+            <p className={styles.description}>
+              Are you not {userName}?{' '}
+              <Button onClick={onSignOut} className={classNames(styles.subCardLinkDanger)}>
+                Logout
+              </Button>
+            </p>
           </div>
         </div>
         <div className={styles.contentWrapper}>
@@ -238,7 +265,7 @@ class PatientInformation extends PureComponent {
             ignoreSaveButton
             enableReinitialize
             form={FORM_NAME}
-            initialValues={this.props.initialValues}
+            initialValues={initialValues}
             onChange={this.handleFormChanges}
             onSubmit={this.updateUserProfile}
             asyncValidate={composeAsyncValidators([
@@ -324,8 +351,8 @@ class PatientInformation extends PureComponent {
                 {isCustomCarrier ? (
                   <Field
                     autoFocus={
-                      this.props.insuranceCarrierValue &&
-                      this.props.initialValues.insuranceCarrier !== this.props.insuranceCarrierValue
+                      insuranceCarrierValue &&
+                      initialValues.insuranceCarrier !== insuranceCarrierValue
                     }
                     theme={inputTheme(styles)}
                     iconComponent={
@@ -387,6 +414,7 @@ function mapDispatchToProps(dispatch) {
       setFamilyPatientUser,
       setPatientUser,
       updatePatient,
+      logout,
       touch,
       showButton,
       hideButton,
@@ -430,6 +458,7 @@ function mapStateToProps({
       !carriers.find(carrier => carrier.label === selector(state, 'insuranceCarrier')),
     isLoading: familyPatients.size === 0,
     patientUser,
+    userName: auth.get('patientUser').getFullName(),
     floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
   };
 }
@@ -447,6 +476,7 @@ PatientInformation.propTypes = {
     patientUser: PropTypes.string,
     phoneNumber: PropTypes.string,
   }),
+  logout: PropTypes.func.isRequired,
   addNewFamilyPatient: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
   touch: PropTypes.func.isRequired,
@@ -470,6 +500,7 @@ PatientInformation.propTypes = {
   hideButton: PropTypes.func.isRequired,
   setText: PropTypes.func.isRequired,
   insuranceCarrierValue: PropTypes.string,
+  userName: PropTypes.string.isRequired,
 };
 
 PatientInformation.defaultProps = {

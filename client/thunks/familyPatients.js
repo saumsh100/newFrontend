@@ -58,7 +58,6 @@ export function updatePatient(values, patientId, patientFamilyId) {
       ) {
         dispatch(updatePatientUser(values));
       }
-
       return updatedUser;
     } catch (err) {
       return console.error('add new familyPatient request error', err);

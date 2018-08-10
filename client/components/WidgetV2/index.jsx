@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { withRouter, matchPath } from 'react-router-dom';
 import { parse } from 'query-string';
+import { Element } from 'react-scroll';
+import classNames from 'classnames';
 import Header from './Header';
 import Logon from './Account/Logon';
 import FloatingButton from './FloatingButton';
@@ -13,6 +15,7 @@ import Button from '../library/Button';
 import { setIsClicked } from '../../reducers/widgetNavigation';
 import { locationShape, historyShape } from '../library/PropTypeShapes/routerShapes';
 import Review from './Booking/Review';
+import { AccountTabSVG, FindTimeSVG, ReviewBookSVG } from './SVGs';
 import styles from './styles.scss';
 
 const BOOKING_TAB = undefined;
@@ -106,6 +109,13 @@ class Widget extends Component {
       !!matchPath(pathname, {
         path: '/widgets/:accountId/app/login',
       });
+    const isPatientRoute =
+      !!matchPath(pathname, {
+        path: '/widgets/:accountId/app/book/patient-information',
+      }) ||
+      !!matchPath(pathname, {
+        path: '/widgets/:accountId/app/book/additional-information',
+      });
     const isAccountTab = parsedSearch.tab === ACCOUNT_TAB;
 
     const isBookingRoute = !isAccountTab && parsedSearch.tab === BOOKING_TAB;
@@ -137,15 +147,44 @@ class Widget extends Component {
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
           <Header tabs={tabs} tabState={tabState} />
-          <div
+          <Element
+            id="widgetContainer"
             className={styles.widgetContainer}
             ref={(node) => {
               this.containerNode = node;
               return this.containerNode;
             }}
           >
+            {!isCompleteRoute && (
+              <div className={styles.stepsWrapper}>
+                <div className={styles.steps}>
+                  <div className={classNames(styles.step, styles.active)}>
+                    <strong>Find a Time</strong>
+                    <span>
+                      <FindTimeSVG />
+                    </span>
+                  </div>
+                  <div
+                    className={classNames(styles.step, {
+                      [styles.active]: isAccountRoute || isPatientRoute || isReviewRoute,
+                    })}
+                  >
+                    <strong>Select Patient</strong>
+                    <span>
+                      <AccountTabSVG />
+                    </span>
+                  </div>
+                  <div className={classNames(styles.step, { [styles.active]: isReviewRoute })}>
+                    <strong>Review & Book</strong>
+                    <span>
+                      <ReviewBookSVG />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
             {this.renderChildren(tabState, tabs, history)}
-          </div>
+          </Element>
           <div className={styles.poweredBy}>
             We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
           </div>
@@ -197,4 +236,7 @@ Widget.propTypes = {
   floatingButtonText: PropTypes.string.isRequired,
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Widget));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Widget));

@@ -89,7 +89,7 @@
   align-self: center;
   display: inline-block;
   background: transparent;
-  padding: 0 0 1px;
+  padding: 0 0 2px;
   transition: all 0.2s ease;
   line-height: 1;
   font-family: 'Roboto', sans-serif;
@@ -103,6 +103,7 @@
 .subCardLinkDanger {
   @extend .subCardLink;
   color: $widget-red;
+  padding-bottom: 2px;
 }
 
 .input {
@@ -323,6 +324,7 @@
   font-size: 13px;
   font-weight: 600;
   transition: all 0.2s ease;
+  font-family: inherit;
   &:hover {
     transition: all 0.2s ease;
     color: $widget-grey-dark;
@@ -340,6 +342,7 @@
   font-size: 13px;
   transition: all 0.2s ease;
   font-weight: 600;
+  font-family: inherit;
   &:hover {
     transition: all 0.2s ease;
     opacity: 0.9;
@@ -481,7 +484,7 @@
 
 .cardContainer {
   @extend .container;
-  padding: calc(calc(var(--widget-spacer) * 2) + 21px) calc(var(--widget-spacer) - 4px) 0;
+  padding: calc(var(--widget-spacer) * 2) calc(var(--widget-spacer) - 4px) 0;
   transition: all 0.2s ease;
   .heading,
   .description {
@@ -490,8 +493,7 @@
 }
 
 .scrollableContainer {
-  padding-top: calc(calc(var(--widget-spacer) * 2) + 21px);
-  overflow: auto;
+  padding-top: calc(var(--widget-spacer) * 2);
   height: 100%;
   box-sizing: border-box;
 }

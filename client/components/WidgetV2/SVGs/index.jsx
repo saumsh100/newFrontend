@@ -1,6 +1,24 @@
 
 import React from 'react';
 
+export const FindTimeSVG = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 14">
+    <path
+      d="M8.667 7.333h-2C6.3 7.333 6 7.633 6 8v2c0 .367.3.667.667.667h2c.366 0 .666-.3.666-.667V8c0-.367-.3-.667-.666-.667zm0-6.666v.666H3.333V.667C3.333.3 3.033 0 2.667 0 2.3 0 2 .3 2 .667v.666h-.667c-.74 0-1.326.6-1.326 1.334L0 12c0 .733.593 1.333 1.333 1.333h9.334c.733 0 1.333-.6 1.333-1.333V2.667c0-.734-.6-1.334-1.333-1.334H10V.667C10 .3 9.7 0 9.333 0c-.366 0-.666.3-.666.667zM10 12H2a.669.669 0 0 1-.667-.667V4.667h9.334v6.666c0 .367-.3.667-.667.667z"
+      fillRule="nonzero"
+    />
+  </svg>
+);
+
+export const ReviewBookSVG = () => (
+  <svg viewBox="0 0 12 9" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M11.57.328l.1.101a1.12 1.12 0 0 1 0 1.586l-6.278 6.29a1.12 1.12 0 0 1-1.586 0L.329 4.828a1.12 1.12 0 0 1 0-1.586L.43 3.14a1.12 1.12 0 0 1 1.587 0l2.588 2.588L9.983.339A1.11 1.11 0 0 1 11.57.328z"
+      fillRule="nonzero"
+    />
+  </svg>
+);
+
 export const CloseBookingModalSVG = () => (
   <svg xmlns="http://www.w3.org/2000/svg">
     <path d="M6.44 7.146L.796 1.504A.51.51 0 0 1 .782.782a.51.51 0 0 1 .722.015L7.146 6.44 12.79.797a.51.51 0 0 1 .721-.015.51.51 0 0 1-.014.722L7.854 7.146l5.642 5.643a.51.51 0 0 1 .014.721.51.51 0 0 1-.721-.014L7.146 7.854l-5.642 5.642a.51.51 0 0 1-.722.014.51.51 0 0 1 .015-.721L6.44 7.146z" />
@@ -10,18 +28,6 @@ export const CloseBookingModalSVG = () => (
 export const BackButtonSVG = () => (
   <svg xmlns="http://www.w3.org/2000/svg">
     <path d="M2.207 7.5l5.147 5.146a.5.5 0 1 1-.708.708l-6-6a.5.5 0 0 1 .01-.717l5.99-5.99a.5.5 0 0 1 .708.707L2.207 6.5H12a.5.5 0 1 1 0 1H2.207z" />
-  </svg>
-);
-
-export const BookingTabSVG = () => (
-  <svg xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 2.5h2.5V0H0v2.5zM3.75 10h2.5V7.5h-2.5V10zM0 10h2.5V7.5H0V10zm0-3.75h2.5v-2.5H0v2.5zm3.75 0h2.5v-2.5h-2.5v2.5zM7.5 0v2.5H10V0H7.5zM3.75 2.5h2.5V0h-2.5v2.5zM7.5 6.25H10v-2.5H7.5v2.5zm0 3.75H10V7.5H7.5V10z" />
-  </svg>
-);
-
-export const SummaryTabSVG = () => (
-  <svg width="10" height="10" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3.224 4.481l-.724.716L4.828 7.5 10 2.383l-.724-.716-4.448 4.4-1.604-1.586zM9 5c0 2.2-1.8 4-4 4S1 7.2 1 5a4.012 4.012 0 0 1 5.1-3.85l.8-.8C6.3.15 5.65 0 5 0 2.25 0 0 2.25 0 5s2.25 5 5 5 5-2.25 5-5H9z" />
   </svg>
 );
 
@@ -65,26 +71,17 @@ export const BookingConfirmedSVG = () => (
   </svg>
 );
 
-export const BookingPickDateSVG = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="14" viewBox="0 0 13 14">
-    <path d="M10.684 1.332h-.667V0H8.68v1.332H3.34V0H2.003v1.332h-.667c-.742 0-1.33.6-1.33 1.333L0 11.99c0 .733.594 1.332 1.336 1.332h9.348c.735 0 1.336-.6 1.336-1.332V2.665c0-.733-.601-1.333-1.336-1.333zm0 10.659H1.336V4.663h9.348v7.328z" />
-  </svg>
-);
-
 export const BookingReviewSVG = () => (
   <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
     <path d="M0 9.5V12h2.5l7.372-7.372-2.5-2.5L0 9.5zm11.805-6.805c.26-.26.26-.68 0-.94l-1.56-1.56a.664.664 0 0 0-.94 0l-1.22 1.22 2.5 2.5 1.22-1.22z" />
   </svg>
 );
 
-export const BookingWaitlistSelectTimesSVG = () => (
-  <svg width="12" height="12" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 9.5V12h2.5l7.372-7.372-2.5-2.5L0 9.5zm11.805-6.805c.26-.26.26-.68 0-.94l-1.56-1.56a.664.664 0 0 0-.94 0l-1.22 1.22 2.5 2.5 1.22-1.22z" />
-  </svg>
-);
-
 export const AccountTabSVG = () => (
-  <svg xmlns="http://www.w3.org/2000/svg">
-    <path d="M5 5A2.5 2.5 0 1 0 5.001.001 2.5 2.5 0 0 0 5 5zm0 1.25c-1.669 0-5 .838-5 2.5V10h10V8.75c0-1.662-3.331-2.5-5-2.5z" />
+  <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M6 6a3 3 0 1 0 0-6 3 3 0 1 0 0 6zm0 1.5c-2.002 0-6 1.005-6 3v.75c0 .412.338.75.75.75h10.5c.412 0 .75-.338.75-.75v-.75c0-1.995-3.998-3-6-3z"
+      fillRule="nonzero"
+    />
   </svg>
 );
