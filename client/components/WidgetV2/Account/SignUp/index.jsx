@@ -91,7 +91,4 @@ SignUp.propTypes = {
   createPatient: PropTypes.func.isRequired,
 };
 
-export default withRouter(connect(
-  null,
-  mapDispatchToProps,
-)(SignUp));
+export default withRouter(connect(null, mapDispatchToProps)(SignUp));

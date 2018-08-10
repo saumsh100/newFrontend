@@ -22,8 +22,6 @@ const ConnectedInnerComponent = connect((state) => {
   };
 })(InnerComponent);
 
-const withAuthProps = el => props => (
-  <ConnectedInnerComponent {...{ ...props, el }} />
-);
+const withAuthProps = el => props => <ConnectedInnerComponent {...{ ...props, el }} />;
 
 export default withAuthProps;

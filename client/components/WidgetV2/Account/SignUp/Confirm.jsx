@@ -96,7 +96,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignUpConfirm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SignUpConfirm));

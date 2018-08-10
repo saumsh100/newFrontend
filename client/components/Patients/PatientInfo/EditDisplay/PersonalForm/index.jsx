@@ -92,8 +92,6 @@ export default function PersonalForm(props) {
       onSubmit={handleSubmit}
       className={styles.formContainer}
       initialValues={initialValues}
-      asyncValidate={asyncValidateNewPatient}
-      asyncBlurFields={['email', 'mobilePhoneNumber']}
       ignoreSaveButton={!isResponsive()}
     >
       <Grid className={styles.grid}>

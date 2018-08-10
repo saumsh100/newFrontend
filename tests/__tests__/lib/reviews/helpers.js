@@ -3,14 +3,16 @@ import { v4 as uuid } from 'uuid';
 import {
   Account,
   Appointment,
+  Family,
   Patient,
   Practitioner,
   SentReview,
   Review,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import {
   getEarliestLatestAppointment,
   getReviewAppointments,
+  getReviewPatients,
 } from '../../../../server/lib/reviews/helpers';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
@@ -31,6 +33,10 @@ const makeApptData = (data = {}) => Object.assign({
 }, data);
 
 const makePatientData = (data = {}) => Object.assign({
+  accountId,
+}, data);
+
+const makeFamilyData = (data = {}) => Object.assign({
   accountId,
 }, data);
 
@@ -258,6 +264,57 @@ describe('Reviews Calculation Library', () => {
           const appts = await getReviewAppointments({ account, startDate });
           expect(appts.length).toBe(1);
         });
+      });
+    });
+
+    describe('#getReviewPatients', () => {
+      test('should be a function', () => {
+        expect(typeof getReviewPatients).toBe('function');
+      });
+
+      let account;
+      let appointments;
+      let patients;
+      let families;
+      beforeEach(async () => {
+        account = await Account.findById(accountId);
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'Dustin', lastName: 'Dharp', email: 'a@b.ca' }),
+          makePatientData({ firstName: 'Frank', lastName: 'Abagnale', email: 'a@b.ca' }),
+          makePatientData({ firstName: 'Ethan', lastName: 'Hunt' }),
+          makePatientData({ firstName: 'Donald', lastName: 'Trump' }),
+        ]);
+
+        families = await Family.bulkCreate([
+          makeFamilyData({ headId: patients[0].id, pmsCreatedAt: new Date(2017, 1, 1) }),
+          makeFamilyData({ headId: patients[1].id, pmsCreatedAt: new Date(2016, 1, 1) }),
+        ]);
+
+        await patients[0].update({ familyId: families[0].id });
+        await patients[1].update({ familyId: families[1].id });
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 5, 8), patientId: patients[0].id }), // Aug 5th at 8am - Dustin
+          makeApptData({ ...dates(2017, 7, 5, 9), patientId: patients[1].id }), // Aug 5th at 9am - Frank
+          makeApptData({ ...dates(2017, 7, 5, 10), patientId: patients[2].id }), // Aug 5th at 10am - Ethan
+          makeApptData({ ...dates(2017, 7, 5, 10), patientId: patients[3].id }), // Aug 5th at 9am - Donald
+        ]);
+      });
+
+      test('should return the 1 success and 1 error for Dustin', async () => {
+        const startDate = date(2017, 7, 5, 9, 15);
+        const { success, errors } = await getReviewPatients({ account, startDate });
+        expect(success.length).toBe(1);
+        expect(errors.length).toBe(1);
+      });
+
+      test('should return the 2 errors for Dustin', async () => {
+        // Put Dustin in Frank's family now
+        await patients[0].update({ familyId: families[1].id });
+        const startDate = date(2017, 7, 5, 9, 15);
+        const { success, errors } = await getReviewPatients({ account, startDate });
+        expect(success.length).toBe(0);
+        expect(errors.length).toBe(1);
       });
     });
 

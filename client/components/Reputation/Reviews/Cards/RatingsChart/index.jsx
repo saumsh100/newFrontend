@@ -23,9 +23,7 @@ export default function RatingsChart(props) {
     5: 0,
   };
 
-  const mergedRatings = hasRatings
-    ? Object.assign({}, ratingDefaults, rating)
-    : ratingDefaults;
+  const mergedRatings = hasRatings ? Object.assign({}, ratingDefaults, rating) : ratingDefaults;
 
   return (
     <Card className={styles.card}>
@@ -36,9 +34,7 @@ export default function RatingsChart(props) {
             for (let i = 0; i < r; i++) {
               rows.push(<Star key={i} size={1.8} />);
             }
-            const width = mergedRatings[r]
-              ? Math.floor((mergedRatings[r] / maxValue) * 80)
-              : 5;
+            const width = mergedRatings[r] ? Math.floor(mergedRatings[r] / maxValue * 80) : 5;
             const style = { width: `${width}%` };
             return (
               <div key={index} className={styles.content}>
@@ -47,20 +43,14 @@ export default function RatingsChart(props) {
                   {rows}
                 </div>
                 <div className={styles.content__bar}>
-                  <span
-                    style={style}
-                    className={styles.content__bar__percent}
-                  />
+                  <span style={style} className={styles.content__bar__percent} />
                   {mergedRatings[r]}
                 </div>
               </div>
             );
           })
         ) : (
-          <div className={styles.stats_noReviews}>
-            {' '}
-            There are currently zero reviews.{' '}
-          </div>
+          <div className={styles.stats_noReviews}> There are currently zero reviews. </div>
         )}
       </div>
     </Card>

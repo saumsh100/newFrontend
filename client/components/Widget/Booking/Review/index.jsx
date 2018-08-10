@@ -359,10 +359,7 @@ function mapStateToProps({ auth, availabilities, entities }) {
   };
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Review));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Review));
 
 Review.propTypes = {
   createWaitSpot: PropTypes.func,

@@ -511,7 +511,4 @@ PatientInformation.defaultProps = {
   patientUser: false,
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientInformation));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PatientInformation));

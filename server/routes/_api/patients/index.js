@@ -576,8 +576,6 @@ patientsRouter.post('/connector/batch', checkPermissions('patients:create'),
     cleanedPatients,
     Patient,
     'Patient',
-    [Patient.uniqueAgainstEachOther],
-    [Patient.uniqueValidate],
   )
     .then((savedPatients) => {
       const patientData = savedPatients.map(savedPatient => savedPatient.get({ plain: true }));

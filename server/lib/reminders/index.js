@@ -254,7 +254,6 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     const organizedList = organizeRemindersOutboxList(success);
 
     // Clone array so its not mutable and order by appointment.startDate ASC
-    // TODO: do we really need to slice() and make immutable here? whats the performance loss?
     const sortedPatientsAppointments = organizedList.slice()
       .sort((a, b) => a.patient.appointment.startDate > b.patient.appointment.startDate);
 

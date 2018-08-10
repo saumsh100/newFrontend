@@ -153,7 +153,4 @@ Logged.propTypes = {
   refreshAvailabilitiesState: PropTypes.func.isRequired,
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Logged));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Logged));

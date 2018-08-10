@@ -1,6 +1,9 @@
+
 import uuid from 'uuid';
-import { Chat, Account, TextMessage, User, Patient } from '../../../_models';
+import { Chat, Account, TextMessage, User, Patient } from 'CareCruModels';
 import { sequelizeLoader } from '../../util/loaders';
+import StatusError from '../../../util/StatusError';
+import { getPatientFromCellPhoneNumber } from '../../../lib/contactInfo/getPatientFromCellPhoneNumber';
 
 const chatsRouter = require('express').Router();
 const Sequelize = require('sequelize');
@@ -70,149 +73,153 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
  * creates a new chat
  */
 
-chatsRouter.post('/', checkPermissions('chats:create'), (req, res, next) => {
-  const chatMerge = {
-    lastTextMessageDate: new Date(),
-    accountId: req.body.patient.accountId,
-    patientId: req.body.patient.id,
-    patientPhoneNumber: req.body.patient.mobilePhoneNumber,
-  };
+chatsRouter.post('/', checkPermissions('chats:create'), async (req, res, next) => {
+  try {
+    const accountId = req.body.patient.accountId;
+    const patientId = req.body.patient.id;
+    const cellPhoneNumber = req.body.patient.mobilePhoneNumber;
+    const poc = await getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId });
+    if (!poc) {
+      throw new StatusError(400, `There is not point of contact for ${cellPhoneNumber}.`);
+    }
 
-  return Chat.create(chatMerge)
-    .then((chat) => {
-      const joinObject = { patient: true };
-      joinObject.textMessages = {
-        _apply: sequence => sequence.orderBy('createdAt'),
-      };
+    if (poc.id !== patientId) {
+      throw new StatusError(400, `This patient is not the point of contact for ${cellPhoneNumber}.`);
+    }
 
-      return Chat.findOne({
-        where: { id: chat.id },
-        include: [
-          {
-            model: TextMessage,
-            as: 'textMessages',
-            include: [
-              {
-                model: User,
-                as: 'user',
-                attributes: {
-                  exclude: 'password',
+    const chatMerge = {
+      lastTextMessageDate: new Date(),
+      accountId,
+      patientId,
+      patientPhoneNumber: cellPhoneNumber,
+    };
+
+    return Chat.create(chatMerge)
+      .then((chat) => {
+        const joinObject = {patient: true};
+        joinObject.textMessages = {
+          _apply: sequence => sequence.orderBy('createdAt'),
+        };
+
+        return Chat.findOne({
+          where: { id: chat.id },
+          include: [
+            {
+              model: TextMessage,
+              as: 'textMessages',
+              include: [
+                {
+                  model: User,
+                  as: 'user',
+                  attributes: {
+                    exclude: 'password',
+                  },
+                  required: false,
                 },
-                required: false,
-              },
-            ],
-            required: false,
-          },
-        ],
-      }).then((chats) => {
-        const sendChat = normalize('chat', chats.get({ plain: true }));
-        return res.send(sendChat);
-      });
-    })
-    .catch(next);
+              ],
+              required: false,
+            },
+          ],
+        }).then((chats) => {
+          const sendChat = normalize('chat', chats.get({plain: true}));
+          return res.send(sendChat);
+        });
+      })
+      .catch(next);
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**
  * creates a new text message and sends it using twilio
  */
-chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req, res, next) => {
-  const {
-    chatId, message, patient, userId,
-  } = req.body;
+chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), async (req, res, next) => {
+  try {
+    const {
+      chatId, message, patient, userId,
+    } = req.body;
 
-  if (!patient.mobilePhoneNumber) {
-    return res.sendStatus(400);
-  }
+    if (!patient.mobilePhoneNumber) {
+      throw new StatusError(400, 'Missing mobile phone number.');
+    }
 
-  console.log(`Sending textmessage to ${patient.mobilePhoneNumber}`);
+    const accountId = patient.accountId;
+    const patientId = patient.id;
+    const cellPhoneNumber = patient.mobilePhoneNumber;
+    const poc = await getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId });
+    if (!poc) {
+      throw new StatusError(400, `There is not point of contact for ${cellPhoneNumber}.`);
+    }
 
-  const include = [
-    {
-      model: Patient,
-      as: 'patient',
-    },
-    {
-      model: TextMessage,
-      as: 'textMessages',
-      include: [
-        {
-          model: User,
-          as: 'user',
-          attributes: {
-            exclude: 'password',
+    if (poc.id !== patientId) {
+      throw new StatusError(400, `This patient is not the point of contact for ${cellPhoneNumber}.`);
+    }
+
+    const include = [
+      {
+        model: Patient,
+        as: 'patient',
+      },
+      {
+        model: TextMessage,
+        as: 'textMessages',
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: {
+              exclude: 'password',
+            },
+
+            required: false,
           },
+        ],
 
-          required: false,
-        },
-      ],
+        required: true,
+      },
+    ];
 
-      required: true,
-    },
-  ];
+    const io = req.app.get('socketio');
 
-  const io = req.app.get('socketio');
+    const chatMerge = {
+      lastTextMessageDate: new Date(),
+      accountId: patient.accountId,
+      patientId: patient.id,
+      patientPhoneNumber: patient.mobilePhoneNumber,
+    };
 
-  const chatMerge = {
-    lastTextMessageDate: new Date(),
-    accountId: patient.accountId,
-    patientId: patient.id,
-    patientPhoneNumber: patient.mobilePhoneNumber,
-  };
+    return Account.findOne({where: {id: chatMerge.accountId}, raw: true})
+      .then((account) => {
+        const twilioMessageData = {
+          body: message,
+          chatId,
+          userId,
+          to: patient.mobilePhoneNumber,
+          from: account.twilioPhoneNumber,
+          read: true,
+        };
 
-  return Account.findOne({ where: { id: chatMerge.accountId }, raw: true })
-    .then((account) => {
-      const twilioMessageData = {
-        body: message,
-        chatId,
-        userId,
-        to: patient.mobilePhoneNumber,
-        from: account.twilioPhoneNumber,
-        read: true,
-      };
-
-      return twilioClient.sendMessage(twilioMessageData).then((sms) => {
-        // Add twilio sid as our uniqueId
-        twilioMessageData.id = sms.sid;
-      })
-        .catch(() => {
-          // If sending fails, use temporary id and set status to failed.
-          twilioMessageData.id = uuid();
-          twilioMessageData.smsStatus = 'failed';
+        return twilioClient.sendMessage(twilioMessageData).then((sms) => {
+          // Add twilio sid as our uniqueId
+          twilioMessageData.id = sms.sid;
         })
-        .finally(() => {
-          // Create message anyway
-          if (!chatId) {
-            Chat.create(chatMerge).then((chat) => {
-              twilioMessageData.chatId = chat.id;
-              TextMessage.create(twilioMessageData).then((textMessage) => {
-                Chat.findOne({
-                  where: { id: chat.id },
-                  include,
-                }).then((chat) => {
-                  const send = normalize('chat', chat.get({ plain: true }));
-                  io
-                    .of(namespaces.dash)
-                    .in(account.id)
-                    .emit('newMessage', send);
-
-                  res.send(send);
-                });
-              });
-            });
-          } else {
-            TextMessage.create(twilioMessageData)
-              .then((tm) => {
-                const lastTextMessageId = tm.id;
-                const lastTextMessageDate = tm.createdAt;
-                Chat.update(
-                  { lastTextMessageId, lastTextMessageDate },
-                  { where: { id: chatId } },
-                ).then(() => {
+          .catch(() => {
+            // If sending fails, use temporary id and set status to failed.
+            twilioMessageData.id = uuid();
+            twilioMessageData.smsStatus = 'failed';
+          })
+          .finally(() => {
+            // Create message anyway
+            if (!chatId) {
+              Chat.create(chatMerge).then((chat) => {
+                twilioMessageData.chatId = chat.id;
+                TextMessage.create(twilioMessageData).then((textMessage) => {
                   Chat.findOne({
-                    where: { id: chatId },
+                    where: {id: chat.id},
                     include,
                   }).then((chat) => {
-                    const send = normalize('chat', chat.get({ plain: true }));
+                    const send = normalize('chat', chat.get({plain: true}));
                     io
                       .of(namespaces.dash)
                       .in(account.id)
@@ -221,12 +228,38 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), (req,
                     res.send(send);
                   });
                 });
-              })
-              .catch(next);
-          }
-        });
-    })
-    .catch(next);
+              });
+            } else {
+              TextMessage.create(twilioMessageData)
+                .then((tm) => {
+                  const lastTextMessageId = tm.id;
+                  const lastTextMessageDate = tm.createdAt;
+                  Chat.update(
+                    {lastTextMessageId, lastTextMessageDate},
+                    {where: {id: chatId}},
+                  ).then(() => {
+                    Chat.findOne({
+                      where: {id: chatId},
+                      include,
+                    }).then((chat) => {
+                      const send = normalize('chat', chat.get({plain: true}));
+                      io
+                        .of(namespaces.dash)
+                        .in(account.id)
+                        .emit('newMessage', send);
+
+                      res.send(send);
+                    });
+                  });
+                })
+                .catch(next);
+            }
+          });
+      })
+      .catch(next);
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**

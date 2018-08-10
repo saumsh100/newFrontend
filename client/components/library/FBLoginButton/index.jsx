@@ -80,10 +80,7 @@ FBLoginButton.propTypes = {
   appId: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
-  scope: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.arrayOf(PropTypes.string),
-  ]),
+  scope: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
 };
 
 export default FBLoginButton;

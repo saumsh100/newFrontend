@@ -64,7 +64,4 @@ Logon.defaultProps = {
   isAccountTab: false,
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Logon));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Logon));

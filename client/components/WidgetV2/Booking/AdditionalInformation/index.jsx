@@ -115,7 +115,4 @@ AdditionalInformation.defaultProps = {
   notes: '',
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AdditionalInformation));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdditionalInformation));

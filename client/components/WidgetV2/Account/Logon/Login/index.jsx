@@ -109,7 +109,4 @@ Login.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Login));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login));

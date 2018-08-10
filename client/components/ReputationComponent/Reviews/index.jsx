@@ -118,8 +118,8 @@ class Reviews extends Component {
                   <div> Respond to google maps review </div>
                   <div>
                     {' '}
-                    You can respond from here! Connect your Google My Busyness
-                    account to get started{' '}
+                    You can respond from here! Connect your Google My Busyness account to get
+                    started{' '}
                   </div>
                 </div>
               </div>
@@ -135,9 +135,7 @@ class Reviews extends Component {
                   <Star size={1.3} />
                   <Star size={1.3} />
                 </div>
-                <span className={styles.stats__bottom}>
-                  Industry Average 4.1/5
-                </span>
+                <span className={styles.stats__bottom}>Industry Average 4.1/5</span>
               </div>
             </Card>
           </Col>
@@ -147,12 +145,8 @@ class Reviews extends Component {
               <div className={styles.stats}>
                 <span className={styles.stats__count}>12</span>
                 <span className={styles.stats__title}>Average Rating</span>
-                <div className={styles.stats__rating}>
-                  0 With no start rating
-                </div>
-                <span className={styles.stats__bottom}>
-                  Industry Average 106
-                </span>
+                <div className={styles.stats__rating}>0 With no start rating</div>
+                <span className={styles.stats__bottom}>Industry Average 106</span>
               </div>
             </Card>
           </Col>
@@ -165,19 +159,14 @@ class Reviews extends Component {
                   for (let i = 1; i <= r; i++) {
                     rows.push(<Star size={1.3} />);
                   }
-                  const width = rating[r]
-                    ? Math.floor((rating[r] / maxValue) * 80)
-                    : 5;
+                  const width = rating[r] ? Math.floor(rating[r] / maxValue * 80) : 5;
                   const style = { width: `${width}%` };
                   return (
                     <div className={styles.content}>
                       <div className={styles.content__stars}>{rows}</div>
 
                       <div className={styles.content__bar}>
-                        <span
-                          style={style}
-                          className={styles.content__bar__percent}
-                        />
+                        <span style={style} className={styles.content__bar__percent} />
                         {rating[r]}
                       </div>
                     </div>
@@ -195,9 +184,7 @@ class Reviews extends Component {
                   <Tag label="dentist vancouver" color={colorMap.red} />
                   <Tag label="dentist kitsilano" color={colorMap.yellow} />
                   <Tag label="dentist hygienist" color={colorMap.green} />
-                  <span className={styles.tags__left__update}>
-                    Update keyword based on filters
-                  </span>
+                  <span className={styles.tags__left__update}>Update keyword based on filters</span>
                 </div>
               </div>
             </Card>
@@ -208,11 +195,7 @@ class Reviews extends Component {
               <CardHeader className={styles.cardHeader} title="REVIEWS" />
               <div className={styles.reviewsComments}>
                 <div className={styles.reviewsComments__container}>
-                  <Col
-                    xs={12}
-                    md={12}
-                    className={styles.reviewsComments__comment}
-                  >
+                  <Col xs={12} md={12} className={styles.reviewsComments__comment}>
                     {DataBigComment.map(obj => (
                       <BigCommentBubble
                         icon={obj.icon}

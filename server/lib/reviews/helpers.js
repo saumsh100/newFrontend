@@ -6,14 +6,16 @@ import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
 import {
   Appointment,
+  Family,
   Patient,
   SentReview,
   Review,
   Practitioner,
-} from '../../_models';
+} from 'CareCruModels';
 import GLOBALS from '../../config/globals';
 import { organizeForOutbox, generateOrganizedPatients } from '../comms/util';
 import { convertIntervalStringToObject } from '../../util/time';
+import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 
 const BUFFER_MINUTES = GLOBALS.reviews.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reviews.sameDayWindowHours;
@@ -64,7 +66,14 @@ export async function getReviewPatients({ account, startDate, endDate }) {
     return patient;
   });
 
-  return generateOrganizedPatients(patients, ['email', 'sms']);
+  const channels = ['email', 'sms'];
+  const firstSuccessAndErrors = generateOrganizedPatients(patients, channels);
+  let { success, errors } = await reduceSuccessAndErrors({ account, channels, ...firstSuccessAndErrors });
+
+  // To be removed when family reminders are implemented. If we want them...
+  // This removes patients where the PoC does not have an appointment
+  success = success.filter(({ patient: { appointment } }) => appointment);
+  return { success, errors };
 }
 
 /**
@@ -108,6 +117,11 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
         as: 'patient',
         required: true,
         include: [
+          {
+            model: Family,
+            as: 'family',
+            required: false,
+          },
           {
             model: Review,
             as: 'reviews',

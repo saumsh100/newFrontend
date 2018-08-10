@@ -1,3 +1,4 @@
+
 import set from 'lodash/set';
 import values from 'lodash/values';
 import each from 'lodash/each';
@@ -9,12 +10,8 @@ import {
   selectAppointment,
   setScheduleDate,
 } from '../actions/schedule';
-import {
-  receiveEntities,
-} from '../actions/entities';
-import {
-  updateEntityRequest,
-} from "./fetchEntities";
+import { receiveEntities } from '../actions/entities';
+import { updateEntityRequest } from './fetchEntities';
 
 export function checkPatientUser(patientUser, requestData) {
   return async function (dispatch, getState) {
@@ -27,7 +24,7 @@ export function checkPatientUser(patientUser, requestData) {
       const patientData = await axios.get('/api/patients', { params: query });
 
       const { data } = patientData;
-      const checkObjEmpty = !values(data.entities['patients']).some(x => x !== undefined);
+      const checkObjEmpty = !values(data.entities.patients).some(x => x !== undefined);
 
       if (!checkObjEmpty) {
         return connectedPatientUser(dispatch, requestData, data);
@@ -41,7 +38,6 @@ export function checkPatientUser(patientUser, requestData) {
 }
 
 async function connectedPatientUser(dispatch, requestData, data) {
-
   const patientId = Object.keys(data.entities.patients)[0];
   dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
 

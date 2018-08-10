@@ -9,10 +9,7 @@ const renderItems = items =>
   items.map((props, i) => <BreadcrumbItem key={props.key || i} {...props} />);
 
 const Breadcrumbs = props => (
-  <props.as
-    {...omit(props, Object.keys(Breadcrumbs.propTypes))}
-    className={styles.base}
-  >
+  <props.as {...omit(props, Object.keys(Breadcrumbs.propTypes))} className={styles.base}>
     {props.children ? props.children : renderItems(props.items)}
   </props.as>
 );

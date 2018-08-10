@@ -2,10 +2,11 @@
 import moment from 'moment-timezone';
 import omit from 'lodash/omit';
 import uniqBy from 'lodash/uniqBy';
-import GLOBALS from '../../config/globals';
-import { Appointment, Patient, SentRecall, Recall, sequelize } from '../../_models';
+import { Appointment, Family, Patient, SentRecall, Recall } from 'CareCruModels';
 import { generateOrganizedPatients, organizeForOutbox } from '../comms/util';
 import { sortIntervalAscPredicate, convertIntervalStringToObject } from '../../util/time';
+import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
+import isUndefined from 'lodash/isUndefined';
 
 // 1 day
 const DEFAULT_RECALL_BUFFER = 86400;
@@ -22,9 +23,7 @@ const DEFAULT_RECALL_BUFFER = 86400;
  * @param date
  * @returns {Promise.<Array>}
  */
-export async function mapPatientsToRecalls({
-  recalls, account, startDate, endDate,
-}) {
+export async function mapPatientsToRecalls({ recalls, account, startDate, endDate }) {
   const seen = {};
   const recallsPatients = [];
   for (const recall of recalls) {
@@ -43,10 +42,16 @@ export async function mapPatientsToRecalls({
     // Now add it to the seen map
     unseenPatients.forEach(p => (seen[p.id] = true));
 
-    recallsPatients.push({
-      ...generateOrganizedPatients(unseenPatients, recall.primaryTypes),
-      recall,
-    });
+    const channels = recall.primaryTypes;
+
+    // Weed out the preferences and missing contact info patients
+    const firstSuccessAndErrors = generateOrganizedPatients(unseenPatients, channels);
+    let { success, errors } = await reduceSuccessAndErrors({ account, channels, ...firstSuccessAndErrors });
+
+    // To be removed when family recalls are implemented
+    // This removes patients where the PoC is not set to receive a recall based on added hygiene bool
+    success = success.filter(({ patient }) => !isUndefined(patient.hygiene));
+    recallsPatients.push({ success, errors, recall });
   }
 
   return recallsPatients;
@@ -204,6 +209,11 @@ export async function getPatientsForRecallTouchPoint({
 
   const twoWeeksAgo = moment(startDate).subtract(14, 'days');
   const includeArray = [
+    {
+      model: Family,
+      as: 'family',
+      required: false,
+    },
     {
       model: SentRecall,
       as: 'sentRecalls',

@@ -67,10 +67,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  null,
-  mapDispatchToProps,
-)(ResetPassword));
+export default withRouter(connect(null, mapDispatchToProps)(ResetPassword));
 
 ResetPassword.propTypes = {
   resetPatientUserPassword: PropTypes.func.isRequired,

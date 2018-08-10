@@ -198,10 +198,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SelectDates);
+export default connect(mapStateToProps, mapDispatchToProps)(SelectDates);
 
 SelectDates.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,

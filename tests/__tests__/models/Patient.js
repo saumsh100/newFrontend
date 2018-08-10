@@ -1,10 +1,8 @@
 
 import { Account, Patient } from '../../../server/_models';
-import { wipeModelSequelize } from '../../util/wipeModel';
-import { wipeTestAccounts, seedTestAccountsSequelize, accountId, enterpriseId } from '../../util/seedTestAccounts';
+import wipeModel, { wipeAllModels } from '../../util/wipeModel';
+import { seedTestUsers, accountId, enterpriseId, addressId } from '../../util/seedTestUsers';
 import { omitProperties } from '../../util/selectors';
-
-// TODO: should probably make makeData, a reusable function
 
 const otherAccountId = '00d9d6e9-6941-4dec-8e65-c7bc05977e98';
 const makeData = (data = {}) => (Object.assign({
@@ -25,15 +23,13 @@ const fail = 'Your code should be failing but it is passing';
 const uniqueErrorMessage = 'Unique Field Validation Error';
 
 describe('models/Patient', () => {
-  // IMPORTANT! Patient needs to be removed first...
   beforeEach(async () => {
-    await wipeModelSequelize(Patient);
-    await seedTestAccountsSequelize();
+    await wipeModel(Patient);
+    await seedTestUsers();
   });
 
   afterAll(async () => {
-    await wipeModelSequelize(Patient);
-    await wipeTestAccounts();
+    await wipeAllModels();
   });
 
   describe('Data Validation', () => {
@@ -55,21 +51,15 @@ describe('models/Patient', () => {
       expect(patient.mobilePhoneNumber).toBe(null);
     });
 
-    test('should throw Unique Field error for 2 docs with same data', async () => {
+    test('should not throw any Unique Field error for 2 docs with same mobilePhoneNumber', async () => {
       // Save one, then try saving another with same data
-      await Patient.create(makeData());
-
-      // Couldn't get toThrowError working here...
-      try {
-        await Patient.create(makeData());
-        throw new Error(fail);
-      } catch (err) {
-        expect(err.name).toBe('SequelizeUniqueConstraintError');
-      }
+      const p1 = await Patient.create(makeData());
+      const p2 = await Patient.create(makeData());
+      expect(p1.mobilePhoneNumber).toBe(p2.mobilePhoneNumber);
     });
 
-    test('should NOT throw Unique Field error for same email but in different accounts', async () => {
-      await Account.create(makeAccountData({ id: otherAccountId, name: 'Other Test', enterpriseId }));
+    test('should not throw Unique Field error for same email but in different accounts', async () => {
+      await Account.create(makeAccountData({ id: otherAccountId, name: 'Other Test', enterpriseId, addressId }));
       const p1 = await Patient.create(makeData());
       const p2 = await Patient.create(makeData({ accountId: otherAccountId }));
 
@@ -100,7 +90,7 @@ describe('models/Patient', () => {
     });
   });
 
-  describe('Batch Saving', () => {
+  describe.skip('DEPRECATED: Batch Saving', () => {
     describe('#uniqueValidate', () => {
       test('should fail', async () => {
         await Patient.create(makeData());

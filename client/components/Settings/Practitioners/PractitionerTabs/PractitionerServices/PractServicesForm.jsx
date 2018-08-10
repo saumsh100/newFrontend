@@ -22,19 +22,14 @@ class PractServicesForm extends Component {
     e.stopPropagation();
     const { formName, values, allServices } = this.props;
 
-    const actions = Object.keys(values).map(key =>
-      change(formName, key, !allServices));
+    const actions = Object.keys(values).map(key => change(formName, key, !allServices));
 
     this.props.dispatch(batchActions(actions));
   }
 
   render() {
     const {
-      services,
-      practitioner,
-      initialValues,
-      formName,
-      values,
+      services, practitioner, initialValues, formName, values,
     } = this.props;
 
     let showComponent = null;
@@ -97,7 +92,4 @@ function mapStateToProps({ form }, { formName }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(PractServicesForm);
+export default connect(mapStateToProps, null)(PractServicesForm);

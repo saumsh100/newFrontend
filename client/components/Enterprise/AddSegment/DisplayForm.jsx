@@ -45,7 +45,7 @@ class DisplayForm extends Component {
     if (total === 0) {
       return 100;
     }
-    return round((num / total) * 100, 2);
+    return round(num / total * 100, 2);
   }
 
   render() {
@@ -74,11 +74,7 @@ class DisplayForm extends Component {
                 contentClass={styles.tabContent}
                 onChange={this.onTabChange}
               >
-                <Tab
-                  label="Demographics"
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
-                >
+                <Tab label="Demographics" className={styles.tab} activeClass={styles.activeTab}>
                   <Grid className={styles.grid}>
                     <Row>
                       <Col xs={2} sm={2} md={2} className={styles.fieldLabel}>
@@ -136,18 +132,10 @@ class DisplayForm extends Component {
                     </Row>
                   </Grid>
                 </Tab>
-                <Tab
-                  label="Behavior"
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
-                >
+                <Tab label="Behavior" className={styles.tab} activeClass={styles.activeTab}>
                   <span>Coming soon</span>
                 </Tab>
-                <Tab
-                  label="Custom"
-                  className={styles.tab}
-                  activeClass={styles.activeTab}
-                >
+                <Tab label="Custom" className={styles.tab} activeClass={styles.activeTab}>
                   <span>Coming soon</span>
                 </Tab>
               </Tabs>
@@ -179,14 +167,10 @@ class DisplayForm extends Component {
                   >
                     of patients
                   </Gauge>
-                  <InfoSection
-                    title={segments.preview.segmentActiveUsers || ''}
-                  >
+                  <InfoSection title={segments.preview.segmentActiveUsers || ''}>
                     # of patients
                   </InfoSection>
-                  <InfoSection
-                    title={segments.preview.segmentAppointments || ''}
-                  >
+                  <InfoSection title={segments.preview.segmentAppointments || ''}>
                     {`${this.calculatePercentage(
                       segments.preview.segmentAppointments,
                       segments.preview.totalAppointments,
@@ -197,9 +181,7 @@ class DisplayForm extends Component {
                     items={[
                       {
                         label: 'Age',
-                        value: this.props.age
-                          ? this.props.age.join(', ')
-                          : 'All',
+                        value: this.props.age ? this.props.age.join(', ') : 'All',
                       },
                       {
                         label: 'Gender',
@@ -260,9 +242,6 @@ function mapStateToProps(state) {
   };
 }
 
-const enhance = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-);
+const enhance = connect(mapStateToProps, mapDispatchToProps);
 
 export default enhance(DisplayForm);

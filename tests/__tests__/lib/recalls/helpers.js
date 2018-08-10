@@ -3,12 +3,12 @@ import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import {
   Appointment,
+  Family,
   Patient,
   Practitioner,
   Recall,
   SentRecall,
-  sequelize,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import {
   mapPatientsToRecalls,
   getRecallsOutboxList,
@@ -69,7 +69,9 @@ describe('Recalls Calculation Library', () => {
   describe('Helpers', () => {
     describe('#mapPatientsToRecalls', () => {
       let patients;
+      let families;
       beforeEach(async () => {
+        const familyId = uuid();
         patients = await Patient.bulkCreate([
           makePatientData({
             firstName: 'Old',
@@ -79,22 +81,43 @@ describe('Recalls Calculation Library', () => {
             dueForHygieneDate: date(2017, 1, 5, 9),
             lastHygieneDate: date(2016, 1, 5, 9),
           }),
+
+          makePatientData({
+            firstName: 'Other',
+            lastName: 'Patient',
+            status: 'Active',
+            email: 'test@test.com',
+          }),
         ]);
+
+        families = await Family.bulkCreate([
+          {
+            id: familyId,
+            headId: patients[0].id,
+            accountId,
+          },
+        ]);
+
+        await patients[0].update({ familyId: families[0].id });
+        await patients[1].update({ familyId: families[0].id });
       });
+
       test('should be a function', () => {
         expect(typeof mapPatientsToRecalls).toBe('function');
       });
 
       test('make sure with multiple recalls that are valid. Only the most recent returns', async () => {
         const result = await mapPatientsToRecalls({
-          recalls: [{
-            interval: '1 months',
-            primaryTypes: ['email'],
-          },
-          {
-            interval: '2 months',
-            primaryTypes: ['email'],
-          }],
+          recalls: [
+            {
+              interval: '1 months',
+              primaryTypes: ['email'],
+            },
+            {
+              interval: '2 months',
+              primaryTypes: ['email'],
+            },
+          ],
 
           account: {
             id: accountId,
@@ -111,6 +134,39 @@ describe('Recalls Calculation Library', () => {
         ] = result;
 
         expect(oneMonthRecalls.success.length).toBe(1);
+        expect(twoMonthRecalls.success.length).toBe(0);
+      });
+
+      test('dont send to non contact info PoCs', async () => {
+        await families[0].update({ headId: patients[1].id  });
+        const result = await mapPatientsToRecalls({
+          recalls: [
+            {
+              interval: '1 months',
+              primaryTypes: ['email'],
+            },
+            {
+              interval: '2 months',
+              primaryTypes: ['email'],
+            },
+          ],
+
+          account: {
+            id: accountId,
+            recallBuffer: '1 days',
+          },
+
+          startDate: date(2016, 10, 5, 8),
+          endDate: date(2018, 10, 5, 8),
+        });
+
+        const [
+          oneMonthRecalls,
+          twoMonthRecalls,
+        ] = result;
+
+        expect(oneMonthRecalls.success.length).toBe(0);
+        expect(oneMonthRecalls.errors.length).toBe(0);
         expect(twoMonthRecalls.success.length).toBe(0);
       });
 

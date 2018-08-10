@@ -61,6 +61,20 @@ export default function (sequelize, DataTypes) {
     });
   });
 
+  /**
+   * isHead is a function that will check to see if patient is the
+   * family head of the family model
+   *
+   * @param family
+   * @param patient
+   * @return {boolean}
+   */
+  Family.isHead = (family, patient) => {
+    return family.accountId === patient.accountId &&
+      family.id === patient.familyId &&
+      family.headId === patient.id;
+  };
+
   Family.preValidateArray = async function (dataArray) {
     const errors = [];
 

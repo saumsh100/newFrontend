@@ -1,5 +1,4 @@
 
-import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import * as RemindersLibrary from '../../../../server/lib/reminders';
 import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
@@ -12,20 +11,22 @@ import {
   Reminder,
   Patient,
   Practitioner,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import { tzIso } from '../../../../server/util/time';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId, enterpriseId } from '../../../util/seedTestUsers';
 import { patientId } from '../../../util/seedTestPatients';
 import { seedTestAppointments, appointmentId } from '../../../util/seedTestAppointments';
-import { seedTestReminders, reminderId1, reminderId2 } from '../../../util/seedTestReminders';
+import { seedTestReminders, reminderId1 } from '../../../util/seedTestReminders';
+import * as ContactInfo from '../../../../server/lib/contactInfo/getPatientFromCellPhoneNumber';
 
 // Necessary for mocking
-const sendRemindersForAccountTmp = RemindersLibrary.sendRemindersForAccount;
-const sendReminderEmailTmp = sendReminder.email;
-const sendReminderSmsTmp = sendReminder.sms;
-const sendReminderPhoneTmp = sendReminder.phone;
-const getAppointmentsFromReminderTmp = RemindersHelpers.getAppointmentsFromReminder;
+let sendRemindersForAccountTmp = RemindersLibrary.sendRemindersForAccount;
+let sendReminderEmailTmp = sendReminder.email;
+let sendReminderSmsTmp = sendReminder.sms;
+let sendReminderPhoneTmp = sendReminder.phone;
+let getAppointmentsFromReminderTmp = RemindersHelpers.getAppointmentsFromReminder;
+let fetchPatientsFromKeyValueTmp = ContactInfo.fetchPatientsFromKeyValue;
 
 const mockPub = {
   publish: () => {},
@@ -100,6 +101,7 @@ describe('Reminders Job Integration Tests', () => {
       sendReminder.email = jest.fn(() => console.log('Mock sendReminder.email called'));
       sendReminder.sms = jest.fn(() => console.log('Mock sendReminder.sms called'));
       sendReminder.phone = jest.fn(() => console.log('Mock sendReminder.phone called'));
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => []);
 
       account = await Account.findById(accountId);
       // TODO: also need to add recalls onto the account?
@@ -110,6 +112,7 @@ describe('Reminders Job Integration Tests', () => {
       sendReminder.email = sendReminderEmailTmp;
       sendReminder.sms = sendReminderSmsTmp;
       sendReminder.phone = sendReminderPhoneTmp;
+      ContactInfo.fetchPatientsFromKeyValue = fetchPatientsFromKeyValueTmp;
     });
 
     /**
@@ -135,6 +138,28 @@ describe('Reminders Job Integration Tests', () => {
      * With 1 reminder, and 1 patient, it should call sendReminder.sms
      */
     test('should call sendReminder.sms for the 1 patient', async () => {
+      const createPatient = () => ({
+        id: patientId,
+        mobilePhoneNumber: '+16042433796',
+        pmsCreatedAt: new Date (2016, 1, 1),
+        preferences: { sms: true },
+        familyId: 'Jones',
+        family: {
+          id: 'Jones',
+          pmsCreatedAt: new Date (2016, 1, 1),
+          headId: patientId,
+        },
+      });
+
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => {
+        return [{
+          ...createPatient(),
+          get() {
+            return createPatient();
+          }
+        }];
+      });
+
       // Make sure it returns a patient
       RemindersHelpers.getAppointmentsFromReminder = jest.fn(() => [
         {
@@ -153,15 +178,9 @@ describe('Reminders Job Integration Tests', () => {
           },
 
           patient: {
-            id: patientId,
-            mobilePhoneNumber: '+16042433796',
-            preferences: { sms: true },
+            ...createPatient(),
             get() {
-              return {
-                id: patientId,
-                mobilePhoneNumber: '+16042433796',
-                preferences: { sms: true },
-              };
+              return createPatient();
             },
           },
 

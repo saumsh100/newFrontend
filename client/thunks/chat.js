@@ -291,6 +291,7 @@ export function createNewChat(entityData) {
       key: 'chats',
       entityData,
       url: '/api/chats',
+      alert: { error: { body: 'Failed to create a conversation with this patient.' } },
     }));
 }
 
@@ -300,6 +301,7 @@ export function sendChatMessage(entityData) {
       key: 'chats',
       entityData,
       url: '/api/chats/textMessages',
+      alert: { error: { body: 'Failed to send patient the text message.' } },
     }));
 }
 

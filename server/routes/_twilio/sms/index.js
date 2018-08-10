@@ -2,13 +2,14 @@
 import { Router } from 'express';
 import {
   Account,
+  Appointment,
   Chat,
   Patient,
-  TextMessage,
   SentReminder,
-  Appointment,
+  TextMessage,
   User,
-} from '../../../_models';
+} from 'CareCruModels';
+import { getPatientFromCellPhoneNumber } from '../../../lib/contactInfo/getPatientFromCellPhoneNumber';
 import { getValidSmsReminders } from '../../../lib/reminders/helpers';
 import { createConfirmationText } from '../../../lib/reminders/sendReminder';
 import { sequelizeLoader } from '../../util/loaders';
@@ -99,31 +100,22 @@ smsRouter.post('/accounts/:accountId', async (req, res, next) => {
     const textMessageData = sanitizeTwilioSmsData(req.body);
 
     // Grab account from incoming number so that we can get accountId
-    const patient = await Patient.findOne({
-      where: {
-        accountId: account.id,
-        mobilePhoneNumber: From,
-      },
-    });
+    const patient = await getPatientFromCellPhoneNumber({ accountId: account.id, cellPhoneNumber: From });
 
-    let chat = await Chat.findOne({
-      where: {
-        accountId: account.id,
-        patientPhoneNumber: From,
-        patientId: {
-          $ne: null,
+    let chat = null;
+    if (patient) {
+      chat = await Chat.findOne({
+        where: {
+          accountId: account.id,
+          patientId: patient.id,
         },
-      },
-    });
-
-    if (!chat || !patient) {
+      });
+    } else {
       chat = await Chat.findOne({
         where: {
           accountId: account.id,
           patientPhoneNumber: From,
-          patientId: {
-            $eq: null,
-          },
+          patientId: { $eq: null },
         },
       });
     }

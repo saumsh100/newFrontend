@@ -34,8 +34,8 @@ export default function NewPatientForm({ onSubmit, formName }) {
       form={formName}
       onSubmit={onSubmit}
       ignoreSaveButton
-      asyncValidate={asyncValidateNewPatient}
-      asyncBlurFields={['email', 'mobilePhoneNumber']}
+      // asyncValidate={asyncValidateNewPatient}
+      // asyncBlurFields={['email', 'mobilePhoneNumber']}
       data-test-id={formName}
     >
       <Field

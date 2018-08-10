@@ -7,6 +7,8 @@ const moment = require('moment');
 // accountId2
 const accountId = '72954241-3652-4792-bae5-5bfed53d37b7';
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
+const patientId1 = '63854241-3652-4792-bae5-5bfed53d37b7';
+const patientId2 = '54454241-3652-4792-bae5-5bfed53d37b7';
 
 module.exports = {
   up: async function (queryInterface) {
@@ -31,7 +33,7 @@ module.exports = {
     };
 
     const patient1 = {
-      id: uuid(),
+      id: patientId1,
       accountId,
       firstName: 'Justin',
       lastName: 'Timberlake',
@@ -42,7 +44,7 @@ module.exports = {
     };
 
     const patient2 = {
-      id: uuid(),
+      id: patientId2,
       accountId,
       firstName: 'Stacy',
       lastName: 'Lee',
@@ -76,7 +78,7 @@ module.exports = {
     };
 
     await queryInterface.bulkInsert('Practitioners', [practitioner1, practitioner2]);
-    await queryInterface.bulkInsert('Patients', [patient1]);
+    await queryInterface.bulkInsert('Patients', [patient1, patient2]);
     await queryInterface.bulkInsert('Appointments', [appointment1, appointment2]);
   },
 

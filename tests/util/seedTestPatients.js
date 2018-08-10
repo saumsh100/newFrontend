@@ -16,7 +16,7 @@ const patient = {
   firstName: 'Ronald',
   lastName: 'Mcdonald',
   pmsId: '12',
-  mobilePhoneNumber: '7789999999',
+  mobilePhoneNumber: '+17789999999',
   createdAt: '2017-07-19T00:14:30.932Z',
   address: null,
   birthDate: '1980-01-01T00:00:00.932Z',

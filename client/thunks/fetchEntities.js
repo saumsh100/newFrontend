@@ -8,13 +8,13 @@ import {
   updateEntity,
 } from '../actions/entities';
 
-import {
-  showAlertTimeout,
-} from './alerts';
+import { showAlertTimeout } from './alerts';
 
 import { createRequest, receiveRequest, errorRequest } from '../reducers/apiRequests';
 
-export function fetchEntities({ key, join, params = {}, url }) {
+export function fetchEntities({
+  key, join, params = {}, url,
+}) {
   return (dispatch, getState) => {
     // adding this so pass by reference params won't go for mulitple requests
     params = Object.assign({}, params);
@@ -25,7 +25,8 @@ export function fetchEntities({ key, join, params = {}, url }) {
       params.join = join.join(',');
     }
     url = url || entity.getUrlRoot();
-    return axios.get(url, { params })
+    return axios
+      .get(url, { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
@@ -38,7 +39,9 @@ export function fetchEntities({ key, join, params = {}, url }) {
   };
 }
 
-export function fetchEntitiesRequest({ id, key, base, join, params = {}, url, returnData }) {
+export function fetchEntitiesRequest({
+  id, key, base, join, params = {}, url, returnData,
+}) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -52,7 +55,8 @@ export function fetchEntitiesRequest({ id, key, base, join, params = {}, url, re
     // Create record for request
     dispatch(createRequest({ id }));
 
-    return axios.get(url, { params })
+    return axios
+      .get(url, { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveRequest({ id, data }));
@@ -67,7 +71,9 @@ export function fetchEntitiesRequest({ id, key, base, join, params = {}, url, re
   };
 }
 
-export function deleteEntityRequest({ key, id, url, values, alert }) {
+export function deleteEntityRequest({
+  key, id, url, values, alert,
+}) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -76,7 +82,8 @@ export function deleteEntityRequest({ key, id, url, values, alert }) {
     const keyStr = key.substring(0, key.length - 1);
     const errorText = alert ? alert.error : { body: `Delete ${keyStr} failed` };
 
-    axios.delete(url, { params: values })
+    axios
+      .delete(url, { params: values })
       .then(() => {
         dispatch(deleteEntity({ key, id }));
         if (alert && alert.success) {
@@ -91,14 +98,17 @@ export function deleteEntityRequest({ key, id, url, values, alert }) {
   };
 }
 
-export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
+export function deleteEntityCascade({
+  key, id, url, cascadeKey, ids,
+}) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
 
     url = url || `${entity.getUrlRoot()}/${id}`;
 
-    axios.delete(url)
+    axios
+      .delete(url)
       .then(() => {
         if (cascadeKey) {
           ids.forEach((singleId) => {
@@ -111,8 +121,9 @@ export function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
   };
 }
 
-
-export function createEntityRequest({ key, entityData, url, params = {}, alert }) {
+export function createEntityRequest({
+  key, entityData, url, params = {}, alert,
+}) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const entity = entities.get(key);
@@ -120,7 +131,8 @@ export function createEntityRequest({ key, entityData, url, params = {}, alert }
 
     const errorText = alert ? alert.error : { body: `${key} creation failed` };
 
-    return axios.post(url, entityData, { params })
+    return axios
+      .post(url, entityData, { params })
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities }));
@@ -137,13 +149,17 @@ export function createEntityRequest({ key, entityData, url, params = {}, alert }
   };
 }
 
-export function updateEntityRequest({ key, model, values, url, alert, merge }) {
+export function updateEntityRequest({
+  key, model, values, url, alert, merge,
+}) {
   url = url || model.getUrlRoot();
   values = values || model.toJSON();
 
   const errorText = alert ? alert.error : { body: `Update ${key} failed` };
 
-  return dispatch => axios.put(url, values)
+  return dispatch =>
+    axios
+      .put(url, values)
       .then((response) => {
         const { data } = response;
         dispatch(receiveEntities({ key, entities: data.entities, merge }));

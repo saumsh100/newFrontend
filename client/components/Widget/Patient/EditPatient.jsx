@@ -94,14 +94,12 @@ class EditPatient extends Component {
       ) {
         return;
       }
-      return axios
-        .post('/patientUsers/phoneNumber', { phoneNumber })
-        .then((response) => {
-          const { error } = response.data;
-          if (error) {
-            throw { phoneNumber: error };
-          }
-        });
+      return axios.post('/patientUsers/phoneNumber', { phoneNumber }).then((response) => {
+        const { error } = response.data;
+        if (error) {
+          throw { phoneNumber: error };
+        }
+      });
     };
 
     const { birthDate } = this.props.patientUser;
@@ -218,7 +216,4 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EditPatient));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPatient));

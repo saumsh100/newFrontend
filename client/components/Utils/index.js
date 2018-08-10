@@ -6,7 +6,6 @@ import isArray from 'lodash/isArray';
 import pick from 'lodash/pick';
 import isFunction from 'lodash/isFunction';
 
-
 /**
  * Conver camelCase names to dashed-names
  * @param {string} name

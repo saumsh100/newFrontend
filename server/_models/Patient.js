@@ -36,7 +36,7 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    // Used to connect authenticated patientUser to his patient record
+    // Used to connect authenticated patientUser to their patient record
     // in the PMS
     patientUserId: {
       type: DataTypes.UUID,
@@ -70,16 +70,10 @@ export default function (sequelize, DataTypes) {
     otherPhoneNumber: customDataTypes.phoneNumber('otherPhoneNumber', DataTypes),
 
     prefContactPhone: {
-      // TODO: this should be an enum
       type: DataTypes.STRING,
     },
 
-    /* notes: {
-      type: DataTypes.STRING,
-    },*/
-
     gender: {
-      // TODO: needs to be an enum
       type: DataTypes.STRING,
     },
 
@@ -88,18 +82,14 @@ export default function (sequelize, DataTypes) {
     },
 
     language: {
-      // TODO: needs to be an enum
       type: DataTypes.STRING,
     },
 
-    // TODO: needs to be a separate table
     address: {
-      // TODO: for now just use nested JSON
       type: DataTypes.JSONB,
       defaultValue: {},
     },
 
-    // TODO: needs to be a separate table
     preferences: {
       type: DataTypes.JSONB,
       defaultValue: {
@@ -120,7 +110,6 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    // TODO: what is this for?
     type: {
       type: DataTypes.STRING,
     },
@@ -146,7 +135,6 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.DATE,
     },
 
-    // TODO: should be a seperate table
     insurance: {
       type: DataTypes.JSONB,
     },
@@ -268,18 +256,6 @@ export default function (sequelize, DataTypes) {
       defaultValue: [],
       allowNull: false,
     },
-  }, {
-    // Model Config
-    indexes: [
-      {
-        unique: true,
-        fields: ['accountId', 'email'],
-      },
-      {
-        unique: true,
-        fields: ['accountId', 'mobilePhoneNumber'],
-      },
-    ],
   });
 
   Patient.associate = (models) => {
@@ -536,10 +512,6 @@ export default function (sequelize, DataTypes) {
     }
 
     return response;
-  };
-
-  Patient.allPatients = async function (db, segment) {
-
   };
 
   Patient.STATUS = STATUS;

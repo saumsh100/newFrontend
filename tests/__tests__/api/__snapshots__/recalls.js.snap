@@ -40,6 +40,7 @@ Object {
 exports[`/api/accounts/:account/recalls Recalls GET /:accountId/recalls/outbox Outbox for Recalls - Should return Patient Old 1`] = `
 Array [
   Object {
+    "dependants": Array [],
     "patient": Object {
       "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
       "address": Object {},
@@ -49,6 +50,7 @@ Array [
       "contactMethodNote": null,
       "dueForRecallExamDate": null,
       "email": "hello@hello.com",
+      "family": null,
       "familyId": null,
       "firstApptDate": null,
       "firstApptId": null,

@@ -54,7 +54,4 @@ RemoteSubmitButton.defaultProps = {
   removePristineCheck: false,
 };
 
-export default connect(
-  mapStateToProps,
-  mapActionsToProps,
-)(RemoteSubmitButton);
+export default connect(mapStateToProps, mapActionsToProps)(RemoteSubmitButton);

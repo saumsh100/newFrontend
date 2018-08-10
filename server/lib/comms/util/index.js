@@ -1,7 +1,7 @@
 
-import groupBy from 'lodash/groupBy';
-import map from 'lodash/map';
-import toArray from 'lodash/toArray';
+const groupBy = require('lodash/groupBy');
+const map = require('lodash/map');
+const toArray = require('lodash/toArray');
 
 const ATTRS = {
   email: 'email',
@@ -34,7 +34,7 @@ const NO_PREFERENCE_ERROR_CODES = {
  * @param primaryType
  * @returns {{errors: Array, success: Array}}
  */
-export function cannotSend(patient, primaryType) {
+function cannotSend(patient, primaryType) {
   // If it is undefined return the error code
   if (!patient[ATTRS[primaryType]]) {
     return ERROR_CODES[primaryType];
@@ -48,7 +48,7 @@ export function cannotSend(patient, primaryType) {
  * @param primaryType
  * @returns {{errors: Array, success: Array}}
  */
-export function noPreference(patient, primaryType) {
+function noPreference(patient, primaryType) {
   const preferences = patient.preferences || {};
 
   // If it is false return errorCode
@@ -67,7 +67,7 @@ export function noPreference(patient, primaryType) {
  * @param primaryTypes (ie.// ['email', 'sms'])
  * @returns {{errors: Array, success: Array}}
  */
-export function generateOrganizedPatients(patients, primaryTypes) {
+function generateOrganizedPatients(patients, primaryTypes) {
   const errors = [];
   const success = [];
 
@@ -102,7 +102,15 @@ export function generateOrganizedPatients(patients, primaryTypes) {
  * @param mergePredicate
  * @returns [organizedArray] (ie.// [{ patient, appointment, primaryTypes: ['sms', 'email'] }])
  */
-export function organizeForOutbox(array, selectorPredicate, mergePredicate) {
+function organizeForOutbox(array, selectorPredicate, mergePredicate) {
   const groupedMap = groupBy(array, selectorPredicate);
   return toArray(map(groupedMap, mergePredicate));
 }
+
+module.exports = {
+  channelAttributesMap: ATTRS,
+  cannotSend,
+  noPreference,
+  generateOrganizedPatients,
+  organizeForOutbox,
+};

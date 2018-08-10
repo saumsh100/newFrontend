@@ -58,21 +58,12 @@ const EditableList = ({
   };
 
   const renderItem = item => (
-    <EditableListItem
-      key={item.id}
-      item={item}
-      onEdit={onEdit}
-      onDelete={confirmAndDelete}
-    >
+    <EditableListItem key={item.id} item={item} onEdit={onEdit} onDelete={confirmAndDelete}>
       {render(item)}
     </EditableListItem>
   );
 
-  return items && items.length ? (
-    <List>{items.map(renderItem)}</List>
-  ) : (
-    <div>No items.</div>
-  );
+  return items && items.length ? <List>{items.map(renderItem)}</List> : <div>No items.</div>;
 };
 
 EditableList.propTypes = {

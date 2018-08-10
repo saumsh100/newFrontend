@@ -7,11 +7,11 @@ import {
   Account,
   Appointment,
   Patient,
-  SentReminder,
+  Family,
   Reminder,
+  SentReminder,
   WeeklySchedule,
-  Sequelize,
-} from '../../_models';
+} from 'CareCruModels';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
 import {
@@ -20,9 +20,8 @@ import {
   sortIntervalAscPredicate,
 } from '../../util/time';
 import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNextClosedDays';
+import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 
-// TODO: add to globals file for these values
-// Should always be equal to the cron interval
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
 
@@ -46,7 +45,13 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
     const lastReminder = reminders[i - 1];
 
     // Get appointments that this reminder deals with
-    const appointments = await exports.getAppointmentsFromReminder({ reminder, account, startDate, endDate, lastReminder });
+    const appointments = await exports.getAppointmentsFromReminder({
+      reminder,
+      account,
+      startDate,
+      endDate,
+      lastReminder,
+    });
 
     // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
     // This is why the order or reminders is so important
@@ -54,14 +59,22 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
 
     // Now add it to the seen map
     unseenAppts.forEach(a => seen[a.id] = true);
-
     const patients = unseenAppts.map((appt) => {
       const patient = appt.patient.get({ plain: true });
       patient.appointment = appt.get({ plain: true });
       return patient;
     });
 
-    remindersPatients.push(generateOrganizedPatients(patients, reminder.primaryTypes));
+    const channels = reminder.primaryTypes;
+
+    // Weed out the preferences and missing contact info patients
+    const firstSuccessAndErrors = generateOrganizedPatients(patients, channels);
+    let { success, errors } = await reduceSuccessAndErrors({ account, channels, ...firstSuccessAndErrors });
+
+    // To be removed when family reminders is implemented
+    // This removes reminders where the PoC is not having an appointment
+    success = success.filter(({ patient: { appointment } }) => appointment);
+    remindersPatients.push({ success, errors });
   }
 
   return remindersPatients;
@@ -166,24 +179,32 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
           },
         },
 
-        include: [{
-          model: Appointment,
-          as: 'appointments',
-          where: {
-            isDeleted: false,
-            isCancelled: false,
-            isShortCancelled: false,
-            isMissed: false,
-            isPending: false,
-            accountId: reminder.accountId,
-            // Do not include the upper-bound, or else you'll always get the same appointment as above
-            startDate: {
-              $gte: sameDayStart,
-              $lt: start,
-            },
+        include: [
+          {
+            model: Family,
+            as: 'family',
           },
-          required: false,
-        }],
+          {
+            model: Appointment,
+            as: 'appointments',
+            where: {
+              isDeleted: false,
+              isCancelled: false,
+              isShortCancelled: false,
+              isMissed: false,
+              isPending: false,
+              accountId: reminder.accountId,
+              // Do not include the upper-bound, or else you'll always get the same appointment as above
+              startDate: {
+                $gte: sameDayStart,
+                $lt: start,
+              },
+            },
+
+            required: false,
+          }
+        ],
+
         required: true,
       },
       {
