@@ -1,5 +1,9 @@
+
 import moment from 'moment-timezone';
 import { Appointment, DeliveredProcedure, WeeklySchedule, Account, sequelize } from '../../_models';
+
+const endOfCurrentDay = timezone => moment().tz(timezone).endOf('day').toISOString();
+const startOfCurrentDay = timezone => moment().tz(timezone).startOf('day').toISOString();
 
 /**
  * calcRevenueDays is an async function that will calculate the total revenue
@@ -182,6 +186,7 @@ export default async function calcRevenueDays(revParams) {
             $between: [
               moment()
                 .tz(timezone)
+                .startOf('day')
                 .toISOString(),
               moment()
                 .tz(timezone)
@@ -197,7 +202,6 @@ export default async function calcRevenueDays(revParams) {
       });
 
       sumEstimatedProcedureRevenue(delProc, 'entryDate', totalRevObj, 'totalRevenue', timezone);
-
       sumEstimatedProcedureRevenue(apps, 'startDate', totalRevObj, 'estimatedRevenue', timezone);
     }
 
@@ -298,7 +302,10 @@ async function getAllDatesWithAppointments(
     }
     i += 1;
   }
-
+  
+  if (endOfCurrentDay(timezone) in appointmentObj) {
+    appointmentObj[startOfCurrentDay(timezone)] = 0;
+  }
   return appointmentObj;
 }
 
@@ -330,7 +337,7 @@ function getBeforeAfterTodayDates(dateObj, timezone) {
       ) ||
       subDate.isSame(moment()
         .tz(timezone)
-        .endOf('day'));
+        .endOf('day')) || subDate.isSame(moment().tz(timezone).startOf('day'));
 
     const isAfter = subDate.isAfter(moment().tz(timezone));
 
@@ -366,12 +373,21 @@ function getBeforeAfterTodayDates(dateObj, timezone) {
  * @param {String} timezone timezone of the office
  */
 function sumEstimatedProcedureRevenue(entities, dateType, totalRevObj, entityField, timezone) {
+  const endOfToday = endOfCurrentDay(timezone);
+  const startOfToday = startOfCurrentDay(timezone);
+
   entities.forEach((entity) => {
     const date = moment
       .tz(entity[dateType], timezone)
       .endOf('day')
       .toISOString();
-    if (date in totalRevObj) {
+
+    // Seperating the summation for estimated revenue and billed revenue when the date matches today.
+    if (endOfToday === date && dateType === 'entryDate') {
+      totalRevObj[startOfToday] += entity[entityField];
+    } else if (endOfToday === date && dateType === 'startDate') {
+      totalRevObj[endOfToday] += entity[entityField];
+    } else if (date in totalRevObj && date !== endOfToday) {
       totalRevObj[date] += entity[entityField];
     }
   });

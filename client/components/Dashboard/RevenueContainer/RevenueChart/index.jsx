@@ -70,15 +70,21 @@ const generateChartOptions = () => {
       title: (tooltipItem) => {
         const month = tooltipItem[0].xLabel[0];
         const day = tooltipItem[0].xLabel[1];
-
         return `${month} ${day}`;
       },
-      label: tooltipItem => `$${tooltipItem.yLabel}`,
+      label: (tooltipItem) => {
+        const number = tooltipItem.yLabel;
+        return `$${number.toLocaleString('en')}`;
+      },
     },
   };
 
   const legend = {
     display: false,
+    labels: {
+      fontColor: colorMap.white,
+      fontFamily: 'Gotham-Book',
+    },
   };
 
   return {
@@ -88,41 +94,58 @@ const generateChartOptions = () => {
   };
 };
 
-const generateDataSet = (labels, data) => ({
+const defaultDataSet = {
+  fill: true,
+  lineTension: 0,
+  backgroundColor: '#242c36',
+  borderColor: colorMap.white,
+  borderCapStyle: 'butt',
+  borderDash: [],
+  borderDashOffset: 0.0,
+  borderJoinStyle: 'miter',
+  pointBorderColor: colorMap.white,
+  pointBackgroundColor: '#242c36',
+  pointBorderWidth: 1,
+  pointHoverRadius: 5,
+  pointHoverBackgroundColor: colorMap.green,
+  pointHoverBorderColor: colorMap.dark,
+  pointHoverBorderWidth: 2,
+  pointRadius: 5,
+  pointHitRadius: 10,
+};
+
+const generateDataSet = (labels, billedData, estimatedData) => ({
   labels,
   datasets: [
     {
-      fill: true,
-      lineTension: 0,
+      ...defaultDataSet,
+      label: 'Booked',
       backgroundColor: '#242c36',
-      borderColor: colorMap.white,
-      borderCapStyle: 'butt',
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: 'miter',
-      pointBorderColor: colorMap.white,
       pointBackgroundColor: '#242c36',
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: colorMap.green,
-      pointHoverBorderColor: colorMap.dark,
-      pointHoverBorderWidth: 2,
-      pointRadius: 5,
-      pointHitRadius: 10,
-      data,
+      data: billedData,
+    },
+    {
+      ...defaultDataSet,
+      label: 'Estimated',
+      backgroundColor: '#4f5966',
+      pointBackgroundColor: '#4f5966',
+      pointHoverBackgroundColor: colorMap.blue,
+      data: estimatedData,
     },
   ],
 });
 
 export default function RevenueChart(props) {
-  const { labels, data, isValid } = props;
+  const {
+    labels, billedData, estimatedData, isValid,
+  } = props;
 
   return (
     <div className={styles.chart}>
       {isValid ? (
         <Line
           options={generateChartOptions()}
-          data={generateDataSet(labels, data)}
+          data={generateDataSet(labels, billedData, estimatedData)}
         />
       ) : (
         <div className={styles.noRevenue}> No Revenue </div>
@@ -133,7 +156,8 @@ export default function RevenueChart(props) {
 
 RevenueChart.propTypes = {
   labels: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string)).isRequired,
-  data: PropTypes.arrayOf(PropTypes.number).isRequired,
+  billedData: PropTypes.arrayOf(PropTypes.number).isRequired,
+  estimatedData: PropTypes.arrayOf(PropTypes.number).isRequired,
   isValid: PropTypes.number,
 };
 

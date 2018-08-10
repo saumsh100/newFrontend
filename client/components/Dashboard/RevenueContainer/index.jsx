@@ -14,39 +14,109 @@ import sortAsc from '../../../../iso/helpers/sort/sortAsc';
 import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
-function generateLabels(data, timezone) {
-  const dateKeys = Object.keys(data);
-  return dateKeys
-    .filter(key => key !== 'average')
-    .sort(sortAsc)
-    .map(key => [dateFormatter(key, timezone, 'ddd'), dateFormatter(key, timezone, 'DD')]);
+const filterBooked = (startOfCurrentDay, endOfCurrentDay) => key =>
+  key !== 'average' && (key < endOfCurrentDay || key === startOfCurrentDay);
+
+const filterEstimated = endOfCurrentDay => key => key !== 'average' && key >= endOfCurrentDay;
+
+const filterStartOfDay = startOfCurrentDay => key => key !== 'average' && key !== startOfCurrentDay;
+
+function getFutureOrCurrentDayPosition(dataKeys, startOfCurrentDay, endOfCurrentDay) {
+  const filteredData = dataKeys.filter(filterEstimated(endOfCurrentDay)).sort(sortAsc);
+
+  return filteredData.length
+    ? dataKeys
+      .filter(filterStartOfDay(startOfCurrentDay))
+      .sort(sortAsc)
+      .indexOf(filteredData[0])
+    : -1;
 }
 
-function generateDataPoints(data) {
-  const dateKeys = Object.keys(data);
-  return dateKeys
-    .filter(key => key !== 'average')
+function generateDataPointsBeforeToday(data, dataKeys, startOfCurrentDay, endOfCurrentDay) {
+  return dataKeys
+    .filter(filterBooked(startOfCurrentDay, endOfCurrentDay))
     .sort(sortAsc)
     .map(key => Math.floor(data[key]));
 }
 
-function renderDisplay(revenueData) {
+function generateDataPointsAfterToday(data, dataKeys, endOfCurrentDay) {
+  return dataKeys
+    .filter(filterEstimated(endOfCurrentDay))
+    .sort(sortAsc)
+    .map(key => Math.floor(data[key]));
+}
+
+function generateLabels(dataKeys, timezone, startOfCurrentDay) {
+  return dataKeys
+    .filter(filterStartOfDay(startOfCurrentDay))
+    .sort(sortAsc)
+    .map(key => [dateFormatter(key, timezone, 'ddd'), dateFormatter(key, timezone, 'DD')]);
+}
+
+function renderDisplay(revenueData, account) {
   const revenue = revenueData.toJS();
   const isValid = revenue.average;
-  const data = generateDataPoints(revenue);
 
-  return <RevenueDisplay data={data} isValid={isValid} average={revenue.average} />;
+  const timezone = account.get('timezone');
+
+  const currentDay = moment().tz(timezone);
+  const startOfCurrentDay = currentDay.startOf('day').toISOString();
+  const endOfCurrentDay = currentDay.endOf('day').toISOString();
+
+  const dataKeys = Object.keys(revenue);
+  const sortedDates = dataKeys.filter(filterStartOfDay(startOfCurrentDay)).sort(sortAsc);
+
+  const billedData = generateDataPointsBeforeToday(
+    revenue,
+    dataKeys,
+    startOfCurrentDay,
+    endOfCurrentDay,
+  );
+  const estimatedData = generateDataPointsAfterToday(revenue, dataKeys, endOfCurrentDay);
+
+  return (
+    <RevenueDisplay
+      dates={sortedDates}
+      billedData={billedData}
+      isValid={isValid}
+      estimatedData={estimatedData}
+      average={revenue.average}
+      timezone={timezone}
+    />
+  );
 }
 
 function renderChart(revenueData, account) {
   const revenue = revenueData.toJS();
-
+  const timezone = account.get('timezone');
   const isValid = revenue.average;
 
-  const labels = isValid ? generateLabels(revenue, account.get('timezone')) : [];
-  const data = isValid ? generateDataPoints(revenue) : [];
+  const currentDay = moment().tz(timezone);
+  const endOfCurrentDay = currentDay.endOf('day').toISOString();
+  const startOfCurrentDay = currentDay.startOf('day').toISOString();
 
-  return <RevenueChart labels={labels} data={data} isValid={isValid} />;
+  const dataKeys = Object.keys(revenue);
+
+  const labels = isValid ? generateLabels(dataKeys, timezone, startOfCurrentDay) : [];
+  const billedData = isValid
+    ? generateDataPointsBeforeToday(revenue, dataKeys, startOfCurrentDay, endOfCurrentDay)
+    : [];
+  const estimatedData = isValid
+    ? generateDataPointsAfterToday(revenue, dataKeys, endOfCurrentDay)
+    : [];
+
+  const dayPos = getFutureOrCurrentDayPosition(dataKeys, startOfCurrentDay, endOfCurrentDay);
+
+  const nullArray = Array(dayPos > -1 ? dayPos : 0).fill(null);
+
+  return (
+    <RevenueChart
+      labels={labels}
+      billedData={[...billedData, ...nullArray]}
+      estimatedData={[...nullArray, ...estimatedData]}
+      isValid={isValid}
+    />
+  );
 }
 
 class RevenueContainer extends Component {
@@ -98,7 +168,7 @@ class RevenueContainer extends Component {
         loaded={wasAllFetched}
         loaderStyle={styles.loader}
       >
-        {wasAllFetched && renderDisplay(revenueData.get('data'))}
+        {wasAllFetched && renderDisplay(revenueData.get('data'), account)}
         {wasAllFetched && renderChart(revenueData.get('data'), account)}
       </Card>
     );
@@ -122,6 +192,7 @@ function mapStateToProps({ apiRequests, entities, auth }) {
     apiRequests.get('revenueFetch') && apiRequests.get('revenueFetch').wasFetched;
 
   return {
+    timezone: auth.get('timezone'),
     revenueData,
     wasRevenueFetched,
     wasAccountFetched,
@@ -145,4 +216,7 @@ RevenueContainer.defaultProps = {
   account: new Map(),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(RevenueContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RevenueContainer);
