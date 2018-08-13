@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 export default {
   red: '#FF715A',
   blue: '#8FBBD6',
@@ -27,3 +27,9 @@ export const hexToRgbA = (hex, opacity) => {
   }
   throw new Error('Bad Hex');
 };
+
+export const darkerColor = (c, n) =>
+  c.map(d => {
+    let b = Number(d);
+    return (b += n) < 0 ? 0 : b > 255 ? 255 : b | 0;
+  });

@@ -1,13 +1,14 @@
-
+/* eslint-disable */
 import CareCruAPI from './carecru';
 import UI from './ui';
+import { darkerColor, hexToRgbA } from '../components/library/util/colorMap';
 
 /* IMPORTANT: DO NOT TOUCH THESE, VERY SENSITIVE SEARCH AND REPLACE */
 /* DO NOT USE THESE STRINGS ANYWHERE ELSE OR ELSE SEARCH AND REPLACE WILL NOT WORK */
-const __CARECRU_ACCOUNT_ID__ = "__CARECRU_ACCOUNT_ID__";
-const __CARECRU_WIDGET_PRIMARY_COLOR__ = "__CARECRU_WIDGET_PRIMARY_COLOR__";
-const __CARECRU_STYLE_CSS__ = "__CARECRU_STYLE_CSS__";
-const __CARECRU_IFRAME_SRC__ = "__CARECRU_IFRAME_SRC__";
+const __CARECRU_ACCOUNT_ID__ = '__CARECRU_ACCOUNT_ID__';
+const __CARECRU_WIDGET_PRIMARY_COLOR__ = '__CARECRU_WIDGET_PRIMARY_COLOR__';
+const __CARECRU_STYLE_CSS__ = '__CARECRU_STYLE_CSS__';
+const __CARECRU_IFRAME_SRC__ = '__CARECRU_IFRAME_SRC__';
 
 function getQueryVariable(variable) {
   const query = window.location.search.substring(1);
@@ -22,7 +23,7 @@ function getQueryVariable(variable) {
 
 function isValidStarsVariable(stars) {
   const num = parseInt(stars);
-  return 1 <= num && num >= 5;
+  return num >= 1 && num >= 5;
 }
 
 /**
@@ -39,9 +40,13 @@ function isValidStarsVariable(stars) {
  */
 function main() {
   // Registering settings and defaults
-  window.CareCruSettings = Object.assign({}, {
-    showBookingButton: true,
-  }, window.CareCruSettings);
+  window.CareCruSettings = Object.assign(
+    {},
+    {
+      showBookingButton: true,
+    },
+    window.CareCruSettings,
+  );
 
   window.CareCruz = window.CareCruz || {};
 
@@ -59,13 +64,25 @@ function main() {
   window.CareCruz[__CARECRU_ACCOUNT_ID__] = window.CareCru;
 
   // Set global color
-  document.documentElement.style.setProperty('--bookingWidgetPrimaryColor', __CARECRU_WIDGET_PRIMARY_COLOR__);
+  document.documentElement.style.setProperty(
+    '--bookingWidgetPrimaryColor',
+    __CARECRU_WIDGET_PRIMARY_COLOR__,
+  );
+  document.documentElement.style.setProperty(
+    '--bookingWidgetPrimaryColorDarker',
+    `rgb(${darkerColor(
+      hexToRgbA(__CARECRU_WIDGET_PRIMARY_COLOR__, 1)
+        .slice(5, -4)
+        .split(','),
+      -10,
+    )})`,
+  );
 
   // This should always be off for multiple widgets
   // but I would rather change SPA to allow toggling of accountId first
   if (window.CareCruSettings.showBookingButton) {
     const button = UI.bookingButton();
-    button.onclick = (e) => {
+    button.onclick = e => {
       e.preventDefault();
       CareCru.open();
     };
