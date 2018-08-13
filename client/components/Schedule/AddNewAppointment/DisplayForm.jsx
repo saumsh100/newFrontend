@@ -2,6 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { Map } from 'immutable';
+import sortAsc from '../../../../iso/helpers/sort/sortAsc';
+import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import { Form, Field } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import DisplaySearchedPatient from './DisplaySearchedPatient';
@@ -12,26 +14,12 @@ import styles from './styles.scss';
 const generateEntityOptions = (entities, label) =>
   entities
     .sort(SortByName)
-    .reduce(
-      (prev, curr) => [...prev, { label: curr[label], value: curr.id }],
-      [],
-    );
-
-const buildPractitionerTitle = practitioner =>
-  (practitioner.type === 'Dentist'
-    ? `Dr. ${practitioner.lastName}`
-    : `${practitioner.firstName} ${practitioner.lastName || ''}`);
+    .reduce((prev, curr) => [...prev, { label: curr[label], value: curr.id }], []);
 
 const generatePractitionerOptions = practitioners =>
   practitioners
     .sort(SortByFirstName)
-    .reduce(
-      (prev, curr) => [
-        ...prev,
-        { label: buildPractitionerTitle(curr), value: curr.id },
-      ],
-      [],
-    );
+    .reduce((prev, curr) => [...prev, { label: curr.getPrettyName(), value: curr.id }], []);
 
 /**
  * Generate an array containing valid time-slots,
@@ -84,18 +72,17 @@ const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
  * @param {*} value
  */
 const validatePatient = value =>
-  (value && typeof value === 'object' && value.id
-    ? undefined
-    : 'You must select a valid patient');
+  (value && typeof value === 'object' && value.id ? undefined : 'You must select a valid patient');
 
 /**
  * Sets the defaultStartTime using the next time after the currentHour + 1hour.
  */
 const defaultStartTime = () => {
   const now = moment().add(60, 'minutes');
-  const sortedTimes = generateTimeOptions().sort((a, b) => (a.value < b.value ? -1 : 1));
+  const sortedTimes = generateTimeOptions().sort((a, b) => sortAsc(a.value, b.value));
   const nextAvailable =
-    sortedTimes.find(opt => moment(opt.value).format('HH:mm') > now.format('HH:mm')) || sortedTimes[0];
+    sortedTimes.find(opt => dateFormatter(opt.value, '', 'HH:mm') > now.format('HH:mm')) ||
+    sortedTimes[0];
   return nextAvailable.value;
 };
 
@@ -239,9 +226,7 @@ class DisplayForm extends Component {
       </div>
     );
 
-    const searchStyles = !patientDisplay
-      ? styles.searchContainer
-      : styles.hidden;
+    const searchStyles = !patientDisplay ? styles.searchContainer : styles.hidden;
 
     return (
       <Form
@@ -304,10 +289,7 @@ DisplayForm.propTypes = {
   handleStartTimeChange: PropTypes.func,
   handleSubmit: PropTypes.func,
   handleUnitChange: PropTypes.func,
-  patientSearched: PropTypes.oneOfType([
-    PropTypes.objectOf(PropTypes.any),
-    PropTypes.string,
-  ]),
+  patientSearched: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string]),
   patients: PropTypes.instanceOf(Map),
   practitioners: PropTypes.instanceOf(Map),
   selectedAppointment: PropTypes.string,
