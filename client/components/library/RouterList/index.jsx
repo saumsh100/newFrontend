@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Map } from 'immutable';
 import jwt from 'jwt-decode';
 import Link from '../Link';

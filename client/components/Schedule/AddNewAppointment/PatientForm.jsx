@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import DisplaySearchedPatient from './DisplaySearchedPatient';
 import { Grid, Row, Col, Field } from '../../library';
 import styles from './styles.scss';

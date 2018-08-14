@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Popover from 'react-popover';
 import { ListItem } from '../library';
 import { checkIfUsersEqual } from '../Utils';

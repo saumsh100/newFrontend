@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
 import omit from 'lodash/omit';
 import debounce from 'lodash/debounce';

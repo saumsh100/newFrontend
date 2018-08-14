@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import styles from '../styles.scss';
 import { Checkbox, CheckboxImage } from '../../../../library';
 import { SortByFirstName } from '../../../../library/util/SortEntities';

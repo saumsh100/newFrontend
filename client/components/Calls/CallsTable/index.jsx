@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import moment from 'moment';
 import { Map, Record } from 'immutable';
 import { InfiniteScroll } from '../../library';

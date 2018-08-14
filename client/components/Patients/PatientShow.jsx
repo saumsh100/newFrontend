@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ChatContainer from '../../containers/ChatContainer';
 
 function PatientShow({ patient, patients }) {

@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import omit from 'lodash/omit';
 import Popover from 'react-popover';
 import { compose, withProps } from 'recompose';

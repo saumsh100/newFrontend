@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
 import styles from './styles.scss';
@@ -35,7 +36,7 @@ export default function BadgeHeader(props) {
 }
 
 BadgeHeader.propTypes = {
-  count: React.PropTypes.number,
+  count: PropTypes.number,
   className: PropTypes.string,
   title: PropTypes.string,
 };

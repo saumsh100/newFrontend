@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { withState, compose } from 'recompose';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from '../library';
 

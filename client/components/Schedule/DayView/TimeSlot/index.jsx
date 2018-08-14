@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import TimeSlotColumn from './TimeSlotColumn';
 import ShowAppointment from './ShowAppointment';
 import ShowMark from './ShowMark';

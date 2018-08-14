@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import PractServicesList from './PractServicesList';
 import { Form, Field, Toggle } from '../../../../library';
 import { change } from 'redux-form';

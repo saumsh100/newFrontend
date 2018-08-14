@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { withState } from 'recompose';
 import { Card, Checkbox, Search, Form, Button } from '../../library';
 import FilterForm from './FilterForm';

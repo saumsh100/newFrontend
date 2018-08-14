@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { compose, withHandlers } from 'recompose';
 import { withRouter } from 'react-router-dom';
 import Button from '../Button';

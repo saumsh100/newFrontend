@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { isResponsive } from '../../../../util/hub';
 import { Grid, Row, Col, Avatar, Badge } from '../../../library';
@@ -14,9 +14,7 @@ class FamilyMember extends React.Component {
     super(props);
     this.mouseLeave = this.mouseLeave.bind(this);
     this.mouseOver = this.mouseOver.bind(this);
-    this.state = {
-      isHovering: false,
-    };
+    this.state = { isHovering: false  };
   }
 
   mouseLeave() {
@@ -47,9 +45,7 @@ class FamilyMember extends React.Component {
     return (
       <button
         type="button"
-        className={classNames([styles.familyMember_config_button], {
-          [styles.familyMember_config_button_remove]: remove,
-        })}
+        className={classNames([styles.familyMember_config_button], { [styles.familyMember_config_button_remove]: remove  })}
         onClick={handler}
       >
         {text}
@@ -136,9 +132,7 @@ class FamilyMember extends React.Component {
   }
 
   renderFamilyConfig(props) {
-    const {
-      fullName, age, patient, isHead, avatarSize,
-    } = props;
+    const { fullName, age, patient, isHead, avatarSize  } = props;
 
     return (
       <Row middle="xs" start="xs">
@@ -149,9 +143,7 @@ class FamilyMember extends React.Component {
           <Row
             start="xs"
             middle="xs"
-            className={classNames([styles.familyMember_config_row], {
-              [styles.familyMember_config_row_head]: isHead,
-            })}
+            className={classNames([styles.familyMember_config_row], { [styles.familyMember_config_row_head]: isHead  })}
           >
             <Col>{this.renderNameAge(fullName, age)}</Col>
             <Col>{this.renderDisplayHead()}</Col>
@@ -172,7 +164,10 @@ class FamilyMember extends React.Component {
 
     const avatarSize = isResponsive() ? 'sm' : 'md';
 
-    const finalProps = { ...this.props, avatarSize };
+    const finalProps = {
+ ...this.props,
+      avatarSize 
+};
 
     return (
       <Grid

@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Card, Guage, PieChart, LineChart, BarChart } from '../library';
 
 export default function GuageTest() {

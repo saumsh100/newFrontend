@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import moment from 'moment';
 import { Map } from 'immutable';
 import sortAsc from '../../../../iso/helpers/sort/sortAsc';

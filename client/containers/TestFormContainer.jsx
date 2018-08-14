@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import TestForm from '../components/demo/TestForm';
 
 const uuid = require('uuid').v4;

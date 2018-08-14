@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 export default function withTimer(BasicComponent) {
   class TimerComponent extends Component {

@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { SubmissionError, change } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

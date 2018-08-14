@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Row, Col } from '../../../../library';
 import Arrow from '../Arrow';
 import classNames from 'classnames';

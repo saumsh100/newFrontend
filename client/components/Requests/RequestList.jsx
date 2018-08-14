@@ -1,8 +1,9 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
+import PropTypes from 'prop-types';
 import { stringify } from 'query-string';
 import { Map } from 'immutable';
 import RequestListItem from './RequestListItem';

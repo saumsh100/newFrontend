@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Checkbox from '../../Checkbox';
 
 class RFCheckbox extends Component {

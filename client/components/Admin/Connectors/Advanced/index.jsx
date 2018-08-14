@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import axios from 'axios';
 import findIndex from 'lodash/findIndex';
 import isEmpty from 'lodash/isEmpty';

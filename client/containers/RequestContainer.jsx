@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { createBrowserHistory } from 'history';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';

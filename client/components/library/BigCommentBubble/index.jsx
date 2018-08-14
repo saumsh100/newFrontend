@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import moment from 'moment';
 import { Icon } from '../index';
 import DoubleIcon from '../DoubleIcon';

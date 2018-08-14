@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Form, Field } from '../../../library';
 import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';

@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Card, Row, Col, Tabs, Tab, Icon } from '../../../../library';
 import classNames from 'classnames';
 import styles from './styles.scss';

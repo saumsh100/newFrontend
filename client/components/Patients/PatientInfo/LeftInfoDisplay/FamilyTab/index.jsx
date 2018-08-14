@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import Family from '../../../Shared/Family';
 import FamilyMember from '../../../Shared/FamilyMember';
 import { patientUserShape } from '../../../../library/PropTypeShapes';
@@ -15,9 +15,7 @@ const FamilyTab = ({ family }) => (
 FamilyTab.propTypes = {
   family: PropTypes.shape({
     id: PropTypes.string,
-    head: PropTypes.shape({
-      accountId: PropTypes.string,
-    }),
+    head: PropTypes.shape({ accountId: PropTypes.string  }),
     members: PropTypes.shape({
       edges: PropTypes.arrayOf(PropTypes.shape({
         fullName: PropTypes.string,
@@ -31,11 +29,7 @@ FamilyTab.propTypes = {
 };
 
 FamilyTab.defaultProps = {
-  family: {
-    members: {
-      edges: [],
-    },
-  },
+  family: {members: { edges: []  },},
 };
 
 export default FamilyTab;

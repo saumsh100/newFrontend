@@ -1,6 +1,7 @@
 
 import Dropzone from 'react-dropzone';
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import styles from './styles.scss';
 import Loading from 'react-loader';
 

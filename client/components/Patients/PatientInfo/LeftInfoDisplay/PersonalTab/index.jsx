@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import moment from 'moment';
 import { Grid, Row, Col, Icon } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';

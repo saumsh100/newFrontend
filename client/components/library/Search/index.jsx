@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
 import { Icon, Input, Modal, Calendar } from '../../library';

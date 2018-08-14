@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { isResponsive } from '../../../../util/hub';
 import styles from './styles.scss';
@@ -62,9 +62,7 @@ const Family = ({ family, render }) => {
 Family.propTypes = {
   family: PropTypes.shape({
     id: PropTypes.string,
-    head: PropTypes.shape({
-      accountId: PropTypes.string,
-    }),
+    head: PropTypes.shape({ accountId: PropTypes.string  }),
     members: PropTypes.shape({
       edges: PropTypes.arrayOf(PropTypes.shape({
         fullName: PropTypes.string,

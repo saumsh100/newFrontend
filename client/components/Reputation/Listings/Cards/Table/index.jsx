@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { List, ListItem, Card, Icon } from '../../../../library';
 import styles from './styles.scss';
 import ShowDetails from './ShowDetails';

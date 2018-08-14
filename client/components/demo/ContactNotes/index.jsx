@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import map from 'lodash/map';
 import { Toggle } from '../../library';
 import convertToCommsPreferences from '../../../../server/util/convertToCommsPreferences';

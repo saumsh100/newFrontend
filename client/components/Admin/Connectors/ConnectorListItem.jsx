@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { ListItem, Grid, Row, Col, Toggle, IconButton } from '../../library';
 import LastSyncDisplay from '../../LastSyncDisplay';
 import Advanced from './Advanced';

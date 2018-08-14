@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
 import { TOOLBAR_RIGHT, TOOLBAR_LEFT } from '../../../util/hub';

@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import TimeOffListItem from './TimeOffListItem';
 import { List } from '../../../../library';
 import { sortByFieldAsc } from '../../../../library/util/SortEntities';

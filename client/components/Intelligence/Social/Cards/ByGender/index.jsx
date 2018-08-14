@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Card, CardHeader, Icon, PieChart } from '../../../../library';
 import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';

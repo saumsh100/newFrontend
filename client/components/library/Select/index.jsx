@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
 
@@ -41,5 +42,5 @@ export default function Select(props) {
 }
 Select.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

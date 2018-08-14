@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import keys from 'lodash/keys';
 import values from 'lodash/values';
 import max from 'lodash/max';

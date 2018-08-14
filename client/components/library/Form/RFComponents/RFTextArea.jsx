@@ -1,5 +1,6 @@
 
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import omit from 'lodash/omit';
 import { inputShape, metaShape } from '../../PropTypeShapes/inputShape';
 import TextArea from '../../TextArea';

@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Form, Field, Grid, Row, Col } from '../../../../library';
 import styles from './styles.scss';
 import { emailValidate } from '../../../../library/Form/validate';

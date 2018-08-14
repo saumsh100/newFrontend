@@ -1,5 +1,6 @@
 
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { Card, InfiniteScroll } from '../../library';
 
 export default class PatientsList extends Component {

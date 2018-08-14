@@ -1,5 +1,6 @@
 
-import React, { PropTypes, Component, defaultProps } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component, defaultProps } from 'react';
 import classNames from 'classnames/bind';
 import withTheme from '../../../hocs/withTheme';
 import styles from './styles.scss';

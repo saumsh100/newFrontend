@@ -67,8 +67,8 @@ OmitForm.propTypes = {
     required: PropTypes.bool,
     validate: PropTypes.arrayOf(PropTypes.func),
     component: PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.element,
+      PropTypes.string,
+      PropTypes.element,
     ]),
     type: PropTypes.string,
   }),
