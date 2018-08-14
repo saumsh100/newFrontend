@@ -79,7 +79,7 @@ exports.trayMenuLoggedIn = managerInstance => [
     click: () => checkForUpdate(),
   },
   toolbarSizeMenu(managerInstance),
-  // toolbarPositionMenu(managerInstance),
+  toolbarPositionMenu(managerInstance),
   generateDisplaysList(managerInstance),
   separator,
   {

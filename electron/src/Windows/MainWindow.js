@@ -1,5 +1,7 @@
 
+const os = require('os');
 const url = require('url');
+const robot = require('robotjs');
 const config = require('../../config');
 const { userSessionStore: Store } = require('../store');
 const WindowMain = require('./Window');
@@ -19,6 +21,8 @@ class MainBrowserWindow extends WindowMain {
   constructor() {
     super();
     this.isCollapsed = true;
+    this.mousePositionCheckerTimeout = null;
+    this.mousePositionFocusChecks = 0;
   }
 
   /**
@@ -108,6 +112,58 @@ class MainBrowserWindow extends WindowMain {
   }
 
   /**
+   * Registers a timeout function that periodically checks if mouse is within the
+   * toolbar zone when application is blurred.
+   */
+  registerMousePositionChecker() {
+    this.mousePositionCheckerTimeout = setTimeout(() => {
+      const mousePosition = robot.getMousePos();
+      if (this.isCursorWithinToolbarZone(mousePosition)) {
+        this.mousePositionFocusChecks += 1;
+      }
+
+      // As timeout is 500 and we want to focus the app on 1500ms, we are waiting for 3 checks
+      return this.mousePositionFocusChecks === 3 ?
+        this.focusApp() : this.registerMousePositionChecker();
+    }, 500);
+  }
+
+  /**
+   * Cancels the blur checker timeout. (window is focused)
+   */
+  cancelMousePositionChecker() {
+    if (this.mousePositionCheckerTimeout) {
+      clearTimeout(this.mousePositionCheckerTimeout);
+    }
+  }
+
+  /**
+   * Check if cursor is within the toolbar zone.
+   * @param cursor {{x, y}} Current position of the cursor
+   * @return {boolean}
+   */
+  isCursorWithinToolbarZone(cursor) {
+    const bounds = this.window.getBounds();
+
+    return cursor.x >= bounds.x && cursor.x <= bounds.x + bounds.width
+      && cursor.y >= bounds.y && cursor.y <= bounds.y + bounds.height;
+  }
+
+  /**
+   * Focus the app and clear blur checks.
+   */
+  focusApp() {
+    this.mousePositionFocusChecks = 0;
+    if (os.platform() !== 'darwin') {
+      this.window.setAlwaysOnTop(true);
+    }
+    this.window.focus();
+    if (os.platform() !== 'darwin') {
+      this.window.setAlwaysOnTop(false);
+    }
+  }
+
+  /**
    * Get the X coordinate of window.
    * @returns {number}
    */
@@ -145,6 +201,28 @@ class MainBrowserWindow extends WindowMain {
       protocol: `${PROTOCOL}:`,
       slashes: true,
     });
+  }
+
+  /**
+   * Callback that runs on application blur.
+   * @param toolbarWindow {MainBrowserWindow}
+   * @returns {Function}
+   */
+  static onBlurCallback(toolbarWindow) {
+    return () => {
+      toolbarWindow.registerMousePositionChecker();
+    };
+  }
+
+  /**
+   * Callback that runs when application is focused.
+   * @param toolbarWindow {MainBrowserWindow}
+   * @returns {Function}
+   */
+  static onFocusCallback(toolbarWindow) {
+    return () => {
+      toolbarWindow.cancelMousePositionChecker();
+    };
   }
 }
 

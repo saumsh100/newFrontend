@@ -46,6 +46,9 @@ class WindowManager {
     this.userModalWindow.window.on('hide', () => {
       this.mainWindow.notifyUserManagementWindowClosed();
     });
+
+    this.mainWindow.window.on('blur', MainBrowserWindow.onBlurCallback(this.mainWindow));
+    this.mainWindow.window.on('focus', MainBrowserWindow.onFocusCallback(this.mainWindow));
   }
 
   /**
@@ -56,6 +59,8 @@ class WindowManager {
     this.mainWindow.setLoginWindowSize();
     this.mainWindow.setLoginWindowPosition();
     this.userModalWindow.close();
+    this.mainWindow.window.removeListener('blur', MainBrowserWindow.onBlurCallback(this.mainWindow));
+    this.mainWindow.window.removeListener('focus', MainBrowserWindow.onFocusCallback(this.mainWindow));
   }
 
   /**
