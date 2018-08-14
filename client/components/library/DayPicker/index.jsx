@@ -16,7 +16,7 @@ import styles from './styles.scss';
 const getUTCDate = (value) => {
   const {
     years, months, date, hours,
-  } = moment.utc(value).toObject();
+  } = moment(value).toObject();
   return new Date(years, months, date, hours);
 };
 

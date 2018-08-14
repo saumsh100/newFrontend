@@ -68,11 +68,9 @@ export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 
 function getStartTimeForToday(account) {
-  const timezone = account.timezone;
-  const zone = -1 * moment.tz(new Date(), timezone).zone();
-  return moment()
+  return moment
+    .tz(new Date(), account.timezone)
     .add(1, 'hours')
-    .zone(zone)
     .toISOString();
 }
 

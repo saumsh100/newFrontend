@@ -28,6 +28,7 @@ import {
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
+import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import { isResponsive } from '../../../../util/hub';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
@@ -326,7 +327,14 @@ class DateTime extends PureComponent {
                   },
                 }}
                 numberOfMonths={isResponsive() ? 1 : 2}
-                value={selectedStartDate}
+                // here i'm formatting the date like so we don't convert the date
+                // selectedStartDate needs to be iso string because of the API needs it
+                // but it can sometimes be a future date depending on the timezone you currently are
+                value={dateFormatter(
+                  selectedStartDate,
+                  accountTimezone,
+                  'YYYY-MM-DD[T]HH:mm:ss.SSSZZ',
+                )}
                 tipSize={0.01}
                 showPreviousMonth={false}
                 theme={dayPickerStyles}
