@@ -31,11 +31,7 @@ import {
   SET_SENTRECALLID,
   SET_DUE_DATE,
   SET_FAMILY_PATIENT_USER,
-  SET_IS_BOOKING,
   RESET_WAITLIST,
-  SET_WAITLIST_TIMES,
-  SET_WAITLIST_DATES,
-  SET_WAITLIST_UNAVAILABLE_DATES,
   SET_TIMEFRAME,
 } from '../constants';
 
@@ -62,9 +58,6 @@ export const setIsSuccessfulBooking = createAction(SET_IS_SUCCESSFUL_BOOKING);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 export const resetWaitlist = createAction(RESET_WAITLIST);
 export const setHasWaitList = createAction(SET_HAS_WAITLIST);
-export const setWaitlistTimes = createAction(SET_WAITLIST_TIMES);
-export const setWaitlistDates = createAction(SET_WAITLIST_DATES);
-export const setWaitlistUnavailableDates = createAction(SET_WAITLIST_UNAVAILABLE_DATES);
 export const updateWaitSpot = createAction(UPDATE_WAITSPOT);
 export const setNotes = createAction(SET_NOTES);
 export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);
@@ -72,7 +65,6 @@ export const setInsuranceMemberId = createAction(SET_INSURANCE_MEMBER_ID);
 export const setInsuranceCarrier = createAction(SET_INSURANCE_CARRIER);
 export const setSentRecallId = createAction(SET_SENTRECALLID);
 export const setDueDate = createAction(SET_DUE_DATE);
-export const setIsBooking = createAction(SET_IS_BOOKING);
 export const setTimeFrame = createAction(SET_TIMEFRAME);
 
 // This is on the auth reducer!

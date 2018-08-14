@@ -26,7 +26,7 @@ import {
 } from '../../../library/Form/validate';
 import { normalizePhone } from '../../../library/Form/normalize';
 import { SortByFirstName } from '../../../library/util/SortEntities';
-import { setFamilyPatientUser, setPatientUser } from '../../../../actions/availabilities';
+import { setFamilyPatientUser, setPatientUser } from '../../../../reducers/availabilities';
 import SuggestionSelect from '../../../library/DropdownSuggestion/SuggestionSelect';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
@@ -39,7 +39,6 @@ import {
 import { dropdownTheme, inputTheme } from '../../theme';
 import Button from '../../../library/Button';
 import styles from './styles.scss';
-
 /**
  * Gender's array
  */
@@ -228,6 +227,7 @@ class PatientInformation extends PureComponent {
      * @param {object} values
      */
     const asyncEmailValidation = values =>
+      patientUser &&
       (values.email === patientUser.email ? false : asyncEmailValidatePatient(values));
     /**
      * Check if the passed phoneNumber is not already used,
@@ -236,8 +236,9 @@ class PatientInformation extends PureComponent {
      * @param {object} values
      */
     const asyncPhoneNumberValidation = values =>
+      (patientUser &&
       (values.phoneNumber === patientUser.phoneNumber ||
-      values.phoneNumber === normalizePhone(patientUser.phoneNumber)
+        values.phoneNumber === normalizePhone(patientUser.phoneNumber))
         ? false
         : asyncPhoneNumberValidatePatient(values));
 

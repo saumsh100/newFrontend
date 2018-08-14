@@ -14,7 +14,7 @@ import {
   setSelectedAvailability,
   setSelectedStartDate,
   setTimeFrame,
-} from '../../../../actions/availabilities';
+} from '../../../../reducers/availabilities';
 import Button from '../../../library/Button';
 import DayPicker from '../../../library/DayPicker';
 import Join from '../Waitlist/Join';

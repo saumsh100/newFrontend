@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WidgetCard from '../../../library/WidgetCard';
-import { setSelectedServiceId } from '../../../../actions/availabilities';
+import { setSelectedServiceId } from '../../../../reducers/availabilities';
 import services from '../../../../entities/collections/services';
 import { locationShape, historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
@@ -93,8 +93,11 @@ export default connect(
 
 Reasons.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
-  selectedServiceId: PropTypes.string.isRequired,
+  selectedServiceId: PropTypes.string,
   servicesEntity: PropTypes.instanceOf(services).isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   setSelectedServiceId: PropTypes.func.isRequired,
+};
+Reasons.defaultProps = {
+  selectedServiceId: '',
 };

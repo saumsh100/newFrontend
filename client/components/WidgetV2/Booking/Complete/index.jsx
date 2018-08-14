@@ -12,7 +12,7 @@ import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
 import Service from '../../../../entities/models/Service';
-import { refreshAvailabilitiesState } from '../../../../actions/availabilities';
+import { refreshAvailabilitiesState } from '../../../../reducers/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { BookingConfirmedSVG } from '../../SVGs';
 import { handleAvailabilitiesTimes } from '../Review/helpers';

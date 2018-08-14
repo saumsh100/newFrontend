@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WidgetCard from '../../../library/WidgetCard';
 import practitioners from '../../../../entities/collections/practitioners';
-import { setSelectedPractitionerId } from '../../../../actions/availabilities';
+import { setSelectedPractitionerId } from '../../../../reducers/availabilities';
 import { locationShape, historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import services from '../../../../entities/collections/services';
 import styles from './styles.scss';
@@ -115,11 +115,12 @@ Practitioners.propTypes = {
   selectedPractitionerId: PropTypes.string,
   location: PropTypes.shape(locationShape).isRequired,
   setSelectedPractitionerId: PropTypes.func.isRequired,
-  selectedServiceId: PropTypes.string.isRequired,
+  selectedServiceId: PropTypes.string,
   servicesEntity: PropTypes.instanceOf(services).isRequired,
   history: PropTypes.shape(historyShape).isRequired,
 };
 
 Practitioners.defaultProps = {
   selectedPractitionerId: '',
+  selectedServiceId: '',
 };

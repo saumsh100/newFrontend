@@ -7,7 +7,6 @@ import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import BackButton from './BackButton';
 import Button from '../../library/Button';
-import { setIsBooking } from '../../../actions/availabilities';
 import { closeBookingModal } from '../../../thunks/availabilities';
 import { historyShape } from '../../library/PropTypeShapes/routerShapes';
 import { CloseBookingModalSVG } from '../SVGs';
@@ -22,14 +21,13 @@ class Header extends Component {
   goBack(path) {
     return () => {
       this.props.history.push(path);
-      this.props.setIsBooking(true);
     };
   }
 
   render() {
     const {
       history,
-      tabState: { isCompleteRoute, isFirstRoute },
+      routesState: { isCompleteRoute, isFirstRoute },
     } = this.props;
 
     return (
@@ -76,7 +74,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       closeBookingModal,
-      setIsBooking,
     },
     dispatch,
   );
@@ -85,8 +82,7 @@ function mapDispatchToProps(dispatch) {
 Header.propTypes = {
   closeBookingModal: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
-  setIsBooking: PropTypes.func.isRequired,
-  tabState: PropTypes.objectOf(PropTypes.bool).isRequired,
+  routesState: PropTypes.objectOf(PropTypes.bool).isRequired,
 };
 
 export default withRouter(connect(

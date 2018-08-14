@@ -8,8 +8,9 @@ import { bindActionCreators } from 'redux';
 import difference from 'lodash/difference';
 import { Button } from '../../../../library';
 import Service from '../../../../../entities/models/Service';
-import { setWaitlistTimes } from '../../../../../actions/availabilities';
+import { setWaitlistTimes } from '../../../../../reducers/availabilities';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { patientUserShape } from '../../../../library/PropTypeShapes';
 import officeHoursShape from '../../../../library/PropTypeShapes/officeHoursShape';
 import createAvailabilitiesFromOpening from '../../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import groupTimesPerPeriod from '../../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
@@ -20,7 +21,6 @@ import {
   setText,
 } from '../../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
-import { patientUserShape } from '../../../../library/PropTypeShapes';
 
 /**
  * Checks if there are a specific route to go onclicking a card or just the default one.

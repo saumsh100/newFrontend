@@ -10,7 +10,6 @@ import { Button } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
 import Service from '../../../../entities/models/Service';
-import { setIsBooking } from '../../../../actions/availabilities';
 import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
@@ -105,7 +104,6 @@ class Review extends PureComponent {
     const {
       dateAndTime,
       history,
-      isBooking,
       location,
       notes,
       officeHours,
@@ -114,7 +112,6 @@ class Review extends PureComponent {
       selectedService,
       timezone,
       waitlist,
-      ...props
     } = this.props;
 
     const b = path =>
@@ -139,17 +136,19 @@ class Review extends PureComponent {
      * Generates the availabilities using the office openings,
      * also group them inside the specific time-frame.
      */
-    const availabilities = createAvailabilitiesFromOpening({
-      startDate: earliestStartTime,
-      endDate: moment.tz(latestEndTime, timezone),
-      duration: selectedService.get('duration'),
-      interval: 60,
-    }).reduce(groupTimesPerPeriod, {
-      morning: [],
-      afternoon: [],
-      evening: [],
-      total: 0,
-    });
+    const availabilities =
+      selectedService &&
+      createAvailabilitiesFromOpening({
+        startDate: earliestStartTime,
+        endDate: moment.tz(latestEndTime, timezone),
+        duration: selectedService.get('duration'),
+        interval: 60,
+      }).reduce(groupTimesPerPeriod, {
+        morning: [],
+        afternoon: [],
+        evening: [],
+        total: 0,
+      });
 
     /**
      * Display a linear list of times that were selected from the user on the waitlist's steps.
@@ -211,9 +210,6 @@ class Review extends PureComponent {
                 <Button
                   className={styles.subCardLink}
                   onClick={() => {
-                    if (!isBooking) {
-                      props.setIsBooking(true);
-                    }
                     history.push(b('waitlist/select-dates'));
                   }}
                 >
@@ -227,9 +223,14 @@ class Review extends PureComponent {
             <p className={styles.subtitle}>
               Here are the informations that you already defined to your appointment.
             </p>
-            {selectedService.get('name') && (
-              <SummaryItem label="Reason" value={selectedService.get('name')} link={b('reason')} />
-            )}
+            {selectedService &&
+              selectedService.get('name') && (
+                <SummaryItem
+                  label="Reason"
+                  value={selectedService.get('name')}
+                  link={b('reason')}
+                />
+              )}
             <SummaryItem
               label="Practitioner"
               value={
@@ -305,11 +306,9 @@ function mapStateToProps({
       'models',
       availabilities.get('selectedPractitionerId'),
     ]),
-    selectedService: entities.getIn([
-      'services',
-      'models',
-      availabilities.get('selectedServiceId'),
-    ]),
+    selectedService:
+      availabilities.get('selectedServiceId') &&
+      entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]),
     timezone: availabilities.get('account').get('timezone'),
     user: auth.get('patientUser'),
     waitlist: availabilities.get('waitlist').toJS(),
@@ -322,7 +321,6 @@ function mapDispatchToProps(dispatch) {
     {
       createRequest,
       createWaitSpot,
-      setIsBooking,
       hideButton,
       setIsClicked,
       setText,
@@ -356,7 +354,6 @@ Review.propTypes = {
   patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),
   selectedPractitioner: PropTypes.oneOfType([PropTypes.instanceOf(Practitioner), PropTypes.string]),
   selectedService: PropTypes.oneOfType([PropTypes.instanceOf(Service), PropTypes.string]),
-  setIsBooking: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
   waitlist: PropTypes.shape({
     dates: PropTypes.arrayOf(PropTypes.string),

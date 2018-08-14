@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getRangeOfDays } from '../../../../../../server/util/time';
-import { setWaitlistDates } from '../../../../../actions/availabilities';
+import { setWaitlistDates } from '../../../../../reducers/availabilities';
 import { DayPickerRange, Input } from '../../../../library';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import {
@@ -18,7 +18,6 @@ import { isResponsive } from '../../../../../util/hub';
 import { inputTheme } from '../../../theme';
 import dayPickerStyles from '../../dayPickerStyles.scss';
 import styles from './styles.scss';
-
 /**
  * Next default route for this component
  */

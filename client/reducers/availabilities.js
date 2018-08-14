@@ -1,12 +1,10 @@
 
 import { fromJS, Map } from 'immutable';
 import moment from 'moment-timezone';
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 import {
   SIX_DAYS_SHIFT,
   SET_START_DATE,
-  SET_SELECTED_PRACTITIONER_ID,
-  SET_SELECTED_SERVICE_ID,
   CREATE_PATIENT,
   SET_REGISTRATION_STEP,
   SET_CLINIC_INFO,
@@ -18,27 +16,56 @@ import {
   SET_IS_TIMER_EXPIRED,
   SET_AVAILABILITIES,
   SET_CONFIRM_AVAILABILITY,
-  SET_PATIENT_USER,
   SET_IS_SUCCESSFUL_BOOKING,
-  REFRESH_AVAILABILITIES_STATE,
   SET_HAS_WAITLIST,
   UPDATE_WAITSPOT,
   SET_IS_LOGIN,
   SET_NEXT_AVAILABILITY,
   SET_FORGOT_PASSWORD,
-  SET_NOTES,
   SET_INSURANCE_MEMBER_ID,
-  SET_FAMILY_PATIENT_USER,
   SET_INSURANCE_CARRIER,
   SET_SENTRECALLID,
   SET_DUE_DATE,
-  SET_IS_BOOKING,
-  RESET_WAITLIST,
-  SET_WAITLIST_TIMES,
-  SET_WAITLIST_DATES,
-  SET_WAITLIST_UNAVAILABLE_DATES,
-  SET_TIMEFRAME,
 } from '../constants';
+
+/**
+ * In the future this will prefix @availabilities/
+ * @type {string}
+ */
+const reducerName = '';
+/**
+ * CONSTANTS
+ */
+export const SET_NOTES = `${reducerName}SET_NOTES`;
+export const RESET_WAITLIST = `${reducerName}RESET_WAITLIST`;
+export const SET_PATIENT_USER = `${reducerName}SET_PATIENT_USER`;
+export const SET_WAITLIST_DATES = `${reducerName}SET_WAITLIST_DATES`;
+export const SET_WAITLIST_TIMES = `${reducerName}SET_WAITLIST_TIMES`;
+export const SET_FAMILY_PATIENT_USER = `${reducerName}SET_FAMILY_PATIENT_USER`;
+export const SET_SELECTED_SERVICE_ID = `${reducerName}SET_SELECTED_SERVICE_ID`;
+export const REFRESH_FIRST_STEP_DATA = `${reducerName}REFRESH_FIRST_STEP_DATA`;
+export const REFRESH_SECOND_STEP_DATA = `${reducerName}REFRESH_SECOND_STEP_DATA`;
+export const SET_SELECTED_PRACTITIONER_ID = `${reducerName}SET_SELECTED_PRACTITIONER_ID`;
+export const REFRESH_AVAILABILITIES_STATE = `${reducerName}REFRESH_AVAILABILITIES_STATE`;
+export const SET_TIMEFRAME = `${reducerName}SET_TIMEFRAME`;
+/**
+ * ACTIONS
+ */
+export const setConfirmAvailability = createAction(SET_CONFIRM_AVAILABILITY);
+export const setTimeFrame = createAction(SET_TIMEFRAME);
+export const setSelectedAvailability = createAction(SET_SELECTED_AVAILABILITY);
+export const setSelectedStartDate = createAction(SET_START_DATE);
+export const setNotes = createAction(SET_NOTES);
+export const resetWaitlist = createAction(RESET_WAITLIST);
+export const setPatientUser = createAction(SET_PATIENT_USER);
+export const setWaitlistDates = createAction(SET_WAITLIST_DATES);
+export const setWaitlistTimes = createAction(SET_WAITLIST_TIMES);
+export const refreshFirstStepData = createAction(REFRESH_FIRST_STEP_DATA);
+export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);
+export const setSelectedServiceId = createAction(SET_SELECTED_SERVICE_ID);
+export const refreshSecondStepData = createAction(REFRESH_SECOND_STEP_DATA);
+export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_ID);
+export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 
 function getStartTimeForToday(account) {
   const timezone = account.timezone;
@@ -185,6 +212,22 @@ export default handleActions(
       return state.set('selectedAvailability', action.payload);
     },
 
+    [REFRESH_FIRST_STEP_DATA](state) {
+      return state.merge({
+        selectedAvailability: null,
+        selectedServiceId: null,
+        selectedPractitionerId: '',
+        selectedStartDate: '',
+        confirmedAvailability: false,
+      });
+    },
+    [REFRESH_SECOND_STEP_DATA](state) {
+      return state.merge({
+        familyPatientUser: null,
+        notes: null,
+      });
+    },
+
     [SET_AVAILABILITIES](state, action) {
       return state.set('availabilities', action.payload);
     },
@@ -195,9 +238,6 @@ export default handleActions(
 
     [SET_NEXT_AVAILABILITY](state, action) {
       return state.set('nextAvailability', action.payload);
-    },
-    [SET_IS_BOOKING](state, action) {
-      return state.set('isBooking', action.payload);
     },
 
     [SET_IS_FETCHING](state, action) {
@@ -251,9 +291,6 @@ export default handleActions(
     [SET_WAITLIST_DATES](state, action) {
       return state.setIn(['waitlist', 'dates'], action.payload);
     },
-    [SET_WAITLIST_UNAVAILABLE_DATES](state, action) {
-      return state.setIn(['waitlist', 'unavailableDates'], action.payload);
-    },
     [SET_PATIENT_USER](state, action) {
       return state.set('patientUser', action.payload);
     },
@@ -286,7 +323,11 @@ export default handleActions(
         retrievedFirstTime,
       } = action.payload;
       return state.merge({
-        [practitionerId]: { selectedEndDay, selectedStartDay, retrievedFirstTime },
+        [practitionerId]: {
+          selectedEndDay,
+          selectedStartDay,
+          retrievedFirstTime,
+        },
       });
     },
 

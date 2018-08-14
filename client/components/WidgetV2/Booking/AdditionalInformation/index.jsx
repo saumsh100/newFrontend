@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { submit } from 'redux-form';
 import { Field, Form } from '../../../library';
 import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
-import { setNotes } from '../../../../actions/availabilities';
+import { setNotes } from '../../../../reducers/availabilities';
 import {
   showButton,
   hideButton,

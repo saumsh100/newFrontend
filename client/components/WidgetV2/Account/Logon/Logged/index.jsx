@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { Button, Field, Form } from '../../../../library';
 import { logout } from '../../../../../thunks/patientAuth';
-import { refreshAvailabilitiesState } from '../../../../../actions/availabilities';
+import { refreshAvailabilitiesState } from '../../../../../reducers/availabilities';
 import patientUserShape from '../../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import {

@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Button } from '../../../../library';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
-import { resetWaitlist } from '../../../../../actions/availabilities';
+import { resetWaitlist } from '../../../../../reducers/availabilities';
 import { hideButton } from '../../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
 

@@ -5,28 +5,29 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { withRouter, matchPath } from 'react-router-dom';
-import { parse } from 'query-string';
 import { Element } from 'react-scroll';
 import classNames from 'classnames';
 import Header from './Header';
-import Logon from './Account/Logon';
 import FloatingButton from './FloatingButton';
 import Button from '../library/Button';
 import { setIsClicked } from '../../reducers/widgetNavigation';
 import { locationShape, historyShape } from '../library/PropTypeShapes/routerShapes';
-import Review from './Booking/Review';
 import { AccountTabSVG, FindTimeSVG, ReviewBookSVG } from './SVGs';
+import { refreshFirstStepData, refreshSecondStepData } from '../../reducers/availabilities';
 import styles from './styles.scss';
 
-const BOOKING_TAB = undefined;
-const ACCOUNT_TAB = 'account';
-const REVIEW_TAB = 'summary';
+const b = ({ pathname }, path) =>
+  pathname
+    .split('/')
+    .filter((v, index) => index < 5)
+    .concat(path)
+    .join('/');
 
 class Widget extends Component {
-  constructor(props) {
-    super(props);
-
-    this.renderChildren = this.renderChildren.bind(this);
+  constructor() {
+    super();
+    this.handleCleaningFirstStep = this.handleCleaningFirstStep.bind(this);
+    this.handleCleaningSecondStep = this.handleCleaningSecondStep.bind(this);
   }
 
   componentWillMount() {
@@ -43,110 +44,55 @@ class Widget extends Component {
     }
   }
 
-  renderTabs({
-    isAccountRoute, isAccountTab, isEditing, isReviewRoute, isSummaryRoute,
-  }) {
-    if (isSummaryRoute && !isEditing) {
-      return <Review canConfirm={false} />;
+  /**
+   * Ask if the user wants to proceed and reselect all data related to the second step.
+   * @returns {*}
+   */
+  handleCleaningSecondStep() {
+    if (window.confirm("Confirm if you want to change the patient's information.")) {
+      this.props.refreshSecondStepData();
+      return this.props.history.push(b(this.props.location, 'patient-information'));
     }
-
-    if (isAccountTab && !isAccountRoute && !isReviewRoute) {
-      return <Logon isAccountTab />;
-    }
-
-    return null;
+    return undefined;
   }
 
-  renderChildren(tabState, tabs, history) {
-    const { isAccountRoute, isBookingRoute, isEditing } = tabState;
-
-    const isChildrenRoute = isBookingRoute || isAccountRoute || isEditing;
-    if (!isChildrenRoute) {
-      return this.renderTabs(tabState);
+  /**
+   * Ask if the user wants to proceed and reselect all data related to the first step.
+   * @returns {*}
+   */
+  handleCleaningFirstStep() {
+    if (window.confirm("Confirm if you want to change your appointment's information.")) {
+      this.props.refreshFirstStepData();
+      return this.props.history.push(b(this.props.location, 'reason'));
     }
-    return React.Children.map(this.props.children, child =>
-      React.cloneElement(child, {
-        location: {
-          ...history.location,
-          state: {
-            ...history.location.state,
-            ...tabState,
-            ...tabs,
-          },
-        },
-      }));
+    return undefined;
   }
 
   render() {
-    const {
-      floatingButtonIsVisible,
-      floatingButtonIsDisabled,
-      floatingButtonText,
-      history,
-    } = this.props;
+    const { floatingButtonIsVisible, floatingButtonIsDisabled, floatingButtonText } = this.props;
 
-    const { pathname, search } = this.props.location;
-    const parsedSearch = parse(search);
+    const { pathname } = this.props.location;
 
-    const isEditing = !!parsedSearch.edit;
+    const buildMatchpath = url => !!matchPath(pathname, { path: `/widgets/:accountId/app/${url}` });
 
-    const isSummaryRoute =
-      parsedSearch.tab !== ACCOUNT_TAB &&
-      (parsedSearch.tab === REVIEW_TAB || parsedSearch.edit === 'true');
+    const isReviewRoute = buildMatchpath('book/review');
+    const isCompleteRoute = buildMatchpath('book/complete');
+    const isAccountRoute = buildMatchpath('account') || buildMatchpath('login');
+    const isPatientRoute = buildMatchpath('book/patient-information');
+    const isAdditionalRoute = buildMatchpath('book/additional-information');
+    const isFirstRoute = buildMatchpath('book/reason');
 
-    const isReviewRoute = !!matchPath(pathname, {
-      path: '/widgets/:accountId/app/book/review',
-    });
-
-    const isCompleteRoute = !!matchPath(pathname, {
-      path: '/widgets/:accountId/app/book/complete',
-    });
-
-    const isAccountRoute =
-      !!matchPath(pathname, {
-        path: '/widgets/:accountId/app/account',
-      }) ||
-      !!matchPath(pathname, {
-        path: '/widgets/:accountId/app/login',
-      });
-    const isPatientRoute =
-      !!matchPath(pathname, {
-        path: '/widgets/:accountId/app/book/patient-information',
-      }) ||
-      !!matchPath(pathname, {
-        path: '/widgets/:accountId/app/book/additional-information',
-      });
-    const isAccountTab = parsedSearch.tab === ACCOUNT_TAB;
-
-    const isBookingRoute = !isAccountTab && parsedSearch.tab === BOOKING_TAB;
-
-    const isFirstRoute =
-      isBookingRoute &&
-      !isEditing &&
-      !!matchPath(pathname, {
-        path: '/widgets/:accountId/app/book/reason',
-      });
-
-    const tabState = {
+    const routesState = {
       isFirstRoute,
-      isEditing,
       isReviewRoute,
       isAccountRoute,
-      isAccountTab,
-      isBookingRoute,
-      isSummaryRoute,
       isCompleteRoute,
     };
-    const tabs = {
-      BOOKING_TAB,
-      ACCOUNT_TAB,
-      REVIEW_TAB,
-    };
-
+    const isSecondStep = isAccountRoute || isPatientRoute || isAdditionalRoute || isReviewRoute;
     return (
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
-          <Header tabs={tabs} tabState={tabState} />
+          <Header routesState={routesState} />
           <Element
             id="widgetContainer"
             className={styles.widgetContainer}
@@ -158,32 +104,41 @@ class Widget extends Component {
             {!isCompleteRoute && (
               <div className={styles.stepsWrapper}>
                 <div className={styles.steps}>
-                  <div className={classNames(styles.step, styles.active)}>
+                  <Button
+                    className={classNames(styles.step, styles.active)}
+                    disabled={isFirstRoute}
+                    onClick={this.handleCleaningFirstStep}
+                  >
                     <strong>Find a Time</strong>
                     <span>
                       <FindTimeSVG />
                     </span>
-                  </div>
-                  <div
+                  </Button>
+                  <Button
+                    disabled={!isAdditionalRoute && !isReviewRoute}
                     className={classNames(styles.step, {
-                      [styles.active]: isAccountRoute || isPatientRoute || isReviewRoute,
+                      [styles.active]: isSecondStep,
                     })}
+                    onClick={this.handleCleaningSecondStep}
                   >
                     <strong>Select Patient</strong>
                     <span>
                       <AccountTabSVG />
                     </span>
-                  </div>
-                  <div className={classNames(styles.step, { [styles.active]: isReviewRoute })}>
+                  </Button>
+                  <Button
+                    className={classNames(styles.step, { [styles.active]: isReviewRoute })}
+                    disabled
+                  >
                     <strong>Review & Book</strong>
                     <span>
                       <ReviewBookSVG />
                     </span>
-                  </div>
+                  </Button>
                 </div>
               </div>
             )}
-            {this.renderChildren(tabState, tabs, history)}
+            {this.props.children}
           </Element>
           <div className={styles.poweredBy}>
             We run on <img src="/images/carecru_logo_color_horizontal.png" alt="CareCru" />
@@ -220,12 +175,16 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setIsClicked,
+      refreshFirstStepData,
+      refreshSecondStepData,
     },
     dispatch,
   );
 }
 
 Widget.propTypes = {
+  refreshFirstStepData: PropTypes.func.isRequired,
+  refreshSecondStepData: PropTypes.func.isRequired,
   account: PropTypes.instanceOf(Map).isRequired,
   children: PropTypes.node.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
