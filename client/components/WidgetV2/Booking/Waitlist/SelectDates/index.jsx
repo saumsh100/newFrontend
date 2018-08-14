@@ -1,12 +1,10 @@
 
 import React, { PureComponent } from 'react';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getRangeOfDays } from '../../../../../../server/util/time';
+import classnames from 'classnames';
 import { setWaitlistDates } from '../../../../../reducers/availabilities';
-import { DayPickerRange, Input } from '../../../../library';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import {
   showButton,
@@ -14,10 +12,11 @@ import {
   setIsClicked,
   setText,
 } from '../../../../../reducers/widgetNavigation';
-import { isResponsive } from '../../../../../util/hub';
-import { inputTheme } from '../../../theme';
-import dayPickerStyles from '../../dayPickerStyles.scss';
+import { capitalizeFirstLetter } from '../../../../Utils';
+import Button from '../../../../library/Button';
+import sort from '../../../../../../iso/helpers/sort/sort';
 import styles from './styles.scss';
+
 /**
  * Next default route for this component
  */
@@ -28,7 +27,23 @@ const nextRoute = './select-times';
  */
 const contextualUrl = location => (location.state && location.state.nextRoute) || nextRoute;
 
+const daysOfTheWeek = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+];
+
 class SelectDates extends PureComponent {
+  constructor() {
+    super();
+    this.shouldShowNextButton = this.shouldShowNextButton.bind(this);
+    this.handleAvailableDays = this.handleAvailableDays.bind(this);
+  }
+
   componentDidMount() {
     const {
       waitlist: { dates },
@@ -36,11 +51,7 @@ class SelectDates extends PureComponent {
     } = this.props;
 
     props.setText('Select times available');
-    if (dates.length > 0) {
-      props.showButton();
-    } else {
-      props.hideButton();
-    }
+    this.shouldShowNextButton(dates.length > 0);
   }
 
   componentDidUpdate(prevProps) {
@@ -63,61 +74,53 @@ class SelectDates extends PureComponent {
     }
   }
 
-  render() {
+  shouldShowNextButton(should) {
+    return should ? this.props.showButton() : this.props.hideButton();
+  }
+
+  /**
+   * Extracts dates on a date-range and also set these date to the reducer.
+   *
+   * @param day
+   */
+  handleAvailableDays(day) {
     const {
-      selectedAvailability, timezone, setWaitlist, waitlist,
+      waitlist: { dates },
+      setWaitlist,
     } = this.props;
+    const finalDates = [
+      ...(dates.includes(day) ? dates.filter(d => d !== day) : [...dates, day]),
+    ].sort((a, b) => sort()(daysOfTheWeek.indexOf(a), daysOfTheWeek.indexOf(b)));
+    this.shouldShowNextButton(finalDates.length > 0);
+    return setWaitlist(finalDates);
+  }
 
-    /**
-     * Extracts dates on a date-range and also set these date to the reducer.
-     *
-     * @param {*} param0
-     */
-    const extractRange = ({ from, to }) => {
-      const dates = from && to ? getRangeOfDays(from, to, timezone) : [];
-      if (dates.length > 0) {
-        this.props.showButton();
-      }
+  render() {
+    const { waitlist: { dates } } = this.props;
 
-      return setWaitlist(dates);
-    };
+    const checkIfIncludesDay = day => dates.includes(day);
 
     return (
       <div className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
-            <h1 className={styles.heading}>Select Waitlist Date Range</h1>
+            <h1 className={styles.heading}>Select Waitlist Days Available</h1>
+            <p className={styles.description}>Select all that apply</p>
           </div>
         </div>
         <div className={styles.contentWrapper}>
-          <div className={styles.rowCard}>
-            <div className={styles.container}>
-              <DayPickerRange
-                fieldsWrapper={dayPickerFields}
-                monthsToShow={isResponsive() ? 1 : 2}
-                from={(waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || ''}
-                to={
-                  (waitlist.dates.length &&
-                    moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
-                  ''
-                }
-                disabledDays={{
-                  before: new Date(),
-                  after:
-                    (selectedAvailability && moment(selectedAvailability.startDate).toDate()) ||
-                    null,
-                }}
-                onChange={values => extractRange(values)}
-                theme={dayPickerStyles}
-                modifiers={{
-                  [dayPickerStyles.start]:
-                    (waitlist.dates.length && moment(waitlist.dates[0]).toDate()) || '',
-                  [dayPickerStyles.end]:
-                    (waitlist.dates.length &&
-                      moment(waitlist.dates[waitlist.dates.length - 1]).toDate()) ||
-                    '',
-                }}
-              />
+          <div className={styles.container}>
+            <div className={styles.timeFrameWrapper}>
+              {daysOfTheWeek.map((day) => {
+                const classes = classnames(styles.slot, styles.timeFrameButton, { [styles.selectedSlot]: checkIfIncludesDay(day) });
+                return (
+                  <div className={styles.slotWrapper} key={day}>
+                    <Button onClick={() => this.handleAvailableDays(day)} className={classes}>
+                      {capitalizeFirstLetter(day)}
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -125,49 +128,6 @@ class SelectDates extends PureComponent {
     );
   }
 }
-
-const dayPickerFields = ({
-  from: {
-    fromReadOnly, fromValue, fromRef, fromOnClick,
-  },
-  to: {
-    toReadOnly, toValue, toRef, toOnClick,
-  },
-}) => (
-  <div className={styles.rangeInputContainer}>
-    <Input
-      readOnly={fromReadOnly}
-      refCallBack={fromRef}
-      value={fromValue}
-      onClick={fromOnClick}
-      label="Start Date"
-      theme={inputTheme(styles)}
-    />
-    <Input
-      readOnly={toReadOnly}
-      refCallBack={toRef}
-      value={toValue}
-      onClick={toOnClick}
-      label="End Date"
-      theme={inputTheme(styles)}
-    />
-  </div>
-);
-
-dayPickerFields.propTypes = {
-  from: PropTypes.shape({
-    fromReadOnly: PropTypes.bool,
-    fromValue: PropTypes.string,
-    fromRef: PropTypes.func,
-    fromOnClick: PropTypes.func,
-  }).isRequired,
-  to: PropTypes.shape({
-    toReadOnly: PropTypes.bool,
-    toValue: PropTypes.string,
-    toRef: PropTypes.func,
-    toOnClick: PropTypes.func,
-  }).isRequired,
-};
 
 function mapStateToProps({ availabilities, entities, widgetNavigation }) {
   return {
@@ -197,7 +157,10 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SelectDates);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectDates);
 
 SelectDates.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
@@ -223,6 +186,10 @@ SelectDates.propTypes = {
   setText: PropTypes.func.isRequired,
 };
 SelectDates.defaultProps = {
-  waitlist: { dates: [], unavailableDates: [], times: [] },
+  waitlist: {
+    dates: [],
+    unavailableDates: [],
+    times: [],
+  },
   selectedAvailability: false,
 };

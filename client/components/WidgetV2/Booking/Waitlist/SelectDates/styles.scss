@@ -1,34 +1,6 @@
 @import '../../styles';
 
-.waitlistIndex {
-  font-size: 13px;
-  font-family: 'Roboto', sans-serif;
-  color: $widget-grey;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 0 8px;
-}
-.waitlistKey {
-  width: 100%;
-  display: block;
-  font-family: 'Roboto', sans-serif;
-}
-.waitlistValue {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-}
-.rangeInputContainer {
-  display: flex;
-  margin: 0 -8px;
-}
-
-.group {
-  margin: 0 8px var(--widget-spacer);
-  padding: 0;
-  flex: 1;
-}
-
-.dateRangeButton {
-  margin-top: var(--widget-spacer);
+.slotWrapper {
+  @extend .cardWrapper;
+  flex: 0 50%;
 }

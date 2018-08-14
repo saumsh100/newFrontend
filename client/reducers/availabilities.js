@@ -116,7 +116,6 @@ export const createInitialWidgetState = (state) => {
       hasWaitList: false,
       waitlist: {
         dates: [],
-        unavailableDates: [],
         times: [],
       },
       waitSpot: {

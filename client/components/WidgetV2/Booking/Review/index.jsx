@@ -23,6 +23,7 @@ import {
   setIsClicked,
   setText,
 } from '../../../../reducers/widgetNavigation';
+import { capitalizeFirstLetter } from '../../../Utils';
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
@@ -32,16 +33,12 @@ const NOT_PROVIDED_TEXT = 'Not Provided';
  * If is a regular range display the first and the last day,
  * otherwise display a list of dates.
  */
-const waitlistDates = (dates, timezone) => {
+const waitlistDates = (dates) => {
   if (dates.length === 0) {
     return null;
   }
-  const firstDate = dateFormatter(dates[0], timezone, 'MMM Do');
-  const lastDate = dateFormatter(dates[dates.length - 1], timezone, 'MMM Do');
-  /**
-   * It shows the days that are on the waitlist.
-   */
-  return `From: ${firstDate} - To: ${lastDate}`;
+
+  return dates.map(d => capitalizeFirstLetter(d)).join(', ');
 };
 
 const compareTimes = earlier => (value, ref) => (value && earlier ? value < ref : value > ref);
@@ -193,7 +190,7 @@ class Review extends PureComponent {
                 </p>
                 <SummaryItem
                   label="Available Dates"
-                  value={waitlistDates(waitlist.dates, timezone)}
+                  value={waitlistDates(waitlist.dates)}
                   link={b('waitlist/select-dates')}
                 />
                 <SummaryItem

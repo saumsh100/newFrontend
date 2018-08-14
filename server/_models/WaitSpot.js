@@ -45,12 +45,9 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.ARRAY(DataTypes.DATEONLY),
     },
 
-    unavailableDates: {
-      type: DataTypes.ARRAY(DataTypes.DATEONLY),
-    },
 
     availableDates: {
-      type: DataTypes.ARRAY(DataTypes.DATEONLY),
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
 
     availableTimes: {
