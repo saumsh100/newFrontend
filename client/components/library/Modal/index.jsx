@@ -52,14 +52,15 @@ class Modal extends Component {
       backDropStyles,
     } = this.props;
 
-    const modalContainerClassName = classNames(styles.modalContainer, containerStyles, {
-      [styles.active]: active,
-    });
+    const modalContainerClassName = classNames(
+      styles.modalContainer,
+      containerStyles, { [styles.active]: active },
+    );
 
-    const modalBodyClassName = classNames(className, styles.modalBody, {
-      [styles[type]]: !custom && type,
-      [styles.medium]: !custom && !type,
-    });
+    const modalBodyClassName = classNames(
+      className, styles.modalBody,
+      { [styles[type]]: !custom && type },
+    );
 
     const backDropClassName = classNames(styles.backDropDefault, backDropStyles);
 
@@ -104,7 +105,7 @@ Modal.defaultProps = {
   onEscKeyDown: null,
   onOverlayClick: null,
   showOverlay: true,
-  type: null,
+  type: 'medium',
 };
 
 export default Modal;

@@ -22,26 +22,24 @@
   display: flex;
 }
 
-@media screen and (min-width: 700px) {
-  .small {
-    width: 25%;
-  }
+.small {
+  width: 25%;
+}
 
-  .mediumSmall {
-    width: 30%;
-  }
+.mediumSmall {
+  width: 30%;
+}
 
-  .medium {
-    width: 40%;
-  }
+.medium {
+  width: 40%;
+}
 
-  .mediumLarge {
-    width: 50%;
-  }
+.mediumLarge {
+  width: 50%;
+}
 
-  .large {
-    width: 80%;
-  }
+.large {
+  width: 80%;
 }
 
 .backDropDefault {
