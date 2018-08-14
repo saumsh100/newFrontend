@@ -1,19 +1,22 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import styles from './styles.scss';
+import EventContainer from './Shared/EventContainer';
+import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
+import getEventText from './Shared/textBuilder';
 
-export default function AppointmentEvent(props) {
-  const { data, bodyStyle } = props;
+export default function AppointmentEvent({ data }) {
+  const { isCancelled, startDate } = data;
+
+  const completedApp = startDate < new Date().toISOString() ? 'completed' : 'booked';
+  const eventTextKey = isCancelled ? 'cancelled' : completedApp;
+
+  const appDate = dateFormatter(startDate, '', 'MMMM Do, YYYY h:mma');
+
+  const headerData = getEventText('english', 'appointments', eventTextKey)({ appDate });
 
   return (
-    <div className={bodyStyle}>
-      <div className={styles.body_header}>
-        Appointment on {moment(data.startDate).format('MMMM Do, YYYY h:mma')}
-      </div>
-      <div className={styles.body_subHeaderItalic}>{data.note || ''}</div>
-    </div>
+    <EventContainer key={data.id} headerData={headerData} subHeaderItalicData={data.note || ''} />
   );
 }
 
@@ -22,9 +25,4 @@ AppointmentEvent.propTypes = {
     startDate: PropTypes.string,
     note: PropTypes.string,
   }).isRequired,
-  bodyStyle: PropTypes.string,
-};
-
-AppointmentEvent.defaultProps = {
-  bodyStyle: null,
 };

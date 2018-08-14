@@ -50,7 +50,8 @@
   justify-content: center;
   background-color: $primary-grey;
   height: 50px;
-  border-right: 1px solid #cdcdcd;
+  border-right: 1px solid #b4b4b5;
+  border-bottom: 1px solid #b4b4b5;
   color: $primary-dark;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
   align-items: center;
@@ -62,8 +63,9 @@
 }
 
 .activeTabCard {
-  border-bottom: $selection-border $primary-color;
+  border-bottom: none;
   color: black;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
   background-color: white;
+  transition: ease 0.2s all;
 }

@@ -93,18 +93,16 @@
 
     &_active {
       composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
-      color: #ffffff;
-      opacity: 0.6;
-      background: lighten($primary-darkgrey, 10%);
-      padding: 12px;
-      height: 16px;
+      color: #fff;
+      background: #a7a7a5;
+      height: 13px;
       display: flex;
       align-items: center;
       border-radius: 20px;
-      font-size: 14px;
-      width: 80px;
+      width: 60px;
       justify-content: center;
       box-sizing: border-box;
+      padding: 9px;
     }
   }
 

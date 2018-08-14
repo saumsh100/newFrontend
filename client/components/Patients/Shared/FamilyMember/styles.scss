@@ -5,7 +5,7 @@
   display: block;
   margin: 0 auto;
   padding-top: 15px;
-  border-bottom: 1px solid $primary-light-grey;
+  border-bottom: 1px solid #efefef;
 }
 
 .familyMember {
@@ -13,7 +13,7 @@
 
   &_withBorder:after {
     @include withBorder;
-    width: 80%;
+    width: 100%;
   }
 
   &_row {

@@ -49,7 +49,16 @@ export const createInitialPatientState = state =>
       searchFirstName: '',
       searchLastName: '',
 
-      timelineFilters: ['appointment', 'reminder', 'review', 'call', 'newpatient', 'request'],
+      timelineFilters: [
+        'appointment',
+        'call',
+        'duedate',
+        'newpatient',
+        'recall',
+        'reminder',
+        'review',
+        'request',
+      ],
     },
     state,
   ));

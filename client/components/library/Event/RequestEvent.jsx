@@ -2,18 +2,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
-import styles from './styles.scss';
+import EventContainer from './Shared/EventContainer';
+import getEventText from './Shared/textBuilder';
 
-export default function RequestEvent(props) {
-  const { data, bodyStyle } = props;
-
+export default function RequestEvent({ data }) {
+  const eventTextKey = data.isCancelled ? 'rejected' : 'confirmed';
   return (
-    <div className={bodyStyle}>
-      <div className={styles.body_header}>
-        Online appointment requested for {dateFormatter(data.startDate, '', 'MMMM Do, YYYY h:mma')}
-      </div>
-      <div className={styles.body_subHeaderItalic}>{data.note || ''}</div>
-    </div>
+    <EventContainer
+      key={data.id}
+      headerData={`${getEventText('english', 'requests', eventTextKey)} ${dateFormatter(
+        data.startDate,
+        '',
+        'MMMM Do, YYYY h:mma',
+      )}`}
+      subHeaderItalicData={data.note || ''}
+    />
   );
 }
 
@@ -22,9 +25,4 @@ RequestEvent.propTypes = {
     startDate: PropTypes.string,
     note: PropTypes.string,
   }).isRequired,
-  bodyStyle: PropTypes.string,
-};
-
-RequestEvent.defaultProps = {
-  bodyStyle: '',
 };

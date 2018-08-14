@@ -1,3 +1,4 @@
+
 import omit from 'lodash/omit';
 import { Patient, Event } from '../../_models';
 import { fetchAppointmentEvents, buildAppointmentEvent } from './appointments';

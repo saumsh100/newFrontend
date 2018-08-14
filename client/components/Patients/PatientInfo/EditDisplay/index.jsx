@@ -174,7 +174,7 @@ class EditDisplay extends Component {
     }
 
     return (
-      <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} noUnderLine>
+      <Tabs index={this.state.tabIndex} onChange={this.handleTabChange}>
         <Tab label="Appointments" tabCard>
           {this.renderAppointmentsForm()}
         </Tab>

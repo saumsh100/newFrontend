@@ -48,7 +48,7 @@ export default function TopDisplay(props) {
 
   const bgStyle = {
     background: `url('/images/banners/${bgImgs[randomNum]}')`,
-    backgroundSize: '100%',
+    backgroundSize: '70%',
   };
 
   const wasAllFetched = wasStatsFetched && patient && accountsFetched && wasPatientFetched;

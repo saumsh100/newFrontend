@@ -1,26 +1,25 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import styles from './styles.scss';
+import EventContainer from './Shared/EventContainer';
 
-export default function CallEvent(props) {
-  const { data, callStyle } = props;
+export default function CallEvent({ data }) {
+  const callerCityText = data.callerCity && `from: ${data.callerCity}`;
 
-  return (
-    <div className={callStyle}>
-      <div className={styles.call_header}>Phone Call</div>
+  const component = (
+    <div className={styles.call}>
+      <div className={styles.call_header}>{data.firstName} called the practice.</div>
       <div>
         <audio controls>
           <source src={data.recording} type="audio/ogg" />
         </audio>
       </div>
-      <div className={styles.call_subHeaderItalic}>
-        {data.duration} seconds, from {data.callerCity}, at{' '}
-        {moment(data.startTime).format('h:mm a')}
-      </div>
+      <div className={styles.call_subHeaderItalic}>{callerCityText}</div>
     </div>
   );
+
+  return <EventContainer key={data.id} component={component} />;
 }
 
 CallEvent.propTypes = {
@@ -29,9 +28,4 @@ CallEvent.propTypes = {
     callerCity: PropTypes.string,
     startTime: PropTypes.string,
   }).isRequired,
-  callStyle: PropTypes.string,
-};
-
-CallEvent.defaultProps = {
-  callStyle: '',
 };

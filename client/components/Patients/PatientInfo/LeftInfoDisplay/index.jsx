@@ -46,17 +46,17 @@ export default function LeftInfoDisplay(props) {
 
   return (
     <Card className={styles.mainContainer} runAnimation loaded={!!patient}>
-      <Tabs index={tabIndex} onChange={handleTabChange} noUnderLine contentClass={styles.content}>
-        <Tab label="Appointments" tabCard>
+      <Tabs index={tabIndex} onChange={handleTabChange} contentClass={styles.content}>
+        <Tab label="Appointments" tabCard activeClass={styles.activeTab}>
           {appointmentsTab}
         </Tab>
-        <Tab label="Personal" tabCard>
+        <Tab label="Personal" tabCard activeClass={styles.activeTab}>
           {personalTab}
         </Tab>
-        <Tab label="Insurance" index={tabIndex} tabCard>
+        <Tab label="Insurance" index={tabIndex} tabCard activeClass={styles.activeTab}>
           {insuranceTab}
         </Tab>
-        <Tab label="Family" index={tabIndex} tabCard>
+        <Tab label="Family" index={tabIndex} tabCard activeClass={styles.activeTab}>
           {familyTab}
         </Tab>
       </Tabs>

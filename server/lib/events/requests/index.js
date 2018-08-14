@@ -11,7 +11,7 @@ export async function fetchRequestEvents({ patient, accountId, query }) {
       accountId,
       patientUserId: patient.patientUserId,
     },
-    attributes: ['id', 'createdAt', 'startDate', 'endDate', 'note', 'isConfirmed'],
+    attributes: ['id', 'createdAt', 'startDate', 'note', 'isConfirmed', 'isCancelled'],
     order: [['createdAt', 'DESC']],
     ...query,
   });

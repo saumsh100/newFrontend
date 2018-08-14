@@ -84,8 +84,7 @@
 }
 .grid {
   box-sizing: border-box;
-  padding: 45px 35px 20px;
-  //border-top: 1px solid $primary-grey;
+  padding: 45px 35px 0px;
 }
 
 .row {
@@ -136,6 +135,8 @@
 
 .activeTab {
   background-color: $primary-white;
+  transition: ease 0.2s all;
+  border-bottom: none;
 }
 
 .recallContainer {

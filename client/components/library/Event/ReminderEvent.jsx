@@ -1,28 +1,33 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
-import styles from './styles.scss';
+import EventContainer from './Shared/EventContainer';
+import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
+import getEventText from './Shared/textBuilder';
 
-export default function ReminderEvent(props) {
-  const { data, bodyStyle } = props;
-  return (
-    <div className={bodyStyle}>
-      <div className={styles.body_subHeader}>
-        Reminder Sent: For appointment on{' '}
-        {moment(data.appointment.startDate).format('MMMM Do, YYYY h:mma')}
-      </div>
-    </div>
-  );
+export default function ReminderEvent({ data }) {
+  const appDate = dateFormatter(data.appointment.startDate, '', 'MMMM Do, YYYY h:mma');
+
+  const contactMethodHash = {
+    email: 'SMS',
+    sms: 'Email',
+    'sms/email': 'Email & SMS',
+  };
+
+  const contactMethod = contactMethodHash[data.primaryType];
+  const intervalText = data.reminder.interval;
+
+  const headerData = getEventText('english', 'reminders', 'default')({
+    contactMethod,
+    intervalText,
+    appDate,
+  });
+
+  return <EventContainer key={data.id} headerData={headerData} />;
 }
 
 ReminderEvent.propTypes = {
   data: PropTypes.shape({
     appointmentStartDate: PropTypes.string,
   }).isRequired,
-  bodyStyle: PropTypes.string,
-};
-
-ReminderEvent.defaultProps = {
-  bodyStyle: '',
 };

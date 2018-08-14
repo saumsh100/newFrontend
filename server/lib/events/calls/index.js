@@ -1,3 +1,4 @@
+
 import { Call } from '../../../_models';
 
 export async function fetchCallEvents({ patientId, accountId, query }) {
@@ -22,10 +23,10 @@ export async function fetchCallEvents({ patientId, accountId, query }) {
   });
 }
 
-export function buildCallEvent({ data }) {
+export function buildCallEvent({ data, patient }) {
   return {
     id: Buffer.from(`call-${data.id}`).toString('base64'),
     type: 'Call',
-    metaData: data,
+    metaData: { ...data, firstName: patient.firstName },
   };
 }

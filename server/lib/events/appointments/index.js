@@ -7,11 +7,10 @@ export async function fetchAppointmentEvents({ patientId, accountId, query }) {
       accountId,
       patientId,
       isDeleted: false,
-      isCancelled: false,
       isMissed: false,
       isPending: false,
     },
-    attributes: ['id', 'startDate', 'endDate', 'note'],
+    attributes: ['id', 'startDate', 'endDate', 'note', 'isCancelled', 'isPatientConfirmed'],
     order: [['startDate', 'DESC']],
     ...query,
   });

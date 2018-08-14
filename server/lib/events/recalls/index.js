@@ -1,7 +1,13 @@
+
 import { SentRecall, Recall } from '../../../_models';
+import groupEvents from '../helpers';
+
+const checkGroupingFunc = (sentRecall, nextSentRecall) =>
+  (sentRecall.recall.interval === nextSentRecall.recall.interval
+&& sentRecall.primaryType !== nextSentRecall.primaryType);
 
 export async function fetchRecallEvents({ patientId, accountId, query }) {
-  return SentRecall.findAll({
+  const sentRecalls = await SentRecall.findAll({
     raw: true,
     nest: true,
     where: {
@@ -21,6 +27,8 @@ export async function fetchRecallEvents({ patientId, accountId, query }) {
     order: [['createdAt', 'DESC']],
     ...query,
   });
+
+  return groupEvents(sentRecalls, checkGroupingFunc, { primaryType: 'sms/email' });
 }
 
 export function buildRecallEvent({ data }) {

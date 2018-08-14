@@ -79,12 +79,14 @@
 }
 
 .dateHeader {
-  composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-  font-size: 16px;
+  font-family: $medium-font;
+  font-size: 10px;
   color: $primary-dark-grey;
   padding-left: 55px;
-  padding-top: 20px;
-  padding-bottom: 5px;
+  padding-top: 10px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 
   @media screen and (max-width: 576px) {
     font-size: 14px;
@@ -94,8 +96,8 @@
 }
 
 .today {
-  color: $primary-dark;
-  font-size: 23px;
+  color: $primary-blue;
+  font-size: 10px;
 
   @media screen and (max-width: 576px) {
     padding-left: 0;

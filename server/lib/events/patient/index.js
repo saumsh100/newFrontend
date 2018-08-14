@@ -1,3 +1,6 @@
+
+import moment from 'moment-timezone';
+
 export function buildNewPatientEvent({ patient, accountId }) {
   return {
     id: Buffer.from(`patient-${patient.id}`).toString('base64'),
@@ -6,6 +9,7 @@ export function buildNewPatientEvent({ patient, accountId }) {
     type: 'NewPatient',
     metaData: {
       createdAt: patient.pmsCreatedAt || patient.createdAt,
+      pmsCreatedAt: patient.pmsCreatedAt,
       firstName: patient.firstName,
       lastName: patient.lastName,
     },
@@ -14,10 +18,11 @@ export function buildNewPatientEvent({ patient, accountId }) {
 
 export function fetchPatientDueDateEvents({ patient }) {
   const { dueForRecallExamDate, dueForHygieneDate } = patient;
-
   if (!dueForHygieneDate && !dueForRecallExamDate) return [];
 
-  if (dueForRecallExamDate === dueForHygieneDate) {
+  if (moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'day')
+  && moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'month')
+  && moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'year')) {
     return [
       {
         dueDate: dueForHygieneDate,
@@ -26,7 +31,10 @@ export function fetchPatientDueDateEvents({ patient }) {
     ];
   }
 
-  if ((dueForHygieneDate && !dueForRecallExamDate) || dueForHygieneDate > dueForRecallExamDate) {
+  if (
+    (dueForHygieneDate && !dueForRecallExamDate) ||
+    (dueForHygieneDate && dueForHygieneDate < dueForRecallExamDate)
+  ) {
     return [
       {
         dueDate: dueForHygieneDate,
@@ -34,6 +42,7 @@ export function fetchPatientDueDateEvents({ patient }) {
       },
     ];
   }
+
   return [
     {
       dueDate: dueForRecallExamDate,
@@ -44,13 +53,14 @@ export function fetchPatientDueDateEvents({ patient }) {
 
 export function buildPatientDueDateEvent({ patient, data }) {
   const metaData = {
-    id: Buffer.from(`patientDueDate-${patient.id}`).toString('base64'),
     firstName: patient.firstName,
     lastName: patient.lastName,
+    createdAt: data.dueDate,
     ...data,
   };
 
   return {
+    id: Buffer.from(`patientDueDate-${patient.id}`).toString('base64'),
     type: 'DueDate',
     metaData,
   };
