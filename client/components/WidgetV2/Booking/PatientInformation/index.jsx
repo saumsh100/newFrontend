@@ -228,6 +228,7 @@ class PatientInformation extends PureComponent {
      */
     const asyncEmailValidation = values =>
       patientUser &&
+      patientUser.email &&
       (values.email === patientUser.email ? false : asyncEmailValidatePatient(values));
     /**
      * Check if the passed phoneNumber is not already used,
@@ -237,6 +238,7 @@ class PatientInformation extends PureComponent {
      */
     const asyncPhoneNumberValidation = values =>
       (patientUser &&
+      patientUser.phoneNumber &&
       (values.phoneNumber === patientUser.phoneNumber ||
         values.phoneNumber === normalizePhone(patientUser.phoneNumber))
         ? false
@@ -426,9 +428,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStateToProps({
-  auth, availabilities, widgetNavigation, ...state
-}) {
+function mapStateToProps({ auth, availabilities, widgetNavigation, ...state }) {
   const selector = formValueSelector(FORM_NAME);
   const patientInfoForm = state.form[FORM_NAME];
   const familyPatients = auth.get('familyPatients');
@@ -512,4 +512,7 @@ PatientInformation.defaultProps = {
   patientUser: false,
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PatientInformation));
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientInformation));

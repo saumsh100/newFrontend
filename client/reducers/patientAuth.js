@@ -57,13 +57,10 @@ export default handleActions(
 
     [UPDATE_FAMILY_PATIENT](
       state,
-      {
-        payload: { patientId, values },
-      },
+      { payload: { patientId, values } },
     ) {
       const familyPatients = state.get('familyPatients');
-
-      if (!familyPatients.length) return state;
+      if (!familyPatients.size) return state;
 
       return state.updateIn(
         ['familyPatients', familyPatients.findIndex(i => i.id === patientId)],

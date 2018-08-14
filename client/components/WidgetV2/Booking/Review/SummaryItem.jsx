@@ -1,11 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { matchPath } from 'react-router-dom';
-import { stringify } from 'query-string';
-import { Button } from '../../../library';
-import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
-import { BookingReviewSVG } from '../../SVGs';
 import styles from './styles.scss';
 
 /**
@@ -26,42 +21,18 @@ const ellipsisText = (value, delimiter) =>
  * @param {object} history
  * @param {object} location
  */
-const SummaryItem = ({
-  label, value, link, location, history,
-}) => {
-  const match = matchPath(location.pathname, {
-    path: `/widgets/:accountId/app/book${link.slice(1)}`,
-    exact: true,
-  });
-
-  return (
-    <div className={styles.waitlistIndex}>
-      <span className={styles.waitlistKey}>{label}</span>
-      <span className={styles.waitlistValue}>
-        {typeof value === 'string' ? <p>{ellipsisText(value, 200)}</p> : value}
-        <Button
-          className={styles.editLink}
-          onClick={() =>
-            history.push({
-              pathname: link,
-              state: { nextRoute: match ? false : location.pathname },
-              search: stringify({ edit: true }),
-            })
-          }
-        >
-          <BookingReviewSVG />
-        </Button>
-      </span>
-    </div>
-  );
-};
+const SummaryItem = ({ label, value }) => (
+  <div className={styles.waitlistIndex}>
+    <span className={styles.waitlistKey}>{label}</span>
+    <span className={styles.waitlistValue}>
+      {typeof value === 'string' ? <p>{ellipsisText(value, 200)}</p> : value}
+    </span>
+  </div>
+);
 
 SummaryItem.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  link: PropTypes.string.isRequired,
-  history: PropTypes.shape(historyShape).isRequired,
-  location: PropTypes.shape(locationShape).isRequired,
 };
 
 /**

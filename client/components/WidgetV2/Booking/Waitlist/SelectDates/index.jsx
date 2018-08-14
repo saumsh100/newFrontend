@@ -22,6 +22,7 @@ import styles from './styles.scss';
  */
 const nextRoute = './select-times';
 
+
 /**
  * Checks if there are a specific route to go onclicking a card or just the default one.
  */
@@ -55,13 +56,7 @@ class SelectDates extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const {
-      floatingButtonIsClicked,
-      history,
-      location,
-      waitlist: { times },
-      ...props
-    } = this.props;
+    const { floatingButtonIsClicked, history, location, ...props } = this.props;
 
     if (floatingButtonIsClicked && !prevProps.floatingButtonIsClicked) {
       props.setIsClicked(false);
@@ -69,10 +64,11 @@ class SelectDates extends PureComponent {
       props.setText();
       history.push({
         ...location,
-        pathname: times.length > 0 ? contextualUrl(this.props.location) : nextRoute,
+        pathname: nextRoute,
       });
     }
   }
+
 
   shouldShowNextButton(should) {
     return should ? this.props.showButton() : this.props.hideButton();

@@ -23,6 +23,8 @@ import {
   setIsClicked,
   setText,
 } from '../../../../reducers/widgetNavigation';
+import { BookingReviewSVG } from '../../SVGs';
+import { refreshFirstStepData, refreshSecondStepData } from '../../../../reducers/availabilities';
 import { capitalizeFirstLetter } from '../../../Utils';
 import styles from './styles.scss';
 
@@ -84,9 +86,7 @@ class Review extends PureComponent {
    * Manages if we should create a waitlist and an availability or both
    */
   submitRequest() {
-    const {
-      dateAndTime, hasWaitList, history, ...props
-    } = this.props;
+    const { dateAndTime, hasWaitList, history, ...props } = this.props;
 
     const creationPromises = [
       ...(dateAndTime ? [props.createRequest()] : []),
@@ -182,52 +182,29 @@ class Review extends PureComponent {
             <h1 className={styles.heading}>Review & Book</h1>
           </div>
           <div className={styles.content}>
-            <h3 className={styles.title}>Waitlist Summary</h3>
-            {waitlist.dates.length > 0 ? (
+            <div className={styles.titleWrapper}>
+              <h3 className={styles.title}>Appointment Summary</h3>
               <div>
-                <p className={styles.subtitle}>
-                  Here are the informations that you already defined to your appointment.
-                </p>
-                <SummaryItem
-                  label="Available Dates"
-                  value={waitlistDates(waitlist.dates)}
-                  link={b('waitlist/select-dates')}
-                />
-                <SummaryItem
-                  label="Times"
-                  value={waitlistTimes()}
-                  link={b('waitlist/select-times')}
-                />
-              </div>
-            ) : (
-              <div className={styles.joinWaitlist}>
-                <div className={styles.subCardWrapper}>
-                  <p className={styles.subCardSubtitle}>Looks like you did not set any waitlist</p>
-                </div>
                 <Button
-                  className={styles.subCardLink}
+                  className={styles.editLink}
                   onClick={() => {
-                    history.push(b('waitlist/select-dates'));
+                    if (
+                      window.confirm("Confirm if you want to change your appointment's information.")
+                    ) {
+                      this.props.refreshFirstStepData();
+                      return this.props.history.push(b('reason'), { nextRoute: location.pathname });
+                    }
+                    return undefined;
                   }}
                 >
-                  Join Waitlist
+                  <BookingReviewSVG />
+                  Edit
                 </Button>
               </div>
+            </div>
+            {selectedService.get('name') && (
+              <SummaryItem label="Reason" value={selectedService.get('name')} link={b('reason')} />
             )}
-          </div>
-          <div className={styles.content}>
-            <h3 className={styles.title}>Appointment Summary</h3>
-            <p className={styles.subtitle}>
-              Here are the informations that you already defined to your appointment.
-            </p>
-            {selectedService &&
-              selectedService.get('name') && (
-                <SummaryItem
-                  label="Reason"
-                  value={selectedService.get('name')}
-                  link={b('reason')}
-                />
-              )}
             <SummaryItem
               label="Practitioner"
               value={
@@ -243,6 +220,71 @@ class Review extends PureComponent {
                 link={b('date-and-time')}
               />
             )}
+            <hr />
+            {waitlist.dates.length > 0 ? (
+              <div>
+                <div className={styles.titleWrapper}>
+                  <h3 className={styles.title}>Waitlist Summary</h3>
+                  <div>
+                    <Button
+                      className={styles.editLink}
+                      onClick={() =>
+                        this.props.history.push(b('waitlist/select-dates'), { nextRoute: location.pathname })
+                      }
+                    >
+                      <BookingReviewSVG />
+                      Edit
+                    </Button>
+                  </div>
+                </div>
+                <SummaryItem
+                  label="Available Dates"
+                  value={waitlistDates(waitlist.dates, timezone)}
+                  link={b('waitlist/select-dates')}
+                />
+                <SummaryItem
+                  label="Times"
+                  value={waitlistTimes()}
+                  link={b('waitlist/select-times')}
+                />
+              </div>
+            ) : (
+              <div className={styles.titleWrapper}>
+                <h3 className={styles.emptyWaitlistTitle}>Waitlist Summary</h3>
+                <div>
+                  <Button
+                    className={styles.subCardLink}
+                    onClick={() => {
+                      history.push(b('waitlist/select-dates'), { nextRoute: location.pathname });
+                    }}
+                  >
+                    Join Waitlist
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className={styles.content}>
+            <div className={styles.titleWrapper}>
+              <h3 className={styles.title}>Patient Summary</h3>
+              <div>
+                <Button
+                  className={styles.editLink}
+                  onClick={() => {
+                    if (
+                      window.confirm("Confirm if you want to change the patient's information.")
+                    ) {
+                      this.props.refreshSecondStepData();
+                      return this.props.history.push(b('patient-information'));
+                    }
+                    return undefined;
+                  }}
+                >
+                  <BookingReviewSVG />
+                  Edit
+                </Button>
+              </div>
+            </div>
             {patientUser && (
               <SummaryItem
                 label="Patient"
@@ -280,9 +322,7 @@ class Review extends PureComponent {
   }
 }
 
-function mapStateToProps({
-  availabilities, entities, auth, widgetNavigation,
-}) {
+function mapStateToProps({ availabilities, entities, auth, widgetNavigation }) {
   const getPatientUser =
     availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
       ? auth
@@ -322,6 +362,8 @@ function mapDispatchToProps(dispatch) {
       setIsClicked,
       setText,
       showButton,
+      refreshFirstStepData,
+      refreshSecondStepData,
     },
     dispatch,
   );
@@ -357,6 +399,8 @@ Review.propTypes = {
     unavailableDates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
   }),
+  refreshFirstStepData: PropTypes.func.isRequired,
+  refreshSecondStepData: PropTypes.func.isRequired,
   floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
   showButton: PropTypes.func.isRequired,
