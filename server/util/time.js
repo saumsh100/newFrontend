@@ -15,6 +15,7 @@ const Time = {
   },
 
   tzIso: (date = new Date(), timezone) => moment.tz(date, timezone).toISOString(),
+  tzTime: (date = new Date(), timezone) => moment.tz(date, timezone).format('HH:mm:ss'),
 
   getISOSortPredicate: property => (a, b) => {
     const ap = a[property];

@@ -15,13 +15,14 @@ import {
   SentReminder,
   Family,
   WeeklySchedule,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import {
   getAppointmentsFromReminder,
   shouldSendReminder,
   getValidSmsReminders,
   mapPatientsToReminders,
 } from '../../../../server/lib/reminders/helpers';
+import { tzIso } from '../../../../server/util/time';
 import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
@@ -54,6 +55,8 @@ const dates = (y, m, d, h) => {
     endDate: date(y, m, d, h + 1),
   };
 };
+
+const td = d => tzIso(d, TIME_ZONE);
 
 describe('RemindersList Calculation Library', () => {
   beforeEach(async () => {
@@ -536,6 +539,75 @@ describe('RemindersList Calculation Library', () => {
         expect(appts.length).toBe(2);
         expect(appts[0].patientId).toBe(patients[0].id);
         expect(appts[1].patientId).toBe(patients[1].id);
+      });
+    });
+
+    describe('#getAppointmentsFromReminder - reminder.startTime', () => {
+      let account;
+      let reminder;
+      let appointments;
+      let patients;
+      beforeEach(async () => {
+        account = { timezone: TIME_ZONE };
+        reminder = await Reminder.create({
+          accountId,
+          interval: '2 hours',
+          primaryTypes: ['sms'],
+          startTime: '07:00:00',
+        });
+
+        patients = await Patient.bulkCreate([
+          makePatientData({ firstName: 'John', lastName: 'Doe' }),
+          makePatientData({ firstName: 'Janet', lastName: 'Jackson' }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ startDate: td('2018-08-15 07:00'), endDate: td('2018-08-15 08:00'), patientId: patients[0].id }),
+          makeApptData({ startDate: td('2018-08-15 08:00'), endDate: td('2018-08-15 09:00'), patientId: patients[0].id }),
+          makeApptData({ startDate: td('2018-08-15 09:00'), endDate: td('2018-08-15 10:00'), patientId: patients[1].id }),
+          makeApptData({ startDate: td('2018-08-15 10:00'), endDate: td('2018-08-15 11:00'), patientId: patients[0].id }),
+        ]);
+      });
+
+      test('should return Janet Jackson for her 9am for whole day', async () => {
+        const startDate = td('2018-08-15 00:00');
+        const endDate = td('2018-08-15 24:00');
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate, endDate });
+        expect(appts.length).toBe(1);
+        expect(appts[0].patientId).toBe(patients[1].id);
+        expect(appts[0].startDate.toISOString()).toBe(td('2018-08-15 09:00'));
+      });
+
+      test('should return Janet Jackson for her 9am and John Doe for his 7am', async () => {
+        await reminder.update({ startTime: null });
+        const startDate = td('2018-08-15 00:00');
+        const endDate = td('2018-08-15 24:00');
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate, endDate });
+        expect(appts.length).toBe(2);
+        expect(appts[0].patientId).toBe(patients[0].id);
+        expect(appts[0].startDate.toISOString()).toBe(td('2018-08-15 07:00'));
+        expect(appts[1].patientId).toBe(patients[1].id);
+        expect(appts[1].startDate.toISOString()).toBe(td('2018-08-15 09:00'));
+      });
+
+      test('should return no appointments', async () => {
+        const startDate = td('2018-08-15 05:00');
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate });
+        expect(appts.length).toBe(0);
+      });
+
+      test('should return Janet Jackson for her 9am', async () => {
+        const startDate = td('2018-08-15 07:00');
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate });
+        expect(appts.length).toBe(1);
+        expect(appts[0].patientId).toBe(patients[1].id);
+        expect(appts[0].startDate.toISOString()).toBe(td('2018-08-15 09:00'));
+      });
+
+      test('should return none because John Doe has an earlier ignore appointment', async () => {
+        const startDate = td('2018-08-15 08:00');
+        const appts = await getAppointmentsFromReminder({ reminder, account, startDate });
+        expect(appts.length).toBe(0);
       });
     });
 

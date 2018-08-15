@@ -55,9 +55,7 @@ const isValidTime = (val) => {
 };
 
 function AdvancedSettingsForm(props) {
-  const {
-    reminder, onSubmit, isCustomConfirmValue, isDailyValue,
-  } = props;
+  const { reminder, onSubmit, isCustomConfirmValue, isDailyValue } = props;
   const {
     ignoreSendIfConfirmed,
     isCustomConfirm,
@@ -68,6 +66,7 @@ function AdvancedSettingsForm(props) {
     isDaily,
     dailyRunTime,
     isConfirmable,
+    startTime,
   } = reminder;
 
   const initialValues = {
@@ -80,6 +79,7 @@ function AdvancedSettingsForm(props) {
     isDaily,
     dailyRunTime,
     isConfirmable,
+    startTime,
   };
 
   return (
@@ -132,6 +132,7 @@ function AdvancedSettingsForm(props) {
       {isDailyValue && (
         <Field required name="dailyRunTime" label="Daily Run Time" validate={[isValidTime]} />
       )}
+      <Field name="startTime" label="Earliest Send Time" validate={[isValidTime]} />
     </Form>
   );
 }
@@ -151,7 +152,4 @@ function mapStateToProps(state, { reminder }) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  null,
-)(AdvancedSettingsForm);
+export default connect(mapStateToProps, null)(AdvancedSettingsForm);

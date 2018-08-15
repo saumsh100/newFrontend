@@ -96,6 +96,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.TIME,
     },
 
+    startTime: {
+      type: DataTypes.TIME,
+    },
+
     dontSendWhenClosed: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

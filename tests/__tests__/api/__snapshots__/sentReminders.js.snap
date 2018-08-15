@@ -117,6 +117,7 @@ Object {
         "primaryTypes": Array [
           "sms",
         ],
+        "startTime": null,
       },
     },
     "sentReminders": Object {

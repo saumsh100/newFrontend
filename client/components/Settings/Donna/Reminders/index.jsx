@@ -41,9 +41,7 @@ class Reminders extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({
-      url: `/api/accounts/${this.props.activeAccount.id}/reminders`,
-    });
+    this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/reminders` });
   }
 
   toggleAdding() {
@@ -68,9 +66,7 @@ class Reminders extends Component {
     };
 
     const alert = {
-      success: {
-        body: 'Reminder Created',
-      },
+      success: { body: 'Reminder Created' },
 
       error: {
         title: 'Clinic Reminders Error',
@@ -85,9 +81,7 @@ class Reminders extends Component {
         alert,
       })
       .then(() => {
-        this.setState({
-          isAdding: false,
-        });
+        this.setState({ isAdding: false });
 
         this.props.reset('newReminder');
       });
@@ -110,6 +104,7 @@ class Reminders extends Component {
       omitChairIdsString,
       omitPractitionerIdsString,
       isDaily,
+      startTime,
     } = newValues;
 
     if (isCustomConfirm && customConfirmString) {
@@ -120,6 +115,10 @@ class Reminders extends Component {
 
     if (!isDaily) {
       newValues.dailyRunTime = null;
+    }
+
+    if (!startTime) {
+      newValues.startTime = null;
     }
 
     newValues.omitChairIds = omitChairIdsString ? omitChairIdsString.split(',') : [];
@@ -200,7 +199,10 @@ class Reminders extends Component {
         label: 'Save',
         onClick: this.newReminder,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: 'newReminder' },
+        props: {
+          color: 'blue',
+          form: 'newReminder',
+        },
       },
     ];
 
@@ -290,9 +292,7 @@ class Reminders extends Component {
 
 Reminders.propTypes = {
   activeAccount: PropTypes.shape(accountShape).isRequired,
-  reminders: PropTypes.shape({
-    get: PropTypes.func.isRequired,
-  }).isRequired,
+  reminders: PropTypes.shape({ get: PropTypes.func.isRequired }).isRequired,
   role: PropTypes.string.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,

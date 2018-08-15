@@ -18,6 +18,7 @@ import {
   convertIntervalStringToObject,
   convertIntervalToMs,
   sortIntervalAscPredicate,
+  tzTime,
 } from '../../util/time';
 import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
@@ -80,7 +81,6 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
   return remindersPatients;
 }
 
-
 /**
  * getAppointmentsFromReminder returns all of the appointments that are
  * - in that clinic
@@ -88,16 +88,18 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
  * - and if we should send reminder
  *
  * @param reminder
+ * @param account - has a default of empty object for testing simplicity
  * @param startDate
  * @param endDate (defaults to startDate + 5 minutes)
- * @param lastReminder
- * @param buffer
+ * @returns [appointments]
  */
-export async function getAppointmentsFromReminder({ reminder, account, startDate, endDate }) {
+export async function getAppointmentsFromReminder({ reminder, account = {}, startDate, endDate }) {
+  // This function should throw an error if startDate and endDate are not in the same day
   endDate = endDate || moment(startDate).add(CRON_MINUTES, 'minutes').toISOString();
 
   // convert string to { weeks: 1, days: 1, ... }
   const intervalObject = convertIntervalStringToObject(reminder.interval);
+  const { timezone } = account;
 
   // Add the touchpoint's interval to the date we are wanting to check for
   let start = moment(startDate).add(intervalObject).toISOString();
@@ -110,8 +112,6 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
   let sameDayStart = moment(start).subtract(SAME_DAY_HOURS, 'hours').toISOString();
 
   if (reminder.isDaily) {
-    const { timezone } = account;
-
     // Now adjust end if there are consecutive closed days
     if (reminder.dontSendWhenClosed) {
       const weeklySchedule = await WeeklySchedule.findById(account.weeklyScheduleId);
@@ -137,16 +137,40 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
     // Easier than conditionally querying same-day appts
     // This makes the window 0 seconds
     sameDayStart = start;
+  } else if (reminder.startTime) {
+    // We would never have a reminder with a specific startTime that was sent isDaily
+    // startTime is for rolling reminders like the 2 hour reminders
+    const values = reminder.startTime.split(':');
+    const startTime = moment.tz(start, timezone)
+      .hours(values[0])
+      .minutes(values[1])
+      .seconds(values[2])
+      .milliseconds(0)
+      .add(intervalObject)
+      .toISOString();
+
+    if (start <= startTime && startTime < end) {
+      // If the reminder.startTime is between the range we are searching then
+      // make the lower bound the reminder.startTime
+      start = startTime;
+    } else if (start <= startTime && end <= startTime) {
+      // If range is less than startTime, return zero cause then its not a valid time to send
+      return [];
+    }
   }
+
+  const defaultAppointmentsScope = {
+    isDeleted: false,
+    isCancelled: false,
+    isShortCancelled: false,
+    isMissed: false,
+    isPending: false,
+  };
 
   // Now we query for the appointments, those appointments patients and sentReminders, and those patients appointmemnts
   const appointments = await Appointment.findAll({
     where: {
-      isDeleted: false,
-      isCancelled: false,
-      isShortCancelled: false,
-      isMissed: false,
-      isPending: false,
+      ...defaultAppointmentsScope,
       accountId: reminder.accountId,
       startDate: {
         $gte: start,
@@ -188,11 +212,7 @@ export async function getAppointmentsFromReminder({ reminder, account, startDate
             model: Appointment,
             as: 'appointments',
             where: {
-              isDeleted: false,
-              isCancelled: false,
-              isShortCancelled: false,
-              isMissed: false,
-              isPending: false,
+              ...defaultAppointmentsScope,
               accountId: reminder.accountId,
               // Do not include the upper-bound, or else you'll always get the same appointment as above
               startDate: {
@@ -433,12 +453,13 @@ export async function fetchAccountsAndActiveReminders({ startDate, endDate }) {
 export function generateIsActiveReminder({ account, startDate, endDate }) {
   return (reminder) => {
     if (!reminder.isDaily) return true;
+
     // If it's a daily reminder, ensure the dailyRunTime is within the range
     // or else it wouldn't get sent in the range and no need to return
     const { dailyRunTime } = reminder;
-    const t = d => moment.tz(d, account.timezone).format('HH:mm:ss');
-    const start = t(startDate);
-    const end = t(endDate);
+    const { timezone } = account;
+    const start = tzTime(startDate, timezone);
+    const end = tzTime(endDate, timezone);
     return (start <= dailyRunTime) && (dailyRunTime < end);
   };
 }
