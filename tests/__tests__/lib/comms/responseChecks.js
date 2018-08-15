@@ -129,17 +129,50 @@ describe('Communications Utility - Response Checks', () => {
 
     test('should return true', () => {
       const text = 'y';
-      expect(isSmsConfirmationResponse(text, { C: true, Y: true })).toBe(true);
+      expect(isSmsConfirmationResponse(text, {
+        C: true,
+        Y: true,
+      })).toBe(true);
     });
 
     test('should return false', () => {
       const text = 'yes';
-      expect(isSmsConfirmationResponse(text, { C: true, Y: true })).toBe(false);
+      expect(isSmsConfirmationResponse(text, {
+        C: true,
+        Y: true,
+      })).toBe(false);
     });
 
     test('should return true', () => {
       const text = 'Y... Great!';
-      expect(isSmsConfirmationResponse(text, { C: true, Y: true })).toBe(true);
+      expect(isSmsConfirmationResponse(text, {
+        C: true,
+        Y: true,
+      })).toBe(true);
+    });
+
+    test('should return false', () => {
+      const text = "Y'all!";
+      expect(isSmsConfirmationResponse(text, {
+        C: true,
+        Y: true,
+      })).toBe(false);
+    });
+
+    test('should return false', () => {
+      const text = "all'y";
+      expect(isSmsConfirmationResponse(text, {
+        C: true,
+        Y: true,
+      })).toBe(false);
+    });
+
+    test('should return false', () => {
+      const text = 'all"y';
+      expect(isSmsConfirmationResponse(text, {
+        C: true,
+        Y: true,
+      })).toBe(false);
     });
   });
 });

@@ -36,7 +36,7 @@ export function getIndicesOf(text, magicWord) {
  * @param char
  */
 export function isWordy(char) {
-  return /[a-zA-Z0-9]/.test(char);
+  return /[a-zA-Z0-9'"]/.test(char);
 }
 
 /**
