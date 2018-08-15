@@ -35,12 +35,10 @@ module.exports = {
           },
           { transaction: t },
         );
-        await queryInterface.changeColumn(
-          'WaitSpots',
-          'availableDates',
-          {
-            type: Sequelize.ARRAY(Sequelize.DATEONLY),
-          },
+        await queryInterface.sequelize.query(
+          'ALTER TABLE "WaitSpots" ALTER COLUMN "availableDates" DROP NOT NULL;' +
+          'ALTER TABLE "WaitSpots" ALTER COLUMN "availableDates" DROP DEFAULT;' +
+          'ALTER TABLE "WaitSpots" ALTER COLUMN "availableDates" TYPE DATE[] USING ("availableDates"::date[]);',
           { transaction: t },
         );
       } catch (err) {
