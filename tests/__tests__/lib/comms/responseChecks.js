@@ -166,13 +166,5 @@ describe('Communications Utility - Response Checks', () => {
         Y: true,
       })).toBe(false);
     });
-
-    test('should return false', () => {
-      const text = 'all"y';
-      expect(isSmsConfirmationResponse(text, {
-        C: true,
-        Y: true,
-      })).toBe(false);
-    });
   });
 });
