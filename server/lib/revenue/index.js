@@ -16,14 +16,10 @@ const startOfCurrentDay = timezone => moment().tz(timezone).startOf('day').toISO
  */
 export default async function calcRevenueDays(revParams) {
   try {
-    const {
-      date, pastDaysLimit, maxDates, accountId,
-    } = revParams;
+    const { date, pastDaysLimit, maxDates, accountId  } = revParams;
 
     const accountData = await Account.findOne({
-      where: {
-        id: accountId,
-      },
+      where: { id: accountId  },
       include: [
         {
           model: WeeklySchedule,
@@ -52,9 +48,7 @@ export default async function calcRevenueDays(revParams) {
         .endOf('day')
         .toISOString()) > -1
     ) {
-      return {
-        average: 0,
-      };
+      return { average: 0  };
     }
 
     const totalRevObj = await getAllDatesWithAppointments(
@@ -95,9 +89,7 @@ export default async function calcRevenueDays(revParams) {
                 .toISOString(),
             ],
           },
-          estimatedRevenue: {
-            $not: null,
-          },
+          estimatedRevenue: { $not: null  },
         },
         attributes: ['estimatedRevenue', 'startDate'],
       });
@@ -131,7 +123,6 @@ export default async function calcRevenueDays(revParams) {
                 .toISOString(),
             ],
           },
-          isCompleted: true,
         },
         group: ['DeliveredProcedure.id'],
         attributes: [
@@ -165,7 +156,6 @@ export default async function calcRevenueDays(revParams) {
                 .toISOString(),
             ],
           },
-          isCompleted: true,
         },
         group: ['DeliveredProcedure.id'],
         attributes: [
@@ -194,9 +184,7 @@ export default async function calcRevenueDays(revParams) {
                 .toISOString(),
             ],
           },
-          estimatedRevenue: {
-            $not: null,
-          },
+          estimatedRevenue: { $not: null  },
         },
         attributes: ['estimatedRevenue', 'startDate'],
       });
