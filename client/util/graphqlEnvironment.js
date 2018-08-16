@@ -1,18 +1,28 @@
 
-import { Environment, Network, RecordSource, Store } from 'relay-runtime';
+import { Environment, Network, RecordSource, Store } from 'relay-runtime'; // eslint-disable-line import/no-extraneous-dependencies
+import ApolloClient from 'apollo-boost';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { isOnDevice, getApiUrl, getSubscriptionUrl } from './hub';
 
 const getTokenDefault = () => localStorage.getItem('token');
+const hostName = `${window.location.protocol}//${window.location.host}`;
 const path = '/graphql';
 
 const socketProtocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
-const url = !isOnDevice() ? path : getApiUrl() + path;
+const uri = !isOnDevice() ? `${hostName}${path}` : getApiUrl() + path;
+
+export const apolloClient = new ApolloClient({
+  uri,
+  request: async (operation) => {
+    const token = getTokenDefault();
+    operation.setContext({ headers: { Authorization: `Bearer ${token}` } });
+  },
+});
 
 const fetchQuery = (getToken = getTokenDefault) => (operation, variables) => {
   const token = getToken();
 
-  return fetch(url, {
+  return fetch(uri, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -33,21 +43,20 @@ const setupSubscription = (config, variables, cacheConfig, observer) => {
     `${socketProtocol}://${getSubscriptionUrl()}/subscriptions`,
     {
       reconnect: true,
-      connectionParams: {
-        Authorization: token,
-      },
+      connectionParams: { Authorization: token },
     },
   );
 
-  const client = subscriptionClient.request({ query, variables }).subscribe((response) => {
-    observer.onNext({
-      data: response.data,
+  const client = subscriptionClient
+    .request({
+      query,
+      variables,
+    })
+    .subscribe((response) => {
+      observer.onNext({ data: response.data });
     });
-  });
 
-  return {
-    dispose: client.unsubscribe,
-  };
+  return { dispose: client.unsubscribe };
 };
 
 const environment = new Environment({
