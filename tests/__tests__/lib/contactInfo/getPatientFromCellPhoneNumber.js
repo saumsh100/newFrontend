@@ -36,6 +36,8 @@ describe('Contact Info Service', () => {
         makeFamilyData({ pmsCreatedAt: new Date(2018, 1, 1) }),
         makeFamilyData({ pmsCreatedAt: new Date(2017, 1, 1) }),
         makeFamilyData({ pmsCreatedAt: new Date(2016, 1, 1) }),
+        makeFamilyData({ pmsCreatedAt: new Date(2015, 1, 1) }),
+        makeFamilyData({ pmsCreatedAt: new Date(2014, 1, 1) }),
       ]);
 
       patients = await Patient.bulkCreate([
@@ -46,11 +48,18 @@ describe('Contact Info Service', () => {
         makePatientData({ firstName: 'E', lastName: 'E', mobilePhoneNumber: '+18881112222', familyId: families[1].id, pmsCreatedAt: new Date(2018, 5, 1) }),
         makePatientData({ firstName: 'F', lastName: 'F', mobilePhoneNumber: '+18882223333', familyId: families[1].id, pmsCreatedAt: new Date(2018, 6, 1) }),
         makePatientData({ firstName: 'G', lastName: 'G', mobilePhoneNumber: '+18883334444', familyId: families[2].id, pmsCreatedAt: new Date(2018, 7, 1) }),
+        
+        // Patients with birthDate
+        makePatientData({ firstName: 'H', lastName: 'H', mobilePhoneNumber: '+18883335555', familyId: families[3].id, pmsCreatedAt: new Date(2018, 8, 1), birthDate: new Date(2017, 8, 1) }),
+        makePatientData({ firstName: 'I', lastName: 'I', mobilePhoneNumber: '+18883335555', familyId: families[3].id, pmsCreatedAt: new Date(2018, 9, 1), birthDate: new Date(2018, 9, 1) }),
+        makePatientData({ firstName: 'J', lastName: 'J', mobilePhoneNumber: '+18883335566', familyId: families[4].id, pmsCreatedAt: new Date(2018, 10, 1), birthDate: new Date(2017, 10, 1) }),
+        makePatientData({ firstName: 'L', lastName: 'L', mobilePhoneNumber: '+18883335566', familyId: families[4].id, pmsCreatedAt: new Date(2018, 11, 1), birthDate: new Date(2018, 11, 1) }),
       ]);
 
       await families[0].update({ headId: patients[0].id });
       await families[1].update({ headId: patients[4].id });
       await families[2].update({ headId: patients[6].id });
+      await families[4].update({ headId: patients[10].id });
     });
 
     test('Should return patientA because its the family head of the newest family', async () => {
@@ -67,7 +76,8 @@ describe('Contact Info Service', () => {
 
     // TODO: decide if we need to support this?
     // TODO: do we care about older families if information is shared?
-    // TODO: how many families in 1 account share the same contact information in its patients? should group by the patient's number
+    // TODO: how many families in 1 account share the same contact information in its patients? 
+    // TODO: should group by the patient's number
     test.skip('Should return patientG because its the only family head', async () => {
       const cellPhoneNumber = '+18883334444';
       const patient = await getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId });
@@ -85,6 +95,18 @@ describe('Contact Info Service', () => {
       const cellPhoneNumber = '+18881112222';
       const patient = await getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId });
       expect(patient.id).toBe(patients[4].id);
+    });
+
+    test('Should return patient H because is the oldest member of the newest created family', async () => {
+      const cellPhoneNumber = '+18883335555';
+      const patient = await getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId });
+      expect(patient.id).toBe(patients[7].id);
+    });
+
+    test('Should return patient L because is family head even thought is not the oldest member', async () => {
+      const cellPhoneNumber = '+18883335566';
+      const patient = await getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId });
+      expect(patient.id).toBe(patients[10].id);
     });
   });
 });

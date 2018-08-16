@@ -4,11 +4,9 @@ const orderBy = require('lodash/orderBy');
 const toArray = require('lodash/toArray');
 
 // Can't used Family model because the migrations use this function
-const isHead = (family, patient) => {
-  return family.accountId === patient.accountId &&
+const isHead = (family, patient) => family.accountId === patient.accountId &&
     family.id === patient.familyId &&
     family.headId === patient.id;
-};
 
 /**
  * selectCorrectPatient is a function that will take an array of patients data and return
@@ -41,12 +39,15 @@ module.exports = function selectCorrectPatient(patients) {
   }
 
   // Group by family, ordered by family.pmsCreatedAt
-  // This object would look like { [familyId1]: [patientsInFamily1], [familyId2]: [patientsInFamily2], ... }
+  // This object would look like
+  // { [familyId1]: [patientsInFamily1], [familyId2]: [patientsInFamily2], ... }
   const families = toArray(groupBy(patientsWithFamilies, 'familyId'));
 
   // Select the newest family to work with for the rest of the function
-  const orderedFamilies =  orderBy(families, patientsInFamily => patientsInFamily[0].family.pmsCreatedAt, 'desc');
-  const newestFamilyPatients = orderedFamilies[0];
+  const orderedFamilies = orderBy(families, patientsInFamily => patientsInFamily[0].family.pmsCreatedAt, 'desc');
+
+  // Order the families members by birthDate so the POC is the oldest member if not the head.
+  const newestFamilyPatients = orderBy(orderedFamilies[0], p => p.birthDate, 'asc');
 
   // Return the family head or else return the newest created patient in family
   const familyHead = newestFamilyPatients.find(p => isHead(p.family, p));
