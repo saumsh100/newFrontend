@@ -146,6 +146,9 @@
       top: 29px;
       left: calc(-50% + 10px);
       z-index: -1;
+      @media (min-width: 350px) {
+        top: 33px;
+      }
     }
     &.active {
       color: $widget-white;
@@ -166,6 +169,9 @@
       font-size: 10px;
       font-weight: 600;
       margin-bottom: 4px;
+      @media (min-width: 350px) {
+        font-size: 11px;
+      }
     }
     &:first-of-type {
       z-index: 3;
@@ -185,6 +191,10 @@
       border-radius: 50%;
       color: $widget-grey-light;
       background: $widget-grey-lightest;
+      @media (min-width: 350px) {
+        width: 30px;
+        height: 30px;
+      }
     }
     svg {
       width: 14px;

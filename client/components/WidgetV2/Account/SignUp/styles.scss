@@ -7,3 +7,8 @@
   vertical-align: baseline;
   margin-left: 3px;
 }
+
+.actionButton {
+  @extend .actionButton;
+  margin-bottom: var(--widget-spacer);
+}

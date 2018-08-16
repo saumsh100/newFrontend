@@ -22,12 +22,6 @@ import styles from './styles.scss';
  */
 const nextRoute = './select-times';
 
-
-/**
- * Checks if there are a specific route to go onclicking a card or just the default one.
- */
-const contextualUrl = location => (location.state && location.state.nextRoute) || nextRoute;
-
 const daysOfTheWeek = [
   'sunday',
   'monday',
@@ -51,7 +45,7 @@ class SelectDates extends PureComponent {
       ...props
     } = this.props;
 
-    props.setText('Select times available');
+    props.setText();
     this.shouldShowNextButton(dates.length > 0);
   }
 
@@ -68,7 +62,6 @@ class SelectDates extends PureComponent {
       });
     }
   }
-
 
   shouldShowNextButton(should) {
     return should ? this.props.showButton() : this.props.hideButton();
@@ -100,7 +93,7 @@ class SelectDates extends PureComponent {
       <div className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
-            <h1 className={styles.heading}>Select Waitlist Days Available</h1>
+            <h1 className={styles.heading}>Select Available Days</h1>
             <p className={styles.description}>Select all that apply</p>
           </div>
         </div>
@@ -108,10 +101,17 @@ class SelectDates extends PureComponent {
           <div className={styles.container}>
             <div className={styles.timeFrameWrapper}>
               {daysOfTheWeek.map((day) => {
-                const classes = classnames(styles.slot, styles.timeFrameButton, { [styles.selectedSlot]: checkIfIncludesDay(day) });
+                const { slot, timeFrameButton, selectedSlot } = styles;
                 return (
                   <div className={styles.slotWrapper} key={day}>
-                    <Button onClick={() => this.handleAvailableDays(day)} className={classes}>
+                    <Button
+                      onClick={() => this.handleAvailableDays(day)}
+                      className={classnames({
+                        [slot]: true,
+                        [timeFrameButton]: true,
+                        [selectedSlot]: checkIfIncludesDay(day),
+                      })}
+                    >
                       {capitalizeFirstLetter(day)}
                     </Button>
                   </div>

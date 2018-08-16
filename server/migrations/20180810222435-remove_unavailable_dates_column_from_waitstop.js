@@ -36,6 +36,7 @@ module.exports = {
           { transaction: t },
         );
         await queryInterface.sequelize.query(
+          'UPDATE "WaitSpots" SET "availableDates" = NULL;' +
           'ALTER TABLE "WaitSpots" ALTER COLUMN "availableDates" DROP NOT NULL;' +
           'ALTER TABLE "WaitSpots" ALTER COLUMN "availableDates" DROP DEFAULT;' +
           'ALTER TABLE "WaitSpots" ALTER COLUMN "availableDates" TYPE DATE[] USING ("availableDates"::date[]);',

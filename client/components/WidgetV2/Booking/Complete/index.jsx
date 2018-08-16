@@ -16,7 +16,12 @@ import { refreshAvailabilitiesState } from '../../../../reducers/availabilities'
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { BookingConfirmedSVG } from '../../SVGs';
 import { handleAvailabilitiesTimes } from '../Review/helpers';
+import SummaryItem from '../Review/SummaryItem';
+import { hideButton } from '../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
+import { capitalizeFirstLetter } from '../../../Utils';
+
+const NOT_PROVIDED_TEXT = 'Not Provided';
 
 function Complete({
   dateAndTime,
@@ -28,8 +33,10 @@ function Complete({
   selectedPractitioner,
   timezone,
   waitlist,
+  notes,
   ...props
 }) {
+  props.hideButton();
   /**
    * Look over the officeHours object and find the earliest startTime of the clinic.
    */
@@ -71,16 +78,12 @@ function Complete({
    * If is a regular range display the first and the last day,
    * otherwise display a list of dates.
    */
-  const waitlistDates = () => {
-    if (waitlist.dates.length === 0) {
+  const waitlistDates = (dates) => {
+    if (dates.length === 0) {
       return null;
     }
-    const firstDate = dateFormatter(waitlist.dates[0], timezone, 'MMM Do');
-    const lastDate = dateFormatter(waitlist.dates[waitlist.dates.length - 1], timezone, 'MMM Do');
-    /**
-     * It shows the days that are on the waitlist.
-     */
-    return `From: ${firstDate} - To: ${lastDate}`;
+
+    return dates.map(d => capitalizeFirstLetter(d)).join(', ');
   };
 
   /**
@@ -95,6 +98,8 @@ function Complete({
       </span>
     );
 
+  const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
+    NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
   return (
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
@@ -106,70 +111,76 @@ function Complete({
             Thank You, {patientUser && `${patientUser.firstName} ${patientUser.lastName}`}!
           </h1>
           <p className={styles.description}>
-            Your request has been successfully created. <br />
+            Your request has been submitted successfully. <br />
             We will be in touch soon, please wait for our confirmation.
           </p>
         </div>
       </div>
       <div className={styles.contentWrapper}>
-        <div className={styles.container}>
-          {dateAndTime && (
-            <div className={styles.rowCard}>
+        {dateAndTime && (
+          <div className={styles.content}>
+            <div className={styles.bookingGroup}>
+              <h4 className={styles.title}>Appointment Details</h4>
+              <SummaryItem label="Reason" value={selectedService.get('name')} />
+              {selectedPractitioner && selectedPractitioner.getPrettyName() ? (
+                <SummaryItem label="Practitioner" value={selectedPractitioner.getPrettyName()} />
+              ) : (
+                <SummaryItem label="Practitioner" value="No Preference" />
+              )}
+              <SummaryItem
+                label="Date"
+                value={`${dateFormatter(
+                  dateAndTime.startDate,
+                  timezone,
+                  'ddd, MMM Do',
+                )} at ${dateFormatter(dateAndTime.startDate, timezone, 'h:mm a')}`}
+              />
+            </div>
+            <hr />
+            {waitlist.dates.length > 0 && (
               <div className={styles.bookingGroup}>
-                <h4 className={styles.bookingType}>{"Appointment's Details"}:</h4>
-                <p className={styles.requestInfo}>
-                  <strong>Date:</strong>{' '}
-                  {`${dateFormatter(
-                    dateAndTime.startDate,
-                    timezone,
-                    'dddd, MMM Do',
-                  )} at ${dateFormatter(dateAndTime.startDate, timezone, 'h:mm a')}`}
-                </p>
-                {selectedPractitioner &&
-                  selectedPractitioner.getPrettyName() && (
-                    <p className={styles.requestInfo}>
-                      <strong>Practitioner:</strong> {selectedPractitioner.getPrettyName()}
-                    </p>
-                  )}
-                <p className={styles.requestInfo}>
-                  <strong>Reason:</strong> {selectedService.get('name')}
-                </p>
+                <h4 className={styles.title}>Waitlist Details</h4>
+                <SummaryItem
+                  label="Available Dates"
+                  value={waitlistDates(waitlist.dates, timezone)}
+                />
+                <SummaryItem label="Times" value={waitlistTimes()} />
               </div>
-            </div>
-          )}
-
-          {waitlist.dates.length > 0 && (
-            <div className={styles.rowCard}>
-              <h4 className={styles.bookingType}>{"Waitlist's Details"}:</h4>
-              <p className={styles.requestInfo}>
-                <strong>Reason:</strong> {selectedService.get('name')}
-              </p>
-              <p className={styles.requestInfo}>
-                <strong>Available Dates:</strong> {waitlistDates()}
-              </p>
-              <p className={styles.requestInfo}>
-                <strong>Available Times:</strong> {waitlistTimes()}
-              </p>
-            </div>
-          )}
-          <div className={styles.contentWrapper}>
-            <Button
-              className={styles.actionButton}
-              onClick={() => {
-                props.refreshAvailabilitiesState();
-                history.push({
-                  ...location,
-                  pathname: '../book/reason',
-                  state: {
-                    ...location.state,
-                    isCompleteRoute: false,
-                  },
-                });
-              }}
-            >
-              Start New Booking
-            </Button>
+            )}
           </div>
+        )}
+        <div className={styles.content}>
+          <div className={styles.bookingGroup}>
+            <h4 className={styles.title}>Patient Details</h4>
+            <SummaryItem
+              label="Patient"
+              value={`${patientUser.firstName} ${patientUser.lastName}`}
+            />
+            <SummaryItem
+              label="Insurance Carrier"
+              value={`${patientUser.insuranceCarrier || NOT_PROVIDED_TEXT}`}
+            />
+            <SummaryItem label="Insurance Member ID & Group ID" value={insuranceMemberAndGroupID} />
+            <SummaryItem label="Notes" value={notes || NOT_PROVIDED_TEXT} />
+          </div>
+        </div>
+        <div className={styles.container}>
+          <Button
+            className={styles.actionButton}
+            onClick={() => {
+              props.refreshAvailabilitiesState();
+              history.push({
+                ...location,
+                pathname: '../book/reason',
+                state: {
+                  ...location.state,
+                  isCompleteRoute: false,
+                },
+              });
+            }}
+          >
+            Start New Booking
+          </Button>
         </div>
       </div>
     </div>
@@ -177,10 +188,14 @@ function Complete({
 }
 
 function mapStateToProps({ auth, availabilities, entities }) {
-  const getPatientUser = auth
-    .get('familyPatients')
-    .find(patient => patient.id === availabilities.get('familyPatientUser'));
+  const getPatientUser =
+    availabilities.get('familyPatientUser') && auth.get('familyPatients').size > 0
+      ? auth
+        .get('familyPatients')
+        .find(patient => patient.id === availabilities.get('familyPatientUser'))
+      : false;
   return {
+    notes: availabilities.get('notes'),
     dateAndTime: availabilities.get('selectedAvailability'),
     officeHours: availabilities.get('officeHours').toJS(),
     timezone: availabilities.get('account').get('timezone'),
@@ -203,6 +218,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       refreshAvailabilitiesState,
+      hideButton,
     },
     dispatch,
   );
@@ -231,6 +247,8 @@ Complete.propTypes = {
     dates: PropTypes.arrayOf(PropTypes.string),
     times: PropTypes.arrayOf(PropTypes.string),
   }),
+  notes: PropTypes.string,
+  hideButton: PropTypes.func.isRequired,
 };
 
 Complete.defaultProps = {
@@ -239,6 +257,7 @@ Complete.defaultProps = {
     endDate: '',
     practitionerId: '',
   },
+  notes: '',
   patientUser: null,
   selectedPractitioner: '',
   selectedService: '',

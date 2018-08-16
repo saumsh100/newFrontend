@@ -5,12 +5,19 @@
   color: var(--primaryColor);
   margin-bottom: var(--widget-spacer);
 }
+
+.actionButton {
+  @extend .actionButton;
+  margin-bottom: var(--widget-spacer);
+}
+
 .container {
   @extend .container;
   text-align: center;
 }
 .content {
-  padding: 0;
+  @extend .content;
+  text-align: center;
 }
 .requestTitle {
   @extend .subtitle;
@@ -56,4 +63,16 @@
   font-weight: 500;
   margin-bottom: 8px;
   margin-top: 0;
+}
+
+.title {
+  @extend .title;
+  margin-bottom: var(--widget-spacer);
+}
+
+hr {
+  border: 0;
+  margin: var(--widget-spacer) 0;
+  background: $widget-grey-lighter;
+  height: 1px;
 }

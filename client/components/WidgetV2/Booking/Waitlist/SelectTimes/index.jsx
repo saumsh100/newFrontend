@@ -58,9 +58,7 @@ class SelectTimes extends React.Component {
   }
 
   render() {
-    const {
-      selectedService, officeHours, waitlist, timezone, setWaitlist,
-    } = this.props;
+    const { selectedService, officeHours, waitlist, timezone, setWaitlist } = this.props;
 
     /**
      * Add the current.startDate to the accumulator.
@@ -197,9 +195,8 @@ class SelectTimes extends React.Component {
         <div className={styles.timeFrameWrapper}>
           <h3 className={styles.slotsTitle}>{label}</h3>
           {timeframe.map((availability) => {
-            const classes = classnames(styles.slot, {
-              [styles.selectedSlot]: checkIfIncludesTime(availability),
-            });
+            const { slot, selectedSlot } = styles;
+            const classes = classnames(slot, { [selectedSlot]: checkIfIncludesTime(availability) });
             return (
               <div className={styles.cardWrapper} key={`${availability.startDate}`}>
                 <Button
@@ -218,7 +215,7 @@ class SelectTimes extends React.Component {
       <div className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
-            <h1 className={styles.heading}>Select Waitlist Times Available</h1>
+            <h1 className={styles.heading}>Select Available Times</h1>
             <p className={styles.description}>Select all that apply</p>
           </div>
         </div>
@@ -243,9 +240,7 @@ class SelectTimes extends React.Component {
   }
 }
 
-function mapStateToProps({
-  availabilities, auth, entities, widgetNavigation,
-}) {
+function mapStateToProps({ availabilities, auth, entities, widgetNavigation }) {
   const getPatientUser =
     availabilities.get('familyPatientUser') && auth.get('familyPatients').length > 0
       ? auth

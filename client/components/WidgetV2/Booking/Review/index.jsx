@@ -24,7 +24,7 @@ import {
   setText,
 } from '../../../../reducers/widgetNavigation';
 import { BookingReviewSVG } from '../../SVGs';
-import { refreshFirstStepData, refreshSecondStepData } from '../../../../reducers/availabilities';
+import { refreshFirstStepData } from '../../../../reducers/availabilities';
 import { capitalizeFirstLetter } from '../../../Utils';
 import styles from './styles.scss';
 
@@ -64,7 +64,7 @@ class Review extends PureComponent {
   componentDidMount() {
     const { dateAndTime, hasWaitList, canConfirm } = this.props;
     if (canConfirm && (dateAndTime || hasWaitList)) {
-      this.props.setText('Confirm Booking');
+      this.props.setText('Submit Booking Request');
       return this.props.showButton();
     }
     this.props.setText();
@@ -189,7 +189,7 @@ class Review extends PureComponent {
                   className={styles.editLink}
                   onClick={() => {
                     if (
-                      window.confirm("Confirm if you want to change your appointment's information.")
+                      window.confirm('Are you sure you want to edit your appointment information? You will have to re-select the steps in Find a Time section.')
                     ) {
                       this.props.refreshFirstStepData();
                       return this.props.history.push(b('reason'), { nextRoute: location.pathname });
@@ -202,9 +202,14 @@ class Review extends PureComponent {
                 </Button>
               </div>
             </div>
-            {selectedService.get('name') && (
-              <SummaryItem label="Reason" value={selectedService.get('name')} link={b('reason')} />
-            )}
+            {selectedService &&
+              selectedService.get('name') && (
+                <SummaryItem
+                  label="Reason"
+                  value={selectedService.get('name')}
+                  link={b('reason')}
+                />
+              )}
             <SummaryItem
               label="Practitioner"
               value={
@@ -270,15 +275,7 @@ class Review extends PureComponent {
               <div>
                 <Button
                   className={styles.editLink}
-                  onClick={() => {
-                    if (
-                      window.confirm("Confirm if you want to change the patient's information.")
-                    ) {
-                      this.props.refreshSecondStepData();
-                      return this.props.history.push(b('patient-information'));
-                    }
-                    return undefined;
-                  }}
+                  onClick={() => this.props.history.push(b('patient-information'))}
                 >
                   <BookingReviewSVG />
                   Edit
@@ -363,7 +360,6 @@ function mapDispatchToProps(dispatch) {
       setText,
       showButton,
       refreshFirstStepData,
-      refreshSecondStepData,
     },
     dispatch,
   );
@@ -400,7 +396,6 @@ Review.propTypes = {
     times: PropTypes.arrayOf(PropTypes.string),
   }),
   refreshFirstStepData: PropTypes.func.isRequired,
-  refreshSecondStepData: PropTypes.func.isRequired,
   floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
   showButton: PropTypes.func.isRequired,

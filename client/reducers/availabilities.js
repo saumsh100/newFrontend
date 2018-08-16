@@ -44,7 +44,6 @@ export const SET_WAITLIST_TIMES = `${reducerName}SET_WAITLIST_TIMES`;
 export const SET_FAMILY_PATIENT_USER = `${reducerName}SET_FAMILY_PATIENT_USER`;
 export const SET_SELECTED_SERVICE_ID = `${reducerName}SET_SELECTED_SERVICE_ID`;
 export const REFRESH_FIRST_STEP_DATA = `${reducerName}REFRESH_FIRST_STEP_DATA`;
-export const REFRESH_SECOND_STEP_DATA = `${reducerName}REFRESH_SECOND_STEP_DATA`;
 export const SET_SELECTED_PRACTITIONER_ID = `${reducerName}SET_SELECTED_PRACTITIONER_ID`;
 export const REFRESH_AVAILABILITIES_STATE = `${reducerName}REFRESH_AVAILABILITIES_STATE`;
 export const SET_TIMEFRAME = `${reducerName}SET_TIMEFRAME`;
@@ -63,7 +62,6 @@ export const setWaitlistTimes = createAction(SET_WAITLIST_TIMES);
 export const refreshFirstStepData = createAction(REFRESH_FIRST_STEP_DATA);
 export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);
 export const setSelectedServiceId = createAction(SET_SELECTED_SERVICE_ID);
-export const refreshSecondStepData = createAction(REFRESH_SECOND_STEP_DATA);
 export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_ID);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 
@@ -218,12 +216,6 @@ export default handleActions(
         confirmedAvailability: false,
       });
     },
-    [REFRESH_SECOND_STEP_DATA](state) {
-      return state.merge({
-        familyPatientUser: null,
-        notes: null,
-      });
-    },
 
     [SET_AVAILABILITIES](state, action) {
       return state.set('availabilities', action.payload);
@@ -356,9 +348,7 @@ export default handleActions(
 
     [CREATE_PATIENT](state, action) {
       const { firstName, lastName } = action.payload;
-      return state.merge({
-        messages: [`Patient ${firstName} ${lastName} has been registered`],
-      });
+      return state.merge({ messages: [`Patient ${firstName} ${lastName} has been registered`] });
     },
 
     [SET_REGISTRATION_STEP](state, action) {
@@ -371,9 +361,7 @@ export default handleActions(
     },
 
     [SET_CLINIC_INFO](state, action) {
-      const {
-        address, logo, clinicName, bookingWidgetPrimaryColor,
-      } = action.payload;
+      const { address, logo, clinicName, bookingWidgetPrimaryColor } = action.payload;
       return state.merge({
         logo,
         address,
@@ -384,9 +372,7 @@ export default handleActions(
 
     [SET_RESERVATION](state, action) {
       const reservationId = action.payload;
-      return state.merge({
-        reservationId,
-      });
+      return state.merge({ reservationId });
     },
 
     [REMOVE_RESERVATION](state) {

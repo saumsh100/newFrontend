@@ -13,7 +13,7 @@ import Button from '../library/Button';
 import { setIsClicked } from '../../reducers/widgetNavigation';
 import { locationShape, historyShape } from '../library/PropTypeShapes/routerShapes';
 import { AccountTabSVG, FindTimeSVG, ReviewBookSVG } from './SVGs';
-import { refreshFirstStepData, refreshSecondStepData } from '../../reducers/availabilities';
+import { refreshFirstStepData } from '../../reducers/availabilities';
 import styles from './styles.scss';
 
 const b = ({ pathname }, path) =>
@@ -27,7 +27,6 @@ class Widget extends Component {
   constructor() {
     super();
     this.handleCleaningFirstStep = this.handleCleaningFirstStep.bind(this);
-    this.handleCleaningSecondStep = this.handleCleaningSecondStep.bind(this);
   }
 
   componentWillMount() {
@@ -45,23 +44,13 @@ class Widget extends Component {
   }
 
   /**
-   * Ask if the user wants to proceed and reselect all data related to the second step.
-   * @returns {*}
-   */
-  handleCleaningSecondStep() {
-    if (window.confirm("Confirm if you want to change the patient's information.")) {
-      this.props.refreshSecondStepData();
-      return this.props.history.push(b(this.props.location, 'patient-information'));
-    }
-    return undefined;
-  }
-
-  /**
    * Ask if the user wants to proceed and reselect all data related to the first step.
    * @returns {*}
    */
   handleCleaningFirstStep() {
-    if (window.confirm("Confirm if you want to change your appointment's information.")) {
+    if (
+      window.confirm('Are you sure you want to edit your appointment information? You will have to re-select the steps in Find a Time section.')
+    ) {
       this.props.refreshFirstStepData();
       return this.props.history.push(b(this.props.location, 'reason'));
     }
@@ -116,10 +105,10 @@ class Widget extends Component {
                   </Button>
                   <Button
                     disabled={!isAdditionalRoute && !isReviewRoute}
-                    className={classNames(styles.step, {
-                      [styles.active]: isSecondStep,
-                    })}
-                    onClick={this.handleCleaningSecondStep}
+                    className={classNames(styles.step, { [styles.active]: isSecondStep })}
+                    onClick={() =>
+                      this.props.history.push(b(this.props.location, 'patient-information'))
+                    }
                   >
                     <strong>Select Patient</strong>
                     <span>
@@ -176,7 +165,6 @@ function mapDispatchToProps(dispatch) {
     {
       setIsClicked,
       refreshFirstStepData,
-      refreshSecondStepData,
     },
     dispatch,
   );
@@ -184,7 +172,6 @@ function mapDispatchToProps(dispatch) {
 
 Widget.propTypes = {
   refreshFirstStepData: PropTypes.func.isRequired,
-  refreshSecondStepData: PropTypes.func.isRequired,
   account: PropTypes.instanceOf(Map).isRequired,
   children: PropTypes.node.isRequired,
   history: PropTypes.shape(historyShape).isRequired,

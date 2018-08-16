@@ -245,7 +245,7 @@ class PatientInformation extends PureComponent {
         : asyncPhoneNumberValidatePatient(values));
 
     const onSignOut = () => {
-      if (window.confirm('By signing out you will reset your current booking. Want to continue?')) {
+      if (window.confirm('Are you sure you want to log out?')) {
         this.props.logout();
         history.push('../login');
       }
