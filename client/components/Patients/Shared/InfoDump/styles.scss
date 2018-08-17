@@ -24,14 +24,14 @@
   text-transform: capitalize;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .email {
   white-space: normal;
-  max-width: 120px;
+  text-transform: none;
 }
 
 .noData {
   color: $primary-dark;
+  text-transform: uppercase;
 }

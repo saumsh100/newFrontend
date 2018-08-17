@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { Map } from 'immutable';
 import { Card, Avatar, Icon, Grid, Row, Col } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
@@ -39,7 +38,11 @@ export default function TopDisplay(props) {
     wasPatientFetched,
   } = props;
 
-  const age = patient && patient.birthDate ? moment().diff(patient.birthDate, 'years') : '';
+  if (!patient) {
+    return null;
+  }
+
+  const age = patient.getAge();
 
   const production =
     wasStatsFetched && patientStats.get('productionCalendarYear')
@@ -68,7 +71,7 @@ export default function TopDisplay(props) {
               </div>
               <div className={styles.avatarContainer_data}>
                 <div className={styles.avatarContainer_data_name}>
-                  {patient.getFullName()}, {age}
+                  {`${patient.getFullName()}${age && ','} ${age}`}
                 </div>
                 {patient.email && (
                   <div className={styles.displayFlex}>

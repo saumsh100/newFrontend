@@ -84,12 +84,13 @@
   color: $primary-dark-grey;
   padding-left: 55px;
   padding-top: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  margin-left: 3px;
 
   @media screen and (max-width: 576px) {
-    font-size: 14px;
+    font-size: 10px;
     padding-left: 43px;
     padding-top: 10px;
   }

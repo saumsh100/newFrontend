@@ -9,7 +9,7 @@ import styles from '../../PatientTable/styles.scss';
 export default function RecallColumn(props) {
   const { patient, className, showTable } = props;
 
-  const displayNa = <div className={styles.displayFlex}>{showTable ? '-' : 'n/a'}</div>;
+  const displayNa = <div className={styles.displayFlex_text}>{showTable ? '-' : 'n/a'}</div>;
 
   if (!patient.dueForRecallExamDate) {
     return displayNa;

@@ -33,9 +33,7 @@ import LeftInfoDisplay from './LeftInfoDisplay';
 import { isHub, isResponsive } from '../../../util/hub';
 import styles from './styles.scss';
 
-const HeaderModalComponent = ({
-  icon, text, onClick, title,
-}) => (
+const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
     className={classNames({
       [styles.editButton]: isResponsive(),
@@ -113,9 +111,7 @@ class PatientInfo extends Component {
   }
 
   changePageTab(pageTab) {
-    this.setState({
-      pageTab,
-    });
+    this.setState({ pageTab });
   }
 
   fetchEvents() {
@@ -123,9 +119,7 @@ class PatientInfo extends Component {
       key: 'events',
       id: 'getPatientEvents',
       url: `/api/patients/${this.props.patient.id}/events`,
-      params: {
-        limit: 10,
-      },
+      params: { limit: 10 },
     });
   }
 
@@ -179,9 +173,7 @@ class PatientInfo extends Component {
   }
 
   openFilter() {
-    this.setState({
-      filterOpen: true,
-    });
+    this.setState({ filterOpen: true });
   }
 
   reinitializeState() {
@@ -201,9 +193,7 @@ class PatientInfo extends Component {
   }
 
   handleTabChange(index) {
-    this.setState({
-      tabIndex: index,
-    });
+    this.setState({ tabIndex: index });
   }
 
   addRemoveFilter(filter) {
@@ -232,9 +222,7 @@ class PatientInfo extends Component {
 
     return (
       <Grid
-        className={classNames(styles.mainContainer, {
-          [styles.responsiveContainer]: isHub(),
-        })}
+        className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}
       >
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
@@ -370,9 +358,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStateToProps({
-  entities, apiRequests, patientTable, auth, electron,
-}, { match }) {
+function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
   const reminders = entities
     .getIn(['reminders', 'models'])
@@ -467,7 +453,10 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
 };
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 const query = graphql`
   query PatientInfo_Query($patientId: String!) {
@@ -542,9 +531,7 @@ const PatientInfoWithData = (parentProps) => {
     <QueryRenderer
       environment={graphQLEnvironment}
       query={query}
-      variables={{
-        patientId: id,
-      }}
+      variables={{ patientId: id }}
       render={PatientInfoRenderer(parentProps)}
     />
   );

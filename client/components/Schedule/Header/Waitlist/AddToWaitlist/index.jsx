@@ -31,13 +31,15 @@ const initialValues = {
   unavailableDays: [],
 };
 
+function validatePatient(value) {
+  return value && typeof value !== 'object' ? 'Searching...' : undefined;
+}
+
 class AddToWaitlist extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      patientSearched: null,
-    };
+    this.state = { patientSearched: null };
 
     this.getSuggestions = this.getSuggestions.bind(this);
     this.handleAutoSuggest = this.handleAutoSuggest.bind(this);
@@ -47,7 +49,10 @@ class AddToWaitlist extends Component {
 
   getSuggestions(value) {
     return this.props
-      .fetchEntitiesRequest({ url: '/api/patients/search', params: { patients: value } })
+      .fetchEntitiesRequest({
+        url: '/api/patients/search',
+        params: { patients: value },
+      })
       .then(searchData => searchData.patients)
       .then(searchedPatients => Object.values(searchedPatients))
       .then(patientList =>
@@ -101,9 +106,7 @@ class AddToWaitlist extends Component {
     this.props.onSubmit();
     this.props.reset(this.props.formName);
 
-    this.setState({
-      patientSearched: null,
-    });
+    this.setState({ patientSearched: null });
   }
 
   render() {
@@ -122,6 +125,7 @@ class AddToWaitlist extends Component {
         onChange={(e, newValue) => this.handleAutoSuggest(newValue)}
         icon="search"
         data-test-id="patientData"
+        validate={[validatePatient]}
       />
     ) : (
       <div
@@ -210,9 +214,7 @@ class AddToWaitlist extends Component {
   }
 }
 
-AddToWaitlist.defaultProps = {
-  formName: 'Add to Waitlist Form',
-};
+AddToWaitlist.defaultProps = { formName: 'Add to Waitlist Form' };
 
 AddToWaitlist.propTypes = {
   formName: PropTypes.string,
@@ -225,9 +227,7 @@ AddToWaitlist.propTypes = {
 const mapStateToProps = ({ auth }) => {
   const accountId = auth.get('accountId');
 
-  return {
-    accountId,
-  };
+  return { accountId };
 };
 
 const mapDispatchToProps = dispatch =>
@@ -239,4 +239,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddToWaitlist);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AddToWaitlist);

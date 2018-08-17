@@ -59,7 +59,10 @@ export default class Patient extends createModel(PatientSchema) {
   }
 
   getAge() {
-    return moment().diff(this.get('birthDate'), 'years');
+    const birthDate = this.get('birthDate');
+    return birthDate && moment(birthDate).isValid()
+      ? moment().diff(this.get('birthDate'), 'years')
+      : '';
   }
 
   getInsurance() {

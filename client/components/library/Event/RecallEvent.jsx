@@ -17,19 +17,19 @@ export default function RecallEvent({ data }) {
   };
 
   const recallIntervalHash = {
-    '1 months': '1 month before',
-    '1 weeks': '1 week before',
-    '-1 weeks': '1 week after',
-    '-1 months': '1 month after',
-    '-2 months': '2 months after',
-    '-4 months': '4 months after',
-    '-6 months': '6 months after',
-    '-8 months': '8 months after',
-    '-10 months': '10 months after',
-    '-12 months': '12 months after',
-    '-14 months': '14 months after',
-    '-16 months': '16 months after',
-    '-18 months': '18 months after',
+    '1 months': '1 Month Before',
+    '1 weeks': '1 Week Before',
+    '-1 weeks': '1 Week After',
+    '-1 months': '1 Month After',
+    '-2 months': '2 Months After',
+    '-4 months': '4 Months After',
+    '-6 months': '6 Months After',
+    '-8 months': '8 Months After',
+    '-10 months': '10 Months After',
+    '-12 months': '12 Months After',
+    '-14 months': '14 Months After',
+    '-16 months': '16 Months After',
+    '-18 months': '18 Months After',
   };
 
   const intervalText = recallIntervalHash[data.recall.interval];
@@ -44,8 +44,4 @@ export default function RecallEvent({ data }) {
   return <EventContainer key={data.id} headerData={headerData} />;
 }
 
-RecallEvent.propTypes = {
-  data: PropTypes.shape({
-    appointmentStartDate: PropTypes.string,
-  }).isRequired,
-};
+RecallEvent.propTypes = { data: PropTypes.shape({ appointmentStartDate: PropTypes.string }).isRequired };

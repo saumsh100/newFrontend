@@ -14,7 +14,7 @@ class Timeline extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      limit: 10,
+      page: 5,
       loaded: false,
       eventsLength: 0,
     };
@@ -25,50 +25,35 @@ class Timeline extends Component {
     const { events } = this.props;
 
     const query = {
-      limit: 5,
-      offset: this.state.limit,
+      limit: this.state.page,
+      offset: events.length,
       retrieveEvents: ['appointments'],
     };
 
-    if (events.length !== this.state.eventsLength) {
-      this.setState(
-        {
-          loaded: true,
-        },
-        () => {
-          this.props
-            .fetchEntities({
-              key: 'events',
-              id: 'getPatientEventsScroll',
-              url: `/api/patients/${this.props.patientId}/events`,
-              params: query,
-            })
-            .then(() => {
-              this.setState({
-                limit: this.state.limit + 5,
-                eventsLength: events.length,
-                loaded: false,
-              });
-            });
-        },
-      );
-    }
+    this.setState({ loaded: true }, () => {
+      this.props
+        .fetchEntities({
+          key: 'events',
+          id: 'getPatientEventsScroll',
+          url: `/api/patients/${this.props.patientId}/events`,
+          params: query,
+        })
+        .then(() => {
+          this.setState({
+            loaded: false,
+            eventsLength: events.length,
+          });
+        });
+    });
   }
 
   render() {
-    const {
-      events, filters, wasPatientFetched, wasEventsFetched,
-    } = this.props;
+    const { events, filters, wasPatientFetched, wasEventsFetched } = this.props;
 
-    const style = {
-      overflow: 'scroll',
-    };
+    const style = { overflow: 'scroll' };
 
     const wasAllFetched = wasPatientFetched && wasEventsFetched;
-    const hasMore =
-      events.length >= this.state.limit &&
-      events.length !== this.state.eventsLength &&
-      !this.state.loaded;
+    const hasMore = events.length > this.state.eventsLength && !this.state.loaded;
 
     return (
       <Card className={styles.card} runAnimation loaded={wasAllFetched && !this.state.loaded}>
@@ -97,8 +82,8 @@ function mapStateToProps({ entities, apiRequests }, { patientId }) {
 
   const events = entities
     .getIn(['events', 'models'])
-    .toArray()
-    .filter(event => event.get('patientId') === patientId);
+    .filter(event => event.get('patientId') === patientId)
+    .toArray();
 
   return {
     events,
@@ -107,12 +92,7 @@ function mapStateToProps({ entities, apiRequests }, { patientId }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      fetchEntities,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ fetchEntities }, dispatch);
 }
 
 Timeline.propTypes = {
@@ -131,4 +111,7 @@ Timeline.defaultProps = {
   events: [],
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Timeline);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Timeline);

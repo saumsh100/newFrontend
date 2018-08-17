@@ -1,4 +1,3 @@
-
 @import '../../../ui.scss';
 
 .mainContainer {
@@ -55,7 +54,6 @@
 }
 
 .rowHeader {
-
 }
 
 .rowTable {
@@ -102,6 +100,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+  &_text {
+    font-family: $medium-font;
+    text-transform: uppercase;
+  }
 }
 
 .displayFlexCenter {
@@ -119,7 +122,7 @@
   &_lastAppt {
     padding-top: 3px;
     @extend .subHeader;
-    color: #636363
+    color: #636363;
   }
   &_revenue {
     color: #636363;
@@ -188,8 +191,7 @@
 }
 
 :global(.ReactTable.-highlight .rt-tbody .rt-tr:not(.-padRow):hover) {
-  background: rgba(0,0,0,0.02);
-
+  background: rgba(0, 0, 0, 0.02);
 }
 
 :global(.ReactTable .-pagination) {
@@ -260,7 +262,6 @@ $height: 6px;
 }
 
 .thead-after {
-
 }
 
 .thead-order {
@@ -285,7 +286,6 @@ $height: 6px;
   }
 }
 
-
 .columnHeaderStyle {
   background: white;
   display: flex;
@@ -293,9 +293,8 @@ $height: 6px;
   box-shadow: none;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
   align-items: center;
-  color: #A7A9AC;
+  color: #a7a9ac;
 }
-
 
 .cbxStyle {
   height: 15px;

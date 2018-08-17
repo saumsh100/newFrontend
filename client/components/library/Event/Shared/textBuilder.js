@@ -31,10 +31,8 @@ const eventEnglishText = {
   recalls: {
     hygiene: ({ sentDate, contactMethod }) => `Sent ${contactMethod} Hygiene Recall on ${sentDate}`,
     recall: ({ intervalText, contactMethod, sentDate }) =>
-      `Sent '${intervalText} Due Date' ${contactMethod} recall on ${sentDate}`,
+      `Sent '${intervalText} Due Date' ${contactMethod} Recall on ${sentDate}`,
   },
 };
 
-const eventLanguages = {
-  english: eventEnglishText,
-};
+const eventLanguages = { english: eventEnglishText };

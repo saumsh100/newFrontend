@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
-import { asyncValidateNewPatient } from '../../../../library/Form/validate';
 import { isResponsive } from '../../../../../util/hub';
+import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import PatientModel from '../../../../../entities/models/Patient';
 import styles from '../styles.scss';
 
@@ -53,13 +53,16 @@ const countries = [
 ];
 
 export default function PersonalForm(props) {
-  const {
-    patient, handleSubmit, country, setCountry, inputStyle,
-  } = props;
+  const { patient, handleSubmit, country, setCountry, inputStyle } = props;
+
+  const birthDate = patient.birthDate;
+  const isValidBirthDate = moment(birthDate).isValid()
+    ? dateFormatter(birthDate, '', 'MM/DD/YYYY')
+    : '';
 
   const initialValues = {
     gender: patient.get('gender'),
-    birthDate: moment(patient.get('birthDate')).format('MM/DD/YYYY'),
+    birthDate: isValidBirthDate,
     homePhoneNumber: patient.get('homePhoneNumber'),
     mobilePhoneNumber: patient.get('mobilePhoneNumber'),
     workPhoneNumber: patient.get('workPhoneNumber'),

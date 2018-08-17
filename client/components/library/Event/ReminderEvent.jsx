@@ -14,20 +14,23 @@ export default function ReminderEvent({ data }) {
     'sms/email': 'Email & SMS',
   };
 
+  const reminderIntervalHash = {
+    '21 days': '21 Days',
+    '7 days': '7 Days',
+    '2 days': '2 Days',
+    '2 hours': '2 Hours',
+  };
+
   const contactMethod = contactMethodHash[data.primaryType];
   const intervalText = data.reminder.interval;
 
   const headerData = getEventText('english', 'reminders', 'default')({
     contactMethod,
-    intervalText,
+    intervalText: reminderIntervalHash[intervalText],
     appDate,
   });
 
   return <EventContainer key={data.id} headerData={headerData} />;
 }
 
-ReminderEvent.propTypes = {
-  data: PropTypes.shape({
-    appointmentStartDate: PropTypes.string,
-  }).isRequired,
-};
+ReminderEvent.propTypes = { data: PropTypes.shape({ appointmentStartDate: PropTypes.string }).isRequired };

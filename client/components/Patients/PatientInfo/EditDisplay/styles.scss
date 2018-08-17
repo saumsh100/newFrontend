@@ -168,9 +168,11 @@
   color: $primary-dark-grey;
   font-size: $extra-small-size;
   opacity: 0.6;
+  min-height: 460px;
 
   @media screen and (max-width: 576px) {
     padding-bottom: 15px;
+    min-height: unset;
   }
 }
 
