@@ -20,9 +20,7 @@ import RelayPatientSearch from '../RelayPatientSearch';
 import styles from './styles.scss';
 
 const UserMenu = (props) => {
-  const {
-    user, role, activeAccount, enterprise,
-  } = props;
+  const { user, role, activeAccount, enterprise } = props;
 
   const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
@@ -53,9 +51,7 @@ const UserMenu = (props) => {
 UserMenu.propTypes = {
   user: PropTypes.instanceOf(Map),
   role: PropTypes.string,
-  activeAccount: PropTypes.shape({
-    addressId: PropTypes.string,
-  }),
+  activeAccount: PropTypes.shape({ addressId: PropTypes.string }),
   enterprise: PropTypes.instanceOf(Map),
 };
 
@@ -67,9 +63,7 @@ const ActiveAccountButton = ({ account, onClick }) => (
 );
 
 ActiveAccountButton.propTypes = {
-  account: PropTypes.shape({
-    id: PropTypes.string,
-  }),
+  account: PropTypes.shape({ id: PropTypes.string }),
   onClick: PropTypes.func,
 };
 
@@ -77,9 +71,7 @@ class TopBar extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      index: 0,
-    };
+    this.state = { index: 0 };
 
     this.onSearchSelect = this.onSearchSelect.bind(this);
     this.sync = this.sync.bind(this);
@@ -140,6 +132,7 @@ class TopBar extends Component {
       />
     );
 
+
     if (isCollapsed) {
       logoImage = (
         <img
@@ -197,12 +190,8 @@ class TopBar extends Component {
       onBlur: this.closeSearch,
     };
 
-    const groupStyles = classNames(styles.searchTheme, {
-      [styles.animateSearch]: !isSearchCollapsed,
-    });
-    const iconStyles = classNames(styles.searchIconWrapper, {
-      [styles.iconSearchOpen]: !isSearchCollapsed,
-    });
+    const groupStyles = classNames(styles.searchTheme, { [styles.animateSearch]: !isSearchCollapsed });
+    const iconStyles = classNames(styles.searchIconWrapper, { [styles.iconSearchOpen]: !isSearchCollapsed });
 
     const searchTheme = {
       group: groupStyles,
@@ -291,9 +280,7 @@ TopBar.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   switchActiveAccount: PropTypes.func.isRequired,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }),
+  location: PropTypes.shape({ pathname: PropTypes.string }),
   push: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
@@ -301,9 +288,7 @@ TopBar.propTypes = {
   enterprise: PropTypes.instanceOf(Map),
   user: PropTypes.instanceOf(Map),
   role: PropTypes.string,
-  activeAccount: PropTypes.shape({
-    addressId: PropTypes.string,
-  }),
+  activeAccount: PropTypes.shape({ addressId: PropTypes.string }),
   runOnDemandSync: PropTypes.func,
   withEnterprise: PropTypes.bool,
   isAuth: PropTypes.bool,

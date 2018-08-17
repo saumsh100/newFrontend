@@ -10,14 +10,20 @@ import { setIsSearchCollapsed } from '../reducers/toolbar';
 import { logout, switchActiveAccount } from '../thunks/auth';
 import runOnDemandSync from '../thunks/runOnDemandSync';
 import { fetchEntities } from '../thunks/fetchEntities';
+import { accountShape } from '../components/library/PropTypeShapes';
 import { getCollection, getModel } from '../components/Utils';
 
 const fetchAccounts = () =>
-  fetchEntities({ key: 'accounts', url: '/api/accounts' });
+  fetchEntities({
+    key: 'accounts',
+    url: '/api/accounts',
+  });
 
 class TopBarContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchAccounts();
+    this.preloadLogoImage = new Image();
+    this.preloadLogoImage.src = '/images/carecru_logo.png';
   }
 
   render() {
@@ -31,8 +37,10 @@ TopBarContainer.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
   fetchAccounts: PropTypes.func.isRequired,
-  accounts: PropTypes.arrayOf(PropTypes.object),
+  accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)),
 };
+
+TopBarContainer.defaultProps = { accounts: null };
 
 const mapStateToProps = state => ({
   isCollapsed: state.toolbar.get('isCollapsed'),

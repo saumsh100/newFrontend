@@ -10,6 +10,7 @@
   background-color: $primary-dark;
   z-index: 20;
   overflow-y: auto;
+  transition: ease-out 0.3s all;
 }
 
 .navHidden {

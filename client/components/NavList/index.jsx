@@ -16,13 +16,12 @@ function NavList({
   unreadChats,
   onlineRequests,
 }) {
-  const { navItem, activeItem, activeLabel } = styles;
+  const { navItem, activeItem } = styles;
 
   const inactiveClass = navItem;
   const activeClass = classNames(navItem, activeItem);
 
   const inactiveLabelClass = styles.label;
-  const activeLabelClass = classNames(styles.label, activeLabel);
 
   const SingleNavItem = ({
     path,
@@ -36,12 +35,12 @@ function NavList({
     active = active || location.pathname === path;
     let classes = active ? activeClass : inactiveClass;
 
-    classes = classNames(classes, {
-      [styles.disabledItem]: disabled,
-    });
+    classes = classNames(classes, { [styles.disabledItem]: disabled });
 
-    const labelComponent = !isCollapsed && (
-      <div className={active ? activeLabelClass : inactiveLabelClass}>{label}</div>
+    const labelComponent = (
+      <div className={classNames(inactiveLabelClass, { [styles.hiddenLabel]: isCollapsed })}>
+        {label}
+      </div>
     );
 
     return (
@@ -70,9 +69,7 @@ function NavList({
     active: false,
   };
 
-  const MultiNavItem = ({
-    path, icon, label, children, iconType,
-  }) => {
+  const MultiNavItem = ({ path, icon, label, children, iconType }) => {
     const active = location.pathname.indexOf(path) === 0;
     let content = null;
     if (active && !isCollapsed) {
@@ -98,15 +95,12 @@ function NavList({
     ]).isRequired,
   };
 
-  MultiNavItem.defaultProps = {
-    iconType: 'solid',
-  };
+  MultiNavItem.defaultProps = { iconType: 'solid' };
 
   const SubNavItem = ({ path, label, disabled }) => {
     const active = location.pathname.indexOf(path) === 0;
-    const inactiveSubClass = classNames(styles.liSubNavItem, {
-      [styles.disabledSubNavItem]: disabled,
-    });
+    const disabledClass = styles.disabledSubNavItem;
+    const inactiveSubClass = classNames(styles.liSubNavItem, { [disabledClass]: disabled });
 
     const activeSubClass = classNames(
       inactiveSubClass,
@@ -131,9 +125,7 @@ function NavList({
     path: PropTypes.string.isRequired,
   };
 
-  SubNavItem.defaultProps = {
-    disabled: false,
-  };
+  SubNavItem.defaultProps = { disabled: false };
 
   return (
     <div className={styles.navListWrapper}>

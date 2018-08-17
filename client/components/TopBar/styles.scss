@@ -60,6 +60,7 @@ $padding-size-border: 10px;
   text-align: center;
   border-bottom: 1px $primary-darkgrey solid;
   box-sizing: border-box;
+  transition: ease-out 0.3s all;
 }
 
 .logoImageCollapsed {
@@ -72,6 +73,7 @@ $padding-size-border: 10px;
 
 .logoImageImage {
   width: 140px;
+  transition: ease-out 0.3s all;
 }
 
 .logoImageImageCollapsed {

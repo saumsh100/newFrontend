@@ -1,4 +1,3 @@
-
 @import '../../ui';
 
 .rightSectionContainer {
@@ -9,6 +8,7 @@
   height: 100%;
   overflow: auto;
   background-color: $background-color;
+  transition: ease 0.3s all;
 }
 
 .fullWidth {
