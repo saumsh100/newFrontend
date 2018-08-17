@@ -66,10 +66,7 @@ export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
 
 function getStartTimeForToday(account) {
-  return moment
-    .tz(new Date(), account.timezone)
-    .add(1, 'hours')
-    .toISOString();
+  return moment.tz(new Date(), account.timezone).add(1, 'hours');
 }
 
 function getFloorDate(date) {
@@ -83,7 +80,7 @@ let selectedStartDate = moment()
   .toISOString();
 export const createInitialWidgetState = (state) => {
   if (state) {
-    selectedStartDate = getStartTimeForToday(state.account);
+    selectedStartDate = getStartTimeForToday(state.account).toISOString();
   }
 
   const floorDate = getFloorDate(selectedStartDate);
@@ -332,17 +329,18 @@ export default handleActions(
       // If same day as today, set it to the 1 hour from now time
       // If not, set it to the beginning of the day
       const account = state.get('account').toJS();
-      let startDate = getStartTimeForToday(account);
-      if (!moment.tz(payload, account.timezone).isSame(startDate, 'day')) {
-        startDate = moment
-          .tz(payload, account.timezone)
+      const searchedDate = moment(payload).toObject();
+      const startDateForToday = getStartTimeForToday(account);
+      const isToday = searchedDate.date === startDateForToday.get('date');
+      const startDate = isToday
+        ? startDateForToday.toISOString()
+        : moment
+          .tz(searchedDate, account.timezone)
           .hours(0)
           .minutes(0)
           .seconds(0)
           .milliseconds(0)
           .toISOString();
-      }
-
       return state.set('selectedStartDate', startDate);
     },
 

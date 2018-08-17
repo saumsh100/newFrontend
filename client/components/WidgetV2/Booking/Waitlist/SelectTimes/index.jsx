@@ -104,7 +104,7 @@ class SelectTimes extends React.Component {
       endDate: moment.tz(latestEndTime, timezone),
       duration: selectedService.get('duration'),
       interval: 60,
-    }).reduce(groupTimesPerPeriod, {
+    }).reduce(groupTimesPerPeriod(timezone), {
       morning: [],
       afternoon: [],
       evening: [],
@@ -195,8 +195,10 @@ class SelectTimes extends React.Component {
         <div className={styles.timeFrameWrapper}>
           <h3 className={styles.slotsTitle}>{label}</h3>
           {timeframe.map((availability) => {
-            const { slot, selectedSlot } = styles;
-            const classes = classnames(slot, { [selectedSlot]: checkIfIncludesTime(availability) });
+            const classes = classnames({
+              [styles.slot]: true,
+              [styles.selectedSlot]: checkIfIncludesTime(availability),
+            });
             return (
               <div className={styles.cardWrapper} key={`${availability.startDate}`}>
                 <Button

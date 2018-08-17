@@ -15,7 +15,7 @@ const SPLIT_EVENING = 17;
  * @param {number} index
  */
 
-const groupTimesPerPeriod = (previous, current, index) => {
+const groupTimesPerPeriod = timezone =>  (previous, current, index) => {
   if (
     index === 0 &&
     !isEqual(previous, {
@@ -27,8 +27,7 @@ const groupTimesPerPeriod = (previous, current, index) => {
   ) {
     throw new Error('The default value of your reduce is not valid, you must use the structure showed above.');
   }
-
-  const selectedHour = parseFloat(setDateToTimezone(current.startDate).format('HH'));
+  const selectedHour = parseFloat(setDateToTimezone(current.startDate, timezone).format('HH'));
   if (selectedHour >= SPLIT_AFTERNOON && selectedHour <= SPLIT_EVENING) {
     previous = {
       ...previous,

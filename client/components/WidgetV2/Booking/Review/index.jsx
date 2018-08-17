@@ -140,7 +140,7 @@ class Review extends PureComponent {
         endDate: moment.tz(latestEndTime, timezone),
         duration: selectedService.get('duration'),
         interval: 60,
-      }).reduce(groupTimesPerPeriod, {
+      }).reduce(groupTimesPerPeriod(timezone), {
         morning: [],
         afternoon: [],
         evening: [],

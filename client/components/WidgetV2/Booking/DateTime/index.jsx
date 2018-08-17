@@ -48,7 +48,7 @@ import styles from './styles.scss';
 const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) =>
   availabilities
     .filter(date => genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'd'))
-    .reduce(groupTimesPerPeriod, {
+    .reduce(groupTimesPerPeriod(accountTimezone), {
       morning: [],
       afternoon: [],
       evening: [],
@@ -118,15 +118,11 @@ class DateTime extends PureComponent {
    * @param date
    */
   changeSelectedDate(date) {
-    const momentDate = genericMoment(date, this.props.accountTimezone);
-
-    if (!momentDate.isSame(this.props.selectedStartDate, 'day')) {
-      this.setState({ needToUpdateWaitlist: true });
-      this.props.hideButton();
-      this.props.setSelectedAvailability(null);
-      this.props.setSelectedStartDate(date);
-      this.props.fetchAvailabilities();
-    }
+    this.setState({ needToUpdateWaitlist: true });
+    this.props.hideButton();
+    this.props.setSelectedAvailability(null);
+    this.props.setSelectedStartDate(date);
+    this.props.fetchAvailabilities();
   }
 
   handleClosingModal() {
@@ -159,9 +155,7 @@ class DateTime extends PureComponent {
    * Send the user to the join waitlist's prompt, after clicking on the next button.
    */
   confirmDateTime() {
-    const {
-      selectedAvailability, accountTimezone, location, history,
-    } = this.props;
+    const { selectedAvailability, accountTimezone, location, history } = this.props;
 
     this.props.setConfirmAvailability(true);
 
@@ -181,9 +175,7 @@ class DateTime extends PureComponent {
       return history.push(nextLoc || './patient-information');
     }
 
-    return this.setState({
-      isModal: true,
-    });
+    return this.setState({ isModal: true });
   }
 
   /**
@@ -318,14 +310,8 @@ class DateTime extends PureComponent {
             <div className={styles.container}>
               <DayPicker
                 noTarget
-                disabledDays={{
-                  before: new Date(),
-                }}
-                modifiers={{
-                  disabled: {
-                    before: new Date(),
-                  },
-                }}
+                disabledDays={{ before: new Date() }}
+                modifiers={{ disabled: { before: new Date() } }}
                 numberOfMonths={isResponsive() ? 1 : 2}
                 // here i'm formatting the date like so we don't convert the date
                 // selectedStartDate needs to be iso string because of the API needs it
