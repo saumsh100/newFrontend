@@ -48,9 +48,7 @@ export function createRequest() {
     const state = getState();
     const {
       account,
-      selectedAvailability: {
-        startDate, endDate, practitionerId, chairId,
-      },
+      selectedAvailability: { startDate, endDate, practitionerId, chairId },
       selectedPractitionerId,
       selectedServiceId,
       sentRecallId,
@@ -176,9 +174,7 @@ export function setRegistrationStep(registrationStep, accountId) {
 export function getClinicInfo(accountId) {
   return function (dispatch) {
     axios.get(`/logo/${accountId}`).then((data) => {
-      const {
-        logo, address, clinicName, bookingWidgetPrimaryColor,
-      } = data.data;
+      const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
       dispatch(setClinicInfoAction({
         logo,
         address,
@@ -197,11 +193,11 @@ export function removeReservation(reservationId) {
   };
 }
 
-export function closeBookingModal() {
+export function closeBookingModal(path) {
   return () => {
     // clean up state for closing the Modal
     window.parent.postMessage('message', '*');
-    window.iframeClient && window.iframeClient.sendEvent('closeModal');
+    window.iframeClient && window.iframeClient.sendEvent('closeModal', path);
   };
 }
 

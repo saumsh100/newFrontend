@@ -84,7 +84,7 @@ function main() {
     const button = UI.bookingButton();
     button.onclick = e => {
       e.preventDefault();
-      CareCru.open();
+      CareCru.open(CareCru.lastRoute);
     };
   }
 

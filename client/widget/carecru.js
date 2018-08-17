@@ -21,7 +21,8 @@ function CareCru({ iframeSrc }) {
   });
 
   const self = this;
-  this.host.onEvent('closeModal', () => {
+  this.host.onEvent('closeModal', (route) => {
+    self.lastRoute = route;
     self.close();
   });
 }
@@ -55,7 +56,6 @@ CareCru.prototype.setSentRecallId = function (id) {
 CareCru.prototype.setDueDate = function (id) {
   this.host.sendEvent('setDueDate', id);
 };
-
 
 /**
  * #close

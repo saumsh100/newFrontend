@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import BackButton from './BackButton';
 import Button from '../../library/Button';
 import { closeBookingModal } from '../../../thunks/availabilities';
-import { historyShape } from '../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../library/PropTypeShapes/routerShapes';
 import { CloseBookingModalSVG } from '../SVGs';
 import styles from './styles.scss';
 
@@ -27,14 +27,21 @@ class Header extends Component {
   render() {
     const {
       history,
+      location,
       routesState: { isCompleteRoute, isFirstRoute },
     } = this.props;
+
+    const path = location.pathname
+      .split('/')
+      .filter((_, i) => i > 3)
+      .join('/');
 
     return (
       <div className={styles.topHead}>
         <div className={styles.headerContainer}>
           <div
-            className={classNames(styles.headerLeftArea, {
+            className={classNames({
+              [styles.headerLeftArea]: true,
               [styles.hideBack]: isCompleteRoute || isFirstRoute,
             })}
           >
@@ -42,16 +49,15 @@ class Header extends Component {
           </div>
 
           <div className={styles.headerCenterArea}>
-            <h2
-              className={classNames(styles.pageTitle, {
-                [styles.complete]: isCompleteRoute,
-              })}
-            >
+            <h2 className={classNames(styles.pageTitle, { [styles.complete]: isCompleteRoute })}>
               Schedule your Appointment
             </h2>
           </div>
           <div className={styles.headerRightArea}>
-            <Button className={styles.closeButton} onClick={this.props.closeBookingModal}>
+            <Button
+              className={styles.closeButton}
+              onClick={() => this.props.closeBookingModal(path)}
+            >
               <CloseBookingModalSVG />
             </Button>
           </div>
@@ -71,17 +77,13 @@ function mapStateToProps({ auth, availabilities }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      closeBookingModal,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ closeBookingModal }, dispatch);
 }
 
 Header.propTypes = {
   closeBookingModal: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
   routesState: PropTypes.objectOf(PropTypes.bool).isRequired,
 };
 
