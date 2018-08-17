@@ -23,10 +23,6 @@ const eventEnglishText = {
     pastTense: 'appointment on',
     futureTense: 'appointment for',
   },
-  reminders: {
-    default: ({ intervalText, contactMethod, appDate }) =>
-      `Sent '${intervalText} Before' ${contactMethod} Reminder for the appointment on ${appDate}`,
-  },
 
   recalls: {
     hygiene: ({ sentDate, contactMethod }) => `Sent ${contactMethod} Hygiene Recall on ${sentDate}`,

@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import EventContainer from './Shared/EventContainer';
 import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
-import getEventText from './Shared/textBuilder';
+import styles from './styles.scss';
 
 export default function ReminderEvent({ data }) {
   const appDate = dateFormatter(data.appointment.startDate, '', 'MMMM Do, YYYY h:mma');
@@ -14,23 +14,17 @@ export default function ReminderEvent({ data }) {
     'sms/email': 'Email & SMS',
   };
 
-  const reminderIntervalHash = {
-    '21 days': '21 Days',
-    '7 days': '7 Days',
-    '2 days': '2 Days',
-    '2 hours': '2 Hours',
-  };
-
   const contactMethod = contactMethodHash[data.primaryType];
-  const intervalText = data.reminder.interval;
+  const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;
 
-  const headerData = getEventText('english', 'reminders', 'default')({
-    contactMethod,
-    intervalText: reminderIntervalHash[intervalText],
-    appDate,
-  });
+  const component = (
+    <div className={styles.body_header}>
+      Sent {"'"}
+      {intervalText} Before{"'"} {contactMethod} Reminder for the appointment on {appDate}
+    </div>
+  );
 
-  return <EventContainer key={data.id} headerData={headerData} />;
+  return <EventContainer key={data.id} component={component} />;
 }
 
 ReminderEvent.propTypes = { data: PropTypes.shape({ appointmentStartDate: PropTypes.string }).isRequired };
