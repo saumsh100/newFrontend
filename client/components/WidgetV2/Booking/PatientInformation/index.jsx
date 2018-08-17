@@ -39,6 +39,7 @@ import {
 import { dropdownTheme, inputTheme } from '../../theme';
 import Button from '../../../library/Button';
 import styles from './styles.scss';
+
 /**
  * Gender's array
  */
@@ -198,6 +199,7 @@ class PatientInformation extends PureComponent {
       history,
       userName,
       initialValues,
+      patientIsUser,
       insuranceCarrierValue,
     } = this.props;
 
@@ -308,10 +310,11 @@ class PatientInformation extends PureComponent {
               <Element name="email" className={styles.contentWrapper}>
                 <Field
                   theme={inputTheme(styles)}
-                  label="Email *"
+                  label={`Email ${patientIsUser ? '*' : ''}`}
                   name="email"
                   type="email"
-                  validate={[emailValidate]}
+                  required={patientIsUser}
+                  validate={[value => value && emailValidate(value)]}
                 />
               </Element>
               <Element name="birthDate" className={styles.contentWrapper}>
@@ -327,19 +330,18 @@ class PatientInformation extends PureComponent {
               <Element name="phoneNumber" className={styles.contentWrapper}>
                 <Field
                   theme={inputTheme(styles)}
-                  required
+                  required={patientIsUser}
                   name="phoneNumber"
                   type="tel"
-                  label="Phone Number *"
+                  label={`Phone Number ${patientIsUser ? '*' : ''}`}
                 />
               </Element>
               <Element name="gender" className={styles.contentWrapper}>
                 <div className={styles.group}>
                   <Field
                     name="gender"
-                    label="Gender *"
+                    label="Gender"
                     component={SuggestionSelect}
-                    required
                     theme={dropdownTheme(styles)}
                     validateValue={value => validateField(genders, value)}
                     renderValue={value =>
@@ -368,16 +370,18 @@ class PatientInformation extends PureComponent {
                         }
                       />
                     }
+                    required
                     name="insuranceCarrier"
-                    label="Insurance Carrier"
+                    label="Insurance Carrier *"
                   />
                 ) : (
                   <div className={styles.group}>
                     <Field
                       name="insuranceCarrier"
-                      label="Insurance Carrier"
+                      label="Insurance Carrier *"
                       component={SuggestionSelect}
                       theme={dropdownTheme(styles)}
+                      required
                       validateValue={value => validateField(carriers, value) || value === null}
                       renderValue={value =>
                         (validateField(carriers, value) && validateField(carriers, value).label) ||
@@ -394,10 +398,16 @@ class PatientInformation extends PureComponent {
                   theme={inputTheme(styles)}
                   label="Insurance Member ID"
                   name="insuranceMemberId"
+                  disabled={insuranceCarrierValue === carriers[0].value}
                 />
               </Element>
               <Element name="insuranceGroupId" className={styles.contentWrapper}>
-                <Field theme={inputTheme(styles)} label="Group ID" name="insuranceGroupId" />
+                <Field
+                  theme={inputTheme(styles)}
+                  label="Group ID"
+                  name="insuranceGroupId"
+                  disabled={insuranceCarrierValue === carriers[0].value}
+                />
               </Element>
             </div>
           </Form>
@@ -450,6 +460,7 @@ function mapStateToProps({ auth, availabilities, widgetNavigation, ...state }) {
     selectedFamilyPatientUserId: patientId,
     initialValues,
     insuranceCarrierValue: selector(state, 'insuranceCarrier'),
+    patientIsUser: availabilities.get('familyPatientUser') === auth.get('patientUser').get('id'),
     formError:
       patientInfoForm && (patientInfoForm.syncErrors || patientInfoForm.asyncErrors)
         ? getError(patientInfoForm.syncErrors) || getError(patientInfoForm.asyncErrors)
@@ -502,6 +513,7 @@ PatientInformation.propTypes = {
   setText: PropTypes.func.isRequired,
   insuranceCarrierValue: PropTypes.string,
   userName: PropTypes.string.isRequired,
+  patientIsUser: PropTypes.bool.isRequired,
 };
 
 PatientInformation.defaultProps = {

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
@@ -17,6 +18,7 @@ function Input(props) {
     theme,
     classStyles,
     iconType,
+    disabled,
   } = props;
 
   const inputProps = omit(props, [
@@ -44,12 +46,14 @@ function Input(props) {
   });
 
   const inputClassName = classNames(theme.input, {
+    [theme.disabled]: disabled,
     [theme.erroredInput]: error,
     [theme.inputWithIcon]: iconComponent || icon,
   });
 
   const inputWrapperClassName = classNames(theme.group, {
     [classStyles]: classStyles,
+    [theme.disabledGroup]: disabled,
   });
 
   const errorClassName = theme.error;
@@ -79,11 +83,13 @@ Input.propTypes = {
   type: PropTypes.string,
   icon: PropTypes.string,
   iconType: PropTypes.string,
+  disabled: PropTypes.bool,
   classStyles: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.string), PropTypes.string]),
   iconComponent: PropTypes.oneOfType([PropTypes.bool, PropTypes.func]),
 };
 
 Input.defaultProps = {
+  disabled: false,
   error: '',
   label: '',
   value: '',

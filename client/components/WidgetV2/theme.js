@@ -12,6 +12,8 @@ export function inputTheme(input) {
     input: input.input,
     inputWithIcon: input.inputWithIcon,
     label: input.label,
+    disabled: input.disabled,
+    disabledGroup: input.disabledGroup,
   };
 }
 export function inputTextarea(input) {

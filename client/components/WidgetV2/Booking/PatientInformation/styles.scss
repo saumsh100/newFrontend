@@ -124,3 +124,11 @@ form {
     }
   }
 }
+
+.disabled {
+  pointer-events: none;
+  background: $widget-grey-lighter;
+}
+.disabledGroup {
+  cursor: not-allowed;
+}
