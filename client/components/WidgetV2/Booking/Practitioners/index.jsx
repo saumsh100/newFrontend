@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import WidgetCard from '../../../library/WidgetCard';
 import practitioners from '../../../../entities/collections/practitioners';
 import { setSelectedPractitionerId } from '../../../../reducers/availabilities';
+import { setAvailabilities, setNextAvailability } from '../../../../actions/availabilities';
 import { locationShape, historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import services from '../../../../entities/collections/services';
 import styles from './styles.scss';
@@ -40,7 +41,12 @@ function Practitioners({
           description: actual.get('type'),
         },
       ],
-      [{ label: 'No Preference', value: '' }],
+      [
+        {
+          label: 'No Preference',
+          value: '',
+        },
+      ],
     );
   /**
    * Checks if there are a specific route to go onclicking a card or just the default one.
@@ -51,6 +57,10 @@ function Practitioners({
   };
 
   const selectPractitioner = (practitioner) => {
+    if (selectedPractitionerId !== practitioner) {
+      props.setAvailabilities([]);
+      props.setNextAvailability(null);
+    }
     props.setSelectedPractitionerId(practitioner);
     return history.push(contextualUrl);
   };
@@ -100,27 +110,31 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setSelectedPractitionerId,
+      setAvailabilities,
+      setNextAvailability,
     },
     dispatch,
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Practitioners);
-
 Practitioners.propTypes = {
+  history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
   practitionersEntity: PropTypes.instanceOf(practitioners).isRequired,
   selectedPractitionerId: PropTypes.string,
-  location: PropTypes.shape(locationShape).isRequired,
-  setSelectedPractitionerId: PropTypes.func.isRequired,
   selectedServiceId: PropTypes.string,
   servicesEntity: PropTypes.instanceOf(services).isRequired,
-  history: PropTypes.shape(historyShape).isRequired,
+  setAvailabilities: PropTypes.func.isRequired,
+  setNextAvailability: PropTypes.func.isRequired,
+  setSelectedPractitionerId: PropTypes.func.isRequired,
 };
 
 Practitioners.defaultProps = {
   selectedPractitionerId: '',
   selectedServiceId: '',
 };
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Practitioners);

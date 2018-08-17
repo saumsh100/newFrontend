@@ -316,11 +316,10 @@ class DateTime extends PureComponent {
                 // here i'm formatting the date like so we don't convert the date
                 // selectedStartDate needs to be iso string because of the API needs it
                 // but it can sometimes be a future date depending on the timezone you currently are
-                value={dateFormatter(
-                  selectedStartDate,
-                  accountTimezone,
-                  'YYYY-MM-DD[T]HH:mm:ss.SSSZZ',
-                )}
+                value={
+                  selectedStartDate &&
+                  dateFormatter(selectedStartDate, accountTimezone, 'YYYY-MM-DD')
+                }
                 tipSize={0.01}
                 showPreviousMonth={false}
                 theme={dayPickerStyles}

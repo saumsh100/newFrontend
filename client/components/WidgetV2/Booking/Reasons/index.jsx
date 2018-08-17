@@ -5,13 +5,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import WidgetCard from '../../../library/WidgetCard';
 import { setSelectedServiceId } from '../../../../reducers/availabilities';
+import { setAvailabilities, setNextAvailability } from '../../../../actions/availabilities';
 import services from '../../../../entities/collections/services';
 import { locationShape, historyShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
-function Reasons({
-  servicesEntity, selectedServiceId, location, history, ...props
-}) {
+function Reasons({ servicesEntity, selectedServiceId, location, history, ...props }) {
   /**
    * List of only active and not hidden practitioners
    * containing their name value and type.
@@ -35,8 +34,12 @@ function Reasons({
     pathname: './practitioner',
   };
 
-  const selectReason = (practitioner) => {
-    props.setSelectedServiceId(practitioner);
+  const selectReason = (reason) => {
+    if (selectedServiceId !== reason) {
+      props.setAvailabilities([]);
+      props.setNextAvailability(null);
+    }
+    props.setSelectedServiceId(reason);
     return history.push(contextualUrl);
   };
   return (
@@ -81,23 +84,26 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setSelectedServiceId,
+      setAvailabilities,
+      setNextAvailability,
     },
     dispatch,
   );
 }
 
+Reasons.propTypes = {
+  history: PropTypes.shape(historyShape).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
+  selectedServiceId: PropTypes.string,
+  servicesEntity: PropTypes.instanceOf(services).isRequired,
+  setAvailabilities: PropTypes.func.isRequired,
+  setNextAvailability: PropTypes.func.isRequired,
+  setSelectedServiceId: PropTypes.func.isRequired,
+};
+
+Reasons.defaultProps = { selectedServiceId: '' };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Reasons);
-
-Reasons.propTypes = {
-  location: PropTypes.shape(locationShape).isRequired,
-  selectedServiceId: PropTypes.string,
-  servicesEntity: PropTypes.instanceOf(services).isRequired,
-  history: PropTypes.shape(historyShape).isRequired,
-  setSelectedServiceId: PropTypes.func.isRequired,
-};
-Reasons.defaultProps = {
-  selectedServiceId: '',
-};
