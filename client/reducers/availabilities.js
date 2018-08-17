@@ -134,7 +134,7 @@ export const createInitialWidgetState = (state) => {
       selectedAvailability: null,
       confirmedAvailability: false,
       selectedServiceId: null, // Will be set by the initialState from server
-      selectedPractitionerId: '',
+      selectedPractitionerId: null,
       selectedStartDate,
       registrationStep: 1,
       reservationId: null,
@@ -168,7 +168,7 @@ export default handleActions(
         insuranceCarrier: 'Pay for myself',
         insuranceMemberId: '',
         familyPatientUser: null,
-        selectedPractitionerId: '',
+        selectedPractitionerId: null,
         selectedStartDate,
         notes: null,
         hasWaitList: false,
@@ -208,7 +208,7 @@ export default handleActions(
       return state.merge({
         selectedAvailability: null,
         selectedServiceId: null,
-        selectedPractitionerId: '',
+        selectedPractitionerId: null,
         selectedStartDate: '',
         confirmedAvailability: false,
       });

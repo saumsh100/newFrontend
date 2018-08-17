@@ -36,7 +36,7 @@ reviewsRouter.param(
 reviewsRouter.get('/:accountIdJoin/app(/*)?', async (req, res, next) => {
   try {
     const { entities } = normalize('account', req.account.get({ plain: true }));
-    let selectedServiceId = req.account.services[0] ? req.account.services[0].id : null;
+    let selectedServiceId = null;
     for (let i = 0; i < req.account.services.length; i++) {
       if (req.account.services[i].isDefault) {
         selectedServiceId = req.account.services[i].id;
