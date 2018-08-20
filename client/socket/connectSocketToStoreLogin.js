@@ -19,7 +19,10 @@ export default function connectSocketToStoreLogin(store, socket) {
        * Request Socket
        */
       socket.on('request.created', (data) => {
-        dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'requests',
+          entities: data.entities,
+        }));
         const alert = {
           title: 'Appointment Request',
           body: 'You have an appointment request.',
@@ -43,63 +46,105 @@ export default function connectSocketToStoreLogin(store, socket) {
       });
 
       socket.on('update:Request', (data) => {
-        dispatch(receiveEntities({ key: 'requests', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'requests',
+          entities: data.entities,
+        }));
       });
       socket.on('remove:Request', (data) => {
-        dispatch(deleteEntity({ key: 'requests', id: data }));
+        dispatch(deleteEntity({
+          key: 'requests',
+          id: data,
+        }));
       });
 
       /**
        * WaitSpot Socket
        */
       socket.on('create:WaitSpot', (data) => {
-        dispatch(receiveEntities({ key: 'waitSpots', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'waitSpots',
+          entities: data.entities,
+        }));
       });
       socket.on('update:WaitSpot', (data) => {
-        dispatch(receiveEntities({ key: 'waitSpots', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'waitSpots',
+          entities: data.entities,
+        }));
       });
       socket.on('remove:WaitSpot', (data) => {
-        dispatch(deleteEntity({ key: 'waitSpots', id: data }));
+        dispatch(deleteEntity({
+          key: 'waitSpots',
+          id: data,
+        }));
       });
 
       /**
        * SentReminder Socket
        */
       socket.on('create:SentReminder', (data) => {
-        dispatch(receiveEntities({ key: 'sentReminders', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'sentReminders',
+          entities: data.entities,
+        }));
       });
       socket.on('update:SentReminder', (data) => {
-        dispatch(receiveEntities({ key: 'sentReminders', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'sentReminders',
+          entities: data.entities,
+        }));
       });
       socket.on('remove:SentReminder', (data) => {
-        dispatch(deleteEntity({ key: 'sentReminders', id: data }));
+        dispatch(deleteEntity({
+          key: 'sentReminders',
+          id: data,
+        }));
       });
 
       /**
        * SentRecalls Socket
        */
       socket.on('create:SentRecall', (data) => {
-        dispatch(receiveEntities({ key: 'sentRecalls', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'sentRecalls',
+          entities: data.entities,
+        }));
       });
       socket.on('update:SentRecall', (data) => {
-        dispatch(receiveEntities({ key: 'sentRecalls', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'sentRecalls',
+          entities: data.entities,
+        }));
       });
       socket.on('remove:SentRecall', (data) => {
-        dispatch(deleteEntity({ key: 'sentRecalls', id: data }));
+        dispatch(deleteEntity({
+          key: 'sentRecalls',
+          id: data,
+        }));
       });
 
       /**
        * Appointment Socket
        */
       socket.on('create:Appointment', (data) => {
-        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'appointments',
+          entities: data.entities,
+        }));
       });
       socket.on('update:Appointment', (data) => {
-        dispatch(receiveEntities({ key: 'appointments', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'appointments',
+          entities: data.entities,
+        }));
       });
       socket.on('remove:Appointment', (data) => {
         // console.log('remove:Appointment event, id=', data.id);
-        dispatch(deleteEntity({ key: 'appointments', id: data.id }));
+        dispatch(deleteEntity({
+          key: 'appointments',
+          id: data.id,
+        }));
       });
 
       /**
@@ -124,13 +169,19 @@ export default function connectSocketToStoreLogin(store, socket) {
           clickable: true,
         }; */
 
-        dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'calls',
+          entities: data.entities,
+        }));
         // dispatch(showAlertTimeout({ alert, type: 'success' }));
       });
 
       socket.on('call.ended', (data) => {
         // const callId = Object.keys(data.entities.calls)[0];
-        dispatch(receiveEntities({ key: 'calls', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'calls',
+          entities: data.entities,
+        }));
         // dispatch(removeAlert({ alert: { id: callId } }));
       });
 
@@ -139,18 +190,30 @@ export default function connectSocketToStoreLogin(store, socket) {
        */
       socket.on('create:Patient', (data) => {
         // console.log('Created Patient', data.entities);
-        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'patients',
+          entities: data.entities,
+        }));
       });
 
       socket.on('update:Patient', (data) => {
-        dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'patients',
+          entities: data.entities,
+        }));
       });
       socket.on('remove:Patient', (data) => {
-        dispatch(deleteEntity({ key: 'patients', id: data.id }));
+        dispatch(deleteEntity({
+          key: 'patients',
+          id: data.id,
+        }));
       });
 
       socket.on('newMessage', (data) => {
-        dispatch(receiveEntities({ key: 'chats', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'chats',
+          entities: data.entities,
+        }));
         dispatch(addMessage(data));
 
         const node = document.getElementById('careCruChatScrollIntoView');
@@ -164,15 +227,28 @@ export default function connectSocketToStoreLogin(store, socket) {
       });
 
       socket.on('markRead', (data) => {
-        dispatch(receiveEntities({ key: 'textMessages', entities: data.entities }));
+        dispatch(receiveEntities({
+          key: 'textMessages',
+          entities: data.entities,
+        }));
         dispatch(createListOfUnreadedChats(data.entities.textMessages));
+      });
+
+      socket.on('update:Chat', (data) => {
+        dispatch(receiveEntities({
+          key: 'chat',
+          entities: data.entities,
+        }));
       });
 
       socket.on('syncClientError', () => {});
 
       socket.on('syncFinished', (data) => {
         dispatch(setSyncingWithPMS({ isSyncing: false }));
-        dispatch(updateEntity({ key: 'accounts', entity: data }));
+        dispatch(updateEntity({
+          key: 'accounts',
+          entity: data,
+        }));
       });
 
       socket.on('syncProgress', () => {});

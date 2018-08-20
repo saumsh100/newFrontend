@@ -463,3 +463,30 @@ export function generateIsActiveReminder({ account, startDate, endDate }) {
     return (start <= dailyRunTime) && (dailyRunTime < end);
   };
 }
+
+/**
+ * Confirm reminder if exist.
+ *
+ * @param accountId
+ * @param patientId
+ * @returns {Promise<*>}
+ */
+export async function confirmReminderIfExist(accountId, patientId) {
+  const validSmsReminders = await getValidSmsReminders({
+    patientId,
+    accountId,
+  });
+
+  if (!validSmsReminders.length) {
+    return false;
+  }
+
+  // Confirm first available reminder
+  const validSentReminder = validSmsReminders[0];
+  const { appointment, reminder } = validSentReminder;
+  const sentReminder = validSentReminder.get({ plain: true });
+
+  await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
+  await appointment.confirm(reminder);
+  return sentReminder;
+}

@@ -11,7 +11,6 @@ const moment = require('moment');
 const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 const { namespaces } = require('../../../config/globals');
-const twilio = require('../../../config/globals').twilio;
 const twilioClient = require('../../../config/twilio');
 
 const Op = Sequelize.Op;
