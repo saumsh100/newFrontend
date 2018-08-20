@@ -11,7 +11,7 @@ RUN npm install babel-preset-env -g
 
 WORKDIR /tmp
 COPY package.json /tmp/
-COPY .npmignore /tmp/ 
+COPY .npmignore /tmp/
 
 RUN npm cache clear --force
 RUN npm install sharp
@@ -54,6 +54,10 @@ RUN cp -a /tmp/node_modules /app
 RUN rm -rf /tmp/node_modules
 
 RUN npm run postinstall
+
+RUN npm install sequelize -g
+RUN npm install sequelize-cli -g
+RUN npm install pg -g
 
 EXPOSE 80
 
