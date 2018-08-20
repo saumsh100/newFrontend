@@ -2195,22 +2195,6 @@
               "deprecationReason": null
             },
             {
-              "name": "availableDates",
-              "description": null,
-              "args": [],
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "availableTimes",
               "description": null,
               "args": [],
@@ -4665,20 +4649,6 @@
             },
             {
               "name": "unavailableDays",
-              "description": null,
-              "type": {
-                "kind": "LIST",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "defaultValue": null
-            },
-            {
-              "name": "availableDates",
               "description": null,
               "type": {
                 "kind": "LIST",

@@ -3,6 +3,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Map } from 'immutable';
 import { Button } from '../../../library';
 import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
@@ -12,14 +13,16 @@ import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
 import Service from '../../../../entities/models/Service';
-import { refreshAvailabilitiesState } from '../../../../reducers/availabilities';
+import {
+  refreshAvailabilitiesState,
+  getSelectedDaysOfTheWeek,
+} from '../../../../reducers/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { BookingConfirmedSVG } from '../../SVGs';
-import { handleAvailabilitiesTimes } from '../Review/helpers';
+import { waitlistDates, waitlistTimes } from '../Review/helpers';
 import SummaryItem from '../Review/SummaryItem';
 import { hideButton } from '../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
-import { capitalizeFirstLetter } from '../../../Utils';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
 
@@ -32,7 +35,8 @@ function Complete({
   officeHours,
   selectedPractitioner,
   timezone,
-  waitlist,
+  waitSpot,
+  selectedDaysOfTheWeek,
   notes,
   ...props
 }) {
@@ -73,31 +77,6 @@ function Complete({
     total: 0,
   });
 
-  /**
-   * Display the dates selected on the waitlist's steps.
-   * If is a regular range display the first and the last day,
-   * otherwise display a list of dates.
-   */
-  const waitlistDates = (dates) => {
-    if (dates.length === 0) {
-      return null;
-    }
-
-    return dates.map(d => capitalizeFirstLetter(d)).join(', ');
-  };
-
-  /**
-   * Display a linear list of times that were selected from the user on the waitlist's steps.
-   */
-  const waitlistTimes = () =>
-    waitlist.times.length > 0 && (
-      <span>
-        {Object.keys(availabilities)
-          .reduce(handleAvailabilitiesTimes(waitlist.times, availabilities, timezone), [])
-          .map(text => text)}
-      </span>
-    );
-
   const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
     NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;
   return (
@@ -137,14 +116,14 @@ function Complete({
               />
             </div>
             <hr />
-            {waitlist.dates.length > 0 && (
+            {selectedDaysOfTheWeek.size > 0 && (
               <div className={styles.bookingGroup}>
                 <h4 className={styles.title}>Waitlist Details</h4>
+                <SummaryItem label="Available Dates" value={waitlistDates(selectedDaysOfTheWeek)} />
                 <SummaryItem
-                  label="Available Dates"
-                  value={waitlistDates(waitlist.dates, timezone)}
+                  label="Times"
+                  value={waitlistTimes(waitSpot, availabilities, timezone)}
                 />
-                <SummaryItem label="Times" value={waitlistTimes()} />
               </div>
             )}
           </div>
@@ -194,11 +173,15 @@ function mapStateToProps({ auth, availabilities, entities }) {
         .get('familyPatients')
         .find(patient => patient.id === availabilities.get('familyPatientUser'))
       : false;
+
+  const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
+
   return {
     notes: availabilities.get('notes'),
     dateAndTime: availabilities.get('selectedAvailability'),
     officeHours: availabilities.get('officeHours').toJS(),
     timezone: availabilities.get('account').get('timezone'),
+    selectedDaysOfTheWeek,
     selectedService: entities.getIn([
       'services',
       'models',
@@ -210,7 +193,7 @@ function mapStateToProps({ auth, availabilities, entities }) {
       availabilities.get('selectedPractitionerId'),
     ]),
     patientUser: getPatientUser,
-    waitlist: availabilities.get('waitlist').toJS(),
+    waitSpot: availabilities.get('waitSpot'),
   };
 }
 
@@ -243,10 +226,8 @@ Complete.propTypes = {
   selectedService: PropTypes.oneOfType([PropTypes.instanceOf(Service), PropTypes.string]),
   timezone: PropTypes.string.isRequired,
   refreshAvailabilitiesState: PropTypes.func.isRequired,
-  waitlist: PropTypes.shape({
-    dates: PropTypes.arrayOf(PropTypes.string),
-    times: PropTypes.arrayOf(PropTypes.string),
-  }),
+  waitSpot: PropTypes.instanceOf(Map).isRequired,
+  selectedDaysOfTheWeek: PropTypes.instanceOf(Map).isRequired,
   notes: PropTypes.string,
   hideButton: PropTypes.func.isRequired,
 };
@@ -261,8 +242,4 @@ Complete.defaultProps = {
   patientUser: null,
   selectedPractitioner: '',
   selectedService: '',
-  waitlist: {
-    dates: [],
-    times: [],
-  },
 };

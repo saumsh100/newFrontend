@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { Map } from 'immutable';
 import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import { Button } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
@@ -16,7 +17,7 @@ import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import { SummaryItemFactory } from './SummaryItem';
-import { handleAvailabilitiesTimes } from './helpers';
+import { waitlistDates, waitlistTimes } from './helpers';
 import {
   showButton,
   hideButton,
@@ -24,24 +25,13 @@ import {
   setText,
 } from '../../../../reducers/widgetNavigation';
 import { BookingReviewSVG } from '../../SVGs';
-import { refreshFirstStepData } from '../../../../reducers/availabilities';
-import { capitalizeFirstLetter } from '../../../Utils';
+import {
+  refreshFirstStepData,
+  getSelectedDaysOfTheWeek,
+} from '../../../../reducers/availabilities';
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
-
-/**
- * Display the dates selected on the waitlist's steps.
- * If is a regular range display the first and the last day,
- * otherwise display a list of dates.
- */
-const waitlistDates = (dates) => {
-  if (dates.length === 0) {
-    return null;
-  }
-
-  return dates.map(d => capitalizeFirstLetter(d)).join(', ');
-};
 
 const compareTimes = earlier => (value, ref) => (value && earlier ? value < ref : value > ref);
 const isValueEarlier = compareTimes(true);
@@ -100,15 +90,17 @@ class Review extends PureComponent {
   render() {
     const {
       dateAndTime,
+      hasWaitList,
       history,
       location,
       notes,
       officeHours,
       patientUser,
+      selectedDaysOfTheWeek,
       selectedPractitioner,
       selectedService,
       timezone,
-      waitlist,
+      waitSpot,
     } = this.props;
 
     const b = path =>
@@ -146,18 +138,6 @@ class Review extends PureComponent {
         evening: [],
         total: 0,
       });
-
-    /**
-     * Display a linear list of times that were selected from the user on the waitlist's steps.
-     */
-    const waitlistTimes = () =>
-      waitlist.times.length > 0 && (
-        <span>
-          {Object.keys(availabilities)
-            .reduce(handleAvailabilitiesTimes(waitlist.times, availabilities, timezone), [])
-            .map(text => text)}
-        </span>
-      );
 
     /**
      * Returns the component that renders the title, value and edit button for the provided data.
@@ -218,7 +198,7 @@ class Review extends PureComponent {
               link={b('practitioner')}
             />
 
-            {(dateAndTime || waitlist.dates.length > 0) && (
+            {(dateAndTime || hasWaitList) && (
               <SummaryItem
                 label="Date and Time"
                 value={dateTimeSummaryText}
@@ -226,7 +206,7 @@ class Review extends PureComponent {
               />
             )}
             <hr />
-            {waitlist.dates.length > 0 ? (
+            {hasWaitList ? (
               <div>
                 <div className={styles.titleWrapper}>
                   <h3 className={styles.title}>Waitlist Summary</h3>
@@ -244,12 +224,12 @@ class Review extends PureComponent {
                 </div>
                 <SummaryItem
                   label="Available Dates"
-                  value={waitlistDates(waitlist.dates, timezone)}
+                  value={waitlistDates(selectedDaysOfTheWeek)}
                   link={b('waitlist/select-dates')}
                 />
                 <SummaryItem
                   label="Times"
-                  value={waitlistTimes()}
+                  value={waitlistTimes(waitSpot, availabilities, timezone)}
                   link={b('waitlist/select-times')}
                 />
               </div>
@@ -326,27 +306,33 @@ function mapStateToProps({ availabilities, entities, auth, widgetNavigation }) {
         .get('familyPatients')
         .find(patient => patient.id === availabilities.get('familyPatientUser'))
       : false;
+
+  const selectedPractitioner = entities.getIn([
+    'practitioners',
+    'models',
+    availabilities.get('selectedPractitionerId'),
+  ]);
+  const selectedService =
+    availabilities.get('selectedServiceId') &&
+    entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]);
+  const selectedDaysOfTheWeek = getSelectedDaysOfTheWeek(availabilities.get('waitSpot'));
+
   return {
+    confirmedAvailability: availabilities.get('confirmedAvailability'),
     dateAndTime: availabilities.get('selectedAvailability'),
-    hasWaitList: availabilities.get('waitlist').get('dates').length > 0,
+    floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
+    hasWaitList: selectedDaysOfTheWeek.size > 0,
     isAuth: auth.get('isAuthenticated'),
     isBooking: availabilities.get('isBooking'),
     notes: availabilities.get('notes'),
     officeHours: availabilities.get('officeHours').toJS(),
-    confirmedAvailability: availabilities.get('confirmedAvailability'),
     patientUser: getPatientUser,
-    selectedPractitioner: entities.getIn([
-      'practitioners',
-      'models',
-      availabilities.get('selectedPractitionerId'),
-    ]),
-    selectedService:
-      availabilities.get('selectedServiceId') &&
-      entities.getIn(['services', 'models', availabilities.get('selectedServiceId')]),
+    selectedDaysOfTheWeek,
+    selectedPractitioner,
+    selectedService,
     timezone: availabilities.get('account').get('timezone'),
     user: auth.get('patientUser'),
-    waitlist: availabilities.get('waitlist').toJS(),
-    floatingButtonIsClicked: widgetNavigation.getIn(['floatingButton', 'isClicked']),
+    waitSpot: availabilities.get('waitSpot'),
   };
 }
 
@@ -380,27 +366,24 @@ Review.propTypes = {
     endDate: PropTypes.string,
     practitionerId: PropTypes.string,
   }),
+  floatingButtonIsClicked: PropTypes.bool.isRequired,
   hasWaitList: PropTypes.bool.isRequired,
+  hideButton: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   isBooking: PropTypes.bool.isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   notes: PropTypes.string,
   officeHours: PropTypes.shape(officeHoursShape).isRequired,
   patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),
+  refreshFirstStepData: PropTypes.func.isRequired,
+  selectedDaysOfTheWeek: PropTypes.instanceOf(Map).isRequired,
   selectedPractitioner: PropTypes.oneOfType([PropTypes.instanceOf(Practitioner), PropTypes.string]),
   selectedService: PropTypes.oneOfType([PropTypes.instanceOf(Service), PropTypes.string]),
-  timezone: PropTypes.string.isRequired,
-  waitlist: PropTypes.shape({
-    dates: PropTypes.arrayOf(PropTypes.string),
-    unavailableDates: PropTypes.arrayOf(PropTypes.string),
-    times: PropTypes.arrayOf(PropTypes.string),
-  }),
-  refreshFirstStepData: PropTypes.func.isRequired,
-  floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
-  showButton: PropTypes.func.isRequired,
-  hideButton: PropTypes.func.isRequired,
   setText: PropTypes.func.isRequired,
+  showButton: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
+  waitSpot: PropTypes.instanceOf(Map).isRequired,
 };
 
 Review.defaultProps = {
@@ -414,9 +397,4 @@ Review.defaultProps = {
   patientUser: null,
   selectedPractitioner: '',
   selectedService: '',
-  waitlist: {
-    dates: [],
-    unavailableDates: [],
-    times: [],
-  },
 };

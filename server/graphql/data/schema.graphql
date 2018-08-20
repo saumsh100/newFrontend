@@ -150,7 +150,6 @@ input addWaitSpotInput {
   preferences: SequelizeJSON
   daysOfTheWeek: SequelizeJSON
   unavailableDays: [String]
-  availableDates: [String]
   availableTimes: [String]
   endDate: String
   appointmentId: String
@@ -521,7 +520,6 @@ type WaitSpot implements Node {
   preferences: SequelizeJSON
   daysOfTheWeek: SequelizeJSON
   unavailableDays: [String]
-  availableDates: [String]
   availableTimes: [String]
   endDate: String
   appointmentId: String

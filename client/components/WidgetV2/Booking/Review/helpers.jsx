@@ -6,6 +6,38 @@ import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanComm
 import styles from './styles.scss';
 
 /**
+ * Display the dates selected on the waitlist's steps.
+ * If is a regular range display the first and the last day,
+ * otherwise display a list of dates.
+ */
+export const waitlistDates = (week) => {
+  if (week.size === 0) {
+    return null;
+  }
+
+  return week
+    .keySeq()
+    .toArray()
+    .map(capitalizeFirstLetter)
+    .join(', ');
+};
+
+/**
+ * Display a linear list of times that were selected from the user on the waitlist's steps.
+ */
+export const waitlistTimes = (waitSpot, availabilities, timezone) =>
+  waitSpot.get('times').size > 0 && (
+    <span>
+      {Object.keys(availabilities)
+        .reduce(
+          handleAvailabilitiesTimes(waitSpot.get('times').toJS(), availabilities, timezone),
+          [],
+        )
+        .map(text => text)}
+    </span>
+  );
+
+/**
  * Configured formatter for the current account timezone and ha format.
  */
 export const formatReviewDatesFactory = dateFormatterFactory('ha');

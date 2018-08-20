@@ -1,3 +1,4 @@
+
 export default function (sequelize, DataTypes) {
   const WaitSpot = sequelize.define('WaitSpot', {
     id: {
@@ -11,13 +12,9 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    patientId: {
-      type: DataTypes.UUID,
-    },
+    patientId: {type: DataTypes.UUID,},
 
-    patientUserId: {
-      type: DataTypes.UUID,
-    },
+    patientUserId: {type: DataTypes.UUID,},
 
     preferences: {
       type: DataTypes.JSONB,
@@ -41,39 +38,20 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    unavailableDays: {
-      type: DataTypes.ARRAY(DataTypes.DATEONLY),
-    },
+    unavailableDays: {type: DataTypes.ARRAY(DataTypes.DATEONLY),},
 
+    availableTimes: {type: DataTypes.ARRAY(DataTypes.DATE),},
 
-    availableDates: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
+    endDate: {type: DataTypes.DATE,},
 
-    availableTimes: {
-      type: DataTypes.ARRAY(DataTypes.DATE),
-    },
+    appointmentId: {type: DataTypes.UUID,},
 
-    endDate: {
-      type: DataTypes.DATE,
-    },
+    reasonId: {type: DataTypes.UUID,},
 
-    appointmentId: {
-      type: DataTypes.UUID,
-    },
-
-    reasonId: {
-      type: DataTypes.UUID,
-    },
-
-    practitionerId: {
-      type: DataTypes.UUID,
-    },
+    practitionerId: {type: DataTypes.UUID,},
   });
 
-  WaitSpot.associate = ({
-    Appointment, Account, Patient, PatientUser, Practitioner, Service,
-  }) => {
+  WaitSpot.associate = ({Appointment, Account, Patient, PatientUser, Practitioner, Service,}) => {
     WaitSpot.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',

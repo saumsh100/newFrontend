@@ -6,9 +6,10 @@ import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import difference from 'lodash/difference';
+import { List } from 'immutable';
 import { Button } from '../../../../library';
 import Service from '../../../../../entities/models/Service';
-import { setWaitlistTimes } from '../../../../../reducers/availabilities';
+import { setWaitSpotTimes } from '../../../../../reducers/availabilities';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { patientUserShape } from '../../../../library/PropTypeShapes';
 import officeHoursShape from '../../../../library/PropTypeShapes/officeHoursShape';
@@ -28,7 +29,7 @@ import styles from './styles.scss';
 const contextualUrl = location =>
   (location.state && location.state.nextRoute) || '../patient-information';
 
-class SelectTimes extends React.Component {
+class SelectTimes extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -37,7 +38,7 @@ class SelectTimes extends React.Component {
 
   componentDidMount() {
     this.props.setText();
-    this.shouldShowNextButton(this.props.waitlist.times.length > 0);
+    this.shouldShowNextButton(this.props.waitSpotTimes.size > 0);
   }
 
   componentDidUpdate(prevProps) {
@@ -58,7 +59,7 @@ class SelectTimes extends React.Component {
   }
 
   render() {
-    const { selectedService, officeHours, waitlist, timezone, setWaitlist } = this.props;
+    const { selectedService, officeHours, waitSpotTimes, timezone } = this.props;
 
     /**
      * Add the current.startDate to the accumulator.
@@ -73,7 +74,7 @@ class SelectTimes extends React.Component {
      *
      * @param {object} startDate
      */
-    const checkIfIncludesTime = ({ startDate }) => waitlist.times.includes(startDate);
+    const checkIfIncludesTime = ({ startDate }) => waitSpotTimes.includes(startDate);
 
     /**
      * Look over the officeHours object and find the earliest startTime of the clinic.
@@ -123,7 +124,7 @@ class SelectTimes extends React.Component {
           (availabilities[frame] &&
             availabilities[frame].length > 0 &&
             availabilities[frame].every(checkIfIncludesTime)) ||
-          availabilities.total === waitlist.times.length,
+          availabilities.total === waitSpotTimes.size,
       });
       return (
         <div className={styles.slotWrapper} key={`${label}`}>
@@ -149,7 +150,7 @@ class SelectTimes extends React.Component {
       let selectedAvailabilities = [];
       if (frame === 'all') {
         selectedAvailabilities =
-          availabilities.total === waitlist.times.length
+          availabilities.total === waitSpotTimes.size
             ? []
             : [
               ...availabilities.morning.reduce(reduceStartTime, []),
@@ -159,11 +160,11 @@ class SelectTimes extends React.Component {
       } else {
         const frameTimes = availabilities[frame].reduce(reduceStartTime, []);
         selectedAvailabilities = availabilities[frame].every(checkIfIncludesTime)
-          ? difference(waitlist.times, frameTimes)
-          : [...waitlist.times, ...difference(frameTimes, waitlist.times)];
+          ? difference(waitSpotTimes, frameTimes)
+          : [...waitSpotTimes, ...difference(frameTimes, waitSpotTimes)];
       }
       this.shouldShowNextButton(selectedAvailabilities.length > 0);
-      return setWaitlist(selectedAvailabilities);
+      return this.props.setWaitSpotTimes(List(selectedAvailabilities));
     };
 
     /**
@@ -175,12 +176,12 @@ class SelectTimes extends React.Component {
     const handleAvailability = (availability) => {
       let times = [];
       if (checkIfIncludesTime(availability)) {
-        times = waitlist.times.filter(value => value !== availability.startDate);
+        times = waitSpotTimes.filter(value => value !== availability.startDate);
       } else {
-        times = [...waitlist.times, availability.startDate];
+        times = [...waitSpotTimes, availability.startDate];
       }
       this.shouldShowNextButton(times.length > 0);
-      return setWaitlist(times);
+      return this.props.setWaitSpotTimes(List(times));
     };
 
     /**
@@ -249,9 +250,10 @@ function mapStateToProps({ availabilities, auth, entities, widgetNavigation }) {
         .get('familyPatients')
         .find(patient => patient.id === availabilities.get('familyPatientUser'))
       : false;
+
   return {
     timezone: availabilities.get('account').get('timezone'),
-    waitlist: availabilities.get('waitlist').toJS(),
+    waitSpotTimes: availabilities.get('waitSpot').get('times'),
     officeHours: availabilities.get('officeHours').toJS(),
     selectedService: entities.getIn([
       'services',
@@ -266,7 +268,7 @@ function mapStateToProps({ availabilities, auth, entities, widgetNavigation }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setWaitlist: setWaitlistTimes,
+      setWaitSpotTimes,
       showButton,
       hideButton,
       setIsClicked,
@@ -288,13 +290,9 @@ SelectTimes.propTypes = {
   patientUser: PropTypes.oneOfType([PropTypes.shape(patientUserShape), PropTypes.bool]),
   selectedService: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Service)])
     .isRequired,
-  setWaitlist: PropTypes.func.isRequired,
+  setWaitSpotTimes: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
-  waitlist: PropTypes.shape({
-    dates: PropTypes.arrayOf(PropTypes.string),
-    unavailableDates: PropTypes.arrayOf(PropTypes.string),
-    times: PropTypes.arrayOf(PropTypes.string),
-  }),
+  waitSpotTimes: PropTypes.instanceOf(List).isRequired,
   hideButton: PropTypes.func.isRequired,
   floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
@@ -302,11 +300,4 @@ SelectTimes.propTypes = {
   setText: PropTypes.func.isRequired,
 };
 
-SelectTimes.defaultProps = {
-  patientUser: false,
-  waitlist: {
-    dates: [],
-    unavailableDates: [],
-    times: [],
-  },
-};
+SelectTimes.defaultProps = { patientUser: false };

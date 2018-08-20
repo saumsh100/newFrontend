@@ -102,7 +102,6 @@ export function createWaitSpot() {
       account,
       waitSpot,
       selectedAvailability,
-      waitlist,
       selectedServiceId,
       selectedPractitionerId,
     } = state.availabilities.toJS();
@@ -114,21 +113,12 @@ export function createWaitSpot() {
       preferences: waitSpot.preferences,
       unavailableDays: waitSpot.unavailableDays,
       daysOfTheWeek: waitSpot.daysOfTheWeek,
-
-      availableDates: waitlist.dates,
-      availableTimes: waitlist.times,
-      unavailableDates: waitlist.unavailableDates,
+      availableTimes: waitSpot.times,
 
       reasonId: selectedServiceId,
       practitionerId: selectedPractitionerId !== '' ? selectedPractitionerId : null,
 
-      // If availability is selected, add this to the waitspot, so we can know when to remove
-      endDate:
-        (selectedAvailability && selectedAvailability.startDate) ||
-        waitlist.dates[waitlist.dates.length - 1] ||
-        moment()
-          .add(60, 'days')
-          .toISOString(),
+      endDate: selectedAvailability && selectedAvailability.startDate,
     };
 
     return axios.post('/waitSpots', params).then(({ data: { entities: waitSpots } }) => {

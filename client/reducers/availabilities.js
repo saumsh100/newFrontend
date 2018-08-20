@@ -40,13 +40,14 @@ export const SET_NOTES = `${reducerName}SET_NOTES`;
 export const RESET_WAITLIST = `${reducerName}RESET_WAITLIST`;
 export const SET_PATIENT_USER = `${reducerName}SET_PATIENT_USER`;
 export const SET_WAITLIST_DATES = `${reducerName}SET_WAITLIST_DATES`;
-export const SET_WAITLIST_TIMES = `${reducerName}SET_WAITLIST_TIMES`;
+export const SET_WAITSPOT_TIMES = `${reducerName}SET_WAITSPOT_TIMES`;
 export const SET_FAMILY_PATIENT_USER = `${reducerName}SET_FAMILY_PATIENT_USER`;
 export const SET_SELECTED_SERVICE_ID = `${reducerName}SET_SELECTED_SERVICE_ID`;
 export const REFRESH_FIRST_STEP_DATA = `${reducerName}REFRESH_FIRST_STEP_DATA`;
 export const SET_SELECTED_PRACTITIONER_ID = `${reducerName}SET_SELECTED_PRACTITIONER_ID`;
 export const REFRESH_AVAILABILITIES_STATE = `${reducerName}REFRESH_AVAILABILITIES_STATE`;
 export const SET_TIMEFRAME = `${reducerName}SET_TIMEFRAME`;
+export const UPDATE_DAYS_OF_THE_WEEK = `${reducerName}UPDATE_DAYS_OF_THE_WEEK `;
 /**
  * ACTIONS
  */
@@ -58,12 +59,13 @@ export const setNotes = createAction(SET_NOTES);
 export const resetWaitlist = createAction(RESET_WAITLIST);
 export const setPatientUser = createAction(SET_PATIENT_USER);
 export const setWaitlistDates = createAction(SET_WAITLIST_DATES);
-export const setWaitlistTimes = createAction(SET_WAITLIST_TIMES);
+export const setWaitSpotTimes = createAction(SET_WAITSPOT_TIMES);
 export const refreshFirstStepData = createAction(REFRESH_FIRST_STEP_DATA);
 export const setFamilyPatientUser = createAction(SET_FAMILY_PATIENT_USER);
 export const setSelectedServiceId = createAction(SET_SELECTED_SERVICE_ID);
 export const setSelectedPractitionerId = createAction(SET_SELECTED_PRACTITIONER_ID);
 export const refreshAvailabilitiesState = createAction(REFRESH_AVAILABILITIES_STATE);
+export const updateDaysOfTheWeek = createAction(UPDATE_DAYS_OF_THE_WEEK);
 
 function getStartTimeForToday(account) {
   return moment.tz(new Date(), account.timezone).add(1, 'hours');
@@ -78,6 +80,45 @@ function getFloorDate(date) {
 let selectedStartDate = moment()
   .add(1, 'hours')
   .toISOString();
+
+const refreshableState = {
+  familyPatientUser: null,
+  forgotPassword: false,
+  hasWaitList: false,
+  insuranceCarrier: 'Pay for myself',
+  insuranceMemberId: '',
+  isBooking: true,
+  isConfirming: false,
+  isFetching: false,
+  isLogin: false,
+  isSuccessfulBooking: false,
+  isTimerExpired: false,
+  notes: null,
+  registrationStep: 1,
+  reservationId: null,
+  selectedAvailability: null,
+  selectedPractitionerId: null,
+  selectedStartDate,
+  sentRecallId: null,
+  waitSpot: {
+    preferences: {
+      mornings: true,
+      afternoons: true,
+      evenings: true,
+    },
+    daysOfTheWeek: {
+      sunday: false,
+      monday: false,
+      tuesday: false,
+      wednesday: false,
+      thursday: false,
+      friday: false,
+      saturday: false,
+    },
+    times: [],
+  },
+};
+
 export const createInitialWidgetState = (state) => {
   if (state) {
     selectedStartDate = getStartTimeForToday(state.account).toISOString();
@@ -86,67 +127,26 @@ export const createInitialWidgetState = (state) => {
   const floorDate = getFloorDate(selectedStartDate);
 
   // selectedStartDate = timezone ?
-  return fromJS(Object.assign(
-    {
-      account: null,
-      officeHours: null,
-      practitioners: [],
-      services: [],
-      availabilities: [],
-      nextAvailability: null,
-      patientUser: null,
-      isFetching: false,
-      isBooking: true,
-      familyPatientUser: null,
-      insuranceCarrier: 'Pay for myself',
-      insuranceMemberId: '',
-      isConfirming: false,
-      isLogin: false,
-      forgotPassword: false,
-      initialForm: {},
-      isTimerExpired: false,
-      isSuccessfulBooking: false,
-      hasWaitList: false,
-      waitlist: {
-        dates: [],
-        times: [],
-      },
-      waitSpot: {
-        preferences: {
-          mornings: true,
-          afternoons: true,
-          evenings: true,
-        },
-
-        daysOfTheWeek: {
-          sunday: false,
-          monday: false,
-          tuesday: false,
-          wednesday: false,
-          thursday: false,
-          friday: false,
-          saturday: false,
-        },
-
-        unavailableDays: [],
-      },
-
-      selectedAvailability: null,
-      confirmedAvailability: false,
-      selectedServiceId: null, // Will be set by the initialState from server
-      selectedPractitionerId: null,
-      selectedStartDate,
-      registrationStep: 1,
-      reservationId: null,
-      notes: null,
-      sentRecallId: null,
-      dueDate: null,
-      floorDate,
-      timeframe: null,
-    },
-    state,
-  ));
+  return fromJS({
+    account: null,
+    availabilities: [],
+    confirmedAvailability: false,
+    dueDate: null,
+    floorDate,
+    initialForm: {},
+    nextAvailability: null,
+    officeHours: null,
+    patientUser: null,
+    practitioners: [],
+    selectedServiceId: null, // Will be set by the initialState from server
+    services: [],
+    timeframe: null,
+    ...refreshableState,
+    ...state,
+  });
 };
+
+export const getSelectedDaysOfTheWeek = waitSpot => waitSpot.get('daysOfTheWeek').filter(v => v);
 
 export default handleActions(
   {
@@ -154,50 +154,7 @@ export default handleActions(
       // We can't re-fetch practitioners and services cause they are pulled from server,
       // so don't purge those...
       // We also don't wanna re-set user-selected state because why make them re-select?
-      return state.merge({
-        isFetching: false,
-        isLogin: false,
-        isConfirming: false,
-        isTimerExpired: false,
-        isSuccessfulBooking: false,
-        registrationStep: 1,
-        reservationId: null,
-        forgotPassword: false,
-        selectedAvailability: null,
-        isBooking: true,
-        insuranceCarrier: 'Pay for myself',
-        insuranceMemberId: '',
-        familyPatientUser: null,
-        selectedPractitionerId: null,
-        selectedStartDate,
-        notes: null,
-        hasWaitList: false,
-        waitlist: {
-          dates: [],
-          times: [],
-        },
-        waitSpot: {
-          preferences: {
-            mornings: true,
-            afternoons: true,
-            evenings: true,
-          },
-
-          daysOfTheWeek: {
-            sunday: false,
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-          },
-
-          unavailableDays: [],
-        },
-
-        sentRecallId: null,
-      });
+      return state.merge(refreshableState);
     },
 
     [SET_SELECTED_AVAILABILITY](state, action) {
@@ -271,8 +228,11 @@ export default handleActions(
       };
       return state.set('waitlist', Map(payload));
     },
-    [SET_WAITLIST_TIMES](state, action) {
-      return state.setIn(['waitlist', 'times'], action.payload);
+    [UPDATE_DAYS_OF_THE_WEEK](state, action) {
+      return state.mergeIn(['waitSpot', 'daysOfTheWeek'], action.payload);
+    },
+    [SET_WAITSPOT_TIMES](state, action) {
+      return state.setIn(['waitSpot', 'times'], action.payload);
     },
     [SET_WAITLIST_DATES](state, action) {
       return state.setIn(['waitlist', 'dates'], action.payload);

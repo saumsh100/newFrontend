@@ -1,6 +1,17 @@
 @import '../../styles';
 
-.slotWrapper {
+.cardWrapper {
   @extend .cardWrapper;
   flex: 0 50%;
+  @media (min-width: 576px) {
+    flex: 0 25%;
+  }
+}
+
+.slotWrapper {
+  @extend .cardWrapper;
+  flex: 1;
+  @media (min-width: 350px) {
+    flex: 1;
+  }
 }

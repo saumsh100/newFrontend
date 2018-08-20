@@ -3,9 +3,14 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Map } from 'immutable';
 import classnames from 'classnames';
-import { setWaitlistDates } from '../../../../../reducers/availabilities';
+import {
+  updateDaysOfTheWeek,
+  getSelectedDaysOfTheWeek,
+} from '../../../../../reducers/availabilities';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
+import { week, frames, dayToFrame } from '../../../../../../iso/helpers/week';
 import {
   showButton,
   hideButton,
@@ -14,7 +19,6 @@ import {
 } from '../../../../../reducers/widgetNavigation';
 import { capitalizeFirstLetter } from '../../../../Utils';
 import Button from '../../../../library/Button';
-import sort from '../../../../../../iso/helpers/sort/sort';
 import styles from './styles.scss';
 
 /**
@@ -22,31 +26,31 @@ import styles from './styles.scss';
  */
 const nextRoute = './select-times';
 
-const daysOfTheWeek = [
-  'sunday',
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-];
+const isFullFrame = (frame, waitSpot) =>
+  week[frame].reduce((acc, v) => (!waitSpot.getIn(['daysOfTheWeek', v]) ? false : acc), true);
 
 class SelectDates extends PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    const { waitSpot } = props;
+
+    this.state = {
+      [frames.all]: getSelectedDaysOfTheWeek(waitSpot).size === 7,
+      [frames.weekdays]: isFullFrame(frames.weekdays, waitSpot),
+      [frames.weekends]: isFullFrame(frames.weekends, waitSpot),
+    };
+
     this.shouldShowNextButton = this.shouldShowNextButton.bind(this);
     this.handleAvailableDays = this.handleAvailableDays.bind(this);
+    this.handleSelectFrameAvailability = this.handleSelectFrameAvailability.bind(this);
   }
 
   componentDidMount() {
-    const {
-      waitlist: { dates },
-      ...props
-    } = this.props;
+    const { waitSpot, ...props } = this.props;
 
     props.setText();
-    this.shouldShowNextButton(dates.length > 0);
+    this.shouldShowNextButton(getSelectedDaysOfTheWeek(waitSpot).size > 0);
   }
 
   componentDidUpdate(prevProps) {
@@ -73,21 +77,81 @@ class SelectDates extends PureComponent {
    * @param day
    */
   handleAvailableDays(day) {
-    const {
-      waitlist: { dates },
-      setWaitlist,
-    } = this.props;
-    const finalDates = [
-      ...(dates.includes(day) ? dates.filter(d => d !== day) : [...dates, day]),
-    ].sort((a, b) => sort()(daysOfTheWeek.indexOf(a), daysOfTheWeek.indexOf(b)));
-    this.shouldShowNextButton(finalDates.length > 0);
-    return setWaitlist(finalDates);
+    const { waitSpot } = this.props;
+
+    const finalWaitSpot = waitSpot.updateIn(['daysOfTheWeek', day], d => !d);
+
+    const selectedDays = getSelectedDaysOfTheWeek(finalWaitSpot);
+
+    if (selectedDays.size === 7) {
+      return this.handleSelectFrameAvailability(frames.all);
+    }
+
+    const update = isFullFrame(dayToFrame(day), finalWaitSpot);
+
+    this.setState({
+      [frames.all]: false,
+      [dayToFrame(day)]: update,
+    });
+    this.shouldShowNextButton(selectedDays.size > 0);
+
+    return this.props.updateDaysOfTheWeek(finalWaitSpot.get('daysOfTheWeek'));
+  }
+
+  handleSelectFrameAvailability(frame) {
+    const { waitSpot } = this.props;
+
+    const selectedDays = getSelectedDaysOfTheWeek(waitSpot);
+
+    this.setState(
+      prevState =>
+        (frame === frames.all
+          ? {
+            [frames.all]: !prevState.all,
+            [frames.weekdays]: !prevState.all,
+            [frames.weekends]: !prevState.all,
+          }
+          : {
+            [frames.all]: selectedDays.size + week[frame].length === 7,
+            [frames[frame]]: !prevState[frame],
+          }),
+      () => {
+        const finalWaitSpot = waitSpot.withMutations((w) => {
+          week[frame].forEach((key) => {
+            w.setIn(['daysOfTheWeek', key], this.state[frame]);
+          });
+        });
+
+        this.shouldShowNextButton(getSelectedDaysOfTheWeek(finalWaitSpot).size > 0);
+
+        return this.props.updateDaysOfTheWeek(finalWaitSpot.get('daysOfTheWeek'));
+      },
+    );
   }
 
   render() {
-    const { waitlist: { dates } } = this.props;
+    const { waitSpot } = this.props;
 
-    const checkIfIncludesDay = day => dates.includes(day);
+    /**
+     * Return a button scoped to a specific time-frame
+     *
+     * @param {string} frame
+     * @param {string} label
+     */
+    const timeFrameButton = (frame, label) => {
+      const classes = classnames({
+        [styles.slot]: true,
+        [styles.timeFrameButton]: true,
+        [styles.selectedSlot]: this.state[frame],
+      });
+      return (
+        <div className={styles.slotWrapper} key={`${label}`}>
+          <Button className={classes} onClick={() => this.handleSelectFrameAvailability(frame)}>
+            {label}
+          </Button>
+        </div>
+      );
+    };
 
     return (
       <div className={styles.scrollableContainer}>
@@ -100,23 +164,31 @@ class SelectDates extends PureComponent {
         <div className={styles.contentWrapper}>
           <div className={styles.container}>
             <div className={styles.timeFrameWrapper}>
-              {daysOfTheWeek.map((day) => {
-                const { slot, timeFrameButton, selectedSlot } = styles;
-                return (
-                  <div className={styles.slotWrapper} key={day}>
-                    <Button
-                      onClick={() => this.handleAvailableDays(day)}
-                      className={classnames({
-                        [slot]: true,
-                        [timeFrameButton]: true,
-                        [selectedSlot]: checkIfIncludesDay(day),
-                      })}
-                    >
-                      {capitalizeFirstLetter(day)}
-                    </Button>
-                  </div>
-                );
-              })}
+              {timeFrameButton(frames.all, 'All Days')}
+              {timeFrameButton(frames.weekdays, 'Weekdays')}
+              {timeFrameButton(frames.weekends, 'Weekends')}
+            </div>
+            <div className={styles.contentWrapper}>
+              <span className={styles.helper}>Or</span>
+              <div className={styles.timeFrameWrapper}>
+                {week[frames.all].map((day) => {
+                  const { slot, selectedSlot } = styles;
+                  return (
+                    <div className={styles.cardWrapper} key={day}>
+                      <Button
+                        onClick={() => this.handleAvailableDays(day)}
+                        className={classnames({
+                          [slot]: true,
+                          [styles.timeFrameButton]: true,
+                          [selectedSlot]: waitSpot.getIn(['daysOfTheWeek', day]),
+                        })}
+                      >
+                        {capitalizeFirstLetter(day)}
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -128,7 +200,7 @@ class SelectDates extends PureComponent {
 function mapStateToProps({ availabilities, entities, widgetNavigation }) {
   return {
     timezone: availabilities.get('account').get('timezone'),
-    waitlist: availabilities.get('waitlist').toJS(),
+    waitSpot: availabilities.get('waitSpot'),
     selectedAvailability:
       availabilities.get('confirmedAvailability') && availabilities.get('selectedAvailability'),
     selectedService: entities.getIn([
@@ -143,7 +215,7 @@ function mapStateToProps({ availabilities, entities, widgetNavigation }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setWaitlist: setWaitlistDates,
+      updateDaysOfTheWeek,
       hideButton,
       setText,
       setIsClicked,
@@ -162,11 +234,8 @@ SelectDates.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   timezone: PropTypes.string.isRequired,
-  setWaitlist: PropTypes.func.isRequired,
-  waitlist: PropTypes.shape({
-    dates: PropTypes.arrayOf(PropTypes.string),
-    times: PropTypes.arrayOf(PropTypes.string),
-  }),
+  updateDaysOfTheWeek: PropTypes.func.isRequired,
+  waitSpot: PropTypes.instanceOf(Map).isRequired,
   selectedAvailability: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.shape({
@@ -181,11 +250,4 @@ SelectDates.propTypes = {
   showButton: PropTypes.func.isRequired,
   setText: PropTypes.func.isRequired,
 };
-SelectDates.defaultProps = {
-  waitlist: {
-    dates: [],
-    unavailableDates: [],
-    times: [],
-  },
-  selectedAvailability: false,
-};
+SelectDates.defaultProps = { selectedAvailability: false };
