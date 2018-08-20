@@ -114,7 +114,7 @@ class Header extends Component {
           {isAuth ? <PatientUserMenu user={patientUser} /> : null}
           <IconButton
             icon="times"
-            onClick={this.props.closeBookingModal}
+            onClick={() => this.props.closeBookingModal()}
             className={styles.closeButton}
           />
         </div>

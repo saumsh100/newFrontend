@@ -103,7 +103,7 @@ function mapStateToProps({ entities, availabilities }) {
     services: entities.get('services'),
     practitioners: entities.get('practitioners'),
     selectedServiceId: availabilities.get('selectedServiceId'),
-    selectedPractitionerId: availabilities.get('selectedPractitionerId'),
+    selectedPractitionerId: availabilities.get('selectedPractitionerId') || '',
   };
 }
 

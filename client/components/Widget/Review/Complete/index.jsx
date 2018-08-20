@@ -33,7 +33,7 @@ class Complete extends Component {
           <Button
             className={styles.button}
             color="red"
-            onClick={this.props.closeBookingModal}
+            onClick={() => this.props.closeBookingModal()}
           >
             Done
           </Button>
