@@ -16,10 +16,10 @@ import { AccountTabSVG, FindTimeSVG, ReviewBookSVG } from './SVGs';
 import { refreshFirstStepData } from '../../reducers/availabilities';
 import styles from './styles.scss';
 
-const b = ({ pathname }, path) =>
+const b = ({ pathname }, path, size = 5) =>
   pathname
     .split('/')
-    .filter((v, index) => index < 5)
+    .filter((v, index) => index < size)
     .concat(path)
     .join('/');
 
@@ -52,7 +52,7 @@ class Widget extends Component {
       window.confirm('Are you sure you want to edit your appointment information? You will have to re-select the steps in Find a Time section.')
     ) {
       this.props.refreshFirstStepData();
-      return this.props.history.push(b(this.props.location, 'reason'));
+      return this.props.history.push(b(this.props.location, 'book/reason', 4));
     }
     return undefined;
   }

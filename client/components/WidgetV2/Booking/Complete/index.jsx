@@ -68,7 +68,7 @@ function Complete({
   const availabilities = createAvailabilitiesFromOpening({
     startDate: earliestStartTime,
     endDate: setDateToTimezone(latestEndTime, timezone),
-    duration: selectedService.get('duration'),
+    duration: selectedService && selectedService.get('duration'),
     interval: 60,
   }).reduce(groupTimesPerPeriod(timezone), {
     morning: [],

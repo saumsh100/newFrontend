@@ -160,8 +160,8 @@ class SelectTimes extends React.PureComponent {
       } else {
         const frameTimes = availabilities[frame].reduce(reduceStartTime, []);
         selectedAvailabilities = availabilities[frame].every(checkIfIncludesTime)
-          ? difference(waitSpotTimes, frameTimes)
-          : [...waitSpotTimes, ...difference(frameTimes, waitSpotTimes)];
+          ? new Set(difference(waitSpotTimes.toJS(), frameTimes))
+          : new Set([...waitSpotTimes.toJS(), ...difference(frameTimes, waitSpotTimes.toJS())]);
       }
       this.shouldShowNextButton(selectedAvailabilities.length > 0);
       return this.props.setWaitSpotTimes(List(selectedAvailabilities));
@@ -174,14 +174,11 @@ class SelectTimes extends React.PureComponent {
      * @param {string} availability
      */
     const handleAvailability = (availability) => {
-      let times = [];
-      if (checkIfIncludesTime(availability)) {
-        times = waitSpotTimes.filter(value => value !== availability.startDate);
-      } else {
-        times = [...waitSpotTimes, availability.startDate];
-      }
-      this.shouldShowNextButton(times.length > 0);
-      return this.props.setWaitSpotTimes(List(times));
+      const times = checkIfIncludesTime(availability)
+        ? waitSpotTimes.filter(value => value !== availability.startDate)
+        : waitSpotTimes.push(availability.startDate);
+      this.shouldShowNextButton(times.size > 0);
+      return this.props.setWaitSpotTimes(times);
     };
 
     /**

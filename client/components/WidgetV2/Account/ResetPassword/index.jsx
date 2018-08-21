@@ -9,6 +9,7 @@ import { Form, Field, Button } from '../../../library';
 import { emailValidate } from '../../../library/Form/validate';
 import { resetPatientUserPassword } from '../../../../thunks/patientAuth';
 import { inputTheme } from '../../theme';
+import Link from '../../../library/Link';
 import styles from './styles.scss';
 
 function ResetPassword(props) {
@@ -29,10 +30,14 @@ function ResetPassword(props) {
     <div className={styles.scrollableContainer}>
       <div className={styles.contentWrapper}>
         <div className={styles.container}>
-          <h1 className={styles.heading}>Reset</h1>
+          <h1 className={styles.heading}>Reset Password</h1>
           <p className={styles.description}>
             Enter your email below and if you are a user, we will send you a link to reset your
             password.
+            <br /> Remember your password?{' '}
+            <Link className={styles.subCardLink} to="./login">
+              Login
+            </Link>
           </p>
         </div>
       </div>
@@ -59,16 +64,12 @@ function ResetPassword(props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      resetPatientUserPassword,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ resetPatientUserPassword }, dispatch);
 }
 
-export default withRouter(connect(null, mapDispatchToProps)(ResetPassword));
+export default withRouter(connect(
+  null,
+  mapDispatchToProps,
+)(ResetPassword));
 
-ResetPassword.propTypes = {
-  resetPatientUserPassword: PropTypes.func.isRequired,
-};
+ResetPassword.propTypes = { resetPatientUserPassword: PropTypes.func.isRequired };

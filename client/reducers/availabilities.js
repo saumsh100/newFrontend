@@ -100,6 +100,7 @@ const refreshableState = {
   selectedPractitionerId: null,
   selectedStartDate,
   sentRecallId: null,
+  selectedServiceId: null,
   waitSpot: {
     preferences: {
       mornings: true,
