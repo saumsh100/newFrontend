@@ -30,8 +30,8 @@ module.exports = {
         const configurations = await queryInterface
           .sequelize.query(`
             SELECT * FROM "Configurations"
-            WHERE "name" = ?;
-          ` , { replacements: [migrationFieldName], transaction: t });
+            WHERE "name" = '${migrationFieldName}';
+          ` , { transaction: t });
 
         const configurationIds = configurations[0].map(c => c.id);
         await queryInterface.bulkDelete('AccountConfigurations', {
@@ -39,9 +39,7 @@ module.exports = {
         }, { transaction: t });
 
         await queryInterface.bulkDelete('Configurations', {
-          name: [
-            migrationFieldName,
-          ],
+          name: migrationFieldName,
         }, { transaction: t });
       } catch (err) {
         console.error(err);
