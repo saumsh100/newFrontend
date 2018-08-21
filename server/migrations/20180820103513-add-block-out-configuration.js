@@ -2,7 +2,7 @@
 'use strict';
 
 const uuid = require('uuid').v4;
-const migrationFieldName = 'APPOINTMENT_BLOCK_OUT_TYPES';
+const migrationFieldName = 'APPOINTMENT_NOT_BOOKABLE_TYPES';
 
 module.exports = {
   up:  (queryInterface) => {
@@ -12,7 +12,7 @@ module.exports = {
           id: uuid(),
           name: migrationFieldName,
           defaultValue: '[]',
-          description: 'A json array of names of the blockouts that need to be synced as appointments',
+          description: 'A json array of types of the appointments that need to be synced as not bookable',
           type: 'json',
           createdAt: new Date(),
           updatedAt: new Date(),

@@ -531,8 +531,8 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "json",
-        "description": "A json array of names of the blockouts that need to be synced as appointments",
-        "name": "APPOINTMENT_BLOCK_OUT_TYPES",
+        "description": "A json array of types of the appointments that need to be synced as not bookable",
+        "name": "APPOINTMENT_NOT_BOOKABLE_TYPES",
         "value": "[]",
       },
       "type": "configuration",
@@ -916,8 +916,8 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "json",
-        "description": "A json array of names of the blockouts that need to be synced as appointments",
-        "name": "APPOINTMENT_BLOCK_OUT_TYPES",
+        "description": "A json array of types of the appointments that need to be synced as not bookable",
+        "name": "APPOINTMENT_NOT_BOOKABLE_TYPES",
         "value": "[]",
       },
       "type": "configuration",
