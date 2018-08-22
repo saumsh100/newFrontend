@@ -528,6 +528,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of types of the appointments that need to be synced as not bookable",
+        "name": "APPOINTMENT_NOT_BOOKABLE_TYPES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -901,6 +910,15 @@ Object {
         "description": "The custom db url that the connector will use.",
         "name": "DB_CONNECTION_URL",
         "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of types of the appointments that need to be synced as not bookable",
+        "name": "APPOINTMENT_NOT_BOOKABLE_TYPES",
+        "value": "[]",
       },
       "type": "configuration",
     },
