@@ -1,5 +1,5 @@
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, Set } from 'immutable';
 import moment from 'moment-timezone';
 import { createAction, handleActions } from 'redux-actions';
 import {
@@ -116,7 +116,7 @@ const refreshableState = {
       friday: false,
       saturday: false,
     },
-    times: [],
+    times: new Set([]),
   },
 };
 
@@ -225,7 +225,7 @@ export default handleActions(
       const payload = {
         dates: [],
         unavailableDates: [],
-        times: [],
+        times: new Set([]),
       };
       return state.set('waitlist', Map(payload));
     },

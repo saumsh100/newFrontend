@@ -5,8 +5,7 @@ import classnames from 'classnames';
 import moment from 'moment-timezone';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import difference from 'lodash/difference';
-import { List } from 'immutable';
+import { Set } from 'immutable';
 import { Button } from '../../../../library';
 import Service from '../../../../../entities/models/Service';
 import { setWaitSpotTimes } from '../../../../../reducers/availabilities';
@@ -135,6 +134,12 @@ class SelectTimes extends React.PureComponent {
       );
     };
 
+    const selectAllStartingTimes = {
+      morning: availabilities.morning.reduce(reduceStartTime, []),
+      afternoon: availabilities.afternoon.reduce(reduceStartTime, []),
+      evening: availabilities.evening.reduce(reduceStartTime, []),
+    };
+
     /**
      * Handle what we have to select in comparison to what
      * is already selected.
@@ -147,24 +152,20 @@ class SelectTimes extends React.PureComponent {
      * @param {string} frame
      */
     const handleSelectFrameAvailability = (frame) => {
-      let selectedAvailabilities = [];
       if (frame === 'all') {
-        selectedAvailabilities =
+        const frameAll =
           availabilities.total === waitSpotTimes.size
-            ? []
-            : [
-              ...availabilities.morning.reduce(reduceStartTime, []),
-              ...availabilities.afternoon.reduce(reduceStartTime, []),
-              ...availabilities.evening.reduce(reduceStartTime, []),
-            ];
-      } else {
-        const frameTimes = availabilities[frame].reduce(reduceStartTime, []);
-        selectedAvailabilities = availabilities[frame].every(checkIfIncludesTime)
-          ? new Set(difference(waitSpotTimes.toJS(), frameTimes))
-          : new Set([...waitSpotTimes.toJS(), ...difference(frameTimes, waitSpotTimes.toJS())]);
+            ? waitSpotTimes.clear()
+            : waitSpotTimes.union(...Object.values(selectAllStartingTimes));
+        this.shouldShowNextButton(frameAll.size > 0);
+        return this.props.setWaitSpotTimes(frameAll);
       }
-      this.shouldShowNextButton(selectedAvailabilities.length > 0);
-      return this.props.setWaitSpotTimes(List(selectedAvailabilities));
+      const selectAllStartingTime = selectAllStartingTimes[frame];
+      const selectedAvailabilities = selectAllStartingTime.every(v => waitSpotTimes.includes(v))
+        ? waitSpotTimes.subtract(selectAllStartingTime)
+        : waitSpotTimes.union(selectAllStartingTime);
+      this.shouldShowNextButton(selectedAvailabilities.size > 0);
+      return this.props.setWaitSpotTimes(selectedAvailabilities);
     };
 
     /**
@@ -173,10 +174,10 @@ class SelectTimes extends React.PureComponent {
      *
      * @param {string} availability
      */
-    const handleAvailability = (availability) => {
-      const times = checkIfIncludesTime(availability)
-        ? waitSpotTimes.filter(value => value !== availability.startDate)
-        : waitSpotTimes.push(availability.startDate);
+    const handleAvailability = ({ startDate }) => {
+      const times = waitSpotTimes.includes(startDate)
+        ? waitSpotTimes.remove(startDate)
+        : waitSpotTimes.add(startDate);
       this.shouldShowNextButton(times.size > 0);
       return this.props.setWaitSpotTimes(times);
     };
@@ -289,7 +290,7 @@ SelectTimes.propTypes = {
     .isRequired,
   setWaitSpotTimes: PropTypes.func.isRequired,
   timezone: PropTypes.string.isRequired,
-  waitSpotTimes: PropTypes.instanceOf(List).isRequired,
+  waitSpotTimes: PropTypes.instanceOf(Set).isRequired,
   hideButton: PropTypes.func.isRequired,
   floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
