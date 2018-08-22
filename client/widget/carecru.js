@@ -25,6 +25,13 @@ function CareCru({ iframeSrc }) {
     self.lastRoute = route;
     self.close();
   });
+
+  this.host.onEvent('completeBooking', () => {
+    if (window.ga) {
+      window.ga('send', 'event', 'CareCru Online Scheduler', 'New Appointment Request', null, null);
+    }
+    console.log('Completed booking!');
+  });
 }
 
 // Bind event-emitter like functionality on CareCru API for better

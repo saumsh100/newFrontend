@@ -87,6 +87,7 @@ export function createRequest() {
       .post('/requests', params)
       .then(() => {
         dispatch(setIsSuccessfulBooking(true));
+        window.iframeClient && window.iframeClient.sendEvent('completeBooking');
       })
       .catch((err) => {
         console.log('FAILED REQUEST!');
