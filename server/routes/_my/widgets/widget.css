@@ -76,7 +76,8 @@
 
 .CareCruButton {
   position: fixed;
-  right: 0;
+  right: -160px;
+  opacity: 0;
   top: 250px;
   width: 157px;
   min-height: 75px;
@@ -99,7 +100,26 @@
   line-height: 19px;
   text-shadow: 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.10);
   border-bottom-left-radius: 999px;
-  border-top-left-radius: 999px;
+  border-top-left-radius: 999px;  
+}
+
+.CareCruButton.fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    right: -160px;
+  }
+  50% {
+    opacity: 0;
+    right: -20px;
+  }
+  100%{
+    opacity: 1;
+    right: 0px;
+  }
 }
 
 .CareCruButton strong {
@@ -144,8 +164,8 @@
 @media screen and (max-width: 610px) {
   .CareCruButton {
     top: auto;
-    bottom: 2.5%;
     right: 0;
+    opacity: 0;
     left: 0;
     width: 90%;
     left: 5%;
@@ -157,6 +177,24 @@
     padding: 10px 0;
     text-align: center;
     min-height: auto;
+  }
+  
+  .CareCruButton.fadeIn {
+    animation: fadeIn 1s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      bottom: -3%;
+    }
+    50% {
+      opacity: 0;
+    }
+    100%{
+      opacity: 1;
+      bottom: 2.5%;
+    }
   }
 
   .CareCruButton strong {
@@ -183,4 +221,70 @@
   height: 100%;
   border: none;
   overflow: hidden;
+}
+
+
+/*
+  Initial Spinner
+*/
+.CareCruSpinner {
+  font-family: 'Roboto';
+  margin: 0 auto 0;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 700;
+  letter-spacing: .035em;
+  z-index: 102;
+  position: relative;
+  background: white;
+  opacity: 1;
+  transition: opacity 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.CareCruSpinner.fadeOut {
+  opacity: 0;
+  transition: opacity 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.CareCruSpinner > div > div {
+  width: 18px;
+  height: 18px;
+  background-color: var(--bookingWidgetPrimaryColor);
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: CareCruSpinner-bouncedelay 1.4s infinite ease-in-out both;
+  animation: CareCruSpinner-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.CareCruSpinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.CareCruSpinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+.CareCruSpinner > span {
+  margin-top: 12px;
+}
+
+@-webkit-keyframes CareCruSpinner-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes CareCruSpinner-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
 }

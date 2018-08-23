@@ -16,11 +16,25 @@ function CareCru({ iframeSrc }) {
     height: '100%',
   });
 
+  const frame = document.querySelector('#CareCruIframe');
+  const self = this;
+
+  frame.onload = function () {
+    const button = document.querySelector('.CareCruButton');
+    button.classList.add('fadeIn');
+  };
+
   this.host.connect().then(() => {
     console.log('Connected to client!');
+
+    const spinner = document.querySelector('.CareCruSpinner');
+    spinner.classList.add('fadeOut');
+
+    setTimeout(() => {
+      spinner.remove();
+    }, 450);
   });
 
-  const self = this;
   this.host.onEvent('closeModal', (route) => {
     self.lastRoute = route;
     self.close();
