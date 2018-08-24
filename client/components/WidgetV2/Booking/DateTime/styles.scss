@@ -82,6 +82,8 @@
   border-radius: 4px;
   font-size: 14px;
   padding: var(--widget-spacer) 0;
+  margin-top: calc(50px - var(--widget-spacer));
+  margin-bottom: 50px;
 }
 .datePicker {
   border: 1px solid $widget-grey-lighter;
