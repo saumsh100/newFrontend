@@ -36,6 +36,8 @@
   .stepsWrapper {
     width: auto;
     flex: none;
+    padding: var(--widget-spacer) var(--widget-spacer) 0;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -111,10 +113,6 @@
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1px;
-}
-
-.stepsWrapper {
-  padding: var(--widget-spacer) var(--widget-spacer) 0;
 }
 
 .steps {
