@@ -23,7 +23,7 @@ export default {
       account,
       link,
     });
-    return sendMessage(patient.mobilePhoneNumber, body);
+    return sendMessage(patient.mobilePhoneNumber, body, account.id);
   },
 
   // Send Review email via Mandrill (MailChimp)

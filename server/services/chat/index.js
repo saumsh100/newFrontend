@@ -111,11 +111,12 @@ export async function receiveMessage(account, textMessageData) {
  * @param user {string|null} An id of user that is sending a message.
  * @returns {Promise}
  */
-export async function sendMessage(mobilePhoneNumber, message, user = null) {
-  const patient = await Patient.findOne({
-    raw: true,
-    where: { mobilePhoneNumber },
+export async function sendMessage(mobilePhoneNumber, message, accountId, user = null) {
+  const patient = await getPatientFromCellPhoneNumber({
+    accountId,
+    cellPhoneNumber: mobilePhoneNumber,
   });
+
   const chat = await Chat.findOne({
     raw: true,
     where: { patientId: patient.id },

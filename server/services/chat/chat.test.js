@@ -46,7 +46,7 @@ describe('services.chat', () => {
 
     it('creates a new chat for message if it doesnt exist', async () => {
       const { body, userId } = textMessageTest;
-      const result = await chatService.sendMessage(patient.mobilePhoneNumber, body, userId);
+      const result = await chatService.sendMessage(patient.mobilePhoneNumber, body, patient.accountId, userId);
       const omitedMessage = omitProperties(result, ['id', 'user', 'chatId']);
 
       expect(result.id).toBeDefined();
@@ -59,7 +59,7 @@ describe('services.chat', () => {
       const createChatMock = jest.spyOn(Chat, 'create');
       const { body, userId } = textMessageTest;
 
-      const result = await chatService.sendMessage(patient.mobilePhoneNumber, body, userId);
+      const result = await chatService.sendMessage(patient.mobilePhoneNumber, body, patient.accountId, userId);
       const omitedMessage = omitProperties(result, ['id', 'user', 'chatId']);
 
       expect(createChatMock).not.toHaveBeenCalled();

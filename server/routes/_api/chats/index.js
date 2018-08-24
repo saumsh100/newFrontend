@@ -149,7 +149,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), async
       throw new StatusError(400, `This patient is not the point of contact for ${cellPhoneNumber}.`);
     }
 
-    const chatData = await sendMessage(cellPhoneNumber, message, userId);
+    const chatData = await sendMessage(cellPhoneNumber, message, accountId, userId);
     return res.send(chatData);
   } catch (e) {
     return next(e);

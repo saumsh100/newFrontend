@@ -47,7 +47,7 @@ export default {
       currentDate,
       isConfirmable,
     });
-    return sendMessage(patient.mobilePhoneNumber, body);
+    return sendMessage(patient.mobilePhoneNumber, body, account.id);
   },
 
   // Send Appointment Reminder call via Twilio
