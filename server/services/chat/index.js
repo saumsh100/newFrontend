@@ -22,9 +22,9 @@ import { getPatientFromCellPhoneNumber } from '../../lib/contactInfo/getPatientF
 /**
  * Socket events.
  */
-const NEW_MESSAGE = 'newMessage';
-const MARK_UNREAD = 'markUnread';
-const MARK_READ = 'markRead';
+const NEW_MESSAGE = 'create:TextMessage';
+const MARK_UNREAD = 'unread:TextMessage';
+const MARK_READ = 'read:TextMessage';
 const UPDATE_CHAT = 'update:Chat';
 
 /**
@@ -347,6 +347,13 @@ function getChatForSocketUpdate(id) {
         as: 'patient',
         required: false,
       },
+    ],
+    order: [
+      [['lastTextMessageDate', 'DESC']],
+      [{
+        model: TextMessage,
+        as: 'textMessages',
+      }, 'createdAt', 'ASC'],
     ],
   });
 }

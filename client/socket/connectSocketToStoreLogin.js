@@ -209,7 +209,7 @@ export default function connectSocketToStoreLogin(store, socket) {
         }));
       });
 
-      socket.on('newMessage', (data) => {
+      socket.on('create:TextMessage', (data) => {
         dispatch(receiveEntities({
           key: 'chats',
           entities: data.entities,
@@ -222,11 +222,11 @@ export default function connectSocketToStoreLogin(store, socket) {
         }
       });
 
-      socket.on('markUnread', (data) => {
+      socket.on('unread:TextMessage', (data) => {
         dispatch(socketLock(data.entities.textMessages));
       });
 
-      socket.on('markRead', (data) => {
+      socket.on('read:TextMessage', (data) => {
         dispatch(receiveEntities({
           key: 'textMessages',
           entities: data.entities,

@@ -25,9 +25,7 @@ class MessageContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      sendingMessage: false,
-    };
+    this.state = { sendingMessage: false };
 
     this.sendMessageHandler = this.sendMessageHandler.bind(this);
   }
@@ -130,9 +128,7 @@ class MessageContainer extends Component {
 
   groupChatMessages(textMessages) {
     const group = [];
-    let currentGroup = {
-      messages: [],
-    };
+    let currentGroup = { messages: [] };
 
     textMessages.forEach((message) => {
       if (!currentGroup.time) {
@@ -181,7 +177,7 @@ class MessageContainer extends Component {
           className={styles.markUnreadButton}
           onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
         >
-          Mark unread
+          Click here to mark as unread
         </Button>
       );
 
@@ -202,9 +198,8 @@ class MessageContainer extends Component {
         avatarUser = message.user && message.user.id ? message.user : botAvatar;
       }
 
-      const avatarStyles = classNames(styles.bubbleAvatar, {
-        [styles.botAvatar]: avatarUser && avatarUser.bot,
-      });
+      const isBot = avatarUser && avatarUser.bot;
+      const avatarStyles = classNames(styles.bubbleAvatar, { [styles.botAvatar]: isBot });
 
       const avatar = (
         <Avatar size="xs" className={avatarStyles} user={avatarUser} isPatient={isFromPatient} />
@@ -221,7 +216,7 @@ class MessageContainer extends Component {
           }}
         >
           <Tooltip
-            trigger={['click', 'hover']}
+            trigger={['hover']}
             overlay={resendMessageButton}
             placement="left"
             getTooltipContainer={() => failedMessageWrapper}
@@ -239,7 +234,7 @@ class MessageContainer extends Component {
           }}
         >
           <Tooltip
-            trigger={['click', 'hover']}
+            trigger={['hover']}
             overlay={markUnreadText}
             placement="right"
             getTooltipContainer={() => optionsWrapper}
@@ -354,15 +349,9 @@ MessageContainer.propTypes = {
     twilioPhoneNumber: PropTypes.string,
     toJS: PropTypes.func,
   }).isRequired,
-  selectedChat: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  newChat: PropTypes.shape({
-    id: PropTypes.string,
-  }),
-  selectedPatient: PropTypes.shape({
-    id: PropTypes.string,
-  }),
+  selectedChat: PropTypes.shape({ id: PropTypes.string }),
+  newChat: PropTypes.shape({ id: PropTypes.string }),
+  selectedPatient: PropTypes.shape({ id: PropTypes.string }),
   userId: PropTypes.string.isRequired,
   selectChat: PropTypes.func.isRequired,
   setNewChat: PropTypes.func.isRequired,

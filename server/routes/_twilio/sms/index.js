@@ -1,78 +1,12 @@
 
 import { Router } from 'express';
-import {
-  Account,
-  Appointment,
-  Chat,
-  Patient,
-  SentReminder,
-  TextMessage,
-  User,
-} from 'CareCruModels';
-import { getPatientFromCellPhoneNumber } from '../../../lib/contactInfo/getPatientFromCellPhoneNumber';
-import { getValidSmsReminders } from '../../../lib/reminders/helpers';
-import { createConfirmationText } from '../../../lib/reminders/sendReminder';
+import { TextMessage } from 'CareCruModels';
 import { sequelizeLoader } from '../../util/loaders';
-import { sanitizeTwilioSmsData } from '../util';
-import { isSmsConfirmationResponse } from '../../../lib/comms/util/responseChecks';
-import twilioClient from '../../../config/twilio';
-import { namespaces } from '../../../config/globals';
-import normalize from '../../_api/normalize';
+import { receiveSMS } from '../../../services/sms';
 
 const smsRouter = Router();
 
 smsRouter.param('accountId', sequelizeLoader('account', 'Account'));
-
-function sendSocket(io, chatId) {
-  return Chat.findOne({
-    where: { id: chatId },
-    include: [
-      {
-        model: TextMessage,
-        as: 'textMessages',
-        required: false,
-        order: ['createdAt', 'ASC'],
-        include: {
-          model: User,
-          as: 'user',
-          attributes: {
-            exclude: 'password',
-          },
-          required: false,
-        },
-      },
-      {
-        model: Patient,
-        as: 'patient',
-        required: false,
-      },
-    ],
-  }).then((chat) => {
-    console.log('Found chat', chat.id);
-    io.of(namespaces.dash)
-      .in(chat.accountId)
-      .emit('newMessage', normalize('chat', chat.get({ plain: true })));
-  });
-}
-
-function sendSocketReminder(io, sentReminder) {
-  return SentReminder.findOne({
-    where: {
-      id: sentReminder.id,
-    },
-    include: [
-      {
-        model: Appointment,
-        as: 'appointment',
-      },
-    ],
-  }).then((sentReminderOne) => {
-    const sentReminderData = sentReminderOne.get({ plain: true });
-    io.of('/dash')
-      .in(sentReminder.accountId)
-      .emit('create:SentReminder', normalize('sentReminder', sentReminderData));
-  });
-}
 
 /**
  * Twilio SMS Webhook
@@ -81,118 +15,9 @@ function sendSocketReminder(io, sentReminder) {
 smsRouter.post('/accounts/:accountId', async (req, res, next) => {
   try {
     console.log(`Received twilio message on /accounts/${req.account.id}`);
-
+    await receiveSMS(req.account, req.body);
     // Twilio needs to have a certain type associated with the response
     res.type('xml');
-
-    let {
-      account,
-    } = req;
-
-    const {
-      From,
-      Body,
-    } = req.body;
-
-    account = account.get({ plain: true });
-
-    const io = req.app.get('socketio');
-    const textMessageData = sanitizeTwilioSmsData(req.body);
-
-    // Grab account from incoming number so that we can get accountId
-    const patient = await getPatientFromCellPhoneNumber({ accountId: account.id, cellPhoneNumber: From });
-
-    let chat = null;
-    if (patient) {
-      chat = await Chat.findOne({
-        where: {
-          accountId: account.id,
-          patientId: patient.id,
-        },
-      });
-    } else {
-      chat = await Chat.findOne({
-        where: {
-          accountId: account.id,
-          patientPhoneNumber: From,
-          patientId: { $eq: null },
-        },
-      });
-    }
-
-    if (!chat) {
-      chat = await Chat.create({
-        accountId: account.id,
-        patientId: patient && patient.id,
-        patientPhoneNumber: From,
-      });
-    }
-
-    const chatClean = chat.get({ plain: true });
-
-    // Now save TM
-    const textMessage = await TextMessage.create(Object.assign(
-      {},
-      textMessageData,
-      { chatId: chatClean.id },
-    ));
-
-    const textMessageClean = textMessage.get({ plain: true });
-
-    // Update Chat to have new textMessage
-    await chat.update({ lastTextMessageId: textMessageClean.id, lastTextMessageDate: textMessageClean.createdAt });
-
-    // If not patient or if not a valid sms confirmation response just return
-    if (!patient || !isSmsConfirmationResponse(Body)) {
-      await sendSocket(io, chatClean.id);
-      return res.end();
-    }
-
-    // Confirm reminder if any exist
-    const validSmsReminders = await getValidSmsReminders({
-      patientId: patient.id,
-      accountId: account.id,
-    });
-
-
-    if (!validSmsReminders.length) {
-      await sendSocket(io, chatClean.id);
-      return res.end();
-    }
-
-    // Confirm first available reminder
-    const validSentReminder = validSmsReminders[0];
-    const { appointment, reminder } = validSentReminder;
-    const sentReminder = validSentReminder.get({ plain: true });
-
-    await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
-    await appointment.confirm(reminder);
-    await sendSocketReminder(io, sentReminder);
-
-    // Mark this as read cause we are auto-responding to it
-    await textMessage.update({ read: true });
-
-    const responseMessage = await twilioClient.sendMessage({
-      from: account.twilioPhoneNumber,
-      to: patient.mobilePhoneNumber,
-      body: createConfirmationText({ patient, appointment, account, reminder }),
-    });
-
-    const responseTextMessageData = sanitizeTwilioSmsData(responseMessage);
-    let responseTextMessage = await TextMessage.create(Object.assign(
-      {},
-      responseTextMessageData,
-      { chatId: chatClean.id, read: true },
-    ));
-
-    responseTextMessage = responseTextMessage.get({ plain: true });
-
-    await chat.update({
-      lastTextMessageId: responseTextMessage.id,
-      lastTextMessageDate: responseTextMessage.createdAt,
-    });
-
-    await sendSocket(io, chatClean.id);
     res.end();
   } catch (err) {
     next(err);

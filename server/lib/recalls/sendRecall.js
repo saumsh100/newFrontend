@@ -1,10 +1,10 @@
 
-import twilio from '../../config/twilio';
 import moment from 'moment';
 import { sendTemplate } from '../mail';
 import createRecallText from './createRecallText';
 import compressUrl from '../../util/compressUrl';
 import { formatPhoneNumber } from '../../util/formatters';
+import { sendMessage } from '../../services/chat';
 
 const recallIntervalToTemplate = {
   '1 weeks': 'Patient Recall - 1 Weeks Before',
@@ -22,22 +22,29 @@ const recallIntervalToTemplate = {
   '-18 months': 'Patient Recall - 18 Months After',
 };
 
-const generateBookingUrl = ({ account, sentRecall, dueDate }) => {
-  return `${account.website}?cc=book&sentRecallId=${encodeURIComponent(sentRecall.id)}&dueDate=${encodeURIComponent(dueDate)}`;
-};
+const generateBookingUrl = ({ account, sentRecall, dueDate }) => `${account.website}?cc=book&sentRecallId=${encodeURIComponent(sentRecall.id)}&dueDate=${encodeURIComponent(dueDate)}`;
 
 export default {
   // Send Appointment Reminder text via Twilio
   async sms({ account, patient, sentRecall, recall, dueDate }) {
-    const longLink = generateBookingUrl({ account, sentRecall, dueDate: dueDate.slice(0) });
+    const longLink = generateBookingUrl({
+      account,
+      sentRecall,
+      dueDate: dueDate.slice(0),
+    });
     const shortLink = await compressUrl(longLink);
     const link = `https://${shortLink}`;
     const lastDate = patient.hygiene ? patient.lastHygieneDate : patient.lastRecallDate;
-    return twilio.sendMessage({
-      to: patient.mobilePhoneNumber,
-      from: account.twilioPhoneNumber,
-      body: createRecallText({ patient, account, sentRecall, recall, link, dueDate, lastApptDate: lastDate }),
+    const body = createRecallText({
+      patient,
+      account,
+      sentRecall,
+      recall,
+      link,
+      dueDate,
+      lastApptDate: lastDate,
     });
+    return sendMessage(patient.mobilePhoneNumber, body);
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
@@ -62,7 +69,11 @@ export default {
         },
         {
           name: 'BOOK_URL',
-          content: generateBookingUrl({ account, sentRecall, dueDate }),
+          content: generateBookingUrl({
+            account,
+            sentRecall,
+            dueDate,
+          }),
         },
         {
           name: 'ACCOUNT_CLINICNAME',
@@ -147,5 +158,4 @@ function getTimeAgo(date) {
 function getAppointmentTime(date) {
   return `${date.getHours()}:${date.getMinutes()}`;
 }
-
 

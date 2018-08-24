@@ -6,6 +6,7 @@ import createReminderText, { getReminderTemplateName } from './createReminderTex
 import { sendTemplate } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 import { formatPhoneNumber } from '../../util/formatters';
+import { sendMessage } from '../../services/chat';
 
 export function getIsConfirmable(appointment, reminder) {
   if (!reminder.isConfirmable) return false;
@@ -17,9 +18,7 @@ export function getIsConfirmable(appointment, reminder) {
   return !appointment.isPatientConfirmed;
 }
 
-export const createConfirmationText = ({
-  patient, account, appointment, reminder,
-}) => {
+export const createConfirmationText = ({ patient, account, appointment, reminder }) => {
   const mDate = moment.tz(appointment.startDate, account.timezone);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
@@ -29,9 +28,7 @@ export const createConfirmationText = ({
 };
 
 const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
-const generateCallBackUrl = ({
-  account, appointment, patient, sentReminder,
-}) => {
+const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
   const mDate = moment.tz(appointment.startDate, account.timezone);
   const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
   const startTime = mDate.format('h:mma'); // 2:15pm
@@ -40,42 +37,36 @@ const generateCallBackUrl = ({
 
 export default {
   // Send Appointment Reminder text via Twilio
-  sms({
-    account, appointment, patient, reminder, currentDate,
-  }) {
+  sms({ account, appointment, patient, reminder, currentDate }) {
     const isConfirmable = getIsConfirmable(appointment, reminder);
-    return twilio.sendMessage({
-      to: patient.mobilePhoneNumber,
-      from: account.twilioPhoneNumber,
-      body: createReminderText({
-        patient,
-        account,
-        appointment,
-        reminder,
-        currentDate,
-        isConfirmable,
-      }),
+    const body = createReminderText({
+      patient,
+      account,
+      appointment,
+      reminder,
+      currentDate,
+      isConfirmable,
     });
+    return sendMessage(patient.mobilePhoneNumber, body);
   },
 
   // Send Appointment Reminder call via Twilio
-  phone({
-    account, appointment, patient, sentReminder,
-  }) {
+  phone({ account, appointment, patient, sentReminder }) {
     // TODO: add phoneNumber logic for patient
     return twilio.makeCall({
       to: patient.mobilePhoneNumber,
       from: account.twilioPhoneNumber,
       url: generateCallBackUrl({
-        account, appointment, patient, sentReminder,
+        account,
+        appointment,
+        patient,
+        sentReminder,
       }),
     });
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({
-    account, appointment, patient, sentReminder, reminder,
-  }) {
+  email({ account, appointment, patient, sentReminder, reminder }) {
     const isConfirmable = getIsConfirmable(appointment, reminder) ? 'true' : null;
     const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
     return sendTemplate({
@@ -84,7 +75,11 @@ export default {
       fromName: account.name,
       replyTo: account.contactEmail,
       subject: 'Appointment Reminder',
-      templateName: getReminderTemplateName({ isConfirmable, reminder, account }),
+      templateName: getReminderTemplateName({
+        isConfirmable,
+        reminder,
+        account,
+      }),
       mergeVars: [
         {
           name: 'PRIMARY_COLOR',
@@ -153,7 +148,11 @@ export default {
         {
           type: 'application/octet-stream',
           name: 'appointment.ics',
-          content: new Buffer(buildAppointmentEvent({ appointment, patient, account })).toString('base64'),
+          content: new Buffer(buildAppointmentEvent({
+            appointment,
+            patient,
+            account,
+          })).toString('base64'),
         },
       ],
     });

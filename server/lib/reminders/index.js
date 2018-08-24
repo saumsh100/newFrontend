@@ -1,21 +1,12 @@
 
 import moment from 'moment-timezone';
 import omit from 'lodash/omit';
-import { env } from '../../config/globals';
 import {
-  Account,
   Appointment,
-  Chat,
-  Patient,
-  Reminder,
   SentReminder,
-  TextMessage,
 } from '../../_models';
 import GLOBALS from '../../config/globals';
 import { organizeForOutbox } from '../comms/util';
-import normalize from '../../routes/_api/normalize';
-import { sanitizeTwilioSmsData } from '../../routes/_twilio/util';
-import { generateOrganizedPatients } from '../comms/util';
 import {
   convertIntervalStringToObject,
   sortIntervalAscPredicate,
@@ -28,29 +19,6 @@ import {
   fetchAccountsAndActiveReminders,
 } from './helpers';
 import sendReminder, { getIsConfirmable } from './sendReminder';
-
-async function sendSocket(io, chatId) {
-  let chat = await Chat.findOne({
-    where: { id: chatId },
-    include: [
-      {
-        model: TextMessage,
-        as: 'textMessages',
-        order: ['createdAt', 'DESC'],
-      },
-      {
-        model: Patient,
-        as: 'patient',
-      },
-    ],
-  });
-
-  chat = chat.get({ plain: true });
-
-  await io.of('/dash')
-    .in(chat.patient.accountId)
-    .emit('newMessage', normalize('chat', chat));
-}
 
 /**
  * sendRemindersForAccount is an async function that will send reminders for the account passed in
@@ -74,11 +42,17 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
   console.log(`Sending reminders for ${name} (${account.id}) at ${moment(startDate).format('YYYY-MM-DD h:mma')}...`);
 
   // Sort reminders by interval so that we send to earliest first
-  const sortedReminders = reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+  const sortedReminders = reminders.sort((a, b) =>
+    sortIntervalAscPredicate(a.interval, b.interval));
 
   // Collect successfully sent sentReminderIds to be sent to create correspondences
   const sentReminderIds = [];
-  const remindersPatients = await mapPatientsToReminders({ reminders: sortedReminders, account, startDate, endDate });
+  const remindersPatients = await mapPatientsToReminders({
+    reminders: sortedReminders,
+    account,
+    startDate,
+    endDate,
+  });
 
   let i;
   for (i = 0; i < sortedReminders.length; i++) {
@@ -109,7 +83,7 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
         await SentReminder.bulkCreate(failedSentReminders);
         console.log(`------ ${errors.length} => saved sentReminders that would fail`);
       } catch (err) {
-        console.error(`------ Failed bulk saving of sentReminders that would fail`);
+        console.error('------ Failed bulk saving of sentReminders that would fail');
         console.error(err);
       }
     }
@@ -132,9 +106,8 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
         primaryType,
       });
 
-      let data = null;
       try {
-        data = await sendReminder[primaryType]({
+        await sendReminder[primaryType]({
           patient,
           account,
           appointment,
@@ -155,29 +128,6 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
       await sentReminder.update({ isSent: true });
       const appt = await Appointment.findById(appointment.id);
       appt.update({ isReminderSent: true });
-
-      // This needs to be refactored into a Chat lib module
-      if (primaryType === 'sms' && env !== 'test') {
-        const textMessageData = sanitizeTwilioSmsData(data);
-        const { to } = textMessageData;
-        let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
-        if (!chat) {
-          chat = await Chat.create({
-            accountId: account.id,
-            patientId: patient.id,
-            patientPhoneNumber: to,
-          });
-        }
-
-        // Now save TM
-        const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
-
-        // Update Chat to have new textMessage
-        await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
-
-        // Now update the clients in real-time
-        global.io && await sendSocket(global.io, chat.id);
-      }
     }
   }
 
@@ -201,10 +151,18 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
  */
 export async function computeRemindersAndSend({ startDate, endDate, pub }) {
   // Get all clinics that actually want reminders sent and get their Reminder Touchpoints
-  const accounts = await fetchAccountsAndActiveReminders({ startDate, endDate });
+  const accounts = await fetchAccountsAndActiveReminders({
+    startDate,
+    endDate,
+  });
   for (const account of accounts) {
     // use `exports.` because we can mock it and stub it in test suite
-    await exports.sendRemindersForAccount({ account, startDate, endDate, pub });
+    await exports.sendRemindersForAccount({
+      account,
+      startDate,
+      endDate,
+      pub,
+    });
   }
 }
 
@@ -230,7 +188,11 @@ export async function computeRemindersAndSend({ startDate, endDate, pub }) {
  */
 export async function getRemindersOutboxList({ account, startDate, endDate }) {
   // Fetch active reminders for the account that need to be sent
-  const reminders = await fetchActiveReminders({ account, startDate, endDate });
+  const reminders = await fetchActiveReminders({
+    account,
+    startDate,
+    endDate,
+  });
 
   // Adjust dates so we are not including items that would not happen in the interval.
   // This is because we need to show according to how we run the cron

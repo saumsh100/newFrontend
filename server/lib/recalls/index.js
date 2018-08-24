@@ -1,38 +1,8 @@
 
 import moment from 'moment-timezone';
-import { Account, Patient, SentRecall, Recall, Chat, TextMessage } from '../../_models';
-import {
-  getPatientsDueForRecall,
-  mapPatientsToRecalls,
-} from './helpers';
-import { sanitizeTwilioSmsData } from '../../routes/_twilio/util';
-import { convertIntervalStringToObject } from '../../util/time';
-import normalize from '../../routes/_api/normalize';
+import { Account, SentRecall, Recall } from '../../_models';
+import { mapPatientsToRecalls } from './helpers';
 import sendRecall from './sendRecall';
-import { env } from '../../config/globals';
-
-async function sendSocket(io, chatId) {
-  let chat = await Chat.findOne({
-    where: { id: chatId },
-    include: [
-      {
-        model: TextMessage,
-        as: 'textMessages',
-        order: ['createdAt', 'DESC'],
-      },
-      {
-        model: Patient,
-        as: 'patient',
-      },
-    ],
-  });
-
-  chat = chat.get({ plain: true });
-
-  await io.of('/dash')
-    .in(chat.patient.accountId)
-    .emit('newMessage', normalize('chat', chat));
-}
 
 /**
  * sendRecallsForAccount is an async function that will send recalls for the data passed in
@@ -56,7 +26,11 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
   console.log(`Sending recalls for ${account.name}`);
   const { recalls, name } = account;
 
-  const recallsPatients = await mapPatientsToRecalls({ recalls, account, startDate: date });
+  const recallsPatients = await mapPatientsToRecalls({
+    recalls,
+    account,
+    startDate: date,
+  });
 
   let i;
   for (i = 0; i < recalls.length; i++) {
@@ -82,7 +56,7 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
 
       await SentRecall.bulkCreate(failedSentRecalls);
     } catch (err) {
-      console.error(`FAILED bulkSave of failed sentRecalls`, err);
+      console.error('FAILED bulkSave of failed sentRecalls', err);
     }
 
     // Save ids of recalls sent as we are sending them
@@ -113,10 +87,9 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
           moment(patient.dueForHygieneDate);
       }
 
-      let data = null;
       try {
         dueDate = dueDate.toISOString();
-        data = await sendRecall[primaryType]({
+        await sendRecall[primaryType]({
           patient,
           account,
           sentRecall,
@@ -132,28 +105,6 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
       }
 
       await sentRecall.update({ isSent: true });
-
-      if (primaryType === 'sms' && env !== 'test') {
-        const textMessageData = sanitizeTwilioSmsData(data);
-        const { to } = textMessageData;
-        let chat = await Chat.findOne({ where: { accountId: account.id, patientPhoneNumber: to } });
-        if (!chat) {
-          chat = await Chat.create({
-            accountId: account.id,
-            patientId: patient.id,
-            patientPhoneNumber: to,
-          });
-        }
-
-        // Now save TM
-        const textMessage = await TextMessage.create(Object.assign({}, textMessageData, { chatId: chat.id, read: true }));
-
-        // Update Chat to have new textMessage
-        await chat.update({ lastTextMessageId: textMessage.id, lastTextMessageDate: textMessage.createdAt });
-
-        // Now update the clients in real-time
-        global.io && await sendSocket(global.io, chat.id);
-      }
 
       sentRecallsIds.push(sentRecall.id);
     }
@@ -177,9 +128,7 @@ export async function sendRecallsForAccount(account, date, pubSocket) {
 export async function computeRecallsAndSend({ date, publishSocket }) {
   // TODO: Create a fetcher function just like reminders has
   const accounts = await Account.findAll({
-    where: {
-      canSendRecalls: true,
-    },
+    where: { canSendRecalls: true },
 
     include: [{
       model: Recall,

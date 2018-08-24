@@ -239,7 +239,7 @@ export function markAsRead(chatId) {
     }
 
     dispatch(updateEntityRequest({
-      key: 'textMessages',
+      key: 'chats',
       values: {},
       url: `/api/chats/${chatId}/textMessages/read`,
     })).then((response) => {
@@ -318,7 +318,10 @@ export function socketLock(textMessages) {
 
     dispatch(setUnreadChats(newUnreadChatsList));
     dispatch(lockChatList(chatListToLock));
-    dispatch(receiveEntities({ key: 'textMessages', entities: { textMessages } }));
+    dispatch(receiveEntities({
+      key: 'textMessages',
+      entities: { textMessages },
+    }));
   };
 }
 
@@ -367,7 +370,10 @@ export function resendMessage(messageId, patientId, chatId) {
       values: { patientId },
       url: `/api/chats/textMessage/${messageId}/resend`,
     })).then(() => {
-      dispatch(deleteEntity({ key: 'textMessages', id: messageId }));
+      dispatch(deleteEntity({
+        key: 'textMessages',
+        id: messageId,
+      }));
       dispatch(setChatMessagesListForChat(chatId));
     });
 }

@@ -21,6 +21,7 @@ export async function sendSMS({ from, to, body }) {
     const message = await twilioClient.sendMessage({ from, to, body });
     return sanitizeTwilioSmsData(message);
   } catch (exception) {
+    logger.error(exception);
     return {
       id: uuid(),
       smsStatus: 'failed',

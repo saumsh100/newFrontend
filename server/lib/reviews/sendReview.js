@@ -1,30 +1,37 @@
 
 import moment from 'moment-timezone';
-import twilio from '../../config/twilio';
 import compressUrl from '../../util/compressUrl';
 import { sendReview } from '../mail';
 import { createReviewText } from './createReviewText';
 import { formatPhoneNumber } from '../../util/formatters';
+import { sendMessage } from '../../services/chat';
 
 const generateReviewsUrl = ({ account, sentReview }) =>
   `${account.website}?cc=review&srid=${sentReview.id}&accountId=${account.id}`;
 
 export default {
   // Send Review SMS via Twilio
-  async sms({ account, appointment, patient, sentReview }) {
-    const longLink = generateReviewsUrl({ account, sentReview });
+  async sms({ account, patient, sentReview }) {
+    const longLink = generateReviewsUrl({
+      account,
+      sentReview,
+    });
     const shortLink = await compressUrl(longLink);
     const link = `https://${shortLink}`;
-    return twilio.sendMessage({
-      to: patient.mobilePhoneNumber,
-      from: account.twilioPhoneNumber,
-      body: createReviewText({ patient, account, link }),
+    const body = createReviewText({
+      patient,
+      account,
+      link,
     });
+    return sendMessage(patient.mobilePhoneNumber, body);
   },
 
   // Send Review email via Mandrill (MailChimp)
-  email({ account, patient, practitioner, sentReview }) {
-    const reviewsUrl = generateReviewsUrl({ account, sentReview });
+  email({ account, patient, sentReview }) {
+    const reviewsUrl = generateReviewsUrl({
+      account,
+      sentReview,
+    });
     const stars = [];
     for (let i = 1; i < 6; i++) {
       stars.push({
@@ -100,5 +107,4 @@ function getAppointmentDate(date, timezone) {
 function getAppointmentTime(date, timezone) {
   return moment.tz(date, timezone).format('h:mm a');
 }
-
 

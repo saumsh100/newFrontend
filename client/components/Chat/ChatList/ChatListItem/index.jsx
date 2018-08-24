@@ -59,9 +59,7 @@ class ChatListItem extends Component {
   }
 
   render() {
-    const {
-      chat, patient, lastTextMessage, hasUnread, selectedChatId,
-    } = this.props;
+    const { chat, patient, lastTextMessage, hasUnread, selectedChatId, lockedChat } = this.props;
 
     if (!patient || !lastTextMessage) {
       return null;
@@ -73,7 +71,7 @@ class ChatListItem extends Component {
 
     const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
-    const isUnread = !isActive && hasUnread;
+    const isUnread = (!isActive && hasUnread) || lockedChat;
 
     const listItemClass = isHub() ? styles.hubListItem : styles.chatListItem;
 
@@ -109,7 +107,7 @@ ChatListItem.propTypes = {
     read: PropTypes.bool,
     body: PropTypes.string,
     createdAt: PropTypes.string,
-  }).isRequired,
+  }),
   chat: PropTypes.shape({
     id: PropTypes.string,
     patientId: PropTypes.string,
@@ -126,9 +124,11 @@ ChatListItem.propTypes = {
   selectChat: PropTypes.func.isRequired,
   selectedChatId: PropTypes.string,
   onChatClick: PropTypes.func,
+  lockedChat: PropTypes.bool.isRequired,
 };
 
 ChatListItem.defaultProps = {
+  lastTextMessage: null,
   hasUnread: false,
   selectedChatId: null,
   onChatClick: e => e,
@@ -138,13 +138,17 @@ function mapStateToProps(state, { chat = {} }) {
   const patients = state.entities.getIn(['patients', 'models']);
   const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
   const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
+  const selectedChatId = state.chat.get('selectedChatId');
+  const lockedChat = state.chat.get('lockedChats').includes(chat.id);
+
   const hasUnread = chat.textMessages.filter((message) => {
     const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
     return messageEntity && !messageEntity.read;
   });
 
   return {
-    selectedChatId: state.chat.get('selectedChatId'),
+    selectedChatId,
+    lockedChat,
     patient: patients.get(chat.patientId) || {},
     hasUnread: hasUnread.length > 0,
     lastTextMessage,
