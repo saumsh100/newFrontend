@@ -30,6 +30,7 @@ import { historyShape, locationShape } from '../../../library/PropTypeShapes/rou
 import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import { isResponsive } from '../../../../util/hub';
+import { setDateToTimezone } from '../../../../../server/util/time';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
 import styles from './styles.scss';
@@ -47,7 +48,7 @@ import styles from './styles.scss';
  */
 const getSortedAvailabilities = (selectedDate, availabilities, accountTimezone) =>
   availabilities
-    .filter(date => genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'd'))
+    .filter(date => genericMoment(date.startDate, accountTimezone).isSame(selectedDate, 'day'))
     .reduce(groupTimesPerPeriod(accountTimezone), {
       morning: [],
       afternoon: [],
@@ -70,6 +71,7 @@ class DateTime extends PureComponent {
 
     this.state = {
       isModal: false,
+      month: new Date(),
       needToUpdateWaitlist: false,
     };
 
@@ -116,9 +118,15 @@ class DateTime extends PureComponent {
    * set the new date.
    *
    * @param date
+   * @param nextAvailability
    */
-  changeSelectedDate(date) {
-    this.setState({ needToUpdateWaitlist: true });
+  changeSelectedDate(date, nextAvailability = false) {
+    this.setState(prevState => ({
+      needToUpdateWaitlist: true,
+      month: nextAvailability
+        ? setDateToTimezone(date, this.props.accountTimezone).toDate()
+        : prevState.month,
+    }));
     this.props.hideButton();
     this.props.setSelectedAvailability(null);
     this.props.setSelectedStartDate(date);
@@ -222,7 +230,7 @@ class DateTime extends PureComponent {
      */
     const nextAvailabilityButton = ({ startDate }) => (
       <Button
-        onClick={() => this.changeSelectedDate(startDate)}
+        onClick={() => this.changeSelectedDate(startDate, true)}
         className={styles.nextAvailabilityButton}
       >
         Next Availablility on {genericMoment(startDate, accountTimezone).format('ddd, MMM D')}
@@ -310,6 +318,8 @@ class DateTime extends PureComponent {
             <div className={styles.container}>
               <DayPicker
                 noTarget
+                fromMonth={new Date()}
+                month={this.state.month}
                 disabledDays={{ before: new Date() }}
                 modifiers={{ disabled: { before: new Date() } }}
                 numberOfMonths={isResponsive() ? 1 : 2}
