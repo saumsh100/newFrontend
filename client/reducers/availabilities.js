@@ -292,7 +292,10 @@ export default handleActions(
       const account = state.get('account').toJS();
       const searchedDate = moment(payload).toObject();
       const startDateForToday = getStartTimeForToday(account);
-      const isToday = searchedDate.date === startDateForToday.get('date');
+      const isToday =
+        searchedDate.date === startDateForToday.get('date') &&
+        searchedDate.months === startDateForToday.get('month') &&
+        searchedDate.years === startDateForToday.get('year');
       const startDate = isToday
         ? startDateForToday.toISOString()
         : moment
