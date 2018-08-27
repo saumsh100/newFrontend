@@ -104,10 +104,10 @@
 }
 
 .CareCruButton.fadeIn {
-  animation: fadeIn 1s ease-out forwards;
+  animation: CareCruFadeIn 1s ease-out forwards;
 }
 
-@keyframes fadeIn {
+@keyframes CareCruFadeIn {
   0% {
     opacity: 0;
     right: -160px;
@@ -180,10 +180,10 @@
   }
   
   .CareCruButton.fadeIn {
-    animation: fadeIn 1s ease-out forwards;
+    animation: CareCruFadeIn 1s ease-out forwards;
   }
 
-  @keyframes fadeIn {
+  @keyframes CareCruFadeIn {
     0% {
       opacity: 0;
       bottom: -3%;
