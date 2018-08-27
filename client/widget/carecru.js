@@ -21,14 +21,14 @@ function CareCru({ iframeSrc }) {
 
   frame.onload = function () {
     const button = document.querySelector('.CareCruButton');
-    button.classList.add('fadeIn');
+    button.classList.add('CareCruFadeIn');
   };
 
   this.host.connect().then(() => {
     console.log('Connected to client!');
 
     const spinner = document.querySelector('.CareCruSpinner');
-    spinner.classList.add('fadeOut');
+    spinner.classList.add('CareCruFadeOut');
 
     setTimeout(() => {
       spinner.remove();
