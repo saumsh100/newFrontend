@@ -59,6 +59,10 @@
   }
 }
 
+.elementWrapper {
+  width: 100%;
+}
+
 .subCard {
   @extend .content;
   flex-wrap: wrap;

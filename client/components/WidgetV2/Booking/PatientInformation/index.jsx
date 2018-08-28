@@ -280,7 +280,7 @@ class PatientInformation extends PureComponent {
             asyncBlurFields={['email', 'phoneNumber']}
           >
             <div className={styles.container}>
-              <Element name="patientUser" className={styles.contentWrapper}>
+              <Element name="patientUser" className={styles.elementWrapper}>
                 <div className={styles.group}>
                   <Field
                     name="patientUser"
@@ -301,13 +301,13 @@ class PatientInformation extends PureComponent {
                   />
                 </div>
               </Element>
-              <Element name="firstName" className={styles.contentWrapper}>
+              <Element name="firstName" className={styles.elementWrapper}>
                 <Field theme={inputTheme(styles)} required name="firstName" label="First Name *" />
               </Element>
-              <Element name="lastName" className={styles.contentWrapper}>
+              <Element name="lastName" className={styles.elementWrapper}>
                 <Field theme={inputTheme(styles)} required name="lastName" label="Last Name *" />
               </Element>
-              <Element name="email" className={styles.contentWrapper}>
+              <Element name="email" className={styles.elementWrapper}>
                 <Field
                   theme={inputTheme(styles)}
                   label={`Email ${patientIsUser ? '*' : ''}`}
@@ -317,7 +317,7 @@ class PatientInformation extends PureComponent {
                   validate={[value => value && emailValidate(value)]}
                 />
               </Element>
-              <Element name="birthDate" className={styles.contentWrapper}>
+              <Element name="birthDate" className={styles.elementWrapper}>
                 <Field
                   theme={inputTheme(styles)}
                   required
@@ -327,7 +327,7 @@ class PatientInformation extends PureComponent {
                   label="Birth Date *"
                 />
               </Element>
-              <Element name="phoneNumber" className={styles.contentWrapper}>
+              <Element name="phoneNumber" className={styles.elementWrapper}>
                 <Field
                   theme={inputTheme(styles)}
                   required={patientIsUser}
@@ -336,7 +336,7 @@ class PatientInformation extends PureComponent {
                   label={`Phone Number ${patientIsUser ? '*' : ''}`}
                 />
               </Element>
-              <Element name="gender" className={styles.contentWrapper}>
+              <Element name="gender" className={styles.elementWrapper}>
                 <div className={styles.group}>
                   <Field
                     name="gender"
@@ -352,7 +352,7 @@ class PatientInformation extends PureComponent {
                   />
                 </div>
               </Element>
-              <Element name="insuranceCarrier" className={styles.contentWrapper}>
+              <Element name="insuranceCarrier" className={styles.elementWrapper}>
                 {isCustomCarrier ? (
                   <Field
                     autoFocus={
@@ -393,7 +393,7 @@ class PatientInformation extends PureComponent {
                   </div>
                 )}
               </Element>
-              <Element name="insuranceMemberId" className={styles.contentWrapper}>
+              <Element name="insuranceMemberId" className={styles.elementWrapper}>
                 <Field
                   theme={inputTheme(styles)}
                   label="Insurance Member ID"
@@ -401,7 +401,7 @@ class PatientInformation extends PureComponent {
                   disabled={insuranceCarrierValue === carriers[0].value}
                 />
               </Element>
-              <Element name="insuranceGroupId" className={styles.contentWrapper}>
+              <Element name="insuranceGroupId" className={styles.elementWrapper}>
                 <Field
                   theme={inputTheme(styles)}
                   label="Group ID"
