@@ -68,13 +68,12 @@ export default function invertFillers(fillers, startDate, endDate) {
   for (i = 0; i < length; i++) {
     // Important for rest of algorithm to assume the post is never after
     // the overall endDate
-    if (endDate <= post) {
+    const filler = fillers[i];
+    if (endDate <= post && (filler.startDate <= startDate || filler.endDate >= endDate)) {
       break;
     }
 
     // Nested if statements are really for code clarity and performance optimization.
-    const filler = fillers[i];
-
     if (isBeforeRange(post, filler)) {
       if (i === lastIndex) {
         if (isBeforeRange(endDate, filler)) {

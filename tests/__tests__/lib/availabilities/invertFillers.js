@@ -323,5 +323,21 @@ describe('#invertFillers', () => {
         });
       });
     });
+
+    describe('filler is out of the startDate - endDate range', () => {
+      test('should return 0 timeslots', () => {
+        const fillers = [
+          r(11, 0, 12, 0),
+        ];
+
+        const startDate = d(0, 0);
+        const endDate = d(0, 10);
+
+        const result = invertFillers(fillers, startDate, endDate);
+        expect(result.length).toEqual(1);
+        expect(result[0].startDate.toISOString()).toBe(d(0, 0).toISOString());
+        expect(result[0].endDate.toISOString()).toBe(d(0, 10).toISOString());
+      });
+    });
   });
 });
