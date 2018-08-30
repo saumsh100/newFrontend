@@ -52,10 +52,18 @@ function main() {
 
   UI.injectStyleText(__CARECRU_STYLE_CSS__);
 
+  // Parse URL to see if we are being linked here
+  const sentReviewId = getQueryVariable('srid');
+  const sentRecallId = getQueryVariable('sentRecallId');
+  const dueDate = getQueryVariable('dueDate');
+  const accountId = getQueryVariable('accountId');
+  const stars = getQueryVariable('stars') || 0;
   const cc = getQueryVariable('cc');
 
-  const iframeSrc = cc ? `${__CARECRU_IFRAME_SRC__}/${cc}` : `${__CARECRU_IFRAME_SRC__}/book`;
-  console.log('iframeSrc', __CARECRU_IFRAME_SRC__);
+  const ccUrl = cc && (sentRecallId ? 'book/date-and-time' : cc) + window.location.search;
+
+  const iframeSrc = ccUrl ? `${__CARECRU_IFRAME_SRC__}/${ccUrl}` : `${__CARECRU_IFRAME_SRC__}/book`;
+  console.log('iframeSrc', __CARECRU_IFRAME_SRC__, iframeSrc);
 
   // Create API for that clinic's widget
   window.CareCru = new CareCruAPI({ iframeSrc });
@@ -87,43 +95,20 @@ function main() {
       window.CareCru.open(CareCru.lastRoute);
     };
   }
-
-  // Parse URL to see if we are being linked here
-  const sentReviewId = getQueryVariable('srid');
-  const sentRecallId = getQueryVariable('sentRecallId');
-  const dueDate = getQueryVariable('dueDate');
-  const accountId = getQueryVariable('accountId');
-  const stars = getQueryVariable('stars') || 0;
-
-  if (cc) {
+  const client = window.CareCruz[accountId] || window.CareCru;
+  if (ccUrl) {
     // open the appropriate modal with that route open
-    if (window.CareCruz[accountId]) {
-      window.CareCruz[accountId].open(cc);
-    } else {
-      window.CareCru.open(cc);
+    if (sentReviewId) {
+      client.mergeReviewValues({ stars });
+      client.mergeSentReviewValues({ id: sentReviewId });
     }
-  }
+    if (sentRecallId) {
+      client.setSentRecallId(sentRecallId);
+      client.setDueDate(dueDate);
+      client.startRecall();
+    }
 
-  if (sentReviewId) {
-    const reviewData = { stars };
-    const sentReviewData = { id: sentReviewId };
-    if (window.CareCruz[accountId]) {
-      window.CareCruz[accountId].mergeReviewValues(reviewData);
-      window.CareCruz[accountId].mergeSentReviewValues(sentReviewData);
-    } else {
-      window.CareCru.mergeReviewValues(reviewData);
-      window.CareCru.mergeSentReviewValues(sentReviewData);
-    }
-  }
-
-  if (sentRecallId) {
-    if (window.CareCruz[accountId]) {
-      window.CareCruz[accountId].setSentRecallId(sentRecallId);
-      window.CareCruz[accountId].setDueDate(dueDate);
-    } else {
-      window.CareCru.setSentRecallId(sentRecallId);
-      window.CareCru.setDueDate(dueDate);
-    }
+    client.open(ccUrl);
   }
 }
 

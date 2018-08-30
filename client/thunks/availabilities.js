@@ -18,6 +18,7 @@ import {
   setPatientUser,
 } from '../actions/availabilities';
 import PatientUser from '../entities/models/PatientUser';
+import { setIsRecall, setSelectedPractitionerId } from '../reducers/availabilities';
 
 export function sixDaysShift(dayObj) {
   return function (dispatch) {
@@ -142,6 +143,13 @@ export function setStartingAppointmentTime(startsAt) {
   };
 }
 
+export function startRecall() {
+  return function (dispatch) {
+    dispatch(setIsRecall(true));
+    dispatch(setSelectedPractitionerId(''));
+  };
+}
+
 export function setRegistrationStep(registrationStep, accountId) {
   return function (dispatch, getState) {
     if (parseInt(registrationStep, 10) === 2) {
@@ -188,7 +196,8 @@ export function closeBookingModal(path) {
   return () => {
     // clean up state for closing the Modal
     window.parent.postMessage('message', '*');
-    window.iframeClient && window.iframeClient.sendEvent('closeModal', path);
+    const lastRoute = path !== 'review' && path !== 'review/complete' ? path : 'book';
+    window.iframeClient && window.iframeClient.sendEvent('closeModal', lastRoute);
   };
 }
 

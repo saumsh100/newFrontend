@@ -29,6 +29,7 @@ class Header extends Component {
       history,
       location,
       routesState: { isCompleteRoute, isFirstRoute },
+      isBook,
     } = this.props;
 
     const path = location.pathname
@@ -42,7 +43,7 @@ class Header extends Component {
           <div
             className={classNames({
               [styles.headerLeftArea]: true,
-              [styles.hideBack]: isCompleteRoute || isFirstRoute,
+              [styles.hideBack]: isCompleteRoute || isFirstRoute || !isBook,
             })}
           >
             <BackButton history={history} goBack={this.goBack} />
@@ -50,7 +51,7 @@ class Header extends Component {
 
           <div className={styles.headerCenterArea}>
             <h2 className={classNames(styles.pageTitle, { [styles.complete]: isCompleteRoute })}>
-              Schedule your Appointment
+              {isBook ? 'Schedule your Appointment' : 'Review your Visit'}
             </h2>
           </div>
           <div className={styles.headerRightArea}>
@@ -67,15 +68,6 @@ class Header extends Component {
   }
 }
 
-function mapStateToProps({ auth, availabilities }) {
-  return {
-    hasWaitList: availabilities.get('hasWaitList'),
-    isAuth: auth.get('isAuthenticated'),
-    isBooking: availabilities.get('isBooking'),
-    patientUser: auth.get('patientUser'),
-  };
-}
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({ closeBookingModal }, dispatch);
 }
@@ -85,9 +77,10 @@ Header.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   routesState: PropTypes.objectOf(PropTypes.bool).isRequired,
+  isBook: PropTypes.bool.isRequired,
 };
 
 export default withRouter(connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Header));

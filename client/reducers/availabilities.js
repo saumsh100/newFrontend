@@ -48,11 +48,13 @@ export const SET_SELECTED_PRACTITIONER_ID = `${reducerName}SET_SELECTED_PRACTITI
 export const REFRESH_AVAILABILITIES_STATE = `${reducerName}REFRESH_AVAILABILITIES_STATE`;
 export const SET_TIMEFRAME = `${reducerName}SET_TIMEFRAME`;
 export const UPDATE_DAYS_OF_THE_WEEK = `${reducerName}UPDATE_DAYS_OF_THE_WEEK `;
+export const SET_IS_RECALL = `${reducerName}SET_IS_RECALL `;
 /**
  * ACTIONS
  */
 export const setConfirmAvailability = createAction(SET_CONFIRM_AVAILABILITY);
 export const setTimeFrame = createAction(SET_TIMEFRAME);
+export const setIsRecall = createAction(SET_IS_RECALL);
 export const setSelectedAvailability = createAction(SET_SELECTED_AVAILABILITY);
 export const setSelectedStartDate = createAction(SET_START_DATE);
 export const setNotes = createAction(SET_NOTES);
@@ -142,6 +144,7 @@ export const createInitialWidgetState = (state) => {
     selectedServiceId: null, // Will be set by the initialState from server
     services: [],
     timeframe: null,
+    isRecall: false,
     ...refreshableState,
     ...state,
   });
@@ -278,8 +281,9 @@ export default handleActions(
       });
     },
 
-    [SET_SELECTED_SERVICE_ID](state, action) {
-      return state.set('selectedServiceId', action.payload);
+    [SET_SELECTED_SERVICE_ID](state, { payload }) {
+      // Remove this logic as soon as we deploy the new booking widget to all practices
+      return state.set('selectedServiceId', payload);
     },
 
     [SET_SELECTED_PRACTITIONER_ID](state, action) {
@@ -347,6 +351,9 @@ export default handleActions(
     [SET_SENTRECALLID](state, action) {
       console.log('action.payload', action.payload);
       return state.set('sentRecallId', action.payload);
+    },
+    [SET_IS_RECALL](state, { payload }) {
+      return state.set('isRecall', payload);
     },
 
     [SET_DUE_DATE](state, { payload }) {

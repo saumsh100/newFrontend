@@ -3,6 +3,8 @@ import Client from 'ifrau/client';
 import { push } from 'react-router-redux';
 import { mergeReviewValues, mergeSentReviewValues } from '../reducers/reviewsWidget';
 import { setSentRecallId, setDueDate } from '../actions/availabilities';
+import { setSelectedServiceId } from '../reducers/availabilities';
+import { startRecall } from '../thunks/availabilities';
 
 const allowedRoutes = {
   book: true,
@@ -52,9 +54,19 @@ export default function connectStoreToHost(store) {
     store.dispatch(mergeSentReviewValues(values));
   });
 
+  client.onEvent('setSelectedServiceId', (values) => {
+    // used to route
+    store.dispatch(setSelectedServiceId(values));
+  });
+
   client.onEvent('setSentRecallId', (sentRecallId) => {
     // used to route
     store.dispatch(setSentRecallId(sentRecallId));
+  });
+
+  client.onEvent('startRecall', () => {
+    // used to route
+    store.dispatch(startRecall());
   });
 
   client.onEvent('setDueDate', (dueDate) => {

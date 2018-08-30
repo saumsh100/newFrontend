@@ -19,6 +19,9 @@ import PatientInformation from '../components/WidgetV2/Booking/PatientInformatio
 import patientUserShape from '../components/library/PropTypeShapes/patientUserShape';
 import Review from '../components/WidgetV2/Booking/Review';
 import Complete from '../components/WidgetV2/Booking/Complete';
+import WidgetContainer from '../components/Widget/Container';
+import Submitted from '../components/Widget/Review/Submitted';
+import CompleteReview from '../components/Widget/Review/Complete';
 import fade from '../styles/fade.scss';
 
 const base = (path = '') => `/widgets/:accountId/app${path}`;
@@ -47,17 +50,13 @@ const GuestRoute = ({
 GuestRoute.propTypes = {
   component: PropTypes.func.isRequired,
   isAuth: PropTypes.bool.isRequired,
-  patientUser: PropTypes.shape({
-    isPhoneNumberConfirmed: PropTypes.bool,
-  }),
+  patientUser: PropTypes.shape({ isPhoneNumberConfirmed: PropTypes.bool }),
   redirecPath: PropTypes.string,
   redirecAccountPath: PropTypes.string,
 };
 
 GuestRoute.defaultProps = {
-  patientUser: {
-    isPhoneNumberConfirmed: false,
-  },
+  patientUser: { isPhoneNumberConfirmed: false },
   redirecPath: 'book/patient-information',
   redirecAccountPath: 'account',
 };
@@ -84,15 +83,11 @@ const AuthenticatedRoute = ({
 AuthenticatedRoute.propTypes = GuestRoute.propTypes;
 
 AuthenticatedRoute.defaultProps = {
-  patientUser: {
-    isPhoneNumberConfirmed: false,
-  },
+  patientUser: { isPhoneNumberConfirmed: false },
   redirecPath: '../login',
 };
 
-const BookingRouter = ({
-  match, isAuth, patientUser, location,
-}) => {
+const BookingRouter = ({ match, isAuth, patientUser, location }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <TransitionGroup>
@@ -137,11 +132,24 @@ const BookingRouter = ({
   );
 };
 
+const ReviewsRouter = ({ match }) => {
+  const b = (path = '') => `${match.url}${path}`;
+  return (
+    <WidgetContainer>
+      <Switch>
+        <Route exact path={b()} component={Submitted} />
+        <Route exact path={b('/complete')} component={CompleteReview} />
+      </Switch>
+    </WidgetContainer>
+  );
+};
+
 const EmbedRouter = ({ match, isAuth, patientUser }) => {
   const b = (path = '') => `${match.url}${path}`;
   return (
     <Switch>
       <Redirect exact from={b()} to={b('/review')} />
+      <Route path={b('/review')} component={ReviewsRouter} />
       <Redirect exact from={b('/book')} to={b('/book/reason')} />
       <Route
         path={b('/book')}
@@ -185,6 +193,15 @@ function mapStateToProps({ auth }) {
 
 export default connect(mapStateToProps)(WidgetRouter);
 
+ReviewsRouter.propTypes = {
+  match: PropTypes.shape({
+    isExact: PropTypes.bool,
+    params: PropTypes.object,
+    path: PropTypes.string,
+    url: PropTypes.string,
+  }).isRequired,
+};
+
 BookingRouter.propTypes = {
   isAuth: PropTypes.bool.isRequired,
   match: PropTypes.shape({
@@ -196,13 +213,9 @@ BookingRouter.propTypes = {
   location: PropTypes.shape(locationShape).isRequired,
   patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(patientUserShape)]),
 };
-BookingRouter.defaultProps = {
-  patientUser: null,
-};
+BookingRouter.defaultProps = { patientUser: null };
 
-BookingRouter.defaultProps = {
-  patientUser: null,
-};
+BookingRouter.defaultProps = { patientUser: null };
 
 WidgetRouter.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
@@ -210,9 +223,7 @@ WidgetRouter.propTypes = {
   patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(patientUserShape)]),
 };
 
-WidgetRouter.defaultProps = {
-  patientUser: null,
-};
+WidgetRouter.defaultProps = { patientUser: null };
 
 EmbedRouter.propTypes = {
   isAuth: PropTypes.bool.isRequired,
@@ -225,6 +236,4 @@ EmbedRouter.propTypes = {
   }).isRequired,
   patientUser: PropTypes.oneOfType([PropTypes.string, PropTypes.shape(patientUserShape)]),
 };
-EmbedRouter.defaultProps = {
-  patientUser: null,
-};
+EmbedRouter.defaultProps = { patientUser: null };

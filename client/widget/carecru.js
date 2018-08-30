@@ -74,6 +74,10 @@ CareCru.prototype.setSentRecallId = function (id) {
   this.host.sendEvent('setSentRecallId', id);
 };
 
+CareCru.prototype.startRecall = function () {
+  this.host.sendEvent('startRecall');
+};
+
 CareCru.prototype.setDueDate = function (id) {
   this.host.sendEvent('setDueDate', id);
 };

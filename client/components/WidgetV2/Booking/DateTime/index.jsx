@@ -92,9 +92,12 @@ class DateTime extends PureComponent {
     if (finalTimeFrame && finalTimeFrame !== '') {
       this.scrollTo(finalTimeFrame);
     }
-
     // This can be removed when the new booking widget is released
-    if (!this.props.nextAvailability && this.props.availabilities.total === 0) {
+    if (
+      !this.props.nextAvailability &&
+      this.props.availabilities.total === 0 &&
+      !this.props.dueDate
+    ) {
       this.props.setSelectedStartDate('');
     }
 
@@ -107,6 +110,9 @@ class DateTime extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    if (prevProps.dueDate !== this.props.dueDate) {
+      this.props.fetchAvailabilities();
+    }
     if (this.props.floatingButtonIsClicked && !prevProps.floatingButtonIsClicked) {
       this.props.setIsClicked(false);
       this.confirmDateTime();
@@ -382,6 +388,7 @@ function mapStateToProps({ availabilities, widgetNavigation }) {
     accountTimezone,
     availabilities: availabilitiesSorted,
     isFetching,
+    dueDate: availabilities.get('dueDate'),
     nextAvailability: availabilities.get('nextAvailability'),
     selectedAvailability: availabilities.get('selectedAvailability'),
     selectedPractitionerId: availabilities.get('selectedPractitionerId'),
@@ -418,6 +425,7 @@ export default connect(
 DateTime.propTypes = {
   accountTimezone: PropTypes.string.isRequired,
   availabilities: PropTypes.oneOfType([PropTypes.instanceOf(List), PropTypes.object]),
+  dueDate: PropTypes.string,
   fetchAvailabilities: PropTypes.func.isRequired,
   history: PropTypes.shape(historyShape).isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -438,6 +446,7 @@ DateTime.propTypes = {
 };
 
 DateTime.defaultProps = {
+  dueDate: null,
   availabilities: [],
   nextAvailability: '',
   selectedAvailability: '',
