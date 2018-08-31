@@ -1,5 +1,13 @@
 FROM node:8-alpine
 
+ARG FEATURE_FLAG_KEY
+ARG GOOGLE_API_KEY
+ARG API_URL
+ARG INTERCOM_APP_ID
+ARG LOGROCKET_APP_ID
+ARG NODE_ENV
+
+
 RUN apk update \
 	&& apk --no-cache add --virtual builds-deps build-base python
 RUN apk add --no-cache vips-dev fftw-dev \
