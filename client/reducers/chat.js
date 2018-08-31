@@ -1,6 +1,7 @@
 
 import { Map } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
+import tabConstants from '../components/Chat/consts';
 
 export const SET_SELECTED_CHAT_ID = '@chat/SET_SELECTED_CHAT_ID';
 export const SET_NEW_CHAT = '@chat/SET_NEW_CHAT';
@@ -25,30 +26,77 @@ export const initialState = Map({
   lockedChats: [],
 });
 
-export default handleActions({
-  [SET_SELECTED_CHAT_ID](state, { payload }) {
-    return state.set('selectedChatId', payload);
-  },
+export default handleActions(
+  {
+    [SET_SELECTED_CHAT_ID](state, { payload }) {
+      return state.set('selectedChatId', payload);
+    },
 
-  [SET_NEW_CHAT](state, { payload }) {
-    return state.set('newChat', payload);
-  },
+    [SET_NEW_CHAT](state, { payload }) {
+      return state.set('newChat', payload);
+    },
 
-  [MERGE_NEW_CHAT](state, { payload }) {
-    const newChat = state.get('newChat') || {};
-    return state.set('newChat', Object.assign({}, newChat, payload));
-  },
+    [MERGE_NEW_CHAT](state, { payload }) {
+      const newChat = state.get('newChat') || {};
+      return state.set('newChat', Object.assign({}, newChat, payload));
+    },
 
-  [SET_UNREAD_CHATS](state, { payload }) {
-    return state.set('unreadChats', payload);
-  },
+    [SET_UNREAD_CHATS](state, { payload }) {
+      return state.set('unreadChats', payload);
+    },
 
-  [SET_CHAT_MESSAGES](state, { payload }) {
-    return state.set('chatMessages', payload);
-  },
+    [SET_CHAT_MESSAGES](state, { payload }) {
+      return state.set('chatMessages', payload);
+    },
 
-  [SET_LOCKED_CHATS](state, { payload }) {
-    return state.set('lockedChats', payload);
+    [SET_LOCKED_CHATS](state, { payload }) {
+      return state.set('lockedChats', payload);
+    },
   },
+  initialState,
+);
 
-}, initialState);
+/**
+ * Filter chats based on selected tab on chat page.
+ * @param chats
+ * @param textMessages
+ * @param selectedChat
+ * @param tabIndex
+ * @return {*}
+ */
+export function filterChatsByTab(chats, textMessages, selectedChat, tabIndex) {
+  switch (tabIndex) {
+    case tabConstants.UNREAD_TAB:
+      return getUnreadChats(chats, textMessages, selectedChat);
+    case tabConstants.FLAGGED_TAB:
+      return getFlaggedChats(chats);
+    default:
+      return chats;
+  }
+}
+
+/**
+ * Selector to filter only chats with unread messages.
+ * @param chats
+ * @param textMessages
+ * @param selectedChat
+ * @return {*}
+ */
+export function getUnreadChats(chats, textMessages, selectedChat) {
+  return chats.filter((filterChat) => {
+    const hasUnread = filterChat.textMessages.filter((message) => {
+      const messageEntity = textMessages.get(message);
+      return messageEntity && !messageEntity.read;
+    });
+    return hasUnread.length > 0 || selectedChat === filterChat.get('id');
+  });
+}
+
+/**
+ * Selector to filter only flagged chats.
+ * @param chats
+ * @return {*}
+ */
+export function getFlaggedChats(chats) {
+  return chats.filter(filterChat => filterChat.get('isFlagged'));
+}

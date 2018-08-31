@@ -470,6 +470,33 @@ module.exports = {
       updatedAt: new Date(),
     });
 
+    patients2.push({
+      id: 'a021cf88-1b5c-4d54-a0f4-b6629523b739',
+      accountId: accountId2,
+      firstName: 'Testen',
+      lastName: 'Testerson',
+      email: 'testen.testerson@google.ca',
+      mobilePhoneNumber: '906-594-6265',
+      birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
+      gender: 'male',
+      language: 'English',
+      insurance: JSON.stringify({
+        insurance: 'Lay Health Insurance',
+        memberId: 'dFSDfWR@R3rfsdFSDFSER@WE',
+        contract: '4234rerwefsdfsd',
+        carrier: 'sadasadsadsads',
+        sin: 'dsasdasdasdadsasad',
+      }),
+      dueForHygieneDate: moment()
+        .add(1, 'months')
+        .toISOString(),
+      dueForRecallExamDate: moment()
+        .add(1, 'months')
+        .toISOString(),
+      createdAt: faker.date.past(),
+      updatedAt: new Date(),
+    });
+
     await queryInterface.bulkInsert('Patients', patients2);
 
     await queryInterface.bulkInsert(

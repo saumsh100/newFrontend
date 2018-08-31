@@ -93,7 +93,10 @@ class ChatListItem extends Component {
             </div>
             <div className={styles.time}>{messageDate}</div>
           </div>
-          <div className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}>
+          <div
+            data-test-id="chat_lastMessage"
+            className={isUnread ? styles.bottomSectionUnread : styles.bottomSection}
+          >
             {lastTextMessage && lastTextMessage.body}
           </div>
         </div>

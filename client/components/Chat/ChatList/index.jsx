@@ -8,41 +8,26 @@ import PatientModel from '../../../entities/models/Patient';
 import { ListItem, IconButton } from '../../library';
 import ChatListItem from './ChatListItem';
 import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
-import { setNewChat } from '../../../reducers/chat';
+import { setNewChat, filterChatsByTab } from '../../../reducers/chat';
 import listItemStyles from './ChatListItem/styles.scss';
 
 class ChatListContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      chatList: [],
-    };
-
     this.removeNewChat = this.removeNewChat.bind(this);
     this.selectNewChat = this.selectNewChat.bind(this);
   }
 
-  componentWillReceiveProps({ chats, tabIndex }) {
-    let chatList = chats.toArray();
-
-    if (tabIndex === 2) {
-      chatList = chatList.filter(chat => chat.isFlagged);
-    }
-
-    this.setState({
-      chatList,
-    });
-  }
-
   sortChatList() {
-    const { textMessages } = this.props;
-    return this.state.chatList.sort((a, b) => {
+    const { textMessages, chats } = this.props;
+    return chats.sort((a, b) => {
       if (!a.textMessages.length || !b.textMessages.length) return -1;
       const aLastId = a.textMessages[a.textMessages.length - 1];
       const aLastTm = textMessages.get(aLastId);
       const bLastId = b.textMessages[b.textMessages.length - 1];
       const bLastTm = textMessages.get(bLastId);
+      if (!aLastTm || bLastTm) return -1;
       return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
     });
   }
@@ -108,10 +93,7 @@ class ChatListContainer extends Component {
 ChatListContainer.propTypes = {
   textMessages: PropTypes.instanceOf(Map),
   chats: PropTypes.instanceOf(Map),
-  tabIndex: PropTypes.number,
-  newChat: PropTypes.shape({
-    patientId: PropTypes.string,
-  }),
+  newChat: PropTypes.shape({ patientId: PropTypes.string }),
   newChatPatient: PropTypes.instanceOf(PatientModel),
   selectedChatId: PropTypes.string,
   setNewChat: PropTypes.func.isRequired,
@@ -123,22 +105,22 @@ ChatListContainer.propTypes = {
 ChatListContainer.defaultProps = {
   textMessages: null,
   chats: null,
-  tabIndex: 0,
   newChat: null,
   newChatPatient: null,
   selectedChatId: null,
   onChatClick: e => e,
 };
 
-function mapStateToProps({ entities, chat }) {
+function mapStateToProps({ entities, chat }, { tabIndex }) {
   const newChat = chat.get('newChat');
+  const selectedChat = chat.get('selectedChatId');
   const patientId = newChat && newChat.patientId;
-  const chats = entities.getIn(['chats', 'models']);
   const textMessages = entities.getIn(['textMessages', 'models']);
+  const chats = entities.getIn(['chats', 'models']);
 
   return {
     newChat,
-    chats,
+    chats: filterChatsByTab(chats, textMessages, selectedChat, tabIndex),
     textMessages,
     selectedChatId: chat.get('selectedChatId'),
     newChatPatient: entities.getIn(['patients', 'models', patientId]),
@@ -156,6 +138,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(ChatListContainer);

@@ -36,11 +36,10 @@ import { setBackHandler, setTitle } from '../../reducers/electron';
 import PatientSearch from '../PatientSearch';
 import { isHub } from '../../util/hub';
 import { CHAT_PAGE } from '../../constants/PageTitle';
+import tabsConstants from './consts';
 import styles from './styles.scss';
 
-const patientSearchTheme = {
-  container: styles.patientSearchClass,
-};
+const patientSearchTheme = { container: styles.patientSearchClass };
 
 const patientSearchInputProps = {
   classStyles: styles.patientSearchInput,
@@ -54,7 +53,7 @@ class ChatMessage extends Component {
     super(props);
 
     this.state = {
-      tabIndex: 0,
+      tabIndex: tabsConstants.ALL_TAB,
       chats: 0,
       moreData: true,
       showPatientsList: true,
@@ -146,18 +145,21 @@ class ChatMessage extends Component {
   }
 
   selectChatOrCreate(patient) {
-    // If this patient has a chat, select the chat
-    const chatToSelect = patient.chatId || null;
-    const newChat = patient.chatId ? null : { patientId: patient.id };
+    const selectChatCallback = () => {
+      // If this patient has a chat, select the chat
+      const chatToSelect = patient.chatId || null;
+      const newChat = patient.chatId ? null : { patientId: patient.id };
 
-    this.props.selectChat(chatToSelect);
-    this.props.setNewChat(newChat);
+      this.props.selectChat(chatToSelect);
+      this.props.setNewChat(newChat);
 
-    if (!this.state.showMessageContainer) {
-      this.toggleShowMessageContainer();
-    }
+      if (!this.state.showMessageContainer) {
+        this.toggleShowMessageContainer();
+      }
 
-    this.hubChatPage();
+      this.hubChatPage();
+    };
+    this.changeTab(tabsConstants.ALL_TAB, selectChatCallback);
   }
 
   receivedChatsPostUpdate(result) {
@@ -193,8 +195,9 @@ class ChatMessage extends Component {
       });
   }
 
-  changeTab(newIndex) {
+  changeTab(newIndex, callback = () => {}) {
     if (this.state.tabIndex === newIndex || !this.props.wasChatsFetched) {
+      callback();
       return;
     }
     this.props.selectChat(null);
@@ -208,6 +211,7 @@ class ChatMessage extends Component {
         this.props.cleanChatList();
         this.loadChatList().then(() => {
           this.props.defaultSelectedChatId();
+          callback();
         });
       },
     );
@@ -264,7 +268,7 @@ class ChatMessage extends Component {
       <SBody>
         <div className={styles.splitWrapper}>
           <div className={styles.leftSplit}>
-            <MessageContainer />
+            <MessageContainer setTab={this.changeTab} />
           </div>
           <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
         </div>
@@ -293,9 +297,20 @@ class ChatMessage extends Component {
         </div>
         <div className={styles.tabsSection}>
           <Tabs fluid index={this.state.tabIndex} onChange={this.changeTab} noUnderLine>
-            <Tab label="All" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
-            <Tab label="Unread" inactiveClass={styles.inactiveTab} activeClass={styles.activeTab} />
             <Tab
+              data-test-id="all_chatTab"
+              label="All"
+              inactiveClass={styles.inactiveTab}
+              activeClass={styles.activeTab}
+            />
+            <Tab
+              data-test-id="unread_chatTab"
+              label="Unread"
+              inactiveClass={styles.inactiveTab}
+              activeClass={styles.activeTab}
+            />
+            <Tab
+              data-test-id="flagged_chatTab"
               label="Flagged"
               inactiveClass={styles.inactiveTab}
               activeClass={styles.activeTab}
@@ -308,18 +323,11 @@ class ChatMessage extends Component {
 
   render() {
     const { showPatientsList, showMessageContainer, showPatientInfo } = this.state;
+    const shouldSlideIn = showMessageContainer || showPatientInfo;
 
     return (
-      <div
-        className={classnames(styles.chatWrapper, {
-          [styles.hub]: isHub(),
-        })}
-      >
-        <div
-          className={classnames(styles.patientsList, {
-            [styles.slideIn]: showPatientsList,
-          })}
-        >
+      <div className={classnames(styles.chatWrapper, { [styles.hub]: isHub() })}>
+        <div className={classnames(styles.patientsList, { [styles.slideIn]: showPatientsList })}>
           <Card noBorder className={styles.leftCard}>
             <SContainer>
               {this.renderHeading()}
@@ -329,9 +337,7 @@ class ChatMessage extends Component {
         </div>
         <Card
           noBorder
-          className={classnames(styles.rightCard, {
-            [styles.slideIn]: showMessageContainer || showPatientInfo,
-          })}
+          className={classnames(styles.rightCard, { [styles.slideIn]: shouldSlideIn })}
         >
           <SContainer>
             <SHeader className={styles.messageHeader}>
@@ -350,20 +356,12 @@ class ChatMessage extends Component {
 }
 
 ChatMessage.defaultProps = {
-  match: {
-    params: {
-      chatId: null,
-    },
-  },
+  match: { params: { chatId: null } },
   wasChatsFetched: false,
 };
 
 ChatMessage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      chatId: PropTypes.string,
-    }),
-  }),
+  match: PropTypes.shape({ params: PropTypes.shape({ chatId: PropTypes.string }) }),
   setNewChat: PropTypes.func.isRequired,
   defaultSelectedChatId: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
@@ -382,9 +380,7 @@ function mapStateToProps({ apiRequests }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
 
-  return {
-    wasChatsFetched,
-  };
+  return { wasChatsFetched };
 }
 
 function mapDispatchToProps(dispatch) {

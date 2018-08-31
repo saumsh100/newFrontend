@@ -19,6 +19,7 @@ import {
   resendMessage,
 } from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
+import chatTabs from '../consts';
 import styles from './styles.scss';
 
 class MessageContainer extends Component {
@@ -93,6 +94,7 @@ class MessageContainer extends Component {
         .then(() => {
           this.props.selectChat(requestObject.chatId);
           this.props.setNewChat(null);
+          this.props.setTab(chatTabs.ALL_TAB);
           this.props.reset('chatMessageForm_newChat');
           this.setState({ sendingMessage: false });
         })
@@ -175,6 +177,7 @@ class MessageContainer extends Component {
       const markUnreadText = (
         <Button
           className={styles.markUnreadButton}
+          data-test-id="chat_markUnreadBtn"
           onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
         >
           Click here to mark as unread
@@ -221,7 +224,9 @@ class MessageContainer extends Component {
             placement="left"
             getTooltipContainer={() => failedMessageWrapper}
           >
-            <Icon icon="exclamation-circle" size={2} />
+            <div>
+              <Icon className={styles.failedMessageWarning} icon="exclamation-circle" size={2} />
+            </div>
           </Tooltip>
         </div>
       );
@@ -229,6 +234,7 @@ class MessageContainer extends Component {
       const messageOptions = isFromPatient && (
         <div
           className={styles.dotsWrapper}
+          data-test-id="chat_unreadDots"
           ref={(reference) => {
             optionsWrapper = reference;
           }}
@@ -360,6 +366,7 @@ MessageContainer.propTypes = {
   createNewChat: PropTypes.func.isRequired,
   markAsUnread: PropTypes.func.isRequired,
   resendMessage: PropTypes.func.isRequired,
+  setTab: PropTypes.func.isRequired,
 };
 
 MessageContainer.defaultProps = {

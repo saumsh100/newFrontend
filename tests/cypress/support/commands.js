@@ -1,3 +1,5 @@
+const uuid = require('uuid');
+
 Cypress.Commands.add('submitDialogForm', (dataTestId) => {
   cy
     .get(`[data-test-id=${dataTestId}Save]`)
@@ -93,6 +95,22 @@ Cypress.Commands.add('sendTextMessage', (patientId, chatId, mobilePhoneNumber, a
       },
       userId: '83fd6b53-83b1-425a-9c6b-ec120c0e91ae',
       chatId: 'd088f259-a3b1-4057-9453-9de92423cba6',
+    },
+  });
+});
+
+Cypress.Commands.add('receiveTextMessage', (accountId, From, To, Body) => {
+  return cy.request({
+    method: 'POST',
+    url: `/twilio/sms/accounts/${accountId}`,
+    header: {
+      'Content-Type': 'application/json',
+    },
+    body: {
+      From,
+      To,
+      Body,
+      MessageSid: uuid(),
     },
   });
 });

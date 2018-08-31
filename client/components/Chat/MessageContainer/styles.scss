@@ -122,7 +122,8 @@
   margin-right: 10px;
   margin-bottom: 15px;
 
-  & > i {
+  .failedMessageWarning {
     color: $primary-red;
+    cursor: pointer;
   }
 }
