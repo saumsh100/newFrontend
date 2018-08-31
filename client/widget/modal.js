@@ -1,10 +1,9 @@
 
 /**
  * Vanilla JS Modal
- *
- * @param modalBody
  * @constructor
  */
+
 function Modal() {
   const overlay = document.createElement('div');
   overlay.className = 'CareCruModal';
@@ -21,7 +20,6 @@ function Modal() {
 
   const body = document.getElementsByTagName('body')[0];
 
-  // inner.appendChild(modalBody);
   overlay.appendChild(inner);
   body.appendChild(overlay);
 
@@ -38,6 +36,10 @@ Modal.prototype.open = function () {
   this.inner.className = innerAlreadyActive ? ic : `${ic} CareCruActive`;
   document.documentElement.style.setProperty('overflow', 'hidden');
   document.documentElement.style.setProperty('position', 'fixed');
+  document.documentElement.style.setProperty('left', '0');
+  document.documentElement.style.setProperty('right', '0');
+  document.documentElement.style.setProperty('top', '0');
+  document.documentElement.style.setProperty('bottom', '0');
 };
 
 Modal.prototype.close = function () {
