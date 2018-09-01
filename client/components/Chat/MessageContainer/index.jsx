@@ -180,7 +180,7 @@ class MessageContainer extends Component {
           data-test-id="chat_markUnreadBtn"
           onClick={() => this.props.markAsUnread(message.get('chatId'), message.get('createdAt'))}
         >
-          Click here to mark as unread
+          Mark unread
         </Button>
       );
 
