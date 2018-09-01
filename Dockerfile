@@ -7,6 +7,7 @@ ARG INTERCOM_APP_ID
 ARG LOGROCKET_APP_ID
 ARG NODE_ENV
 
+ARG TZ=America/Los_Angeles
 
 RUN apk update \
 	&& apk --no-cache add --virtual builds-deps build-base python
@@ -15,6 +16,10 @@ RUN apk add --no-cache vips-dev fftw-dev \
 RUN apk add --no-cache \
   	gcc g++ make libc6-compat
 RUN apk add --no-cache git
+RUN apk add --no-cache tzdata
+
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN npm install babel-preset-env -g
 
 WORKDIR /tmp
