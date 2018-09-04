@@ -1,9 +1,13 @@
 
 const electron = require('electron');
 const { checkForUpdate } = require('./updater');
+const { QUIT_APP } = require('./constants');
 
 const separator = { type: 'separator' };
-const quitButton = { role: 'quit' };
+const quitButton = {
+  label: QUIT_APP,
+  role: 'quit',
+};
 
 /**
  * Generate the menu object for displays

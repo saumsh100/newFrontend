@@ -1,4 +1,5 @@
 const { checkForUpdate } = require('./updater');
+const { QUIT_APP } = require('./constants');
 
 const template = [
   {
@@ -37,7 +38,10 @@ if (process.platform === 'darwin') {
   template.unshift({
     label: 'Carecru Hub',
     submenu: [
-      { role: 'quit' },
+      {
+        label: QUIT_APP,
+        role: 'quit',
+      },
     ],
   });
 }
