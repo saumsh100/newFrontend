@@ -537,6 +537,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Set practitioner to hygienist for hygiene appointments.",
+        "name": "SET_HYGIENIST_FOR_HYGIENE_APPOINTMENT",
+        "value": "0",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -919,6 +928,15 @@ Object {
         "description": "A json array of types of the appointments that need to be synced as not bookable",
         "name": "APPOINTMENT_NOT_BOOKABLE_TYPES",
         "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "boolean",
+        "description": "Set practitioner to hygienist for hygiene appointments.",
+        "name": "SET_HYGIENIST_FOR_HYGIENE_APPOINTMENT",
+        "value": "0",
       },
       "type": "configuration",
     },
