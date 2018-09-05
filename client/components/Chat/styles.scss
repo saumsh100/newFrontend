@@ -77,6 +77,11 @@
       font-size: 17px;
       line-height: $new-chat-button-size;
     }
+
+    &.leftToolbar {
+      right: 30px;
+      left: auto;
+    }
   }
 
   .messageHeader {

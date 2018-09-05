@@ -34,7 +34,7 @@ import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { setNewChat } from '../../reducers/chat';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import PatientSearch from '../PatientSearch';
-import { isHub } from '../../util/hub';
+import { isHub, TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
 import { CHAT_PAGE } from '../../constants/PageTitle';
 import tabsConstants from './consts';
 import styles from './styles.scss';
@@ -277,6 +277,10 @@ class ChatMessage extends Component {
   }
 
   renderHeading() {
+    const { toolbarPosition } = this.props;
+    const isLeftSide = isHub() && toolbarPosition === TOOLBAR_LEFT;
+    const newChatStyle = classnames(styles.addNewChatButton, { [styles.leftToolbar]: isLeftSide });
+
     return (
       <SHeader className={styles.leftCardHeader}>
         <div className={styles.searchSection}>
@@ -290,7 +294,7 @@ class ChatMessage extends Component {
           <Button
             icon="edit"
             onClick={this.addNewChat}
-            className={styles.addNewChatButton}
+            className={newChatStyle}
             color="darkblue"
             data-test-id="button_addNewChat"
           />
@@ -358,6 +362,7 @@ class ChatMessage extends Component {
 ChatMessage.defaultProps = {
   match: { params: { chatId: null } },
   wasChatsFetched: false,
+  toolbarPosition: TOOLBAR_LEFT,
 };
 
 ChatMessage.propTypes = {
@@ -374,13 +379,17 @@ ChatMessage.propTypes = {
   setTitle: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   wasChatsFetched: PropTypes.bool,
+  toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
 };
 
-function mapStateToProps({ apiRequests }) {
+function mapStateToProps({ apiRequests, electron }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
 
-  return { wasChatsFetched };
+  return {
+    wasChatsFetched,
+    toolbarPosition: electron.get('toolbarPosition'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
