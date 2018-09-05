@@ -30,9 +30,7 @@ class MessageTextArea extends Component {
     const { chat, textBoxValue } = this.props;
     const messageArea = document.getElementsByName('message')[0];
     const caretPossition = messageArea.selectionStart;
-    const newMessage = `${textBoxValue.slice(0, caretPossition)}${
-      emoji.native
-    }${textBoxValue.slice(caretPossition)}`;
+    const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(caretPossition)}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
     this.emojiDropdown.toggle();
   }
@@ -41,12 +39,9 @@ class MessageTextArea extends Component {
     const { canSend, chat, sendingMessage } = this.props;
 
     const sendButtonProps = {
-      className:
-        canSend && !sendingMessage ? styles.sendIcon : styles.sendIconDisabled,
+      className: canSend && !sendingMessage ? styles.sendIcon : styles.sendIconDisabled,
       onClick:
-        canSend && !sendingMessage
-          ? () => this.props.submit(`chatMessageForm_${chat.id}`)
-          : null,
+        canSend && !sendingMessage ? () => this.props.submit(`chatMessageForm_${chat.id}`) : null,
     };
 
     return (
@@ -92,12 +87,12 @@ class MessageTextArea extends Component {
       <SContainer className={styles.textAreaContainer}>
         <SBody className={styles.textAreaBody}>
           <Form
+            destroyOnUnmount
+            ignoreSaveButton
             key={`chatMessageForm_${chat.id}`}
             form={`chatMessageForm_${chat.id}`}
-            ignoreSaveButton
             onSubmit={this.props.onSendMessage}
             data-test-id="chatMessageForm"
-            destroyOnUnmount={false}
             className={styles.textWrapper}
           >
             <div className={styles.textAreaWrapper}>
@@ -128,9 +123,7 @@ class MessageTextArea extends Component {
 }
 
 MessageTextArea.propTypes = {
-  chat: PropTypes.shape({
-    id: PropTypes.string,
-  }),
+  chat: PropTypes.shape({ id: PropTypes.string }),
   textBoxValue: PropTypes.string,
   error: PropTypes.string,
   canSend: PropTypes.bool,
@@ -143,12 +136,7 @@ MessageTextArea.propTypes = {
 function mapStateToProps(state, { chat = {} }) {
   const values = getFormValues(`chatMessageForm_${chat.id}`)(state);
   const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
-  const canSend = !!(
-    !!values &&
-    !!values.message &&
-    patient &&
-    patient.mobilePhoneNumber
-  );
+  const canSend = !!(!!values && !!values.message && patient && patient.mobilePhoneNumber);
 
   let error = 'Type a message';
   if (!patient) {
