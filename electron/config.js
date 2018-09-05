@@ -66,4 +66,19 @@ module.exports = {
       transparent: true,
     },
   },
+
+  /**
+   * Settings for the About window.
+   */
+  aboutWindowSettings: {
+    width: 375,
+    height: 195,
+    backgroundColor: '#FAFAFA',
+    show: false,
+    title: '',
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
+    titleBarStyle: 'hidden',
+  },
 };

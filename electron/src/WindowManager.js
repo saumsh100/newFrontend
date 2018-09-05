@@ -2,6 +2,7 @@
 const electron = require('electron');
 const MainBrowserWindow = require('./Windows/MainWindow');
 const UserModalWindow = require('./Windows/UserModal');
+const AboutWindow = require('./Windows/AboutWindow');
 const ScreenManager = require('./ScreenManager');
 const { userSessionStore: Store } = require('./store');
 const config = require('../config');
@@ -191,6 +192,13 @@ class WindowManager {
     this.userModalWindow.scaleWindow();
     this.userModalWindow.setUserModalSize();
     this.userModalWindow.positionWindow();
+  }
+
+  /**
+   * Displays the about window.
+   */
+  static showAboutWindow() {
+    AboutWindow.showWhenReady();
   }
 
   /**

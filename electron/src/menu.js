@@ -1,5 +1,13 @@
 const { checkForUpdate } = require('./updater');
+const WindowManager = require('./WindowManager');
 const { QUIT_APP } = require('./constants');
+
+const helpMenu = [
+  {
+    label: 'Check for updates',
+    click: () => checkForUpdate(),
+  },
+];
 
 const template = [
   {
@@ -25,25 +33,31 @@ const template = [
   },
   {
     label: 'Help',
-    submenu: [
-      {
-        label: 'Check for updates',
-        click: () => checkForUpdate(),
-      },
-    ],
+    submenu: helpMenu,
   },
 ];
+
+const aboutCareCru = [{
+  label: 'About CareCru Hub',
+  click: WindowManager.showAboutWindow,
+}];
 
 if (process.platform === 'darwin') {
   template.unshift({
     label: 'Carecru Hub',
     submenu: [
+      ...aboutCareCru,
+      { type: 'separator' },
       {
         label: QUIT_APP,
         role: 'quit',
       },
     ],
   });
+} else {
+  // windows related menu
+  helpMenu.unshift({ type: 'separator' });
+  helpMenu.unshift(aboutCareCru);
 }
 
 exports.appMenu = template;

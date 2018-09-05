@@ -62,6 +62,7 @@ COPY statics/styles /app/static/styles/
 COPY statics/clinic.html /app/statics/
 COPY statics/electron_index.html /app/statics/
 COPY statics/electron_user.html /app/statics/
+COPY statics/electron_about.html /app/statics/
 
 RUN cp -a /tmp/node_modules /app
 RUN rm -rf /tmp/node_modules

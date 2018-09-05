@@ -1,4 +1,18 @@
 @font-face {
+  font-family: "Gotham-Light";
+  font-weight: "normal";
+  font-style: "normal";
+  src: url(/fonts/GothamSSm-Light.otf) format("opentype"),
+  url(/fonts/Gotham-Light.woff) format("woff");
+}
+@font-face {
+  font-family: "Gotham-Medium";
+  font-weight: "normal";
+  font-style: "normal";
+  src: url(/fonts/GothamSSm-Medium.otf) format("opentype"),
+  url(/fonts/Gotham-Medium.woff) format("woff");
+}
+@font-face {
   font-family: "Gotham-Book";
   font-weight: "normal";
   font-style: "normal";
@@ -148,4 +162,59 @@ ul li p {
 .link-icon {
   float: right;
   margin-right: 0;
+}
+
+.about-content {
+  padding: 30px 20px 20px;
+  user-select: none;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
+  margin-top: 50px;
+}
+
+.about-content h2,
+.about-content p {
+  margin: 0
+}
+
+.about-content h2 {
+  margin-top: 10px;
+  font-family: "Gotham-Medium";
+  font-weight: 500;
+  font-size: 26px;
+  color: #2F3844;
+}
+
+.about-content p {
+  font-family: "Gotham-Light";
+  font-weight: 300;
+  font-size: 16px;
+  color: #6E6E6E;
+}
+
+.bottom-row {
+  margin-top: 7px;
+  font-family: "Gotham-Book";
+  font-weight: 400;
+  color: #6E6E6E;
+}
+
+.bottom-row p {
+  font-size: 12px;
+  display: inline-block;
+}
+
+.bottom-row .links {
+  float: right;
+  margin-top: -5px;
+}
+
+.links > p {
+  cursor: pointer;
+  margin-left: 20px;
+  padding-bottom: 1px;
+  border-bottom: 1px solid #959595;
 }
