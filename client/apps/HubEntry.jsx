@@ -55,6 +55,7 @@ store.dispatch(initializeFeatureFlags());
 
 electron.on(TOOLBAR_POSITION_CHANGE, (e, data) => {
   store.dispatch(setToolbarPosition(data));
+  browserHistory.push('/');
 });
 
 electron.send(REQUEST_TOOLBAR_POSITION);
@@ -132,7 +133,10 @@ load()(store.dispatch).then(() => {
 
   // We have to create global objects only once
   // And pass them to App on render
-  const appProps = { browserHistory, store };
+  const appProps = {
+    browserHistory,
+    store,
+  };
 
   const render = (Component) => {
     ReactDOM.render(
