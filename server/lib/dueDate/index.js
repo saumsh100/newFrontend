@@ -7,7 +7,7 @@ import {
   Appointment,
   AppointmentCode,
   Patient,
-} from '../../_models';
+} from 'CareCruModels';
 import {
   getAccountCronConfigurations,
   updateAccountCronConfigurations,
@@ -22,6 +22,7 @@ import {
   getPatientsWithChangedDueDateInfo,
   updatePatientDueDateFromPatientRecalls,
 } from './patientRecalls';
+import produceLikeQuery from '../shared/produceLikeQuery';
 
 const isPendingApptCheck = ({ adapterType }) => adapterType === 'TRACKER_V11';
 
@@ -42,6 +43,8 @@ export async function getConfigsForDueDates(account) {
     cronDueDate: cronConfigsMap['CRON_DUE_DATE'].value,
     hygieneTypes: JSON.parse(accountConfigsMap['HYGIENE_TYPES'].value),
     recallTypes: JSON.parse(accountConfigsMap['RECALL_TYPES'].value),
+    hygieneProcedureCodes: JSON.parse(accountConfigsMap['HYGIENE_PROCEDURE_CODES'].value),
+    recallProcedureCodes: JSON.parse(accountConfigsMap['RECALL_PROCEDURE_CODES'].value),
   };
 }
 
@@ -51,26 +54,38 @@ export async function getConfigsForDueDates(account) {
  *
  * @param {object} config.account - the account that is having its dueDates updated
  * @param {date} config.date - the date the job is being run on
- * @param {[string]} config.adapterType - the date the job is being run on
- * @param {[uuid]} config.patientIds - the date the job is being run on
- * @param {[string]} config.hygieneTypes - the date the job is being run on
- * @param {[string]} config.recallTypes - the date the job is being run on
+ * @param {[string]} config.adapterType - the type of PMS adapter being run
+ * @param {[uuid]} config.patientIds - the IDs of the patients being updated
+ * @param {[string]} config.hygieneTypes - the hygiene types for the patientRecalls
+ * @param {[string]} config.recallTypes - the recall types for the patientRecalls
+ * @param {[string]} config.hygieneProcedureCodes - the patterns for hygiene procedureCodes
+ * @param {[string]} config.recallProcedureCodes - the patterns for recall procedureCodes
  * @return undefined
  */
 export async function updatePatientDueDatesForAccount(config) {
-  const { account, date, adapterType, patientIds, hygieneTypes, recallTypes } = config;
+  const {
+    account,
+    date,
+    adapterType,
+    patientIds,
+    hygieneTypes,
+    recallTypes,
+    hygieneProcedureCodes,
+    recallProcedureCodes,
+  } = config;
+
   const isUsingPendingAppointments = isPendingApptCheck({ adapterType });
   const isNotAllPatients = isArray(patientIds);
 
   logger.info(
     `Updating dueDates for ` +
-    (isNotAllPatients ? `${patientIds.length} patients with recently changed dueDate info ` : 'all patients ') +
+    (isNotAllPatients ? `${patientIds.length} patients with recently changed info ` : 'all patients ') +
     `based on ${isUsingPendingAppointments ? 'pending appointments' : 'patient recalls'} ` +
     `for ${account.name} with ADAPTER_TYPE=${adapterType}...`,
   );
 
   return isUsingPendingAppointments ?
-    await updatePatientDueDate(account.id, patientIds) :
+    await updatePatientDueDate(account.id, patientIds, hygieneProcedureCodes, recallProcedureCodes) :
     await updatePatientDueDateFromPatientRecalls({
       accountId: account.id,
       date,
@@ -79,6 +94,8 @@ export async function updatePatientDueDatesForAccount(config) {
       patientIds,
       hygieneInterval: account.hygieneInterval,
       recallInterval: account.recallInterval,
+      hygieneProcedureCodes,
+      recallProcedureCodes,
     });
 }
 

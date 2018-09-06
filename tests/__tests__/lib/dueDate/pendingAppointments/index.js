@@ -29,6 +29,9 @@ const makeDeliveredProcedure = (config = {}) => Object.assign({}, {
   entryDate: '2017-07-19T00:14:30.932Z',
 }, config);
 
+const hygieneCodes = ['111%'];
+const recallCodes = ['00121', '01202'];
+
 describe('Last Hygiene Calculations', () => {
   beforeEach(async () => {
     await wipeAllModels();
@@ -142,7 +145,7 @@ describe('Last Hygiene Calculations', () => {
         },
       });
 
-      await updatePatientDueDate(accountId, [patientId]);
+      await updatePatientDueDate(accountId, [patientId], hygieneCodes, recallCodes);
 
       const patientAfter = await Patient.findOne({
         where: {
@@ -181,7 +184,7 @@ describe('Last Hygiene Calculations', () => {
         code: '11201',
       });
 
-      await updatePatientDueDate(accountId, [patientId]);
+      await updatePatientDueDate(accountId, [patientId], hygieneCodes, recallCodes);
 
       const patientAfter = await Patient.findOne({
         where: {
@@ -222,7 +225,7 @@ describe('Last Hygiene Calculations', () => {
         code: '11101',
       });
 
-      await updatePatientDueDate(accountId, [patientId]);
+      await updatePatientDueDate(accountId, [patientId], hygieneCodes, recallCodes);
 
       const patientAfter = await Patient.findOne({
         where: {
@@ -262,7 +265,7 @@ describe('Last Hygiene Calculations', () => {
         code: '00121',
       });
 
-      await updatePatientDueDate(accountId, [patientId]);
+      await updatePatientDueDate(accountId, [patientId], hygieneCodes, recallCodes);
 
       const patientAfter = await Patient.findOne({
         where: {
@@ -314,7 +317,7 @@ describe('Last Hygiene Calculations', () => {
         code: '00121',
       });
 
-      await updatePatientDueDate(accountId, [patientId]);
+      await updatePatientDueDate(accountId, [patientId], hygieneCodes, recallCodes);
 
       const patientAfter = await Patient.findOne({
         where: {
@@ -371,7 +374,7 @@ describe('Last Hygiene Calculations', () => {
         code: '11101',
       });
 
-      await updatePatientDueDate(accountId, [patientId]);
+      await updatePatientDueDate(accountId, [patientId], hygieneCodes, recallCodes);
 
       const patientAfter = await Patient.findOne({
         where: {

@@ -2,8 +2,9 @@
 import moment from 'moment';
 import { Account, Appointment, Patient } from '../../../_models';
 import { calcFirstNextLastAppointment } from '../../../lib/firstNextLastAppointment';
-import { updateMostRecentHygiene } from '../../../lib/lastHygiene';
-import { updateMostRecentRecall } from '../../../lib/lastRecall';
+import updateLastProcedureForAccount from '../../../lib/lastProcedure/updateLastProcedureForAccount';
+import { getConfigsForLastProcedure } from '../../../lib/lastProcedure/runLastProcedureCronForAccounts';
+import lastProcedureData from '../../../lib/lastProcedure/lastProcedureData';
 import { getConfigsForDueDates, updatePatientDueDatesForAccount } from '../../../lib/dueDate';
 
 /**
@@ -184,11 +185,24 @@ async function dueDateCalculation(ids) {
   if (appointments.length) {
     const patientIds = appointments.map(p => p.patientId);
     const accountId = appointments[0].accountId;
-    await updateMostRecentHygiene(accountId, patientIds);
-    await updateMostRecentRecall(accountId, patientIds);
+    const account = await Account.findById(accountId);
+    const lastHygieneConfigs = await getConfigsForLastProcedure({ account, ...lastProcedureData['lastHygiene'] });
+    const lastRecallConfigs = await getConfigsForLastProcedure({ account, ...lastProcedureData['lastRecall'] });
+    await updateLastProcedureForAccount({
+      account,
+      patientIds,
+      ...lastHygieneConfigs,
+      ...lastProcedureData['lastHygiene'],
+    });
+
+    await updateLastProcedureForAccount({
+      account,
+      patientIds,
+      ...lastRecallConfigs,
+      ...lastProcedureData['lastRecall'],
+    });
 
     // Fetch account and other configurations that are important for the dueDates job
-    const account = await Account.findById(accountId);
     const configurationsMap = await getConfigsForDueDates(account);
     const date = (new Date()).toISOString();
     await updatePatientDueDatesForAccount({ account, date, patientIds, ...configurationsMap });

@@ -28,7 +28,7 @@ export function createJob(name, jobData = {}, config = {}) {
     console.error(`${name} job attempt failed, done attempts = ${doneAttempts}`);
     console.error(err);
   }).on('failed', (err) => {
-    console.error(`${name} job failed`);
+    console.error(`ERROR: ${name} job failed`);
     console.error(err);
   });
 }

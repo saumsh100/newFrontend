@@ -531,6 +531,42 @@ Object {
     Object {
       "attributes": Object {
         "dataType": "json",
+        "description": "A json array of \\"hygiene\\" procedure codes",
+        "name": "HYGIENE_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"recall exam\\" procedure codes",
+        "name": "RECALL_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"new patient exam\\" procedure codes",
+        "name": "NP_EXAM_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"restorative\\" procedure codes",
+        "name": "RESTORATIVE_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
         "description": "A json array of types of the appointments that need to be synced as not bookable",
         "name": "APPOINTMENT_NOT_BOOKABLE_TYPES",
         "value": "[]",
@@ -919,6 +955,42 @@ Object {
         "description": "The custom db url that the connector will use.",
         "name": "DB_CONNECTION_URL",
         "value": "",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"hygiene\\" procedure codes",
+        "name": "HYGIENE_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"recall exam\\" procedure codes",
+        "name": "RECALL_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"new patient exam\\" procedure codes",
+        "name": "NP_EXAM_PROCEDURE_CODES",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of \\"restorative\\" procedure codes",
+        "name": "RESTORATIVE_PROCEDURE_CODES",
+        "value": "[]",
       },
       "type": "configuration",
     },

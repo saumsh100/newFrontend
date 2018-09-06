@@ -4,8 +4,8 @@ import {
   AppointmentCode,
   Patient,
   Account,
-} from '../../../_models';
-import { recallCodes } from '../../lastRecall';
+} from 'CareCruModels';
+import produceLikeQuery from '../../shared/produceLikeQuery';
 
 /**
  * finds the next most recent  Appointment of
@@ -15,7 +15,7 @@ import { recallCodes } from '../../lastRecall';
  * @param  {[object]} code - sequelize filter on code
  * @return {[array]} - an array of patients with appointments
  */
-function getPatientsWithAppointmentBasedOnCode(query, code) {
+function getPatientsWithAppointmentBasedOnCode(query, codesQuery) {
   return Patient.findAll({
     where: query,
     order: [
@@ -31,9 +31,7 @@ function getPatientsWithAppointmentBasedOnCode(query, code) {
       include: [{
         model: AppointmentCode,
         as: 'appointmentCodes',
-        where: {
-          code,
-        },
+        where: { code: codesQuery },
         required: true,
       }],
       required: true,
@@ -46,10 +44,12 @@ function getPatientsWithAppointmentBasedOnCode(query, code) {
  * lastRecallDate. If they do their due dates are null, if they don't search for their next recall
  * date in the future
  *
- * @param  {[uuid]} accountId - uuid of accountId
- * @param  {[array]} patientIds - array of patientIds if not sent then assume all patients
+ * @param {uuid} accountId - uuid of accountId
+ * @param {[uuid]} patientIds - array of patientIds if not sent then assume all patients
+ * @param {[string]} hygieneCodes - array of hygiene procedureCode patterns
+ * @param {[string]} recallCodes - array of recall procedureCode patterns
  */
-export async function updatePatientDueDate(accountId, patientIds) {
+export async function updatePatientDueDate(accountId, patientIds, hygieneCodes, recallCodes) {
   const idQuery = patientIds || { $not: null };
 
   await Patient.update({
@@ -61,21 +61,17 @@ export async function updatePatientDueDate(accountId, patientIds) {
     where: { id: idQuery, accountId },
   });
 
-  const patientsHygiene = await getPatientsWithAppointmentBasedOnCode({
+  const patientsHygiene = hygieneCodes.length ? await getPatientsWithAppointmentBasedOnCode({
     id: idQuery,
     accountId,
-    lastHygieneDate: {
-      $not: null,
-    },
-  }, { $like: '111%' });
+    lastHygieneDate: { $not: null },
+  }, produceLikeQuery(hygieneCodes)) : [];
 
-  const patientsRecall = await getPatientsWithAppointmentBasedOnCode({
+  const patientsRecall = recallCodes.length ? await getPatientsWithAppointmentBasedOnCode({
     id: idQuery,
     accountId,
-    lastRecallDate: {
-      $not: null,
-    },
-  }, recallCodes);
+    lastRecallDate: { $not: null },
+  }, produceLikeQuery(recallCodes)) : [];
 
   // for the patients with lastHygieneDate null find their due date for hygiene
   for (let i = 0; i < patientsHygiene.length; i += 1) {

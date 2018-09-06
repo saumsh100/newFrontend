@@ -15,7 +15,7 @@ module.exports = {
     // });
     return queryInterface.sequelize.transaction(async (t) => {
       try {
-        await queryInterface.sequelize.query(`ALTER TABLE "Patients" ALTER COLUMN "address" SET DEFAULT '{}'::json;`, { transaction: t });
+        await queryInterface.sequelize.query(`ALTER TABLE "Patients" ALTER COLUMN "address" SET DEFAULT '{}'::jsonb;`, { transaction: t });
       } catch (e) {
         console.log(e);
         return t.rollback();

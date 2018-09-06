@@ -37,6 +37,9 @@ const makePatientRecallData = (data = {}) => Object.assign({
 
 const dates = d => ({ startDate: moment(d).toISOString(), endDate: moment(d).add(1, 'hours').toISOString() });
 
+const hygieneProcedureCodes = ['111%'];
+const recallProcedureCodes = ['00120'];
+
 describe('Due Date Calculations - patientRecalls', () => {
   beforeEach(async () => {
     await wipeAllModels();
@@ -88,6 +91,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           hygieneTypes: [DEFAULT_HYGIENE],
           recallTypes: [DEFAULT_RECALL],
           patientIds: [],
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(0);
@@ -100,6 +105,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           date,
           hygieneTypes: [DEFAULT_HYGIENE],
           recallTypes: [DEFAULT_RECALL],
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(0);
@@ -113,6 +120,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           date,
           hygieneTypes: [DEFAULT_HYGIENE],
           recallTypes: [DEFAULT_RECALL],
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(4);
@@ -129,6 +138,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           recallTypes: [DEFAULT_RECALL],
           hygieneInterval: '6 months',
           recallInterval: '6 months',
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(4);
@@ -154,6 +165,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           date,
           hygieneTypes: [DEFAULT_HYGIENE],
           recallTypes: [DEFAULT_RECALL],
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(0);
@@ -168,6 +181,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           date,
           hygieneTypes: [DEFAULT_HYGIENE],
           recallTypes: [DEFAULT_RECALL],
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(0);
@@ -189,6 +204,8 @@ describe('Due Date Calculations - patientRecalls', () => {
           recallTypes: [DEFAULT_RECALL],
           hygieneInterval: '6 months',
           recallInterval: '6 months',
+          hygieneProcedureCodes,
+          recallProcedureCodes,
         });
 
         expect(ps.length).toBe(3);

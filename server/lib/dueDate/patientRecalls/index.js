@@ -9,7 +9,8 @@ import {
   DeliveredProcedure,
   Patient,
   PatientRecall,
-} from '../../../_models';
+} from 'CareCruModels';
+import produceLikeQuery from '../../shared/produceLikeQuery';
 import { convertIntervalStringToObject } from '../../../util/time';
 import unionAndMerge from '../../../util/unionAndMerge';
 
@@ -228,6 +229,8 @@ export async function getPatientsWithChangedDueDateInfo(date, accountId) {
  * @param  {[array]} config.patientIds - array of patientIds to update if not sent then assume all patients
  * @param  {[array]} config.hygieneInterval - interval string of the account's fallback time for one being dueForHygiene
  * @param  {[array]} config.recallInterval - interval string of the account's fallback time for one being dueForRecall
+ * @param  {[strings]} config.hygieneProcedureCodes - the patterns for hygiene procedureCodes
+ * @param  {[string]} config.recallProcedureCodes - the patterns for recall procedureCodes
  * @return {[array]} an array of update counts (only useful for checking length to see how many were updated)
  */
 export async function updatePatientDueDateFromPatientRecalls(config) {
@@ -239,17 +242,20 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
     patientIds,
     hygieneInterval,
     recallInterval,
+    hygieneProcedureCodes,
+    recallProcedureCodes,
   } = config;
+
+  // Need to create this boolean because the { $or: [[],[]] } query returns procedureCodes
+  const codesAreSet = hygieneProcedureCodes.length && recallProcedureCodes.length;
 
   // Concatenate the appointments query parameters together
   // - Someone should not be dueForRecallExam if they have a future booked hygiene appointment
   // - Someone should not be dueForHygiene if they have a future booked recall appointment
   const appointmentTypes = hygieneTypes.concat(recallTypes);
-  const hygieneCodesQuery = { $or: [{ $like: '111%' }, { $like: '4342%' }] };
-  const recallCodesQuery = { $in: ['00121', '01202'] };
-  const codesQuery = { $or: [hygieneCodesQuery, recallCodesQuery] };
+  const codesQuery = { $or: [produceLikeQuery(hygieneProcedureCodes), produceLikeQuery(recallProcedureCodes)] };
 
-  let patientsDueForHygiene = await getPatientsThatAreDue({
+  let patientsDueForHygiene = codesAreSet ? await getPatientsThatAreDue({
     accountId,
     date,
     appointmentTypes,
@@ -257,9 +263,9 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
     patientIds,
     patientAttribute: 'lastHygieneDate',
     codesQuery,
-  });
+  }) : [];
 
-  let patientsDueForRecall = await getPatientsThatAreDue({
+  let patientsDueForRecall = codesAreSet ? await getPatientsThatAreDue({
     accountId,
     date,
     appointmentTypes,
@@ -267,7 +273,7 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
     patientIds,
     patientAttribute: 'lastRecallDate',
     codesQuery,
-  });
+  }) : [];
 
   patientsDueForHygiene = patientsDueForHygiene
     .map((patient) => {
@@ -328,12 +334,12 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
       logger.error(
         `Failed updating dueForHygieneDate=${dueForHygieneDate} ` +
         `and dueForRecallExamDate=${dueForRecallExamDate} ` +
-        `for patient with id=${patient.id}`,
+        `for patient with id=${id}`,
       );
 
       logger.error(err);
-    }),
+    })
   );
 
-  return await Promise.all(patientsDuePromises);
+  return Promise.all(patientsDuePromises);
 }

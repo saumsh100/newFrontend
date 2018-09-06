@@ -5,7 +5,7 @@ import rebrandly from '../config/rebrandly';
 const { shortDomain } = GLOBALS.rebrandly;
 
 /**
- * compressUrl is an async function that uses bitly APIs to compress
+ * compressUrl is an async function that uses rebrandly APIs to compress
  * the link into a shortened one
  *
  * @param longUrl = the url to be compressed

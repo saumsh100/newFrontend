@@ -40,6 +40,9 @@ const dates = d => ({
   originalDate: moment(d).toISOString(),
 });
 
+const hygieneProcedureCodes = '["111%"]';
+const recallProcedureCodes = '["00120"]';
+
 describe('Due Date Job - updatePatientDueDatesForAllAccounts', () => {
   beforeEach(async () => {
     await wipeAllModels();
@@ -71,7 +74,11 @@ describe('Due Date Job - updatePatientDueDatesForAllAccounts', () => {
         });
 
         await updateAccountConnectorConfigurations({ name: 'ADAPTER_TYPE', value: 'TRACKER_V11' }, accountId);
+        await updateAccountConnectorConfigurations({ name: 'HYGIENE_PROCEDURE_CODES', value: hygieneProcedureCodes }, accountId);
+        await updateAccountConnectorConfigurations({ name: 'RECALL_PROCEDURE_CODES', value: recallProcedureCodes }, accountId);
         await updateAccountConnectorConfigurations({ name: 'ADAPTER_TYPE', value: 'DENTRIX_G6' }, newAccount.id);
+        await updateAccountConnectorConfigurations({ name: 'HYGIENE_PROCEDURE_CODES', value: hygieneProcedureCodes }, newAccount.id);
+        await updateAccountConnectorConfigurations({ name: 'RECALL_PROCEDURE_CODES', value: recallProcedureCodes }, newAccount.id);
 
         patients = await Patient.bulkCreate([
           makePatientData({ firstName: 'A', lastName: 'B' }),
