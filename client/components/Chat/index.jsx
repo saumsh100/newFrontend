@@ -39,7 +39,10 @@ import { CHAT_PAGE } from '../../constants/PageTitle';
 import tabsConstants from './consts';
 import styles from './styles.scss';
 
-const patientSearchTheme = { container: styles.patientSearchClass };
+const patientSearchTheme = {
+  container: styles.patientSearchClass,
+  suggestionsContainerOpen: styles.suggestionsContainer,
+};
 
 const patientSearchInputProps = {
   classStyles: styles.patientSearchInput,
@@ -262,12 +265,15 @@ class ChatMessage extends Component {
     const patientInfoStyle = classnames(styles.rightSplit, {
       [styles.slideIn]: showPatientInfo,
       [styles.hubRightSplit]: isHub(),
+      [styles.hideContainer]: !showPatientInfo,
     });
+
+    const container = classnames(styles.leftSplit, { [styles.hideContainer]: showPatientInfo });
 
     return (
       <SBody>
         <div className={styles.splitWrapper}>
-          <div className={styles.leftSplit}>
+          <div className={container}>
             <MessageContainer setTab={this.changeTab} />
           </div>
           <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
@@ -331,7 +337,12 @@ class ChatMessage extends Component {
 
     return (
       <div className={classnames(styles.chatWrapper, { [styles.hub]: isHub() })}>
-        <div className={classnames(styles.patientsList, { [styles.slideIn]: showPatientsList })}>
+        <div
+          className={classnames(styles.patientsList, {
+            [styles.slideIn]: showPatientsList,
+            [styles.hideContainer]: !showPatientsList,
+          })}
+        >
           <Card noBorder className={styles.leftCard}>
             <SContainer>
               {this.renderHeading()}
