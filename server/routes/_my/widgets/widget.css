@@ -100,7 +100,7 @@
   line-height: 19px;
   text-shadow: 0.5px 0.5px 0.5px rgba(0, 0, 0, 0.10);
   border-bottom-left-radius: 999px;
-  border-top-left-radius: 999px;  
+  border-top-left-radius: 999px;
 }
 
 .CareCruButton.CareCruFadeIn {
@@ -122,11 +122,12 @@
   }
 }
 
-.CareCruButton strong {
+.CareCruButton .CareCruButtonIconBook {
   display: block;
   font-weight: 600;
   font-size: 25px;
   line-height: 25px;
+  color: white;
 }
 
 .CareCruButtonIcon {
@@ -139,7 +140,7 @@
   top: 24px;
 }
 
-.CareCruButtonIcon svg {
+.CareCruButtonIcon .CareCruButtonIconSVG {
   fill: currentColor;
   height: 35px;
   transition: all 0.2s ease-in;
@@ -156,7 +157,7 @@
   border-color: var(--bookingWidgetPrimaryColorDarker);
 }
 
-.CareCruButton:hover .CareCruButtonIcon svg {
+.CareCruButton:hover .CareCruButtonIcon .CareCruButtonIconSVG {
   transition: all 0.2s ease-in;
   color: var(--bookingWidgetPrimaryColorDarker);
 }
@@ -178,7 +179,7 @@
     text-align: center;
     min-height: auto;
   }
-  
+
   .CareCruButton.CareCruFadeIn {
     animation: CareCruFadeIn 1s ease-out forwards;
   }
@@ -197,7 +198,7 @@
     }
   }
 
-  .CareCruButton strong {
+  .CareCruButton .CareCruButtonIconBook {
     display: inline;
     font-size: 18px;
   }
@@ -280,10 +281,10 @@
 }
 
 @keyframes CareCruSpinner-bouncedelay {
-  0%, 80%, 100% { 
+  0%, 80%, 100% {
     -webkit-transform: scale(0);
     transform: scale(0);
-  } 40% { 
+  } 40% {
     -webkit-transform: scale(1.0);
     transform: scale(1.0);
   }
