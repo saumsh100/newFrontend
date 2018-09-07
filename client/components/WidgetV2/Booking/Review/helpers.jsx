@@ -26,6 +26,7 @@ export const waitlistDates = (week) => {
  * Display a linear list of times that were selected from the user on the waitlist's steps.
  */
 export const waitlistTimes = (waitSpot, availabilities, timezone) =>
+  availabilities &&
   waitSpot.get('times').size > 0 && (
     <span>
       {Object.keys(availabilities)
