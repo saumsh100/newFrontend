@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -237,7 +237,7 @@
     "cypress": "^2.1.0",
     "cypress-cli": "^0.14.0",
     "depcheck": "^0.6.9",
-    "electron": "^3.0.0-beta.4",
+    "electron": "^3.0.0-beta.10",
     "electron-builder": "^20.5.1",
     "electron-publisher-s3": "^20.6.1",
     "enzyme": "^3.3.0",
