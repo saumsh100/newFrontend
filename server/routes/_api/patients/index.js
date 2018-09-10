@@ -230,8 +230,8 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       where: {
         accountId: req.accountId,
         $or: [
-          { firstName: { $iLike: `%${search[0]}%` }, lastName: { $iLike: `%${search[1]}%` } },
-          { firstName: { $iLike: `%${search[1]}%` }, lastName: { $iLike: `%${search[0]}%` } },
+          { firstName: { $iLike: `${search[0]}%` }, lastName: { $iLike: `${search[1]}%` } },
+          { firstName: { $iLike: `${search[1]}%` }, lastName: { $iLike: `${search[0]}%` } },
         ],
       },
     };
@@ -240,9 +240,9 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       where: {
         accountId: req.accountId,
         $or: [
-          { firstName: { $iLike: `%${search[0]}%` } },
-          { lastName: { $iLike: `%${search[0]}%` } },
-          { email: { $iLike: `%${search[0]}%` } },
+          { firstName: { $iLike: `${search[0]}%` } },
+          { lastName: { $iLike: `${search[0]}%` } },
+          { email: { $iLike: `${search[0]}%` } },
         ],
       },
     };
