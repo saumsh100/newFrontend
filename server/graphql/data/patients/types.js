@@ -1,10 +1,11 @@
 
-import { GraphQLObjectType, GraphQLString, GraphQLInt } from 'graphql';
+import { GraphQLObjectType, GraphQLString, GraphQLInt, GraphQLBoolean } from 'graphql';
 import { connectionDefinitions } from 'graphql-relay';
 import { attributeFields } from 'graphql-sequelize';
 import { Patient, Family } from 'CareCruModels';
 import { familyType } from 'CareCruGraphQL/data/families';
 import { nodeInterface } from '../types';
+import getPatientBasedOnFieldsProvided from '../../../lib/contactInfo/getPatient';
 
 const patientType = new GraphQLObjectType({
   name: Patient.name,
@@ -21,6 +22,22 @@ const patientType = new GraphQLObjectType({
     family: {
       type: familyType,
       resolve: async patient => await Family.findById(patient.familyId),
+    },
+    isPhonePoc: {
+      type: GraphQLBoolean,
+      resolve: async (patient) => {
+        const { mobilePhoneNumber: cellPhoneNumber, accountId } = patient;
+        const poc = await getPatientBasedOnFieldsProvided(accountId, { cellPhoneNumber });
+        return poc.id === patient.id;
+      },
+    },
+    isEmailPoc: {
+      type: GraphQLBoolean,
+      resolve: async (patient) => {
+        const { email, accountId } = patient;
+        const poc = await getPatientBasedOnFieldsProvided(accountId, { email });
+        return poc.id === patient.id;
+      },
     },
   }),
 });

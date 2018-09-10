@@ -333,6 +333,8 @@ type Patient implements Node {
   deletedAt: String
   ccId: String
   family: Family
+  isPhonePoc: Boolean
+  isEmailPoc: Boolean
 }
 
 """A connection to a list of items."""

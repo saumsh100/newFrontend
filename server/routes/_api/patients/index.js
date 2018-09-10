@@ -14,6 +14,8 @@ import { Appointment, Chat, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 import patientEventsAggregator from '../../../lib/events';
+import getPatientBasedOnFieldsProvided from '../../../lib/contactInfo/getPatient';
+import StatusError from '../../../util/StatusError';
 
 const patientsRouter = new Router();
 
@@ -661,6 +663,29 @@ patientsRouter.post('/batch', checkPermissions('patients:create'), checkIsArray(
     const entities = normalize('patients', successfulPatients);
     const responseData = Object.assign({}, entities, { errors });
     return res.status(400).send(responseData);
+  }
+});
+
+patientsRouter.get('/poc', checkPermissions('patients:read'), async ({ accountId, query }, res, next) => {
+  try {
+    const { mobile, email } = query;
+
+    if (!mobile && !email) {
+      throw new StatusError(400, 'Mobile or email is required.');
+    }
+
+    const poc = await getPatientBasedOnFieldsProvided(accountId, {
+      cellPhoneNumber: mobile,
+      email,
+    });
+
+    if (!poc) {
+      throw new StatusError(400, `There is not point of contact for ${mobile || email}.`);
+    }
+
+    return res.send(poc);
+  } catch (e) {
+    return next(e);
   }
 });
 
