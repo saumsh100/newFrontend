@@ -1,7 +1,6 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from '../../../../library/Link';
 import styles from './styles.scss';
 
 export default function ShowDetails(props) {
@@ -31,9 +30,7 @@ export default function ShowDetails(props) {
         const displayData = data[mk];
 
         if (!matches[mk] && mk !== 'country' && mk !== 'website') {
-          colorStyle = {
-            color: '#FF715A',
-          };
+          colorStyle = { color: '#FF715A' };
         }
 
         return (
@@ -45,9 +42,9 @@ export default function ShowDetails(props) {
         );
       })}
       <div className={styles.showDetails_links}>
-        <Link to={url} target="_blank" className={styles.showDetails_view}>
+        <a href={url} rel="noopener noreferrer" target="_blank" className={styles.showDetails_view}>
           view
-        </Link>
+        </a>
       </div>
     </div>
   );
