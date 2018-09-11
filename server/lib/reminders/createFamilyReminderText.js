@@ -27,7 +27,7 @@ const single = {
 
     const { date, time } = getDateAndTime(appointment.startDate, account.timezone);
 
-    return `Hi ${patient.firstName}, this is a friendly reminder\nthat ${familyMember.firstName} ${familyMember.lastName}'s next appointment with ${account.name} is on ${date} at ${time}. Please reply with "C" to confirm your appointment.`;
+    return `Hi ${patient.firstName}, this is a friendly reminder that ${familyMember.firstName} ${familyMember.lastName}'s next appointment with ${account.name} is on ${date} at ${time}. Please reply with "C" to confirm your appointment.`;
   },
 
   confirmed: ({ patient, dependants, account }) => {
