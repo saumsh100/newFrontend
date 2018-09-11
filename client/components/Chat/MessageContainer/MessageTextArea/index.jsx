@@ -16,6 +16,7 @@ import {
   SFooter,
   Tooltip,
 } from '../../../library';
+import { isHub } from '../../../../util/hub';
 import styles from './styles.scss';
 import '../../../../../node_modules/emoji-mart/css/emoji-mart.css';
 
@@ -83,6 +84,9 @@ class MessageTextArea extends Component {
     const { chat, canSend, error } = this.props;
 
     if (!chat) return null;
+
+    const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
+
     return (
       <SContainer className={styles.textAreaContainer}>
         <SBody className={styles.textAreaBody}>
@@ -112,7 +116,7 @@ class MessageTextArea extends Component {
           {canSend ? (
             this.renderSendButton()
           ) : (
-            <Tooltip placement="top" overlay={error}>
+            <Tooltip placement={tooltipPlacement} overlay={error}>
               {this.renderSendButton()}
             </Tooltip>
           )}
