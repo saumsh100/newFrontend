@@ -64,13 +64,14 @@ export async function receiveMessage(account, textMessageData) {
 
   // Confirm first available reminder
   const sentRemindersPatients = await confirmReminderIfExist(account.id, patient.id);
-  const { sentReminder, appointment } = sentRemindersPatients[0];
-  if (!sentReminder) {
+  const firstSentReminderPatient = sentRemindersPatients[0];
+  if (sentRemindersPatients.length === 0 || !firstSentReminderPatient.sentReminder) {
     logger.debug('No reminders to confirm, exiting.');
     await updateUserViaSocket(chatClean.id);
     return;
   }
 
+  const { sentReminder, appointment } = firstSentReminderPatient;
   logger.debug(`Reminder ${sentReminder.id} confirmed.`);
   // const sentReminder = await SentReminder.findById(confirmedReminder.id);
   const sentReminderClean = sentReminder.get({ plain: true });

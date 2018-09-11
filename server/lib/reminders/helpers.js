@@ -432,6 +432,7 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
   if (sentReminders.length === 0) return [];
 
   const sentRemindersPatients = await SentRemindersPatients.findAll({
+    where: { sentRemindersId: sentReminders[0].id },
     include: [
       {
         model: Appointment,
@@ -446,7 +447,7 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
         model: SentReminder,
         as: 'sentReminder',
         required: true,
-        where: { id: sentReminders[0].id },
+        where: { accountId },
         include: [
           {
             model: Reminder,
@@ -580,7 +581,7 @@ export async function confirmReminderIfExist(accountId, patientId) {
 
   // Early return if no reminders found
   if (validSmsReminders.length === 0) {
-    return false;
+    return [];
   }
 
   // Confirm first available reminder
