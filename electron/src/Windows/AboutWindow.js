@@ -19,7 +19,12 @@ class AboutWindow extends WindowMain {
     this.window.once('ready-to-show', () => {
       this.show();
     });
-    this.window.webContents.openDevTools({ mode: 'detach' });
+
+    if (process.env.NODE_ENV === 'development') {
+      this.window.webContents.openDevTools({ mode: 'detach' });
+    }
+
+    this.window.setMenuBarVisibility(false);
 
     this.window.once('closed', () => {
       this.window = null;

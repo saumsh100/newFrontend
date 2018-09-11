@@ -57,7 +57,7 @@ if (process.platform === 'darwin') {
 } else {
   // windows related menu
   helpMenu.unshift({ type: 'separator' });
-  helpMenu.unshift(aboutCareCru);
+  helpMenu.unshift(...aboutCareCru);
 }
 
 exports.appMenu = template;

@@ -71,8 +71,8 @@ module.exports = {
    * Settings for the About window.
    */
   aboutWindowSettings: {
-    width: 375,
-    height: 195,
+    width: process.platform === 'darwin' ? 375 : 420,
+    height: process.platform === 'darwin' ? 195 : 228,
     backgroundColor: '#FAFAFA',
     show: false,
     title: '',
