@@ -1,6 +1,7 @@
 
 import faker from 'faker';
 import { v4 as uuid } from 'uuid';
+import moment from 'moment';
 import { Account, Chat, Patient, TextMessage } from '../server/_models';
 
 // Purpose of this file is to seed Chats and TextMessages to test for infinite scroll
@@ -50,10 +51,12 @@ async function main({ accountId }) {
   const chats = await Chat.bulkCreate(chatSeeds);
 
   console.log('Assigning created chatIds to textMessage seeds...');
+  const startDate = moment('2010-01-01');
   let textMessageSeeds = [];
   chats.forEach((chat, j) => {
     const newSeeds = [];
     for (let i = 0; i < 100; i++) {
+      startDate.add(1, 'd');
       newSeeds.push({
         id: uuid(),
         chatId: chat.id,
@@ -61,7 +64,7 @@ async function main({ accountId }) {
         to: patients[j].mobilePhoneNumber,
         from: account.twilioPhoneNumber,
         read: false,
-        createdAt: faker.date.past(40, '2010-01-01'),
+        createdAt: startDate.format(),
       });
     }
 

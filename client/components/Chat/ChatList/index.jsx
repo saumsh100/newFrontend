@@ -27,7 +27,7 @@ class ChatListContainer extends Component {
       const aLastTm = textMessages.get(aLastId);
       const bLastId = b.textMessages[b.textMessages.length - 1];
       const bLastTm = textMessages.get(bLastId);
-      if (!aLastTm || bLastTm) return -1;
+      if (!aLastTm || !bLastTm) return -1;
       return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
     });
   }
