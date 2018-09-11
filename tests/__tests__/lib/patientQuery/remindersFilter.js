@@ -1,6 +1,12 @@
-import * as remindersFilterLibrary from '../../../../server/lib/patientsQuery/remindersFilter';
 
-import { Account, Patient, Appointment, SentReminder, Reminder } from '../../../../server/_models';
+import * as remindersFilterLibrary from '../../../../server/lib/patientsQuery/remindersFilter';
+import {
+  Patient, 
+  Appointment, 
+  SentReminder,
+  SentRemindersPatients, 
+  Reminder 
+} from '../../../../server/_models';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { patientId, patient, seedTestPatients } from '../../../util/seedTestPatients';
@@ -28,7 +34,7 @@ const makeSentReminderData = (data = {}) =>
   Object.assign(
     {
       // Doesnt even have to match recall for this test
-      patientId,
+      contactedPatientId: patientId,
       accountId,
       lengthSeconds: 15552000,
       createdAt: date(2000, 10, 10, 9),
@@ -40,6 +46,7 @@ const makeSentReminderData2 = (data = {}) =>
   Object.assign(
     {
       // Doesnt even have to match recall for this test
+      contactedPatientId: patientId,
       accountId,
       lengthSeconds: 15552000,
     },
@@ -86,37 +93,48 @@ describe('Reminder Filters Tests', () => {
         makeApptData({ patientId: patients[1].id, ...dates(2000, 11, 5, 9) }),
       ]);
 
-      await SentReminder.bulkCreate([
-        makeSentReminderData2({
-          reminderId: reminderPlain.id,
-          primaryType: 'email',
-          patientId: patients[0].id,
-          appointmentId: appointments[0].id,
-          createdAt: date(2000, 10, 10, 10),
-          isSent: true,
-        }),
-        makeSentReminderData2({
-          reminderId: reminderPlain1.id,
-          primaryType: 'sms',
-          patientId: patients[0].id,
-          appointmentId: appointments[1].id,
-          createdAt: date(2000, 10, 10, 9),
-          isSent: true,
-        }),
-        makeSentReminderData2({
-          reminderId: reminderPlain2.id,
-          primaryType: 'sms',
-          patientId: patients[1].id,
-          appointmentId: appointments[2].id,
-          isSent: true,
-          createdAt: date(2000, 12, 10, 9),
-        }),
-      ]);
+      const sentReminder1 = await SentReminder.create(makeSentReminderData2({
+        reminderId: reminderPlain.id,
+        primaryType: 'email',
+        createdAt: date(2000, 10, 10, 10),
+        isSent: true,
+      }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder1.id,
+        patientId: patients[0].id,
+        appointmentId: appointments[0].id,
+      });
+
+      const sentReminder2 = await SentReminder.create(makeSentReminderData2({
+        reminderId: reminderPlain1.id,
+        primaryType: 'sms',
+        createdAt: date(2000, 10, 10, 9),
+        isSent: true,
+      }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder2.id,
+        patientId: patients[0].id,
+        appointmentId: appointments[1].id,
+      });
+
+      const sentReminder3 = await SentReminder.create(makeSentReminderData2({
+        reminderId: reminderPlain2.id,
+        contactedPatientId: patients[1].id,
+        primaryType: 'sms',
+        isSent: true,
+        createdAt: date(2000, 12, 10, 9),
+      }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder3.id,
+        patientId: patients[1].id,
+        appointmentId: appointments[2].id,
+      });
 
       const data = [date(2000, 8, 5, 8), date(2000, 12, 11, 8)];
-      const query = {
-        order: [['lastName', 'DESC']],
-      };
+      const query = { order: [['lastName', 'DESC']] };
 
       const patientsData = await remindersFilterLibrary.LastReminderFilter(
         { data },

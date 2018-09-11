@@ -1,11 +1,12 @@
 
-import { namespaces } from '../../../config/globals';
 import {
-  Appointment,
   Correspondence,
   Reminder,
   SentReminder,
-} from '../../../_models';
+  SentRemindersPatients,
+  Patient,
+} from 'CareCruModels';
+import { namespaces } from '../../../config/globals';
 import batchCreate from '../../../routes/util/batch';
 import { reminderSent, reminderConfirmed } from '../../correspondences/correspondenceNote';
 
@@ -17,47 +18,65 @@ function sendReminderIdsSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
       const sentReminderIds = JSON.parse(data);
-      let sentReminders = await SentReminder.findAll({
+      const sentReminders = await SentReminder.findAll({
         where: {
           isSent: true,
           id: sentReminderIds,
         },
-
-        include: [{ model: Reminder, as: 'reminder' }],
+        include: [
+          {
+            model: Reminder,
+            as: 'reminder',
+          },
+          {
+            model: Patient,
+            as: 'patient',
+          },
+          {
+            model: SentRemindersPatients,
+            as: 'sentRemindersPatients',
+            required: true,
+            include: [
+              {
+                model: Patient,
+                as: 'patient',
+              },
+            ],
+          },
+        ],
       });
 
-      const correspondencesCheck = await Correspondence.findAll({
-        where: {
-          sentReminderId: sentReminderIds,
-        },
-      });
+      if (sentReminders.length === 0) {
+        return;
+      }
+
+      const accountId = sentReminders[0].get('accountId');
+      const correspondencesCheck =
+        await Correspondence.findAll({ where: { sentReminderId: sentReminderIds } });
 
       const sentReminderIdsCheck = correspondencesCheck.map(s => s.sentReminderId);
 
-      sentReminders = sentReminders.filter((s) => {
-        return !sentReminderIdsCheck.includes(s.id);
-      });
-
       // create an object of correspondences from sent reminders
-      const correspondencesToCreate = sentReminders.map((sr) => {
-        return {
-          accountId: sr.accountId,
-          patientId: sr.patientId,
-          sentReminderId: sr.id,
-          appointmentId: sr.appointmentId,
-          method: sr.primaryType,
-          type: Correspondence.REMINDER_SENT_TYPE,
-          contactedAt: sr.createdAt,
-          note: reminderSent(sr),
-        };
-      });
-
-      let correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
-
-      if (correspondences[0]) {
-        const accountId = correspondences[0].accountId;
-        correspondences = correspondences.map(c => c.id);
-
+      const correspondencesToCreate = sentReminders
+        .filter(s => !sentReminderIdsCheck.includes(s.id))
+        .reduce((toCreate, sr) => [
+          ...toCreate,
+          ...sr.sentRemindersPatients.map(srp => ({
+            accountId: sr.accountId,
+            patientId: srp.patientId,
+            sentReminderId: sr.id,
+            appointmentId: srp.appointmentId,
+            method: sr.primaryType,
+            type: Correspondence.REMINDER_SENT_TYPE,
+            contactedAt: sr.createdAt,
+            note: reminderSent(sr, srp.patient),
+          })),
+        ], []);
+                
+      const correspondences =
+        (await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence')).map(c => c.id);
+     
+      if (correspondences.length > 0) {
         console.log(`Sending ${correspondences.length} ${Correspondence.REMINDER_SENT_TYPE} correspondences for account=${accountId}`);
 
         return io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
@@ -71,8 +90,8 @@ function sendReminderIdsSocket(sub, io) {
       if (errors && docs && docs.length) {
         docs = docs.map(d => d.get({ plain: true }));
 
-        if (docs[0]) {
-          const accountId = docs[0].accountId;
+        if (docs.length > 0) {
+          const { accountId } = docs[0];
 
           console.log(`Sending ${docs.length} correspondences for account=${accountId}`);
 
@@ -97,11 +116,31 @@ function sendReminderUpdatedSocket(sub, io) {
   sub.on('data', async (data) => {
     try {
       const sentReminder = await SentReminder.findOne({
-        where: { id: data},
-        include: [{ model: Reminder, as: 'reminder' }],
+        where: { id: data },
+        include: [
+          {
+            model: Reminder,
+            as: 'reminder',
+          },
+          {
+            model: Patient,
+            as: 'patient',
+          },
+          {
+            model: SentRemindersPatients,
+            as: 'sentRemindersPatients',
+            required: true,
+            include: [
+              {
+                model: Patient,
+                as: 'patient',
+              },
+            ],
+          },
+        ],
       });
 
-      const correspondence = await Correspondence.findOne({
+      const correspondences = await Correspondence.findAll({
         where: {
           sentReminderId: data,
           type: Correspondence.REMINDER_SENT_TYPE,
@@ -109,34 +148,43 @@ function sendReminderUpdatedSocket(sub, io) {
         raw: true,
       });
 
-      const correspondenceCheck = await Correspondence.findOne({
-        where: {
-          sentReminderId: data,
-          type: Correspondence.REMINDER_CONFIRMED_TYPE,
-        },
-        raw: true,
-      });
+      const accountId = sentReminder.get('accountId');
+      const correspondencesToUpdate = [];
+      // eslint-disable-next-line no-restricted-syntax
+      for (const correspondence of correspondences) {
+        const correspondenceCheck = await Correspondence.findOne({
+          where: {
+            sentReminderId: data,
+            patientId: correspondence.patientId,
+            patientId: correspondence.appointmentId,
+            type: Correspondence.REMINDER_CONFIRMED_TYPE,
+          },
+          raw: true,
+        });
 
-      if (!correspondenceCheck) {
-        correspondence.note = reminderConfirmed(sentReminder);
-        correspondence.type = Correspondence.REMINDER_CONFIRMED_TYPE;
-        correspondence.isSyncedWithPms = false;
-        correspondence.contactedAt = new Date();
-        correspondence.id = undefined;
-        correspondence.pmsId = undefined;
-
-        const newCorrespondence = await Correspondence.create(correspondence);
-
-        console.log(`Sending patient confirmed correspondence for account=${correspondence.accountId}`);
-
-        io.of(namespaces.sync).in(correspondence.accountId).emit('CREATE:Correspondence', [newCorrespondence.id]);
+        if (!correspondenceCheck) {
+          const { patient } =
+            sentReminder.sentRemindersPatients.find(v => v.patientId === correspondence.patientId);
+          const newCorrespondence = await Correspondence.create({
+            ...correspondence,
+            note: reminderConfirmed(sentReminder, patient),
+            type: Correspondence.REMINDER_CONFIRMED_TYPE,
+            isSyncedWithPms: false,
+            contactedAt: new Date(),
+            id: undefined,
+            pmsId: undefined,
+          });
+          correspondencesToUpdate.push(newCorrespondence.id);
+        }
       }
+
+      console.log(`Sending ${correspondences.length} ${Correspondence.REMINDER_CONFIRMED_TYPE} correspondence for account=${accountId}`);
+      io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondencesToUpdate);
     } catch (error) {
       console.error(error);
     }
   });
 }
-
 
 export default function registerRemindersSubscriber(context, io) {
   // Need to create a new sub for every route to tell

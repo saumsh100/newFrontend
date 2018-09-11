@@ -17,22 +17,17 @@ const toDoListNames = [
   'Waitlist Queue',
 ];
 
-const defaultHeaderTemplate = () => (
+const todosHeader = () => (
   <SHeader className={styles.header}>
     <div className={styles.avatar} />
-    <div className={styles.smallCol}>Task</div>
-    <div className={styles.smallCol}>Scheduled</div>
-    <div className={styles.col}>Name</div>
+    <div className={styles.col}>Contact</div>
+    <div className={styles.smallCol}>Type</div>
+    <div className={styles.col}>Patient</div>
     <div className={styles.col}>Appointment</div>
-    <div className={styles.smallCol}>Confirmed</div>
   </SHeader>
 );
 
-export default function Tasks(props) {
-  const {
-    toDoIndex, loadingToDos, reminders, reviews, recalls, timezone,
-  } = props;
-
+export default function Tasks({ toDoIndex, loadingToDos, reminders, reviews, recalls, timezone }) {
   if (loadingToDos) {
     return null;
   }
@@ -44,7 +39,7 @@ export default function Tasks(props) {
   if (toDoIndex === 0 && reminders && reminders.size) {
     count = reminders.size;
     body = <AppointmentReminders reminders={reminders.toJS()} timezone={timezone} />;
-    header = defaultHeaderTemplate();
+    header = todosHeader();
   } else if (toDoIndex === 1 && recalls && recalls.size && !loadingToDos) {
     count = recalls.size;
     body = <PatientRecalls recalls={recalls.toJS()} timezone={timezone} />;
@@ -52,7 +47,7 @@ export default function Tasks(props) {
       <SHeader className={styles.header}>
         <div className={styles.avatar} />
         <div className={styles.mediumCol}>Type</div>
-        <div className={styles.smallCol}>Task</div>
+        <div className={styles.smallCol}>Channel</div>
         <div className={styles.smallCol}>Scheduled</div>
         <div className={styles.col}>Name</div>
         <div className={styles.col}>Due for Hygiene</div>
@@ -64,7 +59,7 @@ export default function Tasks(props) {
     header = (
       <SHeader className={styles.header}>
         <div className={styles.avatar} />
-        <div className={styles.smallCol}>Task</div>
+        <div className={styles.smallCol}>Channel</div>
         <div className={styles.smallCol}>Scheduled</div>
         <div className={styles.col}>Name</div>
         <div className={styles.col}>Appointment</div>
@@ -77,7 +72,11 @@ export default function Tasks(props) {
   return (
     <SContainer className={styles.container}>
       <SHeader className={styles.countHeader}>
-        <span className={styles.countHeader_count}>{count}&nbsp;</span> {toDoListNames[toDoIndex]}
+        <span className={styles.countHeader_count}>
+          {count}
+          &nbsp;
+        </span>{' '}
+        {toDoListNames[toDoIndex]}
       </SHeader>
       {header}
       <SBody className={styles.body}>{body}</SBody>

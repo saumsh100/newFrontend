@@ -19,6 +19,7 @@ import {
   PasswordReset,
   User,
 } from '../_models';
+import { renderFamilyRemindersHTML } from '../lib/emailTemplates/familyReminders';
 import graphQLRouter from 'CareCruGraphQL/server';
 
 const rootRouter = Router();
@@ -51,33 +52,31 @@ rootRouter.use('/callrail', callsRouterSequelize);
 rootRouter.use('/_callrail', callsRouterSequelize);
 
 rootRouter.get('/signupinvite/:tokenId', (req, res, next) => Invite.findOne({
-  where: {
-    token: req.params.tokenId,
-  },
+  where: { token: req.params.tokenId },
   paranoid: false,
 })
-    .then((invite) => {
-      if (!invite) {
-        // TODO: replace with StatusError
-        return res.status(404).send('404 NOT FOUND');
-      } else if (invite && invite.deletedAt) {
-        return res.status(404).send('Invite Expired/Cancelled');
-      }
-      return res.redirect(`/signup/${req.params.tokenId}`);
-    })
-    .catch(next));
+  .then((invite) => {
+    if (!invite) {
+      // TODO: replace with StatusError
+      return res.status(404).send('404 NOT FOUND');
+    } else if (invite && invite.deletedAt) {
+      return res.status(404).send('Invite Expired/Cancelled');
+    }
+    return res.redirect(`/signup/${req.params.tokenId}`);
+  })
+  .catch(next));
 
 // below route is sequelize
 rootRouter.get('/reset/:tokenId', (req, res, next) => PasswordReset.findOne({ where: { token: req.params.tokenId } })
-    .then((reset) => {
-      if (!reset) {
-        // TODO: replace with StatusError
-        res.status(404).send();
-      } else {
-        res.redirect(`/resetpassword/${req.params.tokenId}`);
-      }
-    })
-    .catch(next));
+  .then((reset) => {
+    if (!reset) {
+      // TODO: replace with StatusError
+      res.status(404).send();
+    } else {
+      res.redirect(`/resetpassword/${req.params.tokenId}`);
+    }
+  })
+  .catch(next));
 
 rootRouter.post('/userCheck', (req, res, next) => {
   const username = req.body.email.toLowerCase().trim();
@@ -92,6 +91,6 @@ rootRouter.post('/userCheck', (req, res, next) => {
 // TODO: Need to update client-side router to handle this
 rootRouter.get('(/*)?', (req, res, next) =>
   // TODO: this should be wrapped in a try catch
-   res.render('app'));
+  res.render('app'));
 
 module.exports = rootRouter;

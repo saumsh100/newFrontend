@@ -8,27 +8,25 @@
  * @param {*} mergeParam an updated event parameter that will tell that it is merged.
  */
 export default function groupEvents(events, conditionalCheck, mergeParam) {
-  const length = events.length - 1;
-  const groupedEvents = [];
+  const { length } = events;
 
   if (length <= 0) {
     return events;
   }
 
+  const groupedEvents = [];
   for (let i = 0; i < length; i += 1) {
     const event = events[i];
     const nextIndex = i + 1;
-
-    if (length - 1 >= nextIndex) {
-      const nextEvent = events[nextIndex];
-
-      if (conditionalCheck(event, nextEvent)) {
-        const mergedEvent = { ...event, ...mergeParam };
-        groupedEvents.push(mergedEvent);
-        i += 1;
-      }
-    } else {
+    if (nextIndex === length || !conditionalCheck(event, events[nextIndex])) {
       groupedEvents.push(event);
+    } else {
+      const mergedEvent = {
+        ...event,
+        ...mergeParam,
+      };
+      groupedEvents.push(mergedEvent);
+      i += 1;
     }
   }
   return groupedEvents;

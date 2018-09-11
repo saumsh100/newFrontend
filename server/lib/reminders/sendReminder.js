@@ -1,12 +1,14 @@
 
-import moment from 'moment-timezone';
 import twilio from '../../config/twilio';
 import { host, protocol, myHost } from '../../config/globals';
+import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
 import createReminderText, { getReminderTemplateName } from './createReminderText';
 import { sendTemplate } from '../mail';
 import { buildAppointmentEvent } from '../ics';
 import { formatPhoneNumber } from '../../util/formatters';
 import { sendMessage } from '../../services/chat';
+import renderFamilyRemindersHTML from '../emailTemplates/familyReminders';
+import createFamilyReminderText from './createFamilyReminderText';
 
 export function getIsConfirmable(appointment, reminder) {
   if (!reminder.isConfirmable) return false;
@@ -18,35 +20,47 @@ export function getIsConfirmable(appointment, reminder) {
   return !appointment.isPatientConfirmed;
 }
 
-export const createConfirmationText = ({ patient, account, appointment, reminder }) => {
-  const mDate = moment.tz(appointment.startDate, account.timezone);
-  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
+function getFamilyConfirmationText(familyHead, sentRemindersPatients, startDate, account, action) {
+  if (sentRemindersPatients.length > 1) {
+    return `Thanks ${familyHead.firstName}! Your family's appointments with ${account.name} ` +
+  `on ${startDate} are ${action}. `;
+  }
+  
+  const { patient, appointment } = sentRemindersPatients[0];
+  const startTime = dateFormatter(appointment.startDate, account.timezone, 'h:mma'); // 2:15pm
+  return `Thanks ${familyHead.firstName}! ${patient.firstName}'s appointment with ${account.name} ` +
+  `on ${startDate} at ${startTime} is ${action}.`;
+}
+
+export const createConfirmationText = ({ patient, account, appointment, reminder, isFamily, sentRemindersPatients }) => {
+  const startDate = dateFormatter(appointment.startDate, account.timezone, 'MMMM Do'); // Saturday, July 9th
+  const startTime = dateFormatter(appointment.startDate, account.timezone, 'h:mma'); // 2:15pm
   const action = reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed';
-  return `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
+  return isFamily ? getFamilyConfirmationText(patient, sentRemindersPatients, startDate, account, action) : `Thanks ${patient.firstName}! Your appointment with ${account.name} ` +
     `on ${startDate} at ${startTime} is ${action}. `;
 };
 
 const BASE_URL = `${protocol}://${host}/twilio/voice/sentReminders`;
 const generateCallBackUrl = ({ account, appointment, patient, sentReminder }) => {
-  const mDate = moment.tz(appointment.startDate, account.timezone);
-  const startDate = mDate.format('MMMM Do'); // Saturday, July 9th
-  const startTime = mDate.format('h:mma'); // 2:15pm
+  const startDate = dateFormatter(appointment.startDate, account.timezone, 'MMMM Do'); // Saturday, July 9th
+  const startTime = dateFormatter(appointment.startDate, account.timezone, 'h:mma'); // 2:15pm
   return `${BASE_URL}/${sentReminder.id}/?firstName=${encodeURIComponent(patient.firstName)}&clinicName=${encodeURIComponent(account.name)}&startDate=${encodeURIComponent(startDate)}&startTime=${encodeURIComponent(startTime)}`;
 };
 
 export default {
   // Send Appointment Reminder text via Twilio
-  sms({ account, appointment, patient, reminder, currentDate }) {
-    const isConfirmable = getIsConfirmable(appointment, reminder);
-    const body = createReminderText({
+  sms({ account, appointment, patient, reminder, sentReminder, currentDate, dependants }) {
+    const { isConfirmable } = sentReminder;
+    const bodyProps = {
       patient,
       account,
       appointment,
       reminder,
       currentDate,
       isConfirmable,
-    });
+      dependants,
+    };
+    const body = (dependants && dependants.length > 0) ? createFamilyReminderText(bodyProps) : createReminderText(bodyProps);
     return sendMessage(patient.mobilePhoneNumber, body, account.id);
   },
 
@@ -66,20 +80,55 @@ export default {
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
-  email({ account, appointment, patient, sentReminder, reminder }) {
-    const isConfirmable = getIsConfirmable(appointment, reminder) ? 'true' : null;
+  email({ account, appointment, patient, sentReminder, reminder, dependants }) {
+    const { isConfirmable } = sentReminder;
+
+    const html = (dependants && dependants.length > 0) && renderFamilyRemindersHTML({
+      account,
+      patient,
+      appointment,
+      sentReminder,
+      familyMembers: dependants,
+      isConfirmable,
+    });
+
     const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+
+    const appointmentMergeVars = appointment ? [{
+      name: 'APPOINTMENT_DATE',
+      content: getAppointmentDate(appointment.startDate, account.timezone),
+    },
+    {
+      name: 'APPOINTMENT_TIME',
+      content: getAppointmentTime(appointment.startDate, account.timezone),
+    }] : [];
+
+    const attachmentsObj = appointment ? {
+      attachments: [
+        {
+          type: 'application/octet-stream',
+          name: 'appointment.ics',
+          content: new Buffer(buildAppointmentEvent({
+            appointment,
+            patient,
+            account,
+          })).toString('base64'),
+        },
+      ],
+    } : {};
+    
     return sendTemplate({
       patientId: patient.id,
       toEmail: patient.email,
       fromName: account.name,
       replyTo: account.contactEmail,
-      subject: 'Appointment Reminder',
-      templateName: getReminderTemplateName({
+      subject: html ? 'Family Reminder' : 'Appointment Reminder',
+      templateName: html ? 'test-html-template' : getReminderTemplateName({
         isConfirmable,
         reminder,
         account,
       }),
+      html,
       mergeVars: [
         {
           name: 'PRIMARY_COLOR',
@@ -111,14 +160,6 @@ export default {
           content: formatPhoneNumber(account.phoneNumber),
         },
         {
-          name: 'APPOINTMENT_DATE',
-          content: getAppointmentDate(appointment.startDate, account.timezone),
-        },
-        {
-          name: 'APPOINTMENT_TIME',
-          content: getAppointmentTime(appointment.startDate, account.timezone),
-        },
-        {
           name: 'PATIENT_FIRSTNAME',
           content: patient.firstName,
         },
@@ -142,19 +183,10 @@ export default {
           name: 'GOOGLE_URL',
           content: `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`,
         },
+        ...appointmentMergeVars,
       ],
 
-      attachments: [
-        {
-          type: 'application/octet-stream',
-          name: 'appointment.ics',
-          content: new Buffer(buildAppointmentEvent({
-            appointment,
-            patient,
-            account,
-          })).toString('base64'),
-        },
-      ],
+      ...attachmentsObj,
     });
   },
 };
@@ -167,10 +199,9 @@ export default {
  */
 
 function getAppointmentDate(date, timezone) {
-  return moment.tz(date, timezone).format('dddd, MMMM Do YYYY');
+  return dateFormatter(date, timezone, 'dddd, MMMM Do YYYY');
 }
 
 function getAppointmentTime(date, timezone) {
-  return moment.tz(date, timezone).format('h:mm a');
+  return dateFormatter(date, timezone, 'h:mm a');
 }
-

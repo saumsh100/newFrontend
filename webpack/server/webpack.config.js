@@ -41,7 +41,7 @@ module.exports = {
       CareCruModels$: path.resolve(projectRoot, './server/_models/index.js'),
       CareCruGraphQL: path.resolve(projectRoot, './server/graphql/'),
     },
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.css'],
   },
 
   output: {
@@ -65,7 +65,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['isomorphic-style-loader', 'css-loader'],
+        use: ['isomorphic-style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.scss$/,
@@ -74,9 +74,7 @@ module.exports = {
     ],
   },
 
-  externals: Object.assign({}, externalModules(path.resolve(projectRoot, 'node_modules')), {
-    sharp: 'commonjs sharp',
-  }),
+  externals: Object.assign({}, externalModules(path.resolve(projectRoot, 'node_modules')), { sharp: 'commonjs sharp' }),
 
   node: {
     console: false,

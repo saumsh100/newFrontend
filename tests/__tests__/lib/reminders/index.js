@@ -1,17 +1,18 @@
 
 import moment from 'moment';
-import * as RemindersLibrary from '../../../../server/lib/reminders';
-import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
-import sendReminder from '../../../../server/lib/reminders/sendReminder';
 import {
   Account,
   Address,
   Appointment,
-  Enterprise,
   Reminder,
   Patient,
   Practitioner,
+  SentReminder,
+  SentRemindersPatients
 } from 'CareCruModels';
+import sendReminder from '../../../../server/lib/reminders/sendReminder';
+import * as RemindersLibrary from '../../../../server/lib/reminders';
+import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
 import { tzIso } from '../../../../server/util/time';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId, enterpriseId } from '../../../util/seedTestUsers';
@@ -28,9 +29,7 @@ let sendReminderPhoneTmp = sendReminder.phone;
 let getAppointmentsFromReminderTmp = RemindersHelpers.getAppointmentsFromReminder;
 let fetchPatientsFromKeyValueTmp = ContactInfo.fetchPatientsFromKeyValue;
 
-const mockPub = {
-  publish: () => {},
-};
+const mockPub = { publish: () => {} };
 
 const TIME_ZONE = 'America/Vancouver';
 const td = d => tzIso(d, TIME_ZONE);
@@ -141,12 +140,12 @@ describe('Reminders Job Integration Tests', () => {
       const createPatient = () => ({
         id: patientId,
         mobilePhoneNumber: '+16042433796',
-        pmsCreatedAt: new Date (2016, 1, 1),
+        pmsCreatedAt: new Date(2016, 1, 1),
         preferences: { sms: true },
         familyId: 'Jones',
         family: {
           id: 'Jones',
-          pmsCreatedAt: new Date (2016, 1, 1),
+          pmsCreatedAt: new Date(2016, 1, 1),
           headId: patientId,
         },
       });
@@ -192,7 +191,12 @@ describe('Reminders Job Integration Tests', () => {
 
       account.reminders = [makeReminderData()];
 
-      await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
+      await RemindersLibrary.sendRemindersForAccount({
+        account,
+        pub: mockPub,
+        ...dates(),
+      });
+
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).toHaveBeenCalledTimes(1);
     });
@@ -235,6 +239,83 @@ describe('Reminders Job Integration Tests', () => {
       await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
+    });
+
+    /**
+     * With 1 reminder, and 1 patient, it should call sendReminder.sms
+     */
+    test('should insert sentReminderPatient for the 1 patient', async () => {
+      const createPatient = () => ({
+        id: patientId,
+        mobilePhoneNumber: '+16042433796',
+        pmsCreatedAt: new Date(2016, 1, 1),
+        preferences: { sms: true },
+        familyId: 'Jones',
+        family: {
+          id: 'Jones',
+          pmsCreatedAt: new Date(2016, 1, 1),
+          headId: patientId,
+        },
+      });
+
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => {
+        return [{
+          ...createPatient(),
+          get() {
+            return createPatient();
+          }
+        }];
+      });
+
+      const mockAppointment = {
+        id: appointmentId,
+        startDate: td(),
+        endDate: td(),
+        get() {
+          return {
+            id: appointmentId,
+            startDate: td(),
+            endDate: td(),
+            update() {
+              console.log('Appointment is being updated!');
+            },
+          };
+        },
+
+        patient: {
+          ...createPatient(),
+          get() {
+            return createPatient();
+          },
+        },
+
+        update() {
+          console.log('Appointment is being updated!');
+        },
+      };
+
+      // Make sure it returns a patient
+      RemindersHelpers.getAppointmentsFromReminder = jest.fn(() => [mockAppointment]);
+
+      account.reminders = [makeReminderData()];
+
+      await RemindersLibrary.sendRemindersForAccount({
+        account,
+        pub: mockPub,
+        ...dates(),
+      });
+
+      const sentReminders = await SentReminder.findAll({
+        where: { contactedPatientId: patientId },
+        include: [
+          {
+            model: SentRemindersPatients,
+            as: 'sentRemindersPatients',
+          },
+        ],
+      });
+
+      expect(sentReminders.length).toBe(1);
     });
   });
 

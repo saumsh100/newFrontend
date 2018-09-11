@@ -23,12 +23,7 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    patientId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-
-    appointmentId: {
+    contactedPatientId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -51,6 +46,12 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    isFamily: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false,
+    },
+    
     // Hacky fix for RemindersList algo so that we don't send farther away reminders
     // after sending the short ones
     primaryType: {
@@ -60,24 +61,15 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    lengthSeconds: {
-      type: DataTypes.INTEGER,
-    },
+    lengthSeconds: { type: DataTypes.INTEGER },
 
-    interval: {
-      type: DataTypes.STRING,
-    },
+    interval: { type: DataTypes.STRING },
   });
 
-  SentReminder.associate = ({ Account, Appointment, Reminder, Patient }) => {
+  SentReminder.associate = ({ Account, Reminder, Patient, SentRemindersPatients }) => {
     SentReminder.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
-    });
-
-    SentReminder.belongsTo(Appointment, {
-      foreignKey: 'appointmentId',
-      as: 'appointment',
     });
 
     SentReminder.belongsTo(Reminder, {
@@ -86,8 +78,14 @@ export default function (sequelize, DataTypes) {
     });
 
     SentReminder.belongsTo(Patient, {
-      foreignKey: 'patientId',
+      foreignKey: 'contactedPatientId',
       as: 'patient',
+    });
+
+    SentReminder.hasMany(SentRemindersPatients, {
+      foreignKey: 'sentRemindersId',
+      as: 'sentRemindersPatients',
+      sourceKey: 'id',
     });
   };
 

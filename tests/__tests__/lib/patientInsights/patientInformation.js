@@ -7,6 +7,7 @@ import {
   DeliveredProcedure,
   Reminder,
   SentReminder,
+  SentRemindersPatients,
 } from '../../../../server/_models';
 import {
   checkMobileNumber,
@@ -35,7 +36,7 @@ const makeFamilyData = (data = {}) => Object.assign({
 }, data);
 
 const makeSentReminderData = (data = {}) => Object.assign({
-  patientId,
+  contactedPatientId: patientId,
   accountId,
   lengthSeconds: 86400,
   primaryType: 'sms',
@@ -67,12 +68,9 @@ describe('Patient Insights', () => {
       expect(typeof allInsights).toBe('function');
       expect(typeof checkConfirmAttempts).toBe('function');
     });
-
-    beforeEach(async () => {
-
-    });
-
+    
     afterEach(async () => {
+      await wipeModel(SentRemindersPatients);
       await wipeModel(SentReminder);
       await wipeModel(Reminder);
       await wipeModel(Appointment);
@@ -86,12 +84,17 @@ describe('Patient Insights', () => {
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
-      await SentReminder.create(makeSentReminderData({
+      const sentReminder1 = await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
-        appointmentId: appts[0].id,
         lengthSeconds: 1086410,
         isSent: true,
       }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder1.id,
+        patientId,
+        appointmentId: appts[0].id,
+      });
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 
@@ -109,13 +112,18 @@ describe('Patient Insights', () => {
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
-      await SentReminder.create(makeSentReminderData({
+      const sentReminder1 = await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
-        appointmentId: appts[0].id,
         lengthSeconds: 1086410,
         isSent: true,
         primaryType: 'phone',
       }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder1.id,
+        patientId,
+        appointmentId: appts[0].id,
+      });
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 
@@ -126,19 +134,28 @@ describe('Patient Insights', () => {
 
     test('should have one email reminder - with one email sent reminder no confirmation', async () => {
       const reminder1 = await Reminder.create({
-        accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months',
+        accountId,
+        primaryType: 'sms',
+        lengthSeconds: 1086410,
+        interval: '6 months',
       });
+
       const appts = await Appointment.bulkCreate([
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
-      await SentReminder.create(makeSentReminderData({
+      const sentReminder1 = await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
-        appointmentId: appts[0].id,
         lengthSeconds: 1086410,
         isSent: true,
         primaryType: 'email',
       }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder1.id,
+        patientId,
+        appointmentId: appts[0].id,
+      });
 
       const confirm = await checkConfirmAttempts(appts[0].id);
 

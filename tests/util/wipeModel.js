@@ -36,6 +36,7 @@ const ORDER = [
   'Reminder',
   'SentRecall',
   'SentReminder',
+  'SentRemindersPatients',
   'SentReview',
   'Review',
   'SyncClientError',
@@ -59,6 +60,4 @@ async function wipeAllModels() {
 }
 
 export default wipeModel;
-export {
-  wipeAllModels,
-};
+export { wipeAllModels };

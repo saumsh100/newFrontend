@@ -15,7 +15,10 @@ export function fetchInsights() {
     try {
       const { dashboard } = getState();
 
-      dispatch(setLoading({ key: 'loadingInsights', value: true }));
+      dispatch(setLoading({
+        key: 'loadingInsights',
+        value: true,
+      }));
 
       const currentDate = moment(dashboard.get('dashboardDate'));
       const startDate = currentDate.startOf('day').toISOString();
@@ -30,7 +33,10 @@ export function fetchInsights() {
       const insights = await axios('/api/appointments/insights', { params: query });
 
       dispatch(setInsights({ data: insights.data }));
-      dispatch(setLoading({ key: 'loadingInsights', value: false }));
+      dispatch(setLoading({
+        key: 'loadingInsights',
+        value: false,
+      }));
     } catch (err) {
       console.log(err);
     }
@@ -57,10 +63,16 @@ export function fetchDonnasToDos(index) {
 
     if (toDoFunctions[index]) {
       const accountId = auth.get('accountId');
-      dispatch(setLoading({ key: 'loadingToDos', value: true }));
+      dispatch(setLoading({
+        key: 'loadingToDos',
+        value: true,
+      }));
 
       await toDoFunctions[index](accountId, startDate, endDate, dispatch, recallBuffer);
-      return dispatch(setLoading({ key: 'loadingToDos', value: false }));
+      return dispatch(setLoading({
+        key: 'loadingToDos',
+        value: false,
+      }));
     }
 
     return dispatch(setToDoReminders([]));
@@ -69,10 +81,11 @@ export function fetchDonnasToDos(index) {
 
 async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
   try {
-    const params = { startDate, endDate };
-    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, {
-      params,
-    });
+    const params = {
+      startDate,
+      endDate,
+    };
+    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, { params });
     dispatch(setToDoReminders(remindersData.data));
   } catch (err) {
     console.error('fetchToDoReminders', err);
@@ -82,7 +95,10 @@ async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
 
 async function fetchToDoReviews(accountId, startDate, endDate, dispatch) {
   try {
-    const params = { startDate, endDate };
+    const params = {
+      startDate,
+      endDate,
+    };
     const reviewsData = await axios.get(`/api/accounts/${accountId}/reviews/outbox`, { params });
     dispatch(setToDoReviews(reviewsData.data));
   } catch (err) {
@@ -100,7 +116,10 @@ async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallB
         .toISOString();
     }
 
-    const params = { startDate, endDate: endDateQuery };
+    const params = {
+      startDate,
+      endDate: endDateQuery,
+    };
     const recallsData = await axios.get(`/api/accounts/${accountId}/recalls/outbox`, { params });
     dispatch(setToDoRecalls(recallsData.data));
   } catch (err) {

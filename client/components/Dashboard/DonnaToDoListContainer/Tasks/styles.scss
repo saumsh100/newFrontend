@@ -90,7 +90,7 @@
 
 .avatar {
   @extend .colStyling;
-  width: 90px;
+  width: 65px;
   @media screen and (max-width: 1000px) {
     display: none;
   }

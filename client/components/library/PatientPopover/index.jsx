@@ -1,20 +1,19 @@
 
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import Popover from 'react-popover';
 import PropTypes from 'prop-types';
-import styles from './styles.scss';
 import PatientProfile from './PatientProfile';
 import { patientShape } from '../PropTypeShapes';
+import styles from './styles.scss';
 
 class PatientPopover extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false,
-    };
+    this.state = { isOpen: false };
 
     this.setOpen = this.setOpen.bind(this);
     this.editPatient = this.editPatient.bind(this);
@@ -23,17 +22,13 @@ class PatientPopover extends Component {
 
   componentDidMount() {
     if (this.props.scrollId) {
-      document
-        .getElementById(this.props.scrollId)
-        .addEventListener('scroll', this.closeOnScroll);
+      document.getElementById(this.props.scrollId).addEventListener('scroll', this.closeOnScroll);
       window.addEventListener('scroll', this.closeOnScroll);
     }
   }
 
   setOpen(value) {
-    this.setState({
-      isOpen: value,
-    });
+    this.setState({ isOpen: value });
   }
 
   editPatient(id) {
@@ -41,15 +36,11 @@ class PatientPopover extends Component {
   }
 
   closeOnScroll() {
-    this.setState({
-      isOpen: false,
-    });
+    this.setState({ isOpen: false });
   }
 
   render() {
-    const {
-      placement, children, patient, closePopover,
-    } = this.props;
+    const { placement, children, patient, closePopover, patientStyles } = this.props;
 
     if (!patient) {
       return null;
@@ -57,7 +48,6 @@ class PatientPopover extends Component {
 
     return (
       <Popover
-        className={styles.patientPopover}
         {...this.props}
         isOpen={this.state.isOpen && !closePopover}
         body={[
@@ -73,7 +63,7 @@ class PatientPopover extends Component {
         onOuterAction={() => this.setOpen(false)}
       >
         <div
-          className={styles.patientLink}
+          className={classnames(styles.patientLink, patientStyles)}
           onDoubleClick={() => this.editPatient(patient.id)}
         >
           {React.Children.map(children, patientLink =>
@@ -90,12 +80,7 @@ class PatientPopover extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      push,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ push }, dispatch);
 }
 
 PatientPopover.propTypes = {
@@ -107,6 +92,7 @@ PatientPopover.propTypes = {
   closePopover: PropTypes.bool,
   push: PropTypes.func.isRequired,
   scrollId: PropTypes.string,
+  patientStyles: PropTypes.string,
 };
 
 PatientPopover.defaultProps = {
@@ -114,7 +100,8 @@ PatientPopover.defaultProps = {
   closePopover: false,
   scrollId: '',
   placement: 'right',
-  className: '',
+  className: styles.patientPopover,
+  patientStyles: '',
 };
 
 const enhance = connect(

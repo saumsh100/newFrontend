@@ -1,8 +1,10 @@
+
 import { v4 as uuid } from 'uuid';
 import {
   Appointment,
   Reminder,
   SentReminder,
+  SentRemindersPatients,
   SentReview,
   Review,
   Patient,
@@ -42,7 +44,7 @@ const makeReviewData = (data = {}) => ({
 });
 
 const makeSentReminderData = (data = {}) => ({
-  patientId,
+  contactedPatientId: patientId,
   accountId,
   interval: '1 days',
   primaryType: 'sms',
@@ -118,12 +120,17 @@ describe('Fetching a single patients events', () => {
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
-      await SentReminder.create(makeSentReminderData({
+      const sentReminder1 = await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
-        appointmentId: appts[0].id,
         interval: '1086410 seconds',
         isSent: true,
       }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder1.id,
+        patientId,
+        appointmentId: appts[0].id,
+      });
 
       const events = await patientEventsAggregator(patientId, accountId, {
         limit: 5,
@@ -227,12 +234,17 @@ describe('Fetching a single patients events', () => {
         makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
       ]);
 
-      await SentReminder.create(makeSentReminderData({
+      const sentReminder1 = await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
-        appointmentId: appts[0].id,
         interval: '1086410 seconds',
         isSent: true,
       }));
+
+      await SentRemindersPatients.create({
+        sentRemindersId: sentReminder1.id,
+        patientId,
+        appointmentId: appts[0].id,
+      });
 
       const olderAppt = await Appointment.create(makeApptData({
         patientId,

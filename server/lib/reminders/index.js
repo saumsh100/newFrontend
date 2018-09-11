@@ -4,8 +4,10 @@ import omit from 'lodash/omit';
 import {
   Appointment,
   SentReminder,
-} from '../../_models';
+  SentRemindersPatients,
+} from 'CareCruModels';
 import GLOBALS from '../../config/globals';
+import sortAsc from '../../../iso/helpers/sort/sortAsc';
 import { organizeForOutbox } from '../comms/util';
 import {
   convertIntervalStringToObject,
@@ -19,6 +21,7 @@ import {
   fetchAccountsAndActiveReminders,
 } from './helpers';
 import sendReminder, { getIsConfirmable } from './sendReminder';
+import { cleanRemindersSuccessData } from './outbox';
 
 /**
  * sendRemindersForAccount is an async function that will send reminders for the account passed in
@@ -55,7 +58,7 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
   });
 
   let i;
-  for (i = 0; i < sortedReminders.length; i++) {
+  for (i = 0; i < sortedReminders.length; i += 1) {
     const reminder = sortedReminders[i];
     const { errors, success } = remindersPatients[i];
     const { primaryTypes, interval } = reminder;
@@ -68,19 +71,28 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
 
     if (errors.length) {
       try {
-        // Save failed sentRecalls from errors
-        const failedSentReminders = errors.map(({ errorCode, patient, primaryType }) => ({
-          reminderId: reminder.id,
-          accountId: account.id,
-          patientId: patient.id,
-          appointmentId: patient.appointment.id,
-          isConfirmable: getIsConfirmable(patient.appointment, reminder),
-          interval: reminder.interval,
-          primaryType,
-          errorCode,
-        }));
+        // eslint-disable-next-line no-restricted-syntax
+        for (const { errorCode, patient, dependants, primaryType } of errors) {
+          const allPatients = [patient, ...dependants];
+          const patientsWithAppointments = allPatients.filter(p => p.appointment);
+          // Save failed sentRecalls from errors
+          const sentReminder = await SentReminder.create({
+            reminderId: reminder.id,
+            appointmentId: patient.appointment.id,
+            isConfirmable: patientsWithAppointments.some(({ appointment: a }) => getIsConfirmable(a, reminder)),
+            interval: reminder.interval,
+            primaryType,
+            errorCode,
+            isFamily: dependants.length > 0,
+          });
 
-        await SentReminder.bulkCreate(failedSentReminders);
+          await Promise.all(patientsWithAppointments
+            .map(p => SentRemindersPatients.create({
+              sentRemindersId: sentReminder.id,
+              patientId: p.id,
+              appointmentId: p.appointment.id,
+            })));
+        }
         console.log(`------ ${errors.length} => saved sentReminders that would fail`);
       } catch (err) {
         console.error('------ Failed bulk saving of sentReminders that would fail');
@@ -89,28 +101,38 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
     }
 
     console.log(`---- ${success.length} => reminders that should succeed`);
-    for (const { patient, primaryType } of success) {
-      const { appointment } = patient;
-      // const { primaryType } = reminder;
 
+    // eslint-disable-next-line no-restricted-syntax
+    for (const { patient, dependants, primaryType } of success) {
+      const { appointment } = patient;
+      const allPatients = [patient, ...dependants];
+      const patientsWithAppointments = allPatients.filter(p => p.appointment);
       // Save sent reminder first so we can
       // - use sentReminderId as token in email
       // - keep track of failed reminders
       const sentReminder = await SentReminder.create({
         reminderId: reminder.id,
         accountId: account.id,
-        patientId: patient.id,
-        appointmentId: appointment.id,
+        contactedPatientId: patient.id,
         interval: reminder.interval,
-        isConfirmable: getIsConfirmable(appointment, reminder),
+        isConfirmable: patientsWithAppointments.some(({ appointment: a }) => getIsConfirmable(a, reminder)),
         primaryType,
+        isFamily: dependants.length > 0,
       });
+
+      await Promise.all(patientsWithAppointments
+        .map(p => SentRemindersPatients.create({
+          sentRemindersId: sentReminder.id,
+          patientId: p.id,
+          appointmentId: p.appointment.id,
+        })));
 
       try {
         await sendReminder[primaryType]({
           patient,
           account,
           appointment,
+          dependants,
           sentReminder,
           reminder,
           currentDate: startDate,
@@ -122,15 +144,14 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
       } catch (error) {
         console.error(`------ Failed sending '${interval} ${primaryType}' reminder to ${patient.firstName} ${patient.lastName}`);
         console.error(error);
-        continue;
+        return;
       }
 
       await sentReminder.update({ isSent: true });
-      const appt = await Appointment.findById(appointment.id);
-      appt.update({ isReminderSent: true });
-    }
+      await Promise.all(patientsWithAppointments.map(({ appointment: a }) =>
+        Appointment.update({ isReminderSent: true }, { where: { id: a.id } })));
+    };
   }
-
   pub && pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   console.log(`Reminders completed for ${account.name} (${account.id})!`);
 }
@@ -211,26 +232,29 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
   remindersPatients.forEach(({ success }, i) => {
     const reminder = reminders[i];
 
-    // mapPatientsToReminders will return a flatter array with primaryTypes separated into primaryType
+    // mapPatientsToReminders will return a flatter array with primaryTypes
+    // separated into primaryType
     // this will group it back together
     const organizedList = organizeRemindersOutboxList(success);
 
-    // Clone array so its not mutable and order by appointment.startDate ASC
-    const sortedPatientsAppointments = organizedList.slice()
-      .sort((a, b) => a.patient.appointment.startDate > b.patient.appointment.startDate);
+    // Clone array so its not mutable and
+    // order by appointment.startDate ASC of the earlies appointment of the reminder
+    const sortedPatientsAppointments =
+      organizedList.slice().sort(sortRemindersByEarliestAppointmentDate);
 
     // map over the sorted array and construct the final object:
     // { patient: { ...patientData, appointment }, reminder, sendDate }
     const outboxReminders = sortedPatientsAppointments.map((pa) => {
       const intervalObject = convertIntervalStringToObject(reminder.interval);
-      const subtractedDate = moment(pa.patient.appointment.startDate).subtract(intervalObject).toISOString();
-      let sendDate = floorDateMinutes(subtractedDate, GLOBALS.reminders.cronIntervalMinutes);
-      if (reminder.isDaily) {
-        sendDate = moment.tz(
+      const subtractedDate = moment(getEarliestApptDateFromReminder(pa))
+        .subtract(intervalObject)
+        .toISOString();
+      const sendDate = reminder.isDaily ?
+        moment.tz(
           `${moment(subtractedDate).format('YYYY-MM-DD')} ${reminder.dailyRunTime}`,
           account.timezone,
-        ).toISOString();
-      }
+        ).toISOString() :
+        floorDateMinutes(subtractedDate, GLOBALS.reminders.cronIntervalMinutes);
 
       return {
         ...pa,
@@ -242,8 +266,32 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
     outboxList = [...outboxList, ...outboxReminders];
   });
 
-  return outboxList.sort((a, b) => a.sendDate > b.sendDate);
+  return outboxList
+    .map(a => cleanRemindersSuccessData(a))
+    .sort((a, b) => a.sendDate > b.sendDate);
 }
+
+/**
+ * Join appointment from PoC and dependants and return the earliest
+ * appointment date among them
+ *
+ * @param {*} reminder.patient
+ * @param {*} reminder.dependants
+ * @return {string} earliest appointment date of the reminder
+ */
+const getEarliestApptDateFromReminder = ({ patient, dependants }) =>
+  [patient, ...dependants]
+    .filter(({ appointment }) => appointment)
+    .sort((
+      { appointment: { startDate: a } },
+      { appointment: { startDate: b } },
+    ) => sortAsc(a, b))[0].appointment.startDate;
+
+/**
+ * Sort reminders by each one earliest appointment date
+ */
+const sortRemindersByEarliestAppointmentDate =
+  (a, b) => sortAsc(getEarliestApptDateFromReminder(a), getEarliestApptDateFromReminder(b));
 
 /**
  * organizeRemindersOutboxList is a function used to organize the outbox for reminders ontop of
@@ -254,7 +302,12 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
 export function organizeRemindersOutboxList(outboxList) {
   // Assume appointment.id is the unique indicator
   // (shouldn't be multiple different reminders going out to same appointment)
-  const selectorPredicate = ({ patient: { appointment } }) => appointment.id;
+  const selectorPredicate = ({ patient, dependants }) =>
+    [patient, ...dependants]
+      .filter(({ appointment }) => appointment)
+      .map(({ appointment }) => appointment.id)
+      .join('-');
+
   const mergePredicate = (groupedArray) => {
     const primaryTypes = groupedArray.map(item => item.primaryType);
     const newObj = {

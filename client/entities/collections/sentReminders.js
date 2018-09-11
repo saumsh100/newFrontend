@@ -1,3 +1,4 @@
+
 import createCollection from '../createCollection';
 import SentReminder from '../models/SentReminder';
 

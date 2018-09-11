@@ -1,6 +1,7 @@
 
 import moment from 'moment-timezone';
 import uniqWith from 'lodash/uniqWith';
+import uniqBy from 'lodash/uniqBy';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
 import {
@@ -10,6 +11,7 @@ import {
   Family,
   Reminder,
   SentReminder,
+  SentRemindersPatients,
   WeeklySchedule,
 } from 'CareCruModels';
 import GLOBALS from '../../config/globals';
@@ -22,6 +24,7 @@ import {
 } from '../../util/time';
 import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
+import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
 
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
@@ -56,26 +59,33 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
 
     // If it has been seen by an earlier reminder (farther away from appt.startDate), ignore it!
     // This is why the order or reminders is so important
-    const unseenAppts = appointments.filter(a => !seen[a.id]);
+    let unseenAppts = appointments.filter(a => !seen[a.id]);
+
+    // This is a hacky way to ensure the earliest appointment is getting added
+    // to the groups for Family Reminder
+    unseenAppts = orderAppointmentsForSamePatient(unseenAppts);
 
     // Now add it to the seen map
     unseenAppts.forEach(a => seen[a.id] = true);
-    const patients = unseenAppts.map((appt) => {
-      const patient = appt.patient.get({ plain: true });
-      patient.appointment = appt.get({ plain: true });
-      return patient;
-    });
+    const patients = unseenAppts.map((appt) => ({
+      ...appt.patient,
+      appointment: appt
+    }));
 
     const channels = reminder.primaryTypes;
 
     // Weed out the preferences and missing contact info patients
     const firstSuccessAndErrors = generateOrganizedPatients(patients, channels);
-    let { success, errors } = await reduceSuccessAndErrors({ account, channels, ...firstSuccessAndErrors });
+    const { success, errors } = await reduceSuccessAndErrors({
+      account,
+      channels,
+      ...firstSuccessAndErrors,
+    });
 
-    // To be removed when family reminders is implemented
-    // This removes reminders where the PoC is not having an appointment
-    success = success.filter(({ patient: { appointment } }) => appointment);
-    remindersPatients.push({ success, errors });
+    remindersPatients.push({
+      success,
+      errors,
+    });
   }
 
   return remindersPatients;
@@ -120,7 +130,6 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
         if (!isOpen(weeklySchedule, getDayOfWeek(startDate))) {
           return [];
         }
-
         const consecutiveClosedDays = countNextClosedDays({ weeklySchedule, startDate });
         if (consecutiveClosedDays) {
           console.log(`There are consecutive closed days, therefore bumping end date by ${consecutiveClosedDays} days`);
@@ -167,8 +176,10 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     isPending: false,
   };
 
+  const familyGroupingEnd = moment(start).add(SAME_DAY_HOURS, 'hours').toISOString();
+
   // Now we query for the appointments, those appointments patients and sentReminders, and those patients appointmemnts
-  const appointments = await Appointment.findAll({
+  let appointments = await Appointment.findAll({
     where: {
       ...defaultAppointmentsScope,
       accountId: reminder.accountId,
@@ -176,37 +187,65 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
         $gte: start,
         $lt: end,
       },
-
-      chairId: {
-        $notIn: reminder.omitChairIds,
-      },
-
-      practitionerId: {
-        $notIn: reminder.omitPractitionerIds,
-      },
+      chairId: { $notIn: reminder.omitChairIds },
+      practitionerId: { $notIn: reminder.omitPractitionerIds },
     },
-
     // Important for grabbing latest sentReminder and checking if it was within window or lastReminder
     // and this one. If it is, we ignore this touchpoint
     order: [
       ['startDate', 'ASC'],
-      [{ model: SentReminder, as: 'sentReminders' }, 'createdAt', 'desc'],
+      [
+        {
+          model: SentRemindersPatients,
+          as: 'sentRemindersPatients',
+        },
+        'createdAt',
+        'desc',
+      ],
     ],
-
     include: [
       {
         model: Patient,
         as: 'patient',
-        where: {
-          $not: {
-            omitReminderIds: { $contains: [reminder.id] },
-          },
-        },
-
+        where: { $not: { omitReminderIds: { $contains: [reminder.id] } } },
         include: [
           {
             model: Family,
             as: 'family',
+            include: [{
+              model: Patient,
+              as: 'patients',
+              where: { $not: { omitReminderIds: { $contains: [reminder.id] } } },
+              include: [{
+                model: Appointment,
+                as: 'appointments',
+                where: {
+                  ...defaultAppointmentsScope,
+                  accountId: reminder.accountId,
+                  chairId: { $notIn: reminder.omitChairIds },
+                  practitionerId: { $notIn: reminder.omitPractitionerIds },
+                  startDate: {
+                    $gte: start,
+                    $lte: familyGroupingEnd, // include the boundary here?
+                  },
+                },
+                required: false,
+                include: [{
+                  model: SentRemindersPatients,
+                  as: 'sentRemindersPatients',
+                  required: false,
+                  include: [{
+                    model: SentReminder,
+                    as: 'sentReminder',
+                    required: true,
+                  }],
+                }],
+              }],
+
+              required: false,
+            }],
+
+            required: false,
           },
           {
             model: Appointment,
@@ -222,20 +261,54 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
             },
 
             required: false,
-          }
+          },
         ],
 
         required: true,
       },
       {
-        model: SentReminder,
-        as: 'sentReminders',
+        model: SentRemindersPatients,
+        as: 'sentRemindersPatients',
         required: false,
+        include: [{
+          model: SentReminder,
+          as: 'sentReminder',
+          required: true,
+        }],
       },
     ],
   });
 
-  return exports.filterReminderAppointments({ appointments, reminder });
+  appointments = appointments.map((a) => {
+    a = a.get({ plain: true }); // Needed for easier data manipulation
+    const { patient: { family } } = a;
+    if (family) {
+      // Can't use the spread property because it destroys sequelize helpers
+      a.patient.family.patients = family.patients.map((p) => ({
+        // Needs to be a different attribute name so there's backwards compatibility
+        ...p,
+        appts: p.appointments.map(a => ({ ...a, patient: p })),
+        appointments: [],
+      }))
+    }
+
+    return a;
+  });
+
+  appointments = exports.filterReminderAppointments({
+    appointments,
+    reminder,
+  });
+
+  appointments = appointments.reduce((arr, appointment) => {
+    return [
+      ...arr,
+      ...flattenFamilyAppointments({ appointment, reminder, customApptsAttr: 'appts' }),
+    ];
+  }, []);
+
+  appointments = uniqBy(appointments, 'id');
+  return appointments;
 }
 
 /**
@@ -252,21 +325,22 @@ export function filterReminderAppointments({ appointments, reminder }) {
 
   // First group appointments by the buffer time (could be every 24 hours, every 6 hours, etc.)
   const floorTime = appointments[0].startDate;
-  const groupedAppointmentsByBuffer = groupBy(appointments, (a) => {
-    return Math.floor(moment(a.startDate).diff(floorTime, 'hours') / SAME_DAY_HOURS);
-  });
+  const groupedAppointmentsByBuffer = groupBy(appointments, a =>
+    Math.floor(moment(a.startDate).diff(floorTime, 'hours') / SAME_DAY_HOURS));
 
   // Now, for each group, ensure the appointments have unique patientIds
   // Then if ignoreSendIfConfirmed if true, filter out the confirmed ones
   let filteredAppointments = [];
   forEach(groupedAppointmentsByBuffer, (appointmentsGroup) => {
+    // Grab the earliest appointment for each patient in the group
     let filteredAppointmentsGroup = uniqWith(appointmentsGroup, (a, b) =>
-      a.patient.id === b.patient.id,
-    );
+      a.patient.id === b.patient.id);
 
     filteredAppointmentsGroup = filteredAppointmentsGroup.filter(a =>
-      exports.shouldSendReminder({ appointment: a, reminder }),
-    );
+      exports.shouldSendReminder({
+        appointment: a,
+        reminder,
+      }));
 
     filteredAppointments = [...filteredAppointments, ...filteredAppointmentsGroup];
   });
@@ -286,11 +360,14 @@ export function filterReminderAppointments({ appointments, reminder }) {
  * @returns {boolean}
  */
 export function shouldSendReminder({ appointment, reminder }) {
-  const { sentReminders, patient } = appointment;
+  const { sentRemindersPatients, patient } = appointment;
   const { preferences, appointments = [] } = patient;
+
+  const sentReminders = sentRemindersPatients.map(exports.extractSentReminders);
 
   // These are appointments that are within the "same day" window, don't send a reminder
   // This is because a reminder for that appointment was probably already sent
+  // NOTE: It should ultimately only ignore if it had a successful sentReminder already not just if it exists
   if (appointments.length) {
     return false;
   }
@@ -326,9 +403,8 @@ export function shouldSendReminder({ appointment, reminder }) {
 export function isAppointmentConfirmed(appointment, reminder) {
   if (reminder.isCustomConfirm) {
     return appointment.isPreConfirmed || appointment.isPatientConfirmed;
-  } else {
-    return appointment.isPatientConfirmed;
   }
+  return appointment.isPatientConfirmed;
 }
 
 /**
@@ -344,28 +420,49 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
   // Confirming valid SMS Reminder for patient
   const sentReminders = await SentReminder.findAll({
     where: {
+      contactedPatientId: patientId,
       accountId,
-      patientId,
       isConfirmed: false,
       isConfirmable: true,
       primaryType: 'sms',
     },
-
     order: [['createdAt', 'asc']],
+  });
+
+  if (sentReminders.length === 0) return [];
+
+  const sentRemindersPatients = await SentRemindersPatients.findAll({
     include: [
-      { model: Appointment, as: 'appointment' },
-      { model: Reminder, as: 'reminder' },
+      {
+        model: Appointment,
+        as: 'appointment',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+        attributes: ['firstName'],
+      },
+      {
+        model: SentReminder,
+        as: 'sentReminder',
+        required: true,
+        where: { id: sentReminders[0].id },
+        include: [
+          {
+            model: Reminder,
+            as: 'reminder',
+          },
+        ],
+      },
     ],
   });
 
-  // Only grab sentReminders with appointments that are booked and in the future
-  return sentReminders.filter(({ appointment }) => {
-    return moment(appointment.startDate).isAfter(date) &&
+  return sentRemindersPatients.filter(({ appointment }) =>
+    moment(appointment.startDate).isAfter(date) &&
       !appointment.isCancelled &&
       !appointment.isDeleted &&
       !appointment.isPending &&
-      !appointment.isMissed;
-  });
+      !appointment.isMissed);
 }
 
 /**
@@ -435,7 +532,11 @@ export async function fetchAccountsAndActiveReminders({ startDate, endDate }) {
   // Filter out reminders and sort by interval
   accounts.forEach((account) => {
     account.reminders = account.reminders
-      .filter(generateIsActiveReminder({ account, startDate, endDate }))
+      .filter(generateIsActiveReminder({
+        account,
+        startDate,
+        endDate,
+      }))
       .sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
   });
 
@@ -477,16 +578,33 @@ export async function confirmReminderIfExist(accountId, patientId) {
     accountId,
   });
 
-  if (!validSmsReminders.length) {
+  // Early return if no reminders found
+  if (validSmsReminders.length === 0) {
     return false;
   }
 
   // Confirm first available reminder
-  const validSentReminder = validSmsReminders[0];
-  const { appointment, reminder } = validSentReminder;
-  const sentReminder = validSentReminder.get({ plain: true });
+  const { sentReminder } = validSmsReminders[0];
 
-  await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.id } });
-  await appointment.confirm(reminder);
-  return sentReminder;
+  await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.get('id') } });
+
+  // Confirm all appointments for that reminder
+  await Promise.all(validSmsReminders.map(({ appointment, sentReminder: { reminder } }) =>
+    appointment.confirm(reminder.get({ plain: true }))));
+
+  return validSmsReminders;
+}
+
+/**
+ * Extract the sentReminder object out of sentRemindersPatients to keep compatibility with old APIs
+ *
+ * @param sentRemindersPatients
+ * @returns {Object}
+ */
+export function extractSentReminders(sentRemindersPatients) {
+  const { sentReminder, ...rest } = sentRemindersPatients;
+  return {
+    ...sentReminder,
+    ...rest,
+  };
 }

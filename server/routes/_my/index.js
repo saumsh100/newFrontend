@@ -1,9 +1,16 @@
 
 /* eslint-disable consistent-return */
 import { Router } from 'express';
-import fs from 'fs';
 import url from 'url';
-import pick from 'lodash/pick';
+import {
+  Account,
+  Appointment,
+  Patient,
+  PatientUser,
+  PatientUserReset,
+  Reminder,
+  SentRemindersPatients,
+} from 'CareCruModels';
 import StatusError from '../../util/StatusError';
 import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
@@ -16,19 +23,9 @@ import sentReviewsRouter from './sentReviews';
 import widgetsRouter from './widgets';
 import unsubRouter from './unsubscribe';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import {
-  Account,
-  Appointment,
-  Patient,
-  PatientUser,
-  Practitioner,
-  PatientUserReset,
-  Reminder,
-} from '../../_models';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import { generateAccountParams, encodeParams } from './util/params';
-import normalize from '../_api/normalize';
 
 const myRouter = Router();
 
@@ -40,9 +37,28 @@ myRouter.use('/families', sequelizeAuthMiddleware, familiesRouter);
 myRouter.use('/auth', authRouter);
 
 myRouter.param('sentReminderId', sequelizeLoader('sentReminder', 'SentReminder', [
-  { model: Appointment, as: 'appointment' },
-  { model: Patient, as: 'patient' },
-  { model: Reminder, as: 'reminder' },
+  {
+    model: Patient,
+    as: 'patient',
+  },
+  {
+    model: Reminder,
+    as: 'reminder',
+  },
+  {
+    model: SentRemindersPatients,
+    as: 'sentRemindersPatients',
+    include: [
+      {
+        model: Appointment,
+        as: 'appointment',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+    ],
+  },
 ]));
 
 myRouter.param('accountId', sequelizeLoader('account', 'Account'));
@@ -181,31 +197,26 @@ myRouter.post('/reset-password/:tokenId', (req, res, next) => {
 myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
   try {
     // TODO: it's stuff like this that we need to put into a "Manager" SentReminderManager.confirm();
-    const sentReminder = req.sentReminder;
+    const { sentReminder } = req;
+    
     await sentReminder.update({ isConfirmed: true });
 
     // For any confirmed reminder we confirm appointment
-    const { appointment, patient, reminder } = sentReminder;
+    const { patient: contactedPatient, reminder } = sentReminder;
 
-    if (appointment) {
-      await appointment.confirm(reminder);
-    }
+    await Promise.all(sentReminder.sentRemindersPatients
+      .map(({ appointment }) => appointment.confirm(reminder)));
 
-    const account = await Account.findOne({
-      where: {
-        id: appointment.accountId,
-      },
-    });
-
-    const appointmentJSON = appointment.get({ plain: true });
-    const patientJSON = patient.get({ plain: true });
-    const reminderJSON = reminder.get({ plain: true });
+    const account = await Account.findOne({ where: { id: sentReminder.accountId } });
 
     const params = {
-      patient: patientJSON,
-      appointment: appointmentJSON,
+      contactedPatient: contactedPatient.get({ plain: true }),
+      appointments: sentReminder.sentRemindersPatients.map(({ appointment, patient }) => ({
+        ...appointment.get({ plain: true }),
+        patient: patient.get({ plain: true }),
+      })),
       account: generateAccountParams(account),
-      reminder: reminderJSON,
+      reminder: reminder.get({ plain: true }),
     };
 
     const encodedParams = encodeParams(params);
@@ -215,9 +226,7 @@ myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) =>
 
     return res.redirect(url.format({
       pathname: `/sentReminders/${req.sentReminder.id}/confirmed`,
-      query: {
-        params: encodedParams,
-      },
+      query: { params: encodedParams },
     }));
   } catch (err) {
     next(err);

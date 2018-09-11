@@ -1,6 +1,6 @@
 
 import { graphql, commitMutation } from 'react-relay';
-import { ConnectionHandler } from 'relay-runtime';
+import { ConnectionHandler } from 'relay-runtime'; // eslint-disable-line import/no-extraneous-dependencies
 
 const mutation = graphql`
   mutation removePatientFromFamily_Mutation($input: updatePatientInput!) {
@@ -16,19 +16,18 @@ const mutation = graphql`
 // clientMutationId must be the global id of the patient to be updated
 const commit = (environment, patient, clientMutationId) => {
   const input = {
+    ...patient,
     id: patient.ccId,
-    accountId: patient.accountId,
-    firstName: patient.firstName,
-    lastName: patient.lastName,
     familyId: null,
+    __typename: undefined,
+    status: undefined,
+    ccId: undefined,
     clientMutationId,
   };
 
   return commitMutation(environment, {
     mutation,
-    variables: {
-      input,
-    },
+    variables: { input },
     updater: (proxyStore) => {
       // get the root field of the mutation return and find the patient record on the payload
       const payloadProxy = proxyStore.getRootField('updatePatientMutation');

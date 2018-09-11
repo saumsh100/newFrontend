@@ -10,14 +10,13 @@ import Popover from 'react-popover';
 import AppointmentInfo from './AppointmentInfo';
 import { selectAppointment, setScheduleDate } from '../../../actions/schedule';
 import { appointmentShape, patientShape, practitionerShape, chairShape } from '../PropTypeShapes';
+import Appointments from '../../../entities/models/Appointments';
 import styles from './styles.scss';
 
 class AppointmentPopover extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false,
-    };
+    this.state = { isOpen: false };
 
     this.setOpen = this.setOpen.bind(this);
     this.closeOnScroll = this.closeOnScroll.bind(this);
@@ -33,9 +32,7 @@ class AppointmentPopover extends Component {
   }
 
   setOpen(value) {
-    this.setState({
-      isOpen: value,
-    });
+    this.setState({ isOpen: value });
   }
 
   handleEditAppointment() {
@@ -45,28 +42,22 @@ class AppointmentPopover extends Component {
     const location = browserHistory.location.pathname;
 
     if (location === '/') {
-      this.props.setScheduleDate({
-        scheduleDate: moment(this.props.dashboardDate),
-      });
+      this.props.setScheduleDate({ scheduleDate: moment(this.props.dashboardDate) });
     }
-
-    const mergeApp = Object.assign(appointment.toJS(), {
-      appModel: appointment,
-    });
+    const mergeApp = {
+      ...(appointment instanceof Appointments ? appointment.toJS() : appointment),
+      ...{ appModel: appointment },
+    };
     this.props.selectAppointment(mergeApp);
     this.props.push('/schedule');
   }
 
   closeOnScroll() {
-    this.setState({
-      isOpen: false,
-    });
+    this.setState({ isOpen: false });
   }
 
   render() {
-    const {
-      placement, patient, appointment, children, chair, practitioner,
-    } = this.props;
+    const { placement, patient, appointment, children, chair, practitioner } = this.props;
 
     return (
       <Popover
@@ -88,9 +79,7 @@ class AppointmentPopover extends Component {
       >
         <div className={styles.appLink} onDoubleClick={this.handleEditAppointment}>
           {React.Children.map(children, patientLink =>
-            React.cloneElement(patientLink, {
-              onClick: () => this.setOpen(true),
-            }))}
+            React.cloneElement(patientLink, { onClick: () => this.setOpen(true) }))}
         </div>
       </Popover>
     );
@@ -127,7 +116,10 @@ function mapDispatchToProps(dispatch) {
 
 AppointmentPopover.propTypes = {
   patient: PropTypes.shape(patientShape).isRequired,
-  appointment: PropTypes.shape(appointmentShape).isRequired,
+  appointment: PropTypes.oneOfType([
+    PropTypes.instanceOf(Appointments),
+    PropTypes.shape(appointmentShape),
+  ]).isRequired,
   practitioner: PropTypes.arrayOf(PropTypes.shape(practitionerShape)),
   chair: PropTypes.arrayOf(PropTypes.shape(chairShape)),
   placement: PropTypes.string,
@@ -146,4 +138,7 @@ AppointmentPopover.defaultProps = {
   scrollId: '',
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppointmentPopover);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(AppointmentPopover);

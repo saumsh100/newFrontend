@@ -1,4 +1,5 @@
 
+
 const mail = require('../server/lib/mail');
 const { formatPhoneNumber } = require('../server/util/formatters');
 
@@ -55,7 +56,20 @@ mail.sendTestEmailTemplate({
       name: 'BOOK_URL',
       content: 'http://www.capitolhilldental.ca/?cc=book',
     },
+    {
+      name: 'CONFIRMATION_URL',
+      content: 'http://www.google.com',
+    },
+    {
+      name: 'FACEBOOK_URL',
+      content: 'http://www.facebook.com',
+    },
+    {
+      name: 'GOOGLE_URL',
+      content: 'http://www.google.com',
+    },
   ],
+  html,
 }).then(() => {
   console.log('Email Sent');
   process.exit();

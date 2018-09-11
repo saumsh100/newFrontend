@@ -89,6 +89,16 @@
   @extend .dotDisplay;
 }
 
+.flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+}
+
 .body {
   @extend .secondaryBgColor;
   border: 1px solid $primary-grey;
@@ -201,5 +211,45 @@
 .reminder {
   &_interval {
     text-transform: capitalize;
+  }
+
+  &_container {
+    margin-top: 15px;
+    box-sizing: border-box;
+    min-width: 300px;
+  }
+
+  &_body {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
+  }
+
+  &_name {
+    color: $primary-dark-grey;
+  }
+
+  &_appDetails {
+    margin-left: 10px;
+  }
+
+  &_appDate {
+    display: flex;
+    font-size: 10px;
+    justify-content: space-between;
+    margin-right: 5px;
+    color: $primary-darkgrey;
+  }
+
+  &_appDateHeaders {
+    margin-right: 5px;
+    color: $primary-dark;
+  }
+
+  &_patientNameStyle {
+    display: inline-block;
   }
 }

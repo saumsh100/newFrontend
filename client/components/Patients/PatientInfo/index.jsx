@@ -221,9 +221,7 @@ class PatientInfo extends Component {
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
 
     return (
-      <Grid
-        className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}
-      >
+      <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
         <Row>
           <Col sm={12} md={12} className={styles.topDisplay}>
             <TopDisplay
@@ -482,6 +480,8 @@ const query = graphql`
             dueForHygieneDate
             dueForRecallExamDate
             status
+            omitReminderIds
+            omitRecallIds
           }
           members(
             first: 2147483647 # MaxGraphQL Int
@@ -501,6 +501,8 @@ const query = graphql`
                 dueForHygieneDate
                 dueForRecallExamDate
                 status
+                omitReminderIds
+                omitRecallIds
               }
             }
           }

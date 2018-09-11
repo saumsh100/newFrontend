@@ -50,14 +50,12 @@ export async function receiveMessage(account, textMessageData) {
 
   const chatClean = await getOrCreateChatForPatient(account.id, from, patient);
   logger.debug(`Chat ${chatClean.id} found or created.`);
-
   const textMessage = await storeTextMessage({
     ...textMessageData,
     ...{ chatId: chatClean.id },
   });
 
   logger.debug(`TextMessage ${textMessage.get('id')} stored.`);
-
   if (!patient || !isSmsConfirmationResponse(body)) {
     logger.debug(`Not a ${!patient ? 'patient' : 'sms confirmation'}, exiting.`);
     await updateUserViaSocket(chatClean.id);
@@ -65,39 +63,33 @@ export async function receiveMessage(account, textMessageData) {
   }
 
   // Confirm first available reminder
-  const confirmedReminder = await confirmReminderIfExist(account.id, patient.id);
-  if (!confirmedReminder) {
+  const sentRemindersPatients = await confirmReminderIfExist(account.id, patient.id);
+  const { sentReminder, appointment } = sentRemindersPatients[0];
+  if (!sentReminder) {
     logger.debug('No reminders to confirm, exiting.');
     await updateUserViaSocket(chatClean.id);
     return;
   }
 
-  logger.debug(`Reminder ${confirmedReminder.id} confirmed.`);
-  const sentReminder = await SentReminder.findById(confirmedReminder.id, {
-    include: [
-      {
-        model: Appointment,
-        as: 'appointment',
-      },
-    ],
-  });
-  const normalizedReminder = normalize('sentReminder', sentReminder.get({ plain: true }));
-
+  logger.debug(`Reminder ${sentReminder.id} confirmed.`);
+  // const sentReminder = await SentReminder.findById(confirmedReminder.id);
+  const sentReminderClean = sentReminder.get({ plain: true });
+  const normalizedReminder = normalize('sentReminder', sentReminderClean);
   publishEvent(account.id, 'create:SentReminder', normalizedReminder);
   await markMessageAsRead(textMessage.get('id'));
-
-  const { appointment, reminder } = confirmedReminder;
+  const { reminder } = sentReminder;
   const messageBody = createConfirmationText({
     patient,
     appointment,
     account,
     reminder,
+    isFamily: sentReminderClean.isFamily,
+    sentRemindersPatients,
   });
 
   const confirmationTextMessage =
     await createChatMessage(messageBody, patient, null, chatClean.id);
   logger.debug(`Sent ${confirmationTextMessage.id} confirmation message.`);
-
   await updateUserViaSocket(chatClean.id);
 }
 

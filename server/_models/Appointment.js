@@ -163,7 +163,7 @@ export default function (sequelize, DataTypes) {
       Chair,
       Patient,
       Practitioner,
-      SentReminder,
+      SentRemindersPatients,
       Service,
       SentReview,
     } = models;
@@ -189,9 +189,9 @@ export default function (sequelize, DataTypes) {
     });
 
 
-    Appointment.hasMany(SentReminder, {
+    Appointment.hasMany(SentRemindersPatients, {
       foreignKey: 'appointmentId',
-      as: 'sentReminders',
+      as: 'sentRemindersPatients',
     });
 
     Appointment.hasMany(SentReview, {

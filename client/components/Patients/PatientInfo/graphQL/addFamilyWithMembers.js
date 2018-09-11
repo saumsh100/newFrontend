@@ -25,6 +25,8 @@ const mutation = graphql`
               dueForHygieneDate
               dueForRecallExamDate
               status
+              omitReminderIds
+              omitRecallIds
             }
           }
         }
@@ -42,9 +44,7 @@ const commit = (environment, members, clientMutationId) => {
 
   return commitMutation(environment, {
     mutation,
-    variables: {
-      input,
-    },
+    variables: { input },
     updater: (proxyStore) => {
       // get the root field of the mutation return and find the family record on the payload
       const payloadProxy = proxyStore.getRootField('createFamilyWithMembersMutation');

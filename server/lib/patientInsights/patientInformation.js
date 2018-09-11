@@ -1,7 +1,7 @@
 
 import uniqBy from 'lodash/uniqBy';
 import moment from 'moment';
-import { Patient, Appointment, Family, SentReminder } from '../../_models';
+import { Patient, Appointment, Family, SentReminder, SentRemindersPatients } from 'CareCruModels';
 
 /**
  * [allInsights returns insights for all patients who are the head
@@ -231,21 +231,27 @@ export async function checkConfirmAttempts(appointmentId) {
 
   const sentReminders = await SentReminder.findAll({
     where: {
-      appointmentId,
       isConfirmed: false,
       isConfirmable: true,
       isSent: true,
     },
+    include: [
+      {
+        model: SentRemindersPatients,
+        as: 'sentRemindersPatients',
+        required: true,
+        where: { appointmentId },
+      },
+    ],
   });
 
   if (!sentReminders.length) {
     return null;
   }
 
-  for (let i = 0; i < sentReminders.length; i += 1) {
-    const sentReminder = sentReminders[i];
+  sentReminders.forEach((sentReminder) => {
     confirmAttempts[sentReminder.primaryType] += 1;
-  }
+  });
 
   let approveInsight = false;
   Object.keys(confirmAttempts).forEach((primaryType) => {

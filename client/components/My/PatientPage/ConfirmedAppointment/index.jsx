@@ -1,65 +1,80 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
+import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
+import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 import { Icon, Well } from '../../../library/index';
 import ClassyDiv from '../../../library/util/ClassyDiv';
 import Section from '../Shared/Section';
 import styles from './styles.scss';
-import {
-  accountShape,
-  appointmentShape,
-  reminderShape,
-} from '../../../library/PropTypeShapes';
+import { accountShape, appointmentShape, reminderShape } from '../../../library/PropTypeShapes';
 
 const WellHeader = ClassyDiv(styles.wellHeader);
 const WellItem = ClassyDiv(styles.wellItem);
 
-export default function ConfirmedAppointment({ params }) {
-  const { account, appointment, reminder } = params;
+const buildAppointmentTime = ({ startDate, endDate, timezone }) => {
+  const apptDateFormat = dateFormatterFactory('h:mma')(timezone);
+  return `${apptDateFormat(startDate)} - ${apptDateFormat(endDate)}`;
+};
 
-  const {
-    address,
-    phoneNumber,
-    contactEmail,
-    bookingWidgetPrimaryColor,
-    website,
-    timezone,
-  } = account;
+const AppointmentsList = ({ appointments, timezone }) => (
+  <Section>
+    <WellHeader>{`Appointment${appointments.length > 1 ? 's' : ''} Information`}</WellHeader>
+    {appointments.map(({ id, startDate, endDate, patient: { firstName, lastName } }) => (
+      <Well key={id}>
+        <WellItem>{`${firstName} ${lastName}`}</WellItem>
+        <WellItem>{dateFormatter(startDate, timezone, 'dddd, MMMM Do YYYY')}</WellItem>
+        <WellItem>
+          {buildAppointmentTime({
+            startDate,
+            endDate,
+            timezone,
+          })}
+        </WellItem>
+      </Well>
+    ))}
+  </Section>
+);
 
+AppointmentsList.propTypes = {
+  appointments: PropTypes.arrayOf(PropTypes.shape({
+    startDate: PropTypes.string,
+    endDate: PropTypes.string,
+  })).isRequired,
+  timezone: PropTypes.string.isRequired,
+};
+
+const tinyIconFactory = bookingWidgetPrimaryColor => props => (
+  <Icon
+    style={{ color: bookingWidgetPrimaryColor }}
+    className={styles.tinyIcon}
+    type="solid"
+    {...props}
+  />
+);
+
+export default function ConfirmedAppointment({
+  params: {
+    account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website, timezone },
+    appointments,
+    reminder,
+  },
+}) {
   const { street, city, state } = address;
-  const { startDate, endDate } = appointment;
 
-  const TinyIcon = props => (
-    <Icon
-      style={{ color: bookingWidgetPrimaryColor }}
-      className={styles.tinyIcon}
-      type="solid"
-      {...props}
-    />
-  );
-
-  const appointmentTime = `${moment.tz(startDate, timezone).format('h:mma')} -
-  ${moment.tz(endDate, timezone).format('h:mma')}`;
+  const TinyIcon = tinyIconFactory(bookingWidgetPrimaryColor);
 
   return (
     <div>
       <Section>
         <div className={styles.header}>Thank you!</div>
         <div className={styles.text}>
-          Your appointment has been{' '}
-          {reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed'}.
+          {`Your appointment${appointments.length > 1 ? 's have' : ' has'} been ${
+            reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed'
+          }.`}
         </div>
       </Section>
-      <Section>
-        <WellHeader>Appointment Information</WellHeader>
-        <Well>
-          <WellItem>
-            {moment.tz(startDate, timezone).format('dddd, MMMM Do YYYY')}
-          </WellItem>
-          <WellItem>{appointmentTime}</WellItem>
-        </Well>
-      </Section>
+      <AppointmentsList appointments={appointments} timezone={timezone} />
       <Section>
         <WellHeader>Practice Information</WellHeader>
         <Well>
@@ -92,7 +107,7 @@ export default function ConfirmedAppointment({ params }) {
 ConfirmedAppointment.propTypes = {
   params: PropTypes.shape({
     account: PropTypes.shape(accountShape),
-    appointment: PropTypes.shape(appointmentShape),
+    appointment: PropTypes.arrayOf(PropTypes.shape(appointmentShape)),
     reminder: PropTypes.shape(reminderShape),
   }).isRequired,
 };

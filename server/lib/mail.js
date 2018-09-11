@@ -24,8 +24,8 @@ export const sendConfirmationReminder = (config) => {
 
 export const sendTestEmailTemplate = (config) => {
   // This function is used only for testing
-  config.subject = 'Exciting New Updates';
-  config.templateName = 'General Introduction Announcement';
+  config.subject = 'Family Reminder';
+  config.templateName = 'test-html-template';
   return exports.sendTemplate(config);
 };
 
@@ -95,6 +95,12 @@ export const sendReview = (config) => {
   return exports.sendTemplate(config);
 };
 
+export const sendFamilyReminder = (config) => {
+  config.subject = 'Tell us about your experience.';
+  config.templateName = 'Patient Review';
+  return exports.sendTemplate(config);
+};
+
 export const sendMassOnlineBookingIntro = (config) => {
   config.subject = 'Online Booking Now Available';
   config.templateName = 'Online Booking Introduction';
@@ -141,6 +147,7 @@ export function sendTemplate(config) {
     replyTo,
     fromName = 'CareCru',
     attachments,
+    html,
   } = config;
 
   return new Promise((resolve, reject) => {
@@ -149,6 +156,8 @@ export function sendTemplate(config) {
       console.log(`TEST: Successfully sent the ${templateName} email to ${toEmail}`);
       return resolve({});
     }
+
+    const htmlObj = html ? { html } : {};
 
     mandrill.messages.sendTemplate(
       {
@@ -164,6 +173,7 @@ export function sendTemplate(config) {
 
         // Message Data
         message: {
+          ...htmlObj,
           from,
           subject,
           from_email: from,
@@ -175,9 +185,7 @@ export function sendTemplate(config) {
             },
           ],
 
-          headers: {
-            'Reply-To': replyTo,
-          },
+          headers: { 'Reply-To': replyTo },
 
           global_merge_vars: mergeVars.concat(defaultMergeVars),
           attachments,

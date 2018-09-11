@@ -268,7 +268,7 @@ export default function (sequelize, DataTypes) {
       Family,
       Review,
       SentReview,
-      SentReminder,
+      SentRemindersPatients,
       PatientUser,
       PatientRecall,
     } = models;
@@ -334,9 +334,9 @@ export default function (sequelize, DataTypes) {
       as: 'chats',
     });
 
-    Patient.hasMany(SentReminder, {
+    Patient.hasMany(SentRemindersPatients, {
       foreignKey: 'patientId',
-      as: 'sentReminders',
+      as: 'sentRemindersPatients',
     });
 
     Patient.hasMany(SentRecall, {

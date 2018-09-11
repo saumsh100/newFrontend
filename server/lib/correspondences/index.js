@@ -1,13 +1,14 @@
 
 import {
   Account,
-  Appointment,
   Correspondence,
-  SentReminder,
-  SentRecall,
-  SentReview,
-  Review,
+  Patient,
   Reminder,
+  Review,
+  SentRecall,
+  SentReminder,
+  SentRemindersPatients,
+  SentReview,
 } from '../../_models';
 import { namespaces } from '../../config/globals';
 import {
@@ -21,7 +22,7 @@ import batchCreate from '../../routes/util/batch';
 import bumpPendingAppointment from './bumpPendingAppointment';
 
 async function computeRemindersCorrespondencesAndCreate(accountId) {
-  let correspondences = await Correspondence.findAll({
+  const correspondences = await Correspondence.findAll({
     paranoid: false,
     where: {
       accountId,
@@ -37,34 +38,54 @@ async function computeRemindersCorrespondencesAndCreate(accountId) {
       isSent: true,
       id: { $notIn: sentReminderIds },
     },
-
-    include: [{ model: Reminder, as: 'reminder' }],
+    include: [
+      {
+        model: Reminder,
+        as: 'reminder',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+      {
+        model: SentRemindersPatients,
+        as: 'sentRemindersPatients',
+        required: true,
+        include: [
+          {
+            model: Patient,
+            as: 'patient',
+          },
+        ],
+      },
+    ],
   });
 
-  const correspondencesToCreate = sentReminders.map((sr) => {
-    return {
-      accountId: sr.accountId,
-      patientId: sr.patientId,
-      sentReminderId: sr.id,
-      appointmentId: sr.appointmentId,
-      method: sr.primaryType,
-      type: Correspondence.REMINDER_SENT_TYPE,
-      contactedAt: sr.createdAt,
-      note: reminderSent(sr),
-    };
-  });
+  const correspondencesToCreate = sentReminders
+    .reduce((toCreate, sr) => [
+      ...toCreate,
+      ...sr.sentRemindersPatients.map(srp => ({
+        accountId: sr.accountId,
+        patientId: srp.patientId,
+        sentReminderId: sr.id,
+        appointmentId: srp.appointmentId,
+        method: sr.primaryType,
+        type: Correspondence.REMINDER_SENT_TYPE,
+        contactedAt: sr.createdAt,
+        note: reminderSent(sr, srp.patient),
+      })),
+    ], []);
 
-  correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
-
-  if (correspondences[0]) {
-    correspondences = correspondences.map(c => c.id);
-    console.log(`Sending ${Correspondence.REMINDER_SENT_TYPE} ${correspondences.length} correspondences for account=${accountId}`);
-    global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
+  const createdCorrespondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+  if (createdCorrespondences.length > 0) {
+    const createdCorrespondencesIds = createdCorrespondences.map(c => c.id);
+    console.log(`Sending ${Correspondence.REMINDER_SENT_TYPE} ${createdCorrespondencesIds.length} correspondences for account=${accountId}`);
+    global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', createdCorrespondencesIds);
   }
 }
 
 async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
-  let correspondences = await Correspondence.findAll({
+  const correspondences = await Correspondence.findAll({
     paranoid: false,
     where: {
       accountId,
@@ -81,29 +102,49 @@ async function computeRemindersConfirmedCorrespondencesAndCreate(accountId) {
       id: { $notIn: sentReminderIds },
       isConfirmed: true,
     },
-
-    include: [{ model: Reminder, as: 'reminder' }],
+    include: [
+      {
+        model: Reminder,
+        as: 'reminder',
+      },
+      {
+        model: Patient,
+        as: 'patient',
+      },
+      {
+        model: SentRemindersPatients,
+        as: 'sentRemindersPatients',
+        required: true,
+        include: [
+          {
+            model: Patient,
+            as: 'patient',
+          },
+        ],
+      },
+    ],
   });
 
-  const correspondencesToCreate = sentReminders.map((sr) => {
-    return {
-      accountId: sr.accountId,
-      patientId: sr.patientId,
-      sentReminderId: sr.id,
-      appointmentId: sr.appointmentId,
-      method: sr.primaryType,
-      type: Correspondence.REMINDER_CONFIRMED_TYPE,
-      contactedAt: sr.updatedAt,
-      note: reminderConfirmed(sr),
-    };
-  });
+  const correspondencesToCreate = sentReminders
+    .reduce((toCreate, sr) => [
+      ...toCreate,
+      ...sr.sentRemindersPatients.map(srp => ({
+        accountId: sr.accountId,
+        patientId: srp.patientId,
+        sentReminderId: sr.id,
+        appointmentId: srp.appointmentId,
+        method: sr.primaryType,
+        type: Correspondence.REMINDER_CONFIRMED_TYPE,
+        contactedAt: sr.createdAt,
+        note: reminderConfirmed(sr, srp.patient),
+      })),
+    ], []);
 
-  correspondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
-
-  if (correspondences[0]) {
-    correspondences = correspondences.map(c => c.id);
-    console.log(`Sending ${Correspondence.REMINDER_CONFIRMED_TYPE} ${correspondences.length} correspondences for account=${accountId}`);
-    global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', correspondences);
+  const createdCorrespondences = await batchCreate(correspondencesToCreate, Correspondence, 'Correspondence');
+  if (createdCorrespondences.length > 0) {
+    const createdCorrespondencesIds = createdCorrespondences.map(c => c.id);
+    console.log(`Sending ${Correspondence.REMINDER_CONFIRMED_TYPE} ${createdCorrespondencesIds.length} correspondences for account=${accountId}`);
+    global.io.of(namespaces.sync).in(accountId).emit('CREATE:Correspondence', createdCorrespondencesIds);
   }
 }
 

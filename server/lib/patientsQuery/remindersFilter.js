@@ -1,5 +1,6 @@
+
 import moment from 'moment';
-import { Patient, SentReminder } from '../../_models';
+import { Patient, SentReminder, SentRemindersPatients } from 'CareCruModels';
 import { getIds, patientAttributes } from './helpers';
 
 export async function RemindersFilter({ data, key }, filterIds, query, accountId) {
@@ -7,9 +8,7 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
     let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
-      prevFilterIds = {
-        id: filterIds,
-      };
+      prevFilterIds = { id: filterIds };
     }
 
     const patientData = await Patient.findAndCountAll({
@@ -19,14 +18,12 @@ export async function RemindersFilter({ data, key }, filterIds, query, accountId
         ...prevFilterIds,
       },
       include: {
-        model: SentReminder,
-        as: 'sentReminders',
+        model: SentRemindersPatients,
+        as: 'sentRemindersPatients',
         where: {
           accountId,
           primaryType: key,
-          createdAt: {
-            $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()],
-          },
+          createdAt: { $between: [moment(data[0]).toISOString(), moment(data[1]).toISOString()] },
         },
         attributes: [],
         required: true,
@@ -51,9 +48,7 @@ export async function LastReminderFilter({ data }, filterIds, query, accountId) 
     let prevFilterIds = { id: { $not: null } };
 
     if (filterIds && filterIds.length) {
-      prevFilterIds = {
-        id: filterIds,
-      };
+      prevFilterIds = { id: filterIds };
     }
 
     const patientData = await SentReminder.findAll({
@@ -78,12 +73,12 @@ export async function LastReminderFilter({ data }, filterIds, query, accountId) 
       },
       group: [
         'patient.id',
-        'SentReminder.patientId',
+        'SentReminder.contactedPatientId',
         'SentReminder.createdAt',
         'SentReminder.primaryType',
       ],
       attributes: ['patient.id'],
-      order: [['patientId', 'desc'], ['createdAt', 'desc']],
+      order: [['contactedPatientId', 'desc'], ['createdAt', 'desc']],
       raw: true,
     });
 

@@ -1,182 +1,116 @@
 
 const normalizr = require('normalizr');
 
-const schema = normalizr.schema;
+const { schema } = normalizr;
 
-const accountSchema = () => {
-  return new schema.Entity('accounts', {
-    users: [userSchema()],
-    practitioners: [_practitionerSchema],
-    services: [_serviceSchema],
-    weeklySchedule: weeklyScheduleSchema(),
-    address: addressSchema(),
-  });
-};
+const accountSchema = () => new schema.Entity('accounts', {
+  users: [userSchema()],
+  practitioners: [_practitionerSchema],
+  services: [_serviceSchema],
+  weeklySchedule: weeklyScheduleSchema(),
+  address: addressSchema(),
+});
 
-const addressSchema = () => {
-  return new schema.Entity('addresses');
-};
+const addressSchema = () => new schema.Entity('addresses');
 
-const appointmentSchema = () => {
-  return new schema.Entity('appointments', {
-    patient: patientSchema(),
-    service: serviceSchema(),
-    practitioner: practitionerSchema(),
-  });
-};
+const appointmentSchema = () => new schema.Entity('appointments', {
+  patient: patientSchema(),
+  service: serviceSchema(),
+  practitioner: practitionerSchema(),
+});
 
-const callSchema = () => {
-  return new schema.Entity('calls', {
-    patient: patientSchema(),
-  });
-};
+const callSchema = () => new schema.Entity('calls', { patient: patientSchema() });
 
-const chairSchema = () => {
-  return new schema.Entity('chairs');
-};
+const chairSchema = () => new schema.Entity('chairs');
 
-const dailyScheduleSchema = () => {
-  return new schema.Entity('dailySchedules');
-};
+const dailyScheduleSchema = () => new schema.Entity('dailySchedules');
 
 const enterpriseSchema = () =>
   new schema.Entity('enterprises');
 
-const eventsSchema = () => {
-  return new schema.Entity('events');
-};
+const eventsSchema = () => new schema.Entity('events');
 
-const chatSchema = () => {
-  return new schema.Entity('chats', {
-    account: accountSchema(),
-    patient: patientSchema(),
-    textMessages: [textMessageSchema()],
-  });
-};
+const chatSchema = () => new schema.Entity('chats', {
+  account: accountSchema(),
+  patient: patientSchema(),
+  textMessages: [textMessageSchema()],
+});
 
-const unreadChatSchema = () => {
-  return new schema.Entity('chats', {
-    account: accountSchema(),
-    patient: patientSchema(),
-  });
-}
+const unreadChatSchema = () => new schema.Entity('chats', {
+  account: accountSchema(),
+  patient: patientSchema(),
+});
 
-const patientSingleSchema = () => {
-  return new schema.Entity('patient');
-};
+const patientSingleSchema = () => new schema.Entity('patient');
 
-const patientSchema = () => {
-  return new schema.Entity('patients', {
-    patientUser: patientUserSchema(),
-    chats: [_chatSchema],
-  });
-};
+const patientSchema = () => new schema.Entity('patients', {
+  patientUser: patientUserSchema(),
+  chats: [_chatSchema],
+});
 
-const familySchema = () => {
-  return new schema.Entity('families', {
-    patients: [patientSchema()],
-  });
-};
+const familySchema = () => new schema.Entity('families', { patients: [patientSchema()] });
 
-const permissionSchema = () => {
-  return new schema.Entity('permissions');
-};
+const permissionSchema = () => new schema.Entity('permissions');
 
-const patientUserSchema = () => {
-  return new schema.Entity('patientUsers')
-}
+const patientUserSchema = () => new schema.Entity('patientUsers');
 
-const requestSchema = () => {
-  return new schema.Entity('requests', {
-    patientUser: patientUserSchema(),
-    service: serviceSchema(),
-    practitioner: practitionerSchema(),
-    chair: chairSchema(),
-    requestingPatientUser: patientUserSchema(),
-  });
-};
+const requestSchema = () => new schema.Entity('requests', {
+  patientUser: patientUserSchema(),
+  service: serviceSchema(),
+  practitioner: practitionerSchema(),
+  chair: chairSchema(),
+  requestingPatientUser: patientUserSchema(),
+});
 
-const inviteSchema = () => {
-  return new schema.Entity('invites');
-};
+const inviteSchema = () => new schema.Entity('invites');
 
-const textMessageSchema = () => {
-  return new schema.Entity('textMessages');
-};
+const textMessageSchema = () => new schema.Entity('textMessages');
 
-const userSchema = () => {
-  return new schema.Entity('users', {
-    permission: permissionSchema(),
-  });
-};
+const userSchema = () => new schema.Entity('users', { permission: permissionSchema() });
 
-const syncClientErrorSchema = () => {
-  return new schema.Entity('syncClientError');
-};
+const syncClientErrorSchema = () => new schema.Entity('syncClientError');
 
-const weeklyScheduleSchema = () => {
-  return new schema.Entity('weeklySchedules');
-};
+const weeklyScheduleSchema = () => new schema.Entity('weeklySchedules');
 
-const deliveredProcedureSchema = () => {
-  return new schema.Entity('deliveredProcedures');
-};
+const deliveredProcedureSchema = () => new schema.Entity('deliveredProcedures');
 
-const practitionerSchema = () => {
-  return new schema.Entity('practitioners', {
-    weeklySchedule: weeklyScheduleSchema(),
-    services: [_serviceSchema],
-    recurringTimeOffs: [practitionerRecurringTimeOffsSchema()],
-  });
-};
+const practitionerSchema = () => new schema.Entity('practitioners', {
+  weeklySchedule: weeklyScheduleSchema(),
+  services: [_serviceSchema],
+  recurringTimeOffs: [practitionerRecurringTimeOffsSchema()],
+});
 
-const practitionerRecurringTimeOffsSchema = () => {
-  return new schema.Entity('practitionerRecurringTimeOffs');
-};
+const practitionerRecurringTimeOffsSchema = () => new schema.Entity('practitionerRecurringTimeOffs');
 
-const serviceSchema = () => {
-  return new schema.Entity('services', {
-    practitioners: [_practitionerSchema],
-  });
-};
+const serviceSchema = () => new schema.Entity('services', { practitioners: [_practitionerSchema] });
 
-const reservationSchema = () => {
-  return new schema.Entity('reservations');
-};
+const reservationSchema = () => new schema.Entity('reservations');
 
-const waitSpotSchema = () => {
-  return new schema.Entity('waitSpots', {
-    patient: patientSchema(),
-    patientUser: patientUserSchema(),
-  });
-};
+const waitSpotSchema = () => new schema.Entity('waitSpots', {
+  patient: patientSchema(),
+  patientUser: patientUserSchema(),
+});
 
-const reminderSchema = () => {
-  return new schema.Entity('reminders');
-};
+const reminderSchema = () => new schema.Entity('reminders');
 
-const recallSchema = () => {
-  return new schema.Entity('recalls');
-};
+const recallSchema = () => new schema.Entity('recalls');
 
-const sentReminderSchema = () => {
-  return new schema.Entity('sentReminders', {
-    appointment: appointmentSchema(),
-    reminder: reminderSchema(),
-    patient: patientSchema(),
-  });
-};
+const sentReminderSchema = () => new schema.Entity('sentReminders', {
+  reminder: reminderSchema(),
+  sentReminders: sentReminderPatientsSchema(),
+});
 
-const sentRecallSchema = () => {
-  return new schema.Entity('sentRecalls', {
-    recall: recallSchema(),
-    patient: patientSchema(),
-  });
-};
+const sentReminderPatientsSchema = () => new schema.Entity('sentReminderPatients', {
+  appointment: appointmentSchema(),
+  patient: patientSchema(),
+});
 
-const patientRecallSchema = () => {
-  return new schema.Entity('patientRecalls');
-};
+const sentRecallSchema = () => new schema.Entity('sentRecalls', {
+  recall: recallSchema(),
+  patient: patientSchema(),
+});
+
+const patientRecallSchema = () => new schema.Entity('patientRecalls');
 
 var _practitionerSchema = practitionerSchema();
 var _serviceSchema = serviceSchema();
@@ -213,6 +147,7 @@ const SCHEMAS = {
   waitSpot: waitSpotSchema(),
   weeklySchedule: weeklyScheduleSchema(),
   sentReminder: sentReminderSchema(),
+  sentReminderPatients: sentReminderPatientsSchema(),
   sentRecall: sentRecallSchema(),
   // Collections (list/find)
   accounts: [accountSchema()],

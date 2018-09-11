@@ -3,15 +3,22 @@ import moment from 'moment';
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Appointment, Account, Address, WeeklySchedule, Family, Reminder, SentReminder, Patient } from '../../../server/_models';
+import {
+  Appointment,
+  Account,
+  WeeklySchedule,
+  Family,
+  Reminder,
+  SentReminder,
+  SentRemindersPatients,
+  Patient,
+} from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
-import { wipeTestPatients } from '../../util/seedTestPatients';
-import { wipeTestPractitioners } from '../../util/seedTestPractitioners';
-import { patientId } from '../../util/seedTestPatients';
+import { wipeTestPatients, patientId } from '../../util/seedTestPatients';
+import { wipeTestPractitioners, practitionerId } from '../../util/seedTestPractitioners';
 import { appointment, appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
-import { weeklyScheduleId, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
-import { practitionerId } from '../../util/seedTestPractitioners';
+import { weeklyScheduleId } from '../../util/seedTestWeeklySchedules';
 import { omitPropertiesFromBody, omitProperties } from '../../util/selectors';
 
 const batchAppointmentId = '04148c65-292d-4d06-8801-d8061cec7b12';
@@ -37,9 +44,7 @@ const batchAppointment = {
   endDate: '2017-07-21T00:16:30.932Z',
   patientId,
   practitionerId,
-  appointmentCodes: [{
-    code: '111111',
-  }],
+  appointmentCodes: [{ code: '111111' }],
   isSyncedWithPms: false,
   isReminderSent: true,
   isDeleted: false,
@@ -98,20 +103,21 @@ const makeApptData = (data = {}) => Object.assign({
   practitionerId,
 }, data);
 
-const makePatientData = (data = {}) => Object.assign({
-  accountId,
-}, data);
+const makePatientData = (data = {}) => Object.assign({ accountId }, data);
 
-const makeFamilyData = (data = {}) => Object.assign({
-  accountId,
-}, data);
+const makeFamilyData = (data = {}) => Object.assign({ accountId }, data);
 
 const makeSentReminderData = (data = {}) => Object.assign({
   // Doesnt even have to match reminder for this test
-  patientId,
   accountId,
+  contactedPatientId: patientId,
   lengthSeconds: 86400,
   primaryType: 'sms',
+}, data);
+
+const makeSentRemindersPatientsData = (data = {}) => Object.assign({
+  // Doesnt even have to match reminder for this test
+  patientId,
 }, data);
 
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
@@ -127,7 +133,10 @@ describe('/api/appointments', () => {
     await seedTestUsers();
     await seedTestAppointments();
     await Account.update({ weeklyScheduleId }, { where: { id: accountId } }).catch(err => console.log(err));
-    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateToken({
+      username: 'manager@test.com',
+      password: '!@CityOfBudaTest#$',
+    });
   });
 
   afterAll(async () => {
@@ -166,11 +175,12 @@ describe('/api/appointments', () => {
       .expect(200)
       .then(({ body }) => {
         body = omitPropertiesFromBody(body);
-        const {
-          data, age, entities, months,
-        } = omitPropertiesFromBody(body);
+        const { data, age, entities, months } = omitPropertiesFromBody(body);
         expect({
-          age, data: data.sort(), entities, months: months.sort(),
+          age,
+          data: data.sort(),
+          entities,
+          months: months.sort(),
         }).toMatchSnapshot();
       }));
 
@@ -255,6 +265,7 @@ describe('/api/appointments', () => {
 
   describe('GET /insights', () => {
     afterEach(async () => {
+      await wipeModel(SentRemindersPatients);
       await wipeModel(SentReminder);
       await wipeModel(Reminder);
       await wipeModel(Appointment);
@@ -274,18 +285,28 @@ describe('/api/appointments', () => {
       }));
 
       const reminder1 = await Reminder.create({
-        accountId, primaryType: 'sms', lengthSeconds: 1086410, interval: '6 months',
+        accountId,
+        primaryType: 'sms',
+        lengthSeconds: 1086410,
+        interval: '6 months',
       });
 
       const appts = await Appointment.bulkCreate([
-        makeApptData({ ...dates(2017, 5, 19, 8), patientId: pat.id }),
+        makeApptData({
+          ...dates(2017, 5, 19, 8),
+          patientId: pat.id,
+        }),
       ]);
 
-      await SentReminder.create(makeSentReminderData({
+      const sentReminder1 = await SentReminder.create(makeSentReminderData({
         reminderId: reminder1.id,
-        appointmentId: appts[0].id,
         lengthSeconds: 1086410,
         isSent: true,
+      }));
+
+      await SentRemindersPatients.create(makeSentRemindersPatientsData({
+        sentRemindersId: sentReminder1.id,
+        appointmentId: appts[0].id,
       }));
 
       return request(app)
@@ -375,9 +396,7 @@ describe('/api/appointments', () => {
     test('/batch - 4 appointments created successfully', () => request(app)
       .post(`${rootUrl}/batch`)
       .set('Authorization', `Bearer ${token}`)
-      .send({
-        appointments: [batchAppointment, batchAppointment2, batchAppointment3, batchAppointment4],
-      })
+      .send({ appointments: [batchAppointment, batchAppointment2, batchAppointment3, batchAppointment4] })
       .expect(201)
       .then(({ body }) => {
         body = omitPropertiesFromBody(body);
@@ -388,9 +407,7 @@ describe('/api/appointments', () => {
     test('/batch - 1 invalid appointment, 3 valid appointments', () => request(app)
       .post(`${rootUrl}/batch`)
       .set('Authorization', `Bearer ${token}`)
-      .send({
-        appointments: [invalidBatchAppointment, batchAppointment2, batchAppointment3, batchAppointment4],
-      })
+      .send({ appointments: [invalidBatchAppointment, batchAppointment2, batchAppointment3, batchAppointment4] })
       .expect(400)
       .then(({ body }) => {
         body = omitPropertiesFromBody(body);
@@ -421,9 +438,7 @@ describe('/api/appointments', () => {
     test('/connector/batch - update 1 appointment', () => {
       const updateAppointment = appointment;
       appointment.isReminderSent = false;
-      appointment.appointmentCodes = [{
-        code: '111111',
-      }];
+      appointment.appointmentCodes = [{ code: '111111' }];
       return request(app)
         .put(`${rootUrl}/connector/batch`)
         .set('Authorization', `Bearer ${token}`)
@@ -441,9 +456,7 @@ describe('/api/appointments', () => {
     test('/:appointmentId - update appointment', () => request(app)
       .put(`${rootUrl}/${appointmentId}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({
-        isSyncedWithPms: true,
-      })
+      .send({ isSyncedWithPms: true })
       .expect(201)
       .then(({ body }) => {
         body = omitPropertiesFromBody(body);

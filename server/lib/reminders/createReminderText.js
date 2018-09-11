@@ -172,7 +172,7 @@ export function getReminderTemplateName({ isConfirmable, reminder, account }) {
 
   const type = getReminderType({ reminder, account });
   const isCustomConfirm = reminder.isCustomConfirm ? 'Preconfirmed' : 'Unconfirmed';
-  const confirmType = isConfirmable === 'true' ? isCustomConfirm : 'Confirmed';
+  const confirmType = JSON.parse(isConfirmable) ? isCustomConfirm : 'Confirmed';
 
   return `Patient Reminder - ${typeMap[type]} - ${confirmType}`;
 }

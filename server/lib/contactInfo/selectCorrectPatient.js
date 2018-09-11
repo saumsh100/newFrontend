@@ -16,7 +16,6 @@ const isHead = (family, patient) => family.accountId === patient.accountId &&
  *
  * @param patients - family data if on the object by patient.family
  * @return patient || null
- *
  */
 module.exports = function selectCorrectPatient(patients) {
   // Early return if no patients in array

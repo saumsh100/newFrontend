@@ -1,7 +1,8 @@
 
-import { getIsConfirmable } from '../reminders/sendReminder';
+import cap from '../../../iso/helpers/string/capitalize';
+import { getTemplateSubType } from './templates/helpers';
+import getReminderTemplate from './templates/reminders';
 
-const cap = str => str.replace(/\b\w/g, l => l.toUpperCase());
 const typeMap = {
   email: 'Email',
   sms: 'SMS',
@@ -14,19 +15,41 @@ const typeMap = {
  * @param sentReminder
  * @return {string}
  */
-export function reminderSent(sentReminder) {
-  const {
-    interval,
-    primaryType,
-    isConfirmable,
-    reminder = {},
-  } = sentReminder;
+export function reminderSent({
+  interval,
+  primaryType,
+  isConfirmable,
+  contactedPatientId,
+  isFamily,
+  patient: { firstName, lastName },
+  reminder = {},
+}, { id: appointmentPatientId }) {
   const { isCustomConfirm } = reminder;
-  const type = isConfirmable ?
-    (isCustomConfirm ? 'Unpreconfirmed' : 'Unconfirmed') :
-    (isCustomConfirm ? 'Pre-Confirmed' : 'Confirmed');
 
-  return `Sent "${cap(interval)} ${typeMap[primaryType]} ${type}" Reminder for Appointment via CareCru`;
+  const reminderTypeMap = {
+    0: {
+      0: 'Confirmed',
+      1: 'Pre-Confirmed',
+    },
+    1: {
+      0: 'Unconfirmed',
+      1: 'Unpreconfirmed',
+    },
+  };
+
+  const type = reminderTypeMap[Number(isConfirmable)][Number(isCustomConfirm)];
+
+  const reminderType = `${cap(interval)} ${typeMap[primaryType]} ${type}`;
+  const subType = getTemplateSubType({
+    isFamily,
+    contactedPatientId,
+    appointmentPatientId,
+  });
+
+  return getReminderTemplate('sent')(subType)({
+    reminderType,
+    contactedPatientName: `${firstName} ${lastName}`,
+  });
 }
 
 /**
@@ -35,14 +58,33 @@ export function reminderSent(sentReminder) {
  * @param sentReminder
  * @return {string}
  */
-export function reminderConfirmed(sentReminder) {
-  const {
-    interval,
-    primaryType,
-    reminder = {},
-  } = sentReminder;
-  const action = reminder.isCustomConfirm ? 'Pre-Confirmed' : 'Confirmed';
-  return `Patient ${action} "${cap(interval)} ${typeMap[primaryType]}" Reminder for Appointment via CareCru`;
+export function reminderConfirmed({
+  interval,
+  primaryType,
+  contactedPatientId,
+  isFamily,
+  patient: { firstName, lastName },
+  reminder = {},
+}, {
+  id: appointmentPatientId,
+  firstName: pFirstName,
+  lastName: pLastName,
+}) {
+  const { isCustomConfirm } = reminder;
+  const action = isCustomConfirm ? 'Pre-Confirmed' : 'Confirmed';
+  const reminderType = `${cap(interval)} ${typeMap[primaryType]}`;
+  const subType = getTemplateSubType({
+    isFamily,
+    contactedPatientId,
+    appointmentPatientId,
+  });
+
+  return getReminderTemplate('confirmed')(subType)({
+    action,
+    reminderType,
+    contactedPatientName: `${firstName} ${lastName}`,
+    appointmentPatientName: `${pFirstName} ${pLastName}`,
+  });
 }
 
 /**

@@ -20,9 +20,7 @@ const sequelizeConfig = {
 // Don't use NODE_ENV===production
 // It doesn't let us debug production locally easily
 if (postgres.ssl) {
-  sequelizeConfig.dialectOptions = {
-    ssl: true,
-  };
+  sequelizeConfig.dialectOptions = { ssl: true };
 }
 
 // If true, sequelize will dump all PostgreSQL queries into terminal
@@ -42,11 +40,7 @@ const sequelize = new Sequelize(
 sequelize
   .authenticate()
   .then(() => {
-    console.log(
-      `Sequelize connected to database=${postgres.database} at host:port=${postgres.host}:${
-        postgres.port
-      }`,
-    );
+    console.log(`Sequelize connected to database=${postgres.database} at host:port=${postgres.host}:${postgres.port}`);
   })
   .catch((err) => {
     console.error('postgres config', postgres);
@@ -95,6 +89,7 @@ models.push(require('./Review').default(sequelize, Sequelize));
 models.push(require('./Segment').default(sequelize, Sequelize));
 models.push(require('./SentRecall').default(sequelize, Sequelize));
 models.push(require('./SentReminder').default(sequelize, Sequelize));
+models.push(require('./SentRemindersPatients').default(sequelize, Sequelize));
 models.push(require('./SentReview').default(sequelize, Sequelize));
 models.push(require('./Service').default(sequelize, Sequelize));
 models.push(require('./SyncClientError').default(sequelize, Sequelize));
