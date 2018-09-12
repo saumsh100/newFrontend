@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.4.7",
+  "version": "2.4.8",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -16,10 +16,10 @@
     "server:build:prod": "webpack --config ./webpack/server/webpack.config.js",
     "build:dist": "node server/bin/deploy.js",
     "console": "node server/bin/console.js",
-    "seeds": "babel-node ./server/bin/seeds.js",
     "rebuild": "export $(cat .env | xargs) && sequelize db:migrate:undo:all && sequelize db:migrate",
-    "rebuild:seed": "npm run rebuild && sequelize db:seed:all",
     "start": "nf start -w -j Procfile_dev",
+    "seed": "export $(cat .env | xargs) && sequelize db:seed:all",
+    "rebuild:seed": "npm run rebuild && npm run seed",
     "startdev": "nf start -j Procfile_dev_no_reminders",
     "start:frontend:dev": "nf start -w -j Procfile",
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
