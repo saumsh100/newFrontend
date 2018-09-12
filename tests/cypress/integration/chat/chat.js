@@ -128,6 +128,7 @@ describe('Chat Tests', () => {
       .click({ force: true })
       .wait(1000)
       .get('[data-test-id="chat_unreadDots"]')
+      .first()
       .trigger('mouseover')
       .get('[data-test-id="chat_markUnreadBtn"]')
       .click({ force: true })

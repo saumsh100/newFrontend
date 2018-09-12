@@ -21,9 +21,7 @@ class AutoCompleteForm extends Component {
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     this.displayField = this.displayField.bind(this);
-    this.state = {
-      suggestions: [],
-    };
+    this.state = { suggestions: [] };
 
     this.getSuggestions = debounce(this.onSuggestionsFetchRequested, 300);
   }
@@ -38,17 +36,13 @@ class AutoCompleteForm extends Component {
   // You already implemented this logic above, so just use it.
   onSuggestionsFetchRequested({ value }) {
     return this.props.getSuggestions(value).then((value2) => {
-      this.setState({
-        suggestions: value2,
-      });
+      this.setState({ suggestions: value2 });
     });
   }
 
   // Autosuggest will call this function every time you need to clear suggestions.
   onSuggestionsClearRequested() {
-    this.setState({
-      suggestions: [],
-    });
+    this.setState({ suggestions: [] });
   }
 
   // TODO: is this really necessary
@@ -58,17 +52,16 @@ class AutoCompleteForm extends Component {
       props.className = this.props.className;
     }
     props.theme = this.props.theme;
-    props.ref = this.props.refCallBack;
 
     return (
       <Input
         {...props}
-        ref={null}
         refCallBack={(node) => {
           this.inputComponent = node;
           return null;
         }}
         data-test-id={this.props['data-test-id']}
+        ref={() => props.ref(this.inputComponent)}
       />
     );
   }

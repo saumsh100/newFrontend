@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.4.6",
+  "version": "2.4.7",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -174,7 +174,7 @@
     "rc-tooltip": "^3.4.2",
     "react": "^15.4.2",
     "react-apollo": "^2.1.11",
-    "react-autosuggest": "^9.0.1",
+    "react-autosuggest": "9.4.0",
     "react-chartjs-2": "^1.5.0",
     "react-click-outside": "^2.2.0",
     "react-color": "^2.12.0",
