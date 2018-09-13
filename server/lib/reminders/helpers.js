@@ -416,7 +416,7 @@ export function isAppointmentConfirmed(appointment, reminder) {
  * @param date
  * @return [sentReminders]
  */
-export async function getValidSmsReminders({ accountId, patientId, date }) {
+export async function getValidSmsReminders({ accountId, patientId, date = (new Date()).toISOString() }) {
   // Confirming valid SMS Reminder for patient
   const sentReminders = await SentReminder.findAll({
     where: {
@@ -426,44 +426,41 @@ export async function getValidSmsReminders({ accountId, patientId, date }) {
       isConfirmable: true,
       primaryType: 'sms',
     },
-    order: [['createdAt', 'asc']],
-  });
-
-  if (sentReminders.length === 0) return [];
-
-  const sentRemindersPatients = await SentRemindersPatients.findAll({
-    where: { sentRemindersId: sentReminders[0].id },
     include: [
       {
-        model: Appointment,
-        as: 'appointment',
-      },
-      {
-        model: Patient,
-        as: 'patient',
-        attributes: ['firstName'],
-      },
-      {
-        model: SentReminder,
-        as: 'sentReminder',
+        model: Reminder,
+        as: 'reminder',
         required: true,
-        where: { accountId },
+      },
+      {
+        model: SentRemindersPatients,
+        as: 'sentRemindersPatients',
+        required: true,
         include: [
           {
-            model: Reminder,
-            as: 'reminder',
+            model: Appointment,
+            as: 'appointment',
+            required: true,
+            where: {
+              startDate: { $gt: date },
+              isCancelled: false,
+              isDeleted: false,
+              isPending: false,
+              isMissed: false,
+            },
+          },
+          {
+            model: Patient,
+            as: 'patient',
+            attributes: ['firstName'],
           },
         ],
       },
     ],
+    order: [['createdAt', 'asc']],
   });
 
-  return sentRemindersPatients.filter(({ appointment }) =>
-    moment(appointment.startDate).isAfter(date) &&
-      !appointment.isCancelled &&
-      !appointment.isDeleted &&
-      !appointment.isPending &&
-      !appointment.isMissed);
+  return sentReminders.filter(({ sentRemindersPatients }) => sentRemindersPatients.length > 0);
 }
 
 /**
@@ -573,10 +570,11 @@ export function generateIsActiveReminder({ account, startDate, endDate }) {
  * @param patientId
  * @returns {Promise<*>}
  */
-export async function confirmReminderIfExist(accountId, patientId) {
-  const validSmsReminders = await getValidSmsReminders({
+export async function confirmReminderIfExist(accountId, patientId, date) {
+  const validSmsReminders = await exports.getValidSmsReminders({
     patientId,
     accountId,
+    date,
   });
 
   // Early return if no reminders found
@@ -585,13 +583,13 @@ export async function confirmReminderIfExist(accountId, patientId) {
   }
 
   // Confirm first available reminder
-  const { sentReminder } = validSmsReminders[0];
-
+  const sentReminder = validSmsReminders[0];
   await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.get('id') } });
 
   // Confirm all appointments for that reminder
-  await Promise.all(validSmsReminders.map(({ appointment, sentReminder: { reminder } }) =>
-    appointment.confirm(reminder.get({ plain: true }))));
+  await Promise.all(sentReminder.sentRemindersPatients
+    .map(({ appointment }) =>
+      appointment.confirm(sentReminder.reminder.get({ plain: true }))));
 
   return validSmsReminders;
 }

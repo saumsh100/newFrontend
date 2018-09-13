@@ -19,6 +19,7 @@ import {
   getAppointmentsFromReminder,
   shouldSendReminder,
   getValidSmsReminders,
+  confirmReminderIfExist,
 } from '../../../../server/lib/reminders/helpers';
 import { tzIso } from '../../../../server/util/time';
 import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
@@ -53,6 +54,76 @@ const dates = (y, m, d, h) => {
 };
 
 const td = d => tzIso(d, TIME_ZONE);
+
+const seedWithNonConfirmableAppointments = async ({ reminder, appointments }) => {
+  // Seed 3 SentReminders for the patient
+  const sentReminder1 = await SentReminder.create(makeSentReminderData({
+    reminderId: reminder.id,
+    createdAt: date(2017, 7, 4, 1),
+  }));
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder1.id,
+    appointmentId: appointments[5].id,
+    patientId,
+  });
+
+  const sentReminder2 = await SentReminder.create(makeSentReminderData({
+    reminderId: reminder.id,
+    createdAt: date(2017, 7, 4, 2),
+  }));
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder2.id,
+    appointmentId: appointments[6].id,
+    patientId,
+  });
+
+  const sentReminder3 = await SentReminder.create(makeSentReminderData({
+    reminderId: reminder.id,
+    createdAt: date(2017, 7, 4, 3),
+  }));
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder3.id,
+    appointmentId: appointments[7].id,
+    patientId,
+  });
+  
+  const sentReminder4 = await SentReminder.create(makeSentReminderData({
+    reminderId: reminder.id,
+    createdAt: date(2017, 7, 4, 4),
+  }));
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder4.id,
+    appointmentId: appointments[8].id,
+    patientId,
+  });
+
+  const sentReminder5 = await SentReminder.create(makeSentReminderData({
+    reminderId: reminder.id,
+    createdAt: date(2017, 7, 4, 5),
+  }));
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder5.id,
+    appointmentId: appointments[9].id,
+    patientId,
+  });
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder5.id,
+    appointmentId: appointments[11].id,
+    patientId,
+  });
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder5.id,
+    appointmentId: appointments[10].id,
+    patientId,
+  });
+};
 
 describe('RemindersList Calculation Library', () => {
   beforeEach(async () => {
@@ -728,14 +799,31 @@ describe('RemindersList Calculation Library', () => {
       let reminder;
       let appointments;
       beforeEach(async () => {
-        reminder = await Reminder.create({ accountId, primaryTypes: ['sms'], interval: '86400 seconds' });
+        reminder = await Reminder.create({
+          accountId,
+          primaryTypes: ['sms'],
+          interval: '86400 seconds',
+        });
+
         appointments = await Appointment.bulkCreate([
           makeApptData({ ...dates(2017, 7, 5, 8) }), // Today at 8
           makeApptData({ ...dates(2017, 7, 5, 9) }), // Today at 9
           makeApptData({ ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
           makeApptData({ isCancelled: true, ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
           makeApptData({ isShortCancelled: true, ...dates(2017, 7, 6, 10) }), // Tomorrow at 10
+          makeApptData({ isCancelled: true, ...dates(2017, 7, 7, 10) }), // 7th at 10 Cancelled
+          makeApptData({ isDeleted: true, ...dates(2017, 7, 8, 10) }), // 8th at 10 Deleted
+          makeApptData({ isPending: true, ...dates(2017, 7, 9, 10) }), // 9th at 10 Pending
+          makeApptData({ isMissed: true, ...dates(2017, 7, 10, 10) }), // 10th at 10 Missed
+          makeApptData({ isCancelled: true, ...dates(2017, 7, 10, 11) }), // 10th at 11 Canceled
+          makeApptData({ ...dates(2017, 7, 10, 12) }), // 10th at 12 Confirmable
+          makeApptData({ ...dates(2017, 7, 5, 7) }), // 5th at 7 Confirmable but old
         ]);
+      });
+
+      afterEach(async () => {
+        wipeModel(SentRemindersPatients);
+        wipeModel(SentReminder);
       });
 
       test('should return [] for no validSmsReminders', async () => {
@@ -790,7 +878,7 @@ describe('RemindersList Calculation Library', () => {
         expect(r.length).toBe(1);
       });
 
-      test.skip('should respect createdAt order', async () => {
+      test('should respect createdAt order', async () => {
         // Seed 3 SentReminders for the patient
         const sentReminder1 = await SentReminder.create(makeSentReminderData({
           reminderId: reminder.id,
@@ -816,7 +904,7 @@ describe('RemindersList Calculation Library', () => {
 
         const sentReminder3 = await SentReminder.create(makeSentReminderData({
           reminderId: reminder.id,
-          primaryType: 'phone',
+          createdAt: date(2017, 7, 4, 3),
         }));
 
         await SentRemindersPatients.create({
@@ -831,7 +919,137 @@ describe('RemindersList Calculation Library', () => {
           date: date(2017, 7, 5, 7),
         });
 
+        expect(r).toHaveLength(3);
         expect(moment(r[0].createdAt).isBefore(r[1].createdAt)).toBe(true);
+      });
+
+      test('should get next available reminder to confirm is appointments can\'t be confirmable', async () => {
+        await seedWithNonConfirmableAppointments({
+          reminder,
+          appointments,
+        });
+
+        const r = await getValidSmsReminders({
+          patientId,
+          accountId,
+          date: date(2017, 7, 5, 7),
+        });
+
+        expect(r).toHaveLength(1);
+        expect(r[0].sentRemindersPatients[0].appointmentId).toBe(appointments[10].id);
+      });
+    });
+    
+    describe('#confirmReminderIfExist', async () => {
+      test('should be a function', () => {
+        expect(typeof confirmReminderIfExist).toBe('function');
+      });
+
+      let reminder;
+      let appointments;
+      beforeEach(async () => {
+        reminder = await Reminder.create({
+          accountId,
+          primaryTypes: ['sms'],
+          interval: '86400 seconds',
+        });
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 10, 10) }), // 10th at 10 Confirmable
+          makeApptData({ ...dates(2017, 7, 10, 11) }), // 10th at 11 Confirmable
+          makeApptData({ ...dates(2017, 7, 10, 12) }), // 10th at 12 Confirmable
+        ]);
+      });
+
+      afterEach(async () => {
+        wipeModel(SentRemindersPatients);
+        wipeModel(SentReminder);
+        wipeModel(Appointment);
+      });
+
+      test('Should confirm a single appointment reminder', async () => {
+        const sentReminder1 = await SentReminder.create(makeSentReminderData({
+          reminderId: reminder.id,
+          createdAt: date(2017, 7, 4, 5),
+        }));
+      
+        await SentRemindersPatients.create({
+          sentRemindersId: sentReminder1.id,
+          appointmentId: appointments[0].id,
+          patientId,
+        });
+        
+        const validSmsReminders =
+          await confirmReminderIfExist(accountId, patientId, date(2017, 7, 5, 7));
+        const confirmedSentReminder = await SentReminder.findOne({
+          where: { id: sentReminder1.id },
+          include: [
+            {
+              model: SentRemindersPatients,
+              as: 'sentRemindersPatients',
+              include: [
+                {
+                  model: Appointment,
+                  as: 'appointment',
+                },
+              ],
+            },
+          ],
+        });
+
+        expect(validSmsReminders).toHaveLength(1);
+        expect(confirmedSentReminder.isConfirmed).toBeTruthy();
+        expect(confirmedSentReminder.sentRemindersPatients[0].appointment.isPatientConfirmed)
+          .toBeTruthy();
+      });
+
+      test('Should confirm a multiple appointments reminder', async () => {
+        const sentReminder1 = await SentReminder.create(makeSentReminderData({
+          reminderId: reminder.id,
+          createdAt: date(2017, 7, 4, 5),
+        }));
+      
+        await SentRemindersPatients.create({
+          sentRemindersId: sentReminder1.id,
+          appointmentId: appointments[0].id,
+          patientId,
+        });
+        
+        await SentRemindersPatients.create({
+          sentRemindersId: sentReminder1.id,
+          appointmentId: appointments[1].id,
+          patientId,
+        });
+
+        await SentRemindersPatients.create({
+          sentRemindersId: sentReminder1.id,
+          appointmentId: appointments[2].id,
+          patientId,
+        });
+
+        const validSmsReminders =
+          await confirmReminderIfExist(accountId, patientId, date(2017, 7, 5, 7));
+        const confirmedSentReminder = await SentReminder.findOne({
+          where: { id: sentReminder1.id },
+          include: [
+            {
+              model: SentRemindersPatients,
+              as: 'sentRemindersPatients',
+              include: [
+                {
+                  model: Appointment,
+                  as: 'appointment',
+                },
+              ],
+            },
+          ],
+        });
+
+        expect(validSmsReminders).toHaveLength(1);
+        expect(confirmedSentReminder.isConfirmed).toBeTruthy();
+        confirmedSentReminder.sentRemindersPatients.forEach(({ appointment }) => {
+          expect(appointment.isPatientConfirmed).toBeTruthy();
+        });
       });
     });
   });

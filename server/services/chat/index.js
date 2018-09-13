@@ -63,22 +63,23 @@ export async function receiveMessage(account, textMessageData) {
   }
 
   // Confirm first available reminder
-  const sentRemindersPatients = await confirmReminderIfExist(account.id, patient.id);
-  const firstSentReminderPatient = sentRemindersPatients[0];
-  if (sentRemindersPatients.length === 0 || !firstSentReminderPatient.sentReminder) {
+  const sentReminders = await confirmReminderIfExist(account.id, patient.id);
+  const firstSentReminder = sentReminders[0];
+  if (!firstSentReminder || firstSentReminder.sentRemindersPatients.length === 0) {
     logger.debug('No reminders to confirm, exiting.');
     await updateUserViaSocket(chatClean.id);
     return;
   }
 
-  const { sentReminder, appointment } = firstSentReminderPatient;
-  logger.debug(`Reminder ${sentReminder.id} confirmed.`);
-  // const sentReminder = await SentReminder.findById(confirmedReminder.id);
-  const sentReminderClean = sentReminder.get({ plain: true });
+  const { reminder, sentRemindersPatients } = firstSentReminder;
+  const { appointment = {} } = sentRemindersPatients
+    .find(({ appointment: a }) => a.patientId === firstSentReminder.contactedPatientId);
+
+  logger.debug(`Reminder ${firstSentReminder.id} confirmed.`);
+  const sentReminderClean = firstSentReminder.get({ plain: true });
   const normalizedReminder = normalize('sentReminder', sentReminderClean);
   publishEvent(account.id, 'create:SentReminder', normalizedReminder);
   await markMessageAsRead(textMessage.get('id'));
-  const { reminder } = sentReminder;
   const messageBody = createConfirmationText({
     patient,
     appointment,
