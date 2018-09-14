@@ -72,7 +72,7 @@ export async function receiveMessage(account, textMessageData) {
   }
 
   const { reminder, sentRemindersPatients } = firstSentReminder;
-  const { appointment = {} } = sentRemindersPatients
+  const pocPatient = sentRemindersPatients
     .find(({ appointment: a }) => a.patientId === firstSentReminder.contactedPatientId);
 
   logger.debug(`Reminder ${firstSentReminder.id} confirmed.`);
@@ -82,7 +82,7 @@ export async function receiveMessage(account, textMessageData) {
   await markMessageAsRead(textMessage.get('id'));
   const messageBody = createConfirmationText({
     patient,
-    appointment,
+    appointment: pocPatient ? pocPatient.appointment : {},
     account,
     reminder,
     isFamily: sentReminderClean.isFamily,
