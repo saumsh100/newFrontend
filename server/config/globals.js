@@ -148,6 +148,19 @@ const logger = {
   logLevel: environmentVariables.LOG_LEVEL || 'debug',
 };
 
+// Auth service config
+const authHostname = environmentVariables.AUTH_SERVICE_HOST;
+const authPort = environmentVariables.AUTH_SERVICE_PORT;
+const authCarecruAppId = environmentVariables.AUTH_SERVICE_CARECRU_APP_ID;
+const authCarecruApiKey = environmentVariables.AUTH_SERVICE_CARECRU_API_KEY;
+
+const authService = {
+  host: authHostname || '127.0.0.1',
+  port: authPort || 3000,
+  appId: authCarecruAppId || '8ce0bb76-1eff-472e-a643-4f0010d2fa7c',
+  apiKey: authCarecruApiKey || 'jNNA7IQKWRqKrH37WYMIBOGC5NgjCPGSYa9O4PEWGOWFGalHV6kRZY9iVpZrIoJ3',
+};
+
 module.exports = {
   staticPath,
   root,
@@ -187,4 +200,5 @@ module.exports = {
   bitly,
   rebrandly,
   logger,
+  authService,
 };
