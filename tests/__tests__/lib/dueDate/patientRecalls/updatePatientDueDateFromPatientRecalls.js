@@ -35,7 +35,10 @@ const makePatientRecallData = (data = {}) => Object.assign({
   type: DEFAULT_HYGIENE,
 }, data);
 
-const dates = d => ({ startDate: moment(d).toISOString(), endDate: moment(d).add(1, 'hours').toISOString() });
+const dates = d => ({
+  startDate: moment(d).toISOString(),
+  endDate: moment(d).add(1, 'hours').toISOString(),
+});
 
 const hygieneProcedureCodes = ['111%'];
 const recallProcedureCodes = ['00120'];
@@ -62,24 +65,64 @@ describe('Due Date Calculations - patientRecalls', () => {
       let patientRecalls;
       beforeEach(async () => {
         patients = await Patient.bulkCreate([
-          makePatientData({ firstName: 'A', lastName: 'B' }),
-          makePatientData({ firstName: 'B', lastName: 'C' }),
-          makePatientData({ firstName: 'C', lastName: 'D' }),
-          makePatientData({ firstName: 'D', lastName: 'E' }),
+          makePatientData({
+            firstName: 'A',
+            lastName: 'B',
+          }),
+          makePatientData({
+            firstName: 'B',
+            lastName: 'C',
+          }),
+          makePatientData({
+            firstName: 'C',
+            lastName: 'D',
+          }),
+          makePatientData({
+            firstName: 'D',
+            lastName: 'E',
+          }),
         ]);
 
         appointments = await Appointment.bulkCreate([
-          makeApptData({ patientId: patients[0].id, ...dates('2018-05-15 08:00:00') }),
-          makeApptData({ patientId: patients[1].id, ...dates('2018-05-15 08:00:00') }),
-          makeApptData({ patientId: patients[2].id, ...dates('2018-05-15 08:00:00'), reason: DEFAULT_RECALL }),
-          makeApptData({ patientId: patients[3].id, ...dates('2018-05-15 08:00:00'), reason: DEFAULT_RECALL }),
+          makeApptData({
+            patientId: patients[0].id,
+            ...dates('2018-05-15 08:00:00'),
+          }),
+          makeApptData({
+            patientId: patients[1].id,
+            ...dates('2018-05-15 08:00:00'),
+          }),
+          makeApptData({
+            patientId: patients[2].id,
+            ...dates('2018-05-15 08:00:00'),
+            reason: DEFAULT_RECALL,
+          }),
+          makeApptData({
+            patientId: patients[3].id,
+            ...dates('2018-05-15 08:00:00'),
+            reason: DEFAULT_RECALL,
+          }),
         ]);
 
         patientRecalls = await PatientRecall.bulkCreate([
-          makePatientRecallData({ patientId: patients[0].id, dueDate: moment('2018-05-15 08:00:00').toISOString() }),
-          makePatientRecallData({ patientId: patients[1].id, dueDate: moment('2018-05-15 08:00:00').toISOString() }),
-          makePatientRecallData({ patientId: patients[2].id, dueDate: moment('2018-05-15 08:00:00').toISOString(), type: DEFAULT_RECALL }),
-          makePatientRecallData({ patientId: patients[3].id, dueDate: moment('2018-05-15 08:00:00').toISOString(), type: DEFAULT_RECALL }),
+          makePatientRecallData({
+            patientId: patients[0].id,
+            dueDate: moment('2018-05-15 08:00:00').toISOString(),
+          }),
+          makePatientRecallData({
+            patientId: patients[1].id,
+            dueDate: moment('2018-05-15 08:00:00').toISOString(),
+          }),
+          makePatientRecallData({
+            patientId: patients[2].id,
+            dueDate: moment('2018-05-15 08:00:00').toISOString(),
+            type: DEFAULT_RECALL,
+          }),
+          makePatientRecallData({
+            patientId: patients[3].id,
+            dueDate: moment('2018-05-15 08:00:00').toISOString(),
+            type: DEFAULT_RECALL,
+          }),
         ]);
       });
 
@@ -146,7 +189,10 @@ describe('Due Date Calculations - patientRecalls', () => {
 
         const d = moment('2018-07-11 08:00:00').toISOString();
         const patientIds = patients.map(p => p.id);
-        const nps = await Patient.findAll({ where: { id: patientIds }, raw: true });
+        const nps = await Patient.findAll({
+          where: { id: patientIds },
+          raw: true,
+        });
         expect(nps[0].dueForHygieneDate.toISOString()).toBe(d);
         expect(nps[0].dueForRecallExamDate.toISOString()).toBe(d);
         expect(nps[1].dueForHygieneDate.toISOString()).toBe(d);
@@ -175,7 +221,10 @@ describe('Due Date Calculations - patientRecalls', () => {
       test('should return 0 patients because the patient dueForRecallExam has a future booked hygiene appointment (based on appointmentCodes)', async () => {
         const date = moment('2018-04-20 08:00:00').toISOString();
         await appointments[2].update({ reason: null });
-        await AppointmentCode.create({ appointmentId: appointments[2].id, code: '11101' });
+        await AppointmentCode.create({
+          appointmentId: appointments[2].id,
+          code: '11101',
+        });
         const ps = await updatePatientDueDateFromPatientRecalls({
           accountId,
           date,
@@ -193,9 +242,22 @@ describe('Due Date Calculations - patientRecalls', () => {
         await wipeModel(Appointment);
         await wipeModel(PatientRecall);
         // We are updating dueForHygieneDate to ensure that Patients are getting updated with null and correct values
-        await patients[1].update({ lastHygieneDate: null, dueForHygieneDate: wd, dueForRecallExamDate: wd });
-        await patients[2].update({ lastRecallDate: null, dueForHygieneDate: wd, dueForRecallExamDate: wd });
-        await patients[3].update({ lastHygieneDate: null, lastRecallDate: null, dueForHygieneDate: wd, dueForRecallExamDate: wd });
+        await patients[1].update({
+          lastHygieneDate: null,
+          dueForHygieneDate: wd,
+          dueForRecallExamDate: wd,
+        });
+        await patients[2].update({
+          lastRecallDate: null,
+          dueForHygieneDate: wd,
+          dueForRecallExamDate: wd,
+        });
+        await patients[3].update({
+          lastHygieneDate: null,
+          lastRecallDate: null,
+          dueForHygieneDate: wd,
+          dueForRecallExamDate: wd,
+        });
         const date = moment('2018-04-20 08:00:00').toISOString();
         const ps = await updatePatientDueDateFromPatientRecalls({
           accountId,
@@ -212,7 +274,10 @@ describe('Due Date Calculations - patientRecalls', () => {
 
         const d = moment('2018-07-11 08:00:00').toISOString();
         const patientIds = patients.map(p => p.id);
-        const updatedPatients = await Patient.findAll({ where: { id: patientIds }, raw: true });
+        const updatedPatients = await Patient.findAll({
+          where: { id: patientIds },
+          raw: true,
+        });
         const nps = keyBy(updatedPatients, 'id');
 
         expect(nps[patientIds[0]].dueForHygieneDate.toISOString()).toBe(d);
@@ -223,6 +288,108 @@ describe('Due Date Calculations - patientRecalls', () => {
         expect(nps[patientIds[2]].dueForRecallExamDate).toBe(null);
         expect(nps[patientIds[3]].dueForHygieneDate).toBe(null);
         expect(nps[patientIds[3]].dueForRecallExamDate).toBe(null);
+      });
+
+      test('should return 0 patients because the appointment is in progress', async () => {
+        await wipeModel(Appointment);
+        await wipeModel(PatientRecall);
+        await wipeModel(Patient);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({
+            firstName: 'E',
+            lastName: 'F',
+          }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({
+            patientId: patients[0].id,
+            ...dates('2018-05-15 08:00:00'),
+          }),
+        ]);
+    
+        const date = moment('2018-05-15 08:20:00').toISOString();
+        const ps = await updatePatientDueDateFromPatientRecalls({
+          accountId,
+          date,
+          hygieneTypes: [DEFAULT_HYGIENE],
+          recallTypes: [DEFAULT_RECALL],
+          hygieneInterval: '6 months',
+          recallInterval: '6 months',
+          hygieneProcedureCodes,
+          recallProcedureCodes,
+        });
+
+        expect(ps.length).toBe(0);
+      });
+
+      test('should return 4 out of 5 patients because the appointments are not booked but one is in progress', async () => {
+        await wipeModel(Appointment);
+        await wipeModel(PatientRecall);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({
+            firstName: 'E',
+            lastName: 'F',
+          }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({
+            patientId: patients[0].id,
+            ...dates('2018-05-15 08:00:00'),
+            reason: DEFAULT_HYGIENE,
+          }),
+        ]);
+    
+        const date = moment('2018-05-15 08:20:00').toISOString();
+        const ps = await updatePatientDueDateFromPatientRecalls({
+          accountId,
+          date,
+          hygieneTypes: [DEFAULT_HYGIENE],
+          recallTypes: [DEFAULT_RECALL],
+          hygieneInterval: '6 months',
+          recallInterval: '6 months',
+          hygieneProcedureCodes,
+          recallProcedureCodes,
+        });
+
+        expect(ps.length).toBe(4);
+      });
+
+      test('should return 1 patient because the appointment has ended', async () => {
+        await wipeModel(Appointment);
+        await wipeModel(PatientRecall);
+        await wipeModel(Patient);
+
+        patients = await Patient.bulkCreate([
+          makePatientData({
+            firstName: 'E',
+            lastName: 'F',
+          }),
+        ]);
+
+        appointments = await Appointment.bulkCreate([
+          makeApptData({
+            patientId: patients[0].id,
+            ...dates('2018-05-15 08:00:00'),
+          }),
+        ]);
+    
+        const date = moment('2018-05-15 09:00:00').toISOString();
+        const ps = await updatePatientDueDateFromPatientRecalls({
+          accountId,
+          date,
+          hygieneTypes: [DEFAULT_HYGIENE],
+          recallTypes: [DEFAULT_RECALL],
+          hygieneInterval: '6 months',
+          recallInterval: '6 months',
+          hygieneProcedureCodes,
+          recallProcedureCodes,
+        });
+
+        expect(ps.length).toBe(1);
       });
     });
   });

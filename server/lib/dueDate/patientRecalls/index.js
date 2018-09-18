@@ -43,9 +43,9 @@ export async function getPatientsThatAreDue(config) {
     patientAttribute,
     codesQuery,
   } = config;
-
+  
   const idsQuery = patientIds || { $not: null };
-  let patients = await Patient.findAll({
+  const patients = await Patient.findAll({
     attributes: ['id', patientAttribute],
     where: {
       id: idsQuery,
@@ -54,7 +54,10 @@ export async function getPatientsThatAreDue(config) {
     },
 
     order: [
-      [{ model: PatientRecall, as: 'patientRecalls' }, 'dueDate', 'ASC'],
+      [{
+        model: PatientRecall,
+        as: 'patientRecalls',
+      }, 'dueDate', 'ASC'],
     ],
 
     include: [
@@ -62,9 +65,7 @@ export async function getPatientsThatAreDue(config) {
         model: PatientRecall,
         as: 'patientRecalls',
         attributes: ['dueDate', 'type'],
-        where: {
-          type: { $in: patientRecallTypes },
-        },
+        where: { type: { $in: patientRecallTypes } },
 
         required: false,
       },
@@ -76,7 +77,7 @@ export async function getPatientsThatAreDue(config) {
           isCancelled: false,
           isMissed: false,
           isPending: false,
-          startDate: { $gt: date },
+          endDate: { $gt: date },
         },
 
         include: [
@@ -104,10 +105,9 @@ export async function getPatientsThatAreDue(config) {
 
       return p;
     })
-    .filter((p) => {
+    .filter(p =>
       // Return patients with NO future booked appointments of that type
-      return !p.appointments.length;
-    });
+      !p.appointments.length);
 }
 
 /**
@@ -177,7 +177,7 @@ export async function getPatientIdsWithChangedPatientRecallsSinceDate(date, acco
  * @return [patientIds] - array of patientIds
  */
 export async function getChangedPatientsSinceDate(date, accountId, omitPatientIds = []) {
-  const changedPatients =  await Patient.findAll({
+  const changedPatients = await Patient.findAll({
     raw: true,
     paranoid: false,
     attributes: ['id'],
@@ -280,10 +280,9 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
       const p = patient.get({ plain: true });
       p.dueForHygieneDate = p.patientRecalls.length ?
         p.patientRecalls[0].dueDate : (hygieneInterval ?
-            moment(p.lastHygieneDate).add(convertIntervalStringToObject(hygieneInterval)).toISOString() :
-            null
+          moment(p.lastHygieneDate).add(convertIntervalStringToObject(hygieneInterval)).toISOString() :
+          null
         );
-
       return p;
     })
     .filter(p => p.dueForHygieneDate);
@@ -293,8 +292,8 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
       const p = patient.get({ plain: true });
       p.dueForRecallExamDate = p.patientRecalls.length ?
         p.patientRecalls[0].dueDate : (recallInterval ?
-           moment(p.lastRecallDate).add(convertIntervalStringToObject(recallInterval)).toISOString() :
-            null
+          moment(p.lastRecallDate).add(convertIntervalStringToObject(recallInterval)).toISOString() :
+          null
         );
 
       return p;
@@ -309,7 +308,7 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
   if (patientIds) {
     // If we are only updating a small subset of patients,
     // set the ones that are no longer due to null
-    nullUpdateIdsQuery = { $in: difference(patientIds, patientsDueIds) }
+    nullUpdateIdsQuery = { $in: difference(patientIds, patientsDueIds) };
   }
 
   // Set values to null now that they are no longer due
@@ -328,18 +327,18 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
   const patientsDuePromises = patientsDue.map(({ id, dueForHygieneDate, dueForRecallExamDate }) =>
     Patient.update(
       // if undefined or falsey, we will set to null or else it won't update at all
-      { dueForHygieneDate: dueForHygieneDate || null, dueForRecallExamDate: dueForRecallExamDate || null },
+      {
+        dueForHygieneDate: dueForHygieneDate || null,
+        dueForRecallExamDate: dueForRecallExamDate || null,
+      },
       { where: { id } },
     ).catch((err) => {
-      logger.error(
-        `Failed updating dueForHygieneDate=${dueForHygieneDate} ` +
+      logger.error(`Failed updating dueForHygieneDate=${dueForHygieneDate} ` +
         `and dueForRecallExamDate=${dueForRecallExamDate} ` +
-        `for patient with id=${id}`,
-      );
+        `for patient with id=${id}`);
 
       logger.error(err);
-    })
-  );
+    }));
 
   return Promise.all(patientsDuePromises);
 }
