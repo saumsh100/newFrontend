@@ -59,6 +59,7 @@ Object {
           "startDate": "2017-12-31T00:14:30.932Z",
         },
         "contactedPatientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
+        "errorCode": null,
         "id": "e757afb0-14ef-4763-b162-c573169131c1",
         "interval": null,
         "isConfirmable": true,

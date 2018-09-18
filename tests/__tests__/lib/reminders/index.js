@@ -205,40 +205,67 @@ describe('Reminders Job Integration Tests', () => {
      * With 1 reminder, and 1 patient without a mobilePhoneNumber, it should NOT call sendReminder.sms
      */
     test('should NOT call sendReminder.sms for the 1 patient cause it has no mobilePhoneNumber', async () => {
-      // Make sure it returns a patient
-      RemindersLibrary.getAppointmentsFromReminder = jest.fn(() => [
-        {
-          id: appointmentId,
-          startDate: td(),
-          endDate: td(),
+      const createPatient = () => ({
+        id: patientId,
+        mobilePhoneNumber: null,
+        pmsCreatedAt: new Date(2016, 1, 1),
+        preferences: { sms: true },
+        familyId: 'Jones',
+        family: {
+          id: 'Jones',
+          pmsCreatedAt: new Date(2016, 1, 1),
+          headId: patientId,
+        },
+      });
+
+      ContactInfo.fetchPatientsFromKeyValue = jest.fn(() => {
+        return [{
+          ...createPatient(),
           get() {
-            return {
-              id: appointmentId,
-              startDate: td(),
-              endDate: td(),
-            };
-          },
+            return createPatient();
+          }
+        }];
+      });
 
-          patient: {
-            id: patientId,
-            get() {
-              return {
-                id: patientId,
-              };
+      const mockAppointment = {
+        id: appointmentId,
+        startDate: td(),
+        endDate: td(),
+        get() {
+          return {
+            id: appointmentId,
+            startDate: td(),
+            endDate: td(),
+            update() {
+              console.log('Appointment is being updated!');
             },
-          },
+          };
+        },
 
-          update() {
-            console.log('Appointment is being updated!');
+        patient: {
+          ...createPatient(),
+          get() {
+            return createPatient();
           },
         },
-      ]);
+
+        update() {
+          console.log('Appointment is being updated!');
+        },
+      };
+
+      // Make sure it returns a patient
+      RemindersHelpers.getAppointmentsFromReminder = jest.fn(() => [mockAppointment]);
 
       account.reminders = [makeReminderData()];
 
       await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
+
+      const sentReminderModel = await SentReminder.findOne({ where: { contactedPatientId: patientId } });
+    
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
+      expect(sentReminderModel.errorCode).toBe('1200');
     });
 
     /**

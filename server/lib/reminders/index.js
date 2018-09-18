@@ -72,26 +72,23 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
     if (errors.length) {
       try {
         // eslint-disable-next-line no-restricted-syntax
-        for (const { errorCode, patient, dependants, primaryType } of errors) {
-          const allPatients = [patient, ...dependants];
-          const patientsWithAppointments = allPatients.filter(p => p.appointment);
+        for (const { errorCode, patient, primaryType } of errors) {
           // Save failed sentRecalls from errors
           const sentReminder = await SentReminder.create({
             reminderId: reminder.id,
-            appointmentId: patient.appointment.id,
-            isConfirmable: patientsWithAppointments.some(({ appointment: a }) => getIsConfirmable(a, reminder)),
+            accountId: account.id,
+            contactedPatientId: patient.id,
+            isConfirmable: getIsConfirmable(patient.appointment, reminder),
             interval: reminder.interval,
             primaryType,
             errorCode,
-            isFamily: dependants.length > 0,
           });
 
-          await Promise.all(patientsWithAppointments
-            .map(p => SentRemindersPatients.create({
-              sentRemindersId: sentReminder.id,
-              patientId: p.id,
-              appointmentId: p.appointment.id,
-            })));
+          await SentRemindersPatients.create({
+            sentRemindersId: sentReminder.id,
+            patientId: patient.id,
+            appointmentId: patient.appointment.id,
+          });
         }
         console.log(`------ ${errors.length} => saved sentReminders that would fail`);
       } catch (err) {
@@ -150,7 +147,7 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
       await sentReminder.update({ isSent: true });
       await Promise.all(patientsWithAppointments.map(({ appointment: a }) =>
         Appointment.update({ isReminderSent: true }, { where: { id: a.id } })));
-    };
+    }
   }
   pub && pub.publish('REMINDER:SENT:BATCH', JSON.stringify(sentReminderIds));
   console.log(`Reminders completed for ${account.name} (${account.id})!`);
