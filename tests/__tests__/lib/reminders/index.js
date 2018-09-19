@@ -10,7 +10,7 @@ import {
   SentReminder,
   SentRemindersPatients
 } from 'CareCruModels';
-import sendReminder from '../../../../server/lib/reminders/sendReminder';
+import sendReminder, { createConfirmationText } from '../../../../server/lib/reminders/sendReminder';
 import * as RemindersLibrary from '../../../../server/lib/reminders';
 import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
 import { tzIso } from '../../../../server/util/time';
@@ -45,6 +45,16 @@ const makeReminderData = (data = {}) => Object.assign(
   data,
 );
 
+const patient = { firstName: 'John' };
+const patient2 = { firstName: 'Jane' };
+const account = {
+  timezone: TIME_ZONE,
+  name: 'Test account',
+};
+const appointment = { startDate: '2018-09-11 18:45:01.09+02' };
+const appointment2 = { startDate: '2018-09-11 17:30:01.09+02' };
+const reminder = { isCustomConfirm: false };
+
 const dates = () => ({ startDate: td('2017-01-05 11:00'), endDate: td('2017-01-05 11:05') });
 
 describe('Reminders Job Integration Tests', () => {
@@ -58,6 +68,84 @@ describe('Reminders Job Integration Tests', () => {
 
   afterAll(async () => {
     await wipeAllModels();
+  });
+
+  describe('createConfirmationText', () => {
+    test('should use patientConfirmationText if isFamily is false', () => {
+      const resultText = createConfirmationText({
+        patient,
+        account,
+        appointment,
+        reminder,
+        isFamily: false,
+      });
+
+      expect(resultText).toMatchSnapshot();
+    });
+
+    test('should use getFamilyConfirmationText if isFamily is true', () => {
+      const sentRemindersPatients = [
+        {
+          patient: patient2,
+          appointment: appointment2,
+        },
+      ];
+
+      const resultText = createConfirmationText({
+        patient,
+        account,
+        appointment,
+        reminder,
+        isFamily: true,
+        sentRemindersPatients,
+      });
+
+      expect(resultText).toMatchSnapshot();
+    });
+
+    test('should use family appointment when family length > 1', () => {
+      const sentRemindersPatients = [
+        {
+          patient,
+          appointment,
+        },
+        {
+          patient: patient2,
+          appointment: appointment2,
+        },
+      ];
+
+      const resultText = createConfirmationText({
+        patient,
+        account,
+        appointment,
+        reminder,
+        isFamily: true,
+        sentRemindersPatients,
+      });
+
+      expect(resultText).toMatchSnapshot();
+    });
+
+    test('sentReminder\'s appointment is used for family appointment', () => {
+      const sentRemindersPatients = [
+        {
+          patient: patient2,
+          appointment: appointment2,
+        },
+      ];
+
+      const resultText = createConfirmationText({
+        patient,
+        account,
+        appointment: {},
+        reminder,
+        isFamily: true,
+        sentRemindersPatients,
+      });
+
+      expect(resultText).toMatchSnapshot();
+    });
   });
 
   describe('computeRemindersAndSend', () => {
