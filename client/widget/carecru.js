@@ -41,9 +41,25 @@ function CareCru({ iframeSrc }) {
   });
 
   this.host.onEvent('completeBooking', () => {
-    if (window.ga) {
-      window.ga('send', 'event', 'CareCru Online Scheduler', 'New Appointment Request', null, null);
+    const eventAction = 'New Appointment Request';
+    const analyticsEvent = {
+      event_category: 'CareCru Online Scheduler',
+      event_label: null,
+    };
+
+    if (window.gtag) {
+      window.gtag('event', eventAction, analyticsEvent);
+    } else if (window.ga) {
+      window.ga(
+        'send',
+        'event',
+        analyticsEvent.event_category,
+        eventAction,
+        analyticsEvent.event_label,
+        null,
+      );
     }
+
     console.log('Completed booking!');
   });
 }
