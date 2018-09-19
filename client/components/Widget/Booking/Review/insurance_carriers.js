@@ -1,7 +1,12 @@
+
 export default [
   {
     label: 'Pay for myself',
     value: 'insurance_1',
+  },
+  {
+    label: 'Other',
+    value: 'other',
   },
   {
     label: 'Sun Life Financial',
@@ -88,7 +93,43 @@ export default [
     value: 'insurance_22',
   },
   {
-    label: 'Other',
-    value: 'other',
+    label: 'AARP',
+    value: 'insurance_23',
+  },
+  {
+    label: 'AETNA',
+    value: 'insurance_24',
+  },
+  {
+    label: 'Ameritas',
+    value: 'insurance_25',
+  },
+  {
+    label: 'Cigna',
+    value: 'insurance_26',
+  },
+  {
+    label: 'Delta Dental',
+    value: 'insurance_27',
+  },
+  {
+    label: 'Green Shield Canada',
+    value: 'insurance_28',
+  },
+  {
+    label: 'Guardian',
+    value: 'insurance_29',
+  },
+  {
+    label: 'Humana',
+    value: 'insurance_30',
+  },
+  {
+    label: 'Spirit Dental & Vision',
+    value: 'insurance_31',
+  },
+  {
+    label: 'United Healthcare',
+    value: 'insurance_32',
   },
 ];
