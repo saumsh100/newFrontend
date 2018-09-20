@@ -2,6 +2,7 @@
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import uniqBy from 'lodash/uniqBy';
 import { UserAuth } from '../../../lib/_auth';
 import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
 import { callRail, twilioSetup, vendastaFullSetup } from '../../../lib/createAccount';
@@ -44,7 +45,10 @@ const accountsRouter = Router();
 accountsRouter.param('accountId', sequelizeLoader('account', 'Account'));
 accountsRouter.param(
   'joinAccountId',
-  sequelizeLoader('account', 'Account', [{ model: Enterprise, as: 'enterprise' }]),
+  sequelizeLoader('account', 'Account', [{
+    model: Enterprise,
+    as: 'enterprise',
+  }]),
 );
 accountsRouter.param('inviteId', sequelizeLoader('invite', 'Invite'));
 accountsRouter.param('permissionId', sequelizeLoader('permission', 'Permission'));
@@ -70,9 +74,7 @@ const apiFunctionsDelete = {
  */
 accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next) => {
   try {
-    const {
-      accountId, role, enterpriseRole, enterpriseId, sessionData,
-    } = req;
+    const { accountId, role, enterpriseRole, enterpriseId, sessionData } = req;
     // Fetch all if correct role, just fetch current account if not
     let accounts;
 
@@ -82,16 +84,12 @@ accountsRouter.get('/', checkPermissions('accounts:read'), async (req, res, next
       accounts = accountsFind.map(a => a.get({ plain: true }));
     } else if (enterpriseRole === 'OWNER') {
       // Return all accounts under enterprise
-      const accountsFind = await Account.findAll({
-        where: { enterpriseId },
-      });
+      const accountsFind = await Account.findAll({ where: { enterpriseId } });
 
       accounts = accountsFind.map(a => a.get({ plain: true }));
     } else {
       // Return single account
-      const accountsFind = await Account.findOne({
-        where: { id: accountId },
-      });
+      const accountsFind = await Account.findOne({ where: { id: accountId } });
 
       accounts = [accountsFind.get({ plain: true })];
     }
@@ -152,9 +150,7 @@ accountsRouter.delete(
  *
  */
 accountsRouter.post('/:accountId/switch', (req, res, next) => {
-  const {
-    account, role, sessionId, permissionId, userId, sessionData,
-  } = req;
+  const { account, role, sessionId, permissionId, userId, sessionData } = req;
   if (role !== 'SUPERADMIN' && role !== 'OWNER' && role !== 'ADMIN') {
     return next(StatusError(403, 'Operation not permitted'));
   }
@@ -286,7 +282,10 @@ accountsRouter.get('/:accountId', checkPermissions('accounts:read'), (req, res, 
   // TODO: need to add joinObject mapping to include...
 
   // Loader will handle 404
-  return Account.findOne({ where: { id: req.account.id }, include: includeArray })
+  return Account.findOne({
+    where: { id: req.account.id },
+    include: includeArray,
+  })
     .then(account => res.send(normalize('account', account.get({ plain: true }))))
     .catch(next);
 });
@@ -391,7 +390,10 @@ accountsRouter.put('/:accountId', checkPermissions('accounts:update'), (req, res
 accountsRouter.get('/:joinAccountId/users', (req, res, next) =>
   User.findAll({
     // raw: true,
-    include: [{ model: Permission, as: 'permission' }],
+    include: [{
+      model: Permission,
+      as: 'permission',
+    }],
     where: {
       enterpriseId: req.account.enterprise.id,
       // TODO: i don't think this should be there...
@@ -405,9 +407,7 @@ accountsRouter.get('/:joinAccountId/users', (req, res, next) =>
 
       const account = req.account.dataValues;
       delete account.enterprise;
-      obj.entities.accounts = {
-        [account.id]: account,
-      };
+      obj.entities.accounts = { [account.id]: account };
 
       res.send(obj);
     })
@@ -423,7 +423,10 @@ accountsRouter.get('/:accountId/reviews/list', async (req, res, next) => {
     const date = new Date().toISOString();
 
     // Get the review appointments and filter out
-    const data = await getReviewPatients({ date, account: req.account });
+    const data = await getReviewPatients({
+      date,
+      account: req.account,
+    });
 
     res.send(data);
   } catch (err) {
@@ -442,7 +445,11 @@ accountsRouter.get('/:accountId/reviews/outbox', async (req, res, next) => {
   try {
     const { account } = req;
     const { startDate = getDayStart(), endDate = getDayEnd() } = req.query;
-    const outboxList = await generateReviewsOutbox({ account, startDate, endDate });
+    const outboxList = await generateReviewsOutbox({
+      account,
+      startDate,
+      endDate,
+    });
     res.send(outboxList);
   } catch (error) {
     next(error);
@@ -473,7 +480,10 @@ accountsRouter.get(
 
       const html = await renderTemplate({
         templateName,
-        mergeVars: generateClinicMergeVars({ account, patient }),
+        mergeVars: generateClinicMergeVars({
+          account,
+          patient,
+        }),
       });
 
       return res.send(html);
@@ -499,11 +509,7 @@ accountsRouter.post(
 
       const { startDate, endDate } = req.query;
 
-      const patientFilters = {
-        email: {
-          $not: null,
-        },
-      };
+      const patientFilters = { email: { $not: null } };
 
       const attributes = ['Patient.id', 'Patient.email', 'Patient.firstName'];
 
@@ -525,15 +531,18 @@ accountsRouter.post(
         endDate,
         attributes,
       );
+
+      const filteredPatients = uniqBy(patients, 'email');
+
       const googlePlaceId = account.googlePlaceId
         ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}`
         : null;
 
       res.sendStatus(200);
 
-      console.log(`Email campaign initiated for ${patients.length} patients`);
+      console.log(`Email campaign initiated for ${filteredPatients.length} patients`);
 
-      const promises = patients.map(patient =>
+      const promises = filteredPatients.map(patient =>
         sendMassGeneralIntroAnnouncement({
           patientId: patient.id,
           accountId: req.accountId,
@@ -609,9 +618,7 @@ accountsRouter.post(
         }
       });
 
-      return await req.account.update({
-        massOnlineEmailSentDate: moment().toISOString(),
-      });
+      return await req.account.update({ massOnlineEmailSentDate: moment().toISOString() });
     } catch (err) {
       console.error(err);
       return next(err);
@@ -634,11 +641,7 @@ accountsRouter.get(
 
       const { startDate, endDate } = req.query;
 
-      const patientFilters = {
-        email: {
-          $not: null,
-        },
-      };
+      const patientFilters = { email: { $not: null } };
 
       const patientCount = await countPatientsWithAppInRange(
         accountId,
