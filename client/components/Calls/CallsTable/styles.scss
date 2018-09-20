@@ -23,6 +23,7 @@
 
 .callListItem {
   cursor: pointer;
+  outline: none;
   &:hover {
     background-color: $primary-grey;
   }

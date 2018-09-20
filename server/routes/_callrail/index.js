@@ -42,23 +42,28 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
     destinationNum: req.body.destinationnum,
     trackingNum: req.body.trackingnum,
     wasApptBooked: req.body.wasApptBooked,
-    callSource: req.body.callsource,
+    callSource: req.body.formatted_tracking_source,
   };
 
   if (req.body.datetime) {
     data.dateTime = moment(req.body.datetime).toISOString();
   }
 
-  Patient.findOne({ where: { accountId: req.account.id, mobilePhoneNumber: callernum }, raw: true })
+  Patient.findOne({
+    where: {
+      accountId: req.account.id,
+      mobilePhoneNumber: callernum,
+    },
+    raw: true,
+  })
     .then((patient) => {
       if (patient) {
         console.log(`Received a call from ${patient.firstName} ${patient.lastName}`);
         callData.patientId = patient.id;
         return Call.create(Object.assign({}, data, callData));
-      } else {
-        console.log(`Received communication from unknown number: ${callernum}.`);
-        return Call.create(Object.assign({}, data, callData));
       }
+      console.log(`Received communication from unknown number: ${callernum}.`);
+      return Call.create(Object.assign({}, data, callData));
     })
     .then((call) => {
       const pub = req.app.get('pub');
@@ -98,7 +103,7 @@ callsRouterSequelize.post('/:accountId/inbound/post-call', (req, res, next) => {
     destinationNum: req.body.destinationnum,
     trackingNum: req.body.trackingnum,
     wasApptBooked: req.body.wasApptBooked,
-    callSource: req.body.callsource,
+    callSource: req.body.formatted_tracking_source,
   };
 
   if (req.body.datetime) {
@@ -148,7 +153,7 @@ callsRouterSequelize.post('/:accountId/inbound/modified', (req, res, next) => {
     destinationNum: req.body.destinationnum,
     trackingNum: req.body.trackingnum,
     wasApptBooked: req.body.wasApptBooked,
-    callSource: req.body.callsource,
+    callSource: req.body.formatted_tracking_source,
   };
 
   if (req.body.datetime) {
