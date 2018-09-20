@@ -76,9 +76,7 @@ class PractitionerOfficeHours extends Component {
   }
 
   openModal() {
-    this.setState({
-      active: true,
-    });
+    this.setState({ active: true });
   }
 
   reinitializeState() {
@@ -97,12 +95,8 @@ class PractitionerOfficeHours extends Component {
     const sendWeeklySchedule = weeklySchedule.merge(newWeeklySchedule);
 
     const alert = {
-      success: {
-        body: `Practitioner Chairs Updated for ${day}`,
-      },
-      error: {
-        body: 'Practitioner Chairs Update Failed',
-      },
+      success: { body: `Practitioner Chairs Updated for ${day}` },
+      error: { body: 'Practitioner Chairs Update Failed' },
     };
 
     return this.props
@@ -125,12 +119,8 @@ class PractitionerOfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: 'Clinic Office Hours Updated',
-      },
-      error: {
-        body: 'Clinic Office Hours Update Failed',
-      },
+      success: { body: 'Clinic Office Hours Updated' },
+      error: { body: 'Clinic Office Hours Update Failed' },
     };
 
     return this.props
@@ -140,9 +130,7 @@ class PractitionerOfficeHours extends Component {
         alert,
       })
       .then(() => {
-        this.setState({
-          active: false,
-        });
+        this.setState({ active: false });
       });
   }
 
@@ -174,12 +162,8 @@ class PractitionerOfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: 'Clinic Office Hours Updated',
-      },
-      error: {
-        body: 'Clinic Office Hours Update Failed',
-      },
+      success: { body: 'Clinic Office Hours Updated' },
+      error: { body: 'Clinic Office Hours Update Failed' },
     };
 
     return this.props
@@ -189,9 +173,7 @@ class PractitionerOfficeHours extends Component {
         alert,
       })
       .then(() => {
-        this.setState({
-          active: false,
-        });
+        this.setState({ active: false });
       });
   }
 
@@ -212,12 +194,8 @@ class PractitionerOfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: `${this.props.practitioner.get('firstName')} schedule deleted.`,
-      },
-      error: {
-        body: `${this.props.practitioner.get('firstName')} schedule delete failed.`,
-      },
+      success: { body: `${this.props.practitioner.get('firstName')} schedule deleted.` },
+      error: { body: `${this.props.practitioner.get('firstName')} schedule delete failed.` },
     };
 
     return this.props.updateEntityRequest({
@@ -245,12 +223,8 @@ class PractitionerOfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: `${this.props.practitioner.get('firstName')} schedule updated.`,
-      },
-      error: {
-        body: `${this.props.practitioner.get('firstName')} schedule update failed.`,
-      },
+      success: { body: `${this.props.practitioner.get('firstName')} schedule updated.` },
+      error: { body: `${this.props.practitioner.get('firstName')} schedule update failed.` },
     };
 
     this.props.updateEntityRequest({
@@ -271,12 +245,8 @@ class PractitionerOfficeHours extends Component {
         : practitioner.set('isCustomSchedule', false);
 
     const alert = {
-      success: {
-        body: `${practitioner.get('firstName')} schedule updated.`,
-      },
-      error: {
-        body: `${practitioner.get('firstName')} schedule update failed.`,
-      },
+      success: { body: `${practitioner.get('firstName')} schedule updated.` },
+      error: { body: `${practitioner.get('firstName')} schedule update failed.` },
     };
 
     this.props.updateEntityRequest({
@@ -301,12 +271,8 @@ class PractitionerOfficeHours extends Component {
     });
 
     const alert = {
-      success: {
-        body: `${practitioner.get('firstName')} schedule updated.`,
-      },
-      error: {
-        body: `${practitioner.get('firstName')} schedule update failed.`,
-      },
+      success: { body: `${practitioner.get('firstName')} schedule updated.` },
+      error: { body: `${practitioner.get('firstName')} schedule update failed.` },
     };
 
     this.props.updateEntityRequest({
@@ -317,9 +283,7 @@ class PractitionerOfficeHours extends Component {
   }
 
   render() {
-    const {
-      weeklySchedule, practitioner, chairs, allChairs,
-    } = this.props;
+    const { weeklySchedule, practitioner, chairs, allChairs } = this.props;
 
     let schedules = null;
     const initialValuesChairs = {};
@@ -388,7 +352,10 @@ class PractitionerOfficeHours extends Component {
           label: 'Save',
           onClick: values => this.chairSubmit(values, this.state.modalChairDay),
           component: RemoteSubmitButton,
-          props: { form: 'chairs', color: 'blue' },
+          props: {
+            form: 'chairs',
+            color: 'blue',
+          },
         },
       ];
 
@@ -487,7 +454,10 @@ class PractitionerOfficeHours extends Component {
         label: 'Save',
         onClick: this.changeStartDate,
         component: RemoteSubmitButton,
-        props: { form: 'advanceCreatePrac', color: 'blue' },
+        props: {
+          form: 'advanceCreatePrac',
+          color: 'blue',
+        },
       },
     ];
 
@@ -518,6 +488,7 @@ class PractitionerOfficeHours extends Component {
               defaultChecked={practitioner.get('isCustomSchedule')}
               value={this.state.value}
               onChange={this.handleToggle}
+              data-test-id="toggle_setCustom"
             />
           </div>
         </div>
@@ -545,25 +516,19 @@ PractitionerOfficeHours.defaultProps = {
 
 function mapStateToProps({ form }) {
   if (!form.chairs) {
-    return {
-      allChairs: null,
-    };
+    return { allChairs: null };
   }
 
-  return {
-    allChairs: checkValues(form.chairs.values),
-  };
+  return { allChairs: checkValues(form.chairs.values) };
 }
 
 function mapActionsToProps(dispatch) {
-  return bindActionCreators(
-    {
-      batchActions,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ batchActions }, dispatch);
 }
 
-const enhance = connect(mapStateToProps, mapActionsToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapActionsToProps,
+);
 
 export default enhance(PractitionerOfficeHours);

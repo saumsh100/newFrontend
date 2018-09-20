@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
 import styles from './styles.scss';
+import { dateFormatter } from '../../../../../../iso/helpers/dateTimezone';
 
-export default function TimeOffDisplay({ values }) {
-  const {
-    startDate, endDate, startTime, endTime, allDay,
-  } = values;
+export default function TimeOffDisplay({ values, timezone }) {
+  const { startDate, endDate, startTime, endTime, allDay } = values;
 
-  const formattedSt = moment(startTime).format('LT');
-  const formattedEt = moment(endTime).format('LT');
+  const startDateFormatted = moment(startDate).format('l');
+  const endDateFormatted = moment(endDate).format('l');
+  const formattedSt = dateFormatter(startTime, timezone, 'LT');
+  const formattedEt = dateFormatter(endTime, timezone, 'LT');
 
   const showDisplayComponent = allDay ? (
     <div>
-      From : {startDate} To: {endDate}
+      From : {startDateFormatted} To: {endDateFormatted}
     </div>
   ) : (
     <div>
-      From: {startDate} {formattedSt} To: {endDate} {formattedEt}
+      From: {startDateFormatted} {formattedSt} To: {endDateFormatted} {formattedEt}
     </div>
   );
 

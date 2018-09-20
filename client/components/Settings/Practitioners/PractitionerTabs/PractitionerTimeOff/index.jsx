@@ -10,13 +10,19 @@ import {
   deleteEntityRequest,
   updateEntityRequest,
 } from '../../../../../thunks/fetchEntities';
-import { IconButton, Modal, Button, DialogBox } from '../../../../library';
+import { IconButton, Button, DialogBox } from '../../../../library';
 import RemoteSubmitButton from '../../../../library/Form/RemoteSubmitButton';
 import TimeOffList from './TimeOffList';
 import TimeOffForm from './TimeOffForm';
 
-const mergeTime = (date, time, allDay) =>
-  (allDay ? date : new Date(date.setHours(time.getHours())));
+const mergeTime = (date, time, allDay, timezone) => {
+  date = moment(date);
+  time = moment.tz(time, timezone);
+  time.year(date.year());
+  time.month(date.month());
+  time.date(date.date());
+  return allDay ? date.format() : time.format();
+};
 
 class PractitionerTimeOff extends Component {
   constructor(props) {
@@ -36,29 +42,16 @@ class PractitionerTimeOff extends Component {
   }
 
   handleSubmit(values) {
-    const {
-      practitioner,
-      createEntityRequest,
-      updateEntityRequest,
-    } = this.props;
+    const { practitioner, createEntityRequest, updateEntityRequest, timezone } = this.props;
 
     const { selectedTimeOff } = this.state;
 
-    const {
-      startDate, endDate, startTime, endTime, allDay,
-    } = values;
+    const { startDate, endDate, startTime, endTime, allDay } = values;
 
     // TODO: is !allDay merge in startTime, endTime into startDate endDate
-    const mergedStartDate = mergeTime(
-      new Date(startDate),
-      new Date(startTime),
-      allDay,
-    );
-    const mergedEndDate = mergeTime(
-      new Date(endDate),
-      new Date(endTime),
-      allDay,
-    );
+    const mergedStartDate = mergeTime(startDate, startTime, allDay, timezone);
+
+    const mergedEndDate = mergeTime(endDate, endTime, allDay, timezone);
 
     const trimValues = {
       practitionerId: practitioner.get('id'),
@@ -70,12 +63,8 @@ class PractitionerTimeOff extends Component {
 
     if (this.state.isAdding) {
       const alert = {
-        success: {
-          body: `${practitioner.get('firstName')} added a time off.`,
-        },
-        error: {
-          body: `${practitioner.get('firstName')} time off could not be added`,
-        },
+        success: { body: `${practitioner.get('firstName')} added a time off.` },
+        error: { body: `${practitioner.get('firstName')} time off could not be added` },
       };
 
       createEntityRequest({
@@ -86,12 +75,8 @@ class PractitionerTimeOff extends Component {
     } else if (selectedTimeOff) {
       // We assume selected practitioner is
       const alert = {
-        success: {
-          body: `${practitioner.get('firstName')} updated a time off.`,
-        },
-        error: {
-          body: `${practitioner.get('firstName')} time off could not be updated`,
-        },
+        success: { body: `${practitioner.get('firstName')} updated a time off.` },
+        error: { body: `${practitioner.get('firstName')} time off could not be updated` },
       };
 
       const valuesMap = Map(trimValues);
@@ -137,7 +122,7 @@ class PractitionerTimeOff extends Component {
   }
 
   render() {
-    const { timeOffs, practitioner } = this.props;
+    const { timeOffs, practitioner, timezone } = this.props;
 
     const { isAdding, selectedTimeOff } = this.state;
 
@@ -148,8 +133,12 @@ class PractitionerTimeOff extends Component {
     const formTimeOff =
       selectedTimeOff ||
       Map({
-        startDate: moment().format('L'),
-        endDate: moment().format('L'),
+        startDate: moment()
+          .tz(timezone)
+          .format('L'),
+        endDate: moment()
+          .tz(timezone)
+          .format('L'),
         allDay: true,
         note: '',
       });
@@ -160,13 +149,13 @@ class PractitionerTimeOff extends Component {
     }
 
     let showAddOrListComponent = (
-      <div style={{ paddingLeft: '10px', paddingTop: '20px' }}>
-        <Button
-          onClick={this.addTimeOff}
-          secondary
-          data-test-id="addTimeOffButton"
-          create
-        >
+      <div
+        style={{
+          paddingLeft: '10px',
+          paddingTop: '20px',
+        }}
+      >
+        <Button onClick={this.addTimeOff} secondary data-test-id="addTimeOffButton" create>
           Add Time Off
         </Button>
       </div>
@@ -179,6 +168,7 @@ class PractitionerTimeOff extends Component {
           practitioner={practitioner}
           onSelectTimeOff={this.selectTimeOff}
           deleteTimeOff={this.deleteTimeOff}
+          timezone={timezone}
         >
           <IconButton icon="plus" onClick={this.addTimeOff} />
         </TimeOffList>
@@ -196,7 +186,10 @@ class PractitionerTimeOff extends Component {
         label: 'Save',
         onClick: this.handleSubmit,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: formName },
+        props: {
+          color: 'blue',
+          form: formName,
+        },
       },
     ];
 
@@ -218,6 +211,7 @@ class PractitionerTimeOff extends Component {
             formName={formName}
             timeOff={formTimeOff}
             handleSubmit={this.handleSubmit}
+            timezone={timezone}
           />
         </DialogBox>
       </div>
@@ -231,7 +225,12 @@ PractitionerTimeOff.propTypes = {
   createEntityRequest: PropTypes.func.isRequired,
   deleteEntityRequest: PropTypes.func.isRequired,
   updateEntityRequest: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
+
+function mapStateToProps({ auth }) {
+  return { timezone: auth.get('timezone') };
+}
 
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
@@ -245,7 +244,7 @@ function mapActionsToProps(dispatch) {
 }
 
 const enhance = connect(
-  null,
+  mapStateToProps,
   mapActionsToProps,
 );
 

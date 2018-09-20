@@ -1,0 +1,51 @@
+
+import axios from 'axios';
+import { receiveEntities } from '../../actions/entities';
+import { createRequest, receiveRequest, errorRequest } from '../../reducers/apiRequests';
+
+export default function fetchEntitiesRequest({
+  id,
+  key,
+  base,
+  join,
+  params = {},
+  url,
+  returnData,
+}) {
+  return (dispatch, getState) => {
+    const { entities } = getState();
+    const entity = entities.get(key);
+    // Add onto the query param for join if passed in
+    if (join && join.length) {
+      params.join = join.join(',');
+    }
+
+    url = url || entity.getUrlRoot(base);
+
+    // Create record for request
+    dispatch(createRequest({ id }));
+
+    return axios
+      .get(url, { params })
+      .then((response) => {
+        const { data } = response;
+        dispatch(receiveRequest({
+          id,
+          data,
+        }));
+        dispatch(receiveEntities({
+          key,
+          entities: data.entities,
+        }));
+        return returnData ? data : data.entities;
+      })
+      .catch((error) => {
+        // TODO: set didInvalidate=true of entity and dispatch alert action
+        errorRequest({
+          id,
+          error,
+        });
+        throw error;
+      });
+  };
+}

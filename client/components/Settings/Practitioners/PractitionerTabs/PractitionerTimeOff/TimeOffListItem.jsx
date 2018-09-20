@@ -1,16 +1,9 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import moment from 'moment';
-import { ListItem, Icon, IconButton, Col } from '../../../../library';
+import { ListItem, IconButton } from '../../../../library';
+import { dateFormatter } from '../../../../../../iso/helpers/dateTimezone';
 import styles from './styles.scss';
-
-const setTime = (time) => {
-  const tempTime = new Date(time);
-  const mergeTime = new Date(1970, 1, 0);
-  mergeTime.setHours(tempTime.getHours());
-  return mergeTime.toISOString();
-};
 
 class TimeOffListItem extends Component {
   constructor(props) {
@@ -25,16 +18,14 @@ class TimeOffListItem extends Component {
   }
 
   render() {
-    const { timeOff, onClick } = this.props;
+    const { timeOff, onClick, timezone } = this.props;
 
-    const {
-      startDate, endDate, note, allDay, fromPMS, pmsId,
-    } = timeOff;
+    const { startDate, endDate, note, allDay, fromPMS, pmsId } = timeOff;
 
-    const startDateFM = moment(startDate).format('MMM Do YYYY');
-    const endDateFM = moment(endDate).format('MMM Do YYYY');
-    const startTimeFM = moment(startDate).format('LT');
-    const endTimeFM = moment(endDate).format('LT');
+    const startDateFM = dateFormatter(startDate, timezone, 'MMM Do YYYY');
+    const endDateFM = dateFormatter(endDate, timezone, 'MMM Do YYYY');
+    const startTimeFM = dateFormatter(startDate, timezone, 'LT');
+    const endTimeFM = dateFormatter(endDate, timezone, 'LT');
 
     const showData = allDay
       ? `${startDateFM} To: ${endDateFM}`
@@ -54,17 +45,12 @@ class TimeOffListItem extends Component {
       );
 
     return (
-      <ListItem
-        onClick={fromPMS || pmsId ? () => {} : onClick}
-        className={styles.timeOffList_item}
-      >
+      <ListItem onClick={fromPMS || pmsId ? () => {} : onClick} className={styles.timeOffList_item}>
         <div className={styles.timeOffList_date}>
           {showData}
           <div className={styles.timeOffList_note}>{showNote}</div>
         </div>
-        <div className={styles.timeOffList_allDay}>
-          {allDay ? 'All Day' : null}&nbsp;
-        </div>
+        <div className={styles.timeOffList_allDay}>{allDay ? 'All Day' : null}&nbsp;</div>
         {button}
       </ListItem>
     );
@@ -72,6 +58,7 @@ class TimeOffListItem extends Component {
 }
 
 TimeOffListItem.propTypes = {
+  timezone: PropTypes.string.isRequired,
   timeOff: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
   deleteTimeOff: PropTypes.func.isRequired,

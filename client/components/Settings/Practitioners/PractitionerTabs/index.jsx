@@ -24,9 +24,7 @@ import {
 class PractitionerTabs extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      index: 0,
-    };
+    this.state = { index: 0 };
 
     this.handleTabChange = this.handleTabChange.bind(this);
     this.updatePractitioner = this.updatePractitioner.bind(this);
@@ -72,9 +70,7 @@ class PractitionerTabs extends Component {
   }
 
   render() {
-    const {
-      practitioner, weeklySchedule, timeOffs, recurringTimeOffs,
-    } = this.props;
+    const { practitioner, weeklySchedule, timeOffs, recurringTimeOffs } = this.props;
 
     if (!practitioner) {
       return null;
@@ -120,7 +116,7 @@ class PractitionerTabs extends Component {
             <Tab label="Practitioner Schedule" data-test-id="tab_practitionerOfficeHours" />
             <Tab label="Reasons" data-test-id="tab_practitionerServices" />
             <Tab label="Time Off" data-test-id="tab_practitionerTimeOff" />
-            <Tab label="Recurring Time Off" />
+            <Tab label="Recurring Time Off" data-test-id="tab_practitionerRecurringTimeOff" />
           </Tabs>
         }
       >
@@ -217,4 +213,7 @@ PractitionerTabs.defaultProps = {
   weeklySchedule: null,
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(PractitionerTabs);
+export default connect(
+  mapStateToProps,
+  mapActionsToProps,
+)(PractitionerTabs);

@@ -58,7 +58,9 @@ class DropdownSelect extends Component {
         }
       });
 
-      this.scrollComponent.scrollTop = valueHeight * this.valueScrollComponent.scrollHeight;
+      if (this.valueScrollComponent) {
+        this.scrollComponent.scrollTop = valueHeight * this.valueScrollComponent.scrollHeight;
+      }
     }
 
     if (this.state.isOpen) {
@@ -95,24 +97,14 @@ class DropdownSelect extends Component {
 
   toggle() {
     this.clearSearchValue();
-    if (this.state.isOpen) {
-      this.setState({
-        isOpen: false,
-      });
-    } else {
-      this.setState({
-        isOpen: true,
-      });
-    }
+    this.setState(prevState => ({ isOpen: !prevState.isOpen }));
   }
 
   close() {
     this.clearSearchValue();
     document.removeEventListener('keydown', this.searchListener);
 
-    this.setState({
-      isOpen: false,
-    });
+    this.setState({ isOpen: false });
   }
 
   handleSearch(value) {
@@ -139,9 +131,7 @@ class DropdownSelect extends Component {
   }
 
   renderList() {
-    const {
-      template, onChange, value, options,
-    } = this.props;
+    const { template, onChange, value, options } = this.props;
 
     const OptionTemplate = template || DefaultOption;
 
@@ -184,9 +174,7 @@ class DropdownSelect extends Component {
   }
 
   renderToggle() {
-    const {
-      value, options, template, theme, error, disabled, label,
-    } = this.props;
+    const { value, options, template, theme, error, disabled, label } = this.props;
 
     const defaultTemplate = ({ option }) => <div>{option.label || option.value}</div>;
     const ToggleTemplate = template || defaultTemplate;
@@ -266,9 +254,7 @@ class DropdownSelect extends Component {
   }
 }
 
-DropdownSelect.defaultProps = {
-  align: 'left',
-};
+DropdownSelect.defaultProps = { align: 'left' };
 
 DropdownSelect.propTypes = {
   label: PropTypes.string,

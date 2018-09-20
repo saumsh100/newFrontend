@@ -8,7 +8,7 @@ import { Form, Field, Icon, Grid, Row, Col } from '../../../../library';
 import TimeOffDisplay from './TimeOffDisplay';
 import styles from './styles.scss';
 
-const generateTimeOptions = () => {
+const generateTimeOptions = (timezone) => {
   const timeOptions = [];
   const totalHours = 24;
   const increment = 60;
@@ -18,23 +18,52 @@ const generateTimeOptions = () => {
   for (i = 0; i < totalHours; i++) {
     let j;
     for (j = 0; j < increments; j++) {
-      const time = moment(new Date(1970, 1, 0, i, j * increment));
-      const value = time.toISOString();
+      const time = moment.tz(`1970-1-31 ${i}:${j * increment}`, 'YYYY-M-D H:mm', timezone);
+      const value = time.format();
       const label = time.format('LT');
-      timeOptions.push({ value, label });
+      timeOptions.push({
+        value,
+        label,
+      });
     }
   }
 
   return timeOptions;
 };
 
-const timeOptions = generateTimeOptions();
+const setDate = (date, timezone) => {
+  const mergeTime = moment.tz(date, 'YYYY-MM-DDThh:mm:ssZ', timezone);
 
-const setTime = (time) => {
-  const tempTime = new Date(time);
-  const mergeTime = new Date(1970, 1, 0);
-  mergeTime.setHours(tempTime.getHours());
-  return mergeTime.toISOString();
+  if (!mergeTime.isValid()) {
+    return moment()
+      .tz(timezone)
+      .format('L');
+  }
+
+  return mergeTime.format('L');
+};
+
+const defaultTimeOptions = {
+  year: 1970,
+  month: 0,
+  date: 31,
+  minutes: 0,
+};
+
+const setTime = (time, timezone) => {
+  const completeTime = moment.tz(time, 'YYYY-MM-DDThh:mm:ssZ', timezone).set(defaultTimeOptions);
+
+  if (!completeTime.isValid()) {
+    return moment
+      .tz(time, timezone)
+      .set({
+        ...defaultTimeOptions,
+        hour: 0,
+      })
+      .format();
+  }
+
+  return completeTime.format();
 };
 
 const checkDates = ({ startDate, endDate }) => {
@@ -58,25 +87,18 @@ const maxLength = max => value =>
 const maxLength10 = maxLength(10);
 
 function TimeOffForm(props) {
-  const {
-    timeOff,
-    formName,
-    handleSubmit,
-    values,
-    showOption,
-    setOption,
-  } = props;
+  const { timeOff, formName, handleSubmit, values, showOption, setOption, timezone } = props;
 
-  const {
-    startDate, endDate, allDay, note,
-  } = timeOff.toJS();
+  const { startDate, endDate, allDay, note } = timeOff.toJS();
+
+  const timeOptions = generateTimeOptions(timezone);
 
   const initialValues = {
-    startDate: moment(startDate).format('L'),
-    endDate: moment(endDate).format('L'),
+    startDate: setDate(startDate, timezone),
+    endDate: setDate(endDate, timezone),
     allDay,
-    startTime: setTime(startDate),
-    endTime: setTime(endDate),
+    startTime: setTime(startDate, timezone),
+    endTime: setTime(endDate, timezone),
     note,
   };
 
@@ -87,6 +109,7 @@ function TimeOffForm(props) {
       name="startTime"
       label="Start Time"
       className={styles.inlineBlock}
+      data-test-id="startTime"
     />
   ) : null;
   const endTimeComponent = !values.allDay ? (
@@ -96,12 +119,13 @@ function TimeOffForm(props) {
       name="endTime"
       label="End Time"
       className={styles.inlineBlock}
+      data-test-id="endTime"
     />
   ) : null;
 
-  const showNoteComponent = showOption ? (
+  const showNoteComponent = showOption && (
     <Field name="note" label="Note" data-test-id="noteInput" />
-  ) : null;
+  );
   const optionsIcon = showOption ? 'minus' : 'plus';
 
   const columnSizeDate = values.allDay ? 12 : 8;
@@ -119,7 +143,12 @@ function TimeOffForm(props) {
       <Grid>
         <Row>
           <Col xs={12} md={columnSizeDate}>
-            <Field component="DayPicker" name="startDate" label="Start Date" />
+            <Field
+              component="DayPicker"
+              name="startDate"
+              label="Start Date"
+              data-test-id="startDate"
+            />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
             {startTimeComponent}
@@ -127,14 +156,14 @@ function TimeOffForm(props) {
         </Row>
         <Row>
           <Col xs={12} md={columnSizeDate}>
-            <Field component="DayPicker" name="endDate" label="End Date" />
+            <Field component="DayPicker" name="endDate" label="End Date" data-test-id="endDate" />
           </Col>
           <Col xs={12} md={columnSizeTime} className={styles.flexCenter}>
             {endTimeComponent}
           </Col>
         </Row>
         <Row className={styles.flexCenter}>
-          <Col xs={6} className={styles.allDay}>
+          <Col xs={6} className={styles.allDay} data-test-id="toggle_allDay">
             <div className={styles.allDay_text}> All Day </div>
             <Field component="Toggle" name="allDay" />
           </Col>
@@ -151,7 +180,7 @@ function TimeOffForm(props) {
         </Row>
       </Grid>
       {showNoteComponent}
-      <TimeOffDisplay values={values} />
+      <TimeOffDisplay values={values} timezone={timezone} />
     </Form>
   );
 }
@@ -160,19 +189,16 @@ TimeOffForm.PropTypes = {
   timeOff: PropTypes.object,
   formName: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 function mapStateToProps({ form }, { formName }) {
   // form data is populated when component renders
   if (!form[formName]) {
-    return {
-      values: {},
-    };
+    return { values: {} };
   }
 
-  return {
-    values: form[formName].values,
-  };
+  return { values: form[formName].values };
 }
 
 const enhance = withState('showOption', 'setOption', false);

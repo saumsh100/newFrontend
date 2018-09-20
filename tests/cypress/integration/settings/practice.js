@@ -62,6 +62,33 @@ describe('Account Settings - Practice', () => {
     });
   });
 
+  context('General Settings', () => {
+    after(() => {
+      // RESET THE TIMEZONE
+      cy
+        .visit('http://localhost:5100/settings/practice/general')
+        .wait(1000)
+        .selectOption('addressSettingsForm', 'timezone', 'option_160')
+        .submitForm('addressSettingsForm');
+    });
+
+    it('change timezones of office hours when timezone is altered', () => {
+      cy
+        .visit('http://localhost:5100/settings/practice/hours')
+        .wait(1000)
+        .get('[data-test-id="dropDown_monday_startTime"]')
+        .contains('9:00 AM')
+        .visit('http://localhost:5100/settings/practice/general')
+        .wait(1000)
+        .selectOption('addressSettingsForm', 'timezone', 'option_114')
+        .submitForm('addressSettingsForm')
+        .visit('http://localhost:5100/settings/practice/hours')
+        .wait(1000)
+        .get('[data-test-id="dropDown_monday_startTime"]')
+        .contains('12:00 PM');
+    });
+  });
+
   context.skip('Users Settings', () => {
     beforeEach(() => {
       cy.visit('http://localhost:5100/settings/practice/users');

@@ -22,30 +22,37 @@ class Address extends Component {
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
-      success: {
-        body: 'Updated Address Information',
-      },
-      error: {
-        body: 'Address Information Update Failed',
-      },
+      success: { body: 'Updated Address Information' },
+      error: { body: 'Address Information Update Failed' },
     };
 
-    this.props.updateEntityRequest({ key: 'accounts', model: modifiedAccount, alert }).then(() => {
-      if (activeAccount.addressId) {
-        values.accountId = activeAccount.id;
-        this.props.updateEntityRequest({
-          key: 'addresses',
-          values,
-          url: `/api/addresses/${activeAccount.addressId}`,
-        });
-      } else {
-        this.props.createEntityRequest({
-          key: 'addresses',
-          values,
-          url: '/api/addresses/',
-        });
-      }
-    });
+    this.props
+      .updateEntityRequest({
+        key: 'accounts',
+        model: modifiedAccount,
+        alert,
+      })
+      .then(() => {
+        if (activeAccount.addressId) {
+          values.accountId = activeAccount.id;
+          this.props.updateEntityRequest({
+            key: 'addresses',
+            values,
+            url: `/api/addresses/${activeAccount.addressId}`,
+          });
+        } else {
+          this.props.createEntityRequest({
+            key: 'addresses',
+            values,
+            url: '/api/addresses/',
+          });
+        }
+      })
+      .then(() => {
+        if (values.timezone !== activeAccount.timezone) {
+          window.location.reload();
+        }
+      });
   }
 
   render() {
@@ -78,9 +85,7 @@ Address.propTypes = {
   change: PropTypes.func.isRequired,
 };
 
-Address.defaultProps = {
-  address: null,
-};
+Address.defaultProps = { address: null };
 
 function mapDispatchToActions(dispatch) {
   return bindActionCreators(
@@ -102,5 +107,8 @@ function mapStateToProps({ entities }, { activeAccount }) {
   };
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToActions);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToActions,
+);
 export default enhance(Address);

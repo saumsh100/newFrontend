@@ -13,23 +13,13 @@ import accountShape from '../../../library/PropTypeShapes/accountShape';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
-const daysOfWeek = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-];
+const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
 class OfficeHours extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      active: false,
-    };
+    this.state = { active: false };
 
     this.reinitializeState = this.reinitializeState.bind(this);
     this.openModal = this.openModal.bind(this);
@@ -40,9 +30,7 @@ class OfficeHours extends Component {
   }
 
   reinitializeState() {
-    this.setState({
-      active: false,
-    });
+    this.setState({ active: false });
   }
 
   delete(i) {
@@ -62,12 +50,8 @@ class OfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: 'Clinic Pattern Deleted',
-      },
-      error: {
-        body: 'Clinic Pattern Deleted Failed',
-      },
+      success: { body: 'Clinic Pattern Deleted' },
+      error: { body: 'Clinic Pattern Deleted Failed' },
     };
 
     return this.props.updateEntityRequest({
@@ -95,12 +79,8 @@ class OfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: 'Clinic Office Hours Updated',
-      },
-      error: {
-        body: 'Clinic Office Hours Update Failed',
-      },
+      success: { body: 'Clinic Office Hours Updated' },
+      error: { body: 'Clinic Office Hours Update Failed' },
     };
 
     this.props.updateEntityRequest({
@@ -116,12 +96,8 @@ class OfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: 'Clinic Office Hours Updated',
-      },
-      error: {
-        body: 'Clinic Office Hours Update Failed',
-      },
+      success: { body: 'Clinic Office Hours Updated' },
+      error: { body: 'Clinic Office Hours Update Failed' },
     };
 
     return this.props
@@ -131,9 +107,7 @@ class OfficeHours extends Component {
         alert,
       })
       .then(() => {
-        this.setState({
-          active: false,
-        });
+        this.setState({ active: false });
       });
   }
 
@@ -145,10 +119,7 @@ class OfficeHours extends Component {
     }
 
     const weeklySchedule = Object.assign({}, this.props.weeklySchedule.toJS());
-    const weeklyScheduleNew = Object.assign(
-      {},
-      this.props.weeklySchedule.toJS(),
-    );
+    const weeklyScheduleNew = Object.assign({}, this.props.weeklySchedule.toJS());
 
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
@@ -168,12 +139,8 @@ class OfficeHours extends Component {
     const newWeeklySchedule = this.props.weeklySchedule.merge(weeklySchedule);
 
     const alert = {
-      success: {
-        body: 'Clinic Office Hours Updated',
-      },
-      error: {
-        body: 'Clinic Office Hours Update Failed',
-      },
+      success: { body: 'Clinic Office Hours Updated' },
+      error: { body: 'Clinic Office Hours Update Failed' },
     };
 
     return this.props
@@ -183,28 +150,20 @@ class OfficeHours extends Component {
         alert,
       })
       .then(() => {
-        this.setState({
-          active: false,
-        });
+        this.setState({ active: false });
       });
   }
 
   openModal() {
-    this.setState({
-      active: true,
-    });
+    this.setState({ active: true });
   }
 
   render() {
-    const { weeklySchedule } = this.props;
+    const { weeklySchedule, activeAccount } = this.props;
     const handleSubmit = (index, values) => {
       const alert = {
-        success: {
-          body: 'Clinic Office Hours Updated',
-        },
-        error: {
-          body: 'Clinic Office Hours Update Failed',
-        },
+        success: { body: 'Clinic Office Hours Updated' },
+        error: { body: 'Clinic Office Hours Update Failed' },
       };
 
       const newWeeklySchedule = Object.assign({}, weeklySchedule.toJS());
@@ -228,11 +187,7 @@ class OfficeHours extends Component {
         <div>
           <div className={styles.orSpacer} />
           <div className={styles.flexHeader} data-test-id={`pattern_${i}`}>
-            <Header
-              contentHeader
-              title={`Week ${i + 2} Pattern`}
-              className={styles.header}
-            />
+            <Header contentHeader title={`Week ${i + 2} Pattern`} className={styles.header} />
             <Button className={styles.button} onClick={this.delete}>
               Delete
             </Button>
@@ -266,7 +221,10 @@ class OfficeHours extends Component {
         label: 'Save',
         onClick: this.changeStartDate,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: 'advanceCreate' },
+        props: {
+          color: 'blue',
+          form: 'advanceCreate',
+        },
       },
     ];
 
@@ -298,11 +256,7 @@ class OfficeHours extends Component {
           </Form>
         </DialogBox>
         <div className={styles.flexHeader}>
-          <Header
-            title="Weekly Schedule"
-            contentHeader
-            className={styles.header}
-          />
+          <Header title="Weekly Schedule" contentHeader className={styles.header} />
           <div>
             <Button
               className={styles.button}
@@ -349,11 +303,7 @@ OfficeHours.propTypes = {
 };
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn([
-    'accounts',
-    'models',
-    auth.get('accountId'),
-  ]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   if (!activeAccount) {
     return {};
@@ -372,12 +322,7 @@ function mapStateToProps({ entities, auth }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      updateEntityRequest,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ updateEntityRequest }, dispatch);
 }
 
 const enhance = connect(

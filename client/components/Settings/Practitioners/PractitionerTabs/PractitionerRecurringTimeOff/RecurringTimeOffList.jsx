@@ -21,27 +21,22 @@ class RecurringTimeOffList extends Component {
   }
 
   render() {
-    const {
-      recurringTimeOffs,
-      practitioner,
-      onSelectTimeOff,
-      deleteTimeOff,
-      children,
-    } = this.props;
+    const { recurringTimeOffs, practitioner, onSelectTimeOff, children, timezone } = this.props;
 
     return (
       <List className={styles.timeOffList} data-test-id="timeOffList">
-        <div className={styles.timeOffList_addTimeOffText}>
-          Add Time Off{children}
-        </div>
-        {recurringTimeOffs.toArray().map(timeOff => (
-          <RecurringTimeOffListItem
-            key={timeOff.get('id')}
-            timeOff={timeOff}
-            practitioner={practitioner}
-            onClick={() => onSelectTimeOff(timeOff)}
-            deleteTimeOff={this.deleteTimeOff}
-          />
+        <div className={styles.timeOffList_addTimeOffText}>Add Time Off{children}</div>
+        {recurringTimeOffs
+          .toArray()
+          .map(timeOff => (
+            <RecurringTimeOffListItem
+              key={timeOff.get('id')}
+              timeOff={timeOff}
+              practitioner={practitioner}
+              onClick={() => onSelectTimeOff(timeOff)}
+              deleteTimeOff={this.deleteTimeOff}
+              timezone={timezone}
+            />
           ))}
       </List>
     );
@@ -54,6 +49,7 @@ RecurringTimeOffList.propTypes = {
   practitioner: PropTypes.object.isRequired,
   onSelectTimeOff: PropTypes.func.isRequired,
   deleteTimeOff: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 export default RecurringTimeOffList;

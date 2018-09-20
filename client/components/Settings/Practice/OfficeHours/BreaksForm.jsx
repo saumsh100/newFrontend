@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import moment from 'moment';
 import pick from 'lodash/pick';
+import { connect } from 'react-redux';
 import mapValues from 'lodash/mapValues';
 import {
   Button,
@@ -16,37 +17,14 @@ import {
   Field,
   FieldArray,
 } from '../../../library/index';
+import { dateFormatter, timeOptionsWithTimezone } from '../../../../../iso/helpers/dateTimezone';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
-
-const generateTimeOptions = () => {
-  const timeOptions = [];
-  const totalHours = 24;
-  const increment = 5;
-  const increments = 60 / increment;
-
-  let i;
-  for (i = 0; i < totalHours; i += 1) {
-    let j;
-    for (j = 0; j < increments; j += 1) {
-      const time = moment(new Date(1970, 1, 0, i, j * increment));
-      const value = time.toISOString();
-      const label = time.format('LT');
-      timeOptions.push({ value, label });
-    }
-  }
-
-  return timeOptions;
-};
 
 const defaultStartTime = moment(new Date(1970, 1, 0, 12, 0)).toISOString();
 const defaultEndTime = moment(new Date(1970, 1, 0, 13, 0)).toISOString();
 
-const timeOptions = generateTimeOptions();
-
-function BreaksForm({
-  weeklySchedule, onSubmit, breaksName, dataId, breaksIndex,
-}) {
+function BreaksForm({ weeklySchedule, onSubmit, breaksName, dataId, breaksIndex, timezone }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
 
@@ -60,9 +38,14 @@ function BreaksForm({
     'sunday',
   ]);
 
+  const timeOptions = timeOptionsWithTimezone(timezone);
   const initialValues = mapValues(parsedWeeklySchedule, (day) => {
     const breaks = day.breaks || [];
-    return { breaks };
+    const formatedBreaks = breaks.map(({ startTime, endTime }) => ({
+      startTime: dateFormatter(startTime, timezone),
+      endTime: dateFormatter(endTime, timezone),
+    }));
+    return { breaks: formatedBreaks };
   });
 
   const renderBreaks = day => ({ fields }) => (
@@ -117,6 +100,7 @@ function BreaksForm({
                     options={timeOptions}
                     name={`${field}.endTime`}
                     label="End Time"
+                    data-test-id={`input_${day}BreakEndTime`}
                     search="label"
                   />
                 </Col>
@@ -146,9 +130,7 @@ function BreaksForm({
     </FormSection>
   );
 
-  DayBreaksForm.propTypes = {
-    day: PropTypes.string.isRequired,
-  };
+  DayBreaksForm.propTypes = { day: PropTypes.string.isRequired };
 
   return (
     <Form
@@ -179,6 +161,7 @@ BreaksForm.propTypes = {
   breaksName: PropTypes.string,
   dataId: PropTypes.string,
   breaksIndex: PropTypes.number,
+  timezone: PropTypes.string.isRequired,
 };
 
 BreaksForm.defaultProps = {
@@ -187,4 +170,11 @@ BreaksForm.defaultProps = {
   breaksName: '',
 };
 
-export default BreaksForm;
+function mapStateToProps({ auth }) {
+  return { timezone: auth.get('timezone') };
+}
+
+export default connect(
+  mapStateToProps,
+  null,
+)(BreaksForm);

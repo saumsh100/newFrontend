@@ -2,35 +2,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import moment from 'moment';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
+import { timeOptionsWithTimezone, dateFormatter } from '../../../../../iso/helpers/dateTimezone';
 import { Grid, Row, Col, Form, FormSection, Field, IconButton } from '../../../library/index';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
-
-const generateTimeOptions = () => {
-  const timeOptions = [];
-  const totalHours = 24;
-  const increment = 5;
-  const increments = 60 / increment;
-
-  let i;
-  for (i = 0; i < totalHours; i += 1) {
-    let j;
-    for (j = 0; j < increments; j += 1) {
-      const time = moment(new Date(1970, 1, 0, i, j * increment));
-      const value = time.toISOString();
-      const label = time.format('LT');
-      timeOptions.push({ value, label });
-    }
-  }
-
-  return timeOptions;
-};
-
-const timeOptions = generateTimeOptions();
 
 function OfficeHoursForm({
   values,
@@ -41,6 +19,7 @@ function OfficeHoursForm({
   modal,
   openModal,
   hoursIndex,
+  timezone,
 }) {
   // TODO: finish fetchEntitiesHOC so we dont have to do this...
   if (!weeklySchedule) return null;
@@ -55,11 +34,13 @@ function OfficeHoursForm({
     'sunday',
   ]);
 
+  const timeOptions = timeOptionsWithTimezone(timezone);
+
   // Need to do this so editing breaks does not screw up initialValues here
   const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => ({
     isClosed,
-    startTime,
-    endTime,
+    startTime: dateFormatter(startTime, timezone),
+    endTime: dateFormatter(endTime, timezone),
   }));
 
   const DayHoursForm = ({ day }) => {
@@ -85,12 +66,9 @@ function OfficeHoursForm({
             <Col xs={7} className={styles.flexCentered}>
               <Grid>
                 <Row>
-                  <Col
-                    xs={4}
-                    className={styles.flexCentered}
-                    data-test-id={`dropDown_${day}_startTime`}
-                  >
+                  <Col xs={4} className={styles.flexCentered}>
                     <Field
+                      data-test-id={`dropDown_${day}_startTime`}
                       component="DropdownSelect"
                       options={timeOptions}
                       name="startTime"
@@ -112,6 +90,7 @@ function OfficeHoursForm({
                   </Col>
                   <Col xs={4} className={styles.flexCentered}>
                     <Field
+                      data-test-id={`dropDown_${day}_endTime`}
                       className={styles.inlineBlock}
                       component="DropdownSelect"
                       options={timeOptions}
@@ -134,9 +113,7 @@ function OfficeHoursForm({
     );
   };
 
-  DayHoursForm.propTypes = {
-    day: PropTypes.string.isRequired,
-  };
+  DayHoursForm.propTypes = { day: PropTypes.string.isRequired };
 
   return (
     <Form
@@ -175,6 +152,7 @@ OfficeHoursForm.propTypes = {
   modal: PropTypes.bool,
   openModal: PropTypes.func,
   hoursIndex: PropTypes.number,
+  timezone: PropTypes.string.isRequired,
 };
 
 OfficeHoursForm.defaultProps = {
@@ -184,19 +162,20 @@ OfficeHoursForm.defaultProps = {
   hoursIndex: 0,
   dataId: '',
   openModal: e => e,
+  account: null,
 };
 
-function mapStateToProps({ form }, { formName }) {
+function mapStateToProps({ form, auth }, { formName }) {
   // form data is populated when component renders
-  if (!form[formName]) {
-    return {
-      values: {},
-    };
-  }
+  const timezone = auth.get('timezone');
 
   return {
-    values: form[formName].values,
+    values: !form[formName] ? {} : form[formName].values,
+    timezone,
   };
 }
 
-export default connect(mapStateToProps, null)(OfficeHoursForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(OfficeHoursForm);
