@@ -29,7 +29,7 @@ class Header extends Component {
       history,
       location,
       routesState: { isCompleteRoute, isFirstRoute },
-      isBook,
+      isReviewApp,
     } = this.props;
 
     const path = location.pathname
@@ -43,15 +43,14 @@ class Header extends Component {
           <div
             className={classNames({
               [styles.headerLeftArea]: true,
-              [styles.hideBack]: isCompleteRoute || isFirstRoute || !isBook,
+              [styles.hideBack]: isCompleteRoute || isFirstRoute || isReviewApp,
             })}
           >
             <BackButton history={history} goBack={this.goBack} />
           </div>
-
           <div className={styles.headerCenterArea}>
             <h2 className={classNames(styles.pageTitle, { [styles.complete]: isCompleteRoute })}>
-              {isBook ? 'Schedule your Appointment' : 'Review your Visit'}
+              {isReviewApp ? 'Review Your Visit' : 'Schedule Your Appointment'}
             </h2>
           </div>
           <div className={styles.headerRightArea}>
@@ -77,7 +76,7 @@ Header.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   routesState: PropTypes.objectOf(PropTypes.bool).isRequired,
-  isBook: PropTypes.bool.isRequired,
+  isReviewApp: PropTypes.bool.isRequired,
 };
 
 export default withRouter(connect(

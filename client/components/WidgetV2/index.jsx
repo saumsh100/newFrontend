@@ -73,7 +73,7 @@ class Widget extends Component {
 
     const { pathname } = this.props.location;
 
-    const isBookingApp = pathname.split('/')[4] === 'book';
+    const isReviewApp = pathname.split('/')[4] === 'review';
 
     const isReviewRoute = buildMatchpath('book/review', pathname);
     const isCompleteRoute = buildMatchpath('book/complete', pathname);
@@ -92,7 +92,7 @@ class Widget extends Component {
     return (
       <div className={styles.reviewsWidgetContainer}>
         <div className={styles.reviewsWidgetCenter}>
-          <Header routesState={routesState} isBook={isBookingApp} />
+          <Header routesState={routesState} isReviewApp={isReviewApp} />
           <Element
             id="widgetContainer"
             className={styles.widgetContainer}
@@ -102,7 +102,7 @@ class Widget extends Component {
             }}
           >
             {!isCompleteRoute &&
-              isBookingApp && (
+              !isReviewApp && (
                 <div className={styles.stepsWrapper}>
                   <div className={styles.steps}>
                     <Button
