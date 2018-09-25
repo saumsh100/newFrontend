@@ -312,9 +312,13 @@ class DateTime extends PureComponent {
       );
     };
     const currentDate = new Date();
+    const queryVars = parse(this.props.location.search);
     const disabledDates =
-      this.props.isRecall && this.props.selectedStartDate > currentDate.toISOString()
-        ? moment(this.props.selectedStartDate).toDate()
+      queryVars &&
+      queryVars.dueDate &&
+      this.props.isRecall &&
+      queryVars.dueDate > currentDate.toISOString()
+        ? moment(queryVars.dueDate).toDate()
         : currentDate;
     return (
       <Element id="scrollableContainer" className={styles.scrollableContainer}>
