@@ -141,7 +141,7 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
       } catch (error) {
         console.error(`------ Failed sending '${interval} ${primaryType}' reminder to ${patient.firstName} ${patient.lastName}`);
         console.error(error);
-        return;
+        continue;
       }
 
       await sentReminder.update({ isSent: true });

@@ -200,7 +200,7 @@ export function sendTemplate(config) {
       // Error Callback
       (err) => {
         if (err) {
-          console.error(`Mandrill Error: ${err}`);
+          console.error(`Mandrill Error: ${JSON.stringify(err, null, 2)}`);
           reject(err);
         }
       },
