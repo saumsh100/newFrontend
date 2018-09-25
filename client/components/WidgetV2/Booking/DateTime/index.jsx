@@ -246,8 +246,8 @@ class DateTime extends PureComponent {
     /**
      * Renders a single slot of time.
      *
-     * @param {object} availability
-     * @param {string} j
+     * @param timeframe
+     * @return React.element
      */
     const renderTimesOnTimeFrame = timeframe => (availability) => {
       const availabilityClasses = classNames(styles.slot, {
@@ -311,7 +311,11 @@ class DateTime extends PureComponent {
         )
       );
     };
-
+    const currentDate = new Date();
+    const disabledDates =
+      this.props.isRecall && this.props.selectedStartDate > currentDate.toISOString()
+        ? moment(this.props.selectedStartDate).toDate()
+        : currentDate;
     return (
       <Element id="scrollableContainer" className={styles.scrollableContainer}>
         <div className={styles.contentWrapper}>
@@ -326,8 +330,8 @@ class DateTime extends PureComponent {
                 noTarget
                 fromMonth={new Date()}
                 month={this.state.month}
-                disabledDays={{ before: new Date() }}
-                modifiers={{ disabled: { before: new Date() } }}
+                disabledDays={{ before: disabledDates }}
+                modifiers={{ disabled: { before: disabledDates } }}
                 numberOfMonths={isResponsive() ? 1 : 2}
                 // here i'm formatting the date like so we don't convert the date
                 // selectedStartDate needs to be iso string because of the API needs it
@@ -388,6 +392,7 @@ function mapStateToProps({ availabilities, widgetNavigation }) {
     accountTimezone,
     availabilities: availabilitiesSorted,
     isFetching,
+    isRecall: availabilities.get('isRecall'),
     dueDate: availabilities.get('dueDate'),
     nextAvailability: availabilities.get('nextAvailability'),
     selectedAvailability: availabilities.get('selectedAvailability'),
@@ -439,6 +444,7 @@ DateTime.propTypes = {
   setTimeFrame: PropTypes.func.isRequired,
   timeframe: PropTypes.string,
   hideButton: PropTypes.func.isRequired,
+  isRecall: PropTypes.bool.isRequired,
   floatingButtonIsClicked: PropTypes.bool.isRequired,
   setIsClicked: PropTypes.func.isRequired,
   showButton: PropTypes.func.isRequired,

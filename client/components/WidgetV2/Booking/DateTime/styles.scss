@@ -80,10 +80,12 @@
 .nextAvailabilityButton {
   width: 100%;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 15px;
   padding: var(--widget-spacer) 0;
   margin-top: calc(50px - var(--widget-spacer));
   margin-bottom: 50px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
 }
 .datePicker {
   border: 1px solid $widget-grey-lighter;
