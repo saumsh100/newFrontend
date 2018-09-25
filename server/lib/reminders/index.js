@@ -297,13 +297,18 @@ const sortRemindersByEarliestAppointmentDate =
  * @params outboxList
  */
 export function organizeRemindersOutboxList(outboxList) {
+  // Prefix the grouping with the PoC patientId to guarantee that
+  // the correct patient is displayed as contact
   // Assume appointment.id is the unique indicator
   // (shouldn't be multiple different reminders going out to same appointment)
-  const selectorPredicate = ({ patient, dependants }) =>
-    [patient, ...dependants]
+  const selectorPredicate = ({ patient, dependants }) => {
+    const appt = [patient, ...dependants]
       .filter(({ appointment }) => appointment)
       .map(({ appointment }) => appointment.id)
       .join('-');
+
+    return `${patient.id}-${appt}`;
+  };
 
   const mergePredicate = (groupedArray) => {
     const primaryTypes = groupedArray.map(item => item.primaryType);
@@ -314,6 +319,5 @@ export function organizeRemindersOutboxList(outboxList) {
 
     return omit(newObj, 'primaryType');
   };
-
   return organizeForOutbox(outboxList, selectorPredicate, mergePredicate);
 }

@@ -350,7 +350,7 @@ describe('Reminders Job Integration Tests', () => {
       await RemindersLibrary.sendRemindersForAccount({ account, pub: mockPub, ...dates() });
 
       const sentReminderModel = await SentReminder.findOne({ where: { contactedPatientId: patientId } });
-    
+
       expect(RemindersHelpers.getAppointmentsFromReminder).toHaveBeenCalledTimes(1);
       expect(sendReminder.sms).not.toHaveBeenCalled();
       expect(sentReminderModel.errorCode).toBe('1200');
@@ -709,6 +709,148 @@ describe('Reminders Job Integration Tests', () => {
       expect(moment.tz(outboxList[0].sendDate, TIME_ZONE).format('h:mma')).toBe('9:00am');
       expect(moment.tz(outboxList[1].sendDate, TIME_ZONE).format('h:mma')).toBe('9:15am');
       expect(moment.tz(outboxList[2].sendDate, TIME_ZONE).format('h:mma')).toBe('11:00am');
+    });
+  });
+
+  describe('organizeRemindersOutboxList', () => {
+    const preferences = { sms: true, emailNotifications: true, phone: true };
+    test('should be unique by appointment', () => {
+      const appointments = [
+        {
+          appointment: { id: 1 },
+          patient: { id: 2, preferences },
+          dependants: [],
+          primaryType: 'email',
+        },
+        {
+          appointment: { id: 1 },
+          patient: { id: 2, preferences },
+          dependants: [],
+          primaryType: 'sms',
+        },
+        {
+          appointment: { id: 2 },
+          patient: { id: 1, preferences },
+          dependants: [],
+          primaryType: 'sms',
+        },
+      ];
+      const outBox = RemindersLibrary.organizeRemindersOutboxList(appointments);
+      expect(outBox).toHaveLength(2);
+      expect(outBox).toMatchSnapshot();
+    });
+
+    test('should be unique by appointment with dependants', () => {
+      const appointments = [
+        {
+          patient: { id: 2, preferences },
+          dependants: [
+            {
+              appointment: { id: 1 },
+              patient: { id: 3, preferences },
+            },
+            {
+              appointment: { id: 2 },
+              patient: { id: 4, preferences },
+            },
+          ],
+          primaryType: 'email',
+        },
+        {
+          patient: { id: 2, preferences },
+          dependants: [
+            {
+              appointment: { id: 1 },
+              patient: { id: 3, preferences },
+            },
+            {
+              appointment: { id: 2 },
+              patient: { id: 4, preferences },
+            },
+          ],
+          primaryType: 'sms',
+        },
+      ];
+      const outBox = RemindersLibrary.organizeRemindersOutboxList(appointments);
+      expect(outBox[0].dependants).toHaveLength(2);
+      expect(outBox).toMatchSnapshot();
+    });
+
+    test('should be unique by appointment for dependants with PoC', () => {
+      const appointments = [
+        {
+          patient: { id: 1, preferences },
+          appointment: { id: 1 },
+          dependants: [],
+          primaryType: 'email',
+        },
+        {
+          patient: { id: 2, preferences },
+          dependants: [
+            {
+              appointment: { id: 1 },
+              patient: { id: 1, preferences },
+            },
+          ],
+          primaryType: 'sms',
+        },
+      ];
+      const outBox = RemindersLibrary.organizeRemindersOutboxList(appointments);
+      expect(outBox).toHaveLength(2);
+      expect(outBox).toMatchSnapshot();
+    });
+
+    test('should be unique by appointment for dependants + PoC', () => {
+      const appointments = [
+        {
+          patient: { id: 1, preferences },
+          appointment: { id: 1 },
+          dependants: [],
+          primaryType: 'email',
+        },
+        {
+          patient: { id: 2, preferences },
+          appointment: { id: 2 },
+          dependants: [
+            {
+              appointment: { id: 1 },
+              patient: { id: 1, preferences },
+            },
+          ],
+          primaryType: 'sms',
+        },
+      ];
+      const outBox = RemindersLibrary.organizeRemindersOutboxList(appointments);
+      expect(outBox).toHaveLength(2);
+      expect(outBox).toMatchSnapshot();
+    });
+
+    test('should be unique by appointment for dependants with different PoCs per channel', () => {
+      const appointments = [
+        {
+          patient: { id: 1, preferences },
+          dependants: [
+            {
+              appointment: { id: 1 },
+              patient: { id: 3, preferences },
+            },
+          ],
+          primaryType: 'email',
+        },
+        {
+          patient: { id: 2, preferences },
+          dependants: [
+            {
+              appointment: { id: 1 },
+              patient: { id: 3, preferences },
+            },
+          ],
+          primaryType: 'sms',
+        },
+      ];
+      const outBox = RemindersLibrary.organizeRemindersOutboxList(appointments);
+      expect(outBox).toHaveLength(2);
+      expect(outBox).toMatchSnapshot();
     });
   });
 });
