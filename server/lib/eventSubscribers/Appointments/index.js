@@ -7,11 +7,21 @@ import { getConfigsForLastProcedure } from '../../../lib/lastProcedure/runLastPr
 import lastProcedureData from '../../../lib/lastProcedure/lastProcedureData';
 import { getConfigsForDueDates, updatePatientDueDatesForAccount } from '../../../lib/dueDate';
 
+const runFirstNextLastCalc = async appointments => calcFirstNextLastAppointment(
+  appointments,
+  async (currentPatient, appointmentsObj) => {
+    await Patient.update(
+      { ...appointmentsObj },
+      { where: { id: currentPatient } },
+    );
+  },
+);
+
 /**
- * does the firstNextLast calculation by grabbing all the patients appointments
+ * does the firstNextLast calculation by grabbing all appointments for a single patient
  */
-function calcPatientFNLAllApps(app) {
-  return Appointment.findAll({
+async function calcPatientFNLAllApps(app) {
+  const appointments = await Appointment.findAll({
     raw: true,
     where: {
       accountId: app.accountId,
@@ -22,72 +32,54 @@ function calcPatientFNLAllApps(app) {
       isPending: false,
     },
     order: [['startDate', 'DESC']],
-  }).then(async (appointments) => {
-    return await calcFirstNextLastAppointment(appointments,
-      async (currentPatient, appointmentsObj) => {
-        try {
-          await Patient.update({
-            ...appointmentsObj,
-          },
-            {
-              where: {
-                id: currentPatient,
-              },
-            });
-        } catch (err) {
-          console.log(err);
-        }
-      });
   });
-};
+    
+  return runFirstNextLastCalc(appointments);
+}
 
 /**
  * does the firstNextLast calculation without grabbing all the patients appointments
  * unless necessary.
  *
  */
+function calcPatientFNLSingleApp(app, patient, sDate) {
+  const today = new Date().toISOString();
+  const startDate = moment(sDate).toISOString();
+  const nextApptDate = patient.nextApptDate ? moment(patient.nextApptDate).toISOString() : today;
 
-function calcPatientFNLSingleApp(app, patient, startDate) {
-  if (moment(startDate).isAfter(new Date()) && !patient.nextApptId) {
-    patient.nextApptId = app.id;
-    patient.nextApptDate = startDate;
+  if (startDate > today && !patient.nextApptId) {
+    const patientData = {
+      ...patient,
+      nextApptId: app.id,
+      nextApptDate: startDate,
+    };
 
-    return Patient.update(patient, {
-      where: {
-        id: patient.id,
-      },
-    });
-  } else if (moment(startDate).isAfter(new Date()) && patient.nextApptId){
-    return Appointment.findOne({
-      where: { id: patient.nextApptId },
-      raw: true,
-    }).then((appNext) => {
-      if (moment(appNext.startDate).isAfter(moment(startDate))) {
-        patient.nextApptId = app.id;
-        patient.nextApptDate = startDate;
+    return updatePatient(patientData);
+  } else if (startDate > today && startDate < nextApptDate) {
+    const patientData = {
+      ...patient,
+      nextApptId: app.id,
+      nextApptDate: startDate,
+    };
 
-        return Patient.update(patient, {
-          where: {
-            id: patient.id,
-          },
-        });
-      }
-    });
-  } else if (moment(startDate).isBefore(new Date()) && !patient.lastApptId && !patient.firstApptId) {
-    patient.lastApptId = app.id;
-    patient.lastApptDate = startDate;
+    return updatePatient(patientData);
+  } else if (startDate < today && !patient.lastApptId && !patient.firstApptId) {
+    const patientData = {
+      ...patient,
+      lastApptId: app.id,
+      lastApptDate: startDate,
+      firstApptId: app.id,
+      firstApptDat: startDate,
+    };
 
-    patient.firstApptId = app.id;
-    patient.firstApptDate = startDate;
-
-    return Patient.update(patient, {
-      where: {
-        id: patient.id,
-      },
-    });
+    return updatePatient(patientData);
   }
 
   return calcPatientFNLAllApps(app);
+}
+
+function updatePatient(patientData) {
+  return Patient.update(patientData, { where: { id: patientData.id } });
 }
 
 /**
@@ -95,9 +87,8 @@ function calcPatientFNLSingleApp(app, patient, startDate) {
  *
  * @param  {id} - id of an appointment
  */
-
-function firstNextLastAppointmentCalc(id) {
-  return Appointment.findOne({
+async function firstNextLastAppointmentCalc(id) {
+  const app = await Appointment.findOne({
     where: { id },
     include: [
       {
@@ -108,19 +99,18 @@ function firstNextLastAppointmentCalc(id) {
     ],
     nest: true,
     raw: true,
-  }).then((app) => {
-    if (app) {
-      const patient = app.patient;
-      const startDate = app.startDate;
-
-      if (!app.isDeleted && !app.isPending && !app.isMissed && !app.isCancelled) {
-        return calcPatientFNLSingleApp(app, patient, startDate);
-      }
-
-      // If an appointment was cancelled deleted or changed to pending reset FNL for this patient.
-      return calcPatientFNLAllApps(app);
-    }
   });
+
+  if (app) {
+    const { patient, startDate } = app;
+
+    if (!app.isDeleted && !app.isPending && !app.isMissed && !app.isCancelled) {
+      return calcPatientFNLSingleApp(app, patient, startDate);
+    }
+
+    // If an appointment was cancelled deleted or changed to pending reset FNL for this patient.
+    return calcPatientFNLAllApps(app);
+  }
 }
 
 /**
@@ -128,41 +118,38 @@ function firstNextLastAppointmentCalc(id) {
  *
  * @param  {[appointmentIds]} - array of appointment ids that were created/updated
  */
-function firstNextLastAppointmentBatchCalc(appointmentIds) {
-  return Appointment.findAll({
-    raw: true,
+export async function firstNextLastAppointmentBatchCalc(appointmentIds) {
+  const batchedApps = await Appointment.findAll({
     where: {
       id: appointmentIds,
       isCancelled: false,
       isDeleted: false,
       isMissed: false,
       isPending: false,
-      patientId: {
-        $not: null,
-      },
+      patientId: { $not: null },
     },
-    order: [['patientId', 'DESC'], ['startDate', 'DESC']],
-  }).then(async (appointments) => {
-    console.log('Batching First Next Last');
-    return await calcFirstNextLastAppointment(appointments,
-      async (currentPatient, appointmentsObj) => {
-        try {
-          await Patient.update({
-            ...appointmentsObj,
-          },
-            {
-              where: {
-                id: currentPatient,
-              },
-            });
-        } catch (err) {
-          console.log(err);
-        }
-      });
+    attributes: ['patientId'],
   });
+
+  const patientIds = batchedApps.map(app => app.patientId);
+
+  const allApps = await Appointment.findAll({
+    raw: true,
+    where: {
+      isCancelled: false,
+      isMissed: false,
+      isPending: false,
+      isDeleted: false,
+      patientId: patientIds,
+    },
+    attributes: ['id', 'startDate', 'patientId'],
+    order: [['patientId', 'DESC'], ['startDate', 'DESC']],
+  });
+  
+  return runFirstNextLastCalc(allApps);
 }
 
- /**
+/**
  * does the due date calculation when a appointment(s)
  * is changed and the other jobs it needs (last recall and last hygiene)
  *
@@ -176,49 +163,54 @@ async function dueDateCalculation(ids) {
     attributes: ['patientId', 'accountId'],
     where: {
       id: ids,
-      patientId: {
-        $not: null,
-      },
+      patientId: { $not: null },
     },
   });
 
   if (appointments.length) {
     const patientIds = appointments.map(p => p.patientId);
-    const accountId = appointments[0].accountId;
+    const { accountId } = appointments[0];
     const account = await Account.findById(accountId);
-    const lastHygieneConfigs = await getConfigsForLastProcedure({ account, ...lastProcedureData['lastHygiene'] });
-    const lastRecallConfigs = await getConfigsForLastProcedure({ account, ...lastProcedureData['lastRecall'] });
+    const lastHygieneConfigs = await getConfigsForLastProcedure({
+      account,
+      ...lastProcedureData.lastHygiene,
+    });
+    const lastRecallConfigs = await getConfigsForLastProcedure({
+      account,
+      ...lastProcedureData.lastRecall,
+    });
     await updateLastProcedureForAccount({
       account,
       patientIds,
       ...lastHygieneConfigs,
-      ...lastProcedureData['lastHygiene'],
+      ...lastProcedureData.lastHygiene,
     });
 
     await updateLastProcedureForAccount({
       account,
       patientIds,
       ...lastRecallConfigs,
-      ...lastProcedureData['lastRecall'],
+      ...lastProcedureData.lastRecall,
     });
 
     // Fetch account and other configurations that are important for the dueDates job
     const configurationsMap = await getConfigsForDueDates(account);
     const date = (new Date()).toISOString();
-    await updatePatientDueDatesForAccount({ account, date, patientIds, ...configurationsMap });
+    await updatePatientDueDatesForAccount({
+      account,
+      date,
+      patientIds,
+      ...configurationsMap,
+    });
   }
 }
 
 function registerAppointmentCalc(sub, push) {
-  sub.on('data', async (data) => {
-    return push.write(data, 'utf8');
-  });
+  sub.on('data', async data => push.write(data, 'utf8'));
 }
 
 function registerAppointmentBatchCalc(sub, push) {
-  sub.on('data', async (data) => {
-    return push.write(data, 'utf8');
-  });
+  sub.on('data', async data => push.write(data, 'utf8'));
 }
 
 export default function registerAppointmentsSubscriber(context, io) {
