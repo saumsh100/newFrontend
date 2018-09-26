@@ -582,6 +582,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of Eaglesoft API url, integration key, userId and password",
+        "name": "EAGLESOFT_CREDENTIALS",
+        "value": "[]",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -1009,6 +1018,15 @@ Object {
         "description": "Set practitioner to hygienist for hygiene appointments.",
         "name": "SET_HYGIENIST_FOR_HYGIENE_APPOINTMENT",
         "value": "0",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "json",
+        "description": "A json array of Eaglesoft API url, integration key, userId and password",
+        "name": "EAGLESOFT_CREDENTIALS",
+        "value": "[]",
       },
       "type": "configuration",
     },
