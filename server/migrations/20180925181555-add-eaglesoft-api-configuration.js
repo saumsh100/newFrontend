@@ -29,7 +29,7 @@ module.exports = {
       try {
         const configurations = await queryInterface
           .sequelize.query(`
-            SELECT * FROM "Configurations"
+            SELECT id FROM "Configurations"
             WHERE "name" = '${migrationFieldName}';
           ` , { transaction: t });
 
