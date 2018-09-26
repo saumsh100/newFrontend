@@ -2,7 +2,7 @@
 'use strict';
 
 const uuid = require('uuid').v4;
-const migrationFieldName = 'EAGLESOFT_CREDENTIALS';
+const migrationFieldName = 'EAGLESOFT_API_CONFIGURATION';
 
 module.exports = {
   up:  (queryInterface) => {
