@@ -12,6 +12,7 @@ import {
   setChatMessages,
   setLockedChats,
 } from '../reducers/chat';
+import { setBackHandler } from '../reducers/electron';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
@@ -270,7 +271,9 @@ export function setChatMessagesListForChat(chatId) {
 
 export function selectChat(id) {
   return (dispatch, getState) => {
-    const { routing } = getState();
+    const { routing, electron } = getState();
+    const persistedBackHandler = electron.get('backHandler');
+
     dispatch(setSelectedChatId(id));
 
     if (isOnChatPage(routing.location.pathname)) {
@@ -282,6 +285,7 @@ export function selectChat(id) {
     }
     dispatch(unlockChat(id));
     dispatch(setChatMessagesListForChat(id));
+    dispatch(setBackHandler(persistedBackHandler));
   };
 }
 
