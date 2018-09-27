@@ -62,7 +62,7 @@ export async function receiveMessage(account, textMessageData) {
     return;
   }
 
-  // Confirm first available reminder
+  // Confirm first available reminder for the closest appointment
   const sentReminders = await confirmReminderIfExist(account.id, patient.id);
   const firstSentReminder = sentReminders[0];
   if (!firstSentReminder || firstSentReminder.sentRemindersPatients.length === 0) {

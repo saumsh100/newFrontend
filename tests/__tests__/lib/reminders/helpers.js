@@ -89,7 +89,7 @@ const seedWithNonConfirmableAppointments = async ({ reminder, appointments }) =>
     appointmentId: appointments[7].id,
     patientId,
   });
-  
+
   const sentReminder4 = await SentReminder.create(makeSentReminderData({
     reminderId: reminder.id,
     createdAt: date(2017, 7, 4, 4),
@@ -939,7 +939,7 @@ describe('RemindersList Calculation Library', () => {
         expect(r[0].sentRemindersPatients[0].appointmentId).toBe(appointments[10].id);
       });
     });
-    
+
     describe('#confirmReminderIfExist', async () => {
       test('should be a function', () => {
         expect(typeof confirmReminderIfExist).toBe('function');
@@ -958,6 +958,8 @@ describe('RemindersList Calculation Library', () => {
           makeApptData({ ...dates(2017, 7, 10, 10) }), // 10th at 10 Confirmable
           makeApptData({ ...dates(2017, 7, 10, 11) }), // 10th at 11 Confirmable
           makeApptData({ ...dates(2017, 7, 10, 12) }), // 10th at 12 Confirmable
+          makeApptData({ ...dates(2017, 7, 26, 12) }), // 26th at 12 Confirmable
+          makeApptData({ ...dates(2017, 7, 24, 12) }), // 24th at 12 Confirmable
         ]);
       });
 
@@ -972,13 +974,13 @@ describe('RemindersList Calculation Library', () => {
           reminderId: reminder.id,
           createdAt: date(2017, 7, 4, 5),
         }));
-      
+
         await SentRemindersPatients.create({
           sentRemindersId: sentReminder1.id,
           appointmentId: appointments[0].id,
           patientId,
         });
-        
+
         const validSmsReminders =
           await confirmReminderIfExist(accountId, patientId, date(2017, 7, 5, 7));
         const confirmedSentReminder = await SentReminder.findOne({
@@ -1008,13 +1010,13 @@ describe('RemindersList Calculation Library', () => {
           reminderId: reminder.id,
           createdAt: date(2017, 7, 4, 5),
         }));
-      
+
         await SentRemindersPatients.create({
           sentRemindersId: sentReminder1.id,
           appointmentId: appointments[0].id,
           patientId,
         });
-        
+
         await SentRemindersPatients.create({
           sentRemindersId: sentReminder1.id,
           appointmentId: appointments[1].id,
@@ -1050,6 +1052,57 @@ describe('RemindersList Calculation Library', () => {
         confirmedSentReminder.sentRemindersPatients.forEach(({ appointment }) => {
           expect(appointment.isPatientConfirmed).toBeTruthy();
         });
+      });
+
+      test('Should confirm the reminder for the closest appointment', async () => {
+        const sentReminder1 = await SentReminder.create(makeSentReminderData({
+          reminderId: reminder.id,
+          createdAt: date(2017, 7, 5, 4), // first sent reminder
+          interval: '7 days',
+        }));
+
+        await SentRemindersPatients.create({
+          sentRemindersId: sentReminder1.id,
+          appointmentId: appointments[3].id,
+          patientId,
+        });
+
+        const sentReminder2 = await SentReminder.create(makeSentReminderData({
+          reminderId: reminder.id,
+          createdAt: date(2017, 7, 5, 5),
+          interval: '3 days',
+        }));
+
+        await SentRemindersPatients.create({
+          sentRemindersId: sentReminder2.id,
+          appointmentId: appointments[4].id, // closest appointment
+          patientId,
+        });
+
+        const validSmsReminders =
+          await confirmReminderIfExist(accountId, patientId, date(2017, 7, 24, 7));
+        const confirmedSentReminder = await SentReminder.findAll({
+          include: [
+            {
+              model: SentRemindersPatients,
+              as: 'sentRemindersPatients',
+              include: [
+                {
+                  model: Appointment,
+                  as: 'appointment',
+                },
+              ],
+            },
+          ],
+        });
+
+        expect(validSmsReminders).toHaveLength(2);
+        expect(confirmedSentReminder[0].isConfirmed).toBeFalsy();
+        expect(confirmedSentReminder[1].isConfirmed).toBeTruthy();
+        expect(confirmedSentReminder[0].sentRemindersPatients[0].appointment.isPatientConfirmed)
+          .toBeFalsy();
+        expect(confirmedSentReminder[1].sentRemindersPatients[0].appointment.isPatientConfirmed)
+          .toBeTruthy();
       });
     });
   });

@@ -25,6 +25,7 @@ import {
 import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
+import sortAsc from '../../../iso/helpers/sort/sortAsc';
 
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
@@ -416,7 +417,11 @@ export function isAppointmentConfirmed(appointment, reminder) {
  * @param date
  * @return [sentReminders]
  */
-export async function getValidSmsReminders({ accountId, patientId, date = (new Date()).toISOString() }) {
+export async function getValidSmsReminders({
+  accountId,
+  patientId,
+  date = (new Date()).toISOString(),
+}) {
   // Confirming valid SMS Reminder for patient
   const sentReminders = await SentReminder.findAll({
     where: {
@@ -460,8 +465,34 @@ export async function getValidSmsReminders({ accountId, patientId, date = (new D
     order: [['createdAt', 'asc']],
   });
 
-  return sentReminders.filter(({ sentRemindersPatients }) => sentRemindersPatients.length > 0);
+  // here we need to not only filter the appointment but also re order the sentReminders
+  // based by appointments date + interval
+  // we can't do this in the query due to the format we store in the db
+  return sentReminders
+    .filter(({ sentRemindersPatients }) => sentRemindersPatients.length > 0)
+    .map((sr) => {
+      const { appointment: { startDate } } =
+        sr.sentRemindersPatients.sort(sortByAppointmentStartDate)[0];
+
+      // we can't destruct sequelize model to not loose it helpers
+      sr.orderDate = moment(startDate)
+        .add(convertIntervalStringToObject(sr.interval))
+        .toISOString();
+
+      return sr;
+    })
+    .sort(({ orderDate: a }, { orderDate: b }) => sortAsc(a, b));
 }
+
+/**
+ * Sort sentRemindersPatients by appointment startDate
+ *
+ * @param appointment.startDate: a
+ * @param appointment.startDate: b
+ * @returns {sentRemindersPatients}
+ */
+const sortByAppointmentStartDate =
+  ({ appointment: { startDate: a } }, { appointment: { startDate: b } }) => sortAsc(a, b);
 
 /**
  * fetchActiveReminders is used by the outbox functions to
