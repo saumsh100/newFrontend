@@ -138,8 +138,8 @@ ChatListItem.defaultProps = {
 };
 
 function mapStateToProps(state, { chat = {} }) {
+  const { lastTextMessageId } = chat;
   const patients = state.entities.getIn(['patients', 'models']);
-  const lastTextMessageId = chat.textMessages[chat.textMessages.length - 1];
   const lastTextMessage = state.entities.getIn(['textMessages', 'models', lastTextMessageId]);
   const selectedChatId = state.chat.get('selectedChatId');
   const lockedChat = state.chat.get('lockedChats').includes(chat.id);

@@ -17,6 +17,7 @@ import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from '
 import DesktopNotification from '../util/desktopNotification';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
 import { isHub } from '../util/hub';
+import { sortByFieldAsc } from '../components/library/util/SortEntities';
 
 function isOnChatPage(currentPath) {
   return currentPath.indexOf('/chat') !== -1;
@@ -46,14 +47,7 @@ export function defaultSelectedChatId() {
 
     // Because it is not defined, we need to sort the chats and pick the appropriate one
     const chats = entities.getIn(['chats', 'models']);
-    const textMessages = entities.getIn(['textMessages', 'models']);
-    const sortedChats = chats.sort((a, b) => {
-      const aLastId = a.textMessages[a.textMessages.length - 1];
-      const aLastTm = textMessages.get(aLastId);
-      const bLastId = b.textMessages[b.textMessages.length - 1];
-      const bLastTm = textMessages.get(bLastId);
-      return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
-    });
+    const sortedChats = sortByFieldAsc(chats, 'lastTextMessageId');
 
     const firstChat = sortedChats.first();
     if (firstChat) {
@@ -257,15 +251,9 @@ export function setChatMessagesListForChat(chatId) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const allMessages = entities.getIn(['textMessages', 'models']);
-    const filteredChatMessages = allMessages
-      .filter(message => message.chatId === chatId)
-      .sort((messageOne, messageTwo) => {
-        const dateOne = new Date(messageOne.createdAt);
-        const dateTwo = new Date(messageTwo.createdAt);
-        return dateOne - dateTwo;
-      });
-
-    return dispatch(setChatMessages(filteredChatMessages || []));
+    const filteredChatMessages = allMessages.filter(message => message.chatId === chatId);
+    const sortedMessages = sortByFieldAsc(filteredChatMessages, 'createdAt');
+    return dispatch(setChatMessages(sortedMessages || []));
   };
 }
 

@@ -9,6 +9,7 @@ import { ListItem, IconButton } from '../../library';
 import ChatListItem from './ChatListItem';
 import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
 import { setNewChat, filterChatsByTab } from '../../../reducers/chat';
+import { sortByFieldAsc } from '../../library/util/SortEntities';
 import listItemStyles from './ChatListItem/styles.scss';
 
 class ChatListContainer extends Component {
@@ -20,16 +21,8 @@ class ChatListContainer extends Component {
   }
 
   sortChatList() {
-    const { textMessages, chats } = this.props;
-    return chats.sort((a, b) => {
-      if (!a.textMessages.length || !b.textMessages.length) return -1;
-      const aLastId = a.textMessages[a.textMessages.length - 1];
-      const aLastTm = textMessages.get(aLastId);
-      const bLastId = b.textMessages[b.textMessages.length - 1];
-      const bLastTm = textMessages.get(bLastId);
-      if (!aLastTm || !bLastTm) return -1;
-      return new Date(bLastTm.createdAt) - new Date(aLastTm.createdAt);
-    });
+    const { chats } = this.props;
+    return sortByFieldAsc(chats, 'lastTextMessageDate');
   }
 
   selectNewChat() {
@@ -91,7 +84,6 @@ class ChatListContainer extends Component {
 }
 
 ChatListContainer.propTypes = {
-  textMessages: PropTypes.instanceOf(Map),
   chats: PropTypes.instanceOf(Map),
   newChat: PropTypes.shape({ patientId: PropTypes.string }),
   newChatPatient: PropTypes.instanceOf(PatientModel),
@@ -103,7 +95,6 @@ ChatListContainer.propTypes = {
 };
 
 ChatListContainer.defaultProps = {
-  textMessages: null,
   chats: null,
   newChat: null,
   newChatPatient: null,
@@ -121,7 +112,6 @@ function mapStateToProps({ entities, chat }, { tabIndex }) {
   return {
     newChat,
     chats: filterChatsByTab(chats, textMessages, selectedChat, tabIndex),
-    textMessages,
     selectedChatId: chat.get('selectedChatId'),
     newChatPatient: entities.getIn(['patients', 'models', patientId]),
   };
