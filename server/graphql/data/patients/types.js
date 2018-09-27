@@ -28,7 +28,7 @@ const patientType = new GraphQLObjectType({
       resolve: async (patient) => {
         const { mobilePhoneNumber: cellPhoneNumber, accountId } = patient;
         const poc = await getPatientBasedOnFieldsProvided(accountId, { cellPhoneNumber });
-        return poc.id === patient.id;
+        return !!poc && poc.id === patient.id;
       },
     },
     isEmailPoc: {
@@ -36,7 +36,7 @@ const patientType = new GraphQLObjectType({
       resolve: async (patient) => {
         const { email, accountId } = patient;
         const poc = await getPatientBasedOnFieldsProvided(accountId, { email });
-        return poc.id === patient.id;
+        return !!poc && poc.id === patient.id;
       },
     },
   }),

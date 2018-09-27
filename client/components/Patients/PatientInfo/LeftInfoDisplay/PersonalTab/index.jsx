@@ -44,7 +44,11 @@ export default function PersonalTab(props) {
         </Col>
         <Col xs={6} className={styles.paddingCol}>
           <InfoDump label="MOBILE NUMBER" data={formatPhoneNumber(patient.mobilePhoneNumber)}>
-            {() => <PointOfContactBadge patientId={patient.id} channel="phone" />}
+            {() =>
+              patient.mobilePhoneNumber && (
+                <PointOfContactBadge patientId={patient.id} channel="phone" />
+              )
+            }
           </InfoDump>
         </Col>
         <Col xs={6}>
@@ -52,7 +56,7 @@ export default function PersonalTab(props) {
         </Col>
         <Col xs={6}>
           <InfoDump label="EMAIL" data={patient.email} type="email">
-            {() => <PointOfContactBadge patientId={patient.id} channel="email" />}
+            {() => patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
           </InfoDump>
         </Col>
       </Row>

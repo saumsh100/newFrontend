@@ -42,15 +42,21 @@ export default function About({ patient }) {
           <Row className={styles.otherSection}>
             <Col xs={12}>
               <Content title="Mobile Phone" value={patient.mobilePhoneNumber || 'n/a'}>
-                {() => <PointOfContactBadge patientId={patient.id} channel="phone" />}
+                {() =>
+                  patient.mobilePhoneNumber && (
+                    <PointOfContactBadge patientId={patient.id} channel="phone" />
+                  )
+                }
               </Content>
             </Col>
             <Col xs={12}>
               <Content title="Home Phone" value={patient.homePhoneNumber || 'n/a'} />
             </Col>
             <Col xs={12}>
-              <Content title="Email" value={patient.email ? patient.email : 'n/a'}>
-                {() => <PointOfContactBadge patientId={patient.id} channel="email" />}
+              <Content title="Email" value={patient.email || 'n/a'}>
+                {() =>
+                  patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />
+                }
               </Content>
             </Col>
           </Row>
