@@ -40,3 +40,9 @@ export const sortByFieldAsc = (collection, fieldDate) =>
     if (moment(b[fieldDate]).isAfter(moment(a[fieldDate]))) return 1;
     return 0;
   });
+
+export const sortTextMessages = (messageOne, messageTwo) => {
+  const dateOne = new Date(messageOne.createdAt);
+  const dateTwo = new Date(messageTwo.createdAt);
+  return dateOne - dateTwo;
+};

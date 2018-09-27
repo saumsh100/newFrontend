@@ -17,7 +17,7 @@ import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from '
 import DesktopNotification from '../util/desktopNotification';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
 import { isHub } from '../util/hub';
-import { sortByFieldAsc } from '../components/library/util/SortEntities';
+import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
 
 function isOnChatPage(currentPath) {
   return currentPath.indexOf('/chat') !== -1;
@@ -251,9 +251,10 @@ export function setChatMessagesListForChat(chatId) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const allMessages = entities.getIn(['textMessages', 'models']);
-    const filteredChatMessages = allMessages.filter(message => message.chatId === chatId);
-    const sortedMessages = sortByFieldAsc(filteredChatMessages, 'createdAt');
-    return dispatch(setChatMessages(sortedMessages || []));
+    const filteredChatMessages = allMessages
+      .filter(message => message.chatId === chatId)
+      .sort(sortTextMessages);
+    return dispatch(setChatMessages(filteredChatMessages || []));
   };
 }
 
