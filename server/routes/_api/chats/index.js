@@ -303,30 +303,31 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
 /**
  * Get a chat's textMessages
  */
-chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), (req, res, next) => {
-  const { limit = TEXT_MESSAGE_LIMIT, skip = 0 } = req.query;
+chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), async ({ query, chat: { id } }, res, next) => {
+  try {
+    const { limit = TEXT_MESSAGE_LIMIT, skip = 0 } = query;
 
-  // We re-query cause we need getJoin, didn't feel like duplicated some loaders code
-  return Chat.findOne({
-    where: { id: req.chat.id },
-    include: [
-      {
-        model: TextMessage,
-        as: 'textMessages',
-        include: [
-          {
-            model: User,
-            as: 'user',
-            attributes: { exclude: 'password' },
-            required: false,
-          },
-        ],
-        required: false,
-      },
-    ],
-  })
-    .then(chat => res.send(normalize('chat', chat.get({ plain: true }))))
-    .catch(next);
+    const messages = await TextMessage.findAll({
+      where: { chatId: id },
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: { exclude: 'password' },
+          required: false,
+        },
+      ],
+      limit,
+      offset: skip,
+      order: [['createdAt', 'DESC']],
+    });
+
+    const allMessages = messages.map(message => message.get({ plain: true }));
+    const normalized = normalize('textMessages', allMessages);
+    return res.send(normalized);
+  } catch (e) {
+    return next(e);
+  }
 });
 
 /**

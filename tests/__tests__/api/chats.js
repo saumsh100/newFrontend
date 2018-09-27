@@ -10,6 +10,7 @@ import { omitPropertiesFromBody } from '../../util/selectors';
 
 const chatId = '3180a744-f6b0-4a09-8046-4e713bf5b565';
 const textMessageId = '059987cb-3051-4656-98d0-72cda34d32a6';
+const textMessageId1 = '059987cb-3051-4656-98d0-72cda34d32a1';
 const patientPhoneNumber = '+16045555555';
 const clinicPhone = '+16043333333';
 
@@ -34,6 +35,16 @@ const textMessage = {
   userId: '6668f250-e8c9-46e3-bfff-0249f1eec6b8',
 };
 
+const textMessage1 = {
+  id: textMessageId1,
+  chatId,
+  to: patientPhoneNumber,
+  from: clinicPhone,
+  body: 'This is a test text message, latest',
+  createdAt: '2017-07-20T00:14:30.932Z',
+  userId: '6668f250-e8c9-46e3-bfff-0249f1eec6b8',
+};
+
 async function seedTestChats() {
   await wipeModel(TextMessage);
   await wipeModel(Chat);
@@ -41,6 +52,7 @@ async function seedTestChats() {
   await seedTestPatients();
   await Chat.create(chat);
   await TextMessage.create(textMessage);
+  await TextMessage.create(textMessage1);
 }
 
 function filterObject(obj, key) {
@@ -110,6 +122,18 @@ describe('/api/chats', () => {
     test('/:chatId/textMessages - retrieve text messages for a chat', () => {
       return request(app)
         .get(`${rootUrl}/${chatId}/textMessages`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200)
+        .then(({ body }) => {
+          filterObject(body, 'updatedAt')
+          body = omitPropertiesFromBody(body);
+          expect(body).toMatchSnapshot();
+        });
+    });
+
+    test('/:chatId/textMessages - offset and limiting returns correct messages', () => {
+      return request(app)
+        .get(`${rootUrl}/${chatId}/textMessages?limit=1&skip=1`)
         .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .then(({ body }) => {
