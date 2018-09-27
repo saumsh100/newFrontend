@@ -12,13 +12,11 @@ import {
   Button,
   TextArea,
   IconButton,
-} from '../index.js';
+  PointOfContactBadge,
+} from '..';
 import { formatPhoneNumber } from '../../library/util/Formatters';
-import {
-  patientShape,
-  chairShape,
-  practitionerShape,
-} from '../PropTypeShapes/index';
+import { patientShape, appointmentShape, practitionerShape } from '../PropTypeShapes/index';
+import ChairModel from '../../../entities/models/Chair';
 import styles from './styles.scss';
 
 const popoverDataSections = (subHeaderText, data) => (
@@ -29,18 +27,14 @@ const popoverDataSections = (subHeaderText, data) => (
 );
 
 export default function AppointmentInfo(props) {
-  const {
-    patient, appointment, age, practitioner, chair,
-  } = props;
+  const { patient, appointment, age, practitioner, chair } = props;
 
   const { startDate, endDate, note } = appointment;
 
   const appointmentDate = moment(startDate).format('dddd LL');
   const lastName = age ? `${patient.lastName},` : patient.lastName;
 
-  const textAreaTheme = {
-    group: styles.textAreaGroup,
-  };
+  const textAreaTheme = { group: styles.textAreaGroup };
 
   return (
     <Card className={styles.card} noBorder>
@@ -48,8 +42,7 @@ export default function AppointmentInfo(props) {
         <SHeader className={styles.header}>
           <Icon icon="calendar" size={1.5} />
           <div className={styles.header_text}>
-            {moment(startDate).format('h:mm a')} -{' '}
-            {moment(endDate).format('h:mm a')}
+            {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
           </div>
           <div className={styles.closeIcon}>
             <IconButton icon="times" onClick={() => props.closePopover()} />
@@ -64,22 +57,21 @@ export default function AppointmentInfo(props) {
               <div className={styles.subHeader}>Contact Info</div>
 
               <div className={styles.data}>
-                {patient.mobilePhoneNumber ? (
-                  <Icon icon="phone" size={0.9} type="solid" />
-                ) : null}
+                {patient.mobilePhoneNumber && <Icon icon="phone" size={0.9} type="solid" />}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber &&
-                  patient.mobilePhoneNumber[0] === '+'
+                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
                     ? formatPhoneNumber(patient.mobilePhoneNumber)
                     : patient.mobilePhoneNumber}
+                  {patient.mobilePhoneNumber && (
+                    <PointOfContactBadge patientId={patient.id} channel="phone" />
+                  )}
                 </div>
               </div>
 
               <div className={styles.data}>
-                {patient.email ? (
-                  <Icon icon="envelope" size={0.9} type="solid" />
-                ) : null}
+                {patient.email && <Icon icon="envelope" size={0.9} type="solid" />}
                 <div className={styles.data_text}>{patient.email}</div>
+                {patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
               </div>
             </div>
           ) : (
@@ -121,15 +113,13 @@ export default function AppointmentInfo(props) {
 }
 
 AppointmentInfo.propTypes = {
-  editAppointment: PropTypes.func,
-  closePopover: PropTypes.func,
+  editAppointment: PropTypes.func.isRequired,
+  closePopover: PropTypes.func.isRequired,
   age: PropTypes.number,
-  practitioner: PropTypes.shape(practitionerShape),
-  patient: PropTypes.shape(patientShape),
-  chair: PropTypes.shape(chairShape),
-  appointment: PropTypes.shape({
-    startDate: PropTypes.string,
-    endDate: PropTypes.string,
-    note: PropTypes.string,
-  }),
+  chair: PropTypes.instanceOf(ChairModel).isRequired,
+  practitioner: PropTypes.shape(practitionerShape).isRequired,
+  patient: PropTypes.shape(patientShape).isRequired,
+  appointment: PropTypes.shape(appointmentShape).isRequired,
 };
+
+AppointmentInfo.defaultProps = { age: null };

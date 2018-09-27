@@ -5,6 +5,7 @@ import moment from 'moment';
 import {
   Card,
   Avatar,
+  IconButton,
   Icon,
   SContainer,
   SHeader,
@@ -12,26 +13,19 @@ import {
   SFooter,
   Button,
   TextArea,
+  PointOfContactBadge,
 } from '../../../../library';
 import { FormatPhoneNumber } from '../../../../library/util/Formatters';
+import { appointmentShape } from '../../../../library/PropTypeShapes';
+import PatientModel from '../../../../../entities/models/Patient';
 import styles from './styles.scss';
 
-export default function AppointmentPopover(props) {
-  const { patient, appointment, scheduleView } = props;
-
-  const {
-    startDate, endDate, practitionerData, chairData, note,
-  } = appointment;
-
+export default function AppointmentPopover({ patient, appointment, scheduleView, ...props }) {
+  const { startDate, endDate, practitionerData, chairData, note } = appointment;
   const age = moment().diff(patient.get('birthDate'), 'years') || '';
-
   const appointmentDate = moment(startDate).format('dddd LL');
   const lastName = age ? `${patient.lastName},` : patient.lastName;
-
-  const textAreaTheme = {
-    group: styles.textAreaGroup,
-  };
-
+  const textAreaTheme = { group: styles.textAreaGroup };
   return (
     <Card className={styles.card} noBorder>
       <SContainer>
@@ -40,9 +34,7 @@ export default function AppointmentPopover(props) {
           <div className={styles.header_text}>
             {patient.firstName} {lastName} {age}
           </div>
-          <div className={styles.closeIcon} onClick={props.closePopover}>
-            <Icon icon="times" />
-          </div>
+          <IconButton className={styles.closeIcon} icon="times" onClick={props.closePopover} />
         </SHeader>
         <SBody className={styles.body}>
           <div className={styles.container}>
@@ -53,8 +45,7 @@ export default function AppointmentPopover(props) {
           <div className={styles.container}>
             <div className={styles.subHeader}>Time</div>
             <div className={styles.data}>
-              {moment(startDate).format('h:mm a')} -{' '}
-              {moment(endDate).format('h:mm a')}
+              {moment(startDate).format('h:mm a')} - {moment(endDate).format('h:mm a')}
             </div>
           </div>
 
@@ -63,9 +54,7 @@ export default function AppointmentPopover(props) {
               {scheduleView === 'chair' ? 'Practitioner' : 'Chair'}
             </div>
             <div className={styles.data}>
-              {scheduleView === 'chair'
-                ? practitionerData.prettyName
-                : chairData}
+              {scheduleView === 'chair' ? practitionerData.prettyName : chairData}
             </div>
           </div>
 
@@ -74,20 +63,23 @@ export default function AppointmentPopover(props) {
               <div className={styles.subHeader}>Patient Info</div>
 
               <div className={styles.data}>
-                {patient.mobilePhoneNumber ? (
-                  <Icon icon="phone" size={0.9} />
-                ) : null}
+                {patient.mobilePhoneNumber && <Icon icon="phone" size={0.9} />}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber &&
-                  patient.mobilePhoneNumber[0] === '+'
+                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
                     ? FormatPhoneNumber(patient.mobilePhoneNumber)
                     : patient.mobilePhoneNumber}
+                  {patient.mobilePhoneNumber && (
+                    <PointOfContactBadge patientId={patient.id} channel="phone" />
+                  )}
                 </div>
               </div>
 
               <div className={styles.data}>
                 {patient.email ? <Icon icon="envelope" size={0.9} /> : null}
-                <div className={styles.data_text}>{patient.email}</div>
+                <div className={styles.data_text}>
+                  {patient.email}
+                  {patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
+                </div>
               </div>
             </div>
           ) : (
@@ -132,10 +124,11 @@ export default function AppointmentPopover(props) {
 }
 
 AppointmentPopover.propTypes = {
-  patient: PropTypes.object,
-  appointment: PropTypes.object,
-  age: PropTypes.number,
-  closePopover: PropTypes.func,
-  editAppointment: PropTypes.func,
+  patient: PropTypes.instanceOf(PatientModel).isRequired,
+  appointment: PropTypes.shape(appointmentShape).isRequired,
+  closePopover: PropTypes.func.isRequired,
+  editAppointment: PropTypes.func.isRequired,
   scheduleView: PropTypes.string,
 };
+
+AppointmentPopover.defaultProps = { scheduleView: 'chair' };

@@ -27,6 +27,7 @@ import DropdownSelect from './DropdownSelect';
 import Dropzone from './Dropzone';
 import DashboardStats from './DashboardStats';
 import Event from './Event';
+import ErrorBadge from './ErrorBadge';
 import Form, { FormSection, Field, FieldArray, SaveButton, RemoteSubmitButton } from './Form';
 import Guage from './Guage';
 import Header from './Header';
@@ -44,6 +45,7 @@ import SelectPill from './SelectPill';
 import InfoSection from './InfoSection';
 import Pill from './Pill';
 import PieChart from './PieChart';
+import PointOfContactBadge from './PointOfContactBadge';
 import ProgressBar from './ProgressBar';
 import RouterButton from './RouterButton';
 import RouterList from './RouterList';
@@ -115,6 +117,7 @@ export {
   DashboardStats,
   DoubleIcon,
   Event,
+  ErrorBadge,
   Filters,
   Field,
   FieldArray,
@@ -138,6 +141,7 @@ export {
   InfoSection,
   PatientPopover,
   PieChart,
+  PointOfContactBadge,
   RemoteSubmitButton,
   RouterButton,
   RouterList,

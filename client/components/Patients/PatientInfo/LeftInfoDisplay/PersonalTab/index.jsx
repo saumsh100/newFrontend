@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Grid, Row, Col } from '../../../../library';
+import { Grid, Row, Col, PointOfContactBadge } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import { formatPhoneNumber } from '../../../../library/util/Formatters';
@@ -43,13 +43,17 @@ export default function PersonalTab(props) {
           <InfoDump label="HOME NUMBER" data={formatPhoneNumber(patient.homePhoneNumber)} />
         </Col>
         <Col xs={6} className={styles.paddingCol}>
-          <InfoDump label="MOBILE NUMBER" data={formatPhoneNumber(patient.mobilePhoneNumber)} />
+          <InfoDump label="MOBILE NUMBER" data={formatPhoneNumber(patient.mobilePhoneNumber)}>
+            {() => <PointOfContactBadge patientId={patient.id} channel="phone" />}
+          </InfoDump>
         </Col>
         <Col xs={6}>
           <InfoDump label="WORK NUMBER" data={formatPhoneNumber(patient.workPhoneNumber)} />
         </Col>
         <Col xs={6}>
-          <InfoDump label="EMAIL" data={patient.email} type="email" />
+          <InfoDump label="EMAIL" data={patient.email} type="email">
+            {() => <PointOfContactBadge patientId={patient.id} channel="email" />}
+          </InfoDump>
         </Col>
       </Row>
       <Row className={styles.row}>

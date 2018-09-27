@@ -12,15 +12,14 @@ import {
   Icon,
   IconButton,
   Button,
+  PointOfContactBadge,
 } from '../../library';
 import { patientShape } from '../PropTypeShapes';
 import { FormatPhoneNumber } from '../util/Formatters';
 import styles from './styles.scss';
 
 export default function PatientProfile(props) {
-  const {
-    patient, age, closePopover, isPatientUser,
-  } = props;
+  const { patient, age, closePopover, isPatientUser } = props;
 
   const lastName = age ? `${patient.lastName},` : patient.lastName;
 
@@ -62,19 +61,22 @@ export default function PatientProfile(props) {
               <div className={styles.subHeader}>Contact Info</div>
 
               <div className={styles.data}>
-                {patient[patientPhone] ? (
-                  <Icon icon="phone" size={0.9} />
-                ) : null}
+                {patient[patientPhone] ? <Icon icon="phone" size={0.9} /> : null}
                 <div className={styles.data_text}>
                   {patient[patientPhone] && patient[patientPhone][0] === '+'
                     ? FormatPhoneNumber(patient[patientPhone])
                     : patient[patientPhone]}
+
+                  {patient[patientPhone] && (
+                    <PointOfContactBadge patientId={patient.id} channel="phone" />
+                  )}
                 </div>
               </div>
 
               <div className={styles.data}>
                 {patient.email ? <Icon icon="envelope" size={0.9} /> : null}
                 <div className={styles.data_text}>{patient.email}</div>
+                {patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
               </div>
             </div>
           ) : (

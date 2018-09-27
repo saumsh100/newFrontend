@@ -2,19 +2,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Grid, Row, Col } from '../../../library';
+import { PointOfContactBadge } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import RecallDropDowns from '../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../Shared/ReminderDropDowns';
-import styles from './styles.scss';
 import { validDateValue } from '../../Shared/helpers';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
+import { patientShape } from '../../../library/PropTypeShapes/index';
+import styles from './styles.scss';
 
 export default function DataTable(props) {
   const { patient } = props;
 
   const recallComp = <RecallDropDowns patient={patient} />;
   const reminderComp = <ReminderDropDowns patient={patient} />;
+  const secondaryNumber =
+    patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber;
 
   return (
     <div className={styles.grid}>
@@ -24,18 +27,20 @@ export default function DataTable(props) {
           data={patient.email}
           className={styles.infoDump}
           type="email"
-        />
+        >
+          {() => <PointOfContactBadge patientId={patient.id} channel="email" />}
+        </InfoDump>
 
         <InfoDump
           label="PRIMARY-NUMBER"
           data={FormatPhoneNumber(patient.mobilePhoneNumber)}
           className={styles.infoDump}
-        />
+        >
+          {() => <PointOfContactBadge patientId={patient.id} channel="phone" />}
+        </InfoDump>
         <InfoDump
           label="SECONDARY-NUMBER"
-          data={FormatPhoneNumber(patient.homePhoneNumber ||
-              patient.prefPhoneNumber ||
-              patient.workPhoneNumber)}
+          data={FormatPhoneNumber(secondaryNumber)}
           className={styles.infoDump}
         />
       </div>
@@ -46,8 +51,7 @@ export default function DataTable(props) {
         <InfoDump label="RECALLS SENT" component={recallComp} />
         {patient.nextApptDate ? (
           <div className={styles.subHeaderSmall}>
-            Next Appointment:{' '}
-            {moment(patient.nextApptDate).format('MMMM Do YYYY')}
+            Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
           </div>
         ) : (
           <div className={styles.subHeaderSmall}>Next Appointment: n/a </div>
@@ -73,6 +77,4 @@ export default function DataTable(props) {
   );
 }
 
-DataTable.propTypes = {
-  patient: PropTypes.object,
-};
+DataTable.propTypes = { patient: PropTypes.shape(patientShape).isRequired };

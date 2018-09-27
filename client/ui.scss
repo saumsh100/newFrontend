@@ -173,6 +173,8 @@ $widget-white: #fff;
 $search-bg: #f4f4f4;
 $search-border-color: #adadae;
 
+$warning: #eaba4e;
+
 @mixin borderTopRight {
   border-top-right-radius: $electron-border-radius;
 }

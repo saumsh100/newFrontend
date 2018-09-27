@@ -2,9 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Grid, Row, Col } from '../../../library';
+import { Grid, Row, Col, PointOfContactBadge } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
+import PatientModel from '../../../../entities/models/Patient';
 import styles from './styles.scss';
 
 const genderMap = {
@@ -22,32 +23,16 @@ export default function About({ patient }) {
             <Col xs={6}>
               <Content
                 title="Age"
-                value={
-                  patient.birthDate
-                    ? moment().diff(patient.birthDate, 'years')
-                    : 'n/a'
-                }
+                value={patient.birthDate ? moment().diff(patient.birthDate, 'years') : 'n/a'}
               />
-              <Content
-                title="Gender"
-                value={genderMap[patient.gender] || 'n/a'}
-              />
-              <Content
-                title="City"
-                value={
-                  patient.address && patient.address.city
-                    ? patient.address.city
-                    : 'n/a'
-                }
-              />
+              <Content title="Gender" value={genderMap[patient.gender] || 'n/a'} />
+              <Content title="City" value={(patient.address && patient.address.city) || 'n/a'} />
             </Col>
             <Col xs={6}>
               <Content
                 title="Birthday"
                 value={
-                  patient.birthDate
-                    ? moment(patient.birthDate).format('MMM DD, YYYY')
-                    : 'n/a'
+                  (patient.birthDate && moment(patient.birthDate).format('MMM DD, YYYY')) || 'n/a'
                 }
               />
               <Content title="Language" value="n/a" />
@@ -55,25 +40,18 @@ export default function About({ patient }) {
             </Col>
           </Row>
           <Row className={styles.otherSection}>
-            <Col xs={6}>
-              <Content
-                title="Mobile Phone"
-                value={
-                  patient.mobilePhoneNumber ? patient.mobilePhoneNumber : 'n/a'
-                }
-              />
-              <Content
-                title="Email"
-                value={patient.email ? patient.email : 'n/a'}
-              />
+            <Col xs={12}>
+              <Content title="Mobile Phone" value={patient.mobilePhoneNumber || 'n/a'}>
+                {() => <PointOfContactBadge patientId={patient.id} channel="phone" />}
+              </Content>
             </Col>
-            <Col xs={6}>
-              <Content
-                title="Home Phone"
-                value={
-                  patient.homePhoneNumber ? patient.homePhoneNumber : 'n/a'
-                }
-              />
+            <Col xs={12}>
+              <Content title="Home Phone" value={patient.homePhoneNumber || 'n/a'} />
+            </Col>
+            <Col xs={12}>
+              <Content title="Email" value={patient.email ? patient.email : 'n/a'}>
+                {() => <PointOfContactBadge patientId={patient.id} channel="email" />}
+              </Content>
             </Col>
           </Row>
         </Grid>
@@ -82,6 +60,4 @@ export default function About({ patient }) {
   );
 }
 
-About.propTypes = {
-  patient: PropTypes.object.isRequired,
-};
+About.propTypes = { patient: PropTypes.shape(PatientModel).isRequired };
