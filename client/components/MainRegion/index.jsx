@@ -15,5 +15,7 @@ export default function MainRegion({ children, isCollapsed }) {
 
 MainRegion.propTypes = {
   isCollapsed: PropTypes.bool.isRequired,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node,
 };
+
+MainRegion.defaultProps = { children: [] };

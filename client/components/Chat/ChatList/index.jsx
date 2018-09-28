@@ -8,7 +8,7 @@ import PatientModel from '../../../entities/models/Patient';
 import { ListItem, IconButton } from '../../library';
 import ChatListItem from './ChatListItem';
 import { defaultSelectedChatId, selectChat } from '../../../thunks/chat';
-import { setNewChat, filterChatsByTab } from '../../../reducers/chat';
+import { filterChatsByTab } from '../../../reducers/chat';
 import { sortByFieldAsc } from '../../library/util/SortEntities';
 import listItemStyles from './ChatListItem/styles.scss';
 
@@ -33,8 +33,7 @@ class ChatListContainer extends Component {
   removeNewChat(e) {
     e.stopPropagation();
     e.preventDefault();
-    this.props.setNewChat(null);
-    this.props.selectChat(null);
+    this.props.selectChat(null, null);
     this.props.defaultSelectedChatId();
   }
 
@@ -88,7 +87,6 @@ ChatListContainer.propTypes = {
   newChat: PropTypes.shape({ patientId: PropTypes.string }),
   newChatPatient: PropTypes.instanceOf(PatientModel),
   selectedChatId: PropTypes.string,
-  setNewChat: PropTypes.func.isRequired,
   defaultSelectedChatId: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   onChatClick: PropTypes.func,
@@ -120,7 +118,6 @@ function mapStateToProps({ entities, chat }, { tabIndex }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setNewChat,
       defaultSelectedChatId,
       selectChat,
     },

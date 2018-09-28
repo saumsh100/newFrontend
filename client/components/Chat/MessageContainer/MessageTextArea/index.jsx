@@ -17,14 +17,17 @@ import {
   Tooltip,
 } from '../../../library';
 import { isHub } from '../../../../util/hub';
-import styles from './styles.scss';
+import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import '../../../../../node_modules/emoji-mart/css/emoji-mart.css';
+import Patient from '../../../../entities/models/Patient';
+import styles from './styles.scss';
 
 class MessageTextArea extends Component {
   constructor(props) {
     super(props);
 
     this.addEmoji = this.addEmoji.bind(this);
+    this.contactPoC = this.contactPoC.bind(this);
   }
 
   addEmoji(emoji) {
@@ -34,6 +37,12 @@ class MessageTextArea extends Component {
     const newMessage = `${textBoxValue.slice(0, caretPossition)}${emoji.native}${textBoxValue.slice(caretPossition)}`;
     this.props.change(`chatMessageForm_${chat.id}`, 'message', newMessage);
     this.emojiDropdown.toggle();
+  }
+
+  contactPoC() {
+    const { poc } = this.props;
+    const chatOrPoC = poc.chats[0] ? { chatId: poc.chats[0] } : { id: poc.id };
+    this.props.selectChatOrCreate(chatOrPoC);
   }
 
   renderSendButton() {
@@ -46,9 +55,9 @@ class MessageTextArea extends Component {
     };
 
     return (
-      <div {...sendButtonProps} data-test-id="button_sendMessage">
+      <div {...sendButtonProps} data-test-id="button_sendMessage" data-testid="button_sendMessage">
         <Icon icon="paper-plane" type="solid" />
-        <label>SEND</label>
+        <span className={styles.sendButton}>SEND</span>
       </div>
     );
   }
@@ -80,15 +89,56 @@ class MessageTextArea extends Component {
     );
   }
 
-  render() {
-    const { chat, canSend, error } = this.props;
+  renderHelper() {
+    return (
+      <div className={styles.tooltipWrapper}>
+        {`The Point of Contact for a piece of contact information like a mobile phone number is
+        defined as the person that owns the mobile phone number. Donna determines this by
+        attributing to the newest family's head, or if no head present, the oldest person in that
+        family.`}
+      </div>
+    );
+  }
 
-    if (!chat) return null;
+  render() {
+    const { chat, canSend, error, isPoC, patient, poc } = this.props;
+
+    if (!chat || isPoC === null) return null;
 
     const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
-
     return (
       <SContainer className={styles.textAreaContainer}>
+        {!isPoC &&
+          patient && (
+            <div className={styles.textAreaPoC}>
+              <img
+                src="/images/donna.png"
+                height="335px"
+                width="338px"
+                alt="Donna"
+                className={styles.donnaImg}
+              />
+              <div className={styles.notPoC}>
+                <p>
+                  Looks like <strong>{patient.firstName}</strong>, is not the{' '}
+                  <Tooltip
+                    trigger={['hover']}
+                    overlay={this.renderHelper}
+                    placement="top"
+                    overlayClassName="light"
+                  >
+                    <span className={styles.pocHelper}>Point of Contact</span>
+                  </Tooltip>{' '}
+                  for their cell phone number. I think you are really trying to contact{' '}
+                  <strong>{`${poc.firstName} ${poc.lastName}`}</strong> instead.
+                </p>
+                <Button className={styles.pocButton} onClick={this.contactPoC}>
+                  Contact {poc.firstName}
+                </Button>
+              </div>
+            </div>
+          )}
+
         <SBody className={styles.textAreaBody}>
           <Form
             destroyOnUnmount
@@ -127,32 +177,47 @@ class MessageTextArea extends Component {
 }
 
 MessageTextArea.propTypes = {
-  chat: PropTypes.shape({ id: PropTypes.string }),
+  chat: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.shape({ id: PropTypes.string })]),
   textBoxValue: PropTypes.string,
   error: PropTypes.string,
-  canSend: PropTypes.bool,
-  sendingMessage: PropTypes.bool,
+  canSend: PropTypes.bool.isRequired,
+  sendingMessage: PropTypes.bool.isRequired,
   onSendMessage: PropTypes.func.isRequired,
-  submit: PropTypes.func,
-  change: PropTypes.func,
+  submit: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  isPoC: PropTypes.bool.isRequired,
+  patient: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.instanceOf(Patient)]),
+  poc: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.instanceOf(Patient)]),
+  selectChatOrCreate: PropTypes.func.isRequired,
+};
+
+MessageTextArea.defaultProps = {
+  chat: {},
+  poc: {},
+  textBoxValue: '',
+  error: '',
+  patient: {},
 };
 
 function mapStateToProps(state, { chat = {} }) {
   const values = getFormValues(`chatMessageForm_${chat.id}`)(state);
   const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
-  const canSend = !!(!!values && !!values.message && patient && patient.mobilePhoneNumber);
-
-  let error = 'Type a message';
-  if (!patient) {
-    error = 'Select a patient above';
-  } else if (!patient.mobilePhoneNumber) {
-    error = 'This patient does not have a mobile phone number';
-  }
-
+  const phoneNumber = patient && patient.get('mobilePhoneNumber');
+  const isPoC = state.chat.get('isPoC');
+  const canSend = isPoC && !!phoneNumber && !!(values && values.message);
+  const error =
+    (!patient && 'Select a patient above') ||
+    (phoneNumber ? 'Type a message' : 'This patient does not have a mobile phone number');
+  const poc = state.chat.get('chatPoC') || {};
   return {
+    isPoC,
+    phoneNumber,
+    accountId: state.auth.get('accountId'),
     textBoxValue: (values && values.message) || '',
     canSend,
     error,
+    poc,
+    patient,
   };
 }
 
@@ -161,6 +226,7 @@ function mapDispatchToProps(dispatch) {
     {
       submit,
       change,
+      fetchEntitiesRequest,
     },
     dispatch,
   );

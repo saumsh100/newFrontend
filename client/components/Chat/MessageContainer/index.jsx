@@ -10,7 +10,6 @@ import moment from 'moment';
 import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip, Button } from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
-import { setNewChat } from '../../../reducers/chat';
 import {
   sendChatMessage,
   createNewChat,
@@ -93,7 +92,6 @@ class MessageContainer extends Component {
         })
         .then(() => {
           this.props.selectChat(requestObject.chatId);
-          this.props.setNewChat(null);
           this.props.setTab(chatTabs.ALL_TAB);
           this.props.reset('chatMessageForm_newChat');
           this.setState({ sendingMessage: false });
@@ -109,7 +107,6 @@ class MessageContainer extends Component {
       .then(() => this.setState({ sendingMessage: false }))
       .then(() => {
         this.props.selectChat(selectedChat.id);
-        this.props.setNewChat(null);
       })
       .catch(() => this.setState({ sendingMessage: false }));
   }
@@ -168,7 +165,7 @@ class MessageContainer extends Component {
 
     return messages.map((message) => {
       const isFromPatient = message.get('from') !== accountTwilio;
-      const patientId = selectedPatient.get('id');
+      const patientId = selectedPatient && selectedPatient.get('id');
 
       const dotsIcon = (
         <Icon icon="ellipsis-h" size={2} className={styles.dotsIcon} id={`dots_${message.id}`} />
@@ -303,6 +300,7 @@ class MessageContainer extends Component {
         <SFooter className={styles.sendMessage}>
           <MessageTextArea
             chat={chat}
+            selectChatOrCreate={this.props.selectChatOrCreate}
             sendingMessage={this.state.sendingMessage}
             onSendMessage={this.sendMessageHandler}
           />
@@ -334,7 +332,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       selectChat,
-      setNewChat,
       reset,
       sendChatMessage,
       createNewChat,
@@ -359,8 +356,8 @@ MessageContainer.propTypes = {
   newChat: PropTypes.shape({ id: PropTypes.string }),
   selectedPatient: PropTypes.shape({ id: PropTypes.string }),
   userId: PropTypes.string.isRequired,
+  selectChatOrCreate: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
-  setNewChat: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   sendChatMessage: PropTypes.func.isRequired,
   createNewChat: PropTypes.func.isRequired,

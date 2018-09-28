@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import axios from 'axios';
 import createModel from '../createModel';
 
 const PatientSchema = {
@@ -67,6 +68,18 @@ export default class Patient extends createModel(PatientSchema) {
 
   getInsurance() {
     return this.get('insurance');
+  }
+
+  isCellPhoneNumberPoC() {
+    return this.isPoc('mobile', this.get('mobilePhoneNumber'));
+  }
+
+  isEmailPoC() {
+    return this.isPoc('email', this.get('email'));
+  }
+
+  isPoc(key, value) {
+    return axios.get('/api/patients/poc', { params: { [key]: value } });
   }
 
   getUrlRoot() {

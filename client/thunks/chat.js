@@ -7,10 +7,12 @@ import uniq from 'lodash/uniq';
 import union from 'lodash/union';
 import without from 'lodash/without';
 import {
-  setSelectedChatId,
+  setSelectedChat,
   setUnreadChats,
   setChatMessages,
   setLockedChats,
+  setChatPoC,
+  setNewChat,
 } from '../reducers/chat';
 import { setBackHandler } from '../reducers/electron';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
@@ -258,12 +260,35 @@ export function setChatMessagesListForChat(chatId) {
   };
 }
 
-export function selectChat(id) {
-  return (dispatch, getState) => {
-    const { routing, electron } = getState();
-    const persistedBackHandler = electron.get('backHandler');
+export async function setChatIsPoC(patient, dispatch) {
+  if (!patient) {
+    return dispatch(setChatPoC(patient));
+  }
 
-    dispatch(setSelectedChatId(id));
+  const { data: poc } = await patient.isCellPhoneNumberPoC();
+  const { patients } = await dispatch(fetchEntitiesRequest({
+    url: '/api/patients/search',
+    params: { patients: poc.email },
+  }));
+  return dispatch(setChatPoC(patients[poc.id]));
+}
+
+export function selectChat(id, createChat = null) {
+  return async (dispatch, getState) => {
+    const { routing, entities, electron } = getState();
+    const persistedBackHandler = electron.get('backHandler');
+    const chat =
+      !createChat && id && entities.getIn(['chats', 'models', id]).delete('textMessages');
+    dispatch(setNewChat(createChat));
+    dispatch(setSelectedChat(chat));
+
+    const patientId = (!!createChat && createChat.patientId) || (id && chat.get('patientId'));
+    if (!!patientId === true) {
+      const futurePatient = entities.getIn(['patients', 'models', patientId]);
+      await setChatIsPoC(futurePatient, dispatch);
+    } else {
+      await setChatIsPoC(id, dispatch);
+    }
 
     if (isOnChatPage(routing.location.pathname)) {
       dispatch(push(`/chat/${id || ''}`));

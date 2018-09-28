@@ -3,33 +3,39 @@ import { Map } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import tabConstants from '../components/Chat/consts';
 
-export const SET_SELECTED_CHAT_ID = '@chat/SET_SELECTED_CHAT_ID';
+export const SET_SELECTED_CHAT = '@chat/SET_SELECTED_CHAT';
 export const SET_NEW_CHAT = '@chat/SET_NEW_CHAT';
 export const MERGE_NEW_CHAT = '@chat/MERGE_NEW_CHAT';
 export const SET_UNREAD_CHATS = '@chat/SET_UNREAD_CHATS';
 export const SET_CHAT_MESSAGES = '@chat/SET_CHAT_MESSAGES';
 export const SET_LOCKED_CHATS = '@chat/SET_LOCKED_CHATS';
+export const SET_CHAT_POC = '@chat/SET_CHAT_POC';
 
-export const setSelectedChatId = createAction(SET_SELECTED_CHAT_ID);
+export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const setNewChat = createAction(SET_NEW_CHAT);
 export const mergeNewChat = createAction(MERGE_NEW_CHAT);
 export const setUnreadChats = createAction(SET_UNREAD_CHATS);
 export const setChatMessages = createAction(SET_CHAT_MESSAGES);
 export const setLockedChats = createAction(SET_LOCKED_CHATS);
+export const setChatPoC = createAction(SET_CHAT_POC);
 
 export const initialState = Map({
   selectedChatId: null,
+  selectedChat: null,
+  selectedPatientId: null,
   newChat: null,
   unreadChats: [],
   chatList: {},
   chatMessages: [],
   lockedChats: [],
+  isPoC: null,
+  chatPoC: null,
 });
 
 export default handleActions(
   {
-    [SET_SELECTED_CHAT_ID](state, { payload }) {
-      return state.set('selectedChatId', payload);
+    [SET_SELECTED_CHAT](state, { payload }) {
+      return state.set('selectedChatId', payload.id).set('selectedChat', payload);
     },
 
     [SET_NEW_CHAT](state, { payload }) {
@@ -47,6 +53,23 @@ export default handleActions(
 
     [SET_CHAT_MESSAGES](state, { payload }) {
       return state.set('chatMessages', payload);
+    },
+
+    [SET_CHAT_POC](state, { payload }) {
+      if (!payload) {
+        return state.set('chatPoC', {}).set('isPoC', true);
+      }
+      if (state.getIn(['selectedChat', 'patientId'])) {
+        return state
+          .set('chatPoC', payload)
+          .set('isPoC', payload.id === state.getIn(['selectedChat', 'patientId']));
+      } else if (state.get('newChat').patientId) {
+        return state
+          .set('chatPoC', payload)
+          .set('isPoC', payload.id === state.get('newChat').patientId);
+      }
+
+      return state;
     },
 
     [SET_LOCKED_CHATS](state, { payload }) {

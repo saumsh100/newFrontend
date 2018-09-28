@@ -139,6 +139,27 @@ $intercom-side-margin: 50px;
   .rc-tooltip-placement-top .rc-tooltip-arrow {
     border-top-color: #2e3845;
   }
+  .rc-tooltip {
+    &.light {
+      width: 250px;
+      opacity: 1;
+      .rc-tooltip-arrow {
+        border-top-color: #ccc;
+        bottom: 2px;
+        margin-left: -5px;
+        border-width: 6px 8px 0;
+      }
+      .rc-tooltip-inner {
+        border-radius: 4px;
+        background: #fff;
+        color: $primary-dark-grey;
+        padding: 12px 14px;
+        text-transform: none;
+        font-size: 12px;
+        box-shadow: 0 1px 10px 1px rgba(181, 181, 181, 0.6);
+      }
+    }
+  }
 }
 
 .loadBar {

@@ -31,7 +31,6 @@ import {
 } from '../../thunks/chat';
 import Loader from '../Loader';
 import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
-import { setNewChat } from '../../reducers/chat';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import PatientSearch from '../PatientSearch';
 import { isHub, TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../../util/hub';
@@ -93,8 +92,7 @@ class ChatMessage extends Component {
 
   addNewChat() {
     // No data yet, this just sets it to not be null
-    this.props.setNewChat({});
-    this.props.selectChat(null);
+    this.props.selectChat(null, {});
     this.toggleShowMessageContainer();
   }
 
@@ -153,8 +151,7 @@ class ChatMessage extends Component {
       const chatToSelect = patient.chatId || null;
       const newChat = patient.chatId ? null : { patientId: patient.id };
 
-      this.props.selectChat(chatToSelect);
-      this.props.setNewChat(newChat);
+      this.props.selectChat(chatToSelect, newChat);
 
       if (!this.state.showMessageContainer) {
         this.toggleShowMessageContainer();
@@ -274,7 +271,10 @@ class ChatMessage extends Component {
       <SBody>
         <div className={styles.splitWrapper}>
           <div className={container}>
-            <MessageContainer setTab={this.changeTab} />
+            <MessageContainer
+              setTab={this.changeTab}
+              selectChatOrCreate={this.selectChatOrCreate}
+            />
           </div>
           <div className={patientInfoStyle}>{this.showPatientInfo()}</div>
         </div>
@@ -378,7 +378,6 @@ ChatMessage.defaultProps = {
 
 ChatMessage.propTypes = {
   match: PropTypes.shape({ params: PropTypes.shape({ chatId: PropTypes.string }) }),
-  setNewChat: PropTypes.func.isRequired,
   defaultSelectedChatId: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   loadChatList: PropTypes.func.isRequired,
@@ -406,7 +405,6 @@ function mapStateToProps({ apiRequests, electron }) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      setNewChat,
       defaultSelectedChatId,
       selectChat,
       loadChatList,

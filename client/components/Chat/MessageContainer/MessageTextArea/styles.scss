@@ -1,9 +1,9 @@
-
 @import '../../../../ui';
 
 .textAreaContainer {
   background-color: $primary-white;
   border: 1px solid $chat-border-color;
+  position: relative;
 }
 
 .textAreaBody {
@@ -12,6 +12,77 @@
     > form {
       height: 100%;
     }
+  }
+}
+
+.pocButton {
+  background: $primary-blue;
+  font-size: 12px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.textAreaPoC {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: $color-white;
+  border: 2px solid $info;
+  border-radius: 4px;
+  display: flex;
+  z-index: 10;
+  overflow: hidden;
+  justify-content: center;
+  animation: fadeIn 0.5s ease;
+  .notPoC {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10px;
+    max-width: 315px;
+    p {
+      line-height: 1.5;
+      margin-top: 0;
+      strong {
+        font-family: $medium-font;
+      }
+    }
+  }
+  .pocHelper {
+    font-family: $medium-font;
+    border-bottom: 1px solid;
+    cursor: pointer;
+  }
+  .donnaImg {
+    max-height: 120%;
+    width: auto;
+    margin-right: -10px;
+    display: none;
+    @media (min-width: 1220px) {
+      display: block;
+    }
+  }
+}
+.sendButton {
+  margin-left: 4px;
+}
+
+.rc-tooltip-inner {
+  background: #f00;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }
 
@@ -41,9 +112,9 @@
   & > div {
     right: auto;
     left: 0;
-     & > ul {
-       box-shadow: none !important;
-     }
+    & > ul {
+      box-shadow: none !important;
+    }
 
     @media (max-width: 576px) {
       left: -22px !important;
@@ -66,9 +137,9 @@
     border-radius: 0;
     border-top-right-radius: 4px !important;
     border-top-left-radius: 4px !important;
-
+    color: #2a3843 !important;
     svg {
-      fill: #2A3843 !important;
+      fill: currentColor !important;
     }
 
     .emoji-mart-anchor {
@@ -83,17 +154,16 @@
 
     .emoji-mart-anchor-selected {
       background-color: white;
-      color: transparent !important;
-
+      color: black !important;
       svg {
-        fill: black !important;
+        fill: currentColor !important;
       }
 
       .emoji-mart-anchor-bar {
         display: none;
       }
     }
-}
+  }
 
   .emoji-mart-search input {
     font-size: 14px !important;
