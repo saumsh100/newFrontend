@@ -13,6 +13,7 @@ import {
   setLockedChats,
   setChatPoC,
   setNewChat,
+  updateChatId,
 } from '../reducers/chat';
 import { setBackHandler } from '../reducers/electron';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
@@ -261,7 +262,7 @@ export function setChatMessagesListForChat(chatId) {
 }
 
 export async function setChatIsPoC(patient, dispatch) {
-  if (!patient) {
+  if (!patient || !patient.get('mobilePhoneNumber')) {
     return dispatch(setChatPoC(patient));
   }
 
@@ -289,7 +290,7 @@ export function selectChat(id, createChat = null) {
     } else {
       await setChatIsPoC(id, dispatch);
     }
-
+    dispatch(updateChatId());
     if (isOnChatPage(routing.location.pathname)) {
       dispatch(push(`/chat/${id || ''}`));
     }

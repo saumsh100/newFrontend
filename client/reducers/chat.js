@@ -4,6 +4,7 @@ import { createAction, handleActions } from 'redux-actions';
 import tabConstants from '../components/Chat/consts';
 
 export const SET_SELECTED_CHAT = '@chat/SET_SELECTED_CHAT';
+export const UPDATE_CHAT_ID = '@chat/UPDATE_CHAT_ID';
 export const SET_NEW_CHAT = '@chat/SET_NEW_CHAT';
 export const MERGE_NEW_CHAT = '@chat/MERGE_NEW_CHAT';
 export const SET_UNREAD_CHATS = '@chat/SET_UNREAD_CHATS';
@@ -12,6 +13,7 @@ export const SET_LOCKED_CHATS = '@chat/SET_LOCKED_CHATS';
 export const SET_CHAT_POC = '@chat/SET_CHAT_POC';
 
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
+export const updateChatId = createAction(UPDATE_CHAT_ID);
 export const setNewChat = createAction(SET_NEW_CHAT);
 export const mergeNewChat = createAction(MERGE_NEW_CHAT);
 export const setUnreadChats = createAction(SET_UNREAD_CHATS);
@@ -34,8 +36,14 @@ export const initialState = Map({
 
 export default handleActions(
   {
+    [UPDATE_CHAT_ID](state) {
+      const selectedChatId =
+        (state.get('selectedChat') && state.get('selectedChat').get('id')) || null;
+      return state.set('selectedChatId', selectedChatId);
+    },
+
     [SET_SELECTED_CHAT](state, { payload }) {
-      return state.set('selectedChatId', payload.id).set('selectedChat', payload);
+      return state.set('selectedChat', payload);
     },
 
     [SET_NEW_CHAT](state, { payload }) {

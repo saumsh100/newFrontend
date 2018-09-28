@@ -185,7 +185,7 @@ MessageTextArea.propTypes = {
   onSendMessage: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
-  isPoC: PropTypes.bool.isRequired,
+  isPoC: PropTypes.bool,
   patient: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.instanceOf(Patient)]),
   poc: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.instanceOf(Patient)]),
   selectChatOrCreate: PropTypes.func.isRequired,
@@ -197,6 +197,7 @@ MessageTextArea.defaultProps = {
   textBoxValue: '',
   error: '',
   patient: {},
+  isPoC: true,
 };
 
 function mapStateToProps(state, { chat = {} }) {
@@ -204,7 +205,7 @@ function mapStateToProps(state, { chat = {} }) {
   const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
   const phoneNumber = patient && patient.get('mobilePhoneNumber');
   const isPoC = state.chat.get('isPoC');
-  const canSend = isPoC && !!phoneNumber && !!(values && values.message);
+  const canSend = !!phoneNumber && !!(values && values.message) && isPoC;
   const error =
     (!patient && 'Select a patient above') ||
     (phoneNumber ? 'Type a message' : 'This patient does not have a mobile phone number');
