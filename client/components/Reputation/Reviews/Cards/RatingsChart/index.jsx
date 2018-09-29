@@ -1,17 +1,12 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import max from 'lodash/max';
-import values from 'lodash/values';
+import React from 'react';
 import { Card, Star } from '../../../../library';
-import colorMap from '../../../../library/util/colorMap';
 import styles from '../../styles.scss';
 
 export default function RatingsChart(props) {
   const { rating } = props;
-  // const ratingStars = _.keys(rating).sort((a,b) => a < b);
   const ratingStars = ['5', '4', '3', '2', '1', '0'];
-  const maxValue = max(values(rating));
 
   const hasRatings = Object.keys(rating).length;
 
@@ -26,19 +21,21 @@ export default function RatingsChart(props) {
 
   const mergedRatings = hasRatings ? Object.assign({}, ratingDefaults, rating) : ratingDefaults;
 
+  const sum = Object.values(mergedRatings).reduce((acc, value) => acc + value, 0);
+
   return (
     <Card className={styles.card}>
       <div className={styles.stats}>
         {hasRatings ? (
-          ratingStars.map((r, index) => {
+          ratingStars.map((r) => {
             const rows = [];
-            for (let i = 0; i < r; i++) {
+            for (let i = 0; i < r; i += 1) {
               rows.push(<Star key={i} size={1.8} />);
             }
-            const width = mergedRatings[r] ? Math.floor(mergedRatings[r] / maxValue * 80) : 5;
+            const width = mergedRatings[r] ? Math.ceil((mergedRatings[r] / sum) * 100) : 0;
             const style = { width: `${width}%` };
             return (
-              <div key={index} className={styles.content}>
+              <div className={styles.content}>
                 <div className={styles.content__stars}>
                   {r === '0' ? 'No Rating' : ''}
                   {rows}
@@ -58,6 +55,4 @@ export default function RatingsChart(props) {
   );
 }
 
-RatingsChart.PropTypes = {
-  rating: PropTypes.object,
-};
+RatingsChart.propTypes = { rating: PropTypes.objectOf(PropTypes.number).isRequired };

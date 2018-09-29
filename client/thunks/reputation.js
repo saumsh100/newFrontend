@@ -1,17 +1,19 @@
-import { setReputationFilter } from '../actions/reputation';
 
-export function setReputationFilterState() {
+import { setReputationFilter } from '../actions/reputation';
+import { setReviewsData } from '../reducers/reputation';
+
+export default function setReputationState() {
   return function (dispatch, getState) {
     const { apiRequests } = getState();
     const reviewsData = apiRequests.get('reviews').data;
-    const reviewsList = reviewsData.get('reviews').toJS();
+    let reviewsList = reviewsData.get('reviews').toJS();
 
     const sourceNames = {};
     const ratingObj = {};
 
-    reviewsList.map((review) => {
-      const name = review.sourceName;
-      const rating = review.rating;
+    reviewsList = reviewsList.map((review) => {
+      const name = review.sourceName.replace('.ca', '');
+      const { rating } = review;
 
       if (!(name in sourceNames)) {
         sourceNames[name] = 1;
@@ -24,15 +26,28 @@ export function setReputationFilterState() {
       } else {
         ratingObj[rating] += 1;
       }
+
+      return {
+        ...review,
+        sourceName: name,
+      };
     });
 
-    const ratings = ['0','1','2','3','4','5'];
+    const ratings = ['0', '1', '2', '3', '4', '5'];
 
     const filterData = {
       sources: Object.keys(sourceNames),
       ratings,
     };
 
-    return dispatch(setReputationFilter({ key: 'reviewsFilter', filterData }));
+    dispatch(setReviewsData({
+      reviewsList,
+      reviewsData: reviewsData.get('data').toJS(),
+    }));
+
+    return dispatch(setReputationFilter({
+      key: 'reviewsFilter',
+      filterData,
+    }));
   };
 }

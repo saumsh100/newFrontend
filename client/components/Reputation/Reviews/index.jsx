@@ -11,11 +11,12 @@ import { accountShape } from '../../library/PropTypeShapes';
 import Loader from '../../Loader';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { setReputationFilter } from '../../../actions/reputation';
-import { setReputationFilterState } from '../../../thunks/reputation';
+import setReputationState from '../../../thunks/reputation';
 import AverageRating from './Cards/AverageRating';
 import RatingsChart from './Cards/RatingsChart';
 import ReviewsCard from './Cards/ReviewsCard';
 import ReputationDisabled from '../ReputationDisabled';
+import filters from './filterOptions';
 import styles from './styles.scss';
 
 class Reviews extends Component {
@@ -40,9 +41,7 @@ class Reviews extends Component {
       hasAccount = true;
     }
 
-    this.setState({
-      hasAccount,
-    });
+    this.setState({ hasAccount });
   }
 
   componentDidMount() {
@@ -60,7 +59,7 @@ class Reviews extends Component {
         }),
       ])
         .then(() => {
-          this.props.setReputationFilterState();
+          this.props.setReputationState();
           this.reviewsContainerHeight = document.getElementById('reviewsContainerRep').clientHeight;
         })
         .catch(() => {
@@ -96,19 +95,18 @@ class Reviews extends Component {
   }
 
   renderInnerContent() {
-    const { reviews, reviewsFilter } = this.props;
+    const { reviewsData, reviewsList, reviewsFilter } = this.props;
 
-    if (!reviews) {
+    if (!reviewsData || !reviewsList) {
       return <Loader inContainer />;
     }
 
-    const reviewsData = reviews.get('data').toJS();
-    const reviewsList = reviews.get('reviews').toJS();
+    const reviewsStats = reviewsData.toJS();
 
     const filterSources = reviewsFilter.get('sources').toJS();
     const filterRatings = reviewsFilter.get('ratings').toJS();
 
-    let constructBigComment = reviewsList;
+    let constructBigComment = reviewsList.toJS();
 
     constructBigComment = constructBigComment
       .filter(review => filterSources.indexOf(review.sourceName) > -1 && review)
@@ -125,34 +123,11 @@ class Reviews extends Component {
       iconColor: '#ffffff',
       background: '#395998',
       iconAlign: 'flex-end',
-      requiredAction: 'ACTION REQUIRED',
+      requiredAction: '',
       url: review.url,
       reviewerUrl: review.reviewerUrl,
+      reviewId: review.reviewId,
     }));
-
-    const filters = [
-      {
-        title: 'sources',
-        items: [
-          { type: 'checkbox', value: 'CareCru' },
-          { type: 'checkbox', value: 'Google Maps' },
-          { type: 'checkbox', value: 'Yelp' },
-          { type: 'checkbox', value: 'Facebook' },
-          { type: 'checkbox', value: 'Rate MDs' },
-        ],
-      },
-      {
-        title: 'ratings',
-        items: [
-          { type: 'checkbox', value: '1 Star' },
-          { type: 'checkbox', value: '2 Star' },
-          { type: 'checkbox', value: '3 Star' },
-          { type: 'checkbox', value: '4 Star' },
-          { type: 'checkbox', value: '5 Star' },
-          { type: 'checkbox', value: 'No Rating' },
-        ],
-      },
-    ];
 
     const initialValues = {
       sources: {
@@ -161,6 +136,7 @@ class Reviews extends Component {
         Yelp: true,
         Facebook: true,
         'Rate MDs': true,
+        YellowPages: true,
       },
 
       ratings: {
@@ -179,26 +155,26 @@ class Reviews extends Component {
           <Row className={styles.reviews__wrapper}>
             <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
               <AverageRating
-                count={reviewsData.industryAverageRating}
-                rating={reviewsData.ratingCounts}
+                count={reviewsStats.industryAverageRating}
+                rating={reviewsStats.ratingCounts}
               />
             </Col>
             <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
               <Card className={styles.card}>
                 <div className={styles.stats}>
-                  <span className={styles.stats__count}> {reviewsData.totalCount} </span>
+                  <span className={styles.stats__count}> {reviewsStats.totalCount} </span>
                   <span className={styles.stats__title}>Total Reviews</span>
                   <div className={styles.stats__rating}>
-                    {reviewsData.ratingCounts['0'] || '0'} with no star rating
+                    {reviewsStats.ratingCounts['0'] || '0'} with no star rating
                   </div>
                   <span className={styles.stats__bottom}>
-                    Industry Average {reviewsData.industryAverageCount}
+                    Industry Average {reviewsStats.industryAverageCount}
                   </span>
                 </div>
               </Card>
             </Col>
             <Col className={styles.padding} xs={12} md={4} sm={6} lg={4}>
-              <RatingsChart rating={reviewsData.ratingCounts} />
+              <RatingsChart rating={reviewsStats.ratingCounts} />
             </Col>
             <Row className={styles.rowReviewsFilter}>
               <Col style={{ paddingLeft: '10px' }} xs={12} md={8} sm={9} lg={9}>
@@ -211,7 +187,10 @@ class Reviews extends Component {
                 />
               </Col>
               <Col
-                style={{ paddingLeft: '10px', paddingRight: '10px' }}
+                style={{
+                  paddingLeft: '10px',
+                  paddingRight: '10px',
+                }}
                 xs={12}
                 md={4}
                 sm={3}
@@ -244,9 +223,10 @@ class Reviews extends Component {
 
 Reviews.propTypes = {
   setReputationFilter: PropTypes.func.isRequired,
-  setReputationFilterState: PropTypes.func.isRequired,
+  setReputationState: PropTypes.func.isRequired,
   reviewsFilter: PropTypes.instanceOf(Map),
-  reviews: PropTypes.instanceOf(Map),
+  reviewsData: PropTypes.instanceOf(Map),
+  reviewsList: PropTypes.instanceOf(Map),
   activeAccount: PropTypes.shape(accountShape).isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -254,17 +234,21 @@ Reviews.propTypes = {
 };
 
 Reviews.defaultProps = {
-  reviews: null,
+  reviewsData: null,
+  reviewsList: null,
   reviewsFilter: null,
 };
 
-function mapStateToProps({
-  apiRequests, entities, auth, reputation,
-}) {
-  const reviews = apiRequests.get('reviews') && apiRequests.get('reviews').data;
-  const reviewsFilter = apiRequests.get('reviews') && reputation.get('reviewsFilter');
+function mapStateToProps({ apiRequests, entities, auth, reputation }) {
+  const reviewsWasFetched = apiRequests.get('reviews').get('wasFetched');
+
+  const reviewsFilter = reviewsWasFetched && reputation.get('reviewsFilter');
+  const reviewsData = reviewsWasFetched && reputation.get('reviewsData');
+  const reviewsList = reviewsWasFetched && reputation.get('reviewsList');
+
   return {
-    reviews,
+    reviewsData,
+    reviewsList,
     reviewsFilter,
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
   };
@@ -275,7 +259,7 @@ function mapDispatchToProps(dispatch) {
     {
       fetchEntitiesRequest,
       setReputationFilter,
-      setReputationFilterState,
+      setReputationState,
       reset,
       change,
     },
@@ -283,6 +267,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Reviews);

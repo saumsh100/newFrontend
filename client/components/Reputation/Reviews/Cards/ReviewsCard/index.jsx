@@ -1,14 +1,7 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Card,
-  CardHeader,
-  BigCommentBubble,
-  Col,
-  Button,
-  DialogBox,
-} from '../../../../library';
+import { Card, CardHeader, BigCommentBubble, Col, Button, DialogBox } from '../../../../library';
 import content from '../../howToContent';
 import styles from '../../styles.scss';
 
@@ -17,8 +10,8 @@ const companyIcons = {
   Facebook: '//www.cdnstyles.com/static/images/icon32/sourceId-10050.png',
   Yelp: '//www.cdnstyles.com/static/images/icon32/sourceId-10000.png',
   'Google Maps': '//www.cdnstyles.com/static/images/icon32/sourceId-10010.png',
-  CareCru:
-    'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
+  CareCru: 'https://carecru.com/wp-content/uploads/2017/07/cropped-CareCru-Icon.png',
+  YellowPages: '//www.cdnstyles.com/static/images/icon32/sourceId-10490.png',
 };
 
 const capitalize = (str) => {
@@ -34,8 +27,7 @@ const isCareCruReview = r => r.icon === 'CareCru';
  * @param nonCCReviews
  * @param ccReviews
  */
-const nonCareCruReviewsCount = (nonCCReviews, ccReviews) =>
-  nonCCReviews - ccReviews;
+const nonCareCruReviewsCount = (nonCCReviews, ccReviews) => nonCCReviews - ccReviews;
 
 class ReviewsCard extends Component {
   constructor(props) {
@@ -58,7 +50,6 @@ class ReviewsCard extends Component {
 
   render() {
     const { data, reviewsContainerHeight } = this.props;
-
     const careCruReviews = data.filter(isCareCruReview);
     const ccLength = careCruReviews.length;
 
@@ -82,15 +73,15 @@ class ReviewsCard extends Component {
           <div className={styles.reviewsComments__container}>
             <Col xs={12} md={12} className={styles.reviewsComments__comment}>
               {data.length ? (
-                data.map((obj, i) => {
+                data.map((obj) => {
                   const isCC = isCareCruReview(obj);
                   return (
                     <BigCommentBubble
-                      key={`${i}_reviewBubble`}
+                      key={`${obj.reviewId}_reviewBubble`}
                       sourceName={obj.icon}
                       icon={companyIcons[obj.icon]}
                       iconColor={obj.iconColor}
-                      background={obj.background}
+                      background={false}
                       iconAlign={obj.iconAlign}
                       headerLinkName={obj.headerLinkName}
                       headerLinkSite={obj.headerLinkSite}
@@ -106,9 +97,7 @@ class ReviewsCard extends Component {
                   );
                 })
               ) : (
-                <div className={styles.clearedReviews}>
-                  Please Remove a Filter Option.
-                </div>
+                <div className={styles.clearedReviews}>Please Remove a Filter Option.</div>
               )}
             </Col>
           </div>
@@ -134,9 +123,9 @@ class ReviewsCard extends Component {
 }
 
 ReviewsCard.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-  submitDate: PropTypes.func,
+  data: PropTypes.arrayOf(PropTypes.object).isRequired,
   reviewsContainerHeight: PropTypes.number,
 };
 
+ReviewsCard.defaultProps = { reviewsContainerHeight: null };
 export default ReviewsCard;

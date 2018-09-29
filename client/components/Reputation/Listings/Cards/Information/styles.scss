@@ -1,5 +1,5 @@
-@import "../../../../../ui";
-@import "../../../../../fonts";
+@import '../../../../../ui';
+@import '../../../../../fonts';
 
 .total {
   height: 210px;
@@ -7,13 +7,14 @@
     display: flex;
     padding: 15px 10px;
     padding-left: 20px;
+    border-bottom: 0px;
   }
   &__wrapper {
     display: flex;
     justify-content: center;
     flex-direction: column;
     padding: 0 0 0 20px;
-    @media screen and (max-width: 400px){
+    @media screen and (max-width: 400px) {
       padding: 0 0 15px 20px;
     }
   }
@@ -47,7 +48,7 @@
     }
     &_text {
       color: $primary-dark;
-      composes: subHeaderMedium from 'sass-loader!../../../../../fonts.scss'
+      composes: subHeaderMedium from 'sass-loader!../../../../../fonts.scss';
     }
     &_data {
       color: lighten($primary-darkgrey, 20%);
