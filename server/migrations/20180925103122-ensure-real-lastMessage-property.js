@@ -27,7 +27,10 @@ module.exports = {
             `,
             { transaction },
           );
+
           const lastTextMessage = textMessage[0][0];
+          if (!lastTextMessage) continue;
+
           const currentLastMessageDate = Date.parse(chat.lastTextMessageDate);
           const messageCreatedAtDate = Date.parse(lastTextMessage.createdAt);
           // Check if chat has to be updated
