@@ -1,6 +1,7 @@
 
 import { SentReminder, SentRemindersPatients, Appointment, Reminder, Patient } from 'CareCruModels';
 import groupEvents from '../helpers';
+import Appointments from '../../../../client/entities/models/Appointments';
 
 const reminderGroupingConditional = (sentReminder, nextSentReminder) => {
   if (
@@ -50,10 +51,7 @@ export async function fetchReminderEvents({ patientId, accountId, query }) {
             as: 'appointment',
             where: {
               accountId,
-              isDeleted: false,
-              isCancelled: false,
-              isPending: false,
-              isMissed: false,
+              ...Appointments.getCommonSearchAppointmentSchema()
             },
             attributes: ['id', 'startDate'],
           },

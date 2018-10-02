@@ -1,3 +1,4 @@
+
 const path = require('path');
 const fs = require('fs');
 
@@ -57,9 +58,7 @@ const callrails = {
   apiAccount: environmentVariables.CALLRAIL_API_ACCOUNTID,
 };
 
-const launchDarkly = {
-  sdkKey: environmentVariables.LAUNCH_DARKLY_SDK_KEY,
-};
+const launchDarkly = { sdkKey: environmentVariables.LAUNCH_DARKLY_SDK_KEY };
 
 const vendasta = {
   apiKey: environmentVariables.VENDASTA_API_KEY,
@@ -72,9 +71,7 @@ const twilio = {
   phoneNumber: environmentVariables.TWILIO_NUMBER,
 };
 
-const mandrill = {
-  apiKey: environmentVariables.MANDRILL_API_KEY,
-};
+const mandrill = { apiKey: environmentVariables.MANDRILL_API_KEY };
 
 const bitly = {
   accessToken: environmentVariables.BITLY_ACCESS_TOKEN,
@@ -86,26 +83,18 @@ const rebrandly = {
   shortDomain: environmentVariables.REBRANDLY_SHORT_DOMAIN,
 };
 
-const loader = {
-  token: environmentVariables.LOADERIO,
-};
+const loader = { token: environmentVariables.LOADERIO };
 
-const logrocket = {
-  appId: environmentVariables.LOGROCKET_APP_ID,
-};
+const logrocket = { appId: environmentVariables.LOGROCKET_APP_ID };
 
-const intercom = {
-  appId: environmentVariables.INTERCOM_APP_ID,
-};
+const intercom = { appId: environmentVariables.INTERCOM_APP_ID };
 
 const aws = {
   accessKeyId: environmentVariables.AWS_ACCESS_KEY_ID,
   secretAccessKey: environmentVariables.AWS_SECRET_ACCESS_KEY,
 };
 
-const s3 = {
-  bucket: environmentVariables.S3_BUCKET || 'carecru-development',
-};
+const s3 = { bucket: environmentVariables.S3_BUCKET || 'carecru-development' };
 
 s3.urlPrefix = environmentVariables.S3_URL_PREFIX || `https://${s3.bucket}.s3.amazonaws.com/`;
 
@@ -128,6 +117,8 @@ const reminders = {
   cronIntervalMinutes: 5,
   sameDayWindowHours: 6,
   allowedCustomConfirmKeys: ['isPreConfirmed', 'reason'],
+  get: value => reminders[value],
+  set: (key, value) => { reminders[key] = value; },
 };
 
 const reviews = {
@@ -144,9 +135,7 @@ const recalls = {
 
 const staticPath = path.normalize(path.join(root, '../statics'));
 
-const logger = {
-  logLevel: environmentVariables.LOG_LEVEL || 'debug',
-};
+const logger = { logLevel: environmentVariables.LOG_LEVEL || 'debug' };
 
 // Auth service config
 const authHostname = environmentVariables.AUTH_SERVICE_HOST;

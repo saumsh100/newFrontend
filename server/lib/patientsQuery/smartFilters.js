@@ -1,5 +1,7 @@
+
 import moment from 'moment';
 import { Appointment, Patient } from '../../_models';
+import Appointments from '../../../client/entities/models/Appointments';
 
 export async function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
   let startDate = moment()
@@ -17,9 +19,7 @@ export async function LateAppointmentsFilter(accountId, offSetLimit, smFilter) {
       .toISOString();
   }
 
-  const baseWhereQuery = {
-    accountId,
-  };
+  const baseWhereQuery = { accountId };
 
   return Patient.findAndCountAll({
     raw: true,
@@ -46,9 +46,7 @@ export function CancelledAppointmentsFilter(accountId, offSetLimit) {
   return Patient.findAndCountAll(Object.assign(
     {
       raw: true,
-      where: {
-        accountId,
-      },
+      where: { accountId },
       include: {
         model: Appointment,
         as: 'appointments',
@@ -66,9 +64,7 @@ export function CancelledAppointmentsFilter(accountId, offSetLimit) {
               new Date(),
             ],
           },
-          patientId: {
-            $not: null,
-          },
+          patientId: { $not: null },
         },
         attributes: [],
         required: true,
@@ -107,9 +103,7 @@ export function UnConfirmedPatientsFilter(accountId, offSetLimit, smFilter) {
       raw: true,
       where: {
         accountId,
-        nextApptId: {
-          $not: null,
-        },
+        nextApptId: { $not: null },
       },
       include: [
         {
@@ -124,11 +118,7 @@ export function UnConfirmedPatientsFilter(accountId, offSetLimit, smFilter) {
                   .toISOString(),
               ],
             },
-            isPatientConfirmed: false,
-            isCancelled: false,
-            isDeleted: false,
-            isMissed: false,
-            isPending: false,
+            ...Appointments.getCommonSearchAppointmentSchema({ isPatientConfirmed: false }),
           },
           attributes: ['startDate'],
           groupBy: ['startDate'],

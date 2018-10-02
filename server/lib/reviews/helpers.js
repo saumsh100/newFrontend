@@ -16,6 +16,7 @@ import GLOBALS from '../../config/globals';
 import { organizeForOutbox, generateOrganizedPatients } from '../comms/util';
 import { convertIntervalStringToObject } from '../../util/time';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
+import Appointments from '../../../client/entities/models/Appointments';
 
 const BUFFER_MINUTES = GLOBALS.reviews.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reviews.sameDayWindowHours;
@@ -96,10 +97,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
 
   const appointments = await Appointment.findAll({
     where: {
-      isDeleted: false,
-      isCancelled: false,
-      isMissed: false,
-      isPending: false,
+      ...Appointments.getCommonSearchAppointmentSchema(),
       accountId: account.id,
       endDate: {
         $gte: begin,
@@ -137,10 +135,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
             as: 'appointments',
             required: false,
             where: {
-              isDeleted: false,
-              isCancelled: false,
-              isMissed: false,
-              isPending: false,
+              ...Appointments.getCommonSearchAppointmentSchema(),
               accountId: account.id,
               endDate: {
                 $gte: end,

@@ -6,6 +6,7 @@ import updateLastProcedureForAccount from '../../../lib/lastProcedure/updateLast
 import { getConfigsForLastProcedure } from '../../../lib/lastProcedure/runLastProcedureCronForAccounts';
 import lastProcedureData from '../../../lib/lastProcedure/lastProcedureData';
 import { getConfigsForDueDates, updatePatientDueDatesForAccount } from '../../../lib/dueDate';
+import Appointments from '../../../../client/entities/models/Appointments';
 
 const runFirstNextLastCalc = async appointments => calcFirstNextLastAppointment(
   appointments,
@@ -26,14 +27,11 @@ async function calcPatientFNLAllApps(app) {
     where: {
       accountId: app.accountId,
       patientId: app.patientId,
-      isCancelled: false,
-      isDeleted: false,
-      isMissed: false,
-      isPending: false,
+      ...Appointments.getCommonSearchAppointmentSchema(),
     },
     order: [['startDate', 'DESC']],
   });
-    
+
   return runFirstNextLastCalc(appointments);
 }
 
@@ -122,10 +120,7 @@ export async function firstNextLastAppointmentBatchCalc(appointmentIds) {
   const batchedApps = await Appointment.findAll({
     where: {
       id: appointmentIds,
-      isCancelled: false,
-      isDeleted: false,
-      isMissed: false,
-      isPending: false,
+      ...Appointments.getCommonSearchAppointmentSchema(),
       patientId: { $not: null },
     },
     attributes: ['patientId'],
@@ -136,16 +131,13 @@ export async function firstNextLastAppointmentBatchCalc(appointmentIds) {
   const allApps = await Appointment.findAll({
     raw: true,
     where: {
-      isCancelled: false,
-      isMissed: false,
-      isPending: false,
-      isDeleted: false,
+      ...Appointments.getCommonSearchAppointmentSchema(),
       patientId: patientIds,
     },
     attributes: ['id', 'startDate', 'patientId'],
     order: [['patientId', 'DESC'], ['startDate', 'DESC']],
   });
-  
+
   return runFirstNextLastCalc(allApps);
 }
 

@@ -2,6 +2,7 @@
 import jobQueue from '../config/jobQueue';
 import createSocketServer from '../sockets/createSocketServer';
 import { Appointment, Patient, Account } from '../_models';
+import Appointments from '../../client/entities/models/Appointments';
 
 const { calcFirstNextLastAppointment } = require('../lib/firstNextLastAppointment');
 
@@ -42,10 +43,7 @@ jobQueue.process('firstNextLastApp', async (job, done) => {
         const appointments = await Appointment.findAll({
           where: {
             accountId: accounts[i].id,
-            isCancelled: false,
-            isMissed: false,
-            isPending: false,
-            isDeleted: false,
+            ...Appointments.getCommonSearchAppointmentSchema(),
             patientId: {
               $in: getIds(patients, 'id'),
             },

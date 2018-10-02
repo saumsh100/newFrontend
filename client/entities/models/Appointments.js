@@ -31,5 +31,13 @@ export default class Appointments extends createModel(AppointmentsSchema) {
     return `/api/appointments/${this.getId()}`;
   }
 
-
+  static getCommonSearchAppointmentSchema(options = {}) {
+    return {
+      isCancelled: false,
+      isDeleted: false,
+      isMissed: false,
+      isPending: false,
+      ...options,
+    };
+  }
 }

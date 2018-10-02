@@ -9,6 +9,7 @@ import {
 } from 'CareCruModels';
 import produceLikeQuery from '../shared/produceLikeQuery';
 import logger from '../../config/logger';
+import Appointments from '../../../client/entities/models/Appointments';
 
 /**
  * updateLastProcedureForPatients is an async function that calculates the most recent procedureDates for patients
@@ -121,10 +122,7 @@ function fetchBookedApptNearDate({ date, accountId, patientId, numHoursNearDate 
     where: {
       accountId,
       patientId,
-      isCancelled: false,
-      isMissed: false,
-      isPending: false,
-      isDeleted: false,
+      ...Appointments.getCommonSearchAppointmentSchema(),
       startDate: {
         $gte: moment(date).subtract(numHoursNearDate, 'hours').toISOString(),
         $lte: moment(date).add(numHoursNearDate, 'hours').toISOString(),

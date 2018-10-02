@@ -8,6 +8,7 @@ import {
   Request,
 } from '../../_models';
 import { ManualLimitOffset, getIds, patientAttributes } from './helpers';
+import Appointments from '../../../client/entities/models/Appointments';
 
 export async function FirstLastAppointmentFilter({ data, key }, filterIds, query, accountId) {
   try {
@@ -65,10 +66,7 @@ export async function AppointmentsCountFilter({ data }, filterIds, query, accoun
         as: 'appointments',
         where: {
           accountId,
-          isCancelled: false,
-          isDeleted: false,
-          isMissed: false,
-          isPending: false,
+          ...Appointments.getCommonSearchAppointmentSchema(),
           patientId: {
             $not: null,
           },

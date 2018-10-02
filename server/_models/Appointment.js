@@ -1,4 +1,8 @@
-const { validateAccountIdPmsId } = require('../util/validators');
+
+import moment from 'moment';
+import globals from '../config/globals';
+import { validateAccountIdPmsId } from '../util/validators';
+import Appointemnts from '../../client/entities/models/Appointments';
 
 export default function (sequelize, DataTypes) {
   const Appointment = sequelize.define('Appointment', {
@@ -18,17 +22,11 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    patientId: {
-      type: DataTypes.UUID,
-    },
+    patientId: { type: DataTypes.UUID },
 
-    serviceId: {
-      type: DataTypes.UUID,
-    },
+    serviceId: { type: DataTypes.UUID },
 
-    chairId: {
-      type: DataTypes.UUID,
-    },
+    chairId: { type: DataTypes.UUID },
 
     pmsId: {
       type: DataTypes.STRING,
@@ -60,13 +58,9 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    originalDate: {
-      type: DataTypes.DATE,
-    },
+    originalDate: { type: DataTypes.DATE },
 
-    note: {
-      type: DataTypes.TEXT,
-    },
+    note: { type: DataTypes.TEXT },
 
     isReminderSent: {
       type: DataTypes.BOOLEAN,
@@ -126,9 +120,7 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    customBufferTime: {
-      type: DataTypes.INTEGER,
-    },
+    customBufferTime: { type: DataTypes.INTEGER },
 
     mark: {
       type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['patientId']),
@@ -137,21 +129,13 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    reason: {
-      type: DataTypes.STRING,
-    },
+    reason: { type: DataTypes.STRING },
 
-    isPreConfirmed: {
-      type: DataTypes.BOOLEAN,
-    },
+    isPreConfirmed: { type: DataTypes.BOOLEAN },
 
-    estimatedRevenue: {
-      type: DataTypes.FLOAT,
-    },
+    estimatedRevenue: { type: DataTypes.FLOAT },
 
-    isRecall: {
-      type: DataTypes.BOOLEAN,
-    },
+    isRecall: { type: DataTypes.BOOLEAN },
   });
 
   Appointment.REQUEST_REASON = 'Appointment Request - CareCru';
@@ -214,7 +198,7 @@ export default function (sequelize, DataTypes) {
     const errors = [];
 
     // Build instances of the models
-    let docs = dataArray.map(p => Appointment.build(p));
+    const docs = dataArray.map(p => Appointment.build(p));
 
     // Now Do ORM Validation
     const validatedDocs = [];
@@ -228,7 +212,10 @@ export default function (sequelize, DataTypes) {
       }
     }
 
-    return { errors, docs: validatedDocs };
+    return {
+      errors,
+      docs: validatedDocs,
+    };
   };
 
   Appointment.batchSave = async function (dataArray) {
@@ -245,21 +232,33 @@ export default function (sequelize, DataTypes) {
         return error;
       });
 
-      throw { docs: response, errors: errorsResponse };
+      throw {
+        docs: response,
+        errors: errorsResponse,
+      };
     }
 
     return response;
   };
 
-  Appointment.prototype.confirm = async function (reminder) {
-    let mergeData = { isSyncedWithPms: false };
-    if (reminder.isCustomConfirm) {
-      mergeData = Object.assign({}, reminder.customConfirmData, mergeData);
-    } else {
-      mergeData = Object.assign({}, { isPatientConfirmed: true }, mergeData);
-    }
-
-    return await this.update(mergeData);
+  Appointment.prototype.confirm = async function ({ isCustomConfirm, customConfirmData }) {
+    const mergeData = {
+      ...(isCustomConfirm ? customConfirmData : { isPatientConfirmed: true }),
+      isSyncedWithPms: false,
+    };
+    const appointmentsToConfirm = await Appointment.findAll({
+      where: {
+        accountId: this.accountId,
+        patientId: this.patientId,
+        ...Appointemnts.getCommonSearchAppointmentSchema({ isPatientConfirmed: false }),
+        startDate: {
+          $gte: this.startDate,
+          $lte: moment(this.startDate)
+            .add(globals.reminders.get('sameDayWindowHours'), 'hours'),
+        },
+      },
+    });
+    return Promise.all(appointmentsToConfirm.map(apt => apt.update(mergeData)));
   };
 
   return Appointment;

@@ -1,4 +1,5 @@
 import { SentReview, Review, Appointment } from '../../../_models';
+import Appointments from '../../../../client/entities/models/Appointments';
 
 export async function fetchReviewEvents({ patientId, accountId, query }) {
   return SentReview.findAll({
@@ -24,10 +25,7 @@ export async function fetchReviewEvents({ patientId, accountId, query }) {
         where: {
           patientId,
           accountId,
-          isDeleted: false,
-          isCancelled: false,
-          isMissed: false,
-          isPending: false,
+          ...Appointments.getCommonSearchAppointmentSchema(),
         },
       },
     ],

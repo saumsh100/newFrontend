@@ -26,6 +26,7 @@ import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNext
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
 import sortAsc from '../../../iso/helpers/sort/sortAsc';
+import Appointments from '../../../client/entities/models/Appointments';
 
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
@@ -68,9 +69,9 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
 
     // Now add it to the seen map
     unseenAppts.forEach(a => seen[a.id] = true);
-    const patients = unseenAppts.map((appt) => ({
+    const patients = unseenAppts.map(appt => ({
       ...appt.patient,
-      appointment: appt
+      appointment: appt,
     }));
 
     const channels = reminder.primaryTypes;
@@ -131,7 +132,10 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
         if (!isOpen(weeklySchedule, getDayOfWeek(startDate))) {
           return [];
         }
-        const consecutiveClosedDays = countNextClosedDays({ weeklySchedule, startDate });
+        const consecutiveClosedDays = countNextClosedDays({
+          weeklySchedule,
+          startDate,
+        });
         if (consecutiveClosedDays) {
           console.log(`There are consecutive closed days, therefore bumping end date by ${consecutiveClosedDays} days`);
           end = moment(end).add(consecutiveClosedDays, 'days').toISOString();
@@ -169,13 +173,7 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     }
   }
 
-  const defaultAppointmentsScope = {
-    isDeleted: false,
-    isCancelled: false,
-    isShortCancelled: false,
-    isMissed: false,
-    isPending: false,
-  };
+  const defaultAppointmentsScope = { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
 
   const familyGroupingEnd = moment(start).add(SAME_DAY_HOURS, 'hours').toISOString();
 
@@ -285,12 +283,15 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     const { patient: { family } } = a;
     if (family) {
       // Can't use the spread property because it destroys sequelize helpers
-      a.patient.family.patients = family.patients.map((p) => ({
+      a.patient.family.patients = family.patients.map(p => ({
         // Needs to be a different attribute name so there's backwards compatibility
         ...p,
-        appts: p.appointments.map(a => ({ ...a, patient: p })),
+        appts: p.appointments.map(a => ({
+          ...a,
+          patient: p,
+        })),
         appointments: [],
-      }))
+      }));
     }
 
     return a;
@@ -301,12 +302,14 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     reminder,
   });
 
-  appointments = appointments.reduce((arr, appointment) => {
-    return [
-      ...arr,
-      ...flattenFamilyAppointments({ appointment, reminder, customApptsAttr: 'appts' }),
-    ];
-  }, []);
+  appointments = appointments.reduce((arr, appointment) => [
+    ...arr,
+    ...flattenFamilyAppointments({
+      appointment,
+      reminder,
+      customApptsAttr: 'appts',
+    }),
+  ], []);
 
   appointments = uniqBy(appointments, 'id');
   return appointments;
@@ -448,10 +451,7 @@ export async function getValidSmsReminders({
             required: true,
             where: {
               startDate: { $gt: date },
-              isCancelled: false,
-              isDeleted: false,
-              isPending: false,
-              isMissed: false,
+              ...Appointments.getCommonSearchAppointmentSchema()
             },
           },
           {

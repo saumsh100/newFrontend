@@ -1,6 +1,7 @@
 
 import moment from 'moment';
 import { Patient, Appointment } from '../../_models';
+import Appointments from '../../../client/entities/models/Appointments';
 
 /**
  * getPatientsWithAppInRange gets all patients who had appointments within a
@@ -72,10 +73,7 @@ export async function countPatientsWithAppInRange(accountId, patientFilters, sta
 
 function appointmentQueryParams(startDate, endDate) {
   return {
-    isCancelled: false,
-    isDeleted: false,
-    isMissed: false,
-    isPending: false,
+    ...Appointments.getCommonSearchAppointmentSchema(),
     startDate: {
       $between: [startDate, endDate],
     },

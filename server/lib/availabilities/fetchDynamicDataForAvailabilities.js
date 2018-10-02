@@ -12,6 +12,7 @@ import {
   PractitionerRecurringTimeOff,
 } from '../../_models';
 import { getProperDateWithZone } from '../../util/time';
+import Appointments from '../../../client/entities/models/Appointments';
 
 const generateDuringFilterSequelize = (startDate, endDate) => ({
   $or: [
@@ -58,10 +59,7 @@ export function fetchAppointments({ practitionerIds, startDate, endDate }) {
     ],
 
     where: {
-      isDeleted: false,
-      isCancelled: false,
-      isMissed: false,
-      isPending: false,
+      ...Appointments.getCommonSearchAppointmentSchema(),
       isBookable: false,
       practitionerId: { $in: practitionerIds },
       ...generateDuringFilterSequelize(startDate, endDate),
@@ -184,7 +182,7 @@ export default async function fetchDynamicDataForAvailabilities({
   account, practitioners, startDate, endDate,
 }) {
   const practitionerIds = practitioners.map(p => p.id);
-  
+
   // This is a temporary fix to properly get the allDay availabilities
   const dayBeforeDate = new Date(startDate);
   dayBeforeDate.setHours(dayBeforeDate.getHours() - 24);
@@ -200,7 +198,7 @@ export default async function fetchDynamicDataForAvailabilities({
   const getDailySchedules = fetchDailySchedules({
     practitionerIds, startDate, endDate, timezone: account.timezone,
   });
-  
+
   // Wait for all queries to finish together but send at same time
   const [
     appointments,

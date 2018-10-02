@@ -1,6 +1,7 @@
 
 import { Patient, Appointment } from '../../_models';
 import { patientAttributes } from './helpers';
+import Appointments from '../../../client/entities/models/Appointments';
 
 export async function PractitionersFilter({ data }, filterIds, query, accountId) {
   try {
@@ -23,10 +24,7 @@ export async function PractitionersFilter({ data }, filterIds, query, accountId)
         as: 'appointments',
         where: {
           accountId,
-          isCancelled: false,
-          isDeleted: false,
-          isMissed: false,
-          isPending: false,
+          ...Appointments.getCommonSearchAppointmentSchema(),
           practitionerId: data[0],
         },
         attributes: [],

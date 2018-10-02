@@ -1,4 +1,4 @@
-/* eslint-disable consistent-return */
+
 import isArray from 'lodash/isArray';
 import { Router } from 'express';
 import moment from 'moment';
@@ -16,6 +16,7 @@ import { namespaces } from '../../../config/globals';
 import patientEventsAggregator from '../../../lib/events';
 import getPatientBasedOnFieldsProvided from '../../../lib/contactInfo/getPatient';
 import StatusError from '../../../util/StatusError';
+import Appointments from '../../../../client/entities/models/Appointments';
 
 const patientsRouter = new Router();
 
@@ -407,10 +408,7 @@ patientsRouter.get('/suggestions', checkPermissions('patients:read'), async (req
           startDate: {
             $gte: new Date(requestCreatedAt),
           },
-          isDeleted: false,
-          isCancelled: false,
-          isMissed: false,
-          isPending: false,
+          ...Appointments.getCommonSearchAppointmentSchema(),
         },
         order: [['startDate', 'ASC']],
         required: false,
@@ -440,10 +438,7 @@ patientsRouter.get('/:patientId/nextAppointment', checkPermissions('patients:rea
         startDate: {
           $gte: new Date(requestCreatedAt),
         },
-        isDeleted: false,
-        isCancelled: false,
-        isMissed: false,
-        isPending: false,
+        ...Appointments.getCommonSearchAppointmentSchema(),
       },
       order: [['startDate', 'ASC']],
     });
