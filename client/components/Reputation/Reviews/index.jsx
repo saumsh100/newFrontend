@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { Card, Col, Grid, Row, Filters } from '../../library';
-import { accountShape } from '../../library/PropTypeShapes';
 import Loader from '../../Loader';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { setReputationFilter } from '../../../actions/reputation';
@@ -23,7 +22,6 @@ class Reviews extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      hasAccount: false,
       activationText: '',
       endDate: null,
       startDate: null,
@@ -32,39 +30,20 @@ class Reviews extends Component {
     this.submitDate = this.submitDate.bind(this);
   }
 
-  componentWillMount() {
-    const { activeAccount } = this.props;
-
-    let hasAccount = false;
-
-    if (activeAccount.get('vendastaId')) {
-      hasAccount = true;
-    }
-
-    this.setState({ hasAccount });
-  }
-
   componentDidMount() {
-    if (this.state.hasAccount) {
+    if (this.props.hasAccount) {
       const params = {
         startDate: this.state.startDate,
         endDate: this.state.endDate,
       };
 
-      Promise.all([
-        this.props.fetchEntitiesRequest({
-          id: 'reviews',
-          url: '/api/reputation/reviews',
-          params,
-        }),
-      ])
+      this.props
+        .setReputationState(params)
         .then(() => {
-          this.props.setReputationState();
           this.reviewsContainerHeight = document.getElementById('reviewsContainerRep').clientHeight;
         })
         .catch(() => {
           this.setState({
-            hasAccount: false,
             activationText:
               'Activate Reviews/Reputation Management package or contact your CareCru account manager for further assistance.',
           });
@@ -214,10 +193,11 @@ class Reviews extends Component {
   }
 
   render() {
-    if (!this.state.hasAccount) {
-      return <ReputationDisabled activationText={this.state.activationText} />;
-    }
-    return this.renderInnerContent();
+    return this.props.hasAccount ? (
+      this.renderInnerContent()
+    ) : (
+      <ReputationDisabled activationText={this.state.activationText} />
+    );
   }
 }
 
@@ -227,7 +207,7 @@ Reviews.propTypes = {
   reviewsFilter: PropTypes.instanceOf(Map),
   reviewsData: PropTypes.instanceOf(Map),
   reviewsList: PropTypes.instanceOf(Map),
-  activeAccount: PropTypes.shape(accountShape).isRequired,
+  hasAccount: PropTypes.bool,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
@@ -237,20 +217,24 @@ Reviews.defaultProps = {
   reviewsData: null,
   reviewsList: null,
   reviewsFilter: null,
+  hasAccount: false,
 };
 
 function mapStateToProps({ apiRequests, entities, auth, reputation }) {
-  const reviewsWasFetched = apiRequests.get('reviews').get('wasFetched');
-
+  const reviews = apiRequests.get('reviews');
+  const reviewsWasFetched =
+    reviews && ((reviews.get('wasFetched') && reputation.get('reviewsData').size > 0) || false);
   const reviewsFilter = reviewsWasFetched && reputation.get('reviewsFilter');
   const reviewsData = reviewsWasFetched && reputation.get('reviewsData');
   const reviewsList = reviewsWasFetched && reputation.get('reviewsList');
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const hasAccount = activeAccount && !!activeAccount.get('vendastaId');
 
   return {
     reviewsData,
     reviewsList,
     reviewsFilter,
-    activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
+    hasAccount,
   };
 }
 

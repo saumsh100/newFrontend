@@ -1,17 +1,24 @@
 
 import { setReputationFilter } from '../actions/reputation';
 import { setReviewsData } from '../reducers/reputation';
+import { fetchEntitiesRequest } from '../thunks/fetchEntities';
 
-export default function setReputationState() {
-  return function (dispatch, getState) {
+export default function setReputationState(params) {
+  return async function (dispatch, getState) {
+    await dispatch(fetchEntitiesRequest({
+      id: 'reviews',
+      url: '/api/reputation/reviews',
+      params,
+    }));
+
     const { apiRequests } = getState();
     const reviewsData = apiRequests.get('reviews').data;
-    let reviewsList = reviewsData.get('reviews').toJS();
+    const reviews = reviewsData.get('reviews').toJS();
 
     const sourceNames = {};
     const ratingObj = {};
 
-    reviewsList = reviewsList.map((review) => {
+    const reviewsList = reviews.map((review) => {
       const name = review.sourceName.replace('.ca', '');
       const { rating } = review;
 
