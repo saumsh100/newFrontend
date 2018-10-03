@@ -7,7 +7,16 @@ import { bindActionCreators } from 'redux';
 import { reset } from 'redux-form';
 import classNames from 'classnames';
 import moment from 'moment';
-import { Avatar, SContainer, SBody, SFooter, Icon, Tooltip, Button } from '../../library';
+import {
+  Avatar,
+  SContainer,
+  SBody,
+  SFooter,
+  Icon,
+  Tooltip,
+  Button,
+  InfiniteScroll,
+} from '../../library';
 import MessageBubble from './MessageBubble';
 import MessageTextArea from './MessageTextArea';
 import {
@@ -16,34 +25,56 @@ import {
   selectChat,
   markAsUnread,
   resendMessage,
+  setChatMessagesListForChat,
 } from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
 import chatTabs from '../consts';
 import styles from './styles.scss';
 
+const DEFAULT_OFFSET = 0;
+const DEFAULT_LIMIT = 15;
+
 class MessageContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { sendingMessage: false };
+    this.state = {
+      currentlySelectedChat: null,
+      sendingMessage: false,
+      loadingMessages: false,
+      messagesCount: 0,
+      offset: DEFAULT_OFFSET,
+    };
 
     this.sendMessageHandler = this.sendMessageHandler.bind(this);
+    this.loadMoreMessages = this.loadMoreMessages.bind(this);
+    this.resetPaginationToDefault = this.resetPaginationToDefault.bind(this);
   }
 
   componentDidMount() {
     this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps({ textMessages, hasMoreMessages, selectedChat }) {
+    const { loadingMessages, messagesCount, currentlySelectedChat } = this.state;
+
+    if (selectedChat && selectedChat.id && currentlySelectedChat !== selectedChat.id) {
+      this.setState({ currentlySelectedChat: selectedChat.id });
+      return this.resetPaginationToDefault();
+    }
+
+    if (textMessages.size !== messagesCount && loadingMessages) {
+      return this.setState({
+        messagesCount: hasMoreMessages ? textMessages.size : messagesCount,
+        loadingMessages: false,
+      });
+    }
+
     // Scroll down on component
     const node = document.getElementById('careCruChatScrollIntoView');
     if (node) {
       node.scrollTop = node.scrollHeight;
     }
-  }
-
-  componentDidUpdate() {
-    this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
   getMessageTime(message) {
@@ -55,6 +86,29 @@ class MessageContainer extends Component {
       lastWeek: '[Last] dddd h:mm a',
       sameElse: 'YYYY/MM/DD, h:mm a',
     });
+  }
+
+  resetPaginationToDefault() {
+    this.setState({
+      loadingMessages: false,
+      messagesCount: 0,
+      offset: DEFAULT_OFFSET,
+    });
+  }
+
+  loadMoreMessages() {
+    const { selectedChat } = this.props;
+
+    this.setState(
+      prevState => ({
+        offset: prevState.offset + DEFAULT_LIMIT,
+        loadingMessages: true,
+      }),
+      () => {
+        const { offset } = this.state;
+        this.props.setChatMessagesListForChat(selectedChat.id, offset, DEFAULT_LIMIT);
+      },
+    );
   }
 
   sendMessageHandler(values) {
@@ -281,7 +335,7 @@ class MessageContainer extends Component {
   }
 
   render() {
-    const { selectedChat, newChat } = this.props;
+    const { selectedChat, newChat, hasMoreMessages } = this.props;
 
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
 
@@ -294,8 +348,16 @@ class MessageContainer extends Component {
             this.scrollContainer = node;
           }}
         >
-          {selectedChat && this.renderMessagesTree()}
-          <div className={styles.raise} />
+          <InfiniteScroll
+            isReverse
+            loadMore={this.loadMoreMessages}
+            hasMore={hasMoreMessages}
+            initialLoad={false}
+            useWindow={false}
+          >
+            {selectedChat && this.renderMessagesTree()}
+            <div className={styles.raise} />
+          </InfiniteScroll>
         </SBody>
         <SFooter className={styles.sendMessage}>
           <MessageTextArea
@@ -317,10 +379,12 @@ function mapStateToProps({ entities, auth, chat }) {
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   const selectedPatientId = selectedChat && selectedChat.patientId;
   const textMessages = chat.get('chatMessages');
+  const hasMoreMessages = chat.get('hasMoreMessages');
 
   return {
     textMessages,
     selectedChat,
+    hasMoreMessages,
     newChat: chat.get('newChat'),
     userId: auth.getIn(['user', 'id']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
@@ -337,6 +401,7 @@ function mapDispatchToProps(dispatch) {
       createNewChat,
       markAsUnread,
       resendMessage,
+      setChatMessagesListForChat,
     },
     dispatch,
   );
@@ -356,6 +421,7 @@ MessageContainer.propTypes = {
   newChat: PropTypes.shape({ id: PropTypes.string }),
   selectedPatient: PropTypes.shape({ id: PropTypes.string }),
   userId: PropTypes.string.isRequired,
+  hasMoreMessages: PropTypes.bool.isRequired,
   selectChatOrCreate: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -364,6 +430,7 @@ MessageContainer.propTypes = {
   markAsUnread: PropTypes.func.isRequired,
   resendMessage: PropTypes.func.isRequired,
   setTab: PropTypes.func.isRequired,
+  setChatMessagesListForChat: PropTypes.func.isRequired,
 };
 
 MessageContainer.defaultProps = {

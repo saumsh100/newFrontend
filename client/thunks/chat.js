@@ -14,6 +14,7 @@ import {
   setChatPoC,
   setNewChat,
   updateChatId,
+  setHasMoreMessages,
 } from '../reducers/chat';
 import { setBackHandler } from '../reducers/electron';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
@@ -250,14 +251,22 @@ export function markAsRead(chatId) {
   };
 }
 
-export function setChatMessagesListForChat(chatId) {
+export function setChatMessagesListForChat(chatId, offset = 0, limit = 15) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const allMessages = entities.getIn(['textMessages', 'models']);
     const filteredChatMessages = allMessages
       .filter(message => message.chatId === chatId)
       .sort(sortTextMessages);
-    return dispatch(setChatMessages(filteredChatMessages || []));
+
+    // Temp solution until the actual api textMessages fetch is implemented (on the client side)
+    // for retrieving messages.
+    // At the moment all messages are in the store, so it doesn't make sense to re-fetch them,
+    // therefore, we will only paginate them.
+    const paginatedMessages = filteredChatMessages.slice(-(offset + limit));
+    const hasMore = paginatedMessages.size < filteredChatMessages.size;
+    dispatch(setHasMoreMessages(hasMore));
+    return dispatch(setChatMessages(paginatedMessages || []));
   };
 }
 
