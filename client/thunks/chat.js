@@ -51,7 +51,7 @@ export function defaultSelectedChatId() {
 
     // Because it is not defined, we need to sort the chats and pick the appropriate one
     const chats = entities.getIn(['chats', 'models']);
-    const sortedChats = sortByFieldAsc(chats, 'lastTextMessageId');
+    const sortedChats = sortByFieldAsc(chats, 'lastTextMessageDate');
 
     const firstChat = sortedChats.first();
     if (firstChat) {
