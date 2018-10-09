@@ -15,73 +15,72 @@ const RecallsText = {
       'You can schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-1 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-1 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       'and you are 1 month past due. ' +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-2 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-2 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-4 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-4 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-6 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-6 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-8 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-8 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-10 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-10 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-12 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-12 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-14 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-14 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-16 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-16 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-18 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-18 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-20 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-20 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 
-  '-24 months': ({ account, patient, dueDate, lastApptDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(lastApptDate).format('dddd, MMMM Do, YYYY')} ` +
+  '-24 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name} and we’re reaching out because you were due for a hygiene appointment on ${moment(dueDate).format('dddd, MMMM Do, YYYY')} ` +
       `and you are ${moment().diff(moment(dueDate), 'months')} months past due. ` +
       'Please schedule your appointment by clicking this link: ' +
       `${link}`,
 };
 
-export default function createRecallText({ patient, account, dueDate, lastApptDate, recall, link }) {
+export default function createRecallText({ patient, account, dueDate, recall, link }) {
   return RecallsText[recall.interval]({
     patient,
     account,
     dueDate,
-    lastApptDate,
     link,
   });
 }
