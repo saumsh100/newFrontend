@@ -1,5 +1,5 @@
 
-import twilio from '../../config/twilio';
+import twilioClient from '../../config/twilio';
 import { host, protocol, myHost } from '../../config/globals';
 import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
 import createReminderText, { getReminderTemplateName } from './createReminderText';
@@ -104,7 +104,7 @@ function sendSms({
  */
 function phoneCall({ account, appointment, patient, sentReminder }) {
   // TODO: add phoneNumber logic for patient
-  return twilio.makeCall({
+  return twilioClient.makeCall({
     to: patient.mobilePhoneNumber,
     from: account.twilioPhoneNumber,
     url: generateCallBackUrl({

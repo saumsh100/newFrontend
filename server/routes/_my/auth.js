@@ -1,11 +1,10 @@
 
 import { Router } from 'express';
-import { v4 as uuid } from 'uuid';
 import url from 'url';
 import crypto from 'crypto';
 import { PatientAuth } from '../../lib/_auth';
 import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import twilio, { phoneNumber } from '../../config/twilio';
+import twilioClient from '../../config/twilio';
 import { sequelizeLoader } from '../util/loaders';
 import { generateAccountParams, encodeParams } from './util/params';
 import StatusError from '../../util/StatusError';
@@ -18,6 +17,7 @@ import {
   Token,
 } from '../../_models';
 import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
+import { twilio } from '../../config/globals';
 
 const authRouter = Router();
 
@@ -46,9 +46,9 @@ async function sendConfirmationMessage(patientUser) {
     patientUser.phoneNumber
   }`);
   const { pinCode } = await PinCode.create({ modelId: patientUser.id });
-  return twilio.sendMessage({
+  return twilioClient.sendMessage({
     to: patientUser.phoneNumber,
-    from: phoneNumber,
+    from: twilio.phoneNumber,
     body: createConfirmationText(pinCode),
   });
 }
@@ -57,7 +57,10 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
   const { body: patient } = req;
   const { ignoreConfirmationText } = req.query;
   if (patient.password !== patient.confirmPassword) {
-    next({ status: 400, message: "Passwords doesn't match." });
+    next({
+      status: 400,
+      message: "Passwords doesn't match.",
+    });
   }
 
   return PatientAuth.signup(patient)
@@ -65,14 +68,20 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
       // For ever patientUser, create a family and make it
       const family = await PatientUserFamily.create({ headId: model.id });
       model = await model.update({ patientUserFamilyId: family.id });
-      return { session, model };
+      return {
+        session,
+        model,
+      };
     })
     .then(async ({ session, model }) => {
-      if (phoneNumber && ignoreConfirmationText !== 'true') {
+      if (twilio.phoneNumber && ignoreConfirmationText !== 'true') {
         await sendConfirmationMessage(model);
       }
 
-      return { session, model };
+      return {
+        session,
+        model,
+      };
     })
     .then(signTokenAndSend(res))
     .then(async (patientUser) => {
@@ -82,7 +91,11 @@ authRouter.post('/signup/:accountId', (req, res, next) => {
 
       // Create token
       const tokenId = crypto.randomBytes(12).toString('hex');
-      const token = await Token.create({ id: tokenId, patientUserId: id, accountId: account.id });
+      const token = await Token.create({
+        id: tokenId,
+        patientUserId: id,
+        accountId: account.id,
+      });
 
       // Generate the URL to confirm email
       const confirmationURL = generateEmailConfirmationURL(token.id, req.protocol, req.get('host'));
@@ -185,9 +198,7 @@ authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
 
     // This will be replaced with proper URL mounting for clinics
     const account = await Account.findById(accountId);
-    const params = {
-      account: generateAccountParams(account),
-    };
+    const params = { account: generateAccountParams(account) };
 
     return res.redirect(url.format({
       pathname: '/signup/confirmed',

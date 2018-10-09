@@ -1,8 +1,7 @@
+
+import axios from 'axios';
 import { callrails, vendasta } from '../config/globals';
 import twilioClient from '../config/twilio';
-const axios = require('axios');
-
-const uuid = require('uuid').v4;
 
 const {
   apiKey,
@@ -17,21 +16,20 @@ export async function twilioDelete(account) {
   }
 
   try {
-    const test = await twilioClient.incomingPhoneNumbers.list();
     let phoneNumberId;
-    for (let i = 0; i < test.incomingPhoneNumbers.length; i += 1) {
-      if (account.twilioPhoneNumber === test.incomingPhoneNumbers[i].phone_number) {
-        phoneNumberId = test.incomingPhoneNumbers[i].sid;
+    await twilioClient.incomingPhoneNumbers.each((incomingPhoneNumbers, done) => {
+      if (account.twilioPhoneNumber === incomingPhoneNumbers.phone_number) {
+        phoneNumberId = incomingPhoneNumbers.sid;
+        done();
       }
-    }
+    });
 
     if (!phoneNumberId) {
-      throw 'ERROR PHONE NUMBER NOT FOUND';
+      throw new Error('ERROR PHONE NUMBER NOT FOUND');
     }
-    await twilioClient.incomingPhoneNumbers(phoneNumberId).delete();
-    const newAccount = await account.update({ twilioPhoneNumber: null });
-
-    return newAccount;
+    await twilioClient.incomingPhoneNumbers(phoneNumberId)
+      .delete();
+    return account.update({ twilioPhoneNumber: null });
   } catch (e) {
     console.log(e);
     console.log('Twilio Account Delete Failed');
@@ -48,9 +46,7 @@ export async function callRailDelete(account) {
     const deleteCompany = {
       method: 'DELETE',
       url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies/${account.callrailId}.json`,
-      headers: {
-        Authorization: `Token token=${callrails.apiKey}`,
-      },
+      headers: { Authorization: `Token token=${callrails.apiKey}` },
     };
 
     await axios(deleteCompany);
@@ -69,15 +65,11 @@ async function vendastaDeleteMS(account) {
   const accountUrl = `https://presence-builder-api.vendasta.com/api/v3/site/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
 
   try {
-    const deleteCompany = {
-      msid: account.vendastaMsId,
-    };
+    const deleteCompany = { msid: account.vendastaMsId };
 
     await axios.post(accountUrl, deleteCompany);
 
-    return await account.update({
-      vendastaMsId: null,
-    });
+    return await account.update({ vendastaMsId: null });
   } catch (e) {
     console.log(e);
     console.log('Vendasta Listings Deletion Failed');
@@ -90,15 +82,11 @@ async function vendastaDeleteRM(account) {
   const accountUrl = `https://reputation-intelligence-api.vendasta.com/api/v2/account/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
 
   try {
-    const deleteCompany = {
-      srid: account.vendastaSrId,
-    };
+    const deleteCompany = { srid: account.vendastaSrId };
 
     await axios.post(accountUrl, deleteCompany);
 
-    return await account.update({
-      vendastaSrId: null,
-    });
+    return await account.update({ vendastaSrId: null });
   } catch (e) {
     console.log(e);
     console.log('Vendasta Rep Management Creation Failed');
@@ -137,9 +125,7 @@ export async function vendastaDelete(account, options) {
 async function vendastaDeleteAll(account) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/delete/?apiKey=${apiKey}&apiUser=${apiUser}`;
 
-  const deleteCompany = {
-    accountId: account.vendastaAccountId,
-  };
+  const deleteCompany = { accountId: account.vendastaAccountId };
   try {
     await axios.post(accountUrl, deleteCompany);
 

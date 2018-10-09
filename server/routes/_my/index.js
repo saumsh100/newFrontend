@@ -1,5 +1,4 @@
 
-/* eslint-disable consistent-return */
 import { Router } from 'express';
 import url from 'url';
 import {
@@ -12,7 +11,6 @@ import {
   SentRemindersPatients,
 } from 'CareCruModels';
 import StatusError from '../../util/StatusError';
-import { lookupsClient } from '../../config/twilio';
 import newAvailabilitiesRouter from './newAvailabilitiesRouter';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
@@ -26,6 +24,7 @@ import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
 import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import { generateAccountParams, encodeParams } from './util/params';
+import twilioClient from '../../config/twilio';
 
 const myRouter = Router();
 
@@ -65,8 +64,17 @@ myRouter.param('accountId', sequelizeLoader('account', 'Account'));
 myRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
 myRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
 myRouter.param('accountIdJoin', sequelizeLoader('account', 'Account', [
-  { association: 'services', required: false, where: { isHidden: { $ne: true } }, order: [['name', 'ASC']] },
-  { association: 'practitioners', required: false, where: { isActive: true } },
+  {
+    association: 'services',
+    required: false,
+    where: { isHidden: { $ne: true } },
+    order: [['name', 'ASC']],
+  },
+  {
+    association: 'practitioners',
+    required: false,
+    where: { isActive: true },
+  },
 ]));
 
 myRouter.use('/reviews', reviewsRouter);
@@ -75,9 +83,7 @@ myRouter.use('/widgets', widgetsRouter);
 
 // Used on patient signup form to determine if a patientUser's email is taken
 myRouter.post('/patientUsers/email', async (req, res, next) => {
-  let {
-    email,
-  } = req.body;
+  let { email } = req.body;
 
   email = email && email.toLowerCase();
 
@@ -91,9 +97,7 @@ myRouter.post('/patientUsers/email', async (req, res, next) => {
 
 // Used on patient signup form to determine if a patientUser's phoneNumber is taken
 myRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
-  let {
-    phoneNumber,
-  } = req.body;
+  let { phoneNumber } = req.body;
 
   phoneNumber = validatePhoneNumber(phoneNumber);
   try {
@@ -103,20 +107,16 @@ myRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
       return res.send({ error: 'There is already a user with that mobile number.' });
     }
 
-    lookupsClient.phoneNumbers(phoneNumber).get({
-      type: 'carrier',
-    }, function(error, number) {
-      if (error) {
+    twilioClient.lookups.phoneNumbers(phoneNumber)
+      .fetch({ type: 'carrier' })
+      .then((number) => {
+        const isLandline = number && number.carrier && number.carrier.type === 'landline';
+        if (isLandline) {
+          return res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
+        }
         return res.sendStatus(200);
-      }
-
-      const isLandline = number && number.carrier && number.carrier.type === 'landline';
-      if (isLandline) {
-        res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
-      } else {
-        res.sendStatus(200);
-      }
-    });
+      })
+      .catch(() => res.sendStatus(200));
   } catch (error) {
     next(error);
   }
@@ -135,7 +135,6 @@ myRouter.get('/patientUsers/:patientUserId', (req, res, next) => {
 myRouter.post('/patientUsers/:patientUserId/patientUsers', async (req, res, next) => {
   try {
     const patientUser = await PatientUser.create(req.body);
-
   } catch (err) {
     next(err);
   }
@@ -147,21 +146,18 @@ myRouter.get('/reset/:tokenId', (req, res, next) => {
     .then((reset) => {
       if (!reset) {
         // TODO: replace with StatusError and pass to next...
-        res.status(404).send();
+        res.status(404)
+          .send();
       } else {
         // TODO: add encoded params
         const { accountId } = reset;
         return Account.findOne({ where: { id: accountId } })
           .then((account) => {
-            const params = {
-              account: generateAccountParams(account),
-            };
+            const params = { account: generateAccountParams(account) };
 
             res.redirect(url.format({
               pathname: `/reset-password/${tokenId}`,
-              query: {
-                params: encodeParams(params),
-              },
+              query: { params: encodeParams(params) },
             }));
           });
       }
@@ -170,9 +166,7 @@ myRouter.get('/reset/:tokenId', (req, res, next) => {
 });
 
 myRouter.post('/reset-password/:tokenId', (req, res, next) => {
-  const {
-    password,
-  } = req.body;
+  const { password } = req.body;
 
   return PatientUserReset.findOne({ where: { token: req.params.tokenId } })
     .then(async (reset) => {
@@ -180,11 +174,7 @@ myRouter.post('/reset-password/:tokenId', (req, res, next) => {
         return next(StatusError(401, 'Invalid Token'));
       }
 
-      const user = await PatientUser.findOne({
-        where: {
-          id: reset.patientUserId,
-        },
-      });
+      const user = await PatientUser.findOne({ where: { id: reset.patientUserId } });
 
       await user.setPasswordAsync(password);
       await user.save();
@@ -198,7 +188,7 @@ myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) =>
   try {
     // TODO: it's stuff like this that we need to put into a "Manager" SentReminderManager.confirm();
     const { sentReminder } = req;
-    
+
     await sentReminder.update({ isConfirmed: true });
 
     // For any confirmed reminder we confirm appointment

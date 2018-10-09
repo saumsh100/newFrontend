@@ -1,8 +1,7 @@
+
 import { callrails, vendasta } from '../config/globals';
 import twilioClient from '../config/twilio';
-import {
-  Account,
-} from '../_models';
+import { Account } from '../_models';
 
 const axios = require('axios');
 
@@ -21,11 +20,7 @@ async function getVendastaIds(listings, reputationManagement, accountId, limit) 
     console.log(`Geting Vendasta Ids for accountId=${accountId}`);
     let completed = 0;
 
-    const account = await Account.findOne({
-      where: {
-        id: accountId,
-      },
-    });
+    const account = await Account.findOne({ where: { id: accountId } });
     const accountUrl = `https://api.vendasta.com/api/v3/account/get/?apiKey=${apiKey}&apiUser=${apiUser}&accountId=${account.vendastaAccountId}`;
 
     const getCompany = await axios.get(accountUrl);
@@ -44,7 +39,7 @@ async function getVendastaIds(listings, reputationManagement, accountId, limit) 
 
     if (reputationManagement) {
       msid = getCompany.data.data.productsJson.MS
-            ? getCompany.data.data.productsJson.MS.productId : null;
+        ? getCompany.data.data.productsJson.MS.productId : null;
       if (msid) {
         completed += 1;
       }
@@ -78,12 +73,8 @@ export async function callRail(account) {
     const createCompany = {
       method: 'POST',
       url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/companies.json`,
-      headers: {
-        Authorization: `Token token=${callrails.apiKey}`,
-      },
-      data: {
-        name: account.name,
-      },
+      headers: { Authorization: `Token token=${callrails.apiKey}` },
+      data: { name: account.name },
       json: true,
     };
 
@@ -91,9 +82,7 @@ export async function callRail(account) {
     const createTracker = {
       method: 'POST',
       url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/trackers.json`,
-      headers: {
-        Authorization: `Token token=${callrails.apiKey}`,
-      },
+      headers: { Authorization: `Token token=${callrails.apiKey}` },
       data: {
         name: account.name,
         type: 'source',
@@ -107,9 +96,7 @@ export async function callRail(account) {
           area_code: areaCode,
           local: phoneNumber,
         },
-        source: {
-          type: 'offline',
-        },
+        source: { type: 'offline' },
       },
       json: true,
     };
@@ -118,9 +105,7 @@ export async function callRail(account) {
     const createWebhook = {
       method: 'POST',
       url: `https://api.callrail.com/v2/a/${callrails.apiAccount}/integrations.json`,
-      headers: {
-        Authorization: `Token token=${callrails.apiKey}`,
-      },
+      headers: { Authorization: `Token token=${callrails.apiKey}` },
       data: {
         company_id: company.data.id,
         type: 'Webhooks',
@@ -152,6 +137,7 @@ export async function twilioSetup(account) {
       smsEnabled: true,
       voiceEnabled: true,
       inRegion: account.address.state,
+      limit: 1,
     });
     const number = data.availablePhoneNumbers[0];
     await twilioClient.incomingPhoneNumbers.create({
@@ -159,8 +145,7 @@ export async function twilioSetup(account) {
       friendlyName: account.name,
       smsUrl: `https://carecru.io/twilio/sms/accounts/${account.id}`,
     });
-    const newAccount = account.update({ twilioPhoneNumber: number.phone_number });
-    return newAccount;
+    return account.update({ twilioPhoneNumber: number.phone_number });
   } catch (e) {
     console.log(e);
     console.log('Twilio Account Creation Failed');
@@ -214,7 +199,6 @@ async function vendastaAddProducts(account, setupList) {
 
 
 async function vendastaSetup(account, setupList) {
-
   const accountUrl = `https://api.vendasta.com/api/v3/account/create/?apiKey=${apiKey}&apiUser=${apiUser}`;
   const customerIdentifier = uuid();
   const createCompany = {
