@@ -46,7 +46,7 @@ async function sendConfirmationMessage(patientUser) {
     patientUser.phoneNumber
   }`);
   const { pinCode } = await PinCode.create({ modelId: patientUser.id });
-  return twilioClient.sendMessage({
+  return twilioClient.messages.create({
     to: patientUser.phoneNumber,
     from: twilio.phoneNumber,
     body: createConfirmationText(pinCode),

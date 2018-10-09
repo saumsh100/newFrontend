@@ -18,7 +18,7 @@ import { receiveMessage } from '../chat';
 export async function sendSMS({ from, to, body }) {
   try {
     logger.debug(`Sending SMS from ${from} to ${to}.`);
-    const message = await twilioClient.sendMessage({ from, to, body });
+    const message = await twilioClient.messages.create({ from, to, body });
     return sanitizeTwilioSmsData(message);
   } catch (exception) {
     logger.error(exception);
