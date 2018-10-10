@@ -19,10 +19,11 @@ import selectCorrectPatient from './selectCorrectPatient';
  * @return {[patients]}
  */
 export async function fetchPatientsFromKeyValue({ key, value, accountId, where = {} }) {
-  return await Patient.findAll({
+  return Patient.findAll({
     where: {
       accountId,
       [key]: value,
+      status: 'Active',
       ...where,
     },
 
@@ -58,7 +59,7 @@ export async function getPatientFromKeyValue({ key, value, accountId }) {
  * @return {Promise<*>}
  */
 export async function getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId }) {
-  return await getPatientFromKeyValue({
+  return getPatientFromKeyValue({
     key: 'mobilePhoneNumber',
     value: cellPhoneNumber,
     accountId,

@@ -137,7 +137,8 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
           startDate,
         });
         if (consecutiveClosedDays) {
-          console.log(`There are consecutive closed days, therefore bumping end date by ${consecutiveClosedDays} days`);
+          console.log(`There are consecutive closed days, therefore bumping end 
+            date by ${consecutiveClosedDays} days`);
           end = moment(end).add(consecutiveClosedDays, 'days').toISOString();
         }
       }
@@ -173,11 +174,13 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     }
   }
 
-  const defaultAppointmentsScope = { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
+  const defaultAppointmentsScope =
+    { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
 
   const familyGroupingEnd = moment(start).add(SAME_DAY_HOURS, 'hours').toISOString();
 
-  // Now we query for the appointments, those appointments patients and sentReminders, and those patients appointmemnts
+  // Now we query for the appointments, those appointments patients and sentReminders, and
+  // those patients appointments
   let appointments = await Appointment.findAll({
     where: {
       ...defaultAppointmentsScope,
@@ -189,8 +192,8 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
       chairId: { $notIn: reminder.omitChairIds },
       practitionerId: { $notIn: reminder.omitPractitionerIds },
     },
-    // Important for grabbing latest sentReminder and checking if it was within window or lastReminder
-    // and this one. If it is, we ignore this touchpoint
+    // Important for grabbing latest sentReminder and checking if it was within window or
+    // lastReminder and this one. If it is, we ignore this touchpoint
     order: [
       ['startDate', 'ASC'],
       [
@@ -206,7 +209,10 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
       {
         model: Patient,
         as: 'patient',
-        where: { $not: { omitReminderIds: { $contains: [reminder.id] } } },
+        where: {
+          $not: { omitReminderIds: { $contains: [reminder.id] } },
+          status: 'Active',
+        },
         include: [
           {
             model: Family,
@@ -214,7 +220,10 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
             include: [{
               model: Patient,
               as: 'patients',
-              where: { $not: { omitReminderIds: { $contains: [reminder.id] } } },
+              where: {
+                $not: { omitReminderIds: { $contains: [reminder.id] } },
+                status: 'Active',
+              },
               include: [{
                 model: Appointment,
                 as: 'appointments',
@@ -252,7 +261,8 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
             where: {
               ...defaultAppointmentsScope,
               accountId: reminder.accountId,
-              // Do not include the upper-bound, or else you'll always get the same appointment as above
+              // Do not include the upper-bound, or else you'll always get the same appointment
+              // as above
               startDate: {
                 $gte: sameDayStart,
                 $lt: start,
@@ -286,8 +296,8 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
       a.patient.family.patients = family.patients.map(p => ({
         // Needs to be a different attribute name so there's backwards compatibility
         ...p,
-        appts: p.appointments.map(a => ({
-          ...a,
+        appts: p.appointments.map(app => ({
+          ...app,
           patient: p,
         })),
         appointments: [],
@@ -371,7 +381,8 @@ export function shouldSendReminder({ appointment, reminder }) {
 
   // These are appointments that are within the "same day" window, don't send a reminder
   // This is because a reminder for that appointment was probably already sent
-  // NOTE: It should ultimately only ignore if it had a successful sentReminder already not just if it exists
+  // NOTE: It should ultimately only ignore if it had a successful sentReminder
+  // already not just if it exists
   if (appointments.length) {
     return false;
   }
@@ -451,7 +462,7 @@ export async function getValidSmsReminders({
             required: true,
             where: {
               startDate: { $gt: date },
-              ...Appointments.getCommonSearchAppointmentSchema()
+              ...Appointments.getCommonSearchAppointmentSchema(),
             },
           },
           {
