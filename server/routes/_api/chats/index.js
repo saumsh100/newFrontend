@@ -128,7 +128,7 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), async
   try {
     const {
       message,
-      patient: { id: patientId, accountId, mobilePhoneNumber: cellPhoneNumber },
+      patient: { id: patientId, accountId, cellPhoneNumber },
       userId,
     } = req.body;
 
