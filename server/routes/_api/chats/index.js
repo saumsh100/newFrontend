@@ -72,9 +72,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
  */
 chatsRouter.post('/', checkPermissions('chats:create'), async (req, res, next) => {
   try {
-    const accountId = req.body.patient.accountId;
-    const patientId = req.body.patient.id;
-    const cellPhoneNumber = req.body.patient.mobilePhoneNumber;
+    const { cellPhoneNumber, accountId, patientId } = req.body.patient;
     const poc = await getPatientFromCellPhoneNumber({
       cellPhoneNumber,
       accountId,
