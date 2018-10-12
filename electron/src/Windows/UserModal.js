@@ -70,7 +70,8 @@ class UserModal extends WindowMain {
     return toolbarPosition === 'left'
       ? Math.floor(workArea.x + (config.userSettings.marginFromWindowBorder * this.zoomFactor))
       : Math.floor(workArea.x + workArea.width -
-      (userSettings.marginFromWindowBorder * this.zoomFactor) - userSettings.modalWindow.width + 7);
+      (userSettings.marginFromWindowBorder * this.zoomFactor) -
+        (userSettings.modalWindow.width * this.zoomFactor) + 7);
   }
 
   /**
