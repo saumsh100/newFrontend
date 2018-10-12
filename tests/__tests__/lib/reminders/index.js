@@ -228,6 +228,7 @@ describe('Reminders Job Integration Tests', () => {
       const createPatient = () => ({
         id: patientId,
         mobilePhoneNumber: '+16042433796',
+        cellPhoneNumber: '+16042433796',
         pmsCreatedAt: new Date(2016, 1, 1),
         preferences: { sms: true },
         familyId: 'Jones',

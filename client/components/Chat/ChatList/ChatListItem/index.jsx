@@ -43,7 +43,6 @@ class ChatListItem extends Component {
 
   renderPatient() {
     const { patient } = this.props;
-
     return patient.firstName || patient.lastName ? (
       <div className={styles.nameAgeWrapper}>
         <div className={styles.nameWithAge}>
@@ -54,7 +53,7 @@ class ChatListItem extends Component {
         )}
       </div>
     ) : (
-      <div className={styles.name}>{patient.mobilePhoneNumber}</div>
+      <div className={styles.name}>{patient.cellPhoneNumber}</div>
     );
   }
 

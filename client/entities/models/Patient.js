@@ -11,6 +11,7 @@ const PatientSchema = {
   startDate: null,
   // phoneNumber: null,
   homePhoneNumber: null,
+  cellPhoneNumber: null,
   mobilePhoneNumber: null,
   workPhoneNumber: null,
   otherPhoneNumber: null,
@@ -71,7 +72,7 @@ export default class Patient extends createModel(PatientSchema) {
   }
 
   isCellPhoneNumberPoC() {
-    return this.isPoc('mobile', this.get('mobilePhoneNumber'));
+    return this.isPoc('mobile', this.get('cellPhoneNumber'));
   }
 
   isEmailPoC() {

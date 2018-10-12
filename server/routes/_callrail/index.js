@@ -5,6 +5,7 @@ import checkPermissions from '../../middleware/checkPermissions';
 import { sequelizeLoader } from '../util/loaders';
 import { Patient, Call } from '../../_models';
 import { namespaces } from '../../config/globals';
+import { whereCellPhoneNumber } from '../../lib/contactInfo/getPatientFromCellPhoneNumber';
 
 const callsRouterSequelize = Router();
 
@@ -50,10 +51,7 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
   }
 
   Patient.findOne({
-    where: {
-      accountId: req.account.id,
-      mobilePhoneNumber: callernum,
-    },
+    where: [{ accountId: req.account.id }, whereCellPhoneNumber(callernum)],
     raw: true,
   })
     .then((patient) => {

@@ -150,6 +150,12 @@ const authService = {
   apiKey: authCarecruApiKey || 'jNNA7IQKWRqKrH37WYMIBOGC5NgjCPGSYa9O4PEWGOWFGalHV6kRZY9iVpZrIoJ3',
 };
 
+const cellPhoneNumberFallback = [
+  'mobilePhoneNumber',
+  'otherPhoneNumber',
+  'homePhoneNumber',
+];
+
 module.exports = {
   staticPath,
   root,
@@ -190,4 +196,5 @@ module.exports = {
   rebrandly,
   logger,
   authService,
+  cellPhoneNumberFallback,
 };

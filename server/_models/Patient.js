@@ -3,8 +3,10 @@ import uniqWith from 'lodash/uniqWith';
 import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
+import coalesce from '../../iso/helpers/coalesce';
 import convertToCommsPreferences from '../util/convertToCommsPreferences';
 import { UniqueFieldError } from './errors';
+import { cellPhoneNumberFallback } from '../config/globals';
 
 const { validateAccountIdPmsId } = require('../util/validators');
 
@@ -255,6 +257,15 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.ARRAY(DataTypes.UUID),
       defaultValue: [],
       allowNull: false,
+    },
+
+    cellPhoneNumber: {
+      type: DataTypes.VIRTUAL(DataTypes.STRING),
+      get() {
+        return cellPhoneNumberFallback.length > 0 ?
+          coalesce(...cellPhoneNumberFallback.map(f => this.get(f))) :
+          this.get('mobilePhoneNumber');
+      },
     },
   });
 

@@ -49,25 +49,14 @@ function displaySubHeaderDiv(content, index) {
  */
 function buildFamilyData(insightObj, patient, gender, timezone) {
   const numOfFam = insightObj.value.length;
-  let textPlural = 'family members';
-
-  if (numOfFam === 1) {
-    textPlural = 'family member';
-  }
-
-  let genderOption2 = 'they';
-
-  if (gender === 'his') {
-    genderOption2 = 'he';
-  } else if (gender === 'her') {
-    genderOption2 = 'she';
-  }
+  const totalFamilyMember = numOfFam === 1 ? 'family member' : 'family members';
+  const genderOption2 = (gender === 'his' && 'he') || (gender === 'her' && 'she') || 'they';
 
   const header = (
     <div>
-      <span className={styles.patientName}>{patient.firstName}</span> has {numOfFam} {textPlural}{' '}
-      due for Recare. Ask if {genderOption2} would like to schedule {numOfFam > 1 ? 'a' : 'this'}{' '}
-      family member.
+      <span className={styles.patientName}>{patient.firstName}</span> has {numOfFam}{' '}
+      {totalFamilyMember} due for Recare. Ask if {genderOption2} would like to schedule{' '}
+      {numOfFam > 1 ? 'a' : 'this'} family member.
     </div>
   );
   const subHeader = (
@@ -126,12 +115,14 @@ function buildConfirmData(insightObj, patient, gender) {
   const subHeaderDiv = total > 0 && (
     <div>
       <span className={styles.patientName}>{patient.firstName} </span>
-      has not yet confirmed {gender} appointment despite CareCru&apos;s {total} attempt{total > 1 &&
-        's'}. ({buildAttemptData({
+      has not yet confirmed {gender} appointment despite CareCru&apos;s {total} attempt
+      {total > 1 && 's'}. (
+      {buildAttemptData({
         email: emailCount,
         sms: smsCount,
         phone: phoneCount,
-      })})
+      })}
+      )
     </div>
   );
   const subHeader = total > 0 && displaySubHeaderDiv(subHeaderDiv, 0);
@@ -191,9 +182,7 @@ function buildMissingPhoneData(patient, gender) {
 }
 
 export default function InsightList(props) {
-  const {
-    patient, insightData, scrollId, appointment, timezone,
-  } = props;
+  const { patient, insightData, scrollId, appointment, timezone } = props;
 
   let displayEmailInsight = null;
   let displayPhoneInsight = null;
@@ -201,11 +190,9 @@ export default function InsightList(props) {
   let displayFamilyRecare = null;
 
   insightData.insights.forEach((insightObj) => {
-    let gender = 'their';
-
-    if (patient && patient.gender) {
-      patient.gender.toLowerCase() === 'male' ? (gender = 'his') : (gender = 'her');
-    }
+    const gender =
+      (patient && patient.gender && (patient.gender.toLowerCase() === 'male' ? 'his' : 'her')) ||
+      'their';
 
     if (insightObj && insightObj.type === 'missingEmail') {
       displayEmailInsight = buildMissingEmailData(patient, gender);
@@ -286,6 +273,4 @@ InsightList.propTypes = {
   timezone: PropTypes.string.isRequired,
 };
 
-InsightList.defaultProps = {
-  scrollId: '',
-};
+InsightList.defaultProps = { scrollId: '' };

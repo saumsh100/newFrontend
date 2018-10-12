@@ -218,7 +218,7 @@ async function createChatMessage(body, patient, userId, chatId) {
 
   const sms = {
     body,
-    to: patient.mobilePhoneNumber,
+    to: patient.cellPhoneNumber,
     from: account.twilioPhoneNumber,
   };
   const smsMessage = await sendSMS(sms);
@@ -227,7 +227,7 @@ async function createChatMessage(body, patient, userId, chatId) {
     const newChat = {
       accountId: patient.accountId,
       patientId: patient.id,
-      patientPhoneNumber: patient.mobilePhoneNumber,
+      patientPhoneNumber: patient.cellPhoneNumber,
     };
 
     const chatInstance = await Chat.create(newChat);
@@ -240,7 +240,7 @@ async function createChatMessage(body, patient, userId, chatId) {
     body,
     chatId,
     userId,
-    to: patient.mobilePhoneNumber,
+    to: patient.cellPhoneNumber,
     from: account.twilioPhoneNumber,
     read: true,
   };

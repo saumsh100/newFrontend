@@ -40,6 +40,7 @@ const PatientShape = {
   lastUpdated: PropTypes.number,
   middleName: PropTypes.string,
   mobilePhoneNumber: PropTypes.string,
+  cellPhoneNumber: PropTypes.string,
   nextApptDate: PropTypes.string,
   nextApptId: PropTypes.string,
   otherPhoneNumber: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

@@ -1,5 +1,6 @@
 
 import omit from 'lodash/omit';
+import { Patient } from 'CareCruModels';
 import {
   cannotSend,
   generateOrganizedPatients,
@@ -15,37 +16,37 @@ describe('Communications Utility Library', () => {
     });
 
     it('should return the correct error for noMobilePhoneNumber (sms)', () => {
-      const patient = { preferences };
+      const patient = new Patient({ preferences });
       const result = cannotSend(patient, 'sms');
       expect(result).toBe('1200');
     });
 
     it('should return the correct error for noMobilePhoneNumber (phone)', () => {
-      const patient = { preferences };
+      const patient = new Patient({ preferences });
       const result = cannotSend(patient, 'phone');
       expect(result).toBe('1300');
     });
 
     it('should return the correct error for noEmail', () => {
-      const patient = { preferences };
+      const patient = new Patient({ preferences });
       const result = cannotSend(patient, 'email');
       expect(result).toBe('1100');
     });
 
     it('should return the no error for sms', () => {
-      const patient = { mobilePhoneNumber: '+17801112222', preferences };
+      const patient = new Patient({ mobilePhoneNumber: '+17801112222', preferences });
       const result = cannotSend(patient, 'sms');
       expect(result).toBeUndefined();
     });
 
     it('should return the no error for phone', () => {
-      const patient = { mobilePhoneNumber: '+17801112222', preferences };
+      const patient = new Patient({ mobilePhoneNumber: '+17801112222', preferences });
       const result = cannotSend(patient, 'phone');
       expect(result).toBeUndefined();
     });
 
     it('should return the no error for email', () => {
-      const patient = { email: 'a@b.ca', preferences };
+      const patient = new Patient({ email: 'a@b.ca', preferences });
       const result = cannotSend(patient, 'email');
       expect(result).toBeUndefined();
     });
@@ -57,21 +58,33 @@ describe('Communications Utility Library', () => {
     });
 
     it('should return no success and all error', () => {
-      const patients = [{ preferences }, { preferences }, { preferences }];
+      const patients = [
+        new Patient({ preferences }),
+        new Patient({ preferences }),
+        new Patient({ preferences }),
+      ];
       const result = generateOrganizedPatients(patients, ['email']);
       expect(result.success.length).toBe(0);
       expect(result.errors.length).toBe(3);
     });
 
     it('should return no error and all success', () => {
-      const patients = [{ email: 'a@b.ca', preferences }, { email: 'a@b.ca', preferences }, { email: 'a@b.ca', preferences }];
+      const patients = [
+        new Patient({ email: 'a@b.ca', preferences }),
+        new Patient({ email: 'a@b.ca', preferences }),
+        new Patient({ email: 'a@b.ca', preferences }),
+      ];
       const result = generateOrganizedPatients(patients, ['email']);
       expect(result.success.length).toBe(3);
       expect(result.errors.length).toBe(0);
     });
 
     it('should return 1 success and 2 error', () => {
-      const patients = [{ email: 'a@b.ca', preferences }, { preferences }, { preferences }];
+      const patients = [
+        new Patient({ email: 'a@b.ca', preferences }),
+        new Patient({ preferences }),
+        new Patient({ preferences }),
+      ];
       const result = generateOrganizedPatients(patients, ['email']);
       expect(result.success.length).toBe(1);
       expect(result.errors.length).toBe(2);
@@ -79,9 +92,9 @@ describe('Communications Utility Library', () => {
 
     it('should return 1 success and 2 error', () => {
       const patients = [
-        { id: 0, email: 'a@b.ca', preferences },
-        { id: 1, email: 'b@a.ca', preferences },
-        { id: 2, mobilePhoneNumber: '+17808508886', preferences },
+        new Patient({ id: 0, email: 'a@b.ca', preferences }),
+        new Patient({ id: 1, email: 'b@a.ca', preferences }),
+        new Patient({ id: 2, mobilePhoneNumber: '+17808508886', preferences }),
       ];
 
       const result = generateOrganizedPatients(patients, ['email', 'sms']);

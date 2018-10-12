@@ -271,7 +271,7 @@ export function setChatMessagesListForChat(chatId, offset = 0, limit = 15) {
 }
 
 export async function setChatIsPoC(patient, dispatch) {
-  if (!patient || !patient.get('mobilePhoneNumber')) {
+  if (!patient || !patient.get('cellPhoneNumber')) {
     return dispatch(setChatPoC(patient));
   }
 

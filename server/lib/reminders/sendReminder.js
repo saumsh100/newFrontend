@@ -91,7 +91,7 @@ function sendSms({
   const body = (dependants && dependants.length > 0)
     ? createFamilyReminderText(bodyProps)
     : createReminderText(bodyProps);
-  return sendMessage(patient.mobilePhoneNumber, body, account.id);
+  return sendMessage(patient.cellPhoneNumber, body, account.id);
 }
 
 /**

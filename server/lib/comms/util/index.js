@@ -5,8 +5,8 @@ const toArray = require('lodash/toArray');
 
 const ATTRS = {
   email: 'email',
-  sms: 'mobilePhoneNumber',
-  phone: 'mobilePhoneNumber',
+  sms: 'cellPhoneNumber',
+  phone: 'cellPhoneNumber',
 };
 
 const ERROR_CODES = {

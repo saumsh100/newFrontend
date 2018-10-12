@@ -1,8 +1,8 @@
 
 import { Family, Patient } from 'CareCruModels';
-import { wipeAllModels } from '../../../util/wipeModel';
-import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
-import getPatientFromEmail from '../../../../server/lib/contactInfo/getPatientFromEmail';
+import { wipeAllModels } from '../../../tests/util/wipeModel';
+import { seedTestUsers, accountId } from '../../../tests/util/seedTestUsers';
+import { getPatientFromEmail } from '../../lib/contactInfo/getPatientFromEmail';
 
 const makeFamilyData = (data = {}) => Object.assign({ accountId }, data);
 

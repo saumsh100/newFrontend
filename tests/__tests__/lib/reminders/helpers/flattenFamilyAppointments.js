@@ -17,12 +17,15 @@ const makeFamilyData = (data = {}) => Object.assign({
   accountId,
 }, data);
 
-const makePatientData = (data = {}) => Object.assign({
-  id: uuid(),
-  accountId,
-  firstName: data.n,
-  lastName: data.n,
-}, data);
+const makePatientData = (data = {}) =>
+  ({
+    id: uuid(),
+    accountId,
+    firstName: data.n,
+    lastName: data.n,
+    cellPhoneNumber: data.mobilePhoneNumber,
+    ...data,
+  });
 
 const date = (y, m, d, h, mi = 0) => (new Date(y, m, d, h, mi)).toISOString();
 const dates = (y, m, d, h, mi) => {

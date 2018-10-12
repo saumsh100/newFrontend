@@ -8,9 +8,10 @@ const selectCorrectPatient = require('./selectCorrectPatient');
 const NOT_POC_ERROR_CODE = '3100';
 
 /**
- * groupPatientsByChannelPoc is a function that is used to organize patients that are set to receive communication
- * into the correct PoC groupings so if they have a channel value like "mobilePhoneNumber" the communication will be
- * correctly sent to the PoC with the dependants grouped under it
+ * groupPatientsByChannelPoc is a function that is used to organize patients that are set to
+ * receive communication into the correct PoC groupings so if they have a channel value like
+ * "mobilePhoneNumber" the communication will be correctly sent to the PoC with the dependants
+ * grouped under it
  *
  * @param patients
  * @param fetchedPatients
@@ -21,7 +22,8 @@ module.exports = function groupPatientsByChannelPoc({ patients, fetchedPatients,
   const attribute = channelAttributesMap[channel];
   const attributeGroups = toArray(groupBy(fetchedPatients, attribute));
 
-  // Now we organize the proper family groupings so we can organize the patients at the end into the proper buckets
+  // Now we organize the proper family groupings so we can organize the patients at the end
+  // into the proper buckets
   const pointsOfContactWithDependants = attributeGroups.map((attributeGroup) => {
     const poc = selectCorrectPatient(attributeGroup);
 
@@ -38,10 +40,16 @@ module.exports = function groupPatientsByChannelPoc({ patients, fetchedPatients,
       // are from the attribute values of the supplied patients
       return {
         primaryType: channel,
-        patient: { ...poc, ...patientsMap[poc.id] },
+        patient: {
+          ...(poc.get ? poc.get({ plain: true }) : poc),
+          ...patientsMap[poc.id],
+        },
         dependants: dependants
           .filter(d => patientsMap[d.id])
-          .map(d => ({ ...d, ...patientsMap[d.id] })),
+          .map(d => ({
+            ...d,
+            ...patientsMap[d.id],
+          })),
       };
     })
     .filter(({ patient, dependants }) => {
@@ -58,7 +66,9 @@ module.exports = function groupPatientsByChannelPoc({ patients, fetchedPatients,
 
   // Finally build the errors based on what did got get assigned
   const unseenPatients = patients.filter(p => !returned[p.id]);
-  const errors = unseenPatients.map(p => ({ patient: p, primaryType: channel, errorCode: NOT_POC_ERROR_CODE }));
+  const errors =
+    unseenPatients.map(p => ({ patient: p, primaryType: channel, errorCode: NOT_POC_ERROR_CODE }));
+
   return {
     errors,
     success: finalGroups,

@@ -118,13 +118,13 @@ class MessageContainer extends Component {
 
     const accountId = this.props.activeAccount.id;
     const { selectedPatient, selectedChat, userId } = this.props;
-    const { mobilePhoneNumber } = selectedPatient;
+    const { cellPhoneNumber } = selectedPatient;
 
     if (!values.message) return;
 
     const patient = {
       id: this.props.selectedPatient.id,
-      mobilePhoneNumber,
+      cellPhoneNumber,
       accountId,
     };
 

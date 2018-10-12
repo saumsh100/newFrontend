@@ -123,6 +123,7 @@ input addPatientInput {
   avatarUrl: String
   omitReminderIds: [String]!
   omitRecallIds: [String]!
+  cellPhoneNumber: String
   clientMutationId: String
 }
 
@@ -328,6 +329,7 @@ type Patient implements Node {
   avatarUrl: String
   omitReminderIds: [String]!
   omitRecallIds: [String]!
+  cellPhoneNumber: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -504,6 +506,7 @@ input updatePatientInput {
   avatarUrl: String
   omitReminderIds: [String]!
   omitRecallIds: [String]!
+  cellPhoneNumber: String
   clientMutationId: String
 }
 

@@ -1,6 +1,6 @@
 
 import getPatientBasedOnFieldsProvided from './getPatient';
-import getPatientFromEmail from './getPatientFromEmail';
+import { getPatientFromEmail } from './getPatientFromEmail';
 import { getPatientFromCellPhoneNumber } from './getPatientFromCellPhoneNumber';
 
 jest.mock('./getPatientFromEmail.js');

@@ -1,6 +1,7 @@
 
-import { Family, Patient } from 'CareCruModels';
+import { Family, Patient, sequelize } from 'CareCruModels';
 import selectCorrectPatient from './selectCorrectPatient';
+import { cellPhoneNumberFallback } from '../../config/globals';
 
 /**
  * getPatientsFromKeyValue is an async function that will fetch patients data in an account
@@ -18,15 +19,21 @@ import selectCorrectPatient from './selectCorrectPatient';
  * @param where
  * @return {[patients]}
  */
-export async function fetchPatientsFromKeyValue({ key, value, accountId, where = {} }) {
+export async function fetchPatientsFromKeyValue({
+  key,
+  value,
+  accountId,
+  where = {},
+}) {
   return Patient.findAll({
-    where: {
-      accountId,
-      [key]: value,
-      status: 'Active',
-      ...where,
-    },
-
+    where: [
+      {
+        accountId,
+        status: 'Active',
+      },
+      ...(key ? [{ [key]: value }] : []),
+      where,
+    ],
     include: [
       {
         model: Family,
@@ -44,24 +51,72 @@ export async function fetchPatientsFromKeyValue({ key, value, accountId, where =
  * @param key
  * @param value
  * @param accountId
+ * @param where
+ * @param single
  * @return {Promise<*>}
  */
-export async function getPatientFromKeyValue({ key, value, accountId }) {
-  const patients = await exports.fetchPatientsFromKeyValue({ key, value, accountId });
-  return selectCorrectPatient(patients);
+export async function getPatientFromKeyValue(
+  { key, value, accountId, where },
+  single = true,
+) {
+  const patients = await exports.fetchPatientsFromKeyValue({
+    key,
+    value,
+    accountId,
+    where,
+  });
+  return single ? selectCorrectPatient(patients) : patients;
 }
 
 /**
- * getPatientFromCellPhoneNumber
+ * Get the PoC from the cellPhoneNumber
  *
  * @param cellPhoneNumber
  * @param accountId
  * @return {Promise<*>}
  */
-export async function getPatientFromCellPhoneNumber({ cellPhoneNumber, accountId }) {
-  return getPatientFromKeyValue({
-    key: 'mobilePhoneNumber',
-    value: cellPhoneNumber,
-    accountId,
-  });
+export async function getPatientFromCellPhoneNumber({
+  cellPhoneNumber,
+  accountId,
+}) {
+  return getPatientFromKeyValue(patientCellPhoneQuery(cellPhoneNumber, accountId));
 }
+
+/**
+ * Get a list of patients from cellPhoneNumber
+ *
+ * @param cellPhoneNumber
+ * @param accountId
+ * @return {Promise<*>}
+ */
+export async function getPatientListFromCellPhoneNumber({
+  cellPhoneNumber,
+  accountId,
+}) {
+  return getPatientFromKeyValue(
+    patientCellPhoneQuery(cellPhoneNumber, accountId),
+    false,
+  );
+}
+
+/**
+ * Patient query using coalesce to normalize cellphone number
+ *
+ * @param cellPhoneNumber
+ * @param accountId
+ * @return {*}
+ */
+const patientCellPhoneQuery = (cellPhoneNumber, accountId) => ({
+  accountId,
+  where: whereCellPhoneNumber(cellPhoneNumber),
+});
+
+export const whereCellPhoneNumber = cellPhoneNumber => sequelize.where(
+  sequelize.fn(
+    'COALESCE',
+    ...(cellPhoneNumberFallback.length > 0
+      ? cellPhoneNumberFallback.map(f => sequelize.col(f))
+      : [sequelize.col('mobilePhoneNumber')]),
+  ),
+  Array.isArray(cellPhoneNumber) ? { in: cellPhoneNumber } : cellPhoneNumber,
+);

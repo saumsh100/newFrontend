@@ -822,8 +822,8 @@ describe('RemindersList Calculation Library', () => {
       });
 
       afterEach(async () => {
-        wipeModel(SentRemindersPatients);
-        wipeModel(SentReminder);
+        await wipeModel(SentRemindersPatients);
+        await wipeModel(SentReminder);
       });
 
       test('should return [] for no validSmsReminders', async () => {
@@ -964,9 +964,9 @@ describe('RemindersList Calculation Library', () => {
       });
 
       afterEach(async () => {
-        wipeModel(SentRemindersPatients);
-        wipeModel(SentReminder);
-        wipeModel(Appointment);
+        await wipeModel(SentRemindersPatients);
+        await wipeModel(SentReminder);
+        await wipeModel(Appointment);
       });
 
       test('Should confirm a single appointment reminder', async () => {

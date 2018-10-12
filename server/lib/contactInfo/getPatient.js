@@ -1,5 +1,5 @@
 
-import getPatientFromEmail from './getPatientFromEmail';
+import { getPatientFromEmail } from './getPatientFromEmail';
 import { getPatientFromCellPhoneNumber } from './getPatientFromCellPhoneNumber';
 
 /**
