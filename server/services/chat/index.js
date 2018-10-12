@@ -2,12 +2,9 @@
 import { Op } from 'sequelize';
 import {
   Account,
-  Appointment,
   Chat,
   Patient,
-  SentReminder,
   TextMessage,
-  User,
 } from 'CareCruModels';
 import { namespaces } from '../../config/globals';
 import { setDateToTimezone } from '../../util/time';
@@ -18,14 +15,8 @@ import { confirmReminderIfExist } from '../../lib/reminders/helpers';
 import { createConfirmationText } from '../../lib/reminders/sendReminder';
 import normalize from '../../routes/_api/normalize';
 import { getPatientFromCellPhoneNumber } from '../../lib/contactInfo/getPatientFromCellPhoneNumber';
-
-/**
- * Socket events.
- */
-const NEW_MESSAGE = 'create:TextMessage';
-const MARK_UNREAD = 'unread:TextMessage';
-const MARK_READ = 'read:TextMessage';
-const UPDATE_CHAT = 'update:Chat';
+import getRelevantSocketUpdateData from './socketUpdateData';
+import { NEW_MESSAGE, UPDATE_CHAT, MARK_READ, MARK_UNREAD } from './consts';
 
 /**
  * Handles receiving a message.
@@ -310,47 +301,10 @@ function updateLastMessageData(chatId, messageId, date) {
  * @return {Promise}
  */
 async function updateUserViaSocket(chatId, event = NEW_MESSAGE) {
-  const chat = await getChatForSocketUpdate(chatId);
+  const chat = await getRelevantSocketUpdateData(chatId, event);
   const normalizedChat = normalize('chat', chat.get({ plain: true }));
   publishEvent(chat.accountId, event, normalizedChat);
   return normalizedChat;
-}
-
-/**
- * Get a chat with all the required relations that we use for socket update.
- * @param id The ID of chat.
- * @returns {Promise}
- */
-function getChatForSocketUpdate(id) {
-  return Chat.findOne({
-    where: { id },
-    include: [
-      {
-        model: TextMessage,
-        as: 'textMessages',
-        required: false,
-        order: ['createdAt', 'ASC'],
-        include: {
-          model: User,
-          as: 'user',
-          attributes: { exclude: 'password' },
-          required: false,
-        },
-      },
-      {
-        model: Patient,
-        as: 'patient',
-        required: false,
-      },
-    ],
-    order: [
-      [['lastTextMessageDate', 'DESC']],
-      [{
-        model: TextMessage,
-        as: 'textMessages',
-      }, 'createdAt', 'ASC'],
-    ],
-  });
 }
 
 /**

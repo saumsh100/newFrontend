@@ -29,23 +29,24 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
 
   const skipped = skip || 0;
   const limitted = limit || 25;
-  const order = [['lastTextMessageDate', 'DESC']];
   // Some default code to ensure we don't pull the entire conversation for each chat
   const newIncludeArray = includeArray.map((include) => {
     if (include.as === 'textMessages') {
-      include.include = [
-        {
-          model: User,
-          as: 'user',
-          attributes: { exclude: 'password' },
-          required: false,
-        },
-      ];
-      order.push([{
-        model: TextMessage,
-        as: 'textMessages',
-      }, 'createdAt', 'ASC']);
-      include.required = true;
+      return {
+        ...include,
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: { exclude: 'password' },
+            required: false,
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+        separate: true,
+        required: true,
+        limit: 1,
+      };
     }
     return include;
   });
@@ -55,7 +56,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
       accountId,
       patientId: { $ne: null },
     },
-    order,
+    order: [['lastTextMessageDate', 'DESC']],
     limit: limitted,
     offset: skipped,
     include: newIncludeArray,
@@ -187,6 +188,7 @@ chatsRouter.get('/unread', checkPermissions('chats:read'), (req, res, next) => {
     as: 'textMessages',
     where: { read: false },
     required: true,
+    order: [['createdAt', 'DESC']],
   };
 
   return Chat.findAll({
@@ -204,6 +206,32 @@ chatsRouter.get('/unread', checkPermissions('chats:read'), (req, res, next) => {
 });
 
 /**
+ * Get the ids of unread messages
+ */
+chatsRouter.get('/unread/count', checkPermissions('chats:read'), async (req, res, next) => {
+  try {
+    const { accountId } = req;
+
+    const unreadMessages = await TextMessage.findAll({
+      attributes: ['id'],
+      where: { read: false },
+      include: [
+        {
+          model: Chat,
+          as: 'chat',
+          where: { accountId },
+        },
+      ],
+    });
+
+    const messageIds = unreadMessages.map(message => message.get('id'));
+    res.send(messageIds);
+  } catch (e) {
+    next(e);
+  }
+});
+
+/**
  * Get the list of flagged chats
  * */
 chatsRouter.get('/flagged', checkPermissions('chats:read'), (req, res, next) => {
@@ -217,19 +245,21 @@ chatsRouter.get('/flagged', checkPermissions('chats:read'), (req, res, next) => 
   // Some default code to ensure we don't pull the entire conversation for each chat
   const newIncludeArray = includeArray.map((include) => {
     if (include.as === 'textMessages') {
-      include.include = [
-        {
-          model: User,
-          as: 'user',
-          attributes: { exclude: 'password' },
-          required: false,
-        },
-      ];
-      order.push([{
-        model: TextMessage,
-        as: 'textMessages',
-      }, 'createdAt', 'ASC']);
-      include.required = true;
+      return {
+        ...include,
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: { exclude: 'password' },
+            required: false,
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+        separate: true,
+        required: true,
+        limit: 1,
+      };
     }
     return include;
   });
@@ -305,7 +335,7 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
   try {
     const { limit = TEXT_MESSAGE_LIMIT, skip = 0 } = query;
 
-    const messages = await TextMessage.findAll({
+    const messages = await TextMessage.findAndCountAll({
       where: { chatId: id },
       include: [
         {
@@ -320,9 +350,12 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
       order: [['createdAt', 'DESC']],
     });
 
-    const allMessages = messages.map(message => message.get({ plain: true }));
+    const allMessages = messages.rows.map(message => message.get({ plain: true }));
     const normalized = normalize('textMessages', allMessages);
-    return res.send(normalized);
+    return res.send({
+      ...normalized,
+      total: messages.count,
+    });
   } catch (e) {
     return next(e);
   }

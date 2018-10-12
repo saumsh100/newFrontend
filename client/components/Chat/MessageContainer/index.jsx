@@ -25,7 +25,7 @@ import {
   selectChat,
   markAsUnread,
   resendMessage,
-  setChatMessagesListForChat,
+  loadChatMessages,
 } from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
 import chatTabs from '../consts';
@@ -42,10 +42,11 @@ class MessageContainer extends Component {
       currentlySelectedChat: null,
       sendingMessage: false,
       loadingMessages: false,
-      messagesCount: 0,
       offset: DEFAULT_OFFSET,
+      loadedMessages: 0,
     };
 
+    this.scrollContainer = null;
     this.sendMessageHandler = this.sendMessageHandler.bind(this);
     this.loadMoreMessages = this.loadMoreMessages.bind(this);
     this.resetPaginationToDefault = this.resetPaginationToDefault.bind(this);
@@ -55,17 +56,17 @@ class MessageContainer extends Component {
     this.scrollContainer.scrollTop = this.scrollContainer.scrollHeight;
   }
 
-  componentWillReceiveProps({ textMessages, hasMoreMessages, selectedChat }) {
-    const { loadingMessages, messagesCount, currentlySelectedChat } = this.state;
+  componentWillReceiveProps({ selectedChat, textMessages }) {
+    const { loadedMessages, currentlySelectedChat } = this.state;
 
     if (selectedChat && selectedChat.id && currentlySelectedChat !== selectedChat.id) {
       this.setState({ currentlySelectedChat: selectedChat.id });
       return this.resetPaginationToDefault();
     }
 
-    if (textMessages.size !== messagesCount && loadingMessages) {
+    if (textMessages.size !== loadedMessages) {
       return this.setState({
-        messagesCount: hasMoreMessages ? textMessages.size : messagesCount,
+        loadedMessages: textMessages.size,
         loadingMessages: false,
       });
     }
@@ -90,23 +91,27 @@ class MessageContainer extends Component {
 
   resetPaginationToDefault() {
     this.setState({
-      loadingMessages: false,
-      messagesCount: 0,
+      loadedMessages: 0,
       offset: DEFAULT_OFFSET,
     });
   }
 
   loadMoreMessages() {
-    const { selectedChat } = this.props;
+    const { selectedChat, textMessages } = this.props;
+    if (!selectedChat || !selectedChat.id) {
+      return;
+    }
 
     this.setState(
-      prevState => ({
-        offset: prevState.offset + DEFAULT_LIMIT,
+      {
+        offset: textMessages.size,
         loadingMessages: true,
-      }),
+      },
       () => {
         const { offset } = this.state;
-        this.props.setChatMessagesListForChat(selectedChat.id, offset, DEFAULT_LIMIT);
+        this.props.loadChatMessages(selectedChat.id, offset, DEFAULT_LIMIT).then(() => {
+          this.setState({ loadingMessages: false });
+        });
       },
     );
   }
@@ -335,8 +340,10 @@ class MessageContainer extends Component {
   }
 
   render() {
-    const { selectedChat, newChat, hasMoreMessages } = this.props;
+    const { loadingMessages, loadedMessages } = this.state;
+    const { selectedChat, newChat, totalChatMessages } = this.props;
 
+    const hasMoreMessages = totalChatMessages > loadedMessages;
     const chat = selectedChat || Object.assign({}, newChat, { id: 'newChat' });
 
     return (
@@ -350,10 +357,11 @@ class MessageContainer extends Component {
         >
           <InfiniteScroll
             isReverse
-            loadMore={this.loadMoreMessages}
-            hasMore={hasMoreMessages}
             initialLoad={false}
             useWindow={false}
+            loadMore={this.loadMoreMessages}
+            hasMore={hasMoreMessages && !loadingMessages}
+            threshold={100}
           >
             {selectedChat && this.renderMessagesTree()}
             <div className={styles.raise} />
@@ -379,12 +387,12 @@ function mapStateToProps({ entities, auth, chat }) {
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   const selectedPatientId = selectedChat && selectedChat.patientId;
   const textMessages = chat.get('chatMessages');
-  const hasMoreMessages = chat.get('hasMoreMessages');
+  const totalChatMessages = chat.get('totalChatMessages');
 
   return {
     textMessages,
     selectedChat,
-    hasMoreMessages,
+    totalChatMessages,
     newChat: chat.get('newChat'),
     userId: auth.getIn(['user', 'id']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
@@ -401,7 +409,7 @@ function mapDispatchToProps(dispatch) {
       createNewChat,
       markAsUnread,
       resendMessage,
-      setChatMessagesListForChat,
+      loadChatMessages,
     },
     dispatch,
   );
@@ -421,7 +429,7 @@ MessageContainer.propTypes = {
   newChat: PropTypes.shape({ id: PropTypes.string }),
   selectedPatient: PropTypes.shape({ id: PropTypes.string }),
   userId: PropTypes.string.isRequired,
-  hasMoreMessages: PropTypes.bool.isRequired,
+  totalChatMessages: PropTypes.number.isRequired,
   selectChatOrCreate: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -430,7 +438,7 @@ MessageContainer.propTypes = {
   markAsUnread: PropTypes.func.isRequired,
   resendMessage: PropTypes.func.isRequired,
   setTab: PropTypes.func.isRequired,
-  setChatMessagesListForChat: PropTypes.func.isRequired,
+  loadChatMessages: PropTypes.func.isRequired,
 };
 
 MessageContainer.defaultProps = {

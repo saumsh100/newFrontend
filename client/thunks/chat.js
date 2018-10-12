@@ -14,7 +14,7 @@ import {
   setChatPoC,
   setNewChat,
   updateChatId,
-  setHasMoreMessages,
+  setTotalChatMessages,
 } from '../reducers/chat';
 import { setBackHandler } from '../reducers/electron';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
@@ -62,10 +62,8 @@ export function defaultSelectedChatId() {
 
 export function loadUnreadMessages() {
   return (dispatch) => {
-    const url = '/api/chats/unread?limit=100';
-    return axios
-      .get(url)
-      .then(result => dispatch(createListOfUnreadedChats(result.data.entities.textMessages || {})));
+    const url = '/api/chats/unread/count';
+    return axios.get(url).then(result => dispatch(setUnreadChats(result.data || [])));
   };
 }
 
@@ -251,7 +249,26 @@ export function markAsRead(chatId) {
   };
 }
 
-export function setChatMessagesListForChat(chatId, offset = 0, limit = 15) {
+export function loadChatMessages(chatId, offset = 0, limit = 15) {
+  return (dispatch) => {
+    if (!chatId) {
+      return dispatch(setChatMessagesListForChat(chatId));
+    }
+    const url = `/api/chats/${chatId}/textMessages?skip=${offset}&limit=${limit}`;
+    return axios
+      .get(url)
+      .then(({ data }) => {
+        dispatch(receiveEntities({
+          key: 'textMessages',
+          entities: data.entities,
+        }));
+        return data.total;
+      })
+      .then(total => dispatch(setChatMessagesListForChat(chatId, total)));
+  };
+}
+
+export function setChatMessagesListForChat(chatId, total = 0) {
   return (dispatch, getState) => {
     const { entities } = getState();
     const allMessages = entities.getIn(['textMessages', 'models']);
@@ -259,14 +276,8 @@ export function setChatMessagesListForChat(chatId, offset = 0, limit = 15) {
       .filter(message => message.chatId === chatId)
       .sort(sortTextMessages);
 
-    // Temp solution until the actual api textMessages fetch is implemented (on the client side)
-    // for retrieving messages.
-    // At the moment all messages are in the store, so it doesn't make sense to re-fetch them,
-    // therefore, we will only paginate them.
-    const paginatedMessages = filteredChatMessages.slice(-(offset + limit));
-    const hasMore = paginatedMessages.size < filteredChatMessages.size;
-    dispatch(setHasMoreMessages(hasMore));
-    return dispatch(setChatMessages(paginatedMessages || []));
+    dispatch(setTotalChatMessages(total));
+    return dispatch(setChatMessages(filteredChatMessages || []));
   };
 }
 
@@ -304,11 +315,8 @@ export function selectChat(id, createChat = null) {
       dispatch(push(`/chat/${id || ''}`));
     }
 
-    if (id) {
-      dispatch(markAsRead(id));
-    }
     dispatch(unlockChat(id));
-    dispatch(setChatMessagesListForChat(id));
+    dispatch(loadChatMessages(id));
     dispatch(setBackHandler(persistedBackHandler));
   };
 }

@@ -48,7 +48,7 @@ const patientSearchInputProps = {
   placeholder: 'Search...',
 };
 
-const CHAT_LIST_OFFSET = 15;
+const CHAT_LIST_LIMIT = 15;
 
 class ChatMessage extends Component {
   constructor(props) {
@@ -79,12 +79,11 @@ class ChatMessage extends Component {
       id: 'dashAccount',
       key: 'accounts',
     });
+    const { params: { chatId } } = this.props.match;
 
-    this.loadChatList(true).then(() => {
-      const { params } = this.props.match;
-
-      if (params.chatId) {
-        this.props.selectChat(params.chatId);
+    this.loadChatList(!chatId).then(() => {
+      if (chatId) {
+        this.props.selectChat(chatId);
         this.toggleShowMessageContainer();
       }
     });
@@ -166,7 +165,7 @@ class ChatMessage extends Component {
     this.setState({
       chats: this.state.chats + Object.keys(result.chats || {}).length,
       moreData: !(
-        Object.keys(result).length === 0 || Object.keys(result.chats).length < CHAT_LIST_OFFSET
+        Object.keys(result).length === 0 || Object.keys(result.chats).length < CHAT_LIST_LIMIT
       ),
     });
   }
@@ -174,11 +173,11 @@ class ChatMessage extends Component {
   chatListLoader() {
     const { tabIndex } = this.state;
 
-    if (tabIndex === 1) {
+    if (tabIndex === tabsConstants.UNREAD_TAB) {
       return this.props.loadUnreadChatList;
     }
 
-    if (tabIndex === 2) {
+    if (tabIndex === tabsConstants.FLAGGED_TAB) {
       return this.props.loadFlaggedChatList;
     }
 
@@ -186,7 +185,7 @@ class ChatMessage extends Component {
   }
 
   loadChatList(initial = false) {
-    return this.chatListLoader()(CHAT_LIST_OFFSET, this.state.chats)
+    return this.chatListLoader()(CHAT_LIST_LIMIT, this.state.chats)
       .then(result => this.receivedChatsPostUpdate(result))
       .then(() => {
         if (initial) {

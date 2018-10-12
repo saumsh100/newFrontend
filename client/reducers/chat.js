@@ -11,7 +11,7 @@ export const SET_UNREAD_CHATS = '@chat/SET_UNREAD_CHATS';
 export const SET_CHAT_MESSAGES = '@chat/SET_CHAT_MESSAGES';
 export const SET_LOCKED_CHATS = '@chat/SET_LOCKED_CHATS';
 export const SET_CHAT_POC = '@chat/SET_CHAT_POC';
-export const SET_HAS_MORE_MESSAGES = '@chat/SET_HAS_MORE_MESSAGES';
+export const SET_TOTAL_CHAT_MESSAGES = '@chat/SET_TOTAL_CHAT_MESSAGES';
 
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
@@ -21,7 +21,7 @@ export const setUnreadChats = createAction(SET_UNREAD_CHATS);
 export const setChatMessages = createAction(SET_CHAT_MESSAGES);
 export const setLockedChats = createAction(SET_LOCKED_CHATS);
 export const setChatPoC = createAction(SET_CHAT_POC);
-export const setHasMoreMessages = createAction(SET_HAS_MORE_MESSAGES);
+export const setTotalChatMessages = createAction(SET_TOTAL_CHAT_MESSAGES);
 
 export const initialState = Map({
   selectedChatId: null,
@@ -34,7 +34,7 @@ export const initialState = Map({
   lockedChats: [],
   isPoC: null,
   chatPoC: null,
-  hasMoreMessages: false,
+  totalChatMessages: 0,
 });
 
 export default handleActions(
@@ -87,8 +87,8 @@ export default handleActions(
       return state.set('lockedChats', payload);
     },
 
-    [SET_HAS_MORE_MESSAGES](state, { payload }) {
-      return state.set('hasMoreMessages', payload);
+    [SET_TOTAL_CHAT_MESSAGES](state, { payload }) {
+      return state.set('totalChatMessages', payload);
     },
   },
   initialState,

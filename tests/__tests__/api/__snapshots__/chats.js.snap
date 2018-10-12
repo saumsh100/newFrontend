@@ -91,6 +91,7 @@ Object {
   "result": Array [
     "059987cb-3051-4656-98d0-72cda34d32a6",
   ],
+  "total": 2,
 }
 `;
 
@@ -180,6 +181,7 @@ Object {
     "059987cb-3051-4656-98d0-72cda34d32a1",
     "059987cb-3051-4656-98d0-72cda34d32a6",
   ],
+  "total": 2,
 }
 `;
 
@@ -297,8 +299,8 @@ Object {
         "patientId": "10518e11-b9d2-4d74-9887-29eaae7b5938",
         "patientPhoneNumber": "+16045555555",
         "textMessages": Array [
-          "059987cb-3051-4656-98d0-72cda34d32a6",
           "059987cb-3051-4656-98d0-72cda34d32a1",
+          "059987cb-3051-4656-98d0-72cda34d32a6",
         ],
       },
     },

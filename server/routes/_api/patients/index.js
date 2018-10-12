@@ -264,7 +264,13 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
         {
           association: 'chats',
           required: false,
-          include: [{ association: 'textMessages', required: false, include: [{ association: 'user', required: false }] }],
+          include: [{
+            association: 'textMessages',
+            required: false,
+            limit: 1,
+            order: [['createdAt', 'DESC']],
+            include: [{ association: 'user', required: false }]
+          }],
         },
       ],
     }, searchClause));
