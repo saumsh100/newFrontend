@@ -102,29 +102,30 @@ describe('#Calculate total revenue for a date range', () => {
   });
 
   test('For a date in the future calculate the estimated revenue, with closed clinic dates', async () => {
+    const futureYear = (new Date()).getFullYear() + 2;
     await Appointment.bulkCreate([
       makeApptData({
         patientId: patients[0].id,
-        startDate: date(2018, 9, 12, 5),
-        endDate: date(2018, 9, 12, 4),
+        startDate: date(futureYear, 9, 12, 5),
+        endDate: date(futureYear, 9, 12, 4),
         estimatedRevenue: 500,
       }),
       makeApptData({
         patientId: patients[0].id,
-        startDate: date(2018, 9, 12, 5),
-        endDate: date(2018, 9, 12, 4),
+        startDate: date(futureYear, 9, 12, 5),
+        endDate: date(futureYear, 9, 12, 4),
         estimatedRevenue: 500,
       }),
       makeApptData({
         patientId: patients[0].id,
-        startDate: date(2018, 9, 11, 5),
-        endDate: date(2018, 9, 11, 7),
+        startDate: date(futureYear, 9, 11, 5),
+        endDate: date(futureYear, 9, 11, 7),
         estimatedRevenue: 500,
       }),
       makeApptData({
         patientId: patients[0].id,
-        startDate: date(2018, 9, 8, 5),
-        endDate: date(2018, 9, 8, 7),
+        startDate: date(futureYear, 9, 8, 5),
+        endDate: date(futureYear, 9, 8, 7),
         estimatedRevenue: 0,
       }),
     ]);
@@ -132,18 +133,18 @@ describe('#Calculate total revenue for a date range', () => {
     await DeliveredProcedure.bulkCreate([
       makeProcedureData({
         patientId: patients[1].id,
-        entryDate: date(2018, 9, 12, 5),
+        entryDate: date(futureYear, 9, 12, 5),
         totalAmount: 700,
       }),
       makeProcedureData({
         patientId: patients[1].id,
-        entryDate: date(2018, 9, 12, 5),
+        entryDate: date(futureYear, 9, 12, 5),
         totalAmount: 700,
       }),
     ]);
 
     const query = {
-      date: date(2018, 9, 12, 5),
+      date: date(futureYear, 9, 12, 5),
       accountId,
       maxDates: 12,
       pastDaysLimit: 30,

@@ -1,7 +1,7 @@
 
 import { graphql } from 'graphql';
 import { toGlobalId } from 'graphql-relay';
-import { Patient, Family } from 'CareCruModels';
+import { Patient } from 'CareCruModels';
 import schema from 'CareCruGraphQL/data/schema';
 import {
   seedTestUsers,
@@ -13,9 +13,7 @@ import {
   superAdminUserId,
 } from '../../util/seedTestUsers';
 import {
-  patient,
   patientId,
-  familyId,
   seedTestPatients,
   wipeTestPatients,
 } from '../../util/seedTestPatients';
@@ -51,25 +49,19 @@ describe('/graphql patients', () => {
     query patientList {
       accountViewer {
         patients {
-          id
-          firstName
-          lastName
+          edges {
+            node {
+              id
+              firstName
+              lastName
+            }
+          }
         }
       }
     }`;
-    const expected = {
-      accountViewer: {
-        patients: [
-          {
-            id: toGlobalId(Patient.name, patientId),
-            firstName: 'Ronald',
-            lastName: 'Mcdonald',
-          },
-        ],
-      },
-    };
+
     const result = await graphql(schema, query, null, context);
-    expect(result).toEqual({ data: expected });
+    expect(result).toMatchSnapshot();
   });
 
   test('queries a patient', async () => {
@@ -83,17 +75,8 @@ describe('/graphql patients', () => {
         }
       }
     }`;
-    const expected = {
-      accountViewer: {
-        patient: {
-          id: toGlobalId(Patient.name, patientId),
-          firstName: 'Ronald',
-          lastName: 'Mcdonald',
-        },
-      },
-    };
     const result = await graphql(schema, query, null, context);
-    expect(result).toEqual({ data: expected });
+    expect(result).toMatchSnapshot();
   });
 
   test('queries a patient with its family', async () => {
@@ -113,23 +96,9 @@ describe('/graphql patients', () => {
           }
         }
       }`;
-    const expected = {
-      accountViewer: {
-        patient: {
-          id: toGlobalId(Patient.name, patientId),
-          firstName: 'Ronald',
-          lastName: 'Mcdonald',
-          familyId,
-          family: {
-            id: toGlobalId(Family.name, familyId),
-            accountId,
-            headId: patient.pmsId,
-          },
-        },
-      },
-    };
+
     const result = await graphql(schema, query, null, context);
-    expect(result).toEqual({ data: expected });
+    expect(result).toMatchSnapshot();
   });
 
   test('queries a patient by its node', async () => {
@@ -175,17 +144,9 @@ describe('/graphql patients', () => {
         clientMutationId: 'carecrutest',
       },
     };
-    const expected = {
-      addPatientMutation: {
-        patient: {
-          firstName: 'Lucas',
-          lastName: 'Taliberti',
-        },
-        clientMutationId: 'carecrutest',
-      },
-    };
+
     const result = await graphql(schema, mutation, null, null, params);
-    expect(result).toEqual({ data: expected });
+    expect(result).toMatchSnapshot();
   });
 
   test('updates a patient', async () => {
@@ -200,6 +161,7 @@ describe('/graphql patients', () => {
           clientMutationId
         }
       }`;
+
     const params = {
       input: {
         id: patientId,
@@ -207,20 +169,13 @@ describe('/graphql patients', () => {
         firstName: 'Lucas',
         lastName: 'Sousa',
         clientMutationId: 'carecrutest',
+        omitRecallIds: [],
+        omitReminderIds: [],
       },
     };
-    const expected = {
-      updatePatientMutation: {
-        patient: {
-          id: toGlobalId(Patient.name, patientId),
-          firstName: 'Lucas',
-          lastName: 'Sousa',
-        },
-        clientMutationId: 'carecrutest',
-      },
-    };
+
     const result = await graphql(schema, mutation, null, null, params);
-    expect(result).toEqual({ data: expected });
+    expect(result).toMatchSnapshot();
   });
 
   test('deletes a patient', async () => {
@@ -236,11 +191,7 @@ describe('/graphql patients', () => {
         clientMutationId: 'carecrutest',
       },
     };
-    const expected = {
-      deletePatientMutation: {
-        clientMutationId: 'carecrutest',
-      },
-    };
+    const expected = { deletePatientMutation: { clientMutationId: 'carecrutest' } };
     const result = await graphql(schema, mutation, null, null, params);
     expect(result).toEqual({ data: expected });
   });

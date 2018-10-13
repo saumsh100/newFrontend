@@ -42,6 +42,7 @@ describe('Chat Tests', () => {
         .next()
         .contains('Testy Testerson')
         .click({ force: true })
+        .wait(1000)
         .get('[data-test-id="chatMessageForm"]')
         .get('[data-test-id="message"]')
         .click({ force: true })
@@ -64,7 +65,6 @@ describe('Chat Tests', () => {
           '+15874003884',
           'Hello to you too!',
         )
-        .wait(1000)
         .get('[data-test-id="item_chatMessage"]')
         .contains('Hello to you too!');
     });
@@ -83,6 +83,7 @@ describe('Chat Tests', () => {
         .next()
         .contains('Testen Testerson')
         .click({ force: true })
+        .wait(1000)
         .get('[data-test-id="chatMessageForm"]')
         .get('[data-test-id="message"]')
         .click({ force: true })
@@ -97,7 +98,6 @@ describe('Chat Tests', () => {
           '+15874003884',
           'Hello new message!',
         )
-        .wait(1000)
         .get('[data-test-id="chat_lastMessage"]')
         .contains('Hello new message!')
         .invoke('attr', 'class')
