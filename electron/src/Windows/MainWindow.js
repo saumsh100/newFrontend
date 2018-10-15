@@ -169,10 +169,11 @@ class MainBrowserWindow extends WindowMain {
    */
   get xCoordinate() {
     const { workArea } = ScreenManager.instance.currentDisplay;
-    const toolbarSize = this.isCollapsed ? COLLAPSED_SIZE : EXPANDED_SIZE;
+    const bounds = this.window.getBounds();
+
     return Store.get('toolbarPosition', config.toolbar.position) === 'left'
       ? workArea.x
-      : workArea.width - toolbarSize + workArea.x;
+      : workArea.width - bounds.width + workArea.x;
   }
 
   /**
