@@ -20,7 +20,6 @@ if (process.env.NODE_ENV !== 'development') {
   log.info(`Update channel set to: ${autoUpdater.channel}`);
 }
 
-
 autoUpdater.on('update-available', () => {
   const updateNotification = new Notification({
     title: 'New update available',
@@ -39,6 +38,8 @@ autoUpdater.on('download-progress', ({ percent }) => {
 });
 
 autoUpdater.on('update-downloaded', () => {
+  autoUpdater.removeListener('update-not-available', updateNotAvailableHandler);
+  log.info('Update downloaded.');
   dialog.showMessageBox({
     type: 'question',
     buttons: ['Install and Relaunch', 'Later'],
@@ -52,7 +53,18 @@ autoUpdater.on('update-downloaded', () => {
   });
 });
 
-exports.checkForUpdate = () => {
-  console.log('Checking for updates');
+function updateNotAvailableHandler() {
+  dialog.showMessageBox({
+    type: 'info',
+    message: 'You are running the latest version of CareCru Hub.',
+  });
+  log.info('Update not available.');
+}
+
+exports.checkForUpdate = (isManuallyTriggered = false) => {
+  log.info('Checking for updates');
+  if (isManuallyTriggered) {
+    autoUpdater.once('update-not-available', updateNotAvailableHandler);
+  }
   autoUpdater.checkForUpdatesAndNotify();
 };

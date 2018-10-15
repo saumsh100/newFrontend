@@ -5,7 +5,7 @@ const { QUIT_APP } = require('./constants');
 const helpMenu = [
   {
     label: 'Check for updates',
-    click: () => checkForUpdate(),
+    click: () => checkForUpdate(true),
   },
 ];
 

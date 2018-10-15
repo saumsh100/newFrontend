@@ -80,7 +80,7 @@ const toolbarPositionMenu = managerInstance =>
 exports.trayMenuLoggedIn = managerInstance => [
   {
     label: 'Check for updates',
-    click: () => checkForUpdate(),
+    click: () => checkForUpdate(true),
   },
   toolbarSizeMenu(managerInstance),
   toolbarPositionMenu(managerInstance),
@@ -96,7 +96,7 @@ exports.trayMenuLoggedIn = managerInstance => [
 exports.trayMenuLoggedOut = () => [
   {
     label: 'Check for updates',
-    click: () => checkForUpdate(),
+    click: () => checkForUpdate(true),
   },
   separator,
   quitButton,
