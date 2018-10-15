@@ -137,26 +137,23 @@ class ChatMessage extends Component {
     );
   }
 
-  hubChatPage() {
+  async hubChatPage() {
     this.props.setTitle(CHAT_PAGE);
-    this.props.setBackHandler(() => {
-      this.togglePatientsList();
-    });
+    this.props.setBackHandler(this.togglePatientsList);
   }
 
   selectChatOrCreate(patient) {
-    const selectChatCallback = () => {
+    const selectChatCallback = async () => {
       // If this patient has a chat, select the chat
       const chatToSelect = patient.chatId || null;
       const newChat = patient.chatId ? null : { patientId: patient.id };
-
-      this.props.selectChat(chatToSelect, newChat);
 
       if (!this.state.showMessageContainer) {
         this.toggleShowMessageContainer();
       }
 
-      this.hubChatPage();
+      await this.hubChatPage();
+      this.props.selectChat(chatToSelect, newChat);
     };
     this.changeTab(tabsConstants.ALL_TAB, selectChatCallback);
   }

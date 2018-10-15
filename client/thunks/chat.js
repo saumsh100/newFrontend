@@ -16,7 +16,6 @@ import {
   updateChatId,
   setTotalChatMessages,
 } from '../reducers/chat';
-import { setBackHandler } from '../reducers/electron';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
@@ -296,8 +295,7 @@ export async function setChatIsPoC(patient, dispatch) {
 
 export function selectChat(id, createChat = null) {
   return async (dispatch, getState) => {
-    const { routing, entities, electron } = getState();
-    const persistedBackHandler = electron.get('backHandler');
+    const { routing, entities } = getState();
     const chat =
       !createChat && id && entities.getIn(['chats', 'models', id]).delete('textMessages');
     dispatch(setNewChat(createChat));
@@ -311,13 +309,12 @@ export function selectChat(id, createChat = null) {
       await setChatIsPoC(id, dispatch);
     }
     dispatch(updateChatId());
-    if (isOnChatPage(routing.location.pathname)) {
+    if (isOnChatPage(routing.location.pathname) && !isHub()) {
       dispatch(push(`/chat/${id || ''}`));
     }
 
     dispatch(unlockChat(id));
     dispatch(loadChatMessages(id));
-    dispatch(setBackHandler(persistedBackHandler));
   };
 }
 
