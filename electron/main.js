@@ -68,18 +68,18 @@ function createWindowListeners() {
   });
 }
 
-const shouldQuit = app.makeSingleInstance(() => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore();
-    }
-    mainWindow.focus();
-  }
-});
+const gotTheLock = app.requestSingleInstanceLock();
 
-if (shouldQuit) {
+if (!gotTheLock) {
   app.quit();
   return;
+}
+
+if (mainWindow) {
+  if (mainWindow.isMinimized()) {
+    mainWindow.restore();
+  }
+  mainWindow.focus();
 }
 
 app.on('ready', createWindow);

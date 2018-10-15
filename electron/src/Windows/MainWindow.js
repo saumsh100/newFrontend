@@ -145,7 +145,7 @@ class MainBrowserWindow extends WindowMain {
   isCursorWithinToolbarZone(cursor) {
     const bounds = this.window.getBounds();
 
-    return cursor.x >= bounds.x && cursor.x <= bounds.x + bounds.width
+    return cursor.x >= bounds.x && cursor.x <= bounds.x + (COLLAPSED_SIZE * this.zoomFactor)
       && cursor.y >= bounds.y && cursor.y <= bounds.y + bounds.height;
   }
 
