@@ -27,10 +27,7 @@ export async function fetchPatientsFromKeyValue({
 }) {
   return Patient.findAll({
     where: [
-      {
-        accountId,
-        status: 'Active',
-      },
+      { accountId },
       ...(key ? [{ [key]: value }] : []),
       where,
     ],
