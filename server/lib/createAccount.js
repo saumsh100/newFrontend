@@ -1,11 +1,9 @@
 
+import axios from 'axios';
+import uuid from 'uuid';
+import { Account } from 'CareCruModels';
 import { callrails, vendasta } from '../config/globals';
-import twilioClient from '../config/twilio';
-import { Account } from '../_models';
-
-const axios = require('axios');
-
-const uuid = require('uuid').v4;
+import { twilioSetup } from './thirdPartyIntegrations/twilio';
 
 const {
   apiKey,
@@ -127,31 +125,6 @@ export async function callRail(account) {
   }
 }
 
-export async function twilioSetup(account) {
-  // Right now default to Canada numbers. Maybe add a country dropdown in account creation.
-  if (!account.destinationPhoneNumber) {
-    return null;
-  }
-  try {
-    const data = await twilioClient.availablePhoneNumbers('CA').local.list({
-      smsEnabled: true,
-      voiceEnabled: true,
-      inRegion: account.address.state,
-      limit: 1,
-    });
-    const number = data.availablePhoneNumbers[0];
-    await twilioClient.incomingPhoneNumbers.create({
-      phoneNumber: number.phone_number,
-      friendlyName: account.name,
-      smsUrl: `https://carecru.io/twilio/sms/accounts/${account.id}`,
-    });
-    return account.update({ twilioPhoneNumber: number.phone_number });
-  } catch (e) {
-    console.log(e);
-    console.log('Twilio Account Creation Failed');
-    return account;
-  }
-}
 
 async function vendastaAddProducts(account, setupList) {
   const accountUrl = `https://api.vendasta.com/api/v3/account/addProduct/?apiKey=${apiKey}&apiUser=${apiUser}`;

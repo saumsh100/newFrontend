@@ -4,8 +4,9 @@ import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
 import uniqBy from 'lodash/uniqBy';
 import { UserAuth } from '../../../lib/_auth';
-import { twilioDelete, callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
-import { callRail, twilioSetup, vendastaFullSetup } from '../../../lib/createAccount';
+import { callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
+import { callRail, vendastaFullSetup } from '../../../lib/createAccount';
+import { twilioSetup, twilioDelete } from '../../../lib/thirdPartyIntegrations/twilio';
 import {
   getAccountConnectorConfigurations,
   updateAccountConnectorConfigurations,

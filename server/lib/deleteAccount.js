@@ -1,41 +1,11 @@
 
 import axios from 'axios';
 import { callrails, vendasta } from '../config/globals';
-import twilioClient from '../config/twilio';
 
 const {
   apiKey,
   apiUser,
 } = vendasta;
-
-
-// deletes twilio takes in account Model
-export async function twilioDelete(account) {
-  if (!account.twilioPhoneNumber) {
-    return null;
-  }
-
-  try {
-    let phoneNumberId;
-    await twilioClient.incomingPhoneNumbers.each((incomingPhoneNumbers, done) => {
-      if (account.twilioPhoneNumber === incomingPhoneNumbers.phone_number) {
-        phoneNumberId = incomingPhoneNumbers.sid;
-        done();
-      }
-    });
-
-    if (!phoneNumberId) {
-      throw new Error('ERROR PHONE NUMBER NOT FOUND');
-    }
-    await twilioClient.incomingPhoneNumbers(phoneNumberId)
-      .delete();
-    return account.update({ twilioPhoneNumber: null });
-  } catch (e) {
-    console.log(e);
-    console.log('Twilio Account Delete Failed');
-    return account;
-  }
-}
 
 // deletes callrail takes in account Model
 export async function callRailDelete(account) {
