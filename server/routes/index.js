@@ -9,6 +9,7 @@ import sequelizeMyRouter from './_my';
 import connectRouter from './connect';
 import twilioRouterSequelize from './_twilio';
 import signupRouterSequelize from './_signup';
+import vendastaRouterSequelize from './_vendasta';
 import resetRouter from './reset';
 import {
   Account,
@@ -50,6 +51,7 @@ rootRouter.use('/twilio', twilioRouterSequelize);
 rootRouter.use('/_twilio', twilioRouterSequelize);
 rootRouter.use('/callrail', callsRouterSequelize);
 rootRouter.use('/_callrail', callsRouterSequelize);
+rootRouter.use('/_vendasta', vendastaRouterSequelize);
 
 rootRouter.get('/signupinvite/:tokenId', (req, res, next) => Invite.findOne({
   where: { token: req.params.tokenId },

@@ -23,6 +23,7 @@ function StatusError(statusCode = 500, message = defaultMessage) {
 
 StatusError.BAD_REQUEST = 400;
 StatusError.FORBIDDEN = 403;
+StatusError.CONFLICT = 409;
 
 require('util').inherits(StatusError, Error);
 
