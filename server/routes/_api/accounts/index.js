@@ -166,7 +166,20 @@ accountsRouter.post('/:accountId/switch', (req, res, next) => {
         permission ||
           role === 'SUPERADMIN' ||
           Promise.reject(StatusError(403, "User don't have permissions for this account.")))
-      .then(() => UserAuth.updateSession(sessionId, sessionData, { accountId }))
+      .then(async () => {
+        const { enterpriseId } = await Account.findById(accountId, { raw: true });
+        await User.update({
+          enterpriseId,
+          activeAccountId: accountId,
+        }, {
+          where: { id: userId },
+        });
+        return enterpriseId;
+      })
+      .then(enterpriseId => UserAuth.updateSession(sessionId, sessionData, {
+        accountId,
+        enterpriseId,
+      }))
       // TODO: do we need to do a newSession.id?
       .then(newSession =>
         UserAuth.signToken({

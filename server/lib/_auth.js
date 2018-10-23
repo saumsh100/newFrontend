@@ -1,11 +1,15 @@
 
 import bcrypt from 'bcrypt';
+import omit from 'lodash/omit';
 import jwt from 'jsonwebtoken';
 import globals from '../config/globals';
 import { User, PatientUser, AuthSession } from '../_models';
 
 export const error = (status, message) =>
-  Promise.reject({ status, message });
+  Promise.reject({
+    status,
+    message,
+  });
 
 const compare = (password, hash) => new Promise((fulfill, reject) => {
   bcrypt.compare(password, hash, (err, match) => {
@@ -36,13 +40,15 @@ export const Auth = (Model, uniqueKey) => ({
       .then(model =>
         compare(password, model.password)
           .then(match => (match ?
-              model :
-              error(401, 'Invalid Credentials')
+            model :
+            error(401, 'Invalid Credentials')
           ))
           // TODO: remove AuthSession creation from here ?
           .then(() => AuthSession.create({ modelId: model.id }))
-          .then(session => ({ session, model })),
-      );
+          .then(session => ({
+            session,
+            model,
+          })));
   },
 
   /**
@@ -57,8 +63,10 @@ export const Auth = (Model, uniqueKey) => ({
       .then(() => Model.create(model))
       .then(model =>
         AuthSession.create({ modelId: model.id })
-          .then(session => ({ model, session })),
-      );
+          .then(session => ({
+            model,
+            session,
+          })));
   },
 
   /**
@@ -84,28 +92,21 @@ export const Auth = (Model, uniqueKey) => ({
     return new Promise((fulfill, reject) => {
       // TODO: This needs to be slowly phased out as we move towards session storage
       jwt.sign(tokenData, globals.tokenSecret, { expiresIn: globals.tokenExpiry }, (err, token) =>
-        (err ? reject(err) : fulfill(token)),
-      );
+        (err ? reject(err) : fulfill(token)));
     });
   },
 
-  updateSession(sessionId, session, updates) {
+  async updateSession(sessionId, session, updates) {
     // TODO: does this need to be a delete then save new?
-    return AuthSession.findById(sessionId)
-      .then((prevSession) => {
-        if (!prevSession) throw new Error(`AuthSession with id=${sessionId} does not exist and so cannot be updated`);
-        prevSession.destroy();
-        return prevSession;
-      })
-      .then(({ dataValues }) => {
-        const prevSession = dataValues;
-        delete prevSession.id;
-        return AuthSession.create({
-          ...prevSession,
-          ...updates,
-          modelId: session.userId || session.modelId,
-        });
-      });
+    const oldSession = await AuthSession.findById(sessionId);
+    if (!oldSession) throw new Error(`AuthSession with id=${sessionId} does not exist and so cannot be updated`);
+    await oldSession.destroy();
+    const prevSession = omit(oldSession.get({ plain: true }), ['id', 'createdAt', 'updatedAt', 'deletedAt']);
+    return AuthSession.create({
+      ...prevSession,
+      ...updates,
+      modelId: session.userId || session.modelId,
+    });
   },
 });
 

@@ -1,9 +1,9 @@
 
 import bcrypt from 'bcrypt';
+import { Account, AuthSession } from '../../server/_models';
 import { passwordHashSaltRounds } from '../../server/config/globals';
 import { UserAuth } from '../../server/lib/_auth';
-import { Account } from '../../server/models';
-import { seedTestUsers, seedTestUsersSequelize } from '../util/seedTestUsers';
+import { seedTestUsers, addressId } from '../util/seedTestUsers';
 import { wipeAllModels } from '../util/wipeModel';
 import { omitProperties } from '../util/selectors';
 
@@ -19,13 +19,13 @@ const fakeSessionId = '00054241-3652-4792-bae5-5bfed53d37b7';
 const fail = 'Your code should be failing but it is passing';
 
 async function seedData() {
-  await seedTestUsersSequelize();
   await seedTestUsers();
 
   // Seed an extra account for fetching multiple and testing switching
-  await Account.save({
+  await Account.create({
     id: accountId2,
     enterpriseId,
+    addressId,
     name: 'Test Account 2',
     createdAt: '2017-07-20T00:14:30.932Z',
   });
@@ -127,12 +127,17 @@ describe('auth lib', () => {
   describe('#updateSession', () => {
     test('should remove the session and return a new one', async () => {
       const { session } = await UserAuth.login(managerEmail, managerPassword);
-      const newSession = await UserAuth.updateSession(session.id, session, { accountId: accountId2 });
+      const newSession = await UserAuth.updateSession(
+        session.id,
+        session,
+        { accountId: accountId2 },
+      );
+      const oldSession = await AuthSession.findById(session.id);
 
       // Now update that session
+      expect(oldSession).toBeNull();
       expect(newSession.accountId).toBe(accountId2);
       expect(omitProperties(newSession.dataValues, ['id'])).toMatchSnapshot();
     });
   });
-
 });
