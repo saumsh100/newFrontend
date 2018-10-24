@@ -12,6 +12,7 @@ Object {
     "chats": Object {
       "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "hasUnread": false,
         "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
         "isFlagged": false,
         "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
@@ -32,6 +33,7 @@ Object {
     "chats": Object {
       "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "hasUnread": false,
         "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
         "isFlagged": false,
         "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
@@ -191,6 +193,7 @@ Object {
     "chats": Object {
       "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "hasUnread": false,
         "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
         "isFlagged": false,
         "lastTextMessageDate": "2017-07-22T00:14:30.932Z",
@@ -291,6 +294,7 @@ Object {
     "chats": Object {
       "3180a744-f6b0-4a09-8046-4e713bf5b565": Object {
         "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+        "hasUnread": false,
         "id": "3180a744-f6b0-4a09-8046-4e713bf5b565",
         "isFlagged": false,
         "lastTextMessageDate": "2017-07-22T00:14:30.932Z",

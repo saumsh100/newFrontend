@@ -6,8 +6,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Icon, ListItem, Avatar } from '../../../library';
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
-import styles from './styles.scss';
 import { isHub } from '../../../../util/hub';
+import styles from './styles.scss';
 
 class ChatListItem extends Component {
   constructor(props) {
@@ -58,7 +58,7 @@ class ChatListItem extends Component {
   }
 
   render() {
-    const { chat, patient, lastTextMessage, hasUnread, selectedChatId, lockedChat } = this.props;
+    const { chat, patient, lastTextMessage, selectedChatId, lockedChat } = this.props;
 
     if (!patient || !lastTextMessage) {
       return null;
@@ -70,7 +70,7 @@ class ChatListItem extends Component {
 
     const messageDate = daysDifference ? mDate.format('YY/MM/DD') : mDate.format('h:mma');
 
-    const isUnread = (!isActive && hasUnread) || lockedChat;
+    const isUnread = (!isActive && chat.hasUnread) || lockedChat;
 
     const listItemClass = isHub() ? styles.hubListItem : styles.chatListItem;
 
@@ -115,13 +115,13 @@ ChatListItem.propTypes = {
     patientId: PropTypes.string,
     lastTextMessageId: PropTypes.string,
     isFlagged: PropTypes.bool,
+    hasUnread: PropTypes.bool,
   }).isRequired,
   patient: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     birthDate: PropTypes.string,
   }).isRequired,
-  hasUnread: PropTypes.bool,
   toggleFlagged: PropTypes.func.isRequired,
   selectChat: PropTypes.func.isRequired,
   selectedChatId: PropTypes.string,
@@ -131,7 +131,6 @@ ChatListItem.propTypes = {
 
 ChatListItem.defaultProps = {
   lastTextMessage: null,
-  hasUnread: false,
   selectedChatId: null,
   onChatClick: e => e,
 };
@@ -143,16 +142,10 @@ function mapStateToProps(state, { chat = {} }) {
   const selectedChatId = state.chat.get('selectedChatId');
   const lockedChat = state.chat.get('lockedChats').includes(chat.id);
 
-  const hasUnread = chat.textMessages.filter((message) => {
-    const messageEntity = state.entities.getIn(['textMessages', 'models', message]);
-    return messageEntity && !messageEntity.read;
-  });
-
   return {
     selectedChatId,
     lockedChat,
     patient: patients.get(chat.patientId) || {},
-    hasUnread: hasUnread.length > 0,
     lastTextMessage,
   };
 }

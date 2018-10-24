@@ -186,13 +186,17 @@ chatsRouter.get('/unread', checkPermissions('chats:read'), (req, res, next) => {
   const textMessageInclude = {
     model: TextMessage,
     as: 'textMessages',
-    where: { read: false },
     required: true,
     order: [['createdAt', 'DESC']],
+    limit: 1,
+    separate: true,
   };
 
   return Chat.findAll({
-    where: { accountId },
+    where: {
+      accountId,
+      hasUnread: true,
+    },
     order,
     offset: skipped,
     limit: limitted,

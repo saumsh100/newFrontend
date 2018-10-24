@@ -44,7 +44,7 @@ export async function receiveMessage(account, textMessageData) {
   const textMessage = await storeTextMessage({
     ...textMessageData,
     ...{ chatId: chatClean.id },
-  });
+  }, true);
 
   logger.debug(`TextMessage ${textMessage.get('id')} stored.`);
   if (!patient || !isSmsConfirmationResponse(body)) {
@@ -71,6 +71,7 @@ export async function receiveMessage(account, textMessageData) {
   const normalizedReminder = normalize('sentReminder', sentReminderClean);
   publishEvent(account.id, 'create:SentReminder', normalizedReminder);
   await markMessageAsRead(textMessage.get('id'));
+  await setChatUnread(chatClean.id, false);
   const messageBody = createConfirmationText({
     patient,
     appointment: pocPatient ? pocPatient.appointment : {},
@@ -132,6 +133,11 @@ export async function markMessagesAsUnread(chatId, textMessageCreatedAt, phoneNu
     },
   );
 
+  await Chat.update(
+    { hasUnread: true },
+    { where: { id: chatId } },
+  );
+
   return updateUserViaSocket(chatId, MARK_UNREAD);
 }
 
@@ -150,6 +156,11 @@ export async function markMessagesAsRead(chatId) {
         read: false,
       },
     },
+  );
+
+  await Chat.update(
+    { hasUnread: false },
+    { where: { id: chatId } },
   );
 
   return updateUserViaSocket(chatId, MARK_READ);
@@ -327,8 +338,24 @@ function publishEvent(accountId, event, data) {
  * @param textMessageData {object} text message data that we store in DB.
  * @returns {Promise<void>} Created textMessage model instance.
  */
-async function storeTextMessage(textMessageData) {
+async function storeTextMessage(textMessageData, markChatAsUnread = false) {
   const textInstance = await TextMessage.create(textMessageData);
   await updateLastMessageData(textMessageData.chatId, textInstance.get('id'), new Date());
+
+  if (markChatAsUnread) {
+    await setChatUnread(textMessageData.chatId);
+  }
+
   return textInstance;
 }
+
+/**
+ * Internal function used to update a chat instance read/unread status.
+ * @param id {object} chat id that we update in DB.
+ * @param hasUnread {boolean} Bool value if chat is has unread or not.
+ * @returns {Promise<void>}
+ */
+async function setChatUnread(id, hasUnread = true) {
+  return Chat.update({ hasUnread }, { where: { id } });
+}
+

@@ -17,7 +17,6 @@ jest.mock('../sms');
 const textMessageId = '059987cb-3051-4656-98d0-72cda34d32a6';
 const chatId = '3180a744-f6b0-4a09-8046-4e713bf5b565';
 const clinicPhone = '+16043333333';
-const textMessageDate = '2017-07-19T00:14:30.932Z';
 const patientPhoneNumber = '+16045555555';
 
 const textMessageTest = {
@@ -76,7 +75,9 @@ describe('services.chat', () => {
     const result = await chatService.markMessagesAsUnread(seededChatId, date, patientPhoneNumber);
     const data = getModelsArray('textMessages', result);
     const omitedMessage = omitPropertiesFromArray(data, ['id', 'user', 'chatId']);
+    const chat = await Chat.findById(seededChatId);
 
+    expect(chat.get('hasUnread')).toBe(true);
     expect(omitedMessage).toMatchSnapshot();
   });
 
@@ -86,7 +87,9 @@ describe('services.chat', () => {
     const result = await chatService.markMessagesAsRead(seededChatId);
     const data = getModelsArray('textMessages', result);
     const omitedMessage = omitPropertiesFromArray(data, ['id', 'user', 'chatId']);
+    const chat = await Chat.findById(seededChatId);
 
+    expect(chat.get('hasUnread')).toBe(false);
     expect(omitedMessage).toMatchSnapshot();
   });
 });

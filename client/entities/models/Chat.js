@@ -9,6 +9,7 @@ const ChatSchema = {
   lastTextMessageDate: null,
   lastTextMessageId: null,
   isFlagged: null,
+  hasUnread: null,
 };
 
 export default class Chat extends createModel(ChatSchema) {

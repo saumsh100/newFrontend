@@ -34,6 +34,12 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+
+    hasUnread: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
   });
 
   Chat.associate = ({ Account, Patient, TextMessage }) => {
