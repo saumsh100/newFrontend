@@ -12,7 +12,8 @@ ARG TZ=America/Los_Angeles
 RUN apk update \
 	&& apk --no-cache add --virtual builds-deps build-base python
 RUN apk add --no-cache vips-dev fftw-dev \
-	--update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
+	--update-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ \
+	--repository https://dl-3.alpinelinux.org/alpine/edge/main/
 RUN apk add --no-cache \
   	gcc g++ make libc6-compat
 RUN apk add --no-cache git
