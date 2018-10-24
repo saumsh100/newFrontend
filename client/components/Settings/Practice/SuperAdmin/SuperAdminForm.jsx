@@ -9,6 +9,16 @@ import styles from './styles.scss';
 
 const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
 
+const uuidRegExp = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const validateOmitIdsArray = (val) => {
+  if (!val) return;
+  const array = val.split(',');
+  const predicate = v => !uuidRegExp.test(v);
+  if (array.some(predicate)) {
+    return "Must UUIDs separated by ',' with no spaces";
+  }
+};
+
 export default function SuperAdminForm({ onSubmit, activeAccount }) {
   const initialValues = {
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
@@ -23,6 +33,8 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     googlePlaceId: activeAccount.get('googlePlaceId'),
     facebookUrl: activeAccount.get('facebookUrl'),
     sendRequestEmail: activeAccount.get('sendRequestEmail'),
+    omitChairIdsString: activeAccount.get('omitChairIds').join(','),
+    omitPractitionerIdsString: activeAccount.get('omitPractitionerIds').join(','),
   };
 
   const lastSyncDate = activeAccount.get('lastSyncDate');
@@ -94,6 +106,12 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
       <Field name="suggestedChairId" label="Suggested Chair ID" data-test-id="suggestedChairId" />
       <Field name="facebookUrl" label="Facebook URL" data-test-id="facebookUrl" />
       <Field name="googlePlaceId" label="Google Place ID" data-test-id="googlePlaceId" />
+      <Field
+        name="omitPractitionerIdsString"
+        label="Omit Practitioner IDs"
+        validate={[validateOmitIdsArray]}
+      />
+      <Field name="omitChairIdsString" label="Omit Chair IDs" validate={[validateOmitIdsArray]} />
     </Form>
   );
 }
@@ -103,6 +121,4 @@ SuperAdminForm.propTypes = {
   activeAccount: PropTypes.instanceOf(AccountModel),
 };
 
-SuperAdminForm.defaultProps = {
-  activeAccount: null,
-};
+SuperAdminForm.defaultProps = { activeAccount: null };

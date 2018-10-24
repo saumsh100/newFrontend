@@ -46,6 +46,8 @@ Object {
         "logo": null,
         "massOnlineEmailSentDate": null,
         "name": "Test Account 2",
+        "omitChairIds": Array [],
+        "omitPractitionerIds": Array [],
         "phoneNumber": null,
         "recallBuffer": "1 days",
         "recallEndTime": "20:00:00",

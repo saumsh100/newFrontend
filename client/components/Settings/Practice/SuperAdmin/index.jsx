@@ -25,9 +25,7 @@ import styles from './styles.scss';
 class SuperAdmin extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      previewOpen: false,
-    };
+    this.state = { previewOpen: false };
     this.sendEmailBlast = this.sendEmailBlast.bind(this);
     this.openPreviewModal = this.openPreviewModal.bind(this);
     this.updateApis = this.updateApis.bind(this);
@@ -44,12 +42,17 @@ class SuperAdmin extends Component {
 
   updateAdminForm(values) {
     const { activeAccount } = this.props;
-    const valuesMap = Map(values);
+    const newValues = {
+      ...values,
+      omitChairIds: values.omitChairIdsString ? values.omitChairIdsString.split(',') : [],
+      omitPractitionerIds: values.omitPractitionerIdsString
+        ? values.omitPractitionerIdsString.split(',')
+        : [],
+    };
+    const valuesMap = Map(newValues);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
-      success: {
-        body: 'Updated Clinic Information',
-      },
+      success: { body: 'Updated Clinic Information' },
       error: {
         title: 'Clinic Information Error',
         body: 'Failed to update.',
@@ -74,9 +77,7 @@ class SuperAdmin extends Component {
     const sendEmailsForSure = sendEmails && window.confirm('Are you really sure?');
 
     if (sendEmailsForSure) {
-      this.setState({
-        previewOpen: false,
-      });
+      this.setState({ previewOpen: false });
       return this.props.sendEmailBlast(activeAccount.id);
     }
     return null;
@@ -84,9 +85,7 @@ class SuperAdmin extends Component {
 
   async updateApis(values) {
     const { activeAccount, address } = this.props;
-    const {
-      reputationManagement, listings, callTracking, canSendReminders,
-    } = values;
+    const { reputationManagement, listings, callTracking, canSendReminders } = values;
 
     const sendingValuesCreate = {};
     sendingValuesCreate.integrations = [];
@@ -103,9 +102,7 @@ class SuperAdmin extends Component {
       website,
     } = activeAccount;
 
-    const {
-      city, state, country, zipCode, street, timezone,
-    } = address;
+    const { city, state, country, zipCode, street, timezone } = address;
 
     if (!city || !state || !country || !street || !zipCode || !timezone || !website) {
       return window.alert('Please enter Address and/or Clinic Website Info First');
@@ -195,9 +192,7 @@ class SuperAdmin extends Component {
   }
 
   openPreviewModal() {
-    this.setState({
-      previewOpen: !this.state.previewOpen,
-    });
+    this.setState({ previewOpen: !this.state.previewOpen });
   }
 
   render() {
@@ -319,4 +314,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SuperAdmin);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SuperAdmin);

@@ -44,6 +44,8 @@ const AccountSchema = {
   massOnlineEmailSentDate: null,
   suggestedChairId: null,
   sendUnconfirmedReviews: null,
+  omitChairIds: [],
+  omitPractitionerIds: [],
 };
 
 export default class Account extends createModel(AccountSchema) {

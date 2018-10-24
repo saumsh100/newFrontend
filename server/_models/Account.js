@@ -3,7 +3,6 @@ import moment from 'moment';
 import customDataTypes from '../util/customDataTypes';
 import globals, { env } from '../config/globals';
 import { sendConnectorBackUp } from '../lib/mail';
-import AddressModel from './Address';
 
 export default function (sequelize, DataTypes) {
   const Account = sequelize.define('Account', {
@@ -23,9 +22,7 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    weeklyScheduleId: {
-      type: DataTypes.UUID,
-    },
+    weeklyScheduleId: { type: DataTypes.UUID },
 
     addressId: {
       type: DataTypes.UUID,
@@ -61,34 +58,22 @@ export default function (sequelize, DataTypes) {
       defaultValue: 15,
     },
 
-    callrailId: {
-      type: DataTypes.INTEGER,
-    },
+    callrailId: { type: DataTypes.INTEGER },
 
-    vendastaAccountId: {
-      type: DataTypes.STRING,
-    },
+    vendastaAccountId: { type: DataTypes.STRING },
 
-    vendastaMsId: {
-      type: DataTypes.STRING,
-    },
+    vendastaMsId: { type: DataTypes.STRING },
 
-    vendastaSrId: {
-      type: DataTypes.STRING,
-    },
+    vendastaSrId: { type: DataTypes.STRING },
 
-    vendastaId: {
-      type: DataTypes.STRING,
-    },
+    vendastaId: { type: DataTypes.STRING },
 
     timeInterval: {
       type: DataTypes.INTEGER,
       defaultValue: 30,
     },
 
-    timezone: {
-      type: DataTypes.STRING,
-    },
+    timezone: { type: DataTypes.STRING },
 
     twilioPhoneNumber: customDataTypes.phoneNumber('twilioPhoneNumber', DataTypes),
     destinationPhoneNumber: customDataTypes.phoneNumber('destinationPhoneNumber', DataTypes),
@@ -96,18 +81,12 @@ export default function (sequelize, DataTypes) {
 
     contactEmail: {
       type: DataTypes.STRING,
-      validate: {
-        isEmail: true,
-      },
+      validate: { isEmail: true },
     },
 
-    website: {
-      type: DataTypes.STRING,
-    },
+    website: { type: DataTypes.STRING },
 
-    logo: {
-      type: DataTypes.STRING,
-    },
+    logo: { type: DataTypes.STRING },
 
     fullLogoUrl: {
       type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['logo']),
@@ -116,33 +95,19 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    clinicName: {
-      type: DataTypes.STRING,
-    },
+    clinicName: { type: DataTypes.STRING },
 
-    bookingWidgetPrimaryColor: {
-      type: DataTypes.STRING,
-    },
+    bookingWidgetPrimaryColor: { type: DataTypes.STRING },
 
-    syncClientAdapter: {
-      type: DataTypes.STRING,
-    },
+    syncClientAdapter: { type: DataTypes.STRING },
 
-    lastSyncDate: {
-      type: DataTypes.DATE,
-    },
+    lastSyncDate: { type: DataTypes.DATE },
 
-    massOnlineEmailSentDate: {
-      type: DataTypes.DATE,
-    },
+    massOnlineEmailSentDate: { type: DataTypes.DATE },
 
-    googlePlaceId: {
-      type: DataTypes.STRING,
-    },
+    googlePlaceId: { type: DataTypes.STRING },
 
-    facebookUrl: {
-      type: DataTypes.STRING,
-    },
+    facebookUrl: { type: DataTypes.STRING },
 
     recallInterval: {
       type: DataTypes.STRING,
@@ -183,14 +148,24 @@ export default function (sequelize, DataTypes) {
       defaultValue: '15 minutes',
     },
 
-    suggestedChairId: {
-      type: DataTypes.UUID,
-    },
+    suggestedChairId: { type: DataTypes.UUID },
 
     sendUnconfirmedReviews: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+
+    omitChairIds: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: [],
+      allowNull: false,
+    },
+
+    omitPractitionerIds: {
+      type: DataTypes.ARRAY(DataTypes.UUID),
+      defaultValue: [],
+      allowNull: false,
     },
   });
 
@@ -283,9 +258,7 @@ export default function (sequelize, DataTypes) {
   };
 
   Account.scopes = (models) => {
-    const {
-      Address,
-    } = models;
+    const { Address } = models;
 
     Account.addScope('defaultScope', {
       include: [{
@@ -298,11 +271,7 @@ export default function (sequelize, DataTypes) {
   Account.modelHooks = (({ AccountConfiguration, Configuration }) => {
     // Hook for sending email if a Connector is back up
     Account.hook('beforeUpdate', async (account) => {
-      const config = await Configuration.findOne({
-        where: {
-          name: 'CONNECTOR_ENABLED',
-        },
-      });
+      const config = await Configuration.findOne({ where: { name: 'CONNECTOR_ENABLED' } });
 
       const accountConfig = await AccountConfiguration.findOne({
         where: {

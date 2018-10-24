@@ -104,6 +104,8 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
         $lt: end,
       },
 
+      chairId: { $notIn: account.omitChairIds },
+      practitionerId: { $notIn: account.omitPractitionerIds },
       ...isConfirmedQuery,
     },
 
