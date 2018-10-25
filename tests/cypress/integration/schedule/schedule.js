@@ -1,7 +1,6 @@
 describe('Schedule Tests', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit('http://localhost:5100/schedule');
+    cy.login('/schedule');
   });
 
   it('add an appointment to the schedule', () => {

@@ -1,8 +1,7 @@
 
 describe('Patient Management Table Tests', () => {
   beforeEach(() => {
-    cy.login();
-    cy.visit(`${Cypress.env('siteURL')}/patients/list`);
+    cy.login('/patients/list');
   });
 
   it('create and search for new patient', () => {

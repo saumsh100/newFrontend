@@ -1,13 +1,9 @@
 
 
 describe('Account Settings - Practice', () => {
-  beforeEach(() => {
-    cy.login();
-  });
-
   context('General Settings', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/general');
+      cy.login('/settings/practice/general');
     });
 
     it('update clinic details', () => {
@@ -17,7 +13,6 @@ describe('Account Settings - Practice', () => {
         .fillTextInput('clinicDetailsForm', 'phoneNumber', '5555555555')
         .fillTextInput('clinicDetailsForm', 'contactEmail', 'testclinic@gmail.com')
         .submitForm('clinicDetailsForm')
-        .reload()
         .get('[data-test-id=name]')
         .should('have.value', 'Donna Dental Test')
         .get('[data-test-id=contactEmail]')
@@ -33,7 +28,6 @@ describe('Account Settings - Practice', () => {
         .fillTextInput('addressSettingsForm', 'zipCode', 'V6P1E8')
         .selectOption('addressSettingsForm', 'timezone', 'option_0')
         .submitForm('addressSettingsForm')
-        .reload()
         .get('[data-test-id=street]')
         .should('have.value', '88829 98th Ave');
     });
@@ -41,7 +35,7 @@ describe('Account Settings - Practice', () => {
 
   context('General Settings', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/superadmin');
+      cy.login('/settings/practice/superadmin');
     });
 
     it('update administrative info', () => {
@@ -53,7 +47,6 @@ describe('Account Settings - Practice', () => {
         .fillTextInput('superAdminSettingsForm', 'facebookUrl', 'www.facebook.com')
         .fillTextInput('superAdminSettingsForm', 'googlePlaceId', '123google')
         .submitForm('superAdminSettingsForm')
-        .reload()
         .get('[data-test-id="toggle_canSendReminders"]')
         .find('input')
         .should('have.value', 'on')
@@ -66,7 +59,7 @@ describe('Account Settings - Practice', () => {
     after(() => {
       // RESET THE TIMEZONE
       cy
-        .visit('http://localhost:5100/settings/practice/general')
+        .login('/settings/practice/general')
         .wait(1000)
         .selectOption('addressSettingsForm', 'timezone', 'option_160')
         .submitForm('addressSettingsForm');
@@ -74,7 +67,7 @@ describe('Account Settings - Practice', () => {
 
     it('change timezones of office hours when timezone is altered', () => {
       cy
-        .visit('http://localhost:5100/settings/practice/hours')
+        .login('/settings/practice/hours')
         .wait(1000)
         .get('[data-test-id="dropDown_monday_startTime"]')
         .contains('9:00 AM')
@@ -91,7 +84,7 @@ describe('Account Settings - Practice', () => {
 
   context.skip('Users Settings', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/users');
+      cy.login('/settings/practice/users');
     });
 
     it('add another user to my practice', () => {
@@ -104,7 +97,6 @@ describe('Account Settings - Practice', () => {
         .fillTextInput('newUserDialog', 'password', 'testaccntpass')
         .fillTextInput('newUserDialog', 'confirmPassword', 'testaccntpass')
         .submitDialogForm('newUserDialog')
-        .reload()
         .get('[data-test-id="John Smith"]')
         .should('exist');
     });
@@ -114,7 +106,6 @@ describe('Account Settings - Practice', () => {
         .getAndClick('inviteUserButton')
         .fillInput('inviteUserDialog', 'email', 'gavin+invitetest@carecru.com')
         .submitDialogForm('inviteUserDialog')
-        .reload()
         .get('[data-test-id="gavin+invitetest@carecru.com"]')
         .should('exist');
     });

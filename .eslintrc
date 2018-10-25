@@ -50,6 +50,7 @@
     "node": true
   },
   "globals": {
+    "Cypress": true,
     "cy": true,
     "expect": true,
     "jest": true,

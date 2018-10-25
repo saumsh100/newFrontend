@@ -1,20 +1,25 @@
 
 describe('Chat Tests', () => {
-  beforeEach(() => {
+  before(() => {
     cy.login();
+    cy.getAndClick('dropDown_accounts')
+      .get('[data-test-id="option_Liberty Chiropractic"]')
+      .click({ force: true });
+  });
+
+  beforeEach(() => {
+    cy.login('/chat');
+  });
+
+  after(() => {
+    cy.getAndClick('dropDown_accounts')
+      .get('[data-test-id="option_Test Account"]')
+      .click({ force: true });
   });
 
   describe('General tests', () => {
-    beforeEach(() => {
-      cy.visit(`${Cypress.env('siteURL')}/chat`);
-    });
-
     it('forces All tab when creating new chat', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="unread_chatTab"]')
+      cy.get('[data-test-id="unread_chatTab"]')
         .click({ force: true })
         .get('[data-test-id="input_chatSearch"]')
         .find('input')
@@ -29,11 +34,7 @@ describe('Chat Tests', () => {
     });
 
     it('initiate a new conversation with a patient', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="button_addNewChat"]')
+      cy.get('[data-test-id="button_addNewChat"]')
         .click({ force: true })
         .get('[data-test-id="input_chatSearch"]')
         .find('input')
@@ -55,26 +56,18 @@ describe('Chat Tests', () => {
     });
 
     it('receives a message from the patient', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .receiveTextMessage(
-          '72954241-3652-4792-bae5-5bfed53d37b7',
-          '906-594-6264',
-          '+15874003884',
-          'Hello to you too!',
-        )
+      cy.receiveTextMessage(
+        '72954241-3652-4792-bae5-5bfed53d37b7',
+        '906-594-6264',
+        '+15874003884',
+        'Hello to you too!',
+      )
         .get('[data-test-id="item_chatMessage"]')
         .contains('Hello to you too!');
     });
 
     it('marks chat as unread if new message is received', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="button_addNewChat"]')
+      cy.get('[data-test-id="button_addNewChat"]')
         .click({ force: true })
         .get('[data-test-id="input_chatSearch"]')
         .find('input')
@@ -105,16 +98,12 @@ describe('Chat Tests', () => {
     });
 
     it('marks chat as read when its selected', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .receiveTextMessage(
-          '72954241-3652-4792-bae5-5bfed53d37b7',
-          '906-594-6265',
-          '+15874003884',
-          'Hello new message again!',
-        )
+      cy.receiveTextMessage(
+        '72954241-3652-4792-bae5-5bfed53d37b7',
+        '906-594-6265',
+        '+15874003884',
+        'Hello new message again!',
+      )
         .wait(1000)
         .get('[data-test-id="chat_lastMessage"]')
         .contains('Hello new message again!')
@@ -124,11 +113,7 @@ describe('Chat Tests', () => {
     });
 
     it('marks chat as unread on request', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="chat_unreadDots"]')
+      cy.get('[data-test-id="chat_unreadDots"]')
         .first()
         .trigger('mouseover')
         .get('[data-test-id="chat_markUnreadBtn"]')
@@ -157,26 +142,14 @@ describe('Chat Tests', () => {
       }
     });
 
-    beforeEach(() => {
-      cy.visit(`${Cypress.env('siteURL')}/chat`);
-    });
-
     it('shows only 15 messages initially', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="item_chatMessage"]')
+      cy.get('[data-test-id="item_chatMessage"]')
         .its('length')
         .should('eq', 15);
     });
 
     it('loads more messages on scroll', () => {
-      cy.getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(5000)
-        .get('[data-test-id="item_chatMessage"]')
+      cy.get('[data-test-id="item_chatMessage"]')
         .first()
         .scrollIntoView({ duration: 2000 })
         .wait(1000)

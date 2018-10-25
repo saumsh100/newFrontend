@@ -1,12 +1,9 @@
 
 context('Practitioners settings - schedule', () => {
-  beforeEach(() => {
-    cy.login();
-  });
-
   context('Practitioners schedule local TZ', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practitioners');
+      cy.login('/settings/practitioners')
+        .wait(1000);
     });
 
     it('set time for office hours', () => {
@@ -41,7 +38,7 @@ context('Practitioners settings - schedule', () => {
 
   context('Time Off local TZ', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practitioners');
+      cy.login('/settings/practitioners');
     });
 
     it('creates new time off record in local tz', () => {
@@ -68,7 +65,7 @@ context('Practitioners settings - schedule', () => {
 
   context('Recurring time off local TZ', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practitioners');
+      cy.login('/settings/practitioners');
     });
 
     it('creates a new recurring time off record in local tz', () => {
@@ -90,11 +87,12 @@ context('Practitioners settings - schedule', () => {
 
   context('Different TZ', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practitioners', {
+      cy.login();
+      cy.visit(`${Cypress.env('siteURL')}/settings/practitioners`, {
         onBeforeLoad(pageWindow) {
           cy.stub(pageWindow.Date.prototype, 'getTimezoneOffset').returns(180);
         },
-      });
+      }).wait(1000);
     });
 
     it('persist timing for office hours', () => {

@@ -4,8 +4,9 @@
   "screenshotsFolder": "tests/cypress/screenshots",
   "videosFolder": "tests/cypress/videos",
   "supportFile": "tests/cypress/support",
-  "screenshotOnHeadlessFailure": false,
-  "videoRecording": false,
+  "video": false,
+  "watchForFileChanges": false,
+  "pageLoadTimeout": 100000,
   "env": {
     "siteURL": "http://localhost:5100"
   }

@@ -1,12 +1,8 @@
 
 context('Practice settings - office hours', () => {
-  beforeEach(() => {
-    cy.login();
-  });
-
   context('Office hours local TZ', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/hours');
+      cy.login('/settings/practice/hours');
     });
 
     it('set time for office hours', () => {
@@ -16,7 +12,7 @@ context('Practice settings - office hours', () => {
         .submitForm('officeHoursForm');
     });
 
-    it('set the monday\'s break hours', () => {
+    it('set the mondays break hours', () => {
       cy
         .get('[data-test-id="button_wednesday_addBreak"]')
         .click({ force: true })
@@ -28,7 +24,8 @@ context('Practice settings - office hours', () => {
 
   context('Office hours different TZ', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/hours', {
+      cy.login();
+      cy.visit(`${Cypress.env('siteURL')}/settings/practice/hours`, {
         onBeforeLoad(pageWindow) {
           cy.stub(pageWindow.Date.prototype, 'getTimezoneOffset').returns(180);
         },

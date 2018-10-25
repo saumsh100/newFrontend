@@ -1,21 +1,27 @@
 
 context('Account Settings - Donna', () => {
-  beforeEach(() => {
+  before(() => {
     cy.login();
+    cy.getAndClick('dropDown_accounts')
+      .get('[data-test-id="option_Liberty Chiropractic"]')
+      .click({ force: true })
+      .wait(1000);
+  });
+
+  after(() => {
+    cy.getAndClick('dropDown_accounts')
+      .get('[data-test-id="option_Test Account"]')
+      .click({ force: true })
+      .wait(1000);
   });
 
   context('Reminders Settings', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/donna/reminders');
+      cy.login('/settings/donna/reminders');
     });
 
     it('check reminder touch-point order', () => {
-      cy
-        .getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="touchPoint_reminder_0"]')
+      cy.get('[data-test-id="touchPoint_reminder_0"]')
         .should('exist')
         .get('[data-test-id="touchPoint_reminder_1"]')
         .should('exist')
@@ -28,16 +34,11 @@ context('Account Settings - Donna', () => {
 
   context('Recalls Settings', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/donna/recalls');
+      cy.login('/settings/donna/recalls');
     });
 
     it('check recall touch-point order', () => {
-      cy
-        .getAndClick('dropDown_accounts')
-        .get('[data-test-id="option_Liberty Chiropractic"]')
-        .click({ force: true })
-        .wait(1000)
-        .get('[data-test-id="touchPoint_recall_0"]')
+      cy.get('[data-test-id="touchPoint_recall_0"]')
         .should('exist')
         .get('[data-test-id="touchPoint_recall_1"]')
         .should('exist');

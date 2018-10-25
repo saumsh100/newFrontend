@@ -1,12 +1,8 @@
 
 context('Account Settings - Schedule', () => {
-  beforeEach(() => {
-    cy.login();
-  });
-
   context('Chairs', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/chairs');
+      cy.login('/settings/practice/chairs');
     });
 
     it('update active chairs', () => {
@@ -14,7 +10,6 @@ context('Account Settings - Schedule', () => {
         .get('[data-test-id="chair_1"]')
         .find('input')
         .click({ force: true })
-        .reload()
         .get('[data-test-id="chair_1"]')
         .find('input')
         .should('have.value', 'on');
@@ -23,7 +18,7 @@ context('Account Settings - Schedule', () => {
 
   context('Office Hours', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/hours');
+      cy.login('/settings/practice/hours');
     });
 
     // As a user I want to...
@@ -41,7 +36,6 @@ context('Account Settings - Schedule', () => {
         .getAndClick('toggle_monday')
         .getAndClick('dropDown_monday_startTime')
         .submitForm('officeHoursForm')
-        .reload()
         .get('[data-test-id="toggle_monday"]')
         .find('input')
         .should('have.value', 'on');
@@ -51,7 +45,6 @@ context('Account Settings - Schedule', () => {
       cy
         .getAndClick('button_monday_addBreak')
         .submitForm('breaksForm')
-        .reload()
         .get('[data-test-id="input_mondayBreakStartTime"]')
         .should('exist');
     });
@@ -60,7 +53,6 @@ context('Account Settings - Schedule', () => {
       cy
         .getAndClick('button_mondayBreakTrash')
         .submitForm('breaksForm')
-        .reload()
         .get('[data-test-id="input_mondayBreakStartTime"]')
         .should('not.exist');
     });
@@ -83,7 +75,7 @@ context('Account Settings - Schedule', () => {
 
   context('Online Booking', () => {
     beforeEach(() => {
-      cy.visit('http://localhost:5100/settings/practice/onlinebooking');
+      cy.login('/settings/practice/onlinebooking');
     });
 
     it('select a new widget color', () => {
@@ -100,7 +92,6 @@ context('Account Settings - Schedule', () => {
       cy
         .selectOption('intervalPreferenceForm', 'timeInterval', 'option_0')
         .submitForm('intervalPreferenceForm')
-        .reload()
         .get('[data-test-id=timeInterval]')
         .contains('15');
     });
