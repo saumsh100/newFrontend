@@ -295,13 +295,15 @@ export async function setChatIsPoC(patient, dispatch) {
 
 export function selectChat(id, createChat = null) {
   return async (dispatch, getState) => {
-    const { routing, entities } = getState();
-    const chat =
+    const { routing, entities, chat } = getState();
+    const currentChatId = chat.get('selectedChatId');
+    if (currentChatId === id) return;
+    const chatEntity =
       !createChat && id && entities.getIn(['chats', 'models', id]).delete('textMessages');
     dispatch(setNewChat(createChat));
-    dispatch(setSelectedChat(chat));
+    dispatch(setSelectedChat(chatEntity));
 
-    const patientId = (!!createChat && createChat.patientId) || (id && chat.get('patientId'));
+    const patientId = (!!createChat && createChat.patientId) || (id && chatEntity.get('patientId'));
     if (!!patientId === true) {
       const futurePatient = entities.getIn(['patients', 'models', patientId]);
       await setChatIsPoC(futurePatient, dispatch);

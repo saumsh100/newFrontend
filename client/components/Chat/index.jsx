@@ -232,13 +232,14 @@ class ChatMessage extends Component {
   }
 
   renderChatList() {
+    const { chatsFetching } = this.props;
     return (
       <SBody>
         <List className={styles.chatsList}>
           <InfiniteScroll
             loadMore={this.loadChatList}
             loader={<Loader key="loader" />}
-            hasMore={this.state.moreData}
+            hasMore={this.state.moreData && !chatsFetching}
             initialLoad={false}
             useWindow={false}
             threshold={1}
@@ -369,6 +370,7 @@ class ChatMessage extends Component {
 ChatMessage.defaultProps = {
   match: { params: { chatId: null } },
   wasChatsFetched: false,
+  chatsFetching: false,
   toolbarPosition: TOOLBAR_LEFT,
 };
 
@@ -385,15 +387,19 @@ ChatMessage.propTypes = {
   setTitle: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   wasChatsFetched: PropTypes.bool,
+  chatsFetching: PropTypes.bool,
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
 };
 
 function mapStateToProps({ apiRequests, electron }) {
   const wasChatsFetched =
     apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('wasFetched');
+  const chatsFetching =
+    apiRequests.get('fetchingChats') && apiRequests.get('fetchingChats').get('isFetching');
 
   return {
     wasChatsFetched,
+    chatsFetching,
     toolbarPosition: electron.get('toolbarPosition'),
   };
 }
