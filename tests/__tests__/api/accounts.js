@@ -112,7 +112,7 @@ describe('/api/accounts', () => {
         .get(`${rootUrl}/dsfhds;kjdfs}/configurations`)
         .set('Authorization', `Bearer ${ownerToken}`)
         .set('Accept', 'application/vnd.api+json')
-        .expect(404)
+        .expect(500)
         .then(({ body }) => {
         });
     });
@@ -174,7 +174,7 @@ describe('/api/accounts', () => {
           name: 'QUICK_SYNC_INTERVAL',
           value: 30,
         })
-        .expect(404)
+        .expect(500)
         .then(({ body }) => {
         });
     });
