@@ -297,7 +297,7 @@ export function selectChat(id, createChat = null) {
   return async (dispatch, getState) => {
     const { routing, entities, chat } = getState();
     const currentChatId = chat.get('selectedChatId');
-    if (currentChatId === id) return;
+    if (id && currentChatId === id) return;
     const chatEntity =
       !createChat && id && entities.getIn(['chats', 'models', id]).delete('textMessages');
     dispatch(setNewChat(createChat));
