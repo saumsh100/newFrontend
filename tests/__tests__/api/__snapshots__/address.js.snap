@@ -27,6 +27,7 @@ Object {
         "EnterpriseId": null,
         "address": "d94894b1-84ec-492c-a33e-3f1ad61b9c1c",
         "addressId": "d94894b1-84ec-492c-a33e-3f1ad61b9c1c",
+        "autoRespondOutsideOfficeHours": null,
         "bookingWidgetPrimaryColor": null,
         "bumpInterval": "2 weeks",
         "callrailId": null,

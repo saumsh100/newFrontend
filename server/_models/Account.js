@@ -167,6 +167,11 @@ export default function (sequelize, DataTypes) {
       defaultValue: [],
       allowNull: false,
     },
+
+    autoRespondOutsideOfficeHours: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   Account.associate = (models) => {
