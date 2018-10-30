@@ -216,6 +216,7 @@ patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res,
 
 patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res, next) => {
   const searchString = req.query.patients || '';
+  const { patientId } = req.query;
   const search = searchString.split(' ');
 
   let normPatients;
@@ -253,6 +254,14 @@ patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res
       searchClause.where.$or.push({ workPhoneNumber: { $like: phoneSearch } });
       searchClause.where.$or.push({ otherPhoneNumber: { $like: phoneSearch } });
     }
+  }
+  if (!searchString && !!patientId) {
+    searchClause = {
+      where: {
+        accountId: req.accountId,
+        id: patientId,
+      },
+    };
   }
 
   try {

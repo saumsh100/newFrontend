@@ -288,7 +288,7 @@ export async function setChatIsPoC(patient, dispatch) {
   const { data: poc } = await patient.isCellPhoneNumberPoC();
   const { patients } = await dispatch(fetchEntitiesRequest({
     url: '/api/patients/search',
-    params: { patients: poc.email },
+    params: { patientId: poc.id },
   }));
   return dispatch(setChatPoC(patients[poc.id]));
 }
