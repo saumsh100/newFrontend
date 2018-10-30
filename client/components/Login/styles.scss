@@ -1,4 +1,3 @@
-
 @import '../../ui.scss';
 
 .backDrop {
@@ -11,19 +10,53 @@
   z-index: 199;
 }
 
-.loginForm {
-  width: 300px;
-  padding: 30px;
-  padding-left: 50px;
-  padding-right: 50px;
+.loginForm,
+.location {
+  width: 400px;
+  padding: 30px 50px;
   margin: 0 auto;
-  margin-top: 100px;
   z-index: 200;
+  box-sizing: border-box;
   border-top: $card-border-size $primary-color;
+  @media screen and (min-height: 720px) {
+    transform: translateY(-150px);
+  }
   @media screen and (max-width: $medium-screen-width) {
     width: 80%;
     padding-left: 25px;
     padding-right: 25px;
+  }
+}
+.location {
+  border: 0;
+  margin-bottom: 10px;
+  text-align: center;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  color: $primary-dark;
+  transition: 0.2s ease all;
+  vertical-align: middle;
+  padding: 0;
+  a {
+    font-size: 11.5px;
+    line-height: 14px;
+    padding: 10px;
+    text-decoration: none;
+    color: $primary-dark;
+    display: block;
+  }
+  &:hover {
+    transition: 0.2s ease all;
+    background: rgba(255, 255, 255, 1);
+  }
+  .flag {
+    font-size: 13px;
+    line-height: 1;
+    vertical-align: middle;
+  }
+  .underline {
+    text-decoration: underline;
   }
 }
 
@@ -56,7 +89,6 @@
     &:hover {
       color: $primary-color;
       cursor: pointer;
-    };
+    }
   }
 }
-

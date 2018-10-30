@@ -24,7 +24,10 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
 
   return getSession()
     .then((session) => {
-      const userSession = { ...session, sessionId };
+      const userSession = {
+        ...session,
+        sessionId,
+      };
       localStorage.setItem('session', JSON.stringify(userSession));
 
       const { user } = userSession;
@@ -35,6 +38,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
         email: user.username,
         key: userSession.userId,
         custom: {
+          domain: window.location.hostname,
           plan: userSession.enterprise.plan,
           role: userSession.role,
           accountId: userSession.accountId,
@@ -96,9 +100,15 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
         SubscriptionManager.accountId = accountId;
 
         if (connect) {
-          connectSocketToConnectStore({ dispatch, getState }, socket);
+          connectSocketToConnectStore({
+            dispatch,
+            getState,
+          }, socket);
         } else {
-          connectSocketToStoreLogin({ dispatch, getState }, socket);
+          connectSocketToStoreLogin({
+            dispatch,
+            getState,
+          }, socket);
         }
 
         // dispatch(loginSuccess(decodedToken));
