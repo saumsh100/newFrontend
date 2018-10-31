@@ -16,5 +16,7 @@ publish:
   bucket: carecru-dev-builds
 win:
   publisherName: carecru
+extraMetadata:
+  API_URL: 'https://carecru.cool'
 generateUpdatesFilesForAllChannels: true
 electronVersion: 3.0.0

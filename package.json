@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.26.1",
+  "version": "2.27.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -9,8 +9,8 @@
   },
   "private": true,
   "scripts": {
-    "client:dev:server": "webpack-dev-server --config ./webpack/client/webpack.development.config.js",
-    "client:build:prod": "webpack -p --config ./webpack/client/webpack.production.config.js",
+    "client:dev:server": "export $(cat .env | xargs) && webpack-dev-server --config ./webpack/client/webpack.development.config.js",
+    "client:build:prod": "export $(cat .env | xargs) && webpack -p --config ./webpack/client/webpack.production.config.js",
     "client:watch:widget": "webpack --config ./webpack/client/webpack.widget.config.js --watch",
     "server:watch": "webpack --watch --config ./webpack/server/webpack.config.js",
     "server:build:prod": "webpack --config ./webpack/server/webpack.config.js",

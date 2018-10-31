@@ -10,7 +10,7 @@ import DashboardRoutes from '../routes/Dashboard';
 import '../styles/default.scss';
 
 const DashboardApp = ({ browserHistory, store }) => (
-  <ApolloProvider client={apolloClient}>
+  <ApolloProvider client={apolloClient()}>
     <Provider store={store}>
       <DashboardRoutes history={browserHistory} />
     </Provider>

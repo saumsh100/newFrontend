@@ -14,11 +14,17 @@ const {
   REQUEST_USER_DATA,
   REQUEST_TOOLBAR_POSITION,
   REQUEST_ZOOM_FACTOR,
+  REQUEST_HOST,
+  RESPONSE_HOST,
 } = require('./constants');
 const WindowManager = require('./WindowManager');
 
 ipcMain.on(APP_VERSION_REQUEST, (event) => {
   event.sender.send(APP_VERSION_RESPONSE, app.getVersion());
+});
+
+ipcMain.on(REQUEST_HOST, (event) => {
+  event.sender.send(RESPONSE_HOST, WindowManager.instance.endpoint);
 });
 
 ipcMain.on(SHOW_TOOLBAR, (event, data) => {

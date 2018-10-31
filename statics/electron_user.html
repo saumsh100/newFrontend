@@ -40,7 +40,10 @@
   const OPEN_EXTERNAL_LINK = 'EXTERNAL_LINK';
   const REQUEST_ZOOM_FACTOR = 'REQUEST_ZOOM_FACTOR';
   const ZOOM_FACTOR_CHANGE = 'ZOOM_FACTOR_CHANGE';
+  const REQUEST_HOST = 'REQUEST_HOST';
+  const RESPONSE_HOST = 'RESPONSE_HOST';
   let storedUser = {};
+  let hostUrl = null;
 
   document.addEventListener("mouseover", () => {
     ipcRenderer.send(SHOW_DIALOG);
@@ -55,14 +58,19 @@
   };
 
   document.getElementById('user-profile').onclick = () => {
-    ipcRenderer.send(OPEN_EXTERNAL_LINK, 'https://carecru.io/profile');
+    ipcRenderer.send(OPEN_EXTERNAL_LINK, `${hostUrl}/profile`);
   };
 
+  ipcRenderer.send(REQUEST_HOST);
   ipcRenderer.send(REQUEST_USER_DATA);
 
   ipcRenderer.on(SET_USER_DATA, (e, data) => {
     storedUser = data;
     renderUser();
+  });
+
+  ipcRenderer.on(RESPONSE_HOST, (e, data) => {
+    hostUrl = data;
   });
 
   ipcRenderer.on(ZOOM_FACTOR_CHANGE, (e, data) => {

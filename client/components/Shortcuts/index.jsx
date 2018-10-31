@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { getApiUrl } from '../../util/hub';
 import { List, ListItem } from '../library/List';
 import SingleShortcut from './SingleShortcut';
 import styles from './styles.scss';
@@ -8,15 +9,15 @@ export default function Shortcuts() {
   const SHORTCUTS_LIST = [
     {
       label: 'Schedule',
-      link: 'https://carecru.io/schedule',
+      link: `${getApiUrl()}/schedule`,
     },
     {
       label: 'Reputation Management',
-      link: 'https://carecru.io/reputation',
+      link: `${getApiUrl()}/reputation`,
     },
     {
       label: 'Settings',
-      link: 'https://carecru.io/settings',
+      link: `${getApiUrl()}/settings`,
     },
   ];
 

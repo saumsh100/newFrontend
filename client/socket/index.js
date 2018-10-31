@@ -5,6 +5,25 @@ import { getSocketUrl } from '../util/hub';
 // const URL = 'http://localhost:5000';
 
 // IMPORTANT because the app is served via iframe do not need to connect by URL
-const socket = io.connect(`${getSocketUrl()}/dash`);
+class Socket {
+  constructor() {
+    this.socket = null;
+    this.connect();
+  }
 
-export default socket;
+  connect() {
+    this.socket = io.connect(`${getSocketUrl()}/dash`);
+  }
+
+  disconnect() {
+    this.socket.disconnect();
+  }
+
+  reconnect() {
+    this.disconnect();
+    this.connect();
+  }
+}
+
+export const socketInstance = new Socket();
+export default socketInstance.socket;

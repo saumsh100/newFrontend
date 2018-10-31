@@ -10,7 +10,7 @@ import HubRoutes from '../routes/Hub';
 import '../styles/default.scss';
 
 const HubApp = ({ browserHistory, store }) => (
-  <ApolloProvider client={apolloClient}>
+  <ApolloProvider client={apolloClient()}>
     <Provider store={store}>
       <HubRoutes history={browserHistory} />
     </Provider>

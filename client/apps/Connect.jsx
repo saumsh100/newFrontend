@@ -10,7 +10,7 @@ import ConnectRoutes from '../routes/Connect';
 import '../styles/default.scss';
 
 const ConnectApp = ({ browserHistory, store }) => (
-  <ApolloProvider client={apolloClient}>
+  <ApolloProvider client={apolloClient()}>
     <Provider store={store}>
       <ConnectRoutes history={browserHistory} />
     </Provider>

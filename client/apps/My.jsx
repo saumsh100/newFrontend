@@ -10,7 +10,7 @@ import MyRoutes from '../routes/My';
 import '../styles/default.scss';
 
 const MyApp = ({ browserHistory, store }) => (
-  <ApolloProvider client={apolloClient}>
+  <ApolloProvider client={apolloClient()}>
     <Provider store={store}>
       <MyRoutes history={browserHistory} />
     </Provider>

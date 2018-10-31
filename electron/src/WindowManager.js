@@ -1,13 +1,16 @@
 
 const electron = require('electron');
+const log = require('electron-log');
 const MainBrowserWindow = require('./Windows/MainWindow');
 const UserModalWindow = require('./Windows/UserModal');
 const AboutWindow = require('./Windows/AboutWindow');
 const ScreenManager = require('./ScreenManager');
 const { userSessionStore: Store } = require('./store');
 const config = require('../config');
+const endPoints = require('./endpoints');
 const TrayManager = require('./TrayManager');
 const { LOGOUT_REQUEST } = require('./constants');
+const packageJson = require('../package');
 
 const BrowserWindow = electron.BrowserWindow;
 
@@ -16,12 +19,35 @@ let instance = null;
 class WindowManager {
   constructor() {
     this.isAuth = false;
+    this.locale = electron.app.getLocale();
+    this.endpoint = null;
     this.mainWindow = new MainBrowserWindow();
     this.userModalWindow = new UserModalWindow();
+    this.setEndpoint();
     this.createMainBrowserWindow();
     this.mainWindow.loadUrl();
     TrayManager.instance.showLoggedOutTray();
     ScreenManager.instance.windowManager = this;
+
+    log.info(`Locale set to: ${this.locale}`);
+    log.info(`Endpoint set to: ${this.endpoint}`);
+  }
+
+  /**
+   * Sets the endpoint based on locale data.
+   */
+  setEndpoint() {
+    const { NODE_ENV } = process.env;
+    // As building the executable version of the app is removing complete process.env
+    // we have to store API_URL for the potential dev and staging URLs into package.json
+    // using the electron-builder variable metadata injection (see electron-builder-dev.yaml
+    const { API_URL } = packageJson;
+
+    const envEndpoints = endPoints[NODE_ENV || 'production'];
+    this.endpoint = envEndpoints[this.locale] || envEndpoints.fallback;
+    if (API_URL) {
+      this.endpoint = API_URL;
+    }
   }
 
   /**

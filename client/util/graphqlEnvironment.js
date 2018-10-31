@@ -2,27 +2,31 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'; // eslint-disable-line import/no-extraneous-dependencies
 import ApolloClient from 'apollo-boost';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { isOnDevice, getApiUrl, getSubscriptionUrl } from './hub';
+import { getApiUrl, getSubscriptionUrl } from './hub';
 
 const getTokenDefault = () => localStorage.getItem('token');
-const hostName = `${window.location.protocol}//${window.location.host}`;
 const path = '/graphql';
 
 const socketProtocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
-const uri = !isOnDevice() ? `${hostName}${path}` : getApiUrl() + path;
 
-export const apolloClient = new ApolloClient({
-  uri,
-  request: async (operation) => {
-    const token = getTokenDefault();
-    operation.setContext({ headers: { Authorization: `Bearer ${token}` } });
-  },
-});
+function getUrlWithPath() {
+  return getApiUrl() + path;
+}
+
+export function apolloClient() {
+  return new ApolloClient({
+    url: getUrlWithPath(),
+    request: async (operation) => {
+      const token = getTokenDefault();
+      operation.setContext({ headers: { Authorization: `Bearer ${token}` } });
+    },
+  });
+}
 
 const fetchQuery = (getToken = getTokenDefault) => (operation, variables) => {
   const token = getToken();
 
-  return fetch(uri, {
+  return fetch(getUrlWithPath(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

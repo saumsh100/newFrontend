@@ -2,7 +2,7 @@
 import axios from 'axios';
 import uuid from 'uuid';
 import { Account } from 'CareCruModels';
-import { callrails, vendasta } from '../config/globals';
+import { callrails, vendasta, host, protocol } from '../config/globals';
 import { twilioSetup } from './thirdPartyIntegrations/twilio';
 
 const {
@@ -108,8 +108,8 @@ export async function callRail(account) {
         company_id: company.data.id,
         type: 'Webhooks',
         config: {
-          post_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/post-call`],
-          pre_call_webhook: [`https://carecru.io/callrail/${account.id}/inbound/pre-call`],
+          post_call_webhook: [`${protocol}://${host}/callrail/${account.id}/inbound/post-call`],
+          pre_call_webhook: [`${protocol}://${host}/callrail/${account.id}/inbound/pre-call`],
         },
       },
       json: true,

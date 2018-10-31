@@ -1,7 +1,8 @@
 
+import { host, protocol } from '../server/config/globals';
 import compressUrl from '../server/util/compressUrl';
 
-const URL = 'https://carecru.io/chat';
+const URL = `${protocol}://${host}/chat`;
 
 async function main() {
   try {

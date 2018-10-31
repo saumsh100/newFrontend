@@ -19,7 +19,7 @@ const entries = appEntries(name => [
   `./client/entries/${name}.js`,
 ]);
 
-const { INTERCOM_APP_ID, LOGROCKET_APP_ID, FACEBOOK_APP_ID, FEATURE_FLAG_KEY, GOOGLE_API_KEY } = env;
+const { INTERCOM_APP_ID, LOGROCKET_APP_ID, FACEBOOK_APP_ID, FEATURE_FLAG_KEY, GOOGLE_API_KEY, HOST } = env;
 
 const developmentConfig = merge(baseConfig, {
   entry: entries('app', 'reviews', 'my', 'connect', 'hub'),
@@ -33,7 +33,7 @@ const developmentConfig = merge(baseConfig, {
         API_SERVER_PORT: `"${serverPort}"`,
         FEATURE_FLAG_KEY: `"${FEATURE_FLAG_KEY}"`,
         GOOGLE_API_KEY: `"${GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'}"`,
-        API_URL: JSON.stringify(process.env.API_URL || 'http://localhost:5100'),
+        HOST: `"${HOST}"`,
       },
     }),
 

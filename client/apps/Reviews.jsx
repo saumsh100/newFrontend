@@ -12,7 +12,7 @@ import EnabledFeature from '../components/library/EnabledFeature';
 
 function ReviewsApp({ store, browserHistory }) {
   return (
-    <ApolloProvider client={apolloClient}>
+    <ApolloProvider client={apolloClient()}>
       <Provider store={store}>
         <EnabledFeature
           predicate={({ flags }) => flags.get('booking-widget-v2')}

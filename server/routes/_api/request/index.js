@@ -1,6 +1,7 @@
 
 
 import { Router } from 'express';
+import { namespaces, protocol, host } from '../../../config/globals';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
@@ -10,15 +11,12 @@ import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendi
 import { formatPhoneNumber } from '../../../util/formatters';
 import { setDateToTimezone } from '../../../util/time';
 import { appointmentRequestNoteStringFormatter } from '../../../lib/appointmentRequestNoteStringFormatter';
-
 import {
   sendAppointmentRequested,
   sendAppointmentRequestConfirmed,
   sendAppointmentRequestRejected,
   sendAppointmentRequestedClinic,
 } from '../../../lib/mail';
-
-const { namespaces } = require('../../../config/globals');
 
 const requestsRouter = Router();
 
@@ -121,7 +119,7 @@ requestsRouter.post('/', async (req, res, next) => {
                 },
                 {
                   name: 'ACCOUNT_WEBSITE',
-                  content: 'https://carecru.io/',
+                  content: `${protocol}://${host}/`,
                 },
                 {
                   name: 'ACCOUNT_CLINICNAME',
