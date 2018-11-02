@@ -52,10 +52,15 @@ const countries = [
   },
 ];
 
-export default function PersonalForm(props) {
-  const { patient, handleSubmit, country, setCountry, inputStyle } = props;
-
-  const birthDate = patient.birthDate;
+export default function PersonalForm({
+  patient,
+  handleSubmit,
+  country,
+  setCountry,
+  inputStyle,
+  dropDownStyle,
+}) {
+  const birthDate = patient.get('birthDate');
   const isValidBirthDate = moment(birthDate).isValid()
     ? dateFormatter(birthDate, '', 'MM/DD/YYYY')
     : '';
@@ -69,42 +74,47 @@ export default function PersonalForm(props) {
     email: patient.get('email'),
     firstName: patient.get('firstName'),
     lastName: patient.get('lastName'),
+    zipCode: '',
+    country: '',
+    city: '',
+    street: '',
+    state: '',
+    ...patient.get('address'),
   };
 
-  if (patient.get('address')) {
-    const currentPatient = patient.get('address');
-
-    initialValues.street = currentPatient.street;
-    initialValues.city = currentPatient.city;
-    initialValues.country = currentPatient.country;
-    initialValues.zipCode = currentPatient.zipCode;
-    initialValues.state = currentPatient.state;
-  }
-
-  let states = usStates;
-
-  if (country === 'CA') {
-    states = caProv;
-  }
-
-  const theme = inputStyle;
+  const states = country === 'CA' ? caProv : usStates;
+  const handlePreSubmit = (data) => {
+    const values = {
+      ...data,
+      mobilePhoneNumber: data.mobilePhoneNumber || null,
+      isSyncedWithPms: false,
+      address: {
+        zipCode: data.zipCode,
+        country: data.country,
+        city: data.city,
+        street: data.street,
+        state: data.state,
+      },
+    };
+    return handleSubmit(values);
+  };
 
   return (
     <Form
       form="Form2"
-      onSubmit={handleSubmit}
+      onSubmit={handlePreSubmit}
       className={styles.formContainer}
       initialValues={initialValues}
       ignoreSaveButton={!isResponsive()}
     >
       <Grid className={styles.grid}>
-        <div className={styles.formHeader}> Basic </div>
+        <div className={styles.formHeader}> Basic</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="firstName" label="First Name" theme={theme} />
+            <Field name="firstName" label="First Name" theme={inputStyle} />
           </Col>
           <Col xs={6}>
-            <Field name="lastName" label="Last Name" theme={theme} />
+            <Field name="lastName" label="Last Name" theme={inputStyle} />
           </Col>
           <Col xs={6} className={styles.colLeft}>
             <Field
@@ -112,7 +122,7 @@ export default function PersonalForm(props) {
               label="Gender"
               component="DropdownSelect"
               options={optionsGender}
-              theme={props.dropDownStyle}
+              theme={dropDownStyle}
             />
           </Col>
           <Col xs={6}>
@@ -121,17 +131,17 @@ export default function PersonalForm(props) {
               validate={[validateBirthdate]}
               name="birthDate"
               label={isResponsive() ? 'Birth Date ' : 'Birth Date (MM/DD/YYYY)'}
-              theme={theme}
+              theme={inputStyle}
             />
           </Col>
         </Row>
-        <div className={styles.formHeader}> Address </div>
+        <div className={styles.formHeader}> Address</div>
         <Row className={styles.row}>
           <Col xs={12}>
-            <Field name="street" label="Address Line 1" theme={theme} />
+            <Field name="street" label="Address Line 1" theme={inputStyle} />
           </Col>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="city" label="City" theme={theme} />
+            <Field name="city" label="City" theme={inputStyle} />
           </Col>
           <Col xs={6}>
             <Field
@@ -139,7 +149,7 @@ export default function PersonalForm(props) {
               label="Country"
               component="DropdownSelect"
               options={countries}
-              theme={props.dropDownStyle}
+              theme={dropDownStyle}
               onChange={(e, value) => {
                 setCountry(value);
               }}
@@ -150,7 +160,7 @@ export default function PersonalForm(props) {
               name="zipCode"
               label={isResponsive() ? 'Zip Code' : 'Postal Code / Zip Code'}
               maxLength="6"
-              theme={theme}
+              theme={inputStyle}
               validate={[value => validateZipcodePostal(value, country)]}
             />
           </Col>
@@ -160,23 +170,23 @@ export default function PersonalForm(props) {
               label="State"
               component="DropdownSelect"
               options={states}
-              theme={props.dropDownStyle}
+              theme={dropDownStyle}
             />
           </Col>
         </Row>
-        <div className={styles.formHeader}> Contact </div>
+        <div className={styles.formHeader}> Contact</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={theme} />
+            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={inputStyle} />
           </Col>
           <Col xs={6}>
-            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={theme} />
+            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={inputStyle} />
           </Col>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={theme} />
+            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={inputStyle} />
           </Col>
           <Col xs={6}>
-            <Field name="email" label="Email" theme={theme} />
+            <Field name="email" label="Email" theme={inputStyle} />
           </Col>
         </Row>
       </Grid>

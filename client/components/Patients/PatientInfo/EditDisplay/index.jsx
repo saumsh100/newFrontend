@@ -53,9 +53,7 @@ class EditDisplay extends Component {
   }
 
   setCountry(value) {
-    this.setState({
-      country: value,
-    });
+    this.setState({ country: value });
   }
 
   handleTabChange(index) {
@@ -64,19 +62,6 @@ class EditDisplay extends Component {
 
   handleSubmit(values) {
     const { updateEntityRequest, patient, reinitializeState } = this.props;
-
-    if (values.mobilePhoneNumber === '') {
-      values.mobilePhoneNumber = null;
-    }
-
-    values.isSyncedWithPms = false;
-    values.address = {};
-    values.address.zipCode = values.zipCode;
-    values.address.country = values.country;
-    values.address.city = values.city;
-    values.address.street = values.street;
-    values.address.state = values.state;
-
     const valuesMap = Map(values);
     const modifiedPatient = patient.merge(valuesMap);
 
@@ -84,12 +69,8 @@ class EditDisplay extends Component {
       key: 'patients',
       model: modifiedPatient,
       alert: {
-        success: {
-          body: `${patient.get('firstName')}'s Info Updated`,
-        },
-        error: {
-          body: `${patient.get('firstName')}'s Info Not Updated`,
-        },
+        success: { body: `${patient.get('firstName')}'s Info Updated` },
+        error: { body: `${patient.get('firstName')}'s Info Not Updated` },
       },
       url: `/api/patients/${patient.get('id')}`,
     }).then(() => {
@@ -230,7 +211,11 @@ class EditDisplay extends Component {
         label: 'Save',
         onClick: this.handleSubmit,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: `Form${this.state.tabIndex + 1}`, removePristineCheck: true },
+        props: {
+          color: 'blue',
+          form: `Form${this.state.tabIndex + 1}`,
+          removePristineCheck: true,
+        },
       },
     ];
 
