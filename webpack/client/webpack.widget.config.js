@@ -24,8 +24,6 @@ const developmentConfig = merge(baseConfig, {
         FEATURE_FLAG_KEY: `"${process.env.FEATURE_FLAG_KEY || '5a332a3c95e24c205546f0df'}"`,
       },
     }),
-
-    new webpack.LoaderOptionsPlugin({ debug: true }),
   ],
 });
 

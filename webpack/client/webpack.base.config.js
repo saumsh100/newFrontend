@@ -1,4 +1,5 @@
 
+const webpack = require('webpack');
 const postcssPresetEnv = require('postcss-preset-env');
 const path = require('path');
 const { projectRoot } = require('../utils');
@@ -25,6 +26,10 @@ module.exports = {
   },
 
   context: projectRoot,
+
+  plugins: [
+    new webpack.LoaderOptionsPlugin({ debug: isDevMode }),
+  ],
 
   module: {
     rules: [
