@@ -34,9 +34,10 @@ const makeApptData = (data = {}) => Object.assign({
   practitionerId,
 }, data);
 
-const makePatientData = (data = {}) => Object.assign({
+const makePatientData = (data = {}) => ({
   accountId,
-}, data);
+  ...data,
+});
 
 const makeSentRecallData = (data = {}) => Object.assign({
   // Doesnt even have to match recall for this test
@@ -47,12 +48,10 @@ const makeSentRecallData = (data = {}) => Object.assign({
 }, data);
 
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
-const dates = (y, m, d, h) => {
-  return {
-    startDate: date(y, m, d, h),
-    endDate: date(y, m, d, h + 1),
-  };
-};
+const dates = (y, m, d, h) => ({
+  startDate: date(y, m, d, h),
+  endDate: date(y, m, d, h + 1),
+});
 
 describe('Recalls Calculation Library', () => {
   beforeEach(async () => {
@@ -104,6 +103,46 @@ describe('Recalls Calculation Library', () => {
 
       test('should be a function', () => {
         expect(typeof mapPatientsToRecalls).toBe('function');
+      });
+
+      test('shold not send recalls if the due date is before last date', async () => {
+        patients = await Patient.bulkCreate([
+          makePatientData({
+            firstName: 'Old',
+            lastName: 'Patient',
+            status: 'Active',
+            email: 'test1@test.com',
+            dueForHygieneDate: date(2016, 1, 5, 9),
+            lastHygieneDate: date(2017, 1, 5, 9),
+          }),
+        ]);
+
+        const [
+          oneMonthRecalls,
+          twoMonthRecalls,
+        ] = await mapPatientsToRecalls({
+          recalls: [
+            {
+              interval: '1 months',
+              primaryTypes: ['email'],
+            },
+            {
+              interval: '2 months',
+              primaryTypes: ['email'],
+            },
+          ],
+
+          account: {
+            id: accountId,
+            recallBuffer: '1 days',
+          },
+
+          startDate: date(2016, 10, 5, 8),
+          endDate: date(2018, 10, 5, 8),
+        });
+
+        expect(oneMonthRecalls.success).toHaveLength(1);
+        expect(twoMonthRecalls.success).toHaveLength(0);
       });
 
       test('make sure with multiple recalls that are valid. Only the most recent returns', async () => {
@@ -249,7 +288,10 @@ describe('Recalls Calculation Library', () => {
         ]);
 
         appointments = await Appointment.bulkCreate([
-          makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 9) }),
+          makeApptData({
+            patientId: patients[0].id,
+            ...dates(2016, 7, 5, 9),
+          }),
         ]);
       });
 
@@ -279,7 +321,6 @@ describe('Recalls Calculation Library', () => {
         expect(result[2].primaryTypes[0]).toBe('email');
         expect(result[3].primaryTypes[0]).toBe('email');
       });
-
     });
 
     describe('#getRecallsOutboxList', () => {
@@ -376,11 +417,7 @@ describe('Recalls Calculation Library', () => {
       });
 
       test('should return one with duplicates with it being hygiene', async () => {
-        const patient1 = {
-          get: () => {
-            return { id: '5' };
-          },
-        };
+        const patient1 = { get: () => ({ id: '5' }) };
 
         const result = removeRecallDuplicates([patient1], [patient1]);
 
@@ -428,18 +465,8 @@ describe('Recalls Calculation Library', () => {
       });
 
       test('should return two with duplicates with one hygiene and one recall that are unique patients', async () => {
-        const patient1 = {
-          get: () => {
-            return { id: '5' };
-          },
-        };
-
-        const patient2 = {
-          get: () => {
-            return { id: '7' };
-          },
-        };
-
+        const patient1 = { get: () => ({ id: '5' }) };
+        const patient2 = { get: () => ({ id: '7' }) };
         const result = removeRecallDuplicates([patient1], [patient2]);
 
         expect(result.length).toBe(2);
@@ -447,7 +474,6 @@ describe('Recalls Calculation Library', () => {
         expect(result[1].hygiene).toBe(false);
       });
     });
-
   });
 });
 

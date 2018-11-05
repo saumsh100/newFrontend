@@ -7,6 +7,7 @@ import { generateOrganizedPatients, organizeForOutbox } from '../comms/util';
 import { sortIntervalAscPredicate, convertIntervalStringToObject } from '../../util/time';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import isUndefined from 'lodash/isUndefined';
+import { sequelize } from '../../_models';
 
 // 1 day
 const DEFAULT_RECALL_BUFFER = 86400;
@@ -234,6 +235,7 @@ export async function getPatientsForRecallTouchPoint({
       ...baseWhereQuery,
       dueForHygieneDate: {
         $not: null,
+        $gt: sequelize.col('lastHygieneDate'),
         $gte: start,
         $lt: end,
       },
@@ -253,6 +255,7 @@ export async function getPatientsForRecallTouchPoint({
       ...baseWhereQuery,
       dueForRecallExamDate: {
         $not: null,
+        $gt: sequelize.col('lastRecallDate'),
         $gte: start,
         $lt: end,
       },
