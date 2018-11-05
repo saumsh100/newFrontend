@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`generate final daily schedule tests generateDailySchedulesForPractitioners should format the result from produceFinalDailySchedulesMap 1`] = `
+Object {
+  "2018-01-01": Object {
+    "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+      "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+      "breaks": Array [],
+      "createdAt": "2017-07-20T00:14:30.932Z",
+      "endTime": "2018-01-02T01:00:00.000Z",
+      "id": "3330f60a-ec83-431f-a67e-28142ab43caa",
+      "isAdvanced": false,
+      "isClosed": true,
+      "isDailySchedule": false,
+      "isModifiedByTimeOff": false,
+      "startTime": "2018-01-01T16:00:00.000Z",
+    },
+  },
+  "2018-01-02": Object {
+    "497ff59a-4bae-4013-bdce-b6b5be91a1f5": Object {
+      "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+      "breaks": Array [],
+      "createdAt": "2017-07-20T00:14:30.932Z",
+      "endTime": "2018-01-02T01:00:00.000Z",
+      "id": "3330f60a-ec83-431f-a67e-28142ab43caa",
+      "isAdvanced": false,
+      "isClosed": true,
+      "isDailySchedule": false,
+      "isModifiedByTimeOff": false,
+      "startTime": "2018-01-01T16:00:00.000Z",
+    },
+  },
+}
+`;

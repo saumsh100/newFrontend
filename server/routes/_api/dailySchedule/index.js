@@ -1,8 +1,11 @@
+
+import { Practitioner, DailySchedule } from 'CareCruModels';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
-import { DailySchedule } from '../../../_models';
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { isPMSIdViolation } from '../../util/handleSequelizeError';
+import generateDailySchedulesForPractitioners from '../../../lib/schedule/produceFinalDailySchedulesForPractitioners';
+import StatusError from '../../../util/StatusError';
 
 const dailyScheduleRouter = require('express').Router();
 const checkPermissions = require('../../../middleware/checkPermissions');
@@ -114,5 +117,46 @@ dailyScheduleRouter.delete('/:dailyScheduleId', checkPermissions('dailySchedules
     return next(e);
   }
 });
+
+/**
+ * GET /finalDailySchedules
+ * Retrieve the final daily schedules for practitioners in the same practice for a period of time.
+ * The params are:
+ * practitionerIds: array of the practitioner Ids. Eg: ["uuid1", "uuid2"]
+ * fromDate: the startDate of the time range. Eg: 2018-01-01
+ * toDate: optional, the endDate of the time range. If not provided, the time range is just one day.
+ */
+dailyScheduleRouter.get('/finalDailySchedules', async ({ query, accountId }, res, next) => {
+  const { fromDate, toDate, practitionerIds } = query;
+  if (!practitionerIds || !fromDate) {
+    next(new StatusError(StatusError.BAD_REQUEST, 'Please provide at least fromDate and practitionerIds'));
+  }
+
+  try {
+    const practitioners = await findPractitionersByIds(JSON.parse(practitionerIds), accountId);
+    res.send(await generateDailySchedulesForPractitioners(practitioners, fromDate, toDate || fromDate));
+  } catch (e) {
+    return next(e);
+  }
+});
+
+async function findPractitionersByIds(practitionerIds, accountId) {
+  return Practitioner.findAll({
+    attributes: [
+      'id',
+      'accountId',
+      'pmsId',
+      'firstName',
+      'lastName',
+      'isCustomSchedule',
+      'weeklyScheduleId',
+    ],
+    where: {
+      id: practitionerIds,
+      accountId,
+    },
+    raw: true,
+  });
+}
 
 module.exports = dailyScheduleRouter;
