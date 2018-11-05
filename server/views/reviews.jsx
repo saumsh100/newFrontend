@@ -40,7 +40,8 @@ class Reviews extends React.Component {
             }}
           />
 
-          {helpers.injectJS('common.js')}
+          {helpers.injectJS('vendor')}
+          {helpers.injectJS('common')}
           {helpers.injectJS('reviews')}
         </body>
       </html>

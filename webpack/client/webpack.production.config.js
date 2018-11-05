@@ -1,13 +1,22 @@
 
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
-const { appEntries } = require('../utils');
 
-const entries = appEntries(name => ['babel-polyfill', `./client/entries/${name}.js`]);
+const entryPath = name => `./client/entries/${name}.js`;
 
 const developmentConfig = merge(baseConfig, {
-  entry: entries('app', 'reviews', 'my', 'cc', 'connect', 'hub'),
+  mode: 'production',
+
+  entry: {
+    app: entryPath('app'),
+    reviews: entryPath('reviews'),
+    my: entryPath('my'),
+    cc: entryPath('cc'),
+    connect: entryPath('connect'),
+    hub: entryPath('hub'),
+  },
 
   plugins: [
     new webpack.DefinePlugin({
@@ -20,17 +29,30 @@ const developmentConfig = merge(baseConfig, {
         HOST: JSON.stringify(process.env.HOST),
       },
     }),
-
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-    }),
-
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      chunks: ['app', 'reviews', 'my', 'connect', 'hub'],
-    }),
   ],
+
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        sourceMap: false,
+        parallel: true,
+        exclude: /node_modules/,
+        cache: './.uglify_cache/'
+      }),
+    ],
+    splitChunks: {
+      chunks: 'all',
+      name: 'common',
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          chunks: 'all',
+          test: /node_modules/,
+          priority: 20
+        }
+      }
+    }
+  }
 });
 
-module.exports = developmentConfig;
+module.exports = () => developmentConfig;

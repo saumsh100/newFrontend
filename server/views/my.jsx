@@ -25,7 +25,8 @@ class My extends React.Component {
         <body style={{ fontFamily: 'Gotham-Book' }} className="MyPatientApp">
           {/* Regions */}
           <div id="root" />
-          {helpers.injectJS('common.js')}
+          {helpers.injectJS('vendor')}
+          {helpers.injectJS('common')}
           {helpers.injectJS('my')}
         </body>
       </html>

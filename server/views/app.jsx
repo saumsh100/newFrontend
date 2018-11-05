@@ -35,7 +35,8 @@ const App = () => (
               window.__ACTIVE_ACCOUNT__ = {{{activeAccount}}};
           </script> */}
 
-      {helpers.injectJS('common.js')}
+      {helpers.injectJS('vendor')}
+      {helpers.injectJS('common')}
       {helpers.injectJS('app')}
     </body>
   </html>

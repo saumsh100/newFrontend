@@ -76,7 +76,7 @@ describe('Account Settings - Practice', () => {
         .selectOption('addressSettingsForm', 'timezone', 'option_114')
         .submitForm('addressSettingsForm')
         .visit('http://localhost:5100/settings/practice/hours')
-        .wait(1000)
+        .wait(2000)
         .get('[data-test-id="dropDown_monday_startTime"]')
         .contains('12:00 PM');
     });

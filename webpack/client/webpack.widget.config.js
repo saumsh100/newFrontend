@@ -6,11 +6,14 @@ const { appEntries } = require('../utils');
 
 const entries = appEntries(name => [
   'babel-polyfill',
+  'react-hot-loader/patch',
   `./client/entries/${name}.js`,
 ]);
 
 const developmentConfig = merge(baseConfig, {
   entry: entries('cc'),
+
+  mode: 'production',
 
   plugins: [
     new webpack.DefinePlugin({

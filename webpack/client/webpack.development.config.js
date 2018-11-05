@@ -2,6 +2,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
 const devServer = require('./dev-server.config');
 const { appEntries, readEnv } = require('../utils');
@@ -22,6 +23,7 @@ const entries = appEntries(name => [
 const { INTERCOM_APP_ID, LOGROCKET_APP_ID, FACEBOOK_APP_ID, FEATURE_FLAG_KEY, GOOGLE_API_KEY, HOST } = env;
 
 const developmentConfig = merge(baseConfig, {
+  mode: 'development',
   entry: entries('app', 'reviews', 'my', 'connect', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
@@ -41,11 +43,7 @@ const developmentConfig = merge(baseConfig, {
 
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
-
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-      chunks: ['app', 'reviews', 'my', 'connect', 'hub'],
-    }),
+    new HardSourceWebpackPlugin(),
 
     new BrowserSyncPlugin(
       // BrowserSync options
@@ -67,7 +65,22 @@ const developmentConfig = merge(baseConfig, {
     ),
   ],
 
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      name: 'common',
+      cacheGroups: {
+        vendor: {
+          name: 'vendor',
+          chunks: 'all',
+          test: /node_modules/,
+          priority: 20
+        }
+      }
+    }
+  },
+
   devServer,
 });
 
-module.exports = developmentConfig;
+module.exports = () => developmentConfig;

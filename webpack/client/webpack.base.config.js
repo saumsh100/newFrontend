@@ -5,12 +5,17 @@ const { projectRoot } = require('../utils');
 
 const localIdentName = '[name]__[local]___[hash:base64:5]';
 
+
+const isDevMode = process.env.NODE_ENV === 'development';
+
 module.exports = {
   cache: true,
   devtool: 'cheap-module-source-map',
 
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.mjs', '.js', '.jsx'],
+    symlinks: false,
+    cacheWithContext: false
   },
 
   output: {
@@ -24,14 +29,19 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto",
+      },
+      {
         test: /\.jsx?$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true,
           },
         },
-        exclude: /node_modules/,
       },
       {
         test: /\.scss$/,
@@ -41,7 +51,7 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true,
-              sourceMap: true,
+              sourceMap: isDevMode,
               minimize: true,
               localIdentName,
             },
@@ -62,7 +72,7 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               outputStyle: 'expanded',
-              sourceMap: true,
+              sourceMap: isDevMode,
             },
           },
         ],
@@ -88,7 +98,7 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: true,
-              sourceMap: true,
+              sourceMap: isDevMode,
               minimize: true,
               localIdentName,
             },

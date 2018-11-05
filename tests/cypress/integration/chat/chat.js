@@ -4,7 +4,8 @@ describe('Chat Tests', () => {
     cy.login();
     cy.getAndClick('dropDown_accounts')
       .get('[data-test-id="option_Liberty Chiropractic"]')
-      .click({ force: true });
+      .click({ force: true })
+      .wait(1000);
   });
 
   beforeEach(() => {

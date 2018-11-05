@@ -24,7 +24,8 @@ class Connect extends React.Component {
           {/* Regions */}
           <div id="root" />
 
-          {helpers.injectJS('common.js')}
+          {helpers.injectJS('vendor')}
+          {helpers.injectJS('common')}
           {helpers.injectJS('connect')}
         </body>
       </html>

@@ -68,7 +68,7 @@ Cypress.Commands.add('login', (path = '/', username, secret) => {
   })
     .then(resp => window.localStorage.setItem('token', resp.body.token))
     .visit(`${Cypress.env('siteURL')}${path}`)
-    .wait(1000);
+    .wait(1500);
 });
 
 Cypress.Commands.add('sendTextMessage', (patientId, chatId, mobilePhoneNumber, accountId) => cy.request({

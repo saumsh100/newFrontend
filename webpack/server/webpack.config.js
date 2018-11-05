@@ -16,10 +16,11 @@ const externalModules = nodeModulesPath =>
 
 const entries = appEntries(name => ['babel-polyfill', `./server/bin/${name}.js`]);
 
-module.exports = {
+module.exports = () => ({
   name: 'server',
   target: 'node',
   devtool: 'cheap-module-source-map',
+  mode: process.env.NODE_ENV,
 
   context: projectRoot,
 
@@ -67,14 +68,13 @@ module.exports = {
         test: /\.css$/,
         use: ['isomorphic-style-loader', 'css-loader', 'sass-loader'],
       },
-      {
-        test: /\.scss$/,
-        use: ['isomorphic-style-loader', 'css-loader', 'sass-loader'],
-      },
     ],
   },
 
-  externals: Object.assign({}, externalModules(path.resolve(projectRoot, 'node_modules')), { sharp: 'commonjs sharp' }),
+  externals: {
+    ...externalModules(path.resolve(projectRoot, 'node_modules')),
+    sharp: 'commonjs sharp',
+  },
 
   node: {
     console: false,
@@ -92,4 +92,8 @@ module.exports = {
     }),
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
   ],
-};
+
+  watchOptions: {
+    ignored: /node_modules/,
+  },
+});
