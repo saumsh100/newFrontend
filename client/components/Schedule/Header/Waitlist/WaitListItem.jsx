@@ -57,7 +57,7 @@ export default function WaitListItem({
     const dayWeekKeys = Object.keys(daysOfTheWeek);
     const checkIfAnyTrue = dayWeekKeys.every(k => !daysOfTheWeek[k]);
 
-    const patientPhone = isPatientUser ? 'phoneNumber' : 'mobilePhoneNumber';
+    const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 
     let nextAppt = null;
 
@@ -73,9 +73,7 @@ export default function WaitListItem({
       [styles.removeBorder]: removeBorder,
     });
 
-    const checkboxStyle = classNames(styles.checkBox, {
-      [styles.checked]: selected,
-    });
+    const checkboxStyle = classNames(styles.checkBox, { [styles.checked]: selected });
 
     const patientInfoSectionHub = isHub() && (
       <div className={styles.heading}>

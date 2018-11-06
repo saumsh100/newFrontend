@@ -52,17 +52,17 @@ export default function AppointmentInfo(props) {
           {popoverDataSections('Date', appointmentDate)}
           {popoverDataSections('Name', `${patient.firstName} ${lastName}`)}
 
-          {patient.mobilePhoneNumber || patient.email ? (
+          {patient.cellPhoneNumber || patient.email ? (
             <div className={styles.container}>
               <div className={styles.subHeader}>Contact Info</div>
 
               <div className={styles.data}>
-                {patient.mobilePhoneNumber && <Icon icon="phone" size={0.9} type="solid" />}
+                {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} type="solid" />}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
-                    ? formatPhoneNumber(patient.mobilePhoneNumber)
-                    : patient.mobilePhoneNumber}
-                  {patient.mobilePhoneNumber && (
+                  {patient.cellPhoneNumber && patient.cellPhoneNumber[0] === '+'
+                    ? formatPhoneNumber(patient.cellPhoneNumber)
+                    : patient.cellPhoneNumber}
+                  {patient.cellPhoneNumber && (
                     <PointOfContactBadge patientId={patient.id} channel="phone" />
                   )}
                 </div>

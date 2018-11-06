@@ -6,6 +6,7 @@ import { Grid, Row, Col, PointOfContactBadge } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import PatientModel from '../../../../entities/models/Patient';
+import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import styles from './styles.scss';
 
 const genderMap = {
@@ -41,16 +42,16 @@ export default function About({ patient }) {
           </Row>
           <Row className={styles.otherSection}>
             <Col xs={12}>
-              <Content title="Mobile Phone" value={patient.mobilePhoneNumber || 'n/a'}>
+              <Content
+                title="Cellphone Number"
+                value={FormatPhoneNumber(patient.cellPhoneNumber) || 'n/a'}
+              >
                 {() =>
-                  patient.mobilePhoneNumber && (
+                  patient.cellPhoneNumber && (
                     <PointOfContactBadge patientId={patient.id} channel="phone" />
                   )
                 }
               </Content>
-            </Col>
-            <Col xs={12}>
-              <Content title="Home Phone" value={patient.homePhoneNumber || 'n/a'} />
             </Col>
             <Col xs={12}>
               <Content title="Email" value={patient.email || 'n/a'}>

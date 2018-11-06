@@ -25,18 +25,16 @@ const patientType = new GraphQLObjectType({
     },
     isPhonePoc: {
       type: GraphQLBoolean,
-      resolve: async (patient) => {
-        const { mobilePhoneNumber: cellPhoneNumber, accountId } = patient;
+      resolve: async ({ cellPhoneNumber, accountId, id }) => {
         const poc = await getPatientBasedOnFieldsProvided(accountId, { cellPhoneNumber });
-        return !!poc && poc.id === patient.id;
+        return !!poc && poc.id === id;
       },
     },
     isEmailPoc: {
       type: GraphQLBoolean,
-      resolve: async (patient) => {
-        const { email, accountId } = patient;
+      resolve: async ({ email, accountId, id }) => {
         const poc = await getPatientBasedOnFieldsProvided(accountId, { email });
-        return !!poc && poc.id === patient.id;
+        return !!poc && poc.id === id;
       },
     },
   }),

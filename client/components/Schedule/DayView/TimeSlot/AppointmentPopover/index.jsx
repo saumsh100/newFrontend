@@ -61,14 +61,11 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
           {patient.mobilePhoneNumber || patient.email ? (
             <div className={styles.container}>
               <div className={styles.subHeader}>Patient Info</div>
-
               <div className={styles.data}>
-                {patient.mobilePhoneNumber && <Icon icon="phone" size={0.9} />}
+                {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} />}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber && patient.mobilePhoneNumber[0] === '+'
-                    ? FormatPhoneNumber(patient.mobilePhoneNumber)
-                    : patient.mobilePhoneNumber}
-                  {patient.mobilePhoneNumber && (
+                  {patient.cellPhoneNumber && FormatPhoneNumber(patient.cellPhoneNumber)}
+                  {patient.cellPhoneNumber && (
                     <PointOfContactBadge patientId={patient.id} channel="phone" />
                   )}
                 </div>
@@ -89,7 +86,7 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
             </div>
           )}
 
-          {note ? (
+          {note && (
             <div className={styles.container}>
               <div className={styles.subHeader}>Note</div>
               <div className={styles.data}>
@@ -100,7 +97,7 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
         </SBody>
 
         <SFooter className={styles.footer}>

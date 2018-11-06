@@ -23,7 +23,7 @@ export default function PatientProfile(props) {
 
   const lastName = age ? `${patient.lastName},` : patient.lastName;
 
-  const patientPhone = isPatientUser ? 'phoneNumber' : 'mobilePhoneNumber';
+  const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 
   const emptyData = subHeader => (
     <div className={styles.container}>

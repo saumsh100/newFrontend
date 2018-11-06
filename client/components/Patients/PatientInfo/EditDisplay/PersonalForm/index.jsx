@@ -70,6 +70,7 @@ export default function PersonalForm({
     birthDate: isValidBirthDate,
     homePhoneNumber: patient.get('homePhoneNumber'),
     mobilePhoneNumber: patient.get('mobilePhoneNumber'),
+    otherPhoneNumber: patient.get('otherPhoneNumber'),
     workPhoneNumber: patient.get('workPhoneNumber'),
     email: patient.get('email'),
     firstName: patient.get('firstName'),
@@ -177,16 +178,19 @@ export default function PersonalForm({
         <div className={styles.formHeader}> Contact</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={inputStyle} />
+            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={theme} />
           </Col>
           <Col xs={6}>
-            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={inputStyle} />
+            <Field name="otherPhoneNumber" type="tel" label="Other Phone Number" theme={theme} />
           </Col>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={inputStyle} />
+            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={theme} />
           </Col>
           <Col xs={6}>
-            <Field name="email" label="Email" theme={inputStyle} />
+            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={theme} />
+          </Col>
+          <Col xs={12}>
+            <Field name="email" label="Email" theme={theme} />
           </Col>
         </Row>
       </Grid>

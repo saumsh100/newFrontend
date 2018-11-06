@@ -39,22 +39,31 @@ export default function PersonalTab(props) {
       </Row>
       <div className={styles.subHeader}> Contact </div>
       <Row className={styles.row}>
-        <Col xs={6} className={styles.paddingCol}>
-          <InfoDump label="HOME NUMBER" data={formatPhoneNumber(patient.homePhoneNumber)} />
-        </Col>
-        <Col xs={6} className={styles.paddingCol}>
-          <InfoDump label="MOBILE NUMBER" data={formatPhoneNumber(patient.mobilePhoneNumber)}>
+        <Col xs={12} className={styles.cellPhoneRow}>
+          <InfoDump label="Cellphone NUMBER" data={formatPhoneNumber(patient.cellPhoneNumber)}>
             {() =>
-              patient.mobilePhoneNumber && (
+              patient.cellPhoneNumber && (
                 <PointOfContactBadge patientId={patient.id} channel="phone" />
               )
             }
           </InfoDump>
         </Col>
-        <Col xs={6}>
+        <Col xs={6} className={styles.paddingPhones}>
+          <InfoDump
+            label="Mobile Phone NUMBER"
+            data={formatPhoneNumber(patient.mobilePhoneNumber)}
+          />
+        </Col>
+        <Col xs={6} className={styles.paddingPhones}>
+          <InfoDump label="Other Phone NUMBER" data={formatPhoneNumber(patient.otherPhoneNumber)} />
+        </Col>
+        <Col xs={6} className={styles.paddingPhones}>
+          <InfoDump label="HOME NUMBER" data={formatPhoneNumber(patient.homePhoneNumber)} />
+        </Col>
+        <Col xs={6} className={styles.paddingPhones}>
           <InfoDump label="WORK NUMBER" data={formatPhoneNumber(patient.workPhoneNumber)} />
         </Col>
-        <Col xs={6}>
+        <Col xs={6} className={styles.emailRow}>
           <InfoDump label="EMAIL" data={patient.email} type="email">
             {() => patient.email && <PointOfContactBadge patientId={patient.id} channel="email" />}
           </InfoDump>

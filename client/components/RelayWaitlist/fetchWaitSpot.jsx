@@ -28,7 +28,7 @@ const query = graphql`
               firstName
               lastName
               phoneNumber
-              mobilePhoneNumber
+              cellPhoneNumber
               email
               birthDate
               gender
@@ -52,9 +52,7 @@ const query = graphql`
   }
 `;
 
-export default function FetchWaitSpot(props) {
-  const { render, ...rest } = props;
-
+export default function FetchWaitSpot({ render, ...rest }) {
   return (
     <QueryRenderer
       environment={graphQLEnvironment}
@@ -64,6 +62,4 @@ export default function FetchWaitSpot(props) {
   );
 }
 
-FetchWaitSpot.propTypes = {
-  render: PropTypes.func.isRequired,
-};
+FetchWaitSpot.propTypes = { render: PropTypes.func.isRequired };

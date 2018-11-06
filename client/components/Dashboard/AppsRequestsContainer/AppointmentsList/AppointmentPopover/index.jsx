@@ -1,34 +1,37 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import {
-  Card,
   Avatar,
-  Icon,
-  SContainer,
-  SHeader,
-  SBody,
-  SFooter,
   Button,
+  Card,
+  Icon,
+  SBody,
+  SContainer,
+  SFooter,
+  SHeader,
   TextArea,
 } from '../../../../library';
 import { FormatPhoneNumber } from '../../../../library/util/Formatters';
+import Patient from '../../../../../entities/collections/patients';
+import Appointment from '../../../../../entities/collections/appointments';
+import Practitioner from '../../../../../entities/collections/practitioners';
+import Chair from '../../../../../entities/collections/chairs';
+import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
-export default function AppointmentPopover(props) {
-  const {
-    patient, appointment, age, practitioner, chair,
-  } = props;
-
+export default function AppointmentPopover({
+  patient,
+  appointment,
+  age,
+  practitioner,
+  chair,
+  closePopover,
+  handleEditAppointment,
+}) {
   const { startDate, endDate, note } = appointment;
 
-  const appointmentDate = moment(startDate).format('dddd LL');
   const lastName = age ? `${patient.lastName},` : patient.lastName;
-
-  const textAreaTheme = {
-    group: styles.textAreaGroup,
-  };
 
   return (
     <Card className={styles.card} noBorder id="appPopOver">
@@ -38,42 +41,42 @@ export default function AppointmentPopover(props) {
           <div className={styles.header_text}>
             {patient.firstName} {lastName} {age}
           </div>
-          <div className={styles.closeIcon} onClick={props.closePopover}>
+          <div
+            className={styles.closeIcon}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => e.keyCode === '13' && closePopover}
+            onClick={closePopover}
+          >
             <Icon icon="times" />
           </div>
         </SHeader>
         <SBody className={styles.body}>
           <div className={styles.container}>
             <div className={styles.subHeader}>Date</div>
-            <div className={styles.data}>{appointmentDate}</div>
+            <div className={styles.data}>{dateFormatter(startDate, '', 'dddd LL')}</div>
           </div>
 
           <div className={styles.container}>
             <div className={styles.subHeader}>Time</div>
             <div className={styles.data}>
-              {moment(startDate).format('h:mm a')} -{' '}
-              {moment(endDate).format('h:mm a')}
+              {dateFormatter(startDate, '', 'h:mm a')} - {dateFormatter(endDate, '', 'h:mm a')}
             </div>
           </div>
 
-          {patient.mobilePhoneNumber || patient.email ? (
+          {patient.cellPhoneNumber || patient.email ? (
             <div className={styles.container}>
               <div className={styles.subHeader}>Patient Info</div>
 
               <div className={styles.data}>
-                {patient.mobilePhoneNumber ? (
-                  <Icon icon="phone" size={0.9} />
-                ) : null}
+                {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} />}
                 <div className={styles.data_text}>
-                  {patient.mobilePhoneNumber &&
-                  patient.mobilePhoneNumber[0] === '+'
-                    ? FormatPhoneNumber(patient.mobilePhoneNumber)
-                    : patient.mobilePhoneNumber}
+                  {patient.cellPhoneNumber && FormatPhoneNumber(patient.cellPhoneNumber)}
                 </div>
               </div>
 
               <div className={styles.data}>
-                {patient.email ? <Icon icon="envelope" size={0.9} /> : null}
+                {patient.email && <Icon icon="envelope" size={0.9} />}
                 <div className={styles.data_text}>{patient.email}</div>
               </div>
             </div>
@@ -96,28 +99,28 @@ export default function AppointmentPopover(props) {
             <div className={styles.data}>{chair.name}</div>
           </div>
 
-          {note ? (
+          {note && (
             <div className={styles.container}>
               <div className={styles.subHeader}>Note</div>
               <div className={styles.data}>
                 <div className={styles.data_note}>
-                  <TextArea disabled="disabled" theme={textAreaTheme}>
+                  <TextArea disabled="disabled" theme={{ group: styles.textAreaGroup }}>
                     {note}
                   </TextArea>
                 </div>
               </div>
             </div>
-          ) : null}
+          )}
         </SBody>
 
         <SFooter className={styles.footer}>
-          <Button border="blue" onClick={props.closePopover} dense compact>
+          <Button border="blue" onClick={closePopover} dense compact>
             Close
           </Button>
           <Button
             color="blue"
             onClick={() => {
-              props.handleEditAppointment(appointment.id);
+              handleEditAppointment(appointment.id);
             }}
             dense
             compact
@@ -132,12 +135,13 @@ export default function AppointmentPopover(props) {
 }
 
 AppointmentPopover.propTypes = {
-  patient: PropTypes.object,
-  appointment: PropTypes.object,
-  age: PropTypes.number,
-  closePopover: PropTypes.func,
-  editAppointment: PropTypes.func,
-  scheduleView: PropTypes.string,
-  practitioner: PropTypes.object,
-  chair: PropTypes.object,
+  patient: PropTypes.instanceOf(Patient).isRequired,
+  appointment: PropTypes.instanceOf(Appointment).isRequired,
+  age: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  closePopover: PropTypes.func.isRequired,
+  practitioner: PropTypes.arrayOf(PropTypes.instanceOf(Practitioner)).isRequired,
+  chair: PropTypes.arrayOf(PropTypes.instanceOf(Chair)).isRequired,
+  handleEditAppointment: PropTypes.func.isRequired,
 };
+
+AppointmentPopover.defaultProps = { age: null };

@@ -1,6 +1,6 @@
 
 import { graphql, requestSubscription } from 'react-relay';
-import { ConnectionHandler } from 'relay-runtime';
+import { ConnectionHandler } from 'relay-runtime'; // eslint-disable-line import/no-extraneous-dependencies
 import environment from '../../util/graphqlEnvironment';
 import DesktopNotification from '../../util/desktopNotification';
 
@@ -22,7 +22,7 @@ const subscription = graphql`
         firstName
         lastName
         phoneNumber
-        mobilePhoneNumber
+        cellPhoneNumber
         email
         birthDate
         gender
@@ -44,9 +44,7 @@ const subscription = graphql`
 const register = accountId =>
   requestSubscription(environment, {
     subscription,
-    variables: {
-      accountId,
-    },
+    variables: { accountId },
     onError: error => console.error(error),
     updater: (proxyStore, data) => {
       const nodeToInsert = proxyStore.getRootField('newWaitSpot');
@@ -59,9 +57,7 @@ const register = accountId =>
       const fullName = `${patient.firstName} ${patient.lastName}`;
 
       const messageHeading = 'New wait spot request';
-      DesktopNotification.showNotification(messageHeading, {
-        body: `New wait spot request by ${fullName}.`,
-      });
+      DesktopNotification.showNotification(messageHeading, { body: `New wait spot request by ${fullName}.` });
 
       if (!accountViewerProxy) {
         return null;
@@ -83,6 +79,4 @@ const register = accountId =>
     },
   });
 
-export default {
-  register,
-};
+export default { register };

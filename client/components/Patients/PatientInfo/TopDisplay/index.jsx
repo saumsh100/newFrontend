@@ -82,14 +82,14 @@ export default function TopDisplay(props) {
                     <div className={styles.avatarContainer_data_email}>{patient.email}</div>
                   </div>
                 )}
-                {patient.mobilePhoneNumber && (
+                {patient.cellPhoneNumber && (
                   <div className={styles.displayFlex}>
                     <span className={styles.avatarContainer_data_icon}>
                       {' '}
                       <Icon icon="phone" />{' '}
                     </span>
                     <div className={styles.avatarContainer_data_phone}>
-                      {formatPhoneNumber(patient.mobilePhoneNumber)}
+                      {formatPhoneNumber(patient.cellPhoneNumber)}
                     </div>
                   </div>
                 )}

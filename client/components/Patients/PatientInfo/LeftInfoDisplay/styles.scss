@@ -115,6 +115,18 @@
     padding-bottom: 15px;
   }
 }
+.paddingPhones {
+  @extend .paddingCol;
+  font-size: 75%;
+  opacity: 0.8;
+  padding-bottom: 15px;
+}
+.cellPhoneRow {
+  padding-bottom: 20px;
+}
+.emailRow {
+  padding-top: 20px;
+}
 
 .tab {
   display: inline-flex;

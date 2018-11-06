@@ -10,8 +10,8 @@ import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import { Icon, Button, Avatar, SHeader } from '../../library';
 import { FormatPhoneNumber } from '../../library/util/Formatters';
 import SameAppointment from './SameAppointment';
-import styles from './styles.scss';
 import SendConfirmationEmail from './SendConfirmationEmail';
+import styles from './styles.scss';
 
 const pluralMap = quantity => (article) => {
   const isPlural = quantity > 1;
@@ -33,9 +33,7 @@ class ConfirmAppointmentRequest extends Component {
 
     const appointments = selectedAppointment.nextAppt;
 
-    this.state = {
-      selectedApp: appointments && appointments.length === 1 && appointments[0],
-    };
+    this.state = { selectedApp: appointments && appointments.length === 1 && appointments[0] };
 
     this.confirmRequest = this.confirmRequest.bind(this);
     this.createAppointment = this.createAppointment.bind(this);
@@ -43,9 +41,7 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   setSelected(app) {
-    this.setState({
-      selectedApp: app,
-    });
+    this.setState({ selectedApp: app });
   }
 
   createAppointment() {
@@ -56,12 +52,7 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   confirmRequest(patient, sendEmail) {
-    const {
-      selectedAppointment,
-      reinitializeState,
-      redirect,
-      setLocation,
-    } = this.props;
+    const { selectedAppointment, reinitializeState, redirect, setLocation } = this.props;
 
     if (redirect) {
       setLocation(redirect);
@@ -69,19 +60,13 @@ class ConfirmAppointmentRequest extends Component {
 
     if (sendEmail) {
       const alertRequestUpdate = {
-        success: {
-          body: `Email confirmation sent to ${patient.getFullName()}`,
-        },
-        error: {
-          body: `Request failed for ${patient.get('firstName')} Failed`,
-        },
+        success: { body: `Email confirmation sent to ${patient.getFullName()}` },
+        error: { body: `Request failed for ${patient.getFullName()} Failed` },
       };
-      const requestId = selectedAppointment.requestModel;
+      const { requestModel: requestId } = selectedAppointment;
       this.props
         .updateEntityRequest({
-          url: `/api/requests/${requestId.get('id')}/confirm/${
-            this.state.selectedApp.id
-          }`,
+          url: `/api/requests/${requestId.get('id')}/confirm/${this.state.selectedApp.id}`,
           values: {},
           alert: alertRequestUpdate,
         })
@@ -90,12 +75,8 @@ class ConfirmAppointmentRequest extends Component {
         });
     } else {
       const alertRequestUpdate = {
-        success: {
-          body: `Request updated for ${patient.getFullName()}`,
-        },
-        error: {
-          body: `Request failed for ${patient.get('firstName')} Failed`,
-        },
+        success: { body: `Request updated for ${patient.getFullName()}` },
+        error: { body: `Request failed for ${patient.getFullName()} Failed` },
       };
       this.props
         .updateEntityRequest({
@@ -108,13 +89,7 @@ class ConfirmAppointmentRequest extends Component {
   }
 
   render() {
-    const {
-      patients,
-      selectedAppointment,
-      setCurrentDay,
-      setSendEmail,
-      sendEmail,
-    } = this.props;
+    const { patients, selectedAppointment, setCurrentDay, setSendEmail, sendEmail } = this.props;
 
     if (!selectedAppointment) {
       return null;
@@ -131,10 +106,10 @@ class ConfirmAppointmentRequest extends Component {
       <div className={styles.container}>
         <div className={styles.text}>
           <span>
-            {`It seems like 
-            ${pluralize('an')} 
-            ${pluralize('appointment')} 
-            ${pluralize('was')} 
+            {`It seems like
+            ${pluralize('an')}
+            ${pluralize('appointment')}
+            ${pluralize('was')}
             already created for:`}
           </span>
           <div className={styles.userCard}>
@@ -145,13 +120,11 @@ class ConfirmAppointmentRequest extends Component {
               </div>
             </SHeader>
             <div className={styles.container}>
-              {patient.mobilePhoneNumber && (
+              {patient.cellPhoneNumber && (
                 <div className={styles.data}>
                   <Icon icon="phone" size={0.9} type="solid" />
                   <div className={styles.data_text}>
-                    {patient.mobilePhoneNumber[0] === '+'
-                      ? FormatPhoneNumber(patient.mobilePhoneNumber)
-                      : patient.mobilePhoneNumber}
+                    {FormatPhoneNumber(patient.cellPhoneNumber)}
                   </div>
                 </div>
               )}
@@ -161,24 +134,21 @@ class ConfirmAppointmentRequest extends Component {
                   <div className={styles.data_text}>{patient.email}</div>
                 </div>
               )}
-              {!patient.mobilePhoneNumber &&
-                !patient.email && <div className={styles.data}>n/a</div>}
+              {!patient.cellPhoneNumber && !patient.email && <div className={styles.data}>n/a</div>}
             </div>
           </div>
 
           {appointments.length > 1 ? (
             <span>
               <br />
-              Select one of these appointments to{' '}
-              <span className={styles.bold}>Connect</span> with this request or
-              simply <span className={styles.bold}>Create New Appointment</span>{' '}
-              to add a new one.
+              Select one of these appointments to <span className={styles.bold}>Connect</span> with
+              this request or simply <span className={styles.bold}>Create New Appointment</span> to
+              add a new one.
             </span>
           ) : (
             <span>
               <br />
-              Would you like to connect the appointment request with this
-              appointment?
+              Would you like to connect the appointment request with this appointment?
             </span>
           )}
         </div>
@@ -210,8 +180,7 @@ class ConfirmAppointmentRequest extends Component {
             onClick={() => {
               if (!selectedApp) return null;
 
-              // eslint-disable-next-line no-alert
-              if (confirm('Are you sure this is the correct Appointment?')) {
+              if (window.confirm('Are you sure this is the correct Appointment?')) {
                 this.setSelected(selectedApp);
                 return setSendEmail();
               }
@@ -234,16 +203,21 @@ class ConfirmAppointmentRequest extends Component {
 }
 
 ConfirmAppointmentRequest.propTypes = {
-  patients: PropTypes.instanceOf(Map),
+  patients: PropTypes.instanceOf(Map).isRequired,
   redirect: PropTypes.shape({ pathname: PropTypes.string }),
-  reinitializeState: PropTypes.func.required,
-  selectAppointment: PropTypes.func,
+  reinitializeState: PropTypes.func.isRequired,
+  selectAppointment: PropTypes.func.isRequired,
   selectedAppointment: selectAppointmentPropType,
-  sendEmail: PropTypes.bool,
-  setCurrentDay: PropTypes.func,
-  setLocation: PropTypes.func,
-  setSendEmail: PropTypes.func,
-  updateEntityRequest: PropTypes.func.required,
+  sendEmail: PropTypes.bool.isRequired,
+  setCurrentDay: PropTypes.func.isRequired,
+  setLocation: PropTypes.func.isRequired,
+  setSendEmail: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+};
+
+ConfirmAppointmentRequest.defaultProps = {
+  redirect: null,
+  selectedAppointment: null,
 };
 
 function mapDispatchToProps(dispatch) {

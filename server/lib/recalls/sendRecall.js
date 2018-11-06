@@ -44,7 +44,7 @@ export default {
       dueDate,
       lastApptDate: lastDate,
     });
-    return sendMessage(patient.mobilePhoneNumber, body, account.id);
+    return sendMessage(patient.cellPhoneNumber, body, account.id);
   },
 
   // Send Appointment Reminder email via Mandrill (MailChimp)
