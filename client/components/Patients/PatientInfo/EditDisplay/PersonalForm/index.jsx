@@ -178,19 +178,24 @@ export default function PersonalForm({
         <div className={styles.formHeader}> Contact</div>
         <Row className={styles.row}>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={theme} />
+            <Field name="mobilePhoneNumber" type="tel" label="Mobile Number" theme={inputStyle} />
           </Col>
           <Col xs={6}>
-            <Field name="otherPhoneNumber" type="tel" label="Other Phone Number" theme={theme} />
+            <Field
+              name="otherPhoneNumber"
+              type="tel"
+              label="Other Phone Number"
+              theme={inputStyle}
+            />
           </Col>
           <Col xs={6} className={styles.colLeft}>
-            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={theme} />
+            <Field name="homePhoneNumber" type="tel" label="Home Number" theme={inputStyle} />
           </Col>
           <Col xs={6}>
-            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={theme} />
+            <Field name="workPhoneNumber" type="tel" label="Work Number" theme={inputStyle} />
           </Col>
           <Col xs={12}>
-            <Field name="email" label="Email" theme={theme} />
+            <Field name="email" label="Email" theme={inputStyle} />
           </Col>
         </Row>
       </Grid>
