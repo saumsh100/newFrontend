@@ -5,10 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 import { Button } from '../../../library';
-import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
-import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
-import { setDateToTimezone } from '../../../../../server/util/time';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
@@ -19,7 +16,7 @@ import {
 } from '../../../../reducers/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import { BookingConfirmedSVG } from '../../SVGs';
-import { waitlistDates, waitlistTimes } from '../Review/helpers';
+import { availabilitiesGroupedByPeriod, waitlistDates, waitlistTimes } from '../Review/helpers';
 import SummaryItem from '../Review/SummaryItem';
 import { hideButton } from '../../../../reducers/widgetNavigation';
 import styles from './styles.scss';
@@ -41,41 +38,18 @@ function Complete({
   ...props
 }) {
   props.hideButton();
-  /**
-   * Look over the officeHours object and find the earliest startTime of the clinic.
-   */
-  const earliestStartTime = Object.values(officeHours).reduce((acc, curr) => {
-    if (!acc || (acc && curr && curr.startTime && curr.startTime < acc)) {
-      acc = curr.startTime;
-    }
-    return acc;
-  });
-
-  /**
-   * Look over the officeHours object and find the latest endTime of the clinic.
-   */
-  const latestEndTime = Object.values(officeHours).reduce((acc, curr) => {
-    if (!acc || (acc && curr && curr.endTime && curr.endTime > acc)) {
-      acc = curr.endTime;
-    }
-    return acc;
-  });
 
   /**
    * Generates the availabilities using the office openings,
    * also group them inside the specific time-frame.
    */
-  const availabilities = createAvailabilitiesFromOpening({
-    startDate: earliestStartTime,
-    endDate: setDateToTimezone(latestEndTime, timezone),
-    duration: selectedService && selectedService.get('duration'),
-    interval: 60,
-  }).reduce(groupTimesPerPeriod(timezone), {
-    morning: [],
-    afternoon: [],
-    evening: [],
-    total: 0,
-  });
+  const availabilities =
+    selectedService &&
+    availabilitiesGroupedByPeriod(
+      Object.values(officeHours),
+      timezone,
+      selectedService.get('duration'),
+    );
 
   const insuranceMemberAndGroupID = `${patientUser.insuranceMemberId ||
     NOT_PROVIDED_TEXT} - ${patientUser.insuranceGroupId || NOT_PROVIDED_TEXT}`;

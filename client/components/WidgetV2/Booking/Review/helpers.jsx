@@ -1,8 +1,11 @@
 
 import React from 'react';
 import { capitalizeFirstLetter } from '../../../Utils';
+import { setDateToTimezone } from '../../../../../server/util/time';
 import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
 import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
+import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
+import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import styles from './styles.scss';
 
 /**
@@ -150,3 +153,79 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
     ];
   };
 };
+
+/**
+ * Create a new Date object combining today's date, month and year with a provided officeHour date.
+ *
+ * @param date
+ * @param timezone
+ * @param today
+ * @returns Date
+ */
+const setTimeForToday = (date, timezone, today = new Date()) =>
+  setDateToTimezone(date, timezone)
+    .set({
+      year: today.getFullYear(),
+      month: today.getMonth() + 1,
+      date: today.getDate(),
+    })
+    .toDate();
+
+/**
+ * With the provided dailySchedule normalize the data
+ * and return only the hours values.
+ *
+ * @param timezone
+ * @returns {function({startTime?: *, endTime?: *}): {startDate: *, endDate: *}}
+ */
+const normalizeDateHours = timezone => ({ startTime, endTime }) => ({
+  startDate: setTimeForToday(startTime, timezone),
+  endDate: setTimeForToday(endTime, timezone),
+});
+
+/**
+ * Remove any value that does not represent a dailySchedule or a open day,
+ * also normalize the dailySchedule object.
+ *
+ * @param schedule
+ * @param timezone
+ * @returns {*}
+ */
+const sanitizeSchedule = (schedule, timezone) =>
+  schedule
+    .filter(h => h && !h.isClosed && h.endTime !== h.startTime)
+    .map(normalizeDateHours(timezone));
+
+/**
+ * Get the earliest and the latest hours for a weeklySchedule.
+ * @param dates
+ * @returns *|{startDate: Date, endDate: Date}
+ */
+const getStartAndEndDate = dates =>
+  dates.reduce(
+    (acc, { startDate, endDate }) => ({
+      startDate: startDate < acc.startDate ? startDate : acc.startDate,
+      endDate: endDate > acc.endDate ? endDate : acc.endDate,
+    }),
+    dates[0],
+  );
+
+/**
+ * Group availabilities by period, using the weeklySchedule information
+ *
+ * @param schedule
+ * @param timezone
+ * @param duration
+ * @returns {availabilities|{morning: Array, afternoon: Array, evening: Array, total: number}}
+ */
+export const availabilitiesGroupedByPeriod = (schedule, timezone, duration) =>
+  createAvailabilitiesFromOpening({
+    ...getStartAndEndDate(sanitizeSchedule(schedule, timezone)),
+    duration,
+    interval: 60,
+  }).reduce(groupTimesPerPeriod(timezone), {
+    morning: [],
+    afternoon: [],
+    evening: [],
+    total: 0,
+  });

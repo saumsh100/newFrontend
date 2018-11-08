@@ -12,14 +12,13 @@ import { setWaitSpotTimes } from '../../../../../reducers/availabilities';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
 import { patientUserShape } from '../../../../library/PropTypeShapes';
 import officeHoursShape from '../../../../library/PropTypeShapes/officeHoursShape';
-import createAvailabilitiesFromOpening from '../../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
-import groupTimesPerPeriod from '../../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import {
   showButton,
   hideButton,
   setIsClicked,
   setText,
 } from '../../../../../reducers/widgetNavigation';
+import { availabilitiesGroupedByPeriod } from '../../Review/helpers';
 import styles from './styles.scss';
 
 /**
@@ -75,41 +74,13 @@ class SelectTimes extends React.PureComponent {
      */
     const checkIfIncludesTime = ({ startDate }) => waitSpotTimes.includes(startDate);
 
-    /**
-     * Look over the officeHours object and find the earliest startTime of the clinic.
-     */
-    const earliestStartTime = Object.values(officeHours).reduce((acc, curr) => {
-      if (!acc || (acc && curr && curr.startTime && curr.startTime < acc)) {
-        acc = curr.startTime;
-      }
-      return acc;
-    });
-
-    /**
-     * Look over the officeHours object and find the latest endTime of the clinic.
-     */
-    const latestEndTime = Object.values(officeHours).reduce((acc, curr) => {
-      if (!acc || (acc && curr && curr.endTime && curr.endTime > acc)) {
-        acc = curr.endTime;
-      }
-      return acc;
-    });
-
-    /**
-     * Generates the availabilities using the office openings,
-     * also group them inside the specific time-frame.
-     */
-    const availabilities = createAvailabilitiesFromOpening({
-      startDate: earliestStartTime,
-      endDate: moment.tz(latestEndTime, timezone),
-      duration: selectedService.get('duration'),
-      interval: 60,
-    }).reduce(groupTimesPerPeriod(timezone), {
-      morning: [],
-      afternoon: [],
-      evening: [],
-      total: 0,
-    });
+    const availabilities =
+      selectedService &&
+      availabilitiesGroupedByPeriod(
+        Object.values(officeHours),
+        timezone,
+        selectedService.get('duration'),
+      );
 
     /**
      * Return a button scoped to a specific time-frame

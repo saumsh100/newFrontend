@@ -2,11 +2,9 @@
 import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import moment from 'moment-timezone';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
-import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import { Button } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
@@ -14,10 +12,9 @@ import Service from '../../../../entities/models/Service';
 import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
-import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import { SummaryItemFactory } from './SummaryItem';
-import { waitlistDates, waitlistTimes } from './helpers';
+import { availabilitiesGroupedByPeriod, waitlistDates, waitlistTimes } from './helpers';
 import {
   showButton,
   hideButton,
@@ -32,17 +29,6 @@ import {
 import styles from './styles.scss';
 
 const NOT_PROVIDED_TEXT = 'Not Provided';
-
-const compareTimes = earlier => (value, ref) => (value && earlier ? value < ref : value > ref);
-const isValueEarlier = compareTimes(true);
-const isValueLater = compareTimes(false);
-
-const getOfficeHours = (key, comparison) => (acc, curr) => {
-  if (!acc || (acc && curr && comparison(curr[key], acc))) {
-    acc = curr[key];
-  }
-  return acc;
-};
 
 class Review extends PureComponent {
   constructor(props) {
@@ -110,34 +96,17 @@ class Review extends PureComponent {
         .concat(path)
         .join('/');
 
-    const officeHoursValues = Object.values(officeHours);
-    /**
-     * Look over the officeHours object and find the earliest startTime of the clinic.
-     */
-    const earliestStartTime = officeHoursValues.reduce(getOfficeHours('startTime', isValueEarlier));
-
-    /**
-     * Look over the officeHours object and find the latest endTime of the clinic.
-     */
-    const latestEndTime = officeHoursValues.reduce(getOfficeHours('endTime', isValueLater));
-
     /**
      * Generates the availabilities using the office openings,
      * also group them inside the specific time-frame.
      */
     const availabilities =
       selectedService &&
-      createAvailabilitiesFromOpening({
-        startDate: earliestStartTime,
-        endDate: moment.tz(latestEndTime, timezone),
-        duration: selectedService.get('duration'),
-        interval: 60,
-      }).reduce(groupTimesPerPeriod(timezone), {
-        morning: [],
-        afternoon: [],
-        evening: [],
-        total: 0,
-      });
+      availabilitiesGroupedByPeriod(
+        Object.values(officeHours),
+        timezone,
+        selectedService.get('duration'),
+      );
 
     /**
      * Returns the component that renders the title, value and edit button for the provided data.
