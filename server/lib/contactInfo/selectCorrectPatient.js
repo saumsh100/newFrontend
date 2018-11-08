@@ -29,7 +29,7 @@ module.exports = function selectCorrectPatient(patients) {
   }
 
   // Separate patients that have families and patients that don't have families
-  const orderedPatients = orderBy(patients, p => p.pmsCreatedAt, 'desc');
+  const orderedPatients = orderBy(patients, p => p.pmsCreatedAt || p.createdAt, 'desc');
   const patientsWithFamilies = orderedPatients.filter(p => p.family);
 
   // If there's no patients with family data, return the newest created patient
@@ -43,7 +43,7 @@ module.exports = function selectCorrectPatient(patients) {
   const families = toArray(groupBy(patientsWithFamilies, 'familyId'));
 
   // Select the newest family to work with for the rest of the function
-  const orderedFamilies = orderBy(families, patientsInFamily => patientsInFamily[0].family.pmsCreatedAt, 'desc');
+  const orderedFamilies = orderBy(families, ([{ family: { pmsCreatedAt, createdAt } }]) => pmsCreatedAt || createdAt, 'desc');
 
   // Order the families members by birthDate so the POC is the oldest member if not the head.
   const newestFamilyPatients = orderBy(orderedFamilies[0], p => p.birthDate, 'asc');
