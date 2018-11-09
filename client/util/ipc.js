@@ -11,6 +11,10 @@ if (isHub()) {
       ipcRenderer.on(channel, handler);
     },
 
+    once: (channel, handler) => {
+      ipcRenderer.once(channel, handler);
+    },
+
     send: (channel, message) => {
       ipcRenderer.send(channel, message);
     },

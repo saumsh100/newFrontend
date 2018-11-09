@@ -69,8 +69,8 @@
     renderUser();
   });
 
-  ipcRenderer.on(RESPONSE_HOST, (e, data) => {
-    hostUrl = data;
+  ipcRenderer.on(RESPONSE_HOST, (e, { url }) => {
+    hostUrl = host;
   });
 
   ipcRenderer.on(ZOOM_FACTOR_CHANGE, (e, data) => {

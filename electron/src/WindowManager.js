@@ -23,7 +23,7 @@ class WindowManager {
     this.endpoint = null;
     this.mainWindow = new MainBrowserWindow();
     this.userModalWindow = new UserModalWindow();
-    this.setEndpoint();
+    this.autoSetEndpoint();
     this.createMainBrowserWindow();
     this.mainWindow.loadUrl();
     TrayManager.instance.showLoggedOutTray();
@@ -36,7 +36,7 @@ class WindowManager {
   /**
    * Sets the endpoint based on locale data.
    */
-  setEndpoint() {
+  autoSetEndpoint() {
     const { NODE_ENV } = process.env;
     // As building the executable version of the app is removing complete process.env
     // we have to store API_URL for the potential dev and staging URLs into package.json
@@ -48,6 +48,17 @@ class WindowManager {
     if (API_URL) {
       this.endpoint = API_URL;
     }
+  }
+
+  /**
+   * Set locale based on user desire.
+   * @param region
+   */
+  setLocale(region = 'en-US') {
+    this.locale = region;
+    this.autoSetEndpoint();
+    log.info(`Locale set to: ${region}`);
+    log.info(`Endpoint set to: ${this.endpoint}`);
   }
 
   /**

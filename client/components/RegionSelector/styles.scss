@@ -1,0 +1,17 @@
+@import '../../ui';
+
+.menu {
+  position: relative !important;
+  width: auto !important;
+  float: right;
+}
+
+.iconContainer {
+  cursor: pointer;
+  color: $primary-dark-grey;
+  float: right;
+
+  & > span {
+    margin-left: 3px;
+  }
+}

@@ -19,6 +19,7 @@ module.exports = {
   REQUEST_ZOOM_FACTOR: 'REQUEST_ZOOM_FACTOR',
   REQUEST_HOST: 'REQUEST_HOST',
   RESPONSE_HOST: 'RESPONSE_HOST',
+  SET_REGION: 'SET_REGION',
 
   // Menu labels
   QUIT_APP: 'Quit CareCru Hub',

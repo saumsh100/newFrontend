@@ -16,6 +16,7 @@ const {
   REQUEST_ZOOM_FACTOR,
   REQUEST_HOST,
   RESPONSE_HOST,
+  SET_REGION,
 } = require('./constants');
 const WindowManager = require('./WindowManager');
 
@@ -24,7 +25,18 @@ ipcMain.on(APP_VERSION_REQUEST, (event) => {
 });
 
 ipcMain.on(REQUEST_HOST, (event) => {
-  event.sender.send(RESPONSE_HOST, WindowManager.instance.endpoint);
+  event.sender.send(RESPONSE_HOST, {
+    url: WindowManager.instance.endpoint,
+    locale: WindowManager.instance.locale,
+  });
+});
+
+ipcMain.on(SET_REGION, (event, locale) => {
+  WindowManager.instance.setLocale(locale);
+  event.sender.send(RESPONSE_HOST, {
+    url: WindowManager.instance.endpoint,
+    locale: WindowManager.instance.locale,
+  });
 });
 
 ipcMain.on(SHOW_TOOLBAR, (event, data) => {
