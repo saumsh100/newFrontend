@@ -68,7 +68,7 @@ describe('Account Settings - Practice', () => {
     it('change timezones of office hours when timezone is altered', () => {
       cy
         .login('/settings/practice/hours')
-        .wait(1000)
+        .wait(3000)
         .get('[data-test-id="dropDown_monday_startTime"]')
         .contains('9:00 AM')
         .visit('http://localhost:5100/settings/practice/general')

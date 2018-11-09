@@ -46,6 +46,7 @@ describe('Schedule Tests', () => {
 
   it('add patient to waitlist', () => {
     cy.getAndClick('button_headerWaitlist')
+      .wait(2000)
       .getAndClick('button_addToWaitlist')
       .get('[data-test-id="Add to Waitlist Form"]')
       .find('[data-test-id="patientData"]')

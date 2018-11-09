@@ -89,8 +89,8 @@ module.exports = {
 
   down: queryInterface => queryInterface.sequelize.transaction(async (transaction) => {
     try {
-      await queryInterface.dropTable('Templates', { transaction });
-      return await queryInterface.dropTable('AccountTemplates', { transaction });
+      await queryInterface.dropTable('AccountTemplates', { transaction });
+      return await queryInterface.dropTable('Templates', { transaction });
     } catch (e) {
       console.log(e);
       return transaction.rollback();

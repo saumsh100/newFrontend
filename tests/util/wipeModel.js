@@ -50,6 +50,8 @@ const ORDER = [
   'PinCode',
   'PasswordReset',
   'DeliveredProcedure',
+  'AccountTemplate',
+  'Template',
 ];
 
 async function wipeAllModels() {
