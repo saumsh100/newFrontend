@@ -603,6 +603,15 @@ Object {
       },
       "type": "configuration",
     },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "API Hostname configuration. Connector will connect to this hostname",
+        "name": "API_HOSTNAME",
+        "value": "app.care.cru:5100",
+      },
+      "type": "configuration",
+    },
   ],
 }
 `;
@@ -1042,6 +1051,15 @@ Object {
         "description": "A json array of Eaglesoft API url, integration key, userId and password",
         "name": "EAGLESOFT_API_CONFIGURATION",
         "value": "[]",
+      },
+      "type": "configuration",
+    },
+    Object {
+      "attributes": Object {
+        "dataType": "string",
+        "description": "API Hostname configuration. Connector will connect to this hostname",
+        "name": "API_HOSTNAME",
+        "value": "app.care.cru:5100",
       },
       "type": "configuration",
     },
