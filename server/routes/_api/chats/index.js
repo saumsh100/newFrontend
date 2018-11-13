@@ -212,23 +212,26 @@ chatsRouter.get('/unread', checkPermissions('chats:read'), (req, res, next) => {
 /**
  * Get the ids of unread messages
  */
-chatsRouter.get('/unread/count', checkPermissions('chats:read'), async (req, res, next) => {
+chatsRouter.get('/unread/count', checkPermissions('chats:read'), async ({ accountId }, res, next) => {
   try {
-    const { accountId } = req;
-
-    const unreadMessages = await TextMessage.findAll({
-      attributes: ['id'],
-      where: { read: false },
+    const unreadMessages = await Chat.findAll({
+      where: {
+        accountId,
+        hasUnread: true,
+      },
       include: [
         {
-          model: Chat,
-          as: 'chat',
-          where: { accountId },
+          model: TextMessage,
+          as: 'textMessages',
+          where: { read: false },
+          attributes: [],
+          required: true,
         },
       ],
+      attributes: ['textMessages.id'],
+      raw: true,
     });
-
-    const messageIds = unreadMessages.map(message => message.get('id'));
+    const messageIds = unreadMessages.map(({ id }) => id);
     res.send(messageIds);
   } catch (e) {
     next(e);

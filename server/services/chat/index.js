@@ -132,11 +132,7 @@ export async function markMessagesAsUnread(chatId, textMessageCreatedAt, phoneNu
       },
     },
   );
-
-  await Chat.update(
-    { hasUnread: true },
-    { where: { id: chatId } },
-  );
+  await setChatUnread(chatId);
 
   return updateUserViaSocket(chatId, MARK_UNREAD);
 }
@@ -158,10 +154,7 @@ export async function markMessagesAsRead(chatId) {
     },
   );
 
-  await Chat.update(
-    { hasUnread: false },
-    { where: { id: chatId } },
-  );
+  await setChatUnread(chatId, false);
 
   return updateUserViaSocket(chatId, MARK_READ);
 }
@@ -356,6 +349,25 @@ async function storeTextMessage(textMessageData, markChatAsUnread = false) {
  * @returns {Promise<void>}
  */
 async function setChatUnread(id, hasUnread = true) {
-  return Chat.update({ hasUnread }, { where: { id } });
+  const textMessagesCount = await TextMessage.count({
+    where: {
+      chatId: id,
+      read: false,
+    },
+  });
+
+  return validChatUpdate(hasUnread, textMessagesCount) && Chat.update({ hasUnread }, { where: { id } });
+}
+
+/**
+ * To be a validate update we need to make sure that,
+ * if hasUnread is true we should have textMessagesCount higher than 0
+ * or if hasUnread is false we should have textMessagesCount equals to 0.
+ * @param hasUnread
+ * @param textMessagesCount
+ * @returns {boolean}
+ */
+function validChatUpdate(hasUnread, textMessagesCount) {
+  return hasUnread ? textMessagesCount > 0 : textMessagesCount === 0;
 }
 
