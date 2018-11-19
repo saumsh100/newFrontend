@@ -100,15 +100,21 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
         SubscriptionManager.accountId = accountId;
 
         if (connect) {
-          connectSocketToConnectStore({
-            dispatch,
-            getState,
-          }, socket);
+          connectSocketToConnectStore(
+            {
+              dispatch,
+              getState,
+            },
+            socket,
+          );
         } else {
-          connectSocketToStoreLogin({
-            dispatch,
-            getState,
-          }, socket);
+          connectSocketToStoreLogin(
+            {
+              dispatch,
+              getState,
+            },
+            socket,
+          );
         }
 
         // dispatch(loginSuccess(decodedToken));
@@ -160,7 +166,7 @@ export function resetPassword(email) {
       .post('/auth/resetpassword', { email })
       .then(() => {})
       .catch((err) => {
-        console.log(err);
+        throw new SubmissionError(err.data, err.status);
       });
 }
 

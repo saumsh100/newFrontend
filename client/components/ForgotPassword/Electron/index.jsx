@@ -16,6 +16,7 @@ class ForgotPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isFalseEmail: false,
       submitted: false,
       email: null,
     };
@@ -23,11 +24,23 @@ class ForgotPassword extends Component {
   }
 
   handleSubmit(values) {
-    this.props.resetPassword(values.email);
-    this.setState({
-      submitted: true,
-      email: values.email,
-    });
+    this.props.resetPassword(values.email).then(
+      () => {
+        this.setState({
+          isFalseEmail: false,
+          submitted: true,
+          email: values.email,
+        });
+      },
+      (reason) => {
+        console.error(reason);
+        this.setState({
+          isFalseEmail: true,
+          submitted: false,
+          email: values.email,
+        });
+      },
+    );
   }
 
   render() {
@@ -36,26 +49,20 @@ class ForgotPassword extends Component {
         <div className={styles.backDrop}>
           <Card className={styles.loginForm}>
             <div className={styles.logoContainer}>
-              <img
-                className={styles.loginLogo}
-                src="/images/logo_black.png"
-                alt="CareCru Logo"
-              />
+              <img className={styles.loginLogo} src="/images/logo_black.png" alt="CareCru Logo" />
             </div>
             <h1 className={styles.formTitle}>FORGOT PASSWORD</h1>
             {this.state.submitted ? (
-              <EmailSuccess
-                email={this.state.email}
-                push={this.props.push}
-                styles={styles}
-              />
+              <EmailSuccess email={this.state.email} push={this.props.push} styles={styles} />
             ) : (
               <div className={styles.formWrapper}>
                 <div className={styles.text}>
-                  Enter your email below and if you are a user, we will send you
-                  a link to reset your password.
+                  Enter your email below and if you are a user, we will send you a link to reset
+                  your password.
                 </div>
-
+                {this.state.isFalseEmail && (
+                  <div className={styles.textError}>Email not found.</div>
+                )}
                 <div>
                   <ForgotPasswordForm onSubmit={this.handleSubmit} />
                 </div>

@@ -29,11 +29,9 @@
   margin-bottom: 30px;
 }
 
-
 .loginLogo {
   width: 100px;
 }
-
 
 .submitButton {
   width: 100%;
@@ -59,9 +57,14 @@
   }
 }
 
+.textError {
+  @extend .text;
+  color: $danger-color;
+}
+
 .textSuccess {
   padding: 10px;
-  background-color: lighten($primary-green,10%);
+  background-color: lighten($primary-green, 10%);
 }
 
 .textSuccess2 {
@@ -81,5 +84,5 @@
 
 .email {
   font-weight: $large-weight;
-  color: $primary-darkgrey
+  color: $primary-darkgrey;
 }

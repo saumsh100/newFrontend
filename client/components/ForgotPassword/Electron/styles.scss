@@ -19,3 +19,9 @@
 .text_only_bot_padding {
   padding-bottom: 20px;
 }
+
+.textError {
+  @extend .text;
+  text-align: center;
+  color: $danger-color;
+}

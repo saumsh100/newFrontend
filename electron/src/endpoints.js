@@ -5,5 +5,5 @@ module.exports = {
     'en-US': 'https://carecru.io',
     fallback: 'https://carecru.ca',
   },
-  development: { fallback: 'http://localhost:5000' },
+  development: { fallback: 'http://localhost:5100' },
 };
