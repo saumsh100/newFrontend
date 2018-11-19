@@ -26,6 +26,7 @@ const developmentConfig = merge(baseConfig, {
         FEATURE_FLAG_KEY: JSON.stringify(process.env.FEATURE_FLAG_KEY),
         GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
         HOST: JSON.stringify(process.env.HOST),
+        CI: JSON.stringify(process.env.CI || false),
       },
     }),
   ],

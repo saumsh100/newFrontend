@@ -71,11 +71,11 @@ describe('Account Settings - Practice', () => {
         .wait(3000)
         .get('[data-test-id="dropDown_monday_startTime"]')
         .contains('9:00 AM')
-        .visit('http://localhost:5100/settings/practice/general')
+        .visit(`${Cypress.env('siteURL')}/settings/practice/general`)
         .wait(1000)
         .selectOption('addressSettingsForm', 'timezone', 'option_114')
         .submitForm('addressSettingsForm')
-        .visit('http://localhost:5100/settings/practice/hours')
+        .visit(`${Cypress.env('siteURL')}/settings/practice/hours`)
         .wait(2000)
         .get('[data-test-id="dropDown_monday_startTime"]')
         .contains('12:00 PM');

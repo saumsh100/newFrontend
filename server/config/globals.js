@@ -13,9 +13,9 @@ const passwordHashSaltRounds = 10;
 const environmentVariables = process.env;
 const env = environmentVariables.NODE_ENV || 'development';
 const port = environmentVariables.PORT || '5000';
-const host = environmentVariables.HOST || 'app.care.cru:5100';
-const myHost = environmentVariables.MY_HOST || 'my.care.cru:5100';
-const protocol = env === 'production' ? 'https' : 'http';
+const host = environmentVariables.HOST || `localhost:${port}`;
+const myHost = environmentVariables.MY_HOST || `my.care.cru:${port}`;
+const protocol = env === 'production' && !environmentVariables.CI ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
 

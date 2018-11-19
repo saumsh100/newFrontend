@@ -8,6 +8,6 @@
   "watchForFileChanges": false,
   "pageLoadTimeout": 100000,
   "env": {
-    "siteURL": "http://localhost:5100"
+    "siteURL": "http://localhost:5000"
   }
 }
