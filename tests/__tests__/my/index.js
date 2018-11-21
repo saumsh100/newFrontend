@@ -8,13 +8,13 @@ import { omitPropertiesFromBody, omitProperties } from '../../util/selectors';
 const host = 'my2.test.com';
 
 describe('/widgets', () => {
-  beforeEach(async() => {
+  beforeEach(async () => {
     await wipeTestPatients();
     await wipeTestUsers();
     await seedTestUsers();
   });
 
-  afterAll(async() => {
+  afterAll(async () => {
     await wipeTestPatients();
     await wipeTestUsers();
   });
@@ -25,21 +25,19 @@ describe('/widgets', () => {
     });
 
     // TODO: Just returns an empty entities object...
-    test('/:accountId/embed - [no description]', () => {
-      return request(app)
-        .get(`/widgets/${accountId}/embed`)
-        .set('Host', host)
-        .expect(200)
-        .then(({body}) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
+    test('/:accountId/embed - [no description]', () => request(app)
+      .get(`/widgets/${accountId}/embed`)
+      .set('Host', host)
+      .expect(200)
+      .then(({ body }) => {
+        body = omitPropertiesFromBody(body);
+        expect(body).toMatchSnapshot();
+      }));
   });
 });
 
 describe('/patientUsers', () => {
-  beforeEach(async() => {
+  beforeEach(async () => {
     await wipeTestPatients();
     await wipeTestUsers();
     await seedTestUsers();
@@ -56,16 +54,14 @@ describe('/patientUsers', () => {
       await seedTestPatients();
     });
 
-    test('/patientUsers/:patientUserId - retrieve patientUser', () => {
-      return request(app)
-        .get(`/patientUsers/${patientUserId}`)
-        .set('Host', host)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitProperties(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
+    test('/patientUsers/:patientUserId - retrieve patientUser', () => request(app)
+      .get(`/patientUsers/${patientUserId}`)
+      .set('Host', host)
+      .expect(200)
+      .then(({ body }) => {
+        body = omitProperties(body);
+        expect(body).toMatchSnapshot();
+      }));
   });
 
   describe('POST /', () => {
@@ -78,9 +74,7 @@ describe('/patientUsers', () => {
       return request(app)
         .post('/patientUsers/email')
         .set('Host', host)
-        .send({
-          email: 'testpatientuser@test.com',
-        })
+        .send({ email: 'testpatientuser@test.com' })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -93,9 +87,7 @@ describe('/patientUsers', () => {
       return request(app)
         .post('/patientUsers/email')
         .set('Host', host)
-        .send({
-          email: 'ronaldmcdonald@test.com',
-        })
+        .send({ email: 'ronaldmcdonald@test.com' })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
@@ -108,14 +100,9 @@ describe('/patientUsers', () => {
       return request(app)
         .post('/patientUsers/phoneNumber')
         .set('Host', host)
-        .send({
-          phoneNumber: '+16049999999',
-        })
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
+        .send({ phoneNumber: '+16049999999' })
+        .expect(500)
+        .then(({ error }) => expect(error.text).toMatchSnapshot());
     });
 
     test('/patientUsers/phoneNumber - check if patientuser with given phoneNumber exists - does not exist', async () => {
@@ -123,9 +110,7 @@ describe('/patientUsers', () => {
       return request(app)
         .post('/patientUsers/phoneNumber')
         .set('Host', host)
-        .send({
-          phoneNumber: '+16049919999',
-        })
+        .send({ phoneNumber: '+16049919999' })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);

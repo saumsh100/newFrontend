@@ -86,7 +86,6 @@ myRouter.post('/patientUsers/email', async (req, res, next) => {
   let { email } = req.body;
 
   email = email && email.toLowerCase();
-
   try {
     const patientUsers = await PatientUser.findAll({ where: { email } });
     return res.send({ exists: !!patientUsers[0] });
@@ -97,14 +96,12 @@ myRouter.post('/patientUsers/email', async (req, res, next) => {
 
 // Used on patient signup form to determine if a patientUser's phoneNumber is taken
 myRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
-  let { phoneNumber } = req.body;
-
-  phoneNumber = validatePhoneNumber(phoneNumber);
   try {
+    const phoneNumber = await validatePhoneNumber(req.body.phoneNumber);
     const patientUsers = await PatientUser.findAll({ where: { phoneNumber } });
     const alreadyExists = !!patientUsers[0];
     if (alreadyExists) {
-      return res.send({ error: 'There is already a user with that mobile number.' });
+      throw new Error('There is already a user with that mobile number.');
     }
 
     twilioClient.lookups.phoneNumbers(phoneNumber)
@@ -112,7 +109,7 @@ myRouter.post('/patientUsers/phoneNumber', async (req, res, next) => {
       .then((number) => {
         const isLandline = number && number.carrier && number.carrier.type === 'landline';
         if (isLandline) {
-          return res.send({ error: 'You cannot use a landline number. Please enter a mobile number.' });
+          throw new Error('You cannot use a landline number. Please enter a mobile number.');
         }
         return res.sendStatus(200);
       })

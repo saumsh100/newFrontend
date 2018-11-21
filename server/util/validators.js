@@ -1,23 +1,18 @@
+
 /**
  * Validates phone number.
  * @param phoneNumber string phone number. Can be empty, null, undefined - anything.
- * @return phone number String or null if invalid.
+ * @return {string|null} number String or null if invalid.
  */
 function validatePhoneNumber(phoneNumber) {
-  if (phoneNumber === null) return null;
+  if (phoneNumber === null || phoneNumber === '') return null;
 
-  if (!phoneNumber || phoneNumber.length < 10) return undefined;
-
-  const pn = phoneNumber.replace(/\D/g, '');
-
-  if (pn.length === 10) {
-    return '+1'.concat(pn);
-  }
-  if (pn.length === 11) {
-    return '+'.concat(pn);
+  if (!phoneNumber || typeof phoneNumber !== 'string' || !/^(\+1)?\s*?\d{3}-?\s*?\d{3}-?\s*?\d{4}$/.test(phoneNumber.trim())) {
+    throw new Error(`Invalid phoneNumber format for "${phoneNumber}", use: +1 222 333 4444`);
   }
 
-  return undefined;
+  const cleanPhoneNumber = phoneNumber.replace(/\D/g, '');
+  return `${cleanPhoneNumber.length === 10 ? '+1' : '+'}${cleanPhoneNumber}`;
 }
 
 function validateAccountIdPmsId(Model, value, self, next) {

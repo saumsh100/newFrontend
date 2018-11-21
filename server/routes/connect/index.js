@@ -1,12 +1,9 @@
 
 /* eslint-disable consistent-return */
 import { Router } from 'express';
-import fs from 'fs';
 import authRouter from './auth';
-import { validatePhoneNumber } from '../../util/validators';
 import { sequelizeLoader } from '../util/loaders';
 import apiRouter from '../_api';
-import normalize from '../_api/normalize';
 
 const connectRouter = new Router();
 

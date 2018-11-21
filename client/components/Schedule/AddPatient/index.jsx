@@ -6,7 +6,6 @@ import { Form, Field } from '../../library';
 
 import {
   maxLength,
-  asyncValidateNewPatient,
   emailValidate,
   validateBirthdate,
   normalizeBirthdate,
@@ -39,8 +38,6 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
       form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}
-      // asyncValidate={asyncValidateNewPatient}
-      // asyncBlurFields={['email', 'mobilePhoneNumber']}
       allowSave
       data-test-id="newPatientForm"
       ignoreSaveButton

@@ -772,7 +772,7 @@ patientsRouter.put('/:patientId', checkPermissions('patients:read'), async (req,
     const patient = await req.patient.update(req.body);
     const normalized = format(req, res, 'patient', patient.dataValues);
 
-    if (phoneNumber !== patient.cellPhoneNumber) {
+    if (patient.cellPhoneNumber && phoneNumber !== patient.cellPhoneNumber) {
       await Chat.update({ patientPhoneNumber: patient.cellPhoneNumber }, {
         where: {
           accountId: req.accountId,

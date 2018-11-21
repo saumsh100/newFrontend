@@ -13,12 +13,12 @@ describe('util/validators', () => {
 
     it('valid - should be valid', () => {
       const validNumber = '7782422626';
-      expect(validatePhoneNumber(validNumber)).toBe('+1'.concat(validNumber));
+      expect(validatePhoneNumber(validNumber)).toBe(`+1${validNumber}`);
     });
 
     it('invalid - should be invalid', () => {
       const number = '77824aa626';
-      expect(validatePhoneNumber(number)).toBe(null);
+      expect(() => validatePhoneNumber(number)).toThrowError('Invalid phoneNumber format for "77824aa626", use: +1 222 333 4444');
     });
 
     it('empty - should be invalid', () => {
@@ -28,7 +28,7 @@ describe('util/validators', () => {
 
     it('undefined - should be invalid', () => {
       const invalidNumber = undefined;
-      expect(validatePhoneNumber(invalidNumber)).toBe(null);
+      expect(() => validatePhoneNumber(invalidNumber)).toThrowError('Invalid phoneNumber format for "undefined", use: +1 222 333 4444');
     });
 
     it('null - should be invalid', () => {
@@ -36,9 +36,13 @@ describe('util/validators', () => {
       expect(validatePhoneNumber(invalidNumber)).toBe(null);
     });
 
+    it('long - should be invalid', () => {
+      const invalidNumber = '+1 0778242 2626';
+      expect(() => validatePhoneNumber(invalidNumber)).toThrowError('Invalid phoneNumber format for "+1 0778242 2626", use: +1 222 333 4444');
+    });
     it('too long - should be invalid', () => {
-      const invalidNumber = '+107782422626';
-      expect(validatePhoneNumber(invalidNumber)).toBe(null);
+      const invalidNumber = '117748242266';
+      expect(() => validatePhoneNumber(invalidNumber)).toThrowError('Invalid phoneNumber format for "117748242266", use: +1 222 333 4444');
     });
   });
 });

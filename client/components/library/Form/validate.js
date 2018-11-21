@@ -3,76 +3,25 @@ import axios from 'axios';
 import zxcvbn from 'zxcvbn';
 import moment from 'moment';
 
-const asyncEmailValidatePatient = (values) => {
-  if (!values.email) return;
-  return axios.post('/patientUsers/email', { email: values.email }).then((response) => {
-    if (response.data.exists) {
+const asyncEmailValidatePatient = ({ email }) => {
+  if (!email) return;
+  return axios.post('/patientUsers/email', { email }).then(({ data }) => {
+    if (data.exists) {
       throw { email: 'There is already a user with that email' };
     }
   });
 };
 
-const asyncPhoneNumberValidatePatient = (values) => {
-  if (!values.phoneNumber) return;
-  return axios
-    .post('/patientUsers/phoneNumber', { phoneNumber: values.phoneNumber })
-    .then((response) => {
-      const { error } = response.data;
-      if (error) {
-        throw { phoneNumber: error };
-      }
-    });
-};
-
-const asyncEmailValidateNewPatient = (values, dispatch, props) => {
-  if (!values.email) return;
-
-  const initialValues = props.initialValues;
-  if (props.initialized && initialValues.email === values.email.replace(/\s/g, '')) {
-    return;
-  }
-
-  return axios.post('/api/patients/emailCheck', { email: values.email }).then((response) => {
-    if (response.data.exists) {
-      throw { email: 'There is already a user with that email' };
-    }
+const asyncPhoneNumberValidatePatient = ({ phoneNumber }) => {
+  if (!phoneNumber) return;
+  return axios.post('/patientUsers/phoneNumber', { phoneNumber }).catch(({ data }) => {
+    throw { phoneNumber: data };
   });
-};
-
-const asyncPhoneNumberValidateNewPatient = (values, dispatch, props) => {
-  if (!values.mobilePhoneNumber) return;
-
-  const initialValues = props.initialValues;
-
-  if (
-    props.initialized &&
-    initialValues.mobilePhoneNumber === values.mobilePhoneNumber.replace(/\s/g, '')
-  ) {
-    console.log(
-      'initial values are equal',
-      initialValues.mobilePhoneNumber,
-      values.mobilePhoneNumber,
-    );
-    return;
-  }
-
-  // TODO: Check for valid mobile phone number
-  return axios
-    .post('/api/patients/phoneNumberCheck', { phoneNumber: values.mobilePhoneNumber })
-    .then((response) => {
-      if (response.data.exists) {
-        throw { mobilePhoneNumber: 'There is already a user with that phone number' };
-      }
-    });
 };
 
 const asyncValidatePatient = composeAsyncValidators([
   asyncEmailValidatePatient,
   asyncPhoneNumberValidatePatient,
-]);
-const asyncValidateNewPatient = composeAsyncValidators([
-  asyncEmailValidateNewPatient,
-  asyncPhoneNumberValidateNewPatient,
 ]);
 
 function composeAsyncValidators(validatorFns) {
@@ -97,9 +46,7 @@ function composeAsyncValidators(validatorFns) {
 
 const phoneValidate = (value) => {
   if (
-    !/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(
-      value,
-    )
+    !/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(value)
   ) {
     return 'Invalid phone Number';
   }
@@ -127,9 +74,7 @@ const phoneNumberValidate = (value) => {
 
 const phoneValidateNullOkay = (value) => {
   if (
-    !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(
-      value,
-    ) &&
+    !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) &&
     value !== null &&
     value !== '' &&
     value !== undefined
@@ -139,9 +84,7 @@ const phoneValidateNullOkay = (value) => {
 };
 
 const postalCodeValidate = (value) => {
-  const can = new RegExp(
-    /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i,
-  );
+  const can = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
   if (!can.test(value) && value !== undefined) {
     return 'Invalid Postal Code';
   }
@@ -170,11 +113,9 @@ const maxLength = max => value =>
 const asyncEmailValidateUser = values =>
   axios
     .post('/userCheck', { email: values.email })
-    .then(
-      response =>
-        response.data.exists !== true ||
-        Promise.reject({ email: `User with ${values.email} already exists...` }),
-    );
+    .then(response =>
+      response.data.exists !== true ||
+        Promise.reject({ email: `User with ${values.email} already exists...` }));
 
 const asyncEmailPasswordReset = values =>
   axios.post('/userCheck', { email: values.email }).then((response) => {
@@ -232,11 +173,8 @@ const validateBirthdate = (value) => {
 export {
   composeAsyncValidators,
   asyncValidatePatient,
-  asyncValidateNewPatient,
   asyncEmailValidatePatient,
-  asyncEmailValidateNewPatient,
   asyncPhoneNumberValidatePatient,
-  asyncPhoneNumberValidateNewPatient,
   asyncEmailPasswordReset,
   asyncEmailValidateUser,
   maxLength,

@@ -8,7 +8,6 @@ import styles from '../../styles.scss';
 import {
   maxLength,
   emailValidate,
-  asyncValidateNewPatient,
 } from '../../../../library/Form/validate';
 
 const normalizeBirthdate = value => value.trim();
@@ -34,8 +33,6 @@ export default function NewPatientForm({ onSubmit, formName }) {
       form={formName}
       onSubmit={onSubmit}
       ignoreSaveButton
-      // asyncValidate={asyncValidateNewPatient}
-      // asyncBlurFields={['email', 'mobilePhoneNumber']}
       data-test-id={formName}
     >
       <Field
