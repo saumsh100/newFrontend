@@ -35,7 +35,6 @@ const developmentConfig = merge(baseConfig, {
         API_SERVER_PORT: `"${serverPort}"`,
         FEATURE_FLAG_KEY: `"${FEATURE_FLAG_KEY}"`,
         GOOGLE_API_KEY: `"${GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'}"`,
-        HOST: `"${HOST}"`,
       },
     }),
 
