@@ -92,24 +92,37 @@ export async function receiveMessage(account, textMessageData) {
  * A function that encapsulates createTextMessage and requires less parameters for easier use
  * generally.
  *
- * @param mobilePhoneNumber {string} Patient's phone number we are sending a message to.
+ * @param cellPhoneNumber {string} Patient's phone number we are sending a message to.
  * @param message {string} Message content.
+ * @param accountId {string} Id of the account.
  * @param user {string|null} An id of user that is sending a message.
  * @returns {Promise}
  */
-export async function sendMessage(mobilePhoneNumber, message, accountId, user = null) {
+export async function sendMessage(cellPhoneNumber, message, accountId, user = null) {
   const patient = await getPatientFromCellPhoneNumber({
     accountId,
-    cellPhoneNumber: mobilePhoneNumber,
-  });
+    cellPhoneNumber,
+  }) || unknownPatient(accountId, cellPhoneNumber);
 
   const chat = await Chat.findOne({
     raw: true,
     where: { patientId: patient.id },
+  }) || await Chat.findOne({
+    raw: true,
+    where: {
+      patientId: null,
+      patientPhoneNumber: cellPhoneNumber,
+      accountId,
+    },
   });
 
   const chatId = chat ? chat.id : null;
-  return createChatMessage(message, patient, user, chatId);
+  return createChatMessage(
+    message,
+    patient,
+    user,
+    chatId,
+  );
 }
 
 /**
@@ -371,3 +384,16 @@ function validChatUpdate(hasUnread, textMessagesCount) {
   return hasUnread ? textMessagesCount > 0 : textMessagesCount === 0;
 }
 
+/**
+ * Create a fake patient we use for sending a message to the unknown patients.
+ * @param accountId
+ * @param cellPhoneNumber
+ * @return {{id: null, accountId: string, cellPhoneNumber: string}}
+ */
+function unknownPatient(accountId, cellPhoneNumber) {
+  return {
+    id: null,
+    accountId,
+    cellPhoneNumber,
+  };
+}

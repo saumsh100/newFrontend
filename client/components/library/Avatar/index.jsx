@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
 import styles from './styles.scss';
+import { Icon } from '../';
 
 export default function Avatar({
   user,
@@ -23,8 +24,11 @@ export default function Avatar({
     <img className={styles.img} src={url} alt={user.firstName} />
   ) : (
     <span className={styles.text}>
-      {user.firstName && user.firstName[0]}
-      {user.lastName && user.lastName[0]}
+      {user.isUnknown ? (
+        <Icon icon="user" type="solid" />
+      ) : (
+        `${user.firstName && user.firstName[0]}${user.lastName && user.lastName[0]}`
+      )}
     </span>
   );
 

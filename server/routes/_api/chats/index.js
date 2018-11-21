@@ -52,10 +52,7 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
   });
 
   return Chat.findAll({
-    where: {
-      accountId,
-      patientId: { $ne: null },
-    },
+    where: { accountId },
     order: [['lastTextMessageDate', 'DESC']],
     limit: limitted,
     offset: skipped,
@@ -140,11 +137,11 @@ chatsRouter.post('/textMessages', checkPermissions('textMessages:create'), async
       accountId,
     });
 
-    if (!poc) {
+    if (patientId && !poc) {
       throw new StatusError(400, `There is not point of contact for ${cellPhoneNumber}.`);
     }
 
-    if (poc.id !== patientId) {
+    if (patientId && poc.id !== patientId) {
       throw new StatusError(400, `This patient is not the point of contact for ${cellPhoneNumber}.`);
     }
 

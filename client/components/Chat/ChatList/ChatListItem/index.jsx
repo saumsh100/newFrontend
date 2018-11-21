@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { Icon, ListItem, Avatar } from '../../../library';
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import { isHub } from '../../../../util/hub';
+import UnknownPatient from '../../unknownPatient';
 import styles from './styles.scss';
 
 class ChatListItem extends Component {
@@ -43,10 +44,11 @@ class ChatListItem extends Component {
 
   renderPatient() {
     const { patient } = this.props;
+
     return patient.firstName || patient.lastName ? (
       <div className={styles.nameAgeWrapper}>
-        <div className={styles.nameWithAge}>
-          {patient.firstName} {patient.lastName}
+        <div data-test-id="chat_patientName" className={styles.nameWithAge}>
+          {patient.isUnknown ? patient.cellPhoneNumber : `${patient.firstName} ${patient.lastName}`}
         </div>
         {patient.birthDate && (
           <div className={styles.age}>{moment().diff(patient.birthDate, 'years')}</div>
@@ -145,7 +147,7 @@ function mapStateToProps(state, { chat = {} }) {
   return {
     selectedChatId,
     lockedChat,
-    patient: patients.get(chat.patientId) || {},
+    patient: patients.get(chat.patientId) || UnknownPatient(chat.patientPhoneNumber),
     lastTextMessage,
   };
 }

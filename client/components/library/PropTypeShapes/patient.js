@@ -57,6 +57,8 @@ const PatientShape = {
   preferredPhoneNumber: PropTypes.number,
   status: PropTypes.string,
   workNumber: PropTypes.number,
+  isUnknown: PropTypes.bool,
+  foundChatId: PropTypes.string,
 };
 
 export default PatientShape;

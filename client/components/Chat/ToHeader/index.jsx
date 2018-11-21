@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -5,6 +6,7 @@ import classNames from 'classnames';
 import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
 import { isHub } from '../../../util/hub';
+import UnknownPatient from '../unknownPatient';
 import styles from './styles.scss';
 
 const toInputTheme = {
@@ -12,20 +14,26 @@ const toInputTheme = {
   suggestionsContainerOpen: styles.suggestionsContainer,
 };
 
-const toInputProps = {
-  placeholder: 'To: Type name of patient',
-};
+const toInputProps = { placeholder: 'To: Type name of patient' };
 
 class ToHeader extends Component {
+  renderPatientName() {
+    const { isUnknown, firstName, lastName, cellPhoneNumber } = this.props.selectedPatient;
+    return isUnknown ? (
+      <span>{cellPhoneNumber}</span>
+    ) : (
+      <span>
+        <span>{firstName}</span>
+        <span>{lastName}</span>
+      </span>
+    );
+  }
+
   renderMobile() {
     const { selectedPatient, onPatientInfoClick, onPatientListClick } = this.props;
 
     return (
-      <div
-        className={classNames(styles.wrapper, {
-          [styles.hubWrapper]: isHub(),
-        })}
-      >
+      <div className={classNames(styles.wrapper, { [styles.hubWrapper]: isHub() })}>
         {!isHub() && (
           <Button
             icon="arrow-left"
@@ -44,10 +52,7 @@ class ToHeader extends Component {
               className={styles.patientInfoButton}
             >
               <Avatar size="xs" user={selectedPatient} />
-              <div className={styles.patientInfoName}>
-                <span>{selectedPatient.firstName}</span>
-                <span>{selectedPatient.lastName}</span>
-              </div>
+              <div className={styles.patientInfoName}>{this.renderPatientName()}</div>
               <Icon className={styles.infoArrow} icon="angle-right" type="light" />
             </Button>
           </div>
@@ -71,10 +76,7 @@ class ToHeader extends Component {
         {selectedPatient ? (
           <div className={styles.patientInfoWrapper}>
             <Avatar size="sm" user={selectedPatient} />
-            <div className={styles.patientInfoName}>
-              <span>{selectedPatient.firstName}</span>
-              <span>{selectedPatient.lastName}</span>
-            </div>
+            <div className={styles.patientInfoName}>{this.renderPatientName()}</div>
           </div>
         ) : (
           <PatientSearch
@@ -97,15 +99,15 @@ ToHeader.propTypes = {
   selectedPatient: PropTypes.shape({
     firstName: PropTypes.string,
     lastName: PropTypes.string,
+    isUnknown: PropTypes.bool,
+    cellPhoneNumber: PropTypes.string,
   }),
   onPatientInfoClick: PropTypes.func.isRequired,
   onPatientListClick: PropTypes.func.isRequired,
   onSearch: PropTypes.func.isRequired,
 };
 
-ToHeader.defaultProps = {
-  selectedPatient: null,
-};
+ToHeader.defaultProps = { selectedPatient: null };
 
 function mapStateToProps({ entities, chat }) {
   const selectedChatId = chat.get('selectedChatId');
@@ -114,9 +116,11 @@ function mapStateToProps({ entities, chat }) {
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
   const selectedPatientId = selectedChat && selectedChat.patientId;
 
-  return {
-    selectedPatient: patients.get(selectedPatientId),
-  };
+  if (selectedChat && selectedChat.patientPhoneNumber && !selectedChat.patientId) {
+    return { selectedPatient: UnknownPatient(selectedChat.patientPhoneNumber) };
+  }
+
+  return { selectedPatient: patients.get(selectedPatientId) };
 }
 
 const enhance = connect(mapStateToProps);

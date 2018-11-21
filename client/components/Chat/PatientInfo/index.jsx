@@ -7,15 +7,14 @@ import About from './About';
 import Appointments from './Appointments';
 import { patientShape } from '../../library/PropTypeShapes/';
 import Insurance from './Insurance';
+import UnknownPatient from '../unknownPatient';
 import styles from './styles.scss';
 
 class PatientInfo extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      tabIndex: 0,
-    };
+    this.state = { tabIndex: 0 };
   }
 
   render() {
@@ -44,26 +43,22 @@ class PatientInfo extends Component {
   }
 }
 
-PatientInfo.propTypes = {
-  patient: PropTypes.shape(patientShape),
-};
+PatientInfo.propTypes = { patient: PropTypes.shape(patientShape) };
 
-PatientInfo.defaultProps = {
-  patient: null,
-};
+PatientInfo.defaultProps = { patient: null };
 
 function mapStateToProps({ entities, chat }) {
-  const selectedChat = chat.get('selectedChatId');
-  const finalChat = selectedChat || chat.get('newChat');
-
+  const selectedChatId = chat.get('selectedChatId');
+  const finalChat = selectedChatId || chat.get('newChat');
+  const selectedChat = chat.get('selectedChat');
   const selectedPatientId =
     finalChat && finalChat.patientId
       ? finalChat.patientId
       : entities.getIn(['chats', 'models', finalChat, 'patientId']);
+  const unknownPatientChat =
+    !selectedPatientId && selectedChat && UnknownPatient(selectedChat.patientPhoneNumber);
 
-  return {
-    patient: entities.getIn(['patients', 'models', selectedPatientId]),
-  };
+  return { patient: entities.getIn(['patients', 'models', selectedPatientId]) || unknownPatientChat };
 }
 
 const enhance = connect(mapStateToProps);

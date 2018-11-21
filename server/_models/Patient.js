@@ -267,6 +267,8 @@ export default function (sequelize, DataTypes) {
           this.get('mobilePhoneNumber');
       },
     },
+
+    foundChatId: { type: DataTypes.VIRTUAL(DataTypes.STRING) },
   });
 
   Patient.associate = (models) => {

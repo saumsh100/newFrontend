@@ -50,6 +50,9 @@ const PatientSchema = {
   dueForRecallExamDate: null,
   omitReminderIds: null,
   omitRecallIds: null,
+  isUnknown: false,
+  // virtual field, used to determinate if there is a pre-created chat for that phone number.
+  foundChatId: null,
 };
 
 export default class Patient extends createModel(PatientSchema) {

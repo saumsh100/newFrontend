@@ -74,7 +74,7 @@ export default handleActions(
         return state
           .set('chatPoC', payload)
           .set('isPoC', payload.id === state.getIn(['selectedChat', 'patientId']));
-      } else if (state.get('newChat').patientId) {
+      } else if (state.get('newChat') && state.get('newChat').patientId) {
         return state
           .set('chatPoC', payload)
           .set('isPoC', payload.id === state.get('newChat').patientId);

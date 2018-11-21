@@ -105,11 +105,12 @@ class MessageTextArea extends Component {
 
     if (!chat || isPoC === null) return null;
 
+    const hasPatient = patient && patient.id;
     const tooltipPlacement = isHub() ? 'bottomRight' : 'top';
     return (
       <SContainer className={styles.textAreaContainer}>
         {!isPoC &&
-          patient && (
+          hasPatient && (
             <div className={styles.textAreaPoC}>
               <img
                 src="/images/donna.png"
@@ -203,8 +204,8 @@ MessageTextArea.defaultProps = {
 function mapStateToProps(state, { chat = {} }) {
   const values = getFormValues(`chatMessageForm_${chat.id}`)(state);
   const patient = state.entities.getIn(['patients', 'models', chat.patientId]);
-  const phoneNumber = patient && patient.get('cellPhoneNumber');
-  const isPoC = state.chat.get('isPoC');
+  const phoneNumber = patient ? patient.get('cellPhoneNumber') : chat.patientPhoneNumber;
+  const isPoC = state.chat.get('isPoC') || !!(!patient && chat.patientPhoneNumber);
   const canSend = !!phoneNumber && !!(values && values.message) && isPoC;
   const error =
     (!patient && 'Select a patient above') ||

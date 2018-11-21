@@ -34,28 +34,37 @@ class PointOfContactBadge extends React.PureComponent {
     }, 2200);
   }
 
+  renderBadge(isPoC) {
+    const { isTooltipVisible } = this.state;
+    const toolTipText = <span>{`${isPoC ? '' : 'Not '}Point of Contact`}</span>;
+
+    return (
+      <span className={classnames(styles.pocBadge, { [styles.isPoC]: isPoC })}>
+        <Spinner />
+        {isTooltipVisible && (
+          <Tooltip placement="top" trigger={['hover']} overlay={toolTipText}>
+            <div className={styles.badge}>{isPoC ? <CheckIcon /> : <XIcon />}</div>
+          </Tooltip>
+        )}
+      </span>
+    );
+  }
+
   render() {
     const { patientId, channel } = this.props;
-    const { isTooltipVisible } = this.state;
+
+    if (!patientId) {
+      return this.renderBadge(true);
+    }
+
     return (
       <PatientQueryRenderer patientId={patientId}>
         {(data) => {
           if (!('accountViewer' in data)) {
             return null;
           }
-
           const isPoC = data.accountViewer.patient[`is${cap(channel)}Poc`];
-          const toolTipText = <span>{`${isPoC ? '' : 'Not '}Point of Contact`}</span>;
-          return (
-            <span className={classnames(styles.pocBadge, { [styles.isPoC]: isPoC })}>
-              <Spinner />
-              {isTooltipVisible && (
-                <Tooltip placement="top" trigger={['hover']} overlay={toolTipText}>
-                  <div className={styles.badge}>{isPoC ? <CheckIcon /> : <XIcon />}</div>
-                </Tooltip>
-              )}
-            </span>
-          );
+          return this.renderBadge(isPoC);
         }}
       </PatientQueryRenderer>
     );

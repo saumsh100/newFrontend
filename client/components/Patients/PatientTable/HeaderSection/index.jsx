@@ -1,8 +1,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, DialogBox, Input, DropdownMenu, Icon } from '../../../library';
+import { Button, DialogBox, DropdownMenu, Icon } from '../../../library';
 import NewPatientForm from './NewPatientForm';
+import AssignPatientToChatDialog from '../../AssignPatientToChatDialog';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import SmartFilters from './SmartFilters';
 import Actions from './Actions';
@@ -13,6 +14,8 @@ class HeaderSection extends Component {
     super(props);
     this.state = {
       active: false,
+      assignPatientToChatModalActive: false,
+      patient: null,
     };
     this.setActive = this.setActive.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
@@ -20,14 +23,21 @@ class HeaderSection extends Component {
   }
 
   setActive() {
+    this.setState({ active: true });
+  }
+
+  openAssignPatientToChatModal(patient) {
     this.setState({
-      active: true,
+      patient,
+      assignPatientToChatModalActive: true,
     });
   }
 
   reinitializeState() {
     this.setState({
       active: false,
+      assignPatientToChatModalActive: false,
+      patient: null,
     });
   }
 
@@ -37,31 +47,26 @@ class HeaderSection extends Component {
     values.isSyncedWithPms = false;
 
     const alert = {
-      success: {
-        body: 'New Patient Added.',
-      },
-      error: {
-        body: 'Failed to add patient.',
-      },
+      success: { body: 'New Patient Added.' },
+      error: { body: 'Failed to add patient.' },
     };
 
     createEntityRequest({
       key: 'patients',
       entityData: values,
       alert,
-    }).then(() => {
+    }).then(({ patients }) => {
       this.props.destroy('newUser');
+      const [patient] = Object.values(patients);
+      if (patient.foundChatId) {
+        return this.openAssignPatientToChatModal(patient);
+      }
       this.reinitializeState();
     });
   }
 
   render() {
-    const {
-      totalPatients,
-      smartFilter,
-      setSmartFilter,
-      patientIds,
-    } = this.props;
+    const { totalPatients, smartFilter, setSmartFilter, patientIds } = this.props;
 
     const formName = 'newPatientForm';
 
@@ -76,7 +81,10 @@ class HeaderSection extends Component {
         label: 'Save',
         onClick: this.handleSubmit,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: formName },
+        props: {
+          color: 'blue',
+          form: formName,
+        },
       },
     ];
 
@@ -102,22 +110,12 @@ class HeaderSection extends Component {
     return (
       <div className={styles.header}>
         <div>
-          <DropdownMenu
-            data-test-id="dropDown_smartFilters"
-            labelComponent={filterMenu}
-            data-test-id="dropDown_smartFilters"
-          >
+          <DropdownMenu labelComponent={filterMenu} data-test-id="dropDown_smartFilters">
             <div className={styles.filterContainer}>
-              <SmartFilters
-                setSmartFilter={setSmartFilter}
-                smartFilter={smartFilter}
-              />
+              <SmartFilters setSmartFilter={setSmartFilter} smartFilter={smartFilter} />
             </div>
           </DropdownMenu>
-          <div
-            className={styles.header_subHeader}
-            data-test-id="text_totalPatientsCount"
-          >
+          <div className={styles.header_subHeader} data-test-id="text_totalPatientsCount">
             {`Showing ${totalPatients} Patients`}
           </div>
         </div>
@@ -145,6 +143,11 @@ class HeaderSection extends Component {
         >
           <NewPatientForm onSubmit={this.handleSubmit} formName={formName} />
         </DialogBox>
+        <AssignPatientToChatDialog
+          callback={this.reinitializeState}
+          active={this.state.assignPatientToChatModalActive}
+          patient={this.state.patient}
+        />
       </div>
     );
   }
@@ -154,8 +157,15 @@ HeaderSection.propTypes = {
   totalPatients: PropTypes.number,
   smartFilter: PropTypes.object,
   setSmartFilter: PropTypes.func.isRequired,
-  patientIds: PropTypes.arrayOf(String),
+  patientIds: PropTypes.arrayOf(PropTypes.string),
   createEntityRequest: PropTypes.func.isRequired,
+  destroy: PropTypes.func.isRequired,
+};
+
+HeaderSection.defaultProps = {
+  totalPatients: null,
+  smartFilter: null,
+  patientIds: [],
 };
 
 export default HeaderSection;

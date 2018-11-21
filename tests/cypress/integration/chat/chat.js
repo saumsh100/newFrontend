@@ -131,6 +131,50 @@ describe('Chat Tests', () => {
     });
   });
 
+  describe('Unknown Number test', () => {
+    it('Receive / Send', () => {
+      cy.receiveTextMessage(
+        '72954241-3652-4792-bae5-5bfed53d37b7',
+        '+11111111111',
+        '+15874003884',
+        'Hi, I am Unknown',
+      )
+        .get('[data-test-id="chat_lastMessage"]')
+        .contains('Hi, I am Unknown')
+        .click({ force: true })
+        .get('[data-test-id="chatMessageForm"]')
+        .get('[data-test-id="message"]')
+        .click({ force: true })
+        .type('Hello Unknown')
+        .get('[data-test-id="button_sendMessage"]')
+        .click({ force: true })
+        .wait(1000)
+        .get('[data-test-id="item_chatMessage"]')
+        .contains('Hello Unknown');
+    });
+
+    it('Open List of Patient and add', () => {
+      cy.login('/patients/list')
+        .getAndClick('button_addNewPatient')
+        .fillTextInput('newPatientForm', 'firstName', 'Boba')
+        .fillTextInput('newPatientForm', 'lastName', 'Fett')
+        .selectOption('newPatientForm', 'gender', 'option_0')
+        .fillTextInput('newPatientForm', 'mobilePhoneNumber', '+11111111111')
+        .get('[data-test-id="email"]')
+        .click({ force: true })
+        .type('boba.fett@carecru.com')
+        .fillTextInput('newPatientForm', 'birthDate', '11/11/2011')
+        .submitForm('newPatientForm')
+        .wait(500)
+        .get('[data-test-id="patientAssignConfirm"]')
+        .get('[data-test-id="patientAssignConfirmYes"]')
+        .click({ force: true })
+        .visit(`${Cypress.env('siteURL')}/chat`)
+        .get('[data-test-id="chat_patientName"]')
+        .contains('Boba Fett');
+    });
+  });
+
   describe('Infinite loading', () => {
     before(() => {
       for (let i = 0; i < 30; i++) {

@@ -18,6 +18,7 @@ import {
 } from '../reducers/chat';
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
+import PatientModel from '../entities/models/Patient';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
 import { isHub } from '../util/hub';
 import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
@@ -281,7 +282,7 @@ export function setChatMessagesListForChat(chatId, total = 0) {
 }
 
 export async function setChatIsPoC(patient, dispatch) {
-  if (!patient || !patient.get('cellPhoneNumber')) {
+  if (!patient || !(patient instanceof PatientModel && patient.get('cellPhoneNumber'))) {
     return dispatch(setChatPoC(patient));
   }
 
@@ -299,16 +300,20 @@ export function selectChat(id, createChat = null) {
     const currentChatId = chat.get('selectedChatId');
     if (id && currentChatId === id) return;
     const chatEntity =
-      !createChat && id && entities.getIn(['chats', 'models', id]).delete('textMessages');
+      !createChat &&
+      id &&
+      entities.getIn(['chats', 'models', id]) &&
+      entities.getIn(['chats', 'models', id]).delete('textMessages');
     dispatch(setNewChat(createChat));
     dispatch(setSelectedChat(chatEntity));
 
-    const patientId = (!!createChat && createChat.patientId) || (id && chatEntity.get('patientId'));
+    const patientId =
+      (!!createChat && createChat.patientId) || (id && chatEntity && chatEntity.get('patientId'));
     if (!!patientId === true) {
       const futurePatient = entities.getIn(['patients', 'models', patientId]);
       await setChatIsPoC(futurePatient, dispatch);
     } else {
-      await setChatIsPoC(id, dispatch);
+      await setChatIsPoC(patientId, dispatch);
     }
     dispatch(updateChatId());
     if (isOnChatPage(routing.location.pathname) && !isHub()) {

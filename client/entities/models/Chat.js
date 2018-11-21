@@ -5,6 +5,7 @@ const ChatSchema = {
   id: null,
   accountId: null,
   patientId: null,
+  patientPhoneNumber: null,
   textMessages: null,
   lastTextMessageDate: null,
   lastTextMessageId: null,

@@ -10,7 +10,6 @@ import { isHub, isResponsive } from '../../util/hub';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import Requests from '../../entities/models/Request';
 import Account from '../../entities/models/Account';
-
 import {
   Card,
   SBody,
@@ -29,12 +28,15 @@ import AddPatientSuggestions from './AddPatientSuggestions';
 import Header from './Header';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
+import AssignPatientToChatDialog from '../Patients/AssignPatientToChatDialog';
 import styles from './styles.scss';
 
 class ScheduleComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      assignPatientToChatModalActive: false,
+      patient: null,
       addNewAppointment: false,
       patientSearched: null,
       sendEmail: false,
@@ -51,17 +53,24 @@ class ScheduleComponent extends Component {
     this.handlePatientUserSubmit = this.handlePatientUserSubmit.bind(this);
     this.handlePatientSubmit = this.handlePatientSubmit.bind(this);
     this.setCreatingPatient = this.setCreatingPatient.bind(this);
+    this.closeAssignPatientModal = this.closeAssignPatientModal.bind(this);
   }
 
   componentDidMount() {
     if (isHub()) {
-      this.updateHubData({ ...this.props, pageTitle: this.pageTitle });
+      this.updateHubData({
+        ...this.props,
+        pageTitle: this.pageTitle,
+      });
     }
   }
 
   componentDidUpdate() {
     if (isHub()) {
-      this.updateHubData({ ...this.props, pageTitle: this.pageTitle });
+      this.updateHubData({
+        ...this.props,
+        pageTitle: this.pageTitle,
+      });
     }
   }
 
@@ -70,43 +79,38 @@ class ScheduleComponent extends Component {
   }
 
   setPatientSearched(patientSearched) {
-    this.setState({
-      patientSearched,
-    });
+    this.setState({ patientSearched });
   }
 
   setSendEmail() {
-    this.setState({
-      sendEmail: !this.state.sendEmail,
-    });
+    this.setState({ sendEmail: !this.state.sendEmail });
   }
 
   setShowInput(showBool) {
-    this.setState({
-      showInput: showBool,
-    });
+    this.setState({ showInput: showBool });
   }
 
   setCurrentDay(day) {
     this.props.setScheduleDate({ scheduleDate: moment(day) });
   }
 
-  nextDay(currentDay) {
-    this.props.setScheduleDate({
-      scheduleDate: moment(currentDay).add(1, 'days'),
+  openAssignPatientToChatModal(patient) {
+    this.setState({
+      patient,
+      assignPatientToChatModalActive: true,
     });
+  }
+
+  nextDay(currentDay) {
+    this.props.setScheduleDate({ scheduleDate: moment(currentDay).add(1, 'days') });
   }
 
   previousDay(currentDay) {
-    this.props.setScheduleDate({
-      scheduleDate: moment(currentDay).subtract(1, 'days'),
-    });
+    this.props.setScheduleDate({ scheduleDate: moment(currentDay).subtract(1, 'days') });
   }
 
   addNewAppointment() {
-    this.setState({
-      addNewAppointment: true,
-    });
+    this.setState({ addNewAppointment: true });
   }
 
   updateHubData(props) {
@@ -141,6 +145,13 @@ class ScheduleComponent extends Component {
     });
   }
 
+  closeAssignPatientModal() {
+    this.setState({
+      assignPatientToChatModalActive: false,
+      patient: null,
+    });
+  }
+
   handlePatientUserSubmit(values) {
     const { schedule, selectAppointment, createEntityRequest } = this.props;
 
@@ -164,33 +175,29 @@ class ScheduleComponent extends Component {
     };
 
     const alert = {
-      success: {
-        body: 'New Patient Added.',
-      },
-      error: {
-        body: 'Failed to add patient.',
-      },
+      success: { body: 'New Patient Added.' },
+      error: { body: 'Failed to add patient.' },
     };
 
     createEntityRequest({
       key: 'patients',
       entityData: values,
       alert,
-    }).then((result) => {
-      appointment.patientId = Object.keys(result.patients)[0];
-      this.reinitializeState();
+    }).then(({ patients }) => {
+      const [patient] = Object.values(patients);
+      appointment.patientId = patient.id;
       selectAppointment(appointment);
+      if (patient.foundChatId) {
+        return this.openAssignPatientToChatModal(patient);
+      }
+      this.reinitializeState();
     });
   }
 
   handlePatientSubmit(values) {
     const alert = {
-      success: {
-        body: 'New Patient Added.',
-      },
-      error: {
-        body: 'Failed to add patient.',
-      },
+      success: { body: 'New Patient Added.' },
+      error: { body: 'Failed to add patient.' },
     };
 
     this.props
@@ -199,8 +206,12 @@ class ScheduleComponent extends Component {
         entityData: values,
         alert,
       })
-      .then(() => {
+      .then(({ patients }) => {
+        const [patient] = Object.values(patients);
         this.props.setCreatingPatient({ createPatientBool: false });
+        if (patient.foundChatId) {
+          return this.openAssignPatientToChatModal(patient);
+        }
       });
   }
 
@@ -224,9 +235,7 @@ class ScheduleComponent extends Component {
 
     const { addNewAppointment } = this.state;
 
-    const hubRedirect = {
-      pathname: '/requests',
-    };
+    const hubRedirect = { pathname: '/requests' };
 
     let formName = 'NewAppointmentForm';
     if (selectedAppointment) {
@@ -290,7 +299,11 @@ class ScheduleComponent extends Component {
           label: 'Save',
           onClick: this.handlePatientUserSubmit,
           component: RemoteSubmitButton,
-          props: { color: 'blue', form: patientFormName, removePristineCheck: true },
+          props: {
+            color: 'blue',
+            form: patientFormName,
+            removePristineCheck: true,
+          },
         },
       ];
 
@@ -320,7 +333,10 @@ class ScheduleComponent extends Component {
           label: 'Save',
           onClick: this.handlePatientSubmit,
           component: RemoteSubmitButton,
-          props: { color: 'blue', form: patientFormName },
+          props: {
+            color: 'blue',
+            form: patientFormName,
+          },
         },
       ];
 
@@ -460,6 +476,11 @@ class ScheduleComponent extends Component {
             </div>
           </div>
         </div>
+        <AssignPatientToChatDialog
+          callback={this.closeAssignPatientModal}
+          patient={this.state.patient}
+          active={this.state.assignPatientToChatModalActive}
+        />
       </div>
     );
   }
@@ -510,9 +531,7 @@ ScheduleComponent.defaultProps = {
   patients: null,
 };
 
-const mapStateToProps = ({ routing }) => ({
-  routing,
-});
+const mapStateToProps = ({ routing }) => ({ routing });
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(

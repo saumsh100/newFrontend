@@ -29,12 +29,12 @@ Cypress.Commands.add('selectOption', (formDataTestId, dataTestId, optionValue) =
     .click({ force: true });
 });
 
-Cypress.Commands.add('fillTextInput', (formDataTestId, dataTestId, text) => {
+Cypress.Commands.add('fillTextInput', (formDataTestId, dataTestId, text, options = {}) => {
   cy
     .get(`[data-test-id=${formDataTestId}]`)
     .find(`[data-test-id=${dataTestId}]`)
     .clear()
-    .type(text);
+    .type(text, options);
 });
 
 Cypress.Commands.add('fillInput', (formDataTestId, dataTestId, email) => {

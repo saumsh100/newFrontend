@@ -3,7 +3,6 @@ import isArray from 'lodash/isArray';
 import { Router } from 'express';
 import moment from 'moment';
 import format from '../../util/format';
-
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { updateChatAfterPatient } from '../../util/preUpdateFunctions';
 import {
@@ -563,14 +562,30 @@ eventsRouter.get('/:patientId/events', checkPermissions('patients:read'), async 
  */
 patientsRouter.post('/', async (req, res, next) => {
   const accountId = req.accountId || req.body.accountId;
-  const patientData = Object.assign({}, req.body, { accountId });
+  const patientData = {
+    ...req.body,
+    accountId,
+  };
 
   try {
     const patientTest = await Patient.build(patientData);
     await patientTest.validate();
 
     const patient = await Patient.create(patientData);
-    const normalizedPatient = format(req, res, 'patient', patient.dataValues);
+    if (patient && patient.cellPhoneNumber) {
+      const chat = await Chat.findOne({
+        where: {
+          accountId,
+          patientPhoneNumber: patient.cellPhoneNumber,
+          patientId: null,
+        },
+      });
+
+      if (chat) {
+        patient.foundChatId = chat.id;
+      }
+    }
+    const normalizedPatient = format(req, res, 'patient', patient.get({ raw: true }));
 
     res.status(201)
       .send(normalizedPatient);

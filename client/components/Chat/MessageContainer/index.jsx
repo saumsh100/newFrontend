@@ -29,6 +29,7 @@ import {
 } from '../../../thunks/chat';
 import ChatTextMessage from '../../../entities/models/TextMessage';
 import chatTabs from '../consts';
+import UnknownPatient from '../unknownPatient';
 import styles from './styles.scss';
 
 const DEFAULT_OFFSET = 0;
@@ -385,18 +386,20 @@ function mapStateToProps({ entities, auth, chat }) {
   const patients = entities.getIn(['patients', 'models']);
   const selectedChatId = chat.get('selectedChatId');
   const selectedChat = chats.get(selectedChatId) || chat.get('newChat');
-  const selectedPatientId = selectedChat && selectedChat.patientId;
   const textMessages = chat.get('chatMessages');
   const totalChatMessages = chat.get('totalChatMessages');
+  const getPatient = ({ patientId, patientPhoneNumber }) =>
+    (patientId ? patients.get(patientId) : UnknownPatient(patientPhoneNumber));
+  const selectedPatient = (selectedChat && getPatient(selectedChat)) || {};
 
   return {
     textMessages,
     selectedChat,
     totalChatMessages,
+    selectedPatient,
     newChat: chat.get('newChat'),
     userId: auth.getIn(['user', 'id']),
     activeAccount: entities.getIn(['accounts', 'models', auth.get('accountId')]),
-    selectedPatient: patients.get(selectedPatientId),
   };
 }
 
