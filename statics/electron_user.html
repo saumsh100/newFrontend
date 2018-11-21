@@ -70,7 +70,7 @@
   });
 
   ipcRenderer.on(RESPONSE_HOST, (e, { url }) => {
-    hostUrl = host;
+    hostUrl = url;
   });
 
   ipcRenderer.on(ZOOM_FACTOR_CHANGE, (e, data) => {
