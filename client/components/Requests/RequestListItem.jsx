@@ -13,9 +13,7 @@ import withHoverable from '../../hocs/withHoverable';
 class RequestListItem extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      viewRequest: false,
-    };
+    this.state = { viewRequest: false };
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
     this.renderListItem = this.renderListItem.bind(this);
@@ -29,14 +27,7 @@ class RequestListItem extends Component {
     this.props.removeRequest(this.props.request);
   }
 
-  renderListItem({
-    patientUser,
-    data,
-    request,
-    requestingUser,
-    requestType,
-    openRequest,
-  }) {
+  renderListItem({ patientUser, data, request, requestingUser, requestType, openRequest }) {
     return (
       <ListItem
         className={styles.requestListItem}
@@ -74,9 +65,7 @@ class RequestListItem extends Component {
 
     const serviceName = service ? service.name : '';
 
-    const fullName = patientUser
-      .get('firstName')
-      .concat(' ', patientUser.get('lastName'));
+    const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
 
     const data = {
       time: request.getFormattedTime(),
@@ -89,6 +78,7 @@ class RequestListItem extends Component {
       note: request.note,
       insuranceCarrier: request.insuranceCarrier,
       insuranceMemberId: request.insuranceMemberId,
+      insuranceGroupId: request.insuranceGroupId,
       month: request.getMonth(),
       day: request.getDay(),
     };
@@ -106,6 +96,7 @@ class RequestListItem extends Component {
             note={data.note}
             insuranceCarrier={data.insuranceCarrier}
             insuranceMemberId={data.insuranceMemberId}
+            insuranceGroupId={data.insuranceGroupId}
             practitioner={practitioner}
             patient={patientUser}
             request={request}

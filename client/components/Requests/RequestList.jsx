@@ -48,12 +48,7 @@ class RequestList extends Component {
       if (nextSelected && !selected) {
         this.props.setBackHandler(this.backHandler);
         this.props.setTitle(<p>
-          <Icon
-            icon="calendar"
-            type="regular"
-            size={0.9}
-            className={styles.calendarIcon}
-          />
+          <Icon icon="calendar" type="regular" size={0.9} className={styles.calendarIcon} />
           {nextSelected.getFormattedTime()}
                             </p>);
       }
@@ -62,7 +57,7 @@ class RequestList extends Component {
 
   confirmAppointment(request, patientUser) {
     const {
-      routing: { location },
+      location,
       redirect,
     } = this.props;
 
@@ -83,7 +78,10 @@ class RequestList extends Component {
 
     this.props.checkPatientUser(patientUser, requestData);
 
-    this.props.push({ ...location, ...redirect });
+    this.props.push({
+      ...location,
+      ...redirect,
+    });
   }
 
   removeRequest(request) {
@@ -102,31 +100,21 @@ class RequestList extends Component {
   }
 
   openRequest(id) {
-    const {
-      routing: { location },
-    } = this.props;
-
     this.props.push({
-      ...location,
+      ...this.props.location,
       search: stringify({ selectedRequest: id || undefined }),
     });
   }
 
   renderSelectedRequest(props) {
-    const {
-      services, patientUsers, practitioners, selectedRequest,
-    } = props;
+    const { services, patientUsers, practitioners, selectedRequest } = props;
 
     const patientUser = patientUsers.get(selectedRequest.get('patientUserId'));
-    const fullName = patientUser
-      .get('firstName')
-      .concat(' ', patientUser.get('lastName'));
+    const fullName = patientUser.get('firstName').concat(' ', patientUser.get('lastName'));
     const service = services.get(selectedRequest.get('serviceId'));
     const serviceName = service ? service.name : '';
     const practitionerId = selectedRequest.get('practitionerId');
-    const practitioner = practitionerId
-      ? practitioners.get(practitionerId)
-      : null;
+    const practitioner = practitionerId ? practitioners.get(practitionerId) : null;
     const requestingUser = patientUsers.get(selectedRequest.get('requestingPatientUserId'));
     const data = {
       time: selectedRequest.getFormattedTime(),
@@ -139,6 +127,7 @@ class RequestList extends Component {
       note: selectedRequest.note,
       insuranceCarrier: selectedRequest.insuranceCarrier,
       insuranceMemberId: selectedRequest.insuranceMemberId,
+      insuranceGroupId: selectedRequest.insuranceGroupId,
       month: selectedRequest.getMonth(),
       day: selectedRequest.getDay(),
     };
@@ -150,13 +139,12 @@ class RequestList extends Component {
         note={data.note}
         insuranceCarrier={data.insuranceCarrier}
         insuranceMemberId={data.insuranceMemberId}
+        insuranceGroupId={data.insuranceGroupId}
         practitioner={practitioner}
         patient={patientUser}
         request={selectedRequest}
         closePopover={this.backHandler}
-        acceptRequest={() =>
-          this.confirmAppointment(selectedRequest, patientUser)
-        }
+        acceptRequest={() => this.confirmAppointment(selectedRequest, patientUser)}
         rejectRequest={() => this.removeRequest(selectedRequest)}
         requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
         isMobile
@@ -165,20 +153,12 @@ class RequestList extends Component {
   }
 
   renderRequestList(props) {
-    const {
-      sortedRequests,
-      services,
-      patientUsers,
-      practitioners,
-      popoverRight,
-    } = props;
+    const { sortedRequests, services, patientUsers, practitioners, popoverRight } = props;
     return (
       <List className={styles.requestList}>
         {sortedRequests.map((request) => {
           const practitionerId = request.get('practitionerId');
-          const practitioner = practitionerId
-            ? practitioners.get(practitionerId)
-            : null;
+          const practitioner = (practitionerId && practitioners.get(practitionerId)) || null;
 
           const requestingUser = patientUsers.get(request.get('requestingPatientUserId'));
 
@@ -230,9 +210,7 @@ RequestList.propTypes = {
   practitioners: PropTypes.instanceOf(Map),
   push: PropTypes.func,
   requestId: PropTypes.string,
-  routing: PropTypes.shape({
-    location: PropTypes.shape(locationShape),
-  }),
+  location: PropTypes.shape(locationShape),
   redirect: PropTypes.shape(locationShape),
   selectAppointment: PropTypes.func,
   selectedRequest: PropTypes.instanceOf(Requests),
@@ -245,9 +223,7 @@ RequestList.propTypes = {
   setTitle: PropTypes.func,
 };
 
-const mapStateToProps = ({ routing }) => ({
-  routing,
-});
+const mapStateToProps = ({ routing: { location } }) => ({ location });
 
 const mapActionsToProps = dispatch =>
   bindActionCreators(

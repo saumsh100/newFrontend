@@ -54,9 +54,7 @@ const renderMobileSubHeader = ({ patient }) => {
   );
 };
 
-renderMobileSubHeader.propTypes = {
-  patient: PropTypes.instanceOf(PatientUser).isRequired,
-};
+renderMobileSubHeader.propTypes = { patient: PropTypes.instanceOf(PatientUser).isRequired };
 
 const renderDesktopFooter = ({ acceptRequest, rejectRequest }) => (
   <SFooter className={styles.footer}>
@@ -81,9 +79,7 @@ const renderMobileFooter = ({
   acceptRequest,
 }) => (
   <SFooter
-    className={classNames(styles.footerMobile, {
-      [styles.footerMobile_displayActions]: displayActions,
-    })}
+    className={classNames(styles.footerMobile, { [styles.footerMobile_displayActions]: displayActions })}
   >
     {displayActions && (
       <Button className={styles.actionOverlayButtonMobile} onClick={acceptRequest}>
@@ -126,17 +122,13 @@ export default class RequestPopover extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      displayActions: false,
-    };
+    this.state = { displayActions: false };
 
     this.toggleActionDisplay = this.toggleActionDisplay.bind(this);
   }
 
   toggleActionDisplay() {
-    this.setState(prevState => ({
-      displayActions: !prevState.displayActions,
-    }));
+    this.setState(prevState => ({ displayActions: !prevState.displayActions }));
   }
 
   render() {
@@ -147,6 +139,7 @@ export default class RequestPopover extends Component {
       service,
       insuranceCarrier,
       insuranceMemberId,
+      insuranceGroupId,
       note,
       requestingUser,
       isMobile,
@@ -204,10 +197,12 @@ export default class RequestPopover extends Component {
                   {insuranceCarrier && <Icon icon="medkit" size={0.9} type="solid" />}
                   <div className={styles.data_text}>
                     {insuranceCarrier || 'n/a'}
-                    {insuranceMemberId && (
+                    {(insuranceMemberId || insuranceGroupId) && (
                       <span className={styles.subData}>
                         <br />
-                        {insuranceMemberId}
+                        Member ID: {insuranceMemberId || 'n/a'}
+                        <br />
+                        Group ID: {insuranceGroupId || 'n/a'}
                       </span>
                     )}
                   </div>
@@ -263,6 +258,7 @@ export default class RequestPopover extends Component {
 RequestPopover.propTypes = {
   insuranceCarrier: PropTypes.string,
   insuranceMemberId: PropTypes.string,
+  insuranceGroupId: PropTypes.string,
   isMobile: PropTypes.bool,
   note: PropTypes.string,
   patient: PropTypes.instanceOf(PatientUser).isRequired,
@@ -275,6 +271,7 @@ RequestPopover.propTypes = {
 RequestPopover.defaultProps = {
   insuranceCarrier: null,
   insuranceMemberId: null,
+  insuranceGroupId: null,
   isMobile: false,
   note: null,
   requestingUser: null,
