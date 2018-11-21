@@ -6,7 +6,7 @@ const migrationFieldName = 'SET_HYGIENIST_FOR_HYGIENE_APPOINTMENT';
 
 module.exports = {
   up:  (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [{
           id: uuid(),

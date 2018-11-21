@@ -10,7 +10,7 @@ const RESTORATIVE_PROCEDURE_CODES = 'RESTORATIVE_PROCEDURE_CODES';
 
 module.exports = {
   up: (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [
           {

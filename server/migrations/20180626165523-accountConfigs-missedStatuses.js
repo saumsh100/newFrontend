@@ -8,7 +8,7 @@ const APPOINTMENT_UNMISSED_STATUS_WRITE = 'APPOINTMENT_UNMISSED_STATUS_WRITE';
 
 module.exports = {
   up: (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [
           {

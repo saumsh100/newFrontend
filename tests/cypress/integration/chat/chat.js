@@ -139,6 +139,7 @@ describe('Chat Tests', () => {
         '+15874003884',
         'Hi, I am Unknown',
       )
+        .wait(500)
         .get('[data-test-id="chat_lastMessage"]')
         .contains('Hi, I am Unknown')
         .click({ force: true })

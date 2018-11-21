@@ -4,7 +4,7 @@ const uuid = require('uuid').v4;
 
 module.exports = {
   up: (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [{
           id: uuid(),

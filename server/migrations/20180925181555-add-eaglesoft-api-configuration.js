@@ -6,7 +6,7 @@ const migrationFieldName = 'EAGLESOFT_API_CONFIGURATION';
 
 module.exports = {
   up:  (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [{
           id: uuid(),

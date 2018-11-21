@@ -6,7 +6,7 @@ const migrationFieldName = 'DB_CONNECTION_URL';
 
 module.exports = {
   up:  (queryInterface) => {
-    queryInterface.sequelize.transaction(async (t) => {
+    return queryInterface.sequelize.transaction(async (t) => {
       try {
         await queryInterface.bulkInsert('Configurations', [{
           id: uuid(),
