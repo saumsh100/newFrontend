@@ -29,9 +29,15 @@ class PointOfContactBadge extends React.PureComponent {
   }
 
   componentDidMount() {
-    setTimeout(() => {
+    this.visiblityTimeout = setTimeout(() => {
       this.setState({ isTooltipVisible: true });
     }, 2200);
+  }
+
+  componentWillUnmount() {
+    if (this.visiblityTimeout) {
+      clearTimeout(this.visiblityTimeout);
+    }
   }
 
   renderBadge(isPoC) {

@@ -2,29 +2,14 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Form, Field } from '../../../../library';
-import {
-  emailValidate,
-  asyncEmailValidateUser,
-} from '../../../../library/Form/validate';
+import { emailValidate, asyncEmailValidateUser } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
 class InviteUserForm extends Component {
   render() {
-    const {
-      sendInvite, formName, mainStyle, formStyle,
-    } = this.props;
+    const { sendInvite, formName, mainStyle, formStyle } = this.props;
 
-    const optionsInterval = [
-      {
-        value: 'OWNER',
-      },
-      {
-        value: 'ADMIN',
-      },
-      {
-        value: 'MANAGER',
-      },
-    ];
+    const optionsInterval = [{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }];
 
     return (
       <Form
@@ -55,11 +40,17 @@ class InviteUserForm extends Component {
   }
 }
 
-InviteUserForm.PropTypes = {
+InviteUserForm.propTypes = {
   formName: PropTypes.string,
   sendInvite: PropTypes.func.isRequired,
-  mainStyle: PropTypes.object,
-  formStyle: PropTypes.object,
+  mainStyle: PropTypes.string,
+  formStyle: PropTypes.string,
+};
+
+InviteUserForm.defaultProps = {
+  formName: null,
+  mainStyle: null,
+  formStyle: null,
 };
 
 export default InviteUserForm;

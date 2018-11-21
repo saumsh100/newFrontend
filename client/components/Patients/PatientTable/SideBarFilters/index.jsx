@@ -15,9 +15,7 @@ class SideBarFilters extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      openFilters: [false, false, false, false],
-    };
+    this.state = { openFilters: [false, false, false, false] };
 
     this.displayFilter = this.displayFilter.bind(this);
     this.handleDemographics = this.handleDemographics.bind(this);
@@ -38,9 +36,7 @@ class SideBarFilters extends Component {
       return !filter;
     });
 
-    this.setState({
-      openFilters: newState,
-    });
+    this.setState({ openFilters: newState });
   }
 
   removeTag(filter) {
@@ -417,10 +413,8 @@ class SideBarFilters extends Component {
           </div>
           <div className={styles.header_text}> Filter </div>
           <Button
-            className={classnames(styles.header_clearText, {
-              [styles.header_clearTextDark]: hasFiltersOn,
-            })}
-            onClick={hasFiltersOn && this.clearTags}
+            className={classnames(styles.header_clearText, { [styles.header_clearTextDark]: hasFiltersOn })}
+            onClick={hasFiltersOn ? this.clearTags : undefined}
           >
             Clear All
           </Button>
@@ -487,8 +481,6 @@ SideBarFilters.propTypes = {
   searchPatients: PropTypes.func.isRequired,
 };
 
-SideBarFilters.defaultProps = {
-  filters: new Map(),
-};
+SideBarFilters.defaultProps = { filters: new Map() };
 
 export default SideBarFilters;

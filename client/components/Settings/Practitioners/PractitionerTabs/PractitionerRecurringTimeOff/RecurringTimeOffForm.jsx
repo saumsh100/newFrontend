@@ -229,7 +229,7 @@ function RecurringTimeOffForm(props) {
   );
 }
 
-RecurringTimeOffForm.PropTypes = {
+RecurringTimeOffForm.propTypes = {
   timezone: PropTypes.string.isRequired,
   timeOff: PropTypes.object,
   formName: PropTypes.string,

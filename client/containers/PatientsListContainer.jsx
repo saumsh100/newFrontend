@@ -15,7 +15,7 @@ class PatientsListContainer extends Component {
   }
 }
 
-PatientsListContainer.PropTypes = {};
+PatientsListContainer.propTypes = {};
 
 function mapStateToProps({ entities }) {
   return {};

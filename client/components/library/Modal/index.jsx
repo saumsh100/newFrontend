@@ -52,15 +52,9 @@ class Modal extends Component {
       backDropStyles,
     } = this.props;
 
-    const modalContainerClassName = classNames(
-      styles.modalContainer,
-      containerStyles, { [styles.active]: active },
-    );
+    const modalContainerClassName = classNames(styles.modalContainer, containerStyles, { [styles.active]: active });
 
-    const modalBodyClassName = classNames(
-      className, styles.modalBody,
-      { [styles[type]]: !custom && type },
-    );
+    const modalBodyClassName = classNames(className, styles.modalBody, { [styles[type]]: !custom && type });
 
     const backDropClassName = classNames(styles.backDropDefault, backDropStyles);
 
@@ -86,7 +80,7 @@ class Modal extends Component {
 Modal.propTypes = {
   active: PropTypes.bool,
   backDropStyles: PropTypes.string,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   className: PropTypes.string,
   containerStyles: PropTypes.string,
   custom: PropTypes.bool,
@@ -99,6 +93,7 @@ Modal.propTypes = {
 Modal.defaultProps = {
   active: false,
   backDropStyles: null,
+  children: null,
   className: null,
   containerStyles: null,
   custom: false,

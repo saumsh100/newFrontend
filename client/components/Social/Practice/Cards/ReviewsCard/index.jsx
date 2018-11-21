@@ -41,6 +41,4 @@ export default function ReviewsCard(props) {
   );
 }
 
-ReviewsCard.PropTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-};
+ReviewsCard.propTypes = { data: PropTypes.arrayOf(PropTypes.object) };

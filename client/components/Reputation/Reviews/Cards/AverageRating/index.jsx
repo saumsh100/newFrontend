@@ -33,15 +33,13 @@ export default function AverageRating(props) {
         <span className={styles.stats__count}>{countCeil}</span>
         <span className={styles.stats__title}>Average Rating</span>
         <div className={styles.stats__rating}>{rows}</div>
-        <span className={styles.stats__bottom}>
-          Industry Average {count.toFixed(1)}/5
-        </span>
+        <span className={styles.stats__bottom}>Industry Average {count.toFixed(1)}/5</span>
       </div>
     </Card>
   );
 }
 
-AverageRating.PropTypes = {
+AverageRating.propTypes = {
   count: PropTypes.number,
   rating: PropTypes.object,
   average: PropTypes.number,

@@ -36,22 +36,16 @@ class ShowAppointment extends Component {
   componentDidMount() {
     // This prevents setState to be called indefinitely
     if (this.state.nameContainerOffsetWidth !== this.nameContainer.offsetWidth) {
-      this.setState({
-        nameContainerOffsetWidth: this.nameContainer.offsetWidth,
-      });
+      this.setState({ nameContainerOffsetWidth: this.nameContainer.offsetWidth });
     }
   }
 
   togglePopover() {
-    this.setState({
-      isOpened: !this.state.isOpened,
-    });
+    this.setState({ isOpened: !this.state.isOpened });
   }
 
   closePopover() {
-    this.setState({
-      isOpened: false,
-    });
+    this.setState({ isOpened: false });
   }
 
   editAppointment() {
@@ -78,9 +72,12 @@ class ShowAppointment extends Component {
 
     const { isOpened, nameContainerOffsetWidth, nameContainerOffset } = this.state;
 
-    appStyle.boxShadow = isOpened
-      ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)'
-      : 'none';
+    const applicationStyle = {
+      ...appStyle,
+      boxShadow: isOpened
+        ? '0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.2)'
+        : 'none',
+    };
 
     // functions to check if there is enough room to display the AppointmentHours inline
     const canShowAppointmentBelow = () => heightCalc >= displayDurationHeight;
@@ -112,7 +109,7 @@ class ShowAppointment extends Component {
           style={containerStyle}
           data-test-id={`appointment_${patient.get('firstName')}${patient.get('lastName')}`}
         >
-          <div className={styles.showAppointment} style={appStyle}>
+          <div className={styles.showAppointment} style={applicationStyle}>
             {isPatientConfirmed || isReminderSent ? (
               <div className={styles.icon}>
                 {isPatientConfirmed ? (

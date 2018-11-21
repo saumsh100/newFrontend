@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { reset, change } from 'redux-form';
 import { bindActionCreators } from 'redux';
@@ -206,7 +206,7 @@ Reviews.propTypes = {
   setReputationState: PropTypes.func.isRequired,
   reviewsFilter: PropTypes.instanceOf(Map),
   reviewsData: PropTypes.instanceOf(Map),
-  reviewsList: PropTypes.instanceOf(Map),
+  reviewsList: PropTypes.instanceOf(List),
   hasAccount: PropTypes.bool,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
@@ -215,7 +215,7 @@ Reviews.propTypes = {
 
 Reviews.defaultProps = {
   reviewsData: null,
-  reviewsList: null,
+  reviewsList: List(),
   reviewsFilter: null,
   hasAccount: false,
 };
@@ -231,9 +231,9 @@ function mapStateToProps({ apiRequests, entities, auth, reputation }) {
   const hasAccount = activeAccount && !!activeAccount.get('vendastaId');
 
   return {
-    reviewsData,
-    reviewsList,
-    reviewsFilter,
+    reviewsData: reviewsData || null,
+    reviewsList: reviewsList || null,
+    reviewsFilter: reviewsFilter || null,
     hasAccount,
   };
 }

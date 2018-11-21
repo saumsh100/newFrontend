@@ -22,7 +22,7 @@ class ChatListContainer extends Component {
 
   sortChatList() {
     const { chats } = this.props;
-    return sortByFieldAsc(chats, 'lastTextMessageDate');
+    return sortByFieldAsc(chats, 'lastTextMessageDate').toArray();
   }
 
   selectNewChat() {

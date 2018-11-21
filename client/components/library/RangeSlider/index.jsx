@@ -13,9 +13,7 @@ const Range = createSliderWithTooltip(Slider.Range);
 class RangeSlider extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: [],
-    };
+    this.state = { value: [] };
     this.onRangeChange = this.onRangeChange.bind(this);
   }
 
@@ -33,20 +31,14 @@ class RangeSlider extends Component {
 
     if (buffer === value[1]) {
       const newValue = [value[0], value[0] + (buffer - duration)];
-      this.setState({
-        value: newValue,
-      });
+      this.setState({ value: newValue });
       this.props.onChange(newValue);
     } else if (value[1] === value[0] + 1) {
       const newValue = [value[0], value[0]];
-      this.setState({
-        value: newValue,
-      });
+      this.setState({ value: newValue });
       this.props.onChange(newValue);
     } else {
-      this.setState({
-        value,
-      });
+      this.setState({ value });
       this.props.onChange(value);
     }
   }
@@ -82,7 +74,7 @@ class RangeSlider extends Component {
   }
 }
 
-RangeSlider.PropTypes = {
+RangeSlider.propTypes = {
   onChange: PropTypes.func,
   defaultValues: PropTypes.array,
   setRangeState: PropTypes.func,

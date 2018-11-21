@@ -10,10 +10,7 @@ class Information extends Component {
 
     return (
       <Card className={styles.total}>
-        <CardHeader
-          className={styles.total__header}
-          title="Listing Information"
-        />
+        <CardHeader className={styles.total__header} title="Listing Information" />
         <div className={styles.total__wrapper}>
           <div className={styles.total__body}>
             {data.map((obj, i) => (
@@ -21,14 +18,10 @@ class Information extends Component {
                 <div className={styles.total__body_item}>
                   <div className={styles.total__item}>
                     <div className={styles.total__item_wrapper}>
-                      <span className={styles.total__body_text}>
-                        {obj.title}
-                      </span>
+                      <span className={styles.total__body_text}>{obj.title}</span>
                     </div>
                     <div className={styles.total__item_wrapper}>
-                      <span className={styles.total__body_data}>
-                        {obj.data}
-                      </span>
+                      <span className={styles.total__body_data}>{obj.data}</span>
                     </div>
                   </div>
                 </div>
@@ -41,8 +34,6 @@ class Information extends Component {
   }
 }
 
-Information.PropTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-};
+Information.propTypes = { data: PropTypes.arrayOf(PropTypes.object) };
 
 export default Information;

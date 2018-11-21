@@ -9,12 +9,11 @@ export default function InfoDump(props) {
 
   const classes = classNames(className, styles.container);
 
-  const dataClass =
-    !component &&
-    classNames(styles.data, {
-      [styles.noData]: !data && !component,
-      [styles.email]: type === 'email',
-    });
+  const dataClass = classNames({
+    [styles.data]: !component,
+    [styles.noData]: !data && !component,
+    [styles.email]: !component && type === 'email',
+  });
 
   return (
     <div className={classes}>
@@ -30,7 +29,7 @@ export default function InfoDump(props) {
 InfoDump.propTypes = {
   label: PropTypes.string.isRequired,
   type: PropTypes.string,
-  data: PropTypes.string,
+  data: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   component: PropTypes.node,
   className: PropTypes.string,
   children: PropTypes.func,

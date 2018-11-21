@@ -40,9 +40,7 @@ export default function FilterPractitioners(props) {
   }
 
   practitionersSort = practitionersSort.map((prac, index) =>
-    Object.assign({}, prac.toJS ? prac.toJS() : prac, {
-      color: colorArray[index],
-    }));
+    Object.assign({}, prac.toJS ? prac.toJS() : prac, { color: colorArray[index] }));
 
   return (
     <div>
@@ -71,9 +69,7 @@ export default function FilterPractitioners(props) {
               <div className={styles.filter_practitioner__type}>{pr.type}</div>
             </div>
           );
-          const url = pr.fullAvatarUrl
-            ? pr.fullAvatarUrl.replace('[size]', 400)
-            : null;
+          const url = pr.fullAvatarUrl ? pr.fullAvatarUrl.replace('[size]', 400) : null;
 
           return (
             <div key={pr.id} className={styles.filter_practitioner__list}>
@@ -99,7 +95,7 @@ export default function FilterPractitioners(props) {
   );
 }
 
-FilterPractitioners.PropTypes = {
+FilterPractitioners.propTypes = {
   filterKey: PropTypes.string,
   allChecked: PropTypes.bool,
   practitioners: PropTypes.object.required,

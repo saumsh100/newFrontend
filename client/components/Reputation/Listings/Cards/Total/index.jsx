@@ -18,19 +18,13 @@ class Total extends Component {
                 <div className={styles.total__item}>
                   <div className={styles.total__header_wrapper}>
                     <Icon
-                      className={`${styles.total__header_icon} ${
-                        styles[`fa-${obj.icon}`]
-                      }`}
+                      className={`${styles.total__header_icon} ${styles[`fa-${obj.icon}`]}`}
                       icon={obj.icon}
                     />
                   </div>
                   <span className={styles.total__header_text}>{obj.title}</span>
                 </div>
-                <div
-                  className={`${styles.total__item} ${
-                    styles[`fa-${obj.icon}`]
-                  }`}
-                >
+                <div className={`${styles.total__item} ${styles[`fa-${obj.icon}`]}`}>
                   {obj.count}
                 </div>
               </div>
@@ -48,7 +42,5 @@ class Total extends Component {
   }
 }
 
-Total.PropTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-};
+Total.propTypes = { data: PropTypes.arrayOf(PropTypes.object) };
 export default Total;

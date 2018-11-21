@@ -10,15 +10,11 @@ class Table extends Component {
   constructor(props) {
     super(props);
     this.toggleDetailes = this.toggleDetailes.bind(this);
-    this.state = {
-      detailsModeActive: false,
-    };
+    this.state = { detailsModeActive: false };
   }
 
   toggleDetailes() {
-    this.setState({
-      detailsModeActive: !this.state.detailsModeActive,
-    });
+    this.setState({ detailsModeActive: !this.state.detailsModeActive });
   }
 
   render() {
@@ -44,37 +40,24 @@ class Table extends Component {
                 )}
                 <List className={styles.data}>
                   {obj.data.map((obj, i) => {
-                    const listingInfo = obj.listing.length
-                      ? obj.listing[0].url
-                      : null;
+                    const listingInfo = obj.listing.length ? obj.listing[0].url : null;
 
                     let accurateListing = <div>Listing not found</div>;
                     let accurateListingIcon = (
-                      <Icon
-                        className={styles.status__icon_times}
-                        icon="times"
-                      />
+                      <Icon className={styles.status__icon_times} icon="times" />
                     );
 
                     if (obj.listing.length) {
                       accurateListing = <div>Accurate listing found</div>;
                       accurateListingIcon = (
-                        <Icon
-                          className={styles.status__icon_check}
-                          icon="check"
-                        />
+                        <Icon className={styles.status__icon_check} icon="check" />
                       );
                       const warning = obj.listing[0].anchorDataWarningFlag;
 
                       if (warning) {
-                        accurateListing = (
-                          <div> Listing found with possible errors </div>
-                        );
+                        accurateListing = <div> Listing found with possible errors </div>;
                         accurateListingIcon = (
-                          <Icon
-                            className={styles.status__icon_exclamation}
-                            icon="exclamation"
-                          />
+                          <Icon className={styles.status__icon_exclamation} icon="exclamation" />
                         );
                       }
                     }
@@ -83,39 +66,23 @@ class Table extends Component {
                       <ListItem key={i} className={styles.data__item}>
                         <div className={styles.data__item_wrapper}>
                           <div className={styles.data__item_left}>
-                            <img
-                              className={styles.data__item_img}
-                              src={obj.img}
-                              alt=""
-                            />
+                            <img className={styles.data__item_img} src={obj.img} alt="" />
                             <div className={styles.data__item_personal}>
-                              <div className={styles.data__item_name}>
-                                {obj.name}
-                              </div>
+                              <div className={styles.data__item_name}>{obj.name}</div>
                             </div>
                           </div>
                           <div className={styles.data__item_center}>
                             <div className={styles.data__item_status}>
-                              <div className={styles.status__icon}>
-                                {accurateListingIcon}
-                              </div>
+                              <div className={styles.status__icon}>{accurateListingIcon}</div>
                             </div>
                           </div>
                           <div className={styles.data__item_right}>
-                            <div
-                              onClick={this.toggleDetailes}
-                              className={styles.data__item_table}
-                            >
-                              <div className={styles.table__text}>
-                                {accurateListing}
-                              </div>
+                            <div onClick={this.toggleDetailes} className={styles.data__item_table}>
+                              <div className={styles.table__text}>{accurateListing}</div>
                               {!obj.listing.length ? null : (
                                 <div className={styles.table__button}>
                                   <Collapsible title="show details">
-                                    <ShowDetails
-                                      listingData={obj.listing}
-                                      url={listingInfo}
-                                    />
+                                    <ShowDetails listingData={obj.listing} url={listingInfo} />
                                   </Collapsible>
                                 </div>
                               )}
@@ -129,9 +96,7 @@ class Table extends Component {
               </div>
             ))
           ) : (
-            <div className={styles.clearedListings}>
-              Please Select a Filter Option
-            </div>
+            <div className={styles.clearedListings}>Please Select a Filter Option</div>
           )}
         </div>
       </Card>
@@ -139,8 +104,6 @@ class Table extends Component {
   }
 }
 
-Table.PropTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-};
+Table.propTypes = { data: PropTypes.arrayOf(PropTypes.object) };
 
 export default Table;

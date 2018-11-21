@@ -9,12 +9,11 @@ import {
   passwordStrength,
   asyncEmailValidateUser,
 } from '../../../../library/Form/validate';
+import InviteUserForm from '../InviteUserForm';
 
 class NewUserForm extends Component {
   render() {
-    const {
-      sendNewUser, formName, mainStyle, formStyle,
-    } = this.props;
+    const { sendNewUser, formName, mainStyle, formStyle } = this.props;
     return (
       <Form
         className={formStyle}
@@ -50,11 +49,7 @@ class NewUserForm extends Component {
           name="role"
           label="Role"
           component="DropdownSelect"
-          options={[
-            { value: 'OWNER' },
-            { value: 'ADMIN' },
-            { value: 'MANAGER' },
-          ]}
+          options={[{ value: 'OWNER' }, { value: 'ADMIN' }, { value: 'MANAGER' }]}
           data-test-id="role"
         />
         <Field
@@ -78,11 +73,17 @@ class NewUserForm extends Component {
   }
 }
 
-NewUserForm.PropTypes = {
+NewUserForm.propTypes = {
   formName: PropTypes.string,
   sendNewUser: PropTypes.func.isRequired,
-  mainStyle: PropTypes.object,
-  formStyle: PropTypes.object,
+  mainStyle: PropTypes.string,
+  formStyle: PropTypes.string,
+};
+
+NewUserForm.defaultProps = {
+  formName: null,
+  mainStyle: null,
+  formStyle: null,
 };
 
 export default NewUserForm;

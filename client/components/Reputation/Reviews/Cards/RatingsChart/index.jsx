@@ -35,7 +35,7 @@ export default function RatingsChart(props) {
             const width = mergedRatings[r] ? Math.ceil((mergedRatings[r] / sum) * 100) : 0;
             const style = { width: `${width}%` };
             return (
-              <div className={styles.content}>
+              <div className={styles.content} key={r}>
                 <div className={styles.content__stars}>
                   {r === '0' ? 'No Rating' : ''}
                   {rows}

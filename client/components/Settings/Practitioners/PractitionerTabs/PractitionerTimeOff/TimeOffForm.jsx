@@ -185,7 +185,7 @@ function TimeOffForm(props) {
   );
 }
 
-TimeOffForm.PropTypes = {
+TimeOffForm.propTypes = {
   timeOff: PropTypes.object,
   formName: PropTypes.string,
   handleSubmit: PropTypes.func.isRequired,
