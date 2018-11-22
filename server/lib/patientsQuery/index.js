@@ -1,4 +1,6 @@
-import { Patient } from '../../_models';
+
+import { Patient } from 'CareCruModels';
+import merge from 'CareCruIso/helpers/merge';
 import {
   LateAppointmentsFilter,
   CancelledAppointmentsFilter,
@@ -16,8 +18,12 @@ import { PractitionersFilter } from './practitionersFilter';
 import { RemindersFilter, LastReminderFilter } from './remindersFilter';
 import { RecallsFilter, LastRecallFilter } from './recallsFilter';
 import { ReviewsFilter } from './reviewsFilter';
-import { getIds } from './helpers';
+import { getIds, patientAttrs } from './helpers';
 import { PatientSearchFirstLastName } from './patientSearch';
+import segments from './segments';
+import reduceQueryParamsToObject, { defaultQueryAccumulator }
+  from './helpers/reduceQueryParamsToObject';
+import queryIncludeMerger from './helpers/queryIncludeMerger';
 
 const filterFunctions = [
   PatientSearchFirstLastName,
@@ -50,16 +56,63 @@ const smartFilterFunctions = [
   UnConfirmedPatientsFilter,
 ];
 
+export async function patientQueryBuilder({
+  debug = false,
+  page = 0,
+  limit = 15,
+  order = ['firstName', 'lastName'],
+  accountId,
+  segment = ['allPatients'],
+  ...rest
+}) {
+  if (!accountId) {
+    throw new Error('accountId is required');
+  }
+
+  const defaultQuery = {
+    where: { accountId },
+    include: [],
+    limit,
+    offset: limit * page,
+    order,
+    ...(debug && { logging: console.log }),
+  };
+
+  const query = Object.entries(rest).reduce(reduceQueryParamsToObject, defaultQueryAccumulator);
+
+  const [segmentName, ...segmentArgs] = segment;
+  const { attributes, having, ...segmentOpts } =
+    segmentName ? segments[segmentName](...segmentArgs) : {};
+
+  const finalHavingArray = query.having.concat(having).filter(h => h);
+  const queryObj = {
+    attributes: patientAttrs
+      .concat(query.attributes)
+      .concat(attributes)
+      .filter(a => a),
+    ...(!!finalHavingArray.length && { having: finalHavingArray }),
+    ...merge.all([
+      defaultQuery,
+      segmentOpts,
+      query.queryOpts,
+    ]),
+  };
+
+  const finalQuery = {
+    ...queryObj,
+    include: queryIncludeMerger(queryObj.include),
+  };
+
+  if (debug) console.log(finalQuery);
+  return Patient.findAndCountAll(finalQuery);
+}
+
 export default async function PatientQuery(config) {
   try {
     const start = Date.now();
-    const {
-      limit, filters, smartFilter, sort, page, accountId,
-    } = config;
+    const { limit, filters, smartFilter, sort, page, accountId } = config;
 
-    const filterBy = {
-      accountId,
-    };
+    const filterBy = { accountId };
 
     /**
      * Sorting By
@@ -123,7 +176,9 @@ export default async function PatientQuery(config) {
       for (let i = 0; i < sortArray.length; i += 1) {
         const filterObj = JSON.parse(sortArray[i]);
         const index = filterObj.indexFunc;
-        const patientIds = filteredPatients.rows ? getIds(filteredPatients.rows, 'id') : [];
+        const patientIds = filteredPatients.rows
+          ? getIds(filteredPatients.rows, 'id')
+          : [];
 
         if (i === filters.length - 1) {
           query.order = order;
@@ -131,7 +186,12 @@ export default async function PatientQuery(config) {
           query.limit = limit;
         }
 
-        const patients = await filterFunctions[index](filterObj, patientIds, query, accountId);
+        const patients = await filterFunctions[index](
+          filterObj,
+          patientIds,
+          query,
+          accountId,
+        );
 
         if (patients.rows.length === 0) {
           filteredPatients = patients;
@@ -153,9 +213,7 @@ export default async function PatientQuery(config) {
         order,
       });
 
-      patients = await Patient.findAll({
-        ...defaultQuery,
-      });
+      patients = await Patient.findAll({ ...defaultQuery });
     } else {
       patientCount = filteredPatients.count;
       patients = filteredPatients.rows;

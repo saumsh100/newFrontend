@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.36.1",
+  "version": "2.37.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -74,6 +74,7 @@
         "setupTestFrameworkScriptFile": "<rootDir>/tests/util/jestSetup.js",
         "displayName": "test",
         "moduleNameMapper": {
+          "^CareCruIso/(.*)": "<rootDir>/iso/$1",
           "^CareCruModels$": "<rootDir>/server/_models/index.js",
           "^CareCruGraphQL/(.*)": "<rootDir>/server/graphql/$1",
           "\\.(s?css)$": "identity-obj-proxy"
@@ -122,6 +123,7 @@
     "cookie-parser": "^1.4.1",
     "cors": "^2.8.1",
     "css-loader": "^0.28.1",
+    "deepmerge": "^2.2.1",
     "downshift": "^1.31.6",
     "emoji-mart": "^2.5.0",
     "event-emitter": "^0.3.4",

@@ -1,0 +1,221 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`#patientQueryBuilder DEBUG MODE it console log the final query object 1`] = `
+Object {
+  "attributes": Array [
+    "id",
+    "accountId",
+    "pmsId",
+    "patientUserId",
+    "email",
+    "firstName",
+    "lastName",
+    "middleName",
+    "phoneNumber",
+    "homePhoneNumber",
+    "mobilePhoneNumber",
+    "workPhoneNumber",
+    "otherPhoneNumber",
+    "prefContactPhone",
+    "gender",
+    "prefName",
+    "language",
+    "address",
+    "preferences",
+    "type",
+    "contactMethodNote",
+    "birthDate",
+    "pmsCreatedAt",
+    "insurance",
+    "isDeleted",
+    "isSyncedWithPms",
+    "familyId",
+    "status",
+    "lastApptId",
+    "lastApptDate",
+    "lastHygieneDate",
+    "lastHygieneApptId",
+    "lastRecallDate",
+    "lastRecallApptId",
+    "dueForRecallExamDate",
+    "recallPendingAppointmentId",
+    "dueForHygieneDate",
+    "hygienePendingAppointmentId",
+    "lastRestorativeDate",
+    "lastRestorativeApptId",
+    "firstApptId",
+    "firstApptDate",
+    "nextApptId",
+    "nextApptDate",
+    "insuranceInterval",
+    "contCareInterval",
+    "avatarUrl",
+    "omitReminderIds",
+    "omitRecallIds",
+    "createdAt",
+    "updatedAt",
+    "deletedAt",
+  ],
+  "include": Array [],
+  "limit": 15,
+  "offset": 0,
+  "order": Array [
+    "firstName",
+    "lastName",
+  ],
+  "where": Object {
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  },
+}
+`;
+
+exports[`#patientQueryBuilder DEBUG MODE it console log the queries made 1`] = `"Executing (default): SELECT count(\\"Patient\\".\\"id\\") AS \\"count\\" FROM \\"Patients\\" AS \\"Patient\\" WHERE ( AND \\"Patient\\".\\"accountId\\" = '62954241-3652-4792-bae5-5bfed53d37b7');"`;
+
+exports[`#patientQueryBuilder DEBUG MODE it console log the queries made 2`] = `"Executing (default): SELECT \\"id\\", \\"accountId\\", \\"pmsId\\", \\"patientUserId\\", \\"email\\", \\"firstName\\", \\"lastName\\", \\"middleName\\", \\"phoneNumber\\", \\"homePhoneNumber\\", \\"mobilePhoneNumber\\", \\"workPhoneNumber\\", \\"otherPhoneNumber\\", \\"prefContactPhone\\", \\"gender\\", \\"prefName\\", \\"language\\", \\"address\\", \\"preferences\\", \\"type\\", \\"contactMethodNote\\", \\"birthDate\\", \\"pmsCreatedAt\\", \\"insurance\\", \\"isDeleted\\", \\"isSyncedWithPms\\", \\"familyId\\", \\"status\\", \\"lastApptId\\", \\"lastApptDate\\", \\"lastHygieneDate\\", \\"lastHygieneApptId\\", \\"lastRecallDate\\", \\"lastRecallApptId\\", \\"dueForRecallExamDate\\", \\"recallPendingAppointmentId\\", \\"dueForHygieneDate\\", \\"hygienePendingAppointmentId\\", \\"lastRestorativeDate\\", \\"lastRestorativeApptId\\", \\"firstApptId\\", \\"firstApptDate\\", \\"nextApptId\\", \\"nextApptDate\\", \\"insuranceInterval\\", \\"contCareInterval\\", \\"avatarUrl\\", \\"omitReminderIds\\", \\"omitRecallIds\\", \\"createdAt\\", \\"updatedAt\\", \\"deletedAt\\" FROM \\"Patients\\" AS \\"Patient\\" WHERE ( AND \\"Patient\\".\\"accountId\\" = '62954241-3652-4792-bae5-5bfed53d37b7') ORDER BY \\"Patient\\".\\"firstName\\", \\"Patient\\".\\"lastName\\" LIMIT 15 OFFSET 0;"`;
+
+exports[`#patientQueryBuilder Usage it overrides the default parameters 1`] = `
+Object {
+  "include": Array [],
+  "limit": 30,
+  "offset": 60,
+  "order": Array [
+    "middleName",
+  ],
+  "where": Object {
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  },
+}
+`;
+
+exports[`#patientQueryBuilder Usage it works with just accountId and default parameters 1`] = `
+Object {
+  "include": Array [],
+  "limit": 15,
+  "offset": 0,
+  "order": Array [
+    "firstName",
+    "lastName",
+  ],
+  "where": Object {
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  },
+}
+`;
+
+exports[`#patientQueryBuilder Usage it works with segment + regular filters 1`] = `
+Object {
+  "group": Array [
+    "Patient.id",
+  ],
+  "having": Array [
+    Object {},
+    Where {
+      "attribute": Fn {
+        "args": Array [
+          Col {
+            "col": "sentRecalls.createdAt",
+          },
+        ],
+        "fn": "max",
+      },
+      "comparator": "=",
+      "logic": Object {
+        "$between": Array [
+          "2018-11-10",
+          "2018-12-10",
+        ],
+      },
+    },
+  ],
+  "include": Array [
+    Object {
+      "as": "appointments",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "isCancelled": false,
+        "isDeleted": false,
+        "isMissed": false,
+        "isPending": false,
+        "practitionerId": "f334b97f-21ec-42ad-828e-599bf4c99b1d",
+      },
+    },
+    Object {
+      "as": "sentRecalls",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "isSent": true,
+      },
+    },
+  ],
+  "limit": 15,
+  "offset": 0,
+  "order": Array [
+    "firstName",
+    "lastName",
+  ],
+  "where": Object {
+    "$or": Object {
+      "dueForHygieneDate": Object {
+        "$gte": "2014-10-17T07:00:00.000Z",
+        "$lt": "2014-10-17T07:00:00.000Z",
+        "$not": null,
+      },
+      "dueForRecallExamDate": Object {
+        "$gte": "2014-10-17T07:00:00.000Z",
+        "$lt": "2014-10-17T07:00:00.000Z",
+        "$not": null,
+      },
+    },
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+    "address": Object {
+      "city": Object {
+        "$ilike": "%Calgary%",
+      },
+    },
+    "birthDate": Object {
+      "$between": Array [
+        "2014-11-16T08:00:00.000Z",
+        "2016-11-16T08:00:00.000Z",
+      ],
+    },
+    "firstName": "Aiden",
+    "gender": Object {
+      "$ilike": "%Female%",
+    },
+    "lastName": "Considine",
+  },
+}
+`;
+
+exports[`#patientQueryBuilder Usage it works with segment 1`] = `
+Object {
+  "include": Array [],
+  "limit": 15,
+  "offset": 0,
+  "order": Array [
+    "firstName",
+    "lastName",
+  ],
+  "where": Object {
+    "$or": Object {
+      "dueForHygieneDate": Object {
+        "$gte": "2017-10-17T07:00:00.000Z",
+        "$lt": "2017-10-17T07:00:00.000Z",
+        "$not": null,
+      },
+      "dueForRecallExamDate": Object {
+        "$gte": "2017-10-17T07:00:00.000Z",
+        "$lt": "2017-10-17T07:00:00.000Z",
+        "$not": null,
+      },
+    },
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  },
+}
+`;

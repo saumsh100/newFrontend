@@ -172,7 +172,6 @@ export default function (sequelize, DataTypes) {
       as: 'practitioner',
     });
 
-
     Appointment.hasMany(SentRemindersPatients, {
       foreignKey: 'appointmentId',
       as: 'sentRemindersPatients',
@@ -222,26 +221,33 @@ export default function (sequelize, DataTypes) {
     const { docs, errors } = await Appointment.preValidateArray(dataArray);
     const savableCopies = docs.map(d => d.get({ plain: true }));
     const response = await Appointment.bulkCreate(savableCopies);
-    if (errors.length) {
-      const errorsResponse = errors.map((error) => {
-        error.model = 'Appointment';
-        error.errorMessage = 'Appointment save error';
-        if (error.errors && error.errors[0]) {
-          error.errorMessage = error.errors[0].message;
-        }
-        return error;
-      });
 
-      throw {
-        docs: response,
-        errors: errorsResponse,
-      };
+    if (errors.length === 0) {
+      return response;
     }
 
-    return response;
+    const errorsResponse = errors.map((error) => {
+      const errorMessage = error.errors && error.errors[0]
+        ? error.errors[0].message
+        : 'Appointment save error';
+
+      return {
+        ...error,
+        model: 'Appointment',
+        errorMessage,
+      };
+    });
+
+    return Promise.reject({
+      docs: response,
+      errors: errorsResponse,
+    });
   };
 
-  Appointment.prototype.confirm = async function ({ isCustomConfirm, customConfirmData }) {
+  Appointment.prototype.confirm = async function ({
+    isCustomConfirm,
+    customConfirmData,
+  }) {
     const mergeData = {
       ...(isCustomConfirm ? customConfirmData : { isPatientConfirmed: true }),
       isSyncedWithPms: false,
@@ -253,13 +259,23 @@ export default function (sequelize, DataTypes) {
         ...Appointemnts.getCommonSearchAppointmentSchema({ isPatientConfirmed: false }),
         startDate: {
           $gte: this.startDate,
-          $lte: moment(this.startDate)
-            .add(globals.reminders.get('sameDayWindowHours'), 'hours'),
+          $lte: moment(this.startDate).add(
+            globals.reminders.get('sameDayWindowHours'),
+            'hours',
+          ),
         },
       },
     });
     return Promise.all(appointmentsToConfirm.map(apt => apt.update(mergeData)));
   };
+
+  Appointment.getCommonSearchAppointmentSchema = (options = {}) => ({
+    isCancelled: false,
+    isDeleted: false,
+    isMissed: false,
+    isPending: false,
+    ...options,
+  });
 
   return Appointment;
 }

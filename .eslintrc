@@ -34,8 +34,8 @@
         "specialLink": ["to"]
       }
     ],
-
-    "consistent-return": "warn"
+    "consistent-return": "warn",
+    "prefer-promise-reject-errors": "warn"
   },
   "settings": {
     "import/resolver": {

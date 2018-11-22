@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`#reduceQueryParamsToObject can merge multiple join queries 1`] = `
+Object {
+  "group": Array [
+    "Patient.id",
+    "Patient.id",
+    "Patient.id",
+    "Patient.id",
+    "Patient.id",
+  ],
+  "include": Array [
+    Object {
+      "as": "deliveredProcedures",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "entryDate": Object {
+          "gt": "2016-11-16T08:00:00.000Z",
+          "lt": 2016-11-16T08:00:00.000Z,
+        },
+      },
+    },
+    Object {
+      "as": "appointments",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "isCancelled": false,
+        "isDeleted": false,
+        "isMissed": false,
+        "isPending": false,
+        "startDate": Object {
+          "lt": 2016-11-16T08:00:00.000Z,
+        },
+      },
+    },
+    Object {
+      "as": "patientUser",
+      "attributes": Array [],
+      "duplicating": false,
+      "include": Object {
+        "as": "requests",
+        "attributes": Array [],
+        "duplicating": false,
+        "model": [Function],
+        "required": true,
+        "where": Object {
+          "isCancelled": false,
+          "isConfirmed": true,
+        },
+      },
+      "model": [Function],
+      "required": true,
+    },
+    Object {
+      "as": "sentRemindersPatients",
+      "attributes": Array [],
+      "duplicating": false,
+      "include": Array [
+        Object {
+          "as": "sentReminder",
+          "attributes": Array [],
+          "duplicating": false,
+          "model": [Function],
+          "required": true,
+          "where": Object {
+            "isSent": true,
+          },
+        },
+      ],
+      "model": [Function],
+      "required": true,
+    },
+    Object {
+      "as": "sentRecalls",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "isSent": true,
+      },
+    },
+    Object {
+      "as": "reviews",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "createdAt": Object {
+          "$between": Array [
+            "2018-11-10",
+            "2018-12-10",
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`#reduceQueryParamsToObject extract attributes and having into different attributes on the query object 1`] = `
+Object {
+  "group": Array [
+    "Patient.id",
+  ],
+  "include": Array [
+    Object {
+      "as": "appointments",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "isCancelled": false,
+        "isDeleted": false,
+        "isMissed": false,
+        "isPending": false,
+        "startDate": Object {
+          "lt": 2017-11-16T08:00:00.000Z,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`#reduceQueryParamsToObject merges simple queries to the query object 1`] = `
+Object {
+  "where": Object {
+    "address": Object {
+      "city": Object {
+        "$ilike": "%Calgary%",
+      },
+    },
+    "birthDate": Object {
+      "$between": Array [
+        "2014-11-16T08:00:00.000Z",
+        "2016-11-16T08:00:00.000Z",
+      ],
+    },
+    "firstName": "Aiden",
+    "gender": Object {
+      "$ilike": "%Female%",
+    },
+    "lastName": "Considine",
+  },
+}
+`;

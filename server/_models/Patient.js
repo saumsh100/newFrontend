@@ -40,15 +40,11 @@ export default function (sequelize, DataTypes) {
 
     // Used to connect authenticated patientUser to their patient record
     // in the PMS
-    patientUserId: {
-      type: DataTypes.UUID,
-    },
+    patientUserId: { type: DataTypes.UUID },
 
     email: {
       type: DataTypes.STRING,
-      validate: {
-        isEmail: true,
-      },
+      validate: { isEmail: true },
     },
 
     firstName: {
@@ -61,31 +57,27 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    middleName: {
-      type: DataTypes.STRING,
-    },
+    middleName: { type: DataTypes.STRING },
 
     phoneNumber: customDataTypes.phoneNumber('phoneNumber', DataTypes),
     homePhoneNumber: customDataTypes.phoneNumber('homePhoneNumber', DataTypes),
-    mobilePhoneNumber: customDataTypes.phoneNumber('mobilePhoneNumber', DataTypes),
+    mobilePhoneNumber: customDataTypes.phoneNumber(
+      'mobilePhoneNumber',
+      DataTypes,
+    ),
     workPhoneNumber: customDataTypes.phoneNumber('workPhoneNumber', DataTypes),
-    otherPhoneNumber: customDataTypes.phoneNumber('otherPhoneNumber', DataTypes),
+    otherPhoneNumber: customDataTypes.phoneNumber(
+      'otherPhoneNumber',
+      DataTypes,
+    ),
 
-    prefContactPhone: {
-      type: DataTypes.STRING,
-    },
+    prefContactPhone: { type: DataTypes.STRING },
 
-    gender: {
-      type: DataTypes.STRING,
-    },
+    gender: { type: DataTypes.STRING },
 
-    prefName: {
-      type: DataTypes.STRING,
-    },
+    prefName: { type: DataTypes.STRING },
 
-    language: {
-      type: DataTypes.STRING,
-    },
+    language: { type: DataTypes.STRING },
 
     address: {
       type: DataTypes.JSONB,
@@ -112,9 +104,7 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    type: {
-      type: DataTypes.STRING,
-    },
+    type: { type: DataTypes.STRING },
 
     contactMethodNote: {
       type: DataTypes.STRING,
@@ -129,17 +119,11 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    birthDate: {
-      type: DataTypes.DATE,
-    },
+    birthDate: { type: DataTypes.DATE },
 
-    pmsCreatedAt: {
-      type: DataTypes.DATE,
-    },
+    pmsCreatedAt: { type: DataTypes.DATE },
 
-    insurance: {
-      type: DataTypes.JSONB,
-    },
+    insurance: { type: DataTypes.JSONB },
 
     isDeleted: {
       type: DataTypes.BOOLEAN,
@@ -161,9 +145,7 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    familyId: {
-      type: DataTypes.UUID,
-    },
+    familyId: { type: DataTypes.UUID },
 
     status: {
       type: DataTypes.ENUM,
@@ -171,81 +153,43 @@ export default function (sequelize, DataTypes) {
       defaultValue: STATUS.ACTIVE,
     },
 
-    lastApptId: {
-      type: DataTypes.UUID,
-    },
+    lastApptId: { type: DataTypes.UUID },
 
-    lastApptDate: {
-      type: DataTypes.DATE,
-    },
+    lastApptDate: { type: DataTypes.DATE },
 
-    lastHygieneDate: {
-      type: DataTypes.DATE,
-    },
+    lastHygieneDate: { type: DataTypes.DATE },
 
-    lastHygieneApptId: {
-      type: DataTypes.UUID,
-    },
+    lastHygieneApptId: { type: DataTypes.UUID },
 
-    lastRecallDate: {
-      type: DataTypes.DATE,
-    },
+    lastRecallDate: { type: DataTypes.DATE },
 
-    lastRecallApptId: {
-      type: DataTypes.UUID,
-    },
+    lastRecallApptId: { type: DataTypes.UUID },
 
-    dueForRecallExamDate: {
-      type: DataTypes.DATE,
-    },
+    dueForRecallExamDate: { type: DataTypes.DATE },
 
-    recallPendingAppointmentId: {
-      type: DataTypes.UUID,
-    },
+    recallPendingAppointmentId: { type: DataTypes.UUID },
 
-    dueForHygieneDate: {
-      type: DataTypes.DATE,
-    },
+    dueForHygieneDate: { type: DataTypes.DATE },
 
-    hygienePendingAppointmentId: {
-      type: DataTypes.UUID,
-    },
+    hygienePendingAppointmentId: { type: DataTypes.UUID },
 
-    lastRestorativeDate: {
-      type: DataTypes.DATE,
-    },
+    lastRestorativeDate: { type: DataTypes.DATE },
 
-    lastRestorativeApptId: {
-      type: DataTypes.UUID,
-    },
+    lastRestorativeApptId: { type: DataTypes.UUID },
 
-    firstApptId: {
-      type: DataTypes.UUID,
-    },
+    firstApptId: { type: DataTypes.UUID },
 
-    firstApptDate: {
-      type: DataTypes.DATE,
-    },
+    firstApptDate: { type: DataTypes.DATE },
 
-    nextApptId: {
-      type: DataTypes.UUID,
-    },
+    nextApptId: { type: DataTypes.UUID },
 
-    nextApptDate: {
-      type: DataTypes.DATE,
-    },
+    nextApptDate: { type: DataTypes.DATE },
 
-    insuranceInterval: {
-      type: DataTypes.STRING,
-    },
+    insuranceInterval: { type: DataTypes.STRING },
 
-    contCareInterval: {
-      type: DataTypes.STRING,
-    },
+    contCareInterval: { type: DataTypes.STRING },
 
-    avatarUrl: {
-      type: DataTypes.STRING,
-    },
+    avatarUrl: { type: DataTypes.STRING },
 
     omitReminderIds: {
       type: DataTypes.ARRAY(DataTypes.UUID),
@@ -315,7 +259,6 @@ export default function (sequelize, DataTypes) {
       foreignKey: 'lastRestorativeApptId',
       as: 'lastRestorativeAppt',
     });
-
 
     Patient.belongsTo(Appointment, {
       foreignKey: 'recallPendingAppointmentId',
@@ -396,7 +339,8 @@ export default function (sequelize, DataTypes) {
     }
 
     const noEmail = isUndefined(email) || isNull(email);
-    const noMobilePhoneNumber = isUndefined(mobilePhoneNumber) || isNull(mobilePhoneNumber);
+    const noMobilePhoneNumber =
+      isUndefined(mobilePhoneNumber) || isNull(mobilePhoneNumber);
     if (noEmail && noMobilePhoneNumber) return;
 
     // Grab all models that match
@@ -417,7 +361,10 @@ export default function (sequelize, DataTypes) {
     });
 
     if (p) {
-      throw UniqueFieldError({ tableName: 'Patient' }, 'email or mobilePhoneNumber');
+      throw UniqueFieldError(
+        { tableName: 'Patient' },
+        'email or mobilePhoneNumber',
+      );
     }
   };
 
@@ -452,13 +399,17 @@ export default function (sequelize, DataTypes) {
 
     // Now check uniqueness against each other
     docs = uniqWith(validatedDocs, (a, b) => {
-      if (a.accountId && b.accountId && (a.accountId === b.accountId)) {
-        if (a.mobilePhoneNumber && b.mobilePhoneNumber && (a.mobilePhoneNumber === b.mobilePhoneNumber)) {
+      if (a.accountId && b.accountId && a.accountId === b.accountId) {
+        if (
+          a.mobilePhoneNumber &&
+          b.mobilePhoneNumber &&
+          a.mobilePhoneNumber === b.mobilePhoneNumber
+        ) {
           onError('mobilePhoneNumber', a);
           return true;
         }
 
-        if (a.email && b.email && (a.email === b.email)) {
+        if (a.email && b.email && a.email === b.email) {
           onError('email', a);
           return true;
         }
@@ -478,30 +429,41 @@ export default function (sequelize, DataTypes) {
     }
 
     docs = finalDocs;
-    return { errors, docs };
+    return {
+      errors,
+      docs,
+    };
   };
 
   Patient.uniqueAgainstEachOther = async (docs) => {
     const errs = [];
     const validDocs = uniqWith(docs, (a, b) => {
-      if (a.accountId && b.accountId && (a.accountId === b.accountId)) {
-        if (a.dataValues.mobilePhoneNumber && b.dataValues.mobilePhoneNumber
-          && (a.dataValues.mobilePhoneNumber === b.dataValues.mobilePhoneNumber)) {
+      if (a.accountId && b.accountId && a.accountId === b.accountId) {
+        if (
+          a.dataValues.mobilePhoneNumber &&
+          b.dataValues.mobilePhoneNumber &&
+          a.dataValues.mobilePhoneNumber === b.dataValues.mobilePhoneNumber
+        ) {
           errs.push(UniqueFieldError({ tableName: 'Patient' }, 'mobilePhoneNumber'));
           return true;
         }
 
-        if (a.dataValues.email && b.dataValues.email &&
-          (a.dataValues.email === b.dataValues.email)) {
+        if (
+          a.dataValues.email &&
+          b.dataValues.email &&
+          a.dataValues.email === b.dataValues.email
+        ) {
           errs.push(UniqueFieldError({ tableName: 'Patient' }, 'email'));
           return true;
         }
       }
     });
 
-    return { validDocs, errs };
+    return {
+      validDocs,
+      errs,
+    };
   };
-
 
   /**
    *
@@ -521,7 +483,10 @@ export default function (sequelize, DataTypes) {
         }
         return error;
       });
-      throw { docs: response, errors: errorsResponse };
+      throw {
+        docs: response,
+        errors: errorsResponse,
+      };
     }
 
     return response;

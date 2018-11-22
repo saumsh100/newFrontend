@@ -1,3 +1,4 @@
+
 export function ManualLimitOffset(eventsArray, query) {
   const { limit, offset, order } = query;
 
@@ -50,4 +51,63 @@ export const patientAttributes = [
   'Patient.insuranceInterval',
   'Patient.dueForRecallExamDate',
   'Patient.dueForHygieneDate',
+];
+
+/**
+ * Patient attribute list used by the new patient search API.
+ * @type {string[]}
+ */
+export const patientAttrs = [
+  'id',
+  'accountId',
+  'pmsId',
+  'patientUserId',
+  'email',
+  'firstName',
+  'lastName',
+  'middleName',
+  'phoneNumber',
+  'homePhoneNumber',
+  'mobilePhoneNumber',
+  'workPhoneNumber',
+  'otherPhoneNumber',
+  'prefContactPhone',
+  'gender',
+  'prefName',
+  'language',
+  'address',
+  'preferences',
+  'type',
+  'contactMethodNote',
+  'birthDate',
+  'pmsCreatedAt',
+  'insurance',
+  'isDeleted',
+  'isSyncedWithPms',
+  'familyId',
+  'status',
+  'lastApptId',
+  'lastApptDate',
+  'lastHygieneDate',
+  'lastHygieneApptId',
+  'lastRecallDate',
+  'lastRecallApptId',
+  'dueForRecallExamDate',
+  'recallPendingAppointmentId',
+  'dueForHygieneDate',
+  'hygienePendingAppointmentId',
+  'lastRestorativeDate',
+  'lastRestorativeApptId',
+  'firstApptId',
+  'firstApptDate',
+  'nextApptId',
+  'nextApptDate',
+  'insuranceInterval',
+  'contCareInterval',
+  'avatarUrl',
+  'omitReminderIds',
+  'omitRecallIds',
+  'createdAt',
+  'updatedAt',
+  'deletedAt',
 ];
