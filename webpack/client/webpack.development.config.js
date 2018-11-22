@@ -1,18 +1,14 @@
 
-const path = require('path');
+// we can disable this as this is development build.
+/* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
 const devServer = require('./dev-server.config');
-const { appEntries, readEnv } = require('../utils');
-const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
-
-// TODO: path to env file should not be hardcoded
-const env = readEnv(path.resolve(process.cwd(), '.env'));
-
-// TODO: duplicate code with dev-server.config.js
-const { serverPort = 5000 } = require('yargs').argv;
+const { appEntries } = require('../utils');
+const globals = require('../../server/config/globals');
 
 const entries = appEntries(name => [
   'babel-polyfill',
@@ -20,7 +16,13 @@ const entries = appEntries(name => [
   `./client/entries/${name}.js`,
 ]);
 
-const { INTERCOM_APP_ID, LOGROCKET_APP_ID, FACEBOOK_APP_ID, FEATURE_FLAG_KEY, GOOGLE_API_KEY, HOST } = env;
+const {
+  CI,
+  INTERCOM_APP_ID,
+  LOGROCKET_APP_ID,
+  FEATURE_FLAG_KEY,
+  GOOGLE_API_KEY,
+} = process.env;
 
 const developmentConfig = merge(baseConfig, {
   mode: 'development',
@@ -29,12 +31,12 @@ const developmentConfig = merge(baseConfig, {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
-        LOGROCKET_APP_ID: `"${LOGROCKET_APP_ID || '7mbzb4/carecru-development'}"`,
-        INTERCOM_APP_ID: `"${INTERCOM_APP_ID || 'enpxykhl'}"`,
-        FACEBOOK_APP_ID: `"${FACEBOOK_APP_ID}"`,
-        API_SERVER_PORT: `"${serverPort}"`,
-        FEATURE_FLAG_KEY: `"${FEATURE_FLAG_KEY}"`,
-        GOOGLE_API_KEY: `"${GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'}"`,
+        LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
+        INTERCOM_APP_ID: JSON.stringify(INTERCOM_APP_ID || 'enpxykhl'),
+        FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
+        GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'),
+        CI: JSON.stringify(!!CI),
+        HOST: JSON.stringify(globals.host),
       },
     }),
 
@@ -73,10 +75,10 @@ const developmentConfig = merge(baseConfig, {
           name: 'vendor',
           chunks: 'all',
           test: /node_modules/,
-          priority: 20
-        }
-      }
-    }
+          priority: 20,
+        },
+      },
+    },
   },
 
   devServer,

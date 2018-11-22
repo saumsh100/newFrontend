@@ -3,9 +3,17 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
+const globals = require('../../server/config/globals');
+
+const {
+  CI,
+  INTERCOM_APP_ID,
+  LOGROCKET_APP_ID,
+  FEATURE_FLAG_KEY,
+  GOOGLE_API_KEY,
+} = process.env;
 
 const entryPath = name => `./client/entries/${name}.js`;
-
 const developmentConfig = merge(baseConfig, {
   mode: 'production',
 
@@ -21,11 +29,12 @@ const developmentConfig = merge(baseConfig, {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        LOGROCKET_APP_ID: JSON.stringify(process.env.LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
-        INTERCOM_APP_ID: JSON.stringify(process.env.INTERCOM_APP_ID || 'enpxykhl'),
-        FEATURE_FLAG_KEY: JSON.stringify(process.env.FEATURE_FLAG_KEY),
-        GOOGLE_API_KEY: JSON.stringify(process.env.GOOGLE_API_KEY),
-        CI: JSON.stringify(process.env.CI || false),
+        LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
+        INTERCOM_APP_ID: JSON.stringify(INTERCOM_APP_ID || 'enpxykhl'),
+        FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
+        GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY),
+        CI: JSON.stringify(!!CI),
+        HOST: JSON.stringify(globals.host),
       },
     }),
   ],

@@ -124,6 +124,7 @@ input addPatientInput {
   omitReminderIds: [String]!
   omitRecallIds: [String]!
   cellPhoneNumber: String
+  foundChatId: String
   clientMutationId: String
 }
 
@@ -330,6 +331,7 @@ type Patient implements Node {
   omitReminderIds: [String]!
   omitRecallIds: [String]!
   cellPhoneNumber: String
+  foundChatId: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -507,6 +509,7 @@ input updatePatientInput {
   omitReminderIds: [String]!
   omitRecallIds: [String]!
   cellPhoneNumber: String
+  foundChatId: String
   clientMutationId: String
 }
 

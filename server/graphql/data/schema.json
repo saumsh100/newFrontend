@@ -1263,6 +1263,18 @@
               "deprecationReason": null
             },
             {
+              "name": "foundChatId",
+              "description": null,
+              "args": [],
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "createdAt",
               "description": null,
               "args": [],
@@ -3504,6 +3516,16 @@
               "defaultValue": null
             },
             {
+              "name": "foundChatId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
               "name": "clientMutationId",
               "description": null,
               "type": {
@@ -4083,6 +4105,16 @@
             },
             {
               "name": "cellPhoneNumber",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null
+            },
+            {
+              "name": "foundChatId",
               "description": null,
               "type": {
                 "kind": "SCALAR",

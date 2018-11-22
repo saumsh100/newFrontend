@@ -3,11 +3,12 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime'; // es
 import ApolloClient from 'apollo-boost';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { getApiUrl, getSubscriptionUrl } from './hub';
+import globals from '../../server/config/globals';
 
 const getTokenDefault = () => localStorage.getItem('token');
 const path = '/graphql';
 
-const socketProtocol = process.env.NODE_ENV === 'production' ? 'wss' : 'ws';
+const socketProtocol = globals.protocol === 'https' ? 'wss' : 'ws';
 
 function getUrlWithPath() {
   return getApiUrl() + path;
