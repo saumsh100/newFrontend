@@ -1,7 +1,6 @@
 
-import { Family, Patient, sequelize } from 'CareCruModels';
+import { Account, Family, Patient, sequelize } from 'CareCruModels';
 import selectCorrectPatient from './selectCorrectPatient';
-import { cellPhoneNumberFallback } from '../../config/globals';
 
 /**
  * getPatientsFromKeyValue is an async function that will fetch patients data in an account
@@ -76,7 +75,7 @@ export async function getPatientFromCellPhoneNumber({
   cellPhoneNumber,
   accountId,
 }) {
-  return getPatientFromKeyValue(patientCellPhoneQuery(cellPhoneNumber, accountId));
+  return getPatientFromKeyValue(await patientCellPhoneQuery(cellPhoneNumber, accountId));
 }
 
 /**
@@ -91,7 +90,7 @@ export async function getPatientListFromCellPhoneNumber({
   accountId,
 }) {
   return getPatientFromKeyValue(
-    patientCellPhoneQuery(cellPhoneNumber, accountId),
+    await patientCellPhoneQuery(cellPhoneNumber, accountId),
     false,
   );
 }
@@ -103,17 +102,29 @@ export async function getPatientListFromCellPhoneNumber({
  * @param accountId
  * @return {*}
  */
-const patientCellPhoneQuery = (cellPhoneNumber, accountId) => ({
+const patientCellPhoneQuery = async (cellPhoneNumber, accountId) => ({
   accountId,
-  where: whereCellPhoneNumber(cellPhoneNumber),
+  where: whereCellPhoneNumber(cellPhoneNumber, await getCellPhoneNumberFallback(accountId)),
 });
 
-export const whereCellPhoneNumber = cellPhoneNumber => sequelize.where(
-  sequelize.fn(
-    'COALESCE',
-    ...(cellPhoneNumberFallback.length > 0
-      ? cellPhoneNumberFallback.map(f => sequelize.col(f))
-      : [sequelize.col('mobilePhoneNumber')]),
-  ),
-  Array.isArray(cellPhoneNumber) ? { in: cellPhoneNumber } : cellPhoneNumber,
-);
+/**
+ * Get the cell phone number fall back order from account configuration
+ * @param accountId
+ * @returns {Promise<Account.cellPhoneNumberFallback>}
+ */
+export const getCellPhoneNumberFallback = async (accountId) => {
+  const { cellPhoneNumberFallback } = await Account.findById(accountId);
+  return cellPhoneNumberFallback;
+};
+
+export const whereCellPhoneNumber = (cellPhoneNumber, cellPhoneNumberFallback) => {
+  return sequelize.where(
+    sequelize.fn(
+      'COALESCE',
+      ...(cellPhoneNumberFallback.length > 0
+        ? cellPhoneNumberFallback.map(f => sequelize.col(f))
+        : [sequelize.col('mobilePhoneNumber')]),
+    ),
+    Array.isArray(cellPhoneNumber) ? { in: cellPhoneNumber } : cellPhoneNumber,
+  );
+};

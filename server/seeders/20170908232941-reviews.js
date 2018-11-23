@@ -39,6 +39,7 @@ module.exports = {
       lastName: 'Timberlake',
       email: `justin+1@carecru.com`,
       mobilePhoneNumber: '+17808508886',
+      cellPhoneNumber: '+17808508886',
       createdAt: new Date(),
       updatedAt: new Date(),
     };

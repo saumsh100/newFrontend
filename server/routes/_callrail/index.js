@@ -5,7 +5,10 @@ import checkPermissions from '../../middleware/checkPermissions';
 import { sequelizeLoader } from '../util/loaders';
 import { Patient, Call } from '../../_models';
 import { namespaces } from '../../config/globals';
-import { whereCellPhoneNumber } from '../../lib/contactInfo/getPatientFromCellPhoneNumber';
+import {
+  getCellPhoneNumberFallback,
+  whereCellPhoneNumber,
+} from '../../lib/contactInfo/getPatientFromCellPhoneNumber';
 
 const callsRouterSequelize = Router();
 
@@ -16,7 +19,7 @@ callsRouterSequelize.param('accountId', sequelizeLoader('account', 'Account'));
 /**
  * Receive a new call from CallRail's webhook API
  */
-callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
+callsRouterSequelize.post('/:accountId/inbound/pre-call', async (req, res, next) => {
   const { callernum } = req.body;
   const callData = {
     id: JSON.stringify(req.body.id),
@@ -50,8 +53,9 @@ callsRouterSequelize.post('/:accountId/inbound/pre-call', (req, res, next) => {
     data.dateTime = moment(req.body.datetime).toISOString();
   }
 
+  const cellPhoneNumberFallback = await getCellPhoneNumberFallback(req.account.id);
   Patient.findOne({
-    where: [{ accountId: req.account.id }, whereCellPhoneNumber(callernum)],
+    where: [{ accountId: req.account.id }, whereCellPhoneNumber(callernum, cellPhoneNumberFallback)],
     raw: true,
   })
     .then((patient) => {

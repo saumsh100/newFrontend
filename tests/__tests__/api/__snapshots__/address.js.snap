@@ -34,6 +34,11 @@ Object {
         "canSendRecalls": false,
         "canSendReminders": false,
         "canSendReviews": false,
+        "cellPhoneNumberFallback": Array [
+          "mobilePhoneNumber",
+          "otherPhoneNumber",
+          "homePhoneNumber",
+        ],
         "clinicName": null,
         "contactEmail": null,
         "destinationPhoneNumber": null,

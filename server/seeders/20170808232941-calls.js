@@ -32,6 +32,7 @@ module.exports = {
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
+        cellPhoneNumber: phoneNumber,
         birthDate: faker.date.between(moment().subtract(100, 'days'), moment()),
         gender: 'male',
         language: 'English',

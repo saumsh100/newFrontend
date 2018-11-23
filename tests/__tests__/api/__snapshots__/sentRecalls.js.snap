@@ -9,6 +9,7 @@ Object {
         "address": null,
         "avatarUrl": null,
         "birthDate": "1980-01-01T00:00:00.932Z",
+        "cellPhoneNumber": "+17789999999",
         "contCareInterval": null,
         "contactMethodNote": null,
         "dueForHygieneDate": null,

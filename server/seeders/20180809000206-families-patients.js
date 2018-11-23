@@ -31,6 +31,7 @@ const patients = [
     lastName: 'Kyle',
     email: `justin+other@carecru.com`,
     mobilePhoneNumber: '+17808508886',
+    cellPhoneNumber: '+17808508886',
     familyId: families[0].id,
     createdAt: new Date(),
     updatedAt: new Date(),

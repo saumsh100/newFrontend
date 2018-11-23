@@ -20,7 +20,7 @@ import patientEventsAggregator from '../../../lib/events';
 import getPatientBasedOnFieldsProvided from '../../../lib/contactInfo/getPatient';
 import StatusError from '../../../util/StatusError';
 import Appointments from '../../../../client/entities/models/Appointments';
-import { whereCellPhoneNumber } from '../../../lib/contactInfo/getPatientFromCellPhoneNumber';
+import { whereCellPhoneNumber, getCellPhoneNumberFallback } from '../../../lib/contactInfo/getPatientFromCellPhoneNumber';
 
 const patientsRouter = new Router();
 
@@ -506,13 +506,14 @@ patientsRouter.post('/emailCheck', checkPermissions('patients:read'), async (req
 
 patientsRouter.post('/phoneNumberCheck', checkPermissions('patients:read'), async ({ accountId, body: { phoneNumber } }, res, next) => {
   const trimmedNumber = phoneNumber.replace(/ +/g, '');
+  const cellPhoneNumberFallback = await getCellPhoneNumberFallback(accountId);
 
   try {
     const patient = await Patient.findOne({
       raw: true,
       where: [
         { accountId },
-        whereCellPhoneNumber(trimmedNumber),
+        whereCellPhoneNumber(trimmedNumber, cellPhoneNumberFallback),
       ],
     });
 

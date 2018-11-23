@@ -241,6 +241,7 @@ module.exports = {
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
+        cellPhoneNumber: phoneNumber,
         birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
         gender: 'male',
         language: 'English',
@@ -310,6 +311,7 @@ module.exports = {
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
+        cellPhoneNumber: phoneNumber,
         birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
         gender: 'female',
         language: 'English',
@@ -327,13 +329,16 @@ module.exports = {
       });
     }
 
+    const mobilePhoneNumber = faker.phone.phoneNumberFormat(0);
+
     patients.push({
       id: uuid(),
       accountId,
       firstName: 'Testy',
       lastName: 'Testerson',
       email: 'testy.testerson@google.ca',
-      mobilePhoneNumber: faker.phone.phoneNumberFormat(0),
+      mobilePhoneNumber,
+      cellPhoneNumber: mobilePhoneNumber,
       birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
       gender: 'female',
       language: 'English',
@@ -424,6 +429,7 @@ module.exports = {
         lastName,
         email: `${firstName}.${lastName}@google.ca`,
         mobilePhoneNumber: phoneNumber,
+        cellPhoneNumber: phoneNumber,
         birthDate: faker.date.past(),
         gender: 'male',
         language: 'English',
@@ -450,6 +456,7 @@ module.exports = {
       lastName: 'Testerson',
       email: 'testy.testerson@google.ca',
       mobilePhoneNumber: '906-594-6264',
+      cellPhoneNumber: '906-594-6264',
       birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
       gender: 'female',
       language: 'English',
@@ -477,6 +484,7 @@ module.exports = {
       lastName: 'Testerson',
       email: 'testen.testerson@google.ca',
       mobilePhoneNumber: '906-594-6265',
+      cellPhoneNumber: '906-594-6265',
       birthDate: faker.date.between(moment().subtract(100, 'years'), moment()),
       gender: 'male',
       language: 'English',

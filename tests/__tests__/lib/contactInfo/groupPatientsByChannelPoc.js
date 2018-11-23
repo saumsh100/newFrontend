@@ -105,21 +105,25 @@ describe('Contact Info Service', () => {
         new Patient({
           firstName: 'Mom',
           mobilePhoneNumber: '+12223334444',
+          cellPhoneNumber: '+12223334444',
           pmsCreatedAt: date(1, 1),
         }),
         new Patient({
           firstName: 'Son',
           mobilePhoneNumber: '+12223334444',
+          cellPhoneNumber: '+12223334444',
           pmsCreatedAt: date(1, 1),
         }),
         new Patient({
           firstName: 'Daughter',
           mobilePhoneNumber: '+12223334444',
+          cellPhoneNumber: '+12223334444',
           pmsCreatedAt: date(1, 1),
         }),
         new Patient({
           firstName: 'Jack',
           mobilePhoneNumber: '+13334445555',
+          cellPhoneNumber: '+13334445555',
           pmsCreatedAt: date(1, 2),
         }),
       ];
@@ -161,16 +165,19 @@ describe('Contact Info Service', () => {
         new Patient({
           firstName: 'Dad',
           mobilePhoneNumber: '+12223334444',
+          cellPhoneNumber: '+12223334444',
           pmsCreatedAt: date(1, 1),
         }),
         new Patient({
           firstName: 'Daughter1',
           mobilePhoneNumber: '+13334445555',
+          cellPhoneNumber: '+13334445555',
           pmsCreatedAt: date(1, 1),
         }),
         new Patient({
           firstName: 'Daughter2',
           mobilePhoneNumber: '+14445556666',
+          cellPhoneNumber: '+14445556666',
           pmsCreatedAt: date(1, 1),
         }),
       ];

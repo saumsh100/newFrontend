@@ -8,7 +8,10 @@
  * @param {array} args
  * @return {*} first not nil value from the arguments array, null if none found.
  */
-const coalesce = (...args) => args.find(arg =>
-  ((arg !== null && arg !== undefined) && (typeof arg !== 'number' || arg.toString() !== 'NaN')));
+const coalesce = (...args) => {
+  const result = args.find(arg =>
+    ((arg !== null && arg !== undefined) && (typeof arg !== 'number' || arg.toString() !== 'NaN')));
+  return result === undefined ? null : result;
+};
 
 export default coalesce;

@@ -154,7 +154,7 @@ describe('/api/chats', () => {
       return request(app)
         .post(rootUrl)
         .set('Authorization', `Bearer ${token}`)
-        .send({ patient: new Patient(patient) })
+        .send({ patient: new Patient({...patient, cellPhoneNumber: patient.mobilePhoneNumber}) })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['lastTextMessageId', 'updatedAt']);

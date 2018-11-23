@@ -1,12 +1,12 @@
 
 import uniqWith from 'lodash/uniqWith';
+import groupBy from 'lodash/groupBy';
 import isUndefined from 'lodash/isUndefined';
 import isNull from 'lodash/isNull';
 import customDataTypes from '../util/customDataTypes';
 import coalesce from '../../iso/helpers/coalesce';
 import convertToCommsPreferences from '../util/convertToCommsPreferences';
 import { UniqueFieldError } from './errors';
-import { cellPhoneNumberFallback } from '../config/globals';
 
 const { validateAccountIdPmsId } = require('../util/validators');
 
@@ -70,6 +70,7 @@ export default function (sequelize, DataTypes) {
       'otherPhoneNumber',
       DataTypes,
     ),
+    cellPhoneNumber: customDataTypes.phoneNumber('cellPhoneNumber', DataTypes),
 
     prefContactPhone: { type: DataTypes.STRING },
 
@@ -201,15 +202,6 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.ARRAY(DataTypes.UUID),
       defaultValue: [],
       allowNull: false,
-    },
-
-    cellPhoneNumber: {
-      type: DataTypes.VIRTUAL(DataTypes.STRING),
-      get() {
-        return cellPhoneNumberFallback.length > 0 ?
-          coalesce(...cellPhoneNumberFallback.map(f => this.get(f))) :
-          this.get('mobilePhoneNumber');
-      },
     },
 
     foundChatId: { type: DataTypes.VIRTUAL(DataTypes.STRING) },
@@ -492,7 +484,46 @@ export default function (sequelize, DataTypes) {
     return response;
   };
 
+  Patient.modelHooks = (({ Account }) => {
+    Patient.hook('beforeUpdate', async (patient) => {
+      if (patient._previousDataValues) {
+        const { cellPhoneNumberFallback } = await Account.findById(patient.accountId);
+        const isSame = cellPhoneNumberFallback
+          .map(number => patient[number] === patient._previousDataValues[number])
+          .reduce((sum, next) => sum && next, true);
+        if (!isSame) {
+          patient.cellPhoneNumber = getCellPhoneNumber(cellPhoneNumberFallback, patient);
+        }
+      }
+    });
+
+    Patient.hook('beforeCreate', async (patient) => {
+      const { cellPhoneNumberFallback } = await Account.findById(patient.accountId);
+      patient.cellPhoneNumber = getCellPhoneNumber(cellPhoneNumberFallback, patient);
+    });
+
+    Patient.hook('beforeBulkCreate', async (patients) => {
+      const accountIds = patients.map(patient => patient.accountId);
+      const accountIdsSet = [...new Set(accountIds)];
+      const accounts = await Account.findAll({
+        attributes: ['id', 'cellPhoneNumberFallback'],
+        where: { id: accountIdsSet },
+      });
+      const cellPhoneNumberFallbackById = groupBy(accounts, 'id');
+      patients.map(async (patient) => {
+        const [{ dataValues: { cellPhoneNumberFallback } }] = cellPhoneNumberFallbackById[patient.accountId];
+        patient.cellPhoneNumber = getCellPhoneNumber(cellPhoneNumberFallback, patient);
+      });
+    });
+  });
+
   Patient.STATUS = STATUS;
 
   return Patient;
+}
+
+function getCellPhoneNumber(cellPhoneNumberFallback, patient) {
+  return cellPhoneNumberFallback.length > 0 ?
+    coalesce(...cellPhoneNumberFallback.map(f => patient.get(f))) :
+    patient.mobilePhoneNumber;
 }

@@ -34,13 +34,13 @@ describe('Communications Utility Library', () => {
     });
 
     it('should return the no error for sms', () => {
-      const patient = new Patient({ mobilePhoneNumber: '+17801112222', preferences });
+      const patient = new Patient({ mobilePhoneNumber: '+17801112222', cellPhoneNumber: '+17801112222', preferences });
       const result = cannotSend(patient, 'sms');
       expect(result).toBeUndefined();
     });
 
     it('should return the no error for phone', () => {
-      const patient = new Patient({ mobilePhoneNumber: '+17801112222', preferences });
+      const patient = new Patient({ mobilePhoneNumber: '+17801112222', cellPhoneNumber: '+17801112222', preferences });
       const result = cannotSend(patient, 'phone');
       expect(result).toBeUndefined();
     });
@@ -94,7 +94,7 @@ describe('Communications Utility Library', () => {
       const patients = [
         new Patient({ id: 0, email: 'a@b.ca', preferences }),
         new Patient({ id: 1, email: 'b@a.ca', preferences }),
-        new Patient({ id: 2, mobilePhoneNumber: '+17808508886', preferences }),
+        new Patient({ id: 2, mobilePhoneNumber: '+17808508886', cellPhoneNumber: '+17808508886', preferences }),
       ];
 
       const result = generateOrganizedPatients(patients, ['email', 'sms']);

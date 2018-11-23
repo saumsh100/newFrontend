@@ -172,6 +172,16 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: true,
     },
+
+    cellPhoneNumberFallback: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [
+        'mobilePhoneNumber',
+        'otherPhoneNumber',
+        'homePhoneNumber',
+      ],
+      allowNull: false,
+    },
   });
 
   Account.associate = (models) => {
@@ -307,6 +317,25 @@ export default function (sequelize, DataTypes) {
             });
           }
         }
+      }
+    });
+
+    /**
+     * This hook will be triggered whenever there is a change to cellPhoneNumberFallback,
+     * it will then update all patients' cellPhoneNumber column with this new fallback order
+     */
+    Account.hook('beforeUpdate', ({ cellPhoneNumberFallback, _previousDataValues, id }) => {
+      const { cellPhoneNumberFallback: prevCellPhoneNumberFallback } = _previousDataValues;
+      if (JSON.stringify(cellPhoneNumberFallback) !== JSON.stringify(prevCellPhoneNumberFallback)) {
+        sequelize.query(`UPDATE "Patients"
+        SET
+          "cellPhoneNumber" = COALESCE("${cellPhoneNumberFallback.join('","')}")
+        WHERE "accountId" = '${id}'
+        AND ("cellPhoneNumber" != 
+          COALESCE("${cellPhoneNumberFallback.join('","')}") 
+          OR "cellPhoneNumber" IS NULL
+          OR COALESCE("${cellPhoneNumberFallback.join('","')}") IS NULL)
+        AND "deletedAt" IS NULL`);
       }
     });
   });

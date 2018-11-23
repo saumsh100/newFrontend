@@ -149,6 +149,7 @@ const ModelAttributes = {
     'workPhoneNumber',
     'otherPhoneNumber',
     'prefContactPhone',
+    'cellPhoneNumber',
     'gender',
     'prefName',
     'language',

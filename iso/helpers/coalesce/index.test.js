@@ -28,6 +28,8 @@ describe('#coalesce', () => {
     expect(coalesce(null, -1, undefined, 2)).toBe(-1);
     expect(coalesce(null, 0, undefined, 2)).toBe(0);
     expect(coalesce(null, 1, undefined, 2)).toBe(1);
+    expect(coalesce(false)).toEqual(false);
+    expect(coalesce(undefined, NaN, false)).toEqual(false);
     expect(coalesce(null, { test: 'test' }, undefined, 'test2')).toEqual({ test: 'test' });
     expect(coalesce(null, ['test'], undefined, 'test2')).toEqual(['test']);
     expect(coalesce(null, dummyFunc, undefined, 'test2')).toBe(dummyFunc);
@@ -36,5 +38,11 @@ describe('#coalesce', () => {
   test('should work with empties', () => {
     expect(coalesce(null, {}, undefined, 'test2')).toEqual({});
     expect(coalesce(null, [], undefined, 'test2')).toEqual([]);
+  });
+
+  test('should return null if arguments are all nil values', () => {
+    expect(coalesce(undefined, undefined, undefined, undefined)).toEqual(null);
+    expect(coalesce(null)).toEqual(null);
+    expect(coalesce(NaN)).toEqual(null);
   });
 });

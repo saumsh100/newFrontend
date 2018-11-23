@@ -46,6 +46,7 @@ Array [
       "address": Object {},
       "avatarUrl": null,
       "birthDate": null,
+      "cellPhoneNumber": null,
       "contCareInterval": null,
       "contactMethodNote": null,
       "dueForRecallExamDate": null,
