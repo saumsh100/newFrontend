@@ -1,22 +1,24 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, DialogBox, DropdownMenu, Icon } from '../../../library';
+import { Button, DialogBox, DropdownMenu } from '../../../library';
 import NewPatientForm from './NewPatientForm';
 import AssignPatientToChatDialog from '../../AssignPatientToChatDialog';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
-import SmartFilters from './SmartFilters';
 import Actions from './Actions';
+import SmartFilters from './SmartFilters';
 import styles from '../styles.scss';
+
+const initialState = {
+  active: false,
+  assignPatientToChatModalActive: false,
+  patient: null,
+};
 
 class HeaderSection extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false,
-      assignPatientToChatModalActive: false,
-      patient: null,
-    };
+    this.state = initialState;
     this.setActive = this.setActive.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,42 +36,35 @@ class HeaderSection extends Component {
   }
 
   reinitializeState() {
-    this.setState({
-      active: false,
-      assignPatientToChatModalActive: false,
-      patient: null,
-    });
+    this.setState(initialState);
   }
 
   handleSubmit(values) {
-    const { createEntityRequest } = this.props;
-
-    values.isSyncedWithPms = false;
-
-    const alert = {
-      success: { body: 'New Patient Added.' },
-      error: { body: 'Failed to add patient.' },
-    };
-
-    createEntityRequest({
-      key: 'patients',
-      entityData: values,
-      alert,
-    }).then(({ patients }) => {
-      this.props.destroy('newUser');
-      const [patient] = Object.values(patients);
-      if (patient.foundChatId) {
-        return this.openAssignPatientToChatModal(patient);
-      }
-      this.reinitializeState();
-    });
+    this.props
+      .createEntityRequest({
+        key: 'patients',
+        entityData: {
+          ...values,
+          isSyncedWithPms: false,
+        },
+        alert: {
+          success: { body: 'New Patient Added.' },
+          error: { body: 'Failed to add patient.' },
+        },
+      })
+      .then(({ patients }) => {
+        this.props.destroy('newUser');
+        const [patient] = Object.values(patients);
+        if (patient.foundChatId) {
+          return this.openAssignPatientToChatModal(patient);
+        }
+        this.reinitializeState();
+      });
   }
 
   render() {
-    const { totalPatients, smartFilter, setSmartFilter, patientIds } = this.props;
-
+    const { patientIds } = this.props;
     const formName = 'newPatientForm';
-
     const actions = [
       {
         label: 'Cancel',
@@ -88,17 +83,6 @@ class HeaderSection extends Component {
       },
     ];
 
-    const filterMenu = props => (
-      <div {...props} className={styles.filterMenuButton}>
-        <div className={styles.header_title}>
-          {smartFilter ? smartFilter.label : 'All Patients'}
-          <div className={styles.header_icon}>
-            <Icon icon="caret-down" type="solid" size={1.7} />
-          </div>
-        </div>
-      </div>
-    );
-
     const actionsMenu = props => (
       <div {...props} className={styles.buttonContainer_actions}>
         <Button iconRight="caret-down" border="blue">
@@ -109,30 +93,15 @@ class HeaderSection extends Component {
 
     return (
       <div className={styles.header}>
-        <div>
-          <DropdownMenu labelComponent={filterMenu} data-test-id="dropDown_smartFilters">
-            <div className={styles.filterContainer}>
-              <SmartFilters setSmartFilter={setSmartFilter} smartFilter={smartFilter} />
-            </div>
-          </DropdownMenu>
-          <div className={styles.header_subHeader} data-test-id="text_totalPatientsCount">
-            {`Showing ${totalPatients} Patients`}
-          </div>
-        </div>
+        <SmartFilters />
         <div className={styles.buttonContainer}>
           <DropdownMenu labelComponent={actionsMenu} className={styles.alignDD}>
             <Actions patientIds={patientIds} />
           </DropdownMenu>
-          <Button
-            onClick={() => this.setActive()}
-            compact
-            color="blue"
-            data-test-id="button_addNewPatient"
-          >
+          <Button onClick={this.setActive} compact color="blue" data-test-id="button_addNewPatient">
             Add New Patient
           </Button>
         </div>
-
         <DialogBox
           actions={actions}
           title="Add New Patient"
@@ -154,18 +123,11 @@ class HeaderSection extends Component {
 }
 
 HeaderSection.propTypes = {
-  totalPatients: PropTypes.number,
-  smartFilter: PropTypes.object,
-  setSmartFilter: PropTypes.func.isRequired,
   patientIds: PropTypes.arrayOf(PropTypes.string),
   createEntityRequest: PropTypes.func.isRequired,
   destroy: PropTypes.func.isRequired,
 };
 
-HeaderSection.defaultProps = {
-  totalPatients: null,
-  smartFilter: null,
-  patientIds: [],
-};
+HeaderSection.defaultProps = { patientIds: [] };
 
 export default HeaderSection;

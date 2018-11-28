@@ -150,9 +150,9 @@ const passwordStrength = (value) => {
   }
 };
 
-const parseNum = value => value && parseInt(value);
+const parseNum = value => value && parseInt(value, 10);
 
-const notNegative = value => (value && value <= 0 ? 'Negative value' : undefined);
+const notNegative = value => (value && value <= 0 ? 'Must be greater than 0' : undefined);
 
 const normalizeBirthdate = value => value.trim();
 

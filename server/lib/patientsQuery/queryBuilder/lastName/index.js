@@ -5,5 +5,5 @@
  * @returns {{where: {lastName: *}}}
  */
 export default function queryLastName(value) {
-  return { where: { lastName: value } };
+  return { where: { lastName: { $iLike: `${value}%` } } };
 }

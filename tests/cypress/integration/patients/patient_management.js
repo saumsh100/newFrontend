@@ -20,25 +20,6 @@ describe('Patient Management Table Tests', () => {
       .fillTextInput('demographics', 'search_firstName', 'Cypress')
       .fillTextInput('demographics', 'search_lastName', 'Hill')
       .get('[data-test-id="text_totalPatientsCount"]')
-      .contains('Showing 1 Patients');
-  });
-
-  it.skip('use smart filter - due in 60 days', () => {
-    cy
-      .wait(1500)
-      .get('[data-test-id="dropDown_smartFilters"]')
-      .click()
-      .getAndClick('option_1')
-      .get('[data-test-id="text_totalPatientsCount"]');
-  });
-
-  it.skip('use smart filter - missed/cancelled appointment', () => {
-    cy
-      .wait(1500)
-      .get('[data-test-id="dropDown_smartFilters"]')
-      .click()
-      .getAndClick('option_8')
-      .get('[data-test-id="text_totalPatientsCount"]')
-      .contains('Showing 1 Patients');
+      .contains('Showing 1 Patient');
   });
 });

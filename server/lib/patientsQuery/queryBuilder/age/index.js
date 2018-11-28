@@ -13,8 +13,8 @@ export default function queryAge([endYear, startYear]) {
     .seconds(0)
     .milliseconds(0);
 
-  const endDate = now.subtract(endYear, 'years').toISOString();
-  const startDate = now.subtract(startYear, 'years').toISOString();
+  const endDate = now.clone().subtract(endYear, 'years').toISOString();
+  const startDate = now.clone().subtract(startYear, 'years').toISOString();
 
   return { where: { birthDate: { $between: [startDate, endDate] } } };
 }

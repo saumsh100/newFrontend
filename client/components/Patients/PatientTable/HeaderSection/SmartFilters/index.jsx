@@ -1,118 +1,92 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem } from '../../../../library';
-import styles from './styles.scss';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { DropdownMenu, List, ListItem } from '../../../../library';
+import { addFilter } from '../../../../../reducers/patientTable';
+import { fetchPatientTableData } from '../../../../../thunks/patientTable';
+import smartFilters, { getActiveSmartFilter } from './smartFilters';
+import Icon from '../../../../library/Icon';
+import styles from '../../styles.scss';
 
-export default function SmartFilters(props) {
-  const { setSmartFilter, smartFilter } = props;
-  const smartFilters = [
-    {
-      index: -1,
-      label: 'All Patients',
-    },
-    {
-      index: 0,
-      label: 'Due within 60 Days',
-      startMonth: -2,
-      endMonth: 0,
-    },
-    {
-      index: 0,
-      label: '0-3 Months Late',
-      startMonth: 3,
-      endMonth: 0,
-    },
-    {
-      index: 0,
-      label: '4-6 Months Late',
-      startMonth: 6,
-      endMonth: 4,
-    },
-    {
-      index: 0,
-      label: '7-12 Months Late',
-      startMonth: 12,
-      endMonth: 7,
-    },
-    {
-      index: 0,
-      label: '13-18 Months Late',
-      startMonth: 18,
-      endMonth: 13,
-    },
-    {
-      index: 0,
-      label: '19-24 Months Late',
-      startMonth: 24,
-      endMonth: 19,
-    },
-    {
-      index: 0,
-      label: '25-36 Months Late',
-      startMonth: 36,
-      endMonth: 25,
-    },
-    {
-      index: 1,
-      label: 'Missed/Cancelled',
-    },
-    {
-      index: 2,
-      label: 'Missed Pre-Appointed',
-    },
-    {
-      index: 3,
-      label: 'Unconfirmed Patients 1 week',
-      days: 7,
-    },
-    {
-      index: 3,
-      label: 'Unconfirmed Patients 2 weeks',
-      days: 14,
-    },
-  ];
+const SmartFilters = ({ activeSegmentLabel, totalPatients, ...props }) => {
+  const setSmartFilter = ({ segment, value = [] }) => {
+    props.addFilter({
+      segment: [segment, ...value],
+      page: 0,
+    });
+    props.fetchPatientTableData();
+  };
+
+  const filterMenu = p => (
+    <div {...p} className={styles.filterMenuButton}>
+      <div className={styles.header_title}>
+        {activeSegmentLabel}
+        <div className={styles.header_icon}>
+          <Icon icon="caret-down" type="solid" size={1.7} />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <List className={styles.smartFilter} data-test-id="smartFiltersList">
-      {smartFilters.map((filter, index) => {
-        let borderStyle = {};
-
-        if (
-          (smartFilter && filter.label === smartFilter.label) ||
-          (filter.label === 'All Patients' && !smartFilter)
-        ) {
-          borderStyle = {
-            borderLeft: '3px solid #FF715A',
-          };
-        }
-
-        return (
-          <ListItem
-            className={styles.filterItem}
-            onClick={() => setSmartFilter(filter)}
-            style={borderStyle}
-            data-test-id={`option_${index}`}
-            key={`smartFilter_${filter.label}`}
-          >
-            {filter.label}
-          </ListItem>
-        );
-      })}
-    </List>
+    <div>
+      <DropdownMenu labelComponent={filterMenu} data-test-id="dropDown_smartFilters">
+        <div className={styles.filterContainer}>
+          <List className={styles.smartFilter} data-test-id="smartFiltersList">
+            {smartFilters.map(({ label, ...filter }, index) => {
+              const borderStyle =
+                (label === activeSegmentLabel && { borderLeft: '3px solid #FF715A' }) || {};
+              return (
+                <ListItem
+                  className={styles.filterItem}
+                  onClick={() => setSmartFilter(filter)}
+                  style={borderStyle}
+                  data-test-id={`option_${index}`}
+                  key={`smartFilter_${label}`}
+                >
+                  {label}
+                </ListItem>
+              );
+            })}
+          </List>
+        </div>
+      </DropdownMenu>
+      <div className={styles.header_subHeader} data-test-id="text_totalPatientsCount">
+        {`Showing ${totalPatients} Patient${totalPatients > 1 ? 's' : ''}`}
+      </div>
+    </div>
   );
-}
+};
 
 SmartFilters.propTypes = {
-  setSmartFilter: PropTypes.func.isRequired,
-  smartFilter: PropTypes.shape({
-    index: PropTypes.number,
-    label: PropTypes.string,
-    startMonth: PropTypes.number,
-    endMonth: PropTypes.number,
-  }),
+  activeSegmentLabel: PropTypes.string.isRequired,
+  addFilter: PropTypes.func.isRequired,
+  fetchPatientTableData: PropTypes.func.isRequired,
+  totalPatients: PropTypes.number,
 };
 
-SmartFilters.defaultProps = {
-  smartFilter: {},
+SmartFilters.defaultProps = { totalPatients: 0 };
+
+const mapStateToProps = ({ patientTable }) => {
+  const segment = patientTable.getIn(['filters', 'segment']);
+  return {
+    activeSegmentLabel: getActiveSmartFilter(segment).label,
+    totalPatients: patientTable.get('count'),
+  };
 };
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addFilter,
+      fetchPatientTableData,
+    },
+    dispatch,
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SmartFilters);

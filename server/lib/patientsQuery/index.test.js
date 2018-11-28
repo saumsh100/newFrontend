@@ -3,7 +3,7 @@ import omit from 'lodash/omit';
 import { Patient } from 'CareCruModels';
 import dateMock from 'CareCruIso/utils/test/dateMock';
 import { accountId } from '../../../tests/util/seedTestUsers';
-import { patientQueryBuilder } from './index';
+import patientQueryBuilder from './index';
 
 describe('#patientQueryBuilder', () => {
   beforeAll(() => {

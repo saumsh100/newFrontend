@@ -1,44 +1,51 @@
 
 import { Router } from 'express';
-import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
-import PatientQuery, { patientQueryBuilder } from '../../../lib/patientsQuery/index';
+import checkPermissions from '../../../middleware/checkPermissions';
+import patientQueryBuilder from '../../../lib/patientsQuery';
 
 const tableRouter = new Router({});
-
-/**
- * Fetching patients for patients table.
- *
- */
-tableRouter.get('/', checkPermissions('table:read'), async (req, res, next) => {
-  try {
-    const patients = await PatientQuery(Object.assign(req.query, { accountId: req.accountId }));
-    return res.send(normalize('patients', patients));
-  } catch (error) {
-    return next(error);
-  }
-});
+const malformedError =
+  new Error('Malformed order[] query parameter, values should be JSON compliant');
 
 tableRouter.get(
   '/search',
   checkPermissions('table:read'),
-  async (req, res, next) => {
+  async ({ query, accountId }, res, next) => {
+    if (query.order && !Array.isArray(query.order)) {
+      return next(Error('Order query parameter should be an array. eg: order[]'));
+    }
+
     try {
-      const parsedQuery = Object.entries(req.query).reduce((query, [key, value]) => {
+      const parsedOrderQuery = query.order && query.order.reduce((orderQuery, value) => {
         let parsedValue;
+
+        if (value.length < 1) {
+          throw new Error('Order cannot be empty');
+        }
+
         try {
           parsedValue = JSON.parse(value.trim());
         } catch (e) {
-          throw new Error('Malformed query parameter, values should be JSON compliant');
+          throw malformedError;
         }
 
-        query[key] = parsedValue;
-        return query;
-      }, {});
+        if (!Array.isArray(parsedValue) && typeof parsedValue !== 'string') {
+          throw new Error('Order value should be array or string');
+        }
+
+        if (parsedValue.length < 1) {
+          throw malformedError;
+        }
+
+        orderQuery = [...orderQuery, parsedValue];
+        return orderQuery;
+      }, []);
 
       const patients = await patientQueryBuilder({
-        ...parsedQuery,
-        accountId: req.accountId,
+        ...query,
+        order: parsedOrderQuery,
+        accountId,
       });
 
       const countObj = {
@@ -54,7 +61,10 @@ tableRouter.get(
         },
       ];
 
-      return res.send(normalize('patients', patientsToNormalize.map(p => p.get({ plain: true }))));
+      return res.send(normalize('patients', patientsToNormalize.map((p, i) => ({
+        ...p.get({ plain: true }),
+        rowNumber: (query.page * query.limit) + i + 1,
+      }))));
     } catch (error) {
       return next(error);
     }

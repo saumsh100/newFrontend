@@ -1,17 +1,17 @@
 
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
+
+const reducer = '@patient-table';
 
 /**
  * Constants
  */
-export const SET_TABLE_DATA = 'SET_ACCOUNT';
-export const SET_IS_LOADING_TABLE = 'SET_IS_LOADING_TABLE';
-export const SET_SMART_FILTER = 'SET_SMART_FIlTER';
-export const SET_TABLE_FILTERS = 'SET_TABLE_FILTERS';
-export const REMOVE_TABLE_FILTER = 'REMOVE_TABLE_FILTER';
-export const CLEAR_TABLE_FILTERS = 'CLEAR_TABLE_FILTERS';
-export const CLEAR_TABLE_SEARCH = 'CLEAR_TABLE_SEARCH';
+export const SET_IS_LOADING = `${reducer}/SET_IS_LOADING`;
+export const SET_DATA = `${reducer}/SET_DATA`;
+export const ADD_FILTER = `${reducer}/ADD_FILTER`;
+export const REMOVE_FILTER = `${reducer}/REMOVE_FILTER`;
+
 export const ADD_REMOVE_TIMELINE_FILTERS = 'ADD_REMOVE_TIMELINE_FILTERS';
 export const SELECT_ALL_TIMELINE_FILTERS = 'SELECT_ALL_TIMELINE_FILTERS';
 export const CLEAR_ALL_TIMELINE_FILTERS = 'CLEAR_ALL_TIMELINE_FILTERS';
@@ -19,13 +19,10 @@ export const CLEAR_ALL_TIMELINE_FILTERS = 'CLEAR_ALL_TIMELINE_FILTERS';
 /**
  * Actions
  */
-export const setTableData = createAction(SET_TABLE_DATA);
-export const setIsLoading = createAction(SET_IS_LOADING_TABLE);
-export const setSmartFilter = createAction(SET_SMART_FILTER);
-export const setFilters = createAction(SET_TABLE_FILTERS);
-export const removeFilter = createAction(REMOVE_TABLE_FILTER);
-export const clearFilters = createAction(CLEAR_TABLE_FILTERS);
-export const clearSearch = createAction(CLEAR_TABLE_SEARCH);
+export const setTableData = createAction(SET_DATA);
+export const setIsLoading = createAction(SET_IS_LOADING);
+export const addFilter = createAction(ADD_FILTER);
+export const removeFilter = createAction(REMOVE_FILTER);
 
 export const addRemoveTimelineFilters = createAction(ADD_REMOVE_TIMELINE_FILTERS);
 export const selectAllTimelineFilters = createAction(SELECT_ALL_TIMELINE_FILTERS);
@@ -35,33 +32,28 @@ export const clearAllTimelineFilters = createAction(CLEAR_ALL_TIMELINE_FILTERS);
  * Initial State
  */
 export const createInitialPatientState = state =>
-  fromJS(Object.assign(
-    {
-      data: [],
-      totalPatients: 0,
-      isLoadingTable: false,
+  fromJS({
+    data: List(),
+    filters: Map({
       limit: 15,
       page: 0,
-      sort: [],
-      filters: Map(),
-      filterTags: Map(),
-      smartFilter: null,
-      searchFirstName: '',
-      searchLastName: '',
-
-      timelineFilters: [
-        'appointment',
-        'call',
-        'duedate',
-        'newpatient',
-        'recall',
-        'reminder',
-        'review',
-        'request',
-      ],
-    },
-    state,
-  ));
+      order: [['firstName', 'asc']],
+      segment: ['allPatients'],
+    }),
+    isLoadingTable: false,
+    count: 0,
+    timelineFilters: [
+      'appointment',
+      'call',
+      'duedate',
+      'newpatient',
+      'recall',
+      'reminder',
+      'review',
+      'request',
+    ],
+    ...state,
+  });
 
 export const initialState = createInitialPatientState();
 
@@ -70,55 +62,26 @@ export const initialState = createInitialPatientState();
  */
 export default handleActions(
   {
-    [SET_TABLE_DATA](state, { payload }) {
-      return state.merge(payload);
-    },
-
-    [SET_IS_LOADING_TABLE](state, { payload }) {
-      return state.set('isLoadingTable', payload);
-    },
-
-    [SET_TABLE_FILTERS](state, { payload }) {
-      const filters = state.get('filters');
-      const newFilters = filters.set(`${payload.filter.indexFunc}`, payload.filter);
+    [SET_DATA](
+      state,
+      { payload: { data, count } },
+    ) {
       return state.merge({
-        filters: newFilters,
-        page: 0,
+        data,
+        count,
       });
     },
 
-    [REMOVE_TABLE_FILTER](state, { payload }) {
-      const filters = state.get('filters');
-      const size = filters.size;
-
-      if (size) {
-        const modifiedFilters = filters.delete(`${payload.index}`);
-        return state.set('filters', modifiedFilters);
-      }
-      return state;
+    [SET_IS_LOADING](state, { payload }) {
+      return state.set('isLoadingTable', payload);
     },
 
-    [SET_SMART_FILTER](state, { payload }) {
-      const index = payload.smFilter.index;
-
-      if (index !== -1) {
-        return state.merge({
-          smartFilter: payload.smFilter,
-          page: 0,
-        });
-      }
-      return initialState;
+    [ADD_FILTER](state, { payload }) {
+      return state.mergeIn(['filters'], payload);
     },
 
-    [CLEAR_TABLE_FILTERS](state) {
-      const filters = state.get('filters').clear();
-      return state.set('filters', filters);
-    },
-
-    [CLEAR_TABLE_SEARCH](state) {
-      state.set('searchFirstName', '');
-      state.set('searchLastName', '');
-      return state;
+    [REMOVE_FILTER](state, { payload }) {
+      return state.deleteIn(['filters', payload]);
     },
 
     [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
@@ -133,16 +96,12 @@ export default handleActions(
         const newFilters = filters;
         newFilters.splice(index, 1);
 
-        return state.merge({
-          timelineFilters: newFilters,
-        });
+        return state.set('timelineFilters', newFilters);
       }
 
       const newFilters = filters;
       newFilters.push(type);
-      return state.merge({
-        timelineFilters: newFilters,
-      });
+      return state.set('timelineFilters', newFilters);
     },
 
     [CLEAR_ALL_TIMELINE_FILTERS](state) {

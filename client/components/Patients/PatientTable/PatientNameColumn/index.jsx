@@ -2,20 +2,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Avatar } from '../../../library';
+import patientShape from '../../../library/PropTypeShapes/patient';
 import styles from './styles.scss';
 
-export default function PatientNameColumn(props) {
-  const {
-    patient, redirect, text, noAvatar,
-  } = props;
-
+export default function PatientNameColumn({ patient, redirect, text, isAvatar }) {
   return (
     <div className={styles.patientRow}>
       <div className={styles.avatarContainer}>
-        {!noAvatar ? <Avatar user={patient} size="xs" /> : null}
+        {isAvatar && <Avatar user={patient} size="xs" />}
       </div>
       <div
         className={styles.name}
+        role="button"
+        tabIndex="-1"
+        onKeyDown={({ keyCode }) => keyCode === '13' && redirect()}
         onClick={(e) => {
           e.stopPropagation();
           redirect();
@@ -28,8 +28,13 @@ export default function PatientNameColumn(props) {
 }
 
 PatientNameColumn.propTypes = {
-  patient: PropTypes.object,
-  redirect: PropTypes.func,
+  patient: PropTypes.shape(patientShape).isRequired,
+  redirect: PropTypes.func.isRequired,
   text: PropTypes.string,
-  noAvatar: PropTypes.bool,
+  isAvatar: PropTypes.bool,
+};
+
+PatientNameColumn.defaultProps = {
+  text: '',
+  isAvatar: false,
 };

@@ -3,407 +3,110 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Map } from 'immutable';
+import { change } from 'redux-form';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import debounce from 'lodash/debounce';
 import { Icon, Card, Button } from '../../../library';
-import Demographics from './Demographics';
-import Appointments from './Appointments';
-import Practitioners from './Practitioners';
-import Communications from './Communications';
+import DemographicsForm from './Demographics';
+import AppointmentsForm from './Appointments';
+import PractitionersForm from './Practitioners';
+import CommunicationsForm from './Communications';
 import FilterTags from './FilterTags';
+import FilterForm from './FilterForm';
+import FilterBodyDisplay from './FilterBodyDisplay';
+import { addFilter, removeFilter } from '../../../../reducers/patientTable';
+import fetchEntities from '../../../../thunks/fetchEntities/fetchEntities';
 import styles from './styles.scss';
+
+const forms = {
+  demographics: {
+    headerTitle: 'Demographics',
+    formComponent: DemographicsForm,
+  },
+  appointments: {
+    headerTitle: 'Appointments',
+    formComponent: AppointmentsForm,
+  },
+  practitioners: {
+    headerTitle: 'Practitioners',
+    formComponent: PractitionersForm,
+  },
+  communication: {
+    headerTitle: 'Communications',
+    formComponent: CommunicationsForm,
+  },
+};
 
 class SideBarFilters extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { openFilters: [false, false, false, false] };
+    this.state = { expandedForm: '' };
 
     this.displayFilter = this.displayFilter.bind(this);
-    this.handleDemographics = this.handleDemographics.bind(this);
-    this.handleAppointments = this.handleAppointments.bind(this);
-    this.handlePractitioners = this.handlePractitioners.bind(this);
-    this.handleCommunications = this.handleCommunications.bind(this);
     this.removeTag = this.removeTag.bind(this);
     this.clearTags = this.clearTags.bind(this);
+    this.formHandler = debounce(this.formHandler.bind(this), 500);
   }
 
-  displayFilter(index) {
-    const { openFilters } = this.state;
+  componentDidMount() {
+    this.props.fetchEntities({ key: 'practitioners' });
+  }
 
-    const newState = openFilters.map((filter, filterIndex) => {
-      if (filterIndex !== index) {
-        return false;
-      }
-      return !filter;
-    });
-
-    this.setState({ openFilters: newState });
+  displayFilter(index, isOpen) {
+    this.setState(() => ({ expandedForm: isOpen ? '' : index }));
   }
 
   removeTag(filter) {
-    const { arrayRemoveAll, removeFilter } = this.props;
+    const { filterForms } = this.props;
+    this.props.removeFilter(filter);
 
-    arrayRemoveAll(filter.formName, filter.formSection);
+    const [form] = Object.entries(filterForms).find(([, value]) => {
+      const hasValue = value.values && value.values[filter];
+      return hasValue
+        ? true
+        : Object.keys(value.registeredFields)
+          .map(v => v.split('.')[0])
+          .includes(filter);
+    });
 
-    removeFilter(filter.indexFunc);
+    if (filterForms[form].values && filterForms[form].values[filter]) {
+      this.props.change(form, filter, '');
+    } else {
+      this.props.setFilterCallback();
+    }
   }
 
   clearTags() {
-    this.props.clearFilters();
+    if (Object.keys(this.props.filters).length === 0) return;
+
+    Object.keys(this.props.filters).forEach(filter => this.removeTag(filter));
   }
 
-  handleDemographics(values) {
-    const { addFilter, removeFilter } = this.props;
+  formHandler(values) {
+    const parsedFilters = Object.entries(values)
+      .filter(([, filterValues]) => {
+        if (!Array.isArray(filterValues)) {
+          return true;
+        }
+        return filterValues.filter(v => !!v).length > 1;
+      })
+      .reduce(
+        (parsed, [filterKey, filterValue]) => {
+          parsed[filterKey] = filterValue;
+          return parsed;
+        },
+        { page: 0 },
+      );
 
-    let keys = Object.keys(values);
-
-    let setFilter = 0;
-    const batchFilters = [];
-
-    keys = keys.filter((key) => {
-      if (key === 'firstName' && values[key].length === 0) {
-        removeFilter(0);
-      } else if (key === 'lastName' && values[key].length === 0) {
-        removeFilter(1);
-      }
-
-      return values[key] && values[key].length !== 0;
-    });
-
-    keys.forEach((key) => {
-      if (key === 'firstName' && values[key].length === 1 && values[key] !== '') {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 0,
-          formName: 'demographics',
-          formSection: key,
-          key,
-          data: values[key],
-          tag: 'Search First Name',
-        });
-      }
-
-      if (key === 'lastName' && values[key].length === 1 && values[key] !== '') {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 1,
-          formName: 'demographics',
-          formSection: key,
-          key,
-          data: values[key],
-          tag: 'Search Last Name',
-        });
-      }
-
-      if (key === 'age' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 2,
-          formName: 'demographics',
-          formSection: key,
-          key,
-          data: values[key],
-          tag: 'Age',
-          intensive: true,
-        });
-      }
-      if (key === 'gender' && values[key].length === 1) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 3,
-          data: values[key],
-          formName: 'demographics',
-          formSection: key,
-          key,
-          tag: 'Gender',
-          intensive: true,
-        });
-      }
-      if (key === 'city' && values[key].length === 1) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 4,
-          formName: 'demographics',
-          formSection: key,
-          data: values[key],
-          key,
-          tag: 'City',
-          intensive: true,
-        });
-      }
-      if (key === 'status' && values[key].length === 1) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 5,
-          formName: 'demographics',
-          formSection: key,
-          data: values[key],
-          key,
-          tag: 'Status',
-          intensive: true,
-        });
-      }
-    });
-
-    if (keys.length === setFilter && keys.length > 0) {
-      batchFilters.forEach((filter) => {
-        addFilter(filter);
-      });
-    }
-  }
-
-  handleAppointments(values) {
-    const { addFilter } = this.props;
-
-    let keys = Object.keys(values);
-
-    let setFilter = 0;
-    const batchFilters = [];
-
-    keys = keys.filter(key => values[key] && values[key].length !== 0);
-
-    keys.forEach((key) => {
-      if (key === 'firstAppointment' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 6,
-          formName: 'appointments',
-          formSection: key,
-          data: values[key],
-          key: 'firstApptDate',
-          tag: 'First Appt',
-          intensive: false,
-        });
-      }
-      if (key === 'lastAppointment' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 7,
-          data: values[key],
-          formName: 'appointments',
-          formSection: key,
-          key: 'lastApptDate',
-          tag: 'Last Appt',
-          intensive: false,
-        });
-      }
-      if (key === 'appointmentsCount' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 8,
-          formName: 'appointments',
-          formSection: key,
-          data: values[key],
-          tag: 'No of Appts',
-          intensive: true,
-        });
-      }
-
-      if (key === 'production' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 9,
-          formName: 'appointments',
-          formSection: key,
-          data: values[key],
-          tag: 'Production',
-          intensive: true,
-        });
-      }
-      if (key === 'onlineAppointments' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 10,
-          formName: 'appointments',
-          formSection: key,
-          data: values[key],
-          tag: 'Online Appts',
-          intensive: true,
-        });
-      }
-    });
-
-    if (keys.length === setFilter && keys.length > 0) {
-      batchFilters.forEach((filter) => {
-        addFilter(filter);
-      });
-    }
-  }
-
-  handlePractitioners(values) {
-    const { addFilter } = this.props;
-
-    let keys = Object.keys(values);
-    keys = keys.filter(key => values[key] && values[key].length !== 0);
-    keys.forEach((key) => {
-      if (key && values[key].length === 1) {
-        const pracObj = {
-          indexFunc: 11,
-          data: values[key],
-          formName: 'practitioners',
-          formSection: 'practitioners',
-          tag: 'Practitioners',
-          intensive: true,
-        };
-        addFilter(pracObj);
-      }
-    });
-  }
-
-  handleCommunications(values) {
-    const { addFilter } = this.props;
-
-    let setFilter = 0;
-    let keys = Object.keys(values);
-
-    const batchFilters = [];
-
-    keys = keys.filter(key => values[key] && values[key].length !== 0);
-
-    keys.forEach((key) => {
-      if (key === 'remindersEmail' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 12,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Reminders Email',
-          key: 'phone',
-        });
-      }
-      if (key === 'remindersSMS' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 13,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Reminders SMS',
-          key: 'sms',
-        });
-      }
-      if (key === 'remindersPhone' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 14,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Reminders Phone',
-          key: 'phone',
-        });
-      }
-      if (key === 'recaresEmail' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 15,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Recares Email',
-          key: 'phone',
-        });
-      }
-      if (key === 'recaresSMS' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 16,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Recares SMS',
-          key: 'sms',
-        });
-      }
-      if (key === 'recaresPhone' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 17,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Recares Phone',
-          key: 'phone',
-        });
-      }
-      if (key === 'lastReminderSent' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 18,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Last Reminder Sent',
-          intensive: true,
-        });
-      }
-      if (key === 'lastRecareSent' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 19,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Last Recare Sent',
-          intensive: true,
-        });
-      }
-      if (key === 'reviews' && values[key].length === 2) {
-        setFilter += 1;
-        batchFilters.push({
-          indexFunc: 20,
-          data: values[key],
-          formName: 'communications',
-          formSection: key,
-          tag: 'Reviews',
-          intensive: true,
-        });
-      }
-    });
-
-    if (keys.length === setFilter && keys.length > 0) {
-      batchFilters.forEach((filter) => {
-        addFilter(filter);
-      });
-    }
+    this.props.addFilter(parsedFilters);
+    this.props.setFilterCallback();
   }
 
   render() {
-    const { practitioners, filters } = this.props;
-
-    const { openFilters } = this.state;
-
-    if (!practitioners) {
-      return null;
-    }
-
-    const inputStyles = {
-      group: styles.groupInputStyle2,
-      filled: styles.filledLabelStyle,
-    };
-
-    const dateTheme = {
-      group: styles.groupInputStyle,
-      filled: styles.filledLabelStyle,
-      label: styles.dateLabelStyle,
-    };
-
-    const filterBodyDisplay = ({ index, component, headerTitle }) => (
-      <div className={styles.filterBody}>
-        <Button
-          className={styles.filterHeader}
-          onClick={() => this.displayFilter(index)}
-          data-test-id={`collapsible_${index}`}
-        >
-          {headerTitle}
-          <span className={styles.filterHeader_icon}>
-            <Icon size={1.5} icon="caret-down" type="solid" />
-          </span>
-        </Button>
-        {openFilters[index] && <div className={styles.collapsible}>{component}</div>}
-      </div>
-    );
-
+    const { filters } = this.props;
+    const { expandedForm } = this.state;
     const hasFiltersOn = filters && filters.size > 0;
     return (
       <Card className={styles.sideBar}>
@@ -413,8 +116,11 @@ class SideBarFilters extends Component {
           </div>
           <div className={styles.header_text}> Filter </div>
           <Button
-            className={classnames(styles.header_clearText, { [styles.header_clearTextDark]: hasFiltersOn })}
-            onClick={hasFiltersOn ? this.clearTags : undefined}
+            className={classnames({
+              [styles.header_clearText]: true,
+              [styles.header_clearTextDark]: hasFiltersOn,
+            })}
+            onClick={this.clearTags}
           >
             Clear All
           </Button>
@@ -423,48 +129,20 @@ class SideBarFilters extends Component {
         <FilterTags filterTags={filters} removeTag={this.removeTag} />
 
         <div className={styles.filtersContainer}>
-          {filterBodyDisplay({
-            index: 0,
-            component: Demographics({
-              handleDemographics: this.handleDemographics,
-              searchPatients: this.props.searchPatients,
-            }),
-            headerTitle: 'Demographics',
-          })}
-          {filterBodyDisplay({
-            index: 1,
-            component: (
-              <Appointments
-                handleAppointments={this.handleAppointments}
-                theme={inputStyles}
-                dateTheme={dateTheme}
-              />
-            ),
-            headerTitle: 'Appointments',
-          })}
-          {filterBodyDisplay({
-            index: 2,
-            component: (
-              <Practitioners
-                handlePractitioners={this.handlePractitioners}
-                practitioners={practitioners}
-                theme={inputStyles}
-              />
-            ),
-            headerTitle: 'Practitioners',
-          })}
-          {filterBodyDisplay({
-            index: 3,
-            component: (
-              <Communications
-                handleCommunications={this.handleCommunications}
-                practitioners={practitioners}
-                theme={inputStyles}
-                dateTheme={dateTheme}
-              />
-            ),
-            headerTitle: 'Communications',
-          })}
+          {Object.entries(forms).map(([key, value], i) => (
+            <FilterBodyDisplay
+              key={key}
+              formName={key}
+              index={i}
+              isOpen={expandedForm === key}
+              headerTitle={value.headerTitle}
+              displayFilter={this.displayFilter}
+            >
+              <FilterForm formName={key} formValueCallback={this.formHandler}>
+                <value.formComponent />
+              </FilterForm>
+            </FilterBodyDisplay>
+          ))}
         </div>
       </Card>
     );
@@ -473,14 +151,48 @@ class SideBarFilters extends Component {
 
 SideBarFilters.propTypes = {
   addFilter: PropTypes.func.isRequired,
-  practitioners: PropTypes.instanceOf(Map).isRequired,
-  clearFilters: PropTypes.func.isRequired,
-  filters: PropTypes.instanceOf(Map),
-  arrayRemoveAll: PropTypes.func.isRequired,
   removeFilter: PropTypes.func.isRequired,
-  searchPatients: PropTypes.func.isRequired,
+  setFilterCallback: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
+  filterForms: PropTypes.objectOf(PropTypes.shape({ registeredFields: PropTypes.object }))
+    .isRequired,
 };
 
 SideBarFilters.defaultProps = { filters: new Map() };
 
-export default SideBarFilters;
+const mapStateToProps = ({ patientTable, form }) => {
+  const filterForms = Object.keys(form)
+    .filter(key => Object.keys(forms).includes(key))
+    .reduce(
+      (obj, key) => ({
+        ...obj,
+        [key]: form[key],
+      }),
+      {},
+    );
+
+  const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
+
+  return {
+    filterForms,
+    filters,
+  };
+};
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addFilter,
+      removeFilter,
+      change,
+      fetchEntities,
+    },
+    dispatch,
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SideBarFilters);

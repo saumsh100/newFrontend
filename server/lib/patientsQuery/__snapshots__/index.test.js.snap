@@ -106,6 +106,7 @@ exports[`#patientQueryBuilder Usage it works with segment + regular filters 1`] 
 Object {
   "group": Array [
     "Patient.id",
+    "Patient.id",
   ],
   "having": Array [
     Object {},
@@ -175,7 +176,7 @@ Object {
     "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
     "address": Object {
       "city": Object {
-        "$ilike": "%Calgary%",
+        "$iLike": "%Calgary%",
       },
     },
     "birthDate": Object {
@@ -184,11 +185,15 @@ Object {
         "2016-11-16T08:00:00.000Z",
       ],
     },
-    "firstName": "Aiden",
-    "gender": Object {
-      "$ilike": "%Female%",
+    "firstName": Object {
+      "$iLike": "Aiden%",
     },
-    "lastName": "Considine",
+    "gender": Object {
+      "$iLike": "Female%",
+    },
+    "lastName": Object {
+      "$iLike": "Considine%",
+    },
   },
 }
 `;

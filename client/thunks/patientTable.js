@@ -9,24 +9,20 @@ export const fetchPatientTableData = () => async (dispatch, getState) => {
   try {
     dispatch(setIsLoading(true));
     const { patientTable } = getState();
+    const params = patientTable.get('filters').toJS();
+    const { data: { entities } } = await axios.get('/api/table/search', { params });
+    const dataArray = getEntities(entities);
 
-    const filters = patientTable.get('filters').toArray();
-    const query = patientTable.toJS();
+    const TOTAL_PATIENTS_KEY = 'totalPatients';
+    const { count } = dataArray.find(({ id }) => id === TOTAL_PATIENTS_KEY);
+    const patients = dataArray.filter(({ id }) => id !== TOTAL_PATIENTS_KEY);
 
-    query.filters = filters;
-    delete query.data;
-    delete query.totalPatients;
-    delete query.isLoadingTable;
-    delete query.filterTags;
-    delete query.timelineFilters;
+    dispatch(setTableData({
+      count,
+      data: patients,
+    }));
 
-    const patientData = await axios.get('/api/table', { params: query });
-    const dataArray = getEntities(patientData.data.entities);
-
-    const totalPatients = dataArray[dataArray.length - 1].count;
-    const patients = dataArray.slice(0, -1);
-
-    dispatch(setTableData({ totalPatients, data: patients, isLoadingTable: false }));
+    dispatch(setIsLoading(false));
   } catch (err) {
     throw err;
   }

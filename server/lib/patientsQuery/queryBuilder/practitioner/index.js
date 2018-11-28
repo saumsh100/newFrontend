@@ -32,5 +32,6 @@ export default function queryPractitioner(practitionerId) {
         required: true,
       },
     ],
+    group: ['Patient.id'],
   };
 }
