@@ -7,7 +7,7 @@ const handleForm = callback => (values) => {
   callback(values);
 };
 
-export default function FilterForm({ children, formName, formValueCallback }) {
+export default function FilterForm({ children, formName, formValueCallback, initialValues }) {
   return (
     <Form
       form={formName}
@@ -15,6 +15,7 @@ export default function FilterForm({ children, formName, formValueCallback }) {
       ignoreSaveButton
       destroyOnUnmount={false}
       data-test-id={formName}
+      initialValues={initialValues}
     >
       {children}
     </Form>
@@ -23,6 +24,7 @@ export default function FilterForm({ children, formName, formValueCallback }) {
 
 FilterForm.propTypes = {
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
+  initialValues: PropTypes.objectOf(PropTypes.string).isRequired,
   formName: PropTypes.string.isRequired,
   formValueCallback: PropTypes.func.isRequired,
 };

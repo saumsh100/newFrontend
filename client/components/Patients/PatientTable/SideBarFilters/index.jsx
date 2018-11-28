@@ -23,18 +23,39 @@ const forms = {
   demographics: {
     headerTitle: 'Demographics',
     formComponent: DemographicsForm,
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      age: '',
+      gender: '',
+      city: '',
+      status: '',
+    },
   },
   appointments: {
     headerTitle: 'Appointments',
     formComponent: AppointmentsForm,
+    initialValues: {
+      firstAppointment: '',
+      lastAppointment: '',
+      production: '',
+      appointmentsCount: '',
+      onlineAppointments: '',
+    },
   },
   practitioners: {
     headerTitle: 'Practitioners',
     formComponent: PractitionersForm,
+    initialValues: { practitioner: '' },
   },
   communication: {
     headerTitle: 'Communications',
     formComponent: CommunicationsForm,
+    initialValues: {
+      lastReminderSent: '',
+      lastRecareSent: '',
+      reviews: '',
+    },
   },
 };
 
@@ -86,9 +107,13 @@ class SideBarFilters extends Component {
 
   formHandler(values) {
     const parsedFilters = Object.entries(values)
-      .filter(([, filterValues]) => {
+      .filter(([key, filterValues]) => {
         if (!Array.isArray(filterValues)) {
-          return true;
+          this.props.removeFilter(key);
+          return filterValues !== '';
+        }
+        if (filterValues.filter(v => !!v).length < 2) {
+          this.props.removeFilter(key);
         }
         return filterValues.filter(v => !!v).length > 1;
       })
@@ -138,7 +163,11 @@ class SideBarFilters extends Component {
               headerTitle={value.headerTitle}
               displayFilter={this.displayFilter}
             >
-              <FilterForm formName={key} formValueCallback={this.formHandler}>
+              <FilterForm
+                initialValues={value.initialValues}
+                formName={key}
+                formValueCallback={this.formHandler}
+              >
                 <value.formComponent />
               </FilterForm>
             </FilterBodyDisplay>
