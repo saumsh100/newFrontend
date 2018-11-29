@@ -20,6 +20,7 @@ import SettingsCard from '../../Shared/SettingsCard';
 import SuperAdminForm from './SuperAdminForm';
 import MassEmailDisplay from './MassEmailDisplay';
 import Account from '../../../../entities/models/Account';
+import CellPhoneFallback from './CellPhoneFallback';
 import styles from './styles.scss';
 
 class SuperAdmin extends Component {
@@ -242,9 +243,13 @@ class SuperAdmin extends Component {
     return (
       role === 'SUPERADMIN' && (
         <SettingsCard title="Super Admin" bodyClass={styles.generalBodyClass}>
-          <Header title="Practice Settings" contentHeader key="Practice Settings" />
+          <Header contentHeader title="Practice Settings" key="Practice Settings" />
           <div className={styles.formContainer}>
             <SuperAdminForm onSubmit={this.updateAdminForm} activeAccount={activeAccount} />
+          </div>
+          <Header contentHeader title="Cell Phone Number Order" key="Cell Phone Number" />
+          <div className={styles.formContainer} key="Cell Phone Number Form">
+            <CellPhoneFallback />
           </div>
 
           {addAccounts}
@@ -283,7 +288,7 @@ SuperAdmin.propTypes = {
   users: PropTypes.instanceOf(Map).isRequired,
 };
 
-function mapStateToProps({ entities, auth }) {
+const mapStateToProps = ({ entities, auth }) => {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
 
   const addresses = entities.getIn(['addresses', 'models']);
@@ -297,10 +302,10 @@ function mapStateToProps({ entities, auth }) {
     address,
     users: entities.getIn(['users', 'models']),
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
     {
       fetchEntities,
       downloadConnector,
@@ -312,7 +317,6 @@ function mapDispatchToProps(dispatch) {
     },
     dispatch,
   );
-}
 
 export default connect(
   mapStateToProps,

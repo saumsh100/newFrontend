@@ -11,6 +11,7 @@ const AccountSchema = {
   country: null,
   state: null,
   city: null,
+  cellPhoneNumberFallback: null,
   timeInterval: null,
   zipCode: null,
   vendastaId: null,

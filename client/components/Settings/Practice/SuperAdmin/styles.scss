@@ -45,3 +45,34 @@
     margin-top: 10px;
   }
 }
+
+.filledLabel {
+  top: -15px !important;
+}
+
+.orderDropdown {
+  padding: 0;
+  height: 100%;
+  > div:not(:last-child) {
+    color: black;
+    font-size: 11px;
+    border-bottom: none;
+    padding-left: 6px;
+    padding-right: 6px;
+    height: 100%;
+    box-sizing: border-box;
+    > div > label {
+      // font-family: $medium-font;
+      top: -15px !important;
+      color: $primary-darkgrey;
+      text-transform: uppercase;
+      font-size: 9px !important;
+    }
+  }
+}
+
+.descriptionMessage {
+  margin: 0 0 20px;
+  line-height: 1.35;
+  color: $clr-dark-grey;
+}
