@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
@@ -14,6 +15,7 @@ import AddToWaitlist from './Waitlist/AddToWaitlist';
 import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import { deleteWaitSpot } from '../../../thunks/waitlist';
 import styles from './styles.scss';
+import EnabledFeature from '../../library/EnabledFeature';
 
 class Header extends Component {
   constructor(props) {
@@ -54,15 +56,11 @@ class Header extends Component {
   }
 
   openWaitlist() {
-    this.setState({
-      showWaitlist: !this.state.showWaitlist,
-    });
+    this.setState({ showWaitlist: !this.state.showWaitlist });
   }
 
   openAddToWaitlist() {
-    this.setState({
-      showAddToWaitlist: !this.state.showAddToWaitlist,
-    });
+    this.setState({ showAddToWaitlist: !this.state.showAddToWaitlist });
   }
 
   handleAddToWaitlist() {
@@ -84,6 +82,7 @@ class Header extends Component {
   render() {
     const {
       addNewAppointment,
+      showAvailabilities,
       scheduleView,
       schedule,
       chairs,
@@ -147,6 +146,21 @@ class Header extends Component {
                 />
               </div>
             </Popover>
+
+            <EnabledFeature
+              predicate={({ userRole }) => userRole === 'SUPERADMIN'}
+              render={() => (
+                <Button
+                  dense
+                  compact
+                  color="blue"
+                  onClick={showAvailabilities}
+                  className={styles.headerLinks_waitlist}
+                >
+                  Availabilities
+                </Button>
+              )}
+            />
 
             <Button
               dense
@@ -238,6 +252,7 @@ Header.propTypes = {
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   addNewAppointment: PropTypes.func.isRequired,
+  showAvailabilities: PropTypes.func.isRequired,
   scheduleView: PropTypes.string.isRequired,
   setScheduleView: PropTypes.func.isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,
@@ -276,4 +291,7 @@ const mapStateToProps = ({ schedule, apiRequests }) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Header);

@@ -1,6 +1,6 @@
 
 import { fromJS } from 'immutable';
-import { handleActions } from 'redux-actions';
+import { createAction, handleActions } from 'redux-actions';
 
 import {
   CLEAR_SCHEDULE_FILTER,
@@ -15,6 +15,11 @@ import {
   SET_SCHEDULE_VIEW,
   CREATE_NEW_PATIENT,
 } from '../constants';
+
+const reducer = '@schedule/';
+
+const SET_AVAILABILITIES = `${reducer}SET_AVAILABILITIES`;
+export const setAvailabilities = createAction(SET_AVAILABILITIES);
 
 const initialState = fromJS({
   scheduleDate: new Date(),
@@ -38,81 +43,86 @@ const initialState = fromJS({
     suggestions: [],
   },
   createNewPatient: false,
+  availabilities: {},
 });
 
-export default handleActions({
-  [SET_MERGING](state, action) {
-    return state.set('mergingPatientData', action.payload);
+export default handleActions(
+  {
+    [SET_MERGING](state, action) {
+      return state.set('mergingPatientData', action.payload);
+    },
+
+    [SET_SCHEDULE_DATE](state, action) {
+      return state.merge({ scheduleDate: action.payload.scheduleDate });
+    },
+
+    [SET_SCHEDULE_VIEW](state, action) {
+      return state.set('scheduleView', action.payload.view);
+    },
+
+    [SELECT_APPOINTMENT](state, action) {
+      const appointment = action.payload;
+      return state.set('selectedAppointment', appointment);
+    },
+
+    [SELECT_WAITSPOT](state, action) {
+      const waitSpot = action.payload;
+      return state.set('selectedWaitSpot', waitSpot);
+    },
+
+    [CREATE_NEW_PATIENT](state, action) {
+      const createPatientBool = action.payload.createPatientBool;
+      return state.set('createNewPatient', createPatientBool);
+    },
+
+    [ADD_SCHEDULE_FILTER](state, action) {
+      const key = action.payload.key;
+      const filterEntities = state.toJS()[key];
+      filterEntities.push(action.payload.id);
+      const mergeObj = {};
+      mergeObj[key] = filterEntities;
+      return state.merge(mergeObj);
+    },
+
+    [REMOVE_SCHEDULE_FILTER](state, action) {
+      const key = action.payload.key;
+      const filterEntities = state.toJS()[key];
+      const mergeObj = {};
+      mergeObj[key] = filterEntities.filter(id => id !== action.payload.id);
+      return state.merge(mergeObj);
+    },
+
+    [ADD_ALL_SCHEDULE_FILTER](state, action) {
+      const key = action.payload.key;
+      const entities = action.payload.entities;
+      const filterEntities = state.toJS()[key];
+
+      entities.forEach((entity) => {
+        const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
+        if (!checkFilter) {
+          filterEntities.push(entity.get('id'));
+        }
+      });
+
+      const mergeObj = {};
+      mergeObj[key] = filterEntities;
+      return state.merge(mergeObj);
+    },
+
+    [CLEAR_SCHEDULE_FILTER](state, action) {
+      const key = action.payload.key;
+      const temp = {};
+      temp[key] = [];
+      return state.merge(temp);
+    },
+
+    [SET_SYNCING](state, action) {
+      return state.set('syncingWithPMS', action.payload.isSyncing);
+    },
+
+    [SET_AVAILABILITIES](state, { payload }) {
+      return state.set('availabilities', payload);
+    },
   },
-
-  [SET_SCHEDULE_DATE](state, action) {
-    return state.merge({
-      scheduleDate: action.payload.scheduleDate,
-    });
-  },
-
-  [SET_SCHEDULE_VIEW](state, action) {
-    return state.set('scheduleView', action.payload.view);
-  },
-
-  [SELECT_APPOINTMENT](state, action) {
-    const appointment = action.payload;
-    return state.set('selectedAppointment', appointment);
-  },
-
-  [SELECT_WAITSPOT](state, action) {
-    const waitSpot = action.payload;
-    return state.set('selectedWaitSpot', waitSpot);
-  },
-
-  [CREATE_NEW_PATIENT](state, action) {
-    const createPatientBool = action.payload.createPatientBool;
-    return state.set('createNewPatient', createPatientBool);
-  },
-
-  [ADD_SCHEDULE_FILTER](state, action) {
-    const key = action.payload.key;
-    const filterEntities = state.toJS()[key];
-    filterEntities.push(action.payload.id);
-    const mergeObj = {};
-    mergeObj[key] = filterEntities;
-    return state.merge(mergeObj);
-  },
-
-  [REMOVE_SCHEDULE_FILTER](state, action) {
-    const key = action.payload.key;
-    const filterEntities = state.toJS()[key];
-    const mergeObj = {};
-    mergeObj[key] = filterEntities.filter(id => id !== action.payload.id);
-    return state.merge(mergeObj);
-  },
-
-  [ADD_ALL_SCHEDULE_FILTER](state, action) {
-    const key = action.payload.key;
-    const entities = action.payload.entities;
-    const filterEntities = state.toJS()[key];
-
-    entities.map((entity) => {
-      const checkFilter = filterEntities.indexOf(entity.get('id')) > -1;
-      if (!checkFilter) {
-        filterEntities.push(entity.get('id'));
-      }
-    });
-
-    const mergeObj = {};
-    mergeObj[key] = filterEntities;
-    return state.merge(mergeObj);
-  },
-
-  [CLEAR_SCHEDULE_FILTER](state, action) {
-    const key = action.payload.key;
-    const temp = {};
-    temp[key] = [];
-    return state.merge(temp);
-  },
-
-  [SET_SYNCING](state, action) {
-    return state.set('syncingWithPMS', action.payload.isSyncing);
-  },
-
-}, initialState);
+  initialState,
+);

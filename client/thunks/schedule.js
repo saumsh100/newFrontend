@@ -2,23 +2,17 @@
 import set from 'lodash/set';
 import values from 'lodash/values';
 import each from 'lodash/each';
-import moment from 'moment';
+import groupBy from 'lodash/groupBy';
 import axios from 'axios';
-import {
-  addAllScheduleFilter,
-  setMergingPatient,
-  selectAppointment,
-  setScheduleDate,
-} from '../actions/schedule';
+import { protocol, myHost } from '../../server/config/globals';
+import { addAllScheduleFilter, setMergingPatient, selectAppointment } from '../actions/schedule';
+import { setAvailabilities } from '../reducers/schedule';
 import { receiveEntities } from '../actions/entities';
-import { updateEntityRequest } from './fetchEntities';
 
 export function checkPatientUser(patientUser, requestData) {
-  return async function (dispatch, getState) {
+  return async function (dispatch) {
     // AccountId passed up in the query
-    const query = {
-      patientUserId: patientUser.get('id'),
-    };
+    const query = { patientUserId: patientUser.get('id') };
 
     try {
       const patientData = await axios.get('/api/patients', { params: query });
@@ -39,11 +33,12 @@ export function checkPatientUser(patientUser, requestData) {
 
 async function connectedPatientUser(dispatch, requestData, data) {
   const patientId = Object.keys(data.entities.patients)[0];
-  dispatch(receiveEntities({ key: 'patients', entities: data.entities }));
+  dispatch(receiveEntities({
+    key: 'patients',
+    entities: data.entities,
+  }));
 
-  const query = {
-    requestCreatedAt: requestData.createdAt,
-  };
+  const query = { requestCreatedAt: requestData.createdAt };
 
   const modifiedRequest = Object.assign({}, requestData);
   set(modifiedRequest, 'patientId', patientId);
@@ -72,7 +67,10 @@ async function suggestedPatients(dispatch, requestData, patientUser) {
 
   const searchResponse = await axios.get('/api/patients/suggestions', { params });
   const dataSuggest = searchResponse.data;
-  dispatch(receiveEntities({ key: 'patients', entities: dataSuggest.entities }));
+  dispatch(receiveEntities({
+    key: 'patients',
+    entities: dataSuggest.entities,
+  }));
 
   const cloneRequestData = Object.assign({}, requestData);
 
@@ -90,17 +88,17 @@ export function setAllFilters(entityKeys) {
   return function (dispatch, getState) {
     const { entities } = getState();
 
-    entityKeys.map((key) => {
+    entityKeys.forEach((key) => {
       const model = entities.getIn([key, 'models']);
 
       let filterModel = [];
       if (key === 'services') {
         const practitioners = entities.getIn(['practitioners', 'models']);
 
-        practitioners.map((practitioner) => {
+        practitioners.forEach((practitioner) => {
           const practitionerIds = practitioner.get('services');
 
-          practitionerIds.map((serviceId) => {
+          practitionerIds.forEach((serviceId) => {
             if (practitionerIds.indexOf(serviceId) > -1) {
               filterModel.push(model.get(serviceId));
             }
@@ -114,6 +112,25 @@ export function setAllFilters(entityKeys) {
         entities: filterModel,
       }));
     });
+  };
+}
+
+export function fetchAvailabilities(date, reasonId) {
+  return async (dispatch, getState) => {
+    const { auth } = getState();
+
+    const { data: { availabilities } } = await axios.get(
+      `${protocol}://${myHost}/accounts/${auth.get('accountId')}/availabilities`,
+      {
+        params: {
+          serviceId: reasonId,
+          startDate: '2018-11-29T08:00:00.000Z',
+          endDate: '2018-12-04T08:00:00.000Z',
+        },
+      },
+    );
+
+    dispatch(setAvailabilities(groupBy(availabilities, 'practitionerId')));
   };
 }
 

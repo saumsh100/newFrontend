@@ -25,6 +25,7 @@ import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
 import AddPatient from './AddPatient';
 import AddPatientSuggestions from './AddPatientSuggestions';
+import AvailabilitiesModal from './AvailabilitiesModal';
 import Header from './Header';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
@@ -38,6 +39,7 @@ class ScheduleComponent extends Component {
       assignPatientToChatModalActive: false,
       patient: null,
       addNewAppointment: false,
+      showAvailabilities: false,
       patientSearched: null,
       sendEmail: false,
       showInput: false,
@@ -45,6 +47,7 @@ class ScheduleComponent extends Component {
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
+    this.showAvailabilities = this.showAvailabilities.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
     this.setSendEmail = this.setSendEmail.bind(this);
     this.nextDay = this.nextDay.bind(this);
@@ -113,6 +116,10 @@ class ScheduleComponent extends Component {
     this.setState({ addNewAppointment: true });
   }
 
+  showAvailabilities() {
+    this.setState({ showAvailabilities: true });
+  }
+
   updateHubData(props) {
     const {
       routing: { location },
@@ -138,6 +145,7 @@ class ScheduleComponent extends Component {
     this.props.setCreatingPatient(false);
     this.props.selectAppointment(null);
     this.setState({
+      showAvailabilities: false,
       addNewAppointment: false,
       patientSearched: null,
       sendEmail: false,
@@ -233,7 +241,7 @@ class ScheduleComponent extends Component {
       accountsFetched,
     } = this.props;
 
-    const { addNewAppointment } = this.state;
+    const { addNewAppointment, showAvailabilities } = this.state;
 
     const hubRedirect = { pathname: '/requests' };
 
@@ -362,31 +370,29 @@ class ScheduleComponent extends Component {
 
     return isHub() ? (
       <div className={styles.hubWrapper}>
-        {allFetched &&
-          isAddNewAppointment && (
-            <AddNewAppointment
-              formName={formName}
-              chairs={filterChairs}
-              practitioners={filterPractitioners}
-              patients={patients.get('models')}
-              reinitializeState={this.reinitializeState}
-              setPatientSearched={this.setPatientSearched}
-              patientSearched={this.state.patientSearched}
-              unit={unit.get('unit')}
-              currentDate={currentDate}
-              showInput={this.state.showInput}
-              setShowInput={this.setShowInput}
-              selectedAppointment={this.props.selectedAppointment}
-              setCreatingPatient={this.props.setCreatingPatient}
-              redirect={isHub() && hubRedirect}
-            />
-          )}
-        {allFetched &&
-          showDialog && (
-            <DialogBody actions={actions.filter(v => v.label !== 'Cancel')}>
-              {displayModalComponent}
-            </DialogBody>
-          )}
+        {allFetched && isAddNewAppointment && (
+          <AddNewAppointment
+            formName={formName}
+            chairs={filterChairs}
+            practitioners={filterPractitioners}
+            patients={patients.get('models')}
+            reinitializeState={this.reinitializeState}
+            setPatientSearched={this.setPatientSearched}
+            patientSearched={this.state.patientSearched}
+            unit={unit.get('unit')}
+            currentDate={currentDate}
+            showInput={this.state.showInput}
+            setShowInput={this.setShowInput}
+            selectedAppointment={this.props.selectedAppointment}
+            setCreatingPatient={this.props.setCreatingPatient}
+            redirect={isHub() && hubRedirect}
+          />
+        )}
+        {allFetched && showDialog && (
+          <DialogBody actions={actions.filter(v => v.label !== 'Cancel')}>
+            {displayModalComponent}
+          </DialogBody>
+        )}
       </div>
     ) : (
       <div className={styles.rowMainContainer}>
@@ -395,6 +401,7 @@ class ScheduleComponent extends Component {
             <SContainer>
               <Header
                 addNewAppointment={this.addNewAppointment}
+                showAvailabilities={this.showAvailabilities}
                 schedule={schedule}
                 chairs={filterChairs}
                 practitioners={filterPractitioners}
@@ -416,6 +423,12 @@ class ScheduleComponent extends Component {
                   selectAppointment={selectAppointment}
                   leftColumnWidth={leftColumnWidth}
                 />
+                {allFetched && (
+                  <AvailabilitiesModal
+                    showAvailabilities={showAvailabilities}
+                    reinitializeState={this.reinitializeState}
+                  />
+                )}
                 {allFetched ? (
                   <Modal
                     active={isAddNewAppointment}
