@@ -139,4 +139,5 @@ module.exports = {
   superAdminUserId,
   seedTestUsers,
   wipeTestUsers,
+  account,
 };
