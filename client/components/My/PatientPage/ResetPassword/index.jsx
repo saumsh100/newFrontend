@@ -1,23 +1,23 @@
 
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { Card, Button } from '../../../library';
+import { Button } from '../../../library';
 import ResetPasswordForm from '../../../ForgotPassword/ResetPassword/ResetPasswordForm';
 import Section from '../Shared/Section';
 import { resetUserPassword } from '../../../../thunks/auth';
+import accountShape from '../../../library/PropTypeShapes/accountShape';
+import appointmentShape from '../../../library/PropTypeShapes/appointmentShape';
+import reminderShape from '../../../library/PropTypeShapes/reminderShape';
+import { locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
-class ResetPassword extends Component {
+class ResetPassword extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      submitted: false,
-    };
-
+    this.state = { submitted: false };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -25,14 +25,12 @@ class ResetPassword extends Component {
     // This just posts right back to location URL...
     return this.props
       .resetUserPassword(this.props.location, values)
-      .then(data => this.setState({ submitted: true }));
+      .then(() => this.setState({ submitted: true }));
   }
 
   render() {
-    // TODO: this needs to be its own route! cause we need a /submitted route that the backend
-    // TODO: can reroute to
     const { submitted } = this.state;
-    const { account } = this.props.params;
+    const { website } = this.props.params.account;
     return (
       <div>
         <Section>
@@ -41,17 +39,16 @@ class ResetPassword extends Component {
           </div>
           <div className={styles.text}>
             {submitted
-              ? "You're password has been changed. To go back to the online booking's login portal, click on the button below."
+              ? "You're password has been changed. To go back to the online booking's portal, click on the button below."
               : 'Change your password by completing the form below.'}
           </div>
         </Section>
         <Section className={styles.formSection}>
           {submitted ? (
-            <a href={`${account.website}?cc=login`}>
+            <a href={`${website}?cc=book`}>
               <Button
-                // fluid
                 icon="arrow-right"
-                title="Back to Login"
+                title="Back to Online Booking"
                 className={styles.backToLoginButton}
               />
             </a>
@@ -72,22 +69,25 @@ class ResetPassword extends Component {
 }
 
 ResetPassword.propTypes = {
-  patientUser: PropTypes.bool,
+  resetUserPassword: PropTypes.func.isRequired,
+  params: PropTypes.shape({
+    account: PropTypes.shape(accountShape),
+    appointment: PropTypes.arrayOf(PropTypes.shape(appointmentShape)),
+    reminder: PropTypes.shape(reminderShape),
+  }).isRequired,
+  location: PropTypes.shape(locationShape).isRequired,
 };
 
-function mapActionsToProps(dispatch) {
-  return bindActionCreators(
+const mapActionsToProps = dispatch =>
+  bindActionCreators(
     {
       resetUserPassword,
       push,
     },
     dispatch,
   );
-}
 
-const enhance = connect(
+export default connect(
   null,
   mapActionsToProps,
-);
-
-export default enhance(ResetPassword);
+)(ResetPassword);
