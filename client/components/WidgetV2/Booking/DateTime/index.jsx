@@ -236,7 +236,7 @@ class DateTime extends PureComponent {
      */
     const nextAvailabilityButton = ({ startDate }) => (
       <Button
-        onClick={() => this.changeSelectedDate(startDate, true)}
+        onClick={() => this.changeSelectedDate(genericMoment(startDate, accountTimezone), true)}
         className={styles.nextAvailabilityButton}
       >
         Next Availablility on {genericMoment(startDate, accountTimezone).format('ddd, MMM D')}
