@@ -18,11 +18,14 @@ import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
 import {
   convertIntervalStringToObject,
-  convertIntervalToMs,
   sortIntervalAscPredicate,
   tzTime,
+  setDateToTimezone,
 } from '../../util/time';
-import countNextClosedDays, { getDayOfWeek, isOpen } from '../schedule/countNextClosedDays';
+import countNextClosedDays, {
+  getDayOfWeek,
+  isOpen,
+} from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
 import sortAsc from '../../../iso/helpers/sort/sortAsc';
@@ -41,7 +44,12 @@ const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
  * @param endDate
  * @returns [remindersPatients] = [ { success, error }, { success, error }, ... ]
  */
-export async function mapPatientsToReminders({ reminders, account, startDate, endDate }) {
+export async function mapPatientsToReminders({
+  reminders,
+  account,
+  startDate,
+  endDate,
+}) {
   const seen = {};
   const remindersPatients = [];
 
@@ -68,7 +76,7 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
     unseenAppts = orderAppointmentsForSamePatient(unseenAppts);
 
     // Now add it to the seen map
-    unseenAppts.forEach(a => seen[a.id] = true);
+    unseenAppts.forEach(a => (seen[a.id] = true));
     const patients = unseenAppts.map(appt => ({
       ...appt.patient,
       appointment: appt,
@@ -105,23 +113,38 @@ export async function mapPatientsToReminders({ reminders, account, startDate, en
  * @param endDate (defaults to startDate + 5 minutes)
  * @returns [appointments]
  */
-export async function getAppointmentsFromReminder({ reminder, account = {}, startDate, endDate }) {
+export async function getAppointmentsFromReminder({
+  reminder,
+  account = {},
+  startDate,
+  endDate,
+}) {
   // This function should throw an error if startDate and endDate are not in the same day
-  endDate = endDate || moment(startDate).add(CRON_MINUTES, 'minutes').toISOString();
+  endDate =
+    endDate ||
+    moment(startDate)
+      .add(CRON_MINUTES, 'minutes')
+      .toISOString();
 
   // convert string to { weeks: 1, days: 1, ... }
   const intervalObject = convertIntervalStringToObject(reminder.interval);
   const { timezone } = account;
 
   // Add the touchpoint's interval to the date we are wanting to check for
-  let start = moment(startDate).add(intervalObject).toISOString();
+  let start = moment(startDate)
+    .add(intervalObject)
+    .toISOString();
 
   // If endDate is not supplied, default to using startDate + recall interval
-  let end = moment(endDate).add(intervalObject).toISOString();
+  let end = moment(endDate)
+    .add(intervalObject)
+    .toISOString();
 
   // This is where we look to see if the patient has had any appointments
   // within a certain window
-  let sameDayStart = moment(start).subtract(SAME_DAY_HOURS, 'hours').toISOString();
+  let sameDayStart = moment(start)
+    .subtract(SAME_DAY_HOURS, 'hours')
+    .toISOString();
 
   if (reminder.isDaily) {
     // Now adjust end if there are consecutive closed days
@@ -139,15 +162,23 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
         if (consecutiveClosedDays) {
           console.log(`There are consecutive closed days, therefore bumping end 
             date by ${consecutiveClosedDays} days`);
-          end = moment(end).add(consecutiveClosedDays, 'days').toISOString();
+          end = moment(end)
+            .add(consecutiveClosedDays, 'days')
+            .toISOString();
         }
       }
     }
 
     // Assume that this function is only run when its time to pull these
     // Or else we should check to make sure dailyRunTime is in range
-    start = moment.tz(start, timezone).startOf('day').toISOString();
-    end = moment.tz(end, timezone).endOf('day').toISOString();
+    start = moment
+      .tz(start, timezone)
+      .startOf('day')
+      .toISOString();
+    end = moment
+      .tz(end, timezone)
+      .endOf('day')
+      .toISOString();
 
     // Easier than conditionally querying same-day appts
     // This makes the window 0 seconds
@@ -156,7 +187,8 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     // We would never have a reminder with a specific startTime that was sent isDaily
     // startTime is for rolling reminders like the 2 hour reminders
     const values = reminder.startTime.split(':');
-    const startTime = moment.tz(start, timezone)
+    const startTime = moment
+      .tz(start, timezone)
       .hours(values[0])
       .minutes(values[1])
       .seconds(values[2])
@@ -177,7 +209,9 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
   const defaultAppointmentsScope =
     { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
 
-  const familyGroupingEnd = moment(start).add(SAME_DAY_HOURS, 'hours').toISOString();
+  const familyGroupingEnd = moment(start)
+    .add(SAME_DAY_HOURS, 'hours')
+    .toISOString();
 
   // Now we query for the appointments, those appointments patients and sentReminders, and
   // those patients appointments
@@ -217,41 +251,49 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
           {
             model: Family,
             as: 'family',
-            include: [{
-              model: Patient,
-              as: 'patients',
-              where: {
-                $not: { omitReminderIds: { $contains: [reminder.id] } },
-                status: 'Active',
-              },
-              include: [{
-                model: Appointment,
-                as: 'appointments',
+            include: [
+              {
+                model: Patient,
+                as: 'patients',
                 where: {
-                  ...defaultAppointmentsScope,
-                  accountId: reminder.accountId,
-                  chairId: { $notIn: reminder.omitChairIds },
-                  practitionerId: { $notIn: reminder.omitPractitionerIds },
-                  startDate: {
-                    $gte: start,
-                    $lte: familyGroupingEnd, // include the boundary here?
-                  },
+                  $not: { omitReminderIds: { $contains: [reminder.id] } },
+                  status: 'Active',
                 },
-                required: false,
-                include: [{
-                  model: SentRemindersPatients,
-                  as: 'sentRemindersPatients',
-                  required: false,
-                  include: [{
-                    model: SentReminder,
-                    as: 'sentReminder',
-                    required: true,
-                  }],
-                }],
-              }],
+                include: [
+                  {
+                    model: Appointment,
+                    as: 'appointments',
+                    where: {
+                      ...defaultAppointmentsScope,
+                      accountId: reminder.accountId,
+                      chairId: { $notIn: reminder.omitChairIds },
+                      practitionerId: { $notIn: reminder.omitPractitionerIds },
+                      startDate: {
+                        $gte: start,
+                        $lte: familyGroupingEnd, // include the boundary here?
+                      },
+                    },
+                    required: false,
+                    include: [
+                      {
+                        model: SentRemindersPatients,
+                        as: 'sentRemindersPatients',
+                        required: false,
+                        include: [
+                          {
+                            model: SentReminder,
+                            as: 'sentReminder',
+                            required: true,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
 
-              required: false,
-            }],
+                required: false,
+              },
+            ],
 
             required: false,
           },
@@ -279,11 +321,13 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
         model: SentRemindersPatients,
         as: 'sentRemindersPatients',
         required: false,
-        include: [{
-          model: SentReminder,
-          as: 'sentReminder',
-          required: true,
-        }],
+        include: [
+          {
+            model: SentReminder,
+            as: 'sentReminder',
+            required: true,
+          },
+        ],
       },
     ],
   });
@@ -312,14 +356,17 @@ export async function getAppointmentsFromReminder({ reminder, account = {}, star
     reminder,
   });
 
-  appointments = appointments.reduce((arr, appointment) => [
-    ...arr,
-    ...flattenFamilyAppointments({
-      appointment,
-      reminder,
-      customApptsAttr: 'appts',
-    }),
-  ], []);
+  appointments = appointments.reduce(
+    (arr, appointment) => [
+      ...arr,
+      ...flattenFamilyAppointments({
+        appointment,
+        reminder,
+        customApptsAttr: 'appts',
+      }),
+    ],
+    [],
+  );
 
   appointments = uniqBy(appointments, 'id');
   return appointments;
@@ -347,8 +394,10 @@ export function filterReminderAppointments({ appointments, reminder }) {
   let filteredAppointments = [];
   forEach(groupedAppointmentsByBuffer, (appointmentsGroup) => {
     // Grab the earliest appointment for each patient in the group
-    let filteredAppointmentsGroup = uniqWith(appointmentsGroup, (a, b) =>
-      a.patient.id === b.patient.id);
+    let filteredAppointmentsGroup = uniqWith(
+      appointmentsGroup,
+      (a, b) => a.patient.id === b.patient.id,
+    );
 
     filteredAppointmentsGroup = filteredAppointmentsGroup.filter(a =>
       exports.shouldSendReminder({
@@ -356,7 +405,10 @@ export function filterReminderAppointments({ appointments, reminder }) {
         reminder,
       }));
 
-    filteredAppointments = [...filteredAppointments, ...filteredAppointmentsGroup];
+    filteredAppointments = [
+      ...filteredAppointments,
+      ...filteredAppointmentsGroup,
+    ];
   });
 
   return filteredAppointments;
@@ -387,21 +439,35 @@ export function shouldSendReminder({ appointment, reminder }) {
     return false;
   }
 
-  if (reminder.ignoreSendIfConfirmed && exports.isAppointmentConfirmed(appointment, reminder)) {
+  if (
+    reminder.ignoreSendIfConfirmed &&
+    exports.isAppointmentConfirmed(appointment, reminder)
+  ) {
     return false;
   }
 
-  // We check interval because they can change and add different reminders
-  // We don't send auto-reminders that are farther away than a previously sent one
+  // We check if the appointment already have a reminder sent of the same type
+  // We don't resend reminders if the appointment got moved to less than 1 day ahead
   const reminderAlreadySentOrLongerAway = sentReminders.some((s) => {
-    if (!s.interval) {
-      // For older sentReminders that have lengthSeconds, we can ignore
-      return false;
-    }
+    // For older sentReminders that have lengthSeconds, we can ignore
+    if (!s.interval) return false;
 
-    const sentReminderMs = convertIntervalToMs(s.interval);
-    const reminderMs = convertIntervalToMs(reminder.interval);
-    return (s.reminderId === reminder.id) || (reminderMs >= sentReminderMs);
+    // If it is a different reminder we should always send it
+    if (s.reminderId !== reminder.id) return false;
+
+    // If the appointment was not changed since
+    // the previous sent reminder, we shouldn't send again
+    if (appointment.startDate === s.appointmentStartDate) return true;
+
+    // We add a day and set the time to the start of the day
+    // so we are sure we are accounting for the right amount of time
+    const sentReminderNextDay = setDateToTimezone(s.appointmentStartDate)
+      .add(1, 'day')
+      .startOf('day')
+      .toISOString();
+
+    // if the reminder was sent the day before or more we send it again
+    return appointment.startDate.toISOString() <= sentReminderNextDay;
   });
 
   return !reminderAlreadySentOrLongerAway && preferences.reminders;
@@ -434,7 +500,7 @@ export function isAppointmentConfirmed(appointment, reminder) {
 export async function getValidSmsReminders({
   accountId,
   patientId,
-  date = (new Date()).toISOString(),
+  date = new Date().toISOString(),
 }) {
   // Confirming valid SMS Reminder for patient
   const sentReminders = await SentReminder.findAll({
@@ -502,8 +568,10 @@ export async function getValidSmsReminders({
  * @param appointment.startDate: b
  * @returns {sentRemindersPatients}
  */
-const sortByAppointmentStartDate =
-  ({ appointment: { startDate: a } }, { appointment: { startDate: b } }) => sortAsc(a, b);
+const sortByAppointmentStartDate = (
+  { appointment: { startDate: a } },
+  { appointment: { startDate: b } },
+) => sortAsc(a, b);
 
 /**
  * fetchActiveReminders is used by the outbox functions to
@@ -542,7 +610,8 @@ export async function fetchActiveReminders({ account, startDate, endDate }) {
   });
 
   // Sort reminders by interval so that we send to earliest first
-  return reminders.sort((a, b) => sortIntervalAscPredicate(a.interval, b.interval));
+  return reminders.sort((a, b) =>
+    sortIntervalAscPredicate(a.interval, b.interval));
 }
 
 /**
@@ -558,15 +627,17 @@ export async function fetchActiveReminders({ account, startDate, endDate }) {
 export async function fetchAccountsAndActiveReminders({ startDate, endDate }) {
   const accounts = await Account.findAll({
     where: { canSendReminders: true },
-    include: [{
-      model: Reminder,
-      as: 'reminders',
-      where: {
-        isDeleted: false,
-        isActive: true,
-        interval: { $not: null },
+    include: [
+      {
+        model: Reminder,
+        as: 'reminders',
+        where: {
+          isDeleted: false,
+          isActive: true,
+          interval: { $not: null },
+        },
       },
-    }],
+    ],
   });
 
   // Filter out reminders and sort by interval
@@ -601,7 +672,7 @@ export function generateIsActiveReminder({ account, startDate, endDate }) {
     const { timezone } = account;
     const start = tzTime(startDate, timezone);
     const end = tzTime(endDate, timezone);
-    return (start <= dailyRunTime) && (dailyRunTime < end);
+    return start <= dailyRunTime && dailyRunTime < end;
   };
 }
 
@@ -626,12 +697,14 @@ export async function confirmReminderIfExist(accountId, patientId, date) {
 
   // Confirm first available reminder
   const sentReminder = validSmsReminders[0];
-  await SentReminder.update({ isConfirmed: true }, { where: { id: sentReminder.get('id') } });
+  await SentReminder.update(
+    { isConfirmed: true },
+    { where: { id: sentReminder.get('id') } },
+  );
 
   // Confirm all appointments for that reminder
-  await Promise.all(sentReminder.sentRemindersPatients
-    .map(({ appointment }) =>
-      appointment.confirm(sentReminder.reminder.get({ plain: true }))));
+  await Promise.all(sentReminder.sentRemindersPatients.map(({ appointment }) =>
+    appointment.confirm(sentReminder.reminder.get({ plain: true }))));
 
   return validSmsReminders;
 }

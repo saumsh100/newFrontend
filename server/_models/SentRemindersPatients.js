@@ -20,10 +20,14 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
       allowNull: false,
     },
+    appointmentStartDate: { type: DataTypes.DATE },
   });
 
-
-  SentRemindersPatients.associate = ({ SentReminder, Appointment, Patient }) => {
+  SentRemindersPatients.associate = ({
+    SentReminder,
+    Appointment,
+    Patient,
+  }) => {
     SentRemindersPatients.belongsTo(SentReminder, {
       foreignKey: 'sentRemindersId',
       as: 'sentReminder',

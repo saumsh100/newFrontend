@@ -25,8 +25,8 @@ import { cleanRemindersSuccessData } from './outbox';
 
 /**
  * sendRemindersForAccount is an async function that will send reminders for the account passed in
- * by calling other composable functions to assemble patients that need reminders and then looping through
- * them and sending the appropriate comms to them
+ * by calling other composable functions to assemble patients that need reminders and
+ * then looping through them and sending the appropriate comms to them
  *
  * - call mapPatientsToReminders to grab the patients that need a respective reminder
  * - loop through this sortedReminders
@@ -40,7 +40,12 @@ import { cleanRemindersSuccessData } from './outbox';
  * @param pub
  * @returns {undefined}
  */
-export async function sendRemindersForAccount({ account, startDate, endDate, pub }) {
+export async function sendRemindersForAccount({
+  account,
+  startDate,
+  endDate,
+  pub,
+}) {
   const { reminders, name } = account;
   console.log(`Sending reminders for ${name} (${account.id}) at ${moment(startDate).format('YYYY-MM-DD h:mma')}...`);
 
@@ -88,6 +93,7 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
             sentRemindersId: sentReminder.id,
             patientId: patient.id,
             appointmentId: patient.appointment.id,
+            appointmentStartDate: patient.appointment.startDate,
           });
         }
         console.log(`------ ${errors.length} => saved sentReminders that would fail`);
@@ -112,16 +118,18 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
         accountId: account.id,
         contactedPatientId: patient.id,
         interval: reminder.interval,
-        isConfirmable: patientsWithAppointments.some(({ appointment: a }) => getIsConfirmable(a, reminder)),
+        isConfirmable: patientsWithAppointments.some(({ appointment: a }) =>
+          getIsConfirmable(a, reminder)),
         primaryType,
         isFamily: dependants.length > 0,
       });
 
-      await Promise.all(patientsWithAppointments
-        .map(p => SentRemindersPatients.create({
+      await Promise.all(patientsWithAppointments.map(({ id, appointment }) =>
+        SentRemindersPatients.create({
           sentRemindersId: sentReminder.id,
-          patientId: p.id,
-          appointmentId: p.appointment.id,
+          patientId: id,
+          appointmentId: appointment.id,
+          appointmentStartDate: appointment.startDate,
         })));
 
       try {
@@ -137,9 +145,13 @@ export async function sendRemindersForAccount({ account, startDate, endDate, pub
 
         sentReminderIds.push(sentReminder.id);
 
-        console.log(`------ Sent '${interval} ${primaryType}' reminder to ${patient.firstName} ${patient.lastName}`);
+        console.log(`------ Sent '${interval} ${primaryType}' reminder to ${
+          patient.firstName
+        } ${patient.lastName}`);
       } catch (error) {
-        console.error(`------ Failed sending '${interval} ${primaryType}' reminder to ${patient.firstName} ${patient.lastName}`);
+        console.error(`------ Failed sending '${interval} ${primaryType}' reminder to ${
+          patient.firstName
+        } ${patient.lastName}`);
         console.error(error);
         continue;
       }
@@ -185,8 +197,9 @@ export async function computeRemindersAndSend({ startDate, endDate, pub }) {
 }
 
 /**
- * getRemindersOutboxList is an async function that will return the list of patients that will receive
- * reminders communications within a certain period of time (between { startDate, endDate })
+ * getRemindersOutboxList is an async function that will return the list of
+ * patients that will receive reminders communications within a certain period
+ * of time (between { startDate, endDate })
  *
  * - startDate is ciel to nearest 5 minute
  * - endDate is floor to nearest 5 minute
@@ -236,8 +249,9 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
 
     // Clone array so its not mutable and
     // order by appointment.startDate ASC of the earlies appointment of the reminder
-    const sortedPatientsAppointments =
-      organizedList.slice().sort(sortRemindersByEarliestAppointmentDate);
+    const sortedPatientsAppointments = organizedList
+      .slice()
+      .sort(sortRemindersByEarliestAppointmentDate);
 
     // map over the sorted array and construct the final object:
     // { patient: { ...patientData, appointment }, reminder, sendDate }
@@ -246,12 +260,19 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
       const subtractedDate = moment(getEarliestApptDateFromReminder(pa))
         .subtract(intervalObject)
         .toISOString();
-      const sendDate = reminder.isDaily ?
-        moment.tz(
-          `${moment(subtractedDate).format('YYYY-MM-DD')} ${reminder.dailyRunTime}`,
-          account.timezone,
-        ).toISOString() :
-        floorDateMinutes(subtractedDate, GLOBALS.reminders.cronIntervalMinutes);
+      const sendDate = reminder.isDaily
+        ? moment
+          .tz(
+            `${moment(subtractedDate).format('YYYY-MM-DD')} ${
+              reminder.dailyRunTime
+            }`,
+            account.timezone,
+          )
+          .toISOString()
+        : floorDateMinutes(
+          subtractedDate,
+          GLOBALS.reminders.cronIntervalMinutes,
+        );
 
       return {
         ...pa,
@@ -279,16 +300,17 @@ export async function getRemindersOutboxList({ account, startDate, endDate }) {
 const getEarliestApptDateFromReminder = ({ patient, dependants }) =>
   [patient, ...dependants]
     .filter(({ appointment }) => appointment)
-    .sort((
-      { appointment: { startDate: a } },
-      { appointment: { startDate: b } },
-    ) => sortAsc(a, b))[0].appointment.startDate;
+    .sort(({ appointment: { startDate: a } }, { appointment: { startDate: b } }) =>
+      sortAsc(a, b))[0].appointment.startDate;
 
 /**
  * Sort reminders by each one earliest appointment date
  */
-const sortRemindersByEarliestAppointmentDate =
-  (a, b) => sortAsc(getEarliestApptDateFromReminder(a), getEarliestApptDateFromReminder(b));
+const sortRemindersByEarliestAppointmentDate = (a, b) =>
+  sortAsc(
+    getEarliestApptDateFromReminder(a),
+    getEarliestApptDateFromReminder(b),
+  );
 
 /**
  * organizeRemindersOutboxList is a function used to organize the outbox for reminders ontop of

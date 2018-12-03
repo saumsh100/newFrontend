@@ -168,6 +168,7 @@ Object {
               "startDate": "2017-12-31T00:14:30.932Z",
             },
             "appointmentId": "6b215a42-5c33-4f94-8313-d89893ae2f36",
+            "appointmentStartDate": null,
             "patient": Object {
               "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
               "address": null,

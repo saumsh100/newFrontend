@@ -55,6 +55,24 @@ const dates = (y, m, d, h) => {
 
 const td = d => tzIso(d, TIME_ZONE);
 
+const makeSentReminderPatientsData = async (reminder, appt) => {
+  const sentReminder = await SentReminder.create({
+    reminderId: reminder.id,
+    appointmentId: appt.id,
+    contactedPatientId: patientId,
+    accountId,
+    interval: reminder.interval,
+    primaryType: reminder.primaryTypes[0],
+  });
+
+  await SentRemindersPatients.create({
+    sentRemindersId: sentReminder.id,
+    appointmentId: appt.id,
+    patientId,
+    appointmentStartDate: appt.startDate,
+  });
+};
+
 const seedWithNonConfirmableAppointments = async ({ reminder, appointments }) => {
   // Seed 3 SentReminders for the patient
   const sentReminder1 = await SentReminder.create(makeSentReminderData({
@@ -219,41 +237,109 @@ describe('RemindersList Calculation Library', () => {
         expect(apptsReminders[0].id).toBe(appts[1].id);
       });
 
-      test('should return 0 appointments as the other now has a different and earlier reminder sent (dont send 21 day reminders if the 1 day reminder has been sent)', async () => {
+      test('should return 0 for same reminder already sent', async () => {
         const currentDate = date(2017, 7, 5, 7);
 
-        const appts = await Appointment.bulkCreate([
+        const [appt] = await Appointment.bulkCreate([
           makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
         ]);
 
-        const diffReminder = await Reminder.create({
-          accountId,
-          primaryTypes: ['sms'],
-          interval: '500 seconds',
-        });
-
-        const sentReminder = await SentReminder.create({
-          reminderId: diffReminder.id,
-          appointmentId: appts[0].id,
-          contactedPatientId: patientId,
-          accountId,
-          // Doesnt even have to match reminder for this test
-          interval: '500 seconds',
-          primaryType: 'sms',
-        });
-
-        await SentRemindersPatients.create({
-          sentRemindersId: sentReminder.id,
-          appointmentId: appts[0].id,
-          patientId,
-        });
+        await makeSentReminderPatientsData(reminder, appt);
 
         const remindersAppts = await getAppointmentsFromReminder({
           reminder,
           startDate: currentDate,
         });
 
-        expect(remindersAppts.length).toBe(0);
+        expect(remindersAppts).toHaveLength(0);
+      });
+
+      test('should return 0 for same reminder already sent but moved in a less than 1 day interval', async () => {
+        const currentDate = date(2017, 7, 5, 8);
+
+        const [appt] = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+        ]);
+
+        await makeSentReminderPatientsData(reminder, appt);
+
+        await Appointment.update(
+          { ...dates(2017, 7, 6, 8) },
+          { where: { id: appt.id } },
+        );
+
+        const remindersAppts = await getAppointmentsFromReminder({
+          reminder,
+          startDate: currentDate,
+        });
+
+        expect(remindersAppts).toHaveLength(0);
+      });
+
+      test('should return 1 for same reminder already sent but moved more than 1 day interval', async () => {
+        const currentDate = date(2017, 7, 6, 7);
+
+        const [appt] = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+        ]);
+
+        await makeSentReminderPatientsData(reminder, appt);
+
+        await Appointment.update(
+          { ...dates(2017, 7, 7, 7) },
+          { where: { id: appt.id } },
+        );
+
+        const remindersAppts = await getAppointmentsFromReminder({
+          reminder,
+          startDate: currentDate,
+        });
+
+        expect(remindersAppts).toHaveLength(1);
+      });
+
+      test('should return 1 for same reminder already sent but moved more than 1 day interval', async () => {
+        const currentDate = date(2017, 7, 6, 7);
+
+        const [appt] = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 6, 7) }), // Tomorrow at 7
+        ]);
+
+        await makeSentReminderPatientsData(reminder, appt);
+
+        await Appointment.update(
+          { ...dates(2017, 7, 7, 7) },
+          { where: { id: appt.id } },
+        );
+
+        const remindersAppts = await getAppointmentsFromReminder({
+          reminder,
+          startDate: currentDate,
+        });
+
+        expect(remindersAppts).toHaveLength(1);
+      });
+
+      test('should return 0 for same reminder already sent but moved more than 1 day interval 2', async () => {
+        const currentDate = date(2017, 7, 6, 7);
+
+        const [appt] = await Appointment.bulkCreate([
+          makeApptData({ ...dates(2017, 7, 6, 9) }),
+        ]);
+
+        await makeSentReminderPatientsData(reminder, appt);
+
+        await Appointment.update(
+          { ...dates(2017, 7, 7, 7) },
+          { where: { id: appt.id } },
+        );
+
+        const remindersAppts = await getAppointmentsFromReminder({
+          reminder,
+          startDate: currentDate,
+        });
+
+        expect(remindersAppts).toHaveLength(1);
       });
 
       describe('#getAppointmentsFromReminder -- sameDay Appointments', () => {
