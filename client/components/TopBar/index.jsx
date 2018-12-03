@@ -5,16 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
 import classNames from 'classnames';
 import omit from 'lodash/omit';
-import {
-  AppBar,
-  Avatar,
-  Button,
-  DropdownMenu,
-  Icon,
-  IconButton,
-  Link,
-  MenuItem,
-} from '../library';
+import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import RelayPatientSearch from '../RelayPatientSearch';
 import styles from './styles.scss';
@@ -25,9 +16,7 @@ const UserMenu = (props) => {
   const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
   // TODO: create a separate container for this to load in user data from 'currentUser'
   const isEnterprise = role === 'SUPERADMIN'; // enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
-  const businessName = isEnterprise
-    ? enterprise.get('name')
-    : activeAccount && activeAccount.name;
+  const businessName = isEnterprise ? enterprise.get('name') : activeAccount && activeAccount.name;
 
   return (
     <Button flat {...newProps} className={styles.userMenuButton}>
@@ -36,12 +25,7 @@ const UserMenu = (props) => {
           <div className={styles.greeting}>Hello, {user.get('firstName')}</div>
           <div className={styles.businessName}>{businessName}</div>
         </div>
-        <Avatar
-          className={styles.userAvatar}
-          user={user.toJS()}
-          isPatient={false}
-          size="sm"
-        />
+        <Avatar className={styles.userAvatar} user={user.toJS()} isPatient={false} size="sm" />
         <Icon icon="caret-down" type="solid" />
       </div>
     </Button>
@@ -49,10 +33,10 @@ const UserMenu = (props) => {
 };
 
 UserMenu.propTypes = {
-  user: PropTypes.instanceOf(Map),
-  role: PropTypes.string,
-  activeAccount: PropTypes.shape({ addressId: PropTypes.string }),
-  enterprise: PropTypes.instanceOf(Map),
+  user: PropTypes.instanceOf(Map).isRequired,
+  role: PropTypes.string.isRequired,
+  activeAccount: PropTypes.shape({ addressId: PropTypes.string }).isRequired,
+  enterprise: PropTypes.instanceOf(Map).isRequired,
 };
 
 const ActiveAccountButton = ({ account, onClick }) => (
@@ -63,15 +47,13 @@ const ActiveAccountButton = ({ account, onClick }) => (
 );
 
 ActiveAccountButton.propTypes = {
-  account: PropTypes.shape({ id: PropTypes.string }),
-  onClick: PropTypes.func,
+  account: PropTypes.shape({ id: PropTypes.string }).isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 class TopBar extends Component {
   constructor(props) {
     super(props);
-
-    this.state = { index: 0 };
 
     this.onSearchSelect = this.onSearchSelect.bind(this);
     this.sync = this.sync.bind(this);
@@ -118,20 +100,13 @@ class TopBar extends Component {
 
     const topBarClassName = classNames(
       styles.topBarContainer,
-      isCollapsed
-        ? styles.topBarContainerCollapsed
-        : styles.topBarContainerUnCollapsed,
+      isCollapsed ? styles.topBarContainerCollapsed : styles.topBarContainerUnCollapsed,
     );
 
     // Conditionally change the image render ifCollapsed, media queries will decide to hide or not
     let logoImage = (
-      <img
-        className={styles.logoImageImage}
-        src="/images/carecru_logo.png"
-        alt="CareCru logo"
-      />
+      <img className={styles.logoImageImage} src="/images/carecru_logo.png" alt="CareCru logo" />
     );
-
 
     if (isCollapsed) {
       logoImage = (
@@ -144,16 +119,8 @@ class TopBar extends Component {
     }
 
     const logoComponent = (
-      <div
-        className={
-          !isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed
-        }
-      >
-        <div
-          className={
-            !isCollapsed ? styles.logoImage : styles.logoImageCollapsed
-          }
-        >
+      <div className={!isCollapsed ? styles.logoWrapper : styles.logoWrapperCollapsed}>
+        <div className={!isCollapsed ? styles.logoImage : styles.logoImageCollapsed}>
           {logoImage}
         </div>
       </div>
@@ -190,11 +157,8 @@ class TopBar extends Component {
       onBlur: this.closeSearch,
     };
 
-    const groupStyles = classNames(styles.searchTheme, { [styles.animateSearch]: !isSearchCollapsed });
-    const iconStyles = classNames(styles.searchIconWrapper, { [styles.iconSearchOpen]: !isSearchCollapsed });
-
     const searchTheme = {
-      group: groupStyles,
+      group: classNames(styles.searchTheme, { [styles.animateSearch]: !isSearchCollapsed }),
       bar: styles.barStyle,
       container: styles.patientSearchClass,
       suggestionsContainerOpen: styles.containerOpen,
@@ -214,16 +178,19 @@ class TopBar extends Component {
             <div className={styles.wrapper}>
               <IconButton
                 icon="search"
-                className={iconStyles}
+                className={classNames({
+                  [styles.searchIconWrapper]: true,
+                  [styles.iconSearchOpen]: !isSearchCollapsed,
+                })}
                 iconClassName={styles.searchIcon}
                 onClick={this.openSearch}
               />
               {!this.props.isSearchCollapsed && (
                 <RelayPatientSearch
+                  focusInputOnMount
                   onChange={this.onSearchSelect}
                   inputProps={patientSearchInputProps}
                   theme={searchTheme}
-                  focusInputOnMount
                 />
               )}
             </div>
@@ -245,9 +212,7 @@ class TopBar extends Component {
             <li>
               <DropdownMenu
                 className={styles.userDropdownMenu}
-                labelComponent={props => (
-                  <UserMenu {...props} {...userMenuProps} />
-                )}
+                labelComponent={props => <UserMenu {...props} {...userMenuProps} />}
               >
                 <Link to="/profile">
                   <MenuItem className={styles.userMenuLi} icon="user">
@@ -280,18 +245,20 @@ TopBar.propTypes = {
   setIsCollapsed: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   switchActiveAccount: PropTypes.func.isRequired,
-  location: PropTypes.shape({ pathname: PropTypes.string }),
+  location: PropTypes.shape({ pathname: PropTypes.string }).isRequired,
   push: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
-  accounts: PropTypes.arrayOf(Object),
-  enterprise: PropTypes.instanceOf(Map),
-  user: PropTypes.instanceOf(Map),
-  role: PropTypes.string,
-  activeAccount: PropTypes.shape({ addressId: PropTypes.string }),
-  runOnDemandSync: PropTypes.func,
-  withEnterprise: PropTypes.bool,
+  accounts: PropTypes.arrayOf(Object).isRequired,
+  enterprise: PropTypes.instanceOf(Map).isRequired,
+  user: PropTypes.instanceOf(Map).isRequired,
+  role: PropTypes.string.isRequired,
+  activeAccount: PropTypes.shape({ addressId: PropTypes.string }).isRequired,
+  runOnDemandSync: PropTypes.func.isRequired,
+  withEnterprise: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool,
 };
+
+TopBar.defaultProps = { isAuth: false };
 
 export default withAuthProps(withRouter(TopBar));

@@ -29,7 +29,6 @@ const defaultState = {
 class PatientSearch extends Component {
   constructor(props) {
     super(props);
-
     this.state = defaultState;
 
     this.updateStateWithData = this.updateStateWithData.bind(this);
@@ -262,7 +261,7 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const { onChange, inputProps, theme, searchedPatients } = this.props;
+    const { onChange, inputProps, theme, searchedPatients, hideRecentSearch } = this.props;
     const newTheme = StyleExtender(theme, styles);
 
     const renderListFooter = this.renderListFooterFactory(newTheme);
@@ -317,7 +316,8 @@ class PatientSearch extends Component {
                   displaySearching,
                   ...suggestionsListProps,
                 })}
-                {searchedPatients.length > 0 &&
+                {!hideRecentSearch &&
+                  searchedPatients.length > 0 &&
                   inputValue === '' && (
                     // render recent searches if has any in the props
                     <div className={newTheme.recentPatientsWrapper}>
@@ -346,6 +346,7 @@ PatientSearch.propTypes = {
   onChange: PropTypes.func.isRequired,
   focusInputOnMount: PropTypes.bool,
   resetInputOnSelection: PropTypes.bool,
+  hideRecentSearch: PropTypes.bool,
   inputProps: PropTypes.shape({
     id: PropTypes.string,
     placeholder: PropTypes.string,
@@ -368,6 +369,7 @@ PatientSearch.propTypes = {
 PatientSearch.defaultProps = {
   focusInputOnMount: false,
   resetInputOnSelection: false,
+  hideRecentSearch: false,
   inputProps: null,
   theme: null,
   searchedPatients: [],
@@ -376,11 +378,7 @@ PatientSearch.defaultProps = {
 
 const mapStateToProps = ({ patientSearch }) => ({ searchedPatients: patientSearch.get('searchedPatients').toArray() });
 
-const mapActionsToProps = dispatch =>
-  bindActionCreators(
-    { setPatientSearched },
-    dispatch,
-  );
+const mapActionsToProps = dispatch => bindActionCreators({ setPatientSearched }, dispatch);
 
 const enhance = connect(
   mapStateToProps,
