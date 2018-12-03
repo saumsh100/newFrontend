@@ -1,4 +1,12 @@
+
 import createModel from '../createModel';
+
+const generateFullName = (firstName = '', lastName = '') => {
+  if (!firstName && !lastName) {
+    return 'Unknown Provider';
+  }
+  return `${firstName} ${lastName}`.trim();
+};
 
 const PractitionerSchema = {
   id: null,
@@ -7,7 +15,6 @@ const PractitionerSchema = {
   services: [],
   firstName: null,
   lastName: null,
-  //type: 'DR',
   isCustomSchedule: null,
   weeklyScheduleId: null,
   fullAvatarUrl: null,
@@ -19,7 +26,7 @@ const PractitionerSchema = {
 
 export default class Practitioner extends createModel(PractitionerSchema) {
   getFullName() {
-    return `${this.get('firstName')} ${this.get('lastName') || ''}`;
+    return generateFullName(this.get('firstName'), this.get('lastName'));
   }
 
   getPrettyName() {
@@ -34,9 +41,8 @@ export default class Practitioner extends createModel(PractitionerSchema) {
   getPrettyShortName() {
     if (this.get('type') === 'Dentist') {
       return `Dr. ${this.get('lastName') || this.get('firstName')}`;
-    } else {
-      return this.get('firstName');
     }
+    return this.get('firstName');
   }
 
   getUrlRoot() {

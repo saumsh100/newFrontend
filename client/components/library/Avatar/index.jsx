@@ -2,8 +2,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import classNames from 'classnames';
-import styles from './styles.scss';
 import { Icon } from '../';
+import styles from './styles.scss';
+
+const generateInitials = (firstName = '', lastName = '') =>
+  `${firstName.charAt(0)}${lastName.charAt(0)}`;
 
 export default function Avatar({
   user,
@@ -24,10 +27,10 @@ export default function Avatar({
     <img className={styles.img} src={url} alt={user.firstName} />
   ) : (
     <span className={styles.text}>
-      {user.isUnknown ? (
+      {user.isUnknown || (!user.lastName && !user.firstName) ? (
         <Icon icon="user" type="solid" />
       ) : (
-        `${user.firstName && user.firstName[0]}${user.lastName && user.lastName[0]}`
+        generateInitials(user.firstName, user.lastName)
       )}
     </span>
   );

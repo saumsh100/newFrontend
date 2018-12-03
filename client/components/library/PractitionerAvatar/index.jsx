@@ -1,14 +1,9 @@
 
-import Avatar from '../Avatar';
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
+import Avatar from '../Avatar';
 
-export default function PractitionerAvatar({
-  practitioner,
-  className,
-  size,
-  onClick = () => {},
-}) {
+export default function PractitionerAvatar({ practitioner, className, size, onClick }) {
   let replaceSize = 100;
   if (size === 'extralg') {
     replaceSize = 400;
@@ -26,6 +21,7 @@ export default function PractitionerAvatar({
       user={{
         avatarUrl,
         firstName: practitioner.firstName,
+        lastName: practitioner.lastName,
       }}
       className={className}
       size={size}
@@ -34,12 +30,18 @@ export default function PractitionerAvatar({
   );
 }
 
-Avatar.propTypes = {
-  title: PropTypes.string,
+PractitionerAvatar.propTypes = {
   className: PropTypes.string,
   onClick: PropTypes.func,
-  user: PropTypes.shape({
-    avatar: PropTypes.string,
-    firstName: PropTypes.string.isRequired,
-  }),
+  practitioner: PropTypes.shape({
+    lastName: PropTypes.string,
+    firstName: PropTypes.string,
+  }).isRequired,
+  size: PropTypes.string,
+};
+
+PractitionerAvatar.defaultProps = {
+  onClick: () => {},
+  className: '',
+  size: '',
 };
