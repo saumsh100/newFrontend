@@ -54,6 +54,8 @@ const fetchPatients = async (props) => {
       $or: [
         { firstName: { $iLike: `${splitSearch[0]}%` } },
         { lastName: { $iLike: `${splitSearch[0]}%` } },
+        { email: { $iLike: `${search}%` } },
+        { cellPhoneNumber: { $iLike: `${search}%` } },
       ],
     };
 
@@ -64,7 +66,7 @@ const fetchPatients = async (props) => {
     order,
   };
 
-  return await fetchQuery(graphQLEnvironment, query, queryVariables);
+  return fetchQuery(graphQLEnvironment, query, queryVariables);
 };
 
 export default fetchPatients;
