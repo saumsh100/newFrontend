@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { Icon } from '../';
 import styles from './styles.scss';
 
-const generateInitials = (firstName = '', lastName = '') =>
-  `${firstName.charAt(0)}${lastName.charAt(0)}`;
+const generateInitials = (firstName, lastName) =>
+  `${(firstName || '').charAt(0)}${(lastName || '').charAt(0)}`;
 
 export default function Avatar({
   user,

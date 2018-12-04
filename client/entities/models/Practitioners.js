@@ -5,7 +5,7 @@ const generateFullName = (firstName = '', lastName = '') => {
   if (!firstName && !lastName) {
     return 'Unknown Provider';
   }
-  return `${firstName} ${lastName}`.trim();
+  return `${firstName || ''} ${lastName || ''}`.trim();
 };
 
 const PractitionerSchema = {
