@@ -19,7 +19,7 @@ Object {
         "id": "6b215a42-5c33-4f94-8313-d89893ae2f36",
         "isBookable": false,
         "isCancelled": false,
-        "isDeleted": false,
+        "isDeleted": true,
         "isMissed": false,
         "isPatientConfirmed": false,
         "isPending": false,

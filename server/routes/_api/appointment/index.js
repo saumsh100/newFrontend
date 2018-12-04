@@ -85,9 +85,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
           },
         },
       ],
-      patientId: {
-        $not: null,
-      },
+      patientId: { $not: null },
       isCancelled: true,
     },
     raw: true,
@@ -114,7 +112,6 @@ appointmentsRouter.get('/business', (req, res, next) => {
       const $or = [];
 
       for (let i = 0; i < appointments.length; i++) {
-
         if (appointments[i].isCancelled) {
           send.brokenAppts++;
 
@@ -129,9 +126,7 @@ appointmentsRouter.get('/business', (req, res, next) => {
               $between: [appointments[i].startDate,
                 appointments[i].endDate],
             },
-            patientId: {
-              $not: null,
-            },
+            patientId: { $not: null },
             practitionerId: appointments[i].practitionerId,
           });
         }
@@ -152,7 +147,6 @@ appointmentsRouter.get('/business', (req, res, next) => {
 // data for most popular day of the week.
 
 appointmentsRouter.get('/statsdate', (req, res, next) => {
-
   const {
     query,
     accountId,
@@ -179,9 +173,7 @@ appointmentsRouter.get('/statsdate', (req, res, next) => {
           },
         },
       ],
-      patientId: {
-        $not: null,
-      },
+      patientId: { $not: null },
     },
     raw: true,
   }));
@@ -243,9 +235,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
             },
           },
         ],
-        patientId: {
-          $not: null,
-        },
+        patientId: { $not: null },
       },
       include: [
         {
@@ -284,7 +274,11 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
         });
         return value.length;
       });
-      res.send({ data: data.reverse(), months: months.reverse(), age });
+      res.send({
+        data: data.reverse(),
+        months: months.reverse(),
+        age,
+      });
     })
     .catch(next);
 });
@@ -319,7 +313,10 @@ appointmentsRouter.get('/appointmentsBooked', async (req, res, next) => {
     const appointmentsBooked = await totalAppointments(start, end, accountId);
     const confirmedAppointments = await totalAppointments(start, end, accountId, { isPatientConfirmed: true });
 
-    return res.send({ appointmentsBooked, confirmedAppointments });
+    return res.send({
+      appointmentsBooked,
+      confirmedAppointments,
+    });
   } catch (e) {
     return next(e);
   }
@@ -555,37 +552,38 @@ appointmentsRouter.get('/', (req, res, next) => {
 
 appointmentsRouter.post('/', checkPermissions('appointments:create'), async (req, res, next) => {
   const accountId = req.accountId;
-  const appointmentData = Object.assign({}, req.body, {
-    accountId,
-  });
+  const appointmentData = Object.assign({}, req.body, { accountId });
 
   try {
     const appointmentTest = await Appointment.build(appointmentData);
     await appointmentTest.validate();
 
     return Appointment.create(appointmentData)
-        .then((appointment) => {
-          const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
-          res.status(201).send(normalized);
-          return { appointment: appointment.dataValues, normalized };
-        })
-        .then(async ({ appointment }) => {
-          if (appointment.isSyncedWithPms && appointment.patientId) {
-            // Dashboard app needs patient data
-            const patient = await Patient.findById(appointment.patientId);
-            appointment.patient = patient.get({ plain: true });
-          }
+      .then((appointment) => {
+        const normalized = format(req, res, 'appointment', appointment.get({ plain: true }));
+        res.status(201).send(normalized);
+        return {
+          appointment: appointment.dataValues,
+          normalized,
+        };
+      })
+      .then(async ({ appointment }) => {
+        if (appointment.isSyncedWithPms && appointment.patientId) {
+          // Dashboard app needs patient data
+          const patient = await Patient.findById(appointment.patientId);
+          appointment.patient = patient.get({ plain: true });
+        }
 
-          const io = req.app.get('socketio');
-          const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-          io && io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
+        const io = req.app.get('socketio');
+        const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+        io && io.of(ns).in(accountId).emit('CREATE:Appointment', appointment.id);
 
-          const pub = req.app.get('pub');
-          pub.publish('APPOINTMENT:CREATED', appointment.id);
+        const pub = req.app.get('pub');
+        pub.publish('APPOINTMENT:CREATED', appointment.id);
 
-          return io && io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
-        })
-        .catch(next);
+        return io && io.of(ns).in(accountId).emit('create:Appointment', normalize('appointment', appointment));
+      })
+      .catch(next);
   } catch (e) {
     if (e.errors && e.errors[0] && e.errors[0].message.messages === 'AccountId PMS ID Violation') {
       const appointment = e.errors[0].message.model.dataValues;
@@ -620,12 +618,10 @@ async function createAppointmentCodes(appointments) {
 
     if (!values.appointmentCodes) continue;
 
-    const createBulk = values.appointmentCodes.map((appCode) => {
-      return {
-        appointmentId: appointments[i].id,
-        code: appCode.code,
-      };
-    });
+    const createBulk = values.appointmentCodes.map(appCode => ({
+      appointmentId: appointments[i].id,
+      code: appCode.code,
+    }));
 
     await AppointmentCode.bulkCreate(createBulk);
   }
@@ -686,7 +682,10 @@ appointmentsRouter.get('/connector/notSynced', checkPermissions('patients:read')
 
   let appointments;
   try {
-    appointments = await fetchApptsWithCodes({ accountId, isSyncedWithPms: false });
+    appointments = await fetchApptsWithCodes({
+      accountId,
+      isSyncedWithPms: false,
+    });
 
     const cleanedAppointments = appointments.map(a => a.get({ plain: true }));
 
@@ -723,26 +722,20 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
     }
   });
 
-  const appointmentUpdates = cleanedAppointments.map((appointment) => {
-    return Appointment.findById(appointment.id)
-      .then(singleAppointment => singleAppointment.update(appointment));
-  });
+  const appointmentUpdates = cleanedAppointments.map(appointment => Appointment.findById(appointment.id)
+    .then(singleAppointment => singleAppointment.update(appointment)));
 
   return Promise.all(appointmentUpdates)
     .then(async (singleAppointment) => {
       const t = await sequelize.transaction();
-      const appointmentIds = singleAppointment.map((app) => {
-        return app.id;
-      });
+      const appointmentIds = singleAppointment.map(app => app.id);
 
       try {
         // destroy all codes and recreate them (and any more or less)
         // This is done under a single transaction as if one fails the transaction
         // is undone.
         await AppointmentCode.destroy({
-          where: {
-            appointmentId: appointmentIds,
-          },
+          where: { appointmentId: appointmentIds },
           force: true,
           paranoid: false,
           transaction: t,
@@ -773,11 +766,11 @@ appointmentsRouter.put('/connector/batch', checkPermissions('appointments:update
  */
 appointmentsRouter.post('/batch', checkPermissions('appointments:create'), checkIsArray('appointments'), async (req, res, next) => {
   const { appointments } = req.body;
-  const cleanedAppointments = appointments.map((appointment) => Object.assign(
-      {},
-      omit(appointment, ['id']),
-      { accountId: req.accountId },
-    ));
+  const cleanedAppointments = appointments.map(appointment => Object.assign(
+    {},
+    omit(appointment, ['id']),
+    { accountId: req.accountId },
+  ));
   return Appointment.batchSave(cleanedAppointments)
     .then((apps) => {
       const appointmentIds = [];
@@ -788,8 +781,8 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
         return appParsed;
       });
 
-      //const pub = req.app.get('pub');
-      //pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
+      // const pub = req.app.get('pub');
+      // pub.publish('APPOINTMENT:CREATED:BATCH', JSON.stringify(appointmentIds));
 
       res.status(201).send(normalize('appointments', appData));
     })
@@ -809,10 +802,8 @@ appointmentsRouter.post('/batch', checkPermissions('appointments:create'), check
  */
 appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkIsArray('appointments'), (req, res, next) => {
   const { appointments } = req.body;
-  const appointmentUpdates = appointments.map((appointment) => {
-    return Appointment.findById(appointment.id)
-      .then(_appointment => _appointment.update(appointment));
-  })
+  const appointmentUpdates = appointments.map(appointment => Appointment.findById(appointment.id)
+    .then(_appointment => _appointment.update(appointment)));
 
   return Promise.all(appointmentUpdates)
     .then((_appointments) => {
@@ -824,8 +815,8 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
         return appParsed;
       });
 
-      //const pub = req.app.get('pub');
-      //pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
+      // const pub = req.app.get('pub');
+      // pub.publish('APPOINTMENT:UPDATED:BATCH', JSON.stringify(appointmentIds));
 
       res.send(normalize('appointments', appData));
     })
@@ -836,17 +827,20 @@ appointmentsRouter.put('/batch', checkPermissions('appointments:update'), checkI
 /**
  * Batch deletion
  */
-appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), (req, res, next) => {
-  const appointmentIds = req.query.ids.split(',');
+appointmentsRouter.delete('/batch', checkPermissions('appointments:delete'), async ({ query: { ids } }, res, next) => {
+  try {
+    console.log(ids);
+    const appointmentsToDelete = ids.split(',').map(id => Appointment.findById(id)
+      .then(_appointment => Promise.all([
+        _appointment.update({ isDeleted: true }),
+        _appointment.destroy(),
+      ])));
+    await Promise.all(appointmentsToDelete);
 
-  const appointmentsToDelete = appointmentIds.map((id) => Appointment.findById(id)
-      .then(_appointment => _appointment.destroy()));
-
-  return Promise.all(appointmentsToDelete)
-    .then(() => {
-      res.sendStatus(204);
-    })
-    .catch(next);
+    res.send(204);
+  } catch (e) {
+    next(e);
+  }
 });
 
 /**
@@ -871,9 +865,9 @@ if (globals.env !== 'production') {
  * Get an appointment
  */
 appointmentsRouter.get('/:appointmentId', checkPermissions('appointments:read'), (req, res, next) => Promise.resolve(req.appointment)
-    .then(appointment =>
-      res.send(format(req, res, 'appointment', appointment.get({ plain: true }))))
-    .catch(next));
+  .then(appointment =>
+    res.send(format(req, res, 'appointment', appointment.get({ plain: true }))))
+  .catch(next));
 
 /**
  * Update a single appointment
@@ -913,20 +907,22 @@ appointmentsRouter.put('/:appointmentId', checkPermissions('appointments:update'
 /**
  * Remove a single appointment
  */
-appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), (req, res, next) => {
-  const appointment = req.appointment;
-  const accountId = req.accountId;
-  // TODO: why not use deleteAll ?
-  return req.appointment.destroy()
-    .then(() => res.send(204))
-    .then(() => {
-      const io = req.app.get('socketio');
-      const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
-      const normalized = normalize('appointment', appointment.get({ plain: true }));
-      io && io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
-      return io && io.of(ns).in(accountId).emit('remove:Appointment', normalized);
-    })
-    .catch(next);
+appointmentsRouter.delete('/:appointmentId', checkPermissions('appointments:delete'), async ({ app, accountId, appointment }, res, next) => {
+  try {
+    await Promise.all([
+      appointment.update({ isDeleted: true }),
+      appointment.destroy(),
+    ]);
+    res.send(204);
+
+    const io = app.get('socketio');
+    const ns = appointment.isSyncedWithPms ? namespaces.dash : namespaces.sync;
+    const normalized = normalize('appointment', appointment.get({ plain: true }));
+    io && io.of(ns).in(accountId).emit('DELETE:Appointment', appointment.id);
+    return io && io.of(ns).in(accountId).emit('remove:Appointment', normalized);
+  } catch (e) {
+    next(e);
+  }
 });
 
 module.exports = appointmentsRouter;
