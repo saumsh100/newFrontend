@@ -12,11 +12,12 @@ import {
   PatientUser,
   Recall,
   SentRecall,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import patientEventsAggregator from '../../../../server/lib/events';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 import { serviceId, seedTestService } from '../../../util/seedTestServices';
 import { wipeAllModels } from '../../../util/wipeModel';
 
@@ -26,6 +27,7 @@ const makeApptData = (data = {}) => ({
   accountId,
   patientId,
   practitionerId,
+  chairId,
   ...data,
 });
 
@@ -51,18 +53,15 @@ const makeSentReminderData = (data = {}) => ({
   ...data,
 });
 
-const makeSentRecallData = (data = {}) =>
-  Object.assign(
-    {
-      // Doesnt even have to match recall for this test
-      patientId,
-      accountId,
-      lengthSeconds: 15552000,
-      createdAt: date(2000, 10, 10, 9),
-      isSent: true,
-    },
-    data,
-  );
+const makeSentRecallData = (data = {}) => ({
+  // Doesnt even have to match recall for this test
+  patientId,
+  accountId,
+  lengthSeconds: 15552000,
+  createdAt: date(2000, 10, 10, 9),
+  isSent: true,
+  ...data,
+});
 
 const date = (y, m, d, h) => new Date(y, m, d, h).toISOString();
 const dates = (y, m, d, h) => ({
@@ -76,6 +75,7 @@ describe('Fetching a single patients events', () => {
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
+    await seedTestChairs();
     await seedTestService();
   });
 

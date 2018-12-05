@@ -1,53 +1,35 @@
 
-import { v4 as uuid } from 'uuid';
 import {
   Account,
   Appointment,
   Patient,
-  Practitioner,
-  SentReview,
-  Review,
-} from '../../../../server/_models';
-import {
-  generateReviewsOutbox,
-} from '../../../../server/lib/reviews/helpers';
+} from 'CareCruModels';
+import { generateReviewsOutbox } from '../../../../server/lib/reviews/helpers';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 
-const appointmentId = uuid();
-
-const makeApptData = (data = {}) => Object.assign({
+const makeApptData = (data = {}) => ({
   accountId,
   patientId,
   practitionerId,
+  chairId,
   isPatientConfirmed: true,
-}, data);
+  ...data,
+});
 
-const makePatientData = (data = {}) => Object.assign({
+const makePatientData = (data = {}) => ({
   accountId,
-}, data);
-
-const makeSentReviewData = (data = {}) => Object.assign({
-  patientId,
-  appointmentId,
-  accountId,
-}, data);
-
-const makeReviewData = (data = {}) => Object.assign({
-  patientId,
-  accountId,
-  stars: 3,
-}, data);
+  ...data,
+});
 
 const date = (y, m, d, h, mi = 0) => (new Date(y, m, d, h, mi)).toISOString();
-const dates = (y, m, d, h) => {
-  return {
-    startDate: date(y, m, d, h),
-    endDate: date(y, m, d, h + 1),
-  };
-};
+const dates = (y, m, d, h) => ({
+  startDate: date(y, m, d, h),
+  endDate: date(y, m, d, h + 1),
+});
 
 describe('Reviews Calculation', () => {
   beforeEach(async () => {
@@ -55,6 +37,7 @@ describe('Reviews Calculation', () => {
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
+    await seedTestChairs();
   });
 
   afterAll(async () => {

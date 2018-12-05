@@ -568,4 +568,11 @@ async function wipeTestAvailabilities() {
 module.exports = {
   seedTestAvailabilities,
   wipeTestAvailabilities,
+  chairId: chairId3,
+  accountId: accountId2,
+  serviceId: cleanupServiceId,
+  // Chelsea Handler
+  practitionerId: practitionerId4,
+  // Jennifer Love-Hewitt
+  practitionerId2: practitionerId3,
 };

@@ -8,30 +8,25 @@ import {
   Service,
   WeeklySchedule,
 } from '../../../../server/_models';
-import { seedTestAvailabilities } from '../../../util/seedTestAvailabilities';
 import { wipeAllModels } from '../../../util/wipeModel';
+import {
+  seedTestAvailabilities,
+  chairId,
+  accountId,
+  serviceId,
+  practitionerId,
+  practitionerId2,
+} from '../../../util/seedTestAvailabilities';
 import searchForAvailabilities from '../../../../server/lib/availabilities/searchForAvailabilities';
-import { printPractitionersData } from '../../../../server/lib/availabilities/helpers/print';
 
 const TZ = 'America/Vancouver';
 
-// Sunshine Smiles Dental (timeInterval = 30, gets changed to 60 at bottom)
-const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
-
-// Cleanup Service (duration = 60)
-const serviceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
-
-// Chelsea Handler
-const practitionerId = '4f439ff8-c55d-4423-9316-a41240c4d329';
-
-const appt = data => Object.assign(
-  {},
-  { accountId },
-  data,
-);
-
-// Jennifer Love-Hewitt
-const practitionerId2 = '721fb9c1-1195-463f-9137-42c52d0707ab';
+const appt = data => ({
+  practitionerId,
+  chairId,
+  accountId,
+  ...data,
+});
 
 const generateWeeklySchedule = data => Object.assign(
   {},
@@ -101,7 +96,11 @@ describe('Availabilities Library', () => {
           endDate,
         };
 
-        const { availabilities, retryAttempts, nextAvailability } = await searchForAvailabilities(options);
+        const {
+          availabilities,
+          retryAttempts,
+          nextAvailability,
+        } = await searchForAvailabilities(options);
         expect(Array.isArray(availabilities)).toBe(true);
         expect(availabilities.length).toBe(0);
         expect(nextAvailability).toBe(null);
@@ -122,7 +121,11 @@ describe('Availabilities Library', () => {
           endDate,
         };
 
-        const { availabilities, retryAttempts, nextAvailability } = await searchForAvailabilities(options);
+        const {
+          availabilities,
+          retryAttempts,
+          nextAvailability,
+        } = await searchForAvailabilities(options);
         expect(Array.isArray(availabilities)).toBe(true);
         expect(availabilities.length).toBe(0);
         expect(nextAvailability).toBe(null);
@@ -159,57 +162,46 @@ describe('Availabilities Library', () => {
         // Add custom WeeklySchedule to practitioner
         appointments = await Appointment.bulkCreate([
           appt({
-            practitionerId,
             startDate: iso('08:45', '03-05'), // Monday
             endDate: iso('09:00', '03-05'), // Monday
           }),
           appt({
-            practitionerId,
             startDate: iso('09:00', '03-05'), // Monday
             endDate: iso('10:00', '03-05'), // Monday
           }),
           appt({
-            practitionerId,
             startDate: iso('10:00', '03-05'), // Monday
             endDate: iso('11:30', '03-05'), // Monday
           }),
           appt({
-            practitionerId,
             startDate: iso('07:30', '03-06'), // Tuesday
             endDate: iso('10:00', '03-06'), // Tuesday
           }),
           appt({
-            practitionerId,
             startDate: iso('10:00', '03-06'), // Tuesday
             endDate: iso('12:30', '03-06'), // Tuesday
           }),
           appt({
-            practitionerId,
             startDate: iso('12:30', '03-06'), // Tuesday
             endDate: iso('15:00', '03-06'), // Tuesday
           }),
           appt({
-            practitionerId,
             startDate: iso('15:00', '03-06'), // Tuesday
             endDate: iso('18:30', '03-06'), // Tuesday
           }),
           appt({
-            practitionerId,
             startDate: iso('14:00', '03-07'), // Wednesday
             endDate: iso('15:00', '03-07'), // Wednesday
           }),
           appt({
-            practitionerId,
             startDate: iso('16:00', '03-07'), // Wednesday
             endDate: iso('16:30', '03-07'), // Wednesday
           }),
           appt({
-            practitionerId,
             startDate: iso('17:00', '03-07'), // Wednesday
             endDate: iso('18:00', '03-07'), // Wednesday
           }),
           appt({
-            practitionerId,
             startDate: iso('18:00', '03-07'), // Wednesday
             endDate: iso('19:00', '03-07'), // Wednesday
           }),
@@ -312,12 +304,18 @@ describe('Availabilities Library', () => {
         ]);
 
         await Account.update(
-          { weeklyScheduleId: weeklySchedules[0].id, timeInterval: 60 },
+          {
+            weeklyScheduleId: weeklySchedules[0].id,
+            timeInterval: 60,
+          },
           { where: { id: accountId } },
         );
 
         await Practitioner.update(
-          { isCustomSchedule: true, weeklyScheduleId: weeklySchedules[1].id },
+          {
+            isCustomSchedule: true,
+            weeklyScheduleId: weeklySchedules[1].id,
+          },
           { where: { id: practitionerId } },
         );
 
@@ -340,7 +338,7 @@ describe('Availabilities Library', () => {
 
         const { availabilities, retryAttempts } = await searchForAvailabilities(options);
         expect(retryAttempts).toBe(0);
-        expect(Array.isArray(availabilities)).toBe(true);
+        expect(Array.isArray(availabilities)).toBeTruthy();
         expect(availabilities.length).toBe(8);
       });
 
@@ -438,7 +436,7 @@ describe('Availabilities Library', () => {
           maxRetryAttempts: 5,
           endDate,
         };
-        
+
         const { availabilities, retryAttempts } = await searchForAvailabilities(options);
 
         expect(retryAttempts).toBe(0);
@@ -464,7 +462,7 @@ describe('Availabilities Library', () => {
           maxRetryAttempts: 5,
           endDate,
         };
-        
+
         const { availabilities, retryAttempts } = await searchForAvailabilities(options);
 
         expect(retryAttempts).toBe(0);

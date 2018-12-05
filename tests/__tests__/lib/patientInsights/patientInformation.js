@@ -8,39 +8,43 @@ import {
   Reminder,
   SentReminder,
   SentRemindersPatients,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import {
-  checkMobileNumber,
-  checkEmail,
   allInsights,
   checkConfirmAttempts,
 } from '../../../../server/lib/patientInsights/patientInformation';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
-import { code, seedTestProcedures, wipeTestProcedures } from '../../../util/seedTestProcedures';
+import { seedTestProcedures, wipeTestProcedures } from '../../../util/seedTestProcedures';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
 
-const makeApptData = (data = {}) => Object.assign({
+const makeApptData = (data = {}) => ({
   accountId,
   patientId,
   practitionerId,
-}, data);
+  chairId,
+  ...data,
+});
 
-const makePatientData = (data = {}) => Object.assign({
+const makePatientData = (data = {}) => ({
   accountId,
-}, data);
+  ...data,
+});
 
-const makeFamilyData = (data = {}) => Object.assign({
+const makeFamilyData = (data = {}) => ({
   accountId,
-}, data);
+  ...data,
+});
 
-const makeSentReminderData = (data = {}) => Object.assign({
+const makeSentReminderData = (data = {}) => ({
   contactedPatientId: patientId,
   accountId,
   lengthSeconds: 86400,
   primaryType: 'sms',
-}, data);
+  ...data,
+});
 
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
 const dates = (y, m, d, h) => ({
@@ -55,6 +59,7 @@ describe('Patient Insights', () => {
     await seedTestPatients();
     await seedTestPractitioners();
     await seedTestProcedures();
+    await seedTestChairs();
   });
 
   afterAll(async () => {
@@ -68,7 +73,7 @@ describe('Patient Insights', () => {
       expect(typeof allInsights).toBe('function');
       expect(typeof checkConfirmAttempts).toBe('function');
     });
-    
+
     afterEach(async () => {
       await wipeModel(SentRemindersPatients);
       await wipeModel(SentReminder);

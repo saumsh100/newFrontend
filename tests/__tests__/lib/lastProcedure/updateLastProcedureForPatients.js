@@ -7,24 +7,29 @@ import {
 import updateLastProcedureForPatients from '../../../../server/lib/lastProcedure/updateLastProcedureForPatients';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { tzIso } from '../../../../server/util/time';
 
-const makeApptData = (data = {}) => Object.assign({
+const makeApptData = (data = {}) => ({
   accountId,
   practitionerId,
-}, data);
+  chairId,
+  ...data,
+});
 
-const makePatientData = (data = {}) => Object.assign({
+const makePatientData = (data = {}) => ({
   accountId,
   firstName: data.n,
   lastName: data.n,
+  ...data,
 });
 
-const makeDPData = (config = {}) => Object.assign({}, {
+const makeDPData = (config = {}) => ({
   accountId,
-  procedureCode: config.code || code,
-}, config);
+  procedureCode: config.code,
+  ...config,
+});
 
 const TIME_ZONE = 'America/Vancouver';
 const td = d => tzIso(d, TIME_ZONE);
@@ -38,6 +43,7 @@ describe('Last Procedure Calculations', () => {
     await wipeAllModels();
     await seedTestUsers();
     await seedTestPractitioners();
+    await seedTestChairs();
   });
 
   afterAll(async () => {

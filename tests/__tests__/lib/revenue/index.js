@@ -5,42 +5,45 @@ import {
   DeliveredProcedure,
   WeeklySchedule,
   Account,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import calcRevenueDays from '../../../../server/lib/revenue/index';
 import { seedTestUsers, accountId, wipeTestUsers } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId, wipeTestPatients } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId, wipeTestPractitioners } from '../../../util/seedTestPractitioners';
 import { seedTestProcedures, wipeTestProcedures } from '../../../util/seedTestProcedures';
 import { wipeTestDeliveredProcedures } from '../../../util/seedTestDeliveredProcedures';
-import { wipeTestWeeklySchedules } from '../../../util/seedTestWeeklySchedules';
+import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 import { wipeAllModels } from '../../../util/wipeModel';
 
-const makeProcedureData = (data = {}) => Object.assign({
+const makeProcedureData = (data = {}) => ({
   accountId,
   patientId,
   procedureCode: '11111',
   procedureCodeId: 'CDA-11111',
   isCompleted: true,
-}, data);
+  ...data,
+});
 
 const weeklySchedule = {
   accountId,
   wednesday: { isClosed: true },
-
   saturday: { isClosed: true },
-
   sunday: { isClosed: true },
-
   isAdvanced: false,
 };
 
-const makeApptData = (data = {}) => Object.assign({
+const makeApptData = (data = {}) => ({
   accountId,
   patientId,
   practitionerId,
-}, data);
+  chairId,
+  ...data,
+});
 
-const makePatientData = (data = {}) => Object.assign({ accountId }, data);
+const makePatientData = (data = {}) => ({
+  accountId,
+  ...data,
+});
 
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
 const dates = (y, m, d, h) => ({
@@ -48,24 +51,12 @@ const dates = (y, m, d, h) => ({
   endDate: date(y, m, d, h + 1),
 });
 
-const currentDateMinusDays = (days) => {
-  const d = new Date();
-  d.setDate(d.getDate() - days);
-
-  return d;
-};
-
 const currentDatePlusDays = (days) => {
   const d = new Date();
   d.setDate(d.getDate() + days);
 
   return d;
 };
-
-const currentDate = new Date();
-const currentDay = currentDate.getDate();
-const currentYear = currentDate.getFullYear();
-const currentMonth = currentDate.getMonth();
 
 describe('#Calculate total revenue for a date range', () => {
   let patients;
@@ -77,6 +68,7 @@ describe('#Calculate total revenue for a date range', () => {
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
+    await seedTestChairs();
     patients = await Patient.bulkCreate([
       makePatientData({
         firstName: 'Old',
@@ -89,7 +81,10 @@ describe('#Calculate total revenue for a date range', () => {
     ]);
     const ws = await WeeklySchedule.create(weeklySchedule);
 
-    await Account.update({ weeklyScheduleId: ws.get({ plain: true }).id }, { where: { id: accountId } });
+    await Account.update(
+      { weeklyScheduleId: ws.get({ plain: true }).id },
+      { where: { id: accountId } },
+    );
   });
 
   afterAll(async () => {

@@ -274,6 +274,8 @@ export default function (sequelize, DataTypes) {
     isDeleted: false,
     isMissed: false,
     isPending: false,
+    practitionerId: { $not: null },
+    chairId: { $not: null },
     ...options,
   });
 

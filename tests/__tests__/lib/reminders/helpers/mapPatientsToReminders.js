@@ -1,48 +1,43 @@
 
-import moment from 'moment';
 import orderBy from 'lodash/orderBy';
 import {
-  Account,
   Appointment,
-  Chair,
   Patient,
-  Practitioner,
   Reminder,
-  SentReminder,
   Family,
-  WeeklySchedule,
 } from 'CareCruModels';
 import { mapPatientsToReminders } from '../../../../../server/lib/reminders/helpers';
 import { wipeAllModels } from '../../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../../util/seedTestPractitioners';
+import { seedTestChairs, chairId } from '../../../../util/seedTestChairs';
 
-const TIME_ZONE = 'America/Vancouver';
-
-const makeApptData = (data = {}) => Object.assign({
+const makeApptData = (data = {}) => ({
   accountId,
   patientId,
   practitionerId,
-}, data);
+  chairId,
+  ...data,
+});
 
-const makeFamilyData = (data = {}) => Object.assign({
+const makeFamilyData = (data = {}) => ({
   accountId,
-}, data);
+  ...data,
+});
 
-const makePatientData = (data = {}) => Object.assign({
+const makePatientData = (data = {}) => ({
   accountId,
   firstName: data.n,
   lastName: data.n,
-}, data);
+  ...data,
+});
 
 const date = (y, m, d, h, mi = 0) => (new Date(y, m, d, h, mi)).toISOString();
-const dates = (y, m, d, h, mi) => {
-  return {
-    startDate: date(y, m, d, h, mi),
-    endDate: date(y, m, d, h + 1, mi),
-  };
-};
+const dates = (y, m, d, h, mi) => ({
+  startDate: date(y, m, d, h, mi),
+  endDate: date(y, m, d, h + 1, mi),
+});
 
 const order = success => orderBy(orderBy(success, s => s.primaryType), s => s.patient.firstName);
 const orderPatients = patients => orderBy(patients, 'firstName');
@@ -53,6 +48,7 @@ describe('RemindersList Calculation Library', () => {
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
+    await seedTestChairs();
   });
 
   afterAll(async () => {

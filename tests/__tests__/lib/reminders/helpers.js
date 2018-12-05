@@ -1,8 +1,4 @@
 
-/**
- * MAJOR DISCLAIMER: this assumes the DB is seeded with seeds!
- */
-
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import {
@@ -26,32 +22,37 @@ import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
+import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 
 const TIME_ZONE = 'America/Vancouver';
 
-const makeApptData = (data = {}) => Object.assign({
+const makeApptData = (data = {}) => ({
   accountId,
   patientId,
   practitionerId,
-}, data);
+  chairId,
+  ...data,
+});
 
-const makePatientData = (data = {}) => Object.assign({ accountId }, data);
+const makePatientData = (data = {}) => ({
+  accountId,
+  ...data,
+});
 
-const makeSentReminderData = (data = {}) => Object.assign({
+const makeSentReminderData = (data = {}) => ({
   // Doesn't even have to match reminder for this test
   contactedPatientId: patientId,
   accountId,
   interval: '1 days',
   primaryType: 'sms',
-}, data);
+  ...data,
+});
 
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
-const dates = (y, m, d, h) => {
-  return {
-    startDate: date(y, m, d, h),
-    endDate: date(y, m, d, h + 1),
-  };
-};
+const dates = (y, m, d, h) => ({
+  startDate: date(y, m, d, h),
+  endDate: date(y, m, d, h + 1),
+});
 
 const td = d => tzIso(d, TIME_ZONE);
 
@@ -149,6 +150,7 @@ describe('RemindersList Calculation Library', () => {
     await seedTestUsers();
     await seedTestPatients();
     await seedTestPractitioners();
+    await seedTestChairs();
   });
 
   afterAll(async () => {

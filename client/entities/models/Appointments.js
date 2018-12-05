@@ -37,6 +37,8 @@ export default class Appointments extends createModel(AppointmentsSchema) {
       isDeleted: false,
       isMissed: false,
       isPending: false,
+      practitionerId: { $not: null },
+      chairId: { $not: null },
       ...options,
     };
   }
