@@ -137,6 +137,54 @@ electron.once(RESPONSE_HOST, (event, { locale }) => {
         store.dispatch(logout());
       });
     }
+
+    // Contex menu
+    const { remote } = window.require('electron');
+    const { Menu } = remote;
+
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Undo',
+        role: 'undo',
+      },
+      {
+        label: 'Redo',
+        role: 'redo',
+      },
+      { type: 'separator' },
+      {
+        label: 'Cut',
+        role: 'cut',
+      },
+      {
+        label: 'Copy',
+        role: 'copy',
+      },
+      {
+        label: 'Paste',
+        role: 'paste',
+      },
+      { type: 'separator' },
+      {
+        label: 'Select all',
+        role: 'selectall',
+      },
+    ]);
+
+    window.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      let element = e.target;
+      while (element) {
+        if (element.nodeName.match(/^(input|textarea)$/i) || element.isContentEditable) {
+          contextMenu.popup(remote.getCurrentWindow());
+          break;
+        }
+        element = element.parentNode;
+      }
+    });
+
     // TODO: define globals with webpack ProvidePlugin
     window.store = store;
     window.browserHistory = browserHistory;
