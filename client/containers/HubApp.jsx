@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import DocumentTitle from 'react-document-title';
 import classNames from 'classnames';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
@@ -10,13 +11,10 @@ import PageHeading from '../components/PageHeading';
 import SubTabs from '../components/SubTabs';
 import AlertContainer from '../containers/AlertContainer';
 import { TOOLBAR_LEFT, TOOLBAR_RIGHT } from '../util/hub';
+import { locationShape } from '../../client/components/library/PropTypeShapes/routerShapes';
 import styles from './styles.scss';
 
-function HubApp(props) {
-  const {
-    location, children, isSearchCollapsed, showContent, toolbarPosition,
-  } = props;
-
+function HubApp({ location, children, isSearchCollapsed, showContent, toolbarPosition }) {
   const isLoginPage = location.pathname.includes('login');
 
   if (isLoginPage) {
@@ -25,6 +23,7 @@ function HubApp(props) {
 
   return (
     <div>
+      <DocumentTitle title="CareCru Hub" />
       <div
         className={classNames(styles.hubContentContainer, {
           [styles.left]: toolbarPosition === TOOLBAR_LEFT,
@@ -59,9 +58,7 @@ function HubApp(props) {
 
 HubApp.propTypes = {
   children: PropTypes.node,
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }),
+  location: PropTypes.shape(locationShape),
   isSearchCollapsed: PropTypes.bool.isRequired,
   showContent: PropTypes.bool.isRequired,
   toolbarPosition: PropTypes.oneOf([TOOLBAR_LEFT, TOOLBAR_RIGHT]),
