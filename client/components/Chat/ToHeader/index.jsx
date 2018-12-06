@@ -7,6 +7,7 @@ import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
 import { isHub } from '../../../util/hub';
 import UnknownPatient from '../unknownPatient';
+import { FormatPhoneNumber } from '../../library/util/Formatters';
 import styles from './styles.scss';
 
 const toInputTheme = {
@@ -20,7 +21,7 @@ class ToHeader extends Component {
   renderPatientName() {
     const { isUnknown, firstName, lastName, cellPhoneNumber } = this.props.selectedPatient;
     return isUnknown ? (
-      <span>{cellPhoneNumber}</span>
+      <span>{FormatPhoneNumber(cellPhoneNumber)}</span>
     ) : (
       <span>
         <span>{firstName}</span>

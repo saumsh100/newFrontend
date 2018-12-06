@@ -8,6 +8,7 @@ import { Icon, ListItem, Avatar } from '../../../library';
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import { isHub } from '../../../../util/hub';
 import UnknownPatient from '../../unknownPatient';
+import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import styles from './styles.scss';
 
 class ChatListItem extends Component {
@@ -48,14 +49,16 @@ class ChatListItem extends Component {
     return patient.firstName || patient.lastName ? (
       <div className={styles.nameAgeWrapper}>
         <div data-test-id="chat_patientName" className={styles.nameWithAge}>
-          {patient.isUnknown ? patient.cellPhoneNumber : `${patient.firstName} ${patient.lastName}`}
+          {patient.isUnknown
+            ? FormatPhoneNumber(patient.cellPhoneNumber)
+            : `${patient.firstName} ${patient.lastName}`}
         </div>
         {patient.birthDate && (
           <div className={styles.age}>{moment().diff(patient.birthDate, 'years')}</div>
         )}
       </div>
     ) : (
-      <div className={styles.name}>{patient.cellPhoneNumber}</div>
+      <div className={styles.name}>{FormatPhoneNumber(patient.cellPhoneNumber)}</div>
     );
   }
 
