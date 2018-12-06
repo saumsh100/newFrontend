@@ -7,8 +7,9 @@ import customDataTypes from '../util/customDataTypes';
 import coalesce from '../../iso/helpers/coalesce';
 import convertToCommsPreferences from '../util/convertToCommsPreferences';
 import { UniqueFieldError } from './errors';
+import { validateExpressRequest } from 'twilio/lib/webhooks/webhooks';
 
-const { validateAccountIdPmsId } = require('../util/validators');
+const { validateAccountIdPmsId, isValidEmail } = require('../util/validators');
 
 const STATUS = {
   ACTIVE: 'Active',
@@ -44,7 +45,14 @@ export default function (sequelize, DataTypes) {
 
     email: {
       type: DataTypes.STRING,
-      validate: { isEmail: true },
+      allowNull: true,
+      validate: {
+        isEmailAndEmpty(value) {
+          if (value && !isValidEmail(value)) {
+            throw new Error('Error: Must be valid email address!');
+          }
+        },
+      },
     },
 
     firstName: {

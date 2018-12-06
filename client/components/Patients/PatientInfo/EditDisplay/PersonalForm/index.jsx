@@ -11,6 +11,7 @@ import { isResponsive } from '../../../../../util/hub';
 import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import PatientModel from '../../../../../entities/models/Patient';
 import styles from '../styles.scss';
+import { isValidEmail } from '../../../../../../server/util/validators';
 
 const normalizeBirthdate = value => value.trim();
 
@@ -40,6 +41,15 @@ const validateZipcodePostal = (value, country) => {
   }
 
   return undefined;
+};
+
+const validateEmail = (value) => {
+  if (!value) return undefined;
+
+  if (isValidEmail(value)) {
+    return undefined;
+  }
+  return 'This is not a valid email address.';
 };
 
 const optionsGender = [{ value: 'Male' }, { value: 'Female' }];
@@ -212,7 +222,13 @@ class PersonalForm extends PureComponent {
               <Field name="workPhoneNumber" type="tel" label="Work Number" theme={inputStyle} />
             </Col>
             <Col xs={12}>
-              <Field name="email" label="Email" theme={inputStyle} />
+              <Field
+                validate={validateEmail}
+                type="email"
+                name="email"
+                label="Email"
+                theme={inputStyle}
+              />
             </Col>
           </Row>
         </Grid>
