@@ -4,7 +4,7 @@ import { setPatientSearchedAction, setPatientSearchedListAction } from '../reduc
 import addPatientSearch from '../components/RelayPatientSearch/addPatientSearch';
 import fetchPatientSearches from '../components/RelayPatientSearch/fetchPatientSearches';
 
-export const setPatientSearched = patient => (dispatch) => {
+export const setPatientSearched = (patient, context = 'topBar') => (dispatch) => {
   const token = localStorage.getItem('token');
   const { activeAccountId, userId } = jwt(token);
 
@@ -13,9 +13,11 @@ export const setPatientSearched = patient => (dispatch) => {
       patientId: patient.ccId,
       accountId: activeAccountId,
       userId,
+      context,
     })
     .then(addedPatient => dispatch(setPatientSearchedAction(addedPatient)));
 };
 
-export const setPatientSearchedList = () => dispatch =>
-  fetchPatientSearches().then(patientList => dispatch(setPatientSearchedListAction(patientList)));
+export const setPatientSearchedList = (context = 'topBar') => dispatch =>
+  fetchPatientSearches(context).then(patientList =>
+    dispatch(setPatientSearchedListAction(patientList)));

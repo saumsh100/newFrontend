@@ -20,6 +20,10 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.UUID,
       allowNull: false,
     },
+    context: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   });
 
   PatientSearches.associate = ({ User, Account, Patient }) => {

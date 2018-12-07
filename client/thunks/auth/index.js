@@ -10,6 +10,7 @@ import { setPatientSearchedList } from '../patientSearch';
 import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../../socket/connectSocketToConnectStore';
 import SubscriptionManager from '../../util/graphqlSubscriptions';
+import { isHub } from '../../util/hub';
 import socket from '../../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
@@ -50,7 +51,7 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
       dispatch(updateFeatureFlagsContext(userData));
 
       dispatch(loginSuccess(userSession));
-      dispatch(setPatientSearchedList());
+      dispatch(setPatientSearchedList(isHub() ? 'hub' : 'topBar'));
       return userSession;
     })
     .catch((error) => {

@@ -1,9 +1,9 @@
 
+import { PatientSearches } from 'CareCruModels';
 import { connectionArgs } from 'graphql-relay';
 import { defaultListArgs } from 'graphql-sequelize';
 import { patientSearchesConnection } from './types';
 import { connectionFromArrayWithoutSlice } from '../../util';
-import { PatientSearches } from 'CareCruModels';
 
 const Sequelize = require('sequelize');
 
@@ -15,7 +15,7 @@ export default resolverOptions => ({
 
     resolve: async (_, args, context) => {
       // separate sequelize args from connections args
-      const { limit = 10, ...rest } = args;
+      const { limit = 10, where, ...rest } = args;
 
       const options = {
         attributes: [
@@ -23,26 +23,27 @@ export default resolverOptions => ({
           'userId',
           'accountId',
           'patientId',
+          'context',
           [Sequelize.fn('max', Sequelize.col('createdAt')), 'createdAt'],
           [Sequelize.fn('max', Sequelize.col('updatedAt')), 'updatedAt'],
           [Sequelize.fn('max', Sequelize.col('deletedAt')), 'deletedAt'],
         ],
         where: {
           userId: context.sessionData.userId,
+          context: (where && where.context) || 'topBar',
         },
-        group: ['userId', 'accountId', 'patientId'],
+        group: ['userId', 'accountId', 'patientId', 'context'],
         order: [[Sequelize.fn('max', Sequelize.col('createdAt')), 'DESC']],
         limit,
       };
 
       // merge sequelize args to resolverOptions from the viewer
       // use the options on the sequelize call and the rest of the args on Relay
-      const data = await PatientSearches.findAndCountAll(
-        resolverOptions.before(options, args, context),
-      );
-      const connectionData = connectionFromArrayWithoutSlice(data.rows, rest, {
-        arrayLength: data.count,
-      });
+      const data =
+        await PatientSearches.findAndCountAll(resolverOptions.before(options, args, context));
+
+      const connectionData =
+        connectionFromArrayWithoutSlice(data.rows, rest, { arrayLength: data.count });
 
       return { ...connectionData };
     },

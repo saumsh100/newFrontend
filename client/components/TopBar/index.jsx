@@ -190,6 +190,7 @@ class TopBar extends Component {
                   focusInputOnMount
                   onChange={this.onSearchSelect}
                   inputProps={patientSearchInputProps}
+                  context="topBar"
                   theme={searchTheme}
                 />
               )}

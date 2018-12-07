@@ -261,7 +261,7 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const { onChange, inputProps, theme, searchedPatients, hideRecentSearch } = this.props;
+    const { onChange, inputProps, theme, searchedPatients } = this.props;
     const newTheme = StyleExtender(theme, styles);
 
     const renderListFooter = this.renderListFooterFactory(newTheme);
@@ -277,7 +277,7 @@ class PatientSearch extends Component {
     return (
       <Downshift
         onChange={(patient) => {
-          this.props.setPatientSearched(patient);
+          this.props.setPatientSearched(patient, context);
           onChange(patient);
         }}
         stateReducer={this.handleDownshiftStateReducer}
@@ -364,12 +364,12 @@ PatientSearch.propTypes = {
     lastApptDate: PropTypes.string,
   })),
   setPatientSearched: PropTypes.func,
+  context: PropTypes.string.isRequired,
 };
 
 PatientSearch.defaultProps = {
   focusInputOnMount: false,
   resetInputOnSelection: false,
-  hideRecentSearch: false,
   inputProps: null,
   theme: null,
   searchedPatients: [],

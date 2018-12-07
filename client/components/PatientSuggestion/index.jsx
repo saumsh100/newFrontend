@@ -18,19 +18,18 @@ const PatientSuggestion = ({
 }) => {
   const newTheme = StyleExtender(theme, styles);
   const fullName = `${patient.firstName} ${patient.lastName}`;
-  const age = patient.birthDate
-    ? `, ${moment().diff(patient.birthDate, 'years')}`
-    : '';
+  const age = patient.birthDate ? `, ${moment().diff(patient.birthDate, 'years')}` : '';
   const patientString = `${fullName}${age}`;
   const inputSearch = inputValue.split(' ').filter(v => v !== '');
 
   return (
     <div
       key={patient.id}
-      {...getItemProps({ id: patient.id, item: patient })}
-      className={classNames({
-        [newTheme.highlightedIndex]: highlightedIndex === index,
-      })}
+      {...getItemProps({
+ id: patient.id,
+item: patient,
+})}
+      className={classNames({ [newTheme.highlightedIndex]: highlightedIndex === index })}
     >
       <div className={newTheme.suggestionContainer}>
         <Avatar user={patient} size="xs" />
@@ -46,9 +45,7 @@ const PatientSuggestion = ({
           </div>
           <div className={newTheme.suggestionContainer_date}>
             Last Appointment:{' '}
-            {patient.lastApptDate
-              ? moment(patient.lastApptDate).format('MMM D YYYY')
-              : 'n/a'}
+            {patient.lastApptDate ? moment(patient.lastApptDate).format('MMM D YYYY') : 'n/a'}
           </div>
         </div>
       </div>
@@ -67,6 +64,7 @@ PatientSuggestion.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     birthDate: PropTypes.string,
+    context: PropTypes.string,
   }).isRequired,
   index: PropTypes.number,
   inputValue: PropTypes.string,

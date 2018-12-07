@@ -87,6 +87,7 @@ input addPatientInput {
   mobilePhoneNumber: String
   workPhoneNumber: String
   otherPhoneNumber: String
+  cellPhoneNumber: String
   prefContactPhone: String
   gender: String
   prefName: String
@@ -123,7 +124,6 @@ input addPatientInput {
   avatarUrl: String
   omitReminderIds: [String]!
   omitRecallIds: [String]!
-  cellPhoneNumber: String
   foundChatId: String
   clientMutationId: String
 }
@@ -137,6 +137,7 @@ input addPatientSearchesInput {
   userId: String!
   accountId: String!
   patientId: String!
+  context: String
   clientMutationId: String
 }
 
@@ -293,6 +294,7 @@ type Patient implements Node {
   mobilePhoneNumber: String
   workPhoneNumber: String
   otherPhoneNumber: String
+  cellPhoneNumber: String
   prefContactPhone: String
   gender: String
   prefName: String
@@ -330,7 +332,6 @@ type Patient implements Node {
   avatarUrl: String
   omitReminderIds: [String]!
   omitRecallIds: [String]!
-  cellPhoneNumber: String
   foundChatId: String
   createdAt: String!
   updatedAt: String!
@@ -369,6 +370,7 @@ type PatientSearches implements Node {
   userId: String!
   accountId: String!
   patientId: String!
+  context: String
   createdAt: String!
   updatedAt: String!
   ccId: String
@@ -472,6 +474,7 @@ input updatePatientInput {
   mobilePhoneNumber: String
   workPhoneNumber: String
   otherPhoneNumber: String
+  cellPhoneNumber: String
   prefContactPhone: String
   gender: String
   prefName: String
@@ -508,7 +511,6 @@ input updatePatientInput {
   avatarUrl: String
   omitReminderIds: [String]!
   omitRecallIds: [String]!
-  cellPhoneNumber: String
   foundChatId: String
   clientMutationId: String
 }

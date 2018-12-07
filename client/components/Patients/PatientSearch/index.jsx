@@ -27,7 +27,10 @@ class PatientSearch extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchEntities({ key: 'accounts', url: '/api/accounts' });
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: '/api/accounts',
+    });
   }
 
   togglePatientsInfo(patient) {
@@ -63,6 +66,7 @@ class PatientSearch extends Component {
             <Icon icon="search" className={styles.searchIcon} />
             <RelayPatientSearch
               focusInputOnMount
+              context="hub"
               onChange={this.togglePatientsInfo}
               inputProps={patientSearchInputProps}
               theme={styles}

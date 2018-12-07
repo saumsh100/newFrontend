@@ -17,7 +17,10 @@ const run = async () => {
 
     fs.writeFileSync(path.join(__dirname, `${filePath}.json`), JSON.stringify(result, null, 2));
     fs.writeFileSync(path.join(__dirname, `${filePath}.graphql`), schemaString);
+    console.log('Schema created');
   }
 };
 
-run().then(() => process.exit(0));
+run()
+  .then(() => process.exit(0))
+  .catch(e => console.log(e));

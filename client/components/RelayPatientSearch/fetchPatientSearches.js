@@ -3,12 +3,12 @@ import { fetchQuery, graphql } from 'relay-runtime'; // eslint-disable-line impo
 import graphQLEnvironment from '../../util/graphqlEnvironment';
 
 const query = graphql`
-  query fetchPatientSearches_Query {
+  query fetchPatientSearches_Query($where: SequelizeJSON!) {
     accountViewer {
       id
       accountId
       userId
-      patientSearches {
+      patientSearches(where: $where) {
         edges {
           node {
             patient {
@@ -28,7 +28,8 @@ const query = graphql`
   }
 `;
 
-export default async () => {
-  const payload = await fetchQuery(graphQLEnvironment, query);
+export default async (context = 'topBar') => {
+  const queryVariables = { where: { context } };
+  const payload = await fetchQuery(graphQLEnvironment, query, queryVariables);
   return payload.accountViewer.patientSearches.edges.map(v => v.node.patient).filter(p => !!p);
 };
