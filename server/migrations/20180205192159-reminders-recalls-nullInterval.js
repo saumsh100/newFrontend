@@ -25,6 +25,6 @@ module.exports = {
   },
 
   down: function (queryInterface, Sequelize) {
-
+    return Promise.resolve();
   },
 };

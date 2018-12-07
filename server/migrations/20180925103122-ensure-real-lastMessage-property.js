@@ -64,5 +64,7 @@ module.exports = {
     });
   },
 
-  down() {},
+  down() {
+    return Promise.resolve();
+  },
 };

@@ -29,5 +29,6 @@ module.exports = {
   down: function (queryInterface, Sequelize) {
     // There is no down function cause its too hard to implement
     // with setting defaultValue
+    return Promise.resolve();
   },
 };
