@@ -50,7 +50,7 @@ tableRouter.get(
 
       const countObj = {
         id: 'totalPatients',
-        count: patients.count.length > 1 ? patients.count.length : patients.count,
+        count: Array.isArray(patients.count) ? patients.count.length : patients.count,
       };
 
       const patientsToNormalize = [

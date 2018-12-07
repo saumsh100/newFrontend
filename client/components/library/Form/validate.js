@@ -64,6 +64,8 @@ const emailValidate = (value) => {
   }
 };
 
+const leftTrim = value => value.replace(/^\s+/g, '');
+
 const phoneNumberValidate = (value) => {
   if (
     !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value)
@@ -171,6 +173,7 @@ const validateBirthdate = (value) => {
 };
 
 export {
+  leftTrim,
   composeAsyncValidators,
   asyncValidatePatient,
   asyncEmailValidatePatient,

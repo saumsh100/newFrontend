@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import { Map } from 'immutable';
 import { change } from 'redux-form';
 import { bindActionCreators } from 'redux';
@@ -81,7 +82,6 @@ class SideBarFilters extends Component {
 
   removeTag(filter) {
     const { filterForms } = this.props;
-    this.props.removeFilter(filter);
 
     const [form] = Object.entries(filterForms).find(([, value]) => {
       const hasValue = value.values && value.values[filter];
@@ -107,26 +107,29 @@ class SideBarFilters extends Component {
 
   formHandler(values) {
     const parsedFilters = Object.entries(values)
-      .filter(([key, filterValues]) => {
-        if (!Array.isArray(filterValues)) {
-          this.props.removeFilter(key);
-          return filterValues !== '';
+      .filter(([, value]) => {
+        if (Array.isArray(value)) {
+          return value.filter(v => !!v).length > 1;
         }
-        if (filterValues.filter(v => !!v).length < 2) {
-          this.props.removeFilter(key);
-        }
-        return filterValues.filter(v => !!v).length > 1;
+        return value.trim() !== '';
       })
       .reduce(
-        (parsed, [filterKey, filterValue]) => {
-          parsed[filterKey] = filterValue;
-          return parsed;
-        },
+        (parsed, [filterKey, filterValue]) => ({
+          ...parsed,
+          [filterKey]: Array.isArray(filterValue) ? filterValue : filterValue.trim(),
+        }),
         { page: 0 },
       );
-
-    this.props.addFilter(parsedFilters);
-    this.props.setFilterCallback();
+    const { page, ...filtersToCompare } = parsedFilters;
+    if (!isEqual(this.props.filters, filtersToCompare)) {
+      Object.keys(this.props.filters).forEach((key) => {
+        if (!filtersToCompare[key]) {
+          this.props.removeFilter(key);
+        }
+      });
+      this.props.addFilter(parsedFilters);
+      this.props.setFilterCallback(parsedFilters);
+    }
   }
 
   render() {

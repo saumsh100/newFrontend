@@ -2,27 +2,10 @@
 import React from 'react';
 import { Field, FormSection } from '../../../../library';
 import TextField from '../FilterForm/Fields/TextField';
-import { notNegative, parseNum } from '../../../../library/Form/validate';
+import { leftTrim, notNegative, parseNum } from '../../../../library/Form/validate';
 import styles from '../styles.scss';
 
 const optionsGender = [{ value: 'Male' }, { value: 'Female' }];
-
-const optionsCity = [
-  { value: 'Calgary' },
-  { value: 'Edmonton' },
-  { value: 'Fredericton' },
-  { value: 'Halifax' },
-  { value: 'Montreal' },
-  { value: 'Quebec' },
-  { value: 'Regina' },
-  { value: 'Saskatoon' },
-  { value: 'St.John' },
-  { value: 'Toronto' },
-  { value: 'Vancouver' },
-  { value: 'Victoria' },
-  { value: 'Winnipeg' },
-];
-
 const optionsStatus = [{ value: 'Active' }, { value: 'Inactive' }];
 
 const theme = {
@@ -33,9 +16,9 @@ const theme = {
 const DemographicsForm = () => (
   <div className={styles.formContainer}>
     <div className={styles.formHeader}> Search By First Name</div>
-    <TextField name="firstName" data-test-id="search_firstName" />
+    <TextField name="firstName" data-test-id="search_firstName" normalize={leftTrim} />
     <div className={styles.formHeader}> Search By Last Name</div>
-    <TextField name="lastName" data-test-id="search_lastName" />
+    <TextField name="lastName" data-test-id="search_lastName" normalize={leftTrim} />
     <div className={styles.formHeader}> Age</div>
     <FormSection name="age" className={styles.formContainer_row}>
       <Field
@@ -71,16 +54,7 @@ const DemographicsForm = () => (
       />
     </div>
     <div className={styles.formHeader}> Location</div>
-    <div className={styles.formContainer_row}>
-      <Field
-        component="DropdownSelect"
-        name="city"
-        options={optionsCity}
-        className={styles.ddSelect}
-        label="City"
-        theme={theme}
-      />
-    </div>
+    <TextField name="city" normalize={leftTrim} />
     <div className={styles.formHeader}> Status</div>
     <div className={styles.formContainer_row}>
       <Field

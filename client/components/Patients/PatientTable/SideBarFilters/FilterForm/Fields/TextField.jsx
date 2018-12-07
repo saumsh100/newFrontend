@@ -4,22 +4,21 @@ import PropTypes from 'prop-types';
 import { Field } from '../../../../../library';
 import { input, group, icon, bar } from '../../styles.scss';
 
-export default function TextField({ name, theme, ...props }) {
-  return (
-    <Field
-      name={name}
-      theme={{
-        input,
-        group,
-        icon,
-        bar,
-        ...theme,
-      }}
-      icon="search"
-      data-test-id={props['data-test-id']}
-    />
-  );
-}
+const TextField = ({ name, theme, ...props }) => (
+  <Field
+    {...props}
+    name={name}
+    theme={{
+      input,
+      group,
+      icon,
+      bar,
+      ...theme,
+    }}
+    icon="search"
+    data-test-id={props['data-test-id']}
+  />
+);
 
 TextField.propTypes = {
   name: PropTypes.string.isRequired,
@@ -31,3 +30,5 @@ TextField.defaultProps = {
   theme: {},
   'data-test-id': '',
 };
+
+export default TextField;
