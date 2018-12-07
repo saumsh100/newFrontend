@@ -25,7 +25,7 @@ class AvailabilitiesModal extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { selectedReason: props.reasons[0].value };
+    this.state = { selectedReason: (props.reasons[0] && props.reasons[0].value) || '' };
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -66,12 +66,21 @@ class AvailabilitiesModal extends React.Component {
               </Button>
             </SHeader>
             <SBody className={styles.body}>
-              <DropdownSelect
-                label="Reason:"
-                value={this.state.selectedReason}
-                onChange={this.handleChange}
-                options={this.props.reasons}
-              />
+              {this.props.error && (
+                <div>
+                  {JSON.stringify(this.props.error, null, 2)}
+                  <h3>You still have some configuration to do.</h3>
+                  <p>It looks like you did not assign a reason to any practitioner.</p>
+                </div>
+              )}
+              {!this.props.error && (
+                <DropdownSelect
+                  label="Reason:"
+                  value={this.state.selectedReason}
+                  onChange={this.handleChange}
+                  options={this.props.reasons}
+                />
+              )}
               {Object.entries(availabilities)
                 .sort(([a], [b]) => sortAsc(a, b))
                 .map(([key, value]) => {
@@ -82,7 +91,7 @@ class AvailabilitiesModal extends React.Component {
                       <p key={practitioner.id} className={styles.practitionerBlock}>
                         <h2>{`${practitioner.get('type')} | ${practitioner.getPrettyName()}`}</h2>
                         {value.map(v => (
-                          <span className={styles.pill}>
+                          <span className={styles.pill} key={`${practitioner.id}${v.startDate}`}>
                             {`${dateFormatter(v.startDate, timezone, 'h:mma')} | ${dateFormatter(
                               v.endDate,
                               timezone,
@@ -116,6 +125,7 @@ AvailabilitiesModal.propTypes = {
   timezone: PropTypes.string.isRequired,
   scheduleDate: PropTypes.string.isRequired,
   availabilities: PropTypes.instanceOf(Map).isRequired,
+  error: PropTypes.instanceOf(Map).isRequired,
   reasons: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
     label: PropTypes.string,
@@ -126,7 +136,8 @@ AvailabilitiesModal.propTypes = {
 const mapStateToProps = ({ schedule, entities, auth }) => ({
   timezone: auth.get('timezone'),
   scheduleDate: schedule.get('scheduleDate').toISOString(),
-  availabilities: schedule.get('availabilities'),
+  availabilities: schedule.get('availabilities').toJS(),
+  error: schedule.get('error'),
   reasons: Object.values(entities.getIn(['services', 'models']).toJS()).map(v => ({
     value: v.id,
     label: v.name,

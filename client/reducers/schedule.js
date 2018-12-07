@@ -1,5 +1,5 @@
 
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 
 import {
@@ -19,7 +19,10 @@ import {
 const reducer = '@schedule/';
 
 const SET_AVAILABILITIES = `${reducer}SET_AVAILABILITIES`;
+const SET_AVAILABILITIES_ERROR = `${reducer}SET_AVAILABILITIES_ERROR`;
+
 export const setAvailabilities = createAction(SET_AVAILABILITIES);
+export const setAvailabilitiesError = createAction(SET_AVAILABILITIES_ERROR);
 
 const initialState = fromJS({
   scheduleDate: new Date(),
@@ -44,6 +47,7 @@ const initialState = fromJS({
   },
   createNewPatient: false,
   availabilities: {},
+  error: null,
 });
 
 export default handleActions(
@@ -121,7 +125,17 @@ export default handleActions(
     },
 
     [SET_AVAILABILITIES](state, { payload }) {
-      return state.set('availabilities', payload);
+      return state.merge({
+        availabilities: payload,
+        error: null,
+      });
+    },
+
+    [SET_AVAILABILITIES_ERROR](state, { payload }) {
+      return state.merge({
+        availabilities: Map(),
+        error: payload,
+      });
     },
   },
   initialState,

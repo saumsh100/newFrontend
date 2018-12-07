@@ -6,8 +6,9 @@ import groupBy from 'lodash/groupBy';
 import axios from 'axios';
 import { protocol, myHost } from '../../server/config/globals';
 import { addAllScheduleFilter, setMergingPatient, selectAppointment } from '../actions/schedule';
-import { setAvailabilities } from '../reducers/schedule';
+import { setAvailabilities, setAvailabilitiesError } from '../reducers/schedule';
 import { receiveEntities } from '../actions/entities';
+import { setDateToTimezone } from '../../server/util/time';
 
 export function checkPatientUser(patientUser, requestData) {
   return async function (dispatch) {
@@ -117,20 +118,30 @@ export function setAllFilters(entityKeys) {
 
 export function fetchAvailabilities(date, reasonId) {
   return async (dispatch, getState) => {
-    const { auth } = getState();
+    const { auth, schedule } = getState();
+    const scheduleDate = setDateToTimezone(schedule.get('scheduleDate'), auth.get('timezone'));
 
-    const { data: { availabilities } } = await axios.get(
-      `${protocol}://${myHost}/accounts/${auth.get('accountId')}/availabilities`,
-      {
-        params: {
-          serviceId: reasonId,
-          startDate: '2018-11-29T08:00:00.000Z',
-          endDate: '2018-12-04T08:00:00.000Z',
+    try {
+      const { data: { availabilities } } = await axios.get(
+        `${protocol}://${myHost}/accounts/${auth.get('accountId')}/availabilities`,
+        {
+          params: {
+            serviceId: reasonId,
+            startDate: scheduleDate.startOf('day').toISOString(),
+            endDate: scheduleDate
+              .clone()
+              .add(1, 'day')
+              .startOf('day')
+              .toISOString(),
+          },
         },
-      },
-    );
+      );
 
-    dispatch(setAvailabilities(groupBy(availabilities, 'practitionerId')));
+      dispatch(setAvailabilities(groupBy(availabilities, 'practitionerId')));
+    } catch (e) {
+      dispatch(setAvailabilitiesError(e));
+      console.error(e);
+    }
   };
 }
 
