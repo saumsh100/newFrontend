@@ -136,7 +136,7 @@ Object {
   "where": Object {
     "address": Object {
       "city": Object {
-        "$ilike": "%Calgary%",
+        "$iLike": "%Calgary%",
       },
     },
     "birthDate": Object {
@@ -145,11 +145,15 @@ Object {
         "2016-11-16T08:00:00.000Z",
       ],
     },
-    "firstName": "Aiden",
-    "gender": Object {
-      "$ilike": "%Female%",
+    "firstName": Object {
+      "$iLike": "Aiden%",
     },
-    "lastName": "Considine",
+    "gender": Object {
+      "$iLike": "Female%",
+    },
+    "lastName": Object {
+      "$iLike": "Considine%",
+    },
   },
 }
 `;

@@ -24,8 +24,10 @@ export default function missedCancelled(hours = 48) {
         model: Appointment,
         as: 'appointments',
         where: {
-          isMissed: true,
-          isCancelled: true,
+          $or: {
+            isMissed: true,
+            isCancelled: true,
+          },
           isDeleted: false,
           isPending: false,
           startDate: {

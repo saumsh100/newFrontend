@@ -12,12 +12,12 @@ import moment from 'moment-timezone';
  */
 export default function dueWithin(days = 60) {
   const currentDate = moment().startOf('day');
-  const startDate = currentDate
+  const startDate = currentDate.toISOString();
+  const endDate = currentDate
     .clone()
-    .subtract(days, 'day')
+    .add(days, 'day')
     .startOf('day')
     .toISOString();
-  const endDate = currentDate.toISOString();
   return {
     where: {
       $or: {
