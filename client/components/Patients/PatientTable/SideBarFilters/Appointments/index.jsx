@@ -58,7 +58,7 @@ export default function Appointments({ theme: { input, date } }) {
         />
       </FormSection>
       <div className={styles.formHeader}>Booked Appointments</div>
-      <FormSection name="appointmentsCount" className={styles.formContainer_row}>
+      <FormSection name="bookedAppointments" className={styles.formContainer_row}>
         <span className={styles.formContainer_dropDownInput}>
           <Field
             component="DropdownSelect"

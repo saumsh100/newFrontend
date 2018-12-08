@@ -94,9 +94,12 @@ class SideBarFilters extends Component {
 
     if (filterForms[form].values && filterForms[form].values[filter]) {
       this.props.change(form, filter, '');
-    } else {
-      this.props.setFilterCallback();
     }
+
+    this.formHandler({
+      ...filterForms[form].values,
+      [filter]: '',
+    });
   }
 
   clearTags() {
@@ -123,10 +126,11 @@ class SideBarFilters extends Component {
     const { page, ...filtersToCompare } = parsedFilters;
     if (!isEqual(this.props.filters, filtersToCompare)) {
       Object.keys(this.props.filters).forEach((key) => {
-        if (!filtersToCompare[key]) {
+        if (!filtersToCompare[key] && key in values) {
           this.props.removeFilter(key);
         }
       });
+
       this.props.addFilter(parsedFilters);
       this.props.setFilterCallback(parsedFilters);
     }
