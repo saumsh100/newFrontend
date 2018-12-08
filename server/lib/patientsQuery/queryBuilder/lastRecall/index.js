@@ -3,8 +3,7 @@ import { SentRecall, sequelize } from 'CareCruModels';
 
 /**
  * builds a query object for sequelize query for the last recall sent between two dates.
- * @param endDate
- * @param startDate
+ * @param dates string[]
  * @returns {{
  *    attributes: *[][],
  *    include: {
@@ -21,7 +20,7 @@ import { SentRecall, sequelize } from 'CareCruModels';
  *    having: *[]
  *  }}
  */
-export default function queryLastReminder([endDate, startDate]) {
+export default function queryLastReminder(dates) {
   return {
     attributes: [
       [
@@ -44,7 +43,7 @@ export default function queryLastReminder([endDate, startDate]) {
       {},
       sequelize.where(
         sequelize.fn('max', sequelize.col('sentRecalls.createdAt')),
-        { $between: [endDate, startDate] },
+        { $between: dates },
       ),
     ],
   };

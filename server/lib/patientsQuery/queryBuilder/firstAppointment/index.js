@@ -1,9 +1,9 @@
 
 /**
  * builds a query object for sequelize query based on firstApptDate field of the Patient model.
- * @param value string[]
+ * @param dates string[]
  * @returns {{where: {firstApptDate: {$between: *[]}}}}
  */
-export default function queryFirstAppointment([endDate, startDate]) {
-  return { where: { firstApptDate: { $between: [startDate, endDate] } } };
+export default function queryFirstAppointment(dates) {
+  return { where: { firstApptDate: { $between: dates } } };
 }
