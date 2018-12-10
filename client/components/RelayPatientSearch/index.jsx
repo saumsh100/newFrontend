@@ -261,7 +261,7 @@ class PatientSearch extends Component {
   }
 
   render() {
-    const { onChange, inputProps, theme, searchedPatients } = this.props;
+    const { onChange, inputProps, theme, searchedPatients, hideRecentSearch, context } = this.props;
     const newTheme = StyleExtender(theme, styles);
 
     const renderListFooter = this.renderListFooterFactory(newTheme);
@@ -364,16 +364,18 @@ PatientSearch.propTypes = {
     lastApptDate: PropTypes.string,
   })),
   setPatientSearched: PropTypes.func,
-  context: PropTypes.string.isRequired,
+  context: PropTypes.string,
 };
 
 PatientSearch.defaultProps = {
+  context: 'topBar',
   focusInputOnMount: false,
-  resetInputOnSelection: false,
   inputProps: null,
-  theme: null,
+  resetInputOnSelection: false,
   searchedPatients: [],
   setPatientSearched: () => {},
+  theme: null,
+  hideRecentSearch: true,
 };
 
 const mapStateToProps = ({ patientSearch }) => ({ searchedPatients: patientSearch.get('searchedPatients').toArray() });

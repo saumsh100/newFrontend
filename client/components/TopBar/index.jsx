@@ -188,9 +188,9 @@ class TopBar extends Component {
               {!this.props.isSearchCollapsed && (
                 <RelayPatientSearch
                   focusInputOnMount
+                  hideRecentSearch={false}
                   onChange={this.onSearchSelect}
                   inputProps={patientSearchInputProps}
-                  context="topBar"
                   theme={searchTheme}
                 />
               )}
