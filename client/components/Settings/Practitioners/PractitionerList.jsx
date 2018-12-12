@@ -4,19 +4,9 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
-import {
-  createEntityRequest,
-  updateEntityRequest,
-} from '../../../thunks/fetchEntities';
-import { setPractitionerId } from '../../../actions/accountSettings';
-import {
-  BadgeHeader,
-  Card,
-  Button,
-  SContainer,
-  SHeader,
-  SBody,
-} from '../../library';
+import { createEntityRequest, updateEntityRequest } from '../../../thunks/fetchEntities';
+import { setPractitionerId } from '../../../reducers/accountSettings';
+import { BadgeHeader, Card, Button, SContainer, SHeader, SBody } from '../../library';
 import PractitionerTabs from './PractitionerTabs';
 import PractitionerItem from './PractitionerItem';
 import CreatePractitionerForm from './CreatePractitionerForm';
@@ -27,9 +17,7 @@ import styles from './styles.scss';
 class PractitionerList extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false,
-    };
+    this.state = { active: false };
 
     this.setActive = this.setActive.bind(this);
     this.createPractitioner = this.createPractitioner.bind(this);
@@ -58,24 +46,25 @@ class PractitionerList extends Component {
     }
 
     const alert = {
-      success: {
-        body: `${values.firstName} was added as a practitioner.`,
-      },
-      error: {
-        body: `${values.firstName} could not be added as a practitioner.`,
-      },
+      success: { body: `${values.firstName} was added as a practitioner.` },
+      error: { body: `${values.firstName} could not be added as a practitioner.` },
     };
 
     // creates the practitioner and then updates with all services set to true
     this.props
-      .createEntityRequest({ key, entityData: values })
+      .createEntityRequest({
+        key,
+        entityData: values,
+      })
       .then((entities) => {
         const id = Object.keys(entities[key])[0];
         const savedPrac = entities[key][id];
 
-        savedPrac.id = id;
-        savedPrac.services = serviceIds;
-        const modifiedPrac = Map(savedPrac);
+        const modifiedPrac = Map({
+          ...savedPrac,
+          id,
+          services: serviceIds,
+        });
 
         this.props.updateEntityRequest({
           key: 'practitioners',
@@ -108,7 +97,10 @@ class PractitionerList extends Component {
         label: 'Save',
         onClick: this.createPractitioner,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: formName },
+        props: {
+          color: 'blue',
+          form: formName,
+        },
       },
     ];
 
@@ -139,26 +131,21 @@ class PractitionerList extends Component {
                 title="Add New Practitioner"
                 actions={actions}
               >
-                <CreatePractitionerForm
-                  formName={formName}
-                  onSubmit={this.createPractitioner}
-                />
+                <CreatePractitionerForm formName={formName} onSubmit={this.createPractitioner} />
               </DialogBox>
             </SHeader>
             <SBody>
-              {practitioners
-                .toArray()
-                .map(practitioner => (
-                  <PractitionerItem
-                    key={practitioner.get('id')}
-                    id={practitioner.get('id')}
-                    practitionerId={selectedPractitioner.get('id')}
-                    practitioner={practitioner}
-                    fullName={practitioner.getFullName()}
-                    setPractitionerId={this.props.setPractitionerId}
-                    data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
-                  />
-                ))}
+              {practitioners.toArray().map(practitioner => (
+                <PractitionerItem
+                  key={practitioner.get('id')}
+                  id={practitioner.get('id')}
+                  practitionerId={selectedPractitioner.get('id')}
+                  practitioner={practitioner}
+                  fullName={practitioner.getFullName()}
+                  setPractitionerId={this.props.setPractitionerId}
+                  data-test-id={`${practitioner.get('firstName')}${practitioner.get('lastName')}`}
+                />
+              ))}
             </SBody>
           </SContainer>
         </Card>
@@ -189,9 +176,7 @@ function mapStateToProps({ accountSettings }, { practitioners }) {
     ? practitioners.get(practitionerId)
     : practitioners.first();
 
-  return {
-    selectedPractitioner,
-  };
+  return { selectedPractitioner };
 }
 function mapActionsToProps(dispatch) {
   return bindActionCreators(

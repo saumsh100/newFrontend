@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchEntities } from '../../../thunks/fetchEntities';
-import { setServiceId } from '../../../actions/accountSettings';
+import { setServiceId } from '../../../reducers/accountSettings';
 import ServiceListContainer from './ServiceListContainer';
 import ServiceDataContainer from './ServiceDataContainer';
 import styles from './styles.scss';
@@ -25,7 +25,10 @@ const sortServicesAlphabetical = (a, b) => {
 
 class Reasons extends Component {
   componentDidMount() {
-    this.props.fetchEntities({ key: 'services', join: ['practitioners'] });
+    this.props.fetchEntities({
+      key: 'services',
+      join: ['practitioners'],
+    });
     this.props.fetchEntities({ key: 'practitioners' });
     this.props.setServiceId({ id: null });
   }
@@ -100,6 +103,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Reasons);

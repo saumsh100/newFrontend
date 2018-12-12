@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`accountSettings reducer reducer work 1`] = `
+Immutable.Map {
+  "serviceId": "123123123",
+  "practitionerId": null,
+}
+`;
+
+exports[`accountSettings reducer reducer work 2`] = `
+Immutable.Map {
+  "serviceId": null,
+  "practitionerId": "33333",
+}
+`;
+
+exports[`accountSettings reducer setPractitionerId 1`] = `
+Object {
+  "payload": Object {
+    "id": "33333",
+  },
+  "type": "@accountSettings/SET_PRACTITIONER_ID",
+}
+`;
+
+exports[`accountSettings reducer setServiceId 1`] = `
+Object {
+  "payload": Object {
+    "id": "123123123",
+  },
+  "type": "@accountSettings/SET_SERVICE_ID",
+}
+`;
