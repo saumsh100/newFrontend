@@ -1,5 +1,6 @@
 
 import { Router } from 'express';
+import pick from 'lodash/pick';
 import url from 'url';
 import {
   Account,
@@ -183,27 +184,28 @@ myRouter.post('/reset-password/:tokenId', (req, res, next) => {
 
 myRouter.get('/sentReminders/:sentReminderId/confirm', async (req, res, next) => {
   try {
-    // TODO: it's stuff like this that we need to put into a "Manager" SentReminderManager.confirm();
     const { sentReminder } = req;
 
     await sentReminder.update({ isConfirmed: true });
 
     // For any confirmed reminder we confirm appointment
-    const { patient: contactedPatient, reminder } = sentReminder;
+    const { reminder, sentRemindersPatients, accountId } = sentReminder;
 
-    await Promise.all(sentReminder.sentRemindersPatients
+    await Promise.all(sentRemindersPatients
       .map(({ appointment }) => appointment.confirm(reminder)));
 
-    const account = await Account.findOne({ where: { id: sentReminder.accountId } });
+    const account = await Account.findOne({
+      where: { id: accountId },
+      attributes: ['addressId', 'phoneNumber', 'contactEmail', 'bookingWidgetPrimaryColor', 'website', 'timezone'],
+    });
 
     const params = {
-      contactedPatient: contactedPatient.get({ plain: true }),
-      appointments: sentReminder.sentRemindersPatients.map(({ appointment, patient }) => ({
-        ...appointment.get({ plain: true }),
-        patient: patient.get({ plain: true }),
+      account: account.get({ plain: true }),
+      appointments: sentRemindersPatients.map(({ appointment, patient }) => ({
+        ...pick(appointment.get({ plain: true }), ['id', 'startDate', 'endDate']),
+        patient: pick(patient.get({ plain: true }), ['firstName', 'lastName']),
       })),
-      account: generateAccountParams(account),
-      reminder: reminder.get({ plain: true }),
+      ...pick(reminder.get({ plain: true }), ['isCustomConfirm']),
     };
 
     const encodedParams = encodeParams(params);

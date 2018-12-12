@@ -7,7 +7,7 @@ import { Icon, Well } from '../../../library/index';
 import ClassyDiv from '../../../library/util/ClassyDiv';
 import Section from '../Shared/Section';
 import styles from './styles.scss';
-import { accountShape, appointmentShape, reminderShape } from '../../../library/PropTypeShapes';
+import { accountShape, appointmentShape } from '../../../library/PropTypeShapes';
 
 const WellHeader = ClassyDiv(styles.wellHeader);
 const WellItem = ClassyDiv(styles.wellItem);
@@ -57,7 +57,7 @@ export default function ConfirmedAppointment({
   params: {
     account: { address, phoneNumber, contactEmail, bookingWidgetPrimaryColor, website, timezone },
     appointments,
-    reminder,
+    isCustomConfirm,
   },
 }) {
   const { street, city, state } = address;
@@ -70,7 +70,7 @@ export default function ConfirmedAppointment({
         <div className={styles.header}>Thank you!</div>
         <div className={styles.text}>
           {`Your appointment${appointments.length > 1 ? 's have' : ' has'} been ${
-            reminder.isCustomConfirm ? 'pre-confirmed' : 'confirmed'
+            isCustomConfirm ? 'pre-confirmed' : 'confirmed'
           }.`}
         </div>
       </Section>
@@ -108,6 +108,6 @@ ConfirmedAppointment.propTypes = {
   params: PropTypes.shape({
     account: PropTypes.shape(accountShape),
     appointment: PropTypes.arrayOf(PropTypes.shape(appointmentShape)),
-    reminder: PropTypes.shape(reminderShape),
+    isCustomConfirm: PropTypes.bool,
   }).isRequired,
 };
