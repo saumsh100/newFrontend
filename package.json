@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.46.5",
+  "version": "2.47.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -151,7 +151,7 @@
     "jwt-decode": "^2.1.0",
     "kue": "^0.11.5",
     "ldclient-js": "^1.5.1",
-    "ldclient-node": "^3.2.0",
+    "ldclient-node": "^5.6.2",
     "lodash": "^4.4.0",
     "logrocket": "^0.4.2",
     "mandrill-api": "^1.0.45",
