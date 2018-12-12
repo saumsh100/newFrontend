@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.50.0",
+  "version": "2.50.1",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -140,7 +140,6 @@
     "graphql-relay": "^0.5.5",
     "graphql-sequelize": "^8.0.0",
     "graphql-subscriptions": "^0.5.8",
-    "helmet": "^3.15.0",
     "history": "^4.6.1",
     "ics": "^1.5.0",
     "ifrau": "^0.21.0",
