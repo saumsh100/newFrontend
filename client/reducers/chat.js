@@ -3,20 +3,20 @@ import { Map } from 'immutable';
 import { createAction, handleActions } from 'redux-actions';
 import tabConstants from '../components/Chat/consts';
 
-export const SET_SELECTED_CHAT = '@chat/SET_SELECTED_CHAT';
-export const UPDATE_CHAT_ID = '@chat/UPDATE_CHAT_ID';
-export const SET_NEW_CHAT = '@chat/SET_NEW_CHAT';
-export const MERGE_NEW_CHAT = '@chat/MERGE_NEW_CHAT';
-export const SET_UNREAD_CHATS = '@chat/SET_UNREAD_CHATS';
-export const SET_CHAT_MESSAGES = '@chat/SET_CHAT_MESSAGES';
-export const SET_LOCKED_CHATS = '@chat/SET_LOCKED_CHATS';
-export const SET_CHAT_POC = '@chat/SET_CHAT_POC';
-export const SET_TOTAL_CHAT_MESSAGES = '@chat/SET_TOTAL_CHAT_MESSAGES';
+const reducer = '@chat';
+
+export const SET_SELECTED_CHAT = `${reducer}/SET_SELECTED_CHAT`;
+export const UPDATE_CHAT_ID = `${reducer}/UPDATE_CHAT_ID`;
+export const SET_NEW_CHAT = `${reducer}/SET_NEW_CHAT`;
+export const SET_UNREAD_CHATS = `${reducer}/SET_UNREAD_CHATS`;
+export const SET_CHAT_MESSAGES = `${reducer}/SET_CHAT_MESSAGES`;
+export const SET_LOCKED_CHATS = `${reducer}/SET_LOCKED_CHATS`;
+export const SET_CHAT_POC = `${reducer}/SET_CHAT_POC`;
+export const SET_TOTAL_CHAT_MESSAGES = `${reducer}/SET_TOTAL_CHAT_MESSAGES`;
 
 export const setSelectedChat = createAction(SET_SELECTED_CHAT);
 export const updateChatId = createAction(UPDATE_CHAT_ID);
 export const setNewChat = createAction(SET_NEW_CHAT);
-export const mergeNewChat = createAction(MERGE_NEW_CHAT);
 export const setUnreadChats = createAction(SET_UNREAD_CHATS);
 export const setChatMessages = createAction(SET_CHAT_MESSAGES);
 export const setLockedChats = createAction(SET_LOCKED_CHATS);
@@ -51,11 +51,6 @@ export default handleActions(
 
     [SET_NEW_CHAT](state, { payload }) {
       return state.set('newChat', payload);
-    },
-
-    [MERGE_NEW_CHAT](state, { payload }) {
-      const newChat = state.get('newChat') || {};
-      return state.set('newChat', Object.assign({}, newChat, payload));
     },
 
     [SET_UNREAD_CHATS](state, { payload }) {
