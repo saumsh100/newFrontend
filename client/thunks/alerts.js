@@ -1,5 +1,5 @@
 
-import { createAlert, removeAlert } from '../actions/alerts';
+import { createAlert, removeAlert } from '../reducers/alerts';
 
 export function showAlertTimeout(payload) {
   return (dispatch, getState) => {
@@ -10,7 +10,7 @@ export function showAlertTimeout(payload) {
     alerts.map((alert) => {
       if (alert && !alert.get('sticky')) {
         window.setTimeout(() => {
-          dispatch(removeAlert({alert}));
+          dispatch(removeAlert({ alert }));
         }, alert.time);
       }
     });

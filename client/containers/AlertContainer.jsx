@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Alert } from '../components/library';
-import { removeAlert } from '../actions/alerts';
+import { removeAlert } from '../reducers/alerts';
 import { setSelectedCallId } from '../actions/caller';
 import styles from './styles.scss';
 
@@ -19,7 +19,7 @@ class AlertContainer extends Component {
   }
 
   render() {
-    const { alerts, removeAlert } = this.props;
+    const { alerts } = this.props;
 
     if (!alerts) {
       return null;
@@ -29,9 +29,7 @@ class AlertContainer extends Component {
       <div className={styles.alertsContainer}>
         {alerts.toArray().map((alert, index) => {
           const alertData = alert.toJS();
-          const func = alertData.caller
-            ? () => this.callerId(alertData.id)
-            : () => null;
+          const func = alertData.caller ? () => this.callerId(alertData.id) : () => null;
 
           return (
             <Alert
@@ -39,7 +37,7 @@ class AlertContainer extends Component {
               index={index}
               alert={alertData}
               alertClick={func}
-              removeAlert={removeAlert}
+              removeAlert={this.props.removeAlert}
             />
           );
         })}
@@ -50,14 +48,12 @@ class AlertContainer extends Component {
 
 AlertContainer.propTypes = {
   alerts: PropTypes.object.isRequired,
-  removeAlert: PropTypes.func,
-  setSelectedCallId: PropTypes.func,
+  removeAlert: PropTypes.func.isRequired,
+  setSelectedCallId: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ alerts }) {
-  return {
-    alerts,
-  };
+  return { alerts };
 }
 
 function mapActionsToProps(dispatch) {

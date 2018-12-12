@@ -1,56 +1,63 @@
 
 import { Map } from 'immutable';
-import { handleActions } from 'redux-actions';
+import { v4 as uuid } from 'uuid';
+import { createAction, handleActions } from 'redux-actions';
 import Alert from '../entities/models/Alert';
 import DesktopNotification from '../util/desktopNotification';
 
-const uuid = require('uuid').v4;
+const reducer = '@alerts';
 
 /**
  * Constants
  */
-export const CREATE_ALERT = 'CREATE_ALERT';
-export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const CREATE_ALERT = `${reducer}/CREATE_ALERT`;
+export const REMOVE_ALERT = `${reducer}/REMOVE_ALERT`;
+
+/**
+ * Actions
+ */
+export const createAlert = createAction(CREATE_ALERT);
+export const removeAlert = createAction(REMOVE_ALERT);
 
 /**
  * Initial State
  */
-const initialState = Map({});
+export const initialState = Map({});
 
-export default handleActions({
-  [CREATE_ALERT](state, { payload: { alert, type } }) {
-    let title = alert.title;
-
-    if (!alert.title && type === 'success') {
-      title = 'Success';
-    } else if (type === 'error' && !alert.title) {
-      title = 'Error';
-    }
-
-    const id = alert.id || uuid();
-    const alertData = new Alert({
-      id,
-      title,
-      body: alert.body,
-      subText: alert.subText || '',
-      type,
-      caller: alert.caller || false,
-      time: 3000,
-      sticky: alert.sticky || false,
-      browserAlert: alert.browserAlert || false,
-      clickable: alert.clickable || false,
-    });
-
-    if (alert.browserAlert) {
-      DesktopNotification.showNotification(title, {
+export default handleActions(
+  {
+    [CREATE_ALERT](
+      state,
+      { payload: { alert, type } },
+    ) {
+      const title = alert.title || (type === 'success' ? 'Success' : 'Error');
+      const id = alert.id || uuid();
+      const alertData = new Alert({
+        id,
+        title,
         body: alert.body,
+        subText: alert.subText || '',
+        type,
+        caller: alert.caller || false,
+        time: 3000,
+        sticky: alert.sticky || false,
+        browserAlert: alert.browserAlert || false,
+        clickable: alert.clickable || false,
       });
-    }
 
-    return state.set(id, alertData);
-  },
+      if (alert.browserAlert) {
+        DesktopNotification.showNotification(title, { body: alert.body });
+      }
 
-  [REMOVE_ALERT](state, { payload: { alert } }) {
-    return state.delete(alert.id);
+      return state.set(id, alertData);
+    },
+
+    [REMOVE_ALERT](
+      state,
+      { payload: { alert: { id } } },
+    ) {
+      return state.delete(id);
+    },
   },
-}, initialState);
+  initialState,
+);

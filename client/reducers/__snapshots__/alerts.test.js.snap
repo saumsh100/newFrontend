@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`alerts reducer createAlert 1`] = `
+Object {
+  "payload": Object {
+    "alert": Object {
+      "body": "test body",
+      "id": "123-456",
+      "title": "test alert",
+    },
+    "type": "failed",
+  },
+  "type": "@alerts/CREATE_ALERT",
+}
+`;
+
+exports[`alerts reducer reducer works 1`] = `
+Immutable.Map {
+  "123-456": Immutable.Record {
+    "id": "123-456",
+    "title": "test alert",
+    "body": "test body",
+    "subText": "",
+    "type": "failed",
+    "time": 3000,
+    "sticky": false,
+    "caller": false,
+    "clickable": false,
+    "browserAlert": false,
+    "lastUpdated": null,
+    "isFetching": false,
+  },
+}
+`;
+
+exports[`alerts reducer reducer works 2`] = `Immutable.Map {}`;
+
+exports[`alerts reducer removeAlert 1`] = `
+Object {
+  "payload": Object {
+    "alert": Object {
+      "id": "123-456",
+    },
+  },
+  "type": "@alerts/REMOVE_ALERT",
+}
+`;
