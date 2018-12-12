@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.48.0",
+  "version": "2.49.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -140,7 +140,7 @@
     "graphql-relay": "^0.5.5",
     "graphql-sequelize": "^8.0.0",
     "graphql-subscriptions": "^0.5.8",
-    "helmet": "^1.1.0",
+    "helmet": "^3.15.0",
     "history": "^4.6.1",
     "ics": "^1.5.0",
     "ifrau": "^0.21.0",
@@ -226,8 +226,8 @@
     "style-loader": "^0.17.0",
     "subscriptions-transport-ws": "^0.9.9",
     "twilio": "^3.22.0",
-    "uuid": "^2.0.3",
     "uglifyjs-webpack-plugin": "^2.0.1",
+    "uuid": "^2.0.3",
     "webpack": "4.16.4",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
