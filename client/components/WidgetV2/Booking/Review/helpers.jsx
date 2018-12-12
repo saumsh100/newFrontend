@@ -1,11 +1,13 @@
 
 import React from 'react';
+import {
+  dateFormatterFactory,
+  groupTimesPerPeriod,
+  toHumanCommaSeparated,
+} from '@carecru/isomorphic';
 import { capitalizeFirstLetter } from '../../../Utils';
 import { setDateToTimezone } from '../../../../../server/util/time';
-import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
-import toHumanCommaSeparated from '../../../../../iso/helpers/string/toHumanCommaSeparated';
 import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
-import groupTimesPerPeriod from '../../../../../iso/helpers/dateTimezone/groupTimesPerPeriod';
 import styles from './styles.scss';
 
 /**

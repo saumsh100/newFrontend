@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import PatientPopover from '../../library/PatientPopover';
 import styles from './styles.scss';
 

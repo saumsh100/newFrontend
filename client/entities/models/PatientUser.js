@@ -1,6 +1,6 @@
 
+import { dateFormatter } from '@carecru/isomorphic';
 import createModel from '../createModel';
-import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
 
 const PatientUserSchema = {
   id: null,

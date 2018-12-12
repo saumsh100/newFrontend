@@ -30,10 +30,16 @@ Object {
       "model": [Function],
       "required": true,
       "where": Object {
+        "chairId": Object {
+          "$not": null,
+        },
         "isCancelled": false,
         "isDeleted": false,
         "isMissed": false,
         "isPending": false,
+        "practitionerId": Object {
+          "$not": null,
+        },
         "startDate": Object {
           "lt": 2016-11-16T08:00:00.000Z,
         },
@@ -118,10 +124,16 @@ Object {
       "model": [Function],
       "required": true,
       "where": Object {
+        "chairId": Object {
+          "$not": null,
+        },
         "isCancelled": false,
         "isDeleted": false,
         "isMissed": false,
         "isPending": false,
+        "practitionerId": Object {
+          "$not": null,
+        },
         "startDate": Object {
           "lt": 2017-11-16T08:00:00.000Z,
         },

@@ -5,13 +5,12 @@ import moment from 'moment-timezone';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { sortAsc, dateFormatter } from '@carecru/isomorphic';
 import RevenueDisplay from './RevenueDisplay';
 import RevenueChart from './RevenueChart';
 import AccountModel from '../../../entities/models/Account';
 import { fetchEntitiesRequest } from '../../../thunks/fetchEntities';
 import { Card } from '../../library';
-import sortAsc from '../../../../iso/helpers/sort/sortAsc';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
 const filterBooked = (startOfCurrentDay, endOfCurrentDay) => key =>
@@ -156,9 +155,7 @@ class RevenueContainer extends Component {
   }
 
   render() {
-    const {
-      revenueData, wasRevenueFetched, wasAccountFetched, account,
-    } = this.props;
+    const { revenueData, wasRevenueFetched, wasAccountFetched, account } = this.props;
 
     const wasAllFetched = wasRevenueFetched && wasAccountFetched;
     return (
@@ -176,12 +173,7 @@ class RevenueContainer extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      fetchEntitiesRequest,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ fetchEntitiesRequest }, dispatch);
 }
 
 function mapStateToProps({ apiRequests, entities, auth }) {

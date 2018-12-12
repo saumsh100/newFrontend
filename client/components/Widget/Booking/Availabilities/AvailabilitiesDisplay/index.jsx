@@ -6,12 +6,11 @@ import debounce from 'lodash/debounce';
 import { bindActionCreators } from 'redux';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
-// import PerfectScrollbar from 'react-perfect-scrollbar';
+import { dateFormatter } from '@carecru/isomorphic';
 import { Grid, Row, Col, Icon, Button } from '../../../../library';
 import * as Actions from '../../../../../actions/availabilities';
 import * as Thunks from '../../../../../thunks/availabilities';
 import { availabilityShape, accountShape } from '../../../../library/PropTypeShapes';
-import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
 const getSortedAvailabilities = (momentDate, availabilities, accountTimezone) =>
@@ -110,13 +109,9 @@ class AvailabilitiesDisplay extends Component {
     // Determine if certain padding away from bottom and if so, hide scroll
     const height = n.scrollHeight - n.offsetHeight;
     if (height - n.scrollTop <= padding) {
-      this.setState({
-        scrollDown: false,
-      });
+      this.setState({ scrollDown: false });
     } else if (!this.state.scrollDown) {
-      this.setState({
-        scrollDown: true,
-      });
+      this.setState({ scrollDown: true });
     }
   }
 
@@ -158,7 +153,10 @@ class AvailabilitiesDisplay extends Component {
         availabilities,
         accountTimezone,
       );
-      dayAvailabilities.push({ momentDate, sortedAvailabilities });
+      dayAvailabilities.push({
+        momentDate,
+        sortedAvailabilities,
+      });
     }
 
     const headerClasses = classNames(styles.datesRow);
@@ -351,16 +349,14 @@ class AvailabilitiesDisplay extends Component {
               {header}
               {availabilitiesDisplay}
               <div className={styles.scrollDownSpace}>
-                {!isFetching &&
-                  this.state.scrollDown &&
-                  needsToScrollMoreDesktop && (
-                    <div className={styles.scrollDown}>
-                      <span>Scroll for More</span>
-                      <div>
-                        <Icon icon="caret-down" type="solid" />
-                      </div>
+                {!isFetching && this.state.scrollDown && needsToScrollMoreDesktop && (
+                  <div className={styles.scrollDown}>
+                    <span>Scroll for More</span>
+                    <div>
+                      <Icon icon="caret-down" type="solid" />
                     </div>
-                  )}
+                  </div>
+                )}
               </div>
             </div>
           </Col>

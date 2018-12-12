@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Map } from 'immutable';
-import sortAsc from '../../../../iso/helpers/sort/sortAsc';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
+import { sortAsc, dateFormatter } from '@carecru/isomorphic';
 import { Form, Field } from '../../library';
 import AppointmentForm from './AppointmentForm';
 import DisplaySearchedPatient from './DisplaySearchedPatient';
@@ -13,14 +12,28 @@ import { SortByFirstName, SortByName } from '../../library/util/SortEntities';
 import styles from './styles.scss';
 
 const generateEntityOptions = (entities, label) =>
-  entities
-    .sort(SortByName)
-    .reduce((prev, curr) => [...prev, { label: curr[label], value: curr.id }], []);
+  entities.sort(SortByName).reduce(
+    (prev, curr) => [
+      ...prev,
+      {
+        label: curr[label],
+        value: curr.id,
+      },
+    ],
+    [],
+  );
 
 const generatePractitionerOptions = practitioners =>
-  practitioners
-    .sort(SortByFirstName)
-    .reduce((prev, curr) => [...prev, { label: curr.getPrettyName(), value: curr.id }], []);
+  practitioners.sort(SortByFirstName).reduce(
+    (prev, curr) => [
+      ...prev,
+      {
+        label: curr.getPrettyName(),
+        value: curr.id,
+      },
+    ],
+    [],
+  );
 
 /**
  * Generate an array containing valid time-slots,
@@ -40,7 +53,10 @@ const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
     const remainder = minutes % increment;
     const label = moment(timeInput).format('LT');
     if (remainder) {
-      timeOptions.push({ value: timeInput, label });
+      timeOptions.push({
+        value: timeInput,
+        label,
+      });
     }
   }
   let i;
@@ -50,7 +66,10 @@ const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
       const value = time.toISOString();
       const label = time.format('LT');
-      timeOptions.push({ value, label });
+      timeOptions.push({
+        value,
+        label,
+      });
     }
   }
 
@@ -60,7 +79,10 @@ const generateTimeOptions = (timeInput = null, unitIncrement = 30) => {
       const time = moment(new Date(1970, 1, 0, i, j * increment));
       const value = time.toISOString();
       const label = time.format('LT');
-      timeOptions.push({ value, label });
+      timeOptions.push({
+        value,
+        label,
+      });
     }
   }
   return timeOptions;
@@ -255,7 +277,9 @@ class DisplayForm extends Component {
             theme={autoCompleteStyle}
             renderSuggestionsContainer={addNewPatientComponent}
             icon="search"
-            ref={el => (this.autoSuggest = el)}
+            ref={(el) => {
+              this.autoSuggest = el;
+            }}
             validate={[validatePatient]}
             onBlurFunction={() => this.props.setShowInput(false)}
             data-test-id="patientSelected"
@@ -280,23 +304,24 @@ class DisplayForm extends Component {
 export default DisplayForm;
 
 DisplayForm.propTypes = {
-  chairs: PropTypes.instanceOf(Map),
-  currentDate: PropTypes.instanceOf(moment),
+  chairs: PropTypes.instanceOf(Map).isRequired,
+  currentDate: PropTypes.instanceOf(moment).isRequired,
   formName: PropTypes.string.isRequired,
-  getSuggestions: PropTypes.func,
-  handleAutoSuggest: PropTypes.func,
-  handleDurationChange: PropTypes.func,
-  handleEndTimeChange: PropTypes.func,
-  handleStartTimeChange: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  handleUnitChange: PropTypes.func,
-  patientSearched: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string]),
-  patients: PropTypes.instanceOf(Map),
-  practitioners: PropTypes.instanceOf(Map),
-  selectedAppointment: PropTypes.string,
-  setCreatingPatient: PropTypes.func,
-  setPatientSearched: PropTypes.func,
-  setShowInput: PropTypes.func,
-  showInput: PropTypes.bool,
-  unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  getSuggestions: PropTypes.func.isRequired,
+  handleAutoSuggest: PropTypes.func.isRequired,
+  handleDurationChange: PropTypes.func.isRequired,
+  handleEndTimeChange: PropTypes.func.isRequired,
+  handleStartTimeChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  handleUnitChange: PropTypes.func.isRequired,
+  patientSearched: PropTypes.oneOfType([PropTypes.objectOf(PropTypes.any), PropTypes.string])
+    .isRequired,
+  patients: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  selectedAppointment: PropTypes.string.isRequired,
+  setCreatingPatient: PropTypes.func.isRequired,
+  setPatientSearched: PropTypes.func.isRequired,
+  setShowInput: PropTypes.func.isRequired,
+  showInput: PropTypes.bool.isRequired,
+  unit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };

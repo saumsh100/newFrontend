@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
+import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 

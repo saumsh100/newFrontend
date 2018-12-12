@@ -1,7 +1,7 @@
 
+import { dateFormatter } from '@carecru/isomorphic';
 import twilioClient from '../../config/twilio';
 import { host, protocol, myHost } from '../../config/globals';
-import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
 import createReminderText, { getReminderTemplateName } from './createReminderText';
 import { sendTemplate } from '../mail';
 import { buildAppointmentEvent } from '../ics';

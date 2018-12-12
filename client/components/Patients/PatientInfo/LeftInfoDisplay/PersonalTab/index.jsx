@@ -2,25 +2,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { dateFormatter } from '@carecru/isomorphic';
 import { Grid, Row, Col, PointOfContactBadge } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
 import { patientShape } from '../../../../library/PropTypeShapes';
 import { formatPhoneNumber } from '../../../../library/util/Formatters';
-import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from '../styles.scss';
 
 export default function PersonalTab(props) {
   const { patient } = props;
 
-  const componentAddress = patient &&
-    patient.address &&
-    Object.keys(patient.address).length && (
-      <div className={styles.text}>
-        <div>{patient.address.street} </div>
-        <div>{patient.address.country} </div>
-        <div>{patient.address.state} </div>
-        <div>{patient.address.zipCode} </div>
-      </div>
+  const componentAddress = patient && patient.address && Object.keys(patient.address).length && (
+    <div className={styles.text}>
+      <div>{patient.address.street} </div>
+      <div>{patient.address.country} </div>
+      <div>{patient.address.state} </div>
+      <div>{patient.address.zipCode} </div>
+    </div>
   );
 
   const birthDateData =

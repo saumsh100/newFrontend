@@ -2,12 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Item } from 'react-html-email';
+import { dateFormatter, sortAsc } from '@carecru/isomorphic';
 import SpaceTable from '../SpaceTable';
 import Bold from '../Bold';
 import Row from '../Row';
 import ItemCol from '../ItemCol';
-import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
-import sortAsc from '../../../../../iso/helpers/sort/sortAsc';
 
 export default function MultipleDetails(props) {
   const { familyMembers, timezone } = props;

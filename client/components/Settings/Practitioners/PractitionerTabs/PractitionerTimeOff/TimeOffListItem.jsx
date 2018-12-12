@@ -1,9 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { dateFormatter } from '@carecru/isomorphic';
 import { ListItem, IconButton } from '../../../../library';
-import { dateFormatter } from '../../../../../../iso/helpers/dateTimezone';
 import styles from './styles.scss';
+import PractitionerRecurringTimeOff from '../../../../../entities/models/PractitionerRecurringTimeOff';
 
 class TimeOffListItem extends Component {
   constructor(props) {
@@ -59,7 +60,7 @@ class TimeOffListItem extends Component {
 
 TimeOffListItem.propTypes = {
   timezone: PropTypes.string.isRequired,
-  timeOff: PropTypes.object.isRequired,
+  timeOff: PropTypes.instanceOf(PractitionerRecurringTimeOff).isRequired,
   onClick: PropTypes.func.isRequired,
   deleteTimeOff: PropTypes.func.isRequired,
 };

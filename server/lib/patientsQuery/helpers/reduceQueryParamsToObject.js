@@ -1,5 +1,5 @@
 
-import merge from 'CareCruIso/helpers/merge';
+import { merge } from '@carecru/isomorphic';
 import queryBuilder from '../queryBuilder';
 
 /**

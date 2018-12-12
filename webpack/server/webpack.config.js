@@ -41,7 +41,6 @@ module.exports = () => ({
     alias: {
       CareCruModels$: path.resolve(projectRoot, './server/_models/index.js'),
       CareCruGraphQL: path.resolve(projectRoot, './server/graphql/'),
-      CareCruIso: path.resolve(projectRoot, './iso/'),
     },
     extensions: ['.js', '.jsx', '.css'],
   },
@@ -94,7 +93,5 @@ module.exports = () => ({
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
   ],
 
-  watchOptions: {
-    ignored: /node_modules/,
-  },
+  watchOptions: { ignored: /node_modules/ },
 });

@@ -1,5 +1,5 @@
 
-import dateMock from 'CareCruIso/utils/test/dateMock';
+import { dateMock } from '@carecru/isomorphic';
 import reduceQueryParamsToObject, { defaultQueryAccumulator } from './reduceQueryParamsToObject';
 
 describe('#reduceQueryParamsToObject', () => {

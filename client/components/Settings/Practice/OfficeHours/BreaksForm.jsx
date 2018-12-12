@@ -6,6 +6,7 @@ import moment from 'moment';
 import pick from 'lodash/pick';
 import { connect } from 'react-redux';
 import mapValues from 'lodash/mapValues';
+import { dateFormatter, timeOptionsWithTimezone } from '@carecru/isomorphic';
 import {
   Button,
   IconButton,
@@ -17,7 +18,6 @@ import {
   Field,
   FieldArray,
 } from '../../../library/index';
-import { dateFormatter, timeOptionsWithTimezone } from '../../../../../iso/helpers/dateTimezone';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
 

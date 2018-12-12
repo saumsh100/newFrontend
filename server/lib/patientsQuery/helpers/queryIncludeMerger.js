@@ -1,6 +1,5 @@
 
-import merge from 'CareCruIso/helpers/merge';
-import sortAsc from 'CareCruIso/helpers/sort/sortAsc';
+import { merge, sortAsc } from '@carecru/isomorphic';
 
 /**
  * queryIncludeMerger

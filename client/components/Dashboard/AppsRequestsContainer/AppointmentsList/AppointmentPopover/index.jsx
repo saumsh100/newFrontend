@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { dateFormatter } from '@carecru/isomorphic';
 import {
   Avatar,
   Button,
@@ -17,7 +18,6 @@ import Patient from '../../../../../entities/collections/patients';
 import Appointment from '../../../../../entities/collections/appointments';
 import Practitioner from '../../../../../entities/collections/practitioners';
 import Chair from '../../../../../entities/collections/chairs';
-import dateFormatter from '../../../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
 export default function AppointmentPopover({

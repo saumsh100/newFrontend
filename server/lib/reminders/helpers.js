@@ -4,6 +4,7 @@ import uniqWith from 'lodash/uniqWith';
 import uniqBy from 'lodash/uniqBy';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
+import { sortAsc } from '@carecru/isomorphic';
 import {
   Account,
   Appointment,
@@ -28,7 +29,6 @@ import countNextClosedDays, {
 } from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
-import sortAsc from '../../../iso/helpers/sort/sortAsc';
 import Appointments from '../../../client/entities/models/Appointments';
 
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
@@ -206,8 +206,7 @@ export async function getAppointmentsFromReminder({
     }
   }
 
-  const defaultAppointmentsScope =
-    { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
+  const defaultAppointmentsScope = { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
 
   const familyGroupingEnd = moment(start)
     .add(SAME_DAY_HOURS, 'hours')
@@ -548,8 +547,7 @@ export async function getValidSmsReminders({
   return sentReminders
     .filter(({ sentRemindersPatients }) => sentRemindersPatients.length > 0)
     .map((sr) => {
-      const { appointment: { startDate } } =
-        sr.sentRemindersPatients.sort(sortByAppointmentStartDate)[0];
+      const { appointment: { startDate } } = sr.sentRemindersPatients.sort(sortByAppointmentStartDate)[0];
 
       // we can't destruct sequelize model to not loose it helpers
       sr.orderDate = moment(startDate)

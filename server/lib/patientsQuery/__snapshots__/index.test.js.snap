@@ -136,6 +136,9 @@ Object {
       "model": [Function],
       "required": true,
       "where": Object {
+        "chairId": Object {
+          "$not": null,
+        },
         "isCancelled": false,
         "isDeleted": false,
         "isMissed": false,
@@ -163,13 +166,13 @@ Object {
   "where": Object {
     "$or": Object {
       "dueForHygieneDate": Object {
-        "$gte": "2014-10-17T07:00:00.000Z",
-        "$lt": "2014-10-17T07:00:00.000Z",
+        "$gte": "2014-11-16T08:00:00.000Z",
+        "$lt": "2014-12-16T08:00:00.000Z",
         "$not": null,
       },
       "dueForRecallExamDate": Object {
-        "$gte": "2014-10-17T07:00:00.000Z",
-        "$lt": "2014-10-17T07:00:00.000Z",
+        "$gte": "2014-11-16T08:00:00.000Z",
+        "$lt": "2014-12-16T08:00:00.000Z",
         "$not": null,
       },
     },
@@ -210,13 +213,13 @@ Object {
   "where": Object {
     "$or": Object {
       "dueForHygieneDate": Object {
-        "$gte": "2017-10-17T07:00:00.000Z",
-        "$lt": "2017-10-17T07:00:00.000Z",
+        "$gte": "2017-11-16T08:00:00.000Z",
+        "$lt": "2017-12-16T08:00:00.000Z",
         "$not": null,
       },
       "dueForRecallExamDate": Object {
-        "$gte": "2017-10-17T07:00:00.000Z",
-        "$lt": "2017-10-17T07:00:00.000Z",
+        "$gte": "2017-11-16T08:00:00.000Z",
+        "$lt": "2017-12-16T08:00:00.000Z",
         "$not": null,
       },
     },

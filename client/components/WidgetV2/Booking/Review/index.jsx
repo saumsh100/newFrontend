@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
+import { dateFormatter } from '@carecru/isomorphic';
 import { Button } from '../../../library';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import Practitioner from '../../../../entities/models/Practitioners';
@@ -12,7 +13,6 @@ import Service from '../../../../entities/models/Service';
 import { createRequest, createWaitSpot } from '../../../../thunks/availabilities';
 import { officeHoursShape } from '../../../library/PropTypeShapes/officeHoursShape';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
-import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import { SummaryItemFactory } from './SummaryItem';
 import { availabilitiesGroupedByPeriod, waitlistDates, waitlistTimes } from './helpers';
 import {
@@ -151,14 +151,9 @@ class Review extends PureComponent {
                 </Button>
               </div>
             </div>
-            {selectedService &&
-              selectedService.get('name') && (
-                <SummaryItem
-                  label="Reason"
-                  value={selectedService.get('name')}
-                  link={b('reason')}
-                />
-              )}
+            {selectedService && selectedService.get('name') && (
+              <SummaryItem label="Reason" value={selectedService.get('name')} link={b('reason')} />
+            )}
             <SummaryItem
               label="Practitioner"
               value={

@@ -1,9 +1,5 @@
 
-import normalizePhoneISO from '../../../../iso/helpers/string/normalizePhone';
-
-export function normalizePhone(value) {
-  return normalizePhoneISO(value);
-}
+export { normalizePhone } from '@carecru/isomorphic';
 
 export function maxDigits(max) {
   return (value) => {

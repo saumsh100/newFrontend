@@ -1,6 +1,6 @@
 
+import { merge } from '@carecru/isomorphic';
 import { Patient } from 'CareCruModels';
-import merge from 'CareCruIso/helpers/merge';
 import { patientAttrs } from './helpers';
 import segments from './segments';
 import reduceQueryParamsToObject, { defaultQueryAccumulator }
@@ -19,7 +19,6 @@ export default async function patientQueryBuilder({
   if (!accountId) {
     throw new Error('accountId is required');
   }
-
   const defaultQuery = {
     where: { accountId },
     include: [],

@@ -1,7 +1,7 @@
 
 import omit from 'lodash/omit';
+import { dateMock } from '@carecru/isomorphic';
 import { Patient } from 'CareCruModels';
-import dateMock from 'CareCruIso/utils/test/dateMock';
 import { accountId } from '../../../tests/util/seedTestUsers';
 import patientQueryBuilder from './index';
 

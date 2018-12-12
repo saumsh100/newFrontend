@@ -3,16 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import classnames from 'classnames';
+import { dateFormatter } from '@carecru/isomorphic';
 import { Icon } from '../../../library';
-import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
 const convertToLocaleString = number => (number ? number.toLocaleString('en') : '0');
 
 export default function RevenueDisplay(props) {
-  const {
-    billedData, average, timezone, dates, estimatedData,
-  } = props;
+  const { billedData, average, timezone, dates, estimatedData } = props;
 
   const lastDate = dates[dates.length - 1];
   const currentDate = moment()

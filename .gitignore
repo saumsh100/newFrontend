@@ -53,3 +53,4 @@ electron/build
 .python-version
 yarn-error.log
 .uglify_cache
+.npmrc

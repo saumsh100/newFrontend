@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import getEventText from './Shared/textBuilder';
 
 export default function AppointmentEvent({ data }) {

@@ -1,10 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
+import { normalizePhone } from '@carecru/isomorphic';
 import Icon from '../../Icon';
 import Input from '../../Input';
 import { inputShape, metaShape } from '../../PropTypeShapes/inputShape';
-import normalizePhone from '../../../../../iso/helpers/string/normalizePhone';
 
 export default function RFInput({
   input,

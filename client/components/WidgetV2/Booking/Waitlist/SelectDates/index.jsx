@@ -5,12 +5,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import classnames from 'classnames';
+import { week, frames, dayToFrame } from '@carecru/isomorphic';
 import {
   updateDaysOfTheWeek,
   getSelectedDaysOfTheWeek,
 } from '../../../../../reducers/availabilities';
 import { historyShape, locationShape } from '../../../../library/PropTypeShapes/routerShapes';
-import { week, frames, dayToFrame } from '../../../../../../iso/helpers/week';
 import {
   showButton,
   hideButton,

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import cap from '../../../../iso/helpers/string/capitalize';
+import { capitalize } from '@carecru/isomorphic';
 import { Tooltip } from '..';
 import PatientQueryRenderer from '../PatientQueryRenderer';
 import XIcon from './XIcon';
@@ -69,7 +69,7 @@ class PointOfContactBadge extends React.PureComponent {
           if (!('accountViewer' in data)) {
             return null;
           }
-          const isPoC = data.accountViewer.patient[`is${cap(channel)}Poc`];
+          const isPoC = data.accountViewer.patient[`is${capitalize(channel)}Poc`];
           return this.renderBadge(isPoC);
         }}
       </PatientQueryRenderer>

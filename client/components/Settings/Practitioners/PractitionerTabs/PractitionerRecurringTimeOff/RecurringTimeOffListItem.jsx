@@ -2,8 +2,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import moment from 'moment';
+import { dateFormatter } from '@carecru/isomorphic';
 import { ListItem, IconButton } from '../../../../library';
-import { dateFormatter } from '../../../../../../iso/helpers/dateTimezone';
 import styles from './styles.scss';
 
 class RecurringTimeOffListItem extends Component {

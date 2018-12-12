@@ -1,6 +1,5 @@
 
-import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
-import sortAsc from '../../../iso/helpers/sort/sortAsc';
+import { dateFormatter, sortAsc } from '@carecru/isomorphic';
 
 const getDateAndTime = (date, timezone) => ({
   date: dateFormatter(date, timezone, 'MMMM Do'),
@@ -64,7 +63,7 @@ function getTemplateType(appointment, dependants) {
   if (appointment) {
     return 'self';
   }
-  
+
   return dependants.length === 1 ? 'single' : 'multiple';
 }
 

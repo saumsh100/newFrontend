@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import classnames from 'classnames';
+import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import styles from './styles.scss';
 
 const calcDotStyling = (date) => {

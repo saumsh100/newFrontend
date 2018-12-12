@@ -1,6 +1,6 @@
 
+import { dateFormatter } from '@carecru/isomorphic';
 import renderTemplates from './renderTemplates';
-import dateFormatter from '../../../iso/helpers/dateTimezone/dateFormatter';
 
 // import { account, appointment, patient, familyMembers } from './entities';
 
@@ -73,6 +73,6 @@ export default function renderFamilyRemindersHTML({ account, appointment, patien
     familyMembers,
     appointmentDate: getAppointmentDate(appointment, familyMembers, account.timezone),
   });
-  
+
   return html;
 }

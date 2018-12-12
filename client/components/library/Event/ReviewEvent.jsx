@@ -1,8 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { dateFormatter } from '@carecru/isomorphic';
 import Star from '../Star';
-import dateFormatter from '../../../../iso/helpers/dateTimezone/dateFormatter';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';
@@ -38,8 +38,4 @@ export default function ReviewEvent({ data }) {
   );
 }
 
-ReviewEvent.propTypes = {
-  data: PropTypes.shape({
-    description: PropTypes.string,
-  }).isRequired,
-};
+ReviewEvent.propTypes = { data: PropTypes.shape({ description: PropTypes.string }).isRequired };

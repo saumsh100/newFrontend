@@ -1,13 +1,12 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import dateFormatter from '../../../../../iso/helpers/dateTimezone/dateFormatter';
-import dateFormatterFactory from '../../../../../iso/helpers/dateTimezone/dateFormatterFactory';
-import { Icon, Well } from '../../../library/index';
+import { dateFormatter, dateFormatterFactory } from '@carecru/isomorphic';
+import { Icon, Well } from '../../../library';
 import ClassyDiv from '../../../library/util/ClassyDiv';
 import Section from '../Shared/Section';
-import styles from './styles.scss';
 import { accountShape, appointmentShape } from '../../../library/PropTypeShapes';
+import styles from './styles.scss';
 
 const WellHeader = ClassyDiv(styles.wellHeader);
 const WellItem = ClassyDiv(styles.wellItem);

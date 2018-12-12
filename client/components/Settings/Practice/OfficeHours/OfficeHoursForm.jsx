@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
-import { timeOptionsWithTimezone, dateFormatter } from '../../../../../iso/helpers/dateTimezone';
+import { timeOptionsWithTimezone, dateFormatter } from '@carecru/isomorphic';
 import { Grid, Row, Col, Form, FormSection, Field, IconButton } from '../../../library/index';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';

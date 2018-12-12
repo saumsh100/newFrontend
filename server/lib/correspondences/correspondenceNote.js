@@ -1,5 +1,5 @@
 
-import cap from '../../../iso/helpers/string/capitalize';
+import { capitalize } from '@carecru/isomorphic';
 import { getTemplateSubType } from './templates/helpers';
 import getReminderTemplate from './templates/reminders';
 
@@ -39,7 +39,7 @@ export function reminderSent({
 
   const type = reminderTypeMap[Number(isConfirmable)][Number(isCustomConfirm)];
 
-  const reminderType = `${cap(interval)} ${typeMap[primaryType]} ${type}`;
+  const reminderType = `${capitalize(interval)} ${typeMap[primaryType]} ${type}`;
   const subType = getTemplateSubType({
     isFamily,
     contactedPatientId,
@@ -72,7 +72,7 @@ export function reminderConfirmed({
 }) {
   const { isCustomConfirm } = reminder;
   const action = isCustomConfirm ? 'Pre-Confirmed' : 'Confirmed';
-  const reminderType = `${cap(interval)} ${typeMap[primaryType]}`;
+  const reminderType = `${capitalize(interval)} ${typeMap[primaryType]}`;
   const subType = getTemplateSubType({
     isFamily,
     contactedPatientId,
@@ -105,7 +105,7 @@ export function recallSent(sentRecall) {
     prettyInterval = interval.slice(1, interval.length);
   }
 
-  return `Sent "${cap(prettyInterval)} ${time} Due Date" ${typeMap[primaryType]} Recall via CareCru`;
+  return `Sent "${capitalize(prettyInterval)} ${time} Due Date" ${typeMap[primaryType]} Recall via CareCru`;
 }
 
 /**
