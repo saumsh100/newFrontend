@@ -11,8 +11,8 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...          
-      - docker build -t $REPOSITORY_URI:latest . --build-arg FEATURE_FLAG_KEY=$FEATURE_FLAG_KEY --build-arg GOOGLE_API_KEY=$GOOGLE_API_KEY --build-arg API_URL=$API_URL --build-arg INTERCOM_APP_ID=$INTERCOM_APP_ID --build-arg LOGROCKET_APP_ID=$LOGROCKET_APP_ID --build-arg NODE_ENV=$NODE_ENV --build-arg HOST=$HOST
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest . --build-arg FEATURE_FLAG_KEY=$FEATURE_FLAG_KEY --build-arg GOOGLE_API_KEY=$GOOGLE_API_KEY --build-arg API_URL=$API_URL --build-arg INTERCOM_APP_ID=$INTERCOM_APP_ID --build-arg LOGROCKET_APP_ID=$LOGROCKET_APP_ID --build-arg NODE_ENV=$NODE_ENV --build-arg HOST=$HOST --build-arg NPM_TOKEN=$NPM_TOKEN
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
@@ -27,7 +27,7 @@ phases:
       - printf '[{"name":"dev-node-patientCache","imageUri":"%1s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitionspatientCache.json
 
 artifacts:
-    files: 
+    files:
       - imagedefinitions.json
       - imagedefinitionscron.json
       - imagedefinitionsevents.json
