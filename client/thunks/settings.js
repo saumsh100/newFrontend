@@ -9,7 +9,6 @@ const generateAlert = field => ({
     body: `Failed to generate ${field}.`,
   },
 });
-
 const removeAlert = field => ({
   success: { body: `Successfully removed ${field}.` },
   error: {
@@ -62,6 +61,30 @@ export function removeCallRailKey(id) {
     return dispatch(receiveEntities({
       key: 'accounts',
       entities: accountWithRemovedValue.entities,
+    }));
+  };
+}
+
+export function generateVendastaKey(id) {
+  return dispatch =>
+    dispatch(createEntityRequest({
+      key: 'accounts',
+      url: `/_vendasta/${id}`,
+      id,
+      alert: generateAlert('Vendasta key'),
+    }));
+}
+
+export function deleteVendastaKey(id) {
+  return async (dispatch) => {
+    const withDeletedValue = await dispatch(deleteEntityRequest({
+      key: 'accounts',
+      url: `/_vendasta/${id}`,
+      alert: removeAlert('Vendasta key'),
+    }));
+    return dispatch(receiveEntities({
+      key: 'accounts',
+      entities: withDeletedValue.entities,
     }));
   };
 }

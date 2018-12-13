@@ -6,6 +6,7 @@ import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
 import AccountModel from '../../../../entities/models/Account';
 import TwilioPhoneNumber from './TwilioPhoneNumber';
+import VendestaInfo from './VendastaInfo';
 import CallRail from './CallRail';
 import styles from './styles.scss';
 
@@ -93,7 +94,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         type="tel"
         data-test-id="destinationPhoneNumber"
       />
-      <Field name="vendastaId" label="Vendasta Id" data-test-id="vendastaId" />
+      <VendestaInfo activeAccount={activeAccount} />
       <CallRail activeAccount={activeAccount} />
       <Field
         name="unit"
