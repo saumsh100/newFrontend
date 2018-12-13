@@ -1,6 +1,6 @@
 
 import { createEntityRequest, deleteEntityRequest } from './fetchEntities';
-import { receiveEntities } from '../actions/entities';
+import { receiveEntities } from '../reducers/entities';
 
 const generateAlert = field => ({
   success: { body: `Successfully generated ${field}.` },
