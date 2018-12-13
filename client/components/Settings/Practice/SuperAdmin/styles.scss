@@ -76,3 +76,15 @@
   line-height: 1.35;
   color: $clr-dark-grey;
 }
+
+.buttonsWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+
+  .inlineButton {
+    margin-left: 5px;
+    height: 40px;
+  }
+}

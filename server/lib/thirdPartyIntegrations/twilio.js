@@ -1,5 +1,5 @@
 
-import { getAreaCode, fieldsValidator } from '@carecru/isomorphic';
+import { getAreaCode, fieldsValidators } from '@carecru/isomorphic';
 import { host } from '../../../server/config/globals';
 import twilioClient from '../../config/twilio';
 import StatusError from '../../util/StatusError';
@@ -11,7 +11,7 @@ import StatusError from '../../util/StatusError';
  * @returns {Promise<Account>}
  */
 export async function twilioSetup(account) {
-  fieldsValidator(account, [
+  fieldsValidators(account, [
     'address.state',
     'address.country',
     'destinationPhoneNumber',
@@ -22,7 +22,7 @@ export async function twilioSetup(account) {
   }
 
   try {
-    const phoneNumber = await getAvailableNumber(account);
+    const phoneNumber = await exports.getAvailableNumber(account);
     await twilioClient.incomingPhoneNumbers.create({
       phoneNumber,
       friendlyName: account.name,
@@ -43,17 +43,17 @@ export async function twilioSetup(account) {
  * @returns {Promise<Account>}
  */
 export async function twilioDelete(account) {
-  fieldsValidator(account, ['twilioPhoneNumber']);
+  fieldsValidators(account, ['twilioPhoneNumber']);
 
   try {
-    const { incomingPhoneNumbers } = await twilioClient.incomingPhoneNumbers.list();
-    const phoneNumber = incomingPhoneNumbers.find(({ phone_number }) => account.twilioPhoneNumber === phone_number);
+    const incomingPhoneNumbers = await twilioClient.incomingPhoneNumbers.list();
+    const phoneNumber = incomingPhoneNumbers.find(({ phoneNumber }) => account.twilioPhoneNumber === phoneNumber);
 
     if (!phoneNumber) {
       throw StatusError(StatusError.BAD_REQUEST, 'Twilio Number Not Found');
     }
 
-    await twilioClient.incomingPhoneNumbers(phoneNumber.sid).delete();
+    await twilioClient.incomingPhoneNumbers(phoneNumber.sid).remove();
     return account.update({ twilioPhoneNumber: null });
   } catch (e) {
     console.error('Twilio Number Delete Failed');
@@ -68,7 +68,7 @@ export async function twilioDelete(account) {
  * @param account
  * @returns {Promise<string>} phoneNumber
  */
-async function getAvailableNumber({ address, destinationPhoneNumber }) {
+export async function getAvailableNumber({ address, destinationPhoneNumber }) {
   const defaultOpts = {
     smsEnabled: true,
     voiceEnabled: true,
@@ -91,12 +91,12 @@ async function getAvailableNumber({ address, destinationPhoneNumber }) {
 
   for (const option of opts) {
     // eslint-disable-next-line no-await-in-loop
-    const { availablePhoneNumbers } = await twilioClient
+    const availablePhoneNumbers = await twilioClient
       .availablePhoneNumbers(address.country)
       .local.list(option);
 
     if (availablePhoneNumbers.length > 0) {
-      return availablePhoneNumbers[0].phone_number;
+      return availablePhoneNumbers[0].phoneNumber;
     }
   }
   throw new Error('No available phone numbers in Twilio');

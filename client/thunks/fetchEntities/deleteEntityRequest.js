@@ -14,7 +14,7 @@ export default function deleteEntityRequest({ key, id, url, values, alert }) {
 
     return axios
       .delete(url, { params: values })
-      .then(() => {
+      .then(({ data }) => {
         dispatch(deleteEntity({
           key,
           id,
@@ -25,6 +25,7 @@ export default function deleteEntityRequest({ key, id, url, values, alert }) {
             type: 'success',
           }));
         }
+        return data;
       })
       .catch((err) => {
         console.log(err);

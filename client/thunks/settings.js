@@ -1,0 +1,43 @@
+
+import { createEntityRequest, deleteEntityRequest } from './fetchEntities';
+import { receiveEntities } from '../actions/entities';
+
+const generateAlert = field => ({
+  success: { body: `Successfully generated ${field}.` },
+  error: {
+    title: 'Clinic Information Error',
+    body: `Failed to generate ${field}.`,
+  },
+});
+
+const removeAlert = field => ({
+  success: { body: `Successfully removed ${field}.` },
+  error: {
+    title: 'Clinic Information Error',
+    body: `Failed to remove ${field}.`,
+  },
+});
+
+export function generateTwilioNumber(id) {
+  return dispatch =>
+    dispatch(createEntityRequest({
+      id,
+      url: `/twilio/setup/${id}/twilioPhoneNumber`,
+      key: 'accounts',
+      alert: generateAlert('Twilio Phone Number'),
+    }));
+}
+
+export function removeTwilioNumber(id) {
+  return async (dispatch) => {
+    const accountWithRemovedValue = await dispatch(deleteEntityRequest({
+      key: 'accounts',
+      url: `/twilio/setup/${id}/twilioPhoneNumber`,
+      alert: removeAlert('Twilio Phone Number'),
+    }));
+    return dispatch(receiveEntities({
+      key: 'accounts',
+      entities: accountWithRemovedValue.entities,
+    }));
+  };
+}

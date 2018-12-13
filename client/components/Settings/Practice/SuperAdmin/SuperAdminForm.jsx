@@ -5,6 +5,7 @@ import { Form, Field } from '../../../library';
 import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
 import AccountModel from '../../../../entities/models/Account';
+import TwilioPhoneNumber from './TwilioPhoneNumber';
 import styles from './styles.scss';
 
 const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
@@ -83,12 +84,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
           </div>
         </div>
       </div>
-      <Field
-        name="twilioPhoneNumber"
-        label="Twilio Phone Number"
-        type="tel"
-        data-test-id="twilioPhoneNumber"
-      />
+      <TwilioPhoneNumber activeAccount={activeAccount} />
       <Field
         name="destinationPhoneNumber"
         label="Destination Phone Number"
