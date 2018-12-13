@@ -46,6 +46,7 @@ class SuperAdmin extends Component {
     const newValues = {
       ...values,
       omitChairIds: values.omitChairIdsString ? values.omitChairIdsString.split(',') : [],
+      callrailId: values.callrailId || null,
       omitPractitionerIds: values.omitPractitionerIdsString
         ? values.omitPractitionerIdsString.split(',')
         : [],

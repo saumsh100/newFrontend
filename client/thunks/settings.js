@@ -5,7 +5,7 @@ import { receiveEntities } from '../actions/entities';
 const generateAlert = field => ({
   success: { body: `Successfully generated ${field}.` },
   error: {
-    title: 'Clinic Information Error',
+    title: 'Practice Information Error',
     body: `Failed to generate ${field}.`,
   },
 });
@@ -13,7 +13,7 @@ const generateAlert = field => ({
 const removeAlert = field => ({
   success: { body: `Successfully removed ${field}.` },
   error: {
-    title: 'Clinic Information Error',
+    title: 'Practice Information Error',
     body: `Failed to remove ${field}.`,
   },
 });
@@ -34,6 +34,30 @@ export function removeTwilioNumber(id) {
       key: 'accounts',
       url: `/twilio/setup/${id}/twilioPhoneNumber`,
       alert: removeAlert('Twilio Phone Number'),
+    }));
+    return dispatch(receiveEntities({
+      key: 'accounts',
+      entities: accountWithRemovedValue.entities,
+    }));
+  };
+}
+
+export function generateCallRailKey(id) {
+  return dispatch =>
+    dispatch(createEntityRequest({
+      id,
+      url: `/_callrail/${id}`,
+      key: 'accounts',
+      alert: generateAlert('CallRail ID'),
+    }));
+}
+
+export function removeCallRailKey(id) {
+  return async (dispatch) => {
+    const accountWithRemovedValue = await dispatch(deleteEntityRequest({
+      key: 'accounts',
+      url: `/_callrail/${id}`,
+      alert: removeAlert('CallRail ID'),
     }));
     return dispatch(receiveEntities({
       key: 'accounts',

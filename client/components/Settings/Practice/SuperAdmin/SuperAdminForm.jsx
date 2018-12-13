@@ -6,6 +6,7 @@ import { notNegative } from '../../../library/Form/validate';
 import LastSyncDisplay from '../../../LastSyncDisplay';
 import AccountModel from '../../../../entities/models/Account';
 import TwilioPhoneNumber from './TwilioPhoneNumber';
+import CallRail from './CallRail';
 import styles from './styles.scss';
 
 const maxUnitSize = value => value && value > 60 && 'Must be less than or equal to 60';
@@ -25,6 +26,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
     twilioPhoneNumber: activeAccount.get('twilioPhoneNumber'),
     destinationPhoneNumber: activeAccount.get('destinationPhoneNumber'),
     vendastaId: activeAccount.get('vendastaId'),
+    callrailId: activeAccount.get('callrailId'),
     unit: activeAccount.get('unit'),
     timeInterval: activeAccount.get('timeInterval'),
     suggestedChairId: activeAccount.get('suggestedChairId'),
@@ -39,9 +41,9 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
   };
 
   const lastSyncDate = activeAccount.get('lastSyncDate');
-  const lastSyncComponent = lastSyncDate ? (
+  const lastSyncComponent = lastSyncDate && (
     <LastSyncDisplay date={lastSyncDate} className={styles.lastSyncWrapper} />
-  ) : null;
+  );
 
   return (
     <Form
@@ -92,6 +94,7 @@ export default function SuperAdminForm({ onSubmit, activeAccount }) {
         data-test-id="destinationPhoneNumber"
       />
       <Field name="vendastaId" label="Vendasta Id" data-test-id="vendastaId" />
+      <CallRail activeAccount={activeAccount} />
       <Field
         name="unit"
         label="Schedule Unit"

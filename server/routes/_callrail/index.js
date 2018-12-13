@@ -38,8 +38,8 @@ callRailRouter.post('/:accountId', async ({ account }, res, next) => {
  */
 callRailRouter.delete('/:accountId', async ({ account }, res, next) => {
   try {
-    await disableCallRailAccount(account);
-    return res.sendStatus(200);
+    const updatedAccount = await disableCallRailAccount(account);
+    return res.send(normalize('account', updatedAccount.get({ plain: true })));
   } catch (e) {
     next(e);
   }
