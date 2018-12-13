@@ -1,8 +1,8 @@
 
 import WeeklySchedule from 'CareCruModels';
-import moment from 'moment-timezone';
 import fetchStaticDataForAvailabilities from '../availabilities/fetchStaticDataForAvailabilities';
 import fetchDynamicDataForAvailabilities from '../availabilities/fetchDynamicDataForAvailabilities';
+import { computeOpeningsForPractitioner } from '../availabilities/computeOpeningsAndAvailabilities';
 import produceFinalDailySchedulesMap from '../schedule/produceFinalDailySchedulesMap';
 import StatusError from '../../util/StatusError';
 import { getRangeOfDays } from '../../util/time';
@@ -111,19 +111,29 @@ export default async function generateDailySchedulesForPractitioners(inputPracti
     const { dailySchedules, timeOffs, isCustomSchedule, weeklyScheduleId, id } = practitioner;
     const weeklySchedule = isCustomSchedule ?
       await findWeeklyScheduleById(weeklyScheduleId) : officeHours;
-    const finalDailySchedule = await produceFinalDailySchedulesMap(
+
+    const finalDailySchedule = computeOpeningsForPractitioner({
+      account,
       weeklySchedule,
-      dailySchedules,
       timeOffs,
+      dailySchedules,
+      appointments: practitioner.appointments,
+      requests: practitioner.requests,
       startDate,
       endDate,
-      timezone,
-    );
-    days.forEach((day) => {
-      result[day] = result[day] || {};
-      result[day][id] = finalDailySchedule[day];
     });
-    return result;
+
+    return days.reduce((acc, day) => ({
+      ...acc,
+      [day]: {
+        ...acc[day],
+        [id]: {
+          ...finalDailySchedule[day].dailySchedule,
+          fillers: finalDailySchedule[day].fillers,
+          openings: finalDailySchedule[day].openings,
+        },
+      },
+    }), result);
   }, {});
 }
 
