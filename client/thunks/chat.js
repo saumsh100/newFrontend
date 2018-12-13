@@ -19,7 +19,7 @@ import {
 import { fetchEntitiesRequest, updateEntityRequest, createEntityRequest } from './fetchEntities';
 import DesktopNotification from '../util/desktopNotification';
 import PatientModel from '../entities/models/Patient';
-import { deleteAllEntity, deleteEntity, receiveEntities } from '../actions/entities';
+import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { isHub } from '../util/hub';
 import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
 
@@ -87,7 +87,7 @@ export function addMessage(message) {
       const { chats, textMessages, patients } = message.entities;
       const chatId = message.result;
       const conversation = chats[chatId];
-      const patientId = conversation.patientId;
+      const { patientId } = conversation;
       const lastTextMessageId = conversation.textMessages[conversation.textMessages.length - 1];
       const { body, read } = textMessages[lastTextMessageId];
 

@@ -1,6 +1,6 @@
 
 import { push } from 'react-router-redux';
-import { updateEntity, deleteEntity, receiveEntities } from '../actions/entities';
+import { updateEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { setSyncingWithPMS } from '../actions/schedule';
 import { addMessage, createListOfUnreadedChats, socketLock } from '../thunks/chat';
 import { isHub } from '../util/hub';

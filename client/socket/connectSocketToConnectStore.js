@@ -1,11 +1,11 @@
 
-import { updateEntity } from '../actions/entities';
 import { push } from 'react-router-redux';
+import { updateEntity } from '../reducers/entities';
 import { setIsSyncing, setProgress, setIsDone } from '../reducers/connect';
 
 export default function connectSocketToConnectStore(store, socket) {
   const jwtToken = localStorage.getItem('token');
-  const { dispatch, getState } = store;
+  const { dispatch } = store;
 
   window.setProgress = (data) => {
     dispatch(setProgress(data));
@@ -36,7 +36,10 @@ export default function connectSocketToConnectStore(store, socket) {
           dispatch(push('./completed'));
         }, 500);
 
-        dispatch(updateEntity({ key: 'accounts', entity: data }));
+        dispatch(updateEntity({
+          key: 'accounts',
+          entity: data,
+        }));
       });
 
       socket.on('syncProgress', (data) => {
@@ -49,4 +52,3 @@ export default function connectSocketToConnectStore(store, socket) {
       throw new Error(msg.data.type);
     });
 }
-

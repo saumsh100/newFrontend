@@ -17,7 +17,7 @@ import {
   fetchEntitiesRequest,
   updateEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { deleteAllEntity } from '../../../actions/entities';
+import { deleteAllEntity } from '../../../reducers/entities';
 import {
   addRemoveTimelineFilters,
   selectAllTimelineFilters,
@@ -86,7 +86,7 @@ class PatientInfo extends Component {
   }
 
   componentDidMount() {
-    const patientId = this.props.match.params.patientId;
+    const { patientId } = this.props.match.params;
     const url = `/api/patients/${patientId}`;
     this.fetchPatientData(patientId, url);
 
@@ -96,7 +96,7 @@ class PatientInfo extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const patientId = this.props.match.params.patientId;
+    const { patientId } = this.props.match.params;
     if (patientId !== nextProps.match.params.patientId) {
       const url = `/api/patients/${nextProps.match.params.patientId}`;
 
@@ -201,7 +201,7 @@ class PatientInfo extends Component {
   }
 
   render() {
-    const patientId = this.props.match.params.patientId;
+    const { patientId } = this.props.match.params;
     const {
       patient,
       patientStats,

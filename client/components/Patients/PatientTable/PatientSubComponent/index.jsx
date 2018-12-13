@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../../library';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
-import { deleteAllEntity } from '../../../../actions/entities';
+import { deleteAllEntity } from '../../../../reducers/entities';
 import Event from '../../../../entities/models/Event';
 import { patientShape } from '../../../library/PropTypeShapes';
 import DataTable from './DataTable';
@@ -15,10 +15,7 @@ import styles from './styles.scss';
 class PatientSubComponent extends Component {
   componentDidMount() {
     const { patient } = this.props;
-
-    const query = {
-      limit: 5,
-    };
+    const query = { limit: 5 };
 
     this.props.fetchEntitiesRequest({
       key: 'events',
@@ -100,4 +97,7 @@ PatientSubComponent.defaultProps = {
   wasFetched: false,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PatientSubComponent);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(PatientSubComponent);

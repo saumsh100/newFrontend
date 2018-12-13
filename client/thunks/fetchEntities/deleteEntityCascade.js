@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { deleteEntity } from '../../actions/entities';
+import { deleteEntity } from '../../reducers/entities';
 
 export default function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
   return (dispatch, getState) => {

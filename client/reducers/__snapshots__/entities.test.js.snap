@@ -1,0 +1,1025 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`entities reducer delete all entitits 1`] = `
+Object {
+  "payload": "accounts",
+  "type": "@entities/DELETE_ALL_ENTITY",
+}
+`;
+
+exports[`entities reducer delete entitity 1`] = `
+Object {
+  "payload": Object {
+    "id": "123",
+    "key": "accounts",
+  },
+  "type": "@entities/DELETE_ENTITY",
+}
+`;
+
+exports[`entities reducer fetch entitits 1`] = `
+Object {
+  "payload": "accounts",
+  "type": "@entities/FETCH_ENTITIES",
+}
+`;
+
+exports[`entities reducer receive entitits 1`] = `
+Object {
+  "payload": Object {
+    "entities": Object {
+      "accounts": Object {
+        "123": Object {
+          "id": "123",
+          "name": "test",
+        },
+      },
+    },
+  },
+  "type": "@entities/RECEIVE_ENTITIES",
+}
+`;
+
+exports[`entities reducer reducers deleteAllEntity 1`] = `
+Immutable.Map {
+  "segments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "reminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "recalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "addresses": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patientUsers": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "permissions": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "requests": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "accounts": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "users": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentReminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentRecalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "invites": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "dialogs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patients": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chairs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "timeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "enterprises": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "appointments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitionerRecurringTimeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "calls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitioners": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "events": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "textMessages": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "availabilities": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chats": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "weeklySchedules": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "waitSpots": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "services": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+}
+`;
+
+exports[`entities reducer reducers deleteEntity 1`] = `
+Immutable.Map {
+  "segments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "reminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "recalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "addresses": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patientUsers": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "permissions": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "requests": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "accounts": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "users": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentReminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentRecalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "invites": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "dialogs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patients": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chairs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "timeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "enterprises": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "appointments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitionerRecurringTimeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "calls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitioners": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "events": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "textMessages": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "availabilities": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chats": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "weeklySchedules": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "waitSpots": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "services": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+}
+`;
+
+exports[`entities reducer reducers fetchEntities 1`] = `
+Immutable.Map {
+  "segments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "reminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "recalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "addresses": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patientUsers": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "permissions": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "requests": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "accounts": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": true,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "users": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentReminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentRecalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "invites": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "dialogs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patients": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chairs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "timeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "enterprises": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "appointments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitionerRecurringTimeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "calls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitioners": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "events": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "textMessages": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "availabilities": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chats": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "weeklySchedules": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "waitSpots": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "services": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+}
+`;
+
+exports[`entities reducer reducers receiveEntities 1`] = `
+Immutable.Map {
+  "segments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "reminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "recalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "addresses": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patientUsers": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "permissions": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "requests": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "accounts": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {
+      "123": Immutable.Record {
+        "id": "123",
+        "addressId": null,
+        "name": "test",
+        "street": null,
+        "logo": null,
+        "fullLogoUrl": null,
+        "country": null,
+        "state": null,
+        "city": null,
+        "cellPhoneNumberFallback": null,
+        "timeInterval": null,
+        "zipCode": null,
+        "vendastaId": null,
+        "phoneNumber": null,
+        "timezone": null,
+        "contactEmail": null,
+        "website": null,
+        "twilioPhoneNumber": null,
+        "bookingWidgetPrimaryColor": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": null,
+        "weeklyScheduleId": null,
+        "unit": null,
+        "canSendReminders": null,
+        "canSendRecalls": null,
+        "canSendReviews": null,
+        "lastSyncDate": "2016-05-31T22:00:00.000Z",
+        "googlePlaceId": null,
+        "facebookUrl": null,
+        "vendastaMsId": null,
+        "sendRequestEmail": null,
+        "vendastaAccountId": null,
+        "vendastaSrId": null,
+        "callrailId": null,
+        "recallInterval": null,
+        "hygieneInterval": null,
+        "recallBuffer": null,
+        "recallStartTime": null,
+        "recallEndTime": null,
+        "reviewsInterval": null,
+        "massOnlineEmailSentDate": null,
+        "suggestedChairId": null,
+        "sendUnconfirmedReviews": null,
+        "omitChairIds": Array [],
+        "omitPractitionerIds": Array [],
+        "lastUpdated": 2018-01-31T23:00:00.000Z,
+        "isFetching": false,
+      },
+    },
+  },
+  "users": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentReminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentRecalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "invites": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "dialogs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patients": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chairs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "timeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "enterprises": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "appointments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitionerRecurringTimeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "calls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitioners": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "events": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "textMessages": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "availabilities": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chats": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "weeklySchedules": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "waitSpots": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "services": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+}
+`;
+
+exports[`entities reducer reducers updateEntity 1`] = `
+Immutable.Map {
+  "segments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "reminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "recalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "addresses": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patientUsers": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "permissions": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "requests": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "accounts": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {
+      "123": Immutable.Record {
+        "id": 123,
+        "addressId": null,
+        "name": "changed name",
+        "street": null,
+        "logo": null,
+        "fullLogoUrl": null,
+        "country": null,
+        "state": null,
+        "city": null,
+        "cellPhoneNumberFallback": null,
+        "timeInterval": null,
+        "zipCode": null,
+        "vendastaId": null,
+        "phoneNumber": null,
+        "timezone": null,
+        "contactEmail": null,
+        "website": null,
+        "twilioPhoneNumber": null,
+        "bookingWidgetPrimaryColor": null,
+        "destinationPhoneNumber": null,
+        "enterpriseId": null,
+        "weeklyScheduleId": null,
+        "unit": null,
+        "canSendReminders": null,
+        "canSendRecalls": null,
+        "canSendReviews": null,
+        "lastSyncDate": "2016-05-31T22:00:00.000Z",
+        "googlePlaceId": null,
+        "facebookUrl": null,
+        "vendastaMsId": null,
+        "sendRequestEmail": null,
+        "vendastaAccountId": null,
+        "vendastaSrId": null,
+        "callrailId": null,
+        "recallInterval": null,
+        "hygieneInterval": null,
+        "recallBuffer": null,
+        "recallStartTime": null,
+        "recallEndTime": null,
+        "reviewsInterval": null,
+        "massOnlineEmailSentDate": null,
+        "suggestedChairId": null,
+        "sendUnconfirmedReviews": null,
+        "omitChairIds": Array [],
+        "omitPractitionerIds": Array [],
+        "lastUpdated": 2018-01-31T23:00:00.000Z,
+        "isFetching": false,
+      },
+    },
+  },
+  "users": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentReminders": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "sentRecalls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "invites": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "dialogs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "patients": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chairs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "timeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "enterprises": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "appointments": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitionerRecurringTimeOffs": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "calls": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "practitioners": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "events": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "textMessages": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "availabilities": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "chats": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "weeklySchedules": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "waitSpots": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+  "services": Immutable.Record {
+    "lastUpdated": null,
+    "isFetching": false,
+    "isCollection": true,
+    "models": Immutable.Map {},
+  },
+}
+`;
+
+exports[`entities reducer update entitity 1`] = `
+Object {
+  "payload": Object {
+    "entity": Object {
+      "entities": Object {
+        "accounts": Object {
+          "123": Object {
+            "id": 123,
+            "name": "changed name",
+          },
+        },
+      },
+    },
+    "key": "accounts",
+  },
+  "type": "@entities/UPDATE_ENTITY",
+}
+`;

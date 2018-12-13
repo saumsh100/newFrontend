@@ -12,7 +12,7 @@ import {
   fetchEntities,
   updateEntityRequest,
 } from '../../thunks/fetchEntities';
-import { deleteAllEntity } from '../../actions/entities';
+import { deleteAllEntity } from '../../reducers/entities';
 
 const paramBuilder = (startDate, endDate, accountId, skip, limit) => ({
   startDate: startDate.toDate(),
@@ -44,11 +44,7 @@ class Calls extends Component {
   componentDidMount() {
     const token = localStorage.getItem('token');
     const decodedToken = jwt(token);
-
-    const {
-      startDate, endDate, skip, limit,
-    } = this.state;
-
+    const { startDate, endDate, skip, limit } = this.state;
     const params = paramBuilder(startDate, endDate, decodedToken.activeAccountId, skip, limit);
 
     this.fetchCallData(params).then((data) => {
@@ -97,16 +93,10 @@ class Calls extends Component {
   }
 
   loadMore() {
-    const {
-      startDate, endDate, accountId, skip, limit, callsLength,
-    } = this.state;
-
+    const { startDate, endDate, accountId, skip, limit, callsLength } = this.state;
     const params = paramBuilder(startDate, endDate, accountId, skip, limit);
 
-    this.setState({
-      fetchingCalls: true,
-    });
-
+    this.setState({ fetchingCalls: true });
     this.props
       .fetchEntities({
         id: 'calls',
@@ -151,10 +141,7 @@ class Calls extends Component {
   }
 
   render() {
-    const {
-      callGraphStats, calls, patients, wasCallsFetched, wasStatsFetched,
-    } = this.props;
-
+    const { callGraphStats, calls, patients, wasCallsFetched, wasStatsFetched } = this.props;
     return (
       <CallsBody
         calls={calls}
@@ -223,4 +210,7 @@ Calls.defaultProps = {
   callGraphStats: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Calls);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Calls);

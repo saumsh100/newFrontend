@@ -7,7 +7,7 @@ import axios from 'axios';
 import { protocol, myHost } from '../../server/config/globals';
 import { addAllScheduleFilter, setMergingPatient, selectAppointment } from '../actions/schedule';
 import { setAvailabilities, setAvailabilitiesError } from '../reducers/schedule';
-import { receiveEntities } from '../actions/entities';
+import { receiveEntities } from '../reducers/entities';
 import { setDateToTimezone } from '../../server/util/time';
 
 export function checkPatientUser(patientUser, requestData) {

@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import { showAlertTimeout } from '../thunks/alerts';
-import { receiveEntities } from '../actions/entities';
+import { receiveEntities } from '../reducers/entities';
 
 const alert = {
   success: { body: 'Syncing with PMS' },

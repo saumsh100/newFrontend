@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { receiveEntities } from '../../actions/entities';
+import { receiveEntities } from '../../reducers/entities';
 
 export default function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {

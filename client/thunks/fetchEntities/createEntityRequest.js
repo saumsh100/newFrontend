@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { receiveEntities } from '../../actions/entities';
+import { receiveEntities } from '../../reducers/entities';
 import { showAlertTimeout } from '../alerts';
 
 export default function createEntityRequest({ key, entityData, url, params = {}, alert }) {

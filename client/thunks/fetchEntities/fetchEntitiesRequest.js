@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { receiveEntities } from '../../actions/entities';
+import { receiveEntities } from '../../reducers/entities';
 import { createRequest, receiveRequest, errorRequest } from '../../reducers/apiRequests';
 
 export default function fetchEntitiesRequest({

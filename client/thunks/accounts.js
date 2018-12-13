@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import moment from 'moment';
-import { receiveEntities } from '../actions/entities';
+import { receiveEntities } from '../reducers/entities';
 import { updateEntityRequest } from './fetchEntities';
 import { showAlertTimeout } from '../thunks/alerts';
 
@@ -11,17 +11,19 @@ export function uploadLogo(accountId, file) {
     data.append('file', file);
 
     const alert = {
-      success: {
-        body: 'Logo has been uploaded',
-      },
-      error: {
-        body: 'Logo failed to upload',
-      },
+      success: { body: 'Logo has been uploaded' },
+      error: { body: 'Logo failed to upload' },
     };
 
     return axios.post(`/api/accounts/${accountId}/logo`, data).then((response) => {
-      dispatch(receiveEntities({ key: 'accounts', entities: response.data.entities }));
-      dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
+      dispatch(receiveEntities({
+        key: 'accounts',
+        entities: response.data.entities,
+      }));
+      dispatch(showAlertTimeout({
+        alert: alert.success,
+        type: 'success',
+      }));
     });
   };
 }
@@ -29,17 +31,19 @@ export function uploadLogo(accountId, file) {
 export function deleteLogo(accountId) {
   return function (dispatch) {
     const alert = {
-      success: {
-        body: 'Logo has been removed',
-      },
-      error: {
-        body: 'Logo removal failed',
-      },
+      success: { body: 'Logo has been removed' },
+      error: { body: 'Logo removal failed' },
     };
 
     return axios.delete(`/api/accounts/${accountId}/logo`).then((response) => {
-      dispatch(receiveEntities({ key: 'accounts', entities: response.data.entities }));
-      dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
+      dispatch(receiveEntities({
+        key: 'accounts',
+        entities: response.data.entities,
+      }));
+      dispatch(showAlertTimeout({
+        alert: alert.success,
+        type: 'success',
+      }));
     });
   };
 }
@@ -53,15 +57,14 @@ export function downloadConnector() {
 export function sendEmailBlast(accountId) {
   return function (dispatch) {
     const alert = {
-      success: {
-        body: 'Email Campaign Successful',
-      },
-      error: {
-        body: 'Email Campaign Failed',
-      },
+      success: { body: 'Email Campaign Successful' },
+      error: { body: 'Email Campaign Failed' },
     };
 
-    dispatch(showAlertTimeout({ alert: alert.success, type: 'success' }));
+    dispatch(showAlertTimeout({
+      alert: alert.success,
+      type: 'success',
+    }));
 
     return axios.post(`/api/accounts/${accountId}/onlineBookingEmailBlast`, {
       startDate: moment()

@@ -1,19 +1,7 @@
 
-import { Map, fromJS } from 'immutable';
+import { Map } from 'immutable';
 import each from 'lodash/each';
-import { handleActions } from 'redux-actions';
-import {
-  FETCH_ENTITIES,
-  RECEIVE_ENTITIES,
-  DELETE_ENTITY,
-  DELETE_ALL_ENTITY,
-  ADD_ENTITY,
-  UPDATE_ENTITY,
-  SEND_MESSAGE_ON_CLIENT,
-  READ_MESSAGES_IN_CURRENT_DIALOG,
-  UPDATE_PATIENT_IN_PATIENT_LIST,
-  ADD_SOCKET_ENTITY,
-} from '../constants';
+import { handleActions, createAction } from 'redux-actions';
 import Account from '../entities/models/Account';
 import accounts from '../entities/collections/accounts';
 import Address from '../entities/models/Address';
@@ -72,41 +60,60 @@ import recalls from '../entities/collections/recalls';
 import SentRecall from '../entities/models/SentRecall';
 import sentRecalls from '../entities/collections/sentRecalls';
 
-export const createInitialEntitiesState = (initialEntitiesState = {}) => receiveEntities(Map({
-    // KEYs must map to the response object
-    // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
-  accounts: new accounts(),
-  addresses: new addresses(),
-  enterprises: new enterprises(),
-  textMessages: new textMessages(),
-  appointments: new appointments(),
-  requests: new requests(),
-  services: new services(),
-  permissions: new permissions(),
-  invites: new invites(),
-  practitioners: new practitioners(),
-  availabilities: new availabilities(),
-  dialogs: new dialogs(),
-  patients: new patients(),
-  calls: new calls(),
-  chairs: new chairs(),
-  chats: new chat(),
-  waitSpots: new waitSpots(),
-  weeklySchedules: new weeklySchedules(),
-  users: new users(),
-  timeOffs: new timeOffs(),
-  practitionerRecurringTimeOffs: new practitionerRecurringTimeOffs(),
-  reminders: new reminders(),
-  sentReminders: new sentReminders(),
-  segments: new segments(),
-  recalls: new recalls(),
-  sentRecalls: new sentRecalls(),
-  patientUsers: new patientUsers(),
-  events: new events(),
+const reducer = '@entities';
+export const FETCH_ENTITIES = `${reducer}/FETCH_ENTITIES`;
+export const RECEIVE_ENTITIES = `${reducer}/RECEIVE_ENTITIES`;
+export const DELETE_ENTITY = `${reducer}/DELETE_ENTITY`;
+export const DELETE_ALL_ENTITY = `${reducer}/DELETE_ALL_ENTITY`;
+export const UPDATE_ENTITY = `${reducer}/UPDATE_ENTITY`;
+export const UPDATE_PATIENT_IN_PATIENT_LIST = `${reducer}/UPDATE_PATIENT_IN_PATIENT_LIST`;
 
-    // reviews: Reviews(), MODEL
-    // listings: Listings(),
-}), initialEntitiesState);
+export const fetchEntities = createAction(FETCH_ENTITIES);
+export const receiveEntities = createAction(RECEIVE_ENTITIES);
+export const deleteEntity = createAction(DELETE_ENTITY);
+export const deleteAllEntity = createAction(DELETE_ALL_ENTITY);
+export const updateEntity = createAction(UPDATE_ENTITY);
+export const updatePatientInPatientList = createAction(UPDATE_PATIENT_IN_PATIENT_LIST);
+
+export const createInitialEntitiesState = (initialEntitiesState = {}) =>
+  receiveEntitiesState(
+    Map({
+      // KEYs must map to the response object
+      // textMessages: Map(), custom collection because it is specific for each patient COLLECTION
+      accounts: new accounts(),
+      addresses: new addresses(),
+      enterprises: new enterprises(),
+      textMessages: new textMessages(),
+      appointments: new appointments(),
+      requests: new requests(),
+      services: new services(),
+      permissions: new permissions(),
+      invites: new invites(),
+      practitioners: new practitioners(),
+      availabilities: new availabilities(),
+      dialogs: new dialogs(),
+      patients: new patients(),
+      calls: new calls(),
+      chairs: new chairs(),
+      chats: new chat(),
+      waitSpots: new waitSpots(),
+      weeklySchedules: new weeklySchedules(),
+      users: new users(),
+      timeOffs: new timeOffs(),
+      practitionerRecurringTimeOffs: new practitionerRecurringTimeOffs(),
+      reminders: new reminders(),
+      sentReminders: new sentReminders(),
+      segments: new segments(),
+      recalls: new recalls(),
+      sentRecalls: new sentRecalls(),
+      patientUsers: new patientUsers(),
+      events: new events(),
+
+      // reviews: Reviews(), MODEL
+      // listings: Listings(),
+    }),
+    initialEntitiesState,
+  );
 
 const Models = {
   accounts: Account,
@@ -140,117 +147,56 @@ const Models = {
   enterpriseDashboard: EnterpriseDashboard,
 };
 
-export default handleActions({
-  [FETCH_ENTITIES](state, { payload: key }) {
-    return state.setIn([key, 'isFetching'], true);
+export default handleActions(
+  {
+    [FETCH_ENTITIES](state, { payload: key }) {
+      return state.setIn([key, 'isFetching'], true);
+    },
+
+    [RECEIVE_ENTITIES](
+      state,
+      { payload: { entities, merge } },
+    ) {
+      return receiveEntitiesState(state, entities, merge);
+    },
+
+    [DELETE_ENTITY](
+      state,
+      { payload: { key, id } },
+    ) {
+      const newState = state;
+      const model = newState.getIn([key, 'models', id]);
+      if (model) {
+        return newState.deleteIn([key, 'models', id]);
+      }
+
+      return state;
+    },
+
+    [DELETE_ALL_ENTITY](state, { payload }) {
+      const newState = state;
+      const model = newState.getIn([payload, 'models']);
+      if (model) {
+        return newState.deleteIn([payload, 'models']);
+      }
+
+      return state;
+    },
+
+    [UPDATE_ENTITY](
+      state,
+      { payload: { key, entity } },
+    ) {
+      const [id] = Object.keys(entity.entities[key]);
+      const updatedEntity = entity.entities[key][id];
+      const updatedModel = new Models[key](updatedEntity);
+      return state.updateIn([key, 'models', id], () => updatedModel);
+    },
   },
+  createInitialEntitiesState(),
+);
 
-  [RECEIVE_ENTITIES](state, { payload: { entities, merge } }) {
-    return receiveEntities(state, entities, merge);
-  },
-
-  [DELETE_ENTITY](state, { payload: { key, id } }) {
-    const newState = state;
-    const model = newState.getIn([key, 'models', id]);
-    if (model) {
-      return newState.deleteIn([key, 'models', id]);
-    }
-
-    return state;
-  },
-
-  [DELETE_ALL_ENTITY](state, { payload }) {
-    const newState = state;
-    const model = newState.getIn([payload, 'models']);
-    if (model) {
-      return newState.deleteIn([payload, 'models']);
-    }
-
-    return state;
-  },
-
-  [ADD_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity.entities[key])[0];
-    const addEntity = entity.entities[key][id];
-    const newModel = new Models[key](addEntity);
-    return state.setIn([key, 'models', id], newModel);
-  },
-
-  [UPDATE_ENTITY](state, { payload: { key, entity } }) {
-    const id = Object.keys(entity.entities[key])[0];
-    const updatedEntity = entity.entities[key][id];
-    const updatedModel = new Models[key](updatedEntity);
-    return state.updateIn([key, 'models', id], () => updatedModel);
-  },
-
-  [ADD_SOCKET_ENTITY](state, { payload: { key, entity } }) {
-    const id = entity.id;
-    const newModel = new Models[key](entity);
-    return state.setIn([key, 'models', id], newModel);
-  },
-
-  [SEND_MESSAGE_ON_CLIENT](state, action) {
-    const { message } = action.payload;
-    const objectToMergeWith = fromJS({
-      lastMessageText: message.body,
-      lastMessageTime: message.createdAt,
-    });
-    const oldDialog = fromJS(state.toJS().dialogs.models[message.patientId]);
-    const mergedDialog = oldDialog.mergeDeep(objectToMergeWith);
-    const oldMessages = state.toJS().dialogs.models[message.patientId].messages.map(m => m);
-    oldMessages.push(message);
-    const resultingDialog = mergedDialog.updateIn(['messages'], () => oldMessages).toJS();
-    return state.updateIn(['dialogs', 'models', message.patientId], () => resultingDialog);
-  },
-
-  [READ_MESSAGES_IN_CURRENT_DIALOG](state, action) {
-    const { messageId, dialogId, messageIndex = 0 } = action.payload;
-    const dialogs = state.toJS().dialogs;
-    const currentDialog = dialogs.models[dialogId];
-    const dialog = fromJS(currentDialog);
-    const dialogMessages = currentDialog.messages
-      .map(m => m);
-    const unreadCount = currentDialog.unreadCount;
-    dialogMessages[messageIndex].read = true;
-    const updatedMessagesDialog = dialog.updateIn(['messages'], () => dialogMessages);
-    const updatedDialog = updatedMessagesDialog.updateIn(['unreadCount'], () => unreadCount - 1).toJS();
-    return state.updateIn(['dialogs', 'models', dialogId], () => updatedDialog);
-  },
-
-  [UPDATE_PATIENT_IN_PATIENT_LIST](state, action) {
-    const { title, id } = action.payload;
-    const currentPatient = state.toJS().patientList.models[id];
-    let objectToMergeWith = {};
-    switch (title) {
-      case 'personal':
-        const { id, firstName, lastName, gender, language, birthday, middleName, status } = action.payload;
-        const name = `${firstName} ${lastName}`;
-        objectToMergeWith = fromJS({ name, gender, language, birthday, id, middleName, status });
-        break;
-
-      case 'insurance':
-        const { insurance, memberId, contract, carrier, sin } = action.payload;
-        objectToMergeWith = fromJS({ insurance: { insurance, memberId, contract, carrier, sin, id } });
-        break;
-
-    }
-    const updatedPatient = fromJS(currentPatient).mergeDeep(objectToMergeWith);
-    return state.updateIn(['patientList', 'models', id], () => updatedPatient.toJS());
-  },
-
-}, createInitialEntitiesState());
-
-/* function updateEntityStateWithEntities(state, key, id, modelData) {
-  const entityState = state.get(key);
-
-  if (entityState.get('isCollection')) {
-    return state.setIn([key, 'models', id], entityState.getModel()(modelData));
-  } else {
-    return state.set('')
-  }
-}*/
-
-function receiveEntities(state, entities, hardMerge) {
+function receiveEntitiesState(state, entities, hardMerge) {
   // TODO: update all appropriate entitites in state
   let newState = state;
   each(entities, (collectionMap, key) => {
@@ -258,14 +204,13 @@ function receiveEntities(state, entities, hardMerge) {
       const model = newState.getIn([key, 'models', id]);
       // TODO: Fix weeklySchedules merge issues
       if (
-        !hardMerge && (
-          !model ||
+        !hardMerge &&
+        (!model ||
           key === 'weeklySchedules' ||
           key === 'patients' ||
           key === 'chats' ||
           key === 'textMessages' ||
-          key === 'events'
-        )
+          key === 'events')
       ) {
         // newModel will have lastUpdated populated
         const newModel = new Models[key](modelData);

@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { deleteEntity } from '../../actions/entities';
+import { deleteEntity } from '../../reducers/entities';
 import { showAlertTimeout } from '../alerts';
 
 export default function deleteEntityRequest({ key, id, url, values, alert }) {
