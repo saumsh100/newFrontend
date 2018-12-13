@@ -28,6 +28,7 @@ RUN npm install babel-preset-env -g
 WORKDIR /tmp
 COPY package.json /tmp/
 COPY .npmignore /tmp/
+COPY .npmrc.example /tmp/
 
 RUN npm cache clear --force
 RUN npm install sharp
