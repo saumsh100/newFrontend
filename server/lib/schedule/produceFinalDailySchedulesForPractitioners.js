@@ -1,9 +1,8 @@
 
-import WeeklySchedule from 'CareCruModels';
+import { WeeklySchedule } from 'CareCruModels';
 import fetchStaticDataForAvailabilities from '../availabilities/fetchStaticDataForAvailabilities';
 import fetchDynamicDataForAvailabilities from '../availabilities/fetchDynamicDataForAvailabilities';
 import { computeOpeningsForPractitioner } from '../availabilities/computeOpeningsAndAvailabilities';
-import produceFinalDailySchedulesMap from '../schedule/produceFinalDailySchedulesMap';
 import StatusError from '../../util/StatusError';
 import { getRangeOfDays } from '../../util/time';
 import { setDateToTimezone } from '../../util/time';
