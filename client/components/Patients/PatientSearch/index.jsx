@@ -8,7 +8,7 @@ import { setBackHandler, setTitle } from '../../../reducers/electron';
 import { PATIENT_SEARCH_PAGE } from '../../../constants/PageTitle';
 import { Icon } from '../../library';
 import PatientInfoPage from '../PatientInfo/Electron';
-import RelayPatientSearch from '../../../components/RelayPatientSearch';
+import GraphQLPatientSearch from '../../GraphQLPatientSearch';
 import styles from './styles.scss';
 
 const patientSearchInputProps = {
@@ -64,7 +64,7 @@ class PatientSearch extends Component {
         ) : (
           <div>
             <Icon icon="search" className={styles.searchIcon} />
-            <RelayPatientSearch
+            <GraphQLPatientSearch
               focusInputOnMount
               context="hub"
               onChange={this.togglePatientsInfo}

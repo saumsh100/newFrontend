@@ -149,7 +149,7 @@ describe('Chat Tests', () => {
         .type('Hello Unknown')
         .get('[data-test-id="button_sendMessage"]')
         .click({ force: true })
-        .wait(1000)
+        .wait(1500)
         .get('[data-test-id="item_chatMessage"]')
         .contains('Hello Unknown');
     });

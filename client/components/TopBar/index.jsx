@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import omit from 'lodash/omit';
 import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
-import RelayPatientSearch from '../RelayPatientSearch';
+import GraphQLPatientSearch from '../GraphQLPatientSearch';
 import styles from './styles.scss';
 
 const UserMenu = (props) => {
@@ -186,7 +186,7 @@ class TopBar extends Component {
                 onClick={this.openSearch}
               />
               {!this.props.isSearchCollapsed && (
-                <RelayPatientSearch
+                <GraphQLPatientSearch
                   focusInputOnMount
                   hideRecentSearch={false}
                   onChange={this.onSearchSelect}

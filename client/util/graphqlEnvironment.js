@@ -16,7 +16,7 @@ function getUrlWithPath() {
 
 export function apolloClient() {
   return new ApolloClient({
-    url: getUrlWithPath(),
+    uri: getUrlWithPath(),
     request: async (operation) => {
       const token = getTokenDefault();
       operation.setContext({ headers: { Authorization: `Bearer ${token}` } });

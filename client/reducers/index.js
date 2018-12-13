@@ -16,7 +16,6 @@ import entities from './entities';
 import featureFlags from './featureFlags';
 import intelligence from './intelligence';
 import patientList from './patientList';
-import patientSearch from './patientSearch';
 import patientTable from './patientTable';
 import reputation from './reputation';
 import requests from './requests';
@@ -41,7 +40,6 @@ const appReducer = combineReducers({
   form,
   intelligence,
   patientList,
-  patientSearch,
   patientTable,
   reputation,
   requests,

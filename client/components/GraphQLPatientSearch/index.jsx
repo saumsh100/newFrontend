@@ -1,19 +1,20 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import Downshift from 'downshift';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
 import uniqBy from 'lodash/uniqBy';
 import { isHub } from '../../util/hub';
-import fetchPatients from './fetchPatients';
 import { Input, InfiniteScroll } from '../library';
 import Loader from '../Loader';
 import PatientSuggestion from '../PatientSuggestion';
 import { StyleExtender } from '../Utils/Themer';
-import { setPatientSearched } from '../../thunks/patientSearch';
+import composeSearchQuery from './composeSearchQuery';
+import composeAddPatientSearchMutation from './composeAddPatientSearchMutation';
+import FetchPatients from './fetchPatients';
+import FetchPatientSearches from './fetchPatientSearches';
+import AddPatientSearch from './addPatientSearch';
 import styles from './styles.scss';
 
 const defaultState = {
@@ -101,10 +102,12 @@ class PatientSearch extends Component {
   handleLoadMore() {
     this.setState({ isLoading: true }, () => {
       const { currValue, endCursor } = this.state;
-      fetchPatients({
-        search: currValue,
-        after: endCursor,
-      }).then(this.updateStateWithData(currValue));
+      this.props
+        .fetchPatients({
+          search: currValue,
+          after: endCursor,
+        })
+        .then(this.updateStateWithData(currValue));
     });
   }
 
@@ -114,7 +117,7 @@ class PatientSearch extends Component {
    * @returns {function}
    */
   updateStateWithData(inputValue) {
-    return data =>
+    return ({ data }) =>
       this.setState((prevState) => {
         const { currValue } = prevState;
         const results = data.accountViewer.patients.edges.map(v => v.node);
@@ -148,7 +151,10 @@ class PatientSearch extends Component {
               currValue: inputValue,
               patients: [],
             },
-            () => fetchPatients({ search: inputValue }).then(this.updateStateWithData(inputValue)),
+            () =>
+              this.props
+                .fetchPatients({ search: inputValue })
+                .then(this.updateStateWithData(inputValue)),
           );
         }
       }
@@ -364,6 +370,7 @@ PatientSearch.propTypes = {
     lastApptDate: PropTypes.string,
   })),
   setPatientSearched: PropTypes.func,
+  fetchPatients: PropTypes.func.isRequired,
   context: PropTypes.string,
 };
 
@@ -378,13 +385,41 @@ PatientSearch.defaultProps = {
   hideRecentSearch: true,
 };
 
-const mapStateToProps = ({ patientSearch }) => ({ searchedPatients: patientSearch.get('searchedPatients').toArray() });
+const GraphQLPatientSearch = ({ context, ...props }) => {
+  const setSearchData = refetch => data => refetch(composeSearchQuery(data));
+  const addNewPatientSearch = update => patient =>
+    update({ variables: { input: composeAddPatientSearchMutation(patient, context) } });
 
-const mapActionsToProps = dispatch => bindActionCreators({ setPatientSearched }, dispatch);
+  return (
+    <FetchPatientSearches context={context}>
+      {({ data: searchHistory }) => {
+        const recentSearches = searchHistory.accountViewer
+          ? searchHistory.accountViewer.patientSearches.edges
+              .map(v => v.node.patient)
+              .filter(p => !!p)
+          : [];
+        return (
+          <FetchPatients>
+            {({ refetch }) => (
+              <AddPatientSearch>
+                {addPatientSearch => (
+                  <PatientSearch
+                    {...props}
+                    context={context}
+                    searchedPatients={recentSearches}
+                    fetchPatients={setSearchData(refetch)}
+                    setPatientSearched={addNewPatientSearch(addPatientSearch)}
+                  />
+                )}
+              </AddPatientSearch>
+            )}
+          </FetchPatients>
+        );
+      }}
+    </FetchPatientSearches>
+  );
+};
 
-const enhance = connect(
-  mapStateToProps,
-  mapActionsToProps,
-);
+GraphQLPatientSearch.propTypes = { context: PropTypes.string.isRequired };
 
-export default enhance(PatientSearch);
+export default GraphQLPatientSearch;
