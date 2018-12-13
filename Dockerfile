@@ -31,6 +31,8 @@ COPY .npmignore /tmp/
 
 RUN npm cache clear --force
 RUN npm install sharp
+
+RUN cp .npmrc.example .npmrc
 RUN CI=true npm install --production
 
 RUN mkdir /app
