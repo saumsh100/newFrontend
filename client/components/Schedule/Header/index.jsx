@@ -12,10 +12,9 @@ import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
-import RemoteSubmitButton from '../../library/Form/RemoteSubmitButton';
 import { deleteWaitSpot } from '../../../thunks/waitlist';
-import styles from './styles.scss';
 import EnabledFeature from '../../library/EnabledFeature';
+import styles from './styles.scss';
 
 class Header extends Component {
   constructor(props) {
@@ -95,8 +94,6 @@ class Header extends Component {
     const leftColumnWidth = schedule.get('leftColumnWidth');
     const scheduleDate = schedule.get('scheduleDate');
     const currentDate = moment(scheduleDate);
-    const addToFormName = 'Add to Waitlist Form';
-
     return (
       <SHeader className={styles.headerContainer}>
         <CurrentDate currentDate={currentDate} leftColumnWidth={leftColumnWidth}>
@@ -206,34 +203,10 @@ class Header extends Component {
             >
               <Waitlist removeWaitSpot={this.removeWaitSpot} openAddTo={this.openAddToWaitlist} />
             </DialogBox>
-            <DialogBox
-              custom
-              title="Add to Waitlist"
+            <AddToWaitlist
+              toggleModal={this.openAddToWaitlist}
               active={this.state.showAddToWaitlist}
-              onEscKeyDown={this.openAddToWaitlist}
-              onOverlayClick={this.openAddToWaitlist}
-              bodyStyles={styles.dialogBodyAdd}
-              actions={[
-                {
-                  props: { border: 'blue' },
-                  component: Button,
-                  onClick: this.openAddToWaitlist,
-                  label: 'Cancel',
-                },
-                {
-                  props: {
-                    color: 'blue',
-                    form: addToFormName,
-                    'data-test-id': 'button_submitForm',
-                  },
-                  component: RemoteSubmitButton,
-                  onClick: this.openAddToWaitlist,
-                  label: 'Save',
-                },
-              ]}
-            >
-              <AddToWaitlist formName={addToFormName} onSubmit={this.handleAddToWaitlist} />
-            </DialogBox>
+            />
           </div>
         </CurrentDate>
       </SHeader>

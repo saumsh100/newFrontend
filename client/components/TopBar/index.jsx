@@ -4,22 +4,18 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Map } from 'immutable';
 import classNames from 'classnames';
-import omit from 'lodash/omit';
 import { AppBar, Avatar, Button, DropdownMenu, Icon, IconButton, Link, MenuItem } from '../library';
 import withAuthProps from '../../hocs/withAuthProps';
 import GraphQLPatientSearch from '../GraphQLPatientSearch';
+import accountShape from '../library/PropTypeShapes/accountShape';
 import styles from './styles.scss';
 
-const UserMenu = (props) => {
-  const { user, role, activeAccount, enterprise } = props;
-
-  const newProps = omit(props, ['user', 'activeAccount', 'enterprise']);
-  // TODO: create a separate container for this to load in user data from 'currentUser'
-  const isEnterprise = role === 'SUPERADMIN'; // enterprise.get('plan') === 'ENTERPRISE' && (role === 'OWNER' || role === 'SUPERADMIN');
-  const businessName = isEnterprise ? enterprise.get('name') : activeAccount && activeAccount.name;
+const UserMenu = ({ user, activeAccount, enterprise, ...props }) => {
+  const businessName =
+    props.role === 'SUPERADMIN' ? enterprise.get('name') : activeAccount && activeAccount.name;
 
   return (
-    <Button flat {...newProps} className={styles.userMenuButton}>
+    <Button flat {...props} className={styles.userMenuButton}>
       <div className={styles.userContainer}>
         <div className={styles.userMenuGreeting}>
           <div className={styles.greeting}>Hello, {user.get('firstName')}</div>
@@ -35,9 +31,11 @@ const UserMenu = (props) => {
 UserMenu.propTypes = {
   user: PropTypes.instanceOf(Map).isRequired,
   role: PropTypes.string.isRequired,
-  activeAccount: PropTypes.shape({ addressId: PropTypes.string }).isRequired,
+  activeAccount: PropTypes.shape(accountShape),
   enterprise: PropTypes.instanceOf(Map).isRequired,
 };
+
+UserMenu.defaultProps = { activeAccount: {} };
 
 const ActiveAccountButton = ({ account, onClick }) => (
   <Button onClick={onClick} className={styles.activeAccountButton}>
@@ -254,12 +252,15 @@ TopBar.propTypes = {
   enterprise: PropTypes.instanceOf(Map).isRequired,
   user: PropTypes.instanceOf(Map).isRequired,
   role: PropTypes.string.isRequired,
-  activeAccount: PropTypes.shape({ addressId: PropTypes.string }).isRequired,
+  activeAccount: PropTypes.shape(accountShape),
   runOnDemandSync: PropTypes.func.isRequired,
   withEnterprise: PropTypes.bool.isRequired,
   isAuth: PropTypes.bool,
 };
 
-TopBar.defaultProps = { isAuth: false };
+TopBar.defaultProps = {
+  isAuth: false,
+  activeAccount: {},
+};
 
 export default withAuthProps(withRouter(TopBar));

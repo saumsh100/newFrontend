@@ -11,9 +11,7 @@ import { fetchEntitiesRequest } from '../../thunks/fetchEntities';
 import { StyleExtender } from '../Utils/Themer';
 import styles from './styles.scss';
 
-const baseTheme = {
-  suggestionsContainerOpen: styles.containerOpen,
-};
+const baseTheme = { suggestionsContainerOpen: styles.containerOpen };
 
 function Suggestion(patient) {
   return (
@@ -90,6 +88,7 @@ class PatientSearch extends Component {
 
     return (
       <AutoCompleteForm
+        data-test-id={this.props['data-test-id']}
         suggestions={suggestions}
         getSuggestions={this.searchPatients}
         onSuggestionSelected={this.onSuggestionSelected}
@@ -109,22 +108,17 @@ PatientSearch.propTypes = {
   inputProps: PropTypes.objectOf(PropTypes.any),
   theme: PropTypes.objectOf(PropTypes.string),
   focusInputOnMount: PropTypes.bool,
+  'data-test-id': PropTypes.string,
 };
 
 PatientSearch.defaultProps = {
   focusInputOnMount: true,
   inputProps: {},
   theme: {},
+  'data-test-id': '',
 };
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      fetchEntitiesRequest,
-    },
-    dispatch,
-  );
-}
+const mapDispatchToProps = dispatch => bindActionCreators({ fetchEntitiesRequest }, dispatch);
 
 export default connect(
   null,

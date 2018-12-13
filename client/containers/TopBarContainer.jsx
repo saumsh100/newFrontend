@@ -11,23 +11,19 @@ import { logout, switchActiveAccount } from '../thunks/auth';
 import runOnDemandSync from '../thunks/runOnDemandSync';
 import { fetchEntities } from '../thunks/fetchEntities';
 import { accountShape } from '../components/library/PropTypeShapes';
-import { getCollection, getModel } from '../components/Utils';
-
-const fetchAccounts = () =>
-  fetchEntities({
-    key: 'accounts',
-    url: '/api/accounts',
-  });
 
 class TopBarContainer extends Component {
   componentDidMount() {
-    this.props.fetchAccounts();
+    this.props.fetchEntities({
+      key: 'accounts',
+      url: '/api/accounts',
+    });
     this.preloadLogoImage = new Image();
     this.preloadLogoImage.src = '/images/carecru_logo.png';
   }
 
   render() {
-    return <TopBar {...this.props} />;
+    return this.props.isReady && <TopBar {...this.props} />;
   }
 }
 
@@ -36,43 +32,47 @@ TopBarContainer.propTypes = {
   isSearchCollapsed: PropTypes.bool.isRequired,
   setIsCollapsed: PropTypes.func.isRequired,
   setIsSearchCollapsed: PropTypes.func.isRequired,
-  fetchAccounts: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
   accounts: PropTypes.arrayOf(PropTypes.shape(accountShape)),
+  activeAccount: PropTypes.shape(accountShape),
 };
 
-TopBarContainer.defaultProps = { accounts: null };
+const mapStateToProps = ({ entities, toolbar, auth }) => {
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  return {
+    isCollapsed: toolbar.get('isCollapsed'),
+    isSearchCollapsed: toolbar.get('isSearchCollapsed'),
+    accounts: Object.values(entities
+      .getIn(['accounts', 'models'])
+      .filter(account => account.enterpriseId === auth.get('enterpriseId'))
+      .toJS()),
+    activeAccount: activeAccount && activeAccount.toJS(),
+    user: auth.get('user'),
+    enterprise: auth.get('enterprise'),
+    isReady: !!auth.get('accountId') && !!activeAccount,
+  };
+};
 
-const mapStateToProps = state => ({
-  isCollapsed: state.toolbar.get('isCollapsed'),
-  isSearchCollapsed: state.toolbar.get('isSearchCollapsed'),
-  accounts: getCollection(
-    state,
-    'accounts',
-    account => account.enterpriseId === state.auth.get('enterpriseId'),
-  ),
-  activeAccount: getModel(state, 'accounts', state.auth.get('accountId')),
-  user: state.auth.get('user'),
-  enterprise: state.auth.get('enterprise'),
-});
-
-function mapActionsToProps(dispatch) {
-  return bindActionCreators(
+const mapActionsToProps = dispatch =>
+  bindActionCreators(
     {
       setIsCollapsed,
       setIsSearchCollapsed,
       logout,
       runOnDemandSync,
-      fetchAccounts,
+      fetchEntities,
       switchActiveAccount,
       push,
     },
     dispatch,
   );
-}
 
-const enhance = connect(
+TopBarContainer.defaultProps = {
+  accounts: [],
+  activeAccount: null,
+};
+
+export default connect(
   mapStateToProps,
   mapActionsToProps,
-);
-
-export default enhance(TopBarContainer);
+)(TopBarContainer);

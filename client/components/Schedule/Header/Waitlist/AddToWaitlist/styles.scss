@@ -19,6 +19,7 @@
 .searchContainer {
   margin-bottom: 20px;
   height: 59px;
+  text-align: left;
 }
 
 .dayContainer {
@@ -26,8 +27,14 @@
   flex-direction: row;
   width: 100%;
   flex-wrap: wrap;
-  padding-left: 20px;
-  padding-right: 20px;
+}
+.timeFrameContainer {
+  @extend .dayContainer;
+  margin-bottom: 8px;
+  + .timeFrameContainer {
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+  }
 }
 
 .subContainer {
@@ -50,7 +57,6 @@
 .subHeaderMargin {
   @extend .subHeader;
   margin-bottom: 12px;
-  margin-left: 20px;
 }
 
 .groupStyle {
@@ -78,11 +84,28 @@
 .colSpacing {
   display: flex;
   padding-bottom: 10px;
-  flex: 1 0 30%;
+  flex: 0 33%;
+  justify-content: center;
+}
+.dialogBodyAdd {
+  padding: 12px !important;
+  overflow: auto !important;
+}
+.orWrapper {
+  display: block;
+  margin-bottom: 10px;
+}
+.colFrames {
+  @extend .colSpacing;
+  flex: 1;
+}
 
-  &:last-child {
-    padding-bottom: 20px;
-  }
+.checkboxButton,
+.wrapperCheckboxButton {
+  width: 100%;
+}
+.wrapperCheckboxButton {
+  margin: 0 10px;
 }
 
 .patientContainer {
@@ -131,5 +154,30 @@
 
   &_date {
     font-size: 10px;
+  }
+}
+
+.patientSearchClass {
+  height: 50px;
+  box-sizing: border-box;
+  border-bottom: 1px solid $primary-darkgrey;
+  width: 100%;
+  padding: 0 12px;
+}
+
+.patientSearchInput {
+  height: 100%;
+  background-color: $color-white;
+
+  > span::before,
+  span::after {
+    bottom: -1px;
+  }
+
+  > input {
+    padding-left: 0;
+    &::placeholder {
+      color: $primary-darkgrey;
+    }
   }
 }

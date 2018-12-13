@@ -1,14 +1,17 @@
 
 import { Delete as deleteEntity, MassDelete as deleteMultiple } from '../components/RelayWaitlist';
+import { fetchEntities } from './fetchEntities';
 
-export function deleteWaitSpot(waitSpot) {
-  return () => {
-    deleteEntity.commit(waitSpot);
-  };
-}
+export const deleteWaitSpot = waitSpot => () => {
+  deleteEntity.commit(waitSpot);
+};
 
-export function deleteMultipleWaitSpots(list) {
-  return () => {
-    deleteMultiple.commit(list);
-  };
-}
+export const deleteMultipleWaitSpots = list => () => {
+  deleteMultiple.commit(list);
+};
+
+export const loadWeeklySchedule = () => dispatch =>
+  dispatch(fetchEntities({
+    key: 'accounts',
+    join: ['weeklySchedule'],
+  }));

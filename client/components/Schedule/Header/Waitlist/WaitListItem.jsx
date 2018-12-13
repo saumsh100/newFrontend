@@ -2,39 +2,38 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import omit from 'lodash/omit';
-import moment from 'moment';
+import { connect } from 'react-redux';
+import { week, dateFormatter } from '@carecru/isomorphic';
 import { Avatar, Icon, PatientPopover, IconButton, Checkbox, Collapsible } from '../../../library';
 import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import { isHub } from '../../../../util/hub';
 import styles from './styles.scss';
 
-export default function WaitListItem({
+const WaitListItem = ({
   waitSpot,
   patient,
   removeWaitSpot,
   isPatientUser,
   removeBorder,
   selected,
+  timezone,
   onSelect: onSelectCallback,
-}) {
-  const onSelect = (event) => {
-    event.stopPropagation();
-    onSelectCallback();
-  };
-
-  const renderPatientHeading = () => {
-    if (isHub()) {
-      return (
-        <div className={styles.name}>
-          {patient.firstName} {patient.lastName}
-        </div>
-      );
-    }
-
-    return (
+}) => {
+  const renderPatientHeading = () =>
+    (isHub() ? (
+      <div className={styles.name}>
+        {patient.firstName} {patient.lastName}
+      </div>
+    ) : (
       <PatientPopover
-        patient={isPatientUser ? Object.assign(patient, { endDate: waitSpot.endDate }) : patient}
+        patient={
+          isPatientUser
+            ? {
+                ...patient,
+                endDate: waitSpot.endDate,
+              }
+            : patient
+        }
         isPatientUser={isPatientUser}
         placement="left"
       >
@@ -42,92 +41,80 @@ export default function WaitListItem({
           {patient.firstName} {patient.lastName}
         </div>
       </PatientPopover>
-    );
-  };
+    ));
 
   const renderContent = () => {
-    if (!patient) {
-      return null;
-    }
-
-    const { preferences, daysOfTheWeek } = waitSpot;
-
-    const prefKeys = Object.keys(omit(preferences, ['weekdays', 'weekends']));
-
-    const dayWeekKeys = Object.keys(daysOfTheWeek);
-    const checkIfAnyTrue = dayWeekKeys.every(k => !daysOfTheWeek[k]);
-
+    if (!patient) return null;
+    const { daysOfTheWeek, endDate, availableTimes } = waitSpot;
+    const checkIfAnyTrue = Object.keys(daysOfTheWeek).every(k => !daysOfTheWeek[k]);
     const patientPhone = isPatientUser ? 'phoneNumber' : 'cellPhoneNumber';
 
-    let nextAppt = null;
-
-    if (isPatientUser) {
-      nextAppt = moment(waitSpot.endDate).format('MMM Do YYYY');
-    } else if (!isPatientUser && moment(patient.nextApptDate).isValid()) {
-      nextAppt = moment(patient.nextApptDate).format('MMM Do YYYY');
-    }
-
-    const wrapperStyle = classNames({
-      [styles.wrapper]: !isHub(),
-      [styles.listItemWrapperHub]: isHub(),
-      [styles.removeBorder]: removeBorder,
-    });
-
-    const checkboxStyle = classNames(styles.checkBox, { [styles.checked]: selected });
-
-    const patientInfoSectionHub = isHub() && (
-      <div className={styles.heading}>
-        <Avatar user={patient} size="xs" />
-        {renderPatientHeading()}
-      </div>
-    );
-
-    const filteredPreferencesList = prefKeys.filter(pref => preferences[pref]).join(', ');
-    const filteredDaysList = dayWeekKeys.filter(day => daysOfTheWeek[day]).join(', ');
+    const nextAppt =
+      (isPatientUser
+        ? dateFormatter(endDate, timezone, 'MMM Do YYYY')
+        : patient.nextApptDate && dateFormatter(patient.nextApptDate, timezone, 'MMM Do YYYY')) ||
+      'n/a';
+    const filteredPreferencesList =
+      availableTimes &&
+      availableTimes
+        .map(time => dateFormatter(new Date(time).toISOString(), timezone, 'LT'))
+        .join(', ');
 
     return (
       <div className={styles.waitListItem} data-test-id="list_waitListItem">
         {isHub() && (
-          <Checkbox customContainer={checkboxStyle} onChange={onSelect} checked={selected} />
+          <Checkbox
+            customContainer={classNames(styles.checkBox, { [styles.checked]: selected })}
+            onChange={(e) => {
+              e.stopPropagation();
+              onSelectCallback();
+            }}
+            checked={selected}
+          />
         )}
-
-        <div className={wrapperStyle}>
-          {patientInfoSectionHub}
-
+        <div
+          className={classNames({
+            [styles.wrapper]: !isHub(),
+            [styles.listItemWrapperHub]: isHub(),
+            [styles.removeBorder]: removeBorder,
+          })}
+        >
+          {isHub() && (
+            <div className={styles.heading}>
+              <Avatar user={patient} size="xs" />
+              {renderPatientHeading()}
+            </div>
+          )}
           {!isHub() && (
             <div className={styles.avatar}>
               <Avatar user={patient} size="sm" />
             </div>
           )}
-
           <div className={styles.patientPrefInfo}>
             {!isHub() && renderPatientHeading()}
-
             <div className={styles.info}>
               <span className={styles.subHeader}> Next Appt: </span>
-              <span className={styles.dataText}>{nextAppt || 'n/a'}</span>
+              <span className={styles.dataText}>{nextAppt}</span>
             </div>
-
             <div className={styles.info}>
               <span className={styles.subHeader}>Preferences: </span>
               <span className={styles.dataText}>{filteredPreferencesList}</span>
             </div>
-
             {!checkIfAnyTrue && (
               <div className={styles.info}>
                 <span className={styles.subHeader}>Preferred Days: </span>
-                <span className={styles.dataText}>{filteredDaysList}</span>
+                <span className={styles.dataText}>
+                  {week.all.filter(day => daysOfTheWeek[day]).join(', ')}
+                </span>
               </div>
             )}
-
             <div className={styles.info}>
               <span className={styles.subHeader}> Requested on: </span>
               <span className={classNames([styles.dataText, styles.createdAt])}>
-                {moment(waitSpot.createdAt).format('MMM DD, YYYY h:mm A')}
+                {dateFormatter(waitSpot.createdAt, timezone, 'MMM DD, YYYY h:mm A')}
               </span>
             </div>
           </div>
-
           {!isHub() && (
             <div className={styles.patientGeneralInfo}>
               {patient[patientPhone] && (
@@ -146,7 +133,6 @@ export default function WaitListItem({
               )}
             </div>
           )}
-
           {!isHub() && (
             <div className={styles.remove}>
               <IconButton icon="times" onClick={removeWaitSpot} />
@@ -185,18 +171,18 @@ export default function WaitListItem({
           <span className={styles.subHeader}>Next appointment: </span>
           <span className={styles.dataText}>
             {patient.nextApptDate
-              ? moment(patient.nextApptDate).format('MMM Do, YYYY h:mm A')
+              ? dateFormatter(patient.nextApptDate, timezone, 'MMM Do, YYYY h:mm A')
               : 'n/a'}
             {isPatientUser &&
               patient.endDate &&
-              moment(patient.endDate).format('MMM Do, YYYY h:mm A')}
+              dateFormatter(patient.endDate, timezone, 'MMM Do, YYYY h:mm A')}
           </span>
         </div>
         <div className={styles.info}>
           <span className={styles.subHeader}>Last appointment: </span>
           <span className={styles.dataText}>
             {patient.lastApptDate
-              ? moment(patient.lastApptDate).format('MMM Do, YYYY h:mm A')
+              ? dateFormatter(patient.lastApptDate, timezone, 'MMM Do, YYYY h:mm A')
               : 'n/a'}
           </span>
         </div>
@@ -216,16 +202,14 @@ export default function WaitListItem({
     );
   };
 
-  if (isHub()) {
-    return (
-      <Collapsible hasIcon={false} title={renderContent()}>
-        {renderPatientProfile()}
-      </Collapsible>
-    );
-  }
-
-  return renderContent();
-}
+  return isHub() ? (
+    <Collapsible hasIcon={false} title={renderContent()}>
+      {renderPatientProfile()}
+    </Collapsible>
+  ) : (
+    renderContent()
+  );
+};
 
 WaitListItem.defaultProps = {
   patient: null,
@@ -236,6 +220,7 @@ WaitListItem.defaultProps = {
 
 WaitListItem.propTypes = {
   removeWaitSpot: PropTypes.func.isRequired,
+  timezone: PropTypes.string.isRequired,
   patient: PropTypes.shape({
     address: PropTypes.shape({
       city: PropTypes.string,
@@ -280,3 +265,7 @@ WaitListItem.propTypes = {
   onSelect: PropTypes.func.isRequired,
   selected: PropTypes.bool,
 };
+
+const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
+
+export default connect(mapStateToProps)(WaitListItem);

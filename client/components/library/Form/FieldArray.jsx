@@ -1,10 +1,5 @@
 
-import PropTypes from 'prop-types';
 import React from 'react';
-import { FieldArray as RFFieldArray } from 'redux-form';
+import { FieldArray } from 'redux-form';
 
-export default function FieldArray(props) {
-  return <RFFieldArray {...props} />;
-}
-
-FieldArray.propTypes = {};
+export default props => <FieldArray {...props} />;

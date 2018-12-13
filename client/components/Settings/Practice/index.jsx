@@ -3,17 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AccountShape from '../../library/PropTypeShapes/accountShape';
 
-export default function Practice({ children, activeAccount }) {
-  const divStyle = { height: '100%' };
-  return (
-    <div style={divStyle}>
-      {React.Children.map(children, child =>
-        React.cloneElement(child, { activeAccount }))}
-    </div>
-  );
-}
+const Practice = ({ children, activeAccount }) => (
+  <div style={{ height: '100%' }}>
+    {React.Children.map(children, child => React.cloneElement(child, { activeAccount }))}
+  </div>
+);
+export default Practice;
 
 Practice.propTypes = {
-  children: PropTypes.element,
-  activeAccount: PropTypes.shape(AccountShape),
+  children: PropTypes.element.isRequired,
+  activeAccount: PropTypes.shape(AccountShape).isRequired,
 };

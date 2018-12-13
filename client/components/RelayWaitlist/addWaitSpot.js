@@ -8,6 +8,7 @@ const mutation = graphql`
       waitSpot {
         patientId
         unavailableDays
+        availableTimes
         endDate
         daysOfTheWeek
         preferences
@@ -19,9 +20,7 @@ const mutation = graphql`
 const commit = input =>
   commitMutation(graphQLEnvironment, {
     mutation,
-    variables: {
-      input,
-    },
+    variables: { input },
   });
 
 export default { commit };

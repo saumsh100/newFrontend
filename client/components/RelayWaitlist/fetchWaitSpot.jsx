@@ -13,6 +13,7 @@ const query = graphql`
       ) @connection(key: "AccountViewer_waitSpots") {
         edges {
           node {
+            availableTimes
             id
             ccId
             patientUserId

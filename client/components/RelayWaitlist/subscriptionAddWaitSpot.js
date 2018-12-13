@@ -9,6 +9,7 @@ const subscription = graphql`
     newWaitSpot(accountId: $accountId) {
       id
       ccId
+      availableTimes
       patientUserId
       patientId
       preferences
