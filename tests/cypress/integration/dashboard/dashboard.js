@@ -1,3 +1,4 @@
+
 describe('Dashboard Tests', () => {
   beforeEach(() => {
     cy.login();
@@ -7,8 +8,9 @@ describe('Dashboard Tests', () => {
     cy
       .get('[data-test-id="statCard_Online Requests"]')
       .contains('0')
+      .wait(2000)
       .get('[data-test-id="statCard_Patient Insights"]')
-      .contains('0')
+      .should('exist')
       .get('[data-test-id="statCard_Appointments Today"]')
       .contains('3')
       .get('[data-test-id="statCard_Patients Unconfirmed"]')

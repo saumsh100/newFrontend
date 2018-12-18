@@ -39,7 +39,7 @@ export async function allInsights(accountId, startDate, endDate) {
     });
 
     const familyHeads = patients.filter(p => p && (p.family === null || p.id === p.family.headId));
-    return generateInsights(familyHeads, startDate);
+    return generateInsights(familyHeads);
   } catch (err) {
     console.error(err);
     throw err;
@@ -53,7 +53,7 @@ export async function allInsights(accountId, startDate, endDate) {
  * @param  {Date} startDate [Selected date]
  * @return [Array] insights [formatted insights]
  */
-export async function generateInsights(patients, startDate) {
+export async function generateInsights(patients) {
   const insightsPromises = patients
     .map(p => p.get({ plain: true }))
     .map(async (patient) => {
@@ -72,7 +72,6 @@ export async function generateInsights(patients, startDate) {
         const confirmInsight = await generateConfirmApptInsight(
           patient,
           appointment,
-          startDate,
         );
         if (confirmInsight) {
           insights.push(confirmInsight);
@@ -80,8 +79,9 @@ export async function generateInsights(patients, startDate) {
       }
 
       if (patient.family && patient.family.patients.length > 0) {
+        const filteredFamilies = patient.family.patients.filter(p => p.id !== patient.id);
         const familiesDueRecare =
-          patient.family.patients.map(({ dueForHygieneDate, dueForRecallExamDate, ...p }) => ({
+          filteredFamilies.map(({ dueForHygieneDate, dueForRecallExamDate, ...p }) => ({
             ...p,
             dateDue: [dueForHygieneDate, dueForRecallExamDate]
               .filter(a => !!a)
@@ -141,7 +141,6 @@ function generateEmailInsight() {
 async function generateConfirmApptInsight(
   { cellPhoneNumber, email },
   { id },
-  startDate,
 ) {
   const confirmAttempts =
     cellPhoneNumber && email && (await checkConfirmAttempts(id));
@@ -149,7 +148,6 @@ async function generateConfirmApptInsight(
     confirmAttempts.phoneNumber = cellPhoneNumber;
   }
   return (
-    moment(startDate).isAfter(new Date()) &&
     (cellPhoneNumber || email) && {
       type: 'confirmAttempts',
       value: confirmAttempts || { cellPhoneNumber },
