@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.61.0",
+  "version": "2.62.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -30,6 +30,7 @@
     "start:backend:dev": "nodemon server/bin/server.js --no-webpack",
     "storybook": "start-storybook -s ./statics/fonts -p 6006",
     "test": "npm run test:api && npm run test:lib && npm run test:graphql",
+    "test:watch": "if [ -f .env ]; then export $(cat .env | xargs); fi && jest --watch",
     "test:cypress": "cypress run",
     "test:jest": "if [ -f .env ]; then export $(cat .env | xargs); fi && jest --verbose --forceExit",
     "test:api": "if [ -f .env ]; then export $(cat .env | xargs); fi && jest tests/__tests__/api --verbose --runInBand --forceExit",

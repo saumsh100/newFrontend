@@ -53,6 +53,11 @@ const namespaces = {
   sync: '/sync',
 };
 
+const modeAnalytics = {
+  accessKey: environmentVariables.MODE_ANALYTICS_ACCESS_KEY,
+  secret: environmentVariables.MODE_ANALYTICS_SECRET,
+};
+
 const callrails = {
   apiKey: environmentVariables.CALLRAIL_API_KEY,
   apiAccount: environmentVariables.CALLRAIL_API_ACCOUNTID,
@@ -182,6 +187,7 @@ module.exports = {
   aws,
   s3,
   postgres,
+  modeAnalytics,
   callrails,
   reminders,
   reviews,
