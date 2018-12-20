@@ -22,7 +22,7 @@ class ModeReport extends Component {
       this.props.reportId !== prevProps.reportId ||
       !isEqual(this.props.parameters, prevProps.parameters)
     ) {
-      this.signUrl(prevProps);
+      this.signUrl(this.props);
     }
   }
 
@@ -59,7 +59,7 @@ class ModeReport extends Component {
 
 ModeReport.propTypes = {
   reportId: PropTypes.string.isRequired,
-  parameters: PropTypes.ObjectOf(PropTypes.string),
+  parameters: PropTypes.objectOf(PropTypes.string),
 };
 
 ModeReport.defaultProps = { parameters: {} };
