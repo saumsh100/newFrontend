@@ -87,6 +87,7 @@ Object {
         "isHidden": false,
         "name": "Test Service",
         "pmsId": null,
+        "reasonScheduleId": null,
         "unitCost": null,
       },
     },
