@@ -44,11 +44,17 @@ const ROUTES = {
       to: '/intelligence/business',
       label: 'Business',
     },
-    /* {
-      to: '/intelligence/social',
-      label: 'Social',
-      disabled: true,
-    }, */
+  ],
+
+  '/reports': [
+    {
+      to: '/reports/bookings',
+      label: 'Online Bookings',
+    },
+    {
+      to: '/reports/reminders',
+      label: 'Reminders',
+    },
   ],
 
   '/reputation': [
@@ -100,17 +106,13 @@ class SubTabs extends Component {
   }
 
   render() {
-    const {
-      location: { pathname },
-    } = this.props;
+    const { location: { pathname } } = this.props;
     const activeRoute = Object.keys(ROUTES).find(route => pathname.indexOf(route) === 0);
 
     return activeRoute ? <RouterTabs routes={ROUTES[activeRoute]} /> : null;
   }
 }
 
-SubTabs.propTypes = {
-  location: PropTypes.objectOf(PropTypes.any).isRequired,
-};
+SubTabs.propTypes = { location: PropTypes.objectOf(PropTypes.any).isRequired };
 
 export default SubTabs;

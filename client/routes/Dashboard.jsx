@@ -15,7 +15,7 @@ import withAuthProps from '../hocs/withAuthProps';
 const Routes = {
   dashboard: LazyRoute(() => import('../components/Dashboard/index'), true),
   profile: LazyRoute(() => import('../components/Profile'), true),
-  intelligence: LazyRoute(() => import('./Dashboard/Intelligence'), true),
+  intelligence: LazyRoute(() => import('./Dashboard/Reports'), true),
   schedule: LazyRoute(() => import('./Dashboard/Schedule'), true),
   patients: LazyRoute(() => import('./Dashboard/Patients'), true),
   chat: LazyRoute(() => import('./Dashboard/Chat'), true),
@@ -27,15 +27,13 @@ const Routes = {
   calls: LazyRoute(() => import('./Dashboard/Calls'), true),
 };
 
-const DashboardRouter = ({
-  history, isAuth, isSuperAdmin, withEnterprise,
-}) => {
+const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const getAuthorizedRoutes = () => (
     <div>
       <Switch>
         <Route path="/" exact component={Routes.dashboard} />
         <Route path="/profile" component={Routes.profile} />
-        <Route path="/intelligence" component={Routes.intelligence} />
+        <Route path="/reports" component={Routes.intelligence} />
         <Route path="/schedule" component={Routes.schedule} />
         <Route path="/patients" component={Routes.patients} />
         <Route path="/chat" component={Routes.chat} />
@@ -44,9 +42,7 @@ const DashboardRouter = ({
         <Route path="/reputation" component={Routes.reputation} />
         <Route path="/settings" component={Routes.settings} />
         {isSuperAdmin && <Route path="/admin" component={Routes.admin} />}
-        {withEnterprise && (
-          <Route path="/enterprise" component={Routes.enterprise} />
-        )}
+        {withEnterprise && <Route path="/enterprise" component={Routes.enterprise} />}
         <Route component={FourZeroFour} />
       </Switch>
     </div>
@@ -60,7 +56,10 @@ const DashboardRouter = ({
             getAuthorizedRoutes()
           ) : (
             <Redirect
-              to={{ pathname: '/login', state: { from: props.location } }}
+              to={{
+                pathname: '/login',
+                state: { from: props.location },
+              }}
             />
           ))
         }
@@ -69,9 +68,7 @@ const DashboardRouter = ({
   );
 
   const signUp = /^\/signup\/.+$/i;
-  const urlTest = signUp.test(history.location.pathname)
-    ? history.location.pathname
-    : '/signup';
+  const urlTest = signUp.test(history.location.pathname) ? history.location.pathname : '/signup';
 
   const reset = /^\/resetpassword\/.+$/i;
   const resetTest = reset.test(history.location.pathname)
@@ -85,30 +82,22 @@ const DashboardRouter = ({
           <Route
             exact
             path="/login"
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <Login {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <Login {...props} />)}
           />
           <Route
             exact
             path={urlTest}
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <SignUp {...props} />)}
           />
           <Route
             exact
             path="/forgot"
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <ForgotPassword {...props} />)}
           />
           <Route
             exact
             path={resetTest}
-            render={props =>
-              (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)
-            }
+            render={props => (isAuth ? <Redirect to="/" /> : <ResetPassword {...props} />)}
           />
           <Route path="/" component={Dashboard} />
         </Switch>
@@ -130,7 +119,7 @@ DashboardRouter.propTypes = {
     location: PropTypes.objectOf(PropTypes.string),
     push: PropTypes.func,
     replace: PropTypes.func,
-  }),
+  }).isRequired,
   isAuth: PropTypes.bool.isRequired,
   isSuperAdmin: PropTypes.bool.isRequired,
   withEnterprise: PropTypes.bool.isRequired,
@@ -149,7 +138,7 @@ DashboardRouter.propTypes = {
     search: PropTypes.string,
     toString: PropTypes.func,
     valueOf: PropTypes.func,
-  }),
+  }).isRequired,
 };
 
 export default withAuthProps(DashboardRouter);

@@ -1,8 +1,6 @@
 
-import io from 'socket.io-client';
+import io from 'socket.io-client'; // eslint-disable-line import/no-extraneous-dependencies
 import { getSocketUrl } from '../util/hub';
-
-// const URL = 'http://localhost:5000';
 
 // IMPORTANT because the app is served via iframe do not need to connect by URL
 class Socket {
