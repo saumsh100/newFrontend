@@ -38,6 +38,8 @@ const App = () => (
       {helpers.injectJS('vendor')}
       {helpers.injectJS('common')}
       {helpers.injectJS('app')}
+
+      <script src="https://modeanalytics.com/embed/embed.js"></script>
     </body>
   </html>
 );
