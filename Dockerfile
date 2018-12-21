@@ -17,14 +17,9 @@ RUN apk update \
 RUN apk add --no-cache vips-dev fftw-dev \
 	--update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
 	--repository http://dl-cdn.alpinelinux.org/alpine/edge/main/
-RUN apk add --no-cache \
-  	gcc g++ make libc6-compat
-RUN apk add --no-cache git
-RUN apk add --no-cache tzdata
+RUN apk add --no-cache libc6-compat git tzdata
 
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-RUN npm install babel-preset-env -g
 
 WORKDIR /tmp
 COPY package.json /tmp/
@@ -76,8 +71,8 @@ RUN rm -rf /tmp/node_modules
 
 RUN npm run postinstall
 
-RUN npm install sequelize -g
-RUN npm install sequelize-cli -g
+RUN npm install sequelize@^4.3.2 -g
+RUN npm install sequelize-cli@^4.1.0 -g
 RUN npm install pg -g
 
 EXPOSE 80
