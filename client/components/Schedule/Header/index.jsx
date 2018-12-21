@@ -81,7 +81,7 @@ class Header extends Component {
   render() {
     const {
       addNewAppointment,
-      showAvailabilities,
+      showSchedule,
       scheduleView,
       schedule,
       chairs,
@@ -151,10 +151,10 @@ class Header extends Component {
                   dense
                   compact
                   color="blue"
-                  onClick={showAvailabilities}
+                  onClick={showSchedule}
                   className={styles.headerLinks_waitlist}
                 >
-                  Availabilities
+                  Debug Schedule
                 </Button>
               )}
             />
@@ -225,7 +225,7 @@ Header.propTypes = {
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
   addNewAppointment: PropTypes.func.isRequired,
-  showAvailabilities: PropTypes.func.isRequired,
+  showSchedule: PropTypes.func.isRequired,
   scheduleView: PropTypes.string.isRequired,
   setScheduleView: PropTypes.func.isRequired,
   schedule: PropTypes.instanceOf(Map).isRequired,

@@ -25,7 +25,7 @@ import DayView from './DayView';
 import AddNewAppointment from './AddNewAppointment';
 import AddPatient from './AddPatient';
 import AddPatientSuggestions from './AddPatientSuggestions';
-import AvailabilitiesModal from './AvailabilitiesModal';
+import ScheduleModal from './ScheduleModal';
 import Header from './Header';
 import RemoteSubmitButton from '../library/Form/RemoteSubmitButton';
 import ConfirmAppointmentRequest from './ConfirmAppointmentRequest/index';
@@ -39,7 +39,7 @@ class ScheduleComponent extends Component {
       assignPatientToChatModalActive: false,
       patient: null,
       addNewAppointment: false,
-      showAvailabilities: false,
+      showSchedule: false,
       patientSearched: null,
       sendEmail: false,
       showInput: false,
@@ -47,7 +47,7 @@ class ScheduleComponent extends Component {
     this.setCurrentDay = this.setCurrentDay.bind(this);
     this.reinitializeState = this.reinitializeState.bind(this);
     this.addNewAppointment = this.addNewAppointment.bind(this);
-    this.showAvailabilities = this.showAvailabilities.bind(this);
+    this.showSchedule = this.showSchedule.bind(this);
     this.setPatientSearched = this.setPatientSearched.bind(this);
     this.setSendEmail = this.setSendEmail.bind(this);
     this.nextDay = this.nextDay.bind(this);
@@ -116,8 +116,8 @@ class ScheduleComponent extends Component {
     this.setState({ addNewAppointment: true });
   }
 
-  showAvailabilities() {
-    this.setState({ showAvailabilities: true });
+  showSchedule() {
+    this.setState({ showSchedule: true });
   }
 
   updateHubData(props) {
@@ -145,7 +145,7 @@ class ScheduleComponent extends Component {
     this.props.setCreatingPatient(false);
     this.props.selectAppointment(null);
     this.setState({
-      showAvailabilities: false,
+      showSchedule: false,
       addNewAppointment: false,
       patientSearched: null,
       sendEmail: false,
@@ -241,7 +241,7 @@ class ScheduleComponent extends Component {
       accountsFetched,
     } = this.props;
 
-    const { addNewAppointment, showAvailabilities } = this.state;
+    const { addNewAppointment, showSchedule } = this.state;
 
     const hubRedirect = { pathname: '/requests' };
 
@@ -401,7 +401,7 @@ class ScheduleComponent extends Component {
             <SContainer>
               <Header
                 addNewAppointment={this.addNewAppointment}
-                showAvailabilities={this.showAvailabilities}
+                showSchedule={this.showSchedule}
                 schedule={schedule}
                 chairs={filterChairs}
                 practitioners={filterPractitioners}
@@ -423,11 +423,8 @@ class ScheduleComponent extends Component {
                   selectAppointment={selectAppointment}
                   leftColumnWidth={leftColumnWidth}
                 />
-                {allFetched && (
-                  <AvailabilitiesModal
-                    showAvailabilities={showAvailabilities}
-                    reinitializeState={this.reinitializeState}
-                  />
+                {allFetched && showSchedule && (
+                  <ScheduleModal reinitializeState={this.reinitializeState} />
                 )}
                 {allFetched ? (
                   <Modal

@@ -133,7 +133,7 @@ dailyScheduleRouter.get('/finalDailySchedules', async ({ query, accountId }, res
   }
 
   try {
-    const practitioners = await findPractitionersByIds(JSON.parse(practitionerIds), accountId);
+    const practitioners = await findPractitionersByIds(practitionerIds, accountId);
     res.send(await generateDailySchedulesForPractitioners(practitioners, fromDate, toDate || fromDate));
   } catch (e) {
     return next(e);

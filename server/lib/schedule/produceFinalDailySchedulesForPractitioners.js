@@ -106,22 +106,28 @@ export default async function generateDailySchedulesForPractitioners(inputPracti
   }
 
   const days = getRangeOfDays(startDate, endDate, timezone);
-  return practitioners.reduce(async (result, practitioner) => {
-    const { dailySchedules, timeOffs, isCustomSchedule, weeklyScheduleId, id } = practitioner;
-    const weeklySchedule = isCustomSchedule ?
-      await findWeeklyScheduleById(weeklyScheduleId) : officeHours;
 
+  const practitionersWithSchedule = await Promise.all(practitioners.map(async (practitioner) => {
+    const { isCustomSchedule, weeklyScheduleId } = practitioner;
+    return {
+      ...practitioner,
+      weeklySchedule: isCustomSchedule ?
+        await findWeeklyScheduleById(weeklyScheduleId) : officeHours,
+    };
+  }));
+
+  return practitionersWithSchedule.reduce((result, practitioner) => {
+    const { dailySchedules, timeOffs, weeklySchedule, id, appointments, requests } = practitioner;
     const finalDailySchedule = computeOpeningsForPractitioner({
       account,
       weeklySchedule,
       timeOffs,
       dailySchedules,
-      appointments: practitioner.appointments,
-      requests: practitioner.requests,
+      appointments,
+      requests,
       startDate,
       endDate,
     });
-
     return days.reduce((acc, day) => ({
       ...acc,
       [day]: {
