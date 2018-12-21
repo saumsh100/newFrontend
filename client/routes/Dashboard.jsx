@@ -33,7 +33,7 @@ const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
       <Switch>
         <Route path="/" exact component={Routes.dashboard} />
         <Route path="/profile" component={Routes.profile} />
-        <Route path="/reports" component={Routes.intelligence} />
+        <Route path="/intelligence" component={Routes.intelligence} />
         <Route path="/schedule" component={Routes.schedule} />
         <Route path="/patients" component={Routes.patients} />
         <Route path="/chat" component={Routes.chat} />

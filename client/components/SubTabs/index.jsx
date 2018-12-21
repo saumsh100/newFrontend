@@ -35,25 +35,26 @@ const ROUTES = {
     },
   ],
 
+  // This is not being used for now
+  // '/intelligence': [
+  //   {
+  //     to: '/intelligence/overview',
+  //     label: 'Overview',
+  //   },
+  //   {
+  //     to: '/intelligence/business',
+  //     label: 'Business',
+  //   },
+  // ],
+
   '/intelligence': [
     {
-      to: '/intelligence/overview',
-      label: 'Overview',
+      to: '/intelligence/growth',
+      label: 'Practice Growth',
     },
     {
-      to: '/intelligence/business',
-      label: 'Business',
-    },
-  ],
-
-  '/reports': [
-    {
-      to: '/reports/bookings',
-      label: 'Online Bookings',
-    },
-    {
-      to: '/reports/reminders',
-      label: 'Reminders',
+      to: '/intelligence/pulse',
+      label: 'Practice Pulse',
     },
   ],
 

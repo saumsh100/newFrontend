@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash/isEqual';
 import signModeUrl from './signModeUrl';
+import styles from './styles.scss';
 
 class ModeReport extends Component {
   constructor(props) {
@@ -40,7 +41,7 @@ class ModeReport extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.report}>
         {this.state.loading ? (
           'Loading...'
         ) : (
@@ -59,7 +60,7 @@ class ModeReport extends Component {
 
 ModeReport.propTypes = {
   reportId: PropTypes.string.isRequired,
-  parameters: PropTypes.objectOf(PropTypes.string),
+  parameters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
 };
 
 ModeReport.defaultProps = { parameters: {} };

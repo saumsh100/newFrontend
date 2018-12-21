@@ -143,9 +143,9 @@ function NavList({
         <EnabledFeature
           predicate={({ flags }) => flags.get('feature-mode-reports-tab')}
           render={() => (
-            <MultiNavItem path="/reports" icon="chart-bar" label="Reports">
-              <SubNavItem path="/reports/bookings" label="Online Bookings" />
-              <SubNavItem path="/reports/reminders" label="Reminders" />
+            <MultiNavItem path="/intelligence" icon="chart-bar" label="Intelligence">
+              <SubNavItem path="/intelligence/growth" label="Practice Growth" />
+              <SubNavItem path="/intelligence/pulse" label="Practice Pulse" />
             </MultiNavItem>
           )}
         />

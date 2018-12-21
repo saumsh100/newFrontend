@@ -3,25 +3,22 @@ import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import LazyRoute from '../LazyRoute';
-import Container from '../../components/Reports';
 
-const base = (path = '') => `/reports${path}`;
+const base = (path = '') => `/intelligence${path}`;
 
 const Routes = {
-  bookings: LazyRoute(() => import('../../components/Reports/Bookings')),
-  reminders: LazyRoute(() => import('../../components/Reports/Reminders')),
+  growth: LazyRoute(() => import('../../components/Reports/Growth')),
+  pulse: LazyRoute(() => import('../../components/Reports/Pulse')),
 };
 
 const Reports = () => (
-  <Container>
-    <DocumentTitle title="CareCru | Reports">
-      <Switch>
-        <Redirect exact from={base()} to={base('/bookings')} />
-        <Route path={base('/bookings')} component={Routes.bookings} />
-        <Route path={base('/reminders')} component={Routes.reminders} />
-      </Switch>
-    </DocumentTitle>
-  </Container>
+  <DocumentTitle title="CareCru | Reports">
+    <Switch>
+      <Redirect exact from={base()} to={base('/growth')} />
+      <Route path={base('/growth')} component={Routes.growth} />
+      <Route path={base('/pulse')} component={Routes.pulse} />
+    </Switch>
+  </DocumentTitle>
 );
 
 export default Reports;
