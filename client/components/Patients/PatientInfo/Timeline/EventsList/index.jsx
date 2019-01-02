@@ -17,7 +17,7 @@ export default function EventsList({ events, filters }) {
     );
   }
 
-  const filteredEvents = events.filter(event => filters.indexOf(event.get('type').toLowerCase()) > -1);
+  const filteredEvents = events.filter(event => filters.indexOf(event.get('type')) > -1);
 
   const sortedEvents = sortEvents(filteredEvents);
 

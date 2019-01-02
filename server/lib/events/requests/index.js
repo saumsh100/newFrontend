@@ -1,3 +1,4 @@
+
 import { Request } from '../../../_models';
 
 export async function fetchRequestEvents({ patient, accountId, query }) {
@@ -20,7 +21,7 @@ export async function fetchRequestEvents({ patient, accountId, query }) {
 export function buildRequestEvent({ data }) {
   return {
     id: Buffer.from(`request-${data.id}`).toString('base64'),
-    type: 'Request',
+    type: 'request',
     metaData: data,
   };
 }

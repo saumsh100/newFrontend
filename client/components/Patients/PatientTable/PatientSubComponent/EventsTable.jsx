@@ -25,13 +25,11 @@ export default function EventsTable({ events }) {
       {sortedEvents.map(event => (
         <div className={styles.lineEventContainer} key={`eventsTable_${event.id}`}>
           <div className={styles.verticalLine}>&nbsp;</div>
-          <Event data={event.get('metaData')} type={event.get('type').toLowerCase()} />
+          <Event data={event.get('metaData')} type={event.get('type')} />
         </div>
       ))}
     </div>
   );
 }
 
-EventsTable.propTypes = {
-  events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired,
-};
+EventsTable.propTypes = { events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired };

@@ -1,3 +1,4 @@
+
 import { Appointment } from '../../../_models';
 
 export async function fetchAppointmentEvents({ patientId, accountId, query }) {
@@ -19,7 +20,7 @@ export async function fetchAppointmentEvents({ patientId, accountId, query }) {
 export function buildAppointmentEvent({ data }) {
   return {
     id: Buffer.from(`appointment-${data.id}`).toString('base64'),
-    type: 'Appointment',
+    type: 'appointment',
     metaData: {
       ...data,
       createdAt: data.startDate,

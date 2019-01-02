@@ -51,7 +51,7 @@ export async function fetchReminderEvents({ patientId, accountId, query }) {
             as: 'appointment',
             where: {
               accountId,
-              ...Appointments.getCommonSearchAppointmentSchema()
+              ...Appointments.getCommonSearchAppointmentSchema(),
             },
             attributes: ['id', 'startDate'],
           },
@@ -71,14 +71,17 @@ export async function fetchReminderEvents({ patientId, accountId, query }) {
   });
   const sentRemindersClean = sentReminders.map(sentReminder => sentReminder.get({ plain: true }));
 
-  return groupEvents(sentRemindersClean, reminderGroupingConditional, { primaryType: 'sms/email' });
+  return groupEvents(sentRemindersClean, reminderGroupingConditional, {
+    primaryType: 'sms/email',
+    grouped: true,
+  });
 }
 
 export function buildReminderEvent({ data }) {
   return {
     id: Buffer.from(`reminder-${data.id}`)
       .toString('base64'),
-    type: 'Reminder',
+    type: 'reminder',
     metaData: data,
   };
 }

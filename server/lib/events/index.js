@@ -1,5 +1,4 @@
 
-import omit from 'lodash/omit';
 import { Patient, Event } from '../../_models';
 import { fetchAppointmentEvents, buildAppointmentEvent } from './appointments';
 import { fetchCallEvents, buildCallEvent } from './calls';
@@ -14,12 +13,12 @@ import {
 } from './patient';
 
 const eventFuncs = {
-  appointments: [fetchAppointmentEvents, buildAppointmentEvent],
-  calls: [fetchCallEvents, buildCallEvent],
-  reminders: [fetchReminderEvents, buildReminderEvent],
-  recalls: [fetchRecallEvents, buildRecallEvent],
-  requests: [fetchRequestEvents, buildRequestEvent],
-  reviews: [fetchReviewEvents, buildReviewEvent],
+  appointment: [fetchAppointmentEvents, buildAppointmentEvent],
+  call: [fetchCallEvents, buildCallEvent],
+  reminder: [fetchReminderEvents, buildReminderEvent],
+  recall: [fetchRecallEvents, buildRecallEvent],
+  request: [fetchRequestEvents, buildRequestEvent],
+  review: [fetchReviewEvents, buildReviewEvent],
   dueDate: [fetchPatientDueDateEvents, buildPatientDueDateEvent],
   newPatient: [() => ['newPatient'], buildNewPatientEvent],
 };
@@ -35,24 +34,27 @@ const eventFuncs = {
  * @returns Events {array}
  */
 export default async function patientEventsAggregator(patientId, accountId, query) {
-  const { retrieveEventTypes = [], excludeEventTypes = [] } = query;
-  const newQuery = omit(query, ['retrieveEventTypes', 'excludeEventTypes']);
+  const { retrieveEventTypes = [], excludeEventTypes = [], eventsOffsetLimitObj, limit } = query;
 
   const patientUnclean = await Patient.findById(patientId);
   const patient = patientUnclean.get({ plain: true });
+
+  const offsetsLimitObj = JSON.parse(eventsOffsetLimitObj);
 
   const params = {
     patient,
     patientId,
     accountId,
-    query: newQuery,
   };
 
   const eventFuncKeys = retrieveEventTypes.length
     ? retrieveEventTypes
     : Object.keys(eventFuncs).filter(ev => excludeEventTypes.indexOf(ev) === -1);
 
-  const allEvents = await Promise.all(eventFuncKeys.map(ev => eventFuncs[ev][0](params)));
+  const allEvents = await Promise.all(eventFuncKeys.map(ev => eventFuncs[ev][0]({
+    ...params,
+    query: offsetsLimitObj[ev],
+  })));
 
   let eventsArray = [];
   allEvents.forEach((events, index) => {
@@ -64,9 +66,7 @@ export default async function patientEventsAggregator(patientId, accountId, quer
     }
   });
 
-  const sortedEvents = eventsArray.sort((a, b) => new Date(b.metaData.createdAt) - new Date(a.metaData.createdAt));
-
-  return filterEventsByQuery(sortedEvents, newQuery);
+  return eventsArray.sort((a, b) => new Date(b.metaData.createdAt) - new Date(a.metaData.createdAt)).slice(0, limit);
 }
 
 /**
@@ -79,8 +79,15 @@ function buildAllEvents(eventType, events, params) {
   const { patientId, accountId } = params;
 
   return events.map((data) => {
-    const buildData = eventFuncs[eventType][1]({ ...params, data });
-    return buildSingleEvent({ ...buildData, patientId, accountId });
+    const buildData = eventFuncs[eventType][1]({
+      ...params,
+      data,
+    });
+    return buildSingleEvent({
+      ...buildData,
+      patientId,
+      accountId,
+    });
   });
 }
 /**
@@ -89,26 +96,4 @@ function buildAllEvents(eventType, events, params) {
  */
 function buildSingleEvent(buildData) {
   return Event.build(buildData).get({ plain: true });
-}
-
-/**
- * filterEventsByQuery takes all events and paginates and limits the amount being fetched.
- * @param eventsArray {array} array of events.
- * @param query {object} limiting and offsetting.
- * @returns Events{array}
- */
-function filterEventsByQuery(eventsArray, query) {
-  const { limit, offset } = query;
-
-  let filterArray = eventsArray;
-
-  if (offset && eventsArray.length > offset) {
-    filterArray = filterArray.slice(offset, eventsArray.length);
-  }
-
-  if (limit) {
-    filterArray = filterArray.slice(0, limit);
-  }
-
-  return filterArray;
 }

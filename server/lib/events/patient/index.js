@@ -6,7 +6,7 @@ export function buildNewPatientEvent({ patient, accountId }) {
     id: Buffer.from(`patient-${patient.id}`).toString('base64'),
     patientId: patient.id,
     accountId,
-    type: 'NewPatient',
+    type: 'newPatient',
     metaData: {
       createdAt: patient.pmsCreatedAt || patient.createdAt,
       pmsCreatedAt: patient.pmsCreatedAt,
@@ -20,9 +20,7 @@ export function fetchPatientDueDateEvents({ patient }) {
   const { dueForRecallExamDate, dueForHygieneDate } = patient;
   if (!dueForHygieneDate && !dueForRecallExamDate) return [];
 
-  if (moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'day')
-  && moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'month')
-  && moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'year')) {
+  if (moment(dueForRecallExamDate).isSame(dueForHygieneDate, 'day')) {
     return [
       {
         dueDate: dueForHygieneDate,
@@ -61,7 +59,7 @@ export function buildPatientDueDateEvent({ patient, data }) {
 
   return {
     id: Buffer.from(`patientDueDate-${patient.id}`).toString('base64'),
-    type: 'DueDate',
+    type: 'dueDate',
     metaData,
   };
 }

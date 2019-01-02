@@ -11,7 +11,6 @@ export default function Event(props) {
   const { type, data } = props;
 
   const iconType = 'solid';
-
   const content = eventHashMap[type];
   const { component, icon, iconColor } = content;
 
@@ -28,11 +27,15 @@ export default function Event(props) {
           </div>
           {component.map(ev => ev({ data }))}
         </div>
-        {type !== 'appointment' && type !== 'duedate' && type !== 'recall' && (
-          <div className={styles.time}>
-            <span className={styles.time_text}>{dateFormatter(data.createdAt, '', 'h:mm a')}</span>
-          </div>
-        )}
+        {type !== 'appointment' &&
+          type !== 'dueDate' &&
+          type !== 'recall' && (
+            <div className={styles.time}>
+              <span className={styles.time_text}>
+                {dateFormatter(data.createdAt, '', 'h:mm a')}
+              </span>
+            </div>
+          )}
       </div>
     )
   );

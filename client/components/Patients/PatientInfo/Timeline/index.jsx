@@ -7,6 +7,7 @@ import { List } from 'immutable';
 import EventModel from '../../../../entities/models/Event';
 import { Card, InfiniteScroll } from '../../../library';
 import { fetchEntities } from '../../../../thunks/fetchEntities';
+import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import EventList from './EventsList';
 import styles from './styles.scss';
 
@@ -14,7 +15,6 @@ class Timeline extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: 5,
       loaded: false,
       eventsLength: 0,
     };
@@ -24,10 +24,23 @@ class Timeline extends Component {
   loadMoreEvents() {
     const { events } = this.props;
 
+    const eventsOffsetLimitObj = getEventsOffsetLimitObj();
+
+    /**
+     * This function iterates over all events for this patient and counts how many
+     * of each type of event there is. Doubling the count
+     * if it is a grouped event like Reminder(sms and email)
+     */
+
+    events.forEach((ev) => {
+      if (ev.type in eventsOffsetLimitObj) {
+        eventsOffsetLimitObj[ev.type].offset += !ev.metaData.grouped ? 1 : 2;
+      }
+    });
+
     const query = {
-      limit: this.state.page,
-      offset: events.length,
-      retrieveEvents: ['appointments'],
+      limit: 5,
+      eventsOffsetLimitObj,
     };
 
     this.setState({ loaded: true }, () => {

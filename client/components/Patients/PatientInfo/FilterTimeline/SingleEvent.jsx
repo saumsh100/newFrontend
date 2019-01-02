@@ -9,10 +9,11 @@ export default function SingleEvent({ type, onClick, checked }) {
   let icon = '';
   let color = '';
   let iconType = 'solid';
+  let typeText = type;
 
   switch (type) {
     case 'appointment':
-      icon = 'calendar';
+      icon = 'calendar-alt';
       color = 'Blue';
       iconType = 'regular';
       break;
@@ -28,9 +29,23 @@ export default function SingleEvent({ type, onClick, checked }) {
       icon = 'phone';
       color = 'Yellow';
       break;
-    case 'newpatient':
+    case 'newPatient':
       icon = 'user';
       color = 'Green';
+      typeText = 'New Patient';
+      break;
+    case 'request':
+      icon = 'calendar-check';
+      color = 'Green';
+      break;
+    case 'dueDate':
+      icon = 'calendar-plus';
+      color = 'Blue';
+      typeText = 'Due Date';
+      break;
+    case 'recall':
+      icon = 'bell';
+      color = 'Red';
       break;
     default:
       break;
@@ -51,9 +66,9 @@ export default function SingleEvent({ type, onClick, checked }) {
       onClick={onClick}
     >
       <div className={iconStyle}>
-        <Icon icon={icon} size={2} type={iconType} />
+        <Icon icon={icon} size={1} type={iconType} />
       </div>
-      <div className={styles.textEvent}>{type}s</div>
+      <div className={styles.textEvent}>{typeText}s</div>
     </div>
   );
 }

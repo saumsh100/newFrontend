@@ -44,13 +44,13 @@ export const createInitialPatientState = state =>
     count: 0,
     timelineFilters: [
       'appointment',
+      'dueDate',
       'call',
-      'duedate',
-      'newpatient',
+      'review',
+      'newPatient',
+      'request',
       'recall',
       'reminder',
-      'review',
-      'request',
     ],
     ...state,
   });
@@ -85,27 +85,16 @@ export default handleActions(
     },
 
     [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {
-      let filters = state.get('timelineFilters');
-      if (filters.size >= 0) {
-        filters = filters.toJS();
-      }
-      const type = payload.type;
-
-      if (filters.indexOf(type) > -1) {
-        const index = filters.indexOf(type);
-        const newFilters = filters;
-        newFilters.splice(index, 1);
-
-        return state.set('timelineFilters', newFilters);
-      }
-
-      const newFilters = filters;
-      newFilters.push(type);
-      return state.set('timelineFilters', newFilters);
+      const filters = state.get('timelineFilters');
+      const index = filters.findIndex(ev => ev === payload.type);
+      return state.set(
+        'timelineFilters',
+        index === -1 ? filters.push(payload.type) : filters.delete(index),
+      );
     },
 
     [CLEAR_ALL_TIMELINE_FILTERS](state) {
-      return state.set('timelineFilters', []);
+      return state.set('timelineFilters', List());
     },
 
     [SELECT_ALL_TIMELINE_FILTERS](state) {

@@ -26,7 +26,10 @@ export async function fetchCallEvents({ patientId, accountId, query }) {
 export function buildCallEvent({ data, patient }) {
   return {
     id: Buffer.from(`call-${data.id}`).toString('base64'),
-    type: 'Call',
-    metaData: { ...data, firstName: patient.firstName },
+    type: 'call',
+    metaData: {
+      ...data,
+      firstName: patient.firstName,
+    },
   };
 }

@@ -23,6 +23,34 @@ import { wipeAllModels } from '../../../util/wipeModel';
 
 const appointmentId = uuid();
 
+const limit = 5;
+const eventsOffsetLimitObj = JSON.stringify({
+  reminder: {
+    offset: 0,
+    limit,
+  },
+  review: {
+    offset: 0,
+    limit,
+  },
+  appointment: {
+    offset: 0,
+    limit,
+  },
+  call: {
+    offset: 0,
+    limit,
+  },
+  recall: {
+    offset: 0,
+    limit,
+  },
+  reviews: {
+    offset: 0,
+    limit,
+  },
+});
+
 const makeApptData = (data = {}) => ({
   accountId,
   patientId,
@@ -90,7 +118,8 @@ describe('Fetching a single patients events', () => {
 
     test('should retrieve a single new patient event', async () => {
       const events = await patientEventsAggregator(patientId, accountId, {
-        limit: 5,
+        limit,
+        eventsOffsetLimitObj,
       });
       expect(events.length).toBe(1);
     });
@@ -103,8 +132,14 @@ describe('Fetching a single patients events', () => {
       ]);
 
       const events = await patientEventsAggregator(patientId, accountId, {
-        limit: 5,
-        retrieveEventTypes: ['appointments'],
+        limit,
+        retrieveEventTypes: ['appointment'],
+        eventsOffsetLimitObj: JSON.stringify({
+          appointment: {
+            limit,
+            offset: 0,
+          },
+        }),
       });
       expect(events.length).toBe(3);
     });
@@ -133,8 +168,14 @@ describe('Fetching a single patients events', () => {
       });
 
       const events = await patientEventsAggregator(patientId, accountId, {
-        limit: 5,
-        retrieveEventTypes: ['reminders'],
+        limit,
+        retrieveEventTypes: ['reminder'],
+        eventsOffsetLimitObj: JSON.stringify({
+          reminder: {
+            limit,
+            offset: 0,
+          },
+        }),
       });
 
       expect(events.length).toBe(1);
@@ -162,7 +203,14 @@ describe('Fetching a single patients events', () => {
       ]);
 
       const events = await patientEventsAggregator(patientId, accountId, {
-        retrieveEventTypes: ['reviews'],
+        limit,
+        retrieveEventTypes: ['review'],
+        eventsOffsetLimitObj: JSON.stringify({
+          review: {
+            limit,
+            offset: 0,
+          },
+        }),
       });
 
       expect(events.length).toBe(1);
@@ -192,14 +240,17 @@ describe('Fetching a single patients events', () => {
 
       await Patient.update(
         { patientUserId: patientUserPlain.id },
-        {
-          where: {
-            id: patientId,
-          },
-        },
+        { where: { id: patientId } },
       );
       const events = await patientEventsAggregator(patientId, accountId, {
-        retrieveEventTypes: ['requests'],
+        retrieveEventTypes: ['request'],
+        eventsOffsetLimitObj: JSON.stringify({
+          request: {
+            limit,
+            offset: 0,
+          },
+        }),
+        limit,
       });
       expect(events.length).toBe(1);
     });
@@ -214,10 +265,20 @@ describe('Fetching a single patients events', () => {
 
       const recallPlain = recall.get({ plain: true });
 
-      await SentRecall.create(makeSentRecallData({ recallId: recallPlain.id, primaryType: 'email' }));
+      await SentRecall.create(makeSentRecallData({
+        recallId: recallPlain.id,
+        primaryType: 'email',
+      }));
 
       const events = await patientEventsAggregator(patientId, accountId, {
-        retrieveEventTypes: ['recalls'],
+        retrieveEventTypes: ['recall'],
+        eventsOffsetLimitObj: JSON.stringify({
+          recall: {
+            limit,
+            offset: 0,
+          },
+        }),
+        limit,
       });
 
       expect(events.length).toBe(1);
@@ -263,7 +324,10 @@ describe('Fetching a single patients events', () => {
         }),
       ]);
 
-      const events = await patientEventsAggregator(patientId, accountId, {});
+      const events = await patientEventsAggregator(patientId, accountId, {
+        eventsOffsetLimitObj,
+        limit,
+      });
       expect(events.length).toBe(5);
     });
 
@@ -278,20 +342,144 @@ describe('Fetching a single patients events', () => {
       ]);
 
       const events = await patientEventsAggregator(patientId, accountId, {
-        limit: 5,
-        offset: 4,
-        retrieveEventTypes: ['appointments'],
+        limit,
+        retrieveEventTypes: ['appointment'],
+        eventsOffsetLimitObj: JSON.stringify({
+          appointment: {
+            offset: 4,
+            limit,
+          },
+        }),
       });
       expect(events.length).toBe(2);
     });
 
     test('No events, including when patient was created', async () => {
       const events = await patientEventsAggregator(patientId, accountId, {
-        limit: 5,
+        limit,
         offset: 4,
         excludeEventTypes: ['newPatient'],
+        eventsOffsetLimitObj,
       });
       expect(events.length).toBe(0);
     });
   });
+
+  describe('#Review Grouping Function', () => {
+    test('should retrieve 1 grouped review event', async () => {
+      const olderAppt = await Appointment.create(makeApptData({
+        patientId,
+        ...dates(2017, 7, 5, 12),
+      }));
+
+      const rev = await Review.bulkCreate([makeReviewData({ patientId })]);
+
+      await SentReview.bulkCreate([
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: true,
+          appointmentId: olderAppt.id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280a',
+          reviewId: rev[0].id,
+        }),
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: false,
+          appointmentId: olderAppt.id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280b',
+          reviewId: null,
+        }),
+      ]);
+
+      const events = await patientEventsAggregator(patientId, accountId, {
+        limit,
+        retrieveEventTypes: ['review'],
+        eventsOffsetLimitObj: JSON.stringify({
+          review: {
+            limit,
+            offset: 0,
+          },
+        }),
+      });
+
+      expect(events.length).toBe(1);
+    });
+
+    test('should retrieve 2 grouped review events and 1 not grouped review event', async () => {
+      const apps = await Appointment.bulkCreate([
+        makeApptData({ ...dates(2014, 7, 5, 8) }),
+        makeApptData({ ...dates(2015, 7, 5, 8) }),
+        makeApptData({ ...dates(2016, 7, 5, 8) }),
+      ]);
+
+
+      const rev = await Review.bulkCreate([makeReviewData({ patientId })]);
+
+      await SentReview.bulkCreate([
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: true,
+          appointmentId: apps[0].id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280a',
+          reviewId: rev[0].id,
+        }),
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: false,
+          appointmentId: apps[0].id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280b',
+          reviewId: null,
+        }),
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: false,
+          appointmentId: apps[1].id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280c',
+          reviewId: rev[0].id,
+        }),
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: false,
+          appointmentId: apps[1].id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280d',
+          reviewId: null,
+        }),
+        makeSentReviewData({
+          isSent: true,
+          isCompleted: true,
+          appointmentId: apps[2].id,
+          patientId,
+          createdAt: date(2017, 7, 5, 16),
+          id: '230804b2-d600-464c-bc86-5bc88804280e',
+          reviewId: null,
+        }),
+      ]);
+
+      const events = await patientEventsAggregator(patientId, accountId, {
+        limit,
+        retrieveEventTypes: ['review'],
+        eventsOffsetLimitObj: JSON.stringify({
+          review: {
+            limit,
+            offset: 0,
+          },
+        }),
+      });
+
+      expect(events.length).toBe(3);
+    });
+  });
 });
+

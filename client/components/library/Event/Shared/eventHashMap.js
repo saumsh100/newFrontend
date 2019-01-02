@@ -18,22 +18,13 @@ const buildEventObj = (component, icon, iconColor, iconType) => ({
 const eventHashMap = {
   appointment: buildEventObj(AppointmentEvent, setAppointmentIcon, 'blue', 'regular'),
   call: buildEventObj(CallEvent, 'phone', 'yellow'),
-  duedate: buildEventObj(DueDateEvent, 'bell', 'blue'),
-  newpatient: buildEventObj(NewPatientEvent, 'user', 'green'),
-  recall: buildEventObj(RecallEvent, setReminderRecallIcon, 'red'),
-  reminder: buildEventObj(ReminderEvent, setReminderRecallIcon, 'red'),
+  dueDate: buildEventObj(DueDateEvent, 'calendar-plus', 'blue'),
+  newPatient: buildEventObj(NewPatientEvent, 'user', 'green'),
+  recall: buildEventObj(RecallEvent, 'bell', 'red'),
+  reminder: buildEventObj(ReminderEvent, 'bell', 'red'),
   request: buildEventObj(RequestEvent, 'calendar-check', 'green'),
   review: buildEventObj(ReviewEvent, 'star', 'yellow'),
 };
-
-function setReminderRecallIcon({ primaryType }) {
-  const typeHash = {
-    email: 'envelope',
-    sms: 'comment',
-    'sms/email': 'comments',
-  };
-  return typeHash[primaryType];
-}
 
 function setAppointmentIcon({ isCancelled }) {
   return isCancelled ? 'calendar-times' : 'calendar-alt';

@@ -469,7 +469,7 @@ Object {
   "allApps": 1,
   "entities": Object {},
   "lastAppointment": "2017-12-31T00:14:30.932Z",
-  "monthsApp": 1,
+  "monthsApp": 0,
   "nextAppointment": null,
   "productionCalendarYear": null,
 }
@@ -668,15 +668,15 @@ Object {
 exports[`/api/patients GET / /stats - retrieve patients appointments 1`] = `
 Object {
   "ageData": Array [
-    0,
-    0,
-    0,
-    100,
-    0,
-    0,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
   ],
   "entities": Object {},
-  "female": 1,
+  "female": 0,
   "male": 0,
 }
 `;

@@ -32,3 +32,30 @@ export const sortEvents = collection =>
     if (b.metaData.createdAt > a.metaData.createdAt) return 1;
     return 0;
   });
+
+export const getEventsOffsetLimitObj = (limit = 5) => ({
+  reminder: {
+    offset: 0,
+    limit,
+  },
+  review: {
+    offset: 0,
+    limit,
+  },
+  appointment: {
+    offset: 0,
+    limit,
+  },
+  call: {
+    offset: 0,
+    limit,
+  },
+  recall: {
+    offset: 0,
+    limit,
+  },
+  reviews: {
+    offset: 0,
+    limit,
+  },
+});

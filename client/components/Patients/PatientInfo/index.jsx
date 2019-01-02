@@ -31,6 +31,7 @@ import TopDisplay from './TopDisplay';
 import Timeline from './Timeline';
 import LeftInfoDisplay from './LeftInfoDisplay';
 import { isHub, isResponsive } from '../../../util/hub';
+import { getEventsOffsetLimitObj } from '../Shared/helpers';
 import styles from './styles.scss';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
@@ -58,9 +59,6 @@ HeaderModalComponent.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-// The default list of events shown on the time-line. Add to this when a new event typed is added.
-const defaultEvents = ['appointment', 'reminder', 'review', 'call', 'newpatient'];
-
 class PatientInfo extends Component {
   constructor(props) {
     super(props);
@@ -73,6 +71,7 @@ class PatientInfo extends Component {
         backHandler: null,
         title: null,
       },
+      defaultEvents: [],
     };
 
     this.changePageTab = this.changePageTab.bind(this);
@@ -90,8 +89,8 @@ class PatientInfo extends Component {
     const url = `/api/patients/${patientId}`;
     this.fetchPatientData(patientId, url);
 
-    if (this.props.patient) {
-      this.fetchEvents();
+    if (this.props.patient && this.props.filters) {
+      this.setState({ defaultEvents: this.props.filters }, () => this.fetchEvents());
     }
   }
 
@@ -115,11 +114,14 @@ class PatientInfo extends Component {
   }
 
   fetchEvents() {
-    this.props.fetchEntitiesRequest({
+    return this.props.fetchEntitiesRequest({
       key: 'events',
       id: 'getPatientEvents',
       url: `/api/patients/${this.props.patient.id}/events`,
-      params: { limit: 10 },
+      params: {
+        limit: 10,
+        eventsOffsetLimitObj: getEventsOffsetLimitObj(10),
+      },
     });
   }
 
@@ -302,7 +304,7 @@ class PatientInfo extends Component {
                         body={[
                           <FilterTimeline
                             addRemoveFilter={this.addRemoveFilter}
-                            defaultEvents={defaultEvents}
+                            defaultEvents={this.state.defaultEvents}
                             filters={this.props.filters}
                             clearFilters={this.props.clearAllTimelineFilters}
                             selectAllFilters={this.props.selectAllTimelineFilters}
@@ -394,7 +396,7 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
     patient: patients.get(match.params.patientId),
     patientStats,
     wasStatsFetched,
-    filters: patientTable.get('timelineFilters'),
+    filters: patientTable.get('timelineFilters').toJS(),
     activeAccount,
     accountsFetched,
     role,

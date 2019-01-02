@@ -10,18 +10,20 @@ import Event from '../../../../entities/models/Event';
 import { patientShape } from '../../../library/PropTypeShapes';
 import DataTable from './DataTable';
 import EventsTable from './EventsTable';
+import { getEventsOffsetLimitObj } from '../../Shared/helpers';
 import styles from './styles.scss';
 
 class PatientSubComponent extends Component {
   componentDidMount() {
-    const { patient } = this.props;
-    const query = { limit: 5 };
-
+    const { patient: { id } } = this.props;
     this.props.fetchEntitiesRequest({
       key: 'events',
       id: 'getPatientEvents',
-      url: `/api/patients/${patient.id}/events`,
-      params: query,
+      url: `/api/patients/${id}/events`,
+      params: {
+        limit: 5,
+        eventsOffsetLimitObj: getEventsOffsetLimitObj(),
+      },
     });
   }
 
