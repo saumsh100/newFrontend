@@ -19,102 +19,205 @@ describe('#patientQueryBuilder string query', () => {
     await wipeAllModels();
   });
 
-  it('just uses starts_with', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: 'ro',
+  describe('firstName', () => {
+    it('just uses starts_with', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: 'ro',
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
+    test('contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: { contains: 'al' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+
+    test('startsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: { startsWith: 'ja' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3]);
+    });
+
+    test('endsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: { endsWith: 'on' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    test('equal', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: { equal: 'Ronald' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+
+    it('uses multiple comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: {
+          startsWith: 'ro',
+          endsWith: 'ld',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+
+    it('uses raw comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: { $iLike: '%al%' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+
+    test('raw operator stacks with comparator', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: {
+          startsWith: 'ro',
+          $iLike: '%al%',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+
+    test('raw operator stacks with comparator doesnt matter the order', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        firstName: {
+          $iLike: '%al%',
+          startsWith: 'ro',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
   });
 
-  test('contains', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: { contains: 'al' },
+  describe('email', () => {
+    it('just uses contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: 'patient1',
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
-  });
+    test('contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: { contains: 'patient' },
+      });
 
-  test('startsWith', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: { startsWith: 'ja' },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId2, patientId3]);
-  });
+    test('startsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: { startsWith: 'te' },
+      });
 
-  test('endsWith', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: { endsWith: 'on' },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId3]);
-  });
+    test('endsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: { endsWith: 'om' },
+      });
 
-  test('equal', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: { equal: 'Ronald' },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
-  });
+    test('equal', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: { equal: 'testpatient2@test.com' },
+      });
 
-  it('uses multiple comparators', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: {
-        startsWith: 'ro',
-        endsWith: 'ld',
-      },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
-  });
+    it('uses multiple comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: {
+          startsWith: 'testpatient3',
+          endsWith: 'com',
+        },
+      });
 
-  it('uses raw comparators', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: { $iLike: '%al%' },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
-  });
+    it('uses raw comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: { $iLike: '%patient2%' },
+      });
 
-  test('raw operator stacks with comparator', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: {
-        startsWith: 'ro',
-        $iLike: '%al%',
-      },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
-  });
+    test('raw operator stacks with comparator', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: {
+          startsWith: 'te',
+          $iLike: '%patient3%',
+        },
+      });
 
-  test('raw operator stacks with comparator doesnt matter the order', async () => {
-    const result = await patientQueryBuilder({
-      accountId,
-      firstName: {
-        $iLike: '%al%',
-        startsWith: 'ro',
-      },
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
     });
 
-    const patients = result.rows.map(({ id }) => id);
-    expect(patients).toEqual([patientId1]);
+    test('raw operator stacks with comparator doesnt matter the order', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        email: {
+          $iLike: '%patient1%',
+          startsWith: 'te',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
   });
 });

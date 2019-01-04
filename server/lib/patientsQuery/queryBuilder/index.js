@@ -4,6 +4,7 @@ import lastName from './lastName';
 import age from './age';
 import gender from './gender';
 import city from './city';
+import email from './email';
 import status from './status';
 import firstAppointment from './firstAppointment';
 import lastAppointment from './lastAppointment';
@@ -22,6 +23,7 @@ const query = {
   age,
   gender,
   city,
+  email,
   status,
   firstAppointment,
   lastAppointment,
