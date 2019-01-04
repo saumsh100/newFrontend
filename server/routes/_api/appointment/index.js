@@ -206,8 +206,7 @@ appointmentsRouter.get('/statslastyear', (req, res, next) => {
     accountId,
   } = req;
 
-
-  const date = moment(new Date()).subtract(moment(new Date()).get('date') + 1, 'days');
+  const date = moment().startOf('month').subtract(1, 'day');
   const age = new Array(6).fill(0);
 
   const Promises = [];

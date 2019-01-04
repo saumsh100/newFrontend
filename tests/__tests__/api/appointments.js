@@ -129,6 +129,7 @@ describe('/api/appointments', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
+    jest.spyOn(Date, 'now').mockImplementation(() => 1543651200000);
     await seedTestUsers();
     await seedTestAppointments();
     await seedTestChairs();

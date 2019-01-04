@@ -101,6 +101,7 @@ describe('/api/patients', () => {
 
   describe('GET /', () => {
     beforeEach(async () => {
+      jest.spyOn(Date, 'now').mockImplementation(() => 1543651200000);
       await seedTestAppointments();
       await Patient.create(pmsCreatePatient);
     });
@@ -131,9 +132,7 @@ describe('/api/patients', () => {
       return request(app)
         .get(`${rootUrl}/${patientId}`)
         .set('Authorization', `Bearer ${token}`)
-        .send({
-          accountId,
-        })
+        .send({ accountId })
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body);
