@@ -89,7 +89,7 @@ class ScheduleModal extends React.Component {
 
   render() {
     const { practitioners, reinitializeState } = this.props;
-    const { error } = this.state;
+    const { error, practitionersData, isLoading, selectedReason } = this.state;
     return (
       <Modal custom active onEscKeyDown={reinitializeState} onOverlayClick={reinitializeState}>
         <Card noBorder className={styles.debuggingModal}>
@@ -110,17 +110,17 @@ class ScheduleModal extends React.Component {
               {!error && (
                 <DropdownSelect
                   label="Reason:"
-                  value={this.state.selectedReason}
+                  value={selectedReason}
                   onChange={this.handleChange}
                   options={this.props.reasons}
                 />
               )}
               <div className={styles.practitionerDebugWrapper}>
-                {this.state.isLoading ? (
+                {isLoading ? (
                   <Loading />
                 ) : (
-                  Object.values(this.state.practitionersData).map((schedule) => {
-                    const practitioner = practitioners.get(schedule.practitionerId);
+                  Object.entries(practitionersData).map(([practitionerId, schedule]) => {
+                    const practitioner = practitioners.get(practitionerId);
                     return (
                       <div className={styles.practitionerDebug} key={practitioner.getPrettyName()}>
                         <div className={styles.practitionerTitle}>
