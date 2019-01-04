@@ -1,17 +1,17 @@
 
 import * as finalDailySchedule from './produceFinalDailySchedulesForPractitioners';
-import fetchStaticDataForAvailabilities from '../availabilities/fetchStaticDataForAvailabilities';
-import fetchDynamicDataForAvailabilities from '../availabilities/fetchDynamicDataForAvailabilities';
+import fetchStaticDataForAvailabilities from '../../availabilities/fetchStaticDataForAvailabilities';
+import fetchDynamicDataForAvailabilities from '../../availabilities/fetchDynamicDataForAvailabilities';
 import generateDailySchedulesForPractitioners from './produceFinalDailySchedulesForPractitioners';
-import produceFinalDailySchedulesMap from '../schedule/produceFinalDailySchedulesMap';
-import StatusError from '../../util/StatusError';
-import { practitionerId } from '../../../tests/util/seedTestPractitioners';
-import { accountId } from '../../../tests/util/seedTestUsers';
-import { weeklySchedule, officeHour } from '../../../tests/util/seedTestWeeklySchedules';
+import produceFinalDailySchedulesMap from './produceFinalDailySchedulesMap';
+import StatusError from '../../../util/StatusError';
+import { practitionerId } from '../../../../tests/util/seedTestPractitioners';
+import { accountId } from '../../../../tests/util/seedTestUsers';
+import { weeklySchedule, officeHour } from '../../../../tests/util/seedTestWeeklySchedules';
 
-jest.mock('../availabilities/fetchStaticDataForAvailabilities');
-jest.mock('../availabilities/fetchDynamicDataForAvailabilities');
-jest.mock('../schedule/produceFinalDailySchedulesMap');
+jest.mock('../../availabilities/fetchStaticDataForAvailabilities');
+jest.mock('../../availabilities/fetchDynamicDataForAvailabilities');
+jest.mock('./produceFinalDailySchedulesMap');
 
 const anotherPractitionerId = '1230f60a-ec83-431f-a67e-28142ab43caa';
 

@@ -296,7 +296,7 @@ authRouter.post('/', ({ body: { email, password } }, res, next) =>
 
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   PatientAuth.logout(sessionId)
-    .then(() => res.send(200))
+    .then(() => res.sendStatus(200))
     .catch(next));
 
 authRouter.get('/me', sequelizeAuthMiddleware, (req, res, next) => {

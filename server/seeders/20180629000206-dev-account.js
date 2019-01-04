@@ -24,17 +24,14 @@ const h2s = num => 60 * 60 * num;
 
 const startTime = timeWithZone(8, 0, devTimezone);
 const endTime = timeWithZone(17, 0, devTimezone);
-const breakStartTime = timeWithZone(12, 0, devTimezone);
-const breakEndTime = timeWithZone(13, 0, devTimezone);
 
-const defaultDailySchedule = JSON.stringify({
+const dailyScheduleTemplate = {
   startTime,
   endTime,
-  breaks: [{
-    startTime: breakStartTime,
-    endTime: breakEndTime,
-  }],
-});
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  accountId: devAccountId,
+};
 
 const recallTemplate = {
   id: uuid(),
@@ -96,7 +93,6 @@ const devAccount = [
   {
     id: devAccountId,
     enterpriseId: devEnterpriseId,
-    weeklyScheduleId: devWeeklyScheduleId,
     addressId: devAddressId,
     name: 'Dev Account',
     destinationPhoneNumber: '+16041111111',
@@ -269,18 +265,58 @@ const devReminders = [
   },
 ];
 
+const mondayId = uuid();
+const tuesdayId = uuid();
+const wednesdayId = uuid();
+const thursdayId = uuid();
+const fridayId = uuid();
+const saturdayId = uuid();
+const sundayId = uuid();
+
+const devDailySchedules = [
+  {
+    ...dailyScheduleTemplate,
+    id: mondayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: tuesdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: wednesdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: thursdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: fridayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: saturdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: sundayId,
+  },
+];
+
 const devWeeklySchedule = [
   {
     id: devWeeklyScheduleId,
-    monday: defaultDailySchedule,
-    tuesday: defaultDailySchedule,
-    wednesday: defaultDailySchedule,
-    thursday: defaultDailySchedule,
-    friday: defaultDailySchedule,
-    saturday: defaultDailySchedule,
-    sunday: defaultDailySchedule,
     createdAt: '2017-08-04T00:14:30.932Z',
     updatedAt: '2017-08-04T00:14:30.932Z',
+    mondayId,
+    tuesdayId,
+    wednesdayId,
+    thursdayId,
+    fridayId,
+    saturdayId,
+    sundayId,
+    accountId: devAccountId,
   },
 ];
 
@@ -290,9 +326,13 @@ module.exports = {
 
     await queryInterface.bulkInsert('Addresses', devAddress);
 
+    await queryInterface.bulkInsert('Accounts', devAccount);
+
+    await queryInterface.bulkInsert('DailySchedules', devDailySchedules);
+
     await queryInterface.bulkInsert('WeeklySchedules', devWeeklySchedule);
 
-    await queryInterface.bulkInsert('Accounts', devAccount);
+    await queryInterface.sequelize.query(`UPDATE "Accounts" SET "weeklyScheduleId" = '${devWeeklyScheduleId}' WHERE "id" = '${devAccountId}';`);
 
     await queryInterface.bulkInsert('Reminders', devReminders);
 
@@ -305,6 +345,5 @@ module.exports = {
     await queryInterface.bulkInsert('Users', devUser);
   },
 
-  down() {
-  },
+  down() {},
 };

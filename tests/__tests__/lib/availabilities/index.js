@@ -26,7 +26,7 @@ const cleanupServiceId = '5f439ff8-c55d-4423-9316-a41240c4d329';
 const crazyServiceId = '49ddcf57-9202-41b9-bc65-bb3359bebd83';
 const timeOffId = 'beefb035-b72c-4f7a-ad73-09465cbf5654';
 
-describe('Availabilities Library', () => {
+describe.skip('Availabilities Library', () => {
   beforeAll(async () => {
     await seedTestAvailabilities();
   });

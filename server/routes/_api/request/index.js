@@ -335,7 +335,7 @@ requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, 
   const { request, accountId } = req;
 
   return req.request.destroy()
-    .then(() => res.send(204))
+    .then(() => res.sendStatus(204))
     .then(() => {
       const io = req.app.get('socketio');
       const ns = namespaces.dash;

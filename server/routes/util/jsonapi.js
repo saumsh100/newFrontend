@@ -201,6 +201,7 @@ const ModelAttributes = {
     'createdAt',
     'updatedAt',
     'deletedAt',
+    'weeklySchedule',
   ],
 
   Request: [

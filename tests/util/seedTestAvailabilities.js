@@ -14,6 +14,7 @@ import {
   PatientUser,
   PractitionerRecurringTimeOff,
 } from '../../server/_models';
+import { saveWeeklyScheduleWithDefaults } from '../../server/_models/WeeklySchedule';
 import wipeModel, { wipeAllModels } from './wipeModel';
 import { time } from '../../server/util/time';
 
@@ -120,15 +121,11 @@ const generateDefaultServices = (_accountId) => {
   ];
 };
 
-const generatePracServJoin = (services, _practitionerId) => {
-  return services.map((service) => {
-    return {
-      Service_id: service.id,
-      Practitioner_id: _practitionerId,
-      id: `${_practitionerId}_${service.id}`,
-    };
-  });
-};
+const generatePracServJoin = (services, _practitionerId) => services.map(service => ({
+  Service_id: service.id,
+  Practitioner_id: _practitionerId,
+  id: `${_practitionerId}_${service.id}`,
+}));
 
 const sunshineServices = generateDefaultServices(accountId2);
 
@@ -235,7 +232,11 @@ const Patients = [
     lastName: 'Sharp',
     email: 'justin@carecru.com',
     mobilePhoneNumber: justinPhoneNumber,
-    birthDate: moment({year: 1993, month: 6, day: 15})._d,
+    birthDate: moment({
+      year: 1993,
+      month: 6,
+      day: 15,
+    })._d,
     gender: 'male',
     language: 'English',
     lastAppointmentDate: new Date(2017, 3, 3, 15, 0),
@@ -308,17 +309,11 @@ const WeeklySchedules = [
   {
     id: weeklyScheduleId3,
     accountId: accountId2,
-    wednesday: {
-      isClosed: true,
-    },
+    wednesday: { isClosed: true },
 
-    saturday: {
-      isClosed: true,
-    },
+    saturday: { isClosed: true },
 
-    sunday: {
-      isClosed: true,
-    },
+    sunday: { isClosed: true },
   },
   {
     id: weeklyScheduleId4,
@@ -335,9 +330,7 @@ const WeeklySchedules = [
       chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
     },
 
-    tuesday: {
-      chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'],
-    },
+    tuesday: { chairIds: ['2f439ff8-c55d-4423-9316-a41240c4d329'] },
 
     wednesday: {
       isClosed: true,
@@ -372,29 +365,17 @@ const WeeklySchedules = [
         ],
       },
 
-      tuesday: {
-        isClosed: true,
-      },
+      tuesday: { isClosed: true },
 
-      thursday: {
-        isClosed: true,
-      },
+      thursday: { isClosed: true },
 
-      wednesday: {
-        isClosed: true,
-      },
+      wednesday: { isClosed: true },
 
-      friday: {
-        isClosed: true,
-      },
+      friday: { isClosed: true },
 
-      saturday: {
-        isClosed: true,
-      },
+      saturday: { isClosed: true },
 
-      monday: {
-        isClosed: true,
-      },
+      monday: { isClosed: true },
     }],
 
     isAdvanced: true,
@@ -438,7 +419,7 @@ const Services = [
 ];
 
 const PractitionerTimeOffs = [
-    // For tests!
+  // For tests!
   {
     practitionerId: practitionerId4,
     startDate: new Date(2017, 2, 19, 0, 0), // sunday (2 days)
@@ -535,20 +516,19 @@ const Chairs = [
 async function seedTestAvailabilities() {
   await wipeAllModels();
 
-  const newWeeklySchedules = WeeklySchedules.map((weeklySchedule) => {
+  const [scheduleOne, scheduleTwo] = WeeklySchedules.map((weeklySchedule) => {
     delete weeklySchedule.accountId;
     return weeklySchedule;
   });
 
-  const PractitionerServices = Practitioner_Services.map((pracService) => {
-    return {
-      practitionerId: pracService.Practitioner_id,
-      serviceId: pracService.Service_id,
-    };
-  });
+  const PractitionerServices = Practitioner_Services.map(pracService => ({
+    practitionerId: pracService.Practitioner_id,
+    serviceId: pracService.Service_id,
+  }));
 
   await Enterprise.bulkCreate(Enterprises);
-  await WeeklySchedule.bulkCreate(newWeeklySchedules);
+  await saveWeeklyScheduleWithDefaults(scheduleOne, WeeklySchedule);
+  await saveWeeklyScheduleWithDefaults(scheduleTwo, WeeklySchedule);
   await Address.bulkCreate([address]);
   await Account.bulkCreate(Accounts);
   await Practitioner.bulkCreate(Practitioners);

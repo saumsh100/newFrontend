@@ -151,19 +151,6 @@ describe('/api/patients', () => {
         });
     });
 
-
-    // TODO: Don't quite understand the response from this
-    test('/stats - retrieve patients appointments', () => {
-      return request(app)
-        .get(`${rootUrl}/stats`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        });
-    });
-
     test('/search - search patients - no results', () => {
       return request(app)
         .get(`${rootUrl}/search?patients=Dylan`)

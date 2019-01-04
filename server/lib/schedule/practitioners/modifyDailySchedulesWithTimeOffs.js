@@ -1,8 +1,8 @@
 
 import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
-import { getRangeOfDays } from '../../util/time';
 import mapValues from 'lodash/mapValues';
+import { getRangeOfDays } from '../../../util/time';
 
 const moment = extendMoment(Moment);
 

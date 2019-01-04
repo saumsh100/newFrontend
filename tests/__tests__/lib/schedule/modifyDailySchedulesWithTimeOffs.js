@@ -1,5 +1,5 @@
 
-import modifyDailyScheduleWithTimeoffs from '../../../../server/lib/schedule/modifyDailySchedulesWithTimeOffs';
+import modifyDailyScheduleWithTimeoffs from '../../../../server/lib/schedule/practitioners/modifyDailySchedulesWithTimeOffs';
 
 const dailySchedulesList = {
   '2018-04-02': {

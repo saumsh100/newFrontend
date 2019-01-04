@@ -33,7 +33,7 @@ authRouter.post('/', ({ body: { username, password } }, res, next) =>
 
 authRouter.delete('/session/:sessionId', ({ params: { sessionId } }, res, next) =>
   UserAuth.logout(sessionId)
-    .then(() => res.send(200))
+    .then(() => res.sendStatus(200))
     .catch(next),
 );
 

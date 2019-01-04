@@ -227,3 +227,5 @@ describe('/api/chats', () => {
     });
   });
 });
+
+module.exports = filterObject;

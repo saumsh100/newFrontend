@@ -7,6 +7,7 @@ import {
   Appointment,
   Patient,
   DeliveredProcedure,
+  DailySchedule,
 } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import generateToken from '../../util/generateToken';
@@ -17,23 +18,6 @@ import { seedTestDeliveredProcedures, wipeTestDeliveredProcedures } from '../../
 import { seedTestProcedures, wipeTestProcedures } from '../../util/seedTestProcedures';
 
 const rootUrl = '/_api/revenue';
-
-const weeklySchedule = {
-  accountId,
-  wednesday: {
-    isClosed: true,
-  },
-
-  saturday: {
-    isClosed: true,
-  },
-
-  sunday: {
-    isClosed: true,
-  },
-
-  isAdvanced: false,
-};
 
 const makeProcedureData = (data = {}) => Object.assign({
   accountId,
@@ -78,7 +62,31 @@ describe('/api/revenue', () => {
     await seedTestPractitioners();
     token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
 
-    const ws = await WeeklySchedule.create(weeklySchedule);
+    const [{ id: openDayId }, { id: closedDayId }] = await DailySchedule.bulkCreate([
+      {
+        startTime: date(1970, 1, 1, 8),
+        endTime: date(1970, 1, 1, 17),
+        accountId,
+      },
+      {
+        startTime: date(1970, 1, 1, 8),
+        endTime: date(1970, 1, 1, 17),
+        closed: true,
+        accountId,
+      },
+    ]);
+
+    const ws = await WeeklySchedule.create({
+      accountId,
+      mondayId: openDayId,
+      tuesdayId: openDayId,
+      wednesdayId: closedDayId,
+      thursdayId: openDayId,
+      fridayId: openDayId,
+      saturdayId: closedDayId,
+      sundayId: closedDayId,
+      isAdvanced: false,
+    });
 
     await Account.update({ weeklyScheduleId: ws.get({ plain: true }).id }, { where: {
       id: accountId,

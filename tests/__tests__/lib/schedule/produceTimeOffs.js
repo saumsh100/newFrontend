@@ -1,5 +1,5 @@
 
-import produceTimeOffs from '../../../../server/lib/schedule/produceTimeOffs';
+import produceTimeOffs from '../../../../server/lib/schedule/practitioners/produceTimeOffs';
 
 const timeOffs = [
   {

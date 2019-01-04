@@ -665,22 +665,6 @@ Object {
 }
 `;
 
-exports[`/api/patients GET / /stats - retrieve patients appointments 1`] = `
-Object {
-  "ageData": Array [
-    0,
-    0,
-    0,
-    100,
-    0,
-    0,
-  ],
-  "entities": Object {},
-  "female": 1,
-  "male": 0,
-}
-`;
-
 exports[`/api/patients GET / /suggestions - no result found 1`] = `
 Object {
   "entities": Object {},

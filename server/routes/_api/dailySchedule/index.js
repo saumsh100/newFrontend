@@ -4,7 +4,7 @@ import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { isPMSIdViolation } from '../../util/handleSequelizeError';
-import generateDailySchedulesForPractitioners from '../../../lib/schedule/produceFinalDailySchedulesForPractitioners';
+import generateDailySchedulesForPractitioners from '../../../lib/schedule/practitioners/produceFinalDailySchedulesForPractitioners';
 import StatusError from '../../../util/StatusError';
 
 const dailyScheduleRouter = require('express').Router();
@@ -40,9 +40,18 @@ dailyScheduleRouter.post('/', checkPermissions('dailySchedules:create'), async (
  */
 dailyScheduleRouter.post('/connector/batch', checkPermissions('dailySchedules:create'), async (req, res, next) => {
   const dailySchedules = req.body;
+  const { accountId } = req;
 
   try {
-    const savedDailySchedules = await batchCreate(dailySchedules, DailySchedule, 'dailySchedules');
+    // Add accountId to the dailySchedule to it fits the current daily schedule schema
+    const cleanedDailySchedule = dailySchedules.reduce((acc, dailySchedule) => ([
+      ...acc,
+      {
+        ...dailySchedule,
+        accountId,
+      },
+    ]), []);
+    const savedDailySchedules = await batchCreate(cleanedDailySchedule, DailySchedule, 'dailySchedules');
 
     const savedDailySchedulesData = savedDailySchedules.map(savedDailySchedule =>
       savedDailySchedule.get({ plain: true }));

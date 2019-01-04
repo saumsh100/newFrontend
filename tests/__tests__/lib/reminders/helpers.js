@@ -10,6 +10,7 @@ import {
   SentReminder,
   SentRemindersPatients,
   WeeklySchedule,
+  DailySchedule,
 } from 'CareCruModels';
 import {
   getAppointmentsFromReminder,
@@ -637,11 +638,30 @@ describe('RemindersList Calculation Library', () => {
           makeApptData({ ...dates(2017, 8, 6, 8), patientId: patients[1].id }),
         ]);
 
+        const [{ id: openDayId }, { id: closedDayId }] = await DailySchedule.bulkCreate([
+          {
+            startTime: date(1970, 1, 1, 8),
+            endTime: date(1970, 1, 1, 17),
+            accountId,
+          },
+          {
+            startTime: date(1970, 1, 1, 8),
+            endTime: date(1970, 1, 1, 17),
+            isClosed: true,
+            accountId,
+          },
+        ]);
+
         weeklySchedules = await WeeklySchedule.bulkCreate([
           {
-            friday: { isClosed: true },
-            saturday: { isClosed: true },
-            sunday: { isClosed: true },
+            mondayId: openDayId,
+            tuesdayId: openDayId,
+            wednesdayId: openDayId,
+            thursdayId: openDayId,
+            fridayId: closedDayId,
+            saturdayId: closedDayId,
+            sundayId: closedDayId,
+            accountId,
           },
         ]);
 

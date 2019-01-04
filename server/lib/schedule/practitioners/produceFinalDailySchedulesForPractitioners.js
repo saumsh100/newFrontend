@@ -1,11 +1,10 @@
 
-import { WeeklySchedule } from 'CareCruModels';
-import fetchStaticDataForAvailabilities from '../availabilities/fetchStaticDataForAvailabilities';
-import fetchDynamicDataForAvailabilities from '../availabilities/fetchDynamicDataForAvailabilities';
-import { computeOpeningsForPractitioner } from '../availabilities/computeOpeningsAndAvailabilities';
-import StatusError from '../../util/StatusError';
-import { getRangeOfDays } from '../../util/time';
-import { setDateToTimezone } from '../../util/time';
+import WeeklySchedule from 'CareCruModels';
+import fetchStaticDataForAvailabilities from '../../availabilities/fetchStaticDataForAvailabilities';
+import fetchDynamicDataForAvailabilities from '../../availabilities/fetchDynamicDataForAvailabilities';
+import { computeOpeningsForPractitioner } from '../../availabilities/computeOpeningsAndAvailabilities';
+import StatusError from '../../../util/StatusError';
+import { getRangeOfDays, setDateToTimezone } from '../../../util/time';
 
 /**
  * Calculate the earliest/last time for a certain period in the clinic's time zone.

@@ -18,6 +18,7 @@ import {
   practitionerId2,
 } from '../../../util/seedTestAvailabilities';
 import searchForAvailabilities from '../../../../server/lib/availabilities/searchForAvailabilities';
+import { saveWeeklyScheduleWithDefaults } from '../../../../server/_models/WeeklySchedule';
 
 const TZ = 'America/Vancouver';
 
@@ -298,14 +299,11 @@ describe('Availabilities Library', () => {
           },
         });
 
-        const weeklySchedules = await WeeklySchedule.bulkCreate([
-          officeHours,
-          customWeeklySchedule,
-        ]);
-
+        const officeHoursDefaults = await saveWeeklyScheduleWithDefaults(officeHours, WeeklySchedule);
+        const customWeeklyScheduleDefaults = await saveWeeklyScheduleWithDefaults(customWeeklySchedule, WeeklySchedule);
         await Account.update(
           {
-            weeklyScheduleId: weeklySchedules[0].id,
+            weeklyScheduleId: officeHoursDefaults.id,
             timeInterval: 60,
           },
           { where: { id: accountId } },
@@ -314,7 +312,7 @@ describe('Availabilities Library', () => {
         await Practitioner.update(
           {
             isCustomSchedule: true,
-            weeklyScheduleId: weeklySchedules[1].id,
+            weeklyScheduleId: customWeeklyScheduleDefaults.id,
           },
           { where: { id: practitionerId } },
         );
@@ -346,8 +344,16 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '03-25');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({ practitionerId, startDate: toStart, endDate: toEnd }),
-          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({
+            practitionerId,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
+          generateTimeOff({
+            practitionerId: practitionerId2,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
         ]);
 
         const startDate = iso('06:00', '03-05'); // Monday morning
@@ -374,8 +380,16 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '03-25');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({ practitionerId, startDate: toStart, endDate: toEnd }),
-          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({
+            practitionerId,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
+          generateTimeOff({
+            practitionerId: practitionerId2,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
         ]);
 
         const startDate = iso('06:00', '03-05'); // Monday morning
@@ -402,8 +416,16 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '04-25');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({ practitionerId, startDate: toStart, endDate: toEnd }),
-          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({
+            practitionerId,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
+          generateTimeOff({
+            practitionerId: practitionerId2,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
         ]);
 
         const startDate = iso('06:00', '03-05'); // Monday morning
@@ -451,7 +473,11 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '03-05');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({
+            practitionerId: practitionerId2,
+            startDate: toStart,
+            endDate: toEnd,
+          }),
         ]);
 
         const options = {

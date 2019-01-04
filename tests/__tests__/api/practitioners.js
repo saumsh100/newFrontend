@@ -3,12 +3,13 @@ import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import omit from 'lodash/omit';
-import { Practitioner, Account, WeeklySchedule } from '../../../server/_models';
+import { Practitioner, Account, WeeklySchedule, DailySchedule } from '../../../server/_models';
 import wipeModel, {  wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { practitionerId, practitioner, seedTestPractitioners } from '../../util/seedTestPractitioners';
-import { weeklyScheduleId, weeklySchedule, seedTestWeeklySchedules } from '../../util/seedTestWeeklySchedules';
-import { omitProperties, omitPropertiesFromBody } from '../../util/selectors';
+import { weeklyScheduleId, seedTestFullWeeklySchedules } from '../../util/seedTestWeeklySchedules';
+import { omitPropertiesFromBody } from '../../util/selectors';
+import filterObject from './chats';
 
 const accountWithSchedule = {
   id: accountId,
@@ -40,7 +41,6 @@ describe('/api/practitioners', () => {
 
   describe('GET /', () => {
     beforeAll(async () => {
-      await seedTestWeeklySchedules();
       await seedTestPractitioners();
     });
 
@@ -67,26 +67,9 @@ describe('/api/practitioners', () => {
         })
         .expect(200)
         .then(({ body }) => {
-          const pracKey = Object.keys(body.entities.practitioners)[0];
-          const schKey = Object.keys(body.entities.weeklySchedules)[0];
           body = omitPropertiesFromBody(body, ['pmsId', 'avatarUrl', 'weeklySchedules', 'startDate']);
-          delete body.entities.weeklySchedules.startDate;
-          body.entities.weeklySchedules[schKey].accountId = body.entities.practitioners[pracKey].accountId;
-
-          body.entities.weeklySchedules[schKey].friday.chairIds = [];
-          body.entities.weeklySchedules[schKey].friday.pmsScheduleId = null;
-          body.entities.weeklySchedules[schKey].saturday.chairIds = [];
-          body.entities.weeklySchedules[schKey].saturday.pmsScheduleId = null;
-          body.entities.weeklySchedules[schKey].sunday.chairIds = [];
-          body.entities.weeklySchedules[schKey].sunday.pmsScheduleId = null;
-          body.entities.weeklySchedules[schKey].monday.chairIds = [];
-          body.entities.weeklySchedules[schKey].monday.pmsScheduleId = null;
-          body.entities.weeklySchedules[schKey].tuesday.chairIds = [];
-          body.entities.weeklySchedules[schKey].tuesday.pmsScheduleId = null;
-          body.entities.weeklySchedules[schKey].wednesday.chairIds = [];
-          body.entities.weeklySchedules[schKey].wednesday.pmsScheduleId = null;
-          body.entities.weeklySchedules[schKey].thursday.chairIds = [];
-          body.entities.weeklySchedules[schKey].thursday.pmsScheduleId = null;
+          filterObject(body, 'updatedAt');
+          filterObject(body, 'createdAt');
           expect(body).toMatchSnapshot();
         });
     });
@@ -109,6 +92,8 @@ describe('/api/practitioners', () => {
         .expect(200)
         .then(({ body }) => {
           body = omitPropertiesFromBody(body, ['pmsId', 'avatarUrl', 'weeklySchedules', 'startDate']);
+          filterObject(body, 'updatedAt');
+          filterObject(body, 'createdAt');
           expect(body).toMatchSnapshot();
         });
     });
@@ -119,14 +104,15 @@ describe('/api/practitioners', () => {
       await seedTestUsers();
       await wipeModel(WeeklySchedule);
       await wipeModel(Practitioner);
-
-      await WeeklySchedule.create(weeklySchedule);
+      await seedTestFullWeeklySchedules();
       await Account.update({ weeklyScheduleId }, { where: { id: accountId } });
     });
 
     afterEach(async () => {
       await Account.update({ weeklyScheduleId: null }, { where: { id: accountId } });
+      await wipeModel(DailySchedule);
       await wipeModel(Practitioner);
+      await wipeModel(WeeklySchedule);
     });
 
     test('create practitioner', () => {

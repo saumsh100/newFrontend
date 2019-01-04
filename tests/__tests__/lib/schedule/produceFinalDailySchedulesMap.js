@@ -1,5 +1,5 @@
 
-import produceFinalDailySchedulesMap from '../../../../server/lib/schedule/produceFinalDailySchedulesMap';
+import produceFinalDailySchedulesMap from '../../../../server/lib/schedule/practitioners/produceFinalDailySchedulesMap';
 
 const schedule = {
   id: '6cc033e5-927e-4abe-8127-d805c074b531',

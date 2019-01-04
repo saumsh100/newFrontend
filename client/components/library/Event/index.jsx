@@ -27,15 +27,11 @@ export default function Event(props) {
           </div>
           {component.map(ev => ev({ data }))}
         </div>
-        {type !== 'appointment' &&
-          type !== 'dueDate' &&
-          type !== 'recall' && (
-            <div className={styles.time}>
-              <span className={styles.time_text}>
-                {dateFormatter(data.createdAt, '', 'h:mm a')}
-              </span>
-            </div>
-          )}
+        {type !== 'appointment' && type !== 'dueDate' && type !== 'recall' && (
+          <div className={styles.time}>
+            <span className={styles.time_text}>{dateFormatter(data.createdAt, '', 'h:mm a')}</span>
+          </div>
+        )}
       </div>
     )
   );

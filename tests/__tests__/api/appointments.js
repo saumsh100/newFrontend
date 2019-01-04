@@ -151,52 +151,6 @@ describe('/api/appointments', () => {
   // TODO: This can use some more test cases...
   // (Gavin: Not familiar with what's going on in these endpoints)
   describe('GET /', () => {
-    test('/business - [no description]', () =>
-      request(app)
-        .get(`${rootUrl}/business?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        }));
-
-    test('/statsdate - data for most popular day of the week', () =>
-      request(app)
-        .get(`${rootUrl}/statsdate`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        }));
-
-    test('/statslastyear - data for past year', () =>
-      request(app)
-        .get(`${rootUrl}/statslastyear`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          const { data, age, entities, months } = omitPropertiesFromBody(body);
-          expect({
-            age,
-            data: data.sort(),
-            entities,
-            months: months.sort(),
-          }).toMatchSnapshot();
-        }));
-
-    test('/stats - appointment stats for intelligence overview', () =>
-      request(app)
-        .get(`${rootUrl}/stats?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        }));
-
     test('/ - retrieve appointments', () =>
       request(app)
         .get(`${rootUrl}?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
@@ -242,38 +196,6 @@ describe('/api/appointments', () => {
           expect(body).toMatchSnapshot();
         });
     });
-  });
-
-  describe('GET /', () => {
-    test('/stats - appointment mostAppointments for intelligence overview', () =>
-      request(app)
-        .get(`${rootUrl}/mostAppointments?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        }));
-
-    test('/stats - appointment practitionerWorked for intelligence overview', () =>
-      request(app)
-        .get(`${rootUrl}/practitionerWorked?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        }));
-
-    test('/stats - appointment appointmentsBooked for intelligence overview', () =>
-      request(app)
-        .get(`${rootUrl}/appointmentsBooked?startDate=2016-07-19T00:14:30.932Z&endDate=2018-07-19T00:14:30.932Z`)
-        .set('Authorization', `Bearer ${token}`)
-        .expect(200)
-        .then(({ body }) => {
-          body = omitPropertiesFromBody(body);
-          expect(body).toMatchSnapshot();
-        }));
   });
 
   describe('GET /insights', () => {

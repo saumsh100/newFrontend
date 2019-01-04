@@ -2,18 +2,14 @@
 import isArray from 'lodash/isArray';
 import { Router } from 'express';
 import moment from 'moment';
+import { Appointment, Chat, Patient } from 'CareCruModels';
 import format from '../../util/format';
 import batchCreate, { batchUpdate } from '../../util/batch';
 import { updateChatAfterPatient } from '../../util/preUpdateFunctions';
-import {
-  mostBusinessPatient,
-  mostBusinessClinic,
-  mostBusinessSinglePatient,
-} from '../../../lib/intelligence/revenue';
+import { mostBusinessSinglePatient } from '../../../lib/intelligence/revenue';
 import checkPermissions from '../../../middleware/checkPermissions';
 import checkIsArray from '../../../middleware/checkIsArray';
 import normalize from '../normalize';
-import { Appointment, Chat, Patient } from '../../../_models';
 import { sequelizeLoader } from '../../util/loaders';
 import { namespaces } from '../../../config/globals';
 import patientEventsAggregator from '../../../lib/events';
@@ -36,35 +32,6 @@ patientsRouter.param('patientId', sequelizeLoader('patient', 'Patient'));
 const eventsRouter = new Router();
 
 patientsRouter.get('/:patientId/events', eventsRouter);
-
-
-function ageRange(age, array) {
-  if (age < 18) {
-    array[0]++;
-  } else if (age >= 18 && age < 25) {
-    array[1]++;
-  } else if (age >= 25 && age < 35) {
-    array[2]++;
-  } else if (age >= 35 && age < 45) {
-    array[3]++;
-  } else if (age >= 45 && age < 55) {
-    array[4]++;
-  } else {
-    array[5]++;
-  }
-  return array;
-}
-
-function ageRangePercent(array) {
-  const newArray = array.slice();
-  newArray[0] = Math.round(100 * array[0] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[1] = Math.round(100 * array[1] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[2] = Math.round(100 * array[2] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[3] = Math.round(100 * array[3] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[4] = Math.round(100 * array[4] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  newArray[5] = Math.round(100 * array[5] / (array[0] + array[1] + array[2] + array[3] + array[4] + array[5]));
-  return newArray;
-}
 
 patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async (req, res, next) => {
   const startDate = moment()
@@ -138,98 +105,6 @@ patientsRouter.get('/:patientId/stats', checkPermissions('patients:read'), async
     next(error);
   }
 });
-
-patientsRouter.get('/revenueStatsTotal', checkPermissions('patients:read'), async (req, res, next) => {
-  const {
-    accountId,
-    query,
-  } = req;
-
-  let {
-    startDate,
-    endDate,
-  } = query;
-
-  startDate = startDate || moment()
-    .subtract(1, 'years')
-    .toISOString();
-  endDate = endDate || moment()
-    .toISOString();
-
-  return mostBusinessClinic(startDate, endDate, accountId)
-    .then(result => res.send(result[0]))
-    .catch(next);
-});
-
-patientsRouter.get('/revenueStats', checkPermissions('patients:read'), async (req, res, next) => {
-  const {
-    accountId,
-    query,
-  } = req;
-
-  let {
-    startDate,
-    endDate,
-  } = query;
-
-  startDate = startDate || moment()
-    .subtract(1, 'years')
-    .toISOString();
-  endDate = endDate || moment()
-    .toISOString();
-
-  return mostBusinessPatient(startDate, endDate, accountId)
-    .then(result => res.send(result))
-    .catch(next);
-});
-
-patientsRouter.get('/stats', checkPermissions('patients:read'), async (req, res, next) => {
-  const { accountId } = req;
-
-  const male = /^male/i;
-
-  const startDate = moment()
-    .subtract(1, 'years')
-    .toISOString();
-  const endDate = moment()
-    .toISOString();
-
-  const stats = {
-    male: 0,
-    female: 0,
-    ageData: new Array(6).fill(0),
-  };
-
-  try {
-    const appointments = await Appointment.findAll({
-      raw: true,
-      where: {
-        accountId,
-        patientId: { $ne: null },
-        startDate: { $between: [startDate, endDate] },
-      },
-      include: [{ association: 'patient' }],
-    });
-
-    appointments.map((appointment) => {
-      if (appointment['patient.gender'] && male.test(appointment['patient.gender'])) {
-        stats.male += 1;
-      } else {
-        stats.female += 1;
-      }
-
-      stats.ageData = ageRange(moment()
-        .diff(moment(appointment['patient.birthDate']), 'years'), stats.ageData);
-      return 0;
-    });
-    stats.ageData = ageRangePercent(stats.ageData);
-
-    return res.send(stats);
-  } catch (error) {
-    next(error);
-  }
-});
-
 
 patientsRouter.get('/search', checkPermissions('patients:read'), async (req, res, next) => {
   const searchString = req.query.patients || '';

@@ -3,7 +3,7 @@ import isArray from 'lodash/isArray';
 import unionBy from 'lodash/unionBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
-import produceFinalDailySchedulesMap from '../schedule/produceFinalDailySchedulesMap';
+import produceFinalDailySchedulesMap from '../schedule/practitioners/produceFinalDailySchedulesMap';
 import {
   getProperDateWithZone,
   getRangeOfDays,

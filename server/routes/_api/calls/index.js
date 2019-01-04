@@ -126,7 +126,7 @@ callsRouter.get('/statsgraph', (req, res, next) => {
   } = query;
 
   if (!startDate || !endDate) {
-    return res.send(400);
+    return res.sendStatus(400);
   }
 
   const range = generateDuringFilterSequelize(startDate, endDate);

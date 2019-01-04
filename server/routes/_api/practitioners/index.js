@@ -1,8 +1,15 @@
 import moment from 'moment-timezone';
-import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair } from '../../../_models';
+import omit from 'lodash/omit';
+import { Practitioner, WeeklySchedule, Account, Service, Practitioner_Service, Chair, DailySchedule } from 'CareCruModels';
 import format from '../../util/format';
 import handleSequelizeError from '../../util/handleSequelizeError';
 import { sequelizeLoader } from '../../util/loaders';
+import {
+  dailyScheduleNameList,
+  updateDaySchedules,
+  deleteIsClosedFieldFromBody,
+  dayNamesList,
+} from '../../../_models/WeeklySchedule';
 
 const practitionersRouter = require('express').Router();
 const authMiddleware = require('../../../middleware/auth');
@@ -11,7 +18,6 @@ const checkPermissions = require('../../../middleware/checkPermissions');
 const normalize = require('../normalize');
 
 const isArray = require('lodash/isArray');
-const mergeWith = require('lodash/mergeWith');
 const uuid = require('uuid');
 const upload = require('../../../lib/upload');
 
@@ -41,69 +47,55 @@ practitionersRouter.get('/', (req, res, next) => {
 
 /**
  * Create a practitioner
+ * A default WeeklySchedule for the practitioner will be created,
+ * copying from the account's office hour
  */
 practitionersRouter.post('/', checkPermissions('practitioners:create'), async (req, res, next) => {
   try {
-    const accountId = req.accountId;
-    let practitionerData = Object.assign({}, req.body, {
+    const { accountId, body } = req;
+
+    const practitionerData = {
+      ...body,
       accountId,
-    });
+    };
 
     const practitionerTest = await Practitioner.build(practitionerData);
     await practitionerTest.validate();
 
-    return Account.findOne({
-      where: { id: req.accountId },
-      raw: true,
-      nest: true,
+    const account = await Account.findOne({
+      where: { id: accountId },
       include: [
         {
           model: WeeklySchedule,
           as: 'weeklySchedule',
         },
       ],
-    })
-    .then((account) => {
-      delete account.weeklySchedule.weeklyScheduleId;
-      delete account.weeklySchedule.createdAt;
-      delete account.weeklySchedule.id;
-      return WeeklySchedule.create(account.weeklySchedule)
-      .then(async (weeklySchedule) => {
-        weeklySchedule = weeklySchedule.get({ plain: true });
-
-        const chairs = await Chair.findAll({
-          raw: true,
-          where: { accountId: req.accountId },
-        });
-
-        const chairIds = chairs.map(chair => chair.id);
-        weeklySchedule.monday.chairIds = chairIds;
-        weeklySchedule.tuesday.chairIds = chairIds;
-        weeklySchedule.wednesday.chairIds = chairIds;
-        weeklySchedule.thursday.chairIds = chairIds;
-        weeklySchedule.friday.chairIds = chairIds;
-        weeklySchedule.saturday.chairIds = chairIds;
-        weeklySchedule.sunday.chairIds = chairIds;
-
-        await WeeklySchedule.update(weeklySchedule, {
-          where: {
-            id: weeklySchedule.id,
-          },
-        });
-
-        practitionerData = Object.assign({}, {
-          accountId: req.accountId,
-          weeklyScheduleId: weeklySchedule.id,
-        }, req.body);
-
-        return Practitioner.create(practitionerData)
-          .then((practitioner) => {
-            practitioner = practitioner.get({ plain: true });
-            practitioner.weeklySchedule = weeklySchedule;
-            return res.status(201).send(format(req, res, 'practitioner', practitioner));
-        });
-      });
     });
+
+    const cleanedSchedule = cleanUpWeeklySchedule(account.weeklySchedule.get({ plain: true }));
+    const weeklySchedule = await WeeklySchedule.create(
+      cleanedSchedule,
+      { include: Object.keys(dailyScheduleNameList).map(day => ({ association: day })) },
+    );
+    const practitioner = await Practitioner.create({
+      ...body,
+      accountId,
+      weeklyScheduleId: weeklySchedule.id,
+    });
+
+    // Add practitionerId to all the dailySchedules
+    const weeklyScheduleData = weeklySchedule.get({ plain: true });
+    const updateBody = Object.keys(dailyScheduleNameList).reduce((acc, day) => ({
+      ...acc,
+      [day]: {
+        ...weeklyScheduleData[day],
+        practitionerId: practitioner.id,
+      },
+    }), weeklyScheduleData);
+
+    await updateDaySchedules(weeklySchedule, updateBody, DailySchedule);
+
+    return res.status(201).send(format(req, res, 'practitioner', practitioner.get({ plain: true })));
   } catch (e) {
     // check sequelize error
     if (e.errors && e.errors[0]) {
@@ -139,6 +131,7 @@ practitionersRouter.get('/:practitionerId', checkPermissions('practitioners:read
 
 /**
  * Update a practitioner
+ * This endpoint will NOT update the customized WeeklySchedule for the practitioner
  */
 practitionersRouter.put('/:practitionerId', checkPermissions('practitioners:update'), (req, res, next) => {
   const newServices = req.body.services || [];
@@ -286,52 +279,32 @@ practitionersRouter.put('/:practitionerId/customSchedule', (req, res, next) => {
 });
 
 /**
- * [mergeCopyArrays function for custom merge (lodash). So that array's aren't merged]
- * @param  {[type]} objValue
- * @param  {[type]} srcValue
- * @return {[type]} only return source value for arrays so they don't merge
- * else return undefined and follow merge.
- */
-function mergeCopyArrays(objValue, srcValue) {
-  if (isArray(objValue)) {
-    return srcValue;
-  }
-}
-
-/**
  * Update a practitioners custom weekly schedule
+ * This endpoint is ONLY used for connector sync
  */
 practitionersRouter.put('/:practitionerId/weeklySchedule', async (req, res, next) => {
   try {
-    await req.practitioner.update({ isCustomSchedule: true });
+    const { practitioner, body } = req;
+    const { weeklyScheduleId } = practitioner;
 
-    let schedule = await WeeklySchedule.findOne({
-      where: {
-        id: req.practitioner.weeklyScheduleId,
+    await practitioner.update({ isCustomSchedule: true });
+    const weeklySchedule = await WeeklySchedule.findByPk(practitioner.weeklyScheduleId);
+
+    // Associate the DailySchedule Ids to the body
+    const updateBody = dayNamesList.reduce((acc, day) => ({
+      ...acc,
+      [day]: {
+        ...body[day],
+        id: weeklySchedule[`${day}Id`],
       },
-    });
+    }), body);
+    const deletedIsClosedBody = deleteIsClosedFieldFromBody(updateBody);
 
-    const bodyCopy = Object.assign({}, req.body);
+    await updateDaySchedules(weeklySchedule, deletedIsClosedBody, DailySchedule);
+    await weeklySchedule.update(body);
+    const updatedSchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
 
-    const scheduleEntryCopy = schedule.get({ plain: true });
-
-    const updateSchedule = mergeWith({}, scheduleEntryCopy, bodyCopy, mergeCopyArrays);
-
-
-    schedule.setDataValue('pmsId', req.body.pmsId);
-
-    await schedule.save();
-
-    schedule = await schedule.update(updateSchedule);
-
-
-    schedule = await WeeklySchedule.findOne({
-      where: {
-        id: req.practitioner.weeklyScheduleId,
-      },
-    });
-
-    return res.send(format(req, res, 'weeklySchedule', schedule));
+    return res.send(format(req, res, 'weeklySchedule', updatedSchedule.get({ plain: true })));
   } catch (error) {
     return next(error);
   }
@@ -380,5 +353,18 @@ practitionersRouter.delete('/:practitionerId', checkPermissions('practitioners:d
     .then(() => res.sendStatus(204))
     .catch(next));
 
+/**
+ * Clean up the weeklySchedule model to reuse it for creating new weeklySchedule.
+ * This function is used for converting a officeHour to a weeklySchedule
+ * @param weeklySchedule
+ */
+function cleanUpWeeklySchedule(weeklySchedule) {
+  const cleanedWeeklySchedule = omit(weeklySchedule, ['id', 'createdAt', 'updatedAt']);
+
+  return Object.keys(dailyScheduleNameList).reduce((acc, day) => ({
+    ...acc,
+    [day]: omit(cleanedWeeklySchedule[day], ['id', 'createdAt', 'updatedAt']),
+  }), cleanedWeeklySchedule);
+}
 
 module.exports = practitionersRouter;

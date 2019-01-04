@@ -2,6 +2,17 @@
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import {
+  Account,
+  Enterprise,
+  Invite,
+  Permission,
+  User,
+  AccountConfiguration,
+  Configuration,
+  WeeklySchedule,
+  DailySchedule,
+} from 'CareCruModels';
 import uniqBy from 'lodash/uniqBy';
 import { UserAuth } from '../../../lib/_auth';
 import { callRailDelete, vendastaDelete } from '../../../lib/deleteAccount';
@@ -16,15 +27,6 @@ import normalize from '../normalize';
 import format from '../../util/format';
 import { getDayStart, getDayEnd } from '../../../util/time';
 import StatusError from '../../../util/StatusError';
-import {
-  Account,
-  Enterprise,
-  Invite,
-  Permission,
-  User,
-  AccountConfiguration,
-  Configuration,
-} from '../../../_models';
 import upload from '../../../lib/upload';
 import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
@@ -40,6 +42,8 @@ import {
   countPatientsWithAppInRange,
 } from '../../../lib/patientsQuery/patientsWithinRange';
 import { formatPhoneNumber } from '../../../../client/components/library/util/Formatters';
+import { createOfficeHour, modifyOfficeHour, deleteOfficeHour } from './officeHour';
+import { deleteIsClosedFieldFromBody } from '../../../_models/WeeklySchedule';
 
 const accountsRouter = Router();
 
@@ -672,4 +676,152 @@ accountsRouter.get(
   },
 );
 
-module.exports = accountsRouter;
+/**
+ * GET /:accountId/officeHour
+ * This is the new end point for retrieving the office hour for an account.
+ */
+accountsRouter.get('/:accountId/officeHour', async ({ account: { weeklyScheduleId, id } }, res, next) => {
+  if (!weeklyScheduleId) {
+    return next(new StatusError(StatusError.NOT_FOUND, `Account ${id} does not have office hour`));
+  }
+
+  try {
+    const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
+    return res.send(weeklySchedule);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/**
+ * POST /connector/officeHour
+ * This is the end point for connector to create the office hour
+ * since connector does not have the information about the accountId,
+ * we need a separate endpoint for it.
+ */
+accountsRouter.post('/connector/officeHour', async (req, res, next) => {
+  try {
+    const { body: rawOfficeHour, accountId } = req;
+    const account = await Account.findByPk(accountId);
+    const weeklySchedule = await createOfficeHour({
+      account,
+      rawOfficeHour,
+    });
+
+    return res.send(format(req, res, 'weeklySchedule', weeklySchedule));
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/**
+ * POST /:accountId/officeHour
+ * This is the new end point for creating the office hour for an account.
+ * The request body should include from 'mondaySchedule' to 'sundaySchedule'.
+ */
+accountsRouter.post('/:accountId/officeHour', async ({ body: rawOfficeHour, account }, res, next) => {
+  try {
+    const weeklySchedule = await createOfficeHour({
+      account,
+      rawOfficeHour,
+    });
+    // do not need to normalize it because the association already includes all the dailySchedule entities
+    return res.send(weeklySchedule.get({ plain: true }));
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/**
+ * DELETE /connector/officeHour
+ * This is the end point for connector to delete the office hour
+ * since connector does not have the information about the accountId,
+ * we need a separate endpoint for it.
+ */
+accountsRouter.delete('/connector/officeHour', async ({ accountId }, res, next) => {
+  try {
+    const account = await Account.findByPk(accountId);
+    await deleteOfficeHour(account);
+    return res.sendStatus(200);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/**
+ * DELETE /:accountId/officeHour
+ * This is the new end point for deleting the office hour for an account.
+ */
+accountsRouter.delete('/:accountId/officeHour', async ({ account }, res, next) => {
+  try {
+    await deleteOfficeHour(account);
+    return res.sendStatus(200);
+  } catch (e) {
+    return next(e);
+  }
+});
+
+/**
+ * PUT /connector/officeHour
+ * This is the end point for connector to modify the office hour
+ * since connector does not have the information about the accountId,
+ * we need a separate endpoint for it.
+ */
+accountsRouter.put(
+  '/connector/officeHour',
+  async (req, res, next) => {
+    try {
+      const { body, accountId } = req;
+      const rawOfficeHour = deleteIsClosedFieldFromBody(body);
+      const account = await Account.findByPk(accountId);
+      let { weeklyScheduleId } = account;
+
+      /* Create the weeklySchedule if not exist for an account.
+       * This is due to the fact that connector is ONLY use PUT method for both
+       * creating and updating office hour.
+       */
+      if (!weeklyScheduleId) {
+        const officeHour = await createOfficeHour({
+          account,
+          rawOfficeHour,
+        });
+        weeklyScheduleId = officeHour.get('id');
+      } else {
+        await modifyOfficeHour({
+          weeklyScheduleId,
+          accountId,
+          rawOfficeHour,
+        });
+      }
+      const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
+
+      return res.send(format(req, res, 'weeklySchedule', weeklySchedule));
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
+
+/**
+ * PUT /:accountId/officeHour
+ * This is the new end point for updating the office hour for an account.
+ * The request body should include from 'mondaySchedule' to 'sundaySchedule'.
+ */
+accountsRouter.put(
+  '/:accountId/officeHour',
+  async ({ body: rawOfficeHour, account: { weeklyScheduleId, id: accountId } }, res, next) => {
+    try {
+      await modifyOfficeHour({
+        weeklyScheduleId,
+        accountId,
+        rawOfficeHour,
+      });
+      const weeklySchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
+      return res.send(weeklySchedule);
+    } catch (e) {
+      return next(e);
+    }
+  },
+);
+
+export default accountsRouter;

@@ -325,7 +325,7 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
   })
     .then((chat) => {
       if (!chat) {
-        return res.send(200);
+        return res.sendStatus(200);
       }
       return res.send(normalize('chat', chat.get({ plain: true })));
     })

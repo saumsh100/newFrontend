@@ -21,7 +21,7 @@ resetRouter.post('/:token', ({ body, params: { token } }, res, next) => {
     },
   }).then((reset) => {
     if (!reset) {
-      return res.send(400);
+      return res.sendStatus(400);
     }
     const username = reset.dataValues.email;
 
@@ -33,7 +33,7 @@ resetRouter.post('/:token', ({ body, params: { token } }, res, next) => {
       await user.setPasswordAsync(passwordChange.password);
       await user.save();
       await reset.destroy();
-      return res.send(200);
+      return res.sendStatus(200);
     });
   }).catch(next);
 });

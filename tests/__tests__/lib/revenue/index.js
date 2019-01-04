@@ -4,6 +4,7 @@ import {
   Patient,
   DeliveredProcedure,
   WeeklySchedule,
+  DailySchedule,
   Account,
 } from 'CareCruModels';
 import calcRevenueDays from '../../../../server/lib/revenue/index';
@@ -23,14 +24,6 @@ const makeProcedureData = (data = {}) => ({
   isCompleted: true,
   ...data,
 });
-
-const weeklySchedule = {
-  accountId,
-  wednesday: { isClosed: true },
-  saturday: { isClosed: true },
-  sunday: { isClosed: true },
-  isAdvanced: false,
-};
 
 const makeApptData = (data = {}) => ({
   accountId,
@@ -79,7 +72,32 @@ describe('#Calculate total revenue for a date range', () => {
         lastName: 'Patient',
       }),
     ]);
-    const ws = await WeeklySchedule.create(weeklySchedule);
+
+    const [{ id: openDayId }, { id: closedDayId }] = await DailySchedule.bulkCreate([
+      {
+        startTime: date(1970, 1, 1, 8),
+        endTime: date(1970, 1, 1, 17),
+        accountId,
+      },
+      {
+        startTime: date(1970, 1, 1, 8),
+        endTime: date(1970, 1, 1, 17),
+        closed: true,
+        accountId,
+      },
+    ]);
+
+    const ws = await WeeklySchedule.create({
+      accountId,
+      mondayId: openDayId,
+      tuesdayId: openDayId,
+      wednesdayId: closedDayId,
+      thursdayId: openDayId,
+      fridayId: openDayId,
+      saturdayId: closedDayId,
+      sundayId: closedDayId,
+      isAdvanced: false,
+    });
 
     await Account.update(
       { weeklyScheduleId: ws.get({ plain: true }).id },

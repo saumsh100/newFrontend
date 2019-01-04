@@ -53,6 +53,17 @@ export default async function fetchStaticDataForAvailabilities({ accountId, serv
             {
               model: WeeklySchedule,
               as: 'weeklySchedule',
+              include: [
+                { association: 'monday' },
+                { association: 'tuesday' },
+                { association: 'wednesday' },
+                { association: 'thursday' },
+                { association: 'friday' },
+                { association: 'saturday' },
+                { association: 'sunday' },
+              ],
+
+              required: false,
             },
           ],
 
@@ -73,6 +84,16 @@ export default async function fetchStaticDataForAvailabilities({ accountId, serv
       {
         model: WeeklySchedule,
         as: 'weeklySchedule',
+        include: [
+          { association: 'monday' },
+          { association: 'tuesday' },
+          { association: 'wednesday' },
+          { association: 'thursday' },
+          { association: 'friday' },
+          { association: 'saturday' },
+          { association: 'sunday' },
+        ],
+
         required: false,
       },
     ],

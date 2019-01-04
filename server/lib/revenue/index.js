@@ -27,8 +27,6 @@ export default async function calcRevenueDays(revParams) {
           as: 'weeklySchedule',
         },
       ],
-      nest: true,
-      raw: true,
     });
 
     const timezone = accountData.timezone || 'America/Vancouver';

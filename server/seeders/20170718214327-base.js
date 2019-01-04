@@ -10,6 +10,11 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+const timeWithZone = (hours, minutes, timezone) =>
+  moment(new Date(1970, 1, 0, hours, minutes))
+    .tz(timezone)
+    .toDate();
+
 const passwordHashSaltRounds = 10;
 
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
@@ -27,6 +32,8 @@ const clinicPhoneNumber = '+17786558613';
 const addressId = uuid();
 const addressId2 = uuid();
 const timezone = 'America/Vancouver';
+const startTime = timeWithZone(8, 0, timezone);
+const endTime = timeWithZone(17, 0, timezone);
 
 const ROLES = {
   MANAGER: 'MANAGER',
@@ -47,7 +54,6 @@ const account = {
   id: accountId,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
-  weeklyScheduleId,
   addressId,
   name: 'Test Account',
   twilioPhoneNumber: clinicPhoneNumber,
@@ -70,7 +76,6 @@ const account2 = {
   id: accountId2,
   vendastaId: 'Liberty Chiropractic',
   enterpriseId,
-  weeklyScheduleId: weeklyScheduleId2,
   addressId: addressId2,
   contactEmail: 'info@libertychiropractic.ca',
   website: 'http://carecru.ngrok.io/tests/sites/reviews.html',
@@ -169,16 +174,115 @@ const superAdminUser2 = {
   updatedAt: '2017-07-19T00:14:30.932Z',
 };
 
+const dailyScheduleTemplate = {
+  startTime,
+  endTime,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  accountId,
+};
+
+const mondayId = uuid();
+const tuesdayId = uuid();
+const wednesdayId = uuid();
+const thursdayId = uuid();
+const fridayId = uuid();
+const saturdayId = uuid();
+const sundayId = uuid();
+
+const mondayId2 = uuid();
+const tuesdayId2 = uuid();
+const wednesdayId2 = uuid();
+const thursdayId2 = uuid();
+const fridayId2 = uuid();
+const saturdayId2 = uuid();
+const sundayId2 = uuid();
+
+const devDailySchedules = [
+  {
+    ...dailyScheduleTemplate,
+    id: mondayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: tuesdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: wednesdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: thursdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: fridayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: saturdayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: sundayId,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: mondayId2,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: tuesdayId2,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: wednesdayId2,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: thursdayId2,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: fridayId2,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: saturdayId2,
+  },
+  {
+    ...dailyScheduleTemplate,
+    id: sundayId2,
+  },
+];
+
 const weeklySchedule1 = {
   id: weeklyScheduleId,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  mondayId,
+  tuesdayId,
+  wednesdayId,
+  thursdayId,
+  fridayId,
+  saturdayId,
+  sundayId,
+  accountId,
 };
 
 const weeklySchedule2 = {
   id: weeklyScheduleId2,
   createdAt: '2017-07-19T00:14:30.932Z',
   updatedAt: '2017-07-19T00:14:30.932Z',
+  mondayId: mondayId2,
+  tuesdayId: tuesdayId2,
+  wednesdayId: wednesdayId2,
+  thursdayId: thursdayId2,
+  fridayId: fridayId2,
+  saturdayId: saturdayId2,
+  sundayId: sundayId2,
+  accountId: accountId2,
 };
 
 module.exports = {
@@ -186,11 +290,17 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Enterprises', [enterprise]);
 
-    await queryInterface.bulkInsert('WeeklySchedules', [weeklySchedule1, weeklySchedule2]);
-
     await queryInterface.bulkInsert('Addresses', [address, address2]);
 
     await queryInterface.bulkInsert('Accounts', [account, account2]);
+
+    await queryInterface.bulkInsert('DailySchedules', devDailySchedules);
+
+    await queryInterface.bulkInsert('WeeklySchedules', [weeklySchedule1, weeklySchedule2]);
+
+    await queryInterface.sequelize.query(`UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId}' WHERE "id" = '${accountId}';`);
+
+    await queryInterface.sequelize.query(`UPDATE "Accounts" SET "weeklyScheduleId" = '${weeklyScheduleId2}' WHERE "id" = '${accountId2}';`);
 
     await queryInterface.bulkInsert('Permissions', [
       managerPermission,

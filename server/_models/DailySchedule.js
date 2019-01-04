@@ -1,4 +1,8 @@
+
+import { dateDiffInMinutes } from '@carecru/isomorphic';
 import { validatePractitionerIdPmsId } from '../util/validators';
+
+const CLOSED_DAY_BUFFER_MINUTES = 30;
 
 export default function (sequelize, DataTypes) {
   const DailySchedule = sequelize.define('DailySchedule', {
@@ -18,15 +22,9 @@ export default function (sequelize, DataTypes) {
       },
     },
 
-    practitionerId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
+    practitionerId: { type: DataTypes.UUID },
 
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-    },
+    date: { type: DataTypes.DATEONLY },
 
     startTime: {
       type: DataTypes.DATE,
@@ -49,14 +47,32 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
       defaultValue: [],
     },
+
+    isClosed: {
+      type: new DataTypes.VIRTUAL(DataTypes.BOOLEAN),
+      get() {
+        return dateDiffInMinutes(this.startTime, this.endTime) < CLOSED_DAY_BUFFER_MINUTES;
+      },
+      set(val) {
+        if (val === true) {
+          this.startTime = new Date('1970-01-01T00:00:00.000Z');
+          this.endTime = this.startTime;
+        }
+      },
+    },
   });
 
-  DailySchedule.associate = (({ Practitioner }) => {
+  DailySchedule.associate = ({ Practitioner, Account }) => {
     DailySchedule.belongsTo(Practitioner, {
       foreignKey: 'practitionerId',
       as: 'practitioner',
     });
-  });
+
+    DailySchedule.belongsTo(Account, {
+      foreignKey: 'accountId',
+      as: 'account',
+    });
+  };
 
   return DailySchedule;
 }

@@ -1,5 +1,5 @@
 
-import produceDailySchedules from './produceDailySchedules';
+import produceDailySchedules from '../produceDailySchedules';
 import produceTimeOffs from './produceTimeOffs';
 import modifyDailySchedulesWithTimeOffs from './modifyDailySchedulesWithTimeOffs';
 
