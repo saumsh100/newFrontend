@@ -16,6 +16,10 @@ import practitioner from './practitioner';
 import lastReminder from './lastReminder';
 import lastRecall from './lastRecall';
 import reviews from './reviews';
+import mobilePhoneNumber from './mobilePhoneNumber';
+import homePhoneNumber from './homePhoneNumber';
+import workPhoneNumber from './workPhoneNumber';
+import otherPhoneNumber from './otherPhoneNumber';
 
 const query = {
   firstName,
@@ -35,6 +39,10 @@ const query = {
   lastReminder,
   lastRecall,
   reviews,
+  mobilePhoneNumber,
+  homePhoneNumber,
+  workPhoneNumber,
+  otherPhoneNumber,
 };
 
 /**

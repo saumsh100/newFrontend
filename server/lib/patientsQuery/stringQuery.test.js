@@ -120,31 +120,31 @@ describe('#patientQueryBuilder string query', () => {
     });
   });
 
-  describe('email', () => {
-    it('just uses contains', async () => {
+  describe('mobilePhoneNumber', () => {
+    it('just uses starts_with', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        email: 'patient1',
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
-    });
-
-    test('contains', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        email: { contains: 'patient' },
+        mobilePhoneNumber: '+177',
       });
 
       const patients = result.rows.map(({ id }) => id);
       expect(patients).toEqual([patientId2, patientId3, patientId1]);
     });
 
+    test('contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        mobilePhoneNumber: { contains: '90' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
     test('startsWith', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        email: { startsWith: 'te' },
+        mobilePhoneNumber: { startsWith: '+177' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -154,65 +154,368 @@ describe('#patientQueryBuilder string query', () => {
     test('endsWith', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        email: { endsWith: 'om' },
+        mobilePhoneNumber: { endsWith: '91' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    test('equal', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        mobilePhoneNumber: { equal: '+17789999991' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    it('uses multiple comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        mobilePhoneNumber: {
+          startsWith: '+17',
+          endsWith: '90',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    it('uses raw comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        mobilePhoneNumber: { $iLike: '%999%' },
       });
 
       const patients = result.rows.map(({ id }) => id);
       expect(patients).toEqual([patientId2, patientId3, patientId1]);
     });
 
-    test('equal', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        email: { equal: 'testpatient2@test.com' },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    it('uses multiple comparators', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        email: {
-          startsWith: 'testpatient3',
-          endsWith: 'com',
-        },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId3]);
-    });
-
-    it('uses raw comparators', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        email: { $iLike: '%patient2%' },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
     test('raw operator stacks with comparator', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        email: {
-          startsWith: 'te',
-          $iLike: '%patient3%',
+        mobilePhoneNumber: {
+          startsWith: '+17',
+          $iLike: '%99%',
         },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId3]);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
     });
 
     test('raw operator stacks with comparator doesnt matter the order', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        email: {
-          $iLike: '%patient1%',
-          startsWith: 'te',
+        mobilePhoneNumber: {
+          $iLike: '%99%',
+          endsWith: '99',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+  });
+
+  describe('homePhoneNumber', () => {
+    it('just uses starts_with', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: '+177',
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: { contains: '90' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    test('startsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: { startsWith: '+177' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('endsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: { endsWith: '91' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    test('equal', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: { equal: '+17789999991' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    it('uses multiple comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: {
+          startsWith: '+17',
+          endsWith: '90',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    it('uses raw comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: { $iLike: '%999%' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('raw operator stacks with comparator', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: {
+          startsWith: '+17',
+          $iLike: '%99%',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('raw operator stacks with comparator doesnt matter the order', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        homePhoneNumber: {
+          $iLike: '%99%',
+          endsWith: '99',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+  });
+
+  describe('workPhoneNumber', () => {
+    it('just uses starts_with', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: '+177',
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: { contains: '90' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    test('startsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: { startsWith: '+177' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('endsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: { endsWith: '91' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    test('equal', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: { equal: '+17789999991' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    it('uses multiple comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: {
+          startsWith: '+17',
+          endsWith: '90',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    it('uses raw comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: { $iLike: '%999%' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('raw operator stacks with comparator', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: {
+          startsWith: '+17',
+          $iLike: '%99%',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('raw operator stacks with comparator doesnt matter the order', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        workPhoneNumber: {
+          $iLike: '%99%',
+          endsWith: '99',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId1]);
+    });
+  });
+
+  describe('otherPhoneNumber', () => {
+    it('just uses starts_with', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: '+177',
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('contains', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: { contains: '90' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    test('startsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: { startsWith: '+177' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('endsWith', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: { endsWith: '91' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    test('equal', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: { equal: '+17789999991' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId3]);
+    });
+
+    it('uses multiple comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: {
+          startsWith: '+17',
+          endsWith: '90',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2]);
+    });
+
+    it('uses raw comparators', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: { $iLike: '%999%' },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('raw operator stacks with comparator', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: {
+          startsWith: '+17',
+          $iLike: '%99%',
+        },
+      });
+
+      const patients = result.rows.map(({ id }) => id);
+      expect(patients).toEqual([patientId2, patientId3, patientId1]);
+    });
+
+    test('raw operator stacks with comparator doesnt matter the order', async () => {
+      const result = await patientQueryBuilder({
+        accountId,
+        otherPhoneNumber: {
+          $iLike: '%99%',
+          endsWith: '99',
         },
       });
 
