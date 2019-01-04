@@ -71,12 +71,13 @@ function groupReviewEvents(reviews) {
     .map((review) => {
       if (review.length === 1) {
         return {
-          ...review,
+          ...review[0],
           grouped: false,
         };
       }
+
       return {
-        ...(review.find(r => r.isCompleted) || review),
+        ...((review.find(r => r.isCompleted)) || review[0]),
         grouped: true,
       };
     });
