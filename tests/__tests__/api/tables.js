@@ -3,7 +3,7 @@ import request from 'supertest';
 import omit from 'lodash/omit';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { seedTestPatientsList, patientId2, patientId3 } from '../../util/seedTestPatientsList';
+import { seedTestPatientsList, patientId1, patientId2, patientId3 } from '../../util/seedTestPatientsList';
 import { seedTestUsers } from '../../util/seedTestUsers';
 import { wipeAllModels } from '../../util/wipeModel';
 
@@ -78,6 +78,71 @@ describe('/_api/table/search', () => {
       .then(({ body }) => {
         const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
         expect(patients).toEqual([patientId3]);
+      }));
+  });
+
+  describe('string query builder firstName', () => {
+    test('defaults to starts with', async () => request(app)
+      .get(`${rootUrl}?firstName=ro`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([patientId1]);
+      }));
+
+    test('starts with', async () => request(app)
+      .get(`${rootUrl}?firstName={"startsWith": "ja"}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([patientId2, patientId3]);
+      }));
+
+    test('ends with', async () => request(app)
+      .get(`${rootUrl}?firstName={"endsWith": "on"}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([patientId3]);
+      }));
+
+    test('contains', async () => request(app)
+      .get(`${rootUrl}?firstName={"contains": "al"}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([patientId1]);
+      }));
+
+    test('equals', async () => request(app)
+      .get(`${rootUrl}?firstName={"equal": "Ronald"}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([patientId1]);
+      }));
+
+    test('equals to unexisting', async () => request(app)
+      .get(`${rootUrl}?firstName={"equal": "Donna"}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([]);
+      }));
+
+    test('multiple comparators', async () => request(app)
+      .get(`${rootUrl}?firstName={"startsWith": "ro", "endsWith": "ld"}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const patients = Object.keys(omit(body.entities.patients, ['totalPatients']));
+        expect(patients).toEqual([patientId1]);
       }));
   });
 });

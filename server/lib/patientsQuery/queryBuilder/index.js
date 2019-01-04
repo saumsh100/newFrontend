@@ -52,11 +52,16 @@ export default {
     if (!query[key]) {
       throw Error(`Key '${key}' is not supported`);
     }
+
     try {
       const jsonParsedValue = JSON.parse(value);
       return query[key](jsonParsedValue);
     } catch (e) {
-      return query[key](value);
+      if (e instanceof SyntaxError) {
+        return query[key](value);
+      }
+
+      throw e;
     }
   },
 };
