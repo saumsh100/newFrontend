@@ -6,16 +6,17 @@ import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-depen
 import { Loading, ErrorBadge } from '..';
 
 const gqlQuery = patientId => gql`
-{
-    accountViewer {
-      patient(id: "${patientId}") {
-        firstName
-        lastName
-        isEmailPoc
-        isPhonePoc
-      }
+    query fetchIsPocStatus {
+        accountViewer {
+            id
+            patient(id: "${patientId}") {
+                firstName
+                lastName
+                isEmailPoc
+                isPhonePoc
+            }
+        }
     }
-  }
 `;
 
 /**
