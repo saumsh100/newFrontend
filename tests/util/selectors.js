@@ -3,6 +3,7 @@ import isArray from 'lodash/isArray';
 import toArray from 'lodash/toArray';
 import mapValues from 'lodash/mapValues';
 import omit from 'lodash/omit';
+import pick from 'lodash/pick';
 
 export function getModelsArray(key, responseBody) {
   const { entities } = responseBody;
@@ -33,6 +34,14 @@ export function omitPropertiesFromBody(responseBody, omitProps, jsonApi = false)
   });
 
   return responseBody;
+}
+
+export function pickPropertiesFromBody(responseBody, pickProps) {
+  return {
+    ...responseBody,
+    entities: mapValues(responseBody.entities, modelsSet =>
+      mapValues(modelsSet, model => pick(model, pickProps))),
+  };
 }
 
 function omitPropertiesFromBodyJsonApi(responseBody, omitProps) {

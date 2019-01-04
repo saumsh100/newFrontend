@@ -1,20 +1,14 @@
 
-import { setDateToTimezone } from '../../../../util/time';
+import { prepareQueryParams } from './util';
+import numberType, { BETWEEN } from '../../../queryBuilder/numberType';
 
 /**
  * builds a query object for sequelize query based on age/birthDate field of the Patient model.
  * @param value string[]
  * @returns {{where: {birthDate: {$between: string[]}}}}
  */
-export default function queryAge([endYear, startYear]) {
-  const now = setDateToTimezone()
-    .hours(0)
-    .minutes(0)
-    .seconds(0)
-    .milliseconds(0);
-
-  const endDate = now.clone().subtract(endYear, 'years').toISOString();
-  const startDate = now.clone().subtract(startYear, 'years').toISOString();
-
-  return { where: { birthDate: { $between: [startDate, endDate] } } };
+export default function queryAge(value) {
+  const queryParams = prepareQueryParams(value);
+  const queryBuilder = numberType(query => ({ where: { birthDate: query } }));
+  return queryBuilder(queryParams, BETWEEN);
 }
