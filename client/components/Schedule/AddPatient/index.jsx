@@ -2,8 +2,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
+import PatientUser from '../../../entities/models/PatientUser';
 import { Form, Field } from '../../library';
-
 import {
   maxLength,
   emailValidate,
@@ -11,17 +11,24 @@ import {
   normalizeBirthdate,
 } from '../../library/Form/validate';
 
-const options = [{ value: 'Male' }, { value: 'Female' }];
+const options = [
+  {
+    label: 'Male',
+    value: 'male',
+  },
+  {
+    label: 'Female',
+    value: 'female',
+  },
+];
 
 export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
   let initialValues = {};
 
   if (mergingPatientData) {
-    const patientUser = mergingPatientData.patientUser;
+    const { patientUser } = mergingPatientData;
 
-    const {
-      firstName, lastName, email, phoneNumber, birthDate, gender,
-    } = patientUser;
+    const { firstName, lastName, email, phoneNumber, birthDate, gender } = patientUser;
 
     initialValues = {
       firstName,
@@ -60,10 +67,13 @@ export default function AddPatient({ onSubmit, formName, mergingPatientData }) {
 }
 
 AddPatient.propTypes = {
-  formName: PropTypes.string,
-  birthday: PropTypes.instanceOf(Date),
-  saveBirthday: PropTypes.func,
+  formName: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  mergingPatientData: PropTypes.object,
-  handleDatePickeer: PropTypes.func,
+  mergingPatientData: PropTypes.shape({
+    patientUser: PropTypes.instanceOf(PatientUser),
+    requestData: PropTypes.shape({
+      serviceId: PropTypes.string,
+      practitionerId: PropTypes.string,
+    }),
+  }).isRequired,
 };

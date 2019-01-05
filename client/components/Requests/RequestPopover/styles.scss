@@ -115,7 +115,7 @@
   align-items: center;
   font-size: 13px;
   composes: fontMedium from 'sass-loader!../../../fonts.scss';
-  padding-bottom: 4px;
+  padding-bottom: 8px;
 
   &_note {
     max-height: 80px;

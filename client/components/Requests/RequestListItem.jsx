@@ -8,12 +8,15 @@ import MonthDay from './MonthDay';
 import RequestData from './RequestData';
 import styles from './styles.scss';
 import RequestPopover from './RequestPopover';
+import PatientUser from '../../entities/models/PatientUser';
+import Practitioner from '../../entities/models/Practitioners';
+import Service from '../../entities/models/Service';
+import Request from '../../entities/models/Request';
 import withHoverable from '../../hocs/withHoverable';
 
 class RequestListItem extends Component {
   constructor(props) {
     super(props);
-    this.state = { viewRequest: false };
     this.onClickConfirm = this.onClickConfirm.bind(this);
     this.onClickRemove = this.onClickRemove.bind(this);
     this.renderListItem = this.renderListItem.bind(this);
@@ -42,6 +45,7 @@ class RequestListItem extends Component {
           phoneNumber={data.phoneNumber}
           service={data.service}
           requestCreatedAt={request.createdAt}
+          birthDate={patientUser.get('birthDate')}
           requestingUser={checkIfUsersEqual(patientUser, requestingUser)}
         />
       </ListItem>
@@ -124,20 +128,22 @@ class RequestListItem extends Component {
 }
 
 RequestListItem.propTypes = {
-  request: PropTypes.shape({}).isRequired,
-  service: PropTypes.shape({}),
-  patientUser: PropTypes.shape({}),
-  practitioner: PropTypes.shape({}),
+  request: PropTypes.instanceOf(Request).isRequired,
+  service: PropTypes.instanceOf(Service).isRequired,
+  patientUser: PropTypes.instanceOf(PatientUser).isRequired,
+  practitioner: PropTypes.instanceOf(Practitioner).isRequired,
   requestId: PropTypes.string,
   popoverRight: PropTypes.string,
-  requestingUser: PropTypes.shape({}),
-  updateEntityRequest: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  confirmAppointment: PropTypes.func,
-  removeRequest: PropTypes.func,
-  openRequest: PropTypes.func,
-  isHovered: PropTypes.bool,
+  requestingUser: PropTypes.instanceOf(PatientUser),
+  confirmAppointment: PropTypes.func.isRequired,
+  removeRequest: PropTypes.func.isRequired,
+  openRequest: PropTypes.func.isRequired,
+};
+
+RequestListItem.defaultProps = {
+  popoverRight: '',
+  requestingUser: null,
+  requestId: '',
 };
 
 export default withHoverable(RequestListItem);
