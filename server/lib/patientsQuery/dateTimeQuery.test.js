@@ -90,8 +90,8 @@ describe('#patientQueryBuilder dateTime query', () => {
         accountId,
         firstApptDate: {
           afterRelative: {
-            interval: ['10 day', '5 days'],
-            date: new Date(2018, 5, 15).toISOString(),
+            interval: '10 day',
+            date: new Date(2018, 5, 5).toISOString(),
           },
         },
       });
@@ -115,7 +115,7 @@ describe('#patientQueryBuilder dateTime query', () => {
         accountId,
         firstApptDate: {
           beforeRelative: {
-            interval: ['10 day', '5 days'],
+            interval: '5 days',
             date: new Date(2018, 5, 6).toISOString(),
           },
         },
