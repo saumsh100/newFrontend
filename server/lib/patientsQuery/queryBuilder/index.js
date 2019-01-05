@@ -6,9 +6,9 @@ import gender from './gender';
 import city from './city';
 import email from './email';
 import status from './status';
-import firstAppointment from './firstAppointment';
-import lastAppointment from './lastAppointment';
-import nextAppointment from './nextAppointment';
+import firstApptDate from './firstApptDate';
+import lastApptDate from './lastApptDate';
+import nextApptDate from './nextApptDate';
 import production from './production';
 import bookedAppointments from './bookedAppointments';
 import onlineAppointments from './onlineAppointments';
@@ -29,9 +29,9 @@ const query = {
   city,
   email,
   status,
-  firstAppointment,
-  lastAppointment,
-  nextAppointment,
+  firstApptDate,
+  lastApptDate,
+  nextApptDate,
   production,
   bookedAppointments,
   onlineAppointments,
