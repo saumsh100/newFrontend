@@ -20,6 +20,7 @@ import mobilePhoneNumber from './mobilePhoneNumber';
 import homePhoneNumber from './homePhoneNumber';
 import workPhoneNumber from './workPhoneNumber';
 import otherPhoneNumber from './otherPhoneNumber';
+import pmsCreatedAt from './pmsCreatedAt';
 
 const query = {
   firstName,
@@ -43,6 +44,7 @@ const query = {
   homePhoneNumber,
   workPhoneNumber,
   otherPhoneNumber,
+  pmsCreatedAt,
 };
 
 /**

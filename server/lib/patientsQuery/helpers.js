@@ -20,6 +20,7 @@ export const patientAttributes = [
   'Patient.email',
   'Patient.patientUserId',
   'Patient.pmsId',
+  'Patient.pmsCreatedAt',
   'Patient.accountId',
   'Patient.phoneNumber',
   'Patient.homePhoneNumber',
