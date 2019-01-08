@@ -2,7 +2,7 @@
 const faker = require('faker');
 const uuid = require('uuid').v4;
 const bcrypt = require('bcrypt');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const procedures = require('../fixtures/procedures/procedureDump.json');
 
 // eslint-disable-next-line
