@@ -73,6 +73,7 @@ export default async function searchForAvailabilities(options) {
 
     const tryStartTime = Date.now();
     let {
+      account: accountWithData,
       practitioners: practitionersWithData,
     } = await fetchDynamicDataForAvailabilities({
       account,
@@ -92,7 +93,7 @@ export default async function searchForAvailabilities(options) {
       nextAvailability,
       practitionersData,
     } = computeOpeningsAndAvailabilities({
-      account,
+      account: accountWithData,
       service,
       practitioners: practitionersWithData,
       startDate,

@@ -104,10 +104,11 @@ export default async function fetchStaticDataForAvailabilities({ accountId, serv
   const service = services[0];
   const practitioners = service ? service.practitioners : [];
   return {
-    account,
+    // Needed to ensure we can use Object.assign and object destructuring in dependant functions
+    account: account.get({ plain: true }),
     service,
 
-    // Needed to just ensure we aren't relying on model accessors
+    // Needed for same reason as above
     practitioners: practitioners.map(p => p.get({ plain: true })),
     chairs,
   };

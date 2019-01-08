@@ -337,6 +337,47 @@ Object {
 }
 `;
 
+exports[`/api/accounts GET /:accountId/OfficeHour when office hour exists 2`] = `
+Object {
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "deletedAt": null,
+  "entities": Object {},
+  "friday": null,
+  "fridayId": null,
+  "id": "3330f60a-ec83-431f-a67e-28142ab43caa",
+  "isAdvanced": false,
+  "monday": Object {
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+    "breaks": Array [],
+    "chairIds": Array [],
+    "createdAt": "2017-07-19T00:14:30.932Z",
+    "date": "2019-08-08",
+    "deletedAt": null,
+    "endTime": "1970-02-01T01:00:00.000Z",
+    "id": "8f698c5b-d4a2-4550-a6dc-1942e068d930",
+    "isClosed": false,
+    "pmsId": null,
+    "practitionerId": null,
+    "startTime": "1970-01-31T16:00:00.000Z",
+  },
+  "mondayId": "8f698c5b-d4a2-4550-a6dc-1942e068d930",
+  "pmsId": null,
+  "saturday": null,
+  "saturdayId": null,
+  "startDate": null,
+  "sunday": null,
+  "sundayId": null,
+  "thursday": null,
+  "thursdayId": null,
+  "tuesday": null,
+  "tuesdayId": null,
+  "wednesday": null,
+  "wednesdayId": null,
+  "weeklySchedules": null,
+}
+`;
+
 exports[`/api/accounts GET /:accountId/configurations Getting Connector Configs 1`] = `
 Object {
   "data": Array [
@@ -1176,6 +1217,49 @@ Object {
 }
 `;
 
+exports[`/api/accounts POST /:accountId/OfficeHour when office hour does not exist 2`] = `
+Object {
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "deletedAt": null,
+  "fridayId": null,
+  "id": "99954241-3652-4792-bae5-5bfed53d37b7",
+  "isAdvanced": false,
+  "monday": Object {
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+    "breaks": Array [
+      Object {
+        "endTime": "1970-01-31T21:00:00.000Z",
+        "startTime": "1970-01-31T20:00:00.000Z",
+      },
+      Object {
+        "endTime": "1970-02-01T00:00:00.000Z",
+        "startTime": "1970-01-31T23:00:00.000Z",
+      },
+    ],
+    "chairIds": Array [],
+    "createdAt": "2017-07-19T00:14:30.932Z",
+    "date": "2018-08-02",
+    "deletedAt": null,
+    "endTime": "1970-02-01T01:00:00.000Z",
+    "id": "88954241-3652-4792-bae5-5bfed53d37b7",
+    "isClosed": false,
+    "pmsId": null,
+    "practitionerId": null,
+    "startTime": "1970-01-31T16:00:00.000Z",
+  },
+  "mondayId": "88954241-3652-4792-bae5-5bfed53d37b7",
+  "pmsId": null,
+  "saturdayId": null,
+  "startDate": null,
+  "sundayId": null,
+  "thursdayId": null,
+  "tuesdayId": null,
+  "wednesdayId": null,
+  "weeklySchedules": null,
+}
+`;
+
 exports[`/api/accounts POST /:accountId/newUser should create and return the user 1`] = `
 Object {
   "activeAccountId": "62954241-3652-4792-bae5-5bfed53d37b7",
@@ -1190,6 +1274,56 @@ Object {
 `;
 
 exports[`/api/accounts PUT /:accountId/OfficeHour when office hour exists 1`] = `
+Object {
+  "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  "createdAt": "2017-07-19T00:14:30.932Z",
+  "deletedAt": null,
+  "entities": Object {},
+  "friday": null,
+  "fridayId": null,
+  "id": "3330f60a-ec83-431f-a67e-28142ab43caa",
+  "isAdvanced": false,
+  "monday": Object {
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+    "breaks": Array [
+      Object {
+        "endTime": "1970-01-31T21:00:00.000Z",
+        "startTime": "1970-01-31T20:00:00.000Z",
+      },
+      Object {
+        "endTime": "1970-02-01T00:00:00.000Z",
+        "startTime": "1970-01-31T23:00:00.000Z",
+      },
+    ],
+    "chairIds": Array [],
+    "createdAt": "2017-07-19T00:14:30.932Z",
+    "date": "2018-08-02",
+    "deletedAt": null,
+    "endTime": "1970-02-01T01:00:00.000Z",
+    "id": "88954241-3652-4792-bae5-5bfed53d37b7",
+    "isClosed": false,
+    "pmsId": null,
+    "practitionerId": null,
+    "startTime": "1970-01-31T16:00:00.000Z",
+  },
+  "mondayId": "88954241-3652-4792-bae5-5bfed53d37b7",
+  "pmsId": null,
+  "saturday": null,
+  "saturdayId": null,
+  "startDate": null,
+  "sunday": null,
+  "sundayId": null,
+  "thursday": null,
+  "thursdayId": null,
+  "tuesday": null,
+  "tuesdayId": null,
+  "wednesday": null,
+  "wednesdayId": null,
+  "weeklySchedules": null,
+}
+`;
+
+exports[`/api/accounts PUT /:accountId/OfficeHour when office hour exists 2`] = `
 Object {
   "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
   "createdAt": "2017-07-19T00:14:30.932Z",

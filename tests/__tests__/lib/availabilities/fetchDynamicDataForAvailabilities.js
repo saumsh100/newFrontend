@@ -2,11 +2,12 @@
 import moment from 'moment';
 import {
   Appointment,
+  DailySchedule,
   Practitioner,
   Practitioner_Service,
   PractitionerRecurringTimeOff,
   Request,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import { seedTestAvailabilities } from '../../../util/seedTestAvailabilities';
 import fetchDynamicDataForAvailabilities, {
   fetchAppointments,
@@ -26,6 +27,12 @@ const makeApptData = data => Object.assign({}, {
   serviceId,
   chairId,
   practitionerId,
+}, data);
+
+const makeDailyScheduleData = data => Object.assign({}, {
+  accountId,
+  startTime: '1970-01-31T08:00:00.000Z',
+  endTime: '1970-01-31T08:00:00.000Z',
 }, data);
 
 const makeRequestData = data => Object.assign({}, {
@@ -167,6 +174,7 @@ describe('Availabilities Library', () => {
 
     describe('#fetchDynamicDataForAvailabilities', () => {
       let practitioners;
+      let dailySchedules;
       let requests;
       beforeAll(async () => {
         requests = await Request.bulkCreate([
@@ -180,6 +188,11 @@ describe('Availabilities Library', () => {
           makePractData({ firstName: 'Jeff' }),
         ]);
 
+        dailySchedules = await DailySchedule.bulkCreate([
+          makeDailyScheduleData({ date: '2018-03-05', practitionerId: null }),
+          makeDailyScheduleData({ date: '2018-03-05', practitionerId: practitioners[0].id }),
+        ]);
+
         const startDate = moment('2018-03-03 01:00:00');
         const endDate = moment('2018-03-06 01:00:00');
 
@@ -189,17 +202,19 @@ describe('Availabilities Library', () => {
         }
       });
 
-      test('Should fetch the requests and appts', async () => {
+      test('Should fetch the correct dailySchedules and appts', async () => {
         const result = await fetchDynamicDataForAvailabilities({
-          account: { accountId },
+          account: { id: accountId },
           practitioners,
           startDate: moment('2018-03-05 01:00:00').toISOString(),
           endDate: moment('2018-03-05 23:00:00').toISOString(),
         });
 
         // 5 practitioners x 8 appts per day = 40
-        expect(result.practitioners.find(p => p.dataValues.firstName === 'Jack').appointments.length).toBe(8);
-        expect(result.requests.length).toBe(0);
+        expect(result.account.dailySchedules.length).toBe(1);
+        const jack = result.practitioners.find(p => p.dataValues.firstName === 'Jack');
+        expect(jack.appointments.length).toBe(8);
+        expect(jack.dailySchedules.length).toBe(1);
       });
     });
   });

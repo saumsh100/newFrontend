@@ -136,6 +136,7 @@ export function fetchTimeOffs({ practitionerIds, startDate, endDate }) {
  * fetchDailySchedules is an async function that will return the promised query
  * of for a practitioner's dailySchedules over a range
  *
+ * @param accountId
  * @param practitionerIds
  * @param startDate
  * @param endDate
@@ -143,13 +144,14 @@ export function fetchTimeOffs({ practitionerIds, startDate, endDate }) {
  * @return [dailySchedules]
  */
 export function fetchDailySchedules({
-  practitionerIds, startDate, endDate, timezone,
+  accountId, practitionerIds, startDate, endDate, timezone,
 }) {
   const startDateOnly = getProperDateWithZone(startDate, timezone);
   const endDateOnly = getProperDateWithZone(endDate, timezone);
   return DailySchedule.findAll({
     attributes: [
       'id',
+      'accountId',
       'practitionerId',
       'date',
       'startTime',
@@ -159,10 +161,16 @@ export function fetchDailySchedules({
     ],
 
     where: {
-      practitionerId: { $in: practitionerIds },
       date: {
         $between: [startDateOnly, endDateOnly],
       },
+
+      $or: [
+        // OfficeHours Overrides
+        { accountId, practitionerId: null },
+        // PractitionerSchedule Overrides
+        { practitionerId: { $in: practitionerIds } },
+      ],
     },
     raw: true,
   });
@@ -176,11 +184,12 @@ export function fetchDailySchedules({
  * @param practitioners
  * @param startDate
  * @param endDate
- * @return {Promise<{requests, practitioners}>}
+ * @return {Promise<{account, practitioners, requests}>}
  */
 export default async function fetchDynamicDataForAvailabilities({
   account, practitioners, startDate, endDate,
 }) {
+  const accountId = account.id;
   const practitionerIds = practitioners.map(p => p.id);
 
   // This is a temporary fix to properly get the allDay availabilities
@@ -189,14 +198,19 @@ export default async function fetchDynamicDataForAvailabilities({
 
   // Start all queries in parallel
   const getAppointments = fetchAppointments({ practitionerIds, startDate, endDate });
-  const getRequests = fetchRequests({ accountId: account.id, startDate, endDate });
+  const getRequests = fetchRequests({ accountId, startDate, endDate });
   const getTimeOffs = fetchTimeOffs({
     practitionerIds,
     startDate: dayBeforeDate.toISOString(),
     endDate,
   });
+
   const getDailySchedules = fetchDailySchedules({
-    practitionerIds, startDate, endDate, timezone: account.timezone,
+    accountId,
+    practitionerIds,
+    startDate,
+    endDate,
+    timezone: account.timezone,
   });
 
   // Wait for all queries to finish together but send at same time
@@ -212,6 +226,14 @@ export default async function fetchDynamicDataForAvailabilities({
     getDailySchedules,
   ]);
 
+  // Grab the account-specific data
+  const accountWithData = {
+    ...account,
+    dailySchedules: dailySchedules.filter(d =>
+      d.accountId === accountId && d.practitionerId === null
+    ),
+  };
+
   // Group data now in an overall map of practitioners
   const practitionerAppointments = groupBy(appointments, a => a.practitionerId);
   const practitionerRequests = groupBy(requests, d => d.suggestedPractitionerId);
@@ -219,20 +241,18 @@ export default async function fetchDynamicDataForAvailabilities({
   const practitionerDailySchedules = groupBy(dailySchedules, d => d.practitionerId);
   const practitionersWithData = practitioners.map((practitioner) => {
     const practitionerId = practitioner.id;
-    return Object.assign(
-      {},
-      practitioner,
-      {
-        appointments: practitionerAppointments[practitionerId] || [],
-        timeOffs: practitionerTimeOffs[practitionerId] || [],
-        dailySchedules: practitionerDailySchedules[practitionerId] || [],
-        requests: practitionerRequests[practitionerId] || [],
-      },
-    );
+    return {
+      ...practitioner,
+      appointments: practitionerAppointments[practitionerId] || [],
+      timeOffs: practitionerTimeOffs[practitionerId] || [],
+      dailySchedules: practitionerDailySchedules[practitionerId] || [],
+      requests: practitionerRequests[practitionerId] || [],
+    };
   });
 
   return {
-    requests,
+    account: accountWithData,
     practitioners: practitionersWithData,
+    requests,
   };
 }

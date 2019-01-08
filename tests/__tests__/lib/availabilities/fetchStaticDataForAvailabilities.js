@@ -5,7 +5,7 @@ import {
   Practitioner_Service,
   Appointment,
   PractitionerRecurringTimeOff,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import { seedTestAvailabilities } from '../../../util/seedTestAvailabilities';
 import fetchStaticDataForAvailabilities from '../../../../server/lib/availabilities/fetchStaticDataForAvailabilities';
 import { wipeAllModels } from '../../../util/wipeModel';

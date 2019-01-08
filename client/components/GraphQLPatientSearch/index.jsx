@@ -322,23 +322,21 @@ class PatientSearch extends Component {
                   displaySearching,
                   ...suggestionsListProps,
                 })}
-                {!hideRecentSearch &&
-                  searchedPatients.length > 0 &&
-                  inputValue === '' && (
-                    // render recent searches if has any in the props
-                    <div className={newTheme.recentPatientsWrapper}>
-                      <div className={newTheme.recentPatientsTitle}>Recent patients</div>
-                      {searchedPatients.map((patient, index) => (
-                        <PatientSuggestion
-                          key={patient.id}
-                          patient={patient}
-                          index={index}
-                          getItemProps={getItemProps}
-                          theme={newTheme}
-                        />
-                      ))}
-                    </div>
-                  )}
+                {!hideRecentSearch && searchedPatients.length > 0 && inputValue === '' && (
+                  // render recent searches if has any in the props
+                  <div className={newTheme.recentPatientsWrapper}>
+                    <div className={newTheme.recentPatientsTitle}>Recent patients</div>
+                    {searchedPatients.map((patient, index) => (
+                      <PatientSuggestion
+                        key={patient.id}
+                        patient={patient}
+                        index={index}
+                        getItemProps={getItemProps}
+                        theme={newTheme}
+                      />
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           );

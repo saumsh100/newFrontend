@@ -458,4 +458,86 @@ describe('/api/accounts', () => {
       await unassociateAccountWithOfficeHour();
     });
   });
+
+  describe('GET /:accountId/OfficeHour', () => {
+    test('when office hour does not exist', async () => request(app)
+      .get(`${rootUrl}/${accountId}/officeHour`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404));
+
+    test('when office hour exists', async () => {
+      await associateAccountWithOfficeHour();
+      const { body } = await request(app)
+        .get(`${rootUrl}/${accountId}/officeHour`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      filterObject(body, 'updatedAt');
+      expect(omitPropertiesFromBody(body)).toMatchSnapshot();
+      await unassociateAccountWithOfficeHour();
+    });
+  });
+
+  describe('DELETE /:accountId/OfficeHour', () => {
+    test('when office hour does not exist', async () => request(app)
+      .delete(`${rootUrl}/${accountId}/officeHour`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(404));
+
+    test('when office hour exists', async () => {
+      await associateAccountWithOfficeHour();
+      const { body } = await request(app)
+        .get(`${rootUrl}/${accountId}/officeHour`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(200);
+
+      await unassociateAccountWithOfficeHour();
+    });
+  });
+
+  describe('POST /:accountId/OfficeHour', () => {
+    test('when office hour exists', async () => {
+      await associateAccountWithOfficeHour();
+      request(app)
+        .post(`${rootUrl}/${accountId}/officeHour`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(409);
+      await unassociateAccountWithOfficeHour();
+    });
+
+    test('when office hour does not exist', async () => {
+      // Manually set the id so that it always matches the snapshot
+      officeHourRequestBody.id = newOfficeHourId;
+      officeHourRequestBody.monday.id = newMondayScheduleId;
+      const { body } = await request(app)
+        .post(`${rootUrl}/${accountId}/officeHour`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(officeHourRequestBody)
+        .expect(200);
+      filterObject(body, 'updatedAt');
+      expect(body).toMatchSnapshot();
+    });
+  });
+
+  describe('PUT /:accountId/OfficeHour', () => {
+    test('when office hour does not exist', async () => {
+      request(app)
+        .put(`${rootUrl}/${accountId}/officeHour`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404);
+    });
+
+    test('when office hour exists', async () => {
+      await associateAccountWithOfficeHour();
+      const { body } = await request(app)
+        .put(`${rootUrl}/${accountId}/officeHour`)
+        .set('Authorization', `Bearer ${token}`)
+        .send(officeHourRequestBody)
+        .expect(200);
+
+      filterObject(body, 'updatedAt');
+      expect(omitPropertiesFromBody(body)).toMatchSnapshot();
+      await unassociateAccountWithOfficeHour();
+    });
+  });
 });

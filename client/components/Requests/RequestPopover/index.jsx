@@ -80,37 +80,37 @@ const renderMobileFooter = ({
   rejectRequest,
   acceptRequest,
 }) => (
-    <SFooter
-      className={classNames(styles.footerMobile, { [styles.footerMobile_displayActions]: displayActions })}
-    >
-      {displayActions && (
-        <Button className={styles.actionOverlayButtonMobile} onClick={acceptRequest}>
-          <Icon icon="check" size={1.5} className={styles.actionOverlayButtonIconMobile} />
-          <span>Accept</span>
-        </Button>
-      )}
-      {displayActions && (
-        <Button className={styles.actionOverlayButtonMobile} onClick={rejectRequest}>
-          <Icon
-            icon="times"
-            style={{ padding: '7px 9px' }}
-            size={1.5}
-            className={styles.actionOverlayButtonIconMobile}
-          />
-          <span>Reject</span>
-        </Button>
-      )}
-      <Button
-        color="blue"
-        dense
-        compact
-        rounded
-        className={styles.actionButtonMobile}
-        onClick={toggleActionDisplay}
-      >
-        <Icon icon={displayActions ? 'minus' : 'plus'} />
+  <SFooter
+    className={classNames(styles.footerMobile, { [styles.footerMobile_displayActions]: displayActions })}
+  >
+    {displayActions && (
+      <Button className={styles.actionOverlayButtonMobile} onClick={acceptRequest}>
+        <Icon icon="check" size={1.5} className={styles.actionOverlayButtonIconMobile} />
+        <span>Accept</span>
       </Button>
-    </SFooter>
+    )}
+    {displayActions && (
+      <Button className={styles.actionOverlayButtonMobile} onClick={rejectRequest}>
+        <Icon
+          icon="times"
+          style={{ padding: '7px 9px' }}
+          size={1.5}
+          className={styles.actionOverlayButtonIconMobile}
+        />
+        <span>Reject</span>
+      </Button>
+    )}
+    <Button
+      color="blue"
+      dense
+      compact
+      rounded
+      className={styles.actionButtonMobile}
+      onClick={toggleActionDisplay}
+    >
+      <Icon icon={displayActions ? 'minus' : 'plus'} />
+    </Button>
+  </SFooter>
 );
 
 renderMobileFooter.propTypes = {
@@ -160,9 +160,9 @@ export default class RequestPopover extends Component {
           (isMobile
             ? renderMobileHeader(this.props)
             : renderDesktopHeader({
-              ...this.props,
-              age,
-            }))}
+                ...this.props,
+                age,
+              }))}
         {isMobile &&
           renderMobileSubHeader({
             ...this.props,
@@ -233,11 +233,11 @@ export default class RequestPopover extends Component {
                 </div>
               </div>
             ) : (
-                <div className={styles.container}>
-                  <div className={styles.subHeader}>Patient Info</div>
-                  <div className={styles.data}>n/a</div>
-                </div>
-              )}
+              <div className={styles.container}>
+                <div className={styles.subHeader}>Patient Info</div>
+                <div className={styles.data}>n/a</div>
+              </div>
+            )}
             {note && (
               <div className={styles.container}>
                 <div className={styles.subHeader}>Note</div>
@@ -269,10 +269,10 @@ export default class RequestPopover extends Component {
         )}
         {isMobile
           ? renderMobileFooter({
-            toggleActionDisplay: this.toggleActionDisplay,
-            displayActions,
-            ...this.props,
-          })
+              toggleActionDisplay: this.toggleActionDisplay,
+              displayActions,
+              ...this.props,
+            })
           : renderDesktopFooter(this.props)}
       </Card>
     );

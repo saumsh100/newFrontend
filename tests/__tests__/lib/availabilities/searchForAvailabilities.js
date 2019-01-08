@@ -3,11 +3,12 @@ import moment from 'moment';
 import {
   Account,
   Appointment,
+  DailySchedule,
   Practitioner,
   PractitionerRecurringTimeOff,
   Service,
   WeeklySchedule,
-} from '../../../../server/_models';
+} from 'CareCruModels';
 import { wipeAllModels } from '../../../util/wipeModel';
 import {
   seedTestAvailabilities,
@@ -43,11 +44,25 @@ const generateWeeklySchedule = data => Object.assign(
   data,
 );
 
-const generateTimeOff = data => Object.assign(
-  {},
-  { allDay: true },
-  data,
-);
+const openDay = () => ({
+  isClosed: false,
+  startTime: iso('01:00'),
+  endTime: iso('23:00'),
+});
+
+const generateTimeOff = (data = {}) => ({
+  allDay: true,
+  ...data,
+});
+
+const generateDailySchedule = (data = {}) => ({
+  accountId,
+  isClosed: true,
+  startTime: iso('08:00'),
+  endTime: iso('08:00'),
+  ...data,
+});
+
 
 const iso = (time, day = '03-08', tz = TZ) => moment.tz(`2018-${day} ${time}:00`, tz).toISOString();
 
@@ -157,7 +172,8 @@ describe('Availabilities Library', () => {
     describe('Integration Tests - General Scenario', () => {
       let appointments;
       let officeHours;
-      let customWeeklySchedule;
+      let customWeeklySchedule1;
+      let customWeeklySchedule2;
       beforeEach(async () => {
         // Add WeeklySchedule to Account
         // Add custom WeeklySchedule to practitioner
@@ -254,20 +270,16 @@ describe('Availabilities Library', () => {
         ]);
 
         officeHours = generateWeeklySchedule({
-          monday: {
-            isClosed: false,
-            startTime: iso('09:00'),
-            endTime: iso('18:00'),
-          },
-
-          tuesday: {
-            isClosed: false,
-            startTime: iso('09:00'),
-            endTime: iso('18:00'),
-          },
+          monday: openDay(),
+          tuesday: openDay(),
+          wednesday: openDay(),
+          thursday: openDay(),
+          friday: openDay(),
+          saturday: openDay(),
+          sunday: openDay(),
         });
 
-        customWeeklySchedule = generateWeeklySchedule({
+        customWeeklySchedule1 = generateWeeklySchedule({
           monday: {
             isClosed: false,
             startTime: iso('08:00'),
@@ -299,11 +311,29 @@ describe('Availabilities Library', () => {
           },
         });
 
-        const officeHoursDefaults = await saveWeeklyScheduleWithDefaults(officeHours, WeeklySchedule);
-        const customWeeklyScheduleDefaults = await saveWeeklyScheduleWithDefaults(customWeeklySchedule, WeeklySchedule);
+        customWeeklySchedule2 = generateWeeklySchedule({
+          monday: {
+            isClosed: false,
+            startTime: iso('09:00'),
+            endTime: iso('18:00'),
+          },
+
+          tuesday: {
+            isClosed: false,
+            startTime: iso('09:00'),
+            endTime: iso('18:00'),
+          },
+        });
+
+        // This needs to be like this because Promise.all breaks it with too many clients
+        const ws1 = await saveWeeklyScheduleWithDefaults(officeHours ,WeeklySchedule);
+        const ws2 = await saveWeeklyScheduleWithDefaults(customWeeklySchedule1 ,WeeklySchedule);
+        const ws3 = await saveWeeklyScheduleWithDefaults(customWeeklySchedule2 ,WeeklySchedule);
+        const weeklySchedules = [ws1, ws2, ws3];
+
         await Account.update(
           {
-            weeklyScheduleId: officeHoursDefaults.id,
+            weeklyScheduleId: weeklySchedules[0].id,
             timeInterval: 60,
           },
           { where: { id: accountId } },
@@ -312,9 +342,17 @@ describe('Availabilities Library', () => {
         await Practitioner.update(
           {
             isCustomSchedule: true,
-            weeklyScheduleId: customWeeklyScheduleDefaults.id,
+            weeklyScheduleId: weeklySchedules[1].id,
           },
           { where: { id: practitionerId } },
+        );
+
+        await Practitioner.update(
+          {
+            isCustomSchedule: true,
+            weeklyScheduleId: weeklySchedules[2].id,
+          },
+          { where: { id: practitionerId2 } },
         );
 
         await Service.update(
@@ -344,16 +382,8 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '03-25');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({
-            practitionerId,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
-          generateTimeOff({
-            practitionerId: practitionerId2,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
+          generateTimeOff({ practitionerId, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
         ]);
 
         const startDate = iso('06:00', '03-05'); // Monday morning
@@ -380,16 +410,8 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '03-25');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({
-            practitionerId,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
-          generateTimeOff({
-            practitionerId: practitionerId2,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
+          generateTimeOff({ practitionerId, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
         ]);
 
         const startDate = iso('06:00', '03-05'); // Monday morning
@@ -416,16 +438,8 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '04-25');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({
-            practitionerId,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
-          generateTimeOff({
-            practitionerId: practitionerId2,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
+          generateTimeOff({ practitionerId, startDate: toStart, endDate: toEnd }),
+          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
         ]);
 
         const startDate = iso('06:00', '03-05'); // Monday morning
@@ -473,11 +487,7 @@ describe('Availabilities Library', () => {
         const toStart = iso('06:00', '03-05');
         const toEnd = iso('06:00', '03-05');
         await PractitionerRecurringTimeOff.bulkCreate([
-          generateTimeOff({
-            practitionerId: practitionerId2,
-            startDate: toStart,
-            endDate: toEnd,
-          }),
+          generateTimeOff({ practitionerId: practitionerId2, startDate: toStart, endDate: toEnd }),
         ]);
 
         const options = {
@@ -494,6 +504,54 @@ describe('Availabilities Library', () => {
         expect(retryAttempts).toBe(0);
         expect(Array.isArray(availabilities)).toBe(true);
         expect(availabilities.length).toBe(3);
+      });
+
+      test('should return 0 availabilities with blocked off OfficeHours', async () => {
+        const startDate = iso('06:00', '03-05'); // Monday morning
+        const endDate = iso('18:00', '03-08'); // Thursday evening
+        const options = {
+          accountId,
+          serviceId,
+          startDate,
+          maxRetryAttempts: 0,
+          endDate,
+        };
+
+        await DailySchedule.bulkCreate([
+          generateDailySchedule({ date: '2018-03-05' }),
+          generateDailySchedule({ date: '2018-03-06' }),
+          generateDailySchedule({ date: '2018-03-07' }),
+          generateDailySchedule({ date: '2018-03-08' }),
+        ]);
+
+        const { availabilities, retryAttempts } = await searchForAvailabilities(options);
+        expect(retryAttempts).toBe(0);
+        expect(Array.isArray(availabilities)).toBeTruthy();
+        expect(availabilities.length).toBe(0);
+      });
+
+      test('should return 7 availabilities with adjusted starTime due to OfficeHours', async () => {
+        const startDate = iso('06:00', '03-05'); // Monday morning
+        const endDate = iso('18:00', '03-08'); // Thursday evening
+        const options = {
+          accountId,
+          serviceId,
+          startDate,
+          maxRetryAttempts: 0,
+          endDate,
+        };
+
+        // Block off the morning till 2pm... reduces the first testcase to 7 availabilities
+        await DailySchedule.create(generateDailySchedule({
+          date: '2018-03-05',
+          startTime: iso('14:00'),
+          endTime: iso('18:00'),
+        }));
+
+        const { availabilities, retryAttempts } = await searchForAvailabilities(options);
+        expect(retryAttempts).toBe(0);
+        expect(Array.isArray(availabilities)).toBeTruthy();
+        expect(availabilities.length).toBe(7);
       });
     });
   });

@@ -12,6 +12,10 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
     },
 
+    accountId: {
+      type: DataTypes.UUID,
+    },
+
     pmsId: {
       type: DataTypes.STRING,
       validate: {
@@ -62,15 +66,15 @@ export default function (sequelize, DataTypes) {
     },
   });
 
-  DailySchedule.associate = ({ Practitioner, Account }) => {
-    DailySchedule.belongsTo(Practitioner, {
-      foreignKey: 'practitionerId',
-      as: 'practitioner',
-    });
-
+  DailySchedule.associate = ({ Account, Practitioner }) => {
     DailySchedule.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
+    });
+
+    DailySchedule.belongsTo(Practitioner, {
+      foreignKey: 'practitionerId',
+      as: 'practitioner',
     });
   };
 

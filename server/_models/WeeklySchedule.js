@@ -215,3 +215,16 @@ export function deleteIsClosedFieldFromBody(body) {
     [day]: omit(body[day], ['isClosed']),
   }), body);
 }
+
+/**
+ * Clean up the weeklySchedule model to reuse it for creating new weeklySchedule.
+ * This function is used for converting a officeHour to a weeklySchedule
+ * @param weeklySchedule
+ */
+export function cleanUpWeeklySchedule(weeklySchedule) {
+  const cleanedWeeklySchedule = omit(weeklySchedule, ['id', 'createdAt', 'updatedAt']);
+  return dayNamesList.reduce((acc, day) => ({
+    ...acc,
+    [day]: omit(cleanedWeeklySchedule[day], ['id', 'createdAt', 'updatedAt']),
+  }), cleanedWeeklySchedule);
+}

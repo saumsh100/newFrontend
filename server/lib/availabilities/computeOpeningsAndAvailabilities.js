@@ -4,6 +4,7 @@ import unionBy from 'lodash/unionBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import produceFinalDailySchedulesMap from '../schedule/practitioners/produceFinalDailySchedulesMap';
+import mergeDailySchedules from '../schedule/mergeDailySchedules';
 import {
   getProperDateWithZone,
   getRangeOfDays,
@@ -100,7 +101,7 @@ export function computeOpeningsForPractitioner(options) {
   endDate = convertToDate(endDate);
 
   const { timezone } = account;
-  const finalDailySchedules = produceFinalDailySchedulesMap(
+  const practitionerDailySchedules = produceFinalDailySchedulesMap(
     weeklySchedule,
     dailySchedules,
     timeOffs,
@@ -108,6 +109,22 @@ export function computeOpeningsForPractitioner(options) {
     endDate,
     timezone,
   );
+
+  // Could probably be moved out of this function as it does not change for each practitioner
+  // it is run for when looping over practitioners
+  const officeHoursDaySchedules = produceFinalDailySchedulesMap(
+    account.weeklySchedule,
+    account.dailySchedules,
+    [], // timeOffs = []
+    startDate,
+    endDate,
+    timezone,
+  );
+
+  // Merge officeHours dailySchedules & practitioner dailySchedules
+  const finalDailySchedules = mapValues(practitionerDailySchedules, (practitionerDailySchedule, date) => {
+    return mergeDailySchedules(officeHoursDaySchedules[date], practitionerDailySchedule);
+  });
 
   // Group fillers by day with timezone taken into account for the day
   const appointmentsByDay = groupBy(appointments, a => getProperDateWithZone(a.startDate, timezone));

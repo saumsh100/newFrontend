@@ -357,34 +357,38 @@ class AddToWaitlist extends React.Component {
                     onChange={() => this.toggleTimeFrames(this.getAllTimes())}
                   />
                 </div>
-                {timeFrameOptions.filter(v => availabilities[v].length).map(timeframe => (
-                  <div className={styles.colFrames} key={timeframe}>
-                    <CheckboxButton
-                      labelStyles={styles.checkboxButton}
-                      wrapperStyle={styles.wrapperCheckboxButton}
-                      checked={this.hasEveryTimeSelected(this.getTimeFrameArray(timeframe))}
-                      label={capitalize(timeframe)}
-                      onChange={() => this.toggleTimeFrames(this.getTimeFrameArray(timeframe))}
-                    />
-                  </div>
-                ))}
-              </Row>
-              <div className={styles.orWrapper}>Or</div>
-              {timeFrameOptions.filter(v => availabilities[v].length).map(t => (
-                <Row className={styles.timeFrameContainer} key={t}>
-                  {availabilities[t].map(({ startDate }) => (
-                    <div className={styles.colSpacing} key={startDate}>
+                {timeFrameOptions
+                  .filter(v => availabilities[v].length)
+                  .map(timeframe => (
+                    <div className={styles.colFrames} key={timeframe}>
                       <CheckboxButton
                         labelStyles={styles.checkboxButton}
                         wrapperStyle={styles.wrapperCheckboxButton}
-                        checked={availableTimes.includes(startDate)}
-                        label={moment.tz(startDate, timezone).format('LT')}
-                        onChange={() => this.handleCheckboxTime(startDate)}
+                        checked={this.hasEveryTimeSelected(this.getTimeFrameArray(timeframe))}
+                        label={capitalize(timeframe)}
+                        onChange={() => this.toggleTimeFrames(this.getTimeFrameArray(timeframe))}
                       />
                     </div>
                   ))}
-                </Row>
-              ))}
+              </Row>
+              <div className={styles.orWrapper}>Or</div>
+              {timeFrameOptions
+                .filter(v => availabilities[v].length)
+                .map(t => (
+                  <Row className={styles.timeFrameContainer} key={t}>
+                    {availabilities[t].map(({ startDate }) => (
+                      <div className={styles.colSpacing} key={startDate}>
+                        <CheckboxButton
+                          labelStyles={styles.checkboxButton}
+                          wrapperStyle={styles.wrapperCheckboxButton}
+                          checked={availableTimes.includes(startDate)}
+                          label={moment.tz(startDate, timezone).format('LT')}
+                          onChange={() => this.handleCheckboxTime(startDate)}
+                        />
+                      </div>
+                    ))}
+                  </Row>
+                ))}
             </Grid>
           </div>
         )}

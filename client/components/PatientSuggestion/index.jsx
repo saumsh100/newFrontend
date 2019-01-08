@@ -26,9 +26,9 @@ const PatientSuggestion = ({
     <div
       key={patient.id}
       {...getItemProps({
- id: patient.id,
-item: patient,
-})}
+        id: patient.id,
+        item: patient,
+      })}
       className={classNames({ [newTheme.highlightedIndex]: highlightedIndex === index })}
     >
       <div className={newTheme.suggestionContainer}>

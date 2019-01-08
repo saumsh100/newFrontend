@@ -45,14 +45,14 @@ export function buildModeUrl({
  * @return {axios.Promise}
  */
 export default function signModeUrl(options) {
-  const reportUrl = buildModeUrl(options);
   const encodedQuestion = encodeURIComponent('?');
   const encodedAnd = encodeURIComponent('&');
-
+  const reportUrl = buildModeUrl(options)
+    .replace(/\?/g, encodedQuestion)
+    .replace(/&/g, encodedAnd);
+  const signUrl = `/api/analytics/signUrl?url=${reportUrl}`;
   return axios
-    .get(`/api/analytics/signUrl?url=${reportUrl
-      .replace(/\?/g, encodedQuestion)
-      .replace(/&/g, encodedAnd)}`)
+    .get(signUrl)
     .then(({ data: { url } }) => url)
     .catch((err) => {
       console.error('Error Signing Mode Url:', err);

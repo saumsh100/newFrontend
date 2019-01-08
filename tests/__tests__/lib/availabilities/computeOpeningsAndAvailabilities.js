@@ -5,8 +5,6 @@ import computeOpeningsAndAvailabilities, {
   computeOpeningsForPractitioner,
 } from '../../../../server/lib/availabilities/computeOpeningsAndAvailabilities';
 
-const TZ = 'America/Edmonton';
-const account = { timezone: TZ, timeInterval: 60 };
 const generateWeeklySchedule = data => Object.assign(
   {},
   {
@@ -21,10 +19,33 @@ const generateWeeklySchedule = data => Object.assign(
   data,
 );
 
+const TZ = 'America/Edmonton';
 const iso = (time, day = '03-08') => moment.tz(`2018-${day} ${time}:00`, TZ).toISOString();
 const d = (time, day = '03-08') => new Date(iso(time, day));
 
+const DEFAULT_OFFICE_HOURS = generateWeeklySchedule({
+  monday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+  tuesday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+  wednesday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+  thursday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+  friday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+  saturday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+  sunday: { isClosed: false, startTime: iso('01:00'), endTime: iso('23:00') },
+});
+
+const DEFAULT_ACCOUNT = {
+  timezone: TZ,
+  timeInterval: 60,
+  weeklySchedule: DEFAULT_OFFICE_HOURS,
+  dailySchedules: [],
+};
+
 describe('Availabilities Library', () => {
+  let account;
+  beforeEach(() => {
+    account = DEFAULT_ACCOUNT;
+  });
+
   describe('#computeOpeningsForPractitioner', () => {
     test('should be a function', () => {
       expect(typeof computeOpeningsForPractitioner).toBe('function');
@@ -101,7 +122,7 @@ describe('Availabilities Library', () => {
       ]);
     });
 
-    describe('Integration Tests - General Scenario Accross 4 Days', () => {
+    describe('Integration Tests - General Scenario Across 4 Days', () => {
       let dailySchedules;
       let timeOffs;
       let weeklySchedule;
@@ -378,9 +399,95 @@ describe('Availabilities Library', () => {
         expect(thursday.dailySchedule.isDailySchedule).toBe(false);
         expect(thursday.dailySchedule.isModifiedByTimeOff).toBe(false);
       });
+
+
+      test('should return 4 days with the correct openings with officeHours properly overriding', () => {
+        const startDate = iso('06:00', '03-05'); // Monday morning
+        const endDate = iso('18:00', '03-08'); // Thursday afternoon
+        account.weeklySchedule = generateWeeklySchedule({
+          monday: {
+            isClosed: true, // Testing blocking off
+          },
+
+          tuesday: {
+            isClosed: false, // Testing the boundary change
+            startTime: iso('09:00'),
+            endTime: iso('19:00'),
+          },
+
+          wednesday: {
+            isClosed: false,
+            startTime: iso('13:00'),
+            endTime: iso('20:00'),
+          },
+        });
+
+        account.dailySchedules = [];
+
+        dailySchedules = dailySchedules.concat([
+          {
+            date: '2018-03-05',
+            startTime: iso('08:00'),
+            endTime: iso('13:00'),
+          },
+          {
+            date: '2018-03-06',
+            startTime: iso('08:00'),
+            endTime: iso('20:00'),
+            breaks: [
+              {
+                startTime: iso('12:00'),
+                endTime: iso('13:00'),
+              },
+            ],
+          },
+          {
+            date: '2018-03-07',
+            startTime: iso('08:00'),
+            endTime: iso('08:00'),
+          },
+        ]);
+
+        const data = computeOpeningsForPractitioner({
+          account,
+          weeklySchedule,
+          timeOffs,
+          dailySchedules,
+          appointments,
+          startDate,
+          endDate,
+        });
+
+        expect(toArray(data).length).toBe(4);
+
+        const monday = data['2018-03-05'];
+        const tuesday = data['2018-03-06'];
+        const wednesday = data['2018-03-07'];
+        const thursday = data['2018-03-08'];
+
+        // Check fillers
+        expect(monday.fillers.length).toBe(3);
+        expect(tuesday.fillers.length).toBe(5);
+        expect(tuesday.fillers[2].type).toBe('Break');
+        expect(wednesday.fillers.length).toBe(4);
+        expect(thursday.fillers.length).toBe(0);
+
+        // Check openings
+        expect(monday.openings).toEqual([]);
+        expect(tuesday.openings).toEqual([
+          // OfficeHours boundary stops it going to 20:00
+          { startDate: d('18:30', '03-06'), endDate: d('19:00', '03-06') },
+        ]);
+        expect(wednesday.openings).toEqual([]);
+        expect(thursday.openings).toEqual([]);
+
+        // Check DailySchedule
+        expect(monday.dailySchedule.isClosed).toBe(true);
+        expect(tuesday.dailySchedule.isClosed).toBe(false);
+        expect(wednesday.dailySchedule.isClosed).toBe(false);
+        expect(thursday.dailySchedule.isClosed).toBe(true);
+      });
     });
-
-
   });
 
   describe('#computeOpeningsAndAvailabilities', () => {
@@ -422,6 +529,7 @@ describe('Availabilities Library', () => {
             endTime: iso('21:00'),
           },
         });
+
         service = { duration: 120  };
 
         officeHours = generateWeeklySchedule({
@@ -560,7 +668,7 @@ describe('Availabilities Library', () => {
 
         expect(practitionersData.length).toBe(2);
         expect(nextAvailability.startDate).toBe(iso('13:00', '03-05'));
-        expect(availabilities.length).toBe(8);
+        expect(availabilities.length).toBe(7); // Office Hours blocks off the potential 8th on Thursday
       });
     });
   });
