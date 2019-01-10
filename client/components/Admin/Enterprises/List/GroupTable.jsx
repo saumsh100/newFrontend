@@ -11,9 +11,7 @@ const subComponent = enterprise => (
 );
 
 export default function GroupTable(props) {
-  const {
-    data, loaded, expanded, handleRowClick,
-  } = props;
+  const { data, loaded, expanded, handleRowClick } = props;
 
   const columns = [
     {
@@ -40,7 +38,7 @@ export default function GroupTable(props) {
       Cell: ({ row }) => formatedDate(row.updatedAt),
     },
     {
-      Header: 'Enter the Prise',
+      Header: 'Select Practice',
       Cell: ({ original }) => (
         <div className={styles.groupName}>
           <IconButton
@@ -56,9 +54,7 @@ export default function GroupTable(props) {
     },
   ];
 
-  const tableStyle = {
-    height: '100%',
-  };
+  const tableStyle = { height: '100%' };
 
   return (
     <DataTable
