@@ -1,6 +1,6 @@
 {
   "name": "carecru",
-  "version": "2.80.0",
+  "version": "2.81.0",
   "description": "Dental Practice Dashboard",
   "author": "Justin Sharp <justin@carecru.com>",
   "engines": {
@@ -61,7 +61,7 @@
     "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write"
   },
   "dependencies": {
-    "@carecru/isomorphic": "^1.1.3",
+    "@carecru/isomorphic": "^1.1.5",
     "@storybook/addon-actions": "^3.2.6",
     "@storybook/addon-knobs": "^3.2.8",
     "@storybook/addon-links": "^3.2.6",
