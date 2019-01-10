@@ -19,10 +19,6 @@ import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 
-// TODO: make seeds more modular so we can see here
-// const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';
-// const patientId = '3aeab035-b72c-4f7a-ad73-09465cbf5654';
-// const oneDayReminderId = '8aeab035-b72c-4f7a-ad73-09465cbf5654';
 const appointmentId = uuid();
 
 const makeApptData = (data = {}) => Object.assign({
@@ -369,19 +365,27 @@ describe('Reviews Calculation Library', () => {
             firstName: 'Dustin',
             lastName: 'Dharp',
             email: 'a@b.ca',
+            status: 'Active',
+            accountId,
           }),
           makePatientData({
             firstName: 'Frank',
             lastName: 'Abagnale',
             email: 'a@b.ca',
+            status: 'Active',
+            accountId,
           }),
           makePatientData({
             firstName: 'Ethan',
             lastName: 'Hunt',
+            status: 'Active',
+            accountId,
           }),
           makePatientData({
             firstName: 'Donald',
             lastName: 'Trump',
+            status: 'Active',
+            accountId,
           }),
         ]);
 

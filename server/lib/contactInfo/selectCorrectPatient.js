@@ -1,12 +1,12 @@
 
-const groupBy = require('lodash/groupBy');
-const orderBy = require('lodash/orderBy');
-const toArray = require('lodash/toArray');
-
-// Can't used Family model because the migrations use this function
-const isHead = (family, patient) => family.accountId === patient.accountId &&
-    family.id === patient.familyId &&
-    family.headId === patient.id;
+const {
+  adultChecker,
+  grabPoC,
+  isHead,
+  isActive,
+  getFromNewestCreatedFamily,
+  getOldest,
+} = require('./util');
 
 /**
  * selectCorrectPatient is a function that will take an array of patients data and return
@@ -17,7 +17,10 @@ const isHead = (family, patient) => family.accountId === patient.accountId &&
  * @param patients - family data if on the object by patient.family
  * @return patient || null
  */
-module.exports = function selectCorrectPatient(patients) {
+module.exports = function selectCorrectPatient(
+  patients,
+  [minAge, maxAge] = [18, 65],
+) {
   // Early return if no patients in array
   if (!patients.length) {
     return null;
@@ -28,27 +31,43 @@ module.exports = function selectCorrectPatient(patients) {
     return patients[0];
   }
 
-  // Separate patients that have families and patients that don't have families
-  const orderedPatients = orderBy(patients, p => p.pmsCreatedAt || p.createdAt, 'desc');
-  const patientsWithFamilies = orderedPatients.filter(p => p.family);
+  const pocGrabber = grabPoC(patients);
 
-  // If there's no patients with family data, return the newest created patient
-  if (patientsWithFamilies.length === 0) {
-    return orderedPatients[0];
-  }
+  const isAdult = adultChecker(minAge, maxAge);
 
-  // Group by family, ordered by family.pmsCreatedAt
-  // This object would look like
-  // { [familyId1]: [patientsInFamily1], [familyId2]: [patientsInFamily2], ... }
-  const families = toArray(groupBy(patientsWithFamilies, 'familyId'));
+  // Step 1 - look for active patients that are head of family
+  const activeHead = pocGrabber(
+    p => isActive(p) && isHead(p.family, p),
+    getFromNewestCreatedFamily,
+  );
+  if (activeHead) return activeHead;
 
-  // Select the newest family to work with for the rest of the function
-  const orderedFamilies = orderBy(families, ([{ family: { pmsCreatedAt, createdAt } }]) => pmsCreatedAt || createdAt, 'desc');
+  // Step 2 - look for active "adults"
+  const activeAdult = pocGrabber(p => isActive(p) && isAdult(p), getOldest);
+  if (activeAdult) return activeAdult;
 
-  // Order the families members by birthDate so the POC is the oldest member if not the head.
-  const newestFamilyPatients = orderBy(orderedFamilies[0], p => p.birthDate, 'asc');
+  // Step 3 - inactive heads
+  const inactiveHead = pocGrabber(
+    p => !isActive(p) && isHead(p.family, p),
+    getFromNewestCreatedFamily,
+  );
+  if (inactiveHead) return inactiveHead;
 
-  // Return the family head or else return the newest created patient in family
-  const familyHead = newestFamilyPatients.find(p => isHead(p.family, p));
-  return familyHead || newestFamilyPatients[0];
+  // Step 4 - oldest inactive adult patient
+  const inactiveAdult = pocGrabber(
+    p => !isActive(p) && isAdult(p),
+    getFromNewestCreatedFamily,
+  );
+  if (inactiveAdult) return inactiveAdult;
+
+  // Step 5 - oldest active patient
+  const activeOldest = pocGrabber(p => isActive(p), getOldest);
+  if (activeOldest) return activeOldest;
+
+  // Step 6 - oldest active patient
+  const inactiveOldest = pocGrabber(p => !isActive(p), getOldest);
+  if (inactiveOldest) return inactiveOldest;
+
+  // consistent return
+  return null;
 };

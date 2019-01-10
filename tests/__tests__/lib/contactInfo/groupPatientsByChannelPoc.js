@@ -1,9 +1,10 @@
 
 import { Patient, Family } from 'CareCruModels';
+import {
+  date,
+  clone,
+} from '../../../util/contactInfoSeedingData';
 import groupPatientsByChannelPoc from '../../../../server/lib/contactInfo/groupPatientsByChannelPoc';
-
-const date = (m, d) => new Date(2018, m, d);
-const clone = obj => Object.assign({}, obj);
 
 describe('Contact Info Service', () => {
   describe('#groupPatientsByChannelPoc', () => {

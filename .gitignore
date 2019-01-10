@@ -54,3 +54,4 @@ electron/build
 yarn-error.log
 .uglify_cache
 .npmrc
+coverage

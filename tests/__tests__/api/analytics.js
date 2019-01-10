@@ -1,18 +1,19 @@
-/**
- * Created by gavin on 2018-12-18.
- */
+
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import { seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 
-const rootUrl = '/api/analytics'
+const rootUrl = '/api/analytics';
 
 describe('api/analytics', () => {
   let token = null;
   beforeAll(async () => {
     await seedTestUsers();
-    token = await generateToken({ username: 'manager@test.com', password: '!@CityOfBudaTest#$' });
+    token = await generateToken({
+      username: 'manager@test.com',
+      password: '!@CityOfBudaTest#$',
+    });
   });
 
   afterAll(async () => {

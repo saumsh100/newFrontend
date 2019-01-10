@@ -4,7 +4,7 @@ import { modeAnalytics } from '../../../config/globals';
 
 const analyticsRouter = require('express').Router();
 
-analyticsRouter.get('/signUrl', ({ query }, res, next) => {
+analyticsRouter.get('/signUrl', async ({ query }, res, next) => {
   try {
     const { url } = query;
     const timestamp = Math.floor(Date.now() / 1000);
@@ -15,9 +15,9 @@ analyticsRouter.get('/signUrl', ({ query }, res, next) => {
       timestamp,
     });
 
-    return res.send({ url: signedUrl });
+    res.send({ url: signedUrl });
   } catch (err) {
-    return next(err);
+    next(err);
   }
 });
 
