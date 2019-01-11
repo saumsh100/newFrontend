@@ -1,4 +1,5 @@
 
+import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
 import toArray from 'lodash/toArray';
 import computeOpeningsAndAvailabilities, {
@@ -39,6 +40,12 @@ const DEFAULT_ACCOUNT = {
   weeklySchedule: DEFAULT_OFFICE_HOURS,
   dailySchedules: [],
 };
+
+// generateAppointmentData, meant to be simple variable name to save space
+const a = (data = {}) => ({
+  id: uuid(),
+  ...data,
+});
 
 describe('Availabilities Library', () => {
   let account;
@@ -89,14 +96,14 @@ describe('Availabilities Library', () => {
       });
 
       const appointments = [
-        {
+        a({
           startDate: iso('08:00'),
           endDate: iso('11:30'),
-        },
-        {
+        }),
+        a({
           startDate: iso('13:00'),
           endDate: iso('14:00'),
-        },
+        }),
       ];
 
       const data = computeOpeningsForPractitioner({
@@ -163,50 +170,50 @@ describe('Availabilities Library', () => {
         });
 
         appointments = [
-          {
+          a({
             startDate: iso('08:45', '03-05'), // Monday
             endDate: iso('09:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('09:00', '03-05'), // Monday
             endDate: iso('10:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('10:00', '03-05'), // Monday
             endDate: iso('11:30', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('07:30', '03-06'), // Tuesday
             endDate: iso('10:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('10:00', '03-06'), // Tuesday
             endDate: iso('12:30', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('12:30', '03-06'), // Tuesday
             endDate: iso('15:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('15:00', '03-06'), // Tuesday
             endDate: iso('18:30', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('14:00', '03-07'), // Wednesday
             endDate: iso('15:00', '03-07'), // Wednesday
-          },
-          {
+          }),
+          a({
             startDate: iso('16:00', '03-07'), // Wednesday
             endDate: iso('16:30', '03-07'), // Wednesday
-          },
-          {
+          }),
+          a({
             startDate: iso('17:00', '03-07'), // Wednesday
             endDate: iso('18:00', '03-07'), // Wednesday
-          },
-          {
+          }),
+          a({
             startDate: iso('18:00', '03-07'), // Wednesday
             endDate: iso('19:00', '03-07'), // Wednesday
-          },
+          }),
         ];
       });
 
@@ -547,89 +554,89 @@ describe('Availabilities Library', () => {
         });
 
         appts1 = [
-          {
+          a({
             startDate: iso('08:45', '03-05'), // Monday
             endDate: iso('09:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('09:00', '03-05'), // Monday
             endDate: iso('10:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('10:00', '03-05'), // Monday
             endDate: iso('11:30', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('07:30', '03-06'), // Tuesday
             endDate: iso('10:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('10:00', '03-06'), // Tuesday
             endDate: iso('12:30', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('12:30', '03-06'), // Tuesday
             endDate: iso('15:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('15:00', '03-06'), // Tuesday
             endDate: iso('18:30', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('14:00', '03-07'), // Wednesday
             endDate: iso('15:00', '03-07'), // Wednesday
-          },
-          {
+          }),
+          a({
             startDate: iso('16:00', '03-07'), // Wednesday
             endDate: iso('16:30', '03-07'), // Wednesday
-          },
-          {
+          }),
+          a({
             startDate: iso('17:00', '03-07'), // Wednesday
             endDate: iso('18:00', '03-07'), // Wednesday
-          },
-          {
+          }),
+          a({
             startDate: iso('18:00', '03-07'), // Wednesday
             endDate: iso('19:00', '03-07'), // Wednesday
-          },
+          }),
         ];
 
         appts2 = [
-          {
+          a({
             startDate: iso('09:00', '03-05'), // Monday
             endDate: iso('10:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('10:00', '03-05'), // Monday
             endDate: iso('11:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('11:00', '03-05'), // Monday
             endDate: iso('12:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('12:00', '03-05'), // Monday
             endDate: iso('13:00', '03-05'), // Monday
-          },
-          {
+          }),
+          a({
             startDate: iso('13:00', '03-06'), // Tuesday
             endDate: iso('14:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('14:00', '03-06'), // Tuesday
             endDate: iso('15:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('15:00', '03-06'), // Tuesday
             endDate: iso('16:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('16:00', '03-06'), // Tuesday
             endDate: iso('17:00', '03-06'), // Tuesday
-          },
-          {
+          }),
+          a({
             startDate: iso('17:00', '03-06'), // Tuesday
             endDate: iso('18:00', '03-06'), // Tuesday
-          },
+          }),
         ];
       });
 

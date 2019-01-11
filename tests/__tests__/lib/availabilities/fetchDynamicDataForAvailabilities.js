@@ -115,27 +115,13 @@ describe('Availabilities Library', () => {
       });
 
       test('Should fetch appointments for the practitioners in order', async () => {
-        const practitionerIds = practitioners.map(p => p.id);
         const appts = await fetchAppointments({
-          practitionerIds,
           startDate: moment('2018-03-03 01:00:00').toISOString(),
           endDate: moment('2018-03-05 01:00:00').toISOString(),
         });
 
         // 5 practitioners x 8 appts per day = 40
         expect(appts.length).toBe(40);
-      });
-
-      test('Should fetch appointments for only 2 practitioners', async () => {
-        const practitionerIds = [practitioners[0].id, practitioners[1].id];
-        const appts = await fetchAppointments({
-          practitionerIds,
-          startDate: moment('2018-03-03 01:00:00').toISOString(),
-          endDate: moment('2018-03-05 01:00:00').toISOString(),
-        });
-
-        // 5 practitioners x 8 appts per day = 40
-        expect(appts.length).toBe(16);
       });
     });
 
@@ -210,11 +196,14 @@ describe('Availabilities Library', () => {
           endDate: moment('2018-03-05 23:00:00').toISOString(),
         });
 
-        // 5 practitioners x 8 appts per day = 40
         expect(result.account.dailySchedules.length).toBe(1);
         const jack = result.practitioners.find(p => p.dataValues.firstName === 'Jack');
         expect(jack.appointments.length).toBe(8);
         expect(jack.dailySchedules.length).toBe(1);
+
+        // Make sure that the chair has all the appointments
+        // 7 practitioners (we added 2 above notice its beforeAll) x 8 appts per day = 56
+        expect(result.chairs[chairId].appointments.length).toBe(56);
       });
     });
   });

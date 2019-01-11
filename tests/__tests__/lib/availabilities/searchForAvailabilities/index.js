@@ -9,7 +9,7 @@ import {
   Service,
   WeeklySchedule,
 } from 'CareCruModels';
-import { wipeAllModels } from '../../../util/wipeModel';
+import { wipeAllModels } from '../../../../util/wipeModel';
 import {
   seedTestAvailabilities,
   chairId,
@@ -17,9 +17,9 @@ import {
   serviceId,
   practitionerId,
   practitionerId2,
-} from '../../../util/seedTestAvailabilities';
-import searchForAvailabilities from '../../../../server/lib/availabilities/searchForAvailabilities';
-import { saveWeeklyScheduleWithDefaults } from '../../../../server/_models/WeeklySchedule';
+} from '../../../../util/seedTestAvailabilities';
+import searchForAvailabilities from '../../../../../server/lib/availabilities/searchForAvailabilities';
+import { saveWeeklyScheduleWithDefaults } from '../../../../../server/_models/WeeklySchedule';
 
 const TZ = 'America/Vancouver';
 

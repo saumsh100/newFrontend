@@ -1,5 +1,6 @@
 
 import groupBy from 'lodash/groupBy';
+import mapValues from 'lodash/mapValues';
 import {
   Appointment,
   Service,
@@ -10,9 +11,8 @@ import {
   Account,
   Chair,
   PractitionerRecurringTimeOff,
-} from '../../_models';
+} from 'CareCruModels';
 import { getProperDateWithZone } from '../../util/time';
-import Appointments from '../../../client/entities/models/Appointments';
 
 const generateDuringFilterSequelize = (startDate, endDate) => ({
   $or: [
@@ -43,12 +43,11 @@ const generateDuringFilterSequelize = (startDate, endDate) => ({
  * fetchAppointments is an async function that will return the promised query
  * of for a practitioner's timeOffs over a range
  *
- * @param practitionerIds
  * @param startDate
  * @param endDate
  * @return [appointments]
  */
-export function fetchAppointments({ practitionerIds, startDate, endDate }) {
+export function fetchAppointments({ startDate, endDate }) {
   return Appointment.findAll({
     attributes: [
       'id',
@@ -59,9 +58,8 @@ export function fetchAppointments({ practitionerIds, startDate, endDate }) {
     ],
 
     where: {
-      ...Appointments.getCommonSearchAppointmentSchema(),
       isBookable: false,
-      practitionerId: { $in: practitionerIds },
+      ...Appointment.getCommonSearchAppointmentSchema(),
       ...generateDuringFilterSequelize(startDate, endDate),
     },
 
@@ -184,7 +182,7 @@ export function fetchDailySchedules({
  * @param practitioners
  * @param startDate
  * @param endDate
- * @return {Promise<{account, practitioners, requests}>}
+ * @return {Promise<{account, practitioners, chairs, requests}>}
  */
 export default async function fetchDynamicDataForAvailabilities({
   account, practitioners, startDate, endDate,
@@ -250,9 +248,15 @@ export default async function fetchDynamicDataForAvailabilities({
     };
   });
 
+  // Group appointments by chairId so we know what chairs have which appointments
+  // We don't actually have to fetch chairs as we only want the ones that have appointments
+  const chairAppointments = groupBy(appointments, a => a.chairId);
+  const chairsWithData = mapValues(chairAppointments, appointments => ({ appointments }));
+
   return {
     account: accountWithData,
     practitioners: practitionersWithData,
+    chairs: chairsWithData,
     requests,
   };
 }

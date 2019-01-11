@@ -1,6 +1,7 @@
 
 import isArray from 'lodash/isArray';
 import unionBy from 'lodash/unionBy';
+import uniqBy from 'lodash/uniqBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import produceFinalDailySchedulesMap from '../schedule/practitioners/produceFinalDailySchedulesMap';
@@ -71,19 +72,111 @@ export function addAvailabilitiesToOpeningsData(data, practitioner, duration, in
 }
 
 /**
+ * computeDatesAndInvertFillers is a function that will handle computing the
+ * boundaries of a search range before passing the fillers into invertFillers
+ * (mainly created to dry up code in computeOpeningsDataForDay)
+ *
+ * @param fillers
+ * @param dailySchedule
+ * @param startDate
+ * @param endDate
+ * @return {ranges[]}
+ */
+export function computeDatesAndInvertFillers({
+  fillers,
+  dailySchedule,
+  startDate,
+  endDate,
+}) {
+  // Make sure to get the correct boundary, use Date as invertFillers needs consistency
+  const dsStart = convertToDate(dailySchedule.startTime);
+  const dsEnd = convertToDate(dailySchedule.endTime);
+  const start = startDate < dsStart ? dsStart : startDate;
+  const end = endDate > dsEnd ? dsEnd : endDate;
+  return invertFillers(fillers, start, end);
+}
+
+/**
+ * computeOpeningsDataForDay is a function that will determine the openings data for
+ * assuming the "fillers" data supplied is for a single day
+ *
+ * @param options
+ * @returns data { openings, fillers, dailySchedule }
+ */
+export function computeOpeningsDataForDay(options) {
+  const {
+    appointments,
+    requests,
+    chairs,
+    dailySchedule,
+    startDate,
+    endDate,
+    useChairAppointments = true,
+    usePractitionerAppointments = true,
+  } = options;
+
+  // Depending on the configurations decide which appointments to take into account
+  const { chairIds = [] } = dailySchedule;
+  const totalAppointments = [
+    ...(usePractitionerAppointments ? appointments : []),
+    ...(useChairAppointments ? chairIds.reduce((chairAppointments, chairId) => ([
+      ...chairAppointments,
+      ...(chairs[chairId] ? chairs[chairId].appointments : []),
+    ]), []) : [])
+  ];
+
+  // If a practitioner has all its appointments in its assigned chair, this ensures
+  // we aren't duplicating the fillers we need to check openings between
+  const finalAppointments = uniqBy(totalAppointments, 'id');
+
+  // Attach { type } attribute to the objects for more detailed logging and debugging at the end
+  const appointmentsWithType = finalAppointments.map(a => ({ ...a, type: 'Appnt' }));
+  const requestsWithType = requests.map(r => ({ ...r, type: 'Reqst' }));
+  const breaks = dailySchedule.breaks || [];
+  const properBreaks = breaks.map(b => ({ ...b, startDate: b.startTime, endDate: b.endTime, type: 'Break' }));
+  const fillers = appointmentsWithType
+    .concat(requestsWithType, properBreaks)
+    // As a safety check, convert all dates to Date objects
+    .map(({ startDate, endDate, ...rest }) => ({
+      ...rest,
+      startDate: convertToDate(startDate),
+      endDate: convertToDate(endDate),
+    }))
+    .sort((a, b) => a.startDate - b.startDate);
+
+  return {
+    fillers,
+    dailySchedule,
+    openings: (!dailySchedule || dailySchedule.isClosed) ?
+      [] :
+      computeDatesAndInvertFillers({
+        fillers,
+        dailySchedule,
+        startDate,
+        endDate,
+      }),
+  };
+}
+
+/**
  * computeOpeningsForPractitioner is a function that will compute the openings in a practitioner's
  * schedule
  *
- * @param account
- * @param weeklySchedule
- * @param timeOffs
- * @param dailySchedules
- * @param appointments
+ * @param options.account
+ * @param options.chairs
+ * @param options.weeklySchedule
+ * @param options.timeOffs
+ * @param options.dailySchedules
+ * @param options.appointments
+ * @param options.requests
+ * @param options.startDate
+ * @param options.endDate
  * @return {data}
  */
 export function computeOpeningsForPractitioner(options) {
   const {
     account,
+    chairs,
     weeklySchedule,
     timeOffs,
     dailySchedules,
@@ -96,7 +189,7 @@ export function computeOpeningsForPractitioner(options) {
     endDate,
   } = options;
 
-  // invertFillers function needs consistency therefore need to ensure Date and not ISO string
+  // invertFillers function needs consistency in dates therefore need to ensure Date and not ISO string
   startDate = convertToDate(startDate);
   endDate = convertToDate(endDate);
 
@@ -115,7 +208,7 @@ export function computeOpeningsForPractitioner(options) {
   const officeHoursDaySchedules = produceFinalDailySchedulesMap(
     account.weeklySchedule,
     account.dailySchedules,
-    [], // timeOffs = []
+    [], // timeOffs don't apply to officeHours
     startDate,
     endDate,
     timezone,
@@ -131,44 +224,27 @@ export function computeOpeningsForPractitioner(options) {
   const requestsByDay = groupBy(requests, r => getProperDateWithZone(r.startDate, timezone));
 
   // For each day in the range from startDate, endDate
-  // Grab all fillers ordered by startDate (including breaks)
+  // Grab all fillers that need to be accommodated
   // And then produce the openings based on the dailySchedule
-  const data = {};
   const days = getRangeOfDays(startDate, endDate, timezone);
-  for (const day of days) {
-    const dailySchedule = finalDailySchedules[day] || {};
-    const appointmentsInDay = appointmentsByDay[day] || [];
-    const requestsInDay = requestsByDay[day] || [];
-    const breaks = dailySchedule.breaks || [];
-    const appointments = appointmentsInDay.map(a => ({ ...a, type: 'Appnt' }));
-    const requests = requestsInDay.map(r => ({ ...r, type: 'Reqst' }));
-    const properBreaks = breaks.map(b => ({ ...b, startDate: b.startTime, endDate: b.endTime, type: 'Break' }));
-    const fillers = appointments
-      .concat(requests, properBreaks)
-      // As a safety check, convert all dates to Date objects
-      .map(({ startDate, endDate, ...rest }) => ({
-        ...rest,
-        startDate: convertToDate(startDate),
-        endDate: convertToDate(endDate),
-      }))
-      .sort((a, b) => a.startDate - b.startDate);
+  return days.reduce((openingsData, day) => ({
+    ...openingsData,
+    [day]: computeOpeningsDataForDay({
+      appointments: appointmentsByDay[day] || [],
+      requests: requestsByDay[day] || [],
+      dailySchedule: finalDailySchedules[day] || {},
+      chairs: mapValues(chairs, chair => ({
+        ...chair,
+        // Only pass in the appointments that are in the day you are checking
+        appointments: chair.appointments.filter(a =>
+          day === getProperDateWithZone(a.startDate, timezone)
+        ),
+      })),
 
-    data[day] = { fillers, dailySchedule };
-
-    if (!dailySchedule || dailySchedule.isClosed) {
-      data[day].openings = [];
-    } else {
-      // Make sure to get the correct boundary, use Date as invertFillers needs consistency
-      const dsStart = convertToDate(dailySchedule.startTime);
-      const dsEnd = convertToDate(dailySchedule.endTime);
-      const start = startDate < dsStart ? dsStart : startDate;
-      const end = endDate > dsEnd ? dsEnd : endDate;
-      const openings = invertFillers(fillers, start, end);
-      data[day].openings = openings;
-    }
-  }
-
-  return data;
+      startDate,
+      endDate,
+    }),
+  }), {});
 }
 
 /**
@@ -176,7 +252,9 @@ export function computeOpeningsForPractitioner(options) {
  * for all practitioners and then reduce those into availabilities given certain configurations
  *
  * @param options.account
+ * @param options.service
  * @param options.practitioners
+ * @param options.chairs
  * @param options.startDate
  * @param options.endDate
  * @return {data} - availabilities, nextAvailability, practitionersData: [{openingsData}]
@@ -186,6 +264,7 @@ export default function computeOpeningsAndAvailabilities(options) {
     account,
     service,
     practitioners,
+    chairs,
     startDate,
     endDate,
   } = options;
@@ -204,6 +283,7 @@ export default function computeOpeningsAndAvailabilities(options) {
     requests,
   }) => computeOpeningsForPractitioner({
     account,
+    chairs,
     weeklySchedule,
     dailySchedules,
     timeOffs,
@@ -235,7 +315,7 @@ export default function computeOpeningsAndAvailabilities(options) {
     };
   });
 
-  // Sort total availabilities by startDatre and then ensure unique startDates
+  // Sort total availabilities by startDate and then ensure unique startDates
   // Don't worry about losing important info, availabilities per practitioner per day is in practitionerData
   totalAvailabilities = unionBy(totalAvailabilities.sort(getISOSortPredicate('startDate')), 'startDate');
 

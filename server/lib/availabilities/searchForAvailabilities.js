@@ -75,6 +75,7 @@ export default async function searchForAvailabilities(options) {
     let {
       account: accountWithData,
       practitioners: practitionersWithData,
+      chairs,
     } = await fetchDynamicDataForAvailabilities({
       account,
       practitioners,
@@ -96,6 +97,7 @@ export default async function searchForAvailabilities(options) {
       account: accountWithData,
       service,
       practitioners: practitionersWithData,
+      chairs,
       startDate,
       endDate,
     });
