@@ -88,10 +88,12 @@ export async function generateInsights(patients) {
               .sort(sort())[0],
           }));
 
-        insights.push({
-          type: 'familiesDueRecare',
-          value: familiesDueRecare,
-        });
+        if (familiesDueRecare && familiesDueRecare.length) {
+          insights.push({
+            type: 'familiesDueRecare',
+            value: familiesDueRecare,
+          });
+        }
       }
 
       if (insights.length) {
