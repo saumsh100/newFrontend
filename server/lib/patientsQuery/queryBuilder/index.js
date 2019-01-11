@@ -1,4 +1,7 @@
 
+import birthDate from './birthDate';
+import dueForHygieneDate from './dueForHygieneDate';
+import dueForRecallExamDate from './dueForRecallExamDate';
 import firstName from './firstName';
 import lastName from './lastName';
 import age from './age';
@@ -6,9 +9,9 @@ import gender from './gender';
 import city from './city';
 import email from './email';
 import status from './status';
-import firstApptDate from './firstApptDate';
-import lastApptDate from './lastApptDate';
-import nextApptDate from './nextApptDate';
+import firstAppointment from './firstApptDate';
+import lastAppointment from './lastApptDate';
+import nextAppointment from './nextApptDate';
 import production from './production';
 import bookedAppointments from './bookedAppointments';
 import onlineAppointments from './onlineAppointments';
@@ -23,6 +26,9 @@ import otherPhoneNumber from './otherPhoneNumber';
 import pmsCreatedAt from './pmsCreatedAt';
 
 const query = {
+  birthDate,
+  dueForHygieneDate,
+  dueForRecallExamDate,
   firstName,
   lastName,
   age,
@@ -30,9 +36,9 @@ const query = {
   city,
   email,
   status,
-  firstApptDate,
-  lastApptDate,
-  nextApptDate,
+  firstAppointment,
+  lastAppointment,
+  nextAppointment,
   production,
   bookedAppointments,
   onlineAppointments,

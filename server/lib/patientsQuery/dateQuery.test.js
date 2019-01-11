@@ -10,16 +10,13 @@ describe('#patientQueryBuilder dateTime query', () => {
     await seedTestUsers();
     await seedTestPatientsList();
     await Patient.update({
-      firstApptDate: new Date(2018, 5, 5),
-      lastApptDate: new Date(2018, 3, 4),
-      nextApptDate: new Date(2018, 3, 4),
-      pmsCreatedAt: new Date(2018, 3, 4),
+      dueForHygieneDate: new Date(2018, 3, 4),
+      dueForRecallExamDate: new Date(2018, 3, 4),
     }, { where: { id: patientId1 } });
 
     await Patient.update({
-      lastApptDate: new Date(2018, 3, 10),
-      nextApptDate: new Date(2018, 3, 10),
-      pmsCreatedAt: new Date(2018, 3, 10),
+      dueForHygieneDate: new Date(2018, 3, 10),
+      dueForRecallExamDate: new Date(2018, 3, 10),
     }, { where: { id: patientId2 } });
   });
 
@@ -27,18 +24,15 @@ describe('#patientQueryBuilder dateTime query', () => {
     await wipeAllModels();
   });
 
-  describe('firstApptDate', () => {
+  describe('birthDate', () => {
     beforeAll(() => {
-      jest.spyOn(Date, 'now').mockImplementation(() => new Date(2018, 5, 3));
+      jest.spyOn(Date, 'now').mockImplementation(() => new Date(2004, 11, 29));
     });
 
     it('between', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: [
-          new Date(2015, 1, 1).toISOString(),
-          new Date(2019, 1, 1).toISOString(),
-        ],
+        birthDate: '1990-01-01',
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -48,137 +42,137 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('$lt', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { $lt: new Date(2018, 11, 20).toISOString() },
+        birthDate: { $lt: new Date(2007, 3, 6).toISOString() },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId2, patientId1]);
     });
 
     test('$gt', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { $gt: new Date(2016, 11, 20).toISOString() },
+        birthDate: { $gt: new Date(2007, 3, 8).toISOString() },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId3]);
     });
 
     test('after', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { after: new Date(2018, 4, 20).toISOString() },
+        birthDate: { after: '2003-04-06' },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId2, patientId3]);
     });
 
     test('before', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { before: new Date(2018, 11, 20).toISOString() },
+        birthDate: { before: '2006-04-06' },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId2, patientId1]);
     });
 
     test('after relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: {
+        birthDate: {
           afterRelative: {
-            interval: '10 day',
-            date: new Date(2018, 5, 5).toISOString(),
+            interval: '10 days',
+            date: '2009-12-26',
           },
         },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId3]);
     });
 
     test('after relative string', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { afterRelative: '10 days' },
+        birthDate: { afterRelative: '10 days' },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId2]);
     });
 
     test('before relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: {
+        birthDate: {
           beforeRelative: {
             interval: '5 days',
-            date: new Date(2018, 5, 6).toISOString(),
+            date: '2010-01-03',
           },
         },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId3]);
     });
 
     test('between relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { betweenRelative: ['10 day', '5 day'] },
+        birthDate: { betweenRelative: ['10 day', '5 day'] },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId2]);
     });
 
     test('together', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: {
-          after: new Date(2018, 5, 1).toISOString(),
-          before: new Date(2018, 11, 21).toISOString(),
+        birthDate: {
+          after: '2009-11-10',
+          before: '2010-04-12',
         },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId3]);
     });
 
     test('raw stacks with the comparator', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: {
-          $gt: new Date(2018, 1, 11).toISOString(),
-          before: new Date(2018, 11, 21).toISOString(),
+        birthDate: {
+          $gt: new Date(2009, 3, 7).toISOString(),
+          before: '2010-04-12',
         },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId3]);
     });
 
     test('stacking don\'t care about order', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: {
-          after: new Date(2018, 1, 11).toISOString(),
-          $lt: new Date(2018, 11, 21).toISOString(),
+        birthDate: {
+          after: '2009-04-07',
+          $lt: new Date(2010, 3, 11).toISOString(),
         },
       });
 
       const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
+      expect(patients).toEqual([patientId3]);
     });
 
     test('before relative string', async () => {
-      jest.spyOn(Date, 'now').mockReturnValue(new Date(2018, 5, 10).toISOString());
+      jest.spyOn(Date, 'now').mockReturnValue(new Date(1990, 0, 3).toISOString());
       const result = await patientQueryBuilder({
         accountId,
-        firstApptDate: { beforeRelative: '10 days' },
+        birthDate: { beforeRelative: '10 days' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -186,7 +180,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     });
   });
 
-  describe('lastApptDate', () => {
+  describe('dueForHygieneDate', () => {
     beforeAll(() => {
       jest.spyOn(Date, 'now').mockImplementation(() => new Date(2018, 5, 3));
     });
@@ -194,9 +188,9 @@ describe('#patientQueryBuilder dateTime query', () => {
     it('between', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: [
-          new Date(2015, 1, 1).toISOString(),
-          new Date(2019, 1, 1).toISOString(),
+        dueForHygieneDate: [
+          '2015-02-01',
+          '2019-02-01',
         ],
       });
 
@@ -207,7 +201,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('$lt', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { $lt: new Date(2018, 3, 6).toISOString() },
+        dueForHygieneDate: { $lt: new Date(2018, 3, 6).toISOString() },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -217,7 +211,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('$gt', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { $gt: new Date(2018, 3, 8).toISOString() },
+        dueForHygieneDate: { $gt: new Date(2018, 3, 8).toISOString() },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -227,7 +221,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('after', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { after: new Date(2018, 3, 6).toISOString() },
+        dueForHygieneDate: { after: '2018-04-06' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -237,7 +231,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('before', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { before: new Date(2018, 3, 6).toISOString() },
+        dueForHygieneDate: { before: '2018-04-06' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -247,10 +241,10 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('after relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: {
+        dueForHygieneDate: {
           afterRelative: {
             interval: '10 days',
-            date: new Date(2018, 3, 6).toISOString(),
+            date: '2018-04-06',
           },
         },
       });
@@ -262,7 +256,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('after relative string', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { afterRelative: '10 days' },
+        dueForHygieneDate: { afterRelative: '10 days' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -272,10 +266,10 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('before relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: {
+        dueForHygieneDate: {
           beforeRelative: {
             interval: '5 days',
-            date: new Date(2018, 3, 6).toISOString(),
+            date: '2018-04-06',
           },
         },
       });
@@ -287,7 +281,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('between relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { betweenRelative: ['10 day', '5 day'] },
+        dueForHygieneDate: { betweenRelative: ['10 day', '5 day'] },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -297,9 +291,9 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('together', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: {
-          after: new Date(2018, 3, 8).toISOString(),
-          before: new Date(2018, 3, 12).toISOString(),
+        dueForHygieneDate: {
+          after: '2018-04-08',
+          before: '2018-04-12',
         },
       });
 
@@ -310,9 +304,9 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('raw stacks with the comparator', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: {
+        dueForHygieneDate: {
           $gt: new Date(2018, 3, 7).toISOString(),
-          before: new Date(2018, 3, 12).toISOString(),
+          before: '2018-04-12',
         },
       });
 
@@ -323,8 +317,8 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('stacking don\'t care about order', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: {
-          after: new Date(2018, 3, 7).toISOString(),
+        dueForHygieneDate: {
+          after: '2018-04-07',
           $lt: new Date(2018, 3, 11).toISOString(),
         },
       });
@@ -337,7 +331,7 @@ describe('#patientQueryBuilder dateTime query', () => {
       jest.spyOn(Date, 'now').mockReturnValue(new Date(2018, 3, 6).toISOString());
       const result = await patientQueryBuilder({
         accountId,
-        lastApptDate: { beforeRelative: '10 days' },
+        dueForHygieneDate: { beforeRelative: '10 days' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -345,7 +339,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     });
   });
 
-  describe('nextApptDate', () => {
+  describe('dueForRecallExamDate', () => {
     beforeAll(() => {
       jest.spyOn(Date, 'now').mockImplementation(() => new Date(2018, 5, 3));
     });
@@ -353,9 +347,9 @@ describe('#patientQueryBuilder dateTime query', () => {
     it('between', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: [
-          new Date(2015, 1, 1).toISOString(),
-          new Date(2019, 1, 1).toISOString(),
+        dueForRecallExamDate: [
+          '2015-02-01',
+          '2019-02-01',
         ],
       });
 
@@ -366,7 +360,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('$lt', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { $lt: new Date(2018, 3, 6).toISOString() },
+        dueForRecallExamDate: { $lt: new Date(2018, 3, 6).toISOString() },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -376,7 +370,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('$gt', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { $gt: new Date(2018, 3, 8).toISOString() },
+        dueForRecallExamDate: { $gt: new Date(2018, 3, 8).toISOString() },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -386,7 +380,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('after', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { after: new Date(2018, 3, 6).toISOString() },
+        dueForRecallExamDate: { after: '2018-04-06' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -396,7 +390,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('before', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { before: new Date(2018, 3, 6).toISOString() },
+        dueForRecallExamDate: { before: '2018-04-06' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -406,10 +400,10 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('after relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: {
+        dueForRecallExamDate: {
           afterRelative: {
             interval: '10 days',
-            date: new Date(2018, 3, 6).toISOString(),
+            date: '2018-04-06',
           },
         },
       });
@@ -421,7 +415,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('after relative string', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { afterRelative: '10 days' },
+        dueForRecallExamDate: { afterRelative: '10 days' },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -431,10 +425,10 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('before relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: {
+        dueForRecallExamDate: {
           beforeRelative: {
             interval: '5 days',
-            date: new Date(2018, 3, 6).toISOString(),
+            date: '2018-04-06',
           },
         },
       });
@@ -446,7 +440,7 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('between relative', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { betweenRelative: ['10 day', '5 day'] },
+        dueForRecallExamDate: { betweenRelative: ['10 day', '5 day'] },
       });
 
       const patients = result.rows.map(({ id }) => id);
@@ -456,9 +450,9 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('together', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: {
-          after: new Date(2018, 3, 8).toISOString(),
-          before: new Date(2018, 3, 12).toISOString(),
+        dueForRecallExamDate: {
+          after: '2018-04-08',
+          before: '2018-04-12',
         },
       });
 
@@ -469,9 +463,9 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('raw stacks with the comparator', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: {
+        dueForRecallExamDate: {
           $gt: new Date(2018, 3, 7).toISOString(),
-          before: new Date(2018, 3, 12).toISOString(),
+          before: '2018-04-12',
         },
       });
 
@@ -482,8 +476,8 @@ describe('#patientQueryBuilder dateTime query', () => {
     test('stacking don\'t care about order', async () => {
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: {
-          after: new Date(2018, 3, 7).toISOString(),
+        dueForRecallExamDate: {
+          after: '2018-04-07',
           $lt: new Date(2018, 3, 11).toISOString(),
         },
       });
@@ -496,166 +490,7 @@ describe('#patientQueryBuilder dateTime query', () => {
       jest.spyOn(Date, 'now').mockReturnValue(new Date(2018, 3, 6).toISOString());
       const result = await patientQueryBuilder({
         accountId,
-        nextApptDate: { beforeRelative: '10 days' },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
-    });
-  });
-
-  describe('pmsCreatedAt', () => {
-    beforeAll(() => {
-      jest.spyOn(Date, 'now').mockImplementation(() => new Date(2018, 5, 3));
-    });
-
-    it('between', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: [
-          new Date(2015, 1, 1).toISOString(),
-          new Date(2019, 1, 1).toISOString(),
-        ],
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2, patientId1]);
-    });
-
-    test('$lt', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { $lt: new Date(2018, 3, 6).toISOString() },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
-    });
-
-    test('$gt', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { $gt: new Date(2018, 3, 8).toISOString() },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    test('after', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { after: new Date(2018, 3, 6).toISOString() },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    test('before', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { before: new Date(2018, 3, 6).toISOString() },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
-    });
-
-    test('after relative', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: {
-          afterRelative: {
-            interval: '10 days',
-            date: new Date(2018, 3, 6).toISOString(),
-          },
-        },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    test('after relative string', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { afterRelative: '10 days' },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([]);
-    });
-
-    test('before relative', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: {
-          beforeRelative: {
-            interval: '5 days',
-            date: new Date(2018, 3, 6).toISOString(),
-          },
-        },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId1]);
-    });
-
-    test('between relative', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { betweenRelative: ['10 day', '5 day'] },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([]);
-    });
-
-    test('together', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: {
-          after: new Date(2018, 3, 8).toISOString(),
-          before: new Date(2018, 3, 12).toISOString(),
-        },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    test('raw stacks with the comparator', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: {
-          $gt: new Date(2018, 3, 7).toISOString(),
-          before: new Date(2018, 3, 12).toISOString(),
-        },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    test('stacking don\'t care about order', async () => {
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: {
-          after: new Date(2018, 3, 7).toISOString(),
-          $lt: new Date(2018, 3, 11).toISOString(),
-        },
-      });
-
-      const patients = result.rows.map(({ id }) => id);
-      expect(patients).toEqual([patientId2]);
-    });
-
-    test('before relative string', async () => {
-      jest.spyOn(Date, 'now').mockReturnValue(new Date(2018, 3, 6).toISOString());
-      const result = await patientQueryBuilder({
-        accountId,
-        pmsCreatedAt: { beforeRelative: '10 days' },
+        dueForRecallExamDate: { beforeRelative: '10 days' },
       });
 
       const patients = result.rows.map(({ id }) => id);

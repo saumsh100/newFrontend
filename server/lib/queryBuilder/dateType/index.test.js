@@ -61,4 +61,22 @@ describe('relative type', () => {
       ],
     });
   });
+
+  test('betweenRelative date', () => {
+    expect(dateType(query => query)({
+      betweenRelative: {
+        interval: ['10 days', '5 days'],
+        date: '2018-12-15',
+      },
+    })).toEqual({
+      $and: [
+        {
+          $between: [
+            new Date(2018, 11, 5, 0, 0, 0).toISOString(),
+            new Date(2018, 11, 20, 23, 59, 59, 999).toISOString(),
+          ],
+        },
+      ],
+    });
+  });
 });
