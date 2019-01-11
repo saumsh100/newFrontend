@@ -12,7 +12,7 @@ import {
   SentRemindersPatients,
 } from 'CareCruModels';
 import StatusError from '../../util/StatusError';
-import newAvailabilitiesRouter from './newAvailabilitiesRouter';
+import availabilitiesRouter from './availabilities';
 import requestRouter from '../_api/request';
 import waitSpotsRouter from '../_api/waitSpots';
 import authRouter from './auth';
@@ -29,7 +29,7 @@ import twilioClient from '../../config/twilio';
 
 const myRouter = Router();
 
-myRouter.use('/', newAvailabilitiesRouter);
+myRouter.use('/', availabilitiesRouter);
 myRouter.use('/', unsubRouter);
 myRouter.use('/requests', sequelizeAuthMiddleware, requestRouter);
 myRouter.use('/waitSpots', sequelizeAuthMiddleware, waitSpotsRouter);
