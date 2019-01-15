@@ -56,6 +56,7 @@ const PatientSuggestion = ({
 PatientSuggestion.defaultProps = {
   inputValue: '',
   highlightedIndex: -1,
+  theme: {},
 };
 
 PatientSuggestion.propTypes = {
@@ -66,10 +67,10 @@ PatientSuggestion.propTypes = {
     birthDate: PropTypes.string,
     context: PropTypes.string,
   }).isRequired,
-  index: PropTypes.number,
+  index: PropTypes.number.isRequired,
   inputValue: PropTypes.string,
   highlightedIndex: PropTypes.number,
-  getItemProps: PropTypes.func,
+  getItemProps: PropTypes.func.isRequired,
   theme: PropTypes.shape({
     suggestionsContainerOpen: PropTypes.string,
     suggestionsList: PropTypes.string,

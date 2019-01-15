@@ -432,7 +432,6 @@ export default connect(
 
 AddToWaitlist.defaultProps = {
   active: false,
-  officeHours: null,
   timezone: '',
   availabilities: null,
 };

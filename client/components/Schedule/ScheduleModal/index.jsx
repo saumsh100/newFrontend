@@ -59,9 +59,9 @@ class ScheduleModal extends React.Component {
    */
   getSchedule(value) {
     this.setState({ isLoading: true });
-
     getFinalDailySchedules({
       fromDate: this.props.scheduleDate,
+      reasonId: value,
       practitionerIds: this.getPractitionerIds(value),
     })
       .then(({ data }) =>
@@ -69,7 +69,7 @@ class ScheduleModal extends React.Component {
           () =>
             this.setState({
               isLoading: false,
-              practitionersData: Object.values(data)[0],
+              practitionersData: data,
             }),
           500,
         ))
@@ -88,14 +88,14 @@ class ScheduleModal extends React.Component {
   }
 
   render() {
-    const { practitioners, reinitializeState } = this.props;
+    const { reinitializeState } = this.props;
     const { error, practitionersData, isLoading, selectedReason } = this.state;
     return (
       <Modal custom active onEscKeyDown={reinitializeState} onOverlayClick={reinitializeState}>
         <Card noBorder className={styles.debuggingModal}>
           <SContainer>
             <SHeader className={appoitmentsStyle.header}>
-              <div>Availabilities</div>
+              <div>Schedule</div>
               <Button className={appoitmentsStyle.close} onClick={reinitializeState}>
                 <Icon icon="times" />
               </Button>
@@ -119,12 +119,12 @@ class ScheduleModal extends React.Component {
                 {isLoading ? (
                   <Loading />
                 ) : (
-                  Object.entries(practitionersData).map(([practitionerId, schedule]) => {
-                    const practitioner = practitioners.get(practitionerId);
+                  Object.values(practitionersData).map(({ openingsData, ...practitioner }) => {
+                    const [schedule] = Object.values(openingsData);
                     return (
-                      <div className={styles.practitionerDebug} key={practitioner.getPrettyName()}>
+                      <div className={styles.practitionerDebug} key={practitioner.id}>
                         <div className={styles.practitionerTitle}>
-                          {practitioner.getPrettyName()} -{' '}
+                          {practitioner.firstName} {practitioner.lastName} -{' '}
                           {dateFormatter(
                             this.props.scheduleDate,
                             this.props.timezone,
@@ -132,9 +132,8 @@ class ScheduleModal extends React.Component {
                           )}{' '}
                           ({dateFormatter(this.props.scheduleDate, this.props.timezone, 'dddd')})
                           <span className={styles.extraInfo}>
-                            {`{ timezone: ${
-                              this.props.timezone
-                            }, isCustomSchedule: ${practitioner.get('isCustomSchedule')} }`}
+                            {`{ timezone: ${this.props.timezone}, isCustomSchedule: ${schedule
+                              .dailySchedule.isCustomSchedule || 'Y'} }`}
                           </span>
                         </div>
                         <div className={styles.schedule}>
@@ -161,19 +160,27 @@ class ScheduleModal extends React.Component {
                           </div>
                           <div className={styles.scheduleBody}>
                             <div className={styles.baseBody}>
-                              {schedule.isClosed ? 'Closed' : 'Open'}
+                              {schedule.dailySchedule.isClosed ? 'Closed' : 'Open'}
                             </div>
                             <div className={styles.baseBody}>
-                              {schedule.isDailySchedule ? 'Y' : 'N'}
+                              {schedule.dailySchedule.isDailySchedule ? 'Y' : 'N'}
                             </div>
                             <div className={styles.baseBody}>
-                              {schedule.isModifiedByTimeOff ? 'Y' : 'N'}
+                              {schedule.dailySchedule.isModifiedByTimeOff ? 'Y' : 'N'}
                             </div>
                             <div className={styles.oneHalf}>
-                              {dateFormatter(schedule.startTime, this.props.timezone, 'h:mma')}
+                              {dateFormatter(
+                                schedule.dailySchedule.startTime,
+                                this.props.timezone,
+                                'h:mma',
+                              )}
                             </div>
                             <div className={styles.oneHalf}>
-                              {dateFormatter(schedule.endTime, this.props.timezone, 'h:mma')}
+                              {dateFormatter(
+                                schedule.dailySchedule.endTime,
+                                this.props.timezone,
+                                'h:mma',
+                              )}
                             </div>
                             <div
                               className={

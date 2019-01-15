@@ -81,7 +81,7 @@ const renderMobileFooter = ({
   acceptRequest,
 }) => (
   <SFooter
-    className={classNames(styles.footerMobile, { [styles.footerMobile_displayActions]: displayActions })}
+    className={classNames(styles.footerMobile, { [styles.footerMobile_actions]: displayActions })}
   >
     {displayActions && (
       <Button className={styles.actionOverlayButtonMobile} onClick={acceptRequest}>

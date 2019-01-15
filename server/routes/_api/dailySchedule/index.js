@@ -1,5 +1,5 @@
 
-import { Practitioner, DailySchedule } from 'CareCruModels';
+import { DailySchedule } from 'CareCruModels';
 import { sequelizeLoader } from '../../util/loaders';
 import format from '../../util/format';
 import batchCreate, { batchUpdate } from '../../util/batch';
@@ -18,18 +18,19 @@ dailyScheduleRouter.param('dailyScheduleId', sequelizeLoader('dailySchedule', 'D
  */
 dailyScheduleRouter.post('/', checkPermissions('dailySchedules:create'), async (req, res, next) => {
   try {
-    const dailyScheduleData = Object.assign({}, req.body, {
+    const dailyScheduleData = {
+      ...req.body,
       accountId: req.accountId,
-    });
+    }
 
     const dailyScheduleTest = await DailySchedule.build(dailyScheduleData);
     await dailyScheduleTest.validate();
 
     return DailySchedule.create(dailyScheduleData)
-        .then((ds) => {
-          const normalized = format(req, res, 'dailySchedule', ds.get({ plain: true }));
-          return res.status(201).send(normalized);
-        });
+      .then((ds) => {
+        const normalized = format(req, res, 'dailySchedule', ds.get({ plain: true }));
+        return res.status(201).send(normalized);
+      });
   } catch (e) {
     return isPMSIdViolation(e, 'PractitionerId PMS ID Violation', 'dailySchedule', req, res, next);
   }
@@ -136,36 +137,24 @@ dailyScheduleRouter.delete('/:dailyScheduleId', checkPermissions('dailySchedules
  * toDate: optional, the endDate of the time range. If not provided, the time range is just one day.
  */
 dailyScheduleRouter.get('/finalDailySchedules', async ({ query, accountId }, res, next) => {
-  const { fromDate, toDate, practitionerIds } = query;
-  if (!practitionerIds || !fromDate) {
-    next(new StatusError(StatusError.BAD_REQUEST, 'Please provide at least fromDate and practitionerIds'));
+  const { fromDate, toDate, practitionerIds, reasonId } = query;
+  if (!practitionerIds || !fromDate || !reasonId) {
+    next(new StatusError(StatusError.BAD_REQUEST, 'Please provide at least fromDate, practitionerIds and reasonId'));
   }
 
   try {
-    const practitioners = await findPractitionersByIds(practitionerIds, accountId);
-    res.send(await generateDailySchedulesForPractitioners(practitioners, fromDate, toDate || fromDate));
+    const practitionersSchedule = await generateDailySchedulesForPractitioners({
+      accountId,
+      serviceId: reasonId,
+      practitionerId: practitionerIds,
+      startDate: fromDate,
+      endDate: toDate,
+    });
+
+    return res.send(practitionersSchedule);
   } catch (e) {
     return next(e);
   }
 });
-
-async function findPractitionersByIds(practitionerIds, accountId) {
-  return Practitioner.findAll({
-    attributes: [
-      'id',
-      'accountId',
-      'pmsId',
-      'firstName',
-      'lastName',
-      'isCustomSchedule',
-      'weeklyScheduleId',
-    ],
-    where: {
-      id: practitionerIds,
-      accountId,
-    },
-    raw: true,
-  });
-}
 
 module.exports = dailyScheduleRouter;

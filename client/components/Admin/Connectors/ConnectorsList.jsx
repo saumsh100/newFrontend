@@ -13,7 +13,9 @@ export default function ConnectorsList({ accounts }) {
       {accounts
         .get('models')
         .sort((a, b) => sortAsc(a.name.toLowerCase(), b.name.toLowerCase()))
-        .map(account => <ConnectorListItem key={account.id} account={account} />)}
+        .map(account => (
+          <ConnectorListItem key={account.id} account={account} />
+        ))}
     </List>
   );
 }

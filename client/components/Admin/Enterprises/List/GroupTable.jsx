@@ -11,7 +11,7 @@ const subComponent = enterprise => (
 );
 
 export default function GroupTable(props) {
-  const { data, loaded, expanded, handleRowClick } = props;
+  const { data, loaded, expanded, handleRowClick, selectEnterprise } = props;
 
   const columns = [
     {
@@ -45,7 +45,7 @@ export default function GroupTable(props) {
             icon="sign-in-alt"
             onClick={(e) => {
               e.stopPropagation();
-              return props.selectEnterprise(original.id);
+              return selectEnterprise(original.id);
             }}
           />
         </div>
@@ -77,6 +77,8 @@ GroupTable.propTypes = {
   loaded: PropTypes.bool,
   expanded: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])),
   handleRowClick: PropTypes.func.isRequired,
+  original: PropTypes.shape({ id: PropTypes.string }),
+  selectEnterprise: PropTypes.func.isRequired,
   data: PropTypes.arrayOf(PropTypes.shape({
     createdAt: PropTypes.string,
     deletedAt: PropTypes.string,

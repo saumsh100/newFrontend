@@ -1,161 +1,56 @@
 
-import WeeklySchedule from 'CareCruModels';
 import fetchStaticDataForAvailabilities from '../../availabilities/fetchStaticDataForAvailabilities';
 import fetchDynamicDataForAvailabilities from '../../availabilities/fetchDynamicDataForAvailabilities';
-import { computeOpeningsForPractitioner } from '../../availabilities/computeOpeningsAndAvailabilities';
-import StatusError from '../../../util/StatusError';
-import { getRangeOfDays, setDateToTimezone } from '../../../util/time';
+import computeOpeningsAndAvailabilities
+  from '../../availabilities/computeOpeningsAndAvailabilities';
 
 /**
- * Calculate the earliest/last time for a certain period in the clinic's time zone.
- * For example, if the practice is in PDT timezone for date '2018-01-01' to '2018-02-03',
- * this function will return {2018-01-01 00:00:00 PDT, 2018-02-03 23:59:59 PDT}
+ * Compute and generate the daily schedule data for practitioners.
  *
- * @param fromDate
- * @param toDate
- * @param timezone
- * @returns {{startDate: Date, endDate: Date}}
+ * @param accountId
+ * @param serviceId
+ * @param practitionerId
+ * @param startDate
+ * @param endDate
+ * @returns {Promise<data.practitionersData>}
  */
-function getZonedDateTime(fromDate, toDate, timezone) {
-  return {
-    startDate: setDateToTimezone(fromDate, timezone).startOf('day').toDate(),
-    endDate: setDateToTimezone(toDate, timezone).endOf('day').toDate(),
-  };
-}
-
-/**
- * Generate daily schedules for practitioners in the same practice during a period of time.
- * The response is grouped by the date, see the example response below:
- * {
-    "2018-01-01": {
-        "0d097fa0-beb4-4c03-b661-f300c5cec76e": {
-            "breaks": [],
-            "endTime": "2018-01-02T01:00:00.000Z",
-            "startTime": "2018-01-01T16:00:00.000Z",
-            "isDailySchedule": false,
-            "isClosed": true,
-            "isModifiedByTimeOff": true
-        },
-        "1230f60a-ec83-431f-a67e-28142ab43caa": {
-            "breaks": [
-                {
-                    "startTime": "2018-01-01T20:00:00.000Z",
-                    "endTime": "2018-01-01T21:00:00.000Z"
-                }
-            ],
-            "endTime": "2018-01-02T01:00:00.000Z",
-            "startTime": "2018-01-01T16:00:00.000Z",
-            "isDailySchedule": false,
-            "isClosed": true,
-            "isModifiedByTimeOff": true
-        }
-    },
-    "2018-01-02": {
-        "0d097fa0-beb4-4c03-b661-f300c5cec76e": {
-            "breaks": [],
-            "endTime": "2018-01-03T01:00:00.000Z",
-            "startTime": "2018-01-02T16:00:00.000Z",
-            "isDailySchedule": false,
-            "isClosed": false,
-            "isModifiedByTimeOff": false
-        },
-        "1230f60a-ec83-431f-a67e-28142ab43caa": {
-            "breaks": [],
-            "endTime": "2018-01-03T01:00:00.000Z",
-            "startTime": "2018-01-02T16:00:00.000Z",
-            "isDailySchedule": true,
-            "isClosed": false,
-            "isModifiedByTimeOff": false
-        }
-    }
-}
- * @param inputPractitioners
- * @param fromDate
- * @param toDate
- * @returns {Promise<>}
- */
-export default async function generateDailySchedulesForPractitioners(inputPractitioners, fromDate, toDate) {
-  if (!inputPractitioners.length) {
-    throw StatusError(
-      StatusError.BAD_REQUEST,
-      'Practitioner list cannot be empty, please make sure your params are in the correct format',
-    );
-  }
-
-  // Office hour should be the same for all the practitioner
-  const { accountId, id: practitionerId } = inputPractitioners[0];
-  const { account } = await fetchStaticDataForAvailabilities({
+export default async function generateDailySchedulesForPractitioners({
+  accountId,
+  serviceId,
+  practitionerId,
+  startDate,
+  endDate,
+}) {
+  const {
+    account,
+    service,
+    practitioners,
+  } = await fetchStaticDataForAvailabilities({
     accountId,
+    serviceId,
     practitionerId,
   });
+
   const {
-    timezone,
-    weeklySchedule: officeHours,
-  } = account.dataValues;
-  const { startDate, endDate } = getZonedDateTime(fromDate, toDate, timezone);
-  const { practitioners } = await fetchDynamicDataForAvailabilities({
+    account: accountWithData,
+    practitioners: practitionersWithData,
+    chairs,
+  } = await fetchDynamicDataForAvailabilities({
     account,
-    practitioners: inputPractitioners,
+    practitioners,
     startDate,
     endDate,
   });
 
-  if (!practitioners.length) {
-    throw StatusError(StatusError.BAD_REQUEST, 'Cannot find the specified practitioner');
-  }
-
-  const days = getRangeOfDays(startDate, endDate, timezone);
-
-  const practitionersWithSchedule = await Promise.all(practitioners.map(async (practitioner) => {
-    const { isCustomSchedule, weeklyScheduleId } = practitioner;
-    return {
-      ...practitioner,
-      weeklySchedule: isCustomSchedule ?
-        await findWeeklyScheduleById(weeklyScheduleId) : officeHours,
-    };
-  }));
-
-  return practitionersWithSchedule.reduce((result, practitioner) => {
-    const { dailySchedules, timeOffs, weeklySchedule, id, appointments, requests } = practitioner;
-    const finalDailySchedule = computeOpeningsForPractitioner({
-      account,
-      weeklySchedule,
-      timeOffs,
-      dailySchedules,
-      appointments,
-      requests,
-      startDate,
-      endDate,
-    });
-    return days.reduce((acc, day) => ({
-      ...acc,
-      [day]: {
-        ...acc[day],
-        [id]: {
-          ...finalDailySchedule[day].dailySchedule,
-          fillers: finalDailySchedule[day].fillers,
-          openings: finalDailySchedule[day].openings,
-        },
-      },
-    }), result);
-  }, {});
-}
-
-export async function findWeeklyScheduleById(weeklyScheduleId) {
-  return WeeklySchedule.findOne({
-    attributes: [
-      'startDate',
-      'pmsId',
-      'isAdvanced',
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-      'sunday',
-    ],
-    where: { id: weeklyScheduleId },
-    raw: true,
+  const { practitionersData } = computeOpeningsAndAvailabilities({
+    account: accountWithData,
+    service,
+    practitioners: practitionersWithData,
+    chairs,
+    startDate,
+    endDate,
   });
+
+  return practitionersData;
 }
+
