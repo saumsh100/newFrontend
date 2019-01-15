@@ -18,7 +18,7 @@ export default {
     });
     const shortLink = await compressUrl(longLink);
     const link = `https://${shortLink}`;
-    const body = createReviewText({
+    const body = await createReviewText({
       patient,
       account,
       link,

@@ -1,3 +1,6 @@
+
+import { getMessageFromTemplates } from '../../services/communicationTemplate';
+
 /**
  * createReviewText will generate the SMS message needed to for the
  * review request SMS
@@ -5,10 +8,10 @@
  * @param patient
  * @param account
  * @param link
- * @return {string}
+ * @return {Promise<string>}
  */
-export const createReviewText = ({ patient, account, link }) => {
-  return `${patient.firstName}, we hope you had a lovely visit. ` +
-    `Let us know how it went by clicking the link below. ` +
-    `${link}`;
-};
+export const createReviewText = async ({ patient, account, link }) => getMessageFromTemplates(account.id, 'review-request', {
+  account,
+  patient,
+  link,
+});

@@ -1,16 +1,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Header,
-  SContainer,
-  SHeader,
-  SBody,
-  SMSPreview,
-} from '../../../../library';
+import { Header, SContainer, SHeader, SBody, SMSPreview } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
-import { createReviewText } from '../../../../../../server/lib/reviews/createReviewText';
 import styles from './styles.scss';
 
 const formatPhoneNumber = phone =>
@@ -18,7 +11,9 @@ const formatPhoneNumber = phone =>
 
 function ReviewSMSPreview({ patient, account }) {
   const link = 'carecru.co/a35fg';
-  const recallMessage = createReviewText({ patient, account, link });
+  const recallMessage = `${patient.firstName}, we hope you had a lovely visit at ${
+    account.name
+  }. Let us know how it went by clicking the link below. ${link}`;
   const smsPhoneNumber =
     account.twilioPhoneNumber ||
     account.destinationPhoneNumber ||
@@ -27,10 +22,7 @@ function ReviewSMSPreview({ patient, account }) {
 
   return (
     <div className={styles.smsPreviewWrapper}>
-      <SMSPreview
-        from={formatPhoneNumber(smsPhoneNumber)}
-        message={recallMessage}
-      />
+      <SMSPreview from={formatPhoneNumber(smsPhoneNumber)} message={recallMessage} />
     </div>
   );
 }
@@ -56,34 +48,22 @@ class ReviewPreview extends Component {
         if (type === 'sms') {
           typePreview = (
             <div>
-              <ReviewSMSPreview
-                review={review}
-                patient={patient}
-                account={account}
-              />
+              <ReviewSMSPreview review={review} patient={patient} account={account} />
             </div>
           );
         } else if (type === 'email') {
           // TODO URL NOT FOUND (NOT DONE)
-          const url = `/api/accounts/${
-            account.id
-          }/emails/preview?templateName=Patient Review`;
+          const url = `/api/accounts/${account.id}/emails/preview?templateName=Patient Review`;
           typePreview = (
             <div>
               <EmailPreview url={url} />
             </div>
           );
         } else if (type === 'phone') {
-          typePreview = (
-            <div className={styles.smsPreviewWrapper}>Phone Preview</div>
-          );
+          typePreview = <div className={styles.smsPreviewWrapper}>Phone Preview</div>;
         }
 
-        return (
-          <CommsPreviewSection key={`${type}`}>
-            {typePreview}
-          </CommsPreviewSection>
-        );
+        return <CommsPreviewSection key={`${type}`}>{typePreview}</CommsPreviewSection>;
       });
 
     return (
