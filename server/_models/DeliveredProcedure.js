@@ -106,6 +106,10 @@ export default function (sequelize, DataTypes) {
     discountAmount: {
       type: DataTypes.FLOAT,
     },
+
+    practitionerId: {
+      type: DataTypes.UUID,
+    },
   });
 
   DeliveredProcedure.associate = (({ Account, Patient, Procedure }) => {
