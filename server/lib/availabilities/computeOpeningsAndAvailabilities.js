@@ -111,7 +111,7 @@ export function computeOpeningsDataForDay(options) {
     dailySchedule,
     startDate,
     endDate,
-    useChairAppointments = true,
+    useChairAppointments = false,
     usePractitionerAppointments = true,
   } = options;
 

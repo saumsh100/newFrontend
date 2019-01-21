@@ -7,7 +7,6 @@ import {
   Chair,
   DailySchedule,
   Practitioner,
-  PractitionerRecurringTimeOff,
   Service,
   WeeklySchedule,
 } from 'CareCruModels';
@@ -53,19 +52,6 @@ const openDay = () => ({
   endTime: iso('23:00'),
 });
 
-const generateTimeOff = (data = {}) => ({
-  allDay: true,
-  ...data,
-});
-
-const generateDailySchedule = (data = {}) => ({
-  accountId,
-  isClosed: true,
-  startTime: iso('08:00'),
-  endTime: iso('08:00'),
-  ...data,
-});
-
 const iso = (time, day = '03-08', tz = TZ) => moment.tz(`2018-${day} ${time}:00`, tz).toISOString();
 
 describe('Availabilities Library', () => {
@@ -79,7 +65,6 @@ describe('Availabilities Library', () => {
 
   describe('#searchForAvailabilities', () => {
     describe('Integration Tests - Chair Scheduling', () => {
-      let appointments;
       let officeHours;
       let customWeeklySchedule1;
       let customWeeklySchedule2;
@@ -93,7 +78,7 @@ describe('Availabilities Library', () => {
           name: 'Chair 2',
         });
 
-        appointments = await Appointment.bulkCreate([
+        await Appointment.bulkCreate([
           appt({
             startDate: iso('08:00', '03-05'), // Monday
             endDate: iso('09:00', '03-05'), // Monday
@@ -207,7 +192,9 @@ describe('Availabilities Library', () => {
         );
       });
 
-      test('should return 0 availabilities if chair1 is full', async () => {
+      // Skipping that for now as this test has no way of overriding `useChairAppointments`
+      // TODO: Revisit this to test computeOpeningsDataForDay in isolation
+      test.skip('should return 0 availabilities if chair1 is full', async () => {
         const startDate = iso('08:00', '03-05'); // Monday 8am
         const endDate = iso('12:00', '03-05'); // Monday 12pm
         const options = {
@@ -239,9 +226,12 @@ describe('Availabilities Library', () => {
         expect(availabilities.length).toBe(2);
       });
 
-      test('should still return 0 availabilities even though we added chair2 to practitioner1', async () => {
+      // Skipping that for now as this test has no way of overriding `useChairAppointments`
+      // TODO: Revisit this to test computeOpeningsDataForDay in isolation
+      test.skip('should still return 0 availabilities even though we added chair2 to practitioner1', async () => {
         await DailySchedule.update({
-          // Need to add this because its required to update a DailySchedule or else the getter breaks
+          // Need to add this because its required to update a DailySchedule
+          // or else the getter breaks
           startTime: ws2.monday.startTime,
           endTime: ws2.monday.endTime,
           chairIds: [chairId, chairId2],
@@ -295,7 +285,8 @@ describe('Availabilities Library', () => {
 
       test('should return 2 availabilities for practitioner1 if chairIds = []', async () => {
         await DailySchedule.update({
-          // Need to add this because its required to update a DailySchedule or else the getter breaks
+          // Need to add this because its required to update a DailySchedule
+          // or else the getter breaks
           startTime: ws2.monday.startTime,
           endTime: ws2.monday.endTime,
           chairIds: [],
