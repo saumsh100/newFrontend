@@ -8,15 +8,8 @@ import { connect } from 'react-redux';
 import jwt from 'jwt-decode';
 import GeneralForm from './GeneralForm';
 import Address from './Address';
-import {
-  updateEntityRequest,
-  fetchEntities,
-} from '../../../../thunks/fetchEntities';
-import {
-  uploadLogo,
-  deleteLogo,
-  downloadConnector,
-} from '../../../../thunks/accounts';
+import { updateEntityRequest, fetchEntities } from '../../../../thunks/fetchEntities';
+import { uploadLogo, deleteLogo, downloadConnector } from '../../../../thunks/accounts';
 import { Dropzone, AccountLogo, Button, Header, Link } from '../../../library';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
@@ -28,11 +21,9 @@ class General extends Component {
       uploading: false,
       downloadLink: null,
       expired: null,
-      previewOpen: false,
-      displayedCount: false,
     };
 
-    this.updateName = this.updateName.bind(this);
+    this.updatePracticeData = this.updatePracticeData.bind(this);
     this.uploadLogo = this.uploadLogo.bind(this);
     this.deleteLogo = this.deleteLogo.bind(this);
     this.downloadConnector = this.downloadConnector.bind(this);
@@ -59,14 +50,10 @@ class General extends Component {
   }
 
   uploadLogo(files) {
-    this.setState({
-      uploading: true,
-    });
+    this.setState({ uploading: true });
 
     this.props.uploadLogo(this.props.activeAccount.id, files[0]).then(() => {
-      this.setState({
-        uploading: false,
-      });
+      this.setState({ uploading: false });
     });
   }
 
@@ -74,16 +61,14 @@ class General extends Component {
     this.props.deleteLogo(this.props.activeAccount.id);
   }
 
-  updateName(values) {
+  updatePracticeData(values) {
     const { activeAccount } = this.props;
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
-      success: {
-        body: 'Updated Clinic Information',
-      },
+      success: { body: 'Updated Practice Information' },
       error: {
-        title: 'Clinic Information Error',
+        title: 'Practice Information Error',
         body: 'Failed to update.',
       },
     };
@@ -110,9 +95,7 @@ class General extends Component {
       return null;
     });
 
-    let button = (
-      <Button onClick={this.downloadConnector}>Generate Download Link</Button>
-    );
+    let button = <Button onClick={this.downloadConnector}>Generate Download Link</Button>;
 
     if (this.state.downloadLink) {
       const now = moment(this.state.expired);
@@ -121,20 +104,12 @@ class General extends Component {
 
       button =
         duration > 0 ? (
-          <Link
-            className={styles.linkAsButton}
-            href={this.state.downloadLink}
-            download
-          >
+          <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
             Click to Download
             <br /> {Math.floor(duration)} s
           </Link>
         ) : (
-          <Link
-            className={styles.linkAsButton}
-            href={this.state.downloadLink}
-            download
-          >
+          <Link className={styles.linkAsButton} href={this.state.downloadLink} download>
             Link Expired
           </Link>
         );
@@ -153,7 +128,7 @@ class General extends Component {
             <Header title="Practice Details" contentHeader />
             <GeneralForm
               role={role}
-              onSubmit={this.updateName}
+              onSubmit={this.updatePracticeData}
               activeAccount={activeAccount}
             />
           </div>
@@ -183,14 +158,19 @@ class General extends Component {
   }
 }
 
+General.defaultProps = {
+  activeAccount: null,
+  users: null,
+};
+
 General.propTypes = {
   activeAccount: PropTypes.objectOf(PropTypes.any),
   users: PropTypes.objectOf(PropTypes.any),
-  updateEntityRequest: PropTypes.func,
-  fetchEntities: PropTypes.func,
-  uploadLogo: PropTypes.func,
-  deleteLogo: PropTypes.func,
-  downloadConnector: PropTypes.func,
+  updateEntityRequest: PropTypes.func.isRequired,
+  fetchEntities: PropTypes.func.isRequired,
+  uploadLogo: PropTypes.func.isRequired,
+  deleteLogo: PropTypes.func.isRequired,
+  downloadConnector: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
@@ -207,17 +187,11 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps({ entities, auth }) {
-  const activeAccount = entities.getIn([
-    'accounts',
-    'models',
-    auth.get('accountId'),
-  ]);
+  const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
   const addresses = entities.getIn(['addresses', 'models']);
 
   const address =
-    activeAccount && activeAccount.addressId
-      ? addresses.get(activeAccount.addressId)
-      : null;
+    activeAccount && activeAccount.addressId ? addresses.get(activeAccount.addressId) : null;
 
   return {
     users: entities.getIn(['users', 'models']),

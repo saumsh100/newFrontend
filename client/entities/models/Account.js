@@ -4,6 +4,10 @@ import createModel from '../createModel';
 const AccountSchema = {
   id: null,
   addressId: null,
+  autoRespondOutsideOfficeHoursLimit: null,
+  canAutoRespondOutsideOfficeHours: false,
+  bufferBeforeOpening: null,
+  bufferAfterClosing: null,
   name: null,
   street: null,
   logo: null,

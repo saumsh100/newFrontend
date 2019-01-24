@@ -53,6 +53,30 @@ describe('Account Settings - Practice', () => {
         .get('[data-test-id="unit"]')
         .should('have.value', '10');
     });
+
+    it('enable communication outside buffer', () => {
+      cy
+        .get('[data-test-id="toggle_buffer"]')
+        .click({ force: true })
+        .fillTextInput('chatSettingsForm', 'bufferBeforeOpeningNum', '-15')
+        .fillTextInput('chatSettingsForm', 'bufferAfterClosingNum', '15')
+        .submitForm('chatSettingsForm')
+        .reload()
+        .get('[data-test-id=bufferBeforeOpeningNum]')
+        .should('have.value', '-15')
+        .get('[data-test-id=bufferAfterClosingNum]')
+        .should('have.value', '15');
+    });
+
+    it('disable communication outside buffer', () => {
+      cy
+        .get('[data-test-id="toggle_buffer"]')
+        .click({ force: true })
+        .submitForm('chatSettingsForm')
+        .reload()
+        .get('[data-test-id=bufferAfterClosingNum]')
+        .should('not.exist');
+    });
   });
 
   context('General Settings', () => {

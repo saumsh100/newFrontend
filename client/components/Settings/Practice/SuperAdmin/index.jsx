@@ -20,6 +20,7 @@ import SettingsCard from '../../Shared/SettingsCard';
 import SuperAdminForm from './SuperAdminForm';
 import MassEmailDisplay from './MassEmailDisplay';
 import Account from '../../../../entities/models/Account';
+import ChatSection from '../General/ChatSection';
 import CellPhoneFallback from './CellPhoneFallback';
 import styles from './styles.scss';
 
@@ -272,6 +273,11 @@ class SuperAdmin extends Component {
           >
             <EmailPreview url={url} />
           </DialogBox>
+
+          <Header title="Chat" contentHeader />
+          <div className={styles.formContainer}>
+            <ChatSection activeAccount={activeAccount} />
+          </div>
         </SettingsCard>
       )
     );

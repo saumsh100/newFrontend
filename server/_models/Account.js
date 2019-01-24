@@ -168,7 +168,17 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    autoRespondOutsideOfficeHours: {
+    canAutoRespondOutsideOfficeHours: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+
+    bufferBeforeOpening: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+
+    bufferAfterClosing: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -181,6 +191,11 @@ export default function (sequelize, DataTypes) {
         'homePhoneNumber',
       ],
       allowNull: false,
+    },
+
+    autoRespondOutsideOfficeHoursLimit: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   });
 

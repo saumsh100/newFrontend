@@ -5,6 +5,7 @@ import {
   isNotInWord,
   wordCheck,
   isSmsConfirmationResponse,
+  handleResponse,
 } from '../../../../server/lib/comms/util/responseChecks';
 
 describe('Communications Utility - Response Checks', () => {
@@ -165,6 +166,44 @@ describe('Communications Utility - Response Checks', () => {
         C: true,
         Y: true,
       })).toBe(false);
+    });
+  });
+
+  describe('isOnlyConfirmation', () => {
+    test('confirmation only with no additional text', () => {
+      const result = handleResponse('C');
+      expect(result.isConfirmation).toBe(true);
+      expect(result.haveExtraMessage).toBe(false);
+    });
+
+    test('confirmation with additional text', () => {
+      const result = handleResponse('C do I need anything else?');
+      expect(result.isConfirmation).toBe(true);
+      expect(result.haveExtraMessage).toBe(true);
+    });
+
+    test('confiramtion with extra chars before', () => {
+      const result = handleResponse('........C');
+      expect(result.isConfirmation).toBe(true);
+      expect(result.haveExtraMessage).toBe(false);
+    });
+
+    test('confiramtion with extra chars after', () => {
+      const result = handleResponse('C........');
+      expect(result.isConfirmation).toBe(true);
+      expect(result.haveExtraMessage).toBe(false);
+    });
+
+    test('no confiramtion just text', () => {
+      const result = handleResponse('CCan I bring something else?');
+      expect(result.isConfirmation).toBe(false);
+      expect(result.haveExtraMessage).toBe(true);
+    });
+
+    test('blank space', () => {
+      const result = handleResponse(' ');
+      expect(result.isConfirmation).toBe(false);
+      expect(result.haveExtraMessage).toBe(true);
     });
   });
 });

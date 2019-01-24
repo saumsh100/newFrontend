@@ -187,7 +187,7 @@
     "relay-compiler": "~1.5.0",
     "rimraf": "^2.5.1",
     "sass-loader": "^6.0.3",
-    "sequelize": "^4.3.2",
+    "sequelize": "^4.41.1",
     "sequelize-cli": "^4.1.0",
     "sharp": "^0.18.1",
     "socket.io": "^2.1.1",

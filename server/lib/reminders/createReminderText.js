@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { convertIntervalStringToObject } from '../../util/time';
 import { formatPhoneNumber } from '../../util/formatters';
 
-const nowISO = () => new Date().toISOString();
+const nowISO = () => new Date(Date.now()).toISOString();
 
 const getDateAndTime = (date, timezone) => {
   const mDate = moment.tz(date, timezone);

@@ -1,7 +1,7 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Header, SContainer, SHeader, SBody, SMSPreview } from '../../../../library';
+import { Header, SBody, SContainer, SHeader, SMSPreview } from '../../../../library';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 import styles from './styles.scss';
@@ -27,58 +27,66 @@ function ReviewSMSPreview({ patient, account }) {
   );
 }
 
-class ReviewPreview extends Component {
-  render() {
-    const { review, account } = this.props;
+ReviewSMSPreview.propTypes = {
+  patient: PropTypes.shape({ firstName: PropTypes.string }).isRequired,
+  account: PropTypes.shape({
+    name: PropTypes.string,
+    twilioPhoneNumber: PropTypes.string,
+    destinationPhoneNumber: PropTypes.string,
+    phoneNumber: PropTypes.string,
+  }).isRequired,
+};
 
-    const { primaryTypes } = review;
+function ReviewPreview(props) {
+  const { review, account } = props;
 
-    // Fake Jane Doe Data
-    const patient = {
-      firstName: 'Jane',
-      lastName: 'Doe',
-    };
+  const { primaryTypes } = review;
 
-    // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
-    const commsPreviewSections = primaryTypes
-      .slice()
-      .reverse()
-      .map((type) => {
-        let typePreview = null;
-        if (type === 'sms') {
-          typePreview = (
-            <div>
-              <ReviewSMSPreview review={review} patient={patient} account={account} />
-            </div>
-          );
-        } else if (type === 'email') {
-          // TODO URL NOT FOUND (NOT DONE)
-          const url = `/api/accounts/${account.id}/emails/preview?templateName=Patient Review`;
-          typePreview = (
-            <div>
-              <EmailPreview url={url} />
-            </div>
-          );
-        } else if (type === 'phone') {
-          typePreview = <div className={styles.smsPreviewWrapper}>Phone Preview</div>;
-        }
+  // Fake Jane Doe Data
+  const patient = {
+    firstName: 'Jane',
+    lastName: 'Doe',
+  };
 
-        return <CommsPreviewSection key={`${type}`}>{typePreview}</CommsPreviewSection>;
-      });
-
-    return (
-      <SContainer>
-        <SHeader className={styles.previewHeader}>
-          <div className={styles.topHeader}>
-            <Header title="Preview" />
+  // Slice so that it's immutable, reverse so that SMS is first cause its a smaller component
+  const commsPreviewSections = primaryTypes
+    .slice()
+    .reverse()
+    .map((type) => {
+      let typePreview = null;
+      if (type === 'sms') {
+        typePreview = (
+          <div>
+            <ReviewSMSPreview review={review} patient={patient} account={account} />
           </div>
-        </SHeader>
-        <SBody className={styles.previewSBody}>
-          <CommsPreview>{commsPreviewSections}</CommsPreview>
-        </SBody>
-      </SContainer>
-    );
-  }
+        );
+      } else if (type === 'email') {
+        // TODO URL NOT FOUND (NOT DONE)
+        const url = `/api/accounts/${account.id}/emails/preview?templateName=Patient Review`;
+        typePreview = (
+          <div>
+            <EmailPreview url={url} />
+          </div>
+        );
+      } else if (type === 'phone') {
+        typePreview = <div className={styles.smsPreviewWrapper}>Phone Preview</div>;
+      }
+
+      return <CommsPreviewSection key={`${type}`}>{typePreview}</CommsPreviewSection>;
+    });
+
+  return (
+    <SContainer>
+      <SHeader className={styles.previewHeader}>
+        <div className={styles.topHeader}>
+          <Header title="Preview" />
+        </div>
+      </SHeader>
+      <SBody className={styles.previewSBody}>
+        <CommsPreview>{commsPreviewSections}</CommsPreview>
+      </SBody>
+    </SContainer>
+  );
 }
 
 ReviewPreview.propTypes = {

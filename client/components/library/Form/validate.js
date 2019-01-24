@@ -172,6 +172,16 @@ const validateBirthdate = (value) => {
   }
 };
 
+const onlyNumber = (value) => {
+  if (!value) return undefined;
+
+  const regex = /^[+-]?\d+$/g;
+  if (!regex.test(value)) {
+    return 'Need to be a number';
+  }
+  return undefined;
+};
+
 export {
   leftTrim,
   composeAsyncValidators,
@@ -195,4 +205,5 @@ export {
   notNegative,
   normalizeBirthdate,
   validateBirthdate,
+  onlyNumber,
 };

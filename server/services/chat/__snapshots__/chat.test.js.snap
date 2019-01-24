@@ -12,6 +12,7 @@ Object {
   "fromCountry": null,
   "fromState": null,
   "fromZip": null,
+  "isOutsideOfficeHoursRespond": false,
   "mediaData": null,
   "numMedia": null,
   "numSegments": null,
@@ -38,6 +39,7 @@ Object {
   "fromCountry": null,
   "fromState": null,
   "fromZip": null,
+  "isOutsideOfficeHoursRespond": false,
   "mediaData": null,
   "numMedia": null,
   "numSegments": null,
@@ -52,7 +54,7 @@ Object {
 }
 `;
 
-exports[`services.chat marks message as read 1`] = `
+exports[`services.chat message marking marks message as read 1`] = `
 Array [
   Object {
     "accountSid": null,
@@ -65,6 +67,7 @@ Array [
     "fromCountry": null,
     "fromState": null,
     "fromZip": null,
+    "isOutsideOfficeHoursRespond": false,
     "mediaData": null,
     "numMedia": null,
     "numSegments": null,
@@ -88,6 +91,7 @@ Array [
     "fromCountry": null,
     "fromState": null,
     "fromZip": null,
+    "isOutsideOfficeHoursRespond": false,
     "mediaData": null,
     "numMedia": null,
     "numSegments": null,
@@ -103,7 +107,7 @@ Array [
 ]
 `;
 
-exports[`services.chat marks message as unread 1`] = `
+exports[`services.chat message marking marks message as unread 1`] = `
 Array [
   Object {
     "accountSid": null,
@@ -116,6 +120,7 @@ Array [
     "fromCountry": null,
     "fromState": null,
     "fromZip": null,
+    "isOutsideOfficeHoursRespond": false,
     "mediaData": null,
     "numMedia": null,
     "numSegments": null,
@@ -139,6 +144,7 @@ Array [
     "fromCountry": null,
     "fromState": null,
     "fromZip": null,
+    "isOutsideOfficeHoursRespond": false,
     "mediaData": null,
     "numMedia": null,
     "numSegments": null,

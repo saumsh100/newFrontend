@@ -102,6 +102,11 @@ export default function (sequelize, DataTypes) {
     mediaData: {
       type: DataTypes.JSONB,
     },
+
+    isOutsideOfficeHoursRespond: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   });
 
   TextMessage.associate = ({ Chat, User }) => {

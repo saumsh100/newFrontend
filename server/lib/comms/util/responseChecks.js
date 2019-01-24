@@ -24,7 +24,7 @@ export function getIndicesOf(text, magicWord) {
   const regexp = new RegExp(magicWord, 'g');
 
   let match;
-  while (match = regexp.exec(text))  {
+  while (match = regexp.exec(text)) {
     indices.push(match.index);
   }
 
@@ -112,4 +112,23 @@ export function isSmsConfirmationResponse(text, magicWords = THE_MAGIC_WORDS) {
   return typeof magicWords !== 'string'
     ? !!find(magicWords, (value, key) => wordCheck(text, key))
     : wordCheck(text, magicWords);
+}
+
+/**
+ * isOnlyConfirmation function determines if a message is
+ * more than confirmation
+ *
+ * @param {string} message
+ * @returns {boolean, boolean}
+ */
+export function handleResponse(message) {
+  // This will remove all special characters that are not alphanumeric
+  // The second part will replace every whitespace that occurs twice or more
+  const body = message.replace(/[^a-zA-Z0-9\s]/gi, '').replace(/\s{2,}/gi, ' ');
+  const fragments = body.split(' ');
+
+  return {
+    isConfirmation: isSmsConfirmationResponse(message),
+    haveExtraMessage: fragments.length !== 1,
+  };
 }

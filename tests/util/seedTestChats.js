@@ -4,7 +4,7 @@ import { Chat, Patient, TextMessage } from '../../server/_models';
 import { accountId } from './seedTestUsers';
 
 export const chatId = '3180a744-f6b0-4a09-8046-4e713bf5b566';
-const textMessageId = '059987cb-3051-4656-98d0-72cda34d32a8';
+export const textMessageId = '059987cb-3051-4656-98d0-72cda34d32a8';
 const textMessageIdAfter = '059987cb-3051-4656-98d0-72cda34d32a9';
 export const patientPhoneNumber = '+16045555555';
 const clinicPhone = '+16043333333';
