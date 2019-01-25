@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { intervalToNumType } from '../../../../../../server/util/time';
+import { intervalToNumType } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
 import { Toggle, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
@@ -50,9 +50,7 @@ class RecallsItem extends Component {
     const { num } = intervalToNumType(props.recall.interval);
 
     // This is more for the input if we had one...
-    this.state = {
-      number: num,
-    };
+    this.state = { number: num };
 
     this.changeIsActive = this.changeIsActive.bind(this);
     this.deleteRecall = this.deleteRecall.bind(this);
@@ -66,9 +64,7 @@ class RecallsItem extends Component {
       return;
     }
 
-    this.setState({
-      number: num,
-    });
+    this.setState({ number: num });
   }
 
   componentWillUpdate(nextProps) {
@@ -79,9 +75,7 @@ class RecallsItem extends Component {
       return;
     }
 
-    this.setState({
-      number: newNumType.num,
-    });
+    this.setState({ number: newNumType.num });
   }
 
   changeIsActive(e) {
@@ -112,9 +106,7 @@ class RecallsItem extends Component {
     // So that it doesn't bubble up and try to select this reminder
     e.stopPropagation();
     e.preventDefault();
-    const {
-      recall, account, selected, selectRecall,
-    } = this.props;
+    const { recall, account, selected, selectRecall } = this.props;
     const { num, type } = intervalToNumType(recall.interval);
     const subType = num >= 0 ? 'before' : 'after';
     const sure = confirm(`Are you sure you want to delete the ${num} ${type} ${subType} due date recall?`);
@@ -170,9 +162,7 @@ class RecallsItem extends Component {
   }
 
   render() {
-    const {
-      recall, selected, selectRecall, lastRecall, index,
-    } = this.props;
+    const { recall, selected, selectRecall, lastRecall, index } = this.props;
 
     const { interval, primaryTypes, isActive } = recall;
 
@@ -205,13 +195,7 @@ class RecallsItem extends Component {
         linesBoxClass={styles.linesBoxClass}
         connectLinesClass={styles.connectLinesClass}
         onClick={() => selectRecall(recall.id)}
-        toggleComponent={
-          <Toggle
-            color={color}
-            checked={isActive}
-            onChange={this.changeIsActive}
-          />
-        }
+        toggleComponent={<Toggle color={color} checked={isActive} onChange={this.changeIsActive} />}
         labelComponent={
           <div className={styles.recallLabel}>
             <TouchPointLabel
@@ -232,20 +216,26 @@ class RecallsItem extends Component {
                 className={dropdownSelectClass}
                 value={primaryTypesKey}
                 options={[
-                  { label: 'Email', value: 'email' },
-                  { label: 'SMS', value: 'sms' },
+                  {
+ label: 'Email',
+value: 'email',
+},
+                  {
+ label: 'SMS',
+value: 'sms',
+},
                   // { label: 'Voice', value: 'phone' },
-                  { label: 'Email & SMS', value: 'email_sms' },
+                  {
+ label: 'Email & SMS',
+value: 'email_sms',
+},
                 ]}
               />
             </div>
           </div>
         }
         rightComponent={
-          <div
-            className={styles.deleteButtonWrapper}
-            onClick={this.deleteRecall}
-          >
+          <div className={styles.deleteButtonWrapper} onClick={this.deleteRecall}>
             <TinyDeleteButton />
           </div>
         }
@@ -254,15 +244,11 @@ class RecallsItem extends Component {
   }
 }
 
-RecallsItem.propTypes = {
-  selectRecall: PropTypes.func.isRequired,
-};
+RecallsItem.propTypes = { selectRecall: PropTypes.func.isRequired };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    {
-      updateEntityRequest,
-    },
+    { updateEntityRequest },
     dispatch,
   );
 }

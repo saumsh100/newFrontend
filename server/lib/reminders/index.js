@@ -1,7 +1,13 @@
 
 import moment from 'moment-timezone';
 import omit from 'lodash/omit';
-import { sortAsc } from '@carecru/isomorphic';
+import {
+  sortAsc,
+  convertIntervalStringToObject,
+  sortIntervalAscPredicate,
+  ceilDateMinutes,
+  floorDateMinutes,
+} from '@carecru/isomorphic';
 import {
   Appointment,
   SentReminder,
@@ -9,12 +15,6 @@ import {
 } from 'CareCruModels';
 import GLOBALS from '../../config/globals';
 import { organizeForOutbox } from '../comms/util';
-import {
-  convertIntervalStringToObject,
-  sortIntervalAscPredicate,
-  ceilDateMinutes,
-  floorDateMinutes,
-} from '../../util/time';
 import {
   mapPatientsToReminders,
   fetchActiveReminders,

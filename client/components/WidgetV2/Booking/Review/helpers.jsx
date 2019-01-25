@@ -4,9 +4,9 @@ import {
   dateFormatterFactory,
   groupTimesPerPeriod,
   toHumanCommaSeparated,
+  setDateToTimezone,
 } from '@carecru/isomorphic';
 import { capitalizeFirstLetter } from '../../../Utils';
-import { setDateToTimezone } from '../../../../../server/util/time';
 import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import styles from './styles.scss';
 

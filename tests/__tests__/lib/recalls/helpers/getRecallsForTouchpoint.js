@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import { w2s } from '@carecru/isomorphic';
 import {
   Appointment,
   Patient,
@@ -12,7 +13,6 @@ import { wipeAllModels } from '../../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../../util/seedTestPractitioners';
-import { w2s } from '../../../../../server/util/time';
 
 const makeApptData = (data = {}) => Object.assign({
   accountId,

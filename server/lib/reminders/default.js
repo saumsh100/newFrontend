@@ -1,5 +1,5 @@
 
-import { d2s, h2s } from '../../util/time';
+import { d2s, h2s } from '@carecru/isomorphic';
 
 /**
  * Default Reminders

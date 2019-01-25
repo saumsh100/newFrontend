@@ -4,7 +4,13 @@ import uniqWith from 'lodash/uniqWith';
 import uniqBy from 'lodash/uniqBy';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
-import { sortAsc } from '@carecru/isomorphic';
+import {
+  sortAsc,
+  convertIntervalStringToObject,
+  sortIntervalAscPredicate,
+  tzTime,
+  setDateToTimezone,
+} from '@carecru/isomorphic';
 import {
   Account,
   Appointment,
@@ -17,12 +23,6 @@ import {
 } from 'CareCruModels';
 import GLOBALS from '../../config/globals';
 import { generateOrganizedPatients } from '../comms/util';
-import {
-  convertIntervalStringToObject,
-  sortIntervalAscPredicate,
-  tzTime,
-  setDateToTimezone,
-} from '../../util/time';
 import countNextClosedDays, {
   getDayOfWeek,
   isOpen,

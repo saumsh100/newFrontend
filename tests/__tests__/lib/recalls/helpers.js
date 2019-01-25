@@ -1,6 +1,7 @@
 
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import { w2s } from '@carecru/isomorphic';
 import {
   Appointment,
   Family,
@@ -21,7 +22,6 @@ import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
-import { w2s } from '../../../../server/util/time';
 
 // TODO: make seeds more modular so we can see here
 // const accountId = '1aeab035-b72c-4f7a-ad73-09465cbf5654';

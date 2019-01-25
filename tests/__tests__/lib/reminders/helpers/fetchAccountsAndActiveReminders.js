@@ -1,4 +1,5 @@
 
+import { tzIso } from '@carecru/isomorphic';
 import {
   Account,
   Address,
@@ -7,7 +8,6 @@ import {
 import {
   fetchAccountsAndActiveReminders,
 } from '../../../../../server/lib/reminders/helpers';
-import { tzIso } from '../../../../../server/util/time';
 import { wipeAllModels } from '../../../../util/wipeModel';
 import { seedTestUsers, accountId, enterpriseId } from '../../../../util/seedTestUsers';
 

@@ -1,6 +1,7 @@
 
 import { Router } from 'express';
 import moment from 'moment';
+import { getDayStart, getDayEnd } from '@carecru/isomorphic';
 import { renderTemplate, generateClinicMergeVars } from '../../../lib/mail';
 import { getReminderTemplateName } from '../../../lib/reminders/createReminderText';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -8,7 +9,6 @@ import { sequelizeLoader } from '../../util/loaders';
 import normalize from '../normalize';
 import { Reminder } from '../../../_models';
 import StatusError from '../../../util/StatusError';
-import { getDayStart, getDayEnd } from '../../../util/time';
 import { getRemindersOutboxList } from '../../../lib/reminders';
 import { mapPatientsToReminders } from '../../../lib/reminders/helpers';
 

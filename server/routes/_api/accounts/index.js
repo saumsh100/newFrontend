@@ -2,6 +2,7 @@
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
+import { getDayStart, getDayEnd } from '@carecru/isomorphic';
 import {
   Account,
   Enterprise,
@@ -25,7 +26,6 @@ import {
 import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import format from '../../util/format';
-import { getDayStart, getDayEnd } from '../../../util/time';
 import StatusError from '../../../util/StatusError';
 import upload from '../../../lib/upload';
 import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';

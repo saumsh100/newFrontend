@@ -43,6 +43,7 @@ module.exports = () => ({
       CareCruGraphQL: path.resolve(projectRoot, './server/graphql/'),
     },
     extensions: ['.js', '.jsx', '.css'],
+    symlinks: false,
   },
 
   output: {
@@ -60,6 +61,7 @@ module.exports = () => ({
           options: {
             cacheDirectory: true,
             babelrc: false,
+
             presets: [['env', { targets: { node: nodeVersion } }], 'react', 'stage-2'],
           },
         },

@@ -1,5 +1,5 @@
 
-import { tzIso } from '../../../../../server/util/time';
+import { tzIso } from '@carecru/isomorphic';
 import { generateIsActiveReminder } from '../../../../../server/lib/reminders/helpers';
 
 const TIME_ZONE = 'America/Vancouver';

@@ -1,7 +1,7 @@
 
 import moment from 'moment';
 import omit from 'lodash/omit';
-import { timeWithZone } from '../util/time';
+import { timeWithZone } from '@carecru/isomorphic';
 
 // Converting to UTC as this is a nested JSON where Sequelize won't do it for us
 function makeSetter(value, field, self) {

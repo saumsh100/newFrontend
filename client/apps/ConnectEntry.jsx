@@ -7,7 +7,7 @@ import moment from 'moment';
 import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import Immutable from 'immutable';
-import time from '../../server/util/time';
+import * as time from '@carecru/isomorphic';
 import socket from '../socket';
 import App from './Connect';
 import configure from '../store/connectStore';
@@ -46,7 +46,10 @@ load()(store.dispatch).then(() => {
 
   // We have to create global objects only once
   // And pass them to App on render
-  const appProps = { browserHistory, store };
+  const appProps = {
+    browserHistory,
+    store,
+  };
   const render = (Component) => {
     ReactDOM.render(
       <AppContainer>

@@ -1,6 +1,7 @@
 
 
 import { Router } from 'express';
+import { setDateToTimezone } from '@carecru/isomorphic';
 import { namespaces, protocol, host } from '../../../config/globals';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -9,7 +10,6 @@ import jsonapi from '../../util/jsonapi';
 import { Permission, PatientUser, Request, User, Account, Service, Practitioner } from '../../../_models';
 import linkRequestWithPendingAppointment from '../../../lib/linkRequestWithPendingAppointment';
 import { formatPhoneNumber } from '../../../util/formatters';
-import { setDateToTimezone } from '../../../util/time';
 import { appointmentRequestNoteStringFormatter } from '../../../lib/appointmentRequestNoteStringFormatter';
 import {
   sendAppointmentRequested,

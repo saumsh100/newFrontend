@@ -1,6 +1,6 @@
 
 import moment from 'moment-timezone';
-import { convertIntervalToMs } from '../../util/time';
+import { convertIntervalToMs } from '@carecru/isomorphic';
 
 const RecallsText = {
   '1 months': ({ account, patient, dueDate, link }) => `Hi ${patient.firstName}, this is ${account.name}. We're reaching out because you're ` +

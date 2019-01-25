@@ -61,7 +61,7 @@
     "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write"
   },
   "dependencies": {
-    "@carecru/isomorphic": "^1.1.5",
+    "@carecru/isomorphic": "^2.1.0",
     "@storybook/addon-actions": "^3.2.6",
     "@storybook/addon-knobs": "^3.2.8",
     "@storybook/addon-links": "^3.2.6",

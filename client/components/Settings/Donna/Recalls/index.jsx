@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
 import { Map } from 'immutable';
+import { convertIntervalToMs } from '@carecru/isomorphic';
 import {
   updateEntityRequest,
   fetchEntities,
@@ -21,7 +22,6 @@ import {
   DropdownSelect,
 } from '../../../library';
 import { accountShape } from '../../../library/PropTypeShapes';
-import { convertIntervalToMs } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RecallsItem from './RecallsItem';
 import AdvancedSettingsForm from './AdvancedSettingsForm';
@@ -32,15 +32,42 @@ import TouchPointItem, { TouchPointLabel } from '../../Shared/TouchPointItem';
 import styles from './styles.scss';
 
 const dueDateOptions = [
-  { label: '4 Mos', value: '4 months' },
-  { label: '5 Mos', value: '5 months' },
-  { label: '6 Mos', value: '6 months' },
-  { label: '7 Mos', value: '7 months' },
-  { label: '8 Mos', value: '8 months' },
-  { label: '9 Mos', value: '9 months' },
-  { label: '10 Mos', value: '10 months' },
-  { label: '11 Mos', value: '11 months' },
-  { label: '12 Mos', value: '12 months' },
+  {
+    label: '4 Mos',
+    value: '4 months',
+  },
+  {
+    label: '5 Mos',
+    value: '5 months',
+  },
+  {
+    label: '6 Mos',
+    value: '6 months',
+  },
+  {
+    label: '7 Mos',
+    value: '7 months',
+  },
+  {
+    label: '8 Mos',
+    value: '8 months',
+  },
+  {
+    label: '9 Mos',
+    value: '9 months',
+  },
+  {
+    label: '10 Mos',
+    value: '10 months',
+  },
+  {
+    label: '11 Mos',
+    value: '11 months',
+  },
+  {
+    label: '12 Mos',
+    value: '12 months',
+  },
 ];
 
 class Recalls extends Component {
@@ -64,9 +91,7 @@ class Recalls extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchEntities({
-      url: `/api/accounts/${this.props.activeAccount.id}/recalls`,
-    });
+    this.props.fetchEntities({ url: `/api/accounts/${this.props.activeAccount.id}/recalls` });
   }
 
   toggleAdding() {
@@ -74,9 +99,7 @@ class Recalls extends Component {
   }
 
   toggleAdvancedSettings() {
-    this.setState({
-      isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen,
-    });
+    this.setState({ isAdvancedSettingsOpen: !this.state.isAdvancedSettingsOpen });
   }
 
   openModal() {
@@ -90,9 +113,7 @@ class Recalls extends Component {
 
   saveAdvancedSettings(values) {
     const { activeAccount } = this.props;
-    const {
-      recallBufferNumber, recallBufferInterval, recallStartTime, recallEndTime,
-    } = values;
+    const { recallBufferNumber, recallBufferInterval, recallStartTime, recallEndTime } = values;
 
     const newValues = {
       recallBuffer: `${recallBufferNumber} ${recallBufferInterval}`,
@@ -153,9 +174,7 @@ class Recalls extends Component {
         alert,
       })
       .then(() => {
-        this.setState({
-          isAdding: false,
-        });
+        this.setState({ isAdding: false });
 
         this.props.reset('newRecall');
       });
@@ -230,7 +249,10 @@ class Recalls extends Component {
         label: 'Save',
         onClick: this.saveAdvancedSettings,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: 'recallAdvancedSettings' },
+        props: {
+          color: 'blue',
+          form: 'recallAdvancedSettings',
+        },
       },
     ];
 
@@ -253,7 +275,10 @@ class Recalls extends Component {
         label: 'Save',
         onClick: this.newReminder,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: 'newRecall' },
+        props: {
+          color: 'blue',
+          form: 'newRecall',
+        },
       },
     ];
 
@@ -271,9 +296,7 @@ class Recalls extends Component {
     const numHygieneMonths = activeAccount.hygieneInterval || '6 months';
     const numRecareMonths = activeAccount.recallInterval || '6 months';
 
-    const dropDownTheme = {
-      filled: styles.filledLabel,
-    };
+    const dropDownTheme = { filled: styles.filledLabel };
 
     return (
       <CommunicationSettingsCard
@@ -445,6 +468,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Recalls);

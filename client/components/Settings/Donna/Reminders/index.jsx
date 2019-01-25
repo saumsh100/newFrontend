@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reset } from 'redux-form';
+import { ordinalSuffix, convertIntervalToMs } from '@carecru/isomorphic';
 import {
   updateEntityRequest,
   fetchEntities,
@@ -11,7 +12,6 @@ import {
 } from '../../../../thunks/fetchEntities';
 import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
 import { accountShape } from '../../../library/PropTypeShapes';
-import { ordinalSuffix, convertIntervalToMs } from '../../../../../server/util/time';
 import CommunicationSettingsCard from '../../Shared/CommunicationSettingsCard';
 import RemindersItem from './RemindersItem';
 import CreateRemindersForm from './CreateRemindersForm';
@@ -327,6 +327,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(Reminders);

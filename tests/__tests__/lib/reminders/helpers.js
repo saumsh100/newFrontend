@@ -1,6 +1,7 @@
 
 import { v4 as uuid } from 'uuid';
 import moment from 'moment';
+import { tzIso } from '@carecru/isomorphic';
 import {
   Account,
   Appointment,
@@ -18,7 +19,6 @@ import {
   getValidSmsReminders,
   confirmReminderIfExist,
 } from '../../../../server/lib/reminders/helpers';
-import { tzIso } from '../../../../server/util/time';
 import wipeModel, { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';

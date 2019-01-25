@@ -1,6 +1,6 @@
 
 import moment from 'moment-timezone';
-import { convertIntervalStringToObject } from '../../util/time';
+import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import { formatPhoneNumber } from '../../util/formatters';
 
 const nowISO = () => new Date(Date.now()).toISOString();

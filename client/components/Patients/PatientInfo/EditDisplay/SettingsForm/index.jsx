@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { change, formValueSelector } from 'redux-form';
 import { Map } from 'immutable';
 import classNames from 'classnames';
-import { intervalToNumType } from '../../../../../../server/util/time';
+import { intervalToNumType } from '@carecru/isomorphic';
 import OmitForm from '../OmitForm';
 import { Grid, Row, Col, Form, Field, FormSection } from '../../../../library';
 import { capitalizeText } from '../../../../../components/Utils';
@@ -56,9 +56,7 @@ class SettingsForm extends Component {
   omitFormHandler(setting) {
     return toOmit =>
       this.setState(
-        {
-          [setting]: toOmit,
-        },
+        { [setting]: toOmit },
         () => {
           const settingFieldName = this.getSettingType(setting);
 
@@ -77,9 +75,7 @@ class SettingsForm extends Component {
   }
 
   render() {
-    const {
-      handleSubmit, patient, reminders, recalls,
-    } = this.props;
+    const { handleSubmit, patient, reminders, recalls } = this.props;
     const { omitReminderIds, omitRecallIds } = this.state;
 
     const { preferences } = patient;
@@ -135,9 +131,7 @@ class SettingsForm extends Component {
           );
         }}
         className={styles.formContainer}
-        initialValues={{
-          preferences,
-        }}
+        initialValues={{ preferences }}
         ignoreSaveButton={!isResponsive()}
       >
         <FormSection name="preferences">
@@ -282,9 +276,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    {
-      change,
-    },
+    { change },
     dispatch,
   );
 
@@ -308,4 +300,7 @@ SettingsForm.defaultProps = {
   recallsField: null,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsForm);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SettingsForm);

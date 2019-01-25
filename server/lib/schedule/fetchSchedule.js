@@ -1,6 +1,6 @@
 
 import { Account, WeeklySchedule, DailySchedule } from 'CareCruModels';
-import { getProperDateWithZone } from '../../util/time';
+import { getProperDateWithZone } from '@carecru/isomorphic';
 
 /**
  * fetchAccountDailySchedules is an async function that will return the promised query

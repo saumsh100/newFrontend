@@ -4,14 +4,14 @@ import unionBy from 'lodash/unionBy';
 import uniqBy from 'lodash/uniqBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
-import produceFinalDailySchedulesMap from '../schedule/practitioners/produceFinalDailySchedulesMap';
-import mergeDailySchedules from '../schedule/mergeDailySchedules';
 import {
   getProperDateWithZone,
   getRangeOfDays,
   getISOSortPredicate,
   convertToDate,
-} from '../../util/time';
+} from '@carecru/isomorphic';
+import produceFinalDailySchedulesMap from '../schedule/practitioners/produceFinalDailySchedulesMap';
+import mergeDailySchedules from '../schedule/mergeDailySchedules';
 import getMostPopularValue from './helpers/getMostPopularValue';
 import invertFillers from './invertFillers';
 import createAvailabilitiesFromOpening from './createAvailabilitiesFromOpening';

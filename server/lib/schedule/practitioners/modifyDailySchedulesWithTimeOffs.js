@@ -2,7 +2,7 @@
 import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
 import mapValues from 'lodash/mapValues';
-import { getRangeOfDays } from '../../../util/time';
+import { getRangeOfDays } from '@carecru/isomorphic';
 
 const moment = extendMoment(Moment);
 

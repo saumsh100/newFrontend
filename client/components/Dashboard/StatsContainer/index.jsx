@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { setDateToTimezone } from '@carecru/isomorphic';
 import { IconCard } from '../../library';
 import { FilterAppointments } from '../Shared/filters';
-import { setDateToTimezone } from '../../../../server/util/time';
 import styles from './styles.scss';
 
 function StatsContainer({

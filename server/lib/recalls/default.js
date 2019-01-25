@@ -1,5 +1,5 @@
 
-import { w2s } from '../../util/time';
+import { w2s } from '@carecru/isomorphic';
 
 /**
  * Default Recalls, 17 total touchpoints, all email

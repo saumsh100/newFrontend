@@ -1,6 +1,7 @@
 
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
+import { getProperDateWithZone } from '@carecru/isomorphic';
 import {
   Appointment,
   Service,
@@ -12,7 +13,6 @@ import {
   Chair,
   PractitionerRecurringTimeOff,
 } from 'CareCruModels';
-import { getProperDateWithZone } from '../../util/time';
 
 const generateDuringFilterSequelize = (startDate, endDate) => ({
   $or: [

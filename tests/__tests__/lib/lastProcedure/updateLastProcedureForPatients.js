@@ -1,4 +1,5 @@
 
+import { tzIso } from '@carecru/isomorphic';
 import {
   Appointment,
   Patient,
@@ -9,7 +10,6 @@ import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 import { seedTestChairs, chairId } from '../../../util/seedTestChairs';
 import { wipeAllModels } from '../../../util/wipeModel';
-import { tzIso } from '../../../../server/util/time';
 
 const makeApptData = (data = {}) => ({
   accountId,

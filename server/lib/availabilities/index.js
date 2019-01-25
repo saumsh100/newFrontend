@@ -4,6 +4,13 @@ import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
 import unionBy from 'lodash/unionBy';
 import {
+  isDuringEachother,
+  isDuringEachotherTimeOff,
+  createPossibleTimeSlots,
+  createIntervalsFromWeeklySchedule,
+  getISOSortPredicate,
+} from '@carecru/isomorphic';
+import {
   Service,
   Practitioner,
   Appointment,
@@ -14,13 +21,6 @@ import {
   PractitionerRecurringTimeOff,
 } from '../../_models';
 import StatusError from '../../util/StatusError';
-import {
-  isDuringEachother,
-  isDuringEachotherTimeOff,
-  createPossibleTimeSlots,
-  createIntervalsFromWeeklySchedule,
-  getISOSortPredicate,
-} from '../../util/time';
 
 const generateDuringFilterSequelize = (startDate, endDate) => {
   return {

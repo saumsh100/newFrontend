@@ -1,7 +1,7 @@
 
 import moment from 'moment';
+import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import { Account, Appointment, Patient, SentRecall } from '../../_models';
-import { convertIntervalStringToObject } from '../../util/time';
 
 /**
  * [bumpPendingAppointment bumps the closest future pending appointment]

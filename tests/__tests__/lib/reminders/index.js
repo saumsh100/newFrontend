@@ -8,12 +8,12 @@ import {
   Patient,
   Practitioner,
   SentReminder,
-  SentRemindersPatients
+  SentRemindersPatients,
 } from 'CareCruModels';
+import { tzIso } from '@carecru/isomorphic';
 import sendReminder, { createConfirmationText } from '../../../../server/lib/reminders/sendReminder';
 import * as RemindersLibrary from '../../../../server/lib/reminders';
 import * as RemindersHelpers from '../../../../server/lib/reminders/helpers';
-import { tzIso } from '../../../../server/util/time';
 import { wipeAllModels } from '../../../util/wipeModel';
 import { seedTestUsers, accountId, enterpriseId } from '../../../util/seedTestUsers';
 import { patientId } from '../../../util/seedTestPatients';

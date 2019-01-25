@@ -1,4 +1,5 @@
 
+import { w2s } from '@carecru/isomorphic';
 import {
   Appointment,
   Patient,
@@ -14,7 +15,6 @@ import { seedTestUsers, accountId } from '../../../util/seedTestUsers';
 import { seedTestPatients, patientId } from '../../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId } from '../../../util/seedTestPractitioners';
 import { seedTestRecalls, recallId1, recallId2 } from '../../../util/seedTestRecalls';
-import { w2s } from '../../../../server/util/time';
 import bumpPendingAppointment from '../../../../server/lib/correspondences/bumpPendingAppointment';
 
 const makeApptData = (data = {}) => Object.assign({

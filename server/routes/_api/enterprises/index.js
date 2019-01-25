@@ -26,7 +26,7 @@ import { generateDefaultRecalls } from '../../../lib/recalls/default';
 import { generateDefaultReminders } from '../../../lib/reminders/default';
 import createAccount from '../../../lib/createAccount';
 
-const { timeWithZone } = require('../../../util/time');
+const { timeWithZone } = require('@carecru/isomorphic');
 
 const enterprisesRouter = Router();
 

@@ -1,10 +1,9 @@
 
-
+import { tzIso, tzTimeHS } from '@carecru/isomorphic';
 import mergeDailySchedules, {
   mergeStartTime,
   mergeEndTime,
 } from './mergeDailySchedules';
-import { tzIso, tzTimeHS } from '../../util/time';
 
 const TZ = 'America/Edmonton';
 const d = date => tzIso(date, TZ);

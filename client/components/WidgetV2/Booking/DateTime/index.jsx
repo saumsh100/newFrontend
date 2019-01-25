@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { CSSTransition } from 'react-transition-group';
 import { Element, scroller } from 'react-scroll';
 import { stringify, parse } from 'query-string';
-import { dateFormatter, groupTimesPerPeriod } from '@carecru/isomorphic';
+import { dateFormatter, groupTimesPerPeriod, setDateToTimezone } from '@carecru/isomorphic';
 import {
   setConfirmAvailability,
   setSelectedAvailability,
@@ -29,7 +29,6 @@ import {
 import availabilityShape from '../../../library/PropTypeShapes/availabilityShape';
 import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import { isResponsive } from '../../../../util/hub';
-import { setDateToTimezone } from '../../../../../server/util/time';
 import transitions from './transitions.scss';
 import dayPickerStyles from '../dayPickerStyles.scss';
 import styles from './styles.scss';

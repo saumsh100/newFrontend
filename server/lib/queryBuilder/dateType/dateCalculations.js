@@ -1,6 +1,5 @@
 
-import { setDateToTimezone, nowToIso } from '@carecru/isomorphic';
-import { getDayStart, getDayEnd } from '../../../../server/util/time';
+import { setDateToTimezone, nowToIso, getDayStart, getDayEnd } from '@carecru/isomorphic';
 import { RELATIVE_BEFORE, RELATIVE_AFTER } from './';
 
 /**

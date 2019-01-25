@@ -2,9 +2,9 @@
 import moment from 'moment-timezone';
 import omit from 'lodash/omit';
 import uniqBy from 'lodash/uniqBy';
+import { sortIntervalAscPredicate, convertIntervalStringToObject } from '@carecru/isomorphic';
 import { Appointment, Family, Patient, SentRecall, Recall } from 'CareCruModels';
 import { generateOrganizedPatients, organizeForOutbox } from '../comms/util';
-import { sortIntervalAscPredicate, convertIntervalStringToObject } from '../../util/time';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import isUndefined from 'lodash/isUndefined';
 import { sequelize } from '../../_models';

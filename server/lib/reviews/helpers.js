@@ -4,6 +4,7 @@ import omit from 'lodash/omit';
 import orderBy from 'lodash/orderBy';
 import groupBy from 'lodash/groupBy';
 import forEach from 'lodash/forEach';
+import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import {
   Appointment,
   Family,
@@ -14,7 +15,6 @@ import {
 } from 'CareCruModels';
 import GLOBALS from '../../config/globals';
 import { organizeForOutbox, generateOrganizedPatients } from '../comms/util';
-import { convertIntervalStringToObject } from '../../util/time';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import Appointments from '../../../client/entities/models/Appointments';
 

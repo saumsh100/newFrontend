@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import moment from 'moment-timezone';
+import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import {
   setLoading,
   setInsights,
@@ -8,7 +9,6 @@ import {
   setToDoReviews,
   setToDoRecalls,
 } from '../reducers/dashboard';
-import { convertIntervalStringToObject } from '../../server/util/time';
 
 export function fetchInsights() {
   return async function (dispatch, getState) {

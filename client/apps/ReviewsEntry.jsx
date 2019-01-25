@@ -9,7 +9,7 @@ import { extendMoment } from 'moment-range';
 import _ from 'lodash';
 import LogRocket from 'logrocket';
 import Immutable from 'immutable';
-import time from '../../server/util/time';
+import * as time from '@carecru/isomorphic';
 import App from './Reviews';
 import configure from '../store/reviewsStore';
 import connectStoreToHost from '../widget/connectStoreToHost';
@@ -66,7 +66,10 @@ loadPatient()(store.dispatch).then(() => {
 
   // We have to create global objects only once
   // And pass them to App on render
-  const appProps = { browserHistory, store };
+  const appProps = {
+    browserHistory,
+    store,
+  };
   const render = (Component) => {
     ReactDOM.render(
       <AppContainer>

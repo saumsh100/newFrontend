@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import difference from 'lodash/difference';
 import logger from '../../../config/logger';
 import {
@@ -11,7 +12,6 @@ import {
   PatientRecall,
 } from 'CareCruModels';
 import produceLikeQuery from '../../shared/produceLikeQuery';
-import { convertIntervalStringToObject } from '../../../util/time';
 import unionAndMerge from '../../../util/unionAndMerge';
 
 // Use to check if the appointment's reason string contains one of the types
@@ -43,7 +43,7 @@ export async function getPatientsThatAreDue(config) {
     patientAttribute,
     codesQuery,
   } = config;
-  
+
   const idsQuery = patientIds || { $not: null };
   const patients = await Patient.findAll({
     attributes: ['id', patientAttribute],

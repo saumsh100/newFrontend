@@ -2,17 +2,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import {
-  Tabs,
-  Tab,
-  Header,
-  SContainer,
-  SHeader,
-  SBody,
-  SMSPreview,
-} from '../../../../library';
+import { convertIntervalStringToObject } from '@carecru/isomorphic';
+import { Tabs, Tab, Header, SContainer, SHeader, SBody, SMSPreview } from '../../../../library';
 import createReminderText from '../../../../../../server/lib/reminders/createReminderText';
-import { convertIntervalStringToObject } from '../../../../../../server/util/time';
 import EmailPreview from '../../../Shared/EmailPreview';
 import CommsPreview, { CommsPreviewSection } from '../../../Shared/CommsPreview';
 // import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
@@ -27,9 +19,7 @@ const wordMap = {
   email: 'Email',
 };
 
-function ReminderSMSPreview({
-  patient, account, appointment, reminder,
-}) {
+function ReminderSMSPreview({ patient, account, appointment, reminder }) {
   const reminderMessage = createReminderText({
     patient,
     account,
@@ -44,10 +34,7 @@ function ReminderSMSPreview({
 
   return (
     <div className={styles.smsPreviewWrapper}>
-      <SMSPreview
-        from={formatPhoneNumber(smsPhoneNumber)}
-        message={reminderMessage}
-      />
+      <SMSPreview from={formatPhoneNumber(smsPhoneNumber)} message={reminderMessage} />
     </div>
   );
 }
@@ -56,20 +43,13 @@ class ReminderPreview extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      index: 0,
-    };
+    this.state = { index: 0 };
   }
 
   componentWillReceiveProps(nextProps) {
     // If new reminder is selected, go to Unconfirmed Tab
-    if (
-      nextProps.reminder.id !== this.props.reminder.id &&
-      this.state.index !== 0
-    ) {
-      this.setState({
-        index: 0,
-      });
+    if (nextProps.reminder.id !== this.props.reminder.id && this.state.index !== 0) {
+      this.setState({ index: 0 });
     }
   }
 
@@ -145,21 +125,9 @@ class ReminderPreview extends Component {
             <Header title="Preview" />
           </div>
           <div className={styles.tabsContainer}>
-            <Tabs
-              index={index}
-              onChange={i => this.setState({ index: i })}
-              noUnderLine
-            >
-              <Tab
-                label="Unconfirmed"
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
-              <Tab
-                label="Confirmed"
-                className={styles.tab}
-                activeClass={styles.activeTab}
-              />
+            <Tabs index={index} onChange={i => this.setState({ index: i })} noUnderLine>
+              <Tab label="Unconfirmed" className={styles.tab} activeClass={styles.activeTab} />
+              <Tab label="Confirmed" className={styles.tab} activeClass={styles.activeTab} />
             </Tabs>
           </div>
         </SHeader>

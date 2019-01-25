@@ -3,21 +3,9 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  ordinalSuffix,
-  intervalToNumType,
-  numTypeToInterval,
-} from '../../../../../../server/util/time';
+import { ordinalSuffix, intervalToNumType, numTypeToInterval } from '@carecru/isomorphic';
 import { updateEntityRequest } from '../../../../../thunks/fetchEntities';
-import {
-  Icon,
-  Grid,
-  Row,
-  Col,
-  Toggle,
-  Input,
-  DropdownSelect,
-} from '../../../../library';
+import { Icon, Grid, Row, Col, Toggle, Input, DropdownSelect } from '../../../../library';
 import { convertPrimaryTypesToKey } from '../../../Shared/util/primaryTypes';
 import IconCircle from '../../../Shared/IconCircle';
 import TinyDeleteButton from '../../../Shared/TinyDeleteButton';
@@ -38,16 +26,28 @@ const wordMap = {
   email_sms: 'Email & SMS',
 };
 
-const typeOptions = [
-  { label: 'Hours', value: 'hours' },
-  { label: 'Days', value: 'days' },
-];
+const typeOptions = [{
+  label: 'Hours',
+  value: 'hours',
+}, {
+  label: 'Days',
+  value: 'days',
+}];
 
 const primaryTypesOptions = [
-  { label: 'Email', value: 'email' },
-  { label: 'SMS', value: 'sms' },
+  {
+    label: 'Email',
+    value: 'email',
+  },
+  {
+    label: 'SMS',
+    value: 'sms',
+  },
   // { label: 'Voice', value: 'phone' },
-  { label: 'Email & SMS', value: 'email_sms' },
+  {
+    label: 'Email & SMS',
+    value: 'email_sms',
+  },
 ];
 
 function SmallIconCircle(props) {
@@ -59,11 +59,7 @@ function SmallIconCircle(props) {
     ? styles.smallReminderSelectWrapperCircleSelected
     : styles.smallReminderSelectWrapperCircle;
 
-  return (
-    <div className={wrapperClass}>
-      {icon ? <Icon icon={icon} type="solid" /> : null}
-    </div>
-  );
+  return <div className={wrapperClass}>{icon ? <Icon icon={icon} type="solid" /> : null}</div>;
 }
 
 function AdvancedSettingsButton(props) {
@@ -75,9 +71,7 @@ class RemindersItem extends Component {
     super(props);
 
     const { num } = intervalToNumType(props.reminder.interval);
-    this.state = {
-      number: num,
-    };
+    this.state = { number: num };
 
     this.editReminder = this.editReminder.bind(this);
     this.deleteReminder = this.deleteReminder.bind(this);
@@ -93,9 +87,7 @@ class RemindersItem extends Component {
       return;
     }
 
-    this.setState({
-      number: num,
-    });
+    this.setState({ number: num });
   }
 
   componentWillUpdate(nextProps) {
@@ -106,9 +98,7 @@ class RemindersItem extends Component {
       return;
     }
 
-    this.setState({
-      number: newNumType.num,
-    });
+    this.setState({ number: newNumType.num });
   }
 
   editReminder(e) {
@@ -139,9 +129,7 @@ class RemindersItem extends Component {
     // So that it doesn't bubble up and try to select this reminder
     e.stopPropagation();
     e.preventDefault();
-    const {
-      reminder, account, isSelected, selectReminder,
-    } = this.props;
+    const { reminder, account, isSelected, selectReminder } = this.props;
     const { num, type } = intervalToNumType(reminder.interval);
     const sure = confirm(`Are you sure you want to delete the ${num} ${type} reminder?`);
     if (!sure) {
@@ -279,22 +267,14 @@ class RemindersItem extends Component {
     const { type } = intervalToNumType(interval);
     const { number } = this.state;
 
-    const dropdownSelectClass = isSelected
-      ? styles.dropdownSelectSelected
-      : styles.dropdownSelect;
+    const dropdownSelectClass = isSelected ? styles.dropdownSelectSelected : styles.dropdownSelect;
 
     return (
       <TouchPointItem
         selected={isSelected}
         className={styles.reminderListItem}
         onClick={() => onSelectReminder(reminder.id)}
-        toggleComponent={
-          <Toggle
-            color="green"
-            checked={isActive}
-            onChange={this.editReminder}
-          />
-        }
+        toggleComponent={<Toggle color="green" checked={isActive} onChange={this.editReminder} />}
         labelComponent={
           <TouchPointLabel
             title={`${ordinalSuffix(index + 1)} Reminder`}
@@ -307,11 +287,7 @@ class RemindersItem extends Component {
               <IconCircle icon={icon} selected={isSelected} />
             </div>
             <div
-              className={
-                isSelected
-                  ? styles.secondaryLinesBoxSelected
-                  : styles.secondaryLinesBox
-              }
+              className={isSelected ? styles.secondaryLinesBoxSelected : styles.secondaryLinesBox}
             >
               <div className={styles.smallIconContainer}>
                 <SmallIconCircle icon="bell" selected={isSelected} />
@@ -360,10 +336,7 @@ class RemindersItem extends Component {
                 onClick={() => onSelectAdvancedSettings(reminder.id)}
               />
             ) : null}
-            <TinyDeleteButton
-              className={styles.deleteButton}
-              onClick={this.deleteReminder}
-            />
+            <TinyDeleteButton className={styles.deleteButton} onClick={this.deleteReminder} />
           </div>
         }
       />
@@ -378,9 +351,7 @@ RemindersItem.propTypes = {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    {
-      updateEntityRequest,
-    },
+    { updateEntityRequest },
     dispatch,
   );
 }

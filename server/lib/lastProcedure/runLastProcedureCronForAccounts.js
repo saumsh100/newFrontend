@@ -1,5 +1,6 @@
 
 import keyBy from 'lodash/keyBy';
+import { iso } from '@carecru/isomorphic';
 import { DeliveredProcedure } from 'CareCruModels';
 import {
   getAccountCronConfigurations,
@@ -7,7 +8,6 @@ import {
 } from '../AccountCronConfigurations';
 import { getAccountConnectorConfigurations } from '../accountConnectorConfigurations';
 import updateLastProcedureForAccount from './updateLastProcedureForAccount';
-import { iso } from '../../util/time';
 import logger from '../../config/logger';
 
 /**

@@ -1,5 +1,6 @@
 
 import moment from 'moment';
+import { time } from '@carecru/isomorphic';
 import {
   Account,
   Address,
@@ -16,7 +17,6 @@ import {
 } from '../../server/_models';
 import { saveWeeklyScheduleWithDefaults } from '../../server/_models/WeeklySchedule';
 import wipeModel, { wipeAllModels } from './wipeModel';
-import { time } from '../../server/util/time';
 
 const uuid = require('uuid').v4;
 
