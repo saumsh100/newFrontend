@@ -9,6 +9,7 @@ import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import accountModel from '../../../../entities/models/Account';
 import PreferencesForm from './PreferencesForm';
 import IntervalForm from './IntervalForm';
+import ChairSchedulingForm from './ChairSchedulingForm';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
 
@@ -23,9 +24,7 @@ class OnlineBooking extends Component {
     const valuesMap = Map(values);
     const modifiedAccount = activeAccount.merge(valuesMap);
     const alert = {
-      success: {
-        body: 'Booking Widget Preferences Updated',
-      },
+      success: { body: 'Booking Widget Preferences Updated' },
       error: {
         Title: 'Preferences Error',
         body: 'Booking Widget Update Failed',
@@ -69,6 +68,10 @@ class OnlineBooking extends Component {
           <Header title="Interval Options" contentHeader />
           <IntervalForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
         </div>
+        <div className={styles.formContainer}>
+          <Header title="Chair Scheduling" contentHeader />
+          <ChairSchedulingForm activeAccount={activeAccount} handleSubmit={this.handleSubmit} />
+        </div>
       </SettingsCard>
     );
   }
@@ -81,23 +84,16 @@ OnlineBooking.propTypes = {
 
 function mapStateToProps({ entities, auth }) {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
-
-  return activeAccount
-    ? {
-      activeAccount,
-    }
-    : {};
+  return activeAccount ? { activeAccount } : {};
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      updateEntityRequest,
-    },
-    dispatch,
-  );
+  return bindActionCreators({ updateEntityRequest }, dispatch);
 }
 
-const enhance = connect(mapStateToProps, mapDispatchToProps);
+const enhance = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+);
 
 export default enhance(OnlineBooking);

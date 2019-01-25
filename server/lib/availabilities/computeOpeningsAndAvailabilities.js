@@ -243,6 +243,10 @@ export function computeOpeningsForPractitioner(options) {
 
       startDate,
       endDate,
+
+      // Allows the account to customize whether it is factoring in any appointments
+      // in the chair that the practitioner is assigned to
+      useChairAppointments: account.isChairSchedulingEnabled,
     }),
   }), {});
 }

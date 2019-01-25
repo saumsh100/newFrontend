@@ -156,6 +156,12 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
     },
 
+    isChairSchedulingEnabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+
     omitChairIds: {
       type: DataTypes.ARRAY(DataTypes.UUID),
       defaultValue: [],

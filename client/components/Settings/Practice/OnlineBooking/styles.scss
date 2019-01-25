@@ -15,6 +15,7 @@
 }
 
 .formContainer {
+  padding-bottom: 20px;
   &_pickerField {
     margin-right: 10px;
   }
@@ -37,4 +38,10 @@
   font-weight: $large-weight;
   font-size: $medium-font;
   padding-bottom: 5px;
+}
+
+.chairSchedulingToggleWrapper {
+  > div > div {
+    margin-left: 20px;
+  }
 }

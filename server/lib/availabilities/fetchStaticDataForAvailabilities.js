@@ -27,7 +27,7 @@ export default async function fetchStaticDataForAvailabilities({ accountId, serv
   const practitionerIdsQuery = practitionerId || { $not: null };
   const account = await Account.unscoped().findOne({
     where: { id: accountId },
-    attributes: ['id', 'unit', 'timeInterval', 'timezone', 'name', 'suggestedChairId'],
+    attributes: ['id', 'unit', 'timeInterval', 'timezone', 'name', 'suggestedChairId', 'isChairSchedulingEnabled'],
     include: [
       {
         // Get the selected service

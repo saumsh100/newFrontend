@@ -49,6 +49,7 @@ const AccountSchema = {
   massOnlineEmailSentDate: null,
   suggestedChairId: null,
   sendUnconfirmedReviews: null,
+  isChairSchedulingEnabled: null,
   omitChairIds: [],
   omitPractitionerIds: [],
 };
