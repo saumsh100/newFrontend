@@ -1,6 +1,6 @@
 
 import { Op } from 'sequelize';
-import { dateToRelativeTime, setDateToTimezone } from '@carecru/isomorphic';
+import { dateToRelativeTime, setDateToTimezone, setDateAndTZ } from '@carecru/isomorphic';
 import {
   Account,
   Chat,
@@ -20,7 +20,6 @@ import produceOutsideOfficeHours from '../../lib/schedule/produceOutsideOfficeHo
 import { NEW_MESSAGE, UPDATE_CHAT, MARK_READ, MARK_UNREAD } from './consts';
 import getNextStartTime from '../../lib/schedule/handleNextStartTimeOpenDays';
 import fetchAndComputeFinalDailySchedules from '../../lib/schedule/fetchAndComputeFinalDailySchedules';
-import setDateAndTZ from '../../../iso/helpers/dateTimezone/setDateAndTZ';
 import { isLimitReachedForPhoneNumber } from '../schedule/limitOutOfOfficeHoursReplays';
 
 /**
