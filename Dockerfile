@@ -54,7 +54,6 @@ COPY scripts/ /app/scripts/
 COPY server/ /app/server/
 COPY tests/ /app/tests/
 COPY webpack/ /app/webpack/
-COPY iso/ /app/iso/
 
 COPY statics/favicons /app/statics/favicons/
 COPY statics/fontawesome /app/statics/fontawesome/
