@@ -3,7 +3,6 @@ import { dateToRelativeTime, setDateToTimezone, addOffset } from '@carecru/isomo
 import getNextStartTime from '../../lib/schedule/handleNextStartTimeOpenDays';
 import { getMessageFromTemplates } from '../../services/communicationTemplate';
 import fetchAndComputeFinalDailySchedules from './fetchAndComputeFinalDailySchedules';
-import { accountId } from '../../../tests/util/seedTestUsers';
 
 /**
  * Function used to generate a response to the patient when he/she contact the clinic
@@ -29,7 +28,7 @@ export default async function produceOutsideOfficeHours({
   const startDate = setDateToTimezone(currentDate, timezone);
 
   const scheduleList = await fetchAndComputeFinalDailySchedules({
-    accountId,
+    accountId: id,
     timezone,
     startDate,
     endDate: setDateToTimezone(endDate.toISOString(), timezone),
