@@ -1,3 +1,4 @@
+
 const moment = require('moment');
 
 /**
@@ -10,7 +11,7 @@ const moment = require('moment');
  * @param updatePatient
  */
 
-async function calcFirstNextLastAppointment(apps, updatePatient) {
+async function calcFirstNextLastAppointment(apps, updatePatient, patients) {
   const today = new Date();
   // loops through the entire set of appointments
   let j = 0;
@@ -28,32 +29,33 @@ async function calcFirstNextLastAppointment(apps, updatePatient) {
 
     let count = 0;
     let i = j;
-
     // loops through a subset of appointments
     while (i < apps.length && currentPatient === apps[i].patientId) {
-      count += 1;
+      if (!apps[i].isCancelled && !apps[i].isDeleted && !apps[i].isMissed && !apps[i].deletedAt) {
+        count += 1;
 
-      const startDate = apps[i].startDate;
+        const startDate = apps[i].startDate;
 
-      // sets the next appointment that is closest to today but in the future
-      if (moment(startDate).isAfter(today)) {
-        nextApptDate = apps[i].startDate;
-        nextApptId = apps[i].id;
+        // sets the next appointment that is closest to today but in the future
+        if (moment(startDate).isAfter(today)) {
+          nextApptDate = apps[i].startDate;
+          nextApptId = apps[i].id;
 
-      // sets first and last appointment to be equal if there is only one past appointment
-      } else if (moment(startDate).isBefore(today) && count === 1) {
-        lastApptDate = apps[i].startDate;
-        lastApptId = apps[i].id;
+          // sets first and last appointment to be equal if there is only one past appointment
+        } else if (moment(startDate).isBefore(today) && count === 1) {
+          lastApptDate = apps[i].startDate;
+          lastApptId = apps[i].id;
 
-        firstApptDate = apps[i].startDate;
-        firstApptId = apps[i].id;
+          firstApptDate = apps[i].startDate;
+          firstApptId = apps[i].id;
 
-      // set last appointment that is closest to today but in the past
-      } else if (moment(startDate).isBefore(today) && !lastApptDate) {
-        lastApptDate = apps[i].startDate;
-        lastApptId = apps[i].id;
+          // set last appointment that is closest to today but in the past
+        } else if (moment(startDate).isBefore(today) && !lastApptDate) {
+          lastApptDate = apps[i].startDate;
+          lastApptId = apps[i].id;
 
-        firstApptId = null;
+          firstApptId = null;
+        }
       }
 
       i += 1;
@@ -79,7 +81,7 @@ async function calcFirstNextLastAppointment(apps, updatePatient) {
         lastApptDate,
       };
 
-    // update the current patient of this subset with the calculated data in the appointments object
+      // update the current patient of this subset with the calculated data in the appointments object
       await updatePatient(currentPatient, appointmentsObj);
     }
 
@@ -88,6 +90,4 @@ async function calcFirstNextLastAppointment(apps, updatePatient) {
   }
 }
 
-module.exports = {
-  calcFirstNextLastAppointment,
-};
+module.exports = { calcFirstNextLastAppointment };

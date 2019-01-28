@@ -15,17 +15,13 @@ const makeApptData = (data = {}) => Object.assign({
   practitionerId,
 }, data);
 
-const makePatientData = (data = {}) => Object.assign({
-  accountId,
-}, data);
+const makePatientData = (data = {}) => Object.assign({ accountId }, data);
 
 const date = (y, m, d, h) => (new Date(y, m, d, h)).toISOString();
-const dates = (y, m, d, h) => {
-  return {
-    startDate: date(y, m, d, h),
-    endDate: date(y, m, d, h + 1),
-  };
-};
+const dates = (y, m, d, h) => ({
+  startDate: date(y, m, d, h),
+  endDate: date(y, m, d, h + 1),
+});
 
 describe('First Next Last Appointment Calculation', () => {
   beforeEach(async () => {
@@ -49,13 +45,25 @@ describe('First Next Last Appointment Calculation', () => {
 
     beforeEach(async () => {
       patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient' }),
-        makePatientData({ firstName: 'Recent', lastName: 'Patient' }),
+        makePatientData({
+          firstName: 'Old',
+          lastName: 'Patient',
+        }),
+        makePatientData({
+          firstName: 'Recent',
+          lastName: 'Patient',
+        }),
       ]);
 
       appointments = await Appointment.bulkCreate([
-        makeApptData({ patientId: patients[0].id, ...dates(2014, 7, 5, 8) }),
-        makeApptData({ patientId: patients[1].id, ...dates(2016, 7, 5, 9) }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2014, 7, 5, 8),
+        }),
+        makeApptData({
+          patientId: patients[1].id,
+          ...dates(2016, 7, 5, 9),
+        }),
       ]);
     });
 
@@ -63,23 +71,18 @@ describe('First Next Last Appointment Calculation', () => {
       await wipeAllModels();
     });
 
-    test('should set patients firstApptId/date and lastApptId/date', async() => {
-      await calcFirstNextLastAppointment(appointments,
+    test('should set patients firstApptId/date and lastApptId/date', async () => {
+      await calcFirstNextLastAppointment(
+        appointments,
         async (currentPatient, appointmentsObj) => {
           try {
-            await Patient.update({
-              ...appointmentsObj,
-            },
-              {
-                where: {
-                  id: currentPatient,
-                },
-              });
+            await Patient.update(
+              { ...appointmentsObj },
+              { where: { id: currentPatient } },
+            );
 
             const patient = await Patient.findOne({
-              where: {
-                id: currentPatient,
-              },
+              where: { id: currentPatient },
               raw: true,
             });
 
@@ -91,26 +94,22 @@ describe('First Next Last Appointment Calculation', () => {
           } catch (err) {
             console.log(err);
           }
-        });
+        },
+      );
     });
 
     test('nextApptId/date should be null', async () => {
-      await calcFirstNextLastAppointment(appointments,
+      await calcFirstNextLastAppointment(
+        appointments,
         async (currentPatient, appointmentsObj) => {
           try {
-            await Patient.update({
-              ...appointmentsObj,
-            },
-              {
-                where: {
-                  id: currentPatient,
-                },
-              });
+            await Patient.update(
+              { ...appointmentsObj },
+              { where: { id: currentPatient } },
+            );
 
             const patient = await Patient.findOne({
-              where: {
-                id: currentPatient,
-              },
+              where: { id: currentPatient },
               raw: true,
             });
 
@@ -119,7 +118,8 @@ describe('First Next Last Appointment Calculation', () => {
           } catch (err) {
             console.log(err);
           }
-        });
+        },
+      );
     });
   });
 
@@ -129,11 +129,17 @@ describe('First Next Last Appointment Calculation', () => {
 
     beforeEach(async () => {
       patients = await Patient.bulkCreate([
-        makePatientData({ firstName: 'Old', lastName: 'Patient' }),
+        makePatientData({
+          firstName: 'Old',
+          lastName: 'Patient',
+        }),
       ]);
 
       appointments = await Appointment.bulkCreate([
-        makeApptData({ patientId: patients[0].id, ...dates(2018, 7, 5, 8) }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2018, 7, 5, 8),
+        }),
       ]);
     });
 
@@ -142,22 +148,17 @@ describe('First Next Last Appointment Calculation', () => {
     });
 
     test('nextApptId/date and firstApptId/date and lastApptId/date should be null', async () => {
-      await calcFirstNextLastAppointment(appointments,
+      await calcFirstNextLastAppointment(
+        appointments,
         async (currentPatient, appointmentsObj) => {
           try {
-            await Patient.update({
-              ...appointmentsObj,
-            },
-              {
-                where: {
-                  id: currentPatient,
-                },
-              });
+            await Patient.update(
+              { ...appointmentsObj },
+              { where: { id: currentPatient } },
+            );
 
             const patient = await Patient.findOne({
-              where: {
-                id: currentPatient,
-              },
+              where: { id: currentPatient },
               raw: true,
             });
 
@@ -172,7 +173,8 @@ describe('First Next Last Appointment Calculation', () => {
           } catch (err) {
             console.log(err);
           }
-        });
+        },
+      );
     });
   });
 
@@ -182,13 +184,25 @@ describe('First Next Last Appointment Calculation', () => {
 
     beforeEach(async () => {
       patients = await Patient.bulkCreate([
-        makePatientData({firstName: 'Old', lastName: 'Patient'}),
+        makePatientData({
+          firstName: 'Old',
+          lastName: 'Patient',
+        }),
       ]);
 
       appointments = await Appointment.bulkCreate([
-        makeApptData({ patientId: patients[0].id, ...dates(2018, 7, 5, 8) }),
-        makeApptData({ patientId: patients[0].id, ...dates(2015, 7, 5, 8) }),
-        makeApptData({ patientId: patients[0].id, ...dates(2016, 7, 5, 8) }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2018, 7, 5, 8),
+        }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2015, 7, 5, 8),
+        }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2016, 7, 5, 8),
+        }),
       ]);
     });
 
@@ -197,22 +211,17 @@ describe('First Next Last Appointment Calculation', () => {
     });
 
     test('should set nextApptId, firstApptId and lastApptId', async () => {
-      await calcFirstNextLastAppointment(appointments,
+      await calcFirstNextLastAppointment(
+        appointments,
         async (currentPatient, appointmentsObj) => {
           try {
-            await Patient.update({
-              ...appointmentsObj,
-            },
-              {
-                where: {
-                  id: currentPatient,
-                },
-              });
+            await Patient.update(
+              { ...appointmentsObj },
+              { where: { id: currentPatient } },
+            );
 
             const patient = await Patient.findOne({
-              where: {
-                id: currentPatient,
-              },
+              where: { id: currentPatient },
               raw: true,
             });
 
@@ -232,9 +241,131 @@ describe('First Next Last Appointment Calculation', () => {
             expect(patient.lastApptId).not.toBe(appointmentsObj.firstApptId);
             expect(patient.lastApptDate).not.toBe(appointmentsObj.firstApptDate);
           } catch (err) {
-            console.log(err)
+            console.log(err);
           }
-        });
+        },
+      );
+    });
+  });
+
+  describe('#calcPatients First/Next/Last Cancelled/Deleted Appointment ', () => {
+    let appointments;
+    let patients;
+
+    beforeEach(async () => {
+      patients = await Patient.bulkCreate([
+        makePatientData({
+          firstName: 'Old',
+          lastName: 'Patient',
+        }),
+      ]);
+
+      appointments = await Appointment.bulkCreate([
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2018, 7, 5, 8),
+          isCancelled: true,
+        }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2015, 7, 5, 8),
+          isDeleted: true,
+        }),
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2016, 7, 5, 8),
+          deletedAt: Date.now(),
+        }),
+      ]);
+    });
+
+    afterAll(async () => {
+      await wipeAllModels();
+    });
+
+    test('should set nextApptId, firstApptId and lastApptId to NULL', async () => {
+      await calcFirstNextLastAppointment(
+        appointments,
+        async (currentPatient, appointmentsObj) => {
+          try {
+            await Patient.update(
+              { ...appointmentsObj },
+              { where: { id: currentPatient } },
+            );
+
+            const patient = await Patient.findOne({
+              where: { id: currentPatient },
+              raw: true,
+            });
+
+            expect(patient.nextApptId).toBe(null);
+            expect(patient.nextApptDate).toBe(null);
+
+
+            expect(patient.firstApptId).toBe(null);
+            expect(patient.firstApptDate).toBe(null);
+
+            expect(patient.lastApptId).toBe(null);
+            expect(patient.lastApptDate).toBe(null);
+          } catch (err) {
+            console.log(err);
+          }
+        },
+      );
+    });
+  });
+  describe('#calcPatients Resetting Next Appointment when an appointment is deleted', () => {
+    let appointments;
+    let patients;
+
+    beforeEach(async () => {
+      patients = await Patient.bulkCreate([
+        makePatientData({
+          firstName: 'Old',
+          lastName: 'Patient',
+        }),
+      ]);
+
+      appointments = await Appointment.bulkCreate([
+        makeApptData({
+          patientId: patients[0].id,
+          ...dates(2019, 7, 5, 8),
+          deletedAt: Date.now(),
+        }),
+      ]);
+
+      await Patient.update({
+        nextApptDate: appointments[0].startDate,
+        nextApptId: appointments[0].id,
+      }, { where: { id: patients[0].id } });
+    });
+
+    afterAll(async () => {
+      await wipeAllModels();
+    });
+
+    test('should set nextApptId and nextApptDate to NULL', async () => {
+      await calcFirstNextLastAppointment(
+        appointments,
+        async (currentPatient, appointmentsObj) => {
+          try {
+            await Patient.update(
+              { ...appointmentsObj },
+              { where: { id: currentPatient } },
+            );
+
+            const patient = await Patient.findOne({
+              where: { id: currentPatient },
+              raw: true,
+            });
+
+            expect(patient.nextApptId).toBe(null);
+            expect(patient.nextApptDate).toBe(null);
+          } catch (err) {
+            console.log(err);
+          }
+        },
+      );
     });
   });
 });
