@@ -213,7 +213,7 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
       return error;
     });
 
-    throw { docs: response, errors: errorsResponse };
+    throw { docs: response || [], errors: errorsResponse };
   }
 
   return response;
