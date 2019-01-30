@@ -21,7 +21,10 @@ export default function getNextStartTime({
       dateDiffInMinutes(
         new Date(daySchedule.startTime),
         new Date(daySchedule.endTime),
-      ) > MAX_DEFAULT_OPEN_WINDOW);
+      ) > MAX_DEFAULT_OPEN_WINDOW &&
+      // exclude if its after the buffered endTime of the day
+      new Date(addBuffer(daySchedule.endTime, bufferAfterClosing)).getTime() > Date.now(),
+    );
 
   if (!filteredSchedule) {
     throw new Error('Practice has no open office hours');
