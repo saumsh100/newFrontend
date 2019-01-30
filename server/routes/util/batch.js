@@ -89,7 +89,7 @@ async function preValidate(dataArray, Model, extraSetValidators = [], extraModel
     validatedDocs = filteredValidatedDocs;
   }
 
-  return { errors, docs: validatedDocs };
+  return { errors, docs: validatedDocs || [] };
 }
 
 export function batchDelete(ids, Model) {
@@ -157,7 +157,7 @@ export async function batchUpdate(dataArray, Model, modelType, preUpdateFunction
   }
 
   if (errors.length) {
-    throw { docs: savedModels, errors };
+    throw { docs: savedModels || [], errors };
   }
 
   return savedModels;
