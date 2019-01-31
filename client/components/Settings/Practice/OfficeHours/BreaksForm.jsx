@@ -6,7 +6,7 @@ import moment from 'moment';
 import pick from 'lodash/pick';
 import { connect } from 'react-redux';
 import mapValues from 'lodash/mapValues';
-import { dateFormatter, timeOptionsWithTimezone } from '@carecru/isomorphic';
+import { setDateToTimezone, timeOptionsWithTimezone } from '@carecru/isomorphic';
 import {
   Button,
   IconButton,
@@ -42,8 +42,8 @@ function BreaksForm({ weeklySchedule, onSubmit, breaksName, dataId, breaksIndex,
   const initialValues = mapValues(parsedWeeklySchedule, (day) => {
     const breaks = day.breaks || [];
     const formatedBreaks = breaks.map(({ startTime, endTime }) => ({
-      startTime: dateFormatter(startTime, timezone),
-      endTime: dateFormatter(endTime, timezone),
+      startTime: setDateToTimezone(startTime, timezone).toISOString(),
+      endTime: setDateToTimezone(endTime, timezone).toISOString(),
     }));
     return { breaks: formatedBreaks };
   });

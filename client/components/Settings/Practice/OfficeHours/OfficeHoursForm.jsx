@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import pick from 'lodash/pick';
 import mapValues from 'lodash/mapValues';
 import { connect } from 'react-redux';
-import { timeOptionsWithTimezone, dateFormatter } from '@carecru/isomorphic';
+import { timeOptionsWithTimezone, setDateToTimezone } from '@carecru/isomorphic';
 import { Grid, Row, Col, Form, FormSection, Field, IconButton } from '../../../library/index';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import styles from './styles.scss';
@@ -39,8 +39,8 @@ function OfficeHoursForm({
   // Need to do this so editing breaks does not screw up initialValues here
   const initialValues = mapValues(parsedWeeklySchedule, ({ isClosed, startTime, endTime }) => ({
     isClosed,
-    startTime: dateFormatter(startTime, timezone),
-    endTime: dateFormatter(endTime, timezone),
+    startTime: setDateToTimezone(startTime, timezone).toISOString(),
+    endTime: setDateToTimezone(endTime, timezone).toISOString(),
   }));
 
   const DayHoursForm = ({ day }) => {
@@ -162,7 +162,6 @@ OfficeHoursForm.defaultProps = {
   hoursIndex: 0,
   dataId: '',
   openModal: e => e,
-  account: null,
 };
 
 function mapStateToProps({ form, auth }, { formName }) {
