@@ -131,7 +131,10 @@ export async function sendMessage(cellPhoneNumber, message, accountId, user = nu
 
   const chat = await Chat.findOne({
     raw: true,
-    where: { patientId: patient.id },
+    where: {
+      patientId: patient.id,
+      patientPhoneNumber: cellPhoneNumber,
+    },
   }) || await Chat.findOne({
     raw: true,
     where: {
