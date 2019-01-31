@@ -2,12 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { PointOfContactBadge } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import RecallDropDowns from '../../Shared/RecallDropDowns';
 import ReminderDropDowns from '../../Shared/ReminderDropDowns';
 import { validDateValue } from '../../Shared/helpers';
-import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import { patientShape } from '../../../library/PropTypeShapes/index';
 import styles from './styles.scss';
 
@@ -33,14 +33,14 @@ export default function DataTable(props) {
 
         <InfoDump
           label="PRIMARY-NUMBER"
-          data={FormatPhoneNumber(patient.mobilePhoneNumber)}
+          data={formatPhoneNumber(patient.mobilePhoneNumber)}
           className={styles.infoDump}
         >
           {() => <PointOfContactBadge patientId={patient.id} channel="phone" />}
         </InfoDump>
         <InfoDump
           label="SECONDARY-NUMBER"
-          data={FormatPhoneNumber(secondaryNumber)}
+          data={formatPhoneNumber(secondaryNumber)}
           className={styles.infoDump}
         />
       </div>

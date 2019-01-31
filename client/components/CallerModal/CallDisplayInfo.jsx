@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { formatPhoneNumber } from '../library/util/Formatters';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import styles from './styles.scss';
 
 export default function CallDisplayInfo({ call }) {
@@ -10,9 +10,7 @@ export default function CallDisplayInfo({ call }) {
       <div className={styles.callInfo_content}>
         <div className={styles.callInfo_body}>
           <div className={styles.callInfo_desc}>Number: </div>
-          <div className={styles.callInfo_data}>
-            {formatPhoneNumber(call.callerNum)}
-          </div>
+          <div className={styles.callInfo_data}>{formatPhoneNumber(call.callerNum)}</div>
         </div>
         <div className={styles.callInfo_body}>
           <div className={styles.callInfo_desc}>City: </div>
@@ -49,6 +47,4 @@ export default function CallDisplayInfo({ call }) {
   );
 }
 
-CallDisplayInfo.propTypes = {
-  call: PropTypes.objectOf(PropTypes.any),
-};
+CallDisplayInfo.propTypes = { call: PropTypes.objectOf(PropTypes.any) };

@@ -2,7 +2,6 @@
 import moment from 'moment';
 import globals from '../config/globals';
 import { validateAccountIdPmsId } from '../util/validators';
-import Appointemnts from '../../client/entities/models/Appointments';
 
 export default function (sequelize, DataTypes) {
   const Appointment = sequelize.define('Appointment', {
@@ -256,7 +255,7 @@ export default function (sequelize, DataTypes) {
       where: {
         accountId: this.accountId,
         patientId: this.patientId,
-        ...Appointemnts.getCommonSearchAppointmentSchema({ isPatientConfirmed: false }),
+        ...Appointment.getCommonSearchAppointmentSchema({ isPatientConfirmed: false }),
         startDate: {
           $gte: this.startDate,
           $lte: moment(this.startDate).add(

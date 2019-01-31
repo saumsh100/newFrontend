@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import {
   Card,
   Icon,
@@ -14,7 +15,6 @@ import {
   IconButton,
   PointOfContactBadge,
 } from '..';
-import { formatPhoneNumber } from '../../library/util/Formatters';
 import { patientShape, appointmentShape, practitionerShape } from '../PropTypeShapes/index';
 import ChairModel from '../../../entities/models/Chair';
 import styles from './styles.scss';

@@ -2,11 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Grid, Row, Col, PointOfContactBadge } from '../../../library';
 import PatientAvatarTitle from '../Shared/PatientAvatarTitle';
 import Content from '../Shared/Content';
 import PatientModel from '../../../../entities/models/Patient';
-import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import styles from './styles.scss';
 
 const genderMap = {
@@ -44,7 +44,7 @@ export default function About({ patient }) {
             <Col xs={12}>
               <Content
                 title="Cellphone Number"
-                value={FormatPhoneNumber(patient.cellPhoneNumber) || 'n/a'}
+                value={formatPhoneNumber(patient.cellPhoneNumber) || 'n/a'}
               >
                 {() =>
                   patient.cellPhoneNumber && (

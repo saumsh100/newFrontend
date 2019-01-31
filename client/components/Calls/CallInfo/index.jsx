@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import InfoDump from '../../Patients/Shared/InfoDump';
-import { formatPhoneNumber } from '../../library/util/Formatters';
 import { Form, Field } from '../../library';
 import styles from './styles.scss';
 
@@ -45,13 +45,14 @@ class CallInfo extends Component {
       .then(
         (data) => {
           const geoData = data.results[0];
-          this.setState({ loaded: true, ...geoData.geometry.location });
+          this.setState({
+            loaded: true,
+            ...geoData.geometry.location,
+          });
         },
         (error) => {
           console.error(error);
-          this.setState({
-            loaded: false,
-          });
+          this.setState({ loaded: false });
         },
       );
   }
@@ -66,9 +67,7 @@ class CallInfo extends Component {
     const { call } = this.props;
 
     const callerId =
-      call.callerCity && call.callerState
-        ? `${call.callerCity}, ${call.callerState}`
-        : null;
+      call.callerCity && call.callerState ? `${call.callerCity}, ${call.callerState}` : null;
 
     return (
       <div className={styles.leftPanel}>
@@ -78,14 +77,8 @@ class CallInfo extends Component {
           <InfoDump label="Initial Source" data={call.callSource} />
         </div>
         <div className={styles.row}>
-          <InfoDump
-            label="Received"
-            data={moment(call.startTime).format('MMM DD, YYYY h:mm A')}
-          />
-          <InfoDump
-            label="Phone number"
-            data={formatPhoneNumber(call.callerNum)}
-          />
+          <InfoDump label="Received" data={moment(call.startTime).format('MMM DD, YYYY h:mm A')} />
+          <InfoDump label="Phone number" data={formatPhoneNumber(call.callerNum)} />
         </div>
         <div className={styles.row}>
           <InfoDump label="Total calls" data={call.totalCalls} />
@@ -110,9 +103,7 @@ class CallInfo extends Component {
   renderRightPanel() {
     const { call } = this.props;
 
-    const initialValues = {
-      wasApptBooked: call.wasApptBooked,
-    };
+    const initialValues = { wasApptBooked: call.wasApptBooked };
 
     return (
       <div className={styles.rightPanel}>
@@ -160,9 +151,7 @@ AppBookedForm.propTypes = {
   initialValues: PropTypes.objectOf(PropTypes.bool),
 };
 
-Marker.propTypes = {
-  text: PropTypes.string,
-};
+Marker.propTypes = { text: PropTypes.string };
 
 CallInfo.propTypes = {
   call: PropTypes.objectOf(PropTypes.any),

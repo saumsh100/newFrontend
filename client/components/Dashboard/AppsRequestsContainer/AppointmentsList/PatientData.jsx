@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Icon } from '../../../library';
 import styles from '../styles.scss';
-import { FormatPhoneNumber } from '../../../library/util/Formatters';
 
 export default function PatientData(props) {
   const { patient, appointment, practitioner } = props;
@@ -20,18 +19,12 @@ export default function PatientData(props) {
         </div>
 
         <div className={styles.patientDetails}>
-          <div className={styles.patientDetails_data}>
-            {practitioner.getPrettyName()}
-          </div>
+          <div className={styles.patientDetails_data}>{practitioner.getPrettyName()}</div>
         </div>
         <div className={styles.patientDetails}>
-          <span className={styles.patientDetails_lastAppt}>
-            Last Appt:&nbsp;
-          </span>
+          <span className={styles.patientDetails_lastAppt}>Last Appt:&nbsp;</span>
           <span className={styles.patientDetails_date}>
-            {patient.lastApptDate
-              ? moment(patient.lastApptDate).format(' MMM D, YYYY')
-              : ' n/a'}
+            {patient.lastApptDate ? moment(patient.lastApptDate).format(' MMM D, YYYY') : ' n/a'}
           </span>
         </div>
 

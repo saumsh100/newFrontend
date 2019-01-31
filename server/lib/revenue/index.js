@@ -1,7 +1,6 @@
 
 import moment from 'moment-timezone';
 import { Appointment, DeliveredProcedure, WeeklySchedule, Account, sequelize } from '../../_models';
-import Appointments from '../../../client/entities/models/Appointments';
 
 const endOfCurrentDay = timezone => moment().tz(timezone).endOf('day').toISOString();
 const startOfCurrentDay = timezone => moment().tz(timezone).startOf('day').toISOString();
@@ -72,7 +71,7 @@ export default async function calcRevenueDays(revParams) {
         raw: true,
         where: {
           accountId,
-          ...Appointments.getCommonSearchAppointmentSchema(),
+          ...Appointment.getCommonSearchAppointmentSchema(),
           startDate: {
             $between: [
               moment
@@ -164,7 +163,7 @@ export default async function calcRevenueDays(revParams) {
         raw: true,
         where: {
           accountId,
-          ...Appointments.getCommonSearchAppointmentSchema(),
+          ...Appointment.getCommonSearchAppointmentSchema(),
           endDate: {
             $between: [
               moment()
@@ -256,7 +255,7 @@ async function getAllDatesWithAppointments(
           },
         },
       ],
-      ...Appointments.getCommonSearchAppointmentSchema(),
+      ...Appointment.getCommonSearchAppointmentSchema(),
     },
     raw: true,
     required: true,

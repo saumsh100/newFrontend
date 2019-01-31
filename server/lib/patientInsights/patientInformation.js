@@ -9,7 +9,6 @@ import {
   SentReminder,
   SentRemindersPatients,
 } from 'CareCruModels';
-import Appointments from '../../../client/entities/models/Appointments';
 
 /**
  * [allInsights returns insights for all patients who are the head
@@ -206,7 +205,7 @@ function appointmentsQuery(accountId, startDate, endDate) {
         $gte: startDate,
         $lte: endDate,
       },
-      ...Appointments.getCommonSearchAppointmentSchema(),
+      ...Appointment.getCommonSearchAppointmentSchema(),
     },
     order: [['startDate', 'DESC']],
     attributes: ['id', 'isPatientConfirmed', 'patientId'],

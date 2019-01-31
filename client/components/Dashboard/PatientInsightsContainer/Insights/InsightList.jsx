@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
-import { formatPhoneNumber } from '../../../library/util/Formatters';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { patientShape, appointmentShape } from '../../../library/PropTypeShapes';
 import { PatientPopover, Avatar, AppointmentPopover } from '../../../library';
 import styles from './styles.scss';

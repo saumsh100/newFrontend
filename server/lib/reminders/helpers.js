@@ -29,7 +29,6 @@ import countNextClosedDays, {
 } from '../schedule/countNextClosedDays';
 import reduceSuccessAndErrors from '../contactInfo/reduceSuccessAndErrors';
 import flattenFamilyAppointments, { orderAppointmentsForSamePatient } from './flattenFamilyAppointments';
-import Appointments from '../../../client/entities/models/Appointments';
 
 const CRON_MINUTES = GLOBALS.reminders.cronIntervalMinutes;
 const SAME_DAY_HOURS = GLOBALS.reminders.sameDayWindowHours;
@@ -206,7 +205,7 @@ export async function getAppointmentsFromReminder({
     }
   }
 
-  const defaultAppointmentsScope = { ...Appointments.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
+  const defaultAppointmentsScope = { ...Appointment.getCommonSearchAppointmentSchema({ isShortCancelled: false }) };
 
   const familyGroupingEnd = moment(start)
     .add(SAME_DAY_HOURS, 'hours')
@@ -527,7 +526,7 @@ export async function getValidSmsReminders({
             required: true,
             where: {
               startDate: { $gt: date },
-              ...Appointments.getCommonSearchAppointmentSchema(),
+              ...Appointment.getCommonSearchAppointmentSchema(),
             },
           },
           {

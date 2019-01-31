@@ -18,6 +18,7 @@ const myHost = environmentVariables.MY_HOST || `my.care.cru:${port}`;
 const protocol = env === 'production' && !environmentVariables.CI ? 'https' : 'http';
 const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
+const fullHostUrl = `${protocol}://${host}`;
 
 let caCert = environmentVariables.COMPOSE_CA_CERT;
 if (environmentVariables.CERT_PATH) {
@@ -169,6 +170,7 @@ module.exports = {
   host,
   myHost,
   protocol,
+  fullHostUrl,
   bundlePort,
   caCert,
   redis,

@@ -1,14 +1,13 @@
 
 import axios from 'axios';
-import StatusError from '../../util/StatusError';
-import { callrails } from '../../config/globals';
-import { getApiUrl } from '../../../client/util/hub';
+import { statusError } from '@carecru/isomorphic';
+import { callrails, fullHostUrl } from '../../config/globals';
 
 const CALL_RAIL_URL = `https://api.callrail.com/v2/a/${callrails.apiAccount}`;
 const errorHandling = ({ customMessage, e }) => {
   console.error(customMessage);
   console.error(e);
-  throw StatusError(e.status, e.data ? e.data.error : e.statusText);
+  throw statusError(e.status, e.data ? e.data.error : e.statusText);
 };
 
 function generateCallRailRequestHeaders() {
@@ -17,7 +16,7 @@ function generateCallRailRequestHeaders() {
 
 function checkForIdExistence(id) {
   if (!id) {
-    throw StatusError(StatusError.NOT_FOUND, 'Account does not have callRail account associated with');
+    throw statusError(statusError.NOT_FOUND, 'Account does not have callRail account associated with');
   }
 }
 
@@ -42,13 +41,13 @@ export async function updateCompanyName({ name, callrailId }) {
   checkForIdExistence(callrailId);
   try {
     const { data } = await makeCallRailRequest({
-      method: 'PUT', 
-      url: `${CALL_RAIL_URL}/companies/${callrailId}.json`, 
+      method: 'PUT',
+      url: `${CALL_RAIL_URL}/companies/${callrailId}.json`,
       data: { name },
     });
 
     return data;
-  } catch (e) {    
+  } catch (e) {
     errorHandling({
       customMessage: 'Failed to update the company name for the account',
       e,
@@ -70,7 +69,7 @@ export async function updatePhoneNumber(account, oldPhoneNumber, newPhoneNumber)
   const { callrailId } = account;
   checkForIdExistence(callrailId);
   if (!oldPhoneNumber || !newPhoneNumber) {
-    throw StatusError(StatusError.BAD_REQUEST, 'Please provide both the oldPhoneNumber and the newPhoneNumber');
+    throw statusError(statusError.BAD_REQUEST, 'Please provide both the oldPhoneNumber and the newPhoneNumber');
   }
 
   try {
@@ -78,7 +77,7 @@ export async function updatePhoneNumber(account, oldPhoneNumber, newPhoneNumber)
     await Promise.all(activeTrackers
       .filter(({ destination_number }) => destination_number === oldPhoneNumber)
       .map(({ id }) => makeCallRailRequest({
-        method: 'PUT', 
+        method: 'PUT',
         url: `${CALL_RAIL_URL}/trackers/${id}.json`,
         data: {
           call_flow: {
@@ -123,7 +122,7 @@ export async function getCallRailInformation({ callrailId }) {
   }
 
   if (company.status === 'disabled') {
-    throw StatusError(StatusError.NOT_FOUND, 'The callRail account has been disabled');
+    throw statusError(statusError.NOT_FOUND, 'The callRail account has been disabled');
   }
   try {
     const activeTrackers = await getActiveTrackers(callrailId);
@@ -182,10 +181,10 @@ export async function disableCallRailAccount(account) {
 export async function createCallRailAccount(account) {
   const { destinationPhoneNumber, id, name, callrailId } = account;
   if (callrailId) {
-    throw StatusError(StatusError.CONFLICT, 'Account already has the call rail account associated with');
+    throw statusError(statusError.CONFLICT, 'Account already has the call rail account associated with');
   }
   if (!destinationPhoneNumber) {
-    throw StatusError(StatusError.NOT_FOUND, 'Destination phone number is not provided');
+    throw statusError(statusError.NOT_FOUND, 'Destination phone number is not provided');
   }
 
   try {
@@ -224,8 +223,8 @@ export async function createCallRailAccount(account) {
         company_id: company.data.id,
         type: 'Webhooks',
         config: {
-          post_call_webhook: [`${getApiUrl()}/callrail/${id}/inbound/post-call`],
-          pre_call_webhook: [`${getApiUrl()}/callrail/${id}/inbound/pre-call`],
+          post_call_webhook: [`${fullHostUrl}/callrail/${id}/inbound/post-call`],
+          pre_call_webhook: [`${fullHostUrl}/callrail/${id}/inbound/pre-call`],
         },
       },
     };

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateFormatter } from '@carecru/isomorphic';
+import { dateFormatter, formatPhoneNumber } from '@carecru/isomorphic';
 import {
   Avatar,
   Button,
@@ -13,7 +13,6 @@ import {
   SHeader,
   TextArea,
 } from '../../../../library';
-import { FormatPhoneNumber } from '../../../../library/util/Formatters';
 import Patient from '../../../../../entities/collections/patients';
 import Appointment from '../../../../../entities/collections/appointments';
 import Practitioner from '../../../../../entities/collections/practitioners';
@@ -71,7 +70,7 @@ export default function AppointmentPopover({
               <div className={styles.data}>
                 {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} />}
                 <div className={styles.data_text}>
-                  {patient.cellPhoneNumber && FormatPhoneNumber(patient.cellPhoneNumber)}
+                  {patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber)}
                 </div>
               </div>
 

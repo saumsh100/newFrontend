@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { Map } from 'immutable';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { selectAppointmentPropType } from '../index';
 import { updateEntityRequest } from '../../../thunks/fetchEntities';
 import { Icon, Button, Avatar, SHeader } from '../../library';
-import { FormatPhoneNumber } from '../../library/util/Formatters';
 import SameAppointment from './SameAppointment';
 import SendConfirmationEmail from './SendConfirmationEmail';
 import styles from './styles.scss';
@@ -124,7 +124,7 @@ class ConfirmAppointmentRequest extends Component {
                 <div className={styles.data}>
                   <Icon icon="phone" size={0.9} type="solid" />
                   <div className={styles.data_text}>
-                    {FormatPhoneNumber(patient.cellPhoneNumber)}
+                    {formatPhoneNumber(patient.cellPhoneNumber)}
                   </div>
                 </div>
               )}

@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Button, Avatar, Icon } from '../../library';
 import PatientSearch from '../../PatientSearch';
 import { isHub } from '../../../util/hub';
 import UnknownPatient from '../unknownPatient';
-import { FormatPhoneNumber } from '../../library/util/Formatters';
 import styles from './styles.scss';
 
 const toInputTheme = {
@@ -21,7 +21,7 @@ class ToHeader extends Component {
   renderPatientName() {
     const { isUnknown, firstName, lastName, cellPhoneNumber } = this.props.selectedPatient;
     return isUnknown ? (
-      <span>{FormatPhoneNumber(cellPhoneNumber)}</span>
+      <span>{formatPhoneNumber(cellPhoneNumber)}</span>
     ) : (
       <span>
         <span>{firstName}</span>

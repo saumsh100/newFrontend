@@ -1,7 +1,6 @@
 
 import groupBy from 'lodash/groupBy';
 import { SentReview, Review, Appointment } from '../../../_models';
-import Appointments from '../../../../client/entities/models/Appointments';
 
 export async function fetchReviewEvents({ patientId, accountId, query }) {
   const reviews = await SentReview.findAll({
@@ -28,7 +27,7 @@ export async function fetchReviewEvents({ patientId, accountId, query }) {
         where: {
           patientId,
           accountId,
-          ...Appointments.getCommonSearchAppointmentSchema(),
+          ...Appointment.getCommonSearchAppointmentSchema(),
         },
         attributes: ['id', 'startDate'],
       },

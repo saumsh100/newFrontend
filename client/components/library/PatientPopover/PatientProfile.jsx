@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import {
   Card,
   SContainer,
@@ -15,7 +16,6 @@ import {
   PointOfContactBadge,
 } from '../../library';
 import { patientShape } from '../PropTypeShapes';
-import { FormatPhoneNumber } from '../util/Formatters';
 import styles from './styles.scss';
 
 export default function PatientProfile(props) {
@@ -64,7 +64,7 @@ export default function PatientProfile(props) {
                 {patient[patientPhone] ? <Icon icon="phone" size={0.9} /> : null}
                 <div className={styles.data_text}>
                   {patient[patientPhone] && patient[patientPhone][0] === '+'
-                    ? FormatPhoneNumber(patient[patientPhone])
+                    ? formatPhoneNumber(patient[patientPhone])
                     : patient[patientPhone]}
 
                   {patient[patientPhone] && (

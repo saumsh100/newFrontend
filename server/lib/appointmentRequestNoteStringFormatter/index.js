@@ -1,6 +1,6 @@
 
 import moment from 'moment-timezone';
-import { formatPhoneNumber } from '../../../client/components/library/util/Formatters';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 
 /**
  * appointmentRequestNoteStringFormatter will format and return the appointment request note

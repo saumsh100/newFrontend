@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Item } from 'react-html-email';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import {
   SpaceTable,
   MultipleDetails,
@@ -11,7 +12,6 @@ import {
   CenterElement,
   Button,
 } from '../../components/library';
-import { formatPhoneNumber } from '../../../components/library/util/Formatters';
 
 export default function SharedComponent({
   color,

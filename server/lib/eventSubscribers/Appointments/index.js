@@ -6,7 +6,6 @@ import updateLastProcedureForAccount from '../../../lib/lastProcedure/updateLast
 import { getConfigsForLastProcedure } from '../../../lib/lastProcedure/runLastProcedureCronForAccounts';
 import lastProcedureData from '../../../lib/lastProcedure/lastProcedureData';
 import { getConfigsForDueDates, updatePatientDueDatesForAccount } from '../../../lib/dueDate';
-import Appointments from '../../../../client/entities/models/Appointments';
 
 const runFirstNextLastCalc = async appointments => calcFirstNextLastAppointment(
   appointments,
@@ -27,7 +26,7 @@ async function calcPatientFNLAllApps(app) {
     where: {
       accountId: app.accountId,
       patientId: app.patientId,
-      ...Appointments.getCommonSearchAppointmentSchema(),
+      ...Appointment.getCommonSearchAppointmentSchema(),
     },
     order: [['startDate', 'DESC']],
   });
@@ -120,7 +119,7 @@ export async function firstNextLastAppointmentBatchCalc(appointmentIds) {
   const batchedApps = await Appointment.findAll({
     where: {
       id: appointmentIds,
-      ...Appointments.getCommonSearchAppointmentSchema(),
+      ...Appointment.getCommonSearchAppointmentSchema(),
       patientId: { $not: null },
     },
     attributes: ['patientId'],
@@ -131,7 +130,7 @@ export async function firstNextLastAppointmentBatchCalc(appointmentIds) {
   const allApps = await Appointment.findAll({
     raw: true,
     where: {
-      ...Appointments.getCommonSearchAppointmentSchema(),
+      ...Appointment.getCommonSearchAppointmentSchema(),
       patientId: patientIds,
     },
     attributes: ['id', 'startDate', 'patientId'],

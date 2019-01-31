@@ -2,11 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Card, Avatar, Icon, Grid, Row, Col } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
-import { formatPhoneNumber } from '../../../library/util/Formatters';
 import { isResponsive } from '../../../../util/hub';
 import { accountShape } from '../../../library/PropTypeShapes';
 import PatientModel from '../../../../entities/models/Patient';

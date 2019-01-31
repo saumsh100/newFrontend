@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { A, Item, Box, Image, Span } from 'react-html-email';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import {
   SpaceTable,
   ItemCol,
@@ -11,7 +12,6 @@ import {
   Copyright,
   CenterContainer,
 } from '../../library';
-import { formatPhoneNumber } from '../../../../components/library/util/Formatters';
 
 const SocialContainer = ({ color, googlePlaceId, facebookUrl }) => {
   const googleHref = `https://search.google.com/local/writereview?placeid=${googlePlaceId}`;

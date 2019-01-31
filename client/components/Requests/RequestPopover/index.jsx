@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classNames from 'classnames';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Request from '../../../entities/models/Request';
 import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
-import { formatPhoneNumber } from '../../library/util/Formatters';
 import styles from './styles.scss';
 
 const renderDesktopHeader = ({ patient, closePopover, age }) => (

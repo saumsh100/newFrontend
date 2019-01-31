@@ -2,7 +2,7 @@
 import moment from 'moment';
 import { Router } from 'express';
 import { v4 as uuid } from 'uuid';
-import { getDayStart, getDayEnd } from '@carecru/isomorphic';
+import { getDayStart, getDayEnd, formatPhoneNumber } from '@carecru/isomorphic';
 import {
   Account,
   Enterprise,
@@ -30,18 +30,15 @@ import StatusError from '../../../util/StatusError';
 import upload from '../../../lib/upload';
 import { getReviewPatients, generateReviewsOutbox } from '../../../lib/reviews/helpers';
 import { sequelizeLoader } from '../../util/loaders';
-import { namespaces } from '../../../config/globals';
 import {
   renderTemplate,
   generateClinicMergeVars,
-  sendMassOnlineBookingIntro,
   sendMassGeneralIntroAnnouncement,
 } from '../../../lib/mail';
 import {
   getPatientsWithAppInRange,
   countPatientsWithAppInRange,
 } from '../../../lib/patientsQuery/patientsWithinRange';
-import { formatPhoneNumber } from '../../../../client/components/library/util/Formatters';
 import { createOfficeHour, modifyOfficeHour, deleteOfficeHour } from './officeHour';
 import { deleteIsClosedFieldFromBody } from '../../../_models/WeeklySchedule';
 

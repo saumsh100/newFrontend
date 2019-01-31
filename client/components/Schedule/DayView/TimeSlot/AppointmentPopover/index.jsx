@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import {
   Card,
   Avatar,
@@ -15,7 +16,6 @@ import {
   TextArea,
   PointOfContactBadge,
 } from '../../../../library';
-import { FormatPhoneNumber } from '../../../../library/util/Formatters';
 import { appointmentShape } from '../../../../library/PropTypeShapes';
 import PatientModel from '../../../../../entities/models/Patient';
 import styles from './styles.scss';
@@ -64,7 +64,7 @@ export default function AppointmentPopover({ patient, appointment, scheduleView,
               <div className={styles.data}>
                 {patient.cellPhoneNumber && <Icon icon="phone" size={0.9} />}
                 <div className={styles.data_text}>
-                  {patient.cellPhoneNumber && FormatPhoneNumber(patient.cellPhoneNumber)}
+                  {patient.cellPhoneNumber && formatPhoneNumber(patient.cellPhoneNumber)}
                   {patient.cellPhoneNumber && (
                     <PointOfContactBadge patientId={patient.id} channel="phone" />
                   )}

@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Icon, ListItem, Avatar } from '../../../library';
 import { toggleFlagged, selectChat } from '../../../../thunks/chat';
 import { isHub } from '../../../../util/hub';
 import UnknownPatient from '../../unknownPatient';
-import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import styles from './styles.scss';
 
 class ChatListItem extends Component {
@@ -50,7 +50,7 @@ class ChatListItem extends Component {
       <div className={styles.nameAgeWrapper}>
         <div data-test-id="chat_patientName" className={styles.nameWithAge}>
           {patient.isUnknown
-            ? FormatPhoneNumber(patient.cellPhoneNumber)
+            ? formatPhoneNumber(patient.cellPhoneNumber)
             : `${patient.firstName} ${patient.lastName}`}
         </div>
         {patient.birthDate && (
@@ -58,7 +58,7 @@ class ChatListItem extends Component {
         )}
       </div>
     ) : (
-      <div className={styles.name}>{FormatPhoneNumber(patient.cellPhoneNumber)}</div>
+      <div className={styles.name}>{formatPhoneNumber(patient.cellPhoneNumber)}</div>
     );
   }
 

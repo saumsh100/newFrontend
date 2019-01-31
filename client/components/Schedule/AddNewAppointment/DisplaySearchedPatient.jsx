@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Avatar, Icon } from '../../library';
 import styles from './styles.scss';
-import { FormatPhoneNumber } from '../../library/util/Formatters';
 
 export default function DisplaySearchedPatient(props) {
   const { patient } = props;
@@ -31,6 +30,4 @@ export default function DisplaySearchedPatient(props) {
   );
 }
 
-DisplaySearchedPatient.propTypes = {
-  patient: PropTypes.object,
-};
+DisplaySearchedPatient.propTypes = { patient: PropTypes.object };

@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { week, dateFormatter } from '@carecru/isomorphic';
+import { week, dateFormatter, formatPhoneNumber } from '@carecru/isomorphic';
 import { Avatar, Icon, PatientPopover, IconButton, Checkbox, Collapsible } from '../../../library';
-import { FormatPhoneNumber } from '../../../library/util/Formatters';
 import { isHub } from '../../../../util/hub';
 import styles from './styles.scss';
 
@@ -121,7 +120,7 @@ const WaitListItem = ({
                 <div className={styles.infoContainer}>
                   <Icon icon="phone" className={styles.icon} />
                   <span className={styles.infoData}>
-                    {FormatPhoneNumber(patient[patientPhone])}
+                    {formatPhoneNumber(patient[patientPhone])}
                   </span>
                 </div>
               )}
@@ -157,7 +156,7 @@ const WaitListItem = ({
           {patient[patientPhone] && (
             <div className={styles.infoContainer}>
               <Icon icon="phone" className={styles.icon} />
-              <span className={styles.infoData}>{FormatPhoneNumber(patient[patientPhone])}</span>
+              <span className={styles.infoData}>{formatPhoneNumber(patient[patientPhone])}</span>
             </div>
           )}
           {patient.email && (
