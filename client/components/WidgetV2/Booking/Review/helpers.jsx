@@ -1,13 +1,13 @@
 
 import React from 'react';
 import {
+  createAvailabilitiesFromOpening,
   dateFormatterFactory,
   groupTimesPerPeriod,
   toHumanCommaSeparated,
   setDateToTimezone,
+  capitalize,
 } from '@carecru/isomorphic';
-import { capitalizeFirstLetter } from '../../../Utils';
-import createAvailabilitiesFromOpening from '../../../../../server/lib/availabilities/createAvailabilitiesFromOpening';
 import styles from './styles.scss';
 
 /**
@@ -23,7 +23,7 @@ export const waitlistDates = (week) => {
   return week
     .keySeq()
     .toArray()
-    .map(capitalizeFirstLetter)
+    .map(capitalize)
     .join(', ');
 };
 
@@ -76,7 +76,7 @@ export const handleAvailabilitiesTimes = (selected, availabilities, timezone) =>
       return acc;
     }
 
-    const timeFrame = capitalizeFirstLetter(value);
+    const timeFrame = capitalize(value);
     // all positive messages are displayed in bold.
     let boldedText = '';
     // normal text

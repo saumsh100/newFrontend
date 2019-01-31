@@ -5,6 +5,7 @@ import uniqBy from 'lodash/uniqBy';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import {
+  createAvailabilitiesFromOpening,
   getProperDateWithZone,
   getRangeOfDays,
   getISOSortPredicate,
@@ -14,7 +15,6 @@ import produceFinalDailySchedulesMap from '../schedule/practitioners/produceFina
 import mergeDailySchedules from '../schedule/mergeDailySchedules';
 import getMostPopularValue from './helpers/getMostPopularValue';
 import invertFillers from './invertFillers';
-import createAvailabilitiesFromOpening from './createAvailabilitiesFromOpening';
 
 /**
  * getCorrectPractitonerWeeklySchedule will modify the practitioner's weeklySchedule

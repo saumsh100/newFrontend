@@ -2,16 +2,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import map from 'lodash/map';
+import { convertToCommsPreferences } from '@carecru/isomorphic';
 import { Toggle } from '../../library';
-import convertToCommsPreferences from '../../../../server/util/convertToCommsPreferences';
 import styles from './styles.scss';
 
 function HighlightPreferences({ preferences }) {
   return (
     <div className={styles.prefsWrapper}>
-      {map(preferences, (val, key) => (
-        <Toggle key={`${key}_toggle`} checked={val} label={key} />
-      ))}
+      {map(preferences, (val, key) => <Toggle key={`${key}_toggle`} checked={val} label={key} />)}
     </div>
   );
 }

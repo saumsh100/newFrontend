@@ -1,8 +1,8 @@
 'use strict';
 
+const { convertToCommsPreferences } = require('@carecru/isomorphic');
 const pick = require('lodash/pick');
 const isEqual = require('lodash/isEqual');
-const convertToCommsPreferences = require('../util/convertToCommsPreferences');
 
 module.exports = {
   up: async function (queryInterface, Sequelize) {

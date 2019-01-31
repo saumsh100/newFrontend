@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getFormValues } from 'redux-form';
+import { validateJsonString } from '@carecru/isomorphic';
 import { Form, Field } from '../../../../library';
 import { reminderShape } from '../../../../library/PropTypeShapes';
-import { validateJsonString } from '../../../../../../server/util/isoValidators';
 import styles from './styles.scss';
 
 const formName = reminder => `advancedSettingsReminders_${reminder.id}`;
@@ -152,4 +152,7 @@ function mapStateToProps(state, { reminder }) {
   };
 }
 
-export default connect(mapStateToProps, null)(AdvancedSettingsForm);
+export default connect(
+  mapStateToProps,
+  null,
+)(AdvancedSettingsForm);

@@ -5,12 +5,11 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { touch } from 'redux-form';
-import { dateFormatter } from '@carecru/isomorphic';
+import { dateFormatter, isValidEmail } from '@carecru/isomorphic';
 import { Grid, Row, Col, Form, Field } from '../../../../library';
 import { usStates, caProv } from '../../../../Settings/Practice/General/Address/selectConstants';
 import { isResponsive } from '../../../../../util/hub';
 import PatientModel from '../../../../../entities/models/Patient';
-import { isValidEmail } from '../../../../../../server/util/validators';
 import styles from '../styles.scss';
 
 const normalizeBirthdate = value => value.trim();

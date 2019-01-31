@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import Cache from '../../../../../server/util/Cache';
+import { Cache } from '@carecru/isomorphic';
 import styles from './styles.scss';
 
 // Default expiry is 30 seconds
@@ -58,10 +58,8 @@ export default class EmailPreview extends Component {
     return getPreview(url).then((html) => {
       // document.write was best way to ensure accessibility of html tag
       // therefore we need to wipe it when it switches
-      this.iframe.contentWindow.document.getElementsByTagName('head')[0].innerHTML =
-        '';
-      this.iframe.contentWindow.document.getElementsByTagName('body')[0].innerHTML =
-        '';
+      this.iframe.contentWindow.document.getElementsByTagName('head')[0].innerHTML = '';
+      this.iframe.contentWindow.document.getElementsByTagName('body')[0].innerHTML = '';
       this.iframe.contentWindow.document.write(html);
 
       // Now insert the custom scaling css into the html style
@@ -76,7 +74,10 @@ export default class EmailPreview extends Component {
       // Set container with proper html so that the iframe is not scrollable
       // We want the overall container to be scrollable
       const height = iHtml.offsetHeight * EMAIL_SCALE + AVERAGE_IMAGE_HEIGHT;
-      this.setState({ loading: false, height });
+      this.setState({
+        loading: false,
+        height,
+      });
     });
   }
 
@@ -90,6 +91,4 @@ export default class EmailPreview extends Component {
   }
 }
 
-EmailPreview.propTypes = {
-  url: PropTypes.string.isRequired,
-};
+EmailPreview.propTypes = { url: PropTypes.string.isRequired };
