@@ -308,7 +308,7 @@ practitionersRouter.delete(
       const practitionerData = { avatarUrl: null };
 
       const savedPractitioner = await req.practitioner.update(practitionerData);
-      res.send(normalize('practitioner', savedPractitioner));
+      res.send(normalize('practitioner', savedPractitioner.get({ plain: true })));
     } catch (error) {
       next(error);
     }
