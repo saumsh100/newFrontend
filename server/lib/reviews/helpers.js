@@ -115,6 +115,7 @@ export async function getReviewAppointments({ account, startDate, endDate, buffe
         model: Patient,
         as: 'patient',
         required: true,
+        where: { preferences: { reviews: true } },
         include: [
           {
             model: Family,
