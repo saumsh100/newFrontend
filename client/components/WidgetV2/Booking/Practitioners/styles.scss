@@ -1,2 +1,67 @@
 @import '../../../../ui';
 @import '../styles';
+
+.imageWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: 492px) {
+    flex-direction: column;
+  }
+}
+
+.displayFlexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarWrapper {
+  margin-left: 16px;
+  margin-right: 12px;
+  min-width: 48px;
+  @extend .displayFlexColumn;
+
+  @media screen and (max-width: 492px) {
+    margin-left: 12px;
+  }
+}
+
+.componentWrapper {
+  min-width: 118px;
+  display: flex;
+  text-align: left;
+
+  @media screen and (max-width: 492px) {
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    text-align: center;
+
+    h3 {
+      margin-top: 2px !important;
+      font-size: 14px !important;
+    }
+
+    span {
+      margin-top: 2px !important;
+      font-size: 12px !important;
+    }
+  }
+
+  @media screen and (max-width: 320px) {
+    min-width: 80px;
+  }
+}
+
+.avatarSize {
+  @media screen and (max-width: 492px) {
+    height: 2.2rem;
+    width: 2.2rem;
+    min-width: 2.2rem;
+    min-height: 2.2rem;
+    font-size: 14px;
+  }
+}
