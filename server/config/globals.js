@@ -20,6 +20,8 @@ const bundlePort = environmentVariables.BUNDLE_PORT || '3050';
 const defaultDBName = env === 'test' ? 'carecru_test' : 'carecru_development';
 const fullHostUrl = `${protocol}://${host}`;
 
+const graphQLServerUrl = environmentVariables.GRAPHQL_SERVER_URL;
+
 let caCert = environmentVariables.COMPOSE_CA_CERT;
 if (environmentVariables.CERT_PATH) {
   caCert = fs.readFileSync(environmentVariables.CERT_PATH);
@@ -171,6 +173,7 @@ module.exports = {
   myHost,
   protocol,
   fullHostUrl,
+  graphQLServerUrl,
   bundlePort,
   caCert,
   redis,
