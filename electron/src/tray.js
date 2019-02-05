@@ -73,7 +73,12 @@ const toolbarSizeMenu = managerInstance =>
 const toolbarPositionMenu = managerInstance =>
   buildSubMenu(
     'Toolbar position',
-    ['left', 'right'],
+    ['left', 'right'].map(value => ({
+      value,
+      label: value.replace(/^\w/, c => c.toUpperCase()),
+      type: 'radio',
+      checked: value === managerInstance.displayPosition,
+    })),
     managerInstance.changeToolbarPosition.bind(managerInstance),
   );
 

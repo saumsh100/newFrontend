@@ -271,6 +271,14 @@ class WindowManager {
   }
 
   /**
+   * Returns currently used position of the toolbar on the display.
+   * @return {*}
+   */
+  get displayPosition() {
+    return Store.get('toolbarPosition', config.toolbar.position);
+  }
+
+  /**
    * Get the instance of window helper.
    *
    * @returns {WindowManager}
