@@ -41,6 +41,7 @@ import {
 } from '../../../lib/patientsQuery/patientsWithinRange';
 import { createOfficeHour, modifyOfficeHour, deleteOfficeHour } from './officeHour';
 import { deleteIsClosedFieldFromBody } from '../../../_models/WeeklySchedule';
+import generateDailyHoursForPractice from '../../../lib/schedule/generateDailyHoursForPractice';
 
 const accountsRouter = Router();
 
@@ -820,5 +821,24 @@ accountsRouter.put(
     }
   },
 );
+
+/**
+ * GET /:accountId/finalDailySchedules
+ * This generates the finalDailyHours for Practice.
+ */
+accountsRouter.get('/:accountId/finalDailySchedules', async ({ account, query }, res, next) => {
+  try {
+    const { startDate, endDate } = query;
+    const practiceSchedule = await generateDailyHoursForPractice({
+      account,
+      startDate,
+      endDate,
+    });
+
+    return res.send(practiceSchedule);
+  } catch (error) {
+    return next(error);
+  }
+});
 
 export default accountsRouter;

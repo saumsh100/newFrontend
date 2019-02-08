@@ -1,7 +1,14 @@
 
 import zxcvbn from 'zxcvbn';
 import { Router } from 'express';
-import { Enterprise, Permission, User, Account } from '../../../_models';
+import {
+  Account,
+  Configuration,
+  AccountConfiguration,
+  Enterprise,
+  Permission,
+  User,
+} from 'CareCruModels';
 import checkPermissions from '../../../middleware/checkPermissions';
 import { sequelizeLoader } from '../../util/loaders';
 import StatusError from '../../../util/StatusError';
@@ -17,33 +24,54 @@ userRouter.param('userId', sequelizeLoader('profile', 'User'));
 userRouter.get('/me', async (req, res, next) => {
   try {
     const { userId, accountId, sessionData } = req;
-
-    const [accountData, userData] = await Promise.all([
+    const [
+      accountData,
+      userData,
+      adapterTypeConfigData,
+    ] = await Promise.all([
       Account.findOne({
-        where: {
-          id: accountId,
-        },
+        where: { id: accountId },
         attributes: ['timezone'],
       }),
-      User.findOne({
-        where: {
-          id: userId,
-        },
 
-        include: [{ model: Enterprise, as: 'enterprise' }, { model: Permission, as: 'permission' }],
+      User.findOne({
+        where: { id: userId },
+        include: [
+          {
+            model: Enterprise,
+            as: 'enterprise',
+          },
+          {
+            model: Permission,
+            as: 'permission',
+          },
+        ],
+      }),
+
+      AccountConfiguration.findOne({
+        where: { accountId },
+        include: [{
+          model: Configuration,
+          as: 'configuration',
+          where: { name: 'ADAPTER_TYPE' },
+          required: true,
+        }],
       }),
     ]);
 
     const account = accountData.get({ plain: true });
     const user = userData.get({ plain: true });
-    const role = user.permission.role;
+    const adapterTypeConfig = adapterTypeConfigData ?
+      adapterTypeConfigData.get({ plain: true }) :
+      {};
 
     const { permissions, ...remainingSessionData } = sessionData;
 
     return res.json({
       ...remainingSessionData,
       enterprise: user.enterprise,
-      role,
+      role: user.permission.role,
+      adapterType: adapterTypeConfig.value,
       user: {
         id: user.id,
         firstName: user.firstName,
@@ -53,7 +81,7 @@ userRouter.get('/me', async (req, res, next) => {
       timezone: account.timezone,
     });
   } catch (error) {
-    next();
+    next(error);
   }
 });
 
@@ -79,9 +107,7 @@ userRouter.get('/', checkPermissions('users:read'), (req, res, next) => {
 
   const queryData = {
     raw: true,
-    where: {
-      activeAccountId: accountId,
-    },
+    where: { activeAccountId: accountId },
 
     include: includeArray,
   };

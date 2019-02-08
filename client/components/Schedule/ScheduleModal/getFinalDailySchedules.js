@@ -2,11 +2,11 @@
 import axios from 'axios';
 import { addOffset } from '@carecru/isomorphic';
 
-export default ({ practitionerIds, fromDate, reasonId }) =>
+export default ({ practitionerIds, fromDate, toDate, reasonId }) =>
   axios.get('/api/dailySchedules/finalDailySchedules', {
     params: {
       fromDate,
-      toDate: addOffset(fromDate, '1 day').toISOString(),
+      toDate: toDate || addOffset(fromDate, '1 day').toISOString(),
       reasonId,
       practitionerIds,
     },

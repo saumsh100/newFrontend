@@ -1,0 +1,216 @@
+@import '../../../ui.scss';
+@import './color';
+
+.backDrop {
+  background: $calendar-backdrop;
+  border: 1px solid $calendar-grey;
+  opacity: 0.7;
+  animation: none;
+}
+
+.modal {
+  background: $calendar-background;
+  border: 1px solid $calendar-grey-lightest;
+  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  border-radius: 4px;
+}
+
+.header {
+  padding: 24px 24px 0;
+
+  .title {
+    font-size: 16px;
+    color: $calendar-green-light;
+    letter-spacing: 0;
+    padding: 0;
+    margin: 0 0 10px;
+  }
+
+  .helper {
+    font-size: 11px;
+    color: $calendar-grey;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+}
+
+.content {
+  padding: 0 24px 24px;
+
+  .groupWrapper {
+    margin-bottom: 16px;
+    color: $calendar-grey;
+  }
+
+  .group {
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+    flex-wrap: wrap;
+
+    &:last-of-type {
+      margin-bottom: 16px;
+    }
+
+    .inputGroup {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+
+      .inputs {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        font-size: 11px;
+        color: $calendar-grey;
+        line-height: 1.5;
+      }
+    }
+
+    .toggle {
+      margin: 12px;
+    }
+
+    .delete {
+      margin-left: 10px;
+      padding: 8px 10px;
+      background: transparent;
+      color: $calendar-grey-light;
+
+      &.disabled {
+        display: none;
+      }
+
+      svg {
+        width: 12px;
+      }
+
+      &:hover {
+        color: $calendar-grey;
+      }
+    }
+
+    .spacer {
+      margin: 0 12px;
+      font-size: 11px;
+      color: $calendar-grey;
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+
+  .label {
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: $calendar-grey;
+    display: flex;
+  }
+
+  .addBreak {
+    background: $calendar-white;
+    border: 1px solid $calendar-grey-lightest;
+    box-shadow: 1px 1px 2px 0 $calendar-shadow;
+    font-size: 12px;
+    color: $calendar-grey-light;
+    border-radius: 4px;
+    text-align: center;
+  }
+}
+
+.errorMessage {
+  color: $calendar-red;
+  margin: 0;
+  font-size: 11px;
+}
+
+.labelButton {
+  font-weight: bold;
+  font-size: 11px;
+  padding: 0;
+  color: $calendar-grey-dark;
+  background: transparent;
+}
+
+.optionButton {
+  display: block;
+  color: $calendar-grey-dark;
+  background: $calendar-white;
+  padding: 10px;
+  font-size: 10px;
+  width: 100%;
+  text-align: left;
+  margin: 0;
+
+  &:hover {
+    color: $calendar-green;
+    background: $calendar-background;
+  }
+}
+
+.closeMessage {
+  font-size: 12px;
+  color: $calendar-grey-light;
+  font-style: italic;
+  margin: 4px 0 16px;
+}
+
+.optionMenu {
+  > div {
+    background: $calendar-white;
+    box-shadow: 1px 1px 2px 0 $calendar-shadow;
+    border-radius: 4px;
+    padding: 0;
+    overflow: hidden;
+
+    > ul {
+      box-shadow: none !important;
+      background: $calendar-white;
+    }
+  }
+}
+
+.labelIcon {
+  font-weight: bold;
+}
+
+.dropdownWrapper {
+  margin-left: 8px;
+}
+
+.footer {
+  padding: 12px 24px;
+  border-top: 1px solid $calendar-grey-lightest;
+  text-align: right;
+
+  .save {
+    background: $calendar-green-light;
+    box-shadow: 1px 1px 2px 0 $calendar-shadow;
+    border-radius: 4px;
+    transition: all 0.2s ease-in;
+    margin-left: 8px;
+
+    &:hover {
+      transition: all 0.2s ease-in;
+      background: $calendar-green;
+    }
+  }
+
+  .cancel {
+    background: transparent;
+    color: $calendar-grey-light;
+    border-radius: 4px;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      box-shadow: 1px 1px 2px 0 $calendar-shadow;
+      transition: all 0.2s ease-in;
+      background: $calendar-white;
+    }
+  }
+}
+
+.selectWrapper {
+  width: 100%;
+  position: relative;
+}

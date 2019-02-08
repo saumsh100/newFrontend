@@ -54,9 +54,7 @@ class SuggestionInput extends Component {
    * and select the input field.
    */
   displaySuggestions() {
-    const {
-      name, toggleView, disabled, isOpen,
-    } = this.props;
+    const { name, toggleView, disabled, isOpen } = this.props;
 
     if (disabled) return;
     if (!isOpen) {
@@ -69,16 +67,7 @@ class SuggestionInput extends Component {
   }
 
   render() {
-    const {
-      name,
-      label,
-      handleKeydown,
-      handleBlur,
-      theme,
-      error,
-      disabled,
-      isOpen,
-    } = this.props;
+    const { name, label, handleKeydown, handleBlur, theme, error, disabled, isOpen } = this.props;
 
     const labelClassName = classNames(theme.label, {
       [theme.filled]: this.state.displayValue,
@@ -105,6 +94,7 @@ class SuggestionInput extends Component {
         <div className={theme.toggleValueDiv}>
           <Input
             type="text"
+            disabled={disabled}
             placeholder={this.props.placeholder}
             value={this.state.displayValue}
             onClick={this.displaySuggestions}
@@ -112,25 +102,21 @@ class SuggestionInput extends Component {
             onChange={this.handleChange}
             onBlur={handleBlur}
             onKeyDown={handleKeydown}
-            className={styles.inputToggler}
+            className={classNames(styles.inputToggler, theme.inputToggler, {
+              [styles.disabled]: disabled,
+              [theme.erroredInput]: error,
+            })}
             theme={{ group: styles.groupFull }}
             id={`suggestion_time_toggle_${name}`}
             refCallBack={(input) => {
               this[`suggestion_time_toggle_${name}`] = input;
             }}
           />
-          <label
-            htmlFor={`suggestion_time_toggle_${name}`}
-            className={labelClassName}
-          >
+          <label htmlFor={`suggestion_time_toggle_${name}`} className={labelClassName}>
             {label}
           </label>
           <div className={theme.caretIconWrapper}>
-            <Icon
-              className={caretIconClassName}
-              icon="caret-down"
-              type="solid"
-            />
+            <Icon className={caretIconClassName} icon="caret-down" type="solid" />
           </div>
         </div>
         <div className={theme.error}>{error || ''}</div>

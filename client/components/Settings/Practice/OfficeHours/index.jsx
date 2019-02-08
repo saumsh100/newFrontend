@@ -7,11 +7,13 @@ import OfficeHoursForm from './OfficeHoursForm';
 import BreaksForm from './BreaksForm';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import { Header, Button, DialogBox, Form, Field } from '../../../library';
+import EnabledFeature from '../../../library/EnabledFeature';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import { weeklyScheduleShape } from '../../../library/PropTypeShapes/weeklyScheduleShape';
 import accountShape from '../../../library/PropTypeShapes/accountShape';
 import SettingsCard from '../../Shared/SettingsCard';
 import styles from './styles.scss';
+import OfficeHoursCalendar from './OfficeHoursCalendar';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -230,67 +232,75 @@ class OfficeHours extends Component {
 
     return (
       <SettingsCard title="Office Hours" bodyClass={styles.officeHoursBody}>
-        <DialogBox
-          actions={actions}
-          title="Update StartDate"
-          type="small"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
-          data-test-id="inviteUserDialog"
-        >
-          <Form
-            form="advanceCreate"
-            onSubmit={this.changeStartDate}
-            initialValues={weeklySchedule}
-            ignoreSaveButton
-            data-test-id="advanceCreate"
-          >
-            <Field
-              required
-              component="DayPicker"
-              name="startDate"
-              label="Start Date"
-              data-test-id="input_startDateDayPicker"
-            />
-          </Form>
-        </DialogBox>
-        <div className={styles.flexHeader}>
-          <Header title="Weekly Schedule" contentHeader className={styles.header} />
-          <div>
-            <Button
-              className={styles.button}
-              onClick={this.createPattern}
-              data-test-id="button_createPatternSchedule"
-              secondary
-            >
-              Add New Pattern
-            </Button>
-            <Button
-              className={styles.button}
-              onClick={this.openModal}
-              data-test-id="button_changeStartDate"
-              secondary
-            >
-              Change Start Date
-            </Button>
-          </div>
-        </div>
-        <OfficeHoursForm
-          weeklySchedule={weeklySchedule}
-          onSubmit={handleSubmit}
-          formName="officeHours"
-          hoursIndex={0}
+        <EnabledFeature
+          predicate={({ flags }) => flags.get('office-hours-calendar-schedule')}
+          render={<OfficeHoursCalendar />}
+          fallback={
+            <div>
+              <DialogBox
+                actions={actions}
+                title="Update StartDate"
+                type="small"
+                active={this.state.active}
+                onEscKeyDown={this.reinitializeState}
+                onOverlayClick={this.reinitializeState}
+                data-test-id="inviteUserDialog"
+              >
+                <Form
+                  form="advanceCreate"
+                  onSubmit={this.changeStartDate}
+                  initialValues={weeklySchedule}
+                  ignoreSaveButton
+                  data-test-id="advanceCreate"
+                >
+                  <Field
+                    required
+                    component="DayPicker"
+                    name="startDate"
+                    label="Start Date"
+                    data-test-id="input_startDateDayPicker"
+                  />
+                </Form>
+              </DialogBox>
+              <div className={styles.flexHeader}>
+                <Header title="Weekly Schedule" contentHeader className={styles.header} />
+                <div>
+                  <Button
+                    className={styles.button}
+                    onClick={this.createPattern}
+                    data-test-id="button_createPatternSchedule"
+                    secondary
+                  >
+                    Add New Pattern
+                  </Button>
+                  <Button
+                    className={styles.button}
+                    onClick={this.openModal}
+                    data-test-id="button_changeStartDate"
+                    secondary
+                  >
+                    Change Start Date
+                  </Button>
+                </div>
+              </div>
+              <OfficeHoursForm
+                weeklySchedule={weeklySchedule}
+                onSubmit={handleSubmit}
+                formName="officeHours"
+                hoursIndex={0}
+              />
+              <Header title="Breaks" contentHeader className={styles.subHeader} />
+              <BreaksForm
+                weeklySchedule={weeklySchedule}
+                onSubmit={handleSubmit}
+                formName="officeHours"
+                breaksName="clinicBreaks"
+                breaksIndex={0}
+              />
+              {schedules}
+            </div>
+          }
         />
-        <Header title="Breaks" contentHeader className={styles.subHeader} />
-        <BreaksForm
-          weeklySchedule={weeklySchedule}
-          onSubmit={handleSubmit}
-          formName="officeHours"
-          breaksName="clinicBreaks"
-          breaksIndex={0}
-        />
-        {schedules}
       </SettingsCard>
     );
   }

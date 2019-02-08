@@ -103,10 +103,13 @@ export default function produceDailySchedules(
     if (dailySchedule) {
       dailySchedule.isDailySchedule = true;
       dailySchedulesMap[day] = dailySchedule;
-    } else {
+    } else if (weeklySchedule) {
       const currentWeeklySchedule = getWeeklyScheduleFromAdvanced(weeklySchedule, day);
       const dayOfWeek = getDayofWeek(day, timezone);
       const currentDailySchedule = currentWeeklySchedule[dayOfWeek];
+
+      // Don't add a day if the default weeklySchedule doesn't have one
+      if (!currentDailySchedule) continue;
 
       currentDailySchedule.isDailySchedule = false;
       dailySchedulesMap[day] = currentDailySchedule;

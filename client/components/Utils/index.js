@@ -5,6 +5,7 @@ import lOmit from 'lodash/omit';
 import isArray from 'lodash/isArray';
 import pick from 'lodash/pick';
 import isFunction from 'lodash/isFunction';
+import { capitalize } from '@carecru/isomorphic';
 
 /**
  * Conver camelCase names to dashed-names
@@ -27,7 +28,10 @@ const toDashName = (name) => {
  * @param {Function} fn
  * @returns {object}
  */
-const listToObject = (list, fn) => list.reduce((obj, key) => ({ ...obj, [key]: fn(key) }), {});
+const listToObject = (list, fn) => list.reduce((obj, key) => ({
+  ...obj,
+  [key]: fn(key),
+}), {});
 
 /**
  * Create object to manipulate with component style properties
@@ -90,7 +94,11 @@ export const getClassMapper = (scheme, styles) => {
       {},
     );
 
-  return { map, omit, types };
+  return {
+    map,
+    omit,
+    types,
+  };
 };
 
 export const omitTypes = (Class, props) =>
@@ -107,12 +115,10 @@ export const getCollection = (state, entityType, filter = false) => {
   return Object.values(filteredCollection.toJS());
 };
 
-export const capitalizeFirstLetter = string => string.charAt(0).toUpperCase() + string.slice(1);
-
 export const capitalizeText = string =>
   string
     .split(' ')
-    .map(word => capitalizeFirstLetter(word))
+    .map(word => capitalize(word))
     .join(' ');
 
 /**

@@ -23,14 +23,13 @@ export const initialState = fromJS({
   sessionId: null,
   adapterPermissions: {},
   timezone: null,
+  adapterType: null,
 });
 
 export default handleActions(
   {
     [ADAPTER_PERMISSIONS_SET](state, { payload }) {
-      return state.merge({
-        adapterPermissions: payload,
-      });
+      return state.merge({ adapterPermissions: payload });
     },
 
     [LOGIN_SUCCESS](state, { payload }) {

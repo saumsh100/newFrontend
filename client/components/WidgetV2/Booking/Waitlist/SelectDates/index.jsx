@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Map } from 'immutable';
 import classnames from 'classnames';
-import { week, frames, dayToFrame } from '@carecru/isomorphic';
+import { week, frames, dayToFrame, capitalize } from '@carecru/isomorphic';
 import {
   updateDaysOfTheWeek,
   getSelectedDaysOfTheWeek,
@@ -17,7 +17,6 @@ import {
   setIsClicked,
   setText,
 } from '../../../../../reducers/widgetNavigation';
-import { capitalizeFirstLetter } from '../../../../Utils';
 import Button from '../../../../library/Button';
 import styles from './styles.scss';
 
@@ -183,7 +182,7 @@ class SelectDates extends PureComponent {
                           [selectedSlot]: waitSpot.getIn(['daysOfTheWeek', day]),
                         })}
                       >
-                        {capitalizeFirstLetter(day)}
+                        {capitalize(day)}
                       </Button>
                     </div>
                   );

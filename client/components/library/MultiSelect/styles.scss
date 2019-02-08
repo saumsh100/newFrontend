@@ -1,0 +1,140 @@
+@import '../../../ui.scss';
+@import '../ScheduleCalendar/color';
+
+.placeholder {
+  color: $calendar-grey-light;
+  padding-left: 8px;
+  font-weight: normal;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.input {
+  border: 1px solid $calendar-grey-lightest;
+  width: 100%;
+  color: $calendar-grey;
+  font-weight: 500;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  min-height: 40px;
+  background: $calendar-white;
+  -webkit-appearance: none;
+  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+
+  &:focus {
+    transition: all 0.2s ease;
+    border-color: $calendar-grey-light;
+  }
+
+  &:focus ~ .label {
+    @extend .filled;
+  }
+}
+
+.value {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+
+  .item {
+    background: $calendar-grey-lightest;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 8px;
+    font-size: 11px;
+
+    .remove {
+      color: $calendar-grey-light;
+      margin-left: 8px;
+    }
+  }
+}
+
+.disabled {
+  @extend .input;
+  background: $calendar-grey-lightest !important;
+  box-shadow: none;
+
+  &:hover {
+    background: $calendar-grey-lightest !important;
+    color: $calendar-grey !important;
+  }
+
+  .item {
+    background: $calendar-background;
+
+    &:hover {
+      background: $calendar-background;
+    }
+  }
+}
+
+.iconWrapper {
+  color: $calendar-grey-light;
+  min-width: 30px;
+}
+
+.filled {
+  left: 16px;
+  top: 12px;
+  font-size: 11px;
+}
+
+.list {
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid $calendar-grey-lightest;
+  border-top: 0;
+  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-15px);
+  transition: all 0.2s ease;
+  position: absolute;
+  box-sizing: border-box;
+
+  &.active {
+    transition: all 0.2s ease;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.option {
+  font-size: $small-size;
+  cursor: pointer;
+  padding-left: 12px;
+  padding-right: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  height: 2.5rem;
+  background-color: $primary-white;
+  border: 0;
+  width: 100%;
+  border-bottom: 1px solid;
+  border-bottom-color: $primary-grey;
+  text-align: center;
+  color: $calendar-grey;
+  justify-content: flex-start;
+  letter-spacing: 0;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-lightgrey !important;
+    color: $primary-dark !important;
+  }
+}

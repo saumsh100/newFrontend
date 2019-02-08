@@ -169,44 +169,5 @@ describe('Schedule Library', () => {
       expect(result['2018-04-05'].isClosed).toBe(true);
       expect(result['2018-04-06'].isClosed).toBe(true);
     });
-
-    test('should return 20 daily schedules and 18 with breaks as 18 in the range have timeoffs in middle of day', async () => {
-      const weeklySchedule = JSON.parse(JSON.stringify(schedule));
-      const dailySchedule = JSON.parse(JSON.stringify(dailySchedules[0]));
-      dailySchedule.date = '2018-04-01';
-
-      const timeOff = {
-        startDate: '2018-04-04T22:00:00.000Z',
-        endDate: '2018-04-22T23:00:00.000Z',
-        allDay: false,
-      };
-
-      const result = produceFinalDailySchedulesMap(
-        weeklySchedule,
-        [dailySchedules],
-        [timeOff],
-        '2018-04-02T21:38:33.880Z',
-        '2018-04-21T21:38:33.880Z',
-        'America/Vancouver',
-      );
-
-      /*expect(result['2018-04-04'].breaks[0].startTime).toBe('2018-04-04T22:00:00.000Z');
-      expect(result['2018-04-04'].breaks[0].endTime).toBe('2018-04-04T23:00:00.000Z');
-      expect(result['2018-04-05'].breaks[0].startTime).toBe('2018-04-05T22:00:00.000Z');
-      expect(result['2018-04-05'].breaks[0].endTime).toBe('2018-04-05T23:00:00.000Z');
-      expect(result['2018-04-06'].breaks[0].startTime).toBe('2018-04-06T22:00:00.000Z');
-      expect(result['2018-04-06'].breaks[0].endTime).toBe('2018-04-06T23:00:00.000Z');
-      expect(Object.keys(result)).toHaveLength(20);*/
-
-      /*let breakCount = 0;
-
-      Object.entries(result).forEach(([key, value]) => {
-        if (value.breaks[0]) {
-          breakCount += 1;
-        }
-      });
-
-      expect(breakCount).toBe(18);*/
-    });
   });
 });

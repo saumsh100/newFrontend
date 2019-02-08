@@ -30,7 +30,6 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
       localStorage.setItem('session', JSON.stringify(userSession));
 
       const { user } = userSession;
-
       const userData = {
         firstName: user.firstName,
         lastName: user.lastName,
@@ -43,11 +42,11 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
           accountId: userSession.accountId,
           enterpriseName: userSession.enterprise.name,
           enterpriseId: userSession.enterprise.id,
+          adapterType: userSession.adapterType,
         },
       };
 
       dispatch(updateFeatureFlagsContext(userData));
-
       dispatch(loginSuccess(userSession));
       return userSession;
     })

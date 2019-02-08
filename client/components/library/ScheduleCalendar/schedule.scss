@@ -1,0 +1,228 @@
+@import '../../../ui.scss';
+@import './color';
+
+.contentWrapper {
+  width: 100%;
+  display: flex;
+  position: relative;
+  padding-top: 45px;
+
+  .content {
+    width: 100%;
+    position: relative;
+    display: flex;
+    height: 100%;
+
+    > div {
+      height: auto;
+    }
+  }
+}
+
+.weekdays {
+  display: table-header-group;
+}
+
+.legends {
+  display: flex;
+  margin-top: 12px;
+}
+
+.legend {
+  display: flex;
+  margin-right: 20px;
+  align-items: center;
+  color: $calendar-grey-lighter;
+  line-height: 1;
+  font-size: 10px;
+}
+
+.toggleDivDisabled {
+  background: $calendar-grey-lightest;
+  padding: 0 16px;
+  min-height: 40px;
+  border-radius: 4px;
+  border: 0;
+
+  .caretIconWrapper {
+    color: $calendar-grey-light;
+  }
+}
+
+.baseLegend {
+  width: 36px;
+  height: 20px;
+  border-radius: 4px;
+  display: block;
+  margin-right: 4px;
+}
+
+.defaultLegend {
+  @extend .baseLegend;
+  box-shadow: inset 0 0 0 1px $calendar-grey-lightest;
+  background: $calendar-white;
+}
+
+.overrideLegend {
+  @extend .baseLegend;
+  box-shadow: inset 0 0 0 1px $calendar-override;
+  background: $calendar-override;
+}
+
+.closedLegend {
+  @extend .baseLegend;
+  box-shadow: inset 0 0 0 1px $calendar-closed;
+  background: $calendar-closed;
+}
+
+.loading {
+  position: absolute;
+  background: transparentize($calendar-white, 0.25);
+  font-size: 34px;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  opacity: 0;
+
+  &.active {
+    z-index: 100;
+    transition: all 0.2s ease;
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.calendarWrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input {
+  border: 1px solid $calendar-grey-lightest;
+  width: 100%;
+  color: $calendar-grey;
+  font-weight: 500;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  min-height: 40px;
+  background: $calendar-white;
+  -webkit-appearance: none;
+  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  transition: all 0.2s ease;
+
+  &:focus {
+    transition: all 0.2s ease;
+    border-color: $calendar-grey-light;
+  }
+
+  &:focus ~ .label {
+    @extend .filled;
+  }
+}
+
+.inputToggler {
+  color: $calendar-grey;
+  line-height: 1.4;
+  font-size: 13px;
+}
+
+.inputActive {
+  transition: all 0.2s ease;
+  border-color: $calendar-grey-light;
+}
+
+.textarea {
+  @extend .input;
+  min-height: 150px;
+  padding-top: 28px;
+}
+
+.group {
+  padding: 0 0 12px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.error {
+  left: 16px;
+  color: $calendar-red;
+  font-size: 12px;
+  top: auto;
+  font-weight: 500;
+  display: block;
+  padding-left: 0;
+  bottom: -5px;
+}
+
+.erroredInput {
+  border-color: $calendar-red;
+  color: $calendar-red;
+}
+
+.errorIcon {
+  color: $calendar-red;
+}
+
+.bar {
+  display: none;
+}
+
+.erroredLabel {
+  color: $calendar-grey-lighter;
+}
+
+.erroredLabelFilled {
+  color: $calendar-grey-lighter;
+}
+
+.label {
+  left: 16px;
+  top: 21px;
+  font-size: 14px;
+  color: $calendar-grey-lighter;
+}
+
+.filled {
+  left: 16px;
+  top: 12px;
+  font-size: 11px;
+}
+
+.wrapper {
+  padding: 8px 0;
+  box-sizing: border-box;
+
+  > div {
+    margin: -4px 0 0;
+    left: 0;
+    transform: translateX(0);
+    box-sizing: border-box;
+
+    > ul {
+      box-shadow: 1px 1px 2px 0 $calendar-shadow;
+      background: $calendar-white;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      border: 1px solid $calendar-grey-light;
+      border-top: 0;
+
+      > div {
+        padding: 0;
+        box-shadow: none;
+        background: $calendar-white;
+        max-height: 170px;
+      }
+    }
+  }
+}
+
+.outside {
+  cursor: default;
+  color: $calendar-outside;
+  background: transparent;
+}

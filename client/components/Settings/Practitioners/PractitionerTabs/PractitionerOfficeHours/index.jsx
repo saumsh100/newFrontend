@@ -18,9 +18,11 @@ import {
 } from '../../../../library';
 import { weeklyScheduleShape } from '../../../../library/PropTypeShapes/weeklyScheduleShape';
 import { chairShape } from '../../../../library/PropTypeShapes/chairShape';
+import EnabledFeature from '../../../../library/EnabledFeature';
 import { practitionerShape } from '../../../../library/PropTypeShapes/practitionerShape';
 import { SortByName } from '../../../../library/util/SortEntities';
 import styles from '../../styles.scss';
+import PractitionerHoursCalendar from './PractitionerHoursCalendar';
 
 const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
@@ -147,7 +149,7 @@ class PractitionerOfficeHours extends Component {
     weeklySchedule.weeklySchedules = weeklySchedule.weeklySchedules || [];
 
     if (!weeklyScheduleNew.startDate) {
-      alert('Please put in a start date before creating a pattern!');
+      window.alert('Please put in a start date before creating a pattern!');
       return null;
     }
 
@@ -288,7 +290,6 @@ class PractitionerOfficeHours extends Component {
     let schedules = null;
     const initialValuesChairs = {};
     let dialogShow = null;
-
     if (weeklySchedule) {
       const allSchedules = weeklySchedule.toJS().weeklySchedules || [];
 
@@ -462,39 +463,51 @@ class PractitionerOfficeHours extends Component {
     ];
 
     return (
-      <div className={styles.practScheduleContainer}>
-        <DialogBox
-          actions={actions}
-          title="Create a New Pattern"
-          type="small"
-          active={this.state.active}
-          onEscKeyDown={this.reinitializeState}
-          onOverlayClick={this.reinitializeState}
-        >
-          <Form
-            ignoreSaveButton
-            form="advanceCreatePrac"
-            onSubmit={this.changeStartDate}
-            initialValues={weeklySchedule}
-          >
-            <Field required component="DayPicker" name="startDate" label="Start Date" />
-          </Form>
-        </DialogBox>
-        {dialogShow}
-        <div className={styles.toggleContainer}>
-          <div className={styles.toggleContainer__text}> Set Custom </div>
-          <div className={styles.toggleContainer__toggle}>
-            <Toggle
-              defaultChecked={practitioner.get('isCustomSchedule')}
-              value={this.state.value}
-              onChange={this.handleToggle}
-              data-test-id="toggle_setCustom"
-            />
+      <EnabledFeature
+        predicate={({ flags }) => flags.get('practitioner-schedule-calendar')}
+        render={
+          <PractitionerHoursCalendar
+            practitioner={practitioner}
+            chairs={chairs.filter(({ isActive }) => isActive).toJS()}
+          />
+        }
+        fallback={
+          <div className={styles.practScheduleContainer}>
+            <div className={styles.toggleContainer}>
+              <div className={styles.toggleContainer__text}> Set Custom </div>
+              <div className={styles.toggleContainer__toggle}>
+                <Toggle
+                  defaultChecked={practitioner.get('isCustomSchedule')}
+                  value={this.state.value}
+                  onChange={this.handleToggle}
+                  data-test-id="toggle_setCustom"
+                />
+              </div>
+            </div>
+            {showComponent}
+            {schedules}
+
+            <DialogBox
+              actions={actions}
+              title="Create a New Pattern"
+              type="small"
+              active={this.state.active}
+              onEscKeyDown={this.reinitializeState}
+              onOverlayClick={this.reinitializeState}
+            >
+              <Form
+                ignoreSaveButton
+                form="advanceCreatePrac"
+                onSubmit={this.changeStartDate}
+                initialValues={weeklySchedule}
+              >
+                <Field required component="DayPicker" name="startDate" label="Start Date" />
+              </Form>
+            </DialogBox>
+            {dialogShow}
           </div>
-        </div>
-        {showComponent}
-        {schedules}
-      </div>
+        }
+      />
     );
   }
 }
@@ -514,21 +527,14 @@ PractitionerOfficeHours.defaultProps = {
   chairs: null,
 };
 
-function mapStateToProps({ form }) {
-  if (!form.chairs) {
-    return { allChairs: null };
-  }
+const mapStateToProps = ({ form, auth }) => ({
+  accountId: auth.get('accountId'),
+  allChairs: form.chairs ? checkValues(form.chairs.values) : null,
+});
 
-  return { allChairs: checkValues(form.chairs.values) };
-}
+const mapActionsToProps = dispatch => bindActionCreators({ batchActions }, dispatch);
 
-function mapActionsToProps(dispatch) {
-  return bindActionCreators({ batchActions }, dispatch);
-}
-
-const enhance = connect(
+export default connect(
   mapStateToProps,
   mapActionsToProps,
-);
-
-export default enhance(PractitionerOfficeHours);
+)(PractitionerOfficeHours);

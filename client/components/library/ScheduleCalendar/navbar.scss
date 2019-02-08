@@ -1,0 +1,96 @@
+@import '../../../ui.scss';
+@import './color';
+
+.top {
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+.container {
+  width: 250px;
+  height: 30px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.nav {
+  width: 100%;
+  position: absolute;
+}
+
+.baseNavButton {
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  outline: none;
+  top: 1px;
+  border: 0;
+  width: 40px;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  color: $calendar-grey-lighter;
+  transition: all 0.2s ease-in;
+  background-color: transparent;
+
+  &:hover {
+    color: $calendar-grey-dark;
+    transition: all 0.2s ease-out;
+  }
+
+  svg {
+    path {
+      fill: currentColor;
+    }
+  }
+}
+
+.prev {
+  @extend .baseNavButton;
+  left: 0;
+
+  svg {
+    transform: rotate(180deg);
+  }
+}
+
+.next {
+  @extend .baseNavButton;
+  right: 0;
+}
+
+.schedule {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.showDrawer {
+  background: $calendar-white;
+  border: 1px solid $calendar-grey-lightest;
+  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  border-radius: 4px;
+  padding: 8px 10px;
+  color: $calendar-grey;
+  line-height: 1;
+  font-size: 11px;
+  transition: all 0.2s ease-in;
+  outline: none;
+  cursor: pointer;
+
+  &.active {
+    transition: all 0.2s ease-in;
+    background: $calendar-green;
+    color: $calendar-white;
+  }
+}
+
+.month {
+  font-size: 20px;
+  color: $calendar-grey;
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+}

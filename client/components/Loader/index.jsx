@@ -5,30 +5,27 @@ import classNames from 'classnames';
 
 import styles from '../../styles/default.scss';
 
-class Loader extends React.Component {
-  render() {
-    if (!this.props.isLoaded) {
-      const barStyle = this.props.inContainer
-        ? classNames(styles.loadBar, styles.barInContainer)
-        : styles.loadBar;
+const Loader = ({ isLoaded, inContainer, children }) => {
+  if (isLoaded) return children;
 
-      return (
-        <div className={barStyle}>
-          <div className={styles.bar} />
-          <div className={styles.bar} />
-          <div className={styles.bar} />
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
+  return (
+    <div className={classNames(styles.loadBar, { [styles.barInContainer]: inContainer })}>
+      <div className={styles.bar} />
+      <div className={styles.bar} />
+      <div className={styles.bar} />
+    </div>
+  );
+};
 
 Loader.propTypes = {
-  isLoaded: PropTypes.bool,
+  isLoaded: PropTypes.bool.isRequired,
   inContainer: PropTypes.bool,
   children: PropTypes.node,
+};
+
+Loader.defaultProps = {
+  inContainer: false,
+  children: null,
 };
 
 export default Loader;

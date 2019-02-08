@@ -14,9 +14,7 @@ import { StyleExtender } from '../../Utils/Themer';
 import styles from './styles.scss';
 
 const getUTCDate = (value) => {
-  const {
-    years, months, date, hours,
-  } = moment(value).toObject();
+  const { years, months, date, hours } = moment(value).toObject();
   return new Date(years, months, date, hours);
 };
 
@@ -30,18 +28,14 @@ const convertValueToDate = (value) => {
 class DayPicker extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isOpen: false,
-    };
+    this.state = { isOpen: false };
     this.handleDayClick = this.handleDayClick.bind(this);
     this.togglePopOver = this.togglePopOver.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   handleDayClick(day, { disabled }) {
-    const {
-      multiple, value, onChange, timezone,
-    } = this.props;
+    const { multiple, value, onChange, timezone } = this.props;
 
     const dates = moment(day).format('YYYY-MM-DD');
 
@@ -98,9 +92,7 @@ class DayPicker extends Component {
   }
 
   render() {
-    const {
-      target, TargetComponent, tipSize, iconClassName, value, noTarget, theme,
-    } = this.props;
+    const { target, TargetComponent, tipSize, iconClassName, value, noTarget, theme } = this.props;
 
     // If value is defined, format to 10/8/2017 style
     const displayValue = value ? moment(value).format('l') : value;

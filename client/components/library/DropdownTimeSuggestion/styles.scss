@@ -213,6 +213,9 @@ $empty-grey: darken(lightgrey, 5%);
     color: $inactive-color;
     font-weight: 200;
   }
+  &.disabled {
+    background-color: transparent;
+  }
 }
 .groupFull {
   width: 100%;
