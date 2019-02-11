@@ -7,7 +7,7 @@ import moment from 'moment/moment';
 import { bindActionCreators } from 'redux';
 import { week, frames, capitalize } from '@carecru/isomorphic';
 import { Grid, Row, Col, Avatar, Icon, Button, DialogBox } from '../../../../library/index';
-import { Create as CreateWaitSpot } from '../../../../GraphQLWaitlist';
+import { Create as CreateWaitSpot } from '../../../../RelayWaitlist';
 import { isHub } from '../../../../../util/hub';
 import CheckboxButton from '../../../../library/CheckboxButton';
 import { availabilitiesGroupedByPeriod } from '../../../../WidgetV2/Booking/Review/helpers';
@@ -152,7 +152,6 @@ class AddToWaitlist extends React.Component {
    */
   handleCreateWaitSpot() {
     const { patientSearched, daysOfTheWeek, availableTimes } = this.state;
-    const { createWaitSpotHandler } = this.props;
     if (
       !patientSearched ||
       Object.values(daysOfTheWeek).every(a => !a) ||
@@ -160,18 +159,14 @@ class AddToWaitlist extends React.Component {
     ) {
       return;
     }
-    createWaitSpotHandler({
-      variables: {
-        input: {
-          daysOfTheWeek,
-          availableTimes,
-          patientId: patientSearched.id,
-          endDate: moment()
-            .add(30, 'days')
-            .toISOString(),
-          accountId: this.props.accountId,
-        },
-      },
+    CreateWaitSpot.commit({
+      daysOfTheWeek,
+      availableTimes,
+      patientId: patientSearched.id,
+      endDate: moment()
+        .add(30, 'days')
+        .toISOString(),
+      accountId: this.props.accountId,
     });
 
     this.reinitializeState();
@@ -430,7 +425,7 @@ const mapStateToProps = ({ auth, availabilities, entities }) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({ loadWeeklySchedule }, dispatch);
 
-const AddToWaitlistEnhanced = connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(AddToWaitlist);
@@ -446,7 +441,6 @@ AddToWaitlist.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   accountId: PropTypes.string.isRequired,
   loadWeeklySchedule: PropTypes.func.isRequired,
-  createWaitSpotHandler: PropTypes.func.isRequired,
   timezone: PropTypes.string,
   availabilities: PropTypes.shape({
     evening: PropTypes.arrayOf(PropTypes.shape({
@@ -474,11 +468,3 @@ SelectedPatient.propTypes = {
     lastName: PropTypes.string,
   }).isRequired,
 };
-
-export default props => (
-  <CreateWaitSpot>
-    {createWaitSpotHandler => (
-      <AddToWaitlistEnhanced createWaitSpotHandler={createWaitSpotHandler} {...props} />
-    )}
-  </CreateWaitSpot>
-);

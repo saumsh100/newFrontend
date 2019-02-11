@@ -1,15 +1,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { graphql, QueryRenderer } from 'react-relay';
+import graphQLEnvironment from '../../util/graphqlEnvironment';
 
-export const query = gql`
+const query = graphql`
   query fetchWaitSpot_Query {
     accountViewer {
       id
-      waitSpots {
+      waitSpots(
+        first: 2147483647 # MaxGraphQL Int
+      ) @connection(key: "AccountViewer_waitSpots") {
         edges {
           node {
             availableTimes
@@ -52,8 +53,14 @@ export const query = gql`
   }
 `;
 
-export default function FetchWaitSpot({ children }) {
-  return <Query query={query}>{children}</Query>;
+export default function FetchWaitSpot({ render, ...rest }) {
+  return (
+    <QueryRenderer
+      environment={graphQLEnvironment}
+      query={query}
+      render={relayProps => render(Object.assign(rest, relayProps))}
+    />
+  );
 }
 
-FetchWaitSpot.propTypes = { children: PropTypes.func.isRequired };
+FetchWaitSpot.propTypes = { render: PropTypes.func.isRequired };

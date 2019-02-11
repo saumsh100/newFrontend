@@ -12,7 +12,7 @@ import Waitlist from './Waitlist';
 import CurrentDate from './CurrentDate';
 import { setScheduleView } from '../../../actions/schedule';
 import AddToWaitlist from './Waitlist/AddToWaitlist';
-import { Delete as DeleteWaitSpot } from '../../GraphQLWaitlist';
+import { deleteWaitSpot } from '../../../thunks/waitlist';
 import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
 
@@ -66,14 +66,12 @@ class Header extends Component {
     this.openAddToWaitlist();
   }
 
-  removeWaitSpot(deleteMutation) {
-    return ({ id }) => {
-      const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
+  removeWaitSpot(waitSpot) {
+    const confirmDelete = window.confirm('Are you sure you want to remove this wait spot?');
 
-      if (confirmDelete) {
-        deleteMutation({ variables: { input: { id } } });
-      }
-    };
+    if (confirmDelete) {
+      this.props.deleteWaitSpot(waitSpot);
+    }
   }
 
   toggleFilters() {
@@ -203,15 +201,7 @@ class Header extends Component {
                 },
               ]}
             >
-              <DeleteWaitSpot>
-                {removeCallback => (
-                  <Waitlist
-                    removeWaitSpot={this.removeWaitSpot(removeCallback)}
-                    openAddTo={this.openAddToWaitlist}
-                    accountId={this.props.accountId}
-                  />
-                )}
-              </DeleteWaitSpot>
+              <Waitlist removeWaitSpot={this.removeWaitSpot} openAddTo={this.openAddToWaitlist} />
             </DialogBox>
             <AddToWaitlist
               toggleModal={this.openAddToWaitlist}
@@ -231,7 +221,6 @@ Header.defaultProps = {
 };
 
 Header.propTypes = {
-  accountId: PropTypes.string.isRequired,
   appointments: PropTypes.objectOf(PropTypes.instanceOf(List)),
   pracsFetched: PropTypes.bool,
   chairsFetched: PropTypes.bool,
@@ -245,13 +234,20 @@ Header.propTypes = {
   previousDay: PropTypes.func.isRequired,
   nextDay: PropTypes.func.isRequired,
   setCurrentDay: PropTypes.func.isRequired,
+  deleteWaitSpot: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ setScheduleView }, dispatch);
+  return bindActionCreators(
+    {
+      setScheduleView,
+      deleteWaitSpot,
+    },
+    dispatch,
+  );
 }
 
-const mapStateToProps = ({ auth, schedule, apiRequests }) => {
+const mapStateToProps = ({ schedule, apiRequests }) => {
   const scheduleView = schedule.get('scheduleView');
 
   const pracsFetched = apiRequests.get('pracSchedule')
@@ -262,7 +258,6 @@ const mapStateToProps = ({ auth, schedule, apiRequests }) => {
     : null;
 
   return {
-    accountId: auth.get('accountId'),
     scheduleView,
     pracsFetched,
     chairsFetched,
