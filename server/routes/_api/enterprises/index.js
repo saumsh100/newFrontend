@@ -25,6 +25,7 @@ import { UserAuth } from '../../../lib/_auth';
 import { generateDefaultRecalls } from '../../../lib/recalls/default';
 import { generateDefaultReminders } from '../../../lib/reminders/default';
 import createAccount from '../../../lib/createAccount';
+import { createOfficeHour } from '../accounts/officeHour';
 
 const { timeWithZone } = require('@carecru/isomorphic');
 
@@ -191,91 +192,93 @@ enterprisesRouter.post('/:enterpriseId/accounts', checkPermissions(['enterprises
       ];
 
       const defaultSchdedule = {
-        accountId: account.id,
-        monday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
-        },
-        tuesday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
-        },
-        wednesday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
+        account,
+        rawOfficeHour: {
+          monday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
+          },
+          tuesday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
+          },
+          wednesday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
 
-        },
-        thursday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
-        },
-        friday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
+          },
+          thursday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
+          },
+          friday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
 
-        },
-        saturday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
+          },
+          saturday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
 
-        },
-        sunday: {
-          startTime: timeWithZone(8, 0, timezone),
-          endTime: timeWithZone(17, 0, timezone),
-          breaks: [
-            {
-              startTime: timeWithZone(12, 0, timezone),
-              endTime: timeWithZone(13, 0, timezone),
-            },
-          ],
+          },
+          sunday: {
+            startTime: timeWithZone(8, 0, timezone),
+            endTime: timeWithZone(17, 0, timezone),
+            breaks: [
+              {
+                startTime: timeWithZone(12, 0, timezone),
+                endTime: timeWithZone(13, 0, timezone),
+              },
+            ],
 
+          },
         },
       };
 
       return Promise.all([
         Reminder.bulkCreate(defaultReminders),
-        WeeklySchedule.create(defaultSchdedule),
+        createOfficeHour(defaultSchdedule),
         Service.bulkCreate(defaultServices),
         Recall.bulkCreate(defaultRecalls),
       ]).then((values) => {
         account.update({ weeklyScheduleId: values[1].id })
-          .then((acct) => res.status(201).send(normalize('account', acct.get({ plain: true }))));
+          .then(acct => res.status(201).send(normalize('account', acct.get({ plain: true }))));
       });
     })
     .catch(next);
