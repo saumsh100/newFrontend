@@ -11,6 +11,7 @@ import SignUp from '../components/SignUpInvite';
 import ForgotPassword from '../components/ForgotPassword';
 import ResetPassword from '../components/ForgotPassword/ResetPassword';
 import withAuthProps from '../hocs/withAuthProps';
+import GrqphQlSubscriptions from '../util/graphqlSubscriptions';
 
 const Routes = {
   dashboard: LazyRoute(() => import('../components/Dashboard/index'), true),
@@ -30,6 +31,7 @@ const Routes = {
 const DashboardRouter = ({ history, isAuth, isSuperAdmin, withEnterprise }) => {
   const getAuthorizedRoutes = () => (
     <div>
+      {GrqphQlSubscriptions.subscriptionComponents()}
       <Switch>
         <Route path="/" exact component={Routes.dashboard} />
         <Route path="/profile" component={Routes.profile} />
