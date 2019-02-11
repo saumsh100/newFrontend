@@ -93,6 +93,9 @@ module.exports = () => ({
       'process.env.BUNDLED': true,
     }),
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+    new webpack.ProvidePlugin({
+      logger: path.resolve(__dirname, './logger.js'),
+    }),
   ],
 
   watchOptions: { ignored: /node_modules/ },

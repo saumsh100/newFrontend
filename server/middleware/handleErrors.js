@@ -15,10 +15,10 @@ const { env } = require('../config/globals');
  * @param {*} next
  */
 function logError(err, req, res, next) {
-  console.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
-  console.error(err.stack);
+  logger.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
+  logger.error(err.stack);
   if (env === 'development' || env === 'test') {
-    console.error(err);
+    logger.error(err);
   }
 
   next(err);
