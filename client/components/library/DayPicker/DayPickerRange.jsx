@@ -87,10 +87,7 @@ class DayPickerRange extends Component {
     if (this.props.handleDayClick) {
       return this.props.handleDayClick(pickedDay);
     }
-    const {
-      from, to, toInputFocused, fromInputFocused,
-    } = this.state;
-
+    const { from, to, toInputFocused, fromInputFocused } = this.state;
     const { disabledDays } = this.props;
 
     if (
@@ -111,7 +108,10 @@ class DayPickerRange extends Component {
         },
         () => {
           this.toInput.focus();
-          this.props.onChange({ from, to: '' });
+          this.props.onChange({
+            from,
+            to: '',
+          });
         },
       );
     }
@@ -121,8 +121,16 @@ class DayPickerRange extends Component {
     }
 
     if (fromInputFocused || !from || DateUtils.isDayBefore(pickedDay, from)) {
+      this.props.onChange({
+        from: pickedDay,
+        to: this.state.to,
+      });
       return this.handleFromInput(pickedDay);
     } else if (toInputFocused || !to || DateUtils.isDayAfter(pickedDay, from)) {
+      this.props.onChange({
+        from: this.state.from,
+        to: pickedDay,
+      });
       return this.handleToInput(pickedDay);
     }
     return null;
@@ -156,7 +164,11 @@ class DayPickerRange extends Component {
           fromInputFocused: false,
           toInputFocused: true,
         },
-        () => this.props.onChange({ from: pickedDay, to: '' }),
+        () =>
+          this.props.onChange({
+            from: pickedDay,
+            to: '',
+          }),
       );
     }
 
@@ -225,9 +237,7 @@ class DayPickerRange extends Component {
     }
 
     if (!isSelectingFirstDay(from, to, day)) {
-      return this.setState({
-        enteredTo: day,
-      });
+      return this.setState({ enteredTo: day });
     }
 
     return '';
@@ -242,7 +252,11 @@ class DayPickerRange extends Component {
         toInputFocused: false,
         fromInputFocused: true,
       },
-      () => this.props.onChange({ from: '', to: '' }),
+      () =>
+        this.props.onChange({
+          from: '',
+          to: '',
+        }),
     );
   }
 
@@ -252,19 +266,30 @@ class DayPickerRange extends Component {
     const isSameDate = isSameAsInitialDates(initDates.from, initDates.to, from, to);
 
     if (moment(from).isValid() && moment(to).isValid() && !isSameDate) {
-      this.props.onChange({ from, to });
+      this.props.onChange({
+        from,
+        to,
+      });
       this.closePopOver();
     }
   }
 
   render() {
     const { from, to, enteredTo } = this.state;
-    const {
-      monthsToShow, popover, disabledDays, readOnly, fieldsWrapper, theme,
-    } = this.props;
+    const { monthsToShow, popover, disabledDays, readOnly, fieldsWrapper, theme } = this.props;
 
-    const modifiers = { [styles.start]: from, [styles.end]: enteredTo, ...this.props.modifiers };
-    const selectedDays = [from, { from, to: enteredTo }];
+    const modifiers = {
+      [styles.start]: from,
+      [styles.end]: enteredTo,
+      ...this.props.modifiers,
+    };
+    const selectedDays = [
+      from,
+      {
+        from,
+        to: enteredTo,
+      },
+    ];
 
     const body = (
       <div className={theme.wrapperRange || styles.wrapperRange}>
@@ -339,12 +364,8 @@ class DayPickerRange extends Component {
  * Displays both the date inputs and the right arrow icon
  */
 const inputsAndNavigation = ({
-  from: {
-    fromReadOnly, fromValue, fromRef, fromOnClick,
-  },
-  to: {
-    toReadOnly, toValue, toRef, toOnClick,
-  },
+  from: { fromReadOnly, fromValue, fromRef, fromOnClick },
+  to: { toReadOnly, toValue, toRef, toOnClick },
 }) => (
   <div className={styles.rangeInputContainer}>
     <Input

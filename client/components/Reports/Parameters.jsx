@@ -95,7 +95,6 @@ class Parameters extends React.Component {
               })
             }
             monthsToShow={2}
-            maxDays={60}
           />
         </div>
         <DropdownSelect
