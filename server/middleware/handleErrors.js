@@ -15,12 +15,15 @@ const { env } = require('../config/globals');
  * @param {*} next
  */
 function logError(err, req, res, next) {
-  logger.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
-  logger.error(err.stack);
-  if (env === 'development' || env === 'test') {
-    logger.error(err);
-  }
 
+  if (env === 'development' || env === 'test') {
+    logger.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
+    logger.error(err.stack);
+    logger.error(err);
+  } else {
+    var errorObj = `{"level":"Error","message":"${err.message}","stack":${JSON.stringify(err.stack)}}`;
+    console.error(errorObj);
+  }
   next(err);
 }
 
