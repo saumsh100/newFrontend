@@ -74,6 +74,4 @@ RUN npm install sequelize@^4.3.2 -g
 RUN npm install sequelize-cli@^4.1.0 -g
 RUN npm install pg -g
 
-EXPOSE 80
-
 CMD node server/bin/build/server.bundle.js
