@@ -97,6 +97,7 @@ const ModelAttributes = {
   DeliveredProcedure: [
     'accountId',
     'patientId',
+    'practitionerId',
     'procedureCode',
     'entryDate',
     'pmsId',
