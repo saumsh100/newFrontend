@@ -7,7 +7,7 @@ module.exports.sequelizeLoader = (reqProp, modelName, include = []) => (req, res
     where: { id: param },
     include,
   }).then((model) => {
-    if (!model) next(StatusError(StatusError.NOT_FOUND, `${modelName} with id=${param} not found`));
+    if (!model) next(StatusError(StatusError.GONE, `${modelName} with id=${param} not found`));
     // Set req[reqProp] to the fetched model and go onto next middleware
     req[reqProp] = model;
     next();
