@@ -54,7 +54,7 @@ export function getWeeklyScheduleFromAdvanced(weeklySchedule, date) {
  * @param timezone - the timezone as a string
  * @returns {string} - the day of the week (lowercase)
  */
-export function getDayofWeek(date, timezone) {
+export function getDayOfWeek(date, timezone) {
   return timezone
     ? moment
       .tz(date, timezone)
@@ -105,7 +105,7 @@ export default function produceDailySchedules(
       dailySchedulesMap[day] = dailySchedule;
     } else if (weeklySchedule) {
       const currentWeeklySchedule = getWeeklyScheduleFromAdvanced(weeklySchedule, day);
-      const dayOfWeek = getDayofWeek(day, timezone);
+      const dayOfWeek = getDayOfWeek(day, timezone);
       const currentDailySchedule = currentWeeklySchedule[dayOfWeek];
 
       // Don't add a day if the default weeklySchedule doesn't have one

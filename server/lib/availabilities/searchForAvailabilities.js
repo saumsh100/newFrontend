@@ -41,7 +41,11 @@ export default async function searchForAvailabilities(options) {
     account,
     service,
     practitioners,
-  } = await fetchStaticDataForAvailabilities({ accountId, serviceId, practitionerId });
+  } = await fetchStaticDataForAvailabilities({
+    accountId,
+    serviceId,
+    practitionerId,
+  });
 
   if (!service) {
     throw StatusError(400, `service with id=${serviceId} not found for this account`);
@@ -50,15 +54,20 @@ export default async function searchForAvailabilities(options) {
   if (!practitioners.length) {
     const text = practitionerId ?
       `practitioner with id=${practitionerId} cannot` :
-      `no practitioners can`;
+      'no practitioners can';
     throw StatusError(400, `${text} do service with id=${serviceId}`);
   }
 
-  logger.debug(
-    `Searching for availabilities for a '${service.name}' ` +
-    `at '${account.name}' from ${printRange({ startDate, endDate }, account.timezone)} in '${account.timezone}'. `  +
-    `Fetched static data in ${Date.now() - startTime}ms.`,
-  );
+  logger.debug(`Searching for availabilities for a '${service.name}' ` +
+    `at '${account.name}' from ${printRange({
+      startDate,
+      endDate,
+    }, account.timezone)} in '${account.timezone}'. ` +
+    `Fetched static data in ${Date.now() - startTime}ms.`);
+
+  if (service.reasonWeeklyHoursId) {
+    logger.debug(`Using reasonWeeklyHoursId: ${service.reasonWeeklyHoursId}`);
+  }
 
   // Since there's no availabilities in initial range, let's continuously search further
   for (let i = 0; i <= maxRetryAttempts; i++) {
@@ -72,7 +81,7 @@ export default async function searchForAvailabilities(options) {
     }
 
     const tryStartTime = Date.now();
-    let {
+    const {
       account: accountWithData,
       practitioners: practitionersWithData,
       chairs,
@@ -83,13 +92,14 @@ export default async function searchForAvailabilities(options) {
       endDate,
     });
 
-    logger.debug(
-      `Try #${tryNum}: Fetched date-range-sensitive-data from ` +
-      `${printRange({ startDate, endDate }, account.timezone)} in ${Date.now() - tryStartTime}ms.`,
-    );
+    logger.debug(`Try #${tryNum}: Fetched date-range-sensitive-data from ` +
+      `${printRange({
+        startDate,
+        endDate,
+      }, account.timezone)} in ${Date.now() - tryStartTime}ms.`);
 
     const computeTime = Date.now();
-    let {
+    const {
       availabilities,
       nextAvailability,
       practitionersData,
@@ -102,10 +112,8 @@ export default async function searchForAvailabilities(options) {
       endDate,
     });
 
-    logger.debug(
-      `Try #${tryNum}: Computed availabilities in ${Date.now() - computeTime}ms. \n` +
-      printPractitionersData(practitionersData, account),
-    );
+    logger.debug(`Try #${tryNum}: Computed availabilities in ${Date.now() - computeTime}ms. \n${
+      printPractitionersData(practitionersData, account)}`);
 
     if (availabilities.length) {
       logger.debug(`Try #${tryNum}: Found some! Total time = ${Date.now() - startTime}ms`);

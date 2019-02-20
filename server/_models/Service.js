@@ -50,9 +50,7 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
-    bufferTime: {
-      type: DataTypes.INTEGER,
-    },
+    bufferTime: { type: DataTypes.INTEGER },
 
     unitCost: {
       // TODO: is this correct?
@@ -68,9 +66,11 @@ export default function (sequelize, DataTypes) {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+
+    reasonWeeklyHoursId: { type: DataTypes.UUID },
   });
 
-  Service.associate = (({ Account, Practitioner, Request }) => {
+  Service.associate = ({ Account, Practitioner, Request }) => {
     Service.belongsTo(Account, {
       foreignKey: 'accountId',
       as: 'account',
@@ -86,7 +86,7 @@ export default function (sequelize, DataTypes) {
       as: 'practitioners',
       foreignKey: 'serviceId',
     });
-  });
+  };
 
   return Service;
 }
