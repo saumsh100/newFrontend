@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PropTypes from 'prop-types';
 import WaitlistSchedule from '../Schedule/Header/Waitlist';
-import { deleteMultipleWaitSpots } from '../../thunks/waitlist';
+import { MassDelete as MassDeleteWaitSpots } from '../GraphQLWaitlist';
 import { setBackHandler, setTitle } from '../../reducers/electron';
 import SelectedCounter from './SelectedCounter';
 import ExtraOptionsHubMenu from '../ExtraOptionsHubMenu';
@@ -27,13 +27,13 @@ class Waitlist extends Component {
     this.hideAddForm = this.hideAddForm.bind(this);
   }
 
-  getMenuOptions() {
+  getMenuOptions(massDeleteHandler) {
     if (this.state.selectedElements.length > 0) {
       return [
         {
           icon: 'trash',
           text: 'DELETE',
-          onClick: this.deleteSelectedElements,
+          onClick: this.deleteSelectedElements(massDeleteHandler),
         },
         {
           icon: 'ban',
@@ -57,15 +57,15 @@ class Waitlist extends Component {
     ];
   }
 
-  deleteSelectedElements() {
-    this.props.deleteMultipleWaitSpots(this.state.selectedElements);
-    this.clearSelectedList();
+  deleteSelectedElements(massDeleteHandler) {
+    return () => {
+      massDeleteHandler(this.state.selectedElements);
+      this.clearSelectedList();
+    };
   }
 
   clearSelectedList() {
-    this.setState({
-      selectedElements: [],
-    });
+    this.setState({ selectedElements: [] });
   }
 
   selectWaitSpot(id) {
@@ -78,57 +78,48 @@ class Waitlist extends Component {
       elementsList.push(id);
     }
 
-    this.setState({
-      selectedElements: elementsList,
-    });
+    this.setState({ selectedElements: elementsList });
   }
 
   showAddForm() {
-    this.setState(
-      {
-        showAddForm: true,
-      },
-      () => {
-        this.props.setBackHandler(() => {
-          this.hideAddForm();
-        });
-        this.props.setTitle(WATILIST_ADD);
-      },
-    );
+    this.setState({ showAddForm: true }, () => {
+      this.props.setBackHandler(() => {
+        this.hideAddForm();
+      });
+      this.props.setTitle(WATILIST_ADD);
+    });
   }
 
   hideAddForm() {
-    this.setState(
-      {
-        showAddForm: false,
-      },
-      () => {
-        this.props.setBackHandler(null);
-        this.props.setTitle(WAITLIST_PAGE);
-      },
-    );
+    this.setState({ showAddForm: false }, () => {
+      this.props.setBackHandler(null);
+      this.props.setTitle(WAITLIST_PAGE);
+    });
   }
 
   render() {
     const { showAddForm } = this.state;
 
     return (
-      <div>
-        {showAddForm && <AddToWaitlistPage onSubmit={this.hideAddForm} />}
-        <ExtraOptionsHubMenu options={this.getMenuOptions()}>
-          <WaitlistSchedule
-            selectWaitSpot={this.selectWaitSpot}
-            selectedWaitSpots={this.state.selectedElements}
-          />
-        </ExtraOptionsHubMenu>
-        <SelectedCounter selected={this.state.selectedElements} />
-      </div>
+      <MassDeleteWaitSpots>
+        {massDeleteHandler => (
+          <div>
+            {showAddForm && <AddToWaitlistPage onSubmit={this.hideAddForm} />}
+            <ExtraOptionsHubMenu options={this.getMenuOptions(massDeleteHandler)}>
+              <WaitlistSchedule
+                selectWaitSpot={this.selectWaitSpot}
+                selectedWaitSpots={this.state.selectedElements}
+              />
+            </ExtraOptionsHubMenu>
+            <SelectedCounter selected={this.state.selectedElements} />
+          </div>
+        )}
+      </MassDeleteWaitSpots>
     );
   }
 }
 
 Waitlist.propTypes = {
-  deleteMultipleWaitSpots: PropTypes.func.isRequired,
   setBackHandler: PropTypes.func.isRequired,
   setTitle: PropTypes.func.isRequired,
 };
@@ -136,11 +127,13 @@ Waitlist.propTypes = {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      deleteMultipleWaitSpots,
       setBackHandler,
       setTitle,
     },
     dispatch,
   );
 
-export default connect(null, mapDispatchToProps)(Waitlist);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Waitlist);

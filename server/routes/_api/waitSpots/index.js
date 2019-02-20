@@ -6,6 +6,9 @@ import checkPermissions from '../../../middleware/checkPermissions';
 import normalize from '../normalize';
 import { WaitSpot } from '../../../_models';
 import globals, { namespaces } from '../../../config/globals';
+import PubSub from '../../../graphql/data/subscriptionsPubSub';
+import { ADD_WAIT_SPOT } from '../../../graphql/data/channels';
+
 
 const waitSpotsRouter = Router();
 
@@ -27,6 +30,7 @@ waitSpotsRouter.post('/', (req, res, next) => {
       res.status(201).send(normalize('waitSpot', waitSpot.dataValues));
       return waitSpot;
     }).then((waitSpot) => {
+      PubSub.publish(ADD_WAIT_SPOT, { newWaitSpot: waitSpot });
       const io = req.app.get('socketio');
       const ns = namespaces.dash;
       return io.of(ns).in(accountId).emit('create:WaitSpot', normalize('waitSpot', waitSpot.get({ plain: true })));
