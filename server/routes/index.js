@@ -18,6 +18,7 @@ import {
 } from '../_models';
 import graphQLClient from '../util/graphQLClient';
 import { sequelizeAuthMiddleware } from '../middleware/auth';
+import isFeatureFlagEnabled from '../lib/featureFlag';
 
 const rootRouter = Router();
 
@@ -98,8 +99,14 @@ rootRouter.post('/userCheck', (req, res, next) => {
 
 // All other traffic, just render app
 // TODO: Need to update client-side router to handle this
-rootRouter.get('(/*)?', (req, res, next) =>
+rootRouter.get('(/*)?', async (req, res, next) => {
   // TODO: this should be wrapped in a try catch
-  res.render('app'));
+  const showNewFont = await isFeatureFlagEnabled('show-new-font', null, {
+    userId: 'carecru-api',
+    domain: req.hostname,
+  });
+
+  return res.render('app', { showNewFont });
+});
 
 module.exports = rootRouter;

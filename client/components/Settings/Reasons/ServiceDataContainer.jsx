@@ -5,14 +5,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import ServiceDataItem from './ServiceDataItem';
-import {
-  updateEntityRequest,
-  deleteEntityRequest,
-  createEntityRequest,
-} from '../../../thunks/fetchEntities';
+import { updateEntityRequest, deleteEntityRequest } from '../../../thunks/fetchEntities';
 import ServicePractitioners from './ServicePractitioners';
 import SettingsCard from '../Shared/SettingsCard';
 import { Card, IconButton } from '../../library';
+import EnabledFeature from '../../library/EnabledFeature';
+import ReasonHours from './ReasonHours';
 import styles from './styles.scss';
 
 class ServiceDataContainer extends Component {
@@ -33,9 +31,12 @@ class ServiceDataContainer extends Component {
 
   deleteService() {
     const { serviceId } = this.props;
-    const deleteService = confirm('Are you sure you want to delete this reason?');
+    const deleteService = window.confirm('Are you sure you want to delete this reason?');
     if (deleteService) {
-      this.props.deleteEntityRequest({ key: 'services', id: serviceId });
+      this.props.deleteEntityRequest({
+        key: 'services',
+        id: serviceId,
+      });
       this.props.setServiceId({ id: null });
     }
   }
@@ -47,9 +48,7 @@ class ServiceDataContainer extends Component {
       return null;
     }
 
-    const selectedService = serviceId
-      ? services.get(serviceId)
-      : services.first();
+    const selectedService = serviceId ? services.get(serviceId) : services.first();
     let component = null;
     if (selectedService) {
       const practitionerIds = selectedService.get('practitioners');
@@ -58,7 +57,13 @@ class ServiceDataContainer extends Component {
           title={selectedService.get('name')}
           bodyClass={styles.serviceDataBody}
           rightActions={
-            <div data-test-id="removeService" onClick={this.deleteService}>
+            <div
+              data-test-id="removeService"
+              onClick={this.deleteService}
+              role="button"
+              tabIndex={0}
+              onKeyDown={e => e.keyCode === '13' && this.deleteService(e)}
+            >
               <IconButton icon="trash" iconType="solid" />
             </div>
           }
@@ -75,6 +80,10 @@ class ServiceDataContainer extends Component {
             updateService={this.updateService}
             practitioners={practitioners}
           />
+          <EnabledFeature
+            predicate={({ flags }) => flags.get('reason-schedule-component')}
+            render={() => <ReasonHours />}
+          />
         </SettingsCard>
       );
     }
@@ -88,28 +97,24 @@ class ServiceDataContainer extends Component {
 }
 
 ServiceDataContainer.propTypes = {
-  updateEntityRequest: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  services: PropTypes.instanceOf(Map),
-  practitioners: PropTypes.instanceOf(Map),
-  serviceId: PropTypes.string,
-  setServiceId: PropTypes.func,
+  updateEntityRequest: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  services: PropTypes.instanceOf(Map).isRequired,
+  practitioners: PropTypes.instanceOf(Map).isRequired,
+  serviceId: PropTypes.string.isRequired,
+  setServiceId: PropTypes.func.isRequired,
 };
 
-function mapActionsToProps(dispatch) {
-  return bindActionCreators(
+const mapActionsToProps = dispatch =>
+  bindActionCreators(
     {
       updateEntityRequest,
       deleteEntityRequest,
-      createEntityRequest,
     },
     dispatch,
   );
-}
 
-const enhance = connect(
+export default connect(
   null,
   mapActionsToProps,
-);
-export default enhance(ServiceDataContainer);
+)(ServiceDataContainer);
