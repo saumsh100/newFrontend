@@ -1,0 +1,64 @@
+@import '../../../../ui.scss';
+
+.ddContainer {
+  width: 100%;
+
+  & ul {
+    border: 1px solid $primary-grey;
+    border-radius: 4px;
+    background-color: $primary-white !important;
+    box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11) !important;
+
+    & > li {
+      height: 36px;
+      color: $widget-grey;
+      font-size: 13px;
+      letter-spacing: 0.02px;
+      line-height: 16px;
+
+      &:hover {
+        background: darken($primary-white, 2%) !important;
+        color: $widget-grey !important;
+      }
+
+      & > button {
+        text-align: left !important;
+        cursor: pointer;
+
+        &:focus {
+          background: transparent !important;
+        }
+      }
+    }
+  }
+}
+
+.triggerButton {
+  height: 40px;
+  width: 100%;
+  border: 1px solid $primary-grey;
+  border-radius: 4px;
+  background-color: $primary-white;
+  box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+  cursor: pointer;
+  outline: none !important;
+  text-align: left;
+  color: $widget-grey;
+  font-size: 13px;
+  letter-spacing: 0.02px;
+  line-height: 16px;
+  padding: 12px 15px;
+
+  & > i {
+    float: right;
+  }
+}
+
+.fieldLabel {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #999999;
+  font-size: 12px;
+  letter-spacing: 0.02px;
+  line-height: 15px;
+}

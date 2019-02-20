@@ -84,6 +84,8 @@ $electron-bar-width: 50px;
 $electron-anti-radius-padding: 10px;
 $electron-border-radius: 4px;
 
+$report-border-bottom: #e9eaeb;
+
 // Feedback Colors
 $danger-color: red;
 $info-color: blue;
@@ -216,4 +218,8 @@ $warning: #eaba4e;
 
 .borderBottomLeft {
   @include borderBottomLeft;
+}
+
+.ui-kit-smoother {
+  transition: all 150ms;
 }

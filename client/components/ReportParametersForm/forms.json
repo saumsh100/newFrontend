@@ -1,0 +1,133 @@
+{
+  "onlineBooking": {
+    "userFriendlyName": "Online Booking",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "categories",
+        "component": "dropdown",
+        "defaultValue": "TotalRequests",
+        "size": 4,
+        "required": true
+      },
+      {
+        "name": "submit",
+        "component": "button",
+        "size": 2
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "month",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "donnasReminders": {
+    "userFriendlyName": "Donna's Reminders",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "submit",
+        "component": "button",
+        "offset": 4,
+        "size": 2
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "month",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "donnasRecalls": {
+    "userFriendlyName": "Donna's Recalls",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "submit",
+        "component": "button",
+        "offset": 4,
+        "size": 2
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "month",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "donnasReviews": {
+    "userFriendlyName": "Donna's Reviews",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "submit",
+        "component": "button",
+        "offset": 4,
+        "size": 2
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "month",
+        "size": "row",
+        "required": true
+      }
+    ]
+  },
+  "totalProduction": {
+    "userFriendlyName": "Total Production",
+    "fields": [
+      {
+        "name": "dateRange",
+        "component": "dateRange",
+        "size": 6,
+        "required": true
+      },
+      {
+        "name": "showComparisons",
+        "component": "toggle",
+        "size": 2
+      },
+      {
+        "name": "submit",
+        "component": "button",
+        "offset": 2,
+        "size": 2
+      },
+      {
+        "name": "dateRangeFilter",
+        "component": "selectPill",
+        "defaultValue": "month",
+        "size": "row",
+        "required": true
+      }
+    ]
+  }
+}
