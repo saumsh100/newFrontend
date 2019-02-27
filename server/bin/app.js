@@ -31,7 +31,7 @@ app.engine('jsx', expressReactNews.createEngine({
 
 // Extra logging for communication with server
 app.use((req, res, next) => { 
-  logger.info(chalk.blue(req.method, req.originalUrl));
+  CCLogger.info(chalk.blue(req.method, req.originalUrl));
   next();
 });
 

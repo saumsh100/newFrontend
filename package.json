@@ -187,6 +187,7 @@
     "redux-thunk": "^2.2.0",
     "relay-compiler": "~1.5.0",
     "rimraf": "^2.5.1",
+    "s3-streamlogger": "^1.5.0",
     "sass-loader": "^6.0.3",
     "sequelize": "^4.41.1",
     "sequelize-cli": "^4.1.0",

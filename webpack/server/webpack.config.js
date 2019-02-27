@@ -94,7 +94,8 @@ module.exports = () => ({
     }),
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
     new webpack.ProvidePlugin({
-      logger: path.resolve(__dirname, './logger.js'),
+      CCLogger: path.resolve(__dirname, './CCLogger.js'),
+      S3Logger: path.resolve(__dirname, './S3Logger.js'),
     }),
   ],
 

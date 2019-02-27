@@ -17,9 +17,9 @@ const { env } = require('../config/globals');
 function logError(err, req, res, next) {
 
   if (env === 'development' || env === 'test') {
-    logger.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
-    logger.error(err.stack);
-    logger.error(err);
+    CCLogger.error(chalk.red('[ERROR]', err.status ? `[${err.status}]` : '', ':', err.message));
+    CCLogger.error(err.stack);
+    CCLogger.error(err);
   } else {
     var errorObj = `{"level":"Error","message":"${err.message}","stack":${JSON.stringify(err.stack)}}`;
     console.error(errorObj);
