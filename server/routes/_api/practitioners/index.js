@@ -24,9 +24,7 @@ import {
 } from '../../../_models/WeeklySchedule';
 import checkPermissions from '../../../middleware/checkPermissions';
 import upload from '../../../lib/upload';
-import { generateDailySchedulesForPractitioner } from
-    '../../../lib/schedule/practitioners/produceFinalDailySchedulesForPractitioners';
-import StatusError from "../../../util/StatusError";
+import { generateDailySchedulesForPractitioner } from '../../../lib/schedule/practitioners/produceFinalDailySchedulesForPractitioners';
 
 const practitionersRouter = require('express').Router();
 
@@ -45,7 +43,8 @@ practitionersRouter.get('/', (req, res, next) => {
     include: includeArray,
   })
     .then((practitioners) => {
-      practitioners = practitioners.map(practitioner => practitioner.get({ plain: true }));
+      practitioners = practitioners.map(practitioner =>
+        practitioner.get({ plain: true }));
       return res.send(format(req, res, 'practitioners', practitioners));
     })
     .catch(next);
@@ -75,7 +74,9 @@ practitionersRouter.post(
 
       return res
         .status(201)
-        .send(format(req, res, 'practitioner', practitioner.get({ plain: true })));
+        .send(
+          format(req, res, 'practitioner', practitioner.get({ plain: true })),
+        );
     } catch (e) {
       // check sequelize error
       if (e.errors && e.errors[0]) {
@@ -99,14 +100,17 @@ practitionersRouter.post(
 practitionersRouter.get(
   '/:noFetchPractitionerId',
   checkPermissions('practitioners:read'),
-  (req, res, next) => Practitioner.findOne({
-    where: { id: req.params.noFetchPractitionerId },
+  (req, res, next) =>
+    Practitioner.findOne({
+      where: { id: req.params.noFetchPractitionerId },
 
-    include: req.includeArray,
-  })
-    .then(practitioner =>
-      res.send(format(req, res, 'practitioner', practitioner.get({ plain: true }))))
-    .catch(next),
+      include: req.includeArray,
+    })
+      .then(practitioner =>
+        res.send(
+          format(req, res, 'practitioner', practitioner.get({ plain: true })),
+        ))
+      .catch(next),
 );
 
 /**
@@ -115,10 +119,11 @@ practitionersRouter.get(
 practitionersRouter.get(
   '/:practitionerId',
   checkPermissions('practitioners:read'),
-  (req, res, next) => Promise.resolve(req.practitioner.get({ plain: true }))
-    .then(practitioner =>
-      res.send(format(req, res, 'practitioner', practitioner)))
-    .catch(next),
+  (req, res, next) =>
+    Promise.resolve(req.practitioner.get({ plain: true }))
+      .then(practitioner =>
+        res.send(format(req, res, 'practitioner', practitioner)))
+      .catch(next),
 );
 
 /**
@@ -133,10 +138,12 @@ practitionersRouter.put(
     // TODO: how to Query Practitioners based on service
     return Practitioner.findOne({
       where: { id: req.practitioner.id },
-      include: [{
-        model: Service,
-        as: 'services',
-      }],
+      include: [
+        {
+          model: Service,
+          as: 'services',
+        },
+      ],
     })
       .then((practitioner) => {
         practitioner = practitioner.get({ plain: true });
@@ -155,32 +162,41 @@ practitionersRouter.put(
           newServices.forEach((newService) => {
             if (!practitioner.services.includes(newService)) {
               addServices.push(newService);
-              promises.push(Practitioner_Service.create({
-                practitionerId: practitioner.id,
-                serviceId: newService,
-              }));
+              promises.push(
+                Practitioner_Service.create({
+                  practitionerId: practitioner.id,
+                  serviceId: newService,
+                }),
+              );
             }
           });
 
-          promises.push(Practitioner_Service.destroy({
-            where: { id: services },
-            paranoid: false,
-            force: true,
-          }));
+          promises.push(
+            Practitioner_Service.destroy({
+              where: { id: services },
+              paranoid: false,
+              force: true,
+            }),
+          );
         }
 
-        promises.push(Practitioner.update(req.body, { where: { id: req.practitioner.id } }));
+        promises.push(
+          Practitioner.update(req.body, { where: { id: req.practitioner.id } }),
+        );
 
-        return Promise.all(promises).then(() => Practitioner.findOne({
-          where: { id: req.practitioner.id },
-          include: [{
-            model: Service,
-            as: 'services',
-          }],
-        }).then((practitionerDel) => {
-          practitionerDel = practitionerDel.get({ plain: true });
-          return res.send(format(req, res, 'practitioner', practitionerDel));
-        }));
+        return Promise.all(promises).then(() =>
+          Practitioner.findOne({
+            where: { id: req.practitioner.id },
+            include: [
+              {
+                model: Service,
+                as: 'services',
+              },
+            ],
+          }).then((practitionerDel) => {
+            practitionerDel = practitionerDel.get({ plain: true });
+            return res.send(format(req, res, 'practitioner', practitionerDel));
+          }));
       })
       .catch(next);
   },
@@ -245,33 +261,28 @@ practitionersRouter.put(
   async (req, res, next) => {
     try {
       const { practitioner, body } = req;
-      const { weeklyScheduleId } = practitioner;
+      await removeCustomScheduleFromPractitioner({ practitioner });
 
-      await practitioner.update({ isCustomSchedule: true });
-      const weeklySchedule = await WeeklySchedule.findByPk(practitioner.weeklyScheduleId);
-
-      // Associate the DailySchedule Ids to the body
-      const updateBody = dayNamesList.reduce(
-        (acc, day) => ({
-          ...acc,
-          [day]: {
-            ...body[day],
-            id: weeklySchedule[`${day}Id`],
-          },
-        }),
-        body,
+      const [
+        ,
+        [{ weeklyScheduleId: createdPractitionerScheduleId }],
+      ] = await addCustomScheduleToPractitioner(
+        { practitioner },
+        deleteIsClosedFieldFromBody(body),
       );
-      const deletedIsClosedBody = deleteIsClosedFieldFromBody(updateBody);
 
-      await updateDaySchedules(
-        weeklySchedule,
-        deletedIsClosedBody,
-        DailySchedule,
+      const createdPractitionerSchedule = await WeeklySchedule.findByPk(
+        createdPractitionerScheduleId,
       );
-      await weeklySchedule.update(body);
-      const updatedSchedule = await WeeklySchedule.findByPk(weeklyScheduleId);
 
-      return res.send(format(req, res, 'weeklySchedule', updatedSchedule.get({ plain: true })));
+      return res.send(
+        format(
+          req,
+          res,
+          'weeklySchedule',
+          createdPractitionerSchedule.get({ plain: true }),
+        ),
+      );
     } catch (error) {
       return next(error);
     }
@@ -297,7 +308,9 @@ practitionersRouter.post(
       const practitionerData = { avatarUrl: fileKey };
 
       const savedPractitioner = await req.practitioner.update(practitionerData);
-      return res.send(normalize('practitioner', savedPractitioner.get({ plain: true })));
+      return res.send(
+        normalize('practitioner', savedPractitioner.get({ plain: true })),
+      );
     } catch (error) {
       return next(error);
     }
@@ -312,7 +325,9 @@ practitionersRouter.delete(
       const practitionerData = { avatarUrl: null };
 
       const savedPractitioner = await req.practitioner.update(practitionerData);
-      res.send(normalize('practitioner', savedPractitioner.get({ plain: true })));
+      res.send(
+        normalize('practitioner', savedPractitioner.get({ plain: true })),
+      );
     } catch (error) {
       next(error);
     }
@@ -337,21 +352,26 @@ practitionersRouter.delete(
  * Retrieve the final daily schedules for practitioners in the same practice for a period of time.
  *
  */
-practitionersRouter.get('/:practitionerId/finalDailySchedules', async ({ query, practitioner }, res, next) => {
-  try {
-    const { startDate, endDate } = query;
-    const account = await Account.findByPk(practitioner.accountId);
-    const practitionersSchedule = await generateDailySchedulesForPractitioner({
-      account: account.get({ plain: true }),
-      practitioner: practitioner.get({ plain: true }),
-      startDate,
-      endDate,
-    });
+practitionersRouter.get(
+  '/:practitionerId/finalDailySchedules',
+  async ({ query, practitioner }, res, next) => {
+    try {
+      const { startDate, endDate } = query;
+      const account = await Account.findByPk(practitioner.accountId);
+      const practitionersSchedule = await generateDailySchedulesForPractitioner(
+        {
+          account: account.get({ plain: true }),
+          practitioner: practitioner.get({ plain: true }),
+          startDate,
+          endDate,
+        },
+      );
 
-    return res.send(practitionersSchedule);
-  } catch (error) {
-    return next(error);
-  }
-});
+      return res.send(practitionersSchedule);
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
 
 module.exports = practitionersRouter;

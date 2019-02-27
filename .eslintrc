@@ -24,8 +24,11 @@
     "lines-between-class-members": ["error", "always"],
     "prefer-destructuring": "warn",
     "no-alert": "off",
-    "object-property-newline": ["error", { "allowAllPropertiesOnSameLine": false }],
-    "object-curly-newline": ["error", { "multiline": true }],
+    "object-property-newline": [
+      "error",
+      { "allowAllPropertiesOnSameLine": false }
+    ],
+    "object-curly-newline": ["error", { "consistent": true }],
     "react/no-did-mount-set-state": "off",
     "jsx-a11y/anchor-is-valid": [
       "error",
@@ -35,7 +38,8 @@
       }
     ],
     "consistent-return": "warn",
-    "prefer-promise-reject-errors": "warn"
+    "prefer-promise-reject-errors": "warn",
+    "function-paren-newline": ["error", "consistent"]
   },
   "settings": {
     "import/resolver": {
