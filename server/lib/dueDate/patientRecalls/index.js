@@ -1,18 +1,17 @@
 
 import moment from 'moment';
 import { convertIntervalStringToObject } from '@carecru/isomorphic';
-import difference from 'lodash/difference';
-import logger from '../../../config/logger';
 import {
-  Account,
   Appointment,
   AppointmentCode,
-  DeliveredProcedure,
   Patient,
   PatientRecall,
 } from 'CareCruModels';
+import difference from 'lodash/difference';
+import logger from '../../../config/logger';
 import produceLikeQuery from '../../shared/produceLikeQuery';
 import unionAndMerge from '../../../util/unionAndMerge';
+import isFeatureFlagEnabled from '../../featureFlag';
 
 // Use to check if the appointment's reason string contains one of the types
 const reasonMatchesType = (reason, types) => {
@@ -42,6 +41,7 @@ export async function getPatientsThatAreDue(config) {
     patientIds,
     patientAttribute,
     codesQuery,
+    isNotDueIfFutureAppt,
   } = config;
 
   const idsQuery = patientIds || { $not: null };
@@ -54,10 +54,14 @@ export async function getPatientsThatAreDue(config) {
     },
 
     order: [
-      [{
-        model: PatientRecall,
-        as: 'patientRecalls',
-      }, 'dueDate', 'ASC'],
+      [
+        {
+          model: PatientRecall,
+          as: 'patientRecalls',
+        },
+        'dueDate',
+        'ASC',
+      ],
     ],
 
     include: [
@@ -96,29 +100,37 @@ export async function getPatientsThatAreDue(config) {
 
   return patients
     .map((p) => {
-      // Can't do this in query cause we don't have lasyHygieneApptDate when the "where" clause gets applied
+      // Can't do this in query cause we don't have lasyHygieneApptDate when the "where"
+      // clause gets applied
       p.patientRecalls = p.patientRecalls.filter(r => p[patientAttribute] < r.dueDate);
 
       // Get future appointments of this "type", through either reason or appointmentCodes
-      p.appointments = p.appointments.filter(a =>
-        reasonMatchesType(a.reason, appointmentTypes) || a.appointmentCodes.length);
+      p.appointments = isNotDueIfFutureAppt
+        ? p.appointments
+        : p.appointments.filter(a =>
+          reasonMatchesType(a.reason, appointmentTypes) ||
+              a.appointmentCodes.length);
 
       return p;
     })
     .filter(p =>
-      // Return patients with NO future booked appointments of that type
+    // Return patients with NO future booked appointments of that type
       !p.appointments.length);
 }
 
 /**
- * getPatientIdsWithChangedAppointmentsSinceDate is an async function that returns an array of patientIds
- * of patients that have had changed appointments since a supplied date
+ * getPatientIdsWithChangedAppointmentsSinceDate is an async function that returns an array of
+ * patientIds of patients that have had changed appointments since a supplied date
  *
  * @param date
  * @param accountId
  * @return [patientIds]
  */
-export async function getPatientIdsWithChangedAppointmentsSinceDate(date, accountId, omitPatientIds = []) {
+export async function getPatientIdsWithChangedAppointmentsSinceDate(
+  date,
+  accountId,
+  omitPatientIds = [],
+) {
   const appointmentsGroupByPatientId = await Appointment.findAll({
     raw: true,
     group: ['patientId'],
@@ -139,15 +151,19 @@ export async function getPatientIdsWithChangedAppointmentsSinceDate(date, accoun
 }
 
 /**
- * getPatientIdsWithChangedPatientRecallsSinceDate is an async function that returns an array of patientIds
- * of patients that have had changed patientRecalls since a supplied date
+ * getPatientIdsWithChangedPatientRecallsSinceDate is an async function that returns an array of
+ * patientIds of patients that have had changed patientRecalls since a supplied date
  *
  * @param date - an isoStringDate
  * @param accountId - uuid of the account
  * @param omitPatientIds - array of patientIDs you don't care about returning
  * @return [patientIds] - array of patientIds
  */
-export async function getPatientIdsWithChangedPatientRecallsSinceDate(date, accountId, omitPatientIds = []) {
+export async function getPatientIdsWithChangedPatientRecallsSinceDate(
+  date,
+  accountId,
+  omitPatientIds = [],
+) {
   const patientRecallsGroupByPatientId = await PatientRecall.findAll({
     raw: true,
     group: ['patientId'],
@@ -176,7 +192,11 @@ export async function getPatientIdsWithChangedPatientRecallsSinceDate(date, acco
  * @param omitPatientIds - array of patientIDs you don't care about returning
  * @return [patientIds] - array of patientIds
  */
-export async function getChangedPatientsSinceDate(date, accountId, omitPatientIds = []) {
+export async function getChangedPatientsSinceDate(
+  date,
+  accountId,
+  omitPatientIds = [],
+) {
   const changedPatients = await Patient.findAll({
     raw: true,
     paranoid: false,
@@ -206,13 +226,24 @@ export async function getChangedPatientsSinceDate(date, accountId, omitPatientId
 export async function getPatientsWithChangedDueDateInfo(date, accountId) {
   let patientIds = [];
 
-  const changedApptsPatientIds = await getPatientIdsWithChangedAppointmentsSinceDate(date, accountId);
+  const changedApptsPatientIds = await getPatientIdsWithChangedAppointmentsSinceDate(
+    date,
+    accountId,
+  );
   patientIds = changedApptsPatientIds.concat(patientIds);
 
-  const changedRecallsPatientIds = await getPatientIdsWithChangedPatientRecallsSinceDate(date, accountId, patientIds);
+  const changedRecallsPatientIds = await getPatientIdsWithChangedPatientRecallsSinceDate(
+    date,
+    accountId,
+    patientIds,
+  );
   patientIds = changedRecallsPatientIds.concat(patientIds);
 
-  const changedPatientIds = await getChangedPatientsSinceDate(date, accountId, patientIds);
+  const changedPatientIds = await getChangedPatientsSinceDate(
+    date,
+    accountId,
+    patientIds,
+  );
   patientIds = changedPatientIds.concat(patientIds);
 
   return patientIds;
@@ -247,42 +278,65 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
   } = config;
 
   // Need to create this boolean because the { $or: [[],[]] } query returns procedureCodes
-  const codesAreSet = hygieneProcedureCodes.length && recallProcedureCodes.length;
+  const codesAreSet =
+    hygieneProcedureCodes.length && recallProcedureCodes.length;
 
   // Concatenate the appointments query parameters together
   // - Someone should not be dueForRecallExam if they have a future booked hygiene appointment
   // - Someone should not be dueForHygiene if they have a future booked recall appointment
   const appointmentTypes = hygieneTypes.concat(recallTypes);
-  const codesQuery = { $or: [produceLikeQuery(hygieneProcedureCodes), produceLikeQuery(recallProcedureCodes)] };
+  const codesQuery = {
+    $or: [
+      produceLikeQuery(hygieneProcedureCodes),
+      produceLikeQuery(recallProcedureCodes),
+    ],
+  };
 
-  let patientsDueForHygiene = codesAreSet ? await getPatientsThatAreDue({
-    accountId,
-    date,
-    appointmentTypes,
-    patientRecallTypes: hygieneTypes,
-    patientIds,
-    patientAttribute: 'lastHygieneDate',
-    codesQuery,
-  }) : [];
+  const isNotDueIfFutureAppt = await isFeatureFlagEnabled(
+    'due-dates-null-if-future-appointment',
+    false,
+    {
+      userId: 'carecru-api',
+      accountId,
+    },
+  );
 
-  let patientsDueForRecall = codesAreSet ? await getPatientsThatAreDue({
-    accountId,
-    date,
-    appointmentTypes,
-    patientRecallTypes: recallTypes,
-    patientIds,
-    patientAttribute: 'lastRecallDate',
-    codesQuery,
-  }) : [];
+  let patientsDueForHygiene = codesAreSet
+    ? await getPatientsThatAreDue({
+      accountId,
+      date,
+      appointmentTypes,
+      patientRecallTypes: hygieneTypes,
+      patientIds,
+      patientAttribute: 'lastHygieneDate',
+      codesQuery,
+      isNotDueIfFutureAppt,
+    })
+    : [];
+
+  let patientsDueForRecall = codesAreSet
+    ? await getPatientsThatAreDue({
+      accountId,
+      date,
+      appointmentTypes,
+      patientRecallTypes: recallTypes,
+      patientIds,
+      patientAttribute: 'lastRecallDate',
+      codesQuery,
+      isNotDueIfFutureAppt,
+    })
+    : [];
 
   patientsDueForHygiene = patientsDueForHygiene
     .map((patient) => {
       const p = patient.get({ plain: true });
-      p.dueForHygieneDate = p.patientRecalls.length ?
-        p.patientRecalls[0].dueDate : (hygieneInterval ?
-          moment(p.lastHygieneDate).add(convertIntervalStringToObject(hygieneInterval)).toISOString() :
-          null
-        );
+      p.dueForHygieneDate = p.patientRecalls.length
+        ? p.patientRecalls[0].dueDate
+        : hygieneInterval
+          ? moment(p.lastHygieneDate)
+            .add(convertIntervalStringToObject(hygieneInterval))
+            .toISOString()
+          : null;
       return p;
     })
     .filter(p => p.dueForHygieneDate);
@@ -290,16 +344,22 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
   patientsDueForRecall = patientsDueForRecall
     .map((patient) => {
       const p = patient.get({ plain: true });
-      p.dueForRecallExamDate = p.patientRecalls.length ?
-        p.patientRecalls[0].dueDate : (recallInterval ?
-          moment(p.lastRecallDate).add(convertIntervalStringToObject(recallInterval)).toISOString() :
-          null
-        );
+      p.dueForRecallExamDate = p.patientRecalls.length
+        ? p.patientRecalls[0].dueDate
+        : recallInterval
+          ? moment(p.lastRecallDate)
+            .add(convertIntervalStringToObject(recallInterval))
+            .toISOString()
+          : null;
 
       return p;
-    }).filter(p => p.dueForRecallExamDate);
+    })
+    .filter(p => p.dueForRecallExamDate);
 
-  const patientsDue = unionAndMerge(patientsDueForHygiene, patientsDueForRecall);
+  const patientsDue = unionAndMerge(
+    patientsDueForHygiene,
+    patientsDueForRecall,
+  );
   const patientsDueIds = patientsDue.map(p => p.id);
 
   // If we are updating ALL the patients for an account
@@ -312,17 +372,20 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
   }
 
   // Set values to null now that they are no longer due
-  await Patient.update({
-    dueForHygieneDate: null,
-    dueForRecallExamDate: null,
-    recallPendingAppointmentId: null,
-    hygienePendingAppointmentId: null,
-  }, {
-    where: {
-      id: nullUpdateIdsQuery,
-      accountId,
+  await Patient.update(
+    {
+      dueForHygieneDate: null,
+      dueForRecallExamDate: null,
+      recallPendingAppointmentId: null,
+      hygienePendingAppointmentId: null,
     },
-  });
+    {
+      where: {
+        id: nullUpdateIdsQuery,
+        accountId,
+      },
+    },
+  );
 
   const patientsDuePromises = patientsDue.map(({ id, dueForHygieneDate, dueForRecallExamDate }) =>
     Patient.update(
@@ -334,8 +397,8 @@ export async function updatePatientDueDateFromPatientRecalls(config) {
       { where: { id } },
     ).catch((err) => {
       logger.error(`Failed updating dueForHygieneDate=${dueForHygieneDate} ` +
-        `and dueForRecallExamDate=${dueForRecallExamDate} ` +
-        `for patient with id=${id}`);
+            `and dueForRecallExamDate=${dueForRecallExamDate} ` +
+            `for patient with id=${id}`);
 
       logger.error(err);
     }));
