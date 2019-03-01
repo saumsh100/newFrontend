@@ -1,0 +1,225 @@
+@import '../../../../ui-kit.scss';
+
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid $grey-lighter;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.toggleTitle {
+  font-family: $inter;
+  font-weight: 500;
+  font-size: 14px;
+  color: $grey;
+  text-align: left;
+  margin: 0 32px 0 0;
+}
+
+.wrapper {
+  border: 1px solid $grey-lighter;
+  border-bottom: 0;
+  box-shadow: $shadow;
+  border-radius: 4px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.header {
+  padding-left: 72px;
+  display: flex;
+  width: 100%;
+}
+
+.weekDayWrapper {
+  min-height: 96px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.weekDay {
+  font-family: $inter;
+  font-weight: 500;
+  font-size: 14px;
+  color: $grey;
+  margin: 0 0 8px;
+}
+.edit {
+  font-family: $inter;
+  font-weight: 500;
+  font-size: 12px;
+  color: $grey-light;
+  letter-spacing: 0;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  display: flex;
+  transition: all 0.2s ease;
+  svg {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+    fill: currentColor;
+    position: relative;
+    bottom: 1px;
+  }
+  &:hover {
+    color: $grey;
+    transition: all 0.2s ease;
+  }
+}
+.body {
+  width: 100%;
+  display: flex;
+  border-top: 1px solid $grey-lightest;
+  max-height: 775px;
+  overflow: scroll;
+  flex-wrap: wrap;
+}
+.daysWrapper {
+  display: block;
+  flex: 1;
+}
+.hours {
+  width: 72px;
+  .hour {
+    min-height: 75px;
+    box-sizing: border-box;
+    border-bottom: 1px solid transparent;
+    text-align: center;
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 12px;
+    color: $grey-light;
+    line-height: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    &:first-of-type {
+      color: transparent;
+    }
+    span {
+      position: relative;
+      top: -6px;
+    }
+  }
+}
+.subHeader {
+  width: 100%;
+  display: flex;
+  .availabilityTitle {
+    width: 72px;
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 10px;
+    color: #808080;
+    letter-spacing: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid $grey-lightest;
+  }
+  .available {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 28px;
+    color: $green-lightest;
+    font-family: $inter;
+    font-size: 12px;
+    border-bottom: 1px solid $grey-lightest;
+    border-left: 1px solid $grey-lightest;
+  }
+  .notAvailable {
+    color: $grey-light;
+  }
+}
+.days {
+  display: flex;
+  flex: 1;
+  .column {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid $grey-lightest;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    position: relative;
+    .modifiers {
+      width: 100%;
+      position: absolute;
+      height: 100%;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .slot {
+      position: absolute;
+      left: 2px;
+      width: calc(100% - 4px);
+      border: 1px solid;
+      box-sizing: border-box;
+      padding: 8px;
+      border-radius: 4px;
+      .value {
+        font-family: $inter;
+        font-weight: 600;
+        font-size: 9px;
+        color: #6e6e6e;
+        margin: 0;
+      }
+      .label {
+        font-family: $inter;
+        font-weight: 400;
+        font-size: 12px;
+        color: #6e6e6e;
+        margin-bottom: 4px;
+        display: block;
+        line-height: 1;
+      }
+      &.availabilities {
+        background: #f4f7f8;
+        border-color: #8fb1bb;
+      }
+      &.breaks {
+        background: #fff8f7;
+        border-color: #ffaa9c;
+      }
+    }
+    .closedColumn {
+      @extend .slot;
+      font-family: $inter;
+      font-weight: 500;
+      font-size: 12px;
+      color: $grey-light;
+      background: $grey-lightest;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: calc(100% - 4px);
+      left: 2px;
+      height: calc(100% - 4px);
+      top: 2px;
+      z-index: 10;
+      border-radius: 4px;
+      box-sizing: border-box;
+      border: 1px solid $grey-lightest;
+    }
+    .row {
+      border-top: 1px solid $grey-lightest;
+      min-height: 75px;
+      box-sizing: border-box;
+      width: 100%;
+      &:first-of-type {
+        border-color: transparent;
+      }
+    }
+  }
+}

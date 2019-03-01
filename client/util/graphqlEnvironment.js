@@ -1,35 +1,28 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
-
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'; // eslint-disable-line import/no-extraneous-dependencies
 import { ApolloClient } from 'apollo-boost';
-import { HttpLink } from 'apollo-link-http';
-import { getMainDefinition } from 'apollo-utilities';
-import { split } from 'apollo-link';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { HttpLink } from 'apollo-link-http'; // eslint-disable-line import/no-extraneous-dependencies
+import { getMainDefinition } from 'apollo-utilities'; // eslint-disable-line import/no-extraneous-dependencies
+import { split } from 'apollo-link'; // eslint-disable-line import/no-extraneous-dependencies
+import { InMemoryCache } from 'apollo-cache-inmemory'; // eslint-disable-line import/no-extraneous-dependencies
 import { WebSocketLink } from 'apollo-link-ws';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { getApiUrl, getSubscriptionUrl } from './hub';
-import globals from '../../server/config/globals';
+import { protocol } from '../../server/config/globals';
 
 const getTokenDefault = () => localStorage.getItem('token');
-const path = '/graphql';
+const socketProtocol = protocol === 'https' ? 'wss' : 'ws';
+const defaultEndpoint = '/graphql';
+const nestEndpoint = '/newgraphql';
+const isNestOperation = operation => operation.search(/\w*_NEST\b/) === -1;
+const getUrlWithPath = (path = defaultEndpoint) => getApiUrl() + path;
 
-const socketProtocol = globals.protocol === 'https' ? 'wss' : 'ws';
-
-function getUrlWithPath() {
-  return getApiUrl() + path;
-}
-
-export function apolloClient() {
-  const token = getTokenDefault();
-
+export const apolloClient = () => {
   const httpLink = new HttpLink({
-    uri: getUrlWithPath(),
-    headers: { Authorization: `Bearer ${token}` },
+    // The logic below is required, so that we can support both NEST and legacy api endpoints.
+    uri: ({ operationName }) =>
+      getUrlWithPath(isNestOperation(operationName) ? defaultEndpoint : nestEndpoint),
+    headers: { Authorization: `Bearer ${getTokenDefault()}` },
   });
-  const wsLink = setupSubscription();
 
   const link = split(
     // split based on operation type
@@ -37,7 +30,7 @@ export function apolloClient() {
       const { kind, operation } = getMainDefinition(query);
       return kind === 'OperationDefinition' && operation === 'subscription';
     },
-    wsLink,
+    setupSubscription(),
     httpLink,
   );
 
@@ -45,37 +38,29 @@ export function apolloClient() {
     link,
     cache: new InMemoryCache(),
   });
-}
+};
 
-const fetchQuery = (getToken = getTokenDefault) => (operation, variables) => {
-  const token = getToken();
-
-  return fetch(getUrlWithPath(), {
+const fetchQuery = () => (operation, variables) =>
+  fetch(getUrlWithPath(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${getTokenDefault()}`,
     },
     body: JSON.stringify({
       query: operation.text,
       variables,
     }),
   }).then(response => response.json());
-};
 
-const setupSubscription = () => {
-  const token = getTokenDefault();
-
-  return new WebSocketLink({
+const setupSubscription = () =>
+  new WebSocketLink({
     uri: `${socketProtocol}://${getSubscriptionUrl()}/subscriptions`,
     reconnect: true,
-    connectionParams: { Authorization: token },
+    connectionParams: { Authorization: getTokenDefault() },
   });
-};
 
-const environment = new Environment({
+export default new Environment({
   network: Network.create(fetchQuery(), setupSubscription),
   store: new Store(new RecordSource()),
 });
-
-export default environment;

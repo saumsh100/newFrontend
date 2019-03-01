@@ -186,6 +186,7 @@ class TopBar extends Component {
               {!this.props.isSearchCollapsed && (
                 <GraphQLPatientSearch
                   focusInputOnMount
+                  context="topBar"
                   hideRecentSearch={false}
                   onChange={this.onSearchSelect}
                   inputProps={patientSearchInputProps}

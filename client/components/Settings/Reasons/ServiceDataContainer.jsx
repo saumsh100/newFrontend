@@ -82,7 +82,7 @@ class ServiceDataContainer extends Component {
           />
           <EnabledFeature
             predicate={({ flags }) => flags.get('reason-schedule-component')}
-            render={() => <ReasonHours />}
+            render={() => <ReasonHours reason={selectedService} />}
           />
         </SettingsCard>
       );

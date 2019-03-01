@@ -14,6 +14,7 @@ const ServiceSchema = {
   allowedPractitioners: null,
   isHidden: null,
   isDefault: null,
+  reasonWeeklyHoursId: null,
 };
 
 export default class Service extends createModel(ServiceSchema) {
@@ -23,5 +24,4 @@ export default class Service extends createModel(ServiceSchema) {
   getUrlRoot() {
     return `/api/services/${this.getId()}`;
   }
-
 }
