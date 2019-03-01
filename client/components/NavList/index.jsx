@@ -146,6 +146,10 @@ function NavList({
             <MultiNavItem path="/intelligence" icon="chart-bar" label="Intelligence">
               <SubNavItem path="/intelligence/growth" label="Practice Growth" />
               <SubNavItem path="/intelligence/pulse" label="Practice Pulse" />
+              <EnabledFeature
+                predicate={({ flags }) => flags.get('new-intelligence-reports-page')}
+                render={<SubNavItem path="/intelligence/v2" label="Practice Pulse V2" />}
+              />
             </MultiNavItem>
           )}
         />
