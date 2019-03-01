@@ -11,7 +11,7 @@ import moment from 'moment';
  *  dueForRecallExamDate: {$not: null, $gte: string, $lt: string}}}}
  *  }
  */
-export default function lateAppointments(startMonth = 0, endMonth = 3) {
+export default function lateAppointments(startMonth = 3, endMonth = 0) {
   const startDate = moment()
     .subtract(startMonth, 'months')
     .toISOString();
