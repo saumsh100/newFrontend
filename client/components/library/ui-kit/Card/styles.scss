@@ -1,0 +1,22 @@
+@import '../../../../ui.scss';
+
+$border-radius: 4px;
+
+.card {
+  background-color: $primary-white;
+  border-top: 3px solid $card-border-color;
+  border-radius: $border-radius;
+  box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+}
+
+.contentStyle {
+  padding: 15px;
+}
+
+.noBorder {
+  border-top: 0;
+}
+
+.isLoadingContent {
+  display: none;
+}
