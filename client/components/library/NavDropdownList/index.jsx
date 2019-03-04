@@ -7,10 +7,12 @@ import styles from './styles.scss';
 const NavDropdownList = props => <DropdownSelect {...props} wrapperClass={styles.wrapperStyle} />;
 
 NavDropdownList.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    label: PropTypes.string,
-  })),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ),
   onChange: PropTypes.func.isRequired,
   selected: PropTypes.string,
 };

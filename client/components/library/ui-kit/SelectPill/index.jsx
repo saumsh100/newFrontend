@@ -24,10 +24,12 @@ function SelectPill({ options, selected, className, classNamePill, onChange }) {
 }
 
 SelectPill.propTypes = {
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.string,
-    label: PropTypes.string,
-  })),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ),
   selected: PropTypes.string,
   className: PropTypes.string,
   classNamePill: PropTypes.string,

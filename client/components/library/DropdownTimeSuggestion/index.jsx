@@ -247,32 +247,14 @@ class DropdownTimeSuggestion extends Component {
    * containing the DataSlots.
    */
   renderList() {
-    const { options, formatValue, onChange, value } = this.props;
-    return (
-      this.state.isOpen && (
-        <div
-          tabIndex="-1"
-          className={styles.dropDownList}
-          ref={(node) => {
-            this.suggestionsNode = node;
-          }}
-        >
-          {options.map((option, i) => (
-            <DataSlot
-              key={`options_${option.value}`}
-              {...this.props}
-              selected={formatValue(this.currentValue) === option.value || value === option.value}
-              option={option}
-              type="button"
-              onClick={() => {
-                onChange(option.value);
-                this.scrollIndex = i;
-                this.close();
-              }}
-            />
-          ))}
-        </div>
-      )
+    return this.props.renderList(
+      this.props,
+      this.currentValue,
+      this.scrollIndex,
+      this.close,
+      (node) => {
+        this.suggestionsNode = node;
+      },
     );
   }
 
@@ -306,6 +288,7 @@ DropdownTimeSuggestion.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
   })).isRequired,
+  renderList: PropTypes.func,
   disabled: PropTypes.bool,
   className: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -334,8 +317,38 @@ const renderValue = value => value;
  */
 const validateValue = val => val.length;
 
+const renderList = (props, currentValue, scrollIndex, close, callback) => (
+  <div tabIndex="-1" className={styles.dropDownList} ref={callback}>
+    {props.options.map((option, i) => (
+      <DataSlot
+        key={`options_${option.value}`}
+        {...props}
+        selected={formatValue(currentValue) === option.value || props.value === option.value}
+        option={option}
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          props.onChange(option.value);
+          scrollIndex = i;
+          close();
+        }}
+      />
+    ))}
+  </div>
+);
+
+renderList.propTypes = {
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string,
+    labe: PropTypes.string,
+  })).isRequired,
+};
+
 DropdownTimeSuggestion.defaultProps = {
   formatValue,
+  renderList,
   validateValue,
   renderValue,
   theme: null,

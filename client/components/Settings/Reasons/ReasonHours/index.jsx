@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
@@ -14,12 +14,13 @@ import Service from '../../../../entities/models/Service';
 import ReasonWeeklyHoursToggle from './ReasonWeeklyHoursToggle';
 import WeeklyHoursModifiers from './WeeklyHoursModifiers';
 import { updateEntity } from '../../../../reducers/entities';
+import Loader from '../../../Loader';
 import styles from './styles.scss';
 
 const rangeStartTime = 4;
 const rangeEndTime = 23;
 
-class ReasonHours extends Component {
+class ReasonHours extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -28,7 +29,7 @@ class ReasonHours extends Component {
 
   /**
    * It fires the GraphQL function for either create or delete a ReasonWeeklyHours,
-   * right after the action we are updating the entity so the UI can represent the changes.
+   * right after the action we are updating the entity so the UI can display the changes.
    *
    * @param checked
    * @param callback
@@ -84,9 +85,10 @@ class ReasonHours extends Component {
         </div>
         <FetchReasonHours reasonWeeklyHoursId={this.props.reason.get('reasonWeeklyHoursId')}>
           {({ loading, error, data }) => {
-            if (loading) return null;
+            if (loading) return <Loader isLoaded={loading} />;
             if (error) return `Error!: ${error}`;
-            const isClosed = weekDay => data.reasonWeeklyHours[weekDay].isClosed;
+            const dateOptions = weekDay => data.reasonWeeklyHours[weekDay];
+            const isClosed = weekDay => dateOptions(weekDay).isClosed;
             return (
               !!this.props.reason.get('reasonWeeklyHoursId') && (
                 <div className={styles.wrapper}>
@@ -94,7 +96,13 @@ class ReasonHours extends Component {
                     {week.all.map(weekDay => (
                       <div className={styles.weekDayWrapper} key={uuid()}>
                         <span className={styles.weekDay}>{capitalize(weekDay)}</span>
-                        <Button className={styles.edit}>
+                        <Button
+                          className={styles.edit}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.props.onEditClick(dateOptions(weekDay), weekDay);
+                          }}
+                        >
                           <EditIcon />
                           Edit
                         </Button>
@@ -119,7 +127,9 @@ class ReasonHours extends Component {
                     <div className={styles.hours}>
                       {range(rangeStartTime, rangeEndTime).map(timeSlot => (
                         <div className={styles.hour} key={uuid()}>
-                          <span>{moment.tz(timeSlot, 'H', this.props.timezone).format('h A')}</span>
+                          <span>
+                            {moment.tz(timeSlot.toString(), 'H', this.props.timezone).format('h A')}
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -137,6 +147,7 @@ class ReasonHours extends Component {
                                 duration={this.props.reason.get('duration')}
                                 timezone={this.props.timezone}
                                 rangeStartTime={rangeStartTime}
+                                allowedTimeFormat={this.props.allowedTimeFormat}
                                 modifiers={{
                                   breaks: data.reasonWeeklyHours[weekDay].breaks,
                                   availabilities: data.reasonWeeklyHours[weekDay].availabilities,
@@ -160,9 +171,13 @@ class ReasonHours extends Component {
 
 ReasonHours.propTypes = {
   reason: PropTypes.shape(Service).isRequired,
+  allowedTimeFormat: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string])
+    .isRequired,
   timezone: PropTypes.string.isRequired,
+  onEditClick: PropTypes.func.isRequired,
   updateEntity: PropTypes.func.isRequired,
 };
+
 const mapStateToProps = ({ auth }) => ({ timezone: auth.get('timezone') });
 const mapActionsToProps = dispatch => bindActionCreators({ updateEntity }, dispatch);
 

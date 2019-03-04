@@ -51,53 +51,53 @@
     &:last-of-type {
       margin-bottom: 16px;
     }
+  }
 
-    .inputGroup {
+  .inputGroup {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    .inputs {
       width: 100%;
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-
-      .inputs {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        font-size: 11px;
-        color: $calendar-grey;
-        line-height: 1.5;
-      }
-    }
-
-    .toggle {
-      margin: 12px;
-    }
-
-    .delete {
-      margin-left: 10px;
-      padding: 8px 10px;
-      background: transparent;
-      color: $calendar-grey-light;
-
-      &.disabled {
-        display: none;
-      }
-
-      svg {
-        width: 12px;
-      }
-
-      &:hover {
-        color: $calendar-grey;
-      }
-    }
-
-    .spacer {
-      margin: 0 12px;
       font-size: 11px;
       color: $calendar-grey;
-      text-align: center;
-      text-transform: uppercase;
+      line-height: 1.5;
     }
+  }
+
+  .toggle {
+    margin: 12px;
+  }
+
+  .delete {
+    margin-left: 10px;
+    padding: 8px 10px;
+    background: transparent;
+    color: $calendar-grey-light;
+
+    &.disabled {
+      display: none;
+    }
+
+    svg {
+      width: 12px;
+    }
+
+    &:hover {
+      color: $calendar-grey;
+    }
+  }
+
+  .spacer {
+    margin: 0 12px;
+    font-size: 11px;
+    color: $calendar-grey;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   .label {

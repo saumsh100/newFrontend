@@ -65,10 +65,12 @@ FormGenerator.propTypes = {
       onChange: PropTypes.func,
     }),
     categories: PropTypes.shape({
-      options: PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      })),
+      options: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string,
+        }),
+      ),
       selected: PropTypes.string,
       label: PropTypes.string,
       onChange: PropTypes.func,
@@ -79,10 +81,12 @@ FormGenerator.propTypes = {
       onChange: PropTypes.func,
     }),
     dateRangeFilter: PropTypes.shape({
-      options: PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string,
-        value: PropTypes.string,
-      })),
+      options: PropTypes.arrayOf(
+        PropTypes.shape({
+          label: PropTypes.string,
+          value: PropTypes.string,
+        }),
+      ),
       selected: PropTypes.string,
       onChange: PropTypes.func,
     }),

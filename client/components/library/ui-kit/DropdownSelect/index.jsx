@@ -76,10 +76,12 @@ class DropdownSelect extends Component {
 DropdownSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    label: PropTypes.string,
-  })),
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+      label: PropTypes.string,
+    }),
+  ),
   selected: PropTypes.string,
   wrapperClass: PropTypes.string,
 };

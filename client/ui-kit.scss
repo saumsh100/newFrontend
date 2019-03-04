@@ -3,6 +3,7 @@ $inter: 'Inter', sans-serif;
 
 // Shadow
 $shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+$shadow-md: 2px 2px 4px 0 rgba(128, 128, 128, 0.11);
 
 //Colors
 $white: #fff;
@@ -12,3 +13,162 @@ $grey-light: #aaaaaa;
 $grey: #6e6e6e;
 
 $green-lightest: #abd0a2;
+$green-light: #206477;
+$green: #184b5a;
+
+$red: #eb5353;
+
+.dropdown {
+  &__input__wrapper {
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid $grey-lighter;
+    box-shadow: $shadow;
+    border-radius: 4px;
+    transition: border-color 0.2s ease;
+    background: $white;
+
+    &:hover {
+      border-color: $grey-light;
+      transition: border-color 0.2s ease;
+    }
+  }
+
+  &__input {
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 13px;
+    color: $grey;
+  }
+
+  &__wrapper {
+    padding: 8px 0;
+    box-sizing: border-box;
+    // we don't have access to the react-dd-menu item
+    // so we need to access it using the div selector
+    > :not(.dd-menu-items) + div,
+    > :not(.dd-menu-items) + div ul {
+      border: 0;
+      box-shadow: none !important;
+    }
+  }
+
+  &__listItem {
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 13px;
+    color: $grey;
+    justify-content: flex-start;
+    border: 0;
+    padding: 0 16px;
+  }
+
+  &__selectedListItem {
+    border: 0;
+  }
+
+  &__list {
+    box-shadow: $shadow-md;
+    border-radius: 4px;
+    border: 1px solid $grey-lighter;
+    max-height: 200px;
+    overflow-y: scroll;
+  }
+
+  &__errorIcon {
+    color: $red;
+  }
+
+  &__errorInput {
+    color: $red;
+  }
+}
+
+.modal {
+  &__title {
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 18px;
+    color: $green;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__helper {
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 14px;
+    color: $grey;
+    margin: 18px 0 12px;
+  }
+
+  &__add__button {
+    background: $white;
+    border: 1px solid $grey-lighter;
+    box-shadow: $shadow;
+    font-size: 13px;
+    color: $grey-light;
+    border-radius: 4px;
+    text-align: center;
+    font-family: $inter;
+    font-weight: 500;
+    display: block;
+    margin-top: 8px;
+  }
+
+  &__cancel {
+    background: transparent;
+    color: $grey-light;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease-in;
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 12px 20px;
+
+    &:hover {
+      border-color: $grey-lighter;
+      box-shadow: $shadow;
+      transition: all 0.2s ease-in;
+      background: $white;
+    }
+  }
+
+  &__save {
+    font-family: $inter;
+    font-weight: 500;
+    font-size: 14px;
+    background: $green-light;
+    box-shadow: $shadow;
+    border-radius: 4px;
+    transition: all 0.2s ease-in;
+    margin-left: 8px;
+    padding: 12px 20px;
+
+    &:hover {
+      box-shadow: $shadow;
+      transition: all 0.2s ease-in;
+      background: $green;
+    }
+  }
+
+  &__group {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    &:last-of-type {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__label {
+    font-family: $inter;
+    font-weight: normal;
+    font-size: 12px;
+    color: #999999;
+  }
+}

@@ -8,14 +8,13 @@ import styles from './styles.scss';
 
 const h2px = 75;
 const m2px = h2px / 60;
-const allowedFormats = ['HH:mm:ss', 'HH:mm:ss-Z'];
 const AVAILABILITIES = 'availabilities';
 
-const timeToVerticalPositionBuilder = ({ timezone, rangeStartTime, time }) =>
+const timeToVerticalPositionBuilder = ({ timezone, rangeStartTime, time, allowedTimeFormat }) =>
   timeToVerticalPosition(
     {
       time,
-      formats: allowedFormats,
+      formats: allowedTimeFormat,
     },
     timezone,
     m2px,
@@ -61,7 +60,7 @@ const WeeklyHoursModifiers = ({ modifiers, ...props }) => {
               ...props,
               time: startTime,
             })}
-            value={moment.tz(startTime, allowedFormats, props.timezone).format('LT')}
+            value={moment.tz(startTime, props.allowedTimeFormat, props.timezone).format('LT')}
             height={getModifierHeight(modifierKey, endTime, startTime, props)}
             label={
               modifierKey === AVAILABILITIES
@@ -78,6 +77,8 @@ WeeklyHoursModifiers.propTypes = {
   duration: PropTypes.number.isRequired,
   timezone: PropTypes.string.isRequired,
   rangeStartTime: PropTypes.number.isRequired,
+  allowedTimeFormat: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string])
+    .isRequired,
   modifiers: PropTypes.shape({
     availabilities: PropTypes.arrayOf(PropTypes.shape({
       startTime: PropTypes.string,

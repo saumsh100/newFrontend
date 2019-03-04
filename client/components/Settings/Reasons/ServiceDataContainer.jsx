@@ -10,7 +10,7 @@ import ServicePractitioners from './ServicePractitioners';
 import SettingsCard from '../Shared/SettingsCard';
 import { Card, IconButton } from '../../library';
 import EnabledFeature from '../../library/EnabledFeature';
-import ReasonHours from './ReasonHours';
+import ReasonWeeklyHoursWrapper from './ReasonHours/Wrapper';
 import styles from './styles.scss';
 
 class ServiceDataContainer extends Component {
@@ -62,7 +62,7 @@ class ServiceDataContainer extends Component {
               onClick={this.deleteService}
               role="button"
               tabIndex={0}
-              onKeyDown={e => e.keyCode === '13' && this.deleteService(e)}
+              onKeyDown={e => e.keyCode === 13 && this.deleteService()}
             >
               <IconButton icon="trash" iconType="solid" />
             </div>
@@ -82,7 +82,7 @@ class ServiceDataContainer extends Component {
           />
           <EnabledFeature
             predicate={({ flags }) => flags.get('reason-schedule-component')}
-            render={() => <ReasonHours reason={selectedService} />}
+            render={() => <ReasonWeeklyHoursWrapper reason={selectedService} />}
           />
         </SettingsCard>
       );

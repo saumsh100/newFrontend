@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuid } from 'uuid';
 import moment from 'moment-timezone';
 import classNames from 'classnames';
 import DropdownTimeSuggestion from '../DropdownTimeSuggestion';
@@ -64,7 +65,10 @@ const InputGroup = ({
   onChange,
   isRemovable,
   onClick,
+  showEndTime,
   error,
+  theme,
+  renderList = undefined,
 }) => (
   <div className={styles.inputGroup}>
     <div className={styles.inputs}>
@@ -78,21 +82,28 @@ const InputGroup = ({
         disabled={!isAllow}
         error={error}
         strict={false}
-        theme={dropdownTheme(schedule)}
+        renderList={renderList}
+        theme={theme}
       />
-      <span className={styles.spacer}>to</span>
-      <DropdownTimeSuggestion
-        options={timeOptions}
-        onChange={value => onChange({ endTime: value })}
-        value={formatTimeField(endTime, timezone)}
-        renderValue={value => renderTimeValue(value, timezone)}
-        formatValue={value => formatTimeField(value, timezone)}
-        validateValue={value => validateTimeField(value, timezone)}
-        strict={false}
-        disabled={!isAllow}
-        error={error}
-        theme={dropdownTheme(schedule)}
-      />
+      {showEndTime && [
+        <span className={styles.spacer} key={uuid()}>
+          to
+        </span>,
+        <DropdownTimeSuggestion
+          options={timeOptions}
+          key={uuid()}
+          renderList={renderList}
+          onChange={value => onChange({ endTime: value })}
+          value={formatTimeField(endTime, timezone)}
+          renderValue={value => renderTimeValue(value, timezone)}
+          formatValue={value => formatTimeField(value, timezone)}
+          validateValue={value => validateTimeField(value, timezone)}
+          strict={false}
+          disabled={!isAllow}
+          error={error}
+          theme={theme}
+        />,
+      ]}
       {isRemovable && (
         <Button
           className={classNames(styles.delete, { [styles.disabled]: !isAllow })}
@@ -122,11 +133,17 @@ InputGroup.propTypes = {
     value: PropTypes.string,
     label: PropTypes.string,
   })).isRequired,
-  error: PropTypes.bool.isRequired,
+  renderList: PropTypes.func.isRequired,
+  theme: PropTypes.objectOf(PropTypes.string),
+  error: PropTypes.bool,
+  showEndTime: PropTypes.bool,
   timezone: PropTypes.string.isRequired,
 };
 
 InputGroup.defaultProps = {
   isRemovable: false,
+  showEndTime: true,
+  theme: dropdownTheme(schedule),
+  error: '',
   onClick: () => {},
 };
