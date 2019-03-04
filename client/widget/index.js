@@ -21,11 +21,6 @@ function getQueryVariable(variable) {
   }
 }
 
-function isValidStarsVariable(stars) {
-  const num = parseInt(stars);
-  return num >= 1 && num >= 5;
-}
-
 /**
  * This is the script that builds Modal UI, and initiates client-side
  * CareCru object to control embedded widgets
@@ -59,8 +54,9 @@ function main() {
   const accountId = getQueryVariable('accountId');
   const stars = getQueryVariable('stars') || 0;
   const cc = getQueryVariable('cc');
+  const suffix = cc && 'review' === cc ? cc : 'book';
 
-  const ccUrl = cc && (sentRecallId ? 'book/date-and-time' : cc) + window.location.search;
+  const ccUrl = cc && (sentRecallId ? 'book/date-and-time' : suffix) + window.location.search;
 
   const iframeSrc = ccUrl ? `${__CARECRU_IFRAME_SRC__}/${ccUrl}` : `${__CARECRU_IFRAME_SRC__}/book`;
   console.log('iframeSrc', __CARECRU_IFRAME_SRC__, iframeSrc);
