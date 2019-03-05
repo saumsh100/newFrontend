@@ -102,7 +102,7 @@ export async function getPatientsThatAreDue(config) {
     .map((p) => {
       // Can't do this in query cause we don't have lasyHygieneApptDate when the "where"
       // clause gets applied
-      p.patientRecalls = p.patientRecalls.filter(r => p[patientAttribute] < r.dueDate);
+      p.patientRecalls = p.patientRecalls.filter(r => p[patientAttribute] <= r.dueDate);
 
       // Get future appointments of this "type", through either reason or appointmentCodes
       p.appointments = isNotDueIfFutureAppt
