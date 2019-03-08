@@ -6,9 +6,9 @@ const loggerMap = new Map();
 
 function S3Logger(folderToUse) {
   if (
-    process.env.S3_LOGGER_ENABLED !== "true" ||
+    process.env.S3_LOGGER_ENABLED !== 'true' ||
     process.env.S3_LOGS_BUCKET_NAME === undefined ||
-    process.env.S3_LOGS_BUCKET_NAME === ""
+    process.env.S3_LOGS_BUCKET_NAME === ''
   ) {
     return CCLogger;
   }
@@ -21,6 +21,10 @@ function S3Logger(folderToUse) {
     bucket: process.env.S3_LOGS_BUCKET_NAME,
     folder: folderToUse,
     name_format: `%Y-%m-%d-%H-%M-%S.log`,
+    rotate_every: 12 * 60 * 60 * 1000,
+    max_file_size: 100 * 1024 * 1024 * 1024,
+    buffer_size: 100 * 1024,
+    upload_every: 1 * 60 * 1000,
     access_key_id: process.env.AWS_ACCESS_KEY_ID,
     secret_access_key: process.env.AWS_SECRET_ACCESS_KEY
   });

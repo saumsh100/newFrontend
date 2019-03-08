@@ -137,6 +137,24 @@ export default function (sequelize, DataTypes) {
     isRecall: { type: DataTypes.BOOLEAN },
   });
 
+  Appointment.afterCreate((appointment) => {
+    let appointmentJSON = appointment.toJSON();
+    delete appointmentJSON.isSyncedWithPMS;
+    S3Logger('appointment').info({
+      ...appointmentJSON, 
+      status: 'created'
+    });
+  }, { individualHooks: true });
+
+  Appointment.afterUpdate((appointment) => {
+    let appointmentJSON = appointment.toJSON();
+    delete appointmentJSON.isSyncedWithPMS;
+    S3Logger('appointment').info({
+      ...appointmentJSON, 
+      status: appointmentJSON.isDeleted ? 'deleted' : 'updated'
+    });
+  }, { individualHooks: true });
+
   Appointment.REQUEST_REASON = 'Appointment Request - CareCru';
 
   Appointment.associate = (models) => {

@@ -184,7 +184,7 @@ async function batchCreate(dataArray, Model, modelType, extraSetValidators = [],
 
   const savableCopies = docs.map(d => d.get({ plain: true }));
 
-  const response = await Model.bulkCreate(savableCopies).catch((e) => {
+  const response = await Model.bulkCreate(savableCopies, { individualHooks: true }).catch((e) => {
     if (modelType === 'deliveredProcedure') {
       return console.log('Batch Failed for deliveredProcedure');
     }
