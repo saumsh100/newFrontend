@@ -25,10 +25,11 @@ import {
   asyncEmailValidatePatient,
 } from '../../../library/Form/validate';
 import { normalizePhone } from '../../../library/Form/normalize';
+import EnabledFeature from '../../../library/EnabledFeature';
 import { SortByFirstName } from '../../../library/util/SortEntities';
 import { setFamilyPatientUser, setPatientUser } from '../../../../reducers/availabilities';
 import SuggestionSelect from '../../../library/DropdownSuggestion/SuggestionSelect';
-import { historyShape } from '../../../library/PropTypeShapes/routerShapes';
+import { historyShape, locationShape } from '../../../library/PropTypeShapes/routerShapes';
 import patientUserShape from '../../../library/PropTypeShapes/patientUserShape';
 import {
   showButton,
@@ -352,63 +353,75 @@ class PatientInformation extends PureComponent {
                   />
                 </div>
               </Element>
-              <Element name="insuranceCarrier" className={styles.elementWrapper}>
-                {isCustomCarrier ? (
-                  <Field
-                    autoFocus={
-                      insuranceCarrierValue &&
-                      initialValues.insuranceCarrier !== insuranceCarrierValue
-                    }
-                    theme={inputTheme(styles)}
-                    iconComponent={
-                      <IconButton
-                        icon="times"
-                        iconType="light"
-                        className={styles.closeIcon}
-                        onClick={() =>
-                          this.props.change(FORM_NAME, 'insuranceCarrier', carriers[0].value)
-                        }
-                      />
-                    }
-                    required
-                    name="insuranceCarrier"
-                    label="Insurance Carrier *"
-                  />
-                ) : (
+              <EnabledFeature
+                predicate={({ flags }) => flags.get('booking-widget-insurance')}
+                render={() => (
                   <div className={styles.group}>
-                    <Field
-                      name="insuranceCarrier"
-                      label="Insurance Carrier *"
-                      component={SuggestionSelect}
-                      theme={dropdownTheme(styles)}
-                      required
-                      validateValue={value => validateField(carriers, value) || value === null}
-                      renderValue={value =>
-                        (validateField(carriers, value) && validateField(carriers, value).label) ||
-                        ''
-                      }
-                      options={carriers}
-                      data-test-id="insuranceCarrier"
-                    />
+                    <Element name="insuranceCarrier" className={styles.elementWrapper}>
+                      {isCustomCarrier ? (
+                        <Field
+                          autoFocus={
+                            insuranceCarrierValue &&
+                            initialValues.insuranceCarrier !== insuranceCarrierValue
+                          }
+                          theme={inputTheme(styles)}
+                          iconComponent={
+                            <IconButton
+                              icon="times"
+                              iconType="light"
+                              className={styles.closeIcon}
+                              onClick={() =>
+                                this.props.change(FORM_NAME, 'insuranceCarrier', carriers[0].value)
+                              }
+                            />
+                          }
+                          required
+                          name="insuranceCarrier"
+                          label="Insurance Carrier *"
+                        />
+                      ) : (
+                        <div className={styles.group}>
+                          <Field
+                            name="insuranceCarrier"
+                            label="Insurance Carrier *"
+                            component={SuggestionSelect}
+                            theme={dropdownTheme(styles)}
+                            required
+                            validateValue={value =>
+                              validateField(carriers, value) || value === null
+                            }
+                            renderValue={value =>
+                              (validateField(carriers, value) &&
+                                validateField(carriers, value).label) ||
+                              ''
+                            }
+                            options={carriers}
+                            data-test-id="insuranceCarrier"
+                          />
+                        </div>
+                      )}
+                    </Element>
+                    ,
+                    <Element name="insuranceMemberId" className={styles.elementWrapper}>
+                      <Field
+                        theme={inputTheme(styles)}
+                        label="Insurance Member ID"
+                        name="insuranceMemberId"
+                        disabled={insuranceCarrierValue === carriers[0].value}
+                      />
+                    </Element>
+                    ,
+                    <Element name="insuranceGroupId" className={styles.elementWrapper}>
+                      <Field
+                        theme={inputTheme(styles)}
+                        label="Group ID"
+                        name="insuranceGroupId"
+                        disabled={insuranceCarrierValue === carriers[0].value}
+                      />
+                    </Element>
                   </div>
                 )}
-              </Element>
-              <Element name="insuranceMemberId" className={styles.elementWrapper}>
-                <Field
-                  theme={inputTheme(styles)}
-                  label="Insurance Member ID"
-                  name="insuranceMemberId"
-                  disabled={insuranceCarrierValue === carriers[0].value}
-                />
-              </Element>
-              <Element name="insuranceGroupId" className={styles.elementWrapper}>
-                <Field
-                  theme={inputTheme(styles)}
-                  label="Group ID"
-                  name="insuranceGroupId"
-                  disabled={insuranceCarrierValue === carriers[0].value}
-                />
-              </Element>
+              />
             </div>
           </Form>
         </div>
@@ -476,6 +489,7 @@ function mapStateToProps({ auth, availabilities, widgetNavigation, ...state }) {
 }
 
 PatientInformation.propTypes = {
+  location: PropTypes.shape(locationShape).isRequired,
   initialValues: PropTypes.shape({
     birthDate: PropTypes.string,
     email: PropTypes.string,
@@ -524,7 +538,9 @@ PatientInformation.defaultProps = {
   patientUser: false,
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(PatientInformation));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(PatientInformation),
+);

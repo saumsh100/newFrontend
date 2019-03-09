@@ -8,6 +8,7 @@ import { isHub } from '../../../util/hub';
 import PatientUser from '../../../entities/models/PatientUser';
 import Request from '../../../entities/models/Request';
 import { Card, Avatar, Icon, SContainer, SHeader, SBody, SFooter, Button } from '../../library';
+import EnabledFeature from '../../library/EnabledFeature';
 import styles from './styles.scss';
 
 const renderDesktopHeader = ({ patient, closePopover, age }) => (
@@ -217,20 +218,25 @@ export default class RequestPopover extends Component {
                   {patient.email ? <Icon icon="envelope" size={0.9} type="solid" /> : null}
                   <div className={styles.data_text}>{patient.email}</div>
                 </div>
-                <div className={styles.multilineData}>
-                  {insuranceCarrier && <Icon icon="medkit" size={0.9} type="solid" />}
-                  <div className={styles.data_text}>
-                    {insuranceCarrier || 'n/a'}
-                    {(insuranceMemberId || insuranceGroupId) && (
-                      <span className={styles.subData}>
-                        <br />
-                        Member ID: {insuranceMemberId || 'n/a'}
-                        <br />
-                        Group ID: {insuranceGroupId || 'n/a'}
-                      </span>
-                    )}
-                  </div>
-                </div>
+                <EnabledFeature
+                  predicate={({ flags }) => flags.get('booking-widget-insurance')}
+                  render={() => (
+                    <div className={styles.multilineData}>
+                      {insuranceCarrier && <Icon icon="medkit" size={0.9} type="solid" />}
+                      <div className={styles.data_text}>
+                        {insuranceCarrier || 'n/a'}
+                        {(insuranceMemberId || insuranceGroupId) && (
+                          <span className={styles.subData}>
+                            <br />
+                            Member ID: {insuranceMemberId || 'n/a'}
+                            <br />
+                            Group ID: {insuranceGroupId || 'n/a'}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                />
               </div>
             ) : (
               <div className={styles.container}>
