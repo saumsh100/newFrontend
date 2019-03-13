@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { isImmutable } from 'immutable';
 import { Form, Field } from '../../../library';
 import { updateEntityRequest } from '../../../../thunks/fetchEntities';
 import Account from '../../../../entities/models/Account';
@@ -71,7 +72,9 @@ class CellPhoneFallback extends React.Component {
 
   handleOrderSubmit(values) {
     if (
-      window.confirm('Are you sure you want to change the order in which Donna will look for a cell phone number?')
+      window.confirm(
+        'Are you sure you want to change the order in which Donna will look for a cell phone number?',
+      )
     ) {
       const finalOrder = Object.entries(values)
         .filter(([, value]) => value !== '')
@@ -135,9 +138,12 @@ CellPhoneFallback.propTypes = {
 
 const mapStateToProps = ({ entities, auth }) => {
   const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
+  const tmpCellPhone = activeAccount.get('cellPhoneNumberFallback');
+  const cellPhoneNumberFallback = isImmutable(tmpCellPhone) ? tmpCellPhone.toJS() : tmpCellPhone;
+
   return {
     activeAccount,
-    cellPhoneNumberFallback: activeAccount.get('cellPhoneNumberFallback').toJS(),
+    cellPhoneNumberFallback,
   };
 };
 
