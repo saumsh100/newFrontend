@@ -23,7 +23,7 @@ export async function fetchRecallEvents({ patientId, accountId, query }) {
         required: true,
       },
     ],
-    attributes: ['id', 'createdAt', 'isHygiene', 'primaryType'],
+    attributes: ['id', 'isAutomated', 'createdAt', 'isHygiene', 'primaryType'],
     order: [['createdAt', 'DESC']],
     ...query,
   });

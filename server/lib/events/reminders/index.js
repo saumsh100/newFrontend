@@ -62,7 +62,7 @@ export async function fetchReminderEvents({ patientId, accountId, query }) {
         ],
       },
     ],
-    attributes: ['id', 'contactedPatientId', 'createdAt', 'isConfirmed', 'primaryType', 'isFamily'],
+    attributes: ['id', 'isAutomated', 'contactedPatientId', 'createdAt', 'isConfirmed', 'primaryType', 'isFamily'],
     order: [['createdAt', 'DESC']],
     group: ['reminder.interval', 'SentReminder.id', 'reminder.id'],
     limit: 5,

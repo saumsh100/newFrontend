@@ -51,7 +51,13 @@ export default function (sequelize, DataTypes) {
       defaultValue: false,
       allowNull: false,
     },
-    
+
+    isAutomated: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+
     // Hacky fix for RemindersList algo so that we don't send farther away reminders
     // after sending the short ones
     primaryType: {
