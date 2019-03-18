@@ -28,4 +28,7 @@ export default data =>
     url: graphQLServerUrl,
     method: 'post',
     data,
+  }).catch((err) => {
+    console.error('GraphQL Client Error:', err);
+    throw err;
   });

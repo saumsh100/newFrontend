@@ -2,14 +2,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
+import isNumber from 'lodash/isNumber';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import { Card, Avatar, Icon, Grid, Row, Col } from '../../../library';
+import EnabledFeature from '../../../library/EnabledFeature';
 import InfoDump from '../../Shared/InfoDump';
 import HygieneData from '../../Shared/HygieneColumn';
 import RecallData from '../../Shared/RecallColumn';
 import { isResponsive } from '../../../../util/hub';
 import { accountShape } from '../../../library/PropTypeShapes';
 import PatientModel from '../../../../entities/models/Patient';
+import ActionsDropdown from '../ActionsDropdown';
 import styles from './styles.scss';
 
 const bgImgs = [
@@ -36,6 +39,7 @@ export default function TopDisplay(props) {
     accountsFetched,
     activeAccount,
     wasPatientFetched,
+    actionMenuItems,
   } = props;
 
   if (!patient) {
@@ -70,8 +74,22 @@ export default function TopDisplay(props) {
                 <Avatar user={patient} size={avatarSize} />
               </div>
               <div className={styles.avatarContainer_data}>
-                <div className={styles.avatarContainer_data_name}>
-                  {`${patient.getFullName()}${age && ','} ${age}`}
+                <div className={styles.avatarContainer_data_nameAge}>
+                  <div className={styles.avatarContainer_data_nameAge_name}>
+                    {patient.getFullName()}
+                  </div>
+                  <div className={styles.avatarContainer_data_nameAge_age}>
+                    {isNumber(age) ? `, ${age}` : null}
+                  </div>
+                  <div className={styles.avatarContainer_data_badge}>
+                    <div
+                      className={
+                        styles[`avatarContainer_data_badge_${patient.status.toLowerCase()}`]
+                      }
+                    >
+                      {patient.status}
+                    </div>
+                  </div>
                 </div>
                 {patient.email && (
                   <div className={styles.displayFlex}>
@@ -93,11 +111,10 @@ export default function TopDisplay(props) {
                     </div>
                   </div>
                 )}
-                {!isResponsive() && (
-                  <div className={styles.paddingStatus}>
-                    <div className={styles.avatarContainer_data_active}>{patient.status}</div>
-                  </div>
-                )}
+                <EnabledFeature
+                  predicate={({ flags }) => flags.get('patient-actions-button')}
+                  render={<ActionsDropdown actionMenuItems={actionMenuItems} />}
+                />
               </div>
             </div>
             <Grid className={styles.rightContainer}>
@@ -152,6 +169,7 @@ TopDisplay.propTypes = {
   patientStats: PropTypes.instanceOf(Map),
   activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   patient: PropTypes.oneOfType([PropTypes.instanceOf(PatientModel), PropTypes.func]),
+  actionMenuItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 TopDisplay.defaultProps = {

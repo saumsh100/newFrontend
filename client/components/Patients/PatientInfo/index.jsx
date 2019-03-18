@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { graphql, QueryRenderer } from 'react-relay';
 import classNames from 'classnames';
 import { Map } from 'immutable';
+import { reset } from 'redux-form';
 import { convertIntervalToMs } from '@carecru/isomorphic';
 import graphQLEnvironment from '../../../util/graphqlEnvironment';
 import { Grid, Row, Col, Icon, Tabs, Tab, Button } from '../../library';
@@ -24,6 +25,7 @@ import {
   clearAllTimelineFilters,
 } from '../../../reducers/patientTable';
 import { setTitle, setBackHandler } from '../../../reducers/electron';
+import { showAlertTimeout } from '../../../thunks/alerts';
 import FilterTimeline from './FilterTimeline';
 import Loader from '../../Loader';
 import EditDisplay from './EditDisplay';
@@ -32,7 +34,13 @@ import Timeline from './Timeline';
 import LeftInfoDisplay from './LeftInfoDisplay';
 import { isHub, isResponsive } from '../../../util/hub';
 import { getEventsOffsetLimitObj } from '../Shared/helpers';
+import FormModal from './FormModal';
+import NotesForm from './Notes/NotesForm';
+import CreatePatientNoteMutation from './Notes/CreatePatientNoteMutation';
+import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 import styles from './styles.scss';
+
+const NOTES_FORM_NAME = 'notesForm';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
@@ -72,6 +80,7 @@ class PatientInfo extends Component {
         title: null,
       },
       defaultEvents: [],
+      isNotesFormOpen: false,
     };
 
     this.changePageTab = this.changePageTab.bind(this);
@@ -82,6 +91,8 @@ class PatientInfo extends Component {
     this.addRemoveFilter = this.addRemoveFilter.bind(this);
     this.fetchPatientData = this.fetchPatientData.bind(this);
     this.fetchEvents = this.fetchEvents.bind(this);
+    this.toggleNotesForm = this.toggleNotesForm.bind(this);
+    this.handleNotesFormSubmit = this.handleNotesFormSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -202,6 +213,37 @@ class PatientInfo extends Component {
     this.props.addRemoveTimelineFilters({ type: filter });
   }
 
+  toggleNotesForm() {
+    this.setState({ isNotesFormOpen: !this.state.isNotesFormOpen });
+  }
+
+  async handleNotesFormSubmit({ note }, commit) {
+    const { patient, activeAccount, userId } = this.props;
+    try {
+      const variables = {
+        note,
+        patientId: patient.id,
+        accountId: activeAccount.id,
+        userId,
+      };
+
+      await commit({ variables });
+      this.toggleNotesForm();
+      this.props.showAlertTimeout({
+        type: 'success',
+        alert: { body: `Added note for ${patient.firstName}` },
+      });
+
+      this.props.reset(NOTES_FORM_NAME);
+    } catch (err) {
+      console.error('handleNotesFormSubmit Error:', err);
+      this.props.showAlertTimeout({
+        type: 'error',
+        alert: { body: `Failed to add note for ${patient.firstName}` },
+      });
+    }
+  }
+
   render() {
     const { patientId } = this.props.match.params;
     const {
@@ -215,12 +257,20 @@ class PatientInfo extends Component {
       accountViewer,
       reminders,
       recalls,
+      canAddNote,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
 
     const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
+
+    const actionMenuItems = [];
+    canAddNote &&
+      actionMenuItems.push({
+        children: <div>Add Note</div>,
+        onClick: this.toggleNotesForm,
+      });
 
     return (
       <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
@@ -233,6 +283,7 @@ class PatientInfo extends Component {
               accountsFetched={accountsFetched}
               wasPatientFetched={wasPatientFetched}
               activeAccount={activeAccount}
+              actionMenuItems={actionMenuItems}
             />
             {isResponsive() && (
               <HeaderModalComponent
@@ -336,6 +387,23 @@ class PatientInfo extends Component {
             </Col>
           </Row>
         )}
+        <FormModal
+          title="Add Note"
+          formName={NOTES_FORM_NAME}
+          active={this.state.isNotesFormOpen}
+          onToggle={this.toggleNotesForm}
+        >
+          <CreatePatientNoteMutation>
+            {commit => (
+              <NotesForm
+                formName={NOTES_FORM_NAME}
+                initialValues={{}}
+                onSubmit={values => this.handleNotesFormSubmit(values, commit)}
+                className={styles.notesForm}
+              />
+            )}
+          </CreatePatientNoteMutation>
+        </FormModal>
       </Grid>
     );
   }
@@ -353,12 +421,17 @@ function mapDispatchToProps(dispatch) {
       setTitle,
       setBackHandler,
       deleteAllEntity,
+      showAlertTimeout,
+      reset,
     },
     dispatch,
   );
 }
 
-function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
+function mapStateToProps(
+  { entities, apiRequests, patientTable, auth, electron, featureFlags },
+  { match },
+) {
   const patients = entities.getIn(['patients', 'models']);
   const reminders = entities
     .getIn(['reminders', 'models'])
@@ -386,11 +459,15 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
 
   const waitForAuth = auth.get('accountId');
   const role = auth.get('role');
+  const userId = auth.get('userId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
   const accountsFetched = apiRequests.get('accountsPatientInfo')
     ? apiRequests.get('accountsPatientInfo').wasFetched
     : null;
+
+  const features = featureFlags.get('flags');
+  const canAddNote = isFeatureEnabledSelector(features, 'patient-add-note-action');
 
   return {
     patient: patients.get(match.params.patientId),
@@ -400,6 +477,7 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
     activeAccount,
     accountsFetched,
     role,
+    userId,
     wasPatientFetched,
     reminders,
     recalls,
@@ -407,6 +485,7 @@ function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }
     wasRecallsFetched,
     currentBackHandler: electron.get('backHandler'),
     currentTitle: electron.get('title'),
+    canAddNote,
   };
 }
 
@@ -416,6 +495,7 @@ PatientInfo.propTypes = {
   wasStatsFetched: PropTypes.bool,
   currentTitle: PropTypes.string,
   role: PropTypes.string,
+  userId: PropTypes.string,
   accountViewer: PropTypes.shape({
     id: PropTypes.string,
     patient: PropTypes.shape({
@@ -439,6 +519,9 @@ PatientInfo.propTypes = {
   clearAllTimelineFilters: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteAllEntity: PropTypes.func.isRequired,
+  showAlertTimeout: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  canAddNote: PropTypes.bool,
 };
 
 PatientInfo.defaultProps = {
@@ -449,8 +532,10 @@ PatientInfo.defaultProps = {
   patient: null,
   patientStats: null,
   role: '',
+  userId: '',
   wasPatientFetched: false,
   wasStatsFetched: false,
+  canAddNote: false,
 };
 
 const enhance = connect(

@@ -12,7 +12,7 @@
 }
 
 .imageContainer {
-  height: 50%;
+  height: 40%;
   opacity: 1;
   background-color: #e6e6e6;
   background-size: 100%;
@@ -31,7 +31,7 @@
 .dataContainer {
   position: relative;
   display: flex;
-  height: 50%;
+  height: 60%;
   width: 100%;
   background-color: #fafafa;
 
@@ -44,35 +44,37 @@
 .avatarContainer {
   width: 30%;
   border-right: 1px solid $primary-grey;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: #fafafa;
   &_avatar {
     top: -82px;
+    left: 0px;
     position: absolute;
+    padding-left: 40px;
   }
 
   &_data {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     line-height: 1.8em;
     padding-top: 60px;
-
-    &_name {
+    padding-left: 40px;
+    padding-right: 40px;
+    &_nameAge {
       color: #505c68;
       font-size: $extra-medium-size;
       composes: fontMedium from 'sass-loader!../../../../fonts.scss';
-      width: 300px;
-      text-align: center;
       margin-bottom: 2px;
       white-space: nowrap;
-      overflow: hidden;
-      max-width: 260px;
-      text-overflow: ellipsis;
       height: 25px;
+      display: flex;
+      align-items: center;
+      justify-items: center;
+      &_name {
+        overflow: hidden;
+        max-width: 260px;
+        text-overflow: ellipsis;
+      }
+
+      &_age {
+      }
     }
 
     &_email {
@@ -92,18 +94,30 @@
       composes: subHeaderSmall from 'sass-loader!../../../../fonts.scss';
     }
 
-    &_active {
+    &_badge {
       composes: subHeaderExtraSmall from 'sass-loader!../../../../fonts.scss';
       color: #fff;
       background: #a7a7a5;
-      height: 13px;
+      height: 18px;
       display: flex;
       align-items: center;
       border-radius: 20px;
       width: 60px;
       justify-content: center;
       box-sizing: border-box;
-      padding: 9px;
+      overflow: hidden;
+      margin-left: 10px;
+      > div {
+        width: 100%;
+        text-align: center;
+      }
+
+      &_active {
+        background: $primary-blue;
+      }
+
+      &_inactive {
+      }
     }
   }
 
@@ -122,18 +136,11 @@
       &_name {
         font-size: 16px;
       }
-
-      &_active {
-        padding: 11px;
-        font-size: 10px;
-      }
     }
   }
 }
 
 .paddingStatus {
-  padding-top: 10px;
-
   @media screen and (max-width: 576px) {
     padding-top: 5px;
   }

@@ -7,7 +7,6 @@
   width: 250px;
   height: auto;
   border-radius: 3px;
-  z-index: 5002;
   visibility: hidden;
   box-shadow: 10px 10px 15px -10px rgba(0, 0, 0, 0.75);
 
@@ -19,7 +18,6 @@
   transform: translateX(0);
   margin-bottom: 5px;
 }
-
 
 .title {
   padding-top: 15px;
@@ -35,7 +33,6 @@
 }
 
 .alertBodyText {
-
 }
 
 .clickableLink {
@@ -76,7 +73,6 @@
   border-left: 10px solid $primary-color;
   background-color: $primary-white;
 
-
   transition-timing-function: ease-out;
   transition: 0.1s;
   transform: translateX(-5em);
@@ -90,12 +86,10 @@
   border-left: 10px solid $primary-green;
   background-color: $primary-white;
 
-
   transition-timing-function: ease-out;
   transition: 0.1s;
   transform: translateX(-5em);
 }
-
 
 .alert--hidden {
   visibility: hidden;

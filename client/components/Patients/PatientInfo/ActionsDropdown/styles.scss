@@ -1,0 +1,11 @@
+.actionsButton {
+  margin-left: 0;
+  margin-top: 5px;
+  width: 170px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  > i {
+    margin-left: auto;
+  }
+}

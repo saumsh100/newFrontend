@@ -94,8 +94,8 @@
 }
 
 .topDisplay {
-  height: 385px;
-  max-height: 385px;
+  height: 320px;
+  max-height: 320px;
   margin-bottom: 15px;
 }
 
@@ -216,4 +216,20 @@
 .editButtonMobile {
   top: 125px;
   z-index: 10;
+}
+
+.notesForm {
+  textarea {
+    padding: 10px;
+    background-color: $primary-lightgrey !important;
+    color: black;
+    height: 100px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  span[class*='error'] {
+    top: unset;
+    bottom: 5px;
+  }
 }
