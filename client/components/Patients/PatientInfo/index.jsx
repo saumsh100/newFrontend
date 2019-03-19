@@ -36,11 +36,14 @@ import { isHub, isResponsive } from '../../../util/hub';
 import { getEventsOffsetLimitObj } from '../Shared/helpers';
 import FormModal from './FormModal';
 import NotesForm from './Notes/NotesForm';
+import FollowUpsForm from './FollowUps/FollowUpsForm';
 import CreatePatientNoteMutation from './Notes/CreatePatientNoteMutation';
+import CreateFollowUpMutation from './FollowUps/CreateFollowUpMutation';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 import styles from './styles.scss';
 
 const NOTES_FORM_NAME = 'notesForm';
+const FOLLOW_UPS_FORM_NAME = 'followUpsForm';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
@@ -81,6 +84,7 @@ class PatientInfo extends Component {
       },
       defaultEvents: [],
       isNotesFormOpen: false,
+      isFollowUpsFormOpen: false,
     };
 
     this.changePageTab = this.changePageTab.bind(this);
@@ -92,7 +96,9 @@ class PatientInfo extends Component {
     this.fetchPatientData = this.fetchPatientData.bind(this);
     this.fetchEvents = this.fetchEvents.bind(this);
     this.toggleNotesForm = this.toggleNotesForm.bind(this);
+    this.toggleFollowUpsForm = this.toggleFollowUpsForm.bind(this);
     this.handleNotesFormSubmit = this.handleNotesFormSubmit.bind(this);
+    this.handleFollowUpsFormSubmit = this.handleFollowUpsFormSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -217,6 +223,10 @@ class PatientInfo extends Component {
     this.setState({ isNotesFormOpen: !this.state.isNotesFormOpen });
   }
 
+  toggleFollowUpsForm() {
+    this.setState({ isFollowUpsFormOpen: !this.state.isFollowUpsFormOpen });
+  }
+
   async handleNotesFormSubmit({ note }, commit) {
     const { patient, activeAccount, userId } = this.props;
     try {
@@ -244,6 +254,33 @@ class PatientInfo extends Component {
     }
   }
 
+  async handleFollowUpsFormSubmit(values, commit) {
+    const { patient, activeAccount, userId } = this.props;
+    try {
+      const variables = {
+        ...values,
+        patientId: patient.id,
+        accountId: activeAccount.id,
+        userId,
+      };
+
+      await commit({ variables });
+      this.toggleFollowUpsForm();
+      this.props.showAlertTimeout({
+        type: 'success',
+        alert: { body: `Added follow-up for ${patient.firstName}` },
+      });
+
+      this.props.reset(FOLLOW_UPS_FORM_NAME);
+    } catch (err) {
+      console.error('handleFollowUpsFormSubmit Error:', err);
+      this.props.showAlertTimeout({
+        type: 'error',
+        alert: { body: `Failed to add follow-up for ${patient.firstName}` },
+      });
+    }
+  }
+
   render() {
     const { patientId } = this.props.match.params;
     const {
@@ -258,6 +295,7 @@ class PatientInfo extends Component {
       reminders,
       recalls,
       canAddNote,
+      canAddFollowUp,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
@@ -270,6 +308,12 @@ class PatientInfo extends Component {
       actionMenuItems.push({
         children: <div>Add Note</div>,
         onClick: this.toggleNotesForm,
+      });
+
+    canAddFollowUp &&
+      actionMenuItems.push({
+        children: <div>Add Follow-up</div>,
+        onClick: this.toggleFollowUpsForm,
       });
 
     return (
@@ -404,6 +448,23 @@ class PatientInfo extends Component {
             )}
           </CreatePatientNoteMutation>
         </FormModal>
+        <FormModal
+          title="Add Follow-up"
+          formName={FOLLOW_UPS_FORM_NAME}
+          active={this.state.isFollowUpsFormOpen}
+          onToggle={this.toggleFollowUpsForm}
+        >
+          <CreateFollowUpMutation>
+            {commit => (
+              <FollowUpsForm
+                formName={FOLLOW_UPS_FORM_NAME}
+                initialValues={{}}
+                onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
+                className={styles.notesForm}
+              />
+            )}
+          </CreateFollowUpMutation>
+        </FormModal>
       </Grid>
     );
   }
@@ -468,6 +529,7 @@ function mapStateToProps(
 
   const features = featureFlags.get('flags');
   const canAddNote = isFeatureEnabledSelector(features, 'patient-add-note-action');
+  const canAddFollowUp = isFeatureEnabledSelector(features, 'patient-add-follow-up-action');
 
   return {
     patient: patients.get(match.params.patientId),
@@ -486,6 +548,7 @@ function mapStateToProps(
     currentBackHandler: electron.get('backHandler'),
     currentTitle: electron.get('title'),
     canAddNote,
+    canAddFollowUp,
   };
 }
 
@@ -522,6 +585,7 @@ PatientInfo.propTypes = {
   showAlertTimeout: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   canAddNote: PropTypes.bool,
+  canAddFollowUp: PropTypes.bool,
 };
 
 PatientInfo.defaultProps = {
@@ -536,6 +600,7 @@ PatientInfo.defaultProps = {
   wasPatientFetched: false,
   wasStatsFetched: false,
   canAddNote: false,
+  canAddFollowUp: false,
 };
 
 const enhance = connect(
