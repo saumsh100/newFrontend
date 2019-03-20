@@ -91,8 +91,12 @@ class ScheduleCalendar extends Component {
           ? this.getSelectedSchedule(this.props.selectedDay)
           : this.props.baseSchedule.weeklySchedule[weekDay],
         editTitle: isTheSameDay
-          ? dateFormatter(this.props.selectedDay, this.props.timezone, 'MMM. D, YYYY')
-          : capitalize(weekDay),
+          ? `Holiday Hours (${dateFormatter(
+            this.props.selectedDay,
+            this.props.timezone,
+            'MMM. D, YYYY',
+          )})`
+          : `Default Weekly Schedule (${capitalize(weekDay)})`,
       },
       () => this.handleModalVisibility(),
     );
@@ -143,9 +147,9 @@ class ScheduleCalendar extends Component {
                 [calendar.dailySchedule]: this.props.dailyScheduleDays,
               }}
               selectedDays={selectedDay}
-              onDayClick={this.props.handleDayClick}
+              onDayClick={day => this.props.handleDayClick(day)}
               className={styles.sidebar_calendar}
-              renderDay={this.props.renderDay}
+              renderDay={day => this.props.renderDay(day, this.handleEditSchedule)}
               classNames={{
                 ...calendar,
                 disabled: calendar.closedDay,

@@ -21,9 +21,9 @@ const ScheduleDrawer = ({
   <div className={styles.wrapper}>
     <div className={styles.top}>
       <h2 className={styles.title}>
-        {selectedDay
-          ? dateFormatter(selectedDay, timezone, 'MMM. D, YYYY')
-          : 'Default Weekly Schedule'}
+        {isOverride && selectedDay
+          ? `Holiday Hours (${dateFormatter(selectedDay, timezone, 'MMM. D, YYYY')})`
+          : 'Default Weekly Schedule '}
       </h2>
       <div className={styles.toggle}>
         <EnabledFeature
@@ -70,15 +70,17 @@ const ScheduleDrawer = ({
 ScheduleDrawer.propTypes = {
   handleEditSchedule: PropTypes.func.isRequired,
   isOverride: PropTypes.bool.isRequired,
-  schedule: PropTypes.objectOf(PropTypes.shape({
-    breaks: PropTypes.array,
-    chairIds: PropTypes.array,
-    endTime: PropTypes.string,
-    isClosed: PropTypes.bool,
-    isDailySchedule: PropTypes.bool,
-    isFeatured: PropTypes.bool,
-    startTime: PropTypes.string,
-  })),
+  schedule: PropTypes.objectOf(
+    PropTypes.shape({
+      breaks: PropTypes.array,
+      chairIds: PropTypes.array,
+      endTime: PropTypes.string,
+      isClosed: PropTypes.bool,
+      isDailySchedule: PropTypes.bool,
+      isFeatured: PropTypes.bool,
+      startTime: PropTypes.string,
+    }),
+  ),
   selectedDay: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
   shouldDisplayWeeklyHours: PropTypes.bool.isRequired,
   timezone: PropTypes.string.isRequired,

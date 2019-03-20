@@ -215,6 +215,7 @@ $empty-grey: darken(lightgrey, 5%);
   }
   &.disabled {
     background-color: transparent;
+    cursor: not-allowed;
   }
 }
 .groupFull {

@@ -1,4 +1,5 @@
 @import '../../../ui.scss';
+@import '../../../ui-kit.scss';
 @import './color';
 
 .top {
@@ -36,7 +37,7 @@
   background-color: transparent;
 
   &:hover {
-    color: $calendar-grey-dark;
+    color: $grey;
     transition: all 0.2s ease-out;
   }
 
@@ -68,9 +69,9 @@
 }
 
 .showDrawer {
-  background: $calendar-white;
-  border: 1px solid $calendar-grey-lightest;
-  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  background: $white;
+  border: 1px solid $grey-lighter;
+  box-shadow: $shadow;
   border-radius: 4px;
   padding: 8px 10px;
   color: $calendar-grey;
@@ -82,8 +83,8 @@
 
   &.active {
     transition: all 0.2s ease-in;
-    background: $calendar-green;
-    color: $calendar-white;
+    background: $green;
+    color: $white;
   }
 }
 

@@ -1,4 +1,5 @@
 @import '../../../ui.scss';
+@import '../../../ui-kit.scss';
 @import './color';
 
 .contentWrapper {
@@ -38,14 +39,14 @@
 }
 
 .toggleDivDisabled {
-  background: $calendar-grey-lightest;
+  background: $grey-lighter;
   padding: 0 16px;
   min-height: 40px;
   border-radius: 4px;
   border: 0;
 
   .caretIconWrapper {
-    color: $calendar-grey-light;
+    color: $grey-light;
   }
 }
 
@@ -59,8 +60,8 @@
 
 .defaultLegend {
   @extend .baseLegend;
-  box-shadow: inset 0 0 0 1px $calendar-grey-lightest;
-  background: $calendar-white;
+  box-shadow: inset 0 0 0 1px $grey-lighter;
+  background: $white;
 }
 
 .overrideLegend {
@@ -77,7 +78,7 @@
 
 .loading {
   position: absolute;
-  background: transparentize($calendar-white, 0.25);
+  background: transparentize($white, 0.25);
   font-size: 34px;
   left: 0;
   right: 0;
@@ -101,7 +102,7 @@
 }
 
 .input {
-  border: 1px solid $calendar-grey-lightest;
+  border: 1px solid $grey-lighter;
   width: 100%;
   color: $calendar-grey;
   font-weight: 500;
@@ -110,14 +111,14 @@
   padding: 0 10px;
   box-sizing: border-box;
   min-height: 40px;
-  background: $calendar-white;
+  background: $white;
   -webkit-appearance: none;
-  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  box-shadow: $shadow;
   transition: border-color 0.2s ease;
 
   &:focus {
     transition: border-color 0.2s ease;
-    border-color: $calendar-grey-light;
+    border-color: $grey-light;
   }
 
   &:focus ~ .label {
@@ -133,7 +134,7 @@
 
 .inputActive {
   transition: all 0.2s ease;
-  border-color: $calendar-grey-light;
+  border-color: $grey-light;
 }
 
 .textarea {
@@ -150,7 +151,7 @@
 
 .error {
   left: 16px;
-  color: $calendar-red;
+  color: $red;
   font-size: 12px;
   top: auto;
   font-weight: 500;
@@ -160,12 +161,12 @@
 }
 
 .erroredInput {
-  border-color: $calendar-red;
-  color: $calendar-red;
+  border-color: $red;
+  color: $red;
 }
 
 .errorIcon {
-  color: $calendar-red;
+  color: $red;
 }
 
 .bar {
@@ -204,17 +205,17 @@
     box-sizing: border-box;
 
     > ul {
-      box-shadow: 1px 1px 2px 0 $calendar-shadow;
-      background: $calendar-white;
+      box-shadow: $shadow;
+      background: $white;
       border-bottom-right-radius: 4px;
       border-bottom-left-radius: 4px;
-      border: 1px solid $calendar-grey-light;
+      border: 1px solid $grey-light;
       border-top: 0;
 
       > div {
         padding: 0;
         box-shadow: none;
-        background: $calendar-white;
+        background: $white;
         max-height: 170px;
       }
     }

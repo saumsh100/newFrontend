@@ -1,4 +1,5 @@
 @import '../../../ui.scss';
+@import '../../../ui-kit.scss';
 @import './color';
 
 .scheduleWrapper {
@@ -8,9 +9,11 @@
   margin-bottom: 4px;
   cursor: pointer;
   transition: all 0.2s ease-in;
+
   &:focus {
     outline: none;
   }
+
   &:hover {
     transition: all 0.2s ease-in;
     background: $calendar-background;
@@ -23,6 +26,11 @@
   &.scheduleOverride {
     background: $calendar-override;
   }
+}
+
+.info {
+  flex: 1;
+  padding-right: 32px;
 }
 
 .schedule {
@@ -51,7 +59,7 @@
 
 .breakTitle {
   font-size: 11px;
-  color: $calendar-grey-light;
+  color: $grey-light;
   font-weight: 500;
   flex: 0;
 }
@@ -59,7 +67,7 @@
 .breaks {
   display: flex;
   font-size: 11px;
-  color: $calendar-grey-light;
+  color: $grey-light;
   font-weight: 500;
   width: 100%;
   margin: 8px 0 0;
@@ -88,7 +96,7 @@
 .settings {
   padding: 0;
   flex: 0;
-  color: $calendar-grey-light;
+  color: $grey-light;
   background: transparent;
   margin: 0;
   transition: all 0.2s ease-in;
@@ -97,5 +105,20 @@
   &:hover {
     color: $calendar-grey;
     transition: all 0.2s ease-in;
+  }
+}
+
+.edit {
+  justify-content: center;
+  align-items: flex-start;
+  color: $grey-light;
+  transition: all 0.2s ease-in;
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+  &:hover {
+    transition: all 0.2s ease-in;
+    color: $grey;
   }
 }

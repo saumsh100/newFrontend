@@ -25,8 +25,9 @@ import {
 } from './thunks';
 import { Toggle } from '../../../../library';
 import chairShape from '../../../../library/PropTypeShapes/chairShape';
-import styles from '../../../../library/ScheduleCalendar/day.scss';
 import EnabledFeature from '../../../../library/EnabledFeature';
+import styles from '../../../../library/ScheduleCalendar/day.scss';
+import calendarDay from '../../../../library/ScheduleCalendar/calendarDay';
 
 class PractitionerHoursCalendar extends Component {
   constructor(props) {
@@ -47,6 +48,7 @@ class PractitionerHoursCalendar extends Component {
 
     this.getSchedule = this.getSchedule.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
+    this.handleDoubleClick = this.handleDoubleClick.bind(this);
     this.handleUpdateSchedule = this.handleUpdateSchedule.bind(this);
     this.handleCreateCustomSchedule = this.handleCreateCustomSchedule.bind(this);
     this.handleRemoveOverrideHours = this.handleRemoveOverrideHours.bind(this);
@@ -148,16 +150,32 @@ class PractitionerHoursCalendar extends Component {
    * It either select a day or unselect the same day.
    *
    * @param date {Date}
+   * @param callback
    */
-  handleDayClick(date) {
+  handleDayClick(date, callback) {
     const selectedDay =
       this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
-    this.setState({
-      selectedDay,
-      selectedDailySchedule: selectedDay
-        ? Object.values(this.getFeaturedDay(selectedDay))[0]
-        : null,
-    });
+    this.setState(
+      {
+        selectedDay,
+        selectedDailySchedule: selectedDay
+          ? Object.values(this.getFeaturedDay(selectedDay))[0]
+          : null,
+      },
+      callback,
+    );
+  }
+
+  /**
+   * Event that handles the doubleClick on a calendar Day;
+   * @param day
+   * @param handleEditSchedule
+   * @return {function(): void}
+   */
+  handleDoubleClick(day, handleEditSchedule) {
+    return () =>
+      this.handleDayClick(day, () =>
+        handleEditSchedule(dateFormatter(day, this.props.timezone, 'dddd').toLowerCase()));
   }
 
   /**
@@ -166,11 +184,12 @@ class PractitionerHoursCalendar extends Component {
    * @param isClosed
    * @param id
    * @param date
+   * @param isDailySchedule
    * @param schedule
    * @param callback {function}
    * @returns {Promise<any | never>}
    */
-  handleUpdateSchedule({ isClosed, id, date, ...schedule }, callback) {
+  handleUpdateSchedule({ isClosed, id, date, isDailySchedule, ...schedule }, callback) {
     const baseBody = pick(schedule, ['startTime', 'endTime', 'breaks', 'chairIds']);
     const baseEndTime = setDateToTimezone(baseBody.endTime, this.props.timezone).toObject();
     const baseStartTime = setDateToTimezone(baseBody.startTime, this.props.timezone).toObject();
@@ -189,13 +208,14 @@ class PractitionerHoursCalendar extends Component {
     })
       .then(() => {
         this.getSchedule(this.state.month);
-        const body = date
-          ? `Updated holiday hours for ${this.props.practitioner.getPrettyName()} on ${dateFormatter(
-            date,
-            this.props.timezone,
-            'dddd, MMMM Do',
-          )}`
-          : `Updated default schedule for ${this.props.practitioner.getPrettyName()}`;
+        const body =
+          date && isDailySchedule
+            ? `Updated holiday hours for ${this.props.practitioner.getPrettyName()} on ${dateFormatter(
+              date,
+              this.props.timezone,
+              'dddd, MMMM Do',
+            )}`
+            : `Updated default schedule for ${this.props.practitioner.getPrettyName()}`;
         this.props.showAlertTimeout({
           alert: { body },
           type: 'success',
@@ -313,28 +333,6 @@ class PractitionerHoursCalendar extends Component {
   render() {
     const { timezone, chairs } = this.props;
 
-    const renderDay = (day) => {
-      const [{ isClosed, startTime, endTime }] = Object.values(this.getFeaturedDay(day));
-      return (
-        <div className={styles.cell}>
-          <div className={styles.single}>{day.getDate()}</div>
-          {!!startTime && !!endTime && (
-            <div className={styles.hours}>
-              {isClosed ? (
-                <span>CLOSED</span>
-              ) : (
-                <span>
-                  {dateFormatter(startTime, timezone, 'LT')}
-                  <br />
-                  {dateFormatter(endTime, timezone, 'LT')}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    };
-
     return (
       <div>
         <EnabledFeature
@@ -361,11 +359,11 @@ class PractitionerHoursCalendar extends Component {
           }}
         />
         <ScheduleCalendar
+          editChairs
           baseSchedule={this.state.baseSchedule}
           chairs={chairs}
           closedDays={this.getModifier('isClosed')}
           dailyScheduleDays={this.getModifier('isDailySchedule')}
-          editChairs
           handleCreateCustomSchedule={this.handleCreateCustomSchedule}
           handleDayClick={this.handleDayClick}
           handleRemoveOverrideHours={this.handleRemoveOverrideHours}
@@ -374,7 +372,14 @@ class PractitionerHoursCalendar extends Component {
           isOverride={this.isOverride()}
           month={this.state.month}
           onChangeMonth={this.onChangeMonth}
-          renderDay={renderDay}
+          renderDay={(day, handleEditSchedule) =>
+            calendarDay(
+              day,
+              this.handleDoubleClick(day, handleEditSchedule),
+              Object.values(this.getFeaturedDay(day))[0],
+              timezone,
+            )
+          }
           selectedDay={this.state.selectedDay}
           shouldDisplayWeeklyHours={this.shouldDisplayWeeklyHours()}
           timezone={timezone}

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setDateToTimezone, timeOptionsWithTimezone } from '@carecru/isomorphic';
+import { setDateToTimezone, sortAsc, timeOptionsWithTimezone } from '@carecru/isomorphic';
 import { Modal, Button, DropdownMenu, Icon } from '../';
 import EnabledFeature from '../EnabledFeature';
 import MultiSelect from '../MultiSelect';
@@ -145,10 +145,25 @@ class EditSchedule extends Component {
   render() {
     const { timezone, isModalVisible, handleUpdateSchedule, selectedDay, chairs } = this.props;
     const timeOptions = timeOptionsWithTimezone(timezone, 30);
-    const items = Object.values(chairs).map(({ id, name }) => ({
-      id,
-      label: name,
-    }));
+    const items = chairs.toJS();
+
+    const options = Object.values(items)
+      .filter(e => e.isActive)
+      .map(({ id, name }) => ({
+        id,
+        label: name,
+      }));
+
+    const getSelectedItems = selectedItems =>
+      selectedItems
+        .map(id => ({ id,
+          label: items[id].name }))
+        .sort(({ label: a }, { label: b }) => sortAsc(a, b));
+
+    const getAvailableOptions = selectedItems =>
+      options
+        .filter(({ id }) => !selectedItems.includes(id))
+        .sort(({ label: a }, { label: b }) => sortAsc(a, b));
 
     return (
       <Modal
@@ -194,17 +209,17 @@ class EditSchedule extends Component {
                                 disabled={
                                   !flags.get('connector-update-practitioner-dailySchedule-chairIds')
                                 }
-                                selected={selectedItems}
+                                selected={getSelectedItems(selectedItems)}
                                 placeholder="Select Chair(s)"
                                 selectorProps={getToggleButtonProps()}
                                 handleSelection={handleSelection}
-                                options={items}
                               />
                             )}
                           />
                           <List
+                            showFallback
                             isOpen={isOpen}
-                            options={items}
+                            options={getAvailableOptions(selectedItems)}
                             itemProps={getItemProps}
                             selectedItems={selectedItems}
                             highlightedIndex={highlightedIndex}
@@ -354,10 +369,7 @@ const mapStateToProps = ({ auth, entities }) => {
   return {
     timezone: activeAccount.get('timezone'),
     pmsName: adapterType,
-    chairs: entities
-      .getIn(['chairs', 'models'])
-      .filter(e => e.isActive)
-      .toArray(),
+    chairs: entities.getIn(['chairs', 'models']),
   };
 };
 
@@ -386,6 +398,6 @@ EditSchedule.propTypes = {
 
 EditSchedule.defaultProps = {
   schedule: {},
-  chairs: {},
+  chairs: [],
   selectedDay: null,
 };

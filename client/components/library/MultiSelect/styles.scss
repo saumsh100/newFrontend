@@ -1,8 +1,9 @@
 @import '../../../ui.scss';
+@import '../../../ui-kit.scss';
 @import '../ScheduleCalendar/color';
 
 .placeholder {
-  color: $calendar-grey-light;
+  color: $grey-light;
   padding-left: 8px;
   font-weight: normal;
   font-size: 12px;
@@ -10,7 +11,7 @@
 }
 
 .input {
-  border: 1px solid $calendar-grey-lightest;
+  border: 1px solid $grey-lighter;
   width: 100%;
   color: $calendar-grey;
   font-weight: 500;
@@ -19,16 +20,16 @@
   padding: 0 8px;
   box-sizing: border-box;
   min-height: 40px;
-  background: $calendar-white;
+  background: $white;
   -webkit-appearance: none;
-  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  box-shadow: $shadow;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
 
   &:focus {
     transition: all 0.2s ease;
-    border-color: $calendar-grey-light;
+    border-color: $grey-light;
   }
 
   &:focus ~ .label {
@@ -40,16 +41,23 @@
   flex: 1;
   display: flex;
   justify-content: flex-start;
+  overflow: auto;
+  padding: 8px 0;
 
   .item {
-    background: $calendar-grey-lightest;
+    background: $grey-lighter;
     padding: 4px 8px;
     border-radius: 4px;
     margin-right: 8px;
     font-size: 11px;
+    text-align: left;
+    align-items: center;
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
 
     .remove {
-      color: $calendar-grey-light;
+      color: $grey-light;
       margin-left: 8px;
     }
   }
@@ -57,11 +65,11 @@
 
 .disabled {
   @extend .input;
-  background: $calendar-grey-lightest !important;
+  background: $grey-lighter !important;
   box-shadow: none;
 
   &:hover {
-    background: $calendar-grey-lightest !important;
+    background: $grey-lighter !important;
     color: $calendar-grey !important;
   }
 
@@ -75,7 +83,7 @@
 }
 
 .iconWrapper {
-  color: $calendar-grey-light;
+  color: $grey-light;
   min-width: 30px;
 }
 
@@ -94,9 +102,9 @@
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  border: 1px solid $calendar-grey-lightest;
+  border: 1px solid $grey-lighter;
   border-top: 0;
-  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  box-shadow: $shadow;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-15px);
@@ -108,7 +116,7 @@
     transition: all 0.2s ease;
     visibility: visible;
     opacity: 1;
-    transform: translateY(0px);
+    transform: translateY(0);
   }
 }
 
@@ -136,5 +144,17 @@
     cursor: pointer;
     background-color: $primary-lightgrey !important;
     color: $primary-dark !important;
+  }
+}
+
+.fallback {
+  @extend .option;
+  text-align: center;
+  justify-content: center;
+  font-style: italic;
+  &:hover {
+    background-color: $primary-white !important;
+    color: $calendar-grey !important;
+    cursor: auto;
   }
 }

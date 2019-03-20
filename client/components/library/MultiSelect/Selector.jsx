@@ -10,7 +10,6 @@ const Selector = ({
   selectorProps,
   isEditable,
   selected,
-  options,
   handleSelection,
   placeholder,
 }) => (
@@ -21,16 +20,16 @@ const Selector = ({
   >
     <div className={styles.value}>
       {selected.length > 0 ? (
-        selected.map(item => (
-          <span className={styles.item} key={item}>
-            {options.find(({ id }) => id === item).label}{' '}
+        selected.map(({ id, label }) => (
+          <span className={styles.item} key={id}>
+            {label}{' '}
             <Icon
               icon="times"
               type="light"
               className={styles.remove}
               onClick={(e) => {
                 e.stopPropagation();
-                !disabled && handleSelection({ id: item });
+                !disabled && handleSelection({ id });
               }}
             />
           </span>
@@ -48,21 +47,21 @@ const Selector = ({
 Selector.propTypes = {
   placeholder: PropTypes.string,
   selectorProps: PropTypes.objectOf(PropTypes.any),
-  selected: PropTypes.arrayOf(PropTypes.string),
   isEditable: PropTypes.bool,
   handleSelection: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
-  options: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string,
-    label: PropTypes.string,
-  })),
+  selected: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      label: PropTypes.string,
+    }),
+  ),
 };
 
 Selector.defaultProps = {
   selectorProps: {},
   placeholder: 'Selector a value',
   selected: [],
-  options: [],
   isEditable: true,
 };
 

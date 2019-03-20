@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { dateFormatter, capitalize } from '@carecru/isomorphic';
 import classNames from 'classnames';
 import styles from './single-date.scss';
+import GearIcon from '../ui-kit/Icons/Gear';
 
 const DateSchedule = ({ day, schedule, timezone, handleEditSchedule, shouldDisplayWeeklyHours }) =>
   shouldDisplayWeeklyHours && (
@@ -19,34 +20,39 @@ const DateSchedule = ({ day, schedule, timezone, handleEditSchedule, shouldDispl
       key={schedule.id}
       onKeyDown={e => e.keyCode === '13' && handleEditSchedule(day)}
     >
-      <div className={styles.schedule}>
-        <div className={styles.date}>{capitalize(day)}</div>
-        <div className={styles.times}>
-          {schedule.isClosed
-            ? 'CLOSED'
-            : `${dateFormatter(schedule.startTime, timezone, 'LT')} to ${dateFormatter(
-                schedule.endTime,
-                timezone,
-                'LT',
-              )}`}
+      <div className={styles.info}>
+        <div className={styles.schedule}>
+          <div className={styles.date}>{capitalize(day)}</div>
+          <div className={styles.times}>
+            {schedule.isClosed
+              ? 'CLOSED'
+              : `${dateFormatter(schedule.startTime, timezone, 'LT')} to ${dateFormatter(
+                  schedule.endTime,
+                  timezone,
+                  'LT',
+                )}`}
+          </div>
+        </div>
+        <div className={styles.breaks}>
+          <div className={styles.breakTitle}>Breaks</div>
+          <ul className={styles.breakList}>
+            {schedule.breaks.length > 0
+              ? schedule.breaks.map(br => (
+                <li key={uuid()}>
+                  {`${dateFormatter(br.startTime, timezone, 'LT')} to ${dateFormatter(
+                      br.endTime,
+                      timezone,
+                      'LT',
+                    )}`}
+                </li>
+                ))
+              : '--'}
+          </ul>
+          <span className={styles.spacer} />
         </div>
       </div>
-      <div className={styles.breaks}>
-        <div className={styles.breakTitle}>Breaks</div>
-        <ul className={styles.breakList}>
-          {schedule.breaks.length > 0
-            ? schedule.breaks.map(br => (
-              <li key={uuid()}>
-                {`${dateFormatter(br.startTime, timezone, 'LT')} to ${dateFormatter(
-                    br.endTime,
-                    timezone,
-                    'LT',
-                  )}`}
-              </li>
-              ))
-            : '--'}
-        </ul>
-        <span className={styles.spacer} />
+      <div className={styles.edit}>
+        <GearIcon />
       </div>
     </div>
   );

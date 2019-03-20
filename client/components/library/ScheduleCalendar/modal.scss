@@ -1,4 +1,5 @@
 @import '../../../ui.scss';
+@import '../../../ui-kit.scss';
 @import './color';
 
 .backDrop {
@@ -10,8 +11,8 @@
 
 .modal {
   background: $calendar-background;
-  border: 1px solid $calendar-grey-lightest;
-  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  border: 1px solid $grey-lighter;
+  box-shadow: $shadow;
   border-radius: 4px;
 }
 
@@ -20,7 +21,7 @@
 
   .title {
     font-size: 16px;
-    color: $calendar-green-light;
+    color: $green-light;
     letter-spacing: 0;
     padding: 0;
     margin: 0 0 10px;
@@ -77,7 +78,7 @@
     margin-left: 10px;
     padding: 8px 10px;
     background: transparent;
-    color: $calendar-grey-light;
+    color: $grey-light;
 
     &.disabled {
       display: none;
@@ -108,18 +109,18 @@
   }
 
   .addBreak {
-    background: $calendar-white;
-    border: 1px solid $calendar-grey-lightest;
-    box-shadow: 1px 1px 2px 0 $calendar-shadow;
+    background: $white;
+    border: 1px solid $grey-lighter;
+    box-shadow: $shadow;
     font-size: 12px;
-    color: $calendar-grey-light;
+    color: $grey-light;
     border-radius: 4px;
     text-align: center;
   }
 }
 
 .errorMessage {
-  color: $calendar-red;
+  color: $red;
   margin: 0;
   font-size: 11px;
 }
@@ -128,14 +129,14 @@
   font-weight: bold;
   font-size: 11px;
   padding: 0;
-  color: $calendar-grey-dark;
+  color: $grey;
   background: transparent;
 }
 
 .optionButton {
   display: block;
-  color: $calendar-grey-dark;
-  background: $calendar-white;
+  color: $grey;
+  background: $white;
   padding: 10px;
   font-size: 10px;
   width: 100%;
@@ -143,29 +144,29 @@
   margin: 0;
 
   &:hover {
-    color: $calendar-green;
+    color: $green;
     background: $calendar-background;
   }
 }
 
 .closeMessage {
   font-size: 12px;
-  color: $calendar-grey-light;
+  color: $grey-light;
   font-style: italic;
   margin: 4px 0 16px;
 }
 
 .optionMenu {
   > div {
-    background: $calendar-white;
-    box-shadow: 1px 1px 2px 0 $calendar-shadow;
+    background: $white;
+    box-shadow: $shadow;
     border-radius: 4px;
     padding: 0;
     overflow: hidden;
 
     > ul {
       box-shadow: none !important;
-      background: $calendar-white;
+      background: $white;
     }
   }
 }
@@ -180,32 +181,32 @@
 
 .footer {
   padding: 12px 24px;
-  border-top: 1px solid $calendar-grey-lightest;
+  border-top: 1px solid $grey-lighter;
   text-align: right;
 
   .save {
-    background: $calendar-green-light;
-    box-shadow: 1px 1px 2px 0 $calendar-shadow;
+    background: $green-light;
+    box-shadow: $shadow;
     border-radius: 4px;
     transition: all 0.2s ease-in;
     margin-left: 8px;
 
     &:hover {
       transition: all 0.2s ease-in;
-      background: $calendar-green;
+      background: $green;
     }
   }
 
   .cancel {
     background: transparent;
-    color: $calendar-grey-light;
+    color: $grey-light;
     border-radius: 4px;
     transition: all 0.2s ease-in;
 
     &:hover {
-      box-shadow: 1px 1px 2px 0 $calendar-shadow;
+      box-shadow: $shadow;
       transition: all 0.2s ease-in;
-      background: $calendar-white;
+      background: $white;
     }
   }
 }

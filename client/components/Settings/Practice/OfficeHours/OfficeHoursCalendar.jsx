@@ -20,7 +20,7 @@ import {
   updateFinalDailyHours,
 } from './thunks';
 import { showAlertTimeout } from '../../../../thunks/alerts';
-import styles from '../../../library/ScheduleCalendar/day.scss';
+import calendarDay from '../../../library/ScheduleCalendar/calendarDay';
 
 class OfficeHoursCalendar extends Component {
   constructor(props) {
@@ -41,6 +41,7 @@ class OfficeHoursCalendar extends Component {
 
     this.getSchedule = this.getSchedule.bind(this);
     this.handleDayClick = this.handleDayClick.bind(this);
+    this.handleDoubleClick = this.handleDoubleClick.bind(this);
     this.handleUpdateSchedule = this.handleUpdateSchedule.bind(this);
     this.handleCreateCustomSchedule = this.handleCreateCustomSchedule.bind(this);
     this.handleRemoveOverrideHours = this.handleRemoveOverrideHours.bind(this);
@@ -155,16 +156,32 @@ class OfficeHoursCalendar extends Component {
    * It either select a day or unselect the same day.
    *
    * @param date {Date}
+   * @param callback
    */
-  handleDayClick(date) {
+  handleDayClick(date, callback) {
     const selectedDay =
       this.state.selectedDay && this.state.selectedDay.getTime() === date.getTime() ? null : date;
-    this.setState({
-      selectedDay,
-      selectedDailySchedule: selectedDay
-        ? Object.values(this.getFeaturedDay(selectedDay))[0]
-        : null,
-    });
+    this.setState(
+      {
+        selectedDay,
+        selectedDailySchedule: selectedDay
+          ? Object.values(this.getFeaturedDay(selectedDay))[0]
+          : null,
+      },
+      callback,
+    );
+  }
+
+  /**
+   * Event that handles the doubleClick on a calendar Day;
+   * @param day
+   * @param handleEditSchedule
+   * @return {function(): void}
+   */
+  handleDoubleClick(day, handleEditSchedule) {
+    return () =>
+      this.handleDayClick(day, () =>
+        handleEditSchedule(dateFormatter(day, this.props.timezone, 'dddd').toLowerCase()));
   }
 
   async handleCreateCustomSchedule({ date } = {}) {
@@ -196,11 +213,13 @@ class OfficeHoursCalendar extends Component {
    *
    * @param isClosed
    * @param id
+   * @param date
+   * @param isDailySchedule
    * @param schedule
    * @param callback {function}
    * @returns {Promise<any | never>}
    */
-  handleUpdateSchedule({ isClosed, id, date, ...schedule }, callback) {
+  handleUpdateSchedule({ isClosed, id, date, isDailySchedule, ...schedule }, callback) {
     const baseBody = pick(schedule, ['startTime', 'endTime', 'breaks', 'chairIds']);
     const baseEndTime = setDateToTimezone(baseBody.endTime, this.props.timezone).toObject();
     const baseStartTime = setDateToTimezone(baseBody.startTime, this.props.timezone).toObject();
@@ -219,13 +238,14 @@ class OfficeHoursCalendar extends Component {
     })
       .then(() => {
         this.getSchedule(this.state.month);
-        const body = date
-          ? `Updated holiday hours for the practice on ${dateFormatter(
-            date,
-            this.props.timezone,
-            'dddd, MMMM Do',
-          )}`
-          : 'Updated default schedule for the practice';
+        const body =
+          date && isDailySchedule
+            ? `Updated holiday hours for the practice on ${dateFormatter(
+              date,
+              this.props.timezone,
+              'dddd, MMMM Do',
+            )}`
+            : 'Updated default schedule for the practice';
         this.props.showAlertTimeout({
           alert: { body },
           type: 'success',
@@ -261,27 +281,6 @@ class OfficeHoursCalendar extends Component {
   render() {
     const { timezone } = this.props;
 
-    const renderDay = (day) => {
-      const [{ isClosed, startTime, endTime }] = Object.values(this.getFeaturedDay(day));
-      return (
-        <div className={styles.cell}>
-          <div className={styles.single}>{day.getDate()}</div>
-          {!!startTime && !!endTime && (
-            <div className={styles.hours}>
-              {isClosed ? (
-                <span>CLOSED</span>
-              ) : (
-                <span>
-                  {dateFormatter(startTime, timezone, 'LT')}
-                  <br />
-                  {dateFormatter(endTime, timezone, 'LT')}
-                </span>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    };
     return (
       <div>
         <ScheduleCalendar
@@ -297,7 +296,14 @@ class OfficeHoursCalendar extends Component {
           month={this.state.month}
           onChangeMonth={this.onChangeMonth}
           practitioner={null}
-          renderDay={renderDay}
+          renderDay={(day, handleEditSchedule) =>
+            calendarDay(
+              day,
+              this.handleDoubleClick(day, handleEditSchedule),
+              Object.values(this.getFeaturedDay(day))[0],
+              timezone,
+            )
+          }
           selectedDay={this.state.selectedDay}
           timezone={timezone}
           weeklySchedule={this.scheduleMap()}

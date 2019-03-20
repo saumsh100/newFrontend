@@ -1,17 +1,18 @@
 @import '../../../ui.scss';
+@import '../../../ui-kit.scss';
 @import './color';
 
 .wrapper {
   width: 100%;
   max-width: 350px;
-  border: 1px solid $calendar-grey-lightest;
+  border: 1px solid $grey-lighter;
   border-left: 0;
   padding: 0;
 }
 
 .title {
   font-size: 16px;
-  color: $calendar-green-light;
+  color: $green-light;
   letter-spacing: 0;
   padding: 0;
   margin: 0;
@@ -43,17 +44,18 @@
 }
 
 .override {
-  background: $calendar-white;
-  border: 1px solid $calendar-grey-lightest;
-  box-shadow: 1px 1px 2px 0 $calendar-shadow;
+  background: $white;
+  border: 1px solid $grey-lighter;
+  box-shadow: $shadow;
   border-radius: 4px;
   padding: 8px 10px;
-  color: $calendar-grey-dark;
+  color: $grey;
   line-height: 1;
   font-size: 10px;
   transition: all 0.2s ease-in;
   outline: none;
   cursor: pointer;
+  margin-bottom: 12px;
 
   &.disabled {
     cursor: not-allowed;
@@ -61,13 +63,13 @@
 
   &.active {
     transition: all 0.2s ease-in;
-    background: $calendar-green;
-    color: $calendar-white;
+    background: $green;
+    color: $white;
   }
 }
 
 .schedules {
   width: 100%;
-  border-top: 1px solid $calendar-grey-lightest;
+  border-top: 1px solid $grey-lighter;
   min-height: 480px;
 }
