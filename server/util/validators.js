@@ -27,6 +27,8 @@ function validateAccountIdPmsId(Model, value, self, next) {
     if (model) {
       if (model.deletedAt) {
         model.setDataValue('deletedAt', null);
+        model.setDataValue('isDeleted', false);
+        
         model = await model.save({ paranoid: false });
       } else if (self.id === model.id) {
         return next();
