@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, RemoteSubmitButton, DialogBox } from '../../../library';
 
-export default function AddFormModal({ active, title, onToggle, children, formName }) {
+export default function FormModal({ active, title, onToggle, children, formName, isUpdate }) {
   return (
     <DialogBox
       active={active}
@@ -18,7 +18,7 @@ export default function AddFormModal({ active, title, onToggle, children, formNa
           props: { color: 'darkgrey' },
         },
         {
-          label: 'Add',
+          label: isUpdate ? 'Update' : 'Add',
           component: RemoteSubmitButton,
           props: {
             color: 'blue',
@@ -33,10 +33,11 @@ export default function AddFormModal({ active, title, onToggle, children, formNa
   );
 }
 
-AddFormModal.propTypes = {
+FormModal.propTypes = {
   active: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   onToggle: PropTypes.func.isRequired,
   children: PropTypes.element.isRequired,
   formName: PropTypes.string.isRequired,
+  isUpdate: PropTypes.bool.isRequired,
 };

@@ -26,7 +26,6 @@ import DialogBody from './DialogBody';
 import DropdownSelect from './DropdownSelect';
 import Dropzone from './Dropzone';
 import DashboardStats from './DashboardStats';
-import Event from './Event';
 import ErrorBadge from './ErrorBadge';
 import Form, { FormSection, Field, FieldArray, SaveButton, RemoteSubmitButton } from './Form';
 import Guage from './Guage';
@@ -116,7 +115,6 @@ export {
   Dropzone,
   DashboardStats,
   DoubleIcon,
-  Event,
   ErrorBadge,
   Filters,
   Field,

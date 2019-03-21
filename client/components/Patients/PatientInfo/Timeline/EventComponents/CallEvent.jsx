@@ -11,6 +11,7 @@ export default function CallEvent({ data }) {
     <div className={styles.call}>
       <div className={styles.call_header}>{data.firstName} called the practice.</div>
       <div>
+        {/* eslint-disable */}
         <audio controls>
           <source src={data.recording} type="audio/ogg" />
         </audio>

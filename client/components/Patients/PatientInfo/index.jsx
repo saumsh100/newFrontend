@@ -18,11 +18,12 @@ import {
   fetchEntitiesRequest,
   updateEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { deleteAllEntity } from '../../../reducers/entities';
+import { deleteAllEntity, receiveEntities } from '../../../reducers/entities';
 import {
   addRemoveTimelineFilters,
   selectAllTimelineFilters,
   clearAllTimelineFilters,
+  setSelectedNote,
 } from '../../../reducers/patientTable';
 import { setTitle, setBackHandler } from '../../../reducers/electron';
 import { showAlertTimeout } from '../../../thunks/alerts';
@@ -37,12 +38,12 @@ import { getEventsOffsetLimitObj } from '../Shared/helpers';
 import FormModal from './FormModal';
 import NotesForm from './Notes/NotesForm';
 import FollowUpsForm from './FollowUps/FollowUpsForm';
-import CreatePatientNoteMutation from './Notes/CreatePatientNoteMutation';
+import CreateOrUpdatePatientNoteMutation from './Notes/CreateOrUpdatePatientNoteMutation';
 import CreateFollowUpMutation from './FollowUps/CreateFollowUpMutation';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 import styles from './styles.scss';
 
-const NOTES_FORM_NAME = 'notesForm';
+const getNotesFormName = data => (data ? `editNotesForm-${data.id}` : 'addNotesForm');
 const FOLLOW_UPS_FORM_NAME = 'followUpsForm';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
@@ -220,7 +221,11 @@ class PatientInfo extends Component {
   }
 
   toggleNotesForm() {
-    this.setState({ isNotesFormOpen: !this.state.isNotesFormOpen });
+    if (this.props.selectedNote) {
+      this.props.setSelectedNote(null);
+    } else {
+      this.setState({ isNotesFormOpen: !this.state.isNotesFormOpen });
+    }
   }
 
   toggleFollowUpsForm() {
@@ -228,7 +233,7 @@ class PatientInfo extends Component {
   }
 
   async handleNotesFormSubmit({ note }, commit) {
-    const { patient, activeAccount, userId } = this.props;
+    const { patient, activeAccount, userId, selectedNote } = this.props;
     try {
       const variables = {
         note,
@@ -237,19 +242,50 @@ class PatientInfo extends Component {
         userId,
       };
 
-      await commit({ variables });
+      if (selectedNote) {
+        variables.id = selectedNote.id;
+      }
+
+      const { data } = await commit({ variables });
       this.toggleNotesForm();
-      this.props.showAlertTimeout({
-        type: 'success',
-        alert: { body: `Added note for ${patient.firstName}` },
+
+      // Get created ID or use the ID of the note you are editing
+      const newNote = selectedNote ? data.updatePatientNote : data.createPatientNote;
+      const eventId = window.btoa(`note-${newNote.id}`);
+
+      // This is temporary as the API is not properly return this data for create actions
+      newNote.date = newNote.date || new Date().toISOString();
+      newNote.createdAt = newNote.date;
+
+      this.props.receiveEntities({
+        entities: {
+          events: {
+            [eventId]: {
+              id: eventId,
+              type: 'note',
+              accountId: newNote.accountId,
+              patientId: newNote.patientId,
+              metaData: newNote,
+            },
+          },
+        },
       });
 
-      this.props.reset(NOTES_FORM_NAME);
+      this.props.showAlertTimeout({
+        type: 'success',
+        alert: {
+          body: `${selectedNote ? 'Updated' : 'Added'} note for ${patient.firstName}`,
+        },
+      });
+
+      this.props.reset(getNotesFormName(selectedNote));
     } catch (err) {
       console.error('handleNotesFormSubmit Error:', err);
       this.props.showAlertTimeout({
         type: 'error',
-        alert: { body: `Failed to add note for ${patient.firstName}` },
+        alert: {
+          body: `Failed to ${selectedNote ? 'update' : 'add'} note for ${patient.firstName}`,
+        },
       });
     }
   }
@@ -296,6 +332,7 @@ class PatientInfo extends Component {
       recalls,
       canAddNote,
       canAddFollowUp,
+      selectedNote,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
@@ -315,6 +352,8 @@ class PatientInfo extends Component {
         children: <div>Add Follow-up</div>,
         onClick: this.toggleFollowUpsForm,
       });
+
+    const isUpdatingNote = !!selectedNote;
 
     return (
       <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
@@ -432,21 +471,22 @@ class PatientInfo extends Component {
           </Row>
         )}
         <FormModal
-          title="Add Note"
-          formName={NOTES_FORM_NAME}
-          active={this.state.isNotesFormOpen}
+          isUpdate={isUpdatingNote}
+          title={isUpdatingNote ? 'Edit Note' : 'Add Note'}
+          formName={getNotesFormName(selectedNote)}
+          active={this.state.isNotesFormOpen || isUpdatingNote}
           onToggle={this.toggleNotesForm}
         >
-          <CreatePatientNoteMutation>
+          <CreateOrUpdatePatientNoteMutation isUpdate={isUpdatingNote}>
             {commit => (
               <NotesForm
-                formName={NOTES_FORM_NAME}
-                initialValues={{}}
+                formName={getNotesFormName(selectedNote)}
+                initialValues={selectedNote}
                 onSubmit={values => this.handleNotesFormSubmit(values, commit)}
                 className={styles.notesForm}
               />
             )}
-          </CreatePatientNoteMutation>
+          </CreateOrUpdatePatientNoteMutation>
         </FormModal>
         <FormModal
           title="Add Follow-up"
@@ -482,8 +522,10 @@ function mapDispatchToProps(dispatch) {
       setTitle,
       setBackHandler,
       deleteAllEntity,
+      receiveEntities,
       showAlertTimeout,
       reset,
+      setSelectedNote,
     },
     dispatch,
   );
@@ -549,6 +591,7 @@ function mapStateToProps(
     currentTitle: electron.get('title'),
     canAddNote,
     canAddFollowUp,
+    selectedNote: patientTable.get('selectedNote'),
   };
 }
 
@@ -582,10 +625,16 @@ PatientInfo.propTypes = {
   clearAllTimelineFilters: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteAllEntity: PropTypes.func.isRequired,
+  receiveEntities: PropTypes.func.isRequired,
   showAlertTimeout: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   canAddNote: PropTypes.bool,
   canAddFollowUp: PropTypes.bool,
+  selectedNote: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    note: PropTypes.string.isRequired,
+  }),
+  setSelectedNote: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {
@@ -601,6 +650,7 @@ PatientInfo.defaultProps = {
   wasStatsFetched: false,
   canAddNote: false,
   canAddFollowUp: false,
+  selectedNote: null,
 };
 
 const enhance = connect(

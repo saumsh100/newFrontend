@@ -44,4 +44,6 @@ export default function RecallEvent({ data }) {
   return <EventContainer key={data.id} headerData={headerData} />;
 }
 
-RecallEvent.propTypes = { data: PropTypes.shape({ appointmentStartDate: PropTypes.string }).isRequired };
+RecallEvent.propTypes = {
+  data: PropTypes.shape({ appointmentStartDate: PropTypes.string }).isRequired,
+};

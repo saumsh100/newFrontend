@@ -1,4 +1,4 @@
-@import '../../../ui';
+@import '../../../../../ui';
 
 .eventWrapper {
   display: flex;
@@ -8,6 +8,12 @@
   position: relative;
   &:first-child {
     margin-top: 0;
+  }
+
+  &:hover {
+    .trashIconWrapper {
+      display: block;
+    }
   }
 }
 
@@ -108,7 +114,37 @@
   line-height: 1.5em;
 
   &_header {
-    composes: fontMedium from 'sass-loader!../../../fonts.scss';
+    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
+  }
+
+  &_editable {
+    background: none;
+    color: inherit;
+    border: none;
+    outline: inherit;
+    text-align: left;
+    font-family: $dashboard-font;
+    > div {
+      &:before {
+        font-family: $medium-font;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      > div {
+        text-decoration: underline;
+        &:after {
+          content: 'Edit';
+          text-decoration: none;
+          color: lighten($primary-dark-grey, 10%);
+          font-style: normal;
+          display: inline-block;
+          margin-left: 10px;
+          font-family: $medium-font;
+        }
+      }
+    }
   }
 
   &_subHeader {
@@ -118,7 +154,7 @@
   &_subHeaderItalic {
     color: $primary-darkgrey;
     font-style: italic;
-    composes: fontSmall from 'sass-loader!../../../fonts.scss';
+    composes: fontSmall from 'sass-loader!../../../../../fonts.scss';
   }
 
   @media screen and (max-width: 576px) {
@@ -135,18 +171,19 @@
 }
 
 .time {
-  padding-top: 5px;
+  padding-top: 8px;
+  padding-right: 3px;
   width: 100%;
   display: flex;
-  top: 0px;
+  bottom: 25px;
   right: 5px;
   position: absolute;
   z-index: 2;
   &_text {
-    composes: fontExtraSmall from 'sass-loader!../../../fonts.scss';
+    composes: fontExtraSmall from 'sass-loader!../../../../../fonts.scss';
+    font-size: 9px;
     margin-left: auto;
-    color: $primary-dark-grey;
-    font-style: italic;
+    color: lighten($primary-dark-grey, 10%);
   }
 }
 
@@ -155,7 +192,7 @@
   line-height: 1.5em;
 
   &_header {
-    composes: fontMedium from 'sass-loader!../../../fonts.scss';
+    composes: fontMedium from 'sass-loader!../../../../../fonts.scss';
   }
 
   &_subHeader {
@@ -165,7 +202,7 @@
   &_subHeaderItalic {
     color: $primary-darkgrey;
     font-style: italic;
-    composes: fontSmall from 'sass-loader!../../../fonts.scss';
+    composes: fontSmall from 'sass-loader!../../../../../fonts.scss';
   }
 
   audio {
@@ -252,4 +289,43 @@
   &_patientNameStyle {
     display: inline-block;
   }
+}
+
+.noteHeaderWrapper {
+  font-style: italic;
+  &:before {
+    content: 'Added Note: ';
+    font-style: normal;
+  }
+}
+
+.note {
+  font-style: italic;
+}
+
+.trashIconWrapper {
+  display: none;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 5px;
+  cursor: pointer;
+  background: none;
+  color: inherit;
+  border: none;
+  outline: inherit;
+  &:hover {
+    .trashIcon {
+      color: $primary-color;
+    }
+  }
+}
+
+.trashIcon {
+  color: lighten($primary-dark-grey, 10%);
+}
+
+.editIcon {
+  display: none;
+  color: lighten($primary-dark-grey, 10%);
 }

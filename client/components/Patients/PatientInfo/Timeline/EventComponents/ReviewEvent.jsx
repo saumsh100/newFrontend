@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateFormatter } from '@carecru/isomorphic';
-import Star from '../Star';
+import { Star } from '../../../../library';
 import EventContainer from './Shared/EventContainer';
 import getEventText from './Shared/textBuilder';
 import styles from './styles.scss';

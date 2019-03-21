@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import classnames from 'classnames';
-import { Event } from '../../../../library';
+import Event from '../EventComponents';
 import EventModel from '../../../../../entities/models/Event';
 import styles from '../styles.scss';
 

@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
-import PatientPopover from '../../library/PatientPopover';
+import { PatientPopover } from '../../../../library';
 import styles from './styles.scss';
 
 export default function ReminderEvent({ data }) {
@@ -16,7 +16,9 @@ export default function ReminderEvent({ data }) {
   const intervalText = <span className={styles.reminder_interval}>{data.reminder.interval}</span>;
 
   const { sentRemindersPatients } = data;
-  const { appointment: { startDate } } = sentRemindersPatients[0];
+  const {
+    appointment: { startDate },
+  } = sentRemindersPatients[0];
 
   const appDate = dateFormatter(startDate, '', 'MMMM Do, YYYY h:mma');
 

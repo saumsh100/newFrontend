@@ -19,6 +19,8 @@ export default gql`
       id
       note
       date
+      patientId
+      accountId
     }
   }
 `;

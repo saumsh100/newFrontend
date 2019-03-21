@@ -3,13 +3,14 @@ import LaunchDarkly from 'ldclient-node';
 import globals from '../../config/globals';
 
 let ldClient;
+
 if (globals.env !== 'test') {
   ldClient = LaunchDarkly.init(globals.launchDarkly.sdkKey);
 }
 
 function ldClientVariation(featureFlag, defaultValue, { userId, ...data }) {
   if (globals.env === 'test') {
-    return resolve(true);
+    return true;
   }
 
   const metaData = {

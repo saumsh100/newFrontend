@@ -47,6 +47,10 @@ export default function SingleEvent({ type, onClick, checked }) {
       icon = 'bell';
       color = 'Red';
       break;
+    case 'note':
+      icon = 'sticky-note';
+      color = 'Blue';
+      break;
     default:
       break;
   }

@@ -16,6 +16,8 @@ export const ADD_REMOVE_TIMELINE_FILTERS = 'ADD_REMOVE_TIMELINE_FILTERS';
 export const SELECT_ALL_TIMELINE_FILTERS = 'SELECT_ALL_TIMELINE_FILTERS';
 export const CLEAR_ALL_TIMELINE_FILTERS = 'CLEAR_ALL_TIMELINE_FILTERS';
 
+export const SET_SELECTED_NOTE = `${reducer}/SET_SELECTED_NOTE`;
+
 /**
  * Actions
  */
@@ -27,6 +29,8 @@ export const removeFilter = createAction(REMOVE_FILTER);
 export const addRemoveTimelineFilters = createAction(ADD_REMOVE_TIMELINE_FILTERS);
 export const selectAllTimelineFilters = createAction(SELECT_ALL_TIMELINE_FILTERS);
 export const clearAllTimelineFilters = createAction(CLEAR_ALL_TIMELINE_FILTERS);
+
+export const setSelectedNote = createAction(SET_SELECTED_NOTE);
 
 /**
  * Initial State
@@ -40,6 +44,7 @@ export const createInitialPatientState = state =>
       order: [['firstName', 'asc']],
       segment: ['allPatients'],
     }),
+
     isLoadingTable: false,
     count: 0,
     timelineFilters: [
@@ -51,7 +56,10 @@ export const createInitialPatientState = state =>
       'request',
       'recall',
       'reminder',
+      'note',
     ],
+
+    selectedNote: null,
     ...state,
   });
 
@@ -64,7 +72,9 @@ export default handleActions(
   {
     [SET_DATA](
       state,
-      { payload: { data, count } },
+      {
+        payload: { data, count },
+      },
     ) {
       return state.merge({
         data,
@@ -101,6 +111,11 @@ export default handleActions(
       const defaultEvents = initialState.get('timelineFilters');
       return state.set('timelineFilters', defaultEvents);
     },
+
+    [SET_SELECTED_NOTE](state, { payload }) {
+      return state.set('selectedNote', payload);
+    },
   },
+
   initialState,
 );

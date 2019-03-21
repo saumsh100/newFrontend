@@ -20,7 +20,6 @@ export const initializeFeatureFlags = (userData = { key: 'carecru' }) => (dispat
 
   if (!envKey) {
     console.error('FEATURE_FLAG_KEY not set');
-
     return;
   }
 
@@ -50,10 +49,12 @@ export const initializeFeatureFlags = (userData = { key: 'carecru' }) => (dispat
 export const updateFeatureFlagsContext = (userData = { key: 'carecru' }) => (dispatch) => {
   window.LDClient.identify(userData, null, () => {
     const flags = window.LDClient.allFlags();
-    dispatch(batchActions(
-      [contextChanged(userData), featureFlagsChanged(flags)],
-      CONTEXT_FEATURE_FLAGS_CHANGED,
-    ));
+    dispatch(
+      batchActions(
+        [contextChanged(userData), featureFlagsChanged(flags)],
+        CONTEXT_FEATURE_FLAGS_CHANGED,
+      ),
+    );
   });
 };
 

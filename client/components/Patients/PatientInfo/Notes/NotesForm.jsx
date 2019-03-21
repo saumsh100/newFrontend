@@ -6,6 +6,7 @@ import { Form, Field } from '../../../library';
 export default function NotesForm({ onSubmit, initialValues, formName, className }) {
   return (
     <Form
+      key={formName}
       form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}
@@ -22,9 +23,10 @@ NotesForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   formName: PropTypes.string.isRequired,
   className: PropTypes.string,
-  initialValues: PropTypes.shape({}).isRequired,
+  initialValues: PropTypes.shape({ note: PropTypes.string }),
 };
 
 NotesForm.defaultProps = {
   className: null,
+  initialValues: null,
 };
