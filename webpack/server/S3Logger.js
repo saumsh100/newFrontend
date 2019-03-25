@@ -25,8 +25,8 @@ function S3Logger(folderToUse) {
     max_file_size: 100 * 1024 * 1024 * 1024,
     buffer_size: 100 * 1024,
     upload_every: 1 * 60 * 1000,
-    access_key_id: process.env.AWS_ACCESS_KEY_ID,
-    secret_access_key: process.env.AWS_SECRET_ACCESS_KEY
+    access_key_id: process.env.S3_LOGS_ACCESS_KEY_ID,
+    secret_access_key: process.env.S3_LOGS_SECRET_ACCESS_KEY
   });
 
   const S3LoggerOutput = new Logger({
