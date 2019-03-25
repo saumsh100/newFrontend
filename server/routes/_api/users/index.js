@@ -117,6 +117,12 @@ userRouter.get('/', checkPermissions('users:read'), (req, res, next) => {
     .catch(next);
 });
 
+
+userRouter.put('/:userId/preferences', checkPermissions('users:update'), (req, res, next) => req.profile
+  .update(req.body)
+  .then(user => res.send(normalize('user', user.get({ plain: true }))))
+  .catch(next));
+
 /**
  * PUT /:userId
  */

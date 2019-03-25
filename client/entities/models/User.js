@@ -11,6 +11,7 @@ const UserSchema = {
   permissionId: null,
   twilioPhoneNumber: null,
   role: null,
+  sendBookingRequestEmail: false,
 };
 
 export default class User extends createModel(UserSchema) {
@@ -22,7 +23,6 @@ export default class User extends createModel(UserSchema) {
   }
 
   getName() {
-    return `${this.get('firstName')} ${this.get('lastName')}` ;
+    return `${this.get('firstName')} ${this.get('lastName')}`;
   }
-
 }

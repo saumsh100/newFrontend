@@ -1,32 +1,32 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { sortDesc } from '@carecru/isomorphic';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import jwt from 'jwt-decode';
+import Map from 'immutable';
 import {
   fetchEntities,
   deleteEntityRequest,
   createEntityRequest,
   updateEntityRequest,
 } from '../../../../thunks/fetchEntities';
-import {
-  List,
-  ListItem,
-  Grid,
-  Header,
-  DialogBox,
-  Row,
-  Button,
-  DropdownSelect,
-} from '../../../library';
+import { List, Header, DialogBox, Row, Button } from '../../../library';
 import ActiveUsersList from './ActiveUsersList';
 import InviteUsersList from './InviteUsersList';
 import NewUserForm from './NewUserForm';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
 import InviteUserForm from './InviteUserForm';
 import SettingsCard from '../../Shared/SettingsCard';
+import EditUserForm from './EditUserForm';
 import styles from './styles.scss';
+
+const getUsersWithPermissions = usr => (permissions, editPermissionId) => {
+  const usrPermission = permissions.get(usr.permissionId);
+  return (
+    usrPermission && editPermissionId === usrPermission && usrPermission.get('role') === 'OWNER'
+  );
+};
 
 class Users extends Component {
   constructor(props) {
@@ -35,6 +35,7 @@ class Users extends Component {
       active: false,
       editActive: false,
       newActive: false,
+      editUserId: null,
       editValue: 'VIEWER',
       roleChange: {},
     };
@@ -51,7 +52,7 @@ class Users extends Component {
   }
 
   componentWillMount() {
-    const { accountId, role, userId } = this.props;
+    const { accountId, role } = this.props;
 
     const url = `/api/accounts/${accountId}/users`;
     const urlInvites = `/api/accounts/${accountId}/invites`;
@@ -59,27 +60,23 @@ class Users extends Component {
     this.props.fetchEntities({ url });
     this.props.fetchEntities({ url: urlInvites });
 
-    this.setState({
-      yep: userId,
-      role,
-    });
+    this.setState({ role });
   }
 
   deleteInvite(id) {
     const { accountId } = this.props;
 
     const alert = {
-      success: {
-        body: 'Invite Deleted.',
-      },
-      error: {
-        body: 'Invite Could Not Be Deleted',
-      },
+      success: { body: 'Invite Deleted.' },
+      error: { body: 'Invite Could Not Be Deleted' },
     };
 
     const url = `/api/accounts/${accountId}/invites/${id}`;
     this.props.deleteEntityRequest({
-      key: 'invites', id, url, alert,
+      key: 'invites',
+      id,
+      url,
+      alert,
     });
   }
 
@@ -90,21 +87,18 @@ class Users extends Component {
     entityData.accountId = accountId;
     entityData.sendingUserId = userId;
 
-    this.setState({
-      newActive: false,
-    });
+    this.setState({ newActive: false });
 
     const alert = {
-      success: {
-        body: 'User Created.',
-      },
-      error: {
-        body: 'User Could Not Be Created',
-      },
+      success: { body: 'User Created.' },
+      error: { body: 'User Could Not Be Created' },
     };
 
     this.props.createEntityRequest({
-      key: 'user', entityData, url, alert,
+      key: 'user',
+      entityData,
+      url,
+      alert,
     });
 
     // resetting inputs to empty
@@ -122,73 +116,69 @@ class Users extends Component {
     entityData.accountId = accountId;
     entityData.sendingUserId = userId;
 
-    this.setState({
-      active: false,
-    });
+    this.setState({ active: false });
 
     const alert = {
-      success: {
-        body: 'Invite Sent.',
-      },
-      error: {
-        body: 'Invite Could Not Be Sent',
-      },
+      success: { body: 'Invite Sent.' },
+      error: { body: 'Invite Could Not Be Sent' },
     };
 
     this.props.createEntityRequest({
-      key: 'invites', entityData, url, alert,
+      key: 'invites',
+      entityData,
+      url,
+      alert,
     });
     entityData.email = '';
   }
 
-  sendEdit() {
+  sendEdit({ role, sendBookingRequestEmail }) {
     const { accountId } = this.props;
 
-    this.setState({
-      editActive: false,
-    });
+    this.setState({ editActive: false });
 
-    const values = {
-      role: this.state.editValue,
-    };
+    const selectedUser = this.props.users.get(this.state.editUserId);
 
-    const url = `/api/accounts/${accountId}/permissions/${
-      this.state.editPermissionId
-    }`;
-    let userOwner = false;
-    let numOfOwners = 0;
-    this.props.users.toArray().map((user, i) => {
-      const permission = this.props.permissions.get(user.permissionId);
-      if (!permission) {
-        return null;
-      }
-      if (
-        this.state.editPermissionId === permission.toJS().id &&
-        permission.toJS().role === 'OWNER'
-      ) {
-        userOwner = true;
-      }
-      if (permission.toJS().role === 'OWNER') {
-        numOfOwners++;
-      }
-      return null;
-    });
+    if (selectedUser.get('sendBookingRequestEmail') !== sendBookingRequestEmail) {
+      const url = `/api/users/${this.state.editUserId}/preferences`;
 
-    if (numOfOwners === 1 && userOwner === true) {
-      alert('There must be one Owner!');
-    } else {
       const alert = {
-        success: {
-          body: 'Permission Changed.',
-        },
-        error: {
-          body: 'Permission Could Not Be Changed',
-        },
+        success: { body: 'Updated User.' },
+        error: { body: 'User Could Not Be Updated' },
       };
 
       this.props.updateEntityRequest({
-        key: 'accounts', values, url, alert,
+        key: 'user',
+        values: { sendBookingRequestEmail },
+        url,
+        alert,
       });
+    }
+
+    const selectedUserPermission = this.props.permissions.get(selectedUser.get('permissionId'));
+
+    if (selectedUserPermission.get('role') !== role) {
+      const url = `/api/accounts/${accountId}/permissions/${this.state.editPermissionId}`;
+
+      const usersWithPermissions = this.props.users.filter(
+        getUsersWithPermissions(this.props.permissions, this.state.editPermissionId),
+      );
+
+      if (usersWithPermissions.size === 1) {
+        alert('There must be one Owner!');
+      } else {
+        const alert = {
+          success: { body: 'Permission Changed.' },
+          error: { body: 'Permission Could Not Be Changed' },
+        };
+
+        this.props.updateEntityRequest({
+          key: 'accounts',
+          values: { role },
+          url,
+          alert,
+        });
+      }
     }
   }
 
@@ -198,6 +188,7 @@ class Users extends Component {
       editActive: false,
       newActive: false,
       roleChange: this.state.roleChange,
+      editUserId: null,
     };
 
     newState.roleChange[this.state.userEdit] = this.state.editValue;
@@ -206,15 +197,11 @@ class Users extends Component {
   }
 
   addUser() {
-    this.setState({
-      active: true,
-    });
+    this.setState({ active: true });
   }
 
   addNewUser() {
-    this.setState({
-      newActive: true,
-    });
+    this.setState({ newActive: true });
   }
 
   editUser(editUserId, editPermissionId, role, i) {
@@ -237,26 +224,16 @@ class Users extends Component {
 
   render() {
     const formName = 'emailInvite';
-    const {
-      users, permissions, accounts, invites,
-    } = this.props;
+    const { users, permissions, accounts, invites } = this.props;
     const { active, editActive, newActive } = this.state;
 
-    let clinicName = null;
-
-    for (let i = 0; i < accounts.toArray().length; i++) {
-      if (accounts.toArray()[i].id === this.props.accountId) {
-        clinicName = accounts.toArray()[i].name;
-        break;
-      }
-    }
+    const usersAccount = accounts.find(acc => acc && acc.id === this.props.accountId);
+    const clinicName = usersAccount.get('name');
 
     let usersInvited = (
       <div className={styles.userListItem}>
         <div className={styles.main}>
-          <p className={styles.name}>
-            Users you have invited will show up here.
-          </p>
+          <p className={styles.name}>Users you have invited will show up here.</p>
         </div>
       </div>
     );
@@ -271,7 +248,7 @@ class Users extends Component {
             email={invite.get('email')}
             currentUserRole={this.state.role}
             date={invite.get('createdAt')}
-            onDelete={this.deleteInvite.bind(null, invite.get('id'))}
+            onDelete={() => this.deleteInvite(invite.get('id'))}
             mainStyle={styles.main}
             nameStyle={styles.name}
             emailStyle={styles.email}
@@ -280,11 +257,6 @@ class Users extends Component {
           />
         ));
     }
-    const options = [
-      { value: 'OWNER' },
-      { value: 'ADMIN' },
-      { value: 'MANAGER' },
-    ];
 
     const actions = [
       {
@@ -297,7 +269,10 @@ class Users extends Component {
         label: 'Save',
         onClick: this.sendInvite,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: formName },
+        props: {
+          color: 'blue',
+          form: formName,
+        },
       },
     ];
 
@@ -312,7 +287,10 @@ class Users extends Component {
         label: 'Save',
         onClick: this.sendNewUser,
         component: RemoteSubmitButton,
-        props: { color: 'blue', form: 'newUser' },
+        props: {
+          color: 'blue',
+          form: 'newUser',
+        },
       },
     ];
 
@@ -324,10 +302,12 @@ class Users extends Component {
         props: { border: 'blue' },
       },
       {
-        label: 'Edit',
-        onClick: this.sendEdit,
-        component: Button,
-        props: { color: 'blue' },
+        label: 'Save',
+        component: RemoteSubmitButton,
+        props: {
+          color: 'blue',
+          form: `${this.state.editUserId}_editUserForm`,
+        },
       },
     ];
 
@@ -379,25 +359,22 @@ class Users extends Component {
         </DialogBox>
         <DialogBox
           actions={editActions}
-          title="Edit User Rights"
+          title="Edit User"
           type="small"
           active={editActive}
           onEscKeyDown={this.reinitializeState}
           onOverlayClick={this.reinitializeState}
         >
-          <DropdownSelect
-            value={this.state.editValue}
-            onChange={this.editDropdown}
-            className={styles.dropdown}
-            options={options}
-          />
+          {this.state.editUserId && this.state.editPermissionId && (
+            <EditUserForm
+              user={users.get(this.state.editUserId)}
+              role={permissions.get(this.state.editPermissionId).get('role')}
+              onSubmit={this.sendEdit}
+            />
+          )}
         </DialogBox>
         <Row className={styles.mainHead}>
-          <Header
-            className={styles.header}
-            contentHeader
-            title={`Users in ${clinicName}`}
-          />
+          <Header className={styles.header} contentHeader title={`Users in ${clinicName}`} />
           <div className={styles.paddingRight}>
             {addUserButton}
             <Button
@@ -411,37 +388,31 @@ class Users extends Component {
           </div>
         </Row>
         <List className={styles.userList} data-test-id="activeUsersList">
-          {users.toArray().map((user, i) => {
-            const permission = permissions.get(user.permissionId);
-            if (!permission) {
-              return null;
-            }
-
-            return (
-              <ActiveUsersList
-                key={user.id}
-                activeUser={user}
-                role={permission.get('role')}
-                currentUserId={this.state.userId}
-                userId={user.get('id')}
-                currentUserRole={this.state.role}
-                edit={this.editUser.bind(
-                  null,
-                  user.get('id'),
-                  permission.get('id'),
-                  permission.get('role'),
-                  i,
-                )}
-              />
-            );
-          })}
+          {users
+            .toArray()
+            .sort(sortDesc)
+            .map((user, i) => {
+              const permission = permissions.get(user.permissionId);
+              if (!permission) {
+                return null;
+              }
+              return (
+                <ActiveUsersList
+                  key={user.id}
+                  activeUser={user}
+                  role={permission.get('role')}
+                  currentUserId={this.state.userId}
+                  userId={user.get('id')}
+                  currentUserRole={this.state.role}
+                  edit={() =>
+                    this.editUser(user.get('id'), permission.get('id'), permission.get('role'), i)
+                  }
+                />
+              );
+            })}
         </List>
         <Row className={styles.mainHeadInvites}>
-          <Header
-            className={styles.header}
-            contentHeader
-            title="Pending Invitations"
-          />
+          <Header className={styles.header} contentHeader title="Pending Invitations" />
         </Row>
         <List className={styles.userList}>{usersInvited}</List>
       </SettingsCard>
@@ -450,17 +421,17 @@ class Users extends Component {
 }
 
 Users.propTypes = {
-  fetchEntities: PropTypes.func,
-  deleteEntityRequest: PropTypes.func,
-  createEntityRequest: PropTypes.func,
-  updateEntityRequest: PropTypes.func,
-  accountId: PropTypes.string,
-  userId: PropTypes.string,
-  role: PropTypes.string,
-  users: PropTypes.object,
-  permissions: PropTypes.object,
-  accounts: PropTypes.object,
-  invites: PropTypes.object,
+  fetchEntities: PropTypes.func.isRequired,
+  deleteEntityRequest: PropTypes.func.isRequired,
+  createEntityRequest: PropTypes.func.isRequired,
+  updateEntityRequest: PropTypes.func.isRequired,
+  accountId: PropTypes.string.isRequired,
+  userId: PropTypes.string.isRequired,
+  role: PropTypes.string.isRequired,
+  users: PropTypes.instanceOf(Map).isRequired,
+  permissions: PropTypes.instanceOf(Map).isRequired,
+  accounts: PropTypes.instanceOf(Map).isRequired,
+  invites: PropTypes.instanceOf(Map).isRequired,
 };
 
 function mapStateToProps({ entities, auth }) {

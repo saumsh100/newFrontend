@@ -2,6 +2,7 @@
 
 import { Router } from 'express';
 import { setDateToTimezone } from '@carecru/isomorphic';
+import moment from 'moment';
 import { namespaces, protocol, host } from '../../../config/globals';
 import { sequelizeLoader } from '../../util/loaders';
 import checkPermissions from '../../../middleware/checkPermissions';
@@ -81,11 +82,7 @@ requestsRouter.post('/', async (req, res, next) => {
         include: [{
           model: Permission,
           as: 'permission',
-          where: {
-            role: {
-              $ne: 'SUPERADMIN',
-            },
-          },
+          where: { role: { $ne: 'SUPERADMIN' } },
           required: true,
         }],
         where: {
@@ -93,7 +90,7 @@ requestsRouter.post('/', async (req, res, next) => {
           sendBookingRequestEmail: true,
         },
       });
-      const { email, firstName, lastName } = patientUser;
+      const { email, firstName, lastName, birthDate, insuranceCarrier, phoneNumber } = patientUser;
       const { name, sendRequestEmail, timezone } = account;
 
       // Send Email
@@ -132,6 +129,22 @@ requestsRouter.post('/', async (req, res, next) => {
                 {
                   name: 'APPOINTMENT_TIME',
                   content: setDateToTimezone(req.body.startDate, timezone).format('h:mm a'),
+                },
+                {
+                  name: 'PATIENTUSER_BIRTHDATE',
+                  content: moment(birthDate).format('MMM DD, YYYY'),
+                },
+                {
+                  name: 'PATIENTUSER_INSURANCE',
+                  content: insuranceCarrier,
+                },
+                {
+                  name: 'PATIENTUSER_EMAIL',
+                  content: email,
+                },
+                {
+                  name: 'PATIENTUSER_PHONENUMBER',
+                  content: formatPhoneNumber(phoneNumber),
                 },
               ],
             });
@@ -224,7 +237,7 @@ requestsRouter.get('/', (req, res, next) => {
       isCancelled,
     },
     include: includeArray,
-  }).then(requests => {
+  }).then((requests) => {
     const sendRequests = requests.map(r => r.get({ plain: true }));
     return res.send(normalize('requests', sendRequests));
   })
@@ -235,20 +248,14 @@ requestsRouter.get('/', (req, res, next) => {
  * Get all requests that need to be synced
  */
 requestsRouter.get('/notSynced', (req, res, next) => {
-  const {
-    accountId,
-  } = req;
+  const { accountId } = req;
 
   return Request.findAll({
     where: {
       accountId,
       isSyncedWithPms: false,
-      suggestedPractitionerId: {
-        $ne: null,
-      },
-      suggestedChairId: {
-        $ne: null,
-      },
+      suggestedPractitionerId: { $ne: null },
+      suggestedChairId: { $ne: null },
     },
     include: [{
       model: PatientUser,
@@ -286,7 +293,7 @@ requestsRouter.get('/notSynced', (req, res, next) => {
 /**
  * Update a request
  */
-requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) =>{
+requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res, next) => {
   const { accountId } = req;
 
   req.body.isSyncedWithPms = false;
@@ -308,7 +315,7 @@ requestsRouter.put('/:requestId', checkPermissions('requests:update'), (req, res
 /**
  * Update a request
  */
-requestsRouter.put('/:requestId/connector', checkPermissions('requests:update'), (req, res, next) =>{
+requestsRouter.put('/:requestId/connector', checkPermissions('requests:update'), (req, res, next) => {
   const { accountId } = req;
 
   req.body.isSyncedWithPms = true;
@@ -331,7 +338,7 @@ requestsRouter.put('/:requestId/connector', checkPermissions('requests:update'),
 /**
  * Delete a request
  */
-requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) =>{
+requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, res, next) => {
   const { request, accountId } = req;
 
   return req.request.destroy()
@@ -351,7 +358,10 @@ requestsRouter.delete('/:requestId', checkPermissions('requests:delete'), (req, 
 requestsRouter.put('/:requestId/reject', (req, res, next) => {
   // TODO: patientUserId should be pulled from auth
   const { accountId, request } = req;
-  return request.update({ isCancelled: true, isSyncedWithPms: false })
+  return request.update({
+    isCancelled: true,
+    isSyncedWithPms: false,
+  })
     .then((requestData) => {
       const normalized = normalize('request', requestData.dataValues);
       res.status(201).send(normalized);
@@ -459,111 +469,109 @@ requestsRouter.put('/:requestId/reject', (req, res, next) => {
 /**
  * Send Confirmed Request Email
  */
-requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('requests:update'), (req, res, next) =>{
-  return req.request.update({
-    isConfirmed: true,
-    appointmentId: req.appointmentId,
-    isSyncedWithPms: false,
+requestsRouter.put('/:requestId/confirm/:appointmentId', checkPermissions('requests:update'), (req, res, next) => req.request.update({
+  isConfirmed: true,
+  appointmentId: req.appointmentId,
+  isSyncedWithPms: false,
+})
+  .then(async (request) => {
+    const requestClean = request.get({ plain: true });
+    let patientUserId = requestClean.patientUserId;
+
+    let requestForName = null;
+
+    if (patientUserId !== requestClean.requestingPatientUserId) {
+      patientUserId = requestClean.requestingPatientUserId;
+
+      const patientUserFor = await PatientUser.findById(requestClean.patientUserId);
+      const { firstName } = patientUserFor;
+      requestForName = firstName;
+    }
+
+    const patientUser = await PatientUser.findById(patientUserId);
+
+    const account = await Account.findById(requestClean.accountId);
+    const { email, firstName } = patientUser;
+
+    const { name, phoneNumber, contactEmail, website, timezone } = account;
+    const { startDate } = req.appointment;
+
+    // Early return so its not dependant on email sending
+    res.status(200).send();
+
+    const io = req.app.get('socketio');
+    const ns = namespaces.dash;
+    const normalized = normalize('request', requestClean);
+    io.of(ns).in(requestClean.accountId).emit('update:Request', normalized);
+
+    const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
+    const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
+
+    // Send Email
+    return sendAppointmentRequestConfirmed({
+      accountId: req.accountId,
+      toEmail: email,
+      fromName: name,
+      mergeVars: [
+        {
+          name: 'PRIMARY_COLOR',
+          content: account.bookingWidgetPrimaryColor || '#206477',
+        },
+        {
+          name: 'PATIENT_FIRSTNAME',
+          content: firstName,
+        },
+        {
+          name: 'ACCOUNT_CLINICNAME',
+          content: name,
+        },
+        {
+          name: 'ACCOUNT_PHONENUMBER',
+          content: formatPhoneNumber(phoneNumber),
+        },
+        {
+          name: 'ACCOUNT_CONTACTEMAIL',
+          content: contactEmail,
+        },
+        {
+          name: 'ACCOUNT_WEBSITE',
+          content: website,
+        },
+        {
+          name: 'ACCOUNT_LOGO_URL',
+          content: accountLogoUrl,
+        },
+        {
+          name: 'ACCOUNT_CITY',
+          content: account.address.city,
+        },
+        {
+          name: 'ACCOUNT_ADDRESS',
+          content: account.address.street,
+        },
+        {
+          name: 'APPOINTMENT_DATE',
+          content: setDateToTimezone(startDate, timezone).format('MMMM Do YYYY'),
+        },
+        {
+          name: 'APPOINTMENT_TIME',
+          content: setDateToTimezone(startDate, timezone).format('h:mm a'),
+        },
+        {
+          name: 'PATIENT_REQUEST_FOR',
+          content: requestForName,
+        },
+        {
+          name: 'FACEBOOK_URL',
+          content: account.facebookUrl,
+        },
+        {
+          name: 'GOOGLE_URL',
+          content: googlePlaceId,
+        },
+      ],
+    });
   })
-    .then(async (request) => {
-      const requestClean = request.get({ plain: true });
-      let patientUserId = requestClean.patientUserId;
-
-      let requestForName = null;
-
-      if (patientUserId !== requestClean.requestingPatientUserId) {
-        patientUserId = requestClean.requestingPatientUserId;
-
-        const patientUserFor = await PatientUser.findById(requestClean.patientUserId);
-        const { firstName } = patientUserFor;
-        requestForName = firstName;
-      }
-
-      const patientUser = await PatientUser.findById(patientUserId);
-
-      const account = await Account.findById(requestClean.accountId);
-      const { email, firstName } = patientUser;
-
-      const { name, phoneNumber, contactEmail, website, timezone } = account;
-      const { startDate } = req.appointment;
-
-      // Early return so its not dependant on email sending
-      res.status(200).send();
-
-      const io = req.app.get('socketio');
-      const ns = namespaces.dash;
-      const normalized = normalize('request', requestClean);
-      io.of(ns).in(requestClean.accountId).emit('update:Request', normalized);
-
-      const accountLogoUrl = typeof account.fullLogoUrl === 'string' && account.fullLogoUrl.replace('[size]', 'original');
-      const googlePlaceId = account.googlePlaceId ? `https://search.google.com/local/writereview?placeid=${account.googlePlaceId}` : null;
-
-      // Send Email
-      return sendAppointmentRequestConfirmed({
-        accountId: req.accountId,
-        toEmail: email,
-        fromName: name,
-        mergeVars: [
-          {
-            name: 'PRIMARY_COLOR',
-            content: account.bookingWidgetPrimaryColor || '#206477',
-          },
-          {
-            name: 'PATIENT_FIRSTNAME',
-            content: firstName,
-          },
-          {
-            name: 'ACCOUNT_CLINICNAME',
-            content: name,
-          },
-          {
-            name: 'ACCOUNT_PHONENUMBER',
-            content: formatPhoneNumber(phoneNumber),
-          },
-          {
-            name: 'ACCOUNT_CONTACTEMAIL',
-            content: contactEmail,
-          },
-          {
-            name: 'ACCOUNT_WEBSITE',
-            content: website,
-          },
-          {
-            name: 'ACCOUNT_LOGO_URL',
-            content: accountLogoUrl,
-          },
-          {
-            name: 'ACCOUNT_CITY',
-            content: account.address.city,
-          },
-          {
-            name: 'ACCOUNT_ADDRESS',
-            content: account.address.street,
-          },
-          {
-            name: 'APPOINTMENT_DATE',
-            content: setDateToTimezone(startDate, timezone).format('MMMM Do YYYY'),
-          },
-          {
-            name: 'APPOINTMENT_TIME',
-            content: setDateToTimezone(startDate, timezone).format('h:mm a'),
-          },
-          {
-            name: 'PATIENT_REQUEST_FOR',
-            content: requestForName,
-          },
-          {
-            name: 'FACEBOOK_URL',
-            content: account.facebookUrl,
-          },
-          {
-            name: 'GOOGLE_URL',
-            content: googlePlaceId,
-          },
-        ],
-      });
-    })
-    .catch(next);
-});
+  .catch(next));
 
 module.exports = requestsRouter;
