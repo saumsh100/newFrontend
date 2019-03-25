@@ -51,19 +51,30 @@ export async function receiveMessage(account, textMessageData) {
 
   logger.debug(`TextMessage ${textMessage.get('id')} stored.`);
   const { isConfirmation, haveExtraMessage } = handleResponse(body);
-  await updateUserViaSocket(chatClean.id);
 
   if (!patient || !isConfirmation) {
     logger.debug(`Not a ${!patient ? 'patient' : 'sms confirmation'}, exiting.`);
+    await updateUserViaSocket(chatClean.id);
     return replyWithOutOfOfficeMessage(account, (patient && patient.get('cellPhoneNumber')) || from);
+  }
+
+  // Mark text message and chat as unread if is only confirmation
+  if (!haveExtraMessage) {
+    await markMessageAsRead(textMessage.get('id'));
+    await setChatUnread(chatClean.id, false);
   }
 
   // Confirm first available reminder for the closest appointment
   const sentReminders = await confirmReminderIfExist(account.id, patient.id);
   const firstSentReminder = sentReminders[0];
+
   if (!firstSentReminder || firstSentReminder.sentRemindersPatients.length === 0) {
     logger.debug('No reminders to confirm, exiting.');
-    return haveExtraMessage && replyWithOutOfOfficeMessage(account, (patient && patient.get('cellPhoneNumber')) || from);
+    await updateUserViaSocket(chatClean.id);
+    return haveExtraMessage && replyWithOutOfOfficeMessage(
+      account,
+      (patient && patient.get('cellPhoneNumber')) || from,
+    );
   }
 
   const { reminder, sentRemindersPatients } = firstSentReminder;
@@ -74,8 +85,6 @@ export async function receiveMessage(account, textMessageData) {
   const sentReminderClean = firstSentReminder.get({ plain: true });
   const normalizedReminder = normalize('sentReminder', sentReminderClean);
   publishEvent(account.id, 'create:SentReminder', normalizedReminder);
-  await markMessageAsRead(textMessage.get('id'));
-  await setChatUnread(chatClean.id, false);
   const confirmationText = createConfirmationText({
     patient,
     appointment: pocPatient ? pocPatient.appointment : {},
@@ -84,14 +93,22 @@ export async function receiveMessage(account, textMessageData) {
     isFamily: sentReminderClean.isFamily,
     sentRemindersPatients,
   });
-  const outOfOfficeMessage = await produceOutsideOfficeHours(account, patient.get('cellPhoneNumber') || from);
+
+  const outOfOfficeMessage = await produceOutsideOfficeHours(
+    account,
+    patient.get('cellPhoneNumber') || from,
+  );
+
   const shouldSendOutOfOfficeMessage = outOfOfficeMessage &&
     !await isLimitReachedForPhoneNumber(account.id, from);
 
-  const messageBody = shouldSendOutOfOfficeMessage && haveExtraMessage ? [confirmationText, outOfOfficeMessage].join(' ') : confirmationText;
+  const messageBody = shouldSendOutOfOfficeMessage && haveExtraMessage
+    ? [confirmationText, outOfOfficeMessage].join(' ')
+    : confirmationText;
 
   const confirmationTextMessage =
     await createChatMessage(messageBody, patient, null, chatClean.id);
+
   logger.debug(`Sent ${confirmationTextMessage.id} confirmation message.`);
   await updateUserViaSocket(chatClean.id);
 }
