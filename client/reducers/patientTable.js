@@ -17,6 +17,7 @@ export const SELECT_ALL_TIMELINE_FILTERS = 'SELECT_ALL_TIMELINE_FILTERS';
 export const CLEAR_ALL_TIMELINE_FILTERS = 'CLEAR_ALL_TIMELINE_FILTERS';
 
 export const SET_SELECTED_NOTE = `${reducer}/SET_SELECTED_NOTE`;
+export const SET_SELECTED_FOLLOW_UP = `${reducer}/SET_SELECTED_FOLLOW_UP`;
 
 /**
  * Actions
@@ -31,6 +32,7 @@ export const selectAllTimelineFilters = createAction(SELECT_ALL_TIMELINE_FILTERS
 export const clearAllTimelineFilters = createAction(CLEAR_ALL_TIMELINE_FILTERS);
 
 export const setSelectedNote = createAction(SET_SELECTED_NOTE);
+export const setSelectedFollowUp = createAction(SET_SELECTED_FOLLOW_UP);
 
 /**
  * Initial State
@@ -57,9 +59,11 @@ export const createInitialPatientState = state =>
       'recall',
       'reminder',
       'note',
+      'followUp',
     ],
 
     selectedNote: null,
+    selectedFollowUp: null,
     ...state,
   });
 
@@ -114,6 +118,10 @@ export default handleActions(
 
     [SET_SELECTED_NOTE](state, { payload }) {
       return state.set('selectedNote', payload);
+    },
+
+    [SET_SELECTED_FOLLOW_UP](state, { payload }) {
+      return state.set('selectedFollowUp', payload);
     },
   },
 

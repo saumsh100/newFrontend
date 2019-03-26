@@ -24,6 +24,7 @@ import {
   selectAllTimelineFilters,
   clearAllTimelineFilters,
   setSelectedNote,
+  setSelectedFollowUp,
 } from '../../../reducers/patientTable';
 import { setTitle, setBackHandler } from '../../../reducers/electron';
 import { showAlertTimeout } from '../../../thunks/alerts';
@@ -39,12 +40,12 @@ import FormModal from './FormModal';
 import NotesForm from './Notes/NotesForm';
 import FollowUpsForm from './FollowUps/FollowUpsForm';
 import CreateOrUpdatePatientNoteMutation from './Notes/CreateOrUpdatePatientNoteMutation';
-import CreateFollowUpMutation from './FollowUps/CreateFollowUpMutation';
+import CreateOrUpdateFollowUpMutation from './FollowUps/CreateOrUpdateFollowUpMutation';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 import styles from './styles.scss';
 
 const getNotesFormName = data => (data ? `editNotesForm-${data.id}` : 'addNotesForm');
-const FOLLOW_UPS_FORM_NAME = 'followUpsForm';
+const getFollowUpsFormName = data => (data ? `editFollowUpsForm-${data.id}` : 'addFollowUpsForm');
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
@@ -229,7 +230,11 @@ class PatientInfo extends Component {
   }
 
   toggleFollowUpsForm() {
-    this.setState({ isFollowUpsFormOpen: !this.state.isFollowUpsFormOpen });
+    if (this.props.selectedFollowUp) {
+      this.props.setSelectedFollowUp(null);
+    } else {
+      this.setState({ isFollowUpsFormOpen: !this.state.isFollowUpsFormOpen });
+    }
   }
 
   async handleNotesFormSubmit({ note }, commit) {
@@ -291,28 +296,71 @@ class PatientInfo extends Component {
   }
 
   async handleFollowUpsFormSubmit(values, commit) {
-    const { patient, activeAccount, userId } = this.props;
+    const { patient, activeAccount, userId, selectedFollowUp } = this.props;
     try {
       const variables = {
-        ...values,
         patientId: patient.id,
         accountId: activeAccount.id,
         userId,
+        dueAt: values.dueAt,
+        patientFollowUpTypeId: values.patientFollowUpTypeId,
+        note: values.note,
       };
 
-      await commit({ variables });
+      if (selectedFollowUp) {
+        variables.id = selectedFollowUp.id;
+        if (values.isCompleted && !selectedFollowUp.completedAt) {
+          variables.completedAt = new Date();
+        }
+
+        if (!values.isCompleted && selectedFollowUp.completedAt) {
+          variables.completedAt = null;
+        }
+      }
+
+      const { data } = await commit({ variables });
       this.toggleFollowUpsForm();
-      this.props.showAlertTimeout({
-        type: 'success',
-        alert: { body: `Added follow-up for ${patient.firstName}` },
+
+      const newFollowUp = selectedFollowUp
+        ? data.updatePatientFollowUp
+        : data.createPatientFollowUp;
+      const eventId = window.btoa(`followUp-${newFollowUp.id}`);
+
+      // This is temporary as the API is not properly return this data for create actions
+      newFollowUp.date = newFollowUp.date || new Date().toISOString();
+      newFollowUp.createdAt = newFollowUp.date;
+
+      this.props.receiveEntities({
+        entities: {
+          events: {
+            [eventId]: {
+              id: eventId,
+              type: 'followUp',
+              accountId: newFollowUp.accountId,
+              patientId: newFollowUp.patientId,
+              metaData: newFollowUp,
+            },
+          },
+        },
       });
 
-      this.props.reset(FOLLOW_UPS_FORM_NAME);
+      this.props.showAlertTimeout({
+        type: 'success',
+        alert: {
+          body: `${selectedFollowUp ? 'Updated' : 'Added'} follow-up for ${patient.firstName}`,
+        },
+      });
+
+      this.props.reset(getNotesFormName(selectedFollowUp));
     } catch (err) {
       console.error('handleFollowUpsFormSubmit Error:', err);
       this.props.showAlertTimeout({
         type: 'error',
-        alert: { body: `Failed to add follow-up for ${patient.firstName}` },
+        alert: {
+          body: `Failed to ${selectedFollowUp ? 'update' : 'add'} follow-up for ${
+            patient.firstName
+          }`,
+        },
       });
     }
   }
@@ -333,6 +381,7 @@ class PatientInfo extends Component {
       canAddNote,
       canAddFollowUp,
       selectedNote,
+      selectedFollowUp,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
@@ -354,6 +403,12 @@ class PatientInfo extends Component {
       });
 
     const isUpdatingNote = !!selectedNote;
+    const isUpdatingFollowUp = !!selectedFollowUp;
+
+    if (selectedFollowUp) {
+      selectedFollowUp.isCompleted = !!selectedFollowUp.completedAt;
+      selectedFollowUp.patientFollowUpTypeId = selectedFollowUp.patientFollowUpType.id;
+    }
 
     return (
       <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
@@ -489,21 +544,23 @@ class PatientInfo extends Component {
           </CreateOrUpdatePatientNoteMutation>
         </FormModal>
         <FormModal
-          title="Add Follow-up"
-          formName={FOLLOW_UPS_FORM_NAME}
-          active={this.state.isFollowUpsFormOpen}
+          isUpdate={isUpdatingFollowUp}
+          title={isUpdatingFollowUp ? 'Edit Follow-up' : 'Add Follow-up'}
+          formName={getFollowUpsFormName(selectedFollowUp)}
+          active={this.state.isFollowUpsFormOpen || isUpdatingFollowUp}
           onToggle={this.toggleFollowUpsForm}
         >
-          <CreateFollowUpMutation>
+          <CreateOrUpdateFollowUpMutation isUpdate={isUpdatingFollowUp}>
             {commit => (
               <FollowUpsForm
-                formName={FOLLOW_UPS_FORM_NAME}
-                initialValues={{}}
+                isUpdate={isUpdatingFollowUp}
+                formName={getFollowUpsFormName(selectedFollowUp)}
+                initialValues={selectedFollowUp}
                 onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
                 className={styles.notesForm}
               />
             )}
-          </CreateFollowUpMutation>
+          </CreateOrUpdateFollowUpMutation>
         </FormModal>
       </Grid>
     );
@@ -526,6 +583,7 @@ function mapDispatchToProps(dispatch) {
       showAlertTimeout,
       reset,
       setSelectedNote,
+      setSelectedFollowUp,
     },
     dispatch,
   );
@@ -592,6 +650,7 @@ function mapStateToProps(
     canAddNote,
     canAddFollowUp,
     selectedNote: patientTable.get('selectedNote'),
+    selectedFollowUp: patientTable.get('selectedFollowUp'),
   };
 }
 
@@ -634,7 +693,12 @@ PatientInfo.propTypes = {
     id: PropTypes.string.isRequired,
     note: PropTypes.string.isRequired,
   }),
+  selectedFollowUp: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    note: PropTypes.string.isRequired,
+  }),
   setSelectedNote: PropTypes.func.isRequired,
+  setSelectedFollowUp: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {
@@ -651,6 +715,7 @@ PatientInfo.defaultProps = {
   canAddNote: false,
   canAddFollowUp: false,
   selectedNote: null,
+  selectedFollowUp: null,
 };
 
 const enhance = connect(

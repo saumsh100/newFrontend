@@ -2,21 +2,21 @@
 import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
 
 export default gql`
-  mutation createPatientFollowUp_NEST(
-    $accountId: String!
-    $patientId: String!
+  mutation updatePatientFollowUp_NEST(
+    $id: ID!
     $userId: String!
     $note: String!
     $dueAt: String!
+    $completedAt: String
     $patientFollowUpTypeId: String!
   ) {
-    createPatientFollowUp(
-      patientFollowUpCreateInput: {
-        accountId: $accountId
-        patientId: $patientId
+    updatePatientFollowUp(
+      patientFollowUpUpdateInput: {
+        id: $id
         userId: $userId
         note: $note
         dueAt: $dueAt
+        completedAt: $completedAt
         patientFollowUpTypeId: $patientFollowUpTypeId
       }
     ) {

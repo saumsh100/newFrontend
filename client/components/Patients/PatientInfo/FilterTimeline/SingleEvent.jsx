@@ -51,6 +51,11 @@ export default function SingleEvent({ type, onClick, checked }) {
       icon = 'sticky-note';
       color = 'Blue';
       break;
+    case 'followUp':
+      icon = 'sticky-note';
+      color = 'Blue';
+      typeText = 'Follow Up';
+      break;
     default:
       break;
   }

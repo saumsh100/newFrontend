@@ -12,6 +12,7 @@ import {
   buildPatientDueDateEvent,
 } from './patient';
 import { fetchNoteEvents, buildNoteEvent } from './patientNotes';
+import { fetchFollowUpEvents, buildFollowUpEvent } from './patientFollowUps';
 
 const eventFuncs = {
   appointment: [fetchAppointmentEvents, buildAppointmentEvent],
@@ -23,6 +24,7 @@ const eventFuncs = {
   dueDate: [fetchPatientDueDateEvents, buildPatientDueDateEvent],
   newPatient: [() => ['newPatient'], buildNewPatientEvent],
   note: [fetchNoteEvents, buildNoteEvent],
+  followUp: [fetchFollowUpEvents, buildFollowUpEvent],
 };
 
 /**
