@@ -217,7 +217,7 @@
     "cypress-cli": "^0.14.0",
     "depcheck": "^0.6.9",
     "electron": "^3.0.0",
-    "electron-builder": "^20.5.1",
+    "electron-builder": "~20.5.1",
     "electron-publisher-s3": "^20.6.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-15": "^1.0.5",
