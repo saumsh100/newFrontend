@@ -6,13 +6,24 @@ import { capitalize } from '@carecru/isomorphic';
 import { Icon } from '../../../../library';
 import styles from './styles.scss';
 
+const filterNameMap = {
+  recallCommunicationPreference: 'Recalls',
+  reminderCommunicationPreference: 'Reminders',
+  reviewCommunicationPreference: 'Reviews',
+  emailCommunicationPreference: 'Email',
+  smsCommunicationPreference: 'SMS',
+  phoneCommunicationPreference: 'Phone',
+};
+
 function FilterTags({ filters, removeTag }) {
   return (
     <div className={styles.tagsContainer}>
       {Object.keys(filters).map(filter => (
         <div key={`filterTag_${filter}`} className={styles.tagBody}>
           <div className={styles.tagText}>
-            {capitalize(filter.replace(/([a-z])([A-Z])/g, '$1 $2'))}
+            {filter in filterNameMap
+              ? filterNameMap[filter]
+              : capitalize(filter.replace(/([a-z])([A-Z])/g, '$1 $2'))}
           </div>
           <div
             className={styles.closeIcon}

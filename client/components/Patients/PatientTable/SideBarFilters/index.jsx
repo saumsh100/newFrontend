@@ -9,10 +9,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
 import { Icon, Card, Button } from '../../../library';
+import EnabledFeature from '../../../library/EnabledFeature';
 import DemographicsForm from './Demographics';
 import AppointmentsForm from './Appointments';
 import PractitionersForm from './Practitioners';
 import CommunicationsForm from './Communications';
+import CommunicationsSettingsForm from './CommunicationsSettings';
 import FilterTags from './FilterTags';
 import FilterForm from './FilterForm';
 import FilterBodyDisplay from './FilterBodyDisplay';
@@ -51,12 +53,14 @@ const forms = {
   },
   communication: {
     headerTitle: 'Communications',
-    formComponent: CommunicationsForm,
-    initialValues: {
-      lastReminderSent: '',
-      lastRecareSent: '',
-      reviews: '',
-    },
+    formComponent: () => (
+      <EnabledFeature
+        predicate={({ flags }) => flags.get('communication-settings-filter-form')}
+        render={CommunicationsSettingsForm}
+        fallback={CommunicationsForm}
+      />
+    ),
+    initialValues: {},
   },
 };
 

@@ -83,6 +83,17 @@
 .formContainer {
   padding-bottom: 15px;
   background-color: #fafafa;
+
+  &_flex {
+    @extend .formContainer;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &_column {
+    width: 96px;
+  }
+
   &_row {
     display: flex;
     width: 100%;
