@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Event } from '../../../library';
+import Event from '../../PatientInfo/Timeline/EventComponents';
 import EventModel from '../../../../entities/models/Event';
 import { sortEvents } from '../../Shared/helpers';
 import styles from './styles.scss';
