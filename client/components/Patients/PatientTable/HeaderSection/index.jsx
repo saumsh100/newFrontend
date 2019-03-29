@@ -1,11 +1,10 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button, DialogBox, DropdownMenu } from '../../../library';
+import { Button, DialogBox } from '../../../library';
 import NewPatientForm from './NewPatientForm';
 import AssignPatientToChatDialog from '../../AssignPatientToChatDialog';
 import RemoteSubmitButton from '../../../library/Form/RemoteSubmitButton';
-import Actions from './Actions';
 import SmartFilters from './SmartFilters';
 import styles from '../styles.scss';
 
@@ -63,7 +62,6 @@ class HeaderSection extends Component {
   }
 
   render() {
-    const { patientIds } = this.props;
     const formName = 'newPatientForm';
     const actions = [
       {
@@ -83,22 +81,11 @@ class HeaderSection extends Component {
       },
     ];
 
-    const actionsMenu = props => (
-      <div {...props} className={styles.buttonContainer_actions}>
-        <Button iconRight="caret-down" border="blue">
-          Actions
-        </Button>
-      </div>
-    );
-
     return (
       <div className={styles.header}>
         <SmartFilters />
         <div className={styles.buttonContainer}>
-          <DropdownMenu labelComponent={actionsMenu} className={styles.alignDD}>
-            <Actions patientIds={patientIds} />
-          </DropdownMenu>
-          <Button onClick={this.setActive} compact color="blue" data-test-id="button_addNewPatient">
+          <Button onClick={this.setActive} color="blue" data-test-id="button_addNewPatient">
             Add New Patient
           </Button>
         </div>
@@ -123,11 +110,8 @@ class HeaderSection extends Component {
 }
 
 HeaderSection.propTypes = {
-  patientIds: PropTypes.arrayOf(PropTypes.string),
   createEntityRequest: PropTypes.func.isRequired,
   destroy: PropTypes.func.isRequired,
 };
-
-HeaderSection.defaultProps = { patientIds: [] };
 
 export default HeaderSection;

@@ -5,8 +5,6 @@ import moment from 'moment';
 import { formatPhoneNumber } from '@carecru/isomorphic';
 import { PointOfContactBadge } from '../../../library';
 import InfoDump from '../../Shared/InfoDump';
-import RecallDropDowns from '../../Shared/RecallDropDowns';
-import ReminderDropDowns from '../../Shared/ReminderDropDowns';
 import { validDateValue } from '../../Shared/helpers';
 import { patientShape } from '../../../library/PropTypeShapes/index';
 import styles from './styles.scss';
@@ -14,8 +12,6 @@ import styles from './styles.scss';
 export default function DataTable(props) {
   const { patient } = props;
 
-  const recallComp = <RecallDropDowns patient={patient} />;
-  const reminderComp = <ReminderDropDowns patient={patient} />;
   const secondaryNumber =
     patient.homePhoneNumber || patient.prefPhoneNumber || patient.workPhoneNumber;
 
@@ -48,17 +44,10 @@ export default function DataTable(props) {
         <InfoDump label="INSURANCE" />
       </div>
       <div className={styles.col}>
-        <InfoDump label="RECALLS SENT" component={recallComp} />
-        {patient.nextApptDate ? (
-          <div className={styles.subHeaderSmall}>
-            Next Appointment: {moment(patient.nextApptDate).format('MMMM Do YYYY')}
-          </div>
-        ) : (
-          <div className={styles.subHeaderSmall}>Next Appointment: n/a </div>
-        )}
-      </div>
-      <div className={styles.col}>
-        <InfoDump label="REMINDERS SENT" component={reminderComp} />
+        <div className={styles.subHeaderSmall}>
+          Next Appointment:{' '}
+          {patient.nextApptDate ? moment(patient.nextApptDate).format('MMMM Do YYYY') : 'n/a'}
+        </div>
       </div>
       <div className={styles.row}>
         <InfoDump

@@ -19,12 +19,6 @@ export default function Communications({ theme }) {
         <span className={styles.formContainer_middleText}> to </span>
         <Field component="DayPicker" name="1" theme={theme} label="Date" />
       </FormSection>
-      <div className={styles.formHeader}> Reviews</div>
-      <FormSection name="reviews" className={styles.formContainer_row}>
-        <Field component="DayPicker" name="0" theme={theme} label="Date" />
-        <span className={styles.formContainer_middleText}> to </span>
-        <Field component="DayPicker" name="1" theme={theme} label="Date" />
-      </FormSection>
     </div>
   );
 }

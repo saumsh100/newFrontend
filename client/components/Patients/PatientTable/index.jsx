@@ -18,7 +18,6 @@ import { fetchPatientTableData } from '../../../thunks/patientTable';
 import { setTableData, removeFilter, addFilter } from '../../../reducers/patientTable';
 import PatientSubComponent from './PatientSubComponent';
 import PatientNameColumn from './PatientNameColumn';
-import SelectPatientColumn from './SelectPatientColumn';
 import SideBarFilters from './SideBarFilters';
 import HeaderSection from './HeaderSection';
 import HygieneColumn from '../Shared/HygieneColumn';
@@ -157,26 +156,6 @@ class PatientTable extends React.PureComponent {
         expander: true,
         className: '',
         style: arrowStyle,
-      },
-      {
-        ...baseColumn,
-        sortable: false,
-        maxWidth: 50,
-        Header: ({ data }) => (
-          <SelectPatientColumn
-            theme={styles.selectAll}
-            checked={data.length > 0 && data.length === patientIds.length}
-            handlePatientSelection={() =>
-              this.handlePatientSelection(data.map(({ _original }) => _original.id))
-            }
-          />
-        ),
-        Cell: ({ original }) => (
-          <SelectPatientColumn
-            checked={patientIds.includes(original.id)}
-            handlePatientSelection={() => this.handlePatientSelection(original.id)}
-          />
-        ),
       },
       {
         ...baseColumn,
