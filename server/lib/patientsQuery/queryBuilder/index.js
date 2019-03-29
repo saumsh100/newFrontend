@@ -24,6 +24,8 @@ import homePhoneNumber from './homePhoneNumber';
 import workPhoneNumber from './workPhoneNumber';
 import otherPhoneNumber from './otherPhoneNumber';
 import pmsCreatedAt from './pmsCreatedAt';
+import sentRecalls from './sentRecalls';
+import sentReminders from './sentReminders';
 import recallCommunicationPreference from './recallCommunicationPreference';
 import reminderCommunicationPreference from './reminderCommunicationPreference';
 import reviewCommunicationPreference from './reviewCommunicationPreference';
@@ -57,6 +59,8 @@ const query = {
   workPhoneNumber,
   otherPhoneNumber,
   pmsCreatedAt,
+  sentRecalls,
+  sentReminders,
   recallCommunicationPreference,
   reminderCommunicationPreference,
   reviewCommunicationPreference,

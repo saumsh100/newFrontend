@@ -166,13 +166,13 @@ Object {
   "where": Object {
     "$or": Object {
       "dueForHygieneDate": Object {
-        "$gte": "2014-11-16T08:00:00.000Z",
-        "$lt": "2014-12-16T08:00:00.000Z",
+        "$gte": "2017-11-16T08:00:00.000Z",
+        "$lt": "2017-12-16T08:00:00.000Z",
         "$not": null,
       },
       "dueForRecallExamDate": Object {
-        "$gte": "2014-11-16T08:00:00.000Z",
-        "$lt": "2014-12-16T08:00:00.000Z",
+        "$gte": "2017-11-16T08:00:00.000Z",
+        "$lt": "2017-12-16T08:00:00.000Z",
         "$not": null,
       },
     },
@@ -184,7 +184,7 @@ Object {
     },
     "birthDate": Object {
       "$between": Array [
-        "2014-11-16T08:00:00.000Z",
+        "2015-11-16T08:00:00.000Z",
         "2016-11-16T08:00:00.000Z",
       ],
     },
@@ -223,6 +223,38 @@ Object {
         "$not": null,
       },
     },
+    "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
+  },
+}
+`;
+
+exports[`#patientQueryBuilder Usage it works with sentRecalls 1`] = `
+Object {
+  "include": Array [
+    Object {
+      "as": "sentRecalls",
+      "attributes": Array [],
+      "duplicating": false,
+      "model": [Function],
+      "required": true,
+      "where": Object {
+        "createdAt": Object {
+          "$between": Array [
+            "2018-11-10",
+            "2018-12-10",
+          ],
+        },
+        "isSent": true,
+      },
+    },
+  ],
+  "limit": 15,
+  "offset": 0,
+  "order": Array [
+    "firstName",
+    "lastName",
+  ],
+  "where": Object {
     "accountId": "62954241-3652-4792-bae5-5bfed53d37b7",
   },
 }
