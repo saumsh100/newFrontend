@@ -24,6 +24,12 @@ import homePhoneNumber from './homePhoneNumber';
 import workPhoneNumber from './workPhoneNumber';
 import otherPhoneNumber from './otherPhoneNumber';
 import pmsCreatedAt from './pmsCreatedAt';
+import recallCommunicationPreference from './recallCommunicationPreference';
+import reminderCommunicationPreference from './reminderCommunicationPreference';
+import reviewCommunicationPreference from './reviewCommunicationPreference';
+import emailCommunicationPreference from './emailCommunicationPreference';
+import smsCommunicationPreference from './smsCommunicationPreference';
+import phoneCommunicationPreference from './phoneCommunicationPreference';
 
 const query = {
   birthDate,
@@ -51,6 +57,12 @@ const query = {
   workPhoneNumber,
   otherPhoneNumber,
   pmsCreatedAt,
+  recallCommunicationPreference,
+  reminderCommunicationPreference,
+  reviewCommunicationPreference,
+  emailCommunicationPreference,
+  smsCommunicationPreference,
+  phoneCommunicationPreference,
 };
 
 /**
