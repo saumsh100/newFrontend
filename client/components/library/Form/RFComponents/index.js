@@ -1,6 +1,7 @@
 
 import RFInput from './RFInput';
 import RFDayPicker from './RFDayPicker';
+import RDayPickerWithHelpers from './RDayPickerWithHelpers';
 import RFSelect from './RFSelect';
 import RFDropdownSelect from './RFDropdownSelect';
 import RFToggle from './RFToggle';
@@ -19,6 +20,7 @@ export default {
   Toggle: RFToggle,
   DropdownSelect: RFDropdownSelect,
   DayPicker: RFDayPicker,
+  DayPickerWithHelpers: RDayPickerWithHelpers,
   // DropDown: RFDropDown.
   Checkbox: RFCheckbox,
   RangeSlider: RFRangeSlider,
