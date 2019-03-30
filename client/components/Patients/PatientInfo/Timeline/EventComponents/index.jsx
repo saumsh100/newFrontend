@@ -28,7 +28,7 @@ export default function Event(props) {
           <EventComponent data={data} />
         ))}
       </div>
-      {type !== 'appointment' && type !== 'dueDate' && type !== 'recall' && (
+      {type !== 'appointment' && type !== 'dueDate' && (
         <div className={styles.time}>
           <span className={styles.time_text}>{dateFormatter(data.createdAt, '', 'h:mma')}</span>
         </div>

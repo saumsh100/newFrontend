@@ -25,6 +25,7 @@ import {
   clearAllTimelineFilters,
   setSelectedNote,
   setSelectedFollowUp,
+  setSelectedRecall,
 } from '../../../reducers/patientTable';
 import { setTitle, setBackHandler } from '../../../reducers/electron';
 import { showAlertTimeout } from '../../../thunks/alerts';
@@ -42,13 +43,18 @@ import FollowUpsForm from './FollowUps/FollowUpsForm';
 import LogRecallForm from './SentRecalls/LogRecallForm';
 import CreateOrUpdatePatientNoteMutation from './Notes/CreateOrUpdatePatientNoteMutation';
 import CreateOrUpdateFollowUpMutation from './FollowUps/CreateOrUpdateFollowUpMutation';
-import CreateSentRecallMutation from './SentRecalls/CreateSentRecallMutation';
+import CreateOrUpdateSentRecallMutation from './SentRecalls/CreateOrUpdateSentRecallMutation';
 import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 import styles from './styles.scss';
 
 const getNotesFormName = data => (data ? `editNotesForm-${data.id}` : 'addNotesForm');
 const getFollowUpsFormName = data => (data ? `editFollowUpsForm-${data.id}` : 'addFollowUpsForm');
 const getRecallsFormName = data => (data ? `editRecallsForm-${data.id}` : 'logRecallsForm');
+
+const updateRecallConfirmation =
+  'Are you sure you want to update this logged recall? ' +
+  'This change will not be reflected in the communication logs ' +
+  'in your Practice Management Software.';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
@@ -243,7 +249,11 @@ class PatientInfo extends Component {
   }
 
   toggleRecallsForm() {
-    this.setState({ isRecallsFormOpen: !this.state.isRecallsFormOpen });
+    if (this.props.selectedRecall) {
+      this.props.setSelectedRecall(null);
+    } else {
+      this.setState({ isRecallsFormOpen: !this.state.isRecallsFormOpen });
+    }
   }
 
   async handleNotesFormSubmit({ note }, commit) {
@@ -375,7 +385,7 @@ class PatientInfo extends Component {
   }
 
   async handleSentRecallFormSubmit(values, commit) {
-    const { patient, activeAccount, userId } = this.props;
+    const { patient, activeAccount, userId, selectedRecall } = this.props;
     try {
       const variables = {
         ...values,
@@ -384,11 +394,40 @@ class PatientInfo extends Component {
         userId,
       };
 
-      await commit({ variables });
+      if (selectedRecall) {
+        variables.id = selectedRecall.id;
+        if (!window.confirm(updateRecallConfirmation)) {
+          this.toggleRecallsForm();
+          this.props.reset(getRecallsFormName(null));
+          return;
+        }
+      }
+
+      const { data } = await commit({ variables });
       this.toggleRecallsForm();
+
+      const newRecall = selectedRecall ? data.updateSentRecall : data.createManualSentRecall;
+      const eventId = window.btoa(`recall-${newRecall.id}`);
+
+      this.props.receiveEntities({
+        entities: {
+          events: {
+            [eventId]: {
+              id: eventId,
+              type: 'recall',
+              accountId: newRecall.accountId,
+              patientId: newRecall.patientId,
+              metaData: newRecall,
+            },
+          },
+        },
+      });
+
       this.props.showAlertTimeout({
         type: 'success',
-        alert: { body: `Logged recall for ${patient.firstName}` },
+        alert: {
+          body: `${selectedRecall ? 'Updated logged' : 'Logged'} recall for ${patient.firstName}`,
+        },
       });
 
       this.props.reset(getRecallsFormName(null));
@@ -396,7 +435,11 @@ class PatientInfo extends Component {
       console.error('handleSentRecallFormSubmit Error:', err);
       this.props.showAlertTimeout({
         type: 'error',
-        alert: { body: `Failed to log recall for ${patient.firstName}` },
+        alert: {
+          body: `Failed to ${selectedRecall ? 'update logged' : 'log'} recall for ${
+            patient.firstName
+          }`,
+        },
       });
     }
   }
@@ -419,6 +462,7 @@ class PatientInfo extends Component {
       canLogRecall,
       selectedNote,
       selectedFollowUp,
+      selectedRecall,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
@@ -447,6 +491,7 @@ class PatientInfo extends Component {
 
     const isUpdatingNote = !!selectedNote;
     const isUpdatingFollowUp = !!selectedFollowUp;
+    const isUpdatingRecall = !!selectedRecall;
 
     if (selectedFollowUp) {
       selectedFollowUp.isCompleted = !!selectedFollowUp.completedAt;
@@ -606,25 +651,28 @@ class PatientInfo extends Component {
           </CreateOrUpdateFollowUpMutation>
         </FormModal>
         <FormModal
-          title="Log Recall"
-          formName={getRecallsFormName(null)}
-          active={this.state.isRecallsFormOpen}
+          isUpdate={isUpdatingRecall}
+          title={isUpdatingRecall ? 'Edit Logged Recall' : 'Log Recall'}
+          formName={getRecallsFormName(selectedRecall)}
+          active={this.state.isRecallsFormOpen || isUpdatingRecall}
           onToggle={this.toggleRecallsForm}
         >
-          <CreateSentRecallMutation>
+          <CreateOrUpdateSentRecallMutation isUpdate={isUpdatingRecall}>
             {commit => (
               <LogRecallForm
-                formName={getRecallsFormName(null)}
-                initialValues={{
-                  primaryType: 'phone',
-                  createdAt: new Date().toISOString(),
-                  note: null,
-                }}
+                isUpdate={isUpdatingRecall}
+                formName={getRecallsFormName(selectedRecall)}
+                initialValues={
+                  selectedRecall || {
+                    primaryType: 'phone',
+                    createdAt: new Date().toISOString(),
+                  }
+                }
                 onSubmit={values => this.handleSentRecallFormSubmit(values, commit)}
                 className={styles.notesForm}
               />
             )}
-          </CreateSentRecallMutation>
+          </CreateOrUpdateSentRecallMutation>
         </FormModal>
       </Grid>
     );
@@ -648,6 +696,7 @@ function mapDispatchToProps(dispatch) {
       reset,
       setSelectedNote,
       setSelectedFollowUp,
+      setSelectedRecall,
     },
     dispatch,
   );
@@ -717,6 +766,7 @@ function mapStateToProps(
     canLogRecall,
     selectedNote: patientTable.get('selectedNote'),
     selectedFollowUp: patientTable.get('selectedFollowUp'),
+    selectedRecall: patientTable.get('selectedRecall'),
   };
 }
 
@@ -764,8 +814,13 @@ PatientInfo.propTypes = {
     id: PropTypes.string.isRequired,
     note: PropTypes.string.isRequired,
   }),
+  selectedRecall: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    note: PropTypes.string.isRequired,
+  }),
   setSelectedNote: PropTypes.func.isRequired,
   setSelectedFollowUp: PropTypes.func.isRequired,
+  setSelectedRecall: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {
@@ -784,6 +839,7 @@ PatientInfo.defaultProps = {
   canLogRecall: false,
   selectedNote: null,
   selectedFollowUp: null,
+  selectedRecall: null,
 };
 
 const enhance = connect(

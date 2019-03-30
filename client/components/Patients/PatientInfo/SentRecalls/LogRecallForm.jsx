@@ -4,17 +4,24 @@ import PropTypes from 'prop-types';
 import { Form, Field } from '../../../library';
 
 const options = [
-  { label: 'Phone',
-    value: 'phone' },
-  { label: 'SMS',
-    value: 'sms' },
-  { label: 'Email',
-    value: 'email' },
+  {
+    label: 'Phone',
+    value: 'phone',
+  },
+  {
+    label: 'SMS',
+    value: 'sms',
+  },
+  {
+    label: 'Email',
+    value: 'email',
+  },
 ];
 
 export default function LogRecallForm({ onSubmit, initialValues, formName, className }) {
   return (
     <Form
+      key={formName}
       form={formName}
       onSubmit={onSubmit}
       initialValues={initialValues}

@@ -23,6 +23,7 @@ export default function FormModal({ active, title, onToggle, children, formName,
           props: {
             color: 'blue',
             form: formName,
+            removePristineCheck: true,
           },
         },
       ]}

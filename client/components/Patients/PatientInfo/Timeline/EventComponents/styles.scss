@@ -340,3 +340,7 @@ $event-grey: lighten($primary-dark-grey, 10%);
   display: none;
   color: $event-grey;
 }
+
+.recallHeader {
+  font-family: $medium-font;
+}

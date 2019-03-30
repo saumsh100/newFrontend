@@ -2,20 +2,16 @@
 import gql from 'graphql-tag'; // eslint-disable-line import/no-extraneous-dependencies
 
 export default gql`
-  mutation createManualSentRecall_NEST(
-    $accountId: String!
-    $patientId: String!
-    $primaryType: String!
-    $userId: String!
+  mutation updateManualSentRecall_NEST(
+    $id: String!
+    $primaryType: String
     $createdAt: String
     $note: String
   ) {
-    createManualSentRecall(
-      sentRecallCreateInput: {
-        accountId: $accountId
-        patientId: $patientId
+    updateSentRecall(
+      sentRecallUpdateInput: {
+        id: $id
         primaryType: $primaryType
-        userId: $userId
         createdAt: $createdAt
         note: $note
       }
