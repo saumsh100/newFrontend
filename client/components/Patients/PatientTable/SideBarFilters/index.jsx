@@ -14,7 +14,7 @@ import AppointmentsForm from './Appointments';
 import PractitionersForm from './Practitioners';
 import CommunicationsForm from './Communications';
 import CommunicationsSettingsForm from './CommunicationsSettings';
-import RemindersSettingsForm from './RemindersSettings';
+import TouchpointsSettingsForm from './TouchpointsSettings';
 import FilterTags from './FilterTags';
 import FilterForm from './FilterForm';
 import FilterBodyDisplay from './FilterBodyDisplay';
@@ -27,6 +27,7 @@ const forms = flags => ({
     validateForm: () => true,
     headerTitle: 'Demographics',
     formComponent: DemographicsForm,
+    props: {},
     initialValues: {
       firstName: '',
       lastName: '',
@@ -47,6 +48,7 @@ const forms = flags => ({
       appointmentsCount: '',
       onlineAppointments: '',
     },
+    props: {},
   },
   practitioners: {
     validateForm: () => true,
@@ -61,13 +63,24 @@ const forms = flags => ({
       ? CommunicationsSettingsForm
       : CommunicationsForm,
     initialValues: {},
+    props: {},
   },
   reminders: {
     validateForm: ({ sentReminder }) => sentReminder.filter(value => !!value).length === 4,
     headerTitle: 'Reminders',
-    formComponent: flags['communication-settings-filter-form'] && RemindersSettingsForm,
+    formComponent: flags['communication-settings-filter-form'] && TouchpointsSettingsForm,
+    props: { fieldName: 'sentReminder' },
     initialValues: {
       sentReminder: ['true', 'null', '', ''],
+    },
+  },
+  recalls: {
+    validateForm: ({ sentRecall }) => sentRecall.filter(value => !!value).length === 4,
+    headerTitle: 'Recalls',
+    formComponent: flags['communication-settings-filter-form'] && TouchpointsSettingsForm,
+    props: { fieldName: 'sentRecall' },
+    initialValues: {
+      sentRecall: ['true', 'null', '', ''],
     },
   },
 });
@@ -151,7 +164,7 @@ class SideBarFilters extends Component {
   }
 
   render() {
-    const { filters, flags } = this.props;
+    const { filters, flags, timezone } = this.props;
     const { expandedForm } = this.state;
     const hasFiltersOn = filters && filters.size > 0;
     return (
@@ -191,7 +204,7 @@ class SideBarFilters extends Component {
                   formName={key}
                   formValueCallback={formValues => this.formHandler(formValues, value.validateForm)}
                 >
-                  <value.formComponent />
+                  <value.formComponent {...value.props} timezone={timezone} />
                 </FilterForm>
               </FilterBodyDisplay>
             ))}
@@ -207,15 +220,16 @@ SideBarFilters.propTypes = {
   setFilterCallback: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
-  flags: PropTypes.objectOf(PropTypes.string).isRequired,
+  flags: PropTypes.objectOf(PropTypes.any).isRequired,
   filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   filterForms: PropTypes.objectOf(PropTypes.shape({ registeredFields: PropTypes.object }))
     .isRequired,
+  timezone: PropTypes.string.isRequired,
 };
 
 SideBarFilters.defaultProps = { filters: new Map() };
 
-const mapStateToProps = ({ patientTable, form, featureFlags }) => {
+const mapStateToProps = ({ patientTable, form, featureFlags, auth }) => {
   const flags = featureFlags.get('flags').toJS();
   const filterForms = Object.keys(form)
     .filter(key => Object.keys(forms(flags)).includes(key))
@@ -230,6 +244,7 @@ const mapStateToProps = ({ patientTable, form, featureFlags }) => {
   const { limit, page, order, segment, ...filters } = patientTable.get('filters').toJS();
 
   return {
+    timezone: auth.get('timezone'),
     filterForms,
     filters,
     flags,
