@@ -24,7 +24,8 @@ export default function FilterForm({ children, formName, formValueCallback, init
 
 FilterForm.propTypes = {
   children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]).isRequired,
-  initialValues: PropTypes.objectOf(PropTypes.string).isRequired,
+  initialValues: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array]))
+    .isRequired,
   formName: PropTypes.string.isRequired,
   formValueCallback: PropTypes.func.isRequired,
 };

@@ -9,12 +9,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
 import { Icon, Card, Button } from '../../../library';
-import EnabledFeature from '../../../library/EnabledFeature';
 import DemographicsForm from './Demographics';
 import AppointmentsForm from './Appointments';
 import PractitionersForm from './Practitioners';
 import CommunicationsForm from './Communications';
 import CommunicationsSettingsForm from './CommunicationsSettings';
+import RemindersSettingsForm from './RemindersSettings';
 import FilterTags from './FilterTags';
 import FilterForm from './FilterForm';
 import FilterBodyDisplay from './FilterBodyDisplay';
@@ -22,8 +22,9 @@ import { addFilter, removeFilter } from '../../../../reducers/patientTable';
 import fetchEntities from '../../../../thunks/fetchEntities/fetchEntities';
 import styles from './styles.scss';
 
-const forms = {
+const forms = flags => ({
   demographics: {
+    validateForm: () => true,
     headerTitle: 'Demographics',
     formComponent: DemographicsForm,
     initialValues: {
@@ -36,6 +37,7 @@ const forms = {
     },
   },
   appointments: {
+    validateForm: () => true,
     headerTitle: 'Appointments',
     formComponent: AppointmentsForm,
     initialValues: {
@@ -47,22 +49,28 @@ const forms = {
     },
   },
   practitioners: {
+    validateForm: () => true,
     headerTitle: 'Practitioners',
     formComponent: PractitionersForm,
     initialValues: { practitioner: '' },
   },
   communication: {
+    validateForm: () => true,
     headerTitle: 'Communications',
-    formComponent: () => (
-      <EnabledFeature
-        predicate={({ flags }) => flags.get('communication-settings-filter-form')}
-        render={CommunicationsSettingsForm}
-        fallback={CommunicationsForm}
-      />
-    ),
+    formComponent: flags['communication-settings-filter-form']
+      ? CommunicationsSettingsForm
+      : CommunicationsForm,
     initialValues: {},
   },
-};
+  reminders: {
+    validateForm: ({ sentReminder }) => sentReminder.filter(value => !!value).length === 4,
+    headerTitle: 'Reminders',
+    formComponent: flags['communication-settings-filter-form'] && RemindersSettingsForm,
+    initialValues: {
+      sentReminder: ['true', 'null', '', ''],
+    },
+  },
+});
 
 class SideBarFilters extends Component {
   constructor(props) {
@@ -85,7 +93,7 @@ class SideBarFilters extends Component {
   }
 
   removeTag(filter) {
-    const { filterForms } = this.props;
+    const { filterForms, flags } = this.props;
 
     const [form] = Object.entries(filterForms).find(([, value]) => {
       const hasValue = value.values && value.values[filter];
@@ -95,15 +103,17 @@ class SideBarFilters extends Component {
           .map(v => v.split('.')[0])
           .includes(filter);
     });
-
+    const selectedForm = forms(flags)[form];
     if (filterForms[form].values && filterForms[form].values[filter]) {
-      this.props.change(form, filter, '');
+      this.props.change(form, filter, selectedForm.initialValues[filter]);
     }
-
-    this.formHandler({
-      ...filterForms[form].values,
-      [filter]: '',
-    });
+    this.formHandler(
+      {
+        ...filterForms[form].values,
+        [filter]: selectedForm.initialValues[filter],
+      },
+      selectedForm.validateForm,
+    );
   }
 
   clearTags() {
@@ -112,11 +122,11 @@ class SideBarFilters extends Component {
     Object.keys(this.props.filters).forEach(filter => this.removeTag(filter));
   }
 
-  formHandler(values) {
+  formHandler(values, validateForm) {
     const parsedFilters = Object.entries(values)
       .filter(([, value]) => {
         if (Array.isArray(value)) {
-          return value.filter(v => !!v).length > 1;
+          return value.filter(v => !!v).length > 1 && validateForm(values);
         }
         return value.trim() !== '';
       })
@@ -141,7 +151,7 @@ class SideBarFilters extends Component {
   }
 
   render() {
-    const { filters } = this.props;
+    const { filters, flags } = this.props;
     const { expandedForm } = this.state;
     const hasFiltersOn = filters && filters.size > 0;
     return (
@@ -165,24 +175,26 @@ class SideBarFilters extends Component {
         <FilterTags filterTags={filters} removeTag={this.removeTag} />
 
         <div className={styles.filtersContainer}>
-          {Object.entries(forms).map(([key, value], i) => (
-            <FilterBodyDisplay
-              key={key}
-              formName={key}
-              index={i}
-              isOpen={expandedForm === key}
-              headerTitle={value.headerTitle}
-              displayFilter={this.displayFilter}
-            >
-              <FilterForm
-                initialValues={value.initialValues}
+          {Object.entries(forms(flags))
+            .filter(([, { formComponent }]) => formComponent)
+            .map(([key, value], i) => (
+              <FilterBodyDisplay
+                key={key}
                 formName={key}
-                formValueCallback={this.formHandler}
+                index={i}
+                isOpen={expandedForm === key}
+                headerTitle={value.headerTitle}
+                displayFilter={this.displayFilter}
               >
-                <value.formComponent />
-              </FilterForm>
-            </FilterBodyDisplay>
-          ))}
+                <FilterForm
+                  initialValues={value.initialValues}
+                  formName={key}
+                  formValueCallback={formValues => this.formHandler(formValues, value.validateForm)}
+                >
+                  <value.formComponent />
+                </FilterForm>
+              </FilterBodyDisplay>
+            ))}
         </div>
       </Card>
     );
@@ -195,6 +207,7 @@ SideBarFilters.propTypes = {
   setFilterCallback: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
+  flags: PropTypes.objectOf(PropTypes.string).isRequired,
   filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   filterForms: PropTypes.objectOf(PropTypes.shape({ registeredFields: PropTypes.object }))
     .isRequired,
@@ -202,9 +215,10 @@ SideBarFilters.propTypes = {
 
 SideBarFilters.defaultProps = { filters: new Map() };
 
-const mapStateToProps = ({ patientTable, form }) => {
+const mapStateToProps = ({ patientTable, form, featureFlags }) => {
+  const flags = featureFlags.get('flags').toJS();
   const filterForms = Object.keys(form)
-    .filter(key => Object.keys(forms).includes(key))
+    .filter(key => Object.keys(forms(flags)).includes(key))
     .reduce(
       (obj, key) => ({
         ...obj,
@@ -218,6 +232,7 @@ const mapStateToProps = ({ patientTable, form }) => {
   return {
     filterForms,
     filters,
+    flags,
   };
 };
 
