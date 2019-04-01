@@ -15,6 +15,7 @@ import PractitionersForm from './Practitioners';
 import CommunicationsForm from './Communications';
 import CommunicationsSettingsForm from './CommunicationsSettings';
 import TouchpointsSettingsForm from './TouchpointsSettings';
+import FollowUpsSettingsForm from './FollowUpsSettings';
 import FilterTags from './FilterTags';
 import FilterForm from './FilterForm';
 import FilterBodyDisplay from './FilterBodyDisplay';
@@ -81,6 +82,15 @@ const forms = flags => ({
     props: { fieldName: 'sentRecall' },
     initialValues: {
       sentRecall: ['true', 'null', '', ''],
+    },
+  },
+  followUps: {
+    validateForm: ({ patientFollowUps }) => patientFollowUps.filter(value => !!value).length === 3,
+    headerTitle: 'Follow-ups',
+    formComponent: flags['communication-settings-filter-form'] && FollowUpsSettingsForm,
+    props: {},
+    initialValues: {
+      patientFollowUps: ['false', '', ''],
     },
   },
 });

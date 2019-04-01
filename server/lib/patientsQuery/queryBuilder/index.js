@@ -72,6 +72,24 @@ const query = {
 };
 
 /**
+ * Parses the value and return itself if is not parseable
+ * Can be used
+ * @param value
+ * @return {*}
+ */
+const jsonParse = (value) => {
+  try {
+    return JSON.parse(value);
+  } catch (e) {
+    if (e instanceof SyntaxError) {
+      return value;
+    }
+
+    throw e;
+  }
+};
+
+/**
  * queryBuilder
  * Returns the object representation of the filter key supplied to the getter method
  * @returns {QueryBuilder}
@@ -89,15 +107,8 @@ export default {
       throw Error(`Key '${key}' is not supported`);
     }
 
-    try {
-      const jsonParsedValue = JSON.parse(value);
-      return query[key](jsonParsedValue);
-    } catch (e) {
-      if (e instanceof SyntaxError) {
-        return query[key](value);
-      }
+    const parsedValue = Array.isArray(value) ? value.map(jsonParse) : jsonParse(value);
 
-      throw e;
-    }
+    return query[key](parsedValue);
   },
 };
