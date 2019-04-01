@@ -63,7 +63,20 @@ const forms = flags => ({
     formComponent: flags['communication-settings-filter-form']
       ? CommunicationsSettingsForm
       : CommunicationsForm,
-    initialValues: {},
+    initialValues: flags['communication-settings-filter-form']
+      ? {
+        recallCommunicationPreference: '',
+        reminderCommunicationPreference: '',
+        reviewCommunicationPreference: '',
+        emailCommunicationPreference: '',
+        smsCommunicationPreference: '',
+        phoneCommunicationPreference: '',
+      }
+      : {
+        lastReminderSent: '',
+        lastRecareSent: '',
+        reviews: '',
+      },
     props: {},
   },
   reminders: {
