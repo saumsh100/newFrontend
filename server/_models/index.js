@@ -72,6 +72,7 @@ models.push(require('./Family').default(sequelize, Sequelize));
 models.push(require('./Invite').default(sequelize, Sequelize));
 models.push(require('./PasswordReset').default(sequelize, Sequelize));
 models.push(require('./Patient').default(sequelize, Sequelize));
+models.push(require('./PatientFollowUp').default(sequelize, Sequelize));
 models.push(require('./PatientRecall').default(sequelize, Sequelize));
 models.push(require('./PatientSearches').default(sequelize, Sequelize));
 models.push(require('./PatientUser').default(sequelize, Sequelize));

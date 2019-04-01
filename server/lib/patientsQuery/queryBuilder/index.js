@@ -32,6 +32,7 @@ import reviewCommunicationPreference from './reviewCommunicationPreference';
 import emailCommunicationPreference from './emailCommunicationPreference';
 import smsCommunicationPreference from './smsCommunicationPreference';
 import phoneCommunicationPreference from './phoneCommunicationPreference';
+import patientFollowUps from './patientFollowUps';
 
 const query = {
   birthDate,
@@ -67,6 +68,7 @@ const query = {
   emailCommunicationPreference,
   smsCommunicationPreference,
   phoneCommunicationPreference,
+  patientFollowUps,
 };
 
 /**

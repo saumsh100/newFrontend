@@ -226,6 +226,7 @@ export default function (sequelize, DataTypes) {
       SentRemindersPatients,
       PatientUser,
       PatientRecall,
+      PatientFollowUp,
     } = models;
 
     Patient.belongsTo(Account, {
@@ -322,6 +323,11 @@ export default function (sequelize, DataTypes) {
     Patient.hasMany(Review, {
       foreignKey: 'patientId',
       as: 'reviews',
+    });
+
+    Patient.hasMany(PatientFollowUp, {
+      foreignKey: 'patientId',
+      as: 'patientFollowUps',
     });
   };
 
