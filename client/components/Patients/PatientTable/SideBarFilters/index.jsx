@@ -67,21 +67,21 @@ const forms = flags => ({
     props: {},
   },
   reminders: {
-    validateForm: ({ sentReminder }) => sentReminder.filter(value => !!value).length === 4,
+    validateForm: ({ sentReminders }) => sentReminders.filter(value => !!value).length === 4,
     headerTitle: 'Reminders',
     formComponent: flags['communication-settings-filter-form'] && TouchpointsSettingsForm,
-    props: { fieldName: 'sentReminder' },
+    props: { fieldName: 'sentReminders' },
     initialValues: {
-      sentReminder: ['true', 'null', '', ''],
+      sentReminders: ['false', 'null', '', ''],
     },
   },
   recalls: {
-    validateForm: ({ sentRecall }) => sentRecall.filter(value => !!value).length === 4,
+    validateForm: ({ sentRecalls }) => sentRecalls.filter(value => !!value).length === 4,
     headerTitle: 'Recalls',
     formComponent: flags['communication-settings-filter-form'] && TouchpointsSettingsForm,
-    props: { fieldName: 'sentRecall' },
+    props: { fieldName: 'sentRecalls' },
     initialValues: {
-      sentRecall: ['true', 'null', '', ''],
+      sentRecalls: ['false', 'null', '', ''],
     },
   },
   followUps: {

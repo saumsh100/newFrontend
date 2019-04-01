@@ -6,7 +6,7 @@ export default gql`
     $accountId: String!
     $patientId: String!
     $userId: String!
-    $note: String!
+    $note: String
     $dueAt: String!
     $patientFollowUpTypeId: String!
   ) {
@@ -14,6 +14,7 @@ export default gql`
       patientFollowUpCreateInput: {
         accountId: $accountId
         patientId: $patientId
+        assignedUserId: $userId
         userId: $userId
         note: $note
         dueAt: $dueAt

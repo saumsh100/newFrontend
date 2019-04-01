@@ -88,7 +88,7 @@ class DayPickerWithHelper extends Component {
     const { tipSize, timezone, value, theme, helpersList } = this.props;
 
     const sanitizedDate = moment(value).toObject();
-    const displayValue = moment.tz(sanitizedDate, this.props.timezone).format('l');
+    const displayValue = value && moment.tz(sanitizedDate, this.props.timezone).format('l');
 
     const body = (
       <div className={styles.outerContainer}>
@@ -123,7 +123,11 @@ class DayPickerWithHelper extends Component {
             handleInputChange={this.handleInputChange}
             initialMonth={value ? moment.tz(value, timezone).toDate() : new Date()}
             month={value ? moment.tz(value, timezone).toDate() : new Date()}
-            classNames={StyleExtender(dayPickerTheme, theme)}
+            classNames={StyleExtender(
+              { ...dayPickerTheme,
+container: styles.calendarContainer },
+              theme,
+            )}
             {...this.props}
           />
         </div>
@@ -169,6 +173,7 @@ class DayPickerWithHelper extends Component {
           <Input
             theme={theme}
             value={displayValue}
+            label={this.props.label}
             onChange={this.handleInputChange}
             onKeyDown={e => this.handleClose(e)}
             onFocus={this.togglePopOver}
@@ -185,6 +190,7 @@ DayPickerWithHelper.propTypes = {
   tipSize: PropTypes.number,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.any)]),
   theme: PropTypes.objectOf(PropTypes.string),
+  label: PropTypes.string,
   helpersList: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
@@ -196,6 +202,7 @@ DayPickerWithHelper.propTypes = {
 DayPickerWithHelper.defaultProps = {
   onChange: e => e,
   tipSize: 12,
+  label: '',
   value: '',
   theme: {},
   helpersList: [

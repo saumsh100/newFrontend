@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, Field } from '../../../library';
-import followUpReasonsList from './followUpReasonsList';
+import FetchFollowUpTypes from '../../../GraphQL/PatientFollowUps/fetchFollowUpTypes';
+import Loader from '../../../Loader';
 import styles from './formStyles.scss';
 
 export default function FollowUpsForm({ onSubmit, initialValues, formName, className, isUpdate }) {
@@ -23,16 +24,30 @@ export default function FollowUpsForm({ onSubmit, initialValues, formName, class
         component="Toggle"
         className={isUpdate ? styles.shownToggle : styles.hiddenToggle}
       />
-      <Field required name="dueAt" label="Due Date" data-test-id="dueDate" component="DayPicker" />
       <Field
         required
-        name="patientFollowUpTypeId"
-        label="Reason"
-        data-test-id="reason"
-        component="DropdownSelect"
-        options={followUpReasonsList}
+        name="dueAt"
+        label="Due Date"
+        data-test-id="dueDate"
+        component="DayPickerWithHelpers"
       />
-      <Field required name="note" label="Note" data-test-id="note" component="TextArea" />
+      <FetchFollowUpTypes>
+        {({ loading, error, data: { patientFollowUpTypes } }) => {
+          if (loading) return <Loader isLoaded={loading} />;
+          if (error) return `Error!: ${error}`;
+          return (
+            <Field
+              required
+              name="patientFollowUpTypeId"
+              label="Reason"
+              data-test-id="reason"
+              component="DropdownSelect"
+              options={patientFollowUpTypes}
+            />
+          );
+        }}
+      </FetchFollowUpTypes>
+      <Field name="note" label="Note" data-test-id="note" component="TextArea" />
     </Form>
   );
 }

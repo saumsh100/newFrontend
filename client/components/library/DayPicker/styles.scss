@@ -8,6 +8,7 @@
 
 .helpersContainer {
   display: flex;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.5);
 }
 
 .closeButton {
@@ -21,6 +22,28 @@
   i {
     font-size: 0.75em !important;
   }
+}
+
+.calendarContainer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  position: relative;
+  padding: 1rem 1rem 0.5rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: white;
+  width: 100%;
+  outline: none;
+  box-sizing: border-box;
+  border: 0;
 }
 
 .helperFooter {
