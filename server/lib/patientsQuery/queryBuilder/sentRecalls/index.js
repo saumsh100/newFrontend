@@ -16,6 +16,7 @@ const sentRecalls = ([sender = null, ...dates]) => ({
       },
     },
   ],
+  group: ['Patient.id'],
 });
 
 const notSentRecalls = ([sender = null, ...dates]) => ({

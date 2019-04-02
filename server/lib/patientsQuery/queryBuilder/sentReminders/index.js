@@ -25,6 +25,7 @@ const sentReminders = ([sender = null, ...dates]) => ({
       ],
     },
   ],
+  group: ['Patient.id'],
 });
 
 const queryNotSentReminders = ([sender = null, ...dates]) => ({
