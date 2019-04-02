@@ -39,7 +39,6 @@ export default function TopDisplay(props) {
     accountsFetched,
     activeAccount,
     wasPatientFetched,
-    actionMenuItems,
   } = props;
 
   if (!patient) {
@@ -113,7 +112,7 @@ export default function TopDisplay(props) {
                 )}
                 <EnabledFeature
                   predicate={({ flags }) => flags.get('patient-actions-button')}
-                  render={<ActionsDropdown actionMenuItems={actionMenuItems} />}
+                  render={<ActionsDropdown patient={patient} />}
                 />
               </div>
             </div>
@@ -169,7 +168,6 @@ TopDisplay.propTypes = {
   patientStats: PropTypes.instanceOf(Map),
   activeAccount: PropTypes.oneOfType([PropTypes.shape(accountShape), PropTypes.func]),
   patient: PropTypes.oneOfType([PropTypes.instanceOf(PatientModel), PropTypes.func]),
-  actionMenuItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 TopDisplay.defaultProps = {

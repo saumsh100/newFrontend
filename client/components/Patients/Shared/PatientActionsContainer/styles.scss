@@ -1,0 +1,29 @@
+@import '../../../../ui.scss';
+
+.patientActionsContainer {
+  height: auto !important; // In order to override global styles
+}
+
+.notesForm {
+  textarea {
+    padding: 10px;
+    background-color: $primary-lightgrey !important;
+    color: black;
+    height: 100px;
+    font-size: 14px;
+    line-height: 1.5em;
+  }
+
+  span[class*='error'] {
+    top: unset;
+    bottom: 5px;
+  }
+
+  > div[class*='toggleWrapper'] {
+    margin-bottom: 10px;
+    > label {
+      color: $primary-darkgrey;
+      margin-right: 10px;
+    }
+  }
+}

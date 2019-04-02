@@ -8,7 +8,7 @@ import EventModel from '../../../../../entities/models/Event';
 import styles from '../styles.scss';
 
 export default function EventDateSections(props) {
-  const { events, dateHeader } = props;
+  const { events, dateHeader, patient } = props;
 
   let showHeader = dateHeader;
   let dateHeaderClass = styles.dateHeader;
@@ -28,6 +28,7 @@ export default function EventDateSections(props) {
           data={event.get('metaData')}
           type={event.get('type')}
           bgColor="secondary"
+          patient={patient}
         />
       ))}
     </div>
@@ -37,4 +38,5 @@ export default function EventDateSections(props) {
 EventDateSections.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired,
   dateHeader: PropTypes.string.isRequired,
+  patient: PropTypes.shape({}).isRequired,
 };

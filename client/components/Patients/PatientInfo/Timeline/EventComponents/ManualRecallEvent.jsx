@@ -7,7 +7,7 @@ import { dateFormatter } from '@carecru/isomorphic';
 import EventContainer from './Shared/EventContainer';
 import { showAlertTimeout } from '../../../../../thunks/alerts';
 import { deleteEntity } from '../../../../../reducers/entities';
-import { setSelectedRecall } from '../../../../../reducers/patientTable';
+import { setSelectedRecall, setActivePatient } from '../../../../../reducers/patientTable';
 import DeleteSentRecallMutation from '../../SentRecalls/DeleteSentRecallMutation';
 import styles from './styles.scss';
 
@@ -25,6 +25,7 @@ class ManualRecallEvent extends Component {
   }
 
   handleRecallEdit(data) {
+    this.props.setActivePatient(this.props.patient);
     this.props.setSelectedRecall(data);
   }
 
@@ -84,6 +85,7 @@ const mapDispatchToProps = dispatch =>
       deleteEntity,
       showAlertTimeout,
       setSelectedRecall,
+      setActivePatient,
     },
     dispatch,
   );
@@ -99,10 +101,14 @@ ManualRecallEvent.propTypes = {
     isAutomated: PropTypes.bool,
     primaryType: PropTypes.string,
   }).isRequired,
-
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+  }).isRequired,
   deleteEntity: PropTypes.func.isRequired,
   showAlertTimeout: PropTypes.func.isRequired,
   setSelectedRecall: PropTypes.func.isRequired,
+  setActivePatient: PropTypes.func.isRequired,
 };
 
 export default enhance(ManualRecallEvent);

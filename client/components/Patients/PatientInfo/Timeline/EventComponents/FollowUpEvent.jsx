@@ -7,7 +7,7 @@ import moment from 'moment';
 import EventContainer from './Shared/EventContainer';
 import { showAlertTimeout } from '../../../../../thunks/alerts';
 import { deleteEntity } from '../../../../../reducers/entities';
-import { setSelectedFollowUp } from '../../../../../reducers/patientTable';
+import { setSelectedFollowUp, setActivePatient } from '../../../../../reducers/patientTable';
 import DeletePatientFollowUpMutation from '../../FollowUps/DeletePatientFollowUpMutation';
 import styles from './styles.scss';
 
@@ -20,6 +20,7 @@ class FollowUpEvent extends Component {
   }
 
   handleFollowUpEdit(data) {
+    this.props.setActivePatient(this.props.patient);
     this.props.setSelectedFollowUp(data);
   }
 
@@ -89,6 +90,7 @@ const mapDispatchToProps = dispatch =>
       deleteEntity,
       showAlertTimeout,
       setSelectedFollowUp,
+      setActivePatient,
     },
     dispatch,
   );
@@ -106,10 +108,14 @@ FollowUpEvent.propTypes = {
     completedAt: PropTypes.string,
     createdAt: PropTypes.string,
   }).isRequired,
-
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+  }).isRequired,
   deleteEntity: PropTypes.func.isRequired,
   showAlertTimeout: PropTypes.func.isRequired,
   setSelectedFollowUp: PropTypes.func.isRequired,
+  setActivePatient: PropTypes.func.isRequired,
 };
 
 export default enhance(FollowUpEvent);

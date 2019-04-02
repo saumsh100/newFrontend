@@ -40,7 +40,7 @@ const Touchpoints = ({ theme, fieldName, timezone }) => (
       <div className={styles.formContainer_row}>
         <Field component="DropdownSelect" name="1" options={senderOptions} theme={theme} />
       </div>
-      <div className={styles.formHeader}>Date</div>
+      <div className={styles.formHeader}>Date Sent</div>
       <div className={styles.formContainer_row}>
         <Field
           component="DayPickerWithHelpers"

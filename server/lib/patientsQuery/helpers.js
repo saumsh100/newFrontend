@@ -47,6 +47,7 @@ export const patientAttrs = [
   'firstName',
   'lastName',
   'middleName',
+  'cellPhoneNumber',
   'phoneNumber',
   'homePhoneNumber',
   'mobilePhoneNumber',

@@ -8,7 +8,7 @@ import eventHashMap from './Shared/eventHashMap';
 import styles from './styles.scss';
 
 export default function Event(props) {
-  const { type, data } = props;
+  const { type, data, patient } = props;
 
   const content = eventHashMap[type];
   if (!content) return;
@@ -25,7 +25,7 @@ export default function Event(props) {
           </div>
         </div>
         {component.map(EventComponent => (
-          <EventComponent data={data} />
+          <EventComponent data={data} patient={patient} />
         ))}
       </div>
       {type !== 'appointment' && type !== 'dueDate' && (
@@ -40,4 +40,5 @@ export default function Event(props) {
 Event.propTypes = {
   type: PropTypes.string.isRequired,
   data: PropTypes.objectOf(PropTypes.any).isRequired,
+  patient: PropTypes.shape({}).isRequired,
 };

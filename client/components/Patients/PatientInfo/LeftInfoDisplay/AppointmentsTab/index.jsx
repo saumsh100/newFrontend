@@ -3,23 +3,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Row, Col } from '../../../../library';
 import InfoDump from '../../../Shared/InfoDump';
-import styles from '../styles.scss';
 import { validDateValue } from '../../../Shared/helpers';
+import LastAppointmentSection from './LastAppointmentSection';
+import styles from '../styles.scss';
 
 export default function AppointmentsTab(props) {
   const { patient } = props;
 
   return (
     <Grid className={styles.grid}>
-      <div className={styles.lastAppointmentHeader}> Last Appointment </div>
-      <Row className={styles.row}>
-        <Col xs={6}>
-          <InfoDump label="RECALL" data={validDateValue(patient.lastRecallDate)} />
-        </Col>
-        <Col xs={6}>
-          <InfoDump label="HYGIENE" data={validDateValue(patient.lastHygieneDate)} />
-        </Col>
-      </Row>
+      <LastAppointmentSection patient={patient} />
       <div className={styles.subHeader}> Continuing Care </div>
       <Row className={styles.row}>
         <Col xs={6}>
@@ -50,7 +43,7 @@ export default function AppointmentsTab(props) {
           <InfoDump label="LAST HYGIENE VISIT" />
         </Col>
         <Col xs={6}>
-          <InfoDump label="TOTAL HYGIENCE VISITS" />
+          <InfoDump label="TOTAL HYGIENE VISITS" />
         </Col>
       </Row>
     </Grid>

@@ -6,7 +6,7 @@ import EventModel from '../../../../entities/models/Event';
 import { sortEvents } from '../../Shared/helpers';
 import styles from './styles.scss';
 
-export default function EventsTable({ events }) {
+export default function EventsTable({ events, patient }) {
   if (!events || !events.length) {
     return (
       <div className={styles.eventsList}>
@@ -25,11 +25,14 @@ export default function EventsTable({ events }) {
       {sortedEvents.map(event => (
         <div className={styles.lineEventContainer} key={`eventsTable_${event.id}`}>
           <div className={styles.verticalLine}>&nbsp;</div>
-          <Event data={event.get('metaData')} type={event.get('type')} />
+          <Event data={event.get('metaData')} type={event.get('type')} patient={patient} />
         </div>
       ))}
     </div>
   );
 }
 
-EventsTable.propTypes = { events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired };
+EventsTable.propTypes = {
+  events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)).isRequired,
+  patient: PropTypes.shape({}).isRequired,
+};

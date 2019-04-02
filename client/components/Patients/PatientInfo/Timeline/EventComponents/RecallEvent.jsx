@@ -28,8 +28,8 @@ const recallIntervalHash = {
   '-18 months': '18 Months After',
 };
 
-export default function RecallEvent({ data }) {
-  if (!data.isAutomated) return <ManualRecallEvent data={data} />;
+export default function RecallEvent({ data, patient }) {
+  if (!data.isAutomated) return <ManualRecallEvent data={data} patient={patient} />;
 
   const sentDate = dateFormatter(data.createdAt, '', 'MMMM Do, YYYY h:mma');
   const typeOfRecall = data.isHygiene ? 'hygiene' : 'recall';
@@ -51,5 +51,9 @@ RecallEvent.propTypes = {
     isAutomated: PropTypes.bool,
     primaryType: PropTypes.string,
     recall: PropTypes.shape({ interval: PropTypes.string }),
+  }).isRequired,
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
   }).isRequired,
 };

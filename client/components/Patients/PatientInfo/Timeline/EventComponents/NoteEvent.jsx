@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import EventContainer from './Shared/EventContainer';
 import { showAlertTimeout } from '../../../../../thunks/alerts';
 import { deleteEntity } from '../../../../../reducers/entities';
-import { setSelectedNote } from '../../../../../reducers/patientTable';
+import { setSelectedNote, setActivePatient } from '../../../../../reducers/patientTable';
 import DeletePatientNoteMutation from '../../Notes/DeletePatientNoteMutation';
 import styles from './styles.scss';
 
@@ -19,6 +19,7 @@ class NoteEvent extends Component {
   }
 
   handleNoteEdit(data) {
+    this.props.setActivePatient(this.props.patient);
     this.props.setSelectedNote(data);
   }
 
@@ -70,6 +71,7 @@ const mapDispatchToProps = dispatch =>
       deleteEntity,
       showAlertTimeout,
       setSelectedNote,
+      setActivePatient,
     },
     dispatch,
   );
@@ -85,10 +87,14 @@ NoteEvent.propTypes = {
     note: PropTypes.string,
     createdAt: PropTypes.string,
   }).isRequired,
-
+  patient: PropTypes.shape({
+    id: PropTypes.string,
+    firstName: PropTypes.string,
+  }).isRequired,
   deleteEntity: PropTypes.func.isRequired,
   showAlertTimeout: PropTypes.func.isRequired,
   setSelectedNote: PropTypes.func.isRequired,
+  setActivePatient: PropTypes.func.isRequired,
 };
 
 export default enhance(NoteEvent);

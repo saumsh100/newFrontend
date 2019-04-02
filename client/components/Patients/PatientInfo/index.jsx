@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { graphql, QueryRenderer } from 'react-relay';
 import classNames from 'classnames';
 import { Map } from 'immutable';
-import { reset } from 'redux-form';
 import { convertIntervalToMs } from '@carecru/isomorphic';
 import graphQLEnvironment from '../../../util/graphqlEnvironment';
 import { Grid, Row, Col, Icon, Tabs, Tab, Button } from '../../library';
@@ -18,17 +17,13 @@ import {
   fetchEntitiesRequest,
   updateEntityRequest,
 } from '../../../thunks/fetchEntities';
-import { deleteAllEntity, receiveEntities } from '../../../reducers/entities';
+import { deleteAllEntity } from '../../../reducers/entities';
 import {
   addRemoveTimelineFilters,
   selectAllTimelineFilters,
   clearAllTimelineFilters,
-  setSelectedNote,
-  setSelectedFollowUp,
-  setSelectedRecall,
 } from '../../../reducers/patientTable';
 import { setTitle, setBackHandler } from '../../../reducers/electron';
-import { showAlertTimeout } from '../../../thunks/alerts';
 import FilterTimeline from './FilterTimeline';
 import Loader from '../../Loader';
 import EditDisplay from './EditDisplay';
@@ -37,24 +32,7 @@ import Timeline from './Timeline';
 import LeftInfoDisplay from './LeftInfoDisplay';
 import { isHub, isResponsive } from '../../../util/hub';
 import { getEventsOffsetLimitObj } from '../Shared/helpers';
-import FormModal from './FormModal';
-import NotesForm from './Notes/NotesForm';
-import FollowUpsForm from './FollowUps/FollowUpsForm';
-import LogRecallForm from './SentRecalls/LogRecallForm';
-import CreateOrUpdatePatientNoteMutation from './Notes/CreateOrUpdatePatientNoteMutation';
-import CreateOrUpdateFollowUpMutation from './FollowUps/CreateOrUpdateFollowUpMutation';
-import CreateOrUpdateSentRecallMutation from './SentRecalls/CreateOrUpdateSentRecallMutation';
-import { isFeatureEnabledSelector } from '../../../reducers/featureFlags';
 import styles from './styles.scss';
-
-const getNotesFormName = data => (data ? `editNotesForm-${data.id}` : 'addNotesForm');
-const getFollowUpsFormName = data => (data ? `editFollowUpsForm-${data.id}` : 'addFollowUpsForm');
-const getRecallsFormName = data => (data ? `editRecallsForm-${data.id}` : 'logRecallsForm');
-
-const updateRecallConfirmation =
-  'Are you sure you want to update this logged recall? ' +
-  'This change will not be reflected in the communication logs ' +
-  'in your Practice Management Software.';
 
 const HeaderModalComponent = ({ icon, text, onClick, title }) => (
   <div
@@ -94,9 +72,6 @@ class PatientInfo extends Component {
         title: null,
       },
       defaultEvents: [],
-      isNotesFormOpen: false,
-      isFollowUpsFormOpen: false,
-      isRecallsFormOpen: false,
     };
 
     this.changePageTab = this.changePageTab.bind(this);
@@ -107,11 +82,6 @@ class PatientInfo extends Component {
     this.addRemoveFilter = this.addRemoveFilter.bind(this);
     this.fetchPatientData = this.fetchPatientData.bind(this);
     this.fetchEvents = this.fetchEvents.bind(this);
-    this.toggleNotesForm = this.toggleNotesForm.bind(this);
-    this.toggleFollowUpsForm = this.toggleFollowUpsForm.bind(this);
-    this.toggleRecallsForm = this.toggleRecallsForm.bind(this);
-    this.handleNotesFormSubmit = this.handleNotesFormSubmit.bind(this);
-    this.handleFollowUpsFormSubmit = this.handleFollowUpsFormSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -232,218 +202,6 @@ class PatientInfo extends Component {
     this.props.addRemoveTimelineFilters({ type: filter });
   }
 
-  toggleNotesForm() {
-    if (this.props.selectedNote) {
-      this.props.setSelectedNote(null);
-    } else {
-      this.setState({ isNotesFormOpen: !this.state.isNotesFormOpen });
-    }
-  }
-
-  toggleFollowUpsForm() {
-    if (this.props.selectedFollowUp) {
-      this.props.setSelectedFollowUp(null);
-    } else {
-      this.setState({ isFollowUpsFormOpen: !this.state.isFollowUpsFormOpen });
-    }
-  }
-
-  toggleRecallsForm() {
-    if (this.props.selectedRecall) {
-      this.props.setSelectedRecall(null);
-    } else {
-      this.setState({ isRecallsFormOpen: !this.state.isRecallsFormOpen });
-    }
-  }
-
-  async handleNotesFormSubmit({ note }, commit) {
-    const { patient, activeAccount, userId, selectedNote } = this.props;
-    try {
-      const variables = {
-        note,
-        patientId: patient.id,
-        accountId: activeAccount.id,
-        userId,
-      };
-
-      if (selectedNote) {
-        variables.id = selectedNote.id;
-      }
-
-      const { data } = await commit({ variables });
-      this.toggleNotesForm();
-
-      // Get created ID or use the ID of the note you are editing
-      const newNote = selectedNote ? data.updatePatientNote : data.createPatientNote;
-      const eventId = window.btoa(`note-${newNote.id}`);
-
-      // This is temporary as the API is not properly return this data for create actions
-      newNote.date = newNote.date || new Date().toISOString();
-      newNote.createdAt = newNote.date;
-
-      this.props.receiveEntities({
-        entities: {
-          events: {
-            [eventId]: {
-              id: eventId,
-              type: 'note',
-              accountId: newNote.accountId,
-              patientId: newNote.patientId,
-              metaData: newNote,
-            },
-          },
-        },
-      });
-
-      this.props.showAlertTimeout({
-        type: 'success',
-        alert: {
-          body: `${selectedNote ? 'Updated' : 'Added'} note for ${patient.firstName}`,
-        },
-      });
-
-      this.props.reset(getNotesFormName(selectedNote));
-    } catch (err) {
-      console.error('handleNotesFormSubmit Error:', err);
-      this.props.showAlertTimeout({
-        type: 'error',
-        alert: {
-          body: `Failed to ${selectedNote ? 'update' : 'add'} note for ${patient.firstName}`,
-        },
-      });
-    }
-  }
-
-  async handleFollowUpsFormSubmit(values, commit) {
-    const { patient, activeAccount, userId, selectedFollowUp } = this.props;
-    try {
-      const variables = {
-        patientId: patient.id,
-        accountId: activeAccount.id,
-        userId,
-        dueAt: values.dueAt,
-        patientFollowUpTypeId: values.patientFollowUpTypeId,
-        note: values.note,
-      };
-
-      if (selectedFollowUp) {
-        variables.id = selectedFollowUp.id;
-        if (values.isCompleted && !selectedFollowUp.completedAt) {
-          variables.completedAt = new Date();
-        }
-
-        if (!values.isCompleted && selectedFollowUp.completedAt) {
-          variables.completedAt = null;
-        }
-      }
-
-      const { data } = await commit({ variables });
-      this.toggleFollowUpsForm();
-
-      const newFollowUp = selectedFollowUp
-        ? data.updatePatientFollowUp
-        : data.createPatientFollowUp;
-      const eventId = window.btoa(`followUp-${newFollowUp.id}`);
-
-      // This is temporary as the API is not properly return this data for create actions
-      newFollowUp.date = newFollowUp.date || new Date().toISOString();
-      newFollowUp.createdAt = newFollowUp.date;
-
-      this.props.receiveEntities({
-        entities: {
-          events: {
-            [eventId]: {
-              id: eventId,
-              type: 'followUp',
-              accountId: newFollowUp.accountId,
-              patientId: newFollowUp.patientId,
-              metaData: newFollowUp,
-            },
-          },
-        },
-      });
-
-      this.props.showAlertTimeout({
-        type: 'success',
-        alert: {
-          body: `${selectedFollowUp ? 'Updated' : 'Added'} follow-up for ${patient.firstName}`,
-        },
-      });
-
-      this.props.reset(getNotesFormName(selectedFollowUp));
-    } catch (err) {
-      console.error('handleFollowUpsFormSubmit Error:', err);
-      this.props.showAlertTimeout({
-        type: 'error',
-        alert: {
-          body: `Failed to ${selectedFollowUp ? 'update' : 'add'} follow-up for ${
-            patient.firstName
-          }`,
-        },
-      });
-    }
-  }
-
-  async handleSentRecallFormSubmit(values, commit) {
-    const { patient, activeAccount, userId, selectedRecall } = this.props;
-    try {
-      const variables = {
-        ...values,
-        patientId: patient.id,
-        accountId: activeAccount.id,
-        userId,
-      };
-
-      if (selectedRecall) {
-        variables.id = selectedRecall.id;
-        if (!window.confirm(updateRecallConfirmation)) {
-          this.toggleRecallsForm();
-          this.props.reset(getRecallsFormName(null));
-          return;
-        }
-      }
-
-      const { data } = await commit({ variables });
-      this.toggleRecallsForm();
-
-      const newRecall = selectedRecall ? data.updateSentRecall : data.createManualSentRecall;
-      const eventId = window.btoa(`recall-${newRecall.id}`);
-
-      this.props.receiveEntities({
-        entities: {
-          events: {
-            [eventId]: {
-              id: eventId,
-              type: 'recall',
-              accountId: newRecall.accountId,
-              patientId: newRecall.patientId,
-              metaData: newRecall,
-            },
-          },
-        },
-      });
-
-      this.props.showAlertTimeout({
-        type: 'success',
-        alert: {
-          body: `${selectedRecall ? 'Updated logged' : 'Logged'} recall for ${patient.firstName}`,
-        },
-      });
-
-      this.props.reset(getRecallsFormName(null));
-    } catch (err) {
-      console.error('handleSentRecallFormSubmit Error:', err);
-      this.props.showAlertTimeout({
-        type: 'error',
-        alert: {
-          body: `Failed to ${selectedRecall ? 'update logged' : 'log'} recall for ${
-            patient.firstName
-          }`,
-        },
-      });
-    }
-  }
-
   render() {
     const { patientId } = this.props.match.params;
     const {
@@ -457,46 +215,12 @@ class PatientInfo extends Component {
       accountViewer,
       reminders,
       recalls,
-      canAddNote,
-      canAddFollowUp,
-      canLogRecall,
-      selectedNote,
-      selectedFollowUp,
-      selectedRecall,
     } = this.props;
 
     const wasAllFetched = accountsFetched && wasPatientFetched;
 
     const shouldDisplayInfoPage = !isResponsive() || this.state.pageTab === 0;
     const shouldDisplayTimelinePage = !isResponsive() || this.state.pageTab === 1;
-
-    const actionMenuItems = [];
-    canAddNote &&
-      actionMenuItems.push({
-        children: <div>Add Note</div>,
-        onClick: this.toggleNotesForm,
-      });
-
-    canAddFollowUp &&
-      actionMenuItems.push({
-        children: <div>Add Follow-up</div>,
-        onClick: this.toggleFollowUpsForm,
-      });
-
-    canLogRecall &&
-      actionMenuItems.push({
-        children: <div>Log Recall</div>,
-        onClick: this.toggleRecallsForm,
-      });
-
-    const isUpdatingNote = !!selectedNote;
-    const isUpdatingFollowUp = !!selectedFollowUp;
-    const isUpdatingRecall = !!selectedRecall;
-
-    if (selectedFollowUp) {
-      selectedFollowUp.isCompleted = !!selectedFollowUp.completedAt;
-      selectedFollowUp.patientFollowUpTypeId = selectedFollowUp.patientFollowUpType.id;
-    }
 
     return (
       <Grid className={classNames(styles.mainContainer, { [styles.responsiveContainer]: isHub() })}>
@@ -509,7 +233,6 @@ class PatientInfo extends Component {
               accountsFetched={accountsFetched}
               wasPatientFetched={wasPatientFetched}
               activeAccount={activeAccount}
-              actionMenuItems={actionMenuItems}
             />
             {isResponsive() && (
               <HeaderModalComponent
@@ -604,6 +327,7 @@ class PatientInfo extends Component {
                     </div>
                   )}
                   <Timeline
+                    patient={patient}
                     patientId={patientId}
                     filters={this.props.filters}
                     wasPatientFetched={wasPatientFetched}
@@ -613,67 +337,6 @@ class PatientInfo extends Component {
             </Col>
           </Row>
         )}
-        <FormModal
-          isUpdate={isUpdatingNote}
-          title={isUpdatingNote ? 'Edit Note' : 'Add Note'}
-          formName={getNotesFormName(selectedNote)}
-          active={this.state.isNotesFormOpen || isUpdatingNote}
-          onToggle={this.toggleNotesForm}
-        >
-          <CreateOrUpdatePatientNoteMutation isUpdate={isUpdatingNote}>
-            {commit => (
-              <NotesForm
-                formName={getNotesFormName(selectedNote)}
-                initialValues={selectedNote}
-                onSubmit={values => this.handleNotesFormSubmit(values, commit)}
-                className={styles.notesForm}
-              />
-            )}
-          </CreateOrUpdatePatientNoteMutation>
-        </FormModal>
-        <FormModal
-          isUpdate={isUpdatingFollowUp}
-          title={isUpdatingFollowUp ? 'Edit Follow-up' : 'Add Follow-up'}
-          formName={getFollowUpsFormName(selectedFollowUp)}
-          active={this.state.isFollowUpsFormOpen || isUpdatingFollowUp}
-          onToggle={this.toggleFollowUpsForm}
-        >
-          <CreateOrUpdateFollowUpMutation isUpdate={isUpdatingFollowUp}>
-            {commit => (
-              <FollowUpsForm
-                isUpdate={isUpdatingFollowUp}
-                formName={getFollowUpsFormName(selectedFollowUp)}
-                initialValues={selectedFollowUp}
-                onSubmit={values => this.handleFollowUpsFormSubmit(values, commit)}
-                className={styles.notesForm}
-              />
-            )}
-          </CreateOrUpdateFollowUpMutation>
-        </FormModal>
-        <FormModal
-          isUpdate={isUpdatingRecall}
-          title={isUpdatingRecall ? 'Edit Logged Recall' : 'Log Recall'}
-          formName={getRecallsFormName(selectedRecall)}
-          active={this.state.isRecallsFormOpen || isUpdatingRecall}
-          onToggle={this.toggleRecallsForm}
-        >
-          <CreateOrUpdateSentRecallMutation isUpdate={isUpdatingRecall}>
-            {commit => (
-              <LogRecallForm
-                isUpdate={isUpdatingRecall}
-                formName={getRecallsFormName(selectedRecall)}
-                initialValues={
-                  selectedRecall || {
-                    primaryType: 'phone',
-                    createdAt: new Date().toISOString(),
-                  }
-                }
-                onSubmit={values => this.handleSentRecallFormSubmit(values, commit)}
-                className={styles.notesForm}
-              />
-            )}
-          </CreateOrUpdateSentRecallMutation>
-        </FormModal>
       </Grid>
     );
   }
@@ -691,21 +354,12 @@ function mapDispatchToProps(dispatch) {
       setTitle,
       setBackHandler,
       deleteAllEntity,
-      receiveEntities,
-      showAlertTimeout,
-      reset,
-      setSelectedNote,
-      setSelectedFollowUp,
-      setSelectedRecall,
     },
     dispatch,
   );
 }
 
-function mapStateToProps(
-  { entities, apiRequests, patientTable, auth, electron, featureFlags },
-  { match },
-) {
+function mapStateToProps({ entities, apiRequests, patientTable, auth, electron }, { match }) {
   const patients = entities.getIn(['patients', 'models']);
   const reminders = entities
     .getIn(['reminders', 'models'])
@@ -733,17 +387,11 @@ function mapStateToProps(
 
   const waitForAuth = auth.get('accountId');
   const role = auth.get('role');
-  const userId = auth.get('userId');
   const activeAccount = entities.getIn(['accounts', 'models', waitForAuth]);
 
   const accountsFetched = apiRequests.get('accountsPatientInfo')
     ? apiRequests.get('accountsPatientInfo').wasFetched
     : null;
-
-  const features = featureFlags.get('flags');
-  const canAddNote = isFeatureEnabledSelector(features, 'patient-add-note-action');
-  const canAddFollowUp = isFeatureEnabledSelector(features, 'patient-add-follow-up-action');
-  const canLogRecall = isFeatureEnabledSelector(features, 'patient-log-recall-action');
 
   return {
     patient: patients.get(match.params.patientId),
@@ -753,7 +401,6 @@ function mapStateToProps(
     activeAccount,
     accountsFetched,
     role,
-    userId,
     wasPatientFetched,
     reminders,
     recalls,
@@ -761,12 +408,6 @@ function mapStateToProps(
     wasRecallsFetched,
     currentBackHandler: electron.get('backHandler'),
     currentTitle: electron.get('title'),
-    canAddNote,
-    canAddFollowUp,
-    canLogRecall,
-    selectedNote: patientTable.get('selectedNote'),
-    selectedFollowUp: patientTable.get('selectedFollowUp'),
-    selectedRecall: patientTable.get('selectedRecall'),
   };
 }
 
@@ -776,7 +417,6 @@ PatientInfo.propTypes = {
   wasStatsFetched: PropTypes.bool,
   currentTitle: PropTypes.string,
   role: PropTypes.string,
-  userId: PropTypes.string,
   accountViewer: PropTypes.shape({
     id: PropTypes.string,
     patient: PropTypes.shape({
@@ -800,27 +440,6 @@ PatientInfo.propTypes = {
   clearAllTimelineFilters: PropTypes.func.isRequired,
   fetchEntitiesRequest: PropTypes.func.isRequired,
   deleteAllEntity: PropTypes.func.isRequired,
-  receiveEntities: PropTypes.func.isRequired,
-  showAlertTimeout: PropTypes.func.isRequired,
-  reset: PropTypes.func.isRequired,
-  canAddNote: PropTypes.bool,
-  canAddFollowUp: PropTypes.bool,
-  canLogRecall: PropTypes.bool,
-  selectedNote: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    note: PropTypes.string.isRequired,
-  }),
-  selectedFollowUp: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    note: PropTypes.string.isRequired,
-  }),
-  selectedRecall: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    note: PropTypes.string.isRequired,
-  }),
-  setSelectedNote: PropTypes.func.isRequired,
-  setSelectedFollowUp: PropTypes.func.isRequired,
-  setSelectedRecall: PropTypes.func.isRequired,
 };
 
 PatientInfo.defaultProps = {
@@ -831,15 +450,8 @@ PatientInfo.defaultProps = {
   patient: null,
   patientStats: null,
   role: '',
-  userId: '',
   wasPatientFetched: false,
   wasStatsFetched: false,
-  canAddNote: false,
-  canAddFollowUp: false,
-  canLogRecall: false,
-  selectedNote: null,
-  selectedFollowUp: null,
-  selectedRecall: null,
 };
 
 const enhance = connect(

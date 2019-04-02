@@ -50,6 +50,12 @@
 }
 
 .header {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+.headerText {
   composes: fontMedium from 'sass-loader!../../../../fonts.scss';
   color: $primary-dark;
   font-size: 16px;
@@ -57,6 +63,7 @@
 
 .timeLineHeader {
   @extend .header;
+  @extend .headerText;
   padding-top: 20px;
   margin-left: 7.5px;
   padding-bottom: 10px;
@@ -67,6 +74,10 @@
   padding-top: 20px;
   padding-left: 35px;
   padding-bottom: 10px;
+
+  &_title {
+    @extend .headerText;
+  }
 }
 
 .eventsContainer {
@@ -210,4 +221,24 @@
 
 .loaderStyle {
   height: 2px !important;
+}
+
+.patientActions {
+  margin-left: auto;
+  margin-right: 3px;
+  > button[class*='actionsButton'] {
+    margin-top: 0;
+    font-size: 12px;
+    padding: 8px 12px;
+    width: 120px;
+  }
+
+  > div[class*='dd-menu-items'] {
+    width: 170px;
+    margin-right: 5px;
+  }
+}
+
+.lastAppointmentSection {
+  padding-top: 20px;
 }

@@ -40,7 +40,7 @@ const Reminders = ({ theme }) => (
       <div className={styles.formContainer_row}>
         <Field component="DropdownSelect" name="1" options={senderOptions} theme={theme} />
       </div>
-      <div className={styles.formHeader}>Date</div>
+      <div className={styles.formHeader}>Date Sent</div>
       <div className={styles.formContainer_row}>
         <Field component="DayPickerWithHelpers" name="2" theme={theme} label="Date" />
         <span className={styles.formContainer_middleText}> to </span>

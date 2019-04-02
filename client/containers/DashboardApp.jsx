@@ -1,39 +1,29 @@
 
 import PropTypes from 'prop-types';
 import React from 'react';
-import { compose, withState } from 'recompose';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import jwt from 'jwt-decode';
-import { push } from 'react-router-redux';
 import TopBarContainer from '../containers/TopBarContainer';
 import NavRegionContainer from '../containers/NavRegionContainer';
 import MainRegionContainer from '../containers/MainRegionContainer';
+import { setIsCollapsed } from '../actions/toolbar';
 import NavList from '../components/NavList';
 import SubTabs from '../components/SubTabs';
 import CallerModal from '../components/CallerModal';
 import AlertContainer from '../containers/AlertContainer';
-import { setIsCollapsed } from '../actions/toolbar';
+import PatientActionsContainer from '../components/Patients/Shared/PatientActionsContainer';
 import styles from './styles.scss';
 
 function DashboardApp(props) {
-  const {
-    location,
-    children,
-    isCollapsed,
-    setIsCollapsed,
-    isSearchCollapsed,
-    activeAccount = {},
-  } = props;
+  const { location, children, isCollapsed, isSearchCollapsed } = props;
 
   let overlay = null;
   if (!isCollapsed) {
+    /* eslint-disable */
     overlay = (
-      <div
-        className={styles.overlay}
-        onClick={() => setIsCollapsed(!isCollapsed)}
-      />
+      <div className={styles.overlay} onClick={() => this.props.setIsCollapsed(!isCollapsed)} />
     );
+    /* eslint-enable */
   }
 
   let AppContainer = (
@@ -53,6 +43,7 @@ function DashboardApp(props) {
         <div className={styles.mainRegionChildren}>
           {children}
           <AlertContainer />
+          <PatientActionsContainer />
         </div>
       </MainRegionContainer>
     </div>
@@ -69,15 +60,14 @@ function DashboardApp(props) {
 
 DashboardApp.propTypes = {
   children: PropTypes.node,
-  activeAccount: PropTypes.object,
-  location: PropTypes.object,
+  activeAccount: PropTypes.shape({}),
+  location: PropTypes.shape({}),
   isCollapsed: PropTypes.bool.isRequired,
   isSearchCollapsed: PropTypes.bool.isRequired,
+  setIsCollapsed: PropTypes.func.isRequired,
 };
 
-function mapStateToProps({
-  toolbar, entities, auth, caller,
-}) {
+function mapStateToProps({ toolbar, entities, auth }) {
   return {
     isCollapsed: toolbar.get('isCollapsed'),
     isSearchCollapsed: toolbar.get('isSearchCollapsed'),
@@ -88,7 +78,7 @@ function mapStateToProps({
 function mapActionsToProps(dispatch) {
   return bindActionCreators(
     {
-      dispatch,
+      setIsCollapsed,
     },
     dispatch,
   );

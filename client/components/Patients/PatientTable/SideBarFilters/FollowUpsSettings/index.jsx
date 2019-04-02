@@ -26,7 +26,7 @@ const FollowUps = ({ theme, timezone }) => (
       <div className={styles.formContainer_row}>
         <Field component="DropdownSelect" name="0" options={booleanOptions} theme={theme} />
       </div>
-      <div className={styles.formHeader}>Date</div>
+      <div className={styles.formHeader}>Due Date</div>
       <div className={styles.formContainer_row}>
         <Field
           component="DayPickerWithHelpers"

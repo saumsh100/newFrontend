@@ -4,18 +4,24 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card } from '../../../library';
+import EnabledFeature from '../../../library/EnabledFeature';
 import { fetchEntitiesRequest } from '../../../../thunks/fetchEntities';
 import { deleteAllEntity } from '../../../../reducers/entities';
+import { setIsNoteFormActive } from '../../../../reducers/patientTable';
 import Event from '../../../../entities/models/Event';
 import { patientShape } from '../../../library/PropTypeShapes';
 import DataTable from './DataTable';
+import PatientInfoSection from './PatientInfoSection';
 import EventsTable from './EventsTable';
 import { getEventsOffsetLimitObj } from '../../Shared/helpers';
+import PatientActionsDropdown from '../../PatientInfo/ActionsDropdown';
 import styles from './styles.scss';
 
 class PatientSubComponent extends Component {
   componentDidMount() {
-    const { patient: { id } } = this.props;
+    const {
+      patient: { id },
+    } = this.props;
     this.props.fetchEntitiesRequest({
       key: 'events',
       id: 'getPatientEvents',
@@ -38,11 +44,31 @@ class PatientSubComponent extends Component {
       <div className={styles.patientSub}>
         <div className={styles.content}>
           <div className={styles.dataTable}>
-            <div className={styles.patientInfoHeader}> Patient Info </div>
-            <Card className={styles.card}>{patient && <DataTable patient={patient} />}</Card>
+            <div className={styles.patientInfoHeader}>
+              <div className={styles.patientInfoHeader_title}>Patient Info</div>
+              <EnabledFeature
+                predicate={({ flags }) => flags.get('patient-actions-button')}
+                render={() => (
+                  <PatientActionsDropdown
+                    patient={patient}
+                    align="right"
+                    className={styles.patientActions}
+                  />
+                )}
+              />
+            </div>
+            <Card className={styles.card}>
+              {patient && (
+                <EnabledFeature
+                  predicate={({ flags }) => flags.get('patient-info-new-collapsible-view')}
+                  render={() => <PatientInfoSection patient={patient} />}
+                  fallback={() => <DataTable patient={patient} />}
+                />
+              )}
+            </Card>
           </div>
           <div className={styles.timeLineTable}>
-            <div className={styles.timeLineHeader}> Timeline & Activities </div>
+            <div className={styles.timeLineHeader}>Timeline & Activities</div>
             <Card
               className={styles.eventsCard}
               runAnimation
@@ -50,7 +76,12 @@ class PatientSubComponent extends Component {
               loaderStyle={styles.loaderStyle}
             >
               {wasFetched && (
-                <EventsTable wasFetched={wasFetched} events={events} patientId={patient.id} />
+                <EventsTable
+                  wasFetched={wasFetched}
+                  events={events}
+                  patientId={patient.id}
+                  patient={patient}
+                />
               )}
             </Card>
           </div>
@@ -81,6 +112,7 @@ function mapDispatchToProps(dispatch) {
     {
       fetchEntitiesRequest,
       deleteAllEntity,
+      setIsNoteFormActive,
     },
     dispatch,
   );

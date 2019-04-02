@@ -20,6 +20,12 @@ export const SET_SELECTED_NOTE = `${reducer}/SET_SELECTED_NOTE`;
 export const SET_SELECTED_FOLLOW_UP = `${reducer}/SET_SELECTED_FOLLOW_UP`;
 export const SET_SELECTED_RECALL = `${reducer}/SET_SELECTED_RECALL`;
 
+export const SET_IS_NOTE_FORM_ACTIVE = `${reducer}/SET_IS_NOTE_FORM_ACTIVE`;
+export const SET_IS_FOLLOW_UPS_FORM_ACTIVE = `${reducer}/SET_IS_FOLLOW_UPS_FORM_ACTIVE`;
+export const SET_IS_RECALLS_FORM_ACTIVE = `${reducer}/SET_IS_RECALLS_FORM_ACTIVE`;
+
+export const SET_ACTIVE_PATIENT = `${reducer}/SET_ACTIVE_PATIENT`;
+
 /**
  * Actions
  */
@@ -35,6 +41,12 @@ export const clearAllTimelineFilters = createAction(CLEAR_ALL_TIMELINE_FILTERS);
 export const setSelectedNote = createAction(SET_SELECTED_NOTE);
 export const setSelectedFollowUp = createAction(SET_SELECTED_FOLLOW_UP);
 export const setSelectedRecall = createAction(SET_SELECTED_RECALL);
+
+export const setIsNoteFormActive = createAction(SET_IS_NOTE_FORM_ACTIVE);
+export const setIsFollowUpsFormActive = createAction(SET_IS_FOLLOW_UPS_FORM_ACTIVE);
+export const setIsRecallsFormActive = createAction(SET_IS_RECALLS_FORM_ACTIVE);
+
+export const setActivePatient = createAction(SET_ACTIVE_PATIENT);
 
 /**
  * Initial State
@@ -67,6 +79,13 @@ export const createInitialPatientState = state =>
     selectedNote: null,
     selectedFollowUp: null,
     selectedRecall: null,
+
+    isNoteFormActive: false,
+    isFollowUpsFormActive: false,
+    isRecallsFormActive: false,
+
+    activePatient: null,
+
     ...state,
   });
 
@@ -129,6 +148,22 @@ export default handleActions(
 
     [SET_SELECTED_RECALL](state, { payload }) {
       return state.set('selectedRecall', payload);
+    },
+
+    [SET_IS_NOTE_FORM_ACTIVE](state, { payload }) {
+      return state.set('isNoteFormActive', payload);
+    },
+
+    [SET_IS_FOLLOW_UPS_FORM_ACTIVE](state, { payload }) {
+      return state.set('isFollowUpsFormActive', payload);
+    },
+
+    [SET_IS_RECALLS_FORM_ACTIVE](state, { payload }) {
+      return state.set('isRecallsFormActive', payload);
+    },
+
+    [SET_ACTIVE_PATIENT](state, { payload }) {
+      return state.set('activePatient', payload);
     },
   },
 

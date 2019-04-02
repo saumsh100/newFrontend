@@ -61,7 +61,7 @@ class Timeline extends Component {
   }
 
   render() {
-    const { events, filters, wasPatientFetched, wasEventsFetched } = this.props;
+    const { events, filters, wasPatientFetched, wasEventsFetched, patient } = this.props;
 
     const style = { overflow: 'scroll' };
 
@@ -80,7 +80,7 @@ class Timeline extends Component {
               threshold={1}
               className={styles.fill}
             >
-              <EventList events={events} filters={filters} />
+              <EventList events={events} filters={filters} patient={patient} />
             </InfiniteScroll>
           </div>
         )}
@@ -113,11 +113,13 @@ Timeline.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(EventModel)),
   wasEventsFetched: PropTypes.bool,
   wasPatientFetched: PropTypes.bool,
+  patient: PropTypes.shape({}),
   patientId: PropTypes.string.isRequired,
   filters: PropTypes.instanceOf(List),
 };
 
 Timeline.defaultProps = {
+  patient: null,
   wasEventsFetched: false,
   wasPatientFetched: false,
   filters: null,

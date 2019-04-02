@@ -8,7 +8,7 @@ import EventDateSections from '../EventDateSections';
 import { sortEvents } from '../../../Shared/helpers';
 import styles from '../styles.scss';
 
-export default function EventsList({ events, filters }) {
+export default function EventsList({ events, filters, patient }) {
   if (events && events.length === 0) {
     return (
       <div className={styles.disclaimer}>
@@ -44,6 +44,7 @@ export default function EventsList({ events, filters }) {
             key={`eventSection_${date}`}
             dateHeader={date}
             events={dateObj[date]}
+            patient={patient}
           />
         ))}
     </div>
@@ -53,6 +54,7 @@ export default function EventsList({ events, filters }) {
 EventsList.propTypes = {
   events: PropTypes.arrayOf(PropTypes.instanceOf(Event)),
   filters: PropTypes.instanceOf(List),
+  patient: PropTypes.shape({}).isRequired,
 };
 
 EventsList.defaultProps = {
