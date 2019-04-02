@@ -6,6 +6,43 @@ import FetchFollowUpTypes from '../../../GraphQL/PatientFollowUps/fetchFollowUpT
 import Loader from '../../../Loader';
 import styles from './formStyles.scss';
 
+const addDays = (days) => {
+  const result = new Date();
+  result.setDate(result.getDate() + days);
+  result.setHours(0);
+  return result;
+};
+
+const addMonths = (months) => {
+  const result = new Date();
+  result.setMonth(result.getMonth() + months);
+  result.setHours(0);
+  return result;
+};
+
+const helpersList = [
+  {
+    label: 'Tomorrow',
+    value: addDays(1),
+  },
+  {
+    label: 'Next Week',
+    value: addDays(7),
+  },
+  {
+    label: 'Next Month',
+    value: addMonths(1),
+  },
+  {
+    label: 'In 3 Months',
+    value: addMonths(3),
+  },
+  {
+    label: 'Next Year',
+    value: addMonths(12),
+  },
+];
+
 export default function FollowUpsForm({ onSubmit, initialValues, formName, className, isUpdate }) {
   return (
     <Form
@@ -29,6 +66,7 @@ export default function FollowUpsForm({ onSubmit, initialValues, formName, class
         name="dueAt"
         label="Due Date"
         data-test-id="dueDate"
+        helpersList={helpersList}
         component="DayPickerWithHelpers"
       />
       <FetchFollowUpTypes>

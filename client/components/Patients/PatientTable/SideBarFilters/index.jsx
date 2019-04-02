@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { Map } from 'immutable';
-import { change } from 'redux-form';
+import { change, reset } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
@@ -19,7 +19,7 @@ import FollowUpsSettingsForm from './FollowUpsSettings';
 import FilterTags from './FilterTags';
 import FilterForm from './FilterForm';
 import FilterBodyDisplay from './FilterBodyDisplay';
-import { addFilter, removeFilter } from '../../../../reducers/patientTable';
+import { addFilter, removeFilter, removeAllFilters } from '../../../../reducers/patientTable';
 import fetchEntities from '../../../../thunks/fetchEntities/fetchEntities';
 import styles from './styles.scss';
 
@@ -155,7 +155,9 @@ class SideBarFilters extends Component {
   clearTags() {
     if (Object.keys(this.props.filters).length === 0) return;
 
-    Object.keys(this.props.filters).forEach(filter => this.removeTag(filter));
+    this.props.removeAllFilters();
+    Object.keys(this.props.filterForms).map(form => this.props.reset(form));
+    this.props.setFilterCallback();
   }
 
   formHandler(values, validateForm) {
@@ -243,6 +245,8 @@ SideBarFilters.propTypes = {
   setFilterCallback: PropTypes.func.isRequired,
   change: PropTypes.func.isRequired,
   fetchEntities: PropTypes.func.isRequired,
+  removeAllFilters: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   flags: PropTypes.objectOf(PropTypes.any).isRequired,
   filters: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   filterForms: PropTypes.objectOf(PropTypes.shape({ registeredFields: PropTypes.object }))
@@ -279,6 +283,8 @@ const mapDispatchToProps = dispatch =>
     {
       addFilter,
       removeFilter,
+      reset,
+      removeAllFilters,
       change,
       fetchEntities,
     },

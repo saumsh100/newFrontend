@@ -11,6 +11,7 @@ export const SET_IS_LOADING = `${reducer}/SET_IS_LOADING`;
 export const SET_DATA = `${reducer}/SET_DATA`;
 export const ADD_FILTER = `${reducer}/ADD_FILTER`;
 export const REMOVE_FILTER = `${reducer}/REMOVE_FILTER`;
+export const REMOVE_ALL_FILTERS = `${reducer}/REMOVE_ALL_FILTERS`;
 
 export const ADD_REMOVE_TIMELINE_FILTERS = 'ADD_REMOVE_TIMELINE_FILTERS';
 export const SELECT_ALL_TIMELINE_FILTERS = 'SELECT_ALL_TIMELINE_FILTERS';
@@ -33,6 +34,7 @@ export const setTableData = createAction(SET_DATA);
 export const setIsLoading = createAction(SET_IS_LOADING);
 export const addFilter = createAction(ADD_FILTER);
 export const removeFilter = createAction(REMOVE_FILTER);
+export const removeAllFilters = createAction(REMOVE_ALL_FILTERS);
 
 export const addRemoveTimelineFilters = createAction(ADD_REMOVE_TIMELINE_FILTERS);
 export const selectAllTimelineFilters = createAction(SELECT_ALL_TIMELINE_FILTERS);
@@ -118,6 +120,9 @@ export default handleActions(
 
     [REMOVE_FILTER](state, { payload }) {
       return state.deleteIn(['filters', payload]);
+    },
+    [REMOVE_ALL_FILTERS]() {
+      return initialState;
     },
 
     [ADD_REMOVE_TIMELINE_FILTERS](state, { payload }) {

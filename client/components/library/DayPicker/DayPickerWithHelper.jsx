@@ -14,16 +14,16 @@ import Button from '../Button';
 import { DropdownSelect } from '../index';
 import styles from './styles.scss';
 
-const addDays = (days) => {
+const subtractDays = (days) => {
   const result = new Date();
-  result.setDate(result.getDate() + days);
+  result.setDate(result.getDate() - days);
   result.setHours(0);
   return result;
 };
 
-const addMonths = (months) => {
+const subtractMonths = (months) => {
   const result = new Date();
-  result.setMonth(result.getMonth() + months);
+  result.setMonth(result.getMonth() - months);
   result.setHours(0);
   return result;
 };
@@ -207,24 +207,24 @@ DayPickerWithHelper.defaultProps = {
   theme: {},
   helpersList: [
     {
-      label: 'Tomorrow',
-      value: addDays(1),
+      label: 'Yesterday',
+      value: subtractDays(1),
     },
     {
-      label: 'Next Week',
-      value: addDays(7),
+      label: 'Last Week',
+      value: subtractDays(7),
     },
     {
-      label: 'Next Month',
-      value: addMonths(1),
+      label: 'Last Month',
+      value: subtractMonths(1),
     },
     {
-      label: 'In 3 Months',
-      value: addMonths(3),
+      label: '3 Months Ago',
+      value: subtractMonths(3),
     },
     {
-      label: 'Next Year',
-      value: addMonths(12),
+      label: 'Last Year',
+      value: subtractMonths(12),
     },
   ],
 };
