@@ -39,25 +39,37 @@ React, Redux, CSS Modules w/ SASS
 ```
 cat << EOF > .env
 NODE_ENV="development"
-POSTGRESQL_HOST=
-POSTGRESQL_PORT=
+POSTGRESQL_HOST=localhost
+POSTGRESQL_PORT=5432
 POSTGRESQL_USER=
 POSTGRESQL_PASSWORD=
-POSTGRESQL_DATABASE=
+POSTGRESQL_ROLE=
+POSTGRESQL_DATABASE=carecru_development_docker
+POSTGRESQL_DB=carecru_development_docker
+REDIS_URL=redis://localhost:6379
+RABBITMQ_URL=amqp://localhost:5672
 MANDRILL_API_KEY=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
+S3_LOGGER_ENABLED=false
+S3_LOGS_BUCKET_NAME=
+S3_LOGS_ACCESS_KEY_ID=
+S3_LOGS_SECRET_ACCESS_KEY=
 S3_BUCKET=
 FEATURE_FLAG_KEY=
 LAUNCH_DARKLY_SDK_KEY=
+NPM_TOKEN=
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_NUMBER=
-HOST=
-MY_HOST=
-BLUEBIRD_W_FORGOTTEN_RETURN=
+HOST=care.cru:5100
+MY_HOST=my.care.cru:5100
+BLUEBIRD_W_FORGOTTEN_RETURN=0
 VENDASTA_API_KEY=
 VENDASTA_API_USER=
+SERVER_HOST=0.0.0.0
+WP_PROXY_HOST=0.0.0.0
+API_URL=http://0.0.0.0:5100
 EOF
 ```
 4.  Install node modules: `npm install`
@@ -66,6 +78,14 @@ EOF
 
 1.  Rebuild and seed the database with development data: `npm run rebuild:seed`
     > **Note:** > `npm run rebuild:seed` can be re-run whenever a fresh DB is needed
+
+## NVM Setup
+
+1. Download nvm using this website. https://github.com/creationix/nvm. Please read through this on how to use properly and migrate existing npm packages. 
+
+2. To download a certain node version using nvm, use the following: `nvm install version`. For the Legacy API (this repo) run: `nvm install 8.11` and for Nest API run: `nvm install 10.0`.
+
+3. After downloading both node 8.11 (used by this repo) and node 10.0 (used the api repo), you can switch between them by using: `nvm use "version"`, for example: `nvm use 8.11.4`.
 
 ## Run
 
@@ -76,6 +96,33 @@ EOF
 2.  Navigate to `localhost:5000` to see application running
 > **Note:**
 > For purposes of testing and effective development, please continue this README to run the build-tools, and use localhost:5100 instead of localhost:5000.
+
+## Running using Docker
+
+1. On the root project directory, run the following command: `docker-compose up` to start up the development environment.
+
+2. 
+    > **Note:**
+    > Run these commands in a different tab.
+    - To gracefully stop the environement and remove the containers run: `docker-compose down`.
+    - To just stop the environment without removing the containers run: `docker-compose stop`.
+    - To kill the environment, either `CTRL+C` or in a separate tab run: `docker-compose kill`.
+    
+> **Note:**
+> For more info on the commands available and what each one does, visit: https://docs.docker.com/compose/reference/overview/
+
+If this is the first time running the development environment, in the root project directory, run the following commands in order: 
+
+1. `npm install`.
+
+2. To start up the dev evironment run: `npm run startdev`.
+
+> **Note:**
+> Don't worry if this takes long. It usually takes about 20-30 mins to install everything.
+
+- To run server watch so that any changes to files automatically rebuild the evironment, run: `npm run server:watch`.
+
+- To run the client dev server, run: `npm run client:dev:server`.
 
 ## Build Tools
 ### Front-end
