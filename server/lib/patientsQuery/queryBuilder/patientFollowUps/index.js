@@ -32,7 +32,7 @@ export default function patientFollowUps([isCompleted, startDate, endDate]) {
         duplicating: false,
         attributes: [],
         where: {
-          createdAt: { $between: [startDate, endDate] },
+          dueAt: { $between: [startDate, endDate] },
           ...(isCompleted === null ? {} : addCompletedAtAttr(isCompleted)),
         },
       },

@@ -11,7 +11,7 @@ describe('queryCompletedPatientFollowUpsTest', () => {
         new Date(2019, 1, 1).toISOString(),
       ]).include[0].where,
     ).toEqual({
-      createdAt: {
+      dueAt: {
         $between: [
           new Date(2017, 1, 1).toISOString(),
           new Date(2019, 1, 1).toISOString(),

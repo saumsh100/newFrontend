@@ -19,7 +19,7 @@ describe('queryNotCompletedPatientFollowUpsTest', () => {
         duplicating: false,
         where: {
           completedAt: { $eq: null },
-          createdAt: {
+          dueAt: {
             $between: [
               new Date(2017, 1, 1).toISOString(),
               new Date(2019, 1, 1).toISOString(),
