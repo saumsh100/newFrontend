@@ -1,5 +1,6 @@
 
 import moment from 'moment-timezone';
+import classnames from 'classnames';
 
 export const validDateValue = (date) => {
   const dateValue = moment(date);
@@ -59,3 +60,15 @@ export const getEventsOffsetLimitObj = (limit = 5) => ({
     limit,
   },
 });
+
+export const buildDotStyles = (dueForDate, styles) => {
+  const monthsDiff = moment()
+    .startOf('day')
+    .diff(dueForDate, 'months', true);
+
+  return classnames(styles.dot, {
+    [styles.dotRed]: monthsDiff > 8 && monthsDiff <= 18,
+    [styles.dotYellow]: monthsDiff > 0 && monthsDiff <= 8,
+    [styles.dotGreen]: monthsDiff >= -1 && monthsDiff <= 0,
+  });
+};

@@ -2,35 +2,20 @@
 import moment from 'moment';
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import patientShape from '../../../library/PropTypeShapes/patient';
+import { buildDotStyles } from '../helpers';
 import styles from '../../PatientTable/styles.scss';
 
 export default function HygieneColumn(props) {
   const { patient, className, showTable } = props;
 
-  const displayNa = <div className={styles.displayFlex_text}>{showTable ? '-' : 'n/a'}</div>;
-
-  if (!patient.dueForHygieneDate) {
-    return displayNa;
-  }
-
   const hygieneDueDate = moment(patient.dueForHygieneDate);
 
-  if (!hygieneDueDate.isValid()) {
-    return displayNa;
+  if (!patient.dueForHygieneDate || !hygieneDueDate.isValid()) {
+    return <div className={styles.displayFlex_text}>{showTable ? '-' : 'n/a'}</div>;
   }
 
-  const monthsDiff = moment().diff(hygieneDueDate, 'months');
-  const weeksDiff = moment().diff(hygieneDueDate, 'weeks');
-  let dotStyle = styles.dot;
-  if (monthsDiff >= 8) {
-    dotStyle = classnames(dotStyle, styles.dotRed);
-  } else if (monthsDiff >= 0 && monthsDiff < 8 && weeksDiff > 0) {
-    dotStyle = classnames(dotStyle, styles.dotYellow);
-  } else if (weeksDiff === 0 || (weeksDiff <= -1 && weeksDiff >= -4)) {
-    dotStyle = classnames(dotStyle, styles.dotGreen);
-  }
+  const dotStyle = buildDotStyles(hygieneDueDate, styles);
 
   return (
     <div className={styles.displayFlex}>
