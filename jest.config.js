@@ -10,6 +10,15 @@ module.exports = {
         '^CareCruGraphQL/(.*)': '<rootDir>/server/graphql/$1',
         '\\.(s?css)$': 'identity-obj-proxy',
       },
+      globals: {
+        S3Logger: () => ({
+          info: () => null,
+        }),
+        CCLogger: {
+          info: () => null,
+          error: () => null,
+        },
+      },
     },
     {
       testURL: 'http://localhost/',
