@@ -11,7 +11,7 @@ import {
 } from '../../util/seedTestUsers';
 import { omitProperties, omitPropertiesFromBody }  from '../../util/selectors';
 
-const rootUrl = '/_api/users';
+const rootUrl = '/api/users';
 
 describe('/api/users', () => {
   // Seed with some standard user data

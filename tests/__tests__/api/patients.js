@@ -9,7 +9,7 @@ import { patient, patientId } from '../../util/seedTestPatients';
 import { seedTestAppointments, wipeTestAppointments } from '../../util/seedTestAppointments';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/patients';
+const rootUrl = '/api/patients';
 const batchPatientId = '8ec1c573-a092-4649-a219-81be86cd1552';
 const batchPatientId2 = '7a1146f9-1d48-4a5f-8479-f6172d5a83b5';
 const batchPatientId3 = '8405acdd-4559-4396-beb8-2e8ce79307c3';

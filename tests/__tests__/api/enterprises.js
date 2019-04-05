@@ -4,11 +4,11 @@ import jwt from 'jwt-decode';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import { Account, Enterprise, Address } from '../../../server/_models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
+import { wipeAllModels } from '../../util/wipeModel';
 import { accountId, enterprise, enterpriseId, seedTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/enterprises';
+const rootUrl = '/api/enterprises';
 
 const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 

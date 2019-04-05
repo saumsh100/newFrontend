@@ -2,13 +2,12 @@
 import request from 'supertest';
 import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
-import { Call, Patient, Account } from '../../../server/_models';
-import wipeModel, { wipeAllModels } from '../../util/wipeModel';
+import { Call } from '../../../server/_models';
+import wipeModel from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-import { patient, patientId, seedTestPatients } from '../../util/seedTestPatients';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_callrail';
+const rootUrl = '/callrail';
 
 const call = {
   id: 'asdsads',

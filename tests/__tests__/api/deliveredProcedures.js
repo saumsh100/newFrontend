@@ -15,7 +15,7 @@ import {
   mostBusinessPatient,
 } from '../../../server/lib/intelligence/revenue';
 
-const rootUrl = '/_api/deliveredProcedures';
+const rootUrl = '/api/deliveredProcedures';
 
 const makeDeliveredProcedure = (config = {}) => Object.assign({}, {
   accountId,

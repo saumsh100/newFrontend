@@ -8,7 +8,7 @@ import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/correspondences';
+const rootUrl = '/api/correspondences';
 
 const correspondenceId1 = '170c742b-232e-4000-a14d-7ef96c6f19c4';
 const correspondenceId2 = '60b59ea4-ab3b-4862-9c69-6488e40b0562';

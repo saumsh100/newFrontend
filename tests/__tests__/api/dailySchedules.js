@@ -19,7 +19,7 @@ const dailySchedule = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
-const rootUrl = '/_api/dailySchedules';
+const rootUrl = '/api/dailySchedules';
 
 async function seedTestPractitionerDailySchedules() {
   await wipeModel(DailySchedule);

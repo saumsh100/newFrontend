@@ -13,7 +13,7 @@ import wipeModel from '../../util/wipeModel';
 import { seedTestOfficeHour, wipeTestOfficeHour, officeHourId } from '../../util/seedTestWeeklySchedules';
 import filterObject from './chats';
 
-const rootUrl = '/_api/accounts';
+const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const userId = '72954241-3652-4792-bae5-5bfed53d37b7';
 const addressId = '62954241-3652-4792-bae5-5bfed53d37b7';

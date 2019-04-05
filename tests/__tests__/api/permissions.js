@@ -10,7 +10,7 @@ import generateToken from '../../util/generateToken';
 import { wipeModel } from '../../util/wipeModel';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/accounts';
+const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const permissionId = '84d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';

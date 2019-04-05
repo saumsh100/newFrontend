@@ -5,11 +5,11 @@ import generateToken from '../../util/generateToken';
 import { WeeklySchedule } from '../../../server/_models';
 import wipeModel from '../../util/wipeModel';
 import { weeklyScheduleId, seedTestWeeklySchedules, officeHourId } from '../../util/seedTestWeeklySchedules';
-import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
+import { seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 import filterObject from './chats';
 
-const rootUrl = '/_api/weeklySchedules';
+const rootUrl = '/api/weeklySchedules';
 const id = '8ce3ba61-60cd-40c6-bc85-c018cabd4a44';
 
 function omitProperties(body) {

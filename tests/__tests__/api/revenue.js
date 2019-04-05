@@ -14,10 +14,10 @@ import generateToken from '../../util/generateToken';
 import { seedTestUsers, accountId, wipeTestUsers } from '../../util/seedTestUsers';
 import { seedTestPatients, patientId, wipeTestPatients } from '../../util/seedTestPatients';
 import { seedTestPractitioners, practitionerId, wipeTestPractitioners } from '../../util/seedTestPractitioners';
-import { seedTestDeliveredProcedures, wipeTestDeliveredProcedures } from '../../util/seedTestDeliveredProcedures';
+import { wipeTestDeliveredProcedures } from '../../util/seedTestDeliveredProcedures';
 import { seedTestProcedures, wipeTestProcedures } from '../../util/seedTestProcedures';
 
-const rootUrl = '/_api/revenue';
+const rootUrl = '/api/revenue';
 
 const makeProcedureData = (data = {}) => Object.assign({
   accountId,

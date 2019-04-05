@@ -13,7 +13,7 @@ import { chairId, seedTestChairs } from '../../util/seedTestChairs';
 
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/requests';
+const rootUrl = '/api/requests';
 
 const requestId = '272d86fc-f743-4cd6-b0c8-7906959bcc9f';
 const requestSeed = {

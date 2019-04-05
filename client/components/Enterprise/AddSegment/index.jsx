@@ -4,15 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { change, reset } from 'redux-form';
-import {
-  Modal,
-  Input,
-  Row,
-  Col,
-  Grid,
-  Button,
-  IconButton,
-} from '../../library';
+import { Modal, Input, Row, Col, Grid, Button, IconButton } from '../../library';
 import DisplayForm from './DisplayForm';
 import {
   fetchEntities,
@@ -47,9 +39,7 @@ class AddSegment extends Component {
   }
 
   componentWillReceiveProps(props) {
-    if (
-      JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)
-    ) {
+    if (JSON.stringify(this.props.formData) !== JSON.stringify(props.formData)) {
       this.props.previewSegment(props.formData);
       this.closeNameinput = this.closeNameinput.bind(this);
     }
@@ -77,7 +67,7 @@ class AddSegment extends Component {
         rawWhere: this.props.formData,
         name: this.state.name,
       },
-      url: '/_api/segments/',
+      url: '/api/segments/',
     });
     this.props.applySegment({
       rawWhere: this.props.formData,
@@ -95,7 +85,7 @@ class AddSegment extends Component {
         rawWhere: this.props.formData,
         name: this.state.name,
       },
-      url: `/_api/segments/${this.props.segmentId || ''}`,
+      url: `/api/segments/${this.props.segmentId || ''}`,
     });
     this.props.applySegment({
       rawWhere: this.props.formData,
@@ -193,9 +183,7 @@ class AddSegment extends Component {
                 <Col xs={2} sm={2} md={2}>
                   <Button
                     onClick={() => {
-                      (this.props.segmentId
-                        ? this.updateSegment
-                        : this.saveSegment)();
+                      (this.props.segmentId ? this.updateSegment : this.saveSegment)();
                     }}
                   >
                     Save

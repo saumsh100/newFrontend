@@ -30,7 +30,7 @@ const batchAppointmentId3 = 'f3905556-45f7-406d-ba5a-dabe02288665';
 const batchAppointmentId4 = 'bd7a83d3-c1f2-40c5-8cb9-7e3b4362194a';
 const invalidBatchAppointmentId = '61073a69-085c-4646-9dc0-2ad85a0b94fb';
 
-const rootUrl = '/_api/appointments';
+const rootUrl = '/api/appointments';
 
 const batchAppointment = {
   id: batchAppointmentId,

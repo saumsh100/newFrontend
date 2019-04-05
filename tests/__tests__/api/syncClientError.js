@@ -25,7 +25,7 @@ const syncClientError = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
-const rootUrl = '/_api/syncClientError';
+const rootUrl = '/api/syncClientError';
 
 async function seedTestSyncClientError() {
   await wipeModel(SyncClientError);

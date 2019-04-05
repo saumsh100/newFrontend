@@ -8,7 +8,7 @@ import { seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import generateToken from '../../util/generateToken';
 import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/segments';
+const rootUrl = '/api/segments';
 const enterpriseId = 'c5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';
 
 
@@ -172,9 +172,9 @@ describe.skip('/api/segments', () => {
   });
 
   // TODO: these need to be changed to not depend on seeds
-  describe('GET /_api/enterprises/accounts/cities', () => {
+  describe('GET /api/enterprises/accounts/cities', () => {
     test.skip('Preview items', async () => request(app)
-      .get(`/_api/enterprises/${enterpriseId}/accounts/cities`)
+      .get(`/api/enterprises/${enterpriseId}/accounts/cities`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
@@ -191,7 +191,7 @@ describe.skip('/api/segments', () => {
 
   describe('GET /api/enterprise/dashboard/patients', () => {
     test('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}&rawWhere=${object}`)
+      .get(`/api/enterprises/dashboard/patients?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}&rawWhere=${object}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
@@ -202,7 +202,7 @@ describe.skip('/api/segments', () => {
 
   describe('GET /api/enterprise/dashboard/patients/region', () => {
     test.skip('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients/region?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .get(`/api/enterprises/dashboard/patients/region?segmentId=${segmentItems[1].id}&startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {
@@ -212,7 +212,7 @@ describe.skip('/api/segments', () => {
 
   describe('GET /api/enterprise/dashboard/patients/practitioner', () => {
     test('Preview items', async () => request(app)
-      .get(`/_api/enterprises/dashboard/patients/practitioner?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
+      .get(`/api/enterprises/dashboard/patients/practitioner?startDate=${moment().add(-1, 'days').toISOString()}&endDate=${moment().toISOString()}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body, error }) => {

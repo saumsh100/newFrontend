@@ -17,7 +17,7 @@ import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/sentReminders';
+const rootUrl = '/api/sentReminders';
 
 const sentRemindersId = 'e757afb0-14ef-4763-b162-c573169131c1';
 const sentReminder = {
@@ -87,7 +87,7 @@ describe('/api/sentReminders', () => {
           appointment: omit(v.appointment, toOmit),
           patient: omit(v.patient, toOmit),
         }));
-        
+
         expect(body).toMatchSnapshot();
       }));
   });

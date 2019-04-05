@@ -45,7 +45,7 @@ describe('/api/recurringTimeOffs', () => {
 
     test('create time off', () => {
       return request(app)
-        .post('/_api/recurringTimeOffs')
+        .post('/api/recurringTimeOffs')
         .set('Authorization', `Bearer ${token}`)
         .send(practitionerTimeOff)
         .expect(201)
@@ -63,7 +63,7 @@ describe('/api/recurringTimeOffs', () => {
 
     test('/:timeOffId - delete a time off', () => {
       return request(app)
-        .delete(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
+        .delete(`/api/recurringTimeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(({ body }) => {
@@ -74,12 +74,12 @@ describe('/api/recurringTimeOffs', () => {
 
     test('/:timeOffId - delete a time off then undelete it', () => {
       return request(app)
-        .delete(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
+        .delete(`/api/recurringTimeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(204)
         .then(() => {
           return request(app)
-            .post('/_api/recurringTimeOffs')
+            .post('/api/recurringTimeOffs')
             .set('Authorization', `Bearer ${token}`)
             .send(practitionerTimeOff)
             .expect(201)
@@ -98,7 +98,7 @@ describe('/api/recurringTimeOffs', () => {
 
     test('/:timeOffId - update a time off', () => {
       return request(app)
-        .put(`/_api/recurringTimeOffs/${practitionerTimeOffId}`)
+        .put(`/api/recurringTimeOffs/${practitionerTimeOffId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({
           endDate: '2017-07-19T00:18:30.932Z',

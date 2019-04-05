@@ -13,7 +13,7 @@ import {
 import { patientId, patientUserId, seedTestPatients } from '../../util/seedTestPatients';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/waitSpots';
+const rootUrl = '/api/waitSpots';
 
 const waitSpotId = 'cc43f0d7-9fb0-4946-b889-f284ea48e4d0';
 const waitSpot = {

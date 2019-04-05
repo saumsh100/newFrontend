@@ -8,7 +8,7 @@ import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import generateToken from '../../util/generateToken';
 import { getModelsArray, omitProperties, omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/accounts';
+const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const addressId = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 const newReminderId = 'f5ab9bc0-f0e6-4538-99ae-2fe7f920abf4';

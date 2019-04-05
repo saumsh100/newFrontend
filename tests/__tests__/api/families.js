@@ -7,7 +7,7 @@ import wipeModel from '../../util/wipeModel';
 import { accountId, seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/families';
+const rootUrl = '/api/families';
 const familyId = '08cb4f5a-3d19-4f70-a543-ab961e78200c';
 const batchInvalidFamilyId = 'b39f60fe-820b-40a3-beb7-00a3aa8ff689';
 const batchFamilyId = '215d8818-0130-411b-bd55-c04587892b66';

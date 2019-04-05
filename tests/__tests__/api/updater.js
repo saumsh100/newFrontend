@@ -7,7 +7,7 @@ import wipeModel from '../../util/wipeModel';
 import { seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 import { omitPropertiesFromBody, omitProperties } from '../../util/selectors';
 
-const rootUrl = '/_api/updater';
+const rootUrl = '/api/updater';
 const syncClientVersionId = '126d3cb0-4468-4503-9254-77fb1e8df539';
 const syncClientVersion = {
   id: syncClientVersionId,

@@ -11,7 +11,7 @@ import generateToken from '../../util/generateToken';
 import { getModelsArray, omitPropertiesFromBody, omitProperties } from '../../util/selectors';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 
-const rootUrl = '/_api/addresses';
+const rootUrl = '/api/addresses';
 const addressId = '62954241-3652-4792-bae5-5bfed53d37b7';
 const addressId2 = 'd94894b1-84ec-492c-a33e-3f1ad61b9c1c';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';

@@ -14,7 +14,7 @@ const textMessageId1 = '059987cb-3051-4656-98d0-72cda34d32a1';
 const patientPhoneNumber = '+16045555555';
 const clinicPhone = '+16043333333';
 
-const rootUrl = '/_api/chats';
+const rootUrl = '/api/chats';
 
 const chat = {
   id: chatId,

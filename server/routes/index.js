@@ -2,14 +2,13 @@
 import { Router } from 'express';
 import subdomain from 'express-subdomain';
 import graphQLRouter from 'CareCruGraphQL/server';
-import sequelizeApiRouter from './_api';
-import sequelizeAuthRouter from './_auth';
-import callsRouterSequelize from './_callrail';
-import sequelizeMyRouter from './_my';
-import connectRouter from './connect';
-import twilioRouterSequelize from './_twilio';
-import signupRouterSequelize from './_signup';
-import vendastaRouterSequelize from './_vendasta';
+import apiRouter from './_api';
+import authRouter from './_auth';
+import callsRouter from './_callrail';
+import myRouter from './_my';
+import twilioRouter from './_twilio';
+import signupRouter from './_signup';
+import vendastaRouter from './_vendasta';
 import resetRouter from './reset';
 import {
   Invite,
@@ -24,21 +23,17 @@ const rootRouter = Router();
 
 // Bind subdomain capturing
 // Will be removed once microservices are in full effect
-rootRouter.use(subdomain('my', sequelizeMyRouter));
-rootRouter.use(subdomain('my2', sequelizeMyRouter));
-rootRouter.use(subdomain('connect', connectRouter));
+rootRouter.use(subdomain('my', myRouter));
+rootRouter.use(subdomain('my2', myRouter));
 
 // Bind auth route to generate tokens
-rootRouter.use('/_auth', sequelizeAuthRouter);
-rootRouter.use('/auth', sequelizeAuthRouter);
+rootRouter.use('/auth', authRouter);
 
-rootRouter.use('/signup', signupRouterSequelize);
-rootRouter.use('/resetpassword', resetRouter); // this is sequelize
-rootRouter.use('/_signup', signupRouterSequelize);
+rootRouter.use('/signup', signupRouter);
+rootRouter.use('/resetpassword', resetRouter);
 
 // Bind REST API
-rootRouter.use('/_api', sequelizeApiRouter);
-rootRouter.use('/api', sequelizeApiRouter);
+rootRouter.use('/api', apiRouter);
 
 // Bind GraphQL endpoint
 rootRouter.use('/graphql', graphQLRouter);
@@ -53,11 +48,9 @@ rootRouter.post('/newgraphql', sequelizeAuthMiddleware, async (req, res, next) =
 });
 
 // Webhooks!
-rootRouter.use('/twilio', twilioRouterSequelize);
-rootRouter.use('/_twilio', twilioRouterSequelize);
-rootRouter.use('/callrail', callsRouterSequelize);
-rootRouter.use('/_callrail', callsRouterSequelize);
-rootRouter.use('/_vendasta', vendastaRouterSequelize);
+rootRouter.use('/twilio', twilioRouter);
+rootRouter.use('/callrail', callsRouter);
+rootRouter.use('/vendasta', vendastaRouter);
 
 rootRouter.get('/signupinvite/:tokenId', (req, res, next) =>
   Invite.findOne({

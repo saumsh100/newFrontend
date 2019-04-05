@@ -11,7 +11,7 @@ import generateToken from '../../util/generateToken';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { getModelsArray, omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/accounts';
+const rootUrl = '/api/accounts';
 const accountId2 = '52954241-3652-4792-bae5-5bfed53d37b7';
 const inviteId1 = '23d4e661-1155-4494-8fdb-c4ec0ddf804d';
 const inviteId2 = '46d4e661-1155-4494-8fdb-c4ec0ddf804d';
@@ -164,7 +164,7 @@ describe('/api/accounts/:accountId/invites', () => {
 
     test('should create a User', async () => {
       return request(app)
-        .post(`/_signup/${token2}/`)
+        .post(`/signup/${token2}/`)
         .send({
           firstName: 'Why',
           lastName: '?',

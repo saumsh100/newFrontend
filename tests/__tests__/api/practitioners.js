@@ -19,7 +19,7 @@ const accountWithSchedule = {
   createdAt: '2017-07-19T00:14:30.932Z',
 };
 
-const rootUrl = '/_api/practitioners';
+const rootUrl = '/api/practitioners';
 
 const createPractitioner = Object.assign({}, practitioner);
 delete createPractitioner.accountId;
@@ -167,7 +167,7 @@ describe('/api/practitioners', () => {
     //   const updatedWeeklySchedule = weeklySchedule;
     //   updatedWeeklySchedule.createdAt = '2017-07-19T00:18:30.932Z';
     //   return request(app)
-    //     .put(`/_api/practitioners/${practitionerId}/customSchedule`)
+    //     .put(`/api/practitioners/${practitionerId}/customSchedule`)
     //     .set('Authorization', `Bearer ${token}`)
     //     .send(Object.assign({ accountId }, weeklySchedule))
     //     .expect(201)

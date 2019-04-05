@@ -5,7 +5,7 @@ import app from '../../../server/bin/app';
 import generateToken from '../../util/generateToken';
 import { seedTestUsers, wipeTestUsers } from '../../util/seedTestUsers';
 
-const rootUrl = '/_auth';
+const rootUrl = '/auth';
 
 describe('/auth', () => {
   // Clear what is necessary

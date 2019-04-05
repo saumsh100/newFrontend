@@ -9,7 +9,7 @@ import { patientId, seedTestPatients } from '../../util/seedTestPatients';
 import { recallId1, seedTestRecalls } from '../../util/seedTestRecalls';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_api/sentRecalls';
+const rootUrl = '/api/sentRecalls';
 
 const sentRecallId = '689b7e40-0bff-40ea-bdeb-ff08d055075f';
 const sentRecall = {

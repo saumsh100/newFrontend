@@ -5,13 +5,11 @@ import generateToken from '../../util/generateToken';
 import { Service, WeeklySchedule, Practitioner, Account } from '../../../server/_models';
 import wipeModel, { wipeAllModels } from '../../util/wipeModel';
 import { accountId, seedTestUsers } from '../../util/seedTestUsers';
-
-const rootUrl = '/_api/services';
-
 import { serviceId, service, seedTestService } from '../../util/seedTestServices';
 import { practitionerId, seedTestPractitioners } from '../../util/seedTestPractitioners';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
+const rootUrl = '/api/services';
 
 describe('/api/services', () => {
   // Seed with some standard user data

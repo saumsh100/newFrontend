@@ -10,7 +10,7 @@ import { reminderId1, seedTestReminders } from '../../util/seedTestReminders';
 import { appointmentId, seedTestAppointments } from '../../util/seedTestAppointments';
 import { omitPropertiesFromBody } from '../../util/selectors';
 
-const rootUrl = '/_twilio';
+const rootUrl = '/twilio';
 
 const sentReminderId = 'e757afb0-14ef-4763-b162-c573169131c1';
 const sentReminder = {
@@ -31,7 +31,7 @@ async function seedTestSentReminder() {
   await SentReminder.create(sentReminder);
 }
 
-describe('/_twilio/', () => {
+describe('/twilio/', () => {
   // Seed with some standard user data
   let token = null;
   beforeEach(async () => {
