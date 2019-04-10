@@ -39,6 +39,7 @@ import patientRecallsRouter from './patientRecalls';
 
 import tableRouter from './table';
 import correspondencesRouter from './correspondences';
+import renderedTemplateRouter from './renderedTemplate';
 
 const apiRouter = Router();
 
@@ -50,6 +51,7 @@ apiRouter.use('/accounts', remindersRouter);
 apiRouter.use('/accounts', invitesRouter);
 apiRouter.use('/accounts', recallsRouter);
 apiRouter.use('/accounts', permissionsRouter);
+apiRouter.use('/accounts', renderedTemplateRouter);
 apiRouter.use('/chairs', chairsRouter);
 apiRouter.use('/connector', connectorRouter);
 apiRouter.use('/dailySchedules', dailyScheduleRouter);
