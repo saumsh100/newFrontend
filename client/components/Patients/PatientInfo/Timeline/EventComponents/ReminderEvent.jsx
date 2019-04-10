@@ -18,9 +18,10 @@ export default function ReminderEvent({ data }) {
   const { sentRemindersPatients } = data;
   const {
     appointment: { startDate },
+    appointmentStartDate,
   } = sentRemindersPatients[0];
 
-  const appDate = dateFormatter(startDate, '', 'MMMM Do, YYYY h:mma');
+  const appDate = dateFormatter(appointmentStartDate || startDate, '', 'MMMM Do, YYYY h:mma');
 
   const component = (
     <div className={styles.body_header}>
