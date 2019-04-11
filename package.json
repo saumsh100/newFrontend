@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "npmrc": "if [ -f .env ]; then export $(cat .env | xargs); fi && node scripts/npmrcGenerate.js",
-    "preinstall": "npm run npmrc",
+    "preinstall": "if [ ! -f .npmrc ]; then npm run npmrc; fi",
     "postinstall": "npm run server:build:prod && npm run graphl:build && npm run client:build:prod && npm run client:widget:build",
     "precommit": "lint-staged",
     "client:dev:server": "if [ -f .env ]; then export $(cat .env | xargs); fi && webpack-dev-server --config ./webpack/client/webpack.development.config.js",
