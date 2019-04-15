@@ -2,12 +2,6 @@
 import { Router } from 'express';
 import url from 'url';
 import crypto from 'crypto';
-import { PatientAuth } from '../../lib/_auth';
-import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
-import twilioClient from '../../config/twilio';
-import { sequelizeLoader } from '../util/loaders';
-import { generateAccountParams, encodeParams } from './util/params';
-import StatusError from '../../util/StatusError';
 import {
   Account,
   PatientUser,
@@ -15,14 +9,19 @@ import {
   PatientUserReset,
   PinCode,
   Token,
-} from '../../_models';
+} from 'CareCruModels';
+import { PatientAuth } from '../../lib/_auth';
+import { sequelizeAuthMiddleware } from '../../middleware/patientAuth';
+import twilioClient from '../../config/twilio';
+import { sequelizeLoader } from '../util/loaders';
+import { generateAccountParams, encodeParams } from './util/params';
+import StatusError from '../../util/StatusError';
 import { sendPatientSignup, sendPatientResetPassword } from '../../lib/mail';
 import { twilio } from '../../config/globals';
 
 const authRouter = Router();
 
 authRouter.param('patientUserId', sequelizeLoader('patientUser', 'PatientUser'));
-authRouter.param('tokenId', sequelizeLoader('token', 'Token'));
 authRouter.param('accountId', sequelizeLoader('account', 'Account'));
 
 const signTokenAndSend = res => ({ session, model }) => {
@@ -188,21 +187,27 @@ authRouter.post('/:patientUserId/resend', (req, res, next) => {
     .catch(next);
 });
 
-authRouter.get('/signup/:tokenId/email', async (req, res, next) => {
+authRouter.get('/signup/:tokenId/email', async ({ params: { tokenId } }, res, next) => {
   try {
-    const { token } = req;
-    const { patientUserId, accountId } = token;
-    const patientUser = await PatientUser.findById(patientUserId);
-    await patientUser.update({ isEmailConfirmed: true });
-    await token.destroy();
+    const token = await Token.findOne({
+      where: { id: tokenId },
+      paranoid: false,
+    });
 
-    // This will be replaced with proper URL mounting for clinics
+    if (!token) return next(StatusError(StatusError.GONE, `Token with id=${tokenId} not found`));
+
+    const { patientUserId, accountId } = token;
     const account = await Account.findById(accountId);
-    const params = { account: generateAccountParams(account) };
+
+    if (!token.deletedAt) {
+      const patientUser = await PatientUser.findById(patientUserId);
+      await patientUser.update({ isEmailConfirmed: true });
+      await token.destroy();
+    }
 
     return res.redirect(url.format({
       pathname: '/signup/confirmed',
-      query: { params: encodeParams(params) },
+      query: { params: encodeParams({ account: generateAccountParams(account) }) },
     }));
   } catch (err) {
     next(err);
