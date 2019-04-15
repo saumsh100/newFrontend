@@ -17,6 +17,10 @@ export default function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    description: {
+      type: DataTypes.STRING,
+    },
+
     pmsId: {
       type: DataTypes.STRING,
       validate: {

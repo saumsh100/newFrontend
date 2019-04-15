@@ -243,6 +243,7 @@ const ModelAttributes = {
 
   Service: [
     'name',
+    'description',
     'accountId',
     'duration',
     'bufferTime',
