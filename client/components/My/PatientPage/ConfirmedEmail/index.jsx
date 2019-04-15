@@ -1,12 +1,17 @@
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import Section from '../Shared/Section';
 import { Button } from '../../../library';
 import styles from './styles.scss';
+import accountShape from '../../../library/PropTypeShapes/accountShape';
 
-export default function ConfirmedEmail({ params }) {
-  const { account } = params;
-  return (
+const getWebsite = (website) => {
+  const rx = new RegExp('^https?://');
+  return rx.test(website) ? website : `http://${website}`;
+};
+
+const ConfirmedEmail = ({ params: { account } }) => (
     <div>
       <Section>
         <div className={styles.header}>Email is confirmed.</div>
@@ -16,9 +21,8 @@ export default function ConfirmedEmail({ params }) {
         </div>
       </Section>
       <Section>
-        <a href={`${account.website}?cc=book`}>
+        <a href={`${getWebsite(account.website)}?cc=book`}>
           <Button
-            // fluid
             icon="arrow-right"
             title="Back to Clinic Website"
             className={styles.backToLoginButton}
@@ -26,7 +30,12 @@ export default function ConfirmedEmail({ params }) {
         </a>
       </Section>
     </div>
-  );
-}
+);
 
-ConfirmedEmail.propTypes = {};
+export default ConfirmedEmail;
+
+ConfirmedEmail.propTypes = {
+  params: PropTypes.shape({
+    account: PropTypes.shape(accountShape),
+  }).isRequired,
+};
