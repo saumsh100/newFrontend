@@ -54,6 +54,7 @@
 .contentWrapper {
   width: 100%;
   transform: translate3d(0, 0, 0);
+
   + .contentWrapper {
     margin-top: var(--widget-spacer);
   }
@@ -97,6 +98,7 @@
   transition: all 0.2s ease;
   line-height: 1;
   font-family: 'Roboto', sans-serif;
+
   &:hover {
     color: $widget-blue-dark;
     border-bottom: 1px solid $widget-blue-dark;
@@ -125,14 +127,17 @@
   -webkit-appearance: none;
   box-shadow: 1px 2px 3px 0 rgba(128, 128, 128, 0.15);
   transition: all 0.2s ease;
+
   &:focus {
     transition: all 0.2s ease;
     border-color: var(--primaryColor);
   }
+
   &:focus ~ .label {
     @extend .filled;
   }
 }
+
 .inputActive {
   transition: all 0.2s ease;
   border-color: var(--primaryColor);
@@ -219,6 +224,7 @@
   outline: none;
   text-decoration: none;
   text-align: center;
+
   &:hover {
     transition: all 0.2s ease;
     color: var(--primaryColor);
@@ -231,6 +237,7 @@
   background: var(--primaryColor);
   border-color: var(--primaryColor);
   color: $widget-white;
+
   &:hover {
     opacity: 0.9;
     color: $widget-white;
@@ -250,6 +257,7 @@
   width: 100%;
   min-height: 40px;
   transition: all 0.2s ease;
+
   &:hover {
     transition: all 0.2s ease;
     opacity: 0.9;
@@ -268,6 +276,7 @@
   justify-content: center;
   align-items: center;
   padding: 0;
+
   svg {
     fill: currentColor;
   }
@@ -286,6 +295,7 @@
   right: var(--widget-spacer);
   top: 22px;
   width: auto !important;
+
   &:focus {
     color: var(--primaryColor);
   }
@@ -327,6 +337,7 @@
   font-weight: 600;
   transition: all 0.2s ease;
   font-family: inherit;
+
   &:hover {
     transition: all 0.2s ease;
     color: $widget-grey-dark;
@@ -345,6 +356,7 @@
   transition: all 0.2s ease;
   font-weight: 600;
   font-family: inherit;
+
   &:hover {
     transition: all 0.2s ease;
     opacity: 0.9;
@@ -380,6 +392,7 @@
   display: block;
   font-size: 12px;
   line-height: 18px;
+
   p {
     word-break: break-word;
     white-space: pre-line;
@@ -405,6 +418,7 @@
 .timeFrameButton {
   flex: 1;
 }
+
 .heading {
   font-weight: 500;
   font-size: 18px;
@@ -414,6 +428,7 @@
   margin-bottom: calc(var(--widget-spacer) / 2);
   display: block;
   width: 100%;
+
   + .cardsWrapper {
     margin-top: var(--widget-spacer);
   }
@@ -438,8 +453,12 @@
 }
 
 .cardWrapper {
-  flex: 0 50%;
+  flex: 0 100%;
+  @media (min-width: 460px) {
+    flex: 0 50%;
+  }
   display: flex;
+
   .card {
     margin: 0 4px 8px !important;
   }
@@ -488,6 +507,7 @@
   @extend .container;
   padding: calc(var(--widget-spacer) * 2) calc(var(--widget-spacer) - 4px) 0;
   transition: all 0.2s ease;
+
   .heading,
   .description {
     padding: 0 4px;

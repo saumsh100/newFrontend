@@ -2,19 +2,20 @@
 import createModel from '../createModel';
 
 const ServiceSchema = {
-  id: null,
-  createdAt: null,
   accountId: null,
-  name: null,
-  duration: null,
-  bufferTime: null,
-  unitCost: null,
-  customCosts: {},
-  practitioners: [],
   allowedPractitioners: null,
-  isHidden: null,
+  bufferTime: null,
+  createdAt: null,
+  customCosts: {},
+  description: null,
+  duration: null,
+  id: null,
   isDefault: null,
+  isHidden: null,
+  name: null,
+  practitioners: [],
   reasonWeeklyHoursId: null,
+  unitCost: null,
 };
 
 export default class Service extends createModel(ServiceSchema) {

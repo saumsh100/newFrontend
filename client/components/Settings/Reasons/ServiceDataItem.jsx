@@ -50,6 +50,7 @@ class ServiceDataItem extends Component {
     const initialValuesBasic = {
       name: service.get('name'),
       duration: service.get('duration'),
+      description: service.get('description'),
       bufferTime: service.get('bufferTime'),
     };
 
@@ -69,6 +70,7 @@ class ServiceDataItem extends Component {
           alignSave="left"
         >
           <Field required name="name" label="Name" validate={[maxLength45]} data-test-id="name" />
+          <Field name="description" label="Description" data-test-id="description" />
           <Field
             required
             name="duration"

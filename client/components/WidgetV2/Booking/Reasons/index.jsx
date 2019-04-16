@@ -67,6 +67,7 @@ class Reasons extends Component {
                 <span className={styles.cardWrapper} key={service.value}>
                   <WidgetCard
                     title={service.label}
+                    description={service.description}
                     selected={service.value === selectedServiceId}
                     onClick={() => this.selectReason(service.value)}
                   />
@@ -90,6 +91,7 @@ function mapStateToProps({ entities, availabilities }) {
         {
           label: actual.get('name'),
           value: actual.get('id'),
+          description: actual.get('description'),
         },
       ],
       [],
@@ -117,10 +119,12 @@ Reasons.propTypes = {
   history: PropTypes.shape(historyShape).isRequired,
   location: PropTypes.shape(locationShape).isRequired,
   selectedServiceId: PropTypes.string,
-  serviceList: PropTypes.arrayOf(PropTypes.shape({
-    label: PropTypes.string,
-    value: PropTypes.string,
-  })).isRequired,
+  serviceList: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string,
+    }),
+  ).isRequired,
   setAvailabilities: PropTypes.func.isRequired,
   setNextAvailability: PropTypes.func.isRequired,
   setSelectedServiceId: PropTypes.func.isRequired,

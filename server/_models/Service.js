@@ -1,4 +1,3 @@
-
 export default function (sequelize, DataTypes) {
   const Service = sequelize.define('Service', {
     id: {
@@ -32,19 +31,20 @@ export default function (sequelize, DataTypes) {
               pmsId: value,
             },
             paranoid: false,
-          }).then(async (service) => {
-            service.setDataValue('deletedAt', null);
-            service = await service.save({ paranoid: false });
+          })
+            .then(async (service) => {
+              service.setDataValue('deletedAt', null);
+              service = await service.save({ paranoid: false });
 
-            if (service) {
-              return next({
-                messages: 'AccountId PMS ID Violation',
-                model: service,
-              });
-            }
+              if (service) {
+                return next({
+                  messages: 'AccountId PMS ID Violation',
+                  model: service,
+                });
+              }
 
-            return next();
-          });
+              return next();
+            });
         },
       },
     },
