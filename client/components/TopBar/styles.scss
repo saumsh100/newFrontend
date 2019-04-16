@@ -127,14 +127,20 @@ $padding-size-border: 10px;
 
 .accountsDropdownMenu > div {
   width: auto;
-  // margin: -5px 0 0 0 !important;
+
+  > ul {
+    max-height: 270px;
+    overflow: scroll;
+  }
 }
 
 .userMenuButton {
   display: flex;
   align-items: center;
+
   &:hover {
     color: $primary-blue !important;
+
     .greeting {
       color: $primary-blue;
     }
@@ -189,6 +195,7 @@ $padding-size-border: 10px;
   cursor: pointer;
   line-height: 47px;
   white-space: nowrap;
+
   &:hover {
     color: $primary-blue;
   }
@@ -202,6 +209,7 @@ $padding-size-border: 10px;
   background-color: $primary-blue;
   cursor: default;
   color: white;
+
   &:hover {
     background-color: $primary-blue !important;
     cursor: default;
@@ -246,15 +254,18 @@ $padding-size-border: 10px;
   background-color: darken(#f4f4f4, 5%) !important;
   font-size: 12px;
   width: 28px !important;
+
   &:hover {
     cursor: pointer;
     border-color: $primary-blue;
   }
 }
+
 .searchIcon {
   padding: 7px;
   color: $primary-dark;
 }
+
 .iconSearchOpen {
   pointer-events: none;
   border: 0;
@@ -268,6 +279,7 @@ $padding-size-border: 10px;
   border: 1px solid darken(#f4f4f4, 10%);
   border-radius: 45px;
   padding: 0;
+
   input {
     height: 100%;
     padding-left: 33px;
