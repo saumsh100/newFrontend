@@ -1,8 +1,7 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import axios from 'axios';
-import { List, ListItem, Tab, Tabs } from '../../../library';
+import { Tab, Tabs } from '../../../library';
 import OutboxReminders from './Reminders';
 import OutboxRecalls from './Recalls';
 import OutboxReviews from './Reviews';
@@ -37,11 +36,7 @@ export default class Outbox extends Component {
 
     return (
       <div className={styles.outboxWrapper}>
-        <Tabs
-          index={this.state.tabIndex}
-          onChange={this.handleTabChange}
-          className={styles.tabs}
-        >
+        <Tabs index={this.state.tabIndex} onChange={this.handleTabChange} className={styles.tabs}>
           <Tab label={label('Reminders', canSendReminders)}>
             <OutboxReminders account={account} />
           </Tab>

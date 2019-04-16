@@ -1,7 +1,7 @@
 
 import moment from 'moment';
-import axios from 'axios';
 import createModel from '../createModel';
+import { httpClient } from '../../util/httpClient';
 
 const PatientSchema = {
   firstName: null,
@@ -83,7 +83,7 @@ export default class Patient extends createModel(PatientSchema) {
   }
 
   isPoc(key, value) {
-    return axios.get('/api/patients/poc', { params: { [key]: value } });
+    return httpClient().get('/api/patients/poc', { params: { [key]: value } });
   }
 
   getUrlRoot() {

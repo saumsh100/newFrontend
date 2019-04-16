@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import axios from 'axios';
 import { bindActionCreators } from 'redux';
 import { Button, Form, Grid, Row, Col, Field } from '../../library';
 import { setFamilyPatientUser } from '../../../actions/availabilities';
@@ -14,6 +13,7 @@ import {
   emailValidate,
 } from '../../library/Form/validate';
 import styles from './styles.scss';
+import { httpClient } from '../../../util/httpClient';
 
 const genderOptions = [{ value: 'Male' }, { value: 'Female' }];
 
@@ -32,7 +32,7 @@ class AddPatient extends Component {
    */
   handleSubmit(values) {
     const { user } = this.props;
-    return axios
+    return httpClient()
       .post(`/families/${user.patientUserFamilyId}/patients`, values)
       .then(response => this.props.setFamilyPatientUser(response.data.id))
       .then(() => this.props.history.goBack({ pathname: '../book/review' }));
@@ -137,7 +137,9 @@ function mapStateToProps({ auth }) {
   };
 }
 
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AddPatient));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(AddPatient),
+);

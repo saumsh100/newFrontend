@@ -1,19 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import axios from 'axios';
 import moment from 'moment';
-import {
-  List,
-  ListItem,
-  Tab,
-  Tabs,
-  Loading,
-  Grid,
-  Row,
-  Col,
-} from '../../library';
+import { List, ListItem, Loading, Grid, Row, Col } from '../../library';
 import styles from './styles.scss';
+import { httpClient } from '../../../util/httpClient';
 
 const getAttrFromPatient = (patient, primaryType) => {
   const attrs = {
@@ -97,7 +88,7 @@ export default class OutboxReviews extends Component {
 
   componentWillMount() {
     const { account } = this.props;
-    return Promise.all([axios.get(`/api/accounts/${account.id}/reviews/list`)])
+    return Promise.all([httpClient().get(`/api/accounts/${account.id}/reviews/list`)])
       .then(([reviewsData]) => {
         console.log('reviewsData', reviewsData);
         this.setState({
@@ -124,10 +115,8 @@ export default class OutboxReviews extends Component {
       );
     }
 
-    const totalSuccess =
-      reviews && reviews.success ? reviews.success.length : 'error';
-    const totalErrors =
-      reviews && reviews.errors ? reviews.errors.length : 'error';
+    const totalSuccess = reviews && reviews.success ? reviews.success.length : 'error';
+    const totalErrors = reviews && reviews.errors ? reviews.errors.length : 'error';
 
     return (
       <div className={styles.reviewsWrapper}>

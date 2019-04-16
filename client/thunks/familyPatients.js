@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import { setFamilyPatientUser } from '../actions/availabilities';
 import {
   addPatientToFamily,
@@ -7,6 +6,7 @@ import {
   updateFamilyPatient,
   updatePatientUser,
 } from '../reducers/patientAuth';
+import { bookingWidgetHttpClient } from '../util/httpClient';
 
 const getAuth = getState => getState().auth;
 
@@ -19,7 +19,9 @@ const handleFamilyId = (patientFamilyId, getState) =>
 export function fetchFamilyPatients(patientFamilyId) {
   return async (dispatch, getState) => {
     try {
-      const familyData = await axios.get(`/families/${handleFamilyId(patientFamilyId, getState)}/patients`);
+      const familyData = await bookingWidgetHttpClient().get(
+        `/families/${handleFamilyId(patientFamilyId, getState)}/patients`,
+      );
       return dispatch(setFamilyPatients(familyData.data));
     } catch (err) {
       return console.error('fetching familyPatients request error', err);
@@ -30,7 +32,7 @@ export function fetchFamilyPatients(patientFamilyId) {
 export function addNewFamilyPatient(values, patientFamilyId) {
   return async (dispatch, getState) => {
     try {
-      const { data } = await axios.post(
+      const { data } = await bookingWidgetHttpClient().post(
         `/families/${handleFamilyId(patientFamilyId, getState)}/patients`,
         values,
       );
@@ -45,11 +47,12 @@ export function addNewFamilyPatient(values, patientFamilyId) {
 export function updatePatient(values, patientId, patientFamilyId) {
   return async (dispatch, getState) => {
     try {
-      const updatedUser = await axios.put(
+      const updatedUser = await bookingWidgetHttpClient().put(
         `/families/${handleFamilyId(patientFamilyId, getState)}/patients/${patientId}`,
         values,
       );
-      dispatch(updateFamilyPatient({ patientId, values }));
+      dispatch(updateFamilyPatient({ patientId,
+        values }));
       if (
         patientId ===
         getAuth(getState)

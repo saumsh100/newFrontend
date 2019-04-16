@@ -1,6 +1,5 @@
 
 import moment from 'moment';
-import axios from 'axios';
 import { batchActions } from 'redux-batched-actions';
 import {
   setIsFetching,
@@ -19,6 +18,7 @@ import {
 } from '../actions/availabilities';
 import PatientUser from '../entities/models/PatientUser';
 import { setIsRecall, setSelectedPractitionerId } from '../reducers/availabilities';
+import { bookingWidgetHttpClient } from '../util/httpClient';
 
 export function sixDaysShift(dayObj) {
   return function (dispatch) {
@@ -30,9 +30,11 @@ export function confirmCode(values) {
   return function (dispatch, getState) {
     const state = getState();
     const patientUser = state.auth.get('patientUser');
-    return axios.post(`/auth/signup/${patientUser.get('id')}/confirm`, values).then(({ data }) => {
-      dispatch(setPatientUser(new PatientUser(data)));
-    });
+    return bookingWidgetHttpClient()
+      .post(`/auth/signup/${patientUser.get('id')}/confirm`, values)
+      .then(({ data }) => {
+        dispatch(setPatientUser(new PatientUser(data)));
+      });
   };
 }
 
@@ -40,7 +42,7 @@ export function resendPinCode() {
   return function (dispatch, getState) {
     const state = getState();
     const patientUser = state.auth.get('patientUser');
-    return axios.post(`/auth/${patientUser.get('id')}/resend`);
+    return bookingWidgetHttpClient().post(`/auth/${patientUser.get('id')}/resend`);
   };
 }
 
@@ -86,7 +88,7 @@ export function createRequest() {
       });
     }
 
-    return axios
+    return bookingWidgetHttpClient()
       .post('/requests', params)
       .then(() => {
         dispatch(setIsSuccessfulBooking(true));
@@ -125,10 +127,12 @@ export function createWaitSpot() {
       endDate: selectedAvailability && selectedAvailability.startDate,
     };
 
-    return axios.post('/waitSpots', params).then(({ data: { entities: waitSpots } }) => {
-      const id = Object.keys(waitSpots)[0];
-      return waitSpots[id];
-    });
+    return bookingWidgetHttpClient()
+      .post('/waitSpots', params)
+      .then(({ data: { entities: waitSpots } }) => {
+        const id = Object.keys(waitSpots)[0];
+        return waitSpots[id];
+      });
   };
 }
 
@@ -156,7 +160,7 @@ export function setRegistrationStep(registrationStep, accountId) {
   return function (dispatch, getState) {
     if (parseInt(registrationStep, 10) === 2) {
       const { practitionerId, serviceId, startsAt } = getState().availabilities.toJS();
-      axios
+      bookingWidgetHttpClient()
         .post('/reservations', {
           practitionerId,
           serviceId,
@@ -174,23 +178,29 @@ export function setRegistrationStep(registrationStep, accountId) {
 
 export function getClinicInfo(accountId) {
   return function (dispatch) {
-    axios.get(`/logo/${accountId}`).then((data) => {
-      const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
-      dispatch(setClinicInfoAction({
-        logo,
-        address,
-        clinicName,
-        bookingWidgetPrimaryColor,
-      }));
-    });
+    bookingWidgetHttpClient()
+      .get(`/logo/${accountId}`)
+      .then((data) => {
+        const { logo, address, clinicName, bookingWidgetPrimaryColor } = data.data;
+        dispatch(
+          setClinicInfoAction({
+            logo,
+            address,
+            clinicName,
+            bookingWidgetPrimaryColor,
+          }),
+        );
+      });
   };
 }
 
 export function removeReservation(reservationId) {
   return function (dispatch) {
-    axios.delete(`/reservations/${reservationId}`).then(() => {
-      dispatch(removeReservationAction());
-    });
+    bookingWidgetHttpClient()
+      .delete(`/reservations/${reservationId}`)
+      .then(() => {
+        dispatch(removeReservationAction());
+      });
   };
 }
 
@@ -226,8 +236,10 @@ export function fetchAvailabilities(date) {
       endDate,
     };
 
-    return axios
-      .get(`/accounts/${account.get('id')}/availabilities`, { params })
+    return bookingWidgetHttpClient()
+      .get(`/accounts/${account.get('id')}/availabilities`, {
+        params,
+      })
       .then(({ data }) => {
         const actions = [
           setAvailabilities(data.availabilities),
@@ -240,17 +252,19 @@ export function fetchAvailabilities(date) {
 
         dispatch(batchActions(actions));
       })
-      .then(data =>
-        new Promise((resolve, reject) => {
-          Promise.all([
-            data,
-            new Promise((interResolve) => {
-              setTimeout(interResolve, 1000);
-            }),
-          ]).then(([result]) => {
-            resolve(result);
-          }, reject);
-        }))
+      .then(
+        data =>
+          new Promise((resolve, reject) => {
+            Promise.all([
+              data,
+              new Promise((interResolve) => {
+                setTimeout(interResolve, 1000);
+              }),
+            ]).then(([result]) => {
+              resolve(result);
+            }, reject);
+          }),
+      )
       .then(() => {
         requestCount -= 1;
         if (!requestCount) {

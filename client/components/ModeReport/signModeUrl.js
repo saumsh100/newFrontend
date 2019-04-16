@@ -1,5 +1,5 @@
 
-import axios from 'axios';
+import { httpClient } from '../../util/httpClient';
 
 const defaultAccessKey = process.env.MODE_ANALYTICS_ACCESS_KEY;
 const generateReportUrl = reportId => `https://modeanalytics.com/carecru/reports/${reportId}/embed`;
@@ -42,7 +42,7 @@ export function buildModeUrl({
  * request to get the signed URL for the Mode Report
  *
  * @param options
- * @return {axios.Promise}
+ * @return {Promise}
  */
 export default function signModeUrl(options) {
   const encodedQuestion = encodeURIComponent('?');
@@ -51,7 +51,7 @@ export default function signModeUrl(options) {
     .replace(/\?/g, encodedQuestion)
     .replace(/&/g, encodedAnd);
   const signUrl = `/api/analytics/signUrl?url=${reportUrl}`;
-  return axios
+  return httpClient()
     .get(signUrl)
     .then(({ data: { url } }) => url)
     .catch((err) => {

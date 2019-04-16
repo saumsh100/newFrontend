@@ -14,11 +14,7 @@ import App from './Reviews';
 import configure from '../store/reviewsStore';
 import connectStoreToHost from '../widget/connectStoreToHost';
 import { loadPatient } from '../thunks/patientAuth';
-import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
-
-// getToken function is custom
-bindAxiosInterceptors(() => localStorage.getItem('auth_token'));
 
 LogRocket.init(process.env.LOGROCKET_APP_ID);
 
@@ -30,15 +26,17 @@ const store = configure({
 
 // initialize feature flag client and get initial flags
 // Booking widget needs the account on init
-store.dispatch(initializeFeatureFlags({
-  key: 'carecru',
-  custom: {
-    accountId: store
-      .getState()
-      .availabilities.get('account')
-      .get('id'),
-  },
-}));
+store.dispatch(
+  initializeFeatureFlags({
+    key: 'carecru',
+    custom: {
+      accountId: store
+        .getState()
+        .availabilities.get('account')
+        .get('id'),
+    },
+  }),
+);
 
 // Bind event handlers from parent
 connectStoreToHost(store);

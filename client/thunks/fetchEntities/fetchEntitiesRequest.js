@@ -1,7 +1,7 @@
 
-import axios from 'axios';
 import { receiveEntities } from '../../reducers/entities';
 import { createRequest, receiveRequest, errorRequest } from '../../reducers/apiRequests';
+import { httpClient } from '../../util/httpClient';
 
 export default function fetchEntitiesRequest({
   id,
@@ -25,18 +25,22 @@ export default function fetchEntitiesRequest({
     // Create record for request
     dispatch(createRequest({ id }));
 
-    return axios
+    return httpClient()
       .get(url, { params })
       .then((response) => {
         const { data } = response;
-        dispatch(receiveRequest({
-          id,
-          data,
-        }));
-        dispatch(receiveEntities({
-          key,
-          entities: data.entities,
-        }));
+        dispatch(
+          receiveRequest({
+            id,
+            data,
+          }),
+        );
+        dispatch(
+          receiveEntities({
+            key,
+            entities: data.entities,
+          }),
+        );
         return returnData ? data : data.entities;
       })
       .catch((error) => {

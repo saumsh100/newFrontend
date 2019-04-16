@@ -1,44 +1,27 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import axios from 'axios';
 import moment from 'moment';
-import {
-  List,
-  ListItem,
-  Tab,
-  Tabs,
-  Loading,
-  Grid,
-  Row,
-  Col,
-} from '../../library';
+import { List, ListItem, Loading, Grid, Row, Col } from '../../library';
 import styles from './styles.scss';
+import { httpClient } from '../../../util/httpClient';
 
-class ReminderListItem extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { data } = this.props;
-    const { patient, primaryTypes, sendDate } = data;
-    const { appointment } = patient;
-    return (
-      <ListItem>
-        <Grid>
-          <Row>
-            <Col xs={3}>{primaryTypes.join('&')}</Col>
-            <Col xs={3}>{moment(sendDate).format('h:mma')}</Col>
-            <Col xs={3}>{`${patient.firstName} ${patient.lastName}`}</Col>
-            <Col xs={3}>
-              {moment(appointment.startDate).format('dddd, MMMM Do h:mma')}
-            </Col>
-          </Row>
-        </Grid>
-      </ListItem>
-    );
-  }
+function ReminderListItem() {
+  const { data } = this.props;
+  const { patient, primaryTypes, sendDate } = data;
+  const { appointment } = patient;
+  return (
+    <ListItem>
+      <Grid>
+        <Row>
+          <Col xs={3}>{primaryTypes.join('&')}</Col>
+          <Col xs={3}>{moment(sendDate).format('h:mma')}</Col>
+          <Col xs={3}>{`${patient.firstName} ${patient.lastName}`}</Col>
+          <Col xs={3}>{moment(appointment.startDate).format('dddd, MMMM Do h:mma')}</Col>
+        </Row>
+      </Grid>
+    </ListItem>
+  );
 }
 
 export default class OutboxReminders extends Component {
@@ -49,15 +32,12 @@ export default class OutboxReminders extends Component {
     this.state = {
       isLoading: true,
       reminders: [],
-      selectedReminder: null,
     };
   }
 
   componentWillMount() {
     const { account } = this.props;
-    return Promise.all([
-      axios.get(`/api/accounts/${account.id}/reminders/outbox`),
-    ])
+    return Promise.all([httpClient().get(`/api/accounts/${account.id}/reminders/outbox`)])
       .then(([remindersData]) => {
         console.log('outboxData', remindersData);
         this.setState({
@@ -69,7 +49,6 @@ export default class OutboxReminders extends Component {
   }
 
   render() {
-    const { account } = this.props;
     const { reminders, isLoading } = this.state;
 
     if (isLoading) {
@@ -88,11 +67,8 @@ export default class OutboxReminders extends Component {
           <div>
             <List>
               {reminders.map(item => (
-                <ReminderListItem
-                  key={`${item.patient.appointment.id}_reminder`}
-                  data={item}
-                />
-                ))}
+                <ReminderListItem key={`${item.patient.appointment.id}_reminder`} data={item} />
+              ))}
             </List>
           </div>
         )}
@@ -102,5 +78,7 @@ export default class OutboxReminders extends Component {
 }
 
 OutboxReminders.propTypes = {
-  account: PropTypes.object.isRequired,
+  account: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
 };

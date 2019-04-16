@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { connect } from 'react-redux';
@@ -16,6 +15,7 @@ import {
 import { normalizePhone } from '../../library/Form/normalize';
 import { fetchFamilyPatients } from '../../../thunks/familyPatients';
 import styles from './styles.scss';
+import { bookingWidgetHttpClient } from '../../../util/httpClient';
 
 const genderOptions = [{ value: 'Male' }, { value: 'Female' }];
 
@@ -47,7 +47,7 @@ class EditPatient extends Component {
   async handleSubmit(values) {
     const { user } = this.props;
     try {
-      await axios.put(
+      await bookingWidgetHttpClient().put(
         `/families/${user.patientUserFamilyId}/patients/${this.props.match.params.patientId}`,
         values,
       );
@@ -73,11 +73,13 @@ class EditPatient extends Component {
       if (!email || email === initial.email) {
         return;
       }
-      return axios.post('/patientUsers/email', { email }).then((response) => {
-        if (response.data.exists) {
-          throw { email: 'There is already a user with that email' };
-        }
-      });
+      return bookingWidgetHttpClient()
+        .post('/patientUsers/email', { email })
+        .then((response) => {
+          if (response.data.exists) {
+            throw { email: 'There is already a user with that email' };
+          }
+        });
     };
     /**
      * Check if the passed phoneNumber is not already used,
@@ -94,12 +96,14 @@ class EditPatient extends Component {
       ) {
         return;
       }
-      return axios.post('/patientUsers/phoneNumber', { phoneNumber }).then((response) => {
-        const { error } = response.data;
-        if (error) {
-          throw { phoneNumber: error };
-        }
-      });
+      return bookingWidgetHttpClient()
+        .post('/patientUsers/phoneNumber', { phoneNumber })
+        .then((response) => {
+          const { error } = response.data;
+          if (error) {
+            throw { phoneNumber: error };
+          }
+        });
     };
 
     const { birthDate } = this.props.patientUser;
@@ -216,4 +220,9 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPatient));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(EditPatient),
+);

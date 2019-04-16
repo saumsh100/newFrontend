@@ -12,11 +12,7 @@ import * as time from '@carecru/isomorphic';
 import App from './My';
 import configure from '../store/myStore';
 import { loadPatient } from '../thunks/patientAuth';
-import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
-
-// getToken function is custom
-bindAxiosInterceptors(() => localStorage.getItem('auth_token'));
 
 LogRocket.init(process.env.LOGROCKET_APP_ID);
 

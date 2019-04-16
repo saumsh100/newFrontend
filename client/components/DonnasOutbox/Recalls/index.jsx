@@ -1,19 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import axios from 'axios';
 import moment from 'moment';
-import {
-  List,
-  ListItem,
-  Tab,
-  Tabs,
-  Loading,
-  Grid,
-  Row,
-  Col,
-} from '../../library';
+import { List, ListItem, Loading, Grid, Row, Col } from '../../library';
 import styles from './styles.scss';
+import { httpClient } from '../../../util/httpClient';
 
 const getAttrFromPatient = (patient, primaryType) => {
   const attrs = {
@@ -75,10 +66,7 @@ class RecallListItem extends Component {
           <div className={styles.col}>Fail: {recall.errors.length}</div>
         </ListItem>
         {this.state.expanded ? (
-          <SuccessfulList
-            success={recall.success}
-            primaryType={recall.primaryType}
-          />
+          <SuccessfulList success={recall.success} primaryType={recall.primaryType} />
         ) : null}
       </div>
     );
@@ -103,7 +91,7 @@ export default class OutboxRecalls extends Component {
     // this.setState({ isLoading: true });
 
     const { account } = this.props;
-    return Promise.all([axios.get(`/api/accounts/${account.id}/recalls/list`)])
+    return Promise.all([httpClient().get(`/api/accounts/${account.id}/recalls/list`)])
       .then(([recallsData]) => {
         console.log('recallsData', recallsData);
         this.setState({
@@ -146,7 +134,9 @@ export default class OutboxRecalls extends Component {
             <h4>Total Success: {totalSuccess}</h4>
             <h4>Total Errors: {totalErrors}</h4>
             <List>
-              {recalls.map(recall => <RecallListItem key={recall.id} recall={recall} />)}
+              {recalls.map(recall => (
+                <RecallListItem key={recall.id} recall={recall} />
+              ))}
             </List>
           </div>
         )}

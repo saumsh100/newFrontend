@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import jwt from 'jwt-decode';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
@@ -9,6 +8,7 @@ import { updateFeatureFlagsContext, resetFeatureFlagsState } from '../featureFla
 import connectSocketToStoreLogin from '../../socket/connectSocketToStoreLogin';
 import connectSocketToConnectStore from '../../socket/connectSocketToConnectStore';
 import SubscriptionManager from '../../util/graphqlSubscriptions';
+import { httpClient } from '../../util/httpClient';
 import socket from '../../socket';
 
 const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
@@ -19,7 +19,10 @@ const updateSessionByToken = (token, dispatch, invalidateSession = true) => {
     localStorage.removeItem('session');
   }
 
-  const getSession = () => axios.get('/api/users/me').then(({ data }) => data);
+  const getSession = () =>
+    httpClient()
+      .get('/api/users/me')
+      .then(({ data }) => data);
 
   return getSession()
     .then((session) => {
@@ -70,7 +73,7 @@ export function login({ values, redirectedFrom = '/', connect = false }) {
       password: values.password,
     };
 
-    return axios
+    return httpClient()
       .post('/auth', loginDetails)
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(({ user, accountId }) => {
@@ -126,7 +129,7 @@ const reloadPage = () => {
 
 export function switchActiveAccount(accountId, redirectTo = '/') {
   return dispatch =>
-    axios
+    httpClient()
       .post(`/api/accounts/${accountId}/switch`, {})
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(() => dispatch(push(redirectTo)))
@@ -135,7 +138,7 @@ export function switchActiveAccount(accountId, redirectTo = '/') {
 
 export function switchActiveEnterprise(enterpriseId, redirectTo = '/') {
   return dispatch =>
-    axios
+    httpClient()
       .post('/api/enterprises/switch', { enterpriseId })
       .then(({ data: { token } }) => updateSessionByToken(token, dispatch))
       .then(() => dispatch(push(redirectTo)))
@@ -148,18 +151,20 @@ export function logout() {
     localStorage.removeItem('session');
     const { auth } = getState();
 
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
-      dispatch(resetFeatureFlagsState());
-      dispatch(authLogout());
-      dispatch(push('/login'));
-      SubscriptionManager.accountId = null;
-    });
+    return httpClient()
+      .delete(`/auth/session/${auth.get('sessionId')}`)
+      .then(() => {
+        dispatch(resetFeatureFlagsState());
+        dispatch(authLogout());
+        dispatch(push('/login'));
+        SubscriptionManager.accountId = null;
+      });
   };
 }
 
 export function resetPassword(email) {
   return () =>
-    axios
+    httpClient()
       .post('/auth/resetpassword', { email })
       .then(() => {})
       .catch((err) => {
@@ -168,16 +173,16 @@ export function resetPassword(email) {
 }
 
 export function resetUserPassword(location, values) {
-  return () => {
-    const url = `${location.pathname}`;
-    return axios.post(url, values).catch((err) => {
-      const { data } = err;
-      throw new SubmissionError({
-        password: data,
-        confirmPassword: data,
+  return () =>
+    httpClient()
+      .post(`${location.pathname}`, values)
+      .catch((err) => {
+        const { data } = err;
+        throw new SubmissionError({
+          password: data,
+          confirmPassword: data,
+        });
       });
-    });
-  };
 }
 
 export function load() {

@@ -69,12 +69,14 @@ VENDASTA_API_KEY=
 VENDASTA_API_USER=
 MODE_ANALYTICS_ACCESS_KEY=
 MODE_ANALYTICS_SECRET=
+GOOGLE_API_KEY=
 HOST=care.cru:5100
 MY_HOST=my.care.cru:5100
 SERVER_HOST=localhost
 WP_PROXY_HOST=localhost
 API_URL=http://0.0.0.0:5100
 GRAPHQL_SERVER_URL=http://localhost:8001/graphql
+API_SERVER_URL=http://localhost:5100
 EOF
 ```
 4.  Install node modules: `npm install`

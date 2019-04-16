@@ -1,7 +1,7 @@
 
-import axios from 'axios';
 import { deleteEntity } from '../../reducers/entities';
 import { showAlertTimeout } from '../alerts';
+import { httpClient } from '../../util/httpClient';
 
 export default function deleteEntityRequest({ key, id, url, values, alert }) {
   return (dispatch, getState) => {
@@ -12,27 +12,33 @@ export default function deleteEntityRequest({ key, id, url, values, alert }) {
     const keyStr = key.substring(0, key.length - 1);
     const errorText = alert ? alert.error : { body: `Delete ${keyStr} failed` };
 
-    return axios
+    return httpClient()
       .delete(url, { params: values })
       .then(({ data }) => {
-        dispatch(deleteEntity({
-          key,
-          id,
-        }));
+        dispatch(
+          deleteEntity({
+            key,
+            id,
+          }),
+        );
         if (alert && alert.success) {
-          dispatch(showAlertTimeout({
-            alert: alert.success,
-            type: 'success',
-          }));
+          dispatch(
+            showAlertTimeout({
+              alert: alert.success,
+              type: 'success',
+            }),
+          );
         }
         return data;
       })
       .catch((err) => {
         console.log(err);
-        dispatch(showAlertTimeout({
-          alert: errorText,
-          type: 'error',
-        }));
+        dispatch(
+          showAlertTimeout({
+            alert: errorText,
+            type: 'error',
+          }),
+        );
         throw err;
       });
   };

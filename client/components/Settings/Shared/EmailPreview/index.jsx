@@ -1,9 +1,9 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 import { Cache } from '@carecru/isomorphic';
 import styles from './styles.scss';
+import { httpClient } from '../../../../util/httpClient';
 
 // Default expiry is 30 seconds
 const emailPreviewCache = new Cache({ defaultExpiryMs: 1000 * 30 });
@@ -17,10 +17,12 @@ const getPreview = url =>
     if (cachedData) return resolve(cachedData);
 
     // Make request to fetch if there is no cachedData
-    return axios.get(url).then(({ data }) => {
-      emailPreviewCache.set(url, data);
-      return resolve(data);
-    });
+    return httpClient()
+      .get(url)
+      .then(({ data }) => {
+        emailPreviewCache.set(url, data);
+        return resolve(data);
+      });
   });
 
 const EMAIL_SCALE = 0.75;

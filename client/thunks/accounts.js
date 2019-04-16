@@ -1,9 +1,9 @@
 
-import axios from 'axios';
 import moment from 'moment';
 import { receiveEntities } from '../reducers/entities';
 import { updateEntityRequest } from './fetchEntities';
 import { showAlertTimeout } from '../thunks/alerts';
+import { httpClient } from '../util/httpClient';
 
 export function uploadLogo(accountId, file) {
   return function (dispatch) {
@@ -15,16 +15,22 @@ export function uploadLogo(accountId, file) {
       error: { body: 'Logo failed to upload' },
     };
 
-    return axios.post(`/api/accounts/${accountId}/logo`, data).then((response) => {
-      dispatch(receiveEntities({
-        key: 'accounts',
-        entities: response.data.entities,
-      }));
-      dispatch(showAlertTimeout({
-        alert: alert.success,
-        type: 'success',
-      }));
-    });
+    return httpClient()
+      .post(`/api/accounts/${accountId}/logo`, data)
+      .then((response) => {
+        dispatch(
+          receiveEntities({
+            key: 'accounts',
+            entities: response.data.entities,
+          }),
+        );
+        dispatch(
+          showAlertTimeout({
+            alert: alert.success,
+            type: 'success',
+          }),
+        );
+      });
   };
 }
 
@@ -35,22 +41,30 @@ export function deleteLogo(accountId) {
       error: { body: 'Logo removal failed' },
     };
 
-    return axios.delete(`/api/accounts/${accountId}/logo`).then((response) => {
-      dispatch(receiveEntities({
-        key: 'accounts',
-        entities: response.data.entities,
-      }));
-      dispatch(showAlertTimeout({
-        alert: alert.success,
-        type: 'success',
-      }));
-    });
+    return httpClient()
+      .delete(`/api/accounts/${accountId}/logo`)
+      .then((response) => {
+        dispatch(
+          receiveEntities({
+            key: 'accounts',
+            entities: response.data.entities,
+          }),
+        );
+        dispatch(
+          showAlertTimeout({
+            alert: alert.success,
+            type: 'success',
+          }),
+        );
+      });
   };
 }
 
 export function downloadConnector() {
   return function () {
-    return axios.get('/api/connector/download').then(response => response.data);
+    return httpClient()
+      .get('/api/connector/download')
+      .then(response => response.data);
   };
 }
 
@@ -61,12 +75,14 @@ export function sendEmailBlast(accountId) {
       error: { body: 'Email Campaign Failed' },
     };
 
-    dispatch(showAlertTimeout({
-      alert: alert.success,
-      type: 'success',
-    }));
+    dispatch(
+      showAlertTimeout({
+        alert: alert.success,
+        type: 'success',
+      }),
+    );
 
-    return axios.post(`/api/accounts/${accountId}/onlineBookingEmailBlast`, {
+    return httpClient().post(`/api/accounts/${accountId}/onlineBookingEmailBlast`, {
       startDate: moment()
         .subtract(5, 'years')
         .toISOString(),
@@ -77,7 +93,7 @@ export function sendEmailBlast(accountId) {
 
 export function getEmailBlastCount(accountId) {
   return function () {
-    return axios.get(`/api/accounts/${accountId}/onlineBookingEmailBlastCount`, {
+    return httpClient().get(`/api/accounts/${accountId}/onlineBookingEmailBlastCount`, {
       startDate: moment()
         .subtract(5, 'years')
         .toISOString(),
@@ -88,10 +104,12 @@ export function getEmailBlastCount(accountId) {
 
 export function updateReviewsSettings(accountId, values, alert) {
   return dispatch =>
-    dispatch(updateEntityRequest({
-      key: 'accounts',
-      url: `/api/accounts/${accountId}`,
-      values,
-      alert,
-    }));
+    dispatch(
+      updateEntityRequest({
+        key: 'accounts',
+        url: `/api/accounts/${accountId}`,
+        values,
+        alert,
+      }),
+    );
 }

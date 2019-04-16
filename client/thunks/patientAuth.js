@@ -1,8 +1,8 @@
 
-import axios from 'axios';
 import LogRocket from 'logrocket';
 import { patientLoginSuccess, patientAuthLogout, setResetEmail } from '../reducers/patientAuth';
 import PatientUser from '../entities/models/PatientUser';
+import { bookingWidgetHttpClient } from '../util/httpClient';
 
 const Token = {
   key: 'auth_token',
@@ -27,7 +27,8 @@ const updateSessionByToken = (token, dispatch) => {
       const sessionId = session.sessionId;
       const patientUser = new PatientUser(session.patientUser);
       // set's isAuthenticated and user data
-      dispatch(patientLoginSuccess({ sessionId, patientUser }));
+      dispatch(patientLoginSuccess({ sessionId,
+        patientUser }));
       return patientUser;
     })
     .catch((err) => {
@@ -40,7 +41,7 @@ const updateSessionByToken = (token, dispatch) => {
 
 export function login(credentials) {
   return function (dispatch) {
-    return axios
+    return bookingWidgetHttpClient()
       .post('/auth', credentials)
       .then(({ data: { token } }) => {
         dispatch(setResetEmail(null));
@@ -59,9 +60,11 @@ export function logout() {
   return (dispatch, getState) => {
     Token.remove();
     const { auth } = getState();
-    return axios.delete(`/auth/session/${auth.get('sessionId')}`).then(() => {
-      dispatch(patientAuthLogout());
-    });
+    return bookingWidgetHttpClient()
+      .delete(`/auth/session/${auth.get('sessionId')}`)
+      .then(() => {
+        dispatch(patientAuthLogout());
+      });
   };
 }
 
@@ -69,9 +72,11 @@ export function resetPatientUserPassword(email) {
   return (dispatch, getState) => {
     const { availabilities } = getState();
     const accountId = availabilities.getIn(['account', 'id']);
-    return axios.post(`/auth/reset/${accountId}`, { email }).then(() => {
-      dispatch(setResetEmail(email));
-    });
+    return bookingWidgetHttpClient()
+      .post(`/auth/reset/${accountId}`, { email })
+      .then(() => {
+        dispatch(setResetEmail(email));
+      });
   };
 }
 
@@ -88,7 +93,10 @@ export function loadPatient() {
 }
 
 // TODO: make this like the sync data
-const fetchPatient = () => axios.get('/auth/me').then(({ data }) => data);
+const fetchPatient = () =>
+  bookingWidgetHttpClient()
+    .get('/auth/me')
+    .then(({ data }) => data);
 
 export function createPatient(values, ignoreConfirmationText) {
   return function (dispatch, getState) {
@@ -98,7 +106,7 @@ export function createPatient(values, ignoreConfirmationText) {
     const accountId = availabilities.getIn(['account', 'id']);
 
     return (
-      axios
+      bookingWidgetHttpClient()
         .post(`/auth/signup/${accountId}`, values, config)
         // TODO: dispatch function that successfully created patient, plug in, confirm code
         // TODO: then allow them to create the patient

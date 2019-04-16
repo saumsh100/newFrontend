@@ -1,14 +1,13 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import axios from 'axios';
 import findIndex from 'lodash/findIndex';
-import isEmpty from 'lodash/isEmpty';
-import { Button, DialogBox, List, ListItem } from '../../../library';
+import { Button, DialogBox } from '../../../library';
 import ConfigurationItem from './ConfigurationItem';
 import Outbox from '../Outbox';
 import DonnasOutbox from '../../../DonnasOutbox';
 import styles from './styles.scss';
+import { httpClient } from '../../../../util/httpClient';
 
 const headersConfig = {
   headers: {
@@ -42,7 +41,7 @@ export default class Advanced extends Component {
 
     const { account } = this.props;
     return Promise.all([
-      axios.get(`/api/accounts/${account.id}/configurations`, headersConfig),
+      httpClient().get(`/api/accounts/${account.id}/configurations`, headersConfig),
     ])
       .then(([{ data }]) => {
         this.setState({
@@ -55,12 +54,8 @@ export default class Advanced extends Component {
 
   onUpdateConfiguration(configuration) {
     const { account } = this.props;
-    return axios
-      .put(
-        `/api/accounts/${account.id}/configurations`,
-        configuration,
-        headersConfig,
-      )
+    return httpClient()
+      .put(`/api/accounts/${account.id}/configurations`, configuration, headersConfig)
       .then(({ data }) => {
         const newConfig = data.data;
         const { configurations } = this.state;
@@ -89,9 +84,7 @@ export default class Advanced extends Component {
 
   render() {
     const { account } = this.props;
-    const {
-      configurations, recalls, reminders, reviews,
-    } = this.state;
+    const { configurations } = this.state;
     return (
       <div className={styles.advancedWrapper}>
         <Button onClick={this.toggleDonnaOutbox}>View Donna's Outbox</Button>
@@ -115,9 +108,7 @@ export default class Advanced extends Component {
           </DialogBox>
         ) : null}
 
-        <Button onClick={this.toggleDonnaTODOList}>
-          View Donna's TODO List
-        </Button>
+        <Button onClick={this.toggleDonnaTODOList}>View Donna's TODO List</Button>
         {this.state.isDonnaTODOListOpen ? (
           <DialogBox
             className={styles.outboxDialog}
@@ -146,7 +137,7 @@ export default class Advanced extends Component {
             account={account}
             onUpdateConfiguration={this.onUpdateConfiguration}
           />
-          ))}
+        ))}
       </div>
     );
   }

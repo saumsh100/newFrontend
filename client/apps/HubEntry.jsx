@@ -18,7 +18,6 @@ import { logout } from '../thunks/hubAuth';
 import { loadUnreadMessages } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
 import { setToolbarPosition, expandContent, setLocale } from '../reducers/electron';
-import bindAxiosInterceptors, { bindApiUrl } from '../util/bindAxiosInterceptors';
 import DesktopNotification from '../util/desktopNotification';
 import {
   TOOLBAR_POSITION_CHANGE,
@@ -42,14 +41,11 @@ electron.send(REQUEST_HOST);
 
 electron.on(RESPONSE_HOST, (event, { url }) => {
   setApiUrl(url);
-  bindApiUrl();
   socketInstance.reconnect();
 });
 
 electron.once(RESPONSE_HOST, (event, { locale }) => {
   const { socket } = socketInstance;
-  // Binds the token setting in header
-  bindAxiosInterceptors();
 
   if (process.env.NODE_ENV === 'production') {
     LogRocket.init(process.env.LOGROCKET_APP_ID);

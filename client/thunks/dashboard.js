@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import moment from 'moment-timezone';
 import { convertIntervalStringToObject } from '@carecru/isomorphic';
 import {
@@ -9,16 +8,19 @@ import {
   setToDoReviews,
   setToDoRecalls,
 } from '../reducers/dashboard';
+import { httpClient } from '../util/httpClient';
 
 export function fetchInsights() {
   return async function (dispatch, getState) {
     try {
       const { dashboard } = getState();
 
-      dispatch(setLoading({
-        key: 'loadingInsights',
-        value: true,
-      }));
+      dispatch(
+        setLoading({
+          key: 'loadingInsights',
+          value: true,
+        }),
+      );
 
       const currentDate = moment(dashboard.get('dashboardDate'));
       const startDate = currentDate.startOf('day').toISOString();
@@ -30,13 +32,17 @@ export function fetchInsights() {
         limit: 100,
       };
 
-      const insights = await axios('/api/appointments/insights', { params: query });
+      const insights = await httpClient().get('/api/appointments/insights', {
+        params: query,
+      });
 
       dispatch(setInsights({ data: insights.data }));
-      dispatch(setLoading({
-        key: 'loadingInsights',
-        value: false,
-      }));
+      dispatch(
+        setLoading({
+          key: 'loadingInsights',
+          value: false,
+        }),
+      );
     } catch (err) {
       console.log(err);
     }
@@ -63,16 +69,20 @@ export function fetchDonnasToDos(index) {
 
     if (toDoFunctions[index]) {
       const accountId = auth.get('accountId');
-      dispatch(setLoading({
-        key: 'loadingToDos',
-        value: true,
-      }));
+      dispatch(
+        setLoading({
+          key: 'loadingToDos',
+          value: true,
+        }),
+      );
 
       await toDoFunctions[index](accountId, startDate, endDate, dispatch, recallBuffer);
-      return dispatch(setLoading({
-        key: 'loadingToDos',
-        value: false,
-      }));
+      return dispatch(
+        setLoading({
+          key: 'loadingToDos',
+          value: false,
+        }),
+      );
     }
 
     return dispatch(setToDoReminders([]));
@@ -85,7 +95,9 @@ async function fetchToDoReminders(accountId, startDate, endDate, dispatch) {
       startDate,
       endDate,
     };
-    const remindersData = await axios.get(`/api/accounts/${accountId}/reminders/outbox`, { params });
+    const remindersData = await httpClient().get(`/api/accounts/${accountId}/reminders/outbox`, {
+      params,
+    });
     dispatch(setToDoReminders(remindersData.data));
   } catch (err) {
     console.error('fetchToDoReminders', err);
@@ -99,7 +111,9 @@ async function fetchToDoReviews(accountId, startDate, endDate, dispatch) {
       startDate,
       endDate,
     };
-    const reviewsData = await axios.get(`/api/accounts/${accountId}/reviews/outbox`, { params });
+    const reviewsData = await httpClient().get(`/api/accounts/${accountId}/reviews/outbox`, {
+      params,
+    });
     dispatch(setToDoReviews(reviewsData.data));
   } catch (err) {
     console.error('fetchToDoReviews', err);
@@ -120,7 +134,9 @@ async function fetchToDoRecalls(accountId, startDate, endDate, dispatch, recallB
       startDate,
       endDate: endDateQuery,
     };
-    const recallsData = await axios.get(`/api/accounts/${accountId}/recalls/outbox`, { params });
+    const recallsData = await httpClient().get(`/api/accounts/${accountId}/recalls/outbox`, {
+      params,
+    });
     dispatch(setToDoRecalls(recallsData.data));
   } catch (err) {
     console.error('fetchToDoRecalls', err);

@@ -1,6 +1,6 @@
 
-import axios from 'axios';
 import { receiveEntities } from '../../reducers/entities';
+import { httpClient } from '../../util/httpClient';
 
 export default function fetchEntities({ key, join, params = {}, url }) {
   return (dispatch, getState) => {
@@ -13,14 +13,16 @@ export default function fetchEntities({ key, join, params = {}, url }) {
       params.join = join.join(',');
     }
     url = url || entity.getUrlRoot();
-    return axios
+    return httpClient()
       .get(url, { params })
       .then((response) => {
         const { data } = response;
-        dispatch(receiveEntities({
-          key,
-          entities: data.entities,
-        }));
+        dispatch(
+          receiveEntities({
+            key,
+            entities: data.entities,
+          }),
+        );
         return data.entities;
       })
       .catch((err) => {

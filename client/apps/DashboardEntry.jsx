@@ -18,12 +18,8 @@ import { load } from '../thunks/auth';
 import { loadUnreadMessages } from '../thunks/chat';
 import { loadOnlineRequest } from '../thunks/onlineRequests';
 import { initializeFeatureFlags } from '../thunks/featureFlags';
-import bindAxiosInterceptors from '../util/bindAxiosInterceptors';
 import DesktopNotification from '../util/desktopNotification';
 import SubscriptionManager from '../util/graphqlSubscriptions';
-
-// Binds the token setting in header
-bindAxiosInterceptors();
 
 if (process.env.NODE_ENV === 'production') {
   LogRocket.init(process.env.LOGROCKET_APP_ID);
@@ -33,10 +29,12 @@ if (process.env.NODE_ENV === 'production') {
 const browserHistory = createBrowserHistory();
 const store = configure({ browserHistory });
 
-store.dispatch(initializeFeatureFlags({
-  key: 'carecru',
-  custom: { domain: window.location.hostname },
-}));
+store.dispatch(
+  initializeFeatureFlags({
+    key: 'carecru',
+    custom: { domain: window.location.hostname },
+  }),
+);
 
 // TODO: move to Auth service layer?
 load()(store.dispatch).then(() => {

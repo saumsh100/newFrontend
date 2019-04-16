@@ -1,19 +1,10 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import axios from 'axios';
 import moment from 'moment';
-import {
-  List,
-  ListItem,
-  Tab,
-  Tabs,
-  Loading,
-  Grid,
-  Row,
-  Col,
-} from '../../../../library';
+import { List, ListItem, Loading, Grid, Row, Col } from '../../../../library';
 import styles from './styles.scss';
+import { httpClient } from '../../../../../util/httpClient';
 
 const getAttrFromPatient = (patient, primaryType) => {
   const attrs = {
@@ -75,10 +66,7 @@ class ReminderListItem extends Component {
           <div className={styles.col}>Fail: {reminder.errors.length}</div>
         </ListItem>
         {this.state.expanded ? (
-          <SuccessfulList
-            success={reminder.success}
-            primaryType={reminder.primaryType}
-          />
+          <SuccessfulList success={reminder.success} primaryType={reminder.primaryType} />
         ) : null}
       </div>
     );
@@ -99,9 +87,7 @@ export default class OutboxReminders extends Component {
 
   componentWillMount() {
     const { account } = this.props;
-    return Promise.all([
-      axios.get(`/api/accounts/${account.id}/reminders/list`),
-    ])
+    return Promise.all([httpClient().get(`/api/accounts/${account.id}/reminders/list`)])
       .then(([remindersData]) => {
         console.log('remindersData', remindersData);
         this.setState({
@@ -142,7 +128,7 @@ export default class OutboxReminders extends Component {
             <List>
               {reminders.map(reminder => (
                 <ReminderListItem key={reminder.id} reminder={reminder} />
-                ))}
+              ))}
             </List>
           </div>
         )}

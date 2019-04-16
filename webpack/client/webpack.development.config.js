@@ -1,8 +1,7 @@
 
-// we can disable this as this is development build.
-/* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+/* eslint-disable import/no-extraneous-dependencies */
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const baseConfig = require('./webpack.base.config');
@@ -23,22 +22,30 @@ const {
   FEATURE_FLAG_KEY,
   MODE_ANALYTICS_ACCESS_KEY,
   GOOGLE_API_KEY,
+  MY_HOST,
+  API_SERVER_URL,
 } = process.env;
 
 const developmentConfig = merge(baseConfig, {
   mode: 'development',
-  entry: entries('app', 'reviews', 'my', 'connect', 'hub'),
+  entry: entries('app', 'reviews', 'my', 'hub'),
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
-        LOGROCKET_APP_ID: JSON.stringify(LOGROCKET_APP_ID || '7mbzb4/carecru-development'),
+        LOGROCKET_APP_ID: JSON.stringify(
+          LOGROCKET_APP_ID || '7mbzb4/carecru-development',
+        ),
         INTERCOM_APP_ID: JSON.stringify(INTERCOM_APP_ID || 'enpxykhl'),
         FEATURE_FLAG_KEY: JSON.stringify(FEATURE_FLAG_KEY),
         MODE_ANALYTICS_ACCESS_KEY: JSON.stringify(MODE_ANALYTICS_ACCESS_KEY),
-        GOOGLE_API_KEY: JSON.stringify(GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q'),
+        GOOGLE_API_KEY: JSON.stringify(
+          GOOGLE_API_KEY || 'AIzaSyA6U9et5P5Zjn4DIeZpTlBY7wNr21dvc9Q',
+        ),
         CI: JSON.stringify(!!CI),
         HOST: JSON.stringify(globals.host),
+        MY_HOST: JSON.stringify(MY_HOST),
+        API_SERVER_URL: JSON.stringify(API_SERVER_URL),
       },
     }),
 

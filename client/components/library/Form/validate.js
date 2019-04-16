@@ -1,22 +1,26 @@
 
-import axios from 'axios';
 import zxcvbn from 'zxcvbn';
 import moment from 'moment';
+import { httpClient, bookingWidgetHttpClient } from '../../../util/httpClient';
 
 const asyncEmailValidatePatient = ({ email }) => {
   if (!email) return;
-  return axios.post('/patientUsers/email', { email }).then(({ data }) => {
-    if (data.exists) {
-      throw { email: 'There is already a user with that email' };
-    }
-  });
+  return bookingWidgetHttpClient()
+    .post('/patientUsers/email', { email })
+    .then(({ data }) => {
+      if (data.exists) {
+        throw { email: 'There is already a user with that email' };
+      }
+    });
 };
 
 const asyncPhoneNumberValidatePatient = ({ phoneNumber }) => {
   if (!phoneNumber) return;
-  return axios.post('/patientUsers/phoneNumber', { phoneNumber }).catch(({ data }) => {
-    throw { phoneNumber: data };
-  });
+  return bookingWidgetHttpClient()
+    .post('/patientUsers/phoneNumber', { phoneNumber })
+    .catch(({ data }) => {
+      throw { phoneNumber: data };
+    });
 };
 
 const asyncValidatePatient = composeAsyncValidators([
@@ -46,7 +50,9 @@ function composeAsyncValidators(validatorFns) {
 
 const phoneValidate = (value) => {
   if (
-    !/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(value)
+    !/(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/i.test(
+      value,
+    )
   ) {
     return 'Invalid phone Number';
   }
@@ -76,7 +82,9 @@ const phoneNumberValidate = (value) => {
 
 const phoneValidateNullOkay = (value) => {
   if (
-    !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(value) &&
+    !/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/.test(
+      value,
+    ) &&
     value !== null &&
     value !== '' &&
     value !== undefined
@@ -86,7 +94,9 @@ const phoneValidateNullOkay = (value) => {
 };
 
 const postalCodeValidate = (value) => {
-  const can = new RegExp(/^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i);
+  const can = new RegExp(
+    /^[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJKLMNPRSTVWXYZ]( )?\d[ABCEGHJKLMNPRSTVWXYZ]\d$/i,
+  );
   if (!can.test(value) && value !== undefined) {
     return 'Invalid Postal Code';
   }
@@ -113,18 +123,22 @@ const maxLength = max => value =>
   (value && value.length > max ? `Must be ${max} characters or less` : undefined);
 
 const asyncEmailValidateUser = values =>
-  axios
+  httpClient()
     .post('/userCheck', { email: values.email })
-    .then(response =>
-      response.data.exists !== true ||
-        Promise.reject({ email: `User with ${values.email} already exists...` }));
+    .then(
+      response =>
+        response.data.exists !== true ||
+        Promise.reject({ email: `User with ${values.email} already exists...` }),
+    );
 
 const asyncEmailPasswordReset = values =>
-  axios.post('/userCheck', { email: values.email }).then((response) => {
-    if (response.data.exists !== true) {
-      return { email: 'User with this email does not exist' };
-    }
-  });
+  httpClient()
+    .post('/userCheck', { email: values.email })
+    .then((response) => {
+      if (response.data.exists !== true) {
+        return { email: 'User with this email does not exist' };
+      }
+    });
 
 const numDigitsValidate = max => (value) => {
   if (!value || value.length >= max) return;

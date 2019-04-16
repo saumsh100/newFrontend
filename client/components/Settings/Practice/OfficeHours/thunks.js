@@ -1,5 +1,5 @@
 
-import axios from 'axios';
+import { httpClient } from '../../../../util/httpClient';
 
 /**
  * Creates a dailyHours instance, setting as default a generic time range.
@@ -8,7 +8,7 @@ import axios from 'axios';
  * @return {*}
  */
 export const createDailyHours = date =>
-  axios.post('/api/dailySchedules', {
+  httpClient().post('/api/dailySchedules', {
     date,
     practitionerId: null,
     startTime: new Date(1970, 1, 0, 8, 0).toISOString(),
@@ -24,7 +24,7 @@ export const createDailyHours = date =>
  * @returns {Promise}
  */
 export const getFinalDailyHours = ({ accountId, startDate, endDate }) =>
-  axios.get(`/api/accounts/${accountId}/finalDailySchedules`, {
+  httpClient().get(`/api/accounts/${accountId}/finalDailySchedules`, {
     params: {
       startDate,
       endDate,
@@ -39,7 +39,7 @@ export const getFinalDailyHours = ({ accountId, startDate, endDate }) =>
  * @returns {Promise}
  */
 export const updateFinalDailyHours = (scheduleId, body) =>
-  axios.put(`/api/dailySchedules/${scheduleId}`, body);
+  httpClient().put(`/api/dailySchedules/${scheduleId}`, body);
 
 /**
  * Delete the provided dailyHours
@@ -47,4 +47,5 @@ export const updateFinalDailyHours = (scheduleId, body) =>
  * @param scheduleId
  * @return {Promise}
  */
-export const deleteDailyHours = scheduleId => axios.delete(`/api/dailySchedules/${scheduleId}`);
+export const deleteDailyHours = scheduleId =>
+  httpClient().delete(`/api/dailySchedules/${scheduleId}`);

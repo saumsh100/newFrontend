@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import { push } from 'react-router-redux';
 import {
   setReview,
@@ -7,6 +6,7 @@ import {
   mergeReviewValues,
   mergeSentReviewValues,
 } from '../reducers/reviewsWidget';
+import { httpClient } from '../util/httpClient';
 
 /**
  * createReview will post to the API to create the review instance
@@ -21,7 +21,8 @@ export function createReview(values) {
     // TODO: vs. organic so that we can add the relation (mark SentReview as successful)
     const { reviews } = getState();
     const accountId = reviews.getIn(['account', 'id']);
-    return axios.post(`/reviews/${accountId}`, values)
+    return httpClient()
+      .post(`/reviews/${accountId}`, values)
       .then(({ data }) => {
         // No normalizr structure here
         dispatch(setReview(data));
@@ -50,11 +51,11 @@ export function saveReview() {
       savedReview = review.set('description', null);
     }
 
-    return axios.post(`/reviews/${accountId}/${sentReviewId}`, savedReview.toJS())
-      .then(({ data }) => {
+    return httpClient()
+      .post(`/reviews/${accountId}/${sentReviewId}`, savedReview.toJS())
+      .then(({ data }) =>
         // No normalizr structure here
-        return dispatch(setReview(data));
-      });
+        dispatch(setReview(data)));
   };
 }
 
@@ -70,7 +71,8 @@ export function updateReview() {
     const reviewId = reviews.getIn(['review', 'id']);
     const patientUserId = auth.getIn(['patientUser', 'id']);
     const reviewData = { patientUserId };
-    return axios.put(`/reviews/${reviewId}`, reviewData)
+    return httpClient()
+      .put(`/reviews/${reviewId}`, reviewData)
       .then(({ data }) => {
         // No normalizr structure here
         dispatch(setReview(data));
@@ -92,7 +94,8 @@ export function loadSentReview() {
     const sentReviewId = reviews.getIn(['sentReview', 'id']);
 
     // TODO: is it okay to just open up
-    return axios.get(`/sentReviews/${sentReviewId}`)
+    return httpClient()
+      .get(`/sentReviews/${sentReviewId}`)
       .then(({ data }) => {
         if (data.sentReview.isCompleted) {
           dispatch(mergeReviewValues(data.review));

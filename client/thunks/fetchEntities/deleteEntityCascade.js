@@ -1,6 +1,6 @@
 
-import axios from 'axios';
 import { deleteEntity } from '../../reducers/entities';
+import { httpClient } from '../../util/httpClient';
 
 export default function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
   return (dispatch, getState) => {
@@ -9,21 +9,25 @@ export default function deleteEntityCascade({ key, id, url, cascadeKey, ids }) {
 
     url = url || `${entity.getUrlRoot()}/${id}`;
 
-    return axios
+    return httpClient()
       .delete(url)
       .then(() => {
         if (cascadeKey) {
           ids.forEach((singleId) => {
-            dispatch(deleteEntity({
-              key: cascadeKey,
-              id: singleId,
-            }));
+            dispatch(
+              deleteEntity({
+                key: cascadeKey,
+                id: singleId,
+              }),
+            );
           });
         }
-        dispatch(deleteEntity({
-          key,
-          id,
-        }));
+        dispatch(
+          deleteEntity({
+            key,
+            id,
+          }),
+        );
       })
       .catch(err => console.log(err));
   };

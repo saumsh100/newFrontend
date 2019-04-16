@@ -1,7 +1,7 @@
 
-import axios from 'axios';
 import { push } from 'react-router-redux';
 import { SubmissionError } from 'redux-form';
+import { httpClient } from '../util/httpClient';
 
 export default function invite(location) {
   return function (dispatch, getState) {
@@ -35,7 +35,7 @@ export default function invite(location) {
 
     const url = `${location.pathname}`;
 
-    return axios
+    return httpClient()
       .post(url, signUpDetails)
       .then(() => {
         dispatch(push('/login'));

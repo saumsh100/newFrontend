@@ -1,5 +1,4 @@
 
-import axios from 'axios';
 import { push } from 'react-router-redux';
 import pull from 'lodash/pull';
 import pullAll from 'lodash/pullAll';
@@ -22,6 +21,7 @@ import PatientModel from '../entities/models/Patient';
 import { deleteAllEntity, deleteEntity, receiveEntities } from '../reducers/entities';
 import { isHub } from '../util/hub';
 import { sortByFieldAsc, sortTextMessages } from '../components/library/util/SortEntities';
+import { httpClient } from '../util/httpClient';
 
 function isOnChatPage(currentPath) {
   return currentPath.indexOf('/chat') !== -1;
@@ -61,10 +61,10 @@ export function defaultSelectedChatId() {
 }
 
 export function loadUnreadMessages() {
-  return (dispatch) => {
-    const url = '/api/chats/unread/count';
-    return axios.get(url).then(result => dispatch(setUnreadChats(result.data || [])));
-  };
+  return dispatch =>
+    httpClient()
+      .get('/api/chats/unread/count')
+      .then(result => dispatch(setUnreadChats(result.data || [])));
 }
 
 export function addMessage(message) {
@@ -142,9 +142,11 @@ export function createListOfUnreadedChats(result) {
     const filteredUnreadList = without(unreadMessages, ...readList);
 
     result = filterUnreadMessages(result)
-      .filter(message =>
-        shouldUpdateUnreadChats(currentLocation, message, selectedChatId) &&
-          currentUser !== message.userId)
+      .filter(
+        message =>
+          shouldUpdateUnreadChats(currentLocation, message, selectedChatId) &&
+          currentUser !== message.userId,
+      )
       .map(message => message.id);
 
     result = uniq(result);
@@ -164,16 +166,18 @@ export function loadChatList(
   join = ['textMessages', 'patient'],
 ) {
   return dispatch =>
-    dispatch(fetchEntitiesRequest({
-      key: 'chats',
-      id: 'fetchingChats',
-      join,
-      params: {
-        limit,
-        skip,
-      },
-      url,
-    }));
+    dispatch(
+      fetchEntitiesRequest({
+        key: 'chats',
+        id: 'fetchingChats',
+        join,
+        params: {
+          limit,
+          skip,
+        },
+        url,
+      }),
+    );
 }
 
 export function cleanChatList() {
@@ -190,12 +194,14 @@ export function loadFlaggedChatList(limit, skip = 0) {
 
 export function toggleFlagged(chatId, isFlagged) {
   return dispatch =>
-    dispatch(updateEntityRequest({
-      key: 'chats',
-      values: { isFlagged: !isFlagged },
-      url: `/api/chats/${chatId}`,
-      merge: true,
-    }));
+    dispatch(
+      updateEntityRequest({
+        key: 'chats',
+        values: { isFlagged: !isFlagged },
+        url: `/api/chats/${chatId}`,
+        merge: true,
+      }),
+    );
 }
 
 export function markAsUnread(chatId, messageDate) {
@@ -204,14 +210,16 @@ export function markAsUnread(chatId, messageDate) {
     const activeAccount = entities.getIn(['accounts', 'models', auth.get('accountId')]);
     const accountTwilioNumber = activeAccount.get('twilioPhoneNumber');
 
-    dispatch(updateEntityRequest({
-      key: 'textMessages',
-      values: {
-        textMessageCreatedAt: messageDate,
-        accountTwilioNumber,
-      },
-      url: `/api/chats/${chatId}/textMessages/unread`,
-    })).then((response) => {
+    dispatch(
+      updateEntityRequest({
+        key: 'textMessages',
+        values: {
+          textMessageCreatedAt: messageDate,
+          accountTwilioNumber,
+        },
+        url: `/api/chats/${chatId}/textMessages/unread`,
+      }),
+    ).then((response) => {
       const { chat } = getState();
       const unreadChats = chat.get('unreadChats');
 
@@ -235,11 +243,13 @@ export function markAsRead(chatId) {
       return;
     }
 
-    dispatch(updateEntityRequest({
-      key: 'chats',
-      values: {},
-      url: `/api/chats/${chatId}/textMessages/read`,
-    })).then((response) => {
+    dispatch(
+      updateEntityRequest({
+        key: 'chats',
+        values: {},
+        url: `/api/chats/${chatId}/textMessages/read`,
+      }),
+    ).then((response) => {
       const unreadChats = chat.get('unreadChats');
       const listToRemove = Object.keys(response.textMessages);
 
@@ -255,13 +265,15 @@ export function loadChatMessages(chatId, offset = 0, limit = 15) {
       return dispatch(setChatMessagesListForChat(chatId));
     }
     const url = `/api/chats/${chatId}/textMessages?skip=${offset}&limit=${limit}`;
-    return axios
+    return httpClient()
       .get(url)
       .then(({ data }) => {
-        dispatch(receiveEntities({
-          key: 'textMessages',
-          entities: data.entities,
-        }));
+        dispatch(
+          receiveEntities({
+            key: 'textMessages',
+            entities: data.entities,
+          }),
+        );
         return data.total;
       })
       .then(total => dispatch(setChatMessagesListForChat(chatId, total)));
@@ -287,10 +299,12 @@ export async function setChatIsPoC(patient, dispatch) {
   }
 
   const { data: poc } = await patient.isCellPhoneNumberPoC();
-  const { patients } = await dispatch(fetchEntitiesRequest({
-    url: '/api/patients/search',
-    params: { patientId: poc.id },
-  }));
+  const { patients } = await dispatch(
+    fetchEntitiesRequest({
+      url: '/api/patients/search',
+      params: { patientId: poc.id },
+    }),
+  );
   return dispatch(setChatPoC(patients[poc.id]));
 }
 
@@ -327,22 +341,28 @@ export function selectChat(id, createChat = null) {
 
 export function createNewChat(entityData) {
   return dispatch =>
-    dispatch(createEntityRequest({
-      key: 'chats',
-      entityData,
-      url: '/api/chats',
-      alert: { error: { body: 'Failed to create a conversation with this patient.' } },
-    }));
+    dispatch(
+      createEntityRequest({
+        key: 'chats',
+        entityData,
+        url: '/api/chats',
+        alert: {
+          error: { body: 'Failed to create a conversation with this patient.' },
+        },
+      }),
+    );
 }
 
 export function sendChatMessage(entityData) {
   return dispatch =>
-    dispatch(createEntityRequest({
-      key: 'chats',
-      entityData,
-      url: '/api/chats/textMessages',
-      alert: { error: { body: 'Failed to send patient the text message.' } },
-    }));
+    dispatch(
+      createEntityRequest({
+        key: 'chats',
+        entityData,
+        url: '/api/chats/textMessages',
+        alert: { error: { body: 'Failed to send patient the text message.' } },
+      }),
+    );
 }
 
 export function socketLock(textMessages) {
@@ -358,10 +378,12 @@ export function socketLock(textMessages) {
 
     dispatch(setUnreadChats(newUnreadChatsList));
     dispatch(lockChatList(chatListToLock));
-    dispatch(receiveEntities({
-      key: 'textMessages',
-      entities: { textMessages },
-    }));
+    dispatch(
+      receiveEntities({
+        key: 'textMessages',
+        entities: { textMessages },
+      }),
+    );
   };
 }
 
@@ -405,15 +427,19 @@ export function unlockChat(chatId) {
 
 export function resendMessage(messageId, patientId, chatId) {
   return dispatch =>
-    dispatch(updateEntityRequest({
-      key: 'chats',
-      values: { patientId },
-      url: `/api/chats/textMessage/${messageId}/resend`,
-    })).then(() => {
-      dispatch(deleteEntity({
-        key: 'textMessages',
-        id: messageId,
-      }));
+    dispatch(
+      updateEntityRequest({
+        key: 'chats',
+        values: { patientId },
+        url: `/api/chats/textMessage/${messageId}/resend`,
+      }),
+    ).then(() => {
+      dispatch(
+        deleteEntity({
+          key: 'textMessages',
+          id: messageId,
+        }),
+      );
       dispatch(setChatMessagesListForChat(chatId));
     });
 }

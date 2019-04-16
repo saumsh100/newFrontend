@@ -2,9 +2,9 @@
 import set from 'lodash/set';
 import values from 'lodash/values';
 import each from 'lodash/each';
-import axios from 'axios';
 import { addAllScheduleFilter, setMergingPatient, selectAppointment } from '../actions/schedule';
 import { receiveEntities } from '../reducers/entities';
+import { httpClient } from '../util/httpClient';
 
 export function checkPatientUser(patientUser, requestData) {
   return async function (dispatch) {
@@ -12,7 +12,7 @@ export function checkPatientUser(patientUser, requestData) {
     const query = { patientUserId: patientUser.get('id') };
 
     try {
-      const patientData = await axios.get('/api/patients', { params: query });
+      const patientData = await httpClient().get('/api/patients', { params: query });
 
       const { data } = patientData;
       const checkObjEmpty = !values(data.entities.patients).some(x => x !== undefined);
@@ -30,17 +30,21 @@ export function checkPatientUser(patientUser, requestData) {
 
 async function connectedPatientUser(dispatch, requestData, data) {
   const patientId = Object.keys(data.entities.patients)[0];
-  dispatch(receiveEntities({
-    key: 'patients',
-    entities: data.entities,
-  }));
+  dispatch(
+    receiveEntities({
+      key: 'patients',
+      entities: data.entities,
+    }),
+  );
 
   const query = { requestCreatedAt: requestData.createdAt };
 
   const modifiedRequest = Object.assign({}, requestData);
   set(modifiedRequest, 'patientId', patientId);
 
-  const appInfo = await axios.get(`/api/patients/${patientId}/nextAppointment`, { params: query });
+  const appInfo = await httpClient().get(`/api/patients/${patientId}/nextAppointment`, {
+    params: query,
+  });
   const appointment = appInfo.data.entities.appointments;
 
   if (appointment) {
@@ -62,21 +66,25 @@ async function suggestedPatients(dispatch, requestData, patientUser) {
     requestCreatedAt: requestData.createdAt,
   };
 
-  const searchResponse = await axios.get('/api/patients/suggestions', { params });
+  const searchResponse = await httpClient().get('/api/patients/suggestions', { params });
   const dataSuggest = searchResponse.data;
-  dispatch(receiveEntities({
-    key: 'patients',
-    entities: dataSuggest.entities,
-  }));
+  dispatch(
+    receiveEntities({
+      key: 'patients',
+      entities: dataSuggest.entities,
+    }),
+  );
 
   const cloneRequestData = Object.assign({}, requestData);
 
   const dataArray = getEntities(dataSuggest.entities);
-  dispatch(setMergingPatient({
-    patientUser,
-    requestData: cloneRequestData,
-    suggestions: dataArray,
-  }));
+  dispatch(
+    setMergingPatient({
+      patientUser,
+      requestData: cloneRequestData,
+      suggestions: dataArray,
+    }),
+  );
 
   return dataArray;
 }
@@ -104,10 +112,12 @@ export function setAllFilters(entityKeys) {
       } else {
         filterModel = model;
       }
-      dispatch(addAllScheduleFilter({
-        key: `${key}Filter`,
-        entities: filterModel,
-      }));
+      dispatch(
+        addAllScheduleFilter({
+          key: `${key}Filter`,
+          entities: filterModel,
+        }),
+      );
     });
   };
 }
