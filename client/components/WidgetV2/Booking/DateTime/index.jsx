@@ -351,10 +351,6 @@ class DateTime extends PureComponent {
           </div>
           <div className={styles.availabilitiesWrapper}>
             <CSSTransition
-              timeout={{
-                enter: 3000,
-                exit: 1000,
-              }}
               in={isFetching}
               classNames={transitions}
               onExiting={() => this.scrollTo('contentWrapperToScroll')}
