@@ -1,0 +1,31 @@
+@import '../../../../ui.scss';
+@import '../../../../ui-kit.scss';
+
+.button {
+  @extend .ui-kit-smoother;
+  width: 100%;
+  min-width: 120px;
+  border-radius: $rounded;
+  background-color: $white;
+  padding: 11px 16px;
+  box-shadow: $shadow;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  color: $grey;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  border: 1px solid $grey-lighter;
+
+  &:hover {
+    border-color: $grey-light;
+    color: $grey-dark;
+  }
+
+  &[disabled] {
+    background-color: $grey-lighter;
+    color: $grey-light;
+    cursor: not-allowed;
+  }
+}

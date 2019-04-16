@@ -1,0 +1,59 @@
+@import '../../../../ui.scss';
+@import '../../../../ui-kit.scss';
+
+.confirm {
+  @extend .ui-kit-smoother;
+  width: 100%;
+  border-radius: 4px;
+  background-color: $green;
+  padding: 7px 12px;
+  box-shadow: $shadow;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 10px;
+  color: $white;
+  text-align: center;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:hover {
+    background: $green-light;
+  }
+
+  &[disabled] {
+    background-color: $grey-lighter;
+    color: $grey;
+    cursor: not-allowed;
+  }
+}
+
+.cancel {
+  @extend .ui-kit-smoother;
+  width: 100%;
+  border-radius: 4px;
+  background-color: transparent;
+  padding: 7px 12px;
+  box-shadow: none;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 10px;
+  color: $grey;
+  text-align: center;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+
+  &:hover {
+    background: $grey-lightest;
+    color: $grey-dark;
+  }
+
+  &[disabled] {
+    background-color: $grey-lighter;
+    color: $grey;
+    cursor: not-allowed;
+  }
+}

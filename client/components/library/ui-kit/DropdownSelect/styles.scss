@@ -1,29 +1,35 @@
 @import '../../../../ui.scss';
+@import '../../../../ui-kit';
 
 .ddContainer {
   width: 100%;
 
   & ul {
     border: 1px solid $primary-grey;
-    border-radius: 4px;
-    background-color: $primary-white !important;
-    box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11) !important;
+    border-radius: $rounded;
+    background-color: $white !important;
+    box-shadow: $shadow !important;
 
     & > li {
       height: 36px;
-      color: $widget-grey;
+      font-family: $inter;
+      color: $grey;
       font-size: 13px;
       letter-spacing: 0.02px;
-      line-height: 16px;
+      line-height: 13px;
+      -webkit-font-smoothing: antialiased;
+      transition: all 0.2s ease;
 
       &:hover {
-        background: darken($primary-white, 2%) !important;
-        color: $widget-grey !important;
+        background: $grey-lightest !important;
+        color: $grey !important;
+        transition: background-color 0.2s ease;
       }
 
       & > button {
         text-align: left !important;
         cursor: pointer;
+        padding: 8px 12px;
 
         &:focus {
           background: transparent !important;
@@ -34,31 +40,24 @@
 }
 
 .triggerButton {
-  height: 40px;
+  max-height: 40px;
+  line-height: 40px;
   width: 100%;
   border: 1px solid $primary-grey;
-  border-radius: 4px;
-  background-color: $primary-white;
-  box-shadow: 1px 1px 2px 0 rgba(128, 128, 128, 0.11);
+  border-radius: $rounded;
+  background-color: $white;
+  box-shadow: $shadow;
   cursor: pointer;
   outline: none !important;
   text-align: left;
-  color: $widget-grey;
+  font-family: $inter;
+  color: $grey;
   font-size: 13px;
   letter-spacing: 0.02px;
-  line-height: 16px;
-  padding: 12px 15px;
-
-  & > i {
-    float: right;
-  }
-}
-
-.fieldLabel {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #999999;
-  font-size: 12px;
-  letter-spacing: 0.02px;
-  line-height: 15px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
 }

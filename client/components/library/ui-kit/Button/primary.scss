@@ -4,27 +4,28 @@
 .button {
   @extend .ui-kit-smoother;
   width: 100%;
-  border-radius: 4px;
-  background-color: $primary-blue;
-  padding: 15px;
+  min-width: 120px;
+  border-radius: $rounded;
+  background-color: $green;
+  padding: 16px;
   box-shadow: $shadow;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 0.02px;
   line-height: 10px;
-  color: $primary-white;
+  color: $white;
   text-align: center;
-  text-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
   outline: none;
   border: none;
   cursor: pointer;
 
   &:hover {
-    background: lighten($primary-blue, 2%);
+    background: $green-light;
   }
 
-  &.disabled {
-    background-color: $primary-grey;
-    color: $clr-bg-dark-grey;
+  &[disabled] {
+    background-color: $grey-lighter;
+    color: $grey-light;
+    cursor: not-allowed;
   }
 }

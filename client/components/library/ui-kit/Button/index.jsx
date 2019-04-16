@@ -1,24 +1,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import styles from './styles.scss';
 
-function Button({ label, onClick, className, type, disabled }) {
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      className={classNames(styles.button, className, { [styles.disabled]: disabled })}
-      disabled={disabled}
-    >
-      {label}
-    </button>
-  );
-}
+const Button = ({ label, children, onClick, className, type, disabled }) => (
+  <button type={type} onClick={onClick} className={className} disabled={disabled}>
+    {label || children}
+  </button>
+);
 
 Button.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
+  children: PropTypes.node,
   onClick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   className: PropTypes.string,
@@ -26,6 +18,8 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  label: '',
+  children: null,
   disabled: false,
   className: null,
   type: 'button',

@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import DropdownMenu from 'react-dd-menu';
 import { Icon } from '../../';
+import ui from '../../../../ui-kit.scss';
 import styles from './styles.scss';
 
 class DropdownSelect extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = { isOpen: false };
 
     this.click = this.click.bind(this);
@@ -66,7 +67,7 @@ class DropdownSelect extends Component {
 
     return (
       <div>
-        {label && <p className={styles.fieldLabel}>{label}</p>}
+        {label && <p className={ui.fieldLabel}>{label}</p>}
         <DropdownMenu {...menuOptions}>{this.renderOptions()}</DropdownMenu>
       </div>
     );

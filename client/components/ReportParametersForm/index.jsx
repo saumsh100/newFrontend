@@ -1,14 +1,14 @@
 
 import React, { Component } from 'react';
 import queryString from 'query-string';
-import { DayPickerRange } from '../library';
 import DropdownSelect from '../library/ui-kit/DropdownSelect';
-import Button from '../library/ui-kit/Button';
+import PrimaryButton from '../library/ui-kit/Button/PrimaryButton';
 import SelectPill from '../library/ui-kit/SelectPill';
 import Toggle from '../library/ui-kit/Toggle';
 import NavDropdownList from '../library/NavDropdownList';
 import FormGenerator from './formGenerator';
 import { categories } from '../Reports/Pulse/utils';
+import DayRangeWithHelpers from '../library/ui-kit/DayPicker/DayRangeWithHelpers';
 import forms from './forms.json';
 import styles from './style.scss';
 
@@ -24,11 +24,11 @@ const BUTTON = 'button';
 const parameters = {
   ...forms,
   defaultComponents: {
-    [DATE_RANGE]: DayPickerRange,
+    [DATE_RANGE]: DayRangeWithHelpers,
     [TOGGLE]: Toggle,
     [SELECT_PILL]: SelectPill,
     [DROPDOWN]: DropdownSelect,
-    [BUTTON]: Button,
+    [BUTTON]: PrimaryButton,
   },
 };
 /*
@@ -235,6 +235,7 @@ export default class ReportParametersForm extends Component {
             page={this.state.page}
             componentProps={{
               dateRange: {
+                label: 'Date Range',
                 popover: true,
                 from: params[page].dateRange ? params[page].dateRange.from : null,
                 to: params[page].dateRange ? params[page].dateRange.to : null,
