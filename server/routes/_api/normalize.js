@@ -31,9 +31,18 @@ const enterpriseSchema = () =>
 const eventsSchema = () => new schema.Entity('events');
 
 const chatSchema = () => new schema.Entity('chats', {
+  assignEntity: (output, key, value) => {
+    if (key === 'lastTextMessage') {
+      output.textMessages.push(value);
+      delete output.lastTextMessage;
+    } else {
+      output[key] = value;
+    }
+  },
   account: accountSchema(),
   patient: patientSchema(),
   textMessages: [textMessageSchema()],
+  lastTextMessage: textMessageSchema(),
 });
 
 const unreadChatSchema = () => new schema.Entity('chats', {

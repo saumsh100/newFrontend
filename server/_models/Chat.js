@@ -58,7 +58,10 @@ export default function (sequelize, DataTypes) {
       as: 'textMessages',
     });
 
-    // TODO: add hasMany textMessages and hasOne lastTextMessage when done
+    Chat.belongsTo(TextMessage, {
+      foreignKey: 'lastTextMessageId',
+      as: 'lastTextMessage',
+    });
   };
 
   return Chat;

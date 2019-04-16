@@ -34,6 +34,9 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
     if (include.as === 'textMessages') {
       return {
         ...include,
+        as: 'lastTextMessage',
+        order: [['createdAt', 'DESC']],
+        required: true,
         include: [
           {
             model: User,
@@ -42,10 +45,6 @@ chatsRouter.get('/', checkPermissions('chats:read'), (req, res, next) => {
             required: false,
           },
         ],
-        order: [['createdAt', 'DESC']],
-        separate: true,
-        required: true,
-        limit: 1,
       };
     }
     return include;
@@ -97,6 +96,7 @@ chatsRouter.post('/', checkPermissions('chats:create'), async (req, res, next) =
         {
           model: TextMessage,
           as: 'textMessages',
+          required: false,
           include: [
             {
               model: User,
@@ -105,7 +105,6 @@ chatsRouter.post('/', checkPermissions('chats:create'), async (req, res, next) =
               required: false,
             },
           ],
-          required: false,
         },
       ],
     });
@@ -182,11 +181,8 @@ chatsRouter.get('/unread', checkPermissions('chats:read'), (req, res, next) => {
 
   const textMessageInclude = {
     model: TextMessage,
-    as: 'textMessages',
+    as: 'lastTextMessage',
     required: true,
-    order: [['createdAt', 'DESC']],
-    limit: 1,
-    separate: true,
   };
 
   return Chat.findAll({
@@ -251,6 +247,8 @@ chatsRouter.get('/flagged', checkPermissions('chats:read'), (req, res, next) => 
     if (include.as === 'textMessages') {
       return {
         ...include,
+        as: 'lastTextMessage',
+        required: true,
         include: [
           {
             model: User,
@@ -259,12 +257,9 @@ chatsRouter.get('/flagged', checkPermissions('chats:read'), (req, res, next) => 
             required: false,
           },
         ],
-        order: [['createdAt', 'DESC']],
-        separate: true,
-        required: true,
-        limit: 1,
       };
     }
+
     return include;
   });
 
@@ -293,13 +288,10 @@ chatsRouter.get('/:chatId', checkPermissions('chats:read'), (req, res, next) => 
   .catch(next));
 
 chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res, next) => {
-  const { accountId } = req;
-
   const { limit, skip } = req.query;
 
   const skipped = skip || 0;
   const limitted = limit || 25;
-  const joinObject = {};
 
   // Some default code to ensure we don't pull the entire conversation for each chat
 
@@ -312,6 +304,7 @@ chatsRouter.get('/patient/:patientId', checkPermissions('chats:read'), (req, res
         order: [['createdAt', 'ASC']],
         limit: limitted,
         offset: skipped,
+        required: true,
         include: [
           {
             model: User,
@@ -341,6 +334,9 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
 
     const messages = await TextMessage.findAndCountAll({
       where: { chatId: id },
+      limit,
+      offset: skip,
+      order: [['createdAt', 'DESC']],
       include: [
         {
           model: User,
@@ -349,9 +345,6 @@ chatsRouter.get('/:chatId/textMessages', checkPermissions('textMessages:read'), 
           required: false,
         },
       ],
-      limit,
-      offset: skip,
-      order: [['createdAt', 'DESC']],
     });
 
     const allMessages = messages.rows.map(message => message.get({ plain: true }));

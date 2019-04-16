@@ -116,13 +116,7 @@ export function filterChatsByTab(chats, textMessages, selectedChat, tabIndex) {
  * @return {*}
  */
 export function getUnreadChats(chats, textMessages, selectedChat) {
-  return chats.filter((filterChat) => {
-    const hasUnread = filterChat.textMessages.filter((message) => {
-      const messageEntity = textMessages.get(message);
-      return messageEntity && !messageEntity.read;
-    });
-    return hasUnread.length > 0 || selectedChat === filterChat.get('id');
-  });
+  return chats.filter(c => c.hasUnread || selectedChat === c.get('id'));
 }
 
 /**
