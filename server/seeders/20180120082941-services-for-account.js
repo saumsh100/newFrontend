@@ -1,6 +1,8 @@
 
 const uuid = require('uuid').v4;
-const accountId = '72954241-3652-4792-bae5-5bfed53d37b7';
+
+const accountId = '62954241-3652-4792-bae5-5bfed53d37b7';
+const accountId2 = '72954241-3652-4792-bae5-5bfed53d37b7';
 const serviceId = '52fb9349-7bd1-454f-a501-e1eda02b3b86';
 const practitionerIds = [
   '19b851d4-5730-41ad-8b85-b3c5f2ee91ff',
@@ -20,6 +22,14 @@ module.exports = {
     const services = [
       {
         id: serviceId,
+        accountId2,
+        name: 'Local Test Service',
+        duration: 60,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: uuid(),
         accountId,
         name: 'Local Test Service',
         duration: 60,

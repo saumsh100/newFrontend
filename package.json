@@ -58,7 +58,9 @@
     "relay": "relay-compiler --src ./client --schema server/graphql/data/schema.json --extensions js jsx",
     "update-schema": "node ./server/bin/build/updateSchema.bundle.js",
     "graphl:build": "npm run update-schema && npm run relay",
-    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write"
+    "format": "prettier-eslint --eslint-config-path=.carecru.eslintrc --write",
+    "remindersJob": "node ./server/bin/build/remindersJob.bundle.js",
+    "reviewsJob": "node ./server/bin/build/reviewsJob.bundle.js"
   },
   "dependencies": {
     "@carecru/isomorphic": "~2.6.0",

@@ -35,6 +35,8 @@ module.exports = () => ({
     'correspondences',
     'patientCache',
     'updateSchema',
+    'remindersJob',
+    'reviewsJob',
   ),
 
   resolve: {
